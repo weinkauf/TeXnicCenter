@@ -13,7 +13,7 @@
 // Generated from the TEXTINCLUDE 2 resource.
 //
 #include "afxres.h"
-#include "../CrysEditEx/editcmd.h"
+#include "../CrysEditEx/Source/editcmd.h"
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -2824,7 +2824,7 @@ END
 2 TEXTINCLUDE DISCARDABLE 
 BEGIN
     "#include ""afxres.h""\r\n"
-    "#include ""../CrysEditEx/editcmd.h""\r\n"
+    "#include ""../CrysEditEx/Source/editcmd.h""\r\n"
     "\0"
 END
 
