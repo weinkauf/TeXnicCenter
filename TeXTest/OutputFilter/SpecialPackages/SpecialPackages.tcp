@@ -6,5 +6,5 @@ Version=3
 MainFile=SpecialPackages.tex
 UseBibTeX=0
 UseMakeIndex=0
-ActiveProfile=LaTeX => DVI
+ActiveProfile=Fast: LaTeX => DVI
 
