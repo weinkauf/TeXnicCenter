@@ -60,7 +60,7 @@ public:
 		stored.
 	@param bWrite
 		FALSE if the information should be read from the file, TRUE if it
-		should be written to the file.		
+		should be written to the file.
 
 	@return
 		TRUE on success, FALSE if an error occured. If an error occurs, 
