@@ -1,3 +1,18 @@
+2004/02/15 svenwiegand
+- Implemented Feature: The file filter of the 'Insert Graphics' dialog 
+  now also lists JPEG and PNG files
+- Fixed Bug: TXC crashes when DDE commands are passed via command line
+- Fixed Bug: TXC hangs on splash screen when DDE commands are passed via
+  command line on startup
+- Fixed Bug: TXC reports an error when starting up the viewer via DDE on
+  slow systems, though the viewer starts (DDE timeout problem) -- solution
+  from Stefan Ascher
+- Fixed Bug: An error in the project wizard interface did not set the path
+  to the project's main file correctly.
+- Fixed Typo: Changed button label from 'Abbrechen' to 'Cancel' in the 
+  english version of the 'New from Template' dialog
+- German version of the Tips & Tricks have been updated by Rüdiger Stuible
+
 2003/12/21 niteria
 - Implemented Feature 863942: Windows explorer tool should open in current directory
 - Aditionally, the tools are saved to another registry location
