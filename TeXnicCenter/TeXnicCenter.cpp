@@ -326,7 +326,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	InitContextMenuManager();
 	InitKeyboardManager();
-	if (g_configuration.m_strLookAndFeel==_T("Office 2000"))
+	if (g_configuration.m_strLookAndFeel==_T("Windows 2000"))
 		CBCGVisualManager::SetDefaultManager(RUNTIME_CLASS(CBCGVisualManager));
 	else if (g_configuration.m_strLookAndFeel==_T("Office XP"))
 		CBCGVisualManager::SetDefaultManager(RUNTIME_CLASS(CBCGVisualManagerXP));

@@ -780,7 +780,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
+// Deutsch (Deutschland) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -2294,7 +2294,7 @@ END
 IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Allgemein"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     GROUPBOX        "Allgemein",IDC_STATIC,8,8,284,31
     CONTROL         "&Letzte Sitzung bei Start wiederherstellen",
@@ -2317,7 +2317,7 @@ BEGIN
     GROUPBOX        "Benutzerschnittstelle (Änderungen erfordern einen Neustart von TeXnicCenter)",
                     IDC_STATIC,8,122,284,71
     LTEXT           "L&ook && Feel:",IDC_STATIC,13,139,40,8
-    COMBOBOX        IDC_LOOKNFEEL_COMBO,57,137,59,106,CBS_DROPDOWNLIST | 
+    COMBOBOX        IDC_LOOKNFEEL_COMBO,57,137,66,106,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
     LTEXT           "S&prache:",IDC_STATIC,13,157,30,8
     COMBOBOX        IDC_GUI_LANGUAGE_COMBO,57,155,80,124,CBS_DROPDOWNLIST | 
@@ -3348,8 +3348,8 @@ END
 
 IDD_OPTIONS_GENERIC DLGINIT
 BEGIN
-    IDC_LOOKNFEEL_COMBO, 0x403, 12, 0
-0x664f, 0x6966, 0x6563, 0x3220, 0x3030, 0x0030, 
+    IDC_LOOKNFEEL_COMBO, 0x403, 13, 0
+0x6957, 0x646e, 0x776f, 0x2073, 0x3032, 0x3030, "\000" 
     IDC_LOOKNFEEL_COMBO, 0x403, 10, 0
 0x664f, 0x6966, 0x6563, 0x5820, 0x0050, 
     IDC_LOOKNFEEL_COMBO, 0x403, 11, 0
@@ -4660,12 +4660,12 @@ BEGIN
     STE_RESOURCE_CONFLICT   "Die Sprachdatei für die gewünschte Sprache (%s) ist nicht mit dieser Version von TeXnicCenter kompatibel.\n\nTeXnicCenter-Version:\t%s\nSprachdatei-Version:\t%s\n\nStatt dessen wird die Standardsprache (Englisch) verwendet."
 END
 
-#endif    // German (Germany) resources
+#endif    // Deutsch (Deutschland) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// Englisch (USA) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -5955,7 +5955,7 @@ END
 IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "General"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     GROUPBOX        "General",IDC_STATIC,8,8,284,31
     CONTROL         "Restore last &session on startup",
@@ -5977,7 +5977,7 @@ BEGIN
     GROUPBOX        "User interface (Changes will require a new start of TeXnicCenter)",
                     IDC_STATIC,8,124,284,69
     LTEXT           "L&ook && Feel:",IDC_STATIC,13,141,40,8
-    COMBOBOX        IDC_LOOKNFEEL_COMBO,57,139,59,106,CBS_DROPDOWNLIST | 
+    COMBOBOX        IDC_LOOKNFEEL_COMBO,57,139,66,106,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
     LTEXT           "&Language:",IDC_STATIC,13,159,35,8
     COMBOBOX        IDC_GUI_LANGUAGE_COMBO,57,157,80,124,CBS_DROPDOWNLIST | 
@@ -7134,8 +7134,8 @@ END
 
 IDD_OPTIONS_GENERIC DLGINIT
 BEGIN
-    IDC_LOOKNFEEL_COMBO, 0x403, 12, 0
-0x664f, 0x6966, 0x6563, 0x3220, 0x3030, 0x0030, 
+    IDC_LOOKNFEEL_COMBO, 0x403, 13, 0
+0x6957, 0x646e, 0x776f, 0x2073, 0x3032, 0x3030, "\000" 
     IDC_LOOKNFEEL_COMBO, 0x403, 10, 0
 0x664f, 0x6966, 0x6563, 0x5820, 0x0050, 
     IDC_LOOKNFEEL_COMBO, 0x403, 11, 0
@@ -8449,7 +8449,7 @@ BEGIN
     STE_RESOURCE_CONFLICT   "The language file for the selected language (%s) is not compatible with this version of TeXnicCenter.\n\nVersion of TeXnicCenter:\t%s\nVersion of language file:\t%s\n\nThe default language (english) will be used instead."
 END
 
-#endif    // English (U.S.) resources
+#endif    // Englisch (USA) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

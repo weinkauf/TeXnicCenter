@@ -160,7 +160,25 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 		SerializeProfileString(_T("Settings"), _T("SkinDirectory"), &m_strSkinDirectory, direction, CPathTool::Cat(CPathTool::GetDirectory(theApp.m_pszHelpFilePath), _T("Skins")));
 		SerializeProfileString(_T("Settings"), _T("SkinURL"), &m_strSkinUrl, direction, _T("http://www.bcgsoft.com/Skins"));
 	}
-	SerializeProfileString(_T("Settings"), _T("LookAndFeel"), &m_strLookAndFeelOnNextStart, direction, _T("Office 2003"));
+
+	// choose default look and feel in dependency of the system we are
+	// running on.
+	// 
+	// default: Windows 2000 style
+	// when theming is enabled: Windows XP style
+	CString			strDefaultLookAndFeel(_T("Windows 2000"));
+	HINSTANCE		hThemeLib = LoadLibrary(_T("UxTheme.dll"));
+	if (hThemeLib)
+	{
+		typedef BOOL (__stdcall *TIsThemeActive)();
+		TIsThemeActive	IsThemeActive = (TIsThemeActive)GetProcAddress(hThemeLib, _T("IsThemeActive"));
+		if (IsThemeActive && IsThemeActive())
+			strDefaultLookAndFeel = _T("Windows XP");
+
+		FreeLibrary(hThemeLib);
+	}
+
+	SerializeProfileString(_T("Settings"), _T("LookAndFeel"), &m_strLookAndFeelOnNextStart, direction, strDefaultLookAndFeel);
 	if (direction==Load)
 		m_strLookAndFeel = m_strLookAndFeelOnNextStart;
 
