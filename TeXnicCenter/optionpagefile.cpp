@@ -59,9 +59,7 @@ BEGIN_MESSAGE_MAP(COptionPageFile, CPropertyPage)
 END_MESSAGE_MAP()
 
 
-COptionPageFile::COptionPageFile()
-: CPropertyPage(COptionPageFile::IDD),
-	m_wndBrowseBtn(IDC_OPTIONS_DEFAULT_PATH_EDIT, CString((LPCTSTR)STE_GET_PATH))
+COptionPageFile::COptionPageFile(): CPropertyPage(COptionPageFile::IDD)
 {
 	//{{AFX_DATA_INIT(COptionPageFile)
 	//}}AFX_DATA_INIT
@@ -69,7 +67,6 @@ COptionPageFile::COptionPageFile()
 	m_bSaveAutomatic = g_configuration.m_bSaveAutomatic;
 	m_bSaveBeforeCompilation = g_configuration.m_bSaveBeforeCompilation;
 	m_unSaveInterval = g_configuration.m_unSaveInterval;
-	m_strDefaultPath = g_configuration.m_strDefaultPath;
 }
 
 
@@ -82,7 +79,6 @@ void COptionPageFile::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPageFile)
-	DDX_Control(pDX, IDC_BROWSE_DEFAULT_PATH, m_wndBrowseBtn);
 	DDX_Control(pDX, IDC_OPTIONS_SAVE_LABEL2, m_wndSaveIntervalLabel2);
 	DDX_Control(pDX, IDC_OPTIONS_SAVE_LABEL1, m_wndSaveIntervalLabel1);
 	DDX_Control(pDX, IDC_OPTIONS_SAVE_INTERVALL_EDIT, m_wndSaveIntervalEdit);
@@ -91,7 +87,6 @@ void COptionPageFile::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_OPTIONS_SAVE_BEFORE_COMPILATION, m_bSaveBeforeCompilation);
 	DDX_Text(pDX, IDC_OPTIONS_SAVE_INTERVALL_EDIT, m_unSaveInterval);
 	DDX_CBIndex(pDX, IDC_OPTIONS_FILETYPE, m_nFileFormat);
-	DDX_Text(pDX, IDC_OPTIONS_DEFAULT_PATH_EDIT, m_strDefaultPath);
 	//}}AFX_DATA_MAP
 }
 
@@ -135,7 +130,6 @@ void COptionPageFile::OnOK()
 	g_configuration.m_bSaveBeforeCompilation = m_bSaveBeforeCompilation;
 	g_configuration.m_unSaveInterval = m_unSaveInterval;
 	g_configuration.m_nStandardFileFormat = m_nFileFormat;
-	g_configuration.m_strDefaultPath = m_strDefaultPath;
-	
+		
 	CPropertyPage::OnOK();
 }

@@ -52,16 +52,17 @@ BEGIN_MESSAGE_MAP(COptionPagePath, CPropertyPage)
 	ON_BN_CLICKED(IDC_ADD_DOCUMENTTEMPLATES, OnAddDocumentTemplates)
 	ON_BN_CLICKED(IDC_REMOVE_DOCUMENTTEMPLATES, OnRemoveDocumentTemplates)
 	ON_LBN_SELCHANGE(IDC_DOCUMENTTEMPLATES, OnSelchangeDocumentTemplates)
-	ON_BN_CLICKED(IDC_BROWSE_PROJECT_PATH, OnBrowseProjectPath)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
-COptionPagePath::COptionPagePath() : CPropertyPage(COptionPagePath::IDD)
+COptionPagePath::COptionPagePath()
+: CPropertyPage(COptionPagePath::IDD),
+	m_wndBrowseBtn(IDC_OPTIONS_DEFAULT_PATH_EDIT, CString((LPCTSTR)STE_GET_PATH))
 {
 	//{{AFX_DATA_INIT(COptionPagePath)
-	m_strProjectPath = _T("");
 	//}}AFX_DATA_INIT
+	m_strDefaultPath = g_configuration.m_strDefaultPath;
 }
 
 COptionPagePath::~COptionPagePath()
@@ -70,26 +71,15 @@ COptionPagePath::~COptionPagePath()
 
 void COptionPagePath::DoDataExchange(CDataExchange* pDX)
 {
-	if( !pDX->m_bSaveAndValidate )
-	{
-		// load data from configuration
-		m_strProjectPath = g_configuration.m_strProjectPath;
-	}
-
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPagePath)
+	DDX_Control(pDX, IDC_BROWSE_DEFAULT_PATH, m_wndBrowseBtn);
 	DDX_Control(pDX, IDC_REMOVE_PROJECTTEMPLATES, m_wndProjectRemoveButton);
 	DDX_Control(pDX, IDC_PROJECTTEMPLATES, m_wndProjectTemplateList);
 	DDX_Control(pDX, IDC_REMOVE_DOCUMENTTEMPLATES, m_wndDocumentRemoveButton);
 	DDX_Control(pDX, IDC_DOCUMENTTEMPLATES, m_wndDocumentTemplateList);
-	DDX_Text(pDX, IDC_PROJECT_PATH, m_strProjectPath);
+	DDX_Text(pDX, IDC_OPTIONS_DEFAULT_PATH_EDIT, m_strDefaultPath);
 	//}}AFX_DATA_MAP
-
-	if( pDX->m_bSaveAndValidate )
-	{
-		// save data from dialog to configuration
-		g_configuration.m_strProjectPath = m_strProjectPath;
-	}
 }
 
 
@@ -163,6 +153,9 @@ void COptionPagePath::OnSelchangeDocumentTemplates()
 
 void COptionPagePath::OnOK() 
 {
+	UpdateData();
+
+	// Store settings to configuration
 	CString	strElement;
 
 	g_configuration.m_astrProjectTemplatePaths.RemoveAll();
@@ -179,17 +172,7 @@ void COptionPagePath::OnOK()
 		g_configuration.m_astrDocumentTemplatePaths.Add( strElement );
 	}
 
+	g_configuration.m_strDefaultPath = m_strDefaultPath;
+
 	CPropertyPage::OnOK();
-}
-
-
-void COptionPagePath::OnBrowseProjectPath() 
-{
-	CFolderSelect	dlg( AfxLoadString( STE_GET_PATH ) );
-	if( dlg.DoModal() != IDOK )
-		return;
-
-	g_configuration.m_strProjectPath = dlg.GetPath();
-
-	UpdateData( FALSE );
 }

@@ -153,6 +153,13 @@ protected:
 	New mode when saving the file
 	*/
 	int m_nCRLFMode;
+
+	/** 
+	Personal directory .
+	(File system directory that serves as a common repository for documents.)
+	*/
+	CString m_strPersonalDir;
+
 };
 
 /////////////////////////////////////////////////////////////////////////////

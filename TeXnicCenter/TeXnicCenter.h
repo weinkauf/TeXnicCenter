@@ -319,6 +319,12 @@ protected:
 	*/
 	CString m_strWorkingDir;
 
+	/** 
+	Personal directory .
+	(File system directory that serves as a common repository for documents.)
+	*/
+	CString m_strPersonalDir;
+
 	/**
 	Handle to localized version of BCGCB-resource-DLL.
 	*/

@@ -60,7 +60,6 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	strSection = "Settings\\Options";
 	SerializeProfileStringArray( strSection, "ProjectTemplatePaths", &m_astrProjectTemplatePaths, direction );
 	SerializeProfileStringArray( strSection, "DocumentTemplatePaths", &m_astrDocumentTemplatePaths, direction );
-	SerializeProfileString( strSection, "ProjectPath", &m_strProjectPath, direction );
 	SerializeProfileInt( strSection, "SaveBeforeCompilation", (int*)&m_bSaveBeforeCompilation, direction, TRUE );
 
 	SerializeProfileInt( strSection, "WndMenuMaxEntries", &m_nWndMenuMaxEntries, direction, 10 );

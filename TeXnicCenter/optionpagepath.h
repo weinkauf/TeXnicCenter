@@ -33,6 +33,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "BrowseButton.h"
+
 class COptionPagePath : public CPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPagePath)
@@ -61,7 +63,6 @@ protected:
 	afx_msg void OnRemoveDocumentTemplates();
 	afx_msg void OnSelchangeDocumentTemplates();
 	virtual BOOL OnInitDialog();
-	afx_msg void OnBrowseProjectPath();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -69,11 +70,12 @@ protected:
 private:
 	//{{AFX_DATA(COptionPagePath)
 	enum { IDD = IDD_OPTIONS_PATHS };
-	CButton	m_wndProjectRemoveButton;
+	CBrowseButton	m_wndBrowseBtn;
+	CButton		m_wndProjectRemoveButton;
 	CListBox	m_wndProjectTemplateList;
-	CButton	m_wndDocumentRemoveButton;
+	CButton		m_wndDocumentRemoveButton;
 	CListBox	m_wndDocumentTemplateList;
-	CString	m_strProjectPath;
+	CString		m_strDefaultPath;
 	//}}AFX_DATA
 };
 
