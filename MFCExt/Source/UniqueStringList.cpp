@@ -30,8 +30,8 @@
 
 
 CUniqueStringList::CUniqueStringList()
+:bIgnoreCase(true)
 {
-	bIgnoreCase = true;
 }
 
 
@@ -96,7 +96,7 @@ void CUniqueStringList::SubtractList(const CStringList& cmpStrList)
 			RemoveAt(pos2); //Remove the duplicate in this list.
 		}
 
-		//We do not need to look deeper into this list,
+		//We do not need to look deeper into *this* list,
 		// because it should be unique at any time.
 		cmpStrList.GetNext(pos);
 	}
