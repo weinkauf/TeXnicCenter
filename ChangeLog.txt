@@ -1,3 +1,7 @@
+2002/05/30 niteria
+- Fixed Bug xxxxx: TeX-Output: Fails for FileNames over more than one line
+- Very small corrections to CPathTool and CCrystalTextView.
+
 2002/05/24 niteria
 - Blocking of StructureParser fixed NOW.
 
