@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.4  2002/03/20 00:48:11  cnorris
+* Mouse scroll wheel handler
+*
 * Revision 1.3  2002/03/20 00:15:29  cnorris
 * Code clean up and new / delete code inspection
 *
@@ -1175,6 +1178,9 @@ void CCrystalTextView::ResetView()
 	m_nTabSize = 4;
 	m_nMaxLineLength = -1;
 	m_nScreenLines = -1;
+	//BEGIN niteria
+	m_nSubLineCount = -1;
+	//END niteria
 	m_nScreenChars = -1;
 	m_nIdealCharPos = -1;
 	m_ptAnchor.x = 0;
