@@ -402,9 +402,11 @@ void CLatexProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 			ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_ACTIVETAB, pwndTabs->GetActiveTab());
 
 		// storing frame information
-		CWnd	*pWnd = AfxGetMainWnd()->GetWindow(GW_CHILD)->GetWindow(GW_CHILD);
-		pWnd = pWnd->GetWindow(GW_HWNDLAST); // Start with the last child
 		int		nFrame = 0;
+		CWnd	*pWnd = AfxGetMainWnd()->GetWindow(GW_CHILD)->GetWindow(GW_CHILD);
+
+		if (pWnd && IsWindow(pWnd->m_hWnd))
+			pWnd = pWnd->GetWindow(GW_HWNDLAST); // Start with the last child, if it exists
 
 		ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_FRAMECOUNT, 0);
 
