@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_INSERTGRAPHICDIALOG_H__F884E221_4371_11D3_929E_A6DAFD7685C8__INCLUDED_)
 #define AFX_INSERTGRAPHICDIALOG_H__F884E221_4371_11D3_929E_A6DAFD7685C8__INCLUDED_
 
@@ -72,6 +78,7 @@ protected:
 public:
 	//{{AFX_DATA(CInsertGraphicDialog)
 	enum { IDD = IDD_GRAPHIC };
+	CButton	m_wndScaleToText;
 	CStatic	m_wndScaleLabel;
 	CSpinButtonCtrl	m_wndScaleSpin;
 	CEdit	m_wndScale;
@@ -80,6 +87,7 @@ public:
 	CString	m_strFile;
 	BOOL	m_bFloat;
 	UINT	m_unScale;
+	BOOL	m_bScaleToText;
 	//}}AFX_DATA
 };
 

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "InsertGraphicDialog.h"
@@ -52,13 +58,14 @@ CInsertGraphicDialog::CInsertGraphicDialog(CWnd* pParent /*=NULL*/)
 	m_strFile = _T("");
 	m_bFloat = TRUE;
 	m_unScale = 100;
+	m_bScaleToText = TRUE;
 	//}}AFX_DATA_INIT
 }
 
 
 BOOL CInsertGraphicDialog::SetProperties( const CString &strProperties )
 {
-	if( strProperties.Find( _T("\\includegraphics{") ) == -1 )
+	if( strProperties.Find( _T("\\includegraphics") ) == -1 )
 		return FALSE;
 
 	///////////////////////////////////////////////////////////////////
@@ -66,14 +73,54 @@ BOOL CInsertGraphicDialog::SetProperties( const CString &strProperties )
 	m_bFloat = CInsertFloatObjectDialog::SetProperties( strProperties );
 	m_strContents.Empty();
 
+//	///////////////////////////////////////////////////////////////////
+//	// is scaled?
+//	if (m_bScale && ( (m_unScale != 100) || (m_bScaleToText) ))
+//	{
+//		CString	strScale;
+//		if (m_bScaleToText)
+//		{
+//			strScale.Format( _T("[width=%.2f\\textwidth]"), m_unScale / 100.0 );
+//		}
+//		else
+//		{
+//			strScale.Format( _T("[scale=%.2f]"), m_unScale / 100.0 );
+//		}
+//
+//		strScale.Replace( _T(','), _T('.') );
+//		strResult += strScale;
+//	}
+
+
 	///////////////////////////////////////////////////////////////////
 	// is scaled?
 	int	nPos = -1;
-	CString	strFind = _T("\\scalebox{");
+	m_bScale = false;
 
-	if( (nPos = strProperties.Find( strFind )) > -1 )
+	//Find type of scaling, if scaling at all
+	// - Normal Scale
+	CString	strFind = _T("[scale=");
+	// - Scale to \textwidth
+	CString	strFind2 = _T("[width=");
+	if ( (nPos = strProperties.Find( strFind )) > -1 )
 	{
+		m_bScale = true;
+		m_bScaleToText = false;
+
 		nPos = nPos + strFind.GetLength();
+	}
+	else if ( (nPos = strProperties.Find( strFind2 )) > -1 )
+		{
+			m_bScale = true;
+			m_bScaleToText = true;
+
+			nPos = nPos + strFind2.GetLength();
+		}
+
+	//Now for the scaling factor
+	if (m_bScale)
+	{
+		ASSERT(nPos > -1);
 
 		// get scale factor
 		CString				strScale;
@@ -94,11 +141,7 @@ BOOL CInsertGraphicDialog::SetProperties( const CString &strProperties )
 
 		if( !strScale.IsEmpty() )
 			m_unScale = (UINT)(atof( strScale ) * 100);
-
-		m_bScale = TRUE;
 	}
-	else
-		m_bScale = FALSE;
 
 	///////////////////////////////////////////////////////////////////
 	// is horizonally centered
@@ -109,21 +152,28 @@ BOOL CInsertGraphicDialog::SetProperties( const CString &strProperties )
 
 	///////////////////////////////////////////////////////////////////
 	// get file path
-	strFind = _T("\\includegraphics{");
+	strFind = _T("\\includegraphics");
 
-	if( (nPos = strProperties.Find( strFind )) > -1 )
+	//Empty filename
+	m_strFile.Empty();
+
+	if ( (nPos = strProperties.Find( strFind )) > -1 )
 	{
 		nPos = nPos + strFind.GetLength();
 
-		// get file name
-		m_strFile.Empty();
-
-		for( ; nPos < strProperties.GetLength(); nPos++ )
+		//Forward to opening brace {
+		nPos = strProperties.Find(_T('{'), nPos);
+		if (nPos > -1)
 		{
-			if( strProperties[nPos] == _T('}') )
-				break;
-			else
-				m_strFile+= strProperties[nPos];
+			nPos++; //Jump over the opening brace {
+			//Read the filename
+			for( ; nPos < strProperties.GetLength(); nPos++ )
+			{
+				if( strProperties[nPos] == _T('}') )
+					break;
+				else
+					m_strFile+= strProperties[nPos];
+			}
 		}
 	}
 	else
@@ -141,10 +191,20 @@ CString CInsertGraphicDialog::GetProperties()
 
 	///////////////////////////////////////////////////////////////////
 	// is scaled?
-	if( m_bScale && m_unScale != 100 )
+	if (m_bScale && ( (m_unScale != 100) || (m_bScaleToText) ))
 	{
 		CString	strScale;
-		strScale.Format( _T("[scale=%.2f]"), m_unScale / 100.0 );
+		if (m_bScaleToText)
+		{
+			//Scale to \textwidth
+			strScale.Format( _T("[width=%.2f\\textwidth]"), m_unScale / 100.0 );
+		}
+		else
+		{
+			//Normal Scale
+			strScale.Format( _T("[scale=%.2f]"), m_unScale / 100.0 );
+		}
+
 		strScale.Replace( _T(','), _T('.') );
 		strResult += strScale;
 	}
@@ -160,9 +220,9 @@ CString CInsertGraphicDialog::GetProperties()
 	if( m_bHCenter )
 	{
 		if( m_bFloat )
-			strResult = _T("\\begin{center}\r\t\t") + strResult + _T("\t\\end{center}\r");
+			strResult = _T("\\begin{center}\r\t\t") + strResult + _T("\t\\end{center}");
 		else
-			strResult = _T("\\begin{center}\r\t") + strResult + _T("\\end{center}\r");
+			strResult = _T("\\begin{center}\r\t") + strResult + _T("\\end{center}");
 	}
 
 	///////////////////////////////////////////////////////////////////
@@ -187,6 +247,7 @@ void CInsertGraphicDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CInsertFloatObjectDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CInsertGraphicDialog)
+	DDX_Control(pDX, IDC_GRAPHIC_SCALETEXTWIDTH, m_wndScaleToText);
 	DDX_Control(pDX, IDC_LABELSCALE, m_wndScaleLabel);
 	DDX_Control(pDX, IDC_SPIN_SCALE, m_wndScaleSpin);
 	DDX_Control(pDX, IDC_GRAPHIC_SCALE, m_wndScale);
@@ -195,6 +256,7 @@ void CInsertGraphicDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_GRAPHIC_FILE, m_strFile);
 	DDX_Check(pDX, IDC_GRAPHIC_FLOAT, m_bFloat);
 	DDX_Text(pDX, IDC_GRAPHIC_SCALE, m_unScale);
+	DDX_Check(pDX, IDC_GRAPHIC_SCALETEXTWIDTH, m_bScaleToText);
 	//}}AFX_DATA_MAP
 }
 
@@ -223,6 +285,7 @@ BOOL CInsertGraphicDialog::OnInitDialog()
 	m_wndScale.EnableWindow( m_bScale );
 	m_wndScaleSpin.EnableWindow( m_bScale );
 	m_wndScaleLabel.EnableWindow( m_bScale );
+	m_wndScaleToText.EnableWindow( m_bScale );
 
 	EnableFloatOptions( m_bFloat );
 
@@ -274,8 +337,10 @@ void CInsertGraphicDialog::OnGraphicBrowse()
 	m_strFile = dlg.GetPathName();
 
 	// get path relative to project dir
-	if( theApp.GetProject() )
-		m_strFile = CPathTool::GetRelativePath(theApp.GetProject()->GetWorkingDir(), m_strFile);
+	if (pLProject)
+	{
+		m_strFile = CPathTool::GetRelativePath(pLProject->GetWorkingDir(), m_strFile);
+	}
 
 	m_strFile.Replace( _T('\\'), _T('/') );
 
@@ -291,6 +356,7 @@ void CInsertGraphicDialog::OnGraphicBscale()
 	m_wndScale.EnableWindow( m_bScale );
 	m_wndScaleSpin.EnableWindow( m_bScale );
 	m_wndScaleLabel.EnableWindow( m_bScale );
+	m_wndScaleToText.EnableWindow( m_bScale );
 }
 
 void CInsertGraphicDialog::OnGraphicFloat() 
