@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:51  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:22+02  sven_wiegand
 * Initial revision
 *
@@ -87,7 +90,7 @@ public:
 // Operations
 public:
 	CCrystalEditView();
-	~CCrystalEditView();
+	virtual ~CCrystalEditView();
 
 	BOOL GetOverwriteMode() const;
 	void SetOverwriteMode(BOOL bOvrMode = TRUE);
