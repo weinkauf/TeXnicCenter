@@ -139,9 +139,14 @@ void CLatexOutputFilter::UpdateFileStack(const CString &strLine)
 			break;
 
 		case _T(')'):
-			//If we are good in parsing, this should not happen.
+			//If we are good in parsing, this ASSERT should not happen.
 			//Comment this out, if it always asserts or try to find the error,
 			//where we pop something from the stackFile, what should not be poped.
+			//
+			// Yeah, well, I found a case:
+			// Mostly TeX prints out some parts of the processed tex-file after reporting a bad box.
+			// And sometimes not! But if this part contains a closing brace ')', we will get
+			// an assertion here somewhat after a wrong poping caused by this ')'. Any Idea?
 			ASSERT(!m_stackFile.IsEmpty());
 			if (!m_stackFile.IsEmpty())
 				m_stackFile.Pop();
@@ -204,7 +209,7 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 	static __JM::RegEx	warning3(".*warning.*: (.*)", true); //Catches package warnings
 
 	//Catching Bad Boxes
-	static __JM::RegEx	badBox1("^(Over|Under)full \\\\[hv]box .* at lines ([[:digit:]]+)--[[:digit:]]+", true);
+	static __JM::RegEx	badBox1("^(Over|Under)full \\\\[hv]box .* at lines ([[:digit:]]+)--([[:digit:]]+)", true);
 	//Use the following only, if you know how to get the source line for it.
 	// This is not simple, as TeX is not reporting it.
 	//static __JM::RegEx	badBox2("^(Over|Under)full \\\\[hv]box .* has occurred while \\output is active", true);
@@ -218,15 +223,47 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 	static __JM::RegEx	output1("Output written on .* \\((\\d*) page.*\\)", true);
 	static __JM::RegEx	output2("No pages of output", true);
 
-	if (error1.Search(strLine))
+	/* ABOUT THE ORDER OF SEARCHING THE OUTPUT
+
+			Every TeX-User needs to correct an error, if he wants to have a valid document.
+			Therefore, errors are quite rare.
+			For some warnings, but not all, there is also a need to correct them - to get a better document.
+			Therefore, warnings may occure more often than errors.
+			Most users are not going to correct a bad box. Sometimes it is not possible at all (at least
+			for the average TeX-user).
+			Therefore, bad boxes are the most common type of catched entities.
+
+			To speed up parsing the output, it is preferable to look for the common stuff first.
+			==> 1. bad boxes; 2. warnings; 3. errors; 4. srcline-numbers; 5. other stuff
+
+	*/
+	if (badBox1.Search(strLine))
 	{
 		FlushCurrentItem();
+
+		//Get the srcline for it.
+		// - Mostly TeX reports something like "100--103" ==> so it is the first one.
+		// - Sometimes TeX reports "167--47". This comes up, if an input
+		// - file was just closed. The first number (n1) means the last line of the input file,
+		// - whereas the second number (n2) means the line after the \input-command in the
+		// - "master"-file. Certainly there is no need, that we always have (n1 > n2),
+		// - but we will not catch the case (n1 < n2) correctly anyway, because we do not
+		// - have enough information about "closing files by TeX" here.
+		// - 
+		// - So I make the assumption, that the last line of the input file is very likely
+		// - to be greater than the line of the \input-command.
+		// - ==> Take min(n1,n2) as the srcline. This will do a good job for more cases than
+		// - just taking the first number. But the problem still remains for some (rare) cases.
+		// - 
+		int n1 = _ttoi(strLine.Mid(badBox1.Position(2), badBox1.Length(2)));
+		int n2 = _ttoi(strLine.Mid(badBox1.Position(3), badBox1.Length(3)));
+
 		m_currentItem = COutputInfo(
 			m_stackFile.IsEmpty()? "" : m_stackFile.Top(),
-			0,
+			(n1 < n2) ? n1 : n2,
 			GetCurrentOutputLine(),
-			strLine.Mid(error1.Position(1), error1.Length(1)),
-			itmError);
+			strLine.Mid(badBox1.Position(1), badBox1.Length(1)),
+			itmBadBox);
 	}
 	else if (warning2.Search(strLine))
 	{
@@ -258,6 +295,16 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 			strLine.Mid(warning3.Position(1), warning3.Length(1)),
 			itmWarning);
 	}
+	else if (error1.Search(strLine))
+	{
+		FlushCurrentItem();
+		m_currentItem = COutputInfo(
+			m_stackFile.IsEmpty()? "" : m_stackFile.Top(),
+			0,
+			GetCurrentOutputLine(),
+			strLine.Mid(error1.Position(1), error1.Length(1)),
+			itmError);
+	}
 	else if (error2.Search(strLine))
 	{
 		FlushCurrentItem();
@@ -267,16 +314,6 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 			GetCurrentOutputLine(),
 			strLine.Mid(error2.Position(1), error2.Length(1)),
 			itmError);
-	}
-	else if (badBox1.Search(strLine))
-	{
-		FlushCurrentItem();
-		m_currentItem = COutputInfo(
-			m_stackFile.IsEmpty()? "" : m_stackFile.Top(),
-			_ttoi(strLine.Mid(badBox1.Position(2), badBox1.Length(2))),
-			GetCurrentOutputLine(),
-			strLine.Mid(badBox1.Position(1), badBox1.Length(1)),
-			itmBadBox);
 	}
 	else if (line1.Search(strLine))
 	{

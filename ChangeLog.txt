@@ -5,6 +5,8 @@
   Corresponding Dialog for defining placeholders for single files.
   Based on this, I could simplify the menus for the placeholders very much.
 - New layout for Options->Spelling.
+- Added external support for placeholders for sets of files.
+- Speeded up the TeX-output-filter and fixed a small catching problem.
 
 2002/04/29 cnorris
 - realtime spell check bug fix
