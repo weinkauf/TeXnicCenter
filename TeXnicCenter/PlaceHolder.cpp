@@ -4,17 +4,17 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License as
 * published by the Free Software Foundation; either version 2 of
 * the License, or (at your option) any later version.
-* 
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 * General Public License for more details.
-* 
+*
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -51,9 +51,9 @@ static char THIS_FILE[]=__FILE__;
 // global functions
 //-------------------------------------------------------------------
 
-CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders, 
-															LPCTSTR lpszMainPath /*= NULL*/, 
-															LPCTSTR lpszCurrentPath /*= NULL*/, 
+CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders,
+															LPCTSTR lpszMainPath /*= NULL*/,
+															LPCTSTR lpszCurrentPath /*= NULL*/,
 															long lCurrentLine /*= -1*/,
 															LPCTSTR lpszCurrentSelection, /*= NULL*/
 															bool bExpandPlaceholderSets, /*= false*/
@@ -228,7 +228,7 @@ CString AfxExpandWildcard(LPCTSTR lpszStringWithWildcard,
 	//Find files
 	CFileFind	ff;
 	bool bMoreFiles;
-	
+
 	if ((CPathTool::GetDrive(lpszStringWithWildcard)).IsEmpty())
 	{
 		bMoreFiles = ff.FindFile(CPathTool::Cat(lpszFolder, lpszStringWithWildcard));
@@ -285,7 +285,7 @@ CPlaceholderSets::CPlaceholderSets(CLatexProject* pProject /*= NULL*/)
 
 	//Construct a regular expression to search for the placeholders
 	CString strRegex;
-	strRegex.Format("\\$(q)*(s)*(f)*(r)*(%s|%s|%s|%s|%s|%s|%s)", 
+	strRegex.Format("\\$(q)*(s)*(f)*(r)*(%s|%s|%s|%s|%s|%s|%s)",
 																			TXC_PLACEHOLDERSETNAME_TEXFILES,
 																			TXC_PLACEHOLDERSETNAME_BIBTEXFILES,
 																			TXC_PLACEHOLDERSETNAME_GRAPHICFILES,
@@ -303,7 +303,7 @@ CPlaceholderSets::~CPlaceholderSets()
 }
 
 
-/**
+/*
 Evaluates the given String and resolves the desired filenames.
 */
 CString CPlaceholderSets::ExpandAllSets(LPCTSTR lpszStringWithPlaceholderSets,
@@ -403,7 +403,7 @@ CString CPlaceholderSets::ExpandAllSets(LPCTSTR lpszStringWithPlaceholderSets,
 }
 
 
-/**
+/*
 Returns a string with the names of all files, that are members
 of the sets defined in Sets.
 NOTE: These sets can only include files, which TXC <b>REPORTED</b>
@@ -468,7 +468,7 @@ CString CPlaceholderSets::GetFileSets(const unsigned int Sets,
 }
 
 
-/**
+/*
 Same as above, but returns a list of strings.
 
 NOTE: Strings in the list are never quoted.
@@ -581,7 +581,7 @@ CUniqueStringList* CPlaceholderSets::GetFileSets(const unsigned int Sets,
 	return pStrList;
 }
 
-/**
+/*
 Sets the pointer to the Project to retrieve information from.
 */
 CLatexProject* CPlaceholderSets::SetProject(CLatexProject* argpProject)
@@ -594,7 +594,7 @@ CLatexProject* CPlaceholderSets::SetProject(CLatexProject* argpProject)
 
 
 
-/**
+/*
 Converts a string according to the given boolean parameters
 and adds it to the given CUniqueStringList-Object.
 It expects to get a full path of the file, i.e. "D:\Temp\test.txt".
