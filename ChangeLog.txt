@@ -1,3 +1,7 @@
+2003/12/14 niteria
+- Partly implemented Feature 531270: User definable insert-commands
+  Will be improved later on.
+
 2003/12/14 svenwiegand
 - Implemented Feature 531272: Import and export for output profiles
 - Implemented Feature 547456: Basic XML-Support
