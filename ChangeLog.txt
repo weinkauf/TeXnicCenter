@@ -1,3 +1,6 @@
+2003/07/24 niteria
+- Implemented Feature 776912: Parse for even unknown environments
+
 2003/07/18 titoo
 - Implemented Feature 567832: Equations in Structure/Object View
 
