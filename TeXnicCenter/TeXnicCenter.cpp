@@ -396,6 +396,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 		return FALSE;
 
 	// show main frame
+	pMainFrame->RebuildToolsMenu();
 	pMainFrame->ShowWindow( m_nCmdShow );
 	pMainFrame->UpdateWindow();
 
@@ -1500,13 +1501,13 @@ MySpell* CTeXnicCenterApp::GetSpeller()
 		// Create dictionary name and path
 		dicName.Format(_T("%s\\%s_%s.dic"),
 			g_configuration.m_strSpellDictionaryPath, 
-			g_configuration.m_strLanguageDefault,
-			g_configuration.m_strLanguageDialectDefault);
+			g_configuration.m_strLanuage,
+			g_configuration.m_strLanguageDialect);
 		// Create affix name and path
 		affName.Format(_T("%s\\%s_%s.aff"),
 			g_configuration.m_strSpellDictionaryPath, 
-			g_configuration.m_strLanguageDefault,
-			g_configuration.m_strLanguageDialectDefault);
+			g_configuration.m_strLanuage,
+			g_configuration.m_strLanguageDialect);
 		try
 		{
 			if ( !::PathFileExists(affName) )
@@ -1653,6 +1654,7 @@ void CTeXnicCenterApp::OnProjectNewFromFile()
 
 	m_pProjectManager->OnProjectNewFromDocument(DocPathName);
 }
+
 
 void CTeXnicCenterApp::OnUpdateProjectNewFromFile(CCmdUI* pCmdUI) 
 {
