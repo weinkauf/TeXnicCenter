@@ -178,24 +178,6 @@ IDR_LATEXTYPE_YELLOW    ICON    DISCARDABLE     "res\\LatexDoc_yellow.ico"
 IDR_MAINFRAME_YELLOW    ICON    DISCARDABLE     "res\\TeXnicCenter_yellow.ico"
 IDR_LATEXWIZARD_YELLOW  ICON    DISCARDABLE     "res\\Wizard_yellow.ico"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Menu
-//
-
-IDR_IDENTIFIERS MENU DISCARDABLE 
-BEGIN
-    POPUP "Identifiers"
-    BEGIN
-        MENUITEM "ID_UPDATE_LATEX_OUTPUT",      ID_UPDATE_LATEX_OUTPUT
-        MENUITEM "ID_PROJECT_PARSE",            ID_PROJECT_PARSE
-        MENUITEM "ID_PROJECT_PARSED",           ID_PROJECT_PARSED
-        MENUITEM "ID_DOCUMENT_SAVED",           ID_DOCUMENT_SAVED
-        MENUITEM "ID_OPTIONS_CHANGED",          ID_OPTIONS_CHANGED
-    END
-END
-
-
 #ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -727,46 +709,6 @@ IDR_FULLSCREEN TOOLBAR DISCARDABLE  16, 15
 BEGIN
     BUTTON      ID_VIEW_FULLSCREEN
 END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
-IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 292, 231
-STYLE WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
-FONT 8, "MS Sans Serif"
-BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    LTEXT           "© 1999-2004",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
-    PUSHBUTTON      "ToolsCenter",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
-    CTEXT           "Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,
-                    SS_CENTERIMAGE
-    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
-    CONTROL         236,IDC_STATIC,"Static",SS_BITMAP,75,7,142,25
-    CTEXT           "Version number will be inserted here",
-                    IDC_STATIC_VERSION,7,34,278,8
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
-BEGIN
-    IDD_ABOUTBOX, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 285
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 224
-    END
-END
-#endif    // APSTUDIO_INVOKED
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1857,6 +1799,18 @@ BEGIN
     END
 END
 
+IDR_IDENTIFIERS MENU DISCARDABLE 
+BEGIN
+    POPUP "DNT:Identifiers"
+    BEGIN
+        MENUITEM "DNT:ID_UPDATE_LATEX_OUTPUT",  ID_UPDATE_LATEX_OUTPUT
+        MENUITEM "DNT:ID_PROJECT_PARSE",        ID_PROJECT_PARSE
+        MENUITEM "DNT:ID_PROJECT_PARSED",       ID_PROJECT_PARSED
+        MENUITEM "DNT:ID_DOCUMENT_SAVED",       ID_DOCUMENT_SAVED
+        MENUITEM "DNT:ID_OPTIONS_CHANGED",      ID_OPTIONS_CHANGED
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2851,6 +2805,21 @@ BEGIN
     PUSHBUTTON      "Abbrechen",IDCANCEL,335,285,50,14
 END
 
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 292, 231
+STYLE WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
+    LTEXT           "© 1999-2004",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
+    PUSHBUTTON      "ToolsCenter",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
+    CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,
+                    SS_CENTERIMAGE
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
+    CONTROL         236,IDC_STATIC,"Static",SS_BITMAP,75,7,142,25
+    CTEXT           "DNT:Version number will be inserted here",
+                    IDC_STATIC_VERSION,7,34,278,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -3105,6 +3074,14 @@ BEGIN
         RIGHTMARGIN, 385
         TOPMARGIN, 7
         BOTTOMMARGIN, 299
+    END
+
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 285
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 224
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -3559,7 +3536,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     ID_TIP                  "Zeigt Tipps und Tricks an\nTipps und Tricks"
     ID_LATEX_RUN            "Erzeugt aus Ihrem Projekt ein druckbares Dokument\nAusgabe erstellen"
-    ID_UPDATE_LATEX_OUTPUT  "Is send, when the latex-output has to be updated"
+    ID_UPDATE_LATEX_OUTPUT  "DNT:Is send, when the latex-output has to be updated"
     ID_NEXT_ERROR           "Springt zum nächsten Fehler\nNächster Fehler"
     ID_PREV_ERROR           "Springt zum vorherigen Fehler\nVorheriger Fehler"
     ID_FILE_SAVE_ALL        "Speichert alle geöffneten Dateien\nAlle speichern"
@@ -3693,14 +3670,14 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_PROJECT_PARSED       "Is send, when the project has been parsed and the views should be updated"
-    ID_PROJECT_PARSE        "Send by CMainFrame to parse project."
+    ID_PROJECT_PARSED       "DNT:Is send, when the project has been parsed and the views should be updated"
+    ID_PROJECT_PARSE        "DNT:Send by CMainFrame to parse project."
     ID_IDRPOPUPITEM_GEHEZU  "Springt zur Stelle der Definition\nGehe zur Definition"
     ID_ITEM_GOTO            "Springt zur Definition des Eintrags\nGehe zu Definition"
     ID_ITEM_INSERT_REF      "Fügt einen Verweis auf den Eintrag in der aktuellen Datei ein\nVerweis einfügen"
     ID_ITEM_INSERT_PAGEREF  "Fügt einen Verweis auf die Seite ein, auf der der Eintrag erscheint\nSeitenverweis einfügen"
     ID_ITEM_PROPERTIES      "Zeigt die Eigenschaften des Eintrags an\nEigenschaften"
-    ID_DOCUMENT_SAVED       "Send by a CLatexDoc-object, after it has been saved."
+    ID_DOCUMENT_SAVED       "DNT:Send by a CLatexDoc-object, after it has been saved."
     ID_INSERT_FORMULA_EMBEDDED 
                             "Füg eine im Text eingebettete Mathematische Formel ein\nEingebettete Formel\n$\001$"
     ID_INSERT_FORMULA       "Fügt eine abgesetzte mathematische Formel ein\nAbgesetzte Formel\n\r\\[\t\001\r\\]\r"
@@ -4116,7 +4093,7 @@ BEGIN
     ID_INSERT_DIAMONDSUIT   "\n\n\\diamondsuit"
     ID_INSERT_HEARSUIT      "\n\n\\heartsuit"
     ID_INSERT_SPADESUIT     "\n\n\\spadesuit"
-    ID_OPTIONS_CHANGED      "Send, when the user changed options in the options dialog."
+    ID_OPTIONS_CHANGED      "DNT:Send, when the user changed options in the options dialog."
     ID_WINDOW_LIST          "Verwaltet die momentan geöffneten Fenster.\nGeöffnete Fenster"
     ID_WINDOW_LIST_MENU     "&Fenster..."
     ID_INSERT_A             "\n\nA"
@@ -5723,11 +5700,38 @@ BEGIN
     END
 END
 
+IDR_IDENTIFIERS MENU DISCARDABLE 
+BEGIN
+    POPUP "DNT:Identifiers"
+    BEGIN
+        MENUITEM "DNT:ID_UPDATE_LATEX_OUTPUT",  ID_UPDATE_LATEX_OUTPUT
+        MENUITEM "DNT:ID_PROJECT_PARSE",        ID_PROJECT_PARSE
+        MENUITEM "DNT:ID_PROJECT_PARSED",       ID_PROJECT_PARSED
+        MENUITEM "DNT:ID_DOCUMENT_SAVED",       ID_DOCUMENT_SAVED
+        MENUITEM "DNT:ID_OPTIONS_CHANGED",      ID_OPTIONS_CHANGED
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
 //
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 292, 231
+STYLE WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
+    LTEXT           "© 1999-2004",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
+    PUSHBUTTON      "ToolsCenter",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
+    CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,
+                    SS_CENTERIMAGE
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
+    CONTROL         236,IDC_STATIC,"Static",SS_BITMAP,75,7,142,25
+    CTEXT           "DNT:Version number will be inserted here",
+                    IDC_STATIC_VERSION,7,34,278,8
+END
 
 IDD_ACTIVE_PROFILE DIALOGEX 0, 0, 257, 95
 STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
@@ -6711,6 +6715,14 @@ END
 #ifdef APSTUDIO_INVOKED
 GUIDELINES DESIGNINFO DISCARDABLE 
 BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 285
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 224
+    END
+
     IDD_ACTIVE_PROFILE, DIALOG
     BEGIN
         LEFTMARGIN, 7

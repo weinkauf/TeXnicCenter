@@ -44,6 +44,18 @@ CFileVersionInfo::CFileVersionInfo()
 }
 
 
+CFileVersionInfo::CFileVersionInfo(HMODULE hModule)
+{
+	Create(hModule);
+}
+
+
+CFileVersionInfo::CFileVersionInfo(LPCTSTR lpszFileName)
+{
+	Create(lpszFileName);
+}
+
+
 CFileVersionInfo::~CFileVersionInfo()
 {}
 
@@ -129,6 +141,8 @@ BOOL CFileVersionInfo::Create(LPCTSTR lpszFileName)
 				}
 			}
 		}
+		m_wLanguageId = (WORD)(dwLangCode&0x0000FFFF);
+		m_wCodePageId = (WORD)((dwLangCode&0xFFFF0000)>>16);
 		
 
 		CString	strSubBlock;
@@ -313,8 +327,23 @@ CString CFileVersionInfo::GetSpecialBuild() const
 }
 
 
+WORD CFileVersionInfo::GetLanguageId() const
+{
+	return m_wLanguageId;
+}
+
+
+WORD CFileVersionInfo::GetCodePageId() const
+{
+	return m_wCodePageId;
+}
+
+
 void CFileVersionInfo::Reset()
 {
+	m_wLanguageId = -1;
+	m_wCodePageId = -1;
+
 	ZeroMemory(&m_FileInfo, sizeof(m_FileInfo));
 	m_strCompanyName.Empty();
 	m_strFileDescription.Empty();

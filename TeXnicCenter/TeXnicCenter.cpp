@@ -255,14 +255,17 @@ BOOL CTeXnicCenterApp::InitInstance()
 	if (m_hTxcResources)
 	{
 		// check compatibility
-		CFileVersionInfo	fviResources, fviTxc;
-		fviResources.Create(m_hTxcResources);
-		fviTxc.Create();
+		CFileVersionInfo	fviResources(m_hTxcResources);
+		CFileVersionInfo	fviTxc((HMODULE)NULL);
 
 		if (fviResources.GetFileVersion()==fviTxc.GetFileVersion())
+		{
 			AfxSetResourceHandle(m_hTxcResources);
+			if (fviResources.GetLanguageId()!=MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL))
+				SetThreadLocale(MAKELCID(fviResources.GetLanguageId(), SORT_DEFAULT));
+		}
 		else
-			bResourcesIncompatible = TRUE;
+			bResourcesIncompatible = TRUE;		
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
