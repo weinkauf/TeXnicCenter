@@ -2,7 +2,6 @@
 // Microsoft Developer Studio generated include file.
 // Used by TeXnicCenter.rc
 //
-#define STE_STRING_FOR_SETLOCALE        16
 #define STE_BCGCBRESDLL                 17
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
