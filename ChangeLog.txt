@@ -3,6 +3,7 @@
 - Made spell checker dictionary format more tolerant
 - Fixed crash when dictionaries don't exist
 - Improved the spell checker dialog's handling of spell checker error
+- Configurable setlocale to fix several problems releated to special characters like accents and umulets.
 
 2002/05/01 niteria
 - Fixed Bug 551125: %rm and %rc not recognized by AfxExpandPlaceholder
