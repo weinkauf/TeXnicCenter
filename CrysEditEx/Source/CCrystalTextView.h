@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:58  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:26+02  sven_wiegand
 * Initial revision
 *
@@ -147,7 +150,7 @@ private:
 	//	Helper functions
 	void ExpandChars(LPCTSTR pszChars, int nOffset, int nCount, CString &line);
 
-	int ApproxActualOffset(int nLineIndex, int nOffset);
+	// int ApproxActualOffset(int nLineIndex, int nOffset); // Unused
 	void AdjustTextPoint(CPoint &point);
 	void DrawLineHelperImpl(CDC *pdc, CPoint &ptOrigin, const CRect &rcClip,
 							LPCTSTR pszChars, int nOffset, int nCount);
