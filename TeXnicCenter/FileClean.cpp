@@ -299,14 +299,17 @@ bool CFileCleanItemArray::SerializeFromRegistry(LPCTSTR strStartSection)
 	if (!reg.Open(strKey))
 	{
 		//Key does not exist; so I assume, that we need some standards
+		// - not cleaned, not protected; just here to assist the user
 		InsertSorted(CFileCleanItem("Postscript", "%bm.ps", CFileCleanItem::none, false), true, true);
 		InsertSorted(CFileCleanItem("DVI", "%bm.dvi", CFileCleanItem::none, false), true, true);
 		InsertSorted(CFileCleanItem("PDF", "%bm.pdf", CFileCleanItem::none, false), true, true);
 		InsertSorted(CFileCleanItem("bak", "*.bak", CFileCleanItem::none, true), true, true);
 
+		// - files to be cleaned
 		InsertSorted(CFileCleanItem("aux", "*.aux", CFileCleanItem::clean, true), true, true);
 		InsertSorted(CFileCleanItem("bbl", "*.bbl", CFileCleanItem::clean, true), true, true);
 		InsertSorted(CFileCleanItem("blg", "*.blg", CFileCleanItem::clean, true), true, true);
+		InsertSorted(CFileCleanItem("ent", "%bm.ent", CFileCleanItem::clean, true), true, true);
 		InsertSorted(CFileCleanItem("lof", "*.lof", CFileCleanItem::clean, true), true, true);
 		InsertSorted(CFileCleanItem("log", "*.log", CFileCleanItem::clean, true), true, true);
 		InsertSorted(CFileCleanItem("lot", "*.lot", CFileCleanItem::clean, true), true, true);
@@ -317,6 +320,7 @@ bool CFileCleanItemArray::SerializeFromRegistry(LPCTSTR strStartSection)
 		InsertSorted(CFileCleanItem("out", "*.out", CFileCleanItem::clean, true), true, true);
 		InsertSorted(CFileCleanItem("toc", "*.toc", CFileCleanItem::clean, true), true, true);
 
+		// - files to be protected
 		InsertSorted(CFileCleanItem("bmp", "*.bmp", CFileCleanItem::protect, true), true, true);
 		InsertSorted(CFileCleanItem("eps", "*.eps", CFileCleanItem::protect, true), true, true);
 		InsertSorted(CFileCleanItem("jpeg", "*.jpeg", CFileCleanItem::protect, true), true, true);
