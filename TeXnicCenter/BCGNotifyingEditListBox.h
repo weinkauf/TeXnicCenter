@@ -96,6 +96,7 @@ Should simplify the use of CBCGEditListBox, because you don't have to
 derive your own classes any more.
 
 @ingroup guielements
+@ingroup bcgext
 
 @author Sven Wiegand
 */
