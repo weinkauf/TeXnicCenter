@@ -30,6 +30,7 @@
 #include "TeXnicCenter.h"
 #include "InsertGraphicDialog.h"
 #include "global.h"
+#include "Configuration.h"
 #include <locale.h>
 
 #ifdef _DEBUG
@@ -240,6 +241,32 @@ void CInsertGraphicDialog::OnGraphicBrowse()
 		TRUE, NULL, m_strFile, 
 		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR, 
 		AfxLoadString( STE_GRAPHIC_FILES ), this );
+
+	// Get default path
+	CString strPersonalDir = "";
+	CLatexProject* pLProject = theApp.GetProject();
+	if (pLProject) strPersonalDir = pLProject->GetWorkingDir();
+	if (strPersonalDir.IsEmpty())
+	{
+		strPersonalDir = g_configuration.m_strDefaultPath;
+		if (strPersonalDir.IsEmpty())
+		{
+			//Get the system default for "My documents"
+			LPITEMIDLIST	lpidl;
+			if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
+			{
+				SHGetPathFromIDList(lpidl, strPersonalDir.GetBuffer(MAX_PATH));
+				strPersonalDir.ReleaseBuffer();
+
+				// free memory
+				LPMALLOC	lpMalloc;
+				SHGetMalloc(&lpMalloc);
+				if(lpMalloc)
+					lpMalloc->Free(lpidl);
+			}
+		}
+	}
+	dlg.m_ofn.lpstrInitialDir = strPersonalDir;
 
 	if( dlg.DoModal() != IDOK )
 		return;
