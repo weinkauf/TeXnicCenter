@@ -374,7 +374,6 @@ BEGIN_MESSAGE_MAP(CProjectNewDialog, CTemplateDialog)
 	//{{AFX_MSG_MAP(CProjectNewDialog)
 	ON_EN_CHANGE(IDC_EDIT_PROJECTNAME, OnChangeProjectName)
 	ON_EN_CHANGE(IDC_EDIT_PROJECTPATH, OnChangeProjectPath)
-	ON_BN_CLICKED(IDC_BUTTON_CREATE, OnCreate)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -483,7 +482,7 @@ void CProjectNewDialog::OnChangeProjectPath()
 }
 
 
-void CProjectNewDialog::OnCreate() 
+void CProjectNewDialog::Create() 
 {
 	UpdateData();
 

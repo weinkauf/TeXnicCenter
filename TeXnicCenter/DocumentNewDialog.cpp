@@ -338,7 +338,6 @@ BOOL CWizardBasedDocumentTemplateItem::InitDocument(LPCTSTR lpszPath, LPCTSTR lp
 
 BEGIN_MESSAGE_MAP(CDocumentNewDialog, CTemplateDialog)
 	//{{AFX_MSG_MAP(CDocumentNewDialog)
-	ON_BN_CLICKED(IDC_BUTTON_CREATE, OnCreate)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -362,13 +361,12 @@ void CDocumentNewDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CTemplateDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CDocumentNewDialog)
-	DDX_Control(pDX, IDC_BUTTON_CREATE, m_wndOkButton);
 	DDX_CBIndex(pDX, IDC_SELECT_FILEFORMAT, m_nFileFormat);
 	//}}AFX_DATA_MAP
 }
 
 
-void CDocumentNewDialog::OnCreate() 
+void CDocumentNewDialog::Create() 
 {
 	UpdateData();
 
