@@ -1,0 +1,194 @@
+/********************************************************************
+*
+* This file is part of the TeXnicCenter-system
+*
+* Copyright (C) 1999-2000 Sven Wiegand
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
+* 
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License as
+* published by the Free Software Foundation; either version 2 of
+* the License, or (at your option) any later version.
+* 
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*
+* If you have further questions or if you want to support
+* further TeXnicCenter development, visit the TeXnicCenter-homepage
+*
+*    http://www.ToolsCenter.org
+*
+*********************************************************************/
+
+#if !defined(AFX_OUTPUTVIEW_H__0EE022A5_20D1_11D3_929E_DA6C20A3421F__INCLUDED_)
+#define AFX_OUTPUTVIEW_H__0EE022A5_20D1_11D3_929E_DA6C20A3421F__INCLUDED_
+
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+// OutputView.h : Header-Datei
+//
+#include "OutputDoc.h"
+
+#define OPW_ADD_LINE		WM_USER + 5
+#define OPW_RESET			WM_USER + 6
+
+class COutputView : public CListCtrl
+{
+	DECLARE_DYNCREATE(COutputView)
+
+// construction/destruction
+public:
+	COutputView();
+	virtual ~COutputView();
+
+// Attribute
+public:
+	COutputDoc *GetDocument() const;
+
+// Operationen
+public:
+	/** Creates the view */
+	BOOL Create(const RECT &rect, CWnd *pwndParent);
+
+	/** Attaches the specified document to the view */
+	void AttachDoc(COutputDoc* pDocument);
+
+	/** Clears the view */
+	void ResetView();
+
+	/** 
+	Adds a line to the view.
+
+	@param lpszLine 
+		Line to add to the view.
+	@param nImage
+		Index of the image to display or -1 if no image should be
+		displayed for the new line.
+	*/
+	void AddLine(LPCTSTR lpszLine, int nImage = -1);
+
+	/**
+	Displays the specified image at the beginning of the specified 
+	line.
+
+	@param nLine
+		Line to change the image for.
+	@param nImage
+		Index of the image in the views image list, to display at the
+		beginning of the line.
+	*/
+	BOOL SetLineImage(int nLine, int nImage);
+
+	/**
+	Selects the specified line in the view an ensures, that it is visible.
+
+	@param nLine Line to select.
+	@param bPlaceAtTop
+		If set to TRUE, the contents will be scrolled so, that the 
+		specified line will be at the top of the list, otherwise the
+		method will only ensure that the line will be visible anywhere
+		in the window.
+	*/
+	void SelectLine(int nLine, BOOL bPlaceAtTop = FALSE);
+
+	/** A helper function, simply calls the protected OnUpdate member to do the work */
+	void DoOnUpdate(COutputView* pSender, LPARAM lHint, CObject* pHint);
+
+	//using CCrystalTextView::GetLineCount;
+	int GetLineCount() const;
+
+	/** 
+	Sets the image list to use 
+	
+	@return
+		Image list used previously
+	*/
+	CImageList *SetImageList(CImageList *pImageList);
+
+	/** Returns the image list, currently in use */
+	CImageList *GetImageList() const;
+
+// implementation helpers
+protected:
+	/** Applies the font settings to the window */
+	void ApplyFont();
+
+	/**
+	Modifies the given string, so that it can be displayed, as expected
+	and returns the result.
+	*/
+	static CString EnsureStringReadable(LPCTSTR lpszString);
+
+// overridables
+protected:
+	virtual void OnUpdate(COutputView* pSender, LPARAM lHint, CObject* pHint);
+
+// overridings
+protected:
+	//{{AFX_VIRTUAL(COutputView)
+	protected:
+	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	//}}AFX_VIRTUAL
+
+// implementation
+protected:
+	/*
+	virtual CCrystalTextBuffer *LocateTextBuffer();
+	virtual DWORD ParseLine( DWORD dwCookie, int nLineIndex, 
+		CCrystalTextView::TEXTBLOCK *pBuf, int &nActualItems );
+	*/
+
+// debugging
+public:
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+#endif
+
+	// Generierte Nachrichtenzuordnungsfunktionen
+protected:
+	LONG OnAddLine( UINT wParam, LONG lParam );
+	LONG OnReset( UINT wParam, LONG lParam );
+	afx_msg void OnSysColorChange();	
+	//{{AFX_MSG(COutputView)
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+
+// attributes
+protected:
+	/** The views document */
+	COutputDoc* m_pOutputDoc;
+
+private:
+	/** TRUE, if the user clicked on a scrollbar during output generations. */
+	BOOL m_bDoNotScroll;
+
+	/** TRUE if the view has been attached to a document */
+	BOOL m_bInitialized;
+
+	/** Font to be used for the view */
+	CFont m_font;
+
+	/** Textbuffer to store the text in. */
+	//CCrystalTextBuffer m_textBuffer;
+
+	/** Internal Line counter. */
+	//int m_nLineCount;
+};
+
+/////////////////////////////////////////////////////////////////////////////
+
+//{{AFX_INSERT_LOCATION}}
+// Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
+
+#endif // AFX_OUTPUTVIEW_H__0EE022A5_20D1_11D3_929E_DA6C20A3421F__INCLUDED_

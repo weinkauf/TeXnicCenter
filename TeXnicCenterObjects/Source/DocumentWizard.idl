@@ -1,0 +1,49 @@
+/********************************************************************
+*
+* This file is part of the TeXnicCenter-system
+*
+* Copyright (C) 1999-2000 Sven Wiegand
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
+* 
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License as
+* published by the Free Software Foundation; either version 2 of
+* the License, or (at your option) any later version.
+* 
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*
+* If you have further questions or if you want to support
+* further TeXnicCenter development, visit the TeXnicCenter-homepage
+*
+*    http://www.ToolsCenter.org
+*
+*********************************************************************/
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object, uuid(D5699120-B50F-11d5-A222-006097239934),
+	helpstring("Implement this interface to provide a document wizard")
+]
+interface IDocumentWizard : IUnknown
+{
+	[propget, helpstring("Return the title of the wizard.")]
+	HRESULT Title([out, retval] BSTR *title);
+
+	[propget, helpstring("Return a text that describes the wizard.")] 
+	HRESULT Description([out, retval] BSTR *description);
+
+	[propget, helpstring("Return the index of the icon in the DLL to use or -1 to use the default icon.")]
+	HRESULT IconIndex([out, retval] int *iconIndex);
+
+	[helpstring("Provide the wizard to the user and generate the file.")]
+	HRESULT DoModal([in] BSTR path, [in] BSTR cr, [out, retval] BOOL *success);
+};

@@ -1,0 +1,60 @@
+This version 200:
+CHANGED:  Allocator usage, to improve efficiency with instance based allocators.
+CHANGED:  regress.h, various fixes for various Borland C++ versions, allocators cleaned up.
+ADDED:    Win32 specific localisation code.
+ADDED:    C and C++ specific localisation code.
+ADDED:    collating element and equivalence class support.
+CHANGED:  Character class declarations.
+CHANGED:  Behaviour of ranges to deal with locales.
+ADDED:    Support for some perl escape sequences (but not yet (?...) ).
+CHANGED:  regbase::icase flag now turns on case insensitivity,
+          traits class char_regex_traits_i is now depreciated.
+CHANGED:  reg_grep now takes a predicate not an output iterator,
+          allows user code to terminate search midway through,
+          and to use regular callback function with grep.
+CHANGED:  Modified search heuristics to improve certain expression
+          types, especially expressions which start with a literal
+          string, or a single character repeat.  The latter are much
+          less likely to become pathological now.
+ADDED:    High level C++ class RegEx.
+
+Version 111:
+BUG:      Wouldn't compile directly on C++ Builder 4 when it was released
+          (not really a bug - more an incompatability)
+          
+FIXED:    All bugs discovered prior to this version (below).
+
+Version 110:
+BUG:      reg_match::maybe_assign could lead to pointer 
+          overrun in certain (rare) circumstances.
+
+FIXED:    All bugs discovered prior to this version (below).
+FIXED:    Support for VC++, GCC, EGCS.
+CHANGED:  Regress.h to work around various compiler bugs.
+
+Version 100:
+BUG:      Literal "," not recognised as a literal.
+
+FIXED:    All bugs discovered prior to this version (below).
+ADDED:    Regress.exe, regression test application.
+
+Version 095
+BUG:      wide character sets that start with ^ not recognised,
+          for example [^[:space:]] will not find anything.
+BUG:      reg_grep fails if match occurs at first character.
+BUG:      If regcomp fails, internal data not freed.
+BUG:      reg_grep fails to reinitialise match after assignment
+          to output iterator.  Line start optimised search restarts
+          from the wrong location if the match is longer than one line.
+BUG:      POSIX API functions can propagate C++ exceptions if the
+          default allocator can throw exceptions.
+BUG:      character sets don't function correctly when regbase::char_classes
+          is not set.
+
+
+
+
+
+
+
+

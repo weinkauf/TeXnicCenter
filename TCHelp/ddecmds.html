@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>DDE Commands</title>
+<meta name="author" content="">
+<meta name="generator" content="Ulli Meybohms HTML EDITOR">
+<link rel="stylesheet" href="STYLE.CSS" type="text/css">
+</head>
+<body>
+
+<h2>DDE Commands</h2>
+
+<p>DDE is an acronym for <em>Dynamic Data Exchange</em>, which is a windows mechanism for inter process communication (<em>IPC</em>). Applications can communicate via DDE. Though DDE is a very old mechanism, nearly all windows applications are supporting those commands.</p>
+
+<p>Normally you do not have the possibility to send DDE commands manually to an application (i.e. from a command line), but TeXnicCenter supports the special <a href="cmdlineargs.html">command line switch</a> '<var>/ddecmd</var>' which sends the specified DDE commands to an already running instance of TeXnicCenter or if there is no running instance, start up a new instance and execute the DDE commands for that new instance.</p>
+
+<p>The following DDE-commands are available:</p>
+
+<dl>
+   <dt>[open("<i>filename</i>")]</dt>
+   <dd>Opens the specified file.
+
+   <p>If the specified file is a project file, the project will be opened, otherwise the file will be opened in the editor.</p>
+   </dd>
+
+   <dt>[goto("<i>filename</i>", "<i>linenumber</i>")]</dt>
+   <dd>Opens the specified file in the editor and places the cursor at the specified line.</dd>
+
+   <dt>[print("<i>filename</i>")]</dt>
+   <dd>Prints the specified file to the default printer.</dd>
+
+   <dt>[printto("<i>filename</i>", "<i>printer</i>", "<i>driver</i>", "<i>port</i>")]</dt>
+   <dd>Prints the specified file to the specified printer.</dd>
+</dl>
+
+
+</body>
+</html>
