@@ -120,6 +120,18 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 		SerializeProfileData(_T("Settings"), "NavigatorFont", &m_fontNavigator, direction, sizeof(m_fontNavigator));
 	}
 
+	// cursor settings
+	int	nInsertCaretForm = CCrystalTextView::GetCaretInsertForm();
+	int nInsertCaretMode = CCrystalTextView::GetCaretInsertMode();
+	int	nOverwriteCaretForm = CCrystalTextView::GetCaretOverwriteForm();
+	int	nOverwriteCaretMode = CCrystalTextView::GetCaretOverwriteMode();
+	SerializeProfileInt(strSection, "InsertCaretForm", &nInsertCaretForm, direction, nInsertCaretForm);
+	SerializeProfileInt(strSection, "InsertCaretMode", &nInsertCaretMode, direction, nInsertCaretMode);
+	SerializeProfileInt(strSection, "OverwriteCaretForm", &nOverwriteCaretForm, direction, nOverwriteCaretForm);
+	SerializeProfileInt(strSection, "OverwriteCaretMode", &nOverwriteCaretMode, direction, nOverwriteCaretMode);
+	CCrystalTextView::SetCaretInsertStyle(nInsertCaretForm, nInsertCaretMode);
+	CCrystalTextView::SetCaretOverwriteStyle(nOverwriteCaretForm, nOverwriteCaretMode);
+
 	SerializeProfileInt( strSection, "EditorTabWidth", &m_nTabWidth, direction, 2 );
 	for( int i = 0; i < CCrystalTextView::COLORINDEX_ERRORBKGND; i++ )
 	{

@@ -23,6 +23,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:52  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:22+02  sven_wiegand
 * Initial revision
 *
@@ -42,6 +45,7 @@ CE_INLINE BOOL CCrystalEditView::GetOverwriteMode() const
 CE_INLINE void CCrystalEditView::SetOverwriteMode(BOOL bOvrMode /*= TRUE*/)
 {
 	m_bOvrMode = bOvrMode;
+	UpdateCaret();
 }
 
 CE_INLINE BOOL CCrystalEditView::GetDisableBSAtSOL() const

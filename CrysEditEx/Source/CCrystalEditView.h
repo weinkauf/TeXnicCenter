@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.2  2002/04/09 23:22:41  cnorris
+* Added explicit virtual destructor
+*
 * Revision 1.1.1.1  2002/02/26 08:11:51  svenwiegand
 * Initial revision
 *
@@ -92,7 +95,7 @@ public:
 	CCrystalEditView();
 	virtual ~CCrystalEditView();
 
-	BOOL GetOverwriteMode() const;
+	virtual BOOL GetOverwriteMode() const;
 	void SetOverwriteMode(BOOL bOvrMode = TRUE);
 
 	void ShowDropIndicator(const CPoint &point);
