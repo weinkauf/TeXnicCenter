@@ -238,6 +238,7 @@ BOOL CLatexDoc::DoSave( LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/ )
 			OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT|OFN_NOREADONLYRETURN, 
 			m_pTextBuffer ? m_pTextBuffer->GetCRLFMode() : g_configuration.m_nStandardFileFormat,
 			CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
+		dlg.m_ofn.lpstrInitialDir = g_configuration.m_strDefaultPath;
 
 		if( dlg.DoModal() != IDOK )
 			return FALSE;
