@@ -1,6 +1,9 @@
+2003/03/08 niteria
+- Fixed Bug 699688: "Save As"-Dialog with wrong InitDir.
+
 2003/03/04 christianwelzel
-- Implemented Feature 551294: Storing MRU Profile with Project 
-- Implemented Feature 535144: Specifying Output Profile in TeX file 
+- Implemented Feature 551294: Storing MRU Profile with Project.
+- Implemented Feature 535144: Specifying Output Profile in TeX file.
 
 2003/01/22 niteria
 - Fixed Bug 670414: syntax highlighting with verbatim env fails.
