@@ -1,3 +1,10 @@
+2003/12/18 niteria
+- Fixed MikTeX recognition. Now it should work with all installation types.
+  The "Install Root" found in HKCU is preferred. If not found there,
+  then HKLM is used.
+- The ListView of the Text Modules dialog gets updated as soon as
+  the user changes the name of a module.
+
 2003/12/16 svenwiegand
 - Implemented Feature 726766: "Option for selecting the language for the GUI"
 - Implemented Feature 601712: "Detailed list view for template dialog"
