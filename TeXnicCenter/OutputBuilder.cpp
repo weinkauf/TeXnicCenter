@@ -61,7 +61,7 @@ BOOL COutputBuilder::Create(int nMode,
 														COutputDoc *pDoc, COutputView *pView, 
 														LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath, 
 														BOOL bRunBibTex, BOOL bRunMakeIndex,
-														int nPriority /*= THREA_PRIORITY_BELOW_NORMAL*/)
+														int nPriority /*= THREAD_PRIORITY_BELOW_NORMAL*/)
 {
 	m_nMode = nMode;
 
