@@ -42,14 +42,14 @@ public:
 
 // overridings
 protected:
-	//{{AFX_VIRTUAL(CActiveOutputtypeDialog)
+	//{{AFX_VIRTUAL(CActiveProfileDialog)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
 	//}}AFX_VIRTUAL
 
 // message handlers
 protected:
-	//{{AFX_MSG(CActiveOutputtypeDialog)
+	//{{AFX_MSG(CActiveProfileDialog)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeProfile();
 	virtual void OnOK();
@@ -58,7 +58,7 @@ protected:
 
 // dialog field data
 protected:
-	//{{AFX_DATA(CActiveOutputtypeDialog)
+	//{{AFX_DATA(CActiveProfileDialog)
 	enum { IDD = IDD_ACTIVE_PROFILE };
 	CButton	m_wndOkButton;
 	CListBox	m_wndProfileList;
