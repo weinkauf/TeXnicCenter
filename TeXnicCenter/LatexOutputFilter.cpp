@@ -137,9 +137,10 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// parse for new error, warning or bad box
 	static __JM::RegEx	error1("^! LaTeX Error: (.*)$", true);
-	static __JM::RegEx	error2("^! (.*)$", true);
+	static __JM::RegEx	error2("^! (.*)$", true); // This could catch warnings, so run it last
 	static __JM::RegEx	warning1("^LaTeX .*warning: (.*)", true);
 	static __JM::RegEx	warning2("^LaTeX .*warning: (.*) on input line ([[:digit:]]+)", true);
+	static __JM::RegEx	warning3("^! (La|pdf)TeX .*warning.*: (.*)", true);
 	static __JM::RegEx	badBox1("^(Over|Under)full \\\\[hv]box .*in paragraph at lines ([[:digit:]]+)--[[:digit:]]+", true);
 	static __JM::RegEx	line1("l.([[:digit:]]+)", true);
 
@@ -171,6 +172,16 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 			0,
 			GetCurrentOutputLine(),
 			strLine.Mid(warning1.Position(1), warning1.Length(1)),
+			itmWarning);
+	}
+	else if (warning3.Search(strLine))
+	{
+		FlushCurrentItem();
+		m_currentItem = COutputInfo(
+			m_stackFile.IsEmpty()? "" : m_stackFile.Top(),
+			0,
+			GetCurrentOutputLine(),
+			strLine.Mid(warning3.Position(1), warning3.Length(1)),
 			itmWarning);
 	}
 	else if (error2.Search(strLine))
