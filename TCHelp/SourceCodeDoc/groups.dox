@@ -28,8 +28,28 @@
 */
 
 /**
+        @defgroup templates Templates
+        @brief Modules dealing with Templates.
+*/
+
+/**
         @defgroup process Process Calling
         @brief Modules related to Process Calling.
+*/
+
+/**
+        @defgroup profiles Output Profiles
+        @brief Modules related to Output Profiles.
+*/
+
+/**
+        @defgroup cominterface COM Interface
+        @brief Modules for the COM Interface.
+*/
+
+/**
+        @defgroup misc Misceleaneous Modules
+        @brief Modules that do not fit into the other categories.
 */
 
 /**

@@ -26,12 +26,21 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(TIPDLG_H_INCLUDED_)
 #define TIPDLG_H_INCLUDED_
 
-/////////////////////////////////////////////////////////////////////////////
-// CTipDlg dialog
+/**	Shows some usefull hints (tips) after startup.
 
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CTipDlg : public CDialog
 {
 // Construction
