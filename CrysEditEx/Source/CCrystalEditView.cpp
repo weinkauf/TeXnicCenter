@@ -58,6 +58,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.6  2003/12/16 20:04:38  svenwiegand
+* Implemented Feature 726766: "Option for selecting the language for the GUI"
+*
 * Revision 1.5  2003/12/06 19:59:58  svenwiegand
 * - Implemented Feature 601708 + additions: The user can now set the styles for
 *   the text cursor independant for the insert and the overwrite mode. The cursor
@@ -227,11 +230,12 @@ BOOL CCrystalEditView::DeleteCurrentSelection()
 		ASSERT_VALIDTEXTPOS(ptCursorPos);
 		SetAnchor(ptCursorPos);
 		SetSelection(ptCursorPos, ptCursorPos);
-		SetCursorPos(ptCursorPos);
 		EnsureVisible(ptCursorPos);
 
 		// [JRT]:
 		m_pTextBuffer->DeleteText(this, ptSelStart.y, ptSelStart.x, ptSelEnd.y, ptSelEnd.x, CE_ACTION_DELSEL);
+
+		SetCursorPos(ptCursorPos); //PV just moved
 		return TRUE;
 	}
 	return FALSE;
@@ -286,10 +290,11 @@ void CCrystalEditView::Cut()
 	ASSERT_VALIDTEXTPOS(ptCursorPos);
 	SetAnchor(ptCursorPos);
 	SetSelection(ptCursorPos, ptCursorPos);
-	SetCursorPos(ptCursorPos);
 	EnsureVisible(ptCursorPos);
 
 	m_pTextBuffer->DeleteText(this, ptSelStart.y, ptSelStart.x, ptSelEnd.y, ptSelEnd.x, CE_ACTION_CUT); // [JRT]
+
+	SetCursorPos(ptCursorPos); //PV just moved
 }
 
 void CCrystalEditView::OnEditDelete() 
@@ -316,10 +321,11 @@ void CCrystalEditView::OnEditDelete()
 	ASSERT_VALIDTEXTPOS(ptCursorPos);
 	SetAnchor(ptCursorPos);
 	SetSelection(ptCursorPos, ptCursorPos);
-	SetCursorPos(ptCursorPos);
 	EnsureVisible(ptCursorPos);
 
 	m_pTextBuffer->DeleteText(this, ptSelStart.y, ptSelStart.x, ptSelEnd.y, ptSelEnd.x, CE_ACTION_DELETE); // [JRT]
+
+	SetCursorPos(ptCursorPos); //PV just moved
 }
 
 void CCrystalEditView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) 
@@ -491,13 +497,14 @@ void CCrystalEditView::OnEditDeleteBack()
 	ASSERT_VALIDTEXTPOS(ptCursorPos);
 	SetAnchor(ptCursorPos);
 	SetSelection(ptCursorPos, ptCursorPos);
-	SetCursorPos(ptCursorPos);
 	EnsureVisible(ptCursorPos);
 
 	if (bDeleted)
 	{
 		m_pTextBuffer->DeleteText(this, ptCursorPos.y, ptCursorPos.x, ptCurrentCursorPos.y, ptCurrentCursorPos.x, CE_ACTION_BACKSPACE); // [JRT]
 	}
+
+	SetCursorPos(ptCursorPos); //PV just moved
 	return;
 }
 
@@ -678,6 +685,8 @@ void CCrystalEditView::OnEditUntab()
 
 				if (nPos > 0)
 					m_pTextBuffer->DeleteText(this, L, 0, L, nPos, CE_ACTION_INDENT); // [JRT]
+
+				SetCursorPos(ptSelEnd);  //PV
 			}
 		}
 		m_bHorzScrollBarLocked = FALSE;

@@ -1,3 +1,7 @@
+
+2005/03/19 vachis
+- Fixed Bug: bad brace highlighting when cursos is at ^ in: "[^citeVisSym] and one presses Ctrl-Delete.
+
 2005/03/19 svenwiegand
 - Fixed Bug 1166521: Error when calling online help, while help is not open
 
