@@ -15,6 +15,11 @@ changes to the existing ones, please do NOT add/commit files containing
 "TeXnicCenterProjectSessionInformation" (.tps), if this is not what you
 intend to test.
 
+Please do NOT remove a test after you fixed a bug. The test shall stay
+here for all times. If the test needs some changes to show up a new bug,
+consider adding a new test. It is ok, to test several problems with one
+project.
+
 If you have further questions or if you want to support
 further TeXnicCenter development, visit the TeXnicCenter-homepage
 
