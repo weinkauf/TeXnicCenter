@@ -201,7 +201,7 @@ void CMDIFrameManager::OnWindowList()
 
 void CMDIFrameManager::OnUpdateWindowMenu(CCmdUI* pCmdUI) 
 {
-	if (!g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers || !pCmdUI->m_pMenu)
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers || !pCmdUI->m_pMenu)
 		return;
 
 	// add the most recent and current window to window menu

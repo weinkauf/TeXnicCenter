@@ -177,7 +177,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	// create menu bar
-	if (!g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers)
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers)
 	{
 		if( !m_wndMenuBar.Create( this ) )
 		{
@@ -256,7 +256,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndOutputBar.SetCaptionStyle( TRUE, TRUE );
 
 	// dock the bars
-	if (!g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers)
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers)
 		m_wndMenuBar.EnableDocking( CBRS_ALIGN_ANY );
 
 	m_wndToolBar.EnableDocking( CBRS_ALIGN_ANY );
@@ -274,7 +274,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	EnableDocking(CBRS_ALIGN_ANY);
 
-	if (!g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers)
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers)
 		DockControlBar( &m_wndMenuBar );
 
 	DockControlBar( &m_wndToolBar );
@@ -305,7 +305,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	// Enable window list manager...
-	if (!g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers)
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers)
 		EnableWindowsDialog(ID_WINDOW_LIST, ID_WINDOW_LIST_MENU, TRUE);
 	else
 	{
@@ -342,7 +342,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 
 BOOL CMainFrame::SetMenu( CMenu *pMenu )
 {
-	if (!g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers)
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers)
 		m_wndMenuBar.CreateFromMenu( pMenu->m_hMenu, FALSE );
 	return TRUE;
 }

@@ -55,7 +55,7 @@ COptionPageGeneric::COptionPageGeneric() : CPropertyPage(COptionPageGeneric::IDD
 	m_strClosingQm = g_configuration.m_strClosingQuotationMark;
 	m_strOpeningQm = g_configuration.m_strOpeningQuotationMark;
 	m_bRestoreSession = g_configuration.m_bLoadLastProject;
-	m_bOptimizeGuiForVisuallyHandicappedUsers = g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsersOnNextStart;
+	m_bOptimizeGuiForVisuallyHandicappedUsers = g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart;
 	//}}AFX_DATA_INIT
 }
 
@@ -118,9 +118,9 @@ void COptionPageGeneric::OnOK()
 	g_configuration.m_strOpeningQuotationMark = m_strOpeningQm;
 	g_configuration.m_bLoadLastProject = m_bRestoreSession ;
 
-	if ((bool)g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers != (bool)m_bOptimizeGuiForVisuallyHandicappedUsers)
+	if ((bool)g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers != (bool)m_bOptimizeGuiForVisuallyHandicappedUsers)
 		AfxMessageBox(STE_OPTIONS_REQUIRES_RESTART, MB_ICONINFORMATION|MB_OK);
-	g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsersOnNextStart = m_bOptimizeGuiForVisuallyHandicappedUsers;
+	g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart = m_bOptimizeGuiForVisuallyHandicappedUsers;
 	
 	CPropertyPage::OnOK();
 }
