@@ -2,7 +2,7 @@
 Compatibility=1.1 or later
 Compiled file=..\Output\TeXCntr.chm
 Contents file=TeXnicCenter.hhc
-Default Window=Window
+Default Window=$global_TxcHelpWindow
 Default topic=root.html
 Display compile progress=No
 Enhanced decompilation=Yes
@@ -13,7 +13,7 @@ Language=0x409 Englisch (USA)
 Title=TeXnicCenter Help
 
 [WINDOWS]
-Window="TeXnicCenter Help","TeXnicCenter.hhc","TeXnicCenter.hhk","root.html","root.html",,,,,0x63420,,0x384e,[322,56,979,660],0x80000,,,,,,0
+$global_TxcHelpWindow="TeXnicCenter Help","TeXnicCenter.hhc","TeXnicCenter.hhk","root.html","root.html","TeXnicCenter.html","TeXnicCenter","LatexHelpBook.chm::\Welcome_to_Latex_Help_e-Book.htm","LaTeX Help Book",0x63420,,0xc384e,[322,56,979,660],0x80000,,,,,,0
 
 
 [FILES]
