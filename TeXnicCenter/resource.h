@@ -923,6 +923,7 @@
 #define ID_INSERT_SURD                  33095
 #define ID_INSERT_TOP                   33096
 #define ID_INSERT_BOT                   33097
+#define ID_FORMAT_TEXTTT                33098
 #define ID_INSERT_ANGLE                 33099
 #define ID_INSERT_FORALL                33100
 #define ID_INSERT_EXISTS                33101
@@ -959,6 +960,7 @@
 #define ID_INSERT_INLINEFRAC            33132
 #define ID_INSERT_SQRT                  33133
 #define ID_INSERT_SQRTEX                33134
+#define ID_FORMAT_TEXTSC                33135
 #define ID_INSERT_OVERBRACE             33150
 #define ID_INSERT_UNDERBRACE            33151
 #define ID_INSERT_LEFTLFLOOR            33152

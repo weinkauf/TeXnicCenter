@@ -282,6 +282,8 @@ BEGIN
     BUTTON      ID_FORMAT_TEXTBF
     BUTTON      ID_FORMAT_TEXTIT
     BUTTON      ID_FORMAT_TEXTSL
+    BUTTON      ID_FORMAT_TEXTTT
+    BUTTON      ID_FORMAT_TEXTSC
     SEPARATOR
     BUTTON      ID_FORMAT_NORMALFONT
     SEPARATOR
@@ -319,6 +321,8 @@ BEGIN
     BUTTON      ID_FORMAT_TEXTBF
     BUTTON      ID_FORMAT_TEXTIT
     BUTTON      ID_FORMAT_TEXTSL
+    BUTTON      ID_FORMAT_TEXTTT
+    BUTTON      ID_FORMAT_TEXTSC
     SEPARATOR
     BUTTON      ID_FORMAT_FLUSHLEFT
     BUTTON      ID_FORMAT_CENTER
@@ -1599,6 +1603,8 @@ BEGIN
             MENUITEM "&Fett",                       ID_FORMAT_TEXTBF
             MENUITEM "&Kursiv",                     ID_FORMAT_TEXTIT
             MENUITEM "&Schräggestellt",             ID_FORMAT_TEXTSL
+            MENUITEM "&Typewriter",                 ID_FORMAT_TEXTTT
+            MENUITEM "Ka&pitälchen",                ID_FORMAT_TEXTSC
         END
         MENUITEM SEPARATOR
         POPUP "&Ausrichtung"
@@ -3916,6 +3922,7 @@ BEGIN
     ID_INSERT_SURD          "\n\n\\surd"
     ID_INSERT_TOP           "\n\n\\top"
     ID_INSERT_BOT           "\n\n\\bot"
+    ID_FORMAT_TEXTTT        "Setzt Text im Argument diktengleich (Schreibmaschinenschrift)\nTypewriter\n\\texttt{\001}"
     ID_INSERT_ANGLE         "\n\n\\angle"
     ID_INSERT_FORALL        "\n\n\\forall"
     ID_INSERT_EXISTS        "\n\n\\exists"
@@ -3959,6 +3966,7 @@ BEGIN
     ID_INSERT_INLINEFRAC    "\n\n\001/"
     ID_INSERT_SQRT          "\n\n\\sqrt{\001}"
     ID_INSERT_SQRTEX        "\n\n\\sqrt[\001]{}"
+    ID_FORMAT_TEXTSC        "Setzt Text im Argument als Kapitälchen\nKapitälchen\n\\textsc{\001}"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -5275,6 +5283,8 @@ BEGIN
             MENUITEM "&Bold",                       ID_FORMAT_TEXTBF
             MENUITEM "&Italic",                     ID_FORMAT_TEXTIT
             MENUITEM "&Slanted",                    ID_FORMAT_TEXTSL
+            MENUITEM "&Typewriter",                 ID_FORMAT_TEXTTT
+            MENUITEM "Small &Caps",                 ID_FORMAT_TEXTSC
         END
         MENUITEM SEPARATOR
         POPUP "&Alignment"
@@ -7536,6 +7546,7 @@ BEGIN
     ID_INSERT_SURD          "\n\n\\surd"
     ID_INSERT_TOP           "\n\n\\top"
     ID_INSERT_BOT           "\n\n\\bot"
+    ID_FORMAT_TEXTTT        "Generates typewriter text\nTypewriter\n\\texttt{\001}"
     ID_INSERT_ANGLE         "\n\n\\angle"
     ID_INSERT_FORALL        "\n\n\\forall"
     ID_INSERT_EXISTS        "\n\n\\exists"
@@ -7579,6 +7590,7 @@ BEGIN
     ID_INSERT_INLINEFRAC    "\n\n\001/"
     ID_INSERT_SQRT          "\n\n\\sqrt{\001}"
     ID_INSERT_SQRTEX        "\n\n\\sqrt[\001]{}"
+    ID_FORMAT_TEXTSC        "Generates text with small caps\nSmall Caps\n\\textsc{\001}"
 END
 
 STRINGTABLE DISCARDABLE 
