@@ -637,7 +637,7 @@ void CLatexProject::OnProjectParsed()
 
 void CLatexProject::SetCurrentStructureItem( int nIndex )
 {
-	ASSERT( nIndex >= -1 && nIndex < m_aStructureItems.GetSize() );
+	ASSERT( nIndex > -1 && ( (nIndex == 0) || (nIndex < m_aStructureItems.GetSize()) ) ); // invalid index
 	if (nIndex < 0 || nIndex >= m_aStructureItems.GetSize())
 		return;
 
