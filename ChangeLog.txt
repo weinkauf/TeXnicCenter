@@ -1,3 +1,8 @@
+2002/06/01 niteria
+- Updated defaults for cleaning the project.
+  (tempfile of package endnotes [%bm.ent] added)
+- Finished Documentation of Placeholders.
+
 2002/05/30 niteria
 - Fixed Bug 555447: TeX-Output: Fails for names over 2 lines
 - Very small corrections to CPathTool and CCrystalTextView.
