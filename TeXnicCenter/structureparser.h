@@ -241,6 +241,18 @@ private:
 	BOOL Parse( LPCTSTR lpszPath, CCookieStack &cookies );
 
 	/**
+	Add the specified file to the m_anItem-array.
+
+	This method resolves file names to the actual name and adds it to the m_anItem-array.
+
+	@param lpszPath
+		Path to the file to add
+	@return
+		Resolved path
+	*/
+	CString AddFileItem( LPCTSTR lpszPath );
+
+	/**
 	Parses the specified string and fills the m_anItem-array.
 
 	@param lpText
@@ -349,6 +361,9 @@ protected:
 
 	/** Regular expression describing an input-command. */
 	tregex m_regexInput;
+
+	/** Regular expression describing the biblography command. */
+	tregex m_regexBib;
 
 	/** Array containing the different headers. */
 	static CString m_astrHeader[MAX_DEPTH];
