@@ -69,6 +69,11 @@ public:
 	*/
 	void SetPath(CString strNewPath);
 
+	/** 
+	Returns the path of ini file to read and write from.
+	*/
+	CString GetPath();
+
 	/**
 	Reads the INI file.
 
