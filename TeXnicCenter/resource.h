@@ -109,6 +109,7 @@
 #define STE_XML_PARSE_ERROR             172
 #define STE_PROFILE_FILE_FILTER         173
 #define IDS_NEWTEXTMODULE               174
+#define STE_XML_INSTALLNEEDED           175
 #define STE_POPUP_EDITOR                176
 #define STE_POPUP_ITEM                  177
 #define STE_POPUP_MAINWINDOWAREA        178

@@ -3643,6 +3643,7 @@ BEGIN
     STE_XML_PARSE_ERROR     "Beim Lesen einer XML-Datei ist ein Fehler aufgetreten.\n\nFehler 0x%08x: %s\n\nDatei:\t%s\nZeile:\t%d\nZeichen:\t%d\n\n%s"
     STE_PROFILE_FILE_FILTER "Ausgabeprofile (*.tco)|*.tco|Alle Dateien (*.*)|*.*||"
     IDS_NEWTEXTMODULE       "Neuer Textbaustein"
+    STE_XML_INSTALLNEEDED   "Zur Nutzung dieser Funktion muss folgende Software auf Ihrem System korrekt installiert sein\n\n\tMicrosoft XML Parser (MSXML)\n\nEinen Verweis auf die aktuelle Version finden Sie im Download-Bereich von\n\n\thttp://www.TeXnicCenter.org/"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7577,6 +7578,7 @@ BEGIN
     STE_XML_PARSE_ERROR     "An error occured while reading an XML file.\n\nError 0x%08x: %s\n\nFile:\t%s\nLine:\t%d\nCharacter:\t%d\n\n%s"
     STE_PROFILE_FILE_FILTER "Output profiles (*.tco)|*.tco|All Files (*.*)|*.*||"
     IDS_NEWTEXTMODULE       "New Text Module"
+    STE_XML_INSTALLNEEDED   "In order to use this function, the following software must be properly installed on your system\n\n\tMicrosoft XML Parser (MSXML)\n\nA link to the newest version can be found in the download area of\n\n\thttp://www.TeXnicCenter.org/"
 END
 
 STRINGTABLE DISCARDABLE 

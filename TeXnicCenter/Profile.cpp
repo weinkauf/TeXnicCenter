@@ -370,8 +370,8 @@ BOOL CProfileMap::LoadXml(LPCTSTR lpszPath)
 			_T("xmlns:txcop='http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd'"), 
 			CPathTool::Cat(theApp.GetWorkingDir(), _T("OutputProfiles.xsd")),
 			_T("http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd"));
-		if (!xmlDoc.Load(lpszPath))
-			AfxThrowComException(S_FALSE);
+
+		if (!xmlDoc.Load(lpszPath)) AfxThrowComException(S_FALSE);
 
 		RemoveAll();
 
@@ -389,29 +389,48 @@ BOOL CProfileMap::LoadXml(LPCTSTR lpszPath)
 	}
 	catch (CComException *pE)
 	{
-		BOOL	bReportedError = FALSE;
-		if (xmlDoc && xmlDoc.GetParseError() && xmlDoc.GetParseError().GetErrorCode()!=0)
+		bool bReportedError(false);
+
+		//Ask MsXML for error description
+		try
 		{
-			try
+			if (xmlDoc && xmlDoc.GetParseError() && xmlDoc.GetParseError().GetErrorCode()!=0)
 			{
-				MsXml::CXMLDOMParseError	xmlError(xmlDoc.GetParseError());
+				MsXml::CXMLDOMParseError xmlError(xmlDoc.GetParseError());
 				CString	strErrorMsg;
 				strErrorMsg.Format(STE_XML_PARSE_ERROR, 
 					xmlError.GetErrorCode(), xmlError.GetReason(),
 					xmlError.GetUrl(), xmlError.GetLine(), xmlError.GetLinepos(),
 					xmlError.GetSrcText());
+
 				AfxMessageBox(strErrorMsg, MB_ICONEXCLAMATION|MB_OK);
-				bReportedError = TRUE;
-			}
-			catch (CComException *pE)
-			{
-				pE->Delete();
+				bReportedError = true;
 			}
 		}
+		catch (CComException* pENew)
+		{
+			pENew->Delete();
+		}
+
+
+		//Report Error, if MsXML did not respond
 		if (!bReportedError)
 		{
-			pE->ReportError(MB_ICONEXCLAMATION|MB_OK);
+			if (pE->GetDescription() == _T(""))
+			{
+				//A generic COM error.
+				//For example, MsXML not installed.
+
+				//Inform the user, that he needs to install MsXML.
+				AfxMessageBox(STE_XML_INSTALLNEEDED, MB_ICONINFORMATION|MB_OK);
+			}
+			else
+			{
+				//Some other error. For example, schema file is missing (*.xsd)
+				pE->ReportError(MB_ICONEXCLAMATION|MB_OK);
+			}
 		}
+
 		pE->Delete();
 		return FALSE;
 	}
@@ -441,7 +460,7 @@ BOOL CProfileMap::SaveXml(LPCTSTR lpszPath) const
 		GetKeyList(astrProfiles);
 		for (int i = 0; i < astrProfiles.GetSize(); ++i)
 		{
-			CProfile	*pProfile = NULL;
+			CProfile* pProfile = NULL;
 			if (!Lookup(astrProfiles[i], pProfile) || !pProfile)
 				continue;
 
@@ -456,9 +475,22 @@ BOOL CProfileMap::SaveXml(LPCTSTR lpszPath) const
 
 		return TRUE;
 	}
-	catch (CComException *pE)
+	catch (CComException* pE)
 	{
-		pE->ReportError(MB_ICONEXCLAMATION|MB_OK);
+		if (pE->GetDescription() == _T(""))
+		{
+			//A generic COM error.
+			//For example, MsXML not installed.
+
+			//Inform the user, that he needs to install MsXML.
+			AfxMessageBox(STE_XML_INSTALLNEEDED, MB_ICONINFORMATION|MB_OK);
+		}
+		else
+		{
+			//Some other error. For example, schema file is missing (*.xsd)
+			pE->ReportError(MB_ICONEXCLAMATION|MB_OK);
+		}
+
 		pE->Delete();
 		return FALSE;
 	}
