@@ -1,3 +1,6 @@
+2002/04/29 christianwelzel
+- Feature 539142: Configurable Default Path for Documents
+
 2002/04/27 cnorris
 - Spell check bug fixes
 - Release build bug fix
