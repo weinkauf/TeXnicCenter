@@ -41,9 +41,9 @@
 
 /**
 This class implements a normal CEdit-control, which remembers the
-carret position each time it looses the focus. After it has lost the
+caret position each time it looses the focus. After it has lost the
 focus, you can call the InsertText()-method to insert text at the
-remembered carret position and give the focus back to the control.
+remembered caret position and give the focus back to the control.
 
 This class is usefull inside a dialog, in combination with 
 menu-buttons, used to insert words into an edit control by choosing 
