@@ -6642,9 +6642,8 @@ BEGIN
     CONTROL         "Include &subdirectories",
                     IDC_OPTIONS_FILECLEAN_RECURSIVE,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,115,123,115,10
-    CONTROL         "Before deleting files, show a dialog to &confirm.",
-                    IDC_OPTIONS_FILECLEAN_CONFIRM,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,140,159,10
+    CONTROL         "&Confirm before delete",IDC_OPTIONS_FILECLEAN_CONFIRM,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,140,83,10
     LTEXT           "Description:",IDC_STATIC,5,95,38,8
     LTEXT           "Pattern:",IDC_STATIC,115,95,26,8
     LTEXT           "Action:",IDC_STATIC,5,125,23,8
