@@ -64,8 +64,10 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 		case COutputDoc::hintParsingFinished:
 			{
 				//-----------------------------------------------------------
-				// remember selected item				
-				CString	strSelectedItem = GetItemPath( GetSelectedItem() );
+				// remember expanded items
+				CString strSelectedItem = GetItemPath(GetSelectedItem());
+				CStringArray astrExpandedItems;
+				GetExpandedItems(astrExpandedItems);
 
 				//-----------------------------------------------------------
 				// fill tree
@@ -117,8 +119,9 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 				}
 
 				//-----------------------------------------------------------
-				// reselect previously selected item
-				SelectItem( GetItemByPath( strSelectedItem ) );
+				//try to expand items
+				ExpandItems(astrExpandedItems);
+				SelectItem(GetItemByPath(strSelectedItem));
 			}
 			break;
 	}
