@@ -3,6 +3,7 @@
   (%wm and %wc togther with slash and short versions)
 - Output Wizard now uses these new placeholders for forward search and Compiling to dvi.
   This fixes Bug 577238 even more... ;-))
+- Fixed Bug 577756: Variiertes Sigma inserts \sigma
 
 2002/07/04 svenwiegand
 - Implemented Feature 539143: Save New Document after Creation
