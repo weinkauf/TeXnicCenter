@@ -1032,16 +1032,6 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 		return FALSE;
 	}
 
-	// Add some tools for the start...subsequent tools are loaded from the registry
-	CBCGUserToolsManager* pUserToolsManager = theApp.GetUserToolsManager();
-	if (pUserToolsManager != NULL &&
-		pUserToolsManager->GetUserTools().IsEmpty())
-	{
-		CBCGUserTool* pTool1 = pUserToolsManager->CreateNewTool();
-		pTool1->m_strLabel = _T("Windows Explorer");
-		pTool1->SetCommand (_T("explorer.exe"));
-	}
-
 	m_wndNavigationBar.SetFlatTabs(theApp.m_bTabFlatBorders);
 	m_wndOutputBar.SetFlatTabs(theApp.m_bTabFlatBorders);
 	EnableMDITabs(theApp.m_bMDITabs, theApp.m_bMDITabIcons, (CBCGTabWnd::Location)theApp.m_nMDITabLocation);

@@ -532,7 +532,7 @@ void CTeXnicCenterApp::PreLoadState()
 }
 
 
-void CTeXnicCenterApp::LoadCustomState ()
+void CTeXnicCenterApp::LoadCustomState()
 {
 	BOOL bControlBarCaption = GetInt(_T("ControlBarCaption"));
 	BOOL bGradientCaption = bControlBarCaption ? GetInt(_T("GradientCaption")) : FALSE;
@@ -544,10 +544,51 @@ void CTeXnicCenterApp::LoadCustomState ()
 	g_ProfileMap.SerializeFromRegistry();
 
 	CBCGSizingControlBar::SetCaptionStyle (bControlBarCaption, bGradientCaption);
+
+	///////////////////////////////
+	// Tools
+	CBCGUserToolsManager* pUserToolsManager = theApp.GetUserToolsManager();
+	if (pUserToolsManager)
+	{
+		//Load tools from different location,
+		// because the original BCG implementation does not have
+		// a versionabel serialization. This would cause a lost
+		// of all tools, if first TXC 1b6.20 is started and
+		// then an earlier version of TXC.
+		// Using this, we can at least assure, that the tools of 1b6.20
+		// are not destroyed by older versions of TXC.
+		// Conversion from older versions to 1b6.20 is done automatically.
+		//Due to the new Language-Resource-DLLs, the BCG-Workspace is serialized
+		// to some other part of the registry anyway. So older versions would
+		// not destroy our new tools. Anyway, to be on the safe side we save it here again.
+
+		CBCGRegistryEx ToolsReg(false, true); //HKCU, ReadOnly
+		//Do we have the new reg entry for tools - or first start of 1b6.20?
+		CString strNewToolsKey = CPathTool::Cat(m_strRegistryRoot, "Settings");
+		if (ToolsReg.OpenFromRoot(strNewToolsKey))
+		{
+			if (ToolsReg.VerifyValue("Tools"))
+			{
+				pUserToolsManager->LoadState(strNewToolsKey);
+			}
+
+			ToolsReg.Close();
+		}
+
+		//Add some tools for the start...subsequent tools are loaded from the registry
+		if (pUserToolsManager->GetUserTools().IsEmpty())
+		{
+			CBCGUserTool* pTool1 = pUserToolsManager->CreateNewTool();
+			pTool1->m_strLabel = _T("Windows Explorer");
+			pTool1->SetCommand (_T("explorer.exe"));
+			pTool1->m_strArguments = "/n,/e,\"%dc\"";
+			pTool1->m_strInitialDirectory = "%dc";
+		}
+	}
 }
 
 
-void CTeXnicCenterApp::SaveCustomState ()
+void CTeXnicCenterApp::SaveCustomState()
 {
 	// BCG specific stuff
 	WriteInt(_T("ControlBarCaption"), CBCGSizingControlBar::IsDrawCaption());
@@ -565,6 +606,17 @@ void CTeXnicCenterApp::SaveCustomState ()
 	// speller
 	if ( m_pSpell && m_pSpell->ismodified() && g_configuration.m_strSpellPersonalDictionary.Compare(_T("")))
 		m_pSpell->save_personal_dictionary( g_configuration.m_strSpellPersonalDictionary );
+
+	///////////////////////////////
+	// Tools
+	CBCGUserToolsManager* pUserToolsManager = theApp.GetUserToolsManager();
+	if (pUserToolsManager)
+	{
+		//Save tools to different location. Read the reason at LoadCustomState.
+		//Create new reg entry for tools - or first start of 1b6.20?
+		CString strNewToolsKey = CPathTool::Cat(m_strRegistryRoot, "Settings");
+		pUserToolsManager->SaveState(strNewToolsKey);
+	}
 }
 
 
@@ -617,7 +669,7 @@ int CTeXnicCenterApp::ExitInstance()
 	if (m_hCrystalEditResources)
 		FreeLibrary(m_hCrystalEditResources);
 
-	// unload txc resource DLL
+	// unload TXC resource DLL
 	if (m_hTxcResources)
 		FreeLibrary(m_hTxcResources);
 
