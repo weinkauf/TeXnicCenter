@@ -1,24 +1,24 @@
 # Microsoft Developer Studio Project File - Name="TeXnicCenterObjects" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** NICHT BEARBEITEN **
+# ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
 CFG=TeXnicCenterObjects - Win32 Debug
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "TeXnicCenterObjects.mak".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
-!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "TeXnicCenterObjects.mak" CFG="TeXnicCenterObjects - Win32 Debug"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "TeXnicCenterObjects - Win32 Release" (basierend auf  "Win32 (x86) Static Library")
-!MESSAGE "TeXnicCenterObjects - Win32 Debug" (basierend auf  "Win32 (x86) Static Library")
+!MESSAGE "TeXnicCenterObjects - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "TeXnicCenterObjects - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -55,12 +55,13 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo
 # Begin Custom Build - Building type library...
 OutDir=.\../Lib
-InputPath=\Eigene Dateien\Source\TeXnicCenterObjects\Lib\TeXnicCenterObjects.lib
+InputPath=\Projekte\texniccenter\TeXnicCenterObjects\Lib\TeXnicCenterObjects.lib
 SOURCE="$(InputPath)"
 
 "$(OutDir)\TeXnicCenterObjects.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	midl /client none /server none /win32 TeXnicCenterObjects.idl 
-	move TeXnicCenterObjects.tlb "$(OutDir)" 
+	xcopy /f TeXnicCenterObjects.tlb "$(OutDir)" 
+	del TeXnicCenterObjects.tlb 
 	
 # End Custom Build
 
@@ -91,12 +92,13 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo /out:"../Lib/TeXnicCenterObjectsD.lib"
 # Begin Custom Build - Building type library...
 OutDir=.\../Lib
-InputPath=\Eigene Dateien\Source\TeXnicCenterObjects\Lib\TeXnicCenterObjectsD.lib
+InputPath=\Projekte\texniccenter\TeXnicCenterObjects\Lib\TeXnicCenterObjectsD.lib
 SOURCE="$(InputPath)"
 
 "$(OutDir)\TeXnicCenterObjects.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	midl /client none /server none /win32 TeXnicCenterObjects.idl 
-	move TeXnicCenterObjects.tlb "$(OutDir)" 
+	xcopy /f TeXnicCenterObjects.tlb "$(OutDir)" 
+	del TeXnicCenterObjects.tlb 
 	
 # End Custom Build
 

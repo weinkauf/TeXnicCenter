@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.5  2002/04/02 03:45:21  niteria
+* Bug 538164: Workaround / fix in ResetView. Search for BEGIN niteria
+*
 * Revision 1.4  2002/03/20 00:48:11  cnorris
 * Mouse scroll wheel handler
 *
@@ -1178,9 +1181,7 @@ void CCrystalTextView::ResetView()
 	m_nTabSize = 4;
 	m_nMaxLineLength = -1;
 	m_nScreenLines = -1;
-	//BEGIN niteria
-	m_nSubLineCount = -1;
-	//END niteria
+	m_nSubLineCount = -1; //Change of View affects Number of Sublines as well
 	m_nScreenChars = -1;
 	m_nIdealCharPos = -1;
 	m_ptAnchor.x = 0;

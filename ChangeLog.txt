@@ -1,7 +1,6 @@
 2002/04/02 niteria
 - Translated the new strings for parsing (introduced by Chris) to german.
-- Workaround / fix for Bug 538164 in CCrystalTextView::ResetView().
-  Search for "BEGIN niteria" and have a look at it.
+- Fix for Bug 538164 in CCrystalTextView::ResetView().
 
 2002/04/01 niteria
 - At the start of the ProfileDialog (for defining of profiles),
