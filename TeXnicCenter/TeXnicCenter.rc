@@ -5663,7 +5663,7 @@ STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Configuration Wizard - Welcome"
 FONT 8, "MS Sans Serif"
 BEGIN
-    LTEXT           "Welcom to the Configuration Wizard.",IDC_STATIC,80,5,
+    LTEXT           "Welcome to the Configuration Wizard.",IDC_STATIC,80,5,
                     175,10
     LTEXT           "The Configuration Wizard will help you, creating the output profiles. In TeXnicCenter output profiles are necessary to generate printable files.",
                     IDC_STATIC,80,20,175,30
