@@ -86,7 +86,14 @@ void CLatexOutputFilter::UpdateFileStack(const CString &strLine)
 		{
 		case _T('('):
 			{
-				for (int j = i+1; j < strLine.GetLength() && strLine[j] != _T('[') && strLine[j] != _T(')') && strLine[j] != _T('('); j++);
+				for (int j = i+1;
+								 ( j < strLine.GetLength() )
+							&& ( strLine[j] != _T('[') )
+							&& ( strLine[j] != _T(')') )
+							&& ( strLine[j] != _T('(') )
+							&& ( strLine[j] != _T('{') );
+							j++);
+
 				if ((j-1) > i)
 				{
 					CString	strFile(strLine.Mid(i+1, (j-1) - (i+1) + 1));
@@ -119,9 +126,11 @@ void CLatexOutputFilter::FlushCurrentItem()
 			m_nErrors++;
 			break;
 		case itmWarning:
+			{
 			AddWarning(m_currentItem);
 			m_nWarnings++;
 			break;
+			}
 		case itmBadBox:
 			AddBadBox(m_currentItem);
 			m_nBadBoxes++;
@@ -147,13 +156,28 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// parse for new error, warning or bad box
+
+	//Catching Errors
 	static __JM::RegEx	error1("^! LaTeX Error: (.*)$", true);
 	static __JM::RegEx	error2("^! (.*)$", true); // This could catch warnings, so run it last
-	static __JM::RegEx	warning1("^LaTeX .*warning: (.*)", true);
+
+	//Catching Warnings
+	static __JM::RegEx	warning1("^(! )?(La|pdf)TeX .*warning.*: (.*)", true);
 	static __JM::RegEx	warning2("^LaTeX .*warning: (.*) on input line ([[:digit:]]+)", true);
-	static __JM::RegEx	warning3("^! (La|pdf)TeX .*warning.*: (.*)", true);
-	static __JM::RegEx	badBox1("^(Over|Under)full \\\\[hv]box .*in paragraph at lines ([[:digit:]]+)--[[:digit:]]+", true);
-	static __JM::RegEx	line1("l.([[:digit:]]+)", true);
+	static __JM::RegEx	warning3(".*warning.*: (.*)", true); //Catches package warnings
+
+	//Catching Bad Boxes
+	static __JM::RegEx	badBox1("^(Over|Under)full \\\\[hv]box .* at lines ([[:digit:]]+)--[[:digit:]]+", true);
+	//Use the following only, if you know how to get the source line for it.
+	// This is not simple, as TeX is not reporting it.
+	//static __JM::RegEx	badBox2("^(Over|Under)full \\\\[hv]box .* has occurred while \\output is active", true);
+
+	//Catching the source line numbers of error/warning types
+	// which are reported over more than one line in the output
+	static __JM::RegEx	line1("l\\.([[:digit:]]+)", true);
+	static __JM::RegEx	line2("line ([[:digit:]]+)", true);
+
+	//Catching the number of output pages
 	static __JM::RegEx	output1("Output written on .* \\((\\d*) page.*\\)", true);
 	static __JM::RegEx	output2("No pages of output", true);
 
@@ -184,7 +208,7 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 			m_stackFile.IsEmpty()? "" : m_stackFile.Top(),
 			0,
 			GetCurrentOutputLine(),
-			strLine.Mid(warning1.Position(1), warning1.Length(1)),
+			strLine.Mid(warning3.Position(1), warning3.Length(1)),
 			itmWarning);
 	}
 	else if (warning3.Search(strLine))
@@ -219,7 +243,34 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 	}
 	else if (line1.Search(strLine))
 	{
-		m_currentItem.m_nSrcLine = _ttoi(strLine.Mid(line1.Position(1), line1.Length(1)));
+		//Catching the line number of some errors/warnings types, which do not
+		// report their place of occurence in their first line. Consider the
+		// following example (catched by line1):
+		//
+		//! Undefined control sequence.
+		//<argument> \pa 
+		//               rskip
+		//l.2 \setlength{\pa rskip}{0.5ex}
+		if (m_currentItem.m_nSrcLine == 0)
+		{
+			m_currentItem.m_nSrcLine = _ttoi(strLine.Mid(line1.Position(1), line1.Length(1)));
+		}
+	}
+	else if (line2.Search(strLine))
+	{
+		//Only change the SrcLine, if it could not been assigned yet (== 0), !!!
+		// because TeX or a TeX-Package is reporting the errorneus input line
+		// one line after reporting the error itself. Consider the following
+		// example (catched by line2):
+		//
+		//Package amsmath Warning: Cannot use `split' here;
+		//(amsmath)                trying to recover with `aligned' on input line 65.
+		//
+		//But: Do not change an Item, if the SrcLine could be retrieved from the output!!!
+		if (m_currentItem.m_nSrcLine == 0)
+		{
+			m_currentItem.m_nSrcLine = _ttoi(strLine.Mid(line2.Position(1), line2.Length(1)));
+		}
 	}
 	else if (output1.Search(strLine))
 	{
