@@ -179,7 +179,7 @@ BOOL CLatexParser::SearchKeyword( LPCTSTR lpStart, LPCTSTR lpEnd, SUBEXPRESSION 
 					return TRUE;
 
 				default:
-					for( ; lpStart < lpEnd && (_istalnum( *lpStart ) || *lpStart == _T('@')); lpStart++ );
+					for( ; lpStart < lpEnd && (_istalpha( *lpStart ) || *lpStart == _T('@')); lpStart++ );
 					what[0].second = (lpStart < lpEnd)? lpStart : lpEnd;
 					return TRUE;
 			}
