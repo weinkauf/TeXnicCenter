@@ -295,6 +295,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 	SetRegistryBase( _T("BCGWorkspace") );
 	InitContextMenuManager();
 	InitKeyboardManager();
+	CBCGVisualManager::SetDefaultManager(RUNTIME_CLASS(CBCGWinXPVisualManager));
 	InitSkinManager(g_configuration.m_strSkinDirectory);
 	GetSkinManager()->EnableSkinsDownload(g_configuration.m_strSkinUrl);
 	CBCGToolbarComboBoxButton::SetFlatMode();

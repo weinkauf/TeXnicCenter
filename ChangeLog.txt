@@ -1,3 +1,7 @@
+2003/12/06 svenwiegand
+- Enabled support for Windows XP Theming (requires BCGControlBar library 6.2,
+  take a look into the new HowToBuild.txt to learn were to download it).
+
 2003/12/04 niteria
 - Implemented Feature 852581: TemplateDialogs: Remember last opened tab
 - Fixed bug 852582: TemplateDialogs: Tabs are not ordered alphabetically
