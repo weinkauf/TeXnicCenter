@@ -1,3 +1,6 @@
+2002/04/10 niteria
+- Fixed Bug 541810: First Chance Exception in COutputBuilder::RunPostProcessors
+
 2002/04/08 cnorris
 - Implemented basic spell checker functionality. The spell checker is based
 on the MySpell library, which is the same implementation used by Mozilla and
@@ -6,7 +9,6 @@ download on the Internet from the OpenOffice webpage. Dictionaries moved into
 to the \language subdirectory of the directory TeXnicCenter are installed 
 and ready for use. More work is scheduled for the spell checker in the 
 future. Future features include: check as you type and personal dictionary.
-
 
 2002/04/02 niteria
 - Translated the new strings for parsing (introduced by Chris) to german.
