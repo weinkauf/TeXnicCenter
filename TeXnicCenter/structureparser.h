@@ -22,7 +22,7 @@
 * If you have further questions or if you want to support
 * further TeXnicCenter development, visit the TeXnicCenter-homepage
 *
-*    http://www.ToolsCenter.org
+*	 http://www.ToolsCenter.org
 *
 *********************************************************************/
 
@@ -44,7 +44,7 @@
 #include "TextSource.h"
 #include "OutputInfo.h"
 
-typedef	reg_expression<TCHAR, char_regex_traits<TCHAR>, JM_DEF_ALLOC(TCHAR)> tregex;
+typedef reg_expression<TCHAR, char_regex_traits<TCHAR>, JM_DEF_ALLOC(TCHAR)> tregex;
 
 class CParseOutputHandler
 {
@@ -85,7 +85,7 @@ public:
 	int m_nType;
 
 	/** Path of file this item occurs in. */
-	CString	m_strPath;
+	CString m_strPath;
 
 	/** Line in the file, this item occurs on. */
 	int m_nLine;
@@ -146,7 +146,7 @@ This class is used to parse the structure of a latex project
 
 @author Sven Wiegand
 */
-class CStructureParser  
+class CStructureParser	
 {
 	/** This function is used as a worker thread to parse the structure. */
 	friend UINT StructureParserThread( LPVOID pStructureParser );
@@ -438,6 +438,12 @@ protected:
 
 	/** Regular expression describing a table end. */
 	tregex m_regexTableEnd;
+
+	/** Regular expression describing an equation start. */
+	tregex m_regexEquationStart;
+
+	/** Regular expression describing an equation end. */
+	tregex m_regexEquationEnd;
 
 	/** Regular expression describing a caption. */
 	tregex m_regexCaption;

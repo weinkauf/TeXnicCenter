@@ -22,7 +22,7 @@
 * If you have further questions or if you want to support
 * further TeXnicCenter development, visit the TeXnicCenter-homepage
 *
-*    http://www.ToolsCenter.org
+*	 http://www.ToolsCenter.org
 *
 *********************************************************************/
 
@@ -74,7 +74,7 @@ void CStructureView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 			{
 				//-----------------------------------------------------------
 				// remember expanded items
-				CString				strSelectedItem = GetItemPath( GetSelectedItem() );
+				CString 			strSelectedItem = GetItemPath( GetSelectedItem() );
 				CStringArray	astrExpandedItems;
 				GetExpandedItems( astrExpandedItems );
 
@@ -96,6 +96,7 @@ void CStructureView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 
 					switch( si.m_nType )
 					{
+					case CStructureParser::equation:
 					case CStructureParser::figure:
 					case CStructureParser::table:
 					case CStructureParser::header:
