@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:36+02  sven_wiegand
 * Initial revision
 *
@@ -56,9 +59,11 @@ protected:
 		int m_nColorIndex;
 	};
 
+
 // construction/destruction
 protected:
 	CCrystalTextBlock( TEXTBLOCK *pTextBlock, int &rnActualItems );
+
 
 // operations
 public:
@@ -74,13 +79,40 @@ public:
 	*/
 	BOOL Add( int nCharPos, int nColorIndex );
 
+	/** Removes all blocks after given index, including block on this index.
+
+	@param nIndex
+		Block index.
+
+	@return number of removed blocks
+	*/
+	int ClearBlocksFrom( int nIndex );
+
+	/**Returns values of text block on given index.
+
+	@param nIndex
+		Text block index.
+	@param nCharPos
+		Character position of the line, where the text block starts.
+	@param nColorIndex
+		Index of the color to use to colorize the text block.
+	*/
+	void GetBlockAt( int nIndex, int &nCharPos, int &nColorIndex ) const;
+
+
+	/**Returns number of textblock items
+	@return number of textblock items
+	*/
+	int GetBlocksCount() const;
+
 // attributes
 protected:
 	/** text block to work on */
-	TEXTBLOCK	*m_pTextBlock;
+		TEXTBLOCK	*m_pTextBlock;
 
 	/** Index */
 	int &m_rnActualItems;
 };
+
 
 #endif // !defined(AFX_CRYSTALTEXTBLOCK_H__37ECF0C1_145F_11D3_929E_444553540000__INCLUDED_)
