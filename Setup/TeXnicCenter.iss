@@ -44,13 +44,8 @@ Source: ..\output\Release\BCGCBResDEU.dll; DestDir: {sys}; CopyMode: normal; Fla
 Source: ..\output\Release\BCGSkinDownloader.dll; DestDir: {sys}; CopyMode: normal; Flags: comparetimestampalso sharedfile; Components: Application_Files
 Source: ..\output\Release\BCGCB58.dll; DestDir: {sys}; CopyMode: normal; Flags: comparetimestampalso sharedfile; Components: Application_Files
 
-Source: ..\..\..\..\..\..\WINDOWS\SYSTEM32\MFC42.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall regserver; Components: System_Files
-Source: ..\..\..\..\..\..\WINDOWS\SYSTEM32\MSVCIRT.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall; Components: System_Files
-Source: ..\..\..\..\..\..\WINDOWS\SYSTEM32\MSVCRT.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall; Components: System_Files
-Source: ..\..\..\..\..\..\WINDOWS\SYSTEM32\MSVCP60.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall; Components: System_Files
 Source: ..\TeXnicCenterObjects\Lib\TeXnicCenterObjects.tlb; DestDir: {app}; CopyMode: normal; Flags: comparetimestampalso regtypelib; Components: Application_Files
 Source: ..\output\Release\Skins\*.dll; DestDir: {app}\Skins; CopyMode: normal; Flags: comparetimestampalso; Components: Skins
-Source: ..\..\..\..\..\..\WINDOWS\SYSTEM32\OLEAUT32.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall regserver; Components: System_Files
 Source: ..\output\Release\language\*.aff; DestDir: {app}\Language; CopyMode: normal; Components: Application_Files; Flags: comparetimestampalso
 Source: ..\output\Release\language\*.dic; DestDir: {app}\Language; CopyMode: normal; Components: Application_Files; Flags: comparetimestampalso
 
