@@ -252,6 +252,10 @@ SOURCE=.\CFindTextDlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\myspell\character.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\Include\CrysEditEx.h
 # End Source File
 # Begin Source File
