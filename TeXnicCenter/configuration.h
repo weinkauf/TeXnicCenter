@@ -360,13 +360,13 @@ public:
 	// Accessability
 
 	/** TRUE to optimize the GUI for visually handicapped users. */
-	BOOL m_bOptimizeMenuForVisuallyHandycappedUsers;
+	BOOL m_bOptimizeMenuForVisuallyHandicappedUsers;
 
 	/** 
 	TRUE to optimize the GUI for visually hadicapped users in the
 	next session.
 	*/
-	BOOL m_bOptimizeMenuForVisuallyHandycappedUsersOnNextStart;
+	BOOL m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart;
 };
 
 // declaration of one and only global configuration object

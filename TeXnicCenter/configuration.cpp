@@ -200,12 +200,12 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Accessability
-	strSection = "Settings\\Accessability";
+	// Accessibility
+	strSection = "Settings\\Accessibility";
 	
-	SerializeProfileInt(strSection, _T("OptimizeMenuForVisuallyHandycappedUsers"), (int*)&m_bOptimizeMenuForVisuallyHandycappedUsersOnNextStart, direction, FALSE);
+	SerializeProfileInt(strSection, _T("OptimizeMenuForVisuallyHandicappedUsers"), (int*)&m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart, direction, FALSE);
 	if (direction==Load)
-		m_bOptimizeMenuForVisuallyHandycappedUsers = m_bOptimizeMenuForVisuallyHandycappedUsersOnNextStart;
+		m_bOptimizeMenuForVisuallyHandicappedUsers = m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart;
 }
 
 
