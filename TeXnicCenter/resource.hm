@@ -29,6 +29,7 @@
 #define HIDC_LABEL                      0x80980417    // IDD_ITEM_PROPERTIES
 #define HIDC_LINE                       0x80980415    // IDD_ITEM_PROPERTIES
 #define HIDC_MAIN_FILE                  0x80970412    // IDD_PROJECT_PROPERTIES
+#define HIDC_OPTIONS_DEFAULT_PATH_EDIT  0x80cd0509    // IDD_OPTIONS_FILE
 #define HIDC_OPTIONS_REPLACE_QM         0x80a10444    // IDD_OPTIONS_GENERIC
 #define HIDC_OPTIONS_REPLACE_QM_CLOSE_EDIT \
                                         0x80a10448    // IDD_OPTIONS_GENERIC

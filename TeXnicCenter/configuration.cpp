@@ -70,6 +70,7 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	SerializeProfileInt( strSection, "SaveAutomatic", (int*)&m_bSaveAutomatic, direction, TRUE );
 	SerializeProfileInt( strSection, "SaveInterval", (int*)&m_unSaveInterval, direction, 10 );
 	SerializeProfileInt( strSection, "StandardFileFormat", &m_nStandardFileFormat, direction, CRLF_STYLE_DOS );
+	SerializeProfileString( strSection, "DefaultPath", &m_strDefaultPath, direction );
 	SerializeProfileInt( strSection, "OpenDocWndMaximized", (int*)&m_bOpenDocWndMaximized, direction, FALSE );
 
 	// quotation mark replacement
