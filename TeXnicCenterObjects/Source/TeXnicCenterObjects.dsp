@@ -55,12 +55,12 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo
 # Begin Custom Build - Building type library...
 OutDir=.\../Lib
-InputPath=\Projekte\texniccenter\TeXnicCenterObjects\Lib\TeXnicCenterObjects.lib
+InputPath=\Projekte\TeXnicCenter\TeXnicCenterObjects\Lib\TeXnicCenterObjects.lib
 SOURCE="$(InputPath)"
 
 "$(OutDir)\TeXnicCenterObjects.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	midl /client none /server none /win32 TeXnicCenterObjects.idl 
-	xcopy /f TeXnicCenterObjects.tlb "$(OutDir)" 
+	xcopy /y /f TeXnicCenterObjects.tlb "$(OutDir)" 
 	del TeXnicCenterObjects.tlb 
 	
 # End Custom Build
@@ -92,12 +92,12 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo /out:"../Lib/TeXnicCenterObjectsD.lib"
 # Begin Custom Build - Building type library...
 OutDir=.\../Lib
-InputPath=\Projekte\texniccenter\TeXnicCenterObjects\Lib\TeXnicCenterObjectsD.lib
+InputPath=\Projekte\TeXnicCenter\TeXnicCenterObjects\Lib\TeXnicCenterObjectsD.lib
 SOURCE="$(InputPath)"
 
 "$(OutDir)\TeXnicCenterObjects.tlb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	midl /client none /server none /win32 TeXnicCenterObjects.idl 
-	xcopy /f TeXnicCenterObjects.tlb "$(OutDir)" 
+	xcopy /y /f TeXnicCenterObjects.tlb "$(OutDir)" 
 	del TeXnicCenterObjects.tlb 
 	
 # End Custom Build
