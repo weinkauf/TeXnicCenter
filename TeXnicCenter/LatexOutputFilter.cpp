@@ -311,7 +311,7 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 			m_stackFile.IsEmpty()? "" : m_stackFile.Top(),
 			0,
 			GetCurrentOutputLine(),
-			strLine.Mid(warning3.Position(1), warning3.Length(1)),
+			strLine.Mid(warning1.Position(1), warning1.Length(1)),
 			itmWarning);
 	}
 	else if (warning3.Search(strLine))
