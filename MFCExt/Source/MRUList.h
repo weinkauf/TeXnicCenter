@@ -19,6 +19,12 @@
 *
 ********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_MRULIST_H__C8D50DC1_2052_11D4_A221_006097239934__INCLUDED_)
 #define AFX_MRULIST_H__C8D50DC1_2052_11D4_A221_006097239934__INCLUDED_
 
@@ -219,7 +225,7 @@ void CMRUList<TYPE, ARG_TYPE>::Add( ARG_TYPE element )
 	if( nCurrentPosition == 0 )
 		return;
 
-	// remove element at the found position
+	//Remove element at the found position
 	if( nCurrentPosition > 0 )
 		Remove( nCurrentPosition );
 
@@ -228,6 +234,18 @@ void CMRUList<TYPE, ARG_TYPE>::Add( ARG_TYPE element )
 	{
 		InsertAt( 0, element );
 		m_nElementCount++;
+	}
+	else
+	{
+		//We do not have space for it.
+		// So we need to remove the least recently used element first
+		if (m_nElementCount > 0) //Should always be true, but who knows...
+		{
+			Remove( m_nElementCount - 1 );
+			//Now add
+			InsertAt( 0, element );
+			m_nElementCount++;
+		}
 	}
 }
 
