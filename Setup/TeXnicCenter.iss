@@ -79,7 +79,6 @@ Name: SendToLink; Description: Add TeXnicCenter to the 'Send To' menu; GroupDesc
 [Dirs]
 Name: {app}\Templates\Documents; Flags: uninsalwaysuninstall
 Name: {app}\Templates\Projects; Flags: uninsalwaysuninstall
-Name: {app}\Skins; Flags: uninsalwaysuninstall
 Name: {app}\Help; Flags: uninsalwaysuninstall; Components: Help_Files
 
 [Types]
