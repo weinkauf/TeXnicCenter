@@ -162,14 +162,16 @@ int HashMgr::load_tables(const char * tpath)
 
 	// raw dictionary - munched file
 	FILE * rawdict = fopen(tpath, "r");
-	if (rawdict == NULL) return 1;
+	if (rawdict == NULL) {
+		ASSERT( FALSE ); // cannot open dictionary
+		return 1;
+	}
 
 	// first read the first line of file to get hash table size */
 	char ts[MAXDELEN];
 	if ( !fgets(ts, MAXDELEN-1,rawdict) ) {
 		// Empty dictionary
 		tablesize = 37;
-		hashsize = 0;
 		tableptr = new hentry[tablesize];
 		memset(tableptr, 0, tablesize*sizeof(struct hentry));
 		fclose(rawdict);
@@ -177,15 +179,19 @@ int HashMgr::load_tables(const char * tpath)
 	}
 	mychomp(ts);
 	tablesize = atoi(ts);
-	tablesize = tablesize + 5;
-	if ((tablesize %2) == 0) tablesize++;
+	if (tablesize < 37) {
+		// Good small hash size
+		tablesize = 37;
+	} else {
+		tablesize += 5;
+		if ((tablesize & 1) == 0) tablesize++;
+	}
 
 	// allocate the hash table
 	tableptr = new hentry[tablesize];
 
 	if (! tableptr) return 3;
 	memset(tableptr, 0, tablesize*sizeof(struct hentry));
-	//for (int i=0; i<tablesize; i++) tableptr[i].word = NULL;
 
 	// loop through all words on much list and add to hash
 	// table and create word and affix strings

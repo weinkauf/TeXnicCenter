@@ -16,23 +16,28 @@ static char THIS_FILE[]=__FILE__;
 
 MySpell::MySpell(const char * affpath, const char * dpath)
 {
-	/* create the ignore and add hashes */
-	pIgnoreHash = new HashMgr;
-	pAddHash = new HashMgr;
-
 	/* first set up the main dict hash manager */
 	pHMgr = new HashMgr(dpath);
 
-	/* next set up the affix manager */
-	pAMgr = new AffixMgr(affpath);
+	try {
+		/* next set up the affix manager */
+		pAMgr = new AffixMgr(affpath);
+	} catch ( ... ) {
+		// clean up and continue the exception
+		delete pHMgr;
+		throw;
+	}
 
 	/* get the preferred try string from the Affix Manager for that dictionary */
 	char * try_string = pAMgr->get_try_string();
 
 	/* and finally set up the suggestion manager */
 	pSMgr = new SuggestMgr(try_string, 10, pAMgr);
-
 	delete [] try_string;
+
+	/* create the ignore and add hashes */
+	pIgnoreHash = new HashMgr;
+	pAddHash = new HashMgr;
 
 	bModified = 0;
 	bMainOnly = 1;
@@ -230,7 +235,8 @@ int MySpell::open_personal_dictionary()
 	} else {
 		try {
 			pAddHash = new HashMgr(strPersonalDictionaryPath);
-		} catch (...) {
+		} catch ( ... ) {
+			pAddHash = new HashMgr;
 			return -1;
 		}
 	}
