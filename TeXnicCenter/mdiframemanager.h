@@ -71,6 +71,11 @@ public:
 	*/
 	void ActivateChildFrame( CFrameWnd *pFrameWnd );
 
+	/**
+	Get the number of child frames in the window list.
+	*/
+	int GetChildFrameCount() const;
+
 // overwritings
 protected:
 	virtual BOOL OnKeyUp( UINT nChar, UINT nRepCnt, UINT nFlags );
