@@ -46,6 +46,7 @@
 #define STE_FILE_EXTERNALCHANGE         140
 #define IDD_FILE_TEMPLATE               141
 #define STE_FILE_EXTERNALCHANGEEX       141
+#define STE_FILE_INUSE_OPEN             142
 #define IDB_DOCUMENTTYPES_LARGE         143
 #define STE_TAB_STRUCTURE               144
 #define IDD_PROJECT_NEW                 144
