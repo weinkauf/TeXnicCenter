@@ -65,10 +65,14 @@ BOOL CAttributeMenu::ShowSpellMenu(MySpell *pSpell, CPoint screenPoint)
 	ASSERT( pTextBuffer );
 	CCrystalTextBuffer::TextAttributeListType *list = pTextBuffer->GetLineAttributes(m_textPoint.y);
 	if (list == NULL)
+	{
+		pTextBuffer->ReleaseLineAttributes();
 		return FALSE;
+	}
 	POSITION pos = list->GetHeadPosition();
 	CCrystalTextBuffer::CTextAttribute attr;
 	int attrCount = 0;
+	BOOL retValue = FALSE;
 	while ( pos != NULL )
 	{
 		attr = list->GetNext( pos );
@@ -120,14 +124,18 @@ BOOL CAttributeMenu::ShowSpellMenu(MySpell *pSpell, CPoint screenPoint)
 		}
 		else if ( nSel == ID_EDIT_SPELL_ADD )
 		{
+			ASSERT(IDOK == AfxMessageBox(_T("Sorry, not implemented yet"), IDOK));
 		}
 		else if ( nSel == ID_EDIT_SPELL_IGNORE_ALL )
 		{
+			ASSERT(IDOK == AfxMessageBox(_T("Sorry, not implemented yet"), IDOK));
 		}
 		if ( nSuggestCount > 0 )
 			pSpell->release_suggest( aSuggestList );
-		return TRUE;
+		retValue = TRUE;
 	}
-	return FALSE;
+	// Clean up and leave
+	pTextBuffer->ReleaseLineAttributes();
+	return retValue;
 }
 

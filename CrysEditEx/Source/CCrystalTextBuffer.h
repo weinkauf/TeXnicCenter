@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.5  2002/04/24 00:46:04  cnorris
+* realtime spell check
+*
 * Revision 1.4  2002/04/23 21:45:09  cnorris
 * realtime spell check
 *
@@ -136,6 +139,7 @@ public:
 		{
 			none,
 			spellError = 1,
+			// ... your new attribute type here
 			nAttributeCount // must be last attribute
 		};
 
@@ -302,7 +306,7 @@ protected:
 		void InsertAttribute(CTextAttribute &insertMe) 
 		{
 			if ( m_lstAttributes == NULL )
-				m_lstAttributes = new CSortList<CTextAttribute, CTextAttribute&>;
+				m_lstAttributes = new TextAttributeListType;
 			m_lstAttributes->InsertSorted(insertMe);
 		}
 
@@ -340,7 +344,7 @@ protected:
 		inline
 		int GetAttributeCount() 
 		{ 
-			if ( m_lstAttributes != NULL ) 
+			if ( m_lstAttributes != NULL )
 				return m_lstAttributes->GetCount();
 			return 0;
 		}
@@ -427,6 +431,9 @@ protected:
 	//	Lines of text
 	CArray <CLineInfo, CLineInfo&> m_aLines;
 
+	// Critical section to protect line attributes.
+	CRITICAL_SECTION m_csLineAttributes;
+
 	//	Undo
 	CArray <SUndoRecord, SUndoRecord&> m_aUndoBuf;
 	int m_nUndoPosition;
@@ -490,11 +497,6 @@ public:
 	void SetCRLFMode(int nCRLFMode);
 	BOOL GetReadOnly() const;
 	void SetReadOnly(BOOL bReadOnly = TRUE);
-	void ClearLineAttributes(int nLine, CTextAttribute::tagAttribute attribute);
-	void ClearLineAttributes(int nLine);
-	void InsertLineAttribute(int nLine, CTextAttribute &lineAttribute);
-	CTextAttribute* GetLineAttribute(int nLine, int nStart, int nEnd) const;
-	TextAttributeListType* GetLineAttributes(int nLine) const;
 
 	//	Text modification functions
 	BOOL InsertText(CCrystalTextView *pSource, int nLine, int nPos, LPCTSTR pszText, int &nEndLine, int &nEndChar, int nAction = CE_ACTION_UNKNOWN);
@@ -528,6 +530,50 @@ public:
 	// More bookmarks
 	int FindNextBookmarkLine(int nCurrentLine = 0);
 	int FindPrevBookmarkLine(int nCurrentLine = 0);
+
+public:
+	// Line attribute operations
+
+	/**
+	Clear all matching text attributes from a line.
+	@param nLine Line number
+	@param attribute Attribute type to remove
+	*/
+	void ClearLineAttributes(int nLine, CTextAttribute::tagAttribute attribute);
+
+	/**
+	Clear all text attribute from a line.
+	@param nLine Line number
+	*/
+	void ClearLineAttributes(int nLine);
+
+	/**
+	Insert a text attribute.
+	@param nLine Line number to insert attribute in.
+	@param attribute Line attribute to insert.
+	*/
+	void InsertLineAttribute(int nLine, CTextAttribute &attribute);
+
+	/**
+	Get the first text attribute within the given range.
+	@param nLine Line number
+	@param nStart Start of search range
+	@param nEnd End of search range
+	*/
+	CTextAttribute* GetLineAttribute(int nLine, int nStart, int nEnd);
+
+	/**
+	Get the text attribute list. Must be matched by a call to 
+	ReleaseLineAttributes().
+	@param nLine Line number to get.
+	*/
+	TextAttributeListType* GetLineAttributes(int nLine);
+
+	/**
+	Release the text attributes. Allow other threads access to the text 
+	attribute data structure.
+	*/
+	void ReleaseLineAttributes();
 
 // Overrides
 	// ClassWizard generated virtual function overrides
