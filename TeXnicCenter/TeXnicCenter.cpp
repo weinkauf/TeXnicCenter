@@ -190,10 +190,10 @@ BEGIN_MESSAGE_MAP(CTeXnicCenterApp, CProjectSupportingWinApp)
 	ON_COMMAND(ID_WINDOW_CLOSE_ALL, OnWindowCloseAll)
 	ON_COMMAND(ID_HELP, OnHelp)
 	ON_COMMAND(ID_BG_UPDATE_PROJECT, OnUpdateProject)
-	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnDisableStdCmd)
-	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS, OnDisableStdCmd)
 	ON_COMMAND(ID_PROJECT_NEW_FROM_FILE, OnProjectNewFromFile)
 	ON_UPDATE_COMMAND_UI(ID_PROJECT_NEW_FROM_FILE, OnUpdateProjectNewFromFile)
+	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnDisableStdCmd)
+	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS, OnDisableStdCmd)
 	//}}AFX_MSG_MAP
 	// Dateibasierte Standard-Dokumentbefehle
 	//ON_COMMAND(ID_FILE_NEW, CProjectSupportingWinApp::OnFileNew)
@@ -203,6 +203,8 @@ BEGIN_MESSAGE_MAP(CTeXnicCenterApp, CProjectSupportingWinApp)
 	// handle most recently used projects
 	ON_UPDATE_COMMAND_UI(ID_FILE_MRU_PROJECT_FIRST, OnUpdateFileMRUProjectList)
 	ON_COMMAND_RANGE(ID_FILE_MRU_PROJECT_FIRST, ID_FILE_MRU_PROJECT_LAST, OnFileMRUProject)
+	// handle most recently used files
+//	ON_COMMAND_RANGE(ID_FILE_MRU_FILE1, ID_FILE_MRU_FILE10, OnFileMRUFile)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_URL_FIRST, ID_URL_LAST, OnUpdateURL)
 	ON_COMMAND_RANGE(ID_URL_FIRST, ID_URL_LAST, OnURL)
 END_MESSAGE_MAP()
@@ -615,7 +617,7 @@ CDocument *CTeXnicCenterApp::GetOpenLatexDocument(LPCTSTR lpszFileName, BOOL bRe
 }
 
 
-CDocument *CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/)
+CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/)
 {
 
 	// get the full path name of the file
@@ -678,7 +680,15 @@ CDocument *CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOn
 }
 
 
-CDocument *CTeXnicCenterApp::OpenLatexDocument( LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/, int nLineNumber /*= -1*/, BOOL bError /*= FALSE*/ )
+CDocument* CTeXnicCenterApp::OpenDocumentFile(LPCTSTR lpszFileName)
+{
+	return OpenLatexDocument(lpszFileName, FALSE, -1, FALSE, true);
+};
+
+
+CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/,
+											   int nLineNumber /*= -1*/, BOOL bError /*= FALSE*/,
+											   bool bAskForProjectLoad /*= true*/)
 {
 	// get the full path name of the file
 	TCHAR		lpszFilePath[_MAX_PATH];
@@ -710,9 +720,52 @@ CDocument *CTeXnicCenterApp::OpenLatexDocument( LPCTSTR lpszFileName, BOOL bRead
 		}
 	}
 
-	// open new document, if we find no one, otherwise activate view of found document
-	if( !bFound )
-		pDoc = pDocTemplate->OpenDocumentFile( strDocPath );
+	//Open new document, if we could not find one
+	// If we found one above, we just activate its view
+	if (!bFound)
+	{
+		bool bLoaded = false;
+		//Check for existing project, that may be the project of this file.
+		if (bAskForProjectLoad)
+		{
+			CString strProjectPath = CLatexProject::GetProjectFileNameFromDoc(strDocPath);
+
+			//Do we have this project already opened?
+			bool bOpened = false;
+			CLatexProject* pLProject = GetProject();
+			if (pLProject)
+			{
+				//We just care, if the existing project file is different
+				if (pLProject->GetPathName() == strProjectPath)
+					bOpened = true;
+			}
+
+			if (!bOpened && CLatexProject::CheckExistingProjectFile(strProjectPath))
+			{
+				//Yes, load the project
+				// ==> But close all other documents before
+				// skipping annoying question in this version --
+				// just closing the documents.
+				// lets see, what the users will say ...
+				// save modified documents
+				if (pDocTemplate->SaveAllModified())
+				{
+					pDocTemplate->CloseAllDocuments(m_bEndSession);
+
+					if (OpenProject(strProjectPath))
+					{
+						//... and the specified file (in most cases the main file)
+						pDoc = OpenLatexDocument(lpszFileName, bReadOnly, nLineNumber, bError, false);
+						bLoaded = true;
+					}
+				}
+			}
+		}
+
+		//Just load the file, if a project was not loaded
+		if (!bLoaded)
+			pDoc = pDocTemplate->OpenDocumentFile(strDocPath);
+	}
 
 	if( !pDoc )
 		return NULL;
@@ -825,10 +878,10 @@ void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt()
 
 BOOL CTeXnicCenterApp::OpenProject( LPCTSTR lpszPath )
 {
-	// open project file
+	//Close the current project
 	AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_PROJECT_CLOSE);
 
-	CProject	*pDoc = m_pProjectDocTemplate->OpenProjectFile(lpszPath);
+	CProject* pDoc = m_pProjectDocTemplate->OpenProjectFile(lpszPath);
 	// test for success
 	if( !pDoc )
 	{
@@ -931,7 +984,7 @@ void CTeXnicCenterApp::OnFileOpen()
 
 	AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
 	// open file
-	OpenLatexDocument( dlg.GetPathName(), dlg.GetReadOnlyPref() );
+	OpenLatexDocument(dlg.GetPathName(), dlg.GetReadOnlyPref(), -1, false, true);
 }
 
 
@@ -1298,6 +1351,15 @@ void CTeXnicCenterApp::OnFileMRUProject( UINT unID )
 		m_recentProjectList.Remove( nIndex );
 }
 
+//void CTeXnicCenterApp::OnFileMRUFile(UINT unID)
+//{
+//	int	nIndex = unID - ID_FILE_MRU_FILE1;
+//
+//	ASSERT(nIndex >= 0 && nIndex < m_pRecentFileList->GetSize());
+//	if (!OpenLatexDocument((*m_pRecentFileList)[nIndex], false, -1, false, true))
+//		m_pRecentFileList->Remove(nIndex);
+//}
+
 
 BOOL CTeXnicCenterApp::OnDDECommand(LPTSTR lpszCommand) 
 {
@@ -1330,7 +1392,7 @@ BOOL CTeXnicCenterApp::OnDDECommand(LPTSTR lpszCommand)
 		strLineNumber = strCommand.Mid( nStart + 1, nEnd - (nStart + 1) );
 		nLineNumber = _ttol( strLineNumber );
 
-		if( !OpenLatexDocument( strFileName, FALSE, nLineNumber ) )
+		if( !OpenLatexDocument(strFileName, FALSE, nLineNumber, FALSE, true) )
 			return FALSE;
 	}
 
@@ -1602,3 +1664,4 @@ void CTeXnicCenterApp::OnUpdateProjectNewFromFile(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(m_pLatexDocTemplate->GetFirstDocPosition() != NULL);
 }
+

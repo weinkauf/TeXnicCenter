@@ -190,10 +190,10 @@ public:
 
 	/** Checks for an existing project file given by lpszPathName.
 
-		Asks the user to load or overwrite the exiting project file.
+		Asks the user to load the exiting project file.
 
 		@returns true, if the existing one shall be loaded.
-		@returns false, if the existing one shall be overwritten.
+		@returns false, if no project is existing or the user does not care about it.
 	*/
 	static bool CheckExistingProjectFile(LPCTSTR lpszPathName);
 

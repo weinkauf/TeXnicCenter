@@ -1351,7 +1351,7 @@ void COutputDoc::OnLatexClean()
 	if (bCleanIt)
 	{
 		if (!fc.CleanFiles())
-				AfxMessageBox(STE_FILECLEAN_ERROR);
+			AfxMessageBox(STE_FILECLEAN_ERROR);
 	}
 }
 
