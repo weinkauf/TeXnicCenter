@@ -167,7 +167,11 @@ BOOL COptionPageLanguage::OnInitDialog()
 	CPropertyPage::OnInitDialog();
 
 	//Set URLs
-	m_wndURLDownloadDicts.SetURL( _T("http://lingucomponent.openoffice.org/download_dictionary.html") );
+	CString DictURL;
+	DictURL.LoadString(ID_URL_TCDICTDOWNLOAD);
+	int idLastLineBreak = DictURL.ReverseFind(_T('\n'));
+	ASSERT(idLastLineBreak > 0);
+	m_wndURLDownloadDicts.SetURL(DictURL.Mid(idLastLineBreak + 1));
 	m_wndURLDownloadDicts.SizeToContent(true, true);
 
 	// List of all region/language strings recognized by setlocale. 
