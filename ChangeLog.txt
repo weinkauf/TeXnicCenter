@@ -1,5 +1,5 @@
 2002/05/30 niteria
-- Fixed Bug xxxxx: TeX-Output: Fails for FileNames over more than one line
+- Fixed Bug 555447: TeX-Output: Fails for names over 2 lines
 - Very small corrections to CPathTool and CCrystalTextView.
 
 2002/05/24 niteria
