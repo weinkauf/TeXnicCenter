@@ -4446,9 +4446,9 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_URL_TCHOME           "http://www.ToolsCenter.org/products/texniccenter/\nTeXnicCenter Homepage\nhttp://www.ToolsCenter.org/products/texniccenter/"
+    ID_URL_TCHOME           "http://www.ToolsCenter.org/\nTeXnicCenter Homepage\nhttp://www.ToolsCenter.org/"
     ID_URL_AUTHOR           "sven.wiegand@gmx.de\nNachricht an den Autor\nmailto:sven.wiegand@gmx.de"
-    ID_URL_TCERROR          "http://www.ToolsCenter.org/products/texniccenter/errors.htm\nFehlerbenachrichtigung\nhttp://www.ToolsCenter.org/products/texniccenter/errors.htm#form"
+    ID_URL_TCERROR          "http://sourceforge.net/tracker/?func=add&group_id=36323&atid=479426\nFehlerbenachrichtigung\nhttp://sourceforge.net/tracker/?func=add&group_id=36323&atid=479426"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter Benutzerforum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
@@ -8304,9 +8304,9 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_URL_TCHOME           "http://www.ToolsCenter.org/products/texniccenter/\nTeXnicCenter Homepage\nhttp://www.ToolsCenter.org/products/texniccenter/"
+    ID_URL_TCHOME           "http://www.ToolsCenter.org/\nTeXnicCenter Homepage\nhttp://www.ToolsCenter.org/"
     ID_URL_AUTHOR           "sven.wiegand@gmx.de\nE-Mail to the Author\nmailto:sven.wiegand@gmx.de"
-    ID_URL_TCERROR          "http://www.ToolsCenter.org/products/texniccenter/errors.htm\nReport an Error\nhttp://www.ToolsCenter.org/products/texniccenter/errors.htm#form"
+    ID_URL_TCERROR          "http://sourceforge.net/tracker/?func=add&group_id=36323&atid=479426\nReport an Error\nhttp://sourceforge.net/tracker/?func=add&group_id=36323&atid=479426"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter User Forum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
