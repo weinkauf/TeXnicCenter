@@ -1,3 +1,6 @@
+2002/04/23 cnorris
+- Implemented real-time spell checking.
+
 2002/04/23 niteria
 - Fixed Bug 88 (old list): The 'Search in Files' does not recognize special
   characters like german umlauts (ä, ö, etc.).

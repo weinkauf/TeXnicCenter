@@ -80,7 +80,7 @@ END
 //
 
 IDR_MARGIN_ICONS        BITMAP  DISCARDABLE     "res/mg_icons.bmp"
-IDB_TEXT_ATTRIBUTE      BITMAP  DISCARDABLE     "res/bitmap1.bmp"
+IDB_TEXT_ATTRIBUTE      BITMAP  DISCARDABLE     "res/textattr.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -82,6 +82,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.7  2002/04/06 05:28:35  cnorris
+* Added SetShowInteractiveSelection
+* Added GetParser
+* Added default value to nLength of HighlightText
+*
 * Revision 1.6  2002/04/03 00:42:31  niteria
 * Bug 538164:Fixed now.
 *
@@ -240,13 +245,14 @@ END_MESSAGE_MAP()
 	EXPAND_PRIMITIVE(MoveCtrlEnd, TextEnd)
 #undef EXPAND_PRIMITIVE
 
-
 /////////////////////////////////////////////////////////////////////////////
 // CCrystalTextView construction/destruction
 
 CCrystalTextView::CCrystalTextView()
 {
 	AFX_ZERO_INIT_OBJECT(CView);
+	::InitializeCriticalSection( &m_csHold );
+	m_pevtHoldCountZero = new CEvent(TRUE, FALSE);
 	m_bSelMargin = TRUE;
 	//BEGIN SW
 	m_panSubLines = new CArray<int, int>();
@@ -264,6 +270,8 @@ CCrystalTextView::CCrystalTextView()
 
 CCrystalTextView::~CCrystalTextView()
 {
+	::DeleteCriticalSection( &m_csHold );
+	delete m_pevtHoldCountZero;
 	ASSERT(m_hAccel == NULL);
 	ASSERT(m_pCacheBitmap == NULL);
 	ASSERT(m_pTextBuffer == NULL);		//	Must be correctly detached
@@ -485,6 +493,44 @@ void CCrystalTextView::ScrollToLine(int nNewTopLine, BOOL bNoSmoothScroll /*= FA
 	//END SW
 }
 
+
+int CCrystalTextView::ExpandChars(LPCTSTR pszChars, int &nOffset, int nCount, int *anIndices)
+{
+	if ( pszChars == NULL )
+		return 0;
+
+	int nInputOffset = nOffset; // offset within unexpanded string
+	int nScreenOffset = 0; // offset of screen includes tab expansion
+	const int nTabSize = GetTabSize();
+
+	while ( pszChars[nInputOffset] != _T('\0') && nInputOffset < nCount )
+	{
+		if ( pszChars[nInputOffset] == _T('\t') )
+		{
+			int nSpaces = ( nTabSize - nScreenOffset % nTabSize );
+			if ( m_bViewTabs )
+			{
+				anIndices[nScreenOffset++] = nInputOffset;
+				--nSpaces;
+			}
+			while ( nSpaces > 0 )
+			{
+				anIndices[nScreenOffset++] = nInputOffset;
+				--nSpaces;
+			}
+			nInputOffset++;
+		}
+		else
+		{
+			anIndices[nScreenOffset++] = nInputOffset++;
+		}
+	}
+	anIndices[nScreenOffset] = nInputOffset;
+	nOffset = nInputOffset;
+	return nScreenOffset;
+}
+
+
 void CCrystalTextView::ExpandChars(LPCTSTR pszChars, int nOffset, int nCount, CString &line)
 {
 	if (nCount <= 0)
@@ -552,6 +598,83 @@ void CCrystalTextView::ExpandChars(LPCTSTR pszChars, int nOffset, int nCount, CS
 	pszBuf[nCurPos] = 0;
 	line.ReleaseBuffer();
 }
+
+
+void CCrystalTextView::DrawLineAttributes(CDC *pdc, CPoint ptOrigin, int nLineIndex, int *anBreaks, int nBreaks)
+{
+	// Draw line attributes
+	LPCTSTR pszLine = GetLineChars(nLineIndex);
+	CCrystalTextBuffer *pBuffer = LocateTextBuffer();
+	CCrystalTextBuffer::TextAttributeListType *pList = pBuffer->GetLineAttributes(nLineIndex);
+	if (pList != NULL)
+	{
+		IMAGELISTDRAWPARAMS drawing;
+		drawing.hdcDst = pdc->m_hDC;
+		drawing.rgbBk = CLR_DEFAULT;
+		drawing.rgbFg = CLR_DEFAULT;
+		drawing.fStyle = ILD_NORMAL;
+		drawing.dwRop = SRCCOPY;
+
+		int *anIndices = (int*) _alloca(sizeof(int) * (GetScreenChars()+1));
+		int nOffset = 0;
+		int nSubline = 0;
+		int nLength = ExpandChars(pszLine, nOffset, anBreaks[nSubline], anIndices);
+		int nStartLine = 0;
+		boolean bSplitAttribute = false;
+
+		CCrystalTextBuffer::CTextAttribute attr;
+		POSITION pos = pList->GetHeadPosition();
+		while (nLength > 0)
+		{
+			if ( !bSplitAttribute )
+			{
+				// Need a new attribute
+				if (pos != NULL)
+					attr = pList->GetNext(pos);
+				else
+					return; // done, no more attributes
+			}
+			else
+			{
+				// Need a new line
+				do 
+				{
+					nLength = ExpandChars(pszLine, nOffset, anBreaks[++nSubline], anIndices);
+					nStartLine = 0;
+					if (nLength == 0)
+						return; // done, no more text
+				} while (attr.m_nStartPos > anIndices[nLength-1]);
+			}
+			int nStartChar = __max(attr.m_nStartPos, anIndices[0]);
+			int nEndChar = __min(attr.m_nEndPos, anIndices[nLength]);
+
+			for (; anIndices[nStartLine] < nStartChar; ++nStartLine);
+			for (int nEndLine = nStartLine; anIndices[nEndLine] < nEndChar; ++nEndLine );
+
+			switch (attr.m_Attribute)
+			{
+				case CCrystalTextBuffer::CTextAttribute::spellError:
+					int nPixelCount = m_nCharWidth * (nEndLine-nStartLine);
+					drawing.i = CCrystalTextBuffer::CTextAttribute::spellError;
+					drawing.y = ptOrigin.y +(nSubline * GetLineHeight()) - 3;
+					drawing.x = ptOrigin.x + (nStartLine * m_nCharWidth);
+					drawing.cx = 4;
+					drawing.cy = 3;
+					drawing.xBitmap = 0;
+					drawing.yBitmap = 13;
+					for (int x = 0; x < nPixelCount; x += drawing.cx)
+					{
+						m_TextAttributeImages.DrawIndirect( &drawing );
+						drawing.x += drawing.cx;
+					}
+					break;
+				// Add new attribute drawing code here
+			}
+			bSplitAttribute = (nEndChar < attr.m_nEndPos);
+		}
+	}
+}
+
 
 void CCrystalTextView::DrawLineHelperImpl(CDC *pdc, CPoint &ptOrigin, const CRect &rcClip,
 										  LPCTSTR pszChars, int nOffset, int nCount)
@@ -955,6 +1078,9 @@ void CCrystalTextView::DrawSingleLine(CDC *pdc, const CRect &rc, int nLineIndex)
 		crText, crBkgnd, bDrawWhitespace,
 		pszChars, 0, nLength, CPoint(0, nLineIndex));
 
+	CPoint attrOrig(rc.left, rc.top+GetLineHeight());
+	DrawLineAttributes(pdc, attrOrig, nLineIndex, anBreaks, nBreaks);
+
 	//	Draw whitespaces to the left of the text
 	//BEGIN SW
 	// Drawing is now realized by DrawScreenLine()
@@ -1177,6 +1303,8 @@ void CCrystalTextView::OnDraw(CDC *pdc)
 
 void CCrystalTextView::ResetView()
 {
+	if ( m_pTextBuffer )
+		Attach( true );
 	m_nTopLine = 0;
 	m_nOffsetChar = 0;
 	m_nLineHeight = -1;
@@ -1221,6 +1349,18 @@ void CCrystalTextView::ResetView()
 
 	m_bBookmarkExist  = FALSE;	// More bookmarks
 	m_bMultipleSearch = FALSE;	// More search
+
+	if ( m_pBackgroundThread )
+	{
+		if ( m_pTextBuffer )
+			// Inform the background thread we've been reset.
+			m_pBackgroundThread->PostThreadMessage(ID_BG_UPDATE_FILE, 0, (long)this);
+		else
+			// Inform the background thread we're being destroyed
+			m_pBackgroundThread->PostThreadMessage(ID_BG_INVALIDATE_VIEW, 0, (long)this);
+	}
+	if ( m_pTextBuffer )
+		Detach ( true );
 }
 
 void CCrystalTextView::UpdateCaret()
@@ -1898,6 +2038,7 @@ int CCrystalTextView::GetScreenChars()
 
 void CCrystalTextView::OnDestroy() 
 {
+	Attach( true );
 	DetachFromBuffer();
 	m_hAccel = NULL;
 
@@ -1914,6 +2055,7 @@ void CCrystalTextView::OnDestroy()
 	}
 	delete m_pCacheBitmap;
 	m_pCacheBitmap = NULL;
+	Detach( true );
 }
 
 BOOL CCrystalTextView::OnEraseBkgnd(CDC *pdc) 
@@ -2632,6 +2774,12 @@ void CCrystalTextView::UpdateView(CCrystalTextView *pSource, CUpdateContext *pCo
 	int nLineCount = GetLineCount();
 	ASSERT(nLineCount > 0);
 	ASSERT(nLineIndex >= -1 && nLineIndex < nLineCount);
+	if ((dwFlags & UPDATE_LINEATTR) != 0)
+	{
+		// Just this line needs painting
+		ASSERT( (dwFlags & UPDATE_SINGLELINE) == 0 ); // Mutally exclusive update commands
+		InvalidateLines(nLineIndex, nLineIndex, FALSE);
+	}
 	if ((dwFlags & UPDATE_SINGLELINE) != 0)
 	{
 		ASSERT(nLineIndex != -1);
@@ -2761,7 +2909,9 @@ int CCrystalTextView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	if (CView::OnCreate(lpCreateStruct) == -1)
 		return -1;
-	
+
+	VERIFY(m_TextAttributeImages.Create(IDB_TEXT_ATTRIBUTE, 16, 0, RGB(255, 255, 255)));
+
 	ASSERT(m_hAccel == NULL);
 	m_hAccel = ::LoadAccelerators(GetResourceHandle(), MAKEINTRESOURCE(IDR_DEFAULT_ACCEL));
 	ASSERT(m_hAccel != NULL);
@@ -3786,3 +3936,55 @@ BOOL CCrystalTextView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	ScrollToSubLine(nScrollTo);
 	return TRUE;
 }
+
+
+int CCrystalTextView::Attach( bool bExclusive /*= false */ )
+{
+	if ( bExclusive )
+	{
+		while ( true )
+		{
+			::WaitForSingleObject( *m_pevtHoldCountZero, INFINITE );
+			::EnterCriticalSection( &m_csHold );
+			if ( m_nHoldCount == 0)
+				break;
+			::LeaveCriticalSection( &m_csHold );
+		}
+		m_nHoldCount = 1;
+	}
+	else
+	{
+		::EnterCriticalSection( &m_csHold );
+		m_pevtHoldCountZero->ResetEvent();
+		++m_nHoldCount;
+		::LeaveCriticalSection( &m_csHold );
+	}
+	return m_nHoldCount;
+}
+
+
+int CCrystalTextView::Detach( bool bExclusive /*= false */ )
+{
+	if ( bExclusive )
+	{
+		// Attach ( true ) was not called
+		ASSERT( m_nHoldCount == 1 );
+		#if (_WIN32_WINNT >= 0x0400)
+		ASSERT ( ::TryEnterCriticalSection( &m_csHold ) );
+		#endif /* _WIN32_WINNT >= 0x0400 */
+
+		m_nHoldCount = 0;
+		m_pevtHoldCountZero->SetEvent();
+		::LeaveCriticalSection( &m_csHold );
+	}
+	else
+	{
+		::EnterCriticalSection( &m_csHold );
+		--m_nHoldCount;
+		if ( m_nHoldCount == 0 )
+			m_pevtHoldCountZero->SetEvent();
+		::LeaveCriticalSection( &m_csHold );
+	}
+	return m_nHoldCount;
+}
+

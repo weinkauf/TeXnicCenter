@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "../../regexpp/include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /D "_MBCS" /D "_AFXEXT" /D "CE_DLL_BUILD" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "../../regexpp/include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /D "_MBCS" /D "_AFXEXT" /D "CE_DLL_BUILD" /FR /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x407 /d "NDEBUG" /d "_AFXDLL"
@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 /nologo /subsystem:windows /dll /map /debug /debugtype:coff /machine:I386 /def:".\CrysEditEx.def" /implib:"../Lib/cryseditEx.lib"
+# ADD LINK32 /nologo /subsystem:windows /dll /map /debug /debugtype:coff /machine:I386 /def:".\CrysEditEx.def" /implib:"../Lib/cryseditEx.lib" /libpath:"../../MFCExt/Lib/MFCExt.lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "CrysEditEx - Win32 Debug"
@@ -80,7 +80,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../output/Debug/cryseditExD.dll" /implib:"../Lib/cryseditExD.lib" /pdbtype:sept
+# ADD LINK32 /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../output/Debug/cryseditExD.dll" /implib:"../Lib/cryseditExD.lib" /pdbtype:sept /libpath:"../../MFCExt/Lib/MFCExtD.lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
@@ -99,6 +99,14 @@ SOURCE=..\..\myspell\affix.cxx
 # Begin Source File
 
 SOURCE=..\..\myspell\affixmgr.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\AttributeMenu.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\BackgroundThread.cpp
 # End Source File
 # Begin Source File
 
@@ -192,7 +200,15 @@ SOURCE=..\..\myspell\affixmgr.hxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\AttributeMenu.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\myspell\atypes.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\BackgroundThread.h
 # End Source File
 # Begin Source File
 
@@ -297,6 +313,10 @@ SOURCE=.\res\mg_cur.cur
 # Begin Source File
 
 SOURCE=.\res\mg_icons.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\text_att.bmp
 # End Source File
 # End Group
 # Begin Source File

@@ -55,6 +55,10 @@
 * $Author$
 *
 * $Log$
+* Revision 1.7  2002/04/09 23:30:17  cnorris
+* LoadFromFile and SaveToFile return the result of GetLastError to provide
+* usefull information about the type of error that occured.
+*
 * Revision 1.6  2002/03/26 16:37:00  cnorris
 * Fixed UNICODE allocation size error
 *
@@ -168,6 +172,8 @@ void CCrystalTextBuffer::CLineInfo::Append(LPCTSTR pszLine, int nLength /* = -1*
 	if ( pszLine == NULL || nLength == 0 || (nLength == -1 && ((nLength = _tcsclen(pszLine)) == 0)) )
 		return;
 
+	ClearAttributes(m_nLength-1, m_nLength, TRUE);
+
 	int nNewLength = nLength + m_nLength;
 	GrowTo(nNewLength);
 	_tcsncat(m_pcLine+m_nLength, pszLine, nLength);
@@ -181,9 +187,13 @@ void CCrystalTextBuffer::CLineInfo::InsertText(int nPos, LPCTSTR pszLine, int nL
 	if ( pszLine == NULL || nLength == 0 || (nLength == -1 && ((nLength = _tcsclen(pszLine)) == 0)) )
 		return;
 
+	ClearAttributes(nPos, nPos+1, TRUE);
+	ShiftAttributes(nPos, nLength);
+
 	int nNewLength = nLength + m_nLength;
+	int nRightCount = m_nLength - nPos;
 	GrowTo(nNewLength);
-	memmove(m_pcLine+nPos+nLength, m_pcLine+nPos, sizeof(TCHAR)nLength);
+	memmove(m_pcLine+nPos+nLength, m_pcLine+nPos, sizeof(TCHAR)*nRightCount);
 	_tcsncpy(m_pcLine+nPos, pszLine, nLength);
 	m_nLength = nNewLength;
 	m_pcLine[nNewLength] = _T('\0');
@@ -194,6 +204,9 @@ void CCrystalTextBuffer::CLineInfo::RemoveText(int nPos, int nCount, boolean bCo
 	ASSERT( nPos >= 0  && nPos < m_nLength ); // nPos is within string
 	ASSERT( nCount > 0 ); // nCount is valid
 	ASSERT( nPos + nCount <= m_nLength );  // nCount will not overrun string
+
+	ClearAttributes(nPos, nPos+nCount, TRUE);
+	ShiftAttributes(nPos+nCount, -nCount);
 
 	int nRightCount = m_nLength - nCount - nPos;
 	memmove(m_pcLine+nPos, m_pcLine+nPos+nCount, nRightCount);
@@ -206,12 +219,91 @@ void CCrystalTextBuffer::CLineInfo::RemoveText(int nPos, int nCount, boolean bCo
 void CCrystalTextBuffer::CLineInfo::TrimText(int nPos, boolean bCompact /*= false*/)
 {
 	ASSERT( nPos >= 0  && nPos <= m_nLength ); // nPos is within string
+
+	ClearAttributes(nPos, m_nLength, TRUE);
+
 	m_pcLine[nPos] = _T('\0');
 	m_nLength = nPos;
 	if ( bCompact )
 		FreeExtra();
+
 }
 
+void CCrystalTextBuffer::CLineInfo::ClearAttributes()
+{
+	if (m_lstAttributes != NULL)
+		m_lstAttributes->RemoveAll();
+}
+
+void CCrystalTextBuffer::CLineInfo::ClearAttributes(CTextAttribute::tagAttribute attribute)
+{
+	if ( m_lstAttributes != NULL )
+	{
+		POSITION pos = m_lstAttributes->GetHeadPosition();
+		while ( pos != NULL )
+		{
+			POSITION prev = pos;
+			CTextAttribute& listElement = m_lstAttributes->GetNext( pos );
+			if ( listElement.m_Attribute == attribute )
+				m_lstAttributes->RemoveAt( prev );
+		}
+	}
+}
+
+void CCrystalTextBuffer::CLineInfo::ClearAttributes(int nStart, int nEnd, BOOL bIncludeOverlap /*= TRUE*/)
+{
+	ASSERT( nStart <= nEnd );
+	if ( (m_lstAttributes != NULL) && (nStart != nEnd) )
+	{
+		POSITION pos = m_lstAttributes->GetHeadPosition();
+		while ( pos != NULL )
+		{
+			POSITION prev = pos;
+			CTextAttribute& listElement = m_lstAttributes->GetNext( pos );
+			if ( listElement.m_nStartPos > nEnd )
+				break;
+			if ( (listElement.m_nStartPos >= nStart) && (listElement.m_nEndPos < nEnd) )
+				m_lstAttributes->RemoveAt( prev );
+			else if ( bIncludeOverlap )
+				if ( ((listElement.m_nStartPos >= nStart) && (listElement.m_nStartPos < nEnd)) ||
+					 ((listElement.m_nEndPos >= nStart) && (listElement.m_nEndPos < nEnd)) )
+					m_lstAttributes->RemoveAt( prev );
+		}
+	}
+}
+
+void CCrystalTextBuffer::CLineInfo::ShiftAttributes(int nStart, int nSpaces)
+{
+	if ( m_lstAttributes != NULL )
+	{
+		POSITION pos = m_lstAttributes->GetHeadPosition();
+		while ( pos != NULL )
+		{
+			CTextAttribute& listElement = m_lstAttributes->GetNext( pos );
+			if ( listElement.m_nStartPos >= nStart )
+			{
+				listElement += nSpaces;
+				ASSERT( listElement.m_nStartPos >= 0 );
+			}
+		}
+	}
+}
+
+int CCrystalTextBuffer::CLineInfo::GetAttributeCount(CTextAttribute::tagAttribute attribute)
+{
+	int nCount = 0;
+	if ( m_lstAttributes != NULL )
+	{
+		POSITION pos = m_lstAttributes->GetHeadPosition();
+		while ( pos != NULL )
+		{
+			CTextAttribute& listElement = m_lstAttributes->GetNext( pos );
+			if ( listElement.m_Attribute == attribute )
+				++nCount;
+		}
+	}
+	return nCount;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // CCrystalTextBuffer::CUpdateContext
@@ -275,6 +367,7 @@ CCrystalTextBuffer::CCrystalTextBuffer()
 	//BEGIN SW
 	m_ptLastChange.x = m_ptLastChange.y = -1;
 	//END SW
+	m_bFirstModify = TRUE;
 }
 
 CCrystalTextBuffer::~CCrystalTextBuffer()
@@ -344,6 +437,7 @@ BOOL CCrystalTextBuffer::InitNew(int nCrlfStyle /*= CRLF_STYLE_DOS*/)
 	m_bReadOnly = FALSE;
 	m_nCRLFMode = nCrlfStyle;
 	m_bModified = FALSE;
+	m_bFirstModify = TRUE;
 	m_nSyncPosition = m_nUndoPosition = 0;
 	m_bUndoGroup = m_bUndoBeginGroup = FALSE;
 	m_nUndoBufSize = UNDO_BUF_SIZE;
@@ -368,6 +462,51 @@ void CCrystalTextBuffer::SetReadOnly(BOOL bReadOnly /*= TRUE*/)
 						//	You must call InitNew() or LoadFromFile() first!
 	m_bReadOnly = bReadOnly;
 }
+
+
+void CCrystalTextBuffer::ClearLineAttributes(int nLine, CTextAttribute::tagAttribute attribute)
+{
+	m_aLines[nLine].ClearAttributes(attribute); 
+}
+
+
+void CCrystalTextBuffer::ClearLineAttributes(int nLine)
+{
+	m_aLines[nLine].ClearAttributes();
+}
+
+
+void CCrystalTextBuffer::InsertLineAttribute(int nLine, CTextAttribute &lineAttribute)
+{
+	m_aLines[nLine].InsertAttribute(lineAttribute);
+}
+
+
+CCrystalTextBuffer::CTextAttribute *CCrystalTextBuffer::GetLineAttribute(int nLine, int nStart, int nEnd) const
+{
+	if ( m_aLines[nLine].m_lstAttributes == NULL )
+		return NULL;
+
+	TextAttributeListType* pList = m_aLines[nLine].m_lstAttributes;
+	POSITION pos = pList->GetHeadPosition();
+	while ( pos != NULL )
+	{
+		CTextAttribute& attr = pList->GetNext( pos );
+		if (nStart >= attr.m_nStartPos && nEnd < attr.m_nEndPos)
+			return &attr;
+	}
+	return NULL;
+}
+
+
+CCrystalTextBuffer::TextAttributeListType *CCrystalTextBuffer::GetLineAttributes(int nLine) const
+{
+	TextAttributeListType* pList = m_aLines[nLine].m_lstAttributes;
+	if ( pList == NULL || pList->GetCount() == 0 )
+		return NULL;
+	return pList;
+}
+
 
 static const char *crlfs[] =
 {
@@ -882,7 +1021,7 @@ BOOL CCrystalTextBuffer::InternalDeleteText(CCrystalTextView *pSource, int nStar
 		}
 		else
 		{
-			// First and last lines are being completly deleted
+			// First and last lines are being completely deleted
 			++nEndLine;
 		}
 
@@ -912,23 +1051,16 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 						//	You must call InitNew() or LoadFromFile() first!
 	ASSERT(nLine >= 0 && nLine < m_aLines.GetSize());
 	ASSERT(nPos >= 0 && nPos <= m_aLines[nLine].GetLength());
+	
 	if (m_bReadOnly)
 		return FALSE;
+
+	if (*pszText == _T('\0'))
+		return TRUE;
 
 	CInsertContext context;
 	context.m_ptStart.x = nPos;
 	context.m_ptStart.y = nLine;
-
-	CLineInfo &li = m_aLines[nLine];
-	int nRestCount = li.GetLength() - nPos;
-	LPTSTR pszRestChars = NULL;
-	if (nRestCount > 0)
-	{
-		// Save the right portion on the first insert line
-		pszRestChars = (TCHAR*) _alloca(sizeof(TCHAR)*nRestCount);
-		_tcsncpy(pszRestChars, li.m_pcLine+nPos, nRestCount);
-		li.TrimText(nPos);
-	}
 
 	int nCurrentLine = nLine;
 	BOOL bNewLines = FALSE;
@@ -944,20 +1076,25 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 
 		if (nCurrentLine == nLine)
 		{
-			m_aLines[nLine].Append(pszText, nTextPos);
+			m_aLines[nLine].InsertText(nPos, pszText, nTextPos);
+			nPos += nTextPos;
 		}
 		else
 		{
-			InsertLine(pszText, nTextPos, nCurrentLine);
 			bNewLines = TRUE;
+			InsertLine(pszText, nTextPos, nCurrentLine);
 		}
 
 		if (pszText[nTextPos] == _T('\0'))
 		{
-			CLineInfo &currentLine = m_aLines[nCurrentLine];
 			nEndLine = nCurrentLine;
-			nEndChar = currentLine.GetLength();
-			currentLine.Append(pszRestChars, nRestCount);
+			nEndChar = nPos;
+			if (nCurrentLine != nLine )
+			{
+				nEndChar = m_aLines[nCurrentLine].GetLength();
+				m_aLines[nCurrentLine].Append(m_aLines[nLine].m_pcLine+nPos);
+				m_aLines[nLine].TrimText(nPos);
+			}
 			break;
 		}
 
@@ -995,6 +1132,98 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 	return TRUE;
 }
 
+/*
+BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine, int nPos, LPCTSTR pszText, int &nEndLine, int &nEndChar)
+{
+	ASSERT(m_bInit);	//	Text buffer not yet initialized.
+						//	You must call InitNew() or LoadFromFile() first!
+	ASSERT(nLine >= 0 && nLine < m_aLines.GetSize());
+	ASSERT(nPos >= 0 && nPos <= m_aLines[nLine].GetLength());
+	
+	if (m_bReadOnly)
+		return FALSE;
+
+	if (*pszText == _T('\0'))
+		return TRUE;
+
+	CInsertContext context;
+	context.m_ptStart.x = nPos;
+	context.m_ptStart.y = nLine;
+
+	int nCurrentLine = nLine;
+	BOOL bNewLines = FALSE;
+	int nTextPos;
+	for (;;)
+	{
+		nTextPos = 0;
+		while (pszText[nTextPos] != _T('\0') && pszText[nTextPos] != _T('\r'))
+		{
+			ASSERT(pszText[nTextPos] != _T('\n')); // invalid string format
+			nTextPos ++;
+		}
+
+		if (nCurrentLine == nLine)
+		{
+			m_aLines[nLine].InsertText(nPos, pszText, nTextPos);
+			nPos += nTextPos;
+			nEndChar = nPos;
+			nEndLine = nLine;
+		}
+		else
+		{
+			if (!bNewLines)
+			{
+				// First new line. Take the right portion of the first line and insert
+				// it as the next line.
+				InsertLine(m_aLines[nLine].m_pcLine+nPos, -1, nCurrentLine);
+				m_aLines[nLine].TrimText(nPos);
+			}
+			bNewLines = TRUE;			
+			nEndChar = nTextPos;
+			nEndLine = nCurrentLine;
+			if (pszText[nTextPos] != _T('\0'))
+				InsertLine(pszText, nTextPos, nCurrentLine);
+			else
+				break;
+		}
+
+		if (pszText[nTextPos] == _T('\0'))
+			break;
+
+		nCurrentLine ++;
+		nTextPos ++;
+
+		if (pszText[nTextPos] == _T('\n'))
+		{
+			nTextPos ++;
+		}
+		else
+		{
+			ASSERT(FALSE);			//	Invalid line-end format passed
+		}
+
+		pszText += nTextPos;
+	}
+
+	context.m_ptEnd.x = nEndChar;
+	context.m_ptEnd.y = nEndLine;
+
+	if (bNewLines)
+		UpdateViews(pSource, &context, UPDATE_HORZRANGE | UPDATE_VERTRANGE, nLine);
+	else
+		UpdateViews(pSource, &context, UPDATE_SINGLELINE | UPDATE_HORZRANGE, nLine);
+
+	if (! m_bModified)
+		SetModified(TRUE);
+
+	//BEGIN SW
+	// remember current cursor position as last editing position
+	m_ptLastChange = context.m_ptEnd;
+	//END SW
+
+	return TRUE;
+}
+*/
 BOOL CCrystalTextBuffer::CanUndo()
 {
 	ASSERT(m_nUndoPosition >= 0 && m_nUndoPosition <= m_aUndoBuf.GetSize());
@@ -1298,6 +1527,16 @@ BOOL CCrystalTextBuffer::GetActionDescription(int nAction, CString &desc)
 void CCrystalTextBuffer::SetModified(BOOL bModified /*= TRUE*/)
 {
 	m_bModified = bModified;
+	if (bModified && m_bFirstModify)
+	{
+		m_bFirstModify = FALSE;
+		POSITION pos = m_lpViews.GetHeadPosition();
+		while (pos != NULL)
+		{
+			CCrystalTextView *pView = m_lpViews.GetNext( pos );
+			::SendMessage(pView->m_hWnd, WM_COMMAND, IDS_EDITOP_FIRSTMODIFY, 0);
+		}
+	}
 }
 
 void CCrystalTextBuffer::BeginUndoGroup(BOOL bMergeWithPrevious /*= FALSE*/)

@@ -24,6 +24,10 @@
 * $Author$
 *
 * $Log$
+* Revision 1.3  2002/04/09 23:30:17  cnorris
+* LoadFromFile and SaveToFile return the result of GetLastError to provide
+* usefull information about the type of error that occured.
+*
 * Revision 1.2  2002/03/26 16:24:58  cnorris
 * Re-wrote LineInfo to manage its own data and manipulation
 *
@@ -45,6 +49,7 @@
 
 #include "cedefs.h"
 #include "CCrystalTextView.h"
+#include "../../MFCExt/Include/ExtCollection.h"
 
 #ifndef __AFXTEMPL_H__
 #pragma message("Include <afxtempl.h> in your stdafx.h to avoid this message")
@@ -112,14 +117,65 @@ private:
 	BOOL m_bInit;
 	BOOL m_bReadOnly;
 	BOOL m_bModified;
+	BOOL m_bFirstModify;
 	int m_nCRLFMode;
 	BOOL m_bCreateBackupFile;
 	int m_nUndoBufSize;
 	int FindLineWithFlag(DWORD dwFlag);
 
-protected:
 #pragma pack(push, 1)
 	//	Nested class declarations
+public:
+	class CTextAttribute
+	{
+	public :
+		typedef enum tagAttribute
+		{
+			none,
+			spellError,
+			nAttributeCount // must be last attribute
+		};
+
+		CTextAttribute() {}
+		CTextAttribute(int nStart, int nEnd, tagAttribute attribute) 
+		{
+			m_nStartPos = nStart;
+			m_nEndPos = nEnd;
+			m_Attribute = attribute;
+		}
+
+		bool operator<(const CTextAttribute &rhs) const { return (m_nStartPos < rhs.m_nStartPos); }
+
+		CTextAttribute& operator+=(int n)
+		{
+			m_nStartPos += n;
+			m_nEndPos += n;
+			return *this;
+		}
+
+		CTextAttribute& operator-=(int n)
+		{
+			m_nStartPos -= n;
+			m_nEndPos -= n;
+			return *this;
+		}
+
+		CTextAttribute& operator=(const CTextAttribute &rhs)
+		{
+			m_nStartPos = rhs.m_nStartPos;
+			m_nEndPos = rhs.m_nEndPos;
+			m_Attribute = rhs.m_Attribute;
+			return *this;
+		}
+
+	public:
+		int m_nStartPos;
+		int m_nEndPos;
+		tagAttribute m_Attribute;
+	};
+	typedef CSortList<CTextAttribute, CTextAttribute&> TextAttributeListType;
+
+protected:
 	class CLineInfo
 	{
 	public:
@@ -213,6 +269,7 @@ protected:
 		void Destroy() 
 		{ 
 			delete [] m_pcLine;
+			delete m_lstAttributes;
 			memset(this, 0, sizeof(CLineInfo));
 		}
 
@@ -234,8 +291,68 @@ protected:
 		*/
 		int GetLength() const { return m_nLength; }
 
+		/** 
+		Insert a line attribute 
+		@param insertMe Attribute to insert to the attribute list.
+		*/
+		inline
+		void InsertAttribute(CTextAttribute &insertMe) 
+		{
+			if ( m_lstAttributes == NULL )
+				m_lstAttributes = new CSortList<CTextAttribute, CTextAttribute&>;
+			m_lstAttributes->InsertSorted(insertMe);
+		}
+
+		/**
+		Clear all line attributes.
+		*/
+		void ClearAttributes();
+
+		/**
+		Clear all line attributes that match the given type.
+		@param attribute Attribute type to remove.
+		*/
+		void ClearAttributes(CTextAttribute::tagAttribute attribute);
+
+		/**
+		Clear all line attributes within the range.
+		@param nStart The start position of the clear
+		@param nEnd The end position of the clear
+		@bIncludeOverlap If <VAR>TRUE</VAR> clear attributes that overlap 
+		range, else only clear attributes completely contained within range.
+		*/
+		void ClearAttributes(int nStart, int nEnd, BOOL bIncludeOverlap = TRUE);
+
+		/**
+		Shift attributes along line. The attribute may be shifted backwards. 
+		@param nStart Starting point of shift.
+		@param nSpaces Number of spaces to shift. May be negative.
+		*/
+		void ShiftAttributes(int nStart, int nSpaces);
+
+		/**
+		Get the number of line attributes.
+		@return Number of attributes
+		*/
+		inline
+		int GetAttributeCount() 
+		{ 
+			if ( m_lstAttributes != NULL ) 
+				return m_lstAttributes->GetCount();
+			return 0;
+		}
+
+		/** Get the number of attributes that match the given type.
+		@param attribute Attribute type to count.
+		@return Number of matched attributes.
+		*/
+		int GetAttributeCount(CTextAttribute::tagAttribute attribute);
+
 		/** Character buffer */
 		TCHAR	*m_pcLine;
+
+		/** Line attribute list */
+		TextAttributeListType *m_lstAttributes;
 	protected:
 		int		m_nMax;
 		int		m_nLength;
@@ -340,7 +457,7 @@ protected:
 public:
 	//	Construction/destruction code
 	CCrystalTextBuffer();
-	~CCrystalTextBuffer();
+	virtual ~CCrystalTextBuffer();
 
 	//	Basic functions
 	BOOL InitNew(int nCrlfStyle = CRLF_STYLE_DOS);
@@ -370,6 +487,11 @@ public:
 	void SetCRLFMode(int nCRLFMode);
 	BOOL GetReadOnly() const;
 	void SetReadOnly(BOOL bReadOnly = TRUE);
+	void ClearLineAttributes(int nLine, CTextAttribute::tagAttribute attribute);
+	void ClearLineAttributes(int nLine);
+	void InsertLineAttribute(int nLine, CTextAttribute &lineAttribute);
+	CTextAttribute* GetLineAttribute(int nLine, int nStart, int nEnd) const;
+	TextAttributeListType* GetLineAttributes(int nLine) const;
 
 	//	Text modification functions
 	BOOL InsertText(CCrystalTextView *pSource, int nLine, int nPos, LPCTSTR pszText, int &nEndLine, int &nEndChar, int nAction = CE_ACTION_UNKNOWN);
