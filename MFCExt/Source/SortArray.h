@@ -100,8 +100,15 @@ int CSortArray<TYPE, ARG_TYPE>::InsertSorted(
 	ASSERT( nStart >= 0 && nStart < GetSize() );
 	ASSERT( nEnd >= 0 && nEnd < GetSize() );
 
+//	// get position to compare with
+//	int	nLookAt = nStart + (nEnd - nStart) / 2;
+
 	// get position to compare with
-	int	nLookAt = nStart + (nEnd - nStart) / 2;
+	int	nLookAt;
+	if ( (nEnd - nStart) == 1 )
+		nLookAt = nStart + 1;
+	else
+		nLookAt = nStart + (nEnd - nStart) / 2;
 
 	if( nStart == nEnd || (nStart + 1) == nEnd )
 	{
