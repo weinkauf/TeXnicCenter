@@ -206,7 +206,8 @@ CTeXnicCenterApp::CTeXnicCenterApp()
 	m_bEndSession( FALSE ),
 	m_bSavingAll( FALSE ),
 	m_recentProjectList( 1, _T("Recent Project List"), _T("Project%d"), 4 ),
-	m_bTabFlatBorders(FALSE)
+	m_bTabFlatBorders(FALSE),
+	m_pSpell(NULL)
 {
 }
 
@@ -466,6 +467,8 @@ int CTeXnicCenterApp::ExitInstance()
 	if( m_pMDIFrameManager )
 		delete m_pMDIFrameManager;
 
+	delete m_pSpell;
+
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// unloading localized resource DLL for BCGCB
 	if (m_hInstBCGCBRes)
@@ -526,8 +529,52 @@ CLatexEdit *CTeXnicCenterApp::GetActiveEditView()
 }
 
 
+CDocument *CTeXnicCenterApp::GetOpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/)
+{
+	// get the full path name of the file
+	TCHAR		lpszFilePath[_MAX_PATH];
+	LPSTR		lpszDummy;
+
+	GetFullPathName( lpszFileName, _MAX_PATH, lpszFilePath, &lpszDummy );
+	CString		strDocPath = lpszFilePath;
+
+	// get the document template
+	CDocTemplate	*pDocTemplate = m_pLatexDocTemplate;
+
+	// try to find a document that represents the requested file
+	CDocument	*pDoc = NULL;
+	POSITION	pos = pDocTemplate->GetFirstDocPosition();
+	BOOL		bFound = FALSE;
+
+	while( pos )
+	{
+		pDoc = (CLatexDoc*)pDocTemplate->GetNextDoc( pos );
+		if( pDoc && pDoc->GetPathName().CompareNoCase(strDocPath)==0 && pDoc->IsKindOf(RUNTIME_CLASS(CLatexDoc)) )
+		{
+			// check if the document has the required read/write mode
+			if ((bReadOnly && !((CLatexDoc*)pDoc)->m_pTextBuffer->GetReadOnly()) || 
+				  (!bReadOnly && ((CLatexDoc*)pDoc)->m_pTextBuffer->GetReadOnly()))
+				continue;
+
+			bFound = TRUE;
+			break;
+		}
+	}
+
+	if( !bFound  || !pDoc )
+		return NULL;
+
+	// set write protection
+	if (pDoc && bReadOnly)
+		((CLatexDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
+
+	return pDoc;
+}
+
+
 CDocument *CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/)
 {
+
 	// get the full path name of the file
 	TCHAR		lpszFilePath[_MAX_PATH];
 	LPSTR		lpszDummy;
@@ -1322,4 +1369,23 @@ void CTeXnicCenterApp::OnWindowCloseAll()
 void CTeXnicCenterApp::OnHelp() 
 {
 	CWinApp::OnHelp();
+}
+
+
+MySpell* CTeXnicCenterApp::GetSpell()
+{
+	if (m_pSpell == NULL)
+	{
+		CString dicName, affName;
+		dicName.Format(_T("%s\\%s_%s.dic"),
+			g_configuration.m_strSpellDictionaryPath, 
+			g_configuration.m_strLanuage,
+			g_configuration.m_strLanguageDialect);
+		affName.Format(_T("%s\\%s_%s.aff"),
+			g_configuration.m_strSpellDictionaryPath, 
+			g_configuration.m_strLanuage,
+			g_configuration.m_strLanguageDialect);
+		m_pSpell = new MySpell( T2CA((LPCTSTR)affName), T2CA((LPCTSTR)dicName) );
+	}
+	return m_pSpell;
 }
