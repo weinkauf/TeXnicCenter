@@ -1415,9 +1415,12 @@ CWinThread* CTeXnicCenterApp::GetBackgroundThread()
 		// Get the background thread to trigger the dictionary creation which 
 		// may take several seconds. This allows the user to continue working
 		// without interruption.
-		CSpellerSource *pSource = static_cast<CSpellerSource*>(this);
-		m_pBackgroundThread->PostThreadMessage(ID_BG_RESET_SPELLER, 0, (long) pSource);
 		m_pBackgroundThread->PostThreadMessage(ID_BG_ENABLE_SPELLER, g_configuration.m_bSpellEnable, NULL);
+		if ( g_configuration.m_bSpellEnable )
+		{
+			CSpellerSource *pSource = static_cast<CSpellerSource*>(this);
+			m_pBackgroundThread->PostThreadMessage(ID_BG_RESET_SPELLER, 0, (long) pSource);
+		}
 	}
 	::LeaveCriticalSection( &m_csLazy );
 	return m_pBackgroundThread;
