@@ -1,7 +1,11 @@
 /* $Id$ */
 
 /**
-    \mainpage \image html logo.png TeXnicCenter SourceCode Documentation 1 Beta 6.20
+    \mainpage notitle
+
+\image html logo.png TeXnicCenter SourceCode Documentation 1 Beta 6.20
+
+<BR>
 
 \section welcome Welcome to the SourceCode Documentation of TeXnicCenter
 
