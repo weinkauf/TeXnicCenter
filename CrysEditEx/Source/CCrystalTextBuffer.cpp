@@ -55,6 +55,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.12  2002/05/06 05:35:42  cnorris
+* Protect background thread from document reset
+*
 * Revision 1.11  2002/04/29 22:55:07  cnorris
 * Spell checker niceness
 *
@@ -1093,7 +1096,12 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 		return FALSE;
 
 	if (pszText == NULL || *pszText == _T('\0'))
+	{
+		// Insert empty or NULL string
+		nEndLine = nLine;
+		nEndChar = nPos;
 		return TRUE;
+	}
 
 	CInsertContext context;
 	context.m_ptStart.x = nPos;
