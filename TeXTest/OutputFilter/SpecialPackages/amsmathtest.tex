@@ -1,0 +1,131 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% $Id$
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This file and the files in this directory and its subdirectories
+% are intended to test several parts of the TeXnicCenter-system.
+%
+% Copyright (C) 2002-$CurrentYear$ ToolsCenter
+
+% Their main purpose is to reproduce several bugs or behaviours coming
+% up from missing features. They are neither a good starting point for
+% working with TeX nor with the TeXnicCenter-system. If you use them,
+% you do this on your own risk. They come WITHOUT ANY WARRANTY;
+% without even the implied warranty of MERCHANTABILITY or
+% FITNESS FOR A PARTICULAR PURPOSE.
+%
+% Anything below the "end of prolog"-line is for testing purposes only
+% and does not reflect the opinions of the author(s) and is not meant
+% to be a statement at all; it is even not said to be true or reliable.
+%
+% If you have further questions or if you want to support
+% further TeXnicCenter development, visit the TeXnicCenter-homepage
+%
+%     http://www.ToolsCenter.org
+%
+% end of prolog %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Weitere Formeln zur trilinearen Interpolation}
+\label{CTrilinearAbleitungen}
+
+Die partiellen Ableitungen erster Ordnung von \eqref{ETrilinearInter}
+lauten (man beachte den konstanten Faktor):
+\begin{multline}\label{ETrilinearInterX}
+F_{G_0}^{G_1}(x,y,z)\frac{d}{dx} = \frac{1}{x_{step}} \cdot \biggl(\\
+\begin{split}&- \frac{y_1-y}{y_{step}}\cdot \frac{z_1-z}{z_{step}}\cdot V_G\begin{pmatrix}x_0\\y_0\\z_0\end{pmatrix}
+ - \frac{y_1-y}{y_{step}}\cdot \frac{z-z_0}{z_{step}}\cdot V_G\begin{pmatrix}x_0\\y_0\\z_1\end{pmatrix}\\
+&- \frac{y-y_0}{y_{step}}\cdot \frac{z_1-z}{z_{step}}\cdot V_G\begin{pmatrix}x_0\\y_1\\z_0\end{pmatrix}
+ - \frac{y-y_0}{y_{step}}\cdot \frac{z-z_0}{z_{step}}\cdot V_G\begin{pmatrix}x_0\\y_1\\z_1\end{pmatrix}\\
+&+ \frac{y_1-y}{y_{step}}\cdot \frac{z_1-z}{z_{step}}\cdot V_G\begin{pmatrix}x_1\\y_0\\z_0\end{pmatrix}
+ + \frac{y_1-y}{y_{step}}\cdot \frac{z-z_0}{z_{step}}\cdot V_G\begin{pmatrix}x_1\\y_0\\z_1\end{pmatrix}\\
+&+ \frac{y-y_0}{y_{step}}\cdot \frac{z_1-z}{z_{step}}\cdot V_G\begin{pmatrix}x_1\\y_1\\z_0\end{pmatrix}
+ + \frac{y-y_0}{y_{step}}\cdot \frac{z-z_0}{z_{step}}\cdot V_G\begin{pmatrix}x_1\\y_1\\z_1\end{pmatrix} \biggr)
+\end{split}\end{multline}
+
+%Let both formulas get on this side
+\enlargethispage{3\baselineskip}
+
+\begin{multline}\label{ETrilinearInterY}
+F_{G_0}^{G_1}(x,y,z)\frac{d}{dy} = \frac{1}{y_{step}} \cdot \biggl(\\
+\begin{split}&-\frac{x_1-x}{x_{step}}\cdot \frac{z_1-z}{z_{step}}\cdot V_G\begin{pmatrix}x_0\\y_0\\z_0\end{pmatrix}
+ - \frac{x_1-x}{x_{step}}\cdot \frac{z-z_0}{z_{step}}\cdot V_G\begin{pmatrix}x_0\\y_0\\z_1\end{pmatrix}\\
+&+ \frac{x_1-x}{x_{step}}\cdot \frac{z_1-z}{z_{step}}\cdot V_G\begin{pmatrix}x_0\\y_1\\z_0\end{pmatrix}
+ + \frac{x_1-x}{x_{step}}\cdot \frac{z-z_0}{z_{step}}\cdot V_G\begin{pmatrix}x_0\\y_1\\z_1\end{pmatrix}\\
+&- \frac{x-x_0}{x_{step}}\cdot \frac{z_1-z}{z_{step}}\cdot V_G\begin{pmatrix}x_1\\y_0\\z_0\end{pmatrix}
+ - \frac{x-x_0}{x_{step}}\cdot \frac{z-z_0}{z_{step}}\cdot V_G\begin{pmatrix}x_1\\y_0\\z_1\end{pmatrix}\\
+&+ \frac{x-x_0}{x_{step}}\cdot \frac{z_1-z}{z_{step}}\cdot V_G\begin{pmatrix}x_1\\y_1\\z_0\end{pmatrix}
+ + \frac{x-x_0}{x_{step}}\cdot \frac{z-z_0}{z_{step}}\cdot V_G\begin{pmatrix}x_1\\y_1\\z_1\end{pmatrix}
+\end{split}\end{multline}
+
+
+\begin{multline}\label{ETrilinearInterZ}
+F_{G_0}^{G_1}(x,y,z)\frac{d}{dz} = \frac{1}{z_{step}} \cdot \biggl(\\
+\begin{split}&-\frac{x_1-x}{x_{step}}\cdot \frac{y_1-y}{y_{step}}\cdot V_G\begin{pmatrix}x_0\\y_0\\z_0\end{pmatrix}
+ + \frac{x_1-x}{x_{step}}\cdot \frac{y_1-y}{y_{step}}\cdot V_G\begin{pmatrix}x_0\\y_0\\z_1\end{pmatrix}\\
+&- \frac{x_1-x}{x_{step}}\cdot \frac{y-y_0}{y_{step}}\cdot V_G\begin{pmatrix}x_0\\y_1\\z_0\end{pmatrix}
+ + \frac{x_1-x}{x_{step}}\cdot \frac{y-y_0}{y_{step}}\cdot V_G\begin{pmatrix}x_0\\y_1\\z_1\end{pmatrix}\\
+&- \frac{x-x_0}{x_{step}}\cdot \frac{y_1-y}{y_{step}}\cdot V_G\begin{pmatrix}x_1\\y_0\\z_0\end{pmatrix}
+ + \frac{x-x_0}{x_{step}}\cdot \frac{y_1-y}{y_{step}}\cdot V_G\begin{pmatrix}x_1\\y_0\\z_1\end{pmatrix}\\
+&- \frac{x-x_0}{x_{step}}\cdot \frac{y-y_0}{y_{step}}\cdot V_G\begin{pmatrix}x_1\\y_1\\z_0\end{pmatrix}
+ + \frac{x-x_0}{x_{step}}\cdot \frac{y-y_0}{y_{step}}\cdot V_G\begin{pmatrix}x_1\\y_1\\z_1\end{pmatrix}
+\end{split}\end{multline}
+
+
+Die partiellen Ableitungen zweiter Ordnung von \eqref{ETrilinearInter}
+lauten (man beachte die konstanten Faktoren):
+
+\begin{equation}\label{ETrilinearInterXXYYZZ}
+F_{G_0}^{G_1}(x,y,z)\frac{d}{d^2x} \; = \; F_{G_0}^{G_1}(x,y,z)\frac{d}{d^2y} \; = \; F_{G_0}^{G_1}(x,y,z)\frac{d}{d^2z} \; = \; \vec 0
+\end{equation}
+
+
+\begin{multline}\label{ETrilinearInterXY}
+F_{G_0}^{G_1}(x,y,z)\frac{d}{dx\,dy} = \frac{1}{x_{step}} \cdot \frac{1}{y_{step}} \cdot \biggl(\\
+\begin{split}&\frac{z_1-z}{z_{step}}\cdot V_G\begin{pmatrix}x_0\\y_0\\z_0\end{pmatrix}
+ + \frac{z-z_0}{z_{step}}\cdot V_G\begin{pmatrix}x_0\\y_0\\z_1\end{pmatrix}\\
+ -&\frac{z_1-z}{z_{step}}\cdot V_G\begin{pmatrix}x_0\\y_1\\z_0\end{pmatrix}
+ - \frac{z-z_0}{z_{step}}\cdot V_G\begin{pmatrix}x_0\\y_1\\z_1\end{pmatrix}\\
+ -&\frac{z_1-z}{z_{step}}\cdot V_G\begin{pmatrix}x_1\\y_0\\z_0\end{pmatrix}
+ - \frac{z-z_0}{z_{step}}\cdot V_G\begin{pmatrix}x_1\\y_0\\z_1\end{pmatrix}\\
+ +&\frac{z_1-z}{z_{step}}\cdot V_G\begin{pmatrix}x_1\\y_1\\z_0\end{pmatrix}
+ + \frac{z-z_0}{z_{step}}\cdot V_G\begin{pmatrix}x_1\\y_1\\z_1\end{pmatrix} \biggr)
+\end{split}\end{multline}
+
+
+\begin{multline}\label{ETrilinearInterXZ}
+F_{G_0}^{G_1}(x,y,z)\frac{d}{dx\,dz} = \frac{1}{x_{step}} \cdot \frac{1}{z_{step}} \cdot \biggl(\\
+\begin{split}&\frac{y_1-y}{y_{step}}\cdot V_G\begin{pmatrix}x_0\\y_0\\z_0\end{pmatrix}
+ - \frac{y_1-y}{y_{step}}\cdot V_G\begin{pmatrix}x_0\\y_0\\z_1\end{pmatrix}\\
+ +&\frac{y-y_0}{y_{step}}\cdot V_G\begin{pmatrix}x_0\\y_1\\z_0\end{pmatrix}
+ - \frac{y-y_0}{y_{step}}\cdot V_G\begin{pmatrix}x_0\\y_1\\z_1\end{pmatrix}\\
+ -&\frac{y_1-y}{y_{step}}\cdot V_G\begin{pmatrix}x_1\\y_0\\z_0\end{pmatrix}
+ + \frac{y_1-y}{y_{step}}\cdot V_G\begin{pmatrix}x_1\\y_0\\z_1\end{pmatrix}\\
+ -&\frac{y-y_0}{y_{step}}\cdot V_G\begin{pmatrix}x_1\\y_1\\z_0\end{pmatrix}
+ + \frac{y-y_0}{y_{step}}\cdot V_G\begin{pmatrix}x_1\\y_1\\z_1\end{pmatrix} \biggr)
+\end{split}\end{multline}
+
+
+\begin{multline}\label{ETrilinearInterYZ}
+F_{G_0}^{G_1}(x,y,z)\frac{d}{dy\,dz} = \frac{1}{y_{step}} \cdot \frac{1}{z_{step}} \cdot \biggl(\\
+\begin{split}&\frac{x_1-x}{x_{step}}\cdot V_G\begin{pmatrix}x_0\\y_0\\z_0\end{pmatrix}
+ - \frac{x_1-x}{x_{step}}\cdot V_G\begin{pmatrix}x_0\\y_0\\z_1\end{pmatrix}\\
+ -&\frac{x_1-x}{x_{step}}\cdot V_G\begin{pmatrix}x_0\\y_1\\z_0\end{pmatrix}
+ + \frac{x_1-x}{x_{step}}\cdot V_G\begin{pmatrix}x_0\\y_1\\z_1\end{pmatrix}\\
+ +&\frac{x-x_0}{x_{step}}\cdot V_G\begin{pmatrix}x_1\\y_0\\z_0\end{pmatrix}
+ - \frac{x-x_0}{x_{step}}\cdot V_G\begin{pmatrix}x_1\\y_0\\z_1\end{pmatrix}\\
+ -&\frac{x-x_0}{x_{step}}\cdot V_G\begin{pmatrix}x_1\\y_1\\z_0\end{pmatrix}
+ + \frac{x-x_0}{x_{step}}\cdot V_G\begin{pmatrix}x_1\\y_1\\z_1\end{pmatrix}
+\end{split}\end{multline}
+
+
+Aufgrund von \eqref{ETrilinearInterXXYYZZ} vereinfacht sich
+die Formel \eqref{EAbleitungTangentenkurveAllgemein3} über
+den 3. Ableitungsvektor einer Tangentenkurve für stückweise trilinear
+interpolierte Vektorfelder wie folgt:\footnote{Der Übersichtlichkeit halber
+sei $F_{G_0}^{G_1}(x,y,z) = F = (f^u,f^v,f^w)^T$.}
+
+\begin{equation}\begin{split}
+\dddot{L} & = f^u\cdot (f^u_x\cdot F_x + f^v_x\cdot F_y + f^v\cdot F_{xy} + f^w_x\cdot F_z + f^w\cdot F_{xz})\\
+& + f^v\cdot (f^u_y\cdot F_x + f^u\cdot F_{xy} + f^v_y\cdot F_y + f^w_y\cdot F_z + f^w\cdot F_{yz})\\
+& + f^w\cdot (f^u_z\cdot F_x + f^u\cdot F_{xz} + f^v_z\cdot F_y + f^v\cdot F_{yz} + f^w_z\cdot F_z)
+\end{split}\end{equation}
+
