@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.13  2002/05/06 05:35:42  cnorris
+* Protect background thread from document reset
+*
 * Revision 1.12  2002/04/29 19:45:17  cnorris
 * Make text attribute structure thread safe
 *
@@ -3922,8 +3925,18 @@ void CCrystalTextView::GetSelectedText(CString &strSelection)
 		// retrieve the word, the cursor is placed on
 		CString	strLine(GetLineChars(ptStart.y));
 
+		//If the cursor is placed at the end of the line ==> step one char back.
+		// (If this EOL is not catched here, it will assert in the
+		//  first run of the next loop - strLine[nStartChar])
+		//If the cursor is placed at the end of a word, step one char back.
+		int nStartChar = ptStart.x;
+		if ( (nStartChar >= strLine.GetLength()) || (!isalnum(strLine[nStartChar])) )
+		{
+			nStartChar--;
+		}
+
 		// retrieve position of first character of the current word
-		for (int nStartChar = ptStart.x; nStartChar >= 0; nStartChar--)
+		for (; nStartChar >= 0; nStartChar--)
 		{
 			if (!isalnum(strLine[nStartChar]))
 			{
