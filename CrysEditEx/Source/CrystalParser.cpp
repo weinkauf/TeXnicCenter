@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.5  2002/04/23 21:31:26  cnorris
+* Include line length in WrapLine
+*
 * Revision 1.4  2002/04/06 05:33:57  cnorris
 * Added NextWord method required for spell checker
 *
@@ -141,7 +144,8 @@ void CCrystalParser::WrapLine( int nLineIndex, int nMaxLineWidth, int *anBreaks,
 		}
 	}
 	// Sneak the total length of the line into the anBreaks array
-	if (anBreaks) anBreaks[nBreaks] = nCharCount;
+	if ( anBreaks && nLineLength )
+		anBreaks[nBreaks] = nCharCount;
 }
 
 
