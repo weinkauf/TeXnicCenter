@@ -2115,22 +2115,24 @@ BEGIN
     PUSHBUTTON      "Abbrechen",IDCANCEL,200,24,50,14,0,0,HIDCANCEL
 END
 
-IDD_ITEM_PROPERTIES DIALOGEX 0, 0, 210, 71
+IDD_ITEM_PROPERTIES DIALOGEX 0, 0, 210, 79
 STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_TOOLWINDOW
 CAPTION "Eigenschaften"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    LTEXT           "Titel:",IDC_STATIC,5,5,16,8
-    LTEXT           "Datei:",IDC_STATIC,5,20,20,8
-    LTEXT           "Zeile:",IDC_STATIC,5,30,18,8
-    LTEXT           "Beschriftung:",IDC_STATIC,5,45,42,8
-    LTEXT           "Marke:",IDC_STATIC,5,55,23,8
-    LTEXT           "Title",IDC_TITLE,53,5,150,8,0,0,HIDC_TITLE
-    LTEXT           "File",IDC_FILE,53,20,150,8,0,0,HIDC_FILE
-    LTEXT           "Line",IDC_LINE,53,30,150,8,0,0,HIDC_LINE
-    LTEXT           "Caption",IDC_CAPTION,53,45,150,8,0,0,HIDC_CAPTION
-    LTEXT           "Label",IDC_LABEL,53,55,150,8,0,0,HIDC_LABEL
+    LTEXT           "Titel:",IDC_STATIC,7,7,16,8
+    LTEXT           "Datei:",IDC_STATIC,7,29,20,8
+    LTEXT           "Zeile:",IDC_STATIC,7,39,18,8
+    LTEXT           "Beschriftung:",IDC_STATIC,7,54,42,8
+    LTEXT           "Marke:",IDC_STATIC,7,64,23,8
+    LTEXT           "Title",IDC_TITLE,53,7,150,8,0,0,HIDC_TITLE
+    LTEXT           "File",IDC_FILE,53,29,150,8,0,0,HIDC_FILE
+    LTEXT           "Line",IDC_LINE,53,39,150,8,0,0,HIDC_LINE
+    LTEXT           "Caption",IDC_CAPTION,53,54,150,8,0,0,HIDC_CAPTION
+    LTEXT           "Label",IDC_LABEL,53,64,150,8,0,0,HIDC_LABEL
+    LTEXT           "Anmerkung:",IDC_STATIC,7,15,39,8
+    LTEXT           "Comment",IDC_COMMENT,53,15,150,8,0,0,HIDC_COMMENT
 END
 
 IDD_HEADER DIALOGEX 0, 0, 222, 66
@@ -2496,7 +2498,7 @@ END
 IDD_OPTIONS_FILE DIALOGEX 0, 0, 235, 156
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Datei"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
     LTEXT           " Speichern ",IDC_STATIC,5,5,37,8
@@ -2552,7 +2554,7 @@ END
 IDD_OPTIONS_PATHS DIALOGEX 0, 0, 235, 156
 STYLE DS_CONTEXTHELP | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Verzeichnisse"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
     LTEXT           " &Projektvorlageverzeichnisse ",IDC_STATIC,5,5,93,8
@@ -2971,7 +2973,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 203
         TOPMARGIN, 7
-        BOTTOMMARGIN, 64
+        BOTTOMMARGIN, 72
     END
 
     IDD_HEADER, DIALOG
@@ -6064,28 +6066,30 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,165,24,50,14
 END
 
-IDD_ITEM_PROPERTIES DIALOGEX 0, 0, 210, 71
+IDD_ITEM_PROPERTIES DIALOGEX 0, 0, 210, 79
 STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_TOOLWINDOW
 CAPTION "Properties"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    LTEXT           "Title:",IDC_STATIC,5,5,16,8
-    LTEXT           "File:",IDC_STATIC,5,20,14,8
-    LTEXT           "Line:",IDC_STATIC,5,30,16,8
-    LTEXT           "Caption:",IDC_STATIC,5,45,27,8
-    LTEXT           "Label:",IDC_STATIC,5,55,20,8
-    LTEXT           "Title",IDC_TITLE,53,5,150,8,0,0,HIDC_TITLE
-    LTEXT           "File",IDC_FILE,53,20,150,8,0,0,HIDC_FILE
-    LTEXT           "Line",IDC_LINE,53,30,150,8,0,0,HIDC_LINE
-    LTEXT           "Caption",IDC_CAPTION,53,45,150,8,0,0,HIDC_CAPTION
-    LTEXT           "Label",IDC_LABEL,53,55,150,8,0,0,HIDC_LABEL
+    LTEXT           "Title:",IDC_STATIC,7,7,16,8
+    LTEXT           "File:",IDC_STATIC,7,29,14,8
+    LTEXT           "Line:",IDC_STATIC,7,39,16,8
+    LTEXT           "Caption:",IDC_STATIC,7,54,27,8
+    LTEXT           "Label:",IDC_STATIC,7,64,20,8
+    LTEXT           "Title",IDC_TITLE,53,7,150,8,0,0,HIDC_TITLE
+    LTEXT           "File",IDC_FILE,53,29,150,8,0,0,HIDC_FILE
+    LTEXT           "Line",IDC_LINE,53,39,150,8,0,0,HIDC_LINE
+    LTEXT           "Caption",IDC_CAPTION,53,54,150,8,0,0,HIDC_CAPTION
+    LTEXT           "Label",IDC_LABEL,53,64,150,8,0,0,HIDC_LABEL
+    LTEXT           "Comment:",IDC_STATIC,7,15,32,8
+    LTEXT           "Comment",IDC_COMMENT,53,15,150,8,0,0,HIDC_COMMENT
 END
 
 IDD_OPTIONS_FILE DIALOGEX 0, 0, 235, 156
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "File"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
     LTEXT           " Save ",IDC_STATIC,5,5,22,8
@@ -6546,7 +6550,7 @@ END
 IDD_OPTIONS_PATHS DIALOGEX 0, 0, 235, 156
 STYLE DS_CONTEXTHELP | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Directories"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
     LTEXT           " &Project Template Directories ",IDC_STATIC,5,5,94,8
@@ -6791,7 +6795,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 203
         TOPMARGIN, 7
-        BOTTOMMARGIN, 64
+        BOTTOMMARGIN, 72
     END
 
     IDD_PROJECT_PROPERTIES, DIALOG
@@ -8253,7 +8257,7 @@ BEGIN
     ID_PH_CURRENTOPTIONS    "\n[1]c"
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
