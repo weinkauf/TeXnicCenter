@@ -275,8 +275,6 @@ protected:
 		Output, the stack where open pairs are stored.
 	@param result
 		CParser::RESULT_ERROR if an error occures, the string that din't have pair is at the top of the stack
-		CParser::RESULT_ENDOK if <code>bClearToEnd</code> have been set and the end/start of block was reached
-													and the pair stack is emty
 		CParser::RESULT_OK otherwise
         
 	@return     
