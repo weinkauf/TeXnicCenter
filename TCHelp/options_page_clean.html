@@ -1,19 +1,33 @@
 <html>
 <head>
-<title>Options - Page 'Clean'</title>
+<title>Tab 'Clean'</title>
 <link rel="stylesheet" href="STYLE.CSS" type="text/css">
 </head>
 <body>
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h3">Tab '<var>Clean</var>'</td>
+</tr>
+</table>
+</p>
 
-<h3>Options - Page '<var>Clean</var>'</h3>
+<p>The tab '<var>Clean</var>' in the dialog
+<a href="options.html">'<var>Options</var>'</a> allows to modify file
+protection and file deletion when using the command <var>Clean Project</var>
+in the menu <var>Build</var>.</p>
 
-<p>The page '<var>Clean</var>' of the <a href="options.html">'<var>Options</var>' dialog</a> allows you to modify which files will be deleted and protected by TeXnicCenter when you use the <var>Clean Project</var> command from the <var>Build</var> menu.</p>
+<p><b>IMPORTANT NOTE:</b><br>
+Please be carefull when configuring this command. Deleting the wrong files
+may cause loss of important data. While TeXnicCenter tries its best to
+prevent deletion of work, it can not take any responsibility for that.</p>
 
-<p><b>IMPORTANT NOTE:</b> Use caution when configuring this command as deleting the wrong files may cause a lost of important data. While TeXnicCenter tries its best to prevent you from deleting your work, it can not take on the responsibility for that.</p>
-
-<div align="center"><img src="options_clean.gif" width="379" height="348" border="0" alt=""></div>
+<p>
+<div align="center"><img src="images/options_clean.gif" width="379" height="348" border="0" alt=""></div>
+</p>
 
 <p>The meaning of the controls are:</p>
+<p>
 <dl>
    <dt>'<var>Edit entries</var>'</dt>
    <dd>The entries in the list box below define the files to be deleted
@@ -22,11 +36,11 @@
 
    <dd>There are two entries at the end of the list,
    which can not be edited or removed. These two entries are used to
-   protect all files of the project and all files, which are opened in
-   the editor. Which files TeXnicCenter recognizes to be part of
-   the project can be seen in the <var>FileView</var> tab of the
-   <var>Navigation</var> window. It can not be assured, that this set
-   includes every file of your work.</dd>
+   protect all files of the project and all files, which are currently
+   opened in the editor. Files recognized by TeXnicCenter as a part of
+   the project are shown on the tab <var>FileView</var> in the window
+   <var>Navigation</var>. This set may not include all files of the
+   current project.</dd>
 
    <dt>'<var>Add</var>'</dt>
    <dd>Pressing this button adds a new entry to the list.</dd>
@@ -35,27 +49,26 @@
    <dd>Pressing this button removes the selected entry from the list.</dd>
 
    <dt>'<var>Sort</var>'</dt>
-   <dd>Pressing this button sorts the list of entries to get a better overview.</dd>
+   <dd>Pressing this button sorts the list of entries for a better
+   overview.</dd>
 
    <dt>'<var>Description</var>'</dt>
    <dd>This edit box is used to change the description text of the
-   selected entry. This text has no meaning to TeXnicCenter - you can
-   type here whatever helps you to remind the selected entry.</dd>
+   selected entry. This text does not mean anything to TeXnicCenter -
+   type here whatever helps to remind/explain the selected entry.</dd>
 
    <dt>'<var>Pattern</var>'</dt>
    <dd>The text in this control defines a file or a set of files to act on
    for the selected entry.</dd>
 
-   <dd>It is allowed to use Wildcards (<b>*</b> and <b>?</b>) as known
-   from the Windows command line. Additionally, it is allowed to use
+   <dd>It is allowed to use the samewildcards (<b>*</b> and <b>?</b>) as known
+   from a Windows command line. Additionally, use
    <a href="placeholdersingle.html">placeholders for single files</a> and
    <a href="placeholdersets.html">placeholders for sets of files</a> here.
-   The combination of wildcards together with
-   <a href="placeholdersingle.html">placeholders for single files</a> is supported.
-   However, any other combination is not allowed.
-   Use the button to the right of this edit box to insert a
-   <a href="placeholders.html">placeholder</a>
-   or type it manually.</dd>
+   The combination of wildcards with placeholders for single files is
+   supported, any other combination <b>not</b>.<br>
+   Use the button on the right of the edit box to insert a
+   <a href="placeholders.html">placeholder</a> or type it in manually.</dd>
 
    <dt>'<var>Action</var>'</dt>
    <dd>This control selects the action to be performed on the file(s)
@@ -67,29 +80,26 @@
        in the list.</li>
 
        <li><b>protect</b> - The files defined by <b>'<var>Pattern</var>'</b>
-       will be protected from deletion. If an entry
-       defines a file to be protected and another entry defines
-       the same file to be deleted, the file will be protected.</li>
+       will be protected from deletion. If an entry defines a file to be
+       protected and another entry defines the same file to be deleted,
+       the file will be protected, i.d. the deletion entry will be ignored.</li>
 
        <li><b>none</b> - The selected entry will not be used to build
-       up the lists for deletion or protection. Use this action, if you
-       do not want to delete or protect an entry, but want to deactivate it.</li>
+       up the lists for deletion or protection. Use this action, if an
+       entry should be deactivate.</li>
    </ul>
    </dd>
 
    <dt>'<var>Include subdirectories</var>'</dt>
    <dd>If selected, TeXnicCenter searches the subdirectories of the
-   active project for
-   matching files defined by <b>'<var>Pattern</var>'</b>, too.
-   This refers to the selected entry.</dd>
+   active project for matching files defined by <b>'<var>Pattern</var>'</b>,
+   too. This refers to the selected entry.</dd>
 
    <dt>'<var>Confirm before delete</var>'</dt>
-   <dd>If selected, TeXnicCenter will show a dialog before deleting
-   files. This dialog lists all the files to be deleted and protected.
-   It is possible to cancel the action using this dialog.
-   </dd>
-
+   <dd>If selected, TeXnicCenter will show a dialog before deleting files.
+   This dialog lists all the files to be deleted and protected.<br>
+   Clicking on the button Cancel will terminate the action.</dd>
 </dl>
-
+</p>
 </body>
 </html>

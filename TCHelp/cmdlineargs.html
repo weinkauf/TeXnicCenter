@@ -4,21 +4,36 @@
 <link rel="stylesheet" href="STYLE.CSS" type="text/css">
 </head>
 <body>
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h2">Command Line Arguments</td>
+</tr>
+</table>
+</p>
 
-<h2>Command Line Arguments</h2>
+<p>TeXnicCenter supports the following command line syntax:</p>
 
-<p>TeXnicCenter supports the following command line syntaxes:</p>
+<p><b>Important:</b><br>
+<ul>
+<li>If you want to influence a running instance of
+TeXnicCenter you should send <a href="ddecmds.html">DDE-commands</a>
+directly to the running instance or use the '<var>/ddecmd</var>' switch.</li>
+<li>Use single quotes (') inside the DDE-commands instead
+of double quotes ('').</li>
+</ul></p>
 
-<p><b>Important:</b> If you want to influence a running instance of TeXnicCenter you should send <a href="ddecmds.html">DDE-commands</a> directly to the running instance or use the '<var>/ddecmd</var>' switch.</p>
-
+<p>
 <dl>
    <dt>TEXCNTR <i>filename</i></dt>
-   <dd>Start up and open the specified file.
-   <p>If the file is a project file, the project will be opened, otherwise the file will be opened in the editor.</p>
+   <dd>Start up and open the specified file.<br>
+   If the file is a project file, the project will be opened,
+   otherwise the file will be opened in the editor.
    </dd>
 
    <dt>TEXCNTR /l <i>linenumber filename</i></dt>
-   <dd>Start up and open the specified file in the editor and place the cursor at the specified line.</dd>
+   <dd>Start up and open the specified file in the editor and
+   place the cursor at the specified line.</dd>
 
    <dt>TEXCNTR /p <i>file</i></dt>
    <dd>Prints the specified file to the default printer.</dd>
@@ -30,41 +45,77 @@
    <dd>Start up and await a <a href="ddecmds.html">DDE command</a></dd>
 
    <dt>TEXCNTR /ddecmd "<i><a href="ddecmds.html">DDE-commands</a></i>"</dt>
-   <dd>If there is already a running instance of TeXnicCenter, then forward the specified DDE commands to this instance, otherwise start up and execute the given DDE-commands.
+   <dd>If there is already a running instance of TeXnicCenter, then forward
+   the specified DDE commands to this instance, otherwise start up and execute
+   the given DDE-commands.
 
    <dt>TEXCNTR /nosplash</dt>
    <dd>Start TeXnicCenter without displaying the splash screen.</dd>
 
-   <p><b>Important:</b> Use single quotes (') inside the DDE-commands instead of double quotes ('')</p>
    </dd>
 </dl>
+</p>
 
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h3">Open a file in TeXnicCenter using another application or
+the command line</td>
+</tr>
+</table>
+</p>
 
-<h3>How to open a file in TeXnicCenter using another application or the command line</h3>
+<p>The DVI-viewer YAP, shipped together with the
+<a class="web" href="www.miktex.org">MikTeX distribution</a> supports
+a feature called "inverse search". If a DVI file opened in the viewer
+has been generated using source specials, you can double click on a
+paragraph in the viewer and the viewer places the cursor in your
+favorite LaTeX editor at the line in the LaTeX source, the given paragraph
+has been generated from.</p>
 
-<p>The DVI-viewer YAP, shipped together with the <a class="web" href="www.miktex.org">MikTeX distribution</a> supports a feature called "inverse search". If a DVI file opened in the viewer has been generated using source specials, you can double click on a paragraph in the viewer and the viewer places the cursor in your favorite LaTeX-editor at the line in the LaTeX-source, the given paragraph has been generated from.</p>
+<p>To do so, your favorite LaTeX editor has to support the feature to go
+to a line and a source file, specified on the command line.</p>
 
-<p>To do so, your favorite LaTeX-editor has to support the feature to go to a line and a source file, specified on the command line.</p>
+<p>TeXnicCenter supports these features with the command line arguments
+listed here.</p>
 
-<p>TeXnicCenter supports these features with the command line arguments listed here.</p>
-
-
-<h4>Multiple Instance Support</h4>
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h4">Multiple Instance Support</td>
+</tr>
+</table>
+</p>
 
 <p>If you specify the command line</p>
 
 <p><code>TECNTR /l <i>linenumber filename</i></code></p>
 
-<p>in the inverse search settings of your viewer, each time you perform an inverse search, a new instance of TeXnicCenter will be started and the new instance will open the specified file and place the cursor at the specified line.</p>
+<p>in the inverse search settings of your viewer, each time you perform
+an inverse search, a new instance of TeXnicCenter will be started and the
+new instance will open the specified file and place the cursor at the
+specified line.</p>
 
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h4">Single Instance Support</td>
+</tr>
+</table>
+</p>
 
-<h4>Single Instance Support</h4>
-
-<p>If you would like to run only one instance of TeXnicCenter (and this is what makes most sense) you can specify the following command line in your viewers inverse search settings:</p>
+<p>If you would like to run only one instance of TeXnicCenter (and this is
+what makes sense most) you can specify the following command line in your
+viewers inverse search settings:</p>
 
 <p><code>TEXCNTR /ddecmd "[goto('<i>filename</i>', '<i>linenumber</i>')]"</code></p>
 
-<p>If you perform an inverse search now, the system will check, if there is already a running instance of TeXnicCenter. In this case the specified <a href="ddecmds.html">DDE command</a> will be send to this running instance, which will open the specified file and place the cursor at the specified line. If there is no running instance, a new instance will be started and this new instance will open the specified file at the specified line.</p>
+<p>If you perform an inverse search now, the system will check, if there is
+already a running instance of TeXnicCenter. In this case the specified
+<a href="ddecmds.html">DDE command</a> will be send to this running instance,
+which will open the specified file and place the cursor at the specified line.
+If there is no running instance, a new instance will be started and this new
+instance will open the specified file at the specified line.</p>
 
 </body>
 </html>
