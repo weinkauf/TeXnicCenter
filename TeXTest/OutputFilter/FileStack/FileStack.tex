@@ -44,6 +44,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
+% TeX splits its output over several lines, if an item does not fit
+% into one line. An item is for example a filename. Most TeX-Distributions
+% allow to config the maximal width of an output line. Mostly this
+% defaults to something <80, because 80 is the normal terminal width.
+%
+% We need to catch even those filenames. It is very likely, that this
+% happens, because a lot of users will work in a path like
+%
+% "C:\Documents and Settings\username\My Documents\PHD thesis\latex\..."
+%
+% and TeX prints out the full name for the main file.
+% So there is no way around: We need to catch it.
+\input{"A Long Path With Spaces and so on to test the FileStack/A Long Filename with Spaces and so on.tex"}
 
 % TeX reports here some bad boxes and prints out the
 % text which generates the bad box in a verbatim way.

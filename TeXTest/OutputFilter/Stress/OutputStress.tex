@@ -29,33 +29,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass[a4paper,twoside,10pt]{report}
 \usepackage[latin1]{inputenc}
-%\usepackage{textcomp}
-\usepackage[dvips]{epsfig}
-\usepackage{ngerman}
-\usepackage{amsmath}
-\usepackage{amsthm}
-\usepackage{amsfonts}
-\usepackage{longtable}
-\usepackage{pst-node}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% COMMENTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Checking whether TXC catches warnings and errors of
-% specific TeX-packages.
-%
-% If this document does not compile with your personal
-% TeX-Distribution, because you do not have a special
-% package, comment out this special \usepackage above
-% and the special \include below.
-%
-% NOTE: DO NOT COMMIT A VERSION OF THIS DOCUMENT, WHERE
-% YOU COMMENTED OUT SOME PACKAGES, BECAUSE YOU DO NOT HAVE
-% THEM!!!
-%
-% You are invited to contribute to this document.
 %
 %
 %
@@ -67,15 +46,23 @@
 \begin{document}
 
 
-% Testing undefined citations
-% - this one will fit into one line
-\cite{hesselink2d}
-% - this one will split over two lines
-\cite{hesselink2dsimple}
 
-% Testing errors and warnings from amsmath
-\input{amsmathtest}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Stressing with 5000 Messages
+\input{StressMsg1000} %Printing out 1000 messages
+%\input{StressMsg1000} %Printing out 1000 messages
+%\input{StressMsg1000} %Printing out 1000 messages
+%\input{StressMsg1000} %Printing out 1000 messages
+%\input{StressMsg1000} %Printing out 1000 messages
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Stressing with 5000 Errors
+%\input{StressErr1000} %Bringing up 1000 Errors
+%\input{StressErr1000} %Bringing up 1000 Errors
+%\input{StressErr1000} %Bringing up 1000 Errors
+%\input{StressErr1000} %Bringing up 1000 Errors
+%\input{StressErr1000} %Bringing up 1000 Errors
 
 \end{document}
+
 
