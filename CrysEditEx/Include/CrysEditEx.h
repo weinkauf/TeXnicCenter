@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.2  2002/04/10 14:29:07  cnorris
+* Spell check
+*
 * Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
 * Initial revision
 *
@@ -36,4 +39,6 @@
 #include "../Source/CrystalTextBufferEx.h"
 #include "../Source/editcmd.h"
 #include "../Source/SpellCheckDlg.h"
+#include "../Source/BackgroundThread.h"
+#include "../Source/AttributeMenu.h"
 #include "../../myspell/myspell.hxx"
