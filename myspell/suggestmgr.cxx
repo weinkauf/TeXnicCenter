@@ -5,9 +5,9 @@
 #include <cstring>
 #include <cstdio>
 
+#include "stdafx.h"
 #include "suggestmgr.hxx"
 
-using namespace std;
 
 extern char * mystrdup(const char *);
 

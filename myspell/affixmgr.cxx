@@ -5,10 +5,9 @@
 #include <cctype>
 #include <cstdio>
 
+#include "stdafx.h"
 #include "affixmgr.hxx"
 #include "affix.hxx"
-
-using namespace std;
 
 // remove end of line char(s)
 void mychomp(char * s);
