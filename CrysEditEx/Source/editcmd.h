@@ -25,6 +25,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.2  2002/02/27 19:56:55  cnorris
+* bug-id 71 String not found during replace operation fixed
+*
 * Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
 * Initial revision
 *
@@ -136,6 +139,7 @@
 //	Dialog IDs
 #define		IDD_EDIT_FIND				8601
 #define		IDD_EDIT_REPLACE			8602
+#define		IDD_SPELL_CHECK				9000
 
 //	Control IDs
 #define		IDC_EDIT_WHOLE_WORD			8603
@@ -174,5 +178,19 @@
 //END SW
 
 #define IDS_EDIT_REPLACE_COUNT          8643
+
+#define IDC_SPELL_REPLACE               8650
+#define IDC_SPELL_REPLACE_ALL           8651
+#define IDC_SPELL_RESUME                8652
+#define IDC_SPELL_IGNORE_ALL            8653
+#define IDC_SPELL_TEXT                  8654
+#define IDC_SPELL_IGNORE                8655
+#define IDC_SPELL_NEXT                  8656
+#define IDC_SPELL_SUGGEST               8657
+#define IDS_SPELL_IGNORE                8658
+#define IDS_SPELL_UNEDIT                8659
+#define IDS_SPELL_DONE                  8660
+#define IDS_SPELL_NO_SUGGESTIONS        8661
+
 
 #endif

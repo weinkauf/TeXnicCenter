@@ -1,24 +1,24 @@
 # Microsoft Developer Studio Project File - Name="CrysEditEx" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** NICHT BEARBEITEN **
+# ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
 CFG=CrysEditEx - Win32 Debug
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "cryseditEx.mak".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
-!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "cryseditEx.mak" CFG="CrysEditEx - Win32 Debug"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "CrysEditEx - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "CrysEditEx - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "CrysEditEx - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "CrysEditEx - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -70,11 +70,11 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "../../regexpp/include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /D "_MBCS" /D "_AFXEXT" /D "CE_DLL_BUILD" /FR /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "../../regexpp/include" /I "../../myspell/" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /D "_MBCS" /D "_AFXEXT" /D "CE_DLL_BUILD" /FR /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x407 /d "_DEBUG" /d "_AFXDLL"
-# ADD RSC /l 0x407 /d "_DEBUG" /d "_AFXDLL"
+# ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -89,9 +89,17 @@ LINK32=link.exe
 
 # Name "CrysEditEx - Win32 Release"
 # Name "CrysEditEx - Win32 Debug"
-# Begin Group "Quellcodedateien"
+# Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;inl"
+# Begin Source File
+
+SOURCE=..\..\myspell\affix.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\myspell\affixmgr.cxx
+# End Source File
 # Begin Source File
 
 SOURCE=.\CCrystalEditView.cpp
@@ -139,6 +147,10 @@ SOURCE=.\CrystalParser.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CrystalSpell.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\CrystalTextBlock.cpp
 # End Source File
 # Begin Source File
@@ -147,17 +159,49 @@ SOURCE=.\CrystalTextBufferEx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\myspell\hashmgr.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\Inline.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\myspell\myspell.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\SpellCheckDlg.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\myspell\suggestmgr.cxx
+# End Source File
 # End Group
-# Begin Group "Header-Dateien"
+# Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=..\..\myspell\affix.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\myspell\affixmgr.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\myspell\atypes.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\myspell\baseaffix.hxx
+# End Source File
 # Begin Source File
 
 SOURCE=.\CCrystalEditView.h
@@ -204,6 +248,10 @@ SOURCE=.\CrystalParser.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\CrystalSpell.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\CrystalTextBlock.h
 # End Source File
 # Begin Source File
@@ -220,10 +268,30 @@ SOURCE=.\editreg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\myspell\hashmgr.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\myspell\htypes.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\myspell\myspell.hxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\SpellCheckDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\myspell\suggestmgr.hxx
+# End Source File
 # End Group
-# Begin Group "Ressourcendateien"
+# Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # Begin Source File
