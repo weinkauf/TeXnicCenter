@@ -233,12 +233,6 @@ BOOL CTeXnicCenterApp::InitInstance()
 		return FALSE;
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// loading localized resource DLL for BCGCB
-	m_hInstBCGCBRes = LoadLibrary(CPathTool::Cat(_T("language"), CString((LPCTSTR)STE_BCGCBRESDLL)));
-	if (m_hInstBCGCBRes)
-		BCGCBSetResourceHandle(m_hInstBCGCBRes);
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// load configuration from registry
 
 	// set registry key
@@ -254,6 +248,36 @@ BOOL CTeXnicCenterApp::InitInstance()
 	// Set the locale
 	_tsetlocale( LC_ALL, g_configuration.m_strLocale );
 
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// loading localized resource DLL for TeXnicCenter itself
+	m_hTxcResources = LoadLibrary(_T("language\\TxcRes") + g_configuration.m_strGuiLanguage + _T(".dll"));
+	BOOL	bResourcesIncompatible = FALSE;
+	if (m_hTxcResources)
+	{
+		// check compatibility
+		CFileVersionInfo	fviResources, fviTxc;
+		fviResources.Create(m_hTxcResources);
+		fviTxc.Create();
+
+		if (fviResources.GetFileVersion()==fviTxc.GetFileVersion())
+			AfxSetResourceHandle(m_hTxcResources);
+		else
+			bResourcesIncompatible = TRUE;
+	}
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// loading localized resource DLL for CrystalEditEx
+	m_hCrystalEditResources = LoadLibrary(_T("language\\") + CString((LPCTSTR)STE_CRYSTAL_EDIT_RESOURCE_DLL));
+	if (m_hCrystalEditResources)
+		CrystalEditExSetResourceHandle(m_hCrystalEditResources);
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// loading localized resource DLL for BCGCB
+	m_hInstBCGCBRes = LoadLibrary(CPathTool::Cat(_T("language"), CString((LPCTSTR)STE_BCGCBRESDLL)));
+	if (m_hInstBCGCBRes)
+		BCGCBSetResourceHandle(m_hInstBCGCBRes);
+
+	//
 	// parse command line
 	CTCCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
@@ -292,7 +316,14 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Initialize BCG
-	SetRegistryBase( _T("BCGWorkspace") );
+	BOOL	bLanguageProfilesExisting = GetProfileInt(_T("BCGWorkspace"), _T("LanguageProfilesDefined"), FALSE);
+	if (!bLanguageProfilesExisting)
+		// If language specific profiles are not already defined, then
+		// load old settings now to help users of old versions to upgrade
+		SetRegistryBase(_T("BCGWorkspace"));
+	else
+		SetRegistryBase(_T("BCGWorkspace\\") + g_configuration.m_strGuiLanguage);
+
 	InitContextMenuManager();
 	InitKeyboardManager();
 	if (g_configuration.m_strLookAndFeel==_T("Office 2000"))
@@ -440,6 +471,40 @@ BOOL CTeXnicCenterApp::InitInstance()
   free((void*)m_pszHelpFilePath);
   m_pszHelpFilePath = _tcsdup(strHelpFilePath);
 
+	// language specific handling
+	if (bResourcesIncompatible)
+	{
+		CFileVersionInfo	fviResources, fviTxc;
+		fviResources.Create(m_hTxcResources);
+		fviTxc.Create();
+		
+		CString	strMessage;
+		strMessage.Format(
+			STE_RESOURCE_CONFLICT, g_configuration.m_strGuiLanguage, 
+			fviTxc.GetFileVersion(), fviResources.GetFileVersion());
+		AfxMessageBox(strMessage);
+	}
+	if (!bLanguageProfilesExisting)
+	{
+		// if language specific profiles were not enable until now, then
+		// save current settings now under the current language specific
+		// profile.
+		SetRegistryBase(_T("BCGWorkspace\\") + g_configuration.m_strGuiLanguage);
+		SaveState();
+		WriteProfileInt(_T("BCGWorkspace"), _T("LanguageProfilesDefined"), TRUE);
+	}
+	else
+	{
+		// inform the user about that the settings for all languages are
+		// stored separately...
+		BOOL	bLanguageAlreadyDefined = GetProfileInt(_T("BCGWorkspace\\") + g_configuration.m_strGuiLanguage, _T("LanguageAlreadyUsed"), FALSE);
+		if (!bLanguageAlreadyDefined)
+		{
+			AfxMessageBox(STE_LANGUAGE_NEW, MB_ICONINFORMATION|MB_OK);
+			WriteProfileInt(_T("BCGWorkspace\\") + g_configuration.m_strGuiLanguage, _T("LanguageAlreadyUsed"), TRUE);
+		}
+	}
+
 	// Show Tip
 	ShowTipAtStartup();
 
@@ -542,6 +607,15 @@ int CTeXnicCenterApp::ExitInstance()
 		FreeLibrary(m_hInstBCGCBRes);
 
 	BCGCBCleanUp();
+
+	// unload CrystalEdit resource DLL
+	CrystalEditExResetResourceHandle();
+	if (m_hCrystalEditResources)
+		FreeLibrary(m_hCrystalEditResources);
+
+	// unload txc resource DLL
+	if (m_hTxcResources)
+		FreeLibrary(m_hTxcResources);
 
 	return CProjectSupportingWinApp::ExitInstance();
 }

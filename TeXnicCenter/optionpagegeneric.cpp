@@ -93,7 +93,8 @@ void COptionPageGeneric::RefillLanguageList()
 		CString	strLanguage = ff.GetFileTitle();
 		strLanguage = strLanguage.Right(strLanguage.GetLength() - _tcslen(_T("TxcRes")));
 
-		m_wndGuiLanguageList.AddString(strLanguage);
+		if (m_wndGuiLanguageList.FindStringExact(0, strLanguage)==CB_ERR)
+			m_wndGuiLanguageList.AddString(strLanguage);
 	}
 }
 

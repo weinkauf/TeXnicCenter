@@ -55,6 +55,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.14  2003/12/06 15:35:43  svenwiegand
+* Fixed bug 617922: highlight all and copy+paste will crash TXC if last line
+* is not empty/highlight all and delete will disable you to type any texts,
+* if last line is not empty.
+*
 * Revision 1.13  2002/05/23 23:11:07  cnorris
 * Update end block position after insterting null or empty string.
 *
@@ -1436,13 +1441,8 @@ BOOL CCrystalTextBuffer::DeleteText(CCrystalTextView *pSource, int nStartLine, i
 
 BOOL CCrystalTextBuffer::GetActionDescription(int nAction, CString &desc)
 {
-	HINSTANCE hOldResHandle = AfxGetResourceHandle();
-#ifdef CRYSEDIT_RES_HANDLE
-	AfxSetResourceHandle(CRYSEDIT_RES_HANDLE);
-#else
-	if (CCrystalTextView::s_hResourceInst != NULL)
-		AfxSetResourceHandle(CCrystalTextView::s_hResourceInst);
-#endif
+	CCrystalResources	cr;
+
 	BOOL bSuccess = FALSE;
 	switch (nAction)
 	{
@@ -1480,12 +1480,13 @@ BOOL CCrystalTextBuffer::GetActionDescription(int nAction, CString &desc)
 		bSuccess = desc.LoadString(IDS_EDITOP_AUTOINDENT);
 		break;
 	}
-	AfxSetResourceHandle(hOldResHandle);
 	return bSuccess;
 }
 
 void CCrystalTextBuffer::SetModified(BOOL bModified /*= TRUE*/)
 {
+	CCrystalResources	cr;
+
 	m_bModified = bModified;
 	if (bModified && m_bFirstModify)
 	{

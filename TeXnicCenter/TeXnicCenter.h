@@ -361,9 +361,19 @@ protected:
 	CString m_strWorkingDir;
 
 	/**
+	Handle to localized version of TXC-resource-DLL.
+	*/
+	HINSTANCE m_hTxcResources;
+
+	/**
 	Handle to localized version of BCGCB-resource-DLL.
 	*/
 	HINSTANCE m_hInstBCGCBRes;
+
+	/**
+	Handle to localized version of CrystalEdit-resource-DLL.
+	*/
+	HINSTANCE m_hCrystalEditResources;
 
 	/** Spell checker */
 	MySpell *m_pSpell;

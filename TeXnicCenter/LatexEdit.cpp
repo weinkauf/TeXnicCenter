@@ -667,6 +667,7 @@ void CLatexEdit::OnSpellFile()
 	GetSelection(ptStart, ptEnd);
 
 	SetShowInteractiveSelection(TRUE);
+	CCrystalResources	cr;
 	CSpellCheckDlg dlg(this, theApp.GetSpeller());
 	dlg.DoModal();
 	SetShowInteractiveSelection(FALSE);

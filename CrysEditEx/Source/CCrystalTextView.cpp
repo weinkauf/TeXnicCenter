@@ -82,6 +82,13 @@
 * $Author$
 *
 * $Log$
+* Revision 1.18  2003/12/06 19:59:58  svenwiegand
+* - Implemented Feature 601708 + additions: The user can now set the styles for
+*   the text cursor independant for the insert and the overwrite mode. The cursor
+*   style is defined by its form (line or block) and its mode (blinking or
+*   not-blinking). The defaults are 'line' for insert cursor and 'block' for
+*   overwrite cursor -- both are blinking.
+*
 * Revision 1.17  2003/04/30 14:20:33  christianwelzel
 * Fixed Bug 602329: File>Print and HP LaserJet 4050
 *
@@ -3407,6 +3414,8 @@ BOOL CCrystalTextView::FindTextInBlock(LPCTSTR pszText, const CPoint &ptStartPos
 
 void CCrystalTextView::OnEditFind() 
 {
+	CCrystalResources	cr;
+
 	CWinApp *pApp = AfxGetApp();
 	ASSERT(pApp != NULL);
 
@@ -3489,6 +3498,8 @@ void CCrystalTextView::OnEditRepeat()
 		if (! FindText(m_pszLastFindWhat, ptSearchPos, m_dwLastSearchFlags, TRUE, &ptFoundPos))
 		///END SW
 		{
+			CCrystalResources	cr;
+
 			CString	prompt;
 			prompt.Format(IDS_EDIT_TEXT_NOT_FOUND, m_pszLastFindWhat);
 			AfxMessageBox(prompt);
@@ -3906,6 +3917,8 @@ void CCrystalTextView::OnEditFindIncrementalBackward()
 
 void CCrystalTextView::OnUpdateStatusMessage(CWnd *pStatusBar)
 {
+	CCrystalResources	cr;
+
 	static BOOL	bUpdatedAtLastCall = FALSE;
 
 	if (!m_bIncrementalSearchForward && !m_bIncrementalSearchBackward)

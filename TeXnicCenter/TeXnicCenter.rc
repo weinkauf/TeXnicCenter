@@ -203,8 +203,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,6,2,0
- PRODUCTVERSION 0,6,2,0
+ FILEVERSION 0,6,20,0
+ PRODUCTVERSION 0,6,20,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -780,7 +780,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
+// Deutsch (Deutschland) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -3534,6 +3534,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     STE_BCGCBRESDLL         "BCGCBResDEU.dll"
+    STE_CRYSTAL_EDIT_RESOURCE_DLL "CrysEdResDeutsch.dll"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4653,12 +4654,18 @@ BEGIN
     ID_TEXTMODULES_DEFINE   "Zeigt Dialog zum Anpassen der Textbausteine an.\nTextbausteine"
 END
 
-#endif    // German (Germany) resources
+STRINGTABLE DISCARDABLE 
+BEGIN
+    STE_LANGUAGE_NEW        "Sie verwenden zum ersten Mal die Sprache 'Deutsch' in TeXnicCenter.\n\nAlle Menüs, Symbolleisten und Tastaturkürzel befinden sich im Auslieferungszustand der deutschen Version.\n\nAnpassungen für Menüs, Symbolleisten und Tastenkürzel werden für jede Sprache getrennt gespeichert."
+    STE_RESOURCE_CONFLICT   "Die Sprachdatei für die gewünschte Sprache (%s) ist nicht mit dieser Version von TeXnicCenter kompatibel.\n\nTeXnicCenter-Version:\t%s\nSprachdatei-Version:\t%s\n\nStatt dessen wird die Standardsprache (Englisch) verwendet."
+END
+
+#endif    // Deutsch (Deutschland) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// Englisch (USA) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -7334,6 +7341,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     STE_BCGCBRESDLL         "none"
+    STE_CRYSTAL_EDIT_RESOURCE_DLL "CrysEdResEnglish.dll"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -8435,7 +8443,13 @@ BEGIN
     ID_TEXTMODULES_DEFINE   "Displays dialog to manage text modules.\nText Modules"
 END
 
-#endif    // English (U.S.) resources
+STRINGTABLE DISCARDABLE 
+BEGIN
+    STE_LANGUAGE_NEW        "You are using the english language for the first time in TeXnicCenter.\n\nAll menus, toolbars and short cuts are set to the default state of the english version.\n\nCustomizations performed on menus, toolbars and short cuts are stored for each language separately."
+    STE_RESOURCE_CONFLICT   "The language file for the selected language (%s) is not compatible with this version of TeXnicCenter.\n\nVersion of TeXnicCenter:\t%s\nVersion of language file:\t%s\n\nThe default language (english) will be used instead."
+END
+
+#endif    // Englisch (USA) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

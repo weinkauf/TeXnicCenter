@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.3  2002/04/24 15:37:11  cnorris
+* realtime spell check
+*
 * Revision 1.2  2002/04/10 14:29:07  cnorris
 * Spell check
 *
@@ -33,6 +36,7 @@
 ********************************************************************/
 
 // INCLUDE-FILE FOR EVERYONE WHO WANTS TO USE CRYSTAL-EDIT-EX
+#include "../Source/CrysEditEx.h"
 #include "../Source/CCrystalEditView.h"
 #include "../Source/CrystalParser.h"
 #include "../Source/CrystalTextBlock.h"

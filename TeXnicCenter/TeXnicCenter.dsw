@@ -14,6 +14,36 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name MFCExt
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CrysEditExDeutsch
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CrysEditExEnglish
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "CrysEditExDeutsch"=..\CrysEditEx\Source\CrysEditExDeutsch.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "CrysEditExEnglish"=..\CrysEditEx\Source\CrysEditExEnglish.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
@@ -92,11 +122,41 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name MSXMLCPP
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name TxcDeutsch
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name TxcEnglish
+    End Project Dependency
 }}}
 
 ###############################################################################
 
 Project: "TeXnicCenterObjects"=..\TeXnicCenterObjects\Source\TeXnicCenterObjects.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "TxcDeutsch"=.\TxcDeutsch.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "TxcEnglish"=.\TxcEnglish.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
