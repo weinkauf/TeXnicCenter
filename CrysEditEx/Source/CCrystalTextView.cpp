@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.3  2002/03/20 00:15:29  cnorris
+* Code clean up and new / delete code inspection
+*
 * Revision 1.2  2002/03/05 17:23:32  cnorris
 * bug id 70 Selecting text immediately after it is inserted from toolbar now works
 *
@@ -156,6 +159,7 @@ BEGIN_MESSAGE_MAP(CCrystalTextView, CView)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_FIND_PREVIOUS, OnUpdateEditFindPrevious)
 	ON_WM_CHAR()
 	ON_COMMAND(ID_EDIT_DELETE_BACK, OnEditDeleteBack)
+	ON_WM_MOUSEWHEEL()
 	//}}AFX_MSG_MAP
 	ON_COMMAND(ID_EDIT_CHAR_LEFT, OnCharLeft)
 	ON_COMMAND(ID_EDIT_EXT_CHAR_LEFT, OnExtCharLeft)
@@ -237,6 +241,7 @@ CCrystalTextView::CCrystalTextView()
 	m_bSelMargin = TRUE;
 	//BEGIN SW
 	m_panSubLines = new CArray<int, int>();
+	m_nSubLineCount = -1;
 	ASSERT( m_panSubLines );
 	m_panSubLines->SetSize( 0, 4096 );
 
@@ -729,7 +734,7 @@ void CCrystalTextView::WrapLineCached( int nLineIndex, int nMaxLineWidth, int *a
 void CCrystalTextView::InvalidateLineCache( int nLineIndex1, int nLineIndex2 /*= -1*/ )
 {
 	// invalidate cached sub line count
-
+	m_nSubLineCount = -1;
 	if( nLineIndex2 == -1 && nLineIndex1 < m_panSubLines->GetSize() )
 		for( int i = nLineIndex1; i < m_panSubLines->GetSize(); i++ )
 			(*m_panSubLines)[i] = -1;
@@ -1737,14 +1742,18 @@ int CCrystalTextView::GetSubLineCount()
 	if( !m_bWordWrap )
 		return GetLineCount();
 
-	// calculate number of sub lines
-	int nLineCount = GetLineCount();
-	int nSubLineCount = 0;
+	if ( m_nSubLineCount == -1 )
+	{
+		// calculate number of sub lines
+		int nLineCount = GetLineCount();
+		int nSubLineCount = 0;
 
-	for( int i = 0; i < nLineCount; i++ )
-		nSubLineCount+= GetSubLines( i );
+		for( int i = 0; i < nLineCount; i++ )
+			nSubLineCount+= GetSubLines( i );
 
-	return nSubLineCount;
+		m_nSubLineCount = nSubLineCount;
+	}
+	return m_nSubLineCount;
 }
 
 int CCrystalTextView::GetSubLineIndex( int nLineIndex )
@@ -2355,6 +2364,7 @@ CPoint CCrystalTextView::TextToClient(const CPoint &point)
 
 void CCrystalTextView::InvalidateLines(int nLine1, int nLine2, BOOL bInvalidateMargin /*= FALSE*/)
 {
+	m_nSubLineCount = -1;
 	bInvalidateMargin = TRUE;
 	if (nLine2 == -1)
 	{
@@ -3736,3 +3746,23 @@ void CCrystalTextView::GetSelectedText(CString &strSelection)
 }
 
 //END SW
+
+BOOL CCrystalTextView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) 
+{
+	/* zDelta is 120 per unit of wheel movement. Future devices may use smaller
+	increments, in which case CCrystalTextView will have to accumilate zDelta until
+	a full line is reached. 
+	*/
+
+	int nScrollTo = m_nTopSubLine;
+
+	nScrollTo -= zDelta / 40; // three lines
+
+	if ( nScrollTo < 0 )
+		nScrollTo = 0;
+	else if ( nScrollTo >= GetSubLineCount() )
+		nScrollTo = GetSubLineCount() - 1;
+
+	ScrollToSubLine(nScrollTo);
+	return TRUE;
+}

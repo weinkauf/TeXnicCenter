@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.2  2002/03/20 00:15:29  cnorris
+* Code clean up and new / delete code inspection
+*
 * Revision 1.1.1.1  2002/02/26 08:11:58  svenwiegand
 * Initial revision
 *
@@ -116,6 +119,10 @@ private:
 	initialize the member objects. This would destroy a CArray object.
 	*/
 	CArray<int, int> *m_panSubLines;
+	/** 
+	Cache the number of sublines
+	*/
+	int m_nSubLineCount;
 	//END SW
 
 	int m_nMaxLineLength;
@@ -745,6 +752,7 @@ protected:
 	afx_msg void OnUpdateEditFindPrevious(CCmdUI* pCmdUI);
 	afx_msg void OnChar( UINT nChar, UINT nRepCnt, UINT nFlags );
 	afx_msg void OnEditDeleteBack();
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	//}}AFX_MSG
 	afx_msg void OnFilePageSetup();
 
