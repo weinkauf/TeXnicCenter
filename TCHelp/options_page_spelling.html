@@ -1,0 +1,48 @@
+<html>
+<head>
+<title>Options - Page 'Spelling'</title>
+<link rel="stylesheet" href="STYLE.CSS" type="text/css">
+</head>
+<body>
+
+<h3>Options - Page '<var>Spelling</var>'</h3>
+
+<p>The page '<var>Spelling</var>' of the <a href="options.html">'<var>Options</var>' dialog</a> allows you to set TeXnicCenter's spelling and language options. <a href="advanced_configuration.html#spelling">Advanced configuration information</a> is available for this option page.</p>
+
+<div align="center"><img src="options_spelling.gif" width="379" height="348" border="0" alt=""></div>
+
+<p>The meaning of the controls are:</p>
+<dl>
+   <dt>'<var>Language</var>'</dt>
+   <dd>This control contains the languages of the installed dictionaries. The language setting only affects the spell checking functionality of TeXnicCenter. It does not affect the language of TeXnicCenter. Changes to language do not take affect until the next time TeXnicCenter is started.</dd>
+
+   <dt>'<var>Dialect</var>'</dt>
+   <dd>This control contains the language dialects available for the selected language. The dialect setting only affects the spell checking functionality of TeXnicCenter. It does not affect the language of TeXnicCenter. Changes to dialect do not take affect until the next time TeXnicCenter is started.</dd>
+
+   <dt>'<var>Locale</var>'</dt>
+   <dd>This control selects the locale setting for the TeXnicCenter application. Locale information is used to format system messages and some internal text manipulation. Changing the locale setting does not change the language of TeXnicCenter. If the selected locale is not available on your Windows installation, the default system locale will be used.</dd>
+
+   <dt>'<var>Check spelling while typing</var>'</dt>
+   <dd>When selected, TeXnicCenter performs spell checking while you type. Words not found in the spell checker dictionary are highlighted.</dd>
+
+   <dt>'<var>Suggest from main dictionary only</var>'</dt>
+   <dd>When selected, TeXnicCenter produces suggestion lists based only on words from the main dictionary. Words in your personal dictionary are not included in suggestion lists.</dd>
+
+   <dt>'<var>Ignore comments</var>'</dt>
+   <dd>When selected, TeXnicCenter does not spell check comments.</dd>
+
+   <dt>'<var>Ignore LaTeX tags</var>'</dt>
+   <dd>When selected, TeXnicCenter does not spell check LaTeX tags. This setting does not affect spell checking LaTeX command arguments. For example, the argument of the LaTeX command \caption{This is a caption}, "This is a caption", is always spell checked. This option on only determines if "\caption" is spell checked.</dd>
+
+   <dt>'<var>Ignore words with numbers</var>'</dt>
+   <dd>When selected, TeXnicCenter does not spell check words containing numbers.</dd>
+
+   <dt>'<var>Ignore UPPERCASE words</var>'</dt>
+   <dd>When selected, TeXnicCenter does not spell check words containing all uppercase letters.</dd>
+
+   <dt>'<var>Personal Dictionary</var>'</dt>
+   <dd>This control contains the path and name of the file containing your personal dictionary. The personal dictionary contains words not found in the main dictionary. The personal dictionary is loaded once during application startup and written once during application shutdown. Clearing the personal dictionary text field disables the personal dictionary. Changes to personal dictionary control do not cause the personal dictionary to be reloaded.</dd>
+</dl>
+
+</body>
+</html>
