@@ -282,6 +282,20 @@ public:
 	static CString GetRelativePath( LPCTSTR lpszFrom, LPCTSTR lpszTo );
 
 	/**
+	@brief Computes an absolute path for a relative location.
+
+	@param lpszDirectory
+		Directory representing the base for the new path.
+		If this does not represent a base (with drive letter etc.),
+		then the function will return the unmodified lpszRelative.
+
+	@param lpszRelative
+		Relative path to be added to base directory.
+		If this is not relative, the function will return it unmodified.
+	*/
+	static CString GetAbsolutePath( LPCTSTR lpszDirectory, LPCTSTR lpszRelative );
+
+	/**
 	@brief Returns TRUE, if the specified path really exists in the file 
 	system.
 
@@ -330,6 +344,14 @@ public:
 		Path to check.
 	*/
 	static BOOL IsSlashPath( LPCTSTR lpszPath );
+
+	/**
+	@brief Returns TRUE, if given path is a relative path.
+
+	@param lpszPath
+		Path to check.
+	*/
+	static BOOL IsRelativePath( LPCTSTR lpszPath );
 
 // basics
 public:
@@ -580,6 +602,20 @@ public:
 	CString GetRelativePath( LPCTSTR lpszTo ) const;
 
 	/**
+	@brief Computes an absolute path for a relative location.
+
+	The member path @c m_strPath is considered to be a directory
+	representing the base for the new path.
+	If it does not represent a base (with drive letter etc.),
+	then the function will return the unmodified lpszRelative.
+
+	@param lpszRelative
+		Relative path to be added to base directory.
+		If this is not relative, the function will return it unmodified.
+	*/
+	CString GetAbsolutePath( LPCTSTR lpszRelative ) const;
+
+	/**
 	Returns TRUE, if the specified path really exists in the file 
 	system.
 
@@ -623,6 +659,11 @@ public:
 	backslashes are used or no separators are in the path.
 	*/
 	BOOL IsSlashPath() const;
+
+	/**
+	Returns TRUE, if given path is a relative path.
+	*/
+	BOOL IsRelativePath() const;
 
 // Attributes:
 protected:
@@ -802,6 +843,12 @@ CString CPathTool::GetRelativePath( LPCTSTR lpszTo ) const
 	return GetRelativePath( m_strPath, lpszTo );
 }
 
+inline
+CString CPathTool::GetAbsolutePath( LPCTSTR lpszRelative ) const
+{
+	return GetAbsolutePath(	m_strPath, lpszRelative );
+}
+
 
 inline
 BOOL CPathTool::Exists() const
@@ -835,6 +882,12 @@ inline
 BOOL CPathTool::IsSlashPath() const
 {
 	return IsSlashPath( m_strPath );
+}
+
+inline
+BOOL CPathTool::IsRelativePath() const
+{
+	return IsRelativePath( m_strPath );
 }
 
 
