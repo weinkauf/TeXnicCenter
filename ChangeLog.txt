@@ -1,4 +1,5 @@
 2002/05/08 niteria
+- Fixed Bug 553800: Splash-Screen hides other windows.
 - Added directory "TeXTest" with files to test TXC with.
   Their main purpose is to reproduce several bugs or behaviours coming
   up from missing features. You are invited to contribute to this section!
