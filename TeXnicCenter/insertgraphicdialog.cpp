@@ -38,6 +38,7 @@
 #include "global.h"
 #include "Configuration.h"
 #include <locale.h>
+#include "../MySpell/Character.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -128,7 +129,7 @@ BOOL CInsertGraphicDialog::SetProperties( const CString &strProperties )
 		
 		for( ; nPos < strProperties.GetLength(); nPos++ )
 		{
-			if( _istdigit( strProperties[nPos] ) || strProperties[nPos] == _T('.') || strProperties[nPos] == _T(',') )
+			if( IsDigit( strProperties[nPos] ) || strProperties[nPos] == _T('.') || strProperties[nPos] == _T(',') )
 				strScale+= strProperties[nPos];
 			else
 				break;

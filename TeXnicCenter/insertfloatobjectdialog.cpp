@@ -30,6 +30,7 @@
 #include "TeXnicCenter.h"
 #include "InsertFloatObjectDialog.h"
 #include "global.h"
+#include "../MySpell/Character.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -309,7 +310,7 @@ void CInsertFloatObjectDialog::OnChangeFloatCaption()
 
 	for( int i = 0; i < m_strCaption.GetLength(); i++ )
 	{
-		if( !_istalnum( m_strCaption[i] ) )
+		if( !IsAlNum( m_strCaption[i] ) )
 			bWhiteSpace = TRUE;
 		else
 		{

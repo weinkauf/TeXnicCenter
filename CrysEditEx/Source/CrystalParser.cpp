@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.6  2002/04/27 07:12:33  cnorris
+* Release build crash
+*
 * Revision 1.5  2002/04/23 21:31:26  cnorris
 * Include line length in WrapLine
 *
@@ -44,6 +47,7 @@
 #include "stdafx.h"
 #include "CrystalParser.h"
 #include "CCrystalTextView.h"
+#include "../../MySpell/Character.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -162,7 +166,7 @@ void CCrystalParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
 	while ( nStartPos < nLength )
 	{
 		// words begin with an alpha character
-		if ( _istalpha( szLine[nStartPos] ) )
+		if ( IsAlpha( szLine[nStartPos] ) )
 			break;
 		++nStartPos;
 	}
@@ -171,8 +175,8 @@ void CCrystalParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
 	while ( nEndPos < nLength )
 	{
 		// words end on terminating character 
-		if ( _istspace( szLine[nEndPos] ) ||
-			(_istpunct( szLine[nEndPos] ) && szLine[nEndPos] != _T('\'')) )
+		if ( IsSpace( szLine[nEndPos] ) ||
+			(IsPunct( szLine[nEndPos] ) && szLine[nEndPos] != _T('\'')) )
 			break;
 		else
 			++nEndPos;

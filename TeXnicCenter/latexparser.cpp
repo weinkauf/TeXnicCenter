@@ -180,7 +180,7 @@ BOOL CLatexParser::SearchKeyword( LPCTSTR lpStart, LPCTSTR lpEnd, SUBEXPRESSION 
 					return TRUE;
 
 				default:
-					for( ; lpStart < lpEnd && (_istalpha( *lpStart ) || *lpStart == _T('@')); lpStart++ );
+					for( ; lpStart < lpEnd && (IsAlpha( *lpStart ) || *lpStart == _T('@')); lpStart++ );
 					what[0].second = (lpStart < lpEnd)? lpStart : lpEnd;
 					return TRUE;
 			}
@@ -459,10 +459,10 @@ void CLatexParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
 		{
 			ch = szLine[nStartPos];
 			// words begin with an alpha character
-			if ( _istalpha(ch) )
+			if ( IsAlpha(ch) )
 				break;
 			// if we're skipping words with numbers, words may begin with a number
-			if ( g_configuration.m_bSpellSkipNumbers && _istdigit(ch) )
+			if ( g_configuration.m_bSpellSkipNumbers && IsDigit(ch) )
 			{
 				badWord = true;
 				break;
@@ -483,11 +483,11 @@ void CLatexParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
 		while ( nEndPos < nLength )
 		{
 			ch = szLine[nEndPos];
-			if ( !badWord && g_configuration.m_bSpellSkipNumbers && _istdigit(ch) )
+			if ( !badWord && g_configuration.m_bSpellSkipNumbers && IsDigit(ch) )
 				badWord = true;
 
 			// words end on terminating character 
-			if ( _istspace(ch) || (_istpunct(ch) &&  ch != _T('\'')) )
+			if ( IsSpace(ch) || (IsPunct(ch) &&  ch != _T('\'')) )
 				break;
 			++nEndPos;
 		}
@@ -503,7 +503,7 @@ void CLatexParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
 				badWord = true;
 				for (int i = nStartPos; i < nEndPos; ++i)
 				{
-					if ( _istlower(szLine[i]) )
+					if ( IsLower(szLine[i]) )
 					{
 						badWord = false;
 						break;

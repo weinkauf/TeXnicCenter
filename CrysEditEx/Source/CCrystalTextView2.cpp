@@ -64,6 +64,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.3  2002/03/27 19:16:46  cnorris
+* Source code clean up
+*
 * Revision 1.2  2002/03/27 19:06:28  cnorris
 * Fix line selection of last line in document
 *
@@ -81,6 +84,7 @@
 #include "CCrystalTextView.h"
 #include "CCrystalTextBuffer.h"
 #include <malloc.h>
+#include "../../MySpell/Character.h"
 
 #ifndef __AFXPRIV_H__
 #pragma message("Include <afxpriv.h> in your stdafx.h to avoid this message")
@@ -174,21 +178,21 @@ void CCrystalTextView::MoveWordLeft(BOOL bSelect)
 
 	LPCTSTR pszChars = GetLineChars(m_ptCursorPos.y);
 	int nPos = m_ptCursorPos.x;
-	while (nPos > 0 && isspace(pszChars[nPos - 1]))
+	while (nPos > 0 && IsSpace(pszChars[nPos - 1]))
 		nPos --;
 
 	if (nPos > 0)
 	{
 		nPos --;
-		if (isalnum(pszChars[nPos]) || pszChars[nPos] == _T('_'))
+		if (IsAlNum(pszChars[nPos]) || pszChars[nPos] == _T('_'))
 		{
-			while (nPos > 0 && (isalnum(pszChars[nPos - 1]) || pszChars[nPos - 1] == _T('_')))
+			while (nPos > 0 && (IsAlNum(pszChars[nPos - 1]) || pszChars[nPos - 1] == _T('_')))
 				nPos --;
 		}
 		else
 		{
-			while (nPos > 0 && ! isalnum(pszChars[nPos - 1])
-						&& pszChars[nPos - 1] != _T('_') && ! isspace(pszChars[nPos - 1]))
+			while (nPos > 0 && ! IsAlNum(pszChars[nPos - 1])
+						&& pszChars[nPos - 1] != _T('_') && ! IsSpace(pszChars[nPos - 1]))
 				nPos --;
 		}
 	}
@@ -228,19 +232,19 @@ void CCrystalTextView::MoveWordRight(BOOL bSelect)
 
 	LPCTSTR pszChars = GetLineChars(m_ptCursorPos.y);
 	int nPos = m_ptCursorPos.x;
-	if (isalnum(pszChars[nPos]) || pszChars[nPos] == _T('_'))
+	if (IsAlNum(pszChars[nPos]) || pszChars[nPos] == _T('_'))
 	{
-		while (nPos < nLength && isalnum(pszChars[nPos]) || pszChars[nPos] == _T('_'))
+		while (nPos < nLength && IsAlNum(pszChars[nPos]) || pszChars[nPos] == _T('_'))
 			nPos ++;
 	}
 	else
 	{
-		while (nPos < nLength && ! isalnum(pszChars[nPos])
-						&& pszChars[nPos] != _T('_') && ! isspace(pszChars[nPos]))
+		while (nPos < nLength && ! IsAlNum(pszChars[nPos])
+						&& pszChars[nPos] != _T('_') && ! IsSpace(pszChars[nPos]))
 			nPos ++;
 	}
 
-	while (nPos < nLength && isspace(pszChars[nPos]))
+	while (nPos < nLength && IsSpace(pszChars[nPos]))
 		nPos ++;
 
 	m_ptCursorPos.x = nPos;
@@ -321,7 +325,7 @@ void CCrystalTextView::MoveHome(BOOL bSelect)
 	int nOriginalHomePos = nHomePos;
 	//END SW
 
-	while (nHomePos < nLength && isspace(pszChars[nHomePos]))
+	while (nHomePos < nLength && IsSpace(pszChars[nHomePos]))
 		nHomePos ++;
 	if (nHomePos == nLength || m_ptCursorPos.x == nHomePos)
 		//BEGIN SW
@@ -488,7 +492,7 @@ CPoint CCrystalTextView::WordToRight(CPoint pt)
 	LPCTSTR pszChars = GetLineChars(pt.y);
 	while (pt.x < nLength)
 	{
-		if (! isalnum(pszChars[pt.x]) && pszChars[pt.x] != _T('_'))
+		if (! IsAlNum(pszChars[pt.x]) && pszChars[pt.x] != _T('_'))
 			break;
 		pt.x ++;
 	}
@@ -502,7 +506,7 @@ CPoint CCrystalTextView::WordToLeft(CPoint pt)
 	LPCTSTR pszChars = GetLineChars(pt.y);
 	while (pt.x > 0)
 	{
-		if (! isalnum(pszChars[pt.x - 1]) && pszChars[pt.x - 1] != _T('_'))
+		if (! IsAlNum(pszChars[pt.x - 1]) && pszChars[pt.x - 1] != _T('_'))
 			break;
 		pt.x --;
 	}

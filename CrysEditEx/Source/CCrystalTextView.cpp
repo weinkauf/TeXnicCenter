@@ -82,6 +82,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.15  2002/06/19 16:04:48  svenwiegand
+* Fixed hanging problem that occured on my fast XP machine, when closing a document.
+*
+* Problem was simply, that the lines Hold() and PostThreadMessage() in OnDestroy() where in the wrong order: On fast systems the background thread already processed the message, before the following Hold() was called and so the hold counter won't become zero which will make block the following Hold(true) call infinite.
+*
 * Revision 1.14  2002/05/30 02:04:54  niteria
 * GetSelectedText behaves now similar to double-click
 *
@@ -140,6 +145,7 @@
 #include "CCrystalTextView.h"
 #include "CCrystalTextBuffer.h"
 #include "CFindTextDlg.h"
+#include "../../MySpell/Character.h"
 
 #ifndef __AFXPRIV_H__
 #pragma message("Include <afxpriv.h> in your stdafx.h to avoid this message")
@@ -3189,13 +3195,13 @@ static int FindStringHelper(LPCTSTR pszFindWhere, LPCTSTR pszFindWhat, BOOL bWho
 			return -1;
 		if (! bWholeWord)
 			return nCur + (pszPos - pszFindWhere);
-		if (pszPos > pszFindWhere && (isalnum(pszPos[-1]) || pszPos[-1] == _T('_')))
+		if (pszPos > pszFindWhere && (IsAlNum(pszPos[-1]) || pszPos[-1] == _T('_')))
 		{
 			nCur += (pszPos - pszFindWhere);
 			pszFindWhere = pszPos + 1;
 			continue;
 		}
-		if (isalnum(pszPos[nLength]) || pszPos[nLength] == _T('_'))
+		if (IsAlNum(pszPos[nLength]) || pszPos[nLength] == _T('_'))
 		{
 			nCur += (pszPos - pszFindWhere + 1);
 			pszFindWhere = pszPos + 1;
@@ -3731,7 +3737,7 @@ void CCrystalTextView::OnChar( UINT nChar, UINT nRepCnt, UINT nFlags )
 	//
 	// - Although I think, that _istgraph() should return true for german umlauts
 	// - and french accentuated characters it does NOT.
-	// - Therefore isalnum() is used here as well - it will return true for them.
+	// - Therefore IsAlNum() is used here as well - it will return true for them.
 	// - Both funcs overlap somehow, but that shouldn't matter that much.
 	//
 	// - I found one character, where the incremental search still cancels:
@@ -3739,7 +3745,7 @@ void CCrystalTextView::OnChar( UINT nChar, UINT nRepCnt, UINT nFlags )
 	//
 	// - The Tabulator key is not supported as well,
 	// - because pressing this key does not bring up the OnChar-Event.
-	if( !( _istgraph( nChar ) || isalnum(nChar) ) && !(nChar == _T(' ')) /*&& !(nChar == _T('\t'))*/ )
+	if( !( IsGraph( nChar ) || IsAlNum(nChar) ) && !(nChar == _T(' ')) /*&& !(nChar == _T('\t'))*/ )
 	{
 		// if not end incremental search
 		m_bIncrementalSearchForward = m_bIncrementalSearchBackward = FALSE;
@@ -3935,7 +3941,7 @@ void CCrystalTextView::GetSelectedText(CString &strSelection)
 		//  first run of the next loop - strLine[nStartChar])
 		//If the cursor is placed at the end of a word, step one char back.
 		int nStartChar = ptStart.x;
-		if ( (nStartChar >= strLine.GetLength()) || (!isalnum(strLine[nStartChar])) )
+		if ( (nStartChar >= strLine.GetLength()) || (!IsAlNum(strLine[nStartChar])) )
 		{
 			nStartChar--;
 		}
@@ -3943,7 +3949,7 @@ void CCrystalTextView::GetSelectedText(CString &strSelection)
 		// retrieve position of first character of the current word
 		for (; nStartChar >= 0; nStartChar--)
 		{
-			if (!isalnum(strLine[nStartChar]))
+			if (!IsAlNum(strLine[nStartChar]))
 			{
 				nStartChar++;
 				break;
@@ -3955,7 +3961,7 @@ void CCrystalTextView::GetSelectedText(CString &strSelection)
 		// retrieve position of first character not belonging to the current word
 		for (int nEndChar = ptStart.x; nEndChar < strLine.GetLength(); nEndChar++)
 		{
-			if (!isalnum(strLine[nEndChar]))
+			if (!IsAlNum(strLine[nEndChar]))
 				break;
 		}
 

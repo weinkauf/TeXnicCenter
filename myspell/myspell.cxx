@@ -7,6 +7,7 @@
 
 #include "stdafx.h"
 #include "myspell.hxx"
+#include "character.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -63,11 +64,11 @@ int MySpell::captype(const char * word) const
 	const char * p = word;
 	while (*p != '\0') {
 		nc++;
-		if (isupper(*p)) ncap++;
+		if (IsUpper(*p)) ncap++;
 		p++;
 	}
 	if (ncap == 0) return NOCAP;
-	if ((ncap == 1) && isupper(*word)) return INITCAP;
+	if ((ncap == 1) && IsUpper(*word)) return INITCAP;
 	if (ncap == nc) return ALLCAP;
 	return HUHCAP;
 }
