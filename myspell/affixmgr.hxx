@@ -5,6 +5,15 @@
 #include "baseaffix.hxx"
 #include "hashmgr.hxx"
 
+// remove end of line char(s)
+void mychomp(char * s);
+
+// duplicate string
+char * mystrdup(const char * s);
+
+// parse string into tokens with char delimiter
+char * mystrsep(char ** stringp, const char delim);
+
 class AffixMgr
 {
 protected:
@@ -25,6 +34,7 @@ public:
   struct hentry * cross_check(const char * word, int len, int sfxopts, const Affix* ppfx) const;
   char * get_encoding() const;
   char * get_try_string() const;
+  void set_hash(HashMgr * ptr);
             
 private:
   int  parse_file(const char * affpath);

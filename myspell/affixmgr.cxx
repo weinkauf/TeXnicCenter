@@ -15,14 +15,6 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-// remove end of line char(s)
-void mychomp(char * s);
-
-// duplicate string
-char * mystrdup(const char * s);
-
-// parse string into tokens with char delimiter
-char * mystrsep(char ** stringp, const char delim);
 
 AffixMgr::AffixMgr(const char * affpath, HashMgr* ptr) 
 {
@@ -49,6 +41,12 @@ AffixMgr::~AffixMgr()
 		delete sTable[j];
 	delete [] trystring;
 	delete [] encoding;
+}
+
+
+void AffixMgr::set_hash(HashMgr * ptr)
+{
+	pHMgr = ptr;
 }
 
 
@@ -98,7 +96,7 @@ int  AffixMgr::parse_file(const char * affpath)
 					switch(i) {
 						case 0: break;
 						case 1: 
-							delete [] trystring;
+							ASSERT( trystring == NULL ); // multiple try strings
 							trystring = mystrdup(piece);
 							break;
 						default: break;
@@ -107,7 +105,6 @@ int  AffixMgr::parse_file(const char * affpath)
 				}
 				delete [] piece;
 			}
-			delete [] piece;
 		}
 
 		/* parse in the name of the character set used by the .dict and .aff */
@@ -120,7 +117,7 @@ int  AffixMgr::parse_file(const char * affpath)
 					switch(i) {
 						case 0: break;
 						case 1:
-							delete [] encoding;
+							ASSERT( encoding == NULL ); // multiple encodings
 							encoding = mystrdup(piece); 
 							break;
 						default: break;
@@ -129,25 +126,30 @@ int  AffixMgr::parse_file(const char * affpath)
 				}
 				delete [] piece;
 			}
-			delete [] piece;
 		}
 
 		// get the type of this affix: P - prefix, S - suffix
 		ft = ' ';
 		if (strncmp(line,"PFX",3) == 0) ft = 'P';
-		if (strncmp(line,"SFX",3) == 0) ft = 'S';
+		else if (strncmp(line,"SFX",3) == 0) ft = 'S';
 		if (ft != ' ') {
 			char * tp = line;
 			char * piece;
 			i = 0;
 
 			// split line into pieces
-
 			while ((piece=mystrsep(&tp,' '))) {
 				if (*piece != '\0') {
 					switch(i) {
 						// piece 1 - is type of affix
-						case 0: break;
+						case 0: 
+							#ifdef _DEBUG
+							if ( ft == 'P' )
+								ASSERT( strncmp(piece, "PFX", 3) == 0 ); // format error
+							else if (ft == 'S' )
+								ASSERT( strncmp(piece, "SFX", 3) == 0 ); // format error
+							#endif /* _DEBUG */
+							break;
 
 						// piece 2 - is affix char
 						case 1:
@@ -163,8 +165,7 @@ int  AffixMgr::parse_file(const char * affpath)
 						// piece 4 - is number of affentries
 						case 3:
 							numents = atoi(piece);
-							ASSERT(ptr == NULL);
-							delete [] ptr;
+							ASSERT( ptr == NULL );
 							ptr = new affentry[numents];
 							ptr->cpflag = ff;
 
@@ -174,7 +175,8 @@ int  AffixMgr::parse_file(const char * affpath)
 				}
 				delete [] piece;
 			}
-			delete [] piece;
+			ASSERT( i > 3 );
+
 
 			// store away ptr to first sffentry
 			nptr = ptr;
@@ -190,35 +192,39 @@ int  AffixMgr::parse_file(const char * affpath)
 				while ((piece=mystrsep(&tp,' '))) {
 					if (*piece != '\0') {
 						switch(i) {
-
 							// piece 1 - is type
 							case 0:
-								if (nptr != ptr) 
-									nptr->cpflag = ptr->cpflag;
+								#ifdef _DEBUG
+								if ( ft == 'P' )
+									ASSERT( strncmp(piece, "PFX", 3) == 0 ); // format error
+								else if (ft == 'S' )
+									ASSERT( strncmp(piece, "SFX", 3) == 0 ); // format error
+								#endif /* _DEBUG */
+
+								nptr->cpflag = ptr->cpflag;
 								break;
 
 							// piece 2 - is affix char
-							case 1: break;
+							case 1: 
+								ASSERT( *piece == flag );
+								break;
 
 							// piece 3 - is string to strip or 0 for null 
 							case 2:
 								nptr->strip = mystrdup(piece);
 								nptr->stripl = strlen(nptr->strip);
 								if (strcmp(nptr->strip,"0") == 0) {
-									//nptr->strip=mystrdup("");
 									*(nptr->strip) = '\0';
 									nptr->stripl = 0;
 								}
 								break;
-
 
 							// piece 4 - is affix string or 0 for null
 							case 3:
 								nptr->appnd = mystrdup(piece);
 								nptr->appndl = strlen(nptr->appnd);
 								if (strcmp(nptr->appnd,"0") == 0) {
-									//nptr->appnd=mystrdup("");
-									(*nptr->appnd) = '\0';
+									*(nptr->appnd) = '\0';
 									nptr->appndl = 0;
 								}
 								break;
@@ -233,23 +239,31 @@ int  AffixMgr::parse_file(const char * affpath)
 					}
 					delete [] piece;
 				}
-				delete [] piece;
+				ASSERT ( i > 4 );
 				nptr++;
 			}
 
 			// now create the correct Affix Object (Prefix or Suffix)
 			if (ft == 'P') {
-				pTable[numpfx++] = (Affix *) new Prefix(this,flag,numents,ptr);
+				if ( numpfx < MAXAFFIXES ) {
+					pTable[numpfx++] = (Affix *) new Prefix(this,flag,numents,ptr);
+				} else {
+					ASSERT( FALSE ); // Too many Prefixes
+					delete [] ptr;
+				}
 			} else {
-				sTable[numsfx++] = (Affix *) new Suffix(this,flag,numents,ptr);
+				if ( numsfx < MAXAFFIXES ) {
+					sTable[numsfx++] = (Affix *) new Suffix(this,flag,numents,ptr);
+				} else {
+					ASSERT( FALSE ); // Too many Affixes
+					delete [] ptr;
+				}
 			}
-			delete [] piece;
-			delete [] ptr;
 			ptr = NULL;
 			nptr = NULL;
+			piece = NULL;
 			numents = 0;
 		}
-		//}
 	}
 	fclose(afflst);
 	return 0;
@@ -262,9 +276,9 @@ int  AffixMgr::parse_file(const char * affpath)
 // in much more detail
 void AffixMgr::encodeit(struct affentry * ptr, char * cs) const
 {
-	char c;
+	unsigned char c;
 	int i, j, k;
-	char mbr[MAXLNLEN];
+	unsigned char mbr[MAXLNLEN];
 
 	// now clear the conditions array */
 	for (i=0;i<SETSIZE;i++) ptr->conds[i] = (unsigned char) 0;
@@ -318,19 +332,20 @@ void AffixMgr::encodeit(struct affentry * ptr, char * cs) const
 		}
 
 		if (ec) {
+			ASSERT( n < 8 );
 			if (grp == 1) {
 				if (neg == 0) {
 					// set the proper bits in the condition array vals for those chars
 					for (j=0;j<nm;j++) {
-						k = (unsigned int) mbr[j];
-						ptr->conds[k] = ptr->conds[k] | (1 << n);
+						k = mbr[j];
+						ptr->conds[k] |= (1 << n);
 					}
 				} else {
 					// complement so set all of them and then unset indicated ones
-					for (j=0;j<SETSIZE;j++) ptr->conds[j] = ptr->conds[j] | (1 << n);
+					for (j=0;j<SETSIZE;j++) ptr->conds[j] |= (1 << n);
 					for (j=0;j<nm;j++) {
-						k = (unsigned int) mbr[j];
-						ptr->conds[k] = ptr->conds[k] & ~(1 << n);
+						k = mbr[j];
+						ptr->conds[k] &= ~(1 << n);
 					}
 				}
 				neg = 0;
@@ -338,7 +353,7 @@ void AffixMgr::encodeit(struct affentry * ptr, char * cs) const
 				nm = 0;
 			} else {
 				// not a group so just set the proper bit for this char
-				ptr->conds[(unsigned int) c] = ptr->conds[(unsigned int)c] | (1 << n);
+				ptr->conds[c] = ptr->conds[c] | (1 << n);
 			}
 			n++;
 			ec = 0;
@@ -421,6 +436,7 @@ char * AffixMgr::get_try_string() const
 }
 
 
+
 // utility method to look up root words in hash table
 struct hentry * AffixMgr::lookup(const char * word) const
 {
@@ -434,27 +450,30 @@ struct hentry * AffixMgr::lookup(const char * word) const
 // a delim string
 char * mystrsep(char ** stringp, const char delim)
 {
+	if ( stringp == NULL || *stringp == NULL || **stringp == '\0' )
+		return NULL;
+
+	while ( **stringp == delim ) ++(*stringp);
 	char * rv = NULL;
 	char * mp = *stringp;
 	int n = strlen(mp);
-	if (n > 0) {
-		char * dp = (char *)memchr(mp,(int)((unsigned char)delim),n);
-		if (dp) {
-			*stringp = dp+1;
-			int nc = (int)((unsigned long)dp - (unsigned long)mp); 
-			rv = new char[nc+1];
-			memcpy(rv,mp,nc);
-			*(rv+nc) = '\0';
-			return rv;
-		} else {
-			rv = new char[n+1];
-			memcpy(rv, mp, n);
-			*(rv+n) = '\0';
-			*stringp = mp + n;
-			return rv;
-		}
+	char * dp = strchr( mp, delim );
+	if (dp) {
+		*stringp = dp+1;
+		int nc = dp - mp;
+		rv = new char[nc+1];
+		ASSERT( rv );
+		strncpy(rv,mp,nc);
+		*(rv+nc) = '\0';
+		return rv;
+	} else {
+		rv = new char[n+1];
+		ASSERT( rv );
+		strncpy(rv, mp, n);
+		*(rv+n) = '\0';
+		*stringp = mp + n;
+		return rv;
 	}
-	return NULL;
 }
 
 
@@ -464,7 +483,8 @@ char * mystrdup(const char * s)
 	if (s) {
 		int sl = strlen(s);
 		d = new char[sl+1];
-		if (d) memcpy(d,s,((sl+1)*sizeof(char)));
+		ASSERT( d );
+		if (d) strcpy(d, s);
 	}
 	return d;
 }
@@ -476,3 +496,4 @@ void mychomp(char * s)
 	if (k > 0) *(s+k-1) = '\0';
 	if ((k > 1) && (*(s+k-2) == '\r')) *(s+k-2) = '\0';
 }
+
