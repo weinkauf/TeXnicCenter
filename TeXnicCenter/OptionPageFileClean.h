@@ -92,6 +92,7 @@ protected:
 	afx_msg void OnDelete();
 	afx_msg void OnNew();
 	afx_msg void OnSort();
+	afx_msg void OnLeavePattern();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

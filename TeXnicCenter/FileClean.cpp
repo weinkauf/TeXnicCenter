@@ -92,11 +92,10 @@ bool CFileCleanItem::PatternIsValid()
 	bool bContainsPlaceholders = AfxContainsPlaceholders(strPattern);
 	bool bContainsPlaceholderSets = AfxContainsPlaceholderSets(strPattern);
 
-	//Pattern is not allowed to contain {%} and {*,?}
-	//Pattern is not allowed to contain {$} and {*,?}
-	//Pattern is not allowed to contain {%} and {$}
-	if ( (bContainsWildcards && bContainsPlaceholders)
-		|| (bContainsWildcards && bContainsPlaceholderSets)
+	//Pattern is allowed to contain {%} and {*,?}
+	//Pattern is NOT allowed to contain {$} and {*,?}
+	//Pattern is NOT allowed to contain {%} and {$}
+	if ( (bContainsWildcards && bContainsPlaceholderSets)
 		|| (bContainsPlaceholders && bContainsPlaceholderSets) )
 		return false;
 
@@ -123,6 +122,15 @@ bool CFileCleanItem::Expand(CLatexProject* argpProject, LPCTSTR lpszCurrentPath,
 	if (AfxContainsPlaceholders(strPattern))
 	{
 		CString strToAdd = AfxExpandPlaceholders(strPattern, argpProject->GetMainPath(), lpszCurrentPath, 0, NULL, false);
+
+		//May contain Wildcards as well
+		if (AfxContainsWildcards(strToAdd))
+		{
+			AfxExpandWildcard(strToAdd, bRecursive, argpProject->GetWorkingDir(), pSList);
+			return true;
+		}
+
+		//No wildcards
 		if (!strToAdd.IsEmpty())
 		{
 			//We only want to have absolute paths, because the user must be able to see

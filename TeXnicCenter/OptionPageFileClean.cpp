@@ -89,15 +89,16 @@ BEGIN_MESSAGE_MAP(COptionPageFileClean, CPropertyPage)
 	ON_CBN_SELCHANGE(IDC_OPTIONS_FILECLEAN_HANDLING, OnSelchangeHandling)
 	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_RECURSIVE, OnRecursive)
 	ON_NOTIFY(NM_CLICK, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
+	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_DELETE, OnDelete)
+	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_NEW, OnNew)
+	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_SORT, OnSort)
 	ON_NOTIFY(NM_DBLCLK, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
 	ON_NOTIFY(NM_RCLICK, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
 	ON_NOTIFY(NM_RDBLCLK, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
 	ON_NOTIFY(NM_RETURN, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
 	ON_NOTIFY(NM_SETFOCUS, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
-	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_DELETE, OnDelete)
-	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_NEW, OnNew)
-	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_SORT, OnSort)
+	ON_EN_KILLFOCUS(IDC_OPTIONS_FILECLEAN_PATTERN, OnLeavePattern)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -322,13 +323,11 @@ void COptionPageFileClean::OnChangePattern()
 	CFileCleanItem* pItem = GetSelectedFCItem();
 	if (!pItem) return; //Nothing selected or whatever
 
-	//TODO: Validate Pattern! using PatternIsValid()
-
 	m_PatternEdit.GetWindowText(pItem->strPattern);
 
 //	//User ListEvent?
 //	if (!m_bUserListEvent)
-		UpdateSelectedListItem();
+	UpdateSelectedListItem();
 }
 
 void COptionPageFileClean::OnSelchangeHandling() 
@@ -580,4 +579,29 @@ void COptionPageFileClean::OnSort()
 
 	//User Interface updaten
 	RefillList();
+}
+
+void COptionPageFileClean::OnLeavePattern() 
+{
+	CFileCleanItem TestItem;
+
+	m_PatternEdit.GetWindowText(TestItem.strPattern);
+
+	//Test if valid
+	if (!TestItem.PatternIsValid())
+	{
+		//Not valid: Show Message to the user
+		CString strMsg;
+		strMsg.Format(STE_FILECLEAN_INVALIDPATTERN, TestItem.strPattern);
+		AfxMessageBox(strMsg, MB_OK | MB_ICONSTOP, 0);
+
+		//Get focus back
+		//m_PatternEdit.SetFocus();
+
+		//Mostly we are just informing the user here.
+		//I do not want to cancel actions like pressing the Ok-Button etc., which
+		// will happen, if we take the focus back. Now it happens only for the
+		// first try (to close the dialog).
+		//The vaildity of a pattern will be checked before deleting files anyway.
+	}
 }
