@@ -89,7 +89,7 @@ char *pArrCredit[] = {
 						"Copyright © 1999-2004\t",
 						"www.ToolsCenter.org\t",
 						"",
-						"Portions Copyright © 1998-2002 by BCGSoft Ltd\f",
+						"Portions Copyright © 1998-2003 by BCGSoft Ltd\f",
 						"Portions Copyright © 1998-2002 by Cristi Posea\f",
 						"",
 						"",
