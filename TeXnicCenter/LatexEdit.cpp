@@ -60,6 +60,7 @@ BEGIN_MESSAGE_MAP(CLatexEdit, CCrystalEditViewEx)
 	ON_COMMAND(ID_EDIT_TOGGLE_WHITESPACEVIEW, OnEditToggleWhitespaceView)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_TOGGLE_WHITESPACEVIEW, OnUpdateEditToggleWhiteSpaceView)
 	ON_WM_SETFOCUS()
+	ON_COMMAND(ID_SPELL_FILE, OnSpellFile)
 	//}}AFX_MSG_MAP
 	ON_WM_SYSCOLORCHANGE()
 
@@ -606,4 +607,20 @@ void CLatexEdit::OnSetFocus(CWnd* pOldWnd)
 	CLatexDoc	*pDoc = GetDocument();
 	if (pDoc)
 		pDoc->CheckForFileChanges();
+}
+
+
+void CLatexEdit::OnSpellFile() 
+{
+	// Save selection
+	CPoint ptStart, ptEnd;
+	GetSelection(ptStart, ptEnd);
+
+	SetShowInteractiveSelection(TRUE);
+	CSpellCheckDlg dlg(this, theApp.GetSpell());
+	dlg.DoModal();
+	SetShowInteractiveSelection(FALSE);
+
+	// Restore selection
+	SetSelection(ptStart, ptEnd);
 }

@@ -130,6 +130,7 @@ protected:
 	afx_msg void OnEditToggleWhitespaceView();
 	afx_msg void OnUpdateEditToggleWhiteSpaceView(CCmdUI* pCmdUI);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
+	afx_msg void OnSpellFile();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
