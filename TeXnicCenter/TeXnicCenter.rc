@@ -2910,18 +2910,18 @@ BEGIN
     PUSHBUTTON      "",IDC_OPTIONS_FILECLEAN_PHINSERT,215,103,15,14
     COMBOBOX        IDC_OPTIONS_FILECLEAN_HANDLING,30,121,75,84,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "Unterverzeichnisse einbeziehen",
+    CONTROL         "&Unterverzeichnisse einbeziehen",
                     IDC_OPTIONS_FILECLEAN_RECURSIVE,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,115,123,115,10
-    CONTROL         "Vor dem Löschen einen Dialog zur Bestätigung anzeigen.",
+    CONTROL         "Vor dem Löschen einen Dialog zur &Bestätigung anzeigen.",
                     IDC_OPTIONS_FILECLEAN_CONFIRM,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,140,196,10
     LTEXT           "Beschreibung:",IDC_STATIC,5,95,46,8
     LTEXT           "Pattern:",IDC_STATIC,115,95,26,8
     LTEXT           "Aktion:",IDC_STATIC,5,125,23,8
-    PUSHBUTTON      "Neu",IDC_OPTIONS_FILECLEAN_NEW,114,3,36,10
-    PUSHBUTTON      "Löschen",IDC_OPTIONS_FILECLEAN_DELETE,154,3,36,10
-    PUSHBUTTON      "Sortieren",IDC_OPTIONS_FILECLEAN_SORT,194,3,36,10
+    PUSHBUTTON      "&Neu",IDC_OPTIONS_FILECLEAN_NEW,114,3,36,10
+    PUSHBUTTON      "&Entfernen",IDC_OPTIONS_FILECLEAN_DELETE,154,3,36,10
+    PUSHBUTTON      "&Sortieren",IDC_OPTIONS_FILECLEAN_SORT,194,3,36,10
     LTEXT           "Einträge bearbeiten:",IDC_STATIC,5,3,64,8
 END
 
@@ -6639,17 +6639,18 @@ BEGIN
     PUSHBUTTON      "",IDC_OPTIONS_FILECLEAN_PHINSERT,215,103,15,14
     COMBOBOX        IDC_OPTIONS_FILECLEAN_HANDLING,30,121,75,84,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "Include subdirectories",IDC_OPTIONS_FILECLEAN_RECURSIVE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,115,123,115,10
-    CONTROL         "Before deleting files, show a dialog to confirm.",
+    CONTROL         "Include &subdirectories",
+                    IDC_OPTIONS_FILECLEAN_RECURSIVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,115,123,115,10
+    CONTROL         "Before deleting files, show a dialog to &confirm.",
                     IDC_OPTIONS_FILECLEAN_CONFIRM,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,140,159,10
     LTEXT           "Description:",IDC_STATIC,5,95,38,8
     LTEXT           "Pattern:",IDC_STATIC,115,95,26,8
     LTEXT           "Action:",IDC_STATIC,5,125,23,8
-    PUSHBUTTON      "New",IDC_OPTIONS_FILECLEAN_NEW,114,3,36,10
-    PUSHBUTTON      "Delete",IDC_OPTIONS_FILECLEAN_DELETE,154,3,36,10
-    PUSHBUTTON      "Sort",IDC_OPTIONS_FILECLEAN_SORT,194,3,36,10
+    PUSHBUTTON      "&Add",IDC_OPTIONS_FILECLEAN_NEW,114,3,36,10
+    PUSHBUTTON      "&Remove",IDC_OPTIONS_FILECLEAN_DELETE,154,3,36,10
+    PUSHBUTTON      "&Sort",IDC_OPTIONS_FILECLEAN_SORT,194,3,36,10
     LTEXT           "Edit entries:",IDC_STATIC,5,3,38,8
 END
 
