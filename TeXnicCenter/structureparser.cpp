@@ -244,7 +244,7 @@ BOOL CStructureParser::StartParsing( LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDi
 	m_nFilesParsed = 0;
 	m_nCharsParsed = 0;
 	if ( m_pParseOutputHandler )
-		m_pParseOutputHandler->OnParseBegin();
+		m_pParseOutputHandler->OnParseBegin(m_bCancel);
 
 	// start parsing thread
 	if( m_pStructureParserThread = AfxBeginThread( StructureParserThread, this, nPriority ) )
@@ -365,14 +365,14 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		INITIALIZE_OI ( info );
 		if ( ::PathFileExists(strPath) )
 		{
-			if ( m_pParseOutputHandler )
+			if ( m_pParseOutputHandler && !m_bCancel )
 			{
 				info.m_strError.Format( STE_PARSE_PARSING, strPath );
 				m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::information );
 			}
 			Parse( strPath, cookies, nFileDepth+1 );
 		}
-		else if ( m_pParseOutputHandler )
+		else if ( m_pParseOutputHandler && !m_bCancel )
 		{
 			info.m_strError.Format( STE_FILE_EXIST, strPath );
 			m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
@@ -554,7 +554,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 					si.m_strTitle = si.m_strCaption;
 			}
 		}
-		else if ( m_pParseOutputHandler )
+		else if ( m_pParseOutputHandler && !m_bCancel )
 		{
 			COutputInfo info;
 			INITIALIZE_OI( info );
@@ -585,7 +585,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 					si.m_strTitle = si.m_strCaption;
 			}
 		}
-		else if ( m_pParseOutputHandler )
+		else if ( m_pParseOutputHandler && !m_bCancel )
 		{
 			COutputInfo info;
 			INITIALIZE_OI( info );
@@ -658,7 +658,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 			if ( ::PathFileExists(strPath) )
 			{
 				AddFileItem( strPath, bibFile );
-				if ( m_pParseOutputHandler )
+				if ( m_pParseOutputHandler && !m_bCancel )
 				{
 					info.m_strError.Format( STE_PARSE_FOUND, m_sItemNames[bibFile] );
 					m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::information );
@@ -666,7 +666,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 			}
 			else 
 			{
-				if ( m_pParseOutputHandler )
+				if ( m_pParseOutputHandler && !m_bCancel )
 				{
 					info.m_strError.Format( STE_FILE_EXIST, strPath );
 					m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
@@ -710,7 +710,7 @@ int CStructureParser::AddFileItem( LPCTSTR lpszPath, int nType )
 
 void CStructureParser::EmptyCookieStack( CCookieStack &cookies )
 {
-	if ( m_pParseOutputHandler )
+	if ( m_pParseOutputHandler && !m_bCancel )
 	{
 		while ( !cookies.IsEmpty() )
 		{
@@ -755,7 +755,7 @@ BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies, int nFil
 
 	if( !pTs )
 	{
-		if ( m_pParseOutputHandler )
+		if ( m_pParseOutputHandler && !m_bCancel )
 		{
 			COutputInfo info;
 			info.m_strSrcFile = lpszPath;

@@ -69,7 +69,8 @@ COutputDoc::COutputDoc()
 	m_bCanGrep( TRUE ),
 	m_bCanRunLatex( TRUE ),
 	m_nActiveFileGrep( 0 ),
-	m_pActiveOutputView( NULL )
+	m_pActiveOutputView( NULL ),
+	m_pParseView(NULL)
 {
 	// initialization
 	m_apGrepView[0] = NULL;
@@ -790,11 +791,22 @@ void COutputDoc::OnParseLineInfo( COutputInfo &line, int nLevel, int nSeverity)
 }
 
 
-void COutputDoc::OnParseBegin()
+void COutputDoc::OnParseBegin(bool bCancelState)
 {
+	//Add here things, that need to be done even if parser shall be cancelled
+
 	m_aParseWarning.RemoveAll();
 	m_aParseInfo.RemoveAll();
 	m_nParseInfoIndex = m_nParseWarningIndex =0;
+
+	//end of: Add here things, that need to be done even if parser shall be cancelled
+
+	//----------------------------------------------------------------------
+
+	if (bCancelState) return;
+
+	//Add here things, that should NOT be done if parser shall be cancelled
+
 	m_pParseView->DeleteAllItems();
 
 	CString timeStr = AfxLoadString(STE_PARSE_BEGIN);
@@ -809,11 +821,26 @@ void COutputDoc::OnParseBegin()
 	_tcsftime(timeBuf+nLength, 100-nLength, _T("%#c"), now);
 	timeStr.ReleaseBuffer();
 	m_pParseView->AddLine(timeBuf);
+
+	//end of: Add here things, that should NOT be done if parser shall be cancelled
 }
 
 
 void COutputDoc::OnParseEnd(boolean bResult, int nFiles, int nLines)
 {
+	//Add here things, that need to be done even after cancelling the parser
+
+
+	//end of: Add here things, that need to be done even after cancelling the parser
+
+	//----------------------------------------------------------------------
+
+	if (!bResult) return;
+
+	//Add here things, that should NOT be done after cancelling the parser
+
+	ASSERT(::IsWindow(m_pParseView->m_hWnd));
+
 	CString timeStr = AfxLoadString(STE_PARSE_END);
 	int nLength = timeStr.GetLength();
 
@@ -826,13 +853,15 @@ void COutputDoc::OnParseEnd(boolean bResult, int nFiles, int nLines)
 	_tcsftime(timeBuf+nLength, 100-nLength, _T("%#c"), now);
 	timeStr.ReleaseBuffer();
 	m_pParseView->AddLine(_T(""));
-	m_pParseView->AddLine(timeBuf);
+	m_pParseView->AddLine(timeStr);
 	
 	CString results;
 	results.Format(STE_PARSE_RESULTS, nFiles, nLines);
 	m_pParseView->AddLine(results);
-	if ( !bResult )
-		m_pParseView->AddLine( AfxLoadString(STE_PARSE_TERMINATE), CParseOutputView::imageError );
+//	if ( !bResult )
+//		m_pParseView->AddLine( AfxLoadString(STE_PARSE_TERMINATE), CParseOutputView::imageError );
+
+	//end of: Add here things, that should NOT be done after cancelling the parser
 }
 
 

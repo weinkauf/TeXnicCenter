@@ -77,8 +77,10 @@ CLatexProject::CLatexProject()
 	// Initialize the control bars and main frame pointer members
 	m_pwndMainFrame     = static_cast<CMainFrame*>(AfxGetMainWnd());
 	ASSERT(m_pwndMainFrame);
-	ASSERT(m_pwndWorkspaceBar  = m_pwndMainFrame->GetWorkspaceBar());
-	ASSERT(m_pwndOutputBar     = m_pwndMainFrame->GetOutputBar());
+	m_pwndWorkspaceBar = m_pwndMainFrame->GetWorkspaceBar();
+	ASSERT(m_pwndWorkspaceBar);
+	m_pwndOutputBar = m_pwndMainFrame->GetOutputBar();
+	ASSERT(m_pwndOutputBar);
 
 	m_pStructureParser = new CStructureParser( this, m_pwndOutputBar->GetOutputDoc() /*, this */);
 	ASSERT( m_pStructureParser );
@@ -250,15 +252,15 @@ void CLatexProject::OnCloseProject()
 	// add views to the docking bars in the frame wnd
 	CMainFrame	*pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
 
-	if( !pwndMainFrame )
+	if (!pwndMainFrame)
 		return;
 
 	// cancel structure parsing
-	if( !m_pStructureParser )
-		return;
-
-	m_pStructureParser->CancelParsing();
-	WaitForSingleObject( m_pStructureParser->m_evtParsingDone, INFINITE );
+	if (m_pStructureParser)
+	{
+		m_pStructureParser->CancelParsing();
+		WaitForSingleObject( m_pStructureParser->m_evtParsingDone, INFINITE );
+	}
 
 	// delete views
 	DeleteProjectViews();

@@ -161,6 +161,7 @@ CProject* CProjectTemplate::CreateNewProject()
 		ASSERT(FALSE);
 		return NULL;
 	}
+
 	CProject* pProject = (CProject*)m_pProjectClass->CreateObject();
 	if (pProject == NULL)
 	{
