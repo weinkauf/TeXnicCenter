@@ -1,3 +1,9 @@
+2003/01/22 niteria
+- Fixed Bug 670414: syntax highlighting with verbatim env fails.
+  A small problem concerning verbatim env still remains. This is mostly due to the
+  old fashioned Syntaxhighlighting. Switching to a newer CrystalEdit will eliminate
+  a lot of highlighting problems.
+
 2003/01/15 niteria
 - Added directory "TCHelp\SourceCodeDoc" with a doxygen configuration
   file. Run doxygen on "txc.doxy" or run "MakeSourceCodeDoc.cmd" (edit
