@@ -239,7 +239,7 @@ BEGIN
     CONTROL         "List4",IDC_SPELL_SUGGEST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_NOCOLUMNHEADER | 
                     LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,7,75,222,55
-    EDITTEXT        IDC_SPELL_TEXT,7,7,221,58,ES_MULTILINE
+    EDITTEXT        IDC_SPELL_TEXT,7,7,221,58,ES_MULTILINE | WS_VSCROLL
 END
 
 
@@ -282,6 +282,10 @@ BEGIN
     IDS_FIND_INCREMENTAL_BACKWARD "Inkrementelle Suche rückwärts: %s"
     IDS_FIND_INCREMENTAL_FAILED "Inkrementelle Suche fehlgeschlagen: %s"
     IDS_EDIT_REPLACE_COUNT  "%d Übereinstimmungen mit\n%s\nersetzt"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
     IDS_SPELL_IGNORE        "Todo:Ignore"
     IDS_SPELL_UNEDIT        "Todo:Unedit"
     IDS_SPELL_DONE          "Todo:Spell check complete"
@@ -367,7 +371,7 @@ BEGIN
     CONTROL         "List4",IDC_SPELL_SUGGEST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_NOCOLUMNHEADER | 
                     LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,7,75,222,55
-    EDITTEXT        IDC_SPELL_TEXT,7,7,221,58,ES_MULTILINE
+    EDITTEXT        IDC_SPELL_TEXT,7,7,221,58,ES_MULTILINE | ES_AUTOVSCROLL
 END
 
 
@@ -429,6 +433,10 @@ BEGIN
     IDS_FIND_INCREMENTAL_BACKWARD "Incremental search backward: %s"
     IDS_FIND_INCREMENTAL_FAILED "Incremental search failed: %s"
     IDS_EDIT_REPLACE_COUNT  "%d occurrences of\n%s\nreplaced"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
     IDS_SPELL_IGNORE        "Ignore"
     IDS_SPELL_UNEDIT        "Unedit"
     IDS_SPELL_DONE          "Spell check complete"

@@ -53,7 +53,8 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CSpellCheckDlg)
 	enum { IDD = IDD_SPELL_CHECK };
-		// NOTE: the ClassWizard will add data members here
+	CListCtrl	c_SuggestList;
+	CEdit	c_Text;
 	//}}AFX_DATA
 
 	/** Set this member to <VAR>false</VAR> to override spell checking in selection only. */
@@ -100,6 +101,7 @@ protected:
 	char m_pWordBuffer[MAXWORDLEN+1];
 	boolean m_bEditing;
 	boolean m_bNoSuggestions;
+	boolean m_bNewLine;
 	CPtrList m_lstIgnoreWords;
 
 public:
