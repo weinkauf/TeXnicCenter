@@ -34,6 +34,7 @@
 #endif // _MSC_VER > 1000
 
 #include "MRUTrackSelComboBox.h"
+#include "BrowseButton.h"
 
 class CFindInFilesDialog : public CDialog
 {
@@ -58,7 +59,6 @@ protected:
 	afx_msg void OnInsertRegularExpression( UINT unID );
 	//{{AFX_MSG(CFindInFilesDialog)
 	afx_msg void OnPopupRegularExpression();
-	afx_msg void OnBrowseSearchIn();
 	virtual void OnOK();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelChange();
@@ -69,6 +69,7 @@ protected:
 public:
 	//{{AFX_DATA(CFindInFilesDialog)
 	enum { IDD = IDD_FILESEARCH };
+	CBrowseButton	m_BrowseBtn;
 	CButton	m_wndRegExCheck;
 	CButton	m_wndOKButton;
 	CComboBox	m_wndSearchThroug;
