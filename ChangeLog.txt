@@ -1,7 +1,11 @@
+2002/05/17 christianwelzel
+- Feature 539142: Configurable Default Path for Documents modified.
+  The insert picture dialog uses this default path also.
+
 2002/05/10 christianwelzel
-- Feature 539142: Configurable Default Path for Documents modified
+- Feature 539142: Configurable Default Path for Documents modified.
   If a project is opened, the project path will be used.
-  If a file is opened, the file path will be uesed
+  If a file is opened, the file path will be used.
 
 2002/05/08 niteria
 - Fixed Bug 553800: Splash-Screen hides other windows.
