@@ -56,9 +56,9 @@ END_MESSAGE_MAP()
 CProfilePageViewer::CProfilePageViewer()
 : CProfilePage(CProfilePageViewer::IDD),
 	m_wndBrowseViewerPath(IDC_EDIT_VIEWERPATH, TRUE, NULL, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, CString((LPCTSTR)STE_COMPILER_FILTER)),
-	m_wndViewCmdPh(IDR_POPUP_PLACEHOLDER),
-	m_wndViewExCmdPh(IDR_POPUP_PLACEHOLDEREX),
-	m_wndCloseCmdPh(IDR_POPUP_PLACEHOLDER),
+	m_wndViewCmdPh(IDR_POPUP_PLACEHOLDER_MAIN_OPT),
+	m_wndViewExCmdPh(IDR_POPUP_PLACEHOLDER_OPT),
+	m_wndCloseCmdPh(IDR_POPUP_PLACEHOLDER_MAIN_OPT),
 	m_pProfile(NULL)
 {
 	//{{AFX_DATA_INIT(CProfilePageViewer)

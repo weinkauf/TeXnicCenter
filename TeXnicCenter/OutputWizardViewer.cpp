@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "OutputWizardViewer.h"
@@ -46,14 +52,13 @@ IMPLEMENT_DYNCREATE(COutputWizardViewer, CPropertyPage)
 BEGIN_MESSAGE_MAP(COutputWizardViewer, CPropertyPage)
 	//{{AFX_MSG_MAP(COutputWizardViewer)
 	ON_BN_CLICKED(IDC_OW_VIEWERBROWSE, OnViewerBrowse)
-	ON_BN_CLICKED(IDC_OW_VIEWERPOPUP, OnViewerPopup)
-	ON_EN_KILLFOCUS(IDC_OW_VIEWERFWSEARCH, OnKillfocusForwardSearchEdit)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
 COutputWizardViewer::COutputWizardViewer(UINT unIDTemplate /*= -1*/) 
-: CPropertyPage(unIDTemplate)
+: CPropertyPage(unIDTemplate),
+m_wndViewerPHBtn(IDR_POPUP_PLACEHOLDER_CURRENT_OPT)
 {
 	// you have to specify a valid dialog template
 	ASSERT((int)unIDTemplate != -1);
@@ -75,7 +80,8 @@ void COutputWizardViewer::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COutputWizardViewer)
-	DDX_Control(pDX, IDC_OW_VIEWERFWSEARCH, m_wndForwardSearchOptionEdit);
+	DDX_Control(pDX, IDC_OW_VIEWERFWSEARCH, m_wndFWSearch);
+	DDX_Control(pDX, IDC_OW_VIEWERPOPUP, m_wndViewerPHBtn);
 	DDX_Text(pDX, IDC_OW_VIEWERFWSEARCH, m_strForwardSearchOption);
 	DDX_Text(pDX, IDC_OW_VIEWERPATH, m_strPath);
 	DDX_Text(pDX, IDC_OW_VIEWERSI, m_strSingleInstanceOption);
@@ -96,49 +102,13 @@ void COutputWizardViewer::OnViewerBrowse()
 	UpdateData(FALSE);
 }
 
-
-void COutputWizardViewer::OnViewerPopup() 
+BOOL COutputWizardViewer::OnInitDialog() 
 {
-	CWnd	*pwndButton = GetDlgItem(IDC_OW_VIEWERPOPUP);
-	if (!pwndButton || !IsWindow(pwndButton->m_hWnd))
-		return;
-
-	CRect	buttonRect;
-	pwndButton->GetWindowRect(buttonRect);
-
-	// Create and display menu
-	CMenu	popupMenu;
-	if (!popupMenu.LoadMenu(IDR_POPUP_PLACEHOLDER_CURRENTDOC))
-		return;
-
-	popupMenu.GetSubMenu(0)->TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON, buttonRect.right, buttonRect.top, this);
-}
-
-
-void COutputWizardViewer::OnKillfocusForwardSearchEdit() 
-{
-	m_wndForwardSearchOptionEdit.GetSel(m_selForwardSearchOptionEdit.nStart, m_selForwardSearchOptionEdit.nEnd);
-}
-
-
-BOOL COutputWizardViewer::PreTranslateMessage(MSG* pMsg) 
-{
-	// proccess popup-menu commands
-	if ( 
-		pMsg->message == WM_COMMAND && 
-		LOWORD(pMsg->wParam) >= ID_PH_FIRST && LOWORD(pMsg->wParam) <= ID_PH_LAST)
-	{
-		// load text to insert
-		CString	strInsert((LPCTSTR)LOWORD(pMsg->wParam));
-
-		// set selection for control
-		m_wndForwardSearchOptionEdit.SetFocus();
-		m_wndForwardSearchOptionEdit.SetSel(m_selForwardSearchOptionEdit.nStart, m_selForwardSearchOptionEdit.nEnd);
-
-		// insert text
-		for (int i = 0; i < strInsert.GetLength(); i++)
-			m_wndForwardSearchOptionEdit.SendMessage(WM_CHAR, (TCHAR)strInsert[i]);
-	}
+	CPropertyPage::OnInitDialog();
 	
-	return CPropertyPage::PreTranslateMessage(pMsg);
+	//Attach edit control
+	m_wndViewerPHBtn.AttachEditCtrl(&m_wndFWSearch);
+	
+	return TRUE;  // return TRUE unless you set the focus to a control
+	              // EXCEPTION: OCX Property Pages should return FALSE
 }

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OUTPUTWIZARDVIEWER_H__627C2BE6_5B16_11D4_A222_006097239934__INCLUDED_)
 #define AFX_OUTPUTWIZARDVIEWER_H__627C2BE6_5B16_11D4_A222_006097239934__INCLUDED_
 
@@ -33,6 +39,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "EditMenuButtonOpt.h"
 
 /**
 This property page is part of the output wizard (COutputWizard) and
@@ -57,8 +64,6 @@ public:
 // Overridings
 protected:
 	//{{AFX_VIRTUAL(COutputWizardViewer)
-	public:
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);
 	//}}AFX_VIRTUAL
@@ -67,8 +72,7 @@ protected:
 protected:
 	//{{AFX_MSG(COutputWizardViewer)
 	afx_msg void OnViewerBrowse();
-	afx_msg void OnViewerPopup();
-	afx_msg void OnKillfocusForwardSearchEdit();
+	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -76,7 +80,8 @@ protected:
 public:
 	//{{AFX_DATA(COutputWizardViewer)
 	enum { IDD = IDD_OUTPUTWIZARD_DVIVIEWER };
-	CEdit	m_wndForwardSearchOptionEdit;
+	CPersistPosEdit	m_wndFWSearch;
+	CEditMenuButtonOpt	m_wndViewerPHBtn;
 	CString	m_strForwardSearchOption;
 	CString	m_strPath;
 	CString	m_strSingleInstanceOption;

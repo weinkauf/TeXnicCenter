@@ -55,9 +55,9 @@ END_MESSAGE_MAP()
 CProfilePagePostprocessor::CProfilePagePostprocessor()
 : CProfilePage(CProfilePagePostprocessor::IDD),
 	m_wndBrowsePostprocessor(IDC_EDIT_PPEXE, TRUE, NULL, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, CString((LPCTSTR)STE_COMPILER_FILTER)),
-	m_wndArgumentsPh(IDR_POPUP_PLACEHOLDER),
-	m_wndInputPh(IDR_POPUP_PLACEHOLDER),
-	m_wndOutputPh(IDR_POPUP_PLACEHOLDER),
+	m_wndArgumentsPh(IDR_POPUP_PLACEHOLDER_MAIN_OPT),
+	m_wndInputPh(IDR_POPUP_PLACEHOLDER_MAIN_OPT),
+	m_wndOutputPh(IDR_POPUP_PLACEHOLDER_MAIN_OPT),
 	m_nSelectedItem(-1),
 	m_pProfile(NULL)
 {
