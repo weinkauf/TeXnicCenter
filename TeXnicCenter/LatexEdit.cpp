@@ -79,12 +79,11 @@ CLatexEdit::CLatexEdit()
 {
 	SetParser( &m_latexParser );
 	SetWordWrapping( TRUE );
+	m_pBackgroundThread = theApp.GetBackgroundThread();
 }
 
 
-CLatexEdit::~CLatexEdit()
-{
-}
+CLatexEdit::~CLatexEdit() { }
 
 
 void CLatexEdit::ResetView()
@@ -217,10 +216,29 @@ int CLatexEdit::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
+
 void CLatexEdit::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
-	theApp.ShowPopupMenu( IDR_POPUP_EDITOR, point, this );	//UPDATE
+	CPoint ptText = point;
+	ScreenToClient(&ptText);
+	CCrystalTextBuffer *pBuffer = LocateTextBuffer();
+	ASSERT( pBuffer );
+	ptText = ClientToText(ptText);
+
+	CCrystalTextBuffer::CTextAttribute *attr = pBuffer->GetLineAttribute(ptText.y, ptText.x, ptText.x+1);
+	if (attr == NULL)
+	{
+		// Default popup
+		theApp.ShowPopupMenu( IDR_POPUP_EDITOR, point, this );
+	}
+	else 
+	{
+		CAttributeMenu menu(this, ptText);
+		if (attr->m_Attribute == CCrystalTextBuffer::CTextAttribute::spellError)
+			menu.ShowSpellMenu(theApp.GetSpeller(), point);
+	}
 }
+
 
 BOOL CLatexEdit::OnInsertLatexConstruct( UINT nID )
 {
@@ -617,10 +635,13 @@ void CLatexEdit::OnSpellFile()
 	GetSelection(ptStart, ptEnd);
 
 	SetShowInteractiveSelection(TRUE);
-	CSpellCheckDlg dlg(this, theApp.GetSpell());
+	CSpellCheckDlg dlg(this, theApp.GetSpeller());
 	dlg.DoModal();
 	SetShowInteractiveSelection(FALSE);
 
 	// Restore selection
 	SetSelection(ptStart, ptEnd);
 }
+
+
+

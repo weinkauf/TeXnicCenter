@@ -92,6 +92,7 @@ END_MESSAGE_MAP()
 
 void COptionPageLanguage::OnOK() 
 {
+	theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_ENABLE_SPELLER, m_bEnableSpell, NULL);
 	g_configuration.m_strLanuage = m_strLanguage;
 	g_configuration.m_strLanguageDialect = m_strDialect;
 	g_configuration.m_strSpellPersonalDictionary = m_strPDictionary;

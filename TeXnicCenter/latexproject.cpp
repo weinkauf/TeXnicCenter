@@ -753,7 +753,7 @@ void CLatexProject::OnItemInsertRef()
 
 void CLatexProject::OnSpellProject() 
 {
-	CSpellCheckDlg dlg(NULL, theApp.GetSpell());
+	CSpellCheckDlg dlg(NULL, theApp.GetSpeller());
 	dlg.m_bDoneMessage = false;
 	dlg.m_bSelection = false;
 
@@ -781,7 +781,7 @@ void CLatexProject::OnSpellProject()
 			CLatexEdit* pView = (CLatexEdit*) pDoc->GetNextView( pos );
 			ASSERT( pView );
 
-			dlg.Reset(pView, theApp.GetSpell());
+			dlg.Reset(pView, theApp.GetSpeller());
 
 			// Save selection
 			CPoint ptStart, ptEnd;
