@@ -161,7 +161,7 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 
 	// \includegraphics * [ ] [ ] { file }	only {file} is required
 	nResult = m_regexGraphic.set_expression( _T(
-		"\\\\includegraphics\\s*\\*?(\\s*\\[[^\\]]\\]){0,2}\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"
+		"\\\\includegraphics\\s*\\*?(\\s*\\[[^\\]]*\\]){0,2}\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"
 	) );
 	TRACE( "m_regexGraphic returned %d\n", nResult );
 
@@ -362,8 +362,8 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		// This file extension list should be user configurable because the rules for including 
 		// graphics are configurable. I think this can wait until the config files are converted 
 		// to XML.
-		static const CString strGraphicTypes[] = {"", ".pdf",".eps",".png"};
-		static const int strGraphicLength = 4;
+		static const CString strGraphicTypes[] = {"", ".eps", ".pdf", ".png", ".jpg", ".jpeg", ".bmp"};
+		static const int strGraphicLength = 7;
 
 		// parse string before occurence
 		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth, aSI );
@@ -374,12 +374,42 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		strPath.TrimRight();
 		strPath.TrimLeft(_T('"'));
 		strPath.TrimRight(_T('"'));
+		bool GraphicFileFound = false;
+		CString strCompletePath;
 		for (int i = 0; i < strGraphicLength; ++i)
 		{
-			CString strCompletePath = strPath;
+			strCompletePath = strPath;
 			strCompletePath += strGraphicTypes[i];
 			if ( ::PathFileExists(strCompletePath) )
+			{
 				AddFileItem( ResolveFileName(strCompletePath), graphicFile, aSI );
+				GraphicFileFound = true;
+				break;
+			}
+		}
+
+		//Give information
+		if (m_pParseOutputHandler && !m_bCancel)
+		{
+			COutputInfo info;
+			INITIALIZE_OI ( info );
+
+			if (GraphicFileFound)
+			{
+				info.m_strError.Format(STE_PARSE_FOUND, strCompletePath);
+				m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::information );
+			}
+			else
+			{
+				strCompletePath = strPath + " [";
+				for (int i = 0; i < strGraphicLength; i++)
+				{
+					strCompletePath += "|" + strGraphicTypes[i];
+				}
+				strCompletePath += "]";
+				info.m_strError.Format(STE_FILE_EXIST, strCompletePath);
+				m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
+			}
 		}
 
 		// parse string behind occurence
