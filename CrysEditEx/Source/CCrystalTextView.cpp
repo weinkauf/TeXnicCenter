@@ -82,6 +82,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.23  2005/03/08 16:36:08  vachis
+* Selection of block between bracket pairs in a hierarchical manner (Ctrl+M)
+* Bracket highlighting disabled if a selection is present
+* New default colours for bracket highlighting
+*
 * Revision 1.22  2005/02/23 23:58:19  vachis
 * Fixed Matching Bracket Highlighting
 * New features for Matching Bracket Highlighting: configure colours,
@@ -799,14 +804,15 @@ void CCrystalTextView::DrawLineHelperRecur(CDC *pdc, CPoint &ptOrigin, const CRe
 		nNextDrawStage = CCrystalTextView::DRAW_CURPAIR;
 		nDrawIndexBkgnd = m_nPairStringColorBkgnd;
 		nDrawIndexText = m_nPairStringColorText;
-		bCondition = (rptDrawSelEnd != rptDrawSelStart) 
-                        && GetColor(nDrawIndexBkgnd) !=  GetColor(CCrystalTextView::COLORINDEX_BKGND)
-                        && GetColor(nDrawIndexText) !=  GetColor(CCrystalTextView::COLORINDEX_NORMALTEXT);
-			//set same colour as block
-		if ( GetColor(nDrawIndexBkgnd) == GetColor(CCrystalTextView::COLORINDEX_PAIRBLOCKBKGND) ) {
-			nDrawIndexText = CCrystalTextView::COLORINDEX_NORMALTEXT; //TODO to leave text intact
-			bCondition = bCondition && m_bDrawPairBlock;
-		}
+		//Draw only, if no selection is present.
+		bCondition = (rptDrawSelEnd != rptDrawSelStart); 
+//                        && GetColor(nDrawIndexBkgnd) !=  GetColor(CCrystalTextView::COLORINDEX_BKGND)
+//                        && GetColor(nDrawIndexText) !=  GetColor(CCrystalTextView::COLORINDEX_NORMALTEXT);
+//			//set same colour as block
+//		if ( GetColor(nDrawIndexBkgnd) == GetColor(CCrystalTextView::COLORINDEX_PAIRBLOCKBKGND) ) {
+//			nDrawIndexText = CCrystalTextView::COLORINDEX_NORMALTEXT; //TODO to leave text intact
+//			bCondition = bCondition && m_bDrawPairBlock;
+//		}
 	}
 	else if (nDrawStage == CCrystalTextView::DRAW_CURPAIR) 
 	{
@@ -815,14 +821,15 @@ void CCrystalTextView::DrawLineHelperRecur(CDC *pdc, CPoint &ptOrigin, const CRe
 		nNextDrawStage = CCrystalTextView::DRAW_PAIRBLOCK;
 		nDrawIndexBkgnd = m_nCurStringColorBkgnd;
 		nDrawIndexText = m_nCurStringColorText;
-		bCondition = (rptDrawSelEnd != rptDrawSelStart)
-                        && GetColor(nDrawIndexBkgnd) !=  GetColor(CCrystalTextView::COLORINDEX_BKGND)
-                        && GetColor(nDrawIndexText) !=  GetColor(CCrystalTextView::COLORINDEX_NORMALTEXT);
-			//set same colour as block
-		if ( GetColor(nDrawIndexBkgnd) == GetColor(CCrystalTextView::COLORINDEX_PAIRBLOCKBKGND)) {
-			nDrawIndexText = CCrystalTextView::COLORINDEX_NORMALTEXT; //TODO to leave text intact?
-			bCondition = bCondition && m_bDrawPairBlock;
-		}
+		//Draw only, if no selection is present.
+		bCondition = (rptDrawSelEnd != rptDrawSelStart);
+//                        && GetColor(nDrawIndexBkgnd) !=  GetColor(CCrystalTextView::COLORINDEX_BKGND)
+//                        && GetColor(nDrawIndexText) !=  GetColor(CCrystalTextView::COLORINDEX_NORMALTEXT);
+//			//set same colour as block
+//		if ( GetColor(nDrawIndexBkgnd) == GetColor(CCrystalTextView::COLORINDEX_PAIRBLOCKBKGND)) {
+//			nDrawIndexText = CCrystalTextView::COLORINDEX_NORMALTEXT; //TODO to leave text intact?
+//			bCondition = bCondition && m_bDrawPairBlock;
+//		}
 	}
 	else if (nDrawStage == CCrystalTextView::DRAW_PAIRBLOCK) 
 	{
@@ -839,9 +846,10 @@ void CCrystalTextView::DrawLineHelperRecur(CDC *pdc, CPoint &ptOrigin, const CRe
 		}
 		nNextDrawStage = CCrystalTextView::DRAW_IMPL;
 		nDrawIndexBkgnd = CCrystalTextView::COLORINDEX_PAIRBLOCKBKGND;
-		nDrawIndexText = CCrystalTextView::COLORINDEX_NORMALTEXT; //TODO to leave text intact?
-		bCondition = (rptDrawSelEnd != rptDrawSelStart) && m_bDrawPairBlock 
-                        && GetColor(nDrawIndexBkgnd) != GetColor(CCrystalTextView::COLORINDEX_BKGND);
+		nDrawIndexText = CCrystalTextView::COLORINDEX_NORMALTEXT; //TODO to leave text intact - or new color for foreground of pair block
+		//Draw only, if no selection is present.
+		bCondition = (rptDrawSelEnd != rptDrawSelStart) && m_bDrawPairBlock;
+//                        && GetColor(nDrawIndexBkgnd) != GetColor(CCrystalTextView::COLORINDEX_BKGND);
 	}
 	else if (nDrawStage == CCrystalTextView::DRAW_IMPL) 
 	{
