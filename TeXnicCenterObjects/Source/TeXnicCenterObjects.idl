@@ -35,9 +35,11 @@ library TeXnicCenterObjects
 {
 	importlib("stdole32.tlb");
 
+	import "DocumentWizard.idl";
 	import "Project.idl";
 	import "ProjectWizard.idl";
 
+	interface IDocumentWizard;
 	interface IProject;
 	interface IProjectWizard;
 };
