@@ -1,5 +1,5 @@
 Microsoft Developer Studio Workspace File, Format Version 6.00
-# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+# WARNUNG: DIESE ARBEITSBEREICHSDATEI DARF NICHT BEARBEITET ODER GELÖSCHT WERDEN!
 
 ###############################################################################
 
@@ -18,6 +18,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "InterfaceWrapper"=..\InterfaceWrapper\source\InterfaceWrapper.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "MFCExt"=..\MFCExt\Source\MFCExt.dsp - Package Owner=<4>
 
 Package=<5>
@@ -26,6 +38,21 @@ Package=<5>
 
 Package=<4>
 {{{
+}}}
+
+###############################################################################
+
+Project: "MSXMLCPP"=..\MSXMLCpp\source\MSXMLCPP.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name InterfaceWrapper
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -58,6 +85,12 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name TeXnicCenterObjects
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name InterfaceWrapper
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MSXMLCPP
     End Project Dependency
 }}}
 

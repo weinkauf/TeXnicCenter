@@ -75,6 +75,14 @@ public:
 	*/
 	int ExecuteAll(LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDir, HANDLE hOutput) const;
 
+	/**
+	Removes the directory specifications from all path specifications
+	of this processor array.
+
+	This is usefull when exporting profiles.
+	*/
+	void RemoveDirectorySpecifications();
+
 // registry serialization
 public:
 	/**
@@ -89,6 +97,20 @@ public:
 	registry object.
 	*/
 	BOOL SerializeFromRegistry(CBCGRegistryEx &reg);
+
+	/**
+	Serializes the post processors to the specified XML element.
+
+	@exception CComException
+	*/
+	void SaveXml(MsXml::CXMLDOMElement xmlPostProcessors) const;
+
+	/**
+	Loads the post processors from the specified XML element.
+
+	@exception CComException
+	*/
+	void LoadXml(MsXml::CXMLDOMElement xmlPostProcessors);
 };
 
 
@@ -197,6 +219,14 @@ public:
 	*/
 	BOOL CancelExecution();
 
+	/**
+	Removes the directory specifications from all path specifications
+	of this processor.
+
+	This is usefull when exporting profiles.
+	*/
+	void RemoveDirectorySpecifications();
+
 // implementation
 protected:
 	/**
@@ -234,6 +264,20 @@ public:
 		right format.
 	*/
 	BOOL SerializeFromString(LPCTSTR lpszPackedInformation);
+
+	/**
+	Serializes the post processor to the specified XML element.
+
+	@exception CComException
+	*/
+	void SaveXml(MsXml::CXMLDOMElement xmlPostProcessor) const;
+
+	/**
+	Loads the post processor from the specified XML element.
+
+	@exception CComException
+	*/
+	void LoadXml(MsXml::CXMLDOMElement xmlPostProcessor);
 
 // attributes
 protected:

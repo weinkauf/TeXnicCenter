@@ -158,6 +158,14 @@ public:
 										LPCTSTR lpszCurrentSelection = NULL,
 										bool bExpandPlaceholderSets = false) const;
 
+	/**
+	Removes the directory specifications from all path specifications
+	of this profile.
+
+	This is usefull when exporting profiles.
+	*/
+	void RemoveDirectorySpecifications();
+
 // string serialization
 public:
 	/**
@@ -175,6 +183,18 @@ public:
 		right format.
 	*/
 	BOOL SerializeFromString(LPCTSTR lpszPackedInformation);
+
+	/**
+	Saves the command properties to the specified XML element.
+
+	@exception CComException
+	*/
+	void SaveXml(MsXml::CXMLDOMElement xmlCommand) const;
+
+	/**
+	Loads the command properties from the specified XML element.
+	*/
+	void LoadXml(MsXml::CXMLDOMElement xmlCommand);
 
 // attributes
 protected:

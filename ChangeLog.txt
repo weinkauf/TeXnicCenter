@@ -1,3 +1,7 @@
+2003/12/14 svenwiegand
+- Implemented Feature 531272: Import and export for output profiles
+- Implemented Feature 547456: Basic XML-Support
+
 2003/12/13 niteria
 - Implemented Feature 797023: Provide standard profile "Latex => PS => PDF"
 

@@ -112,6 +112,14 @@ public:
 	*/
 	BOOL SendCommand(LPCTSTR lpszMainPath, LPCTSTR lpszCurrentPath = NULL, long lCurrentLine = -1) const;
 
+	/**
+	Removes the directory specifications from all path specifications
+	of this command.
+
+	This is usefull when exporting profiles.
+	*/
+	void RemoveDirectorySpecifications();
+
 // static operations
 public:
 	/**
@@ -156,6 +164,18 @@ public:
 		right format.
 	*/
 	BOOL SerializeFromString(LPCTSTR lpszPackedInformation);
+
+	/**
+	Saves the command properties to the specified XML element.
+
+	@exception CComException
+	*/
+	void SaveXml(MsXml::CXMLDOMElement xmlCommand) const;
+
+	/**
+	Loads the command properties from the specified XML element.
+	*/
+	void LoadXml(MsXml::CXMLDOMElement xmlCommand);
 
 // attributes
 protected:

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd" xmlns="http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd">
+	<xs:annotation>
+		<xs:documentation>
+			Schema for TeXnicCenter output profiles.
+			Copyright (c) 2003-2004 ToolsCenter.org. All rights reserved.
+			www.ToolsCenter.org
+		</xs:documentation>
+	</xs:annotation>
+	<xs:include schemaLocation="CommonTypes.xsd" />
+	
+	<!-- overall document structure -->
+	<xs:element name="outputProfiles">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="outputProfileList">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="outputProfile" minOccurs="0" maxOccurs="unbounded" type="OutputProfileDefinition" />
+						</xs:sequence>
+					</xs:complexType>
+					<xs:unique name="ProfileNames">
+						<xs:selector xpath="outputProfile" />
+						<xs:field xpath="@name" />
+					</xs:unique>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="version" type="xs:decimal" use="required" fixed="1.0" />
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- definition of a single output profile (identified by name) -->
+	<xs:complexType name="OutputProfileDefinition">
+		<xs:sequence>
+			<xs:element name="texCommand" type="DisableableCommandLineCommandDefinition" />
+			<xs:element name="bibTexCommand" type="DisableableCommandLineCommandDefinition" />
+			<xs:element name="makeIndexCommand" type="DisableableCommandLineCommandDefinition" />
+			<xs:element name="postProcessors" type="ProcessorList">
+				<xs:unique name="postProcessorNames">
+					<xs:selector xpath="processor" />
+					<xs:field xpath="@name" />
+				</xs:unique>
+			</xs:element>
+			<xs:element name="viewer" type="ViewerDefinition" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="stopOnLatexError" type="xs:boolean" default="false" />
+	</xs:complexType>
+	
+	<!-- general definitions for tools to execute via command line -->
+	<xs:complexType name="CommandLineCommandDefinition">
+		<xs:attribute name="path" type="filePath" use="required" />
+		<xs:attribute name="arguments" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:complexType name="DisableableCommandLineCommandDefinition">
+		<xs:complexContent>
+			<xs:extension base="CommandLineCommandDefinition">
+				<xs:attribute name="execute" type="xs:boolean" default="true" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<!-- Definition for pre- and postprocessors -->
+	<xs:complexType name="ProcessorList">
+		<xs:sequence>
+			<xs:element name="processor" minOccurs="0" maxOccurs="unbounded" type="ProcessorDefinition" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProcessorDefinition">
+		<xs:attribute name="name" type="xs:string" use="required" />		                                
+		<xs:attribute name="path" type="filePath" use="required" />
+		<xs:attribute name="arguments" type="xs:string" use="required" />
+		<xs:attribute name="inputFile" type="filePath" use="required" />
+		<xs:attribute name="outputFile" type="filePath" use="required" />
+	</xs:complexType>
+	
+	<!-- definition for viewer related stuff -->
+	<xs:complexType name="ViewerDefinition">
+		<xs:sequence>
+			<xs:element name="viewProjectCommand" type="ViewCommandDefinition" />
+			<xs:element name="viewCurrentFileCommand" type="ViewCommandDefinition" />
+			<xs:element name="viewCloseCommand" type="ViewCommandDefinition" />
+		</xs:sequence>
+		<xs:attribute name="path" type="filePath" use="required" />
+		<xs:attribute name="closeBeforeCompilation" type="xs:boolean" default="false" />
+	</xs:complexType>
+	<xs:complexType name="ViewCommandDefinition">
+		<xs:sequence>
+			<xs:element name="commandLineCommand" type="CommandLineCommandDefinition" />
+			<xs:element name="ddeCommand" type="DdeCommandDefinition" />
+		</xs:sequence>
+		<xs:attribute name="type">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="commandLine" />
+					<xs:enumeration value="dde" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="DdeCommandDefinition">
+		<xs:attribute name="path" type="filePath" use="required" />
+		<xs:attribute name="server" type="xs:string" use="required" />
+		<xs:attribute name="topic" type="xs:string" use="required" />
+		<xs:attribute name="command" type="xs:string" use="required" />
+	</xs:complexType>
+
+</xs:schema>

@@ -36,21 +36,28 @@ BUILDING TEXNICCENTER
    and unpack the ZIP-archive to the directory, this file (HowToBuild.txt) is
    placed in.
 
-6. Open the TeXnicCenter-workspace ('TeXnicCenter\TeXnicCenter.dsw') in Visual C++.
+6. Install Microsoft XML Parser:
+   a) Download the most recent version of the Microsoft XML Parser 4 (MSXML4) including the
+      SDK.
+   b) Install it on your system.
+   c) Add the include and library paths of MSXML to the list in Visual C++ 6
+      ('Tools -> Options ->Directories').
 
-7. Build the debug and release versions of TeXnicCenter
+7. Open the TeXnicCenter-workspace ('TeXnicCenter\TeXnicCenter.dsw') in Visual C++.
 
-8. Build the TeXnicCenter-Help-File using HTML Help Workshop with the 
+8. Build the debug and release versions of TeXnicCenter
+
+9. Build the TeXnicCenter-Help-File using HTML Help Workshop with the 
     'TCHelp\TeXnicCenter.hhp' project
 
-9. Copy all files matching
+10. Copy all files matching
 
 	*.chm
-   or
+    or
 
 	*.chw
 
-   from the 'output' directory to the 'output\debug\help' and 'output\release\help' directory.
+    from the 'output' directory to the 'output\debug\help' and 'output\release\help' directory.
 
 10. Copy the files
 
@@ -65,9 +72,12 @@ BUILDING TEXNICCENTER
 	a) the 'output\debug' directory
 	b) the 'output\release' directory
 
-11. Create a directory called 'language' in the 'output\debug' and in the 'output\release' directory.
+11. Copy all files matching '*.xsd' from the 'TeXnicCenter\xmlschema' directory to 'output\debug' and
+    'output\release'
 
-12. Copy the files
+12. Create a directory called 'language' in the 'output\debug' and in the 'output\release' directory.
+
+13. Copy the files
 
 	*.aff
 	*.dic

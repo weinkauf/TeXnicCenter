@@ -113,6 +113,12 @@ CProcess *CProcessCommand::Execute(HANDLE hOutput, LPCTSTR lpszWorkingDir, LPCTS
 }
 
 
+void CProcessCommand::RemoveDirectorySpecifications()
+{
+	m_strExecutable = CPathTool::GetFile(m_strExecutable);
+}
+
+
 CString CProcessCommand::SerializeToString() const
 {
 	return m_strExecutable + _T('\n') + m_strArguments;
@@ -130,4 +136,18 @@ BOOL CProcessCommand::SerializeFromString(LPCTSTR lpszPackedInformation)
 
 	Set(strExecutable, strArguments);
 	return TRUE;
+}
+
+
+void CProcessCommand::SaveXml(MsXml::CXMLDOMElement xmlCommand) const
+{
+	xmlCommand.SetAttribute(_T("path"), (LPCTSTR)m_strExecutable);
+	xmlCommand.SetAttribute(_T("arguments"), (LPCTSTR)m_strArguments);
+}
+
+
+void CProcessCommand::LoadXml(MsXml::CXMLDOMElement xmlCommand)
+{
+	m_strExecutable = (LPCTSTR)(_bstr_t)xmlCommand.GetAttribute(_T("path"));
+	m_strArguments = (LPCTSTR)(_bstr_t)xmlCommand.GetAttribute(_T("arguments"));
 }

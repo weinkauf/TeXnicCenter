@@ -35,6 +35,7 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "Profile.h"
+#include "ProfileExchangeDialog.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -204,6 +205,99 @@ void CProfileMap::GetKeyList(CStringArray &astrKeys) const
 }
 
 
+void CProfileMap::CopyFrom(const CProfileMap &profiles, BOOL bEmptyBeforeCopy /* = TRUE */, BOOL bAskUserToOverwrite /* = FALSE */)
+{
+	// remove all existing items if necessary
+	if (bEmptyBeforeCopy)
+		RemoveAll();
+
+	POSITION	pos = profiles.GetStartPosition();
+	while (pos)
+	{
+		CString		strKey;
+		CProfile	*pProfile = NULL;
+		profiles.GetNextAssoc(pos, strKey, pProfile);
+
+		// check if a profile with this name is already defined and
+		// ask the user to overwrite it, if necessary
+		if (bAskUserToOverwrite && Exists(strKey))
+		{
+			CString	strMsg;
+			strMsg.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS, strKey);
+			if (AfxMessageBox(strMsg, MB_YESNO|MB_ICONQUESTION)!=IDYES)
+				// skip this item
+				continue;
+		}
+
+		// create a copy and add it
+		CProfile	*pNewProfile = new CProfile(*pProfile);
+		if (pNewProfile)
+			SetAt(strKey, pNewProfile);
+	}
+
+	// adjust active profile setting for this map if necessary
+	if (!Exists(GetActiveProfileKey()) && !IsEmpty())
+	{
+		pos = GetStartPosition();
+
+		CString		strKey;
+		CProfile	*pProfile;
+		GetNextAssoc(pos, strKey, pProfile);
+
+		SetActiveProfile(strKey);
+	}
+}
+
+
+void CProfileMap::RemoveDirectorySpecifications()
+{
+	POSITION	pos = GetStartPosition();
+	while (pos)
+	{
+		CString		strKey;
+		CProfile	*pProfile;
+		GetNextAssoc(pos, strKey, pProfile);
+		if (pProfile)
+			pProfile->RemoveDirectorySpecifications();
+	}
+}
+
+
+void CProfileMap::Import()
+{
+	CFileDialogEx	fileDlg(TRUE, _T("tco"), NULL, OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT, CString((LPCTSTR)STE_PROFILE_FILE_FILTER));
+	if (fileDlg.DoModal()!=IDOK)
+		return;
+
+	CProfileMap	profiles;
+	if (!profiles.LoadXml(fileDlg.GetPathName()))
+		return;
+
+	CProfileExchangeDialog	dlg(profiles, FALSE);
+	if (dlg.DoModal()!=IDOK)
+		return;
+
+	CopyFrom(profiles, FALSE, TRUE);
+}
+
+
+void CProfileMap::Export() const
+{
+	CProfileMap	profiles;
+	profiles.CopyFrom(*this);
+
+	CProfileExchangeDialog	dlg(profiles, TRUE);
+	if (dlg.DoModal()!=IDOK)
+		return;
+
+	CFileDialogEx	fileDlg(FALSE, _T("tco"), NULL, OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT, CString((LPCTSTR)STE_PROFILE_FILE_FILTER));
+	if (fileDlg.DoModal()!=IDOK)
+		return;
+
+	profiles.SaveXml(fileDlg.GetPathName());
+}
+
+
 BOOL CProfileMap::SerializeToRegistry() const
 {
 	CBCGRegistryEx	reg(FALSE, FALSE);
@@ -264,6 +358,110 @@ BOOL CProfileMap::SerializeFromRegistry()
 	reg.PopKey();
 
 	return TRUE;
+}
+
+
+BOOL CProfileMap::LoadXml(LPCTSTR lpszPath)
+{
+	MsXml::CXMLDOMDocumentEx	xmlDoc;
+	try
+	{
+		xmlDoc.Create(
+			_T("xmlns:txcop='http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd'"), 
+			CPathTool::Cat(theApp.GetWorkingDir(), _T("OutputProfiles.xsd")),
+			_T("http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd"));
+		if (!xmlDoc.Load(lpszPath))
+			AfxThrowComException(S_FALSE);
+
+		RemoveAll();
+
+		MsXml::CXMLDOMNodeList	xmlProfiles(xmlDoc.SelectNodes(_T("txcop:outputProfiles/outputProfileList/outputProfile")));
+		const long							lProfiles = xmlProfiles.GetLength();
+		for (long lProfile = 0; lProfile < lProfiles; ++lProfile)
+		{
+			MsXml::CXMLDOMElement	xmlProfile(xmlProfiles.GetItem(lProfile).QueryInterface(IID_IXMLDOMElement));
+			CProfile							*pProfile = new CProfile();
+			pProfile->LoadXml(xmlProfile);
+			SetAt((_bstr_t)xmlProfile.GetAttribute(_T("name")), pProfile);
+		}
+
+		return TRUE;
+	}
+	catch (CComException *pE)
+	{
+		BOOL	bReportedError = FALSE;
+		if (xmlDoc && xmlDoc.GetParseError() && xmlDoc.GetParseError().GetErrorCode()!=0)
+		{
+			try
+			{
+				MsXml::CXMLDOMParseError	xmlError(xmlDoc.GetParseError());
+				CString	strErrorMsg;
+				strErrorMsg.Format(STE_XML_PARSE_ERROR, 
+					xmlError.GetErrorCode(), xmlError.GetReason(),
+					xmlError.GetUrl(), xmlError.GetLine(), xmlError.GetLinepos(),
+					xmlError.GetSrcText());
+				AfxMessageBox(strErrorMsg, MB_ICONEXCLAMATION|MB_OK);
+				bReportedError = TRUE;
+			}
+			catch (CComException *pE)
+			{
+				pE->Delete();
+			}
+		}
+		if (!bReportedError)
+		{
+			pE->ReportError(MB_ICONEXCLAMATION|MB_OK);
+		}
+		pE->Delete();
+		return FALSE;
+	}
+}
+
+
+BOOL CProfileMap::SaveXml(LPCTSTR lpszPath) const
+{
+	MsXml::CXMLDOMDocumentEx	xmlDoc;
+	try
+	{
+		xmlDoc.Create(
+			_T("xmlns:txcop='http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd'"), 
+			CPathTool::Cat(theApp.GetWorkingDir(), _T("OutputProfiles.xsd")),
+			_T("http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd"));
+
+		MsXml::CXMLDOMElement	xmlRoot(xmlDoc.CreateElement(_T("txcop:outputProfiles")));
+		xmlRoot.SetAttribute(_T("xmlns:txcop"), _T("http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd"));
+		xmlRoot.SetAttribute(_T("version"), 1.0);
+		xmlDoc.AppendChild(xmlRoot);
+
+		MsXml::CXMLDOMElement	xmlProfileCollection(xmlDoc.CreateElement(_T("outputProfileList")));
+		xmlRoot.AppendChild(xmlProfileCollection);
+
+		// write all profiles to collection
+		CStringArray	astrProfiles;
+		GetKeyList(astrProfiles);
+		for (int i = 0; i < astrProfiles.GetSize(); ++i)
+		{
+			CProfile	*pProfile = NULL;
+			if (!Lookup(astrProfiles[i], pProfile) || !pProfile)
+				continue;
+
+			MsXml::CXMLDOMElement	xmlProfile(xmlDoc.CreateElement(_T("outputProfile")));
+			xmlProfile.SetAttribute(_T("name"), (LPCTSTR)astrProfiles[i]);
+			pProfile->SaveXml(xmlProfile);
+			xmlProfileCollection.AppendChild(xmlProfile);
+		}
+
+		// write to file
+		xmlDoc.SavePretty(lpszPath);
+
+		return TRUE;
+	}
+	catch (CComException *pE)
+	{
+		pE->ReportError(MB_ICONEXCLAMATION|MB_OK);
+		pE->Delete();
+		return FALSE;
+	}
 }
 
 
@@ -370,6 +568,21 @@ void CProfile::SetViewCloseCmd(const CProfile::CCommand &cmd)
 }
 
 
+void CProfile::RemoveDirectorySpecifications()
+{
+	m_strLatexPath = CPathTool::GetFile(m_strLatexPath);
+	m_strBibTexPath = CPathTool::GetFile(m_strBibTexPath);
+	m_strMakeIndexPath = CPathTool::GetFile(m_strMakeIndexPath);
+
+	m_aPostProcessors.RemoveDirectorySpecifications();
+
+	m_strViewerPath = CPathTool::GetFile(m_strViewerPath);
+	m_cmdViewProject.RemoveDirectorySpecifications();
+	m_cmdViewCurrent.RemoveDirectorySpecifications();
+	m_cmdCloseView.RemoveDirectorySpecifications();
+}
+
+
 BOOL CProfile::SerializeToRegistry(CBCGRegistryEx &reg) const
 {
 	reg.Write(_T("RunLatex"), m_bRunLatex);
@@ -450,6 +663,115 @@ BOOL CProfile::SerializeFromRegistry(CBCGRegistryEx &reg)
 }
 
 
+void CProfile::SaveXml(MsXml::CXMLDOMElement &xmlProfile) const
+{
+	// serialize general settings
+	xmlProfile.SetAttribute(_T("stopOnLatexError"), m_bStopOnLatexError? _T("true") : _T("false"));
+
+	// serialize LaTeX settings
+	MsXml::CXMLDOMElement	xmlLatexCommand(xmlProfile.GetOwnerDocument().CreateElement(_T("texCommand")));
+	xmlLatexCommand.SetAttribute(_T("execute"), m_bRunLatex? _T("true") : _T("false"));
+	xmlLatexCommand.SetAttribute(_T("path"), (LPCTSTR)m_strLatexPath);
+	xmlLatexCommand.SetAttribute(_T("arguments"), (LPCTSTR)m_strLatexArguments);
+	xmlProfile.AppendChild(xmlLatexCommand);
+
+	// serialize BibTeX settings
+	MsXml::CXMLDOMElement	xmlBibTexCommand(xmlProfile.GetOwnerDocument().CreateElement(_T("bibTexCommand")));
+	xmlBibTexCommand.SetAttribute(_T("execute"), m_bRunBibTex? _T("true") : _T("false"));
+	xmlBibTexCommand.SetAttribute(_T("path"), (LPCTSTR)m_strBibTexPath);
+	xmlBibTexCommand.SetAttribute(_T("arguments"), (LPCTSTR)m_strBibTexArguments);
+	xmlProfile.AppendChild(xmlBibTexCommand);
+
+	// serialize MakeIndex settings
+	MsXml::CXMLDOMElement	xmlMakeIndexCommand(xmlProfile.GetOwnerDocument().CreateElement(_T("makeIndexCommand")));
+	xmlMakeIndexCommand.SetAttribute(_T("execute"), m_bRunMakeIndex? _T("true") : _T("false"));
+	xmlMakeIndexCommand.SetAttribute(_T("path"), (LPCTSTR)m_strMakeIndexPath);
+	xmlMakeIndexCommand.SetAttribute(_T("arguments"), (LPCTSTR)m_strMakeIndexArguments);
+	xmlProfile.AppendChild(xmlMakeIndexCommand);
+
+	// serialize postprocessors
+	MsXml::CXMLDOMElement	xmlPostProcessors(xmlProfile.GetOwnerDocument().CreateElement(_T("postProcessors")));
+	m_aPostProcessors.SaveXml(xmlPostProcessors);
+	xmlProfile.AppendChild(xmlPostProcessors);
+
+
+	//
+	// serialize viewer stuff
+	//
+
+	MsXml::CXMLDOMElement	xmlViewerDefinition(xmlProfile.GetOwnerDocument().CreateElement(_T("viewer")));
+	xmlViewerDefinition.SetAttribute(_T("path"), (LPCTSTR)m_strViewerPath);
+	xmlViewerDefinition.SetAttribute(_T("closeBeforeCompilation"), m_bCloseBeforeCompilation? _T("true") : _T("false"));
+
+	// serialize view project command
+	MsXml::CXMLDOMElement	xmlViewProjectCommand(xmlProfile.GetOwnerDocument().CreateElement(_T("viewProjectCommand")));
+	m_cmdViewProject.SaveXml(xmlViewProjectCommand);
+	xmlViewerDefinition.AppendChild(xmlViewProjectCommand);
+
+	// serialize view current command
+	MsXml::CXMLDOMElement	xmlViewCurrentCommand(xmlProfile.GetOwnerDocument().CreateElement(_T("viewCurrentFileCommand")));
+	m_cmdViewCurrent.SaveXml(xmlViewCurrentCommand);
+	xmlViewerDefinition.AppendChild(xmlViewCurrentCommand);
+
+	// serialize view close command
+	MsXml::CXMLDOMElement	xmlViewCloseCommand(xmlProfile.GetOwnerDocument().CreateElement(_T("viewCloseCommand")));
+	m_cmdCloseView.SaveXml(xmlViewCloseCommand);
+	xmlViewerDefinition.AppendChild(xmlViewCloseCommand);
+
+	xmlProfile.AppendChild(xmlViewerDefinition);
+}
+
+
+void CProfile::LoadXml(MsXml::CXMLDOMElement &xmlProfile)
+{
+	// serialize general settings
+	m_bStopOnLatexError = (bool)xmlProfile.GetAttribute(_T("stopOnLatexError"));
+
+	// serialize LaTeX settings
+	MsXml::CXMLDOMElement	xmlLatexCommand(xmlProfile.SelectSingleNode(_T("texCommand")).QueryInterface(IID_IXMLDOMElement));
+	m_bRunLatex = (bool)xmlLatexCommand.GetAttribute(_T("execute"));
+	m_strLatexPath = (LPCTSTR)(_bstr_t)xmlLatexCommand.GetAttribute(_T("path"));
+	m_strLatexArguments = (LPCTSTR)(_bstr_t)xmlLatexCommand.GetAttribute(_T("arguments"));
+
+	// serialize BibTex settings
+	MsXml::CXMLDOMElement	xmlBibTexCommand(xmlProfile.SelectSingleNode(_T("bibTexCommand")).QueryInterface(IID_IXMLDOMElement));
+	m_bRunBibTex = (bool)xmlBibTexCommand.GetAttribute(_T("execute"));
+	m_strBibTexPath = (LPCTSTR)(_bstr_t)xmlBibTexCommand.GetAttribute(_T("path"));
+	m_strBibTexArguments = (LPCTSTR)(_bstr_t)xmlBibTexCommand.GetAttribute(_T("arguments"));
+
+	// serialize LaTeX settings
+	MsXml::CXMLDOMElement	xmlMakeIndexCommand(xmlProfile.SelectSingleNode(_T("makeIndexCommand")).QueryInterface(IID_IXMLDOMElement));
+	m_bRunMakeIndex = (bool)xmlMakeIndexCommand.GetAttribute(_T("execute"));
+	m_strMakeIndexPath = (LPCTSTR)(_bstr_t)xmlMakeIndexCommand.GetAttribute(_T("path"));
+	m_strMakeIndexArguments = (LPCTSTR)(_bstr_t)xmlMakeIndexCommand.GetAttribute(_T("arguments"));
+
+	// serialize postprocessors
+	MsXml::CXMLDOMElement	xmlPostProcessors(xmlProfile.SelectSingleNode(_T("postProcessors")).QueryInterface(IID_IXMLDOMElement));
+	m_aPostProcessors.LoadXml(xmlPostProcessors);
+
+
+	//
+	// serialize viewer stuff
+	//
+
+	MsXml::CXMLDOMElement	xmlViewerDefinition(xmlProfile.SelectSingleNode(_T("viewer")).QueryInterface(IID_IXMLDOMElement));
+	m_strViewerPath = (LPCTSTR)(_bstr_t)xmlViewerDefinition.GetAttribute(_T("path"));
+	m_bCloseBeforeCompilation = (bool)xmlViewerDefinition.GetAttribute(_T("closeBeforeCompilation"));
+
+	// serialize view project command
+	MsXml::CXMLDOMElement	xmlViewProjectCommand(xmlViewerDefinition.SelectSingleNode(_T("viewProjectCommand")).QueryInterface(IID_IXMLDOMElement));
+	m_cmdViewProject.LoadXml(xmlViewProjectCommand);
+
+	// serialize view current command
+	MsXml::CXMLDOMElement	xmlViewCurrentCommand(xmlViewerDefinition.SelectSingleNode(_T("viewCurrentFileCommand")).QueryInterface(IID_IXMLDOMElement));
+	m_cmdViewCurrent.LoadXml(xmlViewCurrentCommand);
+
+	// serialize view close command
+	MsXml::CXMLDOMElement	xmlViewCloseCommand(xmlViewerDefinition.SelectSingleNode(_T("viewCloseCommand")).QueryInterface(IID_IXMLDOMElement));
+	m_cmdCloseView.LoadXml(xmlViewCloseCommand);
+}
+
+
 //-------------------------------------------------------------------
 // class CProfile::CCommand
 //-------------------------------------------------------------------
@@ -483,6 +805,13 @@ void CProfile::CCommand::SetDdeCommand(const CDdeCommand &cmd)
 }
 
 
+void CProfile::CCommand::RemoveDirectorySpecifications()
+{
+	m_cmdProcess.RemoveDirectorySpecifications();
+	m_cmdDde.RemoveDirectorySpecifications();
+}
+
+
 BOOL CProfile::CCommand::SerializeToRegistry(CBCGRegistryEx &reg) const
 {
 	reg.Write(_T("ActiveType"), m_nActiveCommand);
@@ -503,4 +832,39 @@ BOOL CProfile::CCommand::SerializeFromRegistry(CBCGRegistryEx &reg)
 	m_cmdDde.SerializeFromString(strPackedInformation);
 
 	return TRUE;
+}
+
+
+void CProfile::CCommand::SaveXml(MsXml::CXMLDOMElement xmlCommand) const
+{
+	// active command
+	xmlCommand.SetAttribute(_T("type"), (m_nActiveCommand==typeDde)? _T("dde") : _T("commandLine"));
+
+	// command line
+	MsXml::CXMLDOMElement	xmlCommandLineCommand(xmlCommand.GetOwnerDocument().CreateElement(_T("commandLineCommand")));
+	m_cmdProcess.SaveXml(xmlCommandLineCommand);
+	xmlCommand.AppendChild(xmlCommandLineCommand);
+
+	// dde
+	MsXml::CXMLDOMElement	xmlDdeCommand(xmlCommand.GetOwnerDocument().CreateElement(_T("ddeCommand")));
+	m_cmdDde.SaveXml(xmlDdeCommand);
+	xmlCommand.AppendChild(xmlDdeCommand);
+}
+
+
+void CProfile::CCommand::LoadXml(MsXml::CXMLDOMElement xmlCommand)
+{
+	// active command
+	if (CString(_T("dde")) == (LPCTSTR)(_bstr_t)xmlCommand.GetAttribute(_T("type")))
+		m_nActiveCommand = typeDde;
+	else
+		m_nActiveCommand = typeProcess;
+
+	// command line
+	MsXml::CXMLDOMElement	xmlCommandLineCommand(xmlCommand.SelectSingleNode(_T("commandLineCommand")).QueryInterface(IID_IXMLDOMElement));
+	m_cmdProcess.LoadXml(xmlCommandLineCommand);
+
+	// dde
+	MsXml::CXMLDOMElement	xmlDdeCommand(xmlCommand.SelectSingleNode(_T("ddeCommand")).QueryInterface(IID_IXMLDOMElement));
+	m_cmdDde.LoadXml(xmlDdeCommand);
 }
