@@ -58,6 +58,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:51  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:21+02  sven_wiegand
 * Initial revision
 *
@@ -1046,8 +1049,11 @@ void CCrystalEditView::OnEditReplace()
 BOOL CCrystalEditView::ReplaceSelection(LPCTSTR pszNewText)
 {
 	ASSERT(pszNewText != NULL);
+	/*
+	// If there is no selection perform an insert
 	if (! IsSelection())
 		return FALSE;
+	*/
 
 	DeleteCurrentSelection();
 
