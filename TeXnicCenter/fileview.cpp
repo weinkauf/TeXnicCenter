@@ -29,6 +29,7 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "FileView.h"
+#include "global.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -73,6 +74,13 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 				// initialization
 				DeleteAllItems();
 
+				HTREEITEM hTexParent = InsertItem(AfxLoadString(STE_TEX_FILES), 
+					CStructureParser::texFile, CStructureParser::texFile, 
+					TVI_ROOT, TVI_SORT);
+				HTREEITEM hBibParent = InsertItem(AfxLoadString(STE_BIB_FILES), 
+					CStructureParser::bibFile, CStructureParser::bibFile, 
+					TVI_ROOT, TVI_SORT);
+				HTREEITEM hItem;
 				// fill view
 				for( int i = 0; i < a.GetSize(); i++ )
 				{
@@ -80,14 +88,19 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 
 					switch( si.m_nType )
 					{
-					case CStructureParser::file:
-						{
-							HTREEITEM	hItem = InsertItem( 
-								si.m_strPath, 
-								si.m_nType, si.m_nType, 
-								TVI_ROOT, TVI_SORT );
-							SetItemData( hItem, i );
-						}
+					case CStructureParser::texFile:
+						hItem = InsertItem( 
+							si.m_strPath, 
+							si.m_nType, si.m_nType, 
+							hTexParent, TVI_SORT );
+						SetItemData( hItem, i );
+						break;
+					case CStructureParser::bibFile:
+						hItem = InsertItem( 
+							si.m_strPath, 
+							si.m_nType, si.m_nType, 
+							hBibParent, TVI_SORT );
+						SetItemData( hItem, i );
 						break;
 					}
 				}
@@ -97,5 +110,5 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 				SelectItem( GetItemByPath( strSelectedItem ) );
 			}
 			break;
-	}		
+	}
 }

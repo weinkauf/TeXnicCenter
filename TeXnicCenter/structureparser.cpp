@@ -370,7 +370,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 
 		return;
 	}
-	
+
 	// find label
 	if( reg_search( lpText, lpTextEnd, what, m_regexLabel, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
 	{
@@ -487,7 +487,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 			strPath += _T(".bib");
 			strPath = ResolveFileName(strPath);
 			if ( PathFileExists(strPath) )
-				AddFileItem( strPath );
+				AddFileItem( strPath, bibFile );
 			nStart = nFound + 1;
 		}
 
@@ -512,13 +512,13 @@ CString CStructureParser::ResolveFileName( LPCTSTR lpszPath ) const
 }
 
 
-void CStructureParser::AddFileItem( LPCTSTR lpszPath )
+void CStructureParser::AddFileItem( LPCTSTR lpszPath, int nType )
 {
 	// insert file into item-array
 	CStructureItem	si;
 	si.m_nLine = 0;
 	si.m_nParent = m_anItem[m_nDepth];
-	si.m_nType = file;
+	si.m_nType = nType;
 	si.m_strCaption = "";
 	si.m_strComment = "";
 	si.m_strLabel = "";
@@ -544,7 +544,7 @@ BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies  )
 		return FALSE;
 
 	CString strActualFile( lpszPath );
-	AddFileItem( strActualFile );
+	AddFileItem( strActualFile, texFile );
 
 	// parse text source
 	LPCTSTR							lpLine, lpLineEnd, lpOffset;

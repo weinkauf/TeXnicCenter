@@ -761,7 +761,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -3093,6 +3093,8 @@ BEGIN
     STE_TAB_GREP_2          "Suchen 2"
     STE_OUTPUT_TITLE        "Ausgabe"
     IDR_OUTPUT              "Kennung für die Ausgabeleiste"
+    STE_BIB_FILES           "TODO: Bib files"
+    STE_TEX_FILES           "TODO: Tex files"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4088,12 +4090,12 @@ BEGIN
     STE_COLOR_OTHERS        "Andere Farben..."
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -6357,6 +6359,8 @@ BEGIN
     STE_TAB_GREP_2          "Find 2"
     STE_OUTPUT_TITLE        "Output"
     IDR_OUTPUT              "Identifier for the output bar"
+    STE_BIB_FILES           "Bib files"
+    STE_TEX_FILES           "Tex files"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -6401,7 +6405,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_VIEW_BAR1            "Goes to the next error\nNext Error"
-    ID_VIEW_BAR2            "Goes to the previous Error\nPrevious Error"
+    ID_VIEW_BAR2            "Goes to the previous error\nPrevious Error"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7335,7 +7339,7 @@ BEGIN
     STE_COLOR_OTHERS        "Other Colors..."
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
