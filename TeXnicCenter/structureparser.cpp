@@ -156,7 +156,7 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 	) );
 	TRACE( "m_regexBib returned %d\n", nResult );
 
-	nResult = m_regexAppendix.set_expression( _T("\\\\appendix") );
+	nResult = m_regexAppendix.set_expression( _T("\\\\appendix([^[:graph:]]|$)") );
 	TRACE( "m_regexAppendix returned %d\n", nResult );
 
 	// \includegraphics * [ ] [ ] { file }	only {file} is required
