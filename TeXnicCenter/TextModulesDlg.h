@@ -61,6 +61,8 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CTextModulesDlg)
 	enum { IDD = IDD_TEXTMODULES };
+	CEdit	m_wndBeforeEdit;
+	CEdit	m_wndAfterEdit;
 	CEdit	m_wndNameEdit;
 	CListCtrl	m_wndModulesList;
 	CButton	m_wndDelBtn;
@@ -88,6 +90,8 @@ protected:
 	virtual void OnOK();
 	afx_msg void OnNewTextModule();
 	afx_msg void OnDeleteTextModule();
+	afx_msg void OnChangeName();
+	afx_msg void OnKillFocusName();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -108,6 +112,7 @@ public:
 protected:
 	int nOldSelectedItem;
 	bool bLock;
+	bool bNameChanged;
 };
 
 //{{AFX_INSERT_LOCATION}}
