@@ -1,3 +1,6 @@
+2002/04/11 niteria
+- Translation of the spell checker resources.
+
 2002/04/10 niteria
 - Fixed Bug 541810: First Chance Exception in COutputBuilder::RunPostProcessors.
   Came up because of closing a handle in CPostProcessor::Execute,

@@ -225,17 +225,17 @@ END
 
 IDD_SPELL_CHECK DIALOG DISCARDABLE  0, 0, 290, 137
 STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Spell Check"
+CAPTION "Rechtschreibung"
 FONT 8, "MS Sans Serif"
 BEGIN
-    PUSHBUTTON      "Cancel",IDCANCEL,233,116,50,14
-    LTEXT           "Suggestions",IDC_STATIC,7,65,42,8
-    PUSHBUTTON      "Ignore",IDC_SPELL_IGNORE,233,7,50,14
-    PUSHBUTTON      "Ignore all",IDC_SPELL_IGNORE_ALL,233,22,50,14
-    PUSHBUTTON      "Next line",IDC_SPELL_NEXT,233,67,50,14
-    PUSHBUTTON      "Change",IDC_SPELL_REPLACE,233,37,50,14
-    PUSHBUTTON      "Change all",IDC_SPELL_REPLACE_ALL,233,52,50,14
-    PUSHBUTTON      "Resume",IDC_SPELL_RESUME,233,82,50,14,WS_DISABLED
+    PUSHBUTTON      "Abbrechen",IDCANCEL,233,116,50,14
+    LTEXT           "Vorschläge",IDC_STATIC,7,65,42,8
+    PUSHBUTTON      "Ignorieren",IDC_SPELL_IGNORE,233,7,50,14
+    PUSHBUTTON      "Alle ignorieren",IDC_SPELL_IGNORE_ALL,233,22,50,14
+    PUSHBUTTON      "Nächste Zeile",IDC_SPELL_NEXT,233,67,50,14
+    PUSHBUTTON      "Ändern",IDC_SPELL_REPLACE,233,37,50,14
+    PUSHBUTTON      "Alle ändern",IDC_SPELL_REPLACE_ALL,233,52,50,14
+    PUSHBUTTON      "Übernehmen",IDC_SPELL_RESUME,233,82,50,14,WS_DISABLED
     CONTROL         "List4",IDC_SPELL_SUGGEST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_NOCOLUMNHEADER | 
                     LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,7,75,222,55
@@ -286,10 +286,10 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_SPELL_IGNORE        "Todo:Ignore"
-    IDS_SPELL_UNEDIT        "Todo:Unedit"
-    IDS_SPELL_DONE          "Todo:Spell check complete"
-    IDS_SPELL_NO_SUGGESTIONS "Todo:No Suggestions"
+    IDS_SPELL_IGNORE        "Ignorieren"
+    IDS_SPELL_UNEDIT        "Rückgängig"
+    IDS_SPELL_DONE          "Die Rechtschreibprüfung wurde abgeschlossen."
+    IDS_SPELL_NO_SUGGESTIONS "Keine Vorschläge"
 END
 
 #endif    // German (Germany) resources
