@@ -55,6 +55,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.8  2002/04/23 21:45:09  cnorris
+* realtime spell check
+*
 * Revision 1.7  2002/04/09 23:30:17  cnorris
 * LoadFromFile and SaveToFile return the result of GetLastError to provide
 * usefull information about the type of error that occured.
@@ -205,13 +208,16 @@ void CCrystalTextBuffer::CLineInfo::RemoveText(int nPos, int nCount, boolean bCo
 	ASSERT( nCount > 0 ); // nCount is valid
 	ASSERT( nPos + nCount <= m_nLength );  // nCount will not overrun string
 
-	ClearAttributes(nPos, nPos+nCount, TRUE);
-	ShiftAttributes(nPos+nCount, -nCount);
+	if ( nPos < m_nLength )
+	{
+		ClearAttributes(nPos, nPos+nCount, TRUE);
+		ShiftAttributes(nPos+nCount, -nCount);
 
-	int nRightCount = m_nLength - nCount - nPos;
-	memmove(m_pcLine+nPos, m_pcLine+nPos+nCount, nRightCount);
-	m_nLength -= nCount;
-	m_pcLine[m_nLength] = _T('\0');
+		int nRightCount = m_nLength - nCount - nPos;
+		memmove(m_pcLine+nPos, m_pcLine+nPos+nCount, nRightCount);
+		m_nLength -= nCount;
+		m_pcLine[m_nLength] = _T('\0');
+	}
 	if ( bCompact )
 		FreeExtra();
 }
@@ -220,13 +226,15 @@ void CCrystalTextBuffer::CLineInfo::TrimText(int nPos, boolean bCompact /*= fals
 {
 	ASSERT( nPos >= 0  && nPos <= m_nLength ); // nPos is within string
 
-	ClearAttributes(nPos, m_nLength, TRUE);
+	if ( nPos < m_nLength )
+	{
+		ClearAttributes(nPos, m_nLength, TRUE);
 
-	m_pcLine[nPos] = _T('\0');
-	m_nLength = nPos;
+		m_pcLine[nPos] = _T('\0');
+		m_nLength = nPos;
+	}
 	if ( bCompact )
 		FreeExtra();
-
 }
 
 void CCrystalTextBuffer::CLineInfo::ClearAttributes()
@@ -1055,7 +1063,7 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 	if (m_bReadOnly)
 		return FALSE;
 
-	if (*pszText == _T('\0'))
+	if (pszText == NULL || *pszText == _T('\0'))
 		return TRUE;
 
 	CInsertContext context;
@@ -1132,98 +1140,6 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 	return TRUE;
 }
 
-/*
-BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine, int nPos, LPCTSTR pszText, int &nEndLine, int &nEndChar)
-{
-	ASSERT(m_bInit);	//	Text buffer not yet initialized.
-						//	You must call InitNew() or LoadFromFile() first!
-	ASSERT(nLine >= 0 && nLine < m_aLines.GetSize());
-	ASSERT(nPos >= 0 && nPos <= m_aLines[nLine].GetLength());
-	
-	if (m_bReadOnly)
-		return FALSE;
-
-	if (*pszText == _T('\0'))
-		return TRUE;
-
-	CInsertContext context;
-	context.m_ptStart.x = nPos;
-	context.m_ptStart.y = nLine;
-
-	int nCurrentLine = nLine;
-	BOOL bNewLines = FALSE;
-	int nTextPos;
-	for (;;)
-	{
-		nTextPos = 0;
-		while (pszText[nTextPos] != _T('\0') && pszText[nTextPos] != _T('\r'))
-		{
-			ASSERT(pszText[nTextPos] != _T('\n')); // invalid string format
-			nTextPos ++;
-		}
-
-		if (nCurrentLine == nLine)
-		{
-			m_aLines[nLine].InsertText(nPos, pszText, nTextPos);
-			nPos += nTextPos;
-			nEndChar = nPos;
-			nEndLine = nLine;
-		}
-		else
-		{
-			if (!bNewLines)
-			{
-				// First new line. Take the right portion of the first line and insert
-				// it as the next line.
-				InsertLine(m_aLines[nLine].m_pcLine+nPos, -1, nCurrentLine);
-				m_aLines[nLine].TrimText(nPos);
-			}
-			bNewLines = TRUE;			
-			nEndChar = nTextPos;
-			nEndLine = nCurrentLine;
-			if (pszText[nTextPos] != _T('\0'))
-				InsertLine(pszText, nTextPos, nCurrentLine);
-			else
-				break;
-		}
-
-		if (pszText[nTextPos] == _T('\0'))
-			break;
-
-		nCurrentLine ++;
-		nTextPos ++;
-
-		if (pszText[nTextPos] == _T('\n'))
-		{
-			nTextPos ++;
-		}
-		else
-		{
-			ASSERT(FALSE);			//	Invalid line-end format passed
-		}
-
-		pszText += nTextPos;
-	}
-
-	context.m_ptEnd.x = nEndChar;
-	context.m_ptEnd.y = nEndLine;
-
-	if (bNewLines)
-		UpdateViews(pSource, &context, UPDATE_HORZRANGE | UPDATE_VERTRANGE, nLine);
-	else
-		UpdateViews(pSource, &context, UPDATE_SINGLELINE | UPDATE_HORZRANGE, nLine);
-
-	if (! m_bModified)
-		SetModified(TRUE);
-
-	//BEGIN SW
-	// remember current cursor position as last editing position
-	m_ptLastChange = context.m_ptEnd;
-	//END SW
-
-	return TRUE;
-}
-*/
 BOOL CCrystalTextBuffer::CanUndo()
 {
 	ASSERT(m_nUndoPosition >= 0 && m_nUndoPosition <= m_aUndoBuf.GetSize());
