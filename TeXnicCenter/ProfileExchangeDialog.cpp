@@ -48,6 +48,9 @@ static char THIS_FILE[] = __FILE__;
 
 BEGIN_MESSAGE_MAP(CProfileExchangeDialog, CDialog)
 	//{{AFX_MSG_MAP(CProfileExchangeDialog)
+	ON_BN_CLICKED(IDC_BUTTON_SELECT_ALL, OnSelectAll)
+	ON_BN_CLICKED(IDC_BUTTON_SELECT_NONE, OnSelectNone)
+	ON_BN_CLICKED(IDC_BUTTON_SELECT_INVERT, OnSelectInvert)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -140,4 +143,25 @@ void CProfileExchangeDialog::OnOK()
 		m_Profiles.RemoveDirectorySpecifications();
 	
 	CDialog::OnOK();
+}
+
+
+void CProfileExchangeDialog::OnSelectAll() 
+{
+	for (int nItem = 0; nItem < m_wndProfileList.GetItemCount(); ++nItem)
+		m_wndProfileList.SetCheck(nItem);
+}
+
+
+void CProfileExchangeDialog::OnSelectNone() 
+{
+	for (int nItem = 0; nItem < m_wndProfileList.GetItemCount(); ++nItem)
+		m_wndProfileList.SetCheck(nItem, FALSE);
+}
+
+
+void CProfileExchangeDialog::OnSelectInvert() 
+{
+	for (int nItem = 0; nItem < m_wndProfileList.GetItemCount(); ++nItem)
+		m_wndProfileList.SetCheck(nItem, !m_wndProfileList.GetCheck(nItem));
 }

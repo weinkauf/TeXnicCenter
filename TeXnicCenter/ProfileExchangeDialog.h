@@ -83,6 +83,9 @@ protected:
 	//{{AFX_MSG(CProfileExchangeDialog)
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
+	afx_msg void OnSelectAll();
+	afx_msg void OnSelectNone();
+	afx_msg void OnSelectInvert();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
