@@ -100,6 +100,7 @@ void CStructureView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 					case CStructureParser::figure:
 					case CStructureParser::table:
 					case CStructureParser::header:
+					case CStructureParser::unknownEnv:
 						{
 							//Better display all stuff, even without a title
 							//if (si.m_strTitle.GetLength() == 0)

@@ -95,6 +95,7 @@ void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHin
 					case CStructureParser::equation:
 					case CStructureParser::figure:
 					case CStructureParser::table:
+					case CStructureParser::unknownEnv:
 						ahParentItems[i] = InsertItem( 
 							AfxLoadString( STE_ITEMTYPE_GENERIC + i ),
 							CStructureParser::group, CStructureParser::group,
@@ -117,6 +118,7 @@ void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHin
 					case CStructureParser::equation:
 					case CStructureParser::figure:
 					case CStructureParser::table:
+					case CStructureParser::unknownEnv:
 						{
 							//Better display all stuff, even without a title
 							//if (si.m_strTitle.GetLength() == 0)

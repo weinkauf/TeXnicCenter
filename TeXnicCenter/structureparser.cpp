@@ -50,7 +50,8 @@ static char THIS_FILE[]=__FILE__;
 const CString CStructureParser::m_sItemNames[typeCount]= {
 	"generic","header","equation","quote","quotation",
 	"center","verse","itemization","enumeration","description",
-	"figure","table","texFile","group","bibliography","graphic"};
+	"figure","table","other environment",
+	"texFile","group","bibliography","graphic"};
 
 //-------------------------------------------------------------------
 // class CStructureItem
@@ -145,6 +146,16 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 		"\\\\end\\s*\\{(equation|eqnarray|gather|multline|align|alignat)\\}"
 	) );
 	TRACE( "m_regexEquationEnd returned %d\n", nResult );
+
+	nResult = m_regexUnknownEnvStart.set_expression( _T(
+		"\\\\begin\\s*\\{([^\\}]*)\\}"
+	) );
+	TRACE( "m_regexUnknownEnvStart returned %d\n", nResult );
+
+	nResult = m_regexUnknownEnvEnd.set_expression( _T(
+		"\\\\end\\s*\\{([^\\}]*)\\}"
+	) );
+	TRACE( "m_regexUnknownEnvEnd returned %d\n", nResult );
 
 	nResult = m_regexCaption.set_expression( _T(
 		"\\\\caption\\s*([\\[\\{].*\\})"
@@ -478,6 +489,28 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 
 		return;
 	}
+	//ATTENTION: Insert the start of other (known) environments before this!
+	// look for unknown environment start
+	if( reg_search( lpText, lpTextEnd, what, m_regexUnknownEnvStart, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
+	{
+		//Parse string before occurence
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth, aSI );
+
+		//Get the name of the environment
+		CString strEnvName(what[1].first, what[1].second - what[1].first);
+
+		//Add unknown environment to collection
+		INITIALIZE_SI( si );
+		cookie.nCookieType = si.m_nType = unknownEnv;
+		si.m_strTitle = strEnvName; //Misuse the title for saving the environment name
+		cookie.nItemIndex = aSI.Add( si );
+		cookies.Push( cookie );
+
+		//Parse string behind occurence
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth, aSI );
+
+		return;
+	}
 	// look for headers
 	if( reg_search( lpText, lpTextEnd, what, m_regexHeader, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
 	{
@@ -576,13 +609,14 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		if( !cookies.IsEmpty() && cookies.Top().nCookieType == figure )
 		{
 			CStructureItem	&si = aSI[cookies.Pop().nItemIndex];
-			if( si.m_strTitle.IsEmpty() )
-			{
-				if( si.m_strCaption.IsEmpty() )
-					si.m_strTitle = si.m_strLabel;
-				else
-					si.m_strTitle = si.m_strCaption;
-			}
+			CreateDefaultTitle(si);
+//			if( si.m_strTitle.IsEmpty() )
+//			{
+//				if( si.m_strCaption.IsEmpty() )
+//					si.m_strTitle = si.m_strLabel;
+//				else
+//					si.m_strTitle = si.m_strCaption;
+//			}
 		}
 		else if ( m_pParseOutputHandler && !m_bCancel )
 		{
@@ -607,13 +641,14 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		if( !cookies.IsEmpty() && cookies.Top().nCookieType == table )
 		{
 			CStructureItem	&si = aSI[cookies.Pop().nItemIndex];
-			if( si.m_strTitle.IsEmpty() )
-			{
-				if( si.m_strCaption.IsEmpty() )
-					si.m_strTitle = si.m_strLabel;
-				else
-					si.m_strTitle = si.m_strCaption;
-			}
+			CreateDefaultTitle(si);
+//			if( si.m_strTitle.IsEmpty() )
+//			{
+//				if( si.m_strCaption.IsEmpty() )
+//					si.m_strTitle = si.m_strLabel;
+//				else
+//					si.m_strTitle = si.m_strCaption;
+//			}
 		}
 		else if ( m_pParseOutputHandler && !m_bCancel )
 		{
@@ -638,19 +673,61 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		if( !cookies.IsEmpty() && cookies.Top().nCookieType == equation )
 		{
 			CStructureItem	&si = aSI[cookies.Pop().nItemIndex];
-			if( si.m_strTitle.IsEmpty() )
-			{
-				if( si.m_strCaption.IsEmpty() )
-					si.m_strTitle = si.m_strLabel;
-				else
-					si.m_strTitle = si.m_strCaption;
-			}
+			CreateDefaultTitle(si);
+//			if( si.m_strTitle.IsEmpty() )
+//			{
+//				if( si.m_strCaption.IsEmpty() )
+//					si.m_strTitle = si.m_strLabel;
+//				else
+//					si.m_strTitle = si.m_strCaption;
+//			}
 		}
 		else if ( m_pParseOutputHandler && !m_bCancel )
 		{
 			COutputInfo info;
 			INITIALIZE_OI( info );
 			info.m_strError.Format( STE_PARSE_FOUND_UNMATCHED, m_sItemNames[equation] );
+			m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
+		}
+
+		// parse string behind occurence
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth, aSI );
+
+		return;
+	}
+	//ATTENTION: Insert the end of other (known) environments before this!
+	// find end of unknown environment
+	if( reg_search( lpText, lpTextEnd, what, m_regexUnknownEnvEnd, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
+	{
+		//Parse string before occurence
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth, aSI );
+
+		//Get the name of the environment
+		CString strEnvName(what[1].first, what[1].second - what[1].first);
+
+		//Pop unknown environment from stack
+		if ( !cookies.IsEmpty()
+				&& (cookies.Top().nCookieType == unknownEnv)
+				&& (aSI[cookies.Top().nItemIndex].m_strTitle == strEnvName) )
+		{
+			CStructureItem &si = aSI[cookies.Pop().nItemIndex];
+			if (si.m_strCaption.IsEmpty() && si.m_strLabel.IsEmpty())
+			{
+				si.m_strTitle.Format("%s: %s(%d)", strEnvName, ResolveFileName(si.m_strPath), si.m_nLine);
+			}
+			else
+			{
+				if (si.m_strCaption.IsEmpty())
+					si.m_strTitle = strEnvName + _T(": ") + si.m_strLabel;
+				else
+					si.m_strTitle = strEnvName + _T(": ") + si.m_strCaption;
+			}
+		}
+		else if ( m_pParseOutputHandler && !m_bCancel )
+		{
+			COutputInfo info;
+			INITIALIZE_OI(info);
+			info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, strEnvName);
 			m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
 		}
 

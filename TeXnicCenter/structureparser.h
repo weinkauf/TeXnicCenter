@@ -75,11 +75,11 @@ of a document structure (for example a header).
 */
 class CStructureItem
 {
-// construction/destruction
+//Construction/Destruction
 public:
 	CStructureItem();
 
-// attributes
+//Attributes
 public:
 	/** Type this item is of. */
 	int m_nType;
@@ -175,6 +175,7 @@ public:
 		description,
 		figure,
 		table,
+		unknownEnv,
 		texFile,
 		group,
 		bibFile,
@@ -320,6 +321,39 @@ private:
 	*/
 	int AddFileItem( LPCTSTR lpszPath, int nType, CStructureItemArray &aSI );
 
+
+	/** Creates a title from the caption or label of a CStructureItem.
+
+			Prefers the caption.
+			If both label and caption are empty, then it creates a title from the filename
+			and the line number.
+
+			@note Creates only a new title, if the current title is empty or if forced by bForce.
+
+			@see CStructureItem
+
+			@param bForce
+				Force the generation of a new title. Even if the current title is non-empty.
+	*/
+	inline void CreateDefaultTitle(CStructureItem& si, bool bForce = false)
+	{
+		if (si.m_strTitle.IsEmpty() || bForce)
+		{
+			if (si.m_strCaption.IsEmpty() && si.m_strLabel.IsEmpty())
+			{
+				//Label and Caption empty ==> Generate a title from the filename
+				si.m_strTitle.Format("%s(%d)", ResolveFileName(si.m_strPath), si.m_nLine);
+			}
+			else
+			{
+				if (si.m_strCaption.IsEmpty())
+					si.m_strTitle = si.m_strLabel;
+				else
+					si.m_strTitle = si.m_strCaption;
+			}
+		}
+	};
+
 	/**
 	Resolve a file name relative to working directory or absolute.
 
@@ -444,6 +478,12 @@ protected:
 
 	/** Regular expression describing an equation end. */
 	tregex m_regexEquationEnd;
+
+	/** Regular expression describing the start of an unknown environment. */
+	tregex m_regexUnknownEnvStart;
+
+	/** Regular expression describing the end of an unknown environment. */
+	tregex m_regexUnknownEnvEnd;
 
 	/** Regular expression describing a caption. */
 	tregex m_regexCaption;
