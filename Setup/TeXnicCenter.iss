@@ -51,6 +51,8 @@ Source: ..\..\..\..\..\..\WINDOWS\SYSTEM32\MSVCP60.DLL; DestDir: {sys}; CopyMode
 Source: ..\TeXnicCenterObjects\Lib\TeXnicCenterObjects.tlb; DestDir: {app}; CopyMode: normal; Flags: comparetimestampalso regtypelib; Components: Application_Files
 Source: ..\output\Release\Skins\*.dll; DestDir: {app}\Skins; CopyMode: normal; Flags: comparetimestampalso; Components: Skins
 Source: ..\..\..\..\..\..\WINDOWS\SYSTEM32\OLEAUT32.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall regserver; Components: System_Files
+Source: ..\output\Release\language\*.aff; DestDir: {app}\Language; CopyMode: normal; Components: Application_Files; Flags: comparetimestampalso
+Source: ..\output\Release\language\*.dic; DestDir: {app}\Language; CopyMode: normal; Components: Application_Files; Flags: comparetimestampalso
 
 [Icons]
 Name: {group}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; WorkingDir: {userdocs}; IconIndex: 0
