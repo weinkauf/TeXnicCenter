@@ -109,6 +109,23 @@ public:
 					);
 		};
 
+	///Comparison: LessEqual
+	inline bool operator<= (const CFileCleanItem &arg) const
+		{
+			return(
+					(tFileHandling <= arg.tFileHandling)
+					|| ( (tFileHandling == arg.tFileHandling) && (strDescription <= arg.strDescription) )
+					);
+		};
+
+	///Comparison: GreaterEqual
+	inline bool operator>= (const CFileCleanItem &arg) const
+		{
+			return(
+					(tFileHandling >= arg.tFileHandling)
+					|| ( (tFileHandling == arg.tFileHandling) && (strDescription >= arg.strDescription) )
+					);
+		};
 
 //Methods
 public:
