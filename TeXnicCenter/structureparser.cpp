@@ -465,13 +465,31 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine );
 
 		// parse input file
-		CString	strPath( what[2].first, what[2].second - what[2].first );
-		strPath.TrimLeft();
-		strPath.TrimRight();
-		strPath.TrimLeft(_T('"'));
-		strPath.TrimRight(_T('"'));
-		strPath+= _T(".bib");
-		AddFileItem( strPath );
+		CString	bibPath( what[2].first, what[2].second - what[2].first );
+		int nStart = 0;
+		int nFound;
+		while (true)
+		{
+			nFound = bibPath.Find( _T(','), nStart );
+			if ( nFound == -1 )
+				if ( nStart >= bibPath.GetLength() )
+					// Done
+					break;
+				else
+					// Extract last comma separated element from list
+					nFound = bibPath.GetLength();
+
+			CString strPath( bibPath.Mid(nStart, nFound-nStart) );
+			strPath.TrimLeft();
+			strPath.TrimRight();
+			strPath.TrimLeft( _T('"') );
+			strPath.TrimRight( _T('"') );
+			strPath += _T(".bib");
+			strPath = ResolveFileName(strPath);
+			if ( PathFileExists(strPath) )
+				AddFileItem( strPath );
+			nStart = nFound + 1;
+		}
 
 		// parse string behind occurence
 		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine );
@@ -484,13 +502,18 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 }
 
 
-CString CStructureParser::AddFileItem( LPCTSTR lpszPath )
+CString CStructureParser::ResolveFileName( LPCTSTR lpszPath ) const
 {
 	// format file name (remove path, if identical with working dir
 	CString	strActualFile( lpszPath );
 	if( !m_strWorkingDir.CompareNoCase( CPathTool::Format( _T("%d"), strActualFile ) ) )
 		strActualFile = CPathTool::Format( _T("%n"), strActualFile ); 
+	return ( strActualFile );
+}
 
+
+void CStructureParser::AddFileItem( LPCTSTR lpszPath )
+{
 	// insert file into item-array
 	CStructureItem	si;
 	si.m_nLine = 0;
@@ -499,11 +522,9 @@ CString CStructureParser::AddFileItem( LPCTSTR lpszPath )
 	si.m_strCaption = "";
 	si.m_strComment = "";
 	si.m_strLabel = "";
-	si.m_strPath = strActualFile;
+	si.m_strPath = lpszPath;
 	si.m_strTitle = "";
 	m_aStructureItems.Add( si );
-
-	return ( strActualFile );
 }
 
 
@@ -519,12 +540,11 @@ BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies  )
 		pTs = NULL;
 	}
 
-//	CTextSource	*pTs = m_pTextSourceManager->GetTextSource( lpszPath );
-	
 	if( !pTs )
 		return FALSE;
 
-	CString strActualFile( AddFileItem( lpszPath ) );
+	CString strActualFile( lpszPath );
+	AddFileItem( strActualFile );
 
 	// parse text source
 	LPCTSTR							lpLine, lpLineEnd, lpOffset;
@@ -554,7 +574,7 @@ BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies  )
 					lpLineEnd = what[0].first;
 					break;
 				}
-			}	
+			}
 
 			// find start of verbatim
 			if( reg_search( lpLine, lpLineEnd, what, m_regexVerbStart ) )
