@@ -93,7 +93,7 @@ public:
 
 // overridings
 public:
-	BOOL InitItem(LPCTSTR lpszPath, CImageList &ImageList);
+	BOOL InitItem(LPCTSTR lpszPath, CImageList &ImageList32, CImageList &ImageList16);
 	CString GetTitle();
 	CString GetDescription();
 	int GetImageIndex();
@@ -141,7 +141,7 @@ public:
 
 // overridings
 public:
-	BOOL InitItem(LPCTSTR lpszPath, CImageList &ImageList);
+	BOOL InitItem(LPCTSTR lpszPath, CImageList &ImageList32, CImageList &ImageList16);
 	CString GetTitle();
 	CString GetDescription();
 	int GetImageIndex();
@@ -194,7 +194,7 @@ public:
 
 // overridings
 public:
-	BOOL InitItem(LPCTSTR lpszPath, CImageList &ImageList);
+	BOOL InitItem(LPCTSTR lpszPath, CImageList &ImageList32, CImageList &ImageList16);
 	CString GetTitle();
 	CString GetDescription();
 	int GetImageIndex();

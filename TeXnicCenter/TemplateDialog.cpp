@@ -82,6 +82,8 @@ BEGIN_MESSAGE_MAP(CTemplateDialog, CDialog)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_TEMPLATES, OnTemplateItemChanged)
 	ON_BN_CLICKED(IDC_BUTTON_CREATE, OnCreate)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST_TEMPLATES, OnDblClkTemplate)
+	ON_BN_CLICKED(IDC_RADIO_VIEW_TYPE, OnViewTypeSelection)
+	ON_BN_CLICKED(IDC_RADIO_VIEW_TYPE1, OnViewTypeSelection)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -90,10 +92,13 @@ CTemplateDialog::CTemplateDialog(UINT unIDTemplate, CWnd* pParent /*=NULL*/)
 	:CDialog(unIDTemplate, pParent),
 	m_nFirstTab(0), m_nLastTab(0)
 {
-	m_ImageList.Create(32, 32, ILC_COLOR | ILC_MASK, 1, 1);
+	m_ImageList32.Create(32, 32, ILC_COLOR | ILC_MASK, 1, 1);
+	m_ImageList16.Create(16, 16, ILC_COLOR | ILC_MASK, 1, 1);
 
 	//{{AFX_DATA_INIT(CTemplateDialog)
 	//}}AFX_DATA_INIT
+
+	m_nListViewType = theApp.GetProfileInt(_T("Settings"), _T("TemplateListViewType"), lvtIcons);
 }
 
 
@@ -112,7 +117,7 @@ void CTemplateDialog::AddTemplateFilter(LPCTSTR lpszFilter, CRuntimeClass *pTemp
 
 void CTemplateDialog::AddTemplateItem(LPCTSTR lpszCategory, CTemplateItem *pItem)
 {
-	if (!pItem->InitItem(NULL, m_ImageList))
+	if (!pItem->InitItem(NULL, m_ImageList32, m_ImageList16))
 		return;
 
 	CTemplateItemArray	*pTemplateArray;
@@ -169,7 +174,7 @@ void CTemplateDialog::CollectTemplates()
 					if (!templates.IsDirectory())
 					{
 						CTemplateItem	*pItem = dynamic_cast<CTemplateItem*>(m_apTemplateItemClass[nFilter]->CreateObject());
-						if (pItem->InitItem(templates.GetFilePath(), m_ImageList))
+						if (pItem->InitItem(templates.GetFilePath(), m_ImageList16, m_ImageList32))
 							pTemplateArray->Add(pItem);
 						else
 							delete pItem;
@@ -223,7 +228,8 @@ void CTemplateDialog::CollectTemplates()
 	m_wndTemplateList.MoveWindow( tabRect );
 
 	// initialize list ctrl
-	m_wndTemplateList.SetImageList(&m_ImageList, LVSIL_NORMAL);
+	m_wndTemplateList.SetImageList(&m_ImageList32, LVSIL_NORMAL);
+	m_wndTemplateList.SetImageList(&m_ImageList16, LVSIL_SMALL);
 }
 
 
@@ -303,6 +309,22 @@ int CTemplateDialog::GetSelectedItem() const
 }
 
 
+void CTemplateDialog::UpdateTemplateListViewType()
+{
+	if (!IsWindow(m_wndTemplateList.m_hWnd))
+		return;
+
+	switch (m_nListViewType)
+	{
+		case lvtIcons:
+			m_wndTemplateList.ModifyStyle(LVS_LIST|LVS_ICON|LVS_SMALLICON|LVS_REPORT, LVS_ICON);
+			break;
+		case lvtList:
+			m_wndTemplateList.ModifyStyle(LVS_LIST|LVS_ICON|LVS_SMALLICON|LVS_REPORT, LVS_LIST);
+	}
+}
+
+
 void CTemplateDialog::UpdateControlStates()
 {
 	CWnd	*pOkButton = GetDlgItem(IDC_BUTTON_CREATE);
@@ -318,6 +340,7 @@ void CTemplateDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST_TEMPLATES, m_wndTemplateList);
 	DDX_Control(pDX, IDC_TAB_CATEGORIES, m_wndCategoriesTab);
 	DDX_Text(pDX, IDC_STATIC_DESCRIPTION, m_strDescription);
+	DDX_Radio(pDX, IDC_RADIO_VIEW_TYPE, m_nListViewType);
 	//}}AFX_DATA_MAP
 }
 
@@ -327,6 +350,7 @@ BOOL CTemplateDialog::OnInitDialog()
 	//
 	CDialog::OnInitDialog();
 
+	UpdateTemplateListViewType();
 	CollectTemplates();
 	FillTemplateList();
 	UpdateControlStates();
@@ -378,3 +402,11 @@ void CTemplateDialog::OnDblClkTemplate(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
+
+void CTemplateDialog::OnViewTypeSelection() 
+{
+	UpdateData();
+	UpdateTemplateListViewType();
+
+	theApp.WriteProfileInt(_T("Settings"), _T("TemplateListViewType"), m_nListViewType);
+}

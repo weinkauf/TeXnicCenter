@@ -57,11 +57,12 @@ CEmptyProjectTemplateItem::CEmptyProjectTemplateItem()
 {}
 
 
-BOOL CEmptyProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &ImageList)
+BOOL CEmptyProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &ImageList32, CImageList &ImageList16)
 {
 	//add image to image list and remember index
 	HICON	hIcon = theApp.LoadIcon(IDR_LATEXTYPE);
-	m_nImageIndex = hIcon? ImageList.Add(hIcon) : -1;
+	m_nImageIndex = hIcon? ImageList32.Add(hIcon) : -1;
+	ImageList16.Add(hIcon);
 
 	return TRUE;
 }
@@ -146,7 +147,7 @@ CFileBasedProjectTemplateItem::CFileBasedProjectTemplateItem()
 {}
 
 
-BOOL CFileBasedProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &ImageList)
+BOOL CFileBasedProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &ImageList32, CImageList &ImageList16)
 {
 	m_strPath = lpszPath;
 
@@ -187,7 +188,8 @@ BOOL CFileBasedProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &Image
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//add image to image list and remember index
 	HICON	hIcon = theApp.LoadIcon(IDR_LATEXTYPE);
-	m_nImageIndex = hIcon? ImageList.Add(hIcon) : -1;
+	m_nImageIndex = hIcon? ImageList32.Add(hIcon) : -1;
+	ImageList16.Add(hIcon);
 
 	return TRUE;
 }
@@ -309,7 +311,7 @@ CWizardBasedProjectTemplateItem::CWizardBasedProjectTemplateItem()
 {}
 
 
-BOOL CWizardBasedProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &ImageList)
+BOOL CWizardBasedProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &ImageList32, CImageList &ImageList16)
 {
 	m_strPath = lpszPath;
 
@@ -334,7 +336,8 @@ BOOL CWizardBasedProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &Ima
 	if (!hIcon)
 		hIcon = theApp.LoadIcon(IDR_LATEXWIZARD);
 
-	m_nImageIndex = ImageList.Add(hIcon);
+	m_nImageIndex = ImageList32.Add(hIcon);
+	ImageList16.Add(hIcon);
 
 	return TRUE;
 }
