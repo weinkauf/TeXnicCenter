@@ -295,7 +295,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	// Enable window list manager...
-	EnableWindowsDialog(ID_WINDOW_LIST, CString((LPCTSTR)ID_WINDOW_LIST), TRUE);
+	EnableWindowsDialog(ID_WINDOW_LIST, ID_WINDOW_LIST_MENU, TRUE);
 
 	return 0;
 }
