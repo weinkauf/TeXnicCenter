@@ -34,7 +34,7 @@ BOOL CUserTool::Invoke()
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Collected necessary information
+	// Collect necessary information
 	CString	strMainPath, strCurrentPath, strCurrentSelection;
 	long		lCurrentLine = -1;
 
@@ -54,32 +54,43 @@ BOOL CUserTool::Invoke()
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Invoke tool
-	CString	strCommand = AfxExpandPlaceholders(
-		m_strCommand,
-		strMainPath.IsEmpty()? (LPCTSTR)NULL : strMainPath,
-		strCurrentPath.IsEmpty()? (LPCTSTR)NULL : strCurrentPath,
-		lCurrentLine,
-		strCurrentSelection.IsEmpty()? (LPCTSTR)NULL : strCurrentSelection);
-	CString	strArguments = AfxExpandPlaceholders(
-		m_strArguments,
-		strMainPath.IsEmpty()? (LPCTSTR)NULL : strMainPath,
-		strCurrentPath.IsEmpty()? (LPCTSTR)NULL : strCurrentPath,
-		lCurrentLine,
-		strCurrentSelection.IsEmpty()? (LPCTSTR)NULL : strCurrentSelection);
+	//Be careful with the InitialDirectory: With CreateProcess it is not allowed
+	// to be quoted or empty (In this case, standard is dir of main file).
 	CString	strInitialDirectory = AfxExpandPlaceholders(
-		m_strInitialDirectory,
+		m_strInitialDirectory.IsEmpty() ? "%dm" : m_strInitialDirectory,
 		strMainPath.IsEmpty()? (LPCTSTR)NULL : strMainPath,
 		strCurrentPath.IsEmpty()? (LPCTSTR)NULL : strCurrentPath,
 		lCurrentLine,
-		strCurrentSelection.IsEmpty()? (LPCTSTR)NULL : strCurrentSelection);
+		strCurrentSelection.IsEmpty()? (LPCTSTR)NULL : strCurrentSelection,
+		false);
+	strInitialDirectory.TrimLeft(_T('\"'));
+	strInitialDirectory.TrimRight(_T('\"'));
 
-	if (::ShellExecute (AfxGetMainWnd()->GetSafeHwnd (), NULL, strCommand,
-		strArguments, strInitialDirectory, 
-		SW_SHOWNORMAL) < (HINSTANCE) 32)
+	CProcessCommand	pc;
+	pc.Set(m_strCommand, m_strArguments);//Args will be expanded by Execute
+	CProcess *p = pc.Execute(strInitialDirectory, strMainPath, strCurrentPath,
+														lCurrentLine, strCurrentSelection, true);
+	if (!p)
 	{
-		AfxMessageBox(STE_TOOL_CANTINVOKE, MB_ICONSTOP|MB_OK);
+		TCHAR systemError[100];
+		::FormatMessage(
+			FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
+			NULL,
+			pc.GetLastError(),
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			systemError,
+			100,
+			NULL 
+		);
+
+		CString strProcessResult;
+		strProcessResult.Format(STE_LATEX_START_FAILED_EXT, pc.GetExecutable() + _T(' ') + pc.GetArguments(), systemError);
+		AfxMessageBox(strProcessResult, MB_ICONSTOP|MB_OK);
 		return FALSE;
 	}
+
+	//Delete the process object
+	delete p;
 
 	return TRUE;
 }
