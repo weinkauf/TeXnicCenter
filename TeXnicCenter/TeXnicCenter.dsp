@@ -1,24 +1,24 @@
 # Microsoft Developer Studio Project File - Name="TeXnicCenter" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** DO NOT EDIT **
+# ** NICHT BEARBEITEN **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
 CFG=TeXnicCenter - Win32 Debug
-!MESSAGE This is not a valid makefile. To build this project using NMAKE,
-!MESSAGE use the Export Makefile command and run
+!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
 !MESSAGE 
 !MESSAGE NMAKE /f "TeXnicCenter.mak".
 !MESSAGE 
-!MESSAGE You can specify a configuration when running NMAKE
-!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
+!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
 !MESSAGE 
 !MESSAGE NMAKE /f "TeXnicCenter.mak" CFG="TeXnicCenter - Win32 Debug"
 !MESSAGE 
-!MESSAGE Possible choices for configuration are:
+!MESSAGE Für die Konfiguration stehen zur Auswahl:
 !MESSAGE 
-!MESSAGE "TeXnicCenter - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "TeXnicCenter - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "TeXnicCenter - Win32 Release" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "TeXnicCenter - Win32 Debug" (basierend auf  "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MD /W3 /GR /GX /O2 /I "../CrysEditEx/Include" /I "../regexpp/include" /I "../BCGControlBar/Include" /I "../MFCExt/Include" /I "../TeXnicCenterObjects/Include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /D "CE_FROM_DLL" /FR /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GR /GX /Zi /O2 /I "../CrysEditEx/Include" /I "../regexpp/include" /I "../BCGControlBar/Include" /I "../MFCExt/Include" /I "../TeXnicCenterObjects/Include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /D "CE_FROM_DLL" /FR /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x407 /d "NDEBUG" /d "_AFXDLL"
@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 CrysEditEx.lib MFCExt.lib Shlwapi.lib mpr.lib htmlhelp.lib TeXnicCenterObjects.lib /nologo /subsystem:windows /map /debug /debugtype:coff /machine:I386 /out:"../output/Release/TEXCNTR.EXE" /libpath:"../CrysEditEx/Lib" /libpath:"../MFCExt/Lib" /libpath:"../BCGControlBar/Lib" /libpath:"../regexpp/Lib" /libpath:"../TeXnicCenterObjects/Lib"
+# ADD LINK32 CrysEditEx.lib MFCExt.lib Shlwapi.lib mpr.lib htmlhelp.lib TeXnicCenterObjects.lib /nologo /subsystem:windows /map /debug /debugtype:both /machine:I386 /out:"../output/Release/TEXCNTR.EXE" /libpath:"../CrysEditEx/Lib" /libpath:"../MFCExt/Lib" /libpath:"../BCGControlBar/Lib" /libpath:"../regexpp/Lib" /libpath:"../TeXnicCenterObjects/Lib"
 
 !ELSEIF  "$(CFG)" == "TeXnicCenter - Win32 Debug"
 
@@ -815,61 +815,7 @@ SOURCE=.\PropertyDialog.h
 # Begin Source File
 
 SOURCE=.\Resource.h
-
-!IF  "$(CFG)" == "TeXnicCenter - Win32 Release"
-
 # PROP Ignore_Default_Tool 1
-# Begin Custom Build - Erstellen von Include-Datei für Hilfe...
-TargetName=TEXCNTR
-InputPath=.\Resource.h
-
-"hlp\$(TargetName).hm" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	echo. >"hlp\$(TargetName).hm" 
-	echo // Commands (ID_* and IDM_*) >>"hlp\$(TargetName).hm" 
-	makehm ID_,HID_,0x10000 IDM_,HIDM_,0x10000 resource.h >>"hlp\$(TargetName).hm" 
-	echo. >>"hlp\$(TargetName).hm" 
-	echo // Prompts (IDP_*) >>"hlp\$(TargetName).hm" 
-	makehm IDP_,HIDP_,0x30000 resource.h >>"hlp\$(TargetName).hm" 
-	echo. >>"hlp\$(TargetName).hm" 
-	echo // Resources (IDR_*) >>"hlp\$(TargetName).hm" 
-	makehm IDR_,HIDR_,0x20000 resource.h >>"hlp\$(TargetName).hm" 
-	echo. >>"hlp\$(TargetName).hm" 
-	echo // Dialogs (IDD_*) >>"hlp\$(TargetName).hm" 
-	makehm IDD_,HIDD_,0x20000 resource.h >>"hlp\$(TargetName).hm" 
-	echo. >>"hlp\$(TargetName).hm" 
-	echo // Frame Controls (IDW_*) >>"hlp\$(TargetName).hm" 
-	makehm IDW_,HIDW_,0x50000 resource.h >>"hlp\$(TargetName).hm" 
-	
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "TeXnicCenter - Win32 Debug"
-
-# PROP Ignore_Default_Tool 1
-# Begin Custom Build - Erstellen von Include-Datei für Hilfe...
-TargetName=TEXCNTR
-InputPath=.\Resource.h
-
-"hlp\$(TargetName).hm" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	echo. >"hlp\$(TargetName).hm" 
-	echo // Commands (ID_* and IDM_*) >>"hlp\$(TargetName).hm" 
-	makehm ID_,HID_,0x10000 IDM_,HIDM_,0x10000 resource.h >>"hlp\$(TargetName).hm" 
-	echo. >>"hlp\$(TargetName).hm" 
-	echo // Prompts (IDP_*) >>"hlp\$(TargetName).hm" 
-	makehm IDP_,HIDP_,0x30000 resource.h >>"hlp\$(TargetName).hm" 
-	echo. >>"hlp\$(TargetName).hm" 
-	echo // Resources (IDR_*) >>"hlp\$(TargetName).hm" 
-	makehm IDR_,HIDR_,0x20000 resource.h >>"hlp\$(TargetName).hm" 
-	echo. >>"hlp\$(TargetName).hm" 
-	echo // Dialogs (IDD_*) >>"hlp\$(TargetName).hm" 
-	makehm IDD_,HIDD_,0x20000 resource.h >>"hlp\$(TargetName).hm" 
-	echo. >>"hlp\$(TargetName).hm" 
-	echo // Frame Controls (IDW_*) >>"hlp\$(TargetName).hm" 
-	makehm IDW_,HIDW_,0x50000 resource.h >>"hlp\$(TargetName).hm" 
-	
-# End Custom Build
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -1155,6 +1101,10 @@ SOURCE=.\UserImages.bmp
 # Begin Source File
 
 SOURCE=..\ChangeLog.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\texcntr.exe.manifest
 # End Source File
 # Begin Source File
 
