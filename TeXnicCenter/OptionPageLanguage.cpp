@@ -92,11 +92,10 @@ END_MESSAGE_MAP()
 
 void COptionPageLanguage::OnOK() 
 {
-	theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_ENABLE_SPELLER, m_bEnableSpell, NULL);
+	g_configuration.m_bSpellEnable = m_bEnableSpell;
 	g_configuration.m_strLanuage = m_strLanguage;
 	g_configuration.m_strLanguageDialect = m_strDialect;
 	g_configuration.m_strSpellPersonalDictionary = m_strPDictionary;
-	g_configuration.m_bSpellEnable = m_bEnableSpell;
 	g_configuration.m_bSpellSkipComments = m_bSkipComments;
 	g_configuration.m_bSpellSkipNumbers = m_bSkipNumbers;
 	g_configuration.m_bSpellSkipTags = m_bSkipTags;
@@ -109,6 +108,10 @@ void COptionPageLanguage::OnOK()
 		errMsg.Format( STE_FILE_EXIST, m_strPDictionary );
 		AfxMessageBox( errMsg, MB_OK, MB_ICONEXCLAMATION );
 	}
+
+	theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_ENABLE_SPELLER, m_bEnableSpell, NULL);
+	AfxGetMainWnd()->PostMessage( WM_COMMAND, ID_BG_UPDATE_PROJECT );
+
 	CPropertyPage::OnOK();
 }
 

@@ -190,7 +190,7 @@ BOOL CLatexProject::OnOpenProject(LPCTSTR lpszPathName)
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// parse project
-	OnProjectParse();
+	AfxGetMainWnd()->PostMessage( WM_COMMAND, ID_PROJECT_PARSE );
 
 	return TRUE;
 }
@@ -614,6 +614,9 @@ void CLatexProject::OnProjectParse()
 {
 	if( !m_bCanParse )
 		return;
+
+	// Update the background thread
+	AfxGetMainWnd()->PostMessage( WM_COMMAND, ID_BG_UPDATE_PROJECT );
 
 	// change to working dir
 	SetCurrentDirectory(CPathTool::GetDirectory(m_strMainPath));
