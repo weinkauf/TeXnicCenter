@@ -49,6 +49,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(COptionPageLanguage)
 	enum { IDD = IDD_OPTIONS_LANGUAGE };
+	CComboBox	c_Locale;
 	BOOL	m_bEnableSpell;
 	BOOL	m_bMainDictOnly;
 	BOOL	m_bSkipComments;
@@ -58,6 +59,7 @@ public:
 	CString	m_strLanguage;
 	CString	m_strDialect;
 	CString	m_strPDictionary;
+	CString	m_strLocale;
 	//}}AFX_DATA
 
 // Overrides
