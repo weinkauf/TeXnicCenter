@@ -29,7 +29,7 @@
 
 /**
         @defgroup templates Templates
-        @brief Modules dealing with Templates.
+        @brief Modules dealing with LaTeX Templates for Documents or Projects.
 */
 
 /**
