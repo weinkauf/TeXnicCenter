@@ -917,31 +917,7 @@ void CTeXnicCenterApp::OnFileOpen()
 		GetLatexString( CDocTemplate::filterExt ), NULL,  
 		OFN_FILEMUSTEXIST, CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
 
-	// Get default path
-	CString strPersonalDir = "";
-	CLatexProject* pLProject = GetProject();
-	if (pLProject) strPersonalDir = pLProject->GetWorkingDir();
-	if (strPersonalDir.IsEmpty())
-	{
-		strPersonalDir = g_configuration.m_strDefaultPath;
-		if (strPersonalDir.IsEmpty())
-		{
-			//Get the system default for "My documents"
-			LPITEMIDLIST	lpidl;
-			if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
-			{
-				SHGetPathFromIDList(lpidl, strPersonalDir.GetBuffer(MAX_PATH));
-				strPersonalDir.ReleaseBuffer();
-
-				// free memory
-				LPMALLOC	lpMalloc;
-				SHGetMalloc(&lpMalloc);
-				if(lpMalloc)
-					lpMalloc->Free(lpidl);
-			}
-		}
-	}
-	dlg.m_ofn.lpstrInitialDir = strPersonalDir;
+	dlg.m_ofn.lpstrInitialDir = AfxGetDefaultDirectory();
 
 	if( dlg.DoModal() != IDOK )
 		return;
@@ -957,25 +933,7 @@ void CTeXnicCenterApp::OnProjectOpen()
 	CFileDialogEx		dialog( TRUE, NULL, NULL, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, 
 		GetProjectFileFilter(), AfxGetMainWnd() );
 	
-	// Get default path
-	CString strPersonalDir = g_configuration.m_strDefaultPath;
-	if (strPersonalDir.IsEmpty())
-	{
-		//Get the system default for "My documents"
-		LPITEMIDLIST	lpidl;
-		if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
-		{
-			SHGetPathFromIDList(lpidl, strPersonalDir.GetBuffer(MAX_PATH));
-			strPersonalDir.ReleaseBuffer();
-
-			// free memory
-			LPMALLOC	lpMalloc;
-			SHGetMalloc(&lpMalloc);
-			if(lpMalloc)
-				lpMalloc->Free(lpidl);
-		}
-	}
-	dialog.m_ofn.lpstrInitialDir = strPersonalDir;
+	dialog.m_ofn.lpstrInitialDir = AfxGetDefaultDirectory();
 
 	if( dialog.DoModal() == IDCANCEL )
 		return;

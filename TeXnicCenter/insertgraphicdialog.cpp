@@ -306,38 +306,16 @@ void CInsertGraphicDialog::OnGraphicBrowse()
 		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR, 
 		AfxLoadString( STE_GRAPHIC_FILES ), this );
 
-	// Get default path
-	CString strPersonalDir = "";
-	CLatexProject* pLProject = theApp.GetProject();
-	if (pLProject) strPersonalDir = pLProject->GetWorkingDir();
-	if (strPersonalDir.IsEmpty())
-	{
-		strPersonalDir = g_configuration.m_strDefaultPath;
-		if (strPersonalDir.IsEmpty())
-		{
-			//Get the system default for "My documents"
-			LPITEMIDLIST	lpidl;
-			if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
-			{
-				SHGetPathFromIDList(lpidl, strPersonalDir.GetBuffer(MAX_PATH));
-				strPersonalDir.ReleaseBuffer();
-
-				// free memory
-				LPMALLOC	lpMalloc;
-				SHGetMalloc(&lpMalloc);
-				if(lpMalloc)
-					lpMalloc->Free(lpidl);
-			}
-		}
-	}
-	dlg.m_ofn.lpstrInitialDir = strPersonalDir;
+	//Get default path
+	dlg.m_ofn.lpstrInitialDir = AfxGetDefaultDirectory();
 
 	if( dlg.DoModal() != IDOK )
 		return;
 
 	m_strFile = dlg.GetPathName();
 
-	// get path relative to project dir
+	//Get path relative to project dir
+	CLatexProject* pLProject = theApp.GetProject();
 	if (pLProject)
 	{
 		m_strFile = CPathTool::GetRelativePath(pLProject->GetWorkingDir(), m_strFile);

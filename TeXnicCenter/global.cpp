@@ -26,8 +26,16 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "global.h"
+#include "TeXnicCenter.h"
+#include "configuration.h"
 
 CString AfxLoadString( UINT nID )
 {
@@ -62,3 +70,54 @@ CString AfxFormatSystemString( DWORD dwMessageId )
 	LocalFree(lpBuffer);
 	return szText;
 }
+
+CString AfxGetDefaultDirectory(bool bForceNonEmpty /*= true*/)
+{
+	////////////////////////
+	//Get default directory
+	CString strPersonalDir("");
+
+	// - Project opened? ==> Working Dir is default
+	CLatexProject* pLProject = theApp.GetProject();
+	if (pLProject) strPersonalDir = pLProject->GetWorkingDir();
+
+	// - No Project? ==> Try it with the default dir from the config
+	if (strPersonalDir.IsEmpty())
+	{
+		strPersonalDir = g_configuration.m_strDefaultPath;
+	}
+
+	// - Still empty? ==> Get the system default for "My documents"
+	if (strPersonalDir.IsEmpty())
+	{
+		LPITEMIDLIST lpidl;
+		if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
+		{
+			SHGetPathFromIDList(lpidl, strPersonalDir.GetBuffer(MAX_PATH));
+			strPersonalDir.ReleaseBuffer();
+
+			// free memory
+			LPMALLOC lpMalloc;
+			SHGetMalloc(&lpMalloc);
+			if(lpMalloc)
+				lpMalloc->Free(lpidl);
+		}
+	}
+
+
+	// - Still empty? ==> Hell, this is hard. Lets try this.
+	if (bForceNonEmpty && strPersonalDir.IsEmpty())
+	{
+		strPersonalDir = theApp.GetWorkingDir();
+	}
+
+	// - Still empty? ==> Hell, this is hard. Lets try this.
+	if (bForceNonEmpty && strPersonalDir.IsEmpty())
+	{
+		strPersonalDir = "C:\\";
+	}
+
+	return strPersonalDir;
+}
+
+
