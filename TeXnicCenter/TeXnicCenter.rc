@@ -4973,11 +4973,11 @@ BEGIN
             MENUITEM "",                            ID_INSERT_SPACEWORD
         END
         MENUITEM SEPARATOR
-        POPUP "Several Symbols"
+        POPUP "Miscellaneous Symbols"
         BEGIN
             MENUITEM "partial",                     ID_INSERT_PARTIAL
             MENUITEM "nabla",                       ID_INSERT_NABLA
-            MENUITEM "infty",                       ID_INSERT_INFTY
+            MENUITEM "infinity",                    ID_INSERT_INFTY
             MENUITEM "Im",                          ID_INSERT_IM2
             MENUITEM "Re",                          ID_INSERT_RE2
             MENUITEM "aleph",                       ID_INSERT_ALEPH
@@ -4988,9 +4988,9 @@ BEGIN
             MENUITEM "wp",                          ID_INSERT_WP
             MENUITEM "hbar",                        ID_INSERT_HBAR
             MENUITEM "Integral",                    ID_INSERT_INT
-            MENUITEM "Summe",                       ID_INSERT_SUM
-            MENUITEM "Produkt",                     ID_INSERT_PROD
-            MENUITEM "Coprodukt",                   ID_INSERT_COPROD
+            MENUITEM "Sum",                         ID_INSERT_SUM
+            MENUITEM "Product",                     ID_INSERT_PROD
+            MENUITEM "Coproduct",                   ID_INSERT_COPROD
             MENUITEM SEPARATOR
             MENUITEM "imath",                       ID_INSERT_IMATH
             MENUITEM "jmath",                       ID_INSERT_JMATH
@@ -5006,7 +5006,7 @@ BEGIN
             MENUITEM "triangle",                    ID_INSERT_TRIANGLE
             MENUITEM "clubsuit",                    ID_INSERT_CLUBSUIT
             MENUITEM "diamondsuit",                 ID_INSERT_DIAMONDSUIT
-            MENUITEM "hearsuit",                    ID_INSERT_HEARSUIT
+            MENUITEM "heartsuit",                   ID_INSERT_HEARSUIT
             MENUITEM "spadesuit",                   ID_INSERT_SPADESUIT
         END
         MENUITEM SEPARATOR
