@@ -316,8 +316,9 @@ void CLatexProject::Dump(CDumpContext& dc) const
 #define VAL_PROJECTINFO_MAINFILE			_T("MainFile")
 #define VAL_PROJECTINFO_USEBIBTEX			_T("UseBibTeX")
 #define VAL_PROJECTINFO_USEMAKEINDEX	_T("UseMakeIndex")
+#define VAL_PROJECTINFO_ACTIVEPROFILE	_T("ActiveProfile")
 
-#define CURRENTFORMATVERSION				2
+#define CURRENTFORMATVERSION				3
 #define	FORMATTYPE									_T("TeXnicCenterProjectInformation")
 
 BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
@@ -332,6 +333,9 @@ BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
 		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_MAINFILE, CPathTool::GetRelativePath(GetProjectDir(), m_strMainPath));
 		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEBIBTEX, (int)m_bUseBibTex);
 		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEMAKEINDEX, (int)m_bUseMakeIndex);
+		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_ACTIVEPROFILE, g_ProfileMap.GetActiveProfileKey());
+// get available profiles and active profile
+//	CString				strActiveProfile = g_ProfileMap.GetActiveProfileKey();
 
 		return TRUE;
 	}
@@ -357,6 +361,12 @@ BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
 
 		m_bUseBibTex = ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEBIBTEX, FALSE);
 		m_bUseMakeIndex = ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEMAKEINDEX, FALSE);
+
+		if (nVersion > 2)
+		{
+			g_ProfileMap.SetActiveProfile(ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_ACTIVEPROFILE, ""));
+			theApp.UpdateLatexProfileSel();
+		}
 
 		return TRUE;
 	}
