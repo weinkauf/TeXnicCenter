@@ -1263,7 +1263,7 @@ void CMainFrame::OnContextMenu(CWnd* pWnd, CPoint point)
 {
 	ScreenToClient(&point);
 
-	if (pWnd->m_hWnd == m_hWndMDIClient)
+	if (pWnd->m_hWnd == m_hWndMDIClient || pWnd->m_hWnd == m_wndClientArea.GetMDITabs())
 		theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_MDICLIENT, point.x, point.y, this);
 	else
 		theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_TOOLBAR, point.x, point.y, this);
