@@ -55,6 +55,7 @@ public:
 	CString	m_strLabel;
 	CString	m_strLine;
 	CString	m_strTitle;
+	CString m_strComment;
 	//}}AFX_DATA
 
 

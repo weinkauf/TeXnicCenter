@@ -49,8 +49,10 @@ CItemPropertyDialog::CItemPropertyDialog(CWnd* pParent /*=NULL*/)
 	m_strLabel = _T("");
 	m_strLine = _T("");
 	m_strTitle = _T("");
+	m_strComment = _T("");
 	//}}AFX_DATA_INIT
 }
+
 
 CItemPropertyDialog::CItemPropertyDialog( CStructureItem &si, CWnd* pParent /*=NULL*/ )
 	: CDialog(CItemPropertyDialog::IDD, pParent)
@@ -61,6 +63,7 @@ CItemPropertyDialog::CItemPropertyDialog( CStructureItem &si, CWnd* pParent /*=N
 	m_strLabel = si.m_strLabel;
 	m_strLine.Format( "%d", si.m_nLine );
 	m_strTitle = si.m_strTitle;
+	m_strComment = si.m_strComment;
 	//}}AFX_DATA_INIT
 }
 
@@ -74,6 +77,7 @@ void CItemPropertyDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_LABEL, m_strLabel);
 	DDX_Text(pDX, IDC_LINE, m_strLine);
 	DDX_Text(pDX, IDC_TITLE, m_strTitle);
+	DDX_Text(pDX, IDC_COMMENT, m_strComment);
 	//}}AFX_DATA_MAP
 }
 

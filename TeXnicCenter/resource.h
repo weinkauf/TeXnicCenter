@@ -346,6 +346,7 @@
 #define IDC_LABEL                       1047
 #define IDC_FLOAT_POSHERE               1047
 #define IDC_FLOAT_POSTOP                1048
+#define IDC_COMMENT                     1048
 #define IDC_FLOAT_POSBOTTOM             1049
 #define IDC_FLOAT_POSPAGE               1050
 #define IDC_FLOAT_POSONECOL             1051
