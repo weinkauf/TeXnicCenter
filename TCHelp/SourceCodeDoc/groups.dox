@@ -1,0 +1,28 @@
+/* $Id$ */
+
+/**
+    @defgroup mfcext MFCExt - Extension Classes to MFC
+    @brief Extension Classes to MFC.
+*/
+
+
+
+/**
+    @defgroup main TeXnicCenter
+    @{
+*/
+
+/**
+        @defgroup dialogs Dialogs
+        @brief All Dialogs of TeXnicCenter.
+*/
+
+/**
+        @defgroup process Process Calling
+        @brief Modules related to Process Calling.
+*/
+
+/**
+    @}
+*/
+

@@ -33,6 +33,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+/** @addtogroup process
+
+	@{
+*/
+
 class CProcessException : public CException
 {
 	DECLARE_DYNAMIC( CProcessException )
@@ -188,4 +193,7 @@ public:
 	{return m_processInfo.dwThreadId;}
 };
 
+/** @} */
+
 #endif // !defined(AFX_PROCESS_H__46F6D321_233B_11D3_929E_D167829DA498__INCLUDED_)
+
