@@ -120,6 +120,20 @@ public:
 	*/
 	CLatexEdit *GetActiveEditView();
 
+	/** Returns a pointer to the LaTeX-document with the specified path and read-only
+	attribute. If the document is not open it is NOT opened and NULL is returned.
+
+	@param lpszFileName
+		Path of the file to find.
+	@param bReadOnly
+		TRUE, if the file is write protected.
+
+    @return
+		A pointer to an already opened document, or NULL if the document is
+		not already opend.
+	*/
+	CDocument *GetOpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly = FALSE);
+
 	/**
 	Returns a pointer to the LaTeX-document with the specified path.
 
@@ -241,6 +255,7 @@ protected:
 
 // attributes
 public:
+	MySpell* GetSpell();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	/** Accelerator manager */
 	//CBCGKeyboardManager m_keyboardManager;
@@ -295,6 +310,8 @@ protected:
 	Handle to localized version of BCGCB-resource-DLL.
 	*/
 	HINSTANCE m_hInstBCGCBRes;
+
+	MySpell *m_pSpell;
 };
 
 inline
