@@ -17,18 +17,10 @@ static char THIS_FILE[]=__FILE__;
 
 Prefix::Prefix(AffixMgr* pmgr, unsigned char a, int num, affentry* dp)
 {
-	// initialize affix flag and register affix manager
 	pmyMgr = pmgr;
 	flag = a;
-
-	// create and load the affentry data for this prefix
-	first = new affentry[num];
-	if (first) {
-		memcpy(first,dp,(num * sizeof(struct affentry)));
-		numents = num;
-	} else {
-		/* error condition: throw exception */
-	}
+	first = dp;
+	numents = num;
 }
 
 
@@ -109,18 +101,10 @@ struct hentry * Prefix::check(const char * word, int len) const
 
 Suffix::Suffix(AffixMgr * pmgr, unsigned char a, int num, affentry* dp)
 {
-	// intialize affix flage and register affix manager
 	pmyMgr = pmgr;
 	flag = a;
-
-	// create and load the affentry data for this suffix
-	first = new affentry[num];
-	if (first) {
-		memcpy(first,dp,(num * sizeof(struct affentry)));
-		numents = num;
-	} else {
-		/* error condition: throw exception */
-	}
+	first = dp;
+	numents = num;
 }
 
 

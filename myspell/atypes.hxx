@@ -19,7 +19,7 @@ struct affentry
 	short	appndl;
 	short	numconds;
 	short	cpflag;
-	char	conds[SETSIZE];
+	unsigned char	conds[SETSIZE];
 };
 #pragma pack(pop)
 
