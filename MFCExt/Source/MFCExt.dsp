@@ -106,6 +106,10 @@ SOURCE=.\ExtAfx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FileDialogEx.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\FileVersionInfo.cpp
 # End Source File
 # Begin Source File
@@ -230,6 +234,10 @@ SOURCE=..\Include\ExtException.h
 # Begin Source File
 
 SOURCE=..\Include\ExtTools.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\FileDialogEx.h
 # End Source File
 # Begin Source File
 
