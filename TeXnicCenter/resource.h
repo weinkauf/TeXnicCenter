@@ -6,6 +6,10 @@
 #define STE_CRYSTAL_EDIT_RESOURCE_DLL   18
 #define STE_LANGUAGE_NEW                32
 #define STE_RESOURCE_CONFLICT           33
+#define STE_LANGUAGE_GERMAN             34
+#define STE_LANGUAGE_ENGLISH            35
+#define STE_LANGUAGE_FRENCH             36
+#define STE_CUSTOM                      37
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
 #define IDD_TIP                         103
@@ -630,6 +634,8 @@
 #define IDC_BUTTON_SELECT_ALL           1334
 #define IDC_LOOKNFEEL_COMBO             1334
 #define IDC_RADIO_VIEW_TYPE             1334
+#define IDC_OPTIONS_REPLACE_QM_PREDEFINED_COMBO 1337
+#define IDC_OPTIONS_QM_SET_LABEL        1338
 #define IDD_CUSTOMIZEPAGE_EDITOR        16105
 #define IDD_OUTPUTWIZARD_MIKTEX         16106
 #define IDD_OUTPUTWIZARD_PATH           16107
@@ -1261,7 +1267,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        277
 #define _APS_NEXT_COMMAND_VALUE         38472
-#define _APS_NEXT_CONTROL_VALUE         1337
+#define _APS_NEXT_CONTROL_VALUE         1339
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif
