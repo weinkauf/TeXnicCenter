@@ -40,9 +40,11 @@ A combo box, that supports MRU-Strings.
 
 This is done using CMRUStringList.
 
+There is a hand-written documentation "MRUCombo_docs.html" near the implementation files.
+
 @ingroup mfcext
 
-@author Michael Dunn <mdunn at inreach dot com>
+@author Michael Dunn (mdunn at inreach dot com)
 @author Sven Wiegand
 */
 class AFX_EXT_CLASS CMRUComboBox : public CComboBox
@@ -51,8 +53,8 @@ class AFX_EXT_CLASS CMRUComboBox : public CComboBox
 public:
 	CMRUComboBox();
 	CMRUComboBox(
-		LPCTSTR lpszRegKey, LPCTSTR lpszValueFormat, int nMaxMRUSize = MRUC_DEFAULT_MRU_SIZE, 
-		BOOL bAutoLoadOnConstruction = TRUE, 
+		LPCTSTR lpszRegKey, LPCTSTR lpszValueFormat, int nMaxMRUSize = MRUC_DEFAULT_MRU_SIZE,
+		BOOL bAutoLoadOnConstruction = TRUE,
 		BOOL bAutoSaveOnDestroy = TRUE, BOOL bAutoSaveAfterAdd = FALSE, BOOL bAutoRefresh = FALSE );
 
 // Attributes & accessor functions

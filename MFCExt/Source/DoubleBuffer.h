@@ -4,9 +4,9 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This library is free software; you can redistribute it and/or
-* modify, but leave the headers intact and do not remove any 
+* modify, but leave the headers intact and do not remove any
 * copyrights from the source.
 *
 * This library does not only contain file from us, but also from
@@ -35,7 +35,7 @@
 #include <afxmt.h>					// MFC-Multi-Threading-Erweiterungen
 
 /**
-Die Klasse CDoubleBuffer stellt einen threadsicheren Doppelpuffer zur 
+Die Klasse CDoubleBuffer stellt einen threadsicheren Doppelpuffer zur
 Verfügung, bei dem jeder der beiden Hauptpuffer <var>BUFSIZE</var> Elemente
 vom Typ <var>TYPE</var> aufnehmen kann.
 
@@ -77,7 +77,7 @@ public:
 	/**
 	Fügt einen Datensatz zum Schreibpuffer hinzu.
 
-	@param robo
+	@param element
 		Referenz auf den Datensatz, der zum Schreibpuffer hinzugefügt
 		werden soll.
 	*/
@@ -92,7 +92,7 @@ public:
 	Gibt den spezifizierten Datensatz zurück.
 
 	@param nIndex
-		Index des zu lesenden Elementes. <b>Muss</b> zwischen 0 und 
+		Index des zu lesenden Elementes. <b>Muss</b> zwischen 0 und
 		dem Wert, den <var>GetSize()</var> liefert liegen.
 
 	@return

@@ -4,17 +4,17 @@
 *
 * Copyright (C) 2002-$CurrentYear$ Chris Norris
 * Copyright (C) 2002-$CurrentYear$ ToolsCenter
-* 
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License as
 * published by the Free Software Foundation; either version 2 of
 * the License, or (at your option) any later version.
-* 
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 * General Public License for more details.
-* 
+*
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -61,9 +61,9 @@ public:
 public:
 	/**
 	Insert an element into an already sorted list.
-	@param 
+	@param
 		insertMe Element to insert
-	@return 
+	@return
 		Position of element insertion
 	*/
 	POSITION InsertSorted( ARG_TYPE insertMe )
@@ -83,18 +83,18 @@ public:
 	}
 
 	/**
-	Find the position before an element in the list. The list is searched 
+	Find the position before an element in the list. The list is searched
 	from back to front.
-	<b>Note<\b>:
-	<ul>
-		<li>The element does not have to exist in the list.<\li>
-		<li>The position returned may not be equal to findMe, 
-		even if findMe exists in the list.<\li>
-	<\ul>
-	@param findMe 
+	
+	@note The element does not have to exist in the list.
+	
+	@note The position returned may not be equal to findMe,
+		  even if findMe exists in the list.
+
+	@param findMe
 		Element to search for
-	@param startAfter 
-		Position to start search from. If startBefore == NULL, the search 
+	@param startBefore
+		Position to start search from. If startBefore == NULL, the search
 		starts from the tail of the list.
 	*/
 	POSITION FindBefore( ARG_TYPE findMe, POSITION startBefore = NULL )
@@ -114,16 +114,16 @@ public:
 	/**
 	Find the position after an element in the list. The list is searched from
 	front to back.
-	<b>Note<\b>:
-	<ul>
-		<li>The element does not have to exist in the list.<\li>
-		<li>The position returned may not be equal to findMe, 
-		even if findMe exists in the list.<\li>
-	<\ul>
-	@param findMe 
+	
+	@note The element does not have to exist in the list.
+	
+	@note The position returned may not be equal to findMe,
+		  even if findMe exists in the list.
+		
+	@param findMe
 		Element to search for
-	@param startAfter 
-		Position to start search from. If startAfter == NULL, the search 
+	@param startAfter
+		Position to start search from. If startAfter == NULL, the search
 		starts from the head of the list.
 	*/
 	POSITION FindAfter( ARG_TYPE findMe, POSITION startAfter = NULL )
@@ -141,10 +141,10 @@ public:
 	}
 
 	/**
-	Test if the list is strictly sorted. Strictly sorted means for each element 
-	in the list (except the first element that has no previous), 
-	<code>Compare(<prevElement>, <curElement>) </code> is <VAR>TRUE</VAR>. 
-	The default implementation tests for a strictly increasing sequence of 
+	Test if the list is strictly sorted. Strictly sorted means for each element
+	in the list (except the first element that has no previous),
+	<code>Compare(<prevElement>, <curElement>) </code> is <VAR>TRUE</VAR>.
+	The default implementation tests for a strictly increasing sequence of
 	elements defined by less-than.
 
 	@return
@@ -153,11 +153,11 @@ public:
 	BOOL IsStrictlySorted() const;
 
 	/**
-	Test if the list is sorted. Strictly sorted means for each element 
-	in the list (except the first element that has no previous), 
-	<code>Compare(<prevElement>, <curElement>) </code> is <VAR>TRUE</VAR> OR 
+	Test if the list is sorted. Strictly sorted means for each element
+	in the list (except the first element that has no previous),
+	<code>Compare(<prevElement>, <curElement>) </code> is <VAR>TRUE</VAR> OR
 	<code>Compare(<prevElement>, <curElement>) </code> is <VAR>FALSE</VAR>.
-	The default implementation of tests for increasing sequence of elements 
+	The default implementation of tests for increasing sequence of elements
 	defined by less-than.
 
 	@return
@@ -168,7 +168,7 @@ public:
 
 
 template<class TYPE, class ARG_TYPE, class Compare>
-BOOL CSortList<TYPE, ARG_TYPE, Compare>::IsStrictlySorted() const 
+BOOL CSortList<TYPE, ARG_TYPE, Compare>::IsStrictlySorted() const
 {
 	POSITION pos = GetHeadPosition();
 	TYPE prevElement;

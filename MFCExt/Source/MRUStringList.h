@@ -4,9 +4,9 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This library is free software; you can redistribute it and/or
-* modify, but leave the headers intact and do not remove any 
+* modify, but leave the headers intact and do not remove any
 * copyrights from the source.
 *
 * This library does not only contain file from us, but also from
@@ -47,7 +47,7 @@ For further information see the template class CMRUList.
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CMRUStringList : public CMRUList<CString, LPCTSTR>  
+class AFX_EXT_CLASS CMRUStringList : public CMRUList<CString, LPCTSTR>
 {
 // construction/destruction
 public:
@@ -74,7 +74,7 @@ public:
 
 // operations
 public:
-	/** 
+	/**
 	Reads the list from the registry.
 
 	The section from where the list should be read is specified by
@@ -85,7 +85,7 @@ public:
 	*/
 	virtual BOOL ReadList();
 
-	/** 
+	/**
 	Writes the list to the registry.
 
 	The section to where the list should be written is specified by
@@ -98,7 +98,13 @@ public:
 
 // overridings
 public:
-	void Add( LPCTSTR lpszElement );
+	/**
+	Adds a string to the list.
+
+	@param lpszElement
+		String to be added to the list.
+	*/
+	virtual void Add(LPCTSTR lpszElement);
 
 // attributes
 protected:
