@@ -49,6 +49,7 @@
 /**	Dialog for defining output profiles.
 
 @ingroup dialogs
+@ingroup profiles
 
 @see CProfilePageLatex
 @see CProfilePagePostprocessor

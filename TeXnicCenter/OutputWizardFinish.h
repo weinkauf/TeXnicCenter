@@ -45,6 +45,7 @@ This property page is part of the output wizard (COutputWizard).
 It shows the user, which output types are about to be generated.
 
 @ingroup dialogs
+@ingroup profiles
 
 @author Sven Wiegand
 */

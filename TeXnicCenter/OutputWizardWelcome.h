@@ -46,6 +46,7 @@ It shows the user a welcome message and gives him some general
 instructions.
 
 @ingroup dialogs
+@ingroup profiles
 
 @author Sven Wiegand
 */

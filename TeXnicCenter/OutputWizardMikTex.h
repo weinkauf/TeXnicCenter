@@ -46,6 +46,7 @@ can choose, if TeXnicCenter should be configured for the use with
 MiKTeX or not.
 
 @ingroup dialogs
+@ingroup profiles
 
 @author Sven Wiegand
 */

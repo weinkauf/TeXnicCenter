@@ -47,6 +47,8 @@
 /**
 Profile definition. Specifies how to build the output.
 
+@ingroup profiles
+
 @author Sven Wiegand
 */
 class CProfile  
@@ -456,6 +458,8 @@ extern class CProfileMap g_ProfileMap;
 
 /**
 An array of profiles (CProfile-objects).
+
+@ingroup profiles
 
 @see CProfile
 

@@ -51,6 +51,7 @@ The output wizard allows the user a step by step configuration of the
 output types.
 
 @ingroup dialogs
+@ingroup profiles
 
 @see COutputWizardMikTex
 @see COutputWizardDistributionPath
