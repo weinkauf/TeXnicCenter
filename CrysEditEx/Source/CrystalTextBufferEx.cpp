@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:50  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:37+02  sven_wiegand
 * Initial revision
 *
@@ -41,6 +44,7 @@ CCrystalTextBufferEx::CCrystalTextBufferEx( CDocument *pDoc )
 
 void CCrystalTextBufferEx::SetModified( BOOL bModified )
 {
+	CCrystalTextBuffer::SetModified( bModified );
 	ASSERT( m_pDoc );
 	if( !m_pDoc )
 		return;
