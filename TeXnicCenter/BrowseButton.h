@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_BROWSEBUTTON_H__AF58958C_0A74_11D5_A222_006097239934__INCLUDED_)
 #define AFX_BROWSEBUTTON_H__AF58958C_0A74_11D5_A222_006097239934__INCLUDED_
 
@@ -55,8 +61,9 @@ public:
 	@param other Parameters
 		See BROWSEINFO-structure in the MSDN for details.
 	*/
-	CBrowseButton(UINT unCtrlId, 
-		LPCTSTR lpszTitle, UINT unFlags = 0, 
+	CBrowseButton(UINT unCtrlId, LPCTSTR lpszTitle,
+		bool bUseEditForInitFolder = true,
+		LPCTSTR lpszInitFolder = NULL, UINT unFlags = 0, 
 		BFFCALLBACK lpfn = NULL, LPARAM lParam = 0);
 
 	/**
@@ -105,6 +112,13 @@ protected:
 	*/
 	BOOL m_bBrowseForFile;
 
+	///Holds the Name of the Folder to be selected using the Callback function.
+	CString m_strInitFolder;
+
+	///Whether to get the initial folder for the BrowseForFolder-Dialog from
+	/// the Edit Control or from the given InitFolder-Value given in the constructor.
+	bool m_bUseEditForInitFolder;
+
 	/**
 	Data for file dialog
 	*/
@@ -132,5 +146,17 @@ protected:
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
+
+/**
+This is the callback function for the FolderSelect-Dialog.
+Using this we are able to send a message to the dialog,
+which selects a new folder. The pointer to the initial folder
+needs to be given in the BROWSEINFO::lParam parameter.
+
+@author Tino Weinkauf
+*/
+int CALLBACK BrowseDlgCallback(HWND hwnd, UINT uMsg,
+															LPARAM lParam, LPARAM lpData);
+
 
 #endif // AFX_BROWSEBUTTON_H__AF58958C_0A74_11D5_A222_006097239934__INCLUDED_
