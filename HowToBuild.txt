@@ -45,6 +45,19 @@ BUILDING TEXNICCENTER
 	a) the 'output\debug' directory
 	b) the 'output\release' directory
 
+10. Create a directory called 'language' in the 'output\debug' and in the 'output\release' directory.
+
+11. Copy the files
+
+	*.aff
+	*.dic
+
+    from the 'MySpell' directory to
+
+	a) the 'output\debug\language' directory
+	b) the 'output\debug\release' directoy
+
+
 Building is now completed. You can start TeXnicCenter.
 
 Visit the TeXnicCenter-Homepage
