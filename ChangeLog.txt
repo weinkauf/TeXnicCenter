@@ -1,3 +1,6 @@
+2002/06/28 svenwiegand
+- Using 'LaTeX Help Book' as LaTeX-reference in online help now.
+
 2002/06/27 svenwiegand
 - Fixed Bug 551033: Commands on words don't work correctly 
   (hope so at least;-)
