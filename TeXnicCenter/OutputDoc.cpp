@@ -1,0 +1,977 @@
+/********************************************************************
+*
+* This file is part of the TeXnicCenter-system
+*
+* Copyright (C) 1999-2000 Sven Wiegand
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
+* 
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License as
+* published by the Free Software Foundation; either version 2 of
+* the License, or (at your option) any later version.
+* 
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*
+* If you have further questions or if you want to support
+* further TeXnicCenter development, visit the TeXnicCenter-homepage
+*
+*    http://www.ToolsCenter.org
+*
+*********************************************************************/
+
+#include "stdafx.h"
+#include "TeXnicCenter.h"
+#include "OutputDoc.h"
+#include "MainFrm.h"
+#include "LatexProject.h"
+#include "Configuration.h"
+#include "BuildView.h"
+#include "global.h"
+#include "ProjectPropertyDialog.h"
+#include "Process.h"
+#include "TextSourceFile.h"
+#include "ItemPropertyDialog.h"
+#include "FindInFilesDialog.h"
+#include "Profile.h"
+#include "OutputBuilder.h"
+
+#include <ddeml.h> // DDE support
+#include <dde.h>
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+
+
+// standard beep
+#define BEEP       //MessageBeep( MB_OK )
+
+//-------------------------------------------------------------------
+// class COutputDoc
+//-------------------------------------------------------------------
+
+IMPLEMENT_DYNCREATE(COutputDoc, CCmdTarget)
+
+COutputDoc::COutputDoc()
+: m_pBuildView( NULL ),
+	m_bCanGrep( TRUE ),
+	m_bCanRunLatex( TRUE ),
+	m_nActiveFileGrep( 0 ),
+	m_pActiveOutputView( NULL )
+{
+	// initialization
+	m_apGrepView[0] = NULL;
+	m_apGrepView[1] = NULL;
+
+	m_apaGrepHits[0] = &m_aGrepHits1;
+	m_apaGrepHits[1] = &m_aGrepHits2;
+	m_bActiveFileOperation   = FALSE;
+}
+
+
+COutputDoc::~COutputDoc()
+{
+}
+
+void COutputDoc::SetAllViews(COutputView* pBuildView, COutputView* pGrepView1,	
+							 COutputView* pGrepView2)
+{
+	ASSERT(pBuildView);
+	ASSERT(pGrepView1);
+	ASSERT(pGrepView2);
+	m_pBuildView    = pBuildView;
+	m_apGrepView[0] = pGrepView1;
+	m_apGrepView[1] = pGrepView2;
+
+	OnOutputViewActivated(m_pBuildView);
+}
+
+
+BEGIN_MESSAGE_MAP(COutputDoc, CCmdTarget)
+	//{{AFX_MSG_MAP(COutputDoc)
+	ON_COMMAND(ID_NEXT_ERROR, OnNextError)
+	ON_COMMAND(ID_PREV_ERROR, OnPrevError)
+	ON_COMMAND(ID_NEXT_BADBOX, OnNextBadbox)
+	ON_UPDATE_COMMAND_UI(ID_NEXT_BADBOX, OnUpdateNextPrevBadbox)
+	ON_UPDATE_COMMAND_UI(ID_NEXT_ERROR, OnUpdateNextPrevError)
+	ON_COMMAND(ID_NEXT_WARNING, OnNextWarning)
+	ON_UPDATE_COMMAND_UI(ID_NEXT_WARNING, OnUpdateNextPrevWarning)
+	ON_COMMAND(ID_PREV_BADBOX, OnPrevBadbox)
+	ON_COMMAND(ID_PREV_WARNING, OnPrevWarning)
+	ON_COMMAND(ID_EDIT_FIND_IN_FILES, OnEditFindInFiles)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_FIND_IN_FILES, OnUpdateEditFindInFiles)
+	ON_COMMAND(ID_EDIT_NEXTGREPRESULT, OnEditNextGrepResult)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_NEXTGREPRESULT, OnUpdateGrepResultStep)
+	ON_COMMAND(ID_EDIT_PREVGREPRESULT, OnEditPrevGrepResult)
+	ON_UPDATE_COMMAND_UI(ID_PREV_BADBOX, OnUpdateNextPrevBadbox)
+	ON_UPDATE_COMMAND_UI(ID_PREV_ERROR, OnUpdateNextPrevError)
+	ON_UPDATE_COMMAND_UI(ID_PREV_WARNING, OnUpdateNextPrevWarning)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_PREVGREPRESULT, OnUpdateGrepResultStep)
+	ON_COMMAND(ID_LATEX_STOP_BUILD, OnLatexStopBuild)
+	ON_UPDATE_COMMAND_UI(ID_LATEX_STOP_BUILD, OnUpdateLatexStopBuild)
+	ON_COMMAND(ID_LATEX_RUN, OnLatexRun)
+	ON_UPDATE_COMMAND_UI(ID_LATEX_RUN, OnUpdateLatexRun)
+	ON_COMMAND(ID_LATEX_BIBTEX, OnBibTex)
+	ON_UPDATE_COMMAND_UI(ID_LATEX_BIBTEX, OnUpdateBibTex)
+	ON_COMMAND(ID_LATEX_MAKEINDEX, OnMakeIndex)
+	ON_UPDATE_COMMAND_UI(ID_LATEX_MAKEINDEX, OnUpdateMakeIndex)
+	ON_COMMAND(ID_LATEX_FILECOMPILE, OnFileCompile)
+	ON_UPDATE_COMMAND_UI(ID_LATEX_FILECOMPILE, OnUpdateFileCompile)
+	ON_COMMAND(ID_LATEX_FILEBIBTEX, OnFileBibTex)
+	ON_UPDATE_COMMAND_UI(ID_LATEX_FILEBIBTEX, OnUpdateFileBibTex)
+	ON_COMMAND(ID_LATEX_FILEMAKEINDEX, OnFileMakeIndex)
+	ON_UPDATE_COMMAND_UI(ID_LATEX_FILEMAKEINDEX, OnUpdateFileMakeIndex)
+	ON_COMMAND(ID_LATEX_VIEW, OnLatexView)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// Diagnose COutputDoc
+
+#ifdef _DEBUG
+void COutputDoc::AssertValid() const
+{
+//	CDocument::AssertValid();
+}
+
+void COutputDoc::Dump(CDumpContext& dc) const
+{
+//	CDocument::Dump(dc);
+}
+#endif //_DEBUG
+
+
+/////////////////////////////////////////////////////////////////////
+// handling output errors
+void COutputDoc::ShowError( int nIndex )
+{
+	if( !(nIndex >= 0 && nIndex < m_aErrors.GetSize()) )
+		return;
+
+	theApp.OpenLatexDocument(
+		GetFilePath( m_aErrors[nIndex].m_strSrcFile ), FALSE,
+		m_aErrors[nIndex].m_nSrcLine, TRUE );
+	UpdateAllViews( NULL, hintSelectBuildLine, 
+		(CObject*)&m_aErrors[nIndex].m_nOutputLine );
+
+	m_nActualErrorIndex = nIndex;
+}
+
+
+void COutputDoc::OnNextError() 
+{
+	if( m_nActualErrorIndex >= m_aErrors.GetSize() - 1 || 
+		m_nActualErrorIndex < 0 )
+	{
+		m_nActualErrorIndex = 0;
+		//BEEP;
+		ShowError( m_nActualErrorIndex );
+	}
+	else if( m_nActualErrorIndex < m_aErrors.GetSize() - 1 )
+		ShowError( ++m_nActualErrorIndex );
+	else
+		m_nActualErrorIndex++;
+}
+
+void COutputDoc::OnPrevError() 
+{
+	if( m_nActualErrorIndex > m_aErrors.GetSize() - 1 || 
+		m_nActualErrorIndex <= 0 )
+	{
+		m_nActualErrorIndex = m_aErrors.GetSize() - 1;
+		//BEEP;
+		ShowError( m_nActualErrorIndex );
+	}
+	else if( m_nActualErrorIndex > 0 )
+		ShowError( --m_nActualErrorIndex );
+	else
+		m_nActualErrorIndex--;
+}
+
+void COutputDoc::OnUpdateNextPrevError(CCmdUI* pCmdUI) 
+{
+	pCmdUI->Enable( m_aErrors.GetSize() );
+}
+
+/////////////////////////////////////////////////////////////////////
+// handling bad boxes
+void COutputDoc::ShowBadBox( int nIndex )
+{
+	if( !(nIndex >= 0 && nIndex < m_aBadBoxes.GetSize()) )
+		return;
+
+	theApp.OpenLatexDocument(
+		GetFilePath( m_aBadBoxes[nIndex].m_strSrcFile ), FALSE,
+		m_aBadBoxes[nIndex].m_nSrcLine, TRUE );
+	UpdateAllViews( NULL, hintSelectBuildLine, 
+		(CObject*)&m_aBadBoxes[nIndex].m_nOutputLine );
+
+	m_nActualBadBoxIndex = nIndex;
+}
+
+void COutputDoc::OnNextBadbox() 
+{
+	if( m_nActualBadBoxIndex >= m_aBadBoxes.GetSize() - 1 || 
+		m_nActualBadBoxIndex < 0 )
+	{
+		m_nActualBadBoxIndex = 0;
+		//BEEP;
+		ShowBadBox( m_nActualBadBoxIndex );
+	}
+	else if( m_nActualBadBoxIndex < m_aBadBoxes.GetSize() - 1 )
+		ShowBadBox( ++m_nActualBadBoxIndex );
+	else
+		m_nActualBadBoxIndex++;
+}
+
+void COutputDoc::OnPrevBadbox() 
+{
+	if( m_nActualBadBoxIndex > m_aBadBoxes.GetSize() - 1 || 
+		m_nActualBadBoxIndex <= 0 )
+	{
+		m_nActualBadBoxIndex = m_aBadBoxes.GetSize() - 1;
+		//BEEP;
+		ShowBadBox( m_nActualBadBoxIndex );
+	}
+	else if( m_nActualBadBoxIndex > 0 )
+		ShowBadBox( --m_nActualBadBoxIndex );
+	else
+		m_nActualBadBoxIndex--;
+}
+
+void COutputDoc::OnUpdateNextPrevBadbox(CCmdUI* pCmdUI) 
+{
+	pCmdUI->Enable( m_aBadBoxes.GetSize() );
+}
+
+/////////////////////////////////////////////////////////////////////
+// handling output warnings
+void COutputDoc::ShowWarning( int nIndex )
+{
+	if( !(nIndex >= 0 && nIndex < m_aWarnings.GetSize()) )
+		return;
+
+	theApp.OpenLatexDocument(
+		GetFilePath( m_aWarnings[nIndex].m_strSrcFile ), FALSE,
+		m_aWarnings[nIndex].m_nSrcLine, TRUE );
+	UpdateAllViews( NULL, hintSelectBuildLine, 
+		(CObject*)&m_aWarnings[nIndex].m_nOutputLine );
+
+	m_nActualWarningIndex = nIndex;
+}
+
+void COutputDoc::OnNextWarning() 
+{
+	if( (m_nActualWarningIndex >= m_aWarnings.GetSize() - 1) || 
+		m_nActualWarningIndex < 0 )
+	{
+		m_nActualWarningIndex = 0;
+		//BEEP;
+		ShowWarning( m_nActualWarningIndex );
+	}
+	else if( m_nActualWarningIndex < m_aWarnings.GetSize() - 1 )
+		ShowWarning( ++m_nActualWarningIndex );
+	else
+		m_nActualWarningIndex++;
+}
+
+void COutputDoc::OnPrevWarning() 
+{
+	if( (m_nActualWarningIndex > m_aWarnings.GetSize() - 1) || 
+		(m_nActualWarningIndex <= 0) )
+	{
+		m_nActualWarningIndex = m_aWarnings.GetSize() - 1;
+		//BEEP;
+		ShowWarning( m_nActualWarningIndex );
+	}
+	else if( m_nActualWarningIndex > 0 )
+		ShowWarning( --m_nActualWarningIndex );
+	else
+		m_nActualWarningIndex--;
+}
+
+void COutputDoc::OnUpdateNextPrevWarning(CCmdUI* pCmdUI) 
+{
+	pCmdUI->Enable( m_aWarnings.GetSize() );
+}
+
+
+/////////////////////////////////////////////////////////////////////
+// handling grep results
+
+void COutputDoc::ShowGrepResult( int nIndex )
+{
+	if( !(nIndex >= 0 && nIndex < m_apaGrepHits[m_nActiveFileGrep]->GetSize()) )
+		return;
+
+	theApp.OpenLatexDocument(
+		GetFilePath( m_apaGrepHits[m_nActiveFileGrep]->GetAt( nIndex ).strPath ), FALSE,
+		m_apaGrepHits[m_nActiveFileGrep]->GetAt( nIndex ).nLine, TRUE );
+	UpdateAllViews( NULL, hintSelectGrep1Line + m_nActiveFileGrep, 
+		(CObject*)&m_apaGrepHits[m_nActiveFileGrep]->operator[]( nIndex ).nOutputLine );
+
+	m_anActiveGrepResult[m_nActiveFileGrep] = nIndex;
+}
+
+
+void COutputDoc::OnEditNextGrepResult() 
+{
+	if( (m_anActiveGrepResult[m_nActiveFileGrep] >= 
+		m_apaGrepHits[m_nActiveFileGrep]->GetSize() - 1) || 
+		m_anActiveGrepResult[m_nActiveFileGrep] < 0 )
+	{
+		m_anActiveGrepResult[m_nActiveFileGrep] = 0;
+		//BEEP;
+		ShowGrepResult( m_anActiveGrepResult[m_nActiveFileGrep] );
+	}
+	else if( m_anActiveGrepResult[m_nActiveFileGrep] < 
+		m_apaGrepHits[m_nActiveFileGrep]->GetSize() - 1 )
+		ShowGrepResult( ++m_anActiveGrepResult[m_nActiveFileGrep] );
+	else
+		m_anActiveGrepResult[m_nActiveFileGrep]++;
+}
+
+
+void COutputDoc::OnEditPrevGrepResult() 
+{
+	if( (m_anActiveGrepResult[m_nActiveFileGrep] > 
+		m_apaGrepHits[m_nActiveFileGrep]->GetSize() - 1) || 
+		m_anActiveGrepResult[m_nActiveFileGrep] <= 0 )
+	{
+		m_anActiveGrepResult[m_nActiveFileGrep] = 
+			m_apaGrepHits[m_nActiveFileGrep]->GetSize() - 1;
+		//BEEP;
+		ShowGrepResult( m_anActiveGrepResult[m_nActiveFileGrep] );
+	}
+	else if( m_anActiveGrepResult[m_nActiveFileGrep] > 0 )
+		ShowGrepResult( --m_anActiveGrepResult[m_nActiveFileGrep] );
+	else
+		m_anActiveGrepResult[m_nActiveFileGrep]--;
+}
+
+
+void COutputDoc::OnUpdateGrepResultStep(CCmdUI* pCmdUI) 
+{
+	pCmdUI->Enable( m_apaGrepHits[m_nActiveFileGrep]->GetSize() );
+}
+
+
+void COutputDoc::OnOutputViewActivated( COutputView *pView )
+{
+	ASSERT( pView );
+
+	m_pActiveOutputView = pView;
+
+	for( int i = 0; i < 2; i++ )
+	{
+		if( pView == m_apGrepView[i] )
+		{
+			m_nActiveFileGrep = i;
+			return;
+		}
+	}
+
+	return;
+}
+
+
+/////////////////////////////////////////////////////////////////////
+// paths, open, save, etc.
+
+
+CString COutputDoc::GetMainPath() const
+{
+	if (m_bActiveFileOperation && GetActiveDocument())
+		return GetActiveDocument()->GetPathName();
+	if (theApp.GetProject())
+		return theApp.GetProject()->GetMainPath();
+
+	return CString(_T(""));
+}
+
+
+CString COutputDoc::GetFilePath( LPCTSTR lpszFile )
+{
+	CString		strPath;
+	LPTSTR		dummy;
+
+	SetCurrentDirectory(GetWorkingDir());
+	GetFullPathName( lpszFile, _MAX_PATH, strPath.GetBuffer( _MAX_PATH ), &dummy );
+	strPath.ReleaseBuffer();
+
+	return strPath;
+}
+
+
+CString COutputDoc::GetWorkingDir() const
+{
+	if (m_bActiveFileOperation && GetActiveDocument())
+		return CPathTool::GetDirectory(GetActiveDocument()->GetPathName());
+	else if (theApp.GetProject())
+		return theApp.GetProject()->GetWorkingDir();
+	
+	return CString(_T(""));
+}
+
+
+BOOL COutputDoc::GetRunBibTex() const
+{
+	if (m_bActiveFileOperation)
+		return TRUE;
+	else
+		return theApp.GetProject()->GetRunBibTex();
+}
+
+
+BOOL COutputDoc::GetRunMakeIndex() const
+{
+	if (m_bActiveFileOperation)
+		return TRUE;
+	else
+		return theApp.GetProject()->GetRunMakeIndex();
+}
+
+
+CDocument* COutputDoc::GetActiveDocument() const
+{
+	// Obtain a pointer to the main frame window
+	CFrameWnd* pFrameWnd = static_cast<CFrameWnd*>(AfxGetMainWnd());
+	if (!pFrameWnd || !IsWindow(pFrameWnd->m_hWnd) || !pFrameWnd->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+		return NULL;
+
+	// Now get a pointer to the active frame window
+	CFrameWnd* pActiveFrameWnd = pFrameWnd->GetActiveFrame();
+	if (pActiveFrameWnd == NULL)
+		return NULL;
+	return pActiveFrameWnd->GetActiveDocument();
+}
+
+
+void COutputDoc::OnLatexView() 
+{
+	// check if there is an open document
+	CLatexEdit	*pView = theApp.GetActiveEditView();
+	CLatexDoc		*pDoc = NULL;
+	CString			strCurrentPath;
+	long				lCurrentLine = -1;
+
+	if (pView)
+		pDoc = pView->GetDocument();
+
+	if (pDoc)
+	{
+		strCurrentPath = pDoc->GetPathName();
+		lCurrentLine = pView->GetCursorPos().y + 1;
+	}
+
+	// execute command
+	CProfile	*pProfile = g_ProfileMap.GetActiveProfile();
+	ASSERT(pProfile);
+	if (!pProfile)
+		return;
+
+	CProfile::CCommand	*pCmd = NULL;
+	if (strCurrentPath.IsEmpty())
+		pCmd = &pProfile->GetViewProjectCmd();
+	else
+	{
+		pCmd = &pProfile->GetViewCurrentCmd();
+		if (pCmd->GetActiveCommand() == CProfile::CCommand::typeProcess && pCmd->GetProcessCommand().GetArguments().IsEmpty())
+			pCmd = &pProfile->GetViewProjectCmd();
+		else if (pCmd->GetActiveCommand() == CProfile::CCommand::typeDde && (pCmd->GetDdeCommand().GetCommand().IsEmpty() || pCmd->GetDdeCommand().GetServerName().IsEmpty() || pCmd->GetDdeCommand().GetTopic().IsEmpty()))
+			pCmd = &pProfile->GetViewProjectCmd();
+	}
+
+	if (pCmd && pCmd->GetActiveCommand() == CProfile::CCommand::typeProcess)
+	{
+		CProcess	*p = pCmd->GetProcessCommand().Execute(GetWorkingDir(), GetMainPath(), strCurrentPath, lCurrentLine);
+		if (p)
+			delete p;
+		else
+		{
+			CString strFormat;
+			strFormat.Format(STE_LATEX_START_FAILED, pCmd->GetProcessCommand().GetExecutable());
+			AfxMessageBox(strFormat, MB_ICONSTOP|MB_OK);
+		}
+	}
+	else if (pCmd && pCmd->GetActiveCommand() == CProfile::CCommand::typeDde)
+	{
+		if (!pCmd->GetDdeCommand().SendCommand(GetMainPath(), strCurrentPath, lCurrentLine))
+		{
+			CString strFormat;
+			strFormat.Format(STE_LATEX_START_FAILED, pCmd->GetDdeCommand().GetCommand());
+			AfxMessageBox(strFormat, MB_ICONSTOP|MB_OK);
+		}
+	}
+}
+
+
+void COutputDoc::ActivateMessageByOutputLine( int nLine )
+{
+	int	i;
+
+	if( m_pActiveOutputView == m_pBuildView )
+	{
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		// line of the latex output
+
+		// search errors for specified line
+		for( i = 0; i < m_aErrors.GetSize(); i++ )
+		{
+			if( m_aErrors[i].m_nOutputLine == nLine )
+			{
+				ShowError( i );
+				return;
+			}
+		}
+
+		// search warnings for specified line
+		for( i = 0; i < m_aWarnings.GetSize(); i++ )
+		{
+			if( m_aWarnings[i].m_nOutputLine == nLine )
+			{
+				ShowWarning( i );
+				return;
+			}
+		}
+
+		// search bad boxes for specified line
+		for( i = 0; i < m_aBadBoxes.GetSize(); i++ )
+		{
+			if( m_aBadBoxes[i].m_nOutputLine == nLine )
+			{
+				ShowBadBox( i );
+				return;
+			}
+		}
+	}
+	else
+	{
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		// line of a grep view
+
+		for( i = 0; i < m_apaGrepHits[m_nActiveFileGrep]->GetSize(); i++ )
+		{
+			if( m_apaGrepHits[m_nActiveFileGrep]->GetAt( i ).nOutputLine == nLine )
+			{
+				ShowGrepResult( i );
+				return;
+			}
+		}
+	}
+
+	// not found
+	//BEEP;
+}
+
+void COutputDoc::OnEditFindInFiles() 
+{
+	// can we grep now?
+	if( !m_bCanGrep )
+		return;
+
+	// show dialog
+	CFindInFilesDialog	dlg;
+
+	if( dlg.DoModal() != IDOK )
+		return;	// cancel pressed
+
+	// prepare file grep
+	m_nWorkingFileGrep = m_nActiveFileGrep = dlg.m_nOutput;
+
+	DWORD	dwFlags = CFileGrep::flagOwnThread;
+	if( dlg.m_bCaseSensitive )
+		dwFlags|= CFileGrep::flagCaseSensitive;
+	if( dlg.m_bIncludeSubFolders )
+		dwFlags|= CFileGrep::flagIncludeSubFolders;
+	if( dlg.m_bRegularExpression )
+		dwFlags|= CFileGrep::flagRegularExpression;
+	if( dlg.m_bWholeWords )
+		dwFlags|= CFileGrep::flagWholeWords;
+
+	// initialize output view
+	CString	strStart;
+
+	CMainFrame	*pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
+	if( pwndMainFrame )
+		pwndMainFrame->ActivateOutputTab( CMainFrame::outputTabGrep1 + 
+		m_nWorkingFileGrep );
+
+	strStart.Format( STE_GREP_START, dlg.m_strSearchFor );
+	ASSERT(m_nWorkingFileGrep == 0 || m_nWorkingFileGrep == 1);
+	ASSERT(m_apGrepView[m_nWorkingFileGrep]);
+	m_apGrepView[m_nWorkingFileGrep]->SendMessage( OPW_RESET );
+	m_apGrepView[m_nWorkingFileGrep]->SendMessage( OPW_ADD_LINE, 
+		(WPARAM)(LPCTSTR)strStart );
+
+	// initialize attributes
+	m_apaGrepHits[m_nWorkingFileGrep]->RemoveAll();
+	m_anActiveGrepResult[m_nWorkingFileGrep] = -1;
+	m_nWorkingGrepOutputLine = 1;
+
+	// run grep
+	m_bCanGrep = !m_fileGrep.Grep( this, /*this,*/ 
+		dlg.m_strSearchFor, dlg.m_strSearchThrough, dlg.m_strSearchIn,
+		dwFlags );
+
+	if( m_bCanGrep )
+	{
+		// failed
+		m_apGrepView[m_nWorkingFileGrep]->SendMessage( OPW_ADD_LINE, 
+			(WPARAM)(LPCTSTR)CString( (LPCTSTR)STE_GREP_FAILED ) );
+	}
+}
+
+
+void COutputDoc::OnUpdateEditFindInFiles(CCmdUI* pCmdUI) 
+{
+	if( m_bCanGrep )
+	{
+		pCmdUI->SetCheck( FALSE );
+		pCmdUI->Enable( TRUE );
+	}
+	else
+	{
+		pCmdUI->Enable( FALSE );
+		pCmdUI->SetCheck( TRUE );
+	}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+// implementation of CFileGrepHandler virtuals
+
+void COutputDoc::OnFileGrepHit( CFileGrep *pFileGrep, LPCTSTR lpszPath, 
+							   int nLine, LPCTSTR lpszLine )
+{
+	// identify file grep object
+	if( pFileGrep != &m_fileGrep )
+		return;
+
+	// Add string to grep view
+	CString	strHit;
+	strHit.Format( STE_GREP_HIT, lpszPath, nLine, lpszLine );
+	SendMessage( m_apGrepView[m_nWorkingFileGrep]->m_hWnd, OPW_ADD_LINE, 
+		(WPARAM)(LPCTSTR)strHit, 0L );
+
+	// add hit
+	GREPHIT	gh;
+	gh.strPath = lpszPath;
+	gh.nLine = nLine;
+	gh.nOutputLine = m_nWorkingGrepOutputLine++;
+
+	m_apaGrepHits[m_nWorkingFileGrep]->Add( gh );
+}
+
+
+void COutputDoc::OnFileGrepError( CFileGrep *pFileGrep, LPCTSTR lpszPath )
+{
+	// identify file grep object
+	if( pFileGrep != &m_fileGrep )
+		return;
+
+	// Add error to grep view
+	CString	strError;
+	strError.Format( STE_GREP_ERROR, lpszPath );
+	SendMessage( m_apGrepView[m_nWorkingFileGrep]->m_hWnd, OPW_ADD_LINE, 
+		(WPARAM)(LPCTSTR)strError, 0L );
+	m_nWorkingGrepOutputLine++;
+}
+
+
+void COutputDoc::OnFileGrepFinished( CFileGrep *pFileGrep, int nHints )
+{
+	// identify file grep object
+	if( pFileGrep != &m_fileGrep )
+		return;
+
+	// Add string to grep view
+	CString	strFinished;
+
+	if( nHints > 0 )
+		strFinished.Format( STE_GREP_FINISHED, nHints );
+	else
+		strFinished.LoadString( STE_GREP_FINISHEDNOHIT );
+
+	SendMessage( m_apGrepView[m_nWorkingFileGrep]->m_hWnd, OPW_ADD_LINE, 
+		(WPARAM)(LPCTSTR)strFinished, 0L );
+	m_nWorkingGrepOutputLine++;
+
+	// accoustic information
+	//MessageBeep( MB_ICONINFORMATION );
+
+	// allow grep
+	m_bCanGrep = TRUE;
+}
+
+
+void COutputDoc::UpdateAllViews(COutputView* pSender, LPARAM lHint, CObject* pHint)
+{
+	// walk through all views
+	ASSERT(pSender == NULL);
+	// must have views if sent by one of them
+	
+	ASSERT_VALID(m_pBuildView);
+	if (m_pBuildView != pSender)
+		m_pBuildView->DoOnUpdate(pSender, lHint, pHint);
+	ASSERT_VALID(m_apGrepView[0]);
+	if (m_apGrepView[0] != pSender)
+		m_apGrepView[0]->DoOnUpdate(pSender, lHint, pHint);
+	ASSERT_VALID(m_apGrepView[1]);
+	if (m_apGrepView[1] != pSender)
+		m_apGrepView[1]->DoOnUpdate(pSender, lHint, pHint);
+}
+
+
+void COutputDoc::OnLatexRun() 
+{
+	m_bActiveFileOperation = FALSE;
+	DoLaTeXRun();
+}
+
+
+void COutputDoc::OnUpdateLatexRun(CCmdUI* pCmdUI) 
+{
+	pCmdUI->Enable(
+		theApp.GetProject() && !g_ProfileMap.GetActiveProfileKey().IsEmpty() && !m_builder.IsStillRunning());
+}
+
+
+void COutputDoc::OnBibTex()
+{
+	m_bActiveFileOperation = FALSE;
+	DoBibTexRun();
+}
+
+
+void COutputDoc::OnUpdateBibTex(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(
+		!m_builder.IsStillRunning() &&
+		theApp.GetProject() &&
+		!g_ProfileMap.GetActiveProfileKey().IsEmpty() && g_ProfileMap.GetActiveProfile()->GetRunBibTex());
+}
+
+
+void COutputDoc::OnMakeIndex()
+{
+	m_bActiveFileOperation = FALSE;
+	DoMakeIndexRun();
+}
+
+
+void COutputDoc::OnUpdateMakeIndex(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(
+		!m_builder.IsStillRunning() &&
+		theApp.GetProject() &&
+		!g_ProfileMap.GetActiveProfileKey().IsEmpty() && g_ProfileMap.GetActiveProfile()->GetRunMakeIndex());
+}
+
+
+void COutputDoc::OnFileCompile() 
+{
+	m_bActiveFileOperation = TRUE;
+	DoLaTeXRun();
+}
+
+									   
+void COutputDoc::OnUpdateFileCompile(CCmdUI* pCmdUI) 
+{
+	pCmdUI->Enable(GetActiveDocument() != NULL && !m_builder.IsStillRunning());
+}
+
+
+void COutputDoc::OnFileBibTex()
+{
+	m_bActiveFileOperation = TRUE;
+	DoBibTexRun();
+}
+
+
+void COutputDoc::OnUpdateFileBibTex(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(
+		GetActiveDocument() != NULL && !m_builder.IsStillRunning() &&
+		!g_ProfileMap.GetActiveProfileKey().IsEmpty() && g_ProfileMap.GetActiveProfile()->GetRunBibTex());
+}
+
+
+void COutputDoc::OnFileMakeIndex()
+{
+	m_bActiveFileOperation = TRUE;
+	DoMakeIndexRun();
+}
+
+
+void COutputDoc::OnUpdateFileMakeIndex(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(
+		GetActiveDocument() != NULL && !m_builder.IsStillRunning() &&
+		!g_ProfileMap.GetActiveProfileKey().IsEmpty() && g_ProfileMap.GetActiveProfile()->GetRunMakeIndex());
+}
+
+
+void COutputDoc::DoLaTeXRun()
+{
+	if (m_builder.IsStillRunning())
+		return;
+
+	// save all modified files
+	if( g_configuration.m_bSaveBeforeCompilation )
+		theApp.SaveAllModifiedWithoutPrompt();
+
+	// close viewer if necessary
+	CProfile	*pProfile = g_ProfileMap.GetActiveProfile();
+	if (pProfile && pProfile->GetCloseView())
+	{
+		// remember windows that has the input focus
+		CWnd	*pwnd = CWnd::GetFocus();
+
+		CProfile::CCommand	&cmd = pProfile->GetViewCloseCmd();
+
+		if (cmd.GetActiveCommand() == CProfile::CCommand::typeProcess)
+		{
+			CProcess	*p = cmd.GetProcessCommand().Execute(GetWorkingDir(), GetMainPath());
+			if (p)
+				delete p;
+		}
+		else
+		{
+			// prevent executable from being started, if not already running
+			CDdeCommand	dde = cmd.GetDdeCommand();
+			dde.SetExecutable(_T(""));
+			dde.SendCommand(GetMainPath());
+		}
+
+		// set focus back to window that had the focus before
+		if (pwnd && IsWindow(pwnd->m_hWnd))
+			pwnd->SetFocus();
+	}
+
+	// inizialize members
+	m_aErrors.RemoveAll();
+	m_aWarnings.RemoveAll();
+	m_aBadBoxes.RemoveAll();
+	m_nActualErrorIndex = -1;
+	m_nActualWarningIndex = -1;
+	m_nActualBadBoxIndex = -1;
+
+	// activate output bar
+	CMainFrame* pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
+	if( pwndMainFrame )
+		pwndMainFrame->ActivateOutputTab( CMainFrame::outputTabBuildResult );
+
+	// run latex
+	m_builder.BuildAll(
+		this, m_pBuildView, 
+		GetWorkingDir(), GetMainPath(),
+		GetRunBibTex(), GetRunMakeIndex());
+}
+
+
+void COutputDoc::DoBibTexRun()
+{
+	if (m_builder.IsStillRunning())
+		return;
+
+	// save all modified files
+	if( g_configuration.m_bSaveBeforeCompilation )
+		theApp.SaveAllModifiedWithoutPrompt();
+
+	// inizialize members
+	m_aErrors.RemoveAll();
+	m_aWarnings.RemoveAll();
+	m_aBadBoxes.RemoveAll();
+	m_nActualErrorIndex = -1;
+	m_nActualWarningIndex = -1;
+	m_nActualBadBoxIndex = -1;
+
+	// activate output bar
+	CMainFrame* pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
+	if( pwndMainFrame )
+		pwndMainFrame->ActivateOutputTab( CMainFrame::outputTabBuildResult );
+
+	// run latex
+	m_builder.RunBibTex(this, m_pBuildView, GetWorkingDir(), GetMainPath());
+}
+
+
+void COutputDoc::DoMakeIndexRun()
+{
+	if (m_builder.IsStillRunning())
+		return;
+
+	// save all modified files
+	if( g_configuration.m_bSaveBeforeCompilation )
+		theApp.SaveAllModifiedWithoutPrompt();
+
+	// inizialize members
+	m_aErrors.RemoveAll();
+	m_aWarnings.RemoveAll();
+	m_aBadBoxes.RemoveAll();
+	m_nActualErrorIndex = -1;
+	m_nActualWarningIndex = -1;
+	m_nActualBadBoxIndex = -1;
+
+	// activate output bar
+	CMainFrame* pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
+	if( pwndMainFrame )
+		pwndMainFrame->ActivateOutputTab( CMainFrame::outputTabBuildResult );
+
+	// run latex
+	m_builder.RunMakeIndex(this, m_pBuildView, GetWorkingDir(), GetMainPath());
+}
+
+
+void COutputDoc::OnUpdateLatexStopBuild(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(m_builder.IsStillRunning());
+}
+
+
+void COutputDoc::OnLatexStopBuild()
+{
+	m_builder.CancelExecution();
+}
+
+
+void COutputDoc::ResetBuildInformation()
+{
+	m_aErrors.RemoveAll();
+	m_aWarnings.RemoveAll();
+	m_aBadBoxes.RemoveAll();
+	m_pBuildView->ResetView();
+}
+
+
+void COutputDoc::AddError(COutputInfo error)
+{
+	m_aErrors.Add(error);
+	m_pBuildView->SetLineImage(error.m_nOutputLine, CBuildView::imageError);
+}
+
+
+void COutputDoc::AddWarning(COutputInfo warning)
+{
+	m_aWarnings.Add(warning);
+	m_pBuildView->SetLineImage(warning.m_nOutputLine, CBuildView::imageWarning);
+}
+
+
+void COutputDoc::AddBadBox(COutputInfo badbox)
+{
+	m_aBadBoxes.Add(badbox);
+	m_pBuildView->SetLineImage(badbox.m_nOutputLine, CBuildView::imageBadBox);
+}
+
