@@ -772,7 +772,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -4576,12 +4576,12 @@ BEGIN
     ID_PHS_ALLFILESETS_QR   "$qrAFS"
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -5942,7 +5942,7 @@ BEGIN
     LTEXT           "In &Directory:",IDC_STATIC,7,47,39,8
     COMBOBOX        IDC_SEARCH_SEARCHIN,85,45,150,85,CBS_DROPDOWN | 
                     CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "&...",IDS_SEARCH_BROWSE_SEARCHIN,240,45,15,12
+    PUSHBUTTON      "&...",IDC_SEARCH_BROWSE_SEARCHIN,240,45,15,12
     CONTROL         "Match &whole word only",IDC_SEARCH_WHOLEWORDS,"Button",
                     BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,7,65,125,10
     CONTROL         "Match &case",IDC_SEARCH_CASESENSITIVE,"Button",
@@ -8271,7 +8271,7 @@ BEGIN
     ID_PH_CURRENTOPTIONS    "\n[1]c"
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

@@ -1,3 +1,6 @@
+2002/06/24 niteria
+- Fixed Bug 573198: "Find In Files" fails in english version
+
 2002/06/24 svenwiegand
 - Removed Cursor from Splash Screen ;-)
 - Included spelling dictionaries into setup script.
