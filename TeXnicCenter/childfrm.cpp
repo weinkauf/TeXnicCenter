@@ -130,8 +130,6 @@ void CChildFrame::OnDestroy()
 
 void CChildFrame::OnSetFocus(CWnd* pOldWnd) 
 {
-	CBCGMDIChildWnd::OnSetFocus(pOldWnd);
-
 	theApp.m_pMDIFrameManager->ActivateChildFrame( this );
 }
 

@@ -158,7 +158,9 @@ void CMDIFrameManager::RemoveChildFrame( CFrameWnd *pFrameWnd )
 void CMDIFrameManager::ActivateChildFrame( CFrameWnd *pFrameWnd )
 {
 	int	nIndex = LookupFrameWnd( pFrameWnd );
-	ASSERT( nIndex > -1 );
+
+	if ( nIndex < 0 )
+		return;
 
 	// move window to first position in array
 	if( nIndex == m_nActualWndIndex )
@@ -169,6 +171,7 @@ void CMDIFrameManager::ActivateChildFrame( CFrameWnd *pFrameWnd )
 	m_aFrameWnd.InsertAt( 0, pFrmWnd );
 	m_nActualWndIndex = nIndex;
 }
+
 
 int CMDIFrameManager::LookupFrameWnd( CFrameWnd *pFrameWnd )
 {
@@ -252,4 +255,10 @@ void CMDIFrameManager::OnWindow( UINT nID )
 	ASSERT( m_aFrameWnd[nIndex] && IsWindow( m_aFrameWnd[nIndex]->m_hWnd ) );
 
 	m_pMDIFrameWnd->MDIActivate( m_aFrameWnd[nIndex] );
+}
+
+
+int CMDIFrameManager::GetChildFrameCount() const
+{
+	return m_aFrameWnd.GetSize();
 }
