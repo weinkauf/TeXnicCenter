@@ -26,25 +26,31 @@
 
 <dl>
    <dt>p</dt>
-   <dd>The file's fully qualified path.</dd>
+   <dd>The file's fully qualified <b>p</b>ath.</dd>
+
+   <dt>w</dt>
+   <dd>The file's relative path starting in project directory (= <b>w</b>orking directory).</dd>
 
    <dt>d</dt>
-   <dd>The file's directory.</dd>
+   <dd>The file's <b>d</b>irectory.</dd>
 
    <dt>n</dt>
-   <dd>The file's name (name and extension).</dd>
+   <dd>The file's <b>n</b>ame (name and extension).</dd>
 
    <dt>t</dt>
-   <dd>The file's title (name without extension).</dd>
+   <dd>The file's <b>t</b>itle (name without extension).</dd>
 
    <dt>e</dt>
-   <dd>The file's extension.</dd>
+   <dd>The file's <b>e</b>xtension.</dd>
 
    <dt>b</dt>
-   <dd>The file's base (fully qualified path without the file extension).</dd>
+   <dd>The file's <b>b</b>ase (fully qualified path without the file extension).</dd>
+
+   <dt>r</dt>
+   <dd>The file's d<b>r</b>ive letter (followed by colon ':').</dd>
 </dl>
 
-<p>Instead of '<var>p</var>', '<var>d</var>' and '<var>m</var>' you can use the uppercase variants of these characters to get slashes ('<var>/</var>') instead of backslashes ('<var>\</var>') as path separators.</p>
+<p>Instead of '<var>p</var>', '<var>w</var>', '<var>d</var>' and '<var>m</var>' you can use the uppercase variants of these characters to get slashes ('<var>/</var>') instead of backslashes ('<var>\</var>') as path separators.</p>
 
 <p>The percent sign ('<var>%</var>') can be followed by an '<var>s</var>'. In this case, the placeholders will be replaced with paths matching the old 8.3 path convention.</p>
 
@@ -60,6 +66,9 @@
 <dl>
    <dt>%pm</dt>
    <dd>Will be replaced by the full path of the current project's main file. ["C:\My Documents\TxcTest\JustATest.tex"]</dd>
+
+   <dt>%wm</dt>
+   <dd>Will be replaced by the relative path of the current project's main file. ["JustATest.tex"]</dd>
 
    <dt>%dm</dt>
    <dd>Will be replaced by the directory of the current project's main file. ["C:\My Documents\TxcTest"]</dd>
@@ -130,6 +139,9 @@
 <dl>
    <dt>%pc</dt>
    <dd>Will be replaced by the full path of the current file. ["C:\My Documents\TxcTest\JustATest.tex"]</dd>
+
+   <dt>%wc</dt>
+   <dd>Will be replaced by the relative path of the current file. ["SubDir\AnotherTest.tex"]</dd>
 
    <dt>%dc</dt>
    <dd>Will be replaced by the directory of the current file. ["C:\My Documents\TxcTest"]</dd>

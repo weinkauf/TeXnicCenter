@@ -128,9 +128,9 @@ void CPlaceholderSingleOptDlg::ConstructPlaceholder()
 	UpdateData(true);
 
 	//Get type of reference
-	CString strPHTypes = _T("pbdnter");
+	CString strPHTypes = _T("pbwdnter");
 	int nPHType = m_PHTypeCombo.GetCurSel();
-	if ( (nPHType < 0) || (nPHType > 6) )
+	if ( (nPHType < 0) || (nPHType > 7) )
 	{
 		strPlaceholder = "";
 		return;
@@ -231,7 +231,8 @@ void CPlaceholderSingleOptDlg::ShowExample()
 		strExampleFileName = AfxExpandPlaceholders(strPlaceholder,
 													strMainPath,
 													strCurrentPath,
-													-1, NULL, false);
+													-1, NULL, false,
+													CPathTool::GetDirectory(CPathTool::GetDirectory(strMainPath)));
 		//Show this example
 		m_ExampleEdit.SetWindowText(strExampleFileName);
 	}

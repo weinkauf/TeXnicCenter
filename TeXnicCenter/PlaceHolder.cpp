@@ -56,13 +56,28 @@ CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders,
 															LPCTSTR lpszCurrentPath /*= NULL*/, 
 															long lCurrentLine /*= -1*/,
 															LPCTSTR lpszCurrentSelection, /*= NULL*/
-															bool bExpandPlaceholderSets /*= false*/)
+															bool bExpandPlaceholderSets, /*= false*/
+															LPCTSTR lpszWorkingDir /*= NULL*/)
 {
 	CString		strCmdLine(lpszStringWithPlaceholders);
 	CString		strLine;
 
+	//Getting the WorkingDir of the project
+	CString PathToWorkingDir(lpszWorkingDir);
+	CLatexProject* pLProject = ((CTeXnicCenterApp*)AfxGetApp())->GetProject();
+	if (pLProject && !lpszWorkingDir)
+	{
+		PathToWorkingDir = pLProject->GetWorkingDir();
+	}
+
+	CString slashPathToWorkingDir = CPathTool::GetSlashPath(PathToWorkingDir);
+	CString shortPathToWorkingDir = CPathTool::GetShortPath(PathToWorkingDir);
+	CString shortslashPathToWorkingDir = CPathTool::GetShortPath(slashPathToWorkingDir);
+
 	if( lCurrentLine > -1 )
 		strLine.Format( _T("%d"), lCurrentLine );
+
+
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// format command line
@@ -84,11 +99,13 @@ CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders,
 		strCmdLine.Replace( _T("%em"), main.GetFileExtension() );
 		strCmdLine.Replace( _T("%bm"), CPathTool::Cat( main.GetDirectory(), main.GetFileTitle() ) );
 		strCmdLine.Replace( _T("%rm"), main.GetDrive() );
+		strCmdLine.Replace( _T("%wm"), CPathTool::GetRelativePath(PathToWorkingDir, main.GetPath(), true, false) );
 
 		main.EnsureSlashPath();
 		strCmdLine.Replace( _T("%Pm"), main.GetPath() );
 		strCmdLine.Replace( _T("%Dm"), main.GetDirectory() );
 		strCmdLine.Replace( _T("%Bm"), CPathTool::Cat( main.GetDirectory(), main.GetFileTitle() ) );
+		strCmdLine.Replace( _T("%Wm"), CPathTool::GetRelativePath(slashPathToWorkingDir, main.GetPath(), true, false) );
 
 		main.EnsureBackslashPath();
 		main.EnsureShortPath();
@@ -98,11 +115,13 @@ CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders,
 		strCmdLine.Replace( _T("%stm"), main.GetFileTitle() );
 		strCmdLine.Replace( _T("%sem"), main.GetFileExtension() );
 		strCmdLine.Replace( _T("%sbm"), CPathTool::Cat( main.GetDirectory(), main.GetFileTitle() ) );
+		strCmdLine.Replace( _T("%swm"), CPathTool::GetRelativePath(shortPathToWorkingDir, main.GetPath(), true, false) );
 
 		main.EnsureSlashPath();
 		strCmdLine.Replace( _T("%sPm"), main.GetPath() );
 		strCmdLine.Replace( _T("%sDm"), main.GetDirectory() );
 		strCmdLine.Replace( _T("%sBm"), CPathTool::Cat( main.GetDirectory(), main.GetFileTitle() ) );
+		strCmdLine.Replace( _T("%sWm"), CPathTool::GetRelativePath(shortslashPathToWorkingDir, main.GetPath(), true, false) );
 	}
 
 	if( lpszCurrentPath )
@@ -118,11 +137,13 @@ CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders,
 		strCmdLine.Replace( _T("%ec"), current.GetFileExtension() );
 		strCmdLine.Replace( _T("%bc"), CPathTool::Cat( current.GetDirectory(), current.GetFileTitle() ) );
 		strCmdLine.Replace( _T("%rc"), current.GetDrive() );
+		strCmdLine.Replace( _T("%wc"), CPathTool::GetRelativePath(PathToWorkingDir, current.GetPath(), true, false) );
 
 		current.EnsureSlashPath();
 		strCmdLine.Replace( _T("%Pc"), current.GetPath() );
 		strCmdLine.Replace( _T("%Dc"), current.GetDirectory() );
 		strCmdLine.Replace( _T("%Bc"), CPathTool::Cat( current.GetDirectory(), current.GetFileTitle() ) );
+		strCmdLine.Replace( _T("%Wc"), CPathTool::GetRelativePath(slashPathToWorkingDir, current.GetPath(), true, false) );
 
 		current.EnsureBackslashPath();
 		current.EnsureShortPath();
@@ -132,11 +153,13 @@ CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders,
 		strCmdLine.Replace( _T("%stc"), current.GetFileTitle() );
 		strCmdLine.Replace( _T("%sec"), current.GetFileExtension() );
 		strCmdLine.Replace( _T("%sbc"), CPathTool::Cat( current.GetDirectory(), current.GetFileTitle() ) );
+		strCmdLine.Replace( _T("%swc"), CPathTool::GetRelativePath(shortPathToWorkingDir, current.GetPath(), true, false) );
 
 		current.EnsureSlashPath();
 		strCmdLine.Replace( _T("%sPc"), current.GetPath() );
 		strCmdLine.Replace( _T("%sDc"), current.GetDirectory() );
 		strCmdLine.Replace( _T("%sBc"), CPathTool::Cat( current.GetDirectory(), current.GetFileTitle() ) );
+		strCmdLine.Replace( _T("%sWc"), CPathTool::GetRelativePath(shortslashPathToWorkingDir, current.GetPath(), true, false) );
 	}
 
 	if( lCurrentLine > -1 )
@@ -151,7 +174,7 @@ CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders,
 	//Expand the Sets
 	if (bExpandPlaceholderSets)
 	{
-		CPlaceholderSets ps( ((CTeXnicCenterApp*)AfxGetApp())->GetProject() );
+		CPlaceholderSets ps(pLProject);
 
 		return ps.ExpandAllSets(strCmdLine);
 	}

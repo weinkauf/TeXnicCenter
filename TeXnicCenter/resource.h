@@ -1176,6 +1176,14 @@
 #define ID_PHS_MORESETS_NOOPT           38347
 #define ID_PH_MAINOPTIONS_NOOPT         38348
 #define ID_PH_CURRENTOPTIONS_NOOPT      38349
+#define ID_PH_MRELATIVEPATH             38350
+#define ID_PH_MSLASHRELATIVEPATH        38351
+#define ID_PH_MSHORTRELATIVEPATH        38352
+#define ID_PH_MSSLASHRELATIVEPATH       38353
+#define ID_PH_CRELATIVEPATH             38354
+#define ID_PH_CSLASHRELATIVEPATH        38355
+#define ID_PH_CSHORTRELATIVEPATH        38356
+#define ID_PH_CSSLASHRELATIVEPATH       38357
 
 // Next default values for new objects
 // 
@@ -1183,7 +1191,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        266
-#define _APS_NEXT_COMMAND_VALUE         38350
+#define _APS_NEXT_COMMAND_VALUE         38358
 #define _APS_NEXT_CONTROL_VALUE         1309
 #define _APS_NEXT_SYMED_VALUE           115
 #endif

@@ -332,7 +332,7 @@ void COutputWizard::LookForDviViewer()
 
 	// yes, it is YAP!
 	m_wndPageDviViewer.m_strSingleInstanceOption = _T("-1");
-	m_wndPageDviViewer.m_strForwardSearchOption = _T("-s %l\"%nc\"");
+	m_wndPageDviViewer.m_strForwardSearchOption = _T("-s %l\"%Wc\"");
 
 	// Let's do the YAP inverse search configuration
 	CBCGRegistry	reg(FALSE, FALSE);
@@ -472,7 +472,7 @@ void COutputWizard::GenerateOutputProfiles()
 
 			p.SetLatexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("latex.exe")),
-				_T("--src -interaction=nonstopmode \"%nm\""));
+				_T("--src -interaction=nonstopmode \"%Wm\""));
 			p.SetBibTexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("bibtex.exe")),
 				_T("\"%bm\""));
@@ -525,7 +525,7 @@ void COutputWizard::GenerateOutputProfiles()
 
 			p.SetLatexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("latex.exe")),
-				_T("--src -interaction=nonstopmode \"%nm\""));
+				_T("--src -interaction=nonstopmode \"%Wm\""));
 			p.SetBibTexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("bibtex.exe")),
 				_T("\"%bm\""));
