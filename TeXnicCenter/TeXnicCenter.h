@@ -105,7 +105,7 @@ protected:
 	afx_msg void OnUpdateFileMRUProjectList( CCmdUI* pCmdUI );
 	afx_msg void OnUpdateFileMRUFileList( CCmdUI* pCmdUI );
 	afx_msg void OnFileMRUProject( UINT unID );
-	afx_msg void OnFileMRUFile( UINT unID );
+//	afx_msg void OnFileMRUFile( UINT unID );
 	afx_msg void OnUpdateURL( CCmdUI* pCmdUI );
 	afx_msg void OnURL( UINT unID );
 	DECLARE_MESSAGE_MAP()
@@ -158,7 +158,19 @@ public:
 		A pointer to the specified document or NULL, if no such document
 		exists.
 	*/
-	CDocument *GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly = FALSE);
+	CDocument* GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly = FALSE);
+
+	/** Opens the specified file using OpenLatexDocument.
+
+	Overwritten from CWinApp. Uses directly OpenLatexDocument to
+	fulfill its task.
+
+	@param lpszFileName 
+		Path of the file to open.
+
+	@return A pointer to the document.
+	*/
+	virtual CDocument* OpenDocumentFile(LPCTSTR lpszFileName);
 
 	/**
 	Opens the specified File at the specified line. If the file is already
@@ -173,10 +185,15 @@ public:
 		Number of the line to set the caret on or -1.
 	@param bError 
 		If bError is TRUE, a mark is set in the document on the specified line.
+	@param bAskForProjectLoad
+		If true and a project with a similar name is found, the user will be asked
+		to load this project.
 
 	@return A pointer to the document.
 	*/
-	CDocument *OpenLatexDocument( LPCTSTR lpszFileName, BOOL bReadOnly = FALSE, int nLineNumber = -1, BOOL bError = FALSE );
+	CDocument* OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly = FALSE,
+								int nLineNumber = -1, BOOL bError = FALSE,
+								bool bAskForProjectLoad = true);
 
 	/**
 	Returns a string associated with the project document template.

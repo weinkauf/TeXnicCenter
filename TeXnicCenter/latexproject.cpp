@@ -155,9 +155,10 @@ BOOL CLatexProject::OnNewProjectFromDoc(LPCTSTR lpszDocPathName)
 	//Does it already exist?
 	if (CheckExistingProjectFile(ProjectFileName))
 	{
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// close latex-documents?
+		// save modified documents
+		if (!theApp.SaveAllModified()) return false;
 
+		// close latex-documents
 		// skipping annoying question in this version --
 		// just closing the documents.
 		// lets see, what the users will say ...
@@ -165,7 +166,7 @@ BOOL CLatexProject::OnNewProjectFromDoc(LPCTSTR lpszDocPathName)
 
 		//Open the project
 		OnOpenProject(ProjectFileName);
-		//... and the main file
+		//... and (at least) the main file
 		OnProjectOpenMainfile();
 
 		return true;
@@ -675,7 +676,7 @@ void CLatexProject::OnProjectProperties()
 
 void CLatexProject::OnProjectOpenMainfile() 
 {
-	theApp.OpenLatexDocument( m_strMainPath, FALSE, 0 );
+	theApp.OpenLatexDocument(m_strMainPath, FALSE, -1, FALSE, false);
 }
 
 
@@ -782,10 +783,10 @@ void CLatexProject::OnItemGoto()
 	{
 		case CStructureParser::texFile:
 		case CStructureParser::bibFile:
-			theApp.OpenLatexDocument( GetFilePath( si.m_strPath ), FALSE, -1 );
+			theApp.OpenLatexDocument(GetFilePath( si.m_strPath ), FALSE, -1, FALSE, false);
 			break;
 		default:
-			theApp.OpenLatexDocument( GetFilePath( si.m_strPath ), FALSE, si.m_nLine );
+			theApp.OpenLatexDocument(GetFilePath( si.m_strPath ), FALSE, si.m_nLine, FALSE, false);
 	}
 }
 
@@ -857,10 +858,10 @@ void CLatexProject::OnSpellProject()
 		if ( si.m_nType == CStructureParser::texFile )
 		{
 			boolean bWasOpen = true;
-			CDocument *pDoc = theApp.GetOpenLatexDocument( GetFilePath( si.m_strPath ), FALSE );
+			CDocument *pDoc = theApp.GetOpenLatexDocument(GetFilePath(si.m_strPath), FALSE);
 			if ( pDoc == NULL )
 			{
-				pDoc = theApp.OpenLatexDocument( GetFilePath( si.m_strPath ) );
+				pDoc = theApp.OpenLatexDocument(GetFilePath(si.m_strPath), FALSE, -1, FALSE, false);
 				bWasOpen = false;
 			}
 			if ( pDoc == NULL )

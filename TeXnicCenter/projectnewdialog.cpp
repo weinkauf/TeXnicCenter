@@ -544,8 +544,8 @@ void CProjectNewDialog::Create()
 		BOOL	bResult = pItem->InitProject(theApp.GetProject(), strCrlf);
 		if (bResult)
 		{
-			// open new main file
-			theApp.OpenLatexDocument(theApp.GetProject()->GetMainPath());
+			//open new main file
+			theApp.OpenLatexDocument(theApp.GetProject()->GetMainPath(), FALSE, -1, FALSE, false);
 			CTemplateDialog::EndDialog(IDOK);
 		}
 		else
