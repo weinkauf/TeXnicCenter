@@ -38,8 +38,8 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// TextModulesDlg.h : header file
-//
+
+#include "TabPersistPosEdit.h"
 
 /** Manages TextModules.
 
@@ -61,8 +61,8 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CTextModulesDlg)
 	enum { IDD = IDD_TEXTMODULES };
-	CEdit	m_wndBeforeEdit;
-	CEdit	m_wndAfterEdit;
+	CTabPersistPosEdit	m_wndBeforeEdit;
+	CTabPersistPosEdit	m_wndAfterEdit;
 	CEdit	m_wndNameEdit;
 	CListCtrl	m_wndModulesList;
 	CButton	m_wndDelBtn;

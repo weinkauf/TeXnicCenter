@@ -95,8 +95,10 @@ BOOL CTextModulesDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	//Change Style
+	//Change Styles
 	m_wndModulesList.SetExtendedStyle(m_wndModulesList.GetExtendedStyle() | LVS_EX_FULLROWSELECT); //| LVS_EX_GRIDLINES
+	m_wndBeforeEdit.SetTabStops(16);
+	m_wndAfterEdit.SetTabStops(16);
 
 	//Create the Column
 	CRect rect;
@@ -345,12 +347,7 @@ void CTextModulesDlg::ClearControls()
 void CTextModulesDlg::OnChangeName() 
 {
 	CString newName;
-	LPTSTR buffer = newName.GetBuffer(200);
-	buffer[199] = _T('\0'); //To be on the safe side
-	int nCopied = m_wndNameEdit.GetLine(0, buffer, 199);
-	newName.ReleaseBuffer(nCopied);
-	if ( (nCopied == 0) || (nCopied > 199) ) return;
-
+	m_wndNameEdit.GetWindowText(newName);
 	UpdateNameInTree(nOldSelectedItem, newName);
 	bNameChanged = true;
 }
@@ -364,5 +361,4 @@ void CTextModulesDlg::OnKillFocusName()
 		UpdateOldSelectedItem();
 	}
 }
-
 
