@@ -1,3 +1,16 @@
+2002/06/19 svenwiegand
+- Enabled debug database for release builds.
+- Fixed hanging-problem when closing document on fast systems.
+- Updated german translation of newer changes made to the resources.
+- Updated version id to 1 Beta 6.00.
+- Updated paths of system DLLs in installation script to make them match 
+  my XP paths.
+- Added manifest file to TXC-resources to make TXC use modern controls on 
+  WinXP.
+- When the path for spelling dictionarys is loaded from the registry, 
+  it will be checked, if the path is valid and otherwise a default path 
+  will be used.
+
 2002/06/01 niteria
 - Updated defaults for cleaning the project.
   (tempfile of package endnotes [%bm.ent] added)
