@@ -86,7 +86,7 @@
 // in the array!
 #define ARRAYCOUNT		108
 char *pArrCredit[] = {
-						"Copyright © 1999-2004\t",
+						"Copyright © 1999-2005\t",
 						"www.ToolsCenter.org\t",
 						"",
 						"Portions Copyright © 1998-2003 by BCGSoft Ltd\f",
