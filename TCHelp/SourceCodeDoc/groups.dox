@@ -18,6 +18,11 @@
 */
 
 /**
+        @defgroup guielements GUI Elements
+        @brief Additional GUI Elements implemented for TeXnicCenter.
+*/
+
+/**
         @defgroup process Process Calling
         @brief Modules related to Process Calling.
 */
