@@ -207,8 +207,10 @@ CTeXnicCenterApp::CTeXnicCenterApp()
 	m_bSavingAll( FALSE ),
 	m_recentProjectList( 1, _T("Recent Project List"), _T("Project%d"), 4 ),
 	m_bTabFlatBorders(FALSE),
-	m_pSpell(NULL)
+	m_pSpell(NULL),
+	m_pBackgroundThread(NULL)
 {
+	InitializeCriticalSection( &m_csLazy );
 }
 
 
@@ -467,7 +469,9 @@ int CTeXnicCenterApp::ExitInstance()
 	if( m_pMDIFrameManager )
 		delete m_pMDIFrameManager;
 
+	DeleteCriticalSection( &m_csLazy );
 	delete m_pSpell;
+	delete m_pBackgroundThread;
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// unloading localized resource DLL for BCGCB
@@ -1374,8 +1378,9 @@ void CTeXnicCenterApp::OnHelp()
 }
 
 
-MySpell* CTeXnicCenterApp::GetSpell()
+MySpell* CTeXnicCenterApp::GetSpeller()
 {
+	::EnterCriticalSection( &m_csLazy );
 	if (m_pSpell == NULL)
 	{
 		CWaitCursor wait;
@@ -1390,5 +1395,28 @@ MySpell* CTeXnicCenterApp::GetSpell()
 			g_configuration.m_strLanguageDialect);
 		m_pSpell = new MySpell( T2CA((LPCTSTR)affName), T2CA((LPCTSTR)dicName) );
 	}
+	::LeaveCriticalSection( &m_csLazy );
 	return m_pSpell;
 }
+
+
+CWinThread* CTeXnicCenterApp::GetBackgroundThread()
+{
+	::EnterCriticalSection( &m_csLazy );
+	if (m_pBackgroundThread == NULL )
+	{
+		m_pBackgroundThread = new CBackgroundThread();
+		m_pBackgroundThread->CreateThread();
+		m_pBackgroundThread->SetThreadPriority(THREAD_PRIORITY_LOWEST);
+
+		// Get the background thread to trigger the dictionary creation which 
+		// may take several seconds. This allows the user to continue working
+		// without interruption.
+		CSpellerSource *pSource = static_cast<CSpellerSource*>(this);
+		m_pBackgroundThread->PostThreadMessage(ID_BG_RESET_SPELLER, 0, (long) pSource);
+		m_pBackgroundThread->PostThreadMessage(ID_BG_ENABLE_SPELLER, g_configuration.m_bSpellEnable, NULL);
+	}
+	::LeaveCriticalSection( &m_csLazy );
+	return m_pBackgroundThread;
+}
+

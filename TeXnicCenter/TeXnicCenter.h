@@ -46,8 +46,7 @@
 
 extern class CTeXnicCenterApp	theApp;
 
-class CTeXnicCenterApp :	public CProjectSupportingWinApp, 
-													public CBCGWorkspace
+class CTeXnicCenterApp : public CProjectSupportingWinApp, public CBCGWorkspace, public CSpellerSource
 {
 public:
 	CTeXnicCenterApp();
@@ -250,12 +249,25 @@ public:
 	*/
 	BOOL OpenURL( LPCTSTR lpszURL );
 
+	/**
+	Retrieves the background thread.
+
+	@return 
+		Pointer to background thread.
+		else NULL.
+	*/
+	CWinThread* GetBackgroundThread();
+
+// overrides
+public:
+	// CSpellerSource
+	virtual MySpell* GetSpeller();
+
 // implementation helpers
 protected:
 
 // attributes
 public:
-	MySpell* GetSpell();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	/** Accelerator manager */
 	//CBCGKeyboardManager m_keyboardManager;
@@ -311,7 +323,14 @@ protected:
 	*/
 	HINSTANCE m_hInstBCGCBRes;
 
+	/** Spell checker */
 	MySpell *m_pSpell;
+
+	/** Background thread that processes spelling and other tasks */
+	CBackgroundThread *m_pBackgroundThread;
+
+	/** Critical section to protect lazy resource initialization */
+	CRITICAL_SECTION m_csLazy;
 };
 
 inline
