@@ -873,8 +873,9 @@ void CTeXnicCenterApp::OnFileOpen()
 {
 	CFileDialog	dlg( 
 		TRUE, 
-		GetLatexString( CDocTemplate::filterExt ), NULL, 
+		GetLatexString( CDocTemplate::filterExt ), NULL,  
 		OFN_FILEMUSTEXIST, CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
+	dlg.m_ofn.lpstrInitialDir = g_configuration.m_strDefaultPath;
 
 	if( dlg.DoModal() != IDOK )
 		return;
