@@ -64,6 +64,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.7  2005/03/08 16:36:08  vachis
+* Selection of block between bracket pairs in a hierarchical manner (Ctrl+M)
+* Bracket highlighting disabled if a selection is present
+* New default colours for bracket highlighting
+*
 * Revision 1.6  2005/02/23 23:58:19  vachis
 * Fixed Matching Bracket Highlighting
 * New features for Matching Bracket Highlighting: configure colours,
@@ -760,12 +765,6 @@ void CCrystalTextView::OnLButtonDown(UINT nFlags, CPoint point)
 	m_nIdealCharPos = CalculateActualOffset( m_ptCursorPos.y, m_ptCursorPos.x );
 	//END SW
 
-	if (m_nSelBlockLevel != 0)
-	{
-		ResetSelBlockLevel();
-		SelectBlockAround( GetCursorPos(), 0 );
-	}
-		
 	if (!IsSelection()) {
 		//highlight brackets
 		MarkPairStringTo(GetCursorPos(), FALSE);
