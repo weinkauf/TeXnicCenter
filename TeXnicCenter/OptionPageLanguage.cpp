@@ -97,12 +97,7 @@ void COptionPageLanguage::OnOK()
 {
 	if ( g_configuration.m_strLocale.Compare( m_strLocale ) )
 	{
-		// Locale was changed
-		if ( m_strLocale.Compare(_T("system locale") ) )
-			g_configuration.m_strLocale = m_strLocale;
-		else
-			g_configuration.m_strLocale = _T(""); // system locale
-
+		g_configuration.m_strLocale = m_strLocale;
 		// Invalid locale. Not really a problem. The system default will be used.
 		VERIFY ( _tsetlocale( LC_ALL, g_configuration.m_strLocale ) ); 
 	}
@@ -189,6 +184,10 @@ BOOL COptionPageLanguage::OnInitDialog()
 		_T("spanish-mexican"), _T("spanish-modern"), _T("swedish"), _T("turkish")
 	};
 
+	// Add the system locale
+	c_Locale.AddString( _tsetlocale( LC_ALL, NULL ) );
+
+	// Add all the other avilable locales
 	for (int i = 0; i < nLocales; ++i) 
 		c_Locale.AddString( aLocales[i] );
 
@@ -196,7 +195,7 @@ BOOL COptionPageLanguage::OnInitDialog()
 	{
 		if ( g_configuration.m_strLocale.Compare(_T("")) )
 		{
-			// Add the current local to possible selections
+			// Add the current locale to the possible selections
 			c_Locale.AddString( g_configuration.m_strLocale );
 			c_Locale.SelectString( 0, g_configuration.m_strLocale );
 		}
