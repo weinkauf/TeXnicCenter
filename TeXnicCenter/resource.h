@@ -22,6 +22,7 @@
 #define STE_URL_CANNOTOPEN              111
 #define IDS_OPEN                        112
 #define IDS_SAVE                        113
+#define IDD_FILECLEANCONFIRM            114
 #define IDR_MAINFRAME                   128
 #define IDR_LATEXTYPE                   129
 #define IDR_LATEXPROJECT                130
@@ -152,6 +153,8 @@
 #define IDB_PARSE_VIEW                  243
 #define IDI_ICON1                       244
 #define IDD_OPTIONS_LANGUAGE            245
+#define IDD_OPTIONS_FILECLEAN           249
+#define IDR_POPUP_PLACEHOLDEREX_NOOPT   253
 #define STE_ITEMTYPE_GENERIC            256
 #define STE_ITEMTYPE_HEADER             257
 #define STE_ITEMTYPE_EQUATION           258
@@ -255,6 +258,19 @@
 #define STE_PROFILE_ALREADYEXISTS       448
 #define STE_PROFILE_REMOVE              449
 #define STE_PROFILE_UNCOMPLETE          450
+#define STE_PLACEHOLDERSETS_APF         451
+#define STE_PLACEHOLDERSETS_COF         452
+#define STE_FILECLEAN_ERROR             453
+#define STE_FILECLEAN_HNONE             454
+#define STE_FILECLEAN_HCLEAN            455
+#define STE_FILECLEAN_HPROTECT          456
+#define STE_FILECLEAN_HPROTECTBYDEFAULT 457
+#define STE_FILECLEAN_RECURSIVE         458
+#define STE_FILECLEAN_NOTRECURSIVE      459
+#define STE_FILECLEAN_HEAD1             460
+#define STE_FILECLEAN_HEAD2             461
+#define STE_FILECLEAN_HEAD3             462
+#define STE_FILECLEAN_HEAD4             463
 #define STE_TOOL_NOCMDLINE              464
 #define STE_TOOL_CANTINVOKE             465
 #define STE_COLOR_AUTOMATIC             480
@@ -508,6 +524,21 @@
 #define IDC_OPTIONS_SPELL_IGNORE_ALLCAPS 1266
 #define IDC_OPTIONS_SPELL_PDICT         1267
 #define IDC_OPTIONS_SPELL_BROWSE        1268
+#define IDC_FCCONFIRM_CLEANEDFILES      1269
+#define IDC_FCCONFIRM_PROTECTEDFILES    1270
+#define IDC_FCCONFIRM_LABELPROTECTED    1271
+#define IDC_FCCONFIRM_LABELCLEAN        1272
+#define IDC_FCCONFIRM_SHOWDIALOG        1273
+#define IDC_OPTIONS_FILECLEAN_CONFIRM   1276
+#define IDC_OPTIONS_FILECLEAN_LIST      1280
+#define IDC_OPTIONS_FILECLEAN_NAME      1281
+#define IDC_OPTIONS_FILECLEAN_PATTERN   1282
+#define IDC_OPTIONS_FILECLEAN_HANDLING  1284
+#define IDC_OPTIONS_FILECLEAN_RECURSIVE 1285
+#define IDC_OPTIONS_FILECLEAN_PHINSERT  1286
+#define IDC_OPTIONS_FILECLEAN_NEW       1287
+#define IDC_OPTIONS_FILECLEAN_DELETE    1288
+#define IDC_OPTIONS_FILECLEAN_SORT      1289
 #define IDD_CUSTOMIZEPAGE_EDITOR        16105
 #define IDD_OUTPUTWIZARD_MIKTEX         16106
 #define IDD_OUTPUTWIZARD_PATH           16107
@@ -1075,16 +1106,24 @@
 #define ID_SPELL_PROJECT                38314
 #define ID_SPELL_FILE                   38315
 #define IDS_SPELL_CONTINUE              38316
-#define ID_LATEX_CLEAN                  38317
+#define ID_PHS_ALLPROJECTFILES          38317
+#define ID_PHS_ALLTEXFILES              38318
+#define ID_PHS_ALLBIBTEXFILES           38319
+#define ID_PHS_ALLGRAPHICFILES          38320
+#define ID_PHS_ALLOPENEDFILES           38321
+#define ID_PHS_ALLTXCFILES              38322
+#define ID_PHS_ALLFILESETS              38323
+#define ID_PHS_DOLLAR                   38324
+#define ID_LATEX_CLEAN                  38325
 
 // Next default values for new objects
-//
+// 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        249
-#define _APS_NEXT_COMMAND_VALUE         38317
-#define _APS_NEXT_CONTROL_VALUE         1269
-#define _APS_NEXT_SYMED_VALUE           111
+#define _APS_NEXT_RESOURCE_VALUE        254
+#define _APS_NEXT_COMMAND_VALUE         38326
+#define _APS_NEXT_CONTROL_VALUE         1288
+#define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif

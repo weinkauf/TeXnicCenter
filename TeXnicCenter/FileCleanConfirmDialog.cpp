@@ -26,10 +26,15 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-#include "OptionDialog.h"
-#include "OptionPagePath.h"
+#include "texniccenter.h"
+#include "FileCleanConfirmDialog.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,46 +42,37 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//-------------------------------------------------------------------
-// class COptionDialog
-//-------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC(COptionDialog, CPropertySheet)
+/////////////////////////////////////////////////////////////////////////////
+// CFileCleanConfirmDialog dialog
 
 
-BEGIN_MESSAGE_MAP(COptionDialog, CPropertySheet)
-	//{{AFX_MSG_MAP(COptionDialog)
+CFileCleanConfirmDialog::CFileCleanConfirmDialog(CWnd* pParent /*=NULL*/)
+	: CDialog(CFileCleanConfirmDialog::IDD, pParent)
+{
+	//{{AFX_DATA_INIT(CFileCleanConfirmDialog)
+	m_CleanedFiles = _T("");
+	m_ProtectedFiles = _T("");
+	m_bShowDialog = FALSE;
+	//}}AFX_DATA_INIT
+}
+
+
+void CFileCleanConfirmDialog::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+	//{{AFX_DATA_MAP(CFileCleanConfirmDialog)
+	DDX_Text(pDX, IDC_FCCONFIRM_CLEANEDFILES, m_CleanedFiles);
+	DDX_Text(pDX, IDC_FCCONFIRM_PROTECTEDFILES, m_ProtectedFiles);
+	DDX_Check(pDX, IDC_FCCONFIRM_SHOWDIALOG, m_bShowDialog);
+	//}}AFX_DATA_MAP
+}
+
+
+BEGIN_MESSAGE_MAP(CFileCleanConfirmDialog, CDialog)
+	//{{AFX_MSG_MAP(CFileCleanConfirmDialog)
+		// NOTE: the ClassWizard will add message map macros here
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-COptionDialog::COptionDialog( CWnd* pParentWnd, UINT iSelectPage )
-	:CPropertySheet(STE_OPTIONS_TITLE, pParentWnd, iSelectPage)
-{
-	// Remove the apply button
-	m_psh.dwFlags |= PSH_NOAPPLYNOW;
- 
-	AddPage( &m_pageGeneric );
-	AddPage( &m_pageFile );
-	AddPage( &m_pagePath );
-	AddPage( &m_pageLanguage );
-	AddPage( &m_pageFileClean );
-}
-
-
-COptionDialog::~COptionDialog()
-{
-}
-
-
-BOOL COptionDialog::OnInitDialog() 
-{
-	BOOL bResult = CPropertySheet::OnInitDialog();
-
-	// hide apply button
-//	CWnd	*pWnd = GetDlgItem( ID_APPLY_NOW );
-//	ASSERT_VALID( pWnd );
-//	pWnd->ShowWindow( SW_HIDE );
-	
-	return bResult;
-}
+/////////////////////////////////////////////////////////////////////////////
+// CFileCleanConfirmDialog message handlers

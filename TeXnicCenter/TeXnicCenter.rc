@@ -1775,7 +1775,7 @@ BEGIN
         MENUITEM "&Projekt compilieren",        ID_LATEX_RUN
         MENUITEM "&BibTeX",                     ID_LATEX_BIBTEX
         MENUITEM "&MakeIndex",                  ID_LATEX_MAKEINDEX
-        MENUITEM "&Säubern",                    ID_LATEX_CLEAN
+        MENUITEM "Projekt &säubern",            ID_LATEX_CLEAN
         MENUITEM SEPARATOR
         MENUITEM "A&usgabe betrachten",         ID_LATEX_VIEW
         MENUITEM SEPARATOR
@@ -1858,6 +1858,47 @@ BEGIN
                                                 ID_PH_MSSLASHDIR
         MENUITEM SEPARATOR
         MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
+    END
+END
+
+IDR_POPUP_PLACEHOLDEREX_NOOPT MENU DISCARDABLE 
+BEGIN
+    POPUP "IDR_POPUP_PLACEHOLDEREX_NOOPT"
+    BEGIN
+        MENUITEM "Kompletter Pfad der Hauptdatei", ID_PH_MPATH
+        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung", ID_PH_MBASE
+        MENUITEM "Laufwerksbuchstabe der Hauptdatei mit Doppelpunkt", 
+                                                ID_PH_MROOT
+        MENUITEM "Verzeichnispfad der Hauptdatei", ID_PH_MDIR
+        MENUITEM "Name der Hauptdatei (mit Endung)", ID_PH_MNAME
+        MENUITEM "Titel der Hauptdatei (Name ohne Endung)", ID_PH_MTITLE
+        MENUITEM "Endung der Hauptdatei (ohne führenden Punkt)", 
+                                                ID_PH_MEXTENSION
+        MENUITEM SEPARATOR
+        MENUITEM "Kompletter Pfad des aktiven Dokuments", ID_PH_CPATH
+        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung", 
+                                                ID_PH_CBASE
+        MENUITEM "Laufwerksbuchstabe des aktiven Dokuments mit Doppelpunkt", 
+                                                ID_PH_CROOT
+        MENUITEM "Verzeichnispfad des aktiven Dokuments", ID_PH_CDIR
+        MENUITEM "Name des aktiven Dokuments (mit Endung)", ID_PH_CNAME
+        MENUITEM "Titel des aktiven Dokuments (Name ohne Endung)", 
+                                                ID_PH_CTITLE
+        MENUITEM "Endung des aktiven Dokuments (ohne führenden Punkt)", 
+                                                ID_PH_CEXTENSION
+        MENUITEM SEPARATOR
+        MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
+        MENUITEM SEPARATOR
+        MENUITEM "Alle TeX-Dateien im Projekt", ID_PHS_ALLTEXFILES
+        MENUITEM "Alle BibTeX-Dateien im Projekt", ID_PHS_ALLBIBTEXFILES
+        MENUITEM "Alle Grafik-Dateien im Projekt", ID_PHS_ALLGRAPHICFILES
+        MENUITEM "Alle von TeXnicCenter automatisch generierten Dateien", 
+                                                ID_PHS_ALLTXCFILES
+        MENUITEM "Alle Dateien im Projekt",     ID_PHS_ALLPROJECTFILES
+        MENUITEM "Alle geöffneten Dateien",     ID_PHS_ALLOPENEDFILES
+        MENUITEM "Alle obigen Dateimengen",     ID_PHS_ALLFILESETS
+        MENUITEM SEPARATOR
+        MENUITEM "Dollarzeichen ('$')",         ID_PHS_DOLLAR
     END
 END
 
@@ -2277,7 +2318,7 @@ END
 IDD_OPTIONS_FILE DIALOGEX 0, 0, 235, 156
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Datei"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,234,1
     LTEXT           " Speichern ",IDC_STATIC,5,5,37,8
@@ -2647,6 +2688,55 @@ BEGIN
                     103
 END
 
+IDD_FILECLEANCONFIRM DIALOG DISCARDABLE  0, 0, 295, 180
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Löschen von Dateien bestätigen"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,238,7,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,238,24,50,14
+    EDITTEXT        IDC_FCCONFIRM_CLEANEDFILES,7,17,218,60,ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+    EDITTEXT        IDC_FCCONFIRM_PROTECTEDFILES,7,96,218,60,ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+    LTEXT           "Die folgenden Dateien werden geschützt:",
+                    IDC_FCCONFIRM_LABELPROTECTED,7,85,132,8
+    LTEXT           "Die folgenden Dateien werden gelöscht:",
+                    IDC_FCCONFIRM_LABELCLEAN,7,7,128,8
+    CONTROL         "Diesen Dialog vor dem Löschen von Dateien anzeigen.",
+                    IDC_FCCONFIRM_SHOWDIALOG,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,163,190,10
+END
+
+IDD_OPTIONS_FILECLEAN DIALOG DISCARDABLE  0, 0, 235, 156
+STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Säubern"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "List1",IDC_OPTIONS_FILECLEAN_LIST,"SysListView32",
+                    LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
+                    LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,5,13,225,80
+    EDITTEXT        IDC_OPTIONS_FILECLEAN_NAME,5,103,99,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_OPTIONS_FILECLEAN_PATTERN,115,103,95,14,
+                    ES_AUTOHSCROLL
+    PUSHBUTTON      "",IDC_OPTIONS_FILECLEAN_PHINSERT,215,103,15,14
+    COMBOBOX        IDC_OPTIONS_FILECLEAN_HANDLING,30,121,75,84,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Unterverzeichnisse einbeziehen",
+                    IDC_OPTIONS_FILECLEAN_RECURSIVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,115,123,115,10
+    CONTROL         "Vor dem Löschen einen Dialog zur Bestätigung anzeigen.",
+                    IDC_OPTIONS_FILECLEAN_CONFIRM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,140,196,10
+    LTEXT           "Beschreibung:",IDC_STATIC,5,95,46,8
+    LTEXT           "Pattern:",IDC_STATIC,115,95,26,8
+    LTEXT           "Aktion:",IDC_STATIC,5,125,23,8
+    PUSHBUTTON      "Neu",IDC_OPTIONS_FILECLEAN_NEW,114,3,36,10
+    PUSHBUTTON      "Löschen",IDC_OPTIONS_FILECLEAN_DELETE,154,3,36,10
+    PUSHBUTTON      "Sortieren",IDC_OPTIONS_FILECLEAN_SORT,194,3,36,10
+    LTEXT           "Einträge bearbeiten:",IDC_STATIC,5,3,64,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2805,6 +2895,14 @@ BEGIN
         RIGHTMARGIN, 364
         TOPMARGIN, 7
         BOTTOMMARGIN, 231
+    END
+
+    IDD_FILECLEANCONFIRM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 288
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 173
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -4127,6 +4225,19 @@ BEGIN
                             "Ein Ausgabeprofil mit dem angegebenen Namen ist bereits vorhanden.\n\nWählen Sie einen anderen Namen."
     STE_PROFILE_REMOVE      "Soll das gewählte Ausgabeprofil wirklich gelöscht werden?"
     STE_PROFILE_UNCOMPLETE  "Bitte vervollständigen Sie die Angaben für dieses Ausgabeprofil."
+    STE_PLACEHOLDERSETS_APF "Alle Projektdateien"
+    STE_PLACEHOLDERSETS_COF "Geöffnete Dateien"
+    STE_FILECLEAN_ERROR     "Es trat ein Fehler beim Löschen der Dateien auf.\nÜberprüfen Sie, ob die Dateien schreibgeschützt sind."
+    STE_FILECLEAN_HNONE     "keine"
+    STE_FILECLEAN_HCLEAN    "löschen"
+    STE_FILECLEAN_HPROTECT  "schützen"
+    STE_FILECLEAN_HPROTECTBYDEFAULT "immer schützen"
+    STE_FILECLEAN_RECURSIVE "rekursiv"
+    STE_FILECLEAN_NOTRECURSIVE "nicht rekursiv"
+    STE_FILECLEAN_HEAD1     "Beschreibung"
+    STE_FILECLEAN_HEAD2     "Pattern"
+    STE_FILECLEAN_HEAD3     "Rekursiv"
+    STE_FILECLEAN_HEAD4     "Aktion"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4143,7 +4254,9 @@ BEGIN
     ID_SPELL_PROJECT        "Führt die Rechtschreibprüfung für das gesamte Projekt durch.\nRechtschreibprüfung für Projekt"
     ID_SPELL_FILE           "Führt die Rechtschreibprüfung für die aktive Datei durch.\nRechtschreibprüfung für aktive Datei"
     IDS_SPELL_CONTINUE      "Soll die Rechtschreibprüfung für den Rest des Projektes fortgesetzt werden?"
-    ID_LATEX_CLEAN          "Löscht alle temporären Dateien (säubert das Projekt)\nSäubern"
+    ID_PHS_ALLPROJECTFILES  "$APF"
+    ID_PHS_ALLTEXFILES      "$TPF"
+    ID_PHS_ALLBIBTEXFILES   "$BPF"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4155,6 +4268,16 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_COLOR_AUTOMATIC     "Automatisch"
     STE_COLOR_OTHERS        "Andere Farben..."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_PHS_ALLGRAPHICFILES  "$GPF"
+    ID_PHS_ALLOPENEDFILES   "$COF"
+    ID_PHS_ALLTXCFILES      "$TXC"
+    ID_PHS_ALLFILESETS      "$AFS"
+    ID_PHS_DOLLAR           "$$"
+    ID_LATEX_CLEAN          "Löscht alle temporären Dateien (säubert das Projekt)\nProjekt säubern"
 END
 
 #endif    // German (Germany) resources
@@ -5238,6 +5361,45 @@ BEGIN
     END
 END
 
+IDR_POPUP_PLACEHOLDEREX_NOOPT MENU DISCARDABLE 
+BEGIN
+    POPUP "IDR_POPUP_PLACEHOLDEREX_NOOPT"
+    BEGIN
+        MENUITEM "Main file's full path",       ID_PH_MPATH
+        MENUITEM "Main file's full path without extension", ID_PH_MBASE
+        MENUITEM "Main file's drive letter followed by colon (':')", 
+                                                ID_PH_MROOT
+        MENUITEM "Main file's full directory path", ID_PH_MDIR
+        MENUITEM "Main file's name (with extension)", ID_PH_MNAME
+        MENUITEM "Main file's title (without extension)", ID_PH_MTITLE
+        MENUITEM "Main file's extension",       ID_PH_MEXTENSION
+        MENUITEM SEPARATOR
+        MENUITEM "Current document's full path", ID_PH_CPATH
+        MENUITEM "Current document's full path without extension", 
+                                                ID_PH_CBASE
+        MENUITEM "Current document's drive letter followed by colon (':')", 
+                                                ID_PH_CROOT
+        MENUITEM "Current document's full directory path", ID_PH_CDIR
+        MENUITEM "Current document's name (with extension)", ID_PH_CNAME
+        MENUITEM "Current document's title (without extension)", 
+                                                ID_PH_CTITLE
+        MENUITEM "Current document's extension", ID_PH_CEXTENSION
+        MENUITEM SEPARATOR
+        MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
+        MENUITEM SEPARATOR
+        MENUITEM "All TeX-Files of the project", ID_PHS_ALLTEXFILES
+        MENUITEM "All BibTeX-Files of the project", ID_PHS_ALLBIBTEXFILES
+        MENUITEM "All Graphic-Files of the project", ID_PHS_ALLGRAPHICFILES
+        MENUITEM "All files generated automatically by TeXnicCenter", 
+                                                ID_PHS_ALLTXCFILES
+        MENUITEM "All files of the project",    ID_PHS_ALLPROJECTFILES
+        MENUITEM "All opened files",            ID_PHS_ALLOPENEDFILES
+        MENUITEM "All file sets from above together", ID_PHS_ALLFILESETS
+        MENUITEM SEPARATOR
+        MENUITEM "Dollar sign ('$')",           ID_PHS_DOLLAR
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -6016,6 +6178,54 @@ BEGIN
     GROUPBOX        "Spelling",IDC_STATIC,1,53,233,103
 END
 
+IDD_FILECLEANCONFIRM DIALOG DISCARDABLE  0, 0, 295, 180
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Confirm the deletion of files"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,238,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,238,24,50,14
+    EDITTEXT        IDC_FCCONFIRM_CLEANEDFILES,7,17,218,60,ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+    EDITTEXT        IDC_FCCONFIRM_PROTECTEDFILES,7,96,218,60,ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+    LTEXT           "The following files will be protected:",
+                    IDC_FCCONFIRM_LABELPROTECTED,7,85,112,8
+    LTEXT           "The following files will be deleted:",
+                    IDC_FCCONFIRM_LABELCLEAN,7,7,106,8
+    CONTROL         "Show this dialog before deleting files.",
+                    IDC_FCCONFIRM_SHOWDIALOG,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,163,132,10
+END
+
+IDD_OPTIONS_FILECLEAN DIALOG DISCARDABLE  0, 0, 235, 156
+STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Clean"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "List1",IDC_OPTIONS_FILECLEAN_LIST,"SysListView32",
+                    LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
+                    LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,5,13,225,80
+    EDITTEXT        IDC_OPTIONS_FILECLEAN_NAME,5,103,99,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_OPTIONS_FILECLEAN_PATTERN,115,103,95,14,
+                    ES_AUTOHSCROLL
+    PUSHBUTTON      "",IDC_OPTIONS_FILECLEAN_PHINSERT,215,103,15,14
+    COMBOBOX        IDC_OPTIONS_FILECLEAN_HANDLING,30,121,75,84,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Include subdirectories",IDC_OPTIONS_FILECLEAN_RECURSIVE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,115,123,115,10
+    CONTROL         "Before deleting files, show a dialog to confirm.",
+                    IDC_OPTIONS_FILECLEAN_CONFIRM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,140,159,10
+    LTEXT           "Description:",IDC_STATIC,5,95,38,8
+    LTEXT           "Pattern:",IDC_STATIC,115,95,26,8
+    LTEXT           "Action:",IDC_STATIC,5,125,23,8
+    PUSHBUTTON      "New",IDC_OPTIONS_FILECLEAN_NEW,114,3,36,10
+    PUSHBUTTON      "Delete",IDC_OPTIONS_FILECLEAN_DELETE,154,3,36,10
+    PUSHBUTTON      "Sort",IDC_OPTIONS_FILECLEAN_SORT,194,3,36,10
+    LTEXT           "Edit entries:",IDC_STATIC,5,3,38,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -6174,6 +6384,14 @@ BEGIN
         RIGHTMARGIN, 364
         TOPMARGIN, 7
         BOTTOMMARGIN, 231
+    END
+
+    IDD_FILECLEANCONFIRM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 288
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 173
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -7440,6 +7658,19 @@ BEGIN
                             "A profile with the specified name already exists.\n\nPlease choose another name."
     STE_PROFILE_REMOVE      "Do you really want to remove the selected profile?"
     STE_PROFILE_UNCOMPLETE  "Please complete the declarations of the current profile."
+    STE_PLACEHOLDERSETS_APF "All project files"
+    STE_PLACEHOLDERSETS_COF "Opened files"
+    STE_FILECLEAN_ERROR     "An error occured while deleting the files.\nCheck whether the files are write protected."
+    STE_FILECLEAN_HNONE     "none"
+    STE_FILECLEAN_HCLEAN    "delete"
+    STE_FILECLEAN_HPROTECT  "protect"
+    STE_FILECLEAN_HPROTECTBYDEFAULT "protect always"
+    STE_FILECLEAN_RECURSIVE "recursive"
+    STE_FILECLEAN_NOTRECURSIVE "not recursive"
+    STE_FILECLEAN_HEAD1     "Description"
+    STE_FILECLEAN_HEAD2     "Pattern"
+    STE_FILECLEAN_HEAD3     "Recursive"
+    STE_FILECLEAN_HEAD4     "Action"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7456,7 +7687,9 @@ BEGIN
     ID_SPELL_PROJECT        "Spell check entire project\nSpell check project"
     ID_SPELL_FILE           "Spell check the active file\nSpell check file"
     IDS_SPELL_CONTINUE      "Contiue spell checking remainder of project?"
-    ID_LATEX_CLEAN          "Deletes all intermediate and output files (cleans the project)\nClean"
+    ID_PHS_ALLPROJECTFILES  "$APF"
+    ID_PHS_ALLTEXFILES      "$TPF"
+    ID_PHS_ALLBIBTEXFILES   "$BPF"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7468,6 +7701,16 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_COLOR_AUTOMATIC     "Automatic"
     STE_COLOR_OTHERS        "Other Colors..."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_PHS_ALLGRAPHICFILES  "$GPF"
+    ID_PHS_ALLOPENEDFILES   "$COF"
+    ID_PHS_ALLTXCFILES      "$TXC"
+    ID_PHS_ALLFILESETS      "$AFS"
+    ID_PHS_DOLLAR           "$$"
+    ID_LATEX_CLEAN          "Cleans all intermediate files (cleans the project)\nClean"
 END
 
 #endif    // English (U.S.) resources

@@ -41,6 +41,9 @@
 #include "FindInFilesDialog.h"
 #include "Profile.h"
 #include "OutputBuilder.h"
+//#include "PlaceHolder.h"
+#include "FileClean.h"
+#include "FileCleanConfirmDialog.h"
 
 #include <ddeml.h> // DDE support
 #include <dde.h>
@@ -103,6 +106,7 @@ BEGIN_MESSAGE_MAP(COutputDoc, CCmdTarget)
 	//{{AFX_MSG_MAP(COutputDoc)
 	ON_COMMAND(ID_NEXT_ERROR, OnNextError)
 	ON_COMMAND(ID_PREV_ERROR, OnPrevError)
+	ON_COMMAND(ID_LATEX_VIEW, OnLatexView)
 	ON_COMMAND(ID_NEXT_BADBOX, OnNextBadbox)
 	ON_UPDATE_COMMAND_UI(ID_NEXT_BADBOX, OnUpdateNextPrevBadbox)
 	ON_UPDATE_COMMAND_UI(ID_NEXT_ERROR, OnUpdateNextPrevError)
@@ -115,10 +119,6 @@ BEGIN_MESSAGE_MAP(COutputDoc, CCmdTarget)
 	ON_COMMAND(ID_EDIT_NEXTGREPRESULT, OnEditNextGrepResult)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_NEXTGREPRESULT, OnUpdateGrepResultStep)
 	ON_COMMAND(ID_EDIT_PREVGREPRESULT, OnEditPrevGrepResult)
-	ON_UPDATE_COMMAND_UI(ID_PREV_BADBOX, OnUpdateNextPrevBadbox)
-	ON_UPDATE_COMMAND_UI(ID_PREV_ERROR, OnUpdateNextPrevError)
-	ON_UPDATE_COMMAND_UI(ID_PREV_WARNING, OnUpdateNextPrevWarning)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_PREVGREPRESULT, OnUpdateGrepResultStep)
 	ON_COMMAND(ID_LATEX_STOP_BUILD, OnLatexStopBuild)
 	ON_UPDATE_COMMAND_UI(ID_LATEX_STOP_BUILD, OnUpdateLatexStopBuild)
 	ON_COMMAND(ID_LATEX_RUN, OnLatexRun)
@@ -133,7 +133,12 @@ BEGIN_MESSAGE_MAP(COutputDoc, CCmdTarget)
 	ON_UPDATE_COMMAND_UI(ID_LATEX_FILEBIBTEX, OnUpdateFileBibTex)
 	ON_COMMAND(ID_LATEX_FILEMAKEINDEX, OnFileMakeIndex)
 	ON_UPDATE_COMMAND_UI(ID_LATEX_FILEMAKEINDEX, OnUpdateFileMakeIndex)
-	ON_COMMAND(ID_LATEX_VIEW, OnLatexView)
+	ON_UPDATE_COMMAND_UI(ID_PREV_BADBOX, OnUpdateNextPrevBadbox)
+	ON_UPDATE_COMMAND_UI(ID_PREV_ERROR, OnUpdateNextPrevError)
+	ON_UPDATE_COMMAND_UI(ID_PREV_WARNING, OnUpdateNextPrevWarning)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_PREVGREPRESULT, OnUpdateGrepResultStep)
+	ON_COMMAND(ID_LATEX_CLEAN, OnLatexClean)
+	ON_UPDATE_COMMAND_UI(ID_LATEX_CLEAN, OnUpdateLatexClean)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -1160,5 +1165,46 @@ void COutputDoc::AddBadBox(COutputInfo badbox)
 {
 	m_aBadBoxes.Add(badbox);
 	m_pBuildView->SetLineImage(badbox.m_nOutputLine, CBuildView::imageBadBox);
+}
+
+
+void COutputDoc::OnLatexClean() 
+{
+	CFileClean fc;
+	bool bCleanIt = true;
+
+	fc.Initialize(g_configuration.m_aFileCleanItems);
+
+	if (g_configuration.m_bFileCleanConfirm)
+	{
+		CFileCleanConfirmDialog fcDlg;
+		fcDlg.m_bShowDialog = true;
+		fcDlg.m_CleanedFiles = fc.GetFilesToClean(true);
+		fcDlg.m_ProtectedFiles = fc.GetFilesToProtect();
+
+		if (fcDlg.DoModal() == IDCANCEL)
+		{
+			bCleanIt = false;
+		}
+		else
+		{
+			//bCleanIt = true;
+			g_configuration.m_bFileCleanConfirm = fcDlg.m_bShowDialog;
+		}
+	}
+
+	if (bCleanIt)
+	{
+		if (!fc.CleanFiles())
+				AfxMessageBox(STE_FILECLEAN_ERROR);
+	}
+}
+
+void COutputDoc::OnUpdateLatexClean(CCmdUI* pCmdUI) 
+{
+	pCmdUI->Enable(
+		!m_builder.IsStillRunning() &&
+		theApp.GetProject() &&
+		!g_ProfileMap.GetActiveProfileKey().IsEmpty());
 }
 

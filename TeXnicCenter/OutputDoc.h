@@ -188,6 +188,8 @@ protected:
 	afx_msg void OnUpdateFileBibTex(CCmdUI* pCmdUI);
 	afx_msg void OnFileMakeIndex();
 	afx_msg void OnUpdateFileMakeIndex(CCmdUI* pCmdUI);
+	afx_msg void OnLatexClean();
+	afx_msg void OnUpdateLatexClean(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -309,8 +311,9 @@ protected:
 	COutputInfoArray m_aErrors;
 
 	/** Array that contains information about the warnings of the latex-compiler.*/
+public:
 	COutputInfoArray m_aWarnings;
-
+protected:
 	/** Array that contains information about the bad boxes of the latex-compiler.*/
 	COutputInfoArray m_aBadBoxes;
 
