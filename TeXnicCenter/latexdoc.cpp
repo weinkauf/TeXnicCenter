@@ -93,7 +93,7 @@ BOOL CLatexDoc::OnNewDocument()
 
 void CLatexDoc::SetErrorMark( int nLine )
 {
-	if( nLine < 1 )
+	if( nLine < 0 )
 	{
 		// remove flag
 		int	nLine = m_pTextBuffer->GetLineWithFlag( LF_COMPILATION_ERROR );
