@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "BrowseButton.h"
@@ -50,13 +56,18 @@ END_MESSAGE_MAP()
 
 
 CBrowseButton::CBrowseButton(UINT unCtrlId, 
-														 LPCTSTR lpszTitle, UINT unFlags /*= 0*/, 
+														 LPCTSTR lpszTitle, bool bUseEditForInitFolder /*= true*/,
+														 LPCTSTR lpszInitFolder /*= NULL*/, UINT unFlags /*= 0*/, 
 														 BFFCALLBACK lpfn /*= NULL*/, LPARAM lParam /*= 0*/)
 :	m_unCtrlId(unCtrlId),
-	m_bBrowseForFile(FALSE)
+	m_bBrowseForFile(FALSE),
+	m_strInitFolder(lpszInitFolder),
+	m_bUseEditForInitFolder(bUseEditForInitFolder)
 {
 	m_dataFolderDialog.strTitle = lpszTitle;
 	m_dataFolderDialog.unFlags = unFlags;
+	//We need to change the next 2 items, if the caller wants us to do a callback.
+	// But we will do this just before we open the BFF-Dialog.
 	m_dataFolderDialog.lpfn = lpfn;
 	m_dataFolderDialog.lParam = lParam;
 }
@@ -90,7 +101,8 @@ void CBrowseButton::Browse()
 	ASSERT(pCtrl && IsWindow(pCtrl->m_hWnd));
 	if (!pCtrl || !IsWindow(pCtrl->m_hWnd))
 		return;
-	
+
+	//Get the String from the edit control (hopefully a dirpath)
 	CString	strPath;
 	pCtrl->GetWindowText(strPath);
 
@@ -110,6 +122,28 @@ void CBrowseButton::Browse()
 	}
 	else
 	{
+		bool bUsedCallback = false;
+
+		//Use Callback from the caller or does he want us to do the callback?
+		if (m_dataFolderDialog.lpfn == NULL)
+		{
+			//At least he did not gave us a callback of his own.
+			//So if he gave us the permission to use the edit control
+			// or the given Initfolder, we will do the callback.
+			if (m_bUseEditForInitFolder)
+			{
+				m_strInitFolder = strPath;
+			}
+
+			if (!m_strInitFolder.IsEmpty())
+			{
+				//Now we establish the callback
+				m_dataFolderDialog.lpfn = (BFFCALLBACK) BrowseDlgCallback;
+				m_dataFolderDialog.lParam = (LONG)(LPCTSTR)m_strInitFolder;
+				bUsedCallback = true;
+			}
+		}
+
 		CFolderSelect dlg(
 			m_dataFolderDialog.strTitle, 
 			m_dataFolderDialog.unFlags,
@@ -118,9 +152,19 @@ void CBrowseButton::Browse()
 			m_dataFolderDialog.lParam);
 
 		if (dlg.DoModal() == IDCANCEL)
+		{
+			//We need to reset the callback. If not, we will always jump to the same dir.
+			if (bUsedCallback)
+				m_dataFolderDialog.lpfn = NULL;
+
 			return;
+		}
 
 		strPath = dlg.GetPath();
+
+		//We need to reset the callback. If not, we will always jump to the same dir.
+		if (bUsedCallback)
+			m_dataFolderDialog.lpfn = NULL;
 	}
 
 	// Set text
@@ -148,4 +192,19 @@ void CBrowseButton::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 		Browse();
 	
 	CButton::OnKeyUp(nChar, nRepCnt, nFlags);
+}
+
+//---------------------------------------------------------------------
+
+int CALLBACK BrowseDlgCallback(HWND hwnd, UINT uMsg,
+																LPARAM lParam, LPARAM lpData)
+{
+	if (uMsg == BFFM_INITIALIZED)
+	{
+		//Select the folder
+		::SendMessage(hwnd, BFFM_SETSELECTION, true, lpData);
+	}
+
+
+	return 0;
 }
