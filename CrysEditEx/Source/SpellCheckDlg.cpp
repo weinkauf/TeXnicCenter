@@ -59,17 +59,7 @@ CSpellCheckDlg::CSpellCheckDlg(CCrystalEditView *pBuddy, MySpell *pSpell, CWnd* 
 }
 
 
-CSpellCheckDlg::~CSpellCheckDlg()
-{
-	POSITION pos = m_lstIgnoreWords.GetHeadPosition();
-	void *pWord;
-	while ( pos != NULL )
-	{
-		pWord = m_lstIgnoreWords.GetNext( pos );
-		if ( pWord != NULL )
-			free( pWord );
-	}
-}
+CSpellCheckDlg::~CSpellCheckDlg() {}
 
 
 void CSpellCheckDlg::Reset(CCrystalEditView *pBuddy, MySpell *pSpell)
@@ -100,6 +90,8 @@ BEGIN_MESSAGE_MAP(CSpellCheckDlg, CDialog)
 	ON_BN_CLICKED(IDC_SPELL_RESUME, OnSpellResume)
 	ON_BN_CLICKED(IDC_SPELL_REPLACE, OnSpellReplace)
 	ON_NOTIFY(NM_DBLCLK, IDC_SPELL_SUGGEST, OnDblclkSpellSuggest)
+	ON_BN_CLICKED(IDC_SPELL_ADD, OnSpellAdd)
+	ON_BN_CLICKED(IDC_SPELL_REPLACE_ALL, OnSpellReplaceAll)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -132,7 +124,18 @@ void CSpellCheckDlg::OnSpellIgnore()
 
 void CSpellCheckDlg::OnSpellIgnoreAll() 
 {
-	m_lstIgnoreWords.AddTail( strdup(m_pWordBuffer) );
+	m_pSpell->ignore_word( m_pWordBuffer );
+	m_pBuddy->OnEditOperation( CE_ACTION_UNKNOWN, NULL );
+	m_nCurStart = m_nCurEnd;
+	DoNextWord();
+	OnSpellError();
+}
+
+
+void CSpellCheckDlg::OnSpellAdd() 
+{
+	m_pSpell->add_word( m_pWordBuffer );
+	m_pBuddy->OnEditOperation( CE_ACTION_UNKNOWN, NULL );
 	m_nCurStart = m_nCurEnd;
 	DoNextWord();
 	OnSpellError();
@@ -192,7 +195,7 @@ void CSpellCheckDlg::DoNextWord()
 				while ( i < m_nCurEnd )
 					m_pWordBuffer[j++] = (char)szLine[i++];
 				m_pWordBuffer[j] = 0;
-				if ( !IsIgnoreWord(m_pWordBuffer) && !m_pSpell->spell(m_pWordBuffer))
+				if ( !m_pSpell->spell(m_pWordBuffer) )
 				{
 					m_pBuddy->HighlightText( CPoint(m_nCurStart, m_nCurLine), m_nCurEnd - m_nCurStart );
 					return;
@@ -333,17 +336,24 @@ void CSpellCheckDlg::OnSpellReplace()
 }
 
 
-BOOL CSpellCheckDlg::IsIgnoreWord(char *pWord)
+void CSpellCheckDlg::OnSpellReplaceAll() 
 {
-	POSITION pos = m_lstIgnoreWords.GetHeadPosition();
-	char *pIgnoreWord;
-	while ( pos != NULL )
+	// Get the selected suggestion text
+	POSITION pos = c_SuggestList.GetFirstSelectedItemPosition();
+	if ( !pos )
+		return;
+
+	CString newText = c_SuggestList.GetItemText( c_SuggestList.GetNextSelectedItem(pos), 0 );
+	CString oldText = CString(A2T(m_pWordBuffer));
+
+	CPoint ptFound(m_ptStart);
+	while ( m_pBuddy->FindTextInBlock(oldText, m_ptStart, ptFound, m_ptEnd, FIND_MATCH_CASE, FALSE, &ptFound) )
 	{
-		pIgnoreWord = (char*)m_lstIgnoreWords.GetNext( pos );
-		if ( pWord != NULL && (strcmp( pWord, pIgnoreWord ) == 0) )
-			return TRUE;
+		m_pBuddy->HighlightText(ptFound, oldText.GetLength());
+		VERIFY(m_pBuddy->ReplaceSelection( newText ));
 	}
-	return FALSE;
+	DoNextWord();
+	OnSpellError();
 }
 
 
@@ -352,3 +362,4 @@ void CSpellCheckDlg::OnDblclkSpellSuggest( NMHDR* pNMHDR, LRESULT* pResult )
 	OnSpellReplace();
 	*pResult = 0;
 }
+
