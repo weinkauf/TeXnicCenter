@@ -2256,7 +2256,7 @@ END
 IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Allgemein"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     GROUPBOX        "Allgemein",IDC_STATIC,8,8,284,31
     CONTROL         "&Letzte Sitzung bei Start wiederherstellen",
@@ -2268,14 +2268,9 @@ BEGIN
                     IDC_OPTIONS_REPLACE_QM,"Button",BS_AUTOCHECKBOX | 
                     WS_GROUP | WS_TABSTOP,13,64,115,10,0,
                     HIDC_OPTIONS_REPLACE_QM
-    LTEXT           "&Öffnendes Anführungszeichen:",IDC_OPTIONS_QM_LABEL1,28,
-                    79,98,8
-    EDITTEXT        IDC_OPTIONS_REPLACE_QM_OPEN_EDIT,138,76,15,14,
-                    ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_OPEN_EDIT
-    LTEXT           "&Schließendes Anführungszeichen:",IDC_OPTIONS_QM_LABEL2,
-                    28,94,108,8
-    EDITTEXT        IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT,138,91,15,14,
-                    ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_CLOSE_EDIT
+    LTEXT           "&Öffnendes Zeichen:",IDC_OPTIONS_QM_LABEL1,175,81,64,8
+    LTEXT           "&Schließendes Zeichen:",IDC_OPTIONS_QM_LABEL2,175,96,74,
+                    8
     GROUPBOX        "Benutzerschnittstelle (Änderungen erfordern einen Neustart von TeXnicCenter)",
                     IDC_STATIC,8,122,284,71
     LTEXT           "L&ook && Feel:",IDC_STATIC,13,139,40,8
@@ -2287,6 +2282,13 @@ BEGIN
     CONTROL         "&Benutzerschnittstelle für sehbehinderte Benutzer optimieren",
                     IDC_OPTIONS_OPTIMIZE_FOR_VISUALLY_HANDICAPPED_USERS,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,175,201,10
+    COMBOBOX        IDC_OPTIONS_REPLACE_QM_PREDEFINED_COMBO,91,82,69,59,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Vordefiniert:",IDC_OPTIONS_QM_SET_LABEL,46,85,38,8
+    EDITTEXT        IDC_OPTIONS_REPLACE_QM_OPEN_EDIT,254,78,15,14,
+                    ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_OPEN_EDIT
+    EDITTEXT        IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT,254,93,15,14,
+                    ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_CLOSE_EDIT
 END
 
 IDD_OPTIONS_PATHS DIALOGEX 0, 0, 300, 200
@@ -4647,6 +4649,10 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_LANGUAGE_NEW        "Sie verwenden zum ersten Mal die Sprache 'Deutsch' in TeXnicCenter.\n\nAlle Menüs, Symbolleisten und Tastaturkürzel befinden sich im Auslieferungszustand der deutschen Version.\n\nAnpassungen für Menüs, Symbolleisten und Tastenkürzel werden für jede Sprache getrennt gespeichert."
     STE_RESOURCE_CONFLICT   "Die Sprachdatei für die gewünschte Sprache (%s) ist nicht mit dieser Version von TeXnicCenter kompatibel.\n\nTeXnicCenter-Version:\t%s\nSprachdatei-Version:\t%s\n\nStatt dessen wird die Standardsprache (Englisch) verwendet."
+    STE_LANGUAGE_GERMAN     "Deutsch"
+    STE_LANGUAGE_ENGLISH    "Englisch"
+    STE_LANGUAGE_FRENCH     "Französisch"
+    STE_CUSTOM              "Angepasst"
 END
 
 #endif    // German (Germany) resources
@@ -6025,7 +6031,7 @@ END
 IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "General"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     GROUPBOX        "General",IDC_STATIC,8,8,284,31
     CONTROL         "Restore last &session on startup",
@@ -6036,13 +6042,13 @@ BEGIN
     CONTROL         "&Replace quotation marks",IDC_OPTIONS_REPLACE_QM,"Button",
                     BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,13,64,95,10,0,
                     HIDC_OPTIONS_REPLACE_QM
-    LTEXT           "&Opening quotation marks:",IDC_OPTIONS_QM_LABEL1,28,79,
+    LTEXT           "&Opening quotation marks:",IDC_OPTIONS_QM_LABEL1,170,81,
                     82,8
-    EDITTEXT        IDC_OPTIONS_REPLACE_QM_OPEN_EDIT,112,76,15,14,
+    EDITTEXT        IDC_OPTIONS_REPLACE_QM_OPEN_EDIT,254,78,15,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_OPEN_EDIT
-    LTEXT           "&Closing quotation marks:",IDC_OPTIONS_QM_LABEL2,28,94,
+    LTEXT           "&Closing quotation marks:",IDC_OPTIONS_QM_LABEL2,170,96,
                     78,8
-    EDITTEXT        IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT,112,91,15,14,
+    EDITTEXT        IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT,254,93,15,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_CLOSE_EDIT
     GROUPBOX        "User interface (Changes will require a new start of TeXnicCenter)",
                     IDC_STATIC,8,124,284,69
@@ -6055,6 +6061,9 @@ BEGIN
     CONTROL         "O&ptimize user interface for visually handicapped users",
                     IDC_OPTIONS_OPTIMIZE_FOR_VISUALLY_HANDICAPPED_USERS,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,176,201,10
+    COMBOBOX        IDC_OPTIONS_REPLACE_QM_PREDEFINED_COMBO,91,82,69,61,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Predefined sets:",IDC_OPTIONS_QM_SET_LABEL,36,85,52,8
 END
 
 IDD_PROJECT_PROPERTIES DIALOGEX 0, 0, 252, 150
@@ -8530,6 +8539,10 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_LANGUAGE_NEW        "You are using the english language for the first time in TeXnicCenter.\n\nAll menus, toolbars and short cuts are set to the default state of the english version.\n\nCustomizations performed on menus, toolbars and short cuts are stored for each language separately."
     STE_RESOURCE_CONFLICT   "The language file for the selected language (%s) is not compatible with this version of TeXnicCenter.\n\nVersion of TeXnicCenter:\t%s\nVersion of language file:\t%s\n\nThe default language (english) will be used instead."
+    STE_LANGUAGE_GERMAN     "German"
+    STE_LANGUAGE_ENGLISH    "English"
+    STE_LANGUAGE_FRENCH     "French"
+    STE_CUSTOM              "Custom"
 END
 
 #endif    // English (U.S.) resources

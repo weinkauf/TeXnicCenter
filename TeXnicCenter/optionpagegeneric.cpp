@@ -59,6 +59,15 @@ COptionPageGeneric::COptionPageGeneric() : CPropertyPage(COptionPageGeneric::IDD
 	m_strGuiLanguage = g_configuration.m_strGuiLanguageOnNextStart;
 	m_strLookAndFeel = g_configuration.m_strLookAndFeelOnNextStart;
 	//}}AFX_DATA_INIT
+
+	//Init the QMSets
+	QMSets.RemoveAll();
+	// - English
+	QMSets.Add( CQMSet(STE_LANGUAGE_ENGLISH, "``", "''") );
+	// - German
+	QMSets.Add( CQMSet(STE_LANGUAGE_GERMAN, "\"`", "\"'") );
+	// - French
+	QMSets.Add( CQMSet(STE_LANGUAGE_FRENCH, "\"<", "\">") );
 }
 
 COptionPageGeneric::~COptionPageGeneric()
@@ -69,10 +78,19 @@ COptionPageGeneric::~COptionPageGeneric()
 void COptionPageGeneric::UpdateCtrlStates()
 {
 	// enable/disable controls
-	m_wndOpeningQm.EnableWindow( m_bReplaceQm );
-	m_wndClosingQm.EnableWindow( m_bReplaceQm );
-	m_wndQmLabel1.EnableWindow( m_bReplaceQm );
-	m_wndQmLabel2.EnableWindow( m_bReplaceQm );
+
+	bool bCustomQM = false;
+	if (m_bReplaceQm && (m_wndQMSetsCombo.GetCurSel() != CB_ERR))
+	{
+		bCustomQM = (m_wndQMSetsCombo.GetCurSel() == m_wndQMSetsCombo.GetCount() - 1);
+	}
+
+	m_QMSetLabel.EnableWindow(m_bReplaceQm);
+	m_wndQMSetsCombo.EnableWindow(m_bReplaceQm);
+	m_wndOpeningQm.EnableWindow(m_bReplaceQm && bCustomQM);
+	m_wndClosingQm.EnableWindow(m_bReplaceQm && bCustomQM);
+	m_wndQmLabel1.EnableWindow(m_bReplaceQm && bCustomQM);
+	m_wndQmLabel2.EnableWindow(m_bReplaceQm && bCustomQM);
 }
 
 
@@ -98,11 +116,31 @@ void COptionPageGeneric::RefillLanguageList()
 	}
 }
 
+void COptionPageGeneric::RefillPredefinedQMSets()
+{
+	m_wndQMSetsCombo.ResetContent();
+
+	//Add the sets
+	CString	strLanguage;
+	for(int i=0;i<QMSets.GetSize();i++)
+	{
+		const CQMSet& QMSet = QMSets.ElementAt(i);
+		strLanguage.LoadString(QMSet.NameID);
+		m_wndQMSetsCombo.AddString(strLanguage);
+	}
+
+	//Add custom possibility
+	strLanguage.LoadString(STE_CUSTOM);
+	m_wndQMSetsCombo.AddString(strLanguage);
+}
+
 
 void COptionPageGeneric::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPageGeneric)
+	DDX_Control(pDX, IDC_OPTIONS_QM_SET_LABEL, m_QMSetLabel);
+	DDX_Control(pDX, IDC_OPTIONS_REPLACE_QM_PREDEFINED_COMBO, m_wndQMSetsCombo);
 	DDX_Control(pDX, IDC_LOOKNFEEL_COMBO, m_wndLookAndFeelList);
 	DDX_Control(pDX, IDC_GUI_LANGUAGE_COMBO, m_wndGuiLanguageList);
 	DDX_Control(pDX, IDC_OPTIONS_REPLACE_QM_OPEN_EDIT, m_wndOpeningQm);
@@ -156,6 +194,7 @@ void COptionPageGeneric::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(COptionPageGeneric, CPropertyPage)
 	//{{AFX_MSG_MAP(COptionPageGeneric)
 	ON_BN_CLICKED(IDC_OPTIONS_REPLACE_QM, OnUpdateCtrls)
+	ON_CBN_SELCHANGE(IDC_OPTIONS_REPLACE_QM_PREDEFINED_COMBO, OnSelchangePredefinedQMSets)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -165,8 +204,19 @@ BOOL COptionPageGeneric::OnInitDialog()
 	CPropertyPage::OnInitDialog();
 
 	RefillLanguageList();
+	RefillPredefinedQMSets();
 	UpdateData(FALSE);
-	
+
+	//Find the QM Setting
+	int i(0);
+	for(i=0;i<QMSets.GetSize();i++)
+	{
+		const CQMSet& QMSet = QMSets.ElementAt(i);
+		if ( (QMSet.OpeningQM == m_strOpeningQm) && (QMSet.ClosingQM == m_strClosingQm) )
+			break;
+	}
+	m_wndQMSetsCombo.SetCurSel(i);
+
 	UpdateCtrlStates();
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -181,7 +231,7 @@ void COptionPageGeneric::OnOK()
 	g_configuration.m_bReplaceQuotationMarks = m_bReplaceQm;
 	g_configuration.m_strClosingQuotationMark = m_strClosingQm;
 	g_configuration.m_strOpeningQuotationMark = m_strOpeningQm;
-	g_configuration.m_bLoadLastProject = m_bRestoreSession ;
+	g_configuration.m_bLoadLastProject = m_bRestoreSession;
 
 	// generate message, that tells the user, that his settings will be
 	// activated on next start of TXC if those settings have changed.
@@ -207,4 +257,21 @@ void COptionPageGeneric::OnUpdateCtrls()
 {
 	UpdateData();
 	UpdateCtrlStates();
+}
+
+void COptionPageGeneric::OnSelchangePredefinedQMSets() 
+{
+	if (m_wndQMSetsCombo.GetCurSel() != CB_ERR)
+	{
+		int idx = m_wndQMSetsCombo.GetCurSel();
+		ASSERT((idx >= 0) && (idx <= QMSets.GetSize()));
+		if ((idx >= 0) && (idx < QMSets.GetSize()))
+		{
+			const CQMSet& QMSet = QMSets.ElementAt(idx);
+			m_wndOpeningQm.SetWindowText(QMSet.OpeningQM);
+			m_wndClosingQm.SetWindowText(QMSet.ClosingQM);
+		}
+
+		UpdateCtrlStates();
+	}
 }

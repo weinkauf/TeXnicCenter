@@ -1,3 +1,6 @@
+2004/12/22 niteria
+- Implemented Feature 1089997: Predefined sets of quotation marks
+
 2004/09/09 niteria
 - Updated URL for downloading dictionaries.
 - Implemented Feature 1025478: Document tabs: adjustable position and layout

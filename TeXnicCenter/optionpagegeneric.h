@@ -49,6 +49,29 @@ class COptionPageGeneric : public CPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageGeneric)
 
+//types
+protected:
+	///Defines a set of quotation marks for a certain language
+	struct CQMSet
+	{
+		CQMSet()
+			:NameID(STE_LANGUAGE_ENGLISH),
+			OpeningQM("``"),
+			ClosingQM("''")
+		{}
+
+		CQMSet(const UINT nStringID, LPCTSTR argOpeningQM, LPCTSTR argClosingQM)
+			:NameID(nStringID),
+			OpeningQM(argOpeningQM),
+			ClosingQM(argClosingQM)
+		{}
+
+
+		UINT NameID;
+		CString OpeningQM;
+		CString ClosingQM;
+	};
+
 // construction/destruction
 public:
 	COptionPageGeneric();
@@ -69,6 +92,11 @@ protected:
 	*/
 	void RefillLanguageList();
 
+	/**
+	Fills the list of predefined quotations mark replacement sets.
+	*/
+	void RefillPredefinedQMSets();
+
 // overwritings
 public:
 	//{{AFX_VIRTUAL(COptionPageGeneric)
@@ -84,6 +112,7 @@ protected:
 	//{{AFX_MSG(COptionPageGeneric)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnUpdateCtrls();
+	afx_msg void OnSelchangePredefinedQMSets();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -91,6 +120,8 @@ protected:
 public:
 	//{{AFX_DATA(COptionPageGeneric)
 	enum { IDD = IDD_OPTIONS_GENERIC };
+	CStatic	m_QMSetLabel;
+	CComboBox	m_wndQMSetsCombo;
 	CComboBox	m_wndLookAndFeelList;
 	CComboBox	m_wndGuiLanguageList;
 	CEdit	m_wndOpeningQm;
@@ -105,6 +136,7 @@ public:
 	//}}AFX_DATA
 	CString m_strLookAndFeel;
 	CString m_strGuiLanguage;
+	CArray< CQMSet, CQMSet& > QMSets;
 };
 
 //{{AFX_INSERT_LOCATION}}
