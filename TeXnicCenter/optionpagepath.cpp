@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "OptionPagePath.h"
@@ -172,6 +178,10 @@ void COptionPagePath::OnOK()
 		g_configuration.m_astrDocumentTemplatePaths.Add( strElement );
 	}
 
+	//Kill leading and ending spaces
+	m_strDefaultPath.TrimLeft();
+	m_strDefaultPath.TrimRight();
+	//Update Default Path
 	g_configuration.m_strDefaultPath = m_strDefaultPath;
 
 	CPropertyPage::OnOK();

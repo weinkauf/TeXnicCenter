@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 
@@ -240,17 +246,20 @@ BOOL CLatexDoc::DoSave( LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/ )
 			CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
 		
 		// Get default path
-		m_strPersonalDir = g_configuration.m_strProjectPath;
-		if ( m_strPersonalDir.IsEmpty() )
+		CString strPersonalDir = "";
+		CLatexProject* pLProject = theApp.GetProject();
+		if (pLProject) strPersonalDir = pLProject->GetWorkingDir();
+		if (strPersonalDir.IsEmpty())
 		{
-			m_strPersonalDir = g_configuration.m_strDefaultPath;
-			if (m_strPersonalDir.IsEmpty())
+			strPersonalDir = g_configuration.m_strDefaultPath;
+			if (strPersonalDir.IsEmpty())
 			{
+				//Get the system default for "My documents"
 				LPITEMIDLIST	lpidl;
 				if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
 				{
-					SHGetPathFromIDList(lpidl, m_strPersonalDir.GetBuffer(MAX_PATH));
-					m_strPersonalDir.ReleaseBuffer();
+					SHGetPathFromIDList(lpidl, strPersonalDir.GetBuffer(MAX_PATH));
+					strPersonalDir.ReleaseBuffer();
 
 					// free memory
 					LPMALLOC	lpMalloc;
@@ -260,7 +269,7 @@ BOOL CLatexDoc::DoSave( LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/ )
 				}
 			}
 		}
-		dlg.m_ofn.lpstrInitialDir = m_strPersonalDir;
+		dlg.m_ofn.lpstrInitialDir = strPersonalDir;
 
 		if( dlg.DoModal() != IDOK )
 			return FALSE;

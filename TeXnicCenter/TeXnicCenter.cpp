@@ -398,8 +398,9 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	// load last project of last session
 	if( g_configuration.m_bLoadLastProject && !g_configuration.m_strLastProject.IsEmpty() )
-		if(OpenProject( g_configuration.m_strLastProject ) )
-			g_configuration.m_strProjectPath = g_configuration.m_strLastProject;
+	{
+		OpenProject(g_configuration.m_strLastProject);
+	}
 
 	// update frame window
 	m_pMainWnd->SendMessage( WM_COMMAND, ID_OPTIONS_CHANGED );
@@ -914,17 +915,20 @@ void CTeXnicCenterApp::OnFileOpen()
 		OFN_FILEMUSTEXIST, CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
 
 	// Get default path
-	m_strPersonalDir = g_configuration.m_strProjectPath;
-	if ( m_strPersonalDir.IsEmpty() )
+	CString strPersonalDir = "";
+	CLatexProject* pLProject = GetProject();
+	if (pLProject) strPersonalDir = pLProject->GetWorkingDir();
+	if (strPersonalDir.IsEmpty())
 	{
-		m_strPersonalDir = g_configuration.m_strDefaultPath;
-		if ( m_strPersonalDir.IsEmpty() )
+		strPersonalDir = g_configuration.m_strDefaultPath;
+		if (strPersonalDir.IsEmpty())
 		{
+			//Get the system default for "My documents"
 			LPITEMIDLIST	lpidl;
 			if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
 			{
-				SHGetPathFromIDList(lpidl, m_strPersonalDir.GetBuffer(MAX_PATH));
-				m_strPersonalDir.ReleaseBuffer();
+				SHGetPathFromIDList(lpidl, strPersonalDir.GetBuffer(MAX_PATH));
+				strPersonalDir.ReleaseBuffer();
 
 				// free memory
 				LPMALLOC	lpMalloc;
@@ -934,7 +938,7 @@ void CTeXnicCenterApp::OnFileOpen()
 			}
 		}
 	}
-	dlg.m_ofn.lpstrInitialDir = m_strPersonalDir;
+	dlg.m_ofn.lpstrInitialDir = strPersonalDir;
 
 	if( dlg.DoModal() != IDOK )
 		return;
@@ -951,14 +955,15 @@ void CTeXnicCenterApp::OnProjectOpen()
 		GetProjectFileFilter(), AfxGetMainWnd() );
 	
 	// Get default path
-	m_strPersonalDir = g_configuration.m_strDefaultPath;
-	if (m_strPersonalDir.IsEmpty())
+	CString strPersonalDir = g_configuration.m_strDefaultPath;
+	if (strPersonalDir.IsEmpty())
 	{
+		//Get the system default for "My documents"
 		LPITEMIDLIST	lpidl;
 		if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
 		{
-			SHGetPathFromIDList(lpidl, m_strPersonalDir.GetBuffer(MAX_PATH));
-			m_strPersonalDir.ReleaseBuffer();
+			SHGetPathFromIDList(lpidl, strPersonalDir.GetBuffer(MAX_PATH));
+			strPersonalDir.ReleaseBuffer();
 
 			// free memory
 			LPMALLOC	lpMalloc;
@@ -967,14 +972,13 @@ void CTeXnicCenterApp::OnProjectOpen()
 				lpMalloc->Free(lpidl);
 		}
 	}
-	dialog.m_ofn.lpstrInitialDir = m_strPersonalDir;
+	dialog.m_ofn.lpstrInitialDir = strPersonalDir;
 
 	if( dialog.DoModal() == IDCANCEL )
 		return;
 
 	// open project file
-	if( OpenProject( dialog.GetPathName() ) )
-	  g_configuration.m_strProjectPath = dialog.GetPathName();
+	OpenProject(dialog.GetPathName());
 }
 
 /*

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_CONFIGURATION_H__E7A12DE1_107E_11D3_929E_8FAE545EAC4D__INCLUDED_)
 #define AFX_CONFIGURATION_H__E7A12DE1_107E_11D3_929E_8FAE545EAC4D__INCLUDED_
 
@@ -210,9 +216,6 @@ public:
 
 	/** Default path. */
 	CString m_strDefaultPath;
-
-	/** Project path. */
-	CString m_strProjectPath;
 
 	///////////////////////////////////////////////////////////////////
 	// character replacement

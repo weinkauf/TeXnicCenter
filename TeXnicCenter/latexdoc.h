@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_LATEXDOC_H__447410E9_1058_11D3_929E_D75EECD5B417__INCLUDED_)
 #define AFX_LATEXDOC_H__447410E9_1058_11D3_929E_D75EECD5B417__INCLUDED_
 
@@ -153,12 +159,6 @@ protected:
 	New mode when saving the file
 	*/
 	int m_nCRLFMode;
-
-	/** 
-	Personal directory .
-	(File system directory that serves as a common repository for documents.)
-	*/
-	CString m_strPersonalDir;
 
 };
 
