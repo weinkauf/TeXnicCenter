@@ -289,6 +289,8 @@
 #define STE_PDICT_OPEN_ERROR            482
 #define IDS_LANGUAGE                    483
 #define IDS_DIALECT                     484
+#define STE_DICTIONARY_OPEN_FAIL        485
+#define STE_DICTIONARY_CREATE_FAIL      486
 #define ID_WINDOW_FIRST                 800
 #define ID_WINDOW_LAST                  849
 #define IDR_USER_TOOLBAR_FIRST          900

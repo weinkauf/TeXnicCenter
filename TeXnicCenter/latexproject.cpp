@@ -637,7 +637,7 @@ void CLatexProject::OnProjectParsed()
 
 void CLatexProject::SetCurrentStructureItem( int nIndex )
 {
-	ASSERT( nIndex > -1 && ( (nIndex == 0) || (nIndex < m_aStructureItems.GetSize()) ) ); // invalid index
+	ASSERT( (nIndex == 0) || (nIndex < m_aStructureItems.GetSize()) ); // invalid index
 	if (nIndex < 0 || nIndex >= m_aStructureItems.GetSize())
 		return;
 
@@ -756,7 +756,11 @@ void CLatexProject::OnItemInsertRef()
 
 void CLatexProject::OnSpellProject() 
 {
-	CSpellCheckDlg dlg(NULL, theApp.GetSpeller());
+	MySpell *pSpell = theApp.GetSpeller();
+	if (pSpell == NULL)
+		return;
+
+	CSpellCheckDlg dlg( NULL, NULL );
 	dlg.m_bDoneMessage = false;
 	dlg.m_bSelection = false;
 
@@ -783,8 +787,11 @@ void CLatexProject::OnSpellProject()
 			POSITION pos = pDoc->GetFirstViewPosition();
 			CLatexEdit* pView = (CLatexEdit*) pDoc->GetNextView( pos );
 			ASSERT( pView );
+			if ( pView == NULL )
+				// View is NULL??
+				continue;
 
-			dlg.Reset(pView, theApp.GetSpeller());
+			dlg.Reset(pView, pSpell);
 
 			// Save selection
 			CPoint ptStart, ptEnd;
@@ -795,17 +802,15 @@ void CLatexProject::OnSpellProject()
 			pView->SetShowInteractiveSelection(FALSE);
 			pView->SetSelection(ptStart, ptEnd);
 
-			if (result != IDOK)
-			{
-				result = AfxMessageBox(AfxLoadString(IDS_SPELL_CONTINUE), MB_YESNO|MB_ICONQUESTION);
-				if (result != IDYES)
-					break;
-			}
 			if ( !bWasOpen )
 				pView->SendMessage(WM_COMMAND, ID_FILE_CLOSE);
+			if ( result == IDABORT )
+				break;
+			else if ( result != IDOK )
+				if ( AfxMessageBox(AfxLoadString(IDS_SPELL_CONTINUE), MB_YESNO|MB_ICONQUESTION) != IDYES )
+					break;
 		}
 	}
-	
 }
 
 
