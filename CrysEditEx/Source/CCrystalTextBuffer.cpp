@@ -55,6 +55,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.9  2002/04/25 06:41:01  cnorris
+* Potential access violation fixes
+*
 * Revision 1.8  2002/04/23 21:45:09  cnorris
 * realtime spell check
 *
@@ -376,11 +379,13 @@ CCrystalTextBuffer::CCrystalTextBuffer()
 	m_ptLastChange.x = m_ptLastChange.y = -1;
 	//END SW
 	m_bFirstModify = TRUE;
+	::InitializeCriticalSection( &m_csLineAttributes );
 }
 
 CCrystalTextBuffer::~CCrystalTextBuffer()
 {
 	ASSERT(! m_bInit);			//	You must call FreeAll() before deleting the object
+	::DeleteCriticalSection( &m_csLineAttributes );
 }
 
 
@@ -474,45 +479,64 @@ void CCrystalTextBuffer::SetReadOnly(BOOL bReadOnly /*= TRUE*/)
 
 void CCrystalTextBuffer::ClearLineAttributes(int nLine, CTextAttribute::tagAttribute attribute)
 {
-	m_aLines[nLine].ClearAttributes(attribute); 
+	::EnterCriticalSection( &m_csLineAttributes );
+	m_aLines[nLine].ClearAttributes(attribute);
+	::LeaveCriticalSection( &m_csLineAttributes );
 }
 
 
 void CCrystalTextBuffer::ClearLineAttributes(int nLine)
 {
+	::EnterCriticalSection( &m_csLineAttributes );
 	m_aLines[nLine].ClearAttributes();
+	::LeaveCriticalSection( &m_csLineAttributes );
 }
 
 
-void CCrystalTextBuffer::InsertLineAttribute(int nLine, CTextAttribute &lineAttribute)
+void CCrystalTextBuffer::InsertLineAttribute(int nLine, CTextAttribute &attribute)
 {
-	m_aLines[nLine].InsertAttribute(lineAttribute);
+	::EnterCriticalSection( &m_csLineAttributes );
+	m_aLines[nLine].InsertAttribute(attribute);
+	::LeaveCriticalSection( &m_csLineAttributes );
 }
 
 
-CCrystalTextBuffer::CTextAttribute *CCrystalTextBuffer::GetLineAttribute(int nLine, int nStart, int nEnd) const
+CCrystalTextBuffer::CTextAttribute *CCrystalTextBuffer::GetLineAttribute(int nLine, int nStart, int nEnd)
 {
 	if ( m_aLines[nLine].m_lstAttributes == NULL )
 		return NULL;
 
+	::EnterCriticalSection( &m_csLineAttributes );
 	TextAttributeListType* pList = m_aLines[nLine].m_lstAttributes;
+	CCrystalTextBuffer::CTextAttribute * retValue = NULL;
 	POSITION pos = pList->GetHeadPosition();
 	while ( pos != NULL )
 	{
 		CTextAttribute& attr = pList->GetNext( pos );
 		if (nStart >= attr.m_nStartPos && nEnd < attr.m_nEndPos)
-			return &attr;
+		{
+			retValue = &attr;
+			break;
+		}
 	}
-	return NULL;
+	::LeaveCriticalSection( &m_csLineAttributes );
+	return retValue;
 }
 
 
-CCrystalTextBuffer::TextAttributeListType *CCrystalTextBuffer::GetLineAttributes(int nLine) const
+CCrystalTextBuffer::TextAttributeListType *CCrystalTextBuffer::GetLineAttributes(int nLine)
 {
+	::EnterCriticalSection( &m_csLineAttributes );
 	TextAttributeListType* pList = m_aLines[nLine].m_lstAttributes;
 	if ( pList == NULL || pList->GetCount() == 0 )
 		return NULL;
 	return pList;
+}
+
+
+void CCrystalTextBuffer::ReleaseLineAttributes()
+{
+	::LeaveCriticalSection( &m_csLineAttributes );
 }
 
 
@@ -1450,7 +1474,7 @@ void CCrystalTextBuffer::SetModified(BOOL bModified /*= TRUE*/)
 		while (pos != NULL)
 		{
 			CCrystalTextView *pView = m_lpViews.GetNext( pos );
-			::SendMessage(pView->m_hWnd, WM_COMMAND, IDS_EDITOP_FIRSTMODIFY, 0);
+			::PostMessage(pView->m_hWnd, WM_COMMAND, IDS_EDITOP_FIRSTMODIFY, 0);
 		}
 	}
 }

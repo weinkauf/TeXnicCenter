@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.11  2002/04/27 07:21:59  cnorris
+* Avoid ambiguous function under Visual Studio < 5
+*
 * Revision 1.10  2002/04/25 18:53:53  cnorris
 * background spell check support
 *
@@ -642,7 +645,7 @@ void CCrystalTextView::DrawLineAttributes(CDC *pdc, CPoint ptOrigin, int nLineIn
 				if (pos != NULL)
 					attr = pList->GetNext(pos);
 				else
-					return; // done, no more attributes
+					break; // done, no more attributes
 			}
 			else
 			{
@@ -651,9 +654,9 @@ void CCrystalTextView::DrawLineAttributes(CDC *pdc, CPoint ptOrigin, int nLineIn
 				{
 					nLength = ExpandChars(pszLine, nOffset, anBreaks[++nSubline], anIndices);
 					nStartLine = 0;
-					if (nLength == 0)
-						return; // done, no more text
-				} while (attr.m_nStartPos > anIndices[nLength-1]);
+				} while (nLength && attr.m_nStartPos > anIndices[nLength-1]);
+				if (nLength == 0)
+					break; // done, no more text
 			}
 			int nStartChar = __max(attr.m_nStartPos, anIndices[0]);
 			int nEndChar = __min(attr.m_nEndPos, anIndices[nLength]);
@@ -683,6 +686,7 @@ void CCrystalTextView::DrawLineAttributes(CDC *pdc, CPoint ptOrigin, int nLineIn
 			bSplitAttribute = (nEndChar < attr.m_nEndPos);
 		}
 	}
+	pBuffer->ReleaseLineAttributes();
 }
 
 
