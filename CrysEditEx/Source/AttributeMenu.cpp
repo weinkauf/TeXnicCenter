@@ -114,10 +114,19 @@ BOOL CAttributeMenu::ShowSpellMenu(MySpell *pSpell, CPoint screenPoint)
 			CMenu* pPopup = m_menu.GetSubMenu( CCrystalTextBuffer::CTextAttribute::spellError );
 			ASSERT( pPopup );
 			pPopup->InsertMenu( 0, MF_BYPOSITION|MF_SEPARATOR, 0, _T("") );
-			if (nSuggestCount > spellErrorCount)
-				nSuggestCount = spellErrorCount;
-			for ( i = 0; i < nSuggestCount; ++i )
-				pPopup->InsertMenu( i, MF_STRING|MF_ENABLED|MF_BYPOSITION, i+spellErrorStart, A2T(aSuggestList[i]) );
+			if ( nSuggestCount == 0 )
+			{
+				CString noSuggestions;
+				noSuggestions.LoadString(IDS_SPELL_NO_SUGGESTIONS);
+				pPopup->InsertMenu( 0, MF_STRING|MF_GRAYED|MF_BYPOSITION, 0, noSuggestions );
+			}
+			else
+			{
+				if (nSuggestCount > spellErrorCount)
+					nSuggestCount = spellErrorCount;
+				for ( i = 0; i < nSuggestCount; ++i )
+					pPopup->InsertMenu( i, MF_STRING|MF_ENABLED|MF_BYPOSITION, i+spellErrorStart, A2T(aSuggestList[i]) );
+			}
 
 			int nSel = pPopup->TrackPopupMenu( TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_RETURNCMD|TPM_NONOTIFY, screenPoint.x, screenPoint.y+10, m_pView );
 			if ( nSel >= spellErrorStart && nSel < spellErrorStop )
