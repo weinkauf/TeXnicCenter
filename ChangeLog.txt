@@ -3,6 +3,8 @@
 - Aditionally, the tools are saved to another registry location
   to prevent data loss when old TXC version is started. So the statement
   from 2002/11/26 regarding this does not apply anymore.
+- Disabled single-click project creation for files without "tex"-extension.
+- Set tcp-Version to 4 because of the change regarding project language.
 
 2003/12/20 niteria
 - Tabs can be inserted into the edit controls of the Text Modules dialog.
