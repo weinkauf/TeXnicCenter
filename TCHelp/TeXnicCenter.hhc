@@ -207,7 +207,5 @@
 </UL>
 <OBJECT type="text/sitemap">
 	<param name="Merge" value="..\Help\LatexHelpBook.chm::\LatexHelpBook.hhc">
-
-	</OBJECT>
-</UL>
+</OBJECT>
 </BODY></HTML>

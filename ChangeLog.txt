@@ -1,3 +1,6 @@
+2005/03/19 svenwiegand
+- Fixed Bug 1166521: Error when calling online help, while help is not open
+
 2005/03/16 vachis
 - Fixed Bugs: inconsistent behavior of normal selection and brace block selection 
   unmatched brace (after Ctrl+M) disappear when scrolling
