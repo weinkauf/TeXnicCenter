@@ -5,7 +5,7 @@
 #include "baseaffix.hxx"
 #include "affixmgr.hxx"
 
-class Prefix : Affix
+class Prefix : public Affix
 {
        AffixMgr*           pmyMgr;
 public:
@@ -18,7 +18,7 @@ public:
 
 
 
-class Suffix : Affix
+class Suffix : public Affix
 {
        AffixMgr*           pmyMgr;
 public:

@@ -8,11 +8,12 @@
 #define ALLCAP  2
 #define HUHCAP  3
 
+#include "../CrysEditEx/Source/cedefs.h"
 
 #ifndef _MYSPELLMGR_HXX_
 #define _MYSPELLMGR_HXX_
 
-class MySpell
+class CRYSEDIT_CLASS_DECL MySpell
 {
   AffixMgr*       pAMgr;
   HashMgr*        pHMgr;

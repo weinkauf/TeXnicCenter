@@ -5,9 +5,8 @@
 #include <cstdlib>
 #include <cstdio>
 
+#include "stdafx.h"
 #include "myspell.hxx"
-
-using namespace std;
 
 
 MySpell::MySpell(const char * affpath, const char * dpath)

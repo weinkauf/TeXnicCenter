@@ -7,12 +7,11 @@
 #include <fcntl.h>
 #include <cstdio>
 
+#include "stdafx.h"
 #include "hashmgr.hxx"
 
 extern void mychomp(char * s);
 extern char * mystrdup(const char *);
-
-using namespace std;
 
 
 // build a hash table from a munched word list

@@ -6,10 +6,8 @@
 #include <cstdlib>
 #include <cstdio>
 
+#include "stdafx.h"
 #include "affix.hxx"
-
-using namespace std;
-
 
 Prefix::Prefix(AffixMgr* pmgr, unsigned char a, int num, affentry* dp)
 {
