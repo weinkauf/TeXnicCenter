@@ -55,6 +55,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:53  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:23+02  sven_wiegand
 * Initial revision
 *
@@ -325,9 +328,6 @@ static const char *crlfs[] =
 
 BOOL CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRLF_STYLE_AUTOMATIC*/)
 {
-	ASSERT(! m_bInit);
-	ASSERT(m_aLines.GetSize() == 0);
-
 	HANDLE hFile = NULL;
 	int nCurrentMax = 256;
 	char *pcLineBuf = new char[nCurrentMax];
@@ -343,6 +343,8 @@ BOOL CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CR
 					OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 		if (hFile == INVALID_HANDLE_VALUE)
 			__leave;
+
+		FreeAll();  // release text buffer only after successful read
 
 		int nCurrentLength = 0;
 
