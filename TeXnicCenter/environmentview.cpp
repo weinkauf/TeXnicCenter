@@ -22,7 +22,7 @@
 * If you have further questions or if you want to support
 * further TeXnicCenter development, visit the TeXnicCenter-homepage
 *
-*    http://www.ToolsCenter.org
+*	 http://www.ToolsCenter.org
 *
 *********************************************************************/
 
@@ -66,7 +66,7 @@ CEnvironmentView::~CEnvironmentView()
 }
 
 
-void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)  //UPDATE
+void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)	//UPDATE
 {
 	switch( lHint )
 	{
@@ -74,7 +74,7 @@ void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHin
 			{
 				//-----------------------------------------------------------
 				// remember expanded items
-				CString				strSelectedItem = GetItemPath( GetSelectedItem() );
+				CString 			strSelectedItem = GetItemPath( GetSelectedItem() );
 				CStringArray	astrExpandedItems;
 				GetExpandedItems( astrExpandedItems );
 
@@ -118,14 +118,15 @@ void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHin
 					case CStructureParser::figure:
 					case CStructureParser::table:
 						{
-							if( si.m_strTitle.GetLength() > 0 )
-                            {
-                                HTREEITEM	hItem = InsertItem( 
-								    si.m_strTitle, 
-								    si.m_nType, si.m_nType, 
-								    ahParentItems[si.m_nType], TVI_SORT );
-							    SetItemData( hItem, i );
-                            }
+							//Better display all stuff, even without a title
+							//if (si.m_strTitle.GetLength() == 0)
+							//	break; //no title -> no display
+
+							HTREEITEM hItem = InsertItem( 
+								si.m_strTitle, 
+								si.m_nType, si.m_nType, 
+								ahParentItems[si.m_nType], TVI_SORT );
+							SetItemData( hItem, i );
 						}
 						break;
 					}
