@@ -102,6 +102,8 @@ BOOL CProjectPropertyDialog::OnInitDialog()
 	else
 		pLangBox->SetCurSel( nSel );
 
+	OnSelchangeOptionsLanguage();
+
 	UpdateData(FALSE);
 	
 	return TRUE;  // return TRUE unless you set the focus to a control
