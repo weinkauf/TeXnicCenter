@@ -3097,11 +3097,11 @@ BEGIN
     STE_TAB_GREP_2          "Suchen 2"
     STE_OUTPUT_TITLE        "Ausgabe"
     IDR_OUTPUT              "Kennung für die Ausgabeleiste"
-    STE_BIB_FILES           "BibTeX Dateien"
-    STE_TEX_FILES           "LaTeX Dateien"
+    STE_BIB_FILES           "BibTeX-Dateien"
+    STE_TEX_FILES           "LaTeX-Dateien"
     STE_TAB_PARSE           "Analyse"
     STE_APPENDIX            "Anhang"
-    STE_GRAPHICS_FILES      "TODO: Graphic files"
+    STE_GRAPHICS_FILES      "Grafik-Dateien"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7402,5 +7402,4 @@ LANGUAGE 7, 1
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
-
 
