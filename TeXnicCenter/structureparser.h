@@ -147,8 +147,9 @@ public:
 		description,
 		figure,
 		table,
-		file,
+		texFile,
 		group,
+		bibFile,
 		typeCount
 	};
 
@@ -247,8 +248,11 @@ private:
 
 	@param lpszPath
 		Path to the resolved file to add
+
+	@param nType
+		Type of file
 	*/
-	void AddFileItem( LPCTSTR lpszPath );
+	void AddFileItem( LPCTSTR lpszPath, int nType );
 
 	/**
 	Resolve a file name relative to working directory or absolute.

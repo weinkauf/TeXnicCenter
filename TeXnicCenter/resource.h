@@ -69,6 +69,8 @@
 #define IDD_ITEM_PROPERTIES             152
 #define IDR_OUTPUT                      153
 #define IDR_POPUP_ITEM                  153
+#define STE_BIB_FILES                   154
+#define STE_TEX_FILES                   155
 #define IDD_HEADER                      156
 #define IDD_FLOATOBJECT                 158
 #define IDC_STATIC1                     158

@@ -691,7 +691,8 @@ void CLatexProject::OnUpdateItemCmd(CCmdUI* pCmdUI)
 		case ID_ITEM_GOTO:
 			switch( si.m_nType )
 			{
-			case CStructureParser::file:
+			case CStructureParser::texFile:
+			case CStructureParser::bibFile:
 				pCmdUI->Enable( !si.m_strPath.IsEmpty() );
 				break;
 			default:
@@ -724,7 +725,8 @@ void CLatexProject::OnItemGoto()
 
 	switch( si.m_nType )
 	{
-		case CStructureParser::file:
+		case CStructureParser::texFile:
+		case CStructureParser::bibFile:
 			theApp.OpenLatexDocument( GetFilePath( si.m_strPath ), FALSE, -1 );
 			break;
 		default:
