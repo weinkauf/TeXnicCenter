@@ -262,42 +262,49 @@ void COutputWizard::LookForMikTex()
 {
 	CBCGRegistry userReg(false, true);
 	CBCGRegistry adminReg(true, true);
-	CBCGRegistry* pMiktexReg = 0;
+	CString	strPath(_T(""));
 
+	//Get installation path of MiKTeX
 	//Where did miktex wrote its stuff?
 	// ==> mikTeX Install Options: 'install only for me' and 'install for all'
+	// User HKCU is preferred; so first try the HKLM and then let HKCU overwrite it.
+	if (adminReg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX")))
+	{
+		CString adminPath;
+		if (adminReg.Read(_T("Install Root"), adminPath))
+		{
+			adminPath = CPathTool::Cat(adminPath, _T("MiKTeX\\bin"));
+			if (CPathTool::Exists(adminPath))
+				strPath = adminPath;
+		}
+
+		adminReg.Close();
+	}
+
 	if (userReg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX")))
 	{
-		pMiktexReg = &userReg;
-	}
-	else
-	{
-		if (adminReg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX")))
-			pMiktexReg = &adminReg;
+		CString userPath;
+		if (userReg.Read(_T("Install Root"), userPath))
+		{
+			userPath = CPathTool::Cat(userPath, _T("MiKTeX\\bin"));
+			if (CPathTool::Exists(userPath))
+				strPath = userPath;
+		}
+
+		userReg.Close();
 	}
 
-	if (!pMiktexReg)
-	{
-		m_bMikTexInstalled = false;
-		SetActivePage(pageDistributionPath);
-		return;
-	}
-
-	// Get installation path of MiKTeX
-	CString	strPath;
-	if (!pMiktexReg->Read(_T("Install Root"), strPath))
+	//Did we find a path?
+	if (strPath.GetLength() == 0)
 	{
 		m_bMikTexInstalled = false;
 		SetActivePage(pageDistributionPath);
 		return;
 	}
 
-	pMiktexReg->Close();
-
+	//Yes, everything is fine.
 	m_bMikTexInstalled = true;
-
-	m_wndPageDistributionPath.m_strPath = CPathTool::Cat(strPath, _T("MiKTeX\\bin"));
-
+	m_wndPageDistributionPath.m_strPath = strPath;
 	SetActivePage(pageMikTex);
 }
 
