@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "InsertTabularDialog.h"
@@ -62,7 +68,7 @@ BOOL CInsertTabularDialog::SetProperties( const CString &strProperties )
 
 	///////////////////////////////////////////////////////////////////
 	// is horizonally centered
-	if( strProperties.Find( "\\begin{center}" ) > -1 )
+	if ( (strProperties.Find("\\centering") > -1) || (strProperties.Find("\\begin{center}") > -1) )
 		m_bHCenter = TRUE;
 	else
 		m_bHCenter = FALSE;
@@ -158,7 +164,7 @@ CString CInsertTabularDialog::GetProperties()
 	if( m_bHCenter )
 	{
 		if( m_bFloat )
-			strResult = _T("\\begin{center}\r\t\t") + strResult + _T("\t\\end{center}\r");
+			strResult = _T("\\centering\r\t\t") + strResult;
 		else
 			strResult = _T("\\begin{center}\r\t") + strResult + _T("\\end{center}\r");
 	}
@@ -179,6 +185,11 @@ CString CInsertTabularDialog::GetProperties()
 	}
 	else
 		strResult.Insert( 0, _T('\r') );
+
+
+	///////////////////////////////////////////////////////////////////
+	// Empty Lines?
+	strResult.Replace("\r\r", "\r");
 
 	return strResult;
 }
