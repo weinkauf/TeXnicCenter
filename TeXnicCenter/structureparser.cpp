@@ -44,7 +44,7 @@ static char THIS_FILE[]=__FILE__;
 const CString const CStructureParser::m_sItemNames[typeCount]= {
 	"generic","header","equation","quote","quotation",
 	"center","verse","itemization","enumeration","description",
-	"figure","table","texFile","group","bibliography"};
+	"figure","table","texFile","group","bibliography","graphic"};
 
 //-------------------------------------------------------------------
 // class CStructureItem
@@ -149,13 +149,19 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 	) );
 	TRACE( "m_regexInput returned %d\n", nResult );
 
- 	nResult = m_regexBib.set_expression( _T(
- 		"\\\\(bibliography)\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"
- 	) );
- 	TRACE( "m_regexBib returned %d\n", nResult );
+	nResult = m_regexBib.set_expression( _T(
+		"\\\\(bibliography)\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"
+	) );
+	TRACE( "m_regexBib returned %d\n", nResult );
 
- 	nResult = m_regexAppendix.set_expression( _T("\\\\(appendix)") );
- 	TRACE( "m_regexBib returned %d\n", nResult );
+	nResult = m_regexAppendix.set_expression( _T("\\\\appendix") );
+	TRACE( "m_regexAppendix returned %d\n", nResult );
+
+	// \includegraphics * [ ] [ ] { file }	only {file} is required
+	nResult = m_regexGraphic.set_expression( _T(
+		"\\\\includegraphics\\s*\\*?(\\s*\\[[^\\]]\\]){0,2}\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"
+	) );
+	TRACE( "m_regexGraphic returned %d\n", nResult );
 }
 
 CStructureParser::~CStructureParser()
@@ -184,9 +190,10 @@ BOOL CStructureParser::StartParsing( LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDi
 	m_strWorkingDir = lpszWorkingDir;
 	m_aStructureItems.RemoveAll();
 	m_nDepth = 0;
-	
+
 	m_nLinesParsed = 0;
 	m_nFilesParsed = 0;
+	m_nCharsParsed = 0;
 	if ( m_pParseOutputHandler )
 		m_pParseOutputHandler->OnParseBegin();
 
@@ -321,6 +328,37 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		{
 			info.m_strError.Format( STE_FILE_EXIST, strPath );
 			m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
+		}
+
+		// parse string behind occurence
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth );
+
+		return;
+	}
+	// look for graphic file
+	if( reg_search( lpText, lpTextEnd, what, m_regexGraphic, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
+	{
+		// This file extension list should be user configurable because the rules for including 
+		// graphics are configurable. I think this can wait until the config files are converted 
+		// to XML.
+		static const CString const strGraphicTypes[] = {"", ".pdf",".eps",".png"};
+		static const int strGraphicLength = 4;
+
+		// parse string before occurence
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth );
+
+		// parse input file
+		CString strPath( what[2].first, what[2].second - what[2].first );
+		strPath.TrimLeft();
+		strPath.TrimRight();
+		strPath.TrimLeft(_T('"'));
+		strPath.TrimRight(_T('"'));
+		for (int i = 0; i < strGraphicLength; ++i)
+		{
+			CString strCompletePath = strPath;
+			strCompletePath += strGraphicTypes[i];
+			if ( ::PathFileExists(strCompletePath) )
+				AddFileItem(ResolveFileName(strCompletePath), graphicFile);
 		}
 
 		// parse string behind occurence
@@ -695,6 +733,7 @@ BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies, int nFil
 	while( !m_bCancel && pTs->GetNextLine( lpLine, nLength ) )
 	{
 		m_nLinesParsed++;
+		m_nCharsParsed += nLength;
 		nActualLine++;
 		lpOffset = lpLine;
 		lpLineEnd = lpLine + nLength;

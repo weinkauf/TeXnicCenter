@@ -3101,6 +3101,7 @@ BEGIN
     STE_TEX_FILES           "LaTeX Dateien"
     STE_TAB_PARSE           "Analyse"
     STE_APPENDIX            "Anhang"
+    STE_GRAPHICS_FILES      "TODO: Graphic files"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -6380,10 +6381,11 @@ BEGIN
     STE_TAB_GREP_2          "Find 2"
     STE_OUTPUT_TITLE        "Output"
     IDR_OUTPUT              "Identifier for the output bar"
-    STE_BIB_FILES           "Bib files"
-    STE_TEX_FILES           "Tex files"
+    STE_BIB_FILES           "BibTeX files"
+    STE_TEX_FILES           "LaTeX files"
     STE_TAB_PARSE           "Parse"
     STE_APPENDIX            "Appendix"
+    STE_GRAPHICS_FILES      "Graphic files"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7400,4 +7402,5 @@ LANGUAGE 7, 1
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
+
 

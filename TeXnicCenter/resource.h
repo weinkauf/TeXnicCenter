@@ -76,6 +76,7 @@
 #define STE_APPENDIX                    157
 #define IDD_FLOATOBJECT                 158
 #define IDC_STATIC1                     158
+#define STE_GRAPHICS_FILES              158
 #define IDD_GRAPHIC                     159
 #define STE_LATEX_START                 160
 #define IDD_TABULAR                     160
@@ -148,6 +149,7 @@
 #define STE_LATEX_REF                   240
 #define STE_LATEX_PAGEREF               241
 #define IDB_PARSE_VIEW                  243
+#define IDI_ICON1                       244
 #define STE_ITEMTYPE_GENERIC            256
 #define STE_ITEMTYPE_HEADER             257
 #define STE_ITEMTYPE_EQUATION           258
@@ -1064,7 +1066,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        244
+#define _APS_NEXT_RESOURCE_VALUE        245
 #define _APS_NEXT_COMMAND_VALUE         38314
 #define _APS_NEXT_CONTROL_VALUE         1252
 #define _APS_NEXT_SYMED_VALUE           111
