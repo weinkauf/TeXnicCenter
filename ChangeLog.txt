@@ -1,3 +1,6 @@
+2003/04/30 christianwelzel
+- Fixed Bug 602329: File>Print and HP LaserJet 4050.
+
 2003/03/13 christianwelzel
 - Implemented Feature 614342: Last opened folder.
 - Fixed Feature 535144: Specifying Output Profile in TeX file.

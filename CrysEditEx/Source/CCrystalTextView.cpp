@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.16  2002/06/27 14:43:26  svenwiegand
+* Instead of the character test functions (isalpha, isdigit, etc.) from the standard library, our own wrappers from the character.h file (myspell directory) are used now, to fix character recognition problems (bug 551033).
+*
 * Revision 1.15  2002/06/19 16:04:48  svenwiegand
 * Fixed hanging problem that occured on my fast XP machine, when closing a document.
 *
@@ -1830,8 +1833,8 @@ void CCrystalTextView::OnBeginPrinting(CDC *pdc, CPrintInfo *pInfo)
 	pDisplayFont->GetLogFont(&lf);
 
 	CDC *pDisplayDC = GetDC();
-	lf.lfHeight = MulDiv(lf.lfHeight, pdc->GetDeviceCaps(LOGPIXELSY), pDisplayDC->GetDeviceCaps(LOGPIXELSY) * 2);
-	lf.lfWidth = MulDiv(lf.lfWidth, pdc->GetDeviceCaps(LOGPIXELSX), pDisplayDC->GetDeviceCaps(LOGPIXELSX) * 2);
+	lf.lfHeight = MulDiv(lf.lfHeight, pdc->GetDeviceCaps(LOGPIXELSY), pDisplayDC->GetDeviceCaps(LOGPIXELSY));
+	lf.lfWidth = MulDiv(lf.lfWidth, pdc->GetDeviceCaps(LOGPIXELSX), pDisplayDC->GetDeviceCaps(LOGPIXELSX));
 	ReleaseDC(pDisplayDC);
 
 	m_pPrintFont = new CFont;
