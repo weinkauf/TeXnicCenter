@@ -137,7 +137,7 @@ LRESULT CBackgroundThread::OnUpdateLine(WPARAM wParam, LPARAM lParam)
 		if ( m_bSpellEnabled )
 		{
 			SpellCheckSingleLine( pTextView, nLine );
-			Sleep(3000); // Give the typist a chance to get ahead to prevent 
+			Sleep(3000); // Give the typist a chance to get ahead to prevent flicker
 		}
 	}
 	return 0;
@@ -207,7 +207,7 @@ void CBackgroundThread::SpellCheckSingleLine(CCrystalTextView *pTextView, int nL
 		return;
 
 	ASSERT( pTextView );
-	pTextView->Attach();
+	pTextView->Hold();
 
 	char pWordBuffer[MAXWORDLEN+1];
 	CCrystalParser *pParser = pTextView->GetParser();
@@ -216,7 +216,7 @@ void CBackgroundThread::SpellCheckSingleLine(CCrystalTextView *pTextView, int nL
 
 	if ( !(nLine < pBuffer->GetLineCount()) )
 	{
-		pTextView->Detach();
+		pTextView->Release();
 		return; // Done
 	}
 
@@ -246,7 +246,7 @@ void CBackgroundThread::SpellCheckSingleLine(CCrystalTextView *pTextView, int nL
 	}
 
 	pBuffer->UpdateViews( NULL, NULL, UPDATE_LINEATTR, nLine );
-	pTextView->Detach();
+	pTextView->Release();
 }
 
 
@@ -256,7 +256,7 @@ void CBackgroundThread::SpellCheckBuffer(CCrystalTextView *pTextView)
 		return;
 
 	ASSERT( pTextView );
-	pTextView->Attach();
+	pTextView->Hold();
 
 	int nLineIndex = 0;
 	char pWordBuffer[MAXWORDLEN+1];
@@ -292,7 +292,7 @@ void CBackgroundThread::SpellCheckBuffer(CCrystalTextView *pTextView)
 		++nLineIndex;
 	}
 
-	pTextView->Detach();
+	pTextView->Release();
 	return;
 }
 
@@ -300,7 +300,7 @@ void CBackgroundThread::SpellCheckBuffer(CCrystalTextView *pTextView)
 void CBackgroundThread::RemoveBufferAttributes(CCrystalTextView *pTextView, CCrystalTextBuffer::CTextAttribute::tagAttribute attrType)
 {
 	ASSERT( pTextView );
-	pTextView->Attach();
+	pTextView->Hold();
 
 	CCrystalTextBuffer *pBuffer = pTextView->LocateTextBuffer();
 	int nLineIndex = 0;
@@ -308,7 +308,7 @@ void CBackgroundThread::RemoveBufferAttributes(CCrystalTextView *pTextView, CCry
 		pBuffer->ClearLineAttributes(nLineIndex++, attrType);
 
 	pBuffer->UpdateViews( NULL, NULL, UPDATE_LINEATTR, -1 );
-	pTextView->Detach();
+	pTextView->Release();
 }
 
 

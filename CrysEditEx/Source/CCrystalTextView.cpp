@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.10  2002/04/25 18:53:53  cnorris
+* background spell check support
+*
 * Revision 1.9  2002/04/24 00:32:39  niteria
 * Fixed Bug 84 (old list): incremental search cancels using
 * accentuated characters or german umlauts.
@@ -1311,7 +1314,7 @@ void CCrystalTextView::OnDraw(CDC *pdc)
 void CCrystalTextView::ResetView()
 {
 	if ( m_pTextBuffer )
-		Attach( true );
+		Hold( true );
 	m_nTopLine = 0;
 	m_nOffsetChar = 0;
 	m_nLineHeight = -1;
@@ -1367,7 +1370,7 @@ void CCrystalTextView::ResetView()
 			m_pBackgroundThread->PostThreadMessage(ID_BG_INVALIDATE_VIEW, 0, (long)this);
 	}
 	if ( m_pTextBuffer )
-		Detach ( true );
+		Release( true );
 }
 
 void CCrystalTextView::UpdateCaret()
@@ -2045,7 +2048,7 @@ int CCrystalTextView::GetScreenChars()
 
 void CCrystalTextView::OnDestroy() 
 {
-	Attach( true );
+	Hold( true );
 	DetachFromBuffer();
 	m_hAccel = NULL;
 
@@ -2062,7 +2065,7 @@ void CCrystalTextView::OnDestroy()
 	}
 	delete m_pCacheBitmap;
 	m_pCacheBitmap = NULL;
-	Detach( true );
+	Release( true );
 }
 
 BOOL CCrystalTextView::OnEraseBkgnd(CDC *pdc) 
@@ -3957,7 +3960,7 @@ BOOL CCrystalTextView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 }
 
 
-int CCrystalTextView::Attach( bool bExclusive /*= false */ )
+int CCrystalTextView::Hold( bool bExclusive /*= false */ )
 {
 	if ( bExclusive )
 	{
@@ -3982,15 +3985,15 @@ int CCrystalTextView::Attach( bool bExclusive /*= false */ )
 }
 
 
-int CCrystalTextView::Detach( bool bExclusive /*= false */ )
+int CCrystalTextView::Release( bool bExclusive /*= false */ )
 {
 	if ( bExclusive )
 	{
-		// Attach ( true ) was not called
+		// Hold( true ) was not called
 		ASSERT( m_nHoldCount == 1 );
 		#if (_WIN32_WINNT >= 0x0400)
 		ASSERT ( ::TryEnterCriticalSection( &m_csHold ) );
-		#endif /* _WIN32_WINNT >= 0x0400 */
+		#endif // _WIN32_WINNT >= 0x0400 
 
 		m_nHoldCount = 0;
 		m_pevtHoldCountZero->SetEvent();

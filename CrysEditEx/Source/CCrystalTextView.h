@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.6  2002/04/23 21:45:09  cnorris
+* realtime spell check
+*
 * Revision 1.5  2002/04/09 23:22:41  cnorris
 * Added explicit virtual destructor
 *
@@ -641,21 +644,21 @@ public:
 
 	/**
 	Increment the hold view count. The view cannot be destroyed with outstanding 
-	attachments. Every call must be matched with a call to Detach
-	@param bExclusive Attach exclusively. Wait until the hold count reaches zero,
+	holds. Every call must be matched with a call to Release()
+	@param bExclusive Hold exclusively. Wait until the hold count reaches zero,
 	then make an exclusive hold of view. All future holds block until the
-	exlcusive hold is detached.
+	exlcusive hold is released. Must be matched by call to Release(bExclusive).
 	@return Approximate number of outstanding holds.
 	*/
-	int Attach( bool bExclusive = false );
+	int Hold( bool bExclusive = false );
 
 	/**
 	Decrement the hold view count. The view cannot be destroyed with outstanding 
-	attachments. Every call must be matched with a previous call to Attach
-	@param bExclusive Detach exclusively. Must match call to Attach. 
+	holds. Every call must be matched with a previous call to Hold()
+	@param bExclusive Release exclusively. Must match call to Hold(bExclusive). 
 	@return Approximate number of outstanding holds.
 	*/
-	int Detach( bool bExclusive = false );
+	int Release( bool bExclusive = false );
 
 	/**
 	Sets the Parser to use to parse the file.
