@@ -222,33 +222,42 @@ public:
 	*/
 	BOOL StartParsing( LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDir, int nPriority = THREAD_PRIORITY_IDLE );
 
-	/**
-	Returns a reference to an array of CStructureItem-objects, that
-	describe the structure of the project.
+	/** Populates the provided CStructureItemArray witht the elements of 
+	the last parse. This thread safe, even window threads.
 
-	When you call this method, parsing is blocked. You have to call 
-	UnlockStructureItems() to continue parsing.
+	@param pItemArray
+		CStructureItemArray to populate. pItems is purged of all 
+		elements before populating.
 
-	@see UnlockStructureItems
+	@return
+		<VAR>TRUE</VAR> on success else <VAR>FALSE</VAR>
 	*/
-	const CStructureItemArray *LockStructureItems();
-
-	/**
-	Continues the parsing that has been blocked by a call to 
-	LockStructureItems(). 
-	
-	You should not use the array returned by LockStructureItems()
-	any more after a call to this mehtod.
-	*/
-	void UnlockStructureItems();
+	BOOL GetStructureItems(CStructureItemArray *pItemArray);
 
 	/**
 	Cancels parsing.
 	*/
 	void CancelParsing();
 
+	/** Signaled when parser is inactive. Use this event to determine when 
+	it is safe to destruct a handler. */
+	CEvent m_evtParsingDone;
+
 // implementation
 private:
+
+	/** Lock the internal structure item array.
+	@return 
+		0 on success, else result of GetLastError()
+	*/
+	DWORD Lock();
+
+	/** Unlock the internal structure item array.
+	@return 
+		0 on success, else result of GetLastError()
+	*/
+	DWORD Unlock();
+
 	/**
 	Signals the end of parsing.
 	@param bParsingResult <var>TRUE</var> if parsing was successful, else <var>FALSE</var>.
@@ -436,9 +445,10 @@ protected:
 
 	/** Array containing the index of the actual item representing the depth. */
 	int m_anItem[MAX_DEPTH];
+
 private:
 	/** Used to control access to the m_aStructureItems-member. */
-	CCriticalSection m_structureItemsAccess;
+	HANDLE m_hParsingMutex;
 
 	/** Actual depth */
 	int m_nDepth;
