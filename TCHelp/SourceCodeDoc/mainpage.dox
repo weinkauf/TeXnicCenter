@@ -1,0 +1,22 @@
+/**
+    \mainpage \image html logo.png TeXnicCenter SourceCode Documentation
+
+<em>!This documentation is still beta!</em>
+
+\section welcome Welcome to the SourceCode Documentation of TeXnicCenter
+
+The development of TeXnicCenter is powered by
+<A HREF="http://sourceforge.net/projects/texniccenter/">SourceForge.net</A>
+
+<HR>
+<HR>
+<HR>
+
+\section next The next things should be rewritten some day
+
+
+\htmlinclude credits.html
+
+\htmlinclude copyright.html
+ 
+*/
