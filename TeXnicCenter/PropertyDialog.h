@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PROPERTYDIALOG_H__488E4023_075E_11D5_A222_006097239934__INCLUDED_)
 #define AFX_PROPERTYDIALOG_H__488E4023_075E_11D5_A222_006097239934__INCLUDED_
 
@@ -34,6 +40,13 @@
 #endif // _MSC_VER > 1000
 
 /**
+Provides a property page based on a template.
+
+@ingroup dialogs
+
+@see CPropertyDialog
+
+@author Sven Wiegand
 */
 class CPropertyDialogPage : public CDialog
 {
@@ -105,6 +118,8 @@ contain property pages (see CPropertyDialogPage).
 
 It is similar to CPropertySheet with the difference that you can
 place additional controls in the sheet.
+
+@ingroup dialogs
 
 @author Sven Wiegand
 */

@@ -44,9 +44,15 @@
 #include "BrowseButton.h"
 #include "TemplateDialog.h"
 
+/** @addtogroup templates
+	@{
+*/
+
 /**
 Abstract base class for all elements listed in the template list
 control of the new-project dialog.
+
+@see CProjectNewDialog
 
 @author Sven Wiegand
 */
@@ -72,6 +78,8 @@ public:
 
 /**
 Represents a project template with an empty main file.
+
+@see CProjectNewDialog
 
 @author Sven Wiegand
 */
@@ -118,6 +126,8 @@ Represents a file based template for the project new dialog.
 
 A file based template simply provides a file for the project's main
 file.
+
+@see CProjectNewDialog
 
 @author Sven Wiegand
 */
@@ -170,6 +180,8 @@ private:
 /**
 Represents a project wizard for the project new dialog.
 
+@see CProjectNewDialog
+
 @author Sven Wiegand
 */
 class CWizardBasedProjectTemplateItem : public CProjectTemplateItem
@@ -206,6 +218,8 @@ private:
 
 /**
 Dialog for creating a new project based on a template or a wizard.
+
+@ingroup dialogs
 
 @author Sven Wiegand
 */
@@ -263,6 +277,8 @@ protected:
 	*/
 	BOOL m_bIgnoreProjectPathChange;
 };
+
+/** @} */
 
 
 //{{AFX_INSERT_LOCATION}}

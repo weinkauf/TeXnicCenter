@@ -26,18 +26,25 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OPTIONPAGEGENERIC_H__B6F7CFC1_4515_11D3_929E_B4D2F36FA64C__INCLUDED_)
 #define AFX_OPTIONPAGEGENERIC_H__B6F7CFC1_4515_11D3_929E_B4D2F36FA64C__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// OptionPageGeneric.h : Header-Datei
-//
 
-/////////////////////////////////////////////////////////////////////////////
-// Dialogfeld COptionPageGeneric 
+/**	General Options.
 
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class COptionPageGeneric : public CPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageGeneric)

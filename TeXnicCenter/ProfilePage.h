@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PROFILEPAGE_H__AF58958E_0A74_11D5_A222_006097239934__INCLUDED_)
 #define AFX_PROFILEPAGE_H__AF58958E_0A74_11D5_A222_006097239934__INCLUDED_
 
@@ -36,6 +42,13 @@
 #include "PropertyDialog.h"
 #include "Profile.h"
 
+/**	Base Class for the property pages dealing with the definition
+of output profiles.
+
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CProfilePage : public CPropertyDialogPage
 {
 // construction/destruction

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PROFILENAMEDIALOG_H__F9A231A0_1F87_11D5_A222_006097239934__INCLUDED_)
 #define AFX_PROFILENAMEDIALOG_H__F9A231A0_1F87_11D5_A222_006097239934__INCLUDED_
 
@@ -33,8 +39,10 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-/**
-Dialog that requests the user to enter a name for an output profile.
+
+/** Dialog that requests the user to enter a name for an output profile.
+
+@ingroup dialogs
 
 @author Sven Wiegand
 */

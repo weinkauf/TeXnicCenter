@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PROFILEPAGELATEX_H__5C552765_082E_11D5_A222_006097239934__INCLUDED_)
 #define AFX_PROFILEPAGELATEX_H__5C552765_082E_11D5_A222_006097239934__INCLUDED_
 
@@ -39,6 +45,12 @@
 #include "EditMenuButton.h"
 #include "EditMenuButtonOpt.h"
 
+/**	Edits the Compiler of output profiles.
+
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CProfilePageLatex : public CProfilePage
 {
 // construction/destruction

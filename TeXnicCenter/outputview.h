@@ -38,8 +38,7 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// OutputView.h : Header-Datei
-//
+
 #include "OutputDoc.h"
 
 #define OPW_ADD_LINE		WM_USER + 5

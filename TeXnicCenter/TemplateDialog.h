@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_TEMPLATEDIALOG_H__5588FFA4_2C94_11D3_929E_444553540000__INCLUDED_)
 #define AFX_TEMPLATEDIALOG_H__5588FFA4_2C94_11D3_929E_444553540000__INCLUDED_
 
@@ -33,9 +39,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+/** @addtogroup templates
+	@{
+*/
 
-/**
-Abstract base class for all elements listed in the template list
+/**	Abstract base class for all elements listed in the template list
 control of a template dialog.
 
 @author Sven Wiegand
@@ -85,6 +93,8 @@ void AFXAPI DestructElements(CTemplateItem **pElements, int nCount);
 
 /**
 Dialog for creating new elements based on template files.
+
+@ingroup dialogs
 
 @author Sven Wiegand
 */
@@ -207,6 +217,8 @@ private:
 };
 
 void AFXAPI DestructElements(CTemplateItemArray* *pElements, int nCount);
+
+/** @} */
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.

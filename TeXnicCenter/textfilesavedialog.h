@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_TEXTFILESAVEDIALOG_H__74DCE581_1EB3_11D4_A221_006097239934__INCLUDED_)
 #define AFX_TEXTFILESAVEDIALOG_H__74DCE581_1EB3_11D4_A221_006097239934__INCLUDED_
 
@@ -35,6 +41,13 @@
 
 #include "LatexDoc.h"
 
+/** A File Dialog with a combo box, where the user can choose
+the text format (Unix, Windows, Mac) to save in.
+
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CTextFileSaveDialog : public CFileDialogEx
 {
 // construction/destruction

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OUTPUTWIZARDWELCOME_H__627C2BE9_5B16_11D4_A222_006097239934__INCLUDED_)
 #define AFX_OUTPUTWIZARDWELCOME_H__627C2BE9_5B16_11D4_A222_006097239934__INCLUDED_
 
@@ -38,6 +44,8 @@
 This property sheet is part of the output wizard (COutputWizard).
 It shows the user a welcome message and gives him some general
 instructions.
+
+@ingroup dialogs
 
 @author Sven Wiegand
 */

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OUTPUTWIZARDMIKTEX_H__627C2BE4_5B16_11D4_A222_006097239934__INCLUDED_)
 #define AFX_OUTPUTWIZARDMIKTEX_H__627C2BE4_5B16_11D4_A222_006097239934__INCLUDED_
 
@@ -37,7 +43,9 @@
 This page belongs to the output wizard (COutputWizard) and informs 
 the user, that MiKTeX has been found on his system. The user then
 can choose, if TeXnicCenter should be configured for the use with
-MiKTeX or not
+MiKTeX or not.
+
+@ingroup dialogs
 
 @author Sven Wiegand
 */

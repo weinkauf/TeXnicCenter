@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OUTPUTINFO_H__2F2F3500_25A9_11D3_929E_DBAEDA762522__INCLUDED_)
 #define AFX_OUTPUTINFO_H__2F2F3500_25A9_11D3_929E_DBAEDA762522__INCLUDED_
 
@@ -35,7 +41,7 @@
 
 /**
 Class for information outputted by another program 
-(i.e. error messages of a compiler)
+(i.e. error messages of a compiler).
 
 @author Sven Wiegand
 */

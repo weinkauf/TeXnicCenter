@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PROFILEPAGEPOSTPROCESSOR_H__5C552766_082E_11D5_A222_006097239934__INCLUDED_)
 #define AFX_PROFILEPAGEPOSTPROCESSOR_H__5C552766_082E_11D5_A222_006097239934__INCLUDED_
 
@@ -41,6 +47,12 @@
 #include "EditMenuButtonOpt.h"
 #include "BCGNotifyingEditListBox.h"
 
+/**	Edits the Postprocessors of output profiles.
+
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CProfilePagePostprocessor : public CProfilePage
 {
 // construction/destruction

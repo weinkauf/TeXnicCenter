@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OUTPUTWIZARD_H__627C2BE3_5B16_11D4_A222_006097239934__INCLUDED_)
 #define AFX_OUTPUTWIZARD_H__627C2BE3_5B16_11D4_A222_006097239934__INCLUDED_
 
@@ -43,6 +49,15 @@
 /**
 The output wizard allows the user a step by step configuration of the
 output types.
+
+@ingroup dialogs
+
+@see COutputWizardMikTex
+@see COutputWizardDistributionPath
+@see COutputWizardViewer
+@see COutputWizardViewer
+@see COutputWizardViewer
+@see COutputWizardFinish
 
 @author Sven Wiegand
 */

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PROJECTPROPERTYDIALOG_H__DB3E5C01_323C_11D3_929E_83C047CE4AE2__INCLUDED_)
 #define AFX_PROJECTPROPERTYDIALOG_H__DB3E5C01_323C_11D3_929E_83C047CE4AE2__INCLUDED_
 
@@ -34,6 +40,12 @@
 #endif // _MSC_VER > 1000
 
 
+/**	Edits the properties of the current project.
+
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CProjectPropertyDialog : public CDialog
 {
 // Construction/Destruction

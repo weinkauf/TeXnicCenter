@@ -26,18 +26,25 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OPTIONPAGELANGUAGE_H__2082FD53_4ABF_4A14_8B8B_6254FF4F040D__INCLUDED_)
 #define AFX_OPTIONPAGELANGUAGE_H__2082FD53_4ABF_4A14_8B8B_6254FF4F040D__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// OptionPageLanguage.h : header file
-//
 
-/////////////////////////////////////////////////////////////////////////////
-// COptionPageLanguage dialog
+/**	Options for spell checking.
 
+@ingroup dialogs
+
+@author Chris Norris
+*/
 class COptionPageLanguage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageLanguage)
