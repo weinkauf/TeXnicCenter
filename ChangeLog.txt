@@ -1,3 +1,13 @@
+2002/04/08 cnorris
+- Implemented basic spell checker functionality. The spell checker is based
+on the MySpell library, which is the same implementation used by Mozilla and
+OpenOffice. Dictionaries for several languages (~10) are available for 
+download on the Internet from the OpenOffice webpage. Dictionaries moved into 
+to the \language subdirectory of the directory TeXnicCenter are installed 
+and ready for use. More work is scheduled for the spell checker in the 
+future. Future features include: check as you type and personal dictionary.
+
+
 2002/04/02 niteria
 - Translated the new strings for parsing (introduced by Chris) to german.
 - Fix for Bug 538164 in CCrystalTextView::ResetView().
