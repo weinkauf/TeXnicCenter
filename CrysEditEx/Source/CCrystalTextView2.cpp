@@ -64,6 +64,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:59  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:27+02  sven_wiegand
 * Initial revision
 *
@@ -598,7 +601,8 @@ void CCrystalTextView::OnLButtonDown(UINT nFlags, CPoint point)
 			if( GetSubLineIndex( ptStart.y ) + pos.y == GetSubLineCount() - 1 )
 			{
 				// select to end of subline
-				ptStart = SubLineEndToCharPos( ptStart.y, pos.y );
+				ptStart.y = GetSubLineCount() - 1;
+				ptStart.x = SubLineEndToCharPos( ptStart.y, pos.y );
 			}
 			else
 			{
