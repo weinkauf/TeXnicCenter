@@ -492,6 +492,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 		SetRegistryBase(_T("BCGWorkspace\\") + g_configuration.m_strGuiLanguage);
 		SaveState();
 		WriteProfileInt(_T("BCGWorkspace"), _T("LanguageProfilesDefined"), TRUE);
+		WriteProfileInt(_T("BCGWorkspace\\") + g_configuration.m_strGuiLanguage, _T("LanguageAlreadyUsed"), TRUE);
 	}
 	else
 	{
