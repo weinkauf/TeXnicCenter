@@ -55,6 +55,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.11  2002/04/29 22:55:07  cnorris
+* Spell checker niceness
+*
 * Revision 1.10  2002/04/29 19:45:17  cnorris
 * Make text attribute structure thread safe
 *
@@ -425,6 +428,7 @@ void CCrystalTextBuffer::AppendLine(int nLineIndex, LPCTSTR pszChars, int nLengt
 
 void CCrystalTextBuffer::FreeAll()
 {
+	LockLineAttributes();
 	//	Free text
 	int nCount = m_aLines.GetSize();
 	for (int I = 0; I < nCount; I ++)
@@ -441,6 +445,7 @@ void CCrystalTextBuffer::FreeAll()
 	//BEGIN SW
 	m_ptLastChange.x = m_ptLastChange.y = -1;
 	//END SW
+	ReleaseLineAttributes();
 }
 
 BOOL CCrystalTextBuffer::InitNew(int nCrlfStyle /*= CRLF_STYLE_DOS*/)

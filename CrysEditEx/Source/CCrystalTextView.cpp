@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.12  2002/04/29 19:45:17  cnorris
+* Make text attribute structure thread safe
+*
 * Revision 1.11  2002/04/27 07:21:59  cnorris
 * Avoid ambiguous function under Visual Studio < 5
 *
@@ -283,6 +286,7 @@ CCrystalTextView::CCrystalTextView()
 
 CCrystalTextView::~CCrystalTextView()
 {
+	ASSERT( m_nHoldCount == 0 );
 	::DeleteCriticalSection( &m_csHold );
 	delete m_pevtHoldCountZero;
 	ASSERT(m_hAccel == NULL);
@@ -1317,8 +1321,6 @@ void CCrystalTextView::OnDraw(CDC *pdc)
 
 void CCrystalTextView::ResetView()
 {
-	if ( m_pTextBuffer )
-		Hold( true );
 	m_nTopLine = 0;
 	m_nOffsetChar = 0;
 	m_nLineHeight = -1;
@@ -1369,12 +1371,7 @@ void CCrystalTextView::ResetView()
 		if ( m_pTextBuffer )
 			// Inform the background thread we've been reset.
 			m_pBackgroundThread->PostThreadMessage(ID_BG_UPDATE_BUFFER, 0, (long)this);
-		else
-			// Inform the background thread we're being destroyed
-			m_pBackgroundThread->PostThreadMessage(ID_BG_INVALIDATE_VIEW, 0, (long)this);
 	}
-	if ( m_pTextBuffer )
-		Release( true );
 }
 
 void CCrystalTextView::UpdateCaret()
@@ -1991,7 +1988,9 @@ void CCrystalTextView::AttachToBuffer(CCrystalTextBuffer *pBuf /*= NULL*/)
 	m_pTextBuffer = pBuf;
 	if (m_pTextBuffer != NULL)
 		m_pTextBuffer->AddView(this);
+	Hold( true );
 	ResetView();
+	Release( true );
 
 	//	Init scrollbars
 	CScrollBar *pVertScrollBarCtrl = GetScrollBarCtrl(SB_VERT);
@@ -2052,6 +2051,14 @@ int CCrystalTextView::GetScreenChars()
 
 void CCrystalTextView::OnDestroy() 
 {
+	if ( m_pBackgroundThread )
+	{
+		// Inform the background thread we're being destroyed
+		m_pBackgroundThread->PostThreadMessage(ID_BG_INVALIDATE_VIEW, 0, (long)this);
+		// Increase the hold count to delay destruction until the background thread 
+		// processes the ID_BG_INVALIDATE_VIEW message and releases this view.
+		Hold();
+	}
 	Hold( true );
 	DetachFromBuffer();
 	m_hAccel = NULL;
@@ -3966,6 +3973,7 @@ BOOL CCrystalTextView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 int CCrystalTextView::Hold( bool bExclusive /*= false */ )
 {
+	ASSERT( m_nHoldCount >= 0 );
 	if ( bExclusive )
 	{
 		while ( true )
@@ -3985,32 +3993,31 @@ int CCrystalTextView::Hold( bool bExclusive /*= false */ )
 		++m_nHoldCount;
 		::LeaveCriticalSection( &m_csHold );
 	}
+	ASSERT( m_nHoldCount > 0 );
 	return m_nHoldCount;
 }
 
 
 int CCrystalTextView::Release( bool bExclusive /*= false */ )
 {
+	ASSERT( m_nHoldCount > 0 );
+	int nHoldCount;
 	if ( bExclusive )
 	{
 		// Hold( true ) was not called
 		ASSERT( m_nHoldCount == 1 );
-		#if (_WIN32_WINNT >= 0x0400)
-		ASSERT ( ::TryEnterCriticalSection( &m_csHold ) );
-		#endif // _WIN32_WINNT >= 0x0400 
-
-		m_nHoldCount = 0;
+		nHoldCount = m_nHoldCount = 0;
 		m_pevtHoldCountZero->SetEvent();
 		::LeaveCriticalSection( &m_csHold );
 	}
 	else
 	{
 		::EnterCriticalSection( &m_csHold );
-		--m_nHoldCount;
+		nHoldCount = --m_nHoldCount;
 		if ( m_nHoldCount == 0 )
 			m_pevtHoldCountZero->SetEvent();
 		::LeaveCriticalSection( &m_csHold );
 	}
-	return m_nHoldCount;
+	return nHoldCount;
 }
 
