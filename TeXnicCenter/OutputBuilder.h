@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OUTPUTBUILDER_H__A0979360_2131_11D5_A222_006097239934__INCLUDED_)
 #define AFX_OUTPUTBUILDER_H__A0979360_2131_11D5_A222_006097239934__INCLUDED_
 
@@ -38,8 +44,8 @@
 class COutputDoc;
 class COutputView;
 
-/**
-This class builds the output.
+
+/** This class builds the output.
 
 @author Sven Wiegand
 */
@@ -104,6 +110,14 @@ public:
 	*/
 	BOOL CancelExecution();
 
+	/**
+	Returns whether the last build was cancelled or not.
+	*/
+	BOOL WasCancelled()
+	{
+		return m_bCancel;
+	}
+
 // overridings
 protected:
 	virtual UINT Run();
@@ -161,13 +175,13 @@ protected:
 // attributes
 protected:
 	/** document to report errors and warnings to */
-	COutputDoc *m_pDoc;
+	COutputDoc* m_pDoc;
 
 	/** view to write the output to */
-	COutputView *m_pView;
+	COutputView* m_pView;
 
 	/** output profile to use */
-	CProfile *m_pProfile;
+	CProfile* m_pProfile;
 
 	/** main-file path */
 	CString m_strMainPath;

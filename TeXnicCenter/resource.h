@@ -1261,6 +1261,8 @@
 #define ID_VIEW_DOCTAB_ICONS            38470
 #define ID_VIEW_DOCTAB_NOTE             38471
 #define ID_TOOLS_CANCEL                 38472
+#define ID_LATEX_RUNANDVIEW             38473
+#define ID_LATEX_FILECOMPILEANDVIEW     38474
 #define IDS_TEXTMODULES_NONEDEFINED     57671
 
 // Next default values for new objects
@@ -1269,7 +1271,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        277
-#define _APS_NEXT_COMMAND_VALUE         38473
+#define _APS_NEXT_COMMAND_VALUE         38476
 #define _APS_NEXT_CONTROL_VALUE         1339
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
