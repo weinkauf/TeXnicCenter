@@ -75,6 +75,9 @@ public:
 	virtual ~CFileCleanItem();
 
 //Operators
+/** @{*/ 
+/** @name Operators*/
+public:
 	///Assignment - assigns new values to this (left) item
 	inline void operator= (const CFileCleanItem &arg)
 		{
@@ -126,6 +129,8 @@ public:
 					|| ( (tFileHandling == arg.tFileHandling) && (strDescription >= arg.strDescription) )
 					);
 		};
+
+/* @} */ 
 
 //Methods
 public:
@@ -185,9 +190,12 @@ public:
 
 //Methods
 public:
+	///Adds a number of default Items.
 	void AddDefaultItems();
 
+	///Serializes the array to the registry.
 	bool SerializeToRegistry(LPCTSTR strStartSection) const;
+	///Loads the array from the registry.
 	bool SerializeFromRegistry(LPCTSTR strStartSection);
 };
 

@@ -33,6 +33,11 @@
 */
 
 /**
+        @defgroup textmodules TextModules
+        @brief Classes dealing with user definable pieces of text to be inserted.
+*/
+
+/**
         @defgroup process Process Calling
         @brief Modules related to Process Calling.
 */

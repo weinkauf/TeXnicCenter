@@ -326,7 +326,7 @@ protected:
 											const bool bRelativePaths, const bool bCheckExistence) const;
 
 
-// attributes
+//Attributes
 private:
 	///Pointer to the Project; needed to get the names of the project files
 	CLatexProject* m_pProject;

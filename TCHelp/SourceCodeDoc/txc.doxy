@@ -63,9 +63,11 @@ WARN_LOGFILE           = warnings.log
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = . 
-#                         ../../MFCExt/ \
-#                         ../../CrysEditEx/ \
+INPUT                  = . \
+                         ../../MFCExt/ \
+                         ../../CrysEditEx/ \
+                         ../../TeXnicCenter/
+#INPUT                  = . \
 #                         ../../TeXnicCenter/
 FILE_PATTERNS          = *.dox \
                          *.h
