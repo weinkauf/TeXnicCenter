@@ -183,12 +183,25 @@ protected:
 	void DeleteProjectViews();
 	BOOL CreateProjectViews();
 
+//Statics
 public:
+	///Returns a possible project file name, if doc (tex) file name is given.
+	static CString GetProjectFileNameFromDoc(LPCTSTR lpszDocPathName);
+
+	/** Checks for an existing project file given by lpszPathName.
+
+		Asks the user to load or overwrite the exiting project file.
+
+		@returns true, if the existing one shall be loaded.
+		@returns false, if the existing one shall be overwritten.
+	*/
+	static bool CheckExistingProjectFile(LPCTSTR lpszPathName);
 
 // overridings
 public:
 	virtual void OnCloseProject();
 	virtual BOOL OnOpenProject(LPCTSTR lpszPathName);
+	virtual BOOL OnNewProjectFromDoc(LPCTSTR lpszDocPathName);
 	virtual void SetPathName(LPCTSTR lpszPathName);
 	virtual BOOL OnSaveProject(LPCTSTR lpszPathName);
 	virtual BOOL SaveModified();

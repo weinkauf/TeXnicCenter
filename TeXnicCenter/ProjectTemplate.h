@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PROJECTTEMPLATE_H__980BE3C6_25FC_11D5_A222_006097239934__INCLUDED_)
 #define AFX_PROJECTTEMPLATE_H__980BE3C6_25FC_11D5_A222_006097239934__INCLUDED_
 
@@ -90,6 +96,7 @@ public:
 	virtual BOOL SaveAllModified();     // for all documents
 	virtual void CloseAllProjects(BOOL bEndSession);
 	virtual CProject* OpenProjectFile(LPCTSTR lpszPathName) = 0;
+	virtual CProject* CreateNewProjectFileFromDoc(LPCTSTR lpszDocPathName) = 0;
 	virtual void SetDefaultTitle(CProject* pProject) = 0;
 	virtual BOOL GetProjectString(CString& rString, enum ProjectStringIndex index) const; // get one of the info strings
 
@@ -145,6 +152,7 @@ public:
 	virtual POSITION GetFirstProjectPosition() const;
 	virtual CProject* GetNextProject(POSITION& pos) const;
 	virtual CProject* OpenProjectFile(LPCTSTR lpszPathName);
+	virtual CProject* CreateNewProjectFileFromDoc(LPCTSTR lpszDocPathName);
 	virtual void SetDefaultTitle(CProject* pProject);
 
 protected:  // standard implementation
@@ -184,15 +192,20 @@ public:
 public:
 	virtual BOOL OnDDECommand(LPTSTR lpszCommand);
 	virtual void OnProjectNew();
+	///Creates a new project from a document given by filename.
+	virtual void OnProjectNewFromDocument(LPCTSTR lpszDocFileName);
 	virtual void OnProjectOpen();
 
 // Implementation
 protected:
-	int GetProjectCount(); // helper to count number of total documents
+	///Helper to count number of total projects.
+	int GetProjectCount();
+	///Helper to count number of total documents.
+	int GetDocumentCount();
+	///Prompts the user for the template and returns his choice.
+	CProjectTemplate* GetProjectTemplate();
 
-protected:
 	CPtrList m_templateList;
-	int GetDocumentCount(); // helper to count number of total documents
 
 public:
 	static BOOL bStaticInit;            // TRUE during static initialization

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PROJECT_H__980BE3C3_25FC_11D5_A222_006097239934__INCLUDED_)
 #define AFX_PROJECT_H__980BE3C3_25FC_11D5_A222_006097239934__INCLUDED_
 
@@ -88,6 +94,7 @@ public:
 	virtual void OnChangedViewList();
 	virtual void OnCloseProject();
 	virtual BOOL OnNewProject();
+	virtual BOOL OnNewProjectFromDoc(LPCTSTR lpszDocPathName);
 	virtual BOOL OnOpenProject(LPCTSTR lpszPathName);
 	virtual BOOL OnSaveProject(LPCTSTR lpszPathName);
 	virtual void ReportSaveLoadException(LPCTSTR lpszPathName, CException *e, BOOL bSaving, UINT nIDPDefault);

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "ProjectTemplate.h"
@@ -271,7 +277,6 @@ CProject* CSingleProjectTemplate::GetNextProject(POSITION& pos) const
 	return pProject;
 }
 
-
 CProject* CSingleProjectTemplate::OpenProjectFile(LPCTSTR lpszPathName)
 {
 	CProject* pProject = NULL;
@@ -280,7 +285,11 @@ CProject* CSingleProjectTemplate::OpenProjectFile(LPCTSTR lpszPathName)
 
 	if (m_pOnlyProject != NULL)
 	{
-		// already have a document - reinit it
+//		//Close current project?
+//		if (AfxMessageBox(STE_PROJECT_CLOSE_ASK, MB_ICONQUESTION | MB_OKCANCEL) == IDCANCEL)
+//			return NULL; //leave the original one
+
+		//Already have a document - reinit it
 		pProject = m_pOnlyProject;
 		if (!pProject->SaveModified())
 			return NULL;        // leave the original one
@@ -351,7 +360,7 @@ CProject* CSingleProjectTemplate::OpenProjectFile(LPCTSTR lpszPathName)
 					// assume we can continue
 				}
 			}
-			return NULL;        // open failed
+			return NULL; //open failed
 		}
 		pProject->SetPathName(lpszPathName);
 	}
@@ -359,6 +368,51 @@ CProject* CSingleProjectTemplate::OpenProjectFile(LPCTSTR lpszPathName)
 	return pProject;
 }
 
+CProject* CSingleProjectTemplate::CreateNewProjectFileFromDoc(LPCTSTR lpszDocPathName)
+{
+	CProject* pProject = NULL;
+
+	if (m_pOnlyProject != NULL)
+	{
+//		//Close current project?
+//		if (AfxMessageBox(STE_PROJECT_CLOSE_ASK, MB_ICONQUESTION | MB_OKCANCEL) == IDCANCEL)
+//			return NULL; //leave the original one
+
+		//Already have a project - reinit it
+		pProject = m_pOnlyProject;
+		if (!pProject->SaveModified())
+			return NULL; //leave the original one
+
+		pProject->OnCloseProject();
+		RemoveProject(pProject);
+		delete pProject;
+	}
+
+	//Create a new project
+	pProject = CreateNewProject();
+
+	if (pProject == NULL)
+	{
+		AfxMessageBox(AFX_IDP_FAILED_TO_CREATE_DOC);
+		return NULL;
+	}
+	ASSERT(pProject == m_pOnlyProject);
+
+	if (!pProject->OnNewProjectFromDoc(lpszDocPathName))
+	{
+		// user has been alerted to what failed in OnNewProjectFromDoc
+		TRACE0("CProject::OnNewProjectFromDoc returned FALSE.\n");
+
+		//Project creation not successfull, destroy
+		//pProject->OnCloseProject();
+		RemoveProject(pProject);
+		delete pProject;
+
+		return NULL; //open failed
+	}
+
+	return pProject;
+}
 
 void CSingleProjectTemplate::SetDefaultTitle(CProject* pProject)
 {
@@ -1071,14 +1125,13 @@ BOOL CProjectManager::OnDDECommand(LPTSTR lpszCommand)
 	return bRetVal;
 }
 
-
-void CProjectManager::OnProjectNew()
+CProjectTemplate* CProjectManager::GetProjectTemplate()
 {
 	if (m_templateList.IsEmpty())
 	{
 		TRACE0("Error: no document templates registered with CWinApp.\n");
 		AfxMessageBox(AFX_IDP_FAILED_TO_CREATE_DOC);
-		return;
+		return NULL;
 	}
 
 	CProjectTemplate* pTemplate = (CProjectTemplate*)m_templateList.GetHead();
@@ -1099,10 +1152,28 @@ void CProjectManager::OnProjectNew()
 	ASSERT(pTemplate != NULL);
 	ASSERT_KINDOF(CProjectTemplate, pTemplate);
 
-	pTemplate->OpenProjectFile(NULL);
-		// if returns NULL, the user has already been alerted
+	return pTemplate;
 }
 
+void CProjectManager::OnProjectNew()
+{
+	CProjectTemplate* pTemplate = GetProjectTemplate();
+	if (pTemplate)
+	{
+		pTemplate->OpenProjectFile(NULL);
+		//if returns NULL, the user has already been alerted
+	}
+}
+
+void CProjectManager::OnProjectNewFromDocument(LPCTSTR lpszDocFileName)
+{
+	CProjectTemplate* pTemplate = GetProjectTemplate();
+	if (pTemplate)
+	{
+		pTemplate->CreateNewProjectFileFromDoc(lpszDocFileName);
+		//if returns NULL, the user has already been alerted
+	}
+}
 
 void CProjectManager::OnProjectOpen()
 {

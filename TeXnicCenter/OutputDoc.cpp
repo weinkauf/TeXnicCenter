@@ -503,6 +503,45 @@ CString COutputDoc::GetMainPath() const
 	return CString(_T(""));
 }
 
+bool COutputDoc::AssureExistingMainFile()
+{
+	CString strPath = GetMainPath();
+
+	if (!strPath.IsEmpty())
+	{
+		//Everything is fine
+		if (CPathTool::Exists(strPath)) return true;
+
+		//Filename is there, but file is not on disk
+		CString strMsg;
+		strMsg.Format(STE_FILE_EXIST, strPath);
+		AfxMessageBox(strMsg);
+		return false;
+	}
+	else
+	{
+		//Empty file name - File not saved before
+
+		//This should not happen for projects
+		if (!m_bActiveFileOperation)
+		{
+			AfxMessageBox(STE_PROJECT_MAINFILENOTFOUND, MB_ICONSTOP | MB_OK);
+			return false;
+		}
+
+		//Get the doc
+		CDocument* pDoc = GetActiveDocument();
+		if (!pDoc) return false;
+		//Ask whether to save and proceed OR to cancel the action   
+		if (AfxMessageBox(STE_DOCUMENT_SAVEBEFOREPROCEED, MB_ICONINFORMATION | MB_OKCANCEL) == IDCANCEL)
+			return false;
+
+		//Save it
+		if (!pDoc->DoSave(strPath)) return false;
+	}
+
+	return true;
+};
 
 CString COutputDoc::GetFilePath( LPCTSTR lpszFile )
 {
@@ -1112,37 +1151,39 @@ void COutputDoc::DoLaTeXRun()
 	if (m_builder.IsStillRunning())
 		return;
 
-	// save all modified files
-	if( g_configuration.m_bSaveBeforeCompilation )
+	//Save all modified files
+	//NOTE: This saves only files, that have been saved before
+	if (g_configuration.m_bSaveBeforeCompilation)
 		theApp.SaveAllModifiedWithoutPrompt();
 
+	//Save main file, even if not saved before
+	if (!AssureExistingMainFile()) return;
+
 	// remove all error marks
-	CMultiDocTemplate	*pDocTemplate = theApp.GetLatexDocTemplate();
+	CMultiDocTemplate* pDocTemplate = theApp.GetLatexDocTemplate();
 	if (pDocTemplate)
 	{
-		POSITION	pos = pDocTemplate->GetFirstDocPosition();
+		POSITION pos = pDocTemplate->GetFirstDocPosition();
 		while (pos)
 		{
 			CLatexDoc *pDoc = dynamic_cast<CLatexDoc*>(pDocTemplate->GetNextDoc(pos));
-			if (pDoc)
-				pDoc->SetErrorMark(-1);
+			if (pDoc) pDoc->SetErrorMark(-1);
 		}
 	}
 
 	// close viewer if necessary
-	CProfile	*pProfile = g_ProfileMap.GetActiveProfile();
+	CProfile* pProfile = g_ProfileMap.GetActiveProfile();
 	if (pProfile && pProfile->GetCloseView())
 	{
 		// remember windows that has the input focus
-		CWnd	*pwnd = CWnd::GetFocus();
+		CWnd* pwnd = CWnd::GetFocus();
 
 		CProfile::CCommand	&cmd = pProfile->GetViewCloseCmd();
 
 		if (cmd.GetActiveCommand() == CProfile::CCommand::typeProcess)
 		{
-			CProcess	*p = cmd.GetProcessCommand().Execute(GetWorkingDir(), GetMainPath());
-			if (p)
-				delete p;
+			CProcess* p = cmd.GetProcessCommand().Execute(GetWorkingDir(), GetMainPath());
+			if (p) delete p;
 		}
 		else
 		{
@@ -1167,7 +1208,7 @@ void COutputDoc::DoLaTeXRun()
 
 	// activate output bar
 	CMainFrame* pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
-	if( pwndMainFrame )
+	if (pwndMainFrame)
 		pwndMainFrame->ActivateOutputTab( CMainFrame::outputTabBuildResult );
 
 	// run latex
@@ -1183,9 +1224,13 @@ void COutputDoc::DoBibTexRun()
 	if (m_builder.IsStillRunning())
 		return;
 
-	// save all modified files
-	if( g_configuration.m_bSaveBeforeCompilation )
+	//Save all modified files
+	//NOTE: This saves only files, that have been saved before
+	if (g_configuration.m_bSaveBeforeCompilation)
 		theApp.SaveAllModifiedWithoutPrompt();
+
+	//Save main file, even if not saved before
+	if (!AssureExistingMainFile()) return;
 
 	// inizialize members
 	m_aErrors.RemoveAll();
@@ -1210,9 +1255,13 @@ void COutputDoc::DoMakeIndexRun()
 	if (m_builder.IsStillRunning())
 		return;
 
-	// save all modified files
-	if( g_configuration.m_bSaveBeforeCompilation )
+	//Save all modified files
+	//NOTE: This saves only files, that have been saved before
+	if (g_configuration.m_bSaveBeforeCompilation)
 		theApp.SaveAllModifiedWithoutPrompt();
+
+	//Save main file, even if not saved before
+	if (!AssureExistingMainFile()) return;
 
 	// inizialize members
 	m_aErrors.RemoveAll();
