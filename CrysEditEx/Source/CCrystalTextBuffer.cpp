@@ -55,6 +55,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.3  2002/03/04 18:03:58  cnorris
+* Better handling of text files with bad eol sequences
+*
 * Revision 1.2  2002/02/27 19:21:37  cnorris
 * Change LoadFromFile to free buffer after successful read
 *
@@ -121,7 +124,10 @@ void CCrystalTextBuffer::SUndoRecord::SetText(LPCTSTR pszText)
 void CCrystalTextBuffer::SUndoRecord::FreeText()
 {
 	if (HIWORD((DWORD) m_pszText) != 0)
-		delete m_pszText;
+	{
+		delete [] m_pszText;
+		m_pszText = NULL;
+	}
 }
 
 
@@ -256,7 +262,7 @@ void CCrystalTextBuffer::AppendLine(int nLineIndex, LPCTSTR pszChars, int nLengt
 		TCHAR *pcNewBuf = new TCHAR[li.m_nMax];
 		if (li.m_nLength > 0)
 			memcpy(pcNewBuf, li.m_pcLine, sizeof(TCHAR) * li.m_nLength);
-		delete li.m_pcLine;
+		delete [] li.m_pcLine;
 		li.m_pcLine = pcNewBuf;
 	}
 	memcpy(li.m_pcLine + li.m_nLength, pszChars, sizeof(TCHAR) * nLength);
@@ -271,7 +277,7 @@ void CCrystalTextBuffer::FreeAll()
 	for (int I = 0; I < nCount; I ++)
 	{
 		if (m_aLines[I].m_nMax > 0)
-			delete m_aLines[I].m_pcLine;
+			delete [] m_aLines[I].m_pcLine;
 	}
 	m_aLines.RemoveAll();
 
@@ -830,7 +836,7 @@ BOOL CCrystalTextBuffer::InternalDeleteText(CCrystalTextView *pSource, int nStar
 
 		int nDelCount = nEndLine - nStartLine;
 		for (int L = nStartLine + 1; L <= nEndLine; L ++)
-			delete m_aLines[L].m_pcLine;
+			delete [] m_aLines[L].m_pcLine;
 		m_aLines.RemoveAt(nStartLine + 1, nDelCount);
 
 		//	nEndLine is no more valid
@@ -838,7 +844,7 @@ BOOL CCrystalTextBuffer::InternalDeleteText(CCrystalTextView *pSource, int nStar
 		if (nRestCount > 0)
 		{
 			AppendLine(nStartLine, pszRestChars, nRestCount);
-			delete pszRestChars;
+			delete [] pszRestChars;
 		}
 
 		UpdateViews(pSource, &context, UPDATE_HORZRANGE | UPDATE_VERTRANGE, nStartLine);
@@ -920,7 +926,7 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 	}
 
 	if (pszRestChars != NULL)
-		delete pszRestChars;
+		delete [] pszRestChars;
 
 	context.m_ptEnd.x = nEndChar;
 	context.m_ptEnd.y = nEndLine;
