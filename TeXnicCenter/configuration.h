@@ -202,6 +202,9 @@ public:
 	///////////////////////////////////////////////////////////////////
 	// file	
 
+	/** TRUE, if TeXnicCenter should always save newly created files. */
+	BOOL m_bSaveNewDocuments;
+
 	/** TRUE, if TeXnicCenter should save all modified tex-files, before compilation.*/
 	BOOL m_bSaveBeforeCompilation;
 

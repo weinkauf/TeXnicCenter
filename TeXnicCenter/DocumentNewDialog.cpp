@@ -432,6 +432,9 @@ void CDocumentNewDialog::Create()
 
 				pDoc->LoadBuffer(strTempFilePath);
 				CTemplateDialog::EndDialog(IDOK);
+
+				if (g_configuration.m_bSaveNewDocuments)
+					pDoc->DoFileSave();
 			}
 			catch (BOOL)
 			{
