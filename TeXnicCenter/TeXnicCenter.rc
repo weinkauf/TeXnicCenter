@@ -2794,22 +2794,28 @@ BEGIN
                     IDC_STATIC,316,38,62,92,WS_DISABLED
 END
 
-IDD_PROFILE_EXCHANGE DIALOG DISCARDABLE  0, 0, 242, 145
+IDD_PROFILE_EXCHANGE DIALOG DISCARDABLE  0, 0, 261, 195
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Profile"
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "List1",IDC_PROFILE_LIST,"SysListView32",LVS_LIST | 
-                    LVS_SORTASCENDING | WS_BORDER | WS_TABSTOP,7,7,228,90
+                    LVS_SORTASCENDING | WS_BORDER | WS_TABSTOP,18,19,227,90
     CONTROL         "&Verzeichnisangaben aus Pfaden entfernen",
                     IDC_REMOVE_DIRECTORY_SPECIFICATIONS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,7,103,228,10
-    DEFPUSHBUTTON   "OK",IDOK,63,124,50,14
-    PUSHBUTTON      "Abbrechen",IDCANCEL,129,124,50,14
-    LTEXT           "&Exportieren...",IDC_STATIC_EXPORT,7,130,42,8,NOT 
+                    BS_AUTOCHECKBOX | WS_TABSTOP,16,148,229,10
+    DEFPUSHBUTTON   "OK",IDOK,72,174,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,138,174,50,14
+    LTEXT           "&Exportieren...",IDC_STATIC_EXPORT,7,180,42,8,NOT 
                     WS_VISIBLE
-    LTEXT           "&Importieren",IDC_STATIC_IMPORT,199,130,36,8,NOT 
+    LTEXT           "&Importieren",IDC_STATIC_IMPORT,218,180,36,8,NOT 
                     WS_VISIBLE
+    PUSHBUTTON      "Auswahl &umkehren",IDC_BUTTON_SELECT_INVERT,170,110,75,
+                    14
+    PUSHBUTTON      "Alle a&bwählen",IDC_BUTTON_SELECT_NONE,93,110,75,14
+    PUSHBUTTON      "Alle &anwählen",IDC_BUTTON_SELECT_ALL,16,110,75,14
+    GROUPBOX        "&Profile",IDC_STATIC,7,7,247,123
+    GROUPBOX        "Optionen",IDC_STATIC,7,135,247,30
 END
 
 IDD_PROFILE DIALOG DISCARDABLE  0, 0, 392, 306
@@ -3076,9 +3082,11 @@ BEGIN
     IDD_PROFILE_EXCHANGE, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 235
+        RIGHTMARGIN, 254
+        VERTGUIDE, 16
+        VERTGUIDE, 245
         TOPMARGIN, 7
-        BOTTOMMARGIN, 138
+        BOTTOMMARGIN, 188
     END
 
     IDD_PROFILE, DIALOG
@@ -6599,22 +6607,6 @@ BEGIN
                     BS_AUTOCHECKBOX | WS_TABSTOP,7,35,91,10
 END
 
-IDD_PROFILE_EXCHANGE DIALOG DISCARDABLE  0, 0, 242, 145
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Profile"
-FONT 8, "MS Sans Serif"
-BEGIN
-    CONTROL         "List1",IDC_PROFILE_LIST,"SysListView32",LVS_LIST | 
-                    LVS_SORTASCENDING | WS_BORDER | WS_TABSTOP,7,7,228,90
-    CONTROL         "&Remove directory specifications from paths",
-                    IDC_REMOVE_DIRECTORY_SPECIFICATIONS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,7,103,228,10
-    DEFPUSHBUTTON   "OK",IDOK,63,124,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,129,124,50,14
-    LTEXT           "&Export...",IDC_STATIC_EXPORT,7,130,27,8,NOT WS_VISIBLE
-    LTEXT           "&Import",IDC_STATIC_IMPORT,215,130,20,8,NOT WS_VISIBLE
-END
-
 IDD_TEXTMODULES DIALOG DISCARDABLE  0, 0, 398, 250
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Text Modules"
@@ -6647,6 +6639,29 @@ BEGIN
     LTEXT           "Future versions of TeXnicCenter will offer additional options for defining text modules.",
                     IDC_STATIC,316,38,62,92,WS_DISABLED
 END
+
+IDD_PROFILE_EXCHANGE DIALOG DISCARDABLE  0, 0, 261, 195
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Profile"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "List1",IDC_PROFILE_LIST,"SysListView32",LVS_LIST | 
+                    LVS_SORTASCENDING | WS_BORDER | WS_TABSTOP,18,19,227,90
+    CONTROL         "&Remove directory specifications from paths",
+                    IDC_REMOVE_DIRECTORY_SPECIFICATIONS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,16,148,229,10
+    DEFPUSHBUTTON   "OK",IDOK,72,174,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,138,174,50,14
+    LTEXT           "&Export...",IDC_STATIC_EXPORT,7,180,27,8,NOT WS_VISIBLE
+    LTEXT           "&Import",IDC_STATIC_IMPORT,234,180,20,8,NOT WS_VISIBLE
+    PUSHBUTTON      "In&vert selection",IDC_BUTTON_SELECT_INVERT,170,110,75,
+                    14
+    PUSHBUTTON      "Select &none",IDC_BUTTON_SELECT_NONE,93,110,75,14
+    PUSHBUTTON      "Select &all",IDC_BUTTON_SELECT_ALL,16,110,75,14
+    GROUPBOX        "&Profiles",IDC_STATIC,7,7,247,123
+    GROUPBOX        "Options",IDC_STATIC,7,135,247,30
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -6879,20 +6894,22 @@ BEGIN
         BOTTOMMARGIN, 88
     END
 
-    IDD_PROFILE_EXCHANGE, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 235
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 138
-    END
-
     IDD_TEXTMODULES, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 391
         TOPMARGIN, 7
         BOTTOMMARGIN, 243
+    END
+
+    IDD_PROFILE_EXCHANGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 254
+        VERTGUIDE, 16
+        VERTGUIDE, 245
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 188
     END
 END
 #endif    // APSTUDIO_INVOKED
