@@ -76,10 +76,7 @@ public:
 // attributes
 protected:
 	/** file object */
-	CFile m_file;
-
-	/** archive object used to read from m_file */
-	CArchive *m_pAr;
+	CStdioFile m_file;
 
 	/** CString-object that stores the current line. */
 	CString m_strCurrentLine;
