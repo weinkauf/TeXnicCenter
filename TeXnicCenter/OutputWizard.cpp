@@ -259,25 +259,39 @@ void COutputWizard::SetActivePage(int nPage)
 
 void COutputWizard::LookForMikTex()
 {
-	CBCGRegistry	reg(TRUE, TRUE);
+	CBCGRegistry userReg(false, true);
+	CBCGRegistry adminReg(true, true);
+	CBCGRegistry* pMiktexReg = 0;
 
-	if (!reg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX")))
+	//Where did miktex wrote its stuff?
+	// ==> mikTeX Install Options: 'install only for me' and 'install for all'
+	if (userReg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX")))
 	{
-		m_bMikTexInstalled = FALSE;
+		pMiktexReg = &userReg;
+	}
+	else
+	{
+		if (adminReg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX")))
+			pMiktexReg = &adminReg;
+	}
+
+	if (!pMiktexReg)
+	{
+		m_bMikTexInstalled = false;
 		SetActivePage(pageDistributionPath);
 		return;
 	}
 
 	// Get installation path of MiKTeX
 	CString	strPath;
-	if (!reg.Read(_T("Install Root"), strPath))
+	if (!pMiktexReg->Read(_T("Install Root"), strPath))
 	{
-		m_bMikTexInstalled = FALSE;
+		m_bMikTexInstalled = false;
 		SetActivePage(pageDistributionPath);
 		return;
 	}
 
-	reg.Close();
+	pMiktexReg->Close();
 
 	m_bMikTexInstalled = TRUE;
 
