@@ -1,0 +1,57 @@
+BUILDING TEXNICCENTER
+
+1. Build regexpp-lib how described in it's documentation.
+
+2. Copy the files
+
+	mre200dl.dll
+	mre200dl.ilk
+	mre200dl.pdb
+
+   from the 'regexpp\lib' directory to the 'output\Debug' directory.
+
+3. Copy the file
+
+	mre200l.dll
+
+   from the 'regexpp\lib' directory to the 'output\Release' directory.
+
+4. Download the HTML Help Workshop from Microsoft and install it on your system 
+   (including the necessary header files).
+
+5. Open the TeXnicCenter-workspace ('TeXnicCenter\TeXnicCenter.dsw') in Visual C++..
+
+6. Build the debug and release versions of TeXnicCenter
+
+7. Build the TeXnicCenter-Help-File using HTML Help Workshop with the 
+    'TCHelp\TeXnicCenter.hhp' project
+
+8. Copy the file 
+
+	TeXCntr.chm
+
+    from the 'output' directory to the 'output\debug' and 'output\release' directory.
+
+9. Copy the files
+
+	GPL_english.htm
+	GPL_german.htm
+	Tips_english.txt
+	Tips_german.txt
+	UserImages.bmp
+
+   from the 'TeXnicCenter' directory to
+
+	a) the 'output\debug' directory
+	b) the 'output\release' directory
+
+Building is now completed. You can start TeXnicCenter.
+
+Visit the TeXnicCenter-Homepage
+
+	http://www.ToolsCenter.org/products/texniccenter/
+
+for further information.
+
+
+	Sven Wiegand (sven@ToolsCenter.org)
