@@ -193,9 +193,12 @@ void COptionPageLanguage::FindDictionaries()
 		// Dictionary file format LANG_DIALACT{-extra}?.dic
 		// Example: de_DE.dic en_US-slang.dic 
 		// Get the language and dialect of all installed dictionaries.
-		TCHAR *dash = _tcschr( dirInfo.cFileName, _T('_') );
-		TCHAR *dot = _tcschr( dash, _T('.') );
-		if ( dash != NULL && dot != NULL) 
+		TCHAR* dash;
+		TCHAR* dot;
+		dash = _tcschr( dirInfo.cFileName, _T('_') );
+		if (dash != NULL)
+			dot = _tcschr( dash, _T('.') );
+		if ( (dash != NULL) && (dot != NULL) ) 
 		{
 			CString lang( dirInfo.cFileName, dash-dirInfo.cFileName );
 			CString dialect( dash+1, dot-dash-1);
