@@ -698,8 +698,8 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,6,21,0
- PRODUCTVERSION 0,6,21,0
+ FILEVERSION 0,6,30,0
+ PRODUCTVERSION 0,6,30,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -717,14 +717,14 @@ BEGIN
             VALUE "Comments", "Beta version!\0"
             VALUE "CompanyName", "ToolsCenter (www.ToolsCenter.org)\0"
             VALUE "FileDescription", "TeXnicCenter\0"
-            VALUE "FileVersion", "1 Beta 6.21\0"
+            VALUE "FileVersion", "1 Beta 6.30\0"
             VALUE "InternalName", "TeXnicCenter\0"
-            VALUE "LegalCopyright", "Copyright © 1999-2004 ToolsCenter\0"
+            VALUE "LegalCopyright", "Copyright © 1999-2005 ToolsCenter\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "TEXCNTR.EXE\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "TeXnicCenter\0"
-            VALUE "ProductVersion", "1 Beta 6.21 ('Fawkes')\0"
+            VALUE "ProductVersion", "1 Beta 6.30 ('Firenze')\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -2835,7 +2835,7 @@ STYLE WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    LTEXT           "© 1999-2004",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
+    LTEXT           "© 1999-2005",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
     PUSHBUTTON      "ToolsCenter",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
     CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,
                     SS_CENTERIMAGE
@@ -4718,8 +4718,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,6,21,0
- PRODUCTVERSION 0,6,21,0
+ FILEVERSION 0,6,30,0
+ PRODUCTVERSION 0,6,30,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -4737,14 +4737,14 @@ BEGIN
             VALUE "Comments", "Beta version!\0"
             VALUE "CompanyName", "ToolsCenter (www.ToolsCenter.org)\0"
             VALUE "FileDescription", "TeXnicCenter\0"
-            VALUE "FileVersion", "1 Beta 6.21\0"
+            VALUE "FileVersion", "1 Beta 6.30\0"
             VALUE "InternalName", "TeXnicCenter\0"
-            VALUE "LegalCopyright", "Copyright © 1999-2004 ToolsCenter\0"
+            VALUE "LegalCopyright", "Copyright © 1999-2005 ToolsCenter\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "TEXCNTR.EXE\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "TeXnicCenter\0"
-            VALUE "ProductVersion", "1 Beta 6.21 ('Fawkes')\0"
+            VALUE "ProductVersion", "1 Beta 6.30 ('Firenze')\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -5846,7 +5846,7 @@ STYLE WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    LTEXT           "© 1999-2004",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
+    LTEXT           "© 1999-2005",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
     PUSHBUTTON      "ToolsCenter",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
     CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,
                     SS_CENTERIMAGE
@@ -8613,7 +8613,7 @@ BEGIN
     ID_TOOLS_CANCEL         "Activates editor, hides windows or cancels certain modes"
     ID_LATEX_RUNANDVIEW     "Builds a printable document out of your project and shows it\nBuild and View Output"
     ID_LATEX_FILECOMPILEANDVIEW 
-                            "Erzeugt aus der aktuellen Datei ein druckbares Dokument und zeigt es an\nAktives Dokument erstellen und betrachten"
+                            "Builds a printable output for the active file and shows it\nBuild and view current file"
 END
 
 STRINGTABLE DISCARDABLE 
