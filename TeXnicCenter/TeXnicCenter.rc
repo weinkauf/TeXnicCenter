@@ -762,7 +762,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -925,7 +925,6 @@ BEGIN
                                                 ID_PH_MSSLASHDIR
         MENUITEM SEPARATOR
         MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
-        MENUITEM "Hauptdatei mit weiteren Optionen...", ID_PH_MAINOPTIONS
     END
 END
 
@@ -995,7 +994,7 @@ BEGIN
         MENUITEM "Verzeichnispfad des aktiven Dokuments ('/' als Trennzeichen) (8.3-Format)", 
                                                 ID_PH_MSSLASHDIR
         MENUITEM SEPARATOR
-        MENUITEM "Nummer der aktiven Zeile im aktiven Dokuments", 
+        MENUITEM "Nummer der aktiven Zeile im aktiven Dokument", 
                                                 ID_PH_CLINENR
         MENUITEM "Markierter Text oder aktives Wort im aktiven Dokument", 
                                                 ID_PH_CSELECTION
@@ -1041,7 +1040,7 @@ BEGIN
         MENUITEM "Verzeichnispfad des aktiven Dokuments ('/' als Trennzeichen) (8.3-Format)", 
                                                 38116
         MENUITEM SEPARATOR
-        MENUITEM "Nummer der aktiven Zeile im aktiven Dokuments", 
+        MENUITEM "Nummer der aktiven Zeile im aktiven Dokument", 
                                                 ID_PH_CLINENR
         MENUITEM "Markierter Text oder aktives Wort im aktiven Dokument", 
                                                 ID_PH_CSELECTION
@@ -1890,14 +1889,192 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
         MENUITEM SEPARATOR
+        MENUITEM "Alle Dateien im Projekt",     ID_PHS_ALLPROJECTFILES
+        MENUITEM "Alle geöffneten Dateien",     ID_PHS_ALLOPENEDFILES
         MENUITEM "Alle TeX-Dateien im Projekt", ID_PHS_ALLTEXFILES
         MENUITEM "Alle BibTeX-Dateien im Projekt", ID_PHS_ALLBIBTEXFILES
         MENUITEM "Alle Grafik-Dateien im Projekt", ID_PHS_ALLGRAPHICFILES
         MENUITEM "Alle von TeXnicCenter automatisch generierten Dateien", 
                                                 ID_PHS_ALLTXCFILES
-        MENUITEM "Alle Dateien im Projekt",     ID_PHS_ALLPROJECTFILES
-        MENUITEM "Alle geöffneten Dateien",     ID_PHS_ALLOPENEDFILES
-        MENUITEM "Alle obigen Dateimengen",     ID_PHS_ALLFILESETS
+        MENUITEM "Alle Dateimengen zusammen",   ID_PHS_ALLFILESETS
+        MENUITEM SEPARATOR
+        MENUITEM "Dollarzeichen ('$')",         ID_PHS_DOLLAR
+    END
+END
+
+IDR_POPUP_PLACEHOLDER_OPT MENU DISCARDABLE 
+BEGIN
+    POPUP "IDR_POPUP_PLACEHOLDER_OPT"
+    BEGIN
+        MENUITEM "Kompletter Pfad der Hauptdatei", ID_PH_MPATH
+        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung", ID_PH_MBASE
+        MENUITEM "Verzeichnispfad der Hauptdatei", ID_PH_MDIR
+        MENUITEM "Hauptdatei mit weiteren Optionen...", ID_PH_MAINOPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Kompletter Pfad des aktiven Dokuments", ID_PH_CPATH
+        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung", 
+                                                ID_PH_CBASE
+        MENUITEM "Verzeichnispfad des aktiven Dokuments", ID_PH_CDIR
+        MENUITEM "Aktives Dokument mit weiteren Optionen...", 
+                                                ID_PH_CURRENTOPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Nummer der aktiven Zeile im aktiven Dokument", 
+                                                ID_PH_CLINENR
+        MENUITEM "Markierter Text oder aktives Wort im aktiven Dokument", 
+                                                ID_PH_CSELECTION
+        MENUITEM SEPARATOR
+        MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
+    END
+END
+
+IDR_POPUP_PLACEHOLDER_MAIN_OPT MENU DISCARDABLE 
+BEGIN
+    POPUP "IDR_POPUP_PLACEHOLDER_MAIN_OPT"
+    BEGIN
+        MENUITEM "Kompletter Pfad der Hauptdatei", ID_PH_MPATH
+        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung", ID_PH_MBASE
+        MENUITEM "Verzeichnispfad der Hauptdatei", ID_PH_MDIR
+        MENUITEM "Hauptdatei mit weiteren Optionen...", ID_PH_MAINOPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
+    END
+END
+
+IDR_POPUP_PLACEHOLDER_CURRENT_OPT MENU DISCARDABLE 
+BEGIN
+    POPUP "IDR_POPUP_PLACEHOLDER_CURRENT_OPT"
+    BEGIN
+        MENUITEM "Kompletter Pfad des aktiven Dokuments", ID_PH_CPATH
+        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung", 
+                                                ID_PH_CBASE
+        MENUITEM "Verzeichnispfad des aktiven Dokuments", ID_PH_CDIR
+        MENUITEM "Aktives Dokument mit weiteren Optionen...", 
+                                                ID_PH_CURRENTOPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Nummer der aktiven Zeile im aktiven Dokument", 
+                                                ID_PH_CLINENR
+        MENUITEM "Markierter Text oder aktives Wort im aktiven Dokument", 
+                                                ID_PH_CSELECTION
+        MENUITEM SEPARATOR
+        MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
+    END
+END
+
+IDR_POPUP_PLACEHOLDEREX_CASC MENU DISCARDABLE 
+BEGIN
+    POPUP "IDR_POPUP_PLACEHOLDEREX_CASC"
+    BEGIN
+        MENUITEM "Kompletter Pfad der Hauptdatei", ID_PH_MPATH
+        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung", ID_PH_MBASE
+        MENUITEM "Verzeichnispfad der Hauptdatei", ID_PH_MDIR
+        POPUP "Hauptdatei mit weiteren Optionen"
+        BEGIN
+            MENUITEM "Name der Hauptdatei (mit Endung)", ID_PH_MNAME
+            MENUITEM "Titel der Hauptdatei (Name ohne Endung)", ID_PH_MTITLE
+            MENUITEM "Endung der Hauptdatei (ohne führenden Punkt)", 
+                                                    ID_PH_MEXTENSION
+            MENUITEM "Laufwerksbuchstabe der Hauptdatei mit Doppelpunkt", 
+                                                    ID_PH_MROOT
+            MENUITEM SEPARATOR
+            MENUITEM "Kompletter Pfad der Hauptdatei ('/' als Trennzeichen)", 
+                                                    ID_PH_MSLASHPATH
+            MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung ('/' als Trennzeichen)", 
+                                                    ID_PH_MSLASHBASE
+            MENUITEM "Verzeichnispfad der Hauptdatei ('/' als Trennzeichen)", 
+                                                    ID_PH_MSLASHDIR
+            MENUITEM SEPARATOR
+            MENUITEM "Kompletter Pfad der Hauptdatei (8.3-Format)", 
+                                                    ID_PH_MSPATH
+            MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung (8.3-Format)", 
+                                                    ID_PH_MSBASE
+            MENUITEM "Verzeichnispfad der Hauptdatei (8.3-Format)", 
+                                                    ID_PH_MSDIR
+            MENUITEM SEPARATOR
+            MENUITEM "Kompletter Pfad der Hauptdatei ('/' als Trennzeichen) (8.3-Format)", 
+                                                    ID_PH_MSSLASHPATH
+            MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung ('/' als Trennzeichen) (8.3-Format)", 
+                                                    ID_PH_MSSLASHBASE
+            MENUITEM "Verzeichnispfad der Hauptdatei ('/' als Trennzeichen) (8.3-Format)", 
+                                                    ID_PH_MSSLASHDIR
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Kompletter Pfad des aktiven Dokuments", ID_PH_CPATH
+        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung", 
+                                                ID_PH_CBASE
+        MENUITEM "Verzeichnispfad des aktiven Dokuments", ID_PH_CDIR
+        POPUP "Aktives Dokument mit weiteren Optionen"
+        BEGIN
+            MENUITEM "Name des aktiven Dokuments (mit Endung)", ID_PH_CNAME
+            MENUITEM "Titel des aktiven Dokuments (Name ohne Endung)", 
+                                                    ID_PH_CTITLE
+            MENUITEM "Endung des aktiven Dokuments (ohne führenden Punkt)", 
+                                                    ID_PH_CEXTENSION
+            MENUITEM "Laufwerksbuchstabe des aktiven Dokuments mit Doppelpunkt", 
+                                                    ID_PH_CROOT
+            MENUITEM SEPARATOR
+            MENUITEM "Kompletter Pfad des aktiven Dokuments ('/' als Trennzeichen)", 
+                                                    ID_PH_CSLASHPATH
+            MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung ('/' als Trennzeichen)", 
+                                                    ID_PH_CSLASHBASE
+            MENUITEM "Verzeichnispfad des aktiven Dokuments ('/' als Trennzeichen)", 
+                                                    ID_PH_CSLASHDIR
+            MENUITEM SEPARATOR
+            MENUITEM "Kompletter Pfad des aktiven Dokuments (8.3-Format)", 
+                                                    ID_PH_CSPATH
+            MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung (8.3-Format)", 
+                                                    ID_PH_CSBASE
+            MENUITEM "Verzeichnispfad des aktiven Dokuments (8.3-Format)", 
+                                                    ID_PH_CSDIR
+            MENUITEM SEPARATOR
+            MENUITEM "Kompletter Pfad des aktiven Dokuments ('/' als Trennzeichen) (8.3-Format)", 
+                                                    ID_PH_CSSLASHPATH
+            MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung ('/' als Trennzeichen) (8.3-Format)", 
+                                                    ID_PH_CSSLASHBASE
+            MENUITEM "Verzeichnispfad des aktiven Dokuments ('/' als Trennzeichen) (8.3-Format)", 
+                                                    ID_PH_MSSLASHDIR
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Nummer der aktiven Zeile im aktiven Dokument", 
+                                                ID_PH_CLINENR
+        MENUITEM "Markierter Text oder aktives Wort im aktiven Dokument", 
+                                                ID_PH_CSELECTION
+        MENUITEM SEPARATOR
+        MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
+        MENUITEM SEPARATOR
+        MENUITEM "Alle Dateien im Projekt (Anführungszeichen)", 
+                                                ID_PHS_ALLPROJECTFILES_Q
+        MENUITEM "Alle geöffneten Dateien (Anführungszeichen)", 
+                                                ID_PHS_ALLOPENEDFILES_Q
+        POPUP "Dateimengen mit weiteren Optionen"
+        BEGIN
+            MENUITEM "Alle TeX-Dateien im Projekt (Anführungszeichen)", 
+                                                    ID_PHS_ALLTEXFILES_Q
+            MENUITEM "Alle BibTeX-Dateien im Projekt (Anführungszeichen)", 
+                                                    ID_PHS_ALLBIBTEXFILES_Q
+            MENUITEM "Alle Grafik-Dateien im Projekt (Anführungszeichen)", 
+                                                    ID_PHS_ALLGRAPHICFILES_Q
+            MENUITEM "Alle von TeXnicCenter automatisch generierten Dateien (Anführungszeichen)", 
+                                                    ID_PHS_ALLTXCFILES_Q
+            MENUITEM "Alle Dateimengen zusammen (Anführungszeichen)", 
+                                                    ID_PHS_ALLFILESETS_Q
+            MENUITEM SEPARATOR
+            MENUITEM "Alle Dateien im Projekt (Anführungszeichen) (relativ)", 
+                                                    ID_PHS_ALLPROJECTFILES_QR
+
+            MENUITEM "Alle geöffneten Dateien (Anführungszeichen) (relativ)", 
+                                                    ID_PHS_ALLOPENEDFILES_QR
+            MENUITEM "Alle TeX-Dateien im Projekt (Anführungszeichen) (relativ)", 
+                                                    ID_PHS_ALLTEXFILES_QR
+            MENUITEM "Alle BibTeX-Dateien im Projekt (Anführungszeichen) (relativ)", 
+                                                    ID_PHS_ALLBIBTEXFILES_QR
+            MENUITEM "Alle Grafik-Dateien im Projekt (Anführungszeichen) (relativ)", 
+                                                    ID_PHS_ALLGRAPHICFILES_QR
+
+            MENUITEM "Alle von TeXnicCenter automatisch generierten Dateien (Anführungszeichen) (relativ)", 
+                                                    ID_PHS_ALLTXCFILES_QR
+            MENUITEM "Alle Dateimengen zusammen (Anführungszeichen) (relativ)", 
+                                                    ID_PHS_ALLFILESETS_QR
+        END
         MENUITEM SEPARATOR
         MENUITEM "Dollarzeichen ('$')",         ID_PHS_DOLLAR
     END
@@ -2235,7 +2412,7 @@ BEGIN
     LTEXT           "Geben Sie die Kommandozeilenoption an, die den Viewer dazu veranlaßt, die zu einer Quelltextzeile passende Stelle anzuzeigen. Verwenden Sie die verfügbaren Platzhalter:",
                     IDC_STATIC,80,100,175,33
     EDITTEXT        IDC_OW_VIEWERFWSEARCH,80,136,120,14,ES_AUTOHSCROLL
-    PUSHBUTTON      ">",IDC_OW_VIEWERPOPUP,205,136,15,14
+    PUSHBUTTON      "",IDC_OW_VIEWERPOPUP,205,136,15,14
     LTEXT           "[optional]",IDC_STATIC,225,139,30,8
 END
 
@@ -2319,9 +2496,9 @@ END
 IDD_OPTIONS_FILE DIALOGEX 0, 0, 235, 156
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Datei"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,234,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
     LTEXT           " Speichern ",IDC_STATIC,5,5,37,8
     CONTROL         "Vor &Compilierung alles speichern",
                     IDC_OPTIONS_SAVE_BEFORE_COMPILATION,"Button",
@@ -2338,12 +2515,12 @@ BEGIN
                     UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
                     UDS_ARROWKEYS | UDS_NOTHOUSANDS,120,33,11,14
     LTEXT           "Minuten",IDC_OPTIONS_SAVE_LABEL2,130,36,26,8
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,60,233,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,60,236,1
     LTEXT           " Dateiformat ",IDC_STATIC,5,55,41,8
     LTEXT           "&Standard:",IDC_STATIC,0,70,32,8
     COMBOBOX        IDC_OPTIONS_FILETYPE,35,68,55,57,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,95,233,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,95,236,1
     LTEXT           " Arbeitsverzeichnis ",IDC_STATIC,5,90,62,8
     EDITTEXT        IDC_OPTIONS_DEFAULT_PATH_EDIT,0,110,215,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_DEFAULT_PATH_EDIT
@@ -2362,7 +2539,7 @@ BEGIN
                     IDC_OPTIONS_RESTORE_SESSION,"Button",BS_AUTOCHECKBOX | 
                     WS_GROUP | WS_TABSTOP,0,15,141,10,0,
                     HIDC_OPTIONS_RESTORE_SESSION
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,45,233,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,45,236,1
     LTEXT           " Automatisches Ersetzen ",IDC_STATIC,5,40,80,8
     CONTROL         "&Anführungszeichen ("") ersetzen",
                     IDC_OPTIONS_REPLACE_QM,"Button",BS_AUTOCHECKBOX | 
@@ -2383,7 +2560,7 @@ STYLE DS_CONTEXTHELP | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Verzeichnisse"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,234,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
     LTEXT           " &Projektvorlageverzeichnisse ",IDC_STATIC,5,5,93,8
     LISTBOX         IDC_PROJECTTEMPLATES,0,15,175,35,LBS_SORT | 
                     LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP,0,
@@ -2392,7 +2569,7 @@ BEGIN
                     0,HIDC_ADD_PROJECTTEMPLATES
     PUSHBUTTON      "Entfernen",IDC_REMOVE_PROJECTTEMPLATES,180,35,50,14,0,0,
                     HIDC_REMOVE_PROJECTTEMPLATES
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,60,233,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,60,236,1
     LTEXT           " &Dokumentvorlageverzeichnisse ",IDC_STATIC,5,55,104,8
     LISTBOX         IDC_DOCUMENTTEMPLATES,0,65,175,35,LBS_SORT | 
                     LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP,0,
@@ -2401,7 +2578,7 @@ BEGIN
                     0,HIDC_ADD_DOCUMENTTEMPLATES
     PUSHBUTTON      "Entfernen",IDC_REMOVE_DOCUMENTTEMPLATES,180,85,50,14,0,
                     0,HIDC_REMOVE_DOCUMENTTEMPLATES
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,115,233,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,115,236,1
     LTEXT           " Projekt&verzeichnis ",IDC_STATIC,5,110,62,8
     LTEXT           "Standard:",IDC_STATIC,0,120,32,8
     EDITTEXT        IDC_PROJECT_PATH,0,130,215,14,ES_AUTOHSCROLL,0,
@@ -2665,34 +2842,36 @@ STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Rechtschreibung"
 FONT 8, "MS Sans Serif"
 BEGIN
-    COMBOBOX        IDC_OPTIONS_LANGUAGE,39,16,80,53,CBS_DROPDOWNLIST | 
+    COMBOBOX        IDC_OPTIONS_LANGUAGE,34,16,83,53,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,152,16,80,56,
+    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,152,16,83,56,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "Rechtschreibprüfung &aktivieren",
+    CONTROL         "&Rechtschreibung während der Eingabe überprüfen",
                     IDC_OPTIONS_SPELL_ENABLE,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,63,115,10
-    CONTROL         "Nur Hauptwörterbuch verwenden",
+                    WS_TABSTOP,0,51,175,10
+    CONTROL         "Nur &Hauptwörterbuch verwenden",
                     IDC_OPTIONS_SPELL_MAINDICT,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,73,119,10
+                    WS_TABSTOP,0,63,119,10
     CONTROL         "&Kommentare ignorieren",IDC_OPTIONS_SPELL_COMMENT,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,129,63,88,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,75,88,10
     CONTROL         "LaTe&X-Befehle ignorieren",IDC_OPTIONS_SPELL_SKIP_TAGS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,129,73,96,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,87,96,10
     CONTROL         "Worte mit &Zahlen ignorieren",
                     IDC_OPTIONS_SPELL_IGNORE_NUM,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,129,83,103,10
+                    WS_TABSTOP,0,99,103,10
     CONTROL         "Wörter in &GROSSBUCHSTABEN ignorieren",
                     IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,78,93,153,10
-    EDITTEXT        IDC_OPTIONS_SPELL_PDICT,5,117,209,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_OPTIONS_SPELL_BROWSE,218,116,13,14
-    LTEXT           "&Sprache",IDC_STATIC,4,20,28,8
-    LTEXT           "&Dialekt",IDC_STATIC,127,20,23,8
-    LTEXT           "Benutzerwörterbuch",IDC_STATIC,5,108,64,8
-    GROUPBOX        "Sprache",IDC_STATIC,1,1,233,50
-    GROUPBOX        "Optionen für die Rechtschreibung",IDC_STATIC,1,53,233,
-                    103
+                    BS_AUTOCHECKBOX | WS_TABSTOP,0,111,153,10
+    EDITTEXT        IDC_OPTIONS_SPELL_PDICT,5,138,209,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "&...",IDC_OPTIONS_SPELL_BROWSE,218,138,13,14
+    LTEXT           "&Sprache:",IDC_STATIC,0,20,30,8
+    LTEXT           "&Dialekt:",IDC_STATIC,125,20,25,8
+    LTEXT           "Benutzerwörterbuch:",IDC_STATIC,5,130,66,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
+    LTEXT           " Sprache ",IDC_STATIC,5,5,32,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,44,235,1
+    LTEXT           " Optionen für die Rechtschreibung ",IDC_STATIC,5,39,111,
+                    8
 END
 
 IDD_FILECLEANCONFIRM DIALOG DISCARDABLE  0, 0, 295, 180
@@ -2762,8 +2941,8 @@ BEGIN
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Definieren Sie den Platzhalter für die folgende Datei:",
                     IDC_STATIC,7,7,113,19
-    CONTROL         "Dateibeschreibung",IDC_PLACEHOLDER_SINGLE_WHAT,"Static",
-                    SS_LEFTNOWORDWRAP | WS_GROUP,7,29,115,8
+    CTEXT           "Dateibeschreibung",IDC_PLACEHOLDER_SINGLE_WHAT,7,29,115,
+                    8
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,53,172,1
     LTEXT           " Optionen ",IDC_STATIC,13,48,34,8
     LTEXT           "Art der Referenz:",IDC_STATIC,7,60,54,8
@@ -3124,9 +3303,6 @@ BEGIN
     IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 28, 0
 0x6f4b, 0x706d, 0x656c, 0x7474, 0x7265, 0x5020, 0x6166, 0x2064, 0x686f, 
 0x656e, 0x4520, 0x646e, 0x6e75, 0x0067, 
-    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 35, 0
-0x614c, 0x6675, 0x6577, 0x6b72, 0x6273, 0x6375, 0x7368, 0x6174, 0x6562, 
-0x6d20, 0x7469, 0x4420, 0x706f, 0x6570, 0x706c, 0x6e75, 0x746b, "\000" 
     IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 16, 0
 0x6556, 0x7a72, 0x6965, 0x6863, 0x696e, 0x7073, 0x6166, 0x0064, 
     IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 18, 0
@@ -3138,6 +3314,9 @@ BEGIN
     IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 30, 0
 0x6e45, 0x7564, 0x676e, 0x2820, 0x686f, 0x656e, 0x6620, 0x68fc, 0x6572, 
 0x646e, 0x6e65, 0x5020, 0x6e75, 0x746b, 0x0029, 
+    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 35, 0
+0x614c, 0x6675, 0x6577, 0x6b72, 0x6273, 0x6375, 0x7368, 0x6174, 0x6562, 
+0x6d20, 0x7469, 0x4420, 0x706f, 0x6570, 0x706c, 0x6e75, 0x746b, "\000" 
     0
 END
 
@@ -3165,6 +3344,7 @@ BEGIN
     STE_FILE_EXTERNALCHANGEEX 
                             "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?\n\n(Wichtig: Sie haben Änderungen an dem Dokument vorgenommen. Wenn es neu geladen wird, gehen diese Änderungen verloren!)"
     STE_FILE_INUSE_OPEN     "Die Datei\n\n%s\n\nkann nicht neu geladen werden. Das bereits offene Dokument wird mit einem Schreibschutz versehen."
+    STE_MAINFILE_DESCRIPTION "Hauptdatei"
 END
 
 STRINGTABLE PRELOAD DISCARDABLE 
@@ -3307,6 +3487,8 @@ BEGIN
     STE_TAB_PARSE           "Analyse"
     STE_APPENDIX            "Anhang"
     STE_GRAPHICS_FILES      "Grafik-Dateien"
+    STE_PLACEHOLDER_EXAMPLE_MAIN 
+                            "C:\\LaTeX Dokumente\\Promotion\\Promotion.tex"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -3397,6 +3579,14 @@ BEGIN
     STE_LATEX_CANCELED      "Erstellung vom Anwender abgebrochen"
     STE_LATEX_START_FAILED_EXT 
                             "%s\n\nDer Befehl konnte nicht ausgeführt werden.\nFehler:\n\n%s"
+    STE_PLACEHOLDER_EXAMPLE_CURRENT 
+                            "C:\\LaTeX Dokumente\\Promotion\\Einführung.tex"
+    STE_PLACEHOLDER_EXAMPLE_MAIN_SHORT "C:\\LATEXD~1\\PROMOT~1\\PROMOT~1.TEX"
+    STE_PLACEHOLDER_EXAMPLE_CURRENT_SHORT 
+                            "C:\\LATEXD~1\\PROMOT~1\\EINFÜH~1.TEX"
+    STE_CURRENTDOC_DESCRIPTION "Aktives Dokument"
+    STE_FILECLEAN_INVALIDPATTERN 
+                            "Das eingegebene Pattern %s ist nicht erlaubt.\n\nPlatzhalter für Dateimengen ($) dürfen nicht zusammen\nmit Wildcards (*, ?) und Platzhaltern für Dateien (%%) verwendet werden.\n\nDesweiteren dürfen Pattern nicht leer sein."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4320,7 +4510,7 @@ BEGIN
     ID_HELP_KEYMAPPING      "Zeigt alle Tastaturbefehle an\nTastaturbelegung"
     ID_HELP_CONTENTS        "Zeigt das Inhaltsverzeichnis der Online-Dokumentation an\nInhalt"
     ID_SPELL_PROJECT        "Führt die Rechtschreibprüfung für das gesamte Projekt durch.\nRechtschreibprüfung für Projekt"
-    ID_SPELL_FILE           "Führt die Rechtschreibprüfung für die aktive Datei durch.\nRechtschreibprüfung für aktive Datei"
+    ID_SPELL_FILE           "Führt die Rechtschreibprüfung für das aktive Dokument durch.\nRechtschreibprüfung für aktives Dokument"
     IDS_SPELL_CONTINUE      "Soll die Rechtschreibprüfung für den Rest des Projektes fortgesetzt werden?"
     ID_PHS_ALLPROJECTFILES  "$APF"
     ID_PHS_ALLTEXFILES      "$TPF"
@@ -4350,14 +4540,33 @@ BEGIN
     ID_PHS_DOLLAR           "$$"
     ID_LATEX_CLEAN          "Löscht alle temporären und die von LaTeX erzeugten Dateien.\nProjekt aufräumen"
     ID_PH_MAINOPTIONS       "\n[1]m"
+    ID_PH_CURRENTOPTIONS    "\n[1]c"
+    ID_PHS_ALLPROJECTFILES_Q "$qAPF"
+    ID_PHS_ALLOPENEDFILES_Q "$qCOF"
+    ID_PHS_ALLTEXFILES_Q    "$qTPF"
+    ID_PHS_ALLBIBTEXFILES_Q "$qBPF"
+    ID_PHS_ALLGRAPHICFILES_Q "$qGPF"
 END
 
-#endif    // Deutsch (Deutschland) resources
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_PHS_ALLTXCFILES_Q    "$qTXC"
+    ID_PHS_ALLFILESETS_Q    "$qAFS"
+    ID_PHS_ALLPROJECTFILES_QR "$qrAPF"
+    ID_PHS_ALLOPENEDFILES_QR "$qrCOF"
+    ID_PHS_ALLTEXFILES_QR   "$qrTPF"
+    ID_PHS_ALLBIBTEXFILES_QR "$qrBPF"
+    ID_PHS_ALLGRAPHICFILES_QR "$qrGPF"
+    ID_PHS_ALLTXCFILES_QR   "$qrTXC"
+    ID_PHS_ALLFILESETS_QR   "$qrAFS"
+END
+
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -4517,7 +4726,6 @@ BEGIN
                                                 ID_PH_MSSLASHDIR
         MENUITEM SEPARATOR
         MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
-        MENUITEM "Main file with further options...", ID_PH_MAINOPTIONS
     END
 END
 
@@ -5460,14 +5668,184 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
         MENUITEM SEPARATOR
+        MENUITEM "All files of the project",    ID_PHS_ALLPROJECTFILES
+        MENUITEM "All opened files",            ID_PHS_ALLOPENEDFILES
         MENUITEM "All TeX-Files of the project", ID_PHS_ALLTEXFILES
         MENUITEM "All BibTeX-Files of the project", ID_PHS_ALLBIBTEXFILES
         MENUITEM "All Graphic-Files of the project", ID_PHS_ALLGRAPHICFILES
         MENUITEM "All files generated automatically by TeXnicCenter", 
                                                 ID_PHS_ALLTXCFILES
-        MENUITEM "All files of the project",    ID_PHS_ALLPROJECTFILES
-        MENUITEM "All opened files",            ID_PHS_ALLOPENEDFILES
-        MENUITEM "All file sets from above together", ID_PHS_ALLFILESETS
+        MENUITEM "All file sets together",      ID_PHS_ALLFILESETS
+        MENUITEM SEPARATOR
+        MENUITEM "Dollar sign ('$')",           ID_PHS_DOLLAR
+    END
+END
+
+IDR_POPUP_PLACEHOLDER_CURRENT_OPT MENU DISCARDABLE 
+BEGIN
+    POPUP "IDR_POPUP_PLACEHOLDER_CURRENT_OPT"
+    BEGIN
+        MENUITEM "Current document's full path", ID_PH_CPATH
+        MENUITEM "Current document's full path without extension", 
+                                                ID_PH_CBASE
+        MENUITEM "Current document's full directory path", ID_PH_CDIR
+        MENUITEM "Current document with further options...", 
+                                                ID_PH_CURRENTOPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Current document's active line number", ID_PH_CLINENR
+        MENUITEM "Selected text or active word in the current document", 
+                                                ID_PH_CSELECTION
+        MENUITEM SEPARATOR
+        MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
+    END
+END
+
+IDR_POPUP_PLACEHOLDER_MAIN_OPT MENU DISCARDABLE 
+BEGIN
+    POPUP "IDR_POPUP_PLACEHOLDER_MAIN_OPT"
+    BEGIN
+        MENUITEM "Main file's full path",       ID_PH_MPATH
+        MENUITEM "Main file's full path without extension", ID_PH_MBASE
+        MENUITEM "Main file's full directory path", ID_PH_MDIR
+        MENUITEM "Main file with further options...", ID_PH_MAINOPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
+    END
+END
+
+IDR_POPUP_PLACEHOLDER_OPT MENU DISCARDABLE 
+BEGIN
+    POPUP "IDR_POPUP_PLACEHOLDER_OPT"
+    BEGIN
+        MENUITEM "Main file's full path",       ID_PH_MPATH
+        MENUITEM "Main file's full path without extension", ID_PH_MBASE
+        MENUITEM "Main file's full directory path", ID_PH_MDIR
+        MENUITEM "Main file with further options...", ID_PH_MAINOPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Current document's full path", ID_PH_CPATH
+        MENUITEM "Current document's full path without extension", 
+                                                ID_PH_CBASE
+        MENUITEM "Current document's full directory path", ID_PH_CDIR
+        MENUITEM "Current document with further options...", 
+                                                ID_PH_CURRENTOPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Current document's active line number", ID_PH_CLINENR
+        MENUITEM "Selected text or active word in the current document", 
+                                                ID_PH_CSELECTION
+        MENUITEM SEPARATOR
+        MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
+    END
+END
+
+IDR_POPUP_PLACEHOLDEREX_CASC MENU DISCARDABLE 
+BEGIN
+    POPUP "IDR_POPUP_PLACEHOLDEREX_CASC"
+    BEGIN
+        MENUITEM "Main file's full path",       ID_PH_MPATH
+        MENUITEM "Main file's full path without extension", ID_PH_MBASE
+        MENUITEM "Main file's full directory path", ID_PH_MDIR
+        POPUP "Main file with further options"
+        BEGIN
+            MENUITEM "Main file's name (with extension)", ID_PH_MNAME
+            MENUITEM "Main file's title (without extension)", ID_PH_MTITLE
+            MENUITEM "Main file's extension",       ID_PH_MEXTENSION
+            MENUITEM "Main file's drive letter followed by colon (':')", 
+                                                    ID_PH_MROOT
+            MENUITEM SEPARATOR
+            MENUITEM "Main file's full path (using '/' as separator)", 
+                                                    ID_PH_MSLASHPATH
+            MENUITEM "Main file's full path without extension (using '/' as separator)", 
+                                                    ID_PH_MSLASHBASE
+            MENUITEM "Main file's full directory path (using '/' as separator)", 
+                                                    ID_PH_MSLASHDIR
+            MENUITEM SEPARATOR
+            MENUITEM "Main file's full path (8.3-format)", ID_PH_MSPATH
+            MENUITEM "Main file's full path without extension (8.3-format)", 
+                                                    ID_PH_MSBASE
+            MENUITEM "Main file's full directory path (8.3-format)", 
+                                                    ID_PH_MSDIR
+            MENUITEM SEPARATOR
+            MENUITEM "Main file's full path (using '/' as separator) (8.3-format)", 
+                                                    ID_PH_MSSLASHPATH
+            MENUITEM "Main file's full path without extension (using '/' as separator) (8.3-format)", 
+                                                    ID_PH_MSSLASHBASE
+            MENUITEM "Main file's full directory path (using '/' as separator) (8.3-format)", 
+                                                    38116
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Current document's full path", ID_PH_CPATH
+        MENUITEM "Current document's full path without extension", 
+                                                ID_PH_CBASE
+        MENUITEM "Current document's full directory path", ID_PH_CDIR
+        POPUP "Current document with further options"
+        BEGIN
+            MENUITEM "Current document's name (with extension)", ID_PH_CNAME
+            MENUITEM "Current document's title (without extension)", 
+                                                    ID_PH_CTITLE
+            MENUITEM "Current document's extension", ID_PH_CEXTENSION
+            MENUITEM "Current document's drive letter followed by colon (':')", 
+                                                    ID_PH_CROOT
+            MENUITEM SEPARATOR
+            MENUITEM "Current document's full path (using '/' as separator)", 
+                                                    ID_PH_CSLASHPATH
+            MENUITEM "Current document's full path without extension (using '/' as separator)", 
+                                                    ID_PH_CSLASHBASE
+            MENUITEM "Current document's full directory path (using '/' as separator)", 
+                                                    ID_PH_CSLASHDIR
+            MENUITEM SEPARATOR
+            MENUITEM "Current document's full path (8.3-format)", 
+                                                    ID_PH_CSPATH
+            MENUITEM "Current document's full path without extension (8.3-format)", 
+                                                    ID_PH_CSBASE
+            MENUITEM "Current document's full directory path (8.3-format)", 
+                                                    ID_PH_CSDIR
+            MENUITEM SEPARATOR
+            MENUITEM "Current document's full path (using '/' as separator) (8.3-format)", 
+                                                    ID_PH_CSSLASHPATH
+            MENUITEM "Current document's full path without extension (using '/' as separator) (8.3-format)", 
+                                                    ID_PH_CSSLASHBASE
+            MENUITEM "Current document's full directory path (using '/' as separator) (8.3-format)", 
+                                                    ID_PH_CSSLASHDIR
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Current document's active line number", ID_PH_CLINENR
+        MENUITEM "Selected text or active word in the current document", 
+                                                ID_PH_CSELECTION
+        MENUITEM SEPARATOR
+        MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
+        MENUITEM SEPARATOR
+        MENUITEM "All files of the project (quoted)", 
+                                                ID_PHS_ALLPROJECTFILES_Q
+        MENUITEM "All opened files (quoted)",   ID_PHS_ALLOPENEDFILES_Q
+        POPUP "File sets with further options"
+        BEGIN
+            MENUITEM "All TeX-files of the project (quoted)", 
+                                                    ID_PHS_ALLTEXFILES_Q
+            MENUITEM "All BibTeX-files of the project (quoted)", 
+                                                    ID_PHS_ALLBIBTEXFILES_Q
+            MENUITEM "All Graphic-files of the project (quoted)", 
+                                                    ID_PHS_ALLGRAPHICFILES_Q
+            MENUITEM "All files generated automatically by TeXnicCenter (quoted)", 
+                                                    ID_PHS_ALLTXCFILES_Q
+            MENUITEM "All file sets together (quoted)", ID_PHS_ALLFILESETS_Q
+            MENUITEM SEPARATOR
+            MENUITEM "All files of the project (quoted) (relative)", 
+                                                    ID_PHS_ALLPROJECTFILES_QR
+
+            MENUITEM "All opened files (quoted) (relative)", 
+                                                    ID_PHS_ALLOPENEDFILES_QR
+            MENUITEM "All TeX-files of the project (quoted) (relative)", 
+                                                    ID_PHS_ALLTEXFILES_QR
+            MENUITEM "All BibTeX-files of the project (quoted) (relative)", 
+                                                    ID_PHS_ALLBIBTEXFILES_QR
+            MENUITEM "All Graphic-files of the project (quoted) (relative)", 
+                                                    ID_PHS_ALLGRAPHICFILES_QR
+
+            MENUITEM "All files generated automatically by TeXnicCenter (quoted) (relative)", 
+                                                    ID_PHS_ALLTXCFILES_QR
+            MENUITEM "All file sets together (quoted) (relative)", 
+                                                    ID_PHS_ALLFILESETS_QR
+        END
         MENUITEM SEPARATOR
         MENUITEM "Dollar sign ('$')",           ID_PHS_DOLLAR
     END
@@ -5706,9 +6084,9 @@ END
 IDD_OPTIONS_FILE DIALOGEX 0, 0, 235, 156
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "File"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,234,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
     LTEXT           " Save ",IDC_STATIC,5,5,22,8
     CONTROL         "Save all before &compilation",
                     IDC_OPTIONS_SAVE_BEFORE_COMPILATION,"Button",
@@ -5725,12 +6103,12 @@ BEGIN
                     UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
                     UDS_ARROWKEYS | UDS_NOTHOUSANDS,105,33,11,14
     LTEXT           "minutes",IDC_OPTIONS_SAVE_LABEL2,115,36,25,8
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,60,233,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,60,236,1
     LTEXT           " File Format ",IDC_STATIC,5,55,39,8
     LTEXT           "&Default:",IDC_STATIC,0,70,26,8
     COMBOBOX        IDC_OPTIONS_FILETYPE,30,68,55,57,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,95,233,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,95,236,1
     LTEXT           " Working Directory ",IDC_STATIC,5,90,62,8
     EDITTEXT        IDC_OPTIONS_DEFAULT_PATH_EDIT,0,110,215,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_DEFAULT_PATH_EDIT
@@ -5743,13 +6121,13 @@ STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "General"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,235,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
     LTEXT           " General ",IDC_STATIC,5,5,30,8
     CONTROL         "Restore last &session on start up",
                     IDC_OPTIONS_RESTORE_SESSION,"Button",BS_AUTOCHECKBOX | 
                     WS_GROUP | WS_TABSTOP,0,15,114,10,0,
                     HIDC_OPTIONS_RESTORE_SESSION
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,45,233,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,45,236,1
     LTEXT           " Automatic Replacement ",IDC_STATIC,5,40,80,8
     CONTROL         "&Replace quotation marks ("")",IDC_OPTIONS_REPLACE_QM,
                     "Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,0,50,
@@ -5881,7 +6259,7 @@ BEGIN
     LTEXT           "Enter the command line option, that causes the viewer to display a paragraph belonging to a given source line. Use the place holders:",
                     IDC_STATIC,80,106,175,27
     EDITTEXT        IDC_OW_VIEWERFWSEARCH,80,136,120,14,ES_AUTOHSCROLL
-    PUSHBUTTON      ">",IDC_OW_VIEWERPOPUP,205,136,15,14
+    PUSHBUTTON      "",IDC_OW_VIEWERPOPUP,205,136,15,14
     LTEXT           "[optional]",IDC_STATIC,225,139,30,8
 END
 
@@ -6175,7 +6553,7 @@ STYLE DS_CONTEXTHELP | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Directories"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,234,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
     LTEXT           " &Project Template Directories ",IDC_STATIC,5,5,94,8
     LISTBOX         IDC_PROJECTTEMPLATES,0,15,175,35,LBS_SORT | 
                     LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP,0,
@@ -6184,7 +6562,7 @@ BEGIN
                     HIDC_ADD_PROJECTTEMPLATES
     PUSHBUTTON      "Remove",IDC_REMOVE_PROJECTTEMPLATES,180,35,50,14,0,0,
                     HIDC_REMOVE_PROJECTTEMPLATES
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,60,233,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,60,236,1
     LTEXT           " &Document Template Directories ",IDC_STATIC,5,55,104,8
     LISTBOX         IDC_DOCUMENTTEMPLATES,0,65,175,35,LBS_SORT | 
                     LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP,0,
@@ -6193,7 +6571,7 @@ BEGIN
                     HIDC_ADD_DOCUMENTTEMPLATES
     PUSHBUTTON      "Remove",IDC_REMOVE_DOCUMENTTEMPLATES,180,85,50,14,0,0,
                     HIDC_REMOVE_DOCUMENTTEMPLATES
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,115,233,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,115,236,1
     LTEXT           " Project &Directory ",IDC_STATIC,5,110,57,8
     LTEXT           "Default:",IDC_STATIC,0,120,26,8
     EDITTEXT        IDC_PROJECT_PATH,0,130,215,14,ES_AUTOHSCROLL,0,
@@ -6223,38 +6601,6 @@ BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,210,357,1
     DEFPUSHBUTTON   "OK",IDC_BUTTON_CREATE,257,217,50,14,WS_GROUP
     PUSHBUTTON      "Cancel",IDCANCEL,314,217,50,14
-END
-
-IDD_OPTIONS_LANGUAGE DIALOG DISCARDABLE  0, 0, 235, 156
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Language"
-FONT 8, "MS Sans Serif"
-BEGIN
-    COMBOBOX        IDC_OPTIONS_LANGUAGE,39,16,80,61,CBS_DROPDOWNLIST | 
-                    WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,152,16,80,66,
-                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "&Enable spell check",IDC_OPTIONS_SPELL_ENABLE,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,5,63,76,10
-    CONTROL         "Suggest from &main dictionary only",
-                    IDC_OPTIONS_SPELL_MAINDICT,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,73,121,10
-    CONTROL         "Skip &comments",IDC_OPTIONS_SPELL_COMMENT,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,129,63,64,10
-    CONTROL         "Skip LaTe&X tags",IDC_OPTIONS_SPELL_SKIP_TAGS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,129,73,69,10
-    CONTROL         "Skip words with &numbers",IDC_OPTIONS_SPELL_IGNORE_NUM,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,129,83,94,10
-    CONTROL         "Skip &UPPERCASE words ",
-                    IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,129,93,98,10
-    EDITTEXT        IDC_OPTIONS_SPELL_PDICT,5,117,209,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_OPTIONS_SPELL_BROWSE,218,116,13,14
-    LTEXT           "&Language",IDC_STATIC,4,20,33,8
-    LTEXT           "&Dialect",IDC_STATIC,127,20,23,8
-    LTEXT           "Personal Dictionary",IDC_STATIC,5,108,62,8
-    GROUPBOX        "Language",IDC_STATIC,1,1,233,50
-    GROUPBOX        "Spelling",IDC_STATIC,1,53,233,103
 END
 
 IDD_FILECLEANCONFIRM DIALOG DISCARDABLE  0, 0, 295, 180
@@ -6332,6 +6678,41 @@ BEGIN
     LTEXT           " Result ",IDC_STATIC,11,110,25,8
     LTEXT           "Placeholder:",IDC_STATIC,7,125,40,8
     LTEXT           "PHResult",IDC_PLACEHOLDER_SINGLE_RESULT,50,125,31,8
+END
+
+IDD_OPTIONS_LANGUAGE DIALOG DISCARDABLE  0, 0, 235, 156
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Spelling"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_OPTIONS_LANGUAGE,34,16,83,53,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,152,16,83,56,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Check spelling while &typing",IDC_OPTIONS_SPELL_ENABLE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,51,101,10
+    CONTROL         "Suggest from &main dictionary only",
+                    IDC_OPTIONS_SPELL_MAINDICT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,0,63,119,10
+    CONTROL         "Ignore &comments",IDC_OPTIONS_SPELL_COMMENT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,0,75,70,10
+    CONTROL         "Ignore LaTe&X tags",IDC_OPTIONS_SPELL_SKIP_TAGS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,0,87,75,10
+    CONTROL         "Ignore words with &numbers",
+                    IDC_OPTIONS_SPELL_IGNORE_NUM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,0,99,100,10
+    CONTROL         "Ignore &UPPERCASE words ",
+                    IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,0,111,104,10
+    EDITTEXT        IDC_OPTIONS_SPELL_PDICT,5,138,209,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "&...",IDC_OPTIONS_SPELL_BROWSE,218,138,13,14
+    LTEXT           "&Language:",IDC_STATIC,0,20,35,8
+    LTEXT           "&Dialect:",IDC_STATIC,125,20,25,8
+    LTEXT           "Personal dictionary:",IDC_STATIC,5,130,62,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
+    LTEXT           " Language ",IDC_STATIC,5,5,37,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,44,235,1
+    LTEXT           " Options for spelling ",IDC_STATIC,5,39,64,8
 END
 
 
@@ -6640,25 +7021,27 @@ END
 
 IDD_PLACEHOLDER_SINGLE DLGINIT
 BEGIN
-    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 16, 0
-0x6f4b, 0x706d, 0x656c, 0x7474, 0x7265, 0x5020, 0x6166, 0x0064, 
+    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 10, 0
+0x7546, 0x6c6c, 0x7020, 0x7461, 0x0068, 
     IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 28, 0
-0x6f4b, 0x706d, 0x656c, 0x7474, 0x7265, 0x5020, 0x6166, 0x2064, 0x686f, 
-0x656e, 0x4520, 0x646e, 0x6e75, 0x0067, 
-    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 35, 0
-0x614c, 0x6675, 0x6577, 0x6b72, 0x6273, 0x6375, 0x7368, 0x6174, 0x6562, 
-0x6d20, 0x7469, 0x4420, 0x706f, 0x6570, 0x706c, 0x6e75, 0x746b, "\000" 
-    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 16, 0
-0x6556, 0x7a72, 0x6965, 0x6863, 0x696e, 0x7073, 0x6166, 0x0064, 
-    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 18, 0
-0x614e, 0x656d, 0x2820, 0x696d, 0x2074, 0x6e45, 0x7564, 0x676e, 0x0029, 
-
-    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 25, 0
-0x6954, 0x6574, 0x206c, 0x4e28, 0x6d61, 0x2065, 0x686f, 0x656e, 0x4520, 
-0x646e, 0x6e75, 0x2967, "\000" 
-    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 30, 0
-0x6e45, 0x7564, 0x676e, 0x2820, 0x686f, 0x656e, 0x6620, 0x68fc, 0x6572, 
-0x646e, 0x6e65, 0x5020, 0x6e75, 0x746b, 0x0029, 
+0x7546, 0x6c6c, 0x7020, 0x7461, 0x2068, 0x6977, 0x6874, 0x756f, 0x2074, 
+0x7865, 0x6574, 0x736e, 0x6f69, 0x006e, 
+    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 20, 0
+0x7546, 0x6c6c, 0x6420, 0x7269, 0x6365, 0x6f74, 0x7972, 0x7020, 0x7461, 
+0x0068, 
+    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 22, 0
+0x614e, 0x656d, 0x2820, 0x6977, 0x6874, 0x6520, 0x7478, 0x6e65, 0x6973, 
+0x6e6f, 0x0029, 
+    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 26, 0
+0x6954, 0x6c74, 0x2065, 0x7728, 0x7469, 0x6f68, 0x7475, 0x6520, 0x7478, 
+0x6e65, 0x6973, 0x6e6f, 0x0029, 
+    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 34, 0
+0x7845, 0x6574, 0x736e, 0x6f69, 0x206e, 0x7728, 0x7469, 0x6f68, 0x7475, 
+0x6c20, 0x6165, 0x6964, 0x676e, 0x7020, 0x696f, 0x746e, 0x0029, 
+    IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 37, 0
+0x7244, 0x7669, 0x2065, 0x656c, 0x7474, 0x7265, 0x6620, 0x6c6f, 0x6f6c, 
+0x6577, 0x2064, 0x7962, 0x6320, 0x6c6f, 0x6e6f, 0x2820, 0x3a27, 0x2927, 
+"\000" 
     0
 END
 
@@ -6686,6 +7069,7 @@ BEGIN
     STE_FILE_EXTERNALCHANGEEX 
                             "The file\n\n%s\n\nhas been modified outside TeXnicCenter. Should TeXnicCenter reload the document?\n\n(Important: You have made changes to the document. If you decide to reload it, your changes will be lost!)"
     STE_FILE_INUSE_OPEN     "Cannot re-open the file\n\n%s\n\nConverting existing file to read-only"
+    STE_MAINFILE_DESCRIPTION "Main file"
 END
 
 STRINGTABLE PRELOAD DISCARDABLE 
@@ -6828,6 +7212,7 @@ BEGIN
     STE_TAB_PARSE           "Parse"
     STE_APPENDIX            "Appendix"
     STE_GRAPHICS_FILES      "Graphic files"
+    STE_PLACEHOLDER_EXAMPLE_MAIN "C:\\LaTeX Documents\\PHD Thesis\\PHD.tex"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -6918,6 +7303,14 @@ BEGIN
     STE_LATEX_CANCELED      "Building process cancelled by the user"
     STE_LATEX_START_FAILED_EXT 
                             "%s\n\nCannot execute the command.\nError:\n\n%s"
+    STE_PLACEHOLDER_EXAMPLE_CURRENT 
+                            "C:\\LaTeX Documents\\PHD Thesis\\Introduction.tex"
+    STE_PLACEHOLDER_EXAMPLE_MAIN_SHORT "C:\\LATEXD~1\\PHDTHE~1\\PHD.TEX"
+    STE_PLACEHOLDER_EXAMPLE_CURRENT_SHORT 
+                            "C:\\LATEXD~1\\PHDTHE~1\\INTROD~1.TEX"
+    STE_CURRENTDOC_DESCRIPTION "Current file"
+    STE_FILECLEAN_INVALIDPATTERN 
+                            "The pattern %s is invaild.\n\nPlaceholders for file sets ($) may not be used together\nwith wildcards (*, ?) and placeholders for single files (%%).\n\nFurthermore, pattern are not allowed to be empty."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7855,9 +8248,10 @@ BEGIN
     ID_PHS_DOLLAR           "$$"
     ID_LATEX_CLEAN          "Cleans all intermediate and output files.\nClean Project"
     ID_PH_MAINOPTIONS       "\n[1]m"
+    ID_PH_CURRENTOPTIONS    "\n[1]c"
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
