@@ -4,17 +4,17 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License as
 * published by the Free Software Foundation; either version 2 of
 * the License, or (at your option) any later version.
-* 
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 * General Public License for more details.
-* 
+*
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -25,6 +25,12 @@
 *    http://www.ToolsCenter.org
 *
 *********************************************************************/
+
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
@@ -38,7 +44,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 //-------------------------------------------------------------------
-// class CActiveOutputtypeDialog 
+// class CActiveOutputtypeDialog
 //-------------------------------------------------------------------
 
 BEGIN_MESSAGE_MAP(CActiveProfileDialog, CDialog)
@@ -66,7 +72,7 @@ void CActiveProfileDialog::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BOOL CActiveProfileDialog::OnInitDialog() 
+BOOL CActiveProfileDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
@@ -94,7 +100,7 @@ BOOL CActiveProfileDialog::OnInitDialog()
 }
 
 
-void CActiveProfileDialog::OnSelchangeProfile() 
+void CActiveProfileDialog::OnSelchangeProfile()
 {
 	int	nListIndex = m_wndProfileList.GetCurSel();
 
@@ -102,12 +108,12 @@ void CActiveProfileDialog::OnSelchangeProfile()
 }
 
 
-void CActiveProfileDialog::OnOK() 
+void CActiveProfileDialog::OnOK()
 {
 	int			nListIndex = m_wndProfileList.GetCurSel();
 	CString	strKey;
 	m_wndProfileList.GetText(nListIndex, strKey);
 	g_ProfileMap.SetActiveProfile(strKey);
-	
+
 	CDialog::OnOK();
 }
