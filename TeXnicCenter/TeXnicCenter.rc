@@ -3655,9 +3655,9 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_INSERT_VARRHO        "Fügt ein kleines variiertes Rho ein\nKleines variiertes Rho\n\\rho"
+    ID_INSERT_VARRHO        "Fügt ein kleines variiertes Rho ein\nKleines variiertes Rho\n\\varrho"
     ID_INSERT_SIGMA         "Fügt ein kleines Sigma ein\nKleines Sigma\n\\sigma"
-    ID_INSERT_VARSIGMA      "Fügt ein kleines variiertes Sigma ein\nKleines variiertes Sigma\n\\sigma"
+    ID_INSERT_VARSIGMA      "Fügt ein kleines variiertes Sigma ein\nKleines variiertes Sigma\n\\varsigma"
     ID_INSERT_TAU           "Fügt ein kleines Tau ein\nKleines Tau\n\\tau"
     ID_INSERT_UPSILON       "Fügt ein kleines Upsilon ein\nKleines Upsilon\n\\upsilon"
     ID_INSERT_PHI           "Fügt ein kleines Phi ein\nKleines Phi\n\\phi"
@@ -7260,7 +7260,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_INSERT_VARRHO        "Inserts a small variiertes Rho\nSmall variiertes Rho\n\\rho"
+    ID_INSERT_VARRHO        "Inserts a small variiertes Rho\nSmall variiertes Rho\n\\varrho"
     ID_INSERT_SIGMA         "Inserts a small Sigma\nSmall Sigma\n\\sigma"
     ID_INSERT_VARSIGMA      "Inserts a small variiertes Sigma\nSmall variiertes Sigma\n\\varsigma"
     ID_INSERT_TAU           "Inserts a small Tau\nSmall Tau\n\\tau"
