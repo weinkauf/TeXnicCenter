@@ -38,14 +38,17 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// ItemPropertyDialog.h : Header-Datei
-//
-
-/////////////////////////////////////////////////////////////////////////////
-// Dialogfeld CItemPropertyDialog 
 
 #include "StructureParser.h"
 
+/**	Displays information about a structure item.
+
+@ingroup dialogs
+
+@see CStructureItem
+
+@author Sven Wiegand
+*/
 class CItemPropertyDialog : public CDialog
 {
 // Konstruktion
