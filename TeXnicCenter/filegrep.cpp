@@ -105,10 +105,12 @@ BOOL CFileGrep::Grep(
 		// build regular expression for normal text search.
 		// represent each character by its hexdecimal code
 		CString	strNewSearch, strTemp;
+		unsigned char cTemp;
 
 		for( int i = 0; i < strSearch.GetLength(); i++ )
 		{
-			strTemp.Format( _T("%s\\x%2X"), strNewSearch, strSearch[i] );
+			cTemp = strSearch[i];
+			strTemp.Format( _T("%s\\x%2X"), (LPCTSTR)strNewSearch, cTemp);
 			strNewSearch = strTemp;
 		}
 
