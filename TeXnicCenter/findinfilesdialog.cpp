@@ -45,13 +45,13 @@ static char THIS_FILE[] = __FILE__;
 BEGIN_MESSAGE_MAP(CFindInFilesDialog, CDialog)
 	//{{AFX_MSG_MAP(CFindInFilesDialog)
 	ON_BN_CLICKED(IDC_POPUP_REGULAREXPRESSION, OnPopupRegularExpression)
-	ON_BN_CLICKED(IDS_SEARCH_BROWSE_SEARCHIN, OnBrowseSearchIn)
 	ON_CBN_SELCHANGE(IDC_SEARCH_SEARCHTHROUGH, OnSelChange)
 	ON_CBN_SELCHANGE(IDC_SEARCH_SEARCHIN, OnSelChange)
 	ON_CBN_SELCHANGE(IDC_SEARCH_SEARCHFOR, OnSelChange)
 	ON_CBN_EDITCHANGE(IDC_SEARCH_SEARCHFOR, UpdateControls)
 	ON_CBN_EDITCHANGE(IDC_SEARCH_SEARCHIN, UpdateControls)
 	ON_CBN_EDITCHANGE(IDC_SEARCH_SEARCHTHROUGH, UpdateControls)
+	ON_CBN_SETFOCUS(IDC_SEARCH_SEARCHIN, UpdateControls)
 	//}}AFX_MSG_MAP
 	ON_COMMAND_EX_RANGE(ID_REGEX_FIRST, ID_REGEX_LAST, OnInsertRegularExpression)
 END_MESSAGE_MAP()
@@ -60,7 +60,8 @@ END_MESSAGE_MAP()
 CFindInFilesDialog::CFindInFilesDialog(CWnd* pParent /*=NULL*/)
 : CDialog(CFindInFilesDialog::IDD, pParent),
 	m_wndSearchForCombo( _T("Settings\\FindInFiles\\MRUQueries"), _T("Query%d") ),
-	m_wndSearchInCombo( _T("Settings\\FindInFiles\\MRUDirectories"), _T("Directory%d") )
+	m_wndSearchInCombo( _T("Settings\\FindInFiles\\MRUDirectories"), _T("Directory%d") ),
+	m_BrowseBtn(IDC_SEARCH_SEARCHIN, CString((LPCTSTR)STE_FILEFIND_BROWSEDIR))
 {
 	m_bCaseSensitive = g_configuration.m_bFileFindCaseSensitive;
 	m_bIncludeSubFolders = g_configuration.m_bFileFindSubFolders;
@@ -80,6 +81,7 @@ void CFindInFilesDialog::DoDataExchange(CDataExchange* pDX)
 
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CFindInFilesDialog)
+	DDX_Control(pDX, IDC_SEARCH_BROWSE_SEARCHIN, m_BrowseBtn);
 	DDX_Control(pDX, IDC_SEARCH_REGULAREXPRESSION, m_wndRegExCheck);
 	DDX_Control(pDX, IDOK, m_wndOKButton);
 	DDX_Control(pDX, IDC_SEARCH_SEARCHTHROUGH, m_wndSearchThroug);
@@ -151,19 +153,19 @@ void CFindInFilesDialog::OnPopupRegularExpression()
 }
 
 
-void CFindInFilesDialog::OnBrowseSearchIn() 
-{
-	CFolderSelect	fs( CString( (LPCTSTR)STE_FILEFIND_BROWSEDIR ) );
-
-	if( fs.DoModal() != IDOK )
-		return;
-
-	m_strSearchIn = fs.GetPath();
-
-	UpdateData( FALSE );
-
-	UpdateControls();
-}
+//void CFindInFilesDialog::OnBrowseSearchIn() 
+//{
+//	CFolderSelect	fs( CString( (LPCTSTR)STE_FILEFIND_BROWSEDIR ) );
+//
+//	if( fs.DoModal() != IDOK )
+//		return;
+//
+//	m_strSearchIn = fs.GetPath();
+//
+//	UpdateData( FALSE );
+//
+//	UpdateControls();
+//}
 
 
 void CFindInFilesDialog::OnInsertRegularExpression( UINT unID )
