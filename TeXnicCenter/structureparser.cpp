@@ -362,8 +362,43 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		strPath.TrimRight();
 		strPath.TrimLeft(_T('"'));
 		strPath.TrimRight(_T('"'));
+
+		/* Which file does LaTeX include? (tested with MikTeX 2.3)
+
+			You say ==> existing files on disk ==> result / used file
+
+			\input foo ==> foo and foo.tex ==> foo.tex
+			\input foo ==> foo ==> error
+			\input foo ==> foo.tex.tex ==> error
+			\input foo.text ==> foo.text and foo.text.tex ==> foo.text
+			\input foo.text ==> foo.text.tex ==> foo.text.tex
+			\input foo.tex ==> foo.tex and foo.tex.tex ==> foo.tex
+			\input foo.tex ==> foo.tex.tex ==> foo.tex.tex
+
+			TXC shall have the same behaviour. So first we ask for the file extension.
+			If it is empty, then we add ".tex" by default.
+			If it is non-empty, then we scan for this file first and then for the file with added ".tex".
+		*/
+
+		//Check if the file exists and try some extensions
 		if ( CPathTool::GetFileExtension(strPath).IsEmpty() )
-			strPath += _T(".tex");
+		{
+			strPath += _T(".tex"); //add ".tex" by default.
+		}
+		else
+		{
+			//Extension is non-empty. Scan for this file first.
+			if (!::PathFileExists(strPath))
+			{
+				//File does not exist in its original spelling. We add a ".tex".
+				CString strNewPath(strPath);
+				strNewPath += _T(".tex");
+				if (::PathFileExists(strNewPath))
+				{
+					strPath = strNewPath;
+				}
+			}
+		}
 
 		COutputInfo info;
 		INITIALIZE_OI ( info );

@@ -1,3 +1,8 @@
+2003/11/15 niteria
+- Fixed Bug 842720: Parsing file names with points like "1.1"
+   TXC reproduces now exactly the behaviour of TeX
+   regarding \input and \include
+
 2003/09/13 niteria
 - Implemented Feature 777489: More User Tools Icons
 - Fixed Bug 805454: Single File Compiling fails if project is loaded
