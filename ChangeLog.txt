@@ -1,0 +1,4 @@
+2002/03/19 svenwiegand
+- A double click on a template in the template dialogs ('document from template'
+  and 'new project') is now equivalent to pressing the 'OK' button.
+- Put a yellow frame around the 16x16 TXC icon.
