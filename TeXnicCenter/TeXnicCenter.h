@@ -159,7 +159,7 @@ public:
 	CDocument *GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly = FALSE);
 
 	/**
-	Opens the specified File at the specified line. If the file is allready
+	Opens the specified File at the specified line. If the file is already
 	open, its main view is activated an the cursor is set to the specified
 	line.
 
@@ -210,7 +210,7 @@ public:
 	/**
 	Opens the procject with the specified path.
 
-	If there is allready a project open, it is closed using
+	If there is already a project open, it is closed using
 	OnCloseProject().
 
 	@see #OnCloseProject

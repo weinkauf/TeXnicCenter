@@ -48,9 +48,9 @@ displayed, when the users presses this button. After choosing the placeholder
 from the menu, the user is able to adjust some options of the placeholder.
 
 It behaves like a normal CEditMenuButton, if the description text
-of the menu items in the given menu resource do not start with a '\n'.
+of the menu items in the given menu resource do not start with a '\\n'.
 
-But if the description starts with '\n', a dialog will come up, where the user
+But if the description starts with '\\n', a dialog will come up, where the user
 will be able to adjust options related to Placeholders and/or Placeholder sets.
 
 @see CEditMenuButton
