@@ -32,11 +32,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-/**
-Class creating worker threads without GUI activity.
+/** Class creating worker threads without GUI activity.
 
-Derive your own class and override the virtual Run()-method, which 
-will be called when the thread is started.
+	Derive your own class and override the virtual Run()-method, which 
+	will be called when the thread is started.
+
 
 @ingroup mfcext
 
@@ -44,6 +44,63 @@ will be called when the thread is started.
 */
 class AFX_EXT_CLASS CWorkerThread  
 {
+//Types
+public:
+	///Simple structure for defining a message.
+	struct CallbackMessage
+	{
+		CallbackMessage()
+			:hWnd(NULL)
+			,message(0)
+			,wParam(0)
+			,lParam(0)
+			,bPostMessage(false)
+		{}
+
+		virtual ~CallbackMessage(){}
+
+		///Handle to window, which shall recieve the message.
+		HWND hWnd;
+		///Message ID
+		UINT message;
+		///WParam of the message
+		WPARAM wParam;
+		///LParam of the message
+		LPARAM lParam;
+
+		///Whether the message shall be posted or sent
+		bool bPostMessage;
+
+		void Set(bool bPost, HWND arghWnd, UINT argmessage, WPARAM argwParam = 0, LPARAM arglParam = 0)
+		{
+			bPostMessage = bPost;
+			hWnd = arghWnd;
+			message = argmessage;
+			wParam = argwParam;
+			lParam = arglParam;
+		}
+
+		void UnSet()
+		{
+			hWnd = NULL;
+		}
+
+		void SendCallback()
+		{
+			if (!hWnd) return;
+			if (!::IsWindow(hWnd)) return;
+
+			if (bPostMessage)
+			{
+				::PostMessage(hWnd, message, wParam, lParam);
+			}
+			else
+			{
+				::SendMessage(hWnd, message, wParam, lParam);
+			}
+		}
+	};
+
 // construction/destruction
 public:
 	/**
@@ -197,7 +254,8 @@ protected:
 	This virtual method is called, when the Run()-method has 
 	terminated.
 
-	This base implementation simply retunrs the unExitCode parameter.
+	This base implementation simply calls the @c MsgAfterTermination
+	message callback and returns the unExitCode parameter.
 
 	@param unExitCode
 		Value returned by the Run()-method
@@ -233,6 +291,9 @@ public:
 
 	/** Thread ID */
 	DWORD m_dwThreadId;
+
+	///Definition of Callback after Termination
+	CallbackMessage MsgAfterTermination;
 
 private:
 	BOOL m_bAutoDelete;
