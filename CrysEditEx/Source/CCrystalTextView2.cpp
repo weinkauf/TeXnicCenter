@@ -64,6 +64,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.2  2002/03/27 19:06:28  cnorris
+* Fix line selection of last line in document
+*
 * Revision 1.1.1.1  2002/02/26 08:11:59  svenwiegand
 * Initial revision
 *
@@ -255,26 +258,19 @@ void CCrystalTextView::MoveUp(BOOL bSelect)
 	if (m_ptDrawSelStart != m_ptDrawSelEnd && ! bSelect)
 		m_ptCursorPos = m_ptDrawSelStart;
 
-	//BEGIN SW
-	CPoint	subLinePos;
+	CPoint subLinePos;
 	CharPosToPoint( m_ptCursorPos.y, m_ptCursorPos.x, subLinePos );
 
-	int			nSubLine = GetSubLineIndex( m_ptCursorPos.y ) + subLinePos.y;
+	int nSubLine = GetSubLineIndex( m_ptCursorPos.y ) + subLinePos.y;
 
 	if( nSubLine > 0 )
-	/*ORIGINAL
-	if (m_ptCursorPos.y > 0)
-	*///END SW
 	{
 		if (m_nIdealCharPos == -1)
 			m_nIdealCharPos = CalculateActualOffset(m_ptCursorPos.y, m_ptCursorPos.x);
 
 		//BEGIN SW
 		SubLineCursorPosToTextPos( CPoint( m_nIdealCharPos, nSubLine - 1 ), m_ptCursorPos );
-		/*ORIGINAL
-		m_ptCursorPos.y --;
-		m_ptCursorPos.x = ApproxActualOffset(m_ptCursorPos.y, m_nIdealCharPos);
-		*///END SW
+		//END SW
 		if (m_ptCursorPos.x > GetLineLength(m_ptCursorPos.y))
 			m_ptCursorPos.x = GetLineLength(m_ptCursorPos.y);
 	}
@@ -292,24 +288,18 @@ void CCrystalTextView::MoveDown(BOOL bSelect)
 		m_ptCursorPos = m_ptDrawSelEnd;
 
 	//BEGIN SW
-	CPoint	subLinePos;
+	CPoint subLinePos;
 	CharPosToPoint( m_ptCursorPos.y, m_ptCursorPos.x, subLinePos );
 
-	int			nSubLine = GetSubLineIndex( m_ptCursorPos.y ) + subLinePos.y;
+	int nSubLine = GetSubLineIndex( m_ptCursorPos.y ) + subLinePos.y;
 
 	if( nSubLine < GetSubLineCount() - 1 )
-	/*ORIGINAL
-	if (m_ptCursorPos.y < GetLineCount() - 1)
-	*/
 	{
 		if (m_nIdealCharPos == -1)
 			m_nIdealCharPos = CalculateActualOffset(m_ptCursorPos.y, m_ptCursorPos.x);
 		//BEGIN SW
 		SubLineCursorPosToTextPos( CPoint( m_nIdealCharPos, nSubLine + 1 ), m_ptCursorPos );
-		/*ORIGINAL
-		m_ptCursorPos.y ++;
-		m_ptCursorPos.x = ApproxActualOffset(m_ptCursorPos.y, m_nIdealCharPos);
-		*///END SW
+		//END SW
 		if (m_ptCursorPos.x > GetLineLength(m_ptCursorPos.y))
 			m_ptCursorPos.x = GetLineLength(m_ptCursorPos.y);
 	}
@@ -325,21 +315,18 @@ void CCrystalTextView::MoveHome(BOOL bSelect)
 	int nLength = GetLineLength(m_ptCursorPos.y);
 	LPCTSTR pszChars = GetLineChars(m_ptCursorPos.y);
 	//BEGIN SW
-	CPoint	pos;
+	CPoint pos;
 	CharPosToPoint( m_ptCursorPos.y, m_ptCursorPos.x, pos );
 	int nHomePos = SubLineHomeToCharPos( m_ptCursorPos.y, pos.y );
 	int nOriginalHomePos = nHomePos;
-	/*ORIGINAL
-	int nHomePos = 0;
-	*///END SW
+	//END SW
+
 	while (nHomePos < nLength && isspace(pszChars[nHomePos]))
 		nHomePos ++;
 	if (nHomePos == nLength || m_ptCursorPos.x == nHomePos)
 		//BEGIN SW
 		m_ptCursorPos.x = nOriginalHomePos;
-		/*ORIGINAL
-		m_ptCursorPos.x = 0;
-		*///END SW
+		//END SW
 	else
 		m_ptCursorPos.x = nHomePos;
 	m_nIdealCharPos = CalculateActualOffset(m_ptCursorPos.y, m_ptCursorPos.x);
@@ -353,12 +340,10 @@ void CCrystalTextView::MoveHome(BOOL bSelect)
 void CCrystalTextView::MoveEnd(BOOL bSelect)
 {
 	//BEGIN SW
-	CPoint	pos;
+	CPoint pos;
 	CharPosToPoint( m_ptCursorPos.y, m_ptCursorPos.x, pos );
 	m_ptCursorPos.x = SubLineEndToCharPos( m_ptCursorPos.y, pos.y );
-	/*ORIGINAL
-	m_ptCursorPos.x = GetLineLength(m_ptCursorPos.y);
-	*///END SW
+	//END SW
 	m_nIdealCharPos = CalculateActualOffset(m_ptCursorPos.y, m_ptCursorPos.x);
 	EnsureVisible(m_ptCursorPos);
 	UpdateCaret();
@@ -381,33 +366,17 @@ void CCrystalTextView::MovePgUp(BOOL bSelect)
 	}
 
 	// setting cursor
-	CPoint	subLinePos;
+	CPoint subLinePos;
 	CharPosToPoint( m_ptCursorPos.y, m_ptCursorPos.x, subLinePos );
 
-	int			nSubLine = GetSubLineIndex( m_ptCursorPos.y ) + subLinePos.y - GetScreenLines() + 1;
+	int nSubLine = GetSubLineIndex( m_ptCursorPos.y ) + subLinePos.y - GetScreenLines() + 1;
 
 	if( nSubLine < 0 )
 		nSubLine = 0;
 
 	SubLineCursorPosToTextPos( 
 		CPoint( m_nIdealCharPos, nSubLine ), m_ptCursorPos );
-
-	/*ORIGINAL
-	int nNewTopLine = m_nTopLine - GetScreenLines() + 1;
-	if (nNewTopLine < 0)
-		nNewTopLine = 0;
-	if (m_nTopLine != nNewTopLine)
-	{
-		ScrollToLine(nNewTopLine);
-		UpdateSiblingScrollPos(TRUE);
-	}
-
-	m_ptCursorPos.y -= GetScreenLines() - 1;
-	if (m_ptCursorPos.y < 0)
-		m_ptCursorPos.y = 0;
-	if (m_ptCursorPos.x > GetLineLength(m_ptCursorPos.y))
-		m_ptCursorPos.x = GetLineLength(m_ptCursorPos.y);
-	*///END SW
+	//END SW
 
 	m_nIdealCharPos = CalculateActualOffset(m_ptCursorPos.y, m_ptCursorPos.x);
 	EnsureVisible(m_ptCursorPos);	//todo: no vertical scroll
@@ -433,33 +402,17 @@ void CCrystalTextView::MovePgDn(BOOL bSelect)
 	}
 
 	// setting cursor
-	CPoint	subLinePos;
+	CPoint subLinePos;
 	CharPosToPoint( m_ptCursorPos.y, m_ptCursorPos.x, subLinePos );
 
-	int			nSubLine = GetSubLineIndex( m_ptCursorPos.y ) + subLinePos.y + GetScreenLines() - 1;
+	int nSubLine = GetSubLineIndex( m_ptCursorPos.y ) + subLinePos.y + GetScreenLines() - 1;
 
 	if( nSubLine > nSubLineCount - 1 )
 		nSubLine = nSubLineCount - 1;
 
 	SubLineCursorPosToTextPos( 
 		CPoint( m_nIdealCharPos, nSubLine ), m_ptCursorPos );
-
-	/*ORIGINAL
-	int nNewTopLine = m_nTopLine + GetScreenLines() - 1;
-	if (nNewTopLine >= GetLineCount())
-		nNewTopLine = GetLineCount() - 1;
-	if (m_nTopLine != nNewTopLine)
-	{
-		ScrollToLine(nNewTopLine);
-		UpdateSiblingScrollPos(TRUE);
-	}
-
-	m_ptCursorPos.y += GetScreenLines() - 1;
-	if (m_ptCursorPos.y >= GetLineCount())
-		m_ptCursorPos.y = GetLineCount() - 1;
-	if (m_ptCursorPos.x > GetLineLength(m_ptCursorPos.y))
-		m_ptCursorPos.x = GetLineLength(m_ptCursorPos.y);
-	*///END SW
+	//END SW
 	m_nIdealCharPos = CalculateActualOffset(m_ptCursorPos.y, m_ptCursorPos.x);
 	EnsureVisible(m_ptCursorPos);	//todo: no vertical scroll
 	UpdateCaret();
@@ -585,12 +538,10 @@ void CCrystalTextView::OnLButtonDown(UINT nFlags, CPoint point)
 			m_ptCursorPos = ClientToText(point);
 			//BEGIN SW
 			// Find char pos that is the beginning of the subline clicked on
-			CPoint	pos;
+			CPoint pos;
 			CharPosToPoint( m_ptCursorPos.y, m_ptCursorPos.x, pos );
 			m_ptCursorPos.x = SubLineHomeToCharPos( m_ptCursorPos.y, pos.y );
-			/*ORIGINAL
-			m_ptCursorPos.x = 0;				//	Force beginning of the line
-			*///END SW
+			//END SW
 			if (! bShift)
 				m_ptAnchor = m_ptCursorPos;
 
@@ -606,28 +557,13 @@ void CCrystalTextView::OnLButtonDown(UINT nFlags, CPoint point)
 			}
 			else
 			{
-				int	nLine, nSubLine;
+				int nLine, nSubLine;
 				GetLineBySubLine( GetSubLineIndex( ptStart.y ) + pos.y + 1, nLine, nSubLine );
 				ptStart.y = nLine;
 				ptStart.x = SubLineHomeToCharPos( nLine, nSubLine );
 			}
-			/*ORIGINAL
-			ptStart = m_ptAnchor;
-			if (ptStart.y == GetLineCount() - 1)
-				ptStart.x = GetLineLength(ptStart.y);
-			else
-			{
-				ptStart.y ++;
-				ptStart.x = 0;
-			}
-			*///END SW
-
-			//BEGIN SW
 			ptEnd = m_ptCursorPos;
-			/*ORIGINAL
-			ptEnd = m_ptCursorPos;
-			ptEnd.x = 0;
-			*///END SW
+			//END SW
 
 			m_ptCursorPos = ptEnd;
 			UpdateCaret();
@@ -722,33 +658,21 @@ void CCrystalTextView::OnMouseMove(UINT nFlags, CPoint point)
 					ptNewCursorPos.y == m_ptAnchor.y && ptNewCursorPos.x < m_ptAnchor.x)
 				{
 					//BEGIN SW
-					CPoint	pos;
+					CPoint pos;
 					ptEnd = m_ptAnchor;
 					CharPosToPoint( ptEnd.y, ptEnd.x, pos );
 					if( GetSubLineIndex( ptEnd.y ) + pos.y == GetSubLineCount() - 1 )
 						ptEnd = SubLineEndToCharPos( ptEnd.y, pos.y );
 					else
 					{
-						int	nLine, nSubLine;
+						int nLine, nSubLine;
 						GetLineBySubLine( GetSubLineIndex( ptEnd.y ) + pos.y + 1, nLine, nSubLine );
 						ptEnd.y = nLine;
 						ptEnd.x = SubLineHomeToCharPos( nLine, nSubLine );
 					}
 					CharPosToPoint( ptNewCursorPos.y, ptNewCursorPos.x, pos );
 					ptNewCursorPos.x = SubLineHomeToCharPos( ptNewCursorPos.y, pos.y );
-					/*ORIGINAL
-					ptEnd = m_ptAnchor;
-					if (ptEnd.y == GetLineCount() - 1)
-					{
-						ptEnd.x = GetLineLength(ptEnd.y);
-					}
-					else
-					{
-						ptEnd.y ++;
-						ptEnd.x = 0;
-					}
-					ptNewCursorPos.x = 0;
-					*///END SW
+					//END SW
 					m_ptCursorPos = ptNewCursorPos;
 				}
 				else
@@ -756,7 +680,7 @@ void CCrystalTextView::OnMouseMove(UINT nFlags, CPoint point)
 					ptEnd = m_ptAnchor;
 					//BEGIN SW
 
-					CPoint	pos;
+					CPoint pos;
 					CharPosToPoint( ptEnd.y, ptEnd.x, pos );
 					ptEnd.x = SubLineHomeToCharPos( ptEnd.y, pos.y );
 
@@ -766,7 +690,7 @@ void CCrystalTextView::OnMouseMove(UINT nFlags, CPoint point)
 						ptNewCursorPos.x = SubLineEndToCharPos( ptNewCursorPos.y, pos.y );
 					else
 					{
-						int	nLine, nSubLine;
+						int nLine, nSubLine;
 						GetLineBySubLine( GetSubLineIndex( ptNewCursorPos.y ) + pos.y + 1, nLine, nSubLine );
 						ptNewCursorPos.y = nLine;
 						ptNewCursorPos.x = SubLineHomeToCharPos( nLine, nSubLine );
@@ -776,20 +700,7 @@ void CCrystalTextView::OnMouseMove(UINT nFlags, CPoint point)
 					GetLineBySubLine( GetSubLineIndex( m_ptCursorPos.y ) + pos.y, nLine, nSubLine );
 					m_ptCursorPos.y = nLine;
 					m_ptCursorPos.x = SubLineHomeToCharPos( nLine, nSubLine );
-					/*ORIGINAL
-					ptEnd.x = 0;
-					m_ptCursorPos = ptNewCursorPos;
-					if (ptNewCursorPos.y == GetLineCount() - 1)
-					{
-						ptNewCursorPos.x = GetLineLength(ptNewCursorPos.y);
-					}
-					else
-					{
-						ptNewCursorPos.y ++;
-						ptNewCursorPos.x = 0;
-					}
-					m_ptCursorPos.x = 0;
-					*///END SW
+					//END SW
 				}
 				UpdateCaret();
 				SetSelection(ptNewCursorPos, ptEnd);
@@ -868,33 +779,21 @@ void CCrystalTextView::OnLButtonUp(UINT nFlags, CPoint point)
 				ptNewCursorPos.y == m_ptAnchor.y && ptNewCursorPos.x < m_ptAnchor.x)
 			{
 				//BEGIN SW
-				CPoint	pos;
+				CPoint pos;
 				ptEnd = m_ptAnchor;
 				CharPosToPoint( ptEnd.y, ptEnd.x, pos );
 				if( GetSubLineIndex( ptEnd.y ) + pos.y == GetSubLineCount() - 1 )
 					ptEnd = SubLineEndToCharPos( ptEnd.y, pos.y );
 				else
 				{
-					int	nLine, nSubLine;
+					int nLine, nSubLine;
 					GetLineBySubLine( GetSubLineIndex( ptEnd.y ) + pos.y + 1, nLine, nSubLine );
 					ptEnd.y = nLine;
 					ptEnd.x = SubLineHomeToCharPos( nLine, nSubLine );
 				}
 				CharPosToPoint( ptNewCursorPos.y, ptNewCursorPos.x, pos );
 				ptNewCursorPos.x = SubLineHomeToCharPos( ptNewCursorPos.y, pos.y );
-				/*ORIGINAL
-				ptEnd = m_ptAnchor;
-				if (ptEnd.y == GetLineCount() - 1)
-				{
-					ptEnd.x = GetLineLength(ptEnd.y);
-				}
-				else
-				{
-					ptEnd.y ++;
-					ptEnd.x = 0;
-				}
-				ptNewCursorPos.x = 0;
-				*///END SW
+				//END SW
 				m_ptCursorPos = ptNewCursorPos;
 			}
 			else
@@ -902,7 +801,7 @@ void CCrystalTextView::OnLButtonUp(UINT nFlags, CPoint point)
 				ptEnd = m_ptAnchor;
 				//BEGIN SW
 
-				CPoint	pos;
+				CPoint pos;
 				CharPosToPoint( ptEnd.y, ptEnd.x, pos );
 				ptEnd.x = SubLineHomeToCharPos( ptEnd.y, pos.y );
 
@@ -912,26 +811,13 @@ void CCrystalTextView::OnLButtonUp(UINT nFlags, CPoint point)
 					ptNewCursorPos.x = SubLineEndToCharPos( ptNewCursorPos.y, pos.y );
 				else
 				{
-					int	nLine, nSubLine;
+					int nLine, nSubLine;
 					GetLineBySubLine( GetSubLineIndex( ptNewCursorPos.y ) + pos.y + 1, nLine, nSubLine );
 					ptNewCursorPos.y = nLine;
 					ptNewCursorPos.x = SubLineHomeToCharPos( nLine, nSubLine );
 				}
 				m_ptCursorPos = ptNewCursorPos;
-				/*ORIGINAL
-				ptEnd.x = 0;
-				m_ptCursorPos = ptNewCursorPos;
-				if (ptNewCursorPos.y == GetLineCount() - 1)
-				{
-					ptNewCursorPos.x = GetLineLength(ptNewCursorPos.y);
-				}
-				else
-				{
-					ptNewCursorPos.y ++;
-					ptNewCursorPos.x = 0;
-				}
-				m_ptCursorPos.x = 0;
-				*///END SW
+				//END SW
 			}
 			EnsureVisible(m_ptCursorPos);
 			UpdateCaret();
