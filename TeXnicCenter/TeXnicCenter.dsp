@@ -145,6 +145,10 @@ SOURCE=.\EditMenuButton.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\EditMenuButtonOpt.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\EnvironmentView.cpp
 # End Source File
 # Begin Source File
@@ -349,6 +353,10 @@ SOURCE=.\PlaceHolder.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\PlaceholderSingleOptDlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\PostProcessor.cpp
 # End Source File
 # Begin Source File
@@ -523,6 +531,10 @@ SOURCE=.\DocumentNewDialog.h
 # Begin Source File
 
 SOURCE=.\EditMenuButton.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\EditMenuButtonOpt.h
 # End Source File
 # Begin Source File
 
@@ -727,6 +739,10 @@ SOURCE=.\PersistPosEdit.h
 # Begin Source File
 
 SOURCE=.\PlaceHolder.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PlaceholderSingleOptDlg.h
 # End Source File
 # Begin Source File
 
