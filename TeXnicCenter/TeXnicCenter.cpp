@@ -1434,7 +1434,7 @@ MySpell* CTeXnicCenterApp::GetSpeller()
 				if ( m_pSpell->open_personal_dictionary() != 0 )
 				{
 					CString str;
-					str.Format(STE_FILE_INUSE, AfxLoadString(IDS_OPEN), g_configuration.m_strSpellPersonalDictionary);
+					str.Format(STE_FILE_INUSE, AfxLoadString(IDS_OPEN), g_configuration.m_strSpellPersonalDictionary, "");
 					AfxMessageBox(str);
 				}
 			}
