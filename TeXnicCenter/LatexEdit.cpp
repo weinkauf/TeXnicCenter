@@ -224,7 +224,7 @@ void CLatexEdit::OnContextMenu(CWnd* pWnd, CPoint point)
 	CCrystalTextBuffer *pBuffer = LocateTextBuffer();
 	ASSERT( pBuffer );
 	ptText = ClientToText(ptText);
-	bool bShowDefault = false;
+	bool bShowDefault = true;
 
 	CCrystalTextBuffer::CTextAttribute *attr = pBuffer->GetLineAttribute(ptText.y, ptText.x, ptText.x+1);
 	if (attr != NULL)
@@ -502,7 +502,7 @@ void CLatexEdit::GetSelectedKeyword(CString &strKeyword)
 
 	if (ptStart != ptEnd)
 		GetText(ptStart, ptEnd, strKeyword);
-	else
+	else if ( GetLineLength(ptStart.y) )
 	{
 		// retrieve the keyword, the cursor is placed on
 		CString	strLine(GetLineChars(ptStart.y));
