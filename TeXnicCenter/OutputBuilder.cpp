@@ -360,7 +360,7 @@ BOOL COutputBuilder::RunPostProcessors()
 	CPostProcessorArray	&a = m_pProfile->GetPostProcessorArray();
 	BOOL								bResult = TRUE;
 
-	for (int i=0; ( (i < a.GetSize() - 1) && (!m_bCancel) ); i++)
+	for (int i=0; ( (i < a.GetSize()) && (!m_bCancel) ); i++)
 	{
 		if (!a[i].Execute(m_strMainPath, m_strWorkingDir, hOutput, &m_hCurrentProcess) || m_bCancel)
 		{
