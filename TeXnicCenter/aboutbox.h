@@ -26,11 +26,23 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #ifndef __ABOUTBOX_H__
 #define __ABOUTBOX_H__
 
 //#include <hyperlink.h>
 
+/**	About Box of TeXnicCenter.
+
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CAboutDlg : public CDialog
 {
 // construction/destruction
