@@ -39,6 +39,9 @@
 
 #include <functional>
 
+#pragma warning( push )
+#pragma warning( disable : 4786 ) // Truncate debug information warning
+
 /**
 List that maintains elements in sorted order.
 
@@ -196,5 +199,6 @@ BOOL CSortList<TYPE, ARG_TYPE, Compare>::IsSorted() const
 	return TRUE;
 }
 
+#pragma warning( pop )
 
 #endif // !defined(AFX_SORTLIST_H__8AA09E39_4FB8_4967_99B3_4DF64DCBDC6B__INCLUDED_)
