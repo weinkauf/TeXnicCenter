@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.12  2005/02/15 09:43:12  vachis
+* Implemented feature 536164: Matching Bracket Highlight
+*
 * Revision 1.11  2005/01/04 07:57:11  niteria
 * Implemented function to stop incremental search from the outside.
 *
@@ -181,11 +184,17 @@ private:
 	DWORD *m_pdwParseCookies;
 	int m_nParseArraySize;
 	DWORD GetParseCookie(int nLineIndex);
+
 	//Pair String
 	CPoint m_ptPairStringStart;
 	CPoint m_ptPairStringEnd;
 	int m_nPairStringColorText;
 	int m_nPairStringColorBkgnd;
+	CPoint m_ptCurStringStart;
+	CPoint m_ptCurStringEnd;
+	int m_nCurStringColorText;
+	int m_nCurStringColorBkgnd;
+	BOOL m_bDrawPairBlock;
 
 	//	Pre-calculated line lengths (in characters)
 	int m_nActualLengthArraySize;
@@ -276,8 +285,10 @@ private:
 	enum
 	{
 		DRAW_SELECTION		= 0x0001,
-		DRAW_PAIRS  	    = 0x0002,
-		DRAW_IMPL					= 0x0003		
+		DRAW_PAIR		= 0x0002,
+		DRAW_CURPAIR		= 0x0003,
+		DRAW_PAIRBLOCK		= 0x0004,
+		DRAW_IMPL		= 0x0005		
 	};
 
 	//	CCrystalTextView::FindPairHelper() contants
@@ -296,14 +307,26 @@ protected:
 	void SetAnchor(const CPoint &ptNewAnchor);
 	int GetMarginWidth();
 
-	CPoint GetPairStringStart();
-	CPoint GetPairStringEnd();
+	CPoint GetPairStringStart() const;
+	CPoint GetPairStringEnd() const;
 	void SetPairStringStart(const CPoint &ptStart);
 	void SetPairStringEnd(const CPoint &ptEnd);
-	int GetPairStringColorBkgnd();
-	int GetPairStringColorText();
+	int GetPairStringColorBkgnd() const;
+	int GetPairStringColorText() const;
 	void SetPairStringColorBkgnd(int nColorIndex);
 	void SetPairStringColorText(int nColorIndex);
+
+	CPoint GetCurStringStart() const;
+	CPoint GetCurStringEnd() const;
+	void SetCurStringStart(const CPoint &ptStart);
+	void SetCurStringEnd(const CPoint &ptEnd);
+	int GetCurStringColorBkgnd() const;
+	int GetCurStringColorText() const;
+	void SetCurStringColorBkgnd(int nColorIndex);
+	void SetCurStringColorText(int nColorIndex);
+
+	BOOL GetDrawPairBlock() const;
+	void SetDrawPairBlock( BOOL bDrawBlock );
 
 	BOOL m_bShowInactiveSelection;
 	//	[JRT]
@@ -662,12 +685,14 @@ protected:
 
 	@param ptCursorPos 
 		Typically it's cursor position, 
+	@param bMarkBlock
+		Mark all block between start pair and end pair (brackets)
 
 	@return FALSE if the string that ends at given position have its pair string (e.g. bracket)
 		but this pair have not been found
 		TRUE otherwise			
 		*/
-	virtual BOOL MarkPairStringTo(const CPoint &ptCursorPos);
+	virtual BOOL MarkPairStringTo(const CPoint &ptCursorPos, BOOL bMarkBlock );
 
 	/**Unmark string previoslly marked by <code>MarkPairStringTo</code>.
 	*/
@@ -860,19 +885,23 @@ public:
 		COLORINDEX_OPERATOR,      // [JRT]:
 		COLORINDEX_STRING,
 		COLORINDEX_PREPROCESSOR,
+
+		// Brackets higlighting
+		COLORINDEX_PAIRSTRINGBKGND,
+		COLORINDEX_PAIRSTRINGTEXT,
+		COLORINDEX_BADPAIRSTRINGBKGND,
+		COLORINDEX_BADPAIRSTRINGTEXT,
+		COLORINDEX_CURPAIRSTRINGBKGND,
+		COLORINDEX_CURPAIRSTRINGTEXT,
+		COLORINDEX_PAIRBLOCKBKGND,
+
 		//	Compiler/debugger colors
 		COLORINDEX_ERRORBKGND,
 		COLORINDEX_ERRORTEXT,
 		COLORINDEX_EXECUTIONBKGND,
 		COLORINDEX_EXECUTIONTEXT,
 		COLORINDEX_BREAKPOINTBKGND,
-		COLORINDEX_BREAKPOINTTEXT,
-
-		// Brackets higlighting
-		COLORINDEX_PAIRSTRINGBKGND,
-		COLORINDEX_PAIRSTRINGTEXT,
-		COLORINDEX_BADPAIRSTRINGBKGND,
-		COLORINDEX_BADPAIRSTRINGTEXT
+		COLORINDEX_BREAKPOINTTEXT
 		//	...
 		//	Expandable: custom elements are allowed.
 	};

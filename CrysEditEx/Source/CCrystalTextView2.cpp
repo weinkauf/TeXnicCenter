@@ -64,6 +64,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.5  2005/02/15 09:43:12  vachis
+* Implemented feature 536164: Matching Bracket Highlight
+*
 * Revision 1.4  2002/06/27 14:43:26  svenwiegand
 * Instead of the character test functions (isalpha, isdigit, etc.) from the standard library, our own wrappers from the character.h file (myspell directory) are used now, to fix character recognition problems (bug 551033).
 *
@@ -132,8 +135,9 @@ void CCrystalTextView::MoveLeft(BOOL bSelect)
 	if (! bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
+
 	//highlight brackets
-	MarkPairStringTo(GetCursorPos());
+	MarkPairStringTo(GetCursorPos(), FALSE);
 	Invalidate();
 	UpdateWindow();
 }
@@ -164,8 +168,9 @@ void CCrystalTextView::MoveRight(BOOL bSelect)
 	if (! bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
+
 	//highlight brackets
-	MarkPairStringTo(GetCursorPos());
+	MarkPairStringTo(GetCursorPos(), FALSE);
 	Invalidate();
 	UpdateWindow();
 }
@@ -215,6 +220,11 @@ void CCrystalTextView::MoveWordLeft(BOOL bSelect)
 	if (! bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
+
+	//highlight brackets
+	MarkPairStringTo(GetCursorPos(), FALSE);
+	Invalidate();
+	UpdateWindow();
 }
 
 void CCrystalTextView::MoveWordRight(BOOL bSelect)
@@ -265,6 +275,11 @@ void CCrystalTextView::MoveWordRight(BOOL bSelect)
 	if (! bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
+
+	//highlight brackets
+	MarkPairStringTo(GetCursorPos(), FALSE);
+	Invalidate();
+	UpdateWindow();
 }
 
 void CCrystalTextView::MoveUp(BOOL bSelect)
@@ -294,8 +309,9 @@ void CCrystalTextView::MoveUp(BOOL bSelect)
 	if (! bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
+
 	//highlight brackets
-	MarkPairStringTo(GetCursorPos());
+	MarkPairStringTo(GetCursorPos(), FALSE);
 	Invalidate();
 	UpdateWindow();
 }
@@ -327,8 +343,9 @@ void CCrystalTextView::MoveDown(BOOL bSelect)
 	if (! bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
+
 	//highlight brackets
-	MarkPairStringTo(GetCursorPos());
+	MarkPairStringTo(GetCursorPos(), FALSE);
 	Invalidate();
 	UpdateWindow();
 }
@@ -358,8 +375,9 @@ void CCrystalTextView::MoveHome(BOOL bSelect)
 	if (! bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
+
 	//highlight brackets
-	MarkPairStringTo(GetCursorPos());
+	MarkPairStringTo(GetCursorPos(), FALSE);
 	Invalidate();
 	UpdateWindow();
 }
@@ -377,8 +395,9 @@ void CCrystalTextView::MoveEnd(BOOL bSelect)
 	if (! bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
+
 	//highlight brackets
-	MarkPairStringTo(GetCursorPos());
+	MarkPairStringTo(GetCursorPos(), FALSE);
 	Invalidate();
 	UpdateWindow();
 }
@@ -415,8 +434,9 @@ void CCrystalTextView::MovePgUp(BOOL bSelect)
 	if (! bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
+
 	//highlight brackets
-	MarkPairStringTo(GetCursorPos());
+	MarkPairStringTo(GetCursorPos(), FALSE);
 	Invalidate();
 	UpdateWindow();
 }
@@ -454,8 +474,9 @@ void CCrystalTextView::MovePgDn(BOOL bSelect)
 	if (! bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
+
 	//highlight brackets
-	MarkPairStringTo(GetCursorPos());
+	MarkPairStringTo(GetCursorPos(), FALSE);
 	Invalidate();
 	UpdateWindow();
 }
@@ -470,8 +491,9 @@ void CCrystalTextView::MoveCtrlHome(BOOL bSelect)
 	if (! bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
+
 	//highlight brackets
-	MarkPairStringTo(GetCursorPos());
+	MarkPairStringTo(GetCursorPos(), FALSE);
 	Invalidate();
 	UpdateWindow();
 }
@@ -486,8 +508,9 @@ void CCrystalTextView::MoveCtrlEnd(BOOL bSelect)
 	if (! bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);	
+
 	//highlight brackets
-	MarkPairStringTo(GetCursorPos());
+	MarkPairStringTo(GetCursorPos(), FALSE);
 	Invalidate();
 	UpdateWindow();
 }
@@ -623,11 +646,6 @@ void CCrystalTextView::OnLButtonDown(UINT nFlags, CPoint point)
 			m_bWordSelection = FALSE;
 			m_bLineSelection = TRUE;
 			m_bDragSelection = TRUE;
-
-			//highlight brackets
-			MarkPairStringTo(GetCursorPos());
-			Invalidate();
-			UpdateWindow();
 		}
 	}
 	else
@@ -679,11 +697,6 @@ void CCrystalTextView::OnLButtonDown(UINT nFlags, CPoint point)
 			m_bWordSelection = bControl;
 			m_bLineSelection = FALSE;
 			m_bDragSelection = TRUE;
-
-			//highlight brackets
-			MarkPairStringTo(GetCursorPos());
-			Invalidate();
-			UpdateWindow();
 		}
 	}
 
@@ -693,6 +706,11 @@ void CCrystalTextView::OnLButtonDown(UINT nFlags, CPoint point)
 	// we must set the ideal character position here!
 	m_nIdealCharPos = CalculateActualOffset( m_ptCursorPos.y, m_ptCursorPos.x );
 	//END SW
+
+	//highlight brackets
+	MarkPairStringTo(GetCursorPos(), FALSE);
+	Invalidate();
+	UpdateWindow();
 }
 
 void CCrystalTextView::OnMouseMove(UINT nFlags, CPoint point) 
@@ -938,7 +956,7 @@ void CCrystalTextView::OnLButtonUp(UINT nFlags, CPoint point)
 	}
 
 	//highlight brackets
-	MarkPairStringTo(GetCursorPos());
+	MarkPairStringTo(GetCursorPos(), FALSE);
 	Invalidate();
 	UpdateWindow();
 	ASSERT_VALIDTEXTPOS(m_ptCursorPos);
@@ -1065,7 +1083,7 @@ void CCrystalTextView::OnLButtonDblClk(UINT nFlags, CPoint point)
 		m_bDragSelection = TRUE;
 
 		//highlight brackets
-		MarkPairStringTo(GetCursorPos());
+		MarkPairStringTo(GetCursorPos(), FALSE);
 		Invalidate();
 		UpdateWindow();
 	}
@@ -1105,7 +1123,7 @@ void CCrystalTextView::OnRButtonDown(UINT nFlags, CPoint point)
 	}
 
 	//highlight brackets
-	MarkPairStringTo(GetCursorPos());
+	MarkPairStringTo(GetCursorPos(), FALSE);
 	Invalidate();
 	UpdateWindow();
 

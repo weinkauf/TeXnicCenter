@@ -188,6 +188,12 @@ COLORREF CLatexEdit::GetAutomaticColor(int nColorIndex)
 		return RGB(0xC0, 0x00, 0x00);
 	case COLORINDEX_BADPAIRSTRINGTEXT:
 		return RGB(0xFF, 0xFF, 0xFF);
+	case COLORINDEX_CURPAIRSTRINGBKGND:
+		return RGB(0xE8, 0xE8, 0xFF);
+	case COLORINDEX_CURPAIRSTRINGTEXT:
+		return RGB(0xFF, 0xFF, 0xFF);
+	case COLORINDEX_PAIRBLOCKBKGND:
+		return RGB(0xE8, 0xE8, 0xFF);
 	}
 
 	return RGB(0xFF, 0x00, 0x00);

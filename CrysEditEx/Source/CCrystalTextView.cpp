@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.21  2005/02/15 09:43:12  vachis
+* Implemented feature 536164: Matching Bracket Highlight
+*
 * Revision 1.20  2005/01/04 07:57:11  niteria
 * Implemented function to stop incremental search from the outside.
 *
@@ -758,7 +761,7 @@ void CCrystalTextView::DrawLineHelper(CDC *pdc, CPoint &ptOrigin, const CRect &r
 									  int nCount, CPoint ptTextPos)
 {
 	CCrystalTextView::DrawLineHelperRecur(pdc, ptOrigin, rcClip, nColorIndex, pszChars, 
-										nOffset, nCount, ptTextPos, CCrystalTextView::DRAW_PAIRS );
+										nOffset, nCount, ptTextPos, CCrystalTextView::DRAW_SELECTION );
 }
 
 void CCrystalTextView::DrawLineHelperRecur(CDC *pdc, CPoint &ptOrigin, const CRect &rcClip, 
@@ -771,23 +774,68 @@ void CCrystalTextView::DrawLineHelperRecur(CDC *pdc, CPoint &ptOrigin, const CRe
 	int nNextDrawStage = 0;
 	int nDrawIndexBkgnd = 0, nDrawIndexText = 0;
 
+	ASSERT ( m_ptPairStringStart.y < m_ptPairStringEnd.y || (m_ptPairStringStart.y == m_ptPairStringEnd.y && (m_ptPairStringStart.x <= m_ptPairStringEnd.x)) );
+	ASSERT ( m_ptCurStringStart.y < m_ptCurStringEnd.y || (m_ptCurStringStart.y == m_ptCurStringEnd.y && (m_ptCurStringStart.x <= m_ptCurStringEnd.x)) );
+
 	if (nDrawStage == CCrystalTextView::DRAW_SELECTION) 
 	{
 		rptDrawSelStart = m_ptDrawSelStart;
 		rptDrawSelEnd = m_ptDrawSelEnd;
 		bCondition = m_bFocused || m_bShowInactiveSelection;
-		nNextDrawStage = CCrystalTextView::DRAW_IMPL;
+		nNextDrawStage = CCrystalTextView::DRAW_PAIR;
 		nDrawIndexBkgnd = COLORINDEX_SELBKGND;
 		nDrawIndexText = COLORINDEX_SELTEXT;
 	}
-	else if (nDrawStage == CCrystalTextView::DRAW_PAIRS) 
+	else if (nDrawStage == CCrystalTextView::DRAW_PAIR) 
 	{
 		rptDrawSelStart = m_ptPairStringStart;
 		rptDrawSelEnd = m_ptPairStringEnd;
-		nNextDrawStage = CCrystalTextView::DRAW_SELECTION;
-		bCondition = (rptDrawSelEnd != rptDrawSelStart);
+		nNextDrawStage = CCrystalTextView::DRAW_CURPAIR;
 		nDrawIndexBkgnd = m_nPairStringColorBkgnd;
 		nDrawIndexText = m_nPairStringColorText;
+		bCondition = (rptDrawSelEnd != rptDrawSelStart) 
+                        && GetColor(nDrawIndexBkgnd) !=  GetColor(CCrystalTextView::COLORINDEX_BKGND)
+                        && GetColor(nDrawIndexText) !=  GetColor(CCrystalTextView::COLORINDEX_NORMALTEXT);
+			//set same colour as block
+		if ( GetColor(nDrawIndexBkgnd) == GetColor(CCrystalTextView::COLORINDEX_PAIRBLOCKBKGND) ) {
+			nDrawIndexText = CCrystalTextView::COLORINDEX_NORMALTEXT; //TODO to leave text intact
+			bCondition = bCondition && m_bDrawPairBlock;
+		}
+	}
+	else if (nDrawStage == CCrystalTextView::DRAW_CURPAIR) 
+	{
+		rptDrawSelStart = m_ptCurStringStart;
+		rptDrawSelEnd = m_ptCurStringEnd;
+		nNextDrawStage = CCrystalTextView::DRAW_PAIRBLOCK;
+		nDrawIndexBkgnd = m_nCurStringColorBkgnd;
+		nDrawIndexText = m_nCurStringColorText;
+		bCondition = (rptDrawSelEnd != rptDrawSelStart)
+                        && GetColor(nDrawIndexBkgnd) !=  GetColor(CCrystalTextView::COLORINDEX_BKGND)
+                        && GetColor(nDrawIndexText) !=  GetColor(CCrystalTextView::COLORINDEX_NORMALTEXT);
+			//set same colour as block
+		if ( GetColor(nDrawIndexBkgnd) == GetColor(CCrystalTextView::COLORINDEX_PAIRBLOCKBKGND)) {
+			nDrawIndexText = CCrystalTextView::COLORINDEX_NORMALTEXT; //TODO to leave text intact?
+			bCondition = bCondition && m_bDrawPairBlock;
+		}
+	}
+	else if (nDrawStage == CCrystalTextView::DRAW_PAIRBLOCK) 
+	{
+		if ( m_ptPairStringEnd.y < m_ptCurStringStart.y 
+				 || (m_ptPairStringEnd.y == m_ptCurStringStart.y && (m_ptPairStringStart.x < m_ptCurStringStart.x)) )
+		{
+			rptDrawSelStart = m_ptPairStringEnd;
+			rptDrawSelEnd = m_ptCurStringStart;
+		}
+		else
+		{
+			rptDrawSelStart = m_ptCurStringEnd;
+			rptDrawSelEnd = m_ptPairStringStart;
+		}
+		nNextDrawStage = CCrystalTextView::DRAW_IMPL;
+		nDrawIndexBkgnd = CCrystalTextView::COLORINDEX_PAIRBLOCKBKGND;
+		nDrawIndexText = CCrystalTextView::COLORINDEX_NORMALTEXT; //TODO to leave text intact?
+		bCondition = (rptDrawSelEnd != rptDrawSelStart) && m_bDrawPairBlock 
+                        && GetColor(nDrawIndexBkgnd) != GetColor(CCrystalTextView::COLORINDEX_BKGND);
 	}
 	else if (nDrawStage == CCrystalTextView::DRAW_IMPL) 
 	{
@@ -1228,6 +1276,12 @@ COLORREF CCrystalTextView::GetColor(int nColorIndex)
 		return RGB(192, 0, 0);
 	case COLORINDEX_BADPAIRSTRINGTEXT:
 		return RGB(255, 255, 255);
+	case COLORINDEX_CURPAIRSTRINGBKGND:
+		return RGB(232, 232, 255);
+	case COLORINDEX_CURPAIRSTRINGTEXT:
+		return RGB(255, 255, 255);
+	case COLORINDEX_PAIRBLOCKBKGND:
+		return RGB(232, 232, 255);
 	}
 	return RGB(255, 0, 0);
 }
@@ -3093,7 +3147,7 @@ void CCrystalTextView::SetCursorPos(const CPoint &ptCursorPos)
 	m_nIdealCharPos = CalculateActualOffset(m_ptCursorPos.y, m_ptCursorPos.x);
 	UpdateCaret();
 
-	MarkPairStringTo(ptCursorPos);
+	MarkPairStringTo(ptCursorPos, TRUE);
 	Invalidate();
 	UpdateWindow();
 }
@@ -3335,7 +3389,7 @@ BOOL CCrystalTextView::HighlightText(const CPoint &ptStartPos, int nLength /*= -
 	UpdateCaret();
 	EnsureVisible(m_ptCursorPos);
 
-	MarkPairStringTo(m_ptCursorPos);
+	MarkPairStringTo(m_ptCursorPos, FALSE);
 	Invalidate();
 	UpdateWindow();		
 	return TRUE;
@@ -4238,7 +4292,7 @@ int CCrystalTextView::Release( bool bExclusive /*= false */ )
 }
 
 
-BOOL CCrystalTextView::MarkPairStringTo(const CPoint &ptCursorPos)
+BOOL CCrystalTextView::MarkPairStringTo( const CPoint &ptCursorPos, BOOL bMarkBlock )
 {
 	CPoint ptCurStrStart, ptCurStrEnd;
 	CPoint ptFoundStrStart, ptFoundStrEnd;
@@ -4250,20 +4304,33 @@ BOOL CCrystalTextView::MarkPairStringTo(const CPoint &ptCursorPos)
 	if ( !FindPairTo(ptCursorPos, ptCurStrStart, ptCurStrEnd,
 															ptFoundStrStart, ptFoundStrEnd, bPairFound ) )
 	{
+		UnmarkPairString();
 		//SetPairStringStart( ptFoundStrStart );
 		//SetPairStringEnd( ptFoundStrEnd );
-		SetPairStringStart( ptCurStrStart );
-		SetPairStringEnd( ptCurStrEnd );
-		SetPairStringColorBkgnd( CCrystalTextView::COLORINDEX_BADPAIRSTRINGBKGND );
-		SetPairStringColorText( CCrystalTextView::COLORINDEX_BADPAIRSTRINGTEXT );
+		SetCurStringStart( ptCurStrStart );
+		SetCurStringEnd( ptCurStrEnd );
+		SetCurStringColorBkgnd( CCrystalTextView::COLORINDEX_BADPAIRSTRINGBKGND );
+		SetCurStringColorText( CCrystalTextView::COLORINDEX_BADPAIRSTRINGTEXT );
 		return FALSE;
 	}
 
-	if ( bPairFound ) {
+	if ( bPairFound ) 
+	{
 		SetPairStringStart( ptFoundStrStart );
 		SetPairStringEnd( ptFoundStrEnd );
 		SetPairStringColorBkgnd( CCrystalTextView::COLORINDEX_PAIRSTRINGBKGND );
 		SetPairStringColorText( CCrystalTextView::COLORINDEX_PAIRSTRINGTEXT );
+
+		SetCurStringStart( ptCurStrStart );
+		SetCurStringEnd( ptCurStrEnd );
+		SetCurStringColorBkgnd( CCrystalTextView::COLORINDEX_CURPAIRSTRINGBKGND );
+		SetCurStringColorText( CCrystalTextView::COLORINDEX_CURPAIRSTRINGTEXT );
+
+		if ( bMarkBlock ) 
+			SetDrawPairBlock( TRUE );
+		else
+			SetDrawPairBlock( FALSE );
+
 	}
 	else {
 		UnmarkPairString();	
@@ -4279,16 +4346,23 @@ void CCrystalTextView::UnmarkPairString()
 	SetPairStringEnd(CPoint(0,0));
 	SetPairStringColorText(0);
 	SetPairStringColorBkgnd(0);
+
+	SetCurStringStart(CPoint(0,0));
+	SetCurStringEnd(CPoint(0,0));
+	SetCurStringColorText(0);
+	SetCurStringColorBkgnd(0);
+
+	SetDrawPairBlock( FALSE );
 }
 
 
 
-CPoint CCrystalTextView::GetPairStringStart()
+CPoint CCrystalTextView::GetPairStringStart() const
 {
 	return m_ptPairStringStart;
 }
 
-CPoint CCrystalTextView::GetPairStringEnd()
+CPoint CCrystalTextView::GetPairStringEnd() const
 {
 	return m_ptPairStringStart;
 }
@@ -4305,7 +4379,7 @@ void CCrystalTextView::SetPairStringEnd(const CPoint &ptEnd)
 	m_ptPairStringEnd = ptEnd;
 }
 
-int CCrystalTextView::GetPairStringColorBkgnd()
+int CCrystalTextView::GetPairStringColorBkgnd() const
 {
 	return m_nPairStringColorBkgnd;
 }
@@ -4315,7 +4389,7 @@ void CCrystalTextView::SetPairStringColorBkgnd(int nColorIndex)
 	m_nPairStringColorBkgnd = nColorIndex;
 }
 
-int CCrystalTextView::GetPairStringColorText()
+int CCrystalTextView::GetPairStringColorText() const
 {
 	return m_nPairStringColorText;
 }
@@ -4325,6 +4399,57 @@ void CCrystalTextView::SetPairStringColorText(int nColorIndex)
 	m_nPairStringColorText = nColorIndex;
 }
 
+CPoint CCrystalTextView::GetCurStringStart() const
+{
+	return m_ptCurStringStart;
+}
+
+CPoint CCrystalTextView::GetCurStringEnd() const
+{
+	return m_ptCurStringStart;
+}
+
+void CCrystalTextView::SetCurStringStart(const CPoint &ptStart)
+{
+	ASSERT_VALIDTEXTPOS(ptStart);
+	m_ptCurStringStart = ptStart;
+}
+
+void CCrystalTextView::SetCurStringEnd(const CPoint &ptEnd)
+{
+	ASSERT_VALIDTEXTPOS(ptEnd);
+	m_ptCurStringEnd = ptEnd;
+}
+
+int CCrystalTextView::GetCurStringColorBkgnd() const
+{
+	return m_nCurStringColorBkgnd;
+}
+
+void CCrystalTextView::SetCurStringColorBkgnd(int nColorIndex)
+{
+	m_nCurStringColorBkgnd = nColorIndex;
+}
+
+int CCrystalTextView::GetCurStringColorText() const
+{
+	return m_nCurStringColorText;
+}
+
+void CCrystalTextView::SetCurStringColorText(int nColorIndex)
+{
+	m_nCurStringColorText = nColorIndex;
+}
+
+void CCrystalTextView::SetDrawPairBlock( BOOL bDrawBlock )
+{
+	m_bDrawPairBlock = bDrawBlock;
+}
+
+BOOL CCrystalTextView::GetDrawPairBlock() const
+{
+	return m_bDrawPairBlock;
+}
 
 BOOL CCrystalTextView::FindPairTo(const CPoint &ptCursorPos, CPoint &ptCurStrStart, CPoint &ptCurStrEnd,
 													CPoint &ptFoundStrStart, CPoint &ptFoundStrEnd, BOOL &bPairFound )
