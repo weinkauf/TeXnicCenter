@@ -55,6 +55,9 @@ we do not get the BN_CLICKED, if we would use a normal one.
 @see CBCGToolbarCustomizeEx
 @see CUserTool
 
+@ingroup guielements
+@ingroup bcgext
+
 @author Tino Weinkauf
 */
 
@@ -95,6 +98,8 @@ protected:
 This class overrides some hooks of the original CBCGToolbarCustomize
 to change the behaviour of the BCG-ToolsPage.
 An Edit-Control and a Button are replaced.
+
+@ingroup bcgext
 
 @author Tino Weinkauf
 */
