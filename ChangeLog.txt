@@ -1,3 +1,8 @@
+2005/02/24 vachis
+- Fixed Matching Bracket Highlighting
+- New features for Matching Bracket Highlighting: configure colours, 
+    highlight current block and pair, help
+
 2005/02/15 vachis 
 - Implemented feature 536164: Matching Bracket Highlight
 - Fixed bug 912103: Syntax highlighting error with "%\verb|"
