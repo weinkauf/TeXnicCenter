@@ -496,6 +496,10 @@ CString COutputDoc::GetMainPath() const
 	if (theApp.GetProject())
 		return theApp.GetProject()->GetMainPath();
 
+	//Still nothing known? Try the active document anyway
+	if (GetActiveDocument())
+		return GetActiveDocument()->GetPathName();
+
 	return CString(_T(""));
 }
 
@@ -520,6 +524,10 @@ CString COutputDoc::GetWorkingDir() const
 	else if (theApp.GetProject())
 		return theApp.GetProject()->GetWorkingDir();
 	
+	//Still nothing known? Try the active document anyway
+	if (GetActiveDocument())
+		return CPathTool::GetDirectory(GetActiveDocument()->GetPathName());
+
 	return CString(_T(""));
 }
 
