@@ -447,6 +447,10 @@ BOOL CProjectNewDialog::CreateDirectoryRecursive(LPCTSTR lpszDirectory)
 	if (lpszDirectory[0] == _T('\0'))
 		return FALSE;
 
+	CString strDrive = CPathTool::GetDrive(lpszDirectory);
+	if (strDrive.GetLength() == 0) return FALSE;
+	if (!CPathTool::Exists(strDrive)) return FALSE;
+
 	if (CPathTool::IsDirectory(lpszDirectory))
 		return TRUE;
 
