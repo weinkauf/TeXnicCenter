@@ -450,7 +450,7 @@ void CLatexParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
 	}
 	int nLength = _tcsclen(szLine);
 	boolean badWord = true;
-	TCHAR ch;
+	TBYTE ch;
 
 	while ( nStartPos != -1 && badWord )
 	{
@@ -462,7 +462,7 @@ void CLatexParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
 			if ( _istalpha(ch) )
 				break;
 			// if we're skipping words with numbers, words may begin with a number
-			if ( g_configuration.m_bSpellSkipTags && _istdigit(ch) )
+			if ( g_configuration.m_bSpellSkipNumbers && _istdigit(ch) )
 			{
 				badWord = true;
 				break;
@@ -503,7 +503,7 @@ void CLatexParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
 				badWord = true;
 				for (int i = nStartPos; i < nEndPos; ++i)
 				{
-					if ( !_istupper(szLine[i]) )
+					if ( _istlower(szLine[i]) )
 					{
 						badWord = false;
 						break;
@@ -512,7 +512,7 @@ void CLatexParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
 			}
 
 			if ( badWord )
-				nStartPos = nEndPos + 1;
+				nStartPos = nEndPos;
 		}
 	}
 }
