@@ -25,6 +25,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.4  2002/04/23 21:09:10  cnorris
+* realtime spell check
+*
 * Revision 1.3  2002/04/06 05:39:53  cnorris
 * New resources for spell check
 *
@@ -131,7 +134,7 @@
 //END SW
 
 // Background commands
-#define		ID_BG_UPDATE_FILE			37400
+#define		ID_BG_UPDATE_BUFFER			37400
 #define		ID_BG_UPDATE_LINE			37401
 #define		ID_BG_RESET_SPELLER			37402
 #define		ID_BG_INVALIDATE_VIEW		37403
