@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:57  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:25+02  sven_wiegand
 * Initial revision
 *
@@ -3083,6 +3086,7 @@ void CCrystalTextView::SetCursorPos(const CPoint &ptCursorPos)
 {
 	ASSERT_VALIDTEXTPOS(ptCursorPos);
 	m_ptCursorPos = ptCursorPos;
+	m_ptAnchor = ptCursorPos;
 	m_nIdealCharPos = CalculateActualOffset(m_ptCursorPos.y, m_ptCursorPos.x);
 	UpdateCaret();
 }
