@@ -4073,7 +4073,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_TB_MAINFRAME        "Standard"
     STE_TB_INSERT           "Einfügen"
-    STE_TB_FORMAT           "Textformat"
+    STE_TB_FORMAT           "Textformate"
     STE_TB_FORMAT_RECENTLY_USED "Häufig verwendete Textformate"
     STE_TB_LATEX            "LaTeX"
     STE_TB_MATH             "Mathematische Symbole"
