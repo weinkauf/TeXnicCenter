@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "OutputDoc.h"
@@ -765,28 +771,56 @@ void COutputDoc::OnUpdateEditFindInFiles(CCmdUI* pCmdUI)
 
 void COutputDoc::OnParseLineInfo( COutputInfo &line, int nLevel, int nSeverity)
 {
-	line.m_nOutputLine = m_pParseView->GetLineCount();
+	///////////////////////////////////////////
+	//Make the Infos
+	//NOTE: We need to copy the string, because we use PostMessage and
+	// the original string is out of date when the message is processed.
+	//We need to use PostMessage instead of SendMessage, because SendMessage
+	// still blocks - I do not know why. SendMessage works for the FileGrep,
+	// but for some unknown reason not for this.
+	// NOTE: The Message handler is responsible for freeing the memory!!!
+	char* buffer = new char[line.m_strError.GetLength() + 1];
+	strcpy(buffer, (LPCTSTR)line.m_strError);
+
+	//NOTE: Because we use PostMessage, we can not rely on
+	// m_pParseView->GetLineCount() to get the number of issued output lines
+	// as not all AddInfoLines-Messages have been processed now.
+	// Therefore, we need to count the number of issued lines.
+	// This is not very nice, but I do not see another way.
+	line.m_nOutputLine = m_nOutputLines;
+
 	switch (nSeverity) 
 	{
 	case CParseOutputHandler::none :
 		m_aParseInfo.Add(line);
-		m_pParseView->AddLine(line.m_strError, CParseOutputView::imageNone, nLevel);
+		PostMessage(m_pParseView->m_hWnd, OPW_ADD_INFOLINE,
+			MAKEWPARAM((WORD)nLevel, (WORD)CParseOutputView::imageNone), (LPARAM)buffer);
+		m_nOutputLines++;
 		break;
 	case CParseOutputHandler::information :
 		m_aParseInfo.Add(line);
-		m_pParseView->AddLine(line.m_strError, CParseOutputView::imageInfo, nLevel);
+		PostMessage(m_pParseView->m_hWnd, OPW_ADD_INFOLINE,
+			MAKEWPARAM((WORD)nLevel, (WORD)CParseOutputView::imageInfo), (LPARAM)buffer);
+		m_nOutputLines++;
 		break;
 
 	case CParseOutputHandler::warning :
 		m_aParseWarning.Add(line);
-		m_pParseView->AddLine(line.m_strError, CParseOutputView::imageWarning, nLevel);
+		PostMessage(m_pParseView->m_hWnd, OPW_ADD_INFOLINE,
+			MAKEWPARAM((WORD)nLevel, (WORD)CParseOutputView::imageWarning), (LPARAM)buffer);
+		m_nOutputLines++;
 		break;
 	case CParseOutputHandler::error :
 		m_aParseWarning.Add(line);
-		m_pParseView->AddLine(line.m_strError, CParseOutputView::imageError, nLevel);
+		PostMessage(m_pParseView->m_hWnd, OPW_ADD_INFOLINE,
+			MAKEWPARAM((WORD)nLevel, (WORD)CParseOutputView::imageError), (LPARAM)buffer);
+		m_nOutputLines++;
 		break;
 	default :
-		{ ASSERT(FALSE); } // Invalid nSeverity value
+		{
+			ASSERT(FALSE); //Invalid nSeverity value
+			delete[] buffer; //buffer was not sent - so we kill it here
+		}
 	}
 }
 
@@ -807,7 +841,8 @@ void COutputDoc::OnParseBegin(bool bCancelState)
 
 	//Add here things, that should NOT be done if parser shall be cancelled
 
-	m_pParseView->DeleteAllItems();
+	PostMessage(m_pParseView->m_hWnd, OPW_RESET, 0, 0L);
+	m_nOutputLines = 0;
 
 	CString timeStr = AfxLoadString(STE_PARSE_BEGIN);
 	int nLength = timeStr.GetLength();
@@ -820,7 +855,16 @@ void COutputDoc::OnParseBegin(bool bCancelState)
 	TCHAR *timeBuf = timeStr.GetBuffer(100);
 	_tcsftime(timeBuf+nLength, 100-nLength, _T("%#c"), now);
 	timeStr.ReleaseBuffer();
-	m_pParseView->AddLine(timeBuf);
+
+	// NOTE: The Message handler is responsible for freeing the memory!!!
+	char* buffer = new char[timeStr.GetLength() + 1];
+	strcpy(buffer, (LPCTSTR)timeStr);
+	PostMessage(m_pParseView->m_hWnd, OPW_ADD_INFOLINE,
+		MAKEWPARAM((WORD)0, (WORD)CParseOutputView::imageNone), (LPARAM)buffer);
+	m_nOutputLines++;
+
+	PostMessage(m_pParseView->m_hWnd, OPW_ADD_INFOLINE, 0, 0L);	//Empty line
+	m_nOutputLines++;
 
 	//end of: Add here things, that should NOT be done if parser shall be cancelled
 }
@@ -841,6 +885,7 @@ void COutputDoc::OnParseEnd(boolean bResult, int nFiles, int nLines)
 
 	ASSERT(::IsWindow(m_pParseView->m_hWnd));
 
+	//Time Info
 	CString timeStr = AfxLoadString(STE_PARSE_END);
 	int nLength = timeStr.GetLength();
 
@@ -852,14 +897,26 @@ void COutputDoc::OnParseEnd(boolean bResult, int nFiles, int nLines)
 	TCHAR *timeBuf = timeStr.GetBuffer(100);
 	_tcsftime(timeBuf+nLength, 100-nLength, _T("%#c"), now);
 	timeStr.ReleaseBuffer();
-	m_pParseView->AddLine(_T(""));
-	m_pParseView->AddLine(timeStr);
-	
+
+	// NOTE: The Message handler is responsible for freeing the memory!!!
+	char* buffer = new char[timeStr.GetLength() + 1];
+	strcpy(buffer, (LPCTSTR)timeStr);
+	PostMessage(m_pParseView->m_hWnd, OPW_ADD_INFOLINE, 0, 0L);	//Empty line
+	m_nOutputLines++;
+	PostMessage(m_pParseView->m_hWnd, OPW_ADD_INFOLINE,
+		MAKEWPARAM((WORD)0, (WORD)CParseOutputView::imageNone), (LPARAM)buffer);
+	m_nOutputLines++;
+
+
+	//The result of parsing
 	CString results;
 	results.Format(STE_PARSE_RESULTS, nFiles, nLines);
-	m_pParseView->AddLine(results);
-//	if ( !bResult )
-//		m_pParseView->AddLine( AfxLoadString(STE_PARSE_TERMINATE), CParseOutputView::imageError );
+	// NOTE: The Message handler is responsible for freeing the memory!!!
+	char* buffer2 = new char[results.GetLength() + 1];
+	strcpy(buffer2, (LPCTSTR)results);
+	PostMessage(m_pParseView->m_hWnd, OPW_ADD_INFOLINE,
+		MAKEWPARAM((WORD)0, (WORD)CParseOutputView::imageNone), (LPARAM)buffer2);
+	m_nOutputLines++;
 
 	//end of: Add here things, that should NOT be done after cancelling the parser
 }

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "OutputView.h"
@@ -46,6 +52,7 @@ IMPLEMENT_DYNCREATE(COutputView, CListCtrl)
 BEGIN_MESSAGE_MAP(COutputView, CListCtrl)
 	ON_MESSAGE(OPW_ADD_LINE, OnAddLine)
 	ON_MESSAGE(OPW_RESET, OnReset)
+	ON_MESSAGE(OPW_ADD_INFOLINE, OnAddInfoLine)
 	//{{AFX_MSG_MAP(COutputView)
 	ON_WM_CREATE()
 	ON_WM_LBUTTONDBLCLK()
@@ -133,6 +140,33 @@ LONG COutputView::OnAddLine(UINT wParam, LONG lParam)
 	return 0L;
 }
 
+LONG COutputView::OnAddInfoLine(WPARAM wParam, LONG lParam)
+{
+	/////////////////
+	//Get the Infos
+	// - Image
+	WORD nImage = HIWORD(wParam);
+	// - Level
+	WORD nLevel = LOWORD(wParam);
+	// - Message
+	char* buffer = (char*)lParam;
+
+	if (buffer != NULL)
+	{
+		//Add InfoLine
+		AddLine(buffer, nImage, nLevel);
+
+		//We need to free the char buffer
+		delete[] buffer;
+	}
+	else
+	{
+		//Add empty line
+		AddLine(_T(""));
+	}
+
+	return 0L;
+}
 
 void COutputView::AddLine(LPCTSTR lpszLine, int nImage /*= -1*/, int nIndent /*= 0*/)
 {
