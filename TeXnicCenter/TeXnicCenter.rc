@@ -2294,7 +2294,7 @@ END
 IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Allgemein"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     GROUPBOX        "Allgemein",IDC_STATIC,8,8,284,31
     CONTROL         "&Letzte Sitzung bei Start wiederherstellen",
@@ -2314,10 +2314,17 @@ BEGIN
                     28,94,108,8
     EDITTEXT        IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT,138,91,15,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_CLOSE_EDIT
-    GROUPBOX        "Benutzerschnittstelle",IDC_STATIC,8,124,284,32
+    GROUPBOX        "Benutzerschnittstelle (Änderungen erfordern einen Neustart von TeXnicCenter)",
+                    IDC_STATIC,8,122,284,71
+    LTEXT           "L&ook && Feel:",IDC_STATIC,13,139,40,8
+    COMBOBOX        IDC_LOOKNFEEL_COMBO,57,137,34,106,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "S&prache:",IDC_STATIC,13,157,30,8
+    COMBOBOX        IDC_GUI_LANGUAGE_COMBO,57,155,80,124,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
     CONTROL         "&Benutzerschnittstelle für sehbehinderte Benutzer optimieren",
                     IDC_OPTIONS_OPTIMIZE_FOR_VISUALLY_HANDICAPPED_USERS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,139,201,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,175,201,10
 END
 
 IDD_OPTIONS_PATHS DIALOGEX 0, 0, 300, 200
@@ -3333,6 +3340,19 @@ BEGIN
     IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 26, 0
 0x6c41, 0x656c, 0x4420, 0x7461, 0x6965, 0x656d, 0x676e, 0x6e65, 0x7a20, 
 0x7375, 0x6d61, 0x656d, 0x006e, 
+    0
+END
+
+IDD_OPTIONS_GENERIC DLGINIT
+BEGIN
+    IDC_LOOKNFEEL_COMBO, 0x403, 5, 0
+0x3032, 0x3030, "\000" 
+    IDC_LOOKNFEEL_COMBO, 0x403, 3, 0
+0x5058, "\000" 
+    IDC_LOOKNFEEL_COMBO, 0x403, 5, 0
+0x3032, 0x3330, "\000" 
+    IDC_GUI_LANGUAGE_COMBO, 0x403, 8, 0
+0x6e45, 0x6c67, 0x7369, 0x0068, 
     0
 END
 
@@ -5959,7 +5979,7 @@ END
 IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "General"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     GROUPBOX        "General",IDC_STATIC,8,8,284,31
     CONTROL         "Restore last &session on startup",
@@ -5978,10 +5998,17 @@ BEGIN
                     78,8
     EDITTEXT        IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT,112,91,15,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_CLOSE_EDIT
-    GROUPBOX        "User interface",IDC_STATIC,8,124,284,32
+    GROUPBOX        "User interface (Changes will require a new start of TeXnicCenter)",
+                    IDC_STATIC,8,124,284,69
+    LTEXT           "L&ook && Feel:",IDC_STATIC,13,141,40,8
+    COMBOBOX        IDC_LOOKNFEEL_COMBO,57,139,34,106,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "&Language:",IDC_STATIC,13,159,35,8
+    COMBOBOX        IDC_GUI_LANGUAGE_COMBO,57,157,80,124,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
     CONTROL         "O&ptimize user interface for visually handicapped users",
                     IDC_OPTIONS_OPTIMIZE_FOR_VISUALLY_HANDICAPPED_USERS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,139,201,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,176,201,10
 END
 
 IDD_PROJECT_PROPERTIES DIALOGEX 0, 0, 252, 150
@@ -7111,6 +7138,19 @@ BEGIN
 0x6c62, 0x6e69, 0x696b, 0x676e, "\000" 
     IDC_OVERWRITECURSOR_BLINK, 0x403, 7, 0
 0x7473, 0x7461, 0x6369, "\000" 
+    0
+END
+
+IDD_OPTIONS_GENERIC DLGINIT
+BEGIN
+    IDC_LOOKNFEEL_COMBO, 0x403, 5, 0
+0x3032, 0x3030, "\000" 
+    IDC_LOOKNFEEL_COMBO, 0x403, 3, 0
+0x5058, "\000" 
+    IDC_LOOKNFEEL_COMBO, 0x403, 5, 0
+0x3032, 0x3330, "\000" 
+    IDC_GUI_LANGUAGE_COMBO, 0x403, 8, 0
+0x6e45, 0x6c67, 0x7369, 0x0068, 
     0
 END
 

@@ -622,7 +622,9 @@
 #define IDC_STATIC_IMPORT               1331
 #define IDC_BUTTON_SELECT_INVERT        1332
 #define IDC_BUTTON_SELECT_NONE          1333
+#define IDC_GUI_LANGUAGE_COMBO          1333
 #define IDC_BUTTON_SELECT_ALL           1334
+#define IDC_LOOKNFEEL_COMBO             1334
 #define IDD_CUSTOMIZEPAGE_EDITOR        16105
 #define IDD_OUTPUTWIZARD_MIKTEX         16106
 #define IDD_OUTPUTWIZARD_PATH           16107
@@ -1248,9 +1250,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        274
+#define _APS_NEXT_RESOURCE_VALUE        276
 #define _APS_NEXT_COMMAND_VALUE         38467
-#define _APS_NEXT_CONTROL_VALUE         1333
+#define _APS_NEXT_CONTROL_VALUE         1334
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif
