@@ -42,6 +42,7 @@
 #define STE_FILE_INUSE                  138
 #define IDD_FILE_NEW                    139
 #define STE_FILE_READONLY               139
+#define STE_FILE_DICFILTER              139
 #define IDB_DOCUMENTTYPES               140
 #define STE_FILE_EXTERNALCHANGE         140
 #define IDD_FILE_TEMPLATE               141
@@ -150,6 +151,7 @@
 #define STE_LATEX_PAGEREF               241
 #define IDB_PARSE_VIEW                  243
 #define IDI_ICON1                       244
+#define IDD_OPTIONS_LANGUAGE            245
 #define STE_ITEMTYPE_GENERIC            256
 #define STE_ITEMTYPE_HEADER             257
 #define STE_ITEMTYPE_EQUATION           258
@@ -496,6 +498,16 @@
 #define IDC_EDIT_FILENAME               1248
 #define IDC_EDIT_DIRECTORY              1249
 #define IDC_STOPONLATEXERROR            1250
+#define IDC_OPTIONS_LANGUAGE            1256
+#define IDC_OPTIONS_SPELL_ENABLE        1258
+#define IDC_OPTIONS_LANGUAGE_DIALECT    1259
+#define IDC_OPTIONS_SPELL_COMMENT       1262
+#define IDC_OPTIONS_SPELL_SKIP_TAGS     1263
+#define IDC_OPTIONS_SPELL_IGNORE_NUM    1264
+#define IDC_OPTIONS_SPELL_MAINDICT      1265
+#define IDC_OPTIONS_SPELL_IGNORE_ALLCAPS 1266
+#define IDC_OPTIONS_SPELL_PDICT         1267
+#define IDC_OPTIONS_SPELL_BROWSE        1268
 #define IDD_CUSTOMIZEPAGE_EDITOR        16105
 #define IDD_OUTPUTWIZARD_MIKTEX         16106
 #define IDD_OUTPUTWIZARD_PATH           16107
@@ -1060,15 +1072,18 @@
 #define ID_ITEM_INSERT_LABEL            38310
 #define ID_HELP_KEYMAPPING              38311
 #define ID_HELP_CONTENTS                38313
+#define ID_SPELL_PROJECT                38314
+#define ID_SPELL_FILE                   38315
+#define IDS_SPELL_CONTINUE              38316
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        245
-#define _APS_NEXT_COMMAND_VALUE         38314
-#define _APS_NEXT_CONTROL_VALUE         1252
+#define _APS_NEXT_RESOURCE_VALUE        249
+#define _APS_NEXT_COMMAND_VALUE         38316
+#define _APS_NEXT_CONTROL_VALUE         1269
 #define _APS_NEXT_SYMED_VALUE           111
 #endif
 #endif
