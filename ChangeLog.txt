@@ -1,3 +1,8 @@
+2002/05/10 christianwelzel
+- Feature 539142: Configurable Default Path for Documents modified
+  If a project is opened, the project path will be used.
+  If a file is opened, the file path will be uesed
+
 2002/05/08 niteria
 - Fixed Bug 553800: Splash-Screen hides other windows.
 - Added directory "TeXTest" with files to test TXC with.
@@ -6,7 +11,7 @@
 
 2002/05/03 christianwelzel
 - Feature 539142: Configurable Default Path for Documents modified
-  If this Path is empty, the default personal directory will be used
+  If this path is empty, the default personal directory will be used
 - Configurable Project Path removed
 
 2002/05/01 cnorris
