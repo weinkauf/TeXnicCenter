@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -19,6 +19,12 @@
 *
 ********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_COMBOCOLORPICKER_H__B2348841_5541_11D1_8756_00A0C9181E86__INCLUDED_)
 #define AFX_COMBOCOLORPICKER_H__B2348841_5541_11D1_8756_00A0C9181E86__INCLUDED_
 
@@ -31,6 +37,13 @@
 /////////////////////////////////////////////////////////////////////////////
 // CComboColorPicker window
 
+/**
+A Combo Box for picking colors.
+
+@ingroup mfcext
+
+@author Baldvin Hansson
+*/
 class AFX_EXT_CLASS CComboColorPicker : public CComboBox
 {
 // Construction

@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -19,6 +19,12 @@
 *
 ********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_FILEVERSION_H__F828004C_7680_40FE_A08D_7BB4FF05B4CC__INCLUDED_)
 #define AFX_FILEVERSION_H__F828004C_7680_40FE_A08D_7BB4FF05B4CC__INCLUDED_
 
@@ -26,6 +32,13 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+/**
+Helps dealing with Version Information of files.
+
+@ingroup mfcext
+
+@author Sven Wiegand
+*/
 class AFX_EXT_CLASS CFileVersionInfo
 {
 // construction/destruction

@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -16,6 +16,12 @@
 * If you have further questions visit our homepage
 *
 *    http://www.ToolsCenter.org
+*
+********************************************************************/
+
+/********************************************************************
+*
+* $Id$
 *
 ********************************************************************/
 
@@ -36,6 +42,8 @@ Ein Objekt der Klasse <var>CFormatEdit</var> stellt ein Eingabefeld
 zur Verfuegung, fuer das eine Menge zulaessiger Zeichen definiert werden
 kann. Betaetigt der Benutzer eine Taste, deren Zeichen nicht in dieser
 Menge definiert ist, so wird der Tastendruck ignoriert.
+
+@ingroup mfcext
 
 @author Sven Wiegand
 */

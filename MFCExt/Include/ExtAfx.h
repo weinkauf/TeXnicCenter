@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -18,6 +18,18 @@
 *    http://www.ToolsCenter.org
 *
 ********************************************************************/
+
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
+/**
+@addtogroup mfcext
+
+@{
+*/
 
 /**
 Laedt den String mit der spezifizierten Kennung aus der Stringtabelle
@@ -92,4 +104,6 @@ Zeigt eine MessageBox an.
 */
 AFX_EXT_CLASS int MessageBoxEx( LPCTSTR lpszPrompt, UINT unTitleID, UINT unType = MB_OK, CWnd *pwndParent = NULL );
 
+
+/** @} */
 

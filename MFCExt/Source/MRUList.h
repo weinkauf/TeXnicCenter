@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -39,6 +39,8 @@ An object of this class provides list of most recently used objects.
 
 The specified TYPE must provide the ==Operator, so that CMRUList can
 test, if an specified object is already stored in the list.
+
+@ingroup mfcext
 
 @author Sven Wiegand
 */
@@ -260,3 +262,4 @@ void CMRUList<TYPE, ARG_TYPE>::Remove( int nIndex )
 
 
 #endif // !defined(AFX_MRULIST_H__C8D50DC1_2052_11D4_A221_006097239934__INCLUDED_)
+

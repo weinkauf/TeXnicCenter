@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -19,6 +19,12 @@
 *
 ********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_MRUSTRINGLIST_H__C8D50DC5_2052_11D4_A221_006097239934__INCLUDED_)
 #define AFX_MRUSTRINGLIST_H__C8D50DC5_2052_11D4_A221_006097239934__INCLUDED_
 
@@ -28,8 +34,7 @@
 
 #include "MRUList.h"
 
-/**
-An object of this class is a list of most recently used strings.
+/** An object of this class is a list of most recently used strings.
 
 You can use such a list for example to store the most recently used
 query in a search dialog or something like this.
@@ -37,6 +42,8 @@ query in a search dialog or something like this.
 The list can be stored to and loaded from the registry.
 
 For further information see the template class CMRUList.
+
+@ingroup mfcext
 
 @author Sven Wiegand
 */
@@ -112,6 +119,5 @@ void CMRUStringList::Add( LPCTSTR lpszElement )
 
 	CMRUList<CString, LPCTSTR>::Add( lpszElement );
 }
-
 
 #endif // !defined(AFX_MRUSTRINGLIST_H__C8D50DC5_2052_11D4_A221_006097239934__INCLUDED_)

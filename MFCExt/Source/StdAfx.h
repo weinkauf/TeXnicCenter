@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -46,13 +46,13 @@
 #include <afxdao.h>			// MFC DAO-Datenbankklassen
 #endif // _AFX_NO_DAO_SUPPORT
 
-#include <afxdtctl.h>		// MFC-Unterstützung für allgemeine Steuerelemente von Internet Explorer 4
+#include <afxdtctl.h>		// MFC-Unterst&uuml;tzung f&uuml;r allgemeine Steuerelemente von Internet Explorer 4
 #ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>			// MFC-Unterstützung für gängige Windows-Steuerelemente
+#include <afxcmn.h>			// MFC-Unterst&uuml;tzung f&uuml;r g&auml;ngige Windows-Steuerelemente
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
 
 //{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
+// Microsoft Visual C++ f&uuml;gt unmittelbar vor der vorhergehenden Zeile zus&auml;tzliche Deklarationen ein.
 
 #endif // !defined(AFX_STDAFX_H__F0DEE834_8791_11D3_93E7_000000000000__INCLUDED_)

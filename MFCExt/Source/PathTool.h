@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -19,6 +19,12 @@
 *
 ********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PATHTOOL_H__837269C0_19DC_11D4_A221_006097239934__INCLUDED_)
 #define AFX_PATHTOOL_H__837269C0_19DC_11D4_A221_006097239934__INCLUDED_
 
@@ -28,10 +34,14 @@
 
 
 /**
+Provides a lot of Methods for handling path descriptions.
+
 The class CPathTool provides a lot of Methods for handling path
 descriptions, such as gettingt the file of a path, getting the
 file extension of a path, getting a relative path, catenating
 two paths, etc.
+
+@ingroup mfcext
 
 @author Sven Wiegand
 */
@@ -826,5 +836,6 @@ BOOL CPathTool::IsSlashPath() const
 {
 	return IsSlashPath( m_strPath );
 }
+
 
 #endif // !defined(AFX_PATHTOOL_H__837269C0_19DC_11D4_A221_006097239934__INCLUDED_)
