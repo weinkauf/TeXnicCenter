@@ -780,7 +780,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -2294,7 +2294,7 @@ END
 IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Allgemein"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     GROUPBOX        "Allgemein",IDC_STATIC,8,8,284,31
     CONTROL         "&Letzte Sitzung bei Start wiederherstellen",
@@ -4653,12 +4653,12 @@ BEGIN
     ID_TEXTMODULES_DEFINE   "Zeigt Dialog zum Anpassen der Textbausteine an.\nTextbausteine"
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -5948,7 +5948,7 @@ END
 IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "General"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     GROUPBOX        "General",IDC_STATIC,8,8,284,31
     CONTROL         "Restore last &session on startup",
@@ -8304,8 +8304,7 @@ BEGIN
     STE_OUTPUTWIZARD_PDFTYPE "LaTeX => PDF"
     STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS 
                             "An output profile with the title '%s' already exists.\n\nShould it be overwritten?"
-    STE_OUTPUTWIZARD_PDFVIAPSTYPE "Latex => PS => PDF"
-    STE_OUTPUTWIZARD_PDFVIAPSTYPE2 "LaTeX => PS => PDF"
+    STE_OUTPUTWIZARD_PDFVIAPSTYPE "LaTeX => PS => PDF"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -8436,7 +8435,7 @@ BEGIN
     ID_TEXTMODULES_DEFINE   "Displays dialog to manage text modules.\nText Modules"
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
