@@ -63,13 +63,13 @@ public:
 
 	@param lpszPath
 		Path to the template file.
-	@param ImageList
+	@param ImageList32, ImageList16
 		Image list, the index returned by GetImageIndex() references to.
 
 	@return
 		Nonzero if successfull, FALSE otherwise.
 	*/
-	virtual BOOL InitItem(LPCTSTR lpszPath, CImageList &ImageList) = 0;
+	virtual BOOL InitItem(LPCTSTR lpszPath, CImageList &ImageList32, CImageList &ImageList16) = 0;
 
 	/** Should return the title of the template. */
 	virtual CString	GetTitle() = 0;
@@ -163,6 +163,12 @@ protected:
 	*/
 	int GetSelectedItem() const;
 
+	/**
+	Updates the view type of the template list in dependency of the 
+	current value of m_nListViewType.
+	*/
+	void UpdateTemplateListViewType();
+
 // overridables
 protected:
 	/**
@@ -187,6 +193,7 @@ protected:
 	afx_msg void OnTemplateItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnCreate();
 	afx_msg void OnDblClkTemplate(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnViewTypeSelection();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -196,7 +203,17 @@ protected:
 	CListCtrl	m_wndTemplateList;
 	CTabCtrl	m_wndCategoriesTab;
 	CString	m_strDescription;
+	int m_nListViewType;
 	//}}AFX_DATA
+
+// constants
+protected:
+	/** Constants describing the view modes for the template list. */
+	enum tagListViewType
+	{
+		lvtIcons = 0,
+		lvtList
+	};
 
 // attributes
 protected:
@@ -219,8 +236,11 @@ private:
 	/** Stores all files by their subdirectories, the key is the subdirectory. */
 	CMap<CString, LPCTSTR, CTemplateItemArray*, CTemplateItemArray*> m_mapSubdirToTemplates;
 
-	/** Image list for the template list */
-	CImageList m_ImageList;
+	/** Image list for the template list (large icons) */
+	CImageList m_ImageList32;
+
+	/** Image list for the template list (small icons) */
+	CImageList m_ImageList16;
 };
 
 void AFXAPI DestructElements(CTemplateItemArray* *pElements, int nCount);
