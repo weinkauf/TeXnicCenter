@@ -80,6 +80,7 @@
 #define STE_LATEX_START_FAILED          162
 #define IDD_WINDOW                      162
 #define STE_LATEX_CANCELED              163
+#define STE_LATEX_START_FAILED_EXT      164
 #define IDC_NEXTTIP                     170
 #define IDC_STARTUP                     171
 #define IDC_TIPSTRING                   172
