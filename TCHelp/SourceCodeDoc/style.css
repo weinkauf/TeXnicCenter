@@ -88,3 +88,70 @@ span.comment       { color: #800000 }
 span.preprocessor  { color: #806020 }
 span.stringliteral { color: #002080 }
 span.charliteral   { color: #008080 }
+
+
+
+
+/* "Header" Styles from normal TXC-Help */
+
+td.h1 {
+     background-color: #6699CC;
+     background-image: none;
+     font-family: inherit;
+     font-size : 200%;
+     font-weight: bold;
+     text-align: left;
+     color: white;
+     margin-top : 1.5em;
+     margin-bottom : .5em;
+    }
+
+
+td.h2 {
+     background-color: #6699CC;
+     background-image: none;
+     font-family: inherit;
+     font-size : 175%;
+     font-weight: bold;
+     text-align: left;
+     color: white;
+     margin-top : 1.5em;
+     margin-bottom : .5em;
+    }
+
+
+td.h3 {
+     background-color: #6699CC;
+     background-image: none;
+     font-family: inherit;
+     font-size : 150%;
+     font-weight: bold;
+     text-align: left;
+     color: white;
+     margin-top : 1.2em;
+     margin-bottom : .5em;
+   }
+
+td.h4 {
+     background-color: #6699CC;
+     background-image: none;
+     font-family: inherit;
+     font-size : 125%;
+     font-weight: bold;
+     text-align: left;
+     color: white;
+     margin-top : 1.0em;
+     margin-bottom : .5em;
+   }
+
+td.h5 {
+     background-color: #6699CC;
+     background-image: none;
+     font-family: inherit;
+     font-size : 100%;
+     font-weight: bold;
+     text-align: left;
+     color: white;
+     margin-top : 1.0em;
+     margin-bottom : .5em;
+   }
