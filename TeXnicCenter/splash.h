@@ -26,15 +26,21 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #ifndef _SPLASH_SCRN_
 #define _SPLASH_SCRN_
 
-// Splash.h : Header-Datei
-//
+/** Splash Screen of TeXnicCenter displayed during startup.
 
-/////////////////////////////////////////////////////////////////////////////
-//   Splash Screen Klasse
+@ingroup dialogs
 
+@author Sven Wiegand
+*/
 class CSplashWnd : public CWnd
 {
 // Konstruktion
