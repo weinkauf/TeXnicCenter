@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.7  2002/06/27 14:43:26  svenwiegand
+* Instead of the character test functions (isalpha, isdigit, etc.) from the standard library, our own wrappers from the character.h file (myspell directory) are used now, to fix character recognition problems (bug 551033).
+*
 * Revision 1.6  2002/04/27 07:12:33  cnorris
 * Release build crash
 *
@@ -190,4 +193,27 @@ LPCTSTR CCrystalParser::GetLineChars( int nLineIndex )
 {
 	ASSERT( m_pTextView );
 	return m_pTextView->GetLineChars( nLineIndex );
+}
+
+
+
+BOOL CCrystalParser::FindPairInLine( LPCTSTR lpszLine, LPCTSTR lpszLineEnd, CCrystalTextBlock *pTextBlock, long nLineIndex,
+												int nDirection, LPCTSTR lpszTextPos, CPairStack &aPairStack, int &nNthOpenPair, 
+												long &nFoundStrStart, long &nFoundStrEnd, BOOL &result )
+{
+	nFoundStrStart = 0;
+	nFoundStrEnd = 0;
+	result = FALSE;
+	return TRUE;
+}
+
+
+
+BOOL CCrystalParser::IsEndOfPairAt( LPCTSTR lpszLine, LPCTSTR lpszTextPos, CCrystalTextBlock const*const pTextBlock, 
+																	 long &nPairStrStart, int &nPairIdx, int &nPairDir)
+{
+	nPairIdx = -1;
+	nPairDir = -1;
+
+	return FALSE;
 }

@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.2  2002/04/06 05:33:57  cnorris
+* Added NextWord method required for spell checker
+*
 * Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
 * Initial revision
 *
@@ -35,6 +38,7 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
+
 
 #include "CrystalTextBlock.h"
 
@@ -64,6 +68,29 @@ class CRYSEDIT_CLASS_DECL CCrystalParser : public CObject
 public:
 	CCrystalParser();
 	virtual ~CCrystalParser();
+
+//structures
+public:
+		typedef struct tagPairStackItm {
+		int nPairIdx;
+		int nPairDir;
+		CPoint ptStart, ptEnd;
+	} PAIR_STACK_ITM;
+    
+	typedef std::vector<PAIR_STACK_ITM> CPairStack;
+
+	enum {
+		DIRECTION_LEFT = 0,
+		DIRECTION_RIGHT = 1		
+	};
+
+public:
+	/** Changes direction to the its opposite.
+	@param nDirection
+		DIRECTION_LEFT ot DIRECTION_RIGHT
+	@return opposite direction
+	*/
+  static int OppositeDir( int nDirection );
 
 // overridables
 public:
@@ -130,6 +157,60 @@ public:
 	*/
 	virtual void NextWord( int nLineIndex, int &nStartPos, int &nEndPos );
 
+	/**Searches for pair string in given line. The search stops if <code>nNthOpenPais</code> decreses to zero 
+  or <code>nNthOpenPais</code> equals to <code>PAIR_NONE</code> and aStackPair stack becomes empty.  
+
+	@param lpszLine
+	Line string
+	@param lpszLineEnd
+		Pointer to end of line
+	@param pTextBlock,
+		Parsed line
+	@param nFoundStrStart 
+		Start of string if found 
+	@param nFoundStrEnd 
+		End of string if found  
+	@param nDirection
+		search direction: DIRECTION_LEFT or DIRECITON_RIGHT    
+	@param lpszTextPos
+		Current position in the line
+	@param aPairStack
+		Stack of found and opened pairs
+	@param nNthOpenPair    
+		Number of open pairs that have to be skiped before stopping. 
+		Only pairs with opposite direction than <code>nDireciton</code> does matter.
+	@param result
+		FALSE if an error occures, the string that din't have pair is at the top of the stack.
+        
+	@return     
+	FALSE if the search should continue on the next/previous line
+  */
+	virtual BOOL FindPairInLine( LPCTSTR lpszLine, LPCTSTR lpszLineEnd, CCrystalTextBlock *pTextBlock, long nLineIndex,
+												int nDirection, LPCTSTR lpszTextPos, CPairStack &aPairStack, int &nNthOpenPair, 
+												long &nFoundStrStart, long &nFoundStrEnd, BOOL &result );
+
+	/**Returns TRUE if some pair ends at ptTextPos.
+    
+	@param lpszLine
+		Line string
+	@param lpszTextPos
+		Pointer to end of line
+	@param pBlock
+		Parsed lined
+	@param nPairStrStart 
+		Start of string if found 
+	@param nPairIdx    
+		Found string index
+	@param nPairDir
+		Found string direction: DIRECTION_LEFT or DIRECITON_RIGHT    
+
+	@return TRUE if some pair ends at ptTextPos.
+  */
+	virtual BOOL IsEndOfPairAt( LPCTSTR lpszLine, LPCTSTR lpszTextPos, CCrystalTextBlock const*const pTextBlock, 
+															long &nPairStrStart, int &nPairIdx, int &nPairDir);
+
+
+
 // attributes
 protected:
 
@@ -139,5 +220,21 @@ protected:
 	CCrystalTextView *m_pTextView;
 
 };
+
+
+inline int CCrystalParser::OppositeDir( int nDirection )
+{
+	ASSERT( nDirection == DIRECTION_LEFT || nDirection == DIRECTION_RIGHT );
+
+	if (nDirection == DIRECTION_LEFT)
+	{
+		return DIRECTION_RIGHT;
+	}
+	else
+	{
+		return DIRECTION_LEFT;
+	}
+}
+
 
 #endif // !defined(AFX_CRYSTALPARSER_H__17435DA0_1F72_11D3_929E_FD90DABF8479__INCLUDED_)

@@ -72,6 +72,8 @@ namespace Interfaces
 	#include <TeXnicCenterObjects.h>
 };
 
+#include <vector>
+
 // globale Makros
 #define IFNOT( s )\
 	ASSERT( s );\
