@@ -145,6 +145,7 @@ BOOL CPostProcessor::Execute(LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDir, HANDL
 {
 	HANDLE	hStdInput = INVALID_HANDLE_VALUE;
 	HANDLE	hStdOutput = INVALID_HANDLE_VALUE;
+	bool		bUsedGivenOutputHandle = false;
 	DWORD		dwExitCode = 0;
 
 	try
@@ -178,7 +179,12 @@ BOOL CPostProcessor::Execute(LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDir, HANDL
 		}
 
 		if (hStdOutput == INVALID_HANDLE_VALUE)
+		{
 			hStdOutput = hOutput;
+			//Do not close the handle here;
+			// Caller created it and is responsible for closing it
+			bUsedGivenOutputHandle = true;
+		}
 
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// create process
@@ -208,7 +214,7 @@ BOOL CPostProcessor::Execute(LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDir, HANDL
 	// clean up
 	if (hStdInput != INVALID_HANDLE_VALUE)
 		CloseHandle(hStdInput);
-	if (hStdOutput != INVALID_HANDLE_VALUE)
+	if ( (hStdOutput != INVALID_HANDLE_VALUE) && (!bUsedGivenOutputHandle) )
 		CloseHandle(hStdOutput);
 
 	return dwExitCode? FALSE : TRUE;
