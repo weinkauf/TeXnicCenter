@@ -194,6 +194,8 @@ COLORREF CLatexEdit::GetAutomaticColor(int nColorIndex)
 		return RGB(0xFF, 0xFF, 0xFF);
 	case COLORINDEX_PAIRBLOCKBKGND:
 		return RGB(0xFF, 0xFF, 0xC0);
+	default:
+		ASSERT(false); //ColorIndex not found? Shouldn't happen. Please update.
 	}
 
 	return RGB(0xFF, 0x00, 0x00);
