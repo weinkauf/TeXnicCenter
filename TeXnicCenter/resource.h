@@ -3,6 +3,9 @@
 // Used by TeXnicCenter.rc
 //
 #define STE_BCGCBRESDLL                 17
+#define STE_CRYSTAL_EDIT_RESOURCE_DLL   18
+#define STE_LANGUAGE_NEW                32
+#define STE_RESOURCE_CONFLICT           33
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
 #define IDD_TIP                         103
@@ -1252,9 +1255,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        276
+#define _APS_NEXT_RESOURCE_VALUE        277
 #define _APS_NEXT_COMMAND_VALUE         38467
-#define _APS_NEXT_CONTROL_VALUE         1335
+#define _APS_NEXT_CONTROL_VALUE         1337
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif

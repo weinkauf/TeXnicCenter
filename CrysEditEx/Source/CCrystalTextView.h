@@ -24,6 +24,13 @@
 * $Author$
 *
 * $Log$
+* Revision 1.8  2003/12/06 19:59:58  svenwiegand
+* - Implemented Feature 601708 + additions: The user can now set the styles for
+*   the text cursor independant for the insert and the overwrite mode. The cursor
+*   style is defined by its form (line or block) and its mode (blinking or
+*   not-blinking). The defaults are 'line' for insert cursor and 'block' for
+*   overwrite cursor -- both are blinking.
+*
 * Revision 1.7  2002/04/27 07:21:59  cnorris
 * Avoid ambiguous function under Visual Studio < 5
 *
@@ -70,6 +77,7 @@
 
 class CCrystalTextBuffer;
 class CUpdateContext;
+
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -267,6 +275,9 @@ public:
 	void SetSelection(const CPoint &ptStart, const CPoint &ptEnd);
 	void SetShowInteractiveSelection(BOOL bShowInactiveSelection) 
 		{ m_bShowInactiveSelection = bShowInactiveSelection; }
+
+	static HINSTANCE GetResourceHandle();
+
 
 protected:
 	int m_nTopLine, m_nOffsetChar;
@@ -540,8 +551,6 @@ protected:
 	};
 
 	virtual DWORD ParseLine(DWORD dwCookie, int nLineIndex, TEXTBLOCK *pBuf, int &nActualItems);
-
-	virtual HINSTANCE GetResourceHandle();
 
 	//BEGIN SW
 	// function to draw a single screen line 
@@ -966,6 +975,38 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 };
+
+
+/**
+Create an object of this class in every method, that accesses the 
+local resources.
+
+@author Sven Wiegand
+*/
+class CCrystalResources
+{
+// construction/destruction
+public:
+	CCrystalResources(HINSTANCE hResources = CCrystalTextView::GetResourceHandle())
+	{
+		m_hPrevResources = AfxGetResourceHandle();
+		m_hResources = hResources;
+		AfxSetResourceHandle(m_hResources);
+	}
+
+	virtual ~CCrystalResources()
+	{
+		if (m_hPrevResources)
+			AfxSetResourceHandle(m_hPrevResources);
+		m_hResources = NULL;
+	}
+
+// Attribute
+public:
+	HINSTANCE	m_hPrevResources;
+	HINSTANCE m_hResources;
+};
+
 
 #ifdef _DEBUG
 #define ASSERT_VALIDTEXTPOS(pt)		AssertValidTextPos(pt);

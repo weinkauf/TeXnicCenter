@@ -21,16 +21,6 @@ CCrystalEditViewEx::CCrystalEditViewEx()
 }
 
 
-HINSTANCE CCrystalEditViewEx::GetResourceHandle()
-{
-#ifdef CE_DLL_BUILD
-	return g_hDllInstance;
-#else
-	return AfxGetInstanceHandle();
-#endif
-}
-
-
 DWORD CCrystalEditViewEx::ParseLine( DWORD dwCookie, int nLineIndex, 
 																		TEXTBLOCK *pBuf, int &nActualItems )
 {

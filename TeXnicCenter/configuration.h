@@ -329,6 +329,9 @@ public:
 	/** User interface language activated on next start. */
 	CString m_strGuiLanguageOnNextStart;
 
+	/** User interface language, that was active in the last session. */
+	CString m_strGuiLanguageOnLastSession;
+
 	/** Lanuage of the dictionary. */
 	CString m_strLanguageDefault;
 

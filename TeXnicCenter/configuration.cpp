@@ -170,7 +170,12 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 
 	SerializeProfileString( strSection, "GuiLanguage", &m_strGuiLanguageOnNextStart, direction, _T("English"));
 	if (direction==Load)
+	{
 		m_strGuiLanguage = m_strGuiLanguageOnNextStart;
+		SerializeProfileString(strSection, _T("GuiLanguageOnLastSession"), &m_strGuiLanguageOnLastSession, direction, m_strGuiLanguage);
+	}
+	else
+		SerializeProfileString(strSection, "GuiLanguageOnLastSession", &m_strGuiLanguage, direction);
 
 	SerializeProfileString( strSection, "Language", &m_strLanguageDefault, direction, AfxLoadString(IDS_LANGUAGE) );
 	SerializeProfileString( strSection, "Dialect", &m_strLanguageDialectDefault, direction, AfxLoadString(IDS_DIALECT) );

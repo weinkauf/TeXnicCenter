@@ -46,19 +46,6 @@ public:
 protected:
 	/**
 	@description
-		Returns a handle to the instance (DLL or EXE)
-
-	@return
-		Handle to the Instance (DLL or EXE)
-
-	@remark
-		Equivalent to AfxGetInstanceHandle()
-	*/
-	virtual HINSTANCE GetResourceHandle();
-
-	
-	/**
-	@description
 		Is called by tht view, when there is a Line to parse.
 
 	@param dwCookie

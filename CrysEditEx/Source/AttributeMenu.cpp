@@ -50,6 +50,7 @@ CAttributeMenu::CAttributeMenu( CCrystalEditView *pView, CPoint textPoint )
 	m_pView = pView;
 	m_textPoint = textPoint;
 
+	CCrystalResources	cr;
 	VERIFY( m_menu.LoadMenu(IDR_POPUP_ATTRIBUTE) );
 }
 
@@ -61,6 +62,8 @@ CAttributeMenu::~CAttributeMenu()
 
 BOOL CAttributeMenu::ShowSpellMenu(MySpell *pSpell, CPoint screenPoint)
 {
+	CCrystalResources	cr;
+
 	CCrystalTextBuffer *pTextBuffer = m_pView->LocateTextBuffer();
 	ASSERT( pTextBuffer );
 	CCrystalTextBuffer::TextAttributeListType *list = pTextBuffer->GetLineAttributes(m_textPoint.y);

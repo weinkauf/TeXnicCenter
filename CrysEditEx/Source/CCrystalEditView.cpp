@@ -58,6 +58,13 @@
 * $Author$
 *
 * $Log$
+* Revision 1.5  2003/12/06 19:59:58  svenwiegand
+* - Implemented Feature 601708 + additions: The user can now set the styles for
+*   the text cursor independant for the insert and the overwrite mode. The cursor
+*   style is defined by its form (line or block) and its mode (blinking or
+*   not-blinking). The defaults are 'line' for insert cursor and 'block' for
+*   overwrite cursor -- both are blinking.
+*
 * Revision 1.4  2002/06/27 14:43:26  svenwiegand
 * Instead of the character test functions (isalpha, isdigit, etc.) from the standard library, our own wrappers from the character.h file (myspell directory) are used now, to fix character recognition problems (bug 551033).
 *
@@ -1011,6 +1018,7 @@ void CCrystalEditView::OnEditReplace()
 	CWinApp *pApp = AfxGetApp();
 	ASSERT(pApp != NULL);
 
+	CCrystalResources	cr;
 	CEditReplaceDlg dlg(this);
 
 	//	Take search parameters from registry
@@ -1090,8 +1098,7 @@ void CCrystalEditView::OnUpdateEditUndo(CCmdUI* pCmdUI)
 	if (pCmdUI->m_pMenu != NULL)
 	{
 		//	Tune up 'resource handle'
-		HINSTANCE hOldResHandle = AfxGetResourceHandle();
-		AfxSetResourceHandle(GetResourceHandle());
+		CCrystalResources	cr;
 
 		CString menu;
 		if (bCanUndo)
@@ -1106,9 +1113,6 @@ void CCrystalEditView::OnUpdateEditUndo(CCmdUI* pCmdUI)
 			//	Just load default menu item text
 			menu.LoadString(IDS_MENU_UNDO_DEFAULT);
 		}
-
-		//	Restore original handle
-		AfxSetResourceHandle(hOldResHandle);
 
 		//	Set menu item text
 		pCmdUI->SetText(menu);
@@ -1161,9 +1165,7 @@ void CCrystalEditView::OnUpdateEditRedo(CCmdUI* pCmdUI)
 	//	Since we need text only for menus...
 	if (pCmdUI->m_pMenu != NULL)
 	{
-		//	Tune up 'resource handle'
-		HINSTANCE hOldResHandle = AfxGetResourceHandle();
-		AfxSetResourceHandle(GetResourceHandle());
+		CCrystalResources	cr;
 
 		CString menu;
 		if (bCanRedo)
@@ -1178,9 +1180,6 @@ void CCrystalEditView::OnUpdateEditRedo(CCmdUI* pCmdUI)
 			//	Just load default menu item text
 			menu.LoadString(IDS_MENU_REDO_DEFAULT);
 		}
-
-		//	Restore original handle
-		AfxSetResourceHandle(hOldResHandle);
 
 		//	Set menu item text
 		pCmdUI->SetText(menu);
