@@ -1,3 +1,9 @@
+2003/12/21 niteria
+- Implemented Feature 863942: Windows explorer tool should open in current directory
+- Aditionally, the tools are saved to another registry location
+  to prevent data loss when old TXC version is started. So the statement
+  from 2002/11/26 regarding this does not apply anymore.
+
 2003/12/20 niteria
 - Tabs can be inserted into the edit controls of the Text Modules dialog.
 
