@@ -66,7 +66,6 @@ CLatexProject::CLatexProject()
 	m_bCanRunLatex( TRUE ),
 	m_pStructureParser( NULL ),
 	m_nCurrentStructureItem( -1 ),
-	m_parsingFinished( FALSE, TRUE ),
 	m_pwndStructureView( NULL ),
 	m_pwndEnvironmentView( NULL ),
 	m_pwndFileView(NULL),
@@ -85,9 +84,6 @@ CLatexProject::CLatexProject()
 	ASSERT( m_pStructureParser );
 	if( !m_pStructureParser )
 		AfxThrowMemoryException();
-
-	// We can parse
-	m_parsingFinished.SetEvent();
 }
 
 
@@ -136,11 +132,6 @@ BOOL CLatexProject::OnNewProject()
 
 BOOL CLatexProject::OnOpenProject(LPCTSTR lpszPathName) 
 {
-	/*
-	if (!CProject::OnOpenDocument(lpszPathName))
-		return FALSE;
-	*/
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// load project information
 	CIniFile	file( lpszPathName );
@@ -253,8 +244,6 @@ void CLatexProject::OnCloseProject()
 	else
 		g_configuration.m_strLastProject.Empty();
 
-
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Clean up
 
@@ -269,7 +258,7 @@ void CLatexProject::OnCloseProject()
 		return;
 
 	m_pStructureParser->CancelParsing();
-	WaitForSingleObject( m_parsingFinished, INFINITE );
+	WaitForSingleObject( m_pStructureParser->m_evtParsingDone, INFINITE );
 
 	// delete views
 	DeleteProjectViews();
@@ -287,11 +276,12 @@ BEGIN_MESSAGE_MAP(CLatexProject, CProject)
 	ON_COMMAND(ID_ITEM_GOTO, OnItemGoto)
 	ON_COMMAND(ID_ITEM_INSERT_PAGEREF, OnItemInsertPageref)
 	ON_COMMAND(ID_ITEM_INSERT_REF, OnItemInsertRef)
+	ON_COMMAND(ID_ITEM_INSERT_LABEL, OnItemInsertLabel)
 	ON_UPDATE_COMMAND_UI(ID_ITEM_GOTO, OnUpdateItemCmd)
 	ON_UPDATE_COMMAND_UI(ID_ITEM_INSERT_PAGEREF, OnUpdateItemCmd)
 	ON_UPDATE_COMMAND_UI(ID_ITEM_INSERT_REF, OnUpdateItemCmd)
-	ON_COMMAND(ID_ITEM_INSERT_LABEL, OnItemInsertLabel)
 	ON_UPDATE_COMMAND_UI(ID_ITEM_INSERT_LABEL, OnUpdateItemCmd)
+	ON_COMMAND(ID_SPELL_PROJECT, OnSpellProject)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -562,7 +552,6 @@ BOOL CLatexProject::GetRunMakeIndex() const
 
 CString CLatexProject::GetWorkingDir() const
 {
-	//return m_strWorkingDir;
 	return CPathTool::GetDirectory(m_strMainPath);
 }
 
@@ -597,31 +586,12 @@ void CLatexProject::OnProjectOpenMainfile()
 	theApp.OpenLatexDocument( m_strMainPath, FALSE, 0 );
 }
 
-/////////////////////////////////////////////////////////////////////
-// implementation of CTextSourceManager virtuals
-
-/*CTextSource *CLatexProject::GetTextSource( LPCTSTR lpszPath )
-{	
-	CTextSourceFile	*pTextSource = NULL;
-
-	pTextSource = new CTextSourceFile();
-	if( pTextSource && !pTextSource->Create( lpszPath ) )
-	{
-		delete pTextSource;
-		pTextSource = NULL;
-	}
-
-	return pTextSource;
-}
-*/
 
 /////////////////////////////////////////////////////////////////////
 // implementation of CStructureParserHandler virtuals
 
 void CLatexProject::OnParsingFinished( BOOL bSuccess )
 {
-	m_parsingFinished.SetEvent();
-
 	// synchronize with main thread
 	if( bSuccess )
 		theApp.m_pMainWnd->SendMessage( WM_COMMAND, (WPARAM)ID_PROJECT_PARSED );
@@ -641,23 +611,13 @@ void CLatexProject::OnProjectParse()
 
 	// start parsing
 	m_bCanParse = FALSE;
-	m_parsingFinished.ResetEvent();
 	m_pStructureParser->StartParsing( m_strMainPath, GetWorkingDir() );
 }
 
 
 void CLatexProject::OnProjectParsed() 
 {
-	const CStructureItemArray *pasi = m_pStructureParser->LockStructureItems();
-
-	// copy items to local array
-	m_aStructureItems.RemoveAll();
-//	for( int i = 0; i < pasi->GetSize(); i++ )
-//		m_aStructureItems.Add( pasi->GetAt( i ) );
-	m_aStructureItems.Copy(*pasi);
-
-	m_pStructureParser->UnlockStructureItems();
-
+	m_pStructureParser->GetStructureItems( &m_aStructureItems );
 	UpdateAllViews( NULL, COutputDoc::hintParsingFinished, (CObject*)&m_aStructureItems );
 	m_bCanParse = TRUE;
 }
@@ -781,11 +741,61 @@ void CLatexProject::OnItemInsertRef()
 	pView->SetFocus();
 }
 
-void CLatexProject::OnChangedViewList() 
+
+void CLatexProject::OnSpellProject() 
 {
-	//UpdateFrameCounts();
-	//CProject::OnChangedViewList();
+	CSpellCheckDlg dlg(NULL, theApp.GetSpell());
+	dlg.m_bDoneMessage = false;
+	dlg.m_bSelection = false;
+
+	// Get own copy of strucutre items.
+	CStructureItemArray aStructureItems;
+	m_pStructureParser->GetStructureItems( &aStructureItems );
+
+	for (int i = 0; i < aStructureItems.GetSize(); ++i)
+	{
+		CStructureItem& si = aStructureItems[i];
+		if ( si.m_nType == CStructureParser::texFile )
+		{
+			boolean bWasOpen = true;
+			CDocument *pDoc = theApp.GetOpenLatexDocument( GetFilePath( si.m_strPath ), FALSE );
+			if ( pDoc == NULL )
+			{
+				pDoc = theApp.OpenLatexDocument( GetFilePath( si.m_strPath ) );
+				bWasOpen = false;
+			}
+			if ( pDoc == NULL )
+				// Can't open document, try another one.
+				continue;
+
+			POSITION pos = pDoc->GetFirstViewPosition();
+			CLatexEdit* pView = (CLatexEdit*) pDoc->GetNextView( pos );
+			ASSERT( pView );
+
+			dlg.Reset(pView, theApp.GetSpell());
+
+			// Save selection
+			CPoint ptStart, ptEnd;
+			pView->GetSelection(ptStart, ptEnd);
+			pView->SetShowInteractiveSelection(TRUE);
+			int result = dlg.DoModal();
+			// Restore selection
+			pView->SetShowInteractiveSelection(FALSE);
+			pView->SetSelection(ptStart, ptEnd);
+
+			if (result != IDOK)
+			{
+				result = AfxMessageBox(AfxLoadString(IDS_SPELL_CONTINUE), MB_YESNO|MB_ICONQUESTION);
+				if (result != IDYES)
+					break;
+			}
+			if ( !bWasOpen )
+				pView->SendMessage(WM_COMMAND, ID_FILE_CLOSE);
+		}
+	}
+	
 }
+
 
 BOOL CLatexProject::CreateProjectViews()
 {
@@ -796,12 +806,6 @@ BOOL CLatexProject::CreateProjectViews()
 	// Check if views are allready existing
 	if( m_pwndStructureView && IsWindow( m_pwndStructureView->m_hWnd ) )
 		return FALSE;
-
-	// Initialize create context
-	/*
-	CCreateContext	cc;
-	ZeroMemory( &cc, sizeof( cc ) );
-	*/
 
 	// Create views:
 	CRect						rectDummy;
@@ -822,11 +826,6 @@ BOOL CLatexProject::CreateProjectViews()
 			delete m_pwndFileView;
 	}
 
-	/*
-	cc.m_pNewViewClass = RUNTIME_CLASS( CStructureView );
-	if( !m_pwndStructureView->Create( NULL, NULL, AFX_WS_DEFAULT_VIEW & ~WS_BORDER, 
-		rectDummy, pwndTabs, 0, &cc ) )
-	*/
 	if (!m_pwndStructureView->Create(pwndTabs))
 	{
 		TRACE0("Failed to create structure view\n");
@@ -834,11 +833,6 @@ BOOL CLatexProject::CreateProjectViews()
 	}
 	m_pwndStructureView->SetOwner(m_pwndWorkspaceBar);
 
-	/*
-	cc.m_pNewViewClass = RUNTIME_CLASS( CEnvironmentView );
-	if( !m_pwndEnvironmentView->Create( NULL, NULL, AFX_WS_DEFAULT_VIEW & ~WS_BORDER, 
-		rectDummy, pwndTabs, 0, &cc ) )
-	*/
 	if (!m_pwndEnvironmentView->Create(pwndTabs))
 	{
 		TRACE0("Failed to create environment view\n");
@@ -846,32 +840,12 @@ BOOL CLatexProject::CreateProjectViews()
 	}
 	m_pwndEnvironmentView->SetOwner(m_pwndWorkspaceBar);
 
-	/*
-	cc.m_pNewViewClass = RUNTIME_CLASS( CFileView );
-	if( !m_pwndFileView->Create( NULL, NULL, AFX_WS_DEFAULT_VIEW & ~WS_BORDER, 
-		rectDummy, pwndTabs, 0, &cc ) )
-	*/
 	if (!m_pwndFileView->Create(pwndTabs))
 	{
 		TRACE0("Failed to create file view\n");
 		return FALSE;
 	}
 	m_pwndFileView->SetOwner(m_pwndWorkspaceBar);
-
-	// Create views:
-	/*
-	const DWORD dwViewStyle = WS_CHILD | WS_VISIBLE | TVS_HASLINES | 
-							  TVS_LINESATROOT   | TVS_HASBUTTONS |
-							  TVS_SHOWSELALWAYS | TVS_EDITLABELS;
-	
-	if (!m_wndFileView.Create (dwViewStyle, rectDummy, pwndTabs, 1))
-	{
-		TRACE0("Failed to create workspace view\n");
-		return FALSE;      // fail to create
-	}
-	*/
-
-//	m_wndFileView.PopulateTree();
 
 	// Attach views to tab:
 	pwndTabs->AddTab( m_pwndStructureView, CString( (LPCTSTR)STE_TAB_STRUCTURE ), 0 );
@@ -887,9 +861,6 @@ BOOL CLatexProject::CreateProjectViews()
 	AddView( m_pwndEnvironmentView );
 	AddView( m_pwndFileView );
 
-	// Sorry, but we have to activate one view manually, so that the
-	// project-document can receive messages
-//	((CFrameWnd*)AfxGetMainWnd())->SetActiveView( m_pwndStructureView );
 	return TRUE;
 }
 
@@ -992,3 +963,4 @@ void CLatexProject::XProject::SetUsesMakeIndex_(BOOL bUsesMakeIndex)
 
 	pThis->SetRunMakeIndex(bUsesMakeIndex);
 }
+

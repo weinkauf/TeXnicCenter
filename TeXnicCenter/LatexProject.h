@@ -38,13 +38,12 @@
 #include "MainFrm.h"
 #include "StructureView.h"
 #include "EnvironmentView.h"
-//#include "FileViewEx.h"
 #include "FileView.h"
 #include "Project.h"
 #include "IProject.h"
 
 class CLatexProject : 
-						public CProject, 
+					  public CProject, 
 					  public CStructureParserHandler
 {
 protected:
@@ -95,15 +94,6 @@ public:
 		returned string is empty, if no main file has been set.
 	*/
 	CString GetMainPath() const;
-
-	/**
-	Sets the working directory for this project. Latex will generate its
-	output in this directory.
-
-	@param lpszWorkingDir
-		Directory for this project to work in.
-	*/
-	//void SetWorkingDir( LPCTSTR lpszWorkingDir );
 
 	/**
 	Gets the working directory for this project.
@@ -194,7 +184,6 @@ public:
 	virtual void OnCloseProject();
 	virtual BOOL OnOpenProject(LPCTSTR lpszPathName);
 	virtual void SetPathName(LPCTSTR lpszPathName);
-	virtual void OnChangedViewList();
 	virtual BOOL OnSaveProject(LPCTSTR lpszPathName);
 	virtual BOOL SaveModified();
 protected:
@@ -213,7 +202,6 @@ protected:
 	CWorkspaceBar*   m_pwndWorkspaceBar;
 	COutputBar*      m_pwndOutputBar;
 
-
 	//{{AFX_MSG(CLatexProject)
 	afx_msg void OnProjectProperties();
 	afx_msg void OnProjectOpenMainfile();
@@ -226,13 +214,9 @@ protected:
 	afx_msg void OnItemInsertPageref();
 	afx_msg void OnItemInsertRef();
 	afx_msg void OnItemInsertLabel();
+	afx_msg void OnSpellProject();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
-
-// CTextSourceManager virtuals
-public:
-	/** @see CTextSourceManager::GetTextSource */
-//	virtual CTextSource *GetTextSource( LPCTSTR lpszPath );
 
 // CStructureParserHandler virtuals
 public:
@@ -246,9 +230,6 @@ protected:
 
 	/** Path of the directory, the project file is placed in */
 	CString m_strProjectDir;
-
-	/** Path of directory where latex should work in. */
-	//CString m_strWorkingDir;
 
 	/** TRUE if the project uses BibTeX */
 	BOOL m_bUseBibTex;
@@ -268,9 +249,6 @@ protected:
 	/** Actual parsing item or -1 if no one is selected. */
 	int m_nCurrentStructureItem;
 
-	/** Signaled, when parsing is finished. */
-	CEvent m_parsingFinished;
-
 private:
 	/** TRUE, if we are allowed to parse the project, FALSE otherwise. */
 	BOOL m_bCanParse;
@@ -286,7 +264,6 @@ private:
 
 	/** View which shows all files of the document. */
 	CFileView* m_pwndFileView;
-	//CCFileViewEx	  m_wndFileView;
 
 	/** 
 	After loading the project, this is the index of the navigator
