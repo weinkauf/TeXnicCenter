@@ -130,9 +130,12 @@ void CChildFrame::OnDestroy()
 
 void CChildFrame::OnSetFocus(CWnd* pOldWnd) 
 {
-	theApp.m_pMDIFrameManager->ActivateChildFrame( this );
+	if (theApp.m_pMDIFrameManager->GetChildFrameCount())
+	{
+		CBCGMDIChildWnd::OnSetFocus(pOldWnd);
+		theApp.m_pMDIFrameManager->ActivateChildFrame( this );
+	}
 }
-
 
 
 #define VAL_FRAMEINFO_COLCOUNT					_T("Columns")
