@@ -139,7 +139,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
+// Deutsch (Deutschland) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -230,17 +230,17 @@ CAPTION "Rechtschreibung"
 FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_SPELL_TEXT,7,7,221,58,ES_MULTILINE | WS_VSCROLL
-    PUSHBUTTON      "Ignorieren",IDC_SPELL_IGNORE,233,7,50,14
-    PUSHBUTTON      "Alle ignorieren",IDC_SPELL_IGNORE_ALL,233,22,50,14
-    PUSHBUTTON      "Todo:Add",IDC_SPELL_ADD,233,37,50,14
-    PUSHBUTTON      "Ändern",IDC_SPELL_REPLACE,233,52,50,14
-    PUSHBUTTON      "Alle ändern",IDC_SPELL_REPLACE_ALL,233,67,50,14
-    PUSHBUTTON      "Nächste Zeile",IDC_SPELL_NEXT,233,82,50,14
-    PUSHBUTTON      "Übernehmen",IDC_SPELL_RESUME,233,97,50,14,WS_DISABLED
+    PUSHBUTTON      "&Ignorieren",IDC_SPELL_IGNORE,233,7,50,14
+    PUSHBUTTON      "&Alle ignorieren",IDC_SPELL_IGNORE_ALL,233,22,50,14
+    PUSHBUTTON      "&Hinzufügen",IDC_SPELL_ADD,233,37,50,14
+    PUSHBUTTON      "&Ändern",IDC_SPELL_REPLACE,233,52,50,14
+    PUSHBUTTON      "A&lle ändern",IDC_SPELL_REPLACE_ALL,233,67,50,14
+    PUSHBUTTON      "&Nächste Zeile",IDC_SPELL_NEXT,233,82,50,14
+    PUSHBUTTON      "&Übernehmen",IDC_SPELL_RESUME,233,97,50,14,WS_DISABLED
     CONTROL         "List4",IDC_SPELL_SUGGEST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_NOCOLUMNHEADER | 
                     LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,7,75,222,55
-    LTEXT           "Vorschläge",IDC_STATIC,7,65,42,8
+    LTEXT           "&Vorschläge",IDC_STATIC,7,65,42,8
     PUSHBUTTON      "Abbrechen",IDCANCEL,233,116,50,14
 END
 
@@ -316,12 +316,12 @@ BEGIN
     ID_EDIT_SPELL_ADD       "Wort hinzufügen\nDieses Wort zum Benutzerwörterbuch hinzufügen."
 END
 
-#endif    // German (Germany) resources
+#endif    // Deutsch (Deutschland) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// Englisch (USA) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -385,17 +385,17 @@ CAPTION "Spell Check"
 FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_SPELL_TEXT,7,7,221,58,ES_MULTILINE | ES_AUTOVSCROLL
-    PUSHBUTTON      "Ignore",IDC_SPELL_IGNORE,233,7,50,14
-    PUSHBUTTON      "Ignore all",IDC_SPELL_IGNORE_ALL,233,22,50,14
-    PUSHBUTTON      "Add",IDC_SPELL_ADD,233,37,50,14
-    PUSHBUTTON      "Change",IDC_SPELL_REPLACE,233,52,50,14
-    PUSHBUTTON      "Change all",IDC_SPELL_REPLACE_ALL,233,67,50,14
-    PUSHBUTTON      "Next line",IDC_SPELL_NEXT,233,82,50,14
-    PUSHBUTTON      "Resume",IDC_SPELL_RESUME,233,97,50,14,WS_DISABLED
+    PUSHBUTTON      "&Ignore",IDC_SPELL_IGNORE,233,7,50,14
+    PUSHBUTTON      "I&gnore all",IDC_SPELL_IGNORE_ALL,233,22,50,14
+    PUSHBUTTON      "&Add",IDC_SPELL_ADD,233,37,50,14
+    PUSHBUTTON      "&Change",IDC_SPELL_REPLACE,233,52,50,14
+    PUSHBUTTON      "C&hange all",IDC_SPELL_REPLACE_ALL,233,67,50,14
+    PUSHBUTTON      "&Next line",IDC_SPELL_NEXT,233,82,50,14
+    PUSHBUTTON      "&Resume",IDC_SPELL_RESUME,233,97,50,14,WS_DISABLED
     CONTROL         "List4",IDC_SPELL_SUGGEST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_NOCOLUMNHEADER | 
                     LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,7,75,222,55
-    LTEXT           "Suggestions",IDC_STATIC,7,65,42,8
+    LTEXT           "&Suggestions",IDC_STATIC,7,65,42,8
     PUSHBUTTON      "Cancel",IDCANCEL,233,116,50,14
 END
 
@@ -490,7 +490,7 @@ BEGIN
     ID_EDIT_SPELL_ADD       "Add word\nAdd this word to personal dictionary"
 END
 
-#endif    // English (U.S.) resources
+#endif    // Englisch (USA) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
