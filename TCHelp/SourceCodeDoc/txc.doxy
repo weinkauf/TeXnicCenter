@@ -59,18 +59,19 @@ WARN_LOGFILE           = warnings.log
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = . \
-                         ../../TeXnicCenter/ \
                          ../../MFCExt/ \
-                         ../../CrysEditEx/
-FILE_PATTERNS          = *.h
+                         ../../CrysEditEx/ \
+                         ../../TeXnicCenter/
+FILE_PATTERNS          = *.dox \
+                         *.h
 RECURSIVE              = YES
 EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = */resource.h
-EXAMPLE_PATH           =
+EXAMPLE_PATH           = ../
 EXAMPLE_PATTERNS       =
 EXAMPLE_RECURSIVE      = NO
-IMAGE_PATH             =
+IMAGE_PATH             = .
 INPUT_FILTER           =
 FILTER_SOURCE_FILES    = NO
 #---------------------------------------------------------------------------
@@ -84,9 +85,9 @@ REFERENCES_RELATION    = YES
 #---------------------------------------------------------------------------
 # configuration options related to the alphabetical class index
 #---------------------------------------------------------------------------
-ALPHABETICAL_INDEX     = NO
-COLS_IN_ALPHA_INDEX    = 5
-IGNORE_PREFIX          =
+ALPHABETICAL_INDEX     = YES
+COLS_IN_ALPHA_INDEX    = 3
+IGNORE_PREFIX          = C
 #---------------------------------------------------------------------------
 # configuration options related to the HTML output
 #---------------------------------------------------------------------------
