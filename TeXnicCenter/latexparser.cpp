@@ -738,8 +738,6 @@ BOOL CLatexParser::FindPairInBlock( LPCTSTR lpszLine, LPCTSTR lpszFrom, LPCTSTR 
 				//open pair
 				else if ( aPairStack.empty() && nPairDir == nDirection )
 				{
-					nNthOpenPair--;
-
 					struct tagPairStackItm newBracket;
 					
 					newBracket.nPairIdx = nPairIdx;
@@ -749,7 +747,17 @@ BOOL CLatexParser::FindPairInBlock( LPCTSTR lpszLine, LPCTSTR lpszFrom, LPCTSTR 
 					newBracket.ptEnd.x = lpszPairStrEnd - lpszLine;
 					newBracket.ptEnd.y = nLineIndex;
 
-					openPairStack.insert( openPairStack.begin(), newBracket );
+					if ( nNthOpenPair > 0) {
+						nNthOpenPair--;
+
+						openPairStack.insert( openPairStack.begin(), newBracket );
+					}
+					else 
+					{
+						aPairStack.push_back( newBracket );  //store place of error
+						result = CCrystalParser::RESULT_ERROR;
+				  	return  TRUE;
+					}
 				}
 				//closing bracket
 				else if ( !aPairStack.empty() && nPairDir == nDirection )
@@ -760,7 +768,6 @@ BOOL CLatexParser::FindPairInBlock( LPCTSTR lpszLine, LPCTSTR lpszFrom, LPCTSTR 
 			  		ASSERT( rTopBracket.nPairDir == OppositeDir(nPairDir) );
 						aPairStack.pop_back();			  
 					}
-					//error bracket out of pair
 					else 
 					{
 						result = CCrystalParser::RESULT_ERROR;
@@ -776,22 +783,18 @@ BOOL CLatexParser::FindPairInBlock( LPCTSTR lpszLine, LPCTSTR lpszFrom, LPCTSTR 
 				
 
 				//stack empty, no open pair to look => end
-				if ( aPairStack.empty() && nNthOpenPair  == 0 )
+				if ( aPairStack.empty() && nNthOpenPair == 0 && !bClearToEnd )
 				{
-					if ( bClearToEnd )
-						result = CCrystalParser::RESULT_ENDOK;
-					else 
-					{
-						nFoundStrStart = lpszCurPos - lpszLine;
-						nFoundStrEnd = lpszPairStrEnd - lpszLine;
-						result = CCrystalParser::RESULT_OK;
-						return TRUE;
-					}
+					nFoundStrStart = lpszCurPos - lpszLine;
+					nFoundStrEnd = lpszPairStrEnd - lpszLine;
+					result = CCrystalParser::RESULT_OK;
+					return TRUE;
 				}
 			}
 		}
 	}
 
+	result = CCrystalParser::RESULT_OK;
 	return FALSE;
 }
 
