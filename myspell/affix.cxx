@@ -9,201 +9,198 @@
 #include "stdafx.h"
 #include "affix.hxx"
 
+#ifdef _DEBUG
+#undef THIS_FILE
+static char THIS_FILE[]=__FILE__;
+#define new DEBUG_NEW
+#endif
+
 Prefix::Prefix(AffixMgr* pmgr, unsigned char a, int num, affentry* dp)
 {
-  // initialize affix flag and register affix manager
-  pmyMgr = pmgr;
-  flag = a;
-  
-  // create and load the affentry data for this prefix
-  first = (affentry *) malloc((num*sizeof(struct affentry)));
-  if (first) {
-     memcpy(first,dp,(num * sizeof(struct affentry)));
-     numents = num;
-  } else {
-    /* error condition: throw exception */
-  }
+	// initialize affix flag and register affix manager
+	pmyMgr = pmgr;
+	flag = a;
+
+	// create and load the affentry data for this prefix
+	first = new affentry[num];
+	if (first) {
+		memcpy(first,dp,(num * sizeof(struct affentry)));
+		numents = num;
+	} else {
+		/* error condition: throw exception */
+	}
 }
 
 
 Prefix::~Prefix()
 {
-    if (first) {
-      if (first->appnd) free(first->appnd);
-      if (first->strip) free(first->strip);
-      first->appnd = first->strip = NULL;
-      free((char *)first);
-    }
-    first = NULL;
-    numents = 0;
-    flag = '\0';
-    pmyMgr = NULL;
+	affentry *ptrAff = first;
+	for (int i = 0; i < numents; ++i) {
+		delete [] ptrAff->appnd;
+		delete [] ptrAff->strip;
+		++ptrAff;
+	}
+	delete [] first;
 }
 
 
 // check if this prefix is present
 struct hentry * Prefix::check(const char * word, int len)
 {
-    struct affentry *   pp;	// pointer to current prefix affentry
-    int			cond;	// condition number being examined
-    int	                tmpl;   // length of tmpword
-    struct hentry *     he;     // hash entry of root word or NULL
-    unsigned char *	cp;		
-    int			i;
-    char	        tmpword[MAXWORDLEN];
+	struct affentry *   pp;	// pointer to current prefix affentry
+	int			cond;	// condition number being examined
+	int	                tmpl;   // length of tmpword
+	struct hentry *     he;     // hash entry of root word or NULL
+	unsigned char *	cp;		
+	int			i;
+	char	        tmpword[MAXWORDLEN];
 
-    for (pp = first, i = numents; i > 0; pp++, i--)  {
+	for (pp = first, i = numents; i > 0; pp++, i--)  {
 
-        // a match if the prefix matches the beginning of the 
-        // word, if the remaining root word has positive length
-        // and if there are enough chars in new root word to meet 
-        // the number of characters conditions to test
+		// a match if the prefix matches the beginning of the 
+		// word, if the remaining root word has positive length
+		// and if there are enough chars in new root word to meet 
+		// the number of characters conditions to test
 
-	tmpl = len - pp->appndl;
-	if (tmpl > 0 &&  (pp->appndl == 0 || 
-              strncmp ((pp->appnd), word, pp->appndl) == 0) &&  
-              tmpl + pp->stripl >= pp->numconds) {
+		tmpl = len - pp->appndl;
+		if (tmpl > 0 &&  (pp->appndl == 0 || 
+		strncmp ((pp->appnd), word, pp->appndl) == 0) &&  
+		tmpl + pp->stripl >= pp->numconds) {
 
-	    // generate new root word by removing prefix and adding
-	    // back any characters that would have been stripped
+			// generate new root word by removing prefix and adding
+			// back any characters that would have been stripped
 
-	    if (pp->stripl) strcpy (tmpword, (pp->strip));
-	    strcpy ((tmpword + pp->stripl), (word + pp->appndl));
+			if (pp->stripl) strcpy (tmpword, (pp->strip));
+			strcpy ((tmpword + pp->stripl), (word + pp->appndl));
 
-            // now make sure all of the conditions on characters
-            // are met.  Please see the appendix at the end of
-            // this file for more info on exactly what is being
-            // tested
+			// now make sure all of the conditions on characters
+			// are met.  Please see the appendix at the end of
+			// this file for more info on exactly what is being
+			// tested
 
-	    cp = (unsigned char *)tmpword;
-	    for (cond = 0;  cond < pp->numconds;  cond++) {
-		if ((pp->conds[*cp++] & (1 << cond)) == 0) break;
-	    }
+			cp = (unsigned char *)tmpword;
+			for (cond = 0;  cond < pp->numconds;  cond++) {
+			if ((pp->conds[*cp++] & (1 << cond)) == 0) break;
+			}
 
-            // if all conditions are met then check if resulting
-            // root word in the dictionary
+			// if all conditions are met then check if resulting
+			// root word in the dictionary
 
-	    if (cond >= pp->numconds) {
-		tmpl += pp->stripl;
-		if ((he = pmyMgr->lookup(tmpword)) != NULL) {
-		   if (TESTAFF(he->astr, flag, he->alen)) return he;
+			if (cond >= pp->numconds) {
+				tmpl += pp->stripl;
+				if ((he = pmyMgr->lookup(tmpword)) != NULL) {
+				if (TESTAFF(he->astr, flag, he->alen)) return he;
+				}
+
+				// prefix matched but no root word was found 
+				// if XPRODUCT is allowed, try again but now 
+				// ross checked combined with a suffix
+
+				if (pp->cpflag & XPRODUCT) {
+					he = pmyMgr->cross_check(tmpword, tmpl, XPRODUCT, this);
+					if (he) return he;
+				}
+			}
 		}
-
-		// prefix matched but no root word was found 
-                // if XPRODUCT is allowed, try again but now 
-                // ross checked combined with a suffix
-
-		if (pp->cpflag & XPRODUCT) {
-		   he = pmyMgr->cross_check(tmpword, tmpl, XPRODUCT, this);
-                   if (he) return he;
-		}
-	    }
 	}
-    }
-    return NULL;
+	return NULL;
 }
 
 
 Suffix::Suffix(AffixMgr * pmgr, unsigned char a, int num, affentry* dp)
 {
-  // intialize affix flage and register affix manager
-  pmyMgr = pmgr;
-  flag = a;
+	// intialize affix flage and register affix manager
+	pmyMgr = pmgr;
+	flag = a;
 
-
-  // create and load the affentry data for this suffix
-  first = (affentry *) malloc((num*sizeof(struct affentry)));
-  if (first) {
-     memcpy(first,dp,(num * sizeof(struct affentry)));
-     numents = num;
-  } else {
-    /* error condition: throw exception */
-  }
+	// create and load the affentry data for this suffix
+	first = new affentry[num];
+	if (first) {
+		memcpy(first,dp,(num * sizeof(struct affentry)));
+		numents = num;
+	} else {
+		/* error condition: throw exception */
+	}
 }
 
 
 Suffix::~Suffix()
 {
-    if (first) {
-      if (first->appnd) free(first->appnd);
-      if (first->strip) free(first->strip);
-      first->appnd = first->strip = NULL;
-      free((char *)first);
-    }
-    first = NULL;
-    numents = 0;
-    flag = '\0';
-    pmyMgr = NULL;
+	affentry *ptrAff = first;
+	for (int i = 0; i < numents; ++i) {
+		delete [] ptrAff->appnd;
+		delete [] ptrAff->strip;
+		++ptrAff;
+	}
+	delete [] first;
 }
 
 
 // see if this suffix is present in the word 
 struct hentry * Suffix::check(const char * word, int len, int optflags, Prefix* ppfx)
 {
-    struct affentry *   sp;	         // suffix entry pointer
-    int	                tmpl;		 // length of tmpword 
-    int			cond;		 // condition beng examined
-    struct hentry *     he;              // hash entry pointer
-    unsigned char *	cp;
-    int			i;
-    char	        tmpword[MAXWORDLEN];
+	struct affentry	*sp;	         // suffix entry pointer
+	int				tmpl;		 // length of tmpword 
+	int				cond;		 // condition beng examined
+	struct hentry	*he;              // hash entry pointer
+	unsigned char	*cp;
+	int				i;
+	char			tmpword[MAXWORDLEN];
 
 
-    for (sp = first, i = numents; i > 0; sp++, i--) {
+	for (sp = first, i = numents; i > 0; sp++, i--) {
 
-       // if this suffix is being cross checked with a prefix
-       // but it does not support cross products skip it
+		// if this suffix is being cross checked with a prefix
+		// but it does not support cross products skip it
 
-	if ((optflags & XPRODUCT) != 0 &&  (sp->cpflag & XPRODUCT) == 0)
-	    continue;
+		if ((optflags & XPRODUCT) != 0 &&  (sp->cpflag & XPRODUCT) == 0)
+		continue;
 
-	// a match if the suffix matches the end of the 
-        // word, if the remaining root word has positive length
-        // and if there are enough chars in new root word to meet 
-        // the number of characters conditions to test
+		// a match if the suffix matches the end of the 
+		// word, if the remaining root word has positive length
+		// and if there are enough chars in new root word to meet 
+		// the number of characters conditions to test
 
-	tmpl = len - sp->appndl;
-	if (tmpl > 0  &&  (sp->appndl == 0
-	       ||  strcmp ((sp->appnd), (word + tmpl)) == 0)
-	       &&  tmpl + sp->stripl >= sp->numconds) {
+		tmpl = len - sp->appndl;
+		if (tmpl > 0  &&  (sp->appndl == 0
+		||  strcmp ((sp->appnd), (word + tmpl)) == 0)
+		&&  tmpl + sp->stripl >= sp->numconds) {
 
-	    // generate new root word by removing suffix and adding
-	    // back any characters that would have been stripped or
-	    // or null terminating the shorter string
+			// generate new root word by removing suffix and adding
+			// back any characters that would have been stripped or
+			// or null terminating the shorter string
 
-	    strcpy (tmpword, word);
-	    cp = (unsigned char *)(tmpword + tmpl);
-	    if (sp->stripl) {
-		strcpy ((char *)cp, (sp->strip));
-		tmpl += sp->stripl;
-		cp = (unsigned char *)(tmpword + tmpl);
-	    } else *cp = '\0';
+			strcpy (tmpword, word);
+			cp = (unsigned char *)(tmpword + tmpl);
+			if (sp->stripl) {
+			strcpy ((char *)cp, (sp->strip));
+			tmpl += sp->stripl;
+			cp = (unsigned char *)(tmpword + tmpl);
+			} else *cp = '\0';
 
-            // now make sure all of the conditions on characters
-            // are met.  Please see the appendix at the end of
-            // this file for more info on exactly what is being
-            // tested
+			// now make sure all of the conditions on characters
+			// are met.  Please see the appendix at the end of
+			// this file for more info on exactly what is being
+			// tested
 
-	    for (cond = sp->numconds;  --cond >= 0; ) {
-		if ((sp->conds[*--cp] & (1 << cond)) == 0) break;
-	    }
+			for (cond = sp->numconds;  --cond >= 0; ) {
+			if ((sp->conds[*--cp] & (1 << cond)) == 0) break;
+			}
 
-            // if all conditions are met then check if resulting
-            // root word in the dictionary
+			// if all conditions are met then check if resulting
+			// root word in the dictionary
 
-	    if (cond < 0) {
-	        if ((he = pmyMgr->lookup(tmpword)) != NULL) {
-                     if (TESTAFF(he->astr,flag,he->alen) && 
-                           ((optflags & XPRODUCT) == 0 || 
-                           TESTAFF(he->astr,ppfx->flag,he->alen))) return he;
-	        }  
-	    }
+			if (cond < 0) {
+				if ((he = pmyMgr->lookup(tmpword)) != NULL) {
+					if (TESTAFF(he->astr,flag,he->alen) && 
+					((optflags & XPRODUCT) == 0 || 
+					TESTAFF(he->astr,ppfx->flag,he->alen))) return he;
+				}  
+			}
+		}
 	}
-    }
-    return NULL;
+	return NULL;
 }
-
-
 
 
 #if 0

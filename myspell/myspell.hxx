@@ -15,23 +15,29 @@
 
 class CRYSEDIT_CLASS_DECL MySpell
 {
-  AffixMgr*       pAMgr;
-  HashMgr*        pHMgr;
-  SuggestMgr*     pSMgr;
-
-public:
-  MySpell(const char * affpath, const char * dpath);
-  ~MySpell();
-
-  int suggest(char*** slst, const char * word);
-  int spell(const char *);
+	AffixMgr	*pAMgr;
+	HashMgr		*pHMgr;
+	SuggestMgr	*pSMgr;
 
 private:
-   int    captype(const char *);
-   void   mkinitcap(char *);
-   void   mkallcap(char *);
-   void   mkallsmall(char *);
-   char * check(const char *);
+	int captype(const char *);
+	void mkinitcap(char *);
+	void mkallcap(char *);
+	void mkallsmall(char *);
+	char* check(const char *);
+
+public:
+	MySpell(const char * affpath, const char * dpath);
+	~MySpell();
+
+	int suggest(char*** slst, const char * word);
+	int spell(const char *);
+
+	inline void MySpell::release_suggest(char ** slst) 
+	{ 
+	  if ( pSMgr )
+		  pSMgr->release_suggest(slst);
+	}
 };
 
 #endif

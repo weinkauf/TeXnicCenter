@@ -72,10 +72,10 @@ main(int argc, char** argv)
           int ns = pMS->suggest(&wlst,buf);
           for (int i=0; i < ns; i++) {
             fprintf(stdout,"    ... %s\n",wlst[i]);
-            free(wlst[i]);
+            delete [] wlst[i];
           }
           fprintf(stdout,"\n");
-          free(wlst);
+          delete [] wlst;
        }
     }
 

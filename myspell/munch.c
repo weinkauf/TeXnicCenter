@@ -155,7 +155,7 @@ void parse_aff_file(FILE * afflst)
     char ft;
     struct affent * ptr= NULL;
     struct affent * nptr= NULL;
-    char * line = malloc(MAX_LN_LEN);
+    char * line = new char[MAX_LN_LEN;
 
     while (fgets(line,MAX_LN_LEN,afflst)) {
        k = strlen(line) - 1;
@@ -175,7 +175,7 @@ void parse_aff_file(FILE * afflst)
                     case 1: { achar = *piece; break; }
                     case 2: { if (*piece == 'Y') ff = XPROD; break; }
                     case 3: { numents = atoi(piece); 
-                              ptr = malloc(numents * sizeof(struct affent));
+                              ptr = new affent[numents];
                               ptr->achar = achar;
                               ptr->cpf = ff;
 	                      fprintf(stderr,"parsing %c entries %d\n",achar,numents);
@@ -184,8 +184,9 @@ void parse_aff_file(FILE * afflst)
                  }
                  i++;
              }
-             free(piece);
+             delete [] piece;
           }
+		  delete [] piece;
           /* now parse all of the sub entries*/
           nptr = ptr;
           for (j=0; j < numents; j++) {
@@ -227,8 +228,9 @@ void parse_aff_file(FILE * afflst)
                     }
                     i++;
                 }
-                free(piece);
+                delete [] piece;
              }
+			 delete [] piece;
              nptr++;
           }
           if (ft == 'P') {
@@ -248,7 +250,7 @@ void parse_aff_file(FILE * afflst)
           achar='\0';
        }
     }
-    free(line);
+    delete [] line;
 }
 
 
@@ -449,7 +451,7 @@ void aff_chk (const char * word, int len)
             for (i=0; i < numsfx; i++) {
                suf_chk(nword,nwl,stable[i].aep, stable[i].num, roots[j].prefix, XPROD);
             }
-            free(nword);
+            delete [] nword;
          }
        }
     }
@@ -481,12 +483,12 @@ char * mystrsep(char ** stringp, const char delim)
      if (dp) {
         *stringp = dp+1;
         nc = (int)((unsigned long)dp - (unsigned long)mp); 
-        rv = (char *) malloc(nc+1);
+        rv = new char[nc+1];
         memcpy(rv,mp,nc);
         *(rv+nc) = '\0';
         return rv;
      } else {
-       rv = (char *) malloc(n+1);
+       rv = new char[n+1];
        memcpy(rv, mp, n);
        *(rv+n) = '\0';
        *stringp = mp + n;
@@ -518,7 +520,7 @@ int add_word(char * word)
 {
     int i;
     struct hentry * dp;
-    struct hentry * hp = (struct hentry *) malloc (sizeof(struct hentry));
+	struct hentry * hp = new hentry;
 
     hp->word = word;
     hp->affstr = NULL;
@@ -530,7 +532,7 @@ int add_word(char * word)
     
     if (dp->word == NULL) {
       *dp = *hp;
-       free(hp);
+       delete hp;
     } else {
       while (dp->next != NULL) dp=dp->next; 
       dp->next = hp;
@@ -556,7 +558,7 @@ int load_tables(FILE * wdlst)
   if ((tablesize %2) == 0) tablesize++;
 
   // allocate the hash table
-  tableptr = (struct hentry *) calloc(tablesize, sizeof(struct hentry));
+  tableptr = new hentry[tablesize];
   if (! tableptr) return 3;
 
   // loop thorugh all words on much list and add to hash
@@ -597,7 +599,7 @@ void add_affix_char(struct hentry * ep, char ac)
   int i;
   char * tmp;
   if (ep->affstr == NULL) {
-     ep->affstr = (char *) malloc(2*sizeof(char));
+     ep->affstr = new char[2];
      *(ep->affstr) = ac;
      *((ep->affstr)+1) = '\0';
      return;
@@ -605,11 +607,11 @@ void add_affix_char(struct hentry * ep, char ac)
   al = strlen(ep->affstr);
   for (i=0; i< al; i++)
     if (ac == (ep->affstr)[i]) return;
-  tmp = calloc((al+2),sizeof(char));
+  tmp = new char[al+2];
   memcpy(tmp,ep->affstr,(al+1));
   *(tmp+al) = ac;
   *(tmp+al+1)='\0';
-  free(ep->affstr);
+  delete [] ep->affstr;
   ep->affstr = tmp;
   return;
 }

@@ -10,11 +10,11 @@
 
 struct hentry
 {
-  short    wlen;
-  short    alen;
-  char *   word;
-  char *   astr;
-  struct   hentry * next;
-}; 
+	short			wlen;
+	short			alen;
+	char			*word;
+	char			*astr;
+	struct hentry	*next;
+};
 
 #endif
