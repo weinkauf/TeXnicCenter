@@ -1,3 +1,9 @@
+2002/04/25 cnorris
+- More realtime spell checking
+  * Enable and disable commands (tools->options->language) work in realtime.
+  * Ignore redundant update messages
+  * Slow down the checker to eliminate update flicker
+
 2002/04/23 cnorris
 - Implemented real-time spell checking.
 
