@@ -24,6 +24,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.4  2002/04/06 05:28:35  cnorris
+* Added SetShowInteractiveSelection
+* Added GetParser
+* Added default value to nLength of HighlightText
+*
 * Revision 1.3  2002/03/20 00:48:11  cnorris
 * Mouse scroll wheel handler
 *
@@ -723,7 +728,7 @@ public:
 // Implementation
 public:
 	CCrystalTextView();
-	~CCrystalTextView();
+	virtual ~CCrystalTextView();
 
 protected:
 
