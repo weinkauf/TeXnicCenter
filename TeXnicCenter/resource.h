@@ -585,6 +585,7 @@
 #define IDC_ADVTOOLS_USEOUTPUT          1309
 #define IDC_ADVTOOLS_PROMPTARG          1310
 #define IDC_ADVTOOLS_CLOSEWIN           1311
+#define IDC_OPTIONS_LANGUAGE_DOWNLOAD   1312
 #define IDD_CUSTOMIZEPAGE_EDITOR        16105
 #define IDD_OUTPUTWIZARD_MIKTEX         16106
 #define IDD_OUTPUTWIZARD_PATH           16107
@@ -1097,6 +1098,7 @@
 #define ID_URL_TCNEWSLETTER             38004
 #define ID_URL_TCUSERSGROUP             38005
 #define ID_URL_TCDEVELOPERSGROUP        38006
+#define ID_URL_TCDICTDOWNLOAD           38007
 #define ID_URL_LAST                     38099
 #define ID_PH_FIRST                     38100
 #define ID_PH_MPATH                     38101
@@ -1200,7 +1202,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        270
 #define _APS_NEXT_COMMAND_VALUE         38359
-#define _APS_NEXT_CONTROL_VALUE         1312
+#define _APS_NEXT_CONTROL_VALUE         1313
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif

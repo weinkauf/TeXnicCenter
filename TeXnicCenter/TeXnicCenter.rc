@@ -1684,6 +1684,7 @@ BEGIN
                                                     ID_URL_TCDEVELOPERSGROUP
             MENUITEM SEPARATOR
             MENUITEM "&Fehlerbenachrichtigung",     ID_URL_TCERROR
+            MENUITEM "&Wörterbücher herunterladen", ID_URL_TCDICTDOWNLOAD
         END
         MENUITEM SEPARATOR
         MENUITEM "Inf&o über TeXnicCenter...",  ID_APP_ABOUT
@@ -2627,6 +2628,8 @@ BEGIN
     LTEXT           "&Locale:",IDC_STATIC,1,36,24,8
     COMBOBOX        IDC_OPTIONS_LANGUAGE_LOCALE,33,33,83,53,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Wörterbücher herunterladen",
+                    IDC_OPTIONS_LANGUAGE_DOWNLOAD,132,35,103,10
 END
 
 IDD_FILECLEANCONFIRM DIALOG DISCARDABLE  0, 0, 295, 180
@@ -4273,13 +4276,14 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_URL_TCHOME           "www.ToolsCenter.org/products/texniccenter/\nTeXnicCenter Homepage\nhttp://www.ToolsCenter.org/products/texniccenter/"
+    ID_URL_TCHOME           "http://www.ToolsCenter.org/products/texniccenter/\nTeXnicCenter Homepage\nhttp://www.ToolsCenter.org/products/texniccenter/"
     ID_URL_AUTHOR           "sven.wiegand@gmx.de\nNachricht an den Autor\nmailto:sven.wiegand@gmx.de"
-    ID_URL_TCERROR          "www.ToolsCenter.org/products/texniccenter/errors.htm\nFehlerbenachrichtigung\nhttp://www.ToolsCenter.org/products/texniccenter/errors.htm#form"
+    ID_URL_TCERROR          "http://www.ToolsCenter.org/products/texniccenter/errors.htm\nFehlerbenachrichtigung\nhttp://www.ToolsCenter.org/products/texniccenter/errors.htm#form"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter Benutzerforum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Entwicklerforum\nhttp://www.sourceforge.net/projects/texniccenter"
+    ID_URL_TCDICTDOWNLOAD   "http://whiteboard.openoffice.org/lingucomponent/download_dictionary.html\nWörterbücher herunterladen\nhttp://whiteboard.openoffice.org/lingucomponent/download_dictionary.html"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -5345,6 +5349,7 @@ BEGIN
                                                     ID_URL_TCDEVELOPERSGROUP
             MENUITEM SEPARATOR
             MENUITEM "Report an &Error",            ID_URL_TCERROR
+            MENUITEM "Do&wnload Dictionaries",      ID_URL_TCDICTDOWNLOAD
         END
         MENUITEM SEPARATOR
         MENUITEM "&About TeXnicCenter...",      ID_APP_ABOUT
@@ -6354,6 +6359,8 @@ BEGIN
     LTEXT           "Loc&ale:",IDC_STATIC,1,36,24,8
     COMBOBOX        IDC_OPTIONS_LANGUAGE_LOCALE,35,32,83,53,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Download Dictionaries",IDC_OPTIONS_LANGUAGE_DOWNLOAD,
+                    152,35,83,10
 END
 
 IDD_PLACEHOLDER_SET DIALOG DISCARDABLE  0, 0, 186, 231
@@ -7851,13 +7858,14 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_URL_TCHOME           "www.ToolsCenter.org/products/texniccenter/\nTeXnicCenter Homepage\nhttp://www.ToolsCenter.org/products/texniccenter/"
+    ID_URL_TCHOME           "http://www.ToolsCenter.org/products/texniccenter/\nTeXnicCenter Homepage\nhttp://www.ToolsCenter.org/products/texniccenter/"
     ID_URL_AUTHOR           "sven.wiegand@gmx.de\nE-Mail to the Author\nmailto:sven.wiegand@gmx.de"
-    ID_URL_TCERROR          "www.ToolsCenter.org/products/texniccenter/errors.htm\nReport an Error\nhttp://www.ToolsCenter.org/products/texniccenter/errors.htm#form"
+    ID_URL_TCERROR          "http://www.ToolsCenter.org/products/texniccenter/errors.htm\nReport an Error\nhttp://www.ToolsCenter.org/products/texniccenter/errors.htm#form"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter User Forum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Developer Forum\nhttp://www.sourceforge.net/projects/texniccenter"
+    ID_URL_TCDICTDOWNLOAD   "http://whiteboard.openoffice.org/lingucomponent/download_dictionary.html\nDownload Dictionaries\nhttp://whiteboard.openoffice.org/lingucomponent/download_dictionary.html"
 END
 
 STRINGTABLE DISCARDABLE 

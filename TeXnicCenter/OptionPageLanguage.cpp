@@ -78,6 +78,7 @@ void COptionPageLanguage::DoDataExchange(CDataExchange* pDX)
 	DDX_CBString(pDX, IDC_OPTIONS_LANGUAGE_DIALECT, m_strDialect);
 	DDX_CBString(pDX, IDC_OPTIONS_LANGUAGE_LOCALE, m_strLocale);
 	DDX_Text(pDX, IDC_OPTIONS_SPELL_PDICT, m_strPDictionary);
+	DDX_Control(pDX, IDC_OPTIONS_LANGUAGE_DOWNLOAD, m_wndURLDownloadDicts);
 	//}}AFX_DATA_MAP
 }
 
@@ -160,6 +161,10 @@ void COptionPageLanguage::OnSelchangeOptionsLanguage()
 BOOL COptionPageLanguage::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
+
+	//Set URLs
+	m_wndURLDownloadDicts.SetURL( _T("http://whiteboard.openoffice.org/lingucomponent/download_dictionary.html") );
+	m_wndURLDownloadDicts.SizeToContent(true, true);
 
 	// List of all region/language strings recognized by setlocale. 
 	// There are a number of sub-selections that are not presented
