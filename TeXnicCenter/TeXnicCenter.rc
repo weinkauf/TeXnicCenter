@@ -5044,7 +5044,7 @@ BEGIN
             MENUITEM "H&uger",                      ID_FORMAT_HUGE2
         END
         MENUITEM SEPARATOR
-        POPUP "&Charachters"
+        POPUP "&Characters"
         BEGIN
             MENUITEM "&Normal",                     ID_FORMAT_TEXTNORMAL
             MENUITEM "&Emphasized",                 ID_FORMAT_EMPH
