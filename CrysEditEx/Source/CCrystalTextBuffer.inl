@@ -23,6 +23,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:53  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:24+02  sven_wiegand
 * Initial revision
 *
@@ -38,5 +41,16 @@ CE_INLINE BOOL CCrystalTextBuffer::IsModified() const
 {
 	return m_bModified;
 }
+
+CE_INLINE void CCrystalTextBuffer::ReleaseLineAttributes()
+{
+	::LeaveCriticalSection( &m_csLineAttributes );
+}
+
+CE_INLINE void CCrystalTextBuffer::LockLineAttributes()
+{
+	::EnterCriticalSection( &m_csLineAttributes );
+}
+
 
 #endif

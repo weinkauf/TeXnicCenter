@@ -55,6 +55,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.10  2002/04/29 19:45:17  cnorris
+* Make text attribute structure thread safe
+*
 * Revision 1.9  2002/04/25 06:41:01  cnorris
 * Potential access violation fixes
 *
@@ -193,7 +196,7 @@ void CCrystalTextBuffer::CLineInfo::InsertText(int nPos, LPCTSTR pszLine, int nL
 	if ( pszLine == NULL || nLength == 0 || (nLength == -1 && ((nLength = _tcsclen(pszLine)) == 0)) )
 		return;
 
-	ClearAttributes(nPos, nPos+1, TRUE);
+	ClearAttributes(nPos-1, nPos+1, TRUE);
 	ShiftAttributes(nPos, nLength);
 
 	int nNewLength = nLength + m_nLength;
@@ -213,7 +216,7 @@ void CCrystalTextBuffer::CLineInfo::RemoveText(int nPos, int nCount, boolean bCo
 
 	if ( nPos < m_nLength )
 	{
-		ClearAttributes(nPos, nPos+nCount, TRUE);
+		ClearAttributes(nPos-1, nPos+nCount+1, TRUE);
 		ShiftAttributes(nPos+nCount, -nCount);
 
 		int nRightCount = m_nLength - nCount - nPos;
@@ -276,8 +279,8 @@ void CCrystalTextBuffer::CLineInfo::ClearAttributes(int nStart, int nEnd, BOOL b
 			if ( (listElement.m_nStartPos >= nStart) && (listElement.m_nEndPos < nEnd) )
 				m_lstAttributes->RemoveAt( prev );
 			else if ( bIncludeOverlap )
-				if ( ((listElement.m_nStartPos >= nStart) && (listElement.m_nStartPos < nEnd)) ||
-					 ((listElement.m_nEndPos >= nStart) && (listElement.m_nEndPos < nEnd)) )
+				if ( ((listElement.m_nStartPos <= nStart) && (listElement.m_nEndPos > nStart)) ||
+					 ((listElement.m_nStartPos <= nEnd)   && (listElement.m_nEndPos > nEnd)) )
 					m_lstAttributes->RemoveAt( prev );
 		}
 	}
@@ -531,12 +534,6 @@ CCrystalTextBuffer::TextAttributeListType *CCrystalTextBuffer::GetLineAttributes
 	if ( pList == NULL || pList->GetCount() == 0 )
 		return NULL;
 	return pList;
-}
-
-
-void CCrystalTextBuffer::ReleaseLineAttributes()
-{
-	::LeaveCriticalSection( &m_csLineAttributes );
 }
 
 
@@ -1027,9 +1024,11 @@ BOOL CCrystalTextBuffer::InternalDeleteText(CCrystalTextView *pSource, int nStar
 	context.m_ptStart.x = nStartChar;
 	context.m_ptEnd.y = nEndLine;
 	context.m_ptEnd.x = nEndChar;
+	LockLineAttributes();
 	if (nStartLine == nEndLine)
 	{
 		m_aLines[nStartLine].RemoveText(nStartChar, nEndChar-nStartChar);
+		ReleaseLineAttributes();
 		UpdateViews(pSource, &context, UPDATE_SINGLELINE | UPDATE_HORZRANGE, nStartLine);
 	}
 	else
@@ -1063,6 +1062,7 @@ BOOL CCrystalTextBuffer::InternalDeleteText(CCrystalTextView *pSource, int nStar
 		int nDelCount = nEndLine - nFirstDelLine;
 		m_aLines.RemoveAt(nFirstDelLine, nDelCount);
 
+		ReleaseLineAttributes();
 		UpdateViews(pSource, &context, UPDATE_HORZRANGE | UPDATE_VERTRANGE, nStartLine);
 	}
 
@@ -1097,6 +1097,7 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 	int nCurrentLine = nLine;
 	BOOL bNewLines = FALSE;
 	int nTextPos;
+	LockLineAttributes();
 	for (;;)
 	{
 		nTextPos = 0;
@@ -1144,9 +1145,9 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 
 		pszText += nTextPos;
 	}
-
 	context.m_ptEnd.x = nEndChar;
 	context.m_ptEnd.y = nEndLine;
+	ReleaseLineAttributes();
 
 	if (bNewLines)
 		UpdateViews(pSource, &context, UPDATE_HORZRANGE | UPDATE_VERTRANGE, nLine);
