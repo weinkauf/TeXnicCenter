@@ -146,7 +146,7 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 	TRACE( "m_regexInput returned %d\n", nResult );
 
 	nResult = m_regexBib.set_expression( _T(
-		"\\\\(bibliography)\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"
+		"\\\\bibliography\\s*\\{\\s*([^\\}]*)\\s*\\}"
 	) );
 	TRACE( "m_regexBib returned %d\n", nResult );
 
@@ -596,7 +596,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth, aSI );
 
 		// parse input file
-		CString	bibPath( what[2].first, what[2].second - what[2].first );
+		CString	bibPath( what[1].first, what[1].second - what[1].first );
 		int nStart = 0;
 		int nFound;
 		while (true)
