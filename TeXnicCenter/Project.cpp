@@ -202,6 +202,11 @@ BOOL CProject::OnNewProject()
 	return TRUE;
 }
 
+BOOL CProject::OnNewProjectFromDoc(LPCTSTR lpszDocPathName)
+{
+	//Standard Implementation is like OnNewProject
+	return CProject::OnNewProject();
+}
 
 BOOL CProject::OnOpenProject(LPCTSTR lpszPathName)
 {

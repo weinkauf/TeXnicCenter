@@ -109,8 +109,8 @@ public:
 	/** @see CTextSource::Delete */
 	virtual void Delete();
 
-// overrides
-protected:
+// CDocument overrides
+public:
 	/**	Save the document data to a file.
 
 	@param lpszPathName

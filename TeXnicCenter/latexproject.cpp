@@ -115,7 +115,7 @@ BOOL CLatexProject::OnNewProject()
 	if (!CProject::OnNewProject())
 		return FALSE;
 
-	// add views to the docking bars in the frame wnd
+	//Add views to the docking bars in the frame wnd
 	m_nInitialNavigatorTab = 0;
 	CreateProjectViews();
 
@@ -129,12 +129,90 @@ BOOL CLatexProject::OnNewProject()
 	if (dlg.DoModal() == IDCANCEL)
 		return FALSE;
 
+	//Save and add to LRU
 	DoFileSave();
 	theApp.m_recentProjectList.Add(GetPathName());
+
+	//Trigger analysis - parse project
+	AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_PROJECT_PARSE);
 
 	return TRUE;
 }
 
+BOOL CLatexProject::OnNewProjectFromDoc(LPCTSTR lpszDocPathName)
+{
+	if (!CProject::OnNewProjectFromDoc(lpszDocPathName))
+		return false;
+
+	if (!CPathTool::Exists(lpszDocPathName))
+	{
+		AfxMessageBox(STE_PROJECT_MAINFILENOTFOUND, MB_ICONSTOP | MB_OK);
+		return false;
+	}
+
+	//Set the path of the project file
+	CString ProjectFileName = GetProjectFileNameFromDoc(lpszDocPathName);
+	//Does it already exist?
+	if (CheckExistingProjectFile(ProjectFileName))
+	{
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		// close latex-documents?
+
+		// skipping annoying question in this version --
+		// just closing the documents.
+		// lets see, what the users will say ...
+		theApp.GetLatexDocTemplate()->CloseAllDocuments(theApp.m_bEndSession);
+
+		//Open the project
+		OnOpenProject(ProjectFileName);
+		//... and the main file
+		OnProjectOpenMainfile();
+
+		return true;
+	}
+
+	//Set it
+	SetPathName(ProjectFileName);
+
+	//Set the main latex file
+	SetMainPath(lpszDocPathName);
+
+	//Open the properties dialog for the user to change some values.
+	OnProjectProperties();
+
+	//Save and add to LRU
+	//DoFileSave(); ==> This brings up the Save-Dialog, if tcp is not there - not wanted
+	OnSaveProject(GetPathName());
+	theApp.m_recentProjectList.Add(GetPathName());
+
+	//Add views to the docking bars in the frame wnd
+	m_nInitialNavigatorTab = 0;
+	CreateProjectViews();
+
+	//Open the main file (just to be sure)
+	OnProjectOpenMainfile();
+
+	//Trigger analysis - parse project
+	AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_PROJECT_PARSE);
+
+	return true;
+}
+
+CString CLatexProject::GetProjectFileNameFromDoc(LPCTSTR lpszDocPathName)
+{
+	CString ProjectFileName = CPathTool::GetBase(lpszDocPathName) + _T(".tcp");
+	return ProjectFileName;
+};
+
+bool CLatexProject::CheckExistingProjectFile(LPCTSTR lpszPathName)
+{
+	if (!CPathTool::Exists(lpszPathName)) return false;
+
+	//Ask the user what to do
+	CString strMsg;
+	strMsg.Format(STE_PROJECT_EXISTS, lpszPathName);
+	return (AfxMessageBox(strMsg, MB_ICONQUESTION | MB_YESNO) == IDYES);
+};
 
 #define	TC_PROJECT_SESSION_EXT	_T("tps")
 
@@ -182,8 +260,6 @@ BOOL CLatexProject::OnOpenProject(LPCTSTR lpszPathName)
 	// add views to the docking bars in the frame wnd
 	CreateProjectViews();
 
-	//m_wndFileView.PopulateTree(m_strMainPath);
-	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// parse project
 	AfxGetMainWnd()->PostMessage( WM_COMMAND, ID_PROJECT_PARSE );
@@ -222,10 +298,14 @@ void CLatexProject::OnCloseProject()
 {	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// store project session
-	CIniFile session(GetSessionPathName());
-	session.Reset();
-	SerializeSession(session, TRUE);
-	session.WriteFile();
+	CString SessionPathName = GetSessionPathName();
+	if (!SessionPathName.IsEmpty())
+	{
+		CIniFile session(SessionPathName);
+		session.Reset();
+		SerializeSession(session, TRUE);
+		session.WriteFile();
+	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// close latex-documents?
@@ -236,7 +316,7 @@ void CLatexProject::OnCloseProject()
 	theApp.GetLatexDocTemplate()->CloseAllDocuments(theApp.m_bEndSession);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// remeber last project
+	// remember last project
 	if (theApp.m_bEndSession)
 		g_configuration.m_strLastProject = GetPathName();
 	else
@@ -524,6 +604,9 @@ CString CLatexProject::GetFilePath( LPCTSTR lpszFile )
 //Returns the full path to the project session file
 CString CLatexProject::GetSessionPathName(LPCTSTR lpszPath /*= NULL*/) const
 {
+	if (!lpszPath && GetPathName().IsEmpty())
+		return CString();
+
 	return ( CPathTool::GetBase( (lpszPath != NULL) ? lpszPath : GetPathName() )
 						+ _T('.') + TC_PROJECT_SESSION_EXT );
 }

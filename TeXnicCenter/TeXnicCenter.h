@@ -99,6 +99,8 @@ protected:
 	afx_msg void OnWindowCloseAll();
 	afx_msg void OnHelp();
 	afx_msg void OnUpdateProject();
+	afx_msg void OnProjectNewFromFile();
+	afx_msg void OnUpdateProjectNewFromFile(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	afx_msg void OnUpdateFileMRUProjectList( CCmdUI* pCmdUI );
 	afx_msg void OnUpdateFileMRUFileList( CCmdUI* pCmdUI );

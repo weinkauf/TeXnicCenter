@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OUTPUTDOC_H__74712513_4670_11D4_8677_9E528A3B7553__INCLUDED_)
 #define AFX_OUTPUTDOC_H__74712513_4670_11D4_8677_9E528A3B7553__INCLUDED_
 
@@ -140,6 +146,9 @@ protected:
 	Returns the active document or NULL if there is none.
 	*/
 	CDocument *GetActiveDocument() const;
+
+	///Assures, that the main file is saved and ready to be compiled.
+	bool AssureExistingMainFile();
 
 public:
 

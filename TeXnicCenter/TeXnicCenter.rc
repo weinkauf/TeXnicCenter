@@ -1615,6 +1615,9 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "&Hauptdatei öffnen",          ID_PROJECT_OPEN_MAINFILE
         MENUITEM "Rechtschreibung...",          ID_SPELL_PROJECT
+        MENUITEM SEPARATOR
+        MENUITEM "Erzeugen mit aktueller Datei als Hauptdatei", 
+                                                ID_PROJECT_NEW_FROM_FILE
     END
     POPUP "A&usgabe"
     BEGIN
@@ -3482,11 +3485,13 @@ BEGIN
                             "Die Datei\n\n%s\n\nexistiert bereits.\n\nSoll Sie überschrieben werden?"
     STE_DOCUMENTDIR_CREATE_ERR "Das Verzeichnis konnte nicht erzeugt werden."
     STE_DOCUMENT_CANNOTCREATE "Die Datei konnte nicht erstellt werden."
+    STE_PROJECT_EXISTS      "Es existiert bereits ein Projekt mit dem Dateinamen:\n\n%s\n\nWollen Sie dieses Projekt laden?"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
     STE_OPTIONS_TITLE       "Optionen"
+    STE_DOCUMENT_SAVEBEFOREPROCEED "Sie müssen die Datei erst speichern."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4210,6 +4215,7 @@ BEGIN
     STE_GREP_FINISHEDNOHIT  "Zeichenfolge nicht gefunden."
     STE_GREP_FINISHED       "Es wurde(n) %d Übereinstimmung(en) gefunden."
     STE_GREP_ERROR          "! %s: Zugriff auf Datei nicht möglich!"
+    STE_PROJECT_CLOSE_ASK   "Möchten Sie das aktuelle Projekt schließen?"
     STE_PARSE_BEGIN         "Start der Analyse: "
     STE_PARSE_END           "Ende der Analyse: "
 END
@@ -4445,6 +4451,8 @@ BEGIN
     ID_PH_CSHORTRELATIVEPATH "%swc"
     ID_PH_CSSLASHRELATIVEPATH "%sWc"
     ID_PHS_MORESETS_OPT     "\n[4]"
+    ID_PROJECT_NEW_FROM_FILE 
+                            "Erzeugt ein Projekt mit der aktuell geöffneten Datei als Hauptdatei.\nNeues Projekt mit aktueller Datei"
 END
 
 #endif    // German (Germany) resources
@@ -5280,6 +5288,9 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "&Open Main File",             ID_PROJECT_OPEN_MAINFILE
         MENUITEM "&Spelling...",                ID_SPELL_PROJECT
+        MENUITEM SEPARATOR
+        MENUITEM "Create with active file as main file", 
+                                                ID_PROJECT_NEW_FROM_FILE
     END
     POPUP "&Build"
     BEGIN
@@ -7091,11 +7102,13 @@ BEGIN
                             "The file\n\n%s\n\nalready exists.\n\nShould the file be replaced?"
     STE_DOCUMENTDIR_CREATE_ERR "Cannot create the directory."
     STE_DOCUMENT_CANNOTCREATE "Cannot create the file."
+    STE_PROJECT_EXISTS      "There is an already existing project with the file name:\n\n%s\n\nDo you want to load this project?"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
     STE_OPTIONS_TITLE       "Options"
+    STE_DOCUMENT_SAVEBEFOREPROCEED "You need to save the file first."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7807,6 +7820,7 @@ BEGIN
     STE_GREP_FINISHEDNOHIT  "String not found."
     STE_GREP_FINISHED       "%d Match(es) has been found."
     STE_GREP_ERROR          "! %s: Cannot access file!"
+    STE_PROJECT_CLOSE_ASK   "Do you want to close the current project?"
     STE_PARSE_BEGIN         "Begin parsing time: "
     STE_PARSE_END           "End parsing time: "
 END
@@ -8039,6 +8053,8 @@ BEGIN
     ID_PH_CSHORTRELATIVEPATH "%swc"
     ID_PH_CSSLASHRELATIVEPATH "%sWc"
     ID_PHS_MORESETS_OPT     "\n[4]"
+    ID_PROJECT_NEW_FROM_FILE 
+                            "Creates a new project and sets the active file as the main file of the project.\nNew project with active file"
 END
 
 #endif    // English (U.S.) resources

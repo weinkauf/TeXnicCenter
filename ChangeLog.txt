@@ -1,3 +1,9 @@
+2003/06/05 niteria
+- Implemented Feature 675205: One-Click Project Creation for existing Documents
+- Implemented Feature 588960: Disable build for unsaved files
+   (==> Prompts the user to save the file instead of disabling the command)
+- Fixed Bug 592338: Ghost File when cancelling "New Project"
+
 2003/04/30 christianwelzel
 - Fixed Bug 602329: File>Print and HP LaserJet 4050.
 

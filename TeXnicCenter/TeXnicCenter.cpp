@@ -189,9 +189,11 @@ BEGIN_MESSAGE_MAP(CTeXnicCenterApp, CProjectSupportingWinApp)
 	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_ALL, OnUpdateWindowCloseAll)
 	ON_COMMAND(ID_WINDOW_CLOSE_ALL, OnWindowCloseAll)
 	ON_COMMAND(ID_HELP, OnHelp)
+	ON_COMMAND(ID_BG_UPDATE_PROJECT, OnUpdateProject)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnDisableStdCmd)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS, OnDisableStdCmd)
-	ON_COMMAND(ID_BG_UPDATE_PROJECT, OnUpdateProject)
+	ON_COMMAND(ID_PROJECT_NEW_FROM_FILE, OnProjectNewFromFile)
+	ON_UPDATE_COMMAND_UI(ID_PROJECT_NEW_FROM_FILE, OnUpdateProjectNewFromFile)
 	//}}AFX_MSG_MAP
 	// Dateibasierte Standard-Dokumentbefehle
 	//ON_COMMAND(ID_FILE_NEW, CProjectSupportingWinApp::OnFileNew)
@@ -1554,3 +1556,49 @@ void CTeXnicCenterApp::OnUpdateProject()
 	}
 }
 
+
+void CTeXnicCenterApp::OnProjectNewFromFile() 
+{
+	CLatexEdit* pEdit = GetActiveEditView();
+	if (!pEdit) return;
+
+	CLatexDoc* pDoc = pEdit->GetDocument();
+	if (!pDoc) return;
+
+	//Empty (not yet saved) path name?
+	CString DocPathName = pDoc->GetPathName();
+	if (DocPathName.IsEmpty())
+	{
+		//Ask whether to save and proceed OR to cancel the action   
+		if (AfxMessageBox(STE_DOCUMENT_SAVEBEFOREPROCEED, MB_ICONINFORMATION | MB_OKCANCEL) == IDCANCEL)
+			return;
+
+		//Save it
+		if (!pDoc->DoSave(DocPathName)) return;
+
+		DocPathName = pDoc->GetPathName();
+	}
+
+	//Do we have an opened project?
+	CLatexProject* pLProject = GetProject();
+	if (pLProject)
+	{
+		//We just care, if the existing main file is the same as the new main file
+		if (pLProject->GetMainPath() == DocPathName)
+		{
+			//It is the same ==> the user wants to recreate the current project
+			// So we just show him the Properties dialog.
+			// This is similar to the behaviour in OnProjectNewFromDocument
+			// and saves the user from closing all documents.
+			AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_PROJECT_PROPERTIES);
+			return;
+		}
+	}
+
+	m_pProjectManager->OnProjectNewFromDocument(DocPathName);
+}
+
+void CTeXnicCenterApp::OnUpdateProjectNewFromFile(CCmdUI* pCmdUI) 
+{
+	pCmdUI->Enable(m_pLatexDocTemplate->GetFirstDocPosition() != NULL);
+}

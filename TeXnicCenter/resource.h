@@ -129,8 +129,10 @@
 #define STE_DOCUMENTDIR_CREATE_ERR      205
 #define IDR_HIDDEN_CMDS                 206
 #define STE_DOCUMENT_CANNOTCREATE       206
+#define STE_PROJECT_EXISTS              207
 #define STE_OPTIONS_TITLE               208
 #define IDD_FILE_SAVE                   209
+#define STE_DOCUMENT_SAVEBEFOREPROCEED  209
 #define IDD_FILESEARCH                  211
 #define IDR_POPUP_REGULAREXPRESSION     213
 #define IDR_POPUP_PLACEHOLDER           217
@@ -254,6 +256,7 @@
 #define STE_GREP_FINISHEDNOHIT          340
 #define STE_GREP_FINISHED               341
 #define STE_GREP_ERROR                  342
+#define STE_PROJECT_CLOSE_ASK           343
 #define STE_PARSE_BEGIN                 350
 #define STE_PARSE_END                   351
 #define STE_PARSE_PARSING               352
@@ -1194,6 +1197,7 @@
 #define ID_PH_CSHORTRELATIVEPATH        38356
 #define ID_PH_CSSLASHRELATIVEPATH       38357
 #define ID_PHS_MORESETS_OPT             38358
+#define ID_PROJECT_NEW_FROM_FILE        38359
 
 // Next default values for new objects
 // 
@@ -1201,7 +1205,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        270
-#define _APS_NEXT_COMMAND_VALUE         38359
+#define _APS_NEXT_COMMAND_VALUE         38360
 #define _APS_NEXT_CONTROL_VALUE         1313
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
