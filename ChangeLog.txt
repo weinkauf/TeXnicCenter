@@ -1,3 +1,24 @@
+2002/11/26 niteria
+- Fixed similar Bugs 607758 & 634320: Tools not working & Windows Explorer tool
+- Fixed Bug 609909: TeXnicCenter may overwrite a .tex file
+  This includes, that project files from versions till Beta3.00.000
+  can not be opened anymore. If some users still have such files, they
+  need to use Beta6.01 to convert the project-files. It is very unlikely,
+  that such old things still exist.
+- Fixed Bug 643907: List of Options|Clean not always updated
+- UserTools have been enhanced:
+  - Dialog supports new placeholder menus.
+  - Started implementation of new features like in/out-redirection.
+  - NOTE: This makes it incompatible to the old tools. The old ones
+    have not been implemented using IMPLEMENT_SERIAL(). But the new ones
+    need this. The new version is able to import the old tools, but an old
+    version of TXC can not read them anymore after this.
+    ==> BACKUP your registry, to be on the safe side. <==
+- Removed old Placeholder menus. They are no longer needed.
+- Introduced new global AfxGetDefaultDirectory()-function. Serves as
+  simplification of Feature 539142: "Configurable Default Path for Documents"
+  and for executing tools.
+
 2002/09/26 niteria
 - Fixed Bug 601206: Navigator Bar incorrect appendix display
 
