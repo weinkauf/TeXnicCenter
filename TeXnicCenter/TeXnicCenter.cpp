@@ -472,7 +472,8 @@ int CTeXnicCenterApp::ExitInstance()
 
 	DeleteCriticalSection( &m_csLazy );
 	delete m_pSpell;
-	delete m_pBackgroundThread;
+	if ( m_pBackgroundThread )
+		m_pBackgroundThread->PostThreadMessage(WM_QUIT, 0, 0);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// unloading localized resource DLL for BCGCB

@@ -328,7 +328,7 @@ protected:
 	MySpell *m_pSpell;
 
 	/** Background thread that processes spelling and other tasks */
-	CBackgroundThread *m_pBackgroundThread;
+	CWinThread *m_pBackgroundThread;
 
 	/** Critical section to protect lazy resource initialization */
 	CRITICAL_SECTION m_csLazy;
