@@ -403,7 +403,7 @@ void CLatexProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 
 		// storing frame information
 		CWnd	*pWnd = AfxGetMainWnd()->GetWindow(GW_CHILD)->GetWindow(GW_CHILD);
-		pWnd->GetWindow(GW_HWNDFIRST); // Start with the first child
+		pWnd = pWnd->GetWindow(GW_HWNDLAST); // Start with the last child
 		int		nFrame = 0;
 
 		ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_FRAMECOUNT, 0);
@@ -423,8 +423,8 @@ void CLatexProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 				nFrame++;
 			}
 
-			// get next window
-			pWnd = pWnd->GetNextWindow();
+			// get previous window
+			pWnd = pWnd->GetNextWindow(GW_HWNDPREV);
 		}
 
 		// store number of frames
