@@ -72,6 +72,7 @@
 #define STE_BIB_FILES                   154
 #define STE_TEX_FILES                   155
 #define IDD_HEADER                      156
+#define STE_TAB_PARSE                   156
 #define IDD_FLOATOBJECT                 158
 #define IDC_STATIC1                     158
 #define IDD_GRAPHIC                     159
@@ -145,6 +146,7 @@
 #define IDB_TEXNICCENTER                236
 #define STE_LATEX_REF                   240
 #define STE_LATEX_PAGEREF               241
+#define IDB_PARSE_VIEW                  243
 #define STE_ITEMTYPE_GENERIC            256
 #define STE_ITEMTYPE_HEADER             257
 #define STE_ITEMTYPE_EQUATION           258
@@ -225,6 +227,14 @@
 #define STE_GREP_FINISHEDNOHIT          340
 #define STE_GREP_FINISHED               341
 #define STE_GREP_ERROR                  342
+#define STE_PARSE_BEGIN                 350
+#define STE_PARSE_END                   351
+#define STE_PARSE_PARSING               352
+#define STE_PARSE_FOUND                 353
+#define STE_PARSE_FOUND_UNMATCHED       354
+#define STE_PARSE_RESULTS               355
+#define STE_PARSE_TERMINATE             356
+#define STE_FILE_EXIST                  359
 #define STE_FILE_MRU_PROJECT_NONE       400
 #define STE_FILE_MRU_FILE_NONE          401
 #define STE_FILEFIND_BROWSEDIR          416
@@ -1052,7 +1062,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        243
+#define _APS_NEXT_RESOURCE_VALUE        244
 #define _APS_NEXT_COMMAND_VALUE         38314
 #define _APS_NEXT_CONTROL_VALUE         1250
 #define _APS_NEXT_SYMED_VALUE           111

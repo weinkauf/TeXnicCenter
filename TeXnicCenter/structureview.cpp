@@ -64,7 +64,7 @@ void CStructureView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 {
 	switch( lHint )
 	{
-		case CLatexProject::hintParsingFinished:
+		case COutputDoc::hintParsingFinished:
 			{
 				//-----------------------------------------------------------
 				// remember expanded items

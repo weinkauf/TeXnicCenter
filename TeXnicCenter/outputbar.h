@@ -35,6 +35,7 @@
 
 #include "BuildView.h"
 #include "GrepView.h"
+#include "ParseOutputView.h"
 #include "OutputDoc.h" //UPDATE
 #include "ShellView.h" //UPDATE
 
@@ -99,14 +100,17 @@ protected:
 	/** Tab-Ctrl */
 	CBCGTabWnd m_wndTabs;
 
-	/** View which shows the document structure. */
+	/** View containing the results of the build proceses. */
 	CBuildView *m_pwndBuildView;
 
-	/** View which shows all objects of the document. */
+	/** View containing the results of file grep 1. */
 	CGrepView* m_pwndGrepView1;
 
-	/** View which shows the files used by the document. */
+	/** View containing the results of file grep 2. */
 	CGrepView* m_pwndGrepView2;
+
+	/** Structure parser output view. */
+	CParseOutputView *m_pwndParseView;
 
 	/** DOS Shell view to direct command entering*/
 	CShellView* m_pwndShellView;

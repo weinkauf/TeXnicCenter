@@ -30,6 +30,8 @@
 #include "stdafx.h"
 #include "StructureParser.h"
 #include "TextSourceFile.h"
+#include "ParseOutputView.h"
+#include "resource.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -37,6 +39,12 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
+/////////////////////////////////////////////////////////////////////////////
+// Statics
+const CString const CStructureParser::m_sItemNames[typeCount]= {
+	"generic","header","equation","quote","quotation",
+	"center","verse","itemization","enumeration","description",
+	"figure","table","texFile","group","bibliography"};
 
 //-------------------------------------------------------------------
 // class CStructureItem
@@ -63,9 +71,12 @@ CStructureParser::CStructureParser()
 	ASSERT( FALSE );
 }
 
-CStructureParser::CStructureParser( CStructureParserHandler *pStructureParserHandler/*, CTextSourceManager *pTextSourceManager */)
+CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHandler, 
+								   /*CTextSourceManager *pTextSourceManager, */
+								   CParseOutputHandler *pParseOutputHandler)
 :	m_bCancel( FALSE ),
 	m_pStructureParserHandler( pStructureParserHandler ),
+	m_pParseOutputHandler( pParseOutputHandler ),
 //	m_pTextSourceManager( pTextSourceManager ),
 	m_pStructureParserThread( NULL )
 {
@@ -170,6 +181,11 @@ BOOL CStructureParser::StartParsing( LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDi
 	m_strWorkingDir = lpszWorkingDir;
 	m_aStructureItems.RemoveAll();
 	m_nDepth = 0;
+	
+	m_nLinesParsed = 0;
+	m_nFilesParsed = 0;
+	if ( m_pParseOutputHandler )
+		m_pParseOutputHandler->OnParseBegin();
 
 	// start parsing thread
 	if( m_pStructureParserThread = AfxBeginThread( StructureParserThread, this, nPriority ) )
@@ -177,6 +193,7 @@ BOOL CStructureParser::StartParsing( LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDi
 	else
 		return FALSE;
 }
+
 
 UINT StructureParserThread( LPVOID pStructureParser )
 {
@@ -188,9 +205,9 @@ UINT StructureParserThread( LPVOID pStructureParser )
 	BOOL bParsingResult;
 
 //	bParsingResult =  ((CStructureParser*)pStructureParser)->Parse( ((CStructureParser*)pStructureParser)->m_strMainPath, cookies );
-	bParsingResult = pParser->Parse(pParser->m_strMainPath, cookies);
-	pParser->m_pStructureParserHandler->OnParsingFinished( bParsingResult );
+	bParsingResult = pParser->Parse(pParser->m_strMainPath, cookies, 0);
 
+	pParser->Done( bParsingResult, cookies );
 	return 0;
 }
 
@@ -242,7 +259,6 @@ CString CStructureParser::GetArgument(const CString &strText, TCHAR tcOpeningDel
 }
 
 
-
 #define INITIALIZE_SI( si )\
 	si.m_nLine = nActualLine;\
 	si.m_nParent = m_anItem[m_nDepth];\
@@ -252,7 +268,11 @@ CString CStructureParser::GetArgument(const CString &strText, TCHAR tcOpeningDel
 	si.m_strPath = strActualFile;\
 	si.m_strTitle = ""
 
-void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &cookies, const CString &strActualFile, int nActualLine )
+#define INITIALIZE_OI( oi )\
+	oi.m_strSrcFile = strActualFile;\
+	oi.m_nSrcLine = nActualLine;
+
+void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &cookies, const CString &strActualFile, int nActualLine, int nFileDepth )
 {
 	LPCTSTR							lpTextEnd = lpText;
 	CStructureItem			si;
@@ -271,7 +291,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 	if( reg_search( lpText, lpTextEnd, what, m_regexInput, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
 	{
 		// parse string before occurence
-		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine );
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth );
 
 		// parse input file
 		CString	strPath( what[2].first, what[2].second - what[2].first );
@@ -281,10 +301,26 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		strPath.TrimRight(_T('"'));
 		if( strPath.Find( _T('.') ) < 0 )
 			strPath+= _T(".tex");
-		Parse( strPath, cookies );
+
+		COutputInfo info;
+		INITIALIZE_OI ( info );
+		if ( ::PathFileExists(strPath) )
+		{
+			if ( m_pParseOutputHandler )
+			{
+				info.m_strError.Format( STE_PARSE_PARSING, strPath );
+				m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::information );
+			}
+			Parse( strPath, cookies, nFileDepth+1 );
+		}
+		else if ( m_pParseOutputHandler )
+		{
+			info.m_strError.Format( STE_FILE_EXIST, strPath );
+			m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
+		}
 
 		// parse string behind occurence
-		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine );
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth );
 
 		return;
 	}
@@ -292,7 +328,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 	if( reg_search( lpText, lpTextEnd, what, m_regexFigureStart, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
 	{
 		// parse string before occurence
-		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine );
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth );
 
 		// add figure to collection
 		INITIALIZE_SI( si );
@@ -301,7 +337,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		cookies.Push( cookie );
 
 		// parse string behind occurence
-		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine );
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth );
 
 		return;
 	}
@@ -309,7 +345,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 	if( reg_search( lpText, lpTextEnd, what, m_regexTableStart, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
 	{
 		// parse string before occurence
-		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine );
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth );
 
 		// add table to collection
 		INITIALIZE_SI( si );
@@ -318,7 +354,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		cookies.Push( cookie );
 
 		// parse string behind occurence
-		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine );
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth );
 
 		return;
 	}
@@ -326,7 +362,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 	if( reg_search( lpText, lpTextEnd, what, m_regexHeader, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
 	{
 		// parse string before occurence
-		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine );
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth );
 
 		// if the top of the stack is a header, then remove it
 		if( !cookies.IsEmpty() && cookies.Top().nCookieType == header )
@@ -366,7 +402,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		// parse string behind occurence
 		int	nEnd = nTitleStart+nTitleCount;
 		nEnd = nEnd - (strFullMatch.GetLength() - si.m_strTitle.GetLength()) + 2;
-		ParseString( lpText+nEnd, lpTextEnd - (lpText+nEnd), cookies, strActualFile, nActualLine );
+		ParseString( lpText+nEnd, lpTextEnd - (lpText+nEnd), cookies, strActualFile, nActualLine, nFileDepth );
 
 		return;
 	}
@@ -375,7 +411,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 	if( reg_search( lpText, lpTextEnd, what, m_regexLabel, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
 	{
 		// parse string before occurence
-		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine );
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth );
 
 		if( !cookies.IsEmpty() )
 			if( cookies.Top().nCookieType == header )
@@ -384,7 +420,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 				m_aStructureItems[cookies.Top().nItemIndex].m_strLabel = CString( what[1].first, what[1].second - what[1].first );
 
 		// parse string behind occurence
-		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine );
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth );
 
 		return;
 	}
@@ -393,7 +429,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 	if( reg_search( lpText, lpTextEnd, what, m_regexCaption, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
 	{
 		// parse string before occurence
-		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine );
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth );
 
 		if( !cookies.IsEmpty() )
 		{
@@ -405,7 +441,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		}
 
 		// parse string behind occurence
-		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine );
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth );
 
 		return;
 	}
@@ -414,7 +450,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 	if( reg_search( lpText, lpTextEnd, what, m_regexFigureEnd, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
 	{
 		// parse string before occurence
-		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine );
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth );
 
 		// pop figure from stack
 		if( !cookies.IsEmpty() && cookies.Top().nCookieType == figure )
@@ -428,9 +464,16 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 					si.m_strTitle = si.m_strCaption;
 			}
 		}
+		else if ( m_pParseOutputHandler )
+		{
+			COutputInfo info;
+			INITIALIZE_OI( info );
+			info.m_strError.Format( STE_PARSE_FOUND_UNMATCHED, m_sItemNames[figure] );
+			m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
+		}
 
 		// parse string behind occurence
-		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine );
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth );
 
 		return;
 	}
@@ -438,7 +481,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 	if( reg_search( lpText, lpTextEnd, what, m_regexTableEnd, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
 	{
 		// parse string before occurence
-		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine );
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth );
 
 		// pop figure from stack
 		if( !cookies.IsEmpty() && cookies.Top().nCookieType == table )
@@ -452,9 +495,16 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 					si.m_strTitle = si.m_strCaption;
 			}
 		}
+		else if ( m_pParseOutputHandler )
+		{
+			COutputInfo info;
+			INITIALIZE_OI( info );
+			info.m_strError.Format( STE_PARSE_FOUND_UNMATCHED, m_sItemNames[table] );
+			m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
+		}
 
 		// parse string behind occurence
-		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine );
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth );
 
 		return;
 	}
@@ -462,7 +512,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 	if( reg_search( lpText, lpTextEnd, what, m_regexBib, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
 	{
 		// parse string before occurence
-		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine );
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth );
 
 		// parse input file
 		CString	bibPath( what[2].first, what[2].second - what[2].first );
@@ -486,13 +536,32 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 			strPath.TrimRight( _T('"') );
 			strPath += _T(".bib");
 			strPath = ResolveFileName(strPath);
-			if ( PathFileExists(strPath) )
+
+			COutputInfo info;
+			INITIALIZE_OI ( info );
+
+			if ( ::PathFileExists(strPath) )
+			{
 				AddFileItem( strPath, bibFile );
+				if ( m_pParseOutputHandler )
+				{
+					info.m_strError.Format( STE_PARSE_FOUND, m_sItemNames[bibFile] );
+					m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::information );
+				}
+			}
+			else 
+			{
+				if ( m_pParseOutputHandler )
+				{
+					info.m_strError.Format( STE_FILE_EXIST, strPath );
+					m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
+				}
+			}
 			nStart = nFound + 1;
 		}
 
 		// parse string behind occurence
-		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine );
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth );
 
 		return;
 	}
@@ -512,7 +581,7 @@ CString CStructureParser::ResolveFileName( LPCTSTR lpszPath ) const
 }
 
 
-void CStructureParser::AddFileItem( LPCTSTR lpszPath, int nType )
+int CStructureParser::AddFileItem( LPCTSTR lpszPath, int nType )
 {
 	// insert file into item-array
 	CStructureItem	si;
@@ -524,11 +593,36 @@ void CStructureParser::AddFileItem( LPCTSTR lpszPath, int nType )
 	si.m_strLabel = "";
 	si.m_strPath = lpszPath;
 	si.m_strTitle = "";
-	m_aStructureItems.Add( si );
+	return m_aStructureItems.Add( si );
 }
 
 
-BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies  )
+void CStructureParser::Done( boolean bParsingResult, CCookieStack &cookies )
+{
+	m_pStructureParserHandler->OnParsingFinished( bParsingResult );
+
+	if ( m_pParseOutputHandler )
+	{
+		while ( !cookies.IsEmpty() )
+		{
+			COOKIE item = cookies.Pop();
+			COutputInfo info;
+			CStructureItem	&si = m_aStructureItems[item.nItemIndex];
+
+			if (item.nCookieType == table || item.nCookieType == figure) 
+			{
+				info.m_nSrcLine = si.m_nLine;
+				info.m_strSrcFile = si.m_strPath;
+				info.m_strError.Format( STE_PARSE_FOUND_UNMATCHED, m_sItemNames[item.nCookieType] );
+				m_pParseOutputHandler->OnParseLineInfo( info, 0, CParseOutputHandler::warning );
+			}
+		}
+		m_pParseOutputHandler->OnParseEnd( bParsingResult, m_nFilesParsed, m_nLinesParsed );
+	}
+}
+
+
+BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies, int nFileDepth  )
 {
 	CTextSourceFile	*pTs = NULL;
 
@@ -541,7 +635,18 @@ BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies  )
 	}
 
 	if( !pTs )
+	{
+		if ( m_pParseOutputHandler )
+		{
+			COutputInfo info;
+			info.m_strSrcFile = lpszPath;
+			info.m_nSrcLine = 0;
+			info.m_strError.Format( STE_GREP_ERROR, lpszPath);
+			m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
+		}
 		return FALSE;
+	}
+	m_nFilesParsed++;
 
 	CString strActualFile( lpszPath );
 	AddFileItem( strActualFile, texFile );
@@ -556,6 +661,7 @@ BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies  )
 
 	while( !m_bCancel && pTs->GetNextLine( lpLine, nLength ) )
 	{
+		m_nLinesParsed++;
 		nActualLine++;
 		lpOffset = lpLine;
 		lpLineEnd = lpLine + nLength;
@@ -582,7 +688,7 @@ BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies  )
 				if( IsCmdAt( lpLine, what[0].first - lpLine ) )
 				{
 					// parse line to beginning of \begin{verbatim}-command
-					ParseString( lpLine, what[0].first - lpLine, cookies, strActualFile, nActualLine );
+					ParseString( lpLine, what[0].first - lpLine, cookies, strActualFile, nActualLine, nFileDepth );
 					bVerbatim = TRUE;
 
 					// set line start to end of \begin{verbatim}-command
@@ -614,13 +720,13 @@ BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies  )
 			}
 
 			// parse before verbatim
-			ParseString( lpOffset, what[0].first - lpOffset, cookies, strActualFile, nActualLine );
+			ParseString( lpOffset, what[0].first - lpOffset, cookies, strActualFile, nActualLine, nFileDepth );
 			lpOffset = what[0].second;
 		}
 
 		// parse rest of line
 		if( lpOffset < lpLineEnd )
-			ParseString( lpOffset, lpLineEnd - lpOffset, cookies, strActualFile, nActualLine );
+			ParseString( lpOffset, lpLineEnd - lpOffset, cookies, strActualFile, nActualLine, nFileDepth );
 	}
 
 	// delete text source object
