@@ -35,7 +35,7 @@
 
 #include "LatexDoc.h"
 
-class CTextFileSaveDialog : public CFileDialog
+class CTextFileSaveDialog : public CFileDialogEx
 {
 // construction/destruction
 public:

@@ -932,7 +932,7 @@ BOOL CProjectManager::DoPromptFileName(CString& fileName, UINT nIDSTitle,
 																			 DWORD lFlags, BOOL bOpenFileDialog, 
 																			 CProjectTemplate* pTemplate)
 {
-	CFileDialog dlgFile(bOpenFileDialog);
+	CFileDialogEx dlgFile(bOpenFileDialog);
 
 	CString title;
 	VERIFY(title.LoadString(nIDSTitle));

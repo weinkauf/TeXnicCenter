@@ -301,7 +301,7 @@ void CInsertGraphicDialog::OnGraphicBrowse()
 {
 	UpdateData( TRUE );
 
-	CFileDialog	dlg( 
+	CFileDialogEx	dlg( 
 		TRUE, NULL, m_strFile, 
 		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR, 
 		AfxLoadString( STE_GRAPHIC_FILES ), this );

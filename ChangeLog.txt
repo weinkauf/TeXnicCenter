@@ -5,6 +5,9 @@
 - Feature 540886: Remove error marker when editing a line. Fixed it in another
   way: All error marks will be removed, when a new compilation is about to
   be started.
+- Using CFileDialogEx from MFCExt-library now instead of default CFileDialog 
+  class. Both are totally compatible, but CFileDialogEx will create Win2000 
+  styled dialogs on Win2000 or later (commonly used folder bar at the left).
 
 2002/06/28 svenwiegand
 - Using 'LaTeX Help Book' as LaTeX-reference in online help now.

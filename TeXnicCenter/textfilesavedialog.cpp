@@ -41,7 +41,7 @@ static char THIS_FILE[] = __FILE__;
 //-------------------------------------------------------------------
 
 
-BEGIN_MESSAGE_MAP(CTextFileSaveDialog, CFileDialog)
+BEGIN_MESSAGE_MAP(CTextFileSaveDialog, CFileDialogEx)
 	//{{AFX_MSG_MAP(CTextFileSaveDialog)
 	ON_CBN_SELCHANGE(IDC_SELECT_FILEFORMAT, OnSelchangeFileFormat)
 	//}}AFX_MSG_MAP
@@ -55,7 +55,7 @@ CTextFileSaveDialog::	CTextFileSaveDialog(
 	LPCTSTR lpszFilter /*= NULL*/,
 	CWnd* pParent /*= NULL*/ )
 
-:	CFileDialog( FALSE, lpszDefExt, lpszFileName, dwFlags, lpszFilter, pParent ),
+:	CFileDialogEx( FALSE, lpszDefExt, lpszFileName, dwFlags, lpszFilter, pParent ),
 	m_strTitle( (LPCTSTR)unTitle )
 {
 	m_ofn.Flags|= OFN_ENABLETEMPLATE;
@@ -71,7 +71,7 @@ CTextFileSaveDialog::	CTextFileSaveDialog(
 
 void CTextFileSaveDialog::DoDataExchange(CDataExchange* pDX)
 {
-	CFileDialog::DoDataExchange(pDX);
+	CFileDialogEx::DoDataExchange(pDX);
 
 	//{{AFX_DATA_MAP(CTextFileSaveDialog)
 	DDX_Control(pDX, IDC_STATIC_FORMATTITLE, m_wndFileFormatTitle);
@@ -83,7 +83,7 @@ void CTextFileSaveDialog::DoDataExchange(CDataExchange* pDX)
 
 BOOL CTextFileSaveDialog::OnInitDialog() 
 {
-	CFileDialog::OnInitDialog();
+	CFileDialogEx::OnInitDialog();
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Modify position, size and tab order of the additional controls
@@ -103,7 +103,7 @@ BOOL CTextFileSaveDialog::OnInitDialog()
 	m_wndFileFormatCombo.GetWindowRect(rectFileFormatCombo);
 	ScreenToClient(rectFileFormatCombo);
 	
-	rectFileFormatCombo.left = rectFileTypeCombo.left;
+	rectFileFormatCombo.left = rectFileTypeCombo.left-1; // have to specify -1 here, otherwise box will jump behind the right border -- don't ask me why...
 	rectFileFormatCombo.right = rectFileFormatCombo.left + rectFileTypeCombo.Width();
 
 	// Get position and size of file format title
