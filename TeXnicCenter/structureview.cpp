@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "StructureView.h"
@@ -74,7 +80,7 @@ void CStructureView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 
 				//-----------------------------------------------------------
 				// fill view with parsing results
-				CStructureItemArray						&a = GetProject()->m_aStructureItems;
+				const CStructureItemArray &a = GetProject()->m_aStructureItems;
 				CArray<HTREEITEM, HTREEITEM>	ahItems;
 
 				// initialization
@@ -86,7 +92,7 @@ void CStructureView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 				// fill view
 				for( int i = 0; i < a.GetSize(); i++ )
 				{
-					CStructureItem	&si = a.GetAt( i );
+					const CStructureItem &si = a.GetAt( i );
 
 					switch( si.m_nType )
 					{

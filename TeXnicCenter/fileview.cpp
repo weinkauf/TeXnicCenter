@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "FileView.h"
@@ -71,7 +77,7 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 
 				//-----------------------------------------------------------
 				// fill tree
-				CStructureItemArray	&a = GetProject()->m_aStructureItems;
+				const CStructureItemArray &a = GetProject()->m_aStructureItems;
 
 				// initialization
 				DeleteAllItems();
@@ -90,7 +96,7 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 				// fill view
 				for( int i = 0; i < a.GetSize(); i++ )
 				{
-					CStructureItem	&si = a.GetAt( i );
+					const CStructureItem &si = a.GetAt( i );
 
 					switch( si.m_nType )
 					{
