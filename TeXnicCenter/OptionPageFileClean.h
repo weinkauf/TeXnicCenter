@@ -88,11 +88,11 @@ protected:
 	afx_msg void OnChangePattern();
 	afx_msg void OnSelchangeHandling();
 	afx_msg void OnRecursive();
-	afx_msg void OnListEvent(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDelete();
 	afx_msg void OnNew();
 	afx_msg void OnSort();
 	afx_msg void OnLeavePattern();
+	afx_msg void OnListItemchanged(NMHDR* pNMHDR, LRESULT* pResult);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -111,7 +111,7 @@ private:
 	CFileCleanItemArray m_ItemArray;
 	//CImageList m_images;
 	bool m_bUpdatingList;
-	bool m_bUserListEvent;
+	bool m_bItemChangeLock;
 };
 
 //{{AFX_INSERT_LOCATION}}
