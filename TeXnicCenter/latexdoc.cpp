@@ -32,6 +32,7 @@
 #include "LatexDoc.h"
 #include "TextFileSaveDialog.h"
 #include "Configuration.h"
+#include "global.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -139,32 +140,23 @@ void CLatexDoc::DeleteContents()
 
 BOOL CLatexDoc::OnSaveDocument(LPCTSTR lpszPathName) 
 {	
-	if( m_bSaveCopy )
+	DWORD dwResult = SaveToFile(lpszPathName, m_nCRLFMode, !m_bSaveCopy);
+	if(dwResult != 0)
 	{
-		if( !SaveToFile(lpszPathName, m_nCRLFMode, FALSE) )
-		{
-			CString	strMsg;
-			strMsg.Format(STE_FILE_INUSE, lpszPathName);
-			AfxMessageBox(strMsg, MB_ICONEXCLAMATION|MB_OK);
+		CString	strMsg;
+		strMsg.Format(STE_FILE_INUSE, 
+			AfxLoadString(IDS_SAVE), 
+			lpszPathName, 
+			AfxFormatSystemString(dwResult));
+		AfxMessageBox(strMsg, MB_ICONEXCLAMATION|MB_OK);
 
-			m_bSaveCopy = FALSE;
-			m_nCRLFMode = -1;
-			return FALSE;
-		}
+		m_nCRLFMode = -1;
+		m_bSaveCopy = FALSE;
+		return FALSE;
 	}
-	else
+	else if( !m_bSaveCopy && m_nCRLFMode >= 0)
 	{
-		if( !SaveToFile(lpszPathName, m_nCRLFMode) )
-		{
-			CString	strMsg;
-			strMsg.Format(STE_FILE_INUSE, lpszPathName);
-			AfxMessageBox(strMsg, MB_ICONEXCLAMATION|MB_OK);
-
-			m_nCRLFMode = -1;
-			return FALSE;
-		}
-		else if (m_nCRLFMode >= 0)
-			m_pTextBuffer->SetCRLFMode(m_nCRLFMode);
+		m_pTextBuffer->SetCRLFMode(m_nCRLFMode);
 	}
 
 	m_nCRLFMode = -1;
@@ -174,30 +166,30 @@ BOOL CLatexDoc::OnSaveDocument(LPCTSTR lpszPathName)
 }
 
 
-BOOL CLatexDoc::SaveToFile(LPCTSTR lpszPathName, int nCrlfStyle /*= CRLF_STYLE_AUTOMATIC*/, BOOL bClearModifiedFlag /*= TRUE*/)
+DWORD CLatexDoc::SaveToFile(LPCTSTR lpszPathName, int nCrlfStyle /*= CRLF_STYLE_AUTOMATIC*/, BOOL bClearModifiedFlag /*= TRUE*/)
 {
 	CheckForFileChanges();
-	BOOL bResult = m_pTextBuffer->SaveToFile(lpszPathName, nCrlfStyle, bClearModifiedFlag);
+	DWORD dwResult = m_pTextBuffer->SaveToFile(lpszPathName, nCrlfStyle, bClearModifiedFlag);
 	SnapFileState();
 
-	return bResult;
+	return dwResult;
 }
 
 
-BOOL CLatexDoc::LoadBuffer( LPCTSTR lpszPath )
+DWORD CLatexDoc::LoadBuffer( LPCTSTR lpszPath )
 {
 	m_pTextBuffer->FreeAll();
-	if( !m_pTextBuffer->LoadFromFile( lpszPath ) )
-		return FALSE;
+	DWORD dwResult = m_pTextBuffer->LoadFromFile( lpszPath );
+	if( dwResult == 0 )
+		SetModifiedFlag();
 
-	SetModifiedFlag();
-	return TRUE;
+	return dwResult;
 }
 
 
 BOOL CLatexDoc::OnOpenDocument(LPCTSTR lpszPathName) 
 {
-	return m_pTextBuffer->LoadFromFile( lpszPathName );
+	return (m_pTextBuffer->LoadFromFile( lpszPathName ) == 0);
 }
 
 
@@ -286,7 +278,7 @@ void CLatexDoc::UpdateReadOnlyFlag()
 void CLatexDoc::UpdateTextBufferOnExternalChange()
 {
 	CString	strMsg;
-	int			nResult;
+	int		nResult;
 
 	if (IsModified())
 	{
@@ -301,9 +293,13 @@ void CLatexDoc::UpdateTextBufferOnExternalChange()
 
 	if (nResult == IDYES)
 	{
- 		if (!m_pTextBuffer->LoadFromFile(GetPathName()))
+		DWORD dwResult = m_pTextBuffer->LoadFromFile(GetPathName());
+ 		if ( dwResult != 0)
  		{
- 			strMsg.Format(STE_FILE_INUSE_OPEN, GetPathName());
+ 			strMsg.Format(STE_FILE_INUSE, 
+				AfxLoadString(IDS_OPEN), 
+				GetPathName(), 
+				AfxFormatSystemString(dwResult));
  			AfxMessageBox(strMsg, MB_ICONINFORMATION|MB_OK);
  			m_pTextBuffer->SetReadOnly(TRUE);
  		}

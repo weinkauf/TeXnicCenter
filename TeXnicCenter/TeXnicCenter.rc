@@ -1762,7 +1762,7 @@ BEGIN
         MENUITEM "&Eigenschaften...",           ID_PROJECT_PROPERTIES
         MENUITEM SEPARATOR
         MENUITEM "&Hauptdatei öffnen",          ID_PROJECT_OPEN_MAINFILE
-		MENUITEM "Todo: Spelling...",           ID_SPELL_PROJECT
+        MENUITEM "Todo: Spelling...",           ID_SPELL_PROJECT
     END
     POPUP "A&usgabe"
     BEGIN
@@ -1792,7 +1792,7 @@ BEGIN
     BEGIN
         MENUITEM "&Optionen...",                ID_EXTRAS_OPTIONS
         MENUITEM "&Anpassen...",                ID_EXTRAS_CUSTOMIZE
-		MENUITEM "Todo: Spelling...",           ID_SPELL_FILE
+        MENUITEM "Todo: Spelling...",           ID_SPELL_FILE
         MENUITEM SEPARATOR
         MENUITEM "<User defined tools>",        ID_TOOLS_ENTRY
     END
@@ -2989,8 +2989,8 @@ BEGIN
     STE_FILE_LATEXFILTER    "LaTeX-Dateien (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|Alle Dateien (*.*)|*.*||"
     STE_LICENSE_FILE        "GPL_german.htm"
     STE_FILE_EXEFILTER      "Ausführbare Dateien (*.exe;*.com)|*.exe;*.com|Alle Dateien (*.*)|*.*||"
-    STE_FILE_INUSE          "Speichern der Datei\n\n%s\n\nnicht möglich. Die Datei wird möglicherweise von einer anderen Anwendung verwendet oder von TeXnicCenter gerade analysiert."
-	STE_FILE_DICFILTER      "Todo: Dictionary Files (*.dic)|*.dic|All File (*.*)|*.*||"
+    STE_FILE_INUSE          "Todo: Cannot %s the file\n\n%s\n\n%s"
+    STE_FILE_DICFILTER      "Todo: Dictionary Files (*.dic)|*.dic|All File (*.*)|*.*||"
     STE_FILE_EXTERNALCHANGE "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?"
     STE_FILE_EXTERNALCHANGEEX 
                             "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?\n\n(Wichtig: Sie haben Änderungen an dem Dokument vorgenommen. Wenn es neu geladen wird, gehen diese Änderungen verloren!)"
@@ -3155,6 +3155,7 @@ BEGIN
     CG_IDS_TIPOFTHEDAYHELP  "&?"
     STE_TIP_FILE            "Tips_german.txt"
     STE_URL_CANNOTOPEN      "Die URL konnte nicht geöffnet werden."
+	IDS_OPEN                "Todo: open"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4145,6 +4146,11 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_COLOR_AUTOMATIC     "Automatisch"
     STE_COLOR_OTHERS        "Andere Farben..."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SAVE                "Todo: save"
 END
 
 #endif    // German (Germany) resources
@@ -6311,7 +6317,7 @@ BEGIN
     STE_FILE_LATEXFILTER    "LaTeX-Files (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|All Files (*.*)|*.*||"
     STE_LICENSE_FILE        "GPL_english.htm"
     STE_FILE_EXEFILTER      "Executable Files (*.exe;*.com)|*.exe;*.com|All Files (*.*)|*.*||"
-    STE_FILE_INUSE          "Cannot save the file\n\n%s\n\nMaybe the file is currently used by another application or parsed by TeXnicCenter at the very moment."
+    STE_FILE_INUSE          "Cannot %s the file\n\n%s\n\n%s"
     STE_FILE_DICFILTER      "Dictionary Files (*.dic)|*.dic|All File (*.*)|*.*||"
     STE_FILE_EXTERNALCHANGE "The file\n\n%s\n\nhas been modified outside TeXnicCenter. Should TeXnicCenter reload the document?"
     STE_FILE_EXTERNALCHANGEEX 
@@ -6476,7 +6482,8 @@ BEGIN
     CG_IDS_FILE_CORRUPT     "Problems while reading the tip file."
     CG_IDS_TIPOFTHEDAYHELP  "&?"
     STE_TIP_FILE            "Tips_english.txt"
-    STE_URL_CANNOTOPEN      "Cannot open the specified URL."
+	STE_URL_CANNOTOPEN      "The URL cannot be opened."
+    IDS_OPEN                "open"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7450,6 +7457,11 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_COLOR_AUTOMATIC     "Automatic"
     STE_COLOR_OTHERS        "Other Colors..."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SAVE                "save"
 END
 
 #endif    // English (U.S.) resources
