@@ -1,5 +1,9 @@
+2002/08/06 niteria
+- Specifying Output Profile in TeX file does now set the modified flag of the project.
+  This ensures the change to be saved.
+
 2002/07/17 niteria
-Fixed Bug 582793: Menu Ressources: \hear(t)suit
+- Fixed Bug 582793: Menu Ressources: \hear(t)suit
 
 2002/07/15 niteria
 - Fixed Bug 581758: Tools: English Popup without set placeholders

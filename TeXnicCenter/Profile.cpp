@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "Profile.h"
@@ -147,12 +153,18 @@ BOOL CProfileMap::Rename(LPCTSTR lpszOldKey, LPCTSTR lpszNewKey)
 }
 
 
-BOOL CProfileMap::SetActiveProfile(LPCTSTR lpszKey)
+BOOL CProfileMap::SetActiveProfile(LPCTSTR lpszKey, bool bSetModifiedProject/* = true*/)
 {
 	if (!Exists(lpszKey))
 		return FALSE;
 
 	m_strActiveProfile = lpszKey;
+	if (bSetModifiedProject)
+	{
+		//Set the ModifiedFlag of the project, because this change needs to be saved.
+		CLatexProject* pLProject = ((CTeXnicCenterApp*)AfxGetApp())->GetProject();
+		if (pLProject) pLProject->SetModifiedFlag(true);
+	}
 	return TRUE;
 }
 

@@ -334,8 +334,6 @@ BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
 		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEBIBTEX, (int)m_bUseBibTex);
 		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEMAKEINDEX, (int)m_bUseMakeIndex);
 		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_ACTIVEPROFILE, g_ProfileMap.GetActiveProfileKey());
-// get available profiles and active profile
-//	CString				strActiveProfile = g_ProfileMap.GetActiveProfileKey();
 
 		return TRUE;
 	}
@@ -364,8 +362,16 @@ BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
 
 		if (nVersion > 2)
 		{
-			g_ProfileMap.SetActiveProfile(ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_ACTIVEPROFILE, ""));
-			theApp.UpdateLatexProfileSel();
+			if (g_ProfileMap.SetActiveProfile(ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_ACTIVEPROFILE, ""), false))
+			{
+				//Successfull change of the active profile - update UI
+				theApp.UpdateLatexProfileSel();
+			}
+			else
+			{
+				//Saved profile name not found - other profile used - set project to be modified
+				SetModifiedFlag(true);
+			}
 		}
 
 		return TRUE;
