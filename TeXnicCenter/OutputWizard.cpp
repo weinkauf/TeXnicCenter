@@ -324,7 +324,7 @@ void COutputWizard::LookForDviViewer()
 	strViewer.MakeUpper();
 	if (!strViewer.Find(_T("YAP.EXE")))
 	{
-		// lets user make his configuration
+		// let user make his configuration
 		SetActivePage(pageDviViewer);
 
 		return;
