@@ -33,8 +33,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "BrowseButton.h"
-
 class COptionPageFile : public CPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageFile)
@@ -76,7 +74,6 @@ protected:
 protected:
 	//{{AFX_DATA(COptionPageFile)
 	enum { IDD = IDD_OPTIONS_FILE };
-	CBrowseButton	m_wndBrowseBtn;
 	CStatic	m_wndSaveIntervalLabel2;
 	CStatic	m_wndSaveIntervalLabel1;
 	CEdit	m_wndSaveIntervalEdit;
@@ -85,7 +82,6 @@ protected:
 	BOOL	m_bSaveBeforeCompilation;
 	UINT	m_unSaveInterval;
 	int		m_nFileFormat;
-	CString	m_strDefaultPath;
 	//}}AFX_DATA
 };
 

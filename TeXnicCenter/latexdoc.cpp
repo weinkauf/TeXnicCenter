@@ -238,7 +238,25 @@ BOOL CLatexDoc::DoSave( LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/ )
 			OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT|OFN_NOREADONLYRETURN, 
 			m_pTextBuffer ? m_pTextBuffer->GetCRLFMode() : g_configuration.m_nStandardFileFormat,
 			CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
-		dlg.m_ofn.lpstrInitialDir = g_configuration.m_strDefaultPath;
+		
+		// Get default path
+		m_strPersonalDir = g_configuration.m_strDefaultPath;
+		if (m_strPersonalDir.IsEmpty())
+		{
+			LPITEMIDLIST	lpidl;
+			if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
+			{
+				SHGetPathFromIDList(lpidl, m_strPersonalDir.GetBuffer(MAX_PATH));
+				m_strPersonalDir.ReleaseBuffer();
+
+				// free memory
+				LPMALLOC	lpMalloc;
+				SHGetMalloc(&lpMalloc);
+				if(lpMalloc)
+					lpMalloc->Free(lpidl);
+			}
+		}
+		dlg.m_ofn.lpstrInitialDir = m_strPersonalDir;
 
 		if( dlg.DoModal() != IDOK )
 			return FALSE;

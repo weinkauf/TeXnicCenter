@@ -867,7 +867,7 @@ void CTeXnicCenterApp::OnFileNew()
 	if (pProject)
 		strDefaultDir = CPathTool::GetDirectory(pProject->GetMainPath());
 	else
-		strDefaultDir = g_configuration.m_strProjectPath;
+		strDefaultDir = g_configuration.m_strDefaultPath;
 
 	// create file from template
 	CDocumentNewDialog	dlg(AfxGetMainWnd());
@@ -904,7 +904,25 @@ void CTeXnicCenterApp::OnFileOpen()
 		TRUE, 
 		GetLatexString( CDocTemplate::filterExt ), NULL,  
 		OFN_FILEMUSTEXIST, CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
-	dlg.m_ofn.lpstrInitialDir = g_configuration.m_strDefaultPath;
+
+	// Get default path
+	m_strPersonalDir = g_configuration.m_strDefaultPath;
+	if (m_strPersonalDir.IsEmpty())
+	{
+		LPITEMIDLIST	lpidl;
+		if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
+		{
+			SHGetPathFromIDList(lpidl, m_strPersonalDir.GetBuffer(MAX_PATH));
+			m_strPersonalDir.ReleaseBuffer();
+
+			// free memory
+			LPMALLOC	lpMalloc;
+			SHGetMalloc(&lpMalloc);
+			if(lpMalloc)
+				lpMalloc->Free(lpidl);
+		}
+	}
+	dlg.m_ofn.lpstrInitialDir = m_strPersonalDir;
 
 	if( dlg.DoModal() != IDOK )
 		return;
@@ -917,9 +935,28 @@ void CTeXnicCenterApp::OnFileOpen()
 void CTeXnicCenterApp::OnProjectOpen() 
 {
 	// display file dialog
-	SetCurrentDirectory( g_configuration.m_strProjectPath );
 	CFileDialog		dialog( TRUE, NULL, NULL, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, 
 		GetProjectFileFilter(), AfxGetMainWnd() );
+//	dialog.m_ofn.lpstrInitialDir = g_configuration.m_strDefaultPath;
+	
+	// Get default path
+	m_strPersonalDir = g_configuration.m_strDefaultPath;
+	if (m_strPersonalDir.IsEmpty())
+	{
+		LPITEMIDLIST	lpidl;
+		if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
+		{
+			SHGetPathFromIDList(lpidl, m_strPersonalDir.GetBuffer(MAX_PATH));
+			m_strPersonalDir.ReleaseBuffer();
+
+			// free memory
+			LPMALLOC	lpMalloc;
+			SHGetMalloc(&lpMalloc);
+			if(lpMalloc)
+				lpMalloc->Free(lpidl);
+		}
+	}
+	dialog.m_ofn.lpstrInitialDir = m_strPersonalDir;
 
 	if( dialog.DoModal() == IDCANCEL )
 		return;

@@ -190,9 +190,6 @@ public:
 	/** Paths to search for document templates in. */
 	CStringArray m_astrDocumentTemplatePaths;
 
-	/** Standard project path.*/
-	CString m_strProjectPath;
-
 	/** Number of windows to display in the window menu. */
 	int m_nWndMenuMaxEntries;
 
