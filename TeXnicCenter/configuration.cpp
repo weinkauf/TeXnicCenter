@@ -152,8 +152,9 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	strSection = _T("Settings\\Language-Spelling");
 
 	SerializeProfileString( strSection, "PersonalDictionary", &m_strSpellPersonalDictionary, direction, _T("") );
-	SerializeProfileString( strSection, "DictionaryPath", &m_strSpellDictionaryPath, direction, 
-		CPathTool::Cat(CPathTool::GetDirectory(theApp.m_pszHelpFilePath), _T("Language")));
+	SerializeProfileString( strSection, "DictionaryPath", &m_strSpellDictionaryPath, direction, _T(""));
+	if (!CPathTool::Exists(m_strSpellDictionaryPath))
+		m_strSpellDictionaryPath = CPathTool::Cat(CPathTool::GetDirectory(theApp.m_pszHelpFilePath), _T("Language"));
 	SerializeProfileInt( strSection, "SkipComments", (int*)&m_bSpellSkipComments, direction, 1 );
 	SerializeProfileInt( strSection, "SkipNumbers", (int*)&m_bSpellSkipNumbers, direction, 1 );
 	SerializeProfileInt( strSection, "SkipTags", (int*)&m_bSpellSkipTags, direction, 1 );
