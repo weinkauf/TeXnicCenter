@@ -1,4 +1,5 @@
 # Doxyfile 1.3-rc2
+# $Id$
 
 #---------------------------------------------------------------------------
 # General configuration options
@@ -34,7 +35,7 @@ INHERIT_DOCS           = YES
 INLINE_INFO            = YES
 SORT_MEMBER_DOCS       = YES
 DISTRIBUTE_GROUP_DOC   = NO
-TAB_SIZE               = 8
+TAB_SIZE               = 2
 GENERATE_TODOLIST      = YES
 GENERATE_TESTLIST      = YES
 GENERATE_BUGLIST       = YES
@@ -63,9 +64,9 @@ INPUT                  = . \
                          ../../CrysEditEx/
 FILE_PATTERNS          = *.h
 RECURSIVE              = YES
-EXCLUDE                = */resource.h
+EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
-EXCLUDE_PATTERNS       =
+EXCLUDE_PATTERNS       = */resource.h
 EXAMPLE_PATH           =
 EXAMPLE_PATTERNS       =
 EXAMPLE_RECURSIVE      = NO
@@ -97,7 +98,7 @@ HTML_FOOTER            = footer.html
 HTML_STYLESHEET        = style.css
 HTML_ALIGN_MEMBERS     = YES
 GENERATE_HTMLHELP      = YES
-CHM_FILE               =
+CHM_FILE               = ..\TXCSourceCodeDoc.chm
 HHC_LOCATION           =
 GENERATE_CHI           = YES
 BINARY_TOC             = YES
