@@ -37,6 +37,7 @@
 #include "ProfilePage.h"
 #include "BrowseButton.h"
 #include "EditMenuButton.h"
+#include "EditMenuButtonOpt.h"
 
 
 class CProfilePageViewer : public CProfilePage
@@ -87,10 +88,10 @@ protected:
 	CEdit	m_wndViewDdeServer;
 	CEdit	m_wndCloseCmdDdeServer;
 	CEdit	m_wndCloseCmdDdeTopic;
-	CEditMenuButton	m_wndCloseCmdPh;
+	CEditMenuButtonOpt	m_wndCloseCmdPh;
 	CPersistPosEdit	m_wndCloseCmd;
 	CStatic	m_wndCloseCmdTitle;
-	CEditMenuButton	m_wndViewExCmdPh;
+	CEditMenuButtonOpt	m_wndViewExCmdPh;
 	CEdit	m_wndViewExDdeTopic;
 	CStatic	m_wndViewExTopicTitle;
 	CPersistPosEdit	m_wndViewExCmd;
@@ -98,7 +99,7 @@ protected:
 	CEdit	m_wndViewDdeTopic;
 	CStatic	m_wndViewTopicTitle;
 	CStatic	m_wndViewCmdTitle;
-	CEditMenuButton	m_wndViewCmdPh;
+	CEditMenuButtonOpt	m_wndViewCmdPh;
 	CPersistPosEdit	m_wndViewCmd;
 	CBrowseButton	m_wndBrowseViewerPath;
 	CStatic	m_wndCloseCmdTopicTitle;

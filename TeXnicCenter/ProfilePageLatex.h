@@ -37,6 +37,7 @@
 #include "BrowseButton.h"
 #include "PersistPosEdit.h"
 #include "EditMenuButton.h"
+#include "EditMenuButtonOpt.h"
 
 class CProfilePageLatex : public CProfilePage
 {
@@ -79,11 +80,11 @@ protected:
 	CEdit	m_wndBibTexPath;
 	CPersistPosEdit	m_wndMakeIndexArguments;
 	CPersistPosEdit	m_wndBibTexArguments;
-	CEditMenuButton	m_wndMakeIndexPh;
-	CEditMenuButton	m_wndBibTexPh;
+	CEditMenuButtonOpt	m_wndMakeIndexPh;
+	CEditMenuButtonOpt	m_wndBibTexPh;
 	CBrowseButton	m_wndBrowseMakeIndex;
 	CBrowseButton	m_wndBrowseBibTex;
-	CEditMenuButton	m_wndLatexPh;
+	CEditMenuButtonOpt	m_wndLatexPh;
 	CPersistPosEdit	m_wndLatexArguments;
 	CStatic	m_wndTitleLatexArguments;
 	CBrowseButton	m_wndBrowseLatex;

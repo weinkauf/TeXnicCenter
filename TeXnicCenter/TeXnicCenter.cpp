@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 
@@ -291,7 +297,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 	EnableUserTools(
 		ID_TOOLS_ENTRY, ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST, 
 		RUNTIME_CLASS(CUserTool), 
-		IDR_POPUP_PLACEHOLDEREX, IDR_POPUP_PLACEHOLDER_DIR);
+		IDR_POPUP_PLACEHOLDEREX_CASC, IDR_POPUP_PLACEHOLDER_DIR);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Dokumentvorlagen registrieren

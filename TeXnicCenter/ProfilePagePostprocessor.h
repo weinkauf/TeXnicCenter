@@ -38,6 +38,7 @@
 #include "BrowseButton.h"
 #include "PersistPosEdit.h"
 #include "EditMenuButton.h"
+#include "EditMenuButtonOpt.h"
 #include "BCGNotifyingEditListBox.h"
 
 class CProfilePagePostprocessor : public CProfilePage
@@ -85,9 +86,9 @@ protected:
 	CStatic	m_wndTitleInput;
 	CStatic	m_wndTitleExe;
 	CBCGNotifyingEditListBox m_wndList;
-	CEditMenuButton	m_wndOutputPh;
-	CEditMenuButton	m_wndInputPh;
-	CEditMenuButton	m_wndArgumentsPh;
+	CEditMenuButtonOpt	m_wndOutputPh;
+	CEditMenuButtonOpt	m_wndInputPh;
+	CEditMenuButtonOpt	m_wndArgumentsPh;
 	CPersistPosEdit	m_wndOutput;
 	CPersistPosEdit	m_wndInput;
 	CPersistPosEdit	m_wndArguments;
