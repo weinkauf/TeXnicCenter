@@ -122,7 +122,8 @@ BEGIN
     "N",            ID_INSERT_ENUMERATE,    VIRTKEY, CONTROL, ALT, NOINVERT
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
     "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL, NOINVERT
-    "Q",            ID_WINDOW_NAVIGATOR,    VIRTKEY, CONTROL, NOINVERT
+    "Q",            ID_EDIT_BLOCKCOMMENT_INSERT, VIRTKEY, CONTROL, NOINVERT
+    "Q",            ID_EDIT_BLOCKCOMMENT_TOOGLE, VIRTKEY, ALT, NOINVERT
     "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
     "S",            ID_INSERT_HEADER,       VIRTKEY, CONTROL, ALT, NOINVERT
     "S",            ID_FILE_SAVE_ALL,       VIRTKEY, SHIFT, CONTROL, 
@@ -149,10 +150,12 @@ BEGIN
     VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
     VK_F7,          ID_LATEX_RUN,           VIRTKEY, NOINVERT
     VK_F7,          ID_LATEX_FILECOMPILE,   VIRTKEY, CONTROL, NOINVERT
+    VK_F7,          ID_LATEX_EDITPROFILES,  VIRTKEY, ALT, NOINVERT
     VK_F9,          ID_NEXT_ERROR,          VIRTKEY, NOINVERT
     VK_F9,          ID_PREV_ERROR,          VIRTKEY, SHIFT, NOINVERT
     VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
     VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    "W",            ID_EDIT_BLOCKCOMMENT_REMOVE, VIRTKEY, CONTROL, NOINVERT
     "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
     "Y",            ID_EDIT_REDO,           VIRTKEY, CONTROL, NOINVERT
     "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
@@ -777,7 +780,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -1006,13 +1009,17 @@ BEGIN
     POPUP "&Bearbeiten"
     BEGIN
         MENUITEM "&Rückgängig",                 ID_EDIT_UNDO
-        MENUITEM "Wi&ederherstellen",           ID_EDIT_REDO
+        MENUITEM "Wieder&herstellen",           ID_EDIT_REDO
         MENUITEM SEPARATOR
         MENUITEM "&Ausschneiden",               ID_EDIT_CUT
         MENUITEM "&Kopieren",                   ID_EDIT_COPY
-        MENUITEM "E&infügen",                   ID_EDIT_PASTE
+        MENUITEM "&Einfügen",                   ID_EDIT_PASTE
         MENUITEM SEPARATOR
         MENUITEM "Alles &markieren",            ID_EDIT_SELECT_ALL
+        MENUITEM SEPARATOR
+        MENUITEM "&Blockkommentar einfügen",    ID_EDIT_BLOCKCOMMENT_INSERT
+        MENUITEM "Block&kommentar entfernen",   ID_EDIT_BLOCKCOMMENT_REMOVE
+        MENUITEM "Blockkommentar &wechseln",    ID_EDIT_BLOCKCOMMENT_TOOGLE
     END
     POPUP "&Suchen"
     BEGIN
@@ -2244,7 +2251,7 @@ END
 IDD_OPTIONS_FILE DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Datei"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     GROUPBOX        "Speichern",IDC_STATIC,8,8,284,59
     CONTROL         "&Neue Dokumente sofort speichern",
@@ -2273,7 +2280,7 @@ END
 IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Allgemein"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     GROUPBOX        "Allgemein",IDC_STATIC,8,8,284,31
     CONTROL         "&Letzte Sitzung bei Start wiederherstellen",
@@ -2298,7 +2305,7 @@ END
 IDD_OPTIONS_PATHS DIALOGEX 0, 0, 300, 200
 STYLE DS_CONTEXTHELP | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Verzeichnisse"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     LISTBOX         IDC_PROJECTTEMPLATES,13,21,219,53,LBS_SORT | 
                     LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP,0,
@@ -4506,14 +4513,20 @@ BEGIN
     ID_PHS_MORESETS_OPT     "\n[4]"
     ID_PROJECT_NEW_FROM_FILE 
                             "Erzeugt ein Projekt mit der aktuell geöffneten Datei als Hauptdatei.\nNeues Projekt mit aktueller Datei"
+    ID_EDIT_BLOCKCOMMENT_TOOGLE 
+                            "Wechselt den Kommentarstatus aller selektierten Zeilen.\nBlockkommentar wechseln"
+    ID_EDIT_BLOCKCOMMENT_INSERT 
+                            "Kommentiert alle selektierten Zeilen mittels %-Zeichen.\nBlockkommentar einfügen"
+    ID_EDIT_BLOCKCOMMENT_REMOVE 
+                            "Entfernt die %-Kommentarzeichen am Anfang jeder selektierten Zeile.\nBlockkommentar entfernen"
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -4747,6 +4760,10 @@ BEGIN
         MENUITEM "&Paste",                      ID_EDIT_PASTE
         MENUITEM SEPARATOR
         MENUITEM "Select &All",                 ID_EDIT_SELECT_ALL
+        MENUITEM SEPARATOR
+        MENUITEM "&Insert Block Comment",       ID_EDIT_BLOCKCOMMENT_INSERT
+        MENUITEM "Remove &Block Comment",       ID_EDIT_BLOCKCOMMENT_REMOVE
+        MENUITEM "T&oogle Block Comment",       ID_EDIT_BLOCKCOMMENT_TOOGLE
     END
     POPUP "&Search"
     BEGIN
@@ -5796,7 +5813,7 @@ END
 IDD_OPTIONS_FILE DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "File"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "&Save new document immediately",
                     IDC_OPTIONS_SAVE_NEWDOCS,"Button",BS_AUTOCHECKBOX | 
@@ -5825,7 +5842,7 @@ END
 IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "General"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     GROUPBOX        "General",IDC_STATIC,8,8,284,31
     CONTROL         "Restore last &session on startup",
@@ -6245,7 +6262,7 @@ END
 IDD_OPTIONS_PATHS DIALOGEX 0, 0, 300, 200
 STYLE DS_CONTEXTHELP | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Directories"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     LISTBOX         IDC_PROJECTTEMPLATES,13,21,219,53,LBS_SORT | 
                     LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP,0,
@@ -8150,9 +8167,15 @@ BEGIN
     ID_PHS_MORESETS_OPT     "\n[4]"
     ID_PROJECT_NEW_FROM_FILE 
                             "Creates a new project and sets the active file as the main file of the project.\nNew project with active file"
+    ID_EDIT_BLOCKCOMMENT_TOOGLE 
+                            "Toogles the comment status of all selected lines.\nToogle Block Comment"
+    ID_EDIT_BLOCKCOMMENT_INSERT 
+                            "Comments all selected lines using %-Signs.\nInsert Block Comment"
+    ID_EDIT_BLOCKCOMMENT_REMOVE 
+                            "Removes all %-Signs at the beginning of each selected line.\nRemove Block Comment"
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

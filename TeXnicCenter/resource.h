@@ -1208,6 +1208,10 @@
 #define ID_PH_CSSLASHRELATIVEPATH       38357
 #define ID_PHS_MORESETS_OPT             38358
 #define ID_PROJECT_NEW_FROM_FILE        38359
+#define ID_EDIT_BLOCKCOMMENT_TOOGLE     38362
+#define ID_EDIT_BLOCKCOMMENT_INSERT     38363
+#define ID_EDIT_BLOCKCOMMENT_REMOVE     38364
+#define ID_ACCEL38365                   38365
 
 // Next default values for new objects
 // 
@@ -1215,7 +1219,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        272
-#define _APS_NEXT_COMMAND_VALUE         38360
+#define _APS_NEXT_COMMAND_VALUE         38366
 #define _APS_NEXT_CONTROL_VALUE         1315
 #define _APS_NEXT_SYMED_VALUE           115
 #endif

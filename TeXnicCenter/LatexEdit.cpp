@@ -77,6 +77,11 @@ BEGIN_MESSAGE_MAP(CLatexEdit, CCrystalEditViewEx)
 	ON_COMMAND_EX_RANGE(ID_INSERT_FORMULA_EMBEDDED, ID_INSERT_SPADESUIT, OnInsertLatexConstruct)
 	ON_COMMAND_EX_RANGE(ID_INSERT_A, ID_INSERT_NOTIN, OnInsertLatexConstruct)
 	ON_COMMAND_EX_RANGE(ID_INSERT_SUPERSCRIPT, ID_INSERT_DDOTS, OnInsertLatexConstruct)
+
+	//Commands for Block Comments
+	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_INSERT, OnBlockComment)
+	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_REMOVE, OnBlockComment)
+	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_TOOGLE, OnBlockComment)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -365,7 +370,7 @@ BOOL CLatexEdit::OnInsertLatexConstruct( UINT nID )
 	// get selection
 	GetSelection( ptSelStart, ptSelEnd );
 
-	// test, if selection anchor is at the beginning of at the end of
+	// test, if selection anchor is at the beginning or at the end of
 	// selection.
 	BOOL		bAnchorAtEndOfSelection = ptSelEnd != GetCursorPos();
 	CPoint	ptNewSelStart = ptSelStart;
@@ -654,4 +659,81 @@ void CLatexEdit::OnSpellFile()
 }
 
 
+void CLatexEdit::OnBlockComment(const UINT nID) 
+{
+	//Get the current selection
+	CPoint ptStartSel, ptEndSel;
+	GetSelection(ptStartSel, ptEndSel);
+	//Get the line numbers to act on
+	const int nStartLine = ptStartSel.y;
+	const int nEndLine = ptEndSel.y;
+	ASSERT(nStartLine <= nEndLine);
+
+	//Get the text buffer
+	CCrystalTextBuffer* pText = LocateTextBuffer();
+
+	//Start Undo Group
+	pText->BeginUndoGroup();
+
+
+	//We want to issue a comment even if nothing or just one line is selected ==> (nStartLine == nEndLine)
+	//And we want the last line to be commented even if it is not fully selected
+	int nEndLineOffset = ( (nStartLine == nEndLine) || (ptEndSel.x > 0) ) ? 1 : 0;
+
+	//Commenting the First line is different, because
+	// comment can be inserted/removed/toogled in the middle of the line, too.
+	// - Where to start with acting
+	int nStartChar = ptStartSel.x;
+
+
+	//Go through all lines
+	for(int i=nStartLine;i<nEndLine+nEndLineOffset;i++)
+	{
+		//Is this line commented?
+		bool bHasComment = false;
+		CString strCommentTest;
+		if (pText->GetLineLength(i) > nStartChar)
+		{
+			pText->GetText(i, nStartChar, i, nStartChar + 1, strCommentTest);
+			bHasComment = ( (strCommentTest.GetLength() > 0) && (strCommentTest[0] == '%') );
+		}
+
+		//What to do for the Toogle Command?
+		UINT NewID = nID;
+		if (nID == ID_EDIT_BLOCKCOMMENT_TOOGLE)
+		{
+			NewID = (bHasComment) ? ID_EDIT_BLOCKCOMMENT_REMOVE : ID_EDIT_BLOCKCOMMENT_INSERT;
+		}
+
+		//Insert or Remove Comment for the current line
+		switch (NewID)
+		{
+			case ID_EDIT_BLOCKCOMMENT_INSERT:
+			{
+				CPoint ptNewStartSel;
+				//Insert Comment
+				pText->InsertText(this, i, nStartChar, "%",
+									(int&)ptNewStartSel.y, (int&)ptNewStartSel.x,
+									CE_ACTION_TYPING);
+				break;
+			}
+
+			case ID_EDIT_BLOCKCOMMENT_REMOVE:
+			{
+				if (bHasComment)
+					pText->DeleteText(this, i, nStartChar, i, nStartChar + 1, CE_ACTION_TYPING);
+
+				break;
+			}
+		}
+
+		nStartChar = 0;
+	}//end of "Go through all lines"
+
+
+	//End Undo Group
+	pText->FlushUndoGroup(this);
+
+	SetFocus();
+}
 

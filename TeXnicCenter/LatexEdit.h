@@ -138,6 +138,7 @@ protected:
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	afx_msg void OnSpellFile();
 	//}}AFX_MSG
+	afx_msg void OnBlockComment(const UINT nID);
 	DECLARE_MESSAGE_MAP()
 
 // attributes
