@@ -37,7 +37,7 @@ public:
 	CTreeCursor();
 	CTreeCursor(HTREEITEM hTreeItem, CCTreeCtrlEx* pTree);
 	CTreeCursor(const CTreeCursor& posSrc);
-	~CTreeCursor();
+//	~CTreeCursor();
 	const CTreeCursor &operator =(const CTreeCursor &posSrc);
 	operator HTREEITEM();
 
@@ -108,7 +108,7 @@ protected:
 	// Operation
 public:
 	CCTreeCtrlEx();
-	~CCTreeCtrlEx();
+	virtual ~CCTreeCtrlEx();
 	CImageList* SetImageList(CImageList* pImageList, 
 		int nImageListType = TVSIL_NORMAL);
 
@@ -143,8 +143,8 @@ inline CTreeCursor::CTreeCursor(HTREEITEM hTreeItem, CCTreeCtrlEx* pTree)
 	{  m_hTreeItem = hTreeItem;  m_pTree = pTree;  }
 inline CTreeCursor::CTreeCursor(const CTreeCursor& posSrc)
 	{  *this = posSrc;  }
-inline CTreeCursor::~CTreeCursor()
-	{ }
+//inline CTreeCursor::~CTreeCursor()
+//	{ }
 inline CTreeCursor::operator HTREEITEM()
 	{  return m_hTreeItem;  }
 inline CTreeCursor CTreeCursor::InsertAfter(LPCTSTR strItem, 

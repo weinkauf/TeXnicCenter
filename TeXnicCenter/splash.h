@@ -58,7 +58,7 @@ public:
 
 // Implementierung
 public:
-	~CSplashWnd();
+	virtual ~CSplashWnd();
 	virtual void PostNcDestroy();
 
 protected:

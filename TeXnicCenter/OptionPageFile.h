@@ -41,7 +41,7 @@ class COptionPageFile : public CPropertyPage
 // construction/destruction
 public:
 	COptionPageFile();
-	~COptionPageFile();
+	virtual ~COptionPageFile();
 
 // operations
 public:

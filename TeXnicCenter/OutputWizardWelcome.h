@@ -48,7 +48,7 @@ class COutputWizardWelcome : public CPropertyPage
 // Konstruktion
 public:
 	COutputWizardWelcome();
-	~COutputWizardWelcome();
+	virtual ~COutputWizardWelcome();
 
 // Dialogfelddaten
 	//{{AFX_DATA(COutputWizardWelcome)
