@@ -30,7 +30,7 @@
 //
 
 #include "stdafx.h"
-#include "texniccenter.h"
+#include "TeXnicCenter.h"
 #include "OptionPageLanguage.h"
 #include "Configuration.h"
 #include "global.h"
@@ -109,8 +109,14 @@ void COptionPageLanguage::OnOK()
 		AfxMessageBox( errMsg, MB_OK, MB_ICONEXCLAMATION );
 	}
 
+	// Inform the background thread of the new speller state.
 	theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_ENABLE_SPELLER, m_bEnableSpell, NULL);
-	AfxGetMainWnd()->PostMessage( WM_COMMAND, ID_BG_UPDATE_PROJECT );
+	if ( g_configuration.m_bSpellEnable )
+	{
+		CSpellerSource *pSource = static_cast<CSpellerSource*>(&theApp);
+		theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_RESET_SPELLER, 0, (long) pSource);
+	}
+	AfxGetMainWnd()->PostMessage( WM_COMMAND, ID_BG_UPDATE_PROJECT ); // clear or set the line attributes
 
 	CPropertyPage::OnOK();
 }
