@@ -1,3 +1,6 @@
+2002/07/17 niteria
+Fixed Bug 582793: Menu Ressources: \hear(t)suit
+
 2002/07/15 niteria
 - Fixed Bug 581758: Tools: English Popup without set placeholders
 
