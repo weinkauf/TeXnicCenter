@@ -1,3 +1,6 @@
+2002/04/02 niteria
+- Translated the new strings for parsing (introduced by Chris) to german.
+
 2002/04/01 niteria
 - At the start of the ProfileDialog (for defining of profiles),
   the active profile is now selected.
