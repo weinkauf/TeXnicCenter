@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -19,6 +19,12 @@
 *
 ********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_FILEDIALOGEX_H__F9A18A11_F7BF_4303_8A36_31722C1164D2__INCLUDED_)
 #define AFX_FILEDIALOGEX_H__F9A18A11_F7BF_4303_8A36_31722C1164D2__INCLUDED_
 
@@ -30,6 +36,8 @@
 /**
 A replacement for CFileDialog, that will show a bar with commonly 
 used folders on Win2000 or later.
+
+@ingroup mfcext
 
 @author Sven Wiegand
 */

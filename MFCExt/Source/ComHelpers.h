@@ -2,8 +2,8 @@
 *
 * This file is part of the MFCExt_Library
 *
-* Copyright (C) 1999_2000 Sven Wiegand
-* Copyright (C) 2000_2001 ToolsCenter
+* Copyright (C) 1999-2000 Sven Wiegand
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -19,12 +19,24 @@
 *
 ********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_COMHELPERS_H__60BFF6A0_5832_11d5_A222_006097239934__INCLUDED_)
 #define AFX_COMHELPERS_H__60BFF6A0_5832_11d5_A222_006097239934__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
+
+/**
+@addtogroup mfcext
+
+@{
+*/
 
 /**
 Implements the IUnknown-virtuals.
@@ -58,4 +70,7 @@ Same as METHOD_PROLOGUE without AFX_MANAGE_STATE.
 		((theClass*)((BYTE*)this - offsetof(theClass, m_x##localClass))); \
 	pThis;
 
+/** @} */
+
 #endif // !defined(AFX_COMHELPERS_H__60BFF6A0_5832_11d5_A222_006097239934__INCLUDED_)
+

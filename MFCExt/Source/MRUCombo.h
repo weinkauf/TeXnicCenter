@@ -13,6 +13,12 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_MRUCOMBO_H__BDE24F13_4632_11D2_9505_D07F50C10000__INCLUDED_)
 #define AFX_MRUCOMBO_H__BDE24F13_4632_11D2_9505_D07F50C10000__INCLUDED_
 
@@ -29,7 +35,16 @@
 
 #define MRUC_DEFAULT_MRU_SIZE   10
 
+/**
+A combo box, that supports MRU-Strings.
 
+This is done using CMRUStringList.
+
+@ingroup mfcext
+
+@author Michael Dunn <mdunn at inreach dot com>
+@author Sven Wiegand
+*/
 class AFX_EXT_CLASS CMRUComboBox : public CComboBox
 {
 // Construction

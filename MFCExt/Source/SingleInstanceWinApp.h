@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -16,6 +16,12 @@
 * If you have further questions visit our homepage
 *
 *    http://www.ToolsCenter.org
+*
+********************************************************************/
+
+/********************************************************************
+*
+* $Id$
 *
 ********************************************************************/
 
@@ -49,6 +55,8 @@ Further on you have to override the pure virtuals GetServerName().
 This class is based on the article "Single Instance Program" by 
 Raymon Shawn (raymon@public1.sz.js.cn), found at Code Guru
 (http://www.codeguru.com/misc/single_instance3.shtml)
+
+@ingroup mfcext
 
 @author Sven Wiegand
 */

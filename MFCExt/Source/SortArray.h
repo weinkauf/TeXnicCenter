@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -19,6 +19,12 @@
 *
 ********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_SORTARRAY_H__A010A5E5_1F74_11D4_A221_006097239934__INCLUDED_)
 #define AFX_SORTARRAY_H__A010A5E5_1F74_11D4_A221_006097239934__INCLUDED_
 
@@ -31,6 +37,8 @@ Array with sorting capabilities.
 
 The objects specified to store must provide operators
 for comparison.
+
+@ingroup mfcext
 
 @author Sven Wiegand
 */

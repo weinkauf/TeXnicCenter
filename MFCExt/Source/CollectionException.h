@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -19,6 +19,12 @@
 *
 ********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_COLLECTIONEXCEPTION_H__ADDAFA88_86F4_11D3_93E6_000000000000__INCLUDED_)
 #define AFX_COLLECTIONEXCEPTION_H__ADDAFA88_86F4_11D3_93E6_000000000000__INCLUDED_
 
@@ -30,6 +36,8 @@
 /**
 Objekte dieser Klasse werden als Exceptions von andere Objekten ausgeloest.
 Bei den anderen Objekten handelt es sich um Sammlungs-Objekte (Arrays, Listen, etc.).
+
+@ingroup mfcext
 
 @author Sven Wiegand
 */

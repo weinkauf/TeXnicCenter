@@ -26,9 +26,11 @@
 *
 *********************************************************************/
 
-// SortList.h: interface for the CSortList class.
-//
-//////////////////////////////////////////////////////////////////////
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
 
 #if !defined(AFX_SORTLIST_H__8AA09E39_4FB8_4967_99B3_4DF64DCBDC6B__INCLUDED_)
 #define AFX_SORTLIST_H__8AA09E39_4FB8_4967_99B3_4DF64DCBDC6B__INCLUDED_
@@ -44,6 +46,8 @@
 
 /**
 List that maintains elements in sorted order.
+
+@ingroup mfcext
 
 @author Chris Norris
 */

@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -19,6 +19,12 @@
 *
 ********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_WORKERTHREAD_H__B72F25C4_205F_11D5_A222_006097239934__INCLUDED_)
 #define AFX_WORKERTHREAD_H__B72F25C4_205F_11D5_A222_006097239934__INCLUDED_
 
@@ -31,6 +37,10 @@ Class creating worker threads without GUI activity.
 
 Derive your own class and override the virtual Run()-method, which 
 will be called when the thread is started.
+
+@ingroup mfcext
+
+@author Sven Wiegand
 */
 class AFX_EXT_CLASS CWorkerThread  
 {

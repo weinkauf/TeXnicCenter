@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2002 ToolsCenter
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -41,6 +41,8 @@ the CStringList from the MFC.
 
 Strings can be compared either with respect to case or not.
 This is defined by the attribute bIgnoreCase, which defaults to true.
+
+@ingroup mfcext
 
 @author Tino Weinkauf
 */
@@ -89,7 +91,7 @@ protected:
 //Attributes
 public:
 	/**
-	If false, strings are compared case sensitive
+	If false, strings are compared case sensitive.
 	Default: true == case insensitive
 	*/
 	bool bIgnoreCase;
