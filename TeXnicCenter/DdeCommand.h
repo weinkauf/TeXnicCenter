@@ -40,6 +40,13 @@
 #endif // _MSC_VER > 1000
 
 /**
+Default DDE Timeout. 10 sec. is enough to start AR 6 on a
+P III 500 MHz with 256 MB
+*/
+#define DDE_DEFTIMEOUT 10000
+
+
+/**
 Class for storing properties of an DDE command and to execute DDE 
 commands.
 
@@ -141,11 +148,12 @@ public:
 	@return
 		TRUE on success, FALSE oterhwise.
 	*/
-	static BOOL SendCommand(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPCTSTR lpszTopic = _T("System"), LPCTSTR lpszExecutable = NULL);
+	static BOOL SendCommand(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPCTSTR lpszTopic = _T("System"), LPCTSTR lpszExecutable = NULL, DWORD dwTimeOut = DDE_DEFTIMEOUT);
 
 // static implementation helpers
 protected:
-	static BOOL SendCommandHelper(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPCTSTR lpszTopic);
+	static BOOL SendCommandHelper(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPCTSTR lpszTopic = _T("System"), LPCTSTR lpszExecutable = NULL, DWORD dwTimeOut = DDE_DEFTIMEOUT);
+	static BOOL Connect(LPCSTR lpszExecutable, DWORD dwTimeOut, int inst, HSZ serv, HSZ top, HCONV *conv);
 
 // string serialization
 public:

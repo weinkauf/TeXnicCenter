@@ -36,6 +36,7 @@
 #include "DdeCommand.h"
 #include "PlaceHolder.h"
 #include "Process.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -96,32 +97,18 @@ void CDdeCommand::SetCommand(LPCTSTR lpszCmd)
 BOOL CDdeCommand::SendCommand(LPCTSTR lpszMainPath, 
 															LPCTSTR lpszCurrentPath /*= NULL*/, long lCurrentLine /*= -1*/) const
 {
-	return SendCommand(
+	return SendCommandHelper(
 		m_strServerName, 
 		AfxExpandPlaceholders(m_strCmd, lpszMainPath, lpszCurrentPath, lCurrentLine), 
 		m_strTopic,
-		m_strExecutable.IsEmpty()? (LPCTSTR)NULL : (LPCTSTR)m_strExecutable);
+		m_strExecutable.IsEmpty()? (LPCTSTR)NULL : (LPCTSTR)m_strExecutable,
+		theApp.GetProfileInt(_T("Settings"), _T("DdeConnectTimeOut"), DDE_DEFTIMEOUT));
 }
 
 
-BOOL CDdeCommand::SendCommand(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPCTSTR lpszTopic /*= _T("System")*/, LPCTSTR lpszExecutable /*= NULL*/)
+BOOL CDdeCommand::SendCommand(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPCTSTR lpszTopic /*= _T("System")*/, LPCTSTR lpszExecutable /*= NULL*/, DWORD dwTimeOut /*= DDE_DEFTIMEOUT*/)
 {
-	if (SendCommandHelper(lpszServer, lpszCommand, lpszTopic))
-		return TRUE;
-
-	if (!lpszExecutable)
-		return FALSE;
-
-	// try to start the executable
-	CProcess	p;
-	if (!p.Create(lpszExecutable))
-		return FALSE;
-
-	// wait for process to finish initialization
-	WaitForInputIdle(p.GetProcessHandle(), INFINITE);
-
-	// try again to send the command
-	return SendCommandHelper(lpszServer, lpszCommand, lpszTopic);
+	return SendCommandHelper(lpszServer, lpszCommand, lpszTopic, lpszExecutable, dwTimeOut);
 }
 
 
@@ -131,7 +118,27 @@ void CDdeCommand::RemoveDirectorySpecifications()
 }
 
 
-BOOL CDdeCommand::SendCommandHelper(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPCTSTR lpszTopic)
+BOOL CDdeCommand::Connect(LPCSTR lpszExecutable, DWORD dwTimeOut, int inst, HSZ serv, HSZ top, HCONV *conv)
+{
+	DWORD	dwOverallTime = 0;
+
+	*conv = DdeConnect(inst, serv, top, NULL);
+	if (*conv == 0L && lpszExecutable) {
+		// try to start the executable
+		CProcess	p;
+		if (p.Create(lpszExecutable)) {
+			do {
+				Sleep(10);
+				dwOverallTime+= 10;
+				*conv = DdeConnect(inst, serv, top, NULL);
+			} while ((*conv == 0L) && (dwOverallTime < dwTimeOut));
+		}
+	}
+	return (*conv != 0L);
+}
+
+
+BOOL CDdeCommand::SendCommandHelper(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPCTSTR lpszTopic /*= _T("System")*/, LPCTSTR lpszExecutable /*= NULL*/, DWORD dwTimeOut /*= DDE_DEFTIMEOUT*/)
 {
 	ASSERT(lpszServer && lpszCommand && lpszTopic);
 
@@ -156,8 +163,7 @@ BOOL CDdeCommand::SendCommandHelper(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPC
 			throw FALSE;
 
 		// establish conversation
-		hConversation = DdeConnect(dwId, hszServerName, hszTopic, NULL);
-		if (!hConversation)
+		if (!Connect(lpszExecutable, dwTimeOut, dwId, hszServerName, hszTopic, &hConversation))
 			throw FALSE;
 
 		// ensure byte string
@@ -165,11 +171,11 @@ BOOL CDdeCommand::SendCommandHelper(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPC
 		szCommand = new char[nLen+1];
 		if (!szCommand)
 			throw FALSE;
-		for (int i = 0; i <= nLen+1; i++)
+		for (int i = 0; i <= nLen; i++)
 			szCommand[i] = (char)lpszCommand[i];
 
 		// send command
-		if (!DdeClientTransaction((LPBYTE)szCommand, nLen+1, hConversation, NULL, 0, XTYP_EXECUTE, 1000, NULL))
+		if (!DdeClientTransaction((LPBYTE)szCommand, nLen+1, hConversation, NULL, 0, XTYP_EXECUTE, dwTimeOut, NULL))
 			throw FALSE;
 
 		// clean up
@@ -177,7 +183,7 @@ BOOL CDdeCommand::SendCommandHelper(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPC
 		DdeDisconnect(hConversation);
 		DdeFreeStringHandle(dwId, hszServerName);
 		DdeFreeStringHandle(dwId, hszTopic);
-		DdeUninitialize(dwId);
+		//DdeUninitialize(dwId);
 	}
 	catch (...)
 	{
