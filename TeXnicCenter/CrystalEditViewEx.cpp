@@ -79,7 +79,7 @@ BOOL CCrystalEditViewEx::Serialize(CIniFile &ini, LPCTSTR lpszKey, BOOL bWrite)
 				throw FALSE;
 			if (ptCursor.y >= GetLineCount())
 				throw FALSE;
-			if (ptCursor.x >= GetLineLength(ptCursor.y))
+			if (ptCursor.x >= GetLineLength(ptCursor.y) && ptCursor.x)
 				throw FALSE;
 
 			SetCursorPos(ptCursor);
@@ -87,7 +87,9 @@ BOOL CCrystalEditViewEx::Serialize(CIniFile &ini, LPCTSTR lpszKey, BOOL bWrite)
 			SetSelection(ptCursor, ptCursor);
 		}
 		catch(...)
-		{}
+		{
+			TRACE("Invalid cursor position: %s line %d\n", __FILE__, __LINE__);
+		}
 
 		// scroll to right position
 		int	nSubLineIndex = ini.GetValue(lpszKey, VAL_VIEWINFO_TOPSUBLINE, 0);
