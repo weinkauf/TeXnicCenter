@@ -74,10 +74,10 @@ CSpellCheckDlg::~CSpellCheckDlg()
 
 void CSpellCheckDlg::Reset(CCrystalEditView *pBuddy, MySpell *pSpell)
 {
-	ASSERT( m_pBuddy = pBuddy );
-	ASSERT( m_pTextBuffer = pBuddy->LocateTextBuffer() );
-	ASSERT( m_pParser = m_pBuddy->GetParser() );
-	ASSERT( m_pSpell = pSpell );	
+	VERIFY( m_pBuddy = pBuddy );
+	VERIFY( m_pTextBuffer = pBuddy->LocateTextBuffer() );
+	VERIFY( m_pParser = m_pBuddy->GetParser() );
+	VERIFY( m_pSpell = pSpell );	
 }
 
 
@@ -238,14 +238,14 @@ void CSpellCheckDlg::OnSpellError()
 		m_bNoSuggestions = true;
 		CString label;
 		label.LoadString(IDS_SPELL_NO_SUGGESTIONS);
-		ASSERT( c_SuggestList.InsertItem(0, label ) != -1 );
+		VERIFY( c_SuggestList.InsertItem(0, label ) != -1 );
 	}
 	else
 	{
 		m_bNoSuggestions = false;
 		for ( int i = 0; i < nCount; ++i)
 		{
-			ASSERT( c_SuggestList.InsertItem(i, A2T(ssList[i])) != -1);
+			VERIFY( c_SuggestList.InsertItem(i, A2T(ssList[i])) != -1);
 		}
 		m_pSpell->release_suggest( ssList );
 	}
@@ -264,7 +264,7 @@ void CSpellCheckDlg::OnChangeSpellText()
 	// with the ENM_CHANGE flag ORed into the mask.
 
 	// The user has taken control of the line. Disable all the controls except
-	// Cancel, Resume, and Unedit (Ignore).
+	// Cancel, Resume, and Unedit / Ignore.
 	if ( !m_bEditing )
 	{
 		m_bEditing = true;

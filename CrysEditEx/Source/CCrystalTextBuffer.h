@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.4  2002/04/23 21:45:09  cnorris
+* realtime spell check
+*
 * Revision 1.3  2002/04/09 23:30:17  cnorris
 * LoadFromFile and SaveToFile return the result of GetLastError to provide
 * usefull information about the type of error that occured.
@@ -132,7 +135,7 @@ public:
 		typedef enum tagAttribute
 		{
 			none,
-			spellError,
+			spellError = 1,
 			nAttributeCount // must be last attribute
 		};
 
