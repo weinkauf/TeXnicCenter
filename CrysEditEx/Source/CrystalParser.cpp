@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.2  2002/03/25 19:12:57  cnorris
+* Fix line wrap to break lines without white space which affected screen draw
+*
 * Revision 1.1.1.1  2002/02/26 08:12:00  svenwiegand
 * Initial revision
 *
@@ -67,10 +70,12 @@ void CCrystalParser::WrapLine( int nLineIndex, int nMaxLineWidth, int *anBreaks,
 	int			nTabWidth = m_pTextView->GetTabSize();
 	int			nLineCharCount = 0;
 	int			nCharCount = 0;
-	LPCTSTR	szLine = m_pTextView->GetLineChars( nLineIndex );
+	LPCTSTR		szLine = m_pTextView->GetLineChars( nLineIndex );
 	int			nLastBreakPos = 0;
 	int			nLastCharBreakPos = 0;
 	BOOL		bWhitespace = FALSE;
+	BOOL		bFoundWhiteSpace = FALSE;
+	BOOL		bStructureBreak = FALSE;
 
 	for( int i = 0; i < nLineLength; i++ )
 	{
@@ -80,13 +85,22 @@ void CCrystalParser::WrapLine( int nLineIndex, int nMaxLineWidth, int *anBreaks,
 			nLastBreakPos = i;
 			nLastCharBreakPos = nCharCount;
 			bWhitespace = FALSE;
+			bFoundWhiteSpace = TRUE;
+		}
+		else if ( bStructureBreak && !bFoundWhiteSpace )
+		{
+			// We'll use the structure break if there isn't a whitespace break
+			nLastBreakPos = i;
+			nLastCharBreakPos = nCharCount;
+			bStructureBreak = FALSE;
 		}
 
 		// increment char counter (evtl. expand tab)
 		if( szLine[i] == _T('\t') )
 		{
-			nLineCharCount+= nTabWidth? (nTabWidth - nCharCount % nTabWidth) : 0;
-			nCharCount+= nTabWidth? (nTabWidth - nCharCount % nTabWidth) : 0;
+			int nSpaceCount = nTabWidth? (nTabWidth - nCharCount % nTabWidth) : 0;
+			nLineCharCount+= nSpaceCount;
+			nCharCount+= nSpaceCount;
 		}
 		else
 		{
@@ -94,9 +108,11 @@ void CCrystalParser::WrapLine( int nLineIndex, int nMaxLineWidth, int *anBreaks,
 			nCharCount++;
 		}
 
-		// remember whitespace
+		// remember possible break points
 		if( szLine[i] == _T('\t') || szLine[i] == _T(' ') )
 			bWhitespace = TRUE;
+		else if ( !bFoundWhiteSpace && (szLine[i] == _T(')') || szLine[i] == _T('}')) )
+			bStructureBreak = TRUE;
 
 		// wrap line
 		if( nLineCharCount >= nMaxLineWidth )
@@ -114,6 +130,8 @@ void CCrystalParser::WrapLine( int nLineIndex, int nMaxLineWidth, int *anBreaks,
 
 			nLineCharCount = nCharCount - nLastCharBreakPos;
 			nLastBreakPos = 0;
+			bWhitespace = FALSE;
+			bFoundWhiteSpace = FALSE;
 		}
 	}
 }
