@@ -55,6 +55,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.2  2002/02/27 19:21:37  cnorris
+* Change LoadFromFile to free buffer after successful read
+*
 * Revision 1.1.1.1  2002/02/26 08:11:53  svenwiegand
 * Initial revision
 *
@@ -322,8 +325,8 @@ void CCrystalTextBuffer::SetReadOnly(BOOL bReadOnly /*= TRUE*/)
 static const char *crlfs[] =
 {
 	"\x0d\x0a",			//	DOS/Windows style
-	"\x0a\x0d",			//	UNIX style
-	"\x0a"				//	Macintosh style
+	"\x0a",				//	UNIX style
+	"\x0a\x0d"			//	Macintosh style
 };
 
 BOOL CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRLF_STYLE_AUTOMATIC*/)
@@ -377,21 +380,19 @@ BOOL CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CR
 				else
 				{
 					if (I < dwCurSize - 1 && pcBuf[I + 1] == _T('\x0d'))
-						nCrlfStyle = CRLF_STYLE_UNIX;
-					else
 						nCrlfStyle = CRLF_STYLE_MAC;
+					else
+						nCrlfStyle = CRLF_STYLE_UNIX;
 				}
 			}
 		}
 
 		ASSERT(nCrlfStyle >= 0 && nCrlfStyle <= 2);
 		m_nCRLFMode = nCrlfStyle;
-		const char *crlf = crlfs[nCrlfStyle];
 
 		m_aLines.SetSize(0, 4096);
 
 		DWORD dwBufPtr = 0;
-		int nCrlfPtr = 0;
 		USES_CONVERSION;
 		while (dwBufPtr < dwCurSize)
 		{
@@ -404,6 +405,10 @@ BOOL CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CR
 				dwBufPtr = 0;
 			}
 
+			// Strip \r ('\x0d') from input buffer
+			if ((char)c == '\x0d')
+				continue;
+
 			pcLineBuf[nCurrentLength] = (char) c;
 			nCurrentLength ++;
 			if (nCurrentLength == nCurrentMax)
@@ -412,23 +417,17 @@ BOOL CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CR
 				nCurrentMax += 256;
 				char *pcNewBuf = new char[nCurrentMax];
 				memcpy(pcNewBuf, pcLineBuf, nCurrentLength);
-				delete pcLineBuf;
+				delete[] pcLineBuf;
 				pcLineBuf = pcNewBuf;
 			}
 
-			if ((char) c == crlf[nCrlfPtr])
+			if ((char) c == '\x0a')
 			{
-				nCrlfPtr ++;
-				if (crlf[nCrlfPtr] == 0)
-				{
-					pcLineBuf[nCurrentLength - nCrlfPtr] = 0;
-					InsertLine(A2T(pcLineBuf));
-					nCurrentLength = 0;
-					nCrlfPtr = 0;
-				}
+				pcLineBuf[nCurrentLength-1] = 0;
+
+				InsertLine(A2T(pcLineBuf));
+				nCurrentLength = 0;
 			}
-			else
-				nCrlfPtr = 0;
 		}
 
 		pcLineBuf[nCurrentLength] = 0;
@@ -450,7 +449,7 @@ BOOL CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CR
 	__finally
 	{
 		if (pcLineBuf != NULL)
-			delete pcLineBuf;
+			delete[] pcLineBuf;
 		if (hFile != NULL)
 			::CloseHandle(hFile);
 	}
