@@ -50,6 +50,7 @@
 #define STE_FILE_EXTERNALCHANGEEX       141
 #define STE_FILE_INUSE_OPEN             142
 #define IDB_DOCUMENTTYPES_LARGE         143
+#define STE_MAINFILE_DESCRIPTION        143
 #define STE_TAB_STRUCTURE               144
 #define IDD_PROJECT_NEW                 144
 #define IDB_ITEM_TYPES                  144
@@ -80,6 +81,7 @@
 #define IDC_STATIC1                     158
 #define STE_GRAPHICS_FILES              158
 #define IDD_GRAPHIC                     159
+#define STE_PLACEHOLDER_EXAMPLE_MAIN    159
 #define STE_LATEX_START                 160
 #define IDD_TABULAR                     160
 #define STE_LATEX_RESULT                161
@@ -88,6 +90,11 @@
 #define IDD_WINDOW                      162
 #define STE_LATEX_CANCELED              163
 #define STE_LATEX_START_FAILED_EXT      164
+#define STE_PLACEHOLDER_EXAMPLE_CURRENT 165
+#define STE_PLACEHOLDER_EXAMPLE_MAIN_SHORT 166
+#define STE_PLACEHOLDER_EXAMPLE_CURRENT_SHORT 167
+#define STE_CURRENTDOC_DESCRIPTION      168
+#define STE_FILECLEAN_INVALIDPATTERN    169
 #define IDC_NEXTTIP                     170
 #define IDC_STARTUP                     171
 #define IDC_TIPSTRING                   172
@@ -151,16 +158,19 @@
 #define STE_LATEX_REF                   240
 #define STE_LATEX_PAGEREF               241
 #define IDB_PARSE_VIEW                  243
-#define IDI_ICON1                       244
 #define IDD_OPTIONS_LANGUAGE            245
 #define IDD_OPTIONS_FILECLEAN           249
 #define IDR_POPUP_PLACEHOLDEREX_NOOPT   253
 #define IDD_PLACEHOLDER_SINGLE          254
 #define STE_ITEMTYPE_GENERIC            256
 #define STE_ITEMTYPE_HEADER             257
+#define IDR_POPUP_PLACEHOLDER_OPT       257
 #define STE_ITEMTYPE_EQUATION           258
+#define IDR_POPUP_PLACEHOLDER_MAIN_OPT  258
 #define STE_ITEMTYPE_QUOTE              259
+#define IDR_POPUP_PLACEHOLDER_CURRENT_OPT 259
 #define STE_ITEMTYPE_QUOTATION          260
+#define IDR_POPUP_PLACEHOLDEREX_CASC    260
 #define STE_ITEMTYPE_CENTER             261
 #define STE_ITEMTYPE_VERSE              262
 #define STE_ITEMTYPE_ITEMIZATION        263
@@ -1130,14 +1140,29 @@
 #define ID_LATEX_CLEAN                  38325
 #define ID_PH_MAINOPTIONS               38326
 #define ID_BG_UPDATE_PROJECT            38327
+#define ID_PH_CURRENTOPTIONS            38328
+#define ID_PHS_ALLPROJECTFILES_Q        38331
+#define ID_PHS_ALLOPENEDFILES_Q         38332
+#define ID_PHS_ALLTEXFILES_Q            38333
+#define ID_PHS_ALLBIBTEXFILES_Q         38334
+#define ID_PHS_ALLGRAPHICFILES_Q        38335
+#define ID_PHS_ALLTXCFILES_Q            38336
+#define ID_PHS_ALLFILESETS_Q            38337
+#define ID_PHS_ALLPROJECTFILES_QR       38338
+#define ID_PHS_ALLOPENEDFILES_QR        38339
+#define ID_PHS_ALLTEXFILES_QR           38340
+#define ID_PHS_ALLBIBTEXFILES_QR        38341
+#define ID_PHS_ALLGRAPHICFILES_QR       38342
+#define ID_PHS_ALLTXCFILES_QR           38343
+#define ID_PHS_ALLFILESETS_QR           38344
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        256
-#define _APS_NEXT_COMMAND_VALUE         38328
+#define _APS_NEXT_RESOURCE_VALUE        261
+#define _APS_NEXT_COMMAND_VALUE         38345
 #define _APS_NEXT_CONTROL_VALUE         1298
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
