@@ -41,7 +41,7 @@ MySpell::~MySpell()
 }
 
 
-int MySpell::captype(const char * word)
+int MySpell::captype(const char * word) const
 {
 	int ncap = 0;
 	int nc = 0;
@@ -58,7 +58,7 @@ int MySpell::captype(const char * word)
 }
 
 
-void MySpell::mkallcap(char * p)
+void MySpell::mkallcap(char * p) const
 {
 	while (*p != '\0') { 
 		*p = toupper((unsigned char) *p);
@@ -67,7 +67,7 @@ void MySpell::mkallcap(char * p)
 }
 
 
-void MySpell::mkallsmall(char * p)
+void MySpell::mkallsmall(char * p) const
 {
 	while (*p != '\0') {
 		*p = tolower((unsigned char) *p);
@@ -76,7 +76,7 @@ void MySpell::mkallsmall(char * p)
 }
 
 
-int MySpell::spell(const char * word)
+int MySpell::spell(const char * word) const
 {
 	char * rv=NULL;
 	char wspace[MAXWORDLEN+1];
@@ -104,7 +104,7 @@ int MySpell::spell(const char * word)
 }
 
 
-char * MySpell::check(const char * word)
+char * MySpell::check(const char * word) const
 {
 	struct hentry * he = NULL;
 	if (pHMgr)
@@ -120,7 +120,7 @@ char * MySpell::check(const char * word)
 }
 
 
-int MySpell::suggest(char*** slst, const char * word)
+int MySpell::suggest(char*** slst, const char * word) const
 {
 	char wspace[MAXWORDLEN+1];
 	if (! pSMgr) return 0;
@@ -163,7 +163,7 @@ int MySpell::suggest(char*** slst, const char * word)
 
 
 
-void MySpell::mkinitcap(char * p)
+void MySpell::mkinitcap(char * p) const
 {
 	if (*p != '\0') *p = toupper((unsigned char)*p);
 }
