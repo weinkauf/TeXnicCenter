@@ -448,6 +448,10 @@ void CTeXnicCenterApp::SaveCustomState ()
 
 	// store global configuration
 	g_configuration.Serialize( CConfiguration::Save );
+
+	// speller
+	if ( m_pSpell && m_pSpell->ismodified() && g_configuration.m_strSpellPersonalDictionary.Compare(_T("")))
+		m_pSpell->save_personal_dictionary( g_configuration.m_strSpellPersonalDictionary );
 }
 
 
@@ -466,14 +470,15 @@ void CTeXnicCenterApp::EndSession()
 
 int CTeXnicCenterApp::ExitInstance() 
 {
-	//
+	// Shutdown background thread
+	if ( m_pBackgroundThread )
+		m_pBackgroundThread->PostThreadMessage(WM_QUIT, 0, 0);
+
 	if( m_pMDIFrameManager )
 		delete m_pMDIFrameManager;
 
 	DeleteCriticalSection( &m_csLazy );
 	delete m_pSpell;
-	if ( m_pBackgroundThread )
-		m_pBackgroundThread->PostThreadMessage(WM_QUIT, 0, 0);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// unloading localized resource DLL for BCGCB
@@ -1387,16 +1392,37 @@ MySpell* CTeXnicCenterApp::GetSpeller()
 	{
 		CWaitCursor wait;
 		CString dicName, affName;
+		// Create dictionary name and path
 		dicName.Format(_T("%s\\%s_%s.dic"),
 			g_configuration.m_strSpellDictionaryPath, 
 			g_configuration.m_strLanuage,
 			g_configuration.m_strLanguageDialect);
+		// Create affix name and path
 		affName.Format(_T("%s\\%s_%s.aff"),
 			g_configuration.m_strSpellDictionaryPath, 
 			g_configuration.m_strLanuage,
 			g_configuration.m_strLanguageDialect);
 		m_pSpell = new MySpell( T2CA((LPCTSTR)affName), T2CA((LPCTSTR)dicName) );
+
+		// Create the personal dictionary if we have a name
+		if (g_configuration.m_strSpellPersonalDictionary && 
+			g_configuration.m_strSpellPersonalDictionary.Compare(_T("")))
+		{
+			m_pSpell->set_personal_dictionary(T2CA((LPCTSTR)g_configuration.m_strSpellPersonalDictionary));
+
+			if ( ::PathFileExists(g_configuration.m_strSpellPersonalDictionary) )
+			{
+				// The path exists, so let's try to open it
+				if ( m_pSpell->open_personal_dictionary() != 0 )
+				{
+					CString str;
+					str.Format(STE_FILE_INUSE, AfxLoadString(IDS_OPEN), g_configuration.m_strSpellPersonalDictionary);
+					AfxMessageBox(str);
+				}
+			}
+		}
 	}
+	m_pSpell->suggest_main(g_configuration.m_bSpellMainDictOnly);
 	::LeaveCriticalSection( &m_csLazy );
 	return m_pSpell;
 }

@@ -224,18 +224,21 @@ void CLatexEdit::OnContextMenu(CWnd* pWnd, CPoint point)
 	CCrystalTextBuffer *pBuffer = LocateTextBuffer();
 	ASSERT( pBuffer );
 	ptText = ClientToText(ptText);
+	bool bShowDefault = false;
 
 	CCrystalTextBuffer::CTextAttribute *attr = pBuffer->GetLineAttribute(ptText.y, ptText.x, ptText.x+1);
-	if (attr == NULL)
-	{
-		// Default popup
-		theApp.ShowPopupMenu( IDR_POPUP_EDITOR, point, this );
-	}
-	else 
+	if (attr != NULL)
 	{
 		CAttributeMenu menu(this, ptText);
 		if (attr->m_Attribute == CCrystalTextBuffer::CTextAttribute::spellError)
-			menu.ShowSpellMenu(theApp.GetSpeller(), point);
+			bShowDefault = !menu.ShowSpellMenu(theApp.GetSpeller(), point);
+		// else your new attribute here
+	}
+
+	if (bShowDefault)
+	{
+		// Default popup
+		theApp.ShowPopupMenu( IDR_POPUP_EDITOR, point, this );
 	}
 }
 
