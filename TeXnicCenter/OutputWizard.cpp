@@ -533,6 +533,18 @@ void COutputWizard::GenerateOutputProfiles()
 {
 	CString	strError;
 
+	//Some things, that we will reuse inside this function
+	// - Options for normal latex
+	// - %Wm, because of the src-specials for forward/inverse search. Otherwise, things might break.
+	CString strLatexOptions(_T("--src -interaction=nonstopmode \"%Wm\""));
+	// - Only miktex support the -max-print-line=N feature
+	if (m_bMikTexInstalled) strLatexOptions = _T("--src -interaction=nonstopmode -max-print-line=120 \"%Wm\"");
+	// - Options for PDFLatex
+	// - %pm, because it doesn't matter here. I guess, we could use %Wm as well. But %pm is tested and seems to work for all.
+	CString strPDFLatexOptions(_T("-interaction=nonstopmode \"%pm\""));
+	// - Only miktex support the -max-print-line=N feature
+	if (m_bMikTexInstalled) strPDFLatexOptions = _T("-interaction=nonstopmode -max-print-line=120 \"%pm\"");
+
 	// LaTeX => DVI
 	if (m_bLatexInstalled)
 	{
@@ -546,11 +558,10 @@ void COutputWizard::GenerateOutputProfiles()
 				m_profiles.Remove(strProfile);
 
 			// create profile
-			CProfile	p;
+			CProfile p;
 
 			p.SetLatexPath(
-				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("latex.exe")),
-				_T("--src -interaction=nonstopmode \"%Wm\""));
+				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("latex.exe")), strLatexOptions);
 			p.SetBibTexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("bibtex.exe")),
 				_T("\"%bm\""));
@@ -599,11 +610,10 @@ void COutputWizard::GenerateOutputProfiles()
 				m_profiles.Remove(strProfile);
 
 			// create profile
-			CProfile	p;
+			CProfile p;
 
 			p.SetLatexPath(
-				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("latex.exe")),
-				_T("--src -interaction=nonstopmode \"%Wm\""));
+				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("latex.exe")), strLatexOptions);
 			p.SetBibTexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("bibtex.exe")),
 				_T("\"%bm\""));
@@ -658,11 +668,10 @@ void COutputWizard::GenerateOutputProfiles()
 				m_profiles.Remove(strProfile);
 
 			// create profile
-			CProfile	p;
+			CProfile p;
 
 			p.SetLatexPath(
-				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("pdflatex.exe")),
-				_T("-interaction=nonstopmode \"%pm\""));
+				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("pdflatex.exe")), strPDFLatexOptions);
 			p.SetBibTexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("bibtex.exe")),
 				_T("\"%bm\""));
@@ -735,11 +744,10 @@ void COutputWizard::GenerateOutputProfiles()
 				m_profiles.Remove(strProfile);
 
 			// create profile
-			CProfile	p;
+			CProfile p;
 
 			p.SetLatexPath(
-				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("latex.exe")),
-				_T("--src -interaction=nonstopmode \"%Wm\""));
+				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("latex.exe")), strLatexOptions);
 			p.SetBibTexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("bibtex.exe")),
 				_T("\"%bm\""));
