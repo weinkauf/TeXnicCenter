@@ -1,5 +1,6 @@
 2002/06/24 svenwiegand
 - Removed Cursor from Splash Screen ;-)
+- Included spelling dictionaries into setup script.
 
 2002/06/20 svenwiegand
 - Disabled real time spell checking by default.
