@@ -77,6 +77,7 @@ protected:
 // message handlers
 protected:
 	//{{AFX_MSG(CCrystalEditViewEx)
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
