@@ -772,7 +772,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -4672,12 +4672,12 @@ BEGIN
     ID_PH_CSSLASHRELATIVEPATH "%sWc"
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -8412,7 +8412,7 @@ BEGIN
     ID_HELP_CONTENTS        "Shows the contents of the online documentation\nContents"
     ID_SPELL_PROJECT        "Spell check entire project\nSpell check project"
     ID_SPELL_FILE           "Spell check the active file\nSpell check file"
-    IDS_SPELL_CONTINUE      "Contiue spell checking remainder of project?"
+    IDS_SPELL_CONTINUE      "Continue spell checking remainder of project?"
     ID_PHS_ALLPROJECTFILES  "$APF"
     ID_PHS_ALLTEXFILES      "$TPF"
     ID_PHS_ALLBIBTEXFILES   "$BPF"
@@ -8467,7 +8467,7 @@ BEGIN
     ID_PH_CSSLASHRELATIVEPATH "%sWc"
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
