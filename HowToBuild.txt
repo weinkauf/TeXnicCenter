@@ -55,7 +55,7 @@ BUILDING TEXNICCENTER
     from the 'MySpell' directory to
 
 	a) the 'output\debug\language' directory
-	b) the 'output\debug\release' directoy
+	b) the 'output\release\language' directoy
 
 
 Building is now completed. You can start TeXnicCenter.
