@@ -1,5 +1,8 @@
 2005/03/16 vachis
-- Fixed Bug: inconsistent behavior of normal selection and brace block selection 
+- Fixed Bugs: inconsistent behavior of normal selection and brace block selection 
+  unmatched brace (after Ctrl+M) disappear when scrolling
+  disable brace higlighting when a selection is pressent
+  bugs in brace block selection
 
 2005/03/13 niteria
 - Implemented Feature 547432: Auto-Preview after Building Output
