@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OPTIONDIALOG_H__FD645162_2E39_11D3_929E_FAB22A26316D__INCLUDED_)
 #define AFX_OPTIONDIALOG_H__FD645162_2E39_11D3_929E_FAB22A26316D__INCLUDED_
 
@@ -41,6 +47,18 @@
 #include "OptionPageFileClean.h"
 
 
+/**	Property Sheet displaying all Option Pages.
+
+@ingroup dialogs
+
+@see COptionPageGeneric
+@see COptionPageFile
+@see COptionPagePath
+@see COptionPageLanguage
+@see COptionPageFileClean
+
+@author Sven Wiegand
+*/
 class COptionDialog : public CPropertySheet
 {
 	DECLARE_DYNAMIC(COptionDialog)

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_MRUTRACKSELCOMBOBOX_H__4313FC00_2115_11D4_A221_006097239934__INCLUDED_)
 #define AFX_MRUTRACKSELCOMBOBOX_H__4313FC00_2115_11D4_A221_006097239934__INCLUDED_
 
@@ -38,6 +44,8 @@
 An object of this class is a combo box, from which you can always
 get the selection start and end of the edit box, the last time,
 the box had the focus.
+
+@ingroup guielements
 
 @author Sven Wiegand
 */

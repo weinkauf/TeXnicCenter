@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OPTIONPAGEFILE_H__74DCE580_1EB3_11D4_A221_006097239934__INCLUDED_)
 #define AFX_OPTIONPAGEFILE_H__74DCE580_1EB3_11D4_A221_006097239934__INCLUDED_
 
@@ -33,6 +39,12 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+/**	Options for File handling.
+
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class COptionPageFile : public CPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageFile)
