@@ -136,7 +136,7 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	if (direction == Load)
 	{
 		SerializeProfileString(_T("Settings"), _T("SkinDirectory"), &m_strSkinDirectory, direction, CPathTool::Cat(CPathTool::GetDirectory(theApp.m_pszHelpFilePath), _T("Skins")));
-		SerializeProfileString(_T("Settints"), _T("SkinURL"), &m_strSkinUrl, direction, _T("http://www.bcgsoft.com/Skins"));
+		SerializeProfileString(_T("Settings"), _T("SkinURL"), &m_strSkinUrl, direction, _T("http://www.bcgsoft.com/Skins"));
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
