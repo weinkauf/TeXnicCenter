@@ -78,7 +78,7 @@
 // 
 // Array count. Make sure this keeps up with how many lines there are
 // in the array!
-#define ARRAYCOUNT		84
+#define ARRAYCOUNT		89
 char *pArrCredit[] = {
 						"Copyright © 1999-2002\t",
 						"www.ToolsCenter.org\t",
@@ -114,6 +114,11 @@ char *pArrCredit[] = {
 						"Regular Expression Library\t",
 						"",
 						"Dr. John Maddock\f",
+						"",
+						"",
+						"Spell Checker based on MySpell\t",
+						"",
+						"Kevin B. Hendricks\f",
 						"",
 						"",
 						"Additional Codes\t",
