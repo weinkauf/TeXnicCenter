@@ -52,6 +52,11 @@ void CIniFile::SetPath(CString newpath)
 	path = newpath;
 }
 
+CString CIniFile::GetPath()
+{
+	return path;
+}
+
 
 BOOL CIniFile::ReadFile()
 {
