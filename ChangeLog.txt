@@ -1,3 +1,6 @@
+2005/03/16 vachis
+- Fixed Bug: inconsistent behavior of normal selection and brace block selection 
+
 2005/03/13 niteria
 - Implemented Feature 547432: Auto-Preview after Building Output
 - Added -max-print-line=120 to the compiler options, if mikTeX is installed.
