@@ -1,4 +1,5 @@
 2002/11/26 niteria
+- Fixed Bug 616808: Figures not centered correctly
 - Fixed similar Bugs 607758 & 634320: Tools not working & Windows Explorer tool
 - Fixed Bug 609909: TeXnicCenter may overwrite a .tex file
   This includes, that project files from versions till Beta3.00.000
