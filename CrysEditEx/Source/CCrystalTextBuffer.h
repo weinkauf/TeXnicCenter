@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:53  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:24+02  sven_wiegand
 * Initial revision
 *
@@ -114,14 +117,128 @@ private:
 protected:
 #pragma pack(push, 1)
 	//	Nested class declarations
-	struct SLineInfo
+	class CLineInfo
 	{
-		TCHAR	*m_pcLine;
-		int		m_nLength, m_nMax;
-		DWORD	m_dwFlags;
+	public:
+		/**
+		* Default constructor
+		*/
+		CLineInfo() { memset(this, 0, sizeof(CLineInfo)); }
 
-		SLineInfo() { memset(this, 0, sizeof(SLineInfo)); };
+		/**
+		Constructor
+		@param pszLine 
+			Text to initialize line with. Does not need to be null terminated in nLength given.
+		@param nLength 
+			Length of string. Default value (-1) indicates nLength should be calculated.
+		*/
+		explicit CLineInfo(LPCTSTR pszLine, int nLength = -1)
+		{
+			memset(this, 0, sizeof(CLineInfo));
+			Append(pszLine, nLength);
+		}
+
+		/**
+		Constructor
+		@param nSize
+			Initialize line with enough capacity to contain at least nSize characters.
+		*/
+		explicit CLineInfo(int nSize)
+		{ 
+			memset(this, 0, sizeof(CLineInfo));
+			GrowTo(nSize);
+		}
+
+		/** 
+		Grow (or shrink) the line to accommodate at least nMinSize characters.
+		@param nMinSize
+			Minimum number of characters (not including NULL terminator).
+		*/
+		void GrowTo(int nMinSize);
+
+		/**
+		Append text to end of line. If required line is grown to accommodate new string.
+		@param pszLine
+			Text to append. Does not need to be null terminated in nLength given.
+		@param nLength 
+			Length of string to append. Default value (-1) indicates nLength should be calculated.
+		*/
+		void Append(LPCTSTR pszLine, int nLength = -1);
+
+		/**
+		Insert text into middle of line. If required line is grown to accommodate new string.
+		@param nPos 
+			Insertion point.
+		@param pszLine 
+			Text to insert. Does not need to be null terminated in nLength given.
+		@param nLength 
+			Length of string to insert. Default value (-1) indicates nLength should be calculated.
+		*/
+		void InsertText(int nPos, LPCTSTR pszLine, int nLength = -1);
+
+		/**
+		Remove text from line.
+		@param nPos 
+			Removal point.
+		@param nCount 
+			Number of characters to remove.
+		@param bCompact 
+			Should extra space, if any, in line be freed?
+		*/
+		void RemoveText(int nPos, int nCount, boolean bCompact = false);
+
+		/**
+		Trim line to new length.
+		@param nPos 
+			Length of new string.
+		@param bCompact 
+			Should extra space, if any, in line be freed?
+		*/
+		void TrimText(int nLength, boolean bCompact = false);
+
+		/**
+		Remove extra line capacity while maintaining buffer alignment.
+		*/
+		void FreeExtra()
+		{
+			GrowTo(m_nLength);
+		}
+
+		/** 
+		Destroy line and release dynamic memory.
+		*/
+		void Destroy() 
+		{ 
+			delete [] m_pcLine;
+			memset(this, 0, sizeof(CLineInfo));
+		}
+
+		/**
+		Get the flag bits.
+		@return Flag bits of line.
+		*/
+		DWORD GetFlags() const { return m_dwFlags; }
+
+		/**
+		Set the flag bits.
+		@param dwFlags Flag bits.
+		*/
+		void SetFlags(DWORD dwFlags) { m_dwFlags = dwFlags; }
+
+		/**
+		Get the length of the line.
+		@return Length of line.
+		*/
+		int GetLength() const { return m_nLength; }
+
+		/** Character buffer */
+		TCHAR	*m_pcLine;
+	protected:
+		int		m_nMax;
+		int		m_nLength;
+		DWORD	m_dwFlags;
 	};
+
 
 	enum
 	{
@@ -185,7 +302,7 @@ protected:
 	};
 
 	//	Lines of text
-	CArray <SLineInfo, SLineInfo&> m_aLines;
+	CArray <CLineInfo, CLineInfo&> m_aLines;
 
 	//	Undo
 	CArray <SUndoRecord, SUndoRecord&> m_aUndoBuf;
