@@ -1,6 +1,7 @@
 2004/09/09 niteria
 - Updated URL for downloading dictionaries.
 - Implemented Feature 1025478: Document tabs: adjustable position and layout
+- Fixed Bug 908376: Error in parsing short warning messages
 
 2004/08/25 niteria
 - Fixed bug 1000546: Crash with long lines with (beta 6.21)
