@@ -1,0 +1,51 @@
+<html>
+<head>
+<title>Advanced Configuration</title>
+<link rel="stylesheet" href="STYLE.CSS" type="text/css">
+</head>
+<body>
+
+<h2>Advanced Configuration</h2>
+
+<p>TeXnicCenter provides many configuration options in it dialog boxes and menus. Hopefully, all the configuration you need is available directly from TeXnicCenter. Some configuration tasks, however, are too broad or too uncommon to be supported directly by TeXnicCenter. This section contains advanced configuration tips and information to handle these special cases.</p>
+
+<p>Advanced Configuration Topics:</p>
+<ul>
+  <li><a href="#spelling">Spelling and Language</a></li>
+  <ol>
+     <li> <a href="#what-dictionaries">What dictionaries are available?</a></li>
+     <li><a href="#new">Where can I get additional spelling dictionaries?</a></li>
+     <li><a href="#install">How do I install additional spelling dictionaries?</a></li>
+     <li><a href="#personal-format">What is the format of the personal dictionary?</a></li>
+     <li><a href="#wordlist">Can I use a word list from another application as my personal dictionary?</a></li>
+     <li><a href="#spelling-error">How do I correct a spelling error in the dictionary?</a></li>
+     <li><a href="#locale">The locale I want to use is not available from the locale control?</a></li>
+  </ol>
+</ul>
+
+<h3><a name="spelling">Spelling and Language</a></h3>
+
+<h4><a name="what-dictionaries">What dictionaries are available?</a></h4>
+<p>TeXnicCenter comes with German and English language dictionaries. Dictionaries for several other languages are available on the Internet.</p>
+
+<h4><a name="new">Where can I get additional spelling dictionaries?</a></h4>
+<p>The spell checking library used by TeXnicCenter is called <b>MySpell</b>. It is the same library used by the <a href="http://www.mozilla.org">Mozilla</a> and <a href="http://www.openoffice.org">Open Office</a> projects. Any MySpell dictionary available for those applications is compatible with the TeXnicCenter. The Open Office project has a collection dictionaries supporting several languages and dialects available for <a href="http://whiteboard.openoffice.org/lingucomponent/download_dictionary.html">download</a>. </p>
+
+<h4><a name="install">How do I install additional spelling dictionaries?</a></h4>
+<p>Each MySpell dictionary consist of two main files. Copy both the affix file, "language-dialect.aff", and the dictionary file, "language-dialect.dic" into the Language directory of your TeXnicCenter installation. The new dictionary will appear in the <a href="options_page_spelling.html">'<var>Spelling</var>'</a> option page immediately, but your new selection will not take affect until the next time TeXnicCenter is started.</p>
+
+<h4><a name="personal-format">What is the format of the personal dictionary?</a></h4>
+<p>The personal dictionary format is a simple text file with one case-sensitive word per line. The first line contains the approximate number of words in the dictionary. If the first line doesn't contain a valid number, then TeXnicCenter guesses the word list size. Failing to place a blank line or a number as the first line in the personal dictionary file will cause the first word in the dictionary to be lost.</p>
+
+<h4><a name="wordlist">Can I use a word list from another application as my personal dictionary?</a></h4>
+<p>You may use any word list that is in the <a href="#personal-format">format accepted by the personal dictionary</a>. You will also need read and write access to the personal dictionary file.</p>
+
+<h4><a name="spelling-error">How do I correct a spelling error in the dictionary?</a></h4>
+<p>If the spelling error is in your personal dictionary, open your personal dictionary file in any text editor and remove or correct the incorrect word. If you believe you have found a spelling error in the main dictionary, ensure that the mis-spelling really is an error. First, ensure you have the correct language and dialect. The dialect determines which spelling of words with multiple spellings to use. Next, review your <a href="options_page_spelling.html">language and spelling option settings</a>. If you still believe that you have found a spelling error in a main dictionary, you should contact the author or maintainer of the dictionary directly.</p>
+
+<h4><a name="locale">The locale I want to use is not available from the locale control?</a></h4>
+<p>Most users should find that their preferred locale can safely be selected from within TeXnicCenter. You can however, explicitly set the locale by editing TeXnicCenter's registry keys. If you are uncomfortable editing your registry or you don't know what a registry editor is, you are probably best off not continuing with this configuration.</p>
+<p>First, it is important that TeXnicCenter not be running during any registry editing operation. Open the registry key  "HKEY_CURRENT_USER\Software\ToolsCenter\TeXnicCenter\Settings\Language\Locale" with a registry editor. Change the value of this key to your desired locale. The new locale setting takes affect the next time TeXnicCenter is started.</p>
+
+</body>
+</html>

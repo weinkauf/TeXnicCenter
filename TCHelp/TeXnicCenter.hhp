@@ -9,7 +9,7 @@ Enhanced decompilation=Yes
 Error log file=logfile.log
 Full-text search=Yes
 Index file=Index.hhk
-Language=0x409 Englisch (USA)
+Language=0x409 English (United States)
 Title=TeXnicCenter Help
 
 [WINDOWS]
@@ -302,6 +302,10 @@ placeholders.html
 ddecmds.html
 cmdlineargs.html
 getting_help.html
+advanced_configuration.html
+options_page_spelling.html
+
+[MAP]
 
 [INFOTYPES]
 
