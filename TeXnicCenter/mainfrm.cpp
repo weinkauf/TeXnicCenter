@@ -99,6 +99,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CBCGMDIFrameWnd)
 	ON_COMMAND(ID_VIEW_DOCTAB_ICONS, OnViewDocTabsIcons)
 	ON_COMMAND(ID_VIEW_DOCTAB_NOTE, OnViewDocTabsNote)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_BOTTOM, OnUpdateViewDocTabs)
+	ON_COMMAND(ID_TOOLS_CANCEL, OnToolsCancel)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_OFF, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_TOP, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_ICONS, OnUpdateViewDocTabs)
@@ -144,7 +145,7 @@ END_MESSAGE_MAP()
 
 static UINT indicators[] =
 {
-	ID_SEPARATOR,           // Statusleistenanzeige
+	ID_SEPARATOR,			// Statusleistenanzeige
 	ID_EDIT_INDICATOR_POSITION,
 	//ID_EDIT_INDICATOR_COL,
 	ID_EDIT_INDICATOR_CRLF,
@@ -248,7 +249,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		  sizeof(indicators)/sizeof(UINT)))
 	{
 		TRACE0("Failed to create status bar\n");
-		return -1;      // creation failed
+		return -1;		// creation failed
 	}
 
 	// initialization
@@ -299,7 +300,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockControlBar( &m_wndOutputBar );
 
 	// loading toolbars
-	CString		strControlBarRegEntry = theApp.m_strRegistryRoot + _T("\\CtrlBar\\");
+	CString 	strControlBarRegEntry = theApp.m_strRegistryRoot + _T("\\CtrlBar\\");
 
 	CBCGToolBar::LoadParameters( strControlBarRegEntry );
 
@@ -370,7 +371,7 @@ BOOL CMainFrame::CreateToolBar( CBCGToolBar *pToolBar, UINT unID, UINT unTitleID
 		!pToolBar->LoadToolBar( unID ))
 	{
 		TRACE( "!Failed to create %s tool bar\n", AfxLoadString( unTitleID ) );
-		return FALSE;      // creation failed
+		return FALSE;	   // creation failed
 	}
 
 	pToolBar->SetWindowText( AfxLoadString( unTitleID ) );
@@ -480,7 +481,7 @@ void CMainFrame::OnExtrasCustomize()
 	// create dialog object
 
 	CBCGToolbarCustomizeEx* pDlgCust = new CBCGToolbarCustomizeEx( 
-		this, TRUE,	
+		this, TRUE, 
 		BCGCUSTOMIZE_MENU_SHADOWS|BCGCUSTOMIZE_TEXT_LABELS| 
 			BCGCUSTOMIZE_LOOK_2000|BCGCUSTOMIZE_MENU_ANIMATIONS|BCGCUSTOMIZE_SELECT_SKINS|
 			BCGCUSTOMIZE_NOHELP);
@@ -525,7 +526,7 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 {
 	switch( nIDEvent )
 	{
-		case timerSave:	// save and parse project
+		case timerSave: // save and parse project
 			theApp.SaveAllModifiedWithoutPrompt();
 		case timerParse:	// parse project
 			SendMessage( WM_COMMAND, ID_PROJECT_PARSE );
@@ -574,7 +575,7 @@ void CMainFrame::OnOptionsChanged()
 
 void CMainFrame::OnToggleCtrlBar( UINT nIDEvent )
 {
-	CControlBar	*pCtrlBar = GetControlBarByCmd( nIDEvent );
+	CControlBar *pCtrlBar = GetControlBarByCmd( nIDEvent );
 	ASSERT( pCtrlBar );
 	ASSERT( IsWindow( pCtrlBar->m_hWnd ) );
 	ToggleControlBar( pCtrlBar );
@@ -583,7 +584,7 @@ void CMainFrame::OnToggleCtrlBar( UINT nIDEvent )
 
 void CMainFrame::OnToggleMathBar( UINT nIDEvent )
 {
-	CControlBar	*pCtrlBar = GetControlBarByCmd( nIDEvent );
+	CControlBar *pCtrlBar = GetControlBarByCmd( nIDEvent );
 	ASSERT( pCtrlBar );
 	ASSERT( IsWindow( pCtrlBar->m_hWnd ) );
 
@@ -611,7 +612,7 @@ void CMainFrame::OnToggleMathBar( UINT nIDEvent )
 
 void CMainFrame::OnCheckCtrlBarVisible( CCmdUI *pCmdUI )
 {
-	CControlBar	*pCtrlBar = GetControlBarByCmd( pCmdUI->m_nID );
+	CControlBar *pCtrlBar = GetControlBarByCmd( pCmdUI->m_nID );
 	ASSERT( pCtrlBar );
 	ASSERT( IsWindow( pCtrlBar->m_hWnd ) );
 	pCmdUI->SetCheck( IsControlBarVisible( pCtrlBar ) );
@@ -631,11 +632,11 @@ LRESULT CMainFrame::OnToolbarContextMenu( WPARAM wp, LPARAM lp )
 	// Add user-defined toolbar names to the end
 	for( int i = 0; i < (IDR_USER_TOOLBAR_LAST - IDR_USER_TOOLBAR_FIRST + 1); i++ )
 	{
-		CBCGToolBar	*pToolBar = GetUserBarByIndex( i );
+		CBCGToolBar *pToolBar = GetUserBarByIndex( i );
 		if( pToolBar != NULL )
 		{
 			// add title of current tool bar to menu
-			CString	strToolbarName;
+			CString strToolbarName;
 			pToolBar->GetWindowText( strToolbarName );
 			pPopup->InsertMenu( pPopup->GetMenuItemCount() - 2, MF_STRING | MF_BYPOSITION, ID_VIEW_USER_TOOLBAR_FIRST + i, strToolbarName );
 		}
@@ -675,7 +676,7 @@ void CMainFrame::OnWindowNavigator()
 		ShowControlBar( &m_wndNavigationBar, TRUE, FALSE );
 
 	// get active window and set focus on it
-	CWnd	*pwnd = m_wndNavigationBar.GetTabWnd().GetActiveWnd();
+	CWnd* pwnd = m_wndNavigationBar.GetTabWnd().GetActiveWnd();
 
 	if( !pwnd || !IsWindow( pwnd->m_hWnd ) )
 		return;
@@ -716,7 +717,13 @@ void CMainFrame::OnWindowFiles()
 }
 
 
-void CMainFrame::OnWindowOutput() 
+void CMainFrame::OnWindowOutput()
+{
+	ActivateOutputBar(true);
+}
+
+
+void CMainFrame::ActivateOutputBar(bool bSetFocus)
 {
 	if( !IsWindow( m_wndOutputBar.m_hWnd ) || !IsWindow( m_wndOutputBar.GetTabWnd().m_hWnd ) )
 		return;
@@ -726,63 +733,48 @@ void CMainFrame::OnWindowOutput()
 		ShowControlBar( &m_wndOutputBar, TRUE, FALSE );
 
 	// get active window and set focus on it
-	CWnd	*pwnd = m_wndOutputBar.GetTabWnd().GetActiveWnd();
-
-	if( !pwnd || !IsWindow( pwnd->m_hWnd ) )
-		return;
-
-	pwnd->SetFocus();
+	if (bSetFocus)
+	{
+		CWnd* pwnd = m_wndOutputBar.GetTabWnd().GetActiveWnd();
+		if (pwnd && IsWindow(pwnd->m_hWnd)) pwnd->SetFocus();
+	}
 }
 
 
-void CMainFrame::ActivateOutputTab( int nTab ) 
+void CMainFrame::ActivateOutputTab(int nTab, bool bSetFocus)
 {
 	if( !IsWindow( m_wndOutputBar.m_hWnd ) || !IsWindow( m_wndOutputBar.GetTabWnd().m_hWnd ) )
 		return;
 
-	// select structure tab
-	if( m_wndOutputBar.GetTabWnd().GetActiveTab() != nTab )
-		m_wndOutputBar.GetTabWnd().SetActiveTab( nTab );
+	// select output tab
+	if (m_wndOutputBar.GetTabWnd().GetActiveTab() != nTab)
+	{
+		//SetActiveTab sets the focus. So we need to restore, if this shall not be.
+		CWnd* pwndLastFocus = bSetFocus ? NULL : CWnd::GetFocus();
+		m_wndOutputBar.GetTabWnd().SetActiveTab(nTab);
+		//Set focus back
+		if (pwndLastFocus && IsWindow(pwndLastFocus->m_hWnd)) pwndLastFocus->SetFocus();
+	}
 
-	// Activate navigator window
-	OnWindowOutput();
+	// Activate output window
+	ActivateOutputBar(bSetFocus);
 }
 
 void CMainFrame::OnWindowBuildResult() 
 {
-	ActivateOutputTab( outputTabBuildResult );
+	ActivateOutputTab(outputTabBuildResult, true);
 }
 
 
 void CMainFrame::OnWindowGrep1() 
 {
-	ActivateOutputTab( outputTabGrep1 );
+	ActivateOutputTab(outputTabGrep1, true);
 }
 
 
 void CMainFrame::OnWindowGrep2() 
 {
-	ActivateOutputTab( outputTabGrep2 );
-}
-
-
-BOOL CMainFrame::PreTranslateMessage(MSG* pMsg) 
-{
-	// send key messages to edit view
-	if( (pMsg->message == WM_KEYDOWN || pMsg->message == WM_CHAR || pMsg->message == WM_KEYUP) && pMsg->wParam == VK_ESCAPE )	
-	{
-		// get active frame
-		CFrameWnd	*pFrame = GetActiveFrame();
-		if( pFrame )
-		{
-			// get active view
-			CView	*pView = pFrame->GetActiveView();
-			if( pView && pView->IsKindOf( RUNTIME_CLASS(CLatexEdit) ) && GetFocus() == pView )
-				pView->SendMessage( pMsg->message, pMsg->wParam, pMsg->lParam );
-		}
-	}
-
-	return CBCGMDIFrameWnd::PreTranslateMessage(pMsg);
+	ActivateOutputTab(outputTabGrep2, true);
 }
 
 
@@ -842,8 +834,8 @@ BOOL CMainFrame::ReplaceToolbarButton( UINT unCmdID, const CBCGToolbarButton &bu
 CBCGToolbarButton *CMainFrame::GetToolbarButton( UINT unCmdID, POSITION &pos ) const
 {
 	// find and return specified occurence of the button
-	int	nIndex;
-	int	nStartBar = (int)pos;
+	int nIndex;
+	int nStartBar = (int)pos;
 
 	if( nStartBar < 1 && (nIndex = m_wndFindBar.CommandToIndex( unCmdID )) > -1 )
 	{
@@ -897,7 +889,7 @@ CBCGToolbarButton *CMainFrame::GetToolbarButton( UINT unCmdID, POSITION &pos ) c
 	//Find the Toolbutton in the UserToolbars
 	for( int i = 0; i < (IDR_USER_TOOLBAR_LAST - IDR_USER_TOOLBAR_FIRST + 1); i++ )
 	{
-		CBCGToolBar	*pToolBar = GetUserBarByIndex( i );
+		CBCGToolBar *pToolBar = GetUserBarByIndex( i );
 		if (!pToolBar) continue;
 		if( nStartBar < (i + 8 + MATHBAR_COUNT) && (nIndex = pToolBar->CommandToIndex( unCmdID )) > -1 )
 		{
@@ -978,11 +970,11 @@ BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO*
 //		m_wndOutputBar.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 //		return TRUE;
 
-//	if ((m_wndNavigationBar.GetOutputDoc() != NULL) && 	
+//	if ((m_wndNavigationBar.GetOutputDoc() != NULL) &&	
 //		m_wndNavigationBar.GetOutputDoc()->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 //		return TRUE;
 
-	if ((m_wndOutputBar.GetOutputDoc() != NULL) && 	
+	if ((m_wndOutputBar.GetOutputDoc() != NULL) &&	
 		m_wndOutputBar.GetOutputDoc()->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 		return TRUE;
 	
@@ -992,11 +984,11 @@ BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO*
 void CMainFrame::GetControlBarsEx(CArray<CControlBar*, CControlBar*>& arrBars)
 {
 	if (m_wndMenuBar)
-		arrBars.Add(&m_wndMenuBar);        
+		arrBars.Add(&m_wndMenuBar); 	   
 	if (m_wndStatusBar)
-		arrBars.Add(&m_wndStatusBar);      
+		arrBars.Add(&m_wndStatusBar);	   
 	if (m_wndToolBar)
-		arrBars.Add(&m_wndToolBar);        
+		arrBars.Add(&m_wndToolBar); 	   
 	if (m_wndFormatBar)
 		arrBars.Add(&m_wndFormatBar);
 	if (m_wndFormatRUBar)
@@ -1008,11 +1000,11 @@ void CMainFrame::GetControlBarsEx(CArray<CControlBar*, CControlBar*>& arrBars)
 	
 	if (m_wndNavigationBar)
 		arrBars.Add(&m_wndNavigationBar);
-	                     
+						 
 	if (m_wndMathBar)
-		arrBars.Add(&m_wndMathBar);      
+		arrBars.Add(&m_wndMathBar); 	 
 	if (m_wndOutputBar)
-		arrBars.Add(&m_wndOutputBar);      
+		arrBars.Add(&m_wndOutputBar);	   
 	if (m_wndFindBar)
 		arrBars.Add(&m_wndFindBar);
 	
@@ -1058,19 +1050,19 @@ void CMainFrame::OnHelpSearch()
 {
 	HH_FTS_QUERY query;
 	ZeroMemory(&query, sizeof(query));
-    query.cbStruct        = sizeof(HH_FTS_QUERY);          
-    query.fStemmedSearch  = FALSE;
-    query.fTitleOnly      = FALSE; 
-    query.fExecute        = FALSE;
-    query.pszWindow       = NULL;
+	query.cbStruct		  = sizeof(HH_FTS_QUERY);		   
+	query.fStemmedSearch  = FALSE;
+	query.fTitleOnly	  = FALSE; 
+	query.fExecute		  = FALSE;
+	query.pszWindow 	  = NULL;
 
-	::HtmlHelp(NULL, AfxGetApp()->m_pszHelpFilePath, HH_DISPLAY_SEARCH, (DWORD)&query);	
+	::HtmlHelp(NULL, AfxGetApp()->m_pszHelpFilePath, HH_DISPLAY_SEARCH, (DWORD)&query); 
 }
 
 
 void CMainFrame::OnHelpIndex() 
 {
-	::HtmlHelp(NULL, AfxGetApp()->m_pszHelpFilePath, HH_DISPLAY_INDEX, (DWORD)_T("")); 	
+	::HtmlHelp(NULL, AfxGetApp()->m_pszHelpFilePath, HH_DISPLAY_INDEX, (DWORD)_T(""));	
 }
 
 
@@ -1214,12 +1206,12 @@ void CMainFrame::FullScreenOn()
 	}
 
 	// Save the necessary options for later restoration process
-	m_bMaxChild         =(dwStyle & WS_MAXIMIZE) ? TRUE : FALSE;
+	m_bMaxChild 		=(dwStyle & WS_MAXIMIZE) ? TRUE : FALSE;
 	GetWindowRect(&m_rcMainFrame);
-	int cxScrn   = ::GetSystemMetrics(SM_CXSCREEN);
-	int cyScrn   = ::GetSystemMetrics(SM_CYSCREEN);
+	int cxScrn	 = ::GetSystemMetrics(SM_CXSCREEN);
+	int cyScrn	 = ::GetSystemMetrics(SM_CYSCREEN);
 	
-	HideControlBars();   // Hide the bars
+	HideControlBars();	 // Hide the bars
 		
 	// The full screen toolbar array! The array form was chosen just in case
 	// you wish to add more buttons to the floating toolbar
@@ -1237,8 +1229,8 @@ void CMainFrame::FullScreenOn()
 	dwStyle &= ~WS_CAPTION;
 	::SetWindowLong(m_hWnd, GWL_STYLE, dwStyle);
 	// Now resize the main window
-	cxScrn   = ::GetSystemMetrics(SM_CXSCREEN);
-	cyScrn   = ::GetSystemMetrics(SM_CYSCREEN);
+	cxScrn	 = ::GetSystemMetrics(SM_CXSCREEN);
+	cyScrn	 = ::GetSystemMetrics(SM_CYSCREEN);
 	int cxBorder = ::GetSystemMetrics(SM_CXBORDER);
 	int cyBorder = ::GetSystemMetrics(SM_CYBORDER);
 	SetWindowPos(NULL, -cxBorder, -cyBorder, cxScrn + cxBorder * 2, 
@@ -1275,7 +1267,7 @@ void CMainFrame::FullScreenOn()
 void CMainFrame::FullScreenOff()
 {
 	// Display the hidden bars
-	ShowControlBars();   
+	ShowControlBars();	 
 		
 	if (m_pwndFullScrnToolBar != NULL)
 	{
@@ -1328,16 +1320,16 @@ void CMainFrame::RebuildToolsMenu()
 	CMenu	mnuRef;
 	VERIFY(mnuRef.LoadMenu(IDR_MAINFRAME));
 
-	CString	strToolsMenuTitle;
+	CString strToolsMenuTitle;
 	mnuRef.GetMenuString(mnuRef.GetMenuItemCount()-nToolsMenuIndexOffset, strToolsMenuTitle, MF_BYPOSITION);
 
 	//
 	// Get the tools menu from the current menu
 	//
-	int	nToolsMenuIndex = -1;
+	int nToolsMenuIndex = -1;
 	for (int nItem = 0; nItem < m_stdMenu.GetMenuItemCount(); ++nItem)
 	{
-		CString	strItem;
+		CString strItem;
 		m_stdMenu.GetMenuString(nItem, strItem, MF_BYPOSITION);
 		if (strItem == strToolsMenuTitle)
 		{
@@ -1359,7 +1351,7 @@ void CMainFrame::RebuildToolsMenu()
 	}
 
 	// Remove all current tool related entries
-	int	nLastEntryIndex = pToolsMenu->GetMenuItemCount()-1;
+	int nLastEntryIndex = pToolsMenu->GetMenuItemCount()-1;
 	while (
 		pToolsMenu->GetMenuItemID(nLastEntryIndex)==ID_TOOLS_ENTRY ||
 		(pToolsMenu->GetMenuItemID(nLastEntryIndex)>=ID_USER_TOOL_FIRST &&pToolsMenu->GetMenuItemID(nLastEntryIndex)<=ID_USER_TOOL_LAST))
@@ -1474,3 +1466,41 @@ void CMainFrame::OnExecuteUserTool(UINT nIDEvent)
 	theApp.GetUserToolsManager()->InvokeTool(nIDEvent);
 }
 
+
+void CMainFrame::OnToolsCancel() 
+{
+	//Dependent on the current mode, we do some fancy stuff here.
+	// Current edit view does NOT have focus: It gets it.
+	// Current edit view is in incremental search mode: Cancel search.
+	// Current edit view does have focus: Close output bar.
+
+	//Get active frame
+	CFrameWnd* pFrame = GetActiveFrame();
+	if (!pFrame) return;
+
+	//Get active view/edit
+	CLatexEdit* pEdit = NULL;
+	CView* pView = pFrame->GetActiveView();
+	if (pView) pEdit = dynamic_cast<CLatexEdit*>(pView);
+	if (!pEdit) return;
+
+	if (GetFocus() != pEdit)
+	{
+		//Activate view
+		pEdit->SetFocus();
+	}
+	else
+	{
+		//Cancel incremental search. Returns false, if it was not in search mode.
+		if (!(pEdit->OnEditFindIncrementalStop(false)))
+		{
+			//Close output bar
+			ASSERT(m_wndOutputBar);
+			ASSERT(IsWindow(m_wndOutputBar.m_hWnd));
+			if (IsControlBarVisible(&m_wndOutputBar))
+			{
+				ShowControlBar(&m_wndOutputBar, FALSE, FALSE);
+			}
+		}
+	}
+}

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "WorkspaceBar.h"
@@ -84,24 +90,6 @@ void CWorkspaceBar::OnSize(UINT nType, int cx, int cy)
 	
 	m_wndTabs.SetWindowPos (NULL, -1, -1, cx, cy,
 		SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);	
-}
-
-BOOL CWorkspaceBar::PreTranslateMessage(MSG* pMsg) 
-{
-	if (pMsg->message == WM_KEYDOWN &&
-		pMsg->wParam == VK_ESCAPE)
-	{
-		CMainFrame* pMainFrame = (CMainFrame*) AfxGetMainWnd ();
-		ASSERT_VALID (pMainFrame);
-
-		if (pMainFrame->GetActivePopup () == NULL)
-		{
-			pMainFrame->SetFocus ();
-			return TRUE;
-		}
-	}
-	
-	return CBCGSizingControlBar::PreTranslateMessage(pMsg);
 }
 
 

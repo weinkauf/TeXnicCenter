@@ -43,14 +43,13 @@
 #include "LatexDoc.h"
 #include "CrystalEditViewEx.h"
 
+
+/** Edit view for LaTeX files.
+
+@author Sven Wiegand
+*/
 class CLatexEdit : public CCrystalEditViewEx
 {
-	/** 
-	CMainFrame needs to call OnChar, when Esc was pressed and it is attached to a command of
-	the application.
-	*/
-	friend class CMainFrame;
-
 // construction/destruction
 protected:
 	CLatexEdit();

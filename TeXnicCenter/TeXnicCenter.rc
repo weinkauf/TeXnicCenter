@@ -131,7 +131,7 @@ BEGIN
     "T",            ID_INSERT_TABULAR,      VIRTKEY, CONTROL, ALT, NOINVERT
     "U",            ID_WINDOW_ENVIRONMENT,  VIRTKEY, CONTROL, NOINVERT
     "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
-    VK_ESCAPE,      ID_WINDOW_EDITOR,       VIRTKEY, NOINVERT
+    VK_ESCAPE,      ID_TOOLS_CANCEL,        VIRTKEY, NOINVERT
     VK_F1,          ID_HELP,                VIRTKEY, NOINVERT
     VK_F1,          ID_CONTEXT_HELP,        VIRTKEY, SHIFT, NOINVERT
     VK_F10,         ID_NEXT_WARNING,        VIRTKEY, NOINVERT
@@ -780,6 +780,10 @@ END
 
 IDR_HIDDEN_CMDS MENU DISCARDABLE 
 BEGIN
+    POPUP "E&xtras"
+    BEGIN
+        MENUITEM "Abbrechen",                   ID_TOOLS_CANCEL
+    END
     POPUP "&Fenster"
     BEGIN
         MENUITEM "Editorfenster aktivieren",    ID_WINDOW_EDITOR
@@ -2256,7 +2260,7 @@ END
 IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Allgemein"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     GROUPBOX        "Allgemein",IDC_STATIC,8,8,284,31
     CONTROL         "&Letzte Sitzung bei Start wiederherstellen",
@@ -4643,6 +4647,7 @@ BEGIN
     ID_VIEW_DOCTAB_OFF      "Deaktiviert die Reiter zum Wechseln zwischen geöffneten Dokumenten\nDokumentregister aus"
     ID_VIEW_DOCTAB_ICONS    "Stellt die Dokumentsymbole auf den Reitern zum Wechseln zwischen geöffneten Dokumenten dar\nDokumentregistersymbole an/aus"
     ID_VIEW_DOCTAB_NOTE     "Stellt die Reiter zum Wechseln zwischen geöffneten Dokumenten im Stile eines Aktenordners dar\nAktenordnerstil an/aus"
+    ID_TOOLS_CANCEL         "Aktiviert Editor, schliesst Fenster oder bricht bestimmte Vorgänge ab"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4741,6 +4746,10 @@ END
 
 IDR_HIDDEN_CMDS MENU DISCARDABLE 
 BEGIN
+    POPUP "&Tools"
+    BEGIN
+        MENUITEM "Cancel",                      ID_TOOLS_CANCEL
+    END
     POPUP "&Window"
     BEGIN
         MENUITEM "Activate editor",             ID_WINDOW_EDITOR
@@ -6031,7 +6040,7 @@ END
 IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "General"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     GROUPBOX        "General",IDC_STATIC,8,8,284,31
     CONTROL         "Restore last &session on startup",
@@ -8533,6 +8542,7 @@ BEGIN
     ID_VIEW_DOCTAB_OFF      "Deactivates the tabs to switch between open documents\nDocument tabs off"
     ID_VIEW_DOCTAB_ICONS    "Shows document icons on the document tabs\nDocument icons on tabs"
     ID_VIEW_DOCTAB_NOTE     "Displays the document tabs in a note style\nNote styled document tabs"
+    ID_TOOLS_CANCEL         "Activates editor, hides windows or cancels certain modes"
 END
 
 STRINGTABLE DISCARDABLE 
