@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_TEXNICCENTER_H__447410E1_1058_11D3_929E_D75EECD5B417__INCLUDED_)
 #define AFX_TEXNICCENTER_H__447410E1_1058_11D3_929E_D75EECD5B417__INCLUDED_
 
@@ -318,12 +324,6 @@ protected:
 	(Directory that was the current one while start up of TeXnicCenter). 
 	*/
 	CString m_strWorkingDir;
-
-	/** 
-	Personal directory .
-	(File system directory that serves as a common repository for documents.)
-	*/
-	CString m_strPersonalDir;
 
 	/**
 	Handle to localized version of BCGCB-resource-DLL.
