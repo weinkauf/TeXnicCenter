@@ -191,6 +191,13 @@ public:
 	*/
 	virtual DWORD ParseLine( DWORD dwCookie, int nLineIndex, CCrystalTextBlock *pTextBlock );
 
+	/**
+	Find the next word in a line.
+
+	See base class declaration for parameter description.
+	*/
+	virtual void NextWord( int nLineIndex, int &nStartPos, int &nEndPos );
+
 // attributes
 protected:
 	enum tagCookies {
