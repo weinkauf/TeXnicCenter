@@ -50,16 +50,15 @@ IMPLEMENT_DYNCREATE(COptionPageFileClean, CPropertyPage)
 
 COptionPageFileClean::COptionPageFileClean()
 : CPropertyPage(COptionPageFileClean::IDD),
-	m_PHInsertBtn(IDR_POPUP_PLACEHOLDEREX_NOOPT)
+	m_PHInsertBtn(IDR_POPUP_PLACEHOLDEREX_NOOPT),
+	m_bItemChangeLock(false),
+	m_bUpdatingList(false)
 {
 	//{{AFX_DATA_INIT(COptionPageFileClean)
 	//}}AFX_DATA_INIT
 
 	//Read from the config
 	m_bConfirm = g_configuration.m_bFileCleanConfirm;
-
-	m_bUpdatingList = false;
-//	m_bUserListEvent = false;
 }
 
 COptionPageFileClean::~COptionPageFileClean()
@@ -88,17 +87,11 @@ BEGIN_MESSAGE_MAP(COptionPageFileClean, CPropertyPage)
 	ON_EN_CHANGE(IDC_OPTIONS_FILECLEAN_PATTERN, OnChangePattern)
 	ON_CBN_SELCHANGE(IDC_OPTIONS_FILECLEAN_HANDLING, OnSelchangeHandling)
 	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_RECURSIVE, OnRecursive)
-	ON_NOTIFY(NM_CLICK, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
 	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_DELETE, OnDelete)
 	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_NEW, OnNew)
 	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_SORT, OnSort)
-	ON_NOTIFY(NM_DBLCLK, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
-	ON_NOTIFY(NM_RCLICK, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
-	ON_NOTIFY(NM_RDBLCLK, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
-	ON_NOTIFY(NM_RETURN, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
-	ON_NOTIFY(NM_SETFOCUS, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
-	ON_NOTIFY(LVN_COLUMNCLICK, IDC_OPTIONS_FILECLEAN_LIST, OnListEvent)
 	ON_EN_KILLFOCUS(IDC_OPTIONS_FILECLEAN_PATTERN, OnLeavePattern)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_OPTIONS_FILECLEAN_LIST, OnListItemchanged)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -206,7 +199,7 @@ void COptionPageFileClean::RefillList()
 BOOL COptionPageFileClean::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
-	
+
 	//Initialize controls
 	m_PHInsertBtn.AttachEditCtrl(&m_PatternEdit);
 //	m_images.Create( IDB_ITEM_TYPES, 16, 0, RGB( 0, 128, 128 ) );
@@ -309,9 +302,7 @@ void COptionPageFileClean::OnChangeName()
 
 	m_NameEdit.GetWindowText(pItem->strDescription);
 
-//	//User ListEvent?
-//	if (!m_bUserListEvent)
-		UpdateSelectedListItem();
+	UpdateSelectedListItem();
 }
 
 void COptionPageFileClean::OnChangePattern() 
@@ -325,8 +316,6 @@ void COptionPageFileClean::OnChangePattern()
 
 	m_PatternEdit.GetWindowText(pItem->strPattern);
 
-//	//User ListEvent?
-//	if (!m_bUserListEvent)
 	UpdateSelectedListItem();
 }
 
@@ -367,9 +356,7 @@ void COptionPageFileClean::OnSelchangeHandling()
 			pItem->tFileHandling = CFileCleanItem::none;
 	}
 
-//	//User ListEvent?
-//	if (!m_bUserListEvent)
-		UpdateSelectedListItem();
+	UpdateSelectedListItem();
 }
 
 void COptionPageFileClean::OnRecursive()
@@ -383,9 +370,7 @@ void COptionPageFileClean::OnRecursive()
 
 	pItem->bRecursive = (bool)m_RecursiveBtn.GetCheck();
 
-//	//User ListEvent?
-//	if (!m_bUserListEvent)
-		UpdateSelectedListItem();
+	UpdateSelectedListItem();
 }
 
 CFileCleanItem* COptionPageFileClean::GetSelectedFCItem()
@@ -481,17 +466,30 @@ CString COptionPageFileClean::GetFileHandlingName(CFileCleanItem* pItem)
 	return strHandling;
 }
 
-void COptionPageFileClean::OnListEvent(NMHDR* pNMHDR, LRESULT* pResult) 
+void COptionPageFileClean::OnListItemchanged(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-	//TODO: I can't figure out how to get LVN_ITEMACTIVATE.
-	//I tried OnNotify(), but it didn't work cause the NMHDR was not vaild.
-	//At least it did not contain, what I wanted. I tried NMITEMACTIVATE as well.
-	//... I am somewhat better with the pure SDK...
+	//Locked?
+	if (m_bItemChangeLock)
+	{
+		return;
+	}
 
-//	m_bUserListEvent = false;
-	UpdateControls();
-//	m_bUserListEvent = false;
-	
+	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
+
+	//Did the state change?
+	if (pNMListView->uChanged & LVIF_STATE)
+	{
+		//Was this Item selected or de-selected
+		// - We're considering only selected Items
+		if (pNMListView->uNewState & LVIS_SELECTED)
+		{
+			//Lock this event. Should not be considered, while executing UpdateControls
+			m_bItemChangeLock = true;
+			UpdateControls();
+			m_bItemChangeLock = false;
+		}
+	}
+
 	*pResult = 0;
 }
 
@@ -605,3 +603,4 @@ void COptionPageFileClean::OnLeavePattern()
 		//The vaildity of a pattern will be checked before deleting files anyway.
 	}
 }
+
