@@ -555,6 +555,17 @@ HID_PH_CSELECTION                       0x195A5
 HID_ITEM_INSERT_LABEL                   0x195A6
 HID_HELP_KEYMAPPING                     0x195A7
 HID_HELP_CONTENTS                       0x195A9
+HID_SPELL_PROJECT                       0x195AA
+HID_SPELL_FILE                          0x195AB
+HID_PHS_ALLPROJECTFILES                 0x195AD
+HID_PHS_ALLTEXFILES                     0x195AE
+HID_PHS_ALLBIBTEXFILES                  0x195AF
+HID_PHS_ALLGRAPHICFILES                 0x195B0
+HID_PHS_ALLOPENEDFILES                  0x195B1
+HID_PHS_ALLTXCFILES                     0x195B2
+HID_PHS_ALLFILESETS                     0x195B3
+HID_PHS_DOLLAR                          0x195B4
+HID_LATEX_CLEAN                         0x195B5
  
 // Prompts (IDP_*) 
  
@@ -587,6 +598,7 @@ HIDR_FULLSCREEN                         0x200E0
 HIDR_MDI_CLIENT                         0x200E2
 HIDR_POPUP_PLACEHOLDER_DIR              0x200E3
 HIDR_POPUP_MDICLIENT                    0x200E7
+HIDR_POPUP_PLACEHOLDEREX_NOOPT          0x200FD
 HIDR_MATH                               0x20136
 HIDR_MATHBAR1                           0x20137
 HIDR_MATHBAR2                           0x20138
@@ -612,6 +624,7 @@ HIDD_ABOUTBOX                           0x20064
 HIDD_TIP                                0x20067
 HIDD_OUTPUTWIZARD_WELCOME               0x2006A
 HIDD_OPTIONS_PATHS                      0x2006B
+HIDD_FILECLEANCONFIRM                   0x20072
 HIDD_GET_PATH                           0x20083
 HIDD_FILE_NEW                           0x2008B
 HIDD_FILE_TEMPLATE                      0x2008D
@@ -635,6 +648,8 @@ HIDD_FILESEARCH                         0x200D3
 HIDD_PROFILE                            0x200DE
 HIDD_PROFILE_NAME                       0x200DF
 HIDD_ACTIVE_PROFILE                     0x200E0
+HIDD_OPTIONS_LANGUAGE                   0x200F5
+HIDD_OPTIONS_FILECLEAN                  0x200F9
 HIDD_CUSTOMIZEPAGE_EDITOR               0x23EE9
 HIDD_OUTPUTWIZARD_MIKTEX                0x23EEA
 HIDD_OUTPUTWIZARD_PATH                  0x23EEB

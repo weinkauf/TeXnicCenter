@@ -67,6 +67,7 @@ protected:
 	//{{AFX_MSG(COptionPageFile)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnUpdateCtrls();
+	afx_msg void OnBrowseDefaultPath();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -83,6 +84,7 @@ protected:
 	BOOL	m_bSaveBeforeCompilation;
 	UINT	m_unSaveInterval;
 	int		m_nFileFormat;
+	CString	m_strDefaultPath;
 	//}}AFX_DATA
 };
 

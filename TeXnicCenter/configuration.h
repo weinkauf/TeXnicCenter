@@ -211,6 +211,9 @@ public:
 	/** Standard file format used to create new documents or to save documents. */
 	int m_nStandardFileFormat;
 
+	/** Default path. */
+	CString m_strDefaultPath;
+
 	///////////////////////////////////////////////////////////////////
 	// character replacement
 

@@ -37,7 +37,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include <function.h>
+/* #include <function.h> */
 
 /**
 List that maintains elements in sorted order.
