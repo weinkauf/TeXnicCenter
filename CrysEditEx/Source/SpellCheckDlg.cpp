@@ -67,7 +67,7 @@ void CSpellCheckDlg::Reset(CCrystalEditView *pBuddy, MySpell *pSpell)
 	VERIFY( m_pBuddy = pBuddy );
 	VERIFY( m_pTextBuffer = pBuddy->LocateTextBuffer() );
 	VERIFY( m_pParser = m_pBuddy->GetParser() );
-	VERIFY( m_pSpell = pSpell );	
+	m_pSpell = pSpell;
 }
 
 
@@ -154,8 +154,8 @@ void CSpellCheckDlg::OnSpellNext()
 BOOL CSpellCheckDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
-	ASSERT( m_pBuddy );
-	ASSERT( m_pSpell );
+	if ( m_pBuddy == NULL || m_pSpell == NULL )
+		return TRUE;
 
 	if ( m_pBuddy->IsSelection() && m_bSelection )
 	{
@@ -361,5 +361,14 @@ void CSpellCheckDlg::OnDblclkSpellSuggest( NMHDR* pNMHDR, LRESULT* pResult )
 {
 	OnSpellReplace();
 	*pResult = 0;
+}
+
+
+int CSpellCheckDlg::DoModal() 
+{
+	if ( m_pSpell == NULL )
+		return IDABORT;
+
+	return CDialog::DoModal();
 }
 
