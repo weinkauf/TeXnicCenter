@@ -19,6 +19,12 @@ class CRYSEDIT_CLASS_DECL MySpell
 	HashMgr		*pHMgr;
 	SuggestMgr	*pSMgr;
 
+	int			bModified;
+	int			bMainOnly;
+	HashMgr		*pIgnoreHash;
+	HashMgr		*pAddHash;
+	char		*strPersonalDictionaryPath;
+
 private:
 	int captype(const char *) const;
 	void mkinitcap(char *) const;
@@ -33,10 +39,29 @@ public:
 	int suggest(char*** slst, const char * word) const;
 	int spell(const char *) const;
 
-	inline void MySpell::release_suggest(char ** slst) const
+	void add_word(const char *word);
+	void ignore_word(const char *word);
+
+	void set_personal_dictionary(const char *fileName);
+	int open_personal_dictionary();
+	int save_personal_dictionary(const char *fileName);
+
+	inline void suggest_main(int suggestFromMainOnly)
+	{
+		bMainOnly = suggestFromMainOnly;
+	}
+
+	inline int ismodified() const 
 	{ 
-	  if ( pSMgr )
-		  pSMgr->release_suggest(slst);
+		return bModified; 
+	}
+
+	inline void MySpell::release_suggest(char *** slst) const
+	{ 
+		if (slst != NULL) {
+			pSMgr->release_suggest(*slst);
+			*slst = NULL;
+		}
 	}
 };
 

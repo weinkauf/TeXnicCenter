@@ -28,12 +28,17 @@ HashMgr::HashMgr(const char * tpath)
 	tableptr = NULL;
 	int ec = load_tables(tpath);
 	if (ec) {
-		/* error condition - what should we do here */
-		fprintf(stderr,"Hash Manager Error : %d\n",ec);
-		fflush(stderr);
-		delete [] tableptr;
-		tablesize = 0;
+		throw FALSE;
 	}
+}
+
+
+HashMgr::HashMgr()
+{
+	tablesize = 37;
+	hashsize = 0;
+	tableptr = new hentry[tablesize];
+	memset(tableptr, 0, tablesize*sizeof(struct hentry));
 }
 
 
@@ -76,6 +81,13 @@ struct hentry * HashMgr::lookup(const char *word) const
 }
 
 
+// add a word to the hash table (public)
+int HashMgr::add_word(const char *word, int wl /*= -1*/)
+{
+	if (wl == -1) wl = strlen(word);
+	int retValue = add_word(word, wl, NULL, 0);
+	return retValue;
+}
 
 // add a word to the hash table (private)
 
@@ -111,22 +123,26 @@ int HashMgr::save_tables(const char * tpath) const
 
 	if (tableptr) {
 		FILE * rawdict = fopen(tpath, "w");
-		if (rawdict == NULL) return 1;
+		if (rawdict == NULL) {
+			ASSERT( FALSE ); // error writing the dictionary
+			return -1;
+		}
 
 		char lineString[MAXDELEN];
-		itoa(hashsize, lineString, 10);
-		fputs(lineString ,rawdict);
+		sprintf(lineString, "%d\n", hashsize);
+		fputs(lineString, rawdict);
 
 		for (int i =0; i < tablesize; ++i) {
 			struct hentry * dp = &tableptr[i];
 			while (dp != NULL) {
 				struct hentry * next = dp->next;
 				if (dp->word != NULL) {
-					if (dp->alen != NULL) {
-						sprintf(lineString,"%s/%s", dp->word, dp->astr);
+					if (dp->astr != NULL) {
+						sprintf(lineString,"%s/%s\n", dp->word, dp->astr);
 						fputs(lineString, rawdict);
 					} else {
-						fputs(dp->word, rawdict);
+						sprintf(lineString,"%s\n", dp->word);
+						fputs(lineString, rawdict);
 					}
 				}
 				dp = next;
@@ -150,7 +166,15 @@ int HashMgr::load_tables(const char * tpath)
 
 	// first read the first line of file to get hash table size */
 	char ts[MAXDELEN];
-	if (! fgets(ts, MAXDELEN-1,rawdict)) return 2;
+	if ( !fgets(ts, MAXDELEN-1,rawdict) ) {
+		// Empty dictionary
+		tablesize = 37;
+		hashsize = 0;
+		tableptr = new hentry[tablesize];
+		memset(tableptr, 0, tablesize*sizeof(struct hentry));
+		fclose(rawdict);
+		return 0;
+	}
 	mychomp(ts);
 	tablesize = atoi(ts);
 	tablesize = tablesize + 5;

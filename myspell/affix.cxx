@@ -37,7 +37,7 @@ Prefix::~Prefix()
 
 
 // check if this prefix is present
-struct hentry * Prefix::check(const char * word, int len) const
+struct hentry * Prefix::check(HashMgr *pHMgr, const char * word, int len) const
 {
 	struct affentry *   pp;	// pointer to current prefix affentry
 	int			cond;	// condition number being examined
@@ -80,7 +80,7 @@ struct hentry * Prefix::check(const char * word, int len) const
 
 			if (cond >= pp->numconds) {
 				tmpl += pp->stripl;
-				if ((he = pmyMgr->lookup(tmpword)) != NULL) {
+				if ((he = pmyMgr->lookup(pHMgr, tmpword)) != NULL) {
 				if (TESTAFF(he->astr, flag, he->alen)) return he;
 				}
 
@@ -89,7 +89,7 @@ struct hentry * Prefix::check(const char * word, int len) const
 				// ross checked combined with a suffix
 
 				if (pp->cpflag & XPRODUCT) {
-					he = pmyMgr->cross_check(tmpword, tmpl, XPRODUCT, this);
+					he = pmyMgr->cross_check(pHMgr, tmpword, tmpl, XPRODUCT, this);
 					if (he) return he;
 				}
 			}
@@ -121,7 +121,7 @@ Suffix::~Suffix()
 
 
 // see if this suffix is present in the word 
-struct hentry * Suffix::check(const char * word, int len, int optflags, Prefix* ppfx) const
+struct hentry * Suffix::check(HashMgr *pHMgr, const char * word, int len, int optflags, Prefix* ppfx) const
 {
 	struct affentry	*sp;	         // suffix entry pointer
 	int				tmpl;		 // length of tmpword 
@@ -175,7 +175,7 @@ struct hentry * Suffix::check(const char * word, int len, int optflags, Prefix* 
 			// root word in the dictionary
 
 			if (cond < 0) {
-				if ((he = pmyMgr->lookup(tmpword)) != NULL) {
+				if ((he = pmyMgr->lookup(pHMgr, tmpword)) != NULL) {
 					if (TESTAFF(he->astr,flag,he->alen) && 
 					((optflags & XPRODUCT) == 0 || 
 					TESTAFF(he->astr,ppfx->flag,he->alen))) return he;

@@ -13,7 +13,7 @@ public:
 	Prefix(AffixMgr* pmgr, unsigned char a, int num, affentry* dp );
 	virtual ~Prefix();
 
-	struct hentry* check(const char * word, int len) const;
+	struct hentry* check(HashMgr *pHMgr, const char * word, int len) const;
 };
 
 
@@ -26,7 +26,7 @@ public:
 	Suffix(AffixMgr* pmgr, unsigned char a, int num, affentry* dp );
 	virtual ~Suffix();
 
-	struct hentry* check(const char * word, int len, int optflags, Prefix* ppfx) const;
+	struct hentry* check(HashMgr *pHMgr, const char * word, int len, int optflags, Prefix* ppfx) const;
 };
 
 #endif
