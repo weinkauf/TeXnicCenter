@@ -56,6 +56,8 @@ COptionPageGeneric::COptionPageGeneric() : CPropertyPage(COptionPageGeneric::IDD
 	m_strOpeningQm = g_configuration.m_strOpeningQuotationMark;
 	m_bRestoreSession = g_configuration.m_bLoadLastProject;
 	m_bOptimizeGuiForVisuallyHandicappedUsers = g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart;
+	m_strGuiLanguage = g_configuration.m_strGuiLanguageOnNextStart;
+	m_strLookAndFeel = g_configuration.m_strLookAndFeelOnNextStart;
 	//}}AFX_DATA_INIT
 }
 
@@ -74,10 +76,34 @@ void COptionPageGeneric::UpdateCtrlStates()
 }
 
 
+void COptionPageGeneric::RefillLanguageList()
+{
+	m_wndGuiLanguageList.ResetContent();
+	
+	// add build in language 'English'
+	m_wndGuiLanguageList.AddString(_T("English"));
+
+	// parse language directory to determine additional languages
+	CFileFind	ff;
+	BOOL			bMoreFiles = ff.FindFile(CPathTool::Cat(theApp.GetWorkingDir(), _T("language\\TxcRes*.dll")));
+	while (bMoreFiles)
+	{
+		bMoreFiles = ff.FindNextFile();
+
+		CString	strLanguage = ff.GetFileTitle();
+		strLanguage = strLanguage.Right(strLanguage.GetLength() - _tcslen(_T("TxcRes")));
+
+		m_wndGuiLanguageList.AddString(strLanguage);
+	}
+}
+
+
 void COptionPageGeneric::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPageGeneric)
+	DDX_Control(pDX, IDC_LOOKNFEEL_COMBO, m_wndLookAndFeelList);
+	DDX_Control(pDX, IDC_GUI_LANGUAGE_COMBO, m_wndGuiLanguageList);
 	DDX_Control(pDX, IDC_OPTIONS_REPLACE_QM_OPEN_EDIT, m_wndOpeningQm);
 	DDX_Control(pDX, IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT, m_wndClosingQm);
 	DDX_Control(pDX, IDC_OPTIONS_QM_LABEL2, m_wndQmLabel2);
@@ -88,6 +114,41 @@ void COptionPageGeneric::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_OPTIONS_RESTORE_SESSION, m_bRestoreSession);
 	DDX_Check(pDX, IDC_OPTIONS_OPTIMIZE_FOR_VISUALLY_HANDICAPPED_USERS, m_bOptimizeGuiForVisuallyHandicappedUsers);
 	//}}AFX_DATA_MAP
+
+	if (pDX->m_bSaveAndValidate)
+	{
+		// Read selected information into variables
+		int	nSelection = -1;
+
+		// Look and feel
+		nSelection = m_wndLookAndFeelList.GetCurSel();
+		if (nSelection==CB_ERR)
+			nSelection = m_wndLookAndFeelList.SetCurSel(0);
+		m_wndLookAndFeelList.GetLBText(nSelection, m_strLookAndFeel);
+
+		// GUI language
+		nSelection = m_wndGuiLanguageList.GetCurSel();
+		if (nSelection==CB_ERR)
+			nSelection = m_wndGuiLanguageList.SetCurSel(0);
+		m_wndGuiLanguageList.GetLBText(nSelection, m_strGuiLanguage);
+	}
+	else
+	{
+		// update liste selection based on variables
+		int	nMatch = -1;
+		
+		// Look and feel
+		nMatch = m_wndLookAndFeelList.FindStringExact(0, m_strLookAndFeel);
+		if (nMatch==CB_ERR)
+			nMatch = 0;
+		m_wndLookAndFeelList.SetCurSel(nMatch);
+		
+		// GUI language
+		nMatch = m_wndGuiLanguageList.FindStringExact(0, m_strGuiLanguage);
+		if (nMatch==CB_ERR)
+			nMatch = 0;
+		m_wndGuiLanguageList.SetCurSel(nMatch);
+	}
 }
 
 
@@ -102,8 +163,11 @@ BOOL COptionPageGeneric::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
 
-	UpdateCtrlStates();
+	RefillLanguageList();
+	UpdateData(FALSE);
 	
+	UpdateCtrlStates();
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben
 }
@@ -118,9 +182,21 @@ void COptionPageGeneric::OnOK()
 	g_configuration.m_strOpeningQuotationMark = m_strOpeningQm;
 	g_configuration.m_bLoadLastProject = m_bRestoreSession ;
 
-	if ((bool)g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers != (bool)m_bOptimizeGuiForVisuallyHandicappedUsers)
+	// generate message, that tells the user, that his settings will be
+	// activated on next start of TXC if those settings have changed.
+	BOOL	bShowNextStartInfo = FALSE;
+	bShowNextStartInfo = (bool)g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers != (bool)m_bOptimizeGuiForVisuallyHandicappedUsers;
+	if (!bShowNextStartInfo)
+		bShowNextStartInfo = g_configuration.m_strGuiLanguage != m_strGuiLanguage;
+	if (!bShowNextStartInfo)
+		bShowNextStartInfo = g_configuration.m_strLookAndFeel != m_strLookAndFeel;
+
+	if (bShowNextStartInfo)
 		AfxMessageBox(STE_OPTIONS_REQUIRES_RESTART, MB_ICONINFORMATION|MB_OK);
+
 	g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart = m_bOptimizeGuiForVisuallyHandicappedUsers;
+	g_configuration.m_strGuiLanguageOnNextStart = m_strGuiLanguage;
+	g_configuration.m_strLookAndFeelOnNextStart = m_strLookAndFeel;
 	
 	CPropertyPage::OnOK();
 }

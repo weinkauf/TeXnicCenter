@@ -234,7 +234,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// loading localized resource DLL for BCGCB
-	m_hInstBCGCBRes = LoadLibrary(CString((LPCTSTR)STE_BCGCBRESDLL));
+	m_hInstBCGCBRes = LoadLibrary(CPathTool::Cat(_T("language"), CString((LPCTSTR)STE_BCGCBRESDLL)));
 	if (m_hInstBCGCBRes)
 		BCGCBSetResourceHandle(m_hInstBCGCBRes);
 
@@ -295,7 +295,14 @@ BOOL CTeXnicCenterApp::InitInstance()
 	SetRegistryBase( _T("BCGWorkspace") );
 	InitContextMenuManager();
 	InitKeyboardManager();
-	CBCGVisualManager::SetDefaultManager(RUNTIME_CLASS(CBCGWinXPVisualManager));
+	if (g_configuration.m_strLookAndFeel==_T("Office 2000"))
+		CBCGVisualManager::SetDefaultManager(RUNTIME_CLASS(CBCGVisualManager));
+	else if (g_configuration.m_strLookAndFeel==_T("Office XP"))
+		CBCGVisualManager::SetDefaultManager(RUNTIME_CLASS(CBCGVisualManagerXP));
+	else if (g_configuration.m_strLookAndFeel==_T("Windows XP"))
+		CBCGVisualManager::SetDefaultManager(RUNTIME_CLASS(CBCGWinXPVisualManager));
+	else /*_T("Office 2003")*/
+		CBCGVisualManager::SetDefaultManager(RUNTIME_CLASS(CBCGVisualManager2003));
 	InitSkinManager(g_configuration.m_strSkinDirectory);
 	GetSkinManager()->EnableSkinsDownload(g_configuration.m_strSkinUrl);
 	CBCGToolbarComboBoxButton::SetFlatMode();

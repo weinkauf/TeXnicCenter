@@ -63,6 +63,12 @@ protected:
 	*/
 	void UpdateCtrlStates();
 
+	/**
+	Fills the language list with the languages available on this 
+	system.
+	*/
+	void RefillLanguageList();
+
 // overwritings
 public:
 	//{{AFX_VIRTUAL(COptionPageGeneric)
@@ -85,6 +91,8 @@ protected:
 public:
 	//{{AFX_DATA(COptionPageGeneric)
 	enum { IDD = IDD_OPTIONS_GENERIC };
+	CComboBox	m_wndLookAndFeelList;
+	CComboBox	m_wndGuiLanguageList;
 	CEdit	m_wndOpeningQm;
 	CEdit	m_wndClosingQm;
 	CStatic	m_wndQmLabel2;
@@ -95,7 +103,8 @@ public:
 	BOOL	m_bRestoreSession;
 	BOOL	m_bOptimizeGuiForVisuallyHandicappedUsers;
 	//}}AFX_DATA
-
+	CString m_strLookAndFeel;
+	CString m_strGuiLanguage;
 };
 
 //{{AFX_INSERT_LOCATION}}
