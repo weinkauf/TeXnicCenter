@@ -48,11 +48,11 @@ SOURCE=.\mainpage.dox
 # End Source File
 # Begin Source File
 
-SOURCE=.\MakeClean.cmd
+SOURCE=.\MakeClean.bat
 # End Source File
 # Begin Source File
 
-SOURCE=.\MakeSourceCodeDoc.cmd
+SOURCE=.\MakeSourceCodeDoc.bat
 # End Source File
 # Begin Source File
 
@@ -63,7 +63,7 @@ OutDir=.\html
 InputPath=.\txc.doxy
 
 "$(OutDir)\index.html" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(InputDir)\MakeSourceCodeDoc.cmd
+	$(InputDir)\MakeSourceCodeDoc.bat
 
 # End Custom Build
 # End Source File
