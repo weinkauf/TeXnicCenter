@@ -1877,36 +1877,22 @@ BEGIN
     BEGIN
         MENUITEM "Kompletter Pfad der Hauptdatei", ID_PH_MPATH
         MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung", ID_PH_MBASE
-        MENUITEM "Laufwerksbuchstabe der Hauptdatei mit Doppelpunkt", 
-                                                ID_PH_MROOT
         MENUITEM "Verzeichnispfad der Hauptdatei", ID_PH_MDIR
-        MENUITEM "Name der Hauptdatei (mit Endung)", ID_PH_MNAME
-        MENUITEM "Titel der Hauptdatei (Name ohne Endung)", ID_PH_MTITLE
-        MENUITEM "Endung der Hauptdatei (ohne führenden Punkt)", 
-                                                ID_PH_MEXTENSION
+        MENUITEM "Hauptdatei mit weiteren Optionen...", 
+                                                ID_PH_MAINOPTIONS_NOOPT
         MENUITEM SEPARATOR
         MENUITEM "Kompletter Pfad des aktiven Dokuments", ID_PH_CPATH
         MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung", 
                                                 ID_PH_CBASE
-        MENUITEM "Laufwerksbuchstabe des aktiven Dokuments mit Doppelpunkt", 
-                                                ID_PH_CROOT
         MENUITEM "Verzeichnispfad des aktiven Dokuments", ID_PH_CDIR
-        MENUITEM "Name des aktiven Dokuments (mit Endung)", ID_PH_CNAME
-        MENUITEM "Titel des aktiven Dokuments (Name ohne Endung)", 
-                                                ID_PH_CTITLE
-        MENUITEM "Endung des aktiven Dokuments (ohne führenden Punkt)", 
-                                                ID_PH_CEXTENSION
+        MENUITEM "Aktives Dokument mit weiteren Optionen...", 
+                                                ID_PH_CURRENTOPTIONS_NOOPT
         MENUITEM SEPARATOR
         MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
         MENUITEM SEPARATOR
         MENUITEM "Alle Dateien im Projekt",     ID_PHS_ALLPROJECTFILES
         MENUITEM "Alle geöffneten Dateien",     ID_PHS_ALLOPENEDFILES
-        MENUITEM "Alle TeX-Dateien im Projekt", ID_PHS_ALLTEXFILES
-        MENUITEM "Alle BibTeX-Dateien im Projekt", ID_PHS_ALLBIBTEXFILES
-        MENUITEM "Alle Grafik-Dateien im Projekt", ID_PHS_ALLGRAPHICFILES
-        MENUITEM "Alle von TeXnicCenter automatisch generierten Dateien", 
-                                                ID_PHS_ALLTXCFILES
-        MENUITEM "Alle Dateimengen zusammen",   ID_PHS_ALLFILESETS
+        MENUITEM "Weitere Dateimengen...",      ID_PHS_MORESETS_NOOPT
         MENUITEM SEPARATOR
         MENUITEM "Dollarzeichen ('$')",         ID_PHS_DOLLAR
     END
@@ -2939,17 +2925,17 @@ STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Platzhalter definieren"
 FONT 8, "MS Sans Serif"
 BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,129,7,50,14
-    PUSHBUTTON      "Abbrechen",IDCANCEL,129,24,50,14
+    COMBOBOX        IDC_PLACEHOLDER_SINGLE_PHTYPE,7,70,172,93,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     CONTROL         "8.3-&Format",IDC_PLACEHOLDER_SINGLE_SHORT,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,20,90,49,10
     CONTROL         "'/' als &Trennzeichen",IDC_PLACEHOLDER_SINGLE_FORWARD,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,85,90,78,10
-    LTEXT           "Beispiel:",IDC_STATIC,7,140,27,8
+    DEFPUSHBUTTON   "OK",IDOK,129,7,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,129,24,50,14
     EDITTEXT        IDC_PLACEHOLDER_SINGLE_EXAMPLE,7,150,172,14,
-                    ES_AUTOHSCROLL | ES_READONLY
-    COMBOBOX        IDC_PLACEHOLDER_SINGLE_PHTYPE,7,70,172,93,
-                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+                    ES_AUTOHSCROLL | ES_READONLY | NOT WS_TABSTOP
+    LTEXT           "Beispiel:",IDC_STATIC,7,140,27,8
     LTEXT           "Definieren Sie den Platzhalter für die folgende Datei:",
                     IDC_STATIC,7,7,113,19
     CTEXT           "Dateibeschreibung",IDC_PLACEHOLDER_SINGLE_WHAT,7,29,115,
@@ -2961,6 +2947,39 @@ BEGIN
     LTEXT           " Ergebnis ",IDC_STATIC,11,110,32,8
     LTEXT           "Platzhalter:",IDC_STATIC,7,125,36,8
     LTEXT           "PHErgebnis",IDC_PLACEHOLDER_SINGLE_RESULT,50,125,38,8
+END
+
+IDD_PLACEHOLDER_SET DIALOG DISCARDABLE  0, 0, 186, 231
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Platzhalter definieren"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_PLACEHOLDER_SET_PHTYPE,9,58,172,93,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "8.3-&Format",IDC_PLACEHOLDER_SET_SHORT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,20,77,49,10
+    CONTROL         "'/' als &Trennzeichen",IDC_PLACEHOLDER_SET_FORWARD,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,85,77,78,10
+    CONTROL         "&Relativer Pfad zum Projektverzeichnis",
+                    IDC_PLACEHOLDER_SET_RELATIVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,20,92,135,10
+    CONTROL         "Einzelne Dateien in ""&Anführungszeichen""",
+                    IDC_PLACEHOLDER_SET_QUOTED,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,20,107,146,10
+    EDITTEXT        IDC_PLACEHOLDER_SET_EXAMPLE,7,166,172,58,ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,129,7,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,129,24,50,14
+    LTEXT           "Beispiel:",IDC_STATIC,9,158,27,8
+    LTEXT           "Definieren Sie den Platzhalter für eine Menge von Dateien.",
+                    IDC_STATIC,7,7,113,19
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,9,41,171,1
+    LTEXT           " Optionen ",IDC_STATIC,15,36,34,8
+    LTEXT           "Dateimenge:",IDC_STATIC,9,49,41,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,131,170,1
+    LTEXT           " Ergebnis ",IDC_STATIC,13,126,32,8
+    LTEXT           "Platzhalter:",IDC_STATIC,9,142,36,8
+    LTEXT           "PHErgebnis",IDC_PLACEHOLDER_SET_RESULT,52,142,38,8
 END
 
 
@@ -3137,6 +3156,14 @@ BEGIN
         RIGHTMARGIN, 179
         TOPMARGIN, 7
         BOTTOMMARGIN, 163
+    END
+
+    IDD_PLACEHOLDER_SET, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 224
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -3328,6 +3355,33 @@ BEGIN
     IDC_PLACEHOLDER_SINGLE_PHTYPE, 0x403, 35, 0
 0x614c, 0x6675, 0x6577, 0x6b72, 0x6273, 0x6375, 0x7368, 0x6174, 0x6562, 
 0x6d20, 0x7469, 0x4420, 0x706f, 0x6570, 0x706c, 0x6e75, 0x746b, "\000" 
+    0
+END
+
+IDD_PLACEHOLDER_SET DLGINIT
+BEGIN
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 28, 0
+0x6c41, 0x656c, 0x5420, 0x5865, 0x442d, 0x7461, 0x6965, 0x6e65, 0x6920, 
+0x206d, 0x7250, 0x6a6f, 0x6b65, 0x0074, 
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 31, 0
+0x6c41, 0x656c, 0x4220, 0x6269, 0x6554, 0x2d58, 0x6144, 0x6574, 0x6569, 
+0x206e, 0x6d69, 0x5020, 0x6f72, 0x656a, 0x746b, "\000" 
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 31, 0
+0x6c41, 0x656c, 0x4720, 0x6172, 0x6966, 0x2d6b, 0x6144, 0x6574, 0x6569, 
+0x206e, 0x6d69, 0x5020, 0x6f72, 0x656a, 0x746b, "\000" 
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 42, 0
+0x6c41, 0x656c, 0x7620, 0x6e6f, 0x5420, 0x5865, 0x696e, 0x4363, 0x6e65, 
+0x6574, 0x2072, 0x6567, 0x656e, 0x6972, 0x7265, 0x6574, 0x206e, 0x6144, 
+0x6574, 0x6569, 0x006e, 
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 34, 0
+0x6c41, 0x656c, 0x6920, 0x206d, 0x6445, 0x7469, 0x726f, 0x6720, 0xf665, 
+0x6666, 0x656e, 0x6574, 0x206e, 0x6144, 0x6574, 0x6569, 0x006e, 
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 24, 0
+0x6c41, 0x656c, 0x4420, 0x7461, 0x6965, 0x6e65, 0x6920, 0x206d, 0x7250, 
+0x6a6f, 0x6b65, 0x0074, 
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 26, 0
+0x6c41, 0x656c, 0x4420, 0x7461, 0x6965, 0x656d, 0x676e, 0x6e65, 0x7a20, 
+0x7375, 0x6d61, 0x656d, 0x006e, 
     0
 END
 
@@ -4238,6 +4292,7 @@ BEGIN
     STE_TB_MATH15           "Drunter & Drüber"
     STE_TB_MATH16           "Beschriftete Pfeile"
     STE_TB_FIND             "Suchen & Lesezeichen"
+    STE_PHSDLG_NOEXAMPLE    "Es konnte kein Beispiel konstruiert werden.\r\n\r\nDies ist nur möglich, wenn\r\nein Projekt und/oder Dateien geöffnet sind.\r\nDesweiteren muss der ausgewählte Platzhalter\r\nmindestens eine Datei spezifizieren\r\n(in Abhängigkeit vom aktuellen Projekt)."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4573,6 +4628,11 @@ BEGIN
     ID_PHS_ALLGRAPHICFILES_QR "$qrGPF"
     ID_PHS_ALLTXCFILES_QR   "$qrTXC"
     ID_PHS_ALLFILESETS_QR   "$qrAFS"
+    ID_PHS_TEST_NOOPT       "\n[2]"
+    ID_PHS_TEST_OPT         "\n[3]"
+    ID_PHS_MORESETS_NOOPT   "\n[3]"
+    ID_PH_MAINOPTIONS_NOOPT "\n[2]m"
+    ID_PH_CURRENTOPTIONS_NOOPT "\n[2]c"
 END
 
 #endif    // German (Germany) resources
@@ -5662,34 +5722,22 @@ BEGIN
     BEGIN
         MENUITEM "Main file's full path",       ID_PH_MPATH
         MENUITEM "Main file's full path without extension", ID_PH_MBASE
-        MENUITEM "Main file's drive letter followed by colon (':')", 
-                                                ID_PH_MROOT
         MENUITEM "Main file's full directory path", ID_PH_MDIR
-        MENUITEM "Main file's name (with extension)", ID_PH_MNAME
-        MENUITEM "Main file's title (without extension)", ID_PH_MTITLE
-        MENUITEM "Main file's extension",       ID_PH_MEXTENSION
+        MENUITEM "Main file with further options...", 
+                                                ID_PH_MAINOPTIONS_NOOPT
         MENUITEM SEPARATOR
         MENUITEM "Current document's full path", ID_PH_CPATH
         MENUITEM "Current document's full path without extension", 
                                                 ID_PH_CBASE
-        MENUITEM "Current document's drive letter followed by colon (':')", 
-                                                ID_PH_CROOT
         MENUITEM "Current document's full directory path", ID_PH_CDIR
-        MENUITEM "Current document's name (with extension)", ID_PH_CNAME
-        MENUITEM "Current document's title (without extension)", 
-                                                ID_PH_CTITLE
-        MENUITEM "Current document's extension", ID_PH_CEXTENSION
+        MENUITEM "Current document with further options...", 
+                                                ID_PH_CURRENTOPTIONS_NOOPT
         MENUITEM SEPARATOR
         MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
         MENUITEM SEPARATOR
         MENUITEM "All files of the project",    ID_PHS_ALLPROJECTFILES
         MENUITEM "All opened files",            ID_PHS_ALLOPENEDFILES
-        MENUITEM "All TeX-Files of the project", ID_PHS_ALLTEXFILES
-        MENUITEM "All BibTeX-Files of the project", ID_PHS_ALLBIBTEXFILES
-        MENUITEM "All Graphic-Files of the project", ID_PHS_ALLGRAPHICFILES
-        MENUITEM "All files generated automatically by TeXnicCenter", 
-                                                ID_PHS_ALLTXCFILES
-        MENUITEM "All file sets together",      ID_PHS_ALLFILESETS
+        MENUITEM "Further sets of files...",    ID_PHS_MORESETS_NOOPT
         MENUITEM SEPARATOR
         MENUITEM "Dollar sign ('$')",           ID_PHS_DOLLAR
     END
@@ -6668,21 +6716,21 @@ STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Define Placeholder"
 FONT 8, "MS Sans Serif"
 BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,129,7,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,129,24,50,14
-    CONTROL         "8.3-&format",IDC_PLACEHOLDER_SINGLE_SHORT,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,20,90,47,10
-    CONTROL         "using '/' as &Separator",IDC_PLACEHOLDER_SINGLE_FORWARD,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,85,90,83,10
-    LTEXT           "Example:",IDC_STATIC,7,140,30,8
-    EDITTEXT        IDC_PLACEHOLDER_SINGLE_EXAMPLE,7,150,172,14,
-                    ES_AUTOHSCROLL | ES_READONLY
     COMBOBOX        IDC_PLACEHOLDER_SINGLE_PHTYPE,7,70,172,93,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "8.3-&format",IDC_PLACEHOLDER_SINGLE_SHORT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,20,90,47,10
+    CONTROL         "Using '/' as &separator",IDC_PLACEHOLDER_SINGLE_FORWARD,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,85,90,83,10
+    DEFPUSHBUTTON   "OK",IDOK,129,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,129,24,50,14
+    LTEXT           "Example:",IDC_STATIC,7,140,30,8
+    EDITTEXT        IDC_PLACEHOLDER_SINGLE_EXAMPLE,7,150,172,14,
+                    ES_AUTOHSCROLL | ES_READONLY | NOT WS_TABSTOP
     LTEXT           "Define the placeholder for the following file:",
                     IDC_STATIC,7,7,113,19
-    CONTROL         "file description",IDC_PLACEHOLDER_SINGLE_WHAT,"Static",
-                    SS_LEFTNOWORDWRAP | WS_GROUP,7,29,115,8
+    CTEXT           "file description",IDC_PLACEHOLDER_SINGLE_WHAT,7,29,115,
+                    8
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,53,172,1
     LTEXT           " Options ",IDC_STATIC,13,48,29,8
     LTEXT           "Type of reference:",IDC_STATIC,7,60,59,8
@@ -6728,6 +6776,38 @@ BEGIN
     LTEXT           "Loc&ale:",IDC_STATIC,1,36,24,8
     COMBOBOX        IDC_OPTIONS_LANGUAGE_LOCALE,35,32,83,53,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_PLACEHOLDER_SET DIALOG DISCARDABLE  0, 0, 186, 231
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Define Placeholder"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_PLACEHOLDER_SET_PHTYPE,9,58,172,93,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "8.3-&format",IDC_PLACEHOLDER_SET_SHORT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,20,77,47,10
+    CONTROL         "Using '/' as &separator",IDC_PLACEHOLDER_SET_FORWARD,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,85,77,83,10
+    CONTROL         "&Relative path to working directory",
+                    IDC_PLACEHOLDER_SET_RELATIVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,20,92,121,10
+    CONTROL         """&Quote"" each filename",IDC_PLACEHOLDER_SET_QUOTED,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,20,107,88,10
+    EDITTEXT        IDC_PLACEHOLDER_SET_EXAMPLE,7,166,172,58,ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,129,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,129,24,50,14
+    LTEXT           "Example:",IDC_STATIC,9,158,30,8
+    LTEXT           "Define the placeholder for a set of files.",IDC_STATIC,
+                    7,7,113,19
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,9,41,171,1
+    LTEXT           " Options ",IDC_STATIC,15,36,29,8
+    LTEXT           "Set of files:",IDC_STATIC,9,49,36,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,131,170,1
+    LTEXT           " Result ",IDC_STATIC,13,126,25,8
+    LTEXT           "Placeholder:",IDC_STATIC,9,142,40,8
+    LTEXT           "PHErgebnis",IDC_PLACEHOLDER_SET_RESULT,52,142,38,8
 END
 
 
@@ -6905,6 +6985,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 163
     END
+
+    IDD_PLACEHOLDER_SET, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 224
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -7057,6 +7145,34 @@ BEGIN
 0x7244, 0x7669, 0x2065, 0x656c, 0x7474, 0x7265, 0x6620, 0x6c6f, 0x6f6c, 
 0x6577, 0x2064, 0x7962, 0x6320, 0x6c6f, 0x6e6f, 0x2820, 0x3a27, 0x2927, 
 "\000" 
+    0
+END
+
+IDD_PLACEHOLDER_SET DLGINIT
+BEGIN
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 29, 0
+0x6c41, 0x206c, 0x6554, 0x2d58, 0x6966, 0x656c, 0x2073, 0x666f, 0x7420, 
+0x6568, 0x7020, 0x6f72, 0x656a, 0x7463, "\000" 
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 32, 0
+0x6c41, 0x206c, 0x6942, 0x5462, 0x5865, 0x662d, 0x6c69, 0x7365, 0x6f20, 
+0x2066, 0x6874, 0x2065, 0x7270, 0x6a6f, 0x6365, 0x0074, 
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 33, 0
+0x6c41, 0x206c, 0x7247, 0x7061, 0x6968, 0x2d63, 0x6966, 0x656c, 0x2073, 
+0x666f, 0x7420, 0x6568, 0x7020, 0x6f72, 0x656a, 0x7463, "\000" 
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 51, 0
+0x6c41, 0x206c, 0x6966, 0x656c, 0x2073, 0x666f, 0x7420, 0x6568, 0x7020, 
+0x6f72, 0x656a, 0x7463, 0x6720, 0x6e65, 0x7265, 0x7461, 0x6465, 0x6220, 
+0x2079, 0x6554, 0x6e58, 0x6369, 0x6543, 0x746e, 0x7265, "\000" 
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 41, 0
+0x6c41, 0x206c, 0x7563, 0x7272, 0x6e65, 0x6c74, 0x2079, 0x706f, 0x6e65, 
+0x6465, 0x6620, 0x6c69, 0x7365, 0x6920, 0x206e, 0x6874, 0x2065, 0x6465, 
+0x7469, 0x726f, "\000" 
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 18, 0
+0x6c41, 0x206c, 0x7270, 0x6a6f, 0x6365, 0x2074, 0x6966, 0x656c, 0x0073, 
+
+    IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 28, 0
+0x6c41, 0x206c, 0x6261, 0x766f, 0x2065, 0x6966, 0x656c, 0x6573, 0x7374, 
+0x7420, 0x676f, 0x7465, 0x6568, 0x0072, 
     0
 END
 
@@ -7963,6 +8079,7 @@ BEGIN
     STE_TB_MATH15           "Above & Below"
     STE_TB_MATH16           "Arrows with Captions"
     STE_TB_FIND             "Find & Bookmarks"
+    STE_PHSDLG_NOEXAMPLE    "An example could not be constructed.\r\n\r\nThis is only possible, if a project and/or files\r\nare opened.\r\nFurthermore, the choosen placeholder\r\nneeds to specify at least one file\r\n(depends on opened project)."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -8267,6 +8384,13 @@ BEGIN
     ID_LATEX_CLEAN          "Cleans all intermediate and output files.\nClean Project"
     ID_PH_MAINOPTIONS       "\n[1]m"
     ID_PH_CURRENTOPTIONS    "\n[1]c"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_PHS_MORESETS_NOOPT   "\n[3]"
+    ID_PH_MAINOPTIONS_NOOPT "\n[2]m"
+    ID_PH_CURRENTOPTIONS_NOOPT "\n[2]c"
 END
 
 #endif    // English (U.S.) resources

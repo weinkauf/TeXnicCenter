@@ -42,7 +42,7 @@
 
 #include "FileClean.h"
 #include "PersistPosEdit.h"
-#include "EditMenuButton.h"
+#include "EditMenuButtonOpt.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // COptionPageFileClean dialog
@@ -60,7 +60,7 @@ public:
 	//{{AFX_DATA(COptionPageFileClean)
 	enum { IDD = IDD_OPTIONS_FILECLEAN };
 	CButton	m_DeleteBtn;
-	CEditMenuButton	m_PHInsertBtn;
+	CEditMenuButtonOpt	m_PHInsertBtn;
 	CButton	m_RecursiveBtn;
 	CPersistPosEdit	m_PatternEdit;
 	CEdit	m_NameEdit;

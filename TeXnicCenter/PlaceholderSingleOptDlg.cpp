@@ -54,6 +54,8 @@ CPlaceholderSingleOptDlg::CPlaceholderSingleOptDlg(CWnd* pParent /*=NULL*/)
 	m_bForwardSlash = FALSE;
 	m_bShortFormat = FALSE;
 	//}}AFX_DATA_INIT
+
+	m_bAllowOptions = true;
 }
 
 
@@ -108,6 +110,11 @@ void CPlaceholderSingleOptDlg::SetPlaceholderBase(LPCTSTR lpszPHBase)
 	ASSERT(CorrectPlaceholderBase());
 
 	return;
+}
+
+void CPlaceholderSingleOptDlg::SetAllowOptions(bool bEnable /*= true*/)
+{
+	m_bAllowOptions = bEnable;
 }
 
 void CPlaceholderSingleOptDlg::ConstructPlaceholder()
@@ -167,6 +174,10 @@ BOOL CPlaceholderSingleOptDlg::OnInitDialog()
 
 	//Activate the first entry
 	m_PHTypeCombo.SetCurSel(0);
+
+	//Update Options
+	m_ForwardBtn.EnableWindow(m_bAllowOptions);
+	m_ShortBtn.EnableWindow(m_bAllowOptions);
 
 	//Init the example
 	ShowExample();
@@ -247,6 +258,14 @@ void CPlaceholderSingleOptDlg::OnPHTypeChange()
 void CPlaceholderSingleOptDlg::GetPossibleOptions(bool* pbForward, bool* pbShort) 
 {
 	UpdateData(true);
+
+	if (!m_bAllowOptions)
+	{
+		//Options are not allowed: Just say no.
+		*pbForward = false;
+		*pbShort = false;
+		return;
+	}
 
 	//Get the Type of Placeholder
 	int nPHType = m_PHTypeCombo.GetCurSel();

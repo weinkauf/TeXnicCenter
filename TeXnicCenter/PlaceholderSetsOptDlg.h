@@ -32,24 +32,28 @@
 *
 ********************************************************************/
 
-#if !defined(AFX_PLACEHOLDERSINGLEOPTDLG_H__A8DC67B4_57C2_11D6_AF10_00201855324E__INCLUDED_)
-#define AFX_PLACEHOLDERSINGLEOPTDLG_H__A8DC67B4_57C2_11D6_AF10_00201855324E__INCLUDED_
+#if !defined(AFX_PLACEHOLDERSETSOPTDLG_H__334DF790_8DD2_11D6_AF57_00201855324E__INCLUDED_)
+#define AFX_PLACEHOLDERSETSOPTDLG_H__334DF790_8DD2_11D6_AF57_00201855324E__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// PlaceholderSingleOptDlg.h : header file
-//
+
+
+#include "Placeholder.h"
+
+
+/////////////////////////////////////////////////////////////////////////////
+// CPlaceholderSetsOptDlg dialog
 
 /**
-	This dialog lets the user define all possible placeholders for single files
-	together with their options (forward slash and 8.3-Format).
+	This dialog lets the user define all possible placeholders for sets of files
+	together with their options (forward slash, 8.3-Format, quoting, relative Path).
 
 	<b>Usage:</b>
 
-	First call SetPlaceholderBase() to set the base for the placeholder.
-	Valid options are "m" and "c" (for main and current file).
-	Then call SetAllowOptions() to enable/disable Options-Support.
+	First call SetAllowOptions() to enable/disable Options-Support.
+	Then call SetShowOneLineExample() to configure the type of example shown.
 
 	Then call DoModal().
 
@@ -59,30 +63,31 @@
 
 	@author Tino Weinkauf
 */
-
-class CPlaceholderSingleOptDlg : public CDialog
+class CPlaceholderSetsOptDlg : public CDialog
 {
 // Construction
 public:
-	CPlaceholderSingleOptDlg(CWnd* pParent = NULL);   // standard constructor
+	CPlaceholderSetsOptDlg(CWnd* pParent = NULL);   // standard constructor
 
 // Dialog Data
-	//{{AFX_DATA(CPlaceholderSingleOptDlg)
-	enum { IDD = IDD_PLACEHOLDER_SINGLE };
+	//{{AFX_DATA(CPlaceholderSetsOptDlg)
+	enum { IDD = IDD_PLACEHOLDER_SET };
 	CButton	m_ShortBtn;
-	CButton	m_ForwardBtn;
-	CComboBox	m_PHTypeCombo;
-	CStatic	m_WhatStatic;
 	CStatic	m_ResultStatic;
+	CButton	m_RelativeBtn;
+	CButton	m_QuotedBtn;
+	CComboBox	m_PHTypeCombo;
+	CButton	m_ForwardBtn;
 	CEdit	m_ExampleEdit;
 	BOOL	m_bForwardSlash;
+	BOOL	m_bQuoted;
+	BOOL	m_bRelativePath;
 	BOOL	m_bShortFormat;
 	//}}AFX_DATA
 
-
 // Overrides
 	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPlaceholderSingleOptDlg)
+	//{{AFX_VIRTUAL(CPlaceholderSetsOptDlg)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	//}}AFX_VIRTUAL
@@ -91,33 +96,31 @@ public:
 protected:
 
 	// Generated message map functions
-	//{{AFX_MSG(CPlaceholderSingleOptDlg)
-	virtual void OnOK();
-	virtual void OnCancel();
+	//{{AFX_MSG(CPlaceholderSetsOptDlg)
 	virtual BOOL OnInitDialog();
 	afx_msg void ShowExample();
-	afx_msg void OnPHTypeChange();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
 // Implementation
 public:
-	/**Sets the basic string value of the placeholder.
-	Call this before calling DoModal().
-	*/
-	void SetPlaceholderBase(LPCTSTR lpszPHBase);
-
 	/** Enables/Disables Support of Options.
 	Call this before calling DoModal().
 	*/
 	void SetAllowOptions(bool bEnable = true);
 
-protected:
-	void ConstructPlaceholder();
-	bool CorrectPlaceholderBase();
-	void GetPossibleOptions(bool* pbForward, bool* pbShort);
+	/**
+	To configure the type of example shown.
+	Call this before calling DoModal().
+	*/
+	void SetShowOneLineExample(bool bShowOneLineExample = true);
 
-// Attributes
+protected:
+	///Enables/Disables controls
+	void UpdateControls();
+	void ConstructPlaceholder();
+
+//Attributes
 public:
 	/**Use this to retrieve the Placeholder String with all options
 	defined by the user - after DoModal().
@@ -125,13 +128,17 @@ public:
 	CString strPlaceholder;
 
 private:
-	CString m_strPlaceholderBase;
-
-	///true, if Options (forward slash, 8.3-Format) are allowed to be configured 
+	///true, if Options (forward slash, 8.3-Format, quoting, relative Path) are allowed to be configured 
 	bool m_bAllowOptions;
+
+	///true, if Example shall be shown in one line
+	bool m_bShowOneLineExample;
+
+	///Helps constructing an example
+	CPlaceholderSets m_ExamplePHSets;
 };
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
-#endif // !defined(AFX_PLACEHOLDERSINGLEOPTDLG_H__A8DC67B4_57C2_11D6_AF10_00201855324E__INCLUDED_)
+#endif // !defined(AFX_PLACEHOLDERSETSOPTDLG_H__334DF790_8DD2_11D6_AF57_00201855324E__INCLUDED_)

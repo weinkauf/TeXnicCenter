@@ -37,6 +37,7 @@
 #include "EditMenuButtonOpt.h"
 
 #include "PlaceholderSingleOptDlg.h"
+#include "PlaceholderSetsOptDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -102,9 +103,22 @@ void CEditMenuButtonOpt::OnShowMenu()
 		switch (nDlgID)
 		{
 			case 1: //The Dialog for definition of placeholders for single files
+							// - OPTIONS ALLOWED
+			case 2: //The Dialog for definition of placeholders for single files
+							// - NO OPTIONS ALLOWED
 				{
 					CPlaceholderSingleOptDlg SingleDlg;
 					SingleDlg.SetPlaceholderBase(strBase);
+
+					if (nDlgID == 2)
+					{
+						SingleDlg.SetAllowOptions(false);
+					}
+					else
+					{
+						SingleDlg.SetAllowOptions(true);
+					}
+
 					if (SingleDlg.DoModal() == IDOK)
 					{
 						//Insert the constructed Placeholder for single files
@@ -113,11 +127,33 @@ void CEditMenuButtonOpt::OnShowMenu()
 					break;
 				}
 
-			case 2: //The Dialog for definition of placeholders for file sets
+
+			case 3: //The Dialog for definition of placeholders for file sets
+							// - NO OPTIONS ALLOWED; Files shown on more than one line
+			case 4: //The Dialog for definition of placeholders for file sets
+							// - OPTIONS ALLOWED; Files shown on one line
 				{
-					ASSERT(false);
+ 					CPlaceholderSetsOptDlg SetsDlg;
+					if (nDlgID == 3)
+					{
+						SetsDlg.SetAllowOptions(false);
+						SetsDlg.SetShowOneLineExample(false);
+					}
+					else
+					{
+						SetsDlg.SetAllowOptions(true);
+						SetsDlg.SetShowOneLineExample(true);
+					}
+
+					if (SetsDlg.DoModal() == IDOK)
+					{
+						//Insert the constructed Placeholder for file sets
+						m_pEdit->InsertText(SetsDlg.strPlaceholder);
+					}
+
 					break;
 				}
+
 
 			default:
 				ASSERT(false);
