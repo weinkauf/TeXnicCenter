@@ -1088,7 +1088,6 @@
 #define ID_LATEX_EDITPROFILES           33513
 #define ID_LATEX_PROFILE_SEL            33514
 #define ID_VIEW_FULLSCREEN              33525
-#define ID_VIEW_DOCTAB                  33526
 #define ID_FILEVIEW_BUILD               33530
 #define ID_FILEVIEW_CLEAN               33531
 #define ID_FILEVIEW_REBUILD_ALL         33532
@@ -1248,6 +1247,11 @@
 #define ID_TEXTMODULES_FIRST            38365
 #define ID_TEXTMODULES_LAST             38465
 #define ID_TEXTMODULES_DEFINE           38466
+#define ID_VIEW_DOCTAB_TOP              38467
+#define ID_VIEW_DOCTAB_BOTTOM           38468
+#define ID_VIEW_DOCTAB_OFF              38469
+#define ID_VIEW_DOCTAB_ICONS            38470
+#define ID_VIEW_DOCTAB_NOTE             38471
 #define IDS_TEXTMODULES_NONEDEFINED     57671
 
 // Next default values for new objects
@@ -1256,7 +1260,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        277
-#define _APS_NEXT_COMMAND_VALUE         38467
+#define _APS_NEXT_COMMAND_VALUE         38472
 #define _APS_NEXT_CONTROL_VALUE         1337
 #define _APS_NEXT_SYMED_VALUE           115
 #endif

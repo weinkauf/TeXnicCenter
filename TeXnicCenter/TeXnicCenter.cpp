@@ -553,6 +553,7 @@ void CTeXnicCenterApp::LoadCustomState()
 	m_bMDITabs = GetInt(_T("MDITabs"), TRUE);
 	m_bMDITabIcons = GetInt(_T("MDITabIcons"), TRUE);
 	m_nMDITabLocation = GetInt(_T("MDITabLocation"), CBCGTabWnd::LOCATION_BOTTOM);
+	m_nMDITabStyle = GetInt(_T("MDITabStyle"), CBCGTabWnd::STYLE_3D_SCROLLED);
 	m_recentProjectList.ReadList();
 	g_ProfileMap.SerializeFromRegistry();
 
@@ -610,6 +611,7 @@ void CTeXnicCenterApp::SaveCustomState()
 	WriteInt(_T("MDITabs"), m_bMDITabs);
 	WriteInt(_T("MDITabIcons"), m_bMDITabIcons);
 	WriteInt(_T("MDITabLocation"), m_nMDITabLocation);
+	WriteInt(_T("MDITabStyle"), m_nMDITabStyle);
 	m_recentProjectList.WriteList();
 	g_ProfileMap.SerializeToRegistry();
 
