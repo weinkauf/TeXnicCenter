@@ -172,6 +172,8 @@ void CChildFrame::OnSetFocus(CWnd* pOldWnd)
 
 BOOL CChildFrame::Serialize(CIniFile &ini, LPCTSTR lpszKey, BOOL bWrite)
 {
+	const CString strBaseDir = CPathTool::GetDirectory(ini.GetPath());
+
 	if (bWrite)
 	{
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -197,7 +199,8 @@ BOOL CChildFrame::Serialize(CIniFile &ini, LPCTSTR lpszKey, BOOL bWrite)
 		ini.SetValue(lpszKey, VAL_FRAMEINFO_NORMALPOS_BOTTOM, wp.rcNormalPosition.bottom);
 
 		ini.SetValue(lpszKey, VAL_FRAMEINFO_VIEWCLASS, m_wndSplitter.GetPane(0, 0)->GetRuntimeClass()->m_lpszClassName);
-		ini.SetValue(lpszKey, VAL_FRAMEINFO_DOCPATH, ((CView*)m_wndSplitter.GetPane(0, 0))->GetDocument()->GetPathName());
+		ini.SetValue(lpszKey, VAL_FRAMEINFO_DOCPATH,
+						CPathTool::GetRelativePath(strBaseDir, GetPathNameOfDocument()));
 
 		// storing column and row information
 		int	cxCur, cxMin, cyCur, cyMin;
@@ -284,9 +287,8 @@ BOOL CChildFrame::Serialize(CIniFile &ini, LPCTSTR lpszKey, BOOL bWrite)
 				if (nRow == 0 && nColumn == 0)
 				{
 					// try to create and open document
-					CDocument	*pDoc = theApp.GetLatexDocument(strDocPath);
-					if (!pDoc)
-						return FALSE;
+					CDocument* pDoc = theApp.GetLatexDocument(CPathTool::GetAbsolutePath(strBaseDir, strDocPath));
+					if (!pDoc) return FALSE;
 
 					// create frame and restore window position
 					if (!LoadFrame(IDR_LATEXTYPE, WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, AfxGetMainWnd(), &cc))
@@ -377,3 +379,4 @@ CString CChildFrame::GetPathNameOfDocument()
 {
 	return (((CView*)m_wndSplitter.GetPane(0, 0))->GetDocument()->GetPathName());
 }
+
