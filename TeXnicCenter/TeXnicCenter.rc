@@ -1762,6 +1762,7 @@ BEGIN
         MENUITEM "&Eigenschaften...",           ID_PROJECT_PROPERTIES
         MENUITEM SEPARATOR
         MENUITEM "&Hauptdatei öffnen",          ID_PROJECT_OPEN_MAINFILE
+		MENUITEM "Todo: Spelling...",           ID_SPELL_PROJECT
     END
     POPUP "A&usgabe"
     BEGIN
@@ -1791,6 +1792,7 @@ BEGIN
     BEGIN
         MENUITEM "&Optionen...",                ID_EXTRAS_OPTIONS
         MENUITEM "&Anpassen...",                ID_EXTRAS_CUSTOMIZE
+		MENUITEM "Todo: Spelling...",           ID_SPELL_FILE
         MENUITEM SEPARATOR
         MENUITEM "<User defined tools>",        ID_TOOLS_ENTRY
     END
@@ -2609,6 +2611,38 @@ BEGIN
     PUSHBUTTON      "Abbrechen",IDCANCEL,314,217,50,14
 END
 
+IDD_OPTIONS_LANGUAGE DIALOG DISCARDABLE  0, 0, 235, 156
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Language"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_OPTIONS_LANGUAGE,39,16,80,30,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,152,16,80,30,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "&Enable spell check",IDC_OPTIONS_SPELL_ENABLE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,63,76,10
+    CONTROL         "Suggest from &main dictionary only",
+                    IDC_OPTIONS_SPELL_MAINDICT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,73,121,10
+    CONTROL         "Skip &comments",IDC_OPTIONS_SPELL_COMMENT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,129,63,64,10
+    CONTROL         "Skip LaTe&X tags",IDC_OPTIONS_SPELL_SKIP_TAGS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,129,73,69,10
+    CONTROL         "Skip words with &numbers",IDC_OPTIONS_SPELL_IGNORE_NUM,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,129,83,94,10
+    CONTROL         "Skip &UPPERCASE words ",
+                    IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,129,93,98,10
+    EDITTEXT        IDC_OPTIONS_SPELL_PDICT,5,117,209,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_OPTIONS_SPELL_BROWSE,218,116,13,14
+    LTEXT           "&Language",IDC_STATIC,4,20,33,8
+    LTEXT           "&Dialect",IDC_STATIC,127,20,23,8
+    LTEXT           "Personal Dictionary",IDC_STATIC,5,108,62,8
+    GROUPBOX        "Language",IDC_STATIC,1,1,233,50
+    GROUPBOX        "Spelling",IDC_STATIC,1,53,233,103
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2956,6 +2990,7 @@ BEGIN
     STE_LICENSE_FILE        "GPL_german.htm"
     STE_FILE_EXEFILTER      "Ausführbare Dateien (*.exe;*.com)|*.exe;*.com|Alle Dateien (*.*)|*.*||"
     STE_FILE_INUSE          "Speichern der Datei\n\n%s\n\nnicht möglich. Die Datei wird möglicherweise von einer anderen Anwendung verwendet oder von TeXnicCenter gerade analysiert."
+	STE_FILE_DICFILTER      "Todo: Dictionary Files (*.dic)|*.dic|All File (*.*)|*.*||"
     STE_FILE_EXTERNALCHANGE "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?"
     STE_FILE_EXTERNALCHANGEEX 
                             "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?\n\n(Wichtig: Sie haben Änderungen an dem Dokument vorgenommen. Wenn es neu geladen wird, gehen diese Änderungen verloren!)"
@@ -4095,6 +4130,9 @@ BEGIN
     ID_ITEM_INSERT_LABEL    "Fügt die Verweismarke des Eintrags in der aktuellen Datei ein\nVerweismarke einfügen"
     ID_HELP_KEYMAPPING      "Zeigt alle Tastaturbefehle an\nTastaturbelegung"
     ID_HELP_CONTENTS        "Zeigt das Inhaltsverzeichnis der Online-Dokumentation an\nInhalt"
+    ID_SPELL_PROJECT        "Todo: Spell check entire project\nSpell check project"
+    ID_SPELL_FILE           "Todo: Spell check the active file\nSpell check file"
+    IDS_SPELL_CONTINUE      "Todo: Contiue spell checking remainder of project?"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -5091,6 +5129,7 @@ BEGIN
         MENUITEM "&Properties...",              ID_PROJECT_PROPERTIES
         MENUITEM SEPARATOR
         MENUITEM "&Open Main File",             ID_PROJECT_OPEN_MAINFILE
+        MENUITEM "&Spelling...",                ID_SPELL_PROJECT
     END
     POPUP "&Build"
     BEGIN
@@ -5120,6 +5159,7 @@ BEGIN
     BEGIN
         MENUITEM "&Options...",                 ID_EXTRAS_OPTIONS
         MENUITEM "&Customize...",               ID_EXTRAS_CUSTOMIZE
+        MENUITEM "&Spelling...",                ID_SPELL_FILE
         MENUITEM SEPARATOR
         MENUITEM "<User defined tools>",        ID_TOOLS_ENTRY
     END
@@ -5933,6 +5973,38 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,314,217,50,14
 END
 
+IDD_OPTIONS_LANGUAGE DIALOG DISCARDABLE  0, 0, 235, 156
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Language"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_OPTIONS_LANGUAGE,39,16,80,30,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,152,16,80,30,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "&Enable spell check",IDC_OPTIONS_SPELL_ENABLE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,63,76,10
+    CONTROL         "Suggest from &main dictionary only",
+                    IDC_OPTIONS_SPELL_MAINDICT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,73,121,10
+    CONTROL         "Skip &comments",IDC_OPTIONS_SPELL_COMMENT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,129,63,64,10
+    CONTROL         "Skip LaTe&X tags",IDC_OPTIONS_SPELL_SKIP_TAGS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,129,73,69,10
+    CONTROL         "Skip words with &numbers",IDC_OPTIONS_SPELL_IGNORE_NUM,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,129,83,94,10
+    CONTROL         "Skip &UPPERCASE words ",
+                    IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,129,93,98,10
+    EDITTEXT        IDC_OPTIONS_SPELL_PDICT,5,117,209,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_OPTIONS_SPELL_BROWSE,218,116,13,14
+    LTEXT           "&Language",IDC_STATIC,4,20,33,8
+    LTEXT           "&Dialect",IDC_STATIC,127,20,23,8
+    LTEXT           "Personal Dictionary",IDC_STATIC,5,108,62,8
+    GROUPBOX        "Language",IDC_STATIC,1,1,233,50
+    GROUPBOX        "Spelling",IDC_STATIC,1,53,233,103
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -6240,6 +6312,7 @@ BEGIN
     STE_LICENSE_FILE        "GPL_english.htm"
     STE_FILE_EXEFILTER      "Executable Files (*.exe;*.com)|*.exe;*.com|All Files (*.*)|*.*||"
     STE_FILE_INUSE          "Cannot save the file\n\n%s\n\nMaybe the file is currently used by another application or parsed by TeXnicCenter at the very moment."
+    STE_FILE_DICFILTER      "Dictionary Files (*.dic)|*.dic|All File (*.*)|*.*||"
     STE_FILE_EXTERNALCHANGE "The file\n\n%s\n\nhas been modified outside TeXnicCenter. Should TeXnicCenter reload the document?"
     STE_FILE_EXTERNALCHANGEEX 
                             "The file\n\n%s\n\nhas been modified outside TeXnicCenter. Should TeXnicCenter reload the document?\n\n(Important: You have made changes to the document. If you decide to reload it, your changes will be lost!)"
@@ -7362,6 +7435,9 @@ BEGIN
     ID_ITEM_INSERT_LABEL    "Inserts the label of the item in the current document\nInsert Label"
     ID_HELP_KEYMAPPING      "Displays all short cuts\nKeyboard Command Mapping"
     ID_HELP_CONTENTS        "Shows the contents of the online documentation\nContents"
+    ID_SPELL_PROJECT        "Spell check entire project\nSpell check project"
+    ID_SPELL_FILE           "Spell check the active file\nSpell check file"
+    IDS_SPELL_CONTINUE      "Contiue spell checking remainder of project?"
 END
 
 STRINGTABLE DISCARDABLE 
