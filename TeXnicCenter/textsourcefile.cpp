@@ -39,21 +39,12 @@ static char THIS_FILE[]=__FILE__;
 //////////////////////////////////////////////////////////////////////
 // construction/destruction
 CTextSourceFile::CTextSourceFile()
-:	m_pAr( NULL ),
-	m_bFileOpen( FALSE )
+:	m_bFileOpen( FALSE )
 {
 }
 
 CTextSourceFile::~CTextSourceFile()
 {
-	try
-	{
-		if( m_pAr )
-			m_pAr->Close();
-	}
-	catch( ... )
-	{}
-
 	try
 	{
 		if( m_bFileOpen )
@@ -62,8 +53,6 @@ CTextSourceFile::~CTextSourceFile()
 	catch( ... )
 	{}
 
-	if( m_pAr )
-		delete m_pAr;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -73,16 +62,6 @@ BOOL CTextSourceFile::Create( LPCTSTR lpszFile )
 	// create file
 	if( !(m_bFileOpen = m_file.Open( lpszFile, CFile::modeRead | CFile::shareDenyNone )) )
 		return FALSE;
-
-	// create archiv
-	try
-	{
-		m_pAr = new CArchive( &m_file, CArchive::load );
-	}
-	catch( ... )
-	{
-		return FALSE;
-	}
 
 	return TRUE;
 }
@@ -95,14 +74,15 @@ void CTextSourceFile::Delete()
 
 BOOL CTextSourceFile::GetNextLine( LPCTSTR &lpLine, int &nLength )
 {
-	ASSERT( m_pAr );
+	ASSERT( m_bFileOpen );
 
 	m_strCurrentLine.Empty();
 
-	if( m_pAr->ReadString( m_strCurrentLine ) )
+	if( m_file.ReadString( m_strCurrentLine ) )
 	{
+		m_strCurrentLine.Remove((TCHAR)0x0a);
+		lpLine = m_strCurrentLine.GetBuffer(1);
 		nLength = m_strCurrentLine.GetLength();
-		lpLine = m_strCurrentLine;
 		return TRUE;
 	}
 	else
