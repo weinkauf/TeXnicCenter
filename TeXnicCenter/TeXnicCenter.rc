@@ -3320,7 +3320,7 @@ BEGIN
                             "Fügt die Titeleigenschaften (Autor, Titel, etc.) ein\nTiteleigenschaften\n\r\\title{\001}\r\\author{}\r% Befehl entfernen, um aktuelles Datum zu erzeugen\r\\date{}\r"
     ID_INSERT_MAKETITLE     "Fügt den Titel ein\nTitel\n\\maketitle"
     ID_INSERT_INCLUDEGRAPHICS "Fügt eine Grafik aus einer Datei ein\nGrafik"
-    ID_FORMAT_EMPH          "Hebt Text im Argument hervor\nHervorgeoben\n\\emph{\001}"
+    ID_FORMAT_EMPH          "Hebt Text im Argument hervor\nHervorgehoben\n\\emph{\001}"
     ID_FORMAT_TEXTBF        "Setzt Text im Argument fett\nFett\n\\textbf{\001}"
 END
 
