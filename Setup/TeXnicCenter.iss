@@ -6,7 +6,7 @@ OutputBaseFilename=TXCSetup
 MinVersion=4.0.950,4.0.1381
 AppCopyright=© 1999-2002 www.ToolsCenter.org
 AppName=TeXnicCenter
-AppVerName=TeXnicCenter Version 1 Beta 5.06
+AppVerName=TeXnicCenter Version 1 Beta 6.00
 LicenseFile=GPL.rtf
 AdminPrivilegesRequired=false
 DefaultGroupName=TeXnicCenter
@@ -18,7 +18,7 @@ AppPublisher=ToolsCenter
 AppPublisherURL=www.ToolsCenter.org
 AppSupportURL=www.ToolsCenter.org/products/texniccenter/support.htm
 AppUpdatesURL=www.ToolsCenter.org
-AppVersion=Version 1 Beta 5.06
+AppVersion=Version 1 Beta 6.00
 AppID=TeXnicCenter
 AlwaysShowComponentsList=false
 UninstallDisplayIcon={app}\TEXCNTR.EXE
@@ -44,13 +44,13 @@ Source: ..\output\Release\BCGCBResDEU.dll; DestDir: {sys}; CopyMode: normal; Fla
 Source: ..\output\Release\BCGSkinDownloader.dll; DestDir: {sys}; CopyMode: normal; Flags: comparetimestampalso sharedfile; Components: Application_Files
 Source: ..\output\Release\BCGCB58.dll; DestDir: {sys}; CopyMode: normal; Flags: comparetimestampalso sharedfile; Components: Application_Files
 
-Source: ..\..\..\..\..\WINDOWS\SYSTEM\MFC42.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall regserver; Components: System_Files
-Source: ..\..\..\..\..\WINDOWS\SYSTEM\MSVCIRT.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall; Components: System_Files
-Source: ..\..\..\..\..\WINDOWS\SYSTEM\MSVCRT.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall; Components: System_Files
-Source: ..\..\..\..\..\WINDOWS\SYSTEM\MSVCP60.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall; Components: System_Files
+Source: ..\..\..\..\..\..\WINDOWS\SYSTEM32\MFC42.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall regserver; Components: System_Files
+Source: ..\..\..\..\..\..\WINDOWS\SYSTEM32\MSVCIRT.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall; Components: System_Files
+Source: ..\..\..\..\..\..\WINDOWS\SYSTEM32\MSVCRT.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall; Components: System_Files
+Source: ..\..\..\..\..\..\WINDOWS\SYSTEM32\MSVCP60.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall; Components: System_Files
 Source: ..\TeXnicCenterObjects\Lib\TeXnicCenterObjects.tlb; DestDir: {app}; CopyMode: normal; Flags: comparetimestampalso regtypelib; Components: Application_Files
 Source: ..\output\Release\Skins\*.dll; DestDir: {app}\Skins; CopyMode: normal; Flags: comparetimestampalso; Components: Skins
-Source: ..\..\..\..\..\WINDOWS\SYSTEM\OLEAUT32.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall regserver; Components: System_Files
+Source: ..\..\..\..\..\..\WINDOWS\SYSTEM32\OLEAUT32.DLL; DestDir: {sys}; CopyMode: alwaysskipifsameorolder; Flags: restartreplace uninsneveruninstall regserver; Components: System_Files
 
 [Icons]
 Name: {group}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; WorkingDir: {userdocs}; IconIndex: 0
