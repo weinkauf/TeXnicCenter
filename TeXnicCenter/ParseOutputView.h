@@ -41,9 +41,10 @@
 
 class CParseOutputView : public COutputView  
 {
-public:
 	DECLARE_DYNCREATE(CParseOutputView)
 
+// construction/destruction
+public:
 	CParseOutputView();
 	virtual ~CParseOutputView();
 

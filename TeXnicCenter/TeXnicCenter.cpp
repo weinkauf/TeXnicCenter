@@ -784,8 +784,8 @@ BOOL CTeXnicCenterApp::OpenProject( LPCTSTR lpszPath )
 {
 	// open project file
 	AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_PROJECT_CLOSE);
-	CProject	*pDoc = m_pProjectDocTemplate->OpenProjectFile(lpszPath);
 
+	CProject	*pDoc = m_pProjectDocTemplate->OpenProjectFile(lpszPath);
 	// test for success
 	if( !pDoc )
 	{
@@ -795,6 +795,7 @@ BOOL CTeXnicCenterApp::OpenProject( LPCTSTR lpszPath )
 
 	// add to recent project list
 	m_recentProjectList.Add( pDoc->GetPathName() );
+
 	return TRUE;
 }
 

@@ -246,7 +246,7 @@ public:
 //CParseOutputHandler
 public:
 	virtual void OnParseLineInfo( COutputInfo &line, int nLevel, int nSeverity);
-	virtual void OnParseBegin();
+	virtual void OnParseBegin(bool bCancelState);
 	virtual void OnParseEnd( boolean bResult, int nFiles, int nLines );
 
 protected:

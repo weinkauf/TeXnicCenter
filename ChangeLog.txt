@@ -1,3 +1,7 @@
+2002/04/22 niteria
+- Fixed Bug 538169: Release Version fails on opening a project.
+  And a deadlock related to the structureparser.
+
 2002/04/20 niteria
 - Fixed Bug 89 (old list): Problems with MRUList used in 'Find in Files' dialog.
 - Fixed Bug 114 (old list): StructureParser did not find files,
