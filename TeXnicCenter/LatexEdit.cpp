@@ -181,17 +181,17 @@ COLORREF CLatexEdit::GetAutomaticColor(int nColorIndex)
 	case COLORINDEX_SELTEXT:
 		return ::GetSysColor(COLOR_HIGHLIGHTTEXT);
 	case COLORINDEX_PAIRSTRINGBKGND:
-		return RGB(0x00, 0xC0, 0x00);
+		return RGB(0xC0, 0xFF, 0xC0);
 	case COLORINDEX_PAIRSTRINGTEXT:
-		return RGB(0xFF, 0xFF, 0xFF);
+		return RGB(0x00, 0x00, 0x00);
 	case COLORINDEX_BADPAIRSTRINGBKGND:
-		return RGB(0xC0, 0x00, 0x00);
+		return RGB(0xFF, 0xC0, 0xC0);
 	case COLORINDEX_BADPAIRSTRINGTEXT:
-		return RGB(0xFF, 0xFF, 0xFF);
+		return RGB(0x00, 0x00, 0x00);
 	case COLORINDEX_CURPAIRSTRINGBKGND:
-		return RGB(0x00, 0xC0, 0x00);
+		return RGB(0xC0, 0xFF, 0xC0);
 	case COLORINDEX_CURPAIRSTRINGTEXT:
-		return RGB(0xFF, 0xFF, 0xFF);
+		return RGB(0x00, 0x00, 0x00);
 	case COLORINDEX_PAIRBLOCKBKGND:
 		return RGB(0xFF, 0xFF, 0xC0);
 	default:
