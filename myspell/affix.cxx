@@ -29,6 +29,9 @@ Prefix::Prefix(AffixMgr* pmgr, unsigned char a, int num, affentry* dp)
 Prefix::~Prefix()
 {
     if (first) {
+      if (first->appnd) free(first->appnd);
+      if (first->strip) free(first->strip);
+      first->appnd = first->strip = NULL;
       free((char *)first);
     }
     first = NULL;
@@ -122,6 +125,9 @@ Suffix::Suffix(AffixMgr * pmgr, unsigned char a, int num, affentry* dp)
 Suffix::~Suffix()
 {
     if (first) {
+      if (first->appnd) free(first->appnd);
+      if (first->strip) free(first->strip);
+      first->appnd = first->strip = NULL;
       free((char *)first);
     }
     first = NULL;

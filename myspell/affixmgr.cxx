@@ -99,8 +99,12 @@ int  AffixMgr::parse_file(const char * affpath)
              if (*piece != '\0') {
                  switch(i) {
                     case 0: break;
-                    case 1: { trystring = mystrdup(piece); break; }
-		    default: break;
+                    case 1: 
+                       if (trystring != NULL)
+                          free(trystring);
+                       trystring = mystrdup(piece);
+                       break;
+                    default: break;
                  }
                  i++;
              }
@@ -117,8 +121,12 @@ int  AffixMgr::parse_file(const char * affpath)
              if (*piece != '\0') {
                  switch(i) {
                     case 0: break;
-                    case 1: { encoding = mystrdup(piece); break; }
-		    default: break;
+                    case 1: 
+                       if (encoding != NULL)
+                          free(encoding);
+                       encoding = mystrdup(piece); 
+                       break;
+                    default: break;
                  }
                  i++;
              }
@@ -142,7 +150,7 @@ int  AffixMgr::parse_file(const char * affpath)
                  switch(i) {
                     // piece 1 - is type of affix
                     case 0: break;
-          
+
                     // piece 2 - is affix char
                     case 1: { flag = *piece; break; }
 
@@ -150,12 +158,16 @@ int  AffixMgr::parse_file(const char * affpath)
                     case 2: { if (*piece == 'Y') ff = XPRODUCT; break; }
 
                     // piece 4 - is number of affentries
-                    case 3: { numents = atoi(piece); 
-                              ptr = (struct affentry *)malloc(numents * 
-                                        sizeof(struct affentry));
-                              ptr->cpflag = ff;
-                            }
-		    default: break;
+                    case 3:
+                       numents = atoi(piece);
+                       ASSERT(ptr == NULL);
+                       if (ptr != NULL)
+                         free(ptr);
+                       ptr = (struct affentry *)malloc(numents *  sizeof(struct affentry));
+                       memset(ptr, 0, numents * sizeof(struct affentry));
+                       ptr->cpflag = ff;
+
+                    default: break;
                  }
                  i++;
              }
@@ -173,7 +185,6 @@ int  AffixMgr::parse_file(const char * affpath)
              i = 0;
 
              // split line into pieces
-             
              while ((piece=mystrsep(&tp,' '))) {
                 if (*piece != '\0') {
                     switch(i) {
@@ -191,8 +202,8 @@ int  AffixMgr::parse_file(const char * affpath)
                                  nptr->stripl = strlen(nptr->strip);
                                  if (strcmp(nptr->strip,"0") == 0) {
                                    nptr->strip=mystrdup("");
-				   nptr->stripl = 0;
-                                 }   
+                                   nptr->stripl = 0;
+                                 }
                                  break; 
                                }
 
@@ -201,14 +212,14 @@ int  AffixMgr::parse_file(const char * affpath)
                                  nptr->appndl = strlen(nptr->appnd);
                                  if (strcmp(nptr->appnd,"0") == 0) {
                                    nptr->appnd=mystrdup("");
-				   nptr->appndl = 0;
+                                   nptr->appndl = 0;
                                  }   
                                  break; 
                                }
 
                        // piece 5 - is the conditions descriptions
                        case 4: { encodeit(nptr,piece);}
-		       default: break;
+                       default: break;
                     }
                     i++;
                 }
@@ -219,7 +230,7 @@ int  AffixMgr::parse_file(const char * affpath)
          
           // now create the correct Affix Object (Prefix or Suffix)
           if (ft == 'P') {
-	     pTable[numpfx++] = (Affix *) new Prefix(this,flag,numents,ptr);
+             pTable[numpfx++] = (Affix *) new Prefix(this,flag,numents,ptr);
           } else {
              sTable[numsfx++] = (Affix *) new Suffix(this,flag,numents,ptr);
           }
@@ -302,29 +313,28 @@ void AffixMgr::encodeit(struct affentry * ptr, char * cs)
       if (grp == 1) {
         if (neg == 0) {
           // set the proper bits in the condition array vals for those chars
-	  for (j=0;j<nm;j++) {
-	     k = (unsigned int) mbr[j];
+          for (j=0;j<nm;j++) {
+             k = (unsigned int) mbr[j];
              ptr->conds[k] = ptr->conds[k] | (1 << n);
           }
-	} else {
-	  // complement so set all of them and then unset indicated ones
-	   for (j=0;j<SETSIZE;j++) ptr->conds[j] = ptr->conds[j] | (1 << n);
-	   for (j=0;j<nm;j++) {
-	     k = (unsigned int) mbr[j];
-             ptr->conds[k] = ptr->conds[k] & ~(1 << n);
-	   }
+        } else {
+          // complement so set all of them and then unset indicated ones
+          for (j=0;j<SETSIZE;j++) ptr->conds[j] = ptr->conds[j] | (1 << n);
+          for (j=0;j<nm;j++) {
+            k = (unsigned int) mbr[j];
+            ptr->conds[k] = ptr->conds[k] & ~(1 << n);
+          }
         }
         neg = 0;
-        grp = 0;   
+        grp = 0;
         nm = 0;
       } else {
         // not a group so just set the proper bit for this char
-	ptr->conds[(unsigned int) c] = ptr->conds[(unsigned int)c] | (1 << n);
+        ptr->conds[(unsigned int) c] = ptr->conds[(unsigned int)c] | (1 << n);
       }
       n++;
       ec = 0;
     }
-
 
     i++;
   }

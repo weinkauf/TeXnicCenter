@@ -19,6 +19,7 @@ extern char * mystrdup(const char *);
 HashMgr::HashMgr(const char * tpath)
 {
   tablesize = 0;
+  hashsize = 0;
   tableptr = NULL;
   int ec = load_tables(tpath);
   if (ec) {
@@ -27,6 +28,7 @@ HashMgr::HashMgr(const char * tpath)
     fflush(stderr);
     if (tableptr) {
       free(tableptr);
+      tableptr = NULL; // prevent double free in destructor
     }
     tablesize = 0;
   }
@@ -36,9 +38,24 @@ HashMgr::HashMgr(const char * tpath)
 HashMgr::~HashMgr()
 {
   if (tableptr) {
+    for (int i =0; i < tablesize; ++i) {
+      struct hentry * next;
+      struct hentry * dp = &tableptr[i];
+	  // free the data in the first element
+      if (dp->word != NULL) free(dp->word);
+      if (dp->astr != NULL) free(dp->astr);
+	  dp = dp->next;
+	  // free the data and the structure of subsequent elements
+      while (dp != NULL) {
+        next = dp->next;
+        if (dp->word != NULL) free(dp->word);
+        if (dp->astr != NULL) free(dp->astr);
+        free(dp);
+        dp = next;
+      }
+    }
     free(tableptr);
   }
-  tablesize = 0;
 }
 
 
@@ -82,10 +99,43 @@ int HashMgr::add_word(const char * word, int wl, const char * aff, int al)
       while (dp->next != NULL) dp=dp->next; 
       dp->next = hp;
     }
+	++hashsize;
     return 0;
 }     
 
+// save hash table to a munched word list
 
+int HashMgr::save_tables(const char * tpath)
+{
+  int nWordCount = 0;
+
+  if (tableptr) {
+    FILE * rawdict = fopen(tpath, "w");
+    if (rawdict == NULL) return 1;
+
+    char lineString[MAXDELEN];
+    itoa(hashsize, lineString, 10);
+    fputs(lineString ,rawdict);
+
+    for (int i =0; i < tablesize; ++i) {
+      struct hentry * dp = &tableptr[i];
+      while (dp != NULL) {
+        struct hentry * next = dp->next;
+        if (dp->word != NULL) {
+          if (dp->alen != NULL) {
+            sprintf(lineString,"%s/%s", dp->word, dp->astr);
+            fputs(lineString, rawdict);
+          } else {
+            fputs(dp->word, rawdict);
+          }
+        }
+        dp = next;
+      }
+    }
+  fclose(rawdict);
+  }
+  return 0;
+}
 
 // load a munched word list and build a hash table on the fly
 
@@ -109,7 +159,8 @@ int HashMgr::load_tables(const char * tpath)
   // allocate the hash table
   tableptr = (struct hentry *) calloc(tablesize, sizeof(struct hentry));
   if (! tableptr) return 3;
-  for (int i=0; i<tablesize; i++) tableptr[i].word = NULL;
+  memset(tableptr, 0, tablesize*sizeof(struct hentry));
+  //for (int i=0; i<tablesize; i++) tableptr[i].word = NULL;
 
   // loop through all words on much list and add to hash
   // table and create word and affix strings
@@ -133,7 +184,7 @@ int HashMgr::load_tables(const char * tpath)
     add_word(ts,wl,ap,al);
 
   }
-
+  fclose(rawdict);
   return 0;
 }
 
