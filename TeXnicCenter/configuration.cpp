@@ -168,7 +168,9 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	// Language
 	strSection = _T("Settings\\Language");
 
-	SerializeProfileString( strSection, "GuiLanguage", &m_strGuiLanguageOnNextStart, direction, _T("English"));
+	// help german users from older version to upgrade -- so set german
+	// language as default on german systems.
+	SerializeProfileString( strSection, "GuiLanguage", &m_strGuiLanguageOnNextStart, direction, ((GetUserDefaultLangID()&0xFF)==0x07)? _T("Deutsch") : _T("English"));
 	if (direction==Load)
 	{
 		m_strGuiLanguage = m_strGuiLanguageOnNextStart;
