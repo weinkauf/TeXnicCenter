@@ -395,7 +395,9 @@ CProjectNewDialog::CProjectNewDialog(CWnd* pParent /*=NULL*/)
 		AddTemplateItem(CString((LPCTSTR)STE_EMPTYPROJECT_CATEGORY), pItem);
 
 	// Get Project base path
-	m_strProjectBasePath = g_configuration.m_strDefaultPath;
+//	m_strProjectBasePath = g_configuration.m_strDefaultPath;
+	m_strProjectBasePath = AfxGetDefaultDirectory(true,true);
+
 	if (m_strProjectBasePath.IsEmpty())
 	{
 		LPITEMIDLIST	lpidl;

@@ -42,6 +42,15 @@ CString AfxFormatSystemString( DWORD dwMessageId );
 
 	@param bForceNonEmpty
 		Forces the return value to be non-empty
-*/
-CString AfxGetDefaultDirectory(bool bForceNonEmpty = true);
 
+    @param bNewProject
+	    New Project or not
+*/
+CString AfxGetDefaultDirectory(bool bForceNonEmpty = true, bool bNewProject = false);
+
+/** Sets the last opened directory for open/save-dialogs.
+
+	@param strLastFolder
+		Last opened folder
+*/
+void AfxSetLastDirectory(CString strLastFolder);

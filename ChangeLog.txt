@@ -1,3 +1,7 @@
+2003/03/13 christianwelzel
+- Implemented Feature 614342: Last opened folder.
+- Fixed Feature 535144: Specifying Output Profile in TeX file.
+
 2003/03/08 niteria
 - Fixed Bug 700129: cosh instead of \cosh
 - Fixed Bug 699688: "Save As"-Dialog with wrong InitDir.

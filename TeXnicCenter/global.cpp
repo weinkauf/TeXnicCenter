@@ -71,15 +71,24 @@ CString AfxFormatSystemString( DWORD dwMessageId )
 	return szText;
 }
 
-CString AfxGetDefaultDirectory(bool bForceNonEmpty /*= true*/)
+CString AfxGetDefaultDirectory(bool bForceNonEmpty /*= true*/, bool bNewProject /*= false*/)
 {
 	////////////////////////
 	//Get default directory
 	CString strPersonalDir("");
 
-	// - Project opened? ==> Working Dir is default
-	CLatexProject* pLProject = theApp.GetProject();
-	if (pLProject) strPersonalDir = pLProject->GetWorkingDir();
+	// - New Project?
+	if (!bNewProject)
+	{
+		// - Get LastOpenedFolder
+		strPersonalDir = g_configuration.m_strLastOpenedFolder;
+		if (strPersonalDir.IsEmpty() || !CPathTool::Exists(strPersonalDir))
+		{
+			// - Project opened? ==> Working Dir is default
+			CLatexProject* pLProject = theApp.GetProject();
+			if (pLProject) strPersonalDir = pLProject->GetWorkingDir();
+		}
+	}
 
 	// - No Project? ==> Try it with the default dir from the config
 	if (strPersonalDir.IsEmpty())
@@ -121,3 +130,11 @@ CString AfxGetDefaultDirectory(bool bForceNonEmpty /*= true*/)
 }
 
 
+void AfxSetLastDirectory(CString bLastFolder)
+{
+	// - Set LastOpenedFolder if not empty
+	if (!bLastFolder.IsEmpty())
+	{
+		g_configuration.m_strLastOpenedFolder = bLastFolder;
+	}
+}
