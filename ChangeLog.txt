@@ -1,3 +1,5 @@
+2003/12/13 niteria
+- Implemented Feature 797023: Provide standard profile "Latex => PS => PDF"
 
 2003/12/07 svenwiegand
 - Implemented Feature 855728: Better Support for visually handicapped users

@@ -4445,6 +4445,7 @@ BEGIN
     STE_OUTPUTWIZARD_PDFTYPE "LaTeX => PDF"
     STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS 
                             "Ein Ausgabeprofil mit dem Titel '%s' existiert bereits.\n\nSoll es überschrieben werden?"
+    STE_OUTPUTWIZARD_PDFVIAPSTYPE "LaTeX => PS => PDF"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -8114,6 +8115,8 @@ BEGIN
     STE_OUTPUTWIZARD_PDFTYPE "LaTeX => PDF"
     STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS 
                             "An output profile with the title '%s' already exists.\n\nShould it be overwritten?"
+    STE_OUTPUTWIZARD_PDFVIAPSTYPE "Latex => PS => PDF"
+    STE_OUTPUTWIZARD_PDFVIAPSTYPE2 "LaTeX => PS => PDF"
 END
 
 STRINGTABLE DISCARDABLE 
