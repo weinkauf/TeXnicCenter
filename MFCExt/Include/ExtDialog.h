@@ -19,4 +19,4 @@
 *
 ********************************************************************/
 
-#include "../source/PropertyDialog.h"
+#include "../source/FileDialogEx.h"
