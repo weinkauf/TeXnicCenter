@@ -155,10 +155,6 @@ protected:
 	/**
 	Called for serializing project's properties.
 
-	This method is the replacement for the obsolete Serialize()-method,
-	that takes an CArchive-object as parameter. The obsolete version
-	is only used to import older projects (till Beta3.00.000).
-
 	@param ini
 		The ini-file, the project's information should be read from
 		or written to. You do not have to call the Read() or Write()
@@ -191,7 +187,6 @@ public:
 
 // overridings
 public:
-	virtual void Serialize(CArchive& ar);
 	virtual void OnCloseProject();
 	virtual BOOL OnOpenProject(LPCTSTR lpszPathName);
 	virtual void SetPathName(LPCTSTR lpszPathName);
