@@ -42,10 +42,9 @@
 namespace InterfaceImplementationWrappers
 {
 
-/**
-C++-Wrapper for COM-interface IProject.
+/**	C++-Wrapper for COM-interface IProject.
 
-Works only when used as aggregated class.
+@note Works only when used as aggregated class.
 
 @author Sven Wiegand
 */

@@ -42,8 +42,7 @@
 namespace InterfaceAccessWrappers
 {
 
-/**
-Wrapper for COM-interface IProjectWizard
+/** Wrapper for COM-interface IProjectWizard.
 
 @author Sven Wiegand
 */
