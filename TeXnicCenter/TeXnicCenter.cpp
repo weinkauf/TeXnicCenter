@@ -976,9 +976,12 @@ void CTeXnicCenterApp::OnFileOpen()
 	CString strInitialDir = AfxGetDefaultDirectory();
 	dlg.m_ofn.lpstrInitialDir = strInitialDir;
 
-	if( dlg.DoModal() != IDOK )
+	//Show the dialog
+	if (dlg.DoModal() != IDOK)
 	{
-		AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
+		//It was cancelled - the PathName is not set.
+		// Therefore, we use GetLastOpenedFolder.
+		AfxSetLastDirectory(dlg.GetLastOpenedFolder());
 		return;
 	}
 
@@ -999,14 +1002,17 @@ void CTeXnicCenterApp::OnProjectOpen()
 	CString strInitialDir = AfxGetDefaultDirectory();
 	dialog.m_ofn.lpstrInitialDir = strInitialDir;
 
-	if( dialog.DoModal() == IDCANCEL )
+	//Show the dialog
+	if (dialog.DoModal() != IDOK)
 	{
-		AfxSetLastDirectory( CPathTool::GetDirectory(dialog.GetPathName()) );
+		//It was cancelled - the PathName is not set.
+		// Therefore, we use GetLastOpenedFolder.
+		AfxSetLastDirectory(dialog.GetLastOpenedFolder());
 		return;
 	}
 
-	AfxSetLastDirectory( CPathTool::GetDirectory(dialog.GetPathName()) );
-	// open project file
+	AfxSetLastDirectory(CPathTool::GetDirectory(dialog.GetPathName()));
+	//open project file
 	OpenProject(dialog.GetPathName());
 }
 

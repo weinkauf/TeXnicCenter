@@ -306,22 +306,25 @@ void CInsertGraphicDialog::OnGraphicBrowse()
 {
 	UpdateData( TRUE );
 
-	CFileDialogEx	dlg( 
-		TRUE, NULL, m_strFile, 
-		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR, 
-		AfxLoadString( STE_GRAPHIC_FILES ), this );
+	CFileDialogEx dlg(
+		TRUE, NULL, m_strFile,
+		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR,
+		AfxLoadString(STE_GRAPHIC_FILES), this);
 
 	//Get default path
 	CString strInitialDir = AfxGetDefaultDirectory();
 	dlg.m_ofn.lpstrInitialDir = strInitialDir;
 
-	if( dlg.DoModal() != IDOK )
+	//Show the dialog
+	if (dlg.DoModal() != IDOK)
 	{
-		AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
+		//It was cancelled - the PathName is not set.
+		// Therefore, we use GetLastOpenedFolder.
+		AfxSetLastDirectory(dlg.GetLastOpenedFolder());
 		return;
 	}
 
-	AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
+	AfxSetLastDirectory(CPathTool::GetDirectory(dlg.GetPathName()));
 	m_strFile = dlg.GetPathName();
 
 	//Get path relative to project dir

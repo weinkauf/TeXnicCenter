@@ -239,10 +239,13 @@ BOOL CLatexDoc::DoSave( LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/ )
 			m_pTextBuffer ? m_pTextBuffer->GetCRLFMode() : g_configuration.m_nStandardFileFormat,
 			CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
 		
-		if( dlg.DoModal() != IDOK )
+		//Show the dialog
+		if (dlg.DoModal() != IDOK)
 		{
-			AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
-			return FALSE;
+			//It was cancelled - the PathName is not set.
+			// Therefore, we use GetLastOpenedFolder.
+			AfxSetLastDirectory(dlg.GetLastOpenedFolder());
+			return false;
 		}
 
 		AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );

@@ -70,6 +70,7 @@ int CFileDialogEx::DoModal()
 	ZeroMemory(&OfnEx, sizeof(OfnEx));
 	CopyMemory(&OfnEx, &m_ofn, sizeof(m_ofn));
 
+	//Get the Windows Version
 	dwWinMajor = (DWORD)(LOBYTE(LOWORD(::GetVersion())));
 	if (dwWinMajor >= 5)
 		OfnEx.lStructSize = sizeof(OfnEx);
@@ -107,11 +108,14 @@ int CFileDialogEx::DoModal()
 	else
 		AfxHookWindowCreate(this);
 
+
+	//Show the Dialog
 	int nResult;
 	if (m_bOpenFileDialog)
 		nResult = ::GetOpenFileName(&OfnEx);
 	else
 		nResult = ::GetSaveFileName(&OfnEx);
+
 
 	if (nResult)
 		ASSERT(pThreadState->m_pAlternateWndInit == NULL);
@@ -126,3 +130,12 @@ int CFileDialogEx::DoModal()
 	PostModal();
 	return nResult ? nResult : IDCANCEL;
 }
+
+void CFileDialogEx::OnFolderChange()
+{
+	m_strLastFolder = GetFolderPath(); //uses CDM_GETFOLDERPATH
+
+	//NOTE: In my (old?) MSDN the func GetFolderPath() is not documented,
+	// but you can find it in AFXDLGS.H as a public method.
+}
+

@@ -1,3 +1,6 @@
+2003/07/15 niteria
+- Fixed Bug 702814: TXC doesn't save last opened folder after cancelling
+
 2003/06/13 niteria
 - Implemented Feature 753658: Scan for Project on Opening a Document
    (Still open question: Ability to switch this off in the options?)
