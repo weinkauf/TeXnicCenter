@@ -1,3 +1,7 @@
+2003/03/04 christianwelzel
+- Implemented Feature 551294: Storing MRU Profile with Project 
+- Implemented Feature 535144: Specifying Output Profile in TeX file 
+
 2003/01/22 niteria
 - Fixed Bug 670414: syntax highlighting with verbatim env fails.
   A small problem concerning verbatim env still remains. This is mostly due to the
