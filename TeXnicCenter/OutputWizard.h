@@ -163,6 +163,12 @@ protected:
 	/** TRUE if pdflatex has been found. */
 	BOOL m_bPdfLatexInstalled;
 
+	/** TRUE if Ghostscript has been found. */
+	BOOL m_bGhostscriptInstalled;
+
+	/** Path to Ghostscript. */
+	CString m_strGhostscriptPath;
+
 	/** Profile map to modify */
 	CProfileMap &m_profiles;
 

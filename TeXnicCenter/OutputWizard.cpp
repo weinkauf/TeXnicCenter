@@ -65,10 +65,11 @@ COutputWizard::COutputWizard(CProfileMap &profiles, CWnd* pParentWnd)
 	m_wndPageDviViewer(IDD_OUTPUTWIZARD_DVIVIEWER),
 	m_wndPagePsViewer(IDD_OUTPUTWIZARD_PSVIEWER),
 	m_wndPagePdfViewer(IDD_OUTPUTWIZARD_PDFVIEWER),
-	m_bMikTexInstalled(FALSE),
-	m_bLatexInstalled(FALSE),
-	m_bDvipsInstalled(FALSE),
-	m_bPdfLatexInstalled(FALSE)
+	m_bMikTexInstalled(false),
+	m_bLatexInstalled(false),
+	m_bDvipsInstalled(false),
+	m_bPdfLatexInstalled(false),
+	m_bGhostscriptInstalled(false)
 {
 	AddPage(&m_wndPageWelcome);
 	AddPage(&m_wndPageMikTex);
@@ -141,7 +142,7 @@ void COutputWizard::OnNext()
 			break;
 
 		default:
-			ASSERT(FALSE);
+			ASSERT(false);
 	}
 }
 
@@ -182,12 +183,12 @@ CString COutputWizard::FindApplicationForDocType(LPCTSTR lpszExt)
 	{
 		lResult = RegOpenKeyEx(HKEY_CLASSES_ROOT, lpszExt, 0, KEY_READ, &hKey);
 		if (lResult != ERROR_SUCCESS)
-			throw FALSE;
+			throw false;
 
 		dwSize = 0;
 		lResult = RegQueryValueEx(hKey, NULL, NULL, &dwType, NULL, &dwSize);
 		if (lResult != ERROR_SUCCESS || !dwSize || dwType != REG_SZ)
-			throw FALSE;
+			throw false;
 		
 		lResult = RegQueryValueEx(hKey, NULL, NULL, &dwType, (LPBYTE)strValue.GetBuffer(dwSize), &dwSize);
 		strValue.ReleaseBuffer();
@@ -195,12 +196,12 @@ CString COutputWizard::FindApplicationForDocType(LPCTSTR lpszExt)
 
 		lResult = RegOpenKeyEx(HKEY_CLASSES_ROOT, CPathTool::Cat(strValue, _T("shell\\open\\command")), 0, KEY_READ, &hKey);
 		if (lResult != ERROR_SUCCESS)
-			throw FALSE;
+			throw false;
 
 		dwSize = 0;
 		lResult = RegQueryValueEx(hKey, NULL, NULL, &dwType, NULL, &dwSize);
 		if (lResult != ERROR_SUCCESS || !dwSize || dwType != REG_SZ)
-			throw FALSE;
+			throw false;
 
 		lResult = RegQueryValueEx(hKey, NULL, NULL, &dwType, (LPBYTE)strValue.GetBuffer(dwSize), &dwSize);
 		strValue.ReleaseBuffer();
@@ -250,7 +251,7 @@ void COutputWizard::SetActivePage(int nPage)
 
 		default:
 			// Unknown page!
-			ASSERT(FALSE);
+			ASSERT(false);
 	}
 
 	CPropertySheet::SetActivePage(nPage);
@@ -293,7 +294,7 @@ void COutputWizard::LookForMikTex()
 
 	pMiktexReg->Close();
 
-	m_bMikTexInstalled = TRUE;
+	m_bMikTexInstalled = true;
 
 	m_wndPageDistributionPath.m_strPath = CPathTool::Cat(strPath, _T("MiKTeX\\bin"));
 
@@ -307,12 +308,12 @@ BOOL COutputWizard::LookForLatex()
 	if (!ff.FindFile(CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("latex.exe"))))
 	{
 		AfxMessageBox(STE_OUTPUTWIZARD_NOLATEX, MB_ICONSTOP | MB_OK);
-		m_bLatexInstalled = FALSE;
+		m_bLatexInstalled = false;
 	}
 	else
 	{
 		ff.Close();
-		m_bLatexInstalled = TRUE;
+		m_bLatexInstalled = true;
 	}
 
 	return m_bLatexInstalled;
@@ -349,7 +350,7 @@ void COutputWizard::LookForDviViewer()
 	m_wndPageDviViewer.m_strForwardSearchOption = _T("-s %l\"%Wc\"");
 
 	// Let's do the YAP inverse search configuration
-	CBCGRegistry	reg(FALSE, FALSE);
+	CBCGRegistry	reg(false, false);
 
 	if (!reg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\Yap\\Settings")))
 	{
@@ -387,7 +388,7 @@ void COutputWizard::LookForPs()
 	if (
 		!ff.FindFile(CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("dvips.exe"))))
 	{
-		m_bDvipsInstalled = FALSE;
+		m_bDvipsInstalled = false;
 
 		// There is no dvips, so we don't need any ps-viewer
 		// lets look for pdf
@@ -396,7 +397,7 @@ void COutputWizard::LookForPs()
 	}
 	ff.Close();
 
-	m_bDvipsInstalled = TRUE;
+	m_bDvipsInstalled = true;
 
 	// DVIPS is installed
 	// is there a registered viewer?
@@ -414,21 +415,75 @@ void COutputWizard::LookForPdf()
 {
 	// Let's see, if pdflatex is installed
 	CFileFind	ff;
-	if (
-		!ff.FindFile(CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("pdflatex.exe"))))
+	m_bPdfLatexInstalled = false;
+	if (ff.FindFile(CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("pdflatex.exe"))))
 	{
-		m_bPdfLatexInstalled = FALSE;
-
-		// There is no pdflate, so we don't need a pdf-viewer
-		// lets finish
-		ShowInformation();
-		return;
+		m_bPdfLatexInstalled = true;
 	}
 	ff.Close();
 
-	m_bPdfLatexInstalled = TRUE;
 
-	// OK, the user can generat PDF-documents.
+	//Lets see, if Ghostscript is installed
+	// We find the Ghostscript dll in the registry here:
+	//  Path: HKEY_LOCAL_MACHINE\SOFTWARE\AFPL Ghostscript\<version>
+	//  Entry: GS_DLL=f:\prog\gstools\gs\gs8.12\bin\gsdll32.dll
+	// We need the directory of GS_DLL. There we find gswin32c.exe.
+	m_bGhostscriptInstalled = false;
+	CBCGRegistry gsReg(true, true); //HKEY_LOCAL_MACHINE, ReadOnly
+	if (gsReg.Open("SOFTWARE\\AFPL Ghostscript"))
+	{
+		//Read the subkeys - i.e. subfolders under "AFPL Ghostscript"
+		CStringArray SubKeys;
+		gsReg.ReadSubKeys(SubKeys);
+
+		//We look for the newest version
+		int idGSVersionSubKey = -1;
+		int gsMajorVersion = -1;
+		int gsMinorVersion = -1;
+		for(int i=0;i<SubKeys.GetSize();i++)
+		{
+			int idxPoint = SubKeys[i].Find(_T('.'));
+			if (idxPoint <= 0) continue;
+			int gsMajorVersionThis = atoi( SubKeys[i].Left(idxPoint) );
+			int gsMinorVersionThis = atoi( SubKeys[i].Right(SubKeys[i].GetLength() - idxPoint - 1) );
+			// (8.12 vs. 8.11) 80012 > 80011;  (8.12 at init) 80012 > -10001
+			if ( (gsMajorVersionThis * 10000 + gsMinorVersionThis) > (gsMajorVersion * 10000 + gsMinorVersion) )
+			{
+				idGSVersionSubKey = i;
+				gsMajorVersion = gsMajorVersionThis;
+				gsMinorVersion = gsMinorVersionThis;
+			}
+		}
+
+		//Did we find a version? And can we go into that subdir?
+		if ( (idGSVersionSubKey >= 0) && (gsReg.Open(SubKeys[idGSVersionSubKey])) )
+		{
+			if (gsReg.Read(_T("GS_DLL"), m_strGhostscriptPath))
+			{
+				m_strGhostscriptPath = CPathTool::Cat(CPathTool::GetDirectory(m_strGhostscriptPath), _T("gswin32c.exe"));
+				if (ff.FindFile(m_strGhostscriptPath))
+					m_bGhostscriptInstalled = true;
+
+				ff.Close();
+			}
+		}
+
+		gsReg.Close();
+	}
+
+
+	//Can the user create PDFs?
+	if (!m_bPdfLatexInstalled && !m_bGhostscriptInstalled)
+	{
+		// There is no pdflatex or Ghostscript,
+		// so we don't need a pdf-viewer.
+		// Lets finish.
+		ShowInformation();
+		return;
+	}
+
+
+	// OK, the user can generate PDF-documents.
 	// Lets look for AcrobatReader to view them
 	CString	strViewer = FindApplicationForDocType(_T(".pdf"));
 
@@ -460,6 +515,8 @@ void COutputWizard::ShowInformation()
 		m_wndPageFinish.m_strList+= _T("- ") + CString((LPCTSTR)STE_OUTPUTWIZARD_PSTYPE) + _T("\n\n");
 	if (m_bPdfLatexInstalled)
 		m_wndPageFinish.m_strList+= _T("- ") + CString((LPCTSTR)STE_OUTPUTWIZARD_PDFTYPE) + _T("\n\n");
+	if (m_bGhostscriptInstalled)
+		m_wndPageFinish.m_strList+= _T("- ") + CString((LPCTSTR)STE_OUTPUTWIZARD_PDFVIAPSTYPE) + _T("\n\n");
 
 	SetActivePage(pageFinish);
 }
@@ -629,7 +686,7 @@ void COutputWizard::GenerateOutputProfiles()
 					cmd.SetCommand(_T("[DocClose(\"%bm.pdf\")]"));
 					profileCmd.SetDdeCommand(cmd);
 					p.SetViewCloseCmd(profileCmd);
-					p.SetCloseView(TRUE);
+					p.SetCloseView(true);
 				}
 				else
 				{
@@ -657,6 +714,97 @@ void COutputWizard::GenerateOutputProfiles()
 			m_profiles.Add(strProfile, p);
 		}
 	}
+
+	// LaTeX => PS => PDF
+	if (m_bLatexInstalled && m_bDvipsInstalled && m_bGhostscriptInstalled)
+	{
+		CString	strProfile((LPCTSTR)STE_OUTPUTWIZARD_PDFVIAPSTYPE);
+
+		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS, strProfile);
+		BOOL		bExists = m_profiles.Exists(strProfile);
+		if (!bExists || AfxMessageBox(strError, MB_ICONQUESTION | MB_YESNO) == IDYES)
+		{
+			if (bExists)
+				m_profiles.Remove(strProfile);
+
+			// create profile
+			CProfile	p;
+
+			p.SetLatexPath(
+				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("latex.exe")),
+				_T("--src -interaction=nonstopmode \"%Wm\""));
+			p.SetBibTexPath(
+				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("bibtex.exe")),
+				_T("\"%bm\""));
+			p.SetMakeIndexPath(
+				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("makeindex.exe")),
+				_T("\"%bm\""));
+
+			// add post processor dvips
+			CPostProcessor	ppDVIPS(
+				_T("DviPs (PDF)"), CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("dvips.exe")),
+				_T("-P pdf \"%Bm.dvi\""));
+			p.GetPostProcessorArray().Add(ppDVIPS);
+
+			// add post processor Ghostscript ps2pdf
+			CPostProcessor	ppGS(
+				_T("Ghostscript (ps2pdf)"), m_strGhostscriptPath,
+				_T("-sPAPERSIZE=a4 -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"%bm.pdf\" -c save pop -f \"%bm.ps\""));
+			p.GetPostProcessorArray().Add(ppGS);
+
+			// add viewer settings
+			if (!m_wndPagePdfViewer.m_strPath.IsEmpty())
+			{
+				p.SetViewerPath(m_wndPagePdfViewer.m_strPath);
+
+				if (CPathTool::GetFile(m_wndPagePdfViewer.m_strPath).CompareNoCase(_T("AcroRd32.exe")) == 0)
+				{
+					// Acrobat reader specific commands
+					CDdeCommand					cmd;
+					CProfile::CCommand	profileCmd;
+					profileCmd.SetActiveCommand(CProfile::CCommand::typeDde);
+
+					cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
+					cmd.SetCommand(_T("[DocOpen(\"%bm.pdf\")][FileOpen(\"%bm.pdf\")]"));
+					cmd.SetServer(_T("acroview"), _T("control"));
+					profileCmd.SetDdeCommand(cmd);
+					p.SetViewProjectCmd(profileCmd);
+
+					p.SetViewCurrentCmd(profileCmd);
+
+					cmd.SetCommand(_T("[DocClose(\"%bm.pdf\")]"));
+					profileCmd.SetDdeCommand(cmd);
+					p.SetViewCloseCmd(profileCmd);
+					p.SetCloseView(true);
+				}
+				else
+				{
+					// general commands
+					CProcessCommand			cmd;
+					CProfile::CCommand	profileCmd;
+					profileCmd.SetActiveCommand(CProfile::CCommand::typeProcess);
+
+					cmd.Set(
+						m_wndPagePdfViewer.m_strPath, 
+						m_wndPagePdfViewer.m_strSingleInstanceOption + _T(" \"%bm.pdf\""));
+					profileCmd.SetProcessCommand(cmd);
+					p.SetViewProjectCmd(profileCmd);
+
+					cmd.Set(
+						m_wndPagePdfViewer.m_strPath, 
+						m_wndPagePdfViewer.m_strSingleInstanceOption + _T(' ')
+						+ m_wndPagePdfViewer.m_strForwardSearchOption + _T(" \"%bm.pdf\""));
+					profileCmd.SetProcessCommand(cmd);
+					p.SetViewCurrentCmd(profileCmd);
+				}
+			}
+
+			// add profile to map
+			m_profiles.Add(strProfile, p);
+		}
+	}
+
+
 
 	/*
 	if (m_bDvipsInstalled && m_bLatexInstalled)
