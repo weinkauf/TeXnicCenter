@@ -301,8 +301,12 @@ void CLatexDoc::UpdateTextBufferOnExternalChange()
 
 	if (nResult == IDYES)
 	{
-		m_pTextBuffer->FreeAll();
-		m_pTextBuffer->LoadFromFile(GetPathName());
+ 		if (!m_pTextBuffer->LoadFromFile(GetPathName()))
+ 		{
+ 			strMsg.Format(STE_FILE_INUSE_OPEN, GetPathName());
+ 			AfxMessageBox(strMsg, MB_ICONINFORMATION|MB_OK);
+ 			m_pTextBuffer->SetReadOnly(TRUE);
+ 		}
 	}
 }
 

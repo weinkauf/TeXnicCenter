@@ -761,7 +761,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -2955,6 +2955,7 @@ BEGIN
     STE_FILE_EXTERNALCHANGE "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?"
     STE_FILE_EXTERNALCHANGEEX 
                             "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?\n\n(Wichtig: Sie haben Änderungen an dem Dokument vorgenommen. Wenn es neu geladen wird, gehen diese Änderungen verloren!)"
+    STE_FILE_INUSE_OPEN     "Kann nicht die Datei\n\n%s\n\nwieder öffnen. Umwandelnde vorhandene Datei zu Read-only"
 END
 
 STRINGTABLE PRELOAD DISCARDABLE 
@@ -4085,12 +4086,12 @@ BEGIN
     STE_COLOR_OTHERS        "Andere Farben..."
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -6216,6 +6217,7 @@ BEGIN
     STE_FILE_EXTERNALCHANGE "The file\n\n%s\n\nhas been modified outside TeXnicCenter. Should TeXnicCenter reload the document?"
     STE_FILE_EXTERNALCHANGEEX 
                             "The file\n\n%s\n\nhas been modified outside TeXnicCenter. Should TeXnicCenter reload the document?\n\n(Important: You have made changes to the document. If you decide to reload it, your changes will be lost!)"
+    STE_FILE_INUSE_OPEN     "Cannot re-open the file\n\n%s\n\nConverting existing file to read-only"
 END
 
 STRINGTABLE PRELOAD DISCARDABLE 
@@ -7330,7 +7332,7 @@ BEGIN
     STE_COLOR_OTHERS        "Other Colors..."
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
