@@ -181,9 +181,10 @@ BEGIN_MESSAGE_MAP(CTeXnicCenterApp, CProjectSupportingWinApp)
 	ON_COMMAND(ID_LATEX_EDITPROFILES, OnLatexEditProfiles)
 	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_ALL, OnUpdateWindowCloseAll)
 	ON_COMMAND(ID_WINDOW_CLOSE_ALL, OnWindowCloseAll)
+	ON_COMMAND(ID_HELP, OnHelp)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnDisableStdCmd)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS, OnDisableStdCmd)
-	ON_COMMAND(ID_HELP, OnHelp)
+	ON_COMMAND(ID_BG_UPDATE_PROJECT, OnUpdateProject)
 	//}}AFX_MSG_MAP
 	// Dateibasierte Standard-Dokumentbefehle
 	//ON_COMMAND(ID_FILE_NEW, CProjectSupportingWinApp::OnFileNew)
@@ -1406,6 +1407,7 @@ CWinThread* CTeXnicCenterApp::GetBackgroundThread()
 	if (m_pBackgroundThread == NULL )
 	{
 		m_pBackgroundThread = new CBackgroundThread();
+		ASSERT( m_pBackgroundThread );
 		m_pBackgroundThread->CreateThread();
 		m_pBackgroundThread->SetThreadPriority(THREAD_PRIORITY_LOWEST);
 
@@ -1418,5 +1420,35 @@ CWinThread* CTeXnicCenterApp::GetBackgroundThread()
 	}
 	::LeaveCriticalSection( &m_csLazy );
 	return m_pBackgroundThread;
+}
+
+
+void CTeXnicCenterApp::OnUpdateProject() 
+{
+	// Inform the background thread to update all of the active views.
+	CWinThread *pBackgroundThread = GetBackgroundThread();
+
+	// get the document template
+	CDocTemplate	*pDocTemplate = m_pLatexDocTemplate;
+
+	CDocument	*pDoc = NULL;
+	POSITION	pos = pDocTemplate->GetFirstDocPosition();
+
+	while( pos )
+	{
+		pDoc = pDocTemplate->GetNextDoc( pos );
+		if( pDoc )
+		{
+			// Get the first document view
+			POSITION pos = pDoc->GetFirstViewPosition();
+			if ( pos )
+			{
+				CCrystalTextView *pView = (CCrystalTextView *)pDoc->GetNextView( pos );
+
+				if (pView && pView->IsKindOf(RUNTIME_CLASS(CCrystalTextView)))
+					pBackgroundThread->PostThreadMessage(ID_BG_UPDATE_BUFFER, 0, (long)pView);
+			}
+		}
+	}
 }
 
