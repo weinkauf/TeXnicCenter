@@ -114,12 +114,12 @@ CStructureParser::CStructureParser( CStructureParserHandler *pStructureParserHan
 	TRACE( "m_regexFigureEnd returned %d\n", nResult );
 
 	nResult = m_regexTableStart.set_expression( _T(
-		"\\\\begin\\s*\\{table\\}"
+		"\\\\begin\\s*\\{(sideways)?table\\}"
 	) );
 	TRACE( "m_regexTableStart returned %d\n", nResult );
 
 	nResult = m_regexTableEnd.set_expression( _T(
-		"\\\\end\\s*\\{table\\}"
+		"\\\\end\\s*\\{(sideways)?table\\}"
 	) );
 	TRACE( "m_regexTableEnd returned %d\n", nResult );
 
