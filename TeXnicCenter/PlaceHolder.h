@@ -4,17 +4,17 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License as
 * published by the Free Software Foundation; either version 2 of
 * the License, or (at your option) any later version.
-* 
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 * General Public License for more details.
-* 
+*
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -55,7 +55,7 @@ Expands the placeholders in the given string and returns the result.
 	Path of the current file in the editor. Set to NULL to prevent the
 	function from replacing	the current file specific placeholders.
 @param lCurrentLine
-	Line index of the cursor in the current file in the editor. Set to 
+	Line index of the cursor in the current file in the editor. Set to
 	-1 to prevent the function from replacing the line specific place
 	holders
 @param lpszCurrentSelection
@@ -66,7 +66,7 @@ Expands the placeholders in the given string and returns the result.
 @author Sven Wiegand
 @author Tino Weinkauf
 */
-CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders, 
+CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders,
 															LPCTSTR lpszMainPath = NULL,
 															LPCTSTR lpszCurrentPath = NULL,
 															long lCurrentLine = -1,
@@ -110,12 +110,12 @@ The String will be empty in this case.
 If lpszStringWithWildcard does not contain a wildcard but a filename,
 this one searched in the given folder.
 
-If lpszFolder is NULL, the current directory is used. 
+If lpszFolder is NULL, the current directory is used.
 
 @author Tino Weinkauf
 @author Sven Wiegand
 */
-CString AfxExpandWildcard(LPCTSTR lpszStringWithWildcard, 
+CString AfxExpandWildcard(LPCTSTR lpszStringWithWildcard,
 													bool bRecursive,
 													LPCTSTR lpszFolder = NULL,
 													CUniqueStringList* pStrList = NULL);
@@ -147,7 +147,7 @@ A Class to handle Set-Placeholders (Placeholder Sets), which define sets of file
 
 This allows the following syntax for a given string (see also ExpandAllSets):
 
-<b><tt>$[q][s][f][r]<FILESET></tt></b>
+<b><tt>$[q][s][f][r]\<FILESET\></tt></b>
 
 <ul>
 	<li><b><tt>$</tt></b> Starts the Placeholder. Use "$$" to get "$".</li>
@@ -160,7 +160,7 @@ This allows the following syntax for a given string (see also ExpandAllSets):
 
 	<li><b><tt>r</tt></b> Filenames will be given relative to the WorkingDir of the Project (see also SetProject).</li>
 
-	<li><b><tt><FILESET></tt></b> One of the following:</li>
+	<li><b><tt>\<FILESET\></tt></b> One of the following:</li>
 
 	<ul>
 		<li><b><tt>TPF</tt></b> All TeX-Files reported in <var>m_aStructureItems</var> of the Project (see also SetProject).</li>
@@ -179,20 +179,20 @@ This allows the following syntax for a given string (see also ExpandAllSets):
 <ul>
 	<li><b><tt>$qTPF</tt></b> Lists all TeX-Files reported by TXC-StructureParser. \n
 				Each quoted and separated from each other using a space, \n
-				like <tt>"D:\Temp\test\curvature3d.tex" "D:\Temp\test\definitions\macros.tex" "D:\Temp\test\chaptertwo.tex"</tt></li>
+				like <tt> \verbatim "D:\Temp\test\curvature3d.tex" "D:\Temp\test\definitions\macros.tex" "D:\Temp\test\chaptertwo.tex" \endverbatim </tt></li>
 
 	<li><b><tt>$fBPF</tt></b> Lists all BibTeX-Files reported by TXC-StructureParser. \n
 				The Forward Slash is used as directory separator. \n
 				The Files themselves are separated from each other using a space, \n
-				like <tt>D:/Temp/test/xbib.bib D:/Temp/test/morebibs/morexbib.bib</tt></li>
+				like <tt> \verbatim D:/Temp/test/xbib.bib D:/Temp/test/morebibs/morexbib.bib \endverbatim </tt></li>
 
 	<li><b><tt>$COF</tt></b> Lists all Files opened in the editor. \n
 				Separated from each other using a space (notice the problem with non-quoting of "Program Files"), \n
-				like <tt>D:\Temp\test\curvature3d.tex D:\Program Files\texmf\pdftex\latex\config\pdflatex.ini</tt></li>
+				like <tt> \verbatim D:\Temp\test\curvature3d.tex D:\Program Files\texmf\pdftex\latex\config\pdflatex.ini \endverbatim </tt></li>
 
 	<li><b><tt>$qsrAPF</tt></b> Lists all Files contained in the Project (as reported by TXC-StructureParser). \n
 				Each quoted, Filenames in 8.3-Format and relative to the WorkingDir and separated from each other using a space, \n
-				like <tt>"curvat~1.tcp" "curvat~1.tps" "curvat~1.tex" "..\..\Progra~1\texmf\pdftex\latex\config\pdflatex.ini" "xbib.bib" "morebibs\morexb~1.bib" "defini~1\macros.tex" "chapte~1.tex"</tt></li>
+				like <tt> \verbatim "curvat~1.tcp" "curvat~1.tps" "curvat~1.tex" "..\..\Progra~1\texmf\pdftex\latex\config\pdflatex.ini" "xbib.bib" "morebibs\morexb~1.bib" "defini~1\macros.tex" "chapte~1.tex" \endverbatim </tt></li>
 </ul>
 
 
@@ -207,7 +207,7 @@ always unique - no duplicates of a filename.
 
 @author Tino Weinkauf
 */
-class CPlaceholderSets  
+class CPlaceholderSets
 {
 public:
 	//Constructor / Destructor
@@ -311,7 +311,7 @@ protected:
 	/**
 	Converts a string according to the given boolean parameters
 	and adds it to the given CUniqueStringList-Object.
-	It expects to get a full path of the file, i.e. "D:\Temp\test.txt".
+	It expects to get a full path of the file, i.e. \verbatim "D:\Temp\test.txt" \endverbatim
 
 	@param bCheckExistence
 		Set to true, if you only want to add a Name of a File,
