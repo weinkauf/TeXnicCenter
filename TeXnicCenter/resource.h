@@ -277,6 +277,8 @@
 #define STE_COLOR_AUTOMATIC             480
 #define STE_COLOR_OTHERS                481
 #define STE_PDICT_OPEN_ERROR            482
+#define IDS_LANGUAGE                    483
+#define IDS_DIALECT                     484
 #define ID_WINDOW_FIRST                 800
 #define ID_WINDOW_LAST                  849
 #define IDR_USER_TOOLBAR_FIRST          900
