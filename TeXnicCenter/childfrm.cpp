@@ -366,3 +366,8 @@ BOOL CChildFrame::Serialize(CIniFile &ini, LPCTSTR lpszKey, BOOL bWrite)
 
 	return TRUE;
 }
+
+CString CChildFrame::GetPathNameOfDocument()
+{
+	return (((CView*)m_wndSplitter.GetPane(0, 0))->GetDocument()->GetPathName());
+}
