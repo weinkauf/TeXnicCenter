@@ -520,10 +520,10 @@ void CProjectNewDialog::OnCreate()
 			strCrlf = _T("\r\n");
 			break;
 		case CRLF_STYLE_UNIX:
-			strCrlf = _T("\n\r");
+			strCrlf = _T("\n");
 			break;
 		case CRLF_STYLE_MAC:
-			strCrlf = _T("\n");
+			strCrlf = _T("\n\r");
 			break;
 
 		default:
