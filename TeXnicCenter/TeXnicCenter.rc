@@ -170,7 +170,10 @@ END
 IDR_MAINFRAME           ICON    DISCARDABLE     "res\\TeXnicCenter.ico"
 IDR_LATEXTYPE           ICON    DISCARDABLE     "res\\LatexDoc.ico"
 IDR_LATEXPROJECT        ICON    DISCARDABLE     "res\\idr_late.ico"
-IDR_LATEXWIZARD         ICON    DISCARDABLE     "res\\ico00001.ico"
+IDR_LATEXWIZARD         ICON    DISCARDABLE     "res\\Wizard.ico"
+IDR_LATEXTYPE_YELLOW    ICON    DISCARDABLE     "res\\LatexDoc_yellow.ico"
+IDR_MAINFRAME_YELLOW    ICON    DISCARDABLE     "res\\TeXnicCenter_yellow.ico"
+IDR_LATEXWIZARD_YELLOW  ICON    DISCARDABLE     "res\\Wizard_yellow.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -762,7 +765,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -4564,12 +4567,12 @@ BEGIN
     ID_PHS_ALLFILESETS_QR   "$qrAFS"
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32

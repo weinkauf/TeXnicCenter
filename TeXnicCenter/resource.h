@@ -172,8 +172,11 @@
 #define STE_ITEMTYPE_QUOTATION          260
 #define IDR_POPUP_PLACEHOLDEREX_CASC    260
 #define STE_ITEMTYPE_CENTER             261
+#define IDR_LATEXTYPE_YELLOW            261
 #define STE_ITEMTYPE_VERSE              262
+#define IDR_MAINFRAME_YELLOW            262
 #define STE_ITEMTYPE_ITEMIZATION        263
+#define IDR_LATEXWIZARD_YELLOW          263
 #define STE_ITEMTYPE_ENUMERATION        264
 #define STE_ITEMTYPE_DESCRIPTION        265
 #define STE_ITEMTYPE_FIGURE             266
@@ -1165,7 +1168,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        261
+#define _APS_NEXT_RESOURCE_VALUE        264
 #define _APS_NEXT_COMMAND_VALUE         38345
 #define _APS_NEXT_CONTROL_VALUE         1299
 #define _APS_NEXT_SYMED_VALUE           115
