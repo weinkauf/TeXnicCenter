@@ -170,21 +170,15 @@ BOOL COptionPageLanguage::OnInitDialog()
 	// There are a number of sub-selections that are not presented
 	// here, but users may specify sub-selections in the application 
 	// configuration. The provided selection should be sufficient for
-	// most users needs.
+	// most users' needs.
 
-	// This list is in english only because it appears setlocale uses 
-	// english rather than localized strings.
-	const int nLocales = 36 + 40;
+	// This list is in English only because it appears setlocale uses 
+	// English rather than localized strings. Not all locales on this
+	// list work with all installations. A failure of setlocale reverts
+	// the application to the system locale.
+	const int nLocales = 40;
 	const TCHAR * const aLocales[] = { 
-		// region
-		_T("system locale"), _T("australia"), _T("austria"), _T("belgium"), _T("brazil"), 
-		_T("canada"), _T("china"), _T("czech"), _T("denmark"), _T("england"), _T("finland"), 
-		_T("france"), _T("germany"), _T("greece"), _T("hong kong"), _T("hungary"), _T("iceland"), 
-		_T("ireland"), _T("italy"), _T("japan"), _T("mexico"), _T("netherlands"), _T("new zealand"), 
-		_T("norway"), _T("poland"), _T("portugal"), _T("russia"), _T("singapore"), _T("slovak"), 
-		_T("south korea"), _T("spain"), _T("sweden"), _T("switzerland"), _T("taiwan"), _T("turkey"), 
-		_T("united states"),
-		// language
+		// language (40)
 		_T("chinese"), _T("chinese-simplified"), _T("chinese-traditional"), _T("danish"), _T("dutch"),
 		_T("belgian"), _T("english"), _T("english-aus"), _T("english-can"), _T("english-nz"),
 		_T("english-uk"), _T("english-us"), _T("finnish"),_T("french"), _T("french-belgian"), 
