@@ -45,6 +45,8 @@ for selecting a folder or a file. When the browse dialog has been
 closed by pressing OK, the returned path will be inserted into the
 edit control, attached to the button.
 
+@ingroup guielements
+
 @author Sven Wiegand
 */
 class CBrowseButton : public CButton

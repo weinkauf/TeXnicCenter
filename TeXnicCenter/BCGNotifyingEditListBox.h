@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_BCGNOTIFYINGEDITLISTBOX_H__ED259B04_0B33_11D5_A222_006097239934__INCLUDED_)
 #define AFX_BCGNOTIFYINGEDITLISTBOX_H__ED259B04_0B33_11D5_A222_006097239934__INCLUDED_
 
@@ -88,6 +94,8 @@ messages to the box's parent window.
 
 Should simplify the use of CBCGEditListBox, because you don't have to
 derive your own classes any more.
+
+@ingroup guielements
 
 @author Sven Wiegand
 */
