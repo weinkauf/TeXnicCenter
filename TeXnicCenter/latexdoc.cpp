@@ -240,20 +240,24 @@ BOOL CLatexDoc::DoSave( LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/ )
 			CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
 		
 		// Get default path
-		m_strPersonalDir = g_configuration.m_strDefaultPath;
-		if (m_strPersonalDir.IsEmpty())
+		m_strPersonalDir = g_configuration.m_strProjectPath;
+		if ( m_strPersonalDir.IsEmpty() )
 		{
-			LPITEMIDLIST	lpidl;
-			if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
+			m_strPersonalDir = g_configuration.m_strDefaultPath;
+			if (m_strPersonalDir.IsEmpty())
 			{
-				SHGetPathFromIDList(lpidl, m_strPersonalDir.GetBuffer(MAX_PATH));
-				m_strPersonalDir.ReleaseBuffer();
+				LPITEMIDLIST	lpidl;
+				if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
+				{
+					SHGetPathFromIDList(lpidl, m_strPersonalDir.GetBuffer(MAX_PATH));
+					m_strPersonalDir.ReleaseBuffer();
 
-				// free memory
-				LPMALLOC	lpMalloc;
-				SHGetMalloc(&lpMalloc);
-				if(lpMalloc)
-					lpMalloc->Free(lpidl);
+					// free memory
+					LPMALLOC	lpMalloc;
+					SHGetMalloc(&lpMalloc);
+					if(lpMalloc)
+						lpMalloc->Free(lpidl);
+				}
 			}
 		}
 		dlg.m_ofn.lpstrInitialDir = m_strPersonalDir;

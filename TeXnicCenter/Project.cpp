@@ -32,6 +32,7 @@
 #include "ProjectView.h"
 #include "ProjectTemplate.h"
 #include "ProjectSupportingWinApp.h"
+#include "Configuration.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -558,6 +559,7 @@ void CProject::OnProjectClose()
 
 	// shut it down
 	OnCloseProject();
+	g_configuration.m_strProjectPath = "";
 		
 	// destroy the document
 	GetProjectTemplate()->RemoveProject(this);
