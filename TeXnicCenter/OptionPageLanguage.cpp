@@ -105,8 +105,8 @@ void COptionPageLanguage::OnOK()
 	if ( m_bEnableSpell  && !m_strPDictionary.IsEmpty() && !::PathFileExists(m_strPDictionary) )
 	{
 		CString errMsg;
-		errMsg.Format( STE_FILE_EXIST, m_strPDictionary );
-		AfxMessageBox( errMsg, MB_OK, MB_ICONEXCLAMATION );
+		errMsg.Format( STE_PDICT_OPEN_ERROR, m_strPDictionary );
+		AfxMessageBox( errMsg, MB_OK, MB_ICONINFORMATION );
 	}
 
 	// Inform the background thread of the new speller state.
@@ -213,7 +213,7 @@ void COptionPageLanguage::OnOptionsSpellBrowse()
 	CWnd *pPersonalDictionary = GetDlgItem(IDC_OPTIONS_SPELL_PDICT);
 	CString defaultPath;
 	pPersonalDictionary->GetWindowText( defaultPath );
-	CFileDialog dlg ( true, NULL, NULL, OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST, 
+	CFileDialog dlg ( true, NULL, NULL, OFN_PATHMUSTEXIST, 
 		AfxLoadString(STE_FILE_DICFILTER) );
 	if ( !defaultPath.IsEmpty() )
 	{
