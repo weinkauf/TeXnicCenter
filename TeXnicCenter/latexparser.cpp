@@ -28,6 +28,7 @@
 
 #include "stdafx.h"
 #include "LatexParser.h"
+#include "Configuration.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -438,3 +439,80 @@ DWORD CLatexParser::ParseLine( DWORD dwCookie, int nLineIndex, CCrystalTextBlock
 	return ParseString( lpLine, lpLine + nLength, dwCookie, pTextBlock, lpLine );
 }
 
+
+void CLatexParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
+{
+	LPCTSTR szLine = GetLineChars( nLineIndex );
+	if ( szLine == NULL )
+	{
+		nStartPos = -1;
+		return;
+	}
+	int nLength = _tcsclen(szLine);
+	boolean badWord = true;
+	TCHAR ch;
+
+	while ( nStartPos != -1 && badWord )
+	{
+		badWord = false;
+		while ( nStartPos < nLength )
+		{
+			ch = szLine[nStartPos];
+			// words begin with an alpha character
+			if ( _istalpha(ch) )
+				break;
+			// if we're skipping words with numbers, words may begin with a number
+			if ( g_configuration.m_bSpellSkipTags && _istdigit(ch) )
+			{
+				badWord = true;
+				break;
+			}
+			// Skip comments?
+			if ( g_configuration.m_bSpellSkipComments && ch == _T('%') )
+			{
+				nStartPos = -1;
+				return;
+			}
+			++nStartPos;
+		}
+		if ( !badWord && nStartPos > 0 && g_configuration.m_bSpellSkipTags )
+			badWord = IsCmdAt(szLine, &szLine[nStartPos-1]);
+
+		nEndPos = nStartPos + 1;
+
+		while ( nEndPos < nLength )
+		{
+			ch = szLine[nEndPos];
+			if ( !badWord && g_configuration.m_bSpellSkipNumbers && _istdigit(ch) )
+				badWord = true;
+
+			// words end on terminating character 
+			if ( _istspace(ch) || (_istpunct(ch) &&  ch != _T('\'')) )
+				break;
+			++nEndPos;
+		}
+		if ( !(nStartPos < nLength) )
+		{
+			// We have reached the end of the line
+			nStartPos = -1;
+		}
+		else
+		{
+			if ( !badWord && g_configuration.m_bSpellSkipCaps )
+			{
+				badWord = true;
+				for (int i = nStartPos; i < nEndPos; ++i)
+				{
+					if ( !_istupper(szLine[i]) )
+					{
+						badWord = false;
+						break;
+					}
+				}
+			}
+
+			if ( badWord )
+				nStartPos = nEndPos + 1;
+		}
+	}
+}
