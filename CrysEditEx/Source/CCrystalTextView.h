@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.11  2005/01/04 07:57:11  niteria
+* Implemented function to stop incremental search from the outside.
+*
 * Revision 1.10  2003/12/23 14:50:40  svenwiegand
 * Again modified some resource and language switching related stuff. Hoping this will work now for SmartTranslator...
 *
@@ -110,6 +113,7 @@ enum
 	UPDATE_RESET		= 0x1000		//	document was reloaded, update all!
 };
 
+
 class CRYSEDIT_CLASS_DECL CCrystalTextView : public CView
 {
 	DECLARE_DYNCREATE(CCrystalTextView)
@@ -177,6 +181,11 @@ private:
 	DWORD *m_pdwParseCookies;
 	int m_nParseArraySize;
 	DWORD GetParseCookie(int nLineIndex);
+	//Pair String
+	CPoint m_ptPairStringStart;
+	CPoint m_ptPairStringEnd;
+	int m_nPairStringColorText;
+	int m_nPairStringColorBkgnd;
 
 	//	Pre-calculated line lengths (in characters)
 	int m_nActualLengthArraySize;
@@ -209,14 +218,72 @@ private:
 	@return Length of the screen line.
 	*/
 	int ExpandChars(LPCTSTR pszChars, int &nOffset, int nCount, int *anIndices);
-
+ 
 	// int ApproxActualOffset(int nLineIndex, int nOffset); // Unused
 	void AdjustTextPoint(CPoint &point);
 	void DrawLineHelperImpl(CDC *pdc, CPoint &ptOrigin, const CRect &rcClip,
 							LPCTSTR pszChars, int nOffset, int nCount);
+	void DrawLineHelperRecur(CDC *pdc, CPoint &ptOrigin, const CRect &rcClip, 
+							int nColorIndex, LPCTSTR pszChars, int nOffset,
+							int nCount, CPoint ptTextPos, int nDrawStage);
 	BOOL IsInsideSelBlock(CPoint ptTextPos);
 
 	BOOL m_bBookmarkExist;     // More bookmarks
+
+
+	/** Finds pair string or nth open pair string. It checks if pair strings match each other 
+	(not to allow this '({)}'). Either <code>nPairToLook</code> or <code>nNthOpenPair</code> 
+	have to be set, but not both.
+ 
+	@param ptTextPost  
+	  Position in the text document
+	@param nNthOpenPair 
+	  Find nth open pair
+	@param nCurPairIdx
+	  Find correspondig pair to this string index 
+	@param nDirection 
+	  The direction of search (CLatexParser::DIRECTION_LEFT or CLatexParser::DIRECTION_RIGHT)
+     
+	@param ptPairStrStart 
+	  The start of found pair or start of string that caused and error  
+	@param ptPairStrEnd 
+	  The end of found pair or end of string that caused and error  
+     
+	@reuturn FALSE if the pair was not found or if some pair strings didn't match ("{(})"case ). 
+	  The start and the end of error are returned in <code>ptPairStrStart</code>, <code>ptPairStrEnd</code>. 
+		If an unknown error occures both <code>ptPairStrStart</code> and <code>ptPairStrEnd</code> are set to <code>CPoin(0,0)</code>
+	*/
+	BOOL FindPairHelper( const CPoint &ptTextPos, int nNthOpenPair, int nDirection, int nCurPairIdx,
+														 const CPoint &ptCurStrStart, const CPoint &ptCurStrEnd,
+														 CPoint &ptPairStrStart, CPoint &ptPairStrEnd );
+
+	/**Returns TRUE if some string from <code>m_lpszPairs</code> ends at ptTextPos and this string 
+	is not escaped by sequence of '\', it is not in comment, and it is not in verbatim
+    
+	@param ptPairStrStart 
+	  Start of found string
+	@param ptPairStrEnd 
+	  End of found string
+	@param nPairIdx    
+		Found string index
+  @param nPairDir
+		Found string direction: DIRECTION_LEFT or DIRECITON_RIGHT    
+  */
+	BOOL IsEndOfPairAtHelper( const CPoint &ptTextPos, CPoint &ptFoundStrStart,
+																			 int &nPairIdx, int &nPairDir);
+
+	//	CCrystalTextView::DrawLineHelperRecur() flags
+	enum
+	{
+		DRAW_SELECTION		= 0x0001,
+		DRAW_PAIRS  	    = 0x0002,
+		DRAW_IMPL					= 0x0003		
+	};
+
+	//	CCrystalTextView::FindPairHelper() contants
+	enum {
+	 	PAIR_NONE = -1
+	};
 
 protected:
 	CImageList *m_pIcons;
@@ -228,6 +295,15 @@ protected:
 	void UpdateCaret();
 	void SetAnchor(const CPoint &ptNewAnchor);
 	int GetMarginWidth();
+
+	CPoint GetPairStringStart();
+	CPoint GetPairStringEnd();
+	void SetPairStringStart(const CPoint &ptStart);
+	void SetPairStringEnd(const CPoint &ptEnd);
+	int GetPairStringColorBkgnd();
+	int GetPairStringColorText();
+	void SetPairStringColorBkgnd(int nColorIndex);
+	void SetPairStringColorText(int nColorIndex);
 
 	BOOL m_bShowInactiveSelection;
 	//	[JRT]
@@ -273,6 +349,7 @@ protected:
 
 	void SelectAll();
 	void Copy();
+
 
 public:
 	BOOL IsSelection();
@@ -578,6 +655,57 @@ protected:
 		int nOffset, int nCount, CPoint ptTextPos );
 	//END SW
 
+	//brackets higlighting
+	/**Finds pair string (e.g. bracket) to the string that ends at <code>ptCursorPos</code>. 
+		The marked string is drawn during next redraw. The calling discards previously  
+		marked string.
+
+	@param ptCursorPos 
+		Typically it's cursor position, 
+
+	@return FALSE if the string that ends at given position have its pair string (e.g. bracket)
+		but this pair have not been found
+		TRUE otherwise			
+		*/
+	virtual BOOL MarkPairStringTo(const CPoint &ptCursorPos);
+
+	/**Unmark string previoslly marked by <code>MarkPairStringTo</code>.
+	*/
+	virtual void UnmarkPairString();
+
+
+	/**Finds a pair to the string that ends at <code>ptCursorPos</code> (e.g. pair to a bracket)
+	@param ptCursorPos 
+		Cursor position.
+
+	@param ptCurStrStart 
+		The start of the pair string that ends <code>ptCursorPos</code>, 
+		(0,0) if not found. (It depends on the value of <code>bPairFound</code>.)
+
+	@param ptCurStrEnd 
+		The end of the pair string that ends <code>ptCursorPos</code>, 
+		(0,0) if not found. (It depends on the value of <code>bPairFound</code>.)
+
+	@param ptFoundStrStar 
+		The start of found pair or the start of the string that caused an error, 
+		(0,0) if not found. (It depends on return value.)
+
+	@param ptFoundStrEnd 
+		The end of found pair or the end of the string that caused an error, 
+		(0,0) if not found. (It depends on return value.)
+
+	@param bPairFound 
+		<code>TRUE</code> if the pair string was found
+
+	@return <code>TRUE</code> if the pair was found or no pair string ends at the <code>ptCursorPos</code>
+	(If <code>bPairFound == FALSE</code> all points parameter are set to zero point, 
+	if <code>bPairFound == TRUE</code> all parameter are set).
+	FALSE otherwise (<code>FoundStrStar</code>, <code>FoundStrEnd</code> contain 
+	the position of the string that caused and error  (e.g. lost bracket))
+	*/
+	virtual FindPairTo(const CPoint &ptCursorPos, CPoint &ptCurStrStart, CPoint &ptCurStrEnd,
+													CPoint &ptFoundStrStart, CPoint &ptFoundStrEnd, BOOL &bPairFound );
+
 
 	//BEGIN SW
 	// helpers for incremental search
@@ -627,6 +755,7 @@ protected:
 	/** TRUE if incremental backward search is active, FALSE otherwise */
 	BOOL m_bIncrementalSearchBackward;
 
+	
 private:
 	/** TRUE if we found the string to search for */
 	BOOL m_bIncrementalFound;
@@ -661,6 +790,7 @@ private:
 	/** The current mode of the caret when in overwrite mode */
 	static int s_nCaretOverwriteMode;
 	//END SW
+
 
 // Attributes
 public:
@@ -736,7 +866,13 @@ public:
 		COLORINDEX_EXECUTIONBKGND,
 		COLORINDEX_EXECUTIONTEXT,
 		COLORINDEX_BREAKPOINTBKGND,
-		COLORINDEX_BREAKPOINTTEXT
+		COLORINDEX_BREAKPOINTTEXT,
+
+		// Brackets higlighting
+		COLORINDEX_PAIRSTRINGBKGND,
+		COLORINDEX_PAIRSTRINGTEXT,
+		COLORINDEX_BADPAIRSTRINGBKGND,
+		COLORINDEX_BADPAIRSTRINGTEXT
 		//	...
 		//	Expandable: custom elements are allowed.
 	};

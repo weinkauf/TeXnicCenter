@@ -17,6 +17,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:44+02  sven_wiegand
 * Initial revision
 *
@@ -57,6 +60,7 @@
 #include <afxcmn.h>			// MFC-Unterstützung für gängige Windows-Steuerelemente
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
+#include <vector>
 
 // globale Variablen
 extern HINSTANCE		g_hDllInstance;

@@ -180,6 +180,14 @@ COLORREF CLatexEdit::GetAutomaticColor(int nColorIndex)
 		return ::GetSysColor(COLOR_HIGHLIGHT);
 	case COLORINDEX_SELTEXT:
 		return ::GetSysColor(COLOR_HIGHLIGHTTEXT);
+	case COLORINDEX_PAIRSTRINGBKGND:
+		return RGB(0x00, 0xC0, 0x00);
+	case COLORINDEX_PAIRSTRINGTEXT:
+		return RGB(0xFF, 0xFF, 0xFF);
+	case COLORINDEX_BADPAIRSTRINGBKGND:
+		return RGB(0xC0, 0x00, 0x00);
+	case COLORINDEX_BADPAIRSTRINGTEXT:
+		return RGB(0xFF, 0xFF, 0xFF);
 	}
 
 	return RGB(0xFF, 0x00, 0x00);
