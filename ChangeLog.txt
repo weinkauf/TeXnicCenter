@@ -1,3 +1,6 @@
+2002/07/15 niteria
+- Fixed Bug 581758: Tools: English Popup without set placeholders
+
 2002/07/12 niteria
 - Fixed Small Bug 580489: Spelling error in dialog
 
