@@ -3100,7 +3100,7 @@ BEGIN
     STE_BIB_FILES           "BibTeX Dateien"
     STE_TEX_FILES           "LaTeX Dateien"
     STE_TAB_PARSE           "Analyse"
-    STE_APPENDIX            "TODO: Appendix"
+    STE_APPENDIX            "Anhang"
 END
 
 STRINGTABLE DISCARDABLE 
