@@ -59,6 +59,7 @@ COptionDialog::COptionDialog( CWnd* pParentWnd, UINT iSelectPage )
 	AddPage( &m_pageGeneric );
 	AddPage( &m_pageFile );
 	AddPage( &m_pagePath );
+	AddPage( &m_pageLanguage );
 }
 
 

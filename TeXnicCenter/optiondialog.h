@@ -37,6 +37,7 @@
 #include "OptionPagePath.h"
 #include "OptionPageGeneric.h"
 #include "OptionPageFile.h"
+#include "OPtionPageLanguage.h"
 
 
 class COptionDialog : public CPropertySheet
@@ -69,6 +70,7 @@ protected:
 	COptionPageGeneric		m_pageGeneric;
 	COptionPageFile				m_pageFile;
 	COptionPagePath				m_pagePath;
+	COptionPageLanguage		m_pageLanguage;
 };
 
 /////////////////////////////////////////////////////////////////////////////
