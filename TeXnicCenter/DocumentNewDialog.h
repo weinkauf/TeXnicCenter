@@ -44,9 +44,15 @@
 #include "BrowseButton.h"
 #include "TemplateDialog.h"
 
+/** @addtogroup templates
+	@{
+*/
+
 /**
 Abstract base class for all elements listed in the template list
 control of the document new dialog.
+
+@see CDocumentNewDialog
 
 @author Sven Wiegand
 */
@@ -72,6 +78,8 @@ public:
 
 /**
 Represents an empty document template.
+
+@see CDocumentNewDialog
 
 @author Sven Wiegand
 */
@@ -115,6 +123,8 @@ private:
 
 /**
 Represents a file based template for the document new dialog.
+
+@see CDocumentNewDialog
 
 @author Sven Wiegand
 */
@@ -166,6 +176,8 @@ private:
 
 /**
 Represents a document wizard for the document new dialog.
+
+@see CDocumentNewDialog
 
 @author Sven Wiegand
 */
@@ -239,6 +251,9 @@ protected:
 // attributes
 protected:
 };
+
+/** @} */
+
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
