@@ -71,8 +71,10 @@ public:
 	@param nImage
 		Index of the image to display or -1 if no image should be
 		displayed for the new line.
+	@param nIndent
+		Indent level of line. Zero (default value) indicates no indentation
 	*/
-	void AddLine(LPCTSTR lpszLine, int nImage = -1);
+	void AddLine(LPCTSTR lpszLine, int nImage = -1, int nIndent = 0);
 
 	/**
 	Displays the specified image at the beginning of the specified 

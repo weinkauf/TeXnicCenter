@@ -166,7 +166,7 @@ LONG COutputView::OnAddLine(UINT wParam, LONG lParam)
 }
 
 
-void COutputView::AddLine(LPCTSTR lpszLine, int nImage /*= -1*/)
+void COutputView::AddLine(LPCTSTR lpszLine, int nImage /*= -1*/, int nIndent /*= 0*/)
 {
 	/*
 	int				nEndLine, nEndPos;
@@ -180,12 +180,28 @@ void COutputView::AddLine(LPCTSTR lpszLine, int nImage /*= -1*/)
 	if( !m_bDoNotScroll )
 		EnsureVisible( CPoint( 0, GetLineCount() -1 ) );
 	*/
-	int				nItem;
 
-	if (nImage > -1)
-		nItem = InsertItem(GetItemCount(), EnsureStringReadable(lpszLine), nImage);
-	else
-		nItem = InsertItem(GetItemCount(), EnsureStringReadable(lpszLine));
+	int		nItem = GetItemCount();
+	CString strLine(EnsureStringReadable(lpszLine));
+	LVITEM	lvItem;
+
+	lvItem.mask = LVIF_INDENT | LVIF_TEXT;
+	lvItem.iItem = nItem;
+	lvItem.iSubItem = 0;
+	//lvItem.state
+	lvItem.stateMask = 0;
+	lvItem.iIndent = nIndent;
+	lvItem.cchTextMax = strLine.GetLength();
+	lvItem.pszText = strLine.GetBuffer(0);
+	lvItem.iImage = nImage;
+	//lvItem.lParam
+
+	if ( nImage != -1 )
+		lvItem.mask |= LVIF_IMAGE;
+
+	nItem = InsertItem(&lvItem);
+	strLine.ReleaseBuffer();
+
 	SetColumnWidth(0, LVSCW_AUTOSIZE);
 
 	// first line? then select
