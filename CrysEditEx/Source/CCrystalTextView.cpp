@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.6  2002/04/03 00:42:31  niteria
+* Bug 538164:Fixed now.
+*
 * Revision 1.5  2002/04/02 03:45:21  niteria
 * Bug 538164: Workaround / fix in ResetView. Search for BEGIN niteria
 *
@@ -3025,11 +3028,15 @@ static int FindStringHelper(LPCTSTR pszFindWhere, LPCTSTR pszFindWhat, BOOL bWho
 	return -1;
 }
 
-BOOL CCrystalTextView::HighlightText(const CPoint &ptStartPos, int nLength)
+BOOL CCrystalTextView::HighlightText(const CPoint &ptStartPos, int nLength /*= -1*/)
 {
 	ASSERT_VALIDTEXTPOS(ptStartPos);
 	m_ptCursorPos = ptStartPos;
+	if (nLength == -1)
+		m_ptCursorPos.x = GetLineLength(ptStartPos.y); // Highlight to end of line
+	else
 	m_ptCursorPos.x += nLength;
+	
 	ASSERT_VALIDTEXTPOS(m_ptCursorPos);		//	Probably 'nLength' is bigger than expected...
 	m_ptAnchor = m_ptCursorPos;
 	SetSelection(ptStartPos, m_ptCursorPos);
@@ -3484,6 +3491,12 @@ CCrystalParser *CCrystalTextView::SetParser( CCrystalParser *pParser )
 	return pOldParser;
 }
 //END SW
+
+
+CCrystalParser *CCrystalTextView::GetParser() const
+{
+	return m_pParser;
+}
 
 
 //BEGIN SW

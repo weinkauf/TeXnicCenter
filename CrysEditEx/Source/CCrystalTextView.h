@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.3  2002/03/20 00:48:11  cnorris
+* Mouse scroll wheel handler
+*
 * Revision 1.2  2002/03/20 00:15:29  cnorris
 * Code clean up and new / delete code inspection
 *
@@ -220,11 +223,15 @@ protected:
 	void SelectAll();
 	void Copy();
 
+public:
 	BOOL IsSelection();
 	BOOL IsInsideSelection(const CPoint &ptTextPos);
 	void GetSelection(CPoint &ptStart, CPoint &ptEnd);
 	void SetSelection(const CPoint &ptStart, const CPoint &ptEnd);
+	void SetShowInteractiveSelection(BOOL bShowInactiveSelection) 
+		{ m_bShowInactiveSelection = bShowInactiveSelection; }
 
+protected:
 	int m_nTopLine, m_nOffsetChar;
 	//BEGIN SW
 	/**
@@ -610,6 +617,8 @@ public:
 	CCrystalParser *SetParser( CCrystalParser *pParser );
 	//END SW
 
+	CCrystalParser *GetParser() const;
+
 	//	Default handle to resources
 	static HINSTANCE s_hResourceInst;
 
@@ -670,7 +679,7 @@ public:
 	BOOL FindText(LPCTSTR pszText, const CPoint &ptStartPos, DWORD dwFlags, BOOL bWrapSearch, CPoint *pptFoundPos);
 	BOOL FindTextInBlock(LPCTSTR pszText, const CPoint &ptStartPos, const CPoint &ptBlockBegin, const CPoint &ptBlockEnd,
 						DWORD dwFlags, BOOL bWrapSearch, CPoint *pptFoundPos);
-	BOOL HighlightText(const CPoint &ptStartPos, int nLength);
+	BOOL HighlightText(const CPoint &ptStartPos, int nLength = -1);
 
 	//	Overridable: an opportunity for Auto-Indent, Smart-Indent etc.
 	virtual void OnEditOperation(int nAction, LPCTSTR pszText);
