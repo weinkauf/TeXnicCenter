@@ -64,13 +64,15 @@ Expands the placeholders in the given string and returns the result.
 	Set to True, if you want Sets-Placeholders like "$qrAPF" to be expanded.
 
 @author Sven Wiegand
+@author Tino Weinkauf
 */
 CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders, 
 															LPCTSTR lpszMainPath = NULL,
 															LPCTSTR lpszCurrentPath = NULL,
 															long lCurrentLine = -1,
 															LPCTSTR lpszCurrentSelection = NULL,
-															bool bExpandPlaceholderSets = false);
+															bool bExpandPlaceholderSets = false,
+															LPCTSTR lpszWorkingDir = NULL);
 
 /**
 Returns true, if lpszPattern contains Wildcards like "*" and "?"
