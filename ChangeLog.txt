@@ -1,6 +1,8 @@
 2003/06/13 niteria
 - Implemented Feature 753658: Scan for Project on Opening a Document
    (Still open question: Ability to switch this off in the options?)
+- Implemented Feature 748870: Insert graphics dialogue file type filter too limited
+   (Added *.jpg, *.jpeg and *.png)
 
 2003/06/05 niteria
 - Implemented Feature 675205: One-Click Project Creation for existing Documents
