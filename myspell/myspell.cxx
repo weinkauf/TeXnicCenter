@@ -23,6 +23,8 @@ MySpell::MySpell(const char * affpath, const char * dpath)
 
     /* and finally set up the suggestion manager */
     pSMgr = new SuggestMgr(try_string, 10, pAMgr);
+
+    if (try_string) free(try_string);
 }
 
 
@@ -146,7 +148,7 @@ int MySpell::suggest(char*** slst, const char * word)
                         memcpy(wspace,word,(wl+1));
                         mkallsmall(wspace);
                         ns = pSMgr->suggest(slst, wspace);
-		     }
+                     }
                      break;
                    }
 

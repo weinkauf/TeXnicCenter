@@ -67,9 +67,9 @@ int SuggestMgr::suggest(char*** slst, const char * word)
     if ((nsug < maxSug) && (nsug > -1))
       nsug = twowords(wlst, word, nsug);
 
-    if (nsug < 0) {
+    if (nsug < 1) {
        for (int i=0;i<maxSug; i++)
-	 if (wlst[i] != NULL) free(wlst[i]);
+         if (wlst[i] != NULL) free(wlst[i]);
        free(wlst);
        return -1;
     }

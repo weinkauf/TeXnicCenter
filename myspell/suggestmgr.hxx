@@ -20,6 +20,15 @@ public:
 
   int suggest(char*** slst, const char * word);
   int check(const char *, int);
+  inline void release_suggest(char ** slst)
+  {
+	  if (slst) {
+	    for (int i = 0; i < maxSug; ++i)
+		  if (slst[i] != NULL) free(slst[i]);
+		free(slst);
+	  }
+  }
+
 
 private:
    int forgotchar(char **, const char *, int);
