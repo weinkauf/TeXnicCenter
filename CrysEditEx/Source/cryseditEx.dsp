@@ -147,10 +147,6 @@ SOURCE=.\CrystalParser.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CrystalSpell.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\CrystalTextBlock.cpp
 # End Source File
 # Begin Source File
@@ -245,10 +241,6 @@ SOURCE=..\Include\CrysEditEx.h
 # Begin Source File
 
 SOURCE=.\CrystalParser.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\CrystalSpell.h
 # End Source File
 # Begin Source File
 
