@@ -308,10 +308,10 @@ CString CPathTool::GetRelativePath( LPCTSTR lpszFrom, LPCTSTR lpszTo, BOOL bFrom
 
 CString CPathTool::GetRelativePath( LPCTSTR lpszFrom, LPCTSTR lpszTo )
 {
-	if( !Exists( lpszFrom ) || !Exists( lpszTo ) )
-		return CString();
-
-	return GetRelativePath( lpszFrom, lpszTo, IsDirectory( lpszFrom ), IsDirectory( lpszTo ) );
+	return GetRelativePath(
+		lpszFrom, lpszTo, 
+		Exists(lpszFrom)? IsDirectory(lpszFrom) : FALSE, 
+		Exists(lpszTo)? IsDirectory(lpszTo) : FALSE);
 }
 
 
