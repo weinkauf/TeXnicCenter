@@ -276,6 +276,7 @@
 #define STE_TOOL_CANTINVOKE             465
 #define STE_COLOR_AUTOMATIC             480
 #define STE_COLOR_OTHERS                481
+#define STE_PDICT_OPEN_ERROR            482
 #define ID_WINDOW_FIRST                 800
 #define ID_WINDOW_LAST                  849
 #define IDR_USER_TOOLBAR_FIRST          900
@@ -1127,6 +1128,7 @@
 #define ID_LATEX_CLEAN                  38325
 #define ID_PH_MAINOPTIONS               38326
 #define ID_BG_UPDATE_PROJECT            38327
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
@@ -1138,4 +1140,3 @@
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif
-
