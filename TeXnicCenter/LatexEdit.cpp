@@ -44,6 +44,7 @@
 #include "InsertGraphicDialog.h"
 #include "InsertTabularDialog.h"
 #include "InsertHeaderDialog.h"
+#include "TextModulesDlg.h"
 #include "GotoDialog.h"
 #include "../MySpell/Character.h"
 
@@ -68,15 +69,21 @@ BEGIN_MESSAGE_MAP(CLatexEdit, CCrystalEditViewEx)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_TOGGLE_WHITESPACEVIEW, OnUpdateEditToggleWhiteSpaceView)
 	ON_WM_SETFOCUS()
 	ON_COMMAND(ID_SPELL_FILE, OnSpellFile)
+	ON_COMMAND(ID_TEXTMODULES_DEFINE, OnTextmodulesDefine)
+	ON_UPDATE_COMMAND_UI(ID_TEXTMODULES_DEFINE, OnUpdateTextmodulesDefine)
 	//}}AFX_MSG_MAP
 	ON_WM_SYSCOLORCHANGE()
 
 	ON_MESSAGE(WM_COMMANDHELP, OnCommandHelp)
 
-	// commands to insert latex constructs
+	//Static Commands to insert latex constructs
 	ON_COMMAND_EX_RANGE(ID_INSERT_FORMULA_EMBEDDED, ID_INSERT_SPADESUIT, OnInsertLatexConstruct)
 	ON_COMMAND_EX_RANGE(ID_INSERT_A, ID_INSERT_NOTIN, OnInsertLatexConstruct)
 	ON_COMMAND_EX_RANGE(ID_INSERT_SUPERSCRIPT, ID_INSERT_DDOTS, OnInsertLatexConstruct)
+
+	//TextModules
+	ON_UPDATE_COMMAND_UI(ID_TEXTMODULES_FIRST, OnUpdateTextModulesList)
+	ON_COMMAND_RANGE(ID_TEXTMODULES_FIRST, ID_TEXTMODULES_LAST, OnInsertLatexConstruct)
 
 	//Commands for Block Comments
 	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_INSERT, OnBlockComment)
@@ -339,10 +346,20 @@ BOOL CLatexEdit::OnInsertLatexConstruct( UINT nID )
 		break;
 
 		default:
-			LocateTextBuffer()->BeginUndoGroup();
+			if ( (nID >= ID_TEXTMODULES_FIRST) && (nID <= ID_TEXTMODULES_LAST) )
+			{
+				ASSERT(g_configuration.m_aTextModules.GetSize() > nID - ID_TEXTMODULES_FIRST);
+				if (g_configuration.m_aTextModules.GetSize() > nID - ID_TEXTMODULES_FIRST)
+					strInsert = g_configuration.m_aTextModules[nID - ID_TEXTMODULES_FIRST].GetText();
+				else
+					return false;
+			}
+			else
+				strInsert = AfxLoadString(nID);
 
-			strInsert = AfxLoadString( nID );
-			bReplaceBell = TRUE;
+			bReplaceBell = true;
+
+			LocateTextBuffer()->BeginUndoGroup();
 	}
 
 	if (pDlg)
@@ -737,3 +754,161 @@ void CLatexEdit::OnBlockComment(const UINT nID)
 	SetFocus();
 }
 
+
+void CLatexEdit::OnUpdateTextModulesList(CCmdUI *pCmdUI)
+{
+	CTextModuleGroup* ptmGroup = &g_configuration.m_aTextModules;
+
+	if (g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers)
+	{
+		/////////////////////////////////////////////////////////////////
+		//
+		// handling for normal windows menus 
+		// (visually handicapped user mode)
+		//
+
+		// update message from menu bar?
+		if (!IsMenu(pCmdUI->m_pSubMenu->GetSafeHmenu()))
+			return;
+
+		CMenu	*pMenu = pCmdUI->m_pSubMenu;
+		int i;
+
+		//Delete old entries
+		for(i=pMenu->GetMenuItemCount();i>=0;--i)
+			pMenu->DeleteMenu(i, MF_BYPOSITION);
+		
+		//Anything defined at all?
+		if (!ptmGroup->GetSize())
+		{
+			pCmdUI->SetText(AfxLoadString(IDS_TEXTMODULES_NONEDEFINED));
+			pCmdUI->Enable(false);
+			return;
+		}
+
+		for(i=0;i<ptmGroup->GetSize();i++)
+		{
+			//Get Name to display
+			CString	strDisplayName(ptmGroup->GetAt(i).Name);
+
+			//Add number for the first ten entries
+			if (i<10)
+			{
+				CString	strFormat;
+				if (i==9)
+					strFormat.Format(_T("1&0 %s"), strDisplayName);
+				else
+					strFormat.Format( _T("&%d %s"), i + 1, strDisplayName);
+
+				strDisplayName = strFormat;
+			}
+
+			pMenu->AppendMenu(MF_STRING, ID_TEXTMODULES_FIRST + i, strDisplayName);
+		}
+	}
+	else
+	{
+		/////////////////////////////////////////////////////////////////
+		//
+		// handling for BCG menus
+		//
+
+		// update message from menu bar?
+		if( !pCmdUI->m_pOther || !pCmdUI->m_pOther->IsKindOf( RUNTIME_CLASS(CBCGPopupMenuBar) ) )
+			return;
+
+		CBCGPopupMenuBar* pMenu = (CBCGPopupMenuBar*)pCmdUI->m_pOther;
+		bool bChange = false;
+
+		//Anything defined at all?
+		if (!ptmGroup->GetSize())
+		{
+			pCmdUI->SetText(AfxLoadString(IDS_TEXTMODULES_NONEDEFINED));
+			pCmdUI->Enable(false);
+			//Delete the rest
+			//TODO: We have an assertion in the BCG later on,
+			// if there is something to delete here.
+			// Anyway, it works perfectly after this.
+			// Someone with the full sources needs to have a look at it.
+			while(pMenu->GetCount() > 3)
+			{
+				pMenu->RemoveButton(pMenu->GetCount() - 1);
+				bChange = true;
+			}
+
+			//Repaint menu
+			if (bChange) pMenu->AdjustLayout();
+			return;
+		}
+
+		//Insert all entries
+		int i,j;
+		for(i=0,j=2;i<ptmGroup->GetSize();i++,j++)
+		{
+			//Get Name to display
+			CString	strDisplayName(ptmGroup->GetAt(i).Name);
+
+			//Add number for the first ten entries
+			if (i<10)
+			{
+				CString	strFormat;
+				if (i==9)
+					strFormat.Format(_T("1&0 %s"), strDisplayName);
+				else
+					strFormat.Format( _T("&%d %s"), i + 1, strDisplayName);
+
+				strDisplayName = strFormat;
+			}
+
+			if ( pMenu->GetCount() > j && pMenu->GetButtonText( j ) != strDisplayName )
+			{
+				pMenu->SetButtonText( j, strDisplayName );
+				bChange = true;
+			}
+			else if( pMenu->GetCount() <= j )
+			{
+				int	nIndex = pMenu->InsertButton( CBCGToolbarMenuButton( ID_TEXTMODULES_FIRST + i, NULL, -1, strDisplayName ), j );
+				ASSERT( nIndex > -1 );
+
+				bChange = true;
+			}
+		}
+		ASSERT(j == ptmGroup->GetSize() + 2);
+
+		//Remove additional entries
+		while(j < pMenu->GetCount())
+		{
+			pMenu->RemoveButton(pMenu->GetCount() - 1);
+			bChange = true;
+		}
+
+		//Repaint menu
+		if (bChange) pMenu->AdjustLayout();
+	}
+}
+
+void CLatexEdit::OnTextmodulesDefine() 
+{
+	CTextModulesDlg dlg;
+
+	//Give a copy of the TextModules
+	dlg.m_tmGroup.RemoveAll();
+	for(int i=0;i<g_configuration.m_aTextModules.GetSize();i++)
+	{
+		dlg.m_tmGroup.InsertSorted(g_configuration.m_aTextModules[i]);
+	}
+
+	if (dlg.DoModal() == IDOK)
+	{
+		g_configuration.m_aTextModules.RemoveAll();
+		for(int i=0;i<dlg.m_tmGroup.GetSize();i++)
+		{
+			g_configuration.m_aTextModules.InsertSorted(dlg.m_tmGroup[i]);
+		}
+	};
+}
+
+void CLatexEdit::OnUpdateTextmodulesDefine(CCmdUI* pCmdUI) 
+{
+	pCmdUI->Enable(true);
+}

@@ -185,6 +185,20 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	SerializeProfileInt( strSection, "Enable", (int*)&m_bSpellEnable, direction, 0 );
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// TextModules
+	strSection = "Settings\\TextModules";
+
+	//Serialize the currently one and only Group of TextModules
+	if (direction == Load)
+	{
+		m_aTextModules.SerializeFromRegistry(CPathTool::Cat(theApp.m_strRegistryRoot, strSection));
+	}
+	else
+	{
+		m_aTextModules.SerializeToRegistry(CPathTool::Cat(theApp.m_strRegistryRoot, strSection));
+	}
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// File Cleaning
 	strSection = "Settings\\FileClean";
 

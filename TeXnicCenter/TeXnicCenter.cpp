@@ -305,11 +305,17 @@ BOOL CTeXnicCenterApp::InitInstance()
 		RUNTIME_CLASS(CUserTool), 
 		0, IDR_POPUP_PLACEHOLDER_DIR);
 
-	// prevent MRU project commands from being customized
+	//Prevent some commands from being customized
 	CList<UINT, UINT> m_listProtectedCommands;
 	m_listProtectedCommands.AddTail(&const_cast<CList<UINT, UINT>&>(CBCGToolbarButton::GetProtectedCommands()));
-	for (UINT unCommand = ID_FILE_MRU_PROJECT_FIRST; unCommand <= ID_FILE_MRU_PROJECT_LAST; ++unCommand)
+	UINT unCommand;
+	// - MRU project commands
+	for(unCommand = ID_FILE_MRU_PROJECT_FIRST; unCommand <= ID_FILE_MRU_PROJECT_LAST; ++unCommand)
 		m_listProtectedCommands.AddTail(unCommand);
+	// - TextModules - will be customizable in later versions
+	for(unCommand = ID_TEXTMODULES_FIRST; unCommand <= ID_TEXTMODULES_LAST; ++unCommand)
+		m_listProtectedCommands.AddTail(unCommand);
+	// - Pass the info to the BCG
 	CBCGToolbarButton::SetProtectedCommands(m_listProtectedCommands);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

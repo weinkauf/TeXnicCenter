@@ -40,6 +40,7 @@
 #endif // _MSC_VER > 1000
 
 #include "FileClean.h"
+#include "TextModules.h"
 
 
 class CConfiguration  
@@ -196,7 +197,7 @@ public:
 	/** Paths to search for document templates in. */
 	CStringArray m_astrDocumentTemplatePaths;
 
-	/** Number of windows to display in the window menu. */
+	/** Maximal number of entries (editor windows) in the window menu. */
 	int m_nWndMenuMaxEntries;
 
 	///////////////////////////////////////////////////////////////////
@@ -349,6 +350,12 @@ public:
 	BOOL m_bSpellEnable;
 
 	///////////////////////////////////////////////////////////////////
+	// TextModules
+	
+	/** Group that holds the user defined TextModules. */
+	CTextModuleGroup m_aTextModules;
+
+	///////////////////////////////////////////////////////////////////
 	// File Cleaning
 	
 	/** Array to hold the patterns for file cleaning. */
@@ -363,7 +370,7 @@ public:
 	BOOL m_bOptimizeMenuForVisuallyHandicappedUsers;
 
 	/** 
-	TRUE to optimize the GUI for visually hadicapped users in the
+	TRUE to optimize the GUI for visually handicapped users in the
 	next session.
 	*/
 	BOOL m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart;

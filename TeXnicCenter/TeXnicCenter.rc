@@ -1018,7 +1018,7 @@ BEGIN
         MENUITEM "Alles &markieren",            ID_EDIT_SELECT_ALL
         MENUITEM SEPARATOR
         MENUITEM "&Blockkommentar einfügen",    ID_EDIT_BLOCKCOMMENT_INSERT
-        MENUITEM "Block&kommentar entfernen",   ID_EDIT_BLOCKCOMMENT_REMOVE
+        MENUITEM "B&lockkommentar entfernen",   ID_EDIT_BLOCKCOMMENT_REMOVE
         MENUITEM "Blockkommentar &wechseln",    ID_EDIT_BLOCKCOMMENT_TOOGLE
     END
     POPUP "&Suchen"
@@ -1160,6 +1160,14 @@ BEGIN
             MENUITEM "&Kurzes Zitat",               ID_INSERT_QUOTE
             MENUITEM "&Zitat",                      ID_INSERT_QUOTATION
             MENUITEM "&Vers",                       ID_INSERT_VERSE
+        END
+        MENUITEM SEPARATOR
+        POPUP "Eigene Text&bausteine"
+        BEGIN
+            MENUITEM "Textbausteine &verwalten...", ID_TEXTMODULES_DEFINE
+            MENUITEM SEPARATOR
+            MENUITEM "Eigener Textbaustein",        ID_TEXTMODULES_FIRST
+            , GRAYED
         END
     END
     POPUP "&Mathe"
@@ -2751,36 +2759,39 @@ BEGIN
                     WS_TABSTOP,7,35,129,10
 END
 
-IDD_TEXTMODULES DIALOG DISCARDABLE  0, 0, 450, 250
+IDD_TEXTMODULES DIALOG DISCARDABLE  0, 0, 398, 250
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Textbausteine"
 FONT 8, "MS Sans Serif"
 BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,331,229,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,395,229,50,14
-    CONTROL         "Tree1",IDC_TEXTMODULES_MODULES,"SysTreeView32",
-                    TVS_HASBUTTONS | TVS_HASLINES | TVS_EDITLABELS | 
-                    TVS_SHOWSELALWAYS | TVS_TRACKSELECT | TVS_FULLROWSELECT | 
-                    WS_BORDER | WS_TABSTOP,7,18,102,207
-    PUSHBUTTON      "&Neu",IDC_TEXTMODULES_NEWMODULE,63,229,46,14
-    PUSHBUTTON      "&Löschen",IDC_TEXTMODULES_DELETEMODULE,7,229,46,14
-    LTEXT           "Bausteine:",IDC_STATIC,7,7,34,8
-    PUSHBUTTON      "Menu",IDC_TEXTMODULES_MENUBTN,80,7,29,10
-    GROUPBOX        "Textbaustein",IDC_STATIC,117,7,328,218
+    CONTROL         "List1",IDC_TEXTMODULES_MODULES,"SysListView32",
+                    LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
+                    LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,7,18,102,207
     EDITTEXT        IDC_TEXTMODULES_NAME,125,27,84,14,ES_AUTOHSCROLL
-    LTEXT           "Name",IDC_STATIC,125,17,20,8
     EDITTEXT        IDC_TEXTMODULES_BEFORECURSOR,125,60,158,70,ES_MULTILINE | 
                     ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL
-    LTEXT           "Vor Markierung/Cursor eingefügen:",IDC_STATIC,125,50,
-                    112,8
     EDITTEXT        IDC_TEXTMODULES_AFTERCURSOR,125,144,158,72,ES_MULTILINE | 
                     ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | 
                     WS_VSCROLL | WS_HSCROLL
+    PUSHBUTTON      "&Löschen",IDC_TEXTMODULES_DELETEMODULE,7,229,46,14
+    PUSHBUTTON      "&Neu",IDC_TEXTMODULES_NEWMODULE,63,229,46,14
+    DEFPUSHBUTTON   "OK",IDOK,283,229,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,341,229,50,14
+    PUSHBUTTON      "Menü",IDC_TEXTMODULES_MENUBTN,80,7,29,10,WS_DISABLED
+    LTEXT           "Bausteine:",IDC_STATIC,7,7,34,8
+    GROUPBOX        "Textbaustein",IDC_STATIC,120,7,271,218
+    LTEXT           "Name",IDC_STATIC,125,17,20,8
+    LTEXT           "Vor Markierung/Cursor eingefügen:",IDC_STATIC,125,50,
+                    112,8
     LTEXT           "Nach Markierung/Cursor einfügen:",IDC_STATIC,125,135,
                     110,8
     CONTROL         "Parameter aktivieren",IDC_TEXTMODULES_PARAMSENABLE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,221,30,81,10
-    GROUPBOX        "Parameter",IDC_TEXTMODULES_PARAMSGROUP,323,22,114,194
+                    "Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,221,
+                    30,81,10
+    GROUPBOX        "Parameter",IDC_TEXTMODULES_PARAMSGROUP,308,22,75,194,
+                    WS_DISABLED
+    LTEXT           "Zukünftige Versionen von TeXnicCenter werden zusätzliche Optionen zur Definition von Textbausteinen bieten.",
+                    IDC_STATIC,316,38,62,92,WS_DISABLED
 END
 
 IDD_PROFILE_EXCHANGE DIALOG DISCARDABLE  0, 0, 242, 145
@@ -3057,7 +3068,7 @@ BEGIN
     IDD_TEXTMODULES, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 443
+        RIGHTMARGIN, 391
         TOPMARGIN, 7
         BOTTOMMARGIN, 243
     END
@@ -3385,6 +3396,7 @@ BEGIN
     ID_HELP_USING           "Zeigt Anweisungen zum Umgang mit der Hilfe an.\nHilfe"
     ID_CONTEXT_HELP         "Zeigt Hilfe zu angeklickten Schaltflächen, Menüs und Fenstern an.\nHilfe"
     ID_HELP                 "Zeigt Hilfe zum aktuellen Vorgang oder Befehl an.\nHilfe"
+    IDS_TEXTMODULES_NONEDEFINED "Kein Textbaustein definiert"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -3587,6 +3599,7 @@ BEGIN
     STE_TCP_INVALID         "Dies ist keine gültige Projektdatei."
     STE_XML_PARSE_ERROR     "Beim Lesen einer XML-Datei ist ein Fehler aufgetreten.\n\nFehler 0x%08x: %s\n\nDatei:\t%s\nZeile:\t%d\nZeichen:\t%d\n\n%s"
     STE_PROFILE_FILE_FILTER "Ausgabeprofile (*.tco)|*.tco|Alle Dateien (*.*)|*.*||"
+    IDS_NEWTEXTMODULE       "Neuer Textbaustein"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4604,6 +4617,11 @@ BEGIN
                             "Entfernt die %-Kommentarzeichen am Anfang jeder selektierten Zeile.\nBlockkommentar entfernen"
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_TEXTMODULES_DEFINE   "Zeigt Dialog zum Anpassen der Textbausteine an.\nTextbausteine"
+END
+
 #endif    // Deutsch (Deutschland) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -4974,6 +4992,14 @@ BEGIN
             MENUITEM "&Short Quotation",            ID_INSERT_QUOTE
             MENUITEM "&Quotation",                  ID_INSERT_QUOTATION
             MENUITEM "&Verse",                      ID_INSERT_VERSE
+        END
+        MENUITEM SEPARATOR
+        POPUP "Own Text &Modules"
+        BEGIN
+            MENUITEM "&Manage Text Modules...",     ID_TEXTMODULES_DEFINE
+            MENUITEM SEPARATOR
+            MENUITEM "Own Text Module",             ID_TEXTMODULES_FIRST
+            , GRAYED
         END
     END
     POPUP "&Math"
@@ -6589,6 +6615,38 @@ BEGIN
     LTEXT           "&Import",IDC_STATIC_IMPORT,215,130,20,8,NOT WS_VISIBLE
 END
 
+IDD_TEXTMODULES DIALOG DISCARDABLE  0, 0, 398, 250
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Text Modules"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "List1",IDC_TEXTMODULES_MODULES,"SysListView32",
+                    LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
+                    LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,7,18,102,207
+    EDITTEXT        IDC_TEXTMODULES_NAME,125,27,84,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TEXTMODULES_BEFORECURSOR,125,60,158,70,ES_MULTILINE | 
+                    ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL
+    EDITTEXT        IDC_TEXTMODULES_AFTERCURSOR,125,144,158,72,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | 
+                    WS_VSCROLL | WS_HSCROLL
+    PUSHBUTTON      "&Delete",IDC_TEXTMODULES_DELETEMODULE,7,229,46,14
+    PUSHBUTTON      "&New",IDC_TEXTMODULES_NEWMODULE,63,229,46,14
+    DEFPUSHBUTTON   "OK",IDOK,283,229,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,341,229,50,14
+    PUSHBUTTON      "Menu",IDC_TEXTMODULES_MENUBTN,80,7,29,10,WS_DISABLED
+    LTEXT           "Modules:",IDC_STATIC,7,7,30,8
+    GROUPBOX        "Text Module",IDC_STATIC,120,7,271,218
+    LTEXT           "Name",IDC_STATIC,125,17,20,8
+    LTEXT           "Insert before Selection/Cursor:",IDC_STATIC,125,50,97,8
+    LTEXT           "Insert after Selection/Cursor:",IDC_STATIC,125,135,91,8
+    CONTROL         "Activate Parameters",IDC_TEXTMODULES_PARAMSENABLE,
+                    "Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,221,
+                    30,79,10
+    GROUPBOX        "Parameters",IDC_TEXTMODULES_PARAMSGROUP,308,22,75,194,
+                    WS_DISABLED
+    LTEXT           "Future versions of TeXnicCenter will offer additional options for defining text modules.",
+                    IDC_STATIC,316,38,62,92,WS_DISABLED
+END
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -6827,6 +6885,14 @@ BEGIN
         RIGHTMARGIN, 235
         TOPMARGIN, 7
         BOTTOMMARGIN, 138
+    END
+
+    IDD_TEXTMODULES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 391
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 243
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -7099,6 +7165,7 @@ BEGIN
     ID_HELP_USING           "Shows how to use the help\nHelp"
     ID_CONTEXT_HELP         "Shows help on clicked buttons, menus and windows\nHelp"
     ID_HELP                 "Shows help on the current action or command\nHelp"
+    IDS_TEXTMODULES_NONEDEFINED "No text module defined"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7300,6 +7367,7 @@ BEGIN
     STE_TCP_INVALID         "This is not a valid project file."
     STE_XML_PARSE_ERROR     "An error occured while reading an XML file.\n\nError 0x%08x: %s\n\nFile:\t%s\nLine:\t%d\nCharacter:\t%d\n\n%s"
     STE_PROFILE_FILE_FILTER "Output profiles (*.tco)|*.tco|All Files (*.*)|*.*||"
+    IDS_NEWTEXTMODULE       "New Text Module"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -8298,6 +8366,11 @@ BEGIN
                             "Comments all selected lines using %-Signs.\nInsert Block Comment"
     ID_EDIT_BLOCKCOMMENT_REMOVE 
                             "Removes all %-Signs at the beginning of each selected line.\nRemove Block Comment"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_TEXTMODULES_DEFINE   "Displays dialog to manage text modules.\nText Modules"
 END
 
 #endif    // Englisch (USA) resources

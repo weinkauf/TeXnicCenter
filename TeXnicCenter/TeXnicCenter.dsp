@@ -476,6 +476,14 @@ SOURCE=.\TextFileSaveDialog.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\TextModules.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TextModulesDlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\TextSourceFile.cpp
 # End Source File
 # Begin Source File
@@ -882,6 +890,14 @@ SOURCE=.\TeXnicCenter.h
 # Begin Source File
 
 SOURCE=.\TextFileSaveDialog.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TextModules.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TextModulesDlg.h
 # End Source File
 # Begin Source File
 

@@ -101,6 +101,7 @@
 #define IDC_TIPSTRING                   172
 #define STE_XML_PARSE_ERROR             172
 #define STE_PROFILE_FILE_FILTER         173
+#define IDS_NEWTEXTMODULE               174
 #define STE_POPUP_EDITOR                176
 #define STE_POPUP_ITEM                  177
 #define STE_POPUP_MAINWINDOWAREA        178
@@ -1234,7 +1235,10 @@
 #define ID_EDIT_BLOCKCOMMENT_TOOGLE     38362
 #define ID_EDIT_BLOCKCOMMENT_INSERT     38363
 #define ID_EDIT_BLOCKCOMMENT_REMOVE     38364
-#define ID_ACCEL38365                   38365
+#define ID_TEXTMODULES_FIRST            38365
+#define ID_TEXTMODULES_LAST             38465
+#define ID_TEXTMODULES_DEFINE           38466
+#define IDS_TEXTMODULES_NONEDEFINED     57671
 
 // Next default values for new objects
 // 
@@ -1242,7 +1246,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        274
-#define _APS_NEXT_COMMAND_VALUE         38366
+#define _APS_NEXT_COMMAND_VALUE         38467
 #define _APS_NEXT_CONTROL_VALUE         1332
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
