@@ -1376,6 +1376,7 @@ MySpell* CTeXnicCenterApp::GetSpell()
 {
 	if (m_pSpell == NULL)
 	{
+		CWaitCursor wait;
 		CString dicName, affName;
 		dicName.Format(_T("%s\\%s_%s.dic"),
 			g_configuration.m_strSpellDictionaryPath, 
