@@ -2848,20 +2848,20 @@ BEGIN
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     CONTROL         "&Rechtschreibung während der Eingabe überprüfen",
                     IDC_OPTIONS_SPELL_ENABLE,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,0,51,175,10
+                    WS_TABSTOP,0,59,175,10
     CONTROL         "Nur &Hauptwörterbuch verwenden",
                     IDC_OPTIONS_SPELL_MAINDICT,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,0,63,119,10
+                    WS_TABSTOP,0,71,119,10
     CONTROL         "&Kommentare ignorieren",IDC_OPTIONS_SPELL_COMMENT,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,75,88,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,83,88,10
     CONTROL         "LaTe&X-Befehle ignorieren",IDC_OPTIONS_SPELL_SKIP_TAGS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,87,96,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,95,96,10
     CONTROL         "Worte mit &Zahlen ignorieren",
                     IDC_OPTIONS_SPELL_IGNORE_NUM,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,0,99,103,10
+                    WS_TABSTOP,0,107,103,10
     CONTROL         "Wörter in &GROSSBUCHSTABEN ignorieren",
                     IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,0,111,153,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,0,119,153,10
     EDITTEXT        IDC_OPTIONS_SPELL_PDICT,5,138,209,14,ES_AUTOHSCROLL
     PUSHBUTTON      "&...",IDC_OPTIONS_SPELL_BROWSE,218,138,13,14
     LTEXT           "&Sprache:",IDC_STATIC,0,20,30,8
@@ -2869,9 +2869,12 @@ BEGIN
     LTEXT           "Benutzerwörterbuch:",IDC_STATIC,5,130,66,8
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
     LTEXT           " Sprache ",IDC_STATIC,5,5,32,8
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,44,235,1
-    LTEXT           " Optionen für die Rechtschreibung ",IDC_STATIC,5,39,111,
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,52,235,1
+    LTEXT           " Optionen für die Rechtschreibung ",IDC_STATIC,5,47,111,
                     8
+    LTEXT           "&Locale:",IDC_STATIC,1,36,24,8
+    COMBOBOX        IDC_OPTIONS_LANGUAGE_LOCALE,33,33,83,53,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_FILECLEANCONFIRM DIALOG DISCARDABLE  0, 0, 295, 180
@@ -6689,25 +6692,25 @@ STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Spelling"
 FONT 8, "MS Sans Serif"
 BEGIN
-    COMBOBOX        IDC_OPTIONS_LANGUAGE,34,16,83,53,CBS_DROPDOWNLIST | 
+    COMBOBOX        IDC_OPTIONS_LANGUAGE,35,16,83,53,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
     COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,152,16,83,56,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     CONTROL         "Check spelling while &typing",IDC_OPTIONS_SPELL_ENABLE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,51,101,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,60,101,10
     CONTROL         "Suggest from &main dictionary only",
                     IDC_OPTIONS_SPELL_MAINDICT,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,0,63,119,10
+                    WS_TABSTOP,0,72,119,10
     CONTROL         "Ignore &comments",IDC_OPTIONS_SPELL_COMMENT,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,0,75,70,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,0,84,70,10
     CONTROL         "Ignore LaTe&X tags",IDC_OPTIONS_SPELL_SKIP_TAGS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,0,87,75,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,0,96,75,10
     CONTROL         "Ignore words with &numbers",
                     IDC_OPTIONS_SPELL_IGNORE_NUM,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,0,99,100,10
+                    WS_TABSTOP,0,108,100,10
     CONTROL         "Ignore &UPPERCASE words ",
                     IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,0,111,104,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,0,120,104,10
     EDITTEXT        IDC_OPTIONS_SPELL_PDICT,5,138,209,14,ES_AUTOHSCROLL
     PUSHBUTTON      "&...",IDC_OPTIONS_SPELL_BROWSE,218,138,13,14
     LTEXT           "&Language:",IDC_STATIC,0,20,35,8
@@ -6715,8 +6718,11 @@ BEGIN
     LTEXT           "Personal dictionary:",IDC_STATIC,5,130,62,8
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
     LTEXT           " Language ",IDC_STATIC,5,5,37,8
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,44,235,1
-    LTEXT           " Options for spelling ",IDC_STATIC,5,39,64,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,54,234,1
+    LTEXT           " Options for spelling ",IDC_STATIC,5,48,64,8
+    LTEXT           "Loc&ale:",IDC_STATIC,1,36,24,8
+    COMBOBOX        IDC_OPTIONS_LANGUAGE_LOCALE,35,32,83,53,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
 END
 
 

@@ -52,12 +52,13 @@ COptionPageLanguage::COptionPageLanguage() : CPropertyPage(COptionPageLanguage::
 	m_bEnableSpell = g_configuration.m_bSpellEnable;
 	m_bMainDictOnly = g_configuration.m_bSpellMainDictOnly;
 	m_bSkipComments = g_configuration.m_bSpellSkipComments;
+	m_bSkipNumbers = g_configuration.m_bSpellSkipNumbers;
 	m_bSkipTags = g_configuration.m_bSpellSkipTags;
 	m_bSkipCaps = g_configuration.m_bSpellSkipCaps;
-	m_bSkipNumbers = g_configuration.m_bSpellSkipNumbers;
 	m_strLanguage = g_configuration.m_strLanuage;
 	m_strDialect = g_configuration.m_strLanguageDialect;
 	m_strPDictionary = g_configuration.m_strSpellPersonalDictionary;
+	m_strLocale = g_configuration.m_strLocale;
 	//}}AFX_DATA_INIT
 }
 
@@ -66,15 +67,17 @@ void COptionPageLanguage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPageLanguage)
+	DDX_Control(pDX, IDC_OPTIONS_LANGUAGE_LOCALE, c_Locale);
+	DDX_Check(pDX, IDC_OPTIONS_SPELL_ENABLE, m_bEnableSpell);
+	DDX_Check(pDX, IDC_OPTIONS_SPELL_MAINDICT, m_bMainDictOnly);
 	DDX_Check(pDX, IDC_OPTIONS_SPELL_COMMENT, m_bSkipComments);
 	DDX_Check(pDX, IDC_OPTIONS_SPELL_IGNORE_NUM, m_bSkipNumbers);
-	DDX_Check(pDX, IDC_OPTIONS_SPELL_MAINDICT, m_bMainDictOnly);
 	DDX_Check(pDX, IDC_OPTIONS_SPELL_SKIP_TAGS, m_bSkipTags);
 	DDX_Check(pDX, IDC_OPTIONS_SPELL_IGNORE_ALLCAPS, m_bSkipCaps);
 	DDX_CBString(pDX, IDC_OPTIONS_LANGUAGE, m_strLanguage);
 	DDX_CBString(pDX, IDC_OPTIONS_LANGUAGE_DIALECT, m_strDialect);
+	DDX_CBString(pDX, IDC_OPTIONS_LANGUAGE_LOCALE, m_strLocale);
 	DDX_Text(pDX, IDC_OPTIONS_SPELL_PDICT, m_strPDictionary);
-	DDX_Check(pDX, IDC_OPTIONS_SPELL_ENABLE, m_bEnableSpell);
 	//}}AFX_DATA_MAP
 }
 
@@ -92,6 +95,17 @@ END_MESSAGE_MAP()
 
 void COptionPageLanguage::OnOK() 
 {
+	if ( g_configuration.m_strLocale.Compare( m_strLocale ) )
+	{
+		// Locale was changed
+		if ( m_strLocale.Compare(_T("system locale") ) )
+			g_configuration.m_strLocale = m_strLocale;
+		else
+			g_configuration.m_strLocale = _T(""); // system locale
+
+		// Invalid locale. Not really a problem. The system default will be used.
+		VERIFY ( _tsetlocale( LC_ALL, g_configuration.m_strLocale ) ); 
+	}
 	g_configuration.m_bSpellEnable = m_bEnableSpell;
 	g_configuration.m_strLanuage = m_strLanguage;
 	g_configuration.m_strLanguageDialect = m_strDialect;
@@ -151,12 +165,59 @@ void COptionPageLanguage::OnSelchangeOptionsLanguage()
 BOOL COptionPageLanguage::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
+
+	// List of all region/language strings recognized by setlocale. 
+	// There are a number of sub-selections that are not presented
+	// here, but users may specify sub-selections in the application 
+	// configuration. The provided selection should be sufficient for
+	// most users needs.
+
+	// This list is in english only because it appears setlocale uses 
+	// english rather than localized strings.
+	const int nLocales = 36 + 40;
+	const TCHAR * const aLocales[] = { 
+		// region
+		_T("system locale"), _T("australia"), _T("austria"), _T("belgium"), _T("brazil"), 
+		_T("canada"), _T("china"), _T("czech"), _T("denmark"), _T("england"), _T("finland"), 
+		_T("france"), _T("germany"), _T("greece"), _T("hong kong"), _T("hungary"), _T("iceland"), 
+		_T("ireland"), _T("italy"), _T("japan"), _T("mexico"), _T("netherlands"), _T("new zealand"), 
+		_T("norway"), _T("poland"), _T("portugal"), _T("russia"), _T("singapore"), _T("slovak"), 
+		_T("south korea"), _T("spain"), _T("sweden"), _T("switzerland"), _T("taiwan"), _T("turkey"), 
+		_T("united states"),
+		// language
+		_T("chinese"), _T("chinese-simplified"), _T("chinese-traditional"), _T("danish"), _T("dutch"),
+		_T("belgian"), _T("english"), _T("english-aus"), _T("english-can"), _T("english-nz"),
+		_T("english-uk"), _T("english-us"), _T("finnish"),_T("french"), _T("french-belgian"), 
+		_T("french-canadian"), _T("french-swiss"), _T("german"), _T("german-austrian"), _T("german-swiss"),
+		_T("greek"), _T("hungarian"), _T("icelandic"), _T("italian"), _T("italian-swiss"), _T("japanese"),
+		_T("korean"), _T("norwegian"), _T("norwegian-bokmal"),_T("norwegian-nynorsk"),_T("polish"),
+		_T("portuguese"),_T("portuguese-brazil"),_T("russian"),_T("slovak"),_T("spanish"),
+		_T("spanish-mexican"), _T("spanish-modern"), _T("swedish"), _T("turkish")
+	};
+
+	for (int i = 0; i < nLocales; ++i) 
+		c_Locale.AddString( aLocales[i] );
+
+	if ( c_Locale.SelectString( 0, g_configuration.m_strLocale ) == CB_ERR )
+	{
+		if ( g_configuration.m_strLocale.Compare(_T("")) )
+		{
+			// Add the current local to possible selections
+			c_Locale.AddString( g_configuration.m_strLocale );
+			c_Locale.SelectString( 0, g_configuration.m_strLocale );
+		}
+		else
+		{
+			// Empty locale indicates default system locale
+			c_Locale.SetCurSel( 0 );
+		}
+	}
+
 	FindDictionaries();
-	
 	CComboBox *pLangBox = (CComboBox*)GetDlgItem(IDC_OPTIONS_LANGUAGE);
 
 	// Add all the found languages
-	for (int i = 0; i < m_aLanguage.GetSize(); ++i)
+	for (i = 0; i < m_aLanguage.GetSize(); ++i)
 	{
 		if ( pLangBox->FindString( 0, m_aLanguage[i] ) == CB_ERR )
 			pLangBox->AddString (m_aLanguage[i] );
