@@ -232,12 +232,13 @@ current file is the file opened in the editor, i.e it has the input focus.
 If no file is open in the editor the placeholders will not be replaced.</p>
 
 <p>The examples in brackets show, how the placeholder will be replaced,
-if the current file is "C:\My Documents\TxcTest\JustATest.tex".</p>
+if the current file is "C:\My Documents\TxcTest\SubDir\AnotherTest.tex"
+and the current project's main file is "C:\My Documents\TxcTest\JustATest.tex".</p>
 
 <dl>
    <dt>%pc</dt>
    <dd>Will be replaced by the full path of the current file.<br>
-   ["C:\My Documents\TxcTest\JustATest.tex"]</dd>
+   ["C:\My Documents\TxcTest\SubDir\AnotherTest.tex"]</dd>
 
    <dt>%wc</dt>
    <dd>Will be replaced by the relative path of the current file.<br>
@@ -245,17 +246,17 @@ if the current file is "C:\My Documents\TxcTest\JustATest.tex".</p>
 
    <dt>%dc</dt>
    <dd>Will be replaced by the directory of the current file.<br>
-   ["C:\My Documents\TxcTest"]</dd>
+   ["C:\My Documents\TxcTest\SubDir"]</dd>
 
    <dt>%nc</dt>
    <dd>Will be replaced by the name of the current file. The name includes
    the file extension.<br>
-   ["JustATest.tex"]</dd>
+   ["AnotherTest.tex"]</dd>
 
    <dt>%tc</dt>
    <dd>Will be replaced by the title of the current file. The title does
    not include the file extension.<br>
-   ["JustATest"]</dd>
+   ["AnotherTest"]</dd>
 
    <dt>%ec</dt>
    <dd>Will be replaced by the extension of the current file.<br>
@@ -264,7 +265,7 @@ if the current file is "C:\My Documents\TxcTest\JustATest.tex".</p>
    <dt>%bc</dt>
    <dd>Will be replaced by the base of the current file. The base includes
    the directory followed by the file's title without the file extension.<br>
-   ["C:\My Documents\TxcTest\JustATest"]</dd>
+   ["C:\My Documents\TxcTest\SubDir\AnotherTest"]</dd>
 </dl>
 </p>
 
@@ -280,15 +281,15 @@ if the current file is "C:\My Documents\TxcTest\JustATest.tex".</p>
 <dl>
    <dt>%Pc</dt>
    <dd>Same as '<var>%pm</var>', but using slashes instead of backslashes.<br>
-   ["C:/My Documents/TxcTest/JustATest.tex"]</dd>
+   ["C:/My Documents/TxcTest/SubDir/AnotherTest.tex"]</dd>
 
    <dt>%Dc</dt>
    <dd>Same as '<var>%dm</var>', but using slashes instead of backslashes.<br>
-   ["C:/My Documents/TxcTest"]</dd>
+   ["C:/My Documents/TxcTest/SubDir"]</dd>
 
    <dt>%Bc</dt>
    <dd>Same as '<var>%bm</var>', but using slashes instead of backslashes.<br>
-   ["C:/My Documents/TxcTest/JustATest"]</dd>
+   ["C:/My Documents/TxcTest/SubDir/AnotherTest"]</dd>
 </dl>
 </p>
 
@@ -304,19 +305,19 @@ if the current file is "C:\My Documents\TxcTest\JustATest.tex".</p>
 <dl>
    <dt>%spc</dt>
    <dd>Same as '<var>%pm</var>', but using the 8.3 path notation.<br>
-   ["C:\MyDocu~1\TxcTest\JustAT~1.tex"]</dd>
+   ["C:\MyDocu~1\TxcTest\SubDir\Anothe~1.tex"]</dd>
 
    <dt>%sdc</dt>
    <dd>Same as '<var>%dm</var>', but using the 8.3 path notation.<br>
-   ["C:\MyDocu~1\TxcTest"]</dd>
+   ["C:\MyDocu~1\TxcTest\SubDir"]</dd>
 
    <dt>%snc</dt>
    <dd>Same as '<var>%nm</var>', but using the 8.3 path notation.<br>
-   ["JustAT~1.tex"]</dd>
+   ["Anothe~1.tex"]</dd>
 
    <dt>%stc</dt>
    <dd>Same as '<var>%tm</var>', but using the 8.3 path notation.<br>
-   ["JustAT~1"]</dd>
+   ["Anothe~1"]</dd>
 
    <dt>%sec</dt>
    <dd>Same as '<var>%em</var>', but using the 8.3 path notation.<br>
@@ -324,7 +325,7 @@ if the current file is "C:\My Documents\TxcTest\JustATest.tex".</p>
 
    <dt>%sbc</dt>
    <dd>Same as '<var>%sbm</var>', but using the 8.3 path notation.<br>
-   ["C:\MyDocu~1\TxcTest\JustAT~1"]</dd>
+   ["C:\MyDocu~1\TxcTest\SubDir\Anothe~1"]</dd>
 </dl>
 </p>
 
@@ -341,15 +342,15 @@ Backslashes</td>
 <dl>
    <dt>%sPc</dt>
    <dd>Same as '<var>%spm</var>', but using slashes instead of backslashes.<br>
-   ["C:/MyDocu~1/TxcTest/JustAT~1.tex"]</dd>
+   ["C:/MyDocu~1/TxcTest/SubDir/Anothe~1.tex"]</dd>
 
    <dt>%sDc</dt>
    <dd>Same as '<var>%sdm</var>', but using slashes instead of backslashes.<br>
-   ["C:/MyDocu~1/TxcTest"]</dd>
+   ["C:/MyDocu~1/TxcTest/SubDir"]</dd>
 
    <dt>%sBc</dt>
    <dd>Same as '<var>%sbm</var>', but using slashes instead of backslashes.<br>
-   ["C:/MyDocu~1/TxcTest/JustAT~1"]</dd>
+   ["C:/MyDocu~1/TxcTest/SubDir/Anothe~1"]</dd>
 </dl>
 </p>
 
