@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OUTPUTWIZARDDISTRIBUTIONPATH_H__627C2BE5_5B16_11D4_A222_006097239934__INCLUDED_)
 #define AFX_OUTPUTWIZARDDISTRIBUTIONPATH_H__627C2BE5_5B16_11D4_A222_006097239934__INCLUDED_
 
@@ -37,6 +43,8 @@
 This property page is part of the output wizard (COutputWizard) and
 requests the user to sepcify the directory, where his 
 TeX-distribution has been installed to.
+
+@ingroup dialogs
 
 @author Sven Wiegand
 */

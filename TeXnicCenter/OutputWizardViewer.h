@@ -46,6 +46,8 @@ This property page is part of the output wizard (COutputWizard) and
 requests the user to specify the properties of a file-type-specific
 viewer.
 
+@ingroup dialogs
+
 @author Sven Wiegand
 */
 class COutputWizardViewer : public CPropertyPage

@@ -38,15 +38,20 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// UserToolAdvDlg.h : header file
-//
 
 #include "PersistPosEdit.h"
 #include "EditMenuButtonOpt.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserToolAdvDlg dialog
+/** Lets the user define some advanced options for the tools.
 
+@ingroup dialogs
+
+@see CUserTool
+
+@todo Advanced options for tools: To be implemented.
+
+@author Tino Weinkauf
+*/
 class CUserToolAdvDlg : public CDialog
 {
 // Construction

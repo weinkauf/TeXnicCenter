@@ -44,9 +44,12 @@
 #include "PersistPosEdit.h"
 #include "EditMenuButtonOpt.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// COptionPageFileClean dialog
+/**	Options for cleaning temporary files.
 
+@ingroup dialogs
+
+@author Tino Weinkauf
+*/
 class COptionPageFileClean : public CPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageFileClean)

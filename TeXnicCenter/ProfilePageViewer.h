@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PROFILEPAGEVIEWER_H__5C552767_082E_11D5_A222_006097239934__INCLUDED_)
 #define AFX_PROFILEPAGEVIEWER_H__5C552767_082E_11D5_A222_006097239934__INCLUDED_
 
@@ -40,6 +46,12 @@
 #include "EditMenuButtonOpt.h"
 
 
+/**	Edits the Viewer parts of output profiles.
+
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CProfilePageViewer : public CProfilePage
 {
 // types

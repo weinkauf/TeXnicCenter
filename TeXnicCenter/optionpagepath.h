@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OPTIONPAGEPATH_H__FD645161_2E39_11D3_929E_FAB22A26316D__INCLUDED_)
 #define AFX_OPTIONPAGEPATH_H__FD645161_2E39_11D3_929E_FAB22A26316D__INCLUDED_
 
@@ -35,6 +41,12 @@
 
 #include "BrowseButton.h"
 
+/**	Options for Directory handling.
+
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class COptionPagePath : public CPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPagePath)

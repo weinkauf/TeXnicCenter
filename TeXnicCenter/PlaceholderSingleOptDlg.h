@@ -38,26 +38,27 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// PlaceholderSingleOptDlg.h : header file
-//
+
 
 /**
-	This dialog lets the user define all possible placeholders for single files
-	together with their options (forward slash and 8.3-Format).
+This dialog lets the user define all possible placeholders for single files
+together with their options (forward slash and 8.3-Format).
 
-	<b>Usage:</b>
+<b>Usage:</b>
 
-	First call SetPlaceholderBase() to set the base for the placeholder.
-	Valid options are "m" and "c" (for main and current file).
-	Then call SetAllowOptions() to enable/disable Options-Support.
+First call SetPlaceholderBase() to set the base for the placeholder.
+Valid options are "m" and "c" (for main and current file).
+Then call SetAllowOptions() to enable/disable Options-Support.
 
-	Then call DoModal().
+Then call DoModal().
 
-	After the user finished the dialog with the Ok-Button,
-	you will find the defined placeholder in strPlaceholder.
-	If the dialog was canceled, strPlaceholder is empty.
+After the user finished the dialog with the Ok-Button,
+you will find the defined placeholder in strPlaceholder.
+If the dialog was canceled, strPlaceholder is empty.
 
-	@author Tino Weinkauf
+@ingroup dialogs
+
+@author Tino Weinkauf
 */
 
 class CPlaceholderSingleOptDlg : public CDialog

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OUTPUTWIZARDFINISH_H__627C2BE7_5B16_11D4_A222_006097239934__INCLUDED_)
 #define AFX_OUTPUTWIZARDFINISH_H__627C2BE7_5B16_11D4_A222_006097239934__INCLUDED_
 
@@ -37,6 +43,8 @@
 /**
 This property page is part of the output wizard (COutputWizard).
 It shows the user, which output types are about to be generated.
+
+@ingroup dialogs
 
 @author Sven Wiegand
 */

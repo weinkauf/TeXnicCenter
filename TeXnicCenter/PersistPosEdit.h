@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PERSISTPOSEDIT_H__AF589588_0A74_11D5_A222_006097239934__INCLUDED_)
 #define AFX_PERSISTPOSEDIT_H__AF589588_0A74_11D5_A222_006097239934__INCLUDED_
 
@@ -42,6 +48,8 @@ remembered carret position and give the focus back to the control.
 This class is usefull inside a dialog, in combination with 
 menu-buttons, used to insert words into an edit control by choosing 
 them from a menu that pops-up, when clicking on the menu button.
+
+@ingroup guielements
 
 @author Sven Wiegand
 */

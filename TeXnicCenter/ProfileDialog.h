@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PROFILEDIALOG_H__5C552764_082E_11D5_A222_006097239934__INCLUDED_)
 #define AFX_PROFILEDIALOG_H__5C552764_082E_11D5_A222_006097239934__INCLUDED_
 
@@ -40,6 +46,16 @@
 #include "ProfilePageViewer.h"
 
 
+/**	Dialog for defining output profiles.
+
+@ingroup dialogs
+
+@see CProfilePageLatex
+@see CProfilePagePostprocessor
+@see CProfilePageViewer
+
+@author Sven Wiegand
+*/
 class CProfileDialog : public CPropertyDialog
 {
 // construction/destruction
