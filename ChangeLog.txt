@@ -1,3 +1,7 @@
+2003/01/12 niteria
+- Fixed Bug 666758: table* not shown in navigation bar
+- Fixed Bug 574558: Figure* not recognised in navigation bar
+
 2002/12/07 niteria
 - Fixed Bug 646952: Cannot preview file while not compiled
 - Implemented Feature 636662: Add link to dict download
