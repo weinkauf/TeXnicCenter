@@ -153,6 +153,15 @@ protected:
 	*/
 	int GetSelectedItem() const;
 
+// overridables
+protected:
+	/**
+	Performs the action to create a document/project based on the 
+	current settings. Will be called, when the 'Create' button will
+	be pressed.
+	*/
+	virtual void Create() = 0;
+
 // overridings
 protected:
 	//{{AFX_VIRTUAL(CProjectNewDialog)
@@ -166,13 +175,14 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeTabCategories(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnTemplateItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnCreate();
+	afx_msg void OnDblClkTemplate(NMHDR* pNMHDR, LRESULT* pResult);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
 // dialog data
 protected:
 	//{{AFX_DATA(CProjectNewDialog)
-	enum { IDD = IDD_PROJECT_NEW };
 	CListCtrl	m_wndTemplateList;
 	CTabCtrl	m_wndCategoriesTab;
 	CString	m_strDescription;

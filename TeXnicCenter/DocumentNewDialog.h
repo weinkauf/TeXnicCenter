@@ -208,6 +208,8 @@ public:
 
 // overridings
 protected:
+	void Create();
+
 	//{{AFX_VIRTUAL(CDocumentNewDialog)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);
@@ -216,7 +218,6 @@ protected:
 // implementation
 protected:
 	//{{AFX_MSG(CDocumentNewDialog)
-	afx_msg void OnCreate();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -224,7 +225,6 @@ protected:
 protected:
 	//{{AFX_DATA(CDocumentNewDialog)
 	enum { IDD = IDD_DOCUMENT_NEW };
-	CButton	m_wndOkButton;
 	int		m_nFileFormat;
 	//}}AFX_DATA
 

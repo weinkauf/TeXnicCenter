@@ -75,6 +75,7 @@ BEGIN_MESSAGE_MAP(CTemplateDialog, CDialog)
 	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB_CATEGORIES, OnSelchangeTabCategories)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_TEMPLATES, OnTemplateItemChanged)
 	ON_BN_CLICKED(IDC_BUTTON_CREATE, OnCreate)
+	ON_NOTIFY(NM_DBLCLK, IDC_LIST_TEMPLATES, OnDblClkTemplate)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -331,5 +332,24 @@ void CTemplateDialog::OnTemplateItemChanged(NMHDR* pNMHDR, LRESULT* pResult)
 	else if (pNMListView->uChanged&LVIF_STATE && !(pNMListView->uNewState&LVIS_SELECTED) && pNMListView->uOldState&LVIS_SELECTED)
 		OnTemplateSelectionChanged();
 
+	*pResult = 0;
+}
+
+
+void CTemplateDialog::OnCreate()
+{
+	Create();
+}
+
+
+void CTemplateDialog::OnDblClkTemplate(NMHDR* pNMHDR, LRESULT* pResult) 
+{
+	CWnd	*pOkButton = GetDlgItem(IDC_BUTTON_CREATE);
+	if (!pOkButton || !pOkButton->IsWindowEnabled())
+		return;
+
+	// simulate click on button
+	OnCreate();
+	
 	*pResult = 0;
 }

@@ -219,6 +219,7 @@ protected:
 // overridings
 protected:
 	void UpdateControlStates();
+	void Create();
 
 	//{{AFX_VIRTUAL(CProjectNewDialog)
 	protected:
@@ -230,7 +231,6 @@ protected:
 	//{{AFX_MSG(CProjectNewDialog)
 	afx_msg void OnChangeProjectName();
 	afx_msg void OnChangeProjectPath();
-	afx_msg void OnCreate();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
