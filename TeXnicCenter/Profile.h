@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_PROFILE_H__6FC6E480_04F2_11D5_A222_006097239934__INCLUDED_)
 #define AFX_PROFILE_H__6FC6E480_04F2_11D5_A222_006097239934__INCLUDED_
 
@@ -507,11 +513,15 @@ public:
 
 	/**
 	Activates the profile with the specified key.
+	May set the active project to be modified (bSetModifiedProject == true)
 
 	@return
-		FALSE if there does not exist a profile with the specified key.
+		FALSE, if there does not exist a profile with the specified key.
+	@return
+		TRUE, if the specified key could be found in the list of profiles.
+			In this case, the ModifiedFlag of the active project will be set.
 	*/
-	BOOL SetActiveProfile(LPCTSTR lpszKey);
+	BOOL SetActiveProfile(LPCTSTR lpszKey, bool bSetModifiedProject = true);
 
 	/**
 	Returns a pointer to the active profile or NULL if there are no
