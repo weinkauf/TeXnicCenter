@@ -1,3 +1,9 @@
+2003/01/15 niteria
+- Added directory "TCHelp\SourceCodeDoc" with a doxygen configuration
+  file. Run doxygen on "txc.doxy" or run "MakeSourceCodeDoc.cmd" (edit
+  the path to your doxygen installation herein). You can find doxygen
+  at www.doxygen.org
+
 2003/01/12 niteria
 - Fixed Bug 666758: table* not shown in navigation bar
 - Fixed Bug 574558: Figure* not recognised in navigation bar
