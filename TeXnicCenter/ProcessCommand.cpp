@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "ProcessCommand.h"
 #include "PlaceHolder.h"
@@ -88,7 +94,9 @@ CProcess *CProcessCommand::Execute(HANDLE hOutput, LPCTSTR lpszWorkingDir, LPCTS
 {
 	CString strArguments = AfxExpandPlaceholders(m_strArguments, lpszMainPath,
 																	lpszCurrentPath, lCurrentLine,
-																	lpszCurrentSelection, bExpandPlaceholderSets);
+																	lpszCurrentSelection, bExpandPlaceholderSets,
+																	lpszWorkingDir);
+
 	CProcessCommand* const localThis = (CProcessCommand* const)this;
 	CProcess* p = new CProcess;
 

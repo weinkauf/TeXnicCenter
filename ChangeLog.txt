@@ -1,5 +1,6 @@
 2003/09/13 niteria
 - Implemented Feature 777489: More User Tools Icons
+- Fixed Bug 805454: Single File Compiling fails if project is loaded
 
 2003/08/11 niteria
 - Updated the URL for downloading dictionaries.
