@@ -27,6 +27,7 @@
 
 #include "../source/DoubleBuffer.h"
 #include "../source/SortArray.h"
+#include "../source/SortList.h"
 #include "../source/MRUList.h"
 #include "../source/MRUStringList.h"
 #include "../source/UniqueStringList.h"
