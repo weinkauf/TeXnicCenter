@@ -204,6 +204,8 @@ private:
 /**
 Dialog for creating a new document based on a template or a wizard.
 
+@ingroup dialogs
+
 @author Sven Wiegand
 */
 class CDocumentNewDialog : public CTemplateDialog

@@ -42,6 +42,12 @@
 #include "MRUTrackSelComboBox.h"
 #include "BrowseButton.h"
 
+/** Dialog for starting a Grep Action.
+
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CFindInFilesDialog : public CDialog
 {
 // construction/destruction

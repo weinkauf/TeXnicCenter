@@ -44,6 +44,13 @@
 /////////////////////////////////////////////////////////////////////////////
 // CFileCleanConfirmDialog dialog
 
+/** Dialog for confirming the deletion of files.
+
+@ingroup dialogs
+
+@author Tino Weinkauf
+*/
+
 class CFileCleanConfirmDialog : public CDialog
 {
 // Construction
