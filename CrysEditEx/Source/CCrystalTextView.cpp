@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.14  2002/05/30 02:04:54  niteria
+* GetSelectedText behaves now similar to double-click
+*
 * Revision 1.13  2002/05/06 05:35:42  cnorris
 * Protect background thread from document reset
 *
@@ -2056,12 +2059,14 @@ void CCrystalTextView::OnDestroy()
 {
 	if ( m_pBackgroundThread )
 	{
-		// Inform the background thread we're being destroyed
-		m_pBackgroundThread->PostThreadMessage(ID_BG_INVALIDATE_VIEW, 0, (long)this);
 		// Increase the hold count to delay destruction until the background thread 
 		// processes the ID_BG_INVALIDATE_VIEW message and releases this view.
 		Hold();
+		// Inform the background thread we're being destroyed
+		m_pBackgroundThread->PostThreadMessage(ID_BG_INVALIDATE_VIEW, 0, (long)this);
 	}
+	// This hold will wait until background thread has processed the 
+	// ID_BG_INVALIDATE_VIEW message
 	Hold( true );
 	DetachFromBuffer();
 	m_hAccel = NULL;
