@@ -286,8 +286,9 @@ CString CPathTool::GetRelativePath( LPCTSTR lpszFrom, LPCTSTR lpszTo, BOOL bFrom
 		strTo, bToIsDir? FILE_ATTRIBUTE_DIRECTORY : FILE_ATTRIBUTE_NORMAL );
 	strResult.ReleaseBuffer();
 
+	// If the the PathRelativePathTo failed, the paths are on different drives.
 	if( !bResult )
-		strResult.Empty();
+		strResult = strTo;
 
 	// remove leading ".\"
 	while (strResult.Left(2) == _T(".\\"))
