@@ -308,11 +308,11 @@ void CLatexProject::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
-																	
+
 #define KEY_FORMATINFO								_T("FormatInfo")
 #define VAL_FORMATINFO_TYPE						_T("Type")
 #define VAL_FORMATINFO_VERSION				_T("Version")
-																		
+
 #define KEY_PROJECTINFO								_T("ProjectInfo")
 #define VAL_PROJECTINFO_WORKINGDIR		_T("WorkingDir")
 #define VAL_PROJECTINFO_MAINFILE			_T("MainFile")
@@ -377,7 +377,7 @@ BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
 #define KEY_FORMATINFO									_T("FormatInfo")
 #define VAL_FORMATINFO_TYPE							_T("Type")
 #define VAL_FORMATINFO_VERSION					_T("Version")
-																				
+
 #define KEY_SESSIONINFO									_T("SessionInfo")
 #define VAL_SESSIONINFO_ACTIVETAB				_T("ActiveTab")
 #define VAL_SESSIONINFO_FRAMECOUNT			_T("FrameCount")
@@ -403,6 +403,7 @@ void CLatexProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 
 		// storing frame information
 		CWnd	*pWnd = AfxGetMainWnd()->GetWindow(GW_CHILD)->GetWindow(GW_CHILD);
+		pWnd->GetWindow(GW_HWNDFIRST); // Start with the first child
 		int		nFrame = 0;
 
 		ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_FRAMECOUNT, 0);
