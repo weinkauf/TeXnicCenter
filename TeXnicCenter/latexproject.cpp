@@ -162,7 +162,10 @@ BOOL CLatexProject::OnOpenProject(LPCTSTR lpszPathName)
 		return false;
 	}
 
+	//Set the working dir of the project
 	SetProjectDir(CPathTool::GetDirectory(lpszPathName));
+	//Modify the LastOpenedFolder-Value to be the working dir
+	AfxSetLastDirectory(CPathTool::GetDirectory(lpszPathName));
 
 	//Load the Project Information
 	Serialize(file, FALSE);
