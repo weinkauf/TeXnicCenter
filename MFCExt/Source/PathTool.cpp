@@ -19,6 +19,12 @@
 *
 ********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "PathTool.h"
 #include <Shlwapi.h>
@@ -190,8 +196,10 @@ CString CPathTool::GetFileExtension( LPCTSTR lpszPath )
 	int			nIndex;
 
 	nIndex = strFile.ReverseFind( _T('.') );
-	if( nIndex < 0 )
-		return CString();	// no extension
+	if ( ( nIndex < 0 ) || (nIndex == strFile.GetLength() - 1) )
+	{
+		return CString();	// no or empty (i.e. ends with a point) extension
+	}
 
 	return strFile.Right( strFile.GetLength() - nIndex - 1 );
 }
