@@ -127,7 +127,7 @@ BOOL CDdeCommand::SendCommand(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPCTSTR l
 
 void CDdeCommand::RemoveDirectorySpecifications()
 {
-	m_strServerName = CPathTool::GetFile(m_strServerName);
+	m_strExecutable = CPathTool::GetFile(m_strExecutable);
 }
 
 
