@@ -38,12 +38,13 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// InsertHeaderDialog.h : Header-Datei
-//
 
-/////////////////////////////////////////////////////////////////////////////
-// Dialogfeld CInsertHeaderDialog 
+/** Lets the user insert a heading.
 
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CInsertHeaderDialog : public CDialog
 {
 // types

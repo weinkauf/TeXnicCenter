@@ -38,11 +38,16 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// InsertGraphicDialog.h : Header-Datei
-//
+
 #include "InsertFloatObjectDialog.h"
 
 
+/** Lets the user insert a graphic file.
+
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CInsertGraphicDialog : public CInsertFloatObjectDialog
 {
 // construction/destruction
