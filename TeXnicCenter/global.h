@@ -29,3 +29,5 @@
 // Globale Funktionen
 CString AfxLoadString( UINT nID );
 CString AfxFormatString1( UINT nID, LPCTSTR lpszText );
+CString AfxFormatSystemString( DWORD dwMessageId );
+

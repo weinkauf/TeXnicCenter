@@ -47,3 +47,18 @@ CString AfxFormatString1( UINT nID, LPCTSTR lpszText )
 	szText.Format( nID, lpszText );
 	return szText;
 }
+
+CString AfxFormatSystemString( DWORD dwMessageId )
+{
+	LPTSTR lpBuffer;
+	::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,
+		NULL,
+		dwMessageId,
+		0,
+		(LPTSTR)&lpBuffer,
+		0,
+		NULL);
+	CString szText(lpBuffer);
+	LocalFree(lpBuffer);
+	return szText;
+}
