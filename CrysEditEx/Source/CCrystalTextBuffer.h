@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.2  2002/03/26 16:24:58  cnorris
+* Re-wrote LineInfo to manage its own data and manipulation
+*
 * Revision 1.1.1.1  2002/02/26 08:11:53  svenwiegand
 * Initial revision
 *
@@ -341,8 +344,8 @@ public:
 
 	//	Basic functions
 	BOOL InitNew(int nCrlfStyle = CRLF_STYLE_DOS);
-	BOOL LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle = CRLF_STYLE_AUTOMATIC);
-	BOOL SaveToFile(LPCTSTR pszFileName, int nCrlfStyle = CRLF_STYLE_AUTOMATIC, BOOL bClearModifiedFlag = TRUE);
+	DWORD LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle = CRLF_STYLE_AUTOMATIC);
+	DWORD SaveToFile(LPCTSTR pszFileName, int nCrlfStyle = CRLF_STYLE_AUTOMATIC, BOOL bClearModifiedFlag = TRUE);
 	void FreeAll();
 
 	//	'Dirty' flag

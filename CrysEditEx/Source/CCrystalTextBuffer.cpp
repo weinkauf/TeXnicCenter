@@ -55,6 +55,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.6  2002/03/26 16:37:00  cnorris
+* Fixed UNICODE allocation size error
+*
 * Revision 1.5  2002/03/26 16:24:58  cnorris
 * Re-wrote LineInfo to manage its own data and manipulation
 *
@@ -373,13 +376,13 @@ static const char *crlfs[] =
 	"\x0a\x0d"			//	Macintosh style
 };
 
-BOOL CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRLF_STYLE_AUTOMATIC*/)
+DWORD CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRLF_STYLE_AUTOMATIC*/)
 {
 	HANDLE hFile = NULL;
 	int nCurrentMax = 256;
 	char *pcLineBuf = new char[nCurrentMax];
 
-	BOOL bSuccess = FALSE;
+	DWORD result = 1;
 	__try
 	{
 		DWORD dwFileAttributes = ::GetFileAttributes(pszFileName);
@@ -484,12 +487,14 @@ BOOL CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CR
 		m_nUndoBufSize = UNDO_BUF_SIZE;
 		m_nSyncPosition = m_nUndoPosition = 0;
 		ASSERT(m_aUndoBuf.GetSize() == 0);
-		bSuccess = TRUE;
+		result = 0;
 
 		UpdateViews(NULL, NULL, UPDATE_RESET);
 	}
 	__finally
 	{
+		if (result)
+			result = ::GetLastError();
 		if (pcLineBuf != NULL)
 			delete[] pcLineBuf;
 		if (hFile != NULL)
@@ -498,10 +503,10 @@ BOOL CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CR
 	//BEGIN SW
 	m_ptLastChange.x = m_ptLastChange.y = -1;
 	//END SW
-	return bSuccess;
+	return result;
 }
 
-BOOL CCrystalTextBuffer::SaveToFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRLF_STYLE_AUTOMATIC*/, BOOL bClearModifiedFlag /*= TRUE*/)
+DWORD CCrystalTextBuffer::SaveToFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRLF_STYLE_AUTOMATIC*/, BOOL bClearModifiedFlag /*= TRUE*/)
 {
 	ASSERT(nCrlfStyle == CRLF_STYLE_AUTOMATIC || nCrlfStyle == CRLF_STYLE_DOS||
 			nCrlfStyle == CRLF_STYLE_UNIX || nCrlfStyle == CRLF_STYLE_MAC);
@@ -511,7 +516,7 @@ BOOL CCrystalTextBuffer::SaveToFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRLF
 	TCHAR szTempFileDir[_MAX_PATH + 1];
 	TCHAR szTempFileName[_MAX_PATH + 1];
 	TCHAR szBackupFileName[_MAX_PATH + 1];
-	BOOL bSuccess = FALSE;
+	DWORD result = 1;
 	__try
 	{
 		TCHAR drive[_MAX_PATH], dir[_MAX_PATH], name[_MAX_PATH], ext[_MAX_PATH];
@@ -592,17 +597,19 @@ BOOL CCrystalTextBuffer::SaveToFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRLF
 			SetModified(FALSE);
 			m_nSyncPosition = m_nUndoPosition;
 		}
-		bSuccess = TRUE;
+		result = 0;
 	}
 	__finally
 	{
+		if ( result )
+			result = ::GetLastError();
 		if (hSearch != INVALID_HANDLE_VALUE)
 			::FindClose(hSearch);
 		if (hTempFile != INVALID_HANDLE_VALUE)
 			::CloseHandle(hTempFile);
 		::DeleteFile(szTempFileName);
 	}
-	return bSuccess;
+	return result;
 }
 
 int CCrystalTextBuffer::GetCRLFMode()
