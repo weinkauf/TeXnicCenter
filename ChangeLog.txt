@@ -1,4 +1,9 @@
-2002/06/01 cnorris
+2002/05/03 christianwelzel
+- Feature 539142: Configurable Default Path for Documents modified
+  If this Path is empty, the default personal directory will be used
+- Configurable Project Path removed
+
+2002/05/01 cnorris
 - Much improved structure parser blocking
 - Made spell checker dictionary format more tolerant
 - Fixed crash when dictionaries don't exist
