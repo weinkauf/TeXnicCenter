@@ -136,13 +136,11 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// parse for new error, warning or bad box
-	static __JM::RegEx	error1("! LaTeX Error: (.*)$", true);
-	static __JM::RegEx	error2("! (.*)$", true);
-	static __JM::RegEx	error3("(.*error.*)", true);
-	static __JM::RegEx	warning1("LaTeX warning: (.*)", true);
-	static __JM::RegEx	warning2("LaTeX .* warning: (.*) on input line ([[:digit:]]+).", true);
-	static __JM::RegEx	warning3("(.*warning.*)", true);
-	static __JM::RegEx	badBox1("(overfull|underfull \\[hv]box).*in paragraph at lines ([[:digit:]]+)--[[:digit:]]+", true);
+	static __JM::RegEx	error1("^! LaTeX Error: (.*)$", true);
+	static __JM::RegEx	error2("^! (.*)$", true);
+	static __JM::RegEx	warning1("^LaTeX .*warning: (.*)", true);
+	static __JM::RegEx	warning2("^LaTeX .*warning: (.*) on input line ([[:digit:]]+)", true);
+	static __JM::RegEx	badBox1("^(Over|Under)full \\\\[hv]box .*in paragraph at lines ([[:digit:]]+)--[[:digit:]]+", true);
 	static __JM::RegEx	line1("l.([[:digit:]]+)", true);
 
 	if (error1.Search(strLine))
@@ -155,26 +153,6 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 			strLine.Mid(error1.Position(1), error1.Length(1)),
 			itmError);
 	}
-	else if (error3.Search(strLine))
-	{
-		FlushCurrentItem();
-		m_currentItem = COutputInfo(
-			m_stackFile.IsEmpty()? "" : m_stackFile.Top(),
-			0,
-			GetCurrentOutputLine(),
-			strLine.Mid(error3.Position(1), error3.Length(1)),
-			itmError);
-	}
-	else if (warning1.Search(strLine))
-	{
-		FlushCurrentItem();
-		m_currentItem = COutputInfo(
-			m_stackFile.IsEmpty()? "" : m_stackFile.Top(),
-			0,
-			GetCurrentOutputLine(),
-			strLine.Mid(warning1.Position(1), warning1.Length(1)),
-			itmWarning);
-	}
 	else if (warning2.Search(strLine))
 	{
 		FlushCurrentItem();
@@ -185,14 +163,14 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 			strLine.Mid(warning2.Position(1), warning2.Length(1)),
 			itmWarning);
 	}
-	else if (warning3.Search(strLine))
+	else if (warning1.Search(strLine))
 	{
 		FlushCurrentItem();
 		m_currentItem = COutputInfo(
 			m_stackFile.IsEmpty()? "" : m_stackFile.Top(),
 			0,
 			GetCurrentOutputLine(),
-			strLine.Mid(warning3.Position(1), warning3.Length(1)),
+			strLine.Mid(warning1.Position(1), warning1.Length(1)),
 			itmWarning);
 	}
 	else if (error2.Search(strLine))
