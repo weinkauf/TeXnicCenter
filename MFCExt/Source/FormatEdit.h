@@ -4,9 +4,9 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This library is free software; you can redistribute it and/or
-* modify, but leave the headers intact and do not remove any 
+* modify, but leave the headers intact and do not remove any
 * copyrights from the source.
 *
 * This library does not only contain file from us, but also from
@@ -101,19 +101,25 @@ protected:
 //-------------------------------------------------------------------
 
 /**
+Allows input of numbers only.
+
 Ein Objekt der Klasse CNumberEdit stellt ein Eingabefeld
 dar, das ausschliesslich die Eingabe von Zahlen erlaubt.
 
 Waehrend der Eingabe werden nicht zulaessige Tasten mit einem akustischen
 Signal quittiert und ignoriert und es wird ueberprueft, ob sich die Zahl
 in einem definierbaren Bereich befindet.
+
+@ingroup mfcext
+
+@author Sven Wiegand
 */
 class AFX_EXT_CLASS CNumberEdit : public CFormatEdit
 {
 // Typen
 enum tagNumberType
 {
-	ntChar = 0, 
+	ntChar = 0,
 	ntUChar,
 	ntShort,
 	ntUShort,
@@ -161,8 +167,8 @@ public:
 // Operationen
 public:
 	/**
-	Definiert den Zahlentyp, den das Eingabefeld einlesen soll. 
-	
+	Definiert den Zahlentyp, den das Eingabefeld einlesen soll.
+
 	Die obere
 	und untere Grenze des Wertebereichs werden auf die minimal und maximal
 	zulaessigen Werte des spezifizierten Zahlentyps gesetzt.

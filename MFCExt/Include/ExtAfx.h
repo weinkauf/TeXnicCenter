@@ -4,9 +4,9 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This library is free software; you can redistribute it and/or
-* modify, but leave the headers intact and do not remove any 
+* modify, but leave the headers intact and do not remove any
 * copyrights from the source.
 *
 * This library does not only contain file from us, but also from
@@ -68,12 +68,12 @@ Zeigt eine MessageBox an.
 
 @param unPromptID
 	Kennung der Stringresource, die die anzuzgeigende Meldung enthaelt.
-@param unPromptID
+@param unTitleID
 	Kennung der Stringresource, die den anzuzgeigenden Titel enthaelt.
 @param unType
 	MessageBox-Style.
 @param pwndParent
-	Zeiger auf das Elternfenster oder <var>NULL</var>, falls kein 
+	Zeiger auf das Elternfenster oder <var>NULL</var>, falls kein
 	Elternfenster verwendet werden soll.
 
 @return
@@ -90,12 +90,12 @@ Zeigt eine MessageBox an.
 
 @param lpszPrompt
 	Anzuzeigende Meldung.
-@param unPromptID
+@param unTitleID
 	Kennung der Stringresource, die den anzuzgeigenden Titel enthaelt.
 @param unType
 	MessageBox-Style.
 @param pwndParent
-	Zeiger auf das Elternfenster oder <var>NULL</var>, falls kein 
+	Zeiger auf das Elternfenster oder <var>NULL</var>, falls kein
 	Elternfenster verwendet werden soll.
 
 @return
@@ -106,4 +106,3 @@ AFX_EXT_CLASS int MessageBoxEx( LPCTSTR lpszPrompt, UINT unTitleID, UINT unType 
 
 
 /** @} */
-
