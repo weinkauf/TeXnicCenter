@@ -139,14 +139,6 @@ protected:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	//}}AFX_VIRTUAL
 
-// implementation
-protected:
-	/*
-	virtual CCrystalTextBuffer *LocateTextBuffer();
-	virtual DWORD ParseLine( DWORD dwCookie, int nLineIndex, 
-		CCrystalTextView::TEXTBLOCK *pBuf, int &nActualItems );
-	*/
-
 // debugging
 public:
 #ifdef _DEBUG
@@ -180,12 +172,6 @@ private:
 
 	/** Font to be used for the view */
 	CFont m_font;
-
-	/** Textbuffer to store the text in. */
-	//CCrystalTextBuffer m_textBuffer;
-
-	/** Internal Line counter. */
-	//int m_nLineCount;
 };
 
 /////////////////////////////////////////////////////////////////////////////

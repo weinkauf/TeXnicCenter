@@ -61,13 +61,6 @@ COutputView::COutputView()
 	m_bInitialized(FALSE),
 	m_pOutputDoc(NULL)
 {
-	// disable margin
-	//SetSelectionMargin( FALSE );
-	
-	//m_textBuffer.InitNew();
-	//m_textBuffer.AddView( this );
-	//m_nLineCount  = 0;
-
 	// create dummy font, so that m_font.DestroyObject() wont make any
 	// problems
 	m_font.CreatePointFont(100, _T("Courier New"));
@@ -76,7 +69,6 @@ COutputView::COutputView()
 
 COutputView::~COutputView()
 {
-	//m_textBuffer.FreeAll();
 }
 
 
@@ -122,21 +114,6 @@ CImageList *COutputView::GetImageList() const
 }
 
 
-/*
-DWORD COutputView::ParseLine( DWORD dwCookie, int nLineIndex, 
-														 CListCtrl::TEXTBLOCK *pBuf, int &nActualItems )
-{
-	if( pBuf )
-	{
-		pBuf[nActualItems].m_nCharPos = 0;
-		pBuf[nActualItems].m_nColorIndex = COLORINDEX_NORMALTEXT;
-	}
-
-	return 0;
-}
-*/
-
-
 LONG COutputView::OnReset(UINT wParam, LONG lParam)
 {
 	ResetView();
@@ -146,15 +123,6 @@ LONG COutputView::OnReset(UINT wParam, LONG lParam)
 
 void COutputView::ResetView()
 {
-	/*
-	if( GetLineCount() > 1 || GetLineLength( 0 ) > 0 )
-		m_textBuffer.DeleteText( 
-			this, 0, 0, GetLineCount() - 1, 
-			GetLineLength( GetLineCount() - 1 )? GetLineLength( GetLineCount() - 1 ) - 1 : 0 );
-
-	m_bDoNotScroll = FALSE;
-	m_nLineCount = 0;
-	*/
 	DeleteAllItems();
 }
 
@@ -168,19 +136,6 @@ LONG COutputView::OnAddLine(UINT wParam, LONG lParam)
 
 void COutputView::AddLine(LPCTSTR lpszLine, int nImage /*= -1*/, int nIndent /*= 0*/)
 {
-	/*
-	int				nEndLine, nEndPos;
-	CString		strLine = lpszLine;
-
-	m_textBuffer.InsertText( this, GetLineCount() - 1, 0, strLine + _T("\r\n"), 
-		nEndLine, nEndPos );
-	RecalcHorzScrollBar();
-
-	// Ensure that new line is visible
-	if( !m_bDoNotScroll )
-		EnsureVisible( CPoint( 0, GetLineCount() -1 ) );
-	*/
-
 	int		nItem = GetItemCount();
 	CString strLine(EnsureStringReadable(lpszLine));
 	LVITEM	lvItem;
@@ -235,12 +190,7 @@ BOOL COutputView::SetLineImage(int nLine, int nImage)
 
 void COutputView::SelectLine(int nLine, BOOL bPlaceAtTop /*= FALSE*/)
 {
-	//nLine--; // item-index is zero-based
 	ASSERT(nLine >= 0 && nLine < GetLineCount());
-	/*
-	m_textBuffer.SetLineFlag( nLine, LF_BREAKPOINT, TRUE );
-	EnsureVisible( CPoint( 0, nLine ) );
-	*/
 
 	SetItemState(nLine, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
 	EnsureVisible(nLine, FALSE);
@@ -252,14 +202,6 @@ void COutputView::SelectLine(int nLine, BOOL bPlaceAtTop /*= FALSE*/)
 		Scroll(CSize(0, rect.top));
 	}
 }
-
-
-/*
-CCrystalTextBuffer *COutputView::LocateTextBuffer()
-{
-	return &m_textBuffer;
-}
-*/
 
 
 int COutputView::OnCreate(LPCREATESTRUCT lpCreateStruct) 
@@ -275,8 +217,6 @@ int COutputView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		WS_CHILD | WS_VISIBLE | LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_SINGLESEL);
 	InsertColumn(0, _T(""));
 
-	//AttachToBuffer();
-	
 	return 0;
 }
 
@@ -289,13 +229,6 @@ BOOL COutputView::PreCreateWindow(CREATESTRUCT& cs)
 
 void COutputView::OnLButtonDblClk(UINT nFlags, CPoint point) 
 {
-	// activate message on the line that was double clicked on
-	/*
-	CPoint	pos = GetCursorPos();
-	
-	GetDocument()->ActivateMessageByOutputLine( pos.y + 1 );	// convert zero-based to one-based
-	*/
-
 	POSITION	pos = GetFirstSelectedItemPosition();
 	if (!pos)
 		return;
