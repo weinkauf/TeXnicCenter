@@ -25,6 +25,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:38+02  sven_wiegand
 * Initial revision
 *
@@ -169,5 +172,7 @@
 #define IDS_FIND_INCREMENTAL_BACKWARD   8641
 #define IDS_FIND_INCREMENTAL_FAILED     8642
 //END SW
+
+#define IDS_EDIT_REPLACE_COUNT          8643
 
 #endif

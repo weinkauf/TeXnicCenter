@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:59  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:29+02  sven_wiegand
 * Initial revision
 *
@@ -83,6 +86,7 @@ public:
 
 // Implementation
 protected:
+	int m_nReplaceCount;
 
 	// Generated message map functions
 	//{{AFX_MSG(CEditReplaceDlg)
