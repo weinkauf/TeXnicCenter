@@ -200,7 +200,7 @@ public:
 	int m_nWndMenuMaxEntries;
 
 	///////////////////////////////////////////////////////////////////
-	// file	
+	// File	Handling
 
 	/** TRUE, if TeXnicCenter should always save newly created files. */
 	BOOL m_bSaveNewDocuments;
@@ -222,6 +222,16 @@ public:
 
 	/** Last opened Folder for Load- and Save-Dialogs. */
 	CString m_strLastOpenedFolder;
+
+	///////////////////////////////////////////////////////////////////
+	// File	Handling - Template dialog params
+
+	/** Last opened tab of the project template dialog */
+	int m_nLastTabProjectTemplateDlg;
+
+	/** Last opened tab of the document template dialog */
+	int m_nLastTabDocumentTemplateDlg;
+
 
 	///////////////////////////////////////////////////////////////////
 	// character replacement

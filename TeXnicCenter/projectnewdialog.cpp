@@ -400,9 +400,8 @@ CProjectNewDialog::CProjectNewDialog(CWnd* pParent /*=NULL*/)
 	if (pItem)
 		AddTemplateItem(CString((LPCTSTR)STE_EMPTYPROJECT_CATEGORY), pItem);
 
-	// Get Project base path
-//	m_strProjectBasePath = g_configuration.m_strDefaultPath;
-	m_strProjectBasePath = AfxGetDefaultDirectory(true,true);
+	//Get Project base path
+	m_strProjectBasePath = AfxGetDefaultDirectory(true, true);
 
 	if (m_strProjectBasePath.IsEmpty())
 	{
@@ -412,7 +411,7 @@ CProjectNewDialog::CProjectNewDialog(CWnd* pParent /*=NULL*/)
 			SHGetPathFromIDList(lpidl, m_strProjectBasePath.GetBuffer(MAX_PATH));
 			m_strProjectBasePath.ReleaseBuffer();
 
-			// free memory
+			//free memory
 			LPMALLOC	lpMalloc;
 			SHGetMalloc(&lpMalloc);
 			if(lpMalloc)
@@ -422,6 +421,15 @@ CProjectNewDialog::CProjectNewDialog(CWnd* pParent /*=NULL*/)
 
 	m_strProjectPath = m_strProjectBasePath;
 	m_nFileFormat = g_configuration.m_nStandardFileFormat;
+
+	//Set the info about the first tab to be activated
+	m_nFirstTab = g_configuration.m_nLastTabProjectTemplateDlg;
+}
+
+CProjectNewDialog::~CProjectNewDialog()
+{
+	//First tab to be activated, when dialog is run next time
+	g_configuration.m_nLastTabProjectTemplateDlg = m_nLastTab;
 }
 
 

@@ -199,6 +199,13 @@ protected:
 	//}}AFX_DATA
 
 // attributes
+protected:
+	///The Tab of m_wndCategoriesTab to be activated first.
+	int m_nFirstTab;
+
+	///The Tab of m_wndCategoriesTab that was activated last.
+	int m_nLastTab;
+
 private:
 	/** All valid file names (including wild cards) */
 	CStringArray m_astrFilters;

@@ -80,6 +80,8 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	SerializeProfileString( strSection, "DefaultPath", &m_strDefaultPath, direction );
 	SerializeProfileInt( strSection, "OpenDocWndMaximized", (int*)&m_bOpenDocWndMaximized, direction, FALSE );
 	SerializeProfileString( strSection, "LastOpenedFolder", &m_strLastOpenedFolder, direction );
+	SerializeProfileInt(strSection, "LastTabProjectTemplateDlg", (int*)&m_nLastTabProjectTemplateDlg, direction, 0);
+	SerializeProfileInt(strSection, "LastTabDocumentTemplateDlg", (int*)&m_nLastTabDocumentTemplateDlg, direction, 0);
 
 	// quotation mark replacement
 	SerializeProfileInt( strSection, "ReplaceQuotationMarks", (int*)&m_bReplaceQuotationMarks, direction, TRUE );

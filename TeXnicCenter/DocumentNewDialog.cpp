@@ -354,14 +354,22 @@ CDocumentNewDialog::CDocumentNewDialog(CWnd* pParent /*=NULL*/)
 	//{{AFX_DATA_INIT(CDocumentNewDialog)
 	//}}AFX_DATA_INIT
 
-	// Add template for empty project
+	//Add template for empty project
 	CTemplateItem	*pItem = new CEmptyDocumentTemplateItem;
 	if (pItem)
 		AddTemplateItem(CString((LPCTSTR)STE_EMPTYDOCUMENT_CATEGORY), pItem);
 
 	m_nFileFormat = g_configuration.m_nStandardFileFormat;
+
+	//Set the info about the first tab to be activated
+	m_nFirstTab = g_configuration.m_nLastTabDocumentTemplateDlg;
 }
 
+CDocumentNewDialog::~CDocumentNewDialog()
+{
+	//First tab to be activated, when dialog is run next time
+	g_configuration.m_nLastTabDocumentTemplateDlg = m_nLastTab;
+}
 
 void CDocumentNewDialog::DoDataExchange(CDataExchange* pDX)
 {
