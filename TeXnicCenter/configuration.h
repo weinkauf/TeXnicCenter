@@ -211,6 +211,9 @@ public:
 	/** Default path. */
 	CString m_strDefaultPath;
 
+	/** Project path. */
+	CString m_strProjectPath;
+
 	///////////////////////////////////////////////////////////////////
 	// character replacement
 

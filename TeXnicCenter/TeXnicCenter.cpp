@@ -398,7 +398,8 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	// load last project of last session
 	if( g_configuration.m_bLoadLastProject && !g_configuration.m_strLastProject.IsEmpty() )
-		OpenProject( g_configuration.m_strLastProject );
+		if(OpenProject( g_configuration.m_strLastProject ) )
+			g_configuration.m_strProjectPath = g_configuration.m_strLastProject;
 
 	// update frame window
 	m_pMainWnd->SendMessage( WM_COMMAND, ID_OPTIONS_CHANGED );
@@ -913,20 +914,24 @@ void CTeXnicCenterApp::OnFileOpen()
 		OFN_FILEMUSTEXIST, CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
 
 	// Get default path
-	m_strPersonalDir = g_configuration.m_strDefaultPath;
-	if (m_strPersonalDir.IsEmpty())
+	m_strPersonalDir = g_configuration.m_strProjectPath;
+	if ( m_strPersonalDir.IsEmpty() )
 	{
-		LPITEMIDLIST	lpidl;
-		if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
+		m_strPersonalDir = g_configuration.m_strDefaultPath;
+		if ( m_strPersonalDir.IsEmpty() )
 		{
-			SHGetPathFromIDList(lpidl, m_strPersonalDir.GetBuffer(MAX_PATH));
-			m_strPersonalDir.ReleaseBuffer();
+			LPITEMIDLIST	lpidl;
+			if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
+			{
+				SHGetPathFromIDList(lpidl, m_strPersonalDir.GetBuffer(MAX_PATH));
+				m_strPersonalDir.ReleaseBuffer();
 
-			// free memory
-			LPMALLOC	lpMalloc;
-			SHGetMalloc(&lpMalloc);
-			if(lpMalloc)
-				lpMalloc->Free(lpidl);
+				// free memory
+				LPMALLOC	lpMalloc;
+				SHGetMalloc(&lpMalloc);
+				if(lpMalloc)
+					lpMalloc->Free(lpidl);
+			}
 		}
 	}
 	dlg.m_ofn.lpstrInitialDir = m_strPersonalDir;
@@ -944,7 +949,6 @@ void CTeXnicCenterApp::OnProjectOpen()
 	// display file dialog
 	CFileDialog		dialog( TRUE, NULL, NULL, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, 
 		GetProjectFileFilter(), AfxGetMainWnd() );
-//	dialog.m_ofn.lpstrInitialDir = g_configuration.m_strDefaultPath;
 	
 	// Get default path
 	m_strPersonalDir = g_configuration.m_strDefaultPath;
@@ -969,7 +973,8 @@ void CTeXnicCenterApp::OnProjectOpen()
 		return;
 
 	// open project file
-	OpenProject( dialog.GetPathName() );
+	if( OpenProject( dialog.GetPathName() ) )
+	  g_configuration.m_strProjectPath = dialog.GetPathName();
 }
 
 /*
