@@ -1,5 +1,9 @@
 2002/04/11 niteria
 - Translation of the spell checker resources.
+- Fixed Bug 82 (old list): Problems with jumping to the error/warning source line.
+- Fixed Bug 542550: Bad boxes for alignments are not catched.
+- Fixed Bug 542552: Package warnings are not catched.
+- Fixed Bug 542555: pdftex: Reporting but not jumping to errors/warnings/bad boxes.
 
 2002/04/10 niteria
 - Fixed Bug 541810: First Chance Exception in COutputBuilder::RunPostProcessors.
