@@ -18,6 +18,11 @@
 */
 
 /**
+        @defgroup bcgext Extensions to BCG
+        @brief Extensions to BCG made for TeXnicCenter.
+*/
+
+/**
         @defgroup guielements GUI Elements
         @brief Additional GUI Elements implemented for TeXnicCenter.
 */
