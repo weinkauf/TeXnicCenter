@@ -38,11 +38,7 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// FileCleanConfirmDialog.h : header file
-//
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileCleanConfirmDialog dialog
 
 /** Dialog for confirming the deletion of files.
 
@@ -50,7 +46,6 @@
 
 @author Tino Weinkauf
 */
-
 class CFileCleanConfirmDialog : public CDialog
 {
 // Construction
