@@ -63,7 +63,10 @@ public:
 	/** Set this member to <VAR>false</VAR> to surpress spell check done message. */
 	boolean m_bDoneMessage;
 
-	/** Reset the view and speller */
+	/** Reset the view and speller 
+	@param pBuddy The view this dialog is attached to.
+	@param pSpell The spell object that does most of the work.
+	*/
 	void Reset(CCrystalEditView *pBuddy, MySpell *pSpell);
 
 // Overrides
@@ -75,8 +78,14 @@ public:
 
 // Implementation
 protected:
-	BOOL IsIgnoreWord(char *pWord);
+	/**
+	Handle the spelling error by configuring the suggestion list.
+	*/
 	void OnSpellError();
+
+	/**
+	Find the next word that is not found in the spell checker.
+	*/
 	void DoNextWord();
 
 	// Generated message map functions
@@ -89,6 +98,8 @@ protected:
 	afx_msg void OnSpellResume();
 	afx_msg void OnSpellReplace();
 	afx_msg void OnDblclkSpellSuggest(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnSpellAdd();
+	afx_msg void OnSpellReplaceAll();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -102,7 +113,6 @@ protected:
 	boolean m_bEditing;
 	boolean m_bNoSuggestions;
 	boolean m_bNewLine;
-	CPtrList m_lstIgnoreWords;
 
 public:
 	// These a general routines that should be put somewhere else

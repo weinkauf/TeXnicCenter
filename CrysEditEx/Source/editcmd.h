@@ -25,6 +25,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.5  2002/04/25 18:53:53  cnorris
+* background spell check support
+*
 * Revision 1.4  2002/04/23 21:09:10  cnorris
 * realtime spell check
 *
@@ -205,9 +208,10 @@
 #define IDC_SPELL_IGNORE                8655
 #define IDC_SPELL_NEXT                  8656
 #define IDC_SPELL_SUGGEST               8657
-#define IDS_SPELL_IGNORE                8658
-#define IDS_SPELL_UNEDIT                8659
-#define IDS_SPELL_DONE                  8660
-#define IDS_SPELL_NO_SUGGESTIONS        8661
+#define IDC_SPELL_ADD                   8658
+#define IDS_SPELL_IGNORE                8659
+#define IDS_SPELL_UNEDIT                8660
+#define IDS_SPELL_DONE                  8661
+#define IDS_SPELL_NO_SUGGESTIONS        8662
 
 #endif
