@@ -196,8 +196,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,5,5,0
- PRODUCTVERSION 0,5,5,0
+ FILEVERSION 0,5,6,0
+ PRODUCTVERSION 0,5,6,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -215,14 +215,14 @@ BEGIN
             VALUE "Comments", "Beta version!\0"
             VALUE "CompanyName", "ToolsCenter (www.ToolsCenter.org)\0"
             VALUE "FileDescription", "TeXnicCenter\0"
-            VALUE "FileVersion", "1 Beta 5.05\0"
+            VALUE "FileVersion", "1 Beta 5.06\0"
             VALUE "InternalName", "TeXnicCenter\0"
-            VALUE "LegalCopyright", "Copyright © 1999-2001 ToolsCenter\0"
+            VALUE "LegalCopyright", "Copyright © 1999-2002 ToolsCenter\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "TEXCNTR.EXE\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "TeXnicCenter\0"
-            VALUE "ProductVersion", "1 Beta 5.05\0"
+            VALUE "ProductVersion", "1 Beta 5.06\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -727,7 +727,7 @@ STYLE WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    LTEXT           "© 1999-2001",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
+    LTEXT           "© 1999-2002",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
     PUSHBUTTON      "ToolsCenter",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
     CTEXT           "Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,
                     SS_CENTERIMAGE
@@ -3997,7 +3997,7 @@ BEGIN
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter Benutzerforum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
-                            "http://groups.yahoo.com/group/TeXnicCenter-Users\nTeXnicCenter Entwicklerforum\nhttp://groups.yahoo.com/group/TeXnicCenter-Developers"
+                            "http://groups.yahoo.com/group/TeXnicCenter-Developers\nTeXnicCenter Entwicklerforum\nhttp://groups.yahoo.com/group/TeXnicCenter-Developers"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4973,11 +4973,11 @@ BEGIN
             MENUITEM "",                            ID_INSERT_SPACEWORD
         END
         MENUITEM SEPARATOR
-        POPUP "Miscellaneous Symbols"
+        POPUP "Several Symbols"
         BEGIN
             MENUITEM "partial",                     ID_INSERT_PARTIAL
             MENUITEM "nabla",                       ID_INSERT_NABLA
-            MENUITEM "infinity",                    ID_INSERT_INFTY
+            MENUITEM "infty",                       ID_INSERT_INFTY
             MENUITEM "Im",                          ID_INSERT_IM2
             MENUITEM "Re",                          ID_INSERT_RE2
             MENUITEM "aleph",                       ID_INSERT_ALEPH
@@ -5006,7 +5006,7 @@ BEGIN
             MENUITEM "triangle",                    ID_INSERT_TRIANGLE
             MENUITEM "clubsuit",                    ID_INSERT_CLUBSUIT
             MENUITEM "diamondsuit",                 ID_INSERT_DIAMONDSUIT
-            MENUITEM "heartsuit",                   ID_INSERT_HEARSUIT
+            MENUITEM "hearsuit",                    ID_INSERT_HEARSUIT
             MENUITEM "spadesuit",                   ID_INSERT_SPADESUIT
         END
         MENUITEM SEPARATOR
@@ -7230,7 +7230,7 @@ BEGIN
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter User Forum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
-                            "http://groups.yahoo.com/group/TeXnicCenter-Users\nTeXnicCenter Developer Forum\nhttp://groups.yahoo.com/group/TeXnicCenter-Developers"
+                            "http://groups.yahoo.com/group/TeXnicCenter-Developers\nTeXnicCenter Developer Forum\nhttp://groups.yahoo.com/group/TeXnicCenter-Developers"
 END
 
 STRINGTABLE DISCARDABLE 
