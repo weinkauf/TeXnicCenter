@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.10  2003/12/23 14:50:40  svenwiegand
+* Again modified some resource and language switching related stuff. Hoping this will work now for SmartTranslator...
+*
 * Revision 1.9  2003/12/16 20:04:38  svenwiegand
 * Implemented Feature 726766: "Option for selecting the language for the GUI"
 *
@@ -281,6 +284,16 @@ public:
 
 	static HINSTANCE GetResourceHandle();
 
+	/** Stops incremental search.
+
+		@param bKeepSelection
+			Whether to stay at the found place and keep the selection,
+			or return to where the search started.
+
+		@returns true, if incremental search was active before calling this func.
+		@returns false, otherwise.
+	*/
+	bool OnEditFindIncrementalStop(bool bKeepSelection);
 
 protected:
 	int m_nTopLine, m_nOffsetChar;
@@ -596,15 +609,15 @@ protected:
 	*/
 	virtual void OnSetStatusMessage(CWnd *pStatusBar, LPCTSTR lpszMessage);
 
-	/**
-	Called by OnFindIncrementalForward() and OnFindIncrementalBackward().
+	/**	Finds a term incrementally.
 
 	@param bFindNextOccurence
 		TRUE, if the method should look for the next occurence of the
 		search string in search direction.
 
-	@see #OnFindIncrementalForward
-	@see #OnFindIncrementalBackward
+	@see OnEditFindIncrementalForward
+	@see OnEditFindIncrementalBackward
+	@see OnEditFindIncrementalStop
 	*/
 	void OnEditFindIncremental( BOOL bFindNextOccurence = FALSE );
 
