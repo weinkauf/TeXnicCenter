@@ -3,11 +3,14 @@
 
 class Affix
 {
+public: 
+	virtual ~Affix() {}
+
 protected:
-  int                 numents;
-  struct affentry *   first;
+	int numents;
+	struct affentry *first;
 #if 0
-  virtual char* check(...) {};
+	virtual char* check(...) {};
 #endif
 };
 

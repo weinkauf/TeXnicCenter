@@ -7,27 +7,26 @@
 
 class Prefix : public Affix
 {
-       AffixMgr*           pmyMgr;
+	AffixMgr * pmyMgr;
 public:
-       unsigned char flag;
-       Prefix(AffixMgr* pmgr, unsigned char a, int num, affentry* dp );
-       ~Prefix();
+	unsigned char flag;
+	Prefix(AffixMgr* pmgr, unsigned char a, int num, affentry* dp );
+	~Prefix();
 
-       struct hentry * check(const char * word, int len);
+	struct hentry* check(const char * word, int len);
 };
 
 
 
 class Suffix : public Affix
 {
-       AffixMgr*           pmyMgr;
+	AffixMgr *pmyMgr;
 public:
-       unsigned char flag;
-       Suffix(AffixMgr* pmgr, unsigned char a, int num, affentry* dp );
-       ~Suffix();
+	unsigned char flag;
+	Suffix(AffixMgr* pmgr, unsigned char a, int num, affentry* dp );
+	~Suffix();
 
-       struct hentry * check(const char * word, int len, int optflags, Prefix* ppfx);
-
+	struct hentry* check(const char * word, int len, int optflags, Prefix* ppfx);
 };
 
 #endif
