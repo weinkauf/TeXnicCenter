@@ -118,6 +118,7 @@ BEGIN
                                                     CONTROL, NOINVERT
     "K",            ID_FORMAT_TEXTIT,       VIRTKEY, CONTROL, NOINVERT
     "L",            ID_INSERT_ITEMLABEL,    VIRTKEY, CONTROL, ALT, NOINVERT
+    "M",            ID_EDIT_SEL_BIGGER_BLOCK, VIRTKEY, CONTROL, NOINVERT
     "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
     "N",            ID_INSERT_ENUMERATE,    VIRTKEY, CONTROL, ALT, NOINVERT
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
@@ -962,6 +963,7 @@ BEGIN
         MENUITEM "&Einfügen",                   ID_EDIT_PASTE
         MENUITEM SEPARATOR
         MENUITEM "Alles &markieren",            ID_EDIT_SELECT_ALL
+        MENUITEM "Klammerbl&ock markieren",     ID_EDIT_SEL_BIGGER_BLOCK
         MENUITEM SEPARATOR
         MENUITEM "&Blockkommentar einfügen",    ID_EDIT_BLOCKCOMMENT_INSERT
         MENUITEM "B&lockkommentar entfernen",   ID_EDIT_BLOCKCOMMENT_REMOVE
@@ -3546,6 +3548,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_BCGCBRESDLL         "BCGCBResDEU.dll"
     STE_CRYSTAL_EDIT_RESOURCE_DLL "CrysEdResDeutsch.dll"
+    STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED 
+                            "Es konnten nicht alle Fenster der Sitzung wiederhergestellt werden."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4319,6 +4323,8 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_EDIT_FIND_PREVIOUS   "Wiederholt die letzte Suche in Rückwärtsrichtung.\nWeitersuchen (rückwärts)"
+    ID_EDIT_SEL_BIGGER_BLOCK 
+                            "Markiert den Block zwischen den nächstliegenden Klammern.\nKlammerblock markieren"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4970,6 +4976,7 @@ BEGIN
         MENUITEM "&Paste",                      ID_EDIT_PASTE
         MENUITEM SEPARATOR
         MENUITEM "Select &All",                 ID_EDIT_SELECT_ALL
+        MENUITEM "&Select Brace Block",         ID_EDIT_SEL_BIGGER_BLOCK
         MENUITEM SEPARATOR
         MENUITEM "&Insert Block Comment",       ID_EDIT_BLOCKCOMMENT_INSERT
         MENUITEM "Remove &Block Comment",       ID_EDIT_BLOCKCOMMENT_REMOVE
@@ -7481,6 +7488,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_BCGCBRESDLL         "none"
     STE_CRYSTAL_EDIT_RESOURCE_DLL "CrysEdResEnglish.dll"
+    STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED 
+                            "Not all of the windows in the session could be opened."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -8251,6 +8260,8 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_EDIT_FIND_PREVIOUS   "Repeats the last searrch backward\nFind Next (backward)"
+    ID_EDIT_SEL_BIGGER_BLOCK 
+                            "Selects all text to the left and right until the next braces.\nSelect Brace Block"
 END
 
 STRINGTABLE DISCARDABLE 

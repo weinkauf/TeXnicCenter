@@ -25,6 +25,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.2  2005/03/08 16:36:08  vachis
+* Selection of block between bracket pairs in a hierarchical manner (Ctrl+M)
+* Bracket highlighting disabled if a selection is present
+* New default colours for bracket highlighting
+*
 * Revision 1.1.1.1  2002/02/26 08:11:50  svenwiegand
 * Initial revision
 *
@@ -79,7 +84,7 @@
 #define		ID_EDIT_TEXT_END			37124
 #define		ID_EDIT_EXT_TEXT_END		37125
 #define		ID_EDIT_FIND_PREVIOUS		37126
-#define		ID_EDIT_SEL_BIGGER_BLOCK				37127
+#define		ID_EDIT_SEL_BIGGER_BLOCK	37127
 
 //	Bookmark commands
 #define		ID_EDIT_TOGGLE_BOOKMARK0	37200

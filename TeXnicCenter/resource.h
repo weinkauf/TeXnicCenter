@@ -4,6 +4,7 @@
 //
 #define STE_BCGCBRESDLL                 17
 #define STE_CRYSTAL_EDIT_RESOURCE_DLL   18
+#define STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED 19
 #define STE_LANGUAGE_NEW                32
 #define STE_RESOURCE_CONFLICT           33
 #define STE_LANGUAGE_GERMAN             34
