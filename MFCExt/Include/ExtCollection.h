@@ -3,7 +3,7 @@
 * This file is part of the MFCExt-Library
 *
 * Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-2001 ToolsCenter
+* Copyright (C) 2000-2002 ToolsCenter
 * 
 * This library is free software; you can redistribute it and/or
 * modify, but leave the headers intact and do not remove any 
@@ -19,7 +19,14 @@
 *
 ********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "../source/DoubleBuffer.h"
 #include "../source/SortArray.h"
 #include "../source/MRUList.h"
 #include "../source/MRUStringList.h"
+#include "../source/UniqueStringList.h"
