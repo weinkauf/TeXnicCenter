@@ -59,6 +59,7 @@
 #include <ExtTools.h>
 #include <ExtApp.h>
 #include <ExtCom.h>
+#include <ExtDialog.h>
 #include <cregex.h>
 #include <CrysEditEx.h>
 

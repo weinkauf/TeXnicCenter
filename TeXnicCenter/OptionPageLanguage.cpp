@@ -270,7 +270,7 @@ void COptionPageLanguage::OnOptionsSpellBrowse()
 	CWnd *pPersonalDictionary = GetDlgItem(IDC_OPTIONS_SPELL_PDICT);
 	CString defaultPath;
 	pPersonalDictionary->GetWindowText( defaultPath );
-	CFileDialog dlg ( true, NULL, NULL, OFN_PATHMUSTEXIST, 
+	CFileDialogEx dlg ( true, NULL, NULL, OFN_PATHMUSTEXIST, 
 		AfxLoadString(STE_FILE_DICFILTER) );
 	if ( !defaultPath.IsEmpty() )
 	{

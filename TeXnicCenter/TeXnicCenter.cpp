@@ -912,7 +912,7 @@ void CTeXnicCenterApp::OnDisableStdCmd(CCmdUI* pCmdUI)
 
 void CTeXnicCenterApp::OnFileOpen() 
 {
-	CFileDialog	dlg( 
+	CFileDialogEx	dlg( 
 		TRUE, 
 		GetLatexString( CDocTemplate::filterExt ), NULL,  
 		OFN_FILEMUSTEXIST, CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
@@ -954,7 +954,7 @@ void CTeXnicCenterApp::OnFileOpen()
 void CTeXnicCenterApp::OnProjectOpen() 
 {
 	// display file dialog
-	CFileDialog		dialog( TRUE, NULL, NULL, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, 
+	CFileDialogEx		dialog( TRUE, NULL, NULL, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, 
 		GetProjectFileFilter(), AfxGetMainWnd() );
 	
 	// Get default path

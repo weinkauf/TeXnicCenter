@@ -91,7 +91,7 @@ void COutputWizardViewer::DoDataExchange(CDataExchange* pDX)
 
 void COutputWizardViewer::OnViewerBrowse() 
 {
-	CFileDialog	dlg( 
+	CFileDialogEx	dlg( 
 		TRUE, NULL, m_strPath, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, 
 		CString((LPCTSTR)STE_COMPILER_FILTER), this);
 

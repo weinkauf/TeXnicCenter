@@ -109,7 +109,7 @@ void CBrowseButton::Browse()
 	// Browse
 	if (m_bBrowseForFile)
 	{
-		CFileDialog	dlg(
+		CFileDialogEx	dlg(
 			m_dataFileDialog.bOpenFileDialog,
 			m_dataFileDialog.strDefExt, strPath,
 			m_dataFileDialog.dwFlags,

@@ -90,7 +90,7 @@ void CProjectPropertyDialog::OnBrowseMainFile()
 
 	SetCurrentDirectory(m_strProjectDir);
 
-	CFileDialog	dlg( 
+	CFileDialogEx	dlg( 
 		TRUE, NULL, 
 		m_strMainFile.IsEmpty()? NULL : (LPCTSTR)CPathTool::Cat(m_strProjectDir, m_strMainFile), 
 		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, 
