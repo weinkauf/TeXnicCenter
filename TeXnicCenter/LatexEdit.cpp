@@ -755,7 +755,6 @@ void CLatexEdit::OnBlockComment(const UINT nID)
 	SetFocus();
 }
 
-
 void CLatexEdit::OnUpdateTextModulesList(CCmdUI *pCmdUI)
 {
 	CTextModuleGroup* ptmGroup = &g_configuration.m_aTextModules;
@@ -769,14 +768,15 @@ void CLatexEdit::OnUpdateTextModulesList(CCmdUI *pCmdUI)
 		//
 
 		// update message from menu bar?
-		if (!IsMenu(pCmdUI->m_pSubMenu->GetSafeHmenu()))
+		//CMenu	*pMenu = pCmdUI->m_pSubMenu;
+		CMenu* pMenu = pCmdUI->m_pMenu;
+		if (!pMenu || !IsMenu(pMenu->GetSafeHmenu()))
 			return;
 
-		CMenu	*pMenu = pCmdUI->m_pSubMenu;
 		int i;
 
 		//Delete old entries
-		for(i=pMenu->GetMenuItemCount();i>=0;--i)
+		for(i=pMenu->GetMenuItemCount();i>=3;--i)
 			pMenu->DeleteMenu(i, MF_BYPOSITION);
 		
 		//Anything defined at all?
@@ -786,6 +786,11 @@ void CLatexEdit::OnUpdateTextModulesList(CCmdUI *pCmdUI)
 			pCmdUI->Enable(false);
 			return;
 		}
+
+		//There is something to insert. So lets delete the last entry.
+		ASSERT(pMenu->GetMenuItemCount() == 3);
+		if (pMenu->GetMenuItemCount() > 2)
+			pMenu->DeleteMenu(2, MF_BYPOSITION);
 
 		for(i=0;i<ptmGroup->GetSize();i++)
 		{
