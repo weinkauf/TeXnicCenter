@@ -1,3 +1,11 @@
+2002/05/01 niteria
+- Fixed Bug 551125: %rm and %rc not recognized by AfxExpandPlaceholder
+- Better handling of invalid patterns for "Clean Project".
+- New MenuButton, which is able to display dialogs as well.
+  Corresponding Dialog for defining placeholders for single files.
+  Based on this, I could simplify the menus for the placeholders very much.
+- New layout for Options->Spelling.
+
 2002/04/29 cnorris
 - realtime spell check bug fix
 
