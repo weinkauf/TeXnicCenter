@@ -1126,15 +1126,16 @@
 #define ID_PHS_DOLLAR                   38324
 #define ID_LATEX_CLEAN                  38325
 #define ID_PH_MAINOPTIONS               38326
-
+#define ID_BG_UPDATE_PROJECT            38327
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        256
-#define _APS_NEXT_COMMAND_VALUE         38327
+#define _APS_NEXT_COMMAND_VALUE         38328
 #define _APS_NEXT_CONTROL_VALUE         1298
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif
+
