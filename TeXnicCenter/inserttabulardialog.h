@@ -38,13 +38,15 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// InsertTabularDialog.h : Header-Datei
-//
+
 #include "InsertFloatObjectDialog.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Dialogfeld CInsertTabularDialog 
+/** Lets the user insert a table.
 
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CInsertTabularDialog : public CInsertFloatObjectDialog
 {
 // types
