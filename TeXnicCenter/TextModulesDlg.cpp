@@ -50,7 +50,8 @@ static char THIS_FILE[] = __FILE__;
 CTextModulesDlg::CTextModulesDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CTextModulesDlg::IDD, pParent),
 	nOldSelectedItem(-1),
-	bLock(false)
+	bLock(false),
+	bNameChanged(false)
 {
 	//{{AFX_DATA_INIT(CTextModulesDlg)
 	m_strRight = _T("");
@@ -64,6 +65,8 @@ void CTextModulesDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CTextModulesDlg)
+	DDX_Control(pDX, IDC_TEXTMODULES_BEFORECURSOR, m_wndBeforeEdit);
+	DDX_Control(pDX, IDC_TEXTMODULES_AFTERCURSOR, m_wndAfterEdit);
 	DDX_Control(pDX, IDC_TEXTMODULES_NAME, m_wndNameEdit);
 	DDX_Control(pDX, IDC_TEXTMODULES_MODULES, m_wndModulesList);
 	DDX_Control(pDX, IDC_TEXTMODULES_DELETEMODULE, m_wndDelBtn);
@@ -80,6 +83,8 @@ BEGIN_MESSAGE_MAP(CTextModulesDlg, CDialog)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_TEXTMODULES_MODULES, OnItemchangedModules)
 	ON_BN_CLICKED(IDC_TEXTMODULES_NEWMODULE, OnNewTextModule)
 	ON_BN_CLICKED(IDC_TEXTMODULES_DELETEMODULE, OnDeleteTextModule)
+	ON_EN_CHANGE(IDC_TEXTMODULES_NAME, OnChangeName)
+	ON_EN_KILLFOCUS(IDC_TEXTMODULES_NAME, OnKillFocusName)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -161,8 +166,8 @@ void CTextModulesDlg::UpdateTree(int nIDSelect /*= -1*/)
 		}
 	}
 
-	//Get the Focus!
-	m_wndModulesList.SetFocus();
+//	//Get the Focus!
+//	m_wndModulesList.SetFocus();
 }
 
 
@@ -336,3 +341,28 @@ void CTextModulesDlg::ClearControls()
 
 	UpdateData(false);
 }
+
+void CTextModulesDlg::OnChangeName() 
+{
+	CString newName;
+	LPTSTR buffer = newName.GetBuffer(200);
+	buffer[199] = _T('\0'); //To be on the safe side
+	int nCopied = m_wndNameEdit.GetLine(0, buffer, 199);
+	newName.ReleaseBuffer(nCopied);
+	if ( (nCopied == 0) || (nCopied > 199) ) return;
+
+	UpdateNameInTree(nOldSelectedItem, newName);
+	bNameChanged = true;
+}
+
+void CTextModulesDlg::OnKillFocusName() 
+{
+	//Did the name change?
+	if (bNameChanged)
+	{
+		bNameChanged = false;
+		UpdateOldSelectedItem();
+	}
+}
+
+
