@@ -33,6 +33,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "BrowseButton.h"
 
 class COptionPageFile : public CPropertyPage
 {
@@ -67,7 +68,6 @@ protected:
 	//{{AFX_MSG(COptionPageFile)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnUpdateCtrls();
-	afx_msg void OnBrowseDefaultPath();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -76,6 +76,7 @@ protected:
 protected:
 	//{{AFX_DATA(COptionPageFile)
 	enum { IDD = IDD_OPTIONS_FILE };
+	CBrowseButton	m_wndBrowseBtn;
 	CStatic	m_wndSaveIntervalLabel2;
 	CStatic	m_wndSaveIntervalLabel1;
 	CEdit	m_wndSaveIntervalEdit;
