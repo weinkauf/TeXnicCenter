@@ -312,7 +312,8 @@ void CInsertGraphicDialog::OnGraphicBrowse()
 		AfxLoadString( STE_GRAPHIC_FILES ), this );
 
 	//Get default path
-	dlg.m_ofn.lpstrInitialDir = AfxGetDefaultDirectory();
+	CString strInitialDir = AfxGetDefaultDirectory();
+	dlg.m_ofn.lpstrInitialDir = strInitialDir;
 
 	if( dlg.DoModal() != IDOK )
 		return;

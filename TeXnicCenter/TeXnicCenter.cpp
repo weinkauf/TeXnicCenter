@@ -917,7 +917,9 @@ void CTeXnicCenterApp::OnFileOpen()
 		GetLatexString( CDocTemplate::filterExt ), NULL,  
 		OFN_FILEMUSTEXIST, CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
 
-	dlg.m_ofn.lpstrInitialDir = AfxGetDefaultDirectory();
+	//Get default path
+	CString strInitialDir = AfxGetDefaultDirectory();
+	dlg.m_ofn.lpstrInitialDir = strInitialDir;
 
 	if( dlg.DoModal() != IDOK )
 		return;
@@ -930,10 +932,13 @@ void CTeXnicCenterApp::OnFileOpen()
 void CTeXnicCenterApp::OnProjectOpen() 
 {
 	// display file dialog
-	CFileDialogEx		dialog( TRUE, NULL, NULL, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, 
-		GetProjectFileFilter(), AfxGetMainWnd() );
+	CFileDialogEx dialog(TRUE, NULL, NULL,
+						OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, 
+						GetProjectFileFilter(), AfxGetMainWnd());
 	
-	dialog.m_ofn.lpstrInitialDir = AfxGetDefaultDirectory();
+	//Get default path
+	CString strInitialDir = AfxGetDefaultDirectory();
+	dialog.m_ofn.lpstrInitialDir = strInitialDir;
 
 	if( dialog.DoModal() == IDCANCEL )
 		return;
