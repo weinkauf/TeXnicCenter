@@ -160,6 +160,7 @@
 #define IDB_TEXNICCENTER                236
 #define STE_LATEX_REF                   240
 #define STE_LATEX_PAGEREF               241
+#define STE_LATEX_EQREF                 242
 #define IDB_PARSE_VIEW                  243
 #define IDD_OPTIONS_LANGUAGE            245
 #define IDD_OPTIONS_FILECLEAN           249

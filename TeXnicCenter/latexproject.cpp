@@ -830,10 +830,21 @@ void CLatexProject::OnItemInsertRef()
 	if( !pView )
 		return;
 
+	UINT strID = 0;
+	switch (m_aStructureItems[m_nCurrentStructureItem].m_nType)
+	{
+		case CStructureParser::equation:
+			strID = STE_LATEX_EQREF;
+			break;
+
+		default:
+			strID = STE_LATEX_REF;
+			break;
+	}
+
 	pView->InsertText( 
-		AfxFormatString1( 
-			STE_LATEX_REF, 
-			m_aStructureItems[m_nCurrentStructureItem].m_strLabel ) );
+		AfxFormatString1(strID,
+				m_aStructureItems[m_nCurrentStructureItem].m_strLabel) );
 	pView->SetFocus();
 }
 
