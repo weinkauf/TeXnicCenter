@@ -1,3 +1,7 @@
+2002/04/23 niteria
+- Fixed Bug 88 (old list): The 'Search in Files' does not recognize special
+  characters like german umlauts (ä, ö, etc.).
+
 2002/04/22 niteria
 - Fixed Bug 538169: Release Version fails on opening a project.
   And a deadlock related to the structureparser.
