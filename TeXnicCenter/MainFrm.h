@@ -147,6 +147,12 @@ public:
 	*/
 	void ActivateOutputTab( int nTab );
 
+	/**
+	Should be called, when the user may have changed the external, user
+	defined tools, to update the tools menu.
+	*/
+	void RebuildToolsMenu();
+
 // implementation helpers
 protected:
 	/**
@@ -274,6 +280,9 @@ protected:
 	afx_msg void OnCheckCtrlBarVisible( CCmdUI *pCmdUI );
 	afx_msg LRESULT OnToolbarContextMenu( WPARAM wp, LPARAM lp );
 	afx_msg LRESULT OnResetToolbar( WPARAM wParam, LPARAM lParam );
+	afx_msg LRESULT OnCustomizationMode( WPARAM wParam, LPARAM lParam );
+	afx_msg void OnUpdateUserTool(CCmdUI *pCmdUI);
+	afx_msg void OnExecuteUserTool(UINT nIDEvent);
 
 	//BOOL InitializeDockingWindows();
 

@@ -129,6 +129,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CBCGMDIFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_FIND, OnCheckCtrlBarVisible)
 	ON_REGISTERED_MESSAGE(BCGM_TOOLBARMENU, OnToolbarContextMenu)
 	ON_REGISTERED_MESSAGE(BCGM_RESETTOOLBAR, OnResetToolbar)
+	ON_REGISTERED_MESSAGE(BCGM_CUSTOMIZETOOLBAR, OnCustomizationMode)
+	ON_UPDATE_COMMAND_UI_RANGE(ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST, OnUpdateUserTool)
+	ON_COMMAND_RANGE(ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST, OnExecuteUserTool)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -1241,6 +1244,76 @@ void CMainFrame::FullScreenOff()
 }
 
 
+void CMainFrame::RebuildToolsMenu()
+{
+	// we only need to do this, when we do not use the BCG menu bar
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers)
+		return;
+
+	//
+	// Get the name of the tools menu from the reference menu
+	//
+	// (if MDI-childs are maximized, then the menu of our main frame
+	// also contains items for the MDI childs system menu and the 
+	// minimize, maximize and close buttons for the MDI child. So we
+	// cannot determine the tools submenu by index, because the index
+	// may change from time to time depending on if the MDI childs are
+	// maximized or not).
+	const int	nToolsMenuIndexOffset = 3;
+	CMenu	mnuRef;
+	VERIFY(mnuRef.LoadMenu(IDR_MAINFRAME));
+
+	CString	strToolsMenuTitle;
+	mnuRef.GetMenuString(mnuRef.GetMenuItemCount()-nToolsMenuIndexOffset, strToolsMenuTitle, MF_BYPOSITION);
+
+	//
+	// Get the tools menu from the current menu
+	//
+	int	nToolsMenuIndex = -1;
+	for (int nItem = 0; nItem < m_stdMenu.GetMenuItemCount(); ++nItem)
+	{
+		CString	strItem;
+		m_stdMenu.GetMenuString(nItem, strItem, MF_BYPOSITION);
+		if (strItem == strToolsMenuTitle)
+		{
+			nToolsMenuIndex = nItem;
+			break;
+		}
+	}
+	if (nToolsMenuIndex < 0)
+	{
+		ASSERT(FALSE);
+		return;
+	}
+
+	CMenu *pToolsMenu = m_stdMenu.GetSubMenu(nToolsMenuIndex);
+	if (!IsMenu(pToolsMenu->GetSafeHmenu()))
+	{
+		ASSERT(FALSE);
+		return;
+	}
+
+	// Remove all current tool related entries
+	int	nLastEntryIndex = pToolsMenu->GetMenuItemCount()-1;
+	while (
+		pToolsMenu->GetMenuItemID(nLastEntryIndex)==ID_TOOLS_ENTRY ||
+		(pToolsMenu->GetMenuItemID(nLastEntryIndex)>=ID_USER_TOOL_FIRST &&pToolsMenu->GetMenuItemID(nLastEntryIndex)<=ID_USER_TOOL_LAST))
+	{
+		pToolsMenu->DeleteMenu(nLastEntryIndex, MF_BYPOSITION);
+		nLastEntryIndex = pToolsMenu->GetMenuItemCount()-1;
+	}
+
+	// add new tool entries
+	const CObList	&toolsList = theApp.GetUserToolsManager()->GetUserTools();
+	POSITION			pos = toolsList.GetHeadPosition();
+	while (pos)
+	{
+		CBCGUserTool	*pTool = (CBCGUserTool*)toolsList.GetNext(pos);
+		pToolsMenu->AppendMenu(MF_STRING, pTool->GetCommandId(), pTool->m_strLabel);
+	}
+}
+
+
 void CMainFrame::OnViewFullScreen() 
 {
 	if (m_bFullScreen)
@@ -1310,4 +1383,28 @@ void CMainFrame::OnContextMenu(CWnd* pWnd, CPoint point)
 BOOL CMainFrame::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
 	return TRUE;//CBCGMDIFrameWnd::OnHelpInfo(pHelpInfo);
+}
+
+
+LRESULT CMainFrame::OnCustomizationMode(WPARAM wParam, LPARAM lParam)
+{
+	if (!wParam)
+	{
+		// customization mode is about to be deactivated
+		RebuildToolsMenu();
+	}
+
+	return 0L;
+}
+
+
+void CMainFrame::OnUpdateUserTool(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable();
+}
+
+
+void CMainFrame::OnExecuteUserTool(UINT nIDEvent)
+{
+	theApp.GetUserToolsManager()->InvokeTool(nIDEvent);
 }
