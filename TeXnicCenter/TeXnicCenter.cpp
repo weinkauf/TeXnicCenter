@@ -47,7 +47,7 @@
 #include "UserTool.h"
 #include "Profile.h"
 #include "ProfileDialog.h"
-
+#include <locale.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

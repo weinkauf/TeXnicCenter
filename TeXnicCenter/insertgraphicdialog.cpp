@@ -30,6 +30,7 @@
 #include "TeXnicCenter.h"
 #include "InsertGraphicDialog.h"
 #include "global.h"
+#include <locale.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
