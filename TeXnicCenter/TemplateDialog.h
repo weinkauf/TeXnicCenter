@@ -164,14 +164,14 @@ protected:
 
 // overridings
 protected:
-	//{{AFX_VIRTUAL(CProjectNewDialog)
+	//{{AFX_VIRTUAL(CTemplateDialog)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);
 	//}}AFX_VIRTUAL
 
 // implementation
 protected:
-	//{{AFX_MSG(CProjectNewDialog)
+	//{{AFX_MSG(CTemplateDialog)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeTabCategories(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnTemplateItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
@@ -182,7 +182,7 @@ protected:
 
 // dialog data
 protected:
-	//{{AFX_DATA(CProjectNewDialog)
+	//{{AFX_DATA(CTemplateDialog)
 	CListCtrl	m_wndTemplateList;
 	CTabCtrl	m_wndCategoriesTab;
 	CString	m_strDescription;
