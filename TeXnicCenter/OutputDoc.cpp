@@ -41,7 +41,6 @@
 #include "FindInFilesDialog.h"
 #include "Profile.h"
 #include "OutputBuilder.h"
-//#include "PlaceHolder.h"
 #include "FileClean.h"
 #include "FileCleanConfirmDialog.h"
 
