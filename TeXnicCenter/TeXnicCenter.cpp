@@ -1246,11 +1246,12 @@ void CTeXnicCenterApp::OnUpdateFileMRUProjectList( CCmdUI *pCmdUI )
 		return;
 
 	CMenu	*pMenu = pCmdUI->m_pSubMenu;
+	int		i;
 
-	while (pMenu->GetMenuItemCount())
-		pMenu->DeleteMenu(0, MF_BYPOSITION);
+	for (i = pMenu->GetMenuItemCount(); i >= 0; --i)
+		pMenu->DeleteMenu(i, MF_BYPOSITION);
 	
-	for( int i = 0; i < m_recentProjectList.GetSize() && i < 4; i++ )
+	for( i = 0; i < m_recentProjectList.GetSize() && i < 4; i++ )
 	{
 		// get project path
 		CString	strDisplayName;
@@ -1302,11 +1303,12 @@ void CTeXnicCenterApp::OnUpdateFileMRUFileList( CCmdUI *pCmdUI )
 		return;
 
 	CMenu	*pMenu = pCmdUI->m_pSubMenu;
+	int		i;
 
-	while (pMenu->GetMenuItemCount())
-		pMenu->DeleteMenu(0, MF_BYPOSITION);
+	for (i = pMenu->GetMenuItemCount(); i >= 0; --i)
+		pMenu->DeleteMenu(i, MF_BYPOSITION);
 	
-	for( int i = 0; i < m_pRecentFileList->GetSize() && i < 4; i++ )
+	for( i = 0; i < m_pRecentFileList->GetSize() && i < 4; i++ )
 	{
 		// get project path
 		CString	strDisplayName;
