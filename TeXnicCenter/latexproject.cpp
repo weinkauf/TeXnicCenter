@@ -142,43 +142,30 @@ BOOL CLatexProject::OnOpenProject(LPCTSTR lpszPathName)
 {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// load project information
-	CIniFile	file( lpszPathName );
+	CIniFile file(lpszPathName);
 	if (!file.ReadFile())
 		return FALSE;
 
-	SetProjectDir(CPathTool::GetDirectory(lpszPathName));
-
-	// check if ini file contains any data, if not assume, that we 
-	// have to use an archive instead
+	//Check if ini file contains any useful data.
 	if (file.GetNumKeys() < 2)
 	{
-		CFile			file;
-		CArchive	*pAr = NULL;
+		//tcp-file not valid: inform the user about this error.
+		CString	strMsg;
+		strMsg.Format(STE_FILE_INUSE, 
+			AfxLoadString(IDS_OPEN),
+			lpszPathName,
+			AfxLoadString(STE_TCP_INVALID));
 
-		try
-		{
-			if (!file.Open(lpszPathName, CFile::modeRead))
-				throw FALSE;
+		AfxMessageBox(strMsg, MB_ICONEXCLAMATION|MB_OK);
 
-			pAr = new CArchive(&file, CArchive::load);
-			Serialize(*pAr);
-			pAr->Close();
-			file.Close();
-			delete pAr;
-		}
-		catch(...)
-		{
-			if (pAr)
-			{
-				pAr->Abort();
-				delete pAr;
-			}
-
-			file.Abort();
-		}
+		//and return without loading
+		return false;
 	}
-	else
-		Serialize(file, FALSE);
+
+	SetProjectDir(CPathTool::GetDirectory(lpszPathName));
+
+	//Load the Project Information
+	Serialize(file, FALSE);
 
 	SetModifiedFlag(FALSE);
 
@@ -477,18 +464,6 @@ void CLatexProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 }
 
 
-
-void CLatexProject::Serialize(CArchive& ar)
-{
-	if (ar.IsStoring())
-	{
-		ar << m_strMainPath << GetProjectDir();
-	}
-	else
-	{
-		ar >> m_strMainPath >> m_strProjectDir;
-	}
-}
 
 /////////////////////////////////////////////////////////////////////
 // paths, open, save, etc.
