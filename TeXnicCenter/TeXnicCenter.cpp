@@ -138,6 +138,12 @@ void CTCCommandLineInfo::ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL bLast )
 		bLastWasDdeCommandFlag = TRUE;
 		return;
 	}
+	else if (strParam.CompareNoCase(_T("nosplash")) == 0)
+	{
+		m_bShowSplash = FALSE;
+		return;
+	}
+
 
 	CCommandLineInfo::ParseParam( lpszParam, bFlag, bLast );
 	return;
