@@ -1,7 +1,6 @@
 2002/07/12 niteria
 - Fixed Small Bug 580489: Spelling error in dialog
 
-
 2002/07/12 christianwelzel
 - Implemented Feature 535144: Specifying Output Profile in TeX file
   The last used output-profile will be saved in the tcp-file.
