@@ -138,7 +138,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -262,14 +262,15 @@ BEGIN
     IDS_FIND_INCREMENTAL_FORWARD "Inkrementelle Suche: %s"
     IDS_FIND_INCREMENTAL_BACKWARD "Inkrementelle Suche rückwärts: %s"
     IDS_FIND_INCREMENTAL_FAILED "Inkrementelle Suche fehlgeschlagen: %s"
+    IDS_EDIT_REPLACE_COUNT  "%d auftreten von\n%s\nersetzt"
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -366,9 +367,10 @@ BEGIN
     IDS_FIND_INCREMENTAL_FORWARD "Incremental search: %s"
     IDS_FIND_INCREMENTAL_BACKWARD "Incremental search backward: %s"
     IDS_FIND_INCREMENTAL_FAILED "Incremental search failed: %s"
+    IDS_EDIT_REPLACE_COUNT  "%d occurrences of\n%s\nreplaced"
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:59  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:28+02  sven_wiegand
 * Initial revision
 *
@@ -105,6 +108,7 @@ BOOL CEditReplaceDlg::OnInitDialog()
 	GetDlgItem(IDC_EDIT_SKIP)->EnableWindow(m_sText != _T(""));
 	GetDlgItem(IDC_EDIT_SCOPE_SELECTION)->EnableWindow(m_bEnableScopeSelection);
 	m_bFound = FALSE;
+	m_nReplaceCount = 0;
 
 	return TRUE;
 }
@@ -133,9 +137,17 @@ BOOL CEditReplaceDlg::DoHighlightText()
 
 	if (! bFound)
 	{
-		CString prompt;
-		prompt.Format(IDS_EDIT_TEXT_NOT_FOUND, m_sText);
-		AfxMessageBox(prompt);
+		if ( m_nReplaceCount == 0)
+		{
+			CString prompt;
+			prompt.Format(IDS_EDIT_TEXT_NOT_FOUND, m_sText);
+			AfxMessageBox(prompt);
+		} else {
+			CString prompt;
+			prompt.Format(IDS_EDIT_REPLACE_COUNT, m_nReplaceCount, m_sText);
+			AfxMessageBox(prompt);
+		}
+		m_nReplaceCount = 0;
 		m_ptCurrentPos = m_nScope == 0 ? m_ptBlockBegin : CPoint(0, 0);
 		return FALSE;
 	}
@@ -189,6 +201,7 @@ void CEditReplaceDlg::OnEditReplace()
 			m_ptBlockEnd.x += lstrlen(m_sNewText);
 		}
 	}
+	m_nReplaceCount++;
 	m_ptFoundAt.x += lstrlen(m_sNewText);
 	m_bFound = DoHighlightText();
 }
@@ -223,6 +236,7 @@ void CEditReplaceDlg::OnEditReplaceAll()
 				m_ptBlockEnd.x += lstrlen(m_sNewText);
 			}
 		}
+		m_nReplaceCount++;
 		m_ptFoundAt.x += lstrlen(m_sNewText);
 		m_bFound = DoHighlightText();
 	}
