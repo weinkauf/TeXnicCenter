@@ -233,9 +233,8 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 	static __JM::RegEx	error2("^! (.*)$", true); // This could catch warnings, so run it last
 
 	//Catching Warnings
-	static __JM::RegEx	warning1("^(! )?(La|pdf)TeX .*warning.*: (.*)", true);
-	static __JM::RegEx	warning2("^LaTeX .*warning: (.*) on input line ([[:digit:]]+)", true);
-	static __JM::RegEx	warning3(".*warning.*: (.*)", true); //Catches package warnings
+	static __JM::RegEx	warning1(".+warning: (.*) on input line ([[:digit:]]+)", true); //Catches Latex and package warnings
+	static __JM::RegEx	warning2(".+warning: (.*)", true); //Catches package warnings that split over several lines
 
 	//Catching Bad Boxes
 	static __JM::RegEx	badBox1("^(Over|Under)full \\\\[hv]box .* at lines ([[:digit:]]+)--([[:digit:]]+)", true);
@@ -294,34 +293,24 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 			strLine.Mid(badBox1.Position(1), badBox1.Length(1)),
 			itmBadBox);
 	}
-	else if (warning2.Search(strLine))
-	{
-		FlushCurrentItem();
-		m_currentItem = COutputInfo(
-			m_stackFile.IsEmpty()? "" : m_stackFile.Top(),
-			_ttoi(strLine.Mid(warning2.Position(2), warning2.Length(2))),
-			GetCurrentOutputLine(),
-			strLine.Mid(warning2.Position(1), warning2.Length(1)),
-			itmWarning);
-	}
 	else if (warning1.Search(strLine))
 	{
 		FlushCurrentItem();
 		m_currentItem = COutputInfo(
 			m_stackFile.IsEmpty()? "" : m_stackFile.Top(),
-			0,
+			_ttoi(strLine.Mid(warning1.Position(2), warning1.Length(2))),
 			GetCurrentOutputLine(),
 			strLine.Mid(warning1.Position(1), warning1.Length(1)),
 			itmWarning);
 	}
-	else if (warning3.Search(strLine))
+	else if (warning2.Search(strLine))
 	{
 		FlushCurrentItem();
 		m_currentItem = COutputInfo(
 			m_stackFile.IsEmpty()? "" : m_stackFile.Top(),
 			0,
 			GetCurrentOutputLine(),
-			strLine.Mid(warning3.Position(1), warning3.Length(1)),
+			strLine.Mid(warning2.Position(1), warning2.Length(1)),
 			itmWarning);
 	}
 	else if (error1.Search(strLine))
