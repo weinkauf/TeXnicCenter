@@ -55,7 +55,7 @@ public:
 
 // Dialog Data
 	//{{AFX_DATA(COptionPageLanguage)
-	enum { IDD = IDD_OPTIONS_LANGUAGE };
+	enum { IDD = IDD_OPTIONS_SPELLING };
 	CComboBox	c_Locale;
 	BOOL	m_bEnableSpell;
 	BOOL	m_bMainDictOnly;

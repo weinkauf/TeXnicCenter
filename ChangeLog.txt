@@ -1,3 +1,6 @@
+2003/12/07 svenwiegand
+- Implemented Feature 855728: Better Support for visually handicapped users
+
 2003/12/07 niteria
 - Implemented Feature 855690: Insert/Remove/Toogle Comments on Textblocks
   Use Ctrl-Q for commenting, Ctrl-W for uncommenting, Alt-Q to toogle

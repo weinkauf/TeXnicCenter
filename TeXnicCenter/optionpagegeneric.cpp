@@ -55,6 +55,7 @@ COptionPageGeneric::COptionPageGeneric() : CPropertyPage(COptionPageGeneric::IDD
 	m_strClosingQm = g_configuration.m_strClosingQuotationMark;
 	m_strOpeningQm = g_configuration.m_strOpeningQuotationMark;
 	m_bRestoreSession = g_configuration.m_bLoadLastProject;
+	m_bOptimizeGuiForVisuallyHandicappedUsers = g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsersOnNextStart;
 	//}}AFX_DATA_INIT
 }
 
@@ -85,6 +86,7 @@ void COptionPageGeneric::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT, m_strClosingQm);
 	DDX_Text(pDX, IDC_OPTIONS_REPLACE_QM_OPEN_EDIT, m_strOpeningQm);
 	DDX_Check(pDX, IDC_OPTIONS_RESTORE_SESSION, m_bRestoreSession);
+	DDX_Check(pDX, IDC_OPTIONS_OPTIMIZE_FOR_VISUALLY_HANDICAPPED_USERS, m_bOptimizeGuiForVisuallyHandicappedUsers);
 	//}}AFX_DATA_MAP
 }
 
@@ -115,6 +117,10 @@ void COptionPageGeneric::OnOK()
 	g_configuration.m_strClosingQuotationMark = m_strClosingQm;
 	g_configuration.m_strOpeningQuotationMark = m_strOpeningQm;
 	g_configuration.m_bLoadLastProject = m_bRestoreSession ;
+
+	if ((bool)g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers != (bool)m_bOptimizeGuiForVisuallyHandicappedUsers)
+		AfxMessageBox(STE_OPTIONS_REQUIRES_RESTART, MB_ICONINFORMATION|MB_OK);
+	g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsersOnNextStart = m_bOptimizeGuiForVisuallyHandicappedUsers;
 	
 	CPropertyPage::OnOK();
 }

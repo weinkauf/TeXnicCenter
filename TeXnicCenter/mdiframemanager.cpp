@@ -201,16 +201,21 @@ void CMDIFrameManager::OnWindowList()
 
 void CMDIFrameManager::OnUpdateWindowMenu(CCmdUI* pCmdUI) 
 {
-	/*
-	pCmdUI->Enable();
-	if( !pCmdUI->m_pOther || !pCmdUI->m_pOther->IsKindOf( RUNTIME_CLASS(CBCGPopupMenuBar) ) )
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers || !pCmdUI->m_pMenu)
 		return;
 
-	// insert the first windows
-	CBCGPopupMenuBar	*pMenu = (CBCGPopupMenuBar*)pCmdUI->m_pOther;
-	BOOL							bChange = FALSE;
+	// add the most recent and current window to window menu
+	CMenu	*pMenu = pCmdUI->m_pMenu;
+	int		nInsertIndex;
+	for (nInsertIndex = pCmdUI->m_nIndex; nInsertIndex>0; --nInsertIndex)
+	{
+		if (pMenu->GetMenuItemID(nInsertIndex-1)>=ID_WINDOW_FIRST && pMenu->GetMenuItemID(nInsertIndex-1)<=ID_WINDOW_LAST)
+			pMenu->DeleteMenu(nInsertIndex-1, MF_BYPOSITION);
+		else
+			break;
+	}
 
-	for( int i = 0; i < m_aFrameWnd.GetSize() && i < g_configuration.m_nWndMenuMaxEntries; i++ )
+	for (int i = 0; i < m_aFrameWnd.GetSize() && i < g_configuration.m_nWndMenuMaxEntries; ++i)
 	{
 		// get window title
 		CString	strWindowText;
@@ -227,30 +232,8 @@ void CMDIFrameManager::OnUpdateWindowMenu(CCmdUI* pCmdUI)
 			strWindowText = strFormat;
 		}
 
-		// 
-		int			nIndex = pMenu->CommandToIndex( ID_WINDOW_FIRST + i  );
-
-		if( nIndex > -1 && pMenu->GetButtonText( nIndex ) != strWindowText )
-		{
-			pMenu->SetButtonText( nIndex, strWindowText );
-			bChange = TRUE;
-		}
-		else if( nIndex == -1 )
-		{
-			int	nInsertAt = pMenu->CommandToIndex( ID_WINDOW_LIST );
-			ASSERT( nInsertAt > -1 );
-
-			nIndex = pMenu->InsertButton( CBCGToolbarMenuButton( ID_WINDOW_FIRST + i, NULL, -1, strWindowText ), nInsertAt );
-			ASSERT( nIndex > -1 );
-
-			bChange = TRUE;
-		}
+		pMenu->InsertMenu(nInsertIndex+i, (i==0)?MF_BYPOSITION|MF_CHECKED : MF_BYPOSITION, ID_WINDOW_FIRST+i, strWindowText);
 	}
-
-	// repaint menu
-	if( bChange )
-		pMenu->AdjustLayout();
-	*/
 }
 
 

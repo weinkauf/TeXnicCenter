@@ -198,6 +198,14 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	{
 		m_aFileCleanItems.SerializeToRegistry(CPathTool::Cat(theApp.m_strRegistryRoot, strSection));
 	}
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Accessability
+	strSection = "Settings\\Accessability";
+	
+	SerializeProfileInt(strSection, _T("OptimizeMenuForVisuallyHandycappedUsers"), (int*)&m_bOptimizeMenuForVisuallyHandycappedUsersOnNextStart, direction, FALSE);
+	if (direction==Load)
+		m_bOptimizeMenuForVisuallyHandycappedUsers = m_bOptimizeMenuForVisuallyHandycappedUsersOnNextStart;
 }
 
 

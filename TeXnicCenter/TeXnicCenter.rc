@@ -1668,10 +1668,10 @@ BEGIN
     END
     POPUP "&Fenster"
     BEGIN
-        MENUITEM "Neues &Fenster",              ID_WINDOW_NEW
+        MENUITEM "N&eues Fenster",              ID_WINDOW_NEW
         MENUITEM "&Teilen",                     ID_WINDOW_SPLIT
         MENUITEM "S&chließen",                  ID_FILE_CLOSE
-        MENUITEM "Alle Schließen",              ID_WINDOW_CLOSE_ALL
+        MENUITEM "&Alle Schließen",             ID_WINDOW_CLOSE_ALL
         MENUITEM SEPARATOR
         MENUITEM "Näc&hstes",                   ID_WINDOW_NEXT
         MENUITEM "&Vorhergehendes",             ID_WINDOW_PREVIOUS
@@ -2300,6 +2300,10 @@ BEGIN
                     28,94,108,8
     EDITTEXT        IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT,138,91,15,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_CLOSE_EDIT
+    GROUPBOX        "Benutzerschnittstelle",IDC_STATIC,8,124,284,32
+    CONTROL         "&Benutzerschnittstelle für sehbehinderte Benutzer optimieren",
+                    IDC_OPTIONS_OPTIMIZE_FOR_VISUALLY_HANDICAPPED_USERS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,139,201,10
 END
 
 IDD_OPTIONS_PATHS DIALOGEX 0, 0, 300, 200
@@ -2589,7 +2593,7 @@ BEGIN
     PUSHBUTTON      "Abbrechen",IDCANCEL,314,217,50,14
 END
 
-IDD_OPTIONS_LANGUAGE DIALOG DISCARDABLE  0, 0, 300, 200
+IDD_OPTIONS_SPELLING DIALOG DISCARDABLE  0, 0, 300, 200
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "Rechtschreibung"
 FONT 8, "MS Sans Serif"
@@ -2946,7 +2950,7 @@ BEGIN
         BOTTOMMARGIN, 231
     END
 
-    IDD_OPTIONS_LANGUAGE, DIALOG
+    IDD_OPTIONS_SPELLING, DIALOG
     BEGIN
         LEFTMARGIN, 8
         RIGHTMARGIN, 292
@@ -3547,6 +3551,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_OPTIONS_TITLE       "Optionen"
     STE_DOCUMENT_SAVEBEFOREPROCEED "Sie müssen die Datei erst speichern."
+    STE_OPTIONS_REQUIRES_RESTART 
+                            "Sie haben Änderungen vorgenommen, die erst nach einem Neustart der Software aktiviert werden."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -5861,6 +5867,10 @@ BEGIN
                     78,8
     EDITTEXT        IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT,112,91,15,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_CLOSE_EDIT
+    GROUPBOX        "User interface",IDC_STATIC,8,124,284,32
+    CONTROL         "O&ptimize user interface for visually handicapped users",
+                    IDC_OPTIONS_OPTIMIZE_FOR_VISUALLY_HANDICAPPED_USERS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,139,201,10
 END
 
 IDD_PROJECT_PROPERTIES DIALOGEX 0, 0, 252, 87
@@ -6387,7 +6397,7 @@ BEGIN
     LTEXT           "PHResult",IDC_PLACEHOLDER_SINGLE_RESULT,50,125,31,8
 END
 
-IDD_OPTIONS_LANGUAGE DIALOG DISCARDABLE  0, 0, 300, 200
+IDD_OPTIONS_SPELLING DIALOG DISCARDABLE  0, 0, 300, 200
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "Spelling"
 FONT 8, "MS Sans Serif"
@@ -6686,7 +6696,7 @@ BEGIN
         BOTTOMMARGIN, 163
     END
 
-    IDD_OPTIONS_LANGUAGE, DIALOG
+    IDD_OPTIONS_SPELLING, DIALOG
     BEGIN
         LEFTMARGIN, 8
         RIGHTMARGIN, 292
@@ -7216,6 +7226,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_OPTIONS_TITLE       "Options"
     STE_DOCUMENT_SAVEBEFOREPROCEED "You need to save the file first."
+    STE_OPTIONS_REQUIRES_RESTART 
+                            "Some of the changes you have made require a restart of the software to get activated."
 END
 
 STRINGTABLE DISCARDABLE 
