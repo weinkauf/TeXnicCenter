@@ -43,7 +43,35 @@ class AFX_EXT_CLASS CFileVersionInfo
 {
 // construction/destruction
 public:
+// construction/destruction
+public:
+	/**
+	Constructs an empty object.
+
+	Call Create() to fill the class with version information.
+	*/
 	CFileVersionInfo();
+
+	/**
+	Constructs an object and fills it with the version information
+	of the module specified by the given module handle.
+
+	@param hModule
+		Handle of the module, which version information will be used to
+		fill the object. Pass NULL here to use the version information of
+		the calling process.
+	*/
+	CFileVersionInfo(HMODULE hModule);
+
+	/**
+	Constructs an object and fills it with the version information
+	of the specified file.
+
+	@param lpszFileName
+		Path of the file to read the version information from.
+	*/
+	CFileVersionInfo(LPCTSTR lpszFileName);
+
 	virtual ~CFileVersionInfo();
 
 // operations
@@ -75,6 +103,22 @@ public:
 	CString GetPrivateBuild() const;
 	CString GetSpecialBuild() const;
 
+	/**
+	Returns the identifier of the language, for which the version
+	information has been loaded or 0xFFFF if no version information
+	has been loaded.
+
+	@return
+		A value like created by MAKELANGID.
+	*/
+	WORD GetLanguageId() const;
+
+	/**
+	Returns the codepage identifier the loaded version information
+	is listed in or 0xFFFF if no version information has been loaded.
+	*/
+	WORD GetCodePageId() const;
+
 // implementation helpers
 protected:
 	virtual void Reset();
@@ -96,6 +140,9 @@ private:
 	CString m_strLegalTrademarks;
 	CString m_strPrivateBuild;
 	CString m_strSpecialBuild;
+
+	WORD m_wLanguageId;
+	WORD m_wCodePageId;
 };
 
 #endif // !defined(AFX_FILEVERSION_H__F828004C_7680_40FE_A08D_7BB4FF05B4CC__INCLUDED_)
