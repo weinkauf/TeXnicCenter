@@ -314,6 +314,13 @@ CString CPathTool::GetRelativePath( LPCTSTR lpszFrom, LPCTSTR lpszTo )
 		Exists(lpszTo)? IsDirectory(lpszTo) : FALSE);
 }
 
+CString CPathTool::GetAbsolutePath( LPCTSTR lpszDirectory, LPCTSTR lpszRelative )
+{
+	if (!IsRelativePath(lpszRelative)) return lpszRelative;
+	if (IsRelativePath(lpszDirectory)) return lpszRelative;
+
+	return Cat(lpszDirectory, lpszRelative);
+}
 
 BOOL CPathTool::Exists( LPCTSTR lpszPath )
 {
@@ -376,3 +383,9 @@ BOOL CPathTool::IsSlashPath( LPCTSTR lpszPath )
 	else
 		return FALSE;
 }
+
+BOOL CPathTool::IsRelativePath( LPCTSTR lpszPath )
+{
+	return (GetDrive(lpszPath).GetLength() == 0);
+}
+
