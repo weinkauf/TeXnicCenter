@@ -111,6 +111,19 @@ public:
 
 // overrides
 protected:
+	/**	Save the document data to a file.
+
+	@param lpszPathName
+		Path name where to save document file.
+		If lpszPathName is NULL then the user will be prompted (SaveAs).
+
+	@note
+		lpszPathName can be different than 'm_strPathName'.
+
+	@param bReplace
+		If TRUE, it will change file name if successful (SaveAs).
+		If FALSE, it will not change path name (SaveCopyAs).
+	*/
 	BOOL DoSave( LPCTSTR lpszPathName, BOOL bReplace = TRUE );
 
 	//{{AFX_VIRTUAL(CLatexDoc)
