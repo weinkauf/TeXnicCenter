@@ -95,7 +95,9 @@
 #define STE_CURRENTDOC_DESCRIPTION      168
 #define STE_FILECLEAN_INVALIDPATTERN    169
 #define IDC_NEXTTIP                     170
+#define STE_CUSTOMIZE_TOOLS_ADVBTN      170
 #define IDC_STARTUP                     171
+#define STE_TCP_INVALID                 171
 #define IDC_TIPSTRING                   172
 #define STE_POPUP_EDITOR                176
 #define STE_POPUP_ITEM                  177
@@ -182,6 +184,7 @@
 #define STE_ITEMTYPE_FIGURE             266
 #define STE_ITEMTYPE_TABLE              267
 #define IDR_POPUP_PLACEHOLDEREX_OPT     267
+#define IDD_CUSTOMIZE_TOOLS_ADV         268
 #define STE_FLOATTITLE_INSERT_FIGURE    272
 #define STE_FLOATTITLE_INSERT_TABLE     273
 #define STE_FLOATTYPE_FIGURE            274
@@ -579,6 +582,9 @@
 #define IDC_PLACEHOLDER_SET_SHORT       1307
 #define IDC_PLACEHOLDER_SET_FORWARD     1308
 #define IDC_OPTIONS_SAVE_NEWDOCS        1309
+#define IDC_ADVTOOLS_USEOUTPUT          1309
+#define IDC_ADVTOOLS_PROMPTARG          1310
+#define IDC_ADVTOOLS_CLOSEWIN           1311
 #define IDD_CUSTOMIZEPAGE_EDITOR        16105
 #define IDD_OUTPUTWIZARD_MIKTEX         16106
 #define IDD_OUTPUTWIZARD_PATH           16107
@@ -1192,9 +1198,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        268
+#define _APS_NEXT_RESOURCE_VALUE        270
 #define _APS_NEXT_COMMAND_VALUE         38359
-#define _APS_NEXT_CONTROL_VALUE         1309
+#define _APS_NEXT_CONTROL_VALUE         1312
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif

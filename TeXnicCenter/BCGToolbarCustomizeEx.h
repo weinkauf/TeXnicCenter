@@ -41,6 +41,55 @@
 
 #include "PersistPosEdit.h"
 #include "EditMenuButtonOpt.h"
+#include "UserTool.h"
+
+
+
+/**
+This class provides a button to display a dialog for
+advanced editing of UserTools. The Button will be placed
+on the ToolsPage of the Customization Dialog.
+We need to implement such a button, because
+we do not get the BN_CLICKED, if we would use a normal one.
+
+@see CBCGToolbarCustomizeEx
+@see CUserTool
+
+@author Tino Weinkauf
+*/
+
+class CBCGToolbarCustomizeExAdvBtn : public CButton
+{
+// Construction
+public:
+	CBCGToolbarCustomizeExAdvBtn();
+
+// Attributes
+public:
+	CUserTool* pTool;
+
+// Operations
+public:
+
+// Overrides
+	// ClassWizard generated virtual function overrides
+	//{{AFX_VIRTUAL(CBCGToolbarCustomizeExAdvBtn)
+	//}}AFX_VIRTUAL
+
+// Implementation
+public:
+	virtual ~CBCGToolbarCustomizeExAdvBtn();
+
+	// Generated message map functions
+protected:
+	//{{AFX_MSG(CBCGToolbarCustomizeExAdvBtn)
+	afx_msg void OnClicked();
+	//}}AFX_MSG
+
+	DECLARE_MESSAGE_MAP()
+};
+
+
 
 /**
 This class overrides some hooks of the original CBCGToolbarCustomize
@@ -77,9 +126,21 @@ public:
 
 // Attributes
 protected:
+	/** A Button to replace the original Arguments-Menu-Button.
+			Needed to display an advanced menu with dialog callback.
+	*/
 	CEditMenuButtonOpt m_wndTXCArgumentsBtn;
+
+	/** An Edit to replace the original Arguments-Edit.
+			Needed for the new Arguments-Menu-Button.
+	*/
 	CPersistPosEdit m_wndTXCArgumentsEdit;
 
+	///Button for bringing up a dialog to edit advanced features
+	CBCGToolbarCustomizeExAdvBtn m_wndAdvBtn;
+
+	///Display area to show summarized advanced features
+	CEdit m_wndAdvEdit;
 
 	// Generated message map functions
 protected:
@@ -89,4 +150,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
+
+/////////////////////////////////////////////////////////////////////////////
 #endif // !defined(AFX_BCGTOOLBARCUSTOMIZEEX_H__4DDE1561_A8DC_11D6_AF7A_00201855324E__INCLUDED_)

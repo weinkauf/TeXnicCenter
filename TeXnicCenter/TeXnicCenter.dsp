@@ -482,6 +482,10 @@ SOURCE=.\UserTool.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\UserToolAdvDlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\WorkspaceBar.cpp
 # End Source File
 # End Group
@@ -888,6 +892,10 @@ SOURCE=.\TreeCtrlEx.h
 # Begin Source File
 
 SOURCE=.\UserTool.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\UserToolAdvDlg.h
 # End Source File
 # Begin Source File
 
