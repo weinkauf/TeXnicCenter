@@ -20,8 +20,8 @@
 #define STE_FILE_VERSION                110
 #define STE_TIP_FILE                    110
 #define STE_URL_CANNOTOPEN              111
-#define STE_UPDATE                      112
-#define STE_UPDATED                     112
+#define IDS_OPEN                        112
+#define IDS_SAVE                        113
 #define IDR_MAINFRAME                   128
 #define IDR_LATEXTYPE                   129
 #define IDR_LATEXPROJECT                130

@@ -269,6 +269,10 @@ SOURCE=.\OptionPageGeneric.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\OptionPageLanguage.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\OptionPagePath.cpp
 # End Source File
 # Begin Source File
@@ -634,6 +638,10 @@ SOURCE=.\OptionPageGeneric.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\OptionPageLanguage.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\OptionPagePath.h
 # End Source File
 # Begin Source File
@@ -918,6 +926,10 @@ SOURCE=.\res\fullscre.bmp
 # Begin Source File
 
 SOURCE=.\res\ico00001.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\icon1.ico
 # End Source File
 # Begin Source File
 

@@ -57,9 +57,9 @@ public:
 		Path of the file to load into the buffer.
 
 	@return
-		TRUE if successfull, FALSE otherwise.
+		0 if successfull, GetLastError() otherwise.
 	*/
-	BOOL LoadBuffer( LPCTSTR lpszPath );
+	DWORD LoadBuffer( LPCTSTR lpszPath );
 
 	/**
 	Sets an error mark on the specified line and clears all other error marks.
@@ -91,8 +91,9 @@ protected:
 
 	The parameters are passed to the CCrystalTextBuffer::SaveToFile()
 	method.
+	@return 0 if successfull, GetLastError() otherwise. 
 	*/
-	BOOL SaveToFile(LPCTSTR lpszPathName, int nCrlfStyle = CRLF_STYLE_AUTOMATIC, BOOL bClearModifiedFlag = TRUE);
+	DWORD SaveToFile(LPCTSTR lpszPathName, int nCrlfStyle = CRLF_STYLE_AUTOMATIC, BOOL bClearModifiedFlag = TRUE);
 
 // CTextSource overrides
 public:
