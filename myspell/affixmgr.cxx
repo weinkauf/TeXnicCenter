@@ -24,10 +24,7 @@ AffixMgr::AffixMgr(const char * affpath)
 	trystring = NULL;
 	encoding=NULL;
 	if (parse_file(affpath)) {
-		numpfx = 0;
-		numsfx = 0;
-		fprintf(stderr,"Failure loading aff file\n");
-		fflush(stderr);
+		throw FALSE;
 	}
 }
 
@@ -56,7 +53,6 @@ int  AffixMgr::parse_file(const char * affpath)
 	FILE * afflst;
 	afflst = fopen(affpath,"r");
 	if (!afflst) {
-		fprintf(stderr,"Error - could not open affix description file\n");
 		return 1;
 	}
 
@@ -485,8 +481,20 @@ char * mystrdup(const char * s)
 
 void mychomp(char * s)
 {
-	int k = strlen(s);
-	if (k > 0) *(s+k-1) = '\0';
-	if ((k > 1) && (*(s+k-2) == '\r')) *(s+k-2) = '\0';
+	// Remove all trailing white space from a string
+	int k = strlen(s) - 1;
+	while (k > -1) {
+		switch ( s[k] ) {
+			case '\r':
+			case '\n':
+			case ' ':
+			case '\t':
+				s[k] = '\0';
+				break;
+			default:
+				return;
+		}
+		--k;
+	}
 }
 
