@@ -40,6 +40,7 @@
 #include "GrepView.h"
 #include "Configuration.h"
 #include "Splash.h"
+#include "BCGToolbarCustomizeEx.h"
 #include "UserTool.h"
 
 #include "ProfileDialog.h"
@@ -446,7 +447,8 @@ void CMainFrame::OnExtrasCustomize()
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// create dialog object
-	CBCGToolbarCustomize	*pDlgCust = new CBCGToolbarCustomize( 
+
+	CBCGToolbarCustomizeEx* pDlgCust = new CBCGToolbarCustomizeEx( 
 		this, TRUE,	
 		BCGCUSTOMIZE_MENU_SHADOWS|BCGCUSTOMIZE_TEXT_LABELS| 
 			BCGCUSTOMIZE_LOOK_2000|BCGCUSTOMIZE_MENU_ANIMATIONS|BCGCUSTOMIZE_SELECT_SKINS|

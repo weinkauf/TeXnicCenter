@@ -181,6 +181,7 @@
 #define IDD_PLACEHOLDER_SET             265
 #define STE_ITEMTYPE_FIGURE             266
 #define STE_ITEMTYPE_TABLE              267
+#define IDR_POPUP_PLACEHOLDEREX_OPT     267
 #define STE_FLOATTITLE_INSERT_FIGURE    272
 #define STE_FLOATTITLE_INSERT_TABLE     273
 #define STE_FLOATTYPE_FIGURE            274
@@ -1184,14 +1185,15 @@
 #define ID_PH_CSLASHRELATIVEPATH        38355
 #define ID_PH_CSHORTRELATIVEPATH        38356
 #define ID_PH_CSSLASHRELATIVEPATH       38357
+#define ID_PHS_MORESETS_OPT             38358
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        266
-#define _APS_NEXT_COMMAND_VALUE         38358
+#define _APS_NEXT_RESOURCE_VALUE        268
+#define _APS_NEXT_COMMAND_VALUE         38359
 #define _APS_NEXT_CONTROL_VALUE         1309
 #define _APS_NEXT_SYMED_VALUE           115
 #endif

@@ -298,7 +298,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 	EnableUserTools(
 		ID_TOOLS_ENTRY, ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST, 
 		RUNTIME_CLASS(CUserTool), 
-		IDR_POPUP_PLACEHOLDEREX_CASC, IDR_POPUP_PLACEHOLDER_DIR);
+		0, IDR_POPUP_PLACEHOLDER_DIR);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Dokumentvorlagen registrieren

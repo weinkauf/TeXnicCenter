@@ -2094,6 +2094,39 @@ BEGIN
     END
 END
 
+IDR_POPUP_PLACEHOLDEREX_OPT MENU DISCARDABLE 
+BEGIN
+    POPUP "IDR_POPUP_PLACEHOLDEREX_OPT"
+    BEGIN
+        MENUITEM "Kompletter Pfad der Hauptdatei", ID_PH_MPATH
+        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung", ID_PH_MBASE
+        MENUITEM "Verzeichnispfad der Hauptdatei", ID_PH_MDIR
+        MENUITEM "Hauptdatei mit weiteren Optionen...", ID_PH_MAINOPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Kompletter Pfad des aktiven Dokuments", ID_PH_CPATH
+        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung", 
+                                                ID_PH_CBASE
+        MENUITEM "Verzeichnispfad des aktiven Dokuments", ID_PH_CDIR
+        MENUITEM "Aktives Dokument mit weiteren Optionen...", 
+                                                ID_PH_CURRENTOPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Nummer der aktiven Zeile im aktiven Dokument", 
+                                                ID_PH_CLINENR
+        MENUITEM "Markierter Text oder aktives Wort im aktiven Dokument", 
+                                                ID_PH_CSELECTION
+        MENUITEM SEPARATOR
+        MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
+        MENUITEM SEPARATOR
+        MENUITEM "Alle Dateien im Projekt (in Anführungszeichen)", 
+                                                ID_PHS_ALLPROJECTFILES_Q
+        MENUITEM "Alle geöffneten Dateien (in Anführungszeichen)", 
+                                                ID_PHS_ALLOPENEDFILES_Q
+        MENUITEM "Weitere Dateimengen...",      ID_PHS_MORESETS_OPT
+        MENUITEM SEPARATOR
+        MENUITEM "Dollarzeichen ('$')",         ID_PHS_DOLLAR
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -4670,6 +4703,7 @@ BEGIN
     ID_PH_CSLASHRELATIVEPATH "%Wc"
     ID_PH_CSHORTRELATIVEPATH "%swc"
     ID_PH_CSSLASHRELATIVEPATH "%sWc"
+    ID_PHS_MORESETS_OPT     "\n[4]"
 END
 
 #endif    // German (Germany) resources
@@ -5963,6 +5997,37 @@ BEGIN
             MENUITEM "All file sets together (quoted) (relative)", 
                                                     ID_PHS_ALLFILESETS_QR
         END
+        MENUITEM SEPARATOR
+        MENUITEM "Dollar sign ('$')",           ID_PHS_DOLLAR
+    END
+END
+
+IDR_POPUP_PLACEHOLDEREX_OPT MENU DISCARDABLE 
+BEGIN
+    POPUP "IDR_POPUP_PLACEHOLDEREX_OPT"
+    BEGIN
+        MENUITEM "Main file's full path",       ID_PH_MPATH
+        MENUITEM "Main file's full path without extension", ID_PH_MBASE
+        MENUITEM "Main file's full directory path", ID_PH_MDIR
+        MENUITEM "Main file with further options...", ID_PH_MAINOPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Current document's full path", ID_PH_CPATH
+        MENUITEM "Current document's full path without extension", 
+                                                ID_PH_CBASE
+        MENUITEM "Current document's full directory path", ID_PH_CDIR
+        MENUITEM "Current document with further options...", 
+                                                ID_PH_CURRENTOPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Current document's active line number", ID_PH_CLINENR
+        MENUITEM "Selected text or active word in the current document", 
+                                                ID_PH_CSELECTION
+        MENUITEM SEPARATOR
+        MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
+        MENUITEM SEPARATOR
+        MENUITEM "All files of the project (quoted)", 
+                                                ID_PHS_ALLPROJECTFILES_Q
+        MENUITEM "All opened files (quoted)",   ID_PHS_ALLOPENEDFILES_Q
+        MENUITEM "Further sets of files...",    ID_PHS_MORESETS_OPT
         MENUITEM SEPARATOR
         MENUITEM "Dollar sign ('$')",           ID_PHS_DOLLAR
     END
@@ -8479,6 +8544,7 @@ BEGIN
     ID_PH_CSLASHRELATIVEPATH "%Wc"
     ID_PH_CSHORTRELATIVEPATH "%swc"
     ID_PH_CSSLASHRELATIVEPATH "%sWc"
+    ID_PHS_MORESETS_OPT     "\n[4]"
 END
 
 #endif    // English (U.S.) resources

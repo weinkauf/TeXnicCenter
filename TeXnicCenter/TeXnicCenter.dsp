@@ -109,6 +109,10 @@ SOURCE=.\BCGRegistryEx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\BCGToolbarCustomizeEx.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\BrowseButton.cpp
 # End Source File
 # Begin Source File
@@ -499,6 +503,10 @@ SOURCE=.\BCGNotifyingEditListBox.h
 # Begin Source File
 
 SOURCE=.\BCGRegistryEx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\BCGToolbarCustomizeEx.h
 # End Source File
 # Begin Source File
 
