@@ -135,22 +135,23 @@ CString CInsertGraphicDialog::GetProperties()
 {
 	///////////////////////////////////////////////////////////////////
 	// statics
-	CString	strResult = _T("\\includegraphics{") + m_strFile + _T("}");
+	CString	strResult ( _T("\\includegraphics") );
 
 	///////////////////////////////////////////////////////////////////
 	// is scaled?
 	if( m_bScale && m_unScale != 100 )
 	{
 		CString	strScale;
-		strScale.Format( _T("\\scalebox{%.2f}{"), m_unScale / 100.0 );
+		strScale.Format( _T("[scale=%.2f]"), m_unScale / 100.0 );
 		strScale.Replace( _T(','), _T('.') );
-		strResult.Insert( 0, strScale );
-		strResult+= _T('}');
+		strResult += strScale;
 	}
 
 	///////////////////////////////////////////////////////////////////
 	// statics
-	strResult+= _T('\r');
+	strResult += _T('{');
+	strResult += m_strFile;
+	strResult += _T("}\r");
 
 	///////////////////////////////////////////////////////////////////
 	// is centered?
