@@ -228,6 +228,8 @@ class CProjectNewDialog : public CTemplateDialog
 // construction/destruction
 public:
 	CProjectNewDialog(CWnd* pParent = NULL);
+	virtual ~CProjectNewDialog();
+
 
 // implementation helpers
 protected:

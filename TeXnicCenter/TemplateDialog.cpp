@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "TemplateDialog.h"
@@ -81,7 +87,8 @@ END_MESSAGE_MAP()
 
 
 CTemplateDialog::CTemplateDialog(UINT unIDTemplate, CWnd* pParent /*=NULL*/)
-: CDialog(unIDTemplate, pParent)
+	:CDialog(unIDTemplate, pParent),
+	m_nFirstTab(0), m_nLastTab(0)
 {
 	m_ImageList.Create(32, 32, ILC_COLOR | ILC_MASK, 1, 1);
 
@@ -138,7 +145,7 @@ void CTemplateDialog::CollectTemplates()
 			CString		strSubdir = dirs.GetFilePath();
 			CString		strSubdirName = dirs.GetFileName();
 
-			// check, if name of this subdir is allready existing
+			// check, if name of this subdir is already existing
 			CTemplateItemArray	*pTemplateArray = NULL;
 			if (!m_mapSubdirToTemplates.Lookup(strSubdirName, pTemplateArray))
 				m_mapSubdirToTemplates.SetAt(strSubdirName, pTemplateArray = new CTemplateItemArray);
@@ -172,27 +179,41 @@ void CTemplateDialog::CollectTemplates()
 			}
 		}
 		dirs.Close();
-	}
+	}// end of "parse all the search paths"
 
-	// add for each sub dir in the subdir map a tab
-	POSITION			pos = m_mapSubdirToTemplates.GetStartPosition();
-	CString				strKey;
-	int						nItem = 0;
-	BOOL					bTemplateFilesFound = FALSE;
-	CTemplateItemArray	*pTemplateItemArray;
 
+	//Create a sorted array, so we can add the tabs in alphabetical order
+	POSITION pos = m_mapSubdirToTemplates.GetStartPosition();
+	bool bTemplateFilesFound = false;
+	CSortArray<CString, CString&> astrSubDirsNonEmpty;
 	while (pos)
 	{
+		//Get the active subdir
+		CTemplateItemArray* pTemplateItemArray;
+		CString strKey;
 		m_mapSubdirToTemplates.GetNextAssoc(pos, strKey, pTemplateItemArray);
+		//Any templates in this subdir? ==> If yes, then insert it sorted
 		if (pTemplateItemArray->GetSize())
 		{
-			m_wndCategoriesTab.InsertItem(nItem++, strKey);
-			bTemplateFilesFound = TRUE;
+			astrSubDirsNonEmpty.InsertSorted(strKey, true, false);
+			bTemplateFilesFound = true;
 		}
 	}
 
+	//Add a category tab for each non-empty SubDir in the map
+	if (bTemplateFilesFound)
+	{
+		for(int i=0;i<astrSubDirsNonEmpty.GetSize();i++)
+		{
+			m_wndCategoriesTab.InsertItem(i, astrSubDirsNonEmpty[i]);
+		}
+	}
+
+
 	// select first tab
-	m_wndCategoriesTab.SetCurSel(0);
+	if (m_wndCategoriesTab.SetCurSel(m_nFirstTab) < 0)
+		m_wndCategoriesTab.SetCurSel(0);
+	m_nLastTab = m_wndCategoriesTab.GetCurSel();
 
 	// resize list ctrl
 	CRect	tabRect;
@@ -219,8 +240,8 @@ void CTemplateDialog::FillTemplateList()
 	if (!m_wndCategoriesTab.GetItem(nItem, &item))
 		return;
 
-	CString							strKey = item.pszText;
-	CTemplateItemArray	*papTemplateItems = NULL;
+	CString strKey = item.pszText;
+	CTemplateItemArray* papTemplateItems = NULL;
 
 	if (!m_mapSubdirToTemplates.Lookup(strKey, papTemplateItems))
 		return;
@@ -319,6 +340,9 @@ void CTemplateDialog::OnSelchangeTabCategories(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	FillTemplateList();	
 	OnTemplateSelectionChanged();
+
+	m_nLastTab = m_wndCategoriesTab.GetCurSel();
+
 	*pResult = 0;
 }
 
@@ -353,3 +377,4 @@ void CTemplateDialog::OnDblClkTemplate(NMHDR* pNMHDR, LRESULT* pResult)
 	
 	*pResult = 0;
 }
+

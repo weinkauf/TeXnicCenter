@@ -225,6 +225,7 @@ class CDocumentNewDialog : public CTemplateDialog
 // construction/destruction
 public:
 	CDocumentNewDialog(CWnd* pParent = NULL);
+	virtual ~CDocumentNewDialog();
 
 // overridings
 protected:
