@@ -85,7 +85,8 @@ void CSpellCheckDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CSpellCheckDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
+	DDX_Control(pDX, IDC_SPELL_SUGGEST, c_SuggestList);
+	DDX_Control(pDX, IDC_SPELL_TEXT, c_Text);
 	//}}AFX_DATA_MAP
 }
 
@@ -110,15 +111,18 @@ void CSpellCheckDlg::OnSpellIgnore()
 {
 	if ( m_bEditing )
 	{
+		// Unedit
 		m_bEditing = false;
+		m_bNewLine = true;
 		CString label;
 		label.LoadString(IDS_SPELL_IGNORE);
 		GetDlgItem(IDC_SPELL_IGNORE)->SetWindowText( label );
 		GetDlgItem(IDC_SPELL_IGNORE)->Invalidate();
 		OnSpellError();
 	}
-	else 
+	else
 	{
+		// Ignore
 		m_nCurStart = m_nCurEnd;
 		DoNextWord();
 		OnSpellError();
@@ -162,11 +166,12 @@ BOOL CSpellCheckDlg::OnInitDialog()
 	}
 	m_nCurLine = m_ptStart.y;
 	m_nCurStart = m_nCurEnd = m_ptStart.x;
+	m_bNewLine = true;
 
 	// Select the first word
 	DoNextWord();
 	OnSpellError();
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return FALSE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
@@ -200,6 +205,7 @@ void CSpellCheckDlg::DoNextWord()
 
 		// next line
 		++m_nCurLine;
+		m_bNewLine = true;
 		m_nCurStart = m_nCurEnd = 0;
 	}
 	// We are done
@@ -215,13 +221,16 @@ void CSpellCheckDlg::OnSpellError()
 	if ( !(m_nCurLine < m_ptEnd.y || (m_nCurLine == m_ptEnd.y && m_nCurEnd < m_ptEnd.x)) )
 		return;
 
-	CEdit *pEdit = (CEdit*)GetDlgItem(IDC_SPELL_TEXT);
-	pEdit->SetWindowText( m_pTextBuffer->GetLineChars(m_nCurLine) );
-	pEdit->SetSel( m_nCurStart, m_nCurEnd );
-	pEdit->Invalidate();
+	if ( m_bNewLine )
+	{
+		c_Text.SetWindowText( m_pTextBuffer->GetLineChars(m_nCurLine) );
+		m_bNewLine = false;
+	}
+	c_Text.SetSel( m_nCurStart, m_nCurEnd );
+	c_Text.SetFocus();
+	c_Text.Invalidate();
 
-	CListCtrl *pList = (CListCtrl*)GetDlgItem(IDC_SPELL_SUGGEST);
-	pList->DeleteAllItems();
+	c_SuggestList.DeleteAllItems();
 	char **ssList;
 	int nCount = m_pSpell->suggest( &ssList, m_pWordBuffer );
 	if (nCount < 1)
@@ -229,19 +238,19 @@ void CSpellCheckDlg::OnSpellError()
 		m_bNoSuggestions = true;
 		CString label;
 		label.LoadString(IDS_SPELL_NO_SUGGESTIONS);
-		ASSERT( pList->InsertItem(0, label ) != -1 );
+		ASSERT( c_SuggestList.InsertItem(0, label ) != -1 );
 	}
 	else
 	{
 		m_bNoSuggestions = false;
 		for ( int i = 0; i < nCount; ++i)
 		{
-			ASSERT( pList->InsertItem(i, A2T(ssList[i])) != -1);
+			ASSERT( c_SuggestList.InsertItem(i, A2T(ssList[i])) != -1);
 		}
 		m_pSpell->release_suggest( ssList );
 	}
-	//pList->Invalidate();
-	GetDlgItem(IDC_SPELL_SUGGEST)->EnableWindow( !m_bNoSuggestions );
+
+	c_SuggestList.EnableWindow( !m_bNoSuggestions );
 	GetDlgItem(IDC_SPELL_REPLACE)->EnableWindow( !m_bNoSuggestions );
 	GetDlgItem(IDC_SPELL_REPLACE_ALL)->EnableWindow( !m_bNoSuggestions );
 }
@@ -259,7 +268,7 @@ void CSpellCheckDlg::OnChangeSpellText()
 	if ( !m_bEditing )
 	{
 		m_bEditing = true;
-		GetDlgItem(IDC_SPELL_SUGGEST)->EnableWindow( false );
+		c_SuggestList.EnableWindow( false );
 		GetDlgItem(IDC_SPELL_IGNORE_ALL)->EnableWindow( false );
 		GetDlgItem(IDC_SPELL_REPLACE)->EnableWindow( false );
 		GetDlgItem(IDC_SPELL_REPLACE_ALL)->EnableWindow( false );
@@ -287,9 +296,8 @@ void CSpellCheckDlg::OnSpellResume()
 	GetDlgItem(IDC_SPELL_IGNORE)->SetWindowText( label );
 
 	// Find the first change position
-	CEdit *pEdit = (CEdit*)GetDlgItem(IDC_SPELL_TEXT);
 	CString newText;
-	pEdit->GetWindowText( newText );
+	c_Text.GetWindowText( newText );
 	int start = FirstDifference( m_pTextBuffer->GetLineChars(m_nCurLine), newText );
 	if ( start != -1 )
 	{
@@ -302,9 +310,9 @@ void CSpellCheckDlg::OnSpellResume()
 		m_pBuddy->HighlightText( CPoint(start, m_nCurLine), endOld-start );
 		VERIFY( m_pBuddy->ReplaceSelection( &szNewText[start] ) );
 		newText.ReleaseBuffer(0);
+		m_nCurStart = m_nCurEnd = 0;
 	}
 	// else no change was made
-	m_nCurStart = m_nCurEnd = 0;
 	DoNextWord();
 	OnSpellError();
 }
@@ -313,12 +321,11 @@ void CSpellCheckDlg::OnSpellResume()
 void CSpellCheckDlg::OnSpellReplace()
 {
 	// Get the selected suggestion text
-	CListCtrl *pList = (CListCtrl*)GetDlgItem(IDC_SPELL_SUGGEST);
-	POSITION pos = pList->GetFirstSelectedItemPosition();
+	POSITION pos = c_SuggestList.GetFirstSelectedItemPosition();
 	if ( !pos )
 		return;
 
-	CString newText = pList->GetItemText( pList->GetNextSelectedItem(pos), 0 );
+	CString newText = c_SuggestList.GetItemText( c_SuggestList.GetNextSelectedItem(pos), 0 );
 
 	VERIFY(m_pBuddy->ReplaceSelection( newText ));
 	DoNextWord();
