@@ -762,7 +762,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
+// Deutsch (Deutschland) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -3338,7 +3338,7 @@ BEGIN
     STE_FILE_LATEXFILTER    "LaTeX-Dateien (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|Alle Dateien (*.*)|*.*||"
     STE_LICENSE_FILE        "GPL_german.htm"
     STE_FILE_EXEFILTER      "Ausführbare Dateien (*.exe;*.com)|*.exe;*.com|Alle Dateien (*.*)|*.*||"
-    STE_FILE_INUSE          "Todo: Cannot %s the file\n\n%s\n\n%s"
+    STE_FILE_INUSE          "Kann die Datei\n\n%s\n\nnicht %s.\n\n%s"
     STE_FILE_DICFILTER      "Wörterbuch-Dateien (*.dic)|*.dic|Alle Dateien (*.*)|*.*||"
     STE_FILE_EXTERNALCHANGE "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?"
     STE_FILE_EXTERNALCHANGEEX 
@@ -3511,8 +3511,8 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_OPEN                "Todo: open"
-    IDS_SAVE                "Todo: save"
+    IDS_OPEN                "öffnen"
+    IDS_SAVE                "speichern"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4526,7 +4526,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_COLOR_AUTOMATIC     "Automatisch"
     STE_COLOR_OTHERS        "Andere Farben..."
-    STE_PDICT_OPEN_ERROR    "Todo:Cannot open %s\n\nCreating empty personal dictionary."
+    STE_PDICT_OPEN_ERROR    "Persönliches Wörterbuch %s kann nicht geööfnet werden.\n\nEs wird ein neues leeres Wörterbuch unter diesem Namen erzeugt."
     IDS_LANGUAGE            "de"
     IDS_DIALECT             "DE"
 END
@@ -4561,12 +4561,12 @@ BEGIN
     ID_PHS_ALLFILESETS_QR   "$qrAFS"
 END
 
-#endif    // German (Germany) resources
+#endif    // Deutsch (Deutschland) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// Englisch (USA) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -8251,7 +8251,7 @@ BEGIN
     ID_PH_CURRENTOPTIONS    "\n[1]c"
 END
 
-#endif    // English (U.S.) resources
+#endif    // Englisch (USA) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
