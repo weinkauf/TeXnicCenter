@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_NAVIGATORVIEW_H__75A37CC2_20BE_11D3_929E_D32D9B17C664__INCLUDED_)
 #define AFX_NAVIGATORVIEW_H__75A37CC2_20BE_11D3_929E_D32D9B17C664__INCLUDED_
 
@@ -38,6 +44,11 @@
 class CLatexProject;
 
 
+/** Base class for viewing the document structure
+	in a tree-like structure.
+
+	@author Sven Wiegand
+*/
 class CNavigatorView : 
 	public CTreeCtrl,
 	public CProjectView
@@ -49,9 +60,7 @@ public:
 
 // operations
 public:
-	/**
-	Creates the view.
-	*/
+	/**	Creates the view. */
 	BOOL Create(CWnd *pwndParent);
 
 	/**
@@ -62,7 +71,7 @@ public:
 
 	/**
 	Returns the path of the specified tree item as a text.
-	The part contains of all the parent items seperated by a '\n'.
+	The path contains all the parent items seperated by a newline ('\\n').
 
 	@see #GetItemByPath
 
