@@ -302,6 +302,9 @@ public:
 	/** Dialect of the dictionary. */
 	CString m_strLanguageDialect;
 
+	/** Locale */
+	CString m_strLocale;
+
 	/** Directory containing dictionaries. */
 	CString m_strSpellDictionaryPath;
 

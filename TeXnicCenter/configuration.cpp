@@ -146,6 +146,7 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 
 	SerializeProfileString( strSection, "Language", &m_strLanuage, direction, AfxLoadString(IDS_LANGUAGE) );
 	SerializeProfileString( strSection, "Dialect", &m_strLanguageDialect, direction, AfxLoadString(IDS_DIALECT) );
+	SerializeProfileString( strSection, "Locale", &m_strLocale, direction, _T("") );
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Language-Spelling
