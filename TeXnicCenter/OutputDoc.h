@@ -38,19 +38,24 @@
 #include "OutputInfo.h"
 #include "FileGrep.h"
 #include "OutputBuilder.h"
+#include "StructureParser.h"
 
 class COutputView;
 
 
 class COutputDoc : 
-	public CCmdTarget, public CFileGrepHandler
+	public CCmdTarget, public CFileGrepHandler, public CParseOutputHandler
 {
 public:
+
 	typedef enum tagHint
 	{
 		hintSelectBuildLine = 1,
 		hintParsingFinished,
-		hintSelectGrep1Line,
+		hintSelectParseLine,
+		hintSelectGrep1Line
+		// skip as many values as there are grep windows
+		// = 6
 	} HINT;
 
 protected:
@@ -77,7 +82,7 @@ public:
 	void OnOutputViewActivated( COutputView *pView );
 
 	void SetAllViews(COutputView* pBuildView, COutputView* pGrepView1,	
-		COutputView* pGrepView2);
+		COutputView* pGrepView2, COutputView* pParseView);
 
 	/**
 	Empties the build view and clears the error, warning and badbox 
@@ -236,6 +241,12 @@ public:
 	virtual void OnFileGrepError( CFileGrep *pFileGrep, LPCTSTR lpszPath );
 	virtual void OnFileGrepFinished( CFileGrep *pFileGrep, int nHits );
 
+//CParseOutputHandler
+public:
+	virtual void OnParseLineInfo( COutputInfo &line, int nLevel, int nSeverity);
+	virtual void OnParseBegin();
+	virtual void OnParseEnd( boolean bResult, int nFiles, int nLines );
+
 protected:
 	/**
 	Shows the latex error with the specified index.
@@ -265,10 +276,35 @@ protected:
 	*/
 	void ShowGrepResult( int nIndex );
 
+	/**
+	Shows the parser warning with the specified index.
+
+	@param nIndex Zero based index of the parser warning to show.
+	*/
+	void ShowParseWarning( int nIndex );
+
+	/**
+	Shows the parser information message with the specified index.
+
+	@param nIndex Zero based index of the parser information message to show.
+	*/
+	void ShowParseInfo( int nIndex );
+
 // attributes
 public:
 
 protected:
+	/** Pointer to attached parser-view. */
+	COutputView *m_pParseView;
+
+	/** Array containing parser information */
+	COutputInfoArray m_aParseInfo;
+	int m_nParseInfoIndex;
+
+	/** Array containing parser warning messages */
+	COutputInfoArray m_aParseWarning;
+	int m_nParseWarningIndex;
+
 	/** Array that contains information about the errors of the latex-compiler.*/
 	COutputInfoArray m_aErrors;
 

@@ -36,8 +36,26 @@
 #include <regex.h>
 #include "stack.h"
 #include "TextSource.h"
+#include "OutputInfo.h"
 
 typedef	reg_expression<TCHAR, char_regex_traits<TCHAR>, JM_DEF_ALLOC(TCHAR)> tregex;
+
+class CParseOutputHandler
+{
+public:
+	virtual void OnParseLineInfo( COutputInfo &line, int nLevel, int nSeverity ) {};
+	virtual void OnParseBegin() {}
+	virtual void OnParseEnd( boolean bResult, int nFiles, int nLines ) {}
+	enum tagSeverity
+	{
+		none = 0,
+		information,
+		warning,
+		error,
+		typeCount
+	};
+};
+
 
 /**
 An object of this class contains information about one item
@@ -150,8 +168,11 @@ public:
 		texFile,
 		group,
 		bibFile,
+		// If you add a new type, also add a description string to m_sItemNames
 		typeCount
 	};
+
+	static const CString const m_sItemNames[typeCount];
 
 // construction/destruction
 protected:
@@ -166,7 +187,10 @@ public:
 	@param pTextSourceManager
 		Object that is used to get CTextSource objects.
 	*/
-	CStructureParser( CStructureParserHandler *pStructureParserHandler/*, CTextSourceManager* pTextSourceManager */);
+	CStructureParser(CStructureParserHandler *pStructureParserHandler, 
+		/*CTextSourceManager *pTextSourceManager, */
+		CParseOutputHandler *pParseOutputHandler);
+
 	virtual ~CStructureParser();
 
 // operations
@@ -225,6 +249,13 @@ public:
 // implementation
 private:
 	/**
+	Signals the end of parsing.
+	@param bParsingResult <var>TRUE</var> if parsing was successful, else <var>FALSE</var>.
+	@param cookies Stack of unprocessed cookies from parsing.
+	*/
+	void Done( boolean bParsingResult, CCookieStack &cookies );
+
+	/**
 	Parses the specified file and fills the m_anItem-array.
 
 	This method also parses all files mentioned in \input or
@@ -234,12 +265,14 @@ private:
 		Path of the file to parse.
 	@param cookies
 		Stack of cookies.
+	@param nFileDepth 
+		The number of files in processing stack.
 
 	@return
 		<var>TRUE</var> if parsing has been finished successfully, <var>FALSE</var> if
 		parsing has been canceled.
 	*/
-	BOOL Parse( LPCTSTR lpszPath, CCookieStack &cookies );
+	BOOL Parse( LPCTSTR lpszPath, CCookieStack &cookies, int nFileDepth );
 
 	/**
 	Add the specified file to the m_anItem-array.
@@ -251,8 +284,11 @@ private:
 
 	@param nType
 		Type of file
+
+	@return
+		index of file added to m_aStructureItems array.
 	*/
-	void AddFileItem( LPCTSTR lpszPath, int nType );
+	int AddFileItem( LPCTSTR lpszPath, int nType );
 
 	/**
 	Resolve a file name relative to working directory or absolute.
@@ -278,8 +314,10 @@ private:
 		The file this string is located in.
 	@param nActualLine
 		The actual line in the actual file.
+	@param nFileDepth
+		The depth of the parsed files.
 	*/
-	void ParseString( LPCTSTR lpText, int nLength, CCookieStack &cookies, const CString &strActualFile, int nActualLine );
+	void ParseString( LPCTSTR lpText, int nLength, CCookieStack &cookies, const CString &strActualFile, int nActualLine, int nFileDepth);
 
 	/**
 	Checks, if there is a LaTeX-command at the specified position.
@@ -322,6 +360,9 @@ private:
 protected:
 	/** Handler for this structure parser */
 	CStructureParserHandler *m_pStructureParserHandler;
+
+	/** Handler for structure parser output */
+	CParseOutputHandler *m_pParseOutputHandler;
 
 	/** The text source manager associated with this object. */
 	CTextSourceManager *m_pTextSourceManager;
@@ -392,8 +433,14 @@ private:
 	/** line counter */
 	int m_nLineCount;
 
-	/** <var>TRUE</var> if parsing should be stopped and the pather should be destroyed. */
+	/** <var>TRUE</var> if parsing should be stopped and the parser should be destroyed. */
 	BOOL m_bCancel;
+
+	/** Lines parsed */
+	int m_nLinesParsed;
+
+	/** Files parsed */
+	int m_nFilesParsed;
 };
 
 #endif // !defined(AFX_STRUCTUREPARSER_H__843BC262_339C_11D3_929E_444553540000__INCLUDED_)

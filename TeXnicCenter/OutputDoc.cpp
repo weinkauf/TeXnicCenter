@@ -84,11 +84,13 @@ COutputDoc::~COutputDoc()
 }
 
 void COutputDoc::SetAllViews(COutputView* pBuildView, COutputView* pGrepView1,	
-							 COutputView* pGrepView2)
+							 COutputView* pGrepView2, COutputView* pParseView)
 {
 	ASSERT(pBuildView);
 	ASSERT(pGrepView1);
 	ASSERT(pGrepView2);
+	ASSERT(pParseView);
+	m_pParseView	= pParseView;
 	m_pBuildView    = pBuildView;
 	m_apGrepView[0] = pGrepView1;
 	m_apGrepView[1] = pGrepView2;
@@ -200,7 +202,10 @@ void COutputDoc::OnPrevError()
 
 void COutputDoc::OnUpdateNextPrevError(CCmdUI* pCmdUI) 
 {
-	pCmdUI->Enable( m_aErrors.GetSize() );
+	if ( m_pActiveOutputView == m_pBuildView )
+		pCmdUI->Enable( m_aErrors.GetSize() );
+	else
+		pCmdUI->Enable( FALSE );
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -251,60 +256,144 @@ void COutputDoc::OnPrevBadbox()
 
 void COutputDoc::OnUpdateNextPrevBadbox(CCmdUI* pCmdUI) 
 {
-	pCmdUI->Enable( m_aBadBoxes.GetSize() );
+	if ( m_pActiveOutputView == m_pBuildView )
+		pCmdUI->Enable( m_aBadBoxes.GetSize() );
+	else
+		pCmdUI->Enable( FALSE );
 }
 
 /////////////////////////////////////////////////////////////////////
 // handling output warnings
 void COutputDoc::ShowWarning( int nIndex )
 {
-	if( !(nIndex >= 0 && nIndex < m_aWarnings.GetSize()) )
-		return;
+	if ( m_pActiveOutputView == m_pBuildView )
+	{
+		if( !(nIndex >= 0 && nIndex < m_aWarnings.GetSize()) )
+			return;
 
-	theApp.OpenLatexDocument(
-		GetFilePath( m_aWarnings[nIndex].m_strSrcFile ), FALSE,
-		m_aWarnings[nIndex].m_nSrcLine, TRUE );
-	UpdateAllViews( NULL, hintSelectBuildLine, 
-		(CObject*)&m_aWarnings[nIndex].m_nOutputLine );
+		theApp.OpenLatexDocument(
+			GetFilePath( m_aWarnings[nIndex].m_strSrcFile ), FALSE,
+			m_aWarnings[nIndex].m_nSrcLine, TRUE );
+		UpdateAllViews( NULL, hintSelectBuildLine, 
+			(CObject*)&m_aWarnings[nIndex].m_nOutputLine );
 
-	m_nActualWarningIndex = nIndex;
+		m_nActualWarningIndex = nIndex;
+	}
+	else if ( m_pActiveOutputView == m_pParseView )
+	{
+		if( !(nIndex >= 0 && nIndex < m_aParseWarning.GetSize()) )
+			return;
+
+		theApp.OpenLatexDocument(
+			GetFilePath( m_aParseWarning[nIndex].m_strSrcFile ), FALSE,
+			m_aParseWarning[nIndex].m_nSrcLine, TRUE );
+		UpdateAllViews( NULL, hintSelectParseLine, 
+			(CObject*)&m_aParseWarning[nIndex].m_nOutputLine );
+
+		m_nParseWarningIndex = nIndex;
+	}
 }
 
 void COutputDoc::OnNextWarning() 
 {
-	if( (m_nActualWarningIndex >= m_aWarnings.GetSize() - 1) || 
-		m_nActualWarningIndex < 0 )
+	if ( m_pActiveOutputView == m_pBuildView )
 	{
-		m_nActualWarningIndex = 0;
-		//BEEP;
-		ShowWarning( m_nActualWarningIndex );
+		if( (m_nActualWarningIndex >= m_aWarnings.GetSize() - 1) || 
+			m_nActualWarningIndex < 0 )
+		{
+			m_nActualWarningIndex = 0;
+			//BEEP;
+			ShowWarning( m_nActualWarningIndex );
+		}
+		else if( m_nActualWarningIndex < m_aWarnings.GetSize() - 1 )
+			ShowWarning( ++m_nActualWarningIndex );
+		else
+			m_nActualWarningIndex++;
 	}
-	else if( m_nActualWarningIndex < m_aWarnings.GetSize() - 1 )
-		ShowWarning( ++m_nActualWarningIndex );
-	else
-		m_nActualWarningIndex++;
+	else if ( m_pActiveOutputView == m_pParseView )
+	{
+		if( (m_nParseWarningIndex >= m_aParseWarning.GetSize() - 1) || 
+			m_nParseWarningIndex < 0 )
+		{
+			m_nParseWarningIndex = 0;
+			//BEEP;
+			ShowWarning( m_nParseWarningIndex );
+		}
+		else if( m_nParseWarningIndex < m_aParseWarning.GetSize() - 1 )
+			ShowWarning( ++m_nParseWarningIndex );
+		else
+			m_nParseWarningIndex++;
+	}
 }
 
 void COutputDoc::OnPrevWarning() 
 {
-	if( (m_nActualWarningIndex > m_aWarnings.GetSize() - 1) || 
-		(m_nActualWarningIndex <= 0) )
+	if ( m_pActiveOutputView == m_pBuildView )
 	{
-		m_nActualWarningIndex = m_aWarnings.GetSize() - 1;
-		//BEEP;
-		ShowWarning( m_nActualWarningIndex );
+		if( (m_nActualWarningIndex > m_aWarnings.GetSize() - 1) || 
+			(m_nActualWarningIndex <= 0) )
+		{
+			m_nActualWarningIndex = m_aWarnings.GetSize() - 1;
+			//BEEP;
+			ShowWarning( m_nActualWarningIndex );
+		}
+		else if( m_nActualWarningIndex > 0 )
+			ShowWarning( --m_nActualWarningIndex );
+		else
+			m_nActualWarningIndex--;
 	}
-	else if( m_nActualWarningIndex > 0 )
-		ShowWarning( --m_nActualWarningIndex );
-	else
-		m_nActualWarningIndex--;
+	else if ( m_pActiveOutputView == m_pParseView )
+	{
+		if( (m_nParseWarningIndex > m_aParseWarning.GetSize() - 1) || 
+			(m_nParseWarningIndex <= 0) )
+		{
+			m_nParseWarningIndex = m_aParseWarning.GetSize() - 1;
+			//BEEP;
+			ShowWarning( m_nParseWarningIndex );
+		}
+		else if( m_nParseWarningIndex > 0 )
+			ShowWarning( --m_nParseWarningIndex );
+		else
+			m_nParseWarningIndex--;
+	}
 }
 
 void COutputDoc::OnUpdateNextPrevWarning(CCmdUI* pCmdUI) 
 {
-	pCmdUI->Enable( m_aWarnings.GetSize() );
+	if ( m_pActiveOutputView == m_pBuildView )
+		pCmdUI->Enable( m_aWarnings.GetSize() );
+	else if ( m_pActiveOutputView == m_pParseView )
+		pCmdUI->Enable( m_aParseWarning.GetSize() );
+	else
+		pCmdUI->Enable( FALSE );
 }
 
+/////////////////////////////////////////////////////////////////////
+// handling parse results
+
+void COutputDoc::ShowParseWarning( int nIndex )
+{
+	if( !(nIndex >= 0 && nIndex < m_aParseWarning.GetSize()) )
+		return;
+
+	theApp.OpenLatexDocument(
+		GetFilePath( m_aParseWarning[nIndex].m_strSrcFile ), FALSE,
+		m_aParseWarning[nIndex].m_nSrcLine, TRUE );
+
+	m_nParseInfoIndex = nIndex;
+}
+
+void COutputDoc::ShowParseInfo( int nIndex )
+{
+	if( !(nIndex >= 0 && nIndex < m_aParseInfo.GetSize()) )
+		return;
+
+	theApp.OpenLatexDocument(
+		GetFilePath( m_aParseInfo[nIndex].m_strSrcFile ), FALSE,
+		m_aParseInfo[nIndex].m_nSrcLine, TRUE );
+
+	m_nParseInfoIndex = nIndex;
+}
 
 /////////////////////////////////////////////////////////////////////
 // handling grep results
@@ -555,6 +644,25 @@ void COutputDoc::ActivateMessageByOutputLine( int nLine )
 			}
 		}
 	}
+	else if ( m_pActiveOutputView == m_pParseView )
+	{
+		for ( i = 0; i < m_aParseWarning.GetSize(); i++ )
+		{
+			if ( m_aParseWarning[i].m_nOutputLine == nLine )
+			{
+				ShowParseWarning( i );
+				return;
+			}
+		}
+		for ( i = 0; i < m_aParseInfo.GetSize(); i++ )
+		{
+			if ( m_aParseInfo[i].m_nOutputLine == nLine )
+			{
+				ShowParseInfo( i );
+				return;
+			}
+		}
+	}
 	else
 	{
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -647,6 +755,82 @@ void COutputDoc::OnUpdateEditFindInFiles(CCmdUI* pCmdUI)
 	}
 }
 
+/////////////////////////////////////////////////////////////////////
+// implementation of CParseOutputHandler virtuals
+
+void COutputDoc::OnParseLineInfo( COutputInfo &line, int nLevel, int nSeverity)
+{
+	line.m_nOutputLine = m_pParseView->GetLineCount();
+	switch (nSeverity) 
+	{
+	case CParseOutputHandler::none :
+		m_aParseInfo.Add(line);
+		m_pParseView->AddLine(line.m_strError, CParseOutputView::imageNone, nLevel);
+		break;
+	case CParseOutputHandler::information :
+		m_aParseInfo.Add(line);
+		m_pParseView->AddLine(line.m_strError, CParseOutputView::imageInfo, nLevel);
+		break;
+
+	case CParseOutputHandler::warning :
+		m_aParseWarning.Add(line);
+		m_pParseView->AddLine(line.m_strError, CParseOutputView::imageWarning, nLevel);
+		break;
+	case CParseOutputHandler::error :
+		m_aParseWarning.Add(line);
+		m_pParseView->AddLine(line.m_strError, CParseOutputView::imageError, nLevel);
+		break;
+	default :
+		{ ASSERT(FALSE); } // Invalid nSeverity value
+	}
+}
+
+
+void COutputDoc::OnParseBegin()
+{
+	m_aParseWarning.RemoveAll();
+	m_aParseInfo.RemoveAll();
+	m_nParseInfoIndex = m_nParseWarningIndex =0;
+	m_pParseView->DeleteAllItems();
+
+	CString timeStr = AfxLoadString(STE_PARSE_BEGIN);
+	int nLength = timeStr.GetLength();
+
+	struct tm *now;
+	time_t ltime;
+	time( &ltime );
+	now = localtime( &ltime );
+
+	TCHAR *timeBuf = timeStr.GetBuffer(100);
+	_tcsftime(timeBuf+nLength, 100-nLength, _T("%#c"), now);
+	timeStr.ReleaseBuffer();
+	m_pParseView->AddLine(timeBuf);
+}
+
+
+void COutputDoc::OnParseEnd(boolean bResult, int nFiles, int nLines)
+{
+	CString timeStr = AfxLoadString(STE_PARSE_END);
+	int nLength = timeStr.GetLength();
+
+	struct tm *now;
+	time_t ltime;
+	time( &ltime );
+	now = localtime( &ltime );
+
+	TCHAR *timeBuf = timeStr.GetBuffer(100);
+	_tcsftime(timeBuf+nLength, 100-nLength, _T("%#c"), now);
+	timeStr.ReleaseBuffer();
+	m_pParseView->AddLine(_T(""));
+	m_pParseView->AddLine(timeBuf);
+	
+	CString results;
+	results.Format(STE_PARSE_RESULTS, nFiles, nLines);
+	m_pParseView->AddLine(results);
+	if ( !bResult )
+		m_pParseView->AddLine( AfxLoadString(STE_PARSE_TERMINATE), CParseOutputView::imageError );
+}
+
 
 /////////////////////////////////////////////////////////////////////
 // implementation of CFileGrepHandler virtuals
@@ -730,6 +914,9 @@ void COutputDoc::UpdateAllViews(COutputView* pSender, LPARAM lHint, CObject* pHi
 	ASSERT_VALID(m_apGrepView[1]);
 	if (m_apGrepView[1] != pSender)
 		m_apGrepView[1]->DoOnUpdate(pSender, lHint, pHint);
+	ASSERT_VALID(m_pParseView);
+	if (m_pParseView != pSender)
+		m_pParseView->DoOnUpdate(pSender, lHint, pHint);
 }
 
 

@@ -67,6 +67,7 @@ IDR_FULLSCREEN          BITMAP  DISCARDABLE     "res\\fullscre.bmp"
 IDB_BUILD_VIEW          BITMAP  DISCARDABLE     "res\\buildvie.bmp"
 IDB_TEXNICCENTER        BITMAP  DISCARDABLE     "res\\logo.bmp"
 IDB_SEPARATOR           BITMAP  DISCARDABLE     "res\\separator.bmp"
+IDB_PARSE_VIEW          BITMAP  DISCARDABLE     "res\\parse_vi.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -3943,6 +3944,18 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
+    STE_PARSE_BEGIN         "TODO: Begin parsing time: "
+    STE_PARSE_END           "TODO: End parsing time:"
+    STE_PARSE_PARSING       "TODO: Parsing %s ..."
+    STE_PARSE_FOUND         "TODO: Found %s."
+    STE_PARSE_FOUND_UNMATCHED "TODO: Found unmatched %s."
+    STE_PARSE_RESULTS       "TODO: Parse Results: %d file(s) %d line(s)"
+    STE_PARSE_TERMINATE     "TODO: Parsing terminated abnormally."
+    STE_FILE_EXIST          "TODO: File %s does not exist."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
     ID_REGEX_GROUP          "\\(\001\\)"
     ID_REGEX_STAR           "*"
     ID_REGEX_PLUS           "+"
@@ -6361,6 +6374,7 @@ BEGIN
     IDR_OUTPUT              "Identifier for the output bar"
     STE_BIB_FILES           "Bib files"
     STE_TEX_FILES           "Tex files"
+    STE_TAB_PARSE           "Parse"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7189,6 +7203,18 @@ BEGIN
     STE_GREP_FINISHEDNOHIT  "String not found."
     STE_GREP_FINISHED       "%d Match(es) has been found."
     STE_GREP_ERROR          "! %s: Cannot access file!"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    STE_PARSE_BEGIN         "Begin parsing time: "
+    STE_PARSE_END           "End parsing time:"
+    STE_PARSE_PARSING       "Parsing %s ..."
+    STE_PARSE_FOUND         "Found %s."
+    STE_PARSE_FOUND_UNMATCHED "Found unmatched %s."
+    STE_PARSE_RESULTS       "Parse Results: %d file(s) %d line(s)"
+    STE_PARSE_TERMINATE     "Parsing terminated abnormally."
+    STE_FILE_EXIST          "File %s does not exist."
 END
 
 STRINGTABLE DISCARDABLE 

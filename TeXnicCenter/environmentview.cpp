@@ -64,7 +64,7 @@ void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHin
 {
 	switch( lHint )
 	{
-		case CLatexProject::hintParsingFinished:
+		case COutputDoc::hintParsingFinished:
 			{
 				//-----------------------------------------------------------
 				// remember expanded items

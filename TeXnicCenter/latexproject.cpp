@@ -75,16 +75,16 @@ CLatexProject::CLatexProject()
 	m_nInitialNavigatorTab(0)
 {
 	// initialization
-	m_pStructureParser = new CStructureParser( this/*, this */);
-	ASSERT( m_pStructureParser );
-	if( !m_pStructureParser )
-		AfxThrowMemoryException();
-
 	// Initialize the control bars and main frame pointer members
 	m_pwndMainFrame     = static_cast<CMainFrame*>(AfxGetMainWnd());
 	ASSERT(m_pwndMainFrame);
-	m_pwndWorkspaceBar  = m_pwndMainFrame->GetWorkspaceBar();
-	m_pwndOutputBar     = m_pwndMainFrame->GetOutputBar();
+	ASSERT(m_pwndWorkspaceBar  = m_pwndMainFrame->GetWorkspaceBar());
+	ASSERT(m_pwndOutputBar     = m_pwndMainFrame->GetOutputBar());
+
+	m_pStructureParser = new CStructureParser( this, m_pwndOutputBar->GetOutputDoc() /*, this */);
+	ASSERT( m_pStructureParser );
+	if( !m_pStructureParser )
+		AfxThrowMemoryException();
 
 	// We can parse
 	m_parsingFinished.SetEvent();
@@ -658,7 +658,7 @@ void CLatexProject::OnProjectParsed()
 
 	m_pStructureParser->UnlockStructureItems();
 
-	UpdateAllViews( NULL, hintParsingFinished, (CObject*)&m_aStructureItems );
+	UpdateAllViews( NULL, COutputDoc::hintParsingFinished, (CObject*)&m_aStructureItems );
 	m_bCanParse = TRUE;
 }
 

@@ -61,7 +61,7 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 {
 	switch( lHint )
 	{
-		case CLatexProject::hintParsingFinished:
+		case COutputDoc::hintParsingFinished:
 			{
 				//-----------------------------------------------------------
 				// remember selected item				

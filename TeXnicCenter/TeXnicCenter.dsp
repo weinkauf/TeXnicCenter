@@ -1,24 +1,24 @@
 # Microsoft Developer Studio Project File - Name="TeXnicCenter" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** NICHT BEARBEITEN **
+# ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
 CFG=TeXnicCenter - Win32 Debug
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "TeXnicCenter.mak".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
-!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "TeXnicCenter.mak" CFG="TeXnicCenter - Win32 Debug"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "TeXnicCenter - Win32 Release" (basierend auf  "Win32 (x86) Application")
-!MESSAGE "TeXnicCenter - Win32 Debug" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "TeXnicCenter - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "TeXnicCenter - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MD /W3 /GR /GX /O2 /I "../CrysEditEx/Include" /I "../regexpp/include" /I "../BCGControlBar/Include" /I "../MFCExt/Include" /I "../TeXnicCenterObjects/Include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /D "CE_FROM_DLL" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GR /GX /O2 /I "../CrysEditEx/Include" /I "../regexpp/include" /I "../BCGControlBar/Include" /I "../MFCExt/Include" /I "../TeXnicCenterObjects/Include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /D "CE_FROM_DLL" /FR /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x407 /d "NDEBUG" /d "_AFXDLL"
@@ -69,11 +69,11 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GR /GX /ZI /Od /I "../CrysEditEx/Include" /I "../regexpp/include" /I "../BCGControlBar/Include" /I "../MFCExt/Include" /I "../TeXnicCenterObjects/Include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /D "CE_FROM_DLL" /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GR /GX /ZI /Od /I "../CrysEditEx/Include" /I "../regexpp/include" /I "../BCGControlBar/Include" /I "../MFCExt/Include" /I "../TeXnicCenterObjects/Include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /D "CE_FROM_DLL" /FR /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x407 /d "_DEBUG" /d "_AFXDLL"
-# ADD RSC /l 0x407 /d "_DEBUG" /d "_AFXDLL" /d "AFX_TARG_NEU"
+# ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL" /d "AFX_TARG_NEU"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -318,6 +318,10 @@ SOURCE=.\OutputWizardViewer.cpp
 # Begin Source File
 
 SOURCE=.\OutputWizardWelcome.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ParseOutputView.cpp
 # End Source File
 # Begin Source File
 
@@ -682,6 +686,10 @@ SOURCE=.\OutputWizardWelcome.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ParseOutputView.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\PersistPosEdit.h
 # End Source File
 # Begin Source File
@@ -1021,6 +1029,10 @@ SOURCE=.\res\navigati.bmp
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\parse_vi.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\sdragcopy.cur
 # End Source File
 # Begin Source File
@@ -1086,10 +1098,6 @@ SOURCE=.\TeXnicCenter.reg
 # End Source File
 # End Target
 # End Project
-# Section TeXnicCenter : {72ADFD78-2C39-11D0-9903-00A0C91BC942}
-# 	1:10:IDB_SPLASH:110
-# 	2:21:SplashScreenInsertKey:4.0
-# End Section
 # Section TeXnicCenter : {72ADFD54-2C39-11D0-9903-00A0C91BC942}
 # 	1:17:CG_IDS_DIDYOUKNOW:106
 # 	1:22:CG_IDS_TIPOFTHEDAYMENU:105
@@ -1112,4 +1120,8 @@ SOURCE=.\TeXnicCenter.reg
 # 	2:13:IDB_LIGHTBULB:IDB_LIGHTBULB
 # 	2:18:CG_IDS_FILE_ABSENT:CG_IDS_FILE_ABSENT
 # 	2:10:TipDlg.cpp:TipDlg.cpp
+# End Section
+# Section TeXnicCenter : {72ADFD78-2C39-11D0-9903-00A0C91BC942}
+# 	1:10:IDB_SPLASH:110
+# 	2:21:SplashScreenInsertKey:4.0
 # End Section

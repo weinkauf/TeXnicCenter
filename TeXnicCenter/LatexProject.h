@@ -47,14 +47,6 @@ class CLatexProject :
 						public CProject, 
 					  public CStructureParserHandler
 {
-public:
-	typedef enum tagHint
-	{
-		hintSelectBuildLine = 1,
-		hintParsingFinished,
-		hintSelectGrep1Line
-	} HINT;
-
 protected:
 	CLatexProject();           // Dynamische Erstellung verwendet geschützten Konstruktor
 	DECLARE_DYNCREATE(CLatexProject)
