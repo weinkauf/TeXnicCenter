@@ -58,6 +58,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.4  2002/06/27 14:43:26  svenwiegand
+* Instead of the character test functions (isalpha, isdigit, etc.) from the standard library, our own wrappers from the character.h file (myspell directory) are used now, to fix character recognition problems (bug 551033).
+*
 * Revision 1.3  2002/04/23 21:45:09  cnorris
 * realtime spell check
 *
@@ -732,7 +735,7 @@ void CCrystalEditView::OnUpdateIndicatorRead(CCmdUI* pCmdUI)
 
 void CCrystalEditView::OnEditSwitchOvrmode() 
 {
-	m_bOvrMode = ! m_bOvrMode;
+	SetOverwriteMode(!m_bOvrMode);
 }
 
 void CCrystalEditView::OnUpdateEditSwitchOvrmode(CCmdUI* pCmdUI) 

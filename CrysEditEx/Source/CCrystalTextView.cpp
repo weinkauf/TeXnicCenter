@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.17  2003/04/30 14:20:33  christianwelzel
+* Fixed Bug 602329: File>Print and HP LaserJet 4050
+*
 * Revision 1.16  2002/06/27 14:43:26  svenwiegand
 * Instead of the character test functions (isalpha, isdigit, etc.) from the standard library, our own wrappers from the character.h file (myspell directory) are used now, to fix character recognition problems (bug 551033).
 *
@@ -174,6 +177,11 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CCrystalTextView, CView)
 
 HINSTANCE CCrystalTextView::s_hResourceInst = NULL;
+
+int CCrystalTextView::s_nCaretInsertForm = CARET_LINE;
+int CCrystalTextView::s_nCaretInsertMode = CARET_BLINK;
+int CCrystalTextView::s_nCaretOverwriteForm = CARET_BLOCK;
+int CCrystalTextView::s_nCaretOverwriteMode = CARET_BLINK;
 
 BEGIN_MESSAGE_MAP(CCrystalTextView, CView)
 	//{{AFX_MSG_MAP(CCrystalTextView)
@@ -1395,7 +1403,10 @@ void CCrystalTextView::UpdateCaret()
 	if (m_bFocused && ! m_bCursorHidden &&
 		CalculateActualOffset(m_ptCursorPos.y, m_ptCursorPos.x) >= m_nOffsetChar)
 	{
-		CreateSolidCaret(2, GetLineHeight());
+		if (GetCaretForm()==CARET_BLOCK)
+			CreateSolidCaret(GetCharWidth(), GetLineHeight());
+		else
+			CreateSolidCaret(GetSystemMetrics(SM_CXBORDER)+1, GetLineHeight());
 		SetCaretPos(TextToClient(m_ptCursorPos));
 		ShowCaret();
 	}
@@ -2968,6 +2979,9 @@ void CCrystalTextView::OnEditOperation(int nAction, LPCTSTR pszText)
 
 BOOL CCrystalTextView::PreTranslateMessage(MSG *pMsg) 
 {
+	// catch caret blink message and hide it if we should not blink
+	if (pMsg->message==0x0118 && GetCaretMode()==CARET_STATIC)
+		return TRUE;
 	if (pMsg->message >= WM_KEYFIRST && pMsg->message <= WM_KEYLAST)
 	{
 		if (m_hAccel != NULL)
@@ -3973,6 +3987,68 @@ void CCrystalTextView::GetSelectedText(CString &strSelection)
 		else
 			strSelection = strLine.Mid(nStartChar, nEndChar-nStartChar);
 	}
+}
+
+
+BOOL CCrystalTextView::GetOverwriteMode() const
+{
+	return FALSE;
+}
+
+
+void CCrystalTextView::SetCaretInsertStyle(int nForm, int nMode)
+{
+	s_nCaretInsertForm = nForm;
+	s_nCaretInsertMode = nMode;
+}
+
+
+void CCrystalTextView::SetCaretOverwriteStyle(int nForm, int nMode)
+{
+	s_nCaretOverwriteForm = nForm;
+	s_nCaretOverwriteMode = nMode;
+}
+
+
+int CCrystalTextView::GetCaretInsertForm()
+{
+	return s_nCaretInsertForm;
+}
+
+
+int CCrystalTextView::GetCaretInsertMode()
+{
+	return s_nCaretInsertMode;
+}
+
+
+int CCrystalTextView::GetCaretOverwriteForm()
+{
+	return s_nCaretOverwriteForm;
+}
+
+
+int CCrystalTextView::GetCaretOverwriteMode()
+{
+	return s_nCaretOverwriteMode;
+}
+
+
+int CCrystalTextView::GetCaretForm()
+{
+	if (GetOverwriteMode())
+		return GetCaretOverwriteForm();
+	else
+		return GetCaretInsertForm();
+}
+
+
+int CCrystalTextView::GetCaretMode()
+{
+	if (GetOverwriteMode())
+		return GetCaretOverwriteMode();
+	else
+		return GetCaretInsertMode();
 }
 
 //END SW

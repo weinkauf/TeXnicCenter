@@ -2,6 +2,13 @@
 - Implemented Feature 851400: \texttt{} and \textsc{} buttons
 
 2003/12/06 svenwiegand
+- Implemented Feature 601708 + additions: The user can now set the styles for
+  the text cursor independant for the insert and the overwrite mode. The cursor
+  style is defined by its form (line or block) and its mode (blinking or 
+  not-blinking). The defaults are 'line' for insert cursor and 'block' for
+  overwrite cursor -- both are blinking.
+- When the user chooses 'Automatic' for the colors of selected text and its
+  background, the system defaults are used now instead of black and white.
 - Adapted options pages to make them look more comfortable
 - Moved text format from customization to options dialog
 - Fixed bug 617922: highlight all and copy+paste will crash TXC if last line

@@ -1203,6 +1203,14 @@ BOOL CTeXnicCenterApp::PreTranslateMessage(MSG* pMsg)
 	if (CSplashWnd::PreTranslateAppMessage(pMsg))
 		return TRUE;
 
+	// catch cursor blink message
+	if (pMsg->message==0x0118)
+	{
+		CWnd	*pWnd = CWnd::GetFocus();
+		if (IsWindow(pWnd->GetSafeHwnd()) &&pWnd->PreTranslateMessage(pMsg))
+			return TRUE;
+	}
+
 	return CProjectSupportingWinApp::PreTranslateMessage(pMsg);
 }
 

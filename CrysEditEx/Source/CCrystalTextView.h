@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.7  2002/04/27 07:21:59  cnorris
+* Avoid ambiguous function under Visual Studio < 5
+*
 * Revision 1.6  2002/04/23 21:45:09  cnorris
 * realtime spell check
 *
@@ -621,6 +624,17 @@ private:
 	/** position to start the incremental search at */
 	CPoint m_incrementalSearchStartPos;
 
+	/** The current form of the caret when in insert mode */
+	static int s_nCaretInsertForm;
+
+	/** The current mode of the caret when in insert mode */
+	static int s_nCaretInsertMode;
+
+	/** The current form of the caret when in overwrite mode */
+	static int s_nCaretOverwriteForm;
+
+	/** The current mode of the caret when in overwrite mode */
+	static int s_nCaretOverwriteMode;
 	//END SW
 
 // Attributes
@@ -702,6 +716,38 @@ public:
 		//	Expandable: custom elements are allowed.
 	};
 
+	//BEGIN SW
+	/**
+	Defines constants to be used when calling SetInsertCaretStyle(),
+	SetOverwriteCaretStyle().
+
+	@see tagCaretMode
+	*/
+	enum tagCaretForm
+	{
+		/** Caret is a vertical line */
+		CARET_LINE,
+
+		/** Caret is a block */
+		CARET_BLOCK
+	};
+
+	/**
+	Defines constants to be used when calling SetInsertCaretStyle(),
+	SetOverwriteCaretStyle().
+
+	@see tagCaretForm
+	*/
+	enum tagCaretMode
+	{
+		/** Caret is blinking */
+		CARET_BLINK,
+
+		/** Caret is not blinking */
+		CARET_STATIC
+	};
+	//END SW
+
 // Operations
 public:
 	void AttachToBuffer(CCrystalTextBuffer *pBuf = NULL);
@@ -753,6 +799,56 @@ public:
 		selected text.
 	*/
 	void GetSelectedText(CString &strSelection);
+
+	/**
+	Returns TRUE if the view is in overwrite mode or FALSE if it is in
+	insert mode.
+
+	This base implementation always returns FALSE, but the derived
+	CCrystalEditView class may return TRUE.
+	*/
+	virtual BOOL GetOverwriteMode() const;
+
+	//@{
+	/**
+	Defines the style of the caret.
+
+	The name of the method defines whether to set the given style for
+	the caret in insert or in overwrite mode.
+
+	The style is always set for all view instances.
+
+	@param nForm
+		The form of the caret -- a value of the tagCaretForm enumeration.
+	@param nMode
+		The mode of the caret -- a value of the tagCaretMode enumeration.
+	*/
+	static void SetCaretInsertStyle(int nForm, int nMode);
+	static void SetCaretOverwriteStyle(int nForm, int nMode);
+	//@}
+
+	//@{
+	/**
+	Returns the specified caret setting which is either a value of the
+	tagCaretForm or tagCaretMode enumeration.
+	*/
+	static int GetCaretInsertForm();
+	static int GetCaretInsertMode();
+	static int GetCaretOverwriteForm();
+	static int GetCaretOverwriteMode();
+	//@}
+
+	//@{
+	/**
+	Returns the current caret settings depending on the insert/overwrite
+	caret settings and the current mode (overwrite/insert).
+
+	Depending on the called method the result is either a value of the
+	tagCaretForm or tagCaretMode enumeration.
+	*/
+	int GetCaretForm();
+	int GetCaretMode();
+	//@}
 
 	//END SW
 
