@@ -55,6 +55,8 @@ will be able to adjust options related to Placeholders and/or Placeholder sets.
 
 @see CEditMenuButton
 
+@ingroup guielements
+
 @author Tino Weinkauf
 */
 class CEditMenuButtonOpt : public CEditMenuButton

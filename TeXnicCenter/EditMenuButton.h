@@ -52,6 +52,8 @@ has to specify the text to insert into the edit control.
 
 @see CPersistPosEdit
 
+@ingroup guielements
+
 @author Sven Wiegand
 */
 class CEditMenuButton : public CMenuButton
