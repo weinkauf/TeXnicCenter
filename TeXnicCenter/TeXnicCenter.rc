@@ -676,7 +676,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -4453,7 +4453,7 @@ BEGIN
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter Benutzerforum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Entwicklerforum\nhttp://www.sourceforge.net/projects/texniccenter"
-    ID_URL_TCDICTDOWNLOAD   "http://lingucomponent.openoffice.org/download_dictionary.html#spelling\nWörterbücher herunterladen\nhttp://lingucomponent.openoffice.org/download_dictionary.html#spelling"
+    ID_URL_TCDICTDOWNLOAD   "http://lingucomponent.openoffice.org/spell_dic.html\nWörterbücher herunterladen\nhttp://lingucomponent.openoffice.org/spell_dic.html"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4637,12 +4637,12 @@ BEGIN
     STE_RESOURCE_CONFLICT   "Die Sprachdatei für die gewünschte Sprache (%s) ist nicht mit dieser Version von TeXnicCenter kompatibel.\n\nTeXnicCenter-Version:\t%s\nSprachdatei-Version:\t%s\n\nStatt dessen wird die Standardsprache (Englisch) verwendet."
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -8311,7 +8311,7 @@ BEGIN
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter User Forum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Developer Forum\nhttp://www.sourceforge.net/projects/texniccenter"
-    ID_URL_TCDICTDOWNLOAD   "http://lingucomponent.openoffice.org/download_dictionary.html#spelling\nDownload Dictionaries\nhttp://lingucomponent.openoffice.org/download_dictionary.html#spelling"
+    ID_URL_TCDICTDOWNLOAD   "http://lingucomponent.openoffice.org/spell_dic.html\nDownload Dictionaries\nhttp://lingucomponent.openoffice.org/spell_dic.html"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -8507,7 +8507,7 @@ BEGIN
     STE_RESOURCE_CONFLICT   "The language file for the selected language (%s) is not compatible with this version of TeXnicCenter.\n\nVersion of TeXnicCenter:\t%s\nVersion of language file:\t%s\n\nThe default language (english) will be used instead."
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
