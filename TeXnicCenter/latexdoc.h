@@ -111,7 +111,7 @@ public:
 
 // overrides
 protected:
-	DoSave( LPCTSTR lpszPathName, BOOL bReplace = TRUE );
+	BOOL DoSave( LPCTSTR lpszPathName, BOOL bReplace = TRUE );
 
 	//{{AFX_VIRTUAL(CLatexDoc)
 	public:

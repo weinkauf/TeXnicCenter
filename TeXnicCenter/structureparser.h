@@ -183,7 +183,7 @@ public:
 		typeCount
 	};
 
-	static const CString const m_sItemNames[typeCount];
+	static const CString m_sItemNames[typeCount];
 
 // construction/destruction
 protected:

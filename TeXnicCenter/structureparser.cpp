@@ -47,7 +47,7 @@ static char THIS_FILE[]=__FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 // Statics
-const CString const CStructureParser::m_sItemNames[typeCount]= {
+const CString CStructureParser::m_sItemNames[typeCount]= {
 	"generic","header","equation","quote","quotation",
 	"center","verse","itemization","enumeration","description",
 	"figure","table","texFile","group","bibliography","graphic"};
@@ -362,7 +362,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		// This file extension list should be user configurable because the rules for including 
 		// graphics are configurable. I think this can wait until the config files are converted 
 		// to XML.
-		static const CString const strGraphicTypes[] = {"", ".pdf",".eps",".png"};
+		static const CString strGraphicTypes[] = {"", ".pdf",".eps",".png"};
 		static const int strGraphicLength = 4;
 
 		// parse string before occurence

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_LATEXPROJECT_H__75A37CC1_20BE_11D3_929E_D32D9B17C664__INCLUDED_)
 #define AFX_LATEXPROJECT_H__75A37CC1_20BE_11D3_929E_D32D9B17C664__INCLUDED_
 
@@ -129,7 +135,7 @@ public:
 	/**
 	Returns the full path to the project session file
 	*/
-	__forceinline CString GetSessionPathName(LPCTSTR lpszPath = NULL) const;
+	CString GetSessionPathName(LPCTSTR lpszPath = NULL) const;
 
 	/**
 	Sets the actual selected structure item.
