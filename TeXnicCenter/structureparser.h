@@ -238,7 +238,7 @@ private:
 		<var>TRUE</var> if parsing has been finished successfully, <var>FALSE</var> if
 		parsing has been canceled.
 	*/
-	virtual BOOL Parse( LPCTSTR lpszPath, CCookieStack &cookies );
+	BOOL Parse( LPCTSTR lpszPath, CCookieStack &cookies );
 
 	/**
 	Parses the specified string and fills the m_anItem-array.
@@ -255,7 +255,7 @@ private:
 	@param nActualLine
 		The actual line in the actual file.
 	*/
-	virtual void ParseString( LPCTSTR lpText, int nLength, CCookieStack &cookies, const CString &strActualFile, int nActualLine );
+	void ParseString( LPCTSTR lpText, int nLength, CCookieStack &cookies, const CString &strActualFile, int nActualLine );
 
 	/**
 	Checks, if there is a LaTeX-command at the specified position.
@@ -275,7 +275,7 @@ private:
 	@return
 		TRUE if there is a command at nPos, FALSE otherwise.
 	*/
-	virtual BOOL IsCmdAt( LPCTSTR lpText, int nPos );
+	BOOL IsCmdAt( LPCTSTR lpText, int nPos );
 
 	/**
 	Extracts the argument, delimited by the character, which is the 
