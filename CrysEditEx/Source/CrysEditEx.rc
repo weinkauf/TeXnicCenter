@@ -252,10 +252,10 @@ END
 IDR_POPUP_ATTRIBUTE MENU DISCARDABLE 
 BEGIN
     MENUITEM "none",                        65535
-    POPUP "Todo: Spelling"
+    POPUP "Rechtschreibung"
     BEGIN
-        MENUITEM "Todo: &Ignore All",                 ID_EDIT_SPELL_IGNORE_ALL
-        MENUITEM "Todo: &Add",                        ID_EDIT_SPELL_ADD
+        MENUITEM "&Alle ignorieren",            ID_EDIT_SPELL_IGNORE_ALL
+        MENUITEM "&Hinzufügen",                 ID_EDIT_SPELL_ADD
     END
 END
 
@@ -311,8 +311,8 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_EDIT_SPELL_IGNORE_ALL "Todo: Ignore word\nIgnore this word"
-    ID_EDIT_SPELL_ADD       "Todo: Add word\nAdd this word to personal dictionary"
+    ID_EDIT_SPELL_IGNORE_ALL "Wort ignorieren\nDieses Wort ignorieren."
+    ID_EDIT_SPELL_ADD       "Wort hinzufügen\nDieses Wort zum Benutzerwörterbuch hinzufügen."
 END
 
 #endif    // German (Germany) resources
@@ -400,6 +400,22 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Menu
+//
+
+IDR_POPUP_ATTRIBUTE MENU DISCARDABLE 
+BEGIN
+    MENUITEM "none",                        65535
+    POPUP "Spelling"
+    BEGIN
+        MENUITEM "&Ignore All",                 ID_EDIT_SPELL_IGNORE_ALL
+        MENUITEM "&Add",                        ID_EDIT_SPELL_ADD
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // DESIGNINFO
 //
 
@@ -415,22 +431,6 @@ BEGIN
     END
 END
 #endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Menu
-//
-
-IDR_POPUP_ATTRIBUTE MENU DISCARDABLE 
-BEGIN
-    MENUITEM "none",                        65535
-    POPUP "Spelling"
-    BEGIN
-        MENUITEM "&Ignore All",                 ID_EDIT_SPELL_IGNORE_ALL
-        MENUITEM "&Add",                        ID_EDIT_SPELL_ADD
-    END
-END
 
 
 /////////////////////////////////////////////////////////////////////////////
