@@ -1,3 +1,6 @@
+2002/04/29 cnorris
+- realtime spell check bug fix
+
 2002/04/29 christianwelzel
 - Feature 539142: Configurable Default Path for Documents
 
