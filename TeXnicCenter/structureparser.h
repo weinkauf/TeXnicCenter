@@ -246,17 +246,15 @@ public:
 // implementation
 private:
 
-	/** Lock the internal structure item array.
-	@return 
-		0 on success, else result of GetLastError()
+	/** 
+	Lock the internal structure item array.
 	*/
-	DWORD Lock();
+	inline void Lock()	{ ::EnterCriticalSection( &m_csSI ); }
 
-	/** Unlock the internal structure item array.
-	@return 
-		0 on success, else result of GetLastError()
+	/** 
+	Unlock the internal structure item array.
 	*/
-	DWORD Unlock();
+	inline void Unlock() { ::LeaveCriticalSection( &m_csSI ); }
 
 	/**
 	Signals the end of parsing.
@@ -267,9 +265,12 @@ private:
 
 	/**
 	Empties the cookie stack of all items.
-	@param cookies Cookie stack
+	@param cookies
+		Cookie stack
+	@param aSI
+		Structure Item Array to insert structure elemements into.
 	*/
-	void EmptyCookieStack( CCookieStack &cookies );
+	void EmptyCookieStack( CCookieStack &cookies, CStructureItemArray &aSI );
 
 	/**
 	Parses the specified file and fills the m_anItem-array.
@@ -281,14 +282,16 @@ private:
 		Path of the file to parse.
 	@param cookies
 		Stack of cookies.
-	@param nFileDepth 
+	@param nFileDepth
 		The number of files in processing stack.
+	@param aSI
+		Structure Item Array to insert structure elemements into.
 
 	@return
 		<var>TRUE</var> if parsing has been finished successfully, <var>FALSE</var> if
 		parsing has been canceled.
 	*/
-	BOOL Parse( LPCTSTR lpszPath, CCookieStack &cookies, int nFileDepth );
+	BOOL Parse( LPCTSTR lpszPath, CCookieStack &cookies, int nFileDepth, CStructureItemArray &aSI );
 
 	/**
 	Add the specified file to the m_anItem-array.
@@ -297,14 +300,15 @@ private:
 
 	@param lpszPath
 		Path to the resolved file to add
-
 	@param nType
 		Type of file
+	@param sSI
+		Structure Item Array to insert structure elemements into.
 
 	@return
 		index of file added to m_aStructureItems array.
 	*/
-	int AddFileItem( LPCTSTR lpszPath, int nType );
+	int AddFileItem( LPCTSTR lpszPath, int nType, CStructureItemArray &aSI );
 
 	/**
 	Resolve a file name relative to working directory or absolute.
@@ -332,8 +336,11 @@ private:
 		The actual line in the actual file.
 	@param nFileDepth
 		The depth of the parsed files.
+	@param aSI
+		Structure Item Array to insert structure elemements into.
 	*/
-	void ParseString( LPCTSTR lpText, int nLength, CCookieStack &cookies, const CString &strActualFile, int nActualLine, int nFileDepth);
+	void ParseString( LPCTSTR lpText, int nLength, CCookieStack &cookies, const CString &strActualFile, 
+		int nActualLine, int nFileDepth, CStructureItemArray &aSI );
 
 	/**
 	Checks, if there is a LaTeX-command at the specified position.
@@ -384,7 +391,7 @@ protected:
 	CTextSourceManager *m_pTextSourceManager;
 
 	/** The array of structure items that describe the structure of the project. */
-	CStructureItemArray m_aStructureItems;
+	CStructureItemArray *m_paStructureItems;
 
 	/** The thread object, that does the parsing. */
 	CWinThread *m_pStructureParserThread;
@@ -448,7 +455,7 @@ protected:
 
 private:
 	/** Used to control access to the m_aStructureItems-member. */
-	HANDLE m_hParsingMutex;
+	CRITICAL_SECTION m_csSI;
 
 	/** Actual depth */
 	int m_nDepth;
