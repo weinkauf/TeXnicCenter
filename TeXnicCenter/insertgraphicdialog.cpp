@@ -316,8 +316,12 @@ void CInsertGraphicDialog::OnGraphicBrowse()
 	dlg.m_ofn.lpstrInitialDir = strInitialDir;
 
 	if( dlg.DoModal() != IDOK )
+	{
+		AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
 		return;
+	}
 
+	AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
 	m_strFile = dlg.GetPathName();
 
 	//Get path relative to project dir

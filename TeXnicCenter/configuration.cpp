@@ -79,6 +79,7 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	SerializeProfileInt( strSection, "StandardFileFormat", &m_nStandardFileFormat, direction, CRLF_STYLE_DOS );
 	SerializeProfileString( strSection, "DefaultPath", &m_strDefaultPath, direction );
 	SerializeProfileInt( strSection, "OpenDocWndMaximized", (int*)&m_bOpenDocWndMaximized, direction, FALSE );
+	SerializeProfileString( strSection, "LastOpenedFolder", &m_strLastOpenedFolder, direction );
 
 	// quotation mark replacement
 	SerializeProfileInt( strSection, "ReplaceQuotationMarks", (int*)&m_bReplaceQuotationMarks, direction, TRUE );

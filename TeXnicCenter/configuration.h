@@ -220,6 +220,9 @@ public:
 	/** Default path. */
 	CString m_strDefaultPath;
 
+	/** Last opened Folder for Load- and Save-Dialogs. */
+	CString m_strLastOpenedFolder;
+
 	///////////////////////////////////////////////////////////////////
 	// character replacement
 

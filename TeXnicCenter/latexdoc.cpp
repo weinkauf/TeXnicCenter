@@ -240,8 +240,12 @@ BOOL CLatexDoc::DoSave( LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/ )
 			CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
 		
 		if( dlg.DoModal() != IDOK )
+		{
+			AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
 			return FALSE;
+		}
 
+		AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
 		m_nCRLFMode = dlg.GetFileFormat();
 		m_bSaveCopy = !bReplace;
 		

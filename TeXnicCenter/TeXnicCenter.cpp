@@ -922,8 +922,12 @@ void CTeXnicCenterApp::OnFileOpen()
 	dlg.m_ofn.lpstrInitialDir = strInitialDir;
 
 	if( dlg.DoModal() != IDOK )
+	{
+		AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
 		return;
+	}
 
+	AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
 	// open file
 	OpenLatexDocument( dlg.GetPathName(), dlg.GetReadOnlyPref() );
 }
@@ -941,8 +945,12 @@ void CTeXnicCenterApp::OnProjectOpen()
 	dialog.m_ofn.lpstrInitialDir = strInitialDir;
 
 	if( dialog.DoModal() == IDCANCEL )
+	{
+		AfxSetLastDirectory( CPathTool::GetDirectory(dialog.GetPathName()) );
 		return;
+	}
 
+	AfxSetLastDirectory( CPathTool::GetDirectory(dialog.GetPathName()) );
 	// open project file
 	OpenProject(dialog.GetPathName());
 }
