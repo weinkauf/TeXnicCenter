@@ -83,6 +83,7 @@ CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders,
 		strCmdLine.Replace( _T("%tm"), main.GetFileTitle() );
 		strCmdLine.Replace( _T("%em"), main.GetFileExtension() );
 		strCmdLine.Replace( _T("%bm"), CPathTool::Cat( main.GetDirectory(), main.GetFileTitle() ) );
+		strCmdLine.Replace( _T("%rm"), main.GetDrive() );
 
 		main.EnsureSlashPath();
 		strCmdLine.Replace( _T("%Pm"), main.GetPath() );
@@ -116,6 +117,7 @@ CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders,
 		strCmdLine.Replace( _T("%tc"), current.GetFileTitle() );
 		strCmdLine.Replace( _T("%ec"), current.GetFileExtension() );
 		strCmdLine.Replace( _T("%bc"), CPathTool::Cat( current.GetDirectory(), current.GetFileTitle() ) );
+		strCmdLine.Replace( _T("%rc"), current.GetDrive() );
 
 		current.EnsureSlashPath();
 		strCmdLine.Replace( _T("%Pc"), current.GetPath() );
