@@ -4290,7 +4290,7 @@ BEGIN
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter Benutzerforum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Entwicklerforum\nhttp://www.sourceforge.net/projects/texniccenter"
-    ID_URL_TCDICTDOWNLOAD   "http://whiteboard.openoffice.org/lingucomponent/download_dictionary.html\nWörterbücher herunterladen\nhttp://whiteboard.openoffice.org/lingucomponent/download_dictionary.html"
+    ID_URL_TCDICTDOWNLOAD   "http://lingucomponent.openoffice.org/download_dictionary.html"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7881,7 +7881,7 @@ BEGIN
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter User Forum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Developer Forum\nhttp://www.sourceforge.net/projects/texniccenter"
-    ID_URL_TCDICTDOWNLOAD   "http://whiteboard.openoffice.org/lingucomponent/download_dictionary.html\nDownload Dictionaries\nhttp://whiteboard.openoffice.org/lingucomponent/download_dictionary.html"
+    ID_URL_TCDICTDOWNLOAD   "http://lingucomponent.openoffice.org/download_dictionary.html"
 END
 
 STRINGTABLE DISCARDABLE 
