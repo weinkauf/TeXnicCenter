@@ -1232,53 +1232,128 @@ BOOL CTeXnicCenterApp::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLE
 }
 
 
-void CTeXnicCenterApp::OnUpdateFileMRUProjectList( CCmdUI *pCmdUI )
+void CTeXnicCenterApp::UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &recentFileList, UINT unFirstCommandId, UINT unNoFileStringId)
 {
-	if( !m_recentProjectList.GetSize() || m_recentProjectList[0].IsEmpty() )
+	///////////////////////////////////////////////////////////////////
+	if( !recentFileList.GetSize() || recentFileList[0].IsEmpty() )
 	{
-		pCmdUI->SetText( AfxLoadString( STE_FILE_MRU_PROJECT_NONE ) );
-		pCmdUI->Enable( FALSE );
+		pCmdUI->SetText(AfxLoadString(unNoFileStringId));
+		pCmdUI->Enable(FALSE);
 		return;
 	}
 
-	// update message from menu bar?
-	if (!IsMenu(pCmdUI->m_pSubMenu->GetSafeHmenu()))
-		return;
-
-	CMenu	*pMenu = pCmdUI->m_pSubMenu;
-	int		i;
-
-	for (i = pMenu->GetMenuItemCount(); i >= 0; --i)
-		pMenu->DeleteMenu(i, MF_BYPOSITION);
-	
-	for( i = 0; i < m_recentProjectList.GetSize() && i < 4; i++ )
+	if (g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers)
 	{
-		// get project path
-		CString	strDisplayName;
-		CString	strCurrentDir;
+		/////////////////////////////////////////////////////////////////
+		//
+		// handling for normal windows menus 
+		// (visually handicapped user mode)
+		//
 
-		GetCurrentDirectory( _MAX_PATH, strCurrentDir.GetBuffer( _MAX_PATH ) );
-		strCurrentDir.ReleaseBuffer();
+		// update message from menu bar?
+		if (!IsMenu(pCmdUI->m_pSubMenu->GetSafeHmenu()))
+			return;
 
-		if( !m_recentProjectList.GetDisplayName( 
-			strDisplayName,
-			i,
-			strCurrentDir, strCurrentDir.GetLength() ) )
-			break;
+		CMenu	*pMenu = pCmdUI->m_pSubMenu;
+		int		i;
 
-		// add number for the first ten files
-		if( i < 10 )
+		for (i = pMenu->GetMenuItemCount(); i >= 0; --i)
+			pMenu->DeleteMenu(i, MF_BYPOSITION);
+		
+		for( i = 0; i < recentFileList.GetSize() && i < 4; i++ )
 		{
-			CString	strFormat;
-			if( i == 9 )
-				strFormat.Format( _T("1&0 %s"), strDisplayName );
-			else
-				strFormat.Format( _T("&%d %s"), i + 1, strDisplayName );
-			strDisplayName = strFormat;
+			// get project path
+			CString	strDisplayName;
+			CString	strCurrentDir;
+
+			GetCurrentDirectory( _MAX_PATH, strCurrentDir.GetBuffer( _MAX_PATH ) );
+			strCurrentDir.ReleaseBuffer();
+
+			if( !recentFileList.GetDisplayName( 
+				strDisplayName,
+				i,
+				strCurrentDir, strCurrentDir.GetLength() ) )
+				break;
+
+			// add number for the first ten files
+			if( i < 10 )
+			{
+				CString	strFormat;
+				if( i == 9 )
+					strFormat.Format( _T("1&0 %s"), strDisplayName );
+				else
+					strFormat.Format( _T("&%d %s"), i + 1, strDisplayName );
+				strDisplayName = strFormat;
+			}
+
+			pMenu->AppendMenu(MF_STRING, unFirstCommandId + i, strDisplayName);
+		}
+	}
+	else
+	{
+		/////////////////////////////////////////////////////////////////
+		//
+		// handling for BCG menus
+		//
+
+		// update message from menu bar?
+		if( !pCmdUI->m_pOther || !pCmdUI->m_pOther->IsKindOf( RUNTIME_CLASS(CBCGPopupMenuBar) ) )
+			return;
+
+		// insert all entries of recent project list
+		CBCGPopupMenuBar	*pMenu = (CBCGPopupMenuBar*)pCmdUI->m_pOther;
+		BOOL							bChange = FALSE;
+
+		for( int i = 0; i < recentFileList.GetSize() && i < 4; i++ )
+		{
+			// get project path
+			CString	strDisplayName;
+			CString	strCurrentDir;
+
+			GetCurrentDirectory( _MAX_PATH, strCurrentDir.GetBuffer( _MAX_PATH ) );
+			strCurrentDir.ReleaseBuffer();
+
+			if( !recentFileList.GetDisplayName( 
+				strDisplayName,
+				i,
+				strCurrentDir, strCurrentDir.GetLength() ) )
+				break;
+
+			// add number for the first ten projects
+			if( i < 10 )
+			{
+				CString	strFormat;
+				if( i == 9 )
+					strFormat.Format( _T("1&0 %s"), strDisplayName );
+				else
+					strFormat.Format( _T("&%d %s"), i + 1, strDisplayName );
+				strDisplayName = strFormat;
+			}
+
+			if( pMenu->GetCount() > i && pMenu->GetButtonText( i ) != strDisplayName )
+			{
+				pMenu->SetButtonText( i, strDisplayName );
+				bChange = TRUE;
+			}
+			else if( pMenu->GetCount() <= i )
+			{
+				int	nIndex = pMenu->InsertButton( CBCGToolbarMenuButton( unFirstCommandId + i, NULL, -1, strDisplayName ), i );
+				ASSERT( nIndex > -1 );
+
+				bChange = TRUE;
+			}
 		}
 
-		pMenu->AppendMenu(MF_STRING, ID_FILE_MRU_PROJECT_FIRST + i, strDisplayName);
+		// repaint menu
+		if( bChange )
+			pMenu->AdjustLayout();
 	}
+}
+
+
+void CTeXnicCenterApp::OnUpdateFileMRUProjectList( CCmdUI *pCmdUI )
+{
+	UpdateRecentFileList(pCmdUI, m_recentProjectList, ID_FILE_MRU_PROJECT_FIRST, STE_FILE_MRU_PROJECT_NONE);
 }
 
 
@@ -1291,51 +1366,7 @@ void CTeXnicCenterApp::OnUpdateFileMRU( CCmdUI* pCmdUI )
 
 void CTeXnicCenterApp::OnUpdateFileMRUFileList( CCmdUI *pCmdUI )
 {
-	if( !m_pRecentFileList || !m_pRecentFileList->GetSize() || (*m_pRecentFileList)[0].IsEmpty() || CBCGToolBar::IsCustomizeMode() )
-	{
-		pCmdUI->SetText( AfxLoadString( STE_FILE_MRU_FILE_NONE ) );
-		pCmdUI->Enable( FALSE );
-		return;
-	}
-
-	// update message from menu bar?
-	if (!IsMenu(pCmdUI->m_pSubMenu->GetSafeHmenu()))
-		return;
-
-	CMenu	*pMenu = pCmdUI->m_pSubMenu;
-	int		i;
-
-	for (i = pMenu->GetMenuItemCount(); i >= 0; --i)
-		pMenu->DeleteMenu(i, MF_BYPOSITION);
-	
-	for( i = 0; i < m_pRecentFileList->GetSize() && i < 4; i++ )
-	{
-		// get project path
-		CString	strDisplayName;
-		CString	strCurrentDir;
-
-		GetCurrentDirectory( _MAX_PATH, strCurrentDir.GetBuffer( _MAX_PATH ) );
-		strCurrentDir.ReleaseBuffer();
-
-		if( !m_pRecentFileList->GetDisplayName( 
-			strDisplayName,
-			i,
-			strCurrentDir, strCurrentDir.GetLength() ) )
-			break;
-
-		// add number for the first ten files
-		if( i < 10 )
-		{
-			CString	strFormat;
-			if( i == 9 )
-				strFormat.Format( _T("1&0 %s"), strDisplayName );
-			else
-				strFormat.Format( _T("&%d %s"), i + 1, strDisplayName );
-			strDisplayName = strFormat;
-		}
-
-		pMenu->AppendMenu(MF_STRING, ID_FILE_MRU_FILE1 + i, strDisplayName);
-	}
+	UpdateRecentFileList(pCmdUI, *m_pRecentFileList, ID_FILE_MRU_FILE1, STE_FILE_MRU_FILE_NONE);
 }
 
 
