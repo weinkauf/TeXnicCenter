@@ -101,7 +101,9 @@ void CStructureView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 					case CStructureParser::table:
 					case CStructureParser::header:
 						{
-							if( si.m_nParent == -1 )
+							if (si.m_strTitle.GetLength() == 0)
+                                break; // not title -> no display
+                            if( si.m_nParent == -1 )
 								ahItems[i] = InsertItem( si.m_strTitle, si.m_nType, si.m_nType );
 							else
 								ahItems[i] = InsertItem( 

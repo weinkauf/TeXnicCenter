@@ -137,12 +137,12 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
     TRACE( "m_regexTableEnd returned %d\n", nResult );
 
 	nResult = m_regexEquationStart.set_expression( _T(
-		"\\\\begin\\s*\\{equation\\}"
+		"\\\\begin\\s*\\{(equation|eqnarray)\\}"
 	) );
 	TRACE( "m_regexEquationStart returned %d\n", nResult );
 
 	nResult = m_regexEquationEnd.set_expression( _T(
-		"\\\\end\\s*\\{equation\\}"
+		"\\\\end\\s*\\{(equation|eqnarray)\\}"
 	) );
 	TRACE( "m_regexEquationEnd returned %d\n", nResult );
 
@@ -637,10 +637,10 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		// pop equation from stack
 		if( !cookies.IsEmpty() && cookies.Top().nCookieType == equation )
 		{
-			CStructureItem	&si = aSI[cookies.Pop().nItemIndex];
+            CStructureItem	&si = aSI[cookies.Pop().nItemIndex];
 			if( si.m_strTitle.IsEmpty() )
 			{
-				if( si.m_strCaption.IsEmpty() )
+                if( si.m_strCaption.IsEmpty() )
 					si.m_strTitle = si.m_strLabel;
 				else
 					si.m_strTitle = si.m_strCaption;

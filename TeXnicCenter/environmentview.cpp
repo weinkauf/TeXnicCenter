@@ -118,11 +118,14 @@ void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHin
 					case CStructureParser::figure:
 					case CStructureParser::table:
 						{
-							HTREEITEM	hItem = InsertItem( 
-								si.m_strTitle, 
-								si.m_nType, si.m_nType, 
-								ahParentItems[si.m_nType], TVI_SORT );
-							SetItemData( hItem, i );
+							if( si.m_strTitle.GetLength() > 0 )
+                            {
+                                HTREEITEM	hItem = InsertItem( 
+								    si.m_strTitle, 
+								    si.m_nType, si.m_nType, 
+								    ahParentItems[si.m_nType], TVI_SORT );
+							    SetItemData( hItem, i );
+                            }
 						}
 						break;
 					}
