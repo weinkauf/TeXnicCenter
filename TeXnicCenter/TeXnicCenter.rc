@@ -762,7 +762,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -1821,7 +1821,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "&Tastaturbelegung...",        ID_HELP_KEYMAPPING
         MENUITEM SEPARATOR
-        MENUITEM "Ti&ps && Tricks...",          ID_TIP
+        MENUITEM "Ti&pps und Tricks...",        ID_TIP
         POPUP "TeXnicCenter im Internet"
         BEGIN
             MENUITEM "TeXnicCenter &Homepage",      ID_URL_TCHOME
@@ -2304,13 +2304,13 @@ END
 
 IDD_TIP DIALOG DISCARDABLE  0, 0, 270, 225
 STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
-CAPTION "Tips und Tricks"
+CAPTION "Tipps und Tricks"
 FONT 8, "MS Sans Serif"
 BEGIN
     DEFPUSHBUTTON   "&Schließen",IDOK,211,203,50,14
-    PUSHBUTTON      "&Nächster Tip",IDC_NEXTTIP,139,203,60,14
+    PUSHBUTTON      "&Nächster Tipp",IDC_NEXTTIP,139,203,60,14
     CONTROL         "",IDC_STATIC1,"Static",SS_GRAYFRAME,8,8,253,186
-    CONTROL         "&Tips beim Starten anzeigen",IDC_STARTUP,"Button",
+    CONTROL         "&Tipps beim Starten anzeigen",IDC_STARTUP,"Button",
                     BS_AUTOCHECKBOX | BS_TOP | WS_TABSTOP,8,205,105,12
     ICON            "",IDB_LIGHTBULB,16,16,20,20,NOT WS_VISIBLE
     LTEXT           "IDC_TIPSTRING",IDC_TIPSTRING,51,49,204,139,NOT 
@@ -2362,7 +2362,7 @@ BEGIN
                     IDC_STATIC,80,20,175,35
     LTEXT           "Stellen Sie sicher, daß Sie bereits eine TeX-Distibution installiert haben. Sollte dies nicht der Fall sein, so beenden Sie den Assistenten und TeXnicCenter nun, installieren eine TeX-Distribution und starten den Assistenten danach erneut.",
                     IDC_STATIC,80,60,180,45
-    LTEXT           "Tip: Wenn Sie die MikTeX-Distribution (www.miktex.org) verwenden, so übernimmt TeXnicCenter die komplette Konfiguration für Sie.",
+    LTEXT           "Tipp: Wenn Sie die MikTeX-Distribution (www.miktex.org) verwenden, so übernimmt TeXnicCenter die komplette Konfiguration für Sie.",
                     IDC_STATIC,80,110,180,30
 END
 
@@ -3338,7 +3338,7 @@ BEGIN
     STE_FILE_LATEXFILTER    "LaTeX-Dateien (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|Alle Dateien (*.*)|*.*||"
     STE_LICENSE_FILE        "GPL_german.htm"
     STE_FILE_EXEFILTER      "Ausführbare Dateien (*.exe;*.com)|*.exe;*.com|Alle Dateien (*.*)|*.*||"
-    STE_FILE_INUSE          "Kann die Datei\n\n%s\n\nnicht %s.\n\n%s"
+    STE_FILE_INUSE          "Es trat ein Fehler beim %s der Datei\n\n%s\n\nauf.\n\n%s"
     STE_FILE_DICFILTER      "Wörterbuch-Dateien (*.dic)|*.dic|Alle Dateien (*.*)|*.*||"
     STE_FILE_EXTERNALCHANGE "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?"
     STE_FILE_EXTERNALCHANGEEX 
@@ -3499,11 +3499,11 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    CG_IDS_TIPOFTHEDAY      "Zeigt einen der Tips und Tricks an."
-    CG_IDS_TIPOFTHEDAYMENU  "Ti&ps und Tricks..."
+    CG_IDS_TIPOFTHEDAY      "Zeigt einen der Tipps und Tricks an."
+    CG_IDS_TIPOFTHEDAYMENU  "Ti&pps und Tricks..."
     CG_IDS_DIDYOUKNOW       "Wußten Sie schon..."
-    CG_IDS_FILE_ABSENT      "Tips-Datei ist im vorgeschriebenen Verzeichnis nicht vorhanden"
-    CG_IDS_FILE_CORRUPT     "Probleme beim Lesen der Tips-Datei"
+    CG_IDS_FILE_ABSENT      "Tipps-Datei ist im vorgeschriebenen Verzeichnis nicht vorhanden"
+    CG_IDS_FILE_CORRUPT     "Probleme beim Lesen der Tipps-Datei"
     CG_IDS_TIPOFTHEDAYHELP  "&?"
     STE_TIP_FILE            "Tips_german.txt"
     STE_URL_CANNOTOPEN      "Die URL konnte nicht geöffnet werden."
@@ -3511,13 +3511,13 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_OPEN                "öffnen"
-    IDS_SAVE                "speichern"
+    IDS_OPEN                "Öffnen"
+    IDS_SAVE                "Speichern"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_TIP                  "Zeigt Tips und Tricks an\nTips & Tricks"
+    ID_TIP                  "Zeigt Tipps und Tricks an\nTipps und Tricks"
     ID_LATEX_RUN            "Erzeugt aus Ihrem Projekt ein druckbares Dokument\nAusgabe erstellen"
     ID_UPDATE_LATEX_OUTPUT  "Is send, when the latex-output has to be updated"
     ID_NEXT_ERROR           "Springt zum nächsten Fehler\nNächster Fehler"
@@ -4561,12 +4561,12 @@ BEGIN
     ID_PHS_ALLFILESETS_QR   "$qrAFS"
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -8251,7 +8251,7 @@ BEGIN
     ID_PH_CURRENTOPTIONS    "\n[1]c"
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
