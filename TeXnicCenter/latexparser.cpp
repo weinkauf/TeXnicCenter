@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "LatexParser.h"
 #include "Configuration.h"
@@ -196,7 +202,7 @@ BOOL CLatexParser::SearchVerbStart( LPCTSTR lpStart, LPCTSTR lpEnd, SUBEXPRESSIO
 	for( ; lpStart < lpEnd; lpStart++ )
 	{
 		int	nMatchLen = -1;
-		if (*lpStart == _T('\\') && (nMatchLen = MatchStringEx( lpStart, lpEnd, _T("\\begin\a{verbatim"))) >= 0)
+		if (*lpStart == _T('\\') && (nMatchLen = MatchStringEx( lpStart, lpEnd, _T("\\begin\a{\averbatim"))) >= 0)
 		{
 			what[1].first = what[0].first = lpStart;
 			what[1].second = lpStart + 6;
@@ -227,11 +233,12 @@ BOOL CLatexParser::SearchVerbEnd( LPCTSTR lpStart, LPCTSTR lpEnd, SUBEXPRESSION 
 {
 	for( ; lpStart < lpEnd; lpStart++ )
 	{
-		if( *lpStart == _T('\\') && MatchString( lpStart, lpEnd, _T("\\end{verbatim") ) )
+		int	nMatchLen = -1;
+		if( *lpStart == _T('\\') && (nMatchLen = MatchStringEx( lpStart, lpEnd, _T("\\end\a{\averbatim"))) >= 0)
 		{
 			what[1].first = what[0].first = lpStart;
 			what[1].second = lpStart + 4;
-			lpStart+= 13;	// point to first character behind match
+			lpStart+= nMatchLen;	// point to first character behind match
 			if( lpStart >= lpEnd )
 				return FALSE;
 

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_LATEXSYNTAXPARSER_H__31735C81_110C_11D3_929E_444553540000__INCLUDED_)
 #define AFX_LATEXSYNTAXPARSER_H__31735C81_110C_11D3_929E_444553540000__INCLUDED_
 
@@ -169,6 +175,9 @@ protected:
 	what[0]: whole expression
 	what[1]: "\begin"
 	what[2]: "*" or ""
+
+	@bug {verbatim } not recognized, i.e. whitespace before the closing brace.
+		We should better use regexp here.
 	*/
 	static BOOL SearchVerbStart( LPCTSTR lpStart, LPCTSTR lpEnd, SUBEXPRESSION what[] );
 
@@ -177,6 +186,9 @@ protected:
 	what[0]: whole expression
 	what[1]: "\end"
 	what[2]: "*" or ""
+
+	@bug {verbatim } not recognized, i.e. whitespace before the closing brace.
+		We should better use regexp here.
 	*/
 	static BOOL SearchVerbEnd( LPCTSTR lpStart, LPCTSTR lpEnd, SUBEXPRESSION what[] );
 
