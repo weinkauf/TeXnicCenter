@@ -45,6 +45,7 @@ IMPLEMENT_DYNCREATE(CCrystalEditViewEx, CCrystalEditView)
 
 BEGIN_MESSAGE_MAP(CCrystalEditViewEx, CCrystalEditView)
 	//{{AFX_MSG_MAP(CCrystalEditViewEx)
+	ON_WM_MOUSEWHEEL()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -98,6 +99,21 @@ BOOL CCrystalEditViewEx::Serialize(CIniFile &ini, LPCTSTR lpszKey, BOOL bWrite)
 		if (nSubLineIndex >= 0 && nSubLineIndex < GetSubLineCount())
 			ScrollToSubLine(nSubLineIndex);
 	}
+
+	return TRUE;
+}
+
+
+BOOL CCrystalEditViewEx::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) 
+{
+	int nScrollTo = m_nTopSubLine;
+
+	nScrollTo += (zDelta < 0) ? 2 : -2;
+
+	if (nScrollTo < 0)
+		nScrollTo = 0;
+	if (nScrollTo < GetSubLineCount())
+		ScrollToSubLine(nScrollTo);
 
 	return TRUE;
 }
