@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "OptionPageFile.h"
@@ -49,12 +55,13 @@ IMPLEMENT_DYNCREATE(COptionPageFile, CPropertyPage)
 BEGIN_MESSAGE_MAP(COptionPageFile, CPropertyPage)
 	//{{AFX_MSG_MAP(COptionPageFile)
 	ON_BN_CLICKED(IDC_OPTIONS_SAVE_AUTOMATIC, OnUpdateCtrls)
-	ON_BN_CLICKED(IDC_BROWSE_DEFAULT_PATH, OnBrowseDefaultPath)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
-COptionPageFile::COptionPageFile() : CPropertyPage(COptionPageFile::IDD)
+COptionPageFile::COptionPageFile()
+: CPropertyPage(COptionPageFile::IDD),
+	m_wndBrowseBtn(IDC_OPTIONS_DEFAULT_PATH_EDIT, CString((LPCTSTR)STE_GET_PATH))
 {
 	//{{AFX_DATA_INIT(COptionPageFile)
 	//}}AFX_DATA_INIT
@@ -73,14 +80,9 @@ COptionPageFile::~COptionPageFile()
 
 void COptionPageFile::DoDataExchange(CDataExchange* pDX)
 {
-	if( !pDX->m_bSaveAndValidate )
-	{
-		// load data from configuration
-		m_strDefaultPath = g_configuration.m_strDefaultPath;
-	}
-
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPageFile)
+	DDX_Control(pDX, IDC_BROWSE_DEFAULT_PATH, m_wndBrowseBtn);
 	DDX_Control(pDX, IDC_OPTIONS_SAVE_LABEL2, m_wndSaveIntervalLabel2);
 	DDX_Control(pDX, IDC_OPTIONS_SAVE_LABEL1, m_wndSaveIntervalLabel1);
 	DDX_Control(pDX, IDC_OPTIONS_SAVE_INTERVALL_EDIT, m_wndSaveIntervalEdit);
@@ -91,12 +93,6 @@ void COptionPageFile::DoDataExchange(CDataExchange* pDX)
 	DDX_CBIndex(pDX, IDC_OPTIONS_FILETYPE, m_nFileFormat);
 	DDX_Text(pDX, IDC_OPTIONS_DEFAULT_PATH_EDIT, m_strDefaultPath);
 	//}}AFX_DATA_MAP
-
-	if( pDX->m_bSaveAndValidate )
-	{
-		// save data from dialog to configuration
-		g_configuration.m_strDefaultPath = m_strDefaultPath;
-	}
 }
 
 
@@ -142,16 +138,4 @@ void COptionPageFile::OnOK()
 	g_configuration.m_strDefaultPath = m_strDefaultPath;
 	
 	CPropertyPage::OnOK();
-}
-
-void COptionPageFile::OnBrowseDefaultPath() 
-{
-	CFolderSelect	dlg( AfxLoadString( STE_GET_PATH ) );
-	if( dlg.DoModal() != IDOK )
-		return;
-
-	g_configuration.m_strDefaultPath = dlg.GetPath();
-
-	UpdateData( FALSE );
-	
 }
