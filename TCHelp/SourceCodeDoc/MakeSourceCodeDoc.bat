@@ -34,6 +34,8 @@ echo                                        -
 echo Finishing the HTML-Creation
 
 copy head.png html\head.png
+copy sflogo.png html\sflogo.png
+copy ..\license.html html\license.html
 
 echo                                        -
 echo ----------------------------------------
