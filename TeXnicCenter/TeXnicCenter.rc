@@ -691,8 +691,8 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,6,20,0
- PRODUCTVERSION 0,6,20,0
+ FILEVERSION 0,6,21,0
+ PRODUCTVERSION 0,6,21,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -710,14 +710,14 @@ BEGIN
             VALUE "Comments", "Beta version!\0"
             VALUE "CompanyName", "ToolsCenter (www.ToolsCenter.org)\0"
             VALUE "FileDescription", "TeXnicCenter\0"
-            VALUE "FileVersion", "1 Beta 6.20\0"
+            VALUE "FileVersion", "1 Beta 6.21\0"
             VALUE "InternalName", "TeXnicCenter\0"
             VALUE "LegalCopyright", "Copyright © 1999-2004 ToolsCenter\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "TEXCNTR.EXE\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "TeXnicCenter\0"
-            VALUE "ProductVersion", "1 Beta 6.20 ('Fawkes')\0"
+            VALUE "ProductVersion", "1 Beta 6.21 ('Fawkes')\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -3350,7 +3350,7 @@ BEGIN
     STE_ALL_FILES_FILTER    "Alle Dateien (*.*)|*.*||"
     STE_GET_PATH_TITLE      "Verzeichnis wählen"
     STE_GET_PATH            "Wählen Sie ein Verzeichnis aus..."
-    STE_GRAPHIC_FILES       "Grafik-Dateien|*.jpg,*.jpeg,*.png,*.bmp;*.eps;*.pdf;*.ps;*.tif;*.tiff;*.wmf|Alle Dateien (*.*)|*.*||"
+    STE_GRAPHIC_FILES       "Grafik-Dateien|*.jpg;*.jpeg;*.png;*.bmp;*.eps;*.pdf;*.ps;*.tif;*.tiff;*.wmf|Alle Dateien (*.*)|*.*||"
     STE_FILE_LATEXFILTER    "LaTeX-Dateien (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|BibTeX-Dateien (*.bib, *.bst)|*.bib;*.bst|Alle Dateien (*.*)|*.*||"
     STE_LICENSE_FILE        "GPL_german.htm"
     STE_FILE_EXEFILTER      "Ausführbare Dateien (*.exe;*.com)|*.exe;*.com|Alle Dateien (*.*)|*.*||"
@@ -4446,7 +4446,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_URL_TCHOME           "http://www.ToolsCenter.org/\nTeXnicCenter Homepage\nhttp://www.ToolsCenter.org/"
+    ID_URL_TCHOME           "http://www.TeXnicCenter.org/\nTeXnicCenter Homepage\nhttp://www.TeXnicCenter.org/"
     ID_URL_AUTHOR           "sven.wiegand@gmx.de\nNachricht an den Autor\nmailto:sven.wiegand@gmx.de"
     ID_URL_TCERROR          "http://sourceforge.net/tracker/?func=add&group_id=36323&atid=479426\nFehlerbenachrichtigung\nhttp://sourceforge.net/tracker/?func=add&group_id=36323&atid=479426"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
@@ -4657,8 +4657,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,6,20,0
- PRODUCTVERSION 0,6,20,0
+ FILEVERSION 0,6,21,0
+ PRODUCTVERSION 0,6,21,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -4676,14 +4676,14 @@ BEGIN
             VALUE "Comments", "Beta version!\0"
             VALUE "CompanyName", "ToolsCenter (www.ToolsCenter.org)\0"
             VALUE "FileDescription", "TeXnicCenter\0"
-            VALUE "FileVersion", "1 Beta 6.20\0"
+            VALUE "FileVersion", "1 Beta 6.21\0"
             VALUE "InternalName", "TeXnicCenter\0"
             VALUE "LegalCopyright", "Copyright © 1999-2004 ToolsCenter\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "TEXCNTR.EXE\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "TeXnicCenter\0"
-            VALUE "ProductVersion", "1 Beta 6.20 ('Fawkes')\0"
+            VALUE "ProductVersion", "1 Beta 6.21 ('Fawkes')\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -6714,7 +6714,7 @@ BEGIN
     CONTROL         "&List",IDC_RADIO_VIEW_TYPE1,"Button",BS_AUTORADIOBUTTON,
                     73,219,27,10
     DEFPUSHBUTTON   "OK",IDC_BUTTON_CREATE,257,217,50,14,WS_GROUP
-    PUSHBUTTON      "Abbrechen",IDCANCEL,314,217,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,314,217,50,14
 END
 
 IDD_PROJECT_NEW DIALOG DISCARDABLE  0, 0, 371, 244
@@ -6749,7 +6749,7 @@ BEGIN
     CONTROL         "&List",IDC_RADIO_VIEW_TYPE1,"Button",BS_AUTORADIOBUTTON,
                     73,225,27,10
     DEFPUSHBUTTON   "OK",IDC_BUTTON_CREATE,257,223,50,14,WS_GROUP
-    PUSHBUTTON      "Abbrechen",IDCANCEL,314,223,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,314,223,50,14
 END
 
 
@@ -7239,7 +7239,7 @@ BEGIN
     STE_ALL_FILES_FILTER    "All Files (*.*)|*.*||"
     STE_GET_PATH_TITLE      "Directory Selection"
     STE_GET_PATH            "Select a direcctory..."
-    STE_GRAPHIC_FILES       "Picture-Files|*.jpg,*.jpeg,*.png,*.bmp;*.eps;*.pdf;*.ps;*.tif;*.tiff;*.wmf|All Files (*.*)|*.*||"
+    STE_GRAPHIC_FILES       "Picture-Files|*.jpg;*.jpeg;*.png;*.bmp;*.eps;*.pdf;*.ps;*.tif;*.tiff;*.wmf|All Files (*.*)|*.*||"
     STE_FILE_LATEXFILTER    "LaTeX-Files (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|BibTeX-Files (*.bib, *.bst)|*.bib;*.bst|All Files (*.*)|*.*||"
     STE_LICENSE_FILE        "GPL_english.htm"
     STE_FILE_EXEFILTER      "Executable Files (*.exe;*.com)|*.exe;*.com|All Files (*.*)|*.*||"
@@ -8304,7 +8304,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_URL_TCHOME           "http://www.ToolsCenter.org/\nTeXnicCenter Homepage\nhttp://www.ToolsCenter.org/"
+    ID_URL_TCHOME           "http://www.TeXnicCenter.org/\nTeXnicCenter Homepage\nhttp://www.TeXnicCenter.org/"
     ID_URL_AUTHOR           "sven.wiegand@gmx.de\nE-Mail to the Author\nmailto:sven.wiegand@gmx.de"
     ID_URL_TCERROR          "http://sourceforge.net/tracker/?func=add&group_id=36323&atid=479426\nReport an Error\nhttp://sourceforge.net/tracker/?func=add&group_id=36323&atid=479426"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
