@@ -7,7 +7,8 @@
 #define HIDC_ADD_TYPE                   0x80930403    // IDD_OPTIONS_LATEX
 #define HIDC_BROWSE_DEFAULT_PATH        0x806b050a    // IDD_OPTIONS_PATHS
 #define HIDC_BROWSE_MAIN_FILE           0x80970413    // IDD_PROJECT_PROPERTIES
-#define HIDC_CAPTION                    0x809e0416    // IDD_ITEM_PROPERTIES
+#define HIDC_CAPTION                    0x80980416    // IDD_ITEM_PROPERTIES
+#define HIDC_COMMENT                    0x80980418    // IDD_ITEM_PROPERTIES
 #define HIDC_DEPTH                      0x809c0414    // IDD_HEADER
 #define HIDC_DOCUMENTTEMPLATES          0x806b0403    // IDD_OPTIONS_PATHS
 #define HIDC_EDIT_TYPE                  0x80930406    // IDD_OPTIONS_LATEX
