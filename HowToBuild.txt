@@ -1,6 +1,14 @@
 BUILDING TEXNICCENTER
 
-1. Build regexpp-lib how described in it's documentation.
+1. Build regexpp-lib:
+   a) Open a command line
+   b) Ensure that the environment variables, required to use the command line
+      tools of Visual C++ 6 are setup properly. If you are not sure if this is
+      the case, then execute the 'VCVARS32.BAT' file from the command line, 
+      which should be located in the directory 'VC98\BIN' in your Visual C++
+      program directory (i.e. 'C:\Program Files\Visual C++').
+   c) Change into the 'regexpp\lib\directory'
+   d) Execute the 'VC6.BAT' file to build the library
 
 2. Copy the files
 
@@ -16,8 +24,10 @@ BUILDING TEXNICCENTER
 
    from the 'regexpp\lib' directory to the 'output\Release' directory.
 
-4. Download the HTML Help Workshop from Microsoft and install it on your system 
-   (including the necessary header files).
+4. Download the HTML Help Workshop from Microsoft, install it on your system 
+   (including the necessary header files) and add the directory that includes
+   the header files to the list of include directories in the Visual C++ 6 
+   options ('Tools -> Options -> Directories -> Include folders').
 
 5. Download the BCGControlBarLibrary header- and lib-files from 
 
@@ -26,7 +36,7 @@ BUILDING TEXNICCENTER
    and unpack the ZIP-archive to the directory, this file (HowToBuild.txt) is
    placed in.
 
-6. Open the TeXnicCenter-workspace ('TeXnicCenter\TeXnicCenter.dsw') in Visual C++..
+6. Open the TeXnicCenter-workspace ('TeXnicCenter\TeXnicCenter.dsw') in Visual C++.
 
 7. Build the debug and release versions of TeXnicCenter
 
