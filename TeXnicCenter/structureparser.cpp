@@ -62,7 +62,7 @@ CStructureItem::CStructureItem()
 // class CStructureParser
 //-------------------------------------------------------------------
 CString CStructureParser::m_astrHeader[MAX_DEPTH] = 
-{ _T("part"), _T("chapter"), _T("section"), _T("subsection"), _T("subsubsection") };
+{ _T("appendix"), _T("part"), _T("chapter"), _T("section"), _T("subsection"), _T("subsubsection") };
 
 CStructureParser::CStructureParser()
 :	m_bCancel( FALSE )
@@ -153,6 +153,9 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
  		"\\\\(bibliography)\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"
  	) );
  	TRACE( "m_regexBib returned %d\n", nResult );
+
+ 	nResult = m_regexAppendix.set_expression( _T("\\\\(appendix)") );
+ 	TRACE( "m_regexBib returned %d\n", nResult );
 }
 
 CStructureParser::~CStructureParser()
@@ -207,7 +210,8 @@ UINT StructureParserThread( LPVOID pStructureParser )
 //	bParsingResult =  ((CStructureParser*)pStructureParser)->Parse( ((CStructureParser*)pStructureParser)->m_strMainPath, cookies );
 	bParsingResult = pParser->Parse(pParser->m_strMainPath, cookies, 0);
 
-	pParser->Done( bParsingResult, cookies );
+	pParser->EmptyCookieStack( cookies );
+	pParser->Done( bParsingResult );
 	return 0;
 }
 
@@ -508,6 +512,28 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 
 		return;
 	}
+	// Find appendix
+	if( reg_search( lpText, lpTextEnd, what, m_regexAppendix, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
+	{
+		// parse string before occurence
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth );
+
+		// Reset the headers
+		EmptyCookieStack( cookies );
+		m_nDepth = 1;
+
+		// add appendix to collection
+		INITIALIZE_SI( si );
+		si.m_strTitle.LoadString(STE_APPENDIX);
+		si.m_nParent = -1;
+		cookie.nCookieType = si.m_nType = header;
+		cookie.nItemIndex = m_anItem[m_nDepth] = m_aStructureItems.Add( si );
+		cookies.Push( cookie );
+
+		// parse string behind occurence
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth );
+		return;
+	}
 	// Find bibliography
 	if( reg_search( lpText, lpTextEnd, what, m_regexBib, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
 	{
@@ -596,11 +622,8 @@ int CStructureParser::AddFileItem( LPCTSTR lpszPath, int nType )
 	return m_aStructureItems.Add( si );
 }
 
-
-void CStructureParser::Done( boolean bParsingResult, CCookieStack &cookies )
+void CStructureParser::EmptyCookieStack( CCookieStack &cookies )
 {
-	m_pStructureParserHandler->OnParsingFinished( bParsingResult );
-
 	if ( m_pParseOutputHandler )
 	{
 		while ( !cookies.IsEmpty() )
@@ -617,8 +640,18 @@ void CStructureParser::Done( boolean bParsingResult, CCookieStack &cookies )
 				m_pParseOutputHandler->OnParseLineInfo( info, 0, CParseOutputHandler::warning );
 			}
 		}
-		m_pParseOutputHandler->OnParseEnd( bParsingResult, m_nFilesParsed, m_nLinesParsed );
 	}
+	else
+	{
+		cookies.RemoveAll();
+	}
+}
+
+void CStructureParser::Done( boolean bParsingResult )
+{
+	m_pStructureParserHandler->OnParsingFinished( bParsingResult );
+	if ( m_pParseOutputHandler )
+		m_pParseOutputHandler->OnParseEnd( bParsingResult, m_nFilesParsed, m_nLinesParsed );
 }
 
 

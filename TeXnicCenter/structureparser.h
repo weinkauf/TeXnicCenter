@@ -128,7 +128,7 @@ An Array of CStructureItem-objects.
 typedef CArray<CStructureItem, CStructureItem&> CStructureItemArray;
 
 
-#define MAX_DEPTH		5
+#define MAX_DEPTH		6
 
 
 /**
@@ -253,7 +253,13 @@ private:
 	@param bParsingResult <var>TRUE</var> if parsing was successful, else <var>FALSE</var>.
 	@param cookies Stack of unprocessed cookies from parsing.
 	*/
-	void Done( boolean bParsingResult, CCookieStack &cookies );
+	void Done( boolean bParsingResult );
+
+	/**
+	Empties the cookie stack of all items.
+	@param cookies Cookie stack
+	*/
+	void EmptyCookieStack( CCookieStack &cookies );
 
 	/**
 	Parses the specified file and fills the m_anItem-array.
@@ -417,6 +423,9 @@ protected:
 
 	/** Regular expression describing the biblography command. */
 	tregex m_regexBib;
+
+	/** Regular expression describing the appednidx command. */
+	tregex m_regexAppendix;
 
 	/** Array containing the different headers. */
 	static CString m_astrHeader[MAX_DEPTH];

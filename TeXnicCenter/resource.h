@@ -73,6 +73,7 @@
 #define STE_TEX_FILES                   155
 #define IDD_HEADER                      156
 #define STE_TAB_PARSE                   156
+#define STE_APPENDIX                    157
 #define IDD_FLOATOBJECT                 158
 #define IDC_STATIC1                     158
 #define IDD_GRAPHIC                     159
