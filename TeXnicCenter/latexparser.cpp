@@ -487,7 +487,8 @@ void CLatexParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
 				badWord = true;
 
 			// words end on terminating character 
-			if ( IsSpace(ch) || (IsPunct(ch) &&  ch != _T('\'')) )
+			//if ( IsSpace(ch) || (IsPunct(ch) &&  ch != _T('\'')) )
+			if (!IsAlNum(ch))
 				break;
 			++nEndPos;
 		}
