@@ -1,3 +1,6 @@
+2003/12/20 niteria
+- Tabs can be inserted into the edit controls of the Text Modules dialog.
+
 2003/12/18 niteria
 - Fixed MikTeX recognition. Now it should work with all installation types.
   The "Install Root" found in HKCU is preferred. If not found there,
