@@ -939,6 +939,7 @@
 #define ID_OPTIONS_CHANGED              33113
 #define ID_WINDOW_LIST                  33114
 #define ID_BUTTON33115                  33115
+#define ID_WINDOW_LIST_MENU             33115
 #define ID_INSERT_A                     33117
 #define ID_INSERT_B                     33118
 #define ID_INSERT_X                     33119
