@@ -291,6 +291,22 @@ public:
 
 // implementation helpers
 protected:
+	/**
+	Fills the menu of the most recent used files specified by the 
+	pCmdUI parameter with the files from the specified list.
+
+	@param pCmdUI
+		Points to the submenu to fill with the most recent used files.
+	@param recentFileList
+		List of recent used files, that should be used to build the menu.
+	@param unFirstCommandId
+		Command ID to be used for the first entry in the menu, the 
+		following entries will retrieve the increased values.
+	@param unNoFileStringId
+		Resource identifier of the string to use instead, if the list
+		of recent files is empty.
+	*/
+	static void UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &recentFileList, UINT unFirstCommandId, UINT unNoFileStringId);
 
 // attributes
 public:
