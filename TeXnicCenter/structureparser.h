@@ -243,14 +243,22 @@ private:
 	/**
 	Add the specified file to the m_anItem-array.
 
-	This method resolves file names to the actual name and adds it to the m_anItem-array.
+	This method expects the file name to be resolved.
 
 	@param lpszPath
-		Path to the file to add
+		Path to the resolved file to add
+	*/
+	void AddFileItem( LPCTSTR lpszPath );
+
+	/**
+	Resolve a file name relative to working directory or absolute.
+
+	@param lpszPath
+		Path of file to resolve
 	@return
 		Resolved path
 	*/
-	CString AddFileItem( LPCTSTR lpszPath );
+	CString ResolveFileName( LPCTSTR lpszPath ) const;
 
 	/**
 	Parses the specified string and fills the m_anItem-array.
