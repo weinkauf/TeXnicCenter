@@ -1,0 +1,4167 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>Regex++, regular expression library</TITLE>
+<META NAME="Template" CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080" BGCOLOR="#ffff99">
+
+<FONT FACE="Arial"><H3 ALIGN="CENTER">Regex++, regular expression library.</H3>
+</FONT><FONT FACE="Arial" SIZE=2><EM><P ALIGN="CENTER">(version 2.00, 01 April 1999)</P>
+</FONT></EM><I><PRE>Copyright (c) 1998-9
+Dr John Maddock
+
+Permission to use, copy, modify, distribute and sell this software
+and its documentation for any purpose is hereby granted without fee,
+provided that the above copyright notice appear in all copies and
+that both that copyright notice and this permission notice appear
+in supporting documentation.  Dr John Maddock makes no representations
+about the suitability of this software for any purpose.  
+It is provided "as is" without express or implied warranty.</PRE>
+</I><FONT FACE="Arial" SIZE=2><EM><P>&nbsp;</P>
+</FONT><FONT FACE="Arial"><H3 ALIGN="CENTER">Contents</H3>
+
+<UL>
+</FONT></EM><LI><A HREF="#intro">Introduction</A> </LI>
+<LI><A HREF="#Installation">Installation and Configuration</A> </LI>
+<LI><A HREF="#regbase">Template Class and Algorithm Reference</A> </LI>
+
+<UL>
+<LI>Class <A HREF="#regbase">regbase</A> </LI>
+<LI>Class <A HREF="#bad_expression">bad_expression</A> </LI>
+<LI>Class <A HREF="#reg_expression">reg_expression</A> </LI>
+<LI>Class <A HREF="#regex_char_traits">char_regex_traits</A> </LI>
+<LI>Class <A HREF="#reg_match">reg_match</A> </LI>
+<LI>Algorithm <A HREF="#query_match">query_match</A> </LI>
+<LI>Algorithm <A HREF="#reg_search">reg_search</A> </LI>
+<LI>Algorithm <A HREF="#reg_grep">reg_grep</A> </LI>
+<LI>Algorithm <A HREF="#reg_format">reg_format</A> </LI>
+<LI>Algorithm <A HREF="#reg_merge">reg_merge</A></LI></UL>
+
+<LI>Class <A HREF="#RegEx">RegEx</A> reference </LI>
+<LI><A HREF="#posix">POSIX Compatibility Functions</A> </LI>
+<LI><A HREF="#syntax">Regular Expression Syntax</A> </LI>
+<LI><A HREF="#format_string">Format String Syntax</A> </LI>
+<LI><A HREF="#implementation">Appendices</A> </LI></UL>
+
+<OL>
+<OL>
+
+<LI><A HREF="#implementation">Implementation notes</A></LI>
+<LI><A HREF="#thread_safety">Thread safety</A></LI>
+<LI><A HREF="#localisation">Localisation</A></LI>
+<LI><A HREF="#demos">Demo Applications</A></LI>
+<LI><A HREF="#headers">Header Files</A></LI>
+<LI><A HREF="#redist">Redistributables</A></LI></OL>
+</OL>
+
+
+<UL>
+<LI><A HREF="#furtherInfo">Further Information</A></LI></UL>
+
+<P>&nbsp;</P>
+<P><HR></P>
+<I><FONT FACE="Arial"><H3><A NAME="intro"></A>Introduction</H3>
+</I></FONT><P>The library consists of three parts: a low level template library for compiling, matching and searching regular expressions in &lt;regex&gt;. A high level class that encapsulates the lower level API's and hides the user from template code at the expense of less versatility, and a POSIX API emulation for those that require regular C function API's, both of the latter in &lt;cregex&gt;.</P>
+<P>The low level template code is based around the template class <A HREF="#reg_expression">reg_expression&lt;charT, traits, Allocator&gt;</A>, that is used to encapsulate compiled regular expressions. There are two typedefs of reg_expression&lt;&gt; for easy access to the narrow and wide character versions:</P>
+<PRE>
+<B>typedef</B> reg_expression&lt;<B>char</B>&gt; regex;
+<B>typedef</B> reg_expression&lt;<B>wchar_t</B>&gt; wregex;</PRE>
+<P>In order to match a regular expression, the library provides the algorithm <A HREF="#query_match">query_match</A>. Searching is performed with the algorithm <A HREF="#reg_search">reg_search</A>, and grepping (i.e. finding all matches in a string) with <A HREF="#reg_grep">reg_grep</A>. In each case what matched is reported in an instance of the template class <A HREF="#reg_match">reg_match&lt;iterator, Allocator&gt;</A>, as before there are typedefs of this class for the two most common cases:</P>
+<PRE>
+<B>typedef</B> reg_match&lt;<B>const</B> <B>char</B>*, regex::alloc_type&gt; cmatch;
+<B>typedef</B> reg_match&lt;<B>const</B> <B>wchar_t</B>*, wregex::alloc_type&gt; wcmatch;</PRE>
+<P>However note that the algorithms are not restricted to searching regular C-strings, any bi-directional iterator type can be searched, allowing for the possibility of seamlessly searching almost any kind of data.</P>
+<P>The low level code also supports search and replace operations: the algorithm <A HREF="#reg_format">reg_format</A> takes the result of a match and a format string, and produces a new string by merging the two. The algorithm <A HREF="#reg_merge">reg_merge</A>, takes an expression, a text, and a format string, and transforms the text into a new string by replacing matches with the result of <A HREF="#reg_format">reg_format</A> called on the match and the format string - you can think of this as a version of <A HREF="#reg_grep">reg_grep</A> that does search and replace.</P>
+<P>The class <A HREF="#RegEx">RegEx</A> is a high level encapsulation of the lower level template code - it provides a simplified interface for those that don't need the full power of the library, and supports only narrow characters, and the "extended" regular expression syntax.</P>
+<P>The <A HREF="#posix">POSIX API</A> functions: regcomp, regexec, regfree and regerror, are available in both narrow character and Unicode versions, and are provided for those who need compatability with these API's.</P>
+<P>Finally, note that the library now has run-time <A HREF="#localisation">localisation</A> support, and recognises the full POSIX regular expression syntax - including advanced features like multi-character collating elements and equivalence classes - as well as providing compatibility with other regular expression libraries including GNU and BSD4 regex packages, and to a more limited extent perl 5.</P>
+<P>&nbsp;</P>
+<I><FONT FACE="Arial"><H3><A NAME="Installation"></A>Installation and Configuration Options</H3>
+</I></FONT><P>When you extract the library from its zip file, you must preserve its internal directory structure (for example by using the -d option when extracting). If you didn't do that when extracting, then you'd better stop reading this, delete the files you just extracted, and try again!</P>
+<P>Currently the library will automatically detect and configure itself for Borland, Microsoft and EGCS compilers only. The library will also detect the HP, SGI, Rogue Wave, or Microsoft STL implementations. Alternatively you can define JM_NO_STL and use the library with no underlying STL. If the STL type is detected, then the library will attempt to extract suitable compiler configuration options from the STL used. Otherwise the library will assume that the compiler is fully compliant with the latest draft standard, unless various options are defined to depreciate features not implemented by your compiler, these are documented in &lt;jm_cfg.h&gt;, do not edit this file directly, if you want to add permanent configuration options add them to &lt;jm_opt.h&gt; which is provided for this purpose - this will allow you to keep your configuration options between library versions by retaining &lt;jm_opt.h&gt;. I realise that the library needs a configure script for Unix builds, no doubt at some point I'll get around to writing one.</P>
+<P>The library will encase all code inside namespace __JM unless the macro JM_NO_NAMESPACES is defined, __JM is a macro that defaults to "jm", but can be defined on the command line to be whatever you want. You can also use the macro __JM_STD to refer to the namespace enclosing your standard template library.</P>
+<P>Unlike some other template libraries, this library consists of a mixture of template code (in the headers) and static code and data (in cpp files). Consequently it is necessary to build the library's support code into a library or archive file before you can use it, instructions for specific platforms are as follows:</P>
+<B><P>Borland C++:</P>
+</B><P>Open up a console window and change to the &lt;regex++&gt;\lib directory.</P>
+<P>Select the appropriate batch file (for example bc5.bat for C++ 5, bcb1.bat for Builder1, bcb3.bat for Builder 3 etc).</P>
+<P>Invoke the batch file passing the full path to your version of make on the command line, for example:</P>
+<PRE>
+Bc5 c:\bc5\bin\make</PRE>
+<P>Note that the full path to make is required if you have more than one version of make on your system (as happens if you have more than one version of Borland's tools installed).</P>
+<P>The build process will build a variety of .lib and .dll files (the exact number depends upon the version of Borland's tools you are using), and you should see a message at the end indicating success. The .lib files will be copied to &lt;BCROOT&gt;/lib and the dll's to &lt;BCROOT&gt;/bin, where &lt;BCROOT&gt; corresponds to the install path of your Borland C++ tools.</P>
+<P>Finally when you use regex++ it is only necessary for you to add &lt;regex++&gt;\include to your list of include directories for that project. It is not necessary for you to manually add a .lib file to the project; the headers will automatically select the correct .lib file for your build mode and tell the linker to include it. There is one caveat however: the library can not tell the difference between Borland C++ 5.02, and Borland C++ Builder 1, consequently if you use the library with C++ Builder 1 then you must define the pre-processor symbol JM_USE_VCL in order to ensure that the correct link libraries are selected.</P>
+<P>&nbsp;</P>
+<B><P>Microsoft Visual C++ 5/6</P>
+</B><P>You need either version 5 (service pack 3) or version 6 of MSVC to build this library.</P>
+<P>Open up a command prompt, which has the necessary MSVC environment variables defined (for example by using the batch file Vcvars32.bat installed by the Visual Studio installation), and change to the &lt;regex++&gt;\lib directory.</P>
+<P>Execute the vc6.bat file - at the end you should have six .lib files and two dll files, copies of these will have been placed in your &lt;msvc&gt;\lib and &lt;msvc&gt;\bin directories.</P>
+<P>Finally when you use regex++ it is only necessary for you to add &lt;regex++&gt;\include to your list of include directories for that project. It is not necessary for you to manually add a .lib file to the project; the headers will automatically select the correct .lib file for your build mode and tell the linker to include it.</P>
+<P>&nbsp;</P>
+<B><P>EGCS</P>
+</B><P>There is currently no configure script, however there is a makefile for win32 versions of the egcs compiler. With minor modification this should be suitable for egcs on other platforms. From the command prompt change to the &lt;regex++&gt;/lib directory and type:</P>
+<FONT FACE="Courier New" SIZE=2><P>make -f egcs.mak</P>
+</FONT><P>At the end of the build process you should have a libregex++.a archive file. When you build projects that use regex++, you will need to add &lt;regex++&gt;/include to your list of include paths and add regex++ to your list of library files.</P>
+<P>&nbsp;</P>
+<B><P>Other compilers:</P>
+</B><P>You need to build all the .cpp files in the &lt;regex++&gt;/src directory into a library or archive file. Note that the code is designed to work with compilers that support automatic merging of duplicate template instances - lack of support for this is still a big handicap to making any template code truly portable. If your compiler does not support this then you may be better off adding the .cpp files directly to your project on a bespoke basis.</P>
+<P>&nbsp;</P>
+<P><HR></P>
+<H3 ALIGN="CENTER"><A NAME="regbase"></A>Template Class and Algorithm Reference</H3>
+<I><FONT FACE="Arial"><H3>class regbase</H3>
+</I></FONT><P>#include &lt;regex&gt;</P>
+<P>Class regbase provides error handling and other template independent functions, it is the base class for reg_expression:</P>
+<PRE>
+<B>class</B> JM_IX_DECL regbase
+{
+<B>protected</B>:
+<B>public</B>:
+   <B>enum</B> flag_type
+   {
+      escape_in_lists = <FONT COLOR="#000080">1</FONT>,                          <I><FONT COLOR="#000080">// '\' special inside [...]
+</I></FONT>      char_classes = escape_in_lists &lt;&lt; <FONT COLOR="#000080">1</FONT>,          <I><FONT COLOR="#000080">// [[:CLASS:]] allowed
+</I></FONT>      intervals = char_classes &lt;&lt; <FONT COLOR="#000080">1,</FONT>                <I><FONT COLOR="#000080">// {x,y} allowed
+</I></FONT>      limited_ops = intervals &lt;&lt; <FONT COLOR="#000080">1</FONT>,                 <I><FONT COLOR="#000080">// all of + ? and | are normal characters
+</I></FONT>      newline_alt = limited_ops &lt;&lt; <FONT COLOR="#000080">1</FONT>,               <I><FONT COLOR="#000080">// \n is the same as |
+</I></FONT>      bk_plus_qm = newline_alt &lt;&lt; <FONT COLOR="#000080">1</FONT>,                <I><FONT COLOR="#000080">// uses \+ and \?
+</I></FONT>      bk_braces = bk_plus_qm &lt;&lt; <FONT COLOR="#000080">1</FONT>,                  <I><FONT COLOR="#000080">// uses \{ and \}
+</I></FONT>      bk_parens = bk_braces &lt;&lt; <FONT COLOR="#000080">1</FONT>,                   <I><FONT COLOR="#000080">// uses \( and \)
+</I></FONT>      bk_refs = bk_parens &lt;&lt; <FONT COLOR="#000080">1</FONT>,                     <I><FONT COLOR="#000080">// \d allowed
+</I></FONT>      bk_vbar = bk_refs &lt;&lt; <FONT COLOR="#000080">1</FONT>,                       <I><FONT COLOR="#000080">// uses \|
+</I></FONT>      use_except = bk_vbar &lt;&lt; <FONT COLOR="#000080">1</FONT>,                    <I><FONT COLOR="#000080">// exception on error
+</I></FONT>      failbit = use_except &lt;&lt; <FONT COLOR="#000080">1</FONT>,                    <I><FONT COLOR="#000080">// error flag
+</I></FONT>      literal = failbit &lt;&lt; <FONT COLOR="#000080">1</FONT>,                       <I><FONT COLOR="#000080">// all characters are literals
+</I></FONT>      icase = literal &lt;&lt; <FONT COLOR="#000080">1</FONT>,                         <I><FONT COLOR="#000080">// characters are matched regardless of case
+</I></FONT>      nocollate = icase &lt;&lt; 1,                  <I><FONT COLOR="#000080">// don't use locale specific collation
+</I></FONT>      basic = char_classes | intervals | limited_ops | bk_braces | bk_parens | bk_refs,
+      extended = char_classes | intervals | bk_refs,
+      normal = escape_in_lists | char_classes | intervals | bk_refs | nocollate,
+   };
+
+   <B>unsigned</B> <B>int</B> RE_CALL error_code()<B>const</B>;
+<B>   void</B> RE_CALL fail(<B>unsigned</B> <B>int</B> err);
+   <B>unsigned</B> <B>int</B> RE_CALL flags()<B>const
+</B><FONT COLOR="#008080">#ifdef RE_LOCALE_CPP
+</FONT>   __JM_STD::string RE_CALL errmsg()<B>const</B>;
+   __JM_STD::locale RE_CALL imbue(<B>const</B> __JM_STD::locale&amp; l);
+<B>   const</B> __JM_STD::locale&amp; RE_CALL locale()<B>const</B>;
+<FONT COLOR="#008080">#else
+</FONT>   <B>const</B> <B>char</B>* RE_CALL errmsg()<B>const</B>;
+<FONT COLOR="#008080">#endif
+</FONT>};</PRE>
+<P>&nbsp;</P>
+<P>The enumerated type regbase::flag_type determines the syntax rules for regular expression compilation, the various flags have the following effects:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=652>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase::escape_in_lists</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Allows the use of the escape "\" character in sets of characters, for example [\]] represents the set of characters containing only "]". If this flag is not set then "\" is an ordinary character inside sets.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase::char_classes</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this bit is set, character classes [:classname:] are allowed inside character set declarations, for example "[[:word:]]" represents the set of all characters that belong to the character class "word".</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase:: intervals</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this bit is set, repetition intervals are allowed, for example "a{2,4}" represents a repeat of between 2 and 4 letter a's.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase:: limited_ops</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this bit is set all of "+", "?" and "|" are ordinary characters in all situations.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase:: newline_alt</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this bit is set, then the newline character "\n" has the same effect as the alternation operator "|".</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase:: bk_plus_qm</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this bit is set then "\+" represents the one or more repetition operator and "\?" represents the zero or one repetition operator. When this bit is not set then "+" and "?" are used instead.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase:: bk_braces</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this bit is set then "\{" and "\}" are used for bounded repetitions and "{" and "}" are normal characters. This is the opposite of default behaviour.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase:: bk_parens</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this bit is set then "\(" and "\)" are used to group sub-expressions and "(" and ")" are ordinary characters, this is the opposite of default behaviour.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase:: bk_refs</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this bit is set then back references are allowed.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase:: bk_vbar</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this bit is set then "\|" represents the alternation operator and "|" is an ordinary character. This is the opposite of default behaviour.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase:: use_except</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this bit is set then a <A HREF="#bad_expression">bad_expression</A> exception will be thrown on error.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase:: failbit</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>This bit is set on error, if regbase::use_except is not set, then this bit should be checked to see if a regular expression is valid before usage.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase::literal</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>All characters in the string are treated as literals, there are no special characters or escape sequences.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase::icase</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>All characters in the string are matched regardless of case.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase::nocollate</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Locale specific collation is disabled when dealing with ranges in character set declarations For example when this bit is set the expression [a-c] would match the characters a, b and c only regardless of locale, where as when this is not set , then [a-c] matches any character which collates in the range a to c.</TD>
+<TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>regbase::basic</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Equivalent to the POSIX basic regular expression syntax: char_classes | intervals | limited_ops | bk_braces | bk_parens | bk_refs.</TD>
+<TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Regbase::extended</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Equivalent to the POSIX extended regular expression syntax: char_classes | intervals | bk_refs.</TD>
+<TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="TOP" HEIGHT=24>
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP" HEIGHT=24>
+<P>regbase::normal</TD>
+<TD WIDTH="45%" VALIGN="TOP" HEIGHT=24>
+<P>This is the default setting, and represents how most people expect the library to behave. Equivalent to the POSIX extended syntax, but with locale specific collation disabled, and escape characters inside set declarations enabled: regbase::escape_in_lists | regbase::char_classes | regbase::intervals | regbase::bk_refs | regbase::nocollate.</TD>
+<TD WIDTH="5%" VALIGN="TOP" HEIGHT=24>
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P>Class regbase contains the following public member functions:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=684>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P><A HREF="#reg_errcode_t">reg_errcode_t </A>regbase::error_code();</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>Returns the error code associated with the current regular expression or zero if no error occurred, the code is one of the <A HREF="#reg_errcode_t">reg_errcode_t</A> enumerated values.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>void fail(reg_errcode_t err);</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>For use by derived classes, sets the current error code and throws an <A HREF="#bad_expression">bad_expression</A> exception if regbase::use_except is set.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>unsigned int flags()const;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>Returns the current flags used to compile the expression, can be used to check for the presence of regbase::failbit.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>const char* errmsg()const;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>Returns a user readable string associated with the current error value.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>__JM_STD::locale imbue(const __JM_STD::locale&amp; l);</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>Available only if RE_LOCALE_CPP is defined to enable the C++ locale. Imbues the expression with a copy of the locale l, invalidates any existing compiled expression.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>const __JM_STD::locale&amp; locale()const</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>Available only if RE_LOCALE_CPP is defined to enable the C++ locale. Returns the expressions current locale.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P><A NAME="reg_errcode_t"></A>Error codes are returned as one of the reg_errcode_t enumerated types:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=6 WIDTH=680>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_NOERROR</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>No error occurred.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_NOMATCH</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>No match was found.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_BADPAT</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>The expression was invalid.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_ECOLLATE</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>An invalid collating name was encountered.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_ECTYPE</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>An invalid character class name was encountered.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_EESCAPE</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>A trailing escape character was encountered.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_ESUBREG</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>An invalid back-reference.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_EBRACK</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>A "(" was encountered with no matching ")".</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_EPAREN</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>"(" and ")" do not balance.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_EBRACE</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>"{" was encountered with no matching "}".</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_BADBR</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>The contents of a bounded repetition were invalid.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_ERANGE</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>The endpoint of a range was invalid.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_ESPACE</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>Ran out of memory trying to compile the expression.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_BADRPT</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>A repetition operator was preceded by a sub-expression that can not be repeated.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_EEND</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>Unexpected end of expression.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_ESIZE</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>The expression too big.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_ERPAREN</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>Unmatched right parenthesis.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_EMPTY</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>An empty expression or sub-expression was encountered.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_E_MEMORY</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>Ran out of memory trying to compile the expression.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>REG_E_UNKNOWN</TD>
+<TD WIDTH="46%" VALIGN="TOP">
+<P>An unknown error occurred.</TD>
+<TD WIDTH="4%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P>All error codes are in the range REG_NOERROR to REG_E_UNKNOWN, with REG_NOERROR always taking the value zero.</P>
+<P><HR></P>
+<I><FONT FACE="Arial"><H3><A NAME="bad_expression"></A>Class bad_expression</H3>
+</I></FONT><P>#include &lt;regex&gt;</P>
+<P>An instance of bad_expression is thrown when the flag regbase::use_except is set and a bad regular expression is encountered. </P>
+<PRE>
+<B>class</B> JM_IX_DECL bad_expression : <B>public</B> __JM_STD::exception
+{
+<B>public</B>:
+<FONT COLOR="#008080">#ifdef RE_LOCALE_CPP
+</FONT>bad_expression(<B>const</B> __JM_STD::string&amp; s) : code(s) {}
+<FONT COLOR="#008080">#else
+</FONT>bad_expression(<B>unsigned</B> <B>int</B> err) : code(err) {}
+<FONT COLOR="#008080">#endif
+</FONT>   bad_expression(<B>const</B> bad_expression&amp; e) : __JM_STD::exception(e), code(e.code) {}
+   bad_expression&amp; <B>operator</B>=(<B>const</B> bad_expression&amp; e);
+<B>   virtual</B> <B>const</B> <B>char</B>* what()<B>const</B> <B>throw</B>();
+};</PRE>
+<P>&nbsp;N.B. if JM_NO_EXCEPTION_H is defined during program compilation then bad_expression has no base classes, this allows this library to be used independently of the C++ standard library. In addition if the header defines JM_NO_EXCEPTIONS then class bad_expression is not defined, and no exceptions will be thrown by the library, in this case the flag regbase::use_except has no effect.</P>
+<P><HR></P>
+<I><FONT FACE="Arial"><H3><A NAME="reg_expression"></A>Class reg_expression</H3>
+</I></FONT><P>#include &lt;regex&gt;</P>
+<P>The template class reg_expression encapsulates regular expression parsing and compilation. The class derives from class <A HREF="#regbase">regbase</A> and takes three template parameters:</P>
+<B><I><P>charT</B></I>: determines the character type, i.e. either char or wchar_t.</P>
+<B><I><P>traits</B></I>: determines the behaviour of the character type, for example whether character matching is case sensitive or not, and which character class names are recognised. A default traits class are provided: char_regex_traits&lt;charT&gt;. The traits class char_regex_traits_i&lt;charT&gt; is provided for backward compatibility only.</P>
+<B><I><P>Allocator</B></I>: the allocator class used to allocate memory by the class.</P>
+<P>For ease of use there are two typedefs that define the two standard reg_expression instances, unless you want to use custom allocators, you won't need to use anything other than these:</P>
+<PRE>
+<B>typedef</B> reg_expression&lt;<B>char</B>, char_regex_traits&lt;<B>char</B>&gt;, JM_DEF_ALLOC(<B>char</B>)&gt; regex;
+<B>typedef</B> reg_expression&lt;<B>wchar_t</B>, char_regex_traits&lt;<B>wchar_t</B>&gt;, JM_DEF_ALLOC(<B>wchar_t</B>)&gt; wregex;
+
+<B>template</B> &lt;<B>class</B> charT, <B>class</B> traits JM_TRICKY_DEFAULT_PARAM(char_regex_traits&lt;charT&gt;), <B>class</B> Allocator JM_DEF_ALLOC_PARAM(charT) &gt;
+<B>class</B> reg_expression : <B>public</B> regbase
+{
+<B>public</B>:
+   <I><FONT COLOR="#000080">// typedefs:
+</I></FONT>   <B>typedef</B> Allocator alloc_type;
+   <B>typedef</B> <B>typename</B> REBIND_TYPE(charT, alloc_type)::size_type size_type;
+   <B>typedef</B> charT value_type;
+   <B>typedef</B> charT char_type;
+   <B>typedef</B> traits traits_type;
+   <B>typedef</B> <B>typename</B> traits_type::size_type traits_size_type;
+   <B>typedef</B> <B>typename</B> traits_type::uchar_type traits_uchar_type;
+
+<B>private</B>:
+
+<B>public</B>:
+   <B>unsigned</B> <B>int</B> RE_CALL set_expression(<B>const</B> charT* p, <B>const</B> charT* end, <B>unsigned</B> f = regbase::normal);
+   <B>unsigned</B> <B>int</B> RE_CALL set_expression(<B>const</B> charT* p, <B>unsigned</B> f = regbase::normal) ;
+   reg_expression(<B>const</B> Allocator&amp; a = Allocator());
+   reg_expression(<B>const</B> charT* p, <B>unsigned</B> f = regbase::normal, <B>const</B> Allocator&amp; a = Allocator());
+   reg_expression(<B>const</B> charT* p1, <B>const</B> charT* p2, <B>unsigned</B> f = regbase::normal, <B>const</B> Allocator&amp; a = Allocator());
+   reg_expression(<B>const</B> charT* p, size_type len, <B>unsigned</B> f, <B>const</B> Allocator&amp; a = Allocator());
+   reg_expression(<B>const</B> reg_expression&amp;);
+   ~reg_expression();
+   reg_expression&amp; RE_CALL <B>operator</B>=(<B>const</B> reg_expression&amp;);
+
+   <B>bool</B> RE_CALL <B>operator</B>==(<B>const</B> reg_expression&amp;);
+   <B>bool</B> RE_CALL <B>operator</B>&lt;(<B>const</B> reg_expression&amp;);
+
+   <B>unsigned</B> RE_CALL mark_count()<B>const</B> ;
+   alloc_type RE_CALL allocator()<B>const</B>;
+   <B>const</B> charT* RE_CALL expression()<B>const</B> ;
+};</PRE>
+<P>&nbsp;</P>
+<P>Class reg_expression has the following public member functions:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=686>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> RE_CALL set_expression(<B>const</B> charT* p, <B>const</B> charT* end, <B>unsigned</B> f = regbase::normal);</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>&nbsp;Compiles the regular expression denoted by the two iterators <B>p</B> and <B>end</B>, using the flags specified by <B>f</B> to determine the regular expression syntax. See class <A HREF="#regbase">regbase</A> for allowable flag values. This variant of set_expression allows the regular expression string to contain nulls. Returns the error code on failure, or zero on success.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> RE_CALL set_expression(<B>const</B> charT* p, <B>unsigned</B> f = regbase::normal);</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>&nbsp;Compiles the regular expression contained in the null terminated string <B>p</B>, using the flags specified by <B>f</B> to determine the regular expression syntax. See class <A HREF="#regbase">regbase</A> for allowable flag values. Returns the error code on failure, or zero on success.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>reg_expression(Allocator a = Allocator());</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>&nbsp;Constructs a default instance of reg_expression without any expression.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>reg_expression(charT* p, <B>unsigned</B> f = regbase::normal, Allocator a = Allocator());</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>&nbsp;Constructs an instance of reg_expression from the expression denoted by the null terminated string <B>p</B>, using the flags <B>f</B> to determine regular expression syntax. See class <A HREF="#regbase">regbase</A> for allowable flag values.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>reg_expression(charT* p1, charT* p2, <B>unsigned</B> f = regbase::normal, Allocator a = Allocator());</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>&nbsp;Constructs an instance of reg_expression from the expression denoted by pair of iterators <B>p1</B> and <B>p2</B>, using the flags <B>f</B> to determine regular expression syntax. See class <A HREF="#regbase">regbase</A> for allowable flag values.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>reg_expression(charT* p, size_type len, <B>unsigned</B> f, Allocator a = Allocator());</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>&nbsp;Constructs an instance of reg_expression from the expression denoted by the string <B>p</B> of length <B>len</B>, using the flags <B>f</B> to determine regular expression syntax. See class <A HREF="#regbase">regbase</A> for allowable flag values.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>reg_expression(<B>const</B> reg_expression&amp;);</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Copy constructor - copies an existing regular expression.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>reg_expression&amp; RE_CALL <B>operator</B>=(<B>const</B> reg_expression&amp;);</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Copies an existing regular expression.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<B><P>unsigned</B> RE_CALL mark_count()<B>const</B> ;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Returns the number of sub-expressions in the compiled regular expression.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>alloc_type RE_CALL allocator()<B>const</B>;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Returns a copy of the objects allocator.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<B><P>const</B> charT* RE_CALL expression()<B>const</B> ;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Returns a pointer to a copy of the original expression string.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>Footnote: version 1 of this library did not allow instances of reg_expression&lt;&gt; to be copied, version 2 now supports standard copy constructors and assignments, so that you can insert expressions into standard library containers. Note however that regular expression copying is a relatively slow operation.</P>
+<P>&nbsp;</P>
+<P><HR></P>
+<I><FONT FACE="Arial"><H3><A NAME="regex_char_traits"></A>Class char_regex_traits</H3>
+</I></FONT><P>#include &lt;regex&gt;</P>
+<P>The definition of the default traits class has changed substantially to support both new language features, and new localisation features. In addition version 1 of the library used a separate traits class for case insensitive matching, this version uses the same traits class for both case sensitive and case insensitive matching. For compatibility the old char_regex_traits_i&lt;&gt; template is still present, but new code should use only char_regex_traits&lt;&gt;, and set the regbase::icase flag when compiling to turn on case insensitive matching.</P>
+<P>The purpose of the traits class is to make it easier to customise the behaviour of reg_expression and the associated matching algorithms. Custom traits classes can handle special character sets or define additional character classes, for example one could define [[:kanji:]] as the set of all (Unicode) kanji characters. The following definition defines the interface that all traits classes must provide.</P>
+<PRE>
+<B>template</B> &lt;<B>class</B> charT&gt;
+<B>class</B> char_regex_traits
+{
+<B>public</B>:
+   <B>typedef</B> charT char_type;
+   <I><FONT COLOR="#000080">//
+</I></FONT>   <I><FONT COLOR="#000080">// uchar_type is the same size as char_type
+</I></FONT>   <I><FONT COLOR="#000080">// but must be unsigned:
+</I></FONT>   <B>typedef</B> charT uchar_type;
+   <I><FONT COLOR="#000080">//
+</I></FONT>   <I><FONT COLOR="#000080">// size_type is normally the same as charT
+</I></FONT>   <I><FONT COLOR="#000080">// but could be unsigned int to improve performance
+</I></FONT>   <I><FONT COLOR="#000080">// of narrow character types, NB must be unsigned:
+</I></FONT>   <B>typedef</B> <B>unsigned</B> size_type;
+
+   <I><FONT COLOR="#000080">// length:
+</I></FONT>   <I><FONT COLOR="#000080">// returns the length of a null terminated string
+</I></FONT>   <I><FONT COLOR="#000080">// can be left unimplimented for non-character types.
+</I></FONT>   <B>static</B> size_t length(<B>const</B> char_type* );
+
+   <I><FONT COLOR="#000080">// syntax_type
+</I></FONT>   <I><FONT COLOR="#000080">// returns the syntax type of a given charT
+</I></FONT>   <I><FONT COLOR="#000080">// translates customised syntax to a unified enum.
+</I></FONT>   <B>static</B> <B>unsigned</B> <B>int</B> syntax_type(size_type c);
+
+   <I><FONT COLOR="#000080">// translate:
+</I></FONT>   <I><FONT COLOR="#000080">//
+</I></FONT>   <B>static</B> charT RE_CALL translate(charT c, <B>bool</B> icase
+<FONT COLOR="#008080">   #ifdef RE_LOCALE_CPP
+</FONT>   , <B>const</B> __JM_STD::locale&amp;
+<FONT COLOR="#008080">   #endif
+</FONT>   );
+
+   <I><FONT COLOR="#000080">// transform:
+</I></FONT>   <I><FONT COLOR="#000080">//
+</I></FONT>   <I><FONT COLOR="#000080">// converts a string into a sort key for locale dependant
+</I></FONT>   <I><FONT COLOR="#000080">// character ranges.
+</I></FONT>   <B>static</B> <B>void</B> RE_CALL transform(re_str&lt;charT&gt;&amp; out, <B>const</B> re_str&lt;charT&gt;&amp; in
+<FONT COLOR="#008080">   #ifdef RE_LOCALE_CPP
+</FONT>   , <B>const</B> __JM_STD::locale&amp;
+<FONT COLOR="#008080">   #endif
+</FONT>   );
+
+   <I><FONT COLOR="#000080">// transform_primary:
+</I></FONT>   <I><FONT COLOR="#000080">//
+</I></FONT>   <I><FONT COLOR="#000080">// converts a string into a primary sort key for locale dependant
+</I></FONT>   <I><FONT COLOR="#000080">// equivalence classes.
+</I></FONT>   <B>static</B> <B>void</B> RE_CALL transform_primary(re_str&lt;charT&gt;&amp; out, <B>const</B> re_str&lt;charT&gt;&amp; in
+<FONT COLOR="#008080">   #ifdef RE_LOCALE_CPP
+</FONT>   , <B>const</B> __JM_STD::locale&amp;
+<FONT COLOR="#008080">   #endif
+</FONT>   );
+
+   <I><FONT COLOR="#000080">// is_separator
+</I></FONT>   <I><FONT COLOR="#000080">// returns true if c is a newline character
+</I></FONT>   <B>static</B> <B>bool</B> RE_CALL is_separator(charT c);
+
+   <I><FONT COLOR="#000080">// is_combining
+</I></FONT>   <I><FONT COLOR="#000080">// returns true if the character is a unicode
+</I></FONT>   <I><FONT COLOR="#000080">// combining character
+</I></FONT>   <B>static</B> <B>bool</B> RE_CALL is_combining(charT c);
+
+   <I><FONT COLOR="#000080">// is_class
+</I></FONT>   <I><FONT COLOR="#000080">// returns true if the character is a member
+</I></FONT>   <I><FONT COLOR="#000080">// of the specified character class
+</I></FONT>   <B>static</B> <B>bool</B> RE_CALL is_class(charT c, <B>unsigned</B> <B>int</B> f
+<FONT COLOR="#008080">   #ifdef RE_LOCALE_CPP
+</FONT>   , <B>const</B> __JM_STD::locale&amp;
+<FONT COLOR="#008080">   #endif
+</FONT>   );
+
+   <I><FONT COLOR="#000080">// toi
+</I></FONT>   <I><FONT COLOR="#000080">// converts c to integer
+</I></FONT>   <B>static</B> <B>int</B> RE_CALL toi(charT c
+<FONT COLOR="#008080">   #ifdef RE_LOCALE_CPP
+</FONT>   , <B>const</B> __JM_STD::locale&amp;
+<FONT COLOR="#008080">   #endif
+</FONT>   );
+
+   <I><FONT COLOR="#000080">// toi
+</I></FONT>   <I><FONT COLOR="#000080">// converts multi-character value to int
+</I></FONT>   <I><FONT COLOR="#000080">// updating first as required
+</I></FONT>   <B>static</B> <B>int</B> RE_CALL toi(<B>const</B> charT*&amp; first, <B>const</B> charT* last, <B>int</B> radix
+<FONT COLOR="#008080">   #ifdef RE_LOCALE_CPP
+</FONT>   , <B>const</B> __JM_STD::locale&amp;
+<FONT COLOR="#008080">   #endif
+</FONT>   );
+
+   <I><FONT COLOR="#000080">// lookup_classname
+</I></FONT>   <I><FONT COLOR="#000080">// parses a class declaration of the form [:class:]
+</I></FONT>   <I><FONT COLOR="#000080">// On entry first points to the first character of the class name.
+</I></FONT>   <I><FONT COLOR="#000080">// 
+</I></FONT>   <B>static</B> <B>unsigned</B> <B>int</B> RE_CALL lookup_classname(<B>const</B> charT* first, <B>const</B> charT* last
+<FONT COLOR="#008080">   #ifdef RE_LOCALE_CPP
+</FONT>   , <B>const</B> __JM_STD::locale&amp;
+<FONT COLOR="#008080">   #endif
+</FONT>   );
+
+   <I><FONT COLOR="#000080">// lookup_collatename
+</I></FONT>   <I><FONT COLOR="#000080">// parses a collating element declaration of the form [.collating_name.]
+</I></FONT>   <I><FONT COLOR="#000080">// On entry first points to the first character of the collating element name.
+</I></FONT>   <I><FONT COLOR="#000080">// 
+</I></FONT>   <B>static</B> <B>bool</B> RE_CALL lookup_collatename(re_str&lt;charT&gt;&amp; s, <B>const</B> charT* first, <B>const</B> charT* last
+<FONT COLOR="#008080">   #ifdef RE_LOCALE_CPP
+</FONT>   , <B>const</B> __JM_STD::locale&amp;
+<FONT COLOR="#008080">   #endif
+</FONT>   );
+
+};</PRE>
+<P>&nbsp;</P>
+<P><HR></P>
+<I><FONT FACE="Arial"><H3><A NAME="reg_match"></A>Class reg_match</H3>
+</I></FONT><P>#include &lt;regex&gt;</P>
+<P>Class reg_match is used for reporting what matched a regular expression, it is passed to the matching algorithms <A HREF="#query_match">query_match</A> and <A HREF="#reg_search">reg_search</A>, and is used by <A HREF="#reg_grep">reg_grep</A> to notify the callback function (or function object) what matched.</P>
+<PRE>
+<I><FONT COLOR="#000080">//
+// class reg_match
+// encapsulates reg_match_base, does a deep copy rather than
+// reference counting to ensure thread safety when copying
+// other reg_match instances
+</I></FONT>
+<B>template</B> &lt;<B>class</B> iterator, <B>class</B> Allocator&gt;
+<B>class</B> reg_match : <B>public</B> reg_match_base&lt;iterator, Allocator&gt;
+{
+<B>public</B>:
+<B>   struct</B> pair
+   {
+      iterator first;
+      iterator second;
+      <B>bool</B> matched;
+   };
+
+   reg_match(<B>const</B> Allocator&amp; a = Allocator())
+      : reg_match_base&lt;iterator, Allocator&gt;(a){}
+
+   reg_match(<B>const</B> reg_match_base&lt;iterator, Allocator&gt;&amp; m)
+      : reg_match_base&lt;iterator, Allocator&gt;(m){}
+
+   reg_match&amp; <B>operator</B>=(<B>const</B> reg_match_base&lt;iterator, Allocator&gt;&amp; m);
+
+   reg_match(<B>const</B> reg_match&amp; m);
+   reg_match&amp; <B>operator</B>=(<B>const</B> reg_match&amp; m);
+
+<B>   const</B> pair&amp; RE_CALL <B>operator</B>[](<B>int</B> n) <B>const;
+</B>   Allocator RE_CALL allocator()<B>const</B>;
+   size_t RE_CALL length()<B>const;
+   unsigned</B> <B>int</B> RE_CALL line()<B>const;
+</B>   iterator RE_CALL line_start()<B>const;
+</B>   size_type RE_CALL size()<B>const;
+</B>};</PRE>
+<P>&nbsp;</P>
+<P>Class reg_match and the public base class reg_match_base have the following public member functions:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=701>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>reg_match(Allocator a = Allocator());</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Constructs an instance of reg_match, using allocator instance a.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<B><P>const</B> pair&amp; <B>operator</B>[](size_type n) const;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Returns what matched, item 0 represents the whole string, item 1 the first sub-expression and so on.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Allocator&amp; allocator()const;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Returns the allocator used by the class.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>size_t length();</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Returns the length of the matched string, in effect this is equivalent to operator[](0).second - operator[](0).first.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> RE_CALL line()<B>const</B>;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Returns the index of the line on which the match occurred, indices start with 1, not zero. Equivalent to the number of newline characters prior to operator[](0).first plus one.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>iterator RE_CALL line_start()<B>const;</B></TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Returns an iterator denoting the start of the line on which the match occurred.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>size_type RE_CALL size()<B>const;</B></TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Returns how many sub-expressions are present in the match, including sub-expression zero (the whole match).</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P>The operator[] member function needs further explanation: it returns a const reference to an object of type reg_match&lt;&gt;::pair, which has the following public members:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=706>
+<TR><TD WIDTH="6%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>first</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>An iterator denoting the position of the start of the match.</TD>
+<TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="6%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>second</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>An iterator denoting the position of the end of the match.</TD>
+<TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="6%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>matched</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>A Boolean value denoting whether this sub-expression participated in the match.</TD>
+<TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>Operator[] takes an integer as an argument that denotes the sub-expression for which to return information, the argument can take the following special values:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=706>
+<TR><TD WIDTH="6%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>-2</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>Returns everything from the end of the match, to the end of the input string, equivalent to $' in perl. If this is a null string, then:</P>
+<P>first = second</P>
+<P>And</P>
+<P>matched = false.</TD>
+<TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="6%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>-1</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>Returns everything from the start of the input string (or the end of the last match if this is a grep operation), to the start of this match. Equivalent to $` in perl. If this is a null string, then:</P>
+<P>first = second</P>
+<P>And</P>
+<P>matched = false.</TD>
+<TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="6%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>0</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>Returns the whole of what matched, equivalent to $&amp; in perl. The matched parameter is always true.</TD>
+<TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="6%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>0 &lt; N &lt; size()</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>Returns what matched sub-expression N, if this sub-expression did not participate in the match then </P>
+<P>matched =false</P>
+<P>otherwise:</P>
+<P>matched =true.</TD>
+<TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="6%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>N &lt; -2 or N &gt;= size()</TD>
+<TD WIDTH="44%" VALIGN="TOP">
+<P>Represents an out-of range non-existent sub-expression. Returns a "null" match in which</P>
+<P>first = last</P>
+<P>And</P>
+<P>matched = false.</TD>
+<TD WIDTH="5%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>The other public member functions are for the internal use of the matching algorithms only. Class reg_match_base&lt;&gt; is a reference counted class for internal use only, while reg_match&lt;&gt; always performs deep-copies to ensure thread safety. Note that as well as being parameterised for an allocator, reg_match&lt;&gt; also takes an iterator type, this allows any pair of iterators to be searched for a given regular expression, provided the iterators have at least bi-directional properties.</P>
+<P><HR></P>
+<I><FONT FACE="Arial"><H3><A NAME="query_match"></A>Algorithm query_match</H3>
+</I></FONT><P>#include &lt;regex&gt;</P>
+<P>The algorithm query_match determines whether a given regular expression matches a given sequence denoted by a pair of iterators, the algorithm is defined as follows:</P>
+<PRE>
+<B>template</B> &lt;<B>class</B> iterator, <B>class</B> Allocator, <B>class</B> charT, <B>class</B> traits, <B>class</B> Allocator2&gt;
+<B>bool</B> query_match(iterator first, 
+                 iterator last, 
+                 reg_match&lt;iterator, Allocator&gt;&amp; m, 
+                 <B>const</B> reg_expression&lt;charT, traits, Allocator2&gt;&amp; e, 
+                 <B>unsigned</B> flags = match_default);</PRE>
+<P>The parameters are as follows:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7>
+<TR><TD WIDTH=30 VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH=319 VALIGN="MIDDLE">
+<P>iterator first</TD>
+<TD VALIGN="MIDDLE">
+<P>Denotes the start of the range to be matched.</TD>
+<TD WIDTH=30 VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH=319 VALIGN="TOP">
+<P>iterator last</TD>
+<TD WIDTH=319 VALIGN="TOP">
+<P>Denotes the end of the range to be matched.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH=319 VALIGN="TOP">
+<P>reg_match&lt;iterator, Allocator&gt;&amp; m</TD>
+<TD WIDTH=319 VALIGN="TOP">
+<P>An instance of reg_match in which what matched will be reported. On exit if a match occurred then m[0] denotes the whole of the string that matched, m[0].first must be equal to first, m[0].second will be less than or equal to last. m[1] denotes the first subexpression m[2] the second subexpression and so on. If no match occurred then m[0].first = m[0].second = last.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH=319 VALIGN="TOP">
+<P>const reg_expression&lt;charT, traits, Allocator2&gt;&amp; e</TD>
+<TD WIDTH=319 VALIGN="TOP">
+<P>Contains the regular expression to be matched.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH=319 VALIGN="TOP">
+<P>unsigned flags = match_default</TD>
+<TD WIDTH=319 VALIGN="TOP">
+<P>Determines the semantics used for matching, a combination of one or more <A HREF="#match_type">match_flags</A> enumerators.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P>query_match returns false if no match occurs or true if it does. A match only occurs if it starts at <B>first</B> and finishes on or before <B>last</B>. Example: the following example processes an ftp response:</P>
+<PRE>
+<FONT COLOR="#008080">#include &lt;stdlib.h&gt;
+#include &lt;regex&gt;
+#include &lt;string&gt;
+#include &lt;iostream&gt;
+</FONT>
+regex expression(<FONT COLOR="#0000ff">"^([0-9]+)(\\-| |$)(.*)$"</FONT>);
+
+<I><FONT COLOR="#000080">// process_ftp:
+// on success returns the ftp response code, and fills
+// msg with the ftp response message.
+</I></FONT><B>int</B> process_ftp(<B>const</B> <B>char</B>* response, std::string* msg)
+{
+   cmatch what;
+   <B>if</B>(query_match(response, response + strlen(response), what, expression))
+   {
+      <I><FONT COLOR="#000080">// what[0] contains the whole string
+</I></FONT>      <I><FONT COLOR="#000080">// what[1] contains the response code
+</I></FONT>      <I><FONT COLOR="#000080">// what[2] contains the separator character
+</I></FONT>      <I><FONT COLOR="#000080">// what[3] contains the text message.
+</I></FONT>      <B>if</B>(msg)
+         msg-&gt;assign(what[<FONT COLOR="#000080">3</FONT>].first, what[<FONT COLOR="#000080">3</FONT>].second);
+      <B>return</B> atoi(what[<FONT COLOR="#000080">1</FONT>].first);
+   }
+   <I><FONT COLOR="#000080">// failure did not match
+</I></FONT>   <B>if</B>(msg)
+      msg-&gt;erase();
+   <B>return</B> -<FONT COLOR="#000080">1</FONT>;
+}</PRE>
+<P><A NAME="match_type"></A>The value of the flags parameter passed to the algorithm must be a combination of one or more of the following values:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=701>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>match_default</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>The default value, indicates that <B>first</B> represents the start of a line, the start of a buffer, and (possibly) the start of a word. Also implies that <B>last</B> represents the end of a line, the end of the buffer and (possibly) the end of a word. Implies that a dot sub-expression "." will match both the newline character and a null.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>match_not_bol</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this flag is set then <B>first</B> does not represent the start of a new line.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>match_not_eol</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this flag is set then <B>last</B> does not represent the end of a line.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>match_not_bob</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this flag is set then <B>first</B> is not the beginning of a buffer.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>match_not_eob</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this flag is set then <B>last</B> does not represent the end of a buffer.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>match_not_bow</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this flag is set then <B>first</B> can never match the start of a word.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>match_not_eow</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this flag is set then <B>last</B> can never match the end of a word.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>match_not_dot_newline</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this flag is set then a dot expression "." can not match the newline character.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>match_not_dot_null</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>When this flag is set then a dot expression "." can not match a null character.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE" HEIGHT=75>
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP" HEIGHT=75>
+<P>match_prev_avail</TD>
+<TD WIDTH="45%" VALIGN="TOP" HEIGHT=75>
+<P>When this flag is set, then *--<B>first</B> is a valid expression and the flags match_not_bol and match_not_bow have no effect, since the value of the previous character can be used to check these.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE" HEIGHT=75>
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE" HEIGHT=15>
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP" HEIGHT=15>
+<P>match_any</TD>
+<TD WIDTH="45%" VALIGN="TOP" HEIGHT=15>
+<P>When this flag is set, then the first string matched is returned, rather than the longest possible match. This flag can significantly reduce the time taken to find a match, but what matches is undefined.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE" HEIGHT=15>
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE" HEIGHT=15>
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP" HEIGHT=15>
+<P>match_not_null</TD>
+<TD WIDTH="45%" VALIGN="TOP" HEIGHT=15>
+<P>When this flag is set, then the expression will never match a null string.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE" HEIGHT=15>
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE" HEIGHT=15>
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP" HEIGHT=15>
+<P>match_continuous</TD>
+<TD WIDTH="45%" VALIGN="TOP" HEIGHT=15>
+<P>When this flags is set, then during a grep operation, each successive match must start from where the previous match finished.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE" HEIGHT=15>
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P><HR></P>
+<I><FONT FACE="Arial"><H3><A NAME="reg_search"></A>Algorithm reg_search</H3>
+</I></FONT><P>&nbsp;#include &lt;regex&gt;</P>
+<P>The algorithm reg_search will search a range denoted by a pair of iterators for a given regular expression. The algorithm uses various heuristics to reduce the search time by only checking for a match if a match could conceivably start at that position. The algorithm is defined as follows:</P>
+<PRE>
+<B>template</B> &lt;<B>class</B> iterator, <B>class</B> Allocator, <B>class</B> charT, <B>class</B> traits, <B>class</B> Allocator2&gt;
+<B>bool</B> reg_search(iterator first, 
+                iterator last, 
+                reg_match&lt;iterator, Allocator&gt;&amp; m, 
+                <B>const</B> reg_expression&lt;charT, traits, Allocator2&gt;&amp; e, 
+                <B>unsigned</B> flags = match_default);&nbsp;</PRE>
+<P>The parameters are as follows:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=638>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>iterator first</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The starting position of the range to search.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>iterator last</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The ending position of the range to search.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>reg_match&lt;iterator, Allocator&gt;&amp; m</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>An instance of reg_match in which what matched will be reported. On exit if a match occurred then m[0] denotes the whole of the string that matched, m[0].first and m[0].second will be less than or equal to last. m[1] denotes the first sub-expression m[2] the second sub-expression and so on. If no match occurred then m[0].first = m[0].second = last.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>const reg_expression&lt;charT, traits, Allocator2&gt;&amp; e</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The regular expression to search for.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>unsigned flags = match_default</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The flags that determine what gets matched, a combination of one or more <A HREF="#match_type">match_flags</A> enumerators.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P>Example: the following example, takes the contents of a file in the form of a string, and searches for all the C++ class declarations in the file. The code will work regardless of the way that std::string is implemented, for example it could easily be modified to work with the SGI rope class, which uses a non-contiguous storage strategy.</P>
+<PRE>
+<FONT COLOR="#008080">#include &lt;string&gt;
+#include &lt;map&gt;
+#include &lt;regex&gt;
+</FONT>
+<I><FONT COLOR="#000080">// purpose:
+// takes the contents of a file in the form of a string
+// and searches for all the C++ class definitions, storing
+// their locations in a map of strings/int's
+</I></FONT>
+<B>typedef</B> std::map&lt;std::string, <B>int</B>, std::less&lt;std::string&gt; &gt; map_type;
+
+regex expression(<FONT COLOR="#0000ff">"^(template[[:space:]]*&lt;[^;:{]+&gt;[[:space:]]*)?(class|struct)[[:space:]]*(\\&lt;\\w+\\&gt;([[:blank:]]*\\([^)]*\\))?[[:space:]]*)*(\\&lt;\\w*\\&gt;)[[:space:]]*(&lt;[^;:{]+&gt;[[:space:]]*)?(\\{|:[^;\\{()]*\\{)"</FONT>);
+
+<B>void</B> IndexClasses(map_type&amp; m, <B>const</B> std::string&amp; file)
+{
+   std::string::const_iterator start, end;
+   start = file.begin();
+   end = file.end();   
+   reg_match&lt;std::string::const_iterator&gt; what;
+   <B>unsigned</B> <B>int</B> flags = match_default;
+   <B>while</B>(reg_search(start, end, what, expression, flags))   
+   {
+      <I><FONT COLOR="#000080">// what[0] contains the whole string
+</I></FONT>      <I><FONT COLOR="#000080">// what[5] contains the class name.
+</I></FONT>      <I><FONT COLOR="#000080">// what[6] contains the template specialisation if any.
+</I></FONT>      <I><FONT COLOR="#000080">// add class name and position to map:
+</I></FONT>      m[std::string(what[<FONT COLOR="#000080">5</FONT>].first, what[<FONT COLOR="#000080">5</FONT>].second) + std::string(what[<FONT COLOR="#000080">6</FONT>].first, what[<FONT COLOR="#000080">6</FONT>].second)] = 
+               what[<FONT COLOR="#000080">5</FONT>].first - file.begin();      
+      <I><FONT COLOR="#000080">// update search position:
+</I></FONT>      start = what[<FONT COLOR="#000080">0</FONT>].second;      
+      <I><FONT COLOR="#000080">// update flags:
+</I></FONT>      flags |= match_prev_avail;      
+      flags &amp;= ~match_not_bob;   
+   }
+}</PRE>
+<P>&nbsp;</P>
+<P><HR></P>
+<EM><H3><A NAME="reg_grep"></A>Algorithm reg_grep</H3>
+</EM><P>#include &lt;regex&gt;</P>
+<P>&nbsp;Reg_grep allows you to search through an iterator range and locate all the (non-overlapping) matches with a given regular expression. The function is declared as:</P>
+<PRE>
+<B>template</B> &lt;<B>class</B> Predicate, <B>class</B> iterator, <B>class</B> charT, <B>class</B> traits, <B>class</B> Allocator&gt;
+<B>unsigned</B> <B>int</B> reg_grep(Predicate foo, iterator first, iterator last, <B>const</B> reg_expression&lt;charT, traits, Allocator&gt;&amp; e, <B>unsigned</B> flags = match_default)</PRE>
+<P>The parameters have the following meanings:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=638>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>foo</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>A predicate function object or function pointer, see below for more information.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>first</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The start of the range to search.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>last</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The end of the range to search.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>e</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The regular expression to search for.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>flags</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The flags that determine how matching is carried out, one of the <A HREF="#match_type">match_flags</A> enumerators.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P>&nbsp;The algorithm finds all of the non-overlapping matches of the expression e, for each match it fills a <A HREF="#reg_match">reg_match</A>&lt;iterator, Allocator&gt; structure, which contains information on what matched, and calls the predicate foo, passing the reg_match&lt;iterator, Allocator&gt; as a single argument. If the predicate returns true, then the grep operation continues, otherwise it terminates without searching for further matches.</P>
+<P>The general form of the predicate is:</P>
+<PRE>
+<B>struct</B> grep_predicate
+{
+   grep_predicate&amp; <STRONG>operator</STRONG>*() { <STRONG>return</STRONG> *<STRONG>this</STRONG>; }
+   <STRONG>bool</STRONG> <STRONG>operator</STRONG>()(<STRONG>const</STRONG> reg_match&lt;iterator_type, expression_type::alloc_type&gt;&amp; m);
+};</PRE>
+<P>For example the regular expression "a*b" would find one match in the string "aaaaab" and two in the string "aaabb".</P>
+<P>Remember this algorithm can be used for a lot more than implementing a version of grep, the predicate can be and do anything that you want, grep utilities would output the results to the screen, another program could index a file based on a regular expression and store a set of bookmarks in a list, or a text file conversion utility would output to file. The results of one reg_grep can even be chained into another reg_grep to create recursive parsers.</P>
+<I><P>Footnote: the format of reg_grep has changed compared to version 1 of the library, existing code can not use this version of reg_grep, a function reg_grep_old is provided with the same syntax as the old version, you can either use this version in existing code, or port to the new version by changing your existing output iterator to a predicate.&nbsp;</P>
+</I><P>Example: convert the example from <EM>reg_search</EM> to use <EM>reg_grep</EM> instead:</P>
+<PRE>
+<FONT COLOR="#008080">#include &lt;string&gt;
+#include &lt;map&gt;
+#include &lt;regex&gt;
+</FONT>
+<I><FONT COLOR="#000080">// IndexClasses:
+// takes the contents of a file in the form of a string
+// and searches for all the C++ class definitions, storing
+// their locations in a map of strings/int's
+</I></FONT>
+<B>typedef</B> std::map&lt;std::string, <B>int</B>, std::less&lt;std::string&gt; &gt; map_type;
+
+regex expression(<FONT COLOR="#0000ff">"^(template[[:space:]]*&lt;[^;:{]+&gt;[[:space:]]*)?"
+                 "(class|struct)[[:space:]]*(\\&lt;\\w+\\&gt;([[:blank:]]*\\([^)]*\\))?[[:space:]]*)*(\\&lt;\\w*\\&gt;)"
+                 "[[:space:]]*(&lt;[^;:{]+&gt;[[:space:]]*)?(\\{|:[^;\\{()]*\\{)"</FONT>);
+
+<B>class</B> IndexClassesPred
+{
+   map_type&amp; m;
+   std::string::const_iterator base;
+<B>public</B>:
+   IndexClassesPred(map_type&amp; a, std::string::const_iterator b) : m(a), base(b) {}
+   <B>bool</B> <B>operator</B>()(<B>const</B> reg_match&lt;std::string::const_iterator, regex::alloc_type&gt;&amp; what)
+   {
+      <I><FONT COLOR="#000080">// what[0] contains the whole string
+</I></FONT>      <I><FONT COLOR="#000080">// what[5] contains the class name.
+</I></FONT>      <I><FONT COLOR="#000080">// what[6] contains the template specialisation if any.
+</I></FONT>      <I><FONT COLOR="#000080">// add class name and position to map:
+</I></FONT>      m[std::string(what[<FONT COLOR="#000080">5</FONT>].first, what[<FONT COLOR="#000080">5</FONT>].second) + std::string(what[<FONT COLOR="#000080">6</FONT>].first, what[<FONT COLOR="#000080">6</FONT>].second)] = 
+               what[<FONT COLOR="#000080">5</FONT>].first - base;
+      <B>return</B> <B>true</B>;
+   }
+};
+
+<B>void</B> IndexClasses(map_type&amp; m, <B>const</B> std::string&amp; file)
+{
+   std::string::const_iterator start, end;
+   start = file.begin();
+   end = file.end();
+   reg_grep(IndexClassesPred(m, start), start, end, expression, match_default);</PRE>
+<FONT FACE="Courier New"><P>}</P>
+</FONT><P>Example: Use reg_grep to call a global callback function:</P>
+<PRE>
+<FONT COLOR="#008080">#include &lt;string&gt;
+#include &lt;map&gt;
+#include &lt;regex&gt;
+</FONT>
+<I><FONT COLOR="#000080">// purpose:
+// takes the contents of a file in the form of a string
+// and searches for all the C++ class definitions, storing
+// their locations in a map of strings/int's
+</I></FONT>
+<B>typedef</B> std::map&lt;std::string, <B>int</B>, std::less&lt;std::string&gt; &gt; map_type;
+
+regex expression(<FONT COLOR="#0000ff">"^(template[[:space:]]*&lt;[^;:{]+&gt;[[:space:]]*)?(class|struct)[[:space:]]*(\\&lt;\\w+\\&gt;([[:blank:]]*\\([^)]*\\))?[[:space:]]*)*(\\&lt;\\w*\\&gt;)[[:space:]]*(&lt;[^;:{]+&gt;[[:space:]]*)?(\\{|:[^;\\{()]*\\{)"</FONT>);
+map_type class_index;
+std::string::const_iterator base;
+
+<B>bool</B> grep_callback(<B>const</B> reg_match&lt;std::string::const_iterator, regex::alloc_type&gt;&amp; what)
+{
+   <I><FONT COLOR="#000080">// what[0] contains the whole string
+</I></FONT>   <I><FONT COLOR="#000080">// what[5] contains the class name.
+</I></FONT>   <I><FONT COLOR="#000080">// what[6] contains the template specialisation if any.
+</I></FONT>   <I><FONT COLOR="#000080">// add class name and position to map:
+</I></FONT>   class_index[std::string(what[<FONT COLOR="#000080">5</FONT>].first, what[<FONT COLOR="#000080">5</FONT>].second) + std::string(what[<FONT COLOR="#000080">6</FONT>].first, what[<FONT COLOR="#000080">6</FONT>].second)] = 
+               what[<FONT COLOR="#000080">5</FONT>].first - base;
+   <B>return</B> <B>true</B>;
+}
+
+<B>void</B> IndexClasses(<B>const</B> std::string&amp; file)
+{
+   std::string::const_iterator start, end;
+   start = file.begin();
+   end = file.end();
+   base = start;
+   reg_grep(grep_callback, start, end, expression, match_default);
+}</PRE>
+<P>&nbsp;</P>
+<P>Example use reg_grep to call a class member function, use the standard library adapters <I>mem_fun</I> and <I>bind1st</I> to convert the member function into a predicate:</P>
+<PRE>
+<FONT COLOR="#008080">#include &lt;string&gt;
+#include &lt;map&gt;
+#include &lt;regex&gt;
+#include &lt;functional&gt;
+</FONT>
+<I><FONT COLOR="#000080">// purpose:
+// takes the contents of a file in the form of a string
+// and searches for all the C++ class definitions, storing
+// their locations in a map of strings/int's
+</I></FONT>
+<B>typedef</B> std::map&lt;std::string, <B>int</B>, std::less&lt;std::string&gt; &gt; map_type;
+
+<B>class</B> class_index
+{
+   jm::regex expression;
+   map_type index;
+   std::string::const_iterator base;
+
+   <B>bool</B> grep_callback(reg_match&lt;std::string::const_iterator, regex::alloc_type&gt; what);
+<B>public</B>:
+<B>   void</B> IndexClasses(<B>const</B> std::string&amp; file);
+   class_index()
+      : index(),
+        expression(<FONT COLOR="#0000ff">"^(template[[:space:]]*&lt;[^;:{]+&gt;[[:space:]]*)?"
+</FONT>                   <FONT COLOR="#0000ff">"(class|struct)[[:space:]]*(\\&lt;\\w+\\&gt;([[:blank:]]*\\([^)]*\\))?"
+</FONT>                   <FONT COLOR="#0000ff">"[[:space:]]*)*(\\&lt;\\w*\\&gt;)[[:space:]]*(&lt;[^;:{]+&gt;[[:space:]]*)?"
+</FONT>                   <FONT COLOR="#0000ff">"(\\{|:[^;\\{()]*\\{)"
+</FONT>                   ){}
+};
+
+<B>bool</B> class_index::grep_callback(reg_match&lt;std::string::const_iterator, regex::alloc_type&gt; what)
+{
+   <I><FONT COLOR="#000080">// what[0] contains the whole string
+</I></FONT>   <I><FONT COLOR="#000080">// what[5] contains the class name.
+</I></FONT>   <I><FONT COLOR="#000080">// what[6] contains the template specialisation if any.
+</I></FONT>   <I><FONT COLOR="#000080">// add class name and position to map:
+</I></FONT>   index[std::string(what[<FONT COLOR="#000080">5</FONT>].first, what[<FONT COLOR="#000080">5</FONT>].second) + std::string(what[<FONT COLOR="#000080">6</FONT>].first, what[<FONT COLOR="#000080">6</FONT>].second)] =
+               what[<FONT COLOR="#000080">5</FONT>].first - base;
+   <B>return</B> <B>true</B>;
+}
+
+<B>void</B> class_index::IndexClasses(<B>const</B> std::string&amp; file)
+{
+   std::string::const_iterator start, end;
+   start = file.begin();
+   end = file.end();
+   base = start;
+   reg_grep(std::bind1st(std::mem_fun(&amp;class_index::grep_callback), <B>this</B>),
+            start,
+            end,
+            expression,
+            match_default);
+}</PRE>
+<P>&nbsp;</P>
+<P>Finally, C++ Builder users can use C++ Builder's closure type as a callback argument:</P>
+<PRE>
+<FONT COLOR="#008080">#include &lt;string&gt;
+#include &lt;map&gt;
+#include &lt;regex&gt;
+#include &lt;functional&gt;
+</FONT>
+<I><FONT COLOR="#000080">// purpose:
+// takes the contents of a file in the form of a string
+// and searches for all the C++ class definitions, storing
+// their locations in a map of strings/int's
+</I></FONT>
+<B>typedef</B> std::map&lt;std::string, <B>int</B>, std::less&lt;std::string&gt; &gt; map_type;
+
+<B>class</B> class_index
+{
+   jm::regex expression;
+   map_type index;
+   std::string::const_iterator base;
+   <B>typedef</B> reg_match&lt;std::string::const_iterator, regex::alloc_type&gt; arg_type;
+
+   <B>bool</B> grep_callback(<B>const</B> reg_match&lt;std::string::const_iterator, regex::alloc_type&gt;&amp; what);
+<B>public</B>:
+   <B>typedef</B> <B>bool</B> (<STRONG>__closure</STRONG>* grep_callback_type)(<B>const</B> arg_type&amp;);
+   <B>void</B> IndexClasses(<B>const</B> std::string&amp; file);
+   class_index()
+      : index(),
+        expression(<FONT COLOR="#0000ff">"^(template[[:space:]]*&lt;[^;:{]+&gt;[[:space:]]*)?"
+</FONT>                   <FONT COLOR="#0000ff">"(class|struct)[[:space:]]*(\\&lt;\\w+\\&gt;([[:blank:]]*\\([^)]*\\))?"
+</FONT>                   <FONT COLOR="#0000ff">"[[:space:]]*)*(\\&lt;\\w*\\&gt;)[[:space:]]*(&lt;[^;:{]+&gt;[[:space:]]*)?"
+</FONT>                   <FONT COLOR="#0000ff">"(\\{|:[^;\\{()]*\\{)"
+</FONT>                   ){}
+};
+
+<B>bool</B> class_index::grep_callback(<B>const</B> reg_match&lt;std::string::const_iterator, regex::alloc_type&gt;&amp; what)
+{
+   <I><FONT COLOR="#000080">// what[0] contains the whole string
+</I></FONT>   <I><FONT COLOR="#000080">// what[5] contains the class name.
+</I></FONT>   <I><FONT COLOR="#000080">// what[6] contains the template specialisation if any.
+</I></FONT>   <I><FONT COLOR="#000080">// add class name and position to map:
+</I></FONT>   index[std::string(what[<FONT COLOR="#000080">5</FONT>].first, what[<FONT COLOR="#000080">5</FONT>].second) + std::string(what[<FONT COLOR="#000080">6</FONT>].first, what[<FONT COLOR="#000080">6</FONT>].second)] =
+               what[<FONT COLOR="#000080">5</FONT>].first - base;
+   <B>return</B> <B>true</B>;
+}
+
+<B>void</B> class_index::IndexClasses(<B>const</B> std::string&amp; file)
+{
+   std::string::const_iterator start, end;
+   start = file.begin();
+   end = file.end();
+   base = start;
+   class_index::grep_callback_type cl = &amp;(<B>this</B>-&gt;grep_callback);
+   reg_grep(cl,
+            start,
+            end,
+            expression,
+            match_default);
+}</PRE>
+<P>&nbsp;</P>
+<P><HR></P>
+<P>&nbsp;</P>
+<EM><H3><A NAME="reg_format"></A>Algorithm reg_format</H3>
+</EM><P>#include &lt;regex&gt;</P>
+<P>The algorithm reg_format takes the results of a match and creates a new string based upon a format string, reg_format can be used for search and replace operations:</P>
+<PRE>
+<B>template</B> &lt;<B>class</B> OutputIterator, <B>class</B> iterator, <B>class</B> Allocator, <B>class</B> charT&gt;
+OutputIterator RE_CALL reg_format(OutputIterator out,
+                          <B>const</B> reg_match&lt;iterator, Allocator&gt;&amp; m,
+                          <B>const</B> charT* fmt
+<FONT COLOR="#008080">#ifdef RE_LOCALE_CPP
+</FONT>                         , __JM_STD::locale locale_inst = __JM_STD::locale()
+<FONT COLOR="#008080">#endif
+</FONT>                         )</PRE>
+<P>&nbsp;</P>
+<P>Parameters are passed to the function are as follows:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=640>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>OutputIterator out</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>An output iterator type, the output string is sent to this iterator. Typically this would be a std::ostream_iterator.</TD>
+<TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<B><P>const</B> reg_match&lt;iterator, Allocator&gt;&amp; m</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>An instance of reg_match&lt;&gt; obtained from one of the matching algorithms above, and denoting what matched.</TD>
+<TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<B><P>const</B> charT* fmt</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>A format string that determines how the match is transformed into the new string.</TD>
+<TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>__JM_STD::locale locale_inst</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>An optional locale, to use for the transformation, this parameter is only available when the preprocessor symbol RE_LOCALE_CPP is defined.</TD>
+<TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P>The format string uses a perl-like syntax: see format strings.</P>
+<P><HR></P>
+<EM><H3><A NAME="reg_merge"></A>Algorithm reg_merge</H3>
+</EM><P>#include &lt;regex&gt;</P>
+<P>The algorithm reg_merge is a combination of <A HREF="#reg_grep">reg_grep</A> and <A HREF="#reg_format">reg_format</A>. That is it greps through the string finding all the matches to the regular expression, for each match it then calls reg_format to format the string and sends the result to the output iterator. Sections of text that do not match are copied to the output unchanged only if the parameter <I>copy</I> is true.</P>
+<PRE>
+<B>template</B> &lt;<B>class</B> OutputIterator, <B>class</B> iterator, <B>class</B> traits, <B>class</B> Allocator, <B>class</B> charT&gt;
+OutputIterator RE_CALL reg_merge(OutputIterator out, 
+                         iterator first,
+                         iterator last,
+                         <B>const</B> reg_expression&lt;charT, traits, Allocator&gt;&amp; e, 
+                         <B>const</B> charT* fmt, 
+                         <B>bool</B> copy = <B>true</B>, 
+                         <B>unsigned</B> <B>int</B> flags = match_default)</PRE>
+<P>&nbsp;</P>
+<P>The parameters of reg_merge take the following values:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=640>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>OutputIterator out</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>An output iterator type, the output string is sent to this iterator. Typically this would be a std::ostream_iterator.</TD>
+<TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>iterator first</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>The start of the range of text to grep.</TD>
+<TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>iterator last</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>The end of the range of text to grep.</TD>
+<TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<B><P>const</B> reg_expression&lt;charT, traits, Allocator&gt;&amp; e</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>The expression to search for.</TD>
+<TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<B><P>const</B> charT* fmt</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>The format string to be applied to sections of text that match.</TD>
+<TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<B><P>bool</B> copy = <B>true</B></TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Determines whether or not sections of text which do not match the expression are copied to output.</TD>
+<TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> flags = match_default</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P>Flags which determine how the expression is matched - see match_flags.</TD>
+<TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>Example: the following example takes C/C++ source code as input, and outputs syntax highlighted HTML code, note that the code has been abridged slightly - see snip4.cpp for full details.</P>
+<PRE>
+<FONT COLOR="#008080">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+#include &lt;iterator&gt;
+#include &lt;regex&gt;
+#include &lt;fileiter.h&gt;
+</FONT>
+<I><FONT COLOR="#000080">// purpose:
+// takes the contents of a file and transform to
+// syntax highlighted code in html format
+</I></FONT>
+regex e1, e2;
+<B>extern</B> <B>const</B> <B>char</B>* expression_text;
+<B>extern</B> <B>const</B> <B>char</B>* format_string;
+<B>extern</B> <B>const</B> <B>char</B>* pre_expression;
+<B>extern</B> <B>const</B> <B>char</B>* pre_format;
+<B>extern</B> <B>const</B> <B>char</B>* header_text;
+<B>extern</B> <B>const</B> <B>char</B>* footer_text;
+
+<B>int</B> main(<B>int</B> argc, <B>const</B> <B>char</B>** argv)
+{
+   e1.set_expression(expression_text);
+   e2.set_expression(pre_expression);
+   <B>for</B>(<B>int</B> i = <FONT COLOR="#000080">1</FONT>; i &lt; argc; ++i)
+   {
+      std::cout &lt;&lt; <FONT COLOR="#0000ff">"Processing file "</FONT> &lt;&lt; argv[i] &lt;&lt; std::endl;
+      mapfile in(argv[i]);
+      std::string out_name(std::string(argv[i]) + std::string(<FONT COLOR="#0000ff">".htm"</FONT>));
+      std::ofstream os(out_name.c_str());
+      os &lt;&lt; header_text;
+      <I><FONT COLOR="#000080">// strip '&lt;' and '&gt;' first by outputting to a
+</I></FONT>      <I><FONT COLOR="#000080">// temporary string stream
+</I></FONT>      std::ostringstream t(std::ios::out | std::ios::binary);
+      std::ostream_iterator&lt;<B>char</B>, <B>char</B>&gt; oi(t);
+      reg_merge(oi, in.begin(), in.end(), e2, pre_format, <B>true</B>);
+ <I><FONT COLOR="#000080">     // then output to final output stream
+</I></FONT> <I><FONT COLOR="#000080">     // adding syntax highlighting:
+</I></FONT>      std::string s(t.str());
+      std::ostream_iterator&lt;<B>char</B>, <B>char</B>&gt; out(os);
+      reg_merge(out, s.begin(), s.end(), e1, format_string, <B>true</B>);
+      os &lt;&lt; footer_text;
+   }
+ <B>  return</B> <FONT COLOR="#000080">0</FONT>;
+}
+
+<B>extern</B> <B>const</B> <B>char</B>* pre_expression = <FONT COLOR="#0000ff">"(&lt;)|(&gt;)|\\r"</FONT>;
+<B>extern</B> <B>const</B> <B>char</B>* pre_format = <FONT COLOR="#0000ff">"(?1&lt;)(?2&gt;)"</FONT>;
+
+
+<B>const</B> <B>char</B>* expression_text = 
+<I><FONT COLOR="#000080">      // preprocessor directives: index 1
+</I></FONT>      <FONT COLOR="#0000ff">"(^[[:blank:]]*#([^\\n]*\\\\[[:space:]]+)*[^\\n]*)|"
+</FONT>      <I><FONT COLOR="#000080">// comment: index 3
+</I></FONT>      <FONT COLOR="#0000ff">"(//[^\\n]*|/\\*([^*]|\\*+[^*/])*\\*+/)|"
+</FONT>      <I><FONT COLOR="#000080">// literals: index 5
+</I></FONT> <FONT COLOR="#0000ff">     "\\&lt;([+-]?((0x[[:xdigit:]]+)|(([[:digit:]]*\\.)?[[:digit:]]+([eE][+-]?[[:digit:]]+)?))u?((int(8|16|32|64))|L)?)\\&gt;|"
+</FONT> <I><FONT COLOR="#000080">     // string literals: index 14
+</I></FONT> <FONT COLOR="#0000ff">     "('([^\\\\']|\\\\.)*'|\"([^\\\\\"]|\\\\.)*\")|"
+</FONT> <I><FONT COLOR="#000080">     // keywords: index 17
+</I></FONT>      <FONT COLOR="#0000ff">"\\&lt;(__asm|__cdecl|__declspec|__export|__far16|__fastcall|__fortran|__import"
+</FONT>      <FONT COLOR="#0000ff">"|__pascal|__rtti|__stdcall|_asm|_cdecl|__except|_export|_far16|_fastcall"
+</FONT>      <FONT COLOR="#0000ff">"|__finally|_fortran|_import|_pascal|_stdcall|__thread|__try|asm|auto|bool"
+</FONT> <FONT COLOR="#0000ff">     "|break|case|catch|cdecl|char|class|const|const_cast|continue|default|delete"
+</FONT>      <FONT COLOR="#0000ff">"|do|double|dynamic_cast|else|enum|explicit|extern|false|float|for|friend|goto"
+</FONT>      <FONT COLOR="#0000ff">"|if|inline|int|long|mutable|namespace|new|operator|pascal|private|protected"
+</FONT> <FONT COLOR="#0000ff">     "|public|register|reinterpret_cast|return|short|signed|sizeof|static|static_cast"
+</FONT> <FONT COLOR="#0000ff">     "|struct|switch|template|this|throw|true|try|typedef|typeid|typename|union|unsigned"
+</FONT> <FONT COLOR="#0000ff">     "|using|virtual|void|volatile|wchar_t|while)\\&gt;"
+</FONT>      ;
+
+<B>const</B> <B>char</B>* format_string = <FONT COLOR="#0000ff">"(?1&lt;font color=\"#008040\"&gt;$&amp;&lt;/font&gt;)"
+</FONT>                            <FONT COLOR="#0000ff">"(?3&lt;I&gt;&lt;font color=\"#000080\"&gt;$&amp;&lt;/font&gt;&lt;/I&gt;)"
+</FONT> <FONT COLOR="#0000ff">                           "(?5&lt;font color=\"#0000A0\"&gt;$&amp;&lt;/font&gt;)"
+</FONT>                            <FONT COLOR="#0000ff">"(?14&lt;font color=\"#0000FF\"&gt;$&amp;&lt;/font&gt;)"
+</FONT>                            <FONT COLOR="#0000ff">"(?17&lt;B&gt;$&amp;&lt;/B&gt;)"</FONT>;
+
+<B>const</B> <B>char</B>* header_text = <FONT COLOR="#0000ff">"&lt;HTML&gt;\n&lt;HEAD&gt;\n"
+</FONT>                          <FONT COLOR="#0000ff">"&lt;META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=windows-1252\"&gt;\n"
+</FONT>                          <FONT COLOR="#0000ff">"&lt;/HEAD&gt;\n"
+</FONT>                          <FONT COLOR="#0000ff">"&lt;BODY LINK=\"#0000ff\" VLINK=\"#800080\" BGCOLOR=\"#ffff99\"&gt;\n"
+</FONT>                          <FONT COLOR="#0000ff">"&lt;PARA&gt; &lt;/PARA&gt;\n&lt;PRE&gt;"</FONT>;
+
+<B>const</B> <B>char</B>* footer_text = <FONT COLOR="#0000ff">"&lt;/PRE&gt;\n&lt;/BODY&gt;\n\n"</FONT>;</PRE>
+<P>&nbsp;</P>
+<P><HR></P>
+<FONT FACE="Arial"><EM><H3><A NAME="RegEx"></A>Class RegEx</H3>
+</FONT></EM><P>#include &lt;cregex&gt;</P>
+<P>The class RegEx provides a high level simplified interface to the regular expression library, this class only handles narrow character strings, and regular expressions always follow the "normal" syntax - that is the same as the standard POSIX extended syntax, but with locale specific collation disabled, and escape characters inside character set declarations are allowed.</P>
+<PRE>
+<B>typedef</B> <B>bool</B> (*GrepCallback)(<B>const</B> RegEx&amp; expression);
+<B>typedef</B> <B>bool</B> (*GrepFileCallback)(<B>const</B> <B>char</B>* file, <B>const</B> RegEx&amp; expression);
+<B>typedef</B> <B>bool</B> (*FindFilesCallback)(<B>const</B> <B>char</B>* file);
+
+<B>class</B>  RegEx
+{
+<B>public</B>:
+   RegEx();
+   RegEx(<B>const</B> RegEx&amp; o);
+   ~RegEx();
+   RegEx(<B>const</B> <B>char</B>* c, <B>bool</B> icase = <B>false</B>);
+   RegEx(<B>const</B> __JM_STD::string&amp; s, <B>bool</B> icase = <B>false</B>);
+   RegEx&amp; <B>operator</B>=(<B>const</B> RegEx&amp; o);
+   RegEx&amp; <B>operator</B>=(<B>const</B> <B>char</B>* p);
+   RegEx&amp; <B>operator</B>=(<B>const</B> __JM_STD::string&amp; s);
+   <B>unsigned</B> <B>int</B> SetExpression(<B>const</B> <B>char</B>* p, <B>bool</B> icase = <B>false</B>);
+   <B>unsigned</B> <B>int</B> SetExpression(<B>const</B> __JM_STD::string&amp; s, <B>bool</B> icase = <B>false</B>);
+   __JM_STD::string Expression()<B>const</B>;
+   <I><FONT COLOR="#000080">//
+</I></FONT>   <I><FONT COLOR="#000080">// now matching operators:
+</I></FONT>   <I><FONT COLOR="#000080">//
+</I></FONT>   <B>bool</B> Match(<B>const</B> <B>char</B>* p, <B>unsigned</B> <B>int</B> flags = match_default);
+   <B>bool</B> Match(<B>const</B> __JM_STD::string&amp; s, <B>unsigned</B> <B>int</B> flags = match_default) ;
+   <B>bool</B> Search(<B>const</B> <B>char</B>* p, <B>unsigned</B> <B>int</B> flags = match_default);
+   <B>bool</B> Search(<B>const</B> __JM_STD::string&amp; s, <B>unsigned</B> <B>int</B> flags = match_default) ;
+   <B>unsigned</B> <B>int</B> Grep(GrepCallback cb, <B>const</B> <B>char</B>* p, <B>unsigned</B> <B>int</B> flags = match_default);
+   <B>unsigned</B> <B>int</B> Grep(GrepCallback cb, <B>const</B> __JM_STD::string&amp; s, <B>unsigned</B> <B>int</B> flags = match_default);
+   <B>unsigned</B> <B>int</B> Grep(__JM_STD::vector&lt;__JM_STD::string&gt;&amp; v, <B>const</B> <B>char</B>* p, <B>unsigned</B> <B>int</B> flags = match_default);
+   <B>unsigned</B> <B>int</B> Grep(__JM_STD::vector&lt;__JM_STD::string&gt;&amp; v, <B>const</B> __JM_STD::string&amp; s, <B>unsigned</B> <B>int</B> flags = match_default);
+   <B>unsigned</B> <B>int</B> Grep(__JM_STD::vector&lt;<B>unsigned</B> <B>int</B>&gt;&amp; v, <B>const</B> <B>char</B>* p, <B>unsigned</B> <B>int</B> flags = match_default);
+   <B>unsigned</B> <B>int</B> Grep(__JM_STD::vector&lt;<B>unsigned</B> <B>int</B>&gt;&amp; v, <B>const</B> __JM_STD::string&amp; s, <B>unsigned</B> <B>int</B> flags = match_default);
+   <B>unsigned</B> <B>int</B> GrepFiles(GrepFileCallback cb, <B>const</B> <B>char</B>* files, <B>bool</B> recurse = <B>false</B>, <B>unsigned</B> <B>int</B> flags = match_default);
+   <B>unsigned</B> <B>int</B> GrepFiles(GrepFileCallback cb, <B>const</B> __JM_STD::string&amp; files, <B>bool</B> recurse = <B>false</B>, <B>unsigned</B> <B>int</B> flags = match_default);
+   <B>unsigned</B> <B>int</B> FindFiles(FindFilesCallback cb, <B>const</B> <B>char</B>* files, <B>bool</B> recurse = <B>false</B>, <B>unsigned</B> <B>int</B> flags = match_default);
+   <B>unsigned</B> <B>int</B> FindFiles(FindFilesCallback cb, <B>const</B> __JM_STD::string&amp; files, <B>bool</B> recurse = <B>false</B>, <B>unsigned</B> <B>int</B> flags = match_default);
+   <I><FONT COLOR="#000080">//
+</I></FONT>   <I><FONT COLOR="#000080">// now operators for returning what matched in more detail:
+</I></FONT>   <I><FONT COLOR="#000080">//
+</I></FONT>   <B>unsigned</B> <B>int</B> Position(<B>int</B> i = <FONT COLOR="#000080">0</FONT>)<B>const</B>;
+   <B>unsigned</B> <B>int</B> Length(<B>int</B> i = <FONT COLOR="#000080">0</FONT>)<B>const</B>;
+   __JM_STD::string What(<B>int</B> i)<B>const</B>;
+   __JM_STD::string <B>operator</B>[](<B>int</B> i)<B>const</B> ;
+};</PRE>
+<P>&nbsp;</P>
+<P>Member functions for class RegEx are defined as follows:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=640>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>RegEx();</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Default constructor, constructs an instance of RegEx without any valid expression.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>RegEx(<B>const</B> RegEx&amp; o);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Copy constructor, all the properties of parameter <I>o</I> are copied.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>RegEx(<B>const</B> <B>char</B>* c, <B>bool</B> icase = <B>false</B>);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Constructs an instance of RegEx, setting the expression to <I>c</I>, if <I>icase</I> is <I>true</I> then matching is insensitive to case, otherwise it is sensitive to case. Throws <I>bad_expression</I> on failure.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>RegEx(<B>const</B> __JM_STD::string&amp; s, <B>bool</B> icase = <B>false</B>);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Constructs an instance of RegEx, setting the expression to <I>s</I>, if <I>icase </I>is <I>true</I> then matching is insensitive to case, otherwise it is sensitive to case. Throws <I>bad_expression</I> on failure.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>RegEx&amp; <B>operator</B>=(<B>const</B> RegEx&amp; o);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Default assignment operator.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>RegEx&amp; <B>operator</B>=(<B>const</B> <B>char</B>* p);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Assignment operator, equivalent to calling <I>SetExpression(p, false).</I> Throws <I>bad_expression</I> on failure.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>RegEx&amp; <B>operator</B>=(<B>const</B> __JM_STD::string&amp; s);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Assignment operator, equivalent to calling <I>SetExpression(s, false).</I> Throws <I>bad_expression</I> on failure.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> SetExpression(<B>const</B> <B>char</B>* p, <B>bool</B> icase = <B>false</B>);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Sets the current expression to <I>p</I>, if <I>icase</I> is <I>true</I> then matching is insensitive to case, otherwise it is sensitive to case. Throws <I>bad_expression</I> on failure.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> SetExpression(<B>const</B> __JM_STD::string&amp; s, <B>bool</B> icase = <B>false</B>);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Sets the current expression to <I>s</I>, if <I>icase</I> is <I>true</I> then matching is insensitive to case, otherwise it is sensitive to case. Throws <I>bad_expression</I> on failure.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>__JM_STD::string Expression()<B>const</B>;</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Returns a copy of the current regular expression.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>bool</B> Match(<B>const</B> <B>char</B>* p, <B>unsigned</B> <B>int</B> flags = match_default);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Attempts to match the current expression against the text <I>p</I> using the match flags <I>flags</I> - see <A HREF="#match_type">match flags</A>. Returns <I>true</I> if the match succeeds.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>bool</B> Match(<B>const</B> __JM_STD::string&amp; s, <B>unsigned</B> <B>int</B> flags = match_default) ;</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Attempts to match the current expression against the text <I>s</I> using the match flags <I>flags</I> - see <A HREF="#match_type">match flags</A>. Returns <I>true</I> if the match succeeds.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>bool</B> Search(<B>const</B> <B>char</B>* p, <B>unsigned</B> <B>int</B> flags = match_default);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Attempts to find a match for the current expression somewhere in the text <I>p</I> using the match flags <I>flags </I>- see <A HREF="#match_type">match flags</A>. Returns <I>true</I> if the match succeeds.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>bool</B> Search(<B>const</B> __JM_STD::string&amp; s, <B>unsigned</B> <B>int</B> flags = match_default) ;</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Attempts to find a match for the current expression somewhere in the text <I>s</I> using the match flags <I>flags </I>- see <A HREF="#match_type">match flags</A>. Returns <I>true</I> if the match succeeds.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> Grep(GrepCallback cb, <B>const</B> <B>char</B>* p, <B>unsigned</B> <B>int</B> flags = match_default);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Finds all matches of the current expression in the text <I>p</I> using the match flags <I>flags </I>- see <A HREF="#match_type">match flags</A>. For each match found calls the call-back function <I>cb</I> as: cb(*this);</P>
+<P>If at any stage the call-back function returns false then the grep operation terminates, otherwise continues until no further matches are found. Returns the number of matches found.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> Grep(GrepCallback cb, <B>const</B> __JM_STD::string&amp; s, <B>unsigned</B> <B>int</B> flags = match_default);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Finds all matches of the current expression in the text <I>s</I> using the match flags <I>flags </I>- see <A HREF="#match_type">match flags</A>. For each match found calls the call-back function <I>cb</I> as: cb(*this);</P>
+<P>If at any stage the call-back function returns false then the grep operation terminates, otherwise continues until no further matches are found. Returns the number of matches found.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> Grep(__JM_STD::vector&lt;__JM_STD::string&gt;&amp; v, <B>const</B> <B>char</B>* p, <B>unsigned</B> <B>int</B> flags = match_default);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Finds all matches of the current expression in the text <I>p</I> using the match flags <I>flags </I>- see <A HREF="#match_type">match flags</A>. For each match pushes a copy of what matched onto <I>v</I>. Returns the number of matches found.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> Grep(__JM_STD::vector&lt;__JM_STD::string&gt;&amp; v, <B>const</B> __JM_STD::string&amp; s, <B>unsigned</B> <B>int</B> flags = match_default);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Finds all matches of the current expression in the text <I>s</I> using the match flags <I>flags </I>- see <A HREF="#match_type">match flags</A>. For each match pushes a copy of what matched onto <I>v</I>. Returns the number of matches found.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> Grep(__JM_STD::vector&lt;<B>unsigned</B> <B>int</B>&gt;&amp; v, <B>const</B> <B>char</B>* p, <B>unsigned</B> <B>int</B> flags = match_default);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Finds all matches of the current expression in the text <I>p</I> using the match flags <I>flags </I>- see <A HREF="#match_type">match flags</A>. For each match pushes the starting index of what matched onto <I>v</I>. Returns the number of matches found.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> Grep(__JM_STD::vector&lt;<B>unsigned</B> <B>int</B>&gt;&amp; v, <B>const</B> __JM_STD::string&amp; s, <B>unsigned</B> <B>int</B> flags = match_default);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Finds all matches of the current expression in the text <I>s</I> using the match flags <I>flags </I>- see <A HREF="#match_type">match flags</A>. For each match pushes the starting index of what matched onto <I>v</I>. Returns the number of matches found.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> GrepFiles(GrepFileCallback cb, <B>const</B> <B>char</B>* files, <B>bool</B> recurse = <B>false</B>, <B>unsigned</B> <B>int</B> flags = match_default);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Finds all matches of the current expression in the files <I>files</I> using the match flags <I>flags </I>- see <A HREF="#match_type">match flags</A>. For each match calls the call-back function cb. If the call-back returns false then the algorithm skips that file and moves on to the next. The parameter <I>files</I> can include wild card characters '*' and '?', if the parameter <I>recurse</I> is true then searches sub-directories for matching file names. Returns the total number of matches found.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> GrepFiles(GrepFileCallback cb, <B>const</B> __JM_STD::string&amp; files, <B>bool</B> recurse = <B>false</B>, <B>unsigned</B> <B>int</B> flags = match_default);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Finds all matches of the current expression in the files <I>files</I> using the match flags <I>flags </I>- see <A HREF="#match_type">match flags</A>. For each match calls the call-back function cb. If the call-back returns false then the algorithm skips that file and moves on to the next. The parameter <I>files</I> can include wild card characters '*' and '?', if the parameter <I>recurse</I> is true then searches sub-directories for matching file names. Returns the total number of matches found.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> FindFiles(FindFilesCallback cb, <B>const</B> <B>char</B>* files, <B>bool</B> recurse = <B>false</B>, <B>unsigned</B> <B>int</B> flags = match_default);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>As GrepFiles, but finds no more than one match per file, no information on where the match occurred is passed to the call-back - just the file name. Returns the total number of files that contain a match to the current expression.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> FindFiles(FindFilesCallback cb, <B>const</B> __JM_STD::string&amp; files, <B>bool</B> recurse = <B>false</B>, <B>unsigned</B> <B>int</B> flags = match_default);</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>As GrepFiles, but finds no more than one match per file, no information on where the match occurred is passed to the call-back - just the file name. Returns the total number of files that contain a match to the current expression.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> Position(<B>int</B> i = <FONT COLOR="#000080">0</FONT>)<B>const</B>;</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Returns the position of what matched sub-expression <I>i</I>. If <I>i = 0</I> then returns the position of the whole match. Returns -1 if the supplied index is invalid, or if the specified sub-expression did not participate in the match.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<B><P>unsigned</B> <B>int</B> Length(<B>int</B> i = <FONT COLOR="#000080">0</FONT>)<B>const</B>;</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Returns the length of what matched sub-expression <I>i</I>. If <I>i = 0</I> then returns the length of the whole match. Returns -1 if the supplied index is invalid, or if the specified sub-expression did not participate in the match.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>__JM_STD::string What(<B>int</B> i)<B>const</B>;</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Returns a copy of what matched sub-expression <I>i</I>. If <I>i = 0</I> then returns a copy of the whole match. Returns a null string if the index is invalid or if the specified sub-expression did not participate in a match.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>__JM_STD::string <B>operator</B>[](<B>int</B> i)<B>const</B> ;</TD>
+<TD WIDTH="42%" VALIGN="TOP">
+<P>Returns <I>what(i);</P>
+</I><P>Can be used to simplify access to sub-expression matches, and make usage more perl-like.</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P><HR></P>
+<EM><H3><A NAME="posix"></A>POSIX compatibility library </H3>
+</EM><P>#include &lt;cregex&gt;</P>
+<P>The following functions are available for users who need a POSIX compatible C library, they are available in both Unicode and narrow character versions, the standard POSIX API names are macros that expand to one version or the other depending upon whether UNICODE is defined or not.</P>
+<P>The functions are defined as:</P>
+<PRE>extern "C" {
+<B>int</B> regcompA(regex_tA*, <B>const</B> <B>char</B>*, <B>int</B>);
+<B>unsigned</B> <B>int</B> regerrorA(<B>int</B>, <B>const</B> regex_tA*, <B>char</B>*, <B>unsigned</B> <B>int</B>);
+<B>int</B> regexecA(<B>const</B> regex_tA*, <B>const</B> <B>char</B>*, <B>unsigned</B> <B>int</B>, regmatch_t*, <B>int</B>);
+<B>void</B> regfreeA(regex_tA*);
+
+<B>int</B> regcompW(regex_tW*, <B>const</B> <B>wchar_t</B>*, <B>int</B>);
+<B>unsigned</B> <B>int</B> regerrorW(<B>int</B>, <B>const</B> regex_tW*, <B>wchar_t</B>*, <B>unsigned</B> <B>int</B>);
+<B>int</B> regexecW(<B>const</B> regex_tW*, <B>const</B> <B>wchar_t</B>*, <B>unsigned</B> <B>int</B>, regmatch_t*, <B>int</B>);
+<B>void</B> regfreeW(regex_tW*);
+
+<FONT COLOR="#008080">#ifdef UNICODE
+#define regcomp regcompW
+#define regerror regerrorW
+#define regexec regexecW
+#define regfree regfreeW
+#define regex_t regex_tW
+#else
+#define regcomp regcompA
+#define regerror regerrorA
+#define regexec regexecA
+#define regfree regfreeA
+#define regex_t regex_tA
+#endif
+</FONT>}</PRE>
+<P>All the functions operate on structure <B>regex_t</B>, which exposes two public members:</P>
+<STRONG><P>unsigned int re_nsub</STRONG> this is filled in by <B>regcomp</B> and indicates the number of sub-expressions contained in the regular expression.</P>
+<STRONG><P>const TCHAR* re_endp</STRONG> points to the end of the expression to compile when the flag REG_PEND is set.</P>
+<I><P>Footnote: regex_t is actually a typedef - it is either regex_tA or regex_tW depending upon whether UNICODE is defined or not, TCHAR is either char or wchar_t again depending upon the macro UNICODE.</P>
+</I><P>&nbsp;</P>
+<B><P>regcomp</B> takes a pointer to a <B>regex_t</B>, a pointer to the expression to compile and a flags parameter which can be a combination of:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=638>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>REG_EXTENDED</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Compiles modern regular expressions. Equivalent to regbase::char_classes | regbase::intervals | regbase::bk_refs.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>REG_BASIC</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Compiles basic (obsolete) regular expression syntax. Equivalent to regbase::char_classes | regbase::intervals | regbase::limited_ops | regbase::bk_braces | regbase::bk_parens | regbase::bk_refs.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>REG_NOSPEC</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>All characters are ordinary, the expression is a literal string.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>REG_ICASE</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Compiles for matching that ignores character case.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>REG_NOSUB</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Has no effect in this library.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>REG_NEWLINE</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>When this flag is set a dot does not match the newline character.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>REG_PEND</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>When this flag is set the re_endp parameter of the regex_t structure must point to the end of the regular expression to compile.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<B><P>regerror</B> takes the following parameters, it maps an error code to a human readable string:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=638>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>int code</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The error code.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>const regex_t* e</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The regular expression (can be null).</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>char* buf</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The buffer to fill in with the error message.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>unsigned int buf_size</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The length of buf.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>If the error code is OR'ed with REG_ITOA then the message that results is the printable name of the code rather than a message, for example "REG_BADPAT". If the code is REG_ATIO then <B>e</B> must not be null and <B>e-&gt;re_pend</B> must point to the printable name of an error code, the return value is then the value of the error code. For any other value of <B>code</B>, the return value is the number of characters in the error message, if the return value is greater than or equal to <B>buf_size</B> then <B>regerror</B> will have to be called again with a larger buffer.</P>
+<P>&nbsp;</P>
+<B><P>regexec</B> finds the first occurrence of expression <B>e</B> within string <B>buf</B>. If <B>len</B> is non-zero then *<B>m</B> is filled in with what matched the regular expression, <B>m[0]</B> contains what matched the whole string, <B>m[1] </B>the first sub-expression etc, see <B>regmatch_t</B> in the header file declaration for more details. The <B>eflags</B> parameter can be a combination of:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=638>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>REG_NOTBOL</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Parameter <B>buf </B>does not represent the start of a line.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>REG_NOTEOL</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Parameter <B>buf</B> does not terminate at the end of a line.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>REG_STARTEND</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>The string searched starts at buf + pmatch[0].rm_so and ends at buf + pmatch[0].rm_eo.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P>Finally <STRONG>regfree</STRONG> frees all the memory that was allocated by regcomp.</P>
+<I><P>Footnote: this is an abridged reference to the POSIX API functions, it is provided for compatibility with other libraries, rather than an API to be used in new code (unless you need access from a language other than C++). This version of these functions should also happily co-exist with other versions, as the names used are macros that expand to the actual function names.</P>
+</I><P><HR></P>
+<I><FONT FACE="Arial"><H3><A NAME="syntax"></A>Regular expression syntax</H3>
+</I></FONT><P>This section covers the regular expression syntax used by this library, this is a programmers guide, the actual syntax presented to your program's users will depend upon the flags used during expression compilation.</P>
+<I><P>Literals</P>
+</I><P>All characters are literals except: ".", "*", "?", "+", "(", ")", "{", "}", "[", "]", "^" and "$". These characters are literals when preceded by a "\". A literal is a character that matches itself, or matches the result of traits_type::translate(), where traits_type is the traits template parameter to class reg_expression.</P>
+<P>&nbsp;</P>
+<I><P>Wildcard</P>
+</I><P>The dot character "." matches any single character except : when <I>match_not_dot_null</I> is passed to the matching algorithms, the dot does not match a null character; when <I>match_not_dot_newline</I> is passed to the matching algorithms, then the dot does not match a newline character.</P>
+<P>&nbsp;</P>
+<I><P>Repeats</P>
+</I><P>A repeat is an expression that is repeated an arbitrary number of times. An expression followed by "*" can be repeated any number of times including zero. An expression followed by "+" can be repeated any number of times, but at least once, if the expression is compiled with the flag regbase::bk_plus_qm then "+" is an ordinary character and "\+" represents a repeat of once or more. An expression followed by "?" may be repeated zero or one times only, if the expression is compiled with the flag regbase::bk_plus_qm then "?" is an ordinary character and "\?" represents the repeat zero or once operator. When it is necessary to specify the minimum and maximum number of repeats explicitly, the bounds operator "{}" may be used, thus "a{2}" is the letter "a" repeated exactly twice, "a{2,4}" represents the letter "a" repeated between 2 and 4 times, and "a{2,}" represents the letter "a" repeated at least twice with no upper limit. Note that there must be no white-space inside the {}, and there is no upper limit on the values of the lower and upper bounds. When the expression is compiled with the flag regbase::bk_braces then "{" and "}" are ordinary characters and "\{" and "\}" are used to delimit bounds instead. All repeat expressions refer to the shortest possible previous sub-expression: a single character; a character set, or a sub-expression grouped with "()" for example.</P>
+<P>Examples: </P>
+<P>"ba*" will match all of "b", "ba", "baaa" etc.</P>
+<P>"ba+" will match "ba" or "baaaa" for example but not "b".</P>
+<P>"ba?" will match "b" or "ba".</P>
+<P>"ba{2,4}" will match "baa", "baaa" and "baaaa".</P>
+<P>&nbsp;</P>
+<I><P>Parenthesis</P>
+</I><P>Parentheses serve two purposes, to group items together into a sub-expression, and to mark what generated the match. For example the expression "(ab)*" would match all of the string "ababab". The matching algorithms <A HREF="#query_match">query_match</A> and <A HREF="#reg_search">reg_search</A> each take an instance of <A HREF="#reg_match">reg_match</A> that reports what caused the match, on exit from these functions the <A HREF="#reg_match">reg_match</A> contains information both on what the whole expression matched and on what each sub-expression matched. In the example above reg_match[1] would contain a pair of iterators denoting the final "ab" of the matching string. It is permissible for sub-expressions to match null strings. If a sub-expression takes no part in a match - for example if it is part of an alternative that is not taken - then both of the iterators that are returned for that sub-expression point to the end of the input string, and the <EM>matched</EM> parameter for that sub-expression is <EM>false</EM>. Sub-expressions are indexed from left to right starting from 1, sub-expression 0 is the whole expression.</P>
+<P>&nbsp;</P>
+<I><P>Alternatives</P>
+</I><P>Alternatives occur when the expression can match either one sub-expression or another, each alternative is separated by a "|", or a "\|" if the flag regbase::bk_vbar is set, or by a newline character if the flag regbase::newline_alt is set. Each alternative is the largest possible previous sub-expression; this is the opposite behaviour from repetition operators. </P>
+<P>Examples:</P>
+<P>"a(b|c)" could match "ab" or "ac".</P>
+<P>"abc|def" could match "abc" or "def".</P>
+<P>&nbsp;</P>
+<I><P>Sets</P>
+</I><P>A set is a set of characters that can match any single character that is a member of the set. Sets are delimited by "[" and "]" and can contain literals, character ranges, character classes, collating elements and equivalence classes. Set declarations that start with "^" contain the compliment of the elements that follow.</P>
+<P>Examples:</P>
+<P>Character literals:</P>
+<P>"[abc]" will match either of "a", "b", or "c".</P>
+<P>"[^abc] will match any character other than "a", "b", or "c".</P>
+<P>Character ranges:</P>
+<P>"[a-z]" will match any character in the range "a" to "z".</P>
+<P>"[^A-Z]" will match any character other than those in the range "A" to "Z".</P>
+<P>Note that character ranges are highly locale dependent: they match any character that collates between the endpoints of the range, ranges will only behave according to ASCII rules when the default "C" locale is in effect. For example if the library is compiled with the Win32 localisation model, then [a-z] will match the ASCII characters a-z, and also 'A', 'B' etc, but not 'Z' which collates just after 'z'. This locale specific behaviour can be disabled by specifying regbase::nocollate when compiling, this is the default behaviour when using regbase::normal, and forces ranges to collate according to ASCII character code.</P>
+<P>Character classes are denoted using the syntax "[:classname:]" within a set declaration, for example "[[:space:]]" is the set of all whitespace characters. Character classes are only available if the flag regbase::char_classes is set. The available character classes are:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=638>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>alnum</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any alpha numeric character.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>alpha</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any alphabetical character a-z and A-Z. Other characters may also be included depending upon the locale.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>blank</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any blank character, either a space or a tab.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>cntrl</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any control character.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>digit</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any digit 0-9.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>graph</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any graphical character.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>lower</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any lower case character a-z. Other characters may also be included depending upon the locale.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>print</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any printable character.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>punct</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any punctuation character.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>space</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any whitespace character.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>upper</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any upper case character A-Z. Other characters may also be included depending upon the locale.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>xdigit</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any hexadecimal digit character, 0-9, a-f and A-F.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>word</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any word character - all alphanumeric characters plus the underscore.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>unicode</TD>
+<TD WIDTH="50%" VALIGN="TOP">
+<P>Any character whose code is greater than 255, this applies to the wide character traits classes only.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>There are some shortcuts that can be used in place of the character classes, provided the flag regbase::escape_in_lists is set then you can use:</P>
+<P>\w in place of [:word:]</P>
+<P>\s in place of [:space:]</P>
+<P>\d in place of [:digit:]</P>
+<P>\l in place of [:lower:]</P>
+<P>\u in place of [:upper:]</P>
+<P>&nbsp;</P>
+<P>Collating elements take the general form [.tagname.] inside a set declaration, where <I>tagname</I> is either a single character, or a name of a collating element, for example [[.a.]] is equivalent to [a], and [[.comma.]] is equivalent to [,]. The library supports all the standard POSIX collating element names, and in addition the following digraphs: "ae", "ch", "ll", "ss", "nj", "dz", "lj", each in lower, upper and title case variations. Multi-character collating elements can result in the set matching more than one character, for example [[.ae.]] would match two characters, but note that [^[.ae.]] would only match one character.</P>
+<P>&nbsp;</P>
+<P>Equivalence classes take the general form [=tagname=] inside a set declaration, where <I>tagname</I> is either a single character, or a name of a collating element, and matches any character that is a member of the same primary equivalence class as the collating element [.tagname.]. An equivalence class is a set of characters that collate the same, a primary equivalence class is a set of characters whose primary sort key are all the same (for example strings are typically collated by character, then by accent, and then by case; the primary sort key then relates to the character, the secondary to the accentation, and the tertiary to the case). If there is no equivalence class corresponding to <I>tagname</I>, then [=tagname=] is exactly the same as [.tagname.]. Unfortunately there is no locale independent method of obtaining the primary sort key for a character, except under Win32. For other operating systems the library will "guess" the primary sort key from the full sort key (obtained from <I>strxfrm</I>), so equivalence classes are probably best considered broken under any operating system other than Win32.</P>
+<P>&nbsp;</P>
+<P>To include a literal "-" in a set declaration then: make it the first character after the opening "[" or "[^", the endpoint of a range, a collating element, or if the flag regbase::escape_in_lists is set then precede with an escape character as in "[\-]". To include a literal "[" or "]" or "^" in a set then make them the endpoint of a range, a collating element, or precede with an escape character if the flag regbase::escape_in_lists is set.</P>
+<P>&nbsp;</P>
+<I><P>Line anchors</P>
+</I><P>An anchor is something that matches the null string at the start or end of a line: "^" matches the null string at the start of a line, "$" matches the null string at the end of a line.</P>
+<P>&nbsp;</P>
+<I><P>Back references</P>
+</I><P>A back reference is a reference to a previous sub-expression that has already been matched, the reference is to what the sub-expression matched, not to the expression itself. A back reference consists of the escape character "\" followed by a digit "1" to "9", "\1" refers to the first sub-expression, "\2" to the second etc. For example the expression "(.*)\1" matches any string that is repeated about its mid-point for example "abcabc" or "xyzxyz". A back reference to a sub-expression that did not participate in any match, matches the null string: NB this is different to some other regular expression matchers. Back references are only available if the expression is compiled with the flag regbase::bk_refs set.</P>
+<P>&nbsp;</P>
+<I><P>Characters by code</P>
+</I><P>This is an extension to the algorithm that is not available in other libraries, it consists of the escape character followed by the digit "0" followed by the octal character code. For example "\023" represents the character whose octal code is 23. Where ambiguity could occur use parentheses to break the expression up: "\0103" represents the character whose code is 103, "(\010)3 represents the character 10 followed by "3". To match characters by their hexadecimal code, use \x followed by a string of hexadecimal digits, optionally enclosed inside {}, for example \xf0 or \x{aff}, notice the latter example is a Unicode character.</P>
+<P>&nbsp;</P>
+<I><P>Word operators</P>
+</I><P>The following operators are provided for compatibility with the GNU regular expression library.</P>
+<P>"\w" matches any single character that is a member of the "word" character class, this is identical to the expression "[[:word:]]".</P>
+<P>"\W" matches any single character that is not a member of the "word" character class, this is identical to the expression "[^[:word:]]".</P>
+<P>"\&lt;" matches the null string at the start of a word.</P>
+<P>"\&gt;" matches the null string at the end of the word.</P>
+<P>"\b" matches the null string at either the start or the end of a word.</P>
+<P>"\B" matches a null string within a word.</P>
+<P>The start of the sequence passed to the matching algorithms is considered to be a potential start of a word unless the flag match_not_bow is set. The end of the sequence passed to the matching algorithms is considered to be a potential end of a word unless the flag match_not_eow is set.</P>
+<P>&nbsp;</P>
+<I><P>Buffer operators</P>
+</I><P>The following operators are provide for compatibility with the GNU regular expression library, and Perl regular expressions:</P>
+<P>"\`" matches the start of a buffer.</P>
+<P>"\A" matches the start of the buffer.</P>
+<P>"\'" matches the end of a buffer.</P>
+<P>"\z" matches the end of a buffer.</P>
+<P>"\Z" matches the end of a buffer, or possibly one or more new line characters followed by the end of the buffer.</P>
+<P>A buffer is considered to consist of the whole sequence passed to the matching algorithms, unless the flags match_not_bob or match_not_eob are set.</P>
+<P>&nbsp;</P>
+<I><P>Escape operator</P>
+</I><P>The escape character "\" has several meanings.</P>
+<P>Inside a set declaration the escape character is a normal character unless the flag regbase::escape_in_lists is set in which case whatever follows the escape is a literal character regardless of its normal meaning.</P>
+<P>The escape operator may introduce an operator for example: back references, or a word operator.</P>
+<P>The escape operator may make the following character normal, for example "\*" represents a literal "*" rather than the repeat operator.</P>
+<P>&nbsp;</P>
+<EM><P>Single character escape sequences</P>
+</EM><P>The following escape sequences are aliases for single characters:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=631>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">Escape sequence</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">Character code</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">Meaning</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">\a</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">0x07</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">Bell character.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">\f</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">0x08</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">Form feed.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">\n</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">0x0C</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">Newline character.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">\r</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">0x0D</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">Carriage return.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">\t</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">0x09</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">Tab character.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">\v</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">0x0B</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">Vertical tab.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">\e</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">0x1B</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">ASCII Escape character.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">\0dd</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">0dd</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">An octal character code, where <I>dd</I> is one or more octal digits.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">\xXX</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">0xXX</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">A hexadecimal character code, where XX is one or more hexadecimal digits.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">\x{XX}</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">0xXX</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">A hexadecimal character code, where XX is one or more hexadecimal digits, optionally a unicode character.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">\cZ</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">z-@</TD>
+<TD WIDTH="33%" VALIGN="TOP">
+<P ALIGN="CENTER">An ASCII escape sequence control-Z, where Z is any ASCII character greater than or equal to the character code for '@'.</TD>
+<TD VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<I><P>Miscellaneous escape sequences:</P>
+</I><P>The following are provided mostly for perl compatibility, but note that there are some differences in the meanings of \l \L \u and \U:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=6 WIDTH=680>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\w</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">Equivalent to [[:word:]].</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\W</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">Equivalent to [^[:word:]].</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\s</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">Equivalent to [[:space:]].</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\S</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">Equivalent to [^[:space:]].</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\d</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">Equivalent to [[:digit:]].</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\D</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">Equivalent to [^[:digit:]].</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\l</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">Equivalent to [[:lower:]].</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\L</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">Equivalent to [^[:lower:]].</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\u</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">Equivalent to [[:upper:]].</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\U</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">Equivalent to [^[:upper:]].</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\C</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">Any single character, equivalent to '.'.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\X</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">Match any Unicode combining character sequence, for example "a\x 0301" (a letter a with an accute).</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\Q</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">The begin quote operator, everything that follows is treated as a literal character until a \E end quote operator is found.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">\E</TD>
+<TD WIDTH="45%" VALIGN="TOP">
+<P ALIGN="CENTER">The end quote operator, terminates a sequence begun with \Q.</TD>
+<TD WIDTH="5%" VALIGN="MIDDLE">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<I><P>What gets matched?</P>
+</I><P>The regular expression library will match the first possible matching string, if more than one string starting at a given location can match then it matches the longest possible string, unless the flag match_any is set, in which case the first match encountered is returned. Use of the match_any option can reduce the time taken to find the match - but is only useful if the user is less concerned about what matched - for example it would not be suitable for search and replace operations. In cases where their are multiple possible matches all starting at the same location, and all of the same length, then the match chosen is the one with the longest first sub-expression, if that is the same for two or more matches, then the second sub-expression will be examined and so on.</P>
+<P><HR></P>
+<I><FONT FACE="Arial"><H3><A NAME="format_string"></A>Format String Syntax</H3>
+</I></FONT><P>Format strings are used by the algorithms <A HREF="#reg_format">reg_format</A> and <A HREF="#reg_merge">reg_merge</A>, and are used to transform one string into another.</P>
+<P>In format strings, all characters are treated as literals except: ()$\?:</P>
+<P>To use any of these as literals you must prefix them with the escape character \</P>
+<P>The following special sequences are recognised:</P>
+<I><P>&nbsp;</P>
+<P>Grouping:</P>
+</I><P>Use the parenthesis characters ( and ) to group sub-expressions within the format string, use \( and \) to represent literal '(' and ')'.</P>
+<I><P>&nbsp;</P>
+<P>Sub-expression expansions:</P>
+</I><P>The following perl like expressions expand to a particular matched sub-expression:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=706>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>$`</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>Expands to all the text from the end of the previous match to the start of the current match, if there was no previous match in the current operation, then everything from the start of the input string to the start of the match.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>$'</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>Expands to all the text from the end of the match to the end of the input string.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>$&amp;</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>Expands to all of the current match.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>$0</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>Expands to all of the current match.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>$N</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>Expands to the text which matched sub-expression <I>N</I>.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<I><P>&nbsp;</P>
+<P>Conditional expressions:</P>
+</I><P>Conditional expressions allow two different format strings to be selected dependent upon whether a sub-expression participated in the match or not:</P>
+<P>?Ntrue_expression:false_expression</P>
+<P>Executes true_expression if sub-expression <I>N</I> participated in the match, otherwise executes false_expression.</P>
+<P>Example: suppose we search for <FONT COLOR="#0000ff">"(while)|(for)" </FONT>then the format string <FONT COLOR="#0000ff">"?1WHILE:FOR"</FONT> would output what matched, but in upper case.</P>
+<I><P>&nbsp;</P>
+<P>Escape sequences:</P>
+</I><P>The following escape sequences are also allowed:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=706>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>\a</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>The bell character.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>\f</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>The form feed character.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>\n</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>The newline character.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>\r</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>The carriage return character.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>\t</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>The tab character.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>\v</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>A vertical tab character.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>\x</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>A hexadecimal character - for example \x0D.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>\x{}</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>A possible unicode hexadecimal character - for example \x{1A0}</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>\cx</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>The ASCII escape character x, for example \c@ is equivalent to escape-@.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>\e</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>The ASCII escape character.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="40%" VALIGN="TOP">
+<P>\dd</TD>
+<TD WIDTH="43%" VALIGN="TOP">
+<P>An octal character constant, for example \10.</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P><HR></P>
+<I><FONT FACE="Arial"><H3><A NAME="implementation"></A>Appendix 1: Implementation notes</H3>
+</I></FONT><P>This is the second full release, see changes.txt for a full list of changes from the previous version. There are no known functionality bugs except that POSIX style equivalence classes are only guaranteed correct if the Win32 localisation model is used (the default for Win32 builds of the library).</P>
+<P>There are some aspects of the code that C++ puritans will consider to be poor style, in particular the use of goto in some of the algorithms. The code could be cleaned up, by changing to a recursive implementation, although it is likely to be slower in that case.</P>
+<P>The performance of the algorithms should be satisfactory in most cases. For example the times taken to match the ftp response expression <FONT COLOR="#0000ff">"^([0-9]+)(\-| |$)(.*)$"</FONT> against the string<FONT COLOR="#0000ff"> "100- this is a line of ftp response which contains a message string"</FONT> are: BSD implementation 450 micro seconds, GNU implementation 271 micro seconds, regex++ 127 micro seconds (Pentium P90, Win32 console app under MS Windows 95).</P>
+<P>However it should be noted that there are some "pathological" expressions which may require exponential time for matching; these all involve nested repetition operators, for example attempting to match the expression "(a*a)*b" against <EM>N</EM> letter a's requires time proportional to <EM>2<SUP>N</SUP></EM>. These expressions can (almost) always be rewritten in such a way as to avoid the problem, for example "(a*a)*b" could be rewritten as "a*b" which requires only time linearly proportional to <EM>N</EM> to solve. In the general case, non-nested repeat expressions require time proportional to <EM>N<SUP>2</SUP></EM>, however if the clauses are mutually exclusive then they can be matched in linear time - this is the case with "a*b", for each character the matcher will either match an "a" or a "b" or fail, where as with "a*a" the matcher can't tell which branch to take (the first "a" or the second) and so has to try both. <EM>Be careful how you write your regular expressions and avoid nested repeats if you can! New to this version, some previously pathological cases have been fixed - in particular searching for expressions which contain leading repeats and/or leading literal strings should be much faster than before. Literal strings are now searched for using the Knuth/Morris/Pratt algorithm (this is used in preference to the Boyer/More algorithm because it allows the tracking of newline characters).</P>
+<P>Some aspects of the POSIX regular expression syntax are implementation defined:</P>
+
+<UL>
+</EM><LI>The "leftmost-longest" rule for determining what matches is ambiguous, this library takes the "obvious" interpretation: find the leftmost match, then maximise the length of each sub-expression in turn with lower indexed sub-expressions taking priority over higher indexed sub-expression. </LI>
+<LI>The behaviour of multi-character collating elements is ambiguous in the standard, in particular expressions such as [a[.ae.]] may have subtle inconsistencies lurking in them. This implementation matches bracket expressions as follows: all bracket expressions match a single character only, unless the expression contains a multi-character collating element, either on its own, or as the endpoint to a range, in which case the expression may match more than one character. </LI>
+<LI>Repeated null expressions are repeated only once, they are treated "as if" they were matched the maximum number of times allowed by the expression. </LI>
+<LI>The behaviour of back references is ambiguous in the standard, in particular it is unclear whether expressions of the form <FONT COLOR="#0000ff">"((ab*)\2)+"</FONT> should be allowed. This implementation allows such expressions and the back reference matches whatever the last sub-expression match was. This means that at the end of the match, the back references may have matched strings different from the final value of the sub-expression to which they refer. </LI></UL>
+
+<P><HR></P>
+<EM><H3><A NAME="demos"><A NAME="thread_safety"></A></A>Appendix 2: Thread safety</H3>
+</EM><P>Class reg_expression&lt;&gt; and its typedefs regex and wregex are thread safe, in that compiled regular expressions can safely be shared between threads. The matching algorithms query_match, reg_search, reg_grep, reg_format and reg_merge are all reentrant and thread safe. Class reg_match is now thread safe, in that the results of a match can be safely copied from one thread to another (for example one thread may find matches and push reg_match instances onto a queue, while another thread pops them off the other end), otherwise use a separate instance of reg_match per thread.</P>
+<P>The POSIX API functions are all reentrant and thread safe, regular expressions compiled with <I>regcomp</I> can also be shared between threads.</P>
+<P>The class RegEx is only thread safe if each thread gets its own RegEx instance (apartment threading) - this is a consequence of RegEx handling both compiling and matching regular expressions.</P>
+<P>Finally note that changing the global locale invalidates all compiled regular expressions, therefore calling <I>set_locale</I> from one thread while another uses regular expressions <I>will</I> produce an unpredictable results.</P>
+<P><HR></P>
+<I><H3><A NAME="localisation"></A>Appendix 3: Localisation</H3>
+</I><P>&nbsp;Regex++ provides extensive support for run-time localisation, the localisation model used can be split into two parts: front-end and back-end. </P>
+<P>Front-end localisation deals with everything which the user sees - error messages, and the regular expression syntax itself. For example a French application could change [[:word:]] to [[:mot:]] and \w to \m. Modifying the front end locale requires active support from the developer, by providing the library with a message catalogue to load, containing the localised strings. Front-end locale is affected by the LC_MESSAGES category only.</P>
+<P>Back-end localisation deals with everything that occurs after the expression has been parsed - in other words everything that the user does not see or interact with directly. It deals with case conversion, collation, and character class membership. The back-end locale does not require any intervention from the developer - the library will acquire all the information it requires for the current locale from the underlying operating system / run time library. This means that if the program user does not interact with regular expressions directly - for example if the expressions are embedded in your C++ code - then no explicit localisation is required, as the library will take care of everything for you. For example embedding the expression [[:word:]]+ in your code will always match a whole word, if the program is run on a machine with, for example, a Greek locale, the it will still match a whole word, but in Greek characters rather than Latin ones. The back-end locale is affected by the LC_TYPE and LC_COLLATE categories.</P>
+<P>There are three separate localisation mechanisms supported by regex++:</P>
+<I><P>Win32 localisation model.</P>
+</I><P>This is the default model when the library is compiled under Win32. When this model is in effect there is a single global locale as defined by the user's control panel settings, and returned by GetUserDefaultLCID. All the settings used by regex++ are acquired directly from the operating system bypassing the C run time library. Front-end localisation requires a resource dll, containing a string table with the user defined strings. The library exports the symbol:</P>
+<P>const char* regex_message_catalogue = 0;</P>
+<P>which needs to be set to point to a string containing the name of the resource dll, <I>before</I> your code compiles any regular expressions.</P>
+<P>This model does not currently support thread specific locales (via SetThreadLocale under Windows NT), the library provides full Unicode support under NT, under Windows 9x the library degrades gracefully - characters 0 to 255 are supported, the remainder are treated as "unknown" graphic characters.</P>
+<I><P>C localisation model.</P>
+</I><P>This is the default model when the library is compiled under an operating system other than Win32, Win32 users can force this model to take effect by defining the preprocessor symbol RE_LOCALE_C. When this model is in effect there is a single global locale, as set by <I>setlocale</I>. All settings are acquired from your run time library, consequently Unicode support is dependent upon your run time library implimentation. Front end localisation requires a POSIX message catalogue, the library exports the symbol:</P>
+<P>const char* regex_message_catalogue = 0;</P>
+<P>which needs to be set to point to a string containing the name of the message catalogue, <I>before</I> your code compiles any regular expressions. If your run time library does not support POSIX message catalogues, then you can either provide your own implementation of &lt;nl_types.h&gt; or define JM_NO_CAT to disable front-end localisation via message catalogues.</P>
+<P>Note that calling <I>setlocale</I> invalidates all compiled regular expressions, calling <CODE>setlocale(LC_ALL, "C")</CODE> will make this library behave equivalent to most traditional regular expression libraries including version 1 of this library.</P>
+<I><CODE><P>C++ </CODE>localisation<CODE> </CODE>model<CODE>.</P>
+</I></CODE><P>This model is only in effect if the library is built with the preprocessor symbol RE_LOCALE_CPP defined. When this model is in effect each instance of reg_expression&lt;&gt; has its own instance of std::locale, class reg_expression&lt;&gt; also has a member function <I>imbue</I> which allows the locale for the expression to be set on a per-instance basis. Front end localisation requires a POSIX message catalogue, which will be loaded via the std::messages facet of the expression's locale, the library exports the symbol:</P>
+<P>const char* regex_message_catalogue = 0;</P>
+<P>which needs to be set to point to a string containing the name of the message catalogue, <I>before</I> your code compiles any regular expressions.</P>
+<P>Note that calling reg_expression&lt;&gt;::imbue will invalidate any expression currently compiled in that instance of reg_expression&lt;&gt;. This model is the one which closest fits the ethos of the C++ standard library, however it is the model which will produce the slowest code, and which is the least well supported by current standard library implimentations, for example I have yet to find an implementation of std::locale which support either message catalogues, or locales other than "C" or "POSIX".</P>
+<P>Finally note that if you build the library with a non-default localisation model, then the appropriate preprocessor symbol (RE_LOCALE_C or RE_LOCALE_CPP) must be defined both when you build the support library, and when you include &lt;regex&gt; or &lt;cregex&gt; in your code. The best way to ensure this is to add the #define to &lt;jm/jm_opt.h&gt;.</P>
+<I><P>Providing a message catalogue:&nbsp;</P>
+</I><P>In order to localise the front end of the library, you need to provide the library with the appropriate message strings contained either in a resource dll's string table (Win32 model), or a POSIX message catalogue (C or C++ models). In the latter case the messages must appear in message set zero of the catalogue. The messages and their id's are as follows:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=6 WIDTH=680>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">Message id</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">Meaning</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">Default value</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">101</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character used to start a sub-expression.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"("</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">102</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character used to end a sub-expression declaration.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">")"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">103</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character used to denote an end of line assertion.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"$"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">104</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character used to denote the start of line assertion.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"^"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">105</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character used to denote the "match any character expression".</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"."</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">106</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The match zero or more times repetition operator.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"*"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">107</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The match one or more repetition operator.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"+"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">108</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The match zero or one repetition operator.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"?"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">109</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character set opening character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"["</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">110</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character set closing character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"]"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">111</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The alternation operator.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"|"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">112</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The escape character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"\\"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">113</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The hash character (not currently used).</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"#"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">114</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The range operator.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"-"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">115</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The repetition operator opening character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"{"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">116</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The repetition operator closing character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"}"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">117</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The digit characters.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"0123456789"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">118</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the word boundary assertion.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"b"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">119</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the non-word boundary assertion.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"B"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">120</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the word-start boundary assertion.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"&lt;"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">121</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the word-end boundary assertion.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"&gt;"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">122</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents any word character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"w"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">123</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents a non-word character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"W"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">124</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents a start of buffer assertion.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"`A"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">125</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents an end of buffer assertion.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"'z"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">126</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The newline character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"\n"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">127</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The comma separator.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">","</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">128</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the bell character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"a"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">129</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the form feed character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"f"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">130</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the newline character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"n"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">131</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the carriage return character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"r"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">132</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the tab character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"t"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">133</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the vertical tab character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"v"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">134</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the start of a hexadecimal character constant.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"x"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">135</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the start of an ASCII escape character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"c"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">136</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The colon character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">":"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">137</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The equals character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"="</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">138</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the ASCII escape character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"e"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">139</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents any lower case character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"l"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">140</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents any non-lower case character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"L"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">141</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents any upper case character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"u"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">142</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents any non-upper case character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"U"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">143</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents any space character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"s"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">144</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents any non-space character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"S"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">145</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents any digit character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"d"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">146</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents any non-digit character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"D"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">147</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the end quote operator.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"E"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">148</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the start quote operator.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"Q"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">149</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents a Unicode combining character sequence.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"X"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">150</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents any single character.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"C"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">151</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents end of buffer operator.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"Z"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<P ALIGN="CENTER">152</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character which when preceded by an escape character represents the continuation assertion.</TD>
+<TD WIDTH="29%" VALIGN="TOP">
+<P ALIGN="CENTER">"G"</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P>Custom error messages are loaded as follows:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=679>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">Message ID</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">Error message ID</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">Default string</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">201</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_NOMATCH</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"No match"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">202</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_BADPAT</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Invalid regular expression"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">203</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_ECOLLATE</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Invalid collation character"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">204</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_ECTYPE</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Invalid character class name"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">205</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_EESCAPE</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Trailing backslash"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">206</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_ESUBREG</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Invalid back reference"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">207</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_EBRACK</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Unmatched [ or [^"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">208</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_EPAREN</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Unmatched ( or \\("</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">209</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_EBRACE</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Unmatched \\{"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">210</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_BADBR</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Invalid content of \\{\\}"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">211</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_ERANGE</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Invalid range end"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">212</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_ESPACE</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Memory exhausted"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">213</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_BADRPT</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Invalid preceding regular expression"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">214</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_EEND</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Premature end of regular expression"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">215</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_ESIZE</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Regular expression too big"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">216</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_ERPAREN</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Unmatched ) or \\)"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">217</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_EMPTY</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Empty expression"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">218</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_E_MEMORY</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Out of memory"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">219</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">REG_E_UNKNOWN</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"Unknown error"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P>Custom character class names are loaded as followed:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=678>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">Message ID</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">Description</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">Equivalent default class name</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">300</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for alpha-numeric characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"alnum"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">301</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for alphabetic characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"alpha"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">302</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for control characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"cntrl"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">303</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for digit characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"digit"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">304</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for graphics characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"graph"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">305</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for lower case characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"lower"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">306</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for printable characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"print"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">307</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for punctuation characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"punct"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">308</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for space characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"space"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">309</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for upper case characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"upper"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">310</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for hexadecimal characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"xdigit"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">311</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for blank characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"blank"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">312</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for word characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"word"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="8%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP">
+<P ALIGN="CENTER">313</TD>
+<TD WIDTH="32%" VALIGN="TOP">
+<P ALIGN="CENTER">The character class name for Unicode characters.</TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P ALIGN="CENTER">"unicode"</TD>
+<TD WIDTH="7%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P>Finally, custom collating element names are loaded starting from message id 400, and terminating when the first load thereafter fails. Each message looks something like: "tagname string" where <I>tagname</I> is the name used inside [[.tagname.]] and <I>string</I> is the actual text of the collating element. Note that the value of collating element [[.zero.]] is used for the conversion of strings to numbers - if you replace this with another value then that will be used for string parsing - for example use the Unicode character 0x0660 for [[.zero.]] if you want to use Unicode Arabic-Indic digits in your regular expressions in place of Latin digits.</P>
+<P>Note that the POSIX defined names for character classes and collating elements are always available - even if custom names are defined, in contrast, custom error messages, and custom syntax messages replace the default ones.</P>
+<P><HR></P>
+<EM><H3>Appendix 4: Demo Applications</H3>
+</EM><P>There are three demo applications that ship with this library, they all come with makefiles for Borland, Microsoft and EGCS compilers, otherwise you will have to create your own makefiles.</P>
+<P>regress.exe:</P>
+<P>A regression test application that gives the matching/searching algorithms a full workout. The presence of this program is your guarantee that the library will behave as claimed - at least as far as those items tested are concerned - if anyone spots anything that isn't being tested I'd be glad to hear about it.</P>
+<P>Files: parse.cpp, regress.cpp, tests.cpp.</P>
+<P>&nbsp;</P>
+<P>jgrep.exe</P>
+<P>A simple grep implimentation, run with no command line options to find out its usage. Look at fileiter.cpp/.h and the mapfile class to see an example of a "smart" bidirectional iterator that can be used with regex++ or any other STL algorithm.</P>
+<P>Files: jgrep.cpp, main.cpp.</P>
+<P>&nbsp;</P>
+<P>timer.exe</P>
+<P>A simple interactive expression matching application, the results of all matches are timed, allowing the programmer to optimise their regular expressions where performance is critical.</P>
+<P>Files: timer.cpp.</P>
+<P ALIGN="CENTER"><HR></P>
+<I><H3><A NAME="headers"></A>Appendix 5: Header Files</H3>
+</I><P>There are two main headers used by this library: &lt;regex&gt; provides full access to the entire library, while &lt;cregex&gt; provides access to just the high level class RegEx, and the POSIX API functions. As an alternative you can use &lt;regex.h&gt; or &lt;jm/regex.h&gt; in place of &lt;regex&gt;, and &lt;cregex.h&gt; or &lt;jm/cregex.h&gt; in place of &lt;cregex&gt;. The use of the &lt;jm/header.h&gt; syntax is recommended for those who already have a version of regex.h on their system, which they do not wish to replace, or which they wish to use in parallel with this library.</P>
+<P ALIGN="CENTER"><HR></P>
+<I><H3><A NAME="redist"></A>Appendix 6: Redistributables</H3>
+</I><P>&nbsp;If you are using Microsoft or Borland C++ and link to a dll version of the run time library, then you will also link to one of the dll versions of regex++. While these dll's are redistributable, there are no "standard" versions, so when installing on the users PC, you should place these in a directory private to your application, and not in the PC's directory path.  Note that if you link to a static version of your run time library, then you will also link to a static version of regex++ and no dll's will need to be distributed.  The possible regex++ dll's are as follows:</P>
+<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=7 WIDTH=638>
+<TR><TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="27%" VALIGN="TOP">
+<B><P ALIGN="CENTER">Development Tool</B></TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<B><P ALIGN="CENTER">Run Time Library</B></TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<B><P ALIGN="CENTER">Regex++ Dll</B></TD>
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="27%" VALIGN="TOP">
+<P ALIGN="CENTER">Microsoft Visual C++ 5/6</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Msvcp60.dll and msvcrt.dll</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Mre200l.dll</TD>
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="27%" VALIGN="TOP">
+<P ALIGN="CENTER">Microsoft Visual C++ 5/6</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Msvcp60d.dll and msvcrtd.dll</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Mre200dl.dll</TD>
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="27%" VALIGN="TOP">
+<P ALIGN="CENTER">Borland C++ 5.02</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Cw3230.dll</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">b2re200l.dll</TD>
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="27%" VALIGN="TOP">
+<P ALIGN="CENTER">Borland C++ 5.02</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Cw3230mt.dll</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">B2re200lm.dll</TD>
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="27%" VALIGN="TOP">
+<P ALIGN="CENTER">Borland C++ Builder 1</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Cp3230mt.dll</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">B2re200lv.dll</TD>
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="27%" VALIGN="TOP">
+<P ALIGN="CENTER">Borland C++ Builder 3</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Cw3240.dll</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">B3re200l.dll</TD>
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="27%" VALIGN="TOP">
+<P ALIGN="CENTER">Borland C++ Builder 3</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Cw3240mt.dll</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">B3re200lm.dll</TD>
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="27%" VALIGN="TOP">
+<P ALIGN="CENTER">Borland C++ Builder 3</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Cp3240mt.dll and vcl35.bpl</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">B3re200lv.dll</TD>
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="27%" VALIGN="TOP">
+<P ALIGN="CENTER">Borland C++ Builder 4</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Cw3245.dll</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">B4re200l.dll</TD>
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="27%" VALIGN="TOP">
+<P ALIGN="CENTER">Borland C++ Builder 4</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Cw3245mt.dll</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">B4re200lm.dll</TD>
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+<TD WIDTH="27%" VALIGN="TOP">
+<P ALIGN="CENTER">Borland C++ Builder 4</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">Cp3245mt.dll and vcl40.bpl</TD>
+<TD WIDTH="30%" VALIGN="TOP">
+<P ALIGN="CENTER">B4re200lv.dll</TD>
+<TD WIDTH="7%" VALIGN="TOP">&nbsp;</TD>
+</TR>
+</TABLE>
+
+<P>&nbsp;</P>
+<P><HR></P>
+<EM><H3><A NAME="furtherInfo"></A>Further Information</H3>
+</EM><P>The author can be contacted at <A HREF="mailto:John_Maddock@compuserve.com">John_Maddock@compuserve.com</A>, the home page for this library is at <A HREF="http://ourworld.compuserve.com/homepages/John_Maddock/regexpp.htm">http://ourworld.compuserve.com/homepages/John_Maddock/regexpp.htm</A>, you can obtain the latest official release from this site, anything else is a mirror.</P>
+<P>I am indebted to Robert Sedgewick's "Algorithms in C++" for forcing me to think about algorithms and their performance. The following people have all contributed useful comments or fixes: Edward Diener, Robert Dunn, Max Leung, Rob Ward and Yuval Yosef. I am also grateful to the manuals supplied with the Henry Spencer, Perl and GNU regular expression libraries - wherever possible I have tried to maintain compatibility with these libraries and with the POSIX standard - the code however is entirely my own, including any bugs! I can absolutely guarantee that I will not fix any bugs I don't know about, so if you have any comments or spot any bugs, please get in touch.</P>
+<P>Useful further information can be found at:</P>
+<P>The <A HREF="http://www.opengroup.org/onlinepubs/7908799/toc.htm">Open Unix Specification</A> contains a wealth of useful material, including the regular expression syntax, and specifications for <A HREF="http://www.opengroup.org/onlinepubs/7908799/xsh/regex.h.html">&lt;regex.h&gt;</A> and <A HREF="http://www.opengroup.org/onlinepubs/7908799/xsh/nl_types.h.html">&lt;nl_types.h&gt;</A>.</P>
+<P>The <A HREF="http://www.cs.purdue.edu/homes/stelo/pattern.html">Pattern Matching Pointers</A> site is a "must visit" resource for anyone interested in pattern matching.</P>
+<P><A HREF="http://glimpse.cs.arizona.edu/">Glimpse and Agrep</A>, use a simplified regular expression syntax to achieve faster search times.</P>
+<P><A HREF="http://glimpse.cs.arizona.edu/udi.html">Udi Manber</A> and <A HREF="http://www.dcc.uchile.cl/~rbaeza/">Ricardo Baeza-Yates</A> both have a selection of useful pattern matching papers available from their respective web sites.</P>
+<I><FONT SIZE=2><P>Copyright Dr John Maddock 1998-9 all rights reserved.</P></I></FONT></BODY>
+</HTML>

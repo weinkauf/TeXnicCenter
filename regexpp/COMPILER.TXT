@@ -1,0 +1,38 @@
+There are some problems compiling the demo applications with *some* 
+versions of *some* compilers.
+
+Borland C++ Version 4.5x and less : you're unlikely to get the 
+demos to compile without editing the source, the include style 
+will need to be changed from <include> to <include.h>, probably 
+other changes will be required as well.
+
+Borland C++ Version 5.01 and less : Has problems with namespace 
+lookups, particularly with iterators that are in a different 
+namespaces from the STL.  Some fixes have been introduced to 
+fix this in regress.h, they're ugly though.
+
+Borland C++ Version 5.02 : No problems known.
+
+Borland C++ Builder 3 : no problems, as long as you use ILink 
+and not TLink32 - the latter isn't really supported by Builder 3 
+anyway.
+
+Borland C++ Builder 4 : no known problems.
+
+GCC 2.8: Compiles cleanly but does not run - the compiler 
+generates a corrupt jump table for the central switch statement 
+of reg_expression::set_expression.  I don't know if this is a 
+true compiler problem or a problem with the mingwin32 port, as 
+the assembly output from the compiler does in fact look OK.
+
+GCC 2.91 (EGCS 1.11 and later): no known problems - however 
+requires automatic template instance merging which is not 
+supported under the 1.1 release.
+
+Microsoft VC++ 5:  I'm told everything's OK for this compiler - 
+provide you update to service pack 3 - but can't check this for myself.
+
+Microsoft VC++ 6:  no known problems.
+
+
+

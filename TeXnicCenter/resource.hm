@@ -1,0 +1,57 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by TeXnicCenter.rc
+//
+#define HIDCANCEL                       0x80e00002    // IDD_ACTIVE_PROFILE
+#define HIDC_ADD_DOCUMENTTEMPLATES      0x806b0404    // IDD_OPTIONS_PATHS
+#define HIDC_ADD_PROJECTTEMPLATES       0x806b04de    // IDD_OPTIONS_PATHS
+#define HIDC_ADD_TYPE                   0x80930403    // IDD_OPTIONS_LATEX
+#define HIDC_BROWSE_MAIN_FILE           0x80970413    // IDD_PROJECT_PROPERTIES
+#define HIDC_BROWSE_PROJECT_PATH        0x806b040f    // IDD_OPTIONS_PATHS
+#define HIDC_CAPTION                    0x809e0416    // IDD_ITEM_PROPERTIES
+#define HIDC_DEPTH                      0x809c0414    // IDD_HEADER
+#define HIDC_DOCUMENTTEMPLATES          0x806b0403    // IDD_OPTIONS_PATHS
+#define HIDC_EDIT_TYPE                  0x80930406    // IDD_OPTIONS_LATEX
+#define HIDC_FILE                       0x80980414    // IDD_ITEM_PROPERTIES
+#define HIDC_FLOAT_CAPTION              0x809e0420    // IDD_FLOATOBJECT
+#define HIDC_FLOAT_LABEL                0x809e041f    // IDD_FLOATOBJECT
+#define HIDC_FLOAT_POSBOTTOM            0x809e0419    // IDD_FLOATOBJECT
+#define HIDC_FLOAT_POSHERE              0x809e0417    // IDD_FLOATOBJECT
+#define HIDC_FLOAT_POSONECOL            0x809e041b    // IDD_FLOATOBJECT
+#define HIDC_FLOAT_POSPAGE              0x809e041a    // IDD_FLOATOBJECT
+#define HIDC_FLOAT_POSTOP               0x809e0418    // IDD_FLOATOBJECT
+#define HIDC_FLOAT_POSTWOCOL            0x809e041c    // IDD_FLOATOBJECT
+#define HIDC_GOTO_LINE_EDIT             0x80cb044d    // IDD_GOTO
+#define HIDC_GRAPHIC_BROWSE             0x809f0422    // IDD_GRAPHIC
+#define HIDC_GRAPHIC_BSCALE             0x809f042e    // IDD_GRAPHIC
+#define HIDC_GRAPHIC_CENTER             0x809f0430    // IDD_GRAPHIC
+#define HIDC_GRAPHIC_FLOAT              0x809f042d    // IDD_GRAPHIC
+#define HIDC_GRAPHIC_SCALE              0x809f0423    // IDD_GRAPHIC
+#define HIDC_LABEL                      0x80980417    // IDD_ITEM_PROPERTIES
+#define HIDC_LINE                       0x80980415    // IDD_ITEM_PROPERTIES
+#define HIDC_MAIN_FILE                  0x80970412    // IDD_PROJECT_PROPERTIES
+#define HIDC_OPTIONS_REPLACE_QM         0x80a10444    // IDD_OPTIONS_GENERIC
+#define HIDC_OPTIONS_REPLACE_QM_CLOSE_EDIT \
+                                        0x80a10448    // IDD_OPTIONS_GENERIC
+#define HIDC_OPTIONS_REPLACE_QM_OPEN_EDIT \
+                                        0x80a10447    // IDD_OPTIONS_GENERIC
+#define HIDC_OPTIONS_RESTORE_SESSION    0x80a1043c    // IDD_OPTIONS_GENERIC
+#define HIDC_OPTIONS_SAVE_AUTOMATIC     0x80cd043e    // IDD_OPTIONS_FILE
+#define HIDC_OPTIONS_SAVE_BEFORE_COMPILATION \
+                                        0x80cd043d    // IDD_OPTIONS_FILE
+#define HIDC_OPTIONS_SAVE_INTERVALL_EDIT \
+                                        0x80cd043f    // IDD_OPTIONS_FILE
+#define HIDC_OUTPUT_WIZARD              0x80930407    // IDD_OPTIONS_LATEX
+#define HIDC_PROFILES                   0x80e004c0    // IDD_ACTIVE_PROFILE
+#define HIDC_PROJECTTEMPLATES           0x806b04dd    // IDD_OPTIONS_PATHS
+#define HIDC_PROJECT_PATH               0x806b040e    // IDD_OPTIONS_PATHS
+#define HIDC_REMOVE_DOCUMENTTEMPLATES   0x806b0405    // IDD_OPTIONS_PATHS
+#define HIDC_REMOVE_PROJECTTEMPLATES    0x806b04df    // IDD_OPTIONS_PATHS
+#define HIDC_REMOVE_TYPE                0x80930404    // IDD_OPTIONS_LATEX
+#define HIDC_TABULAR_CENTER             0x80a00431    // IDD_TABULAR
+#define HIDC_TABULAR_FLOAT              0x80a00432    // IDD_TABULAR
+#define HIDC_TABULAR_VBOTTOM            0x80a00435    // IDD_TABULAR
+#define HIDC_TABULAR_VCENTER            0x80a00434    // IDD_TABULAR
+#define HIDC_TABULAR_VTOP               0x80a00433    // IDD_TABULAR
+#define HIDC_TITLE                      0x80980413    // IDD_ITEM_PROPERTIES
+#define HIDC_TYPES                      0x80930405    // IDD_OPTIONS_LATEX
+#define HIDOK                           0x80e00001    // IDD_ACTIVE_PROFILE
