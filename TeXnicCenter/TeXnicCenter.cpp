@@ -223,9 +223,6 @@ CTeXnicCenterApp::CTeXnicCenterApp()
 
 BOOL CTeXnicCenterApp::InitInstance()
 {
-	// setting locale
-	setlocale( LC_ALL, AfxLoadString( STE_STRING_FOR_SETLOCALE ) );
-
 	// check if we should use an existing instance
 	if( !CProjectSupportingWinApp::InitInstance() )
 		return FALSE;
@@ -248,6 +245,9 @@ BOOL CTeXnicCenterApp::InitInstance()
 	LoadStdProfileSettings();
 
 	g_configuration.Serialize(CConfiguration::Load);
+
+	// Set the locale
+	_tsetlocale( LC_ALL, g_configuration.m_strLocale );
 
 	// parse command line
 	CTCCommandLineInfo cmdInfo;
