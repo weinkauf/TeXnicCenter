@@ -770,8 +770,7 @@ void COutputDoc::OnEditFindInFiles()
 
 	CMainFrame	*pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
 	if( pwndMainFrame )
-		pwndMainFrame->ActivateOutputTab( CMainFrame::outputTabGrep1 + 
-		m_nWorkingFileGrep );
+		pwndMainFrame->ActivateOutputTab(CMainFrame::outputTabGrep1 + m_nWorkingFileGrep, true);
 
 	strStart.Format( STE_GREP_START, dlg.m_strSearchFor );
 	ASSERT(m_nWorkingFileGrep == 0 || m_nWorkingFileGrep == 1);
@@ -1206,10 +1205,10 @@ void COutputDoc::DoLaTeXRun()
 	m_nActualWarningIndex = -1;
 	m_nActualBadBoxIndex = -1;
 
-	// activate output bar
+	// activate output bar / tab
 	CMainFrame* pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
 	if (pwndMainFrame)
-		pwndMainFrame->ActivateOutputTab( CMainFrame::outputTabBuildResult );
+		pwndMainFrame->ActivateOutputTab(CMainFrame::outputTabBuildResult, false);
 
 	// run latex
 	m_builder.BuildAll(
@@ -1240,10 +1239,10 @@ void COutputDoc::DoBibTexRun()
 	m_nActualWarningIndex = -1;
 	m_nActualBadBoxIndex = -1;
 
-	// activate output bar
+	// activate output bar / tab
 	CMainFrame* pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
-	if( pwndMainFrame )
-		pwndMainFrame->ActivateOutputTab( CMainFrame::outputTabBuildResult );
+	if (pwndMainFrame)
+		pwndMainFrame->ActivateOutputTab(CMainFrame::outputTabBuildResult, false);
 
 	// run latex
 	m_builder.RunBibTex(this, m_pBuildView, GetWorkingDir(), GetMainPath());
@@ -1271,12 +1270,12 @@ void COutputDoc::DoMakeIndexRun()
 	m_nActualWarningIndex = -1;
 	m_nActualBadBoxIndex = -1;
 
-	// activate output bar
+	// activate output bar / tab
 	CMainFrame* pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
-	if( pwndMainFrame )
-		pwndMainFrame->ActivateOutputTab( CMainFrame::outputTabBuildResult );
+	if (pwndMainFrame)
+		pwndMainFrame->ActivateOutputTab(CMainFrame::outputTabBuildResult, false);
 
-	// run latex
+	// run makeindex
 	m_builder.RunMakeIndex(this, m_pBuildView, GetWorkingDir(), GetMainPath());
 }
 

@@ -1,3 +1,12 @@
+2005/01/04 niteria
+- Reworked focus behavior of the edit window.
+  Now the focus remains there even if a build starts.
+  Furthermore, Escape key behaves now as in Visual Studio.
+  These changes included the following bugs/features:
+  - Fixed Bug 554402: Escape doesn't cancel incremental search
+  - Fixed Bug 580488: TXC doesn't get focused
+  - Implemented Feature 564225: Set focus to editor after building
+
 2004/12/22 niteria
 - Implemented Feature 1089997: Predefined sets of quotation marks
 

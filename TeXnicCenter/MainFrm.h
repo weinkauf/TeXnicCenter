@@ -132,20 +132,23 @@ public:
 	BOOL SetMenu(CMenu* pMenu);
 
 	/**
-	Activates the specified tab on the navigation bar.
+	Activates the specified tab on the navigation bar and sets the focus on it.
 
 	@param nTab
 		Zero based index of the tab on the navigation bar to activate.
 	*/
-	void ActivateNavigationTab( int nTab );
+	void ActivateNavigationTab(int nTab);
 
 	/**
 	Activates the specified tab on the output bar.
 
 	@param nTab
 		Zero based index of the tab on the output bar to activate.
+
+	@param bSetFocus
+		Whether to set the focus to the specified tab or not.
 	*/
-	void ActivateOutputTab(int nTab);
+	void ActivateOutputTab(int nTab, bool bSetFocus);
 
 	/**
 	Should be called, when the user may have changed the external, user
@@ -153,8 +156,18 @@ public:
 	*/
 	void RebuildToolsMenu();
 
+
 // implementation helpers
 protected:
+
+	/**
+	Activates the output bar.
+
+	@param bSetFocus
+		Whether to set the focus to the specified tab or not.
+	*/
+	void ActivateOutputBar(bool bSetFocus);
+
 	/**
 	Toggles the specified control bar.
 
@@ -227,7 +240,6 @@ public:
 	public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL DestroyWindow();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
 	virtual void WinHelp(DWORD dwData, UINT nCmd = HELP_CONTEXT);
@@ -280,6 +292,7 @@ protected:
 	afx_msg void OnViewDocTabsIcons();
 	afx_msg void OnViewDocTabsNote();
 	afx_msg void OnUpdateViewDocTabs(CCmdUI* pCmdUI);
+	afx_msg void OnToolsCancel();
 	//}}AFX_MSG
 	afx_msg void OnToggleCtrlBar( UINT nIDEvent );
 	afx_msg void OnToggleMathBar( UINT nIDEvent );

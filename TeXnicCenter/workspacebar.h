@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_WORKSPACEBAR_H__6CC59864_DC90_11D3_946E_000000000000__INCLUDED_)
 #define AFX_WORKSPACEBAR_H__6CC59864_DC90_11D3_946E_000000000000__INCLUDED_
 
@@ -57,8 +63,6 @@ public:
 // overridings
 protected:
 	//{{AFX_VIRTUAL(CWorkspaceBar)
-	public:
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	//}}AFX_VIRTUAL
 
 // implementation helpers
