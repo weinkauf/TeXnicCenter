@@ -420,24 +420,32 @@ void CLatexEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 		case _T('"'):
 			if( !g_configuration.m_bReplaceQuotationMarks )
 				CCrystalEditViewEx::OnChar(nChar, nRepCnt, nFlags);
-			else				
+			else
 			{
 				CPoint	ptSelStart, ptSelEnd;
 				GetSelection( ptSelStart, ptSelEnd );
 
-				// opening quotation mark, if character left to selection is whitespace.
-				if( ptSelStart.x < 1 || _istspace( GetLineChars( ptSelStart.y )[ptSelStart.x - 1] ) )
+				// opening quotation mark, if charcter is first in line
+				if( ptSelStart.x < 1 )
 					InsertText( g_configuration.m_strOpeningQuotationMark );
 				else
-					InsertText( g_configuration.m_strClosingQuotationMark );
+				{
+					// opening quotation mark, if character left of selection is whitespace or open brace
+					TCHAR cLeft = GetLineChars( ptSelStart.y )[ptSelStart.x - 1];
+					if ( _istspace(cLeft) || cLeft == _T('(') || cLeft == _T('{') || cLeft == _T('['))
+						InsertText( g_configuration.m_strOpeningQuotationMark );
+					else
+						InsertText( g_configuration.m_strClosingQuotationMark );
+				}
 			}
 
 			break;
 
-		default:	
+		default:
 			CCrystalEditViewEx::OnChar(nChar, nRepCnt, nFlags);
 	}
 }
+
 
 void CLatexEdit::OnEditGoto() 
 {
