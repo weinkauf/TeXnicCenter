@@ -469,10 +469,10 @@ void COutputWizard::GenerateOutputProfiles()
 				_T("--src -interaction=nonstopmode \"%pm\""));
 			p.SetBibTexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("bibtex.exe")),
-				_T("%bm"));
+				_T("\"%bm\""));
 			p.SetMakeIndexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("makeindex.exe")),
-				_T("%bm"));
+				_T("\"%bm\""));
 
 			// add viewer settings
 			if (!m_wndPageDviViewer.m_strPath.IsEmpty())
@@ -522,10 +522,10 @@ void COutputWizard::GenerateOutputProfiles()
 				_T("--src -interaction=nonstopmode \"%pm\""));
 			p.SetBibTexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("bibtex.exe")),
-				_T("%bm"));
+				_T("\"%bm\""));
 			p.SetMakeIndexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("makeindex.exe")),
-				_T("%bm"));
+				_T("\"%bm\""));
 
 			// add post processor dvips
 			CPostProcessor	pp(
@@ -581,10 +581,10 @@ void COutputWizard::GenerateOutputProfiles()
 				_T("-interaction=nonstopmode \"%pm\""));
 			p.SetBibTexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("bibtex.exe")),
-				_T("%bm"));
+				_T("\"%bm\""));
 			p.SetMakeIndexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("makeindex.exe")),
-				_T("%bm"));
+				_T("\"%bm\""));
 
 			// add viewer settings
 			if (!m_wndPagePdfViewer.m_strPath.IsEmpty())
