@@ -572,8 +572,8 @@ void CLatexParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
 
 
 BOOL CLatexParser::FindPairInLine( LPCTSTR lpszLine, LPCTSTR lpszLineEnd, CCrystalTextBlock *pTextBlock, long nLineIndex,
-																	 int nDirection, LPCTSTR lpszTextPos, CPairStack &aPairStack, int &nNthOpenPair, 
-																	 long &nFoundStrStart, long &nFoundStrEnd, BOOL &result )
+																	 int nDirection, LPCTSTR lpszTextPos, CPairStack &aPairStack, int &nNthOpenPair, BOOL bClearToEnd,
+																	 long &nFoundStrStart, long &nFoundStrEnd, CPairStack &openPairStack, int &result )
 {
 	ASSERT( lpszTextPos >= lpszLine );
 	BOOL bDoSearch;
@@ -681,8 +681,8 @@ BOOL CLatexParser::FindPairInLine( LPCTSTR lpszLine, LPCTSTR lpszLineEnd, CCryst
 				lpszFrom = lpszTextPos;
 			}
 			
-			if ( FindPairInBlock( lpszLine, lpszFrom, lpszTo, nLineIndex, nDirection, aPairStack, nNthOpenPair, 
-														 nFoundStrStart, nFoundStrEnd, result ) )
+			if ( FindPairInBlock( lpszLine, lpszFrom, lpszTo, nLineIndex, nDirection, aPairStack, nNthOpenPair, bClearToEnd, 
+														 nFoundStrStart, nFoundStrEnd, openPairStack, result ) )
 			{
 				return TRUE;
 			}
@@ -700,8 +700,8 @@ BOOL CLatexParser::FindPairInLine( LPCTSTR lpszLine, LPCTSTR lpszLineEnd, CCryst
 
 
 BOOL CLatexParser::FindPairInBlock( LPCTSTR lpszLine, LPCTSTR lpszFrom, LPCTSTR lpszTo, 
-																	 long nLineIndex, int nDirection, CPairStack &aPairStack, int &nNthOpenPair, 
-																	 long &nFoundStrStart, long &nFoundStrEnd, BOOL &result )
+																	 long nLineIndex, int nDirection, CPairStack &aPairStack, int &nNthOpenPair, BOOL bClearToEnd,
+																	 long &nFoundStrStart, long &nFoundStrEnd, CPairStack &openPairStack, int &result )
 {
 	int nInc = (nDirection == DIRECTION_LEFT) ? -1 : 1;
 	LPCTSTR lpszCurPos = NULL;
@@ -721,8 +721,6 @@ BOOL CLatexParser::FindPairInBlock( LPCTSTR lpszLine, LPCTSTR lpszFrom, LPCTSTR 
 		{
 			if ( (lpszCurPos <= lpszStart) || !IsCmdAt( lpszStart, lpszCurPos-1 ) ) 
 			{	
-				const struct tagPairStackItm &rTopBracket= aPairStack.back();	
-				
 				//new opening bracket
 				if  ( nPairDir == OppositeDir( nDirection ) )
 				{
@@ -737,32 +735,58 @@ BOOL CLatexParser::FindPairInBlock( LPCTSTR lpszLine, LPCTSTR lpszFrom, LPCTSTR 
 
 					aPairStack.push_back( newBracket );
 				}
-				//closing bracket
-				else if ( nPairDir == nDirection && rTopBracket.nPairIdx ==  nPairIdx )  
-				{
-			  	ASSERT( rTopBracket.nPairDir == OppositeDir(nPairDir) );
-					aPairStack.pop_back();			  
-				}
 				//open pair
 				else if ( aPairStack.empty() && nPairDir == nDirection )
 				{
-				  	nNthOpenPair--;
+					nNthOpenPair--;
+
+					struct tagPairStackItm newBracket;
+					
+					newBracket.nPairIdx = nPairIdx;
+					newBracket.nPairDir = nPairDir;
+					newBracket.ptStart.x = lpszCurPos - lpszLine;
+					newBracket.ptStart.y = nLineIndex;
+					newBracket.ptEnd.x = lpszPairStrEnd - lpszLine;
+					newBracket.ptEnd.y = nLineIndex;
+
+					openPairStack.insert( openPairStack.begin(), newBracket );
+				}
+				//closing bracket
+				else if ( !aPairStack.empty() && nPairDir == nDirection )
+				{
+					const struct tagPairStackItm &rTopBracket= aPairStack.back();	
+					if (rTopBracket.nPairIdx ==  nPairIdx )  
+					{
+			  		ASSERT( rTopBracket.nPairDir == OppositeDir(nPairDir) );
+						aPairStack.pop_back();			  
+					}
+					//error bracket out of pair
+					else 
+					{
+						result = CCrystalParser::RESULT_ERROR;
+				  	return  TRUE;
+					}
 				}
 				//error bracket out of pair
 				else 
 				{
-				  	result = FALSE;
+						result = CCrystalParser::RESULT_ERROR;
 				  	return  TRUE;
 				}
 				
 
 				//stack empty, no open pair to look => end
-				if ( aPairStack.empty() && nNthOpenPair == 0 )
+				if ( aPairStack.empty() && nNthOpenPair  == 0 )
 				{
-					nFoundStrStart = lpszCurPos - lpszLine;
-					nFoundStrEnd = lpszPairStrEnd - lpszLine;
-					result = TRUE;
-					return TRUE;
+					if ( bClearToEnd )
+						result = CCrystalParser::RESULT_ENDOK;
+					else 
+					{
+						nFoundStrStart = lpszCurPos - lpszLine;
+						nFoundStrEnd = lpszPairStrEnd - lpszLine;
+						result = CCrystalParser::RESULT_OK;
+						return TRUE;
+					}
 				}
 			}
 		}

@@ -64,6 +64,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.6  2005/02/23 23:58:19  vachis
+* Fixed Matching Bracket Highlighting
+* New features for Matching Bracket Highlighting: configure colours,
+*     highlight current block and pair, help
+*
 * Revision 1.5  2005/02/15 09:43:12  vachis
 * Implemented feature 536164: Matching Bracket Highlight
 *
@@ -136,10 +141,14 @@ void CCrystalTextView::MoveLeft(BOOL bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::MoveRight(BOOL bSelect)
@@ -169,10 +178,14 @@ void CCrystalTextView::MoveRight(BOOL bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::MoveWordLeft(BOOL bSelect)
@@ -221,10 +234,14 @@ void CCrystalTextView::MoveWordLeft(BOOL bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::MoveWordRight(BOOL bSelect)
@@ -276,10 +293,14 @@ void CCrystalTextView::MoveWordRight(BOOL bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::MoveUp(BOOL bSelect)
@@ -310,10 +331,14 @@ void CCrystalTextView::MoveUp(BOOL bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::MoveDown(BOOL bSelect)
@@ -344,10 +369,14 @@ void CCrystalTextView::MoveDown(BOOL bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::MoveHome(BOOL bSelect)
@@ -376,10 +405,14 @@ void CCrystalTextView::MoveHome(BOOL bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::MoveEnd(BOOL bSelect)
@@ -396,10 +429,14 @@ void CCrystalTextView::MoveEnd(BOOL bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::MovePgUp(BOOL bSelect)
@@ -435,10 +472,14 @@ void CCrystalTextView::MovePgUp(BOOL bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::MovePgDn(BOOL bSelect)
@@ -475,10 +516,14 @@ void CCrystalTextView::MovePgDn(BOOL bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::MoveCtrlHome(BOOL bSelect)
@@ -492,10 +537,14 @@ void CCrystalTextView::MoveCtrlHome(BOOL bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::MoveCtrlEnd(BOOL bSelect)
@@ -509,10 +558,14 @@ void CCrystalTextView::MoveCtrlEnd(BOOL bSelect)
 		m_ptAnchor = m_ptCursorPos;
 	SetSelection(m_ptAnchor, m_ptCursorPos);	
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::ScrollUp()
@@ -707,10 +760,20 @@ void CCrystalTextView::OnLButtonDown(UINT nFlags, CPoint point)
 	m_nIdealCharPos = CalculateActualOffset( m_ptCursorPos.y, m_ptCursorPos.x );
 	//END SW
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if (m_nSelBlockLevel != 0)
+	{
+		ResetSelBlockLevel();
+		SelectBlockAround( GetCursorPos(), 0 );
+	}
+		
+	if (!IsSelection()) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::OnMouseMove(UINT nFlags, CPoint point) 
@@ -783,10 +846,14 @@ void CCrystalTextView::OnMouseMove(UINT nFlags, CPoint point)
 				UpdateCaret();
 				SetSelection(ptNewCursorPos, ptEnd);
 
+				//if (!isSelection()) {
 				//highlight brackets
 				//MarkPairStringTo(GetCursorPos());
 				//Invalidate();
 				//UpdateWindow();
+				//}
+				//else
+				//UnmarkPairString();
 				return;
 			}
 
@@ -819,10 +886,14 @@ void CCrystalTextView::OnMouseMove(UINT nFlags, CPoint point)
 		UpdateCaret();
 		SetSelection(ptStart, ptEnd);
 
+		//if (!isSelection()) {
 		//highlight brackets
 		//MarkPairStringTo(GetCursorPos());
 		//Invalidate();
 		//UpdateWindow();
+		//}
+		//else
+		//UnmarkPairString();
 	}
 
 	if (m_bPreparingToDrag)
@@ -955,11 +1026,17 @@ void CCrystalTextView::OnLButtonUp(UINT nFlags, CPoint point)
 		SetSelection(m_ptCursorPos, m_ptCursorPos);
 	}
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
 	ASSERT_VALIDTEXTPOS(m_ptCursorPos);
+	if (!IsSelection()) 
+	{
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
+
 }
 
 void CCrystalTextView::OnTimer(UINT nIDEvent) 
@@ -1082,10 +1159,14 @@ void CCrystalTextView::OnLButtonDblClk(UINT nFlags, CPoint point)
 		m_bLineSelection = FALSE;
 		m_bDragSelection = TRUE;
 
-		//highlight brackets
-		MarkPairStringTo(GetCursorPos(), FALSE);
-		Invalidate();
-		UpdateWindow();
+		if (!IsSelection()) //highlight brackets
+		{
+			MarkPairStringTo(GetCursorPos(), FALSE);
+			Invalidate();
+			UpdateWindow();
+		}
+		else
+			UnmarkPairString();
 	}
 }
 
@@ -1122,10 +1203,14 @@ void CCrystalTextView::OnRButtonDown(UINT nFlags, CPoint point)
 		UpdateCaret();
 	}
 
-	//highlight brackets
-	MarkPairStringTo(GetCursorPos(), FALSE);
-	Invalidate();
-	UpdateWindow();
+	if ( !IsSelection() ) {
+		//highlight brackets
+		MarkPairStringTo(GetCursorPos(), FALSE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 
 	CView::OnRButtonDown(nFlags, point);
 }

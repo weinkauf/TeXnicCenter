@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.8  2005/02/15 09:43:12  vachis
+* Implemented feature 536164: Matching Bracket Highlight
+*
 * Revision 1.7  2002/06/27 14:43:26  svenwiegand
 * Instead of the character test functions (isalpha, isdigit, etc.) from the standard library, our own wrappers from the character.h file (myspell directory) are used now, to fix character recognition problems (bug 551033).
 *
@@ -198,8 +201,8 @@ LPCTSTR CCrystalParser::GetLineChars( int nLineIndex )
 
 
 BOOL CCrystalParser::FindPairInLine( LPCTSTR lpszLine, LPCTSTR lpszLineEnd, CCrystalTextBlock *pTextBlock, long nLineIndex,
-												int nDirection, LPCTSTR lpszTextPos, CPairStack &aPairStack, int &nNthOpenPair, 
-												long &nFoundStrStart, long &nFoundStrEnd, BOOL &result )
+												int nDirection, LPCTSTR lpszTextPos, CPairStack &aPairStack, int &nNthOpenPair, BOOL bClearToEnd,
+												long &nFoundStrStart, long &nFoundStrEnd, CPairStack &openPairStack, BOOL &result )
 {
 	nFoundStrStart = 0;
 	nFoundStrEnd = 0;

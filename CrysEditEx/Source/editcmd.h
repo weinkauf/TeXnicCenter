@@ -25,6 +25,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.6  2002/04/30 23:45:01  cnorris
+* Personal dictionary support
+*
 * Revision 1.5  2002/04/25 18:53:53  cnorris
 * background spell check support
 *
@@ -93,6 +96,7 @@
 #define		ID_EDIT_TEXT_END			37124
 #define		ID_EDIT_EXT_TEXT_END		37125
 #define		ID_EDIT_FIND_PREVIOUS		37126
+#define		ID_EDIT_SEL_BIGGER_BLOCK				37127
 
 //	Bookmark commands
 #define		ID_EDIT_TOGGLE_BOOKMARK0	37200

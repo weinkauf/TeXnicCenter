@@ -24,6 +24,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.13  2005/02/23 23:58:19  vachis
+* Fixed Matching Bracket Highlighting
+* New features for Matching Bracket Highlighting: configure colours,
+*     highlight current block and pair, help
+*
 * Revision 1.12  2005/02/15 09:43:12  vachis
 * Implemented feature 536164: Matching Bracket Highlight
 *
@@ -196,6 +201,9 @@ private:
 	int m_nCurStringColorBkgnd;
 	BOOL m_bDrawPairBlock;
 
+	//block selection
+	int m_nSelBlockLevel; 
+
 	//	Pre-calculated line lengths (in characters)
 	int m_nActualLengthArraySize;
 	int *m_pnActualLineLength;
@@ -241,30 +249,43 @@ private:
 
 
 	/** Finds pair string or nth open pair string. It checks if pair strings match each other 
-	(not to allow this '({)}'). Either <code>nPairToLook</code> or <code>nNthOpenPair</code> 
-	have to be set, but not both.
- 
+	(not to allow this '({)}'). 
+
 	@param ptTextPost  
-	  Position in the text document
+		Position in the text document. It can be before the beginning of line or after the end of line then the
+		previous or next line is immediately processed.
 	@param nNthOpenPair 
-	  Find nth open pair
-	@param nCurPairIdx
-	  Find correspondig pair to this string index 
+		Find nth open pair
 	@param nDirection 
-	  The direction of search (CLatexParser::DIRECTION_LEFT or CLatexParser::DIRECTION_RIGHT)
-     
-	@param ptPairStrStart 
-	  The start of found pair or start of string that caused and error  
-	@param ptPairStrEnd 
-	  The end of found pair or end of string that caused and error  
-     
-	@reuturn FALSE if the pair was not found or if some pair strings didn't match ("{(})"case ). 
-	  The start and the end of error are returned in <code>ptPairStrStart</code>, <code>ptPairStrEnd</code>. 
+		The direction of search (CLatexParser::DIRECTION_LEFT or CLatexParser::DIRECTION_RIGHT)
+	@param aPairStack
+		Stack for search. It can be filled with starting bracket, or some required sequence of brackets that have
+		to be matched with their pairs. In case of error you can find from the stack when the error did occure. 
+	@param bClearToEnd  
+		When the function is about exit according to normal run, it will additionally check the rest of text document
+		whether it conatins any open pair. If do so, an error is returned.
+
+	@param ptFoundStrStart 
+		The start of found pair or start of string that caused an error.    
+	@param ptFoundStrEnd 
+		The end of found pair or end of string that caused an error. The end is the position just after the string.  
+
+	@param openPairStack
+		Output, the stack where open pairs are stored.
+	@param bClearEndReached
+		<code>TRUE</code> if the parameter <code>bClearToEnd<code> was set and the end/start of file
+		was reached without an error.
+
+	@return FALSE if the pair was not found or if some pair strings didn't match ("{(})"case ). 
+		The start and the end of error are returned in <code>ptFoundStrStart</code>, <code>ptFoundStrEnd</code>, 
+		and <code>aPairStack</code> stores the state of stack when the error did occure. If the stack is empty then
+		the beginning or end of file was reached (it depends on direction).
 		If an unknown error occures both <code>ptPairStrStart</code> and <code>ptPairStrEnd</code> are set to <code>CPoin(0,0)</code>
 	*/
-	BOOL FindPairHelper( const CPoint &ptTextPos, int nNthOpenPair, int nDirection, int nCurPairIdx,
-														 const CPoint &ptCurStrStart, const CPoint &ptCurStrEnd,
-														 CPoint &ptPairStrStart, CPoint &ptPairStrEnd );
+	BOOL FindPairHelper( const CPoint &ptTextPos, int nNthOpenPair, int nDirection, CCrystalParser::CPairStack &aPairStack, 
+															BOOL	bClearToEnd, const CPoint &ptCurStrStart, const CPoint &ptCurStrEnd,
+															CPoint &ptFoundStrStart, CPoint &ptFoundStrEnd, CCrystalParser::CPairStack &openPairStack,
+															BOOL &bClearEndReached );
 
 	/**Returns TRUE if some string from <code>m_lpszPairs</code> ends at ptTextPos and this string 
 	is not escaped by sequence of '\', it is not in comment, and it is not in verbatim
@@ -272,7 +293,7 @@ private:
 	@param ptPairStrStart 
 	  Start of found string
 	@param ptPairStrEnd 
-	  End of found string
+	  End of found string, the end is the position just after the string.
 	@param nPairIdx    
 		Found string index
   @param nPairDir
@@ -328,6 +349,9 @@ protected:
 	BOOL GetDrawPairBlock() const;
 	void SetDrawPairBlock( BOOL bDrawBlock );
 
+	void IncSelBlockLevel();
+	void ResetSelBlockLevel();
+
 	BOOL m_bShowInactiveSelection;
 	//	[JRT]
 	BOOL m_bDisableDragAndDrop;
@@ -382,6 +406,26 @@ public:
 	void SetShowInteractiveSelection(BOOL bShowInactiveSelection) 
 		{ m_bShowInactiveSelection = bShowInactiveSelection; }
 
+	/**Selects block around the cursor, it uses last block level
+	@param ptCursorPos position in the text
+	@return FALSE if an error occures
+	*/
+	BOOL SelectBlockAround( const CPoint &ptCursorPos );
+
+	/**Selects block around the cursor.
+
+	@param ptCursorPos position in the text
+
+	@param nBlockLevel 
+		block level. Let us have text "[{()}]" and 
+		let the cursor is in the middle then 1st level block is (), 2nd level block is {()},
+		and 3th level block is [{()}]
+		level 0 clears selected block
+	 
+	@return FALSE if an error occures   
+	*/
+	BOOL SelectBlockAround( const CPoint &ptCursorPos, int nBlockLevel );
+
 	static HINSTANCE GetResourceHandle();
 
 	/** Stops incremental search.
@@ -390,8 +434,8 @@ public:
 			Whether to stay at the found place and keep the selection,
 			or return to where the search started.
 
-		@returns true, if incremental search was active before calling this func.
-		@returns false, otherwise.
+		@return true, if incremental search was active before calling this func.
+		@return false, otherwise.
 	*/
 	bool OnEditFindIncrementalStop(bool bKeepSelection);
 
@@ -709,7 +753,7 @@ protected:
 
 	@param ptCurStrEnd 
 		The end of the pair string that ends <code>ptCursorPos</code>, 
-		(0,0) if not found. (It depends on the value of <code>bPairFound</code>.)
+		(0,0) if not found. (It depends on the value of <code>bPairFound</code>.). The end is the position just after the string.
 
 	@param ptFoundStrStar 
 		The start of found pair or the start of the string that caused an error, 
@@ -717,7 +761,7 @@ protected:
 
 	@param ptFoundStrEnd 
 		The end of found pair or the end of the string that caused an error, 
-		(0,0) if not found. (It depends on return value.)
+		(0,0) if not found. (It depends on return value.). The end is the position just after the string.
 
 	@param bPairFound 
 		<code>TRUE</code> if the pair string was found
@@ -726,7 +770,7 @@ protected:
 	(If <code>bPairFound == FALSE</code> all points parameter are set to zero point, 
 	if <code>bPairFound == TRUE</code> all parameter are set).
 	FALSE otherwise (<code>FoundStrStar</code>, <code>FoundStrEnd</code> contain 
-	the position of the string that caused and error  (e.g. lost bracket))
+	the position of the string that caused an error  (e.g. lost bracket))
 	*/
 	virtual FindPairTo(const CPoint &ptCursorPos, CPoint &ptCurStrStart, CPoint &ptCurStrEnd,
 													CPoint &ptFoundStrStart, CPoint &ptFoundStrEnd, BOOL &bPairFound );
@@ -1128,6 +1172,7 @@ protected:
 	afx_msg void OnExtTextBegin();
 	afx_msg void OnTextEnd();
 	afx_msg void OnExtTextEnd();
+	afx_msg void OnSelBiggerBlock();
 	afx_msg void OnUpdateIndicatorCRLF(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateIndicatorPosition(CCmdUI* pCmdUI);
 	afx_msg void OnToggleBookmark(UINT nCmdID);
