@@ -117,22 +117,22 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 	TRACE( "m_regexVerbEnd returned %d\n", nResult );
 
 	nResult = m_regexFigureStart.set_expression( _T(
-		"\\\\begin\\s*\\{figure\\}"
+		"\\\\begin\\s*\\{\\s*figure\\*?\\s*\\}"
 	) );
 	TRACE( "m_regexFiguresStart returned %d\n", nResult );
 
 	nResult = m_regexFigureEnd.set_expression( _T(
-		"\\\\end\\s*\\{figure\\}"
+		"\\\\end\\s*\\{\\s*figure\\*?\\s*\\}"
 	) );
 	TRACE( "m_regexFigureEnd returned %d\n", nResult );
 
 	nResult = m_regexTableStart.set_expression( _T(
-		"\\\\begin\\s*\\{(sideways)?table\\}"
+		"\\\\begin\\s*\\{\\s*(sideways)?table\\*?\\s*\\}"
 	) );
 	TRACE( "m_regexTableStart returned %d\n", nResult );
 
 	nResult = m_regexTableEnd.set_expression( _T(
-		"\\\\end\\s*\\{(sideways)?table\\}"
+		"\\\\end\\s*\\{\\s*(sideways)?table\\*?\\s*\\}"
 	) );
 	TRACE( "m_regexTableEnd returned %d\n", nResult );
 
