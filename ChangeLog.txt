@@ -2,6 +2,9 @@
 - Implemented Feature 851400: \texttt{} and \textsc{} buttons
 
 2003/12/06 svenwiegand
+- Fixed bug 617922: highlight all and copy+paste will crash TXC if last line
+  is not empty/highlight all and delete will disable you to type any texts,
+  if last line is not empty.
 - Enabled support for Windows XP Theming (requires BCGControlBar library 6.2,
   take a look into the new HowToBuild.txt to learn were to download it).
 
