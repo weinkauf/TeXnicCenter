@@ -7,14 +7,8 @@
   Use Ctrl-Q for commenting, Ctrl-W for uncommenting, Alt-Q to toogle
 - Defined Accelerator for configuring profiles: Alt-F7 (similar to Visual Studio)
 
-2003/12/06 Raffi
-- Set old language to default language
-- Language is now a parameter of the project
-- changed global parameters names: CConfiguration::m_strLanguageDefault to CConfiguration::m_strLanguageDefault
-	and CConfiguration::m_strLanguageDialectDefault to CConfiguration::m_strLanguageDialectDefault
-- In "optionpagelanguage.cpp", changed a constant value (in OnInitDialog) to a better one.
-- Moved COptionPageLanguage::FindDictionaries to a global function "void AfxFindDictionnaries(CArray<CString, CString&> &aLanguage, CArray<CString, CString&> &aDialect)".
-- Changes in Visual Studio project (temporary directories now outside the cvs tree)
+2003/12/06 Superraf
+- Implemented Feature 575921: Language is now a parameter of the project
 
 2003/12/06 niteria
 - Implemented Feature 851400: \texttt{} and \textsc{} buttons
