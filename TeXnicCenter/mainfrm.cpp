@@ -850,14 +850,31 @@ CBCGToolbarButton *CMainFrame::GetToolbarButton( UINT unCmdID, POSITION &pos ) c
 		return m_wndToolBar.GetButton( nIndex );
 	}
 	
-	for( int i = 0; i < MATHBAR_COUNT; i++ )
+	//Look for the button in the Math-Toolbars
+	if (nStartBar < 8 + MATHBAR_COUNT - 1)
 	{
-		if( nStartBar < (i + 8) && (nIndex = m_awndMathBar[i].CommandToIndex( unCmdID )) > -1 )
+		for( int i = 0; i < MATHBAR_COUNT; i++ )
 		{
-			pos = (POSITION)(i + 8);
-			return m_awndMathBar[i].GetButton( nIndex );
+			if( nStartBar < (i + 8) && (nIndex = m_awndMathBar[i].CommandToIndex( unCmdID )) > -1 )
+			{
+				pos = (POSITION)(i + 8);
+				return m_awndMathBar[i].GetButton( nIndex );
+			}
 		}
 	}
+
+	//Find the Toolbutton in the UserToolbars
+	for( int i = 0; i < (IDR_USER_TOOLBAR_LAST - IDR_USER_TOOLBAR_FIRST + 1); i++ )
+	{
+		CBCGToolBar	*pToolBar = GetUserBarByIndex( i );
+		if (!pToolBar) continue;
+		if( nStartBar < (i + 8 + MATHBAR_COUNT) && (nIndex = pToolBar->CommandToIndex( unCmdID )) > -1 )
+		{
+			pos = (POSITION)(i + 8 + MATHBAR_COUNT);
+			return pToolBar->GetButton( nIndex );
+		}
+	}
+
 
 	// button not found
 	return NULL;
