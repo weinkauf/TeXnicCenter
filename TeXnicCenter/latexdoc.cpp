@@ -207,7 +207,7 @@ void CLatexDoc::OnUpdateFileSave(CCmdUI* pCmdUI)
 
 BOOL CLatexDoc::DoSave( LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/ )
 {
-	CString newName = lpszPathName;
+	CString newName(lpszPathName);
 	if (newName.IsEmpty())
 	{
 		CDocTemplate* pTemplate = GetDocTemplate();
@@ -227,7 +227,6 @@ BOOL CLatexDoc::DoSave( LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/ )
 				newName.ReleaseBuffer(iBad);
 
 			// append the default suffix if there is one
-			CString strExt;
 			if( !strExt.IsEmpty() )
 				newName += strExt;
 		}

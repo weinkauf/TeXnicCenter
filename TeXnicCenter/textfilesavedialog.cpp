@@ -108,8 +108,9 @@ BOOL CTextFileSaveDialog::OnInitDialog()
 	CRect	rectFileFormatCombo;
 	m_wndFileFormatCombo.GetWindowRect(rectFileFormatCombo);
 	ScreenToClient(rectFileFormatCombo);
-	
-	rectFileFormatCombo.left = rectFileTypeCombo.left-1; // have to specify -1 here, otherwise box will jump behind the right border -- don't ask me why...
+
+	// have to specify -1 here, otherwise box will jump behind the right border -- don't ask me why...
+	rectFileFormatCombo.left = rectFileTypeCombo.left-1;
 	rectFileFormatCombo.right = rectFileFormatCombo.left + rectFileTypeCombo.Width();
 
 	// Get position and size of file format title
