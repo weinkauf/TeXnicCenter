@@ -4,13 +4,41 @@
 <link rel="stylesheet" href="STYLE.CSS" type="text/css">
 </head>
 <body>
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h2">Placeholders for sets of files</td>
+</tr>
+</table>
+</p>
 
-<h2>Placeholders for sets of files</h2>
+<p>Placeholders can be used for handling sets of files.</p>
 
-<p>Placeholders for sets of files are used to deal with more than one file at a time. The following syntax is allowed for them:</p>
+
+<p>
+<table border="1" width="100%">
+<tr>
+<td>
+<table border="0" width="100%">
+<td class="h5">Note</td>
+<td align="center">Placeholders will never generate duplicates of a filename.</td>
+</tr>
+</table>
+</td></tr>
+</table>
+</p>
+
+
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h3">Syntax</td>
+</tr>
+</table>
+</p>
 
 <p><b>$[q][s][f][r]&lt;FILESET&gt;</b></p>
-
+<p>
 <dl>
   <dt>$</dt>
   <dd>Starts the placeholder. Use "$$" to get "$".</dd>
@@ -54,60 +82,60 @@
   </dl>
   </dd>
 </dl>
+</p>
 
-
-<h3>Examples:</h3>
-
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h3">Examples</td>
+</tr>
+</table>
+</p>
+<p>
 <dl>
   <dt>$qTPF</dt>
   <dd>Lists all (La)TeX-files reported by the structure parser of TeXnicCenter.
-      Each quoted and separated from each other using a space,
-      like<br>
+      File names in quotes and separated by a space, like:<br>
       <br>
       <var>"D:\Temp\test\curvature3d.tex" "D:\Temp\test\definitions\macros.tex"
-      "D:\Temp\test\chaptertwo.tex"</var><br>
-      <br>
-      <br>
-      </dd>
+      "D:\Temp\test\chaptertwo.tex"</var></dd>
 
   <dt>$fBPF</dt>
   <dd>Lists all BibTeX-files reported by the structure parser of TeXnicCenter.
-      The forward slash is used as directory separator.
-      The files themselves are separated from each other using a space,
-      like<br>
+      The forward slash is used as directory separator. File names separated
+      by a space, like:<br>
       <br>
-      <var>D:/Temp/test/xbib.bib D:/Temp/test/morebibs/morexbib.bib</var><br>
-      <br>
-      <br>
-      </dd>
+      <var>D:/Temp/test/xbib.bib D:/Temp/test/morebibs/morexbib.bib</var></dd>
 
   <dt>$COF</dt>
-  <dd>Lists all files, which are currently opened in the editor.
-      They are separated from each other using a space (notice the problem with non-quoting of "Program Files"),
-      like<br>
+  <dd>Lists all files, which are currently opened in the editor. File names
+  separated by a space (no quotes!), like:<br>
       <br>
-      <var>D:\Temp\test\curvature3d.tex D:\Program Files\texmf\pdftex\latex\config\pdflatex.ini</var><br>
-      <br>
-      <br>
-      </dd>
+<var>D:\Temp\test\curvature3d.tex D:\Program Files\texmf\pdftex\latex\config\pdflatex.ini</var></dd>
 
   <dt>$qsrAPF</dt>
-  <dd>Lists all files contained in the project
-      (as reported by the structure parser of TeXnicCenter).
-      Each quoted, filenames in 8.3-format and relative to the
-      working directory and separated from each other using a space, like<br>
+  <dd>Lists all files of the project as reported by the structure parser of
+  TeXnicCenter).  File names displayed in 8.3-format, path relative
+  to the working directory, file names separated by a space, like<br>
       <br>
-      <var>"curvat~1.tcp" "curvat~1.tps" "curvat~1.tex" "xbib.bib" "morebibs\morexb~1.bib" "defini~1\macros.tex" "chapte~1.tex"</var><br>
-      <br>
-      <br>
-      </dd>
+<var>"curvat~1.tcp" "curvat~1.tps" "curvat~1.tex" "xbib.bib" "morebibs\morexb~1.bib" "defini~1\macros.tex" "chapte~1.tex"</var></dd>
 </dl>
+</p>
 
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h3">Application</td>
+</tr>
+</table>
+</p>
 
-<h3>Application:</h3>
+<p>A good idea to use placeholders is a tool like the one defined below. This
+tool will build a ZIP archive of all files of the current project.
+A compression program (like WinZip or WinRAR) is required. Adjust path and
+arguments for that program.</p>
 
-<p>A good place to use the sets would be to define a tool like this:</p>
-
+<p>
 <table cellspacing="15" border="0" >
 <tr>
  <td><b>Command:</b></td>
@@ -122,13 +150,7 @@
  <td>%dm</td>
 </tr>
 </table>
-
-<p>This will lead to a ZIP-archive, where all your files regarding the project are gathered in. You need to have a compression program (like WinZip or WinRAR) for this and to adjust the path and arguments to this program.</p>
-
-
-<h3>Note:</h3>
-
-<p>These placeholders will not generate duplicates of a filename. So you can always be sure, that each filename will be issued only once.</p>
+</p>
 
 </body>
 </html>

@@ -115,15 +115,15 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="\include">
-		<param name="Local" value="creating projects.htm">
+		<param name="Local" value="creating_projects.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="\input">
-		<param name="Local" value="PROJECTS.HTM">
+		<param name="Local" value="projects.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="\input">
-		<param name="Local" value="creating projects.htm">
+		<param name="Local" value="creating_projects.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Accelerators">
@@ -151,7 +151,7 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Configuration">
-		<param name="Local" value="configuration.htm">
+		<param name="Local" value="configuration.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Context Menus">
@@ -209,7 +209,7 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Distribution">
-		<param name="Local" value="whatdoineed.htm">
+		<param name="Local" value="requirements.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Document Templates">
@@ -225,13 +225,13 @@
 			<param name="Local" value="templates_files.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Options - Page 'Paths'">
+			<param name="Name" value="Options Page 'Paths'">
 			<param name="Local" value="options_page_paths.html">
 			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="DVI">
-		<param name="Local" value="output.htm">
+		<param name="Local" value="output.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="DVIPS">
@@ -247,7 +247,7 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Features">
-		<param name="Local" value="whatis.htm">
+		<param name="Local" value="whatis.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="File Format">
@@ -271,11 +271,11 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="GNU GPL">
-		<param name="Local" value="license.htm">
+		<param name="Local" value="license.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="GPL">
-		<param name="Local" value="license.htm">
+		<param name="Local" value="license.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Help">
@@ -287,12 +287,14 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Introduction">
-		<param name="Local" value="introduction.htm">
+		<param name="Local" value="introduction.html">
 		</OBJECT>
+<!--		
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Introduction">
-		<param name="Local" value="introduction.htm">
+		<param name="Local" value="introduction.html">
 		</OBJECT>
+		-->
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Inverse Search">
 		<param name="Local" value="cmdlineargs.html">
@@ -311,11 +313,11 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="LaTeX distribution">
-		<param name="Local" value="whatdoineed.htm">
+		<param name="Local" value="requirements.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="License">
-		<param name="Local" value="license.htm">
+		<param name="Local" value="license.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Look &amp; Feel">
@@ -331,7 +333,7 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="MikTeX">
-		<param name="Local" value="whatdoineed.htm">
+		<param name="Local" value="requirements.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Options">
@@ -353,11 +355,11 @@
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Output Profiles">
-		<param name="Local" value="output.htm">
+		<param name="Local" value="output.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="PDF">
-		<param name="Local" value="output.htm">
+		<param name="Local" value="output.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="PDF-Viewer">
@@ -373,7 +375,7 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Profiles">
-		<param name="Local" value="output.htm">
+		<param name="Local" value="output.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Project">
@@ -395,7 +397,7 @@
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="PS">
-		<param name="Local" value="output.htm">
+		<param name="Local" value="output.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="PS-Viewer">
@@ -423,7 +425,7 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Spelling">
-		<param name="Name" value="Options - Page 'Spelling'">
+		<param name="Name" value="Options Page 'Spelling'">
 		<param name="Local" value="options_page_spelling.html">
 		<param name="URL" value="spell_check.html">
 		<param name="Name" value="Spell checking">
@@ -431,7 +433,7 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Language">
-		<param name="Name" value="Options - Page 'Spelling'">
+		<param name="Name" value="Options Page 'Spelling'">
 		<param name="Local" value="options_page_spelling.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
@@ -448,7 +450,7 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="TeX distribution">
-		<param name="Local" value="whatdoineed.htm">
+		<param name="Local" value="requirements.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Text Formats">
@@ -483,4 +485,5 @@
 		<param name="Local" value="output_config_manually_page_viewer.html">
 		</OBJECT>
 </UL>
-</BODY></HTML>
+</BODY>
+</HTML>

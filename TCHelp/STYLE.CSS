@@ -1,72 +1,190 @@
 /* Cascading Style Sheet for IE4.0 build 1008+ */
 
-body{font-size: 75%; line-height: 125%; font-family: Verdana, Arial, Helvetica,}
+body {
+      font-size: 75%;
+      line-height: 125%;
+      font-family: Verdana, Arial, Helvetica,
+     }
 
-a:link{color: #0000FF;}
-a:active{color: #FF33CC;}
-a:visited{color: #800080;}
+a:link {
+        color: #336699;
+       }
+
+a:active {
+          color: #FF33CC;
+         }
+
+a:visited {
+           color: #6699cc;
+          }
 
 A.web {
-	color : Red;
-}
+        color : Red;
+      }
+
 A.web:ACTIVE {
-	color : Red;
-}
+              color : Red;
+             }
+
 A.web:VISITED {
-	color : Maroon;
-}
+               color : Maroon;
+              }
 
-h1{font-size:200%;margin-bottom:.5em;}
-h2{font-size:175%;margin-top:1.5em;margin-bottom:.5em;}
-h3{font-size:150%;margin-top:1.2em;margin-bottom:.5em;}
-h4{font-size:125%;margin-top:1.0em;margin-bottom:.5em;}
 
-/* p{margin-top:0pt;margin-bottom:0pt;} */
-li p{margin-top:.6em;margin-bottom:0em;}
-big{font-weight:bold;font-size:105%;}
-ol{margin-top:.5em;margin-bottom:0em}
-ul{margin-top:.6em;margin-bottom:0em;margin-left:2.75em;}
-ol ul{list-style:disc;margin-top:2em;}
-li{padding-bottom:.7em;margin-left:-1.25em;}
-dl ul{margin-top:2em;margin-bottom:0em;}/*list item inside a def/term*/
-dl{margin-top:-1em;}
-ol dl{margin-top:-1.5em;margin-left:0em;}/*term/def list inside a numbered list*/
-ol dl dl{margin-top: 0em;margin-left:.2em;}/*term/def list inside a term/def list*/
-dd{margin-bottom:0em;/*not currently working*/margin-left: 3em;}
-dt{padding-top:1em;font-weight: bold; margin-left:1.5em;}
+p {
+      margin-top : .6em;
+      margin-bottom:0em;
+      text-align : justify;
+      alignment: justify;
+     }
 
-code{font-family:Courier;}
 
-pre{margin-top:0em margin-bottom:1.5em; font-family:Courier; font-size: 125%}
+li {
+      margin-top : .6em;
+      margin-bottom:0em;
+      text-align : justify;
+      alignment: justify;
+     }
 
-table{font-size:100%;margin-top:1em;margin-bottom:1em;}
-th.center{text-align:center;}
-th{text-align:left;background:#dddddd;margin: 3pt;vertical-align:bottom;}
-tr{vertical-align:top;}
-td{margin: 3pt;vertical-align:top;}
+ol {
+    margin-top : .5em;
+    margin-bottom:0em;
+   }
 
-/*  IE 4.0 TAGS  */
-p.dis{font-size: 6pt;}
-h5{}
-h5.active{background: #000000;        color: #FFCC99;}
+ul {
+    margin-top : .6em;
+    margin-bottom : 0em;
+    margin-left:2.75em;
+   }
 
-/* -- subheading -- */
-h5.subh        {color: #660000;margin-bottom:-1em;margin-top: 1.5em;}
 
-/* -- Overview heading -- */
-h5.overh{font-size:120%;margin-bottom:1%;}
+/*list item inside a def/term*/
+dl {
+    margin-top : -1em;
+   }
 
-/* -- procedure heading -- */
-h5.proch{margin-bottom:4pt;}
+ol dl {
+       margin-top : -1.5em;
+       margin-left : 0em;
+      }
 
-/* -- topic heading -- */
-h5.topich{margin-bottom:-1em;}
+/*term/def list inside a numbered list*/
 
-/* -- Decision heading -- */
-h5.what{color: #993399;margin-bottom:.4em;}
+ol dl dl {
+          margin-top : 0em;
+          margin-left : .2em;
+         }
 
-/* -- note 'n' tip heading -- */
-h5.note{margin-top:1em;margin-bottom: 0em;}
+/*term/def list inside a term/def list*/
 
-/* -- related topics heading -- */
-h5.relh{margin-top: 2.25em;margin-bottom: -1em;}
+dd {
+    margin-bottom : 0em;
+    /*not currently working*/
+    margin-left: 3em;
+   }
+
+dt {
+    padding-top : 1em;
+    font-weight : bold;
+    margin-left:1.5em;
+   }
+
+code {
+     margin-top : 0em;
+     margin-bottom : 1.5em;
+     font-family : Courier;
+     font-size: 125%
+     }
+
+pre {
+     margin-top : 0em;
+     margin-bottom : 1.5em;
+     font-family : Courier;
+     font-size: 125%
+    }
+
+table {
+       font-size : 100%;
+       margin-top : 1em;
+       margin-bottom : 1em;
+      }
+
+
+th {
+    text-align : left;
+    background : #dddddd;
+    margin : 3pt;
+    vertical-align : bottom;
+   }
+
+tr {
+    vertical-align : top;
+   }
+
+td {
+    margin : 3pt;
+    vertical-align : top;
+   }
+
+
+td.h1 {
+     background-color: #6699CC;
+     background-image: none;
+     font-family: inherit;
+     font-size : 200%;
+     font-weight: bold;
+     text-align: left;
+     color: white;
+     margin-top : 1.5em;
+     margin-bottom : .5em;
+    }
+
+
+td.h2 {
+     background-color: #6699CC;
+     background-image: none;
+     font-family: inherit;
+     font-size : 175%;
+     font-weight: bold;
+     text-align: left;
+     color: white;
+     margin-top : 1.5em;
+     margin-bottom : .5em;
+    }
+
+
+td.h3 {
+     background-color: #6699CC;
+     background-image: none;
+     font-family: inherit;
+     font-size : 150%;
+     font-weight: bold;
+     text-align: left;
+     color: white;
+     margin-top : 1.2em;
+     margin-bottom : .5em;
+   }
+
+td.h4 {
+     background-color: #6699CC;
+     background-image: none;
+     font-family: inherit;
+     font-size : 125%;
+     font-weight: bold;
+     text-align: left;
+     color: white;
+     margin-top : 1.0em;
+     margin-bottom : .5em;
+   }
+
+td.h5 {
+     background-color: #6699CC;
+     background-image: none;
+     font-family: inherit;
+     font-size : 100%;
+     font-weight: bold;
+     text-align: left;
+     color: white;
+     margin-top : 1.0em;
+     margin-bottom : .5em;
+   }
