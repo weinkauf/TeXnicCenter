@@ -1,12 +1,13 @@
 [_ISTool]
 EnableISX=true
 
+Use7zip=false
 [Setup]
 OutputBaseFilename=TXCSetup
 MinVersion=4.0.950,4.0.1381
-AppCopyright=© 1999-2002 www.ToolsCenter.org
+AppCopyright=© 1999-2004 www.ToolsCenter.org
 AppName=TeXnicCenter
-AppVerName=TeXnicCenter Version 1 Beta 6.01
+AppVerName=TeXnicCenter Version 1 Beta 6.20 (Fawkes)
 LicenseFile=GPL.rtf
 AdminPrivilegesRequired=false
 DefaultGroupName=TeXnicCenter
@@ -18,37 +19,39 @@ AppPublisher=ToolsCenter
 AppPublisherURL=www.ToolsCenter.org
 AppSupportURL=www.ToolsCenter.org/products/texniccenter/support.htm
 AppUpdatesURL=www.ToolsCenter.org
-AppVersion=Version 1 Beta 6.01
+AppVersion=Version 1 Beta 6.20
 AppID=TeXnicCenter
 AlwaysShowComponentsList=false
 UninstallDisplayIcon={app}\TEXCNTR.EXE
 
+SolidCompression=true
+ShowLanguageDialog=yes
 [Components]
 Name: Application_Files; Description: Application Files (TeXnicCenter and its components); Flags: fixed; Types: compact typical custom
 Name: Help_Files; Description: Help Files (Online help for TeXnicCenter and LaTeX reference); Types: typical custom
-Name: Skins; Description: Skins (Allows you to change the look & feel of TeXnicCenter); Types: typical custom
 
 [Files]
-Source: ..\output\Release\cryseditEx.dll; DestDir: {app}; CopyMode: alwaysoverwrite; Components: Application_Files
-Source: ..\output\Release\GPL_english.htm; DestDir: {app}; CopyMode: alwaysoverwrite; Components: Application_Files
-Source: ..\output\Release\GPL_german.htm; DestDir: {app}; CopyMode: alwaysoverwrite; Components: Application_Files
-Source: ..\output\Release\MFCExt.dll; DestDir: {app}; CopyMode: normal; Flags: comparetimestampalso; Components: Application_Files
-Source: ..\output\Release\Help\*.chm; DestDir: {app}\Help; CopyMode: normal; Flags: comparetimestampalso; Components: Help_Files
-Source: ..\output\Release\TEXCNTR.EXE; DestDir: {app}; CopyMode: alwaysoverwrite; Components: Application_Files
-Source: ..\TeXnicCenter\Tips_english.txt; DestDir: {app}; CopyMode: normal; Flags: comparetimestampalso; Components: Application_Files
-Source: ..\TeXnicCenter\Tips_german.txt; DestDir: {app}; CopyMode: normal; Flags: comparetimestampalso; Components: Application_Files
-Source: ..\output\Release\UserImages.bmp; DestDir: {app}; CopyMode: normal; Flags: comparetimestampalso; Components: Application_Files
-Source: ..\output\Release\mre200l.dll; DestDir: {sys}; CopyMode: normal; Flags: comparetimestampalso sharedfile; Components: Application_Files
-Source: ..\output\Release\BCGCBResDEU.dll; DestDir: {sys}; CopyMode: normal; Flags: comparetimestampalso sharedfile; Components: Application_Files
-Source: ..\output\Release\BCGSkinDownloader.dll; DestDir: {sys}; CopyMode: normal; Flags: comparetimestampalso sharedfile; Components: Application_Files
-Source: ..\output\Release\BCGCB58.dll; DestDir: {sys}; CopyMode: normal; Flags: comparetimestampalso sharedfile; Components: Application_Files
+Source: ..\output\Release\cryseditEx.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\output\Release\GPL_english.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\output\Release\GPL_german.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\output\Release\MFCExt.dll; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: ..\output\Release\TEXCNTR.EXE; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\TeXnicCenter\Tips_english.txt; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: ..\output\Release\MsXmlCpp.dll; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: ..\TeXnicCenter\Tips_german.txt; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: ..\output\Release\UserImages.bmp; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: ..\output\Release\mre200l.dll; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: ..\output\Release\BCGSkinDownloader.dll; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: ..\output\Release\BCGCB63.dll; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: ..\TeXnicCenterObjects\Lib\TeXnicCenterObjects.tlb; DestDir: {app}; Flags: regtypelib promptifolder comparetimestamp; Components: Application_Files
 
-Source: ..\TeXnicCenterObjects\Lib\TeXnicCenterObjects.tlb; DestDir: {app}; CopyMode: normal; Flags: comparetimestampalso regtypelib; Components: Application_Files
-Source: ..\output\Release\Skins\*.dll; DestDir: {app}\Skins; CopyMode: normal; Flags: comparetimestampalso; Components: Skins
-Source: ..\output\Release\language\*.aff; DestDir: {app}\Language; CopyMode: normal; Components: Application_Files; Flags: comparetimestampalso
-Source: ..\output\Release\language\*.dic; DestDir: {app}\Language; CopyMode: normal; Components: Application_Files; Flags: comparetimestampalso
-Source: ..\output\Release\Help\*.chw; DestDir: {app}\Help; CopyMode: normal; Flags: comparetimestampalso; Components: Help_Files
+Source: ..\output\Release\language\*.dll; DestDir: {app}\Language; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: ..\output\Release\language\*.aff; DestDir: {app}\Language; Components: Application_Files; Flags: promptifolder comparetimestamp
+Source: ..\output\Release\language\*.dic; DestDir: {app}\Language; Components: Application_Files; Flags: promptifolder comparetimestamp
+Source: ..\output\Release\Help\*.chm; DestDir: {app}\Help; Flags: promptifolder comparetimestamp; Components: Help_Files
+Source: ..\output\Release\Help\*.chw; DestDir: {app}\Help; Flags: promptifolder comparetimestamp; Components: Help_Files
 
+Source: ..\output\Release\*.xsd; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
 [Icons]
 Name: {group}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; WorkingDir: {userdocs}; IconIndex: 0
 Name: {group}\TeXnicCenter Help; Filename: {app}\Help\TeXCntr.chm; WorkingDir: {app}\Help; IconFilename: {win}\HH.EXE; IconIndex: 0; Components: Help_Files
@@ -56,7 +59,7 @@ Name: {userdesktop}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; WorkingDir: {user
 Name: {sendto}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; Comment: TeXnicCenter; IconIndex: 0; Tasks: SendToLink; WorkingDir: {userdocs}
 
 [Registry]
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter; ValueType: string; ValueName: CurrentVersion; ValueData: 1 Beta 5.06
+Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter; ValueType: string; ValueName: CurrentVersion; ValueData: 1 Beta 6.20
 Root: HKLM; Subkey: Software\ToolsCenter; Flags: uninsdeletekeyifempty
 Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter; Flags: uninsdeletekey
 Root: HKCU; Subkey: Software\ToolsCenter; Flags: uninsdeletekeyifempty
@@ -76,7 +79,7 @@ Name: SendToLink; Description: Add TeXnicCenter to the 'Send To' menu; GroupDesc
 [Dirs]
 Name: {app}\Templates\Documents; Flags: uninsalwaysuninstall
 Name: {app}\Templates\Projects; Flags: uninsalwaysuninstall
-Name: {app}\Skins; Flags: uninsalwaysuninstall; Components: Skins
+Name: {app}\Skins; Flags: uninsalwaysuninstall
 Name: {app}\Help; Flags: uninsalwaysuninstall; Components: Help_Files
 
 [Types]
