@@ -1,3 +1,7 @@
+2002/12/07 niteria
+- Fixed Bug 646952: Cannot preview file while not compiled
+- Implemented Feature 636662: Add link to dict download
+
 2002/11/26 niteria
 - Fixed Bug 597426: varrho inserts \rho instead of \varrho
 - Fixed Bug 616808: Figures not centered correctly
