@@ -1,3 +1,7 @@
+2003/08/11 niteria
+- Updated the URL for downloading dictionaries.
+   Points now to: http://lingucomponent.openoffice.org/download_dictionary.html
+
 2003/07/24 niteria
 - Implemented Feature 776912: Parse for even unknown environments
 
