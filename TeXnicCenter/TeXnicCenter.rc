@@ -4337,6 +4337,8 @@ BEGIN
     STE_COLOR_AUTOMATIC     "Automatisch"
     STE_COLOR_OTHERS        "Andere Farben..."
     STE_PDICT_OPEN_ERROR    "Todo:Cannot open %s\n\nCreating empty personal dictionary."
+    IDS_LANGUAGE            "de"
+    IDS_DIALECT             "DE"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7840,6 +7842,8 @@ BEGIN
     STE_COLOR_AUTOMATIC     "Automatic"
     STE_COLOR_OTHERS        "Other Colors..."
     STE_PDICT_OPEN_ERROR    "Cannot open %s\n\nCreating empty personal dictionary."
+    IDS_LANGUAGE            "en"
+    IDS_DIALECT             "US"
 END
 
 STRINGTABLE DISCARDABLE 

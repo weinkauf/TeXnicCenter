@@ -30,6 +30,7 @@
 #include "TeXnicCenter.h"
 #include "Configuration.h"
 #include "LatexDoc.h"
+#include "global.h"
 
 
 #ifdef _DEBUG
@@ -141,15 +142,15 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Language
-	strSection = "Settings\\Language";
+	strSection = _T("Settings\\Language");
 
-	SerializeProfileString( strSection, "Language", &m_strLanuage, direction, _T("en") );
-	SerializeProfileString( strSection, "Dialect", &m_strLanguageDialect, direction, _T("US") );
+	SerializeProfileString( strSection, "Language", &m_strLanuage, direction, AfxLoadString(IDS_LANGUAGE) );
+	SerializeProfileString( strSection, "Dialect", &m_strLanguageDialect, direction, AfxLoadString(IDS_DIALECT) );
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Language-Spelling
-	strSection = "Settings\\Language-Spelling";
-	
+	strSection = _T("Settings\\Language-Spelling");
+
 	SerializeProfileString( strSection, "PersonalDictionary", &m_strSpellPersonalDictionary, direction, _T("") );
 	SerializeProfileString( strSection, "DictionaryPath", &m_strSpellDictionaryPath, direction, 
 		CPathTool::Cat(CPathTool::GetDirectory(theApp.m_pszHelpFilePath), _T("Language")));
