@@ -1,4 +1,12 @@
-2002/01/07 svenwiegand
+2002/07/04 niteria
+- Fixed Bug 577238: Src-Specials mixed up
+- Fixed Bug 577237: Graphic files not found by Parser
+- Implemented Feature 577240: Parser informs about found graphic files
+- New Dialog for defining placeholders for sets of files. This simplifies the
+  menu for the placeholders in "Options | Clean". The placeholder menu for the
+  Tools is still waiting to be simplified.
+
+2002/07/01 svenwiegand
 - Fixed Bug: Single quotes (') after a word were interpreted as a character 
   of the word from CLatexParser::NextWord(). This made the spell checker 
   mark this as a spelling error.
