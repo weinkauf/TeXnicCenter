@@ -43,8 +43,9 @@
 #include "OptionPagePath.h"
 #include "OptionPageGeneric.h"
 #include "OptionPageFile.h"
-#include "OPtionPageLanguage.h"
+#include "OptionPageLanguage.h"
 #include "OptionPageFileClean.h"
+#include "CustomizePageEditor.h"
 
 
 /**	Property Sheet displaying all Option Pages.
@@ -91,6 +92,7 @@ protected:
 	COptionPagePath				m_pagePath;
 	COptionPageLanguage		m_pageLanguage;
 	COptionPageFileClean	m_pageFileClean;
+	COptionPageEditor			m_pageEditor;
 };
 
 /////////////////////////////////////////////////////////////////////////////

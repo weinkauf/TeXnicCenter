@@ -447,20 +447,13 @@ BOOL CMainFrame::DestroyWindow()
 void CMainFrame::OnExtrasCustomize() 
 {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// add additional pages to dialog
-	CList<CRuntimeClass*, CRuntimeClass*> listCustomPages;
-	listCustomPages.AddTail(RUNTIME_CLASS(CCustomizePageEditor));
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// create dialog object
 
 	CBCGToolbarCustomizeEx* pDlgCust = new CBCGToolbarCustomizeEx( 
 		this, TRUE,	
 		BCGCUSTOMIZE_MENU_SHADOWS|BCGCUSTOMIZE_TEXT_LABELS| 
 			BCGCUSTOMIZE_LOOK_2000|BCGCUSTOMIZE_MENU_ANIMATIONS|BCGCUSTOMIZE_SELECT_SKINS|
-			BCGCUSTOMIZE_NOHELP,
-		&listCustomPages
-		);
+			BCGCUSTOMIZE_NOHELP);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// enable create/delete of user defined toolbars
