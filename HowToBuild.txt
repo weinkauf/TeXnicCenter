@@ -26,11 +26,14 @@ BUILDING TEXNICCENTER
 7. Build the TeXnicCenter-Help-File using HTML Help Workshop with the 
     'TCHelp\TeXnicCenter.hhp' project
 
-8. Copy the file 
+8. Copy all files matching
 
-	TeXCntr.chm
+	*.chm
+   or
 
-    from the 'output' directory to the 'output\debug' and 'output\release' directory.
+	*.chw
+
+   from the 'output' directory to the 'output\debug\help' and 'output\release\help' directory.
 
 9. Copy the files
 
