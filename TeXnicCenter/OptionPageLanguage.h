@@ -60,6 +60,7 @@ public:
 	CString	m_strDialect;
 	CString	m_strPDictionary;
 	CString	m_strLocale;
+	CBCGURLLinkButton m_wndURLDownloadDicts;
 	//}}AFX_DATA
 
 // Overrides
