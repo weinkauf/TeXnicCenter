@@ -80,6 +80,7 @@ END
 //
 
 IDR_MARGIN_ICONS        BITMAP  DISCARDABLE     "res/mg_icons.bmp"
+IDB_TEXT_ATTRIBUTE      BITMAP  DISCARDABLE     "res/bitmap1.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -245,6 +246,22 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Menu
+//
+
+IDR_POPUP_ATTRIBUTE MENU DISCARDABLE 
+BEGIN
+    MENUITEM "none",                        65535
+    POPUP "Todo: Spelling"
+    BEGIN
+        MENUITEM "Todo: &Ignore All",                 ID_EDIT_SPELL_IGNORE_ALL
+        MENUITEM "Todo: &Add",                        ID_EDIT_SPELL_ADD
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // String Table
 //
 
@@ -290,6 +307,12 @@ BEGIN
     IDS_SPELL_UNEDIT        "Rückgängig"
     IDS_SPELL_DONE          "Die Rechtschreibprüfung wurde abgeschlossen."
     IDS_SPELL_NO_SUGGESTIONS "Keine Vorschläge"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_SPELL_IGNORE_ALL "Todo: Ignore word\nIgnore this word"
+    ID_EDIT_SPELL_ADD       "Todo: Add word\nAdd this word to personal dictionary"
 END
 
 #endif    // German (Germany) resources
@@ -396,6 +419,22 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Menu
+//
+
+IDR_POPUP_ATTRIBUTE MENU DISCARDABLE 
+BEGIN
+    MENUITEM "none",                        65535
+    POPUP "Spelling"
+    BEGIN
+        MENUITEM "&Ignore All",                 ID_EDIT_SPELL_IGNORE_ALL
+        MENUITEM "&Add",                        ID_EDIT_SPELL_ADD
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // String Table
 //
 
@@ -441,6 +480,12 @@ BEGIN
     IDS_SPELL_UNEDIT        "Unedit"
     IDS_SPELL_DONE          "Spell check complete"
     IDS_SPELL_NO_SUGGESTIONS "No Suggestions"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_SPELL_IGNORE_ALL "Ignore word\nIgnore this word"
+    ID_EDIT_SPELL_ADD       "Add word\nAdd this word to personal dictionary"
 END
 
 #endif    // English (U.S.) resources

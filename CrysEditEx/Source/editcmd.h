@@ -25,6 +25,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.3  2002/04/06 05:39:53  cnorris
+* New resources for spell check
+*
 * Revision 1.2  2002/02/27 19:56:55  cnorris
 * bug-id 71 String not found during replace operation fixed
 *
@@ -53,6 +56,8 @@
 #define		ID_EDIT_TAB					37003
 #define		ID_EDIT_UNTAB				37004
 #define		ID_EDIT_SWITCH_OVRMODE		37005
+#define		ID_EDIT_SPELL_IGNORE_ALL	37006
+#define		ID_EDIT_SPELL_ADD			37007
 
 //	Cursor movement commands
 #define		ID_EDIT_CHAR_LEFT			37100
@@ -125,6 +130,13 @@
 // ID_EDIT_DELETE_WORD_BACK was defined already (see above)
 //END SW
 
+// Background commands
+#define		ID_BG_UPDATE_FILE			37400
+#define		ID_BG_UPDATE_LINE			37401
+#define		ID_BG_RESET_SPELLER			37402
+#define		ID_BG_INVALIDATE_VIEW		37403
+#define		ID_BG_ENABLE_SPELLER		37404
+
 //	Status update
 #define		ID_EDIT_INDICATOR_COL		37900
 #define		ID_EDIT_INDICATOR_READ		37901
@@ -135,11 +147,13 @@
 #define		IDR_MARGIN_CURSOR			22900
 #define		IDR_DEFAULT_ACCEL			22901
 #define		IDR_MARGIN_ICONS			22902
+#define		IDB_TEXT_ATTRIBUTE			22903
+#define		IDR_POPUP_ATTRIBUTE			22904
 
 //	Dialog IDs
+#define		IDD_SPELL_CHECK				8600
 #define		IDD_EDIT_FIND				8601
 #define		IDD_EDIT_REPLACE			8602
-#define		IDD_SPELL_CHECK				9000
 
 //	Control IDs
 #define		IDC_EDIT_WHOLE_WORD			8603
@@ -170,6 +184,7 @@
 #define		IDS_EDITOP_DRAGDROP			8627
 #define		IDS_EDITOP_REPLACE			8628
 #define		IDS_EDITOP_AUTOINDENT		8629
+#define		IDS_EDITOP_FIRSTMODIFY		8630
 
 //BEGIN SW
 #define IDS_FIND_INCREMENTAL_FORWARD    8640
@@ -191,6 +206,5 @@
 #define IDS_SPELL_UNEDIT                8659
 #define IDS_SPELL_DONE                  8660
 #define IDS_SPELL_NO_SUGGESTIONS        8661
-
 
 #endif
