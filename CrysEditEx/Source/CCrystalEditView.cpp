@@ -58,6 +58,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.3  2002/04/23 21:45:09  cnorris
+* realtime spell check
+*
 * Revision 1.2  2002/04/06 05:19:05  cnorris
 * ReplaceSelection inserts text at the cursor if there is no selected text
 *
@@ -76,6 +79,7 @@
 #include "CCrystalEditView.h"
 #include "CCrystalTextBuffer.h"
 #include "CEditReplaceDlg.h"
+#include "../../MySpell/Character.h"
 
 #ifndef __AFXPRIV_H__
 #pragma message("Include <afxpriv.h> in your stdafx.h to avoid this message")
@@ -1198,7 +1202,7 @@ void CCrystalEditView::OnEditOperation(int nAction, LPCTSTR pszText)
 			int nLength = m_pTextBuffer->GetLineLength(ptCursorPos.y - 1);
 			LPCTSTR pszLineChars = m_pTextBuffer->GetLineChars(ptCursorPos.y - 1);
 			int nPos = 0;
-			while (nPos < nLength && isspace(pszLineChars[nPos]))
+			while (nPos < nLength && IsSpace(pszLineChars[nPos]))
 				nPos ++;
 
 			if (nPos > 0)

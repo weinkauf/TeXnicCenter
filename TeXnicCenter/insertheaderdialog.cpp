@@ -30,6 +30,7 @@
 #include "TeXnicCenter.h"
 #include "InsertHeaderDialog.h"
 #include "global.h"
+#include "../MySpell/Character.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -163,7 +164,7 @@ void CInsertHeaderDialog::OnChangeTitle()
 
 	for( int i = 0; i < m_strTitle.GetLength(); i++ )
 	{
-		if( !_istalnum( m_strTitle[i] ) )
+		if( !IsAlNum( m_strTitle[i] ) )
 			bWhiteSpace = TRUE;
 		else
 		{

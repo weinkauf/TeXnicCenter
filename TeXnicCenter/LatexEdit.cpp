@@ -39,6 +39,7 @@
 #include "InsertTabularDialog.h"
 #include "InsertHeaderDialog.h"
 #include "GotoDialog.h"
+#include "../MySpell/Character.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -454,7 +455,7 @@ void CLatexEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 				{
 					// opening quotation mark, if character left of selection is whitespace or open brace
 					TCHAR cLeft = GetLineChars( ptSelStart.y )[ptSelStart.x - 1];
-					if ( _istspace(cLeft) || cLeft == _T('(') || cLeft == _T('{') || cLeft == _T('['))
+					if ( IsSpace(cLeft) || cLeft == _T('(') || cLeft == _T('{') || cLeft == _T('['))
 						InsertText( g_configuration.m_strOpeningQuotationMark );
 					else
 						InsertText( g_configuration.m_strClosingQuotationMark );
@@ -583,7 +584,7 @@ BOOL CLatexEdit::IsKeywordCharacter(TCHAR tc) const
 			return TRUE;
 
 		default:
-			return _istalpha(tc);
+			return IsAlpha(tc);
 	}
 }
 

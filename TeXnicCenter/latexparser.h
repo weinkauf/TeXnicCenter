@@ -33,6 +33,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "../MySpell/Character.h"
 
 //typedef	reg_expression<TCHAR, char_regex_traits<TCHAR>, JM_DEF_ALLOC(TCHAR)> tregex;
 
@@ -246,7 +247,7 @@ int CLatexParser::MatchStringEx( LPCTSTR lpStart1, LPCTSTR lpEnd1, LPCTSTR lpszS
 		}
 		else if (*lpStr2 == _T('\a'))
 		{
-			if (_istspace(*lpStr1))
+			if (IsSpace(*lpStr1))
 			{
 				lpStr1++;
 				continue;
