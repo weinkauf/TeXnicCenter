@@ -48,6 +48,13 @@ class CLatexOutputFilter : public COutputFilter
 public:
 	CLatexOutputFilter(BOOL bAutoDelete = FALSE);
 
+// implementation
+public:
+	/**
+	Returns the number of output pages, that have been created by LaTeX.
+	*/
+	int GetNumberOfOutputPages() const;
+
 // implementation helpers
 protected:
 	/**
@@ -100,6 +107,9 @@ private:
 
 	/** number of bad boxes detected */
 	int m_nBadBoxes;
+
+	/** number of output pages detected */
+	int m_nOutputPages;
 
 	/** 
 	Stack containing the files parsed by the compiler. The top-most

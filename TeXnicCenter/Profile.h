@@ -122,10 +122,11 @@ public:
 // attribute operations
 public:
 	/**
-	Sets the path of the (La)TeX-compiler to use and specifies if (La)teX
-	should be used in this profile.
+	Sets the path of the (La)TeX-compiler to use, specifies if (La)teX
+	should be used in this profile and whether compilation should stop
+	on error or not.
 	*/
-	void SetLatexPath(LPCTSTR lpszPath, LPCTSTR lpszArguments, BOOL bUseLatex = TRUE);
+	void SetLatexPath(LPCTSTR lpszPath, LPCTSTR lpszArguments, BOOL bUseLatex = TRUE, BOOL bStopOnLatexError = FALSE);
 
 	/**
 	Sets the path of the BibTeX-executable to use and specifies if 
@@ -182,6 +183,12 @@ public:
 	BOOL GetRunLatex() const;
 
 	/** 
+	Returns TRUE if the compilation should stop on (La)TeX error
+	and FALSE otherwise. 
+	*/
+	BOOL GetStopOnLatexError() const;
+
+	/** 
 	Returns TRUE if the BibTex should be used and FALSE otherwise. 
 	*/
 	BOOL GetRunBibTex() const;
@@ -235,6 +242,17 @@ protected:
 
 	/** Arguments to pass to the (La)TeX-compiler */
 	CString m_strLatexArguments;
+
+	/** 
+	TRUE if TXC should stop after the (La)TeX run, if
+	an error occured. FALSE if the postprocessors
+	should be run nevertheless.
+	This is about unserious errors only, i.e. (La)TeX
+	generated at least one page of output. Compilation
+	will stop, if there were no pages of output and latex
+	finished with an error code.
+	*/
+	BOOL m_bStopOnLatexError;
 
 
 	/** 
@@ -299,6 +317,11 @@ BOOL CProfile::GetRunLatex() const
 	return m_bRunLatex;
 }
 
+inline
+BOOL CProfile::GetStopOnLatexError() const
+{
+	return m_bStopOnLatexError;
+}
 
 inline
 BOOL CProfile::GetRunBibTex() const

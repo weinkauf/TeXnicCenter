@@ -45,14 +45,24 @@ CLatexOutputFilter::CLatexOutputFilter(BOOL bAutoDelete /*= FALSE*/)
 :	COutputFilter(bAutoDelete),
 	m_nErrors(0),
 	m_nWarnings(0),
-	m_nBadBoxes(0)
+	m_nBadBoxes(0),
+	m_nOutputPages(0)
 {}
+
+
+/**
+Returns the number of output pages, that have been created by LaTeX.
+*/
+int CLatexOutputFilter::GetNumberOfOutputPages() const
+{
+	return m_nOutputPages;
+}
 
 
 CString CLatexOutputFilter::GetResultString()
 {
 	CString	strResult;
-	strResult.Format(STE_LATEX_RESULT, m_nErrors, m_nWarnings, m_nBadBoxes);
+	strResult.Format(STE_LATEX_RESULT, m_nErrors, m_nWarnings, m_nBadBoxes, m_nOutputPages);
 	return strResult;
 }
 
@@ -62,6 +72,7 @@ BOOL CLatexOutputFilter::OnPreCreate()
 	m_nErrors = 0;
 	m_nWarnings = 0;
 	m_nBadBoxes = 0;
+	m_nOutputPages = 0;
 
 	return TRUE;
 }
@@ -143,6 +154,8 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 	static __JM::RegEx	warning3("^! (La|pdf)TeX .*warning.*: (.*)", true);
 	static __JM::RegEx	badBox1("^(Over|Under)full \\\\[hv]box .*in paragraph at lines ([[:digit:]]+)--[[:digit:]]+", true);
 	static __JM::RegEx	line1("l.([[:digit:]]+)", true);
+	static __JM::RegEx	output1("Output written on .* \\((\\d*) page.*\\)", true);
+	static __JM::RegEx	output2("No pages of output", true);
 
 	if (error1.Search(strLine))
 	{
@@ -207,6 +220,16 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 	else if (line1.Search(strLine))
 	{
 		m_currentItem.m_nSrcLine = _ttoi(strLine.Mid(line1.Position(1), line1.Length(1)));
+	}
+	else if (output1.Search(strLine))
+	{
+		//LaTeX said 'Output written on _file_ (%m_nOutputPages% pages, _number_ bytes)'
+		m_nOutputPages = _ttoi(strLine.Mid(output1.Position(1), output1.Length(1)));
+	}
+	else if (output2.Search(strLine))
+	{
+		//LaTeX said 'No pages of output'
+		m_nOutputPages = 0;
 	}
 
 	return dwCookie;

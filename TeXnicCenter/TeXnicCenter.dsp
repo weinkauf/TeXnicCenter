@@ -1094,6 +1094,10 @@ SOURCE=.\UserImages.bmp
 # End Group
 # Begin Source File
 
+SOURCE=..\ChangeLog.txt
+# End Source File
+# Begin Source File
+
 SOURCE=.\TeXnicCenter.reg
 # End Source File
 # End Target
