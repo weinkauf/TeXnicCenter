@@ -38,12 +38,13 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// InsertFloatObjectDialog.h : Header-Datei
-//
 
-/////////////////////////////////////////////////////////////////////////////
-// Dialogfeld CInsertFloatObjectDialog 
+/** Base Class for dialogs that insert a floating object.
 
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CInsertFloatObjectDialog : public CDialog
 {
 // types
@@ -96,7 +97,9 @@ public:
 	Sets the properties of the dialog.
 
 	@param strProperties
-		The string to interpret. Linebreaks must be represented by '\r'.
+		The string to interpret.
+		Linebreaks must be represented by \verbatim '\r' \endverbatim
+
 	*/
 	virtual BOOL SetProperties( const CString &strProperties );
 
@@ -104,8 +107,10 @@ public:
 	Gets a string that describes the LaTeX-environment with the
 	properties specified by the dialog. 
 	
-	Linebreaks are represented by '\r'.
-	(i.e. "\r\\begin{table*}[htb]\r\t\001\r\\end{table*}\r")
+	Linebreaks are represented by \verbatim '\r' \endverbatim
+	
+	<b>Example:</b>	  
+	\verbatim "\r\\begin{table*}[htb]\r\t\001\r\\end{table*}\r" \endverbatim
 	*/
 	virtual CString GetProperties();
 

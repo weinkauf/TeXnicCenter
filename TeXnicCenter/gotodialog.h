@@ -38,12 +38,13 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// GotoDialog.h : Header-Datei
-//
 
-/////////////////////////////////////////////////////////////////////////////
-// Dialogfeld CGotoDialog 
+/** Allows the user to jump directly to a line in the active document.
 
+@ingroup dialogs
+
+@author Sven Wiegand
+*/
 class CGotoDialog : public CDialog
 {
 // construction/destruction
