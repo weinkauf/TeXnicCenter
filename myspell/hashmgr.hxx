@@ -5,6 +5,7 @@
 
 class HashMgr
 {
+protected:
 	int				hashsize;
 	int				tablesize;
 	struct hentry	*tableptr;
@@ -13,9 +14,9 @@ public:
 	HashMgr(const char * tpath);
 	~HashMgr();
 
-	struct hentry * lookup(const char *);
-	int hash(const char *);
-	int save_tables(const char * tpath);
+	struct hentry * lookup(const char *) const;
+	int hash(const char *) const;
+	int save_tables(const char * tpath) const;
 
 private:
 	int load_tables(const char * tpath);

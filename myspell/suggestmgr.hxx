@@ -9,6 +9,7 @@
 
 class SuggestMgr
 {
+protected:
 	char		*ctry;
 	int			ctryl;
 	AffixMgr	*pAMgr;
@@ -18,9 +19,9 @@ public:
 	SuggestMgr(const char * tryme, int maxn, AffixMgr *aptr);
 	~SuggestMgr();
 
-	int suggest(char*** slst, const char * word);
-	int check(const char *, int);
-	inline void release_suggest(char ** slst)
+	int suggest(char*** slst, const char * word) const;
+	int check(const char *, int) const;
+	inline void release_suggest(char ** slst)  const
 	{
 		if (slst) {
 			for (int i = 0; i < maxSug; ++i)
@@ -30,11 +31,11 @@ public:
 	}
 
 private:
-	int forgotchar(char **, const char *, int);
-	int swapchar(char **, const char *, int);
-	int extrachar(char **, const char *, int);
-	int badchar(char **, const char *, int);
-	int twowords(char **, const char *, int);
+	int forgotchar(char **, const char *, int) const;
+	int swapchar(char **, const char *, int) const;
+	int extrachar(char **, const char *, int) const;
+	int badchar(char **, const char *, int) const;
+	int twowords(char **, const char *, int) const;
 };
 
 #endif

@@ -62,7 +62,7 @@ HashMgr::~HashMgr()
 
 
 // lookup a root word in the hashtable
-struct hentry * HashMgr::lookup(const char *word)
+struct hentry * HashMgr::lookup(const char *word) const
 {
 	struct hentry *dp;
 	if (tableptr) {
@@ -105,7 +105,7 @@ int HashMgr::add_word(const char * word, int wl, const char * aff, int al)
 
 // save hash table to a munched word list
 
-int HashMgr::save_tables(const char * tpath)
+int HashMgr::save_tables(const char * tpath) const
 {
 	int nWordCount = 0;
 
@@ -193,7 +193,7 @@ int HashMgr::load_tables(const char * tpath)
 // the hash function is a simple load and rotate
 // algorithm borrowed
 
-int HashMgr::hash(const char * word)
+int HashMgr::hash(const char * word) const
 {
 	long  hv = 0;
 	for (int i=0; i < 4  &&  *word != 0; i++)

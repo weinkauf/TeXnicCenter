@@ -260,7 +260,7 @@ int  AffixMgr::parse_file(const char * affpath)
 // conds array - please see the appendix at the end of the
 // file affix.cxx which describes what is going on here
 // in much more detail
-void AffixMgr::encodeit(struct affentry * ptr, char * cs)
+void AffixMgr::encodeit(struct affentry * ptr, char * cs) const
 {
 	char c;
 	int i, j, k;
@@ -353,7 +353,7 @@ void AffixMgr::encodeit(struct affentry * ptr, char * cs)
 
 
 /* cross check suffixes with a specific prefix */
-struct hentry * AffixMgr::cross_check (const char * word, int len, int sfxopts, Affix * ppfx)
+struct hentry * AffixMgr::cross_check (const char * word, int len, int sfxopts, const Affix * ppfx) const
 {
 	int i=0;
 	struct hentry * rv= NULL;
@@ -369,7 +369,7 @@ struct hentry * AffixMgr::cross_check (const char * word, int len, int sfxopts, 
 
 
 // check if word with affixes is correctly spelled
-struct hentry * AffixMgr::affix_check (const char * word, int len)
+struct hentry * AffixMgr::affix_check (const char * word, int len) const
 {
 	int i;
 	struct hentry * rv= NULL;
@@ -395,7 +395,7 @@ struct hentry * AffixMgr::affix_check (const char * word, int len)
 
 
 // utility method to convert a string to lower case
-void AffixMgr::strtolower(char * p)
+void AffixMgr::strtolower(char * p) const
 {
 	char * c = p;
 	while (*c) {
@@ -406,7 +406,7 @@ void AffixMgr::strtolower(char * p)
 
 
 // return text encoding of dictionary
-char * AffixMgr::get_encoding()
+char * AffixMgr::get_encoding() const
 {
 	if (! encoding ) return NULL;
 	return mystrdup(encoding);
@@ -414,7 +414,7 @@ char * AffixMgr::get_encoding()
 
 
 // return the preferred try string for suggestions
-char * AffixMgr::get_try_string()
+char * AffixMgr::get_try_string() const
 {
 	if (! trystring ) return NULL;
 	return mystrdup(trystring);
@@ -422,7 +422,7 @@ char * AffixMgr::get_try_string()
 
 
 // utility method to look up root words in hash table
-struct hentry * AffixMgr::lookup(const char * word)
+struct hentry * AffixMgr::lookup(const char * word) const
 {
 	if (! pHMgr) return NULL;
 	return pHMgr->lookup(word);

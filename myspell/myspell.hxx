@@ -20,20 +20,20 @@ class CRYSEDIT_CLASS_DECL MySpell
 	SuggestMgr	*pSMgr;
 
 private:
-	int captype(const char *);
-	void mkinitcap(char *);
-	void mkallcap(char *);
-	void mkallsmall(char *);
-	char* check(const char *);
+	int captype(const char *) const;
+	void mkinitcap(char *) const;
+	void mkallcap(char *) const;
+	void mkallsmall(char *) const;
+	char* check(const char *) const;
 
 public:
 	MySpell(const char * affpath, const char * dpath);
 	~MySpell();
 
-	int suggest(char*** slst, const char * word);
-	int spell(const char *);
+	int suggest(char*** slst, const char * word) const;
+	int spell(const char *) const;
 
-	inline void MySpell::release_suggest(char ** slst) 
+	inline void MySpell::release_suggest(char ** slst) const
 	{ 
 	  if ( pSMgr )
 		  pSMgr->release_suggest(slst);

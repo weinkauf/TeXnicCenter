@@ -11,9 +11,9 @@ class Prefix : public Affix
 public:
 	unsigned char flag;
 	Prefix(AffixMgr* pmgr, unsigned char a, int num, affentry* dp );
-	~Prefix();
+	virtual ~Prefix();
 
-	struct hentry* check(const char * word, int len);
+	struct hentry* check(const char * word, int len) const;
 };
 
 
@@ -24,9 +24,9 @@ class Suffix : public Affix
 public:
 	unsigned char flag;
 	Suffix(AffixMgr* pmgr, unsigned char a, int num, affentry* dp );
-	~Suffix();
+	virtual ~Suffix();
 
-	struct hentry* check(const char * word, int len, int optflags, Prefix* ppfx);
+	struct hentry* check(const char * word, int len, int optflags, Prefix* ppfx) const;
 };
 
 #endif

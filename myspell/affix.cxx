@@ -45,7 +45,7 @@ Prefix::~Prefix()
 
 
 // check if this prefix is present
-struct hentry * Prefix::check(const char * word, int len)
+struct hentry * Prefix::check(const char * word, int len) const
 {
 	struct affentry *   pp;	// pointer to current prefix affentry
 	int			cond;	// condition number being examined
@@ -137,7 +137,7 @@ Suffix::~Suffix()
 
 
 // see if this suffix is present in the word 
-struct hentry * Suffix::check(const char * word, int len, int optflags, Prefix* ppfx)
+struct hentry * Suffix::check(const char * word, int len, int optflags, Prefix* ppfx) const
 {
 	struct affentry	*sp;	         // suffix entry pointer
 	int				tmpl;		 // length of tmpword 

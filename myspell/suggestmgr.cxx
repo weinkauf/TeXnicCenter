@@ -39,7 +39,7 @@ SuggestMgr::~SuggestMgr()
 // generate suggestions for a mispelled word
 //    pass in address of array of char * pointers
 
-int SuggestMgr::suggest(char*** slst, const char * word)
+int SuggestMgr::suggest(char*** slst, const char * word) const
 {
 	int nsug = 0;
 	char ** wlst = new char*[maxSug];
@@ -79,7 +79,7 @@ int SuggestMgr::suggest(char*** slst, const char * word)
 
 
 // error is wrong char in place of correct one
-int SuggestMgr::badchar(char ** wlst, const char * word, int ns)
+int SuggestMgr::badchar(char ** wlst, const char * word, int ns) const
 {
 	char	tmpc;
 	char	candidate[MAXSWL];
@@ -113,7 +113,7 @@ int SuggestMgr::badchar(char ** wlst, const char * word, int ns)
 
 
 // error is word has an extra letter it does not need 
-int SuggestMgr::extrachar(char** wlst, const char * word, int ns)
+int SuggestMgr::extrachar(char** wlst, const char * word, int ns) const
 {
 	char candidate[MAXSWL];
 	const char * p;
@@ -143,7 +143,7 @@ int SuggestMgr::extrachar(char** wlst, const char * word, int ns)
 
 
 // error is mising a letter it needs
-int SuggestMgr::forgotchar(char ** wlst, const char * word, int ns)
+int SuggestMgr::forgotchar(char ** wlst, const char * word, int ns) const
 {
 	char candidate[MAXSWL];
 	const char *p;
@@ -190,7 +190,7 @@ int SuggestMgr::forgotchar(char ** wlst, const char * word, int ns)
 
 
 /* error is should have been two words */
-int SuggestMgr::twowords(char ** wlst, const char * word, int ns)
+int SuggestMgr::twowords(char ** wlst, const char * word, int ns) const
 {
 	char candidate[MAXSWL];
 	char * p;
@@ -220,7 +220,7 @@ int SuggestMgr::twowords(char ** wlst, const char * word, int ns)
 
 
 // error is adjacent letter were swapped
-int SuggestMgr::swapchar(char ** wlst, const char * word, int ns)
+int SuggestMgr::swapchar(char ** wlst, const char * word, int ns) const
 {
 	char candidate[MAXSWL];
 	char *p;
@@ -255,7 +255,7 @@ int SuggestMgr::swapchar(char ** wlst, const char * word, int ns)
 
 // see if a candidate suggestion is spelled correctly
 // needs to check both root words and words with affixes
-int SuggestMgr::check(const char * word, int len)
+int SuggestMgr::check(const char * word, int len) const
 {
 	struct hentry * rv=NULL;
 	if (pAMgr) { 
