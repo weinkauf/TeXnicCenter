@@ -179,17 +179,21 @@ void CSpellCheckDlg::DoNextWord()
 		LPCSTR szLine = m_pTextBuffer->GetLineChars( m_nCurLine );
 		while ( m_nCurStart != -1 )
 		{
-			int i = m_nCurStart;
-			int j = 0;
-			// Convert string to char*
-			while ( i < m_nCurEnd )
-				m_pWordBuffer[j++] = (char)szLine[i++];
-			m_pWordBuffer[j] = 0;
-			if ( !IsIgnoreWord(m_pWordBuffer) && !m_pSpell->spell(m_pWordBuffer))
+			if ( (m_nCurStart - m_nCurEnd) <  MAXWORDLEN )
 			{
-				m_pBuddy->HighlightText( CPoint(m_nCurStart, m_nCurLine), m_nCurEnd - m_nCurStart );
-				return;
+				int i = m_nCurStart;
+				int j = 0;
+				// Convert string to char*
+				while ( i < m_nCurEnd )
+					m_pWordBuffer[j++] = (char)szLine[i++];
+				m_pWordBuffer[j] = 0;
+				if ( !IsIgnoreWord(m_pWordBuffer) && !m_pSpell->spell(m_pWordBuffer))
+				{
+					m_pBuddy->HighlightText( CPoint(m_nCurStart, m_nCurLine), m_nCurEnd - m_nCurStart );
+					return;
+				}
 			}
+			// else the word was too long, skip it
 			m_nCurStart = m_nCurEnd;
 			m_pParser->NextWord( m_nCurLine, m_nCurStart, m_nCurEnd );
 		} 
@@ -233,9 +237,8 @@ void CSpellCheckDlg::OnSpellError()
 		for ( int i = 0; i < nCount; ++i)
 		{
 			ASSERT( pList->InsertItem(i, A2T(ssList[i])) != -1);
-			free( ssList[i] );
 		}
-		free( ssList );
+		m_pSpell->release_suggest( ssList );
 	}
 	//pList->Invalidate();
 	GetDlgItem(IDC_SPELL_SUGGEST)->EnableWindow( !m_bNoSuggestions );
@@ -250,7 +253,7 @@ void CSpellCheckDlg::OnChangeSpellText()
 	// send this notification unless you override the CDialog::OnInitDialog()
 	// function and call CRichEditCtrl().SetEventMask()
 	// with the ENM_CHANGE flag ORed into the mask.
-	
+
 	// The user has taken control of the line. Disable all the controls except
 	// Cancel, Resume, and Unedit (Ignore).
 	if ( !m_bEditing )
