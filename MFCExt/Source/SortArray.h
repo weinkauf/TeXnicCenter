@@ -70,7 +70,7 @@ public:
 		The index of the new element in the array or -1 if the string
 		has not been inserted.
 	*/
-	int InsertSorted( ARG_TYPE newElement, BOOL bSortAscending = TRUE, BOOL bAllowDuplicate = FALSE );
+	virtual int InsertSorted( ARG_TYPE newElement, BOOL bSortAscending = TRUE, BOOL bAllowDuplicate = FALSE );
 
 // implementation helpers
 protected:
