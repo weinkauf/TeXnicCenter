@@ -21,20 +21,18 @@ protected:
   int                 numsfx;
   Affix*              pTable[MAXAFFIXES];
   Affix*              sTable[MAXAFFIXES];
-  HashMgr *           pHMgr;
   char *              trystring;
   char *              encoding;
 
 public:
  
-  AffixMgr(const char * affpath, HashMgr * ptr);
+  AffixMgr(const char * affpath);
   ~AffixMgr();
-  struct hentry * affix_check(const char * word, int len) const;
-  struct hentry * lookup(const char * word) const;
-  struct hentry * cross_check(const char * word, int len, int sfxopts, const Affix* ppfx) const;
+  struct hentry * affix_check(HashMgr *pHMgr, const char * word, int len) const;
+  struct hentry * lookup(HashMgr *pHMgr, const char * word) const;
+  struct hentry * cross_check(HashMgr *pHMgr, const char * word, int len, int sfxopts, const Affix* ppfx) const;
   char * get_encoding() const;
   char * get_try_string() const;
-  void set_hash(HashMgr * ptr);
             
 private:
   int  parse_file(const char * affpath);

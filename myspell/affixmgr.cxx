@@ -16,10 +16,9 @@ static char THIS_FILE[]=__FILE__;
 #endif
 
 
-AffixMgr::AffixMgr(const char * affpath, HashMgr* ptr) 
+AffixMgr::AffixMgr(const char * affpath) 
 {
 	// register hash manager and load affix data from aff file
-	pHMgr = ptr;
 	numpfx = 0;
 	numsfx = 0;
 	trystring = NULL;
@@ -41,12 +40,6 @@ AffixMgr::~AffixMgr()
 		delete sTable[j];
 	delete [] trystring;
 	delete [] encoding;
-}
-
-
-void AffixMgr::set_hash(HashMgr * ptr)
-{
-	pHMgr = ptr;
 }
 
 
@@ -368,13 +361,13 @@ void AffixMgr::encodeit(struct affentry * ptr, char * cs) const
 
 
 /* cross check suffixes with a specific prefix */
-struct hentry * AffixMgr::cross_check (const char * word, int len, int sfxopts, const Affix * ppfx) const
+struct hentry * AffixMgr::cross_check (HashMgr *pHMgr, const char * word, int len, int sfxopts, const Affix * ppfx) const
 {
 	int i=0;
 	struct hentry * rv= NULL;
 	// go through every possible suffix with this prefix
 	while (i < numsfx)  {
-		rv = ((Suffix *)sTable[i])->check(word, len, sfxopts, (Prefix *)ppfx); 
+		rv = ((Suffix *)sTable[i])->check(pHMgr, word, len, sfxopts, (Prefix *)ppfx); 
 		if (rv) return rv;
 		i++;
 	}
@@ -384,7 +377,7 @@ struct hentry * AffixMgr::cross_check (const char * word, int len, int sfxopts, 
 
 
 // check if word with affixes is correctly spelled
-struct hentry * AffixMgr::affix_check (const char * word, int len) const
+struct hentry * AffixMgr::affix_check (HashMgr *pHMgr, const char * word, int len) const
 {
 	int i;
 	struct hentry * rv= NULL;
@@ -392,7 +385,7 @@ struct hentry * AffixMgr::affix_check (const char * word, int len) const
 	// first check all prefixes (also cross check with suffixes if need be)
 	i=0;
 	while (i < numpfx) {
-		rv = ((Prefix *)pTable[i])->check(word, len); 
+		rv = ((Prefix *)pTable[i])->check(pHMgr, word, len); 
 		if (rv) return rv;
 		i++;
 	}
@@ -400,7 +393,7 @@ struct hentry * AffixMgr::affix_check (const char * word, int len) const
 	// if still not found check all suffixes
 	i = 0;
 	while (i < numsfx) {
-		rv = ((Suffix *)sTable[i])->check(word, len, 0, NULL); 
+		rv = ((Suffix *)sTable[i])->check(pHMgr, word, len, 0, NULL); 
 		if (rv) return rv;
 		i++;
 	}
@@ -438,7 +431,7 @@ char * AffixMgr::get_try_string() const
 
 
 // utility method to look up root words in hash table
-struct hentry * AffixMgr::lookup(const char * word) const
+struct hentry * AffixMgr::lookup(HashMgr *pHMgr, const char * word) const
 {
 	if (! pHMgr) return NULL;
 	return pHMgr->lookup(word);

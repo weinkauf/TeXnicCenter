@@ -16,12 +16,15 @@ static char THIS_FILE[]=__FILE__;
 
 MySpell::MySpell(const char * affpath, const char * dpath)
 {
-	/* first set up the hash manager */
+	/* create the ignore and add hashes */
+	pIgnoreHash = new HashMgr;
+	pAddHash = new HashMgr;
+
+	/* first set up the main dict hash manager */
 	pHMgr = new HashMgr(dpath);
 
 	/* next set up the affix manager */
-	/* it needs access to the hash manager lookup methods */
-	pAMgr = new AffixMgr(affpath,pHMgr);
+	pAMgr = new AffixMgr(affpath);
 
 	/* get the preferred try string from the Affix Manager for that dictionary */
 	char * try_string = pAMgr->get_try_string();
@@ -30,6 +33,10 @@ MySpell::MySpell(const char * affpath, const char * dpath)
 	pSMgr = new SuggestMgr(try_string, 10, pAMgr);
 
 	delete [] try_string;
+
+	bModified = 0;
+	bMainOnly = 1;
+	strPersonalDictionaryPath = NULL;
 }
 
 
@@ -38,6 +45,9 @@ MySpell::~MySpell()
 	delete pSMgr;
 	delete pAMgr;
 	delete pHMgr;
+	delete pIgnoreHash;
+	delete pAddHash;
+	delete [] strPersonalDictionaryPath;
 }
 
 
@@ -106,14 +116,24 @@ int MySpell::spell(const char * word) const
 
 char * MySpell::check(const char * word) const
 {
+	int nLength = strlen(word);
 	struct hentry * he = NULL;
 	if (pHMgr)
 		he = pHMgr->lookup (word);
 
-	if ((he == NULL) && (pAMgr)) {
+	if ((he == NULL) && pIgnoreHash)
+		he = pIgnoreHash->lookup(word);
+
+	if ((he == NULL) && pAddHash)
+		he = pAddHash->lookup(word);
+
+	if ((he == NULL) && pAMgr && pHMgr) {
 		// try stripping off affixes */
-		he = pAMgr->affix_check(word, strlen(word));
+		he = pAMgr->affix_check(pHMgr, word, nLength);
 	}
+
+	if ((he == NULL) && pAMgr && pAddHash && !bMainOnly)
+		he = pAMgr->affix_check(pAddHash, word, nLength);
 
 	if (he) return he->word;
 	return NULL;
@@ -130,37 +150,46 @@ int MySpell::suggest(char*** slst, const char * word) const
 	int j;
 	switch(ct) {
 		case NOCAP:
-			ns = pSMgr->suggest(slst, word); 
+			ns = pSMgr->suggest(pHMgr, -1, slst, word);
+			if ( !bMainOnly )
+				ns = pSMgr->suggest(pAddHash, ns, slst, word);
 			break;
 
 		case INITCAP:
 			memcpy(wspace,word,(wl+1));
 			mkallsmall(wspace);
-			ns = pSMgr->suggest(slst, wspace);
+			ns = pSMgr->suggest(pHMgr, -1, slst, wspace);
+			if ( !bMainOnly )
+				ns = pSMgr->suggest(pAddHash, ns, slst, word);
 			for (j=0; j < ns; j++)
 				mkinitcap((*slst)[j]);
 			break;
 
 		case HUHCAP:
-			ns = pSMgr->suggest(slst, word);
-			if (ns == 0) {
-				memcpy(wspace,word,(wl+1));
-				mkallsmall(wspace);
-				ns = pSMgr->suggest(slst, wspace);
+			memcpy(wspace,word,(wl+1));
+			mkallsmall(wspace);
+			ns = pSMgr->suggest(pHMgr, -1, slst, word);
+			ns = pSMgr->suggest(pHMgr, ns,slst, wspace);
+			if ( !bMainOnly ) {
+				ns = pSMgr->suggest(pAddHash, ns, slst, word);
+				ns = pSMgr->suggest(pAddHash, ns, slst, wspace);
 			}
 			break;
 
 		case ALLCAP:
 			memcpy(wspace,word,(wl+1));
 			mkallsmall(wspace);
-			ns = pSMgr->suggest(slst, wspace);
+			ns = pSMgr->suggest(pHMgr, -1, slst, wspace);
+			if ( !bMainOnly )
+				ns = pSMgr->suggest(pAddHash, ns, slst, word);
 			for (j=0; j < ns; j++)
 				mkallcap((*slst)[j]);
 			break;
 	}
+	if (ns < 1)
+		release_suggest(slst);
 	return ns;
 }
-
 
 
 void MySpell::mkinitcap(char * p) const
@@ -168,4 +197,55 @@ void MySpell::mkinitcap(char * p) const
 	if (*p != '\0') *p = toupper((unsigned char)*p);
 }
 
+
+void MySpell::ignore_word(const char *word)
+{
+	if (pIgnoreHash)
+		pIgnoreHash->add_word(word);
+}
+
+
+void MySpell::add_word(const char *word)
+{
+	if (pAddHash) {
+		pAddHash->add_word(word);
+		bModified = true;
+	}
+}
+
+
+void MySpell::set_personal_dictionary(const char *fileName)
+{
+	delete [] strPersonalDictionaryPath;
+	strPersonalDictionaryPath = strdup(fileName);
+}
+
+
+int MySpell::open_personal_dictionary()
+{
+	delete pAddHash;
+	if (strPersonalDictionaryPath == NULL) {
+		// Create an empty dictionary
+		pAddHash = new HashMgr;
+	} else {
+		try {
+			pAddHash = new HashMgr(strPersonalDictionaryPath);
+		} catch (...) {
+			return -1;
+		}
+	}
+	return 0;
+}
+
+
+int MySpell::save_personal_dictionary(const char *fileName)
+{
+	int retValue = -1;
+	if (fileName && pAddHash) {
+		retValue = pAddHash->save_tables(fileName);
+		if (retValue == 0)
+			bModified = false;
+	}
+	return retValue;
+}
 
