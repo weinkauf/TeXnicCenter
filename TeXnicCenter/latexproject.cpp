@@ -545,17 +545,26 @@ void CLatexProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 		ZeroMemory(&cc, sizeof(cc));
 		cc.m_pNewViewClass = RUNTIME_CLASS(CLatexEdit);
 
+		bool bCouldOpenAllFrames(true);
 		for (nFrame = 0; nFrame < nFrameCount; nFrame++)
 		{
-			CChildFrame	*pChildFrame = new CChildFrame();
+			CChildFrame* pChildFrame = new CChildFrame();
 
 			ASSERT(pChildFrame);
-			if (!pChildFrame)
-				continue;
+			if (!pChildFrame) continue;
 
 			strKey.Format(KEY_FRAMEINFO, nFrame);
 			if (!pChildFrame->Serialize(ini, strKey, bWrite))
+			{
+				bCouldOpenAllFrames = false;
 				delete pChildFrame;
+			}
+		}
+
+		if (!bCouldOpenAllFrames)
+		{
+			AfxMessageBox(STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED,
+							MB_ICONINFORMATION|MB_OK);
 		}
 
 		// restore navigator tab selection
