@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>File based Document Templates</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<h3>File based Document Templates</h3>
+
+<p>File based Document Templates are the most easiest to create document templates. Document templates of this type will be marked wit the following icon in the '<var>Project New</var>' dialog:</p>
+
+<img src="template_file.gif" width="32" height="32" border="0" alt="">
+
+<p>A file based document template is a simple file with the extension ".tex" which is placed in one of the template directories, specified in the <a href="options_page_paths.html">path options</a>.</p>
+
+<p>Such a file can contain an optional description, that will be displayed in the template description field of the '<var>Project New</var>' dialog, when the template has been selected by the user. To create such a description, simply place a line beginning with the text <code>%description: </code> followed by a blank at the top of the template file.</p>
+
+<p>When creating a project based on a file based document template, TeXnicCenter will copy the selected template file to the project's directory, rename it to the project's name, remove the description line (if there is one) and replace the line delimiters with the ones, specified in the '<var>Project New</var>' dialog.</p>
+
+<p><b>An Example:</b></p>
+
+<p>A very simple example for a document template:</p>
+
+<pre>
+%description: An article with a title page
+
+% Preamble
+\documentclass{article}
+
+\title{Insert the title here}
+\author{Insert the author here}
+
+% Document
+\begin{document}
+% create title page and toc
+\maketitle\thispagestyle{empty}\clearpage
+\tableofcontents\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% beginning of text
+
+\end{document}
+</pre>
+
+
+</body>
+</html>

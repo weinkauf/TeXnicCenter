@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<!--last modified on Thursday, September 10, 1998 02:01 PM -->
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<META NAME="GENERATOR" Content="Visual Page 2.0 for Windows">
+	<META NAME="Author" Content="Michael Dunn">
+	<TITLE>CMRUComboBox docs - by Michael Dunn</TITLE>
+</HEAD>
+
+<BODY>
+
+<H1 ALIGN="CENTER">CMRUComboBox Documentation</H1>
+<P><B><FONT SIZE="2" FACE="Tahoma, Arial, Helvetica">CMRUComboBox</FONT></B> was written by <A HREF="mailto:mdunn@inreach.com">Michael
+Dunn</A>. Copyrighted and all that stuff. You can use it as you see fit as long as the copyright notices are kept
+in the source code.</P>
+<H3>CMRUComboBox notes</H3>
+<P>Since the MFC class <TT>CRecentFileList</TT> has several parameters that can be set only in the constructor,
+<TT>CMRUComboBox</TT> keeps a <TT>CRecentFileList*</TT> variable, and allocates a <TT>CRecentFileList</TT> object
+in several circumstances. You do not need to worry about this dynamic allocation, since <TT>CMRUComboBox</TT> takes
+care of it, but it may be an issue in low-memory situations. <TT>CMRUComboBox</TT> methods catch <TT>CMemoryException</TT>s
+when possible, print out a debug message, and then re-throw the exception so that your code or the MFC framework
+can catch it and act accordingly.</P>
+
+<P><TT>CMRUComboBox</TT> uses <TT>CString</TT>s and <TT>LPCTSTR</TT>s, so it should compile and run fine in Unicode.
+ However, I do not have an NT box handy so I have not personally tested it in a Unicode app.</P>
+<H3>CMRUComboBox Methods</H3>
+<H4>Constructor/Destructor</H4>
+
+<UL>
+	<LI><A HREF="#CMRUComboBox">CMRUComboBox</A>
+	<LI><A HREF="#destructor">~CMRUComboBox</A>
+</UL>
+
+<H4>MRU operations</H4>
+
+<UL>
+	<LI><A HREF="#AddToMRU">AddToMRU</A>
+	<LI><A HREF="#EmptyMRU">EmptyMRU</A>
+	<LI><A HREF="#LoadMRU">LoadMRU</A>
+	<LI><A HREF="#SaveMRU">SaveMRU</A>
+</UL>
+
+<H4>Setting MRU parameters</H4>
+
+<UL>
+	<LI><A HREF="#SetMRURegKey">SetMRURegKey</A>
+	<LI><A HREF="#GetMRURegKey">GetMRURegKey</A>
+	<LI><A HREF="#SetMRUValueFormat">SetMRUValueFormat</A>
+	<LI><A HREF="#GetMRUValueFormat">GetMRUValueForma</A>t
+	<LI><A HREF="#SetMaxMRUSize">SetMaxMRUSize</A>
+	<LI><A HREF="#GetMaxMRUSize">GetMaxMRUSize</A>
+	<LI><A HREF="#SetAutoRefreshAfterAdd">SetAutoRefreshAfterAdd</A>
+	<LI><A HREF="#SetAutoSaveAfterAdd">SetAutoSaveAfterAdd</A>
+	<LI><A HREF="#SetAutoSaveOnDestroy">SetAutoSaveOnDestroy</A>
+</UL>
+
+<H4>Other</H4>
+
+<UL>
+	<LI><A HREF="#RefreshCtrl">RefreshCtrl</A>
+</UL>
+
+<H2>
+<HR ALIGN="CENTER">
+Constructor/Destructor</H2>
+<P><A NAME="CMRUComboBox"></A><B><FONT FACE="Tahoma, Arial, Helvetica">CMRUComboBox()</FONT></B></P>
+<P>This is the default constructor. It calls the <TT>CComboBox</TT> constructor and initializes some member variables.</P>
+<P><A NAME="destructor"></A><B><FONT FACE="Tahoma, Arial, Helvetica">~CMRUComboBox()</FONT></B></P>
+<P>The class destructor saves the MRU to the registry if the AutoSaveOnDestroy flag is TRUE, and frees any memory
+used by the MRU.</P>
+<P><B>Remarks</B></P>
+<P>See also<B><FONT SIZE="2" FACE="Tahoma, Arial, Helvetica"> </FONT><A HREF="#SetAutoSaveOnDestroy"><FONT SIZE="2"
+FACE="Tahoma, Arial, Helvetica">SetAutoSaveOnDestroy()</FONT></A></B></P>
+<H2>
+<HR ALIGN="CENTER">
+MRU operations</H2>
+<P><A NAME="AddToMRU"></A><B><FONT FACE="Tahoma, Arial, Helvetica">BOOL AddToMRU ( LPCTSTR </FONT></B><I><FONT
+FACE="Tahoma, Arial, Helvetica">szItem </FONT></I><B><FONT FACE="Tahoma, Arial, Helvetica">)</FONT></B></P>
+<P><B>Parameters</B></P>
+<P><I>szItem</I>: String to be added to the MRU list. This may not be NULL.</P>
+<P><B>Return value</B></P>
+<P>TRUE if successful, FALSE if not. This function can fail if a new <TT>CRecentFileList</TT> object could not
+be allocated, or the MRU parameters were not valid.</P>
+<P><BR>
+<A NAME="EmptyMRU"></A><B><FONT FACE="Tahoma, Arial, Helvetica">void EmptyMRU()</FONT></B></P>
+<P><B>Parameters</B></P>
+<P>None.</P>
+<P><B>Return value</B></P>
+<P>None.</P>
+<P><B>Remarks</B></P>
+<P>This function removes all strings from the MRU, but does <I>not</I> update the combobox control. Call <B><A
+HREF="#RefreshCtrl"><FONT SIZE="2" FACE="Tahoma, Arial, Helvetica">RefreshCtrl()</FONT></A></B> to update the combobox.</P>
+<P><BR>
+<A NAME="LoadMRU"></A><B><FONT FACE="Tahoma, Arial, Helvetica">BOOL LoadMRU()</FONT></B></P>
+<P><B>Parameters</B></P>
+<P>None.</P>
+<P><B>Return value</B></P>
+<P>TRUE if successful, FALSE if not. This function can fail if a new <TT>CRecentFileList</TT> object could not
+be allocated, or the MRU parameters were not valid.</P>
+<P><BR>
+<A NAME="SaveMRU"></A><B><FONT FACE="Tahoma, Arial, Helvetica">BOOL SaveMRU()</FONT></B></P>
+<P><B>Parameters</B></P>
+<P>None.</P>
+<P><B>Return value</B></P>
+<P>TRUE if successful, FALSE if not. This function can fail if no <TT>CRecentFileList</TT> object has been allocated
+yet (meaning there was no MRU to save), if a new <TT>CRecentFileList</TT> object could not be allocated, or if
+the MRU parameters were not valid.</P>
+<H2>
+<HR ALIGN="CENTER">
+Setting MRU parameters</H2>
+<P>
+<P><A NAME="SetMRURegKey"></A><B><FONT FACE="Tahoma, Arial, Helvetica">void SetMRURegKey ( LPCTSTR </FONT></B><I><FONT
+FACE="Tahoma, Arial, Helvetica">szRegKey </FONT></I><B><FONT FACE="Tahoma, Arial, Helvetica">)</FONT></B></P>
+<P><B>Parameters</B></P>
+<P><I>szRegKey</I>: The registry key (or INI file section) in which the MRU will be saved. If you are saving settings
+to the registry (by calling <TT><B>CWinApp::SetRegistryKey()</B></TT>) then the registry key you specify will be
+created in <TT>HKCU\Software\&lt;<B>SetRegistryKey()</B> parameter&gt;\&lt;your app name&gt;</TT>.</P>
+<P><B>Return Value</B></P>
+<P>None.</P>
+<P><BR>
+<A NAME="GetMRURegKey"></A><B><FONT FACE="Tahoma, Arial, Helvetica">const CString&amp; GetMRURegKey() const</FONT></B></P>
+<P><B>Parameters</B></P>
+<P>None.</P>
+<P><B>Return Value</B></P>
+<P>A <TT>CString</TT> containing the current registry key (or INI file section) in which the MRU will be saved.</P>
+<P><BR>
+<A NAME="SetMRUValueFormat"></A><B><FONT FACE="Tahoma, Arial, Helvetica">BOOL SetMRUValueFormat ( LPCTSTR </FONT></B><I><FONT
+FACE="Tahoma, Arial, Helvetica">szValueFormat </FONT></I><B><FONT FACE="Tahoma, Arial, Helvetica">)</FONT></B></P>
+<P><B>Parameters</B></P>
+<P><I>szValueFormat</I>: A format string to use when creating registry or INI file entries. This string must not
+be NULL and must contain &quot;%d&quot;.</P>
+<P><B>Return Value</B></P>
+<P>TRUE if the format is valid as described above, FALSE if not.</P>
+<P><BR>
+<A NAME="GetMRUValueFormat"></A><B><FONT FACE="Tahoma, Arial, Helvetica">const CString&amp; GetMRUValueFormat()
+const</FONT></B></P>
+<P><B>Parameters</B></P>
+<P>None.</P>
+<P><B>Return Value</B></P>
+<P>A <TT>CString</TT> containing the current value format.</P>
+<P><BR>
+<A NAME="SetMaxMRUSize"></A><B><FONT FACE="Tahoma, Arial, Helvetica">int SetMaxMRUSize ( int </FONT></B><I><FONT
+FACE="Tahoma, Arial, Helvetica">nMaxSize </FONT></I><B><FONT FACE="Tahoma, Arial, Helvetica">)</FONT></B></P>
+<P><B>Parameters</B></P>
+<P><I>nMaxSize</I>: The new maximum size for the MRU.</P>
+<P><B>Return Value</B></P>
+<P>If successful, the previous max size of the MRU is returned. If there was no previous MRU, 0 is returned. If
+a new <TT>CRecentFileList</TT> couldn't be allocated, then -1 is returned.</P>
+<P><B>Remarks</B></P>
+<P>This function always results in a new <TT>CRecentFileList</TT> object being allocated immediately. If the new
+size is greater than or equal to the previous size, the previous MRU items are retained. If the new size is smaller,
+then the oldest items in the previous MRU are discarded. For example, if an MRU is sized from 5 down to 3, then
+the oldest 2 items will be discarded.</P>
+<P><BR>
+<A NAME="GetMaxMRUSize"></A><B><FONT FACE="Tahoma, Arial, Helvetica">int GetMaxMRUSize() const</FONT></B></P>
+<P><B>Parameters</B></P>
+<P>None.</P>
+<P><B>Return Value</B></P>
+<P>The current maximum size of the MRU list.</P>
+<P><BR>
+<A NAME="SetAutoRefreshAfterAdd"></A><B><FONT FACE="Tahoma, Arial, Helvetica">BOOL SetAutoRefreshAfterAdd ( BOOL
+</FONT></B><I><FONT FACE="Tahoma, Arial, Helvetica">bAutoRefresh</FONT></I><B><FONT FACE="Tahoma, Arial, Helvetica">
+)</FONT></B></P>
+<P><B>Parameters</B></P>
+<P><I>bAutoRefresh</I>: Pass TRUE to have the <TT>CMRUComboBox</TT> automatically call <B><A HREF="#RefreshCtrl"><FONT
+SIZE="2" FACE="Tahoma, Arial, Helvetica">RefreshCtrl()</FONT></A></B> after a successful call to <B><A HREF="#AddToMRU"><FONT
+SIZE="2" FACE="Tahoma, Arial, Helvetica">AddToMRU()</FONT></A></B>. Pass FALSE to disable this behavior.</P>
+<P><B>Return Value</B></P>
+<P>The previous setting of this flag.</P>
+<P><B>Remarks</B></P>
+<P>This flag defaults to FALSE.</P>
+<P><BR>
+<A NAME="SetAutoSaveAfterAdd"></A><B><FONT FACE="Tahoma, Arial, Helvetica">BOOL SetAutoSaveAfterAdd ( BOOL </FONT></B><I><FONT
+FACE="Tahoma, Arial, Helvetica">bAutoSave</FONT></I><B><FONT FACE="Tahoma, Arial, Helvetica"> )</FONT></B></P>
+<P><B>Parameters</B></P>
+<P><I>bAutoSave</I>: Pass TRUE to have the <TT>CMRUComboBox</TT> automatically call <B><A HREF="#SaveMRU"><FONT
+SIZE="2" FACE="Tahoma, Arial, Helvetica">SaveMRU()</FONT></A></B> after a successful call to <B><A HREF="#AddToMRU"><FONT
+SIZE="2" FACE="Tahoma, Arial, Helvetica">AddToMRU()</FONT></A></B>. Pass FALSE to disable this behavior.</P>
+<P><B>Return Value</B></P>
+<P>The previous setting of this flag.</P>
+<P><B>Remarks</B></P>
+<P>This flag defaults to FALSE.</P>
+<P><BR>
+<A NAME="SetAutoSaveOnDestroy"></A><B><FONT FACE="Tahoma, Arial, Helvetica">BOOL SetAutoSaveOnDestroy ( BOOL </FONT></B><I><FONT
+FACE="Tahoma, Arial, Helvetica">bAutoSave</FONT></I><B><FONT FACE="Tahoma, Arial, Helvetica"> )</FONT></B></P>
+<P><B>Parameters</B></P>
+<P><I>bAutoSave</I>: Pass TRUE to have the <TT>CMRUComboBox</TT> automatically call <B><A HREF="#SaveMRU"><FONT
+SIZE="2" FACE="Tahoma, Arial, Helvetica">SaveMRU()</FONT></A></B> from the destructor. Pass FALSE to disable this
+behavior.</P>
+<P><B>Return Value</B></P>
+<P>The previous setting of this flag.</P>
+<P><B>Remarks</B></P>
+<P>This flag defaults to TRUE. If the call to <B><A HREF="#SaveMRU"><FONT SIZE="2" FACE="Tahoma, Arial, Helvetica">SaveMRU()</FONT></A></B>
+in the destructor fails, a debug message is printed.</P>
+<H2>
+<HR ALIGN="CENTER">
+Other</H2>
+<P>
+<P><A NAME="RefreshCtrl"></A><B><FONT FACE="Tahoma, Arial, Helvetica">void RefreshCtrl()</FONT></B></P>
+<P><B>Parameters</B></P>
+<P>None.</P>
+<P><B>Return Value</B></P>
+<P>None.</P>
+<P><B>Remarks</B></P>
+
+<P>This function removes all strings from the list box portion of the combobox control, and rebuilds it to match
+the current contents of the MRU. The text in the edit box portion of the control is preserved.
+
+</BODY>
+
+</HTML>

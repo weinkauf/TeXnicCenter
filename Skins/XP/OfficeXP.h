@@ -1,0 +1,18 @@
+#if !defined(AFX_OFFICEXP_H__143B9741_B592_11D5_A222_006097239934__INCLUDED_)
+#define AFX_OFFICEXP_H__143B9741_B592_11D5_A222_006097239934__INCLUDED_
+
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+
+class COfficeXP : public CBCGVisualManagerXP
+{
+	DECLARE_DYNCREATE(COfficeXP)
+
+public:
+	COfficeXP();
+	virtual ~COfficeXP();
+
+};
+
+#endif // !defined(AFX_OFFICEXP_H__143B9741_B592_11D5_A222_006097239934__INCLUDED_)
