@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.6  2002/04/29 19:45:17  cnorris
+* Make text attribute structure thread safe
+*
 * Revision 1.5  2002/04/24 00:46:04  cnorris
 * realtime spell check
 *
@@ -322,7 +325,7 @@ protected:
 		void ClearAttributes(CTextAttribute::tagAttribute attribute);
 
 		/**
-		Clear all line attributes within the range.
+		Clear all line attributes within the range (nStart nEnd].
 		@param nStart The start position of the clear
 		@param nEnd The end position of the clear
 		@bIncludeOverlap If <VAR>TRUE</VAR> clear attributes that overlap 
@@ -573,7 +576,15 @@ public:
 	Release the text attributes. Allow other threads access to the text 
 	attribute data structure.
 	*/
+	inline
 	void ReleaseLineAttributes();
+
+	/**
+	Lock the text attributes. Prevent other threads from accessing the text
+	attribute data structre. Must be released with a call to ReleaseLineAttributes()
+	*/
+	inline
+	void LockLineAttributes();
 
 // Overrides
 	// ClassWizard generated virtual function overrides

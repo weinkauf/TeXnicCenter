@@ -108,7 +108,7 @@ BOOL CAttributeMenu::ShowSpellMenu(MySpell *pSpell, CPoint screenPoint)
 		for ( i = 0; i < nSuggestCount; ++i )
 			pPopup->InsertMenu( i, MF_STRING|MF_ENABLED|MF_BYPOSITION, i+spellErrorStart, A2T(aSuggestList[i]) );
 
-		int nSel = pPopup->TrackPopupMenu( TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_RETURNCMD|TPM_NONOTIFY, screenPoint.x, screenPoint.y, m_pView );
+		int nSel = pPopup->TrackPopupMenu( TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_RETURNCMD|TPM_NONOTIFY, screenPoint.x, screenPoint.y+10, m_pView );
 		if ( nSel >= spellErrorStart && nSel < spellErrorStop )
 		{
 			// Save the previous selection
