@@ -92,7 +92,7 @@ void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHin
 					switch( i )
 					{
 					case CStructureParser::header:
-					//case CStructureParser::equation:
+					case CStructureParser::equation:
 					case CStructureParser::figure:
 					case CStructureParser::table:
 						ahParentItems[i] = InsertItem( 
@@ -114,7 +114,7 @@ void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHin
 					switch( si.m_nType )
 					{
 					case CStructureParser::header:
-					//case CStructureParser::equation:
+					case CStructureParser::equation:
 					case CStructureParser::figure:
 					case CStructureParser::table:
 						{
