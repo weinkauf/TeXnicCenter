@@ -137,6 +137,11 @@ CStructureParser::CStructureParser( CStructureParserHandler *pStructureParserHan
 		"\\\\(input|include)\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"
 	) );
 	TRACE( "m_regexInput returned %d\n", nResult );
+
+ 	nResult = m_regexBib.set_expression( _T(
+ 		"\\\\(bibliography)\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"
+ 	) );
+ 	TRACE( "m_regexBib returned %d\n", nResult );
 }
 
 CStructureParser::~CStructureParser()
@@ -453,9 +458,52 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 
 		return;
 	}
+	// Find bibliography
+	if( reg_search( lpText, lpTextEnd, what, m_regexBib, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
+	{
+		// parse string before occurence
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine );
+
+		// parse input file
+		CString	strPath( what[2].first, what[2].second - what[2].first );
+		strPath.TrimLeft();
+		strPath.TrimRight();
+		strPath.TrimLeft(_T('"'));
+		strPath.TrimRight(_T('"'));
+		strPath+= _T(".bib");
+		AddFileItem( strPath );
+
+		// parse string behind occurence
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine );
+
+		return;
+	}
 
 	// allow others to make changes to m_aStructureItems
 	//m_structureItemsAccess.Unlock();
+}
+
+
+CString CStructureParser::AddFileItem( LPCTSTR lpszPath )
+{
+	// format file name (remove path, if identical with working dir
+	CString	strActualFile( lpszPath );
+	if( !m_strWorkingDir.CompareNoCase( CPathTool::Format( _T("%d"), strActualFile ) ) )
+		strActualFile = CPathTool::Format( _T("%n"), strActualFile ); 
+
+	// insert file into item-array
+	CStructureItem	si;
+	si.m_nLine = 0;
+	si.m_nParent = m_anItem[m_nDepth];
+	si.m_nType = file;
+	si.m_strCaption = "";
+	si.m_strComment = "";
+	si.m_strLabel = "";
+	si.m_strPath = strActualFile;
+	si.m_strTitle = "";
+	m_aStructureItems.Add( si );
+
+	return ( strActualFile );
 }
 
 
@@ -476,22 +524,7 @@ BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies  )
 	if( !pTs )
 		return FALSE;
 
-	// format file name (remove path, if identical with working dir
-	CString							strActualFile( lpszPath );
-	if( !m_strWorkingDir.CompareNoCase( CPathTool::Format( _T("%d"), strActualFile ) ) )
-		strActualFile = CPathTool::Format( _T("%n"), strActualFile ); 
-
-	// insert file into item-array
-	CStructureItem	si;
-	si.m_nLine = 0;
-	si.m_nParent = m_anItem[m_nDepth];
-	si.m_nType = file;
-	si.m_strCaption = "";
-	si.m_strComment = "";
-	si.m_strLabel = "";
-	si.m_strPath = strActualFile;
-	si.m_strTitle = "";
-	m_aStructureItems.Add( si );
+	CString strActualFile( AddFileItem( lpszPath ) );
 
 	// parse text source
 	LPCTSTR							lpLine, lpLineEnd, lpOffset;
