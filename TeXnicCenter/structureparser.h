@@ -479,6 +479,12 @@ protected:
 	/** Regular expression describing an equation end. */
 	tregex m_regexEquationEnd;
 
+	/** Regular expression describing a center start. */
+	tregex m_regexCenterStart;
+
+	/** Regular expression describing a center end. */
+	tregex m_regexCenterEnd;
+
 	/** Regular expression describing the start of an unknown environment. */
 	tregex m_regexUnknownEnvStart;
 

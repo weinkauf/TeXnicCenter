@@ -147,6 +147,16 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 	) );
 	TRACE( "m_regexEquationEnd returned %d\n", nResult );
 
+	nResult = m_regexCenterStart.set_expression( _T(
+		"\\\\begin\\s*\\{center\\}"
+	) );
+	TRACE( "m_regexCenterStart returned %d\n", nResult );
+
+	nResult = m_regexCenterEnd.set_expression( _T(
+		"\\\\end\\s*\\{center\\}"
+	) );
+	TRACE( "m_regexCenterEnd returned %d\n", nResult );
+	
 	nResult = m_regexUnknownEnvStart.set_expression( _T(
 		"\\\\begin\\s*\\{([^\\}]*)\\}"
 	) );
@@ -489,6 +499,19 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 
 		return;
 	}
+	
+	// look for center start
+	if( reg_search( lpText, lpTextEnd, what, m_regexCenterStart, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
+	{
+		// parse string before occurence
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth, aSI );
+
+		// parse string behind occurence
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth, aSI );
+
+		return;
+	}
+
 	//ATTENTION: Insert the start of other (known) environments before this!
 	// look for unknown environment start
 	if( reg_search( lpText, lpTextEnd, what, m_regexUnknownEnvStart, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
@@ -695,6 +718,19 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 
 		return;
 	}
+
+	// find end of center
+	if( reg_search( lpText, lpTextEnd, what, m_regexCenterEnd, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
+	{
+		// parse string before occurence
+		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth, aSI );
+
+		// parse string behind occurence
+		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth, aSI );
+
+		return;
+	}
+
 	//ATTENTION: Insert the end of other (known) environments before this!
 	// find end of unknown environment
 	if( reg_search( lpText, lpTextEnd, what, m_regexUnknownEnvEnd, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
