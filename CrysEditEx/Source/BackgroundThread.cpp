@@ -171,7 +171,13 @@ LRESULT CBackgroundThread::OnEnableSpeller(WPARAM wParam, LPARAM lParam)
 
 LRESULT CBackgroundThread::OnInvalidateView(WPARAM wParam, LPARAM lParam)
 {
-	m_pInvalidViews.AddHead((void *)lParam);
+	CCrystalTextView *pTextView = (CCrystalTextView *)lParam;
+	if ( pTextView )
+	{
+		m_pInvalidViews.AddHead( pTextView );
+		// Release the view
+		pTextView->Release();
+	}
 	return 0;
 }
 
