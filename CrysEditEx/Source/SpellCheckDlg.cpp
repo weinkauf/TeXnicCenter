@@ -247,7 +247,7 @@ void CSpellCheckDlg::OnSpellError()
 		{
 			VERIFY( c_SuggestList.InsertItem(i, A2T(ssList[i])) != -1);
 		}
-		m_pSpell->release_suggest( ssList );
+		m_pSpell->release_suggest( &ssList );
 	}
 
 	c_SuggestList.EnableWindow( !m_bNoSuggestions );
