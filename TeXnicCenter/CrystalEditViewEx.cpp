@@ -90,6 +90,8 @@ BOOL CCrystalEditViewEx::Serialize(CIniFile &ini, LPCTSTR lpszKey, BOOL bWrite)
 				throw FALSE;
 
 			SetCursorPos(ptCursor);
+			SetAnchor(ptCursor);
+			SetSelection(ptCursor, ptCursor);
 		}
 		catch(...)
 		{}
