@@ -45,6 +45,7 @@ requests the user to sepcify the directory, where his
 TeX-distribution has been installed to.
 
 @ingroup dialogs
+@ingroup profiles
 
 @author Sven Wiegand
 */

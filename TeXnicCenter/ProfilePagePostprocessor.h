@@ -50,6 +50,7 @@
 /**	Edits the Postprocessors of output profiles.
 
 @ingroup dialogs
+@ingroup profiles
 
 @author Sven Wiegand
 */

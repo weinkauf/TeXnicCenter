@@ -42,6 +42,7 @@
 /**	Allows to switch between different output profiles.
 
 @ingroup dialogs
+@ingroup profiles
 
 @author Sven Wiegand
 */

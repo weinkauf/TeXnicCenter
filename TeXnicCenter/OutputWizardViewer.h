@@ -47,6 +47,7 @@ requests the user to specify the properties of a file-type-specific
 viewer.
 
 @ingroup dialogs
+@ingroup profiles
 
 @author Sven Wiegand
 */

@@ -43,6 +43,7 @@
 /** Dialog that requests the user to enter a name for an output profile.
 
 @ingroup dialogs
+@ingroup profiles
 
 @author Sven Wiegand
 */
