@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "LatexOutputFilter.h"
@@ -46,7 +52,8 @@ CLatexOutputFilter::CLatexOutputFilter(BOOL bAutoDelete /*= FALSE*/)
 	m_nErrors(0),
 	m_nWarnings(0),
 	m_nBadBoxes(0),
-	m_nOutputPages(0)
+	m_nOutputPages(0),
+	m_bFileNameOverLines(false)
 {}
 
 
@@ -77,11 +84,10 @@ BOOL CLatexOutputFilter::OnPreCreate()
 	return TRUE;
 }
 
-
 void CLatexOutputFilter::UpdateFileStack(const CString &strLine)
 {
 	/*
-	With the code in this function we catch	non-file-related stuff as well.
+	With the code in this function we catch non-file-related stuff as well.
 	Consider the following output from TeX:
 
 		Underfull \hbox (badness 3323) in paragraph at lines 87--88
@@ -98,14 +104,26 @@ void CLatexOutputFilter::UpdateFileStack(const CString &strLine)
 	So I think, this assumption is correct. The assertion	"ASSERT(!m_stackFile.IsEmpty());"
 	below will help us to find out, whether I am right or not.
 	*/
-	for (int i = 0; i < strLine.GetLength(); i++)
+
+	int i=0;
+	int nStrMax = strLine.GetLength();
+
+	//If the last run of this func discovered a filename, that
+	// was printed out over more than one line, we will directly
+	// continue to read it in.
+	if (m_bFileNameOverLines)
+		goto ScanNextLine;
+
+
+	for (; i < nStrMax; i++)
 	{
 		switch (strLine[i])
 		{
 		case _T('('):
 			{
+ScanNextLine:
 				for (int j = i+1;
-								 ( j < strLine.GetLength() )
+								 ( j < nStrMax )
 							&& ( strLine[j] != _T('[') )
 							&& ( strLine[j] != _T(')') )
 							&& ( strLine[j] != _T('(') )
@@ -120,16 +138,33 @@ void CLatexOutputFilter::UpdateFileStack(const CString &strLine)
 					\OT1/cmr/m/n/8 Punk-ten. $\OML/cmm/m/it/8 K[] \OT1/cmr/m/n/8 = ([]\OML/cmm/m/it
 					/8 ; []; []\OT1/cmr/m/n/8 )$. $\OML/cmm/m/it/8 K[] \OT1/cmr/m/n/8 =
 
-				The second line has a starting brace '(' directly followed by a '['.
+				The first line has a starting brace '(' directly followed by a '['.
 				This will produce an empty string (i.e. i == j-1) due to the code
 				in the for-next-loop above. But we need the code above - no chance to change it.
 				Certainly, adding empty strings, will somehow corrupt our file stack, but as mentioned
 				above, we catch other non-file-related stuff as well.
 				And the hope/knowledge is, that TeX closes the brace before reporting an error.
 				*/
-				if ((j-1) >= i)
+
+				CString	strFile(strLine.Mid(i+1, (j-1) - (i+1) + 1));
+
+				if (m_bFileNameOverLines)
 				{
-					CString	strFile(strLine.Mid(i+1, (j-1) - (i+1) + 1));
+					strFile = m_strPartialFileName + strLine[0] + strFile;
+					m_bFileNameOverLines = false;
+				}
+
+				//Has the filename been broken up over two or even more lines?
+				if ( (j == nStrMax) && (nStrMax >= 79) && (CPathTool::GetFileExtension(strFile).GetLength() < 3 ) )
+				{
+					//Yes - save it and wait for the next line to read
+					m_strPartialFileName = strFile;
+					m_bFileNameOverLines = true;
+					i = j-1;
+				}
+				else
+				{
+					//No - push it
 					strFile.TrimLeft();
 					strFile.TrimRight();
 					m_stackFile.Push(strFile);
@@ -158,7 +193,7 @@ void CLatexOutputFilter::UpdateFileStack(const CString &strLine)
 
 void CLatexOutputFilter::FlushCurrentItem()
 {
-	int	nItemType = m_currentItem.m_nErrorID;
+	int nItemType = m_currentItem.m_nErrorID;
 	m_currentItem.m_nErrorID = -1;
 
 	switch (nItemType)
@@ -183,12 +218,6 @@ void CLatexOutputFilter::FlushCurrentItem()
 	}
 
 	m_currentItem.Clear();
-}
-
-
-long CLatexOutputFilter::ExtractLineNumber(const CString &strLine, int nStartChar)
-{
-	return _ttol(strLine.Mid(nStartChar));
 }
 
 
