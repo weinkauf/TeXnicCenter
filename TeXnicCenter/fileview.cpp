@@ -80,6 +80,10 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 				HTREEITEM hBibParent = InsertItem(AfxLoadString(STE_BIB_FILES), 
 					CStructureParser::bibFile, CStructureParser::bibFile, 
 					TVI_ROOT, TVI_SORT);
+				HTREEITEM hGaphicParent = InsertItem(AfxLoadString(STE_GRAPHICS_FILES), 
+					CStructureParser::graphicFile, CStructureParser::graphicFile, 
+					TVI_ROOT, TVI_SORT);
+
 				HTREEITEM hItem;
 				// fill view
 				for( int i = 0; i < a.GetSize(); i++ )
@@ -93,6 +97,13 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 							si.m_strPath, 
 							si.m_nType, si.m_nType, 
 							hTexParent, TVI_SORT );
+						SetItemData( hItem, i );
+						break;
+					case CStructureParser::graphicFile:
+						hItem = InsertItem( 
+							si.m_strPath, 
+							si.m_nType, si.m_nType, 
+							hGaphicParent, TVI_SORT );
 						SetItemData( hItem, i );
 						break;
 					case CStructureParser::bibFile:

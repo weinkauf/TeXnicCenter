@@ -168,6 +168,7 @@ public:
 		texFile,
 		group,
 		bibFile,
+		graphicFile,
 		// If you add a new type, also add a description string to m_sItemNames
 		typeCount
 	};
@@ -424,8 +425,11 @@ protected:
 	/** Regular expression describing the biblography command. */
 	tregex m_regexBib;
 
-	/** Regular expression describing the appednidx command. */
+	/** Regular expression describing the appendix command. */
 	tregex m_regexAppendix;
+
+	/** Regular expression describing insert graphics commands. */
+	tregex m_regexGraphic;
 
 	/** Array containing the different headers. */
 	static CString m_astrHeader[MAX_DEPTH];
@@ -450,6 +454,9 @@ private:
 
 	/** Files parsed */
 	int m_nFilesParsed;
+
+	/** Characters parsed */
+	int m_nCharsParsed;
 };
 
 #endif // !defined(AFX_STRUCTUREPARSER_H__843BC262_339C_11D3_929E_444553540000__INCLUDED_)
