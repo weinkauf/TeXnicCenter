@@ -26,8 +26,22 @@
 *
 *********************************************************************/
 
-// Globale Funktionen
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
+// Global Functions
 CString AfxLoadString( UINT nID );
 CString AfxFormatString1( UINT nID, LPCTSTR lpszText );
 CString AfxFormatSystemString( DWORD dwMessageId );
+
+/** Returns the default directory for open/save-dialogs.
+	The return value depends on the current setup and opened files/project.
+
+	@param bForceNonEmpty
+		Forces the return value to be non-empty
+*/
+CString AfxGetDefaultDirectory(bool bForceNonEmpty = true);
 
