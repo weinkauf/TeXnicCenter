@@ -1075,14 +1075,15 @@
 #define ID_SPELL_PROJECT                38314
 #define ID_SPELL_FILE                   38315
 #define IDS_SPELL_CONTINUE              38316
+#define ID_LATEX_CLEAN                  38317
 
 // Next default values for new objects
-// 
+//
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        249
-#define _APS_NEXT_COMMAND_VALUE         38316
+#define _APS_NEXT_COMMAND_VALUE         38317
 #define _APS_NEXT_CONTROL_VALUE         1269
 #define _APS_NEXT_SYMED_VALUE           111
 #endif

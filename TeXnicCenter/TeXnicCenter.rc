@@ -1775,6 +1775,7 @@ BEGIN
         MENUITEM "&Projekt compilieren",        ID_LATEX_RUN
         MENUITEM "&BibTeX",                     ID_LATEX_BIBTEX
         MENUITEM "&MakeIndex",                  ID_LATEX_MAKEINDEX
+        MENUITEM "&Säubern",                    ID_LATEX_CLEAN
         MENUITEM SEPARATOR
         MENUITEM "A&usgabe betrachten",         ID_LATEX_VIEW
         MENUITEM SEPARATOR
@@ -3155,7 +3156,12 @@ BEGIN
     CG_IDS_TIPOFTHEDAYHELP  "&?"
     STE_TIP_FILE            "Tips_german.txt"
     STE_URL_CANNOTOPEN      "Die URL konnte nicht geöffnet werden."
-	IDS_OPEN                "Todo: open"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_OPEN                "Todo: open"
+    IDS_SAVE                "Todo: save"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -3221,7 +3227,7 @@ BEGIN
     STE_LATEX_START_FAILED  "%s\n\nDer Befehl konnte nicht ausgeführt werden."
     STE_LATEX_CANCELED      "Erstellung vom Anwender abgebrochen"
     STE_LATEX_START_FAILED_EXT 
-                            "%s Der Befehl konnte nicht ausgeführt werden. Fehler: %s"
+                            "%s\n\nDer Befehl konnte nicht ausgeführt werden.\nFehler:\n\n%s"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4134,23 +4140,18 @@ BEGIN
     ID_SPELL_PROJECT        "Todo: Spell check entire project\nSpell check project"
     ID_SPELL_FILE           "Todo: Spell check the active file\nSpell check file"
     IDS_SPELL_CONTINUE      "Todo: Contiue spell checking remainder of project?"
+    ID_LATEX_CLEAN          "Löscht alle temporären Dateien (säubert das Projekt)\nSäubern"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
     STE_TOOL_NOCMDLINE      "Für das Tool wurde keine Kommandozeile definiert.\n\nGeben Sie bitte für das Tool eine Kommandozeile an und versuchen Sie es erneut."
-    STE_TOOL_CANTINVOKE     "Die folgende Kommandozeile kann nicht ausgeführt werden: %s"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
     STE_COLOR_AUTOMATIC     "Automatisch"
     STE_COLOR_OTHERS        "Andere Farben..."
-END
-
-STRINGTABLE DISCARDABLE 
-BEGIN
-    IDS_SAVE                "Todo: save"
 END
 
 #endif    // German (Germany) resources
@@ -5148,6 +5149,7 @@ BEGIN
         MENUITEM "Build &Output",               ID_LATEX_RUN
         MENUITEM "&BibTeX",                     ID_LATEX_BIBTEX
         MENUITEM "&MakeIndex",                  ID_LATEX_MAKEINDEX
+        MENUITEM "&Clean",                      ID_LATEX_CLEAN
         MENUITEM SEPARATOR
         MENUITEM "&View Output",                ID_LATEX_VIEW
         MENUITEM SEPARATOR
@@ -6482,8 +6484,13 @@ BEGIN
     CG_IDS_FILE_CORRUPT     "Problems while reading the tip file."
     CG_IDS_TIPOFTHEDAYHELP  "&?"
     STE_TIP_FILE            "Tips_english.txt"
-	STE_URL_CANNOTOPEN      "The URL cannot be opened."
+    STE_URL_CANNOTOPEN      "The URL cannot be opened."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
     IDS_OPEN                "open"
+    IDS_SAVE                "save"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -6548,7 +6555,8 @@ BEGIN
     STE_LATEX_RESULT        "LaTeX-Result: %d Error(s), %d Warning(s), %d Bad Box(es), %d Page(s)"
     STE_LATEX_START_FAILED  "%s\n\nCannot execute the command."
     STE_LATEX_CANCELED      "Building process cancelled by the user"
-    STE_LATEX_START_FAILED_EXT "%s Cannot execute the command. Error: %s"
+    STE_LATEX_START_FAILED_EXT 
+                            "%s\n\nCannot execute the command.\nError:\n\n%s"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7445,23 +7453,18 @@ BEGIN
     ID_SPELL_PROJECT        "Spell check entire project\nSpell check project"
     ID_SPELL_FILE           "Spell check the active file\nSpell check file"
     IDS_SPELL_CONTINUE      "Contiue spell checking remainder of project?"
+    ID_LATEX_CLEAN          "Deletes all intermediate and output files (cleans the project)\nClean"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
     STE_TOOL_NOCMDLINE      "No command line has been specified for this tool.\n\nPlease specify a command line for the tool and try again."
-    STE_TOOL_CANTINVOKE     "Cannot invoke the following command: %s"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
     STE_COLOR_AUTOMATIC     "Automatic"
     STE_COLOR_OTHERS        "Other Colors..."
-END
-
-STRINGTABLE DISCARDABLE 
-BEGIN
-    IDS_SAVE                "save"
 END
 
 #endif    // English (U.S.) resources
