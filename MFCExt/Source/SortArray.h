@@ -138,7 +138,7 @@ int CSortArray<TYPE, ARG_TYPE>::InsertSorted(
 		ASSERT( FALSE );
 		return -1;
 	}
-	else if (nStart == (nEnd+1))
+	else if (nEnd == (nStart + 1))
 	{
 		if (bSortAscending)
 		{
