@@ -171,10 +171,6 @@ SOURCE=..\..\myspell\myspell.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\SpellCheckBuffer.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\SpellCheckDlg.cpp
 # End Source File
 # Begin Source File
@@ -281,10 +277,6 @@ SOURCE=..\..\myspell\htypes.hxx
 # Begin Source File
 
 SOURCE=..\..\myspell\myspell.hxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\SpellCheckBuffer.h
 # End Source File
 # Begin Source File
 
