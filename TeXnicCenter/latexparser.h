@@ -41,7 +41,7 @@
 
 #include "../MySpell/Character.h"
 
-//typedef	reg_expression<TCHAR, char_regex_traits<TCHAR>, JM_DEF_ALLOC(TCHAR)> tregex;
+
 
 class CLatexParser : public CCrystalParser  
 {
@@ -51,6 +51,8 @@ class CLatexParser : public CCrystalParser
 public:
 	CLatexParser();
 
+
+    
 // operations
 protected:
 	/**
@@ -91,6 +93,7 @@ protected:
 		TRUE if there is a command at nPos, FALSE otherwise.
 	*/
 	virtual BOOL IsCmdAt( LPCTSTR lpText, LPCTSTR lpPos );
+
 
 // implementation helpers
 protected:
@@ -192,6 +195,91 @@ protected:
 	*/
 	static BOOL SearchVerbEnd( LPCTSTR lpStart, LPCTSTR lpEnd, SUBEXPRESSION what[] );
 
+	/** Clears all blocks after first comment and also returns correspoding modification of <code>dwCookie</code>.
+
+	@param dwCookie 
+		The result of parsing the line returned by <code>ParseString</code>.
+	@param pBlock 
+		Parsed line.	
+
+	@return Modified dwCookie.
+	*/
+	static DWORD ClearBlocksAfterComment( DWORD dwCookie, CCrystalTextBlock *pTextBlock );
+
+	/** Return the index of found pair string that starts at <code>lpszTextPost</code> position in the string
+	<code>lpszStart/code>.
+
+	@param lpszStart
+		Beginning of the string
+	@param lpszTextPos
+		Position in the string
+	@param lpszEnd
+		End of string
+	@param lpszPairStrEnd
+		End of found string, NULL if not found.
+	@param nPairIdx    
+		Found string index
+	@param nPairDir
+		Found string direction: DIRECTION_LEFT or DIRECITON_RIGHT    
+
+	@return TRUE if some pair string have been found.
+  */
+  virtual BOOL WhatPairStartsAt( LPCTSTR lpszStart, LPCTSTR lpszTextPost, LPCTSTR lpszEnd, 
+																	LPCTSTR &lpszPairStrEnd, int &nPairIdx, int &nPairDir );
+ 
+	/** Return the index of found pair string that ends at <code>lpszTextPost</code> position in the string
+	<code>lpszStart</code>
+
+	@param lpszStart
+		Beginning of the string
+	@param lpszTextPos
+		Position in the string
+	@param lpszEnd
+		End of string
+	@param lpszPairStrStart
+		Start of found string, NULL if not found.
+	@param nPairIdx    
+		Found string index
+	@param nPairDir
+		Found string direction: DIRECTION_LEFT or DIRECITON_RIGHT   
+
+	@return TRUE if some pair string have been found.
+  */
+	virtual BOOL WhatPairEndsAt( LPCTSTR lpszStart, LPCTSTR lpszTextPos, 
+															 LPCTSTR &lpszPairStrStart, int &nPairIdx, int &nPairDir );
+
+	/**Searches for pair string in given block. The search stops if <code>nNthOpenPais</code> decreses to zero 
+	or <code>nNthOpenPais</code> equals to <code>PAIR_NONE</code> and aStackPair stack becomes empty.  
+
+	@param lpszLine
+		Line string, only for computing position in line
+	@param lpszFrom
+		Begining of the block (inclusive). It can be grater than lpszTo, it depends on <code>nDirection<c/ode>
+	@param lpszTo
+		End of the block (inclusive)
+	@param nFoundStrStart 
+		Start of string if found 
+	@param nFoundStrEnd 
+		End of string if found  
+	@param nDirection
+		Search direction: DIRECTION_LEFT or DIRECITON_RIGHT    
+	@param aPairStack
+		Stack of found and opened pairs
+	@param nNthOpenPair    
+		Number of open pairs that have to be skiped before stopping. 
+		Only pairs with opposite direction than <code>nDireciton</code> does matter.
+
+	@param result
+		FALSE if an error occures, the string that din't have pair is at the top of the stack
+        
+	@return     
+		FALSE if the search should continue on the next/previous block
+  */
+	virtual BOOL FindPairInBlock( LPCTSTR lpszLine, LPCTSTR lpszFrom, LPCTSTR lpszTo, 
+																long nLineIndex, int nDirection, CPairStack &aPairStack, int &nNthOpenPair, 
+																long &nFoundStrStart, long &nFoundStrEnd, BOOL &result );
+
+
 // overridables
 public:
 	/**
@@ -211,6 +299,28 @@ public:
 	*/
 	virtual void NextWord( int nLineIndex, int &nStartPos, int &nEndPos );
 
+	/**Searches for pair string at given line. The search stops if <code>nNthOpenPais</code> decreses to zero 
+	or <code>nNthOpenPais</code> equals to <code>PAIR_NONE</code> and aStackPair stack becomes empty.  
+
+	See base class declaration for parameter description.
+        
+	@return     
+		FALSE if the search should continue on the next/previous line
+  */
+	virtual BOOL FindPairInLine( LPCTSTR lpszLine, LPCTSTR lpszLineEnd, CCrystalTextBlock *pTextBlock, long nLineIndex, 
+												int nDirection, LPCTSTR lpszTextPos, CPairStack &aPairStack, int &nNthOpenPair, 
+												long &nFoundStrStart, long &nFoundStrEnd, BOOL &result );
+
+	/**Returns TRUE if some pair ends at ptTextPos.
+    
+	See base class declaration for parameter description.
+
+	@return TRUE if some pair ends at ptTextPos.
+  */
+	virtual BOOL IsEndOfPairAt( LPCTSTR lpszLine, LPCTSTR lpszTextPos, CCrystalTextBlock const*const pTextBlock, 
+															long &nPairStrStart, int &nPairIdx, int &nPairDir );
+
+	
 // attributes
 protected:
 	enum tagCookies {
@@ -218,8 +328,15 @@ protected:
 		verbStar = verb << 1,
 		inlineMath = verbStar << 1
 	};
+
+private:
+	//Array of pair strings (e.g. various brackets).
+	static const int s_nPairs;
+	static LPCTSTR const s_pptszPairs[][2];     //initialization written in cpp file
 };
 
+
+  
 // Inline-Methods
 inline 
 BOOL CLatexParser::IsCmdAt( LPCTSTR lpText, LPCTSTR lpPos )

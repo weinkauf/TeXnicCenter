@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:35+02  sven_wiegand
 * Initial revision
 *
@@ -77,3 +80,28 @@ BOOL CCrystalTextBlock::Add( int nCharPos, int nColorIndex )
 
 	return TRUE;
 }
+
+BOOL CCrystalTextBlock::ClearBlocksFrom( int nIndex )
+{
+		int result = nIndex - m_rnActualItems;
+		if ( result < 0 )
+			result = 0;
+
+		m_rnActualItems = (nIndex > m_rnActualItems) ? m_rnActualItems : nIndex ; 
+		return result;
+}
+
+void CCrystalTextBlock::GetBlockAt( int nIndex, int &nCharPos, int &nColorIndex ) const
+{
+	ASSERT( nIndex < m_rnActualItems );
+
+	nCharPos = m_pTextBlock[nIndex].m_nCharPos;
+	nColorIndex = m_pTextBlock[nIndex].m_nColorIndex; 
+}
+
+
+int CCrystalTextBlock::GetBlocksCount() const
+{
+	return m_rnActualItems;
+}
+
