@@ -15,7 +15,7 @@
 #include <afxwin.h>         // MFC core and standard components
 #include <afxext.h>         // MFC extensions
 
-#include "bcgcb.h"			// BCGControlBar includes
+#include <bcgcb.h>			// BCGControlBar includes
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
