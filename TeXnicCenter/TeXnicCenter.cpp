@@ -472,7 +472,19 @@ int CTeXnicCenterApp::ExitInstance()
 {
 	// Shutdown background thread
 	if ( m_pBackgroundThread )
-		m_pBackgroundThread->PostThreadMessage(WM_QUIT, 0, 0);
+	{
+		m_pBackgroundThread->m_bAutoDelete = FALSE;
+		m_pBackgroundThread->PostThreadMessage( WM_QUIT, 0, 0 );
+		DWORD dwError;
+		do {
+			// Wait for the thread to terminate
+			Sleep(0);
+			::GetExitCodeThread( m_pBackgroundThread->m_hThread, &dwError );
+		} while ( dwError == STILL_ACTIVE );
+
+		delete m_pBackgroundThread;
+		m_pBackgroundThread = NULL;
+	}
 
 	if( m_pMDIFrameManager )
 		delete m_pMDIFrameManager;
