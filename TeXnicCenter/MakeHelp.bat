@@ -1,5 +1,6 @@
 @echo off
 REM -- Zuerst Zuordnungsdatei der mit Microsoft Visual C++ erzeugten resource.h erstellen
+REM -- First, create TeXnicCenter.hm from the Microsoft Visual C++ resource.h file
 echo // Von MAKEHELP.BAT erzeugte Hilfe-Zuordnungsdatei. Wird verwendet von TEXNICCENTER.HPJ. >"hlp\TeXnicCenter.hm"
 echo. >>"hlp\TeXnicCenter.hm"
 echo // Befehle (ID_* und IDM_*) >>"hlp\TeXnicCenter.hm"
@@ -17,9 +18,10 @@ echo. >>"hlp\TeXnicCenter.hm"
 echo // Rahmen-Steuerelemente (IDW_*) >>"hlp\TeXnicCenter.hm"
 makehm IDW_,HIDW_,0x50000 resource.h >>"hlp\TeXnicCenter.hm"
 REM -- Hilfe erstellen für Projekt TEXNICCENTER
-
+REM -- Create help files for TEXNICCENTER project
 
 echo Erstelle Win32-Hilfedateien
+echo Creating Win32 help files
 start /wait hcw /C /E /M "hlp\TeXnicCenter.hpj"
 if errorlevel 1 goto :Error
 if not exist "hlp\TeXnicCenter.hlp" goto :Error
@@ -34,6 +36,6 @@ goto :done
 
 :Error
 echo hlp\TeXnicCenter.hpj(1) : Fehler: Problem beim Erstellen der Hilfedatei festgestellt
-
+echo hlp\TeXnicCenter.hpj(1) : Error: Problem creating help files
 :done
 echo.
