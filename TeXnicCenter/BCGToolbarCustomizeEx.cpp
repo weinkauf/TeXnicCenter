@@ -34,14 +34,68 @@
 
 #include "stdafx.h"
 #include "texniccenter.h"
+#include "UserToolAdvDlg.h"
+
+
 #include "BCGToolbarCustomizeEx.h"
-#include "UserTool.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// CBCGToolbarCustomizeExAdvBtn
+
+CBCGToolbarCustomizeExAdvBtn::CBCGToolbarCustomizeExAdvBtn()
+:pTool(NULL)
+{
+}
+
+CBCGToolbarCustomizeExAdvBtn::~CBCGToolbarCustomizeExAdvBtn()
+{
+}
+
+
+BEGIN_MESSAGE_MAP(CBCGToolbarCustomizeExAdvBtn, CButton)
+	//{{AFX_MSG_MAP(CBCGToolbarCustomizeExAdvBtn)
+	ON_CONTROL_REFLECT(BN_CLICKED, OnClicked)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CBCGToolbarCustomizeExAdvBtn message handlers
+
+void CBCGToolbarCustomizeExAdvBtn::OnClicked() 
+{
+	ASSERT_VALID(pTool);
+
+	//Open Dialog
+	CUserToolAdvDlg AdvDlg;
+	AdvDlg.m_bUseOutputWindow = pTool->m_bUseOutputWindow;
+	AdvDlg.m_bPromptForArguments = pTool->m_bPromptForArguments;
+	AdvDlg.m_bCloseConsoleWindow = pTool->m_bCloseConsoleWindow;
+	AdvDlg.m_strInputFile = pTool->m_strInputFile;
+	AdvDlg.m_strOutputFile = pTool->m_strOutputFile;
+
+	if (AdvDlg.DoModal() == IDOK)
+	{
+		pTool->m_bUseOutputWindow = AdvDlg.m_bUseOutputWindow;
+		pTool->m_bPromptForArguments = AdvDlg.m_bPromptForArguments;
+		pTool->m_bCloseConsoleWindow = AdvDlg.m_bCloseConsoleWindow;
+		pTool->m_strInputFile = AdvDlg.m_strInputFile;
+		pTool->m_strOutputFile = AdvDlg.m_strOutputFile;
+	}
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// CBCGToolbarCustomizeEx
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -73,16 +127,52 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CBCGToolbarCustomizeEx message handlers
 
-void CBCGToolbarCustomizeEx::OnInitToolsPage ()
+void CBCGToolbarCustomizeEx::OnInitToolsPage()
 {
 	ASSERT_VALID (m_pToolsPage);
 
+	///////////////////////////////////////////////////////
+	// PAINTING THE DIALOG...
+	///////////////////////////////////////////////////////
+
 	CRect rectTemp;
 
-//	m_pToolsPage->m_wndToolsList.GetClientRect(rectTemp);
-//	m_pToolsPage->m_wndToolsList.SetWindowPos(NULL, 0, 0,
-//							rectTemp.right, rectTemp.bottom - 20,
-//							SWP_NOMOVE | SWP_FRAMECHANGED);
+	////////////////////////////////////////////
+	// Resizing the list
+	// - to get space for new controls
+	m_pToolsPage->m_wndToolsList.GetClientRect(rectTemp);
+
+	CListCtrl* pListCtrl = m_pToolsPage->m_wndToolsList.m_pWndList;
+	ASSERT_VALID(pListCtrl);
+	//Calc the size of the list for 5 items and 1 header
+	CSize sizeViewRect = pListCtrl->ApproximateViewRect(rectTemp.Size(), 6);
+	//Difference
+	int nListSizeDiff = rectTemp.bottom - sizeViewRect.cy;
+	//Resize the listbox
+	m_pToolsPage->m_wndToolsList.SetWindowPos(NULL, 0, 0,
+							rectTemp.right, sizeViewRect.cy,
+							SWP_NOMOVE | SWP_FRAMECHANGED);
+
+
+	////////////////////////////////////////////
+	// Repositioning other controls
+	// - to get space for new controls
+	CWnd* pWnd = (CWnd*)m_pToolsPage->m_wndToolsList.GetNextWindow();
+	while(pWnd != NULL)
+	{
+		//Reposition Window
+		pWnd->GetWindowRect(rectTemp);
+		m_pToolsPage->ScreenToClient(rectTemp);
+		rectTemp.OffsetRect(0, -nListSizeDiff);
+		pWnd->MoveWindow(rectTemp, true);
+
+		//Next Window
+		pWnd = pWnd->GetNextWindow();
+	}
+
+
+	////////////////////////////////////////////
+	// Replacing unwanted controls by own controls
 
 	//Create and set up the Edit for the arguments
 	m_pToolsPage->m_wndArgumentsEdit.GetWindowRect(rectTemp);
@@ -96,17 +186,9 @@ void CBCGToolbarCustomizeEx::OnInitToolsPage ()
 					m_pToolsPage->m_wndArgumentsEdit.GetStyle(),
 					rectTemp,
 					m_pToolsPage,
-					(UINT)102,
+					(UINT)101,
 					NULL);
 	m_wndTXCArgumentsEdit.SetFont(m_pToolsPage->GetFont());
-
-//	m_wndTXCArgumentsEdit.Create(
-//					m_pToolsPage->m_wndArgumentsEdit.GetStyle(),
-//					rectTemp,
-//					m_pToolsPage,
-//					(UINT)102);
-//	m_wndTXCArgumentsEdit.ModifyStyleEx(0xFFFF, m_pToolsPage->m_wndArgumentsEdit.GetExStyle(),
-//					SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 
 	//Create and set up the Button for the arguments
 	m_pToolsPage->m_wndArgumentsBtn.GetWindowRect(rectTemp);
@@ -115,12 +197,60 @@ void CBCGToolbarCustomizeEx::OnInitToolsPage ()
 					WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON | WS_TABSTOP,
 					rectTemp,
 					m_pToolsPage,
-					101);
+					102);
 	m_wndTXCArgumentsBtn.SetFont(m_pToolsPage->GetFont());
 
-
+	//Attaching the Edit to the Button
 	m_wndTXCArgumentsBtn.AttachEditCtrl(&m_wndTXCArgumentsEdit);
 	m_wndTXCArgumentsBtn.ShowWindow(SW_SHOW);
+
+
+	////////////////////////////////////////////
+	// Creating new controls
+
+	//Getting the font
+	CClientDC dc(m_pToolsPage);
+	CFont* pOldFont = dc.SelectObject(m_pToolsPage->GetFont());
+
+	// The Advanced Button
+	// - getting the position
+	m_pToolsPage->m_wndInitialDirBtn.GetWindowRect(rectTemp);
+	m_pToolsPage->ScreenToClient(rectTemp);
+	rectTemp.OffsetRect(0, rectTemp.bottom - rectTemp.top + 7);
+	CString strAdvBtnText;
+	strAdvBtnText.LoadString(STE_CUSTOMIZE_TOOLS_ADVBTN);
+	CSize sizeAdvBtnLabel = dc.GetTextExtent(strAdvBtnText);
+	rectTemp.left = rectTemp.right - sizeAdvBtnLabel.cx - 10;
+	// - creating it
+	m_wndAdvBtn.Create(strAdvBtnText,
+					WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON | WS_TABSTOP,
+					rectTemp,
+					m_pToolsPage,
+					103);
+	// - set it up
+	m_wndAdvBtn.SetFont(m_pToolsPage->GetFont());
+//	m_wndAdvBtn.ShowWindow(SW_SHOW);
+	m_wndAdvBtn.ShowWindow(SW_HIDE);
+	m_wndAdvBtn.EnableWindow(false);
+
+	// The Advanced Summarize Edit
+	// - getting the position
+	CRect rectListCtrl;
+	pListCtrl->GetWindowRect(rectListCtrl);
+	m_pToolsPage->ScreenToClient(rectListCtrl);
+	rectTemp.right = rectTemp.left - 10;
+	rectTemp.left = rectListCtrl.left;
+	m_wndAdvEdit.Create(ES_READONLY | WS_CHILD | WS_VISIBLE | WS_BORDER,
+					rectTemp,
+					m_pToolsPage,
+					104);
+	m_wndAdvEdit.SetFont(m_pToolsPage->GetFont());
+//	m_wndAdvEdit.ShowWindow(SW_SHOW);
+	m_wndAdvEdit.ShowWindow(SW_HIDE);
+	m_wndAdvEdit.EnableWindow(false);
+
+	//Restoring the font
+	dc.SelectObject(pOldFont);
 }
 
 void CBCGToolbarCustomizeEx::OnBeforeChangeTool(CBCGUserTool* pSelTool)
@@ -152,15 +282,21 @@ void CBCGToolbarCustomizeEx::OnAfterChangeTool(CBCGUserTool* pSelTool)
 		ASSERT_VALID(pTool);
 
 		m_wndTXCArgumentsEdit.SetWindowText(pTool->m_strArguments);
+		m_wndAdvBtn.pTool = pTool;
 
+		//Set advanced description
+		m_wndAdvEdit.SetWindowText(pTool->GetAdvDescription());
 	}
 	else
 	{
 		m_wndTXCArgumentsEdit.SetWindowText(_T(""));
+		m_wndAdvBtn.pTool = NULL;
 	}
 
 	m_wndTXCArgumentsBtn.EnableWindow(pSelTool != NULL);
 	m_wndTXCArgumentsEdit.EnableWindow(pSelTool != NULL);
+//	m_wndAdvBtn.EnableWindow(pSelTool != NULL);
+//	m_wndAdvEdit.EnableWindow(pSelTool != NULL);
 }
 
 void CBCGToolbarCustomizeEx::OnDestroy() 
@@ -203,3 +339,5 @@ BOOL CBCGToolbarCustomizeEx::CheckToolsValidity (const CObList& lstTools)
 	return 	CBCGToolbarCustomize::CheckToolsValidity(lstTools);
 //	return TRUE;
 }
+
+

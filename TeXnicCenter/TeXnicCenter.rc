@@ -901,164 +901,6 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDER MENU DISCARDABLE 
-BEGIN
-    POPUP "IDR_POPUP_PLACEHOLDER"
-    BEGIN
-        MENUITEM "Kompletter Pfad der Hauptdatei", ID_PH_MPATH
-        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung", ID_PH_MBASE
-        MENUITEM "Laufwerksbuchstabe der Hauptdatei mit Doppelpunkt", 
-                                                ID_PH_MROOT
-        MENUITEM "Verzeichnispfad der Hauptdatei", ID_PH_MDIR
-        MENUITEM "Name der Hauptdatei (mit Endung)", ID_PH_MNAME
-        MENUITEM "Titel der Hauptdatei (Name ohne Endung)", ID_PH_MTITLE
-        MENUITEM "Endung der Hauptdatei (ohne führenden Punkt)", 
-                                                ID_PH_MEXTENSION
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad der Hauptdatei ('/' als Trennzeichen)", 
-                                                ID_PH_MSLASHPATH
-        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung ('/' als Trennzeichen)", 
-                                                ID_PH_MSLASHBASE
-        MENUITEM "Verzeichnispfad der Hauptdatei ('/' als Trennzeichen)", 
-                                                ID_PH_MSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad der Hauptdatei (8.3-Format)", ID_PH_MSPATH
-        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung (8.3-Format)", 
-                                                ID_PH_MSBASE
-        MENUITEM "Verzeichnispfad der Hauptdatei (8.3-Format)", ID_PH_MSDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad der Hauptdatei ('/' als Trennzeichen) (8.3-Format)", 
-                                                ID_PH_MSSLASHPATH
-        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung ('/' als Trennzeichen) (8.3-Format)", 
-                                                ID_PH_MSSLASHBASE
-        MENUITEM "Verzeichnispfad der Hauptdatei ('/' als Trennzeichen) (8.3-Format)", 
-                                                ID_PH_MSSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
-    END
-END
-
-IDR_POPUP_PLACEHOLDEREX MENU DISCARDABLE 
-BEGIN
-    POPUP "IDR_POPUP_PLACEHOLDEREX"
-    BEGIN
-        MENUITEM "Kompletter Pfad der Hauptdatei", ID_PH_MPATH
-        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung", ID_PH_MBASE
-        MENUITEM "Laufwerksbuchstabe der Hauptdatei mit Doppelpunkt", 
-                                                ID_PH_MROOT
-        MENUITEM "Verzeichnispfad der Hauptdatei", ID_PH_MDIR
-        MENUITEM "Name der Hauptdatei (mit Endung)", ID_PH_MNAME
-        MENUITEM "Titel der Hauptdatei (Name ohne Endung)", ID_PH_MTITLE
-        MENUITEM "Endung der Hauptdatei (ohne führenden Punkt)", 
-                                                ID_PH_MEXTENSION
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad der Hauptdatei ('/' als Trennzeichen)", 
-                                                ID_PH_MSLASHPATH
-        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung ('/' als Trennzeichen)", 
-                                                ID_PH_MSLASHBASE
-        MENUITEM "Verzeichnispfad der Hauptdatei ('/' als Trennzeichen)", 
-                                                ID_PH_MSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad der Hauptdatei (8.3-Format)", ID_PH_MSPATH
-        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung (8.3-Format)", 
-                                                ID_PH_MSBASE
-        MENUITEM "Verzeichnispfad der Hauptdatei (8.3-Format)", ID_PH_MSDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad der Hauptdatei ('/' als Trennzeichen) (8.3-Format)", 
-                                                ID_PH_MSSLASHPATH
-        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung ('/' als Trennzeichen) (8.3-Format)", 
-                                                ID_PH_MSSLASHBASE
-        MENUITEM "Verzeichnispfad der Hauptdatei ('/' als Trennzeichen) (8.3-Format)", 
-                                                ID_PH_MSSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad des aktiven Dokuments", ID_PH_CPATH
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung", 
-                                                ID_PH_CBASE
-        MENUITEM "Laufwerksbuchstabe des aktiven Dokuments mit Doppelpunkt", 
-                                                ID_PH_CROOT
-        MENUITEM "Verzeichnispfad des aktiven Dokuments", ID_PH_CDIR
-        MENUITEM "Name des aktiven Dokuments (mit Endung)", ID_PH_CNAME
-        MENUITEM "Titel des aktiven Dokuments (Name ohne Endung)", 
-                                                ID_PH_CTITLE
-        MENUITEM "Endung des aktiven Dokuments (ohne führenden Punkt)", 
-                                                ID_PH_CEXTENSION
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ('/' als Trennzeichen)", 
-                                                ID_PH_CSLASHPATH
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung ('/' als Trennzeichen)", 
-                                                ID_PH_CSLASHBASE
-        MENUITEM "Verzeichnispfad des aktiven Dokuments ('/' als Trennzeichen)", 
-                                                ID_PH_CSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad des aktiven Dokuments (8.3-Format)", 
-                                                ID_PH_CSPATH
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung (8.3-Format)", 
-                                                ID_PH_CSBASE
-        MENUITEM "Verzeichnispfad des aktiven Dokuments (8.3-Format)", 
-                                                ID_PH_CSDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ('/' als Trennzeichen) (8.3-Format)", 
-                                                ID_PH_CSSLASHPATH
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung ('/' als Trennzeichen) (8.3-Format)", 
-                                                ID_PH_CSSLASHBASE
-        MENUITEM "Verzeichnispfad des aktiven Dokuments ('/' als Trennzeichen) (8.3-Format)", 
-                                                ID_PH_MSSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Nummer der aktiven Zeile im aktiven Dokument", 
-                                                ID_PH_CLINENR
-        MENUITEM "Markierter Text oder aktives Wort im aktiven Dokument", 
-                                                ID_PH_CSELECTION
-        MENUITEM SEPARATOR
-        MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
-    END
-END
-
-IDR_POPUP_PLACEHOLDER_CURRENTDOC MENU DISCARDABLE 
-BEGIN
-    POPUP "IDR_POPUP_PLACEHOLDER_CURRENTDOC"
-    BEGIN
-        MENUITEM "Kompletter Pfad des aktiven Dokuments", ID_PH_CPATH
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung", 
-                                                ID_PH_CBASE
-        MENUITEM "Laufwerksbuchstabe des aktiven Dokuments mit Doppelpunkt", 
-                                                ID_PH_CROOT
-        MENUITEM "Verzeichnispfad des aktiven Dokuments", ID_PH_CDIR
-        MENUITEM "Name des aktiven Dokuments (mit Endung)", ID_PH_CNAME
-        MENUITEM "Titel des aktiven Dokuments (Name ohne Endung)", 
-                                                ID_PH_CTITLE
-        MENUITEM "Endung des aktiven Dokuments (ohne führenden Punkt)", 
-                                                ID_PH_CEXTENSION
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ('/' als Trennzeichen)", 
-                                                ID_PH_CSLASHPATH
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung ('/' als Trennzeichen)", 
-                                                ID_PH_CSLASHBASE
-        MENUITEM "Verzeichnispfad des aktiven Dokuments ('/' als Trennzeichen)", 
-                                                ID_PH_CSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad des aktiven Dokuments (8.3-Format)", 
-                                                ID_PH_CSPATH
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung (8.3-Format)", 
-                                                ID_PH_CSBASE
-        MENUITEM "Verzeichnispfad des aktiven Dokuments (8.3-Format)", 
-                                                ID_PH_CSDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ('/' als Trennzeichen) (8.3-Format)", 
-                                                ID_PH_CSSLASHPATH
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung ('/' als Trennzeichen) (8.3-Format)", 
-                                                ID_PH_CSSLASHBASE
-        MENUITEM "Verzeichnispfad des aktiven Dokuments ('/' als Trennzeichen) (8.3-Format)", 
-                                                38116
-        MENUITEM SEPARATOR
-        MENUITEM "Nummer der aktiven Zeile im aktiven Dokument", 
-                                                ID_PH_CLINENR
-        MENUITEM "Markierter Text oder aktives Wort im aktiven Dokument", 
-                                                ID_PH_CSELECTION
-        MENUITEM SEPARATOR
-        MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
-    END
-END
-
 IDR_FILEVIEW_FILE MENU DISCARDABLE 
 BEGIN
     POPUP "DUMMY"
@@ -1953,144 +1795,6 @@ BEGIN
                                                 ID_PH_CSELECTION
         MENUITEM SEPARATOR
         MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
-    END
-END
-
-IDR_POPUP_PLACEHOLDEREX_CASC MENU DISCARDABLE 
-BEGIN
-    POPUP "IDR_POPUP_PLACEHOLDEREX_CASC"
-    BEGIN
-        MENUITEM "Kompletter Pfad der Hauptdatei", ID_PH_MPATH
-        MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung", ID_PH_MBASE
-        MENUITEM "Verzeichnispfad der Hauptdatei", ID_PH_MDIR
-        POPUP "Hauptdatei mit weiteren Optionen"
-        BEGIN
-            MENUITEM "Relativer Pfad der Hauptdatei vom Projektverzeichnis aus", 
-                                                    ID_PH_MRELATIVEPATH
-            MENUITEM "Name der Hauptdatei (mit Endung)", ID_PH_MNAME
-            MENUITEM "Titel der Hauptdatei (Name ohne Endung)", ID_PH_MTITLE
-            MENUITEM "Endung der Hauptdatei (ohne führenden Punkt)", 
-                                                    ID_PH_MEXTENSION
-            MENUITEM "Laufwerksbuchstabe der Hauptdatei mit Doppelpunkt", 
-                                                    ID_PH_MROOT
-            MENUITEM SEPARATOR
-            MENUITEM "Kompletter Pfad der Hauptdatei ('/' als Trennzeichen)", 
-                                                    ID_PH_MSLASHPATH
-            MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung ('/' als Trennzeichen)", 
-                                                    ID_PH_MSLASHBASE
-            MENUITEM "Verzeichnispfad der Hauptdatei ('/' als Trennzeichen)", 
-                                                    ID_PH_MSLASHDIR
-            MENUITEM "Relativer Pfad der Hauptdatei ('/' als Trennzeichen)", 
-                                                    ID_PH_MSLASHRELATIVEPATH
-            MENUITEM SEPARATOR
-            MENUITEM "Kompletter Pfad der Hauptdatei (8.3-Format)", 
-                                                    ID_PH_MSPATH
-            MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung (8.3-Format)", 
-                                                    ID_PH_MSBASE
-            MENUITEM "Verzeichnispfad der Hauptdatei (8.3-Format)", 
-                                                    ID_PH_MSDIR
-            MENUITEM "Relativer Pfad der Hauptdatei (8.3-Format)", 
-                                                    ID_PH_MSHORTRELATIVEPATH
-            MENUITEM SEPARATOR
-            MENUITEM "Kompletter Pfad der Hauptdatei ('/' als Trennzeichen) (8.3-Format)", 
-                                                    ID_PH_MSSLASHPATH
-            MENUITEM "Kompletter Pfad der Hauptdatei ohne Endung ('/' als Trennzeichen) (8.3-Format)", 
-                                                    ID_PH_MSSLASHBASE
-            MENUITEM "Verzeichnispfad der Hauptdatei ('/' als Trennzeichen) (8.3-Format)", 
-                                                    ID_PH_MSSLASHDIR
-            MENUITEM "Relativer Pfad der Hauptdatei ('/' als Trennzeichen) (8.3-Format)", 
-                                                    ID_PH_MSSLASHRELATIVEPATH
-
-        END
-        MENUITEM SEPARATOR
-        MENUITEM "Kompletter Pfad des aktiven Dokuments", ID_PH_CPATH
-        MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung", 
-                                                ID_PH_CBASE
-        MENUITEM "Verzeichnispfad des aktiven Dokuments", ID_PH_CDIR
-        POPUP "Aktives Dokument mit weiteren Optionen"
-        BEGIN
-            MENUITEM "Relativer Pfad des aktiven Dokuments vom Projektverzeichnis aus", 
-                                                    ID_PH_CRELATIVEPATH
-            MENUITEM "Name des aktiven Dokuments (mit Endung)", ID_PH_CNAME
-            MENUITEM "Titel des aktiven Dokuments (Name ohne Endung)", 
-                                                    ID_PH_CTITLE
-            MENUITEM "Endung des aktiven Dokuments (ohne führenden Punkt)", 
-                                                    ID_PH_CEXTENSION
-            MENUITEM "Laufwerksbuchstabe des aktiven Dokuments mit Doppelpunkt", 
-                                                    ID_PH_CROOT
-            MENUITEM SEPARATOR
-            MENUITEM "Kompletter Pfad des aktiven Dokuments ('/' als Trennzeichen)", 
-                                                    ID_PH_CSLASHPATH
-            MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung ('/' als Trennzeichen)", 
-                                                    ID_PH_CSLASHBASE
-            MENUITEM "Verzeichnispfad des aktiven Dokuments ('/' als Trennzeichen)", 
-                                                    ID_PH_CSLASHDIR
-            MENUITEM "Relativer Pfad des aktiven Dokuments ('/' als Trennzeichen)", 
-                                                    ID_PH_CSLASHRELATIVEPATH
-            MENUITEM SEPARATOR
-            MENUITEM "Kompletter Pfad des aktiven Dokuments (8.3-Format)", 
-                                                    ID_PH_CSPATH
-            MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung (8.3-Format)", 
-                                                    ID_PH_CSBASE
-            MENUITEM "Verzeichnispfad des aktiven Dokuments (8.3-Format)", 
-                                                    ID_PH_CSDIR
-            MENUITEM "Relativer Pfad des aktiven Dokuments (8.3-Format)", 
-                                                    ID_PH_CSHORTRELATIVEPATH
-            MENUITEM SEPARATOR
-            MENUITEM "Kompletter Pfad des aktiven Dokuments ('/' als Trennzeichen) (8.3-Format)", 
-                                                    ID_PH_CSSLASHPATH
-            MENUITEM "Kompletter Pfad des aktiven Dokuments ohne Endung ('/' als Trennzeichen) (8.3-Format)", 
-                                                    ID_PH_CSSLASHBASE
-            MENUITEM "Verzeichnispfad des aktiven Dokuments ('/' als Trennzeichen) (8.3-Format)", 
-                                                    ID_PH_MSSLASHDIR
-            MENUITEM "Relativer Pfad des aktiven Dokuments ('/' als Trennzeichen) (8.3-Format)", 
-                                                    ID_PH_CSSLASHRELATIVEPATH
-
-        END
-        MENUITEM SEPARATOR
-        MENUITEM "Nummer der aktiven Zeile im aktiven Dokument", 
-                                                ID_PH_CLINENR
-        MENUITEM "Markierter Text oder aktives Wort im aktiven Dokument", 
-                                                ID_PH_CSELECTION
-        MENUITEM SEPARATOR
-        MENUITEM "Prozentzeichen ('%')",        ID_PH_PERCENT
-        MENUITEM SEPARATOR
-        MENUITEM "Alle Dateien im Projekt (Anführungszeichen)", 
-                                                ID_PHS_ALLPROJECTFILES_Q
-        MENUITEM "Alle geöffneten Dateien (Anführungszeichen)", 
-                                                ID_PHS_ALLOPENEDFILES_Q
-        POPUP "Dateimengen mit weiteren Optionen"
-        BEGIN
-            MENUITEM "Alle TeX-Dateien im Projekt (Anführungszeichen)", 
-                                                    ID_PHS_ALLTEXFILES_Q
-            MENUITEM "Alle BibTeX-Dateien im Projekt (Anführungszeichen)", 
-                                                    ID_PHS_ALLBIBTEXFILES_Q
-            MENUITEM "Alle Grafik-Dateien im Projekt (Anführungszeichen)", 
-                                                    ID_PHS_ALLGRAPHICFILES_Q
-            MENUITEM "Alle von TeXnicCenter automatisch generierten Dateien (Anführungszeichen)", 
-                                                    ID_PHS_ALLTXCFILES_Q
-            MENUITEM "Alle Dateimengen zusammen (Anführungszeichen)", 
-                                                    ID_PHS_ALLFILESETS_Q
-            MENUITEM SEPARATOR
-            MENUITEM "Alle Dateien im Projekt (Anführungszeichen) (relativ)", 
-                                                    ID_PHS_ALLPROJECTFILES_QR
-
-            MENUITEM "Alle geöffneten Dateien (Anführungszeichen) (relativ)", 
-                                                    ID_PHS_ALLOPENEDFILES_QR
-            MENUITEM "Alle TeX-Dateien im Projekt (Anführungszeichen) (relativ)", 
-                                                    ID_PHS_ALLTEXFILES_QR
-            MENUITEM "Alle BibTeX-Dateien im Projekt (Anführungszeichen) (relativ)", 
-                                                    ID_PHS_ALLBIBTEXFILES_QR
-            MENUITEM "Alle Grafik-Dateien im Projekt (Anführungszeichen) (relativ)", 
-                                                    ID_PHS_ALLGRAPHICFILES_QR
-
-            MENUITEM "Alle von TeXnicCenter automatisch generierten Dateien (Anführungszeichen) (relativ)", 
-                                                    ID_PHS_ALLTXCFILES_QR
-            MENUITEM "Alle Dateimengen zusammen (Anführungszeichen) (relativ)", 
-                                                    ID_PHS_ALLFILESETS_QR
-        END
-        MENUITEM SEPARATOR
-        MENUITEM "Dollarzeichen ('$')",         ID_PHS_DOLLAR
     END
 END
 
@@ -3036,6 +2740,29 @@ BEGIN
     LTEXT           "PHErgebnis",IDC_PLACEHOLDER_SET_RESULT,52,142,38,8
 END
 
+IDD_CUSTOMIZE_TOOLS_ADV DIALOG DISCARDABLE  0, 0, 242, 95
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Erweiterte Eigenschaften"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,185,7,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,185,24,50,14
+    LTEXT           "&Eingabeumleitung:",IDC_TITLE_INPUT,7,57,59,8
+    EDITTEXT        IDC_EDIT_PPINPUT,70,54,143,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "",IDC_INSERTPH_PPINPUT,220,54,15,14
+    LTEXT           "A&usgabeumleitung:",IDC_TITLE_OUTPUT,7,78,61,8
+    EDITTEXT        IDC_EDIT_PPOUTPUT,70,74,143,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "",IDC_INSERTPH_PPOUTPUT,220,74,15,14
+    CONTROL         "&Benutze Ausgabefenster",IDC_ADVTOOLS_USEOUTPUT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,7,93,10
+    CONTROL         "&Argumente vor dem Start erfragen",
+                    IDC_ADVTOOLS_PROMPTARG,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,20,122,10
+    CONTROL         "&Fenster nach Beendigung schließen",
+                    IDC_ADVTOOLS_CLOSEWIN,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,35,129,10
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -3218,6 +2945,14 @@ BEGIN
         RIGHTMARGIN, 179
         TOPMARGIN, 7
         BOTTOMMARGIN, 224
+    END
+
+    IDD_CUSTOMIZE_TOOLS_ADV, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 235
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -3709,6 +3444,8 @@ BEGIN
     STE_CURRENTDOC_DESCRIPTION "Aktives Dokument"
     STE_FILECLEAN_INVALIDPATTERN 
                             "Das eingegebene Pattern %s ist nicht erlaubt.\n\nPlatzhalter für Dateimengen ($) dürfen nicht zusammen\nmit Wildcards (*, ?) und Platzhaltern für Dateien (%%) verwendet werden.\n\nDesweiteren dürfen Pattern nicht leer sein."
+    STE_CUSTOMIZE_TOOLS_ADVBTN "Erweitert..."
+    STE_TCP_INVALID         "Dies ist keine gültige Projektdatei."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4838,156 +4575,6 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDER MENU DISCARDABLE 
-BEGIN
-    POPUP "IDR_POPUP_PLACEHOLDER"
-    BEGIN
-        MENUITEM "Main file's full path",       ID_PH_MPATH
-        MENUITEM "Main file's full path without extension", ID_PH_MBASE
-        MENUITEM "Main file's drive letter followed by colon (':')", 
-                                                ID_PH_MROOT
-        MENUITEM "Main file's full directory path", ID_PH_MDIR
-        MENUITEM "Main file's name (with extension)", ID_PH_MNAME
-        MENUITEM "Main file's title (without extension)", ID_PH_MTITLE
-        MENUITEM "Main file's extension",       ID_PH_MEXTENSION
-        MENUITEM SEPARATOR
-        MENUITEM "Main file's full path (using '/' as separator)", 
-                                                ID_PH_MSLASHPATH
-        MENUITEM "Main file's full path without extension (using '/' as separator)", 
-                                                ID_PH_MSLASHBASE
-        MENUITEM "Main file's full directory path (using '/' as separator)", 
-                                                ID_PH_MSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Main file's full path (8.3-format)", ID_PH_MSPATH
-        MENUITEM "Main file's full path without extension (8.3-format)", 
-                                                ID_PH_MSBASE
-        MENUITEM "Main file's full directory path (8.3-format)", ID_PH_MSDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Main file's full path (using '/' as separator) (8.3-format)", 
-                                                ID_PH_MSSLASHPATH
-        MENUITEM "Main file's full path without extension (using '/' as separator) (8.3-format)", 
-                                                ID_PH_MSSLASHBASE
-        MENUITEM "Main file's full directory path (using '/' as separator) (8.3-format)", 
-                                                ID_PH_MSSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
-    END
-END
-
-IDR_POPUP_PLACEHOLDEREX MENU DISCARDABLE 
-BEGIN
-    POPUP "IDR_POPUP_PLACEHOLDEREX"
-    BEGIN
-        MENUITEM "Main file's full path",       ID_PH_MPATH
-        MENUITEM "Main file's full path without extension", ID_PH_MBASE
-        MENUITEM "Main file's drive letter followed by colon (':')", 
-                                                ID_PH_MROOT
-        MENUITEM "Main file's full directory path", ID_PH_MDIR
-        MENUITEM "Main file's name (with extension)", ID_PH_MNAME
-        MENUITEM "Main file's title (without extension)", ID_PH_MTITLE
-        MENUITEM "Main file's extension",       ID_PH_MEXTENSION
-        MENUITEM SEPARATOR
-        MENUITEM "Main file's full path (using '/' as separator)", 
-                                                ID_PH_MSLASHPATH
-        MENUITEM "Main file's full path without extension (using '/' as separator)", 
-                                                ID_PH_MSLASHBASE
-        MENUITEM "Main file's full directory path (using '/' as separator)", 
-                                                ID_PH_MSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Main file's full path (8.3-format)", ID_PH_MSPATH
-        MENUITEM "Main file's full path without extension (8.3-format)", 
-                                                ID_PH_MSBASE
-        MENUITEM "Main file's full directory path (8.3-format)", ID_PH_MSDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Main file's full path (using '/' as separator) (8.3-format)", 
-                                                ID_PH_MSSLASHPATH
-        MENUITEM "Main file's full path without extension (using '/' as separator) (8.3-format)", 
-                                                ID_PH_MSSLASHBASE
-        MENUITEM "Main file's full directory path (using '/' as separator) (8.3-format)", 
-                                                ID_PH_MSSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Current document's full path", ID_PH_CPATH
-        MENUITEM "Current document's full path without extension", 
-                                                ID_PH_CBASE
-        MENUITEM "Current document's drive letter followed by colon (':')", 
-                                                ID_PH_CROOT
-        MENUITEM "Current document's full directory path", ID_PH_CDIR
-        MENUITEM "Current document's name (with extension)", ID_PH_CNAME
-        MENUITEM "Current document's title (without extension)", 
-                                                ID_PH_CTITLE
-        MENUITEM "Current document's extension", ID_PH_CEXTENSION
-        MENUITEM SEPARATOR
-        MENUITEM "Current document's full path (using '/' as separator)", 
-                                                ID_PH_CSLASHPATH
-        MENUITEM "Current document's full path without extension (using '/' as separator)", 
-                                                ID_PH_CSLASHBASE
-        MENUITEM "Current document's full directory path (using '/' as separator)", 
-                                                ID_PH_CSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Current document's full path (8.3-format)", ID_PH_CSPATH
-        MENUITEM "Current document's full path without extension (8.3-format)", 
-                                                ID_PH_CSBASE
-        MENUITEM "Current document's full directory path (8.3-format)", 
-                                                ID_PH_CSDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Current document's full path (using '/' as separator) (8.3-format)", 
-                                                ID_PH_CSSLASHPATH
-        MENUITEM "Current document's full path without extension (using '/' as separator) (8.3-format)", 
-                                                ID_PH_CSSLASHBASE
-        MENUITEM "Current document's full directory path (using '/' as separator) (8.3-format)", 
-                                                ID_PH_CSSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Current document's active line number", ID_PH_CLINENR
-        MENUITEM "Selected text or active word in the current document", 
-                                                ID_PH_CSELECTION
-        MENUITEM SEPARATOR
-        MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
-    END
-END
-
-IDR_POPUP_PLACEHOLDER_CURRENTDOC MENU DISCARDABLE 
-BEGIN
-    POPUP "IDR_POPUP_PLACEHOLDER_CURRENTDOC"
-    BEGIN
-        MENUITEM "Current document's full path", ID_PH_CPATH
-        MENUITEM "Current document's full path without extension", 
-                                                ID_PH_CBASE
-        MENUITEM "Current document's drive letter followed by colon (':')", 
-                                                ID_PH_CROOT
-        MENUITEM "Current document's full directory path", ID_PH_CDIR
-        MENUITEM "Current document's name (with extension)", ID_PH_CNAME
-        MENUITEM "Current document's title (without extension)", 
-                                                ID_PH_CTITLE
-        MENUITEM "Current document's extension", ID_PH_CEXTENSION
-        MENUITEM SEPARATOR
-        MENUITEM "Current document's full path (using '/' as separator)", 
-                                                ID_PH_CSLASHPATH
-        MENUITEM "Current document's full path without extension (using '/' as separator)", 
-                                                ID_PH_CSLASHBASE
-        MENUITEM "Current document's full directory path (using '/' as separator)", 
-                                                ID_PH_CSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Current document's full path (8.3-format)", ID_PH_CSPATH
-        MENUITEM "Current document's full path without extension (8.3-format)", 
-                                                ID_PH_CSBASE
-        MENUITEM "Current document's full directory path (8.3-format)", 
-                                                ID_PH_CSDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Current document's full path (using '/' as separator) (8.3-format)", 
-                                                ID_PH_CSSLASHPATH
-        MENUITEM "Current document's full path without extension (using '/' as separator) (8.3-format)", 
-                                                ID_PH_CSSLASHBASE
-        MENUITEM "Current document's full directory path (using '/' as separator) (8.3-format)", 
-                                                ID_PH_CSSLASHDIR
-        MENUITEM SEPARATOR
-        MENUITEM "Current document's active line number", ID_PH_CLINENR
-        MENUITEM "Selected text or active word in the current document", 
-                                                ID_PH_CSELECTION
-        MENUITEM SEPARATOR
-        MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
-    END
-END
-
 IDR_FILEVIEW_FILE MENU DISCARDABLE 
 BEGIN
     POPUP "DUMMY"
@@ -5867,138 +5454,6 @@ BEGIN
                                                 ID_PH_CSELECTION
         MENUITEM SEPARATOR
         MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
-    END
-END
-
-IDR_POPUP_PLACEHOLDEREX_CASC MENU DISCARDABLE 
-BEGIN
-    POPUP "IDR_POPUP_PLACEHOLDEREX_CASC"
-    BEGIN
-        MENUITEM "Main file's full path",       ID_PH_MPATH
-        MENUITEM "Main file's full path without extension", ID_PH_MBASE
-        MENUITEM "Main file's full directory path", ID_PH_MDIR
-        POPUP "Main file with further options"
-        BEGIN
-            MENUITEM "Main file's relative path starting in project directory", 
-                                                    ID_PH_MRELATIVEPATH
-            MENUITEM "Main file's name (with extension)", ID_PH_MNAME
-            MENUITEM "Main file's title (without extension)", ID_PH_MTITLE
-            MENUITEM "Main file's extension",       ID_PH_MEXTENSION
-            MENUITEM "Main file's drive letter followed by colon (':')", 
-                                                    ID_PH_MROOT
-            MENUITEM SEPARATOR
-            MENUITEM "Main file's full path (using '/' as separator)", 
-                                                    ID_PH_MSLASHPATH
-            MENUITEM "Main file's full path without extension (using '/' as separator)", 
-                                                    ID_PH_MSLASHBASE
-            MENUITEM "Main file's full directory path (using '/' as separator)", 
-                                                    ID_PH_MSLASHDIR
-            MENUITEM "Main file's relative path (using '/' as separator)", 
-                                                    ID_PH_MSLASHRELATIVEPATH
-            MENUITEM SEPARATOR
-            MENUITEM "Main file's full path (8.3-format)", ID_PH_MSPATH
-            MENUITEM "Main file's full path without extension (8.3-format)", 
-                                                    ID_PH_MSBASE
-            MENUITEM "Main file's full directory path (8.3-format)", 
-                                                    ID_PH_MSDIR
-            MENUITEM "Main file's relative path (8.3-format)", 
-                                                    ID_PH_MSHORTRELATIVEPATH
-            MENUITEM SEPARATOR
-            MENUITEM "Main file's full path (using '/' as separator) (8.3-format)", 
-                                                    ID_PH_MSSLASHPATH
-            MENUITEM "Main file's full path without extension (using '/' as separator) (8.3-format)", 
-                                                    ID_PH_MSSLASHBASE
-            MENUITEM "Main file's full directory path (using '/' as separator) (8.3-format)", 
-                                                    38116
-            MENUITEM "Main file's relative path (using '/' as separator) (8.3-format)", 
-                                                    ID_PH_MSSLASHRELATIVEPATH
-
-        END
-        MENUITEM SEPARATOR
-        MENUITEM "Current document's full path", ID_PH_CPATH
-        MENUITEM "Current document's full path without extension", 
-                                                ID_PH_CBASE
-        MENUITEM "Current document's full directory path", ID_PH_CDIR
-        POPUP "Current document with further options"
-        BEGIN
-            MENUITEM "Current document's relative path starting in project directory", 
-                                                    ID_PH_CRELATIVEPATH
-            MENUITEM "Current document's name (with extension)", ID_PH_CNAME
-            MENUITEM "Current document's title (without extension)", 
-                                                    ID_PH_CTITLE
-            MENUITEM "Current document's extension", ID_PH_CEXTENSION
-            MENUITEM "Current document's drive letter followed by colon (':')", 
-                                                    ID_PH_CROOT
-            MENUITEM SEPARATOR
-            MENUITEM "Current document's full path (using '/' as separator)", 
-                                                    ID_PH_CSLASHPATH
-            MENUITEM "Current document's full path without extension (using '/' as separator)", 
-                                                    ID_PH_CSLASHBASE
-            MENUITEM "Current document's full directory path (using '/' as separator)", 
-                                                    ID_PH_CSLASHDIR
-            MENUITEM "Current document's relative path (using '/' as separator)", 
-                                                    ID_PH_CSLASHRELATIVEPATH
-            MENUITEM SEPARATOR
-            MENUITEM "Current document's full path (8.3-format)", 
-                                                    ID_PH_CSPATH
-            MENUITEM "Current document's full path without extension (8.3-format)", 
-                                                    ID_PH_CSBASE
-            MENUITEM "Current document's full directory path (8.3-format)", 
-                                                    ID_PH_CSDIR
-            MENUITEM "Current document's relative path (8.3-format)", 
-                                                    ID_PH_CSHORTRELATIVEPATH
-            MENUITEM SEPARATOR
-            MENUITEM "Current document's full path (using '/' as separator) (8.3-format)", 
-                                                    ID_PH_CSSLASHPATH
-            MENUITEM "Current document's full path without extension (using '/' as separator) (8.3-format)", 
-                                                    ID_PH_CSSLASHBASE
-            MENUITEM "Current document's full directory path (using '/' as separator) (8.3-format)", 
-                                                    ID_PH_CSSLASHDIR
-            MENUITEM "Current document's relative path (using '/' as separator) (8.3-format)", 
-                                                    ID_PH_CSSLASHRELATIVEPATH
-
-        END
-        MENUITEM SEPARATOR
-        MENUITEM "Current document's active line number", ID_PH_CLINENR
-        MENUITEM "Selected text or active word in the current document", 
-                                                ID_PH_CSELECTION
-        MENUITEM SEPARATOR
-        MENUITEM "Percent sign ('%')",          ID_PH_PERCENT
-        MENUITEM SEPARATOR
-        MENUITEM "All files of the project (quoted)", 
-                                                ID_PHS_ALLPROJECTFILES_Q
-        MENUITEM "All opened files (quoted)",   ID_PHS_ALLOPENEDFILES_Q
-        POPUP "File sets with further options"
-        BEGIN
-            MENUITEM "All TeX-files of the project (quoted)", 
-                                                    ID_PHS_ALLTEXFILES_Q
-            MENUITEM "All BibTeX-files of the project (quoted)", 
-                                                    ID_PHS_ALLBIBTEXFILES_Q
-            MENUITEM "All Graphic-files of the project (quoted)", 
-                                                    ID_PHS_ALLGRAPHICFILES_Q
-            MENUITEM "All files generated automatically by TeXnicCenter (quoted)", 
-                                                    ID_PHS_ALLTXCFILES_Q
-            MENUITEM "All file sets together (quoted)", ID_PHS_ALLFILESETS_Q
-            MENUITEM SEPARATOR
-            MENUITEM "All files of the project (quoted) (relative)", 
-                                                    ID_PHS_ALLPROJECTFILES_QR
-
-            MENUITEM "All opened files (quoted) (relative)", 
-                                                    ID_PHS_ALLOPENEDFILES_QR
-            MENUITEM "All TeX-files of the project (quoted) (relative)", 
-                                                    ID_PHS_ALLTEXFILES_QR
-            MENUITEM "All BibTeX-files of the project (quoted) (relative)", 
-                                                    ID_PHS_ALLBIBTEXFILES_QR
-            MENUITEM "All Graphic-files of the project (quoted) (relative)", 
-                                                    ID_PHS_ALLGRAPHICFILES_QR
-
-            MENUITEM "All files generated automatically by TeXnicCenter (quoted) (relative)", 
-                                                    ID_PHS_ALLTXCFILES_QR
-            MENUITEM "All file sets together (quoted) (relative)", 
-                                                    ID_PHS_ALLFILESETS_QR
-        END
-        MENUITEM SEPARATOR
-        MENUITEM "Dollar sign ('$')",           ID_PHS_DOLLAR
     END
 END
 
@@ -6933,6 +6388,27 @@ BEGIN
     LTEXT           "PHErgebnis",IDC_PLACEHOLDER_SET_RESULT,52,142,38,8
 END
 
+IDD_CUSTOMIZE_TOOLS_ADV DIALOG DISCARDABLE  0, 0, 242, 95
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Advanced Properties"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,185,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,185,24,50,14
+    LTEXT           "&Input redirection:",IDC_TITLE_INPUT,7,57,54,8
+    EDITTEXT        IDC_EDIT_PPINPUT,70,54,143,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "",IDC_INSERTPH_PPINPUT,220,54,15,14
+    LTEXT           "&Output redirection:",IDC_TITLE_OUTPUT,7,78,59,8
+    EDITTEXT        IDC_EDIT_PPOUTPUT,70,74,143,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "",IDC_INSERTPH_PPOUTPUT,220,74,15,14
+    CONTROL         "&Use Output Window",IDC_ADVTOOLS_USEOUTPUT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,7,80,10
+    CONTROL         "&Prompt for arguments",IDC_ADVTOOLS_PROMPTARG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,20,83,10
+    CONTROL         "&Close window on exiting",IDC_ADVTOOLS_CLOSEWIN,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,35,91,10
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -7115,6 +6591,14 @@ BEGIN
         RIGHTMARGIN, 179
         TOPMARGIN, 7
         BOTTOMMARGIN, 224
+    END
+
+    IDD_CUSTOMIZE_TOOLS_ADV, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 235
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -7568,6 +7052,8 @@ BEGIN
     STE_CURRENTDOC_DESCRIPTION "Current file"
     STE_FILECLEAN_INVALIDPATTERN 
                             "The pattern %s is invaild.\n\nPlaceholders for file sets ($) may not be used together\nwith wildcards (*, ?) and placeholders for single files (%%).\n\nFurthermore, pattern are not allowed to be empty."
+    STE_CUSTOMIZE_TOOLS_ADVBTN "Advanced..."
+    STE_TCP_INVALID         "This is not a valid project file."
 END
 
 STRINGTABLE DISCARDABLE 
