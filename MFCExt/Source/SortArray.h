@@ -100,17 +100,10 @@ int CSortArray<TYPE, ARG_TYPE>::InsertSorted(
 	ASSERT( nStart >= 0 && nStart < GetSize() );
 	ASSERT( nEnd >= 0 && nEnd < GetSize() );
 
-//	// get position to compare with
-//	int	nLookAt = nStart + (nEnd - nStart) / 2;
-
 	// get position to compare with
-	int	nLookAt;
-	if ( (nEnd - nStart) == 1 )
-		nLookAt = nStart + 1;
-	else
-		nLookAt = nStart + (nEnd - nStart) / 2;
+	int	nLookAt = nStart + (nEnd - nStart) / 2;
 
-	if( nStart == nEnd || (nStart + 1) == nEnd )
+	if( nStart == nEnd )
 	{
 		if( newElement == GetAt( nLookAt ) )
 		{
@@ -144,6 +137,23 @@ int CSortArray<TYPE, ARG_TYPE>::InsertSorted(
 		// we never should reach this point
 		ASSERT( FALSE );
 		return -1;
+	}
+	else if (nStart == (nEnd+1))
+	{
+		if (bSortAscending)
+		{
+			if (newElement <= GetAt(nStart))
+				return InsertSorted(nStart, nStart, newElement, bSortAscending, bAllowDuplicate);
+			else
+				return InsertSorted(nEnd, nEnd, newElement, bSortAscending, bAllowDuplicate);
+		}
+		else
+		{
+			if (newElement <= GetAt(nEnd))
+				return InsertSorted(nEnd, nEnd, newElement, bSortAscending, bAllowDuplicate);
+			else
+				return InsertSorted(nStart, nStart, newElement, bSortAscending, bAllowDuplicate);
+		}
 	}
 	else if( newElement == GetAt( nLookAt ) )
 	{
