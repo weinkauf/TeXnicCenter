@@ -1,3 +1,7 @@
+2005/03/13 niteria
+- Implemented Feature 547432: Auto-Preview after Building Output
+- Added -max-print-line=120 to the compiler options, if mikTeX is installed.
+
 2005/03/12 niteria
 - Fixed Bug 1037280: Failed to create project in WebDav folder
   WebDAV NOT supported at all. I just fixed the crash.
@@ -21,8 +25,8 @@
     highlight current block and pair, help
 
 2005/02/15 vachis 
-- Implemented feature 536164: Matching Bracket Highlight
-- Fixed bug 912103: Syntax highlighting error with "%\verb|"
+- Implemented Feature 536164: Matching Bracket Highlight
+- Fixed Bug 912103: Syntax highlighting error with "%\verb|"
  
 2005/01/04 niteria
 - Reworked focus behavior of the edit window.
