@@ -56,8 +56,6 @@ output types.
 @see COutputWizardMikTex
 @see COutputWizardDistributionPath
 @see COutputWizardViewer
-@see COutputWizardViewer
-@see COutputWizardViewer
 @see COutputWizardFinish
 
 @author Sven Wiegand
