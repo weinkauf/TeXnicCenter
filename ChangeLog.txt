@@ -1,6 +1,7 @@
 2003/12/04 niteria
 - Implemented Feature 852581: TemplateDialogs: Remember last opened tab
 - Fixed bug 852582: TemplateDialogs: Tabs are not ordered alphabetically
+- Fixed Bug 854326: Miktex 2.4 'only for me' installation not recognized
 - Set version info to 1 Beta 6.20
 
 2003/11/15 niteria
