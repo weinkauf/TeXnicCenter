@@ -54,3 +54,17 @@ CString AfxGetDefaultDirectory(bool bForceNonEmpty = true, bool bNewProject = fa
 		Last opened folder
 */
 void AfxSetLastDirectory(CString strLastFolder);
+
+
+/** Parse the current dictionnaries installed
+
+	@param aLanguage
+		Languages installed
+
+	@param aDialect
+		Dialects intalled
+
+	Remark: the files should be properly set (no error handling)
+*/
+void AfxFindDictionnaries(CArray<CString, CString&> &aLanguage, 
+						  CArray<CString, CString&> &aDialect);

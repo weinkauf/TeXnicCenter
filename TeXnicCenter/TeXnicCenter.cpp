@@ -1500,13 +1500,13 @@ MySpell* CTeXnicCenterApp::GetSpeller()
 		// Create dictionary name and path
 		dicName.Format(_T("%s\\%s_%s.dic"),
 			g_configuration.m_strSpellDictionaryPath, 
-			g_configuration.m_strLanuage,
-			g_configuration.m_strLanguageDialect);
+			g_configuration.m_strLanguageDefault,
+			g_configuration.m_strLanguageDialectDefault);
 		// Create affix name and path
 		affName.Format(_T("%s\\%s_%s.aff"),
 			g_configuration.m_strSpellDictionaryPath, 
-			g_configuration.m_strLanuage,
-			g_configuration.m_strLanguageDialect);
+			g_configuration.m_strLanguageDefault,
+			g_configuration.m_strLanguageDialectDefault);
 		try
 		{
 			if ( !::PathFileExists(affName) )

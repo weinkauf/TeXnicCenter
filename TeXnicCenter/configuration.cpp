@@ -98,7 +98,7 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	// Editor settings
 	strSection = "Settings\\Editor";
 
-	if (direction == Load)
+	if(direction == Load)
 	{
 		CFont	font;
 		LOGFONT	logFont;
@@ -165,8 +165,8 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	// Language
 	strSection = _T("Settings\\Language");
 
-	SerializeProfileString( strSection, "Language", &m_strLanuage, direction, AfxLoadString(IDS_LANGUAGE) );
-	SerializeProfileString( strSection, "Dialect", &m_strLanguageDialect, direction, AfxLoadString(IDS_DIALECT) );
+	SerializeProfileString( strSection, "Language", &m_strLanguageDefault, direction, AfxLoadString(IDS_LANGUAGE) );
+	SerializeProfileString( strSection, "Dialect", &m_strLanguageDialectDefault, direction, AfxLoadString(IDS_DIALECT) );
 	SerializeProfileString( strSection, "Locale", &m_strLocale, direction, _T("") );
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

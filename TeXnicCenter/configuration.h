@@ -316,10 +316,10 @@ public:
 	// Language and spelling
 
 	/** Lanuage of the dictionary. */
-	CString m_strLanuage;
+	CString m_strLanguageDefault;
 
 	/** Dialect of the dictionary. */
-	CString m_strLanguageDialect;
+	CString m_strLanguageDialectDefault;
 
 	/** Locale */
 	CString m_strLocale;

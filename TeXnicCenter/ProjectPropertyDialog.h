@@ -65,6 +65,7 @@ protected:
 	afx_msg void OnBrowseMainFile();
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
+	afx_msg void OnSelchangeOptionsLanguage();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -81,6 +82,16 @@ public:
 public:
 	/** project's directory */
 	CString m_strProjectDir;
+
+	CArray<CString, CString&>	m_aLanguage;
+	CArray<CString, CString&>	m_aDialect;
+	CString						m_strLanguageCurrent;
+	CString						m_strDialectCurrent;
+
+
+private:
+	void	FindDictionaries();
+
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -77,7 +77,9 @@ CLatexProject::CLatexProject()
 	m_pwndFileView(NULL),
 	m_bUseBibTex(FALSE),
 	m_bUseMakeIndex(FALSE),
-	m_nInitialNavigatorTab(0)
+	m_nInitialNavigatorTab(0),
+	m_strProjectLanguage(""),
+	m_strProjectDialect("")
 {
 	// initialization
 	// Initialize the control bars and main frame pointer members
@@ -378,34 +380,39 @@ void CLatexProject::Dump(CDumpContext& dc) const
 #endif //_DEBUG
 
 
-#define KEY_FORMATINFO								_T("FormatInfo")
-#define VAL_FORMATINFO_TYPE						_T("Type")
+#define KEY_FORMATINFO						_T("FormatInfo")
+#define VAL_FORMATINFO_TYPE					_T("Type")
 #define VAL_FORMATINFO_VERSION				_T("Version")
 
-#define KEY_PROJECTINFO								_T("ProjectInfo")
-#define VAL_PROJECTINFO_WORKINGDIR		_T("WorkingDir")
+#define KEY_PROJECTINFO						_T("ProjectInfo")
+#define VAL_PROJECTINFO_WORKINGDIR			_T("WorkingDir")
 #define VAL_PROJECTINFO_MAINFILE			_T("MainFile")
 #define VAL_PROJECTINFO_USEBIBTEX			_T("UseBibTeX")
-#define VAL_PROJECTINFO_USEMAKEINDEX	_T("UseMakeIndex")
-#define VAL_PROJECTINFO_ACTIVEPROFILE	_T("ActiveProfile")
+#define VAL_PROJECTINFO_USEMAKEINDEX		_T("UseMakeIndex")
+#define VAL_PROJECTINFO_ACTIVEPROFILE		_T("ActiveProfile")
+
+#define VAL_PROJECTINFO_PLANGUAGE			_T("ProjectLanguage")
+#define VAL_PROJECTINFO_PDIALECT			_T("ProjectDialect")
 
 #define CURRENTFORMATVERSION				3
-#define	FORMATTYPE									_T("TeXnicCenterProjectInformation")
+#define	FORMATTYPE							_T("TeXnicCenterProjectInformation")
 
 BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
 {
 	if( bWrite )
 	{
 		// setting format information
-		ini.SetValue( KEY_FORMATINFO, VAL_FORMATINFO_TYPE, FORMATTYPE );
-		ini.SetValue( KEY_FORMATINFO, VAL_FORMATINFO_VERSION, CURRENTFORMATVERSION );
+		ini.SetValue( KEY_FORMATINFO, VAL_FORMATINFO_TYPE,				FORMATTYPE );
+		ini.SetValue( KEY_FORMATINFO, VAL_FORMATINFO_VERSION,			CURRENTFORMATVERSION );
 
 		// setting project information
-		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_MAINFILE, CPathTool::GetRelativePath(GetProjectDir(), m_strMainPath));
-		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEBIBTEX, (int)m_bUseBibTex);
-		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEMAKEINDEX, (int)m_bUseMakeIndex);
-		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_ACTIVEPROFILE, g_ProfileMap.GetActiveProfileKey());
+		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_MAINFILE,			CPathTool::GetRelativePath(GetProjectDir(), m_strMainPath));
+		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEBIBTEX,		(int)m_bUseBibTex);
+		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEMAKEINDEX,		(int)m_bUseMakeIndex);
+		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_ACTIVEPROFILE,	g_ProfileMap.GetActiveProfileKey());
 
+		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_PLANGUAGE,		m_strProjectLanguage);
+		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_PDIALECT,			m_strProjectDialect);
 		return TRUE;
 	}
 	else
@@ -428,8 +435,11 @@ BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
 		if (nVersion > 1)
 			m_strMainPath = CPathTool::Cat(GetProjectDir(), m_strMainPath);
 
-		m_bUseBibTex = ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEBIBTEX, FALSE);
-		m_bUseMakeIndex = ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEMAKEINDEX, FALSE);
+		m_bUseBibTex			= ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEBIBTEX,		FALSE);
+		m_bUseMakeIndex			= ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEMAKEINDEX,	FALSE);
+		// Raffi: added project specific language handling
+		m_strProjectLanguage	= ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_PLANGUAGE,		g_configuration.m_strLanguageDefault);
+		m_strProjectDialect		= ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_PDIALECT,		g_configuration.m_strLanguageDialectDefault);
 
 		if (nVersion > 2)
 		{
@@ -459,18 +469,18 @@ BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
 #undef FORMATTYPE
 
 
-#define KEY_FORMATINFO									_T("FormatInfo")
-#define VAL_FORMATINFO_TYPE							_T("Type")
+#define KEY_FORMATINFO							_T("FormatInfo")
+#define VAL_FORMATINFO_TYPE						_T("Type")
 #define VAL_FORMATINFO_VERSION					_T("Version")
 
-#define KEY_SESSIONINFO									_T("SessionInfo")
+#define KEY_SESSIONINFO							_T("SessionInfo")
 #define VAL_SESSIONINFO_ACTIVETAB				_T("ActiveTab")
-#define VAL_SESSIONINFO_FRAMECOUNT			_T("FrameCount")
+#define VAL_SESSIONINFO_FRAMECOUNT				_T("FrameCount")
 
-#define KEY_FRAMEINFO										_T("Frame%d")
+#define KEY_FRAMEINFO							_T("Frame%d")
 
-#define CURRENTFORMATVERSION						1
-#define	FORMATTYPE											_T("TeXnicCenterProjectSessionInformation")
+#define CURRENTFORMATVERSION					1
+#define	FORMATTYPE								_T("TeXnicCenterProjectSessionInformation")
 
 void CLatexProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 {
@@ -651,26 +661,37 @@ CString CLatexProject::GetWorkingDir() const
 
 void CLatexProject::OnProjectProperties() 
 {
-	CProjectPropertyDialog	dlg( theApp.m_pMainWnd );
-	dlg.m_strProjectDir = GetProjectDir();
-	dlg.m_strMainFile = m_strMainPath;
-	dlg.m_bUseBibTex = m_bUseBibTex;
-	dlg.m_bUseMakeIndex = m_bUseMakeIndex;
+	CProjectPropertyDialog	dlg(theApp.m_pMainWnd);
+	dlg.m_strProjectDir		= GetProjectDir();
+	dlg.m_strMainFile		= m_strMainPath;
+	dlg.m_bUseBibTex		= m_bUseBibTex;
+	dlg.m_bUseMakeIndex		= m_bUseMakeIndex;
+	dlg.m_strLanguageCurrent= m_strProjectLanguage;
+	dlg.m_strDialectCurrent	= m_strProjectDialect;
 
-	if( dlg.DoModal() != IDOK )
+	if(dlg.DoModal() != IDOK )
 		return;
 
-	if (
-		m_strMainPath != dlg.m_strMainFile ||
-		m_bUseBibTex != dlg.m_bUseBibTex ||
-		m_bUseMakeIndex != dlg.m_bUseMakeIndex)
+	if (m_strMainPath			!= dlg.m_strMainFile	||
+		m_bUseBibTex			!= dlg.m_bUseBibTex		||
+		m_bUseMakeIndex			!= dlg.m_bUseMakeIndex)
 	{
 		SetModifiedFlag();
 	}
 
-	m_strMainPath = dlg.m_strMainFile;
-	m_bUseBibTex = dlg.m_bUseBibTex;
+	if(	m_strProjectLanguage	!= dlg.m_strLanguageCurrent	||
+		m_strProjectDialect		!= dlg.m_strDialectCurrent)
+	{
+		SetModifiedFlag();
+		// TO DO: restart the speller on the new language
+	}
+
+
+	m_strMainPath	= dlg.m_strMainFile;
+	m_bUseBibTex	= dlg.m_bUseBibTex;
 	m_bUseMakeIndex = dlg.m_bUseMakeIndex;
+	m_strProjectLanguage	= dlg.m_strLanguageCurrent;
+	m_strProjectDialect		= dlg.m_strDialectCurrent;
 }
 
 
