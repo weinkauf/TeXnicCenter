@@ -50,21 +50,22 @@ public:
 // static
 public:
 	/**
-	Replaces the place holders in lpszText with the path lpszPath.
+	@brief Replaces the place holders in lpszText with the path lpszPath.
 
-	Place holders are having the following syntax: %[s]<p>, where
-	[s] means, that the real place holder <p> can (but not must) be
+	Place holders are having the following syntax: %[s]\<p\>, where
+	[s] means, that the real place holder \<p\> can (but not must) be
 	prefixed by an 's', which has the effect, that the real place
-	holder <p> will be interpreted in 8.3-format (short path names).
+	holder \<p\> will be interpreted in 8.3-format (short path names).
 
 	To get a '%', insert "%%".
 
-	Valid characters for <p> are:
+	Valid characters for \<p\> are:
 	<ul>
 		<li><b>%p</b> Full path.
 		<li><b>%b</b> Base path -- full path without file extension.
 		<li><b>%r</b> Drive letter including colon (':').
-		<li><b>%d</b> Directory of the path.
+		<li><b>%d</b> Directory of the path (excluding last backslash 
+			('\\')) (i.e. "C:\\MyFiles\\Text.txt" would result in "C:\\MyFiles").
 		<li><b>%n</b> Full file name (including extension).
 		<li><b>%t</b> Title of the file (name without extension)
 		<li><b>%e</b> File extension.
@@ -74,18 +75,22 @@ public:
 	</ul>
 
 	If the text "app.exe %D/otherFile.%e" and the path
-	"C:\Temp\MyFile\test.txt" would be specified, the result would be
+	"C:\\Temp\\MyFile\\text.txt"
+	would be specified, the result would be
 	"C:/Temp/otherFile.txt".
 
 	If the text "%sp" and the path 
-	"C:\Program Files\SomeApp\Application.exe" would be specified, the
-	result would be "C:\Progra~1\SomeApp\Applic~1.exe".
+	"C:\\Program Files\\SomeApp\\Application.exe"
+	would be specified, the	result would be
+	"C:\\Progra~1\\SomeApp\\Applic~1.exe".
 	*/
 	static CString Format( LPCTSTR lpszText, LPCTSTR lpszPath );
 
 	/**
+	@brief Catenates two path descriptions. 
+	
 	Catenates two path descriptions by ensuring, that there is exactly
-	one Backslash ('\') between the both pathts, no matter, if 
+	one Backslash ('\\') between the both paths, no matter, if 
 	lpszBasePath already ends with a backslash or lpszPath already
 	starts with a backslash.
 
@@ -100,10 +105,13 @@ public:
 	static CString Cat( LPCTSTR lpszBasePath, LPCTSTR lpszPath );
 
 	/**
-	Returns the drive letter (including the colon (':')) of the path or 
-	an empty string, if there	is no drive letter in the path.
+	@brief Returns the drive letter of the path.
 
-	Example: Would return "C:" for "C:\MyFiles\Test.txt".
+	Returns the drive letter (including the colon (':')) of the path or 
+	an empty string, if there is no drive letter in the path.
+
+	Example: Would return "C:" for 
+	"C:\\MyFiles\\Text.txt".
 
 	@param lpszPath
 		Path to analyze.
@@ -111,9 +119,9 @@ public:
 	static CString GetDrive( LPCTSTR lpszPath );
 
 	/**
-	Returns the directory of the path.
+	@brief Returns the directory of the path.
 
-	Example: Would return "C:\MyFiles" for "C:\MyFiles\Text.txt".
+	Example: Would return "C:\\MyFiles" for "C:\\MyFiles\\Text.txt".
 
 	@param lpszPath
 		Path to analyze.
@@ -121,9 +129,9 @@ public:
 	static CString GetDirectory( LPCTSTR lpszPath );
 
 	/**
-	Returns the directory excluding the drive.
+	@brief Returns the directory excluding the drive.
 
-	Example: Would return "MyFiles" for "C:\MyFiles\Text.txt".
+	Example: Would return "MyFiles" for "C:\\MyFiles\\Text.txt".
 
 	@param lpszPath
 		Path to analyze.
@@ -131,9 +139,9 @@ public:
 	static CString GetDirectoryWithoutDrive( LPCTSTR lpszPath );
 
 	/**
-	Returns the complete path without file extension.
+	@brief Returns the complete path without file extension.
 
-	Example: Would return "C:\MyFiles\Text" for "C:\MyFiles\Text.txt".
+	Example: Would return "C:\\MyFiles\\Text" for "C:\\MyFiles\\Text.txt".
 
 	@param lpszPath
 		Path to return the base of.
@@ -141,9 +149,9 @@ public:
 	static CString GetBase( LPCTSTR lpszPath );
 
 	/**
-	Returns the file of the path.
+	@brief Returns the file of the path.
 
-	Example: Would return "Test.txt" for "C:\MyFiles\Test.txt".
+	Example: Would return "Text.txt" for "C:\\MyFiles\\Text.txt".
 
 	@param lpszPath
 		Path to analyze.
@@ -151,9 +159,9 @@ public:
 	static CString GetFile( LPCTSTR lpszPath );
 
 	/**
-	Returns the file extension of the path without the dot ('.').
+	@brief Returns the file extension of the path without the dot ('.').
 
-	Example: Would return "txt" for "C:\MyFiles\Test.txt".
+	Example: Would return "txt" for "C:\\MyFiles\\Text.txt".
 
 	@param lpszPath
 		Path to analyze.
@@ -161,11 +169,11 @@ public:
 	static CString GetFileExtension( LPCTSTR lpszPath );
 
 	/**
-	Returns the file title of the path.
+	@brief Returns the file title of the path.
 
-	The file title ist the file without the extension.
+	The file title is the file without the extension.
 
-	Example: Would return "Test" for "C:\MyFiles\Test.txt".
+	Example: Would return "Text" for "C:\\MyFiles\\Text.txt".
 
 	@param lpszPath
 		Path to analyze.
@@ -173,13 +181,15 @@ public:
 	static CString GetFileTitle( LPCTSTR lpszPath );
 
 	/**
+	@brief Returns the path in the old 8.3-format.
+	
 	Returns the path in the old 8.3-format or an empty string, if the
 	function failed.
 
-	Example: Would return "C:\Progra~1\TestAp~1.exe" for
-	"C:\Program Files\TestApplication.exe"
+	Example: Would return "C:\\Progra~1\\TestAp~1.exe" for
+	"C:\\Program Files\\TestApplication.exe"
 
-	<b>Remark:</b> The specified file or directory must exist!
+	@remark The specified file or directory must exist!
 
 	@param lpszPath
 		Path to convert to 8.3-format. The path must exist.
@@ -187,13 +197,15 @@ public:
 	static CString GetShortPath( LPCTSTR lpszPath );
 
 	/**
+	@brief Converts the given 8.3-format path to a long path.
+	
 	Converts the given 8.3-format path to a long path (elements can
 	be longer than eight characters).
 
-	Example: Would return "C:\Program Files\TestApplication.exe" for
-	"C:\Progra~1\TestAp~1.exe"
+	Example: Would return "C:\\Program Files\\TestApplication.exe" for
+	"C:\\Progra~1\\TestAp~1.exe"
 
-	<b>Remark:</b> The specified file or directory must exist!
+	@remark The specified file or directory must exist!
 
 	@param lpszPath
 		Path to convert from 8.3-format. The path must exist.
@@ -201,11 +213,13 @@ public:
 	static CString GetLongPath( LPCTSTR lpszPath );
 
 	/**
-	Returns the path with slashes ('/') as path speperators instead
-	of backslashes ('\'). Leaves the path unchanged, if slashes are
-	already used as seperators.
+	@brief Returns the path with forward slashes.
+
+	Returns the path with slashes ('/') as path separators instead
+	of backslashes ('\\'). Leaves the path unchanged, if slashes are
+	already used as separators.
 	
-	Example: Would return "C:/MyFiles/Test.txt" for "C:\MyFiles\Test.txt"
+	Example: Would return "C:/MyFiles/Text.txt" for "C:\\MyFiles\\Text.txt"
 
 	@param lpszPath
 		Path to convert.
@@ -213,11 +227,13 @@ public:
 	static CString GetSlashPath( LPCTSTR lpszPath );
 
 	/**
-	Returns the path with backslashes ('\') as path speperators instead
+	@brief Returns the path with backslashes.
+
+	Returns the path with backslashes ('\\') as path speperators instead
 	of slashes ('/'). Leaves the path unchanged, if backslashes are
 	already used as seperators.
 	
-	Example: Would return "C:\MyFiles\Test.txt" for "C:/MyFiles/Test.txt"
+	Example: Would return "C:\\MyFiles\\Text.txt" for "C:/MyFiles/Text.txt"
 
 	@param lpszPath
 		Path to convert.
@@ -225,10 +241,10 @@ public:
 	static CString GetBackslashPath( LPCTSTR lpszPath );
 
 	/**
-	Returns a path that describes the position of lpszFrom path
+	@brief Returns a path that describes the position of lpszFrom path
 	relative to lpszTo.
 
-	Remarks: The specified paths do not need to exist really.
+	@remark The specified paths do not need to exist really.
 
 	@param lpszFrom
 		Path from where the relative path to lpszTo should be generated.
@@ -242,10 +258,10 @@ public:
 	static CString GetRelativePath( LPCTSTR lpszFrom, LPCTSTR lpszTo, BOOL bFromIsDir, BOOL bToIsDir );
 
 	/**
-	Returns a path that describes the position of lpszFrom path
+	@brief Returns a path that describes the position of lpszFrom path
 	relative to lpszTo.
 
-	Remarks: The specified paths must exist, otherwise an empty string
+	@remark The specified paths must exist, otherwise an empty string
 	is returned.
 
 	@param lpszFrom
@@ -256,46 +272,48 @@ public:
 	static CString GetRelativePath( LPCTSTR lpszFrom, LPCTSTR lpszTo );
 
 	/**
-	Returns TRUE, if the specified path really exists in the file 
+	@brief Returns TRUE, if the specified path really exists in the file 
 	system.
 
-	Remarks: If you do not specify a whole path (including drive), the
+	@remark If you do not specify a whole path (including drive), the
 	result depends on the current directory.
 	*/
 	static BOOL Exists( LPCTSTR lpszPath );
 
 	/**
-	Returns TRUE if the specified path is just a drive.
+	@brief Returns TRUE if the specified path is just a drive.
 
-	Remarks: The function only tries to determine the result out of the 
+	@remark The function only tries to determine the result out of the 
 	name, it does not check, if the specified path really exists and
 	if it is of the specified type.
 
 	Example: Would return TRUE for "C:", "A:", etc.
-	Would return FALSE for "C:\MyFiles\Test.txt", "Test.txt", etc.
+	Would return FALSE for "C:\\MyFiles\\Text.txt", "Text.txt", etc.
 	*/
 	static BOOL IsDrive( LPCTSTR lpszPath );
 
 	/**
-	Returns TRUE if the specified path really exists in the file system
+	@brief Returns TRUE if the specified path really exists in the file system
 	and if it is a directory.
 
-	Remarks: If you do not specify a whole path (including drive), the
+	@remark If you do not specify a whole path (including drive), the
 	result depends on the current directory.
+
+	@bug Does not return TRUE for diskette drives like "A:" !!!
 	*/
 	static BOOL IsDirectory( LPCTSTR lpszPath );
 
 	/**
-	Returns TRUE if the specified path really exists in the file system
+	@brief Returns TRUE if the specified path really exists in the file system
 	and if it is a file.
 
-	Remarks: If you do not specify a whole path (including drive), the
+	@remark If you do not specify a whole path (including drive), the
 	result depends on the current directory.
 	*/
 	static BOOL IsFile( LPCTSTR lpszPath );
 
 	/**
-	Returns TRUE, if slashes are used as path separators or FALSE, if
+	@brief Returns TRUE, if slashes are used as path separators or FALSE, if
 	backslashes are used or no separators are in the path.
 
 	@param lpszPath
@@ -329,8 +347,8 @@ public:
 	Converts the path to the old 8.3-format or leaves it unchanged,
 	if it is already in 8.3-format or if the function fails.
 
-	Example: Would convert to "C:\Progra~1\TestAp~1.exe" for
-	"C:\Program Files\TestApplication.exe"
+	Example: Would convert to "C:\\Progra~1\\TestAp~1.exe" for
+	"C:\\Program Files\\TestApplication.exe"
 
 	<b>Remark:</b> The specified file or directory must exist!
 
@@ -343,8 +361,8 @@ public:
 	Converts the path to the long format or leaves it unchanged,
 	if it is already in long format or if the function fails.
 
-	Example: Would convert to "C:\Progra~1\TestAp~1.exe" for
-	"C:\Program Files\TestApplication.exe"
+	Example: Would convert to "C:\\Progra~1\\TestAp~1.exe" for
+	"C:\\Program Files\\TestApplication.exe"
 
 	<b>Remark:</b> The specified file or directory must exist!
 
@@ -358,7 +376,7 @@ public:
 	is already in slash-style.
 
 	In slash style, the slash ('/') is the path separator instead
-	of the backslash ('\').
+	of the backslash ('\\').
 	*/
 	void EnsureSlashPath();
 
@@ -366,28 +384,28 @@ public:
 	Converts the path to backslash-style or leaves it unchanged, if it
 	is already in backslash-style.
 
-	In backslash style, the backslash ('\') is the path separator instead
+	In backslash style, the backslash ('\\') is the path separator instead
 	of the slash ('/').
 	*/
 	void EnsureBackslashPath();
 
 	/**
-	Replaces the place holders in lpszText with the path.
+	@brief Replaces the place holders in lpszText with the path lpszPath.
 
-	Place holders are having the following syntax: %[s]<p>, where
-	[s] means, that the real place holder <p> can (but not must) be
+	Place holders are having the following syntax: %[s]\<p\>, where
+	[s] means, that the real place holder \<p\> can (but not must) be
 	prefixed by an 's', which has the effect, that the real place
-	holder <p> will be interpreted in 8.3-format (short path names).
+	holder \<p\> will be interpreted in 8.3-format (short path names).
 
 	To get a '%', insert "%%".
 
-	Valid characters for <p> are:
+	Valid characters for \<p\> are:
 	<ul>
 		<li><b>%p</b> Full path.
 		<li><b>%b</b> Base path -- full path without file extension.
 		<li><b>%r</b> Drive letter including colon (':').
 		<li><b>%d</b> Directory of the path (excluding last backslash 
-			('\')) (i.e. "C:\MyFiles\Test.txt" would result in "C:\MyFiles").
+			('\\')) (i.e. "C:\\MyFiles\\Text.txt" would result in "C:\\MyFiles").
 		<li><b>%n</b> Full file name (including extension).
 		<li><b>%t</b> Title of the file (name without extension)
 		<li><b>%e</b> File extension.
@@ -397,12 +415,14 @@ public:
 	</ul>
 
 	If the text "app.exe %D/otherFile.%e" and the path
-	"C:\Temp\MyFile\test.txt" would be specified, the result would be
+	"C:\\Temp\\MyFile\\text.txt"
+	would be specified, the result would be
 	"C:/Temp/otherFile.txt".
 
 	If the text "%sp" and the path 
-	"C:\Program Files\SomeApp\Application.exe" would be specified, the
-	result would be "C:\Progra~1\SomeApp\Applic~1.exe".
+	"C:\\Program Files\\SomeApp\\Application.exe"
+	would be specified, the	result would be
+	"C:\\Progra~1\\SomeApp\\Applic~1.exe".
 	*/
 	CString Format( LPCTSTR lpszText ) const;
 
@@ -410,8 +430,8 @@ public:
 	Returns the path to the old 8.3-format or an empty string, if the
 	function failed.
 
-	Example: Would return "C:\Progra~1\TestAp~1.exe" for
-	"C:\Program Files\TestApplication.exe"
+	Example: Would return "C:\\Progra~1\\TestAp~1.exe" for
+	"C:\\Program Files\\TestApplication.exe"
 
 	<b>Remark:</b> The specified file or directory must exist!
 	*/
@@ -421,8 +441,8 @@ public:
 	Returns the converted to a long path (elements can
 	be longer than eight characters).
 
-	Example: Would return "C:\Program Files\TestApplication.exe" for
-	"C:\Progra~1\TestAp~1.exe"
+	Example: Would return "C:\\Program Files\\TestApplication.exe" for
+	"C:\\Progra~1\\TestAp~1.exe"
 
 	<b>Remark:</b> The specified file or directory must exist!
 	*/
@@ -430,19 +450,19 @@ public:
 
 	/**
 	Returns the path with slashes ('/') as path speperators instead
-	of backslashes ('\'). Leaves the path unchanged, if slashes are
+	of backslashes ('\\'). Leaves the path unchanged, if slashes are
 	already used as seperators.
 	
-	Example: Would return "C:/MyFiles/Test.txt" for "C:\MyFiles\Test.txt"
+	Example: Would return "C:/MyFiles/Text.txt" for "C:\\MyFiles\\Text.txt"
 	*/
 	CString GetSlashPath() const;
 
 	/**
-	Returns the path with backslashes ('\') as path speperators instead
+	Returns the path with backslashes ('\\') as path speperators instead
 	of slashes ('/'). Leaves the path unchanged, if backslashes are
 	already used as seperators.
 	
-	Example: Would return "C:\MyFiles\Test.txt" for "C:/MyFiles/Test.txt"
+	Example: Would return "C:\\MyFiles\\Text.txt" for "C:/MyFiles/Text.txt"
 	*/
 	CString GetBackslashPath() const;
 
@@ -450,42 +470,42 @@ public:
 	Returns the drive letter (including the colon (':')) of the path or 
 	an empty string, if there	is no drive letter in the path.
 
-	Example: Would return "C:" for "C:\MyFiles\Test.txt".
+	Example: Would return "C:" for "C:\\MyFiles\\Text.txt".
 	*/
 	CString GetDrive() const;
 
 	/**
 	Returns the directory of the path.
 
-	Example: Would return "C:\MyFiles" for "C:\MyFiles\Text.txt".
+	Example: Would return "C:\\MyFiles" for "C:\\MyFiles\\Text.txt".
 	*/
 	CString GetDirectory() const;
 
 	/**
 	Returns the directory excluding the drive.
 
-	Example: Would return "MyFiles" for "C:\MyFiles\Text.txt".
+	Example: Would return "MyFiles" for "C:\\MyFiles\\Text.txt".
 	*/
 	CString GetDirectoryWithoutDrive() const;
 
 	/**
 	Returns the full path without file extension.
 
-	Example: Would return "C:\MyFiles\Text" for "C:\MyFiles\Text.txt".
+	Example: Would return "C:\\MyFiles\\Text" for "C:\\MyFiles\\Text.txt".
 	*/
 	CString GetBase() const;
 
 	/**
 	Returns the file of the path.
 
-	Example: Would return "Test.txt" for "C:\MyFiles\Test.txt".
+	Example: Would return "Text.txt" for "C:\\MyFiles\\Text.txt".
 	*/
 	CString GetFile() const;
 
 	/**
 	Returns the file extension of the path.
 
-	Example: Would return "txt" for "C:\MyFiles\Test.txt".
+	Example: Would return "txt" for "C:\\MyFiles\\Text.txt".
 	*/
 	CString GetFileExtension() const;
 
@@ -494,13 +514,13 @@ public:
 
 	The file title ist the file without the extension.
 
-	Example: Would return "Test" for "C:\MyFiles\Test.txt".
+	Example: Would return "Text" for "C:\\MyFiles\\Text.txt".
 	*/
 	CString GetFileTitle() const;
 
 	/**
 	Appends lpszPath to the path by ensuring, that the both parts are
-	separated by exactly one backslash ('\').
+	separated by exactly one backslash ('\\').
 
 	@param lpszPath
 		Path to append.
@@ -512,7 +532,7 @@ public:
 
 	/**
 	Appends lpszPath to the path by ensuring, that the both parts are
-	separated by exactly one backslash ('\').
+	separated by exactly one backslash ('\\').
 
 	@param lpszPath
 		Path to append.
@@ -566,7 +586,7 @@ public:
 	if it is of the specified type.
 
 	Example: Would return TRUE for "C:", "A:", etc.
-	Would return FALSE for "C:\MyFiles\Test.txt", "Test.txt", etc.
+	Would return FALSE for "C:\\MyFiles\\Text.txt", "Text.txt", etc.
 	*/
 	BOOL IsDrive() const;
 
