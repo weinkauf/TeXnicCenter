@@ -1108,6 +1108,19 @@ void COutputDoc::DoLaTeXRun()
 	if( g_configuration.m_bSaveBeforeCompilation )
 		theApp.SaveAllModifiedWithoutPrompt();
 
+	// remove all error marks
+	CMultiDocTemplate	*pDocTemplate = theApp.GetLatexDocTemplate();
+	if (pDocTemplate)
+	{
+		POSITION	pos = pDocTemplate->GetFirstDocPosition();
+		while (pos)
+		{
+			CLatexDoc *pDoc = dynamic_cast<CLatexDoc*>(pDocTemplate->GetNextDoc(pos));
+			if (pDoc)
+				pDoc->SetErrorMark(-1);
+		}
+	}
+
 	// close viewer if necessary
 	CProfile	*pProfile = g_ProfileMap.GetActiveProfile();
 	if (pProfile && pProfile->GetCloseView())
