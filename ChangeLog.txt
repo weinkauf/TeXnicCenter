@@ -1,3 +1,14 @@
+2002/04/18 niteria
+- Added new collection class to MFCExt called CUniqueStringList, which does not
+  add an item, if it is already in the list. Has some advandced features as well.
+- Added internal support for Placeholder sets (set of filesnames
+  defined by a placeholder). Have a look at placeholder.h to read, what it does.
+  External support (to the user) is still pending.
+- A UserTool invokes now with CreateProcess via CProcess. This offers the commandline
+  to be longer than before. Usefull together with Placeholder sets.
+- Feature 536162: Clear All Command implemented. This one needs the new placeholder sets.
+- Fixed small sorting problem in SortArray::InsertSorted
+
 2002/04/11 niteria
 - Translation of the spell checker resources.
 - Fixed Bug 82 (old list): Problems with jumping to the error/warning source line.
