@@ -62,6 +62,11 @@ public:
 	*/
 	BOOL Serialize(CIniFile &ini, LPCTSTR lpszKey, BOOL bWrite);
 
+	/**
+	Returns the FileName / PathName of the document associated with this ChildFrame.
+	*/
+	CString GetPathNameOfDocument();
+
 // overridings
 protected:
 	//{{AFX_VIRTUAL(CChildFrame)

@@ -102,13 +102,20 @@ public:
 	@param lCurrentLine
 		Lineindex of the current file in the editor or -1 to prevent the
 		method from replacing the current line specific placeholders.
+	@param lpszCurrentSelection
+		Selected text in the current document.
+	@param bExpandPlaceholderSets
+		Set to True, if you want Sets-Placeholders like "$qrAPF" to be expanded.
 
 	@return
 		Returns a pointer to a CProcess-object, if the process has been 
 		started successfully or NULL otherwise. The caller is responsible
 		for deleting the returned process object.
 	*/
-	CProcess *Execute(LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath, LPCTSTR lpszCurrentPath = NULL, long lCurrentLine = -1) const;
+	CProcess* Execute(LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath,
+										LPCTSTR lpszCurrentPath = NULL, long lCurrentLine = -1,
+										LPCTSTR lpszCurrentSelection = NULL,
+										bool bExpandPlaceholderSets = false) const;
 
 	/**
 	Starts the specified console process without a visible window, 
@@ -136,13 +143,20 @@ public:
 	@param lCurrentLine
 		Lineindex of the current file in the editor or -1 to prevent the
 		method from replacing the current line specific placeholders.
+	@param lpszCurrentSelection
+		Selected text in the current document.
+	@param bExpandPlaceholderSets
+		Set to True, if you want Sets-Placeholders like "$qrAPF" to be expanded.
 
 	@return
 		Returns a pointer to a CProcess-object, if the process has been 
 		started successfully or NULL otherwise. The caller is responsible
 		for deleting the returned process object.
 	*/
-	CProcess *Execute(HANDLE hOutput, LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath, LPCTSTR lpszCurrentPath = NULL, long lCurrentLine = -1) const;
+	CProcess *Execute(HANDLE hOutput, LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath,
+										LPCTSTR lpszCurrentPath = NULL, long lCurrentLine = -1,
+										LPCTSTR lpszCurrentSelection = NULL,
+										bool bExpandPlaceholderSets = false) const;
 
 // string serialization
 public:

@@ -176,7 +176,7 @@ BOOL CLatexProject::OnOpenProject(LPCTSTR lpszPathName)
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// load project session
-	CIniFile	session(CPathTool::GetBase(lpszPathName) + _T('.') + TC_PROJECT_SESSION_EXT);
+	CIniFile session(GetSessionPathName(lpszPathName));
 	if (session.ReadFile())
 		SerializeSession(session, FALSE);
 
@@ -224,7 +224,7 @@ void CLatexProject::OnCloseProject()
 {	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// store project session
-	CIniFile	session(CPathTool::GetBase(GetPathName()) + _T('.') + TC_PROJECT_SESSION_EXT);
+	CIniFile session(GetSessionPathName());
 	session.Reset();
 	SerializeSession(session, TRUE);
 	session.WriteFile();
@@ -517,6 +517,13 @@ CString CLatexProject::GetFilePath( LPCTSTR lpszFile )
 	strPath.ReleaseBuffer();
 
 	return strPath;
+}
+
+//Returns the full path to the project session file -- inlined
+CString CLatexProject::GetSessionPathName(LPCTSTR lpszPath /*= NULL*/) const
+{
+	return ( CPathTool::GetBase( (lpszPath != NULL) ? lpszPath : GetPathName() )
+						+ _T('.') + TC_PROJECT_SESSION_EXT );
 }
 
 

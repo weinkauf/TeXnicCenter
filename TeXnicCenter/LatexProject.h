@@ -119,6 +119,19 @@ public:
 	CString GetProjectDir() const;
 
 	/**
+	Returns the full path of the specified file in the project.
+
+	@param lpszFile
+		File to get the full path for.
+	*/
+	CString GetFilePath( LPCTSTR lpszFile );
+
+	/**
+	Returns the full path to the project session file
+	*/
+	__forceinline CString GetSessionPathName(LPCTSTR lpszPath = NULL) const;
+
+	/**
 	Sets the actual selected structure item.
 
 	@param nIndex
@@ -133,14 +146,6 @@ public:
 
 // implementation helpers
 protected:
-	/**
-	Returns the full path of the specified file in the project.
-
-	@param lpszFile
-		File to get the full path for.
-	*/
-	CString GetFilePath( LPCTSTR lpszFile );
-
 	/**
 	Called for serializing project's properties.
 

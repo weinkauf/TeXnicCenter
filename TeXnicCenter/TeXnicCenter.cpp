@@ -648,7 +648,7 @@ CDocument *CTeXnicCenterApp::OpenLatexDocument( LPCTSTR lpszFileName, BOOL bRead
 	CDocTemplate	*pDocTemplate = m_pLatexDocTemplate;
 
 	// try to find a document that represents the requested file
-	CDocument	*pDoc;
+	CDocument	*pDoc = NULL;
 	POSITION	pos = pDocTemplate->GetFirstDocPosition();
 	BOOL			bFound = FALSE;
 
