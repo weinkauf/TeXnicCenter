@@ -153,6 +153,14 @@ SOURCE=.\FileChangeWatcher.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FileClean.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\FileCleanConfirmDialog.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\FileGrep.cpp
 # End Source File
 # Begin Source File
@@ -262,6 +270,10 @@ SOURCE=.\OptionDialog.cpp
 # Begin Source File
 
 SOURCE=.\OptionPageFile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\OptionPageFileClean.cpp
 # End Source File
 # Begin Source File
 
@@ -522,6 +534,14 @@ SOURCE=.\FileChangeWatcher.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\FileClean.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\FileCleanConfirmDialog.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\FileGrep.h
 # End Source File
 # Begin Source File
@@ -631,6 +651,10 @@ SOURCE=.\OptionDialog.h
 # Begin Source File
 
 SOURCE=.\OptionPageFile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\OptionPageFileClean.h
 # End Source File
 # Begin Source File
 
@@ -1054,6 +1078,10 @@ SOURCE=.\res\separator.bmp
 # Begin Source File
 
 SOURCE=.\res\singledrag.cur
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\sort.bmp
 # End Source File
 # Begin Source File
 

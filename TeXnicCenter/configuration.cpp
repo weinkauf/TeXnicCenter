@@ -31,6 +31,7 @@
 #include "Configuration.h"
 #include "LatexDoc.h"
 
+
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
@@ -157,6 +158,21 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	SerializeProfileInt( strSection, "SkipUppercase", (int*)&m_bSpellSkipCaps, direction, 1 );
 	SerializeProfileInt( strSection, "MainDictionaryOnly", (int*)&m_bSpellMainDictOnly, direction, 1 );
 	SerializeProfileInt( strSection, "Enable", (int*)&m_bSpellEnable, direction, 1 );
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// File Cleaning
+	strSection = "Settings\\FileClean";
+
+	SerializeProfileInt( strSection, "Confirm", (int*)&m_bFileCleanConfirm, direction, 1 );
+	//Serialize the ItemArray
+	if (direction == Load)
+	{
+		m_aFileCleanItems.SerializeFromRegistry(CPathTool::Cat(theApp.m_strRegistryRoot, strSection));
+	}
+	else
+	{
+		m_aFileCleanItems.SerializeToRegistry(CPathTool::Cat(theApp.m_strRegistryRoot, strSection));
+	}
 }
 
 

@@ -33,6 +33,9 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "FileClean.h"
+
+
 class CConfiguration  
 {
 public:
@@ -319,6 +322,14 @@ public:
 
 	/** Enable spell check. */
 	BOOL m_bSpellEnable;
+
+	///////////////////////////////////////////////////////////////////
+	// File Cleaning
+	
+	/** Array to hold the patterns for file cleaning. */
+	CFileCleanItemArray m_aFileCleanItems;
+
+	bool m_bFileCleanConfirm;
 };
 
 // declaration of one and only global configuration object
