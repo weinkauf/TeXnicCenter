@@ -72,6 +72,22 @@
 % - this one will split over two lines
 \cite{hesselink2dsimple}
 
+
+% Testing generic package warnings
+% - an empty one
+\PackageWarning{example}{}
+
+% - a short one
+\PackageWarning{example}{short warning message}
+
+% - a longer one, that breaks automatically
+\PackageWarning{example}{warning message that is longer so that the line breakes automatically}
+
+% - one with a manual break
+\PackageWarning{example}{warning message with manual\MessageBreak line break.}
+
+
+
 % Testing errors and warnings from amsmath
 \input{amsmathtest}
 
