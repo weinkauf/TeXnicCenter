@@ -406,10 +406,13 @@ BOOL CTeXnicCenterApp::InitInstance()
 	m_pMainWnd->SendMessage( WM_COMMAND, ID_OPTIONS_CHANGED );
 
 	// Change extension for help file
-  CString strHelpFile = m_pszHelpFilePath;
-  strHelpFile.Replace(".HLP", ".chm");
+  CString strHelpFilePath = m_pszHelpFilePath;
+  strHelpFilePath.Replace(".HLP", ".chm");
+	CString	strHelpFile = CPathTool::GetFile(strHelpFilePath);
+	CString	strHelpDir = CPathTool::Cat(CPathTool::GetDirectory(strHelpFilePath), _T("Help"));
+	strHelpFilePath = CPathTool::Cat(strHelpDir, strHelpFile);
   free((void*)m_pszHelpFilePath);
-  m_pszHelpFilePath = _tcsdup(strHelpFile);
+  m_pszHelpFilePath = _tcsdup(strHelpFilePath);
 
 	// Show Tip
 	ShowTipAtStartup();
