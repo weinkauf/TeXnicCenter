@@ -82,6 +82,10 @@
 * $Author$
 *
 * $Log$
+* Revision 1.9  2002/04/24 00:32:39  niteria
+* Fixed Bug 84 (old list): incremental search cancels using
+* accentuated characters or german umlauts.
+*
 * Revision 1.8  2002/04/23 21:45:09  cnorris
 * realtime spell check
 *
@@ -1357,7 +1361,7 @@ void CCrystalTextView::ResetView()
 	{
 		if ( m_pTextBuffer )
 			// Inform the background thread we've been reset.
-			m_pBackgroundThread->PostThreadMessage(ID_BG_UPDATE_FILE, 0, (long)this);
+			m_pBackgroundThread->PostThreadMessage(ID_BG_UPDATE_BUFFER, 0, (long)this);
 		else
 			// Inform the background thread we're being destroyed
 			m_pBackgroundThread->PostThreadMessage(ID_BG_INVALIDATE_VIEW, 0, (long)this);

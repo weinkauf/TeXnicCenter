@@ -48,7 +48,7 @@ static char THIS_FILE[]=__FILE__;
 IMPLEMENT_DYNCREATE( CBackgroundThread, CWinThread )
 
 BEGIN_MESSAGE_MAP( CBackgroundThread, CWinThread )
-	ON_MESSAGE(ID_BG_UPDATE_FILE, OnUpdateFile)
+	ON_MESSAGE(ID_BG_UPDATE_BUFFER, OnUpdateBuffer)
 	ON_MESSAGE(ID_BG_UPDATE_LINE, OnUpdateLine)
 	ON_MESSAGE(ID_BG_RESET_SPELLER, OnGetSpeller)
 	ON_MESSAGE(ID_BG_ENABLE_SPELLER, OnEnableSpeller)
@@ -57,30 +57,46 @@ END_MESSAGE_MAP()
 
 
 CBackgroundThread::CBackgroundThread() 
-: m_evtDone(FALSE, TRUE, NULL, NULL)
 {
 	m_pSpell = NULL;
-	m_nBusyCount = 0;
 	m_bSpellEnabled = false;
 }
 
 
 CBackgroundThread::~CBackgroundThread()
 {
-	ASSERT( m_nBusyCount == 0 );
 }
 
 
 //////////////////////////////////////////////////////////////////////
 // message handlers
 
-LRESULT CBackgroundThread::OnUpdateFile(WPARAM wParam, LPARAM lParam)
+LRESULT CBackgroundThread::OnUpdateBuffer(WPARAM wParam, LPARAM lParam)
 {
 	CCrystalTextView *pTextView = (CCrystalTextView *)lParam;
 	ASSERT( pTextView );
 	if ( IsValidView(pTextView) )
+	{
+		// Check if there are any redundant message in the message queue.
+		// This should really improve speed on slower machines and machines 
+		// doing background processing.
+		MSG msg;
+		while ( ::PeekMessage( &msg, NULL, ID_BG_UPDATE_BUFFER, ID_BG_UPDATE_BUFFER, PM_NOREMOVE ) != 0 )
+		{
+			if ( msg.lParam == lParam )
+			{
+				// Remove and discard the duplicate
+				::PeekMessage( &msg, NULL, ID_BG_UPDATE_BUFFER, ID_BG_UPDATE_BUFFER, PM_REMOVE );
+				continue;
+			}
+			break;
+		}
+
 		if ( m_bSpellEnabled )
 			SpellCheckBuffer( pTextView );
+		else
+			RemoveBufferAttributes( pTextView, CCrystalTextBuffer::CTextAttribute::spellError );
+	}
 	return 0;
 }
 
@@ -91,8 +107,39 @@ LRESULT CBackgroundThread::OnUpdateLine(WPARAM wParam, LPARAM lParam)
 	ASSERT( pTextView );
 	int nLine = (int)wParam;
 	if ( IsValidView(pTextView) )
+	{
+		// Check if there are any redundant message in the message queue.
+		// This should really improve speed on slower machines and machines 
+		// doing background processing.
+		MSG msg;
+		while ( ::PeekMessage( &msg, NULL, ID_BG_UPDATE_BUFFER, ID_BG_UPDATE_LINE, PM_NOREMOVE ) != 0 )
+		{
+			if ( msg.lParam == lParam )
+			{
+				// This buffer has a message. What could it be? 
+				if ( msg.message == ID_BG_UPDATE_BUFFER )
+				{
+					// A message to check the whole buffer is in the queue.
+					// There is no point checking a single line -- we're done.
+					return 0;
+				}
+				else if ( msg.message == ID_BG_UPDATE_LINE  && msg.wParam == wParam )
+				{
+					// A duplicate message. Remove and discard.
+					::PeekMessage( &msg, NULL, ID_BG_UPDATE_LINE, ID_BG_UPDATE_LINE, PM_REMOVE );
+					continue;
+				}
+				// else  We need to handle this message
+			}
+			break;
+		}
+
 		if ( m_bSpellEnabled )
+		{
 			SpellCheckSingleLine( pTextView, nLine );
+			Sleep(3000); // Give the typist a chance to get ahead to prevent 
+		}
+	}
 	return 0;
 }
 
@@ -115,16 +162,10 @@ LRESULT CBackgroundThread::OnEnableSpeller(WPARAM wParam, LPARAM lParam)
 	if ( bSpellEnabled == m_bSpellEnabled )
 		return 0;
 
-	// Update the current view
-	CCrystalTextView *pTextView = (CCrystalTextView *)lParam;
-	if ( pTextView )
-		if ( bSpellEnabled )
-			SpellCheckBuffer( pTextView );
-		else
-			RemoveBufferAttributes( pTextView, CCrystalTextBuffer::CTextAttribute::spellError);
-
 	m_bSpellEnabled = bSpellEnabled;
-	return 0;	
+	if ( lParam != 0 )
+		OnUpdateBuffer(0, lParam);
+	return 0;
 }
 
 
@@ -133,6 +174,7 @@ LRESULT CBackgroundThread::OnInvalidateView(WPARAM wParam, LPARAM lParam)
 	m_pInvalidViews.AddHead((void *)lParam);
 	return 0;
 }
+
 
 //////////////////////////////////////////////////////////////////////
 // overrides
@@ -150,6 +192,9 @@ BOOL CBackgroundThread::OnIdle(LONG lCount)
 }
 
 
+//////////////////////////////////////////////////////////////////////
+// implementation
+
 void CBackgroundThread::SetSpeller(MySpell *pSpell)
 {
 	m_pSpell = pSpell;
@@ -163,9 +208,6 @@ void CBackgroundThread::SpellCheckSingleLine(CCrystalTextView *pTextView, int nL
 
 	ASSERT( pTextView );
 	pTextView->Attach();
-
-	::InterlockedIncrement( &m_nBusyCount );
-	m_evtDone.ResetEvent();
 
 	char pWordBuffer[MAXWORDLEN+1];
 	CCrystalParser *pParser = pTextView->GetParser();
@@ -203,10 +245,6 @@ void CBackgroundThread::SpellCheckSingleLine(CCrystalTextView *pTextView, int nL
 		pParser->NextWord( nLine, nStart, nEnd) ;
 	}
 
-	::InterlockedDecrement( &m_nBusyCount );
-	if ( m_nBusyCount == 0 )
-		m_evtDone.SetEvent();
-
 	pBuffer->UpdateViews( NULL, NULL, UPDATE_LINEATTR, nLine );
 	pTextView->Detach();
 }
@@ -219,9 +257,6 @@ void CBackgroundThread::SpellCheckBuffer(CCrystalTextView *pTextView)
 
 	ASSERT( pTextView );
 	pTextView->Attach();
-
-	::InterlockedIncrement( &m_nBusyCount );
-	m_evtDone.ResetEvent();
 
 	int nLineIndex = 0;
 	char pWordBuffer[MAXWORDLEN+1];
@@ -257,10 +292,6 @@ void CBackgroundThread::SpellCheckBuffer(CCrystalTextView *pTextView)
 		++nLineIndex;
 	}
 
-	::InterlockedDecrement( &m_nBusyCount );
-	if ( m_nBusyCount == 0 )
-		m_evtDone.SetEvent();
-
 	pTextView->Detach();
 	return;
 }
@@ -276,23 +307,26 @@ void CBackgroundThread::RemoveBufferAttributes(CCrystalTextView *pTextView, CCry
 	while ( nLineIndex < pBuffer->GetLineCount() )
 		pBuffer->ClearLineAttributes(nLineIndex++, attrType);
 
+	pBuffer->UpdateViews( NULL, NULL, UPDATE_LINEATTR, -1 );
 	pTextView->Detach();
 }
 
 
 BOOL CBackgroundThread::IsValidView(void *pView)
 {
-	// This in affect gives the ID_BG_INVALIDATE_VIEW messge the highest priority.
+	// This in affect gives the ID_BG_INVALIDATE_VIEW message the highest priority, 
+	// which is what we want.
 	MSG msg;
-	if ( ::PeekMessage( &msg, this->m_pMainWnd->m_hWnd, ID_BG_INVALIDATE_VIEW, ID_BG_INVALIDATE_VIEW, TRUE) )
+	while( ::PeekMessage( &msg, NULL, ID_BG_INVALIDATE_VIEW, ID_BG_INVALIDATE_VIEW, PM_REMOVE) != 0 )
 		OnInvalidateView( msg.wParam , msg.lParam );
 
+	BOOL isValid = (pView != NULL);
 	POSITION pos = m_pInvalidViews.GetHeadPosition();
-	while ( pos != NULL )
+	while ( pos != NULL && isValid )
 	{
 		if ( pView == m_pInvalidViews.GetNext(pos) )
-			return FALSE;
+			isValid = FALSE;
 	}
-	return TRUE;
+	return isValid;
 }
 

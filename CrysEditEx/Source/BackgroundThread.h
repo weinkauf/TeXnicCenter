@@ -61,7 +61,7 @@ public:
 
 	// message handlers
 public:
-	afx_msg LRESULT OnUpdateFile(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnUpdateBuffer(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnUpdateLine(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGetSpeller(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnEnableSpeller(WPARAM wParam, LPARAM lParam);
@@ -81,23 +81,38 @@ public:
 	*/
 	void SetSpeller(MySpell *pSpell);
 
-	/**
-	Query the thread if it is busy.
-	@return <VAR>TRUE</VAR> if thread is busy, else <VAR>FALSE</VAR>
-	*/
-	inline bool IsBusy() const { return m_nBusyCount == 0; }
-
 protected:
+	/**
+	Spell check a single line
+	@param pTextView View to check
+	@param nLine Line number
+	*/
 	void SpellCheckSingleLine(CCrystalTextView *pTextView, int nLine);
+
+	/**
+	Spell check an entire buffer.
+	@param pTextView View to check
+	*/
 	void SpellCheckBuffer(CCrystalTextView *pTextView);
+
+	/**
+	Remove attributes from a buffer
+	@param pTextView Buffer to remove attributes from
+	@param attrType The type of attributes to remove
+	*/
 	void RemoveBufferAttributes(CCrystalTextView *pTextView, CCrystalTextBuffer::CTextAttribute::tagAttribute attrType);
+
+	/**
+	Internal method to determine is a view is still valid. A view is invalidated when it sends
+	a ID_BG_INVALIDATE_VIEW message.
+	@param pView The view to check
+	@return <VAR>TRUE</VAR> if valid else <VAR>FALSE</VAR>.
+	*/
 	BOOL IsValidView(void *pView);
 
 protected:
 	MySpell *m_pSpell;
-	long m_nBusyCount;
 	BOOL m_bSpellEnabled;
-	CEvent m_evtDone;
 	CPtrList m_pInvalidViews;
 };
 
