@@ -35,11 +35,13 @@
 
 /**
 A replacement for CFileDialog, that will show a bar with commonly 
-used folders on Win2000 or later.
+used folders on Win2000 or later. Additionally, it stores the
+last opened folder even if the dialog was cancelled by the user.
 
 @ingroup mfcext
 
 @author Sven Wiegand
+@author Tino Weinkauf
 */
 class AFX_EXT_CLASS CFileDialogEx : public CFileDialog
 {
@@ -53,11 +55,27 @@ public:
 		LPCTSTR lpszFilter = NULL,
 		CWnd* pParentWnd = NULL);
 
-// Overridings
+//Overridings
 public:
+	///Call this to show the dialog.
 	int DoModal();
 
-// Message handlers
+protected:
+	///Catches the folder-changed-notification.
+	void OnFolderChange();
+
+//Methods
+public:
+	///Returns the last opened folder, even if the user cancelled the dialog.
+	CString GetLastOpenedFolder()
+		{return m_strLastFolder;};
+
+//Attributes
+protected:
+	///Storage to hold the last opened folder.
+	CString m_strLastFolder;
+
+//Message handlers
 protected:
 	//{{AFX_MSG(CFileDialogEx)
 	//}}AFX_MSG
