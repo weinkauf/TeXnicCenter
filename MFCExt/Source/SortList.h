@@ -37,7 +37,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-/* #include <function.h> */
+#include <functional>
 
 /**
 List that maintains elements in sorted order.
@@ -164,7 +164,9 @@ template<class TYPE, class ARG_TYPE, class Compare>
 BOOL CSortList<TYPE, ARG_TYPE, Compare>::IsStrictlySorted() const 
 {
 	POSITION pos = GetHeadPosition();
-	TYPE prevElement = GetNext( pos );
+	TYPE prevElement;
+	if ( pos != NULL )
+		prevElement = GetNext( pos );
 	while ( pos != NULL )
 	{
 		ARG_TYPE curElement = GetNext( pos );
@@ -180,7 +182,9 @@ template<class TYPE, class ARG_TYPE, class Compare>
 BOOL CSortList<TYPE, ARG_TYPE, Compare>::IsSorted() const
 {
 	POSITION pos = GetHeadPosition();
-	TYPE prevElement = GetNext( pos );
+	TYPE prevElement;
+	if ( pos != NULL )
+		prevElement = GetNext( pos );
 	while ( pos != NULL )
 	{
 		ARG_TYPE curElement = GetNext( pos );
