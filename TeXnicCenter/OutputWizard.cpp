@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "OutputWizard.h"
@@ -466,7 +472,7 @@ void COutputWizard::GenerateOutputProfiles()
 
 			p.SetLatexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("latex.exe")),
-				_T("--src -interaction=nonstopmode \"%pm\""));
+				_T("--src -interaction=nonstopmode \"%nm\""));
 			p.SetBibTexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("bibtex.exe")),
 				_T("\"%bm\""));
@@ -519,7 +525,7 @@ void COutputWizard::GenerateOutputProfiles()
 
 			p.SetLatexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("latex.exe")),
-				_T("--src -interaction=nonstopmode \"%pm\""));
+				_T("--src -interaction=nonstopmode \"%nm\""));
 			p.SetBibTexPath(
 				CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("bibtex.exe")),
 				_T("\"%bm\""));
