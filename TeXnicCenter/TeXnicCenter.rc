@@ -1708,7 +1708,7 @@ BEGIN
             MENUITEM "triangle",                    ID_INSERT_TRIANGLE
             MENUITEM "clubsuit",                    ID_INSERT_CLUBSUIT
             MENUITEM "diamondsuit",                 ID_INSERT_DIAMONDSUIT
-            MENUITEM "hearsuit",                    ID_INSERT_HEARSUIT
+            MENUITEM "heartsuit",                   ID_INSERT_HEARSUIT
             MENUITEM "spadesuit",                   ID_INSERT_SPADESUIT
         END
         MENUITEM SEPARATOR
@@ -4151,7 +4151,7 @@ BEGIN
     ID_INSERT_TRIANGLE      "\n\n\\triangle"
     ID_INSERT_CLUBSUIT      "\n\n\\clubsuit"
     ID_INSERT_DIAMONDSUIT   "\n\n\\diamondsuit"
-    ID_INSERT_HEARSUIT      "\n\n\\hearsuit"
+    ID_INSERT_HEARSUIT      "\n\n\\heartsuit"
     ID_INSERT_SPADESUIT     "\n\n\\spadesuit"
     ID_OPTIONS_CHANGED      "Send, when the user changed options in the options dialog."
     ID_WINDOW_LIST          "&Fenster..."
@@ -5590,7 +5590,7 @@ BEGIN
             MENUITEM "triangle",                    ID_INSERT_TRIANGLE
             MENUITEM "clubsuit",                    ID_INSERT_CLUBSUIT
             MENUITEM "diamondsuit",                 ID_INSERT_DIAMONDSUIT
-            MENUITEM "hearsuit",                    ID_INSERT_HEARSUIT
+            MENUITEM "heartsuit",                   ID_INSERT_HEARSUIT
             MENUITEM "spadesuit",                   ID_INSERT_SPADESUIT
         END
         MENUITEM SEPARATOR
@@ -7975,7 +7975,7 @@ BEGIN
     ID_INSERT_TRIANGLE      "\n\n\\triangle"
     ID_INSERT_CLUBSUIT      "\n\n\\clubsuit"
     ID_INSERT_DIAMONDSUIT   "\n\n\\diamondsuit"
-    ID_INSERT_HEARSUIT      "\n\n\\hearsuit"
+    ID_INSERT_HEARSUIT      "\n\n\\heartsuit"
     ID_INSERT_SPADESUIT     "\n\n\\spadesuit"
     ID_OPTIONS_CHANGED      "Send, when the user changed options in the options dialog."
     ID_WINDOW_LIST          "&Windows..."
