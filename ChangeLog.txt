@@ -1,5 +1,5 @@
 2003/03/08 niteria
-- Fixed bug 700129: cosh instead of \cosh
+- Fixed Bug 700129: cosh instead of \cosh
 - Fixed Bug 699688: "Save As"-Dialog with wrong InitDir.
 
 2003/03/04 christianwelzel
