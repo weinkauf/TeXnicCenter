@@ -117,15 +117,21 @@ protected:
 public:
 	BOOL m_bAutoDelete;
 
-	int m_nIconIndex; // index of the icon in the executable, to use for this project type
+	///Index of the icon in the executable, to use for this project type
+	int m_nIconIndex;
 
 protected:
-	CRuntimeClass* m_pProjectClass;     // class for creating new projects
+	///Class for creating new projects
+	CRuntimeClass* m_pProjectClass;
 
-	CString m_strProjectStrings;    // '\n' separated names
-	UINT m_nIDResource;                 // IDR_ for frame/menu/accel as well
-		// The document names sub-strings are represented as _one_ string:
-		// windowTitle\ndocName\n ... (see DocStringIndex enum)
+	/** '\n' separated names
+	The document names sub-strings are represented as _one_ string:
+	windowTitle\ndocName\n ... (see DocStringIndex enum)
+	*/
+	CString m_strProjectStrings;    
+
+	///IDR_ for frame/menu/accel as well
+	UINT m_nIDResource;                 
 };
 
 
