@@ -80,6 +80,24 @@ BOOL CLatexOutputFilter::OnPreCreate()
 
 void CLatexOutputFilter::UpdateFileStack(const CString &strLine)
 {
+	/*
+	With the code in this function we catch	non-file-related stuff as well.
+	Consider the following output from TeX:
+
+		Underfull \hbox (badness 3323) in paragraph at lines 87--88
+
+	This pushes the wrong filename "badness 3323" on our filestack.
+	But that does not matter. We will pop it before detecting the bad box
+	in ParseLine - so we have the correct filename again (reported by TeX
+	somewhat earlier).
+	Lets call all braces "(...)", which are not related to files, "non-file-braces".
+
+	For this function, we need the assume, that TeX closes all non-file-braces
+	before reporting an error; at least before we detect it in ParseLine.
+	I did not see any other behaviour of TeX and I can not imagine it.
+	So I think, this assumption is correct. The assertion	"ASSERT(!m_stackFile.IsEmpty());"
+	below will help us to find out, whether I am right or not.
+	*/
 	for (int i = 0; i < strLine.GetLength(); i++)
 	{
 		switch (strLine[i])
@@ -94,7 +112,22 @@ void CLatexOutputFilter::UpdateFileStack(const CString &strLine)
 							&& ( strLine[j] != _T('{') );
 							j++);
 
-				if ((j-1) > i)
+				/*
+				We need to push even empty strings on the stack, because only this
+				assures, that we get every starting and closing brace.
+				Consider the following output from TeX (it is ONE! line of output):
+
+					\OT1/cmr/m/n/8 Punk-ten. $\OML/cmm/m/it/8 K[] \OT1/cmr/m/n/8 = ([]\OML/cmm/m/it
+					/8 ; []; []\OT1/cmr/m/n/8 )$. $\OML/cmm/m/it/8 K[] \OT1/cmr/m/n/8 =
+
+				The second line has a starting brace '(' directly followed by a '['.
+				This will produce an empty string (i.e. i == j-1) due to the code
+				in the for-next-loop above. But we need the code above - no chance to change it.
+				Certainly, adding empty strings, will somehow corrupt our file stack, but as mentioned
+				above, we catch other non-file-related stuff as well.
+				And the hope/knowledge is, that TeX closes the brace before reporting an error.
+				*/
+				if ((j-1) >= i)
 				{
 					CString	strFile(strLine.Mid(i+1, (j-1) - (i+1) + 1));
 					strFile.TrimLeft();
@@ -106,6 +139,10 @@ void CLatexOutputFilter::UpdateFileStack(const CString &strLine)
 			break;
 
 		case _T(')'):
+			//If we are good in parsing, this should not happen.
+			//Comment this out, if it always asserts or try to find the error,
+			//where we pop something from the stackFile, what should not be poped.
+			ASSERT(!m_stackFile.IsEmpty());
 			if (!m_stackFile.IsEmpty())
 				m_stackFile.Pop();
 			break;
