@@ -267,7 +267,7 @@ private:
 
 	@param lpText
 		String that contains the possible command
-		(not guaranteed to be terminated by null-charachter).
+		(not guaranteed to be terminated by null-character).
 	@param nPos
 		Zero-based index of the first character of the possible
 		command (the backslash).

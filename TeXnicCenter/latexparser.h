@@ -76,7 +76,7 @@ protected:
 
 	@param lpText
 		String that contains the possible command
-		(not guaranteed to be terminated by null-charachter).
+		(not guaranteed to be terminated by null-character).
 	@param lpPos
 		Pointer to the character that starts the possible command (the backslash).
 
