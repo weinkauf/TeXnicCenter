@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:12:00  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:34+02  sven_wiegand
 * Initial revision
 *
@@ -49,8 +52,7 @@ CCrystalParser::~CCrystalParser()
 }
 
 
-DWORD CCrystalParser::ParseLine(
-											DWORD dwCookie, int nLineIndex, CCrystalTextBlock *pBlock )
+DWORD CCrystalParser::ParseLine( DWORD dwCookie, int nLineIndex, CCrystalTextBlock *pBlock )
 {
 	return 0;
 }
@@ -99,22 +101,19 @@ void CCrystalParser::WrapLine( int nLineIndex, int nMaxLineWidth, int *anBreaks,
 		// wrap line
 		if( nLineCharCount >= nMaxLineWidth )
 		{
-			if( anBreaks )
+			// if no wrap position found, but line is too wide, wrap at current position
+			if( nLastBreakPos == 0 )
 			{
-				// if no wrap position found, but line is to wide, 
-				// wrap at current position
-				if( (nBreaks && nLastBreakPos == anBreaks[nBreaks - 1]) || (!nBreaks && !nLastBreakPos) )
-				{
-					nLastBreakPos = i;
-					nLastCharBreakPos = nCharCount;
-				}
-
-				anBreaks[nBreaks++] = nLastBreakPos;
+				nLastBreakPos = i;
+				nLastCharBreakPos = nCharCount;
 			}
+			if( anBreaks )
+				anBreaks[nBreaks++] = nLastBreakPos;
 			else
 				nBreaks++;
 
 			nLineCharCount = nCharCount - nLastCharBreakPos;
+			nLastBreakPos = 0;
 		}
 	}
 }
