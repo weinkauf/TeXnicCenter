@@ -198,7 +198,24 @@ BOOL COutputBuilder::RunLatex()
 	pc.Set(m_pProfile->GetLatexPath(), m_pProfile->GetLatexArguments());
 	CProcess	*p = pc.Execute(hOutput, m_strWorkingDir, m_strMainPath, NULL, -1);
 	if (!p)
-		return FALSE;
+	{
+		::CloseHandle(hOutput);
+		filter.Terminate(0);
+		filter.CloseHandle();
+		TCHAR systemError[100];
+		::FormatMessage(
+			FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
+			NULL,
+			pc.GetLastError(),
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			systemError,
+			100,
+			NULL 
+		);
+
+		m_strLatexResult.Format( STE_LATEX_START_FAILED_EXT, pc.GetExecutable(), systemError );
+		return FALSE; 
+	}
 
 //	m_dwProcessGroupId = p->GetProcessID();
 	m_hCurrentProcess = p->GetProcessHandle();
@@ -235,7 +252,24 @@ BOOL COutputBuilder::RunBibTex()
 	pc.Set(m_pProfile->GetBibTexPath(), m_pProfile->GetBibTexArguments());
 	CProcess	*p = pc.Execute(hOutput, m_strWorkingDir, m_strMainPath, NULL, -1);
 	if (!p)
-		return FALSE;
+	{
+		::CloseHandle(hOutput);
+		filter.Terminate(0);
+		filter.CloseHandle();
+		TCHAR systemError[100];
+		::FormatMessage(
+			FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
+			NULL,
+			pc.GetLastError(),
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			systemError,
+			100,
+			NULL 
+		);
+
+		m_strLatexResult.Format( STE_LATEX_START_FAILED_EXT, pc.GetExecutable(), systemError );
+		return FALSE; 
+	}
 
 	m_hCurrentProcess = p->GetProcessHandle();
 	p->WaitForProcess();
@@ -271,7 +305,24 @@ BOOL COutputBuilder::RunMakeIndex()
 	pc.Set(m_pProfile->GetMakeIndexPath(), m_pProfile->GetMakeIndexArguments());
 	CProcess	*p = pc.Execute(hOutput, m_strWorkingDir, m_strMainPath, NULL, -1);
 	if (!p)
-		return FALSE;
+	{
+		::CloseHandle(hOutput);
+		filter.Terminate(0);
+		filter.CloseHandle();
+		TCHAR systemError[100];
+		::FormatMessage(
+			FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
+			NULL,
+			pc.GetLastError(),
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			systemError,
+			100,
+			NULL 
+		);
+
+		m_strLatexResult.Format( STE_LATEX_START_FAILED_EXT, pc.GetExecutable(), systemError );
+		return FALSE; 
+	}
 
 	m_hCurrentProcess = p->GetProcessHandle();
 	p->WaitForProcess();

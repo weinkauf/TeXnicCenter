@@ -3175,6 +3175,8 @@ BEGIN
     STE_LATEX_RESULT        "LaTeX-Ergebnis: %d Fehler, %d Warnung(en), %d zu volle/leere Box(en)"
     STE_LATEX_START_FAILED  "%s\n\nDer Befehl konnte nicht ausgeführt werden."
     STE_LATEX_CANCELED      "Erstellung vom Anwender abgebrochen"
+    STE_LATEX_START_FAILED_EXT 
+                            "%s Der Befehl konnte nicht ausgeführt werden. Fehler: %s"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -6437,6 +6439,7 @@ BEGIN
     STE_LATEX_RESULT        "LaTeX-Result: %d Error(s), %d Warning(s), %d Bad Box(es)"
     STE_LATEX_START_FAILED  "%s\n\nCannot execute the command."
     STE_LATEX_CANCELED      "Building process cancelled by the user"
+    STE_LATEX_START_FAILED_EXT "%s Cannot execute the command. Error: %s"
 END
 
 STRINGTABLE DISCARDABLE 

@@ -51,7 +51,7 @@ public:
 // attribute operations
 public:
 	/**
-	Setst the properties of the command.
+	Sets the properties of the command.
 
 	Take a look at the <var>AfxExpandPlaceholders</var> to get more
 	detailed information about the allowed placeholders in the argument
@@ -69,6 +69,13 @@ public:
 
 	CString GetExecutable() const;
 	CString GetArguments() const;
+
+	/**
+	The error of the last operation.
+
+	@return 0 if no error else result of ::GetLastError()
+	*/
+	DWORD GetLastError() const;
 
 // operations
 public:
@@ -165,6 +172,8 @@ protected:
 	contain place holders.
 	*/
 	CString m_strArguments;
+
+	DWORD m_nLastError;
 };
 
 
@@ -180,6 +189,13 @@ inline
 CString CProcessCommand::GetArguments() const
 {
 	return m_strArguments;
+}
+
+
+inline
+DWORD CProcessCommand::GetLastError() const
+{
+	return m_nLastError;
 }
 
 #endif // !defined(AFX_PROCESSCOMMAND_H__65CF1820_0593_11D5_A222_006097239934__INCLUDED_)

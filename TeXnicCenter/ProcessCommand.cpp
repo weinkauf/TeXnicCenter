@@ -40,7 +40,7 @@ static char THIS_FILE[]=__FILE__;
 // class CProcessCommand
 //-------------------------------------------------------------------
 
-CProcessCommand::CProcessCommand()
+CProcessCommand::CProcessCommand() : m_nLastError(0)
 {}
 
 
@@ -58,10 +58,16 @@ void CProcessCommand::Set(LPCTSTR lpszExecutable, LPCTSTR lpszArguments)
 CProcess *CProcessCommand::Execute(LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath, LPCTSTR lpszCurrentPath /*= NULL*/, long lCurrentLine /*= -1*/) const
 {
 	CString		strArguments = AfxExpandPlaceholders(m_strArguments, lpszMainPath, lpszCurrentPath, lCurrentLine);
+	CProcessCommand * const localThis = (CProcessCommand * const)this;
 	CProcess	*p = new CProcess;
-
+	
 	if (p->Create(m_strExecutable + _T(' ') + strArguments, NULL, NULL, FALSE, CREATE_NEW_PROCESS_GROUP, NULL, lpszWorkingDir))
+	{
+		localThis->m_nLastError = 0;
 		return p;
+	}
+
+	localThis->m_nLastError = ::GetLastError();
 
 	delete p;
 	return NULL;
@@ -71,10 +77,16 @@ CProcess *CProcessCommand::Execute(LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath,
 CProcess *CProcessCommand::Execute(HANDLE hOutput, LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath, LPCTSTR lpszCurrentPath /*= NULL*/, long lCurrentLine /*= -1*/) const
 {
 	CString		strArguments = AfxExpandPlaceholders(m_strArguments, lpszMainPath, lpszCurrentPath, lCurrentLine);
+	CProcessCommand * const localThis = (CProcessCommand * const)this;
 	CProcess	*p = new CProcess;
 
 	if (p->CreateHiddenConsole(m_strExecutable + _T(' ') + strArguments, INVALID_HANDLE_VALUE, hOutput, hOutput, CREATE_NEW_CONSOLE | CREATE_NEW_PROCESS_GROUP, lpszWorkingDir))
+	{
+		localThis->m_nLastError = 0;
 		return p;
+	}
+
+	localThis->m_nLastError = ::GetLastError();
 
 	delete p;
 	return NULL;
