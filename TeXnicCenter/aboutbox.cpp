@@ -78,7 +78,7 @@
 // 
 // Array count. Make sure this keeps up with how many lines there are
 // in the array!
-#define ARRAYCOUNT		89
+#define ARRAYCOUNT		97
 char *pArrCredit[] = {
 						"Copyright © 1999-2002\t",
 						"www.ToolsCenter.org\t",
@@ -102,6 +102,8 @@ char *pArrCredit[] = {
 						"",
 						"Chris Norris\f",
 						"Paul Selormey\f",
+						"Tino Weinkauf\f",
+						"Christian Welzel\f",
 						"Sven Wiegand\f",
 						"",
 						"",
@@ -217,12 +219,12 @@ BOOL CAboutDlg::OnInitDialog()
 	CDialog::OnInitDialog();
 	
 	// set URLs
-	m_wndURLToolsCenter.SetURL( _T("http://www.ToolsCenter.org") );
+	m_wndURLToolsCenter.SetURL( _T("http://www.ToolsCenter.org/") );
 	m_wndURLToolsCenter.SizeToContent( TRUE, FALSE );
 	
 	// initialize scrolling credits
 	BOOL bRet;
-    	UINT nRet;
+	UINT nRet;
 	
 	nCurrentFontHeight = NORMAL_TEXT_HEIGHT;
 	
@@ -243,14 +245,14 @@ BOOL CAboutDlg::OnInitDialog()
 
 	// If you assert here, you did not assign your static display control
 	// the IDC_ value that was used in the GetDlgItem(...). This is the
-    // control that will display the credits.
+	// control that will display the credits.
 	_ASSERTE(m_pDisplayFrame);
 				 
 	m_pDisplayFrame->GetClientRect(&m_ScrollRect);
 
 
 	nRet = SetTimer(DISPLAY_TIMER_ID,DISPLAY_SPEED,NULL);
-    _ASSERTE(nRet != 0);
+	_ASSERTE(nRet != 0);
 
 	return TRUE;
 }
@@ -259,16 +261,16 @@ BOOL CAboutDlg::OnInitDialog()
 void CAboutDlg::OnPaint() 
 {
 	CPaintDC dc(this); // device context for painting
-	
+
 	PAINTSTRUCT ps;
 	CDC* pDc = m_pDisplayFrame->BeginPaint(&ps);
-	
+
 	pDc->SetBkMode(TRANSPARENT);
 
 
 	//*********************************************************************
-	//	FONT SELECTION
-    	CFont m_fntArial;
+	// FONT SELECTION
+	CFont m_fntArial;
 	CFont* pOldFont;
 	BOOL bSuccess;
 	
@@ -284,14 +286,14 @@ void CAboutDlg::OnPaint()
 			bItalic = FALSE;
 			bUnderline = FALSE;
 			nCurrentFontHeight = NORMAL_TEXT_HEIGHT;
-   			bSuccess = m_fntArial.CreateFont(NORMAL_TEXT_HEIGHT, 0, 0, 0, 
-   								FW_THIN, bItalic, bUnderline, 0, 
-   								ANSI_CHARSET,
-                               	OUT_DEFAULT_PRECIS,
-                               	CLIP_DEFAULT_PRECIS,
-                               	PROOF_QUALITY,
-                               	VARIABLE_PITCH | 0x04 | FF_DONTCARE,
-                               	(LPSTR)"Arial");
+			bSuccess = m_fntArial.CreateFont(NORMAL_TEXT_HEIGHT, 0, 0, 0, 
+									FW_THIN, bItalic, bUnderline, 0, 
+									ANSI_CHARSET,
+									OUT_DEFAULT_PRECIS,
+									CLIP_DEFAULT_PRECIS,
+									PROOF_QUALITY,
+									VARIABLE_PITCH | 0x04 | FF_DONTCARE,
+									(LPSTR)"Arial");
 			pDc->SetTextColor(NORMAL_TEXT_COLOR);
 			pOldFont  = pDc->SelectObject(&m_fntArial);
 			break;
@@ -300,14 +302,14 @@ void CAboutDlg::OnPaint()
 			bItalic = FALSE;
 			bUnderline = FALSE;
 			nCurrentFontHeight = TOP_LEVEL_GROUP_HEIGHT;
-   			bSuccess = m_fntArial.CreateFont(TOP_LEVEL_GROUP_HEIGHT, 0, 0, 0, 
-   								FW_BOLD, bItalic, bUnderline, 0, 
-   								ANSI_CHARSET,
-                               	OUT_DEFAULT_PRECIS,
-                               	CLIP_DEFAULT_PRECIS,
-                               	PROOF_QUALITY,
-                               	VARIABLE_PITCH | 0x04 | FF_DONTCARE,
-                               	(LPSTR)"Arial");
+			bSuccess = m_fntArial.CreateFont(TOP_LEVEL_GROUP_HEIGHT, 0, 0, 0, 
+									FW_BOLD, bItalic, bUnderline, 0, 
+									ANSI_CHARSET,
+									OUT_DEFAULT_PRECIS,
+									CLIP_DEFAULT_PRECIS,
+									PROOF_QUALITY,
+									VARIABLE_PITCH | 0x04 | FF_DONTCARE,
+									(LPSTR)"Arial");
 			pDc->SetTextColor(TOP_LEVEL_GROUP_COLOR);
 			pOldFont  = pDc->SelectObject(&m_fntArial);
 			break;
@@ -318,14 +320,14 @@ void CAboutDlg::OnPaint()
 			bItalic = FALSE;
 			bUnderline = FALSE;
 			nCurrentFontHeight = GROUP_TITLE_HEIGHT;
-   			bSuccess = m_fntArial.CreateFont(GROUP_TITLE_HEIGHT, 0, 0, 0, 
-   								FW_BOLD, bItalic, bUnderline, 0, 
-   								ANSI_CHARSET,
-                               	OUT_DEFAULT_PRECIS,
-                               	CLIP_DEFAULT_PRECIS,
-                               	PROOF_QUALITY,
-                               	VARIABLE_PITCH | 0x04 | FF_DONTCARE,
-                               	(LPSTR)"Arial");
+			bSuccess = m_fntArial.CreateFont(GROUP_TITLE_HEIGHT, 0, 0, 0, 
+									FW_BOLD, bItalic, bUnderline, 0, 
+									ANSI_CHARSET,
+									OUT_DEFAULT_PRECIS,
+									CLIP_DEFAULT_PRECIS,
+									PROOF_QUALITY,
+									VARIABLE_PITCH | 0x04 | FF_DONTCARE,
+									(LPSTR)"Arial");
 			pDc->SetTextColor(GROUP_TITLE_COLOR);
 			pOldFont  = pDc->SelectObject(&m_fntArial);
 			break;
@@ -338,11 +340,11 @@ void CAboutDlg::OnPaint()
 			bSuccess = m_fntArial.CreateFont(TOP_LEVEL_TITLE_HEIGHT, 0, 0, 0, 
 								FW_BOLD, bItalic, bUnderline, 0, 
 								ANSI_CHARSET,
-	                           	OUT_DEFAULT_PRECIS,
-	                           	CLIP_DEFAULT_PRECIS,
-	                           	PROOF_QUALITY,
-	                           	VARIABLE_PITCH | 0x04 | FF_DONTCARE,
-	                           	(LPSTR)"Arial");
+								OUT_DEFAULT_PRECIS,
+								CLIP_DEFAULT_PRECIS,
+								PROOF_QUALITY,
+								VARIABLE_PITCH | 0x04 | FF_DONTCARE,
+								(LPSTR)"Arial");
 			pDc->SetTextColor(TOP_LEVEL_TITLE_COLOR);
 			pOldFont  = pDc->SelectObject(&m_fntArial);
 			break;
@@ -361,7 +363,7 @@ void CAboutDlg::OnPaint()
 					return; 
 					}
 				m_bmpCurrent = &m_bmpWork;
-	   			m_bmpCurrent->GetObject(sizeof(BITMAP), &m_bmpInfo);
+				m_bmpCurrent->GetObject(sizeof(BITMAP), &m_bmpInfo);
 			
 				m_size.cx = m_bmpInfo.bmWidth;	// width  of dest rect
 				RECT workRect;
