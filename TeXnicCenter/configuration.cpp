@@ -160,10 +160,17 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 		SerializeProfileString(_T("Settings"), _T("SkinDirectory"), &m_strSkinDirectory, direction, CPathTool::Cat(CPathTool::GetDirectory(theApp.m_pszHelpFilePath), _T("Skins")));
 		SerializeProfileString(_T("Settings"), _T("SkinURL"), &m_strSkinUrl, direction, _T("http://www.bcgsoft.com/Skins"));
 	}
+	SerializeProfileString(_T("Settings"), _T("LookAndFeel"), &m_strLookAndFeelOnNextStart, direction, _T("Office 2003"));
+	if (direction==Load)
+		m_strLookAndFeel = m_strLookAndFeelOnNextStart;
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Language
 	strSection = _T("Settings\\Language");
+
+	SerializeProfileString( strSection, "GuiLanguage", &m_strGuiLanguageOnNextStart, direction, _T("English"));
+	if (direction==Load)
+		m_strGuiLanguage = m_strGuiLanguageOnNextStart;
 
 	SerializeProfileString( strSection, "Language", &m_strLanguageDefault, direction, AfxLoadString(IDS_LANGUAGE) );
 	SerializeProfileString( strSection, "Dialect", &m_strLanguageDialectDefault, direction, AfxLoadString(IDS_DIALECT) );

@@ -1,3 +1,7 @@
+2003/12/16 svenwiegand
+- Support for selecting Look & Feel out of the following options: 
+  "Office 2000", "Office XP", "Windows XP" and "Office 2003"
+
 2003/12/14 niteria
 - Partly implemented Feature 531270: User definable insert-commands
   Will be improved later on.

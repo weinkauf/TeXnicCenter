@@ -313,8 +313,21 @@ public:
 	/** URL, where to download skins from */
 	CString m_strSkinUrl;
 
+	/** Look and feel currently in use */
+	CString m_strLookAndFeel;
+
+	/** Look and feel activated on next start */
+	CString m_strLookAndFeelOnNextStart;
+
+
 	///////////////////////////////////////////////////////////////////
 	// Language and spelling
+
+	/** User interface language currently in use. */
+	CString m_strGuiLanguage;
+
+	/** User interface language activated on next start. */
+	CString m_strGuiLanguageOnNextStart;
 
 	/** Lanuage of the dictionary. */
 	CString m_strLanguageDefault;
