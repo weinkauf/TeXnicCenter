@@ -67,6 +67,9 @@ COptionDialog::COptionDialog( CWnd* pParentWnd, UINT iSelectPage )
 	AddPage( &m_pagePath );
 	AddPage( &m_pageLanguage );
 	AddPage( &m_pageFileClean );
+	AddPage( &m_pageEditor );
+
+	//SetTreeViewMode(TRUE, TRUE);
 }
 
 
@@ -79,10 +82,8 @@ BOOL COptionDialog::OnInitDialog()
 {
 	BOOL bResult = CPropertySheet::OnInitDialog();
 
-	// hide apply button
-//	CWnd	*pWnd = GetDlgItem( ID_APPLY_NOW );
-//	ASSERT_VALID( pWnd );
-//	pWnd->ShowWindow( SW_HIDE );
+	// modify tree control
+	//GetPageTreeControl()->ModifyStyle(TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS, 0);
 	
 	return bResult;
 }

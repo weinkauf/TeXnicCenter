@@ -2,6 +2,8 @@
 - Implemented Feature 851400: \texttt{} and \textsc{} buttons
 
 2003/12/06 svenwiegand
+- Adapted options pages to make them look more comfortable
+- Moved text format from customization to options dialog
 - Fixed bug 617922: highlight all and copy+paste will crash TXC if last line
   is not empty/highlight all and delete will disable you to type any texts,
   if last line is not empty.

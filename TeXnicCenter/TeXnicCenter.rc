@@ -777,7 +777,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
+// Deutsch (Deutschland) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -1848,24 +1848,6 @@ END
 // Dialog
 //
 
-IDD_OPTIONS_LATEX DIALOGEX 0, 0, 235, 156
-STYLE DS_CONTEXTHELP | WS_CHILD | WS_DISABLED | WS_CAPTION
-CAPTION "LaTeX"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
-BEGIN
-    GROUPBOX        "Ausgabetypen",IDC_STATIC,5,5,225,147
-    LISTBOX         IDC_TYPES,10,15,215,114,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
-                    WS_VSCROLL | WS_TABSTOP,0,HIDC_TYPES
-    PUSHBUTTON      "&Hinzufügen...",IDC_ADD_TYPE,65,133,50,14,0,0,
-                    HIDC_ADD_TYPE
-    PUSHBUTTON      "&Bearbeiten...",IDC_EDIT_TYPE,120,133,50,14,0,0,
-                    HIDC_EDIT_TYPE
-    PUSHBUTTON      "&Entfernen",IDC_REMOVE_TYPE,175,133,50,14,0,0,
-                    HIDC_REMOVE_TYPE
-    PUSHBUTTON      "&Assistent...",IDC_OUTPUT_WIZARD,10,133,50,14,0,0,
-                    HIDC_OUTPUT_WIZARD
-END
-
 IDD_ACTIVE_PROFILE DIALOGEX 0, 0, 257, 95
 STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Aktives Ausgabeprofil festlegen"
@@ -2259,95 +2241,88 @@ BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,5,61,240,1
 END
 
-IDD_OPTIONS_FILE DIALOGEX 0, 0, 235, 156
+IDD_OPTIONS_FILE DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Datei"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
-    LTEXT           " Speichern ",IDC_STATIC,5,6,37,8
+    GROUPBOX        "Speichern",IDC_STATIC,8,8,284,59
     CONTROL         "&Neue Dokumente sofort speichern",
                     IDC_OPTIONS_SAVE_NEWDOCS,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,0,20,124,10
+                    WS_TABSTOP,13,20,124,10
     CONTROL         "Vor &Compilierung alles speichern",
                     IDC_OPTIONS_SAVE_BEFORE_COMPILATION,"Button",
-                    BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,0,35,117,10,0,
+                    BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,13,35,117,10,0,
                     HIDC_OPTIONS_SAVE_BEFORE_COMPILATION
     CONTROL         "&Automatisch speichern",IDC_OPTIONS_SAVE_AUTOMATIC,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,50,87,10,0,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,50,87,10,0,
                     HIDC_OPTIONS_SAVE_AUTOMATIC
-    LTEXT           "alle",IDC_OPTIONS_SAVE_LABEL1,87,51,12,8
-    EDITTEXT        IDC_OPTIONS_SAVE_INTERVALL_EDIT,100,48,28,14,
+    LTEXT           "alle",IDC_OPTIONS_SAVE_LABEL1,100,51,12,8
+    EDITTEXT        IDC_OPTIONS_SAVE_INTERVALL_EDIT,113,48,28,14,
                     ES_AUTOHSCROLL | ES_NUMBER,0,
                     HIDC_OPTIONS_SAVE_INTERVALL_EDIT
     CONTROL         "Spin1",IDC_OPTIONS_SAVE_INTERVALL_SPIN,"msctls_updown32",
                     UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
-                    UDS_ARROWKEYS | UDS_NOTHOUSANDS,120,48,11,14
-    LTEXT           "Minuten",IDC_OPTIONS_SAVE_LABEL2,130,51,26,8
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,75,235,1
-    LTEXT           " Dateiformat ",IDC_STATIC,5,71,41,8
-    LTEXT           "&Standard:",IDC_STATIC,0,85,32,8
-    COMBOBOX        IDC_OPTIONS_FILETYPE,35,83,55,57,CBS_DROPDOWNLIST | 
+                    UDS_ARROWKEYS | UDS_NOTHOUSANDS,133,48,11,14
+    LTEXT           "Minuten",IDC_OPTIONS_SAVE_LABEL2,143,51,26,8
+    LTEXT           "&Standard Dateiformat:",IDC_STATIC,8,85,70,8
+    COMBOBOX        IDC_OPTIONS_FILETYPE,82,83,55,57,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
 END
 
-IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 235, 156
+IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Allgemein"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,235,1
-    LTEXT           " Allgemein ",IDC_STATIC,5,5,35,8
+    GROUPBOX        "Allgemein",IDC_STATIC,8,8,284,31
     CONTROL         "&Letzte Sitzung bei Start wiederherstellen",
                     IDC_OPTIONS_RESTORE_SESSION,"Button",BS_AUTOCHECKBOX | 
-                    WS_GROUP | WS_TABSTOP,0,15,141,10,0,
+                    WS_GROUP | WS_TABSTOP,13,21,141,10,0,
                     HIDC_OPTIONS_RESTORE_SESSION
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,45,236,1
-    LTEXT           " Automatisches Ersetzen ",IDC_STATIC,5,40,80,8
+    GROUPBOX        "Automatisches Ersetzen",IDC_STATIC,8,49,284,64
     CONTROL         "&Anführungszeichen ("") ersetzen",
                     IDC_OPTIONS_REPLACE_QM,"Button",BS_AUTOCHECKBOX | 
-                    WS_GROUP | WS_TABSTOP,0,50,115,10,0,
+                    WS_GROUP | WS_TABSTOP,13,64,115,10,0,
                     HIDC_OPTIONS_REPLACE_QM
-    LTEXT           "&Öffnendes Anführungszeichen:",IDC_OPTIONS_QM_LABEL1,15,
-                    65,98,8
-    EDITTEXT        IDC_OPTIONS_REPLACE_QM_OPEN_EDIT,125,62,15,14,
+    LTEXT           "&Öffnendes Anführungszeichen:",IDC_OPTIONS_QM_LABEL1,28,
+                    79,98,8
+    EDITTEXT        IDC_OPTIONS_REPLACE_QM_OPEN_EDIT,138,76,15,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_OPEN_EDIT
     LTEXT           "&Schließendes Anführungszeichen:",IDC_OPTIONS_QM_LABEL2,
-                    15,80,108,8
-    EDITTEXT        IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT,125,77,15,14,
+                    28,94,108,8
+    EDITTEXT        IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT,138,91,15,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_CLOSE_EDIT
 END
 
-IDD_OPTIONS_PATHS DIALOGEX 0, 0, 235, 156
+IDD_OPTIONS_PATHS DIALOGEX 0, 0, 300, 200
 STYLE DS_CONTEXTHELP | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Verzeichnisse"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
-    LTEXT           " &Projektvorlageverzeichnisse ",IDC_STATIC,5,5,93,8
-    LISTBOX         IDC_PROJECTTEMPLATES,0,15,175,35,LBS_SORT | 
+    LISTBOX         IDC_PROJECTTEMPLATES,13,21,219,53,LBS_SORT | 
                     LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP,0,
                     HIDC_PROJECTTEMPLATES
-    PUSHBUTTON      "Hinzufügen...",IDC_ADD_PROJECTTEMPLATES,180,15,50,14,0,
+    PUSHBUTTON      "Hinzufügen...",IDC_ADD_PROJECTTEMPLATES,237,21,50,14,0,
                     0,HIDC_ADD_PROJECTTEMPLATES
-    PUSHBUTTON      "Entfernen",IDC_REMOVE_PROJECTTEMPLATES,180,35,50,14,0,0,
+    PUSHBUTTON      "Entfernen",IDC_REMOVE_PROJECTTEMPLATES,237,39,50,14,0,0,
                     HIDC_REMOVE_PROJECTTEMPLATES
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,60,236,1
-    LTEXT           " &Dokumentvorlageverzeichnisse ",IDC_STATIC,5,55,104,8
-    LISTBOX         IDC_DOCUMENTTEMPLATES,0,65,175,35,LBS_SORT | 
+    LISTBOX         IDC_DOCUMENTTEMPLATES,13,99,219,53,LBS_SORT | 
                     LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP,0,
                     HIDC_DOCUMENTTEMPLATES
-    PUSHBUTTON      "Hinzufügen...",IDC_ADD_DOCUMENTTEMPLATES,180,65,50,14,0,
+    PUSHBUTTON      "Hinzufügen...",IDC_ADD_DOCUMENTTEMPLATES,237,99,50,14,0,
                     0,HIDC_ADD_DOCUMENTTEMPLATES
-    PUSHBUTTON      "Entfernen",IDC_REMOVE_DOCUMENTTEMPLATES,180,85,50,14,0,
+    PUSHBUTTON      "Entfernen",IDC_REMOVE_DOCUMENTTEMPLATES,237,117,50,14,0,
                     0,HIDC_REMOVE_DOCUMENTTEMPLATES
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,115,236,1
-    LTEXT           " Arbeits&verzeichnis ",IDC_STATIC,5,110,62,8
-    LTEXT           "Standard:",IDC_STATIC,0,120,32,8
-    EDITTEXT        IDC_OPTIONS_DEFAULT_PATH_EDIT,0,130,215,14,
+    LTEXT           "&Standard Arbeitsverzeichnis:",IDC_STATIC,8,168,90,8
+    EDITTEXT        IDC_OPTIONS_DEFAULT_PATH_EDIT,8,179,267,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_DEFAULT_PATH_EDIT
-    PUSHBUTTON      "&...",IDC_BROWSE_DEFAULT_PATH,220,130,15,14,0,0,
+    PUSHBUTTON      "&...",IDC_BROWSE_DEFAULT_PATH,277,179,15,14,0,0,
                     HIDC_BROWSE_DEFAULT_PATH
+    GROUPBOX        "Verzeichnisse für &Projektvorlagen",IDC_STATIC,8,8,284,
+                    71
+    GROUPBOX        "Verzeichnisse für &Dokumentvorlagen",IDC_STATIC,8,86,
+                    284,71
 END
 
 IDD_FILE_SAVE DIALOG DISCARDABLE  0, 0, 130, 30
@@ -2550,7 +2525,7 @@ BEGIN
     PUSHBUTTON      "Abbrechen",IDCANCEL,314,217,50,14
 END
 
-IDD_CUSTOMIZEPAGE_EDITOR DIALOG DISCARDABLE  0, 0, 265, 146
+IDD_OPTIONS_EDITOR DIALOG DISCARDABLE  0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Textformat"
 FONT 8, "MS Sans Serif"
@@ -2558,23 +2533,30 @@ BEGIN
     LTEXT           "&Fenster:",IDC_STATIC,8,10,26,8
     COMBOBOX        IDC_WINDOW,41,8,99,94,CBS_DROPDOWNLIST | WS_VSCROLL | 
                     WS_TABSTOP
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,9,40,248,1
-    LTEXT           "Schrift ",IDC_STATIC,9,35,23,8
+    GROUPBOX        "Schrift",IDC_STATIC,8,25,284,45
     CTEXT           "Example of current font will appear here",
-                    IDC_EDITOR_FONT,9,46,180,20,SS_CENTERIMAGE | SS_SUNKEN
-    PUSHBUTTON      "&Ändern...",IDC_EDITOR_SELECTFONT,195,49,50,14
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,8,82,248,1
-    LTEXT           "Farben ",IDC_STATIC,8,77,25,8
-    LTEXT           "&Element:",IDC_STATIC,8,91,28,8
-    COMBOBOX        IDC_EDITOR_ELEMENT,38,89,125,137,CBS_DROPDOWNLIST | 
+                    IDC_EDITOR_FONT,16,41,180,20,SS_CENTERIMAGE | SS_SUNKEN
+    PUSHBUTTON      "&Ändern...",IDC_EDITOR_SELECTFONT,202,44,50,14
+    GROUPBOX        "Farben",IDC_STATIC,8,74,284,35
+    LTEXT           "&Element:",IDC_STATIC,16,89,28,8
+    COMBOBOX        IDC_EDITOR_ELEMENT,47,87,125,137,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Color Picker",IDC_EDITOR_ELEMENTCOLOR,168,88,75,14
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,8,119,248,1
-    LTEXT           "Allgemein ",IDC_STATIC,8,113,33,8
-    LTEXT           "&Tabulatorbreite:",IDC_STATIC,8,127,50,8
-    EDITTEXT        IDC_EDITOR_TABWIDTH,62,124,15,14,ES_RIGHT | 
+    PUSHBUTTON      "Color Picker",IDC_EDITOR_ELEMENTCOLOR,177,86,75,14
+    GROUPBOX        "Cursor",IDC_STATIC,8,113,284,53
+    LTEXT           "E&infügen:",IDC_STATIC,14,127,31,8
+    COMBOBOX        IDC_INSERCURSOR_STYLE,68,125,48,58,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_INSERTCURSOR_BLINK,120,125,48,79,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "&Überschreiben:",IDC_STATIC,14,146,49,8
+    COMBOBOX        IDC_OVERWRITECURSOR_STYLE,68,144,48,58,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_OVERWRITECURSOR_BLINK,120,144,48,79,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "&Tabulatorbreite:",IDC_STATIC,8,182,50,8
+    EDITTEXT        IDC_EDITOR_TABWIDTH,65,179,15,14,ES_RIGHT | 
                     ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "Zeichen",IDC_STATIC,78,127,27,8
+    LTEXT           "Zeichen",IDC_STATIC,83,182,27,8
 END
 
 IDD_DOCUMENT_NEW DIALOG DISCARDABLE  0, 0, 371, 238
@@ -2600,46 +2582,43 @@ BEGIN
     PUSHBUTTON      "Abbrechen",IDCANCEL,314,217,50,14
 END
 
-IDD_OPTIONS_LANGUAGE DIALOG DISCARDABLE  0, 0, 235, 156
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_OPTIONS_LANGUAGE DIALOG DISCARDABLE  0, 0, 300, 200
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "Rechtschreibung"
 FONT 8, "MS Sans Serif"
 BEGIN
-    COMBOBOX        IDC_OPTIONS_LANGUAGE,34,16,83,53,CBS_DROPDOWNLIST | 
+    GROUPBOX        "Sprache",IDC_STATIC,8,8,284,52
+    LTEXT           "&Sprache:",IDC_STATIC,15,23,30,8
+    COMBOBOX        IDC_OPTIONS_LANGUAGE,45,21,98,53,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,152,16,83,56,
+    LTEXT           "&Dialekt:",IDC_STATIC,150,23,25,8
+    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,179,21,105,56,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "&Rechtschreibung während der Eingabe überprüfen",
-                    IDC_OPTIONS_SPELL_ENABLE,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,0,59,175,10
-    CONTROL         "Nur &Hauptwörterbuch verwenden",
-                    IDC_OPTIONS_SPELL_MAINDICT,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,0,71,119,10
-    CONTROL         "&Kommentare ignorieren",IDC_OPTIONS_SPELL_COMMENT,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,83,88,10
-    CONTROL         "LaTe&X-Befehle ignorieren",IDC_OPTIONS_SPELL_SKIP_TAGS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,95,96,10
-    CONTROL         "Worte mit &Zahlen ignorieren",
-                    IDC_OPTIONS_SPELL_IGNORE_NUM,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,0,107,103,10
-    CONTROL         "Wörter in &GROSSBUCHSTABEN ignorieren",
-                    IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,0,119,153,10
-    EDITTEXT        IDC_OPTIONS_SPELL_PDICT,5,138,209,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "&...",IDC_OPTIONS_SPELL_BROWSE,218,138,13,14
-    LTEXT           "&Sprache:",IDC_STATIC,0,20,30,8
-    LTEXT           "&Dialekt:",IDC_STATIC,125,20,25,8
-    LTEXT           "Benutzerwörterbuch:",IDC_STATIC,5,130,66,8
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
-    LTEXT           " Sprache ",IDC_STATIC,5,5,32,8
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,52,235,1
-    LTEXT           " Optionen für die Rechtschreibung ",IDC_STATIC,5,47,111,
-                    8
-    LTEXT           "&Locale:",IDC_STATIC,1,36,24,8
-    COMBOBOX        IDC_OPTIONS_LANGUAGE_LOCALE,33,33,83,53,CBS_DROPDOWNLIST | 
+    LTEXT           "&Locale:",IDC_STATIC,15,43,24,8
+    COMBOBOX        IDC_OPTIONS_LANGUAGE_LOCALE,45,40,98,53,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
     PUSHBUTTON      "Wörterbücher herunterladen",
-                    IDC_OPTIONS_LANGUAGE_DOWNLOAD,132,35,103,10
+                    IDC_OPTIONS_LANGUAGE_DOWNLOAD,166,42,103,10
+    GROUPBOX        "Optionen",IDC_STATIC,8,67,284,126
+    CONTROL         "&Rechtschreibung während der Eingabe überprüfen",
+                    IDC_OPTIONS_SPELL_ENABLE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,15,83,175,10
+    CONTROL         "Nur &Hauptwörterbuch verwenden",
+                    IDC_OPTIONS_SPELL_MAINDICT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,15,95,119,10
+    CONTROL         "&Kommentare ignorieren",IDC_OPTIONS_SPELL_COMMENT,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,107,88,10
+    CONTROL         "LaTe&X-Befehle ignorieren",IDC_OPTIONS_SPELL_SKIP_TAGS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,119,96,10
+    CONTROL         "Worte mit &Zahlen ignorieren",
+                    IDC_OPTIONS_SPELL_IGNORE_NUM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,15,131,103,10
+    CONTROL         "Wörter in &GROSSBUCHSTABEN ignorieren",
+                    IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,143,153,10
+    LTEXT           "&Benutzerwörterbuch:",IDC_STATIC,15,161,66,8
+    EDITTEXT        IDC_OPTIONS_SPELL_PDICT,15,171,253,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "&...",IDC_OPTIONS_SPELL_BROWSE,270,171,13,14
 END
 
 IDD_FILECLEANCONFIRM DIALOG DISCARDABLE  0, 0, 295, 180
@@ -2662,33 +2641,33 @@ BEGIN
                     WS_TABSTOP,7,163,190,10
 END
 
-IDD_OPTIONS_FILECLEAN DIALOG DISCARDABLE  0, 0, 235, 156
+IDD_OPTIONS_FILECLEAN DIALOG DISCARDABLE  0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Aufräumen"
 FONT 8, "MS Sans Serif"
 BEGIN
+    GROUPBOX        "&Dateigruppen",IDC_STATIC,8,8,284,167
     CONTROL         "List1",IDC_OPTIONS_FILECLEAN_LIST,"SysListView32",
                     LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
-                    LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,5,13,225,80
-    EDITTEXT        IDC_OPTIONS_FILECLEAN_NAME,5,103,99,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_OPTIONS_FILECLEAN_PATTERN,115,103,95,14,
+                    LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,12,20,275,87
+    PUSHBUTTON      "&Neu",IDC_OPTIONS_FILECLEAN_NEW,12,109,87,15
+    PUSHBUTTON      "&Entfernen",IDC_OPTIONS_FILECLEAN_DELETE,106,109,87,15
+    PUSHBUTTON      "&Sortieren",IDC_OPTIONS_FILECLEAN_SORT,200,109,87,15
+    LTEXT           "&Beschreibung:",IDC_STATIC,12,129,46,8
+    EDITTEXT        IDC_OPTIONS_FILECLEAN_NAME,12,139,131,14,ES_AUTOHSCROLL
+    LTEXT           "&Pattern:",IDC_STATIC,150,129,26,8
+    EDITTEXT        IDC_OPTIONS_FILECLEAN_PATTERN,150,139,121,14,
                     ES_AUTOHSCROLL
-    PUSHBUTTON      "",IDC_OPTIONS_FILECLEAN_PHINSERT,215,103,15,14
-    COMBOBOX        IDC_OPTIONS_FILECLEAN_HANDLING,30,121,75,84,
+    PUSHBUTTON      "",IDC_OPTIONS_FILECLEAN_PHINSERT,272,139,15,14
+    LTEXT           "&Aktion:",IDC_STATIC,12,160,23,8
+    COMBOBOX        IDC_OPTIONS_FILECLEAN_HANDLING,38,158,105,84,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     CONTROL         "&Unterverzeichnisse einbeziehen",
                     IDC_OPTIONS_FILECLEAN_RECURSIVE,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,115,123,115,10
-    CONTROL         "Vor dem Löschen einen Dialog zur &Bestätigung anzeigen.",
+                    WS_TABSTOP,150,160,115,10
+    CONTROL         "Bes&tätigung vor dem löschen",
                     IDC_OPTIONS_FILECLEAN_CONFIRM,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,140,196,10
-    LTEXT           "Beschreibung:",IDC_STATIC,5,95,46,8
-    LTEXT           "Pattern:",IDC_STATIC,115,95,26,8
-    LTEXT           "Aktion:",IDC_STATIC,5,125,23,8
-    PUSHBUTTON      "&Neu",IDC_OPTIONS_FILECLEAN_NEW,114,3,36,10
-    PUSHBUTTON      "&Entfernen",IDC_OPTIONS_FILECLEAN_DELETE,154,3,36,10
-    PUSHBUTTON      "&Sortieren",IDC_OPTIONS_FILECLEAN_SORT,194,3,36,10
-    LTEXT           "Einträge bearbeiten:",IDC_STATIC,5,3,64,8
+                    WS_TABSTOP,8,183,107,10
 END
 
 IDD_PLACEHOLDER_SINGLE DIALOG DISCARDABLE  0, 0, 186, 170
@@ -2870,6 +2849,30 @@ BEGIN
         BOTTOMMARGIN, 80
     END
 
+    IDD_OPTIONS_FILE, DIALOG
+    BEGIN
+        LEFTMARGIN, 8
+        RIGHTMARGIN, 292
+        TOPMARGIN, 8
+        BOTTOMMARGIN, 193
+    END
+
+    IDD_OPTIONS_GENERIC, DIALOG
+    BEGIN
+        LEFTMARGIN, 8
+        RIGHTMARGIN, 292
+        TOPMARGIN, 8
+        BOTTOMMARGIN, 193
+    END
+
+    IDD_OPTIONS_PATHS, DIALOG
+    BEGIN
+        LEFTMARGIN, 8
+        RIGHTMARGIN, 292
+        TOPMARGIN, 8
+        BOTTOMMARGIN, 193
+    END
+
     IDD_FILE_SAVE, DIALOG
     BEGIN
         LEFTMARGIN, 7
@@ -2920,12 +2923,12 @@ BEGIN
         BOTTOMMARGIN, 231
     END
 
-    IDD_CUSTOMIZEPAGE_EDITOR, DIALOG
+    IDD_OPTIONS_EDITOR, DIALOG
     BEGIN
         LEFTMARGIN, 8
-        RIGHTMARGIN, 257
+        RIGHTMARGIN, 292
         TOPMARGIN, 8
-        BOTTOMMARGIN, 138
+        BOTTOMMARGIN, 193
     END
 
     IDD_DOCUMENT_NEW, DIALOG
@@ -2936,12 +2939,34 @@ BEGIN
         BOTTOMMARGIN, 231
     END
 
+    IDD_OPTIONS_LANGUAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 8
+        RIGHTMARGIN, 292
+        VERTGUIDE, 15
+        VERTGUIDE, 143
+        VERTGUIDE, 150
+        VERTGUIDE, 284
+        TOPMARGIN, 8
+        BOTTOMMARGIN, 193
+    END
+
     IDD_FILECLEANCONFIRM, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 288
         TOPMARGIN, 7
         BOTTOMMARGIN, 173
+    END
+
+    IDD_OPTIONS_FILECLEAN, DIALOG
+    BEGIN
+        LEFTMARGIN, 8
+        RIGHTMARGIN, 292
+        VERTGUIDE, 143
+        VERTGUIDE, 150
+        TOPMARGIN, 8
+        BOTTOMMARGIN, 193
     END
 
     IDD_PLACEHOLDER_SINGLE, DIALOG
@@ -3085,7 +3110,7 @@ BEGIN
     0
 END
 
-IDD_CUSTOMIZEPAGE_EDITOR DLGINIT
+IDD_OPTIONS_EDITOR DLGINIT
 BEGIN
     IDC_WINDOW, 0x403, 7, 0
 0x6445, 0x7469, 0x726f, "\000" 
@@ -3122,6 +3147,22 @@ BEGIN
     IDC_EDITOR_ELEMENT, 0x403, 32, 0
 0x6353, 0x6c68, 0x73fc, 0x6573, 0x776c, 0x726f, 0x2074, 0x6e69, 0x4720, 
 0x656c, 0x6369, 0x7568, 0x676e, 0x2820, 0x2424, 0x0029, 
+    IDC_INSERCURSOR_STYLE, 0x403, 6, 0
+0x694c, 0x696e, 0x0065, 
+    IDC_INSERCURSOR_STYLE, 0x403, 6, 0
+0x6c42, 0x636f, 0x006b, 
+    IDC_INSERTCURSOR_BLINK, 0x403, 9, 0
+0x6c62, 0x6e69, 0x656b, 0x646e, "\000" 
+    IDC_INSERTCURSOR_BLINK, 0x403, 9, 0
+0x7473, 0x7461, 0x7369, 0x6863, "\000" 
+    IDC_OVERWRITECURSOR_STYLE, 0x403, 6, 0
+0x694c, 0x696e, 0x0065, 
+    IDC_OVERWRITECURSOR_STYLE, 0x403, 6, 0
+0x6c42, 0x636f, 0x006b, 
+    IDC_OVERWRITECURSOR_BLINK, 0x403, 9, 0
+0x6c62, 0x6e69, 0x656b, 0x646e, "\000" 
+    IDC_OVERWRITECURSOR_BLINK, 0x403, 9, 0
+0x7473, 0x7461, 0x7369, 0x6863, "\000" 
     0
 END
 
@@ -4467,12 +4508,12 @@ BEGIN
                             "Erzeugt ein Projekt mit der aktuell geöffneten Datei als Hauptdatei.\nNeues Projekt mit aktueller Datei"
 END
 
-#endif    // German (Germany) resources
+#endif    // Deutsch (Deutschland) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// Englisch (USA) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -5752,79 +5793,57 @@ BEGIN
     LTEXT           "Comment",IDC_COMMENT,53,15,150,8,0,0,HIDC_COMMENT
 END
 
-IDD_OPTIONS_FILE DIALOGEX 0, 0, 235, 156
+IDD_OPTIONS_FILE DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "File"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
-    LTEXT           " Save ",IDC_STATIC,5,6,22,8
     CONTROL         "&Save new document immediately",
                     IDC_OPTIONS_SAVE_NEWDOCS,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,0,20,119,10
+                    WS_TABSTOP,13,20,119,10
     CONTROL         "Save all before &compilation",
                     IDC_OPTIONS_SAVE_BEFORE_COMPILATION,"Button",
-                    BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,0,35,101,10,0,
+                    BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,13,35,101,10,0,
                     HIDC_OPTIONS_SAVE_BEFORE_COMPILATION
     CONTROL         "Save &automatic",IDC_OPTIONS_SAVE_AUTOMATIC,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,0,50,65,10,0,
+                    BS_AUTOCHECKBOX | WS_TABSTOP,13,50,65,10,0,
                     HIDC_OPTIONS_SAVE_AUTOMATIC
-    LTEXT           "every",IDC_OPTIONS_SAVE_LABEL1,65,51,18,8
-    EDITTEXT        IDC_OPTIONS_SAVE_INTERVALL_EDIT,85,48,28,14,
+    LTEXT           "every",IDC_OPTIONS_SAVE_LABEL1,78,51,18,8
+    EDITTEXT        IDC_OPTIONS_SAVE_INTERVALL_EDIT,98,48,28,14,
                     ES_AUTOHSCROLL | ES_NUMBER,0,
                     HIDC_OPTIONS_SAVE_INTERVALL_EDIT
     CONTROL         "Spin1",IDC_OPTIONS_SAVE_INTERVALL_SPIN,"msctls_updown32",
                     UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
-                    UDS_ARROWKEYS | UDS_NOTHOUSANDS,105,48,11,14
-    LTEXT           "minutes",IDC_OPTIONS_SAVE_LABEL2,115,51,25,8
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,75,235,1
-    LTEXT           " File Format ",IDC_STATIC,5,71,39,8
-    LTEXT           "&Default:",IDC_STATIC,0,85,26,8
-    COMBOBOX        IDC_OPTIONS_FILETYPE,30,83,55,57,CBS_DROPDOWNLIST | 
+                    UDS_ARROWKEYS | UDS_NOTHOUSANDS,118,48,11,14
+    LTEXT           "minutes",IDC_OPTIONS_SAVE_LABEL2,128,51,25,8
+    LTEXT           "&Default:",IDC_STATIC,8,85,26,8
+    COMBOBOX        IDC_OPTIONS_FILETYPE,38,83,55,57,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Save",IDC_STATIC,8,8,284,60
 END
 
-IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 235, 156
+IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "General"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
-    LTEXT           " General ",IDC_STATIC,5,5,30,8
-    CONTROL         "Restore last &session on start up",
+    GROUPBOX        "General",IDC_STATIC,8,8,284,31
+    CONTROL         "Restore last &session on startup",
                     IDC_OPTIONS_RESTORE_SESSION,"Button",BS_AUTOCHECKBOX | 
-                    WS_GROUP | WS_TABSTOP,0,15,114,10,0,
+                    WS_GROUP | WS_TABSTOP,13,21,112,10,0,
                     HIDC_OPTIONS_RESTORE_SESSION
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,45,236,1
-    LTEXT           " Automatic Replacement ",IDC_STATIC,5,40,80,8
-    CONTROL         "&Replace quotation marks ("")",IDC_OPTIONS_REPLACE_QM,
-                    "Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,0,50,
-                    104,10,0,HIDC_OPTIONS_REPLACE_QM
-    LTEXT           "&opening quotation mark:",IDC_OPTIONS_QM_LABEL1,15,65,
-                    77,8
-    EDITTEXT        IDC_OPTIONS_REPLACE_QM_OPEN_EDIT,95,62,15,14,
+    GROUPBOX        "Automatic replacement",IDC_STATIC,8,49,284,64
+    CONTROL         "&Replace quotation marks",IDC_OPTIONS_REPLACE_QM,"Button",
+                    BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,13,64,95,10,0,
+                    HIDC_OPTIONS_REPLACE_QM
+    LTEXT           "&Opening quotation marks:",IDC_OPTIONS_QM_LABEL1,28,79,
+                    82,8
+    EDITTEXT        IDC_OPTIONS_REPLACE_QM_OPEN_EDIT,112,76,15,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_OPEN_EDIT
-    LTEXT           "&closing quotation mark:",IDC_OPTIONS_QM_LABEL2,15,80,
-                    74,8
-    EDITTEXT        IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT,95,77,15,14,
+    LTEXT           "&Closing quotation marks:",IDC_OPTIONS_QM_LABEL2,28,94,
+                    78,8
+    EDITTEXT        IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT,112,91,15,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_REPLACE_QM_CLOSE_EDIT
-END
-
-IDD_OPTIONS_LATEX DIALOGEX 0, 0, 235, 156
-STYLE DS_CONTEXTHELP | WS_CHILD | WS_DISABLED | WS_CAPTION
-CAPTION "LaTeX"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
-BEGIN
-    GROUPBOX        "Output types",IDC_STATIC,5,5,225,147
-    LISTBOX         IDC_TYPES,10,15,215,114,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
-                    WS_VSCROLL | WS_TABSTOP,0,HIDC_TYPES
-    PUSHBUTTON      "&Add...",IDC_ADD_TYPE,65,133,50,14,0,0,HIDC_ADD_TYPE
-    PUSHBUTTON      "&Edit...",IDC_EDIT_TYPE,120,133,50,14,0,0,
-                    HIDC_EDIT_TYPE
-    PUSHBUTTON      "&Remove",IDC_REMOVE_TYPE,175,133,50,14,0,0,
-                    HIDC_REMOVE_TYPE
-    PUSHBUTTON      "&Wizard...",IDC_OUTPUT_WIZARD,10,133,50,14,0,0,
-                    HIDC_OUTPUT_WIZARD
 END
 
 IDD_PROJECT_PROPERTIES DIALOGEX 0, 0, 252, 87
@@ -6189,7 +6208,7 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,170,33,50,14
 END
 
-IDD_CUSTOMIZEPAGE_EDITOR DIALOG DISCARDABLE  0, 0, 265, 146
+IDD_OPTIONS_EDITOR DIALOG DISCARDABLE  0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Text Format"
 FONT 8, "MS Sans Serif"
@@ -6197,55 +6216,58 @@ BEGIN
     LTEXT           "&Window:",IDC_STATIC,8,10,29,8
     COMBOBOX        IDC_WINDOW,41,8,99,94,CBS_DROPDOWNLIST | WS_VSCROLL | 
                     WS_TABSTOP
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,9,40,248,1
-    LTEXT           "Font ",IDC_STATIC,9,35,17,8
+    GROUPBOX        "Font",IDC_STATIC,8,25,284,45
     CTEXT           "Example of current font will appear here",
-                    IDC_EDITOR_FONT,9,46,180,20,SS_CENTERIMAGE | SS_SUNKEN
-    PUSHBUTTON      "&Change",IDC_EDITOR_SELECTFONT,195,49,50,14
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,8,82,248,1
-    LTEXT           "Colors ",IDC_STATIC,8,77,22,8
-    LTEXT           "&Element:",IDC_STATIC,8,91,28,8
-    COMBOBOX        IDC_EDITOR_ELEMENT,38,89,125,137,CBS_DROPDOWNLIST | 
+                    IDC_EDITOR_FONT,16,41,180,20,SS_CENTERIMAGE | SS_SUNKEN
+    PUSHBUTTON      "&Choose...",IDC_EDITOR_SELECTFONT,202,44,50,14
+    GROUPBOX        "Colors",IDC_STATIC,8,74,284,35
+    LTEXT           "&Item:",IDC_STATIC,16,89,16,8
+    COMBOBOX        IDC_EDITOR_ELEMENT,47,87,125,137,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Color Picker",IDC_EDITOR_ELEMENTCOLOR,168,88,75,14
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,8,119,248,1
-    LTEXT           "General ",IDC_STATIC,8,113,28,8
-    LTEXT           "&Tabulator width:",IDC_STATIC,8,127,52,8
-    EDITTEXT        IDC_EDITOR_TABWIDTH,62,124,15,14,ES_RIGHT | 
+    PUSHBUTTON      "Color Picker",IDC_EDITOR_ELEMENTCOLOR,177,86,75,14
+    GROUPBOX        "Cursor",IDC_STATIC,8,113,284,53
+    LTEXT           "I&nsert:",IDC_STATIC,14,127,20,8
+    COMBOBOX        IDC_INSERCURSOR_STYLE,68,125,48,58,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_INSERTCURSOR_BLINK,120,125,48,79,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "&Overwrite:",IDC_STATIC,14,146,33,8
+    COMBOBOX        IDC_OVERWRITECURSOR_STYLE,68,144,48,58,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_OVERWRITECURSOR_BLINK,120,144,48,79,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "&Tabulator width:",IDC_STATIC,8,182,52,8
+    EDITTEXT        IDC_EDITOR_TABWIDTH,65,179,15,14,ES_RIGHT | 
                     ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "characters",IDC_STATIC,78,127,34,8
+    LTEXT           "characters",IDC_STATIC,83,182,34,8
 END
 
-IDD_OPTIONS_PATHS DIALOGEX 0, 0, 235, 156
+IDD_OPTIONS_PATHS DIALOGEX 0, 0, 300, 200
 STYLE DS_CONTEXTHELP | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Directories"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
-    LTEXT           " &Project Template Directories ",IDC_STATIC,5,5,94,8
-    LISTBOX         IDC_PROJECTTEMPLATES,0,15,175,35,LBS_SORT | 
+    LISTBOX         IDC_PROJECTTEMPLATES,13,21,219,53,LBS_SORT | 
                     LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP,0,
                     HIDC_PROJECTTEMPLATES
-    PUSHBUTTON      "Add...",IDC_ADD_PROJECTTEMPLATES,180,15,50,14,0,0,
+    PUSHBUTTON      "Add...",IDC_ADD_PROJECTTEMPLATES,237,21,50,14,0,0,
                     HIDC_ADD_PROJECTTEMPLATES
-    PUSHBUTTON      "Remove",IDC_REMOVE_PROJECTTEMPLATES,180,35,50,14,0,0,
+    PUSHBUTTON      "Remove",IDC_REMOVE_PROJECTTEMPLATES,237,39,50,14,0,0,
                     HIDC_REMOVE_PROJECTTEMPLATES
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,60,236,1
-    LTEXT           " &Document Template Directories ",IDC_STATIC,5,55,104,8
-    LISTBOX         IDC_DOCUMENTTEMPLATES,0,65,175,35,LBS_SORT | 
+    LISTBOX         IDC_DOCUMENTTEMPLATES,13,99,219,53,LBS_SORT | 
                     LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP,0,
                     HIDC_DOCUMENTTEMPLATES
-    PUSHBUTTON      "Add...",IDC_ADD_DOCUMENTTEMPLATES,180,65,50,14,0,0,
+    PUSHBUTTON      "Add...",IDC_ADD_DOCUMENTTEMPLATES,237,99,50,14,0,0,
                     HIDC_ADD_DOCUMENTTEMPLATES
-    PUSHBUTTON      "Remove",IDC_REMOVE_DOCUMENTTEMPLATES,180,85,50,14,0,0,
+    PUSHBUTTON      "Remove",IDC_REMOVE_DOCUMENTTEMPLATES,237,117,50,14,0,0,
                     HIDC_REMOVE_DOCUMENTTEMPLATES
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,115,236,1
-    LTEXT           " Working &Directory ",IDC_STATIC,5,110,62,8
-    LTEXT           "Default:",IDC_STATIC,0,120,26,8
-    EDITTEXT        IDC_OPTIONS_DEFAULT_PATH_EDIT,0,130,215,14,
+    LTEXT           "&Default working directory",IDC_STATIC,8,168,79,8
+    EDITTEXT        IDC_OPTIONS_DEFAULT_PATH_EDIT,8,179,267,14,
                     ES_AUTOHSCROLL,0,HIDC_OPTIONS_DEFAULT_PATH_EDIT
-    PUSHBUTTON      "&...",IDC_BROWSE_DEFAULT_PATH,220,130,15,14,0,0,
+    PUSHBUTTON      "&...",IDC_BROWSE_DEFAULT_PATH,277,179,15,14,0,0,
                     HIDC_BROWSE_DEFAULT_PATH
+    GROUPBOX        "&Project template directories",IDC_STATIC,8,8,284,71
+    GROUPBOX        "&Document template directories",IDC_STATIC,8,86,284,71
 END
 
 IDD_DOCUMENT_NEW DIALOG DISCARDABLE  0, 0, 371, 238
@@ -6291,32 +6313,32 @@ BEGIN
                     WS_TABSTOP,7,163,132,10
 END
 
-IDD_OPTIONS_FILECLEAN DIALOG DISCARDABLE  0, 0, 235, 156
+IDD_OPTIONS_FILECLEAN DIALOG DISCARDABLE  0, 0, 300, 200
 STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Clean"
 FONT 8, "MS Sans Serif"
 BEGIN
+    GROUPBOX        "&File groups",IDC_STATIC,8,8,284,167
     CONTROL         "List1",IDC_OPTIONS_FILECLEAN_LIST,"SysListView32",
                     LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
-                    LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,5,13,225,80
-    EDITTEXT        IDC_OPTIONS_FILECLEAN_NAME,5,103,99,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_OPTIONS_FILECLEAN_PATTERN,115,103,95,14,
+                    LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,12,20,275,87
+    PUSHBUTTON      "&New",IDC_OPTIONS_FILECLEAN_NEW,12,109,87,15
+    PUSHBUTTON      "&Remove",IDC_OPTIONS_FILECLEAN_DELETE,106,109,87,15
+    PUSHBUTTON      "&Sort",IDC_OPTIONS_FILECLEAN_SORT,200,109,87,15
+    LTEXT           "&Description:",IDC_STATIC,12,129,38,8
+    EDITTEXT        IDC_OPTIONS_FILECLEAN_NAME,12,139,131,14,ES_AUTOHSCROLL
+    LTEXT           "&Pattern:",IDC_STATIC,150,129,26,8
+    EDITTEXT        IDC_OPTIONS_FILECLEAN_PATTERN,150,139,121,14,
                     ES_AUTOHSCROLL
-    PUSHBUTTON      "",IDC_OPTIONS_FILECLEAN_PHINSERT,215,103,15,14
-    COMBOBOX        IDC_OPTIONS_FILECLEAN_HANDLING,30,121,75,84,
+    PUSHBUTTON      "",IDC_OPTIONS_FILECLEAN_PHINSERT,272,139,15,14
+    LTEXT           "&Action:",IDC_STATIC,12,160,23,8
+    COMBOBOX        IDC_OPTIONS_FILECLEAN_HANDLING,38,158,105,84,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "Include &subdirectories",
+    CONTROL         "&Include subdirectories",
                     IDC_OPTIONS_FILECLEAN_RECURSIVE,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,115,123,115,10
+                    WS_TABSTOP,150,160,115,10
     CONTROL         "&Confirm before delete",IDC_OPTIONS_FILECLEAN_CONFIRM,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,140,83,10
-    LTEXT           "Description:",IDC_STATIC,5,95,38,8
-    LTEXT           "Pattern:",IDC_STATIC,115,95,26,8
-    LTEXT           "Action:",IDC_STATIC,5,125,23,8
-    PUSHBUTTON      "&Add",IDC_OPTIONS_FILECLEAN_NEW,114,3,36,10
-    PUSHBUTTON      "&Remove",IDC_OPTIONS_FILECLEAN_DELETE,154,3,36,10
-    PUSHBUTTON      "&Sort",IDC_OPTIONS_FILECLEAN_SORT,194,3,36,10
-    LTEXT           "Edit entries:",IDC_STATIC,5,3,38,8
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,8,183,83,10
 END
 
 IDD_PLACEHOLDER_SINGLE DIALOG DISCARDABLE  0, 0, 186, 170
@@ -6348,44 +6370,42 @@ BEGIN
     LTEXT           "PHResult",IDC_PLACEHOLDER_SINGLE_RESULT,50,125,31,8
 END
 
-IDD_OPTIONS_LANGUAGE DIALOG DISCARDABLE  0, 0, 235, 156
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_OPTIONS_LANGUAGE DIALOG DISCARDABLE  0, 0, 300, 200
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "Spelling"
 FONT 8, "MS Sans Serif"
 BEGIN
-    COMBOBOX        IDC_OPTIONS_LANGUAGE,35,16,83,53,CBS_DROPDOWNLIST | 
+    GROUPBOX        "Sprache",IDC_STATIC,8,8,284,52
+    LTEXT           "&Language:",IDC_STATIC,15,23,35,8
+    COMBOBOX        IDC_OPTIONS_LANGUAGE,52,21,91,53,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,152,16,83,56,
+    LTEXT           "&Dialect:",IDC_STATIC,150,23,25,8
+    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,179,21,105,56,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "Check spelling while &typing",IDC_OPTIONS_SPELL_ENABLE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,60,101,10
-    CONTROL         "Suggest from &main dictionary only",
-                    IDC_OPTIONS_SPELL_MAINDICT,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,0,72,119,10
-    CONTROL         "Ignore &comments",IDC_OPTIONS_SPELL_COMMENT,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,0,84,70,10
-    CONTROL         "Ignore LaTe&X tags",IDC_OPTIONS_SPELL_SKIP_TAGS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,0,96,75,10
-    CONTROL         "Ignore words with &numbers",
-                    IDC_OPTIONS_SPELL_IGNORE_NUM,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,0,108,100,10
-    CONTROL         "Ignore &UPPERCASE words ",
-                    IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,0,120,104,10
-    EDITTEXT        IDC_OPTIONS_SPELL_PDICT,5,138,209,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "&...",IDC_OPTIONS_SPELL_BROWSE,218,138,13,14
-    LTEXT           "&Language:",IDC_STATIC,0,20,35,8
-    LTEXT           "&Dialect:",IDC_STATIC,125,20,25,8
-    LTEXT           "Personal dictionary:",IDC_STATIC,5,130,62,8
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,10,236,1
-    LTEXT           " Language ",IDC_STATIC,5,5,37,8
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,54,234,1
-    LTEXT           " Options for spelling ",IDC_STATIC,5,48,64,8
-    LTEXT           "Loc&ale:",IDC_STATIC,1,36,24,8
-    COMBOBOX        IDC_OPTIONS_LANGUAGE_LOCALE,35,32,83,53,CBS_DROPDOWNLIST | 
+    LTEXT           "Loc&ale:",IDC_STATIC,15,43,24,8
+    COMBOBOX        IDC_OPTIONS_LANGUAGE_LOCALE,52,40,91,53,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
     PUSHBUTTON      "Download Dictionaries",IDC_OPTIONS_LANGUAGE_DOWNLOAD,
-                    152,35,83,10
+                    177,42,81,10
+    GROUPBOX        "Options",IDC_STATIC,8,67,284,126
+    CONTROL         "Check spelling while &typing",IDC_OPTIONS_SPELL_ENABLE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,83,101,10
+    CONTROL         "Suggest from &main dictionary only",
+                    IDC_OPTIONS_SPELL_MAINDICT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,15,95,119,10
+    CONTROL         "Ignore &comments",IDC_OPTIONS_SPELL_COMMENT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,107,70,10
+    CONTROL         "Ignore LaTe&X tags",IDC_OPTIONS_SPELL_SKIP_TAGS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,119,75,10
+    CONTROL         "Ignore words with &numbers",
+                    IDC_OPTIONS_SPELL_IGNORE_NUM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,15,131,100,10
+    CONTROL         "Ignore &UPPERCASE words",
+                    IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,143,102,10
+    LTEXT           "&Personal dictionary",IDC_STATIC,15,161,60,8
+    EDITTEXT        IDC_OPTIONS_SPELL_PDICT,15,171,253,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "&...",IDC_OPTIONS_SPELL_BROWSE,270,171,13,14
 END
 
 IDD_PLACEHOLDER_SET DIALOG DISCARDABLE  0, 0, 186, 231
@@ -6522,6 +6542,22 @@ BEGIN
         BOTTOMMARGIN, 72
     END
 
+    IDD_OPTIONS_FILE, DIALOG
+    BEGIN
+        LEFTMARGIN, 8
+        RIGHTMARGIN, 292
+        TOPMARGIN, 8
+        BOTTOMMARGIN, 193
+    END
+
+    IDD_OPTIONS_GENERIC, DIALOG
+    BEGIN
+        LEFTMARGIN, 8
+        RIGHTMARGIN, 292
+        TOPMARGIN, 8
+        BOTTOMMARGIN, 193
+    END
+
     IDD_PROJECT_PROPERTIES, DIALOG
     BEGIN
         LEFTMARGIN, 7
@@ -6585,12 +6621,20 @@ BEGIN
         BOTTOMMARGIN, 47
     END
 
-    IDD_CUSTOMIZEPAGE_EDITOR, DIALOG
+    IDD_OPTIONS_EDITOR, DIALOG
     BEGIN
         LEFTMARGIN, 8
-        RIGHTMARGIN, 257
+        RIGHTMARGIN, 292
         TOPMARGIN, 8
-        BOTTOMMARGIN, 138
+        BOTTOMMARGIN, 193
+    END
+
+    IDD_OPTIONS_PATHS, DIALOG
+    BEGIN
+        LEFTMARGIN, 8
+        RIGHTMARGIN, 292
+        TOPMARGIN, 8
+        BOTTOMMARGIN, 193
     END
 
     IDD_DOCUMENT_NEW, DIALOG
@@ -6609,12 +6653,28 @@ BEGIN
         BOTTOMMARGIN, 173
     END
 
+    IDD_OPTIONS_FILECLEAN, DIALOG
+    BEGIN
+        LEFTMARGIN, 8
+        RIGHTMARGIN, 292
+        TOPMARGIN, 8
+        BOTTOMMARGIN, 193
+    END
+
     IDD_PLACEHOLDER_SINGLE, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 179
         TOPMARGIN, 7
         BOTTOMMARGIN, 163
+    END
+
+    IDD_OPTIONS_LANGUAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 8
+        RIGHTMARGIN, 292
+        TOPMARGIN, 8
+        BOTTOMMARGIN, 193
     END
 
     IDD_PLACEHOLDER_SET, DIALOG
@@ -6710,46 +6770,6 @@ BEGIN
     0
 END
 
-IDD_CUSTOMIZEPAGE_EDITOR DLGINIT
-BEGIN
-    IDC_WINDOW, 0x403, 7, 0
-0x6445, 0x7469, 0x726f, "\000" 
-    IDC_WINDOW, 0x403, 10, 0
-0x614e, 0x6976, 0x6167, 0x6f74, 0x0072, 
-    IDC_WINDOW, 0x403, 7, 0
-0x754f, 0x7074, 0x7475, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 17, 0
-0x6553, 0x656c, 0x7463, 0x6f69, 0x206e, 0x614d, 0x6772, 0x6e69, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 12, 0
-0x6857, 0x7469, 0x7365, 0x6170, 0x6563, 0x0073, 
-    IDC_EDITOR_ELEMENT, 0x403, 11, 0
-0x6142, 0x6b63, 0x7267, 0x756f, 0x646e, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 12, 0
-0x6f4e, 0x6d72, 0x6c61, 0x5420, 0x7865, 0x0074, 
-    IDC_EDITOR_ELEMENT, 0x403, 22, 0
-0x6142, 0x6b63, 0x7267, 0x756f, 0x646e, 0x2820, 0x6573, 0x656c, 0x7463, 
-0x6465, 0x0029, 
-    IDC_EDITOR_ELEMENT, 0x403, 23, 0
-0x6f4e, 0x6d72, 0x6c61, 0x5420, 0x7865, 0x2074, 0x7328, 0x6c65, 0x6365, 
-0x6574, 0x2964, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 8, 0
-0x654b, 0x7779, 0x726f, 0x0064, 
-    IDC_EDITOR_ELEMENT, 0x403, 8, 0
-0x6f43, 0x6d6d, 0x6e65, 0x0074, 
-    IDC_EDITOR_ELEMENT, 0x403, 9, 0
-0x704f, 0x7265, 0x7461, 0x726f, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 18, 0
-0x6554, 0x7478, 0x6920, 0x206e, 0x765c, 0x7265, 0x6162, 0x6974, 0x006d, 
-
-    IDC_EDITOR_ELEMENT, 0x403, 29, 0
-0x6f4e, 0x6d72, 0x6c61, 0x7420, 0x7865, 0x2074, 0x6e69, 0x6520, 0x7571, 
-0x7461, 0x6f69, 0x206e, 0x2428, 0x2924, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 25, 0
-0x654b, 0x7779, 0x726f, 0x2064, 0x6e69, 0x6520, 0x7571, 0x7461, 0x6f69, 
-0x206e, 0x2428, 0x2924, "\000" 
-    0
-END
-
 IDD_DOCUMENT_NEW DLGINIT
 BEGIN
     IDC_SELECT_FILEFORMAT, 0x403, 8, 0
@@ -6816,6 +6836,62 @@ BEGIN
     IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 28, 0
 0x6c41, 0x206c, 0x6261, 0x766f, 0x2065, 0x6966, 0x656c, 0x6573, 0x7374, 
 0x7420, 0x676f, 0x7465, 0x6568, 0x0072, 
+    0
+END
+
+IDD_OPTIONS_EDITOR DLGINIT
+BEGIN
+    IDC_WINDOW, 0x403, 7, 0
+0x6445, 0x7469, 0x726f, "\000" 
+    IDC_WINDOW, 0x403, 10, 0
+0x614e, 0x6976, 0x6167, 0x6f74, 0x0072, 
+    IDC_WINDOW, 0x403, 14, 0
+0x7541, 0x6773, 0x6261, 0x6c65, 0x6965, 0x7473, 0x0065, 
+    IDC_EDITOR_ELEMENT, 0x403, 14, 0
+0x7541, 0x7773, 0x6861, 0x736c, 0x6170, 0x746c, 0x0065, 
+    IDC_EDITOR_ELEMENT, 0x403, 12, 0
+0x654c, 0x7265, 0x657a, 0x6369, 0x6568, 0x006e, 
+    IDC_EDITOR_ELEMENT, 0x403, 16, 0
+0x6554, 0x7478, 0x6968, 0x746e, 0x7265, 0x7267, 0x6e75, 0x0064, 
+    IDC_EDITOR_ELEMENT, 0x403, 14, 0
+0x6f4e, 0x6d72, 0x6c61, 0x7265, 0x5420, 0x7865, 0x0074, 
+    IDC_EDITOR_ELEMENT, 0x403, 26, 0
+0x6554, 0x7478, 0x6968, 0x746e, 0x7265, 0x7267, 0x6e75, 0x2064, 0x4128, 
+0x7375, 0x6177, 0x6c68, 0x0029, 
+    IDC_EDITOR_ELEMENT, 0x403, 24, 0
+0x6f4e, 0x6d72, 0x6c61, 0x7265, 0x5420, 0x7865, 0x2074, 0x4128, 0x7375, 
+0x6177, 0x6c68, 0x0029, 
+    IDC_EDITOR_ELEMENT, 0x403, 14, 0
+0x6353, 0x6c68, 0x73fc, 0x6573, 0x776c, 0x726f, 0x0074, 
+    IDC_EDITOR_ELEMENT, 0x403, 10, 0
+0x6f4b, 0x6d6d, 0x6e65, 0x6174, 0x0072, 
+    IDC_EDITOR_ELEMENT, 0x403, 9, 0
+0x704f, 0x7265, 0x7461, 0x726f, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 18, 0
+0x6554, 0x7478, 0x6920, 0x206e, 0x765c, 0x7265, 0x6162, 0x6974, 0x006d, 
+
+    IDC_EDITOR_ELEMENT, 0x403, 32, 0
+0x6f4e, 0x6d72, 0x6c61, 0x7265, 0x5420, 0x7865, 0x2074, 0x6e69, 0x4720, 
+0x656c, 0x6369, 0x7568, 0x676e, 0x2820, 0x2424, 0x0029, 
+    IDC_EDITOR_ELEMENT, 0x403, 32, 0
+0x6353, 0x6c68, 0x73fc, 0x6573, 0x776c, 0x726f, 0x2074, 0x6e69, 0x4720, 
+0x656c, 0x6369, 0x7568, 0x676e, 0x2820, 0x2424, 0x0029, 
+    IDC_INSERCURSOR_STYLE, 0x403, 5, 0
+0x694c, 0x656e, "\000" 
+    IDC_INSERCURSOR_STYLE, 0x403, 6, 0
+0x6c42, 0x636f, 0x006b, 
+    IDC_INSERTCURSOR_BLINK, 0x403, 9, 0
+0x6c62, 0x6e69, 0x696b, 0x676e, "\000" 
+    IDC_INSERTCURSOR_BLINK, 0x403, 9, 0
+0x7473, 0x7461, 0x7369, 0x6863, "\000" 
+    IDC_OVERWRITECURSOR_STYLE, 0x403, 5, 0
+0x694c, 0x656e, "\000" 
+    IDC_OVERWRITECURSOR_STYLE, 0x403, 6, 0
+0x6c42, 0x636f, 0x006b, 
+    IDC_OVERWRITECURSOR_BLINK, 0x403, 9, 0
+0x6c62, 0x6e69, 0x696b, 0x676e, "\000" 
+    IDC_OVERWRITECURSOR_BLINK, 0x403, 7, 0
+0x7473, 0x7461, 0x6369, "\000" 
     0
 END
 
@@ -8076,7 +8152,7 @@ BEGIN
                             "Creates a new project and sets the active file as the main file of the project.\nNew project with active file"
 END
 
-#endif    // English (U.S.) resources
+#endif    // Englisch (USA) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
