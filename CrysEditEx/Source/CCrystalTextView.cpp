@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.19  2003/12/16 20:04:38  svenwiegand
+* Implemented Feature 726766: "Option for selecting the language for the GUI"
+*
 * Revision 1.18  2003/12/06 19:59:58  svenwiegand
 * - Implemented Feature 601708 + additions: The user can now set the styles for
 *   the text cursor independant for the insert and the overwrite mode. The cursor
@@ -2790,6 +2793,9 @@ void CCrystalTextView::OnKillFocus(CWnd* pNewWnd)
 {
 	CView::OnKillFocus(pNewWnd);
 
+	//Stop incremental search
+	OnEditFindIncrementalStop(true);
+
 	m_bFocused = FALSE;
 	UpdateCaret();
 	if (m_ptSelStart != m_ptSelEnd)
@@ -3728,8 +3734,7 @@ BOOL CCrystalTextView::OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDL
 		nID == ID_EDIT_DELETE_BACK )
 		return CView::OnCmdMsg( nID, nCode, pExtra, pHandlerInfo );
 
-	if( nID >= ID_EDIT_FIRST && nID <= ID_EDIT_LAST )
-		m_bIncrementalSearchForward = m_bIncrementalSearchBackward = FALSE;
+	if ( nID >= ID_EDIT_FIRST && nID <= ID_EDIT_LAST ) OnEditFindIncrementalStop(true);
 
 	return CView::OnCmdMsg( nID, nCode, pExtra, pHandlerInfo );
 }
@@ -3743,21 +3748,16 @@ void CCrystalTextView::OnChar( UINT nChar, UINT nRepCnt, UINT nFlags )
 		return;
 
 	// exit incremental search, if Escape is pressed
-	// - NOTE: VK_ESCAPE does not arrive here.
 	if( nChar == VK_ESCAPE )
 	{
-		// if not end incremental search
-		m_bIncrementalSearchForward = m_bIncrementalSearchBackward = FALSE;
-		SetSelection( m_selStartBeforeIncrementalSearch, m_selEndBeforeIncrementalSearch );
-		SetCursorPos( m_cursorPosBeforeIncrementalSearch );
-		EnsureVisible( m_cursorPosBeforeIncrementalSearch );
+		OnEditFindIncrementalStop(false);
 		return;
 	}
 
-	// exit incremental search without destroying selection
+	// exit incremental search without destroying selection, if Return was pressed
 	if( nChar == VK_RETURN )
 	{
-		m_bIncrementalSearchForward = m_bIncrementalSearchBackward = FALSE;
+		OnEditFindIncrementalStop(true);
 		return;
 	}
 
@@ -3775,8 +3775,8 @@ void CCrystalTextView::OnChar( UINT nChar, UINT nRepCnt, UINT nFlags )
 	// - because pressing this key does not bring up the OnChar-Event.
 	if( !( IsGraph( nChar ) || IsAlNum(nChar) ) && !(nChar == _T(' ')) /*&& !(nChar == _T('\t'))*/ )
 	{
-		// if not end incremental search
-		m_bIncrementalSearchForward = m_bIncrementalSearchBackward = FALSE;
+		//If not valid, then end incremental search
+		OnEditFindIncrementalStop(true);
 		return;
 	}
 
@@ -3851,6 +3851,25 @@ void CCrystalTextView::OnEditFindIncremental( BOOL bFindNextOccurence /*= FALSE*
 	EnsureVisible( matchEnd );
 }
 
+
+bool CCrystalTextView::OnEditFindIncrementalStop(bool bKeepSelection)
+{
+	if (!m_bIncrementalSearchForward && !m_bIncrementalSearchBackward)
+		return false; //Not in search mode.
+
+	//Stop search.
+	m_bIncrementalSearchForward = m_bIncrementalSearchBackward = FALSE;
+
+	//Cancel it? I.e., return to original place?
+	if (!bKeepSelection)
+	{
+		SetSelection(m_selStartBeforeIncrementalSearch, m_selEndBeforeIncrementalSearch);
+		SetCursorPos(m_cursorPosBeforeIncrementalSearch);
+		EnsureVisible(m_cursorPosBeforeIncrementalSearch);
+	}
+
+	return true;
+}
 
 
 void CCrystalTextView::OnEditFindIncrementalForward()
