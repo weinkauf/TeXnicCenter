@@ -1,3 +1,8 @@
+2002/05/08 niteria
+- Added directory "TeXTest" with files to test TXC with.
+  Their main purpose is to reproduce several bugs or behaviours coming
+  up from missing features. You are invited to contribute to this section!
+
 2002/05/03 christianwelzel
 - Feature 539142: Configurable Default Path for Documents modified
   If this Path is empty, the default personal directory will be used
