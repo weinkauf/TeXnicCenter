@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "EnvironmentView.h"
@@ -74,7 +80,7 @@ void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHin
 
 				//-----------------------------------------------------------
 				// fill view with parsing results
-				CStructureItemArray	&a = GetProject()->m_aStructureItems;
+				const CStructureItemArray &a = GetProject()->m_aStructureItems;
 
 				// initialization
 				DeleteAllItems();
@@ -103,7 +109,7 @@ void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHin
 				// fill view
 				for( i = 0; i < a.GetSize(); i++ )
 				{
-					CStructureItem	&si = a.GetAt( i );
+					const CStructureItem &si = a.GetAt( i );
 
 					switch( si.m_nType )
 					{

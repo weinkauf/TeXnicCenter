@@ -550,7 +550,7 @@ CUniqueStringList* CPlaceholderSets::GetFileSets(const unsigned int Sets,
 		int i;
 		for(i=0;i<m_pProject->m_aStructureItems.GetSize();i++)
 		{
-			CStructureItem &si = m_pProject->m_aStructureItems.GetAt(i);
+			const CStructureItem &si = m_pProject->m_aStructureItems.GetAt(i);
 
 			if (
 				( (si.m_nType == CStructureParser::texFile) && (Sets & TXC_PLACEHOLDERSET_TEXFILES) )

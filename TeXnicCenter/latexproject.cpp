@@ -662,7 +662,7 @@ void CLatexProject::OnUpdateItemCmd(CCmdUI* pCmdUI)
 	}
 
 	// check commands
-	CStructureItem	&si = m_aStructureItems[m_nCurrentStructureItem];
+	const CStructureItem	&si = m_aStructureItems[m_nCurrentStructureItem];
 
 	switch( pCmdUI->m_nID )
 	{
@@ -699,7 +699,7 @@ void CLatexProject::OnItemGoto()
 	if( !(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.GetSize()) )
 		return;
 
-	CStructureItem	&si = m_aStructureItems[m_nCurrentStructureItem];
+	const CStructureItem	&si = m_aStructureItems[m_nCurrentStructureItem];
 
 	switch( si.m_nType )
 	{
