@@ -25,7 +25,6 @@ UninstallDisplayIcon={app}\TEXCNTR.EXE
 
 [Components]
 Name: Application_Files; Description: Application Files (TeXnicCenter and its components); Flags: fixed; Types: compact typical custom
-Name: System_Files; Description: System Files (Updates your system files - STRONGLY RECOMMENDED); Types: compact typical custom
 Name: Help_Files; Description: Help Files (Online help for TeXnicCenter and LaTeX reference); Types: typical custom
 Name: Skins; Description: Skins (Allows you to change the look & feel of TeXnicCenter); Types: typical custom
 
