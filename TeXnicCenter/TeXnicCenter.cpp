@@ -305,6 +305,13 @@ BOOL CTeXnicCenterApp::InitInstance()
 		RUNTIME_CLASS(CUserTool), 
 		0, IDR_POPUP_PLACEHOLDER_DIR);
 
+	// prevent MRU project commands from being customized
+	CList<UINT, UINT> m_listProtectedCommands;
+	m_listProtectedCommands.AddTail(&const_cast<CList<UINT, UINT>&>(CBCGToolbarButton::GetProtectedCommands()));
+	for (UINT unCommand = ID_FILE_MRU_PROJECT_FIRST; unCommand <= ID_FILE_MRU_PROJECT_LAST; ++unCommand)
+		m_listProtectedCommands.AddTail(unCommand);
+	CBCGToolbarButton::SetProtectedCommands(m_listProtectedCommands);
+
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Dokumentvorlagen registrieren
 	// LaTeX-Document
@@ -1234,13 +1241,14 @@ void CTeXnicCenterApp::OnUpdateFileMRUProjectList( CCmdUI *pCmdUI )
 	}
 
 	// update message from menu bar?
-	if( !pCmdUI->m_pOther || !pCmdUI->m_pOther->IsKindOf( RUNTIME_CLASS(CBCGPopupMenuBar) ) )
+	if (!IsMenu(pCmdUI->m_pSubMenu->GetSafeHmenu()))
 		return;
 
-	// insert all entries of recent project list
-	CBCGPopupMenuBar	*pMenu = (CBCGPopupMenuBar*)pCmdUI->m_pOther;
-	BOOL							bChange = FALSE;
+	CMenu	*pMenu = pCmdUI->m_pSubMenu;
 
+	while (pMenu->GetMenuItemCount())
+		pMenu->DeleteMenu(0, MF_BYPOSITION);
+	
 	for( int i = 0; i < m_recentProjectList.GetSize() && i < 4; i++ )
 	{
 		// get project path
@@ -1256,7 +1264,7 @@ void CTeXnicCenterApp::OnUpdateFileMRUProjectList( CCmdUI *pCmdUI )
 			strCurrentDir, strCurrentDir.GetLength() ) )
 			break;
 
-		// add number for the first ten projects
+		// add number for the first ten files
 		if( i < 10 )
 		{
 			CString	strFormat;
@@ -1267,23 +1275,8 @@ void CTeXnicCenterApp::OnUpdateFileMRUProjectList( CCmdUI *pCmdUI )
 			strDisplayName = strFormat;
 		}
 
-		if( pMenu->GetCount() > i && pMenu->GetButtonText( i ) != strDisplayName )
-		{
-			pMenu->SetButtonText( i, strDisplayName );
-			bChange = TRUE;
-		}
-		else if( pMenu->GetCount() <= i )
-		{
-			int	nIndex = pMenu->InsertButton( CBCGToolbarMenuButton( ID_FILE_MRU_PROJECT_FIRST + i, NULL, -1, strDisplayName ), i );
-			ASSERT( nIndex > -1 );
-
-			bChange = TRUE;
-		}
+		pMenu->AppendMenu(MF_STRING, ID_FILE_MRU_PROJECT_FIRST + i, strDisplayName);
 	}
-
-	// repaint menu
-	if( bChange )
-		pMenu->AdjustLayout();
 }
 
 
@@ -1296,7 +1289,7 @@ void CTeXnicCenterApp::OnUpdateFileMRU( CCmdUI* pCmdUI )
 
 void CTeXnicCenterApp::OnUpdateFileMRUFileList( CCmdUI *pCmdUI )
 {
-	if( !m_pRecentFileList || !m_pRecentFileList->GetSize() || (*m_pRecentFileList)[0].IsEmpty() )
+	if( !m_pRecentFileList || !m_pRecentFileList->GetSize() || (*m_pRecentFileList)[0].IsEmpty() || CBCGToolBar::IsCustomizeMode() )
 	{
 		pCmdUI->SetText( AfxLoadString( STE_FILE_MRU_FILE_NONE ) );
 		pCmdUI->Enable( FALSE );
@@ -1304,13 +1297,14 @@ void CTeXnicCenterApp::OnUpdateFileMRUFileList( CCmdUI *pCmdUI )
 	}
 
 	// update message from menu bar?
-	if( !pCmdUI->m_pOther || !pCmdUI->m_pOther->IsKindOf( RUNTIME_CLASS(CBCGPopupMenuBar) ) )
+	if (!IsMenu(pCmdUI->m_pSubMenu->GetSafeHmenu()))
 		return;
 
-	// insert all entries of recent file list
-	CBCGPopupMenuBar	*pMenu = (CBCGPopupMenuBar*)pCmdUI->m_pOther;
-	BOOL							bChange = FALSE;
+	CMenu	*pMenu = pCmdUI->m_pSubMenu;
 
+	while (pMenu->GetMenuItemCount())
+		pMenu->DeleteMenu(0, MF_BYPOSITION);
+	
 	for( int i = 0; i < m_pRecentFileList->GetSize() && i < 4; i++ )
 	{
 		// get project path
@@ -1337,23 +1331,8 @@ void CTeXnicCenterApp::OnUpdateFileMRUFileList( CCmdUI *pCmdUI )
 			strDisplayName = strFormat;
 		}
 
-		if( pMenu->GetCount() > i && pMenu->GetButtonText( i ) != strDisplayName )
-		{
-			pMenu->SetButtonText( i, strDisplayName );
-			bChange = TRUE;
-		}
-		else if( pMenu->GetCount() <= i )
-		{
-			int	nIndex = pMenu->InsertButton( CBCGToolbarMenuButton( ID_FILE_MRU_FILE1 + i, NULL, -1, strDisplayName ), i );
-			ASSERT( nIndex > -1 );
-
-			bChange = TRUE;
-		}
+		pMenu->AppendMenu(MF_STRING, ID_FILE_MRU_FILE1 + i, strDisplayName);
 	}
-
-	// repaint menu
-	if( bChange )
-		pMenu->AdjustLayout();
 }
 
 
@@ -1679,4 +1658,3 @@ void CTeXnicCenterApp::OnUpdateProjectNewFromFile(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(m_pLatexDocTemplate->GetFirstDocPosition() != NULL);
 }
-

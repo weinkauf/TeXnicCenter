@@ -93,6 +93,7 @@ public:
 	CString	m_strClosingQm;
 	CString	m_strOpeningQm;
 	BOOL	m_bRestoreSession;
+	BOOL	m_bOptimizeGuiForVisuallyHandicappedUsers;
 	//}}AFX_DATA
 
 };

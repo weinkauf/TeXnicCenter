@@ -177,13 +177,23 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	// create menu bar
-	if( !m_wndMenuBar.Create( this ) )
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers)
 	{
-		TRACE0( "Failed to create menubar\n" );
-		return -1;
+		if( !m_wndMenuBar.Create( this ) )
+		{
+			TRACE0( "Failed to create menubar\n" );
+			return -1;
+		}
+		m_wndMenuBar.SetBarStyle( 
+			m_wndMenuBar.GetBarStyle() | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC );
 	}
-	m_wndMenuBar.SetBarStyle( 
-		m_wndMenuBar.GetBarStyle() | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC );
+	else
+	{
+		// load menu bars
+		m_stdMenu.LoadMenu( IDR_MAINFRAME );
+		m_projectMenu.LoadMenu( IDR_LATEXPROJECT );
+		MDISetMenu(&m_stdMenu, NULL);
+	}
 
 	// Allow disabled menu items to be highligted...
 	CBCGMenuBar::HighlightDisabledItems ();
@@ -246,7 +256,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndOutputBar.SetCaptionStyle( TRUE, TRUE );
 
 	// dock the bars
-	m_wndMenuBar.EnableDocking( CBRS_ALIGN_ANY );
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers)
+		m_wndMenuBar.EnableDocking( CBRS_ALIGN_ANY );
+
 	m_wndToolBar.EnableDocking( CBRS_ALIGN_ANY );
 	m_wndFindBar.EnableDocking( CBRS_ALIGN_ANY );
 	m_wndInsertBar.EnableDocking( CBRS_ALIGN_ANY );
@@ -262,7 +274,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	EnableDocking(CBRS_ALIGN_ANY);
 
-	DockControlBar( &m_wndMenuBar );
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers)
+		DockControlBar( &m_wndMenuBar );
+
 	DockControlBar( &m_wndToolBar );
 	DockControlBarLeftOf(&m_wndLatexBar, &m_wndToolBar);
 	DockControlBar( &m_wndInsertBar );
@@ -272,10 +286,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockControlBarLeftOf( &m_wndMathBar, &m_wndFormatRUBar );
 	DockControlBar( &m_wndNavigationBar );
 	DockControlBar( &m_wndOutputBar );
-
-	// load menu bars
-	m_stdMenu.LoadMenu( IDR_MAINFRAME );
-	m_projectMenu.LoadMenu( IDR_LATEXPROJECT );
 
 	// loading toolbars
 	CString		strControlBarRegEntry = theApp.m_strRegistryRoot + _T("\\CtrlBar\\");
@@ -295,7 +305,15 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	// Enable window list manager...
-	EnableWindowsDialog(ID_WINDOW_LIST, ID_WINDOW_LIST_MENU, TRUE);
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers)
+		EnableWindowsDialog(ID_WINDOW_LIST, ID_WINDOW_LIST_MENU, TRUE);
+	else
+	{
+		// add entry for window list to the end of window menu
+		CMenu		*pmnuWindowMenu = m_stdMenu.GetSubMenu(m_stdMenu.GetMenuItemCount()-2);
+		pmnuWindowMenu->AppendMenu(MF_SEPARATOR);
+		pmnuWindowMenu->AppendMenu(MF_BYPOSITION, ID_WINDOW_LIST, CString((LPCTSTR)ID_WINDOW_LIST_MENU));
+	}
 
 	return 0;
 }
@@ -324,7 +342,8 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 
 BOOL CMainFrame::SetMenu( CMenu *pMenu )
 {
-	m_wndMenuBar.CreateFromMenu( pMenu->m_hMenu, FALSE );
+	if (!g_configuration.m_bOptimizeMenuForVisuallyHandycappedUsers)
+		m_wndMenuBar.CreateFromMenu( pMenu->m_hMenu, FALSE );
 	return TRUE;
 }
 

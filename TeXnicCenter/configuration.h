@@ -355,6 +355,18 @@ public:
 	CFileCleanItemArray m_aFileCleanItems;
 
 	bool m_bFileCleanConfirm;
+
+	///////////////////////////////////////////////////////////////////
+	// Accessability
+
+	/** TRUE to optimize the GUI for visually handicapped users. */
+	BOOL m_bOptimizeMenuForVisuallyHandycappedUsers;
+
+	/** 
+	TRUE to optimize the GUI for visually hadicapped users in the
+	next session.
+	*/
+	BOOL m_bOptimizeMenuForVisuallyHandycappedUsersOnNextStart;
 };
 
 // declaration of one and only global configuration object
