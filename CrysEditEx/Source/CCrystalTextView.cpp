@@ -82,6 +82,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.22  2005/02/23 23:58:19  vachis
+* Fixed Matching Bracket Highlighting
+* New features for Matching Bracket Highlighting: configure colours,
+*     highlight current block and pair, help
+*
 * Revision 1.21  2005/02/15 09:43:12  vachis
 * Implemented feature 536164: Matching Bracket Highlight
 *
@@ -256,6 +261,7 @@ BEGIN_MESSAGE_MAP(CCrystalTextView, CView)
 	ON_COMMAND(ID_EDIT_EXT_TEXT_BEGIN, OnExtTextBegin)
 	ON_COMMAND(ID_EDIT_TEXT_END, OnTextEnd)
 	ON_COMMAND(ID_EDIT_EXT_TEXT_END, OnExtTextEnd)
+	ON_COMMAND(ID_EDIT_SEL_BIGGER_BLOCK, OnSelBiggerBlock)
 	//	Standard printing commands
 	ON_COMMAND(ID_FILE_PAGE_SETUP, OnFilePageSetup)
 	ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
@@ -1277,11 +1283,11 @@ COLORREF CCrystalTextView::GetColor(int nColorIndex)
 	case COLORINDEX_BADPAIRSTRINGTEXT:
 		return RGB(255, 255, 255);
 	case COLORINDEX_CURPAIRSTRINGBKGND:
-		return RGB(232, 232, 255);
+		return RGB(0, 192, 0);
 	case COLORINDEX_CURPAIRSTRINGTEXT:
 		return RGB(255, 255, 255);
 	case COLORINDEX_PAIRBLOCKBKGND:
-		return RGB(232, 232, 255);
+		return RGB(255, 255, 192);
 	}
 	return RGB(255, 0, 0);
 }
@@ -2753,6 +2759,14 @@ void CCrystalTextView::SetSelection(const CPoint &ptStart, const CPoint &ptEnd)
 	}
 	m_ptSelStart = ptStart;
 	m_ptSelEnd = ptEnd;
+
+	//no selection 
+	if (m_ptSelStart == m_ptSelEnd) {
+		ResetSelBlockLevel();
+	}
+	else {
+		UnmarkPairString();
+	}
 }
 
 void CCrystalTextView::AdjustTextPoint(CPoint &point)
@@ -3389,9 +3403,13 @@ BOOL CCrystalTextView::HighlightText(const CPoint &ptStartPos, int nLength /*= -
 	UpdateCaret();
 	EnsureVisible(m_ptCursorPos);
 
-	MarkPairStringTo(m_ptCursorPos, FALSE);
-	Invalidate();
-	UpdateWindow();		
+	if (!IsSelection()) {
+		MarkPairStringTo(m_ptCursorPos, FALSE);
+		Invalidate();
+		UpdateWindow();		
+	}
+	else
+		UnmarkPairString();
 	return TRUE;
 }
 
@@ -3925,6 +3943,7 @@ void CCrystalTextView::OnChar( UINT nChar, UINT nRepCnt, UINT nFlags )
 	// add character to incremental search string and search
 	*m_pstrIncrementalSearchString+= nChar;
 	OnEditFindIncremental();
+	
 }
 
 
@@ -4456,12 +4475,13 @@ BOOL CCrystalTextView::FindPairTo(const CPoint &ptCursorPos, CPoint &ptCurStrSta
 
 {
 	BOOL result;
+	BOOL bClearEndReached = FALSE;
 
 	bPairFound = FALSE;
 
-	int nPairIdx = -1, nPairDir = -1;
+	int nCurPairIdx = -1, nCurPairDir = -1;
 	if ( m_pParser == NULL 
-			 || !IsEndOfPairAtHelper( ptCursorPos, ptCurStrStart, nPairIdx, nPairDir) )
+			 || !IsEndOfPairAtHelper( ptCursorPos, ptCurStrStart, nCurPairIdx, nCurPairDir) )
 	{
 			ptFoundStrStart = CPoint(0,0);
 			ptFoundStrEnd = CPoint(0,0);
@@ -4470,66 +4490,76 @@ BOOL CCrystalTextView::FindPairTo(const CPoint &ptCursorPos, CPoint &ptCurStrSta
 
 	ptCurStrEnd = ptCursorPos;
 
-	int nOpDir = m_pParser->OppositeDir(nPairDir);
+	//fill stack
+	CCrystalParser::CPairStack aPairStack;
+	CCrystalParser::CPairStack openPairStack;
+    
+	struct CCrystalParser::tagPairStackItm newBracket;
+	newBracket.nPairIdx = nCurPairIdx;
+	newBracket.nPairDir = nCurPairDir;
+	newBracket.ptStart = ptCurStrStart;
+	newBracket.ptEnd = ptCurStrEnd;
+
+	aPairStack.push_back(newBracket);
+    
+	int nOpDir = m_pParser->OppositeDir(nCurPairDir);
 	if (nOpDir == CCrystalParser::DIRECTION_LEFT)
 	{
-		result = FindPairHelper( ptCurStrStart, 0, nOpDir, nPairIdx, ptCurStrStart, ptCurStrEnd, 
-										 ptFoundStrStart, ptFoundStrEnd );
+		CPoint ptTemp = ptCurStrStart;
+		ptTemp.x--; //move to first position that doesn't belong to CurStr
+		result = FindPairHelper( ptTemp, 0, nOpDir, aPairStack, false, ptCurStrStart, ptCurStrEnd,  
+										 ptFoundStrStart, ptFoundStrEnd, openPairStack, bClearEndReached );
 	}
 	else
 	{
-		result = FindPairHelper( ptCurStrEnd, 0, nOpDir, nPairIdx, ptCurStrStart, ptCurStrEnd,
-										 ptFoundStrStart, ptFoundStrEnd );
+		result = FindPairHelper( ptCurStrEnd, 0, nOpDir, aPairStack, false, ptCurStrStart, ptCurStrEnd,
+										 ptFoundStrStart, ptFoundStrEnd, openPairStack, bClearEndReached );
 	}
 
+    if (result == FALSE ) {
+		if (aPairStack.empty())
+		{
+			ptFoundStrStart = ptFoundStrEnd = CPoint(0,0);
+		}
+		else
+		{
+			const struct CCrystalParser::tagPairStackItm &rPairItm = aPairStack.back();
+			ptFoundStrStart = rPairItm.ptStart;
+			ptFoundStrEnd = rPairItm.ptEnd;
+		}
+	}
+	
+	aPairStack.clear();
 	bPairFound = result;
 	return result;
 }
 
 
 
-BOOL CCrystalTextView::FindPairHelper( const CPoint &ptTextPos, int nNthOpenPair, int nDirection, int nCurPairIdx,
-														 const CPoint &ptCurStrStart, const CPoint &ptCurStrEnd,
-														 CPoint &ptPairStrStart, CPoint &ptPairStrEnd )
+BOOL CCrystalTextView::FindPairHelper( const CPoint &ptTextPos, int nNthOpenPair, int nDirection, CCrystalParser::CPairStack &aPairStack,
+														 BOOL bClearToEnd, const CPoint &ptCurStrStart, const CPoint &ptCurStrEnd,
+														 CPoint &ptFoundStrStart, CPoint &ptFoundStrEnd, CCrystalParser::CPairStack &openPairStack,
+														 BOOL &bClearEndReached )
 {
-	BOOL result = TRUE;
+	int result = CCrystalParser::RESULT_OK;
   
-	ASSERT( nNthOpenPair == 0 || nCurPairIdx == CCrystalTextView::PAIR_NONE );
-	ASSERT( nNthOpenPair != 0 || nCurPairIdx != CCrystalTextView::PAIR_NONE );
 	ASSERT( nDirection == CCrystalParser::DIRECTION_LEFT 
     		  || nDirection == CCrystalParser::DIRECTION_RIGHT );
-
-
-	CCrystalParser::CPairStack aPairStack;
-
-	if (nCurPairIdx != CCrystalTextView::PAIR_NONE) 
-	{
-		struct CCrystalParser::tagPairStackItm newBracket;
-					
-		newBracket.nPairIdx = nCurPairIdx;
-		newBracket.nPairDir = m_pParser->OppositeDir( nDirection );
-		newBracket.ptStart = ptCurStrStart;
-		newBracket.ptEnd = ptCurStrEnd;
-
-		aPairStack.push_back(newBracket);
-	}
 	
 	int nLineCount = GetLineCount();
 	int nLineIndex = ptTextPos.y;
 	LPCTSTR	lpszLine = GetLineChars( nLineIndex );
 	LPCTSTR lpszLineEnd = lpszLine + GetLineLength( nLineIndex );
 	LPCTSTR lpszTextPos = lpszLine + ptTextPos.x;
-	if ( nDirection == CCrystalParser::DIRECTION_LEFT )
-	{
-		lpszTextPos -= 1;
-	}
+	
+	BOOL bSkipLine = ptTextPos.x < 0 || lpszTextPos >= lpszLineEnd;
 
 	//search through the lines
 	while ( true ) 
 	{
 		long nLength = GetLineLength( nLineIndex );
 
-		if ( lpszTextPos >= lpszLine && nLength != 0 )
+		if ( !bSkipLine && lpszTextPos >= lpszLine && nLength != 0 )
 		{
 			DWORD dwCookie = 0;
 			DWORD dwCookie2 = 0;
@@ -4543,18 +4573,25 @@ BOOL CCrystalTextView::FindPairHelper( const CPoint &ptTextPos, int nNthOpenPair
 			dwCookie2 = ParseLine( dwCookie, nLineIndex, pBuf, nBlocks);
 
 			if ( m_pParser->FindPairInLine( lpszLine, lpszLineEnd, &textBlock, nLineIndex, nDirection, 
-																lpszTextPos, aPairStack, nNthOpenPair, ptPairStrStart.x, ptPairStrEnd.x, result ) ) 
+																lpszTextPos, aPairStack, nNthOpenPair, bClearToEnd, 
+																ptFoundStrStart.x, ptFoundStrEnd.x, openPairStack, result ) ) 
 			{
 				//pair found
 				break;
 			}
 			free( pBuf );
 		}
+		bSkipLine = FALSE;
 	
 		nLineIndex += (nDirection == CCrystalParser::DIRECTION_LEFT) ? -1 : 1;
 		//end of file, pair not found
 		if ( nLineIndex < 0 || nLineIndex >= nLineCount ) 
 		{
+			if ( bClearToEnd && result ==  CCrystalParser::RESULT_ENDOK )  {
+				bClearEndReached = TRUE;
+				result = TRUE;
+				break;
+			}
 			result = FALSE;
 			break;
 		}
@@ -4568,18 +4605,15 @@ BOOL CCrystalTextView::FindPairHelper( const CPoint &ptTextPos, int nNthOpenPair
 		}
 	} 
 
-	if (result == FALSE ) {
-		const struct CCrystalParser::tagPairStackItm &rPairItm = aPairStack.back();
-		ptPairStrStart = rPairItm.ptStart;
-		ptPairStrEnd = rPairItm.ptEnd;
-	}
-	else
-	{
-		ptPairStrEnd.y = ptPairStrStart.y = nLineIndex;
-	}
+//	if  (result == TRUE )
+//	{
+		ptFoundStrEnd.y = ptFoundStrStart.y = nLineIndex;
+//	}
+//	else 
+//	{
+//   		ptPairStrEnd = ptPairStrStart = CPoint(0,0);
+//	}
 	
-	aPairStack.clear();
-
 	return result;  
 }
 
@@ -4614,9 +4648,125 @@ BOOL CCrystalTextView::IsEndOfPairAtHelper( const CPoint &ptTextPos, CPoint &ptF
 }
 
 
+void CCrystalTextView::IncSelBlockLevel()
+{
+	m_nSelBlockLevel++;
+}
+
+
+void CCrystalTextView::ResetSelBlockLevel()
+{
+	m_nSelBlockLevel = 0;
+}
+
+
+BOOL CCrystalTextView::SelectBlockAround( const CPoint &ptTextPos )
+{
+	return SelectBlockAround( ptTextPos, m_nSelBlockLevel );
+}
+
+
+BOOL CCrystalTextView::SelectBlockAround( const CPoint &ptCursorPos, int nBlockLevel )
+{
+	if (nBlockLevel == 0) {
+		SetSelection( CPoint(0,0), CPoint(0,0) );
+		return TRUE;
+	}
+	BOOL bClearEndReached = FALSE;
+
+	m_nSelBlockLevel = nBlockLevel;
+	CPoint ptSelStart, ptSelEnd;
+	CPoint ptNull(0,0);
+	CPoint ptTemp(0,0);
+	CPoint ptCurStrStart;
+	CPoint ptErrStrStart(0,0);
+	CPoint ptErrStrEnd(0,0);
+	int nPairIdx = -1, nPairDir = -1;
+	if ( m_pParser == NULL )
+		return FALSE;
+
+	//move to first position that doesn't belong to CurStr
+	CPoint ptSearchStartL = ptCursorPos;
+	CPoint ptSearchStartR = ptCursorPos;
+	if ( IsEndOfPairAtHelper( ptCursorPos, ptCurStrStart, nPairIdx, nPairDir) )
+	{
+		if ( nPairDir == CCrystalParser::DIRECTION_RIGHT ) {
+			ptSearchStartL = ptCurStrStart;
+			ptSearchStartR = ptCurStrStart;
+		}
+	}
+	ptSearchStartL.x--; 
+	
+
+	//create stack
+	CCrystalParser::CPairStack aPairStack;
+	CCrystalParser::CPairStack openPairStack;
+	BOOL		bClearToEnd = false;
+	
+	//fills stack with nBlockLevel of open pairs
+	if (!FindPairHelper( ptSearchStartL, nBlockLevel, CCrystalParser::DIRECTION_LEFT, aPairStack,
+				bClearToEnd, ptNull, ptNull, ptSelStart, ptTemp, openPairStack, bClearEndReached ))
+	{
+		if (aPairStack.empty())
+		{
+			ptSelStart = CPoint(0,0);	
+			bClearToEnd = true;
+		}
+		else
+		{
+			const struct CCrystalParser::tagPairStackItm &rPairItm = aPairStack.back();
+			ptErrStrStart = rPairItm.ptStart;
+			ptErrStrEnd = rPairItm.ptEnd;
+			goto error;
+		}
+	}
+	aPairStack.clear();
+	//consumes stack with nBlockLevel of open pairs
+	if (!FindPairHelper( ptSearchStartR, 0, CCrystalParser::DIRECTION_RIGHT, openPairStack,
+				bClearToEnd, ptNull, ptNull, ptTemp, ptSelEnd, aPairStack, bClearEndReached ))
+	{
+		const struct CCrystalParser::tagPairStackItm &rPairItm = openPairStack.back();
+		ptErrStrStart = rPairItm.ptStart;
+		ptErrStrEnd = rPairItm.ptEnd;
+		goto error;
+	}
+	else 
+	{
+		if ( bClearToEnd && bClearEndReached )
+		{
+ 			ptSelEnd.y = GetLineCount()-1;
+   		ptSelEnd.x = GetLineLength(ptSelEnd.y);
+		}
+	}
+
+
+	SetSelection( ptSelStart, ptSelEnd );
+	return TRUE;
+
+error:
+	SetSelection( CPoint(0,0), CPoint(0,0) ); //deselect
+	ResetSelBlockLevel();
+
+	SetCurStringStart( ptErrStrStart );
+	SetCurStringEnd( ptErrStrEnd );
+	SetCurStringColorBkgnd( CCrystalTextView::COLORINDEX_BADPAIRSTRINGBKGND );
+	SetCurStringColorText( CCrystalTextView::COLORINDEX_BADPAIRSTRINGTEXT );
+
+	//jump to error
+	//SetCursorPos( ptErrStrEnd );
+	EnsureVisible( ptErrStrEnd );
+	return FALSE;
+}
+
+
+void CCrystalTextView::OnSelBiggerBlock()
+{
+	IncSelBlockLevel();
+	SelectBlockAround( GetCursorPos() );
+}
 
 
 
-
+ 
 
 

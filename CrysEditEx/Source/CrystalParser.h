@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.3  2005/02/15 09:43:12  vachis
+* Implemented feature 536164: Matching Bracket Highlight
+*
 * Revision 1.2  2002/04/06 05:33:57  cnorris
 * Added NextWord method required for spell checker
 *
@@ -77,11 +80,17 @@ public:
 		CPoint ptStart, ptEnd;
 	} PAIR_STACK_ITM;
     
-	typedef std::vector<PAIR_STACK_ITM> CPairStack;
+	typedef std::vector <PAIR_STACK_ITM> CPairStack;
 
 	enum {
 		DIRECTION_LEFT = 0,
 		DIRECTION_RIGHT = 1		
+	};
+
+	enum {
+		RESULT_ERROR = 0,
+		RESULT_OK = 1,
+		RESULT_ENDOK = 2
 	};
 
 public:
@@ -159,6 +168,7 @@ public:
 
 	/**Searches for pair string in given line. The search stops if <code>nNthOpenPais</code> decreses to zero 
   or <code>nNthOpenPais</code> equals to <code>PAIR_NONE</code> and aStackPair stack becomes empty.  
+	Descendants are supposed to override this empty implementation!!
 
 	@param lpszLine
 	Line string
@@ -167,9 +177,9 @@ public:
 	@param pTextBlock,
 		Parsed line
 	@param nFoundStrStart 
-		Start of string if found 
+		Start of string if found, or start of string that caused an error.
 	@param nFoundStrEnd 
-		End of string if found  
+		End of string if found, or end of string that caused an error.  
 	@param nDirection
 		search direction: DIRECTION_LEFT or DIRECITON_RIGHT    
 	@param lpszTextPos
@@ -179,17 +189,26 @@ public:
 	@param nNthOpenPair    
 		Number of open pairs that have to be skiped before stopping. 
 		Only pairs with opposite direction than <code>nDireciton</code> does matter.
+	@param bClearToEnd  
+		When the function is about exit according to normal run, it will continue to check the rest of line
+		whether it conatins any open pair. If do so, an error is returned.
+	@param openPairStack
+		Output, the stack where open pairs are stored.
 	@param result
-		FALSE if an error occures, the string that din't have pair is at the top of the stack.
+		CParser::RESULT_ERROR if an error occures, the string that din't have pair is at the top of the stack
+		CParser::RESULT_ENDOK if <code>bClearToEnd</code> have been set and the end/start of line was reached
+													and the pair stack is emty
+		CParser::RESULT_OK otherwise
+
         
 	@return     
 	FALSE if the search should continue on the next/previous line
   */
 	virtual BOOL FindPairInLine( LPCTSTR lpszLine, LPCTSTR lpszLineEnd, CCrystalTextBlock *pTextBlock, long nLineIndex,
-												int nDirection, LPCTSTR lpszTextPos, CPairStack &aPairStack, int &nNthOpenPair, 
-												long &nFoundStrStart, long &nFoundStrEnd, BOOL &result );
+												int nDirection, LPCTSTR lpszTextPos, CPairStack &aPairStack, int &nNthOpenPair, BOOL bClearToEnd,   
+												long &nFoundStrStart, long &nFoundStrEnd, CPairStack &openPairStack, BOOL &result );
 
-	/**Returns TRUE if some pair ends at ptTextPos.
+	/**Returns TRUE if some pair ends at ptTextPos. Descendants are supposed to override this empty implementation!!
     
 	@param lpszLine
 		Line string

@@ -72,6 +72,7 @@ namespace Interfaces
 	#include <TeXnicCenterObjects.h>
 };
 
+#include <deque>
 #include <vector>
 
 // globale Makros

@@ -25,6 +25,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:11:50  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:38+02  sven_wiegand
 * Initial revision
 *
@@ -76,6 +79,7 @@
 #define		ID_EDIT_TEXT_END			37124
 #define		ID_EDIT_EXT_TEXT_END		37125
 #define		ID_EDIT_FIND_PREVIOUS		37126
+#define		ID_EDIT_SEL_BIGGER_BLOCK				37127
 
 //	Bookmark commands
 #define		ID_EDIT_TOGGLE_BOOKMARK0	37200

@@ -258,9 +258,9 @@ protected:
 	@param lpszTo
 		End of the block (inclusive)
 	@param nFoundStrStart 
-		Start of string if found 
+		Start of string if found, or start of string that caused an error. 
 	@param nFoundStrEnd 
-		End of string if found  
+		End of string if found, or end of string that caused an error.  
 	@param nDirection
 		Search direction: DIRECTION_LEFT or DIRECITON_RIGHT    
 	@param aPairStack
@@ -268,16 +268,23 @@ protected:
 	@param nNthOpenPair    
 		Number of open pairs that have to be skiped before stopping. 
 		Only pairs with opposite direction than <code>nDireciton</code> does matter.
-
+	@param bClearToEnd  
+		When the function is about exit according to normal run, it will continue to check the rest of text document
+		whether it conatins any open pair. If do so, an error is returned. 
+	@param openPairStack
+		Output, the stack where open pairs are stored.
 	@param result
-		FALSE if an error occures, the string that din't have pair is at the top of the stack
+		CParser::RESULT_ERROR if an error occures, the string that din't have pair is at the top of the stack
+		CParser::RESULT_ENDOK if <code>bClearToEnd</code> have been set and the end/start of block was reached
+													and the pair stack is emty
+		CParser::RESULT_OK otherwise
         
 	@return     
 		FALSE if the search should continue on the next/previous block
   */
 	virtual BOOL FindPairInBlock( LPCTSTR lpszLine, LPCTSTR lpszFrom, LPCTSTR lpszTo, 
-																long nLineIndex, int nDirection, CPairStack &aPairStack, int &nNthOpenPair, 
-																long &nFoundStrStart, long &nFoundStrEnd, BOOL &result );
+																long nLineIndex, int nDirection, CPairStack &aPairStack, int &nNthOpenPair, BOOL bClearToEnd, 
+																long &nFoundStrStart, long &nFoundStrEnd, CPairStack &openPairStack, int &result );
 
 
 // overridables
@@ -308,8 +315,8 @@ public:
 		FALSE if the search should continue on the next/previous line
   */
 	virtual BOOL FindPairInLine( LPCTSTR lpszLine, LPCTSTR lpszLineEnd, CCrystalTextBlock *pTextBlock, long nLineIndex, 
-												int nDirection, LPCTSTR lpszTextPos, CPairStack &aPairStack, int &nNthOpenPair, 
-												long &nFoundStrStart, long &nFoundStrEnd, BOOL &result );
+												int nDirection, LPCTSTR lpszTextPos, CPairStack &aPairStack, int &nNthOpenPair, BOOL bClearToEnd, 
+												long &nFoundStrStart, long &nFoundStrEnd, CPairStack &openPairStack, int &result );
 
 	/**Returns TRUE if some pair ends at ptTextPos.
     

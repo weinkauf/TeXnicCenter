@@ -17,6 +17,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.2  2005/02/15 09:43:12  vachis
+* Implemented feature 536164: Matching Bracket Highlight
+*
 * Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
 * Initial revision
 *
@@ -60,6 +63,7 @@
 #include <afxcmn.h>			// MFC-Unterstützung für gängige Windows-Steuerelemente
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
+#include <deque>
 #include <vector>
 
 // globale Variablen

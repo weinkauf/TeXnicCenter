@@ -1,3 +1,8 @@
+2005/03/08 vachis
+- Selection of block between bracket pairs in a hierarchical manner (Ctrl+M)
+- Bracket highlighting disabled if a selection is present
+- New default colours for bracket highlighting
+
 2005/02/24 vachis
 - Fixed Matching Bracket Highlighting
 - New features for Matching Bracket Highlighting: configure colours, 
