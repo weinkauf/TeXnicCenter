@@ -4529,6 +4529,10 @@ BEGIN
     STE_PDICT_OPEN_ERROR    "Persönliches Wörterbuch %s kann nicht geööfnet werden.\n\nEs wird ein neues leeres Wörterbuch unter diesem Namen erzeugt."
     IDS_LANGUAGE            "de"
     IDS_DIALECT             "DE"
+    STE_DICTIONARY_OPEN_FAIL 
+                            "Todo:Cannot open dictionary component\n\n""%s"".\n\nSpell checker will be disabled."
+    STE_DICTIONARY_CREATE_FAIL 
+                            "Todo:Encountered unrecoverable error while creating dictionary.\n%s\nSpell checker will be disabled."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -8234,9 +8238,13 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_COLOR_AUTOMATIC     "Automatic"
     STE_COLOR_OTHERS        "Other Colors..."
-    STE_PDICT_OPEN_ERROR    "Cannot open %s\n\nCreating empty personal dictionary."
+    STE_PDICT_OPEN_ERROR    "Cannot open\n\n""%s""\n\nCreating empty personal dictionary."
     IDS_LANGUAGE            "en"
     IDS_DIALECT             "US"
+    STE_DICTIONARY_OPEN_FAIL 
+                            "Cannot open dictionary component\n\n""%s"".\n\nSpell checker will be disabled."
+    STE_DICTIONARY_CREATE_FAIL 
+                            "Encountered unrecoverable error while creating dictionary.\n%s\nSpell checker will be disabled."
 END
 
 STRINGTABLE DISCARDABLE 

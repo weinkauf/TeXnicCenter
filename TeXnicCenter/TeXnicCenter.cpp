@@ -1420,27 +1420,52 @@ MySpell* CTeXnicCenterApp::GetSpeller()
 			g_configuration.m_strSpellDictionaryPath, 
 			g_configuration.m_strLanuage,
 			g_configuration.m_strLanguageDialect);
-		m_pSpell = new MySpell( T2CA((LPCTSTR)affName), T2CA((LPCTSTR)dicName) );
-
-		// Create the personal dictionary if we have a name
-		if (g_configuration.m_strSpellPersonalDictionary && 
-			g_configuration.m_strSpellPersonalDictionary.Compare(_T("")))
+		try
 		{
-			m_pSpell->set_personal_dictionary(T2CA((LPCTSTR)g_configuration.m_strSpellPersonalDictionary));
+			if ( !::PathFileExists(affName) )
+				throw AfxFormatString1(STE_DICTIONARY_OPEN_FAIL, affName);
+			if ( !::PathFileExists(dicName) )
+				throw AfxFormatString1(STE_DICTIONARY_OPEN_FAIL, dicName);
 
-			if ( ::PathFileExists(g_configuration.m_strSpellPersonalDictionary) )
+			m_pSpell = new MySpell( T2CA((LPCTSTR)affName), T2CA((LPCTSTR)dicName) );
+
+			// Create the personal dictionary if we have a name
+			if (g_configuration.m_strSpellPersonalDictionary && 
+				g_configuration.m_strSpellPersonalDictionary.Compare(_T("")))
 			{
-				// The path exists, so let's try to open it
-				if ( m_pSpell->open_personal_dictionary() != 0 )
+				m_pSpell->set_personal_dictionary(T2CA((LPCTSTR)g_configuration.m_strSpellPersonalDictionary));
+
+				if ( ::PathFileExists(g_configuration.m_strSpellPersonalDictionary) )
 				{
-					CString str;
-					str.Format(STE_FILE_INUSE, AfxLoadString(IDS_OPEN), g_configuration.m_strSpellPersonalDictionary, "");
-					AfxMessageBox(str);
+					// The path exists, so let's try to open it
+					if ( m_pSpell->open_personal_dictionary() != 0 )
+					{
+						CString str;
+						str.Format(STE_FILE_INUSE, AfxLoadString(IDS_OPEN), g_configuration.m_strSpellPersonalDictionary, "");
+						::MessageBox( NULL, str, NULL, MB_OK | MB_ICONINFORMATION | MB_TASKMODAL );
+					}
 				}
 			}
 		}
+		catch ( CString str )
+		{
+			// One of the dictionary files does not exist.
+			g_configuration.m_bSpellEnable = FALSE;
+			::MessageBox( NULL, str, NULL, MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL );
+		}
+		catch ( ... )
+		{
+			// There was an error while creating the dictionary. This may be due 
+			// to a corrupted file system or insufficient operating system privileges. 
+			// Whatever the cause, it deserves a little stronger warning message.
+			g_configuration.m_bSpellEnable = FALSE;
+			::MessageBox( NULL, AfxFormatString1(STE_DICTIONARY_CREATE_FAIL, _T("")),
+				NULL, MB_OK | MB_ICONERROR | MB_TASKMODAL );
+		}
 	}
-	m_pSpell->suggest_main(g_configuration.m_bSpellMainDictOnly);
+
+	if ( m_pSpell )
+		m_pSpell->suggest_main(g_configuration.m_bSpellMainDictOnly);
 	::LeaveCriticalSection( &m_csLazy );
 	return m_pSpell;
 }
