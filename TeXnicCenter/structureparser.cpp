@@ -358,8 +358,8 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		strPath.TrimRight();
 		strPath.TrimLeft(_T('"'));
 		strPath.TrimRight(_T('"'));
-		if( strPath.Find( _T('.') ) < 0 )
-			strPath+= _T(".tex");
+		if ( CPathTool::GetFileExtension(strPath).IsEmpty() )
+			strPath += _T(".tex");
 
 		COutputInfo info;
 		INITIALIZE_OI ( info );
@@ -646,6 +646,9 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 			strPath.TrimRight();
 			strPath.TrimLeft( _T('"') );
 			strPath.TrimRight( _T('"') );
+			//BibTeX takes only the .bib-Extension!
+			// And in \bibliography{...} the user has to omitt the extension!
+			// We could warn the user, if he uses an extension in \bibliography{...}
 			strPath += _T(".bib");
 			strPath = ResolveFileName(strPath);
 
