@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "MainFrm.h"
@@ -521,7 +527,7 @@ CString CLatexProject::GetFilePath( LPCTSTR lpszFile )
 	return strPath;
 }
 
-//Returns the full path to the project session file -- inlined
+//Returns the full path to the project session file
 CString CLatexProject::GetSessionPathName(LPCTSTR lpszPath /*= NULL*/) const
 {
 	return ( CPathTool::GetBase( (lpszPath != NULL) ? lpszPath : GetPathName() )

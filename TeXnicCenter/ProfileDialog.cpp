@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "ProfileDialog.h"
@@ -292,7 +298,7 @@ void CProfileDialog::OnItemChanging(NMHDR* pNMHDR, LRESULT* pResult)
 
 		To avoid this, we are using this counter.
 		*/
-		static	nSelChangeFailCount = 0;
+		static int nSelChangeFailCount = 0;
 
 		if (!nSelChangeFailCount)
 		{
