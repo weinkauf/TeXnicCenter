@@ -1,3 +1,10 @@
+2002/07/04 svenwiegand
+- Implemented Feature 539143: Save New Document after Creation
+  The options page 'File' has got a new option 'Save new documents immediately'. 
+  If checked, the 'Save As' dialog box will popup directly, after the users has 
+  created a new document via the 'File|New' or 'File|New from Template...' 
+  command.
+
 2002/07/04 niteria
 - Fixed Bug 577238: Src-Specials mixed up
 - Fixed Bug 577237: Graphic files not found by Parser
