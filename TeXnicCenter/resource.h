@@ -178,6 +178,7 @@
 #define IDR_LATEXWIZARD_YELLOW          263
 #define STE_ITEMTYPE_ENUMERATION        264
 #define STE_ITEMTYPE_DESCRIPTION        265
+#define IDD_PLACEHOLDER_SET             265
 #define STE_ITEMTYPE_FIGURE             266
 #define STE_ITEMTYPE_TABLE              267
 #define STE_FLOATTITLE_INSERT_FIGURE    272
@@ -241,6 +242,7 @@
 #define IDR_MATHBAR16                   326
 #define STE_TB_FIND                     326
 #define IDB_BUILD_VIEW                  327
+#define STE_PHSDLG_NOEXAMPLE            327
 #define STE_GREP_START                  336
 #define STE_GREP_FAILED                 337
 #define STE_GREP_CANCELED               338
@@ -568,6 +570,13 @@
 #define IDC_PLACEHOLDER_SINGLE_RESULT   1297
 #define IDC_OPTIONS_LANGUAGE_LOCALE     1298
 #define IDC_GRAPHIC_SCALETEXTWIDTH      1299
+#define IDC_PLACEHOLDER_SET_EXAMPLE     1300
+#define IDC_PLACEHOLDER_SET_RESULT      1301
+#define IDC_PLACEHOLDER_SET_PHTYPE      1304
+#define IDC_PLACEHOLDER_SET_QUOTED      1305
+#define IDC_PLACEHOLDER_SET_RELATIVE    1306
+#define IDC_PLACEHOLDER_SET_SHORT       1307
+#define IDC_PLACEHOLDER_SET_FORWARD     1308
 #define IDD_CUSTOMIZEPAGE_EDITOR        16105
 #define IDD_OUTPUTWIZARD_MIKTEX         16106
 #define IDD_OUTPUTWIZARD_PATH           16107
@@ -1161,15 +1170,20 @@
 #define ID_PHS_ALLGRAPHICFILES_QR       38342
 #define ID_PHS_ALLTXCFILES_QR           38343
 #define ID_PHS_ALLFILESETS_QR           38344
+#define ID_PHS_TEST_NOOPT               38345
+#define ID_PHS_TEST_OPT                 38346
+#define ID_PHS_MORESETS_NOOPT           38347
+#define ID_PH_MAINOPTIONS_NOOPT         38348
+#define ID_PH_CURRENTOPTIONS_NOOPT      38349
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        265
-#define _APS_NEXT_COMMAND_VALUE         38345
-#define _APS_NEXT_CONTROL_VALUE         1300
+#define _APS_NEXT_RESOURCE_VALUE        266
+#define _APS_NEXT_COMMAND_VALUE         38350
+#define _APS_NEXT_CONTROL_VALUE         1309
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif

@@ -129,13 +129,13 @@ CString AfxExpandWildcard(LPCTSTR lpszStringWithWildcard,
 #define TXC_PLACEHOLDERSET_ALLPROJECTFILES 15
 #define TXC_PLACEHOLDERSET_ALLFILESETS 0xFFFF
 ///Defines for names of Placeholder sets
-#define TXC_PLACEHOLDERSETNAME_TEXFILES "TPF"
-#define TXC_PLACEHOLDERSETNAME_BIBTEXFILES "BPF"
-#define TXC_PLACEHOLDERSETNAME_GRAPHICFILES "GPF"
-#define TXC_PLACEHOLDERSETNAME_TXCFILES "TXC"
-#define TXC_PLACEHOLDERSETNAME_CURRENTLYOPENEDFILES "COF"
-#define TXC_PLACEHOLDERSETNAME_ALLPROJECTFILES "APF"
-#define TXC_PLACEHOLDERSETNAME_ALLFILESETS "AFS"
+#define TXC_PLACEHOLDERSETNAME_TEXFILES _T("TPF")
+#define TXC_PLACEHOLDERSETNAME_BIBTEXFILES _T("BPF")
+#define TXC_PLACEHOLDERSETNAME_GRAPHICFILES _T("GPF")
+#define TXC_PLACEHOLDERSETNAME_TXCFILES _T("TXC")
+#define TXC_PLACEHOLDERSETNAME_CURRENTLYOPENEDFILES _T("COF")
+#define TXC_PLACEHOLDERSETNAME_ALLPROJECTFILES _T("APF")
+#define TXC_PLACEHOLDERSETNAME_ALLFILESETS _T("AFS")
 
 ///Typedef for regular expression used for searching for Placeholder sets
 typedef	reg_expression<TCHAR, char_regex_traits<TCHAR>, JM_DEF_ALLOC(TCHAR)> tregex_PS;
@@ -209,7 +209,7 @@ class CPlaceholderSets
 {
 public:
 	//Constructor / Destructor
-	CPlaceholderSets(CLatexProject* pProject);
+	CPlaceholderSets(CLatexProject* pProject = NULL);
 	virtual ~CPlaceholderSets();
 
 //Operations

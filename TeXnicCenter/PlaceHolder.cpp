@@ -256,7 +256,7 @@ CString AfxExpandWildcard(LPCTSTR lpszStringWithWildcard,
  *	A class to handle set-placeholders, which define sets of files.
  *
  ***************************************************************************/
-CPlaceholderSets::CPlaceholderSets(CLatexProject* pProject)
+CPlaceholderSets::CPlaceholderSets(CLatexProject* pProject /*= NULL*/)
 {
 	m_pProject = pProject;
 
@@ -272,7 +272,6 @@ CPlaceholderSets::CPlaceholderSets(CLatexProject* pProject)
 																			TXC_PLACEHOLDERSETNAME_ALLFILESETS);
 	int nResult = m_regexPS.set_expression((LPCTSTR)strRegex);
 	TRACE("m_regexPS returned %d\n", nResult);
-
 }
 
 
@@ -493,7 +492,6 @@ CUniqueStringList* CPlaceholderSets::GetFileSets(const unsigned int Sets,
 	}
 
 	//Safety - we need a valid m_pProject
-	ASSERT(IsValid());
 	if (!IsValid()) return pStrList;
 
 	////////////////////////////////////
@@ -567,7 +565,7 @@ CLatexProject* CPlaceholderSets::SetProject(CLatexProject* argpProject)
 {
 	CLatexProject* pOld = m_pProject;
 	m_pProject = argpProject;
-	ASSERT(IsValid());
+//	ASSERT(IsValid());
 	return pOld;
 }
 
