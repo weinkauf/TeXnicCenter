@@ -71,12 +71,13 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(COutputDoc, CCmdTarget)
 
 COutputDoc::COutputDoc()
-: m_pBuildView( NULL ),
-	m_bCanGrep( TRUE ),
-	m_bCanRunLatex( TRUE ),
-	m_nActiveFileGrep( 0 ),
-	m_pActiveOutputView( NULL ),
-	m_pParseView(NULL)
+: m_pBuildView(NULL)
+	,m_bCanGrep(TRUE)
+	,m_bCanRunLatex(TRUE)
+	,m_nActiveFileGrep(0)
+	,m_pActiveOutputView(NULL)
+	,m_pParseView(NULL)
+	,m_bActiveFileOperation(FALSE)
 {
 	// initialization
 	m_apGrepView[0] = NULL;
@@ -84,7 +85,6 @@ COutputDoc::COutputDoc()
 
 	m_apaGrepHits[0] = &m_aGrepHits1;
 	m_apaGrepHits[1] = &m_aGrepHits2;
-	m_bActiveFileOperation   = FALSE;
 }
 
 
@@ -139,12 +139,16 @@ BEGIN_MESSAGE_MAP(COutputDoc, CCmdTarget)
 	ON_UPDATE_COMMAND_UI(ID_LATEX_FILEBIBTEX, OnUpdateFileBibTex)
 	ON_COMMAND(ID_LATEX_FILEMAKEINDEX, OnFileMakeIndex)
 	ON_UPDATE_COMMAND_UI(ID_LATEX_FILEMAKEINDEX, OnUpdateFileMakeIndex)
+	ON_COMMAND(ID_LATEX_CLEAN, OnLatexClean)
+	ON_UPDATE_COMMAND_UI(ID_LATEX_CLEAN, OnUpdateLatexClean)
+	ON_COMMAND(ID_LATEX_RUNANDVIEW, OnLatexRunAndView)
 	ON_UPDATE_COMMAND_UI(ID_PREV_BADBOX, OnUpdateNextPrevBadbox)
 	ON_UPDATE_COMMAND_UI(ID_PREV_ERROR, OnUpdateNextPrevError)
 	ON_UPDATE_COMMAND_UI(ID_PREV_WARNING, OnUpdateNextPrevWarning)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_PREVGREPRESULT, OnUpdateGrepResultStep)
-	ON_COMMAND(ID_LATEX_CLEAN, OnLatexClean)
-	ON_UPDATE_COMMAND_UI(ID_LATEX_CLEAN, OnUpdateLatexClean)
+	ON_UPDATE_COMMAND_UI(ID_LATEX_RUNANDVIEW, OnUpdateLatexRun)
+	ON_UPDATE_COMMAND_UI(ID_LATEX_FILECOMPILEANDVIEW, OnUpdateFileCompile)
+	ON_COMMAND(ID_LATEX_FILECOMPILEANDVIEW, OnLatexFileCompileAndView)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -606,6 +610,9 @@ CDocument* COutputDoc::GetActiveDocument() const
 
 void COutputDoc::OnLatexView() 
 {
+	//Reset the message callback of the builder
+	m_builder.MsgAfterTermination.UnSet();
+
 	// check if there is an open document
 	CLatexEdit	*pView = theApp.GetActiveEditView();
 	CLatexDoc		*pDoc = NULL;
@@ -1066,7 +1073,10 @@ void COutputDoc::OnLatexRun()
 void COutputDoc::OnUpdateLatexRun(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(
-		theApp.GetProject() && !g_ProfileMap.GetActiveProfileKey().IsEmpty() && !m_builder.IsStillRunning());
+					theApp.GetProject()
+					&& !g_ProfileMap.GetActiveProfileKey().IsEmpty()
+					&& !m_builder.IsStillRunning()
+					);
 }
 
 
@@ -1147,8 +1157,7 @@ void COutputDoc::OnUpdateFileMakeIndex(CCmdUI* pCmdUI)
 
 void COutputDoc::DoLaTeXRun()
 {
-	if (m_builder.IsStillRunning())
-		return;
+	if (m_builder.IsStillRunning()) return;
 
 	//Save all modified files
 	//NOTE: This saves only files, that have been saved before
@@ -1288,6 +1297,11 @@ void COutputDoc::OnUpdateLatexStopBuild(CCmdUI *pCmdUI)
 
 void COutputDoc::OnLatexStopBuild()
 {
+	//Reset the message callback of the builder
+	// - so we won't get called after termination.
+	m_builder.MsgAfterTermination.UnSet();
+
+	//Cancel the build
 	m_builder.CancelExecution();
 }
 
@@ -1362,3 +1376,15 @@ void COutputDoc::OnUpdateLatexClean(CCmdUI* pCmdUI)
 		!g_ProfileMap.GetActiveProfileKey().IsEmpty());
 }
 
+
+void COutputDoc::OnLatexRunAndView() 
+{
+	m_builder.MsgAfterTermination.Set(false, AfxGetMainWnd()->m_hWnd, WM_COMMAND, ID_LATEX_VIEW);
+	OnLatexRun();
+}
+
+void COutputDoc::OnLatexFileCompileAndView() 
+{
+	m_builder.MsgAfterTermination.Set(false, AfxGetMainWnd()->m_hWnd, WM_COMMAND, ID_LATEX_VIEW);
+	OnFileCompile();
+}

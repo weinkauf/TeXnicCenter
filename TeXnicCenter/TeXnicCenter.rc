@@ -147,6 +147,9 @@ BEGIN
     VK_F3,          ID_EDIT_REPEAT,         VIRTKEY, NOINVERT
     VK_F3,          ID_EDIT_FIND_PREVIOUS,  VIRTKEY, SHIFT, NOINVERT
     VK_F5,          ID_LATEX_VIEW,          VIRTKEY, NOINVERT
+    VK_F5,          ID_LATEX_RUNANDVIEW,    VIRTKEY, CONTROL, NOINVERT
+    VK_F5,          ID_LATEX_FILECOMPILEANDVIEW, VIRTKEY, SHIFT, CONTROL, 
+                                                    NOINVERT
     VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
     VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
     VK_F7,          ID_LATEX_RUN,           VIRTKEY, NOINVERT
@@ -323,6 +326,9 @@ BEGIN
     BUTTON      ID_LATEX_STOP_BUILD
     SEPARATOR
     BUTTON      ID_LATEX_VIEW
+    SEPARATOR
+    BUTTON      ID_LATEX_RUNANDVIEW
+    BUTTON      ID_LATEX_FILECOMPILEANDVIEW
     SEPARATOR
     BUTTON      ID_NEXT_ERROR
     BUTTON      ID_PREV_ERROR
@@ -1592,34 +1598,37 @@ BEGIN
         MENUITEM "&Eigenschaften...",           ID_PROJECT_PROPERTIES
         MENUITEM SEPARATOR
         MENUITEM "&Hauptdatei öffnen",          ID_PROJECT_OPEN_MAINFILE
-        MENUITEM "Rechtschreibung...",          ID_SPELL_PROJECT
+        MENUITEM "&Rechtschreibung...",         ID_SPELL_PROJECT
         MENUITEM SEPARATOR
-        MENUITEM "Erzeugen mit aktueller Datei als Hauptdatei", 
+        MENUITEM "Erzeugen mit &aktueller Datei als Hauptdatei", 
                                                 ID_PROJECT_NEW_FROM_FILE
     END
     POPUP "A&usgabe"
     BEGIN
         POPUP "Aktives &Dokument"
         BEGIN
-            MENUITEM "&Compilieren",                ID_LATEX_FILECOMPILE
+            MENUITEM "&Erstellen",                  ID_LATEX_FILECOMPILE
             MENUITEM "&BibTeX",                     ID_LATEX_FILEBIBTEX
             MENUITEM "&MakeIndex",                  ID_LATEX_FILEMAKEINDEX
+            MENUITEM "Erstellen &und betrachten",   ID_LATEX_FILECOMPILEANDVIEW
+
         END
-        MENUITEM "&Projekt compilieren",        ID_LATEX_RUN
+        MENUITEM "Ausgabe &erstellen",          ID_LATEX_RUN
         MENUITEM "&BibTeX",                     ID_LATEX_BIBTEX
         MENUITEM "&MakeIndex",                  ID_LATEX_MAKEINDEX
         MENUITEM "Projekt auf&räumen",          ID_LATEX_CLEAN
         MENUITEM SEPARATOR
-        MENUITEM "A&usgabe betrachten",         ID_LATEX_VIEW
+        MENUITEM "Ausgabe be&trachten",         ID_LATEX_VIEW
+        MENUITEM "Ausgabe erstellen &und betrachten", ID_LATEX_RUNANDVIEW
         MENUITEM SEPARATOR
-        MENUITEM "Nächster Fehler",             ID_NEXT_ERROR
-        MENUITEM "Vorheriger Fehler",           ID_PREV_ERROR
-        MENUITEM "Nächste Warnung",             ID_NEXT_WARNING
-        MENUITEM "Vorherige Warnung",           ID_PREV_WARNING
-        MENUITEM "Nächste zu volle/leere Box",  ID_NEXT_BADBOX
-        MENUITEM "Vorherige zu volle/leere Box", ID_PREV_BADBOX
+        MENUITEM "Nächster &Fehler",            ID_NEXT_ERROR
+        MENUITEM "&Vorheriger Fehler",          ID_PREV_ERROR
+        MENUITEM "Nächste &Warnung",            ID_NEXT_WARNING
+        MENUITEM "V&orherige Warnung",          ID_PREV_WARNING
+        MENUITEM "Nächste zu volle/leere Bo&x", ID_NEXT_BADBOX
+        MENUITEM "Vor&herige zu volle/leere Box", ID_PREV_BADBOX
         MENUITEM SEPARATOR
-        MENUITEM "Ausgabeprofile definieren...", ID_LATEX_EDITPROFILES
+        MENUITEM "Ausgabe&profile definieren...", ID_LATEX_EDITPROFILES
         MENUITEM "&Aktives Ausgabeprofil wählen...", ID_LATEX_PROFILE
     END
     POPUP "E&xtras"
@@ -4543,7 +4552,6 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_LATEX_COMPILE        "Kompiliert das gerade aktive Dokument\nAktives Dokument compilieren"
     ID_LATEX_STOP_BUILD     "Bricht den Erstellvorgang ab\nErstellvorgang abbrechen"
 END
 
@@ -4575,7 +4583,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_LATEX_FILECOMPILE    "Kompiliert das gerade aktive Dokument\nAktives Dokument compilieren"
+    ID_LATEX_FILECOMPILE    "Erzeugt aus der aktuellen Datei ein druckbares Dokument\nAktives Dokument erstellen"
     ID_LATEX_FILEBIBTEX     "Führt BibTeX für das gerade aktive Dokument aus\nBibTeX für aktives Dokument"
     ID_LATEX_FILEMAKEINDEX  "Führt MakeIndex für das gerade aktive Dokument aus\nMakeIndex für aktives Dokument"
     ID_LATEX_BIBTEX         "Führt BibTeX für das Projekt aus\nBibTeX"
@@ -4675,6 +4683,9 @@ BEGIN
     ID_VIEW_DOCTAB_ICONS    "Stellt die Dokumentsymbole auf den Reitern zum Wechseln zwischen geöffneten Dokumenten dar\nDokumentregistersymbole an/aus"
     ID_VIEW_DOCTAB_NOTE     "Stellt die Reiter zum Wechseln zwischen geöffneten Dokumenten im Stile eines Aktenordners dar\nAktenordnerstil an/aus"
     ID_TOOLS_CANCEL         "Aktiviert Editor, schliesst Fenster oder bricht bestimmte Vorgänge ab"
+    ID_LATEX_RUNANDVIEW     "Erzeugt aus Ihrem Projekt ein druckbares Dokument und zeigt es an\nErstellen und betrachten"
+    ID_LATEX_FILECOMPILEANDVIEW 
+                            "Erzeugt aus der aktuellen Datei ein druckbares Dokument und zeigt es an\nAktives Dokument erstellen und betrachten"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -5594,16 +5605,18 @@ BEGIN
         MENUITEM "&Open Main File",             ID_PROJECT_OPEN_MAINFILE
         MENUITEM "&Spelling...",                ID_SPELL_PROJECT
         MENUITEM SEPARATOR
-        MENUITEM "Create with active file as main file", 
+        MENUITEM "&Create with active file as main file", 
                                                 ID_PROJECT_NEW_FROM_FILE
     END
     POPUP "&Build"
     BEGIN
         POPUP "Current &File"
         BEGIN
-            MENUITEM "Build &Output",               ID_LATEX_FILECOMPILE
-            MENUITEM "&BibTeX",                     ID_LATEX_FILEBIBTEX
+            MENUITEM "&Build",                      ID_LATEX_FILECOMPILE
+            MENUITEM "BibTe&X",                     ID_LATEX_FILEBIBTEX
             MENUITEM "&MakeIndex",                  ID_LATEX_FILEMAKEINDEX
+            MENUITEM "Build &and View",             ID_LATEX_FILECOMPILEANDVIEW
+
         END
         MENUITEM "Build &Output",               ID_LATEX_RUN
         MENUITEM "&BibTeX",                     ID_LATEX_BIBTEX
@@ -5611,16 +5624,17 @@ BEGIN
         MENUITEM "&Clean Project",              ID_LATEX_CLEAN
         MENUITEM SEPARATOR
         MENUITEM "&View Output",                ID_LATEX_VIEW
+        MENUITEM "Build &and View Output",      ID_LATEX_RUNANDVIEW
         MENUITEM SEPARATOR
-        MENUITEM "Next Error",                  ID_NEXT_ERROR
-        MENUITEM "Previous Error",              ID_PREV_ERROR
-        MENUITEM "Next Warning",                ID_NEXT_WARNING
-        MENUITEM "Previous Warning",            ID_PREV_WARNING
-        MENUITEM "Next Bad Box",                ID_NEXT_BADBOX
-        MENUITEM "Previous Bad Box",            ID_PREV_BADBOX
+        MENUITEM "Next &Error",                 ID_NEXT_ERROR
+        MENUITEM "&Previous Error",             ID_PREV_ERROR
+        MENUITEM "Next &Warning",               ID_NEXT_WARNING
+        MENUITEM "P&revious Warning",           ID_PREV_WARNING
+        MENUITEM "Next Bad Bo&x",               ID_NEXT_BADBOX
+        MENUITEM "Previo&us Bad Box",           ID_PREV_BADBOX
         MENUITEM SEPARATOR
-        MENUITEM "Define Output Profiles...",   ID_LATEX_EDITPROFILES
-        MENUITEM "Select Output Profile...",    ID_LATEX_PROFILE
+        MENUITEM "&Define Output Profiles...",  ID_LATEX_EDITPROFILES
+        MENUITEM "&Select Output Profile...",   ID_LATEX_PROFILE
     END
     POPUP "&Tools"
     BEGIN
@@ -7513,7 +7527,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_TIP                  "Displays the tip of the day\nTip of the Day"
-    ID_LATEX_RUN            "Builds a printable document out of your project\nBuild output"
+    ID_LATEX_RUN            "Builds a printable document out of your project\nBuild Output"
     ID_UPDATE_LATEX_OUTPUT  "Is send, when the latex-output has to be updated"
     ID_NEXT_ERROR           "Goes to the next Error\nNext Error"
     ID_PREV_ERROR           "Goes to the previous Error\nPrevious Error"
@@ -8468,7 +8482,6 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_LATEX_COMPILE        "Compile the active open file\nCompile File"
     ID_LATEX_STOP_BUILD     "Stop the build process\nStop Build"
 END
 
@@ -8598,6 +8611,9 @@ BEGIN
     ID_VIEW_DOCTAB_ICONS    "Shows document icons on the document tabs\nDocument icons on tabs"
     ID_VIEW_DOCTAB_NOTE     "Displays the document tabs in a note style\nNote styled document tabs"
     ID_TOOLS_CANCEL         "Activates editor, hides windows or cancels certain modes"
+    ID_LATEX_RUNANDVIEW     "Builds a printable document out of your project and shows it\nBuild and View Output"
+    ID_LATEX_FILECOMPILEANDVIEW 
+                            "Erzeugt aus der aktuellen Datei ein druckbares Dokument und zeigt es an\nAktives Dokument erstellen und betrachten"
 END
 
 STRINGTABLE DISCARDABLE 

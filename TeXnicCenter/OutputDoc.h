@@ -199,6 +199,8 @@ protected:
 	afx_msg void OnUpdateFileMakeIndex(CCmdUI* pCmdUI);
 	afx_msg void OnLatexClean();
 	afx_msg void OnUpdateLatexClean(CCmdUI* pCmdUI);
+	afx_msg void OnLatexRunAndView();
+	afx_msg void OnLatexFileCompileAndView();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

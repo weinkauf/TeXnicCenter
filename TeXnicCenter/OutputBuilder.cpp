@@ -51,17 +51,18 @@ static char THIS_FILE[]=__FILE__;
 //-------------------------------------------------------------------
 
 COutputBuilder::COutputBuilder()
-:	CWorkerThread(FALSE),
-	m_pView(NULL),
-	m_pProfile(NULL)
+:	CWorkerThread(FALSE)
+	,m_pView(NULL)
+	,m_pProfile(NULL)
+	,m_bCancel(FALSE)
 {}
 
 
 BOOL COutputBuilder::Create(int nMode,
-														COutputDoc *pDoc, COutputView *pView, 
-														LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath, 
-														BOOL bRunBibTex, BOOL bRunMakeIndex,
-														int nPriority /*= THREAD_PRIORITY_BELOW_NORMAL*/)
+							COutputDoc* pDoc, COutputView* pView, 
+							LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath, 
+							BOOL bRunBibTex, BOOL bRunMakeIndex,
+							int nPriority /*= THREAD_PRIORITY_BELOW_NORMAL*/)
 {
 	m_nMode = nMode;
 
@@ -94,26 +95,26 @@ BOOL COutputBuilder::Create(int nMode,
 }
 
 
-BOOL COutputBuilder::BuildAll(COutputDoc *pDoc, COutputView *pView, 
-															LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath, 
-															BOOL bRunBibTex, BOOL bRunMakeIndex,
-															int nPriority /*= THREA_PRIORITY_BELOW_NORMAL*/)
+BOOL COutputBuilder::BuildAll(COutputDoc* pDoc, COutputView* pView, 
+								LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath, 
+								BOOL bRunBibTex, BOOL bRunMakeIndex,
+								int nPriority /*= THREA_PRIORITY_BELOW_NORMAL*/)
 {
 	return Create(modeBuildAll, pDoc, pView, lpszWorkingDir, lpszMainPath, bRunBibTex, bRunMakeIndex, nPriority);
 }
 
 
-BOOL COutputBuilder::RunBibTex(COutputDoc *pDoc, COutputView *pView,
-															 LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath,
-															 int nPriority /*= THREAD_PRIORITY_BELOW_NORMAL*/)
+BOOL COutputBuilder::RunBibTex(COutputDoc* pDoc, COutputView* pView,
+								 LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath,
+								 int nPriority /*= THREAD_PRIORITY_BELOW_NORMAL*/)
 {
 	return Create(modeRunBibTexOnly, pDoc, pView, lpszWorkingDir, lpszMainPath, TRUE, FALSE, nPriority);
 }
 
 
-BOOL COutputBuilder::RunMakeIndex(COutputDoc *pDoc, COutputView *pView,
-																	LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath,
-																	int nPriority /*= THREAD_PRIORITY_BELOW_NORMAL*/)
+BOOL COutputBuilder::RunMakeIndex(COutputDoc* pDoc, COutputView* pView,
+									LPCTSTR lpszWorkingDir, LPCTSTR lpszMainPath,
+									int nPriority /*= THREAD_PRIORITY_BELOW_NORMAL*/)
 {
 	return Create(modeRunMakeIndexOnly, pDoc, pView, lpszWorkingDir, lpszMainPath, FALSE, TRUE, nPriority);
 }
@@ -168,14 +169,17 @@ UINT COutputBuilder::Run()
 
 UINT COutputBuilder::OnTerminate(UINT unExitCode)
 {
-	if (m_bCancel )
+	UINT retval(unExitCode);
+
+	//Add a line to the end of the output
+	if (m_bCancel)
 	{
 		if (m_pView)
 		{
 			m_pView->AddLine(_T(""));
 			m_pView->AddLine(CString((LPCTSTR)STE_LATEX_CANCELED));
 		}
-		return -1;
+		retval = -1;
 	}
 	else
 	{
@@ -184,9 +188,12 @@ UINT COutputBuilder::OnTerminate(UINT unExitCode)
 			m_pView->AddLine(_T(""));
 			m_pView->AddLine(m_strLatexResult);
 		}
-
-		return unExitCode;
 	}
+
+	//Call callback message
+	MsgAfterTermination.SendCallback();
+
+	return retval;
 }
 
 
