@@ -311,9 +311,8 @@ protected:
 	COutputInfoArray m_aErrors;
 
 	/** Array that contains information about the warnings of the latex-compiler.*/
-public:
 	COutputInfoArray m_aWarnings;
-protected:
+
 	/** Array that contains information about the bad boxes of the latex-compiler.*/
 	COutputInfoArray m_aBadBoxes;
 
