@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.25  2005/03/16 15:20:45  vachis
+* fixed redraw bug: unmatched brace is not shown in red if it is in visible window rectangle
+*
 * Revision 1.24  2005/03/12 11:46:52  niteria
 * Enabled bracket matching even if colors are the same as the normal colors.
 * Now we have a consistent matching even in formulas.
@@ -3173,9 +3176,13 @@ void CCrystalTextView::SetCursorPos(const CPoint &ptCursorPos)
 	m_nIdealCharPos = CalculateActualOffset(m_ptCursorPos.y, m_ptCursorPos.x);
 	UpdateCaret();
 
-	MarkPairStringTo(ptCursorPos, TRUE);
-	Invalidate();
-	UpdateWindow();
+	if (!IsSelection()) {
+		MarkPairStringTo(ptCursorPos, TRUE);
+		Invalidate();
+		UpdateWindow();
+	}
+	else
+		UnmarkPairString();
 }
 
 void CCrystalTextView::SetSelectionMargin(BOOL bSelMargin)
@@ -4588,7 +4595,7 @@ BOOL CCrystalTextView::FindPairHelper( const CPoint &ptTextPos, int nNthOpenPair
 																lpszTextPos, aPairStack, nNthOpenPair, bClearToEnd, 
 																ptFoundStrStart.x, ptFoundStrEnd.x, openPairStack, result ) ) 
 			{
-				//pair found
+				//pair found or error
 				break;
 			}
 			free( pBuf );
@@ -4599,7 +4606,7 @@ BOOL CCrystalTextView::FindPairHelper( const CPoint &ptTextPos, int nNthOpenPair
 		//end of file, pair not found
 		if ( nLineIndex < 0 || nLineIndex >= nLineCount ) 
 		{
-			if ( bClearToEnd && result ==  CCrystalParser::RESULT_ENDOK )  {
+			if ( bClearToEnd && aPairStack.empty() )  {
 				bClearEndReached = TRUE;
 				result = TRUE;
 				break;
@@ -4737,9 +4744,14 @@ BOOL CCrystalTextView::SelectBlockAround( const CPoint &ptCursorPos, int nBlockL
 	if (!FindPairHelper( ptSearchStartR, 0, CCrystalParser::DIRECTION_RIGHT, openPairStack,
 				bClearToEnd, ptNull, ptNull, ptTemp, ptSelEnd, aPairStack, bClearEndReached ))
 	{
-		const struct CCrystalParser::tagPairStackItm &rPairItm = openPairStack.back();
-		ptErrStrStart = rPairItm.ptStart;
-		ptErrStrEnd = rPairItm.ptEnd;
+		if (openPairStack.empty()) {
+			ptErrStrStart = ptErrStrEnd = CPoint(0,0);
+		}
+		else {
+			const struct CCrystalParser::tagPairStackItm &rPairItm = openPairStack.back();
+			ptErrStrStart = rPairItm.ptStart;
+			ptErrStrEnd = rPairItm.ptEnd;
+		}
 		goto error;
 	}
 	else 

@@ -20,6 +20,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.4  2005/03/08 16:36:08  vachis
+* Selection of block between bracket pairs in a hierarchical manner (Ctrl+M)
+* Bracket highlighting disabled if a selection is present
+* New default colours for bracket highlighting
+*
 * Revision 1.3  2005/02/15 09:43:12  vachis
 * Implemented feature 536164: Matching Bracket Highlight
 *
@@ -89,8 +94,7 @@ public:
 
 	enum {
 		RESULT_ERROR = 0,
-		RESULT_OK = 1,
-		RESULT_ENDOK = 2
+		RESULT_OK = 1
 	};
 
 public:
@@ -196,8 +200,6 @@ public:
 		Output, the stack where open pairs are stored.
 	@param result
 		CParser::RESULT_ERROR if an error occures, the string that din't have pair is at the top of the stack
-		CParser::RESULT_ENDOK if <code>bClearToEnd</code> have been set and the end/start of line was reached
-													and the pair stack is emty
 		CParser::RESULT_OK otherwise
 
         

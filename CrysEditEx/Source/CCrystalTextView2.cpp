@@ -64,6 +64,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.8  2005/03/16 12:11:25  vachis
+* removed inconsistent behavior of normal selection and brace block selection
+* (brace block selection disappered when you returned from application menu
+* by clicking into the document window)
+*
 * Revision 1.7  2005/03/08 16:36:08  vachis
 * Selection of block between bracket pairs in a hierarchical manner (Ctrl+M)
 * Bracket highlighting disabled if a selection is present
@@ -780,7 +785,7 @@ void CCrystalTextView::OnMouseMove(UINT nFlags, CPoint point)
 	CView::OnMouseMove(nFlags, point);
 
 	//unhighlight brackets
-	UnmarkPairString();
+	//UnmarkPairString();
 
 	if (m_bDragSelection)
 	{
