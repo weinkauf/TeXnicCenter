@@ -137,7 +137,10 @@ protected:
 	afx_msg void OnUpdateEditToggleWhiteSpaceView(CCmdUI* pCmdUI);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	afx_msg void OnSpellFile();
+	afx_msg void OnTextmodulesDefine();
+	afx_msg void OnUpdateTextmodulesDefine(CCmdUI* pCmdUI);
 	//}}AFX_MSG
+	afx_msg void OnUpdateTextModulesList(CCmdUI *pCmdUI);
 	afx_msg void OnBlockComment(const UINT nID);
 	DECLARE_MESSAGE_MAP()
 
