@@ -55,6 +55,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.5  2002/03/26 16:24:58  cnorris
+* Re-wrote LineInfo to manage its own data and manipulation
+*
 * Revision 1.4  2002/03/04 18:29:10  cnorris
 * Match delete [] with new []
 *
@@ -915,8 +918,8 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 	if (nRestCount > 0)
 	{
 		// Save the right portion on the first insert line
-		pszRestChars = (TCHAR*) _alloca(sizeof(TCHAR)*nRestCount+1);
-		_tcsncpy(pszRestChars, li.m_pcLine+nPos, nRestCount+1);
+		pszRestChars = (TCHAR*) _alloca(sizeof(TCHAR)*nRestCount);
+		_tcsncpy(pszRestChars, li.m_pcLine+nPos, nRestCount);
 		li.TrimText(nPos);
 	}
 
