@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.8  2002/04/23 21:45:09  cnorris
+* realtime spell check
+*
 * Revision 1.7  2002/04/06 05:28:35  cnorris
 * Added SetShowInteractiveSelection
 * Added GetParser
@@ -3679,7 +3682,8 @@ void CCrystalTextView::OnChar( UINT nChar, UINT nRepCnt, UINT nFlags )
 	if( !m_bIncrementalSearchForward && !m_bIncrementalSearchBackward )
 		return;
 
-	// exit incremental search, wenn Escape is pressed
+	// exit incremental search, if Escape is pressed
+	// - NOTE: VK_ESCAPE does not arrive here.
 	if( nChar == VK_ESCAPE )
 	{
 		// if not end incremental search
@@ -3697,8 +3701,19 @@ void CCrystalTextView::OnChar( UINT nChar, UINT nRepCnt, UINT nFlags )
 		return;
 	}
 
-	// is the character valid for incremental search?
-	if( !_istgraph( nChar ) && !(nChar == _T(' ')) && !(nChar == _T('\t')) )
+	//Is the character valid for incremental search?
+	//
+	// - Although I think, that _istgraph() should return true for german umlauts
+	// - and french accentuated characters it does NOT.
+	// - Therefore isalnum() is used here as well - it will return true for them.
+	// - Both funcs overlap somehow, but that shouldn't matter that much.
+	//
+	// - I found one character, where the incremental search still cancels:
+	// - The Euro-Symbol
+	//
+	// - The Tabulator key is not supported as well,
+	// - because pressing this key does not bring up the OnChar-Event.
+	if( !( _istgraph( nChar ) || isalnum(nChar) ) && !(nChar == _T(' ')) /*&& !(nChar == _T('\t'))*/ )
 	{
 		// if not end incremental search
 		m_bIncrementalSearchForward = m_bIncrementalSearchBackward = FALSE;
