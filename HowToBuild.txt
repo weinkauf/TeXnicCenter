@@ -38,7 +38,7 @@ BUILDING TEXNICCENTER
 
 6. Install Microsoft XML Parser:
    a) Download the most recent version of the Microsoft XML Parser 4 (MSXML4) including the
-      SDK.
+      SDK from 'http://msdn.microsoft.com/downloads/'
    b) Install it on your system.
    c) Add the include and library paths of MSXML to the list in Visual C++ 6
       ('Tools -> Options ->Directories').
