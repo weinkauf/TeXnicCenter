@@ -34,7 +34,7 @@ Source: ..\output\Release\cryseditEx.dll; DestDir: {app}; CopyMode: alwaysoverwr
 Source: ..\output\Release\GPL_english.htm; DestDir: {app}; CopyMode: alwaysoverwrite; Components: Application_Files
 Source: ..\output\Release\GPL_german.htm; DestDir: {app}; CopyMode: alwaysoverwrite; Components: Application_Files
 Source: ..\output\Release\MFCExt.dll; DestDir: {app}; CopyMode: normal; Flags: comparetimestampalso; Components: Application_Files
-Source: ..\output\Release\TeXCntr.chm; DestDir: {app}; CopyMode: normal; Flags: comparetimestampalso; Components: Help_Files
+Source: ..\output\Release\Help\*.chm; DestDir: {app}\Help; CopyMode: normal; Flags: comparetimestampalso; Components: Help_Files
 Source: ..\output\Release\TEXCNTR.EXE; DestDir: {app}; CopyMode: alwaysoverwrite; Components: Application_Files
 Source: ..\TeXnicCenter\Tips_english.txt; DestDir: {app}; CopyMode: normal; Flags: comparetimestampalso; Components: Application_Files
 Source: ..\TeXnicCenter\Tips_german.txt; DestDir: {app}; CopyMode: normal; Flags: comparetimestampalso; Components: Application_Files
@@ -48,10 +48,11 @@ Source: ..\TeXnicCenterObjects\Lib\TeXnicCenterObjects.tlb; DestDir: {app}; Copy
 Source: ..\output\Release\Skins\*.dll; DestDir: {app}\Skins; CopyMode: normal; Flags: comparetimestampalso; Components: Skins
 Source: ..\output\Release\language\*.aff; DestDir: {app}\Language; CopyMode: normal; Components: Application_Files; Flags: comparetimestampalso
 Source: ..\output\Release\language\*.dic; DestDir: {app}\Language; CopyMode: normal; Components: Application_Files; Flags: comparetimestampalso
+Source: ..\output\Release\Help\*.chw; DestDir: {app}\Help; CopyMode: normal; Flags: comparetimestampalso; Components: Help_Files
 
 [Icons]
 Name: {group}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; WorkingDir: {userdocs}; IconIndex: 0
-Name: {group}\TeXnicCenter Help; Filename: {app}\TeXCntr.chm; WorkingDir: {app}; IconFilename: {win}\HH.EXE; IconIndex: 0
+Name: {group}\TeXnicCenter Help; Filename: {app}\Help\TeXCntr.chm; WorkingDir: {app}\Help; IconFilename: {win}\HH.EXE; IconIndex: 0; Components: Help_Files
 Name: {userdesktop}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; WorkingDir: {userdocs}; Comment: TeXnicCenter; IconIndex: 0; Tasks: DesktopLink
 Name: {sendto}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; Comment: TeXnicCenter; IconIndex: 0; Tasks: SendToLink; WorkingDir: {userdocs}
 
@@ -76,7 +77,8 @@ Name: SendToLink; Description: Add TeXnicCenter to the 'Send To' menu; GroupDesc
 [Dirs]
 Name: {app}\Templates\Documents; Flags: uninsalwaysuninstall
 Name: {app}\Templates\Projects; Flags: uninsalwaysuninstall
-Name: {app}\Skins; Flags: uninsalwaysuninstall
+Name: {app}\Skins; Flags: uninsalwaysuninstall; Components: Skins
+Name: {app}\Help; Flags: uninsalwaysuninstall; Components: Help_Files
 
 [Types]
 Name: typical; Description: Typical (Will be useful for the most users)
