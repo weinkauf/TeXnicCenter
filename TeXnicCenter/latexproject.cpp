@@ -154,6 +154,8 @@ BOOL CLatexProject::OnNewProjectFromDoc(LPCTSTR lpszDocPathName)
 
 	//Set the path of the project file
 	CString ProjectFileName = GetProjectFileNameFromDoc(lpszDocPathName);
+	if (ProjectFileName.IsEmpty()) return false;
+
 	//Does it already exist?
 	if (CheckExistingProjectFile(ProjectFileName))
 	{
@@ -203,7 +205,11 @@ BOOL CLatexProject::OnNewProjectFromDoc(LPCTSTR lpszDocPathName)
 
 CString CLatexProject::GetProjectFileNameFromDoc(LPCTSTR lpszDocPathName)
 {
-	CString ProjectFileName = CPathTool::GetBase(lpszDocPathName) + _T(".tcp");
+	CString ProjectFileName = (CPathTool::GetFileExtension(lpszDocPathName) == _T("tex"))
+														?
+														CPathTool::GetBase(lpszDocPathName) + _T(".tcp")
+														:
+														"";
 	return ProjectFileName;
 };
 
@@ -394,7 +400,7 @@ void CLatexProject::Dump(CDumpContext& dc) const
 #define VAL_PROJECTINFO_PLANGUAGE			_T("ProjectLanguage")
 #define VAL_PROJECTINFO_PDIALECT			_T("ProjectDialect")
 
-#define CURRENTFORMATVERSION				3
+#define CURRENTFORMATVERSION				4
 #define	FORMATTYPE							_T("TeXnicCenterProjectInformation")
 
 BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
@@ -437,7 +443,7 @@ BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
 
 		m_bUseBibTex			= ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEBIBTEX,		FALSE);
 		m_bUseMakeIndex			= ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEMAKEINDEX,	FALSE);
-		// Raffi: added project specific language handling
+
 		m_strProjectLanguage	= ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_PLANGUAGE,		g_configuration.m_strLanguageDefault);
 		m_strProjectDialect		= ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_PDIALECT,		g_configuration.m_strLanguageDialectDefault);
 

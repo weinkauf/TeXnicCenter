@@ -1812,6 +1812,9 @@ void CTeXnicCenterApp::OnProjectNewFromFile()
 		DocPathName = pDoc->GetPathName();
 	}
 
+	//Is it a latex file?
+	if (CPathTool::GetFileExtension(DocPathName) != _T("tex")) return;
+
 	//Do we have an opened project?
 	CLatexProject* pLProject = GetProject();
 	if (pLProject)
@@ -1834,5 +1837,19 @@ void CTeXnicCenterApp::OnProjectNewFromFile()
 
 void CTeXnicCenterApp::OnUpdateProjectNewFromFile(CCmdUI* pCmdUI) 
 {
-	pCmdUI->Enable(m_pLatexDocTemplate->GetFirstDocPosition() != NULL);
+	bool bEnable = false;
+
+	CLatexEdit* pEdit = GetActiveEditView();
+	if (pEdit)
+	{
+		CLatexDoc* pDoc = pEdit->GetDocument();
+		if (pDoc)
+		{
+			//Is it a latex file?
+			bEnable = (CPathTool::GetFileExtension(pDoc->GetPathName()) == _T("tex"));
+		}
+	}
+
+	pCmdUI->Enable(bEnable);
+//	pCmdUI->Enable(m_pLatexDocTemplate->GetFirstDocPosition() != NULL);
 }
