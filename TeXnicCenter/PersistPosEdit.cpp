@@ -26,8 +26,13 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 #include "PersistPosEdit.h"
 
 #ifdef _DEBUG
@@ -35,10 +40,6 @@
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-
-//-------------------------------------------------------------------
-// CPersistPosEdit
-//-------------------------------------------------------------------
 
 
 BEGIN_MESSAGE_MAP(CPersistPosEdit, CEdit)
@@ -59,12 +60,7 @@ void CPersistPosEdit::InsertText(LPCTSTR lpszText)
 {
 	SetFocus();
 	SetSel(m_nSelStart, m_nSelEnd);
-
-	// insert text
-	int	i;
-	int	nLen = _tcslen(lpszText);
-	for (i = 0; i < nLen; i++)
-		SendMessage(WM_CHAR, lpszText[i]);
+	ReplaceSel(lpszText, true);
 }
 
 
