@@ -1,4 +1,6 @@
 2005/03/12 niteria
+- Fixed Bug 1037280: Failed to create project in WebDav folder
+  WebDAV NOT supported at all. I just fixed the crash.
 - Fixed Bug 1112058: tps-file stores global location of opened files
   Now relative paths are saved - thus, it is save to move folders with tps-files.
 - Fixed Bug 893376: Cryptic COM error when XML not installed
