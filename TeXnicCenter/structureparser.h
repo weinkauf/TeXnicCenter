@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_STRUCTUREPARSER_H__843BC262_339C_11D3_929E_444553540000__INCLUDED_)
 #define AFX_STRUCTUREPARSER_H__843BC262_339C_11D3_929E_444553540000__INCLUDED_
 
@@ -54,6 +60,10 @@ public:
 		error,
 		typeCount
 	};
+
+protected:
+	/** The number of Output-Lines, that have been issued */
+	int m_nOutputLines;
 };
 
 

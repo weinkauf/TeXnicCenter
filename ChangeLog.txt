@@ -1,3 +1,6 @@
+2002/05/24 niteria
+- Blocking of StructureParser fixed NOW.
+
 2002/05/20 niteria
 - Feature 558433 implemented: InsertGraphics with scaling to textwidth.
 

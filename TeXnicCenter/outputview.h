@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_OUTPUTVIEW_H__0EE022A5_20D1_11D3_929E_DA6C20A3421F__INCLUDED_)
 #define AFX_OUTPUTVIEW_H__0EE022A5_20D1_11D3_929E_DA6C20A3421F__INCLUDED_
 
@@ -38,6 +44,7 @@
 
 #define OPW_ADD_LINE		WM_USER + 5
 #define OPW_RESET			WM_USER + 6
+#define OPW_ADD_INFOLINE	WM_USER + 7
 
 class COutputView : public CListCtrl
 {
@@ -150,6 +157,7 @@ public:
 protected:
 	LONG OnAddLine( UINT wParam, LONG lParam );
 	LONG OnReset( UINT wParam, LONG lParam );
+	LONG OnAddInfoLine( WPARAM wParam, LONG lParam );
 	afx_msg void OnSysColorChange();	
 	//{{AFX_MSG(COutputView)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);

@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"
 #include "stdafx.h"
 #include "StructureParser.h"
@@ -234,8 +240,6 @@ UINT StructureParserThread( LPVOID pStructureParser )
 	pParser->Done( bParsingResult );
 	pParser->m_bCancel = FALSE;
 
-	// Give the thread a priority boost so we can finish before getting killed
-	::SetThreadPriority( ::GetCurrentThread(), THREAD_PRIORITY_HIGHEST );
 	pParser->m_evtParsingDone.SetEvent();
 
 	return 0;
