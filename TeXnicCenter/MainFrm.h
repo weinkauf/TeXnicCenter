@@ -121,7 +121,7 @@ public:
 		Pointer to the toolbar button with the specified command ID or
 		NULL if there is no such button.
 	*/
-	CBCGToolbarButton *GetToolbarButton( UINT unCmdID, POSITION &pos ) const;
+	CBCGToolbarButton* GetToolbarButton( UINT unCmdID, POSITION &pos ) const;
 
 	/**
 	Activates the specified menu.
@@ -129,7 +129,7 @@ public:
 	@param pMenu
 		The Menu to activate.
 	*/
-	BOOL SetMenu( CMenu *pMenu );
+	BOOL SetMenu(CMenu* pMenu);
 
 	/**
 	Activates the specified tab on the navigation bar.
@@ -145,7 +145,7 @@ public:
 	@param nTab
 		Zero based index of the tab on the output bar to activate.
 	*/
-	void ActivateOutputTab( int nTab );
+	void ActivateOutputTab(int nTab);
 
 	/**
 	Should be called, when the user may have changed the external, user
@@ -161,7 +161,7 @@ protected:
 	@param pCtrlBar
 		Control bar to toggle.
 	*/
-	void ToggleControlBar( CControlBar *pCtrlBar );
+	void ToggleControlBar(CControlBar* pCtrlBar);
 
 	/**
 	Checks if the specified control bar is visible
@@ -172,7 +172,7 @@ protected:
 	@return
 		TRUE, if the specified control bar is visible, FALSE otherwise.
 	*/
-	BOOL IsControlBarVisible( CControlBar *pCtrlBar );
+	BOOL IsControlBarVisible(CControlBar* pCtrlBar);
 
 	/**
 	Returns the control bar associated with the specified command ID.
@@ -184,7 +184,7 @@ protected:
 		Pointer to the control bar associated with the specified 
 		command ID or NULL, if there is no matching control bar.
 	*/
-	CControlBar *GetControlBarByCmd( UINT unID );
+	CControlBar* GetControlBarByCmd(UINT unID);
 
 	/**
 	Creates the specified tool bar
@@ -201,7 +201,7 @@ protected:
 	@return
 		TRUE if successfull, FALSE otherwise.
 	*/
-	BOOL CreateToolBar( CBCGToolBar *pToolBar, UINT unID, UINT unTitleID, BOOL bVisible = TRUE );
+	BOOL CreateToolBar(CBCGToolBar* pToolBar, UINT unID, UINT unTitleID, BOOL bVisible = TRUE);
 
 	/** Hides all control bars */
 	void HideControlBars();
@@ -209,15 +209,17 @@ protected:
 	/** Shows all control bars */
 	void ShowControlBars();
 
-	/**
-	Activates the full screen mode.
+	/**	Activates the full screen mode.
 	*/
 	void FullScreenOn();
 
-	/**
-	Deactivates the full screen mode.
+	/** Deactivates the full screen mode.
 	*/
 	void FullScreenOff();
+
+	/** Cares (display/hide) about the Document tabs.
+	*/
+	void DisplayDocumentTabs();
 
 // overloadings
 public:
@@ -262,8 +264,6 @@ protected:
 	afx_msg void OnWindowList();
 	afx_msg void OnHelpSearch();
 	afx_msg void OnHelpIndex();
-	afx_msg void OnViewDocTabs();
-	afx_msg void OnUpdateViewDocTabs(CCmdUI* pCmdUI);
 	afx_msg void OnViewFullScreen();
 	afx_msg void OnUpdateViewFullScreen(CCmdUI* pCmdUI);
 	afx_msg void OnHelpKeyMapping();
@@ -274,6 +274,12 @@ protected:
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnHelpContents();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
+	afx_msg void OnViewDocTabsBottom();
+	afx_msg void OnViewDocTabsOff();
+	afx_msg void OnViewDocTabsTop();
+	afx_msg void OnViewDocTabsIcons();
+	afx_msg void OnViewDocTabsNote();
+	afx_msg void OnUpdateViewDocTabs(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	afx_msg void OnToggleCtrlBar( UINT nIDEvent );
 	afx_msg void OnToggleMathBar( UINT nIDEvent );

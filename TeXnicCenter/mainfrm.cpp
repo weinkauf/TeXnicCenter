@@ -83,8 +83,6 @@ BEGIN_MESSAGE_MAP(CMainFrame, CBCGMDIFrameWnd)
 	ON_COMMAND(ID_WINDOW_LIST, OnWindowList)
 	ON_COMMAND(ID_HELP_FINDER, OnHelpSearch)
 	ON_COMMAND(ID_HELP_INDEX, OnHelpIndex)
-	ON_COMMAND(ID_VIEW_DOCTAB, OnViewDocTabs)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB, OnUpdateViewDocTabs)
 	ON_COMMAND(ID_VIEW_FULLSCREEN, OnViewFullScreen)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_FULLSCREEN, OnUpdateViewFullScreen)
 	ON_COMMAND(ID_HELP_KEYMAPPING, OnHelpKeyMapping)
@@ -95,6 +93,16 @@ BEGIN_MESSAGE_MAP(CMainFrame, CBCGMDIFrameWnd)
 	ON_WM_CONTEXTMENU()
 	ON_COMMAND(ID_HELP_CONTENTS, OnHelpContents)
 	ON_WM_HELPINFO()
+	ON_COMMAND(ID_VIEW_DOCTAB_BOTTOM, OnViewDocTabsBottom)
+	ON_COMMAND(ID_VIEW_DOCTAB_OFF, OnViewDocTabsOff)
+	ON_COMMAND(ID_VIEW_DOCTAB_TOP, OnViewDocTabsTop)
+	ON_COMMAND(ID_VIEW_DOCTAB_ICONS, OnViewDocTabsIcons)
+	ON_COMMAND(ID_VIEW_DOCTAB_NOTE, OnViewDocTabsNote)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_BOTTOM, OnUpdateViewDocTabs)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_OFF, OnUpdateViewDocTabs)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_TOP, OnUpdateViewDocTabs)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_ICONS, OnUpdateViewDocTabs)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_NOTE, OnUpdateViewDocTabs)
 	//}}AFX_MSG_MAP
 	// Globale Hilfebefehle
 	ON_COMMAND(ID_HELP_FINDER, CBCGMDIFrameWnd::OnHelpFinder)
@@ -1034,7 +1042,7 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 
 	m_wndNavigationBar.SetFlatTabs(theApp.m_bTabFlatBorders);
 	m_wndOutputBar.SetFlatTabs(theApp.m_bTabFlatBorders);
-	EnableMDITabs(theApp.m_bMDITabs, theApp.m_bMDITabIcons, (CBCGTabWnd::Location)theApp.m_nMDITabLocation);
+	DisplayDocumentTabs();
 
 	return TRUE;
 }
@@ -1072,16 +1080,83 @@ void CMainFrame::WinHelp(DWORD dwData, UINT nCmd)
 }
 
 
-void CMainFrame::OnViewDocTabs() 
+void CMainFrame::DisplayDocumentTabs()
 {
-	theApp.m_bMDITabs = !theApp.m_bMDITabs;
-	EnableMDITabs(theApp.m_bMDITabs, theApp.m_bMDITabIcons, (CBCGTabWnd::Location)theApp.m_nMDITabLocation);
+	EnableMDITabs(theApp.m_bMDITabs, theApp.m_bMDITabIcons,
+					(CBCGTabWnd::Location)theApp.m_nMDITabLocation,
+					false, false,
+					(CBCGTabWnd::Style)theApp.m_nMDITabStyle);
 }
 
+void CMainFrame::OnViewDocTabsBottom() 
+{
+	theApp.m_bMDITabs = true;
+	theApp.m_nMDITabLocation = CBCGTabWnd::LOCATION_BOTTOM;
+	DisplayDocumentTabs();
+}
+
+void CMainFrame::OnViewDocTabsTop() 
+{
+	theApp.m_bMDITabs = true;
+	theApp.m_nMDITabLocation = CBCGTabWnd::LOCATION_TOP;
+	DisplayDocumentTabs();
+}
+
+void CMainFrame::OnViewDocTabsOff() 
+{
+	theApp.m_bMDITabs = false;
+	DisplayDocumentTabs();
+}
+
+void CMainFrame::OnViewDocTabsIcons() 
+{
+	theApp.m_bMDITabIcons = !theApp.m_bMDITabIcons;
+	DisplayDocumentTabs();
+}
+
+void CMainFrame::OnViewDocTabsNote() 
+{
+	if (theApp.m_nMDITabStyle == CBCGTabWnd::STYLE_3D_SCROLLED)
+	{
+		theApp.m_nMDITabStyle = CBCGTabWnd::STYLE_3D_ONENOTE;
+	}
+	else
+	{
+		theApp.m_nMDITabStyle = CBCGTabWnd::STYLE_3D_SCROLLED;
+	}
+	DisplayDocumentTabs();
+}
 
 void CMainFrame::OnUpdateViewDocTabs(CCmdUI* pCmdUI) 
 {
-	pCmdUI->SetCheck(theApp.m_bMDITabs);
+	switch (pCmdUI->m_nID)
+	{
+		case ID_VIEW_DOCTAB_BOTTOM:
+			pCmdUI->SetRadio(theApp.m_bMDITabs && (theApp.m_nMDITabLocation == CBCGTabWnd::LOCATION_BOTTOM) );
+			break;
+
+		case ID_VIEW_DOCTAB_TOP:
+			pCmdUI->SetRadio(theApp.m_bMDITabs && (theApp.m_nMDITabLocation == CBCGTabWnd::LOCATION_TOP) );
+			break;
+
+		case ID_VIEW_DOCTAB_OFF:
+			pCmdUI->SetRadio(!theApp.m_bMDITabs);
+			break;
+
+		case ID_VIEW_DOCTAB_ICONS:
+			pCmdUI->SetCheck(theApp.m_bMDITabIcons);
+			pCmdUI->Enable(theApp.m_bMDITabs);
+			break;
+
+		case ID_VIEW_DOCTAB_NOTE:
+			pCmdUI->SetCheck(theApp.m_nMDITabStyle == CBCGTabWnd::STYLE_3D_ONENOTE);
+			pCmdUI->Enable(theApp.m_bMDITabs);
+			break;
+
+		default:
+			ASSERT(false);
+			break;
+	}
 }
 	
 
@@ -1398,3 +1473,4 @@ void CMainFrame::OnExecuteUserTool(UINT nIDEvent)
 {
 	theApp.GetUserToolsManager()->InvokeTool(nIDEvent);
 }
+

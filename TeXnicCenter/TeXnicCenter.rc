@@ -1037,7 +1037,15 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "&Leerraumanzeige",            ID_EDIT_TOGGLE_WHITESPACEVIEW
 
-        MENUITEM "&Dokumentregister",           ID_VIEW_DOCTAB
+        POPUP "&Dokumentregister"
+        BEGIN
+            MENUITEM "&Oben",                       ID_VIEW_DOCTAB_TOP
+            MENUITEM "&Unten",                      ID_VIEW_DOCTAB_BOTTOM
+            MENUITEM "&Aus",                        ID_VIEW_DOCTAB_OFF
+            MENUITEM SEPARATOR
+            MENUITEM "&Dokumentsymbole anzeigen",   ID_VIEW_DOCTAB_ICONS
+            MENUITEM "Aktenordner&stil",            ID_VIEW_DOCTAB_NOTE
+        END
         MENUITEM "Vollbild",                    ID_VIEW_FULLSCREEN
     END
     POPUP "&Einfügen"
@@ -4509,7 +4517,6 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_VIEW_FULLSCREEN      "Schaltet den Vollbild-Modus ein und aus\nVollbild"
-    ID_VIEW_DOCTAB          "Aktiviert oder deaktiviert die Reiter zum Wechseln zwischen geöffneten Dokumenten\nDokumentregister an/aus"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4629,6 +4636,11 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_TEXTMODULES_DEFINE   "Zeigt Dialog zum Anpassen der Textbausteine an.\nTextbausteine"
+    ID_VIEW_DOCTAB_TOP      "Aktiviert die Reiter zum Wechseln zwischen geöffneten Dokumenten am oberen Rand\nDokumentregister oben"
+    ID_VIEW_DOCTAB_BOTTOM   "Aktiviert die Reiter zum Wechseln zwischen geöffneten Dokumenten am unteren Rand\nDokumentregister unten"
+    ID_VIEW_DOCTAB_OFF      "Deaktiviert die Reiter zum Wechseln zwischen geöffneten Dokumenten\nDokumentregister aus"
+    ID_VIEW_DOCTAB_ICONS    "Stellt die Dokumentsymbole auf den Reitern zum Wechseln zwischen geöffneten Dokumenten dar\nDokumentregistersymbole an/aus"
+    ID_VIEW_DOCTAB_NOTE     "Stellt die Reiter zum Wechseln zwischen geöffneten Dokumenten im Stile eines Aktenordners dar\nAktenordnerstil an/aus"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4988,7 +5000,15 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Display White Spaces",        ID_EDIT_TOGGLE_WHITESPACEVIEW
 
-        MENUITEM "Document &Tabs",              ID_VIEW_DOCTAB
+        POPUP "Document &Tabs"
+        BEGIN
+            MENUITEM "&Top",                        ID_VIEW_DOCTAB_TOP
+            MENUITEM "&Bottom",                     ID_VIEW_DOCTAB_BOTTOM
+            MENUITEM "&Off",                        ID_VIEW_DOCTAB_OFF
+            MENUITEM SEPARATOR
+            MENUITEM "Show &Icons",                 ID_VIEW_DOCTAB_ICONS
+            MENUITEM "&Note Style",                 ID_VIEW_DOCTAB_NOTE
+        END
         MENUITEM "Full Screen",                 ID_VIEW_FULLSCREEN
     END
     POPUP "&Insert"
@@ -8499,6 +8519,11 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_TEXTMODULES_DEFINE   "Displays dialog to manage text modules.\nText Modules"
+    ID_VIEW_DOCTAB_TOP      "Activates the tabs to switch between open documents at the top\nDocument tabs top"
+    ID_VIEW_DOCTAB_BOTTOM   "Activates the tabs to switch between open documents at the bottom\nDocument tabs bottom"
+    ID_VIEW_DOCTAB_OFF      "Deactivates the tabs to switch between open documents\nDocument tabs off"
+    ID_VIEW_DOCTAB_ICONS    "Shows document icons on the document tabs\nDocument icons on tabs"
+    ID_VIEW_DOCTAB_NOTE     "Displays the document tabs in a note style\nNote styled document tabs"
 END
 
 STRINGTABLE DISCARDABLE 

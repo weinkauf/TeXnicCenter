@@ -344,6 +344,9 @@ public:
 	/** Location, where to display the document tabs. */
 	int m_nMDITabLocation;
 
+	/** Style, how the document tabs are displayed. */
+	int m_nMDITabStyle;
+
 protected:
 	/** Document template for normal latex-documents */
 	CMultiDocTemplate	*m_pLatexDocTemplate;
