@@ -780,7 +780,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -2232,7 +2232,7 @@ END
 IDD_PROJECT_PROPERTIES DIALOGEX 0, 0, 253, 150
 STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Projekteigenschaften"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     LTEXT           "&Hauptdatei:",IDC_STATIC,7,10,38,8
     EDITTEXT        IDC_MAIN_FILE,49,7,178,14,ES_AUTOHSCROLL,0,
@@ -2772,6 +2772,38 @@ BEGIN
                     WS_TABSTOP,7,35,129,10
 END
 
+IDD_TEXTMODULES DIALOG DISCARDABLE  0, 0, 450, 250
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Textbausteine"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,331,229,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,395,229,50,14
+    CONTROL         "Tree1",IDC_TEXTMODULES_MODULES,"SysTreeView32",
+                    TVS_HASBUTTONS | TVS_HASLINES | TVS_EDITLABELS | 
+                    TVS_SHOWSELALWAYS | TVS_TRACKSELECT | TVS_FULLROWSELECT | 
+                    WS_BORDER | WS_TABSTOP,7,18,102,207
+    PUSHBUTTON      "&Neu",IDC_TEXTMODULES_NEWMODULE,63,229,46,14
+    PUSHBUTTON      "&Löschen",IDC_TEXTMODULES_DELETEMODULE,7,229,46,14
+    LTEXT           "Bausteine:",IDC_STATIC,7,7,34,8
+    PUSHBUTTON      "Menu",IDC_TEXTMODULES_MENUBTN,80,7,29,10
+    GROUPBOX        "Textbaustein",IDC_STATIC,117,7,328,218
+    EDITTEXT        IDC_TEXTMODULES_NAME,125,27,84,14,ES_AUTOHSCROLL
+    LTEXT           "Name",IDC_STATIC,125,17,20,8
+    EDITTEXT        IDC_TEXTMODULES_BEFORECURSOR,125,60,158,70,ES_MULTILINE | 
+                    ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL
+    LTEXT           "Vor Markierung/Cursor eingefügen:",IDC_STATIC,125,50,
+                    112,8
+    EDITTEXT        IDC_TEXTMODULES_AFTERCURSOR,125,144,158,72,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | 
+                    WS_VSCROLL | WS_HSCROLL
+    LTEXT           "Nach Markierung/Cursor einfügen:",IDC_STATIC,125,135,
+                    110,8
+    CONTROL         "Parameter aktivieren",IDC_TEXTMODULES_PARAMSENABLE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,221,30,81,10
+    GROUPBOX        "Parameter",IDC_TEXTMODULES_PARAMSGROUP,323,22,114,194
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -3008,6 +3040,14 @@ BEGIN
         RIGHTMARGIN, 235
         TOPMARGIN, 7
         BOTTOMMARGIN, 88
+    END
+
+    IDD_TEXTMODULES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 443
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 243
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -4533,12 +4573,12 @@ BEGIN
                             "Entfernt die %-Kommentarzeichen am Anfang jeder selektierten Zeile.\nBlockkommentar entfernen"
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -5882,7 +5922,7 @@ END
 IDD_PROJECT_PROPERTIES DIALOGEX 0, 0, 252, 150
 STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Project properties"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     LTEXT           "Main &file",IDC_STATIC,7,10,27,8
     EDITTEXT        IDC_MAIN_FILE,40,7,187,14,ES_AUTOHSCROLL,0,
@@ -8199,7 +8239,7 @@ BEGIN
                             "Removes all %-Signs at the beginning of each selected line.\nRemove Block Comment"
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
