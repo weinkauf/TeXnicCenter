@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:35+02  sven_wiegand
 * Initial revision
 *
@@ -41,6 +44,7 @@ language properties are:
 <ul>
 	<li> Syntax highlighting (method ParseLine())
 	<li> Word wrapping (method WrapLine())
+	<li> Word extraction (method NextWord())
 </ul>
 
 Derive your own class from CCrystalParser and override the method ParseLine()
@@ -64,7 +68,7 @@ public:
 // overridables
 public:
 	/**
-	Is called by tht view, when there is a Line to parse.
+	Is called by the view, when there is a Line to parse.
 
 	@param dwCookie The result of parsing the previous line. This parameter contains flags,
 		you set while parsing the previous line. Normaly this will be flags that
@@ -111,8 +115,26 @@ public:
 	*/
 	virtual void WrapLine( int nLineIndex, int nMaxLineWidth, int *anBreaks, int &nBreaks );
 
+	/**
+	Find the next word within the given line.
+
+    The base implementation defines a word as beginning with an alpha character and ending
+	on a space, punctuation, or eol. 
+
+	@param nLineIndex The index of the line to search
+
+	@param nStartPos The index of the character to start the search. If the line contains
+	no more words, nStartPos is set to -1.
+
+	@param nEndPos The index of the character one past the end of the word.
+	*/
+	virtual void NextWord( int nLineIndex, int &nStartPos, int &nEndPos );
+
 // attributes
 protected:
+
+	virtual LPCTSTR GetLineChars( int nLineIndex );
+
 	/**	The text view this parser is attached to. */
 	CCrystalTextView *m_pTextView;
 

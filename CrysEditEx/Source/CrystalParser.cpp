@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.3  2002/04/01 23:07:56  cnorris
+* Implement secondary line break characters.
+*
 * Revision 1.2  2002/03/25 19:12:57  cnorris
 * Fix line wrap to break lines without white space which affected screen draw
 *
@@ -134,4 +137,44 @@ void CCrystalParser::WrapLine( int nLineIndex, int nMaxLineWidth, int *anBreaks,
 			bFoundWhiteSpace = FALSE;
 		}
 	}
+}
+
+
+void CCrystalParser::NextWord( int nLineIndex, int &nStartPos, int &nEndPos )
+{
+	LPCTSTR szLine = GetLineChars( nLineIndex );
+	if ( szLine == NULL)
+	{
+		nStartPos = -1;
+		return;
+	}
+	int nLength = _tcsclen( szLine );
+
+	while ( nStartPos < nLength )
+	{
+		// words begin with an alpha character
+		if ( _istalpha( szLine[nStartPos] ) )
+			break;
+		++nStartPos;
+	}
+	nEndPos = nStartPos;
+
+	while ( nEndPos < nLength )
+	{
+		// words end on terminating character 
+		if ( _istspace( szLine[nEndPos] ) ||
+			(_istpunct( szLine[nEndPos] ) && szLine[nEndPos] != _T('\'')) )
+			break;
+		else
+			++nEndPos;
+	}
+	if ( nStartPos == nEndPos )
+		nStartPos = -1;
+}
+
+
+LPCTSTR CCrystalParser::GetLineChars( int nLineIndex )
+{
+	ASSERT( m_pTextView );
+	return m_pTextView->GetLineChars( nLineIndex );
 }
