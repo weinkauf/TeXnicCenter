@@ -731,7 +731,7 @@ void CMainFrame::OnWindowGrep1()
 
 void CMainFrame::OnWindowGrep2() 
 {
-	ActivateOutputTab( outputTabGrep1 );
+	ActivateOutputTab( outputTabGrep2 );
 }
 
 
