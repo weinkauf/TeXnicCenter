@@ -1047,7 +1047,9 @@ void CTeXnicCenterApp::OnUpdateProjectSave(CCmdUI* pCmdUI)
 
 void CTeXnicCenterApp::OnLatexNew() 
 {
-	m_pLatexDocTemplate->OpenDocumentFile( NULL );
+	CDocument	*pDoc = m_pLatexDocTemplate->OpenDocumentFile( NULL );
+	if (pDoc && g_configuration.m_bSaveNewDocuments)
+		pDoc->DoFileSave();
 }
 
 

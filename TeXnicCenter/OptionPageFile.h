@@ -82,6 +82,7 @@ protected:
 	BOOL	m_bSaveBeforeCompilation;
 	UINT	m_unSaveInterval;
 	int		m_nFileFormat;
+	BOOL	m_bSaveNewDocuments;
 	//}}AFX_DATA
 };
 

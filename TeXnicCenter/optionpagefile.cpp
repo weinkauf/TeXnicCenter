@@ -64,6 +64,7 @@ COptionPageFile::COptionPageFile(): CPropertyPage(COptionPageFile::IDD)
 	//{{AFX_DATA_INIT(COptionPageFile)
 	//}}AFX_DATA_INIT
 	m_nFileFormat = g_configuration.m_nStandardFileFormat;
+	m_bSaveNewDocuments = g_configuration.m_bSaveNewDocuments;
 	m_bSaveAutomatic = g_configuration.m_bSaveAutomatic;
 	m_bSaveBeforeCompilation = g_configuration.m_bSaveBeforeCompilation;
 	m_unSaveInterval = g_configuration.m_unSaveInterval;
@@ -87,6 +88,7 @@ void COptionPageFile::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_OPTIONS_SAVE_BEFORE_COMPILATION, m_bSaveBeforeCompilation);
 	DDX_Text(pDX, IDC_OPTIONS_SAVE_INTERVALL_EDIT, m_unSaveInterval);
 	DDX_CBIndex(pDX, IDC_OPTIONS_FILETYPE, m_nFileFormat);
+	DDX_Check(pDX, IDC_OPTIONS_SAVE_NEWDOCS, m_bSaveNewDocuments);
 	//}}AFX_DATA_MAP
 }
 
@@ -126,6 +128,7 @@ void COptionPageFile::OnOK()
 	UpdateData();
 
 	// Store settings to configuration
+	g_configuration.m_bSaveNewDocuments = m_bSaveNewDocuments;
 	g_configuration.m_bSaveAutomatic = m_bSaveAutomatic;
 	g_configuration.m_bSaveBeforeCompilation = m_bSaveBeforeCompilation;
 	g_configuration.m_unSaveInterval = m_unSaveInterval;
