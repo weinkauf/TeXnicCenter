@@ -1,3 +1,8 @@
+2003/12/07 niteria
+- Implemented Feature 855690: Insert/Remove/Toogle Comments on Textblocks
+  Use Ctrl-Q for commenting, Ctrl-W for uncommenting, Alt-Q to toogle
+- Defined Accelerator for configuring profiles: Alt-F7 (similar to Visual Studio)
+
 2003/12/06 niteria
 - Implemented Feature 851400: \texttt{} and \textsc{} buttons
 
