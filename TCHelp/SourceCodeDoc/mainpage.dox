@@ -5,6 +5,10 @@
 
 \section welcome Welcome to the SourceCode Documentation of TeXnicCenter
 
+TeXnicCenter is an Integrated Development Environment (IDE) for writing TeX/LaTeX-documents on Microsoft Windows platforms. It provides a lot of enhanced features like structure parsing, project management, syntax highlighting, etc.
+
+You can find the homepage of TeXnicCenter at <A HREF="http://www.ToolsCenter.org/products/texniccenter/">http://www.ToolsCenter.org/products/texniccenter/</A>
+
 The development of TeXnicCenter is powered by
 <A HREF="http://sourceforge.net/projects/texniccenter/">SourceForge.net</A>
 
