@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #include "stdafx.h"  // z.B. stdafx.h
 #include "resource.h"  // z.B. resource.h
 
@@ -40,8 +46,11 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 //   Klasse Begrüßungsbildschirm
 
+//Statics
 BOOL CSplashWnd::c_bShowSplashWnd;
-CSplashWnd* CSplashWnd::c_pSplashWnd;
+CSplashWnd* CSplashWnd::c_pSplashWnd = NULL;
+CSplashWnd* CSplashWnd::c_pSplashWndPublic = NULL;
+
 CSplashWnd::CSplashWnd()
 {
 }
@@ -51,6 +60,7 @@ CSplashWnd::~CSplashWnd()
 	// Statischen Fensterzeiger löschen
 	ASSERT(c_pSplashWnd == this);
 	c_pSplashWnd = NULL;
+	c_pSplashWndPublic = NULL;
 }
 
 BEGIN_MESSAGE_MAP(CSplashWnd, CWnd)
@@ -68,15 +78,23 @@ void CSplashWnd::EnableSplashScreen(BOOL bEnable /*= TRUE*/)
 
 void CSplashWnd::ShowSplashScreen(CWnd* pParentWnd /*= NULL*/)
 {
+	c_pSplashWndPublic = NULL;
+
 	if (!c_bShowSplashWnd || c_pSplashWnd != NULL)
 		return;
 
 	// Neuen Begrüßungsbildschirm reservieren und erstellen
 	c_pSplashWnd = new CSplashWnd;
 	if (!c_pSplashWnd->Create(pParentWnd))
+	{
 		delete c_pSplashWnd;
+		c_pSplashWnd = c_pSplashWndPublic = NULL;
+	}
 	else
+	{
+		c_pSplashWndPublic = c_pSplashWnd;
 		c_pSplashWnd->UpdateWindow();
+	}
 }
 
 BOOL CSplashWnd::PreTranslateAppMessage(MSG* pMsg)
@@ -109,13 +127,15 @@ BOOL CSplashWnd::Create(CWnd* pParentWnd /*= NULL*/)
 	BITMAP bm;
 	m_bitmap.GetBitmap(&bm);
 
-	return CreateEx(WS_EX_TOOLWINDOW | WS_EX_TOPMOST,
+	return CreateEx(WS_EX_TOOLWINDOW  /*| WS_EX_TOPMOST*/, //Do not hide other windows with WS_EX_TOPMOST
 		AfxRegisterWndClass(0, AfxGetApp()->LoadStandardCursor(IDC_ARROW)),
 		NULL, WS_POPUP | WS_VISIBLE, 0, 0, bm.bmWidth, bm.bmHeight, pParentWnd->GetSafeHwnd(), NULL);
 }
 
 void CSplashWnd::HideSplashScreen()
 {
+	c_pSplashWndPublic = NULL;
+
 	// Fenster entfernen und Hauptrahmen aktualisieren
 	DestroyWindow();
 	if( AfxGetMainWnd() )

@@ -61,9 +61,13 @@ public:
 	virtual ~CSplashWnd();
 	virtual void PostNcDestroy();
 
+public:
+	/** Hides the Splash Window. Do not use the public pointer after calling this function! Will be NULL.*/
+	void HideSplashScreen();
+	static CSplashWnd* c_pSplashWndPublic;
+
 protected:
 	BOOL Create(CWnd* pParentWnd = NULL);
-	void HideSplashScreen();
 	static BOOL c_bShowSplashWnd;
 	static CSplashWnd* c_pSplashWnd;
 

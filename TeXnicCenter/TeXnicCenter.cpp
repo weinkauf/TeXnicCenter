@@ -55,6 +55,7 @@
 #include "ProfileDialog.h"
 #include <locale.h>
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -385,6 +386,12 @@ BOOL CTeXnicCenterApp::InitInstance()
 	// show main frame
 	pMainFrame->ShowWindow( m_nCmdShow );
 	pMainFrame->UpdateWindow();
+
+	// hide the splash, if still there
+	if (CSplashWnd::c_pSplashWndPublic)
+	{
+		CSplashWnd::c_pSplashWndPublic->HideSplashScreen();
+	}
 
 	//
 	UpdateLatexProfileSel();
