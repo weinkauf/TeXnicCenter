@@ -33,7 +33,6 @@
 ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 #include "LatexParser.h"
 #include "Configuration.h"
 
@@ -270,10 +269,6 @@ DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCook
 	SUBEXPRESSION				what[3];
 
 
-	char								*pdest;
-	char								AProfile[40], BProfile[40];
-	int									APos;
-
 	///////////////////////////////////////////////////////////////////
 	// look for end of verb
 	if( dwCookie & verb || dwCookie & verbStar )
@@ -342,32 +337,6 @@ DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCook
 		// highlicht occurence
 		if( pTextBlock )
 			pTextBlock->Add( what[0].first - lpLine, CCrystalTextView::COLORINDEX_COMMENT );
-
-			// Check for defined "output-profile"
-			pdest = strstr( lpLine, "output-profile");
-			if( pdest != NULL)
-			{
-				pdest = strstr( lpLine, "\"");
-				APos = pdest - lpLine + 1;
-				strncpy (AProfile, lpLine + APos, strlen(lpLine) - APos + 1);
-
-				pdest = strstr( AProfile, "\"");
-				APos = pdest - AProfile + 1;
-
-				strncat (BProfile, AProfile, APos-1);
-
-				if (g_ProfileMap.SetActiveProfile(BProfile, false))
-				{
-					//Successfull change of the active profile - update UI
-					theApp.UpdateLatexProfileSel();
-				}
-				else
-				{
-					//Saved profile name not found - other profile used - set project to be modified
-					CLatexProject* pLProject = ((CTeXnicCenterApp*)AfxGetApp())->GetProject();
-					if (pLProject) pLProject->SetModifiedFlag(true);
-				}
-			}
 
 		return dwCookie;
 	}
