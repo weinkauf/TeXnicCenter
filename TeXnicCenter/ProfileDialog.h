@@ -128,6 +128,8 @@ protected:
 	afx_msg void OnItemChanging(NMHDR* pNMHDR, LRESULT* pResult);
 	virtual void OnOK();
 	afx_msg void OnProfileWizard();
+	afx_msg void OnProfileExport();
+	afx_msg void OnProfileImport();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

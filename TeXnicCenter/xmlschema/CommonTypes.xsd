@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:annotation>
+		<xs:documentation>
+			Schema that contains common types for other ToolsCenter.org schemas.
+			Copyright (c) 2003-2004 ToolsCenter.org. All rights reserved.
+			www.ToolsCenter.org
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:simpleType name="filePath">
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+	<xs:complexType name="FilePathElement">
+		<xs:attribute name="path" type="filePath" use="required" />
+	</xs:complexType>
+</xs:schema>

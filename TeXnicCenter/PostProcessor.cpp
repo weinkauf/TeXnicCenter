@@ -54,6 +54,13 @@ int CPostProcessorArray::ExecuteAll(LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDir
 }
 
 
+void CPostProcessorArray::RemoveDirectorySpecifications()
+{
+	for (int i = 0; i < GetSize(); ++i)
+		ElementAt(i).RemoveDirectorySpecifications();
+}
+
+
 BOOL CPostProcessorArray::SerializeToRegistry(CBCGRegistryEx &reg) const
 {
 	CString	strValue;
@@ -86,6 +93,33 @@ BOOL CPostProcessorArray::SerializeFromRegistry(CBCGRegistryEx &reg)
 	}
 
 	return TRUE;
+}
+
+
+void CPostProcessorArray::SaveXml(MsXml::CXMLDOMElement xmlPostProcessors) const
+{
+	for (int i = 0; i < GetSize(); ++i)
+	{
+		MsXml::CXMLDOMElement	xmlPostProcessor(xmlPostProcessors.GetOwnerDocument().CreateElement(_T("processor")));
+		GetAt(i).SaveXml(xmlPostProcessor);
+		xmlPostProcessors.AppendChild(xmlPostProcessor);
+	}
+}
+
+
+void CPostProcessorArray::LoadXml(MsXml::CXMLDOMElement xmlPostProcessors)
+{
+	RemoveAll();
+
+	MsXml::CXMLDOMNodeList	xmlPostProcessorList(xmlPostProcessors.SelectNodes(_T("processor")));
+	const long							lProcessors = xmlPostProcessorList.GetLength();
+	for (long lProcessor = 0; lProcessor < lProcessors; ++lProcessor)
+	{
+		MsXml::CXMLDOMElement	xmlPostProcessor(xmlPostProcessorList.GetItem(lProcessor).QueryInterface(IID_IXMLDOMElement));
+		CPostProcessor				pp;
+		pp.LoadXml(xmlPostProcessor);
+		Add(pp);
+	}
 }
 
 
@@ -227,6 +261,14 @@ BOOL CPostProcessor::CancelExecution()
 }
 
 
+void CPostProcessor::RemoveDirectorySpecifications()
+{
+	m_strPath = CPathTool::GetFile(m_strPath);
+	m_strInputFile = CPathTool::GetFile(m_strInputFile);
+	m_strOutputFile = CPathTool::GetFile(m_strOutputFile);
+}
+
+
 CString CPostProcessor::GetExpandedArguments(LPCTSTR lpszPath) const
 {
 	return AfxExpandPlaceholders(m_strArguments, lpszPath);
@@ -278,4 +320,24 @@ BOOL CPostProcessor::SerializeFromString(LPCTSTR lpszPackedInformation)
 	SetOutputFile(strOutputFile);
 
 	return TRUE;
+}
+
+
+void CPostProcessor::SaveXml(MsXml::CXMLDOMElement xmlPostProcessor) const
+{
+	xmlPostProcessor.SetAttribute(_T("name"), (LPCTSTR)m_strTitle);
+	xmlPostProcessor.SetAttribute(_T("path"), (LPCTSTR)m_strPath);
+	xmlPostProcessor.SetAttribute(_T("arguments"), (LPCTSTR)m_strArguments);
+	xmlPostProcessor.SetAttribute(_T("inputFile"), (LPCTSTR)m_strInputFile);
+	xmlPostProcessor.SetAttribute(_T("outputFile"), (LPCTSTR)m_strOutputFile);
+}
+
+
+void CPostProcessor::LoadXml(MsXml::CXMLDOMElement xmlPostProcessor)
+{
+	m_strTitle = (LPCTSTR)(_bstr_t)xmlPostProcessor.GetAttribute(_T("name"));
+	m_strPath = (LPCTSTR)(_bstr_t)xmlPostProcessor.GetAttribute(_T("path"));
+	m_strArguments = (LPCTSTR)(_bstr_t)xmlPostProcessor.GetAttribute(_T("arguments"));
+	m_strInputFile = (LPCTSTR)(_bstr_t)xmlPostProcessor.GetAttribute(_T("inputFile"));
+	m_strOutputFile = (LPCTSTR)(_bstr_t)xmlPostProcessor.GetAttribute(_T("outputFile"));
 }

@@ -125,6 +125,12 @@ BOOL CDdeCommand::SendCommand(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPCTSTR l
 }
 
 
+void CDdeCommand::RemoveDirectorySpecifications()
+{
+	m_strServerName = CPathTool::GetFile(m_strServerName);
+}
+
+
 BOOL CDdeCommand::SendCommandHelper(LPCTSTR lpszServer, LPCTSTR lpszCommand, LPCTSTR lpszTopic)
 {
 	ASSERT(lpszServer && lpszCommand && lpszTopic);
@@ -214,4 +220,22 @@ BOOL CDdeCommand::SerializeFromString(LPCTSTR lpszPackedInformation)
 	SetServer(strServerName, strTopic);
 	SetCommand(strCmd);
 	return TRUE;
+}
+
+
+void CDdeCommand::SaveXml(MsXml::CXMLDOMElement xmlCommand) const
+{
+	xmlCommand.SetAttribute(_T("path"), (LPCTSTR)m_strExecutable);
+	xmlCommand.SetAttribute(_T("server"), (LPCTSTR)m_strServerName);
+	xmlCommand.SetAttribute(_T("topic"), (LPCTSTR)m_strTopic);
+	xmlCommand.SetAttribute(_T("command"), (LPCTSTR)m_strCmd);
+}
+
+
+void CDdeCommand::LoadXml(MsXml::CXMLDOMElement xmlCommand)
+{
+	m_strExecutable = (LPCTSTR)(_bstr_t)xmlCommand.GetAttribute(_T("path"));
+	m_strServerName = (LPCTSTR)(_bstr_t)xmlCommand.GetAttribute(_T("server"));
+	m_strTopic = (LPCTSTR)(_bstr_t)xmlCommand.GetAttribute(_T("topic"));
+	m_strCmd = (LPCTSTR)(_bstr_t)xmlCommand.GetAttribute(_T("command"));
 }

@@ -58,6 +58,8 @@ BEGIN_MESSAGE_MAP(CProfileDialog, CPropertyDialog)
 	ON_BN_CLICKED(IDC_PROFILE_RENAME, OnProfileRename)
 	ON_NOTIFY(LVN_ITEMCHANGING, IDC_LIST_PROFILES, OnItemChanging)
 	ON_BN_CLICKED(IDC_PROFILE_WIZARD, OnProfileWizard)
+	ON_BN_CLICKED(IDC_PROFILE_EXPORT, OnProfileExport)
+	ON_BN_CLICKED(IDC_PROFILE_IMPORT, OnProfileImport)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -465,4 +467,32 @@ void CProfileDialog::OnProfileWizard()
 	COutputWizard	dlg(m_profiles, this);
 	dlg.DoModal();
 	RefillList();
+}
+
+
+void CProfileDialog::OnProfileExport() 
+{
+	m_profiles.Export();
+}
+
+
+void CProfileDialog::OnProfileImport() 
+{
+	// remember selected item
+	int			nSelectedItem = m_wndProfileList.GetSelectionMark();
+	CString	strSelectedItem = (nSelectedItem>-1) ? m_wndProfileList.GetItemText(nSelectedItem, 0) : _T("");
+
+	// import items
+	m_profiles.Import();
+
+	RefillList();
+	
+	// try to select same item as before
+	LVFINDINFO	lvfi;
+	ZeroMemory(&lvfi, sizeof(lvfi));
+	lvfi.flags = LVFI_STRING;
+	lvfi.psz = (LPCTSTR)strSelectedItem;
+	nSelectedItem = m_wndProfileList.FindItem(&lvfi);
+	if (nSelectedItem > -1)
+		m_wndProfileList.SetItemState(nSelectedItem, LVIS_SELECTED, LVIS_SELECTED);
 }

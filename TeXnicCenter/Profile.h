@@ -84,6 +84,16 @@ public:
 		const CProcessCommand &GetProcessCommand() const;
 		const CDdeCommand &GetDdeCommand() const;
 
+	// operations
+	public:
+		/**
+		Removes the directory specifications from all path specifications
+		in this command.
+
+		This is usefull when exporting profiles.
+		*/
+		void RemoveDirectorySpecifications();
+
 	// serialization
 	public:
 		/**
@@ -100,6 +110,18 @@ public:
 		object.
 		*/
 		BOOL SerializeFromRegistry(CBCGRegistryEx &reg);
+
+		/**
+		Saves the command properties to the specified XML element.
+
+		@exception CComException
+		*/
+		void SaveXml(MsXml::CXMLDOMElement xmlCommand) const;
+
+		/**
+		Loads the command properties from the specified XML element.
+		*/
+		void LoadXml(MsXml::CXMLDOMElement xmlCommand);
 
 	// attributes
 	protected:
@@ -223,6 +245,16 @@ public:
 	CCommand& GetViewCurrentCmd();
 	CCommand& GetViewCloseCmd();
 
+// operations
+public:
+	/**
+	Removes the directory specifications from all path specifications
+	in this profile.
+
+	This is usefull when exporting profiles.
+	*/
+	void RemoveDirectorySpecifications();
+
 // serialization
 public:
 	/**
@@ -236,6 +268,20 @@ public:
 	registry object.
 	*/
 	BOOL SerializeFromRegistry(CBCGRegistryEx &reg);
+
+	/**
+	Writes the profiles properties to the specified XML element.
+
+	@exception CComException
+	*/
+	void SaveXml(MsXml::CXMLDOMElement &xmlProfile) const;
+
+	/**
+	Loads the profiles properties from the specified XML element.
+
+	@exception CComException
+	*/
+	void LoadXml(MsXml::CXMLDOMElement &xmlProfile);
 	
 // attributes
 protected:
@@ -472,6 +518,12 @@ public:
 	CProfileMap();
 	virtual ~CProfileMap();
 
+// make base implementations available
+public:
+	using CMap<CString, LPCTSTR, CProfile*, CProfile*>::Lookup;
+	using CMap<CString, LPCTSTR, CProfile*, CProfile*>::GetStartPosition;
+	using CMap<CString, LPCTSTR, CProfile*, CProfile*>::GetNextAssoc;
+
 // operations
 public:
 	/**
@@ -547,11 +599,44 @@ public:
 	*/
 	void GetKeyList(CStringArray &astrKeys) const;
 
-// make base implementations available
-public:
-	using CMap<CString, LPCTSTR, CProfile*, CProfile*>::Lookup;
-	using CMap<CString, LPCTSTR, CProfile*, CProfile*>::GetStartPosition;
-	using CMap<CString, LPCTSTR, CProfile*, CProfile*>::GetNextAssoc;
+	/**
+	Makes this copy a deep copy of the specified map.
+
+	This method does not copy the CProfile-pointers stored in the other
+	map, instead it creates a copy of each profile stored in profiles 
+	add adds it to this map.
+
+	@param profiles
+		Source map to copy from.
+	@param bEmptyBeforeCopy
+		If TRUE, all items from this map will be removed before the new
+		ones are copied. Otherwise the new items will be added and maybe
+		overwrite the existing items.
+	@param bAskUserToOverwrite
+		If bEmptyBeforeCopy is FALSE and the method tries to overwrite
+		an already defined profile, this flag specifies whether the user
+		should be asked to overwrite or not. If the user is not asked,
+		items will be overwritten silently.
+	*/
+	void CopyFrom(const CProfileMap &profiles, BOOL bEmptyBeforeCopy = TRUE, BOOL bAskUserToOverwrite = FALSE);
+
+	/**
+	Removes the directory specifications from all path specifications
+	in all profiles.
+
+	This is usefull when exporting profiles.
+	*/
+	void RemoveDirectorySpecifications();
+
+	/**
+	Allows the user to import output profiles to this map.
+	*/
+	void Import();
+
+	/**
+	Allows the user to export output profiles of this map.
+	*/
+	void Export() const;
 
 // serialization
 public:
@@ -570,6 +655,43 @@ public:
 	m_pszRegistryKey -member of the CWinApp-derived application class.
 	*/
 	BOOL SerializeFromRegistry();
+
+	/**
+	Loads the profile map from the specified XML file, which must follow
+	the XML-schema 
+	'http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd'.
+
+	Before loading, all currently existing profiles are removed from 
+	the map.
+
+	In case of an error the method will display a message to the user
+	and return FALSE.
+
+	@param lpszPath
+		Path to load the definitions from.
+
+	@return
+		TRUE on success, FALSE otherwise.
+	*/
+	BOOL LoadXml(LPCTSTR lpszPath);
+
+	/**
+	Saves the profile map to the specified XML file.
+
+	The created file follows the rules specified in the XML-schema
+	'http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd'.
+
+	In case of an error the method will display a message to the user
+	and return FALSE.
+
+	@param lpszPath
+		Path of the file to write the profile definitions to. If the file
+		already exists, it will be overwritten.
+
+	@return
+		TRUE on success, FALSE otherwise.
+	*/
+	BOOL SaveXml(LPCTSTR lpszPath) const;
 
 // attributes
 private:

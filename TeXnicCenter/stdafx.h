@@ -63,6 +63,8 @@
 #include <cregex.h>
 #include <CrysEditEx.h>
 
+#include <MsXmlCpp.h>
+
 #include <htmlhelp.h>
 
 namespace Interfaces

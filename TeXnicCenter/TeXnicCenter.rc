@@ -780,7 +780,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
+// Deutsch (Deutschland) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -2352,27 +2352,6 @@ BEGIN
                     WS_VSCROLL | WS_TABSTOP
 END
 
-IDD_PROFILE DIALOG DISCARDABLE  0, 0, 392, 306
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Profile"
-FONT 8, "MS Sans Serif"
-BEGIN
-    LTEXT           "&Profile",IDC_STATIC,7,7,123,8
-    CONTROL         "List1",IDC_LIST_PROFILES,"SysListView32",LVS_LIST | 
-                    LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | 
-                    LVS_NOLABELWRAP | WS_BORDER | WS_TABSTOP,7,20,120,225
-    PUSHBUTTON      "&Hinzufügen",IDC_PROFILE_ADD,7,246,60,14
-    PUSHBUTTON      "&Kopieren",IDC_PROFILE_COPY,68,246,60,14
-    PUSHBUTTON      "&Umbenennen",IDC_PROFILE_RENAME,7,261,60,14
-    PUSHBUTTON      "&Löschen",IDC_PROFILE_REMOVE,68,261,60,14
-    CONTROL         "Tab1",IDC_TAB_PROFILEPAGES,"SysTabControl32",0x0,135,7,
-                    250,268
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,5,280,380,1
-    PUSHBUTTON      "&Assistent",IDC_PROFILE_WIZARD,7,285,50,14
-    DEFPUSHBUTTON   "OK",IDOK,280,285,50,14
-    PUSHBUTTON      "Abbrechen",IDCANCEL,335,285,50,14
-END
-
 IDD_PROFILE_LATEX DIALOG DISCARDABLE  0, 0, 242, 250
 STYLE DS_MODALFRAME | DS_CONTROL | WS_CHILD | WS_CAPTION
 CAPTION "(La)TeX"
@@ -2804,6 +2783,47 @@ BEGIN
     GROUPBOX        "Parameter",IDC_TEXTMODULES_PARAMSGROUP,323,22,114,194
 END
 
+IDD_PROFILE_EXCHANGE DIALOG DISCARDABLE  0, 0, 242, 145
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Profile"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "List1",IDC_PROFILE_LIST,"SysListView32",LVS_LIST | 
+                    LVS_SORTASCENDING | WS_BORDER | WS_TABSTOP,7,7,228,90
+    CONTROL         "&Verzeichnisangaben aus Pfaden entfernen",
+                    IDC_REMOVE_DIRECTORY_SPECIFICATIONS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,103,228,10
+    DEFPUSHBUTTON   "OK",IDOK,63,124,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,129,124,50,14
+    LTEXT           "&Exportieren...",IDC_STATIC_EXPORT,7,130,42,8,NOT 
+                    WS_VISIBLE
+    LTEXT           "&Importieren",IDC_STATIC_IMPORT,199,130,36,8,NOT 
+                    WS_VISIBLE
+END
+
+IDD_PROFILE DIALOG DISCARDABLE  0, 0, 392, 306
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Profiles"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "&Profile",IDC_STATIC,7,7,123,8
+    CONTROL         "List1",IDC_LIST_PROFILES,"SysListView32",LVS_LIST | 
+                    LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | 
+                    LVS_NOLABELWRAP | WS_BORDER | WS_TABSTOP,7,20,120,225
+    PUSHBUTTON      "&Hinzufügen",IDC_PROFILE_ADD,7,246,60,14
+    PUSHBUTTON      "&Umbenennen",IDC_PROFILE_RENAME,7,261,60,14
+    PUSHBUTTON      "&Kopieren",IDC_PROFILE_COPY,68,246,60,14
+    PUSHBUTTON      "&Löschen",IDC_PROFILE_REMOVE,68,261,60,14
+    CONTROL         "Tab1",IDC_TAB_PROFILEPAGES,"SysTabControl32",WS_TABSTOP,
+                    135,7,250,268
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,5,280,380,1
+    PUSHBUTTON      "&Assistent...",IDC_PROFILE_WIZARD,7,285,50,14
+    PUSHBUTTON      "&Importieren...",IDC_PROFILE_IMPORT,68,285,50,14
+    PUSHBUTTON      "&Exportieren...",IDC_PROFILE_EXPORT,118,285,50,14
+    DEFPUSHBUTTON   "OK",IDOK,280,285,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,335,285,50,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2930,14 +2950,6 @@ BEGIN
         BOTTOMMARGIN, 23
     END
 
-    IDD_PROFILE, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 385
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 299
-    END
-
     IDD_PROFILE_LATEX, DIALOG
     BEGIN
         RIGHTMARGIN, 240
@@ -3048,6 +3060,22 @@ BEGIN
         RIGHTMARGIN, 443
         TOPMARGIN, 7
         BOTTOMMARGIN, 243
+    END
+
+    IDD_PROFILE_EXCHANGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 235
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 138
+    END
+
+    IDD_PROFILE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 385
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 299
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -3557,6 +3585,8 @@ BEGIN
                             "Das eingegebene Pattern %s ist nicht erlaubt.\n\nPlatzhalter für Dateimengen ($) dürfen nicht zusammen\nmit Wildcards (*, ?) und Platzhaltern für Dateien (%%) verwendet werden.\n\nDesweiteren dürfen Pattern nicht leer sein."
     STE_CUSTOMIZE_TOOLS_ADVBTN "Erweitert..."
     STE_TCP_INVALID         "Dies ist keine gültige Projektdatei."
+    STE_XML_PARSE_ERROR     "Beim Lesen einer XML-Datei ist ein Fehler aufgetreten.\n\nFehler 0x%08x: %s\n\nDatei:\t%s\nZeile:\t%d\nZeichen:\t%d\n\n%s"
+    STE_PROFILE_FILE_FILTER "Ausgabeprofile (*.tco)|*.tco|Alle Dateien (*.*)|*.*||"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4574,12 +4604,12 @@ BEGIN
                             "Entfernt die %-Kommentarzeichen am Anfang jeder selektierten Zeile.\nBlockkommentar entfernen"
 END
 
-#endif    // German (Germany) resources
+#endif    // Deutsch (Deutschland) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// Englisch (USA) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -6197,14 +6227,16 @@ BEGIN
     CONTROL         "List1",IDC_LIST_PROFILES,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | 
                     LVS_NOLABELWRAP | WS_BORDER | WS_TABSTOP,7,20,120,225
+    CONTROL         "Tab1",IDC_TAB_PROFILEPAGES,"SysTabControl32",WS_TABSTOP,
+                    135,7,250,268
     PUSHBUTTON      "&Add",IDC_PROFILE_ADD,7,246,60,14
     PUSHBUTTON      "&Copy",IDC_PROFILE_COPY,68,246,60,14
     PUSHBUTTON      "Re&name",IDC_PROFILE_RENAME,7,261,60,14
     PUSHBUTTON      "&Remove",IDC_PROFILE_REMOVE,68,261,60,14
-    CONTROL         "Tab1",IDC_TAB_PROFILEPAGES,"SysTabControl32",0x0,135,7,
-                    250,268
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,5,280,380,1
-    PUSHBUTTON      "&Wizard",IDC_PROFILE_WIZARD,7,285,50,14
+    PUSHBUTTON      "&Wizard...",IDC_PROFILE_WIZARD,7,285,50,14
+    PUSHBUTTON      "&Import...",IDC_PROFILE_IMPORT,68,285,50,14
+    PUSHBUTTON      "&Export...",IDC_PROFILE_EXPORT,118,285,50,14
     DEFPUSHBUTTON   "OK",IDOK,280,285,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,335,285,50,14
 END
@@ -6541,6 +6573,22 @@ BEGIN
                     BS_AUTOCHECKBOX | WS_TABSTOP,7,35,91,10
 END
 
+IDD_PROFILE_EXCHANGE DIALOG DISCARDABLE  0, 0, 242, 145
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Profile"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "List1",IDC_PROFILE_LIST,"SysListView32",LVS_LIST | 
+                    LVS_SORTASCENDING | WS_BORDER | WS_TABSTOP,7,7,228,90
+    CONTROL         "&Remove directory specifications from paths",
+                    IDC_REMOVE_DIRECTORY_SPECIFICATIONS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,103,228,10
+    DEFPUSHBUTTON   "OK",IDOK,63,124,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,129,124,50,14
+    LTEXT           "&Export...",IDC_STATIC_EXPORT,7,130,27,8,NOT WS_VISIBLE
+    LTEXT           "&Import",IDC_STATIC_IMPORT,215,130,20,8,NOT WS_VISIBLE
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -6771,6 +6819,14 @@ BEGIN
         RIGHTMARGIN, 235
         TOPMARGIN, 7
         BOTTOMMARGIN, 88
+    END
+
+    IDD_PROFILE_EXCHANGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 235
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 138
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -7242,6 +7298,8 @@ BEGIN
                             "The pattern %s is invaild.\n\nPlaceholders for file sets ($) may not be used together\nwith wildcards (*, ?) and placeholders for single files (%%).\n\nFurthermore, pattern are not allowed to be empty."
     STE_CUSTOMIZE_TOOLS_ADVBTN "Advanced..."
     STE_TCP_INVALID         "This is not a valid project file."
+    STE_XML_PARSE_ERROR     "An error occured while reading an XML file.\n\nError 0x%08x: %s\n\nFile:\t%s\nLine:\t%d\nCharacter:\t%d\n\n%s"
+    STE_PROFILE_FILE_FILTER "Output profiles (*.tco)|*.tco|All Files (*.*)|*.*||"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -8242,7 +8300,7 @@ BEGIN
                             "Removes all %-Signs at the beginning of each selected line.\nRemove Block Comment"
 END
 
-#endif    // English (U.S.) resources
+#endif    // Englisch (USA) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
