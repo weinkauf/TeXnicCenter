@@ -607,7 +607,7 @@ LRESULT CLatexEdit::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 	link.pszKeywords = (LPCTSTR)strKeyword;
 	link.pszUrl = NULL;
 	link.pszMsgText = NULL;
-	link.pszWindow = NULL;
+	link.pszWindow = _T(">$global_TxcHelpWindow");
 	link.fIndexOnFail = TRUE;
 	HtmlHelp(NULL, theApp.m_pszHelpFilePath, HH_KEYWORD_LOOKUP, (DWORD)&link);
 
