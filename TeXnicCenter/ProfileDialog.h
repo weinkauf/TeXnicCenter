@@ -90,6 +90,11 @@ protected:
 	*/
 	void UnselectCurrentItem();
 
+	/**
+	Selects the item in the list, which represents the active output profile.
+	*/
+	void SelectActiveProfile();
+
 	BOOL OnSelectionChanging();
 	void OnSelectionChanged();
 	void UpdateControlStates();

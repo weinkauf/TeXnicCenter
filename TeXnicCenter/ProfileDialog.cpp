@@ -212,6 +212,28 @@ void CProfileDialog::UnselectCurrentItem()
 }
 
 
+//Selects the item in the list, which represents the active output profile.
+void CProfileDialog::SelectActiveProfile()
+{
+	LVFINDINFO FindInfo;
+
+	//Init the FindInfo structure
+	FindInfo.flags = LVFI_STRING;
+	CString strActiveProfile = m_profiles.GetActiveProfileKey();
+	FindInfo.psz = strActiveProfile.GetBuffer(1);
+
+	//Find it
+	int nIndex = m_wndProfileList.FindItem(&FindInfo);
+
+	//Select it
+	if (nIndex != -1)
+	{
+		//Now select
+		m_wndProfileList.SetItemState(nIndex, LVIS_SELECTED, LVIS_SELECTED);
+	}
+}
+
+
 void CProfileDialog::UpdateControlStates()
 {
 	if (m_pCurrentProfile)
@@ -247,6 +269,9 @@ BOOL CProfileDialog::OnInitDialog()
 
 	// fill list with profiles
 	RefillList();
+
+	//Select the active output profile
+	SelectActiveProfile();
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben

@@ -70,6 +70,7 @@ protected:
 protected:
 	//{{AFX_DATA(CProfilePageLatex)
 	enum { IDD = IDD_PROFILE_LATEX };
+	CButton	m_wndStopOnLatexError;
 	CStatic	m_wndTitleMakeIndexPath;
 	CStatic	m_wndTitleMakeIndexArguments;
 	CStatic	m_wndTitleBibTexPath;
@@ -97,6 +98,7 @@ protected:
 	CString	m_strMakeIndexArguments;
 	CString	m_strBibTexPath;
 	CString	m_strMakeIndexPath;
+	BOOL	m_bStopOnLatexError;
 	//}}AFX_DATA
 
 // attributes

@@ -73,6 +73,7 @@ CProfilePageLatex::CProfilePageLatex()
 	m_strMakeIndexArguments = _T("");
 	m_strBibTexPath = _T("");
 	m_strMakeIndexPath = _T("");
+	m_bStopOnLatexError = FALSE;
 	//}}AFX_DATA_INIT
 }
 
@@ -92,6 +93,7 @@ void CProfilePageLatex::UpdateControlStates()
 		m_wndTitleLatexArguments.ShowWindow(SW_SHOW);
 		m_wndLatexArguments.ShowWindow(SW_SHOW);
 		m_wndLatexPh.ShowWindow(SW_SHOW);
+		m_wndStopOnLatexError.ShowWindow(SW_SHOW);
 	}
 	else
 	{
@@ -101,6 +103,7 @@ void CProfilePageLatex::UpdateControlStates()
 		m_wndTitleLatexArguments.ShowWindow(SW_HIDE);
 		m_wndLatexArguments.ShowWindow(SW_HIDE);
 		m_wndLatexPh.ShowWindow(SW_HIDE);
+		m_wndStopOnLatexError.ShowWindow(SW_HIDE);
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -158,6 +161,7 @@ void CProfilePageLatex::OnUpdateDataSet(CProfile *pProfile)
 	{
 		// (La)TeX
 		m_bUseLatex = m_pProfile->GetRunLatex();
+		m_bStopOnLatexError = m_pProfile->GetStopOnLatexError();
 		m_strLatexPath = m_pProfile->GetLatexPath();
 		m_strLatexArguments = m_pProfile->GetLatexArguments();
 
@@ -199,7 +203,7 @@ BOOL CProfilePageLatex::ApplyChanges()
 		m_wndLatexArguments.SetFocus();
 		return FALSE;
 	}
-	m_pProfile->SetLatexPath(m_strLatexPath, m_strLatexArguments, m_bUseLatex);
+	m_pProfile->SetLatexPath(m_strLatexPath, m_strLatexArguments, m_bUseLatex, m_bStopOnLatexError);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// BibTeX
@@ -237,6 +241,7 @@ void CProfilePageLatex::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CProfilePageLatex)
+	DDX_Control(pDX, IDC_STOPONLATEXERROR, m_wndStopOnLatexError);
 	DDX_Control(pDX, IDC_TITLE_MAKEINDEXPATH, m_wndTitleMakeIndexPath);
 	DDX_Control(pDX, IDC_TITLE_MAKEINDEXARGUMENTS, m_wndTitleMakeIndexArguments);
 	DDX_Control(pDX, IDC_TITLE_BIBTEXPATH, m_wndTitleBibTexPath);
@@ -264,6 +269,7 @@ void CProfilePageLatex::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_MAKEINDEXARGUMENTS, m_strMakeIndexArguments);
 	DDX_Text(pDX, IDC_EDIT_BIBTEXPATH, m_strBibTexPath);
 	DDX_Text(pDX, IDC_EDIT_MAKEINDEXPATH, m_strMakeIndexPath);
+	DDX_Check(pDX, IDC_STOPONLATEXERROR, m_bStopOnLatexError);
 	//}}AFX_DATA_MAP
 }
 

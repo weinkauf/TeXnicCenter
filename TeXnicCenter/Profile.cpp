@@ -261,6 +261,7 @@ BOOL CProfileMap::SerializeFromRegistry()
 
 CProfile::CProfile()
 :	m_bRunLatex(FALSE),
+	m_bStopOnLatexError(FALSE),
 	m_bRunBibTex(FALSE),
 	m_bRunMakeIndex(FALSE),
 	m_bCloseBeforeCompilation(FALSE)
@@ -284,6 +285,7 @@ CProfile &CProfile::operator=(const CProfile &p)
 
 	m_bCloseBeforeCompilation = p.m_bCloseBeforeCompilation;
 	m_bRunLatex = p.m_bRunLatex;
+	m_bStopOnLatexError = p.m_bStopOnLatexError;
 	m_bRunBibTex = p.m_bRunBibTex;
 	m_bRunMakeIndex = p.m_bRunMakeIndex;
 	m_cmdCloseView = p.m_cmdCloseView;
@@ -301,11 +303,12 @@ CProfile &CProfile::operator=(const CProfile &p)
 }
 
 
-void CProfile::SetLatexPath(LPCTSTR lpszPath, LPCTSTR lpszArguments, BOOL bUseLatex /*= TRUE*/)
+void CProfile::SetLatexPath(LPCTSTR lpszPath, LPCTSTR lpszArguments, BOOL bUseLatex /*= TRUE*/, BOOL bStopOnLatexError /*= FALSE*/)
 {
 	m_strLatexPath = lpszPath;
 	m_strLatexArguments = lpszArguments;
 	m_bRunLatex = bUseLatex;
+	m_bStopOnLatexError = bStopOnLatexError;
 }
 
 
@@ -360,6 +363,7 @@ BOOL CProfile::SerializeToRegistry(CBCGRegistryEx &reg) const
 	reg.Write(_T("RunLatex"), m_bRunLatex);
 	reg.Write(_T("LatexPath"), m_strLatexPath);
 	reg.Write(_T("LatexArgs"), m_strLatexArguments);
+	reg.Write(_T("LatexStopOnError"), m_bStopOnLatexError);
 
 	reg.Write(_T("RunBibTex"), m_bRunBibTex);
 	reg.Write(_T("BibTexPath"), m_strBibTexPath);
@@ -399,6 +403,7 @@ BOOL CProfile::SerializeFromRegistry(CBCGRegistryEx &reg)
 	reg.Read(_T("RunLatex"), m_bRunLatex);
 	reg.Read(_T("LatexPath"), m_strLatexPath);
 	reg.Read(_T("LatexArgs"), m_strLatexArguments);
+	reg.Read(_T("LatexStopOnError"), m_bStopOnLatexError);
 
 	reg.Read(_T("RunBibTex"), m_bRunBibTex);
 	reg.Read(_T("BibTexPath"), m_strBibTexPath);

@@ -2399,40 +2399,43 @@ BEGIN
     LTEXT           "  (La)TeX-Compiler  ",IDC_STATIC,10,0,63,8
     CONTROL         "(&La)TeX in diesem Profil verwenden",IDC_USELATEX,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,10,230,10
-    LTEXT           "Pfad des (La)TeX-Compilers:",IDC_TITLE_LATEXPATH,5,25,
+    LTEXT           "Pfad des (La)TeX-Compilers:",IDC_TITLE_LATEXPATH,5,35,
                     90,8
-    EDITTEXT        IDC_EDIT_LATEXPATH,5,35,210,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_BROWSELATEX,220,35,15,14
+    EDITTEXT        IDC_EDIT_LATEXPATH,5,45,210,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSELATEX,220,45,15,14
     LTEXT           "Argumente, die an den Compiler übergeben werden sollen:",
-                    IDC_TITLE_LATEXARGUMENTS,5,50,184,8
-    EDITTEXT        IDC_EDIT_LATEXARGUMENTS,5,60,210,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "",IDC_LATEXPH,220,60,15,14
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,5,85,229,1
-    LTEXT           "  BibTeX  ",IDC_STATIC,10,80,32,8
+                    IDC_TITLE_LATEXARGUMENTS,5,60,184,8
+    EDITTEXT        IDC_EDIT_LATEXARGUMENTS,5,70,210,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "",IDC_LATEXPH,220,70,15,14
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,5,95,229,1
+    LTEXT           "  BibTeX  ",IDC_STATIC,10,90,32,8
     CONTROL         "&BibTeX in diesem Profil nicht verwenden",
                     IDC_DONTUSEBIBTEX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
-                    5,90,143,10
-    LTEXT           "Pfad des BibTeX-Compilers:",IDC_TITLE_BIBTEXPATH,5,105,
+                    5,100,143,10
+    LTEXT           "Pfad des BibTeX-Compilers:",IDC_TITLE_BIBTEXPATH,5,115,
                     88,8
-    EDITTEXT        IDC_EDIT_BIBTEXPATH,5,114,210,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_BROWSEBIBTEX,220,114,15,14
+    EDITTEXT        IDC_EDIT_BIBTEXPATH,5,124,210,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSEBIBTEX,220,124,15,14
     LTEXT           "Argumente, die an BibTeX übergeben werden sollen:",
-                    IDC_TITLE_BIBTEXARGUMENTS,5,135,167,8
-    EDITTEXT        IDC_EDIT_BIBTEXARGUMENTS,5,145,210,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "",IDC_BIBTEXPH,220,145,15,14
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,5,170,227,1
-    LTEXT           "  MakeIndex  ",IDC_STATIC,10,165,44,8
+                    IDC_TITLE_BIBTEXARGUMENTS,5,140,167,8
+    EDITTEXT        IDC_EDIT_BIBTEXARGUMENTS,5,150,210,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "",IDC_BIBTEXPH,220,150,15,14
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,5,175,227,1
+    LTEXT           "  MakeIndex  ",IDC_STATIC,10,170,44,8
     CONTROL         "&MakeIndex in diesem Profil nicht verwenden",
                     IDC_DONTUSEMAKEINDEX,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,175,155,10
+                    WS_TABSTOP,5,180,155,10
     LTEXT           "Pfad des MakeIndex-Compilers:",IDC_TITLE_MAKEINDEXPATH,
-                    5,189,100,8
-    EDITTEXT        IDC_EDIT_MAKEINDEXPATH,5,199,210,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_BROWSEMAKEINDEX,220,199,15,14
-    LTEXT           "Argumente, die an BibTeX übergeben werden sollen:",
-                    IDC_TITLE_MAKEINDEXARGUMENTS,5,220,167,8
+                    5,194,100,8
+    EDITTEXT        IDC_EDIT_MAKEINDEXPATH,5,204,210,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSEMAKEINDEX,220,204,15,14
+    LTEXT           "Argumente, die an MakeIndex übergeben werden sollen:",
+                    IDC_TITLE_MAKEINDEXARGUMENTS,5,220,179,8
     EDITTEXT        IDC_EDIT_MAKEINDEXARGUMENTS,5,230,210,14,ES_AUTOHSCROLL
     PUSHBUTTON      "",IDC_MAKEINDEXPH,220,230,15,14
+    CONTROL         "Compilierung &stoppen, wenn LaTeX-Fehler auftritt",
+                    IDC_STOPONLATEXERROR,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,23,230,10
 END
 
 IDD_PROFILE_NAME DIALOG DISCARDABLE  0, 0, 227, 54
@@ -3175,7 +3178,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     STE_LATEX_START         "--------------------Ausgabeprofil: %s--------------------"
-    STE_LATEX_RESULT        "LaTeX-Ergebnis: %d Fehler, %d Warnung(en), %d zu volle/leere Box(en)"
+    STE_LATEX_RESULT        "LaTeX-Ergebnis: %d Fehler, %d Warnung(en), %d zu volle/leere Box(en), %d Seite(n)"
     STE_LATEX_START_FAILED  "%s\n\nDer Befehl konnte nicht ausgeführt werden."
     STE_LATEX_CANCELED      "Erstellung vom Anwender abgebrochen"
     STE_LATEX_START_FAILED_EXT 
@@ -3940,12 +3943,12 @@ BEGIN
     STE_GREP_FINISHEDNOHIT  "Zeichenfolge nicht gefunden."
     STE_GREP_FINISHED       "Es wurde(n) %d Übereinstimmung(en) gefunden."
     STE_GREP_ERROR          "! %s: Zugriff auf Datei nicht möglich!"
+    STE_PARSE_BEGIN         "TODO: Begin parsing time: "
+    STE_PARSE_END           "TODO: End parsing time:"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    STE_PARSE_BEGIN         "TODO: Begin parsing time: "
-    STE_PARSE_END           "TODO: End parsing time:"
     STE_PARSE_PARSING       "TODO: Parsing %s ..."
     STE_PARSE_FOUND         "TODO: Found %s."
     STE_PARSE_FOUND_UNMATCHED "TODO: Found unmatched %s."
@@ -5796,39 +5799,42 @@ BEGIN
     LTEXT           "  (La)TeX compiler  ",IDC_STATIC,10,0,62,8
     CONTROL         "&Run (La)TeX in this profile",IDC_USELATEX,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,5,10,230,10
-    LTEXT           "Path to the (La)TeX compiler:",IDC_TITLE_LATEXPATH,5,25,
+    LTEXT           "Path to the (La)TeX compiler:",IDC_TITLE_LATEXPATH,5,35,
                     93,8
-    EDITTEXT        IDC_EDIT_LATEXPATH,5,35,210,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_BROWSELATEX,220,35,15,14
+    EDITTEXT        IDC_EDIT_LATEXPATH,5,45,210,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSELATEX,220,45,15,14
     LTEXT           "Command line arguments to pass to the compiler:",
-                    IDC_TITLE_LATEXARGUMENTS,5,50,154,8
-    EDITTEXT        IDC_EDIT_LATEXARGUMENTS,5,60,210,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "",IDC_LATEXPH,220,60,15,14
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,5,85,229,1
-    LTEXT           "  BibTeX  ",IDC_STATIC,10,80,32,8
+                    IDC_TITLE_LATEXARGUMENTS,5,60,154,8
+    EDITTEXT        IDC_EDIT_LATEXARGUMENTS,5,70,210,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "",IDC_LATEXPH,220,70,15,14
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,5,95,229,1
+    LTEXT           "  BibTeX  ",IDC_STATIC,10,90,32,8
     CONTROL         "Do not use &BibTeX in this profile",IDC_DONTUSEBIBTEX,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,90,117,10
-    LTEXT           "Path to BibTeX executable:",IDC_TITLE_BIBTEXPATH,5,105,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,100,117,10
+    LTEXT           "Path to BibTeX executable:",IDC_TITLE_BIBTEXPATH,5,115,
                     88,8
-    EDITTEXT        IDC_EDIT_BIBTEXPATH,5,114,210,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_BROWSEBIBTEX,220,114,15,14
+    EDITTEXT        IDC_EDIT_BIBTEXPATH,5,124,210,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSEBIBTEX,220,124,15,14
     LTEXT           "&Command line arguments to pass to BibTeX:",
-                    IDC_TITLE_BIBTEXARGUMENTS,5,135,140,8
-    EDITTEXT        IDC_EDIT_BIBTEXARGUMENTS,5,145,210,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "",IDC_BIBTEXPH,220,145,15,14
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,5,170,227,1
-    LTEXT           "  MakeIndex  ",IDC_STATIC,10,165,44,8
+                    IDC_TITLE_BIBTEXARGUMENTS,5,140,140,8
+    EDITTEXT        IDC_EDIT_BIBTEXARGUMENTS,5,150,210,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "",IDC_BIBTEXPH,220,150,15,14
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,5,175,227,1
+    LTEXT           "  MakeIndex  ",IDC_STATIC,10,170,44,8
     CONTROL         "Do not use &MakeIndex in this profile",
                     IDC_DONTUSEMAKEINDEX,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,175,129,10
+                    WS_TABSTOP,5,180,129,10
     LTEXT           "Path to MakeIndex executable:",IDC_TITLE_MAKEINDEXPATH,
-                    5,189,100,8
-    EDITTEXT        IDC_EDIT_MAKEINDEXPATH,5,199,210,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "...",IDC_BROWSEMAKEINDEX,220,199,15,14
+                    5,194,100,8
+    EDITTEXT        IDC_EDIT_MAKEINDEXPATH,5,204,210,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSEMAKEINDEX,220,204,15,14
     LTEXT           "&Command line arguments to pass to MakeIndex:",
                     IDC_TITLE_MAKEINDEXARGUMENTS,5,220,152,8
     EDITTEXT        IDC_EDIT_MAKEINDEXARGUMENTS,5,230,210,14,ES_AUTOHSCROLL
     PUSHBUTTON      "",IDC_MAKEINDEXPH,220,230,15,14
+    CONTROL         "&Stop Compilation, if LaTeX-Error occures",
+                    IDC_STOPONLATEXERROR,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,23,230,10
 END
 
 IDD_PROFILE_NAME DIALOG DISCARDABLE  0, 0, 227, 54
@@ -6454,7 +6460,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     STE_LATEX_START         "--------------------Output Profile: %s--------------------"
-    STE_LATEX_RESULT        "LaTeX-Result: %d Error(s), %d Warning(s), %d Bad Box(es)"
+    STE_LATEX_RESULT        "LaTeX-Result: %d Error(s), %d Warning(s), %d Bad Box(es), %d Page(s)"
     STE_LATEX_START_FAILED  "%s\n\nCannot execute the command."
     STE_LATEX_CANCELED      "Building process cancelled by the user"
     STE_LATEX_START_FAILED_EXT "%s Cannot execute the command. Error: %s"
@@ -7203,12 +7209,12 @@ BEGIN
     STE_GREP_FINISHEDNOHIT  "String not found."
     STE_GREP_FINISHED       "%d Match(es) has been found."
     STE_GREP_ERROR          "! %s: Cannot access file!"
+    STE_PARSE_BEGIN         "Begin parsing time: "
+    STE_PARSE_END           "End parsing time:"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    STE_PARSE_BEGIN         "Begin parsing time: "
-    STE_PARSE_END           "End parsing time:"
     STE_PARSE_PARSING       "Parsing %s ..."
     STE_PARSE_FOUND         "Found %s."
     STE_PARSE_FOUND_UNMATCHED "Found unmatched %s."

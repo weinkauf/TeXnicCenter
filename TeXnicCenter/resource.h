@@ -492,6 +492,7 @@
 #define IDC_REMOVE_PROJECTTEMPLATES     1247
 #define IDC_EDIT_FILENAME               1248
 #define IDC_EDIT_DIRECTORY              1249
+#define IDC_STOPONLATEXERROR            1250
 #define IDD_CUSTOMIZEPAGE_EDITOR        16105
 #define IDD_OUTPUTWIZARD_MIKTEX         16106
 #define IDD_OUTPUTWIZARD_PATH           16107
@@ -1064,7 +1065,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        244
 #define _APS_NEXT_COMMAND_VALUE         38314
-#define _APS_NEXT_CONTROL_VALUE         1250
+#define _APS_NEXT_CONTROL_VALUE         1252
 #define _APS_NEXT_SYMED_VALUE           111
 #endif
 #endif

@@ -234,7 +234,13 @@ BOOL COutputBuilder::RunLatex()
 	filter.CloseHandle();
 	m_strLatexResult = filter.GetResultString();
 
-	return !dwExitCode;
+	//Error handling
+	if (m_pProfile->GetStopOnLatexError())
+		//Stop on error code != 0
+		return !dwExitCode;
+	else
+		//Stop only, if no pages of output and error code != 0
+		return ( (filter.GetNumberOfOutputPages() > 0) || !dwExitCode);
 }
 
 
