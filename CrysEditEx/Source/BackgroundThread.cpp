@@ -26,9 +26,11 @@
 *
 *********************************************************************/
 
-// CBackgroundThread.cpp: implementation of the CBackgroundThread class.
-//
-//////////////////////////////////////////////////////////////////////
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
 
 #include "stdafx.h"
 #include "BackgroundThread.h"
@@ -233,7 +235,7 @@ void CBackgroundThread::SpellCheckSingleLine(CCrystalTextView *pTextView, int nL
 
 	while ( nStart != -1 )
 	{
-		if ( (nStart - nEnd) <  MAXWORDLEN )
+		if ( abs(nStart - nEnd) <  MAXWORDLEN )
 		{
 			int i = nStart;
 			int j = 0;
