@@ -158,7 +158,6 @@ void CProjectPropertyDialog::FindDictionaries()
 
 void CProjectPropertyDialog::OnSelchangeOptionsLanguage() 
 {
-	// TODO: Add your control notification handler code here
 	CComboBox *pDialBox = (CComboBox*) GetDlgItem(IDC_OPTIONS_LANGUAGE_DIALECT);
 	CComboBox *pLangBox = (CComboBox*) GetDlgItem(IDC_OPTIONS_LANGUAGE);
 

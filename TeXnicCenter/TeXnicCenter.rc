@@ -780,7 +780,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
+// Deutsch (Deutschland) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -2229,7 +2229,7 @@ BEGIN
     LTEXT           "Static",IDC_OW_OPTLIST,80,20,175,60
 END
 
-IDD_PROJECT_PROPERTIES DIALOGEX 0, 0, 253, 143
+IDD_PROJECT_PROPERTIES DIALOGEX 0, 0, 253, 150
 STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Projekteigenschaften"
 FONT 8, "MS Sans Serif"
@@ -2243,15 +2243,15 @@ BEGIN
                     BS_AUTOCHECKBOX | WS_TABSTOP,7,30,75,10
     CONTROL         "Verwendet &MakeIndex",IDC_CHECK_MAKEINDEX,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,7,45,87,10
-    DEFPUSHBUTTON   "OK",IDOK,140,122,50,14
-    PUSHBUTTON      "Abbrechen",IDCANCEL,196,122,50,14
-    LTEXT           "TODO &Language:",IDC_STATIC,7,77,58,8
-    COMBOBOX        IDC_OPTIONS_LANGUAGE,7,89,91,53,CBS_DROPDOWNLIST | 
+    GROUPBOX        "Projektsprache",IDC_STATIC,7,66,239,56
+    LTEXT           "&Sprache:",IDC_STATIC,12,81,30,8
+    COMBOBOX        IDC_OPTIONS_LANGUAGE,47,79,91,90,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    LTEXT           "TODO &Dialect:",IDC_STATIC,127,77,48,8
-    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,127,89,105,56,
+    LTEXT           "&Dialekt:",IDC_STATIC,12,103,25,8
+    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,47,100,91,56,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "",IDC_STATIC,"Static",SS_GRAYRECT,7,67,238,1
+    DEFPUSHBUTTON   "OK",IDOK,140,129,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,196,129,50,14
 END
 
 IDD_OPTIONS_FILE DIALOGEX 0, 0, 300, 200
@@ -2604,7 +2604,7 @@ STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "Rechtschreibung"
 FONT 8, "MS Sans Serif"
 BEGIN
-    GROUPBOX        "TODO (default) Sprache",IDC_STATIC,8,8,284,52
+    GROUPBOX        "Standardsprache",IDC_STATIC,8,8,284,52
     LTEXT           "&Sprache:",IDC_STATIC,15,23,30,8
     COMBOBOX        IDC_OPTIONS_LANGUAGE,45,21,98,53,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
@@ -2863,7 +2863,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 246
         TOPMARGIN, 7
-        BOTTOMMARGIN, 136
+        BOTTOMMARGIN, 143
     END
 
     IDD_OPTIONS_FILE, DIALOG
@@ -4533,12 +4533,12 @@ BEGIN
                             "Entfernt die %-Kommentarzeichen am Anfang jeder selektierten Zeile.\nBlockkommentar entfernen"
 END
 
-#endif    // German (Germany) resources
+#endif    // Deutsch (Deutschland) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// Englisch (USA) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -5879,7 +5879,7 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,139,201,10
 END
 
-IDD_PROJECT_PROPERTIES DIALOGEX 0, 0, 252, 146
+IDD_PROJECT_PROPERTIES DIALOGEX 0, 0, 252, 150
 STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Project properties"
 FONT 8, "MS Sans Serif"
@@ -5893,15 +5893,15 @@ BEGIN
                     WS_TABSTOP,7,30,57,10
     CONTROL         "Uses &MakeIndex",IDC_CHECK_MAKEINDEX,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,7,45,69,10
-    DEFPUSHBUTTON   "OK",IDOK,140,125,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,195,125,50,14
-    LTEXT           "&Language:",IDC_STATIC,7,77,35,8
-    COMBOBOX        IDC_OPTIONS_LANGUAGE,7,89,91,53,CBS_DROPDOWNLIST | 
+    GROUPBOX        "Project language",IDC_STATIC,7,66,239,56
+    LTEXT           "&Language:",IDC_STATIC,12,81,35,8
+    COMBOBOX        IDC_OPTIONS_LANGUAGE,49,79,91,90,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    LTEXT           "&Dialect:",IDC_STATIC,127,77,25,8
-    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,127,89,105,56,
+    LTEXT           "&Dialect:",IDC_STATIC,12,103,25,8
+    COMBOBOX        IDC_OPTIONS_LANGUAGE_DIALECT,49,100,91,56,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "",IDC_STATIC,"Static",SS_GRAYRECT,7,67,238,1
+    DEFPUSHBUTTON   "OK",IDOK,140,129,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,195,129,50,14
 END
 
 IDD_TABULAR DIALOGEX 0, 0, 243, 226
@@ -6602,7 +6602,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 245
         TOPMARGIN, 7
-        BOTTOMMARGIN, 139
+        BOTTOMMARGIN, 143
     END
 
     IDD_TABULAR, DIALOG
@@ -8199,7 +8199,7 @@ BEGIN
                             "Removes all %-Signs at the beginning of each selected line.\nRemove Block Comment"
 END
 
-#endif    // English (U.S.) resources
+#endif    // Englisch (USA) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
