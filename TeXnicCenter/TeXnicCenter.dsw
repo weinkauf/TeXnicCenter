@@ -30,6 +30,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "TXC Documentation"="..\TCHelp\SourceCodeDoc\TXC Documentation.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "TeXnicCenter"=.\TeXnicCenter.dsp - Package Owner=<4>
 
 Package=<5>
