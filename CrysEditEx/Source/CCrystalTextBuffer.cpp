@@ -55,6 +55,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.13  2002/05/23 23:11:07  cnorris
+* Update end block position after insterting null or empty string.
+*
 * Revision 1.12  2002/05/06 05:35:42  cnorris
 * Protect background thread from document reset
 *
@@ -1052,7 +1055,10 @@ BOOL CCrystalTextBuffer::InternalDeleteText(CCrystalTextView *pSource, int nStar
 			++nFirstDelLine;
 			++nEndLine;
 		}
-		else if (end.GetLength() == 0 || nEndChar != end.GetLength())
+		//BEGIN SW
+		//else if (end.GetLength() == 0 || nEndChar != end.GetLength())
+		else if (end.GetLength() == 0 || nEndChar != end.GetLength() || nEndLine == m_aLines.GetUpperBound())
+		//END SW
 		{
 			// First line is being deleted so remove the left portion of last line, if any
 			if (nEndChar)
