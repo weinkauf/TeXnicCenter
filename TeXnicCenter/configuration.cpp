@@ -136,6 +136,27 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 		SerializeProfileString(_T("Settings"), _T("SkinDirectory"), &m_strSkinDirectory, direction, CPathTool::Cat(CPathTool::GetDirectory(theApp.m_pszHelpFilePath), _T("Skins")));
 		SerializeProfileString(_T("Settints"), _T("SkinURL"), &m_strSkinUrl, direction, _T("http://www.bcgsoft.com/Skins"));
 	}
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Language
+	strSection = "Settings\\Language";
+
+	SerializeProfileString( strSection, "Language", &m_strLanuage, direction, _T("en") );
+	SerializeProfileString( strSection, "Dialect", &m_strLanguageDialect, direction, _T("US") );
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Language-Spelling
+	strSection = "Settings\\Language-Spelling";
+	
+	SerializeProfileString( strSection, "PersonalDictionary", &m_strSpellPersonalDictionary, direction, _T("") );
+	SerializeProfileString( strSection, "DictionaryPath", &m_strSpellDictionaryPath, direction, 
+		CPathTool::Cat(CPathTool::GetDirectory(theApp.m_pszHelpFilePath), _T("Language")));
+	SerializeProfileInt( strSection, "SkipComments", (int*)&m_bSpellSkipComments, direction, 1 );
+	SerializeProfileInt( strSection, "SkipNumbers", (int*)&m_bSpellSkipNumbers, direction, 1 );
+	SerializeProfileInt( strSection, "SkipTags", (int*)&m_bSpellSkipTags, direction, 1 );
+	SerializeProfileInt( strSection, "SkipUppercase", (int*)&m_bSpellSkipCaps, direction, 1 );
+	SerializeProfileInt( strSection, "MainDictionaryOnly", (int*)&m_bSpellMainDictOnly, direction, 1 );
+	SerializeProfileInt( strSection, "Enable", (int*)&m_bSpellEnable, direction, 1 );
 }
 
 

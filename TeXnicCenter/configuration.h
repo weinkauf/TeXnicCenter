@@ -286,6 +286,39 @@ public:
 
 	/** URL, where to download skins from */
 	CString m_strSkinUrl;
+
+	///////////////////////////////////////////////////////////////////
+	// Language and spelling
+
+	/** Lanuage of the dictionary. */
+	CString m_strLanuage;
+
+	/** Dialect of the dictionary. */
+	CString m_strLanguageDialect;
+
+	/** Directory containing dictionaries. */
+	CString m_strSpellDictionaryPath;
+
+	/** Path of personal dictionary. */
+	CString m_strSpellPersonalDictionary;
+
+	/** Skip comments. */
+	BOOL m_bSpellSkipComments;
+
+	/** Skip words with numbers. */
+	BOOL m_bSpellSkipNumbers;
+
+	/** Skip LaTeX tags. */
+	BOOL m_bSpellSkipTags;
+
+	/** Skip all uppsercase words .*/
+	BOOL m_bSpellSkipCaps;
+
+	/** Suggest from main dictionary only. */
+	BOOL m_bSpellMainDictOnly;
+
+	/** Enable spell check. */
+	BOOL m_bSpellEnable;
 };
 
 // declaration of one and only global configuration object
