@@ -20,6 +20,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.4  2002/04/06 05:33:57  cnorris
+* Added NextWord method required for spell checker
+*
 * Revision 1.3  2002/04/01 23:07:56  cnorris
 * Implement secondary line break characters.
 *
@@ -137,6 +140,8 @@ void CCrystalParser::WrapLine( int nLineIndex, int nMaxLineWidth, int *anBreaks,
 			bFoundWhiteSpace = FALSE;
 		}
 	}
+	// Sneak the total length of the line into the anBreaks array
+	if (anBreaks) anBreaks[nBreaks] = nCharCount;
 }
 
 
