@@ -1,3 +1,11 @@
+2002/01/07 svenwiegand
+- Fixed Bug: Single quotes (') after a word were interpreted as a character 
+  of the word from CLatexParser::NextWord(). This made the spell checker 
+  mark this as a spelling error.
+- Feature 540886: Remove error marker when editing a line. Fixed it in another
+  way: All error marks will be removed, when a new compilation is about to
+  be started.
+
 2002/06/28 svenwiegand
 - Using 'LaTeX Help Book' as LaTeX-reference in online help now.
 
