@@ -82,6 +82,10 @@
 * $Author$
 *
 * $Log$
+* Revision 1.24  2005/03/12 11:46:52  niteria
+* Enabled bracket matching even if colors are the same as the normal colors.
+* Now we have a consistent matching even in formulas.
+*
 * Revision 1.23  2005/03/08 16:36:08  vachis
 * Selection of block between bracket pairs in a hierarchical manner (Ctrl+M)
 * Bracket highlighting disabled if a selection is present
@@ -4763,6 +4767,8 @@ error:
 	//jump to error
 	//SetCursorPos( ptErrStrEnd );
 	EnsureVisible( ptErrStrEnd );
+	Invalidate();
+	//UpdateWindow();
 	return FALSE;
 }
 
