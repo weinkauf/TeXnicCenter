@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.5  2002/04/09 23:22:41  cnorris
+* Added explicit virtual destructor
+*
 * Revision 1.4  2002/04/06 05:28:35  cnorris
 * Added SetShowInteractiveSelection
 * Added GetParser
@@ -53,6 +56,7 @@
 
 #include "cedefs.h"
 #include "CrystalParser.h"
+#include <afxmt.h>
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -81,6 +85,7 @@ enum
 	UPDATE_VERTRANGE	= 0x0002,		//	update vert scrollbar
 	UPDATE_SINGLELINE	= 0x0100,		//	single line has changed
 	UPDATE_FLAGSONLY	= 0x0200,		//	only line-flags were changed
+	UPDATE_LINEATTR		= 0x0400,		//	only line-attributes were changed
 
 	UPDATE_RESET		= 0x1000		//	document was reloaded, update all!
 };
@@ -94,6 +99,10 @@ class CRYSEDIT_CLASS_DECL CCrystalTextView : public CView
 	//END SW
 
 private:
+	int m_nHoldCount; // Number of holds on view. View cannot be destroyed with outstanding holds.
+	CEvent *m_pevtHoldCountZero; // Signaled when hold count is zero.
+	CRITICAL_SECTION m_csHold; // Protect hold count operations.
+
 	//	Search parameters
 	BOOL m_bLastSearch;
 	DWORD m_dwLastSearchFlags;
@@ -104,6 +113,9 @@ private:
 
 	//	Painting caching bitmap
 	CBitmap *m_pCacheBitmap;
+
+	// Text attribute images
+	CImageList m_TextAttributeImages;
 
 	//	Line/character dimensions
 	int m_nLineHeight, m_nCharWidth;
@@ -116,7 +128,7 @@ private:
 
 	//	Amount of lines/characters that completely fits the client area
 	int m_nScreenLines, m_nScreenChars;
-	
+
 	//BEGIN SW
 	/**
 	Contains for each line the number of sublines. If the line is not
@@ -164,6 +176,19 @@ private:
 
 	//	Helper functions
 	void ExpandChars(LPCTSTR pszChars, int nOffset, int nCount, CString &line);
+	/*
+	Populate an array that shadows the expanded string. Each element in the array corresponds
+	to a character in the expanded string. Each element contains the index of character of the
+	unexpanded string. If the string has no expansion characters, the array contains the numbers 0
+	to n, where n is the length of the unexpanded string.
+	@param pszChars Unexpanded string
+	@param nOffset The index to begin the expansion. The expansion begins at the beginning of 
+		a screen line.
+	@param nCount The length of the line until break.
+	@param anIndices The array where the expanded indices are stored.
+	@return Length of the screen line.
+	*/
+	int ExpandChars(LPCTSTR pszChars, int &nOffset, int nCount, int *anIndices);
 
 	// int ApproxActualOffset(int nLineIndex, int nOffset); // Unused
 	void AdjustTextPoint(CPoint &point);
@@ -191,6 +216,7 @@ protected:
 	BOOL m_bWordWrap;
 	CCrystalParser *m_pParser;
 	//END SW
+	CWinThread *m_pBackgroundThread;
 
 	CPoint ClientToText(const CPoint &point);
 	CPoint TextToClient(const CPoint &point);
@@ -423,6 +449,7 @@ protected:
 
 	virtual void DrawSingleLine(CDC *pdc, const CRect &rect, int nLineIndex);
 	virtual void DrawMargin(CDC *pdc, const CRect &rect, int nLineIndex);
+	virtual void DrawLineAttributes(CDC *pdc, CPoint ptOrigin, int nLineIndex, int *anBreaks, int nBreaks);
 
 	//BEGIN SW
 	// word wrapping
@@ -611,6 +638,24 @@ public:
 	//BEGIN SW
 	BOOL GetWordWrapping() const;
 	void SetWordWrapping( BOOL bWordWrap );
+
+	/**
+	Increment the hold view count. The view cannot be destroyed with outstanding 
+	attachments. Every call must be matched with a call to Detach
+	@param bExclusive Attach exclusively. Wait until the hold count reaches zero,
+	then make an exclusive hold of view. All future holds block until the
+	exlcusive hold is detached.
+	@return Approximate number of outstanding holds.
+	*/
+	int Attach( bool bExclusive = false );
+
+	/**
+	Decrement the hold view count. The view cannot be destroyed with outstanding 
+	attachments. Every call must be matched with a previous call to Attach
+	@param bExclusive Detach exclusively. Must match call to Attach. 
+	@return Approximate number of outstanding holds.
+	*/
+	int Detach( bool bExclusive = false );
 
 	/**
 	Sets the Parser to use to parse the file.

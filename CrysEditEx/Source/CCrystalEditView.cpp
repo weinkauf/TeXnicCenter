@@ -58,6 +58,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.2  2002/04/06 05:19:05  cnorris
+* ReplaceSelection inserts text at the cursor if there is no selected text
+*
 * Revision 1.1.1.1  2002/02/26 08:11:51  svenwiegand
 * Initial revision
 *
@@ -1179,6 +1182,9 @@ void CCrystalEditView::OnUpdateEditRedo(CCmdUI* pCmdUI)
 
 void CCrystalEditView::OnEditOperation(int nAction, LPCTSTR pszText)
 {
+	if ( m_pBackgroundThread )
+		m_pBackgroundThread->PostThreadMessage(ID_BG_UPDATE_LINE, (long)(GetCursorPos().y), (long)this);
+
 	if (m_bAutoIndent)
 	{
 		//	Analyse last action...
