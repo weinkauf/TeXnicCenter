@@ -52,32 +52,41 @@ public:
 	*/
 	CFileVersionInfo();
 
+	//@{
 	/**
 	Constructs an object and fills it with the version information
-	of the module specified by the given module handle.
+	of the specified module.
 
-	@param hModule
-		Handle of the module, which version information will be used to
-		fill the object. Pass NULL here to use the version information of
-		the calling process.
+	See description of Create() for a documentation of the parameters.
+
+	@see Create()
 	*/
-	CFileVersionInfo(HMODULE hModule);
-
-	/**
-	Constructs an object and fills it with the version information
-	of the specified file.
-
-	@param lpszFileName
-		Path of the file to read the version information from.
-	*/
-	CFileVersionInfo(LPCTSTR lpszFileName);
+	CFileVersionInfo(HMODULE hModule, DWORD dwLanguageId = (DWORD)-1);
+	CFileVersionInfo(LPCTSTR lpszFileName, DWORD dwLanguageId = (DWORD)-1);
+	//@}
 
 	virtual ~CFileVersionInfo();
 
 // operations
 public:
-	BOOL Create(HMODULE hModule = NULL);
-	BOOL Create(LPCTSTR lpszFileName);
+	//@{
+	/**
+	Loads the version information for the specified module.
+
+	@param hModule
+		Instance handle of the module to load the information for or
+		NULL to load the information for the module, that has been used
+		to create the current process.
+	@param dwLanguageCodepageId
+		Identifier for a language and codepage to load the version 
+		information in. If no information in this format is available,
+		the method will load nothing. Specify 0xFFFFFFFF if the method
+		should determine the language by itself. See VerQueryValue of the
+		SDK documentation for details of the format of this id.
+	*/
+	BOOL Create(HMODULE hModule = NULL, DWORD dwLanguageCodepageId = (DWORD)-1);
+	BOOL Create(LPCTSTR lpszFileName, DWORD dwLanguageCodepageId = (DWORD)-1);
+	//@}
 
 // attribute operations
 public:

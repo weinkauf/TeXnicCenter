@@ -44,15 +44,15 @@ CFileVersionInfo::CFileVersionInfo()
 }
 
 
-CFileVersionInfo::CFileVersionInfo(HMODULE hModule)
+CFileVersionInfo::CFileVersionInfo(HMODULE hModule, DWORD dwLanguageCodepageId /* = (DWORD)-1 */)
 {
-	Create(hModule);
+	Create(hModule, dwLanguageCodepageId);
 }
 
 
-CFileVersionInfo::CFileVersionInfo(LPCTSTR lpszFileName)
+CFileVersionInfo::CFileVersionInfo(LPCTSTR lpszFileName, DWORD dwLanguageCodepageId /* = (DWORD)-1 */)
 {
-	Create(lpszFileName);
+	Create(lpszFileName, dwLanguageCodepageId);
 }
 
 
@@ -87,17 +87,17 @@ BOOL CFileVersionInfo::GetTranslationId(LPVOID lpData, UINT unBlockSize, WORD wL
 }
 
 
-BOOL CFileVersionInfo::Create(HMODULE hModule /*= NULL*/)
+BOOL CFileVersionInfo::Create(HMODULE hModule /*= NULL*/, DWORD dwLanguageCodepageId /* = (DWORD)-1 */)
 {
 	CString	strPath;
 
 	GetModuleFileName(hModule, strPath.GetBuffer(_MAX_PATH), _MAX_PATH);
 	strPath.ReleaseBuffer();
-	return Create(strPath);
+	return Create(strPath, dwLanguageCodepageId);
 }
 
 
-BOOL CFileVersionInfo::Create(LPCTSTR lpszFileName)
+BOOL CFileVersionInfo::Create(LPCTSTR lpszFileName, DWORD dwLanguageCodepageId /* = (DWORD)-1 */)
 {
 	Reset();
 
@@ -129,24 +129,36 @@ BOOL CFileVersionInfo::Create(LPCTSTR lpszFileName)
 		VerQueryValue(lpData, _T("\\VarFileInfo\\Translation"), &lpInfo, &unInfoLen);
 		
 		DWORD	dwLangCode = 0;
-		if (!GetTranslationId(lpInfo, unInfoLen, GetUserDefaultLangID(), dwLangCode, FALSE))
+		if (dwLanguageCodepageId==(DWORD)-1)
 		{
-			if (!GetTranslationId(lpInfo, unInfoLen, GetUserDefaultLangID(), dwLangCode, TRUE))
+			if (!GetTranslationId(lpInfo, unInfoLen, LANGIDFROMLCID(GetThreadLocale()), dwLangCode, FALSE))
 			{
-				if (!GetTranslationId(lpInfo, unInfoLen, MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL), dwLangCode, TRUE))
+				if (!GetTranslationId(lpInfo, unInfoLen, LANGIDFROMLCID(GetThreadLocale()), dwLangCode, TRUE))
 				{
-					if (!GetTranslationId(lpInfo, unInfoLen, MAKELANGID(LANG_ENGLISH, SUBLANG_NEUTRAL), dwLangCode, TRUE))
-						// use the first one we can get
-						dwLangCode = *((DWORD*)lpInfo);
+					if (!GetTranslationId(lpInfo, unInfoLen, GetUserDefaultLangID(), dwLangCode, FALSE))
+					{
+						if (!GetTranslationId(lpInfo, unInfoLen, GetUserDefaultLangID(), dwLangCode, TRUE))
+						{
+							if (!GetTranslationId(lpInfo, unInfoLen, MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL), dwLangCode, TRUE))
+							{
+								if (!GetTranslationId(lpInfo, unInfoLen, MAKELANGID(LANG_ENGLISH, SUBLANG_NEUTRAL), dwLangCode, TRUE))
+									// use the first one we can get
+									dwLangCode = *((DWORD*)lpInfo);
+							}
+						}
+					}
 				}
 			}
 		}
+		else
+			dwLangCode = dwLanguageCodepageId;
+
 		m_wLanguageId = (WORD)(dwLangCode&0x0000FFFF);
 		m_wCodePageId = (WORD)((dwLangCode&0xFFFF0000)>>16);
 		
 
 		CString	strSubBlock;
-		strSubBlock.Format(_T("\\StringFileInfo\\%04X%04X\\"), dwLangCode&0x0000FFFF, (dwLangCode&0xFFFF0000)>>16);
+		strSubBlock.Format(_T("\\StringFileInfo\\%04X%04X\\"), m_wLanguageId, m_wCodePageId);
 		
 		// catch string table
 		if (VerQueryValue(lpData, (LPTSTR)(LPCTSTR)(strSubBlock+_T("CompanyName")), &lpInfo, &unInfoLen))

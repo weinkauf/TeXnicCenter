@@ -226,6 +226,16 @@ CTeXnicCenterApp::CTeXnicCenterApp()
 }
 
 
+BOOL CALLBACK TxcEnumResourceLanguages(HANDLE hModule, LPCTSTR lpszType, LPCTSTR lpszName, WORD wIdLang, LONG lParam)
+{
+	ASSERT(lpszType==RT_VERSION);
+	*((WORD*)lParam) = wIdLang;
+
+	// we are only interested in the first language, so return FALSE here
+	return FALSE;
+}
+
+
 BOOL CTeXnicCenterApp::InitInstance()
 {
 	// check if we should use an existing instance
@@ -254,8 +264,11 @@ BOOL CTeXnicCenterApp::InitInstance()
 	BOOL	bResourcesIncompatible = FALSE;
 	if (m_hTxcResources)
 	{
+		WORD	wIdLang = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
+		EnumResourceLanguages(m_hTxcResources, RT_VERSION, MAKEINTRESOURCE(1), (ENUMRESLANGPROC)TxcEnumResourceLanguages, (LONG)&wIdLang);
+
 		// check compatibility
-		CFileVersionInfo	fviResources(m_hTxcResources);
+		CFileVersionInfo	fviResources(m_hTxcResources, MAKELONG(wIdLang, 0x04b0/*UNICODE*/));
 		CFileVersionInfo	fviTxc((HMODULE)NULL);
 
 		if (fviResources.GetFileVersion()==fviTxc.GetFileVersion())
