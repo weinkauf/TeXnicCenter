@@ -965,14 +965,6 @@ SOURCE=.\res\fullscre.bmp
 # End Source File
 # Begin Source File
 
-SOURCE=.\res\ico00001.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\res\icon1.ico
-# End Source File
-# Begin Source File
-
 SOURCE=.\res\idr_late.ico
 # End Source File
 # Begin Source File
@@ -994,6 +986,10 @@ SOURCE=.\res\latex.bmp
 # Begin Source File
 
 SOURCE=.\res\LatexDoc.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\LatexDoc_yellow.ico
 # End Source File
 # Begin Source File
 
@@ -1105,10 +1101,6 @@ SOURCE=.\res\Splsh16.bmp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Splsh16.bmp
-# End Source File
-# Begin Source File
-
 SOURCE=.\res\TeXnicCenter.ico
 # End Source File
 # Begin Source File
@@ -1117,11 +1109,23 @@ SOURCE=.\res\TeXnicCenter.rc2
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\TeXnicCenter_yellow.ico
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\Toolbar.bmp
 # End Source File
 # Begin Source File
 
 SOURCE=.\res\toolbar1.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\Wizard.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\Wizard_yellow.ico
 # End Source File
 # End Group
 # Begin Group "Required Files"
