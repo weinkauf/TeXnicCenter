@@ -160,7 +160,7 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	SerializeProfileInt( strSection, "SkipTags", (int*)&m_bSpellSkipTags, direction, 1 );
 	SerializeProfileInt( strSection, "SkipUppercase", (int*)&m_bSpellSkipCaps, direction, 1 );
 	SerializeProfileInt( strSection, "MainDictionaryOnly", (int*)&m_bSpellMainDictOnly, direction, 1 );
-	SerializeProfileInt( strSection, "Enable", (int*)&m_bSpellEnable, direction, 1 );
+	SerializeProfileInt( strSection, "Enable", (int*)&m_bSpellEnable, direction, 0 );
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// File Cleaning

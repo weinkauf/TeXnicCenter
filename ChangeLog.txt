@@ -1,4 +1,5 @@
 2002/06/20 svenwiegand
+- Disabled real time spell checking by default.
 - Removed 'Test & Suggestions' category from the about box -- to many
   people are not mentioned there.
 
