@@ -136,7 +136,7 @@ class CSingleProjectTemplate : public CProjectTemplate
 // construction/destruction
 public:
 	CSingleProjectTemplate(UINT nIDResource, CRuntimeClass* pProjectClass, int nIconIndex = -1);
-	~CSingleProjectTemplate();
+	virtual ~CSingleProjectTemplate();
 
 // implementation
 public:
@@ -162,7 +162,7 @@ class CProjectManager : public CObject
 // construction/destruction
 public:
 	CProjectManager();
-	~CProjectManager();
+	virtual ~CProjectManager();
 
 // operations
 public:

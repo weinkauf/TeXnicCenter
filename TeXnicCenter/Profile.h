@@ -460,7 +460,7 @@ class CProfileMap : protected CMap<CString, LPCTSTR, CProfile*, CProfile*>
 // construction/destruction
 public:
 	CProfileMap();
-	~CProfileMap();
+	virtual ~CProfileMap();
 
 // operations
 public:

@@ -47,7 +47,7 @@ class COutputWizardFinish : public CPropertyPage
 // Construction/Destruction
 public:
 	COutputWizardFinish();
-	~COutputWizardFinish();
+	virtual ~COutputWizardFinish();
 
 // Overridings
 protected:

@@ -57,7 +57,7 @@ public:
 		pointing down.
 	*/
 	CMenuButton(UINT unMenuId, BOOL bRightArrow = TRUE);
-	~CMenuButton();
+	virtual ~CMenuButton();
 
 // overridings
 protected:

@@ -47,7 +47,7 @@ public:
 	/** See CBCGRegistry-documentation for parameter description */
 	CBCGRegistryEx(BOOL bAdmin, BOOL bReadOnly);
 
-	~CBCGRegistryEx();
+	virtual ~CBCGRegistryEx();
 
 // operations
 public:

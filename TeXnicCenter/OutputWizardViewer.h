@@ -51,7 +51,7 @@ public:
 	Constructs a page for the specified dialog template.
 	*/
 	COutputWizardViewer(UINT unIDTemplate = -1);
-	~COutputWizardViewer();
+	virtual ~COutputWizardViewer();
 
 
 // Overridings

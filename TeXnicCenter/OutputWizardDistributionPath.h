@@ -47,7 +47,7 @@ class COutputWizardDistributionPath : public CPropertyPage
 // Construction/Destruction
 public:
 	COutputWizardDistributionPath();
-	~COutputWizardDistributionPath();
+	virtual ~COutputWizardDistributionPath();
 
 // Overridings
 protected:

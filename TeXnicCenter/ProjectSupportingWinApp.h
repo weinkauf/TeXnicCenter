@@ -46,7 +46,7 @@ class CProjectSupportingWinApp : public CWinApp
 // construction/destruction
 public:
 	CProjectSupportingWinApp();
-	~CProjectSupportingWinApp();
+	virtual ~CProjectSupportingWinApp();
 
 // operations
 public:

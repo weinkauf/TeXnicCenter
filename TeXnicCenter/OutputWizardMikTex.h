@@ -48,7 +48,7 @@ class COutputWizardMikTex : public CPropertyPage
 // construction/destruction
 public:
 	COutputWizardMikTex();
-	~COutputWizardMikTex();
+	virtual ~COutputWizardMikTex();
 
 // Overridings
 protected:
