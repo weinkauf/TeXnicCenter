@@ -1,3 +1,20 @@
+2002/04/01 niteria
+- At the start of the ProfileDialog (for defining of profiles),
+  the active profile is now selected.
+  This is similar to the ActiveProfileDialog.
+- CMainFrame::GetToolbarButton scans now the UserToolbars as well.
+  This way the ComboBoxes to change the active profile (ID_LATEX_PROFILE_SEL)
+  will be updated in UserToolbars as well.
+- In german IDD_PROFILE_LATEX the static IDC_TITLE_MAKEINDEXARGUMENTS
+  was changed from "Argumente, die an BibTeX..." to "... MakeIndex ...".
+- Added Profile-Option for "Stop Compilation, if LaTeX-Error occures".
+  If checked and TeX reports "No pages of output" and error code != 0,
+  TXC will NOT run bibTeX, makeIndex and postprocessors (behaviour as before).
+  If unchecked (default) and TeX reports at least one page of output,
+  TXC will run postprocessors - independently of the error code by TeX.
+- Parsing the LaTeX-Output for the number of pages created by LaTeX and
+  reporting this to the user via STE_LATEX_RESULT.
+
 2002/03/19 svenwiegand
 - A double click on a template in the template dialogs ('document from template'
   and 'new project') is now equivalent to pressing the 'OK' button.
