@@ -12,29 +12,34 @@ BUILDING TEXNICCENTER
 
 2. Copy the files
 
-	mre200dl.dll
-	mre200dl.ilk
-	mre200dl.pdb
+    mre200dl.dll
+    mre200dl.ilk
+    mre200dl.pdb
 
    from the 'regexpp\lib' directory to the 'output\Debug' directory.
 
 3. Copy the file
 
-	mre200l.dll
+    mre200l.dll
 
    from the 'regexpp\lib' directory to the 'output\Release' directory.
 
-4. Download the HTML Help Workshop from Microsoft, install it on your system 
-   (including the necessary header files) and add the directory that includes
-   the header files to the list of include directories in the Visual C++ 6 
-   options ('Tools -> Options -> Directories -> Include folders').
 
-5. Download the BCGControlBarLibrary header- and lib-files from 
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   %
+   % For the following downloads, see also:
+   %  http://www.toolscenter.org/front_content.php?idcat=50
+   %
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-   	http://www.toolscenter.org/products/texniccenter/download.htm
-
-   and unpack the ZIP-archive to the directory, this file (HowToBuild.txt) is
-   placed in.
+4. Install Microsoft HTML Help Workshop:
+   a) Download it from Microsoft ('http://msdn.microsoft.com/downloads/')
+   b) Install it on your system (including the necessary header files)
+   c) Add the directory that includes the header files
+      to the list of include directories in the Visual C++ 6 options
+      ('Tools -> Options -> Directories -> Include files').
+   d) Add the library path as well
+      ('Tools -> Options -> Directories -> Library files').
 
 6. Install Microsoft XML Parser:
    a) Download the most recent version of the Microsoft XML Parser 4 (MSXML4) including the
@@ -43,58 +48,64 @@ BUILDING TEXNICCENTER
    c) Add the include and library paths of MSXML to the list in Visual C++ 6
       ('Tools -> Options ->Directories').
 
+5. Download the BCGControlBarLibrary header- and lib-files from 
+
+   	http://www.toolscenter.org/front_content.php?idcat=50
+
+   and unpack the ZIP-archive to the directory, this file (HowToBuild.txt) is
+   placed in.
+
 7. Open the TeXnicCenter-workspace ('TeXnicCenter\TeXnicCenter.dsw') in Visual C++.
 
-8. Build the debug and release versions of TeXnicCenter
+8. Build the debug and release versions of TeXnicCenter.
 
 9. Build the TeXnicCenter-Help-File using HTML Help Workshop with the 
-    'TCHelp\TeXnicCenter.hhp' project
+    'TCHelp\TeXnicCenter.hhp' project.
 
 10. Copy all files matching
 
-	*.chm
-    or
-
-	*.chw
+     '*.chm'  or  '*.chw'
 
     from the 'output' directory to the 'output\debug\help' and 'output\release\help' directory.
 
-10. Copy the files
+11. Copy the files
 
-	GPL_english.htm
-	GPL_german.htm
-	Tips_english.txt
-	Tips_german.txt
-	UserImages.bmp
+     GPL_english.htm
+     GPL_german.htm
+     Tips_english.txt
+     Tips_german.txt
+     UserImages.bmp
 
     from the 'TeXnicCenter' directory to
 
-	a) the 'output\debug' directory
-	b) the 'output\release' directory
+     a) the 'output\debug' directory
+     b) the 'output\release' directory
 
-11. Copy all files matching '*.xsd' from the 'TeXnicCenter\xmlschema' directory to 'output\debug' and
-    'output\release'
+12. Copy all files matching '*.xsd' from the 'TeXnicCenter\xmlschema' directory
+    to 'output\debug' and 'output\release'.
 
-12. Create a directory called 'language' in the 'output\debug' and in the 'output\release' directory.
+12. Create a directory called 'language' in 'output\debug' and 'output\release'.
 
 13. Copy the files
 
-	*.aff
-	*.dic
+     *.aff
+     *.dic
 
     from the 'MySpell' directory to
 
-	a) the 'output\debug\language' directory
-	b) the 'output\release\language' directoy
+     a) the 'output\debug\language' directory
+     b) the 'output\release\language' directoy
 
 
 Building is now completed. You can start TeXnicCenter.
 
 Visit the TeXnicCenter-Homepage
 
-	http://www.ToolsCenter.org/products/texniccenter/
+     http://www.texniccenter.org/
 
-for further information.
+for further information. Don't hesitate to ask us, if a problem occurs.
 
 
-	Sven Wiegand (sven@ToolsCenter.org)
+  Sven Wiegand (sven@ToolsCenter.org)
+  Tino Weinkauf (tino@TeXnicCenter.ToolsCenter.org)
+
