@@ -72,19 +72,15 @@ CStructureParser::CStructureParser()
 }
 
 CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHandler, 
-								   /*CTextSourceManager *pTextSourceManager, */
 								   CParseOutputHandler *pParseOutputHandler)
 :	m_bCancel( FALSE ),
 	m_pStructureParserHandler( pStructureParserHandler ),
 	m_pParseOutputHandler( pParseOutputHandler ),
-//	m_pTextSourceManager( pTextSourceManager ),
-	m_pStructureParserThread( NULL )
+	m_pStructureParserThread( NULL ),
+	m_evtParsingDone(TRUE, TRUE, NULL, NULL)
 {
 	// initialize attributes
-//	ASSERT( pTextSourceManager ); 
 	ASSERT( pStructureParserHandler );
-
-	m_structureItemsAccess.Unlock();
 
 	// initialize regular expressions
 	int	nResult;
@@ -162,24 +158,77 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 		"\\\\includegraphics\\s*\\*?(\\s*\\[[^\\]]\\]){0,2}\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"
 	) );
 	TRACE( "m_regexGraphic returned %d\n", nResult );
+
+	m_hParsingMutex = ::CreateMutex( NULL, FALSE, _T("StructureParser") );
 }
+
 
 CStructureParser::~CStructureParser()
 {
-
+	::CloseHandle( m_hParsingMutex );
 }
 
-const CStructureItemArray *CStructureParser::LockStructureItems()
+
+DWORD CStructureParser::Lock()
 {
-	//m_structureItemsAccess.Lock();
-
-	return &m_aStructureItems;
+	// We have to be very careful not to block a window thread. 
+	DWORD hRes;
+	while ( (hRes = ::MsgWaitForMultipleObjects(1, &m_hParsingMutex, FALSE, INFINITE, QS_ALLEVENTS)) != WAIT_OBJECT_0 )
+	{
+		if (hRes == (WAIT_OBJECT_0 + 1) )
+		{
+			// Window message needs processing
+			MSG msg;
+			while ( ::PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE | PM_NOYIELD) ) 
+			{
+				::TranslateMessage(&msg);
+				::DispatchMessage(&msg);
+			}
+		}
+		else
+		{
+			hRes = ::GetLastError();
+#ifdef _DEBUG
+			TCHAR buf[100];
+			::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, hRes, 0, buf, 100, NULL);
+			TRACE("Lock() Wait failed (%d) \"%s\"\n", hRes, buf);
+#endif /* _DEBUG */
+		return hRes;
+		}
+	}
+	return 0;
 }
 
-void CStructureParser::UnlockStructureItems()
+
+DWORD CStructureParser::Unlock()
 {
-	//m_structureItemsAccess.Unlock();
+	BOOL hRes = ::ReleaseMutex( m_hParsingMutex );
+	if ( !hRes )
+	{
+		DWORD dwErr = ::GetLastError();
+#ifdef _DEBUG
+		TCHAR buf[100];
+		::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, dwErr, 0, buf, 100, NULL);
+		TRACE("Unlock() Release failed (%d) \"%s\"\n", dwErr, buf);
+#endif /* _DEBUG */
+		return dwErr;
+	}
+	return 0;
 }
+
+
+BOOL CStructureParser::GetStructureItems(CStructureItemArray *pItemArray)
+{
+	DWORD retVal = Lock();
+	if ( retVal == 0 )
+	{
+		pItemArray->RemoveAll();
+		pItemArray->Copy( m_aStructureItems );
+		retVal = Unlock();
+	}
+	return ( retVal == 0 );
+}
+
 
 BOOL CStructureParser::StartParsing( LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDir, int nPriority )
 {
@@ -207,18 +256,20 @@ BOOL CStructureParser::StartParsing( LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDi
 
 UINT StructureParserThread( LPVOID pStructureParser )
 {
-//	ASSERT( ((CStructureParser*)pStructureParser)->m_pTextSourceManager );
-	CStructureParser* pParser = (CStructureParser*)pStructureParser;
-//	ASSERT(pParser->m_pTextSourceManager);
-
 	CStructureParser::CCookieStack cookies;
 	BOOL bParsingResult;
 
-//	bParsingResult =  ((CStructureParser*)pStructureParser)->Parse( ((CStructureParser*)pStructureParser)->m_strMainPath, cookies );
+	CStructureParser* pParser = (CStructureParser*)pStructureParser;
+	pParser->m_evtParsingDone.ResetEvent();
+
+	pParser->Lock();
 	bParsingResult = pParser->Parse(pParser->m_strMainPath, cookies, 0);
+	pParser->Unlock();
 
 	pParser->EmptyCookieStack( cookies );
 	pParser->Done( bParsingResult );
+
+	pParser->m_evtParsingDone.SetEvent();
 	return 0;
 }
 
@@ -292,9 +343,6 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 	int									nTypeStart, nTypeCount, nTitleStart, nTitleCount;
 	CString							strHeaderType;
 	COOKIE							cookie;
-
-	// wait until we can make changes to m_aStructureItems
-	//m_structureItemsAccess.Lock();
 
 	lpTextEnd = lpText + nLength;
 
@@ -629,9 +677,6 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 
 		return;
 	}
-
-	// allow others to make changes to m_aStructureItems
-	//m_structureItemsAccess.Unlock();
 }
 
 
