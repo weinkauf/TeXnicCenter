@@ -245,31 +245,8 @@ BOOL CLatexDoc::DoSave( LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/ )
 			m_pTextBuffer ? m_pTextBuffer->GetCRLFMode() : g_configuration.m_nStandardFileFormat,
 			CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
 		
-		// Get default path
-		CString strPersonalDir = "";
-		CLatexProject* pLProject = theApp.GetProject();
-		if (pLProject) strPersonalDir = pLProject->GetWorkingDir();
-		if (strPersonalDir.IsEmpty())
-		{
-			strPersonalDir = g_configuration.m_strDefaultPath;
-			if (strPersonalDir.IsEmpty())
-			{
-				//Get the system default for "My documents"
-				LPITEMIDLIST	lpidl;
-				if (SHGetSpecialFolderLocation(AfxGetMainWnd()->m_hWnd, CSIDL_PERSONAL, &lpidl) == NOERROR)
-				{
-					SHGetPathFromIDList(lpidl, strPersonalDir.GetBuffer(MAX_PATH));
-					strPersonalDir.ReleaseBuffer();
-
-					// free memory
-					LPMALLOC	lpMalloc;
-					SHGetMalloc(&lpMalloc);
-					if(lpMalloc)
-						lpMalloc->Free(lpidl);
-				}
-			}
-		}
-		dlg.m_ofn.lpstrInitialDir = strPersonalDir;
+		//Get default path
+		dlg.m_ofn.lpstrInitialDir = AfxGetDefaultDirectory();
 
 		if( dlg.DoModal() != IDOK )
 			return FALSE;
