@@ -37,6 +37,7 @@
 #include "OptionPageLanguage.h"
 #include "Configuration.h"
 #include "global.h"
+#include <locale.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -58,8 +59,8 @@ COptionPageLanguage::COptionPageLanguage() : CPropertyPage(COptionPageLanguage::
 	m_bSkipNumbers = g_configuration.m_bSpellSkipNumbers;
 	m_bSkipTags = g_configuration.m_bSpellSkipTags;
 	m_bSkipCaps = g_configuration.m_bSpellSkipCaps;
-	m_strLanguage = g_configuration.m_strLanuage;
-	m_strDialect = g_configuration.m_strLanguageDialect;
+	m_strLanguageDefault = g_configuration.m_strLanguageDefault;
+	m_strDialectDefault = g_configuration.m_strLanguageDialectDefault;
 	m_strPDictionary = g_configuration.m_strSpellPersonalDictionary;
 	m_strLocale = g_configuration.m_strLocale;
 	//}}AFX_DATA_INIT
@@ -77,8 +78,8 @@ void COptionPageLanguage::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_OPTIONS_SPELL_IGNORE_NUM, m_bSkipNumbers);
 	DDX_Check(pDX, IDC_OPTIONS_SPELL_SKIP_TAGS, m_bSkipTags);
 	DDX_Check(pDX, IDC_OPTIONS_SPELL_IGNORE_ALLCAPS, m_bSkipCaps);
-	DDX_CBString(pDX, IDC_OPTIONS_LANGUAGE, m_strLanguage);
-	DDX_CBString(pDX, IDC_OPTIONS_LANGUAGE_DIALECT, m_strDialect);
+	DDX_CBString(pDX, IDC_OPTIONS_LANGUAGE, m_strLanguageDefault);
+	DDX_CBString(pDX, IDC_OPTIONS_LANGUAGE_DIALECT, m_strDialectDefault);
 	DDX_CBString(pDX, IDC_OPTIONS_LANGUAGE_LOCALE, m_strLocale);
 	DDX_Text(pDX, IDC_OPTIONS_SPELL_PDICT, m_strPDictionary);
 	DDX_Control(pDX, IDC_OPTIONS_LANGUAGE_DOWNLOAD, m_wndURLDownloadDicts);
@@ -103,28 +104,28 @@ void COptionPageLanguage::OnOK()
 	{
 		g_configuration.m_strLocale = m_strLocale;
 		// Invalid locale. Not really a problem. The system default will be used.
-		VERIFY ( _tsetlocale( LC_ALL, g_configuration.m_strLocale ) ); 
+		VERIFY ( setlocale( LC_ALL, g_configuration.m_strLocale ) );		// Raffi: setlocale defined instead of _tsetlocale
 	}
-	g_configuration.m_bSpellEnable = m_bEnableSpell;
-	g_configuration.m_strLanuage = m_strLanguage;
-	g_configuration.m_strLanguageDialect = m_strDialect;
-	g_configuration.m_strSpellPersonalDictionary = m_strPDictionary;
-	g_configuration.m_bSpellSkipComments = m_bSkipComments;
-	g_configuration.m_bSpellSkipNumbers = m_bSkipNumbers;
-	g_configuration.m_bSpellSkipTags = m_bSkipTags;
-	g_configuration.m_bSpellSkipCaps = m_bSkipCaps;
-	g_configuration.m_bSpellMainDictOnly = m_bMainDictOnly;
+	g_configuration.m_strLanguageDefault			= m_strLanguageDefault;
+	g_configuration.m_strLanguageDialectDefault		= m_strDialectDefault;
+	g_configuration.m_strSpellPersonalDictionary	= m_strPDictionary;
+	g_configuration.m_bSpellSkipComments			= m_bSkipComments;
+	g_configuration.m_bSpellSkipNumbers				= m_bSkipNumbers;
+	g_configuration.m_bSpellSkipTags				= m_bSkipTags;
+	g_configuration.m_bSpellSkipCaps				= m_bSkipCaps;
+	g_configuration.m_bSpellMainDictOnly			= m_bMainDictOnly;
+	g_configuration.m_bSpellEnable					= m_bEnableSpell;
 
-	if ( m_bEnableSpell  && !m_strPDictionary.IsEmpty() && !::PathFileExists(m_strPDictionary) )
+	if (m_bEnableSpell  && !m_strPDictionary.IsEmpty() && !::PathFileExists(m_strPDictionary) )
 	{
 		CString errMsg;
-		errMsg.Format( STE_PDICT_OPEN_ERROR, m_strPDictionary );
-		AfxMessageBox( errMsg, MB_OK, MB_ICONINFORMATION );
+		errMsg.Format(STE_PDICT_OPEN_ERROR, m_strPDictionary);
+		AfxMessageBox(errMsg, MB_OK, MB_ICONINFORMATION);
 	}
 
 	// Inform the background thread of the new speller state.
 	theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_ENABLE_SPELLER, m_bEnableSpell, NULL);
-	if ( g_configuration.m_bSpellEnable )
+	if(m_bEnableSpell)
 	{
 		CSpellerSource *pSource = static_cast<CSpellerSource*>(&theApp);
 		theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_RESET_SPELLER, 0, (long) pSource);
@@ -153,7 +154,7 @@ void COptionPageLanguage::OnSelchangeOptionsLanguage()
 	}
 
 	// Select the dialect
-	int nSel = pDialBox->FindStringExact( 0, m_strDialect );
+	int nSel = pDialBox->FindStringExact( 0, m_strDialectDefault );
 	if ( nSel == CB_ERR )
 		pDialBox->SetCurSel( 0 );
 	else
@@ -179,7 +180,6 @@ BOOL COptionPageLanguage::OnInitDialog()
 	// English rather than localized strings. Not all locales on this
 	// list work with all installations. A failure of setlocale reverts
 	// the application to the system locale.
-	const int nLocales = 40;
 	const TCHAR * const aLocales[] = { 
 		// language (40)
 		_T("chinese"), _T("chinese-simplified"), _T("chinese-traditional"), _T("danish"), _T("dutch"),
@@ -191,6 +191,7 @@ BOOL COptionPageLanguage::OnInitDialog()
 		_T("portuguese"),_T("portuguese-brazil"),_T("russian"),_T("slovak"),_T("spanish"),
 		_T("spanish-mexican"), _T("spanish-modern"), _T("swedish"), _T("turkish")
 	};
+	const int nLocales = /*40*/sizeof(aLocales)/sizeof(TCHAR *);
 
 	// Add the system locale
 	c_Locale.AddString( _tsetlocale( LC_ALL, NULL ) );
@@ -225,7 +226,7 @@ BOOL COptionPageLanguage::OnInitDialog()
 	}
 
 	// Select the language
-	int nSel = pLangBox->FindStringExact( 0, m_strLanguage );
+	int nSel = pLangBox->FindStringExact( 0, m_strLanguageDefault );
 	if ( nSel == CB_ERR )
 		pLangBox->SetCurSel( 0 );
 	else
@@ -242,34 +243,7 @@ void COptionPageLanguage::FindDictionaries()
 {
 	m_aLanguage.RemoveAll();
 	m_aDialect.RemoveAll();
-
-	CString dicFileMatch = g_configuration.m_strSpellDictionaryPath+_T("\\*.dic");
-
-	WIN32_FIND_DATA  dirInfo;
-	HANDLE hFile;
-	boolean bNext = true;
-
-	hFile = FindFirstFile( dicFileMatch, &dirInfo );
-	while ( hFile != INVALID_HANDLE_VALUE && bNext )
-	{
-		// Dictionary file format LANG_DIALACT{-extra}?.dic
-		// Example: de_DE.dic en_US-slang.dic 
-		// Get the language and dialect of all installed dictionaries.
-		TCHAR* dash;
-		TCHAR* dot;
-		dash = _tcschr( dirInfo.cFileName, _T('_') );
-		if (dash != NULL)
-			dot = _tcschr( dash, _T('.') );
-		if ( (dash != NULL) && (dot != NULL) ) 
-		{
-			CString lang( dirInfo.cFileName, dash-dirInfo.cFileName );
-			CString dialect( dash+1, dot-dash-1);
-			m_aDialect.Add( dialect );
-			m_aLanguage.Add( lang );
-		}
-		bNext = FindNextFile( hFile, &dirInfo );
-	}
-	FindClose( hFile );
+	AfxFindDictionnaries(m_aLanguage,m_aDialect);
 }
 
 

@@ -138,3 +138,37 @@ void AfxSetLastDirectory(CString bLastFolder)
 		g_configuration.m_strLastOpenedFolder = bLastFolder;
 	}
 }
+
+// Raffi: get dictionnaries
+//----------------------------------------------------------------
+void AfxFindDictionnaries(CArray<CString, CString&> &aLanguage, 
+						  CArray<CString, CString&> &aDialect)
+{
+	CString dicFileMatch = g_configuration.m_strSpellDictionaryPath+_T("\\*.dic");
+
+	WIN32_FIND_DATA  dirInfo;
+	HANDLE hFile;
+	boolean bNext = true;
+
+	hFile = FindFirstFile( dicFileMatch, &dirInfo );
+	while( hFile != INVALID_HANDLE_VALUE && bNext )
+	{
+		// Dictionary file format LANG_DIALACT{-extra}?.dic
+		// Example: de_DE.dic en_US-slang.dic 
+		// Get the language and dialect of all installed dictionaries.
+		TCHAR* dash;
+		TCHAR* dot;
+		dash = _tcschr( dirInfo.cFileName, _T('_') );
+		if (dash != NULL)
+			dot = _tcschr( dash, _T('.') );
+		if ( (dash != NULL) && (dot != NULL) ) 
+		{
+			CString lang( dirInfo.cFileName, dash-dirInfo.cFileName );
+			CString dialect( dash+1, dot-dash-1);
+			aDialect.Add( dialect );
+			aLanguage.Add( lang );
+		}
+		bNext = FindNextFile( hFile, &dirInfo );
+	}
+	FindClose( hFile );
+}

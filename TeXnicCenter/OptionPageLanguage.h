@@ -63,8 +63,8 @@ public:
 	BOOL	m_bSkipNumbers;
 	BOOL	m_bSkipTags;
 	BOOL	m_bSkipCaps;
-	CString	m_strLanguage;
-	CString	m_strDialect;
+	CString	m_strLanguageDefault;
+	CString	m_strDialectDefault;
 	CString	m_strPDictionary;
 	CString	m_strLocale;
 	CBCGURLLinkButton m_wndURLDownloadDicts;

@@ -255,6 +255,10 @@ protected:
 
 	/** TRUE if the project uses MakeIndex */
 	BOOL m_bUseMakeIndex;
+
+	/** Project specific used language and dialect **/
+	CString		m_strProjectLanguage;
+	CString		m_strProjectDialect;
 	
 // attributes
 public:

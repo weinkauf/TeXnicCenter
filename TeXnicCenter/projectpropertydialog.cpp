@@ -30,6 +30,8 @@
 #include "TeXnicCenter.h"
 #include "ProjectPropertyDialog.h"
 #include "global.h"
+#include "Configuration.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -48,6 +50,8 @@ CProjectPropertyDialog::CProjectPropertyDialog(CWnd* pParent /*=NULL*/)
 	m_strMainFile = _T("");
 	m_bUseMakeIndex = FALSE;
 	m_bUseBibTex = FALSE;
+	m_strLanguageCurrent	= g_configuration.m_strLanguageDefault;
+	m_strDialectCurrent		= g_configuration.m_strLanguageDialectDefault;
 	//}}AFX_DATA_INIT
 }
 
@@ -59,6 +63,8 @@ void CProjectPropertyDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_MAIN_FILE, m_strMainFile);
 	DDX_Check(pDX, IDC_CHECK_MAKEINDEX, m_bUseMakeIndex);
 	DDX_Check(pDX, IDC_CHECK_BIBTEX, m_bUseBibTex);
+	DDX_CBString(pDX, IDC_OPTIONS_LANGUAGE, m_strLanguageCurrent);
+	DDX_CBString(pDX, IDC_OPTIONS_LANGUAGE_DIALECT, m_strDialectCurrent);
 	//}}AFX_DATA_MAP
 }
 
@@ -66,6 +72,7 @@ void CProjectPropertyDialog::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CProjectPropertyDialog, CDialog)
 	//{{AFX_MSG_MAP(CProjectPropertyDialog)
 	ON_BN_CLICKED(IDC_BROWSE_MAIN_FILE, OnBrowseMainFile)
+	ON_CBN_SELCHANGE(IDC_OPTIONS_LANGUAGE, OnSelchangeOptionsLanguage)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -76,6 +83,24 @@ BOOL CProjectPropertyDialog::OnInitDialog()
 
 	// make relative path out of main file's path
 	m_strMainFile = CPathTool::GetRelativePath(m_strProjectDir, m_strMainFile);
+
+	FindDictionaries();
+	CComboBox *pLangBox = (CComboBox*)GetDlgItem(IDC_OPTIONS_LANGUAGE);
+
+	// Add all the found languages
+	int i;
+	for (i = 0; i < m_aLanguage.GetSize(); ++i)
+	{
+		if (pLangBox->FindString( 0, m_aLanguage[i] ) == CB_ERR )
+			pLangBox->AddString (m_aLanguage[i] );
+	}
+
+	// Select the language
+	int nSel = pLangBox->FindStringExact( 0, m_strLanguageCurrent );
+	if ( nSel == CB_ERR )
+		pLangBox->SetCurSel( 0 );
+	else
+		pLangBox->SetCurSel( nSel );
 
 	UpdateData(FALSE);
 	
@@ -120,4 +145,40 @@ void CProjectPropertyDialog::OnOK()
 	UpdateData(FALSE);
 	
 	CDialog::OnOK();
+}
+
+
+void CProjectPropertyDialog::FindDictionaries()
+{
+	m_aLanguage.RemoveAll();
+	m_aDialect.RemoveAll();
+	AfxFindDictionnaries(m_aLanguage,m_aDialect);
+}
+
+
+void CProjectPropertyDialog::OnSelchangeOptionsLanguage() 
+{
+	// TODO: Add your control notification handler code here
+	CComboBox *pDialBox = (CComboBox*) GetDlgItem(IDC_OPTIONS_LANGUAGE_DIALECT);
+	CComboBox *pLangBox = (CComboBox*) GetDlgItem(IDC_OPTIONS_LANGUAGE);
+
+	pDialBox->ResetContent();
+	if (pLangBox->GetCurSel() == -1)
+		return;
+
+	CString lang;
+	pLangBox->GetLBText( pLangBox->GetCurSel(), lang );
+	for (int i = 0; i < m_aDialect.GetSize(); ++i)
+	{
+		if ( lang == m_aLanguage[i] )
+			pDialBox->AddString( m_aDialect[i] );
+	}
+
+	// Select the dialect
+	int nSel = pDialBox->FindStringExact( 0, this->m_strDialectCurrent);
+	if ( nSel == CB_ERR )
+		pDialBox->SetCurSel( 0 );
+	else
+		pDialBox->SetCurSel( nSel );
+	
 }

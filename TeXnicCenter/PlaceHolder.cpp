@@ -182,6 +182,9 @@ CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders,
 	return strCmdLine;
 }
 
+
+
+
 //----------------------------------------------------------------
 
 bool AfxContainsWildcards(LPCTSTR lpszPattern)
