@@ -26,6 +26,12 @@
 *
 *********************************************************************/
 
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
+
 #if !defined(AFX_MENUBUTTON_H__AF58958B_0A74_11D5_A222_006097239934__INCLUDED_)
 #define AFX_MENUBUTTON_H__AF58958B_0A74_11D5_A222_006097239934__INCLUDED_
 
@@ -36,6 +42,8 @@
 /**
 Simplifies the use of CBCGMenuButton. You can specify the resource-ID
 of the menu-resource on construction.
+
+@ingroup guielements
 
 @author	Sven Wiegand
 */
