@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.9  2003/12/16 20:04:38  svenwiegand
+* Implemented Feature 726766: "Option for selecting the language for the GUI"
+*
 * Revision 1.8  2003/12/06 19:59:58  svenwiegand
 * - Implemented Feature 601708 + additions: The user can now set the styles for
 *   the text cursor independant for the insert and the overwrite mode. The cursor
@@ -995,6 +998,11 @@ public:
 	}
 
 	virtual ~CCrystalResources()
+	{
+		RestorePrevResources();
+	}
+
+	void RestorePrevResources()
 	{
 		if (m_hPrevResources)
 			AfxSetResourceHandle(m_hPrevResources);

@@ -882,6 +882,7 @@ void CLatexProject::OnSpellProject()
 	if (pSpell == NULL)
 		return;
 
+	CCrystalResources	cr;
 	CSpellCheckDlg dlg( NULL, NULL );
 	dlg.m_bDoneMessage = false;
 	dlg.m_bSelection = false;
@@ -920,6 +921,7 @@ void CLatexProject::OnSpellProject()
 			pView->GetSelection(ptStart, ptEnd);
 			pView->SetShowInteractiveSelection(TRUE);
 			int result = dlg.DoModal();
+			cr.RestorePrevResources();
 			// Restore selection
 			pView->SetShowInteractiveSelection(FALSE);
 			pView->SetSelection(ptStart, ptEnd);
