@@ -2955,7 +2955,7 @@ BEGIN
     STE_FILE_LATEXFILTER    "LaTeX-Dateien (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|Alle Dateien (*.*)|*.*||"
     STE_LICENSE_FILE        "GPL_german.htm"
     STE_FILE_EXEFILTER      "Ausführbare Dateien (*.exe;*.com)|*.exe;*.com|Alle Dateien (*.*)|*.*||"
-    STE_FILE_INUSE          "Speichern der Datei\n\n%s\n\nnicht möglich. Die Datei wird möglicherweise von einer anderen Anwendung verwendet."
+    STE_FILE_INUSE          "Speichern der Datei\n\n%s\n\nnicht möglich. Die Datei wird möglicherweise von einer anderen Anwendung verwendet oder von TeXnicCenter gerade analysiert."
     STE_FILE_EXTERNALCHANGE "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?"
     STE_FILE_EXTERNALCHANGEEX 
                             "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?\n\n(Wichtig: Sie haben Änderungen an dem Dokument vorgenommen. Wenn es neu geladen wird, gehen diese Änderungen verloren!)"
@@ -3097,8 +3097,9 @@ BEGIN
     STE_TAB_GREP_2          "Suchen 2"
     STE_OUTPUT_TITLE        "Ausgabe"
     IDR_OUTPUT              "Kennung für die Ausgabeleiste"
-    STE_BIB_FILES           "TODO: Bib files"
-    STE_TEX_FILES           "TODO: Tex files"
+    STE_BIB_FILES           "BibTeX Dateien"
+    STE_TEX_FILES           "LaTeX Dateien"
+    STE_TAB_PARSE           "Analyse"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -3943,18 +3944,18 @@ BEGIN
     STE_GREP_FINISHEDNOHIT  "Zeichenfolge nicht gefunden."
     STE_GREP_FINISHED       "Es wurde(n) %d Übereinstimmung(en) gefunden."
     STE_GREP_ERROR          "! %s: Zugriff auf Datei nicht möglich!"
-    STE_PARSE_BEGIN         "TODO: Begin parsing time: "
-    STE_PARSE_END           "TODO: End parsing time:"
+    STE_PARSE_BEGIN         "Start der Analyse: "
+    STE_PARSE_END           "Ende der Analyse: "
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    STE_PARSE_PARSING       "TODO: Parsing %s ..."
-    STE_PARSE_FOUND         "TODO: Found %s."
-    STE_PARSE_FOUND_UNMATCHED "TODO: Found unmatched %s."
-    STE_PARSE_RESULTS       "TODO: Parse Results: %d file(s) %d line(s)"
-    STE_PARSE_TERMINATE     "TODO: Parsing terminated abnormally."
-    STE_FILE_EXIST          "TODO: File %s does not exist."
+    STE_PARSE_PARSING       "Analysiere %s ..."
+    STE_PARSE_FOUND         "Gefunden: %s."
+    STE_PARSE_FOUND_UNMATCHED "Offenes Element gefunden: %s."
+    STE_PARSE_RESULTS       "Analyse-Ergebnis: %d Datei(en), %d Zeil(en)"
+    STE_PARSE_TERMINATE     "Die Analyse wurde fehlerhaft beendet."
+    STE_FILE_EXIST          "Die Datei %s existiert nicht."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -6236,7 +6237,7 @@ BEGIN
     STE_FILE_LATEXFILTER    "LaTeX-Files (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|All Files (*.*)|*.*||"
     STE_LICENSE_FILE        "GPL_english.htm"
     STE_FILE_EXEFILTER      "Executable Files (*.exe;*.com)|*.exe;*.com|All Files (*.*)|*.*||"
-    STE_FILE_INUSE          "Cannot save the file\n\n%s\n\nMaybe the file is currently used by another application."
+    STE_FILE_INUSE          "Cannot save the file\n\n%s\n\nMaybe the file is currently used by another application or parsed by TeXnicCenter at the very moment."
     STE_FILE_EXTERNALCHANGE "The file\n\n%s\n\nhas been modified outside TeXnicCenter. Should TeXnicCenter reload the document?"
     STE_FILE_EXTERNALCHANGEEX 
                             "The file\n\n%s\n\nhas been modified outside TeXnicCenter. Should TeXnicCenter reload the document?\n\n(Important: You have made changes to the document. If you decide to reload it, your changes will be lost!)"
@@ -7218,7 +7219,7 @@ BEGIN
     STE_PARSE_PARSING       "Parsing %s ..."
     STE_PARSE_FOUND         "Found %s."
     STE_PARSE_FOUND_UNMATCHED "Found unmatched %s."
-    STE_PARSE_RESULTS       "Parse Results: %d file(s) %d line(s)"
+    STE_PARSE_RESULTS       "Parse Results: %d file(s), %d line(s)"
     STE_PARSE_TERMINATE     "Parsing terminated abnormally."
     STE_FILE_EXIST          "File %s does not exist."
 END
