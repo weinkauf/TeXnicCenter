@@ -192,15 +192,24 @@ BOOL CStructureParser::StartParsing( LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDi
 	m_nLinesParsed = 0;
 	m_nFilesParsed = 0;
 	m_nCharsParsed = 0;
+
+	// Signal that parsing has started.
 	m_evtParsingDone.ResetEvent();
-	if ( m_pParseOutputHandler && !m_bCancel )
+	bool bFailed = m_bCancel; 
+	if ( !bFailed && m_pParseOutputHandler )
 		m_pParseOutputHandler->OnParseBegin( m_bCancel );
 
 	// start parsing thread
-	if( m_pStructureParserThread = AfxBeginThread( StructureParserThread, this, nPriority ) )
-		return TRUE;
-	else
+	if ( !bFailed )
+		bFailed = !( m_pStructureParserThread = AfxBeginThread( StructureParserThread, this, nPriority ) );
+
+	if ( bFailed )
+	{
+		m_evtParsingDone.SetEvent();
+		m_bCancel = FALSE;
 		return FALSE;
+	}
+	return TRUE;
 }
 
 
