@@ -529,7 +529,9 @@ void CProjectNewDialog::Create()
 	// create path to the project
 	if (!CreateDirectoryRecursive(pProject->GetWorkingDir()))
 	{
-		AfxMessageBox(STE_PROJECTDIR_CREATE_ERR, MB_ICONSTOP|MB_OK);
+		CString errMsg; /* show error msg with path */
+		errMsg.Format(STE_PROJECTDIR_CREATE_ERR, pProject->GetWorkingDir());
+		AfxMessageBox(errMsg, MB_ICONSTOP|MB_OK);
 		return;
 	}
 	pProject->OnSaveProject(pProject->GetPathName());
