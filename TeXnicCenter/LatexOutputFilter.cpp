@@ -233,8 +233,8 @@ DWORD CLatexOutputFilter::ParseLine(CString strLine, DWORD dwCookie)
 	static __JM::RegEx	error2("^! (.*)$", true); // This could catch warnings, so run it last
 
 	//Catching Warnings
-	static __JM::RegEx	warning1(".+warning: (.*) on input line ([[:digit:]]+)", true); //Catches Latex and package warnings
-	static __JM::RegEx	warning2(".+warning: (.*)", true); //Catches package warnings that split over several lines
+	static __JM::RegEx	warning1(".+warning.*: (.*) on input line ([[:digit:]]+)", true); //Catches Latex and package warnings
+	static __JM::RegEx	warning2(".+warning.*: (.*)", true); //Catches LaTeX and package warnings that split over several lines
 
 	//Catching Bad Boxes
 	static __JM::RegEx	badBox1("^(Over|Under)full \\\\[hv]box .* at lines ([[:digit:]]+)--([[:digit:]]+)", true);
