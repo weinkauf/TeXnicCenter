@@ -444,17 +444,13 @@ void CProjectNewDialog::UpdateControlStates()
 
 BOOL CProjectNewDialog::CreateDirectoryRecursive(LPCTSTR lpszDirectory)
 {
-	if (lpszDirectory[0] == _T('\0'))
-		return FALSE;
-
-	CString strDrive = CPathTool::GetDrive(lpszDirectory);
-	if (strDrive.GetLength() == 0) return FALSE;
-	if (!CPathTool::Exists(strDrive)) return FALSE;
+	if (lpszDirectory == NULL) return FALSE;
+	if (lpszDirectory[0] == _T('\0')) return FALSE;
 
 	if (CPathTool::IsDirectory(lpszDirectory))
 		return TRUE;
 
-	CString	strParent = CPathTool::GetDirectory(lpszDirectory);
+	CString	strParent = CPathTool::GetParentDirectory(lpszDirectory);
 	if (!CPathTool::IsDirectory(strParent))
 	{
 		if (!CreateDirectoryRecursive(strParent))
@@ -529,9 +525,21 @@ void CProjectNewDialog::Create()
 	// create path to the project
 	if (!CreateDirectoryRecursive(pProject->GetWorkingDir()))
 	{
-		CString errMsg; /* show error msg with path */
-		errMsg.Format(STE_PROJECTDIR_CREATE_ERR, pProject->GetWorkingDir());
-		AfxMessageBox(errMsg, MB_ICONSTOP|MB_OK);
+		//Show error msg with path and system error message
+		TCHAR systemError[200];
+		::FormatMessage(
+			FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
+			NULL,
+			::GetLastError(),
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			systemError,
+			200,
+			NULL
+		);
+
+		CString errMsg;
+		errMsg.Format(STE_PROJECTDIR_CREATE_ERR, pProject->GetWorkingDir(), systemError);
+		AfxMessageBox(errMsg, MB_ICONSTOP | MB_OK);
 		return;
 	}
 	pProject->OnSaveProject(pProject->GetPathName());

@@ -3670,7 +3670,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_SELECT_PROJECT_PATH "Wählen Sie ein Verzeichnis für das neue Projekt aus..."
     STE_PROJECTDIR_CREATE_ERR 
-                            "Das Projektverzeichnis %s konnte nicht erzeugt werden."
+                            "Das Projektverzeichnis\n\n%s\n\nkonnte aus folgendem Grund nicht erzeugt werden:\n\n%s"
     STE_PROJECT_MAINFILEEXISTS 
                             "Die Datei %s existiert bereits.\n\nSoll Sie überschrieben werden?"
     STE_PROJECT_USEEXISTINGFILE 
@@ -7614,7 +7614,8 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     STE_SELECT_PROJECT_PATH "Select a directory for the new project..."
-    STE_PROJECTDIR_CREATE_ERR "The project directory %s cannot be created."
+    STE_PROJECTDIR_CREATE_ERR 
+                            "The project directory\n\n%s\n\ncould not be created due to the following reason:\n\n%s"
     STE_PROJECT_MAINFILEEXISTS 
                             "The file %s is already existing.\n\nShould the file be replaced?"
     STE_PROJECT_USEEXISTINGFILE 
