@@ -66,6 +66,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
+\message{! pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has been already used, duplicate ignored}
+
 % Testing undefined citations
 % - this one will fit into one line
 \cite{hesselink2d}
@@ -81,7 +83,7 @@
 \PackageWarning{example}{short warning message}
 
 % - a longer one, that breaks automatically
-\PackageWarning{example}{warning message that is longer so that the line breakes automatically}
+\PackageWarning{example}{warning message that is longer and even longer and even longer so that the line breakes automatically}
 
 % - one with a manual break
 \PackageWarning{example}{warning message with manual\MessageBreak line break.}
