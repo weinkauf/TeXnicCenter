@@ -1,3 +1,7 @@
+2005/05/18 niteria
+- Fixed Bug 1201271: Cannot Create Project Folder
+- Fixed Bug 659988: Can't create Project in recursive non-exist path on floppy
+- Fixed Bug 1199799: Warning as Error (pdftex)
 
 2005/03/19 vachis
 - Fixed Bug: bad brace highlighting when cursos is at ^ in: "[^citeVisSym] and one presses Ctrl-Delete.
