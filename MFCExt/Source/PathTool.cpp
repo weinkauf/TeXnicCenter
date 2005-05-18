@@ -129,19 +129,39 @@ CString CPathTool::GetDrive( LPCTSTR lpszPath )
 CString CPathTool::GetDirectory( LPCTSTR lpszPath )
 {
 	CString	strPath = GetBackslashPath( lpszPath );
-	BOOL		bWasSlashPath = IsSlashPath( lpszPath );
-	int			nIndex;
+	BOOL bWasSlashPath = IsSlashPath( lpszPath );
 
-	// find file
-	nIndex = strPath.ReverseFind( _T('\\') );
-	if( nIndex < 0 )
+	//Find last backslash
+	int nIndex = strPath.ReverseFind( _T('\\') );
+	if (nIndex < 0)
+	{
 		return CString();
-	else if( nIndex == (strPath.GetLength() - 1) )
-		return bWasSlashPath? GetSlashPath( strPath ) : strPath;	// of the kind "C:\", etc.
-	else
-		return bWasSlashPath? GetSlashPath( strPath.Left( nIndex ) ) : strPath.Left( nIndex );
+	}
+
+	if (nIndex == (strPath.GetLength() - 1))
+	{
+		//of the kind "C:\", etc. - i.e., with an ending backslash
+		return bWasSlashPath ? GetSlashPath( strPath ) : strPath;
+	}
+
+	return bWasSlashPath ? GetSlashPath( strPath.Left( nIndex ) ) : strPath.Left( nIndex );
 }
 
+
+CString CPathTool::GetParentDirectory( LPCTSTR lpszPath )
+{
+	CString	strPath = GetBackslashPath( lpszPath );
+	BOOL bWasSlashPath = IsSlashPath( lpszPath );
+
+	//Find last backslash
+	int nIndex = strPath.ReverseFind( _T('\\') );
+	if( nIndex < 0 )
+	{
+		return CString();
+	}
+
+	return bWasSlashPath ? GetSlashPath( strPath.Left( nIndex ) ) : strPath.Left( nIndex );
+}
 
 
 CString CPathTool::GetDirectoryWithoutDrive( LPCTSTR lpszPath )
@@ -324,11 +344,7 @@ CString CPathTool::GetAbsolutePath( LPCTSTR lpszDirectory, LPCTSTR lpszRelative 
 
 BOOL CPathTool::Exists( LPCTSTR lpszPath )
 {
-	CFileFind	ff;
-	BOOL			bResult = ff.FindFile( GetBackslashPath( lpszPath ) );
-	ff.Close();
-
-	return bResult;
+	return (IsFile(lpszPath) || IsDirectory(lpszPath));
 }
 
 
@@ -346,13 +362,28 @@ BOOL CPathTool::IsDrive( LPCTSTR lpszPath )
 
 BOOL CPathTool::IsDirectory( LPCTSTR lpszPath )
 {
-	CFileFind	ff;
-	if (!ff.FindFile(GetBackslashPath(lpszPath)))
-		return FALSE;
+	if (lpszPath == NULL) return false;
+	if (lpszPath[0] == _T('\0')) return false;
 
-	ff.FindNextFile();
+	//We test the following way:
+	//If given path is a directory, we can always
+	//make a grep in that directory using "Path\\*".
+	//If it is not a directory, this will fail.
+	//So this will work for drives like "A:" or "C:" as well.
+	CString TestPath = GetBackslashPath(lpszPath);
+	TestPath.TrimLeft();
+	TestPath.TrimRight();
+	if (TestPath[TestPath.GetLength()-1] != _T('\\'))
+	{
+		TestPath += "\\*";
+	}
+	else
+	{
+		TestPath += "*";
+	}
 
-	BOOL	bResult = ff.IsDirectory();
+	CFileFind ff;
+	BOOL bResult = ff.FindFile(TestPath);
 	ff.Close();
 
 	return bResult;
@@ -361,6 +392,9 @@ BOOL CPathTool::IsDirectory( LPCTSTR lpszPath )
 
 BOOL CPathTool::IsFile( LPCTSTR lpszPath )
 {
+	if (lpszPath == NULL) return false;
+	if (lpszPath[0] == _T('\0')) return false;
+
 	CFileFind	ff;
 	if (!ff.FindFile(GetBackslashPath(lpszPath)))
 		return FALSE;

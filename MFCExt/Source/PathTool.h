@@ -132,11 +132,28 @@ public:
 	@brief Returns the directory of the path.
 
 	Example: Would return "C:\\MyFiles" for "C:\\MyFiles\\Text.txt".
+	Would return "C:" for "C:\\MyFiles".
+	Would return "C:\\MyFiles\\" for "C:\\MyFiles\\".
+	Thus, subsequent calls with "C:\\MyFiles\\" would keep that path intact.
+
+	@see GetParentDirectory() to retrieve the parent directory.
 
 	@param lpszPath
 		Path to analyze.
 	*/
 	static CString GetDirectory( LPCTSTR lpszPath );
+
+	/**
+	@brief Returns the parent directory of the path.
+
+	Example: Would return "C:\\MyFiles" for "C:\\MyFiles\\Text.txt".
+	Would return "C:\\MyFiles" for "C:\\MyFiles\\SubDir\\" and "C:\\MyFiles\\SubDir".
+	Would return "C:" for "C:\\MyFiles\\" and "C:\\MyFiles".
+
+	@param lpszPath
+		Path to analyze.
+	*/
+	static CString GetParentDirectory( LPCTSTR lpszPath );
 
 	/**
 	@brief Returns the directory excluding the drive.
@@ -322,8 +339,6 @@ public:
 
 	@remark If you do not specify a whole path (including drive), the
 	result depends on the current directory.
-
-	@bug Does not return TRUE for diskette drives like "A:" !!!
 	*/
 	static BOOL IsDirectory( LPCTSTR lpszPath );
 
@@ -510,8 +525,22 @@ public:
 	Returns the directory of the path.
 
 	Example: Would return "C:\\MyFiles" for "C:\\MyFiles\\Text.txt".
+	Would return "C:" for "C:\\MyFiles".
+	Would return "C:\\MyFiles\\" for "C:\\MyFiles\\".
+	Thus, subsequent calls with "C:\\MyFiles\\" would keep that path intact.
+
+	@see GetParentDirectory() to retrieve the parent directory.
 	*/
 	CString GetDirectory() const;
+
+	/**
+	Returns the parent directory of the path.
+
+	Example: Would return "C:\\MyFiles" for "C:\\MyFiles\\Text.txt".
+	Would return "C:\\MyFiles" for "C:\\MyFiles\\SubDir\\" and "C:\\MyFiles\\SubDir".
+	Would return "C:" for "C:\\MyFiles\\" and "C:\\MyFiles".
+	*/
+	CString GetParentDirectory() const;
 
 	/**
 	Returns the directory excluding the drive.
