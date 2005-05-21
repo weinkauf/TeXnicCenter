@@ -683,7 +683,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
+// Deutsch (Deutschland) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -698,8 +698,8 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,6,30,0
- PRODUCTVERSION 0,6,30,0
+ FILEVERSION 0,6,31,0
+ PRODUCTVERSION 0,6,31,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -717,14 +717,14 @@ BEGIN
             VALUE "Comments", "Beta version!\0"
             VALUE "CompanyName", "ToolsCenter (www.ToolsCenter.org)\0"
             VALUE "FileDescription", "TeXnicCenter\0"
-            VALUE "FileVersion", "1 Beta 6.30\0"
+            VALUE "FileVersion", "1 Beta 6.31\0"
             VALUE "InternalName", "TeXnicCenter\0"
             VALUE "LegalCopyright", "Copyright © 1999-2005 ToolsCenter\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "TEXCNTR.EXE\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "TeXnicCenter\0"
-            VALUE "ProductVersion", "1 Beta 6.30 ('Firenze')\0"
+            VALUE "ProductVersion", "1 Beta 6.31 ('Firenze')\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -4698,12 +4698,12 @@ BEGIN
     STE_CUSTOM              "Angepasst"
 END
 
-#endif    // German (Germany) resources
+#endif    // Deutsch (Deutschland) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// Englisch (USA) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -4718,8 +4718,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,6,30,0
- PRODUCTVERSION 0,6,30,0
+ FILEVERSION 0,6,31,0
+ PRODUCTVERSION 0,6,31,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -4737,14 +4737,14 @@ BEGIN
             VALUE "Comments", "Beta version!\0"
             VALUE "CompanyName", "ToolsCenter (www.ToolsCenter.org)\0"
             VALUE "FileDescription", "TeXnicCenter\0"
-            VALUE "FileVersion", "1 Beta 6.30\0"
+            VALUE "FileVersion", "1 Beta 6.31\0"
             VALUE "InternalName", "TeXnicCenter\0"
             VALUE "LegalCopyright", "Copyright © 1999-2005 ToolsCenter\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "TEXCNTR.EXE\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "TeXnicCenter\0"
-            VALUE "ProductVersion", "1 Beta 6.30 ('Firenze')\0"
+            VALUE "ProductVersion", "1 Beta 6.31 ('Firenze')\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -8627,7 +8627,7 @@ BEGIN
     STE_CUSTOM              "Custom"
 END
 
-#endif    // English (U.S.) resources
+#endif    // Englisch (USA) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

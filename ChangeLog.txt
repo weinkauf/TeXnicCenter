@@ -1,3 +1,6 @@
+2005/05/21 svenwiegand
+- Updated version information and setup
+
 2005/05/18 niteria
 - Fixed Bug 1201271: Cannot Create Project Folder
 - Fixed Bug 659988: Can't create Project in recursive non-exist path on floppy
