@@ -1,5 +1,88 @@
 BUILDING TEXNICCENTER
 
+0. Note: The build process have been automated. Except the regexpp lib all steps are executed
+		 during the build process with VC++. I have tested it and seems to work properly. 
+		 If any problems occur, please let me know and refer to the steps of the old process which
+		 is given at the end of this document.
+		 
+		 23.05.2005, Olli (mailto:owieland@sourceforge.net)
+
+1. Build regexpp-lib:
+   a) Open a command line
+   b) Ensure that the environment variables, required to use the command line
+      tools of Visual C++ 6 are setup properly. If you are not sure if this is
+      the case, then execute the 'VCVARS32.BAT' file from the command line, 
+      which should be located in the directory 'VC98\BIN' in your Visual C++
+      program directory (i.e. 'C:\Program Files\Visual C++').
+   c) Change into the 'TeXniCCenter' directory
+   d) Execute the 'buildregexp.bat' file to build the library
+
+2. (obsolete)
+
+
+3. (obsolete)
+
+
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   %
+   % For the following downloads, see also:
+   %  http://www.toolscenter.org/front_content.php?idcat=50
+   %
+   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+4. Install Microsoft HTML Help Workshop:
+   a) Download it from Microsoft ('http://msdn.microsoft.com/downloads/')
+   b) Install it on your system (including the necessary header files)
+   c) Add the directory that includes the header files
+      to the list of include directories in the Visual C++ 6 options
+      ('Tools -> Options -> Directories -> Include files').
+   d) Add the library path as well
+      ('Tools -> Options -> Directories -> Library files').
+   e) Finally add the path to hhc.exe as well
+   	  ('Tools -> Options -> Directories -> Executable files').
+
+6. Install Microsoft XML Parser:
+   a) Download the most recent version of the Microsoft XML Parser 4 (MSXML4) including the
+      SDK from 'http://msdn.microsoft.com/downloads/'
+   b) Install it on your system.
+   c) Add the include and library paths of MSXML to the list in Visual C++ 6
+      ('Tools -> Options ->Directories').
+
+5. Download the BCGControlBarLibrary header- and lib-files from 
+
+   	http://www.toolscenter.org/front_content.php?idcat=50
+
+   and unpack the ZIP-archive to the directory, this file (HowToBuild.txt) is
+   placed in.
+
+7. Open the TeXnicCenter-workspace ('TeXnicCenter\TeXnicCenter.dsw') in Visual C++.
+
+8. Build the debug and release versions of TeXnicCenter. ("Batch build")
+
+9. (obsolete)
+
+10. (obsolete)
+
+11. (obsolete)
+
+12. (obsolete)
+
+13. (obsolete)
+
+Building is now completed. You can start TeXnicCenter.
+
+Visit the TeXnicCenter-Homepage
+
+     http://www.texniccenter.org/
+
+for further information. Don't hesitate to ask us, if a problem occurs.
+
+
+  Sven Wiegand (sven@ToolsCenter.org)
+  Tino Weinkauf (tino@TeXnicCenter.ToolsCenter.org)
+
+
+------------------------------------ Old procedure ------------------------------------
 1. Build regexpp-lib:
    a) Open a command line
    b) Ensure that the environment variables, required to use the command line
@@ -24,40 +107,7 @@ BUILDING TEXNICCENTER
 
    from the 'regexpp\lib' directory to the 'output\Release' directory.
 
-
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   %
-   % For the following downloads, see also:
-   %  http://www.toolscenter.org/front_content.php?idcat=50
-   %
-   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-4. Install Microsoft HTML Help Workshop:
-   a) Download it from Microsoft ('http://msdn.microsoft.com/downloads/')
-   b) Install it on your system (including the necessary header files)
-   c) Add the directory that includes the header files
-      to the list of include directories in the Visual C++ 6 options
-      ('Tools -> Options -> Directories -> Include files').
-   d) Add the library path as well
-      ('Tools -> Options -> Directories -> Library files').
-
-6. Install Microsoft XML Parser:
-   a) Download the most recent version of the Microsoft XML Parser 4 (MSXML4) including the
-      SDK from 'http://msdn.microsoft.com/downloads/'
-   b) Install it on your system.
-   c) Add the include and library paths of MSXML to the list in Visual C++ 6
-      ('Tools -> Options ->Directories').
-
-5. Download the BCGControlBarLibrary header- and lib-files from 
-
-   	http://www.toolscenter.org/front_content.php?idcat=50
-
-   and unpack the ZIP-archive to the directory, this file (HowToBuild.txt) is
-   placed in.
-
-7. Open the TeXnicCenter-workspace ('TeXnicCenter\TeXnicCenter.dsw') in Visual C++.
-
-8. Build the debug and release versions of TeXnicCenter.
+...
 
 9. Build the TeXnicCenter-Help-File using HTML Help Workshop with the 
     'TCHelp\TeXnicCenter.hhp' project.
@@ -95,17 +145,3 @@ BUILDING TEXNICCENTER
 
      a) the 'output\debug\language' directory
      b) the 'output\release\language' directoy
-
-
-Building is now completed. You can start TeXnicCenter.
-
-Visit the TeXnicCenter-Homepage
-
-     http://www.texniccenter.org/
-
-for further information. Don't hesitate to ask us, if a problem occurs.
-
-
-  Sven Wiegand (sven@ToolsCenter.org)
-  Tino Weinkauf (tino@TeXnicCenter.ToolsCenter.org)
-

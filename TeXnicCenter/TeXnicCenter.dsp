@@ -55,6 +55,13 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
 # ADD LINK32 CrysEditEx.lib MFCExt.lib TeXnicCenterObjects.lib Shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib /nologo /subsystem:windows /map /debug /debugtype:both /machine:I386 /out:"../output/Release/TEXCNTR.EXE" /libpath:"../CrysEditEx/Lib" /libpath:"../MFCExt/Lib" /libpath:"../BCGControlBar/Lib" /libpath:"../regexpp/Lib" /libpath:"../TeXnicCenterObjects/Lib"
+# Begin Special Build Tool
+SOURCE="$(InputPath)"
+PreLink_Desc=Build regexpp...
+PreLink_Cmds=buildregexp.bat
+PostBuild_Desc=Setup help, xsd and language files...
+PostBuild_Cmds=buildlang.bat	buildxml.bat	cd ..\TCHelp	buildhelp.bat
+# End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "TeXnicCenter - Win32 Debug"
 
@@ -83,6 +90,11 @@ LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 CrysEditExD.lib MFCExtD.lib TeXnicCenterObjectsD.lib Shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib /nologo /subsystem:windows /debug /machine:I386 /out:"../output/Debug/TEXCNTR.EXE" /pdbtype:sept /libpath:"../CrysEditEx/Lib" /libpath:"../MFCExt/Lib" /libpath:"../BCGControlBar/Lib" /libpath:"../regexpp/Lib" /libpath:"../TeXnicCenterObjects/Lib"
 # SUBTRACT LINK32 /map
+# Begin Special Build Tool
+SOURCE="$(InputPath)"
+PostBuild_Desc=Setup help, xsd and language files...
+PostBuild_Cmds=buildlang.bat	buildxml.bat	cd ..\TCHelp	buildhelp.bat
+# End Special Build Tool
 
 !ENDIF 
 
