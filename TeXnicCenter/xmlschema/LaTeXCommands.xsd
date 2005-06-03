@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:annotation>
+		<xs:documentation>
+			Contains all LaTeX commands found in the .sty and .cls files
+			Copyright (c) 2005 ToolsCenter.org. All rights reserved.
+			www.ToolsCenter.org
+		</xs:documentation>
+	</xs:annotation>
+	
+	<xs:include schemaLocation="CommonTypes.xsd" />
+
+	<!-- Definition for a .sty or .cls file -->
+	<xs:complexType name="lxCollection">	
+		<xs:sequence>
+			<xs:element name="cmd" type="lxPackage" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- Definition for a .sty or .cls file -->
+	<xs:complexType name="lxPackage">	
+		<xs:attribute name="name" type="xs:string" use="required" />		                                
+		<xs:attribute name="path" type="filePath" use="required" />
+		
+		<xs:sequence>
+			<xs:element name="cmd" type="lxCommand" />
+			<xs:element name="env" type="lxEnvironment" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- definition for LaTeX command related stuff -->
+	<xs:complexType name="lxCommand">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="parameters" type="xs:byte" default="0" />
+		<xs:attribute name="hasstar" type="xs:boolean" default="false" />
+	</xs:complexType>
+	
+	<!-- definition for LateX environment related stuff -->
+	<xs:complexType name="lxEnvironment">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="parameters" type="xs:byte" default="0" />
+	</xs:complexType>
+</xs:schema>
