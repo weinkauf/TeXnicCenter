@@ -44,6 +44,7 @@ static char THIS_FILE[]=__FILE__;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+IMPLEMENT_DYNAMIC(CNewEnvironment, CLaTeXCommand) 
 
 CNewEnvironment::CNewEnvironment(const CStyleFile *parent, CString &name, int noOfParams)
 :CLaTeXCommand(parent, name, noOfParams)
@@ -70,4 +71,7 @@ const CString CNewEnvironment::ToString() {
 
 /*
  * $Log$
+ * Revision 1.1  2005/06/03 20:29:43  owieland
+ * Initial checkin of package and class parser
+ *
  */

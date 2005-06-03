@@ -44,6 +44,7 @@
 class CNewEnvironment : public CLaTeXCommand  
 {
 public:
+	DECLARE_DYNAMIC(CNewEnvironment)
 	CNewEnvironment(const CStyleFile *parent, CString &name, int noOfParams);
 	virtual ~CNewEnvironment();
 
@@ -54,4 +55,7 @@ public:
 
 /*
  * $Log$
+ * Revision 1.1  2005/06/03 20:29:43  owieland
+ * Initial checkin of package and class parser
+ *
  */

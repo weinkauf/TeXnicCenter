@@ -41,10 +41,14 @@
 
 #include "LaTeXCommand.h"
 
+
+
 /* Represents a LaTeX command. See class CLaTeXCommand for further details */
 class CNewCommand : public CLaTeXCommand  
 {
 public:
+	DECLARE_DYNAMIC(CNewCommand)
+
 	CNewCommand(const CStyleFile *parent, CString &name, int NoOfParam = 0, BOOL hasStar=FALSE);
 	virtual ~CNewCommand();
 
@@ -60,4 +64,7 @@ private:
 
 /*
  * $Log$
+ * Revision 1.1  2005/06/03 20:29:43  owieland
+ * Initial checkin of package and class parser
+ *
  */
