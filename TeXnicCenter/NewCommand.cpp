@@ -46,6 +46,7 @@ static char THIS_FILE[]=__FILE__;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+IMPLEMENT_DYNAMIC(CNewCommand, CLaTeXCommand) 
 
 CNewCommand::CNewCommand(const CStyleFile *parent, CString &name, int noOfParam, BOOL hasStar)
 :CLaTeXCommand(parent, name, noOfParam)
@@ -78,4 +79,7 @@ const CString CNewCommand::ToLaTeX()
 
 /*
  * $Log$
+ * Revision 1.1  2005/06/03 20:29:43  owieland
+ * Initial checkin of package and class parser
+ *
  */
