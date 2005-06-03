@@ -37,6 +37,7 @@
 #include "LaTeXCommand.h"
 #include "NewCommand.h"
 #include "NewEnvironment.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -52,12 +53,14 @@ const TCHAR* TOKENS[]={"\\newcommand", "\\newenvironment", "\\DeclareOption"};
 CStyleFile::CStyleFile(CStyleFile &file)
 {
 	m_Filename = file.m_Filename;
+	m_Name = file.GetName();
 	Init();
 }
 
 CStyleFile::CStyleFile(CString& filename)
 {
 	m_Filename = filename;
+	m_Name = CPathTool::GetFileTitle(filename);
 	Init();
 }
 
@@ -286,4 +289,7 @@ void CStyleFile::SetListener(CLaTeXCommandListener *listener)
 
 /*
  * $Log$
+ * Revision 1.1  2005/06/03 20:29:43  owieland
+ * Initial checkin of package and class parser
+ *
  */
