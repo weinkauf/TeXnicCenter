@@ -58,18 +58,20 @@ public:
 	virtual ~CStyleFile();
 
 	void SetListener(CLaTeXCommandListener *listener);
-	CLaTeXCommand *CreateItem(int type, CString &name, int hasStar, int noOfParams);
+	
 	void ProcessFile();
 	CString GetFilename() const {return m_Filename;};
+	CString GetName() const {return m_Name;};
+	const CMapStringToOb *GetItems() const {return &m_Commands;}
 
 	CStyleFile& operator = (const CStyleFile&);
 		
 private:
+	void Init();
+	CLaTeXCommand *CreateItem(int type, CString &name, int hasStar, int noOfParams);
+
 	CString m_Name;
 	BOOL m_IsClass;
-	void Init();
-
-
 	CString m_Filename;
 	CMapStringToOb 	m_Commands;
 	CLaTeXCommandListener *m_Listener;
@@ -91,4 +93,7 @@ public:
 
 /*
  * $Log$
+ * Revision 1.1  2005/06/03 20:29:43  owieland
+ * Initial checkin of package and class parser
+ *
  */
