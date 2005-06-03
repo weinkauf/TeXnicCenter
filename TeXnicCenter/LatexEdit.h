@@ -148,6 +148,7 @@ protected:
 	CLatexParser	m_latexParser;
 
 public:
+	void OnPackageSetup();
 	CLatexDoc* GetDocument();
 
 };

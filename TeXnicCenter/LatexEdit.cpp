@@ -47,6 +47,7 @@
 #include "TextModulesDlg.h"
 #include "GotoDialog.h"
 #include "../MySpell/Character.h"
+#include "StyleFileContainer.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -69,6 +70,7 @@ BEGIN_MESSAGE_MAP(CLatexEdit, CCrystalEditViewEx)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_TOGGLE_WHITESPACEVIEW, OnUpdateEditToggleWhiteSpaceView)
 	ON_WM_SETFOCUS()
 	ON_COMMAND(ID_SPELL_FILE, OnSpellFile)
+	ON_COMMAND(ID_PACKAGE_SETUP, OnPackageSetup)
 	ON_COMMAND(ID_TEXTMODULES_DEFINE, OnTextmodulesDefine)
 	ON_UPDATE_COMMAND_UI(ID_TEXTMODULES_DEFINE, OnUpdateTextmodulesDefine)
 	//}}AFX_MSG_MAP
@@ -933,4 +935,20 @@ void CLatexEdit::OnTextmodulesDefine()
 void CLatexEdit::OnUpdateTextmodulesDefine(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(true);
+}
+
+void CLatexEdit::OnPackageSetup()
+{
+	CFolderSelect fsel("Choose directory to search for style files");
+	CStyleFileContainer csf;
+
+	if (fsel.DoModal() == IDOK) {
+		csf.AddSearchPath(CString(fsel.GetPath()));
+		csf.FindStyleFiles();
+	}
+
+	CFolderSelect fselxml("Choose directory to save package.xml");
+	if (fselxml.DoModal() == IDOK) {
+		csf.SaveAsXML(fselxml.GetPath() + "\\package.xml");
+	}
 }

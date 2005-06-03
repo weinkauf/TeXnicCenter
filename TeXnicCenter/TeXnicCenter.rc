@@ -683,7 +683,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -1636,6 +1636,7 @@ BEGIN
         MENUITEM "&Optionen...",                ID_EXTRAS_OPTIONS
         MENUITEM "&Anpassen...",                ID_EXTRAS_CUSTOMIZE
         MENUITEM "Rechtschreibung...",          ID_SPELL_FILE
+        MENUITEM "&Pakete suchen (Exp)",        ID_PACKAGE_SETUP
         MENUITEM SEPARATOR
         MENUITEM "<User defined tools>",        ID_TOOLS_ENTRY
     END
@@ -4698,12 +4699,12 @@ BEGIN
     STE_CUSTOM              "Angepasst"
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -8627,7 +8628,7 @@ BEGIN
     STE_CUSTOM              "Custom"
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
