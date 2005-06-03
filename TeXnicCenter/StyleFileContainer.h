@@ -40,12 +40,22 @@
 
 #include "stylefile.h"
 
+#define CSF_XML_CONTAINER	_T("lxCollection")
+#define CSF_XML_PACKAGE		_T("lxpackage")
+#define CSF_XML_COMMAND		_T("lxcommand")
+#define CSF_XML_ENVIRONMENT	_T("lxenvironment")
+#define CSF_XML_NAME		_T("name")
+#define CSF_XML_PATH		_T("path")
+#define CSF_XML_PARAMS		_T("parameters")
+
+
 /* Container class for all available .sty and .cls files.
  *
  */
 class CStyleFileContainer : public CObject, virtual public CLaTeXCommandListener
 {
 public:	
+	BOOL SaveAsXML(CString &path);
 	CStyleFileContainer(CString &basePath=CString("."));
 	virtual ~CStyleFileContainer();
 
@@ -94,4 +104,7 @@ private:
 
 /*
  * $Log$
+ * Revision 1.1  2005/06/03 20:29:43  owieland
+ * Initial checkin of package and class parser
+ *
  */
