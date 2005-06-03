@@ -77,8 +77,7 @@ PostBuild_Cmds=buildlang.bat	buildxml.bat	cd ..\TCHelp	buildhelp.bat
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GR /GX /ZI /Od /I "../CrysEditEx/Include" /I "../regexpp/include" /I "../BCGControlBar/Include" /I "../MFCExt/Include" /I "../TeXnicCenterObjects/Include" /I "../MsXmlCpp/Include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /D "CE_FROM_DLL" /Yu"stdafx.h" /FD /GZ /c
-# SUBTRACT CPP /Fr
+# ADD CPP /nologo /MDd /W3 /Gm /GR /GX /ZI /Od /I "../CrysEditEx/Include" /I "../regexpp/include" /I "../BCGControlBar/Include" /I "../MFCExt/Include" /I "../TeXnicCenterObjects/Include" /I "../MsXmlCpp/Include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /D "CE_FROM_DLL" /Fr /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x407 /d "_DEBUG" /d "_AFXDLL"
@@ -247,6 +246,10 @@ SOURCE=.\KeyboardHook.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\LaTeXCommand.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\LatexDoc.cpp
 # End Source File
 # Begin Source File
@@ -284,6 +287,14 @@ SOURCE=.\MRUTrackSelComboBox.cpp
 # Begin Source File
 
 SOURCE=.\NavigatorView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\NewCommand.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\NewEnvironment.cpp
 # End Source File
 # Begin Source File
 
@@ -469,6 +480,14 @@ SOURCE=.\StructureParser.cpp
 # Begin Source File
 
 SOURCE=.\StructureView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\StyleFile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\StyleFileContainer.cpp
 # End Source File
 # Begin Source File
 
@@ -664,6 +683,10 @@ SOURCE=.\KeyboardHook.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\LaTeXCommand.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\LatexDoc.h
 # End Source File
 # Begin Source File
@@ -701,6 +724,14 @@ SOURCE=.\MRUTrackSelComboBox.h
 # Begin Source File
 
 SOURCE=.\NavigatorView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\NewCommand.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\NewEnvironment.h
 # End Source File
 # Begin Source File
 
@@ -894,6 +925,14 @@ SOURCE=.\StructureParser.h
 # Begin Source File
 
 SOURCE=.\StructureView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\StyleFile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\StyleFileContainer.h
 # End Source File
 # Begin Source File
 
