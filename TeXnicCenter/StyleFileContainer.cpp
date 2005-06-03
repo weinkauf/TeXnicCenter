@@ -32,8 +32,12 @@
 *
 ********************************************************************/
 #include "stdafx.h"
+#include "TeXnicCenter.h"
 #include "StyleFile.h"
 #include "StyleFileContainer.h"
+#include "LaTeXCommand.h"
+#include "NewCommand.h"
+#include "NewEnvironment.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -210,6 +214,98 @@ BOOL CStyleFileContainer::RemoveSearchPath(CString &dir) {
 	return FALSE;
 }
 
+/* Saves package tree to XML (currently incomplete!) */
+BOOL CStyleFileContainer::SaveAsXML(CString &path)
+{
+	MsXml::CXMLDOMDocumentEx	xmlDoc;
+	try
+	{
+		xmlDoc.Create();
+		/*
+		xmlDoc.Create(
+			_T("xmlns:txclxp='http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd'"), 
+			CPathTool::Cat(theApp.GetWorkingDir(), _T("LaTeXCommands.xsd")),
+			_T("http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd"));
+		*/
+		
+		MsXml::CXMLDOMElement	xmlRoot(xmlDoc.CreateElement(CSF_XML_CONTAINER));
+		xmlRoot.SetAttribute(_T("xmlns:txclxp"), _T("http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd"));
+		xmlRoot.SetAttribute(_T("version"), 1.0);
+		xmlDoc.AppendChild(xmlRoot);
+		
+		POSITION pos = m_StyleFiles.GetStartPosition();
+		while(pos != NULL) {
+			CStyleFile *sf;
+			CString key;
+			m_StyleFiles.GetNextAssoc(pos, key, (CObject*&)sf);
+			
+			MsXml::CXMLDOMElement	xmlPackage(xmlDoc.CreateElement(CSF_XML_PACKAGE));
+			xmlPackage.SetAttribute(CSF_XML_NAME, (LPCTSTR)sf->GetName());
+			xmlPackage.SetAttribute(CSF_XML_PATH, (LPCTSTR)sf->GetFilename());
+			
+			/* Export commands and environments */
+			const CMapStringToOb *cmds = sf->GetItems();
+			POSITION posC = cmds->GetStartPosition();
+			while(posC != NULL) {
+				CLaTeXCommand *lc;
+				CString keyC;
+				CString type;
+
+				cmds->GetNextAssoc(posC, keyC, (CObject*&)lc);
+								
+				if (lc->IsKindOf( RUNTIME_CLASS( CNewCommand))) {
+					type = CSF_XML_COMMAND;
+				} else {
+					type = CSF_XML_ENVIRONMENT;
+				}
+				MsXml::CXMLDOMElement	xmlCmd(xmlDoc.CreateElement(type));
+				xmlCmd.SetAttribute(CSF_XML_NAME, (LPCTSTR)lc->ToLaTeX());
+
+				if (lc->GetNoOfParams() > 0) {
+					TCHAR buf[5];
+					itoa(lc->GetNoOfParams(), buf, 10);
+					xmlCmd.SetAttribute(CSF_XML_PARAMS, buf);
+				}
+				
+				xmlPackage.AppendChild(xmlCmd);
+			}
+			xmlRoot.AppendChild(xmlPackage);
+		}
+
+		TRACE("Saving XML tree...");
+
+		// write to file
+		xmlDoc.SavePretty(path);
+		TRACE("done\n");
+		return TRUE;
+	}
+	catch (CComException* pE)
+	{
+		if (pE->GetDescription() == _T(""))
+		{
+			//A generic COM error.
+			//For example, MsXML not installed.
+
+			//Inform the user, that he needs to install MsXML.
+			AfxMessageBox(STE_XML_INSTALLNEEDED, MB_ICONINFORMATION|MB_OK);
+		}
+		else
+		{
+			//Some other error. For example, schema file is missing (*.xsd)
+			TRACE("Desc: %s", pE->GetDescription());
+			
+			pE->ReportError(MB_ICONEXCLAMATION|MB_OK);
+		}
+
+		pE->Delete();
+		return FALSE;
+	}
+
+}
+
 /*
  * $Log$
+ * Revision 1.1  2005/06/03 20:29:43  owieland
+ * Initial checkin of package and class parser
+ *
  */
