@@ -154,6 +154,10 @@ SOURCE=.\DdeCommand.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\DeclareOption.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\DocumentNewDialog.cpp
 # End Source File
 # Begin Source File
@@ -592,6 +596,10 @@ SOURCE=.\CustomizePageEditor.h
 # Begin Source File
 
 SOURCE=.\DdeCommand.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DeclareOption.h
 # End Source File
 # Begin Source File
 
