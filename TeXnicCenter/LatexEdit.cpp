@@ -48,6 +48,7 @@
 #include "GotoDialog.h"
 #include "../MySpell/Character.h"
 #include "StyleFileContainer.h"
+#include "PackageScanProgress.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -943,9 +944,16 @@ void CLatexEdit::OnPackageSetup()
 	CStyleFileContainer csf;
 
 	if (fsel.DoModal() == IDOK) {
+		csf.ClearSearchPath();
 		csf.AddSearchPath(CString(fsel.GetPath()));
+		CPackageScanProgress prg;
+		csf.SetEventListener(&prg);
+
+		prg.ShowWindow(SW_SHOW);
 		csf.FindStyleFiles();
+		prg.CloseWindow();
 	}
+	
 
 	CFolderSelect fselxml("Choose directory to save package.xml");
 	if (fselxml.DoModal() == IDOK) {

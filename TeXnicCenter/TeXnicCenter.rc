@@ -2846,6 +2846,17 @@ BEGIN
                     IDC_STATIC_VERSION,7,34,278,8
 END
 
+IDD_PACKAGE_SCAN_PROGRESS DIALOG DISCARDABLE  0, 0, 232, 89
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Suche Dateien..."
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "C:",IDC_DIR,15,28,210,9
+    LTEXT           "",IDC_FILE,15,42,210,9
+    LTEXT           "",IDC_COMMANDS,16,57,209,9
+    DEFPUSHBUTTON   "&Abbrechen",IDC_CANCEL,85,68,62,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -3108,6 +3119,14 @@ BEGIN
         RIGHTMARGIN, 285
         TOPMARGIN, 7
         BOTTOMMARGIN, 224
+    END
+
+    IDD_PACKAGE_SCAN_PROGRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 225
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 82
     END
 END
 #endif    // APSTUDIO_INVOKED

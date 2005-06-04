@@ -370,6 +370,10 @@ SOURCE=.\OutputWizardWelcome.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\PackageScanProgress.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ParseOutputView.cpp
 # End Source File
 # Begin Source File
@@ -804,6 +808,10 @@ SOURCE=.\OutputWizardViewer.h
 # Begin Source File
 
 SOURCE=.\OutputWizardWelcome.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PackageScanProgress.h
 # End Source File
 # Begin Source File
 
