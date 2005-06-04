@@ -1,10 +1,12 @@
 [FormatInfo]
 Type=TeXnicCenterProjectInformation
-Version=3
+Version=4
 
 [ProjectInfo]
 MainFile=Catching.tex
 UseBibTeX=1
 UseMakeIndex=0
-ActiveProfile=Fast: LaTeX => DVI
+ActiveProfile=LaTeX => DVI
+ProjectLanguage=en
+ProjectDialect=US
 
