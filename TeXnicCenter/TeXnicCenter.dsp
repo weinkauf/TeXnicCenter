@@ -114,6 +114,10 @@ SOURCE=.\ActiveProfileDialog.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\AutoCompleteListBox.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\BCGNotifyingEditListBox.cpp
 # End Source File
 # Begin Source File
@@ -556,6 +560,10 @@ SOURCE=.\AboutBox.h
 # Begin Source File
 
 SOURCE=.\ActiveProfileDialog.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\AutoCompleteListBox.h
 # End Source File
 # Begin Source File
 
