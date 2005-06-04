@@ -44,6 +44,7 @@
 const int LATEX_COMMAND = 0;
 const int LATEX_ENVIRONMENT = 1;
 const int LATEX_OPTION = 2;
+const int LATEX_REQPACKAGE = 3;
 
 #define INVALID_LATEX_ITEM -5678
 
@@ -62,19 +63,24 @@ public:
 	void ProcessFile();
 	CString GetFilename() const {return m_Filename;};
 	CString GetName() const {return m_Name;};
-	const CMapStringToOb *GetItems() const {return &m_Commands;}
+	const CMapStringToOb *GetCommands() const {return &m_Commands;}
+	const CStringArray *GetOptions() const {return &m_Options;}
+	const CStringArray *GetRequiredPackages() const {return &m_ReqPackages;}
 
 	CStyleFile& operator = (const CStyleFile&);
 		
 private:
+	
 	void Init();
 	CLaTeXCommand *CreateItem(int type, CString &name, int hasStar, int noOfParams);
 
-	CString m_Name;
-	BOOL m_IsClass;
-	CString m_Filename;
-	CMapStringToOb 	m_Commands;
-	CLaTeXCommandListener *m_Listener;
+	CStringArray			m_Options;
+	CStringArray			m_ReqPackages;
+	CString					m_Name;
+	BOOL					m_IsClass;
+	CString					m_Filename;
+	CMapStringToOb 			m_Commands;
+	CLaTeXCommandListener	*m_Listener;
 protected:
 	void ParseBuffer(TCHAR *buf);
 	BOOL HasCommands(const TCHAR *buf);
@@ -84,6 +90,7 @@ protected:
 class CStyleFileListener
 {
 public:
+	virtual BOOL OnQueryCancel() = 0;
 	virtual void OnDirectoryFound(CString &dirname) = 0;
 	virtual void OnFileFound(CString &filename) = 0;
 	virtual void OnCommandFound(CLaTeXCommand &command) = 0;
@@ -93,6 +100,9 @@ public:
 
 /*
  * $Log$
+ * Revision 1.2  2005/06/03 22:28:43  owieland
+ * Impl. GetName()
+ *
  * Revision 1.1  2005/06/03 20:29:43  owieland
  * Initial checkin of package and class parser
  *

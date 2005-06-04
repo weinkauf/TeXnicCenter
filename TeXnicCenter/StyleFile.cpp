@@ -38,6 +38,7 @@
 #include "NewCommand.h"
 #include "NewEnvironment.h"
 #include "TeXnicCenter.h"
+#include "DeclareOption.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -45,7 +46,7 @@ static TCHAR THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-const TCHAR* TOKENS[]={"\\newcommand", "\\newenvironment", "\\DeclareOption"};
+const TCHAR* TOKENS[]={"\\newcommand", "\\newenvironment", "\\DeclareOption", "\\RequirePackage"};
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -130,7 +131,7 @@ void CStyleFile::Init()
 void CStyleFile::ParseBuffer(TCHAR *buf)
 {
 	
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		TCHAR *t, *token;
 		TCHAR nameBuf[255];
 		int lTok = strlen(TOKENS[i]);		
@@ -166,7 +167,7 @@ void CStyleFile::ParseBuffer(TCHAR *buf)
 				hasStar = 1;
 			}
 
-			if (i == 0) { /* Commands have a leading '\' */
+			if (i == LATEX_COMMAND) { /* Commands have a leading '\' */
 				token++;				
 			}
 
@@ -196,20 +197,25 @@ void CStyleFile::ParseBuffer(TCHAR *buf)
 						m_Listener->OnCommandFound(*lc);
 					}
 					CObject *dummy;
-					if (!m_Commands.Lookup(lc->ToString(), dummy)) {
-						m_Commands.SetAt(lc->ToString(), lc);
-					} else {						
-						TRACE("** Duplicate key: %s\n", lc->ToString());
-						delete lc;
+					switch (i) {
+					case LATEX_COMMAND:
+					case LATEX_ENVIRONMENT:
+						if (!m_Commands.Lookup(lc->ToString(), dummy)) {
+							m_Commands.SetAt(lc->ToString(), lc);
+						} else {						
+							TRACE("** Duplicate key: %s\n", lc->ToString());
+							delete lc;
+						}
+						break;
+					case LATEX_OPTION:						
+						m_Options.Add(lc->GetName());
+						delete lc; /* currently not needed */
+						break;
+					case LATEX_REQPACKAGE:						
+						m_ReqPackages.Add(lc->GetName());
+						delete lc; /* currently not needed */
+						break;
 					}
-				}
-
-				//TRACE("--> %s '%s'\n", TOKENS[i], nameBuf);
-				if (nOptions > 0) {
-					//TRACE("--> Options: %d\n", nOptions);
-				}
-				if (hasStar > 0) {
-					//TRACE("--> has star\n");
 				}
 			} else { /* For debug purposes only */
 				if (l > 0 && !isPrivate) {
@@ -275,8 +281,11 @@ CLaTeXCommand *CStyleFile::CreateItem(int type, CString &name, int hasStar, int 
 	case LATEX_ENVIRONMENT:
 		return new CNewEnvironment(this, name, noOfParams);
 		break;
-	case LATEX_OPTION:
-		return NULL;
+	case LATEX_OPTION:		
+		return new CDeclareOption(this, name);
+		break;
+	case LATEX_REQPACKAGE:
+		return new CDeclareOption(this, name); /* murx */
 		break;
 	}
 	throw INVALID_LATEX_ITEM;
@@ -289,7 +298,11 @@ void CStyleFile::SetListener(CLaTeXCommandListener *listener)
 
 /*
  * $Log$
+ * Revision 1.2  2005/06/03 22:28:43  owieland
+ * Impl. GetName()
+ *
  * Revision 1.1  2005/06/03 20:29:43  owieland
  * Initial checkin of package and class parser
  *
  */
+
