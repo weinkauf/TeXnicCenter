@@ -5642,6 +5642,7 @@ BEGIN
         MENUITEM "&Options...",                 ID_EXTRAS_OPTIONS
         MENUITEM "&Customize...",               ID_EXTRAS_CUSTOMIZE
         MENUITEM "&Spelling...",                ID_SPELL_FILE
+        MENUITEM "Search &Packages (Exp)",      ID_PACKAGE_SETUP
         MENUITEM SEPARATOR
         MENUITEM "<User defined tools>",        ID_TOOLS_ENTRY
     END
