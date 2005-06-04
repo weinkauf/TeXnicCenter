@@ -192,7 +192,8 @@ const CStringArray* CStyleFileContainer::GetPossibleCompletions(const CString &c
 			if (tmp == NULL) {
 				tmp = new CStringArray();
 			}
-			tmp->Add(key);			 		
+			
+			tmp->Add(lc->ToLaTeX() + " - " + lc->GetStyleFile()->GetName());			 		
 			//TRACE("ADD '%s' (now %d items)\n", key, tmp->GetSize());
 		}
 	}	
@@ -333,6 +334,9 @@ void CStyleFileContainer::ClearMap()
 
 /*
  * $Log$
+ * Revision 1.3  2005/06/04 10:39:12  owieland
+ * Added option and required package support
+ *
  * Revision 1.2  2005/06/03 22:29:20  owieland
  * XML Export
  *

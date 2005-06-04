@@ -42,6 +42,8 @@
 #include "LatexParser.h"
 #include "LatexDoc.h"
 #include "CrystalEditViewEx.h"
+#include "StyleFileContainer.h"	// Added by ClassView
+#include "AutoCompleteListBox.h"
 
 
 /** Edit view for LaTeX files.
@@ -138,6 +140,7 @@ protected:
 	afx_msg void OnSpellFile();
 	afx_msg void OnTextmodulesDefine();
 	afx_msg void OnUpdateTextmodulesDefine(CCmdUI* pCmdUI);
+	afx_msg void OnQueryCompletion();
 	//}}AFX_MSG
 	afx_msg void OnUpdateTextModulesList(CCmdUI *pCmdUI);
 	afx_msg void OnBlockComment(const UINT nID);
@@ -151,6 +154,10 @@ public:
 	void OnPackageSetup();
 	CLatexDoc* GetDocument();
 
+private:
+	CAutoCompleteListBox* m_CompletionListBox;
+	CAutoCompleteListBox *CreateListBox(const CStringArray *list);
+	CStyleFileContainer m_AvailableCommands;
 };
 
 #ifndef _DEBUG  // Testversion in LatexEdit.cpp

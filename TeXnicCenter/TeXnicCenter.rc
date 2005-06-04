@@ -159,6 +159,7 @@ BEGIN
     VK_F9,          ID_PREV_ERROR,          VIRTKEY, SHIFT, NOINVERT
     VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
     VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    VK_SPACE,       ID_QUERY_COMPLETION,    VIRTKEY, CONTROL, NOINVERT
     "W",            ID_EDIT_BLOCKCOMMENT_REMOVE, VIRTKEY, CONTROL, NOINVERT
     "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
     "Y",            ID_EDIT_REDO,           VIRTKEY, CONTROL, NOINVERT
@@ -338,6 +339,8 @@ BEGIN
     SEPARATOR
     BUTTON      ID_NEXT_BADBOX
     BUTTON      ID_PREV_BADBOX
+    SEPARATOR
+    BUTTON      ID_QUERY_COMMAND
 END
 
 IDR_MAINFRAME TOOLBAR DISCARDABLE  16, 15
@@ -1636,6 +1639,8 @@ BEGIN
         MENUITEM "&Optionen...",                ID_EXTRAS_OPTIONS
         MENUITEM "&Anpassen...",                ID_EXTRAS_CUSTOMIZE
         MENUITEM "Rechtschreibung...",          ID_SPELL_FILE
+        MENUITEM SEPARATOR
+        MENUITEM "&Befehl vervollständigen (Exp)", ID_QUERY_COMPLETION
         MENUITEM "&Pakete suchen (Exp)",        ID_PACKAGE_SETUP
         MENUITEM SEPARATOR
         MENUITEM "<User defined tools>",        ID_TOOLS_ENTRY
@@ -4716,6 +4721,7 @@ BEGIN
     STE_LANGUAGE_ENGLISH    "Englisch"
     STE_LANGUAGE_FRENCH     "Französisch"
     STE_CUSTOM              "Angepasst"
+    STE_QUERY_FILES         "Es sind noch keine Befehle vorhanden. Möchten Sie jetzt Verzeichnisse nach Paketen durchsuchen?"
 END
 
 #endif    // German (Germany) resources
@@ -5661,6 +5667,8 @@ BEGIN
         MENUITEM "&Options...",                 ID_EXTRAS_OPTIONS
         MENUITEM "&Customize...",               ID_EXTRAS_CUSTOMIZE
         MENUITEM "&Spelling...",                ID_SPELL_FILE
+        MENUITEM SEPARATOR
+        MENUITEM "&Complete command (Exp)",     ID_QUERY_COMPLETION
         MENUITEM "Search &Packages (Exp)",      ID_PACKAGE_SETUP
         MENUITEM SEPARATOR
         MENUITEM "<User defined tools>",        ID_TOOLS_ENTRY
@@ -8646,6 +8654,7 @@ BEGIN
     STE_LANGUAGE_ENGLISH    "English"
     STE_LANGUAGE_FRENCH     "French"
     STE_CUSTOM              "Custom"
+    STE_QUERY_FILES         "No commands available yet. Do you like to scan directories for additional packages now?"
 END
 
 #endif    // English (U.S.) resources

@@ -11,6 +11,7 @@
 #define STE_LANGUAGE_ENGLISH            35
 #define STE_LANGUAGE_FRENCH             36
 #define STE_CUSTOM                      37
+#define STE_QUERY_FILES                 38
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
 #define IDD_TIP                         103
@@ -1267,6 +1268,8 @@
 #define ID_LATEX_RUNANDVIEW             38473
 #define ID_LATEX_FILECOMPILEANDVIEW     38474
 #define ID_PACKAGE_SETUP                38476
+#define ID_QUERY_COMPLETION             38477
+#define ID_QUERY_COMMAND                38478
 #define IDS_TEXTMODULES_NONEDEFINED     57671
 
 // Next default values for new objects
@@ -1275,7 +1278,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        278
-#define _APS_NEXT_COMMAND_VALUE         38477
+#define _APS_NEXT_COMMAND_VALUE         38479
 #define _APS_NEXT_CONTROL_VALUE         1340
 #define _APS_NEXT_SYMED_VALUE           115
 #endif

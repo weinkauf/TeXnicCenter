@@ -71,9 +71,10 @@ BEGIN_MESSAGE_MAP(CLatexEdit, CCrystalEditViewEx)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_TOGGLE_WHITESPACEVIEW, OnUpdateEditToggleWhiteSpaceView)
 	ON_WM_SETFOCUS()
 	ON_COMMAND(ID_SPELL_FILE, OnSpellFile)
-	ON_COMMAND(ID_PACKAGE_SETUP, OnPackageSetup)
 	ON_COMMAND(ID_TEXTMODULES_DEFINE, OnTextmodulesDefine)
 	ON_UPDATE_COMMAND_UI(ID_TEXTMODULES_DEFINE, OnUpdateTextmodulesDefine)
+	ON_COMMAND(ID_PACKAGE_SETUP, OnPackageSetup)
+	ON_COMMAND(ID_QUERY_COMPLETION, OnQueryCompletion)
 	//}}AFX_MSG_MAP
 	ON_WM_SYSCOLORCHANGE()
 
@@ -102,10 +103,15 @@ CLatexEdit::CLatexEdit()
 	SetParser( &m_latexParser );
 	SetWordWrapping( TRUE );
 	m_pBackgroundThread = theApp.GetBackgroundThread();
+	m_CompletionListBox = NULL;
 }
 
 
-CLatexEdit::~CLatexEdit() { }
+CLatexEdit::~CLatexEdit() { 
+	if (m_CompletionListBox != NULL) {
+		delete m_CompletionListBox;
+	}
+}
 
 
 void CLatexEdit::ResetView()
@@ -940,23 +946,82 @@ void CLatexEdit::OnUpdateTextmodulesDefine(CCmdUI* pCmdUI)
 
 void CLatexEdit::OnPackageSetup()
 {
+	/* For debug only*/
+	//m_AvailableCommands.AddSearchPath(CString("c:\\texmf"));
+	//m_AvailableCommands.FindStyleFiles();
+
+	/* remove this line on production */
+	//if (1) return;
+
 	CFolderSelect fsel("Choose directory to search for style files");
-	CStyleFileContainer csf;
-
-	if (fsel.DoModal() == IDOK) {
-		csf.ClearSearchPath();
-		csf.AddSearchPath(CString(fsel.GetPath()));
-		CPackageScanProgress prg;
-		csf.SetEventListener(&prg);
-
-		prg.ShowWindow(SW_SHOW);
-		csf.FindStyleFiles();
-		prg.CloseWindow();
-	}
 	
 
+	if (fsel.DoModal() == IDOK) {
+		m_AvailableCommands.ClearSearchPath();
+		m_AvailableCommands.AddSearchPath(CString(fsel.GetPath()));
+		
+		CPackageScanProgress prg;
+		m_AvailableCommands.SetEventListener(&prg);
+
+		prg.ShowWindow(SW_SHOW);
+		m_AvailableCommands.FindStyleFiles();
+		prg.CloseWindow();
+	}	
+	
 	CFolderSelect fselxml("Choose directory to save package.xml");
 	if (fselxml.DoModal() == IDOK) {
-		csf.SaveAsXML(fselxml.GetPath() + "\\package.xml");
+		m_AvailableCommands.SaveAsXML(fselxml.GetPath() + "\\package.xml");
 	}
+}
+
+void CLatexEdit::OnQueryCompletion() 
+{	
+	TRACE("OnQueryCompletion...\n");
+	if (!m_AvailableCommands.GetNoOfFiles()) {
+		/* ask user for scanning directories */		
+		if (AfxMessageBox(STE_QUERY_FILES, MB_ICONQUESTION|MB_YESNO) == IDYES) {
+			OnPackageSetup();
+			return;
+		}
+	}
+
+	CString keyword;
+	CPoint	ptStart, ptEnd;
+	GetSelection(ptStart, ptEnd);
+	if (ptStart != ptEnd) {
+		GetText(ptStart, ptEnd, keyword);
+	}
+	TRACE("Keyword %s\n", keyword);
+
+	if (keyword.GetLength() > 2) {
+		const CStringArray *pc = m_AvailableCommands.GetPossibleCompletions(keyword);
+		
+		if (pc != NULL) {
+			TRACE("Found %d possibilities...\n", pc->GetSize());
+			m_CompletionListBox = CreateListBox(pc);
+			delete pc;
+		}
+		
+	}
+}
+
+CAutoCompleteListBox *CLatexEdit::CreateListBox(const CStringArray *list)
+{
+	CPoint	ptStart, ptText;
+	GetSelection(ptStart, ptText);
+
+	if (m_CompletionListBox == NULL) {
+		m_CompletionListBox = new CAutoCompleteListBox();
+		m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|WS_HSCROLL, CRect(ptText.x, ptText.y, ptText.x + 150, ptText.y + 100), this, 456);
+	} else {
+		m_CompletionListBox->ResetContent();
+		//m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|WS_HSCROLL, CRect(ptText.x, ptText.y, 100, 50), this, 456);
+	}
+
+	TRACE("Will add %d items \n", list->GetSize());
+	for(int i=0; i < list->GetSize(); i++) {
+		TRACE("Adding %s\n", list->GetAt(i));
+		m_CompletionListBox->AddString(list->GetAt(i));		
+	}
+	return m_CompletionListBox;
 }
