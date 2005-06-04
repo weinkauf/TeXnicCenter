@@ -41,9 +41,11 @@
 #include "stylefile.h"
 
 #define CSF_XML_CONTAINER	_T("lxCollection")
-#define CSF_XML_PACKAGE		_T("lxpackage")
-#define CSF_XML_COMMAND		_T("lxcommand")
-#define CSF_XML_ENVIRONMENT	_T("lxenvironment")
+#define CSF_XML_PACKAGE		_T("lxPackage")
+#define CSF_XML_COMMAND		_T("lxCommand")
+#define CSF_XML_ENVIRONMENT	_T("lxEnvironment")
+#define CSF_XML_OPTION		_T("lxOption")
+#define CSF_XML_REQPACKAGE	_T("lxReqPackage")
 #define CSF_XML_NAME		_T("name")
 #define CSF_XML_PATH		_T("path")
 #define CSF_XML_PARAMS		_T("parameters")
@@ -98,12 +100,17 @@ private:
 
 	CStyleFileListener *m_Listener;	/* Pointer to event listener (maybe NULL!) */
 	CStringArray	m_SearchPaths;	/* List of paths where to search for .sty and .cls files */
+protected:
+	void ClearMap();
 };
 
 #endif // !defined(AFX_STYLEFILECONTAINER_H__20CE8791_F3F3_4CA7_9FA6_373EAD4AAABF__INCLUDED_)
 
 /*
  * $Log$
+ * Revision 1.2  2005/06/03 22:29:20  owieland
+ * XML Export
+ *
  * Revision 1.1  2005/06/03 20:29:43  owieland
  * Initial checkin of package and class parser
  *

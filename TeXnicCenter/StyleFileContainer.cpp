@@ -58,23 +58,13 @@ CStyleFileContainer::CStyleFileContainer(CString &basePath)
 
 CStyleFileContainer::~CStyleFileContainer()
 {
-	POSITION pos = m_StyleFiles.GetStartPosition();
-	while(pos != NULL) {
-		CStyleFile *sf;
-		CString key;
-		m_StyleFiles.GetNextAssoc(pos, key, (CObject*&)sf);
-		if (sf != NULL) {
-			delete sf;
-		}
-		m_StyleFiles.RemoveKey(key);
-	}
-	/* Note: Memory clean up in CStyleFile, we only drop the references */
-	m_Commands.RemoveAll();
+	ClearMap();
 }
 
 void CStyleFileContainer::FindStyleFiles()
 {	
 	m_NoOfFiles = 0;
+	ClearMap();
 	for (int i = 0; i <= m_SearchPaths.GetUpperBound(); i++) {
 		FindStyleFilesRecursive(m_SearchPaths.GetAt(i));
 	}
@@ -87,6 +77,14 @@ void CStyleFileContainer::FindStyleFilesRecursive(CString dir)
 	BOOL bWorking = finder.FindFile(dir + "\\*");
 
 	m_LastDir = dir;
+
+	if (m_Listener != NULL) {
+		if (m_Listener->OnQueryCancel()) {
+			TRACE("** Scanning files cancelled by user break\n"); 
+			ClearMap();
+			return;
+		}
+	}
 
 	if (m_Listener != NULL) {
 		m_Listener->OnDirectoryFound(dir);
@@ -244,7 +242,7 @@ BOOL CStyleFileContainer::SaveAsXML(CString &path)
 			xmlPackage.SetAttribute(CSF_XML_PATH, (LPCTSTR)sf->GetFilename());
 			
 			/* Export commands and environments */
-			const CMapStringToOb *cmds = sf->GetItems();
+			const CMapStringToOb *cmds = sf->GetCommands();
 			POSITION posC = cmds->GetStartPosition();
 			while(posC != NULL) {
 				CLaTeXCommand *lc;
@@ -267,6 +265,20 @@ BOOL CStyleFileContainer::SaveAsXML(CString &path)
 					xmlCmd.SetAttribute(CSF_XML_PARAMS, buf);
 				}
 				
+				xmlPackage.AppendChild(xmlCmd);
+			}
+
+			const CStringArray *opt = sf->GetOptions();
+			for(int i=0; i < opt->GetUpperBound(); i++) {
+				MsXml::CXMLDOMElement	xmlCmd(xmlDoc.CreateElement(CSF_XML_OPTION));
+				xmlCmd.SetAttribute(CSF_XML_NAME, (LPCTSTR)opt->GetAt(i));
+				xmlPackage.AppendChild(xmlCmd);
+			}
+
+			opt = sf->GetRequiredPackages();
+			for(i=0; i < opt->GetUpperBound(); i++) {
+				MsXml::CXMLDOMElement	xmlCmd(xmlDoc.CreateElement(CSF_XML_REQPACKAGE));
+				xmlCmd.SetAttribute(CSF_XML_NAME, (LPCTSTR)opt->GetAt(i));
 				xmlPackage.AppendChild(xmlCmd);
 			}
 			xmlRoot.AppendChild(xmlPackage);
@@ -303,9 +315,29 @@ BOOL CStyleFileContainer::SaveAsXML(CString &path)
 
 }
 
+void CStyleFileContainer::ClearMap()
+{
+	POSITION pos = m_StyleFiles.GetStartPosition();
+	while(pos != NULL) {
+		CStyleFile *sf;
+		CString key;
+		m_StyleFiles.GetNextAssoc(pos, key, (CObject*&)sf);
+		if (sf != NULL) {
+			delete sf;
+		}
+		m_StyleFiles.RemoveKey(key);
+	}
+	/* Note: Memory clean up in CStyleFile, we only drop the references */
+	m_Commands.RemoveAll();
+}
+
 /*
  * $Log$
+ * Revision 1.2  2005/06/03 22:29:20  owieland
+ * XML Export
+ *
  * Revision 1.1  2005/06/03 20:29:43  owieland
  * Initial checkin of package and class parser
  *
  */
+
