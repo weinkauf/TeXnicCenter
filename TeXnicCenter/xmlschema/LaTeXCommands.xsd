@@ -13,7 +13,7 @@
 	<!-- Definition for a .sty or .cls file -->
 	<xs:complexType name="lxCollection">	
 		<xs:sequence>
-			<xs:element name="cmd" type="lxPackage" />
+			<xs:element name="lxc" type="lxPackage" />
 		</xs:sequence>
 	</xs:complexType>
 	
@@ -25,6 +25,8 @@
 		<xs:sequence>
 			<xs:element name="cmd" type="lxCommand" />
 			<xs:element name="env" type="lxEnvironment" />
+			<xs:element name="env" type="lxOption" />
+			<xs:element name="env" type="lxReqPackage" />
 		</xs:sequence>
 	</xs:complexType>
 	
@@ -39,5 +41,15 @@
 	<xs:complexType name="lxEnvironment">
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="parameters" type="xs:byte" default="0" />
+	</xs:complexType>
+	
+	<!-- definition for stylefile options  -->
+	<xs:complexType name="lxOption">
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+	
+	<!-- definition for stylefile options  -->
+	<xs:complexType name="lxReqPackage">
+		<xs:attribute name="name" type="xs:string" use="required" />
 	</xs:complexType>
 </xs:schema>
