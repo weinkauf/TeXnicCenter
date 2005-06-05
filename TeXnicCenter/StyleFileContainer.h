@@ -57,6 +57,8 @@
 class CStyleFileContainer : public CObject, virtual public CLaTeXCommandListener
 {
 public:	
+	void LoadFromXML(const CString &file, BOOL addToExisting);
+	static BOOL ContainsString(const CStringArray *list, const CString &string);
 	BOOL SaveAsXML(CString &path);
 	CStyleFileContainer(CString &basePath=CString("."));
 	virtual ~CStyleFileContainer();
@@ -108,6 +110,9 @@ protected:
 
 /*
  * $Log$
+ * Revision 1.3  2005/06/04 10:39:12  owieland
+ * Added option and required package support
+ *
  * Revision 1.2  2005/06/03 22:29:20  owieland
  * XML Export
  *

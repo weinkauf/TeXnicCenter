@@ -31,6 +31,21 @@
 * $Id$
 *
 ********************************************************************/
+
+/*
+ * $Log$
+ * Revision 1.3  2005/06/04 10:39:12  owieland
+ * Added option and required package support
+ *
+ * Revision 1.2  2005/06/03 22:28:43  owieland
+ * Impl. GetName()
+ *
+ * Revision 1.1  2005/06/03 20:29:43  owieland
+ * Initial checkin of package and class parser
+ *
+ */
+
+
 #include "stdafx.h"
 
 #include "StyleFile.h"
@@ -190,20 +205,14 @@ void CStyleFile::ParseBuffer(TCHAR *buf)
 				nameBuf[l] = 0;
 
 				/* Create appropriate instance */
-				CLaTeXCommand *lc = CreateItem(i, CString(nameBuf), hasStar, nOptions);
+				CAbstractLaTeXCommand *lc = CreateItem(i, CString(nameBuf), hasStar, nOptions);
 
 				if (lc != NULL) { /* Instance valid -> Notify container and add to list */
-					if (m_Listener != NULL) {
-						m_Listener->OnCommandFound(*lc);
-					}
-					CObject *dummy;
+					
 					switch (i) {
 					case LATEX_COMMAND:
 					case LATEX_ENVIRONMENT:
-						if (!m_Commands.Lookup(lc->ToString(), dummy)) {
-							m_Commands.SetAt(lc->ToString(), lc);
-						} else {						
-							TRACE("** Duplicate key: %s\n", lc->ToString());
+						if (!AddCommand((CLaTeXCommand*)lc)) {
 							delete lc;
 						}
 						break;
@@ -272,7 +281,7 @@ int CStyleFile::ExtractOptionCount(const TCHAR *closePar, const TCHAR *openBr, c
 }
 
 /* Creates an instance of a LaTeX command (factory pattern) */
-CLaTeXCommand *CStyleFile::CreateItem(int type, CString &name, int hasStar, int noOfParams)
+CAbstractLaTeXCommand *CStyleFile::CreateItem(int type, CString &name, int hasStar, int noOfParams)
 {
 	switch(type) {
 	case LATEX_COMMAND:
@@ -296,13 +305,77 @@ void CStyleFile::SetListener(CLaTeXCommandListener *listener)
 	m_Listener = listener;
 }
 
-/*
- * $Log$
- * Revision 1.2  2005/06/03 22:28:43  owieland
- * Impl. GetName()
- *
- * Revision 1.1  2005/06/03 20:29:43  owieland
- * Initial checkin of package and class parser
- *
- */
 
+/** 
+ Adds a command to the style file. Returns true, if command was inserted successfully or FALSE,
+ if not (e. g. command already exists)
+ */
+BOOL CStyleFile::AddCommand(CLaTeXCommand *cmd)
+{
+	CObject *dummy;
+	if (!m_Commands.Lookup(cmd->ToString(), dummy)) {
+		m_Commands.SetAt(cmd->ToString(), cmd);
+		if (m_Listener != NULL) {
+			m_Listener->OnCommandFound(*cmd);
+		}
+		return TRUE;
+	} else {						
+		TRACE("** Duplicate key: %s\n", cmd->ToString());		
+	}	
+	return FALSE;
+}
+
+/** 
+ Adds an option to the style file. Returns true, if command was inserted successfully or FALSE,
+ if not (e. g. command already exists)
+ */
+BOOL CStyleFile::AddOption(CDeclareOption *cmd)
+{
+	if (!CStyleFileContainer::ContainsString(&m_Options, cmd->GetName())) {
+		m_Options.Add(cmd->GetName());
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
+/**
+ Creates a LaTeX command (\newcommand) with the given parameters and sets
+ current style file as parent.
+ */
+BOOL CStyleFile::AddCommand(CString &name, int noOfParams, CString &desc)
+{
+	CNewCommand *nc = new CNewCommand(this, name, noOfParams);
+	nc->SetDescription(desc);
+
+	if (AddCommand(nc)) {
+		return TRUE;
+	} else {
+		delete nc;
+	}
+	return FALSE;
+}
+
+BOOL CStyleFile::AddOption(CString &name, CString &desc)
+{
+	CDeclareOption *d = new CDeclareOption(this, name);
+	if (AddOption(d)) {
+		return TRUE;
+	} else {
+		delete d;
+	}
+	return FALSE;
+}
+
+BOOL CStyleFile::AddEnvironment(CString &name, int noOfParams, CString &desc)
+{
+	CNewEnvironment *ne = new CNewEnvironment(this, name, noOfParams);
+	ne->SetDescription(desc);
+
+	if (AddCommand(ne)) {
+		return TRUE;
+	} else {
+		delete ne;
+	}
+	return FALSE;
+}
