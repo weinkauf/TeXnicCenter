@@ -34,17 +34,9 @@
 
 /*
  * $Log$
- * Revision 1.2  2005/06/03 22:24:56  owieland
- * + IMPLEMENT/DECLARE_DYNAMIC
- *
- * Revision 1.1  2005/06/03 20:29:43  owieland
- * Initial checkin of package and class parser
- *
  */
-
 #include "stdafx.h"
-#include "StyleFile.h"
-#include "LaTeXCommand.h"
+#include "texniccenter.h"
 #include "AbstractLaTeXCommand.h"
 
 #ifdef _DEBUG
@@ -56,22 +48,41 @@ static char THIS_FILE[]=__FILE__;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-IMPLEMENT_DYNAMIC(CLaTeXCommand, CAbstractLaTeXCommand) 
-
-CLaTeXCommand::CLaTeXCommand(const CStyleFile *parent, CString &name, int noOfParams)
-:CAbstractLaTeXCommand(parent, name)
-{	
-	m_NoOfParams = noOfParams > 0 ? noOfParams : 0;
-}
-
-CLaTeXCommand::CLaTeXCommand(CLaTeXCommand &cmd) 
-:CAbstractLaTeXCommand(cmd) 
+IMPLEMENT_DYNAMIC(CAbstractLaTeXCommand, CObject) 
+CAbstractLaTeXCommand::CAbstractLaTeXCommand(const CStyleFile *parent, CString &name)
 {
-	m_NoOfParams = cmd.m_NoOfParams;
+	m_Parent = parent;
+	m_Name = name;
 }
 
-CLaTeXCommand::~CLaTeXCommand()
+CAbstractLaTeXCommand::CAbstractLaTeXCommand(CAbstractLaTeXCommand &cmd) {
+	m_Parent = cmd.m_Parent;
+	m_Name = cmd.m_Name;
+}
+
+
+CAbstractLaTeXCommand::~CAbstractLaTeXCommand()
 {
 
 }
 
+const CString CAbstractLaTeXCommand::ToString()
+{
+	return m_Name;
+}
+
+
+const CString CAbstractLaTeXCommand::ToLaTeX()
+{
+	return m_Name;
+}
+
+void CAbstractLaTeXCommand::SetDescription(CString &desc)
+{
+	m_Description = desc;
+}
+
+void CAbstractLaTeXCommand::SetName(CString &name)
+{
+	m_Name = name;
+}

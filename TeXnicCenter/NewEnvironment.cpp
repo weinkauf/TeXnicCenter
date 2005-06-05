@@ -62,15 +62,18 @@ const CString CNewEnvironment::ToString() {
 	CString x =  (sf != NULL ? sf->GetFilename() : CString("???"));
 	
 	TCHAR buf[5];
-	itoa(m_NoOfParams, buf, 10);
+	itoa(GetNoOfParams(), buf, 10);
 	
 	return CString(GetName() + 
-		(m_NoOfParams>0 ? "#" + CString(buf) : "") + 
+		(GetNoOfParams()>0 ? "#" + CString(buf) : "") + 
 		" (" + x + ")");
 }
 
 /*
  * $Log$
+ * Revision 1.2  2005/06/03 22:24:56  owieland
+ * + IMPLEMENT/DECLARE_DYNAMIC
+ *
  * Revision 1.1  2005/06/03 20:29:43  owieland
  * Initial checkin of package and class parser
  *

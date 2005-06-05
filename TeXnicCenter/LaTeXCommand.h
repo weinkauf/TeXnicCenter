@@ -39,11 +39,13 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "AbstractLaTeXCommand.h"
+
 class CStyleFile;
 
 
 /* Base class for all LaTeX entities */
-class CLaTeXCommand : public CObject 
+class CLaTeXCommand : public CAbstractLaTeXCommand 
 {
 public:
 	DECLARE_DYNAMIC(CLaTeXCommand)		
@@ -51,22 +53,10 @@ public:
 	CLaTeXCommand(CLaTeXCommand &cmd);
 	virtual ~CLaTeXCommand();
 
-	CString &GetName() {return m_Name;};
 	/* Returns the number of parameters */
 	virtual int GetNoOfParams() {return m_NoOfParams;};	
-	/* Returns a pointer to the containing style or class file */
-	const CStyleFile *GetStyleFile() {return m_Parent;};
-	/* Returns the LaTeX string representation */
-	virtual const CString ToLaTeX();
-	/* Returns a unique identifier of the object (may be used as hash value) */
-	virtual const CString ToString();
-protected:
-	int					m_NoOfParams;
-
-private:	
-	CString				m_Name;
-	const CStyleFile	*m_Parent;
-
+private:
+	int m_NoOfParams;
 };
 
 /* Listener interface */
@@ -81,6 +71,9 @@ public:
 
 /*
  * $Log$
+ * Revision 1.2  2005/06/03 22:24:56  owieland
+ * + IMPLEMENT/DECLARE_DYNAMIC
+ *
  * Revision 1.1  2005/06/03 20:29:43  owieland
  * Initial checkin of package and class parser
  *
