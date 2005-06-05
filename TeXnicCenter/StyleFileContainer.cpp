@@ -34,6 +34,9 @@
 
 /*
  * $Log$
+ * Revision 1.5  2005/06/05 16:42:42  owieland
+ * Extended user interface (prepare for loading the package rep from XML)
+ *
  * Revision 1.4  2005/06/04 13:09:35  owieland
  * Added rudimentary auto-complete support (Tools->Complete command).
  *
@@ -161,14 +164,6 @@ void CStyleFileContainer::AddSearchPath(CString &dir)
 BOOL CStyleFileContainer::IsDirInSearchPath(CString &dir)
 {
 	return ContainsString(&m_SearchPaths, dir);
-	/*
-	for (int i = 0; i <= m_SearchPaths.GetUpperBound(); i++) {
-		if (dir == m_SearchPaths.GetAt(i)) {
-			return TRUE;
-		}
-	}
-	return FALSE;
-	*/
 }
 
 const CString CStyleFileContainer::GetFileExt(CString &file)
