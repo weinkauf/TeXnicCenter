@@ -104,6 +104,7 @@ CLatexEdit::CLatexEdit()
 	SetWordWrapping( TRUE );
 	m_pBackgroundThread = theApp.GetBackgroundThread();
 	m_CompletionListBox = NULL;
+	m_Proxy = new MyListener(this);
 }
 
 
@@ -111,6 +112,7 @@ CLatexEdit::~CLatexEdit() {
 	if (m_CompletionListBox != NULL) {
 		delete m_CompletionListBox;
 	}
+	delete m_Proxy;
 }
 
 
@@ -947,11 +949,11 @@ void CLatexEdit::OnUpdateTextmodulesDefine(CCmdUI* pCmdUI)
 void CLatexEdit::OnPackageSetup()
 {
 	/* For debug only*/
-	//m_AvailableCommands.AddSearchPath(CString("c:\\texmf"));
-	//m_AvailableCommands.FindStyleFiles();
+	m_AvailableCommands.AddSearchPath(CString("c:\\texmf"));
+	m_AvailableCommands.FindStyleFiles();
 
 	/* remove this line on production */
-	//if (1) return;
+	if (1) return;
 
 	CFolderSelect fsel("Choose directory to search for style files");
 	
@@ -966,12 +968,12 @@ void CLatexEdit::OnPackageSetup()
 		prg.ShowWindow(SW_SHOW);
 		m_AvailableCommands.FindStyleFiles();
 		prg.CloseWindow();
+
+		CFolderSelect fselxml("Choose directory to save package.xml");
+		if (fselxml.DoModal() == IDOK) {
+			m_AvailableCommands.SaveAsXML(fselxml.GetPath() + "\\package.xml");
+		}
 	}	
-	
-	CFolderSelect fselxml("Choose directory to save package.xml");
-	if (fselxml.DoModal() == IDOK) {
-		m_AvailableCommands.SaveAsXML(fselxml.GetPath() + "\\package.xml");
-	}
 }
 
 void CLatexEdit::OnQueryCompletion() 
@@ -998,8 +1000,13 @@ void CLatexEdit::OnQueryCompletion()
 		
 		if (pc != NULL) {
 			TRACE("Found %d possibilities...\n", pc->GetSize());
-			m_CompletionListBox = CreateListBox(pc);
-			delete pc;
+			if (pc->GetSize() > 1) {
+				m_CompletionListBox = CreateListBox(pc);
+				m_CompletionListBox->ShowWindow(SW_SHOW);
+				delete pc;
+			} else { /* choose first element automatically */
+				OnCommandSelect(pc->GetAt(0));
+			}
 		}
 		
 	}
@@ -1012,6 +1019,7 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(const CStringArray *list)
 
 	if (m_CompletionListBox == NULL) {
 		m_CompletionListBox = new CAutoCompleteListBox();
+		m_CompletionListBox->SetListener(m_Proxy);
 		m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|WS_HSCROLL, CRect(ptText.x, ptText.y, ptText.x + 150, ptText.y + 100), this, 456);
 	} else {
 		m_CompletionListBox->ResetContent();
@@ -1024,4 +1032,21 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(const CStringArray *list)
 		m_CompletionListBox->AddString(list->GetAt(i));		
 	}
 	return m_CompletionListBox;
+}
+
+
+void CLatexEdit::OnCommandSelect(CString &cmd)
+{
+	TRACE("==> OnCommandSelect %s\n", cmd);
+	//Get the current selection
+	CPoint ptStart, ptEnd;
+
+	//Get the text buffer
+	CCrystalTextBuffer* pText = LocateTextBuffer();
+
+	//Start Undo Group
+	pText->BeginUndoGroup();
+	ReplaceSelection(cmd);
+	pText->FlushUndoGroup(this);
+
 }

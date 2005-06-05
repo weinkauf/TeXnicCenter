@@ -45,6 +45,7 @@
 #include "StyleFileContainer.h"	// Added by ClassView
 #include "AutoCompleteListBox.h"
 
+class MyListener;
 
 /** Edit view for LaTeX files.
 
@@ -75,6 +76,7 @@ public:
 	redraws the window.
 	*/
 	void ApplyConfiguration();
+
 
 // implementation
 protected:
@@ -151,6 +153,7 @@ protected:
 	CLatexParser	m_latexParser;
 
 public:
+	virtual void OnCommandSelect(CString &command);
 	void OnPackageSetup();
 	CLatexDoc* GetDocument();
 
@@ -158,6 +161,7 @@ private:
 	CAutoCompleteListBox* m_CompletionListBox;
 	CAutoCompleteListBox *CreateListBox(const CStringArray *list);
 	CStyleFileContainer m_AvailableCommands;
+	MyListener *m_Proxy;
 };
 
 #ifndef _DEBUG  // Testversion in LatexEdit.cpp
@@ -165,6 +169,18 @@ inline CLatexDoc* CLatexEdit::GetDocument()
    { return (CLatexDoc*)m_pDocument; }
 #endif
 
+/**
+ This class is needed because CLaTeXEdit will not compile, if CAutoCompleteListener is
+ added to the base class list %&$§"*!.
+ So we must redirect the listener chain to this class  (sigh).
+ */
+class MyListener : public CAutoCompleteListener {
+public:
+	MyListener(CLatexEdit *parent) {ASSERT(parent != NULL); p = parent;}
+	virtual void OnCommandSelect(CString &command) {p->OnCommandSelect(command);}
+private:
+	CLatexEdit *p;
+};
 /////////////////////////////////////////////////////////////////////////////
 
 //{{AFX_INSERT_LOCATION}}
