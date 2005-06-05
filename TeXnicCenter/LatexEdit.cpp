@@ -949,11 +949,11 @@ void CLatexEdit::OnUpdateTextmodulesDefine(CCmdUI* pCmdUI)
 void CLatexEdit::OnPackageSetup()
 {
 	/* For debug only*/
-	m_AvailableCommands.AddSearchPath(CString("c:\\texmf"));
-	m_AvailableCommands.FindStyleFiles();
+	//m_AvailableCommands.AddSearchPath(CString("c:\\texmf"));
+	//m_AvailableCommands.FindStyleFiles();
 
 	/* remove this line on production */
-	if (1) return;
+	//if (1) return;
 
 	CFolderSelect fsel("Choose directory to search for style files");
 	
@@ -978,7 +978,7 @@ void CLatexEdit::OnPackageSetup()
 
 void CLatexEdit::OnQueryCompletion() 
 {	
-	TRACE("OnQueryCompletion...\n");
+	//TRACE("OnQueryCompletion...\n");
 	if (!m_AvailableCommands.GetNoOfFiles()) {
 		/* ask user for scanning directories */		
 		if (AfxMessageBox(STE_QUERY_FILES, MB_ICONQUESTION|MB_YESNO) == IDYES) {
@@ -993,7 +993,7 @@ void CLatexEdit::OnQueryCompletion()
 	if (ptStart != ptEnd) {
 		GetText(ptStart, ptEnd, keyword);
 	}
-	TRACE("Keyword %s\n", keyword);
+	//TRACE("Keyword %s\n", keyword);
 
 	if (keyword.GetLength() > 2) {
 		const CStringArray *pc = m_AvailableCommands.GetPossibleCompletions(keyword);
@@ -1002,11 +1002,16 @@ void CLatexEdit::OnQueryCompletion()
 			TRACE("Found %d possibilities...\n", pc->GetSize());
 			if (pc->GetSize() > 1) {
 				m_CompletionListBox = CreateListBox(pc);
-				m_CompletionListBox->ShowWindow(SW_SHOW);
+				m_CompletionListBox->ShowWindow(SW_RESTORE);
+				m_CompletionListBox->SetFocus();
 				delete pc;
 			} else { /* choose first element automatically */
+				TRACE("One command found: %s\n", pc->GetAt(0));
 				OnCommandSelect(pc->GetAt(0));
 			}
+		} else {
+			TRACE("No command found!\n");
+			Beep(300, 300);
 		}
 		
 	}
@@ -1015,29 +1020,34 @@ void CLatexEdit::OnQueryCompletion()
 CAutoCompleteListBox *CLatexEdit::CreateListBox(const CStringArray *list)
 {
 	CPoint	ptStart, ptText;
-	GetSelection(ptStart, ptText);
-
+	GetSelection(ptStart, ptText);	
+	ptText = TextToClient(ptText);
+	
 	if (m_CompletionListBox == NULL) {
 		m_CompletionListBox = new CAutoCompleteListBox();
 		m_CompletionListBox->SetListener(m_Proxy);
-		m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|WS_HSCROLL, CRect(ptText.x, ptText.y, ptText.x + 150, ptText.y + 100), this, 456);
+		m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|LBS_WANTKEYBOARDINPUT|LBS_OWNERDRAWFIXED, CRect(ptText.x, ptText.y, ptText.x + 150, ptText.y + 100), this, 456);
 	} else {
 		m_CompletionListBox->ResetContent();
+		m_CompletionListBox->SetWindowPos(NULL, ptText.x, ptText.y, 150, 100, SWP_NOZORDER);
 		//m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|WS_HSCROLL, CRect(ptText.x, ptText.y, 100, 50), this, 456);
 	}
 
-	TRACE("Will add %d items \n", list->GetSize());
+	//TRACE("Will add %d items \n", list->GetSize());
 	for(int i=0; i < list->GetSize(); i++) {
-		TRACE("Adding %s\n", list->GetAt(i));
-		m_CompletionListBox->AddString(list->GetAt(i));		
+		//TRACE("Adding %s\n", list->GetAt(i));
+		m_CompletionListBox->AddString(list->GetAt(i));				
 	}
+	
+	m_CompletionListBox->SetCurSel(0);
+	//TRACE("List box contains %d items\n", m_CompletionListBox->GetCount());
 	return m_CompletionListBox;
 }
 
 
 void CLatexEdit::OnCommandSelect(CString &cmd)
 {
-	TRACE("==> OnCommandSelect %s\n", cmd);
+	//TRACE("==> OnCommandSelect %s\n", cmd);
 	//Get the current selection
 	CPoint ptStart, ptEnd;
 
