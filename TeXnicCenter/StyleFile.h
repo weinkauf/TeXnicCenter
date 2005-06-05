@@ -41,6 +41,8 @@
 
 #include "LaTeXCommand.h"
 
+class CDeclareOption;
+
 const int LATEX_COMMAND = 0;
 const int LATEX_ENVIRONMENT = 1;
 const int LATEX_OPTION = 2;
@@ -52,6 +54,7 @@ const int LATEX_REQPACKAGE = 3;
 class CStyleFile :public CObject
 {
 public:	
+	
 	
 	CStyleFile(CStyleFile &file);
 	CStyleFile(CString& m_Filename);
@@ -66,13 +69,20 @@ public:
 	const CMapStringToOb *GetCommands() const {return &m_Commands;}
 	const CStringArray *GetOptions() const {return &m_Options;}
 	const CStringArray *GetRequiredPackages() const {return &m_ReqPackages;}
+	
+	BOOL AddCommand(CString &name, int noOfParams=0, CString &desc=CString(""));
+	/** Works for both, \newcommand and \newenvironment */
+	BOOL AddCommand(CLaTeXCommand *cmd);
+	BOOL AddEnvironment(CString &name, int noOfParams=0, CString &desc=CString(""));
+	BOOL AddOption(CDeclareOption *cmd);
+	BOOL AddOption(CString &name, CString &desc=CString(""));
 
 	CStyleFile& operator = (const CStyleFile&);
 		
 private:
 	
 	void Init();
-	CLaTeXCommand *CreateItem(int type, CString &name, int hasStar, int noOfParams);
+	CAbstractLaTeXCommand *CreateItem(int type, CString &name, int hasStar, int noOfParams);
 
 	CStringArray			m_Options;
 	CStringArray			m_ReqPackages;
@@ -100,6 +110,9 @@ public:
 
 /*
  * $Log$
+ * Revision 1.3  2005/06/04 10:39:12  owieland
+ * Added option and required package support
+ *
  * Revision 1.2  2005/06/03 22:28:43  owieland
  * Impl. GetName()
  *

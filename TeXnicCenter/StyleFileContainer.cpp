@@ -31,6 +31,23 @@
 * $Id$
 *
 ********************************************************************/
+
+/*
+ * $Log$
+ * Revision 1.4  2005/06/04 13:09:35  owieland
+ * Added rudimentary auto-complete support (Tools->Complete command).
+ *
+ * Revision 1.3  2005/06/04 10:39:12  owieland
+ * Added option and required package support
+ *
+ * Revision 1.2  2005/06/03 22:29:20  owieland
+ * XML Export
+ *
+ * Revision 1.1  2005/06/03 20:29:43  owieland
+ * Initial checkin of package and class parser
+ *
+ */
+
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "StyleFile.h"
@@ -143,12 +160,15 @@ void CStyleFileContainer::AddSearchPath(CString &dir)
 /* Returns true, if path <dir> is already in the search path, otherwise FALSE */
 BOOL CStyleFileContainer::IsDirInSearchPath(CString &dir)
 {
+	return ContainsString(&m_SearchPaths, dir);
+	/*
 	for (int i = 0; i <= m_SearchPaths.GetUpperBound(); i++) {
 		if (dir == m_SearchPaths.GetAt(i)) {
 			return TRUE;
 		}
 	}
 	return FALSE;
+	*/
 }
 
 const CString CStyleFileContainer::GetFileExt(CString &file)
@@ -192,8 +212,10 @@ const CStringArray* CStyleFileContainer::GetPossibleCompletions(const CString &c
 			if (tmp == NULL) {
 				tmp = new CStringArray();
 			}
-			
-			tmp->Add(lc->ToLaTeX() + " - " + lc->GetStyleFile()->GetName());			 		
+
+			if (!ContainsString(tmp, lc->ToLaTeX())) {
+				tmp->Add(lc->ToLaTeX());			 		
+			}
 			//TRACE("ADD '%s' (now %d items)\n", key, tmp->GetSize());
 		}
 	}	
@@ -332,16 +354,19 @@ void CStyleFileContainer::ClearMap()
 	m_Commands.RemoveAll();
 }
 
-/*
- * $Log$
- * Revision 1.3  2005/06/04 10:39:12  owieland
- * Added option and required package support
- *
- * Revision 1.2  2005/06/03 22:29:20  owieland
- * XML Export
- *
- * Revision 1.1  2005/06/03 20:29:43  owieland
- * Initial checkin of package and class parser
- *
- */
+/** Helper function for StringArrays. */
+BOOL CStyleFileContainer::ContainsString(const CStringArray *list, const CString &string)
+{
+	ASSERT(list != NULL);
+	for(int i=0; i < list->GetSize(); i++) {
+		if (string == list->GetAt(i)) {
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
 
+void CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
+{
+
+}
