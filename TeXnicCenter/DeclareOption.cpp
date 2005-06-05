@@ -17,7 +17,7 @@ static char THIS_FILE[]=__FILE__;
 //////////////////////////////////////////////////////////////////////
 
 CDeclareOption::CDeclareOption(const CStyleFile *parent, CString &name)
-:CLaTeXCommand(parent, name, 0)
+:CAbstractLaTeXCommand(parent, name)
 {
 
 }

@@ -11,7 +11,7 @@
 
 #include "LaTeXCommand.h"
 
-class CDeclareOption : public CLaTeXCommand  
+class CDeclareOption : public CAbstractLaTeXCommand  
 {
 public:
 	CDeclareOption(const CStyleFile *parent, CString &name);
