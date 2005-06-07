@@ -599,6 +599,9 @@ void CTeXnicCenterApp::LoadCustomState()
 			pTool1->m_strInitialDirectory = "%dc";
 		}
 	}
+
+	/* ow: Load command repository */
+	m_AvailableCommands.LoadFromXML(GetWorkingDir() + _T("\\packages.xml"));
 }
 
 

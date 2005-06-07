@@ -42,10 +42,11 @@
 #include "LatexParser.h"
 #include "LatexDoc.h"
 #include "CrystalEditViewEx.h"
-#include "StyleFileContainer.h"	// Added by ClassView
 #include "AutoCompleteListBox.h"
 
 class MyListener;
+
+
 
 /** Edit view for LaTeX files.
 
@@ -160,7 +161,7 @@ public:
 private:
 	CAutoCompleteListBox* m_CompletionListBox;
 	CAutoCompleteListBox *CreateListBox(const CStringArray *list);
-	CStyleFileContainer m_AvailableCommands;
+	
 	MyListener *m_Proxy;
 };
 

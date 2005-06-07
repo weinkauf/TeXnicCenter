@@ -49,6 +49,7 @@
 #include "MDIFrameManager.h"
 #include "ProjectSupportingWinApp.h"
 #include "ProjectTemplate.h"
+#include "StyleFileContainer.h"	// Added by ClassView
 
 extern class CTeXnicCenterApp	theApp;
 
@@ -310,6 +311,7 @@ protected:
 
 // attributes
 public:
+	CStyleFileContainer m_AvailableCommands;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	/** Accelerator manager */
 	//CBCGKeyboardManager m_keyboardManager;
