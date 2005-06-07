@@ -34,6 +34,9 @@
 
 /*
  * $Log$
+ * Revision 1.4  2005/06/05 16:42:42  owieland
+ * Extended user interface (prepare for loading the package rep from XML)
+ *
  * Revision 1.3  2005/06/04 10:39:12  owieland
  * Added option and required package support
  *
@@ -61,7 +64,7 @@ static TCHAR THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-const TCHAR* TOKENS[]={"\\newcommand", "\\newenvironment", "\\DeclareOption", "\\RequirePackage"};
+const TCHAR* TOKENS[]={"\\newcommand", "\\newenvironment", "\\DeclareOption", "\\RequirePackage", "\\def"};
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -78,6 +81,11 @@ CStyleFile::CStyleFile(CString& filename)
 	m_Filename = filename;
 	m_Name = CPathTool::GetFileTitle(filename);
 	Init();
+}
+
+void CStyleFile::Init()
+{	
+	m_Listener = NULL;
 }
 
 CStyleFile::~CStyleFile()
@@ -105,6 +113,10 @@ CStyleFile& CStyleFile::operator = (const CStyleFile& sf)
 	return *this;
 }
 
+/**
+ Processes a file, if it contains valuable commands. The file is loaded into a buffer
+ a is passed to <it>ParseBuffer</it>, where all commands will be extracted.
+ */
 void CStyleFile::ProcessFile()
 {
 	CFile f;
@@ -114,11 +126,9 @@ void CStyleFile::ProcessFile()
 		DWORD l = f.GetLength();
 
 		TCHAR *buf = new TCHAR[l];
-
 		f.Read(buf, l);
 
 		if (HasCommands(buf)) {
-			//TRACE("File %s contains commands\n", m_Filename);
 			ParseBuffer(buf);
 		}
 
@@ -131,22 +141,26 @@ void CStyleFile::ProcessFile()
 	f.Close();	
 }
 
+/**
+ Checks if a buffer contains given keywords.
+ */
 BOOL CStyleFile::HasCommands(const TCHAR *buf)
 {
-	return strstr(buf, "\\newcommand") != NULL || 
-		strstr(buf, "\\newenvironment") != NULL || 
-		strstr(buf, "\\DeclareOption") != NULL;
+	for (int i = 0; i < TOKEN_COUNT; i++) {
+		if (strstr(buf, TOKENS[i]) != NULL) {
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
-void CStyleFile::Init()
-{	
-	m_Listener = NULL;
-}
-
+/**
+ Parses a buffer and creates appropriate instances. It works on a very low level.
+ */
 void CStyleFile::ParseBuffer(TCHAR *buf)
 {
 	
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < TOKEN_COUNT; i++) {
 		TCHAR *t, *token;
 		TCHAR nameBuf[255];
 		int lTok = strlen(TOKENS[i]);		
@@ -200,7 +214,7 @@ void CStyleFile::ParseBuffer(TCHAR *buf)
 			}
 
 			int l = p - pStart;
-			if (l < 255 && l > 0 && !isPrivate) { // Command valid?
+			if (l < 255 && l > 0 && !isPrivate) { /* Command valid? */
 				strncpy((TCHAR*)&nameBuf, pStart, l);
 				nameBuf[l] = 0;
 
@@ -212,6 +226,9 @@ void CStyleFile::ParseBuffer(TCHAR *buf)
 					switch (i) {
 					case LATEX_COMMAND:
 					case LATEX_ENVIRONMENT:
+					case LATEX_DEF:
+						/* Some commands may be duplicate due to conditional definitions in the
+						   style file. */
 						if (!AddCommand((CLaTeXCommand*)lc)) {
 							delete lc;
 						}
@@ -250,13 +267,16 @@ void CStyleFile::ParseBuffer(TCHAR *buf)
 				}
 			}
 
-
 			/* Get next token: */
 			token = strstr(token + 1, TOKENS[i]);	  
 	   }
 	}
 }
 
+/**
+ Retrieves the number of options of a command or environment. Does not work for commands
+ defined via '\def' (TeX-Style).
+ */
 int CStyleFile::ExtractOptionCount(const TCHAR *closePar, const TCHAR *openBr, const TCHAR *closeBr)
 {
 	if (closePar == NULL || openBr == NULL || closeBr == NULL) return -2; /* No option avalable */
@@ -280,11 +300,14 @@ int CStyleFile::ExtractOptionCount(const TCHAR *closePar, const TCHAR *openBr, c
 	return atoi(buf);
 }
 
-/* Creates an instance of a LaTeX command (factory pattern) */
+/** 
+ Creates an instance of a LaTeX command (factory pattern) 
+ */
 CAbstractLaTeXCommand *CStyleFile::CreateItem(int type, CString &name, int hasStar, int noOfParams)
 {
 	switch(type) {
 	case LATEX_COMMAND:
+	case LATEX_DEF:
 		return new CNewCommand(this, name, noOfParams, hasStar);
 		break;
 	case LATEX_ENVIRONMENT:
@@ -300,6 +323,9 @@ CAbstractLaTeXCommand *CStyleFile::CreateItem(int type, CString &name, int hasSt
 	throw INVALID_LATEX_ITEM;
 }
 
+/**
+ Registers a listener for style file events. An existing listener will be dropped. 
+ */
 void CStyleFile::SetListener(CLaTeXCommandListener *listener)
 {
 	m_Listener = listener;
@@ -341,7 +367,7 @@ BOOL CStyleFile::AddOption(CDeclareOption *cmd)
 
 /**
  Creates a LaTeX command (\newcommand) with the given parameters and sets
- current style file as parent.
+ current style file as parent. The parameter desc is an optional description.
  */
 BOOL CStyleFile::AddCommand(CString &name, int noOfParams, CString &desc)
 {
@@ -356,6 +382,9 @@ BOOL CStyleFile::AddCommand(CString &name, int noOfParams, CString &desc)
 	return FALSE;
 }
 
+/**
+ Adds an option to this style file.
+ */
 BOOL CStyleFile::AddOption(CString &name, CString &desc)
 {
 	CDeclareOption *d = new CDeclareOption(this, name);
@@ -366,6 +395,11 @@ BOOL CStyleFile::AddOption(CString &name, CString &desc)
 	}
 	return FALSE;
 }
+
+/**
+ Creates a LaTeX environment (\newenvironment) with the given parameters and sets
+ current style file as parent. The parameter desc is an optional description.
+ */
 
 BOOL CStyleFile::AddEnvironment(CString &name, int noOfParams, CString &desc)
 {
