@@ -54,7 +54,7 @@ public:
 	virtual ~CLaTeXCommand();
 
 	/* Returns the number of parameters */
-	virtual int GetNoOfParams() {return m_NoOfParams;};	
+	virtual int GetNoOfParams() {return m_NoOfParams;};		
 private:
 	int m_NoOfParams;
 };
@@ -71,6 +71,10 @@ public:
 
 /*
  * $Log$
+ * Revision 1.3  2005/06/05 16:41:59  owieland
+ * Introduced new base class CAbstractLaTeXCommand for a better
+ * understandable class hierarchy and better seperation of options and commands.
+ *
  * Revision 1.2  2005/06/03 22:24:56  owieland
  * + IMPLEMENT/DECLARE_DYNAMIC
  *

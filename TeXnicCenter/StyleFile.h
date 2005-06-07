@@ -58,7 +58,7 @@ class CStyleFile :public CObject
 {
 public:	
 	
-	
+	CStyleFile(CString &name, CString &desc);
 	CStyleFile(CStyleFile &file);
 	CStyleFile(CString& m_Filename);
 	
@@ -83,6 +83,7 @@ public:
 	CStyleFile& operator = (const CStyleFile&);
 		
 private:
+	CString m_Desc;
 	
 	void Init();
 	CAbstractLaTeXCommand *CreateItem(int type, CString &name, int hasStar, int noOfParams);
@@ -113,6 +114,11 @@ public:
 
 /*
  * $Log$
+ * Revision 1.5  2005/06/07 19:48:21  owieland
+ * + Parse commands declared via \\def
+ * + Revised HasCommands
+ * + Added comments
+ *
  * Revision 1.4  2005/06/05 16:42:42  owieland
  * Extended user interface (prepare for loading the package rep from XML)
  *
