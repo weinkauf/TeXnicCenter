@@ -52,11 +52,14 @@ CNewCommand::CNewCommand(const CStyleFile *parent, CString &name, int noOfParam,
 :CLaTeXCommand(parent, name, noOfParam)
 {	
 	m_HasStar = hasStar;
+	if (name[0] == '\\') { /* remove trailing '\', if neccessary  */
+		name.Delete(0);
+	}
 	if (name[name.GetLength()-1] == '*') { // correct name, if neccessary
 		m_HasStar = TRUE;
-		name.Delete(name.GetLength()-1);
-		SetName(name);
+		name.Delete(name.GetLength()-1);		
 	}
+	SetName(name);
 }
 
 CNewCommand::~CNewCommand()
@@ -66,7 +69,7 @@ CNewCommand::~CNewCommand()
 
 const CString CNewCommand::ToString() {
 	const CStyleFile *sf = GetStyleFile();
-	CString x =  (sf != NULL ? sf->GetFilename() : CString("???"));
+	CString x =  (sf != NULL ? sf->GetName() : CString("???"));
 	
 	TCHAR buf[5];
 	itoa(GetNoOfParams(), buf, 10);
@@ -84,6 +87,10 @@ const CString CNewCommand::ToLaTeX()
 
 /*
  * $Log$
+ * Revision 1.3  2005/06/05 16:41:59  owieland
+ * Introduced new base class CAbstractLaTeXCommand for a better
+ * understandable class hierarchy and better seperation of options and commands.
+ *
  * Revision 1.2  2005/06/03 22:24:56  owieland
  * + IMPLEMENT/DECLARE_DYNAMIC
  *

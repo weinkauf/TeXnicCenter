@@ -34,6 +34,11 @@
 
 /*
  * $Log$
+ * Revision 1.6  2005/06/05 19:45:18  owieland
+ * - Beautified auto complete listbox (fonts, position).
+ * - Bugfix: Window did not appeared after second invocation
+ * - Beep, if no completion was found
+ *
  * Revision 1.5  2005/06/05 16:42:42  owieland
  * Extended user interface (prepare for loading the package rep from XML)
  *
@@ -131,8 +136,7 @@ void CStyleFileContainer::FindStyleFilesRecursive(CString dir)
 				if (m_Listener != NULL) {
 					m_Listener->OnFileFound(dir);
 				}
-				m_StyleFiles.SetAt(p, sf);				
-				m_NoOfFiles++;
+				AddStyleFile(sf);
 			}
 		}
 	}
@@ -174,6 +178,17 @@ const CString CStyleFileContainer::GetFileExt(CString &file)
 		return CString(file.Mid(idx + 1));
 	}
 	return CString(""); 
+}
+
+BOOL CStyleFileContainer::AddStyleFile(CStyleFile *sf)
+{	
+	CObject *dummy;
+	if (!m_StyleFiles.Lookup(sf->GetName(), dummy)) {
+		m_StyleFiles.SetAt(sf->GetName(), sf);				
+		m_NoOfFiles++;
+		return TRUE;
+	}
+	return FALSE;
 }
 
 void CStyleFileContainer::OnCommandFound(CLaTeXCommand &command) {
@@ -361,7 +376,151 @@ BOOL CStyleFileContainer::ContainsString(const CStringArray *list, const CString
 	return FALSE;
 }
 
-void CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
+/**
+ Loads commands from XML. Took code from profile.cpp 
+ */
+BOOL CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
 {
+	MsXml::CXMLDOMDocumentEx	xmlDoc;
+	try
+	{
+		xmlDoc.Create(/*
+			_T("xmlns:txcop='http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd'"), 
+			CPathTool::Cat(theApp.GetWorkingDir(), _T("OutputProfiles.xsd")),
+			_T("http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd")*/);
 
+		if (!CPathTool::Exists(file)) {
+			return FALSE;
+		}
+
+		if (!xmlDoc.Load((LPCTSTR)file)) AfxThrowComException(S_FALSE);
+
+				
+		MsXml::CXMLDOMElement xmlPackages(xmlDoc.GetDocumentElement());
+
+		MsXml::CXMLDOMNodeList nodes = xmlPackages.GetChildNodes();
+		const long	lPackages = nodes.GetLength();
+		TRACE("Found %d package nodes in %s\n", lPackages, file);
+
+		if (lPackages > 0 && !addToExisting) {
+			ClearMap(); /* drop existing commands */
+		}
+
+		for (long i = 0; i < lPackages; ++i) {	/* walk through child nodes */		 
+			ProcessPackageNode(nodes.GetItem(i));
+		}
+		TRACE("** Loaded %d commands\n", m_Commands.GetCount());
+		return TRUE;
+	}
+	catch (CComException *pE)
+	{
+		bool bReportedError(false);
+
+		//Ask MsXML for error description
+		try
+		{
+			if (xmlDoc && xmlDoc.GetParseError() && xmlDoc.GetParseError().GetErrorCode()!=0)
+			{
+				MsXml::CXMLDOMParseError xmlError(xmlDoc.GetParseError());
+				CString	strErrorMsg;
+				strErrorMsg.Format(STE_XML_PARSE_ERROR, 
+					xmlError.GetErrorCode(), xmlError.GetReason(),
+					xmlError.GetUrl(), xmlError.GetLine(), xmlError.GetLinepos(),
+					xmlError.GetSrcText());
+
+				AfxMessageBox(strErrorMsg, MB_ICONEXCLAMATION|MB_OK);
+				bReportedError = true;
+			}
+		}
+		catch (CComException* pENew)
+		{
+			pENew->Delete();
+		}
+
+
+		//Report Error, if MsXML did not respond
+		if (!bReportedError)
+		{
+			if (pE->GetDescription() == _T(""))
+			{
+				//A generic COM error.
+				//For example, MsXML not installed.
+
+				//Inform the user, that he needs to install MsXML.
+				AfxMessageBox(STE_XML_INSTALLNEEDED, MB_ICONINFORMATION|MB_OK);
+			}
+			else
+			{
+				//Some other error. For example, schema file is missing (*.xsd)
+				pE->ReportError(MB_ICONEXCLAMATION|MB_OK);
+			}
+		}
+
+		pE->Delete();
+		return FALSE;
+	}	
+}
+
+
+
+void CStyleFileContainer::ProcessPackageNode(MsXml::CXMLDOMNode &element)
+{
+	/* fetch attributes */
+	MsXml::CXMLDOMNamedNodeMap attr = element.GetAttributes();
+	CString nameVal, descVal;
+
+	for(int j = 0; j < attr.GetLength(); j++) {
+		MsXml::CXMLDOMNode a = attr.GetItem(j);
+		CString s = a.GetNodeName();
+		if (s == CSF_XML_NAME) {
+			nameVal = a.GetText();
+		} else if (s == CSF_XML_DESC) {
+			descVal = a.GetText();
+		}
+	}
+	
+	/* Create style file instance and insert it into the hash map */
+	CStyleFile *sf = new CStyleFile(nameVal, descVal);
+	sf->SetListener(this);
+	if (!AddStyleFile(sf)) {
+		TRACE("WARNING: Unable to add file %s, seems to be duplicate\n", sf->GetName());
+		delete sf;
+		return;
+	}
+	
+	/* Process children */
+	MsXml::CXMLDOMNodeList nodes = element.GetChildNodes();		
+	long n = nodes.GetLength();
+	
+	for (long i = 0; i < n; ++i) {	/* walk through child nodes */
+		ProcessEntityNodes(nodes.GetItem(i), sf);
+	}
+}
+
+
+void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyleFile *parent)
+{
+	/* fetch attributes */
+	MsXml::CXMLDOMNamedNodeMap attr = element.GetAttributes();
+	CString nameVal, descVal;
+	int nOfParams = 0;		
+
+	for(int j = 0; j < attr.GetLength(); j++) {
+		MsXml::CXMLDOMNode a = attr.GetItem(j);
+		CString s = a.GetNodeName();
+		if (s == CSF_XML_NAME) {
+			nameVal = a.GetText();
+		} else if (s == CSF_XML_DESC) {
+			descVal = a.GetText();
+		} else if (s == CSF_XML_PARAMS) {
+			nOfParams = atoi(a.GetText());			
+		}
+	}
+
+	/* Add element to style file */
+	if (element.GetNodeName() == CSF_XML_COMMAND) {
+		parent->AddCommand(nameVal, nOfParams, descVal);
+	} else if (element.GetNodeName() == CSF_XML_ENVIRONMENT) {
+		parent->AddEnvironment(nameVal, nOfParams, descVal);
+	}
 }

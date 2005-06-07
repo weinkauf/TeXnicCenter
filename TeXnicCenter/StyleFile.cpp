@@ -34,6 +34,11 @@
 
 /*
  * $Log$
+ * Revision 1.5  2005/06/07 19:48:21  owieland
+ * + Parse commands declared via \\def
+ * + Revised HasCommands
+ * + Added comments
+ *
  * Revision 1.4  2005/06/05 16:42:42  owieland
  * Extended user interface (prepare for loading the package rep from XML)
  *
@@ -69,10 +74,19 @@ const TCHAR* TOKENS[]={"\\newcommand", "\\newenvironment", "\\DeclareOption", "\
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+CStyleFile::CStyleFile(CString &name, CString &desc)
+{
+	m_Filename = _T("");
+	m_Name = name;
+	m_Desc = desc;
+	Init();
+}
+
 CStyleFile::CStyleFile(CStyleFile &file)
 {
 	m_Filename = file.m_Filename;
 	m_Name = file.GetName();
+	m_Desc = _T("");
 	Init();
 }
 
@@ -80,6 +94,7 @@ CStyleFile::CStyleFile(CString& filename)
 {
 	m_Filename = filename;
 	m_Name = CPathTool::GetFileTitle(filename);
+	m_Desc = _T("");
 	Init();
 }
 

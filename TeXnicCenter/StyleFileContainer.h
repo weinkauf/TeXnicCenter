@@ -49,6 +49,7 @@
 #define CSF_XML_NAME		_T("name")
 #define CSF_XML_PATH		_T("path")
 #define CSF_XML_PARAMS		_T("parameters")
+#define CSF_XML_DESC		_T("desc")
 
 
 /* Container class for all available .sty and .cls files.
@@ -57,7 +58,8 @@
 class CStyleFileContainer : public CObject, virtual public CLaTeXCommandListener
 {
 public:	
-	void LoadFromXML(const CString &file, BOOL addToExisting);
+	BOOL AddStyleFile(CStyleFile *sf);
+	BOOL LoadFromXML(const CString &file, BOOL addToExisting=FALSE);
 	static BOOL ContainsString(const CStringArray *list, const CString &string);
 	BOOL SaveAsXML(CString &path);
 	CStyleFileContainer(CString &basePath=CString("."));
@@ -89,9 +91,12 @@ public:
 	virtual void OnCommandFound(CLaTeXCommand &command);
 
 private:
+	void ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyleFile *parent);
+	void ProcessPackageNode(MsXml::CXMLDOMNode &element);
+	
 	
 	void FindStyleFilesRecursive(CString dir);
-
+	
 	CString			m_LastItem;		/* Contains name of last item found */
 	CString			m_LastFile;		/* Contains name of last file found */
 	CString			m_LastDir;		/* Contains name of last dir found */
@@ -106,10 +111,14 @@ protected:
 	void ClearMap();
 };
 
+
 #endif // !defined(AFX_STYLEFILECONTAINER_H__20CE8791_F3F3_4CA7_9FA6_373EAD4AAABF__INCLUDED_)
 
 /*
  * $Log$
+ * Revision 1.4  2005/06/05 16:42:42  owieland
+ * Extended user interface (prepare for loading the package rep from XML)
+ *
  * Revision 1.3  2005/06/04 10:39:12  owieland
  * Added option and required package support
  *
