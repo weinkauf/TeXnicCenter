@@ -47,6 +47,9 @@ const int LATEX_COMMAND = 0;
 const int LATEX_ENVIRONMENT = 1;
 const int LATEX_OPTION = 2;
 const int LATEX_REQPACKAGE = 3;
+const int LATEX_DEF = 4;
+
+const int TOKEN_COUNT = 5;
 
 #define INVALID_LATEX_ITEM -5678
 
@@ -110,6 +113,9 @@ public:
 
 /*
  * $Log$
+ * Revision 1.4  2005/06/05 16:42:42  owieland
+ * Extended user interface (prepare for loading the package rep from XML)
+ *
  * Revision 1.3  2005/06/04 10:39:12  owieland
  * Added option and required package support
  *
