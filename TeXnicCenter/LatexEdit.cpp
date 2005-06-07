@@ -493,6 +493,7 @@ BOOL CLatexEdit::OnInsertLatexConstruct( UINT nID )
 
 void CLatexEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
+	TRACE("Key %d (%x), Flags = %d (%x)\n", nChar, nChar, nFlags, nFlags);
 	switch( nChar )
 	{
 		case _T('"'):
@@ -517,8 +518,7 @@ void CLatexEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 				}
 			}
 
-			break;
-
+			break;		
 		default:
 			CCrystalEditViewEx::OnChar(nChar, nRepCnt, nFlags);
 	}
@@ -559,7 +559,7 @@ void CLatexEdit::GetSelectedKeyword(CString &strKeyword)
 	if (ptStart != ptEnd)
 		GetText(ptStart, ptEnd, strKeyword);
 	else if ( GetLineLength(ptStart.y) )
-	{
+	{		
 		// retrieve the keyword, the cursor is placed on
 		CString	strLine(GetLineChars(ptStart.y));
 
@@ -959,19 +959,19 @@ void CLatexEdit::OnPackageSetup()
 	
 
 	if (fsel.DoModal() == IDOK) {
-		m_AvailableCommands.ClearSearchPath();
-		m_AvailableCommands.AddSearchPath(CString(fsel.GetPath()));
+		theApp.m_AvailableCommands.ClearSearchPath();
+		theApp.m_AvailableCommands.AddSearchPath(CString(fsel.GetPath()));
 		
 		CPackageScanProgress prg;
-		m_AvailableCommands.SetEventListener(&prg);
+		theApp.m_AvailableCommands.SetEventListener(&prg);
 
 		prg.ShowWindow(SW_SHOW);
-		m_AvailableCommands.FindStyleFiles();
+		theApp.m_AvailableCommands.FindStyleFiles();
 		prg.CloseWindow();
 
 		CFolderSelect fselxml("Choose directory to save package.xml");
 		if (fselxml.DoModal() == IDOK) {
-			m_AvailableCommands.SaveAsXML(fselxml.GetPath() + "\\package.xml");
+			theApp.m_AvailableCommands.SaveAsXML(fselxml.GetPath() + "\\package.xml");
 		}
 	}	
 }
@@ -979,7 +979,7 @@ void CLatexEdit::OnPackageSetup()
 void CLatexEdit::OnQueryCompletion() 
 {	
 	//TRACE("OnQueryCompletion...\n");
-	if (!m_AvailableCommands.GetNoOfFiles()) {
+	if (!theApp.m_AvailableCommands.GetNoOfFiles()) {
 		/* ask user for scanning directories */		
 		if (AfxMessageBox(STE_QUERY_FILES, MB_ICONQUESTION|MB_YESNO) == IDYES) {
 			OnPackageSetup();
@@ -996,10 +996,10 @@ void CLatexEdit::OnQueryCompletion()
 	//TRACE("Keyword %s\n", keyword);
 
 	if (keyword.GetLength() > 2) {
-		const CStringArray *pc = m_AvailableCommands.GetPossibleCompletions(keyword);
+		const CStringArray *pc = theApp.m_AvailableCommands.GetPossibleCompletions(keyword);
 		
 		if (pc != NULL) {
-			TRACE("Found %d possibilities...\n", pc->GetSize());
+			//TRACE("Found %d possibilities...\n", pc->GetSize());
 			if (pc->GetSize() > 1) {
 				m_CompletionListBox = CreateListBox(pc);
 				m_CompletionListBox->ShowWindow(SW_RESTORE);
@@ -1009,11 +1009,9 @@ void CLatexEdit::OnQueryCompletion()
 				TRACE("One command found: %s\n", pc->GetAt(0));
 				OnCommandSelect(pc->GetAt(0));
 			}
-		} else {
-			TRACE("No command found!\n");
-			Beep(300, 300);
-		}
-		
+		} 		
+	} else {
+		Beep(300, 300); // Nothing found or no (valid) keyword selected
 	}
 }
 
@@ -1021,34 +1019,30 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(const CStringArray *list)
 {
 	CPoint	ptStart, ptText;
 	GetSelection(ptStart, ptText);	
-	ptText = TextToClient(ptText);
+	ptStart.y++; // goto next row
+	ptStart = TextToClient(ptStart);
 	
 	if (m_CompletionListBox == NULL) {
-		m_CompletionListBox = new CAutoCompleteListBox();
+		m_CompletionListBox = new CAutoCompleteListBox(ptStart);
 		m_CompletionListBox->SetListener(m_Proxy);
-		m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|LBS_WANTKEYBOARDINPUT|LBS_OWNERDRAWFIXED, CRect(ptText.x, ptText.y, ptText.x + 150, ptText.y + 100), this, 456);
+		m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|LBS_WANTKEYBOARDINPUT|LBS_OWNERDRAWFIXED, 
+			CRect(ptStart.x, ptStart.y, ptStart.x + 150, ptStart.y + 100), this, 456);
 	} else {
 		m_CompletionListBox->ResetContent();
-		m_CompletionListBox->SetWindowPos(NULL, ptText.x, ptText.y, 150, 100, SWP_NOZORDER);
-		//m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|WS_HSCROLL, CRect(ptText.x, ptText.y, 100, 50), this, 456);
+		m_CompletionListBox->SetWindowPos(NULL, ptStart.x, ptStart.y, 150, 100, SWP_NOZORDER);
 	}
 
-	//TRACE("Will add %d items \n", list->GetSize());
 	for(int i=0; i < list->GetSize(); i++) {
-		//TRACE("Adding %s\n", list->GetAt(i));
 		m_CompletionListBox->AddString(list->GetAt(i));				
 	}
 	
-	m_CompletionListBox->SetCurSel(0);
-	//TRACE("List box contains %d items\n", m_CompletionListBox->GetCount());
+	m_CompletionListBox->SetCurSel(0);	
 	return m_CompletionListBox;
 }
 
 
 void CLatexEdit::OnCommandSelect(CString &cmd)
 {
-	//TRACE("==> OnCommandSelect %s\n", cmd);
-	//Get the current selection
 	CPoint ptStart, ptEnd;
 
 	//Get the text buffer
@@ -1058,5 +1052,6 @@ void CLatexEdit::OnCommandSelect(CString &cmd)
 	pText->BeginUndoGroup();
 	ReplaceSelection(cmd);
 	pText->FlushUndoGroup(this);
-
+	
 }
+
