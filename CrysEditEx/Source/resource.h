@@ -2,6 +2,7 @@
 // Microsoft Developer Studio generated include file.
 // Used by CrysEditEx.rc
 //
+#define ID_EDIT_QUERY_COMPLETION        58112
 
 // Next default values for new objects
 // 

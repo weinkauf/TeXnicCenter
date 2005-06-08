@@ -24,6 +24,13 @@
 * $Author$
 *
 * $Log$
+* Revision 1.3  2003/12/06 19:59:58  svenwiegand
+* - Implemented Feature 601708 + additions: The user can now set the styles for
+*   the text cursor independant for the insert and the overwrite mode. The cursor
+*   style is defined by its form (line or block) and its mode (blinking or
+*   not-blinking). The defaults are 'line' for insert cursor and 'block' for
+*   overwrite cursor -- both are blinking.
+*
 * Revision 1.2  2002/04/09 23:22:41  cnorris
 * Added explicit virtual destructor
 *
@@ -121,6 +128,7 @@ protected:
 
 	// Generated message map functions
 protected:
+	virtual void QueryComplete();
 	//{{AFX_MSG(CCrystalEditView)
 	afx_msg void OnEditPaste();
 	afx_msg void OnUpdateEditCut(CCmdUI* pCmdUI);
@@ -140,6 +148,7 @@ protected:
 	afx_msg void OnEditUndo();
 	afx_msg void OnUpdateEditRedo(CCmdUI* pCmdUI);
 	afx_msg void OnEditRedo();
+	afx_msg void OnEditQueryCompletion();
 	//}}AFX_MSG
 	afx_msg void OnUpdateIndicatorCol(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateIndicatorOvr(CCmdUI* pCmdUI);

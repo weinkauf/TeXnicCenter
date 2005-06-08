@@ -58,6 +58,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.7  2005/03/19 16:31:34  vachis
+* fixed bug: bad brace highlighting when cursos is at ^ in: "[^citeVisSym] and one presses Ctrl-Delete.
+*
 * Revision 1.6  2003/12/16 20:04:38  svenwiegand
 * Implemented Feature 726766: "Option for selecting the language for the GUI"
 *
@@ -87,6 +90,7 @@
 ********************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "editcmd.h"
 #include "editreg.h"
 #include "CCrystalEditView.h"
@@ -167,6 +171,7 @@ BEGIN_MESSAGE_MAP(CCrystalEditView, CCrystalTextView)
 	ON_COMMAND(ID_EDIT_UNDO, OnEditUndo)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_REDO, OnUpdateEditRedo)
 	ON_COMMAND(ID_EDIT_REDO, OnEditRedo)
+	ON_COMMAND(ID_EDIT_QUERY_COMPLETION, OnEditQueryCompletion)
 	//}}AFX_MSG_MAP
 	ON_UPDATE_COMMAND_UI(ID_EDIT_INDICATOR_READ, OnUpdateIndicatorRead)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_OVR, OnUpdateIndicatorOvr)
@@ -1293,3 +1298,14 @@ void CCrystalEditView::OnEditDeleteWordBack()
 	OnEditDeleteBack();
 }
 //END SW
+
+void CCrystalEditView::QueryComplete()
+{
+	TRACE("QueryComplete()\n");
+}
+
+void CCrystalEditView::OnEditQueryCompletion() 
+{
+	
+	QueryComplete();
+}
