@@ -493,7 +493,6 @@ BOOL CLatexEdit::OnInsertLatexConstruct( UINT nID )
 
 void CLatexEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	TRACE("Key %d (%x), Flags = %d (%x)\n", nChar, nChar, nFlags, nFlags);
 	switch( nChar )
 	{
 		case _T('"'):
@@ -648,25 +647,7 @@ LRESULT CLatexEdit::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 {
 	CString	strKeyword;
 	GetSelectedKeyword(strKeyword);
-	if (strKeyword.IsEmpty())
-	{
-		HtmlHelp(NULL, AfxGetApp()->m_pszHelpFilePath, HH_DISPLAY_TOC, 0L);	
-		return TRUE;
-	}
-
-	HtmlHelp(NULL, theApp.m_pszHelpFilePath, HH_DISPLAY_TOC, 0L);
-
-	HH_AKLINK	link;
-	link.cbStruct = sizeof(link);
-	link.fReserved = FALSE;
-	link.pszKeywords = (LPCTSTR)strKeyword;
-	link.pszUrl = NULL;
-	link.pszMsgText = NULL;
-	link.pszWindow = _T(">$global_TxcHelpWindow");
-	link.fIndexOnFail = TRUE;
-	HtmlHelp(NULL, theApp.m_pszHelpFilePath, HH_KEYWORD_LOOKUP, (DWORD)&link);
-
-	return TRUE;
+	return InvokeContextHelp(strKeyword);	
 }
 
 
@@ -978,7 +959,9 @@ void CLatexEdit::OnPackageSetup()
 
 void CLatexEdit::OnQueryCompletion() 
 {	
-	//TRACE("OnQueryCompletion...\n");
+	CString keyword;
+	CPoint topLeft;
+
 	if (!theApp.m_AvailableCommands.GetNoOfFiles()) {
 		/* ask user for scanning directories */		
 		if (AfxMessageBox(STE_QUERY_FILES, MB_ICONQUESTION|MB_YESNO) == IDYES) {
@@ -987,63 +970,70 @@ void CLatexEdit::OnQueryCompletion()
 		}
 	}
 
-	CString keyword;
-	CPoint	ptStart, ptEnd;
-	GetSelection(ptStart, ptEnd);
-	if (ptStart != ptEnd) {
-		GetText(ptStart, ptEnd, keyword);
-	}
-	//TRACE("Keyword %s\n", keyword);
+	GetSelection(m_oldStart, m_oldEnd); /* store old position */
+
+	GetWordBeforeCursor(keyword, topLeft); /* retrieve word to be completed */
 
 	if (keyword.GetLength() > 2) {
 		const CStringArray *pc = theApp.m_AvailableCommands.GetPossibleCompletions(keyword);
 		
-		if (pc != NULL) {
-			//TRACE("Found %d possibilities...\n", pc->GetSize());
+		if (pc != NULL) { /* we found sthg :-) */
 			if (pc->GetSize() > 1) {
-				m_CompletionListBox = CreateListBox(pc);
-				m_CompletionListBox->ShowWindow(SW_RESTORE);
-				m_CompletionListBox->SetFocus();
-				delete pc;
+				m_CompletionListBox = CreateListBox(pc, topLeft);
+				m_CompletionListBox->SetFocus();				
 			} else { /* choose first element automatically */
-				TRACE("One command found: %s\n", pc->GetAt(0));
 				OnCommandSelect(pc->GetAt(0));
 			}
+			delete pc; // drop list
 		} 		
 	} else {
-		Beep(300, 300); // Nothing found or no (valid) keyword selected
+		Beep(300, 300); // no (valid) keyword selected
 	}
 }
 
-CAutoCompleteListBox *CLatexEdit::CreateListBox(const CStringArray *list)
+CAutoCompleteListBox *CLatexEdit::CreateListBox(const CStringArray *list,const CPoint topLeft)
 {
 	CPoint	ptStart, ptText;
-	GetSelection(ptStart, ptText);	
-	ptStart.y++; // goto next row
-	ptStart = TextToClient(ptStart);
-	
-	if (m_CompletionListBox == NULL) {
+	ptStart = TextToClient(topLeft);
+
+	int wndCmd;
+
+	ptStart.y += GetLineHeight(); // Goto next row
+
+	if (m_CompletionListBox == NULL) { // create listbox
 		m_CompletionListBox = new CAutoCompleteListBox(ptStart);
 		m_CompletionListBox->SetListener(m_Proxy);
 		m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|LBS_WANTKEYBOARDINPUT|LBS_OWNERDRAWFIXED, 
-			CRect(ptStart.x, ptStart.y, ptStart.x + 150, ptStart.y + 100), this, 456);
-	} else {
+			CRect(), this, 456);
+		// _T("LISTBOX")
+		/* try to display as a popup, does not work properly :-(
+		TRACE("WC: %s\n", m_CompletionListBox->GetWndClass());
+		m_CompletionListBox->CreateEx(WS_EX_LEFT, m_CompletionListBox->GetWndClass(), _T("TXCAutoComplete"), 
+			WS_POPUP|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|LBS_WANTKEYBOARDINPUT|LBS_OWNERDRAWFIXED, 
+			CRect(), this, NULL);
+			*/
+		wndCmd = SW_SHOWNORMAL;
+	} else { // reset existing instance
 		m_CompletionListBox->ResetContent();
-		m_CompletionListBox->SetWindowPos(NULL, ptStart.x, ptStart.y, 150, 100, SWP_NOZORDER);
+		wndCmd = SW_RESTORE;		
 	}
 
-	for(int i=0; i < list->GetSize(); i++) {
+	for(int i=0; i < list->GetSize(); i++) { // fill items
 		m_CompletionListBox->AddString(list->GetAt(i));				
 	}
 	
-	m_CompletionListBox->SetCurSel(0);	
+	// setup and show listbox
+	m_CompletionListBox->ShowWindow(wndCmd);
+	m_CompletionListBox->MoveWindow(ptStart.x, ptStart.y, 100, 150);
+	m_CompletionListBox->SetCurSel(0);
 	return m_CompletionListBox;
 }
 
 
 void CLatexEdit::OnCommandSelect(CString &cmd)
-{
+{	
 	CPoint ptStart, ptEnd;
+	GetSelection(ptStart, ptEnd);
 
 	//Get the text buffer
 	CCrystalTextBuffer* pText = LocateTextBuffer();
@@ -1052,6 +1042,95 @@ void CLatexEdit::OnCommandSelect(CString &cmd)
 	pText->BeginUndoGroup();
 	ReplaceSelection(cmd);
 	pText->FlushUndoGroup(this);
+	SetSelection(ptEnd, ptEnd); // place cursor after inserted word	
+}
+
+void CLatexEdit::OnCommandCancelled()
+{	
+	SetSelection(m_oldStart, m_oldEnd); // nothing selected, so just retrieve old cursor pos
+}
+
+void CLatexEdit::OnHelp(CString &cmd)
+{	
+	InvokeContextHelp(cmd);	
+}
+
+void CLatexEdit::QueryComplete()
+{
+	OnQueryCompletion();
+	CString s;
+	//GetSelectedKeyword(s);
 	
 }
 
+/**
+ Retrieves the word before or under the cursor position (thank you, Sven)
+ */
+void CLatexEdit::GetWordBeforeCursor(CString &strKeyword, CPoint &start)
+{
+	CPoint	ptStart, ptEnd;
+	GetSelection(ptStart, ptEnd);
+	int sx = ptStart.x;
+
+	if (ptStart != ptEnd)
+		GetText(ptStart, ptEnd, strKeyword);
+	else if ( GetLineLength(ptStart.y) )
+	{		
+		// retrieve the keyword, the cursor is placed on
+		CString	strLine(GetLineChars(ptStart.y));
+
+		if (sx >= strLine.GetLength() - 1) { // check bounds
+			sx = strLine.GetLength() - 1; 
+		}
+		// retrieve position of first character of the current word
+		for (int nStartChar = sx-1; nStartChar >= 0; nStartChar--)
+		{
+			if (!IsKeywordCharacter(strLine[nStartChar]))
+			{
+				nStartChar++;
+				break;
+			}	
+		}
+		if (nStartChar < 0)
+			nStartChar = 0;
+		
+		start.x = nStartChar;
+		start.y = ptStart.y;
+		// retrieve position of first character not belonging to the current word
+		for (int nEndChar = ptStart.x; nEndChar < strLine.GetLength(); nEndChar++)
+		{
+			if (!IsKeywordCharacter(strLine[nEndChar]))
+				break;
+		}
+
+		if (nEndChar <= nStartChar) {
+			strKeyword.Empty();
+		} else {
+			SetSelection(start, CPoint(nEndChar, ptStart.y));
+			strKeyword = strLine.Mid(nStartChar, nEndChar-nStartChar);
+		}
+	}
+}
+
+BOOL CLatexEdit::InvokeContextHelp(const CString keyword)
+{
+	if (keyword.IsEmpty())
+	{
+		HtmlHelp(NULL, AfxGetApp()->m_pszHelpFilePath, HH_DISPLAY_TOC, 0L);	
+		return TRUE;
+	}
+
+	HtmlHelp(NULL, theApp.m_pszHelpFilePath, HH_DISPLAY_TOC, 0L);
+
+	HH_AKLINK	link;
+	link.cbStruct = sizeof(link);
+	link.fReserved = FALSE;
+	link.pszKeywords = (LPCTSTR)keyword;
+	link.pszUrl = NULL;
+	link.pszMsgText = NULL;
+	link.pszWindow = _T(">$global_TxcHelpWindow");
+	link.fIndexOnFail = TRUE;
+	HtmlHelp(NULL, theApp.m_pszHelpFilePath, HH_KEYWORD_LOOKUP, (DWORD)&link);
+
+	return TRUE;
+}

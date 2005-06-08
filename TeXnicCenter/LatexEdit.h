@@ -97,6 +97,8 @@ protected:
 	*/
 	BOOL IsKeywordCharacter(TCHAR tc) const;
 
+
+	virtual void QueryComplete();
 // static operations
 public:
 	/**
@@ -154,13 +156,19 @@ protected:
 	CLatexParser	m_latexParser;
 
 public:
+	void GetWordBeforeCursor(CString &strKeyword, CPoint &start);
 	virtual void OnCommandSelect(CString &command);
+	virtual void OnCommandCancelled();
+	virtual void OnHelp(CString &command);
 	void OnPackageSetup();
 	CLatexDoc* GetDocument();
 
 private:
+	BOOL InvokeContextHelp(const CString keyword);
+	CPoint m_oldStart;
+	CPoint m_oldEnd;
 	CAutoCompleteListBox* m_CompletionListBox;
-	CAutoCompleteListBox *CreateListBox(const CStringArray *list);
+	CAutoCompleteListBox *CreateListBox(const CStringArray *list, const CPoint topLeft);
 	
 	MyListener *m_Proxy;
 };
@@ -179,6 +187,8 @@ class MyListener : public CAutoCompleteListener {
 public:
 	MyListener(CLatexEdit *parent) {ASSERT(parent != NULL); p = parent;}
 	virtual void OnCommandSelect(CString &command) {p->OnCommandSelect(command);}
+	virtual void OnCommandCancelled() {p->OnCommandCancelled();};
+	virtual void OnHelp(CString &command) {p->OnHelp(command);}
 private:
 	CLatexEdit *p;
 };
