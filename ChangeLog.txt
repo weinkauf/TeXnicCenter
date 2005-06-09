@@ -1,3 +1,8 @@
+2005/06/09 owieland
+- Implemented Feature 1205427: Auto-Complete function. Press Ctrl+Space during editing to use it.
+  The shipped file packages.xml contains an (incomplete) snapshot of available LaTeX commands. 
+  So feel free to add/correct/remove entries.
+
 2005/05/21 svenwiegand
 - Updated version information and setup
 
