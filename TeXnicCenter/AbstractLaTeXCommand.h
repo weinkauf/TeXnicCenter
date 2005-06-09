@@ -11,6 +11,10 @@
 
 class CStyleFile;
 
+/**
+ CAbstractLaTeXCommand is the base class for all LaTeX constructs handled by
+ CStylefile(Container).
+ */
 class CAbstractLaTeXCommand : public CObject  
 {
 public:
@@ -23,14 +27,15 @@ public:
 	/* Returns a pointer to the containing style or class file */
 	const CStyleFile *GetStyleFile() const {return m_Parent;};
 	/* Returns the LaTeX string representation */
-	virtual const CString ToLaTeX(BOOL showParString=TRUE);
+	virtual CString ToLaTeX(BOOL showParString=TRUE) const {return m_Name;}
 	/* Returns a unique identifier of the object (may be used as hash value) */
-	virtual const CString ToString();
-
+	virtual CString ToString();
+	/* Maintain description */
 	void SetDescription(CString &desc);
 	CString GetDescription() const {return m_Description;};
-
-	const CString GetName() const {return m_Name;}
+	/* Name of the command (without any decorations )*/
+	CString GetName() const {return m_Name;}
+	/* Returns a pointer to the style file which contains this command */
 	const CStyleFile *GetParent() const {return m_Parent;}
 
 private:	

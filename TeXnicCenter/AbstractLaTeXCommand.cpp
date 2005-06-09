@@ -34,6 +34,11 @@
 
 /*
  * $Log$
+ * Revision 1.3  2005/06/09 17:09:59  owieland
+ * + Revised architecture (moved autocmpl-handling to listbox)
+ * + Hilight commands if they are from a class (unsatisfying yet)
+ * + Several bugfixes
+ *
  * Revision 1.2  2005/06/09 12:07:44  owieland
  * Addtional parameter 'showParams' in ToLaTeX()
  *
@@ -74,13 +79,7 @@ CAbstractLaTeXCommand::~CAbstractLaTeXCommand()
 
 }
 
-const CString CAbstractLaTeXCommand::ToString()
-{
-	return m_Name;
-}
-
-
-const CString CAbstractLaTeXCommand::ToLaTeX(BOOL showParString)
+CString CAbstractLaTeXCommand::ToString()
 {
 	return m_Name;
 }

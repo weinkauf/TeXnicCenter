@@ -52,8 +52,8 @@ public:
 	CNewCommand(const CStyleFile *parent, CString &name, int NoOfParam = 0, BOOL hasStar=FALSE);
 	virtual ~CNewCommand();
 
-	virtual const CString ToLaTeX(BOOL showParString=TRUE);
-	virtual const CString ToString();
+	virtual CString ToLaTeX(BOOL showParString=TRUE);
+	virtual CString ToString();
 
 	BOOL HasStar() const {return m_HasStar;}
 private:
@@ -64,6 +64,12 @@ private:
 
 /*
  * $Log$
+ * Revision 1.3  2005/06/09 12:09:59  owieland
+ * + Consider ProvidesXXX commands for package/class description
+ * + Avoid duplicate option entries
+ * + Export description of packages
+ * + Consider number of parameters on auto completion
+ *
  * Revision 1.2  2005/06/03 22:24:56  owieland
  * + IMPLEMENT/DECLARE_DYNAMIC
  *

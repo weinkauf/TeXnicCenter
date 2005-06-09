@@ -48,6 +48,7 @@ class CStyleFile;
 class CLaTeXCommand : public CAbstractLaTeXCommand 
 {
 public:
+	
 	DECLARE_DYNAMIC(CLaTeXCommand)		
 	CLaTeXCommand(const CStyleFile *parent, CString &name, int m_NoOfParams);
 	CLaTeXCommand(CLaTeXCommand &cmd);
@@ -55,7 +56,15 @@ public:
 
 	/* Returns the number of parameters */
 	virtual int GetNoOfParams() {return m_NoOfParams;};		
+
+	virtual CString GetExpandBefore() const {return m_ExpandBefore;}
+	virtual CString GetExpandAfter() const {return m_ExpandAfter;}
+	virtual void SetExpandBefore(CString &txt);
+	virtual void SetExpandAfter(CString &txt);
+
 private:
+	CString m_ExpandAfter;
+	CString m_ExpandBefore;
 	int m_NoOfParams;
 protected:
 	const CString GetParameterString();
@@ -73,6 +82,9 @@ public:
 
 /*
  * $Log$
+ * Revision 1.5  2005/06/09 12:07:44  owieland
+ * Addtional parameter 'showParams' in ToLaTeX()
+ *
  * Revision 1.4  2005/06/07 23:14:23  owieland
  * + Load commands from packages.xml
  * + Fixed position of the auto complete listbox / beautified content

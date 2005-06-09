@@ -34,6 +34,9 @@
 
 /*
  * $Log$
+ * Revision 1.4  2005/06/09 12:07:44  owieland
+ * Addtional parameter 'showParams' in ToLaTeX()
+ *
  * Revision 1.3  2005/06/05 16:41:59  owieland
  * Introduced new base class CAbstractLaTeXCommand for a better
  * understandable class hierarchy and better seperation of options and commands.
@@ -68,12 +71,16 @@ CLaTeXCommand::CLaTeXCommand(const CStyleFile *parent, CString &name, int noOfPa
 :CAbstractLaTeXCommand(parent, name)
 {	
 	m_NoOfParams = noOfParams > 0 ? noOfParams : 0;
+	m_ExpandAfter = _T("");
+	m_ExpandBefore = _T("");
 }
 
 CLaTeXCommand::CLaTeXCommand(CLaTeXCommand &cmd) 
 :CAbstractLaTeXCommand(cmd) 
 {
 	m_NoOfParams = cmd.m_NoOfParams;
+	m_ExpandAfter = cmd.m_ExpandAfter;
+	m_ExpandBefore = cmd.m_ExpandBefore;
 }
 
 CLaTeXCommand::~CLaTeXCommand()
@@ -94,3 +101,14 @@ const CString CLaTeXCommand::GetParameterString()
 	}
 	return CString(tmp);
 }
+
+void CLaTeXCommand::SetExpandAfter(CString &txt)
+{
+	m_ExpandAfter = txt;
+}
+
+void CLaTeXCommand::SetExpandBefore(CString &txt)
+{
+	m_ExpandBefore = txt;
+}
+
