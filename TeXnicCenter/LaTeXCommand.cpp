@@ -34,6 +34,10 @@
 
 /*
  * $Log$
+ * Revision 1.3  2005/06/05 16:41:59  owieland
+ * Introduced new base class CAbstractLaTeXCommand for a better
+ * understandable class hierarchy and better seperation of options and commands.
+ *
  * Revision 1.2  2005/06/03 22:24:56  owieland
  * + IMPLEMENT/DECLARE_DYNAMIC
  *
@@ -52,6 +56,8 @@
 static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
+
+const TCHAR *PAR_STRINGS[] = {_T(""), _T("{}"), _T("{}{}"), _T("{}{}{}"), _T("{}{}{}{}"), _T("{}{}{}{}{}")};
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -75,3 +81,16 @@ CLaTeXCommand::~CLaTeXCommand()
 
 }
 
+
+const CString CLaTeXCommand::GetParameterString()
+{
+	if (m_NoOfParams >= 0 && m_NoOfParams < 6) {
+		return PAR_STRINGS[m_NoOfParams];
+	}
+	
+	CString tmp(PAR_STRINGS[5]);
+	for(int i=0; i < m_NoOfParams - 5; i++) {
+		tmp += "{}";
+	}
+	return CString(tmp);
+}
