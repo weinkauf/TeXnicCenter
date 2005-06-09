@@ -34,6 +34,12 @@
 
 /*
  * $Log$
+ * Revision 1.7  2005/06/09 12:09:59  owieland
+ * + Consider ProvidesXXX commands for package/class description
+ * + Avoid duplicate option entries
+ * + Export description of packages
+ * + Consider number of parameters on auto completion
+ *
  * Revision 1.6  2005/06/07 23:14:23  owieland
  * + Load commands from packages.xml
  * + Fixed position of the auto complete listbox / beautified content
@@ -87,27 +93,30 @@ const TCHAR* TOKENS[]={
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CStyleFile::CStyleFile(CString &name, CString &desc)
+CStyleFile::CStyleFile(CString &name, CString &desc, BOOL isClass)
 {
 	m_Filename = _T("");
 	m_Name = name;
 	m_Desc = desc;
+	m_IsClass = isClass;
 	Init();
 }
 
-CStyleFile::CStyleFile(CStyleFile &file)
+CStyleFile::CStyleFile(CStyleFile &file, BOOL isClass)
 {
 	m_Filename = file.m_Filename;
 	m_Name = file.GetName();
 	m_Desc = _T("");
+	m_IsClass = isClass;
 	Init();
 }
 
-CStyleFile::CStyleFile(CString& filename)
+CStyleFile::CStyleFile(CString& filename, BOOL isClass)
 {
 	m_Filename = filename;
 	m_Name = CPathTool::GetFileTitle(filename);
 	m_Desc = _T("");
+	m_IsClass = isClass;
 	Init();
 }
 
@@ -491,4 +500,9 @@ int CStyleFile::ExtractDescription(const TCHAR *closePar, const TCHAR *openBr, c
 	desc = buf;
 
 	return 0;
+}
+
+CString CStyleFile::ToString()
+{
+	return CString((m_IsClass ? _T("Class ") : _T("File ")) + m_Name);
 }

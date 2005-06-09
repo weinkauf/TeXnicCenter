@@ -63,10 +63,11 @@ const int MAX_DESC_LEN = 255;
 class CStyleFile :public CObject
 {
 public:	
+	CString ToString();
 	
-	CStyleFile(CString &name, CString &desc);
-	CStyleFile(CStyleFile &file);
-	CStyleFile(CString& m_Filename);
+	CStyleFile(CString &name, CString &desc, BOOL isClass=FALSE);
+	CStyleFile(CStyleFile &file, BOOL isClass=FALSE);
+	CStyleFile(CString& m_Filename, BOOL isClass=FALSE);
 	
 	virtual ~CStyleFile();
 
@@ -76,9 +77,12 @@ public:
 	CString GetFilename() const {return m_Filename;};
 	CString GetName() const {return m_Name;};
 	CString GetDescription() const {return m_Desc;};
+	BOOL IsDocClass() const {return m_IsClass;}
+
 	const CMapStringToOb *GetCommands() const {return &m_Commands;}
 	const CStringArray *GetOptions() const {return &m_Options;}
 	const CStringArray *GetRequiredPackages() const {return &m_ReqPackages;}
+	
 	
 	BOOL AddCommand(CString &name, int noOfParams=0, CString &desc=CString(""));
 	/** Works for both, \newcommand and \newenvironment */
@@ -91,7 +95,7 @@ public:
 		
 private:
 	int ExtractDescription(const TCHAR *closePar, const TCHAR *openBr, const TCHAR *closeBr, CString &desc);
-	CString m_Desc;
+	
 	
 	void Init();
 	CAbstractLaTeXCommand *CreateItem(int type, CString &name, int hasStar, int noOfParams);
@@ -103,7 +107,10 @@ private:
 	CString					m_Filename;
 	CMapStringToOb 			m_Commands;
 	CLaTeXCommandListener	*m_Listener;
+	CString					m_Desc;
 protected:
+	
+
 	void ParseBuffer(TCHAR *buf);
 	BOOL HasCommands(const TCHAR *buf);
 	int ExtractOptionCount(const TCHAR *closePar, const TCHAR *openBr, const TCHAR *closeBr);
@@ -122,6 +129,12 @@ public:
 
 /*
  * $Log$
+ * Revision 1.7  2005/06/09 12:09:59  owieland
+ * + Consider ProvidesXXX commands for package/class description
+ * + Avoid duplicate option entries
+ * + Export description of packages
+ * + Consider number of parameters on auto completion
+ *
  * Revision 1.6  2005/06/07 23:14:23  owieland
  * + Load commands from packages.xml
  * + Fixed position of the auto complete listbox / beautified content

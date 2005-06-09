@@ -47,7 +47,7 @@
 #include "TextModulesDlg.h"
 #include "GotoDialog.h"
 #include "../MySpell/Character.h"
-#include "StyleFileContainer.h"
+
 #include "PackageScanProgress.h"
 
 #ifdef _DEBUG
@@ -973,25 +973,10 @@ void CLatexEdit::OnQueryCompletion()
 	GetSelection(m_oldStart, m_oldEnd); /* store old position */
 
 	GetWordBeforeCursor(keyword, topLeft); /* retrieve word to be completed */
-
-	if (keyword.GetLength() > 2) {
-		const CStringArray *pc = theApp.m_AvailableCommands.GetPossibleCompletions(keyword);
-		
-		if (pc != NULL) { /* we found sthg :-) */
-			if (pc->GetSize() > 1) {
-				m_CompletionListBox = CreateListBox(pc, topLeft);
-				m_CompletionListBox->SetFocus();				
-			} else { /* choose first element automatically */
-				OnCommandSelect(pc->GetAt(0));
-			}
-			delete pc; // drop list
-		} 		
-	} else {
-		Beep(300, 300); // no (valid) keyword selected
-	}
+	m_CompletionListBox = CreateListBox(keyword, topLeft); /* setup (and show) list box */
 }
 
-CAutoCompleteListBox *CLatexEdit::CreateListBox(const CStringArray *list,const CPoint topLeft)
+CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLeft)
 {
 	CPoint	ptStart, ptText;
 	ptStart = TextToClient(topLeft);
@@ -1001,7 +986,7 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(const CStringArray *list,const C
 	ptStart.y += GetLineHeight(); // Goto next row
 
 	if (m_CompletionListBox == NULL) { // create listbox
-		m_CompletionListBox = new CAutoCompleteListBox(ptStart);
+		m_CompletionListBox = new CAutoCompleteListBox(&theApp.m_AvailableCommands);
 		m_CompletionListBox->SetListener(m_Proxy);
 		m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|LBS_WANTKEYBOARDINPUT|LBS_OWNERDRAWFIXED, 
 			CRect(), this, 456);
@@ -1018,14 +1003,14 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(const CStringArray *list,const C
 		wndCmd = SW_RESTORE;		
 	}
 
-	for(int i=0; i < list->GetSize(); i++) { // fill items
-		m_CompletionListBox->AddString(list->GetAt(i));				
-	}
-	
+		
 	// setup and show listbox
-	m_CompletionListBox->ShowWindow(wndCmd);
-	m_CompletionListBox->MoveWindow(ptStart.x, ptStart.y, 100, 150);
-	m_CompletionListBox->SetCurSel(0);
+	if (m_CompletionListBox->InitWithKeyword(keyword)) {
+		m_CompletionListBox->ShowWindow(wndCmd);
+		m_CompletionListBox->MoveWindow(ptStart.x, ptStart.y, 100, 150);
+		m_CompletionListBox->SetCurSel(0);
+		m_CompletionListBox->SetFocus();
+	}
 	return m_CompletionListBox;
 }
 

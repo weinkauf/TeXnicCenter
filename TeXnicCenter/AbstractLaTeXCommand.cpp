@@ -34,6 +34,9 @@
 
 /*
  * $Log$
+ * Revision 1.2  2005/06/09 12:07:44  owieland
+ * Addtional parameter 'showParams' in ToLaTeX()
+ *
  * Revision 1.1  2005/06/05 16:41:57  owieland
  * Introduced new base class CAbstractLaTeXCommand for a better
  * understandable class hierarchy and better seperation of options and commands.
@@ -55,8 +58,9 @@ static char THIS_FILE[]=__FILE__;
 IMPLEMENT_DYNAMIC(CAbstractLaTeXCommand, CObject) 
 CAbstractLaTeXCommand::CAbstractLaTeXCommand(const CStyleFile *parent, CString &name)
 {
+	ASSERT(parent != NULL);
 	m_Parent = parent;
-	m_Name = name;
+	m_Name = name;	
 }
 
 CAbstractLaTeXCommand::CAbstractLaTeXCommand(CAbstractLaTeXCommand &cmd) {

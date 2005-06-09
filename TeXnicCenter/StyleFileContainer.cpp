@@ -34,6 +34,12 @@
 
 /*
  * $Log$
+ * Revision 1.8  2005/06/09 12:09:59  owieland
+ * + Consider ProvidesXXX commands for package/class description
+ * + Avoid duplicate option entries
+ * + Export description of packages
+ * + Consider number of parameters on auto completion
+ *
  * Revision 1.7  2005/06/07 23:14:23  owieland
  * + Load commands from packages.xml
  * + Fixed position of the auto complete listbox / beautified content
@@ -135,13 +141,17 @@ void CStyleFileContainer::FindStyleFilesRecursive(CString dir)
 
 			if (ext == "sty" || ext == "cls") {
 				m_LastFile = name;
-				CStyleFile *sf = new CStyleFile(p);
-				sf->SetListener(this);
-				sf->ProcessFile();
+				CStyleFile *sf = new CStyleFile(p, ext == "cls");
+				sf->SetListener(this);				
+				
 				if (m_Listener != NULL) {
 					m_Listener->OnFileFound(dir);
 				}
-				AddStyleFile(sf);
+				if (!AddStyleFile(sf)) {
+					delete sf;
+				} else {
+					sf->ProcessFile();
+				}
 			}
 		}
 	}
@@ -238,6 +248,47 @@ const CStringArray* CStyleFileContainer::GetPossibleCompletions(const CString &c
 	return tmp;
 }
 
+/* Returns a list of possible completions to a given string. Here the function retuns objects
+   instead of string, so that the receiver has more options to display the result.  */
+const CMapStringToOb* CStyleFileContainer::GetPossibleItems(const CString &cmd, const CString &docClass) {
+	CMapStringToOb *tmp = NULL;
+	int l;
+
+	l = cmd.GetLength();
+	if (0 == l) { /* Nothing to do */
+		return NULL;
+	}
+
+
+	POSITION pos = m_Commands.GetStartPosition();
+	while(pos != NULL) {
+		CLaTeXCommand *lc;
+		CString key;
+		m_Commands.GetNextAssoc(pos, key, (CObject*&)lc);
+		//TRACE("test '%s' = '%s' (%d)\n", key.Left(l), cmd, key.Left(l) == cmd);
+
+		if (!docClass.IsEmpty() && 
+			lc->GetParent()->IsDocClass() &&  
+			docClass != lc->GetParent()->GetName()) {
+
+			continue; /* skip commands which are not available in this class */
+		}
+
+		if (lc != NULL && key.GetLength() >= l && key.Left(l) == cmd) {
+			if (tmp == NULL) {
+				tmp = new CMapStringToOb();
+			}
+
+			if (!tmp->Lookup(key, (CObject*&)lc) || lc->GetParent()->IsDocClass()) {
+				tmp->SetAt(lc->ToLaTeX(), lc);			 		
+			}
+			//TRACE("ADD '%s' (now %d items)\n", key, tmp->GetSize());
+		}
+	}	
+	/* TODO: Sort result */
+	return tmp;
+}
+
 /* Removes a path entry from the search path. Returns true, if path was found and removed, otherwise false */
 BOOL CStyleFileContainer::RemoveSearchPath(CString &dir) {
 	for (int i = 0; i <= m_SearchPaths.GetUpperBound(); i++) {
@@ -280,6 +331,10 @@ BOOL CStyleFileContainer::SaveAsXML(CString &path)
 			xmlPackage.SetAttribute(CSF_XML_PATH, (LPCTSTR)sf->GetFilename());
 			if (sf->GetDescription().GetLength() > 0) {
 				xmlPackage.SetAttribute(CSF_XML_DESC, (LPCTSTR)sf->GetDescription());
+			}
+
+			if (sf->IsDocClass()) {
+				xmlPackage.SetAttribute(CSF_XML_CLASS, "TRUE");
 			}
 			
 			/* Export commands and environments */
@@ -449,6 +504,7 @@ BOOL CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
 		//Report Error, if MsXML did not respond
 		if (!bReportedError)
 		{
+			_asm int 3; // force debug
 			if (pE->GetDescription() == _T(""))
 			{
 				//A generic COM error.
@@ -476,6 +532,7 @@ void CStyleFileContainer::ProcessPackageNode(MsXml::CXMLDOMNode &element)
 	/* fetch attributes */
 	MsXml::CXMLDOMNamedNodeMap attr = element.GetAttributes();
 	CString nameVal, descVal;
+	BOOL isClass = FALSE;
 
 	for(int j = 0; j < attr.GetLength(); j++) {
 		MsXml::CXMLDOMNode a = attr.GetItem(j);
@@ -484,11 +541,13 @@ void CStyleFileContainer::ProcessPackageNode(MsXml::CXMLDOMNode &element)
 			nameVal = a.GetText();
 		} else if (s == CSF_XML_DESC) {
 			descVal = a.GetText();
+		} else if (s == CSF_XML_CLASS) {			
+			isClass = TRUE; /* existing node is sufficient */
 		}
 	}
 	
 	/* Create style file instance and insert it into the hash map */
-	CStyleFile *sf = new CStyleFile(nameVal, descVal);
+	CStyleFile *sf = new CStyleFile(nameVal, descVal, isClass);
 	sf->SetListener(this);
 	if (!AddStyleFile(sf)) {
 		TRACE("WARNING: Unable to add file %s, seems to be duplicate\n", sf->GetName());
