@@ -156,14 +156,19 @@ protected:
 	CLatexParser	m_latexParser;
 
 public:
+	BOOL IsValidTextPos(CPoint pos);
 	void GetWordBeforeCursor(CString &strKeyword, CPoint &start);
-	virtual void OnCommandSelect(CString &command);
-	virtual void OnCommandCancelled();
-	virtual void OnHelp(CString &command);
+	virtual void OnACCommandSelect(CString &command);
+	virtual void OnACCommandCancelled();
+	virtual void OnACHelp(CString &command);
+	virtual void OnACBackspace();
+	virtual void OnACChar(UINT nKey, UINT nRepCount, UINT nFlags);
 	void OnPackageSetup();
 	CLatexDoc* GetDocument();
 
 private:
+	BOOL RestoreFocus();
+	CWnd* m_OldFocus;
 	BOOL InvokeContextHelp(const CString keyword);
 	CPoint m_oldStart;
 	CPoint m_oldEnd;
@@ -186,9 +191,16 @@ inline CLatexDoc* CLatexEdit::GetDocument()
 class MyListener : public CAutoCompleteListener {
 public:
 	MyListener(CLatexEdit *parent) {ASSERT(parent != NULL); p = parent;}
-	virtual void OnCommandSelect(CString &command) {p->OnCommandSelect(command);}
-	virtual void OnCommandCancelled() {p->OnCommandCancelled();};
-	virtual void OnHelp(CString &command) {p->OnHelp(command);}
+	/* Command was selected */
+	virtual void OnACCommandSelect(CString &command) {p->OnACCommandSelect(command);}
+	/* Auto complete was cancelled */
+	virtual void OnACCommandCancelled() {p->OnACCommandCancelled();};
+	/* User demands context help (F1 key) */
+	virtual void OnACHelp(CString &command) {p->OnACHelp(command);}
+	/* Backspace was pressed (affects keyword!) */ 
+	virtual void OnACBackspace() {p->OnACBackspace();}
+	/* A char was typed (affects keyword!) */ 
+	virtual void OnACChar(UINT nKey, UINT nRepCount, UINT nFlags) {p->OnACChar(nKey, nRepCount, nFlags);}
 private:
 	CLatexEdit *p;
 };
