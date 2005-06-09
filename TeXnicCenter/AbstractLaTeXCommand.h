@@ -23,7 +23,7 @@ public:
 	/* Returns a pointer to the containing style or class file */
 	const CStyleFile *GetStyleFile() const {return m_Parent;};
 	/* Returns the LaTeX string representation */
-	virtual const CString ToLaTeX();
+	virtual const CString ToLaTeX(BOOL showParString=TRUE);
 	/* Returns a unique identifier of the object (may be used as hash value) */
 	virtual const CString ToString();
 

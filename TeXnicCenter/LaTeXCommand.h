@@ -57,6 +57,8 @@ public:
 	virtual int GetNoOfParams() {return m_NoOfParams;};		
 private:
 	int m_NoOfParams;
+protected:
+	const CString GetParameterString();
 };
 
 /* Listener interface */
@@ -71,6 +73,11 @@ public:
 
 /*
  * $Log$
+ * Revision 1.4  2005/06/07 23:14:23  owieland
+ * + Load commands from packages.xml
+ * + Fixed position of the auto complete listbox / beautified content
+ * + Fixed some bugs
+ *
  * Revision 1.3  2005/06/05 16:41:59  owieland
  * Introduced new base class CAbstractLaTeXCommand for a better
  * understandable class hierarchy and better seperation of options and commands.

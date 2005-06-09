@@ -34,6 +34,10 @@
 
 /*
  * $Log$
+ * Revision 1.1  2005/06/05 16:41:57  owieland
+ * Introduced new base class CAbstractLaTeXCommand for a better
+ * understandable class hierarchy and better seperation of options and commands.
+ *
  */
 #include "stdafx.h"
 #include "texniccenter.h"
@@ -72,7 +76,7 @@ const CString CAbstractLaTeXCommand::ToString()
 }
 
 
-const CString CAbstractLaTeXCommand::ToLaTeX()
+const CString CAbstractLaTeXCommand::ToLaTeX(BOOL showParString)
 {
 	return m_Name;
 }
