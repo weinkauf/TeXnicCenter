@@ -34,6 +34,11 @@
 
 /*
  * $Log$
+ * Revision 1.6  2005/06/07 23:14:23  owieland
+ * + Load commands from packages.xml
+ * + Fixed position of the auto complete listbox / beautified content
+ * + Fixed some bugs
+ *
  * Revision 1.5  2005/06/07 19:48:21  owieland
  * + Parse commands declared via \\def
  * + Revised HasCommands
@@ -69,7 +74,15 @@ static TCHAR THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-const TCHAR* TOKENS[]={"\\newcommand", "\\newenvironment", "\\DeclareOption", "\\RequirePackage", "\\def"};
+const TCHAR* TOKENS[]={
+	"\\newcommand", 
+	"\\newenvironment", 
+	"\\DeclareOption", 
+	"\\RequirePackage", 
+	"\\def",
+	"\\ProvidesClass",
+	"\\ProvidesPackage"
+};
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -130,7 +143,7 @@ CStyleFile& CStyleFile::operator = (const CStyleFile& sf)
 
 /**
  Processes a file, if it contains valuable commands. The file is loaded into a buffer
- a is passed to <it>ParseBuffer</it>, where all commands will be extracted.
+ a is passed to <it>ParseBuffer</it>, where all commands will be extracted. 
  */
 void CStyleFile::ProcessFile()
 {
@@ -171,6 +184,7 @@ BOOL CStyleFile::HasCommands(const TCHAR *buf)
 
 /**
  Parses a buffer and creates appropriate instances. It works on a very low level.
+ Ugly, but fast :-)
  */
 void CStyleFile::ParseBuffer(TCHAR *buf)
 {
@@ -229,7 +243,7 @@ void CStyleFile::ParseBuffer(TCHAR *buf)
 			}
 
 			int l = p - pStart;
-			if (l < 255 && l > 0 && !isPrivate) { /* Command valid? */
+			if (l < 255 && l > 1 && !isPrivate) { /* Command valid? */
 				strncpy((TCHAR*)&nameBuf, pStart, l);
 				nameBuf[l] = 0;
 
@@ -248,18 +262,26 @@ void CStyleFile::ParseBuffer(TCHAR *buf)
 							delete lc;
 						}
 						break;
-					case LATEX_OPTION:						
-						m_Options.Add(lc->GetName());
+					case LATEX_OPTION:
+						if (!CStyleFileContainer::ContainsString(&m_Options, lc->GetName())) {
+							m_Options.Add(lc->GetName());
+						}
 						delete lc; /* currently not needed */
 						break;
 					case LATEX_REQPACKAGE:						
 						m_ReqPackages.Add(lc->GetName());
 						delete lc; /* currently not needed */
 						break;
+					case LATEX_CLS_DESC:
+					case LATEX_STY_DESC:						
+						ExtractDescription(close, openBr, closeBr, m_Desc);
+						TRACE("Desc: %s: <%s>\n", m_Name, m_Desc);
+						delete lc;
+						break;
 					}
 				}
 			} else { /* For debug purposes only */
-				if (l > 0 && !isPrivate) {
+				if (l > 1 && !isPrivate) {
 					TRACE("!! Buffer to small: Needs %d bytes\n", l);
 				} else if (!isPrivate) {
 					strncpy(nameBuf, t, 50);
@@ -332,6 +354,10 @@ CAbstractLaTeXCommand *CStyleFile::CreateItem(int type, CString &name, int hasSt
 		return new CDeclareOption(this, name);
 		break;
 	case LATEX_REQPACKAGE:
+		return new CDeclareOption(this, name); /* murx */
+		break;
+	case LATEX_CLS_DESC:
+	case LATEX_STY_DESC:
 		return new CDeclareOption(this, name); /* murx */
 		break;
 	}
@@ -427,4 +453,42 @@ BOOL CStyleFile::AddEnvironment(CString &name, int noOfParams, CString &desc)
 		delete ne;
 	}
 	return FALSE;
+}
+
+/**
+ Extracts a dscription string from a \ProvidesXXX command. Works similar as ExtractOptionCount
+ */
+int CStyleFile::ExtractDescription(const TCHAR *closePar, const TCHAR *openBr, const TCHAR *closeBr, CString &desc)
+{
+	if (closePar == NULL || openBr == NULL || closeBr == NULL) {
+		desc.Empty();
+		return -2; /* No desc avalable */
+	}
+
+	int d = closeBr - openBr - 1;
+	if (d <= 0) {
+		desc.Empty();
+		return -4;
+	}
+
+	if (d >= MAX_DESC_LEN) {
+		d = MAX_DESC_LEN - 1;
+	}
+	TCHAR *p = (TCHAR*)closePar;
+
+	p++;
+	while (p < openBr) {
+		if (isdigit(*p) || isalpha(*p)) {
+			desc.Empty();
+			return -3;
+		}
+		p++;
+	}
+
+	TCHAR buf[MAX_DESC_LEN];
+	strncpy(buf, openBr + 1, d);
+	buf[d] = 0;
+	desc = buf;
+
+	return 0;
 }

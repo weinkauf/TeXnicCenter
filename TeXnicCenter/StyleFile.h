@@ -43,14 +43,20 @@
 
 class CDeclareOption;
 
+/* Token types */
 const int LATEX_COMMAND = 0;
 const int LATEX_ENVIRONMENT = 1;
 const int LATEX_OPTION = 2;
 const int LATEX_REQPACKAGE = 3;
 const int LATEX_DEF = 4;
+const int LATEX_CLS_DESC = 5;
+const int LATEX_STY_DESC = 6;
+/* Number of token types */
+const int TOKEN_COUNT = 7;
+/* Maximum length of desc */
+const int MAX_DESC_LEN = 255;
 
-const int TOKEN_COUNT = 5;
-
+/* Exception ID */
 #define INVALID_LATEX_ITEM -5678
 
 /* Represents a LaTeX-Style file or class */
@@ -69,6 +75,7 @@ public:
 	void ProcessFile();
 	CString GetFilename() const {return m_Filename;};
 	CString GetName() const {return m_Name;};
+	CString GetDescription() const {return m_Desc;};
 	const CMapStringToOb *GetCommands() const {return &m_Commands;}
 	const CStringArray *GetOptions() const {return &m_Options;}
 	const CStringArray *GetRequiredPackages() const {return &m_ReqPackages;}
@@ -83,6 +90,7 @@ public:
 	CStyleFile& operator = (const CStyleFile&);
 		
 private:
+	int ExtractDescription(const TCHAR *closePar, const TCHAR *openBr, const TCHAR *closeBr, CString &desc);
 	CString m_Desc;
 	
 	void Init();
@@ -114,6 +122,11 @@ public:
 
 /*
  * $Log$
+ * Revision 1.6  2005/06/07 23:14:23  owieland
+ * + Load commands from packages.xml
+ * + Fixed position of the auto complete listbox / beautified content
+ * + Fixed some bugs
+ *
  * Revision 1.5  2005/06/07 19:48:21  owieland
  * + Parse commands declared via \\def
  * + Revised HasCommands

@@ -34,6 +34,11 @@
 
 /*
  * $Log$
+ * Revision 1.7  2005/06/07 23:14:23  owieland
+ * + Load commands from packages.xml
+ * + Fixed position of the auto complete listbox / beautified content
+ * + Fixed some bugs
+ *
  * Revision 1.6  2005/06/05 19:45:18  owieland
  * - Beautified auto complete listbox (fonts, position).
  * - Bugfix: Window did not appeared after second invocation
@@ -273,6 +278,9 @@ BOOL CStyleFileContainer::SaveAsXML(CString &path)
 			MsXml::CXMLDOMElement	xmlPackage(xmlDoc.CreateElement(CSF_XML_PACKAGE));
 			xmlPackage.SetAttribute(CSF_XML_NAME, (LPCTSTR)sf->GetName());
 			xmlPackage.SetAttribute(CSF_XML_PATH, (LPCTSTR)sf->GetFilename());
+			if (sf->GetDescription().GetLength() > 0) {
+				xmlPackage.SetAttribute(CSF_XML_DESC, (LPCTSTR)sf->GetDescription());
+			}
 			
 			/* Export commands and environments */
 			const CMapStringToOb *cmds = sf->GetCommands();
@@ -290,7 +298,7 @@ BOOL CStyleFileContainer::SaveAsXML(CString &path)
 					type = CSF_XML_ENVIRONMENT;
 				}
 				MsXml::CXMLDOMElement	xmlCmd(xmlDoc.CreateElement(type));
-				xmlCmd.SetAttribute(CSF_XML_NAME, (LPCTSTR)lc->ToLaTeX());
+				xmlCmd.SetAttribute(CSF_XML_NAME, (LPCTSTR)lc->ToLaTeX(FALSE));
 
 				if (lc->GetNoOfParams() > 0) {
 					TCHAR buf[5];
