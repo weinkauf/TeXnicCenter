@@ -52,7 +52,7 @@ public:
 	CNewCommand(const CStyleFile *parent, CString &name, int NoOfParam = 0, BOOL hasStar=FALSE);
 	virtual ~CNewCommand();
 
-	virtual const CString ToLaTeX();
+	virtual const CString ToLaTeX(BOOL showParString=TRUE);
 	virtual const CString ToString();
 
 	BOOL HasStar() const {return m_HasStar;}
@@ -64,6 +64,9 @@ private:
 
 /*
  * $Log$
+ * Revision 1.2  2005/06/03 22:24:56  owieland
+ * + IMPLEMENT/DECLARE_DYNAMIC
+ *
  * Revision 1.1  2005/06/03 20:29:43  owieland
  * Initial checkin of package and class parser
  *

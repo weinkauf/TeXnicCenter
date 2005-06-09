@@ -74,19 +74,27 @@ const CString CNewCommand::ToString() {
 	TCHAR buf[5];
 	itoa(GetNoOfParams(), buf, 10);
 	
-	return CString("\\" + GetName() + 
-		(m_HasStar ? "*" : "") + 
-		(GetNoOfParams()>0 ? "#" + CString(buf) : "") + 
+	return CString(_T("\\") + GetName() + 
+		(m_HasStar ? _T("*") : _T("")) + 
+		(GetNoOfParams()>0 ? _T("#") + CString(buf) : _T("")) + 
 		" (" + x + ")");
 }
 
-const CString CNewCommand::ToLaTeX()
-{
-	return CString("\\" + GetName()) + (m_HasStar ? "*" : "");
+const CString CNewCommand::ToLaTeX(BOOL showParString)
+{	
+	return CString(_T("\\") + 
+		GetName() + 
+		(m_HasStar ? _T("*") : _T("")) + 
+		(showParString ? GetParameterString() : _T("")));
 }
 
 /*
  * $Log$
+ * Revision 1.4  2005/06/07 23:14:23  owieland
+ * + Load commands from packages.xml
+ * + Fixed position of the auto complete listbox / beautified content
+ * + Fixed some bugs
+ *
  * Revision 1.3  2005/06/05 16:41:59  owieland
  * Introduced new base class CAbstractLaTeXCommand for a better
  * understandable class hierarchy and better seperation of options and commands.
