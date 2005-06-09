@@ -105,6 +105,7 @@ CLatexEdit::CLatexEdit()
 	m_pBackgroundThread = theApp.GetBackgroundThread();
 	m_CompletionListBox = NULL;
 	m_Proxy = new MyListener(this);
+	m_OldFocus = NULL;
 }
 
 
@@ -492,7 +493,7 @@ BOOL CLatexEdit::OnInsertLatexConstruct( UINT nID )
 
 
 void CLatexEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) 
-{
+{	
 	switch( nChar )
 	{
 		case _T('"'):
@@ -973,7 +974,9 @@ void CLatexEdit::OnQueryCompletion()
 	GetSelection(m_oldStart, m_oldEnd); /* store old position */
 
 	GetWordBeforeCursor(keyword, topLeft); /* retrieve word to be completed */
-	m_CompletionListBox = CreateListBox(keyword, topLeft); /* setup (and show) list box */
+	if (!keyword.IsEmpty()) {
+		m_CompletionListBox = CreateListBox(keyword, topLeft); /* setup (and show) list box */
+	}
 }
 
 CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLeft)
@@ -988,7 +991,7 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 	if (m_CompletionListBox == NULL) { // create listbox
 		m_CompletionListBox = new CAutoCompleteListBox(&theApp.m_AvailableCommands);
 		m_CompletionListBox->SetListener(m_Proxy);
-		m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|LBS_WANTKEYBOARDINPUT|LBS_OWNERDRAWFIXED, 
+		m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|/*LBS_WANTKEYBOARDINPUT|*/LBS_OWNERDRAWFIXED, 
 			CRect(), this, 456);
 		// _T("LISTBOX")
 		/* try to display as a popup, does not work properly :-(
@@ -998,8 +1001,7 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 			CRect(), this, NULL);
 			*/
 		wndCmd = SW_SHOWNORMAL;
-	} else { // reset existing instance
-		m_CompletionListBox->ResetContent();
+	} else { // reset existing instance		
 		wndCmd = SW_RESTORE;		
 	}
 
@@ -1009,36 +1011,11 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 		m_CompletionListBox->ShowWindow(wndCmd);
 		m_CompletionListBox->MoveWindow(ptStart.x, ptStart.y, 100, 150);
 		m_CompletionListBox->SetCurSel(0);
-		m_CompletionListBox->SetFocus();
+		m_OldFocus = m_CompletionListBox->SetFocus();
 	}
 	return m_CompletionListBox;
 }
 
-
-void CLatexEdit::OnCommandSelect(CString &cmd)
-{	
-	CPoint ptStart, ptEnd;
-	GetSelection(ptStart, ptEnd);
-
-	//Get the text buffer
-	CCrystalTextBuffer* pText = LocateTextBuffer();
-
-	//Start Undo Group
-	pText->BeginUndoGroup();
-	ReplaceSelection(cmd);
-	pText->FlushUndoGroup(this);
-	SetSelection(ptEnd, ptEnd); // place cursor after inserted word	
-}
-
-void CLatexEdit::OnCommandCancelled()
-{	
-	SetSelection(m_oldStart, m_oldEnd); // nothing selected, so just retrieve old cursor pos
-}
-
-void CLatexEdit::OnHelp(CString &cmd)
-{	
-	InvokeContextHelp(cmd);	
-}
 
 void CLatexEdit::QueryComplete()
 {
@@ -1117,5 +1094,90 @@ BOOL CLatexEdit::InvokeContextHelp(const CString keyword)
 	link.fIndexOnFail = TRUE;
 	HtmlHelp(NULL, theApp.m_pszHelpFilePath, HH_KEYWORD_LOOKUP, (DWORD)&link);
 
+	return TRUE;
+}
+
+/* ------------ Message handlers for auto complete listbox ------------*/
+
+void CLatexEdit::OnACCommandSelect(CString &cmd)
+{	
+	CPoint ptStart, ptEnd;
+	GetSelection(ptStart, ptEnd);
+
+	//Get the text buffer
+	CCrystalTextBuffer* pText = LocateTextBuffer();
+
+	//Start Undo Group
+	pText->BeginUndoGroup();
+	ReplaceSelection(cmd);
+	pText->FlushUndoGroup(this);
+	GetSelection(ptStart, ptEnd); // retrieve new selection pos
+	SetSelection(ptEnd, ptEnd); // place cursor after inserted word	
+
+	RestoreFocus();
+}
+
+void CLatexEdit::OnACCommandCancelled()
+{	
+	/* try to restore old cursor pos */
+	if (IsValidTextPos(m_oldStart) && IsValidTextPos(m_oldEnd)) {
+		SetSelection(m_oldStart, m_oldEnd); 
+	} else { /* suggest new position */
+		GetSelection(m_oldStart, m_oldEnd);
+		SetSelection(m_oldEnd, m_oldEnd); 
+	}
+	RestoreFocus();
+}
+
+void CLatexEdit::OnACHelp(CString &cmd)
+{	
+	InvokeContextHelp(cmd);	
+}
+
+void CLatexEdit::OnACBackspace() {
+	if (m_CompletionListBox != NULL && m_CompletionListBox->IsWindowVisible()) {
+		CPoint ps, pe, dummy;
+		GetSelection(ps, pe);
+		dummy.x = pe.x - 1;
+		dummy.y = pe.y;
+		SetSelection(dummy, pe);
+		//CCrystalEditViewEx::OnChar(VK_BACK, 1, 0);		
+		if (ReplaceSelection(_T(""))) { /* WÜRG !!!! */
+			GetSelection(dummy, pe); /* retrieve new cursor pos */
+			SetSelection(ps, pe); /* restore selection */
+		} else {
+			TRACE("Could not delete selection!\n");
+		}
+		return;
+	}
+}
+
+void CLatexEdit::OnACChar(UINT nKey, UINT nRepCount, UINT nFlags) {
+	if (m_CompletionListBox != NULL && m_CompletionListBox->IsWindowVisible()) {
+		CPoint ps, pe, dummy;
+		GetSelection(ps, pe);
+		SetSelection(pe, pe);
+		CCrystalEditViewEx::OnChar(nKey, nRepCount, nFlags);
+		GetSelection(dummy, pe); /* retrieve new cursor pos */
+		SetSelection(ps, pe); /* restore selection */
+		return;
+	}
+}
+
+/* Checks, if pos is a valid cursor position (to avoid assertions due to invalid pos) */
+BOOL CLatexEdit::IsValidTextPos(CPoint point)
+{
+	if (GetLineCount() > 0)
+	{
+		return (m_nTopLine >= 0 && m_nOffsetChar >= 0) &&
+			(point.y >= 0 && point.y < GetLineCount()) && 
+			(point.x >= 0 && point.x <= GetLineLength(point.y));
+	}
+	return FALSE;
+}
+
+BOOL CLatexEdit::RestoreFocus()
+{	
+	SetFocus();
 	return TRUE;
 }
