@@ -50,6 +50,7 @@
 #define CSF_XML_PATH		_T("path")
 #define CSF_XML_PARAMS		_T("parameters")
 #define CSF_XML_DESC		_T("desc")
+#define CSF_XML_CLASS		_T("class")
 
 
 /* Container class for all available .sty and .cls files.
@@ -78,6 +79,10 @@ public:
 
 	/* Returns a list of possible completions to a given string */
 	const CStringArray* GetPossibleCompletions(const CString &cmd);
+	/*	Returns a list of possible completions to a given string. Here the function 
+		returns a map with objects instead of string, so that the receiver has more 
+		options to display the result.  */
+	const CMapStringToOb* GetPossibleItems(const CString &cmd, const CString &docClass);
 
 	/* Sets an event listener to CStyleFileContainer events */
 	void SetEventListener(CStyleFileListener *listener);
@@ -116,6 +121,11 @@ protected:
 
 /*
  * $Log$
+ * Revision 1.5  2005/06/07 23:14:23  owieland
+ * + Load commands from packages.xml
+ * + Fixed position of the auto complete listbox / beautified content
+ * + Fixed some bugs
+ *
  * Revision 1.4  2005/06/05 16:42:42  owieland
  * Extended user interface (prepare for loading the package rep from XML)
  *

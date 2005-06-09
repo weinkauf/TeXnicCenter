@@ -168,7 +168,7 @@ private:
 	CPoint m_oldStart;
 	CPoint m_oldEnd;
 	CAutoCompleteListBox* m_CompletionListBox;
-	CAutoCompleteListBox *CreateListBox(const CStringArray *list, const CPoint topLeft);
+	CAutoCompleteListBox *CreateListBox(CString &keywordt, const CPoint topLeft);
 	
 	MyListener *m_Proxy;
 };
