@@ -158,7 +158,7 @@ protected:
 public:
 	BOOL IsValidTextPos(CPoint pos);
 	void GetWordBeforeCursor(CString &strKeyword, CPoint &start);
-	virtual void OnACCommandSelect(CString &command);
+	virtual void OnACCommandSelect(const CLaTeXCommand *cmd);
 	virtual void OnACCommandCancelled();
 	virtual void OnACHelp(CString &command);
 	virtual void OnACBackspace();
@@ -192,7 +192,7 @@ class MyListener : public CAutoCompleteListener {
 public:
 	MyListener(CLatexEdit *parent) {ASSERT(parent != NULL); p = parent;}
 	/* Command was selected */
-	virtual void OnACCommandSelect(CString &command) {p->OnACCommandSelect(command);}
+	virtual void OnACCommandSelect(const CLaTeXCommand *cmd) {p->OnACCommandSelect(cmd);}
 	/* Auto complete was cancelled */
 	virtual void OnACCommandCancelled() {p->OnACCommandCancelled();};
 	/* User demands context help (F1 key) */

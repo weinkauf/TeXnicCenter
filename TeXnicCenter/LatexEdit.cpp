@@ -1099,9 +1099,11 @@ BOOL CLatexEdit::InvokeContextHelp(const CString keyword)
 
 /* ------------ Message handlers for auto complete listbox ------------*/
 
-void CLatexEdit::OnACCommandSelect(CString &cmd)
+void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 {	
 	CPoint ptStart, ptEnd;
+
+	ASSERT(cmd != NULL);
 	GetSelection(ptStart, ptEnd);
 
 	//Get the text buffer
@@ -1109,10 +1111,21 @@ void CLatexEdit::OnACCommandSelect(CString &cmd)
 
 	//Start Undo Group
 	pText->BeginUndoGroup();
-	ReplaceSelection(cmd);
+	CString s = cmd->GetExpandBefore();
+	s += cmd->ToLaTeX();
+	s += cmd->GetExpandAfter();
+	ReplaceSelection(s);
+
 	pText->FlushUndoGroup(this);
 	GetSelection(ptStart, ptEnd); // retrieve new selection pos
-	SetSelection(ptEnd, ptEnd); // place cursor after inserted word	
+
+	
+	SetSelection(ptEnd, ptEnd); // drop selection and place cursor after inserted word	
+	if (cmd->GetExpandAfter().GetLength() > 0) { /* are there additional inserts? */
+		ptEnd.x = 0;
+		ptEnd.y--; /* one line up (very primitive, should be more flexible!) */
+		SetCursorPos(ptEnd);
+	}
 
 	RestoreFocus();
 }

@@ -49,7 +49,8 @@ IMPLEMENT_DYNAMIC(CNewEnvironment, CLaTeXCommand)
 CNewEnvironment::CNewEnvironment(const CStyleFile *parent, CString &name, int noOfParams)
 :CLaTeXCommand(parent, name, noOfParams)
 {
-	
+	SetExpandBefore(CString(_T("\\begin{")));
+	SetExpandAfter(CString("}" + CString(GetParameterString()) + "\r\n\r\n\\end{" +name + "}"));
 }
 
 CNewEnvironment::~CNewEnvironment()
@@ -57,7 +58,7 @@ CNewEnvironment::~CNewEnvironment()
 
 }
 
-const CString CNewEnvironment::ToString() {
+CString CNewEnvironment::ToString() {
 	const CStyleFile *sf = GetStyleFile();
 	CString x =  (sf != NULL ? sf->GetFilename() : CString("???"));
 	
@@ -71,6 +72,10 @@ const CString CNewEnvironment::ToString() {
 
 /*
  * $Log$
+ * Revision 1.3  2005/06/05 16:41:59  owieland
+ * Introduced new base class CAbstractLaTeXCommand for a better
+ * understandable class hierarchy and better seperation of options and commands.
+ *
  * Revision 1.2  2005/06/03 22:24:56  owieland
  * + IMPLEMENT/DECLARE_DYNAMIC
  *

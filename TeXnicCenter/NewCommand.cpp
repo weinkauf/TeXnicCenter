@@ -67,7 +67,7 @@ CNewCommand::~CNewCommand()
 
 }
 
-const CString CNewCommand::ToString() {
+CString CNewCommand::ToString() {
 	const CStyleFile *sf = GetStyleFile();
 	CString x =  (sf != NULL ? sf->GetName() : CString("???"));
 	
@@ -80,7 +80,7 @@ const CString CNewCommand::ToString() {
 		" (" + x + ")");
 }
 
-const CString CNewCommand::ToLaTeX(BOOL showParString)
+CString CNewCommand::ToLaTeX(BOOL showParString)
 {	
 	return CString(_T("\\") + 
 		GetName() + 
@@ -90,6 +90,12 @@ const CString CNewCommand::ToLaTeX(BOOL showParString)
 
 /*
  * $Log$
+ * Revision 1.5  2005/06/09 12:09:59  owieland
+ * + Consider ProvidesXXX commands for package/class description
+ * + Avoid duplicate option entries
+ * + Export description of packages
+ * + Consider number of parameters on auto completion
+ *
  * Revision 1.4  2005/06/07 23:14:23  owieland
  * + Load commands from packages.xml
  * + Fixed position of the auto complete listbox / beautified content

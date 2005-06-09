@@ -48,13 +48,16 @@ public:
 	CNewEnvironment(const CStyleFile *parent, CString &name, int noOfParams);
 	virtual ~CNewEnvironment();
 
-	virtual const CString CNewEnvironment::ToString();
+	virtual CString CNewEnvironment::ToString();
 };
 
 #endif // !defined(AFX_NEWENVIRONMENT_H__CA02E4AE_6D38_4F53_9CB6_3FE9C7D4E068__INCLUDED_)
 
 /*
  * $Log$
+ * Revision 1.2  2005/06/03 22:24:56  owieland
+ * + IMPLEMENT/DECLARE_DYNAMIC
+ *
  * Revision 1.1  2005/06/03 20:29:43  owieland
  * Initial checkin of package and class parser
  *
