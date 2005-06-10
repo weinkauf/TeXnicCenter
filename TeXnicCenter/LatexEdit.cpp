@@ -982,6 +982,9 @@ void CLatexEdit::OnQueryCompletion()
 CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLeft)
 {
 	CPoint	ptStart, ptText;
+	if (!IsValidTextPos(topLeft)) {
+		TRACE("Inalid text pos %d, %d\n", topLeft.x, topLeft.y);
+	}
 	ptStart = TextToClient(topLeft);
 
 	int wndCmd;
@@ -1113,7 +1116,7 @@ void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 	pText->BeginUndoGroup();
 	CString s = cmd->GetExpandBefore();
 	s += cmd->ToLaTeX();
-	s += cmd->GetExpandAfter();
+	s += cmd->GetExpandAfter();	
 	ReplaceSelection(s);
 
 	pText->FlushUndoGroup(this);

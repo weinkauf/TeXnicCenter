@@ -34,6 +34,10 @@
 
 /*
  * $Log$
+ * Revision 1.5  2005/06/09 22:58:47  owieland
+ * Introduced ExpandBefore/After members to allow insertion of additional constructs
+ * (useful for environments to insert \\begin-\\end pairs}
+ *
  * Revision 1.4  2005/06/09 12:07:44  owieland
  * Addtional parameter 'showParams' in ToLaTeX()
  *
@@ -89,7 +93,7 @@ CLaTeXCommand::~CLaTeXCommand()
 }
 
 
-const CString CLaTeXCommand::GetParameterString()
+const CString CLaTeXCommand::GetParameterString() const
 {
 	if (m_NoOfParams >= 0 && m_NoOfParams < 6) {
 		return PAR_STRINGS[m_NoOfParams];
