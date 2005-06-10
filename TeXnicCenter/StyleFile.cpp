@@ -34,6 +34,11 @@
 
 /*
  * $Log$
+ * Revision 1.8  2005/06/09 17:09:59  owieland
+ * + Revised architecture (moved autocmpl-handling to listbox)
+ * + Hilight commands if they are from a class (unsatisfying yet)
+ * + Several bugfixes
+ *
  * Revision 1.7  2005/06/09 12:09:59  owieland
  * + Consider ProvidesXXX commands for package/class description
  * + Avoid duplicate option entries
@@ -87,7 +92,9 @@ const TCHAR* TOKENS[]={
 	"\\RequirePackage", 
 	"\\def",
 	"\\ProvidesClass",
-	"\\ProvidesPackage"
+	"\\ProvidesPackage",
+	"\\DeclareTextSymbol",
+	"\\DeclareTextCommand"
 };
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -265,6 +272,8 @@ void CStyleFile::ParseBuffer(TCHAR *buf)
 					case LATEX_COMMAND:
 					case LATEX_ENVIRONMENT:
 					case LATEX_DEF:
+					case LATEX_TXT_SYMBOL:
+					case LATEX_TXT_COMMAND:
 						/* Some commands may be duplicate due to conditional definitions in the
 						   style file. */
 						if (!AddCommand((CLaTeXCommand*)lc)) {
@@ -354,6 +363,12 @@ CAbstractLaTeXCommand *CStyleFile::CreateItem(int type, CString &name, int hasSt
 	switch(type) {
 	case LATEX_COMMAND:
 	case LATEX_DEF:
+		return new CNewCommand(this, name, noOfParams, hasStar);
+		break;
+	case LATEX_TXT_SYMBOL:
+		return new CNewCommand(this, name, 0, hasStar);
+		break;
+	case LATEX_TXT_COMMAND:
 		return new CNewCommand(this, name, noOfParams, hasStar);
 		break;
 	case LATEX_ENVIRONMENT:
