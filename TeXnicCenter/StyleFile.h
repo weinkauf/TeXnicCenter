@@ -51,8 +51,11 @@ const int LATEX_REQPACKAGE = 3;
 const int LATEX_DEF = 4;
 const int LATEX_CLS_DESC = 5;
 const int LATEX_STY_DESC = 6;
+const int LATEX_TXT_SYMBOL = 7;
+const int LATEX_TXT_COMMAND = 8;
 /* Number of token types */
-const int TOKEN_COUNT = 7;
+const int TOKEN_COUNT = 9;
+
 /* Maximum length of desc */
 const int MAX_DESC_LEN = 255;
 
@@ -129,6 +132,11 @@ public:
 
 /*
  * $Log$
+ * Revision 1.8  2005/06/09 17:09:59  owieland
+ * + Revised architecture (moved autocmpl-handling to listbox)
+ * + Hilight commands if they are from a class (unsatisfying yet)
+ * + Several bugfixes
+ *
  * Revision 1.7  2005/06/09 12:09:59  owieland
  * + Consider ProvidesXXX commands for package/class description
  * + Avoid duplicate option entries
