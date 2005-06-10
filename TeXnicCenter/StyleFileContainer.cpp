@@ -34,6 +34,11 @@
 
 /*
  * $Log$
+ * Revision 1.9  2005/06/09 17:09:59  owieland
+ * + Revised architecture (moved autocmpl-handling to listbox)
+ * + Hilight commands if they are from a class (unsatisfying yet)
+ * + Several bugfixes
+ *
  * Revision 1.8  2005/06/09 12:09:59  owieland
  * + Consider ProvidesXXX commands for package/class description
  * + Avoid duplicate option entries
@@ -80,6 +85,21 @@
 static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
+
+#define CSF_XML_CONTAINER	_T("lxCollection")
+#define CSF_XML_PACKAGE		_T("lxPackage")
+#define CSF_XML_COMMAND		_T("lxCommand")
+#define CSF_XML_ENVIRONMENT	_T("lxEnvironment")
+#define CSF_XML_OPTION		_T("lxOption")
+#define CSF_XML_REQPACKAGE	_T("lxReqPackage")
+#define CSF_XML_NAME		_T("name")
+#define CSF_XML_PATH		_T("path")
+#define CSF_XML_PARAMS		_T("parameters")
+#define CSF_XML_DESC		_T("desc")
+#define CSF_XML_CLASS		_T("class")
+#define CSF_XML_EXPAFTER	_T("expafter")
+#define CSF_XML_EXPBEFORE	_T("expbefore")
+
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -226,7 +246,6 @@ const CStringArray* CStyleFileContainer::GetPossibleCompletions(const CString &c
 		return NULL;
 	}
 
-
 	POSITION pos = m_Commands.GetStartPosition();
 	while(pos != NULL) {
 		CLaTeXCommand *lc;
@@ -360,6 +379,15 @@ BOOL CStyleFileContainer::SaveAsXML(CString &path)
 					itoa(lc->GetNoOfParams(), buf, 10);
 					xmlCmd.SetAttribute(CSF_XML_PARAMS, buf);
 				}
+
+				/* just for testing */
+				if (lc->GetExpandAfter().GetLength() > 0) {
+					xmlCmd.SetAttribute(CSF_XML_EXPAFTER, (LPCTSTR)lc->GetExpandAfter());
+				}
+
+				if (lc->GetExpandBefore().GetLength() > 0) {
+					xmlCmd.SetAttribute(CSF_XML_EXPBEFORE, (LPCTSTR)lc->GetExpandBefore());
+				}
 				
 				xmlPackage.AppendChild(xmlCmd);
 			}
@@ -400,8 +428,6 @@ BOOL CStyleFileContainer::SaveAsXML(CString &path)
 		else
 		{
 			//Some other error. For example, schema file is missing (*.xsd)
-			TRACE("Desc: %s", pE->GetDescription());
-			
 			pE->ReportError(MB_ICONEXCLAMATION|MB_OK);
 		}
 

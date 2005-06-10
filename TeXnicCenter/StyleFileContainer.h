@@ -40,18 +40,6 @@
 
 #include "stylefile.h"
 
-#define CSF_XML_CONTAINER	_T("lxCollection")
-#define CSF_XML_PACKAGE		_T("lxPackage")
-#define CSF_XML_COMMAND		_T("lxCommand")
-#define CSF_XML_ENVIRONMENT	_T("lxEnvironment")
-#define CSF_XML_OPTION		_T("lxOption")
-#define CSF_XML_REQPACKAGE	_T("lxReqPackage")
-#define CSF_XML_NAME		_T("name")
-#define CSF_XML_PATH		_T("path")
-#define CSF_XML_PARAMS		_T("parameters")
-#define CSF_XML_DESC		_T("desc")
-#define CSF_XML_CLASS		_T("class")
-
 
 /* Container class for all available .sty and .cls files.
  *
@@ -121,6 +109,11 @@ protected:
 
 /*
  * $Log$
+ * Revision 1.6  2005/06/09 17:09:59  owieland
+ * + Revised architecture (moved autocmpl-handling to listbox)
+ * + Hilight commands if they are from a class (unsatisfying yet)
+ * + Several bugfixes
+ *
  * Revision 1.5  2005/06/07 23:14:23  owieland
  * + Load commands from packages.xml
  * + Fixed position of the auto complete listbox / beautified content
