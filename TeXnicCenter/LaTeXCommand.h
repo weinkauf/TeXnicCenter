@@ -67,7 +67,7 @@ private:
 	CString m_ExpandBefore;
 	int m_NoOfParams;
 protected:
-	const CString GetParameterString();
+	const CString GetParameterString() const;
 };
 
 /* Listener interface */
@@ -82,6 +82,10 @@ public:
 
 /*
  * $Log$
+ * Revision 1.6  2005/06/09 22:58:47  owieland
+ * Introduced ExpandBefore/After members to allow insertion of additional constructs
+ * (useful for environments to insert \\begin-\\end pairs}
+ *
  * Revision 1.5  2005/06/09 12:07:44  owieland
  * Addtional parameter 'showParams' in ToLaTeX()
  *

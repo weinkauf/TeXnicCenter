@@ -80,7 +80,7 @@ CString CNewCommand::ToString() {
 		" (" + x + ")");
 }
 
-CString CNewCommand::ToLaTeX(BOOL showParString)
+CString CNewCommand::ToLaTeX(BOOL showParString) const
 {	
 	return CString(_T("\\") + 
 		GetName() + 
@@ -90,6 +90,10 @@ CString CNewCommand::ToLaTeX(BOOL showParString)
 
 /*
  * $Log$
+ * Revision 1.6  2005/06/09 22:58:47  owieland
+ * Introduced ExpandBefore/After members to allow insertion of additional constructs
+ * (useful for environments to insert \\begin-\\end pairs}
+ *
  * Revision 1.5  2005/06/09 12:09:59  owieland
  * + Consider ProvidesXXX commands for package/class description
  * + Avoid duplicate option entries
