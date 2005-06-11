@@ -34,6 +34,10 @@
 
 /*
  * $Log$
+ * Revision 1.4  2005/06/09 22:58:47  owieland
+ * Introduced ExpandBefore/After members to allow insertion of additional constructs
+ * (useful for environments to insert \\begin-\\end pairs}
+ *
  * Revision 1.3  2005/06/09 17:09:59  owieland
  * + Revised architecture (moved autocmpl-handling to listbox)
  * + Hilight commands if they are from a class (unsatisfying yet)
@@ -92,4 +96,14 @@ void CAbstractLaTeXCommand::SetDescription(CString &desc)
 void CAbstractLaTeXCommand::SetName(CString &name)
 {
 	m_Name = name;
+}
+
+void CAbstractLaTeXCommand::Dump( CDumpContext& dc ) const {
+	CObject::Dump(dc);
+	dc << m_Name;
+
+	if (m_Parent != NULL) {
+		dc << "/";
+		dc << m_Parent->GetName();
+	}
 }
