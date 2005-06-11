@@ -981,9 +981,9 @@ void CLatexEdit::OnQueryCompletion()
 
 CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLeft)
 {
-	CPoint	ptStart, ptText;
+	CPoint	ptStart, ptText;	
 	if (!IsValidTextPos(topLeft)) {
-		TRACE("Inalid text pos %d, %d\n", topLeft.x, topLeft.y);
+		TRACE("Invalid text pos %d, %d\n", topLeft.x, topLeft.y);
 	}
 	ptStart = TextToClient(topLeft);
 
@@ -993,28 +993,22 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 
 	if (m_CompletionListBox == NULL) { // create listbox
 		m_CompletionListBox = new CAutoCompleteListBox(&theApp.m_AvailableCommands);
-		m_CompletionListBox->SetListener(m_Proxy);
-		m_CompletionListBox->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|/*LBS_WANTKEYBOARDINPUT|*/LBS_OWNERDRAWFIXED, 
-			CRect(), this, 456);
-		// _T("LISTBOX")
-		/* try to display as a popup, does not work properly :-(
-		TRACE("WC: %s\n", m_CompletionListBox->GetWndClass());
-		m_CompletionListBox->CreateEx(WS_EX_LEFT, m_CompletionListBox->GetWndClass(), _T("TXCAutoComplete"), 
-			WS_POPUP|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|LBS_WANTKEYBOARDINPUT|LBS_OWNERDRAWFIXED, 
-			CRect(), this, NULL);
-			*/
+		m_CompletionListBox->SetListener(m_Proxy);		
+		m_CompletionListBox->Create(WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|LBS_WANTKEYBOARDINPUT|LBS_OWNERDRAWFIXED, 
+				CRect(), this, NULL);
 		wndCmd = SW_SHOWNORMAL;
 	} else { // reset existing instance		
 		wndCmd = SW_RESTORE;		
 	}
-
 		
-	// setup and show listbox
-	if (m_CompletionListBox->InitWithKeyword(keyword)) {
+	// setup and show listbox. If InitWithKeyword returns true, we show the box, otherwise
+	// we found nothing or an unique match
+	if (m_CompletionListBox->InitWithKeyword(keyword)) {		
 		m_CompletionListBox->ShowWindow(wndCmd);
+		ClientToScreen(&ptStart); // translate coordinates, because popup has no parent 
 		m_CompletionListBox->MoveWindow(ptStart.x, ptStart.y, 100, 150);
 		m_CompletionListBox->SetCurSel(0);
-		m_OldFocus = m_CompletionListBox->SetFocus();
+		//m_OldFocus = m_CompletionListBox->SetFocus();
 	}
 	return m_CompletionListBox;
 }
@@ -1023,9 +1017,6 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 void CLatexEdit::QueryComplete()
 {
 	OnQueryCompletion();
-	CString s;
-	//GetSelectedKeyword(s);
-	
 }
 
 /**
@@ -1077,6 +1068,7 @@ void CLatexEdit::GetWordBeforeCursor(CString &strKeyword, CPoint &start)
 	}
 }
 
+/* Invokes context help for a given keyword */
 BOOL CLatexEdit::InvokeContextHelp(const CString keyword)
 {
 	if (keyword.IsEmpty())

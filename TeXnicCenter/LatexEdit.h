@@ -156,25 +156,29 @@ protected:
 	CLatexParser	m_latexParser;
 
 public:
+	/* Checks if given cursor position is valid */
 	BOOL IsValidTextPos(CPoint pos);
+	/* Retrieves word before cursor */
 	void GetWordBeforeCursor(CString &strKeyword, CPoint &start);
+	/* Handlers for events of auto complete listbox */
 	virtual void OnACCommandSelect(const CLaTeXCommand *cmd);
 	virtual void OnACCommandCancelled();
 	virtual void OnACHelp(CString &command);
 	virtual void OnACBackspace();
 	virtual void OnACChar(UINT nKey, UINT nRepCount, UINT nFlags);
+	/* Searches a directory for packages */
 	void OnPackageSetup();
 	CLatexDoc* GetDocument();
 
 private:
 	BOOL RestoreFocus();
-	CWnd* m_OldFocus;
+	CAutoCompleteListBox *CreateListBox(CString &keywordt, const CPoint topLeft);
 	BOOL InvokeContextHelp(const CString keyword);
+
+	CWnd* m_OldFocus;
 	CPoint m_oldStart;
 	CPoint m_oldEnd;
 	CAutoCompleteListBox* m_CompletionListBox;
-	CAutoCompleteListBox *CreateListBox(CString &keywordt, const CPoint topLeft);
-	
 	MyListener *m_Proxy;
 };
 
