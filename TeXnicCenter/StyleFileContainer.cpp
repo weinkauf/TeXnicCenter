@@ -34,6 +34,9 @@
 
 /*
  * $Log$
+ * Revision 1.10  2005/06/10 15:31:38  owieland
+ * Moved xml constants to .cpp file
+ *
  * Revision 1.9  2005/06/09 17:09:59  owieland
  * + Revised architecture (moved autocmpl-handling to listbox)
  * + Hilight commands if they are from a class (unsatisfying yet)
@@ -595,7 +598,7 @@ void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyle
 {
 	/* fetch attributes */
 	MsXml::CXMLDOMNamedNodeMap attr = element.GetAttributes();
-	CString nameVal, descVal;
+	CString nameVal, descVal, beforeVal, afterVal;
 	int nOfParams = 0;		
 
 	for(int j = 0; j < attr.GetLength(); j++) {
@@ -607,13 +610,48 @@ void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyle
 			descVal = a.GetText();
 		} else if (s == CSF_XML_PARAMS) {
 			nOfParams = atoi(a.GetText());			
+		} else if (s == CSF_XML_EXPAFTER) {
+			afterVal = a.GetText();
+			SetupCR(afterVal);
+		} else if (s == CSF_XML_EXPBEFORE) {
+			beforeVal = a.GetText();
+			SetupCR(beforeVal);
 		}
 	}
 
 	/* Add element to style file */
 	if (element.GetNodeName() == CSF_XML_COMMAND) {
-		parent->AddCommand(nameVal, nOfParams, descVal);
+		CNewCommand *nc = parent->AddCommand(nameVal, nOfParams, descVal);
+
+		if (nc != NULL && !afterVal.IsEmpty()) {
+			//TRACE("Add expA = %s to %s\n", afterVal, nc->GetName());
+			nc->SetExpandAfter(afterVal);
+		}
+		if (nc != NULL && !beforeVal.IsEmpty()) {
+			//TRACE("Add expB = %s to %s\n", beforeVal, nc->GetName());
+			nc->SetExpandBefore(beforeVal);
+		}
 	} else if (element.GetNodeName() == CSF_XML_ENVIRONMENT) {
-		parent->AddEnvironment(nameVal, nOfParams, descVal);
+		CNewEnvironment *ne = parent->AddEnvironment(nameVal, nOfParams, descVal);
+
+		if (ne != NULL && !afterVal.IsEmpty()) {
+			//TRACE("Add expA = %s to %s\n", afterVal, ne->GetName());
+			ne->SetExpandAfter(afterVal);
+		}
+		if (ne != NULL && !beforeVal.IsEmpty()) {
+			//TRACE("Add expB = %s to %s\n", beforeVal, ne->GetName());
+			ne->SetExpandBefore(beforeVal);
+		}
 	}
+}
+
+/* 
+	This is needed, because CrystalEdit needs a \r\n to create a line feed, but XML parsers
+	turns every &#xD;&#xA; sequence into an single '&#xA;'.
+	(see http://www.sql-und-xml.de/xml-lernen/xml-version-1.1-unicode.html for details)
+ */
+
+void CStyleFileContainer::SetupCR(CString &s)
+{
+	s.Replace("\n", "\r\n");
 }

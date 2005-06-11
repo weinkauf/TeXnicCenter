@@ -84,6 +84,7 @@ public:
 	virtual void OnCommandFound(CLaTeXCommand &command);
 
 private:
+	void SetupCR(CString &s);
 	void ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyleFile *parent);
 	void ProcessPackageNode(MsXml::CXMLDOMNode &element);
 	
@@ -109,6 +110,9 @@ protected:
 
 /*
  * $Log$
+ * Revision 1.7  2005/06/10 15:31:38  owieland
+ * Moved xml constants to .cpp file
+ *
  * Revision 1.6  2005/06/09 17:09:59  owieland
  * + Revised architecture (moved autocmpl-handling to listbox)
  * + Hilight commands if they are from a class (unsatisfying yet)
