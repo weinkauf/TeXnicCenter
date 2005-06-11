@@ -68,6 +68,7 @@ public:
 	/* Returns a pointer to the style file which contains this command */
 	const CStyleFile *GetParent() const {return m_Parent;}
 
+	virtual void Dump( CDumpContext& dc ) const;
 private:	
 	CString				m_Description;
 	CString				m_Name;
