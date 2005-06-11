@@ -41,6 +41,9 @@
 
 #include "LaTeXCommand.h"
 
+
+class CNewCommand;
+class CNewEnvironment;
 class CDeclareOption;
 
 /* Token types */
@@ -74,6 +77,8 @@ public:
 	
 	virtual ~CStyleFile();
 
+	virtual void Dump( CDumpContext& dc ) const;
+
 	void SetListener(CLaTeXCommandListener *listener);
 	
 	void ProcessFile();
@@ -87,10 +92,10 @@ public:
 	const CStringArray *GetRequiredPackages() const {return &m_ReqPackages;}
 	
 	
-	BOOL AddCommand(CString &name, int noOfParams=0, CString &desc=CString(""));
+	CNewCommand *AddCommand(CString &name, int noOfParams=0, CString &desc=CString(_T("")));		
 	/** Works for both, \newcommand and \newenvironment */
 	BOOL AddCommand(CLaTeXCommand *cmd);
-	BOOL AddEnvironment(CString &name, int noOfParams=0, CString &desc=CString(""));
+	CNewEnvironment *AddEnvironment(CString &name, int noOfParams=0, CString &desc=CString(""));
 	BOOL AddOption(CDeclareOption *cmd);
 	BOOL AddOption(CString &name, CString &desc=CString(""));
 
@@ -132,6 +137,9 @@ public:
 
 /*
  * $Log$
+ * Revision 1.9  2005/06/10 15:34:15  owieland
+ * Consider \\DeclareTextCommand and \\DeclareTextSymbol
+ *
  * Revision 1.8  2005/06/09 17:09:59  owieland
  * + Revised architecture (moved autocmpl-handling to listbox)
  * + Hilight commands if they are from a class (unsatisfying yet)

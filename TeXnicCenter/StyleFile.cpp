@@ -34,6 +34,9 @@
 
 /*
  * $Log$
+ * Revision 1.9  2005/06/10 15:34:15  owieland
+ * Consider \\DeclareTextCommand and \\DeclareTextSymbol
+ *
  * Revision 1.8  2005/06/09 17:09:59  owieland
  * + Revised architecture (moved autocmpl-handling to listbox)
  * + Hilight commands if they are from a class (unsatisfying yet)
@@ -434,17 +437,17 @@ BOOL CStyleFile::AddOption(CDeclareOption *cmd)
  Creates a LaTeX command (\newcommand) with the given parameters and sets
  current style file as parent. The parameter desc is an optional description.
  */
-BOOL CStyleFile::AddCommand(CString &name, int noOfParams, CString &desc)
+CNewCommand *CStyleFile::AddCommand(CString &name, int noOfParams, CString &desc)
 {
 	CNewCommand *nc = new CNewCommand(this, name, noOfParams);
 	nc->SetDescription(desc);
 
 	if (AddCommand(nc)) {
-		return TRUE;
+		return nc;
 	} else {
 		delete nc;
 	}
-	return FALSE;
+	return NULL;
 }
 
 /**
@@ -466,17 +469,17 @@ BOOL CStyleFile::AddOption(CString &name, CString &desc)
  current style file as parent. The parameter desc is an optional description.
  */
 
-BOOL CStyleFile::AddEnvironment(CString &name, int noOfParams, CString &desc)
+CNewEnvironment *CStyleFile::AddEnvironment(CString &name, int noOfParams, CString &desc)
 {
 	CNewEnvironment *ne = new CNewEnvironment(this, name, noOfParams);
 	ne->SetDescription(desc);
 
 	if (AddCommand(ne)) {
-		return TRUE;
+		return ne;
 	} else {
 		delete ne;
 	}
-	return FALSE;
+	return NULL;
 }
 
 /**
@@ -520,4 +523,9 @@ int CStyleFile::ExtractDescription(const TCHAR *closePar, const TCHAR *openBr, c
 CString CStyleFile::ToString()
 {
 	return CString((m_IsClass ? _T("Class ") : _T("File ")) + m_Name);
+}
+
+void CStyleFile::Dump( CDumpContext& dc ) const {
+	CObject::Dump(dc);
+	dc << m_Name;	
 }
