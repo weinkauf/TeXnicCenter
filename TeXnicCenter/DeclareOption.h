@@ -41,6 +41,10 @@
 
 #include "LaTeXCommand.h"
 
+/** 
+	Represents an option package of a LaTeX package or class.
+
+  */
 class CDeclareOption : public CAbstractLaTeXCommand  
 {
 public:

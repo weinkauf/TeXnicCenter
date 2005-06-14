@@ -40,7 +40,10 @@
 
 #include "LaTeXCommand.h"
 
-/* Represents a LaTeX environment. See class CLaTeXCommand for further details */
+/** Represents a LaTeX environment. 
+	@see CLaTeXCommand 
+
+	*/
 class CNewEnvironment : public CLaTeXCommand  
 {
 public:
@@ -55,6 +58,10 @@ public:
 
 /*
  * $Log$
+ * Revision 1.3  2005/06/09 22:58:47  owieland
+ * Introduced ExpandBefore/After members to allow insertion of additional constructs
+ * (useful for environments to insert \\begin-\\end pairs}
+ *
  * Revision 1.2  2005/06/03 22:24:56  owieland
  * + IMPLEMENT/DECLARE_DYNAMIC
  *

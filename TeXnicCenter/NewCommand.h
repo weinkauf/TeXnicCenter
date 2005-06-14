@@ -43,7 +43,7 @@
 
 
 
-/* Represents a LaTeX command. See class CLaTeXCommand for further details */
+/** Represents a LaTeX command. See class CLaTeXCommand for further details */
 class CNewCommand : public CLaTeXCommand  
 {
 public:
@@ -54,7 +54,7 @@ public:
 
 	virtual CString ToLaTeX(BOOL showParString=TRUE) const;
 	virtual CString ToString();
-
+	/** Returns true, if command ends with a star, like <tt>\section*</tt> */
 	BOOL HasStar() const {return m_HasStar;}
 private:
 	BOOL m_HasStar;
@@ -64,6 +64,9 @@ private:
 
 /*
  * $Log$
+ * Revision 1.5  2005/06/10 14:52:54  owieland
+ * Bugfix ToLaTeX (was 'out of call hierachy', now declared as const)
+ *
  * Revision 1.4  2005/06/09 22:58:47  owieland
  * Introduced ExpandBefore/After members to allow insertion of additional constructs
  * (useful for environments to insert \\begin-\\end pairs}

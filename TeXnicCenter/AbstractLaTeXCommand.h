@@ -44,6 +44,8 @@ class CStyleFile;
 /**
  CAbstractLaTeXCommand is the base class for all LaTeX constructs handled by
  CStylefile(Container).
+
+ @see CStylefile
  */
 class CAbstractLaTeXCommand : public CObject  
 {
@@ -54,18 +56,21 @@ public:
 	CAbstractLaTeXCommand(CAbstractLaTeXCommand &cmd);
 
 	virtual ~CAbstractLaTeXCommand();
-	/* Returns a pointer to the containing style or class file */
+	/** Returns a pointer to the containing style or class file */
 	const CStyleFile *GetStyleFile() const {return m_Parent;};
-	/* Returns the LaTeX string representation */
+	/** Returns the LaTeX string representation 
+		@param showParString If true, the appropriate amount of bracket pairs is inserted behind the
+		command.
+	*/
 	virtual CString ToLaTeX(BOOL showParString=TRUE) const {return m_Name;}
-	/* Returns a unique identifier of the object (may be used as hash value) */
+	/** Returns a unique identifier of the object (may be used as hash value) */
 	virtual CString ToString();
-	/* Maintain description */
+	/** Set the description (free text) of the function */
 	void SetDescription(CString &desc);
 	CString GetDescription() const {return m_Description;};
-	/* Name of the command (without any decorations )*/
+	/** Name of the command (without any decorations )*/
 	CString GetName() const {return m_Name;}
-	/* Returns a pointer to the style file which contains this command */
+	/** Returns a pointer to the style file which contains this command */
 	const CStyleFile *GetParent() const {return m_Parent;}
 
 	virtual void Dump( CDumpContext& dc ) const;
