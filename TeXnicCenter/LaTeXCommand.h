@@ -44,7 +44,22 @@
 class CStyleFile;
 
 
-/* Base class for all LaTeX entities */
+/** 
+	Base class for all LaTeX entities provided in a style file, usually commands end environments.
+
+	They may have optional parameters and have configurable text blocks, which are inserted before 
+	resp. behind the inserted command. E. g. in environments like
+<code>
+	\begin{myEnv}
+	\end{myEnv}
+</code>	
+	a common value for the <tt>ExpandBefore</tt> attribute is '\begin{' resp. 
+	'}\end{myEnv}' for the <tt>ExpandAfter</tt> attribute.
+
+	The class CNewEnvironment use these values as default.
+	
+@see CNewCommand, CNewEnvironment
+*/
 class CLaTeXCommand : public CAbstractLaTeXCommand 
 {
 public:
@@ -54,12 +69,15 @@ public:
 	CLaTeXCommand(CLaTeXCommand &cmd);
 	virtual ~CLaTeXCommand();
 
-	/* Returns the number of parameters */
+	/** Returns the number of parameters */
 	virtual int GetNoOfParams() {return m_NoOfParams;};		
-
+	/** Returns the text block which is inserted before the command/environment */
 	virtual CString GetExpandBefore() const {return m_ExpandBefore;}
+	/** Returns the text block which is inserted after the command/environment */
 	virtual CString GetExpandAfter() const {return m_ExpandAfter;}
+	/** Sets the text block which is inserted before the command/environment */
 	virtual void SetExpandBefore(CString &txt);
+	/** Sets the text block which is inserted after the command/environment */
 	virtual void SetExpandAfter(CString &txt);
 
 private:
@@ -70,10 +88,13 @@ protected:
 	const CString GetParameterString() const;
 };
 
-/* Listener interface */
+/** Abstract interface for parsing events of CStylefile */
 class CLaTeXCommandListener
 {
 public:
+	/** Called by the framework, if the parser recognized a command or an environment 
+		@param command Reference to the parsed item.	
+	*/
 	virtual void OnCommandFound(CLaTeXCommand &command) = 0;
 };
 
@@ -82,6 +103,9 @@ public:
 
 /*
  * $Log$
+ * Revision 1.7  2005/06/10 14:52:54  owieland
+ * Bugfix ToLaTeX (was 'out of call hierachy', now declared as const)
+ *
  * Revision 1.6  2005/06/09 22:58:47  owieland
  * Introduced ExpandBefore/After members to allow insertion of additional constructs
  * (useful for environments to insert \\begin-\\end pairs}
