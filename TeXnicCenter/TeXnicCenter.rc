@@ -3687,6 +3687,7 @@ BEGIN
     STE_POPUP_EDITOR        "Editor"
     STE_POPUP_ITEM          "Navigatoransicht"
     STE_POPUP_MAINWINDOWAREA "Rahmenfensterhintergrund"
+    STE_TAB_BIBENTRIES      "Literatur"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7636,6 +7637,7 @@ BEGIN
     STE_POPUP_EDITOR        "Editor"
     STE_POPUP_ITEM          "Navigator View"
     STE_POPUP_MAINWINDOWAREA "Main Window Area"
+    STE_TAB_BIBENTRIES      "References"
 END
 
 STRINGTABLE DISCARDABLE 

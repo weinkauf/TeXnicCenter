@@ -45,6 +45,7 @@
 #include "StructureView.h"
 #include "EnvironmentView.h"
 #include "FileView.h"
+#include "BibView.h"
 #include "Project.h"
 #include "IProject.h"
 
@@ -287,6 +288,9 @@ private:
 
 	/** View which shows all files of the document. */
 	CFileView* m_pwndFileView;
+
+	/** View which shows all bibtex items the document. */
+	CBibView* m_pwndBibView;
 
 	/** 
 	After loading the project, this is the index of the navigator
