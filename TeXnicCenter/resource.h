@@ -177,6 +177,7 @@
 #define STE_LATEX_PAGEREF               241
 #define STE_LATEX_EQREF                 242
 #define IDB_PARSE_VIEW                  243
+#define STE_LATEX_CITE                 	244
 #define IDD_OPTIONS_SPELLING            245
 #define IDD_OPTIONS_FILECLEAN           249
 #define IDR_POPUP_PLACEHOLDEREX_NOOPT   253
