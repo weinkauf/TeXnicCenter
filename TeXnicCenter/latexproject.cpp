@@ -965,8 +965,9 @@ BOOL CLatexProject::CreateProjectViews()
 	m_pwndStructureView   = new CStructureView;
 	m_pwndEnvironmentView = new CEnvironmentView;
 	m_pwndFileView = new CFileView;
+	m_pwndBibView = new CBibView;
 
-	if( !m_pwndStructureView || !m_pwndEnvironmentView || !m_pwndFileView )
+	if( !m_pwndStructureView || !m_pwndEnvironmentView || !m_pwndFileView || !m_pwndBibView )
 	{
 		if( m_pwndStructureView )
 			delete m_pwndStructureView;
@@ -974,6 +975,8 @@ BOOL CLatexProject::CreateProjectViews()
 			delete m_pwndEnvironmentView;
 		if( m_pwndFileView )
 			delete m_pwndFileView;
+		if( m_pwndBibView )
+			delete m_pwndBibView;
 	}
 
 	if (!m_pwndStructureView->Create(pwndTabs))
@@ -997,10 +1000,18 @@ BOOL CLatexProject::CreateProjectViews()
 	}
 	m_pwndFileView->SetOwner(m_pwndWorkspaceBar);
 
+	if (!m_pwndBibView->Create(pwndTabs))
+	{
+		TRACE0("Failed to create bib view\n");
+		return FALSE;
+	}
+	m_pwndBibView->SetOwner(m_pwndWorkspaceBar);
+
 	// Attach views to tab:
 	pwndTabs->AddTab( m_pwndStructureView, CString( (LPCTSTR)STE_TAB_STRUCTURE ), 0 );
 	pwndTabs->AddTab( m_pwndEnvironmentView, CString( (LPCTSTR)STE_TAB_ENVIRONMENTS ), 1 );
 	pwndTabs->AddTab( m_pwndFileView/*&m_wndFileView*/, CString( (LPCTSTR)STE_TAB_FILES ), 2 );
+	pwndTabs->AddTab( m_pwndBibView, CString( (LPCTSTR)STE_TAB_BIBENTRIES ), 3 );
 
 	if (m_nInitialNavigatorTab < 0 || m_nInitialNavigatorTab > 2)
 		m_nInitialNavigatorTab = 0;
@@ -1010,6 +1021,7 @@ BOOL CLatexProject::CreateProjectViews()
 	AddView( m_pwndStructureView );
 	AddView( m_pwndEnvironmentView );
 	AddView( m_pwndFileView );
+	AddView( m_pwndBibView );
 
 	return TRUE;
 }

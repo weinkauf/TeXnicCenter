@@ -38,6 +38,8 @@
 #include "TextSourceFile.h"
 #include "ParseOutputView.h"
 #include "resource.h"
+#include "bibtexentry.h"
+#include "bibtexfile.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -51,7 +53,7 @@ const CString CStructureParser::m_sItemNames[typeCount]= {
 	"generic","header","equation","quote","quotation",
 	"center","verse","itemization","enumeration","description",
 	"figure","table","other environment",
-	"texFile","group","bibliography","graphic"};
+	"texFile","group","bibliography","graphic", "bibitem"};
 
 //-------------------------------------------------------------------
 // class CStructureItem
@@ -867,6 +869,28 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 			if ( ::PathFileExists(strPath) )
 			{
 				AddFileItem( strPath, bibFile, aSI );
+				/* begin ow */
+				CBiBTeXFile aBibFile(strPath);
+				aBibFile.DropAllEntries();	// clean up previous result
+				aBibFile.ProcessFile();		// parse it ...
+				const CMapStringToOb *items = aBibFile.GetEntries(); // ...and fetch the entries.
+
+				POSITION pos = items->GetStartPosition(); // iterate over entry map
+				while(pos != NULL) {
+					CBiBTeXEntry *be;
+					CString key;
+					items->GetNextAssoc(pos, key, (CObject*&)be);
+					if (be != NULL) { // setup entry
+						be->m_nParent = m_anItem[m_nDepth];
+						cookie.nCookieType = be->m_nType;
+						TRACE("Added si: %s, %s, %s\n", be->m_strPath, be->m_strLabel, be->m_strCaption);
+						cookie.nItemIndex = aSI.Add( *be );
+						cookies.Push( cookie );
+					} else {
+						TRACE("NP detected in CBiBTeXFile %s", strPath);
+					}					
+				}
+				/* end ow */
 				if ( m_pParseOutputHandler && !m_bCancel )
 				{
 					info.m_strError.Format( STE_PARSE_FOUND, m_sItemNames[bibFile] );

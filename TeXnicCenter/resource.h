@@ -115,6 +115,7 @@
 #define STE_POPUP_EDITOR                176
 #define STE_POPUP_ITEM                  177
 #define STE_POPUP_MAINWINDOWAREA        178
+#define STE_TAB_BIBENTRIES              179
 #define IDR_INSERT                      186
 #define IDR_FORMAT                      190
 #define STE_SELECT_PROJECT_PATH         192
