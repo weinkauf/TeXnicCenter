@@ -109,6 +109,8 @@ CLatexProject::~CLatexProject()
 		delete m_pwndEnvironmentView;
 	if (m_pwndFileView)
 		delete m_pwndFileView;
+	if (m_pwndBibView)
+		delete m_pwndBibView;
 }
 
 
@@ -791,9 +793,16 @@ void CLatexProject::OnUpdateItemCmd(CCmdUI* pCmdUI)
 				pCmdUI->Enable( si.m_nLine > 0 && !si.m_strPath.IsEmpty() );
 			}
 			break;
+		
+		case ID_ITEM_INSERT_PAGEREF: // makes no sense for BibTeX entries
+			if (si.m_nType != CStructureParser::bibItem) {
+				pCmdUI->Enable( !si.m_strLabel.IsEmpty() && theApp.GetActiveEditView() );
+			} else {
+				pCmdUI->Enable(FALSE);
+			}
+			break;
 		case ID_ITEM_INSERT_LABEL:
 		case ID_ITEM_INSERT_REF:
-		case ID_ITEM_INSERT_PAGEREF:
 			pCmdUI->Enable( !si.m_strLabel.IsEmpty() && theApp.GetActiveEditView() );
 			break;
 		default:
@@ -872,7 +881,9 @@ void CLatexProject::OnItemInsertRef()
 		case CStructureParser::equation:
 			strID = STE_LATEX_EQREF;
 			break;
-
+		case CStructureParser::bibItem:
+			strID = STE_LATEX_CITE;
+			break;
 		default:
 			strID = STE_LATEX_REF;
 			break;
