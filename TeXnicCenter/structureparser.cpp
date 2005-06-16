@@ -883,7 +883,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 					if (be != NULL) { // setup entry
 						be->m_nParent = m_anItem[m_nDepth];
 						cookie.nCookieType = be->m_nType;
-						TRACE("Added si: %s, %s, %s\n", be->m_strPath, be->m_strLabel, be->m_strCaption);
+						//TRACE("Added si: %s, %s, %s\n", be->m_strPath, be->m_strLabel, be->m_strCaption);
 						cookie.nItemIndex = aSI.Add( *be );
 						cookies.Push( cookie );
 					} else {
