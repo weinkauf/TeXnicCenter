@@ -88,10 +88,10 @@ BOOL CBiBTeXFile::ProcessFile()
 
 BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 {
-	const TCHAR *begin;
+	const TCHAR *begin, *lastChar = NULL;
 	CBiBTeXEntry::BibType type;
 	int depth = 0, line = 1, col = 1;
-	BOOL inComment = FALSE, inAccent = FALSE;
+	BOOL inComment = FALSE, inQuote = FALSE;
 
 	begin = buf;	
 	type = CBiBTeXEntry::Unknown;
@@ -103,10 +103,11 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 			break;
 		case _T('\"'): // Toggle quote
 			if (inComment) break;
-			inAccent = !inAccent;
+			if (lastChar && lastChar[0] == _T('\\')) break;
+			inQuote = !inQuote;
 			break;
 		case _T('@'): // Start type
-			if (inComment || inAccent) break;
+			if (inComment || inQuote) break;
 			if (0 == depth) { // update pointer if on top level
 				begin = buf;			
 			}
@@ -120,7 +121,7 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 			++depth;			
 			break;
 		case _T(','):
-			if (inComment || inAccent) break;
+			if (inComment || inQuote) break;
 			if (1 == depth) { // process entry field
 				ProcessArgument(begin, buf-begin, type, line);
 				begin = buf;
@@ -140,17 +141,14 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 				return FALSE;
 			}
 			break;
-		case _T('\n'): // update line number
-			if (inAccent) { // Quotes may not exceed a line
-				HandleParseError(buf, line, col);
-				return FALSE;
-			}
+		case _T('\n'): // update line number			
 			inComment = FALSE;
 			col = 0;
 			++line;
 			break;
 		}
 		col++;
+		lastChar = buf;
 		buf++;
 	}
 
@@ -167,11 +165,12 @@ CBiBTeXEntry::BibType CBiBTeXFile::ProcessEntryType(const TCHAR *buf, int len, i
 	tmp[len - 1] = 0;
 	//TRACE("Entry: %s\n", tmp);
 
-	for (int i = 0; i < BIBTEX_ENTRY_SIZE; i++) {
+	for (int i = 0; i < CBiBTeXEntry::Unknown; i++) {
 		if (0 == stricmp(tmp, BibTypeVerbose[i])) {
 			return (CBiBTeXEntry::BibType)i;
 		}
 	}
+
 	return CBiBTeXEntry::Unknown;
 }
 
@@ -185,23 +184,36 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 	tmp[len - 1] = 0;
 
 
-	if (type == CBiBTeXEntry::Unknown) {
-		TRACE("** Ignore entry: %s\n", tmp);
+	if (type == CBiBTeXEntry::String || type == CBiBTeXEntry::Comment) {
+		//TRACE("** Skip item at line %d: %s\n", line, tmp);
 		return;
 	}
-	//
+
+	if (type == CBiBTeXEntry::Unknown) {
+		TRACE("** Ignore unknown entry at line %d: %s\n", line, tmp);
+		HandleParseError(buf, line, 1);
+		return;
+	}
+	
 
 	if (NULL == strstr(tmp, _T("="))) { // argument is key?		
-		if (!m_Entries.Lookup(tmp, (CObject*&)dummy)) {
+		CString key = tmp;
+		key.TrimLeft();
+		key.TrimRight();
+
+		if (key.IsEmpty()) {
+			return;
+		}
+		if (!m_Entries.Lookup(key, (CObject*&)dummy)) {
 			be = new CBiBTeXEntry(tmp, type);
 			/* add entries used by structure parser */
 			be->m_nLine = line;			
 			
-			m_Entries.SetAt(tmp, be);
-			m_LastKey = tmp;
-			m_Keys.Add(tmp);
+			m_Entries.SetAt(key, be);
+			m_LastKey = key;
+			m_Keys.Add(key);
 		} else {
-			TRACE("WARNING: Invalid or duplicate key <%s> (%s)\n", tmp, BibTypeVerbose[type]);
+			TRACE("WARNING: Invalid or duplicate key <%s> (%s)\n", key, BibTypeVerbose[type]);
 		}
 	} else {
 		
@@ -287,10 +299,11 @@ void CBiBTeXFile::FinalizeItem()
 	if (m_Entries.Lookup(m_LastKey, (CObject*&)be)) {
 		be->m_nType = CStructureParser::bibItem;
 		be->m_strTitle = be->ToCaption();
-		be->m_strCaption = be->ToString();
+		be->m_strCaption = be->ToCaption();
 		be->m_strLabel = be->GetKey();
 		be->m_strComment = BibTypeVerbose[be->GetType()];
 		be->m_strPath = m_Filename;
+		//TRACE("Finalized %s\n", be->ToString());
 	} else {
 		//ASSERT(FALSE);
 		TRACE("Warning: Did not found key %s\n", m_LastKey);

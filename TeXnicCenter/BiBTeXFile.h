@@ -42,7 +42,7 @@
 #include "BiBTeXEntry.h"
 
 /* Must have this length, because some authors include large abstracts */
-#define MAX_BIBTEX_ARG_LENGTH 4096
+#define MAX_BIBTEX_ARG_LENGTH 8192
 
 /** Represents a BibTeX file. The corresponding file name have to be passed via constructor */
 class CBiBTeXFile : public CObject  

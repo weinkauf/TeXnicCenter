@@ -41,12 +41,12 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-
+// NOTE: The string must have an case-insentive match with the corresponding keyword in bibtex!
 const TCHAR* BibTypeVerbose[] = {
 "Book", "Article", "Booklet", "Manual", "Inproceedings", 
-"Conference", "Inbook", "Incollection", "Masterthesis",
+"Conference", "Inbook", "Incollection", "Mastersthesis",
 "Misc", "PhDthesis", "Proceedings", "TechReport",
-"Unpublished", "Unknown"
+"Unpublished", "String", "Comment", "Preamble", "Unknown"
 }; // must be kept in sync with bibtype!
 
 
@@ -105,16 +105,24 @@ CString CBiBTeXEntry::ToCaption()
 	GetField(_T("title"), title);
 	GetField(_T("year"), year);
 
-	// beautify output
+	// beautify output (looks cruel, I know)
 	author.Replace(_T("{"), _T(""));
 	author.Replace(_T("}"), _T(""));
+	author.Replace(_T("\r"), _T(""));
+	author.Replace(_T("\n"), _T(""));
+	author.Replace(_T("\t"), _T(""));	
 	author.Replace(_T("\""), _T(""));
 	author.Replace(_T(" and"), _T(","));
 	title.Replace(_T("\""), _T(""));
 	title.Replace(_T("{"), _T(""));
 	title.Replace(_T("}"), _T(""));
+	title.Replace(_T("\n"), _T(""));
+	title.Replace(_T("\r"), _T(""));
+	title.Replace(_T("\t"), _T(""));
 	year.Replace(_T("{"), _T(""));
 	year.Replace(_T("}"), _T(""));
+	year.Replace(_T("\""), _T(""));
+
 
 	return CString(author + _T(": ") + 
 		title + _T(" (") + 
