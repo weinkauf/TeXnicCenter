@@ -51,6 +51,7 @@ extern const TCHAR* BibTypeVerbose[];
 class CBiBTeXEntry : public CObject, public CStructureItem  
 {
 public:
+	
 	static enum BibType {Book=0, Article, Booklet, Manual, Inproceedings, 
 						Conference, Inbook, Incollection, Masterthesis,
 						Misc, Phdthesis, Proceedings, Techreport,
@@ -69,6 +70,7 @@ public:
 	CString GetKey() const {return m_Key;}
 
 	CString ToString();
+	CString ToCaption();
 private:
 	CMapStringToString m_Fields;
 	BibType m_Type;	

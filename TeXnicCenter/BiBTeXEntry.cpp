@@ -95,6 +95,11 @@ BOOL CBiBTeXEntry::SetField(CString name, CString value, BOOL forceOverwrite)
 
 CString CBiBTeXEntry::ToString()
 {
+	return CString(_T("[") + m_Key + _T("] ") + ToCaption());
+}
+
+CString CBiBTeXEntry::ToCaption()
+{
 	CString author, title, year;
 	GetField(_T("author"), author);
 	GetField(_T("title"), title);
@@ -103,14 +108,15 @@ CString CBiBTeXEntry::ToString()
 	// beautify output
 	author.Replace(_T("{"), _T(""));
 	author.Replace(_T("}"), _T(""));
+	author.Replace(_T("\""), _T(""));
 	author.Replace(_T(" and"), _T(","));
+	title.Replace(_T("\""), _T(""));
 	title.Replace(_T("{"), _T(""));
 	title.Replace(_T("}"), _T(""));
 	year.Replace(_T("{"), _T(""));
 	year.Replace(_T("}"), _T(""));
 
-	return CString(_T("[") + m_Key + _T("] ") + 
-		author + _T(": ") + 
+	return CString(author + _T(": ") + 
 		title + _T(" (") + 
 		BibTypeVerbose[m_Type] + _T(", ") +
 		year + _T(")")

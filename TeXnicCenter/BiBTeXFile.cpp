@@ -43,6 +43,7 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
+extern const TCHAR* BibTypeVerbose[];
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -285,9 +286,10 @@ void CBiBTeXFile::FinalizeItem()
 	CBiBTeXEntry *be;
 	if (m_Entries.Lookup(m_LastKey, (CObject*&)be)) {
 		be->m_nType = CStructureParser::bibItem;
+		be->m_strTitle = be->ToCaption();
 		be->m_strCaption = be->ToString();
 		be->m_strLabel = be->GetKey();
-		be->m_strComment = "";
+		be->m_strComment = BibTypeVerbose[be->GetType()];
 		be->m_strPath = m_Filename;
 	} else {
 		//ASSERT(FALSE);
