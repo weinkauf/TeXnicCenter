@@ -1,6 +1,36 @@
-// BiBTeXFile.cpp: implementation of the CBiBTeXFile class.
-//
-//////////////////////////////////////////////////////////////////////
+/********************************************************************
+*
+* This file is part of the TeXnicCenter-system
+*
+* Copyright (C) 1999-2000 Sven Wiegand
+* Copyright (C) 2000-$CurrentYear$ ToolsCenter
+* 
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License as
+* published by the Free Software Foundation; either version 2 of
+* the License, or (at your option) any later version.
+* 
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*
+* If you have further questions or if you want to support
+* further TeXnicCenter development, visit the TeXnicCenter-homepage
+*
+*    http://www.ToolsCenter.org
+*
+*********************************************************************/
+
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
 
 #include "stdafx.h"
 #include "BiBTeXFile.h"
@@ -25,6 +55,7 @@ CBiBTeXFile::CBiBTeXFile(CString file)
 
 CBiBTeXFile::~CBiBTeXFile()
 {
+	DropAllEntries();
 }
 
 
@@ -82,7 +113,7 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 		case _T('{'):
 			if (inComment) break;
 			if (0 == depth) { // process entry type, e. g. @Article
-				type = ProcessEntryType(begin, buf-begin);
+				type = ProcessEntryType(begin, buf-begin, line);
 				begin = buf;
 			}
 			++depth;			
@@ -90,16 +121,19 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 		case _T(','):
 			if (inComment || inAccent) break;
 			if (1 == depth) { // process entry field
-				ProcessArgument(begin, buf-begin, type);
+				ProcessArgument(begin, buf-begin, type, line);
 				begin = buf;
 			}			
 			break;
 		case _T('}'):
 			if (inComment) break;
 			if (1 == depth) { // process entry field and decrease stack depth
-				ProcessArgument(begin, buf-begin, type);				
+				ProcessArgument(begin, buf-begin, type, line);
 			} 
 			--depth;
+			if (depth == 0) {
+				FinalizeItem();
+			}
 			if (depth < 0) {
 				HandleParseError(buf, line, col);
 				return FALSE;
@@ -123,7 +157,7 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 	return TRUE;
 }
 
-CBiBTeXEntry::BibType CBiBTeXFile::ProcessEntryType(const TCHAR *buf, int len)
+CBiBTeXEntry::BibType CBiBTeXFile::ProcessEntryType(const TCHAR *buf, int len, int line)
 {
 	TCHAR tmp[MAX_BIBTEX_ARG_LENGTH];
 	
@@ -140,7 +174,7 @@ CBiBTeXEntry::BibType CBiBTeXFile::ProcessEntryType(const TCHAR *buf, int len)
 	return CBiBTeXEntry::Unknown;
 }
 
-void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibType type)
+void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibType type, int line)
 {
 	TCHAR tmp[MAX_BIBTEX_ARG_LENGTH];
 	CBiBTeXEntry *be, *dummy;
@@ -159,6 +193,9 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 	if (NULL == strstr(tmp, _T("="))) { // argument is key?		
 		if (!m_Entries.Lookup(tmp, (CObject*&)dummy)) {
 			be = new CBiBTeXEntry(tmp, type);
+			/* add entries used by structure parser */
+			be->m_nLine = line;			
+			
 			m_Entries.SetAt(tmp, be);
 			m_LastKey = tmp;
 			m_Keys.Add(tmp);
@@ -241,4 +278,19 @@ void CBiBTeXFile::DropAllEntries()
 	}
 
 	m_Keys.RemoveAll();
+}
+
+void CBiBTeXFile::FinalizeItem()
+{
+	CBiBTeXEntry *be;
+	if (m_Entries.Lookup(m_LastKey, (CObject*&)be)) {
+		be->m_nType = CStructureParser::bibItem;
+		be->m_strCaption = be->ToString();
+		be->m_strLabel = be->GetKey();
+		be->m_strComment = "";
+		be->m_strPath = m_Filename;
+	} else {
+		//ASSERT(FALSE);
+		TRACE("Warning: Did not found key %s\n", m_LastKey);
+	}
 }
