@@ -46,7 +46,7 @@ void CBibView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint) {
 				// initialization
 				DeleteAllItems();
 
-				HTREEITEM hBibParent, hBibRoot;
+				HTREEITEM hBibParent = 0, hBibRoot;
 				hBibRoot = InsertItem(AfxLoadString(STE_BIB_FILES), 
 							CStructureParser::bibFile, CStructureParser::bibFile, 
 							TVI_ROOT, TVI_SORT);
@@ -57,6 +57,7 @@ void CBibView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint) {
 
 					switch( si.m_nType )
 					{
+					// thanks god we are sure, that a bibFile predecesses a bibItem
 					case CStructureParser::bibFile:
 							hBibParent = InsertItem( 
 								si.m_strPath, 
@@ -65,11 +66,8 @@ void CBibView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint) {
 							SetItemData( hBibParent, i );
 						break;
 					case CStructureParser::bibItem:
-						{
-							//Better display all stuff, even without a title
-							//if (si.m_strTitle.GetLength() == 0)
-							//	break; //no title -> no display
-
+						{				
+							ASSERT(hBibParent != 0);
 							HTREEITEM hItem = InsertItem( 
 								si.m_strCaption, 
 								si.m_nType, si.m_nType, 
