@@ -1,3 +1,7 @@
+2005/06/16 owieland
+- Implemented Feature 1220431, 1066225, 1041341 (partially :-), 971049, 605469:
+  Parsing BibTeX files
+
 2005/06/09 owieland
 - Implemented Feature 1205427: Auto-Complete function. Press Ctrl+Space during editing to use it.
   The shipped file packages.xml contains an (incomplete) snapshot of available LaTeX commands. 
