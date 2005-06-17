@@ -177,7 +177,7 @@
 #define STE_LATEX_PAGEREF               241
 #define STE_LATEX_EQREF                 242
 #define IDB_PARSE_VIEW                  243
-#define STE_LATEX_CITE                 	244
+#define STE_LATEX_CITE                  244
 #define IDD_OPTIONS_SPELLING            245
 #define IDD_OPTIONS_FILECLEAN           249
 #define IDR_POPUP_PLACEHOLDEREX_NOOPT   253
@@ -644,6 +644,7 @@
 #define IDC_OPTIONS_REPLACE_QM_PREDEFINED_COMBO 1337
 #define IDC_OPTIONS_QM_SET_LABEL        1338
 #define IDC_CANCEL                      1339
+#define IDC_SHOW_LINENUMBERS            1340
 #define IDD_CUSTOMIZEPAGE_EDITOR        16105
 #define IDD_OUTPUTWIZARD_MIKTEX         16106
 #define IDD_OUTPUTWIZARD_PATH           16107
@@ -1281,7 +1282,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        278
 #define _APS_NEXT_COMMAND_VALUE         38480
-#define _APS_NEXT_CONTROL_VALUE         1340
+#define _APS_NEXT_CONTROL_VALUE         1341
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif

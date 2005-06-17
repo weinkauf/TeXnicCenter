@@ -274,6 +274,9 @@ public:
 	/** TRUE, if white spaces shout be displayed as special chars, FALSE otherwise */
 	BOOL m_bViewWhitespaces;
 
+	/** TRUE, if line numbers should be shown */
+	BOOL m_bShowLineNumbers;
+
 	///////////////////////////////////////////////////////////////////
 	// Other window settings
 

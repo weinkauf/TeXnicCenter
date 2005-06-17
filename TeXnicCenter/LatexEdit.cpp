@@ -132,6 +132,9 @@ void CLatexEdit::ApplyConfiguration()
 
 	// set tab size
 	SetTabSize( g_configuration.m_nTabWidth );
+
+	// show line numbers?
+	SetShowLineNumbers(g_configuration.m_bShowLineNumbers);
 	
 	// set font for editor
 	SetFont(g_configuration.m_fontEditor);

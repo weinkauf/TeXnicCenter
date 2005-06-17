@@ -82,6 +82,12 @@
 * $Author$
 *
 * $Log$
+* Revision 1.26  2005/03/16 18:17:58  vachis
+* fixed bugs: unmatched brace (after Ctrl+M) disappear when scrolling
+*                   disable higlighting when a selection is pressent
+*                   memory violation when  Ctrl+M is pressed in an emtpy document
+*                   bug in brace block selection
+*
 * Revision 1.25  2005/03/16 15:20:45  vachis
 * fixed redraw bug: unmatched brace is not shown in red if it is in visible window rectangle
 *
@@ -179,6 +185,7 @@
 
 #include "stdafx.h"
 #include <malloc.h>
+#include <math.h>
 #include "editcmd.h"
 #include "editreg.h"
 #include "CCrystalTextView.h"
@@ -215,6 +222,7 @@ int CCrystalTextView::s_nCaretInsertForm = CARET_LINE;
 int CCrystalTextView::s_nCaretInsertMode = CARET_BLINK;
 int CCrystalTextView::s_nCaretOverwriteForm = CARET_BLOCK;
 int CCrystalTextView::s_nCaretOverwriteMode = CARET_BLINK;
+int CCrystalTextView::m_bShowLineNumbers = FALSE;
 
 BEGIN_MESSAGE_MAP(CCrystalTextView, CView)
 	//{{AFX_MSG_MAP(CCrystalTextView)
@@ -327,6 +335,7 @@ CCrystalTextView::CCrystalTextView()
 	::InitializeCriticalSection( &m_csHold );
 	m_pevtHoldCountZero = new CEvent(TRUE, FALSE);
 	m_bSelMargin = TRUE;
+	m_bShowLineNumbers = TRUE;
 	//BEGIN SW
 	m_panSubLines = new CArray<int, int>();
 	m_nSubLineCount = -1;
@@ -1316,6 +1325,7 @@ DWORD CCrystalTextView::GetLineFlags(int nLineIndex)
 
 void CCrystalTextView::DrawMargin(CDC *pdc, const CRect &rect, int nLineIndex)
 {
+
 	if (! m_bSelMargin)
 	{
 		pdc->FillSolidRect(rect, GetColor(COLORINDEX_BKGND));
@@ -1323,6 +1333,15 @@ void CCrystalTextView::DrawMargin(CDC *pdc, const CRect &rect, int nLineIndex)
 	}
 
 	pdc->FillSolidRect(rect, GetColor(COLORINDEX_SELMARGIN));
+
+	if (m_bShowLineNumbers && nLineIndex != -1) { // draw line number
+		CPoint pt(rect.left + 2, rect.top + (GetLineHeight() - 16) / 2);
+		CString s;
+		s.Format(_T("%d"), nLineIndex + 1);
+		pdc->DrawText(s, 
+			CRect(pt.x, pt.y, pt.x + GetMarginWidth()-4, pt.y + + GetMarginWidth()-4), 
+			DT_RIGHT|DT_SINGLELINE);
+	}
 
 	int nImageIndex = -1;
 	if (nLineIndex >= 0)
@@ -3830,7 +3849,16 @@ BOOL CCrystalTextView::GetSelectionMargin()
 
 int CCrystalTextView::GetMarginWidth()
 {
-	return m_bSelMargin ? 20 : 1;
+	int w = 16; // default
+
+	if (m_bShowLineNumbers) {
+		int nLines = GetLineCount();
+		w = floor(log10(nLines < 10 ? 10 : nLines)) * 12;
+
+		if (w < 20) w = 20; // ensure minimum width
+	}
+
+	return m_bSelMargin ? w + 4 : 1;
 }
 
 BOOL CCrystalTextView::GetSmoothScroll() const
@@ -4792,7 +4820,12 @@ void CCrystalTextView::OnSelBiggerBlock()
 }
 
 
-
+void CCrystalTextView::SetShowLineNumbers(BOOL show) {
+	if (show != m_bShowLineNumbers) {
+		m_bShowLineNumbers = show;
+	}
+}
  
-
-
+BOOL CCrystalTextView::GetShowLineNumbers() {
+	return m_bShowLineNumbers;
+}
