@@ -142,6 +142,10 @@ SOURCE=.\BiBTeXFile.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\BibView.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\BrowseButton.cpp
 # End Source File
 # Begin Source File
@@ -600,6 +604,10 @@ SOURCE=.\BiBTeXEntry.h
 # Begin Source File
 
 SOURCE=.\BiBTeXFile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\BibView.h
 # End Source File
 # Begin Source File
 
