@@ -102,6 +102,10 @@ CString CBiBTeXEntry::ToCaption()
 {
 	CString author, title, year;
 	GetField(_T("author"), author);
+
+	if (author.IsEmpty()) {
+		GetField(_T("editor"), author);
+	}
 	GetField(_T("title"), title);
 	GetField(_T("year"), year);
 
@@ -113,15 +117,25 @@ CString CBiBTeXEntry::ToCaption()
 	author.Replace(_T("\t"), _T(""));	
 	author.Replace(_T("\""), _T(""));
 	author.Replace(_T(" and"), _T(","));
+	while (author.Find(_T("  ")) != -1) {
+		author.Replace(_T("  "), _T(" "));
+	}
+	
 	title.Replace(_T("\""), _T(""));
 	title.Replace(_T("{"), _T(""));
 	title.Replace(_T("}"), _T(""));
 	title.Replace(_T("\n"), _T(""));
 	title.Replace(_T("\r"), _T(""));
 	title.Replace(_T("\t"), _T(""));
+	title.Replace(_T("\\"), _T(""));
+	while (title.Find(_T("  ")) != -1) {
+		title.Replace(_T("  "), _T(" "));
+	}
 	year.Replace(_T("{"), _T(""));
 	year.Replace(_T("}"), _T(""));
 	year.Replace(_T("\""), _T(""));
+
+	author.TrimLeft();
 
 
 	return CString(author + _T(": ") + 
