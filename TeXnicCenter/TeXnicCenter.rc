@@ -3755,7 +3755,7 @@ BEGIN
     ID_INSERT_FORMULA       "Fügt eine abgesetzte mathematische Formel ein\nAbgesetzte Formel\n\r\\[\t\001\r\\]\r"
     ID_INSERT_EQUATION      "Fügt eine nummerierte mathematische Gleichung ein\nNummerierte Gleichung\n\r\\begin{equation}\r\t\001\r\\end{equation}\r"
     ID_INSERT_EQUATION_ARRAY 
-                            "Fügt eine Gleichungsfolge ein\nGleichungsfolge\n\r\\begin{eqnarray}\r\t\001\r\\end{eqnarray}\r"
+                            "Fügt eine Gleichungsfolge ein\nGleichungsfolge\n\r\\begin{align}\r\t\001\r\\end{align}\r"
     ID_INSERT_QUOTE         "Fügt ein kurzes abgesetztes Zitat ein\nKurzes Zitat\n\r\\begin{quote}\r\t\001\r\\end{quote}\r"
     ID_INSERT_QUOTATION     "Fügt ein langes abgesetztes Zitat ein\nZitat\n\r\\begin{quotation}\r\t\001\r\\end{quotation}\r"
     ID_INSERT_CENTER        "Fügt eine Zentrierung ein\nZentrierung"
@@ -3767,7 +3767,7 @@ BEGIN
     STE_LATEX_REF           "\\ref{%s}"
     STE_LATEX_PAGEREF       "\\pageref{%s}"
     STE_LATEX_EQREF         "\\eqref{%s}"
-    STE_LATEX_CITE         	"\\cite{%s}"
+    STE_LATEX_CITE          "\\cite{%s}"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7704,7 +7704,7 @@ BEGIN
     ID_INSERT_FORMULA       "Inserts a mathematical formula\nFormula\n\r\\[\t\001\r\\]\r"
     ID_INSERT_EQUATION      "Inserts an enumerated equation\nEnumerated Equation\n\r\\begin{equation}\r\t\001\r\\end{equation}\r"
     ID_INSERT_EQUATION_ARRAY 
-                            "Inserts an equation array\nEquation Array\n\r\\begin{eqnarray}\r\t\001\r\\end{eqnarray}\r"
+                            "Inserts an equation array\nEquation Array\n\r\\begin{align}\r\t\001\r\\end{align}\r"
     ID_INSERT_QUOTE         "Inserts a short quotation\nShort Quotation\n\r\\begin{quote}\r\t\001\r\\end{quote}\r"
     ID_INSERT_QUOTATION     "Inserts a quotation\nQuotation\n\r\\begin{quotation}\r\t\001\r\\end{quotation}\r"
     ID_INSERT_CENTER        "Inserts a centered environment\nCentered"
