@@ -24,6 +24,11 @@
 * $Author$
 *
 * $Log$
+* Revision 1.14  2005/03/08 16:36:08  vachis
+* Selection of block between bracket pairs in a hierarchical manner (Ctrl+M)
+* Bracket highlighting disabled if a selection is present
+* New default colours for bracket highlighting
+*
 * Revision 1.13  2005/02/23 23:58:19  vachis
 * Fixed Matching Bracket Highlighting
 * New features for Matching Bracket Highlighting: configure colours,
@@ -157,7 +162,7 @@ private:
 	int m_nTabSize;
 	BOOL m_bViewTabs;
 	BOOL m_bSelMargin;
-
+	
 	//	Amount of lines/characters that completely fits the client area
 	int m_nScreenLines, m_nScreenChars;
 
@@ -860,6 +865,8 @@ private:
 	static int s_nCaretOverwriteMode;
 	//END SW
 
+	static BOOL m_bShowLineNumbers;
+
 
 // Attributes
 public:
@@ -1083,6 +1090,9 @@ public:
 	int GetCaretForm();
 	int GetCaretMode();
 	//@}
+
+	static void SetShowLineNumbers(BOOL show);
+	static BOOL GetShowLineNumbers();
 
 	//END SW
 

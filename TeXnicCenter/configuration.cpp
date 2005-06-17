@@ -133,6 +133,7 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	CCrystalTextView::SetCaretOverwriteStyle(nOverwriteCaretForm, nOverwriteCaretMode);
 
 	SerializeProfileInt( strSection, "EditorTabWidth", &m_nTabWidth, direction, 2 );
+	SerializeProfileInt( strSection, "EditorShowLineNumbers", &m_bShowLineNumbers, direction, 0);
 	for( int i = 0; i < CCrystalTextView::COLORINDEX_ERRORBKGND; i++ )
 	{
 		CString	strFormat;
