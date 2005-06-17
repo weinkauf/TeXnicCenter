@@ -1,3 +1,8 @@
+2005/06/17 owieland
+- Implemented Feature 1178333 
+- Fixed bug 1222824
+- Fixed bug 1222733
+
 2005/06/16 owieland
 - Implemented Feature 1220431, 1066225, 1041341 (partially :-), 971049, 605469:
   Parsing BibTeX files
