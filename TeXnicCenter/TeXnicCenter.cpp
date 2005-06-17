@@ -1380,6 +1380,11 @@ BOOL CTeXnicCenterApp::PreTranslateMessage(MSG* pMsg)
 			return TRUE;
 	}
 
+	// Workaround for bug 1222824 (Crash on ALT + ^)
+	if (pMsg->message == 0x104 && pMsg->wParam == 0xDC) {
+		return TRUE;
+	}
+
 	return CProjectSupportingWinApp::PreTranslateMessage(pMsg);
 }
 
