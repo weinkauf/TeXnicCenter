@@ -224,6 +224,10 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 
 			//TRACE("Set Value: <%s> = <%s>\n", name, val);
 			name.MakeLower();
+			name.TrimLeft();
+			name.TrimRight();
+			val.TrimLeft();
+			val.TrimRight();
 			be->SetField(name, val);
 		} else {
 			ASSERT(FALSE);
