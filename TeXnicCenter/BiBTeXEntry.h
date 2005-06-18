@@ -46,7 +46,7 @@
 
 extern const TCHAR* BibTypeVerbose[];
 
-
+class CBiBTeXFile;
 
 class CBiBTeXEntry : public CObject, public CStructureItem  
 {
@@ -58,7 +58,7 @@ public:
 						Unpublished, String, Comment, Preamble, Unknown};
 
 
-	CBiBTeXEntry(CString key, BibType type=Book);
+	CBiBTeXEntry(CString key, CBiBTeXFile *parent, BibType type=Book);
 	virtual ~CBiBTeXEntry();
 
 	BOOL SetField(CString name, CString value, BOOL forceOverwrite=FALSE);
@@ -72,9 +72,12 @@ public:
 	CString ToString();
 	CString ToCaption();
 private:
-	CMapStringToString m_Fields;
-	BibType m_Type;	
-	CString m_Key;
+	void BeautifyField(CString &value);
+
+	CMapStringToString	m_Fields;
+	BibType				m_Type;	
+	CString				m_Key;
+	CBiBTeXFile*		m_Parent;
 };
 
 #endif // !defined(AFX_BIBTEXENTRY_H__F01E9D3A_27FE_44B2_A8F3_AD4490011BE2__INCLUDED_)
