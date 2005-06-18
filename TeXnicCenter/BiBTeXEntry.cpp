@@ -34,6 +34,7 @@
 
 #include "stdafx.h"
 #include "BiBTeXEntry.h"
+#include "BiBTeXFile.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -54,28 +55,17 @@ const TCHAR* BibTypeVerbose[] = {
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CBiBTeXEntry::CBiBTeXEntry(CString key, BibType type)
+CBiBTeXEntry::CBiBTeXEntry(CString key, CBiBTeXFile *parent, BibType type)
 {
+	ASSERT(parent != NULL);
+	m_Parent = parent;
 	m_Key = key;
 	m_Type = type;
 }
 
 CBiBTeXEntry::~CBiBTeXEntry()
 {
-	/*
-	POSITION pos = m_Fields.GetStartPosition();
-	while(pos != NULL) {
-		CString sf;
-		CString key;
-		m_Fields.GetNextAssoc(pos, key, sf);
-		if (sf != NULL) {
-			//TRACE("Deleting cmd %s\n", sf->ToString());
-			delete sf;
-		} else {
-			TRACE("NP detected in CBiBTeXEntry %s", m_Key);
-		}
-		m_Commands.RemoveKey(key);
-	}*/
+
 }
 
 BOOL CBiBTeXEntry::GetField(CString name, CString &value)
@@ -103,44 +93,58 @@ CString CBiBTeXEntry::ToCaption()
 	CString author, title, year;
 	GetField(_T("author"), author);
 
+	// Get editor instead
 	if (author.IsEmpty()) {
 		GetField(_T("editor"), author);
 	}
+	// Last chance: publisher
+	if (author.IsEmpty()) {
+		GetField(_T("publisher"), author);
+	}
 	GetField(_T("title"), title);
 	GetField(_T("year"), year);
+	
+	// Remove trash (slashes, whitespace,...) from string
+	BeautifyField(author);	
+	BeautifyField(title);
+	BeautifyField(year);
 
-	// beautify output (looks cruel, I know)
-	author.Replace(_T("{"), _T(""));
-	author.Replace(_T("}"), _T(""));
-	author.Replace(_T("\r"), _T(""));
-	author.Replace(_T("\n"), _T(""));
-	author.Replace(_T("\t"), _T(""));	
-	author.Replace(_T("\""), _T(""));
-	author.Replace(_T(" and"), _T(","));
-	while (author.Find(_T("  ")) != -1) {
-		author.Replace(_T("  "), _T(" "));
+	// Try to expand abbreviations
+	CString abbrev = m_Parent->GetString(author);
+	if (!abbrev.IsEmpty()) {
+		//TRACE("Expand %s to %s...\n", author, abbrev.Mid(0,5));
+		author = abbrev;	
+		BeautifyField(author);
+	}
+
+	abbrev = m_Parent->GetString(title);
+	if (!abbrev.IsEmpty()) {
+		//TRACE("Expand %s to %s...\n", title, abbrev.Mid(0,5));
+		title = abbrev;
+		BeautifyField(title);
 	}
 	
-	title.Replace(_T("\""), _T(""));
-	title.Replace(_T("{"), _T(""));
-	title.Replace(_T("}"), _T(""));
-	title.Replace(_T("\n"), _T(""));
-	title.Replace(_T("\r"), _T(""));
-	title.Replace(_T("\t"), _T(""));
-	title.Replace(_T("\\"), _T(""));
-	while (title.Find(_T("  ")) != -1) {
-		title.Replace(_T("  "), _T(" "));
-	}
-	year.Replace(_T("{"), _T(""));
-	year.Replace(_T("}"), _T(""));
-	year.Replace(_T("\""), _T(""));
-
-	author.TrimLeft();
-
 
 	return CString(author + _T(": ") + 
 		title + _T(" (") + 
 		BibTypeVerbose[m_Type] + _T(", ") +
 		year + _T(")")
 		);
+}
+
+void CBiBTeXEntry::BeautifyField(CString &value) {
+	value.Replace(_T(" and"), _T(","));
+	value.Replace(_T("\""), _T(""));
+	value.Replace(_T("{"), _T(""));
+	value.Replace(_T("}"), _T(""));
+	value.Replace(_T("\n"), _T(""));
+	value.Replace(_T("\r"), _T(""));
+	value.Replace(_T("\t"), _T(""));
+	value.Replace(_T("\\"), _T(""));
+
+	while (value.Find(_T("  ")) != -1) {
+		value.Replace(_T("  "), _T(" "));
+	}
+	value.TrimLeft();
+	value.TrimRight();
 }

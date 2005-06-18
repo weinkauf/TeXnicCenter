@@ -64,11 +64,22 @@ public:
 		in the BibTeX file.
 	*/
 	const CMapStringToOb *GetEntries() const {return (const CMapStringToOb *)&m_Entries;}
-	/** Returns all keys defined in the BibTeX file */
+	/** Returns an entry for a given key 
+		@return Pointer to corresponding entry or NULL, of no entry was found
+	*/
+	const CBiBTeXEntry* GetEntryByKey(CString key);
+	/** Returns all keys defined in the BibTeX file 
+		@return Pointer to string array containing the keys.
+	*/
 	const CStringArray* GetKeys() const {return (const CStringArray*)&m_Keys;}
 
-	/** Removes all BibTeX entries */
+	/** Removes all BibTeX entries, including the abbrev strings */
 	void DropAllEntries();
+
+	/** Returns the expanded version of an abbreviation defined via @string command
+		@return Expanded string for given abbreviation or an empty string, if not found
+	*/
+	CString GetString(CString abbrev);
 private:
 	/* Called, if an item is complete */
 	void FinalizeItem();
@@ -82,6 +93,7 @@ private:
 
 	CString			m_Filename;
 	CMapStringToOb	m_Entries;
+	CMapStringToString	m_Strings;
 	CString			m_LastKey;
 	CStringArray	m_Keys;
 };

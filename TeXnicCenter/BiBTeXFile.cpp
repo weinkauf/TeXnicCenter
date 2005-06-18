@@ -152,7 +152,7 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 		buf++;
 	}
 
-	TRACE("Found %d entries\n", m_Entries.GetCount());
+	TRACE("%s: Found %d entries\n", m_Filename, m_Entries.GetCount());
 	return TRUE;
 }
 
@@ -183,9 +183,8 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 	strncpy(tmp, buf + 1, len - 1);
 	tmp[len - 1] = 0;
 
-
-	if (type == CBiBTeXEntry::String || type == CBiBTeXEntry::Comment) {
-		//TRACE("** Skip item at line %d: %s\n", line, tmp);
+	/* Skip comments and preamble */
+	if (type == CBiBTeXEntry::Preamble || type == CBiBTeXEntry::Comment) {
 		return;
 	}
 
@@ -194,18 +193,33 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 		HandleParseError(buf, line, 1);
 		return;
 	}
-	
 
+	// strings have no explicit key, instead we are using the first field name as key
+	if (type == CBiBTeXEntry::String && NULL != strstr(tmp, _T("="))) { 
+		CString name, val;
+		ParseField(tmp, name, val);
+
+		name.TrimLeft();
+		name.TrimRight();
+		val.TrimLeft();
+		val.TrimRight();
+
+		m_Strings.SetAt(name, val);
+		return;
+	}
+
+	
 	if (NULL == strstr(tmp, _T("="))) { // argument is key?		
 		CString key = tmp;
 		key.TrimLeft();
 		key.TrimRight();
 
-		if (key.IsEmpty()) {
+		if (key.IsEmpty()) { // invalid key?
 			return;
 		}
-		if (!m_Entries.Lookup(key, (CObject*&)dummy)) {
-			be = new CBiBTeXEntry(tmp, type);
+
+		if (!m_Entries.Lookup(key, (CObject*&)dummy)) { // key already exists?
+			be = new CBiBTeXEntry(tmp, this, type);
 			/* add entries used by structure parser */
 			be->m_nLine = line;			
 			
@@ -215,9 +229,7 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 		} else {
 			TRACE("WARNING: Invalid or duplicate key <%s> (%s)\n", key, BibTypeVerbose[type]);
 		}
-	} else {
-		
-		//be = (CBiBTeXEntry *)m_Entries.Top();
+	} else { // extract name-value pair and add it to the entry
 		if (m_Entries.Lookup(m_LastKey, (CObject*&)be)) {
 			CString name, val;
 			ParseField(tmp, name, val);
@@ -229,7 +241,7 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 			val.TrimLeft();
 			val.TrimRight();
 			be->SetField(name, val);
-		} else {
+		} else { // error: key not found -> likely an error in the bibtex file
 			ASSERT(FALSE);
 		}
 	}
@@ -295,6 +307,7 @@ void CBiBTeXFile::DropAllEntries()
 	}
 
 	m_Keys.RemoveAll();
+	m_Strings.RemoveAll();
 }
 
 void CBiBTeXFile::FinalizeItem()
@@ -310,6 +323,24 @@ void CBiBTeXFile::FinalizeItem()
 		//TRACE("Finalized %s\n", be->ToString());
 	} else {
 		//ASSERT(FALSE);
-		TRACE("Warning: Did not found key %s\n", m_LastKey);
+		// TRACE("Warning: Did not found key %s\n", m_LastKey);
 	}
+}
+
+const CBiBTeXEntry* CBiBTeXFile::GetEntryByKey(CString key)
+{
+	CBiBTeXEntry *be;
+	if (m_Entries.Lookup(m_LastKey, (CObject*&)be)) {
+		return (const CBiBTeXEntry*)be;
+	}
+	return NULL;
+}
+
+CString CBiBTeXFile::GetString(CString abbrev)
+{
+	CString expanded;
+	if (m_Strings.Lookup(abbrev, expanded)) {
+		return CString(expanded);
+	}
+	return CString();
 }
