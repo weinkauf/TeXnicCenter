@@ -987,6 +987,7 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 	CPoint	ptStart, ptText;	
 	if (!IsValidTextPos(topLeft)) {
 		TRACE("Invalid text pos %d, %d\n", topLeft.x, topLeft.y);
+		return FALSE;
 	}
 	ptStart = TextToClient(topLeft);
 
