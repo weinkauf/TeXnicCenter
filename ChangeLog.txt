@@ -1,18 +1,17 @@
 2005/06/19 owieland
-- Implemented Feature 551087
-- Implemented Feature 597717 
+- Implemented Feature 551087: Marking missing files
+- Implemented Feature 597717: Saving ignored words
 
 2005/06/17 owieland
-- Implemented Feature 1178333 
+- Implemented Feature 579593: Line numbering
 - Fixed bug 1222824
 - Fixed bug 1222733
 
 2005/06/16 owieland
-- Implemented Feature 1220431, 1066225, 1041341 (partially :-), 971049, 605469:
-  Parsing BibTeX files
+- Implemented Feature 575104:  Parsing BibTeX files
 
 2005/06/09 owieland
-- Implemented Feature 1205427: Auto-Complete function. Press Ctrl+Space during editing to use it.
+- Implemented Feature 559096: Auto-Complete function. Press Ctrl+Space during editing to use it.
   The shipped file packages.xml contains an (incomplete) snapshot of available LaTeX commands. 
   So feel free to add/correct/remove entries.
 
