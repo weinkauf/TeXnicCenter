@@ -101,6 +101,7 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 					switch( si.m_nType )
 					{
 					case CStructureParser::texFile:
+					case CStructureParser::missingFile:
 						hItem = InsertItem( 
 							si.m_strPath, 
 							si.m_nType, si.m_nType, 
