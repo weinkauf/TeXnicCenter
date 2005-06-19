@@ -899,6 +899,8 @@ void CLatexProject::OnItemInsertRef()
 void CLatexProject::OnSpellProject() 
 {
 	MySpell *pSpell = theApp.GetSpeller();
+	CString sPath = CString(theApp.GetProject()->GetProjectDir() + _T("\\ignored.sc"));
+
 	if (pSpell == NULL)
 		return;
 
@@ -940,8 +942,23 @@ void CLatexProject::OnSpellProject()
 			CPoint ptStart, ptEnd;
 			pView->GetSelection(ptStart, ptEnd);
 			pView->SetShowInteractiveSelection(TRUE);
+
+			// begin ow
+			if (CPathTool::Exists(sPath)) {
+				//TRACE("%s exists, loading ignored words\n", sPath);
+				theApp.GetSpeller()->open_ignored_words(sPath) ;
+			}
+			// end ow
 			int result = dlg.DoModal();
 			cr.RestorePrevResources();
+
+			// begin ow
+			if (theApp.GetSpeller()->ismodified()) {		
+				//TRACE("SC was modified, save ign words to %s...\n", sPath);		
+				theApp.GetSpeller()->save_ignored_words(sPath) ;
+			}
+			// end ow
+
 			// Restore selection
 			pView->SetShowInteractiveSelection(FALSE);
 			pView->SetSelection(ptStart, ptEnd);

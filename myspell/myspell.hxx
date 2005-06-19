@@ -46,6 +46,9 @@ public:
 	int open_personal_dictionary();
 	int save_personal_dictionary(const char *fileName);
 
+	int open_ignored_words(const char *fileName);
+	int save_ignored_words(const char *fileName);
+
 	inline void suggest_main(int suggestFromMainOnly)
 	{
 		bMainOnly = suggestFromMainOnly;
@@ -63,6 +66,7 @@ public:
 			*slst = NULL;
 		}
 	}
+
 };
 
 #endif
