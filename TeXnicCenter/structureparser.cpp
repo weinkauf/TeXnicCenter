@@ -53,7 +53,7 @@ const CString CStructureParser::m_sItemNames[typeCount]= {
 	"generic","header","equation","quote","quotation",
 	"center","verse","itemization","enumeration","description",
 	"figure","table","other environment",
-	"texFile","group","bibliography","graphic", "bibitem"};
+	"texFile","group","bibliography","graphic", "bibitem", "missingFile"};
 
 //-------------------------------------------------------------------
 // class CStructureItem
@@ -415,8 +415,9 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		}
 		else if ( m_pParseOutputHandler && !m_bCancel )
 		{
+			AddFileItem(strPath, missingFile, aSI);
 			info.m_strError.Format( STE_FILE_EXIST, strPath );
-			m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
+			m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );			
 		}
 
 		// parse string behind occurence
