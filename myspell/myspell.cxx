@@ -206,8 +206,10 @@ void MySpell::mkinitcap(char * p) const
 
 void MySpell::ignore_word(const char *word)
 {
-	if (pIgnoreHash)
+	if (pIgnoreHash) {
 		pIgnoreHash->add_word(word);
+		bModified = true;
+	}
 }
 
 
@@ -256,3 +258,27 @@ int MySpell::save_personal_dictionary(const char *fileName)
 	return retValue;
 }
 
+
+int MySpell::open_ignored_words(const char *fileName)
+{
+	try {
+		delete pIgnoreHash;
+		pIgnoreHash = new HashMgr(fileName);
+	} catch (...) {
+		pIgnoreHash = new HashMgr();
+		return -1;
+	}
+	return 0;
+}
+
+
+int MySpell::save_ignored_words(const char *fileName)
+{
+	int retValue = -1;
+	if (fileName && pIgnoreHash) {
+		retValue = pIgnoreHash->save_tables(fileName);
+		if (retValue == 0)
+			bModified = false;
+	}
+	return retValue;
+}
