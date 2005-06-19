@@ -1,3 +1,7 @@
+2005/06/19 owieland
+- Implemented Feature 551087
+- Implemented Feature 597717 
+
 2005/06/17 owieland
 - Implemented Feature 1178333 
 - Fixed bug 1222824
