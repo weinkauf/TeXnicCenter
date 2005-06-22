@@ -52,12 +52,15 @@ const int LATEX_ENVIRONMENT = 1;
 const int LATEX_OPTION = 2;
 const int LATEX_REQPACKAGE = 3;
 const int LATEX_DEF = 4;
-const int LATEX_CLS_DESC = 5;
-const int LATEX_STY_DESC = 6;
-const int LATEX_TXT_SYMBOL = 7;
-const int LATEX_TXT_COMMAND = 8;
+const int LATEX_LET = 5;
+const int LATEX_CLS_DESC = 6;
+const int LATEX_STY_DESC = 7;
+const int LATEX_TXT_SYMBOL = 8;
+const int LATEX_MATH_SYMBOL = 9;
+const int LATEX_TXT_COMMAND = 10;
+
 /* Number of token types */
-const int TOKEN_COUNT = 9;
+const int TOKEN_COUNT = 11;
 
 /* Maximum length of desc */
 const int MAX_DESC_LEN = 255;
@@ -137,6 +140,10 @@ public:
 
 /*
  * $Log$
+ * Revision 1.10  2005/06/11 12:50:57  owieland
+ * - Load also expAfter/expBefore attributes from packages.xml
+ * - AddCommand/AddEnvironment now return pointers to created object
+ *
  * Revision 1.9  2005/06/10 15:34:15  owieland
  * Consider \\DeclareTextCommand and \\DeclareTextSymbol
  *

@@ -34,6 +34,10 @@
 
 /*
  * $Log$
+ * Revision 1.10  2005/06/11 12:50:57  owieland
+ * - Load also expAfter/expBefore attributes from packages.xml
+ * - AddCommand/AddEnvironment now return pointers to created object
+ *
  * Revision 1.9  2005/06/10 15:34:15  owieland
  * Consider \\DeclareTextCommand and \\DeclareTextSymbol
  *
@@ -94,9 +98,11 @@ const TCHAR* TOKENS[]={
 	"\\DeclareOption", 
 	"\\RequirePackage", 
 	"\\def",
+	"\\let",
 	"\\ProvidesClass",
 	"\\ProvidesPackage",
 	"\\DeclareTextSymbol",
+	"\\DeclareMathSymbol",
 	"\\DeclareTextCommand"
 };
 //////////////////////////////////////////////////////////////////////
@@ -275,7 +281,9 @@ void CStyleFile::ParseBuffer(TCHAR *buf)
 					case LATEX_COMMAND:
 					case LATEX_ENVIRONMENT:
 					case LATEX_DEF:
+					case LATEX_LET:
 					case LATEX_TXT_SYMBOL:
+					case LATEX_MATH_SYMBOL:
 					case LATEX_TXT_COMMAND:
 						/* Some commands may be duplicate due to conditional definitions in the
 						   style file. */
@@ -366,9 +374,11 @@ CAbstractLaTeXCommand *CStyleFile::CreateItem(int type, CString &name, int hasSt
 	switch(type) {
 	case LATEX_COMMAND:
 	case LATEX_DEF:
+	case LATEX_LET:
 		return new CNewCommand(this, name, noOfParams, hasStar);
 		break;
 	case LATEX_TXT_SYMBOL:
+	case LATEX_MATH_SYMBOL:
 		return new CNewCommand(this, name, 0, hasStar);
 		break;
 	case LATEX_TXT_COMMAND:
