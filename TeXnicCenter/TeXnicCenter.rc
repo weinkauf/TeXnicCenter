@@ -7720,6 +7720,7 @@ BEGIN
     STE_LATEX_REF           "\\ref{%s}"
     STE_LATEX_PAGEREF       "\\pageref{%s}"
     STE_LATEX_EQREF         "\\eqref{%s}"
+    STE_LATEX_CITE          "\\cite{%s}"
 END
 
 STRINGTABLE DISCARDABLE 
