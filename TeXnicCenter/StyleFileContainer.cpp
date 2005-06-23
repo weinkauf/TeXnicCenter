@@ -34,6 +34,10 @@
 
 /*
  * $Log$
+ * Revision 1.11  2005/06/11 12:50:57  owieland
+ * - Load also expAfter/expBefore attributes from packages.xml
+ * - AddCommand/AddEnvironment now return pointers to created object
+ *
  * Revision 1.10  2005/06/10 15:31:38  owieland
  * Moved xml constants to .cpp file
  *
@@ -255,7 +259,7 @@ const CStringArray* CStyleFileContainer::GetPossibleCompletions(const CString &c
 		CString key;
 		m_Commands.GetNextAssoc(pos, key, (CObject*&)lc);
 		//TRACE("test '%s' = '%s' (%d)\n", key.Left(l), cmd, key.Left(l) == cmd);
-		if (lc != NULL && key.GetLength() >= l && key.Left(l) == cmd) {
+		if (lc != NULL && key.GetLength() >= l && stricmp(key.Left(l), cmd) == 0) {
 			if (tmp == NULL) {
 				tmp = new CStringArray();
 			}
@@ -296,7 +300,7 @@ const CMapStringToOb* CStyleFileContainer::GetPossibleItems(const CString &cmd, 
 			continue; /* skip commands which are not available in this class */
 		}
 
-		if (lc != NULL && key.GetLength() >= l && key.Left(l) == cmd) {
+		if (lc != NULL && key.GetLength() >= l && stricmp(key.Left(l), cmd) == 0) {
 			if (tmp == NULL) {
 				tmp = new CMapStringToOb();
 			}
@@ -599,6 +603,7 @@ void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyle
 	/* fetch attributes */
 	MsXml::CXMLDOMNamedNodeMap attr = element.GetAttributes();
 	CString nameVal, descVal, beforeVal, afterVal;
+	BOOL hasAfterVal = FALSE, hasBeforeVal = FALSE; 
 	int nOfParams = 0;		
 
 	for(int j = 0; j < attr.GetLength(); j++) {
@@ -611,9 +616,11 @@ void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyle
 		} else if (s == CSF_XML_PARAMS) {
 			nOfParams = atoi(a.GetText());			
 		} else if (s == CSF_XML_EXPAFTER) {
+			hasAfterVal = TRUE;
 			afterVal = a.GetText();
 			SetupCR(afterVal);
 		} else if (s == CSF_XML_EXPBEFORE) {
+			hasBeforeVal = TRUE;
 			beforeVal = a.GetText();
 			SetupCR(beforeVal);
 		}
@@ -623,22 +630,23 @@ void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyle
 	if (element.GetNodeName() == CSF_XML_COMMAND) {
 		CNewCommand *nc = parent->AddCommand(nameVal, nOfParams, descVal);
 
-		if (nc != NULL && !afterVal.IsEmpty()) {
+		if (nc != NULL && hasAfterVal) {
 			//TRACE("Add expA = %s to %s\n", afterVal, nc->GetName());
 			nc->SetExpandAfter(afterVal);
 		}
-		if (nc != NULL && !beforeVal.IsEmpty()) {
+		if (nc != NULL && hasBeforeVal) {
 			//TRACE("Add expB = %s to %s\n", beforeVal, nc->GetName());
 			nc->SetExpandBefore(beforeVal);
 		}
 	} else if (element.GetNodeName() == CSF_XML_ENVIRONMENT) {
 		CNewEnvironment *ne = parent->AddEnvironment(nameVal, nOfParams, descVal);
+		TRACE("** Loaded env %s (%s)\n", nameVal, descVal);
 
-		if (ne != NULL && !afterVal.IsEmpty()) {
+		if (ne != NULL && hasAfterVal) {
 			//TRACE("Add expA = %s to %s\n", afterVal, ne->GetName());
 			ne->SetExpandAfter(afterVal);
 		}
-		if (ne != NULL && !beforeVal.IsEmpty()) {
+		if (ne != NULL && hasBeforeVal) {
 			//TRACE("Add expB = %s to %s\n", beforeVal, ne->GetName());
 			ne->SetExpandBefore(beforeVal);
 		}
