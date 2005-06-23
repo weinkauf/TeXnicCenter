@@ -305,7 +305,7 @@ void CAboutDlg::OnPaint()
 									CLIP_DEFAULT_PRECIS,
 									PROOF_QUALITY,
 									VARIABLE_PITCH | 0x04 | FF_DONTCARE,
-									(LPSTR)"Arial");
+									(LPCTSTR)"Arial");
 			pDc->SetTextColor(NORMAL_TEXT_COLOR);
 			pOldFont  = pDc->SelectObject(&m_fntArial);
 			break;
@@ -321,7 +321,7 @@ void CAboutDlg::OnPaint()
 									CLIP_DEFAULT_PRECIS,
 									PROOF_QUALITY,
 									VARIABLE_PITCH | 0x04 | FF_DONTCARE,
-									(LPSTR)"Arial");
+									(LPCTSTR)"Arial");
 			pDc->SetTextColor(TOP_LEVEL_GROUP_COLOR);
 			pOldFont  = pDc->SelectObject(&m_fntArial);
 			break;
@@ -339,7 +339,7 @@ void CAboutDlg::OnPaint()
 									CLIP_DEFAULT_PRECIS,
 									PROOF_QUALITY,
 									VARIABLE_PITCH | 0x04 | FF_DONTCARE,
-									(LPSTR)"Arial");
+									(LPCTSTR)"Arial");
 			pDc->SetTextColor(GROUP_TITLE_COLOR);
 			pOldFont  = pDc->SelectObject(&m_fntArial);
 			break;
@@ -356,7 +356,7 @@ void CAboutDlg::OnPaint()
 								CLIP_DEFAULT_PRECIS,
 								PROOF_QUALITY,
 								VARIABLE_PITCH | 0x04 | FF_DONTCARE,
-								(LPSTR)"Arial");
+								(LPCTSTR)"Arial");
 			pDc->SetTextColor(TOP_LEVEL_TITLE_COLOR);
 			pOldFont  = pDc->SelectObject(&m_fntArial);
 			break;
@@ -365,11 +365,11 @@ void CAboutDlg::OnPaint()
 			if (!m_bProcessingBitmap)
 				{
 				CString szBitmap = m_szWork.Left(m_szWork.GetLength()-1);
-	   			if (!m_bmpWork.LoadBitmap((const char *)szBitmap))
+	   			if (!m_bmpWork.LoadBitmap((LPCTSTR)szBitmap))
 					{
 					CString str; 
-					str.Format("Could not find bitmap resource \"%s\". "
-                               "Be sure to assign the bitmap a QUOTED resource name", szBitmap); 
+					str.Format(_T("Could not find bitmap resource \"%s\". ")
+                               _T("Be sure to assign the bitmap a QUOTED resource name"), szBitmap); 
 					KillTimer(DISPLAY_TIMER_ID); 
 					MessageBox(str); 
 					return; 
@@ -422,7 +422,7 @@ void CAboutDlg::OnPaint()
 	
 	if (!m_bProcessingBitmap)
 		{
-		int x = pDc->DrawText((const char *)m_szWork,m_szWork.GetLength()-1,&r,DT_TOP|DT_CENTER|
+		int x = pDc->DrawText((LPCTSTR)m_szWork,m_szWork.GetLength()-1,&r,DT_TOP|DT_CENTER|
 					DT_NOPREFIX | DT_SINGLELINE);	
 		m_bDrawText=FALSE;
 		}
