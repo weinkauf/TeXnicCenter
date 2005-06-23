@@ -61,6 +61,7 @@ void CBibView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint) {
 					{
 						// thanks god we are sure, that a bibFile predecesses a bibItem
 						case CStructureParser::bibFile:
+						case CStructureParser::missingBibFile:
 						{
 							hBibParent = InsertItem(
 													si.m_strPath,

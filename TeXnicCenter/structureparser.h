@@ -182,6 +182,8 @@ public:
 		graphicFile,
 		bibItem,
 		missingFile,
+		missingPicFile, 
+		missingBibFile,
 		// If you add a new type, also add a description string to m_sItemNames
 		typeCount
 	};
