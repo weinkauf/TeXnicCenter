@@ -899,13 +899,13 @@ void CLatexProject::OnItemInsertRef()
 void CLatexProject::OnSpellProject() 
 {
 	MySpell *pSpell = theApp.GetSpeller();
-	// TODO: Add locale string to file name
+	
+	// Setup path for ignored words
 	CString sIgnoredPath = 
 		CString(theApp.GetProject()->GetProjectDir() +
-		_T("\\ignored") + g_configuration.m_strGuiLanguage + _T(".sc"));
-	CString sUserPath = 
-		CString(theApp.GetProject()->GetProjectDir() + 
-		_T("\\user")+ g_configuration.m_strGuiLanguage + _T(".sc"));
+		_T("\\ignored") + 
+		theApp.GetProject()->GetTitle() +
+		g_configuration.m_strGuiLanguage + _T(".sc"));
 
 	if (pSpell == NULL)
 		return;
@@ -953,10 +953,6 @@ void CLatexProject::OnSpellProject()
 			if (CPathTool::Exists(sIgnoredPath)) {
 				theApp.GetSpeller()->open_ignored_words(sIgnoredPath);
 			}
-			if (CPathTool::Exists(sUserPath)) {
-				theApp.GetSpeller()->set_personal_dictionary(sUserPath);
-				theApp.GetSpeller()->open_personal_dictionary();
-			}
 			// end ow
 			int result = dlg.DoModal();
 			cr.RestorePrevResources();
@@ -964,8 +960,7 @@ void CLatexProject::OnSpellProject()
 			// begin ow
 			if (theApp.GetSpeller()->ismodified()) {		
 				//TRACE("SC was modified, save ign words to %s...\n", sPath);		
-				theApp.GetSpeller()->save_ignored_words(sIgnoredPath);
-				theApp.GetSpeller()->save_personal_dictionary(sUserPath);
+				theApp.GetSpeller()->save_ignored_words(sIgnoredPath);				
 			}
 			// end ow
 
