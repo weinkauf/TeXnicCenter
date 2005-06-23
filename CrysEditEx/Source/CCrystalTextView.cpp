@@ -82,6 +82,10 @@
 * $Author$
 *
 * $Log$
+* Revision 1.28  2005/06/23 14:59:34  owieland
+* - Draw each line number with same font and color
+* - Compute size correctly
+*
 * Revision 1.27  2005/06/17 21:38:44  owieland
 * Show line numbers in editor (FR 1178333 )
 *
@@ -3865,11 +3869,15 @@ int CCrystalTextView::GetMarginWidth()
 		int nMax = ceil(log10(nLines < 10 ? 10 : nLines));
 
 		CDC *pDC = GetDC();
+		ASSERT(pDC != NULL);
+		
 		CFont *pOldFont = pDC->SelectObject(GetFont());
 		CSize s = pDC->GetTextExtent("9");		
 		pDC->SelectObject(pOldFont);
 		cw = s.cx + 1;	
 		w =  nMax * cw;
+		ReleaseDC(pDC);
+	 
 
 		if (w < 20) w = 20; // ensure minimum width
 	}
