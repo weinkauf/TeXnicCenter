@@ -1013,6 +1013,8 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 		m_CompletionListBox->MoveWindow(ptStart.x, ptStart.y, 100, 150);
 		m_CompletionListBox->SetCurSel(0);
 		m_OldFocus = m_CompletionListBox->SetFocus();
+	} else {
+		SetFocus();
 	}
 	return m_CompletionListBox;
 }
