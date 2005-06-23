@@ -57,8 +57,6 @@ LINK32=link.exe
 # ADD LINK32 CrysEditEx.lib MFCExt.lib TeXnicCenterObjects.lib Shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib /nologo /subsystem:windows /map /debug /debugtype:both /machine:I386 /out:"../output/Release/TEXCNTR.EXE" /libpath:"../CrysEditEx/Lib" /libpath:"../MFCExt/Lib" /libpath:"../BCGControlBar/Lib" /libpath:"../regexpp/Lib" /libpath:"../TeXnicCenterObjects/Lib"
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
-PreLink_Desc=Build regexpp...
-PreLink_Cmds=buildregexp.bat
 PostBuild_Desc=Setup help, xsd and language files...
 PostBuild_Cmds=buildlang.bat	buildxml.bat	cd ..\TCHelp	buildhelp.bat
 # End Special Build Tool
@@ -87,7 +85,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 CrysEditExD.lib MFCExtD.lib TeXnicCenterObjectsD.lib Shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib /nologo /subsystem:windows /debug /machine:I386 /out:"../output/Debug/TEXCNTR.EXE" /pdbtype:sept /libpath:"../CrysEditEx/Lib" /libpath:"../MFCExt/Lib" /libpath:"../BCGControlBar/Lib" /libpath:"../regexpp/Lib" /libpath:"../TeXnicCenterObjects/Lib"
+# ADD LINK32 CrysEditExD.lib MFCExtD.lib TeXnicCenterObjectsD.lib Shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib mre200dl.lib /nologo /subsystem:windows /debug /machine:I386 /out:"../output/Debug/TEXCNTR.EXE" /pdbtype:sept /libpath:"../CrysEditEx/Lib" /libpath:"../MFCExt/Lib" /libpath:"../BCGControlBar/Lib" /libpath:"../regexpp/Lib" /libpath:"../TeXnicCenterObjects/Lib"
 # SUBTRACT LINK32 /map
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
@@ -1277,6 +1275,10 @@ SOURCE=.\TeXnicCenter.reg
 # End Source File
 # End Target
 # End Project
+# Section TeXnicCenter : {72ADFD78-2C39-11D0-9903-00A0C91BC942}
+# 	1:10:IDB_SPLASH:110
+# 	2:21:SplashScreenInsertKey:4.0
+# End Section
 # Section TeXnicCenter : {72ADFD54-2C39-11D0-9903-00A0C91BC942}
 # 	1:17:CG_IDS_DIDYOUKNOW:106
 # 	1:22:CG_IDS_TIPOFTHEDAYMENU:105
@@ -1299,8 +1301,4 @@ SOURCE=.\TeXnicCenter.reg
 # 	2:13:IDB_LIGHTBULB:IDB_LIGHTBULB
 # 	2:18:CG_IDS_FILE_ABSENT:CG_IDS_FILE_ABSENT
 # 	2:10:TipDlg.cpp:TipDlg.cpp
-# End Section
-# Section TeXnicCenter : {72ADFD78-2C39-11D0-9903-00A0C91BC942}
-# 	1:10:IDB_SPLASH:110
-# 	2:21:SplashScreenInsertKey:4.0
 # End Section
