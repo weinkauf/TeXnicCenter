@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.27  2005/06/17 21:38:44  owieland
+* Show line numbers in editor (FR 1178333 )
+*
 * Revision 1.26  2005/03/16 18:17:58  vachis
 * fixed bugs: unmatched brace (after Ctrl+M) disappear when scrolling
 *                   disable higlighting when a selection is pressent
@@ -1338,9 +1341,15 @@ void CCrystalTextView::DrawMargin(CDC *pdc, const CRect &rect, int nLineIndex)
 		CPoint pt(rect.left + 2, rect.top + (GetLineHeight() - 16) / 2);
 		CString s;
 		s.Format(_T("%d"), nLineIndex + 1);
-		pdc->DrawText(s, 
-			CRect(pt.x, pt.y, pt.x + GetMarginWidth()-4, pt.y + + GetMarginWidth()-4), 
-			DT_RIGHT|DT_SINGLELINE);
+		/* Select color and font */
+		CFont *pOldFont = pdc->SelectObject(GetFont());
+		COLORREF oldColor = pdc->SetTextColor(GetColor(COLORINDEX_NORMALTEXT));
+		/* Draw it */
+		CRect r = CRect(pt.x, pt.y, pt.x + GetMarginWidth()-4, pt.y + GetLineHeight());
+		pdc->DrawText(s, r, DT_RIGHT|DT_SINGLELINE);
+		/* Restore old values */
+		pdc->SelectObject(pOldFont);
+		pdc->SetTextColor(oldColor);
 	}
 
 	int nImageIndex = -1;
@@ -3849,11 +3858,18 @@ BOOL CCrystalTextView::GetSelectionMargin()
 
 int CCrystalTextView::GetMarginWidth()
 {
-	int w = 16; // default
+	int w = 16, cw; // default
 
 	if (m_bShowLineNumbers) {
-		int nLines = GetLineCount();
-		w = floor(log10(nLines < 10 ? 10 : nLines)) * 12;
+		int nLines = GetLineCount();		
+		int nMax = ceil(log10(nLines < 10 ? 10 : nLines));
+
+		CDC *pDC = GetDC();
+		CFont *pOldFont = pDC->SelectObject(GetFont());
+		CSize s = pDC->GetTextExtent("9");		
+		pDC->SelectObject(pOldFont);
+		cw = s.cx + 1;	
+		w =  nMax * cw;
 
 		if (w < 20) w = 20; // ensure minimum width
 	}
