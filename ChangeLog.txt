@@ -1,3 +1,6 @@
+2005/06/23 niteria
+- Implemented Feature 1225978: Auto-Expand of Navigator Trees after loading project
+
 2005/06/19 owieland
 - Implemented Feature 551087: Marking missing files
 - Implemented Feature 597717: Saving ignored words

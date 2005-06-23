@@ -181,6 +181,58 @@ void CNavigatorView::ExpandItems( const CStringArray &astrItems )
 	}
 }
 
+void CNavigatorView::ExpandItemsByLevel(const int nLevel)
+{
+	//Safety
+	if (nLevel < 0)
+	{
+		ASSERT(false);
+		return;
+	}
+
+	//We start at the root with level zero
+	// and traverse the tree in a depth-first manner.
+	HTREEITEM hItem = GetNextItem(NULL, TVGN_ROOT);
+	bool bLookForParent(false);
+	int currLevel = 0;
+	while (currLevel >= 0)
+	{
+		if ((currLevel <= nLevel) && !bLookForParent)
+		{
+			//Expand this item, if it has children
+			//Furthermore, go down.
+			if (ItemHasChildren(hItem))
+			{
+				Expand(hItem, TVE_EXPAND);
+				hItem = GetChildItem(hItem);
+				currLevel++;
+				continue;
+			}
+		}
+		else
+		{
+			//We reached the max level or are looking explicitly for a parent
+			hItem = GetParentItem(hItem);
+			currLevel--;
+			bLookForParent = false;
+		}
+
+		//Current item has no children or is a parent that we already visited/expanded.
+		//So we're looking for its next sibling.
+		//If it does not exist, we go up in the tree.
+		HTREEITEM hTemp = GetNextSiblingItem(hItem);
+		if (hTemp)
+		{
+			hItem = hTemp;
+		}
+		else
+		{
+			bLookForParent = true;
+		}
+	}
+}
+
+
 
 HTREEITEM CNavigatorView::GetNextExpandedItem( HTREEITEM hItem, BOOL bInclude /*= FALSE*/ ) const
 {

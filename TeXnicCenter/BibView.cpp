@@ -33,6 +33,10 @@ void CBibView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint) {
 	{
 		case COutputDoc::hintParsingFinished:
 			{
+				//How many items do we have in this view currently?
+				//If none, i.e. first filled after loading a project, then expand the zeroth level
+				const bool bExpandAll = (GetCount() == 0);
+
 				//-----------------------------------------------------------
 				// remember expanded items
 				CString 			strSelectedItem = GetItemPath( GetSelectedItem() );
@@ -46,10 +50,8 @@ void CBibView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint) {
 				// initialization
 				DeleteAllItems();
 
-				HTREEITEM hBibParent = 0, hBibRoot;
-				hBibRoot = InsertItem(AfxLoadString(STE_BIB_FILES), 
-							CStructureParser::bibFile, CStructureParser::bibFile, 
-							TVI_ROOT, TVI_SORT);
+				HTREEITEM hBibParent = 0;
+
 				// fill view
 				for(int i = 0; i < a.GetSize(); i++ )
 				{
@@ -57,31 +59,41 @@ void CBibView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint) {
 
 					switch( si.m_nType )
 					{
-					// thanks god we are sure, that a bibFile predecesses a bibItem
-					case CStructureParser::bibFile:
-							hBibParent = InsertItem( 
-								si.m_strPath, 
-								si.m_nType, si.m_nType, 
-								hBibRoot, TVI_SORT );
+						// thanks god we are sure, that a bibFile predecesses a bibItem
+						case CStructureParser::bibFile:
+						{
+							hBibParent = InsertItem(
+													si.m_strPath,
+													si.m_nType, si.m_nType,
+													TVI_ROOT, TVI_SORT );
 							SetItemData( hBibParent, i );
-						break;
-					case CStructureParser::bibItem:
+							break;
+						}
+
+						case CStructureParser::bibItem:
 						{				
 							ASSERT(hBibParent != 0);
 							HTREEITEM hItem = InsertItem( 
-								si.m_strCaption, 
-								si.m_nType, si.m_nType, 
-								hBibParent, TVI_SORT );
+														si.m_strCaption, 
+														si.m_nType, si.m_nType, 
+														hBibParent, TVI_SORT );
 							SetItemData( hItem, i );
+							break;
 						}
-						break;
 					}
 				}
 
 				//-----------------------------------------------------------
 				//try to expand items
-				ExpandItems( astrExpandedItems );
-				SelectItem( GetItemByPath( strSelectedItem ) );
+				if (!bExpandAll)
+				{
+					ExpandItems( astrExpandedItems );
+					SelectItem( GetItemByPath( strSelectedItem ) );
+				}
+				else
+				{
+					ExpandItemsByLevel(0);
+				}
 			}
 			break;
 	}

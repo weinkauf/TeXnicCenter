@@ -69,6 +69,10 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 	{
 		case COutputDoc::hintParsingFinished:
 			{
+				//How many items do we have in this view currently?
+				//If none, i.e. first filled after loading a project, then expand the zeroth level
+				const bool bExpandAll = (GetCount() == 0);
+
 				//-----------------------------------------------------------
 				// remember expanded items
 				CString strSelectedItem = GetItemPath(GetSelectedItem());
@@ -127,8 +131,15 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 
 				//-----------------------------------------------------------
 				//try to expand items
-				ExpandItems(astrExpandedItems);
-				SelectItem(GetItemByPath(strSelectedItem));
+				if (!bExpandAll)
+				{
+					ExpandItems(astrExpandedItems);
+					SelectItem(GetItemByPath(strSelectedItem));
+				}
+				else
+				{
+					ExpandItemsByLevel(0);
+				}
 			}
 			break;
 	}

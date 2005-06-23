@@ -115,6 +115,17 @@ public:
 	*/
 	void ExpandItems( const CStringArray &astrItems );
 
+	/** Expands all items until given level.
+	
+		This function expand each item,
+		which has a level smaller or equal to the given one.
+
+		@param nLevel
+			Items in this level and its parents will be expanded.
+			This is zero-based.
+	*/
+	void ExpandItemsByLevel(const int nLevel);
+
 // implementation helpers
 protected:
 	/**
