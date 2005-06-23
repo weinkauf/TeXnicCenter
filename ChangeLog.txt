@@ -7,8 +7,8 @@
 
 2005/06/17 owieland
 - Implemented Feature 579593: Line numbering
-- Fixed bug 1222824
-- Fixed bug 1222733
+- Fixed bug 1222824: ALT+[^] makes it crash
+- Implemented Feature 1222733: eqnarray is obsolete
 
 2005/06/16 owieland
 - Implemented Feature 575104:  Parsing BibTeX files
