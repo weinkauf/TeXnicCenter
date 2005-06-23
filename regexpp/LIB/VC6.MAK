@@ -4,6 +4,17 @@ CFG=Debug
 !MESSAGE No configuration specified. Defaulting to Debug.
 !ENDIF 
 
+#begin texniccenter    
+!IFNDEF LIBNAME
+!IF "$(CFG)" == "Release"
+LIBNAME=mre200l
+!ELSE
+LIBNAME=mre200dl
+!ENDIF
+!MESSAGE No lib name specified. Defaulting to $(LIBNAME)
+!ENDIF
+#end texniccenter    
+
 !IF "$(CFG)" != "Release" && "$(CFG)" != "Debug"
 !MESSAGE Invalid configuration "$(CFG)" specified.
 !MESSAGE You can specify a configuration when running NMAKE
@@ -121,6 +132,10 @@ LIB32_OBJS= \
   $(LIB32_FLAGS) $(DEF_FLAGS) $(LIB32_OBJS)
 <<
     copy "$(LIBNAME).lib" "$(MSVCDIR)\lib\$(LIBNAME).lib"
+#begin texniccenter
+	if not exist ..\..\output\Release (	md ..\..\output\Release)	
+	copy mre200l.lib ..\..\output\Release
+#end texniccenter
 
 !ELSEIF  "$(CFG)" == "Debug"
 
@@ -188,6 +203,10 @@ LIB32_OBJS= \
 <<
     copy "$(LIBNAME).lib" "$(MSVCDIR)\lib\$(LIBNAME).lib"
     copy "$(LIBNAME).pdb" "$(MSVCDIR)\lib\$(LIBNAME).pdb"
+#begin texniccenter
+	if not exist ..\..\output\Debug (md ..\..\output\Debug) 
+	copy mre200dl.lib ..\..\output\Debug
+#end texniccenter
 
 !ENDIF 
 
