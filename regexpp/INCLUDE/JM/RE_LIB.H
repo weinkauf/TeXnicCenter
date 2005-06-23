@@ -24,7 +24,9 @@
 #define RE_LIB_H
 
 #if defined(_MSC_VER) && !defined(RE_BUILD_DLL)
+   #pragma message("Setup REGEXPP lib for MS...")
    #ifdef _DLL
+	  #pragma message("REGEXPP: Link with DLL")
       #ifdef _DEBUG
          #pragma comment(lib, "mre200dl.lib")
       #else // DEBUG
@@ -32,12 +34,14 @@
       #endif // _DEBUG
    #else // _DLL
       #ifdef _MT
+		#pragma message("REGEXPP: Static LIB with MT")
          #ifdef _DEBUG
             #pragma comment(lib, "mre200dm.lib")
          #else //_DEBUG
             #pragma comment(lib, "mre200m.lib")
          #endif //_DEBUG
       #else //_MT
+		#pragma message("REGEXPP: Static LIB without MT")
          #ifdef _DEBUG
             #pragma comment(lib, "mre200d.lib")
          #else //_DEBUG
