@@ -177,12 +177,12 @@ void CBCGToolbarCustomizeEx::OnInitToolsPage()
 	//Create and set up the Edit for the arguments
 	m_pToolsPage->m_wndArgumentsEdit.GetWindowRect(rectTemp);
 	m_pToolsPage->ScreenToClient(rectTemp);
-	char ClassName[100];
-	GetClassName(m_pToolsPage->m_wndArgumentsEdit.GetSafeHwnd(), ClassName, 99);
+	TCHAR ClassName[100];
+	GetClassName(m_pToolsPage->m_wndArgumentsEdit.GetSafeHwnd(), (LPTSTR)ClassName, 99);
 	m_wndTXCArgumentsEdit.CreateEx(
 					m_pToolsPage->m_wndArgumentsEdit.GetExStyle(),
 					ClassName,
-					"TXCArgumentsEdit",
+					_T("TXCArgumentsEdit"),
 					m_pToolsPage->m_wndArgumentsEdit.GetStyle(),
 					rectTemp,
 					m_pToolsPage,
@@ -193,7 +193,7 @@ void CBCGToolbarCustomizeEx::OnInitToolsPage()
 	//Create and set up the Button for the arguments
 	m_pToolsPage->m_wndArgumentsBtn.GetWindowRect(rectTemp);
 	m_pToolsPage->ScreenToClient(rectTemp);
-	m_wndTXCArgumentsBtn.Create("",
+	m_wndTXCArgumentsBtn.Create(_T(""),
 					WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON | WS_TABSTOP,
 					rectTemp,
 					m_pToolsPage,

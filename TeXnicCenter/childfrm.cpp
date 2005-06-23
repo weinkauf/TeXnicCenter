@@ -293,7 +293,8 @@ BOOL CChildFrame::Serialize(CIniFile &ini, LPCTSTR lpszKey, BOOL bWrite)
 					// create frame and restore window position
 					if (!LoadFrame(IDR_LATEXTYPE, WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, AfxGetMainWnd(), &cc))
 					{
-						TRACE0(_T("Window has not been created\n"));
+						//TRACE0(_T("Window has not been created\n"));
+						TRACE(_T("Window has not been created\n"));
 						return FALSE;
 					}
 
