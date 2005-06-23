@@ -72,6 +72,8 @@ namespace Interfaces
 	#include <TeXnicCenterObjects.h>
 };
 
+#include "jm\\re_lib.h"
+
 #include <deque>
 #include <vector>
 

@@ -85,7 +85,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 CrysEditExD.lib MFCExtD.lib TeXnicCenterObjectsD.lib Shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib mre200dl.lib /nologo /subsystem:windows /debug /machine:I386 /out:"../output/Debug/TEXCNTR.EXE" /pdbtype:sept /libpath:"../CrysEditEx/Lib" /libpath:"../MFCExt/Lib" /libpath:"../BCGControlBar/Lib" /libpath:"../regexpp/Lib" /libpath:"../TeXnicCenterObjects/Lib"
+# ADD LINK32 CrysEditExD.lib MFCExtD.lib TeXnicCenterObjectsD.lib Shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib /nologo /subsystem:windows /debug /machine:I386 /out:"../output/Debug/TEXCNTR.EXE" /pdbtype:sept /libpath:"../CrysEditEx/Lib" /libpath:"../MFCExt/Lib" /libpath:"../BCGControlBar/Lib" /libpath:"../regexpp/Lib" /libpath:"../TeXnicCenterObjects/Lib"
 # SUBTRACT LINK32 /map
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
