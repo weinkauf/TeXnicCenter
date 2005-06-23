@@ -1,24 +1,20 @@
 @echo off
-rem Build all help files and moves the created files resp. additional help files
-rem to the appropriate output directories.
-rem $Id$
-rem
+@rem Build all help files and moves the created files resp. additional help files
+@rem to the appropriate output directories.
+@rem $Id$
+@rem
+@rem hhc returns 1, even if it was successful
 
-rem hhc returns 1, even if it was successful
 @hhc TeXnicCenter.hhp
 @if %errorlevel% GEQ 2 goto error
 
-@cd ..\output
 @echo "Creating help directories..."
-if not exist .\Release\help (
-md .\Release\help
-)
-if not exist .\Debug\help (
-md .\Debug\help
-) 
+if not exist ..\output\Release\help (md ..\output\Release\help)
+if not exist ..\output\Debug\help (md ..\output\Debug\help) 
+cd ..\TCHelp
 @echo "Copying created help files..."
-@for %%i in (*.chm;*.chw) do copy %%i .\Debug\help
-@for %%i in (*.chm;*.chw) do copy %%i .\Release\help
+@for %%i in (*.chm;*.chw) do copy %%i ..\output\Debug\help
+@for %%i in (*.chm;*.chw) do copy %%i ..\output\Release\help
 @cd ..\texniccenter
 @echo "Copying additional help files..."
 @for %%i in (GPL_english.htm GPL_german.htm Tips_english.txt Tips_german.txt UserImages.bmp) do copy %%i ..\output\Debug
