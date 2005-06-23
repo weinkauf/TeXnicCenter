@@ -113,6 +113,7 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 						SetItemData( hItem, i );
 						break;
 					case CStructureParser::graphicFile:
+					case CStructureParser::missingPicFile:
 						hItem = InsertItem( 
 							si.m_strPath, 
 							si.m_nType, si.m_nType, 
@@ -120,6 +121,7 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 						SetItemData( hItem, i );
 						break;
 					case CStructureParser::bibFile:
+					case CStructureParser::missingBibFile:
 						hItem = InsertItem( 
 							si.m_strPath, 
 							si.m_nType, si.m_nType, 

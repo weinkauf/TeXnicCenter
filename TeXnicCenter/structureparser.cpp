@@ -53,7 +53,8 @@ const CString CStructureParser::m_sItemNames[typeCount]= {
 	"generic","header","equation","quote","quotation",
 	"center","verse","itemization","enumeration","description",
 	"figure","table","other environment",
-	"texFile","group","bibliography","graphic", "bibitem", "missingFile"};
+	"texFile","group","bibliography","graphic", "bibitem", "missingFile",
+	"missingPicFile", "missingBibFile"};
 
 //-------------------------------------------------------------------
 // class CStructureItem
@@ -453,6 +454,14 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 			{
 				AddFileItem( ResolveFileName(strCompletePath), graphicFile, aSI );
 				GraphicFileFound = true;
+				break;
+			} else {
+				COutputInfo info;
+				INITIALIZE_OI ( info );
+
+				AddFileItem(strCompletePath, missingPicFile, aSI);
+				info.m_strError.Format( STE_FILE_EXIST, strPath );				
+				m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
 				break;
 			}
 		}
@@ -902,6 +911,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 			{
 				if ( m_pParseOutputHandler && !m_bCancel )
 				{
+					AddFileItem(strPath, missingBibFile, aSI);				
 					info.m_strError.Format( STE_FILE_EXIST, strPath );
 					m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
 				}
