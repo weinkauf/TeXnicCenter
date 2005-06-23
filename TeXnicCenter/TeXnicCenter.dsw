@@ -129,9 +129,6 @@ Package=<4>
     Project_Dep_Name TxcEnglish
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name regexp
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name regexpdll
     End Project Dependency
 }}}
