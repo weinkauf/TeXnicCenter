@@ -1,5 +1,6 @@
 2005/06/24 owieland
 - Fixed bug 688063: Tab context menu closes wrong file
+- Fixed bug 1098351: No jump to error, if no line number is known
 
 2005/06/23 niteria
 - Implemented Feature 1225978: Auto-Expand of Navigator Trees after loading project
