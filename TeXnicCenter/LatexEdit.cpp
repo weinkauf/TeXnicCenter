@@ -1006,8 +1006,7 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 	if (m_CompletionListBox == NULL) { // create listbox
 		m_CompletionListBox = new CAutoCompleteListBox(&theApp.m_AvailableCommands);
 		m_CompletionListBox->SetListener(m_Proxy);		
-		m_CompletionListBox->Create(WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|LBS_WANTKEYBOARDINPUT|LBS_OWNERDRAWFIXED, 
-				CRect(), this, NULL);
+		
 		wndCmd = SW_SHOWNORMAL;
 	} else { // reset existing instance		
 		wndCmd = SW_RESTORE;		
@@ -1015,15 +1014,25 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 		
 	// setup and show listbox. If InitWithKeyword returns true, we show the box, otherwise
 	// we found nothing or an unique match
-	if (m_CompletionListBox->InitWithKeyword(keyword)) {		
-		m_CompletionListBox->ShowWindow(wndCmd);
-		ClientToScreen(&ptStart); // translate coordinates, because popup has no parent 
-		m_CompletionListBox->MoveWindow(ptStart.x, ptStart.y, 100, 150);
-		m_CompletionListBox->SetCurSel(0);
-		m_OldFocus = m_CompletionListBox->SetFocus();
-	} else {
+	int nWords = m_CompletionListBox->GetNumberOfMatches(keyword);
+	if (nWords >= 1) {
+		if (nWords == 1) {
+			m_CompletionListBox->InitWithKeyword(keyword);
+		} else {
+			if (!::IsWindow(m_CompletionListBox->GetSafeHwnd())) { // this is quite dirty :-(
+				m_CompletionListBox->Create(WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|LBS_WANTKEYBOARDINPUT|LBS_OWNERDRAWFIXED, 
+					CRect(), this, NULL);
+			}
+			m_CompletionListBox->InitWithKeyword(keyword);
+			m_CompletionListBox->ShowWindow(wndCmd);
+			ClientToScreen(&ptStart); // translate coordinates, because popup has no parent 
+			m_CompletionListBox->MoveWindow(ptStart.x, ptStart.y, 100, 150);
+			m_CompletionListBox->SetCurSel(0);
+			m_OldFocus = m_CompletionListBox->SetFocus();
+		}
+	} /*else {
 		SetFocus();
-	}
+	}*/
 	return m_CompletionListBox;
 }
 
@@ -1111,6 +1120,7 @@ BOOL CLatexEdit::InvokeContextHelp(const CString keyword)
 void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 {	
 	CPoint ptStart, ptEnd;
+	BOOL bFound = FALSE;
 
 	ASSERT(cmd != NULL);
 	GetSelection(ptStart, ptEnd);
@@ -1127,14 +1137,40 @@ void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 
 	pText->FlushUndoGroup(this);
 	GetSelection(ptStart, ptEnd); // retrieve new selection pos
+	SetSelection(ptStart, ptStart); // drop selection
 
-	
-	SetSelection(ptEnd, ptEnd); // drop selection and place cursor after inserted word	
-	if (cmd->GetExpandAfter().GetLength() > 0) { /* are there additional inserts? */
-		ptEnd.x = 0;
-		ptEnd.y--; /* one line up (very primitive, should be more flexible!) */
-		SetCursorPos(ptEnd);
+	// search the first curly brace
+	for(int y = ptStart.y; y <= ptEnd.y && !bFound; y++) {
+		CString s = GetLineChars(y);
+
+		int begin = s.Find(_T("\\begin{")); // skip open brace of begin block
+		int nOff = 0;
+		if (begin != -1) {
+			nOff = 6 + begin + 1;
+		}
+
+		int pos = s.Find(_T("{"), nOff);
+		if (pos != -1) {
+			CPoint ptCaret = CPoint(pos + 1, y);
+			if (!IsValidTextPos(ptCaret)) { // position is not valid -> use position of brace itself
+				ptCaret = CPoint(pos, y);				
+			}
+			SetCursorPos(ptCaret); // place caret after the first open brace
+			bFound = TRUE;
+		}
 	}
+
+	if (!bFound) { // no brace found drop selection and place cursor after inserted word	
+		SetCursorPos(ptEnd); 
+	}
+
+	/*
+	CStringpText->GetLineChars()
+	if (cmd->GetExpandAfter().GetLength() > 0) { 
+		ptEnd.x = 0;
+		ptEnd.y--; 
+		SetCursorPos(ptEnd);
+	}*/
 
 	RestoreFocus();
 }
