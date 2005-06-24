@@ -16,5 +16,5 @@ md ..\..\output\Debug
 copy mre200dl.dll ..\..\output\Debug
 copy mre200dl.ilk ..\..\output\Debug
 copy mre200dl.pdb ..\..\output\Debug
-copy mre200dl.dll ..\..\output\Release
+copy mre200l.dll ..\..\output\Release
 cd ..\..\texniccenter
