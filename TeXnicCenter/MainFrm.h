@@ -42,6 +42,8 @@
 #include "WorkspaceBar.h"
 #include "OutputBar.h"
 
+class CLatexEdit;
+
 // number of mathematic toolbars
 #define MATHBAR_COUNT		16
 
@@ -293,6 +295,7 @@ protected:
 	afx_msg void OnViewDocTabsNote();
 	afx_msg void OnUpdateViewDocTabs(CCmdUI* pCmdUI);
 	afx_msg void OnToolsCancel();
+	afx_msg void OnFileClose();
 	//}}AFX_MSG
 	afx_msg void OnToggleCtrlBar( UINT nIDEvent );
 	afx_msg void OnToggleMathBar( UINT nIDEvent );
@@ -326,6 +329,8 @@ protected:
 	CMenu									m_stdMenu;
 	CMenu									m_projectMenu;
 	CBCGToolBarImages			m_userImages;
+
+	CLatexEdit*						m_pTargetWindow; // Target window from context menu
 
 	// Full Screen mode support
 	BOOL          m_bFSModeShowMenuBar;
