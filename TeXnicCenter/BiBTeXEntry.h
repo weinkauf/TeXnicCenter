@@ -55,7 +55,7 @@ public:
 	static enum BibType {Book=0, Article, Booklet, Manual, Inproceedings, 
 						Conference, Inbook, Incollection, Masterthesis,
 						Misc, Phdthesis, Proceedings, Techreport,
-						Unpublished, String, Comment, Preamble, Unknown};
+						Unpublished, String, Comment, Preamble, Error, Unknown};
 
 
 	CBiBTeXEntry(CString key, CBiBTeXFile *parent, BibType type=Book);
