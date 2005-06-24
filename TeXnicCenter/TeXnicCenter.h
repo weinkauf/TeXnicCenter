@@ -350,6 +350,9 @@ public:
 	int m_nMDITabStyle;
 
 protected:
+	void FindPackageFiles();
+	void FindPackageFilesRecursive(CString dir);
+
 	/** Document template for normal latex-documents */
 	CMultiDocTemplate	*m_pLatexDocTemplate;
 
