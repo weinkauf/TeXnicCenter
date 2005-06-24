@@ -47,7 +47,7 @@ const TCHAR* BibTypeVerbose[] = {
 "Book", "Article", "Booklet", "Manual", "Inproceedings", 
 "Conference", "Inbook", "Incollection", "Mastersthesis",
 "Misc", "PhDthesis", "Proceedings", "TechReport",
-"Unpublished", "String", "Comment", "Preamble", "Unknown"
+"Unpublished", "String", "Comment", "Preamble", "Parse Error", "Unknown"
 }; // must be kept in sync with bibtype!
 
 
@@ -134,7 +134,9 @@ CString CBiBTeXEntry::ToCaption()
 
 void CBiBTeXEntry::BeautifyField(CString &value) {
 	value.Replace(_T(" and"), _T(","));
-	value.Replace(_T("\""), _T(""));
+	//value.Replace(_T("\""), _T(""));
+	value.Replace(_T("~"), _T(" "));
+	value.Replace(_T("--"), _T("-"));
 	value.Replace(_T("{"), _T(""));
 	value.Replace(_T("}"), _T(""));
 	value.Replace(_T("\n"), _T(""));

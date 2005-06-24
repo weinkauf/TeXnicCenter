@@ -52,6 +52,7 @@ CBiBTeXFile::CBiBTeXFile(CString file)
 :CObject()
 {
 	m_Filename = file;
+	m_ErrorCount = 0;
 }
 
 CBiBTeXFile::~CBiBTeXFile()
@@ -72,7 +73,7 @@ BOOL CBiBTeXFile::ProcessFile()
 		TCHAR *buf = new TCHAR[l];
 
 		f.Read(buf, l);
-
+		m_ErrorCount = 0;
 		ok = ParseFile(buf);
 
 		delete [] buf;
@@ -103,7 +104,9 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 			break;
 		case _T('\"'): // Toggle quote
 			if (inComment) break;
-			if (lastChar && lastChar[0] == _T('\\')) break;
+			/* Quotes are taken "as is", if included in arbitrary braces */
+			if (depth >= 2 || (lastChar && lastChar[0] == _T('\\'))) break;
+			//TRACE("Toggle quote to %d on line %d, col %d (depth = %d)\n", inQuote, line, col, depth);
 			inQuote = !inQuote;
 			break;
 		case _T('@'): // Start type
@@ -137,7 +140,7 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 				FinalizeItem();
 			}
 			if (depth < 0) {
-				HandleParseError(buf, line, col);
+				HandleParseError(buf, _T("Too many '}'"),  line, col);
 				return FALSE;
 			}
 			break;
@@ -189,8 +192,11 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 	}
 
 	if (type == CBiBTeXEntry::Unknown) {
+		if (strlen(tmp) > 40) {
+			tmp[40] = 0; // cut it here
+		}
 		TRACE("** Ignore unknown entry at line %d: %s\n", line, tmp);
-		HandleParseError(buf, line, 1);
+		HandleParseError(buf, _T("Unknown BibTeX type"), line, 1);
 		return;
 	}
 
@@ -238,21 +244,38 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 			name.MakeLower();
 			name.TrimLeft();
 			name.TrimRight();
+			ReplaceSpecialChars(val);
 			val.TrimLeft();
 			val.TrimRight();
 			be->SetField(name, val);
 		} else { // error: key not found -> likely an error in the bibtex file
-			ASSERT(FALSE);
+			HandleParseError(tmp, _T("Hmmm, difficult to say :-(. Most likely a missing key or extra ',' after last entry"), line, 1);
 		}
 	}
 }
 
-void CBiBTeXFile::HandleParseError(const TCHAR *buf, int line, int col)
+void CBiBTeXFile::HandleParseError(const TCHAR *buf, const TCHAR *msg, int line, int col)
 {
 	TCHAR tmp[21];
 	strncpy(tmp, buf + 1, 20);
 	tmp[20] = 0;
-	TRACE("Parse error at (%d, %d): <%c>%s...\n(Line %d)\n", line, col, buf[0], tmp);
+	
+	CString s, key;
+
+	m_ErrorCount++;
+	key.Format("Parse_Error%d", m_ErrorCount);
+	TRACE("!! Parse error at (%d, %d): %s (<%c>%s...\n)", line, col, msg, buf[0], tmp);
+
+	s.Format("!! Parse error at (%d, %d): %s <%c>%s...", line, col, msg, buf[0], tmp);
+	CBiBTeXEntry *be = new CBiBTeXEntry(tmp, this, CBiBTeXEntry::Error);			
+	be->m_nLine = line;						
+	be->m_nType = CStructureParser::bibItem;
+	be->m_strTitle = s;
+	be->m_strComment = msg;
+	be->m_strCaption = s;
+	be->m_strLabel = key;
+	be->m_strPath = m_Filename;
+	m_Entries.SetAt(key, be);	
 }
 
 BOOL CBiBTeXFile::ParseField(const TCHAR *field, CString &name, CString &val)
@@ -267,7 +290,7 @@ BOOL CBiBTeXFile::ParseField(const TCHAR *field, CString &name, CString &val)
 	}
 	
 	// Extract name and value
-	len1 = eqChar - field - 1;
+	len1 = eqChar - field;
 	len2 = n - (eqChar - field) - 1;
 	ASSERT(len1 < MAX_BIBTEX_ARG_LENGTH);
 	ASSERT(len2 < MAX_BIBTEX_ARG_LENGTH);
@@ -343,4 +366,27 @@ CString CBiBTeXFile::GetString(CString abbrev)
 		return CString(expanded);
 	}
 	return CString();
+}
+
+void CBiBTeXFile::ReplaceSpecialChars(CString &value)
+{
+	// Strip off surrounding quotes
+	if (value[0] == '\"' && value[value.GetLength()-1] == '\"') {
+		value.Delete(0);
+		value.Delete(value.GetLength()-1);
+	}
+	// Strip off surrounding braces
+	if (value[0] == '{' && value[value.GetLength()-1] == '}') {
+		value.Delete(0);
+		value.Delete(value.GetLength()-1);
+	}
+
+	// Replace umlauts (incomplete!)
+	value.Replace(_T("\"o"), _T("ö"));
+	value.Replace(_T("\"a"), _T("ä"));
+	value.Replace(_T("\"u"), _T("ü"));
+	value.Replace(_T("\"O"), _T("Ö"));
+	value.Replace(_T("\"A"), _T("Ä"));
+	value.Replace(_T("\"U"), _T("Ü"));
+	value.Replace(_T("\"ss"), _T("ß"));
 }

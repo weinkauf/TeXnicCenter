@@ -76,16 +76,20 @@ public:
 	/** Removes all BibTeX entries, including the abbrev strings */
 	void DropAllEntries();
 
+	/** Returns the number or parse errors */
+	int GetErrorCount() const {return m_ErrorCount;}
+
 	/** Returns the expanded version of an abbreviation defined via @string command
 		@return Expanded string for given abbreviation or an empty string, if not found
 	*/
 	CString GetString(CString abbrev);
 private:
+	int m_ErrorCount;
 	/* Called, if an item is complete */
 	void FinalizeItem();
 	/* Parses a field entry 'name = value' */
 	BOOL ParseField(const TCHAR *field, CString &name, CString &val);
-	void HandleParseError(const TCHAR *buf, int line, int col);
+	void HandleParseError(const TCHAR *buf, const TCHAR *msg, int line, int col);
 	CBiBTeXEntry::BibType ProcessEntryType(const TCHAR *buf, int len, int line);
 	void ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibType, int line);
 	BOOL ParseFile(const TCHAR* buf);
@@ -96,6 +100,8 @@ private:
 	CMapStringToString	m_Strings;
 	CString			m_LastKey;
 	CStringArray	m_Keys;
+protected:
+	void ReplaceSpecialChars(CString &value);
 };
 
 #endif // !defined(AFX_BIBTEXFILE_H__8631BC01_4CE2_4706_995E_5230B32EF3FA__INCLUDED_)
