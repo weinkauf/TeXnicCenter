@@ -49,6 +49,7 @@
 #include "OutputBuilder.h"
 #include "FileClean.h"
 #include "FileCleanConfirmDialog.h"
+#include "Mmsystem.h"
 
 #include <ddeml.h> // DDE support
 #include <dde.h>
@@ -286,13 +287,17 @@ void COutputDoc::ShowWarning( int nIndex )
 		if( !(nIndex >= 0 && nIndex < m_aWarnings.GetSize()) )
 			return;
 
-		theApp.OpenLatexDocument(
-			GetFilePath( m_aWarnings[nIndex].m_strSrcFile ), FALSE,
-			m_aWarnings[nIndex].m_nSrcLine, TRUE );
-		UpdateAllViews( NULL, hintSelectBuildLine, 
-			(CObject*)&m_aWarnings[nIndex].m_nOutputLine );
+		if (m_aWarnings[nIndex].m_nSrcLine > 0) {
+			theApp.OpenLatexDocument(
+				GetFilePath( m_aWarnings[nIndex].m_strSrcFile ), FALSE,
+				m_aWarnings[nIndex].m_nSrcLine, TRUE );
+			UpdateAllViews( NULL, hintSelectBuildLine, 
+				(CObject*)&m_aWarnings[nIndex].m_nOutputLine );
 
-		m_nActualWarningIndex = nIndex;
+			m_nActualWarningIndex = nIndex;
+		} else {
+			 PlaySound("\\Ding.wav" ,NULL, SND_ASYNC );
+		}
 	}
 	else if ( m_pActiveOutputView == m_pParseView )
 	{
