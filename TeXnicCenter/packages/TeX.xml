@@ -1,47 +1,78 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <lxCollection version="1" xmlns:txclxp="http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd">
-	<lxPackage name="(internal)" path="" desc="TeX/LaTeX native commands" class="TRUE">
-		<lxCommand name="usepackage" parameters="1"/>
-		<lxCommand name="include" parameters="1"/>
-		<lxCommand name="documentclass" parameters="1"/>		
-		<lxEnvironment name="tabular" parameters="1" expafter="}{ccc}&#xA;&#xA;\end{tabular}" expbefore="\begin{"/>
+	<lxPackage name="(internal)" 
+		path="" 
+		desc="TeX/LaTeX native commands (incomplete!)" 
+		class="TRUE">		
+		<lxCommand name="usepackage" parameters="1" desc="Includes additional packages"/>
+		<lxCommand name="documentclass" 
+			parameters="1" 
+			desc="Defines the document class (e. g. article)"
+		/>		
+		<lxEnvironment name="tabular" 
+			parameters="1" 
+			desc="Provides a tabbed environment"
+			expafter="}{ccc}&#xA;&#xA;\end{tabular}" 
+			expbefore="\begin{"/>
 		<lxEnvironment name="document"/>
-		<lxCommand name="bibliography" parameters="1"/>
-		<lxCommand name="input" parameters="1"/>		
-		<lxCommand name="include" parameters="1"/>		
+		<lxCommand name="bibliography" 
+			desc="Includes one or more bibliography databases"
+			parameters="1"
+		/>
+		<lxCommand name="input" 
+			desc="Includes additional document files"
+			parameters="1"
+		/>		
+		<lxCommand name="include" 
+			desc="Includes additional document files"
+			parameters="1"
+		/>
+		<lxCommand name="newcommand" 
+			desc="Declares an user defined command"
+			parameters="1"
+		/>
+		<lxCommand name="newenvironment" 
+			desc="Declares an user defined environment"
+			parameters="2"
+		/>
+		<lxCommand name="renewcommand" 
+			desc="Redefines an existing command"
+			parameters="1"
+		/>
+		<lxCommand name="renewenvironment" 
+			desc="Redefines an existing environment"
+			parameters="2"
+		/>
 	</lxPackage>		
+	<lxPackage name="BibTeX" 
+		path="" 
+		desc="BibTeX entry types (incomplete)">		
+		<lxEnvironment name="@Book" 
+			desc="BibTeX entry for a published book"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author={},&#xA;	title={}&#xA;	year={}&#xA;	publisher = {}&#xA;"
+			expbefore=""/>
+		<lxEnvironment name="@Article" 
+			desc="BibTeX entry for an article in a journal or magazine"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author={},&#xA;	title={}&#xA;	year={}&#xA;	journal = {}&#xA;"
+			expbefore=""/>
+		<lxEnvironment name="@Booklet" 
+			desc="BibTeX entry for a book without publisher"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author={},&#xA;	title={}&#xA;	year={}&#xA;	howpublished = {}&#xA;"
+			expbefore=""/>
+		<lxEnvironment name="@InBook" 
+			desc="BibTeX entry for a book excerpt (e. g. an article within a book)"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author={},&#xA;	title={}&#xA;	year={}&#xA;	pages = {}&#xA;	publisher = {}&#xA;"
+			expbefore=""/>
+		<lxEnvironment name="@Inproceedings" 
+			desc="BibTeX entry for an article in a conference transscript"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author={},&#xA;	title={}&#xA;	year={}&#xA;	pages = {}&#xA;	booktitle = {}&#xA;"
+			expbefore=""/>
+	</lxPackage>
 </lxCollection>
 <!-- $Id$ -->
 <!-- 
 	$Log$
-	Revision 1.12  2005/06/19 21:05:00  owieland
-	Removed \\sectionXXX
-	
-	Revision 1.11  2005/06/19 20:46:41  owieland
-	Added input & include
-	
-	Revision 1.10  2005/06/19 19:41:44  owieland
-	Added 'document' env
-	
-	Revision 1.9  2005/06/18 11:54:23  owieland
-	Added \\bibliography to internal commands
-	
-	Revision 1.8  2005/06/11 12:52:19  owieland
-	Added expAfter/expBefore example
-	
-	Revision 1.7  2005/06/10 14:50:20  owieland
-	Removed slashes
-	
-	Revision 1.6  2005/06/09 23:00:01  owieland
-	Removed \\sectionX entries
-	
-	Revision 1.5  2005/06/09 17:41:07  owieland
-	Added internal commands
-	
-	Revision 1.4  2005/06/09 14:45:51  owieland
-	Moved CVS tag to end of file
-	
-	Revision 1.3  2005/06/09 12:57:38  owieland
-	Added CVS Tags
+	Revision 1.1  2005/06/23 20:15:39  owieland
+	Read packages from subdirectory instead of single file
 	 
 -->
