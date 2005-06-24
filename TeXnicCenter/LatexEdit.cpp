@@ -954,9 +954,17 @@ void CLatexEdit::OnPackageSetup()
 		theApp.m_AvailableCommands.FindStyleFiles();
 		prg.CloseWindow();
 
-		CFolderSelect fselxml("Choose directory to save package.xml");
+		CFileDialog fselxml(FALSE, 
+			_T("xml"), 
+			_T("packages.xml"), 
+			OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+			AfxLoadString(STE_FILE_XMLFILTER),
+			NULL);
+
 		if (fselxml.DoModal() == IDOK) {
-			theApp.m_AvailableCommands.SaveAsXML(fselxml.GetPath() + "\\package.xml");
+			CString s = fselxml.GetPathName();
+			theApp.m_AvailableCommands.SaveAsXML(s);
+			TRACE("Package saved under '%s'\n", s);
 		}
 	}	
 }
