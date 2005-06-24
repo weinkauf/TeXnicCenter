@@ -49,29 +49,32 @@
 		desc="BibTeX entry types (incomplete)">		
 		<lxEnvironment name="@Book" 
 			desc="BibTeX entry for a published book"
-			expafter="{(!!Provide a unique key here!!),&#xA;	author={},&#xA;	title={}&#xA;	year={}&#xA;	publisher = {}&#xA;"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title = {},&#xA;	year = {},&#xA;	publisher = {}&#xA;}"
 			expbefore=""/>
 		<lxEnvironment name="@Article" 
 			desc="BibTeX entry for an article in a journal or magazine"
-			expafter="{(!!Provide a unique key here!!),&#xA;	author={},&#xA;	title={}&#xA;	year={}&#xA;	journal = {}&#xA;"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title = {},&#xA;	year  ={},&#xA;	journal = {}&#xA;}"
 			expbefore=""/>
 		<lxEnvironment name="@Booklet" 
 			desc="BibTeX entry for a book without publisher"
-			expafter="{(!!Provide a unique key here!!),&#xA;	author={},&#xA;	title={}&#xA;	year={}&#xA;	howpublished = {}&#xA;"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title = {},&#xA;	year = {},&#xA;	howpublished = {}&#xA;}"
 			expbefore=""/>
 		<lxEnvironment name="@InBook" 
 			desc="BibTeX entry for a book excerpt (e. g. an article within a book)"
-			expafter="{(!!Provide a unique key here!!),&#xA;	author={},&#xA;	title={}&#xA;	year={}&#xA;	pages = {}&#xA;	publisher = {}&#xA;"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title = {},&#xA;	year = {},&#xA;	pages = {},&#xA;	publisher = {}&#xA;}"
 			expbefore=""/>
 		<lxEnvironment name="@Inproceedings" 
 			desc="BibTeX entry for an article in a conference transscript"
-			expafter="{(!!Provide a unique key here!!),&#xA;	author={},&#xA;	title={}&#xA;	year={}&#xA;	pages = {}&#xA;	booktitle = {}&#xA;"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	pages = {},&#xA;	booktitle = {}&#xA;}"
 			expbefore=""/>
 	</lxPackage>
 </lxCollection>
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.2  2005/06/24 00:23:52  owieland
+	Added some BibTeX entry types and some commands
+	
 	Revision 1.1  2005/06/23 20:15:39  owieland
 	Read packages from subdirectory instead of single file
 	 
