@@ -601,7 +601,8 @@ void CTeXnicCenterApp::LoadCustomState()
 	}
 
 	/* ow: Load command repository */
-	m_AvailableCommands.LoadFromXML(GetWorkingDir() + _T("\\packages.xml"));
+	//obsolete: m_AvailableCommands.LoadFromXML(GetWorkingDir() + _T("\\packages.xml"));
+	FindPackageFiles();
 }
 
 
@@ -1875,4 +1876,39 @@ void CTeXnicCenterApp::OnUpdateProjectNewFromFile(CCmdUI* pCmdUI)
 
 	pCmdUI->Enable(bEnable);
 //	pCmdUI->Enable(m_pLatexDocTemplate->GetFirstDocPosition() != NULL);
+}
+
+
+void CTeXnicCenterApp::FindPackageFiles()
+{		
+	CString strSearchDir = CString(GetWorkingDir() + _T("\\packages"));
+	FindPackageFilesRecursive(strSearchDir);	
+	if (m_AvailableCommands.GetNoOfFiles()) {
+
+	}
+}
+
+void CTeXnicCenterApp::FindPackageFilesRecursive(CString dir) 
+{
+	CFileFind finder;
+	BOOL bWorking = finder.FindFile(dir + "\\*");
+
+	while (bWorking) {
+		bWorking = finder.FindNextFile();
+		CString name(finder.GetFileName());
+
+		if (finder.IsDirectory() && !finder.IsDots()) {
+			FindPackageFilesRecursive(dir + _T("\\") + name);
+			
+		} else {
+			CString p(finder.GetFilePath());
+			
+			CString ext = CPathTool::GetFileExtension(name);
+
+			if (ext == _T("xml")) {
+				TRACE("Adding package file: %s...\n", CPathTool::GetFileTitle(p));
+				m_AvailableCommands.LoadFromXML(p, true);
+			}
+		}
+	}
 }
