@@ -34,6 +34,10 @@
 
 /*
  * $Log$
+ * Revision 1.12  2005/06/23 22:17:13  owieland
+ * - Compare words case insensitive
+ * - Allow empty insertBefore/After values
+ *
  * Revision 1.11  2005/06/11 12:50:57  owieland
  * - Load also expAfter/expBefore attributes from packages.xml
  * - AddCommand/AddEnvironment now return pointers to created object
@@ -172,7 +176,7 @@ void CStyleFileContainer::FindStyleFilesRecursive(CString dir)
 				sf->SetListener(this);				
 				
 				if (m_Listener != NULL) {
-					m_Listener->OnFileFound(dir);
+					m_Listener->OnFileFound(p);
 				}
 				if (!AddStyleFile(sf)) {
 					delete sf;
