@@ -42,13 +42,14 @@
 //#include "StructureView.h"
 //#include "EnvironmentView.h"
 //#include "FileView.h"
+#include "ChildFrm.h"
 #include "BuildView.h"
 #include "GrepView.h"
 #include "Configuration.h"
 #include "Splash.h"
 #include "BCGToolbarCustomizeEx.h"
 #include "UserTool.h"
-
+#include "Latexedit.h"
 #include "ProfileDialog.h"
 
 #ifdef _DEBUG
@@ -104,6 +105,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CBCGMDIFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_TOP, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_ICONS, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_NOTE, OnUpdateViewDocTabs)
+	ON_COMMAND(ID_FILE_CLOSE, OnFileClose)
 	//}}AFX_MSG_MAP
 	// Globale Hilfebefehle
 	ON_COMMAND(ID_HELP_FINDER, CBCGMDIFrameWnd::OnHelpFinder)
@@ -165,7 +167,9 @@ CMainFrame::CMainFrame()
 	m_bFSModeShowDocTabs(FALSE),
 	m_bMaxChild(FALSE),
 	m_pwndFullScrnToolBar(FALSE)
-{}
+{
+	m_pTargetWindow = NULL;
+}
 
 
 CMainFrame::~CMainFrame()
@@ -934,8 +938,15 @@ BOOL CMainFrame::OnCommand(WPARAM wParam, LPARAM lParam)
 {
 	// forward notifications from ComboBoxes as command
 	if( HIWORD( wParam ) == CBN_SELENDOK || HIWORD( wParam ) == CBN_EDITCHANGE )
-		SendMessage( WM_COMMAND, (WPARAM)LOWORD( wParam ) );
+		SendMessage( WM_COMMAND, (WPARAM)LOWORD( wParam ) );	
 	
+	// Bug fix: 688063: Tab context menu closes wrong file
+	// We have to handle file close event from context menu seperately
+	if (wParam == ID_FILE_CLOSE) {
+		::SendMessage(m_wndClientArea.GetMDITabs(), WM_LBUTTONDOWN, 0, 0);
+		OnFileClose();
+		return TRUE;
+	}
 	return CBCGMDIFrameWnd::OnCommand(wParam, lParam);
 }
 
@@ -1428,12 +1439,23 @@ void CMainFrame::OnWindowPrevious()
 
 void CMainFrame::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
-	ScreenToClient(&point);
+	// We have to use the right window to get right coordinates ;-)
+	::ScreenToClient(pWnd->GetSafeHwnd(), &point);
 
-	if (pWnd->m_hWnd == m_hWndMDIClient || pWnd->m_hWnd == m_wndClientArea.GetMDITabs())
+	if (pWnd->m_hWnd == m_hWndMDIClient || pWnd->m_hWnd == m_wndClientArea.GetMDITabs()) {
+		// determine target window for context menu 
+		int nTab = m_wndClientArea.GetMDITabs().GetTabFromPoint(point);						
+		CChildFrame *wndEdit = dynamic_cast<CChildFrame*>(m_wndClientArea.GetMDITabs().GetTabWnd(nTab));		
+		// save pointer for later use
+		m_pTargetWindow = dynamic_cast<CLatexEdit *>(wndEdit->GetActiveView());
+
+		// translate menu coordinates and show menu
+		::ClientToScreen(pWnd->GetSafeHwnd(), &point);
 		theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_MDICLIENT, point.x, point.y, this);
-	else
-		theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_TOOLBAR, point.x, point.y, this);
+	} else {
+		m_pTargetWindow = NULL; // mark as invalid
+		theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_TOOLBAR, point.x, point.y, this);		
+	}
 }
 
 
@@ -1502,5 +1524,15 @@ void CMainFrame::OnToolsCancel()
 				ShowControlBar(&m_wndOutputBar, FALSE, FALSE);
 			}
 		}
+	}
+}
+
+void CMainFrame::OnFileClose() 
+{
+	// TODO: Add your command handler code here
+	if (m_pTargetWindow != NULL) {
+		TRACE("OnFileClose :-) %s\n", m_pTargetWindow->GetDocument()->GetPathName());
+		m_pTargetWindow->GetDocument()->OnCloseDocument();
+		m_pTargetWindow = NULL;
 	}
 }
