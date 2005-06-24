@@ -106,12 +106,17 @@ CLatexEdit::CLatexEdit()
 	m_CompletionListBox = NULL;
 	m_Proxy = new MyListener(this);
 	m_OldFocus = NULL;
+	m_InstTip = NULL;
 }
 
 
 CLatexEdit::~CLatexEdit() { 
 	if (m_CompletionListBox != NULL) {
 		delete m_CompletionListBox;
+	}
+
+	if (m_InstTip != NULL) {
+		delete m_InstTip;
 	}
 	delete m_Proxy;
 }
@@ -524,6 +529,7 @@ void CLatexEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 			break;		
 		default:
 			CCrystalEditViewEx::OnChar(nChar, nRepCnt, nFlags);
+			InstantAdvice();
 	}
 }
 
@@ -974,6 +980,10 @@ void CLatexEdit::OnQueryCompletion()
 	CString keyword;
 	CPoint topLeft;
 
+	if (m_InstTip != NULL) { // Drop advice
+		m_InstTip->ShowWindow(SW_HIDE);
+	}
+
 	if (!theApp.m_AvailableCommands.GetNoOfFiles()) {
 		/* ask user for scanning directories */		
 		if (AfxMessageBox(STE_QUERY_FILES, MB_ICONQUESTION|MB_YESNO) == IDYES) {
@@ -988,6 +998,7 @@ void CLatexEdit::OnQueryCompletion()
 	if (!keyword.IsEmpty()) {
 		m_CompletionListBox = CreateListBox(keyword, topLeft); /* setup (and show) list box */
 	}
+	
 }
 
 CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLeft)
@@ -1045,7 +1056,7 @@ void CLatexEdit::QueryComplete()
 /**
  Retrieves the word before or under the cursor position (thank you, Sven)
  */
-void CLatexEdit::GetWordBeforeCursor(CString &strKeyword, CPoint &start)
+void CLatexEdit::GetWordBeforeCursor(CString &strKeyword, CPoint &start, BOOL bSelect)
 {
 	CPoint	ptStart, ptEnd;
 	GetSelection(ptStart, ptEnd);
@@ -1085,7 +1096,9 @@ void CLatexEdit::GetWordBeforeCursor(CString &strKeyword, CPoint &start)
 		if (nEndChar <= nStartChar) {
 			strKeyword.Empty();
 		} else {
-			SetSelection(start, CPoint(nEndChar, ptStart.y));
+			if (bSelect) {
+				SetSelection(start, CPoint(nEndChar, ptStart.y));
+			}
 			strKeyword = strLine.Mid(nStartChar, nEndChar-nStartChar);
 		}
 	}
@@ -1238,4 +1251,55 @@ BOOL CLatexEdit::RestoreFocus()
 {	
 	SetFocus();
 	return TRUE;
+}
+
+
+void CLatexEdit::InstantAdvice() {
+	CString keyw, key;
+	CPoint ptStart = GetCursorPos(), ptClient;
+
+	GetWordBeforeCursor(keyw, ptStart, FALSE);
+
+	if (keyw.GetLength() > MINIMUM_KEYWORD_LENGTH) {
+		const CMapStringToOb *map;
+
+		map = theApp.m_AvailableCommands.GetPossibleItems(keyw, _T(""));
+		if (map != NULL && map->GetCount() == 1) { //keyword is unique -> OK
+			CLaTeXCommand *lc;
+			POSITION pos = map->GetStartPosition();	
+			map->GetNextAssoc(pos, key, (CObject*&)lc);
+
+			if (lc != NULL) {
+				if (m_InstTip == NULL) {
+					m_InstTip = new CStatic();
+					m_InstTip->Create(lc->ToLaTeX(), WS_CHILD|WS_VISIBLE|SS_SUNKEN, CRect(), this);
+				}			
+				// Compute window size				
+				ptClient = TextToClient(ptStart);
+				CDC *pDC = m_InstTip->GetDC();						
+				CSize cText = pDC->GetTextExtent(lc->ToLaTeX());
+				m_InstTip->ReleaseDC(pDC);
+
+				// Determine if there is space enough to show the window below the text
+				CRect r;
+				GetClientRect(r);
+				ptClient.y += 2* GetLineHeight();
+				if (!::PtInRect(r, ptClient)) { // no space -> show it above
+					ptClient.y -= 2 * GetLineHeight();
+				}
+				ptClient.y -= GetLineHeight();				
+				// Place and show the window
+				m_InstTip->MoveWindow(ptClient.x, ptClient.y, cText.cx + 4, cText.cy + 4);
+				m_InstTip->SetWindowText(lc->ToLaTeX());
+				m_InstTip->ShowWindow(SW_SHOW);
+			}
+			
+		} else {
+			// Nothing found: Hide window
+			if (m_InstTip != NULL) {
+				m_InstTip->ShowWindow(SW_HIDE);
+			}
+		}
+		delete map; // DON'T FORGET THIS!
+	}
 }

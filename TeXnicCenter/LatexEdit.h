@@ -109,6 +109,7 @@ public:
 // virtuals
 protected:
 	virtual void ResetView();
+	void InstantAdvice();
 	virtual CCrystalTextBuffer *LocateTextBuffer();
 	virtual void OnSetStatusMessage(CWnd *pStatusBar, LPCTSTR lpszMessage);
 
@@ -159,7 +160,7 @@ public:
 	/* Checks if given cursor position is valid */
 	BOOL IsValidTextPos(CPoint pos);
 	/* Retrieves word before cursor */
-	void GetWordBeforeCursor(CString &strKeyword, CPoint &start);
+	void GetWordBeforeCursor(CString &strKeyword, CPoint &start, BOOL bSelect=TRUE);
 	/* Handlers for events of auto complete listbox */
 	virtual void OnACCommandSelect(const CLaTeXCommand *cmd);
 	virtual void OnACCommandCancelled();
@@ -178,6 +179,7 @@ private:
 	CWnd* m_OldFocus;
 	CPoint m_oldStart;
 	CPoint m_oldEnd;
+	CStatic *m_InstTip;
 	CAutoCompleteListBox* m_CompletionListBox;
 	MyListener *m_Proxy;
 };
