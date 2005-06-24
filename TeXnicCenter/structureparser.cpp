@@ -878,13 +878,20 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 
 			if ( ::PathFileExists(strPath) )
 			{
-				AddFileItem( strPath, bibFile, aSI );
+				
 				/* begin ow */
 				CBiBTeXFile aBibFile(strPath);
 				aBibFile.DropAllEntries();	// clean up previous result
 				aBibFile.ProcessFile();		// parse it ...
 				const CMapStringToOb *items = aBibFile.GetEntries(); // ...and fetch the entries.
 
+				if (aBibFile.GetErrorCount()) {
+					CString strCap;
+					strCap.Format(_T("%s (%d errors)"), strPath, aBibFile.GetErrorCount());
+					AddFileItem( strCap, bibFile, aSI );
+				} else {
+					AddFileItem( strPath, bibFile, aSI );
+				}
 				POSITION pos = items->GetStartPosition(); // iterate over entry map
 				while(pos != NULL) {
 					CBiBTeXEntry *be;
