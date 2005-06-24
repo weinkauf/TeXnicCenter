@@ -116,6 +116,7 @@
 #define STE_POPUP_ITEM                  177
 #define STE_POPUP_MAINWINDOWAREA        178
 #define STE_TAB_BIBENTRIES              179
+#define STE_FILE_XMLFILTER              180
 #define IDR_INSERT                      186
 #define IDR_FORMAT                      190
 #define STE_SELECT_PROJECT_PATH         192
@@ -1282,7 +1283,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        278
 #define _APS_NEXT_COMMAND_VALUE         38480
-#define _APS_NEXT_CONTROL_VALUE         1341
+#define _APS_NEXT_CONTROL_VALUE         1342
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif
