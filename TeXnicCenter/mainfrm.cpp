@@ -101,11 +101,13 @@ BEGIN_MESSAGE_MAP(CMainFrame, CBCGMDIFrameWnd)
 	ON_COMMAND(ID_VIEW_DOCTAB_NOTE, OnViewDocTabsNote)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_BOTTOM, OnUpdateViewDocTabs)
 	ON_COMMAND(ID_TOOLS_CANCEL, OnToolsCancel)
+	ON_COMMAND(ID_FILE_CLOSE, OnFileClose)
+	ON_COMMAND(ID_WINDOW_REFERENCES, OnWindowReferences)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_OFF, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_TOP, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_ICONS, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_NOTE, OnUpdateViewDocTabs)
-	ON_COMMAND(ID_FILE_CLOSE, OnFileClose)
+	ON_COMMAND(ID_WINDOW_PARSE, OnWindowParse)
 	//}}AFX_MSG_MAP
 	// Globale Hilfebefehle
 	ON_COMMAND(ID_HELP_FINDER, CBCGMDIFrameWnd::OnHelpFinder)
@@ -720,6 +722,10 @@ void CMainFrame::OnWindowFiles()
 	ActivateNavigationTab( navigatorTabFiles );
 }
 
+void CMainFrame::OnWindowReferences() 
+{
+	ActivateNavigationTab( navigatorTabReferences );
+}
 
 void CMainFrame::OnWindowOutput()
 {
@@ -779,6 +785,11 @@ void CMainFrame::OnWindowGrep1()
 void CMainFrame::OnWindowGrep2() 
 {
 	ActivateOutputTab(outputTabGrep2, true);
+}
+
+void CMainFrame::OnWindowParse() 
+{
+	ActivateOutputTab(outputTabParse, true);
 }
 
 
@@ -1536,3 +1547,4 @@ void CMainFrame::OnFileClose()
 		m_pTargetWindow = NULL;
 	}
 }
+
