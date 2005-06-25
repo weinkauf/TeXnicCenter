@@ -92,7 +92,7 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 				HTREEITEM hBibParent = InsertItem(AfxLoadString(STE_BIB_FILES), 
 					CStructureParser::bibFile, CStructureParser::bibFile, 
 					TVI_ROOT, TVI_SORT);
-				HTREEITEM hGaphicParent = InsertItem(AfxLoadString(STE_GRAPHICS_FILES), 
+				HTREEITEM hGraphicParent = InsertItem(AfxLoadString(STE_GRAPHICS_FILES), 
 					CStructureParser::graphicFile, CStructureParser::graphicFile, 
 					TVI_ROOT, TVI_SORT);
 
@@ -105,25 +105,25 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 					switch( si.m_nType )
 					{
 					case CStructureParser::texFile:
-					case CStructureParser::missingFile:
+					case CStructureParser::missingTexFile:
 						hItem = InsertItem( 
-							si.m_strPath, 
+							si.m_strTitle, 
 							si.m_nType, si.m_nType, 
 							hTexParent, TVI_SORT );
 						SetItemData( hItem, i );
 						break;
 					case CStructureParser::graphicFile:
-					case CStructureParser::missingPicFile:
+					case CStructureParser::missingGraphicFile:
 						hItem = InsertItem( 
-							si.m_strPath, 
+							si.m_strTitle, 
 							si.m_nType, si.m_nType, 
-							hGaphicParent, TVI_SORT );
+							hGraphicParent, TVI_SORT );
 						SetItemData( hItem, i );
 						break;
 					case CStructureParser::bibFile:
 					case CStructureParser::missingBibFile:
 						hItem = InsertItem( 
-							si.m_strPath, 
+							si.m_strTitle, 
 							si.m_nType, si.m_nType, 
 							hBibParent, TVI_SORT );
 						SetItemData( hItem, i );

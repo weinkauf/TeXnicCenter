@@ -31,6 +31,7 @@
 #define IDS_OPEN                        112
 #define IDS_SAVE                        113
 #define IDD_FILECLEANCONFIRM            114
+#define STE_ERROR_COUNT                 114
 #define IDR_MAINFRAME                   128
 #define IDR_LATEXTYPE                   129
 #define IDR_LATEXPROJECT                130

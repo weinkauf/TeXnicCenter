@@ -50,11 +50,11 @@ static char THIS_FILE[]=__FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // Statics
 const CString CStructureParser::m_sItemNames[typeCount]= {
-	"generic","header","equation","quote","quotation",
-	"center","verse","itemization","enumeration","description",
-	"figure","table","other environment",
-	"texFile","group","bibliography","graphic", "bibitem", "missingFile",
-	"missingPicFile", "missingBibFile"};
+	"generic", "header", "equation", "quote", "quotation",
+	"center", "verse", "itemization", "enumeration", "description",
+	"figure", "table", "other environment",
+	"texFile", "group", "bibFile", "graphic", "bibitem",
+	"missingTexFile", "missingGraphicFile", "missingBibFile"};
 
 //-------------------------------------------------------------------
 // class CStructureItem
@@ -416,7 +416,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		}
 		else if ( m_pParseOutputHandler && !m_bCancel )
 		{
-			AddFileItem(strPath, missingFile, aSI);
+			AddFileItem(strPath, missingTexFile, strActualFile, nActualLine, aSI);
 			info.m_strError.Format( STE_FILE_EXIST, strPath );
 			m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );			
 		}
@@ -452,19 +452,19 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 			strCompletePath += strGraphicTypes[i];
 			if ( ::PathFileExists(strCompletePath) )
 			{
-				AddFileItem( ResolveFileName(strCompletePath), graphicFile, aSI );
+				//File exists
+				AddFileItem( ResolveFileName(strCompletePath), graphicFile, strActualFile, nActualLine, aSI );
 				GraphicFileFound = true;
-				break;
-			} else {
-				COutputInfo info;
-				INITIALIZE_OI ( info );
-
-				AddFileItem(strCompletePath, missingPicFile, aSI);
-				info.m_strError.Format( STE_FILE_EXIST, strPath );				
-				m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
 				break;
 			}
 		}
+
+		//File does not exist? Add as missing.
+		if (!GraphicFileFound)
+		{
+			AddFileItem(strPath, missingGraphicFile, strActualFile, nActualLine, aSI);
+		}
+
 
 		//Give information
 		if (m_pParseOutputHandler && !m_bCancel)
@@ -680,13 +680,6 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		{
 			CStructureItem	&si = aSI[cookies.Pop().nItemIndex];
 			CreateDefaultTitle(si);
-//			if( si.m_strTitle.IsEmpty() )
-//			{
-//				if( si.m_strCaption.IsEmpty() )
-//					si.m_strTitle = si.m_strLabel;
-//				else
-//					si.m_strTitle = si.m_strCaption;
-//			}
 		}
 		else if ( m_pParseOutputHandler && !m_bCancel )
 		{
@@ -712,13 +705,6 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		{
 			CStructureItem	&si = aSI[cookies.Pop().nItemIndex];
 			CreateDefaultTitle(si);
-//			if( si.m_strTitle.IsEmpty() )
-//			{
-//				if( si.m_strCaption.IsEmpty() )
-//					si.m_strTitle = si.m_strLabel;
-//				else
-//					si.m_strTitle = si.m_strCaption;
-//			}
 		}
 		else if ( m_pParseOutputHandler && !m_bCancel )
 		{
@@ -744,13 +730,6 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		{
 			CStructureItem	&si = aSI[cookies.Pop().nItemIndex];
 			CreateDefaultTitle(si);
-//			if( si.m_strTitle.IsEmpty() )
-//			{
-//				if( si.m_strCaption.IsEmpty() )
-//					si.m_strTitle = si.m_strLabel;
-//				else
-//					si.m_strTitle = si.m_strCaption;
-//			}
 		}
 		else if ( m_pParseOutputHandler && !m_bCancel )
 		{
@@ -878,32 +857,41 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 
 			if ( ::PathFileExists(strPath) )
 			{
-				
 				/* begin ow */
 				CBiBTeXFile aBibFile(strPath);
 				aBibFile.DropAllEntries();	// clean up previous result
 				aBibFile.ProcessFile();		// parse it ...
 				const CMapStringToOb *items = aBibFile.GetEntries(); // ...and fetch the entries.
 
-				if (aBibFile.GetErrorCount()) {
-					CString strCap;
-					strCap.Format(_T("%s (%d errors)"), strPath, aBibFile.GetErrorCount());
-					AddFileItem( strCap, bibFile, aSI );
-				} else {
-					AddFileItem( strPath, bibFile, aSI );
+				//Add the bibfile itself
+				if (aBibFile.GetErrorCount())
+				{
+					CString strAnnotation;
+					strAnnotation.Format(STE_ERROR_COUNT, aBibFile.GetErrorCount());
+					AddFileItem( strPath, bibFile, strActualFile, nActualLine, aSI, strAnnotation );
 				}
-				POSITION pos = items->GetStartPosition(); // iterate over entry map
-				while(pos != NULL) {
+				else
+				{
+					AddFileItem( strPath, bibFile, strActualFile, nActualLine, aSI );
+				}
+
+				//Iterate over entry map
+				POSITION pos = items->GetStartPosition();
+				while(pos != NULL)
+				{
 					CBiBTeXEntry *be;
 					CString key;
 					items->GetNextAssoc(pos, key, (CObject*&)be);
-					if (be != NULL) { // setup entry
+					if (be != NULL)
+					{ // setup entry
 						be->m_nParent = m_anItem[m_nDepth];
 						cookie.nCookieType = be->m_nType;
 						//TRACE("Added si: %s, %s, %s\n", be->m_strPath, be->m_strLabel, be->m_strCaption);
 						cookie.nItemIndex = aSI.Add( *be );
 						cookies.Push( cookie );
-					} else {
+					}
+					else
+					{
 						TRACE("NP detected in CBiBTeXFile %s", strPath);
 					}					
 				}
@@ -918,7 +906,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 			{
 				if ( m_pParseOutputHandler && !m_bCancel )
 				{
-					AddFileItem(strPath, missingBibFile, aSI);				
+					AddFileItem(strPath, missingBibFile, strActualFile, nActualLine, aSI);				
 					info.m_strError.Format( STE_FILE_EXIST, strPath );
 					m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
 				}
@@ -944,18 +932,30 @@ CString CStructureParser::ResolveFileName( LPCTSTR lpszPath ) const
 }
 
 
-int CStructureParser::AddFileItem( LPCTSTR lpszPath, int nType, CStructureItemArray &aSI )
+int CStructureParser::AddFileItem( LPCTSTR lpszPath, int nType,
+									LPCTSTR lpszIncludeFromFile, const int nIncludedFileLineNumber,
+									CStructureItemArray &aSI, LPCTSTR lpszAnnotation /*= NULL*/ )
 {
 	// insert file into item-array
 	CStructureItem	si;
-	si.m_nLine = 0;
+	si.m_nLine = nIncludedFileLineNumber;
 	si.m_nParent = m_anItem[m_nDepth];
 	si.m_nType = nType;
 	si.m_strCaption = "";
-	si.m_strComment = "";
+	si.m_strComment = lpszIncludeFromFile;
 	si.m_strLabel = "";
 	si.m_strPath = lpszPath;
-	si.m_strTitle = "";
+	if (lpszAnnotation == NULL)
+	{
+		//Displayed title will be the path
+		si.m_strTitle = lpszPath;
+	}
+	else
+	{
+		//Displayed title with path and annotation
+		si.m_strTitle.Format("%s (%s)", lpszPath, lpszAnnotation);
+	}
+
 	return aSI.Add( si );
 }
 
@@ -1019,7 +1019,7 @@ BOOL CStructureParser::Parse(  LPCTSTR lpszPath, CCookieStack &cookies, int nFil
 	m_nFilesParsed++;
 
 	CString strActualFile( lpszPath );
-	AddFileItem( strActualFile, texFile, aSI );
+	AddFileItem( strActualFile, texFile, "", -1, aSI );
 
 	// parse text source
 	LPCTSTR 						lpLine, lpLineEnd, lpOffset;

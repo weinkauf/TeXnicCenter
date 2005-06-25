@@ -64,7 +64,7 @@ void CBibView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint) {
 						case CStructureParser::missingBibFile:
 						{
 							hBibParent = InsertItem(
-													si.m_strPath,
+													si.m_strTitle,
 													si.m_nType, si.m_nType,
 													TVI_ROOT, TVI_SORT );
 							SetItemData( hBibParent, i );
@@ -75,7 +75,7 @@ void CBibView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint) {
 						{				
 							ASSERT(hBibParent != 0);
 							HTREEITEM hItem = InsertItem( 
-														si.m_strCaption, 
+														si.m_strTitle, 
 														si.m_nType, si.m_nType, 
 														hBibParent, TVI_SORT );
 							SetItemData( hItem, i );
