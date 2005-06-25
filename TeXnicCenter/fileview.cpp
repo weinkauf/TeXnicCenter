@@ -141,6 +141,7 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 				else
 				{
 					ExpandItemsByLevel(0);
+					EnsureVisible(GetNextItem(NULL, TVGN_ROOT));
 				}
 			}
 			break;

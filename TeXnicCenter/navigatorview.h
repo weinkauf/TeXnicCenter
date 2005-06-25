@@ -117,7 +117,7 @@ public:
 
 	/** Expands all items until given level.
 	
-		This function expand each item,
+		This function expands each item,
 		which has a level smaller or equal to the given one.
 
 		@param nLevel
