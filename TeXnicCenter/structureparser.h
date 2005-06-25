@@ -181,8 +181,8 @@ public:
 		bibFile,
 		graphicFile,
 		bibItem,
-		missingFile,
-		missingPicFile, 
+		missingTexFile,
+		missingGraphicFile, 
 		missingBibFile,
 		// If you add a new type, also add a description string to m_sItemNames
 		typeCount
@@ -308,36 +308,41 @@ private:
 	*/
 	BOOL Parse( LPCTSTR lpszPath, CCookieStack &cookies, int nFileDepth, CStructureItemArray &aSI );
 
-	/**
-	Add the specified file to the m_anItem-array.
+	/**	Adds the specified file to the m_anItem-array.
 
 	This method expects the file name to be resolved.
 
 	@param lpszPath
-		Path to the resolved file to add
+		Path to the resolved file to add.
 	@param nType
 		Type of file
-	@param sSI
-		Structure Item Array to insert structure elemements into.
+	@param aSI
+		Structure Item Array to insert structure elements into.
+	@param lpszAnnotation
+		Annotation string for the file name.
+		The displayed caption will look like this "Filename (Annotation)".
+		May be NULL.
 
 	@return
 		index of file added to m_aStructureItems array.
 	*/
-	int AddFileItem( LPCTSTR lpszPath, int nType, CStructureItemArray &aSI );
+	int AddFileItem( LPCTSTR lpszPath, int nType,
+						LPCTSTR lpszIncludeFromFile, const int nIncludedFileLineNumber,
+						CStructureItemArray &aSI, LPCTSTR lpszAnnotation = NULL );
 
 
 	/** Creates a title from the caption or label of a CStructureItem.
 
-			Prefers the caption.
-			If both label and caption are empty, then it creates a title from the filename
-			and the line number.
+		Prefers the caption.
+		If both label and caption are empty, then it creates a title from the filename
+		and the line number.
 
-			@note Creates only a new title, if the current title is empty or if forced by bForce.
+		@note Creates only a new title, if the current title is empty or if forced by bForce.
 
-			@see CStructureItem
+		@see CStructureItem
 
-			@param bForce
-				Force the generation of a new title. Even if the current title is non-empty.
+		@param bForce
+			Force the generation of a new title. Even if the current title is non-empty.
 	*/
 	inline void CreateDefaultTitle(CStructureItem& si, bool bForce = false)
 	{
@@ -356,7 +361,7 @@ private:
 					si.m_strTitle = si.m_strCaption;
 			}
 		}
-	};
+	}
 
 	/**
 	Resolve a file name relative to working directory or absolute.

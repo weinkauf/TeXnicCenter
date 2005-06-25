@@ -830,6 +830,12 @@ void CLatexProject::OnItemGoto()
 		case CStructureParser::bibFile:
 			theApp.OpenLatexDocument(GetFilePath( si.m_strPath ), FALSE, -1, FALSE, false);
 			break;
+		case CStructureParser::missingTexFile:
+		case CStructureParser::missingGraphicFile:
+		case CStructureParser::missingBibFile:
+		case CStructureParser::graphicFile:
+			theApp.OpenLatexDocument(GetFilePath( si.m_strComment ), FALSE, si.m_nLine, FALSE, false);
+			break;
 		default:
 			theApp.OpenLatexDocument(GetFilePath( si.m_strPath ), FALSE, si.m_nLine, FALSE, false);
 	}
@@ -1043,10 +1049,10 @@ BOOL CLatexProject::CreateProjectViews()
 	// Attach views to tab:
 	pwndTabs->AddTab( m_pwndStructureView, CString( (LPCTSTR)STE_TAB_STRUCTURE ), 0 );
 	pwndTabs->AddTab( m_pwndEnvironmentView, CString( (LPCTSTR)STE_TAB_ENVIRONMENTS ), 1 );
-	pwndTabs->AddTab( m_pwndFileView/*&m_wndFileView*/, CString( (LPCTSTR)STE_TAB_FILES ), 2 );
+	pwndTabs->AddTab( m_pwndFileView, CString( (LPCTSTR)STE_TAB_FILES ), 2 );
 	pwndTabs->AddTab( m_pwndBibView, CString( (LPCTSTR)STE_TAB_BIBENTRIES ), 3 );
 
-	if (m_nInitialNavigatorTab < 0 || m_nInitialNavigatorTab > 2)
+	if (m_nInitialNavigatorTab < 0 || m_nInitialNavigatorTab > 3)
 		m_nInitialNavigatorTab = 0;
 	pwndTabs->SetActiveTab(m_nInitialNavigatorTab);
 
@@ -1073,6 +1079,7 @@ void CLatexProject::DeleteProjectViews()
 	RemoveView( m_pwndStructureView );
 	RemoveView( m_pwndEnvironmentView );
 	RemoveView( m_pwndFileView );
+	RemoveView( m_pwndBibView );
 
 	// Detach views from tab...
 	CBCGTabWnd* pwndTabs = &m_pwndWorkspaceBar->GetTabWnd();
@@ -1082,11 +1089,13 @@ void CLatexProject::DeleteProjectViews()
 	delete m_pwndStructureView;
 	delete m_pwndEnvironmentView;
 	delete m_pwndFileView;
+	delete m_pwndBibView;
 
 	// mark pointers as NULL
 	m_pwndStructureView   = NULL;
 	m_pwndEnvironmentView = NULL;
 	m_pwndFileView        = NULL;
+	m_pwndBibView         = NULL;
 }
 
 

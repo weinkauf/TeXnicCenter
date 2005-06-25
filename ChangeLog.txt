@@ -1,3 +1,9 @@
+2005/06/25 niteria
+- Double-click on missing files opens the position where the file was included.
+- Double-click on graphic files (missing or not) opens the position
+  where the file was included.
+- New icons for bibtex entries, missing files, etc.
+
 2005/06/24 owieland
 - Fixed bug 688063: Tab context menu closes wrong file
 - Fixed bug 1098351: No jump to error, if no line number is known
