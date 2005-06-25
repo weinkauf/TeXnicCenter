@@ -303,6 +303,12 @@ protected:
 	*/
 	void ShowParseInfo( int nIndex );
 
+	/** Tries to open a file, if linenumber is non-zero.
+
+		Beeps otherwise.
+	*/
+	bool TryOpenFile(LPCTSTR lpszFilename, const int nLineNumber);
+
 // attributes
 public:
 

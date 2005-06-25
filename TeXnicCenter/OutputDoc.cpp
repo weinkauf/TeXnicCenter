@@ -49,7 +49,6 @@
 #include "OutputBuilder.h"
 #include "FileClean.h"
 #include "FileCleanConfirmDialog.h"
-#include "Mmsystem.h"
 
 #include <ddeml.h> // DDE support
 #include <dde.h>
@@ -176,12 +175,8 @@ void COutputDoc::ShowError( int nIndex )
 	if( !(nIndex >= 0 && nIndex < m_aErrors.GetSize()) )
 		return;
 
-	theApp.OpenLatexDocument(
-		GetFilePath( m_aErrors[nIndex].m_strSrcFile ), FALSE,
-		m_aErrors[nIndex].m_nSrcLine, TRUE );
-	UpdateAllViews( NULL, hintSelectBuildLine, 
-		(CObject*)&m_aErrors[nIndex].m_nOutputLine );
-
+	TryOpenFile(GetFilePath(m_aErrors[nIndex].m_strSrcFile), m_aErrors[nIndex].m_nSrcLine);
+	UpdateAllViews(NULL, hintSelectBuildLine, (CObject*)&m_aErrors[nIndex].m_nOutputLine);
 	m_nActualErrorIndex = nIndex;
 }
 
@@ -231,12 +226,8 @@ void COutputDoc::ShowBadBox( int nIndex )
 	if( !(nIndex >= 0 && nIndex < m_aBadBoxes.GetSize()) )
 		return;
 
-	theApp.OpenLatexDocument(
-		GetFilePath( m_aBadBoxes[nIndex].m_strSrcFile ), FALSE,
-		m_aBadBoxes[nIndex].m_nSrcLine, TRUE );
-	UpdateAllViews( NULL, hintSelectBuildLine, 
-		(CObject*)&m_aBadBoxes[nIndex].m_nOutputLine );
-
+	TryOpenFile(GetFilePath(m_aBadBoxes[nIndex].m_strSrcFile), m_aBadBoxes[nIndex].m_nSrcLine);
+	UpdateAllViews(NULL, hintSelectBuildLine, (CObject*)&m_aBadBoxes[nIndex].m_nOutputLine);
 	m_nActualBadBoxIndex = nIndex;
 }
 
@@ -282,36 +273,12 @@ void COutputDoc::OnUpdateNextPrevBadbox(CCmdUI* pCmdUI)
 // handling output warnings
 void COutputDoc::ShowWarning( int nIndex )
 {
-	if ( m_pActiveOutputView == m_pBuildView )
-	{
-		if( !(nIndex >= 0 && nIndex < m_aWarnings.GetSize()) )
-			return;
+	if( !(nIndex >= 0 && nIndex < m_aWarnings.GetSize()) )
+		return;
 
-		if (m_aWarnings[nIndex].m_nSrcLine > 0) {
-			theApp.OpenLatexDocument(
-				GetFilePath( m_aWarnings[nIndex].m_strSrcFile ), FALSE,
-				m_aWarnings[nIndex].m_nSrcLine, TRUE );
-			UpdateAllViews( NULL, hintSelectBuildLine, 
-				(CObject*)&m_aWarnings[nIndex].m_nOutputLine );
-
-			m_nActualWarningIndex = nIndex;
-		} else {
-			 PlaySound("\\Ding.wav" ,NULL, SND_ASYNC );
-		}
-	}
-	else if ( m_pActiveOutputView == m_pParseView )
-	{
-		if( !(nIndex >= 0 && nIndex < m_aParseWarning.GetSize()) )
-			return;
-
-		theApp.OpenLatexDocument(
-			GetFilePath( m_aParseWarning[nIndex].m_strSrcFile ), FALSE,
-			m_aParseWarning[nIndex].m_nSrcLine, TRUE );
-		UpdateAllViews( NULL, hintSelectParseLine, 
-			(CObject*)&m_aParseWarning[nIndex].m_nOutputLine );
-
-		m_nParseWarningIndex = nIndex;
-	}
+	TryOpenFile(GetFilePath(m_aWarnings[nIndex].m_strSrcFile ), m_aWarnings[nIndex].m_nSrcLine);
+	UpdateAllViews(NULL, hintSelectBuildLine, (CObject*)&m_aWarnings[nIndex].m_nOutputLine);
+	m_nActualWarningIndex = nIndex;
 }
 
 void COutputDoc::OnNextWarning() 
@@ -337,10 +304,10 @@ void COutputDoc::OnNextWarning()
 		{
 			m_nParseWarningIndex = 0;
 			//BEEP;
-			ShowWarning( m_nParseWarningIndex );
+			ShowParseWarning( m_nParseWarningIndex );
 		}
 		else if( m_nParseWarningIndex < m_aParseWarning.GetSize() - 1 )
-			ShowWarning( ++m_nParseWarningIndex );
+			ShowParseWarning( ++m_nParseWarningIndex );
 		else
 			m_nParseWarningIndex++;
 	}
@@ -369,10 +336,10 @@ void COutputDoc::OnPrevWarning()
 		{
 			m_nParseWarningIndex = m_aParseWarning.GetSize() - 1;
 			//BEEP;
-			ShowWarning( m_nParseWarningIndex );
+			ShowParseWarning( m_nParseWarningIndex );
 		}
 		else if( m_nParseWarningIndex > 0 )
-			ShowWarning( --m_nParseWarningIndex );
+			ShowParseWarning( --m_nParseWarningIndex );
 		else
 			m_nParseWarningIndex--;
 	}
@@ -396,11 +363,9 @@ void COutputDoc::ShowParseWarning( int nIndex )
 	if( !(nIndex >= 0 && nIndex < m_aParseWarning.GetSize()) )
 		return;
 
-	theApp.OpenLatexDocument(
-		GetFilePath( m_aParseWarning[nIndex].m_strSrcFile ), FALSE,
-		m_aParseWarning[nIndex].m_nSrcLine, TRUE );
-
-	m_nParseInfoIndex = nIndex;
+	TryOpenFile(GetFilePath(m_aParseWarning[nIndex].m_strSrcFile), m_aParseWarning[nIndex].m_nSrcLine);
+	UpdateAllViews(NULL, hintSelectParseLine, (CObject*)&m_aParseWarning[nIndex].m_nOutputLine);
+	m_nParseWarningIndex = nIndex;
 }
 
 void COutputDoc::ShowParseInfo( int nIndex )
@@ -408,10 +373,8 @@ void COutputDoc::ShowParseInfo( int nIndex )
 	if( !(nIndex >= 0 && nIndex < m_aParseInfo.GetSize()) )
 		return;
 
-	theApp.OpenLatexDocument(
-		GetFilePath( m_aParseInfo[nIndex].m_strSrcFile ), FALSE,
-		m_aParseInfo[nIndex].m_nSrcLine, TRUE );
-
+	TryOpenFile(GetFilePath(m_aParseInfo[nIndex].m_strSrcFile), m_aParseInfo[nIndex].m_nSrcLine);
+	UpdateAllViews(NULL, hintSelectParseLine, (CObject*)&m_aParseInfo[nIndex].m_nOutputLine);
 	m_nParseInfoIndex = nIndex;
 }
 
@@ -1392,4 +1355,15 @@ void COutputDoc::OnLatexFileCompileAndView()
 {
 	m_builder.MsgAfterTermination.Set(false, AfxGetMainWnd()->m_hWnd, WM_COMMAND, ID_LATEX_VIEW);
 	OnFileCompile();
+}
+
+bool COutputDoc::TryOpenFile(LPCTSTR lpszFilename, const int nLineNumber)
+{
+	if (nLineNumber > 0)
+	{
+		return (theApp.OpenLatexDocument(lpszFilename, FALSE, nLineNumber, TRUE) != NULL);
+	}
+
+	MessageBeep(MB_ICONSTOP);
+	return false;
 }
