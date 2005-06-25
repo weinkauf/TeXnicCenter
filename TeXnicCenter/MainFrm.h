@@ -70,14 +70,16 @@ public:
 	{
 		outputTabBuildResult = 0,
 		outputTabGrep1 = 1,
-		outputTabGrep2 = 2
+		outputTabGrep2 = 2,
+		outputTabParse = 3
 	};
 
 	enum tagNavigatorTabs
 	{
 		navigatorTabStructure = 0,
 		navigatorTabEnvironments = 1,
-		navigatorTabFiles = 2
+		navigatorTabFiles = 2,
+		navigatorTabReferences = 3
 	};
 
 // operations
@@ -296,6 +298,8 @@ protected:
 	afx_msg void OnUpdateViewDocTabs(CCmdUI* pCmdUI);
 	afx_msg void OnToolsCancel();
 	afx_msg void OnFileClose();
+	afx_msg void OnWindowReferences();
+	afx_msg void OnWindowParse();
 	//}}AFX_MSG
 	afx_msg void OnToggleCtrlBar( UINT nIDEvent );
 	afx_msg void OnToggleMathBar( UINT nIDEvent );

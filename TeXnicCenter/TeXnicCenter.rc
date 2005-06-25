@@ -800,11 +800,13 @@ BEGIN
         MENUITEM "Gliederungsansicht aktivieren", ID_WINDOW_STRUCTURE
         MENUITEM "Objektansicht aktivieren",    ID_WINDOW_ENVIRONMENT
         MENUITEM "Dateiansicht aktivieren",     ID_WINDOW_FILES
+        MENUITEM "Literaturansicht aktivieren", ID_WINDOW_REFERENCES
         MENUITEM SEPARATOR
         MENUITEM "Ausgabefenster aktivieren",   ID_WINDOW_OUTPUT
-        MENUITEM "'Erstellen'-Ansicht aktivieren", ID_WINDOW_BUILDRESULT
-        MENUITEM "'Suchen 1'-Ansicht aktivieren", ID_WINDOW_GREP1
-        MENUITEM "'Suchen 2'-Ansicht aktivieren", ID_WINDOW_GREP2
+        MENUITEM "'Erstellen'-Ausgabe aktivieren", ID_WINDOW_BUILDRESULT
+        MENUITEM "'Suchen 1'-Ausgabe aktivieren", ID_WINDOW_GREP1
+        MENUITEM "'Suchen 2'-Ausgabe aktivieren", ID_WINDOW_GREP2
+        MENUITEM "'Analyse'-Ausgabe aktivieren", ID_WINDOW_PARSE
     END
     POPUP "A&usgabe"
     BEGIN
@@ -4504,9 +4506,9 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_WINDOW_OUTPUT        "Aktiviert die Ausgabeleiste\nAusgabeleiste aktivieren"
-    ID_WINDOW_BUILDRESULT   "Aktiviert die 'Erstellen'-Ansicht\n'Erstellen'-Ansicht aktivieren"
-    ID_WINDOW_GREP1         "Aktiviert die 'Suchen 1'-Ansicht\n'Suchen 1'-Ansicht aktivieren"
-    ID_WINDOW_GREP2         "Aktiviert die 'Suchen 2'-Ansicht\n'Suchen 2'-Ansicht aktivieren"
+    ID_WINDOW_BUILDRESULT   "Aktiviert die 'Erstellen'-Ausgabe\n'Erstellen'-Ausgabe aktivieren"
+    ID_WINDOW_GREP1         "Aktiviert die 'Suchen 1'-Ausgabe\n'Suchen 1'-Ausgabe aktivieren"
+    ID_WINDOW_GREP2         "Aktiviert die 'Suchen 2'-Ausgabe\n'Suchen 2'-Ausgabe aktivieren"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4729,6 +4731,12 @@ BEGIN
     STE_QUERY_FILES         "Es sind noch keine Befehle vorhanden. Möchten Sie jetzt Verzeichnisse nach Paketen durchsuchen?"
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_WINDOW_REFERENCES    "Aktiviert die Literaturansicht\nLiteraturansicht aktivieren"
+    ID_WINDOW_PARSE         "Aktiviert die 'Analyse'-Ausgabe\n'Analyse'-Ausgabe aktivieren"
+END
+
 #endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -4827,11 +4835,13 @@ BEGIN
         MENUITEM "Activate structure view",     ID_WINDOW_STRUCTURE
         MENUITEM "Activate object view",        ID_WINDOW_ENVIRONMENT
         MENUITEM "Activate file view",          ID_WINDOW_FILES
+        MENUITEM "Activate references view",    ID_WINDOW_REFERENCES
         MENUITEM SEPARATOR
         MENUITEM "Activate output bar",         ID_WINDOW_OUTPUT
-        MENUITEM "Activate 'Build'-view",       ID_WINDOW_BUILDRESULT
-        MENUITEM "Activate 'Find 1'-view",      ID_WINDOW_GREP1
-        MENUITEM "Activate 'Find 2' view",      ID_WINDOW_GREP2
+        MENUITEM "Activate build output",       ID_WINDOW_BUILDRESULT
+        MENUITEM "Activate 'Find 1' output",    ID_WINDOW_GREP1
+        MENUITEM "Activate 'Find 2' output",    ID_WINDOW_GREP2
+        MENUITEM "Activate parse output",       ID_WINDOW_PARSE
     END
     POPUP "&Output"
     BEGIN
@@ -8390,7 +8400,7 @@ BEGIN
     ID_WINDOW_EDITOR        "Activates the editor window\nActivate Editor Window"
     ID_WINDOW_NAVIGATOR     "Activates the navigator bar\nActivate Navigator Bar"
     ID_WINDOW_STRUCTURE     "Activates the structure view\nActivate Structure View"
-    ID_WINDOW_ENVIRONMENT   "Activates the object view\nActivate Object view"
+    ID_WINDOW_ENVIRONMENT   "Activates the object view\nActivate Object View"
     ID_WINDOW_FILES         "Activates the file view\nActivate File View"
 END
 
@@ -8465,9 +8475,9 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_WINDOW_OUTPUT        "Activates the output bar\nActivate Output Bar"
-    ID_WINDOW_BUILDRESULT   "Activates the build view\nActivate Build View"
-    ID_WINDOW_GREP1         "Activates the 'Find 1'-view\nActivate 'Find 1'-View"
-    ID_WINDOW_GREP2         "Activates the 'Find 2'-View\nActivate 'Find 2'-View"
+    ID_WINDOW_BUILDRESULT   "Activates the build output view\nActivate Build Output"
+    ID_WINDOW_GREP1         "Activates the 'Find 1' output view\nActivate 'Find 1' Output"
+    ID_WINDOW_GREP2         "Activates the 'Find 2' output view\nActivate 'Find 2' Output View"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -8686,6 +8696,12 @@ BEGIN
     STE_LANGUAGE_FRENCH     "French"
     STE_CUSTOM              "Custom"
     STE_QUERY_FILES         "No commands available yet. Do you like to scan directories for additional packages now?"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_WINDOW_REFERENCES    "Activates the references view\nActivate References View"
+    ID_WINDOW_PARSE         "Activates the parse output view\nActivate Parse Output"
 END
 
 #endif    // English (U.S.) resources

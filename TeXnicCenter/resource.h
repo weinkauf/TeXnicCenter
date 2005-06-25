@@ -1275,6 +1275,8 @@
 #define ID_PACKAGE_SETUP                38476
 #define ID_QUERY_COMPLETION             38477
 #define ID_QUERY_COMMAND                38478
+#define ID_WINDOW_REFERENCES            38480
+#define ID_WINDOW_PARSE                 38481
 #define IDS_TEXTMODULES_NONEDEFINED     57671
 
 // Next default values for new objects
@@ -1283,7 +1285,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        278
-#define _APS_NEXT_COMMAND_VALUE         38480
+#define _APS_NEXT_COMMAND_VALUE         38482
 #define _APS_NEXT_CONTROL_VALUE         1342
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
