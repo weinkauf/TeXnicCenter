@@ -1,4 +1,5 @@
 2005/06/25 niteria
+- Added commands for activating the references and the parse view.
 - Double-click on missing files opens the position where the file was included.
 - Double-click on graphic files (missing or not) opens the position
   where the file was included.
