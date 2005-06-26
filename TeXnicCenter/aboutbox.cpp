@@ -84,7 +84,7 @@
 // 
 // Array count. Make sure this keeps up with how many lines there are
 // in the array!
-#define ARRAYCOUNT		108
+#define ARRAYCOUNT		109
 char *pArrCredit[] = {
 						"Copyright © 1999-2005\t",
 						"www.ToolsCenter.org\t",
@@ -112,6 +112,7 @@ char *pArrCredit[] = {
 						"Tino Weinkauf\f",
 						"Christian Welzel\f",
 						"Sven Wiegand\f",
+						"Oliver Wieland\f",
 						"",
 						"",
 						"Editor with Syntax Highlighting\t",
