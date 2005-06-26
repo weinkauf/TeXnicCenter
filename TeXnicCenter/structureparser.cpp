@@ -869,6 +869,19 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 					CString strAnnotation;
 					strAnnotation.Format(STE_ERROR_COUNT, aBibFile.GetErrorCount());
 					AddFileItem( strPath, bibFile, strActualFile, nActualLine, aSI, strAnnotation );
+					// Wrote msgs to output window
+					const CObArray *msgs = aBibFile.GetErrorMsgs();
+					for (int i = 0; i < msgs->GetSize(); i++) {
+						CBiBTeXEntry *be = dynamic_cast<CBiBTeXEntry*>(msgs->GetAt(i));
+						if (be == NULL) {
+							TRACE("NP found in error msgs of BibTex file\n");
+							continue;
+						}
+						info.m_strError = be->m_strTitle;
+						info.m_nSrcLine = be->m_nLine;
+						info.m_strSrcFile = be->m_strPath;
+						m_pParseOutputHandler->OnParseLineInfo( info, nFileDepth, CParseOutputHandler::warning );
+					}
 				}
 				else
 				{

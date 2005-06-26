@@ -118,7 +118,14 @@
 #define STE_POPUP_MAINWINDOWAREA        178
 #define STE_TAB_BIBENTRIES              179
 #define STE_FILE_XMLFILTER              180
+#define STE_BIBTEX_ERR_QOUTEWITHINQUOTE 181
+#define STE_BIBTEX_ERR_WRONGLEVELAT     182
+#define STE_BIBTEX_ERR_INVALID_EOF      183
+#define STE_BIBTEX_ERR_COUNT            184
+#define STE_BIBTEX_ERR_MISSING_KEY      185
 #define IDR_INSERT                      186
+#define STE_BIBTEX_ERR_DUP_KEY          186
+#define STE_BIBTEX_ERR_INVALID_TYPE     187
 #define IDR_FORMAT                      190
 #define STE_SELECT_PROJECT_PATH         192
 #define IDR_FORMAT_RECENTLY_USED        192
