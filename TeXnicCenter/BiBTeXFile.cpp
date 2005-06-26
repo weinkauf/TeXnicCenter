@@ -33,6 +33,8 @@
 ********************************************************************/
 
 #include "stdafx.h"
+#include "global.h"
+#include "resource.h"
 #include "BiBTeXFile.h"
 #include "BiBTeXEntry.h"
 
@@ -53,6 +55,8 @@ CBiBTeXFile::CBiBTeXFile(CString file)
 {
 	m_Filename = file;
 	m_ErrorCount = 0;
+	m_IsATSignInBracesAllowed = TRUE;
+	m_WarnWrongLevelAT = TRUE;
 }
 
 CBiBTeXFile::~CBiBTeXFile()
@@ -92,7 +96,7 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 	const TCHAR *begin, *lastChar = NULL;
 	CBiBTeXEntry::BibType type;
 	int depth = 0, line = 1, col = 1;
-	BOOL inComment = FALSE, inQuote = FALSE;
+	BOOL inComment = FALSE, inQuote = FALSE, insideEntry = FALSE;
 
 	begin = buf;	
 	type = CBiBTeXEntry::Unknown;
@@ -100,59 +104,115 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 	while (*buf) { // Parser state machine
 		switch(*buf) {
 		case _T('%'): // Toggle comment
+			if (depth != 0) break;
 			inComment = TRUE;
 			break;
 		case _T('\"'): // Toggle quote
-			if (inComment) break;
+			if (inComment || !insideEntry) break;
+
+			if (depth ==1 && inQuote && (lastChar && lastChar[0] == _T('\\'))) {
+				// STE_BIBTEX_ERR_QOUTEWITHINQUOTE
+				HandleParseError(STE_BIBTEX_ERR_QOUTEWITHINQUOTE, line, col);
+			}
+
 			/* Quotes are taken "as is", if included in arbitrary braces */
 			if (depth >= 2 || (lastChar && lastChar[0] == _T('\\'))) break;
-			//TRACE("Toggle quote to %d on line %d, col %d (depth = %d)\n", inQuote, line, col, depth);
+			
 			inQuote = !inQuote;
+			//TRACE("Toggle quote to %d on line %d, col %d (depth = %d)\n", inQuote, line, col, depth);
 			break;
 		case _T('@'): // Start type
-			if (inComment || inQuote) break;
-			if (0 == depth) { // update pointer if on top level
-				begin = buf;			
+			/* The @ sign has a very strong meaning in BibTeX. It is indicating the beginning of an
+			   entry, no matter which text precedes. So the entry "steward03" is considered by BibTeX!
+
+				@Comment{
+				  @Book{steward03, [...]
+				  }
+				}
+			   You can have a @ inside a quoted values but not inside a braced value. 
+			 */
+			if (inComment || inQuote) break;			
+			/* More relaxed handling of @? */
+			if (m_IsATSignInBracesAllowed && depth>= 2) break;
+			if (/*0 != depth*/ insideEntry && m_WarnWrongLevelAT) { 
+				HandleParseError(STE_BIBTEX_ERR_WRONGLEVELAT, line, col);
 			}
+			depth = 0;
+			insideEntry = TRUE;
+			begin = buf; // update pointer if on top level
 			break;
-		case _T('{'):
-			if (inComment) break;
+		case _T('('):
+			if (inComment || !insideEntry) break;
 			if (0 == depth) { // process entry type, e. g. @Article
 				type = ProcessEntryType(begin, buf-begin, line);
 				begin = buf;
-			}
+				++depth; // only on level 0!
+			}			
+			break;
+		case _T('{'):
+			if (inComment || !insideEntry) break;
+			if (0 == depth) { // process entry type, e. g. @Article
+				type = ProcessEntryType(begin, buf-begin, line);
+				begin = buf;
+			} 
 			++depth;			
 			break;
 		case _T(','):
-			if (inComment || inQuote) break;
+			if (inComment || inQuote || !insideEntry) break;
 			if (1 == depth) { // process entry field
 				ProcessArgument(begin, buf-begin, type, line);
 				begin = buf;
 			}			
 			break;
+		case _T(')'):
+			if (inComment || inQuote || !insideEntry) break;
+			if (1 == depth) { // process entry field and decrease stack depth
+				ProcessArgument(begin, buf-begin, type, line);
+
+				--depth;
+				if (depth == 0) {
+					insideEntry = FALSE;
+					FinalizeItem();
+				}
+				/*
+				if (depth < 0) {
+					HandleParseError(buf, _T("Too many ')'"),  line, col);
+					return FALSE;
+				}*/
+			} 			
+			break;
 		case _T('}'):
-			if (inComment) break;
+			if (inComment || !insideEntry) break;
 			if (1 == depth) { // process entry field and decrease stack depth
 				ProcessArgument(begin, buf-begin, type, line);
 			} 
 			--depth;
 			if (depth == 0) {
+				insideEntry = FALSE;
 				FinalizeItem();
 			}
+			/*
 			if (depth < 0) {
-				HandleParseError(buf, _T("Too many '}'"),  line, col);
-				return FALSE;
-			}
-			break;
-		case _T('\n'): // update line number			
+				HandleParseError(buf, _T("Too many '}'"),  line, col);				
+				depth = 0;
+				//return FALSE;
+			}*/
+			break;		
+		}
+
+		if (*buf == _T('\n')) { // update line number			
 			inComment = FALSE;
 			col = 0;
 			++line;
-			break;
 		}
 		col++;
 		lastChar = buf;
 		buf++;
+	}
+
+	// Check if parser finished correctly
+	if (depth > 0) {
+		HandleParseError(STE_BIBTEX_ERR_INVALID_EOF, line, col);
 	}
 
 	TRACE("%s: Found %d entries\n", m_Filename, m_Entries.GetCount());
@@ -173,7 +233,7 @@ CBiBTeXEntry::BibType CBiBTeXFile::ProcessEntryType(const TCHAR *buf, int len, i
 			return (CBiBTeXEntry::BibType)i;
 		}
 	}
-
+	HandleParseError(STE_BIBTEX_ERR_INVALID_TYPE, line, 1, tmp);
 	return CBiBTeXEntry::Unknown;
 }
 
@@ -196,7 +256,7 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 			tmp[40] = 0; // cut it here
 		}
 		TRACE("** Ignore unknown entry at line %d: %s\n", line, tmp);
-		HandleParseError(buf, _T("Unknown BibTeX type"), line, 1);
+		//STE_BIBTEX_ERR_INVALID_TYPE		
 		return;
 	}
 
@@ -214,7 +274,6 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 		return;
 	}
 
-	
 	if (NULL == strstr(tmp, _T("="))) { // argument is key?		
 		CString key = tmp;
 		key.TrimLeft();
@@ -232,7 +291,8 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 			m_Entries.SetAt(key, be);
 			m_LastKey = key;
 			m_Keys.Add(key);
-		} else {
+		} else {			
+			HandleParseError(STE_BIBTEX_ERR_DUP_KEY, line, 1, key);
 			TRACE("WARNING: Invalid or duplicate key <%s> (%s)\n", key, BibTypeVerbose[type]);
 		}
 	} else { // extract name-value pair and add it to the entry
@@ -248,34 +308,52 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 			val.TrimLeft();
 			val.TrimRight();
 			be->SetField(name, val);
-		} else { // error: key not found -> likely an error in the bibtex file
-			HandleParseError(tmp, _T("Hmmm, difficult to say :-(. Most likely a missing key or extra ',' after last entry"), line, 1);
+		} else { // error: key not found -> likely an error in the bibtex file			
+			HandleParseError(STE_BIBTEX_ERR_MISSING_KEY, line, 1);
 		}
 	}
 }
 
-void CBiBTeXFile::HandleParseError(const TCHAR *buf, const TCHAR *msg, int line, int col)
+void CBiBTeXFile::HandleParseError(UINT msgID, int line, int col, const TCHAR *addDesc)
 {
-	TCHAR tmp[21];
-	strncpy(tmp, buf + 1, 20);
-	tmp[20] = 0;
-	
-	CString s, key;
+
+	CString s, key;	
 
 	m_ErrorCount++;
 	key.Format("Parse_Error%d", m_ErrorCount);
-	TRACE("!! Parse error at (%d, %d): %s (<%c>%s...\n)", line, col, msg, buf[0], tmp);
+	
 
-	s.Format("!! Parse error at (%d, %d): %s <%c>%s...", line, col, msg, buf[0], tmp);
-	CBiBTeXEntry *be = new CBiBTeXEntry(tmp, this, CBiBTeXEntry::Error);			
+	CString errMsgFmt = AfxLoadString(msgID);
+
+	switch (msgID) {
+	case STE_BIBTEX_ERR_MISSING_KEY:	
+	case STE_BIBTEX_ERR_INVALID_EOF:
+	case STE_BIBTEX_ERR_QOUTEWITHINQUOTE:
+	case STE_BIBTEX_ERR_WRONGLEVELAT:
+		s.Format(errMsgFmt, m_Filename, line, col);
+		break;
+	case STE_BIBTEX_ERR_INVALID_TYPE:
+	case STE_BIBTEX_ERR_DUP_KEY:
+		s.Format(errMsgFmt, m_Filename, line, col, addDesc);
+		break;
+	default:
+		TRACE("BibTeX: Warning: No handler for msgID %d\n", msgID);
+	}
+
+	TRACE(s);
+	
+	
+	CBiBTeXEntry *be = new CBiBTeXEntry(s, this, CBiBTeXEntry::Error);			
 	be->m_nLine = line;						
 	be->m_nType = CStructureParser::bibItem;
 	be->m_strTitle = s;
-	be->m_strComment = msg;
+	be->m_strComment = _T("");
 	be->m_strCaption = s;
 	be->m_strLabel = key;
 	be->m_strPath = m_Filename;
-	m_Entries.SetAt(key, be);	
+	m_ErrorMsgs.Add(be);
+	//m_Entries.SetAt(key, be);	
+	
 }
 
 BOOL CBiBTeXFile::ParseField(const TCHAR *field, CString &name, CString &val)
@@ -331,6 +409,12 @@ void CBiBTeXFile::DropAllEntries()
 
 	m_Keys.RemoveAll();
 	m_Strings.RemoveAll();
+	for (int i=0;i < m_ErrorMsgs.GetSize(); i++) {
+		CBiBTeXEntry *be = dynamic_cast<CBiBTeXEntry*>(m_ErrorMsgs.GetAt(i));
+		if (be != NULL) {
+			delete be;
+		}
+	}
 }
 
 void CBiBTeXFile::FinalizeItem()
@@ -371,12 +455,12 @@ CString CBiBTeXFile::GetString(CString abbrev)
 void CBiBTeXFile::ReplaceSpecialChars(CString &value)
 {
 	// Strip off surrounding quotes
-	if (value[0] == '\"' && value[value.GetLength()-1] == '\"') {
+	if (!value.IsEmpty() && value[0] == '\"' && value[value.GetLength()-1] == '\"') {
 		value.Delete(0);
 		value.Delete(value.GetLength()-1);
 	}
 	// Strip off surrounding braces
-	if (value[0] == '{' && value[value.GetLength()-1] == '}') {
+	if (!value.IsEmpty() && value[0] == '{' && value[value.GetLength()-1] == '}') {
 		value.Delete(0);
 		value.Delete(value.GetLength()-1);
 	}
