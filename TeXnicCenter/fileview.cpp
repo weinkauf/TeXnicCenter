@@ -88,13 +88,13 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 
 				HTREEITEM hTexParent = InsertItem(AfxLoadString(STE_TEX_FILES), 
 					CStructureParser::texFile, CStructureParser::texFile, 
-					TVI_ROOT, TVI_SORT);
+					TVI_ROOT, TVI_FIRST);
 				HTREEITEM hBibParent = InsertItem(AfxLoadString(STE_BIB_FILES), 
 					CStructureParser::bibFile, CStructureParser::bibFile, 
-					TVI_ROOT, TVI_SORT);
+					TVI_ROOT, TVI_LAST);
 				HTREEITEM hGraphicParent = InsertItem(AfxLoadString(STE_GRAPHICS_FILES), 
 					CStructureParser::graphicFile, CStructureParser::graphicFile, 
-					TVI_ROOT, TVI_SORT);
+					TVI_ROOT, TVI_LAST);
 
 				HTREEITEM hItem;
 				// fill view
