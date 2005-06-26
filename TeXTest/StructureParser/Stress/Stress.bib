@@ -34,7 +34,7 @@
 }
 
 @Comment{
-  @Book{steward03,
+  Book{steward03,
     author =	 {Martha Steward},
     title =	 {Cooking behind bars},
     publisher =	 {Culinary Expert Series},
@@ -5014,7 +5014,7 @@ to 83 minutes, an order of magnitude improvement. }
  year = "1999",
  pages = "105-114",
 )
-} <-- This bracket should be treated as comment
+{ <-- This bracket should be treated as comment
 
 @ARTICLE{barnhill81,
   author =       "R. Barnhill and G. Farin",
@@ -7125,5 +7125,58 @@ type = {Summer School Lecture Notes}
   AUTHOR =       "E.~Caraballo and M.~Samimy and J,~DeBonis",
   TITLE =        "Low Dimensional Modeling of Flow for Closed-Loop Flow Control",
   NOTE =         "{AIAA Paper 2003-0059}",
+}
+
+@Article{Piwowarski:1985:CBS,
+  author =       "Marek Piwowarski",
+  title =        "Comments on Batched Searching of Sequential and
+                 Tree-Structured Files",
+  journal =      j-TODS,
+  volume =       "10",
+  number =       "2",
+  pages =        "285--287",
+  month =        jun,
+  year =         "1985",
+  CODEN =        "ATDSD3",
+  ISSN =         "0362-5915",
+  bibdate =      "Sat Dec 7 14:16:54 MST 1996",
+  bibsource =    "http://www.acm.org/pubs/toc/, Database/Graefe.bib",
+  note =         "See \cite{Shneiderman:1976:BSS,Batory:1982:UMP}.",
+  URL =          "http://www.acm.org/pubs/toc/Abstracts/tods/214294.html",
+  acknowledgement = ack-nhfb,
+  keywords =     "performance",
+  subject =      "{\bf H.3.2}: Information Systems, INFORMATION STORAGE
+                 AND RETRIEVAL, Information Storage, File organization.
+                 {\bf E.1}: Data, DATA STRUCTURES, Trees. {\bf F.2.2}:
+                 Theory of Computation, ANALYSIS OF ALGORITHMS AND
+                 PROBLEM COMPLEXITY, Nonnumerical Algorithms and
+                 Problems, Sorting and searching.",
+}
+
+@Article{Batory:1982:UMP,
+  author =       "D. S. Batory and C. C. Gotlieb",
+  title =        "A Unifying Model of Physical Databases",
+  journal =      j-TODS,
+  volume =       "7",
+  number =       "4",
+  pages =        "509--539",
+  month =        dec,
+  year =         "1982",
+  CODEN =        "ATDSD3",
+  ISSN =         "0362-5915",
+  bibdate =      "Sun Dec 8 08:54:10 MST 1996",
+  bibsource =    "Compendex database, Database/Graefe.bib,
+                 Database/Wiederhold.bib, Misc/is.bib",
+  abstract =     "A unifying model for the study of database performance
+                 is proposed. Applications of the model are shown to
+                 relate and extend important work concerning batched
+                 searching, transposed files, index selection, dynamic
+                 hash-based files, generalized access path structures,
+                 differential files, network databases, and multifile
+                 query processing.",
+  acknowledgement = ack-nhfb,
+  annote =       "See also \cite{Piwowarski:1985:CBS}.",
+  classification = "723",
+  keywords =     "database systems, TODS decomposition",
 }
 %  YEAR =         "2003",

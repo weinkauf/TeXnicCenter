@@ -1,3 +1,5 @@
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% $Id$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -60,9 +62,21 @@
 \input{StressGraphic1000}
 
 % begin ow
-\bibliography{stress}
-% end ow
+% Test nonexisting file
+\input{nonexistingfile}
+
+% Test nonexisting picture
+\begin{figure}
+	\centering
+		\includegraphics{nonexistingPic.png}
+	\label{fig:fsfsfsf}
+\end{figure}
+
+% Test bibtex parser
+% stress contains a large bibtex file with 2 duplicate entries
+% biberrorX files contain misuse cases which are not be parsed by BibTeX
+% Please refer to the comments given in the bib files itself, why bibtex would issue an error
+\bibliographystyle{alpha}
+\bibliography{stress,biberror1,biberror2,biberror3,biberror4,nonexistingbib}
 \end{document}
-
-
-
+% end ow
