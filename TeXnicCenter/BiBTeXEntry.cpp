@@ -105,23 +105,23 @@ CString CBiBTeXEntry::ToCaption()
 	GetField(_T("year"), year);
 	
 	// Remove trash (slashes, whitespace,...) from string
-	BeautifyField(author);	
-	BeautifyField(title);
-	BeautifyField(year);
+	BeautifyField(author, true);	
+	BeautifyField(title, false);
+	BeautifyField(year, false);
 
 	// Try to expand abbreviations
 	CString abbrev = m_Parent->GetString(author);
 	if (!abbrev.IsEmpty()) {
 		//TRACE("Expand %s to %s...\n", author, abbrev.Mid(0,5));
 		author = abbrev;	
-		BeautifyField(author);
+		BeautifyField(author, true);
 	}
 
 	abbrev = m_Parent->GetString(title);
 	if (!abbrev.IsEmpty()) {
 		//TRACE("Expand %s to %s...\n", title, abbrev.Mid(0,5));
 		title = abbrev;
-		BeautifyField(title);
+		BeautifyField(title, false);
 	}
 	
 
@@ -132,8 +132,10 @@ CString CBiBTeXEntry::ToCaption()
 		);
 }
 
-void CBiBTeXEntry::BeautifyField(CString &value) {
-	value.Replace(_T(" and"), _T(","));
+void CBiBTeXEntry::BeautifyField(CString &value, const bool bReplaceAnds) {
+
+	if (bReplaceAnds) value.Replace(_T(" and"), _T(","));
+
 	//value.Replace(_T("\""), _T(""));
 	value.Replace(_T("~"), _T(" "));
 	value.Replace(_T("--"), _T("-"));

@@ -72,7 +72,7 @@ public:
 	CString ToString();
 	CString ToCaption();
 private:
-	void BeautifyField(CString &value);
+	void BeautifyField(CString &value, const bool bReplaceAnds);
 
 	CMapStringToString	m_Fields;
 	BibType				m_Type;	
