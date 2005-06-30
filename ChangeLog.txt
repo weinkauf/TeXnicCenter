@@ -1,3 +1,7 @@
+2005/06/30 niteria
+- Added number of bibtex entries as annotation of a bibtex file
+  in the structure view.
+
 2005/06/25 niteria
 - Added commands for activating the references and the parse view.
 - Double-click on missing files opens the position where the file was included.
