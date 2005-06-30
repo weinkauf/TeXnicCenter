@@ -378,6 +378,16 @@ BOOL CChildFrame::Serialize(CIniFile &ini, LPCTSTR lpszKey, BOOL bWrite)
 
 CString CChildFrame::GetPathNameOfDocument()
 {
-	return (((CView*)m_wndSplitter.GetPane(0, 0))->GetDocument()->GetPathName());
+	CView* pView = dynamic_cast<CView*>(m_wndSplitter.GetPane(0, 0));
+	if (pView)
+	{
+		CDocument* pDoc = pView->GetDocument();
+		if (pDoc)
+		{
+			return pDoc->GetPathName();
+		}
+	}
+
+	return CString();
 }
 
