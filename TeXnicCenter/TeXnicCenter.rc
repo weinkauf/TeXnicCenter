@@ -3605,7 +3605,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_OPEN                "Öffnen"
     IDS_SAVE                "Speichern"
-    STE_ERROR_COUNT         "%d Warnungen"
+    STE_WARNING_COUNT       "%d Warnungen"
+    STE_ENTRIES_COUNT       "%d Einträge"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7597,7 +7598,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_OPEN                "open"
     IDS_SAVE                "save"
-    STE_ERROR_COUNT         "%d warnings"
+    STE_WARNING_COUNT       "%d warnings"
+    STE_ENTRIES_COUNT       "%d entries"
 END
 
 STRINGTABLE DISCARDABLE 

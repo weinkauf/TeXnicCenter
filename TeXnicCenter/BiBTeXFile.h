@@ -60,6 +60,12 @@ public:
 	/** Parses a BibTeX file @see SetFilename*/
 	BOOL ProcessFile();
 
+	/** Returns the number of Bibtex entries. */
+	int GetEntriesCount() const
+	{
+		return m_Entries.GetCount();
+	}
+
 	/** Returns a map with all BibteX entries. The map key corresponds to the key given
 		in the BibTeX file.
 	*/
