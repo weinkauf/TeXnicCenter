@@ -3705,6 +3705,8 @@ BEGIN
     STE_BIBTEX_ERR_MISSING_KEY "(%s:%d:%d) Eintrag hat keinen Schlüssel"
     STE_BIBTEX_ERR_DUP_KEY  "(%s:%d:%d) Schlüssel %s bereits vorhanden"
     STE_BIBTEX_ERR_INVALID_TYPE "(%s:%d:%d) Ungültiger BibTeX-Typ '%s'"
+    STE_BIBTEX_ERR_SUSPICOUS_LINE 
+                            "(%s:%d:%d) Möglicherweise falsche Klammer (Inhalt wurde abgeschnitten)"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -7698,6 +7700,8 @@ BEGIN
     STE_BIBTEX_ERR_MISSING_KEY "(%s:%d:%d) Entry has ko key"
     STE_BIBTEX_ERR_DUP_KEY  "(%s:%d:%d) Duplicate key '%s'"
     STE_BIBTEX_ERR_INVALID_TYPE "(%s:%d:%d) Unknown BibTeX type '%s'"
+    STE_BIBTEX_ERR_SUSPICOUS_LINE 
+                            "(%s:%d:%d) Suspicous line found (maybe an invalid brace)"
 END
 
 STRINGTABLE DISCARDABLE 
