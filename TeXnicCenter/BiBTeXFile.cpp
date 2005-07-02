@@ -57,11 +57,14 @@ CBiBTeXFile::CBiBTeXFile(CString file)
 	m_ErrorCount = 0;
 	m_IsATSignInBracesAllowed = TRUE;
 	m_WarnWrongLevelAT = TRUE;
+	m_BufferSize = MAX_BIBTEX_ARG_LENGTH;
+	m_Buffer = new TCHAR[m_BufferSize];
 }
 
 CBiBTeXFile::~CBiBTeXFile()
 {
 	DropAllEntries();
+	delete [] m_Buffer;
 }
 
 
@@ -96,7 +99,7 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 	const TCHAR *begin, *lastChar = NULL;
 	CBiBTeXEntry::BibType type;
 	int depth = 0, line = 1, col = 1;
-	BOOL inComment = FALSE, inQuote = FALSE, insideEntry = FALSE;
+	BOOL inComment = FALSE, inQuote = FALSE, insideEntry = FALSE, openBrace = FALSE;
 
 	begin = buf;	
 	type = CBiBTeXEntry::Unknown;
@@ -114,7 +117,7 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 				// STE_BIBTEX_ERR_QOUTEWITHINQUOTE
 				HandleParseError(STE_BIBTEX_ERR_QOUTEWITHINQUOTE, line, col);
 			}
-
+			
 			/* Quotes are taken "as is", if included in arbitrary braces */
 			if (depth >= 2 || (lastChar && lastChar[0] == _T('\\'))) break;
 			
@@ -151,6 +154,8 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 			break;
 		case _T('{'):
 			if (inComment || !insideEntry) break;
+
+			openBrace = TRUE;
 			if (0 == depth) { // process entry type, e. g. @Article
 				type = ProcessEntryType(begin, buf-begin, line);
 				begin = buf;
@@ -183,6 +188,7 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 			break;
 		case _T('}'):
 			if (inComment || !insideEntry) break;
+			openBrace = FALSE;
 			if (1 == depth) { // process entry field and decrease stack depth
 				ProcessArgument(begin, buf-begin, type, line);
 			} 
@@ -215,55 +221,56 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 		HandleParseError(STE_BIBTEX_ERR_INVALID_EOF, line, col);
 	}
 
-	TRACE("%s: Found %d entries\n", m_Filename, m_Entries.GetCount());
+	TRACE("\n%s: Found %d entries\n", m_Filename, m_Entries.GetCount());
 	return TRUE;
 }
 
 CBiBTeXEntry::BibType CBiBTeXFile::ProcessEntryType(const TCHAR *buf, int len, int line)
 {
-	TCHAR tmp[MAX_BIBTEX_ARG_LENGTH];
-	
-	ASSERT(len > 0 && len < MAX_BIBTEX_ARG_LENGTH);
-	strncpy(tmp, buf + 1, len - 1);
-	tmp[len - 1] = 0;
-	//TRACE("Entry: %s\n", tmp);
+	if (!SaveCopyBuffer(buf + 1, len - 1)) {
+		HandleParseError(STE_BIBTEX_ERR_SUSPICOUS_LINE, line, 1, m_Buffer);
+	}
 
 	for (int i = 0; i < CBiBTeXEntry::Unknown; i++) {
-		if (0 == stricmp(tmp, BibTypeVerbose[i])) {
+		if (0 == stricmp(m_Buffer, BibTypeVerbose[i])) {
 			return (CBiBTeXEntry::BibType)i;
 		}
 	}
-	HandleParseError(STE_BIBTEX_ERR_INVALID_TYPE, line, 1, tmp);
+	HandleParseError(STE_BIBTEX_ERR_INVALID_TYPE, line, 1, m_Buffer);
 	return CBiBTeXEntry::Unknown;
 }
 
 void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibType type, int line)
 {
-	TCHAR tmp[MAX_BIBTEX_ARG_LENGTH];
 	CBiBTeXEntry *be, *dummy;
-
-	ASSERT(len > 0 && len < MAX_BIBTEX_ARG_LENGTH);
-	strncpy(tmp, buf + 1, len - 1);
-	tmp[len - 1] = 0;
+	
+	
+	if (!SaveCopyBuffer(buf + 1, len - 1)) {
+		HandleParseError(STE_BIBTEX_ERR_SUSPICOUS_LINE, line, 1, m_Buffer);
+	}	
 
 	/* Skip comments and preamble */
 	if (type == CBiBTeXEntry::Preamble || type == CBiBTeXEntry::Comment) {
 		return;
 	}
 
-	if (type == CBiBTeXEntry::Unknown) {
-		if (strlen(tmp) > 40) {
-			tmp[40] = 0; // cut it here
+	if (type == CBiBTeXEntry::Unknown) 
+	{
+		if (strlen(m_Buffer) > 100) 
+		{
+			m_Buffer[100] = 0;
 		}
-		TRACE("** Ignore unknown entry at line %d: %s\n", line, tmp);
-		//STE_BIBTEX_ERR_INVALID_TYPE		
+		TRACE("** Ignore unknown entry at line %d: %s\n", line, m_Buffer);
 		return;
 	}
 
+	//TRACE("Processing argument: %s, type %d at line %d\n", m_Buffer, type, line);
+
 	// strings have no explicit key, instead we are using the first field name as key
-	if (type == CBiBTeXEntry::String && NULL != strstr(tmp, _T("="))) { 
+	if (type == CBiBTeXEntry::String && NULL != strstr(buf, _T("="))) 
+	{ 
 		CString name, val;
-		ParseField(tmp, name, val);
+		ParseField(m_Buffer, name, val);
 
 		name.TrimLeft();
 		name.TrimRight();
@@ -274,20 +281,23 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 		return;
 	}
 
-	if (NULL == strstr(tmp, _T("="))) { // argument is key?		
-		CString key = tmp;
+	if (NULL == strstr(m_Buffer, _T("="))) 
+	{ // argument is key?		
+		CString key = m_Buffer;
+		
 		key.TrimLeft();
 		key.TrimRight();
 
-		if (key.IsEmpty()) { // invalid key?
+		if (key.IsEmpty()) 
+		{ // invalid key?
 			return;
 		}
 
 		if (!m_Entries.Lookup(key, (CObject*&)dummy)) { // key already exists?
-			be = new CBiBTeXEntry(tmp, this, type);
+			be = new CBiBTeXEntry(m_Buffer, this, type);
 			/* add entries used by structure parser */
 			be->m_nLine = line;			
-			
+			//TRACE("Adding key %s\n", key);
 			m_Entries.SetAt(key, be);
 			m_LastKey = key;
 			m_Keys.Add(key);
@@ -298,7 +308,10 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 	} else { // extract name-value pair and add it to the entry
 		if (m_Entries.Lookup(m_LastKey, (CObject*&)be)) {
 			CString name, val;
-			ParseField(tmp, name, val);
+			if (!ParseField(m_Buffer, name, val)) {
+				HandleParseError(STE_BIBTEX_ERR_SUSPICOUS_LINE, line, 1);
+				return;
+			}
 
 			//TRACE("Set Value: <%s> = <%s>\n", name, val);
 			name.MakeLower();
@@ -316,12 +329,10 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 
 void CBiBTeXFile::HandleParseError(UINT msgID, int line, int col, const TCHAR *addDesc)
 {
-
 	CString s, key;	
 
 	m_ErrorCount++;
 	key.Format("Parse_Error%d", m_ErrorCount);
-	
 
 	CString errMsgFmt = AfxLoadString(msgID);
 
@@ -330,6 +341,7 @@ void CBiBTeXFile::HandleParseError(UINT msgID, int line, int col, const TCHAR *a
 	case STE_BIBTEX_ERR_INVALID_EOF:
 	case STE_BIBTEX_ERR_QOUTEWITHINQUOTE:
 	case STE_BIBTEX_ERR_WRONGLEVELAT:
+	case STE_BIBTEX_ERR_SUSPICOUS_LINE:
 		s.Format(errMsgFmt, m_Filename, line, col);
 		break;
 	case STE_BIBTEX_ERR_INVALID_TYPE:
@@ -340,7 +352,7 @@ void CBiBTeXFile::HandleParseError(UINT msgID, int line, int col, const TCHAR *a
 		TRACE("BibTeX: Warning: No handler for msgID %d\n", msgID);
 	}
 
-	TRACE(s);
+	TRACE(s + "\n");
 	
 	
 	CBiBTeXEntry *be = new CBiBTeXEntry(s, this, CBiBTeXEntry::Error);			
@@ -359,7 +371,7 @@ void CBiBTeXFile::HandleParseError(UINT msgID, int line, int col, const TCHAR *a
 BOOL CBiBTeXFile::ParseField(const TCHAR *field, CString &name, CString &val)
 {
 	TCHAR* eqChar;
-	TCHAR tmp[MAX_BIBTEX_ARG_LENGTH];
+
 	eqChar = strstr(field, _T("="));
 	int len1, len2, n = strlen(field);
 
@@ -370,9 +382,17 @@ BOOL CBiBTeXFile::ParseField(const TCHAR *field, CString &name, CString &val)
 	// Extract name and value
 	len1 = eqChar - field;
 	len2 = n - (eqChar - field) - 1;
-	ASSERT(len1 < MAX_BIBTEX_ARG_LENGTH);
-	ASSERT(len2 < MAX_BIBTEX_ARG_LENGTH);
 
+	if (len1 > MAX_BIBTEX_ARG_LENGTH || len2 > MAX_BIBTEX_ARG_LENGTH) {		
+		return FALSE;
+	}
+
+	name = field;
+	val = field;
+
+	name.Delete(len1, n-len1);
+	val.Delete(0, len1 + 1);
+/*
 	strncpy(tmp, field, len1);
 	tmp[len1] = 0;
 
@@ -382,6 +402,7 @@ BOOL CBiBTeXFile::ParseField(const TCHAR *field, CString &name, CString &val)
 	tmp[len2] = 0;
 
 	val = tmp;
+	*/
 	/// remove whitespace
 	name.TrimRight();
 	name.TrimLeft();
@@ -473,4 +494,24 @@ void CBiBTeXFile::ReplaceSpecialChars(CString &value)
 	value.Replace(_T("\"A"), _T("Ä"));
 	value.Replace(_T("\"U"), _T("Ü"));
 	value.Replace(_T("\"ss"), _T("ß"));
+}
+
+BOOL CBiBTeXFile::SaveCopyBuffer(const TCHAR *buffer, int reqSize)
+{
+	BOOL ret = TRUE;
+	ASSERT(reqSize >= 0);
+
+	if (reqSize == 0) return TRUE;
+
+	/* NOTE: We cut the buffer here instead of reallocate it in order 
+	   to avoid heap corruptions. Large buffers may caused by invalid braces
+	   */
+	if (reqSize > m_BufferSize) { // cut buffer, if needed
+		reqSize = m_BufferSize - 1;
+		ret = FALSE;
+	}
+	strncpy(m_Buffer, buffer, reqSize);
+	m_Buffer[reqSize] = 0;
+
+	return ret;
 }

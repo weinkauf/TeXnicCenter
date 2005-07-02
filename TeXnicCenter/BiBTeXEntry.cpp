@@ -60,6 +60,10 @@ CBiBTeXEntry::CBiBTeXEntry(CString key, CBiBTeXFile *parent, BibType type)
 	ASSERT(parent != NULL);
 	m_Parent = parent;
 	m_Key = key;
+
+	if (m_Key.GetLength() == 0) {
+		m_Key = "-";
+	}
 	m_Type = type;
 }
 
