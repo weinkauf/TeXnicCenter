@@ -1031,8 +1031,8 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 			m_CompletionListBox->InitWithKeyword(keyword);
 		} else {
 			if (!::IsWindow(m_CompletionListBox->GetSafeHwnd())) { // this is quite dirty :-(
-				m_CompletionListBox->Create(WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_VSCROLL|LBS_WANTKEYBOARDINPUT|LBS_OWNERDRAWFIXED, 
-					CRect(), this, NULL);
+				m_CompletionListBox->Create(NULL, NULL, WS_VISIBLE, CRect(), theApp.GetMainWnd());
+				//m_CompletionListBox->SetParent(theApp.GetMainWnd());
 			}
 			m_CompletionListBox->InitWithKeyword(keyword);
 			m_CompletionListBox->ShowWindow(wndCmd);
