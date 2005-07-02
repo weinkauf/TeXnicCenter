@@ -127,6 +127,7 @@
 #define IDR_INSERT                      186
 #define STE_BIBTEX_ERR_DUP_KEY          186
 #define STE_BIBTEX_ERR_INVALID_TYPE     187
+#define STE_BIBTEX_ERR_SUSPICOUS_LINE   188
 #define IDR_FORMAT                      190
 #define STE_SELECT_PROJECT_PATH         192
 #define IDR_FORMAT_RECENTLY_USED        192
@@ -225,6 +226,7 @@
 #define STE_FLOATPREFIX_FIGURE          276
 #define STE_FLOATPREFIX_TABLE           277
 #define IDD_PACKAGE_SCAN_PROGRESS       277
+#define IDD_DIALOG1                     279
 #define STE_HEADER_PART                 288
 #define STE_HEADER_CHAPTER              289
 #define STE_HEADER_SECTION              290
@@ -1292,9 +1294,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        278
+#define _APS_NEXT_RESOURCE_VALUE        281
 #define _APS_NEXT_COMMAND_VALUE         38482
-#define _APS_NEXT_CONTROL_VALUE         1342
+#define _APS_NEXT_CONTROL_VALUE         1345
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif
