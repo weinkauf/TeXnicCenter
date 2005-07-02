@@ -48,6 +48,8 @@
 class CBiBTeXFile : public CObject  
 {
 public:	
+	int m_BufferSize;
+	TCHAR* m_Buffer;
 	
 	CBiBTeXFile(CString file);
 	virtual ~CBiBTeXFile();
@@ -121,6 +123,7 @@ public:
 	void SetWarnWrongLevelAT(BOOL flag) {m_WarnWrongLevelAT = flag;}
 
 private:
+	BOOL SaveCopyBuffer(const TCHAR* buffer, int reqSize);	
 	/* Called, if an item is complete */
 	void FinalizeItem();
 	/* Parses a field entry 'name = value' */
