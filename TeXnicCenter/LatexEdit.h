@@ -45,7 +45,7 @@
 #include "AutoCompleteListBox.h"
 
 class MyListener;
-
+class CAdvice;
 
 
 /** Edit view for LaTeX files.
@@ -172,6 +172,7 @@ public:
 	CLatexDoc* GetDocument();
 
 private:
+	void HideAdvice();
 	BOOL RestoreFocus();
 	CAutoCompleteListBox *CreateListBox(CString &keywordt, const CPoint topLeft);
 	BOOL InvokeContextHelp(const CString keyword);
@@ -179,7 +180,7 @@ private:
 	CWnd* m_OldFocus;
 	CPoint m_oldStart;
 	CPoint m_oldEnd;
-	CStatic *m_InstTip;
+	CAdvice *m_InstTip;
 	CAutoCompleteListBox* m_CompletionListBox;
 	MyListener *m_Proxy;
 };
