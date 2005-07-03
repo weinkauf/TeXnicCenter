@@ -47,6 +47,7 @@
 #include "TextModulesDlg.h"
 #include "GotoDialog.h"
 #include "../MySpell/Character.h"
+#include "Advice.h"
 
 #include "PackageScanProgress.h"
 
@@ -73,8 +74,8 @@ BEGIN_MESSAGE_MAP(CLatexEdit, CCrystalEditViewEx)
 	ON_COMMAND(ID_SPELL_FILE, OnSpellFile)
 	ON_COMMAND(ID_TEXTMODULES_DEFINE, OnTextmodulesDefine)
 	ON_UPDATE_COMMAND_UI(ID_TEXTMODULES_DEFINE, OnUpdateTextmodulesDefine)
-	ON_COMMAND(ID_PACKAGE_SETUP, OnPackageSetup)
 	ON_COMMAND(ID_QUERY_COMPLETION, OnQueryCompletion)
+	ON_COMMAND(ID_PACKAGE_SETUP, OnPackageSetup)
 	//}}AFX_MSG_MAP
 	ON_WM_SYSCOLORCHANGE()
 
@@ -1011,7 +1012,7 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 	ptStart = TextToClient(topLeft);
 
 	int wndCmd;
-
+	
 	ptStart.y += GetLineHeight(); // Goto next row
 
 	if (m_CompletionListBox == NULL) { // create listbox
@@ -1272,35 +1273,37 @@ void CLatexEdit::InstantAdvice() {
 
 			if (lc != NULL) {
 				if (m_InstTip == NULL) {
-					m_InstTip = new CStatic();
-					m_InstTip->Create(lc->ToLaTeX(), WS_CHILD|WS_VISIBLE|SS_SUNKEN, CRect(), this);
-				}			
-				// Compute window size				
-				ptClient = TextToClient(ptStart);
-				CDC *pDC = m_InstTip->GetDC();						
-				CSize cText = pDC->GetTextExtent(lc->ToLaTeX());
-				m_InstTip->ReleaseDC(pDC);
-
-				// Determine if there is space enough to show the window below the text
-				CRect r;
-				GetClientRect(r);
-				ptClient.y += 2* GetLineHeight();
-				if (!::PtInRect(r, ptClient)) { // no space -> show it above
-					ptClient.y -= 2 * GetLineHeight();
-				}
-				ptClient.y -= GetLineHeight();				
-				// Place and show the window
-				m_InstTip->MoveWindow(ptClient.x, ptClient.y, cText.cx + 4, cText.cy + 4);
-				m_InstTip->SetWindowText(lc->ToLaTeX());
-				m_InstTip->ShowWindow(SW_SHOW);
-			}
-			
+					m_InstTip = new CAdvice();
+					m_InstTip->Create(lc->ToLaTeX(), WS_POPUP|SS_SUNKEN, CRect(), this);
+				} 
+				if (!m_InstTip->IsWindowVisible()) {
+					// Compute window size				
+					ptClient = TextToClient(ptStart);
+					::ClientToScreen(GetSafeHwnd(), &ptClient);
+					// Determine if there is space enough to show the window below the text
+					ptClient.y += GetLineHeight();
+					// Place and show the window
+					m_InstTip->SetWindowPos(NULL, ptClient.x, ptClient.y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
+					m_InstTip->SetWindowText(lc->GetExpandBefore() + lc->ToLaTeX() + lc->GetExpandAfter());			
+					m_InstTip->ShowWindow(SW_SHOWNA);
+					m_InstTip->SetTimer(1, 3000, 0);
+					SetFocus();
+				} 
+			}			
 		} else {
 			// Nothing found: Hide window
-			if (m_InstTip != NULL) {
-				m_InstTip->ShowWindow(SW_HIDE);
-			}
+			HideAdvice();
 		}
 		delete map; // DON'T FORGET THIS!
 	}
 }
+
+void CLatexEdit::HideAdvice()
+{
+	if (m_InstTip != NULL) {
+		m_InstTip->ShowWindow(SW_HIDE);
+	}
+}
+
+
+
