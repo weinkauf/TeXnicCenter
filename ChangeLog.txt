@@ -1,3 +1,8 @@
+2005/07/03 niteria
+- Implemented Feature 984843: Session should open files in the order as they appear
+  Files are now restored in the order as shown by the document tabs.
+  If document tabs are not shown, window cycling order is used as before.
+
 2005/06/30 niteria
 - Added number of bibtex entries as annotation of a bibtex file
   in the structure view.
