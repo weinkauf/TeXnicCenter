@@ -51,27 +51,51 @@ class CBiBTeXFile;
 class CBiBTeXEntry : public CObject, public CStructureItem  
 {
 public:
-	
+	/** Possible BibTeX types. The types Error and Unknown are for internal use only */
 	static enum BibType {Book=0, Article, Booklet, Manual, Inproceedings, 
 						Conference, Inbook, Incollection, Masterthesis,
 						Misc, Phdthesis, Proceedings, Techreport,
 						Unpublished, String, Comment, Preamble, Error, Unknown};
 
+	/** Constructs a new BibTeX entry 
+		@param key Key of the BibTeX entry
+		@param parent Pointer to the BibTeX file containing the entry
+		@param type Entry type (default: @book)
 
+	@see BibType
+	*/
 	CBiBTeXEntry(CString key, CBiBTeXFile *parent, BibType type=Book);
 	virtual ~CBiBTeXEntry();
-
+	/** Set an entry fields. To set the author of an entry, just call
+		<code>CString author;
+		SetField("author", author);
+		</code>
+		@param forceOverwrite If true, the field value will be overridden in every case. Otherwise
+		SetField returns false, if the entry already exists. Default is false.
+		@return True, if entry was changed successfully.
+		*/	
 	BOOL SetField(CString name, CString value, BOOL forceOverwrite=FALSE);
+	/** Access to entry fields. To get the author of an entry, just call
+		<code>CString author;
+		SetField("author", "Asterix");
+		</code>
+		@return True, if entry was changed
+		*/
 	BOOL GetField(CString name, CString &value);
 
+	/* Sets/gets the type of the BibTeX entry */
 	BibType GetType() const {return m_Type;}
 	void SetType(BibType type) {m_Type = type;}
-
+	/* Returns the key of the BibTeX entry */
 	CString GetKey() const {return m_Key;}
-
+	/* String representations of CBibTeXEntry */
 	CString ToString();
 	CString ToCaption();
 private:
+	/* Removes ugly chars (e. g. whitespace, new lines,...) from a field 
+		@param value String to beautify
+		@param bReplaceAnds If true, 'and' (common in author fields) are replaced with a comma.
+	*/
 	void BeautifyField(CString &value, const bool bReplaceAnds);
 
 	CMapStringToString	m_Fields;
