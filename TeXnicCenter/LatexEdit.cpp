@@ -1133,7 +1133,9 @@ BOOL CLatexEdit::InvokeContextHelp(const CString keyword)
 void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 {	
 	CPoint ptStart, ptEnd;
+	CPoint ptCaret;
 	BOOL bFound = FALSE;
+	BOOL isEnv = FALSE;
 
 	ASSERT(cmd != NULL);
 	GetSelection(ptStart, ptEnd);
@@ -1143,7 +1145,7 @@ void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 
 	//Start Undo Group
 	pText->BeginUndoGroup();
-	CString s = cmd->GetExpandBefore();
+	CString s = cmd->GetExpandBefore(); // collect completion...
 	s += cmd->ToLaTeX();
 	s += cmd->GetExpandAfter();	
 	ReplaceSelection(s);
@@ -1152,40 +1154,39 @@ void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 	GetSelection(ptStart, ptEnd); // retrieve new selection pos
 	SetSelection(ptStart, ptStart); // drop selection
 
-	// search the first curly brace
-	for(int y = ptStart.y; y <= ptEnd.y && !bFound; y++) {
-		CString s = GetLineChars(y);
+	isEnv = cmd->GetExpandAfter().GetLength() && cmd->GetExpandBefore().GetLength();
+	
+	
+	if (!isEnv) { // command was inserted
+		// search the first curly brace
+		for(int y = ptStart.y; y <= ptEnd.y && !bFound; y++) {
+			CString s = GetLineChars(y);
+			int nOff = (y == ptStart.y) ? ptStart.x : 0; // is there an offset?
 
-		int begin = s.Find(_T("\\begin{")); // skip open brace of begin block
-		int nOff = 0;
-		if (begin != -1) {
-			nOff = 6 + begin + 1;
-		}
-
-		int pos = s.Find(_T("{"), nOff);
-		if (pos != -1) {
-			CPoint ptCaret = CPoint(pos + 1, y);
-			if (!IsValidTextPos(ptCaret)) { // position is not valid -> use position of brace itself
-				ptCaret = CPoint(pos, y);				
+			int pos = s.Find(_T("{"), nOff);
+			if (pos != -1) {
+				ptCaret = CPoint(pos + 1, y);
+				if (!IsValidTextPos(ptCaret)) { // position is not valid -> use position of brace itself
+					ptCaret = CPoint(pos, y);				
+				}
+				SetCursorPos(ptCaret); // place caret after the first open brace
+				bFound = TRUE;
 			}
-			SetCursorPos(ptCaret); // place caret after the first open brace
-			bFound = TRUE;
+		}
+
+		if (!bFound) { // no brace found drop selection and place cursor after inserted word	
+			SetCursorPos(ptEnd); 
+		}
+	} else { // env was inserted -> place cursor in next row
+		ptCaret.y = ptStart.y + 1;
+		ptCaret.x = 0;
+		if (IsValidTextPos(ptCaret)) {
+			CString s = GetLineChars(ptCaret.y);
+			while (ptCaret.x < s.GetLength() && s.GetAt(ptCaret.x) == '\t') ptCaret.x++;			 
+			SetCursorPos(ptCaret);
 		}
 	}
-
-	if (!bFound) { // no brace found drop selection and place cursor after inserted word	
-		SetCursorPos(ptEnd); 
-	}
-
-	/*
-	CStringpText->GetLineChars()
-	if (cmd->GetExpandAfter().GetLength() > 0) { 
-		ptEnd.x = 0;
-		ptEnd.y--; 
-		SetCursorPos(ptEnd);
-	}*/
-
-	RestoreFocus();
+	RestoreFocus(); // set focus back to edit view
 }
 
 void CLatexEdit::OnACCommandCancelled()
