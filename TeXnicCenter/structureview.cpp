@@ -90,6 +90,9 @@ void CStructureView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 				// initialization
 				ahItems.SetSize( a.GetSize(), 0 );
 
+				//Lock
+				LockWindowUpdate();
+
 				// empty view
 				DeleteAllItems();
 
@@ -136,6 +139,9 @@ void CStructureView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 					ExpandItemsByLevel(0);
 					EnsureVisible(GetNextItem(NULL, TVGN_ROOT));
 				}
+
+				//Unlock
+				UnlockWindowUpdate();
 			}
 			break;
 	}

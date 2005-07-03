@@ -83,6 +83,9 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 				// fill tree
 				const CStructureItemArray &a = GetProject()->m_aStructureItems;
 
+				//Lock
+				LockWindowUpdate();
+
 				// initialization
 				DeleteAllItems();
 
@@ -143,6 +146,9 @@ void CFileView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
 					ExpandItemsByLevel(0);
 					EnsureVisible(GetNextItem(NULL, TVGN_ROOT));
 				}
+
+				//Unlock
+				UnlockWindowUpdate();
 			}
 			break;
 	}

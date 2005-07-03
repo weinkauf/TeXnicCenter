@@ -82,6 +82,9 @@ void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHin
 				// fill view with parsing results
 				const CStructureItemArray &a = GetProject()->m_aStructureItems;
 
+				//Lock
+				LockWindowUpdate();
+
 				// initialization
 				DeleteAllItems();
 
@@ -138,6 +141,9 @@ void CEnvironmentView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHin
 				//try to expand items
 				ExpandItems( astrExpandedItems );
 				SelectItem( GetItemByPath( strSelectedItem ) );
+
+				//Unlock
+				UnlockWindowUpdate();
 			}
 			break;
 	}	
