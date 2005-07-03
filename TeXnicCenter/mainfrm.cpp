@@ -42,7 +42,6 @@
 //#include "StructureView.h"
 //#include "EnvironmentView.h"
 //#include "FileView.h"
-#include "ChildFrm.h"
 #include "BuildView.h"
 #include "GrepView.h"
 #include "Configuration.h"
@@ -1390,6 +1389,76 @@ void CMainFrame::RebuildToolsMenu()
 		CBCGUserTool	*pTool = (CBCGUserTool*)toolsList.GetNext(pos);
 		pToolsMenu->AppendMenu(MF_STRING, pTool->GetCommandId(), pTool->m_strLabel);
 	}
+}
+
+
+int CMainFrame::GetMDIChilds(CArray<CChildFrame*, CChildFrame*>& MDIChildArray,
+							  const bool bSortByTabs /*= true*/)
+{
+	int ActiveChild = -1;
+
+	//Clean up
+	MDIChildArray.RemoveAll();
+
+	//Ordered by tabs or ordered as in the window list?
+	//If tabs are not shown, we give the childs in window cycling order.
+	if (bSortByTabs && theApp.m_bMDITabs)
+	{
+		//Get the tabs
+		const CBCGTabWnd& Tabs = GetMDITabs();
+		const int nTabs = Tabs.GetTabsNum();
+
+		//Go through the tabs and get the childs
+		for(int i=0;i<nTabs;i++)
+		{
+			CWnd* pWnd = Tabs.GetTabWnd(i);
+			if (pWnd->IsKindOf(RUNTIME_CLASS(CChildFrame)))
+			{
+				CChildFrame* pChild = dynamic_cast<CChildFrame*>(pWnd);
+
+				//Add child to the output array
+				if (pChild)
+				{
+					MDIChildArray.Add(pChild);
+
+					//Mark as active
+					if (Tabs.GetActiveTab() == i)
+					{
+						ActiveChild = MDIChildArray.GetSize() - 1;
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		//Get frame information
+		int nFrame = 0;
+		CWnd* pWnd = GetWindow(GW_CHILD)->GetWindow(GW_CHILD);
+
+		//Start with the last child, if it exists
+		if (pWnd && IsWindow(pWnd->m_hWnd))
+		{
+			pWnd = pWnd->GetWindow(GW_HWNDLAST);
+		}
+
+		//Iterate through all MDI Childs
+		while (pWnd && IsWindow(pWnd->m_hWnd))
+		{
+			if (pWnd->IsKindOf(RUNTIME_CLASS(CChildFrame)))
+			{
+				CChildFrame* pChild = dynamic_cast<CChildFrame*>(pWnd);
+				MDIChildArray.Add(pChild);
+			}
+
+			// get previous window
+			pWnd = pWnd->GetNextWindow(GW_HWNDPREV);
+		}
+
+		ActiveChild = MDIChildArray.GetSize() - 1;
+	}
+
+	return ActiveChild;
 }
 
 

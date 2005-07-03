@@ -41,6 +41,7 @@
 
 #include "WorkspaceBar.h"
 #include "OutputBar.h"
+#include "ChildFrm.h"
 
 class CLatexEdit;
 
@@ -159,6 +160,24 @@ public:
 	defined tools, to update the tools menu.
 	*/
 	void RebuildToolsMenu();
+
+	/** Builds up list of opened MDI childs.
+
+		Call this function to obtain an array of pointers to the currently opened MDI Childs.
+		You can later ask each MDI Child for its view or document.
+		The childs can be given sorted by the current window cycling order
+		or sorted as shown by the tabs (default).
+
+		@param MDIChildArray
+			Retrieves pointers to all MDI Childs.
+
+		@param bSortByTabs
+			Whether to give the MDI Childs sorted as shown by the tabs or in windows cycling order.
+
+		@returns Array index of the currently active child.
+	*/
+	int GetMDIChilds(CArray<CChildFrame*, CChildFrame*>& MDIChildArray, const bool bSortByTabs = true);
+
 
 
 // implementation helpers
