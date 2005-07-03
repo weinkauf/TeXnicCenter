@@ -272,8 +272,18 @@ BOOL CLatexProject::OnOpenProject(LPCTSTR lpszPathName)
 	CreateProjectViews();
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Activate Editor window
+	if (m_pwndMainFrame)
+	{
+		m_pwndMainFrame->SendMessage(WM_COMMAND, ID_WINDOW_EDITOR);
+	}
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// parse project
-	AfxGetMainWnd()->PostMessage( WM_COMMAND, ID_PROJECT_PARSE );
+	if (m_pwndMainFrame)
+	{
+		m_pwndMainFrame->PostMessage( WM_COMMAND, ID_PROJECT_PARSE );
+	}
 
 	return TRUE;
 }
@@ -484,10 +494,11 @@ BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
 #define KEY_SESSIONINFO							_T("SessionInfo")
 #define VAL_SESSIONINFO_ACTIVETAB				_T("ActiveTab")
 #define VAL_SESSIONINFO_FRAMECOUNT				_T("FrameCount")
+#define VAL_SESSIONINFO_ACTIVEFRAME				_T("ActiveFrame")
 
 #define KEY_FRAMEINFO							_T("Frame%d")
 
-#define CURRENTFORMATVERSION					1
+#define CURRENTFORMATVERSION					2
 #define	FORMATTYPE								_T("TeXnicCenterProjectSessionInformation")
 
 void CLatexProject::SerializeSession(CIniFile &ini, BOOL bWrite)
@@ -495,60 +506,55 @@ void CLatexProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 	if (bWrite)
 	{
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// storing format information
+		//Format information
 		ini.SetValue(KEY_FORMATINFO, VAL_FORMATINFO_TYPE, FORMATTYPE);
 		ini.SetValue(KEY_FORMATINFO, VAL_FORMATINFO_VERSION, CURRENTFORMATVERSION);
 
-		// store active tab of navigator
+		//Store active tab of navigator
 		CBCGTabWnd* pwndTabs = &m_pwndWorkspaceBar->GetTabWnd();
 		if (pwndTabs && IsWindow(pwndTabs->m_hWnd))
-			ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_ACTIVETAB, pwndTabs->GetActiveTab());
-
-		// storing frame information
-		int		nFrame = 0;
-		CWnd	*pWnd = AfxGetMainWnd()->GetWindow(GW_CHILD)->GetWindow(GW_CHILD);
-
-		if (pWnd && IsWindow(pWnd->m_hWnd))
-			pWnd = pWnd->GetWindow(GW_HWNDLAST); // Start with the last child, if it exists
-
-		ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_FRAMECOUNT, 0);
-
-		// iterate through all MDI-childs
-		while (pWnd && IsWindow(pWnd->m_hWnd))
 		{
-			if (pWnd->IsKindOf(RUNTIME_CLASS(CChildFrame)))
-			{
-				// store information for this MDI-window
-				CChildFrame			*pChildFrame = (CChildFrame*)pWnd;
-				CString					strKey;
-
-				strKey.Format(KEY_FRAMEINFO, nFrame);
-				((CChildFrame*)pWnd)->Serialize(ini, strKey, bWrite);
-
-				nFrame++;
-			}
-
-			// get previous window
-			pWnd = pWnd->GetNextWindow(GW_HWNDPREV);
+			ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_ACTIVETAB, pwndTabs->GetActiveTab());
 		}
 
-		// store number of frames
-		ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_FRAMECOUNT, nFrame);
+		//Store frame information
+		if (m_pwndMainFrame)
+		{
+			//Get the MDI Childs (sorted by Tabs)
+			CArray<CChildFrame*, CChildFrame*> MDIChildArray;
+			const int nActiveFrame = m_pwndMainFrame->GetMDIChilds(MDIChildArray, true);
+
+			//Set Number of Frames
+			ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_FRAMECOUNT, MDIChildArray.GetSize());
+			//Set active MDI Child
+			ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_ACTIVEFRAME, nActiveFrame);
+
+			for(int i=0;i<MDIChildArray.GetSize();i++)
+			{
+				//Store information for this MDI-window
+				CString strKey;
+				strKey.Format(KEY_FRAMEINFO, i);
+
+				MDIChildArray.GetAt(i)->Serialize(ini, strKey, bWrite);
+			}
+		}
 	}
 	else
 	{
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// reading format information
 		CString	strKey;
-		int			nFrameCount = ini.GetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_FRAMECOUNT, 0);
-		int			nFrame;
-		CCreateContext	cc;
+		const int nFrameCount = ini.GetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_FRAMECOUNT, 0);
+		const int nActiveFrame = ini.GetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_ACTIVEFRAME, -1);
+		CCreateContext cc;
 
 		ZeroMemory(&cc, sizeof(cc));
 		cc.m_pNewViewClass = RUNTIME_CLASS(CLatexEdit);
 
+		//Open all stored frames
 		bool bCouldOpenAllFrames(true);
-		for (nFrame = 0; nFrame < nFrameCount; nFrame++)
+		CChildFrame* pChildToBeActivated = NULL;
+		for (int nFrame = 0; nFrame < nFrameCount; nFrame++)
 		{
 			CChildFrame* pChildFrame = new CChildFrame();
 
@@ -561,16 +567,31 @@ void CLatexProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 				bCouldOpenAllFrames = false;
 				delete pChildFrame;
 			}
+			else
+			{
+				if (nActiveFrame == nFrame)
+				{
+					pChildToBeActivated = pChildFrame;
+				}
+			}
 		}
 
+		//Restore navigator tab selection
+		m_nInitialNavigatorTab = ini.GetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_ACTIVETAB, 0);
+
+		//Activate the frame that was active when closing the project
+		if (pChildToBeActivated)
+		{
+			pChildToBeActivated->ActivateFrame(SW_SHOW);
+			//NOTE: We give the focus later to this window
+		}
+
+		//Give message, if we could not open all files / frames
 		if (!bCouldOpenAllFrames)
 		{
 			AfxMessageBox(STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED,
 							MB_ICONINFORMATION|MB_OK);
 		}
-
-		// restore navigator tab selection
-		m_nInitialNavigatorTab = ini.GetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_ACTIVETAB, 0);
 	}
 }
 

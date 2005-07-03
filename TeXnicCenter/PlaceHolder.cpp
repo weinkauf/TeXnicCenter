@@ -477,10 +477,10 @@ Same as above, but returns a list of strings.
 NOTE: Strings in the list are never quoted.
 */
 CUniqueStringList* CPlaceholderSets::GetFileSets(const unsigned int Sets,
-																								CUniqueStringList* pStrList,
-																								const bool bShortPaths /*= false*/,
-																								const bool bForwardSlash /*= false*/,
-																								const bool bRelativePaths /*= false*/) const
+													CUniqueStringList* pStrList,
+													const bool bShortPaths /*= false*/,
+													const bool bForwardSlash /*= false*/,
+													const bool bRelativePaths /*= false*/) const
 {
 	CString strToAdd;
 
@@ -492,28 +492,24 @@ CUniqueStringList* CPlaceholderSets::GetFileSets(const unsigned int Sets,
 	//Get the currently opened files
 	if (Sets & TXC_PLACEHOLDERSET_CURRENTLYOPENEDFILES)
 	{
-		//Storing frame information
-		CWnd* pWnd = AfxGetMainWnd()->GetWindow(GW_CHILD)->GetWindow(GW_CHILD);
-
-		if (pWnd && IsWindow(pWnd->m_hWnd))
-			pWnd = pWnd->GetWindow(GW_HWNDLAST);//Start with the last child, if it exists
-
-		//Iterate through all MDI-childs
-		while (pWnd && IsWindow(pWnd->m_hWnd))
+		//Get the list of MDI Childs
+		CWnd* pWnd = AfxGetMainWnd();
+		CMainFrame* pMain = dynamic_cast<CMainFrame*>(pWnd);
+		if (pMain)
 		{
-			if ( pWnd->IsKindOf(RUNTIME_CLASS(CChildFrame)) )
+			CArray<CChildFrame*, CChildFrame*> MDIChildArray;
+			pMain->GetMDIChilds(MDIChildArray);
+
+			for(int i=0;i<MDIChildArray.GetSize();i++)
 			{
 				//Get the information from this MDI-window
 				// absolute path; long filenames; backslashes
-				strToAdd = ((CChildFrame*)pWnd)->GetPathNameOfDocument();
+				strToAdd = MDIChildArray.GetAt(i)->GetPathNameOfDocument();
 
 				//The Caller must be aware, that the following might throw a CMemoryException
 				ConvertAndAdd(strToAdd, pStrList, bShortPaths, bForwardSlash,
 												bRelativePaths, true);
 			}
-
-			// get previous window
-			pWnd = pWnd->GetNextWindow(GW_HWNDPREV);
 		}
 	}
 
