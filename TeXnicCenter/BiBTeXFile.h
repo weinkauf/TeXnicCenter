@@ -48,15 +48,17 @@
 class CBiBTeXFile : public CObject  
 {
 public:	
-	int m_BufferSize;
-	TCHAR* m_Buffer;
-	
+	/** Constructs a new BibTeXFile object. After the object is created, call ProcessFile to 
+		scan a bib file for entries.
+		@param file Name of the BibTeX file (.bib)
+	*/
 	CBiBTeXFile(CString file);
+	/** Destroys the CBiBTeXFile object */
 	virtual ~CBiBTeXFile();
 
 	/** Returns current filename of the BibTeX file */
 	CString GetFilename() const {return m_Filename;}
-	/** Sets a new filename
+	/** Sets a new filename */
 	void SetFilename(CString filename) {m_Filename = filename;}
 
 	/** Parses a BibTeX file @see SetFilename*/
@@ -123,8 +125,19 @@ public:
 	void SetWarnWrongLevelAT(BOOL flag) {m_WarnWrongLevelAT = flag;}
 
 private:
+	/* Copies needed part of the parsed file stream for further ops. Otherwise we had to operate on 
+	a very large buffer which would slow down performance significantly! 
+	So the maximum buffer size is limited by MAX_BIBTEX_ARG_LENGTH. If the requested buffer is larger,
+	it will be cutted to this length. Reason: Large buffers often indicate an error (e. g. an unbalanced brace), so we
+	had to take care of this. There may be cases, where BibTeX entries contain large abstracts and may exceed
+	this buffer. But we just want to show the entry in the navigator, so missing contents of the abstract field
+	are not important.
+		@param buffer Pointer to original buffer
+		@param reqSize Size of string to copy from the buffer
+		@return TRUE, if copy was successfully
+	*/
 	BOOL SaveCopyBuffer(const TCHAR* buffer, int reqSize);	
-	/* Called, if an item is complete */
+	/* Called, if an item is complete. */
 	void FinalizeItem();
 	/* Parses a field entry 'name = value' */
 	BOOL ParseField(const TCHAR *field, CString &name, CString &val);
@@ -135,13 +148,28 @@ private:
 		@param addDesc is an optional string (e. g. for dup keys or invalied BibTeX types)
 	*/
 	void HandleParseError(UINT msgID, int line, int col, const TCHAR *addDesc = _T(""));
+	/** Determines the BibTeX type (Article, Book, ...)
+		@param buf Pointer to buffer containing the tokens 
+		@param len Length of the buffer
+		@param line Line number
+		
+		@return BibTeX type or CBiBTeXEntry::Unknown, if invalid entry 
+	*/
 	CBiBTeXEntry::BibType ProcessEntryType(const TCHAR *buf, int len, int line);
-	void ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibType, int line);
+	/** Processes a field of an BibTeX entry
+		@param buf Pointer to buffer containing the tokens 
+		@param len Length of the buffer
+		@param type BibTeX type (Article, Book, ...)
+		@param line Line number
+	*/
+	void ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibType type, int line);
 	BOOL ParseFile(const TCHAR* buf);
 
-	BOOL m_IsATSignInBracesAllowed;
-	BOOL m_WarnWrongLevelAT;
-	int m_ErrorCount;
+	BOOL			m_IsATSignInBracesAllowed;
+	BOOL			m_WarnWrongLevelAT;
+	int				m_ErrorCount;
+	int				m_BufferSize;
+	TCHAR*			m_Buffer;	
 	CString			m_Filename;
 	CMapStringToOb	m_Entries;
 	CMapStringToString	m_Strings;

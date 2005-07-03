@@ -46,9 +46,6 @@ static char THIS_FILE[]=__FILE__;
 #endif
 
 extern const TCHAR* BibTypeVerbose[];
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 CBiBTeXFile::CBiBTeXFile(CString file)
 :CObject()
@@ -106,23 +103,20 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 
 	while (*buf) { // Parser state machine
 		switch(*buf) {
-		case _T('%'): // Toggle comment
+		case _T('%'): // Toggle comment. Please note, that this is no official comment sign!
 			if (depth != 0) break;
 			inComment = TRUE;
 			break;
 		case _T('\"'): // Toggle quote
 			if (inComment || !insideEntry) break;
-
+			/* Quotes must be included in arbitry braces, if the fields are delimited by quotes */
 			if (depth ==1 && inQuote && (lastChar && lastChar[0] == _T('\\'))) {
-				// STE_BIBTEX_ERR_QOUTEWITHINQUOTE
 				HandleParseError(STE_BIBTEX_ERR_QOUTEWITHINQUOTE, line, col);
-			}
-			
+			}			
 			/* Quotes are taken "as is", if included in arbitrary braces */
 			if (depth >= 2 || (lastChar && lastChar[0] == _T('\\'))) break;
 			
 			inQuote = !inQuote;
-			//TRACE("Toggle quote to %d on line %d, col %d (depth = %d)\n", inQuote, line, col, depth);
 			break;
 		case _T('@'): // Start type
 			/* The @ sign has a very strong meaning in BibTeX. It is indicating the beginning of an
@@ -144,7 +138,7 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 			insideEntry = TRUE;
 			begin = buf; // update pointer if on top level
 			break;
-		case _T('('):
+		case _T('('): // alternative beginning of an entry
 			if (inComment || !insideEntry) break;
 			if (0 == depth) { // process entry type, e. g. @Article
 				type = ProcessEntryType(begin, buf-begin, line);
@@ -152,9 +146,8 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 				++depth; // only on level 0!
 			}			
 			break;
-		case _T('{'):
+		case _T('{'): // beginning of an entry, field or special chars within a field
 			if (inComment || !insideEntry) break;
-
 			openBrace = TRUE;
 			if (0 == depth) { // process entry type, e. g. @Article
 				type = ProcessEntryType(begin, buf-begin, line);
@@ -162,14 +155,14 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 			} 
 			++depth;			
 			break;
-		case _T(','):
+		case _T(','): // field delimiter
 			if (inComment || inQuote || !insideEntry) break;
 			if (1 == depth) { // process entry field
 				ProcessArgument(begin, buf-begin, type, line);
 				begin = buf;
 			}			
 			break;
-		case _T(')'):
+		case _T(')'): // alternative end of an entry
 			if (inComment || inQuote || !insideEntry) break;
 			if (1 == depth) { // process entry field and decrease stack depth
 				ProcessArgument(begin, buf-begin, type, line);
@@ -179,14 +172,9 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 					insideEntry = FALSE;
 					FinalizeItem();
 				}
-				/*
-				if (depth < 0) {
-					HandleParseError(buf, _T("Too many ')'"),  line, col);
-					return FALSE;
-				}*/
 			} 			
 			break;
-		case _T('}'):
+		case _T('}'): // ending of an entry, field or special chars within a field
 			if (inComment || !insideEntry) break;
 			openBrace = FALSE;
 			if (1 == depth) { // process entry field and decrease stack depth
@@ -197,17 +185,11 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 				insideEntry = FALSE;
 				FinalizeItem();
 			}
-			/*
-			if (depth < 0) {
-				HandleParseError(buf, _T("Too many '}'"),  line, col);				
-				depth = 0;
-				//return FALSE;
-			}*/
 			break;		
-		}
+		} // end switch
 
-		if (*buf == _T('\n')) { // update line number			
-			inComment = FALSE;
+		if (*buf == _T('\n')) { // update line number?
+			inComment = FALSE; // quit comment
 			col = 0;
 			++line;
 		}
