@@ -47,6 +47,9 @@ void CBibView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint) {
 				// fill view with parsing results
 				const CStructureItemArray &a = GetProject()->m_aStructureItems;
 
+				//Lock
+				LockWindowUpdate();
+
 				// initialization
 				DeleteAllItems();
 
@@ -96,6 +99,9 @@ void CBibView::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint) {
 					ExpandItemsByLevel(0);
 					EnsureVisible(GetNextItem(NULL, TVGN_ROOT));
 				}
+
+				//Unlock
+				UnlockWindowUpdate();
 			}
 			break;
 	}
