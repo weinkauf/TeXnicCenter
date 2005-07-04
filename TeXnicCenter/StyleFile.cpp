@@ -34,6 +34,9 @@
 
 /*
  * $Log$
+ * Revision 1.11  2005/06/22 20:19:50  owieland
+ * Added \\let and \\DeclareMathSymbol to parser tokens
+ *
  * Revision 1.10  2005/06/11 12:50:57  owieland
  * - Load also expAfter/expBefore attributes from packages.xml
  * - AddCommand/AddEnvironment now return pointers to created object
@@ -178,7 +181,7 @@ void CStyleFile::ProcessFile()
 		f.Open(m_Filename, CFile::modeRead);
 		DWORD l = f.GetLength();
 
-		TCHAR *buf = new TCHAR[l];
+		TCHAR *buf = new TCHAR[l + 1];
 		f.Read(buf, l);
 
 		if (HasCommands(buf)) {
