@@ -74,7 +74,7 @@ BOOL CBiBTeXFile::ProcessFile()
 		f.Open(m_Filename, CFile::modeRead);
 		DWORD l = f.GetLength();
 
-		TCHAR *buf = new TCHAR[l];
+		TCHAR *buf = new TCHAR[l + 1];
 
 		f.Read(buf, l);
 		m_ErrorCount = 0;
