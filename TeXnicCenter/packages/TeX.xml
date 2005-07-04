@@ -12,7 +12,7 @@
 		<lxEnvironment name="tabular" 
 			parameters="1" 
 			desc="Provides a tabbed environment"
-			expafter="}{ccc}&#xA;&#xA;\end{tabular}" 
+			expafter="}{ccc}&#xA;	&#xA;\end{tabular}" 
 			expbefore="\begin{"/>
 		<lxEnvironment name="document"/>
 		<lxCommand name="bibliography" 
@@ -29,19 +29,19 @@
 		/>
 		<lxCommand name="newcommand" 
 			desc="Declares an user defined command"
-			parameters="1"
+			parameters="2"
 		/>
 		<lxCommand name="newenvironment" 
 			desc="Declares an user defined environment"
-			parameters="2"
+			parameters="3"
 		/>
 		<lxCommand name="renewcommand" 
 			desc="Redefines an existing command"
-			parameters="1"
+			parameters="2"
 		/>
 		<lxCommand name="renewenvironment" 
 			desc="Redefines an existing environment"
-			parameters="2"
+			parameters="3"
 		/>
 	</lxPackage>		
 	<lxPackage name="BibTeX" 
@@ -67,11 +67,38 @@
 			desc="BibTeX entry for an article in a conference transscript"
 			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	pages = {},&#xA;	booktitle = {}&#xA;}"
 			expbefore=""/>
+		<lxEnvironment name="@Manual" 
+			desc="BibTeX entry for a technical documentation"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@Misc" 
+			desc="BibTeX entry for any other citation"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	howpublished = {}&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@PhDThesis" 
+			desc="BibTeX entry for a PhD thesis"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	school = {}&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@Proceedings" 
+			desc="BibTeX entry for an article in a conference transscript"
+			expafter="{(!!Provide a unique key here!!),&#xA;	editor = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	}"
+			expbefore=""/>
+		<lxEnvironment name="@TechReport" 
+			desc="BibTeX entry for a report of a school or research institute"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	institution = {}&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@Unpublished" 
+			desc="BibTeX entry for an unpublished paper"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	note = {},&#xA;	year = {}&#xA;}"
+			expbefore=""/>
 	</lxPackage>
 </lxCollection>
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.3  2005/06/24 00:36:43  owieland
+	Added/fixed some BibTeX entry types
+	
 	Revision 1.2  2005/06/24 00:23:52  owieland
 	Added some BibTeX entry types and some commands
 	
