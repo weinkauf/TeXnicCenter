@@ -31,3 +31,4 @@
 #include "../source/PathTool.h"
 #include "../source/Wildcard.h"
 #include "../source/WorkerThread.h"
+#include "../source/SystemInfo.h"

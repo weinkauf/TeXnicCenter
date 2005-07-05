@@ -391,7 +391,8 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	// Haupt-MDI-Rahmenfenster erzeugen
 	CMainFrame *pMainFrame = new CMainFrame;
-	if (!pMainFrame->LoadFrame(IDR_MAINFRAME))
+
+	if (!pMainFrame->LoadFrame(IDR_MAINFRAME))	
 		return FALSE;
 	m_pMainWnd = pMainFrame;
 
@@ -532,6 +533,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 		dlg.DoModal();
 		UpdateLatexProfileSel();
 	}
+	TRACE("Detected OS: %s\n", m_SystemInfo.ToString());
 
 	return TRUE;
 }

@@ -49,7 +49,7 @@
 #include "MDIFrameManager.h"
 #include "ProjectSupportingWinApp.h"
 #include "ProjectTemplate.h"
-#include "StyleFileContainer.h"	// Added by ClassView
+#include "StyleFileContainer.h"
 
 extern class CTeXnicCenterApp	theApp;
 
@@ -349,6 +349,8 @@ public:
 	/** Style, how the document tabs are displayed. */
 	int m_nMDITabStyle;
 
+	/** Infos about current windows version */
+	CSystemInfo m_SystemInfo;
 protected:
 	void FindPackageFiles();
 	void FindPackageFilesRecursive(CString dir);

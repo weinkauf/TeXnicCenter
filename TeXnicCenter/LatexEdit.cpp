@@ -1031,6 +1031,11 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 		if (nWords == 1) {
 			m_CompletionListBox->InitWithKeyword(keyword);
 		} else {
+			/* Listbox does not work properly under NT :-( */
+			if (theApp.m_SystemInfo.GetMajorVersion() < 5) {
+				TRACE("Windows NT, 95 or 98 detected, cancel auto complete...\n");
+				return m_CompletionListBox;
+			}
 			if (!::IsWindow(m_CompletionListBox->GetSafeHwnd())) { // this is quite dirty :-(
 				m_CompletionListBox->Create(NULL, NULL, WS_VISIBLE, CRect(), theApp.GetMainWnd());
 				//m_CompletionListBox->SetParent(theApp.GetMainWnd());
