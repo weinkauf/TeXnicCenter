@@ -9,7 +9,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CAdvice window
-const COLORREF ADVICE_BK_COLOR = RGB(0xC0, 0xFF, 0xC0);
+const COLORREF ADVICE_BK_COLOR = RGB(0xFF, 0xFF, 0xC0);
 
 class CAdvice : public CStatic
 {
