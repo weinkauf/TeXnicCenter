@@ -1,27 +1,14 @@
 BUILDING TEXNICCENTER
 
-0. Note: The build process have been automated. Except the regexpp lib all steps are executed
-		 during the build process with VC++. I have tested it and seems to work properly. 
+0. Note: The build process have been automated. I have tested it and seems to work properly. 
 		 If any problems occur, please let me know and refer to the steps of the old process which
-		 is given at the end of this document.
+		 are given at the end of this document.
 		 
 		 23.05.2005, Olli (mailto:owieland@sourceforge.net)
 
-1. Build regexpp-lib:
-   a) Open a command line
-   b) Ensure that the environment variables, required to use the command line
-      tools of Visual C++ 6 are setup properly. If you are not sure if this is
-      the case, then execute the 'VCVARS32.BAT' file from the command line, 
-      which should be located in the directory 'VC98\BIN' in your Visual C++
-      program directory (i.e. 'C:\Program Files\Visual C++').
-   c) Change into the 'TeXniCCenter' directory
-   d) Execute the 'buildregexp.bat' file to build the library
-
+1. (obsolete)
 2. (obsolete)
-
-
 3. (obsolete)
-
 
    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    %
