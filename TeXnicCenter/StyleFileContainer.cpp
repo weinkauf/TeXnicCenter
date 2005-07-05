@@ -34,6 +34,9 @@
 
 /*
  * $Log$
+ * Revision 1.13  2005/06/24 11:41:15  owieland
+ * Bugfix: Pass file path to listener instead of directory
+ *
  * Revision 1.12  2005/06/23 22:17:13  owieland
  * - Compare words case insensitive
  * - Allow empty insertBefore/After values
@@ -500,7 +503,7 @@ BOOL CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
 
 		MsXml::CXMLDOMNodeList nodes = xmlPackages.GetChildNodes();
 		const long	lPackages = nodes.GetLength();
-		TRACE("Found %d package nodes in %s\n", lPackages, file);
+		//TRACE("Found %d package nodes in %s\n", lPackages, file);
 
 		if (lPackages > 0 && !addToExisting) {
 			ClearMap(); /* drop existing commands */
@@ -644,7 +647,7 @@ void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyle
 		}
 	} else if (element.GetNodeName() == CSF_XML_ENVIRONMENT) {
 		CNewEnvironment *ne = parent->AddEnvironment(nameVal, nOfParams, descVal);
-		TRACE("** Loaded env %s (%s)\n", nameVal, descVal);
+		//TRACE("** Loaded env %s (%s)\n", nameVal, descVal);
 
 		if (ne != NULL && hasAfterVal) {
 			//TRACE("Add expA = %s to %s\n", afterVal, ne->GetName());
