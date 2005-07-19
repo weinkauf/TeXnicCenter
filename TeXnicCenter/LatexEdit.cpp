@@ -503,6 +503,7 @@ BOOL CLatexEdit::OnInsertLatexConstruct( UINT nID )
 
 void CLatexEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {	
+	//TRACE("OnChar: %d (nFlags=%d)\n", nChar, nFlags);
 	switch( nChar )
 	{
 		case _T('"'):
@@ -1002,7 +1003,7 @@ void CLatexEdit::OnQueryCompletion()
 	
 }
 
-CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLeft)
+CAutoCompleteDialog *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLeft)
 {
 	CPoint	ptStart, ptText;	
 	if (!IsValidTextPos(topLeft)) {
@@ -1016,7 +1017,7 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 	ptStart.y += GetLineHeight(); // Goto next row
 
 	if (m_CompletionListBox == NULL) { // create listbox
-		m_CompletionListBox = new CAutoCompleteListBox(&theApp.m_AvailableCommands);
+		m_CompletionListBox = new CAutoCompleteDialog(&theApp.m_AvailableCommands, this);
 		m_CompletionListBox->SetListener(m_Proxy);		
 		
 		wndCmd = SW_SHOWNORMAL;
@@ -1024,32 +1025,17 @@ CAutoCompleteListBox *CLatexEdit::CreateListBox(CString &keyword,const CPoint to
 		wndCmd = SW_RESTORE;		
 	}
 		
-	// setup and show listbox. If InitWithKeyword returns true, we show the box, otherwise
-	// we found nothing or an unique match
+	// setup and show listbox
 	int nWords = m_CompletionListBox->GetNumberOfMatches(keyword);
 	if (nWords >= 1) {
-		if (nWords == 1) {
-			m_CompletionListBox->InitWithKeyword(keyword);
-		} else {
-			/* Listbox does not work properly under NT :-( */
-			if (theApp.m_SystemInfo.GetMajorVersion() < 5) {
-				TRACE("Windows NT, 95 or 98 detected, cancel auto complete...\n");
-				return m_CompletionListBox;
-			}
-			if (!::IsWindow(m_CompletionListBox->GetSafeHwnd())) { // this is quite dirty :-(
-				m_CompletionListBox->Create(NULL, NULL, WS_VISIBLE, CRect(), theApp.GetMainWnd());
-				//m_CompletionListBox->SetParent(theApp.GetMainWnd());
-			}
-			m_CompletionListBox->InitWithKeyword(keyword);
+		m_CompletionListBox->InitWithKeyword(keyword);
+		if (nWords > 1) {		
 			m_CompletionListBox->ShowWindow(wndCmd);
-			ClientToScreen(&ptStart); // translate coordinates, because popup has no parent 
-			m_CompletionListBox->MoveWindow(ptStart.x, ptStart.y, 100, 150);
+			ClientToScreen(&ptStart); // translate coordinates
+			m_CompletionListBox->SetWindowPos(NULL, ptStart.x, ptStart.y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
 			m_CompletionListBox->SetCurSel(0);
-			m_OldFocus = m_CompletionListBox->SetFocus();
 		}
-	} /*else {
-		SetFocus();
-	}*/
+	}
 	return m_CompletionListBox;
 }
 

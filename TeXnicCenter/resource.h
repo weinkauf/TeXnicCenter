@@ -227,6 +227,7 @@
 #define STE_FLOATPREFIX_TABLE           277
 #define IDD_PACKAGE_SCAN_PROGRESS       277
 #define IDD_DIALOG1                     279
+#define IDD_AUTOCOMPLETE                281
 #define STE_HEADER_PART                 288
 #define STE_HEADER_CHAPTER              289
 #define STE_HEADER_SECTION              290
@@ -657,6 +658,7 @@
 #define IDC_OPTIONS_QM_SET_LABEL        1338
 #define IDC_CANCEL                      1339
 #define IDC_SHOW_LINENUMBERS            1340
+#define IDC_LIST                        1345
 #define IDD_CUSTOMIZEPAGE_EDITOR        16105
 #define IDD_OUTPUTWIZARD_MIKTEX         16106
 #define IDD_OUTPUTWIZARD_PATH           16107
@@ -1294,9 +1296,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        281
+#define _APS_NEXT_RESOURCE_VALUE        282
 #define _APS_NEXT_COMMAND_VALUE         38482
-#define _APS_NEXT_CONTROL_VALUE         1345
+#define _APS_NEXT_CONTROL_VALUE         1346
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif
