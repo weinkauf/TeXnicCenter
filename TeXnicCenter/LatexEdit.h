@@ -42,7 +42,8 @@
 #include "LatexParser.h"
 #include "LatexDoc.h"
 #include "CrystalEditViewEx.h"
-#include "AutoCompleteListBox.h"
+//#include "AutoCompleteListBox.h"
+#include "AutoCompleteDialog.h"
 
 class MyListener;
 class CAdvice;
@@ -174,14 +175,16 @@ public:
 private:
 	void HideAdvice();
 	BOOL RestoreFocus();
-	CAutoCompleteListBox *CreateListBox(CString &keywordt, const CPoint topLeft);
+	//CAutoCompleteListBox *CreateListBox(CString &keywordt, const CPoint topLeft);
+	CAutoCompleteDialog *CreateListBox(CString &keyword, const CPoint topLeft);
 	BOOL InvokeContextHelp(const CString keyword);
 
 	CWnd* m_OldFocus;
 	CPoint m_oldStart;
 	CPoint m_oldEnd;
 	CAdvice *m_InstTip;
-	CAutoCompleteListBox* m_CompletionListBox;
+	//CAutoCompleteListBox* m_CompletionListBox;
+	CAutoCompleteDialog* m_CompletionListBox;
 	MyListener *m_Proxy;
 };
 

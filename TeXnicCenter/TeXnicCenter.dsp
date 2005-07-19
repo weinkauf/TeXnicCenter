@@ -120,7 +120,7 @@ SOURCE=.\Advice.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\AutoCompleteListBox.cpp
+SOURCE=.\AutoCompleteDialog.cpp
 # End Source File
 # Begin Source File
 
@@ -586,6 +586,10 @@ SOURCE=.\ActiveProfileDialog.h
 # Begin Source File
 
 SOURCE=.\Advice.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\AutoCompleteDialog.h
 # End Source File
 # Begin Source File
 
@@ -1283,10 +1287,6 @@ SOURCE=.\TeXnicCenter.reg
 # End Source File
 # End Target
 # End Project
-# Section TeXnicCenter : {72ADFD78-2C39-11D0-9903-00A0C91BC942}
-# 	1:10:IDB_SPLASH:110
-# 	2:21:SplashScreenInsertKey:4.0
-# End Section
 # Section TeXnicCenter : {72ADFD54-2C39-11D0-9903-00A0C91BC942}
 # 	1:17:CG_IDS_DIDYOUKNOW:106
 # 	1:22:CG_IDS_TIPOFTHEDAYMENU:105
@@ -1309,4 +1309,8 @@ SOURCE=.\TeXnicCenter.reg
 # 	2:13:IDB_LIGHTBULB:IDB_LIGHTBULB
 # 	2:18:CG_IDS_FILE_ABSENT:CG_IDS_FILE_ABSENT
 # 	2:10:TipDlg.cpp:TipDlg.cpp
+# End Section
+# Section TeXnicCenter : {72ADFD78-2C39-11D0-9903-00A0C91BC942}
+# 	1:10:IDB_SPLASH:110
+# 	2:21:SplashScreenInsertKey:4.0
 # End Section
