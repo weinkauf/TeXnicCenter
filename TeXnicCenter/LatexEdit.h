@@ -173,6 +173,7 @@ public:
 	CLatexDoc* GetDocument();
 
 private:
+	void DestroyListBox();
 	void HideAdvice();
 	BOOL RestoreFocus();
 	//CAutoCompleteListBox *CreateListBox(CString &keywordt, const CPoint topLeft);

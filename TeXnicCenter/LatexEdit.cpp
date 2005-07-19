@@ -677,6 +677,9 @@ void CLatexEdit::OnSetFocus(CWnd* pOldWnd)
 	CLatexDoc	*pDoc = GetDocument();
 	if (pDoc)
 		pDoc->CheckForFileChanges();
+	if (m_CompletionListBox != NULL) {
+		DestroyListBox();
+	}
 }
 
 
@@ -1017,7 +1020,7 @@ CAutoCompleteDialog *CLatexEdit::CreateListBox(CString &keyword,const CPoint top
 	ptStart.y += GetLineHeight(); // Goto next row
 
 	if (m_CompletionListBox == NULL) { // create listbox
-		m_CompletionListBox = new CAutoCompleteDialog(&theApp.m_AvailableCommands, this);
+		m_CompletionListBox = new CAutoCompleteDialog(&theApp.m_AvailableCommands, theApp.GetMainWnd());
 		m_CompletionListBox->SetListener(m_Proxy);		
 		
 		wndCmd = SW_SHOWNORMAL;
@@ -1177,7 +1180,7 @@ void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 			while (ptCaret.x < s.GetLength() && s.GetAt(ptCaret.x) == '\t') ptCaret.x++;			 
 			SetCursorPos(ptCaret);
 		}
-	}
+	}	
 	RestoreFocus(); // set focus back to edit view
 }
 
@@ -1190,7 +1193,7 @@ void CLatexEdit::OnACCommandCancelled()
 		GetSelection(m_oldStart, m_oldEnd);
 		SetSelection(m_oldEnd, m_oldEnd); 
 	}
-	RestoreFocus();
+	RestoreFocus();	
 }
 
 void CLatexEdit::OnACHelp(CString &cmd)
@@ -1298,3 +1301,11 @@ void CLatexEdit::HideAdvice()
 
 
 
+
+void CLatexEdit::DestroyListBox()
+{
+	if (m_CompletionListBox != NULL) {
+		delete m_CompletionListBox;
+		m_CompletionListBox = NULL;
+	}
+}
