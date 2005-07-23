@@ -1,10 +1,10 @@
 BUILDING TEXNICCENTER
 
-0. Note: The build process have been automated. I have tested it and seems to work properly. 
-		 If any problems occur, please let me know and refer to the steps of the old process which
-		 are given at the end of this document.
-		 
-		 23.05.2005, Olli (mailto:owieland@sourceforge.net)
+0. Note: The build process has been automated. I have tested it and seems to work properly. 
+         If any problems occur, please let me know and refer to the steps of the old process which
+         are given at the end of this document.
+
+         23.05.2005, Olli (mailto:owieland@sourceforge.net)
 
 1. (obsolete)
 2. (obsolete)
@@ -37,7 +37,7 @@ BUILDING TEXNICCENTER
 
 5. Download the BCGControlBarLibrary header- and lib-files from 
 
-   	http://www.toolscenter.org/front_content.php?idcat=50
+     http://www.toolscenter.org/downloads
 
    and unpack the ZIP-archive to the directory, this file (HowToBuild.txt) is
    placed in.
