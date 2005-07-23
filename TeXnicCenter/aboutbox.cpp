@@ -42,7 +42,7 @@
 #define DISPLAY_SLOW				70
 #define DISPLAY_MEDIUM			40
 #define DISPLAY_FAST				10
-#define DISPLAY_SPEED				DISPLAY_MEDIUM
+#define DISPLAY_SPEED				DISPLAY_FAST
 
 #define RED					RGB(255,0,0)
 #define GREEN				RGB(0,255,0)
@@ -84,7 +84,6 @@
 // 
 // Array count. Make sure this keeps up with how many lines there are
 // in the array!
-#define ARRAYCOUNT		109
 char *pArrCredit[] = {
 						"Copyright © 1999-2005\t",
 						"www.ToolsCenter.org\t",
@@ -156,9 +155,16 @@ char *pArrCredit[] = {
 						"",
 						"IDB_SEPARATOR\b",
 						"",
-						"Splash Screen\r",
+						"Graphics\r",
+						"",
+						"Splash Screen\t",
 						"",
 						"Ralph Kocher\f",
+						"",
+						"",
+						"Additional Graphics\t",
+						"",
+						"Felix Kaiser\f",
 						"",
 						"",
 						"IDB_SEPARATOR\b",
@@ -192,6 +198,8 @@ char *pArrCredit[] = {
 						"",
 						""
 						};
+						
+#define ARRAYCOUNT sizeof(pArrCredit)/sizeof(char*)
 
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
