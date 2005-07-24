@@ -1304,8 +1304,9 @@ void CLatexEdit::HideAdvice()
 
 void CLatexEdit::DestroyListBox()
 {
+	/*
 	if (m_CompletionListBox != NULL) {
 		delete m_CompletionListBox;
 		m_CompletionListBox = NULL;
-	}
+	}*/
 }
