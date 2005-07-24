@@ -168,7 +168,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "regexp"=..\regexpp\LIB\regexp.dsp - Package Owner=<4>
+Project: "regexpdll"=..\regexpp\LIB\regexpdll.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
