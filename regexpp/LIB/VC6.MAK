@@ -206,6 +206,8 @@ LIB32_OBJS= \
 #begin texniccenter
 	if not exist ..\..\output\Debug (md ..\..\output\Debug) 
 	copy mre200dl.lib ..\..\output\Debug
+	copy mre200dl.ilk ..\..\output\Debug
+	copy mre200dl.pdb ..\..\output\Debug
 #end texniccenter
 
 !ENDIF 
