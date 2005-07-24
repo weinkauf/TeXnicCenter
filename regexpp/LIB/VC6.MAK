@@ -134,7 +134,7 @@ LIB32_OBJS= \
     copy "$(LIBNAME).lib" "$(MSVCDIR)\lib\$(LIBNAME).lib"
 #begin texniccenter
 	if not exist ..\..\output\Release (	md ..\..\output\Release)	
-	copy mre200l.lib ..\..\output\Release
+	copy "$(LIBNAME).lib" ..\..\output\Release
 #end texniccenter
 
 !ELSEIF  "$(CFG)" == "Debug"
@@ -205,9 +205,9 @@ LIB32_OBJS= \
     copy "$(LIBNAME).pdb" "$(MSVCDIR)\lib\$(LIBNAME).pdb"
 #begin texniccenter
 	if not exist ..\..\output\Debug (md ..\..\output\Debug) 
-	copy mre200dl.lib ..\..\output\Debug
-	copy mre200dl.ilk ..\..\output\Debug
-	copy mre200dl.pdb ..\..\output\Debug
+	copy "$(LIBNAME).lib" ..\..\output\Debug
+	copy "$(LIBNAME).ilk" ..\..\output\Debug
+	copy "$(LIBNAME).pdb" ..\..\output\Debug
 #end texniccenter
 
 !ENDIF 
