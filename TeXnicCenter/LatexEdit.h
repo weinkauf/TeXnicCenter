@@ -148,6 +148,7 @@ protected:
 	afx_msg void OnTextmodulesDefine();
 	afx_msg void OnUpdateTextmodulesDefine(CCmdUI* pCmdUI);
 	afx_msg void OnQueryCompletion();
+	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	//}}AFX_MSG
 	afx_msg void OnUpdateTextModulesList(CCmdUI *pCmdUI);
 	afx_msg void OnBlockComment(const UINT nID);

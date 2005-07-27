@@ -76,6 +76,7 @@ BEGIN_MESSAGE_MAP(CLatexEdit, CCrystalEditViewEx)
 	ON_UPDATE_COMMAND_UI(ID_TEXTMODULES_DEFINE, OnUpdateTextmodulesDefine)
 	ON_COMMAND(ID_QUERY_COMPLETION, OnQueryCompletion)
 	ON_COMMAND(ID_PACKAGE_SETUP, OnPackageSetup)
+	ON_WM_KILLFOCUS()
 	//}}AFX_MSG_MAP
 	ON_WM_SYSCOLORCHANGE()
 
@@ -944,16 +945,11 @@ void CLatexEdit::OnUpdateTextmodulesDefine(CCmdUI* pCmdUI)
 
 void CLatexEdit::OnPackageSetup()
 {
-	/* For debug only*/
-	//m_AvailableCommands.AddSearchPath(CString("c:\\texmf"));
-	//m_AvailableCommands.FindStyleFiles();
+	CString title(AfxLoadString(IDS_SAVE_PACKAGE_AS)); 
+	CString initialDir(theApp.GetWorkingDir() + _T("\\packages"));
 
-	/* remove this line on production */
-	//if (1) return;
-
-	CFolderSelect fsel("Choose directory to search for style files");
+	CFolderSelect fsel(AfxLoadString(IDS_SELECT_PACKAGE_DIR));
 	
-
 	if (fsel.DoModal() == IDOK) {
 		theApp.m_AvailableCommands.ClearSearchPath();
 		theApp.m_AvailableCommands.AddSearchPath(CString(fsel.GetPath()));
@@ -965,12 +961,17 @@ void CLatexEdit::OnPackageSetup()
 		theApp.m_AvailableCommands.FindStyleFiles();
 		prg.CloseWindow();
 
-		CFileDialog fselxml(FALSE, 
+		CFileDialogEx fselxml(FALSE, 
 			_T("xml"), 
 			_T("packages.xml"), 
 			OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
 			AfxLoadString(STE_FILE_XMLFILTER),
 			NULL);
+
+		fselxml.m_ofn.lpstrTitle = (LPCTSTR)title; 
+		fselxml.m_ofn.lpstrInitialDir = (LPCTSTR)initialDir;
+		TRACE("title = %s\n", AfxLoadString(IDS_SAVE_PACKAGE_AS)); 
+		TRACE("initDir = %s\n", CString(theApp.GetWorkingDir() + _T("\\packages")));
 
 		if (fselxml.DoModal() == IDOK) {
 			CString s = fselxml.GetPathName();
@@ -1020,7 +1021,7 @@ CAutoCompleteDialog *CLatexEdit::CreateListBox(CString &keyword,const CPoint top
 	ptStart.y += GetLineHeight(); // Goto next row
 
 	if (m_CompletionListBox == NULL) { // create listbox
-		m_CompletionListBox = new CAutoCompleteDialog(&theApp.m_AvailableCommands, theApp.GetMainWnd());
+		m_CompletionListBox = new CAutoCompleteDialog(&theApp.m_AvailableCommands, this /*theApp.GetMainWnd()*/);
 		m_CompletionListBox->SetListener(m_Proxy);		
 		
 		wndCmd = SW_SHOWNORMAL;
@@ -1299,14 +1300,17 @@ void CLatexEdit::HideAdvice()
 	}
 }
 
-
-
+void CLatexEdit::OnKillFocus(CWnd* pNewWnd) 
+{
+	CCrystalEditViewEx::OnKillFocus(pNewWnd);
+	TRACE("kill focus -> close window\n");
+	DestroyListBox();
+}
 
 void CLatexEdit::DestroyListBox()
 {
-	/*
-	if (m_CompletionListBox != NULL) {
-		delete m_CompletionListBox;
-		m_CompletionListBox = NULL;
-	}*/
+	if (m_CompletionListBox != NULL) {		
+		m_CompletionListBox->CloseWindow();
+	}
 }
+
