@@ -718,7 +718,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -3621,6 +3621,8 @@ BEGIN
     STE_CRYSTAL_EDIT_RESOURCE_DLL "CrysEdResDeutsch.dll"
     STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED 
                             "Es konnten nicht alle Fenster der Sitzung wiederhergestellt werden."
+    IDS_SAVE_PACKAGE_AS     "Gelesene Pakete speichern unter..."
+    IDS_SELECT_PACKAGE_DIR  "Bitte Wurzelverzeichnis für Paketsuche auswählen"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4783,12 +4785,12 @@ BEGIN
     ID_WINDOW_PARSE         "Aktiviert die 'Analyse'-Ausgabe\n'Analyse'-Ausgabe aktivieren"
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -7616,6 +7618,8 @@ BEGIN
     STE_CRYSTAL_EDIT_RESOURCE_DLL "CrysEdResEnglish.dll"
     STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED 
                             "Not all of the windows in the session could be opened."
+    IDS_SAVE_PACKAGE_AS     "Save scanned packages as..."
+    IDS_SELECT_PACKAGE_DIR  "Please select root dir where to search for packages"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -8762,7 +8766,7 @@ BEGIN
     ID_WINDOW_PARSE         "Activates the parse output view\nActivate Parse Output"
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
