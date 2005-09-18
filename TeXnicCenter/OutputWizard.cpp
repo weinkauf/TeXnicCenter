@@ -411,10 +411,16 @@ void COutputWizard::LookForPs()
 	m_wndPagePsViewer.m_strPath = FindApplicationForDocType(_T(".ps"));
 
 	if (m_wndPagePsViewer.m_strPath.Find(_T("GSVIEW32.EXE")) > -1)
+	{
+		m_wndPagePsViewer.m_strSingleInstanceOption = _T("-e");
+
 		LookForPdf();
+	}
 	else
+	{
 		// lets the user make his configuration
 		SetActivePage(pagePsViewer);
+	}
 }
 
 

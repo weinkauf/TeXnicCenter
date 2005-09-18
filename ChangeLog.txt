@@ -1,3 +1,6 @@
+2005/09/18 niteria
+- Single Instance Option for ghostview, i.e., ghostview is started only once.
+
 2005/07/03 niteria
 - Implemented Feature 984843: Session should open files in the order as they appear
   Files are now restored in the order as shown by the document tabs.
