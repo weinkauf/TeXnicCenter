@@ -1,5 +1,6 @@
 2005/10/13 owieland
 - Fixed bug 1325323: Minor english corrections
+- Fixed bug 1314326: Edit -> Toogle Block Comment mispelled
 
 2005/09/18 niteria
 - Single Instance Option for ghostview, i.e., ghostview is started only once.
