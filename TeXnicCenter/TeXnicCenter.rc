@@ -7849,7 +7849,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     ID_INSERT_VERBATIM      "Inserts source code\nCode\n\r\\begin{verbatim}\r\001\r\\end{verbatim}\r"
     ID_INSERT_ITEMIZE       "Inserts an itemization\nItemization\n\r\\begin{itemize}\r\t\\item \001\r\\end{itemize}\r"
-    ID_INSERT_ENUMERATE     "Inserts an enumerations\nEnumeration\n\r\\begin{enumerate}\r\t\\item \001\r\\end{enumerate}\r"
+    ID_INSERT_ENUMERATE     "Inserts an enumeration\nEnumeration\n\r\\begin{enumerate}\r\t\\item \001\r\\end{enumerate}\r"
     ID_INSERT_DESCRIPTION   "Inserts an itemization, in which each item has a label\nDescription\n\r\\begin{description}\r\t\\item[\001] \r\\end{description}\r"
     ID_INSERT_TITLEPAGE     "Inserts a title page\nTitle Page\n\r\\begin{titlepage}\r\t\001\r\\end{titlepage}\r"
     ID_INSERT_ABSTRACT      "Inserts an abstract\nAbstract\n\r\\begin{abstract}\r\t\001\r\\end{abstract}\r"
@@ -7902,7 +7902,7 @@ BEGIN
     ID_FORMAT_SLOPPYPAR     "Inserts a ""sloppy"" paragraph\n""Sloppy"" Paragraph\n\r\\begin{sloppypar}\r\t\001\r\\end{sloppypar}\r"
     ID_FORMAT_FLUSHLEFT     "Aligns text left\nAlign Left\n\r\\begin{flushleft}\r\001\r\\end{flushleft}\r"
     ID_FORMAT_CENTER        "Centers text\nCenter\n\r\\begin{center}\r\001\r\\end{center}\r"
-    ID_FORMAT_FLUSHRIGHT    "Aligns text right\nAlign Rigth\n\r\\begin{flushright}\r\001\r\\end{flushright}\r"
+    ID_FORMAT_FLUSHRIGHT    "Aligns text right\nAlign Right\n\r\\begin{flushright}\r\001\r\\end{flushright}\r"
 END
 
 STRINGTABLE DISCARDABLE 
