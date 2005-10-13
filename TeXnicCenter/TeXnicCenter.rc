@@ -8728,7 +8728,7 @@ BEGIN
     ID_PROJECT_NEW_FROM_FILE 
                             "Creates a new project and sets the active file as the main file of the project.\nNew project with active file"
     ID_EDIT_BLOCKCOMMENT_TOOGLE 
-                            "Toogles the comment status of all selected lines.\nToogle Block Comment"
+                            "Toggles the comment status of all selected lines.\nToggle Block Comment"
     ID_EDIT_BLOCKCOMMENT_INSERT 
                             "Comments all selected lines using %-Signs.\nInsert Block Comment"
     ID_EDIT_BLOCKCOMMENT_REMOVE 
