@@ -129,7 +129,7 @@ CString CBiBTeXEntry::ToCaption()
 	}
 	
 
-	return CString(author + _T(": ") + 
+	return CString(m_Key + _T(": ") + author + _T(": ") + 
 		title + _T(" (") + 
 		BibTypeVerbose[m_Type] + _T(", ") +
 		year + _T(")")
