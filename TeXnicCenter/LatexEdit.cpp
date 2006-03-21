@@ -1007,12 +1007,12 @@ void CLatexEdit::OnQueryCompletion()
 	
 }
 
-CAutoCompleteDialog *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLeft)
+CAutoCompleteDlg *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLeft)
 {
 	CPoint	ptStart, ptText;	
 	if (!IsValidTextPos(topLeft)) {
 		TRACE("Invalid text pos %d, %d\n", topLeft.x, topLeft.y);
-		return FALSE;
+		return 0;
 	}
 	ptStart = TextToClient(topLeft);
 
@@ -1021,23 +1021,24 @@ CAutoCompleteDialog *CLatexEdit::CreateListBox(CString &keyword,const CPoint top
 	ptStart.y += GetLineHeight(); // Goto next row
 
 	if (m_CompletionListBox == NULL) { // create listbox
-		m_CompletionListBox = new CAutoCompleteDialog(&theApp.m_AvailableCommands, this /*theApp.GetMainWnd()*/);
+		m_CompletionListBox = new CAutoCompleteDlg(&theApp.m_AvailableCommands, this /*theApp.GetMainWnd()*/);
 		m_CompletionListBox->SetListener(m_Proxy);		
 		
 		wndCmd = SW_SHOWNORMAL;
 	} else { // reset existing instance		
-		wndCmd = SW_RESTORE;		
+		wndCmd = SW_SHOWNORMAL;		
 	}
 		
 	// setup and show listbox
 	int nWords = m_CompletionListBox->GetNumberOfMatches(keyword);
 	if (nWords >= 1) {
 		m_CompletionListBox->InitWithKeyword(keyword);
-		if (nWords > 1) {		
+		if (nWords > 1) {					
 			m_CompletionListBox->ShowWindow(wndCmd);
 			ClientToScreen(&ptStart); // translate coordinates
 			m_CompletionListBox->SetWindowPos(NULL, ptStart.x, ptStart.y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
 			m_CompletionListBox->SetCurSel(0);
+			
 		}
 	}
 	return m_CompletionListBox;
@@ -1304,13 +1305,13 @@ void CLatexEdit::OnKillFocus(CWnd* pNewWnd)
 {
 	CCrystalEditViewEx::OnKillFocus(pNewWnd);
 	TRACE("kill focus -> close window\n");
-	DestroyListBox();
+	//DestroyListBox();
 }
 
 void CLatexEdit::DestroyListBox()
 {
-	if (m_CompletionListBox != NULL) {		
-		m_CompletionListBox->CloseWindow();
+	if (m_CompletionListBox != NULL && ::IsWindow(m_CompletionListBox->GetSafeHwnd())) {		
+		m_CompletionListBox->ShowWindow(SW_HIDE);
 	}
 }
 
