@@ -120,7 +120,7 @@ SOURCE=.\Advice.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\AutoCompleteDialog.cpp
+SOURCE=.\AutoCompleteDlg.cpp
 # End Source File
 # Begin Source File
 
@@ -590,6 +590,10 @@ SOURCE=.\Advice.h
 # Begin Source File
 
 SOURCE=.\AutoCompleteDialog.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\AutoCompleteDlg.h
 # End Source File
 # Begin Source File
 
