@@ -47,6 +47,9 @@ static char THIS_FILE[]=__FILE__;
 
 extern const TCHAR* BibTypeVerbose[];
 
+/**
+ * Initialize object with a given BibTeX file
+ */
 CBiBTeXFile::CBiBTeXFile(CString file)
 :CObject()
 {
@@ -58,13 +61,18 @@ CBiBTeXFile::CBiBTeXFile(CString file)
 	m_Buffer = new TCHAR[m_BufferSize];
 }
 
+/**
+ * Clean up
+ */
 CBiBTeXFile::~CBiBTeXFile()
 {
 	DropAllEntries();
 	delete [] m_Buffer;
 }
 
-
+/**
+ * Opens the given BibTeX file, store the contents in a buffer and passes it to the parser.
+ */
 BOOL CBiBTeXFile::ProcessFile()
 {
 	CFile f;
@@ -82,7 +90,7 @@ BOOL CBiBTeXFile::ProcessFile()
 
 		delete [] buf;
 	} catch(CFileException &ex) {
-		TRACE("Error opening style file: %s\n",ex);
+		TRACE("Error opening BibTeX file: %s\n",ex);
 		f.Close();				
 		return FALSE;
 	} 
@@ -91,12 +99,15 @@ BOOL CBiBTeXFile::ProcessFile()
 	return ok;
 }
 
+/**
+ * Parses the BibTex file. 
+ */
 BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 {
 	const TCHAR *begin, *lastChar = NULL;
 	CBiBTeXEntry::BibType type;
 	int depth = 0, line = 1, col = 1;
-	BOOL inComment = FALSE, inQuote = FALSE, insideEntry = FALSE, openBrace = FALSE;
+	BOOL inComment = FALSE, inQuote = FALSE, insideEntry = FALSE, openBrace = FALSE; // internal states
 
 	begin = buf;	
 	type = CBiBTeXEntry::Unknown;
@@ -181,18 +192,20 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 				ProcessArgument(begin, buf-begin, type, line);
 			} 
 			--depth;
-			if (depth == 0) {
+			if (depth == 0) { // we're back on earth -> reset parser state and complete item
 				insideEntry = FALSE;
 				FinalizeItem();
 			}
 			break;		
 		} // end switch
 
-		if (*buf == _T('\n')) { // update line number?
+		if (*buf == _T('\n')) { // found a new line
 			inComment = FALSE; // quit comment
 			col = 0;
-			++line;
+			++line; // update line number
 		}
+
+		// move to next char in buffer
 		col++;
 		lastChar = buf;
 		buf++;
@@ -207,17 +220,22 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 	return TRUE;
 }
 
+/**
+ * Find the corresponding BibTeX entry type and issues an error, if entry type is unknown
+ */
 CBiBTeXEntry::BibType CBiBTeXFile::ProcessEntryType(const TCHAR *buf, int len, int line)
 {
-	if (!SaveCopyBuffer(buf + 1, len - 1)) {
+	if (!SaveCopyBuffer(buf + 1, len - 1)) { // buffer sanity check
 		HandleParseError(STE_BIBTEX_ERR_SUSPICOUS_LINE, line, 1, m_Buffer);
 	}
 
-	for (int i = 0; i < CBiBTeXEntry::Unknown; i++) {
+	for (int i = 0; i < CBiBTeXEntry::Unknown; i++) { // search BibTeX item
 		if (0 == stricmp(m_Buffer, BibTypeVerbose[i])) {
 			return (CBiBTeXEntry::BibType)i;
 		}
 	}
+
+	// type not found -> raise error msg
 	HandleParseError(STE_BIBTEX_ERR_INVALID_TYPE, line, 1, m_Buffer);
 	return CBiBTeXEntry::Unknown;
 }
@@ -238,7 +256,7 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 
 	if (type == CBiBTeXEntry::Unknown) 
 	{
-		if (strlen(m_Buffer) > 100) 
+		if (strlen(m_Buffer) > 100) // limit length to satisfy TRACE macro
 		{
 			m_Buffer[100] = 0;
 		}
@@ -296,6 +314,8 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 			}
 
 			//TRACE("Set Value: <%s> = <%s>\n", name, val);
+
+			// Clean up contents
 			name.MakeLower();
 			name.TrimLeft();
 			name.TrimRight();
@@ -309,6 +329,9 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibTy
 	}
 }
 
+/**
+ * Setup error message and adds it to the message list
+ */
 void CBiBTeXFile::HandleParseError(UINT msgID, int line, int col, const TCHAR *addDesc)
 {
 	CString s, key;	
@@ -350,6 +373,9 @@ void CBiBTeXFile::HandleParseError(UINT msgID, int line, int col, const TCHAR *a
 	
 }
 
+/**
+ * Parses a BibTeX field and returns a corresponding key-value pair.
+ */
 BOOL CBiBTeXFile::ParseField(const TCHAR *field, CString &name, CString &val)
 {
 	TCHAR* eqChar;
@@ -374,17 +400,7 @@ BOOL CBiBTeXFile::ParseField(const TCHAR *field, CString &name, CString &val)
 
 	name.Delete(len1, n-len1);
 	val.Delete(0, len1 + 1);
-/*
-	strncpy(tmp, field, len1);
-	tmp[len1] = 0;
 
-	name = tmp;
-
-	strncpy(tmp, eqChar + 1, len2);
-	tmp[len2] = 0;
-
-	val = tmp;
-	*/
 	/// remove whitespace
 	name.TrimRight();
 	name.TrimLeft();
@@ -394,10 +410,13 @@ BOOL CBiBTeXFile::ParseField(const TCHAR *field, CString &name, CString &val)
 	return TRUE;
 }
 
+/**
+ * Drops all entries including key and string hash table
+ */
 void CBiBTeXFile::DropAllEntries()
 {
 	POSITION pos = m_Entries.GetStartPosition();
-	while(pos != NULL) {
+	while(pos != NULL) { // delete key-entry hashtable
 		CBiBTeXEntry *be;
 		CString key;
 		m_Entries.GetNextAssoc(pos, key, (CObject*&)be);
@@ -410,9 +429,9 @@ void CBiBTeXFile::DropAllEntries()
 		m_Entries.RemoveKey(key);
 	}
 
-	m_Keys.RemoveAll();
-	m_Strings.RemoveAll();
-	for (int i=0;i < m_ErrorMsgs.GetSize(); i++) {
+	m_Keys.RemoveAll(); // drop all keys
+	m_Strings.RemoveAll(); // drop all abbreviations
+	for (int i=0;i < m_ErrorMsgs.GetSize(); i++) { // cleanup memory 
 		CBiBTeXEntry *be = dynamic_cast<CBiBTeXEntry*>(m_ErrorMsgs.GetAt(i));
 		if (be != NULL) {
 			delete be;
@@ -420,6 +439,10 @@ void CBiBTeXFile::DropAllEntries()
 	}
 }
 
+/**
+ * Invoked by the parser if an BibTeX entry is complete. The BibTeXEntry object is filled up with the
+ * missing data needed for the structure view.
+ */
 void CBiBTeXFile::FinalizeItem()
 {
 	CBiBTeXEntry *be;
@@ -437,6 +460,9 @@ void CBiBTeXFile::FinalizeItem()
 	}
 }
 
+/**
+ * Returns an BibTeX entry for a given key or NULL, if key not exists
+ */
 const CBiBTeXEntry* CBiBTeXFile::GetEntryByKey(CString key)
 {
 	CBiBTeXEntry *be;
@@ -446,6 +472,9 @@ const CBiBTeXEntry* CBiBTeXFile::GetEntryByKey(CString key)
 	return NULL;
 }
 
+/**
+ * Returns a string (an abbreviation) of the BibTeX file or an empty string, if not exist.
+ */
 CString CBiBTeXFile::GetString(CString abbrev)
 {
 	CString expanded;
@@ -455,6 +484,9 @@ CString CBiBTeXFile::GetString(CString abbrev)
 	return CString();
 }
 
+/**
+ * Removes unwanted whitespace from a string
+ */
 void CBiBTeXFile::ReplaceSpecialChars(CString &value)
 {
 	// Strip off surrounding quotes
@@ -478,6 +510,9 @@ void CBiBTeXFile::ReplaceSpecialChars(CString &value)
 	value.Replace(_T("\"ss"), _T("ß"));
 }
 
+/**
+ * Copies a string buffer to a local buffer with checking the requested length. 
+ */
 BOOL CBiBTeXFile::SaveCopyBuffer(const TCHAR *buffer, int reqSize)
 {
 	BOOL ret = TRUE;
