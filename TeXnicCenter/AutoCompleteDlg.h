@@ -30,9 +30,8 @@ public:
 
 // Operations
 public:
+	/** Select an item in the listbox by the zero-based position. See also CListBox::SetCurSel */
 	void SetCurSel(int);
-
-	int GetNumberOfMatches(CString keyword);
 	/** 
 		Updates listbox selection so that the best match for the given keyword is selected.
 
@@ -89,6 +88,7 @@ private:
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CAutoCompleteDlg)
+	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

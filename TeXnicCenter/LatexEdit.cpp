@@ -1003,8 +1003,9 @@ void CLatexEdit::OnQueryCompletion()
 	GetWordBeforeCursor(keyword, topLeft); /* retrieve word to be completed */
 	if (!keyword.IsEmpty()) {
 		m_CompletionListBox = CreateListBox(keyword, topLeft); /* setup (and show) list box */
-	}
-	
+	} else {
+		SetSelection(m_oldStart, m_oldEnd); /* restore old position */
+	}	
 }
 
 CAutoCompleteDlg *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLeft)
@@ -1015,32 +1016,30 @@ CAutoCompleteDlg *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLef
 		return 0;
 	}
 	ptStart = TextToClient(topLeft);
-
-	int wndCmd;
-	
 	ptStart.y += GetLineHeight(); // Goto next row
 
-	if (m_CompletionListBox == NULL) { // create listbox
-		m_CompletionListBox = new CAutoCompleteDlg(&theApp.m_AvailableCommands, this /*theApp.GetMainWnd()*/);
-		m_CompletionListBox->SetListener(m_Proxy);				
-		wndCmd = SW_SHOWNORMAL;
-	} else { // reset existing instance		
-		wndCmd = SW_SHOWNORMAL;		
-	}
-		
-	// setup and show listbox
-	int nWords = m_CompletionListBox->GetNumberOfMatches(keyword);
-	if (nWords >= 1) {
+			
+	// setup listbox	
+	int nWords = GetNumberOfMatches(keyword); // find number of matches
+	if (nWords >= 1) { // found one or more matches		
+		if (m_CompletionListBox == NULL) { // create window, if needed
+			m_CompletionListBox = new CAutoCompleteDlg(&theApp.m_AvailableCommands, this /*theApp.GetMainWnd()*/);
+			m_CompletionListBox->SetListener(m_Proxy);								
+		}
+		// InitWithKeyword will notify the listener immediatly, if only one exact match exists
 		m_CompletionListBox->InitWithKeyword(keyword);
-		if (nWords > 1) {					
-			m_CompletionListBox->ShowWindow(wndCmd);
+
+		if (nWords > 1) { // show listbox for selection
+			m_CompletionListBox->ShowWindow(SW_SHOWNORMAL);
 			ClientToScreen(&ptStart); // translate coordinates
 			m_CompletionListBox->SetWindowPos(NULL, ptStart.x, ptStart.y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
-			m_CompletionListBox->SetCurSel(0);
-			
+			m_CompletionListBox->SetCurSel(0);			
+		} 
+	} else { // hide window
+		SetSelection(m_oldStart, m_oldEnd); /* restore old position */
+		if (m_CompletionListBox != NULL) {
+			m_CompletionListBox->ShowWindow(SW_HIDE);
 		}
-	} else {
-		m_CompletionListBox->ShowWindow(SW_HIDE);
 	}
 	return m_CompletionListBox;
 }
@@ -1314,3 +1313,15 @@ void CLatexEdit::DestroyListBox()
 	}
 }
 
+/* Returns the number of possible matches */
+int CLatexEdit::GetNumberOfMatches(CString keyword) {
+	const CMapStringToOb *map;
+
+	map = theApp.m_AvailableCommands.GetPossibleItems(keyword, _T(""));
+	if (map == NULL) return 0;
+
+	int n = map->GetCount();
+	delete map;
+
+	return n;
+}

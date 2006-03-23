@@ -177,6 +177,8 @@ private:
 	void HideAdvice();
 	BOOL RestoreFocus();
 
+	/* Returns the number of possible matches */
+	int GetNumberOfMatches(CString keyword);
 	CAutoCompleteDlg *CreateListBox(CString &keyword, const CPoint topLeft);
 	BOOL InvokeContextHelp(const CString keyword);
 
