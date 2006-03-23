@@ -124,6 +124,10 @@ SOURCE=.\AutoCompleteDlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\AutoCompleteListbox.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\BCGNotifyingEditListBox.cpp
 # End Source File
 # Begin Source File
@@ -586,10 +590,6 @@ SOURCE=.\ActiveProfileDialog.h
 # Begin Source File
 
 SOURCE=.\Advice.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\AutoCompleteDialog.h
 # End Source File
 # Begin Source File
 
@@ -1063,6 +1063,10 @@ SOURCE=.\WorkspaceBar.h
 # Begin Source File
 
 SOURCE=.\res\bitmap1.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\bmp00001.bmp
 # End Source File
 # Begin Source File
 

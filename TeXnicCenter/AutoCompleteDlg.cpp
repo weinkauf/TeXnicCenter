@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "texniccenter.h"
 #include "AutoCompleteDlg.h"
+#include "AutoCompleteListbox.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -22,7 +23,7 @@ CAutoCompleteDlg::CAutoCompleteDlg(CStyleFileContainer *sfc, CWnd* pParent)
 	m_CurrentKeyword = "";
 	m_Listener = NULL;
 	m_Container = sfc;
-	m_Box = new CListBox;
+	m_Box = new CAutoCompleteListbox;
 	if (!Create(0, 0, 0, CRect(200,200, 400, 400), pParent, ID_AUTOCOMPLETE)) {
 		TRACE("Window creation (CAutoCompleteDlg) failed!\n");
 	}
@@ -227,12 +228,21 @@ BOOL CAutoCompleteDlg::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWO
 	ok = CWnd::CreateEx(WS_EX_CLIENTEDGE, AfxRegisterWndClass(
 			CS_HREDRAW|CS_VREDRAW|CS_OWNDC,
 			theApp.LoadStandardCursor(IDC_ARROW),
-			GetSysColorBrush(COLOR_WINDOW)), _T("AutoCompleteBox"), dwStyle, rect, pParentWnd, 0, pContext);
+			GetSysColorBrush(COLOR_WINDOW)), 
+			_T("AutoCompleteBox"), 
+			dwStyle, 
+			rect, 
+			pParentWnd, 
+			0, 
+			pContext);
 	
 	if (ok) {
 		/* ow: Window is created, now we can set the visible flag */
 		ModifyStyle(0, WS_VISIBLE);
-		ok &= m_Box->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_HSCROLL, CRect(0,0, rect.right - rect.left - 2, rect.bottom - rect.top), this, 1);
+		ok &= m_Box->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|LBS_OWNERDRAWFIXED|WS_HSCROLL, 
+			CRect(0,0, rect.right - rect.left - 2, rect.bottom - rect.top), 
+			this, 
+			1);
 	}
 	return ok;
 }
@@ -241,7 +251,7 @@ BOOL CAutoCompleteDlg::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWO
 BOOL CAutoCompleteDlg::PreTranslateMessage(MSG* pMsg) 
 {
 	if (!IsWindowVisible()) { /* are we sleeping? */
-		CWnd *wnd = GetParent();
+		CWnd *wnd = GetParent(); /* pass msg to parent */
 		return wnd->PreTranslateMessage(pMsg);
 	}
 
@@ -309,6 +319,9 @@ BOOL CAutoCompleteDlg::PreTranslateMessage(MSG* pMsg)
 				m_CurrentKeyword += (TCHAR)pMsg->wParam;		
 				UpdateSelection(m_CurrentKeyword);
 			} else {
+				if (m_Listener != NULL) {
+					m_Listener->OnACChar(pMsg->wParam, LOWORD(pMsg->lParam), HIWORD(pMsg->lParam));
+				}
 				CancelSelection();
 			}
 			if (m_Listener != NULL) {
@@ -318,8 +331,6 @@ BOOL CAutoCompleteDlg::PreTranslateMessage(MSG* pMsg)
 		break;	
 	}
 	
-	
 	return CWnd::PreTranslateMessage(pMsg);
 }
-
 
