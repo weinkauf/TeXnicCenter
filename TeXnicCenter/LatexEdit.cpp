@@ -1022,8 +1022,7 @@ CAutoCompleteDlg *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLef
 
 	if (m_CompletionListBox == NULL) { // create listbox
 		m_CompletionListBox = new CAutoCompleteDlg(&theApp.m_AvailableCommands, this /*theApp.GetMainWnd()*/);
-		m_CompletionListBox->SetListener(m_Proxy);		
-		
+		m_CompletionListBox->SetListener(m_Proxy);				
 		wndCmd = SW_SHOWNORMAL;
 	} else { // reset existing instance		
 		wndCmd = SW_SHOWNORMAL;		
@@ -1040,6 +1039,8 @@ CAutoCompleteDlg *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLef
 			m_CompletionListBox->SetCurSel(0);
 			
 		}
+	} else {
+		m_CompletionListBox->ShowWindow(SW_HIDE);
 	}
 	return m_CompletionListBox;
 }
@@ -1304,8 +1305,6 @@ void CLatexEdit::HideAdvice()
 void CLatexEdit::OnKillFocus(CWnd* pNewWnd) 
 {
 	CCrystalEditViewEx::OnKillFocus(pNewWnd);
-	TRACE("kill focus -> close window\n");
-	//DestroyListBox();
 }
 
 void CLatexEdit::DestroyListBox()

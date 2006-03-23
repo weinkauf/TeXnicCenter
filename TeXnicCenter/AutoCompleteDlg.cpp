@@ -48,7 +48,9 @@ END_MESSAGE_MAP()
 
 BOOL CAutoCompleteDlg::InitWithKeyword(CString &keyword)
 {
-	if (keyword.GetLength() < MINIMUM_KEYWORD_LENGTH) return FALSE;
+	if (keyword.GetLength() < MINIMUM_KEYWORD_LENGTH) {
+		return FALSE;
+	}
 
 	CLaTeXCommand *lc;
 	CString key;
@@ -57,7 +59,7 @@ BOOL CAutoCompleteDlg::InitWithKeyword(CString &keyword)
 
 	map = m_Container->GetPossibleItems(keyword, _T(""));
 	
-	if (map == NULL) { /* Nothing to do */
+	if (map == NULL || map->GetCount() == 0) { /* Nothing to do */
 		m_CurrentKeyword.Empty();
 		return FALSE;
 	}
@@ -72,10 +74,12 @@ BOOL CAutoCompleteDlg::InitWithKeyword(CString &keyword)
 		if (m_Listener != NULL) {
 			m_Listener->OnACCommandSelect(lc);
 		}
+		TRACE("One element only: %s\n", keyword);
 		delete map;
 		return FALSE;
 	} else {
 		if (!::IsWindow(this->GetSafeHwnd())) { // provide safe exit
+			TRACE("ERROR: Not a window\n");
 			if (m_Listener != NULL) {
 				delete map;
 				if (m_Listener != NULL) {
@@ -217,13 +221,17 @@ void CAutoCompleteDlg::SetCurSel(int sel)
 BOOL CAutoCompleteDlg::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
 {
 	BOOL ok;
-	dwStyle = WS_POPUPWINDOW|WS_VISIBLE;
+	/* ow: We omit the WS_VISIBLE flag here in order to prevent the window being visible on creation */
+	dwStyle = WS_POPUPWINDOW;
 
 	ok = CWnd::CreateEx(WS_EX_CLIENTEDGE, AfxRegisterWndClass(
 			CS_HREDRAW|CS_VREDRAW|CS_OWNDC,
 			theApp.LoadStandardCursor(IDC_ARROW),
 			GetSysColorBrush(COLOR_WINDOW)), _T("AutoCompleteBox"), dwStyle, rect, pParentWnd, 0, pContext);
+	
 	if (ok) {
+		/* ow: Window is created, now we can set the visible flag */
+		ModifyStyle(0, WS_VISIBLE);
 		ok &= m_Box->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|WS_HSCROLL, CRect(0,0, rect.right - rect.left - 2, rect.bottom - rect.top), this, 1);
 	}
 	return ok;
