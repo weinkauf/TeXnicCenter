@@ -40,6 +40,7 @@ CAutoCompleteDlg::~CAutoCompleteDlg()
 
 BEGIN_MESSAGE_MAP(CAutoCompleteDlg, CWnd)
 	//{{AFX_MSG_MAP(CAutoCompleteDlg)
+	ON_WM_KILLFOCUS()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -121,7 +122,8 @@ void CAutoCompleteDlg::SetListener(CAutoCompleteListener *listener)
 /* Select best entry for given keyword. returns true, if selection was updated, otherwise false. */
 BOOL CAutoCompleteDlg::UpdateSelection(CString &newKeyword)
 {
-	int x = m_Box->FindString(0, newKeyword);
+	int x = m_Box->FindString(-1, newKeyword);
+
 	if (x != LB_ERR) {
 		m_Box->SetCurSel(x);
 		m_Box->SetTopIndex(x);
@@ -135,18 +137,6 @@ BOOL CAutoCompleteDlg::IsCancelChar(WORD theChar) {
 	return theChar == VK_SPACE;
 }
 
-/* Returns the number of possible matches */
-int CAutoCompleteDlg::GetNumberOfMatches(CString keyword) {
-	const CMapStringToOb *map;
-
-	map = m_Container->GetPossibleItems(keyword, _T(""));
-	if (map == NULL) return 0;
-
-	int n = map->GetCount();
-	delete map;
-
-	return n;
-}
 
 
 /* User has comfirmed selection.  */
@@ -157,12 +147,13 @@ void CAutoCompleteDlg::ApplySelection()
 
 	if (n != LB_ERR) {
 		m_Box->GetText(n, selectedItem);	
-		CloseWindow();
+		
 		CLaTeXCommand *lc = (CLaTeXCommand *)m_Box->GetItemData(n);
 		ASSERT(lc != NULL);
 		if (m_Listener != NULL) {
 			m_Listener->OnACCommandSelect(lc);
 		}
+		CloseWindow();
 	} else {
 		TRACE("Error occurred during ApplySelection, error code %d", ::GetLastError());
 		CloseWindow();
@@ -222,8 +213,7 @@ void CAutoCompleteDlg::SetCurSel(int sel)
 BOOL CAutoCompleteDlg::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
 {
 	BOOL ok;
-	/* ow: We omit the WS_VISIBLE flag here in order to prevent the window being visible on creation */
-	dwStyle = WS_POPUPWINDOW;
+	dwStyle = WS_POPUPWINDOW|WS_VISIBLE;
 
 	ok = CWnd::CreateEx(WS_EX_CLIENTEDGE, AfxRegisterWndClass(
 			CS_HREDRAW|CS_VREDRAW|CS_OWNDC,
@@ -236,9 +226,7 @@ BOOL CAutoCompleteDlg::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWO
 			0, 
 			pContext);
 	
-	if (ok) {
-		/* ow: Window is created, now we can set the visible flag */
-		ModifyStyle(0, WS_VISIBLE);
+	if (ok) { // creation successful -> create the embedded listbox
 		ok &= m_Box->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|LBS_OWNERDRAWFIXED|WS_HSCROLL, 
 			CRect(0,0, rect.right - rect.left - 2, rect.bottom - rect.top), 
 			this, 
@@ -334,3 +322,9 @@ BOOL CAutoCompleteDlg::PreTranslateMessage(MSG* pMsg)
 	return CWnd::PreTranslateMessage(pMsg);
 }
 
+
+void CAutoCompleteDlg::OnKillFocus(CWnd* pNewWnd) 
+{
+	CWnd::OnKillFocus(pNewWnd);
+	CancelSelection();
+}
