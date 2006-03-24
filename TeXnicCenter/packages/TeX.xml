@@ -14,34 +14,73 @@
 			desc="Provides a tabbed environment"
 			expafter="}{ccc}&#xA;	&#xA;\end{tabular}" 
 			expbefore="\begin{"/>
+		<lxEnvironment name="figure" 
+			parameters="1" 
+			desc="Provides a figure environment"
+			expafter="}[ht]&#xA;	&#xA;\end{figure}" 
+			expbefore="\begin{"/>
 		<lxEnvironment name="document"/>
 		<lxCommand name="bibliography" 
 			desc="Includes one or more bibliography databases"
 			parameters="1"
 		/>
-		<lxCommand name="input" 
+		<lxCommand name="\input" 
 			desc="Includes additional document files"
 			parameters="1"
 		/>		
-		<lxCommand name="include" 
+		<lxCommand name="\include" 
 			desc="Includes additional document files"
 			parameters="1"
 		/>
-		<lxCommand name="newcommand" 
+		<lxCommand name="\newcommand" 
 			desc="Declares an user defined command"
 			parameters="2"
 		/>
-		<lxCommand name="newenvironment" 
+		<lxCommand name="\newenvironment" 
 			desc="Declares an user defined environment"
 			parameters="3"
 		/>
-		<lxCommand name="renewcommand" 
-			desc="Redefines an existing command"
-			parameters="2"
+		
+		<lxCommand name="\textbf" 
+			desc="Switches to bold font"
+			parameters="1"
 		/>
-		<lxCommand name="renewenvironment" 
-			desc="Redefines an existing environment"
-			parameters="3"
+		<lxCommand name="\textit" 
+			desc="Switches to italic font"
+			parameters="1"
+		/>
+		<lxCommand name="\textsl" 
+			desc="Switches to slanted font"
+			parameters="1"
+		/>
+		<lxCommand name="\textsc" 
+			desc="Switches to small capitals"
+			parameters="1"
+		/>
+		<lxCommand name="\emph" 
+			desc="Emphasize"
+			parameters="1"
+		/>
+		
+		<lxEnvironment name="enumeration" 
+			parameters="1" 
+			desc="Defines an environment for an enumeration"
+			expafter="}&#xA;	\item &#xA;\end{enumeration}" 
+			expbefore="\begin{"/>
+		<lxEnvironment name="itemize" 
+			parameters="0" 
+			desc="Defines an environment for an itemization"
+			expafter="}&#xA;	\item &#xA;\end{itemize}" 
+			expbefore="\begin{"/>
+		<lxEnvironment name="description" 
+			parameters="0" 
+			desc="Defines an environment for a description list"
+			expafter="}&#xA;	\item[myDesc] &#xA;\end{description}" 
+			expbefore="\begin{"/>
+		
+		<lxCommand name="\footnote" 
+			desc="Inserts a footnote"
+			parameters="1"
 		/>
 	</lxPackage>		
 	<lxPackage name="BibTeX" 
@@ -96,6 +135,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.4  2005/07/04 23:01:51  owieland
+	Fixed \\(re)newcommand parameters
+	
 	Revision 1.3  2005/06/24 00:36:43  owieland
 	Added/fixed some BibTeX entry types
 	
