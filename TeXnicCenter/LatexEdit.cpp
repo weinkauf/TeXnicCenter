@@ -1153,7 +1153,6 @@ void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 
 	isEnv = cmd->GetExpandAfter().GetLength() && cmd->GetExpandBefore().GetLength();
 	
-	
 	if (!isEnv) { // command was inserted
 		// search the first curly brace
 		for(int y = ptStart.y; y <= ptEnd.y && !bFound; y++) {
@@ -1174,14 +1173,11 @@ void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 		if (!bFound) { // no brace found drop selection and place cursor after inserted word	
 			SetCursorPos(ptEnd); 
 		}
-	} else { // env was inserted -> place cursor in next row
+	} else { // env was inserted -> place cursor at end of next row
 		ptCaret.y = ptStart.y + 1;
-		ptCaret.x = 0;
-		if (IsValidTextPos(ptCaret)) {
-			CString s = GetLineChars(ptCaret.y);
-			while (ptCaret.x < s.GetLength() && s.GetAt(ptCaret.x) == '\t') ptCaret.x++;			 
-			SetCursorPos(ptCaret);
-		}
+		ptCaret.x = GetLineLength(ptCaret.y);
+
+		SetCursorPos(ptCaret);
 	}	
 	RestoreFocus(); // set focus back to edit view
 }
