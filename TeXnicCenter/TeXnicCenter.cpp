@@ -1885,8 +1885,9 @@ void CTeXnicCenterApp::FindPackageFiles()
 {		
 	CString strSearchDir = CString(GetWorkingDir() + _T("\\packages"));
 	FindPackageFilesRecursive(strSearchDir);	
-	if (m_AvailableCommands.GetNoOfFiles()) {
-
+	// TODO: Issue warning, if no files/commands have been found
+	if (!m_AvailableCommands.GetNoOfFiles()) {
+		
 	}
 }
 

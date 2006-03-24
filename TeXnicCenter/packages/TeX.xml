@@ -44,18 +44,32 @@
 		<lxCommand name="\textbf" 
 			desc="Switches to bold font"
 			parameters="1"
+			icon="format.bmp"
+			index="1"
 		/>
 		<lxCommand name="\textit" 
 			desc="Switches to italic font"
 			parameters="1"
+			icon="format.bmp"
+			index="2"
 		/>
 		<lxCommand name="\textsl" 
 			desc="Switches to slanted font"
 			parameters="1"
+			icon="format.bmp"
+			index="3"
+		/>
+		<lxCommand name="\texttt" 
+			desc="Switches to slanted font"
+			parameters="1"
+			icon="format.bmp"
+			index="4"
 		/>
 		<lxCommand name="\textsc" 
 			desc="Switches to small capitals"
 			parameters="1"
+			icon="format.bmp"
+			index="5"
 		/>
 		<lxCommand name="\emph" 
 			desc="Emphasize"
@@ -135,6 +149,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.5  2006/03/24 14:28:56  owieland
+	Added some common commands and envs
+	
 	Revision 1.4  2005/07/04 23:01:51  owieland
 	Fixed \\(re)newcommand parameters
 	

@@ -34,6 +34,9 @@
 
 /*
  * $Log$
+ * Revision 1.14  2005/07/05 22:04:25  owieland
+ * Removed unnecessary trace output
+ *
  * Revision 1.13  2005/06/24 11:41:15  owieland
  * Bugfix: Pass file path to listener instead of directory
  *
@@ -113,6 +116,8 @@ static char THIS_FILE[]=__FILE__;
 #define CSF_XML_CLASS		_T("class")
 #define CSF_XML_EXPAFTER	_T("expafter")
 #define CSF_XML_EXPBEFORE	_T("expbefore")
+#define CSF_XML_ICONFILE	_T("icon")
+#define CSF_XML_ICONINDEX	_T("index")
 
 
 //////////////////////////////////////////////////////////////////////
@@ -609,9 +614,9 @@ void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyle
 {
 	/* fetch attributes */
 	MsXml::CXMLDOMNamedNodeMap attr = element.GetAttributes();
-	CString nameVal, descVal, beforeVal, afterVal;
-	BOOL hasAfterVal = FALSE, hasBeforeVal = FALSE; 
-	int nOfParams = 0;		
+	CString nameVal, descVal, beforeVal, afterVal, iconFile="";
+	BOOL hasAfterVal = FALSE, hasBeforeVal = FALSE, hasFile = FALSE, hasIndex = FALSE; 
+	int nOfParams = 0, iconIndex = 0;		
 
 	for(int j = 0; j < attr.GetLength(); j++) {
 		MsXml::CXMLDOMNode a = attr.GetItem(j);
@@ -630,32 +635,37 @@ void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyle
 			hasBeforeVal = TRUE;
 			beforeVal = a.GetText();
 			SetupCR(beforeVal);
+		} else if (s == CSF_XML_ICONINDEX) {
+			hasIndex = TRUE;
+			iconIndex = atoi(a.GetText());
+		} else if (s == CSF_XML_ICONFILE) {
+			hasFile = TRUE;
+			iconFile = theApp.GetWorkingDir() + _T("\\packages\\") + a.GetText();
 		}
 	}
 
 	/* Add element to style file */
+	CLaTeXCommand *lc;
 	if (element.GetNodeName() == CSF_XML_COMMAND) {
-		CNewCommand *nc = parent->AddCommand(nameVal, nOfParams, descVal);
-
-		if (nc != NULL && hasAfterVal) {
-			//TRACE("Add expA = %s to %s\n", afterVal, nc->GetName());
-			nc->SetExpandAfter(afterVal);
-		}
-		if (nc != NULL && hasBeforeVal) {
-			//TRACE("Add expB = %s to %s\n", beforeVal, nc->GetName());
-			nc->SetExpandBefore(beforeVal);
-		}
+		lc = parent->AddCommand(nameVal, nOfParams, descVal);
 	} else if (element.GetNodeName() == CSF_XML_ENVIRONMENT) {
-		CNewEnvironment *ne = parent->AddEnvironment(nameVal, nOfParams, descVal);
-		//TRACE("** Loaded env %s (%s)\n", nameVal, descVal);
+		lc = parent->AddEnvironment(nameVal, nOfParams, descVal);
+	}
 
-		if (ne != NULL && hasAfterVal) {
-			//TRACE("Add expA = %s to %s\n", afterVal, ne->GetName());
-			ne->SetExpandAfter(afterVal);
+	// assign missing attributes
+	if (lc != NULL) {
+		if (hasAfterVal) {
+			lc->SetExpandAfter(afterVal);
 		}
-		if (ne != NULL && hasBeforeVal) {
-			//TRACE("Add expB = %s to %s\n", beforeVal, ne->GetName());
-			ne->SetExpandBefore(beforeVal);
+		if (hasBeforeVal) {
+			lc->SetExpandBefore(beforeVal);
+		}
+		if (hasFile) {
+			lc->SetIconFile(iconFile);
+			lc->SetIconIndex(0); // set default
+		}
+		if (hasIndex) {
+			lc->SetIconIndex(iconIndex);
 		}
 	}
 }

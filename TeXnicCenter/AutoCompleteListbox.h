@@ -9,6 +9,8 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CAutoCompleteListbox window
+const BMP_HEIGHT = 15;
+const BMP_WIDTH = 16;
 
 class CAutoCompleteListbox : public CListBox
 {
@@ -19,9 +21,13 @@ public:
 // Attributes
 public:
 private:
-	CFont *m_BoldFont;
+	CFont				*m_BoldFont;
+	CMapStringToPtr		*m_PictureCache;
 
 // Operations
+private:	
+	BOOL DrawBitmap(CDC* pDC, CString file, UINT index, CRect rect);
+	CBitmap* CAutoCompleteListbox::LoadBitmapFromFile(CString filename);
 public:
 
 // Overrides
