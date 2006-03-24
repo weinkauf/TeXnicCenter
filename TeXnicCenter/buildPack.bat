@@ -10,4 +10,6 @@ if not exist ..\output\debug\packages (md ..\output\debug\packages)
 cd packages
 copy *.xml ..\..\output\debug\packages
 copy *.xml ..\..\output\release\packages
+copy *.bmp ..\..\output\debug\packages
+copy *.bmp ..\..\output\release\packages
 cd ..

@@ -50,7 +50,7 @@ class CStyleFile;
 class CAbstractLaTeXCommand : public CObject  
 {
 public:
-	
+
 	DECLARE_DYNAMIC(CAbstractLaTeXCommand)
 	CAbstractLaTeXCommand(const CStyleFile *parent, CString &name);
 	CAbstractLaTeXCommand(CAbstractLaTeXCommand &cmd);
@@ -73,11 +73,22 @@ public:
 	/** Returns a pointer to the style file which contains this command */
 	const CStyleFile *GetParent() const {return m_Parent;}
 
+	/** Sets/gets the icon index (position of the icon in the bitmap). A bitmap must have a size of n * 16 x 15 pixel, where
+		n is the number of icons in the bitmap. Example: A bitmap with 5 icons must have a size of 80 x 15 pixel. 
+	 */
+	void SetIconIndex(int idx);
+	int GetIconIndex();
+	/** Sets/gets the icon file name */
+	void SetIconFile(CString file);
+	CString GetIconFile();
+
 	virtual void Dump( CDumpContext& dc ) const;
 private:	
 	CString				m_Description;
 	CString				m_Name;
 	const CStyleFile	*m_Parent;
+	int m_IconIndex;
+	CString m_IconFile;
 protected:
 	void SetName(CString &name);
 };

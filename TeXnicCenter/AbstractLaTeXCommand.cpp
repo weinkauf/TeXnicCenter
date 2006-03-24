@@ -34,6 +34,9 @@
 
 /*
  * $Log$
+ * Revision 1.5  2005/06/11 12:48:34  owieland
+ * Added Dump support
+ *
  * Revision 1.4  2005/06/09 22:58:47  owieland
  * Introduced ExpandBefore/After members to allow insertion of additional constructs
  * (useful for environments to insert \\begin-\\end pairs}
@@ -70,11 +73,15 @@ CAbstractLaTeXCommand::CAbstractLaTeXCommand(const CStyleFile *parent, CString &
 	ASSERT(parent != NULL);
 	m_Parent = parent;
 	m_Name = name;	
+	m_IconIndex = -1;
+	m_IconFile = "";
 }
 
 CAbstractLaTeXCommand::CAbstractLaTeXCommand(CAbstractLaTeXCommand &cmd) {
 	m_Parent = cmd.m_Parent;
 	m_Name = cmd.m_Name;
+	m_IconIndex = cmd.m_IconIndex;
+	m_IconFile = cmd.m_IconFile;
 }
 
 
@@ -106,4 +113,24 @@ void CAbstractLaTeXCommand::Dump( CDumpContext& dc ) const {
 		dc << "/";
 		dc << m_Parent->GetName();
 	}
+}
+
+CString CAbstractLaTeXCommand::GetIconFile()
+{
+	return m_IconFile;
+}
+
+void CAbstractLaTeXCommand::SetIconFile(CString file)
+{
+	m_IconFile = file;
+}
+
+int CAbstractLaTeXCommand::GetIconIndex()
+{
+	return m_IconIndex;
+}
+
+void CAbstractLaTeXCommand::SetIconIndex(int idx)
+{
+	m_IconIndex = idx;
 }
