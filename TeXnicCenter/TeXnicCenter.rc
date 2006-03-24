@@ -679,40 +679,6 @@ END
 //
 
 1                       24      DISCARDABLE     "res\\texcntr.exe.manifest"
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
-IDD_AUTOCOMPLETE DIALOG DISCARDABLE  0, 0, 120, 100
-STYLE DS_3DLOOK | WS_POPUP
-FONT 8, "MS Sans Serif"
-BEGIN
-    LISTBOX         IDC_LIST,1,1,118,98,LBS_SORT | LBS_OWNERDRAWFIXED | 
-                    LBS_HASSTRINGS | LBS_NOINTEGRALHEIGHT | 
-                    LBS_WANTKEYBOARDINPUT | WS_VSCROLL | WS_TABSTOP
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
-BEGIN
-    IDD_AUTOCOMPLETE, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 108
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 85
-    END
-END
-#endif    // APSTUDIO_INVOKED
-
 #endif    // Neutral resources
 /////////////////////////////////////////////////////////////////////////////
 
