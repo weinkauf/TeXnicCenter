@@ -235,15 +235,10 @@ void COptionPageGeneric::OnOK()
 
 	// generate message, that tells the user, that his settings will be
 	// activated on next start of TXC if those settings have changed.
-	BOOL	bShowNextStartInfo = FALSE;
-	bShowNextStartInfo = (bool)g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers != (bool)m_bOptimizeGuiForVisuallyHandicappedUsers;
-	if (!bShowNextStartInfo)
-		bShowNextStartInfo = g_configuration.m_strGuiLanguage != m_strGuiLanguage;
-	if (!bShowNextStartInfo)
-		bShowNextStartInfo = g_configuration.m_strLookAndFeel != m_strLookAndFeel;
-
-	if (bShowNextStartInfo)
-		AfxMessageBox(STE_OPTIONS_REQUIRES_RESTART, MB_ICONINFORMATION|MB_OK);
+	bool bShowNextStartInfo = (g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsers != m_bOptimizeGuiForVisuallyHandicappedUsers);
+	bShowNextStartInfo |= (g_configuration.m_strGuiLanguage != m_strGuiLanguage);
+	bShowNextStartInfo |= (g_configuration.m_strLookAndFeel != m_strLookAndFeel);
+	if (bShowNextStartInfo) AfxMessageBox(STE_OPTIONS_REQUIRES_RESTART, MB_ICONINFORMATION|MB_OK);
 
 	g_configuration.m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart = m_bOptimizeGuiForVisuallyHandicappedUsers;
 	g_configuration.m_strGuiLanguageOnNextStart = m_strGuiLanguage;

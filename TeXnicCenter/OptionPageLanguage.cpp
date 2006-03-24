@@ -106,6 +106,11 @@ void COptionPageLanguage::OnOK()
 		// Invalid locale. Not really a problem. The system default will be used.
 		VERIFY ( setlocale( LC_ALL, g_configuration.m_strLocale ) );		// Raffi: setlocale defined instead of _tsetlocale
 	}
+
+	bool bShowNextStartInfo = (g_configuration.m_strLanguageDefault != m_strLanguageDefault);
+	bShowNextStartInfo |= (g_configuration.m_strLanguageDialectDefault != m_strDialectDefault);
+	if (bShowNextStartInfo) AfxMessageBox(STE_OPTIONS_REQUIRES_RESTART, MB_ICONINFORMATION|MB_OK);
+
 	g_configuration.m_strLanguageDefault			= m_strLanguageDefault;
 	g_configuration.m_strLanguageDialectDefault		= m_strDialectDefault;
 	g_configuration.m_strSpellPersonalDictionary	= m_strPDictionary;
