@@ -173,6 +173,7 @@ public:
 	CLatexDoc* GetDocument();
 
 private:
+	
 	void DestroyListBox();
 	void HideAdvice();
 	BOOL RestoreFocus();
@@ -182,12 +183,14 @@ private:
 	CAutoCompleteDlg *CreateListBox(CString &keyword, const CPoint topLeft);
 	BOOL InvokeContextHelp(const CString keyword);
 
+
 	CWnd* m_OldFocus;
 	CPoint m_oldStart;
 	CPoint m_oldEnd;
 	CAdvice *m_InstTip;
 	CAutoCompleteDlg* m_CompletionListBox;
 	MyListener *m_Proxy;
+	BOOL m_AutoCompleteActive;
 };
 
 #ifndef _DEBUG  // Testversion in LatexEdit.cpp

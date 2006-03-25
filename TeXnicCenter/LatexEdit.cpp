@@ -109,6 +109,7 @@ CLatexEdit::CLatexEdit()
 	m_Proxy = new MyListener(this);
 	m_OldFocus = NULL;
 	m_InstTip = NULL;
+	m_AutoCompleteActive = FALSE;
 }
 
 
@@ -998,10 +999,16 @@ void CLatexEdit::OnQueryCompletion()
 		}
 	}
 
+	// Don't allow a second window
+	if (m_AutoCompleteActive) {
+		return;
+	}
+
 	GetSelection(m_oldStart, m_oldEnd); /* store old position */
 
 	GetWordBeforeCursor(keyword, topLeft); /* retrieve word to be completed */
 	if (!keyword.IsEmpty()) {
+		m_AutoCompleteActive = TRUE;
 		m_CompletionListBox = CreateListBox(keyword, topLeft); /* setup (and show) list box */
 	} else {
 		SetSelection(m_oldStart, m_oldEnd); /* restore old position */
@@ -1027,14 +1034,15 @@ CAutoCompleteDlg *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLef
 			m_CompletionListBox->SetListener(m_Proxy);								
 		}
 		// InitWithKeyword will notify the listener immediatly, if only one exact match exists
-		m_CompletionListBox->InitWithKeyword(keyword);
-
-		if (nWords > 1) { // show listbox for selection
+		if (m_CompletionListBox->InitWithKeyword(keyword) && nWords > 1) { // show listbox for selection
 			m_CompletionListBox->ShowWindow(SW_SHOWNORMAL);
 			ClientToScreen(&ptStart); // translate coordinates
-			m_CompletionListBox->SetWindowPos(NULL, ptStart.x, ptStart.y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
+			// Move box by 18 to consider the icon space
+			m_CompletionListBox->SetWindowPos(NULL, ptStart.x - 18, ptStart.y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
 			m_CompletionListBox->SetCurSel(0);			
-		} 
+		} else {
+			m_CompletionListBox->ShowWindow(SW_HIDE);
+		}
 	} else { // hide window
 		SetSelection(m_oldStart, m_oldEnd); /* restore old position */
 		if (m_CompletionListBox != NULL) {
@@ -1134,6 +1142,7 @@ void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 	BOOL bFound = FALSE;
 	BOOL isEnv = FALSE;
 
+	m_AutoCompleteActive = FALSE;
 	ASSERT(cmd != NULL);
 	GetSelection(ptStart, ptEnd);
 
@@ -1171,7 +1180,7 @@ void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 		}
 
 		if (!bFound) { // no brace found drop selection and place cursor after inserted word	
-			SetCursorPos(ptEnd); 
+			SetCursorPos(ptEnd);
 		}
 	} else { // env was inserted -> place cursor at end of next row
 		ptCaret.y = ptStart.y + 1;
@@ -1179,11 +1188,19 @@ void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 
 		SetCursorPos(ptCaret);
 	}	
+	ptCaret = GetCursorPos();
+	SetSelection(ptCaret, ptCaret); // sync selection with C'pos
 	RestoreFocus(); // set focus back to edit view
 }
 
 void CLatexEdit::OnACCommandCancelled()
 {	
+	/* This issue is a little bit weird: The AC window sends a OnACCommandCancelled in every case the window is close
+	   in order to react on KillFocus msgs. If the completion was finished OnACCommandSelect, we must prohibit to execute
+	   OnACCommandCancelled in this case. So we use the m_AutoCompleteActive flag to determine, if the autocomplete
+	   has been finished or not */
+	if (!m_AutoCompleteActive) return;
+
 	/* try to restore old cursor pos */
 	if (IsValidTextPos(m_oldStart) && IsValidTextPos(m_oldEnd)) {
 		SetSelection(m_oldStart, m_oldEnd); 
@@ -1191,6 +1208,7 @@ void CLatexEdit::OnACCommandCancelled()
 		GetSelection(m_oldStart, m_oldEnd);
 		SetSelection(m_oldEnd, m_oldEnd); 
 	}
+	m_AutoCompleteActive = FALSE;
 	RestoreFocus();	
 }
 
@@ -1313,7 +1331,12 @@ void CLatexEdit::DestroyListBox()
 int CLatexEdit::GetNumberOfMatches(CString keyword) {
 	const CMapStringToOb *map;
 
+	if (keyword.GetLength() < CAutoCompleteDlg::GetMinimumKeywordLength()) {
+		return 0;
+	}
+
 	map = theApp.m_AvailableCommands.GetPossibleItems(keyword, _T(""));
+
 	if (map == NULL) return 0;
 
 	int n = map->GetCount();

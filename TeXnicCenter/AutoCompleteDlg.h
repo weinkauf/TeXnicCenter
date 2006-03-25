@@ -30,6 +30,8 @@ public:
 
 // Operations
 public:
+	
+
 	/** Select an item in the listbox by the zero-based position. See also CListBox::SetCurSel */
 	void SetCurSel(int);
 	/** 
@@ -67,6 +69,7 @@ public:
 
 // Implementation
 public:
+	static int GetMinimumKeywordLength() {return MINIMUM_KEYWORD_LENGTH;}
 	virtual ~CAutoCompleteDlg();
 protected:
 	void MoveSelection(int delta);
