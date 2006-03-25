@@ -162,11 +162,11 @@ void CAutoCompleteDlg::ApplySelection()
 
 /* User cancelled completion */
 void CAutoCompleteDlg::CancelSelection()
-{
-	CloseWindow();
+{		
 	if (m_Listener != NULL) {
 		m_Listener->OnACCommandCancelled();
 	}
+	CloseWindow();
 }
 
 /**
@@ -215,10 +215,11 @@ BOOL CAutoCompleteDlg::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWO
 	BOOL ok;
 	dwStyle = WS_POPUPWINDOW|WS_VISIBLE;
 
-	ok = CWnd::CreateEx(WS_EX_CLIENTEDGE, AfxRegisterWndClass(
-			CS_HREDRAW|CS_VREDRAW|CS_OWNDC,
-			theApp.LoadStandardCursor(IDC_ARROW),
-			GetSysColorBrush(COLOR_WINDOW)), 
+	ok = CWnd::CreateEx(WS_EX_OVERLAPPEDWINDOW, 
+			AfxRegisterWndClass(
+				CS_HREDRAW|CS_VREDRAW|CS_OWNDC,
+				theApp.LoadStandardCursor(IDC_ARROW),
+				GetSysColorBrush(COLOR_WINDOW)), 
 			_T("AutoCompleteBox"), 
 			dwStyle, 
 			rect, 
@@ -227,8 +228,10 @@ BOOL CAutoCompleteDlg::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWO
 			pContext);
 	
 	if (ok) { // creation successful -> create the embedded listbox
-		ok &= m_Box->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|LBS_OWNERDRAWFIXED|WS_HSCROLL, 
-			CRect(0,0, rect.right - rect.left - 2, rect.bottom - rect.top), 
+		CRect rc;
+		GetClientRect(&rc);
+		ok &= m_Box->Create(WS_CHILD|WS_VISIBLE|LBS_STANDARD|LBS_HASSTRINGS|LBS_NOINTEGRALHEIGHT|LBS_OWNERDRAWFIXED|WS_HSCROLL, 
+			rc, 
 			this, 
 			1);
 	}
@@ -328,3 +331,4 @@ void CAutoCompleteDlg::OnKillFocus(CWnd* pNewWnd)
 	CWnd::OnKillFocus(pNewWnd);
 	CancelSelection();
 }
+

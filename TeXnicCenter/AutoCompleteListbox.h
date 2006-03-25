@@ -46,7 +46,7 @@ public:
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CAutoCompleteListbox)
-		// NOTE - the ClassWizard will add and remove member functions here.
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()

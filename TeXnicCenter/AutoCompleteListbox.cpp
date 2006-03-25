@@ -35,7 +35,7 @@ CAutoCompleteListbox::~CAutoCompleteListbox()
 
 BEGIN_MESSAGE_MAP(CAutoCompleteListbox, CListBox)
 	//{{AFX_MSG_MAP(CAutoCompleteListbox)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
+	ON_WM_LBUTTONDBLCLK()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -209,4 +209,14 @@ CBitmap *CAutoCompleteListbox::LoadBitmapFromFile(CString filename) {
 		}
 	}
 	return CBitmap::FromHandle(hbm);
+}
+
+void CAutoCompleteListbox::OnLButtonDblClk(UINT nFlags, CPoint point) 
+{
+	CListBox::OnLButtonDblClk(nFlags, point);
+	CWnd *w = GetParent();
+
+	if (w != NULL) {
+		::SendMessage(w->GetSafeHwnd(), WM_CHAR, VK_RETURN, 0);
+	}
 }
