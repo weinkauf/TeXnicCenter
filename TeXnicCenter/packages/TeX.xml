@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <lxCollection version="1" xmlns:txclxp="http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd">
-	<lxPackage name="(internal)" 
+	<lxPackage name="Common LaTeX commands and environments" 
 		path="" 
 		desc="TeX/LaTeX native commands (incomplete!)" 
 		class="TRUE">		
@@ -47,13 +47,22 @@
 			index="9"
 			expafter="}[ht]&#xA;	&#xA;	\label{}&#xA;	\caption{}&#xA;\end{figure}" 
 			expbefore="\begin{"/>
-			
-			
+		<lxCommand name="\caption" parameters="1"/>
+		<lxCommand name="\label" parameters="1"/>	
+					
 		<lxEnvironment name="document"
 			desc="Starts a new document"
 			expafter="}&#xA;&#xA;\end{document}" 
 			expbefore="\begin{"
 		/>
+		<lxCommand name="\thispagestyle" parameters="1"/>
+		<lxCommand name="\pagenumbering" parameters="1"/>
+		<lxCommand name="\vspace" parameters="1"/>
+		<lxCommand name="\hspace" parameters="1"/>
+		<lxCommand name="\newline" parameters="0"/>
+		<lxCommand name="\newpage" parameters="0"/>
+		<lxCommand name="\cleardoublepage" parameters="0"/>
+		<lxCommand name="\setcounter" parameters="2"/>		
 
 		<lxCommand name="\part" 
 			desc="Starts a new part (book only)"
@@ -182,14 +191,28 @@
 			index="15"
 			parameters="1"
 		/>
+		<lxCommand name="\bibliographystyle" 
+			desc="Sets the style of the bibliography"
+			icon="format.bmp"
+			index="15"
+			parameters="1"
+		/>
+		
 		<lxCommand name="\listoftables"/>
 		<lxCommand name="\listoffigures"/>
 		<lxCommand name="\tableofcontents"/>
+		<lxCommand name="\addcontentsline" parameters="3"/>
 		<lxCommand name="\appendix"/>
 		<lxCommand name="\maketitle"/>
 		
-		
-
+		<lxCommand name="\emph" 
+			desc="Emphasize text"
+			parameters="1"
+		/>
+		<lxCommand name="\emph" 
+			desc="Emphasize text"
+			parameters="1"
+		/>
 	</lxPackage>		
 	<lxPackage name="BibTeX" 
 		path="" 
@@ -243,6 +266,11 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.7  2006/03/26 22:29:33  owieland
+	- Added some icons and commands
+	- Moved redundant commands and envs of standard doc classes to TeX.xml
+	- Removed empty packages
+	
 	Revision 1.6  2006/03/24 22:56:23  owieland
 	Added opportunity to decorate each command/environment with an icon
 	
