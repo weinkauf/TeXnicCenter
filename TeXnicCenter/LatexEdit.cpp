@@ -1042,10 +1042,20 @@ CAutoCompleteDlg *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLef
 			//TRACE("==> CreateListBox: Show listbox \n");
 			CRect rc;
 			m_AutoCompleteActive = TRUE;
-			m_CompletionListBox->GetWindowRect(&rc);
-			ClientToScreen(&ptStart); // translate coordinates
 			// Move box by 18 to consider the icon space
 			m_CompletionListBox->SetWindowPos(NULL, ptStart.x - 18, ptStart.y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
+			m_CompletionListBox->GetWindowRect(&rc);
+			
+			// Check, if window overlaps with desktop
+			CPoint p1 = CPoint(rc.left, rc.top) , p2 = CPoint(rc.right, rc.bottom);
+			::ClientToScreen(GetSafeHwnd(), &p1);
+			::ClientToScreen(GetSafeHwnd(), &p2);
+			rc = CRect(p1, p2);
+			ComputeWindowLocation(rc, GetLineHeight());
+
+			if (rc.top != ptStart.y || rc.left != ptStart.x) { // correct position
+				m_CompletionListBox->SetWindowPos(NULL, rc.left, rc.top, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
+			}
 			m_CompletionListBox->ShowWindow(SW_SHOWNORMAL);
 			m_CompletionListBox->SetCurSel(0);			
 		} else {
@@ -1348,4 +1358,20 @@ int CLatexEdit::GetNumberOfMatches(CString keyword) {
 	delete map;
 
 	return n;
+}
+
+/* Checks, if an window overlaps screen region */
+void CLatexEdit::ComputeWindowLocation(CRect &rect, int lineHeight)
+{
+	CWnd *w = CWnd::GetDesktopWindow();
+	CRect screenRect;
+	w->GetWindowRect(screenRect);
+	
+	if (rect.bottom > screenRect.bottom) {
+		rect.OffsetRect(CPoint(0, -lineHeight-rect.Height()));
+	}
+
+	if (rect.right > screenRect.right) {
+		rect.OffsetRect(CPoint(-rect.Width(), 0));
+	}
 }
