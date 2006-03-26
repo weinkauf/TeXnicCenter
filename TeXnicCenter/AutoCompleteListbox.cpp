@@ -140,7 +140,7 @@ void CAutoCompleteListbox::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 
 	ReleaseDC(pDC);
 
-	lpMeasureItemStruct->itemHeight = sz.cy + 1;		
+	lpMeasureItemStruct->itemHeight = 15;//sz.cy + 1;		
 }
 
 int CAutoCompleteListbox::CompareItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct) 
