@@ -116,6 +116,10 @@ void CAutoCompleteListbox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	if (lc->GetIconIndex() != -1) {
 		DrawBitmap(&dc, lc->GetIconFile(), lc->GetIconIndex(), bmpRect);
 	}
+	if ((lpDrawItemStruct->itemAction | ODA_SELECT) &&
+	  (lpDrawItemStruct->itemState & ODS_SELECTED))	{
+		dc.DrawFocusRect(rcItem);
+	}
 
 	// Reset the background color and the text color back to their
 	// original values.
