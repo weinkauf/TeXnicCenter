@@ -8,21 +8,6 @@
 		<lxCommand name="documentclass" 
 			parameters="1" 
 			desc="Defines the document class (e. g. article)"
-		/>		
-		<lxEnvironment name="tabular" 
-			parameters="1" 
-			desc="Provides a tabbed environment"
-			expafter="}{ccc}&#xA;	&#xA;\end{tabular}" 
-			expbefore="\begin{"/>
-		<lxEnvironment name="figure" 
-			parameters="1" 
-			desc="Provides a figure environment"
-			expafter="}[ht]&#xA;	&#xA;\end{figure}" 
-			expbefore="\begin{"/>
-		<lxEnvironment name="document"/>
-		<lxCommand name="bibliography" 
-			desc="Includes one or more bibliography databases"
-			parameters="1"
 		/>
 		<lxCommand name="\input" 
 			desc="Includes additional document files"
@@ -40,62 +25,171 @@
 			desc="Declares an user defined environment"
 			parameters="3"
 		/>
+				
+		<lxEnvironment name="tabular" 
+			parameters="1" 
+			desc="Provides a tabbed environment"
+			icon="format.bmp"
+			index="10"
+			expafter="}{ccc}&#xA;	&#xA;\end{tabular}" 
+			expbefore="\begin{"/>
+		<lxEnvironment name="table" 
+			parameters="1" 
+			desc="Provides a table environment"
+			icon="format.bmp"
+			index="10"
+			expafter="}{ccc}&#xA;	&#xA;	\label{}&#xA;	\caption{}&#xA;\end{table}" 
+			expbefore="\begin{"/>
+		<lxEnvironment name="figure" 
+			parameters="1" 
+			desc="Provides a figure environment"
+			icon="format.bmp"
+			index="9"
+			expafter="}[ht]&#xA;	&#xA;	\label{}&#xA;	\caption{}&#xA;\end{figure}" 
+			expbefore="\begin{"/>
+			
+			
+		<lxEnvironment name="document"
+			desc="Starts a new document"
+			expafter="}&#xA;&#xA;\end{document}" 
+			expbefore="\begin{"
+		/>
+
+		<lxCommand name="\part" 
+			desc="Starts a new part (book only)"
+			icon="format.bmp"
+			index="6"
+			parameters="1"
+		/>
+		<lxCommand name="\chapter" 
+			desc="Starts a new chapter"
+			icon="format.bmp"
+			index="6"
+			parameters="1"
+		/>
+		<lxCommand name="\section" 
+			desc="Starts a new section"
+			icon="format.bmp"
+			index="6"
+			parameters="1"
+		/>
+		<lxCommand name="\subsection" 
+			desc="Starts a new subsection"
+			icon="format.bmp"
+			index="6"
+			parameters="1"
+		/>
+		<lxCommand name="\subsubsection" 
+			desc="Starts a new subsubsection"
+			icon="format.bmp"
+			index="6"
+			parameters="1"
+		/>
 		
 		<lxCommand name="\textbf" 
-			desc="Switches to bold font"
+			desc="Change to bold font"
 			parameters="1"
 			icon="format.bmp"
 			index="1"
 		/>
 		<lxCommand name="\textit" 
-			desc="Switches to italic font"
+			desc="Change to italic font"
 			parameters="1"
 			icon="format.bmp"
 			index="2"
 		/>
 		<lxCommand name="\textsl" 
-			desc="Switches to slanted font"
+			desc="Change to slanted font"
 			parameters="1"
 			icon="format.bmp"
 			index="3"
 		/>
 		<lxCommand name="\texttt" 
-			desc="Switches to slanted font"
+			desc="Change to typewriter font"
 			parameters="1"
 			icon="format.bmp"
 			index="4"
 		/>
 		<lxCommand name="\textsc" 
-			desc="Switches to small capitals"
+			desc="Change to small capitals"
 			parameters="1"
 			icon="format.bmp"
 			index="5"
 		/>
 		<lxCommand name="\emph" 
-			desc="Emphasize"
+			desc="Emphasize text"
 			parameters="1"
 		/>
 		
 		<lxEnvironment name="enumeration" 
 			parameters="1" 
-			desc="Defines an environment for an enumeration"
+			desc="Defines an environment for an enumeration (numbered itemization)"
+			icon="format.bmp"
+			index="8"
 			expafter="}&#xA;	\item &#xA;\end{enumeration}" 
 			expbefore="\begin{"/>
 		<lxEnvironment name="itemize" 
 			parameters="0" 
 			desc="Defines an environment for an itemization"
+			icon="format.bmp"
+			index="7"
 			expafter="}&#xA;	\item &#xA;\end{itemize}" 
 			expbefore="\begin{"/>
 		<lxEnvironment name="description" 
 			parameters="0" 
 			desc="Defines an environment for a description list"
+			icon="format.bmp"
+			index="8"
 			expafter="}&#xA;	\item[myDesc] &#xA;\end{description}" 
 			expbefore="\begin{"/>
-		
+		<lxCommand name="\item"/>
+		<lxCommand name="\subitem"/>
+			
+		<lxEnvironment name="flushleft" 
+			parameters="0" 
+			desc="Defines an environment with left aligned text"
+			icon="format.bmp"
+			index="26"
+			expafter="}&#xA;	&#xA;\end{flushleft}" 
+			expbefore="\begin{"/>		
+		<lxEnvironment name="flushright" 
+			parameters="0" 
+			desc="Defines an environment with right aligned text"
+			icon="format.bmp"
+			index="28"
+			expafter="}&#xA;	&#xA;\end{flushright}" 
+			expbefore="\begin{"/>			
+		<lxEnvironment name="center" 
+			parameters="0" 
+			desc="Defines an environment with centered text"
+			icon="format.bmp"
+			index="27"
+			expafter="}&#xA;	&#xA;\end{center}" 
+			expbefore="\begin{"/>
+			
 		<lxCommand name="\footnote" 
 			desc="Inserts a footnote"
 			parameters="1"
 		/>
+		
+		<lxEnvironment name="quotation" 
+			expafter="}&#xA;&#xA;\end{quotation}" 
+			expbefore="\begin{"/>
+		
+		<lxCommand name="\bibliography" 
+			desc="Includes one or more bibliography databases"
+			icon="format.bmp"
+			index="15"
+			parameters="1"
+		/>
+		<lxCommand name="\listoftables"/>
+		<lxCommand name="\listoffigures"/>
+		<lxCommand name="\tableofcontents"/>
+		<lxCommand name="\appendix"/>
+		<lxCommand name="\maketitle"/>
+		
+		
+
 	</lxPackage>		
 	<lxPackage name="BibTeX" 
 		path="" 
@@ -149,6 +243,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.6  2006/03/24 22:56:23  owieland
+	Added opportunity to decorate each command/environment with an icon
+	
 	Revision 1.5  2006/03/24 14:28:56  owieland
 	Added some common commands and envs
 	
