@@ -24,7 +24,7 @@ class CAutoCompleteDlg : public CWnd
 public:
 	enum { ID_AUTOCOMPLETE = 1234 };
 	CAutoCompleteDlg(CStyleFileContainer *sfc, CWnd* pParent = NULL);
-
+	friend class CAutoCompleteListbox;
 // Attributes
 public:
 
@@ -74,6 +74,7 @@ public:
 protected:
 	void MoveSelection(int delta);
 private:
+	
 	void ApplySelection();
 	void CancelSelection();
 	BOOL IsCancelChar(WORD theChar);
@@ -85,13 +86,16 @@ private:
 	CString m_CurrentKeyword;
 
 	CStyleFileContainer *m_Container;
-	CString m_WndClass;
+	//CString m_WndClass;
 	CAutoCompleteListener *m_Listener;
 	CListBox	*m_Box;
+	BOOL m_Visible;
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CAutoCompleteDlg)
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

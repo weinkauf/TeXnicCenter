@@ -11,6 +11,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+class CAutoCompleteDlg;
 /////////////////////////////////////////////////////////////////////////////
 // CAutoCompleteListbox
 
@@ -85,7 +86,6 @@ void CAutoCompleteListbox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	const CStyleFile *cs = lc->GetParent();
 	if (cs != NULL && cs->IsDocClass()) { // bold, if command is part of a document class
 		dc.SelectObject(m_BoldFont->GetSafeHandle());
-		TRACE("%s is from class %s\n", str, cs->GetName());
 	}
 
 	// If this item is selected, set the background color 
@@ -211,12 +211,14 @@ CBitmap *CAutoCompleteListbox::LoadBitmapFromFile(CString filename) {
 	return CBitmap::FromHandle(hbm);
 }
 
+/** Treat dblclk as confirmation */
 void CAutoCompleteListbox::OnLButtonDblClk(UINT nFlags, CPoint point) 
 {
 	CListBox::OnLButtonDblClk(nFlags, point);
-	CWnd *w = GetParent();
-
+	CAutoCompleteDlg *w = dynamic_cast<CAutoCompleteDlg*>(GetOwner());
+	
 	if (w != NULL) {
-		::SendMessage(w->GetSafeHwnd(), WM_CHAR, VK_RETURN, 0);
+		w->ApplySelection();
 	}
 }
+

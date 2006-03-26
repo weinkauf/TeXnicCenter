@@ -23,10 +23,11 @@ CAutoCompleteDlg::CAutoCompleteDlg(CStyleFileContainer *sfc, CWnd* pParent)
 	m_CurrentKeyword = "";
 	m_Listener = NULL;
 	m_Container = sfc;
+	m_Visible = FALSE;
 	m_Box = new CAutoCompleteListbox;
 	if (!Create(0, 0, 0, CRect(200,200, 400, 400), pParent, ID_AUTOCOMPLETE)) {
 		TRACE("Window creation (CAutoCompleteDlg) failed!\n");
-	}
+	} 
 }
 
 CAutoCompleteDlg::~CAutoCompleteDlg()
@@ -41,6 +42,8 @@ CAutoCompleteDlg::~CAutoCompleteDlg()
 BEGIN_MESSAGE_MAP(CAutoCompleteDlg, CWnd)
 	//{{AFX_MSG_MAP(CAutoCompleteDlg)
 	ON_WM_KILLFOCUS()
+	ON_WM_SHOWWINDOW()
+	ON_WM_LBUTTONDBLCLK()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -76,7 +79,7 @@ BOOL CAutoCompleteDlg::InitWithKeyword(CString &keyword)
 		if (m_Listener != NULL) {
 			m_Listener->OnACCommandSelect(lc);
 		}
-		TRACE("One element only: %s\n", keyword);
+		//TRACE("One element only: %s\n", keyword);
 		delete map;
 		return FALSE;
 	} else {
@@ -144,7 +147,6 @@ void CAutoCompleteDlg::ApplySelection()
 {
 	int n = m_Box->GetCurSel();
 	CString selectedItem;
-
 	if (n != LB_ERR) {
 		m_Box->GetText(n, selectedItem);	
 		
@@ -152,21 +154,23 @@ void CAutoCompleteDlg::ApplySelection()
 		ASSERT(lc != NULL);
 		if (m_Listener != NULL) {
 			m_Listener->OnACCommandSelect(lc);
-		}
-		CloseWindow();
+		} 		
 	} else {
 		TRACE("Error occurred during ApplySelection, error code %d", ::GetLastError());
-		CloseWindow();
 	}	
+	ShowWindow(SW_HIDE);
 }
 
 /* User cancelled completion */
 void CAutoCompleteDlg::CancelSelection()
 {		
+	TRACE("==> CancelSelection\n");
 	if (m_Listener != NULL) {
 		m_Listener->OnACCommandCancelled();
-	}
-	CloseWindow();
+		
+	} 
+	ShowWindow(SW_HIDE);
+	TRACE("<== CancelSelection\n");
 }
 
 /**
@@ -213,11 +217,11 @@ void CAutoCompleteDlg::SetCurSel(int sel)
 BOOL CAutoCompleteDlg::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
 {
 	BOOL ok;
-	dwStyle = WS_POPUPWINDOW|WS_VISIBLE;
+	dwStyle = WS_POPUP|WS_VISIBLE|WS_DLGFRAME;
 
-	ok = CWnd::CreateEx(WS_EX_OVERLAPPEDWINDOW, 
+	ok = CWnd::CreateEx(0, 
 			AfxRegisterWndClass(
-				CS_HREDRAW|CS_VREDRAW|CS_OWNDC,
+				CS_HREDRAW|CS_VREDRAW|CS_OWNDC|CS_DBLCLKS,
 				theApp.LoadStandardCursor(IDC_ARROW),
 				GetSysColorBrush(COLOR_WINDOW)), 
 			_T("AutoCompleteBox"), 
@@ -249,6 +253,7 @@ BOOL CAutoCompleteDlg::PreTranslateMessage(MSG* pMsg)
 	switch(pMsg->message) {
 	case WM_KEYDOWN:
 		switch(pMsg->wParam) {
+
 		case VK_TAB: 
 		case VK_RETURN:
 			ApplySelection();
@@ -328,7 +333,29 @@ BOOL CAutoCompleteDlg::PreTranslateMessage(MSG* pMsg)
 
 void CAutoCompleteDlg::OnKillFocus(CWnd* pNewWnd) 
 {
-	CWnd::OnKillFocus(pNewWnd);
-	CancelSelection();
+	if (pNewWnd != m_Box && pNewWnd != this) {
+		//TRACE("==> KillFocus, visible = %d\n", IsWindowVisible());
+		CWnd::OnKillFocus(pNewWnd);
+		CancelSelection();
+		//TRACE("<== KillFocus\n");
+	} else {
+		//TRACE("My window -> not KillFocus\n");
+	}
 }
 
+
+
+void CAutoCompleteDlg::OnShowWindow(BOOL bShow, UINT nStatus) 
+{
+	if (bShow != m_Visible) {
+		//TRACE("Show window show = %d, status = %d, old visible = %d\n", bShow, nStatus, m_Visible);
+		CWnd::OnShowWindow(bShow, nStatus);
+		m_Visible = bShow;
+	}
+}
+
+
+void CAutoCompleteDlg::OnLButtonDblClk(UINT nFlags, CPoint point) 
+{
+	ApplySelection();
+}
