@@ -679,9 +679,10 @@ void CLatexEdit::OnSetFocus(CWnd* pOldWnd)
 	CLatexDoc	*pDoc = GetDocument();
 	if (pDoc)
 		pDoc->CheckForFileChanges();
+	/*
 	if (m_CompletionListBox != NULL) {
 		DestroyListBox();
-	}
+	}*/
 }
 
 
@@ -1001,14 +1002,15 @@ void CLatexEdit::OnQueryCompletion()
 
 	// Don't allow a second window
 	if (m_AutoCompleteActive) {
+		TRACE("==> autocomplete is active, quitting...\n");
 		return;
 	}
 
 	GetSelection(m_oldStart, m_oldEnd); /* store old position */
 
 	GetWordBeforeCursor(keyword, topLeft); /* retrieve word to be completed */
-	if (!keyword.IsEmpty()) {
-		m_AutoCompleteActive = TRUE;
+	
+	if (!keyword.IsEmpty()) {		
 		m_CompletionListBox = CreateListBox(keyword, topLeft); /* setup (and show) list box */
 	} else {
 		SetSelection(m_oldStart, m_oldEnd); /* restore old position */
@@ -1022,12 +1024,14 @@ CAutoCompleteDlg *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLef
 		TRACE("Invalid text pos %d, %d\n", topLeft.x, topLeft.y);
 		return 0;
 	}
+	//TRACE("==> CreateListBox\n");
 	ptStart = TextToClient(topLeft);
 	ptStart.y += GetLineHeight(); // Goto next row
 
 			
 	// setup listbox	
 	int nWords = GetNumberOfMatches(keyword); // find number of matches
+	//TRACE("==> CreateListBox matches = %d\n", nWords);
 	if (nWords >= 1) { // found one or more matches		
 		if (m_CompletionListBox == NULL) { // create window, if needed
 			m_CompletionListBox = new CAutoCompleteDlg(&theApp.m_AvailableCommands, this /*theApp.GetMainWnd()*/);
@@ -1035,20 +1039,20 @@ CAutoCompleteDlg *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLef
 		}
 		// InitWithKeyword will notify the listener immediatly, if only one exact match exists
 		if (m_CompletionListBox->InitWithKeyword(keyword) && nWords > 1) { // show listbox for selection
-			m_CompletionListBox->ShowWindow(SW_SHOWNORMAL);
+			//TRACE("==> CreateListBox: Show listbox \n");
+			CRect rc;
+			m_AutoCompleteActive = TRUE;
+			m_CompletionListBox->GetWindowRect(&rc);
 			ClientToScreen(&ptStart); // translate coordinates
 			// Move box by 18 to consider the icon space
 			m_CompletionListBox->SetWindowPos(NULL, ptStart.x - 18, ptStart.y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
+			m_CompletionListBox->ShowWindow(SW_SHOWNORMAL);
 			m_CompletionListBox->SetCurSel(0);			
 		} else {
-			m_CompletionListBox->ShowWindow(SW_HIDE);
+			//TRACE("==> CreateListBox: NOT Show listbox \n");
 		}
-	} else { // hide window
-		SetSelection(m_oldStart, m_oldEnd); /* restore old position */
-		if (m_CompletionListBox != NULL) {
-			m_CompletionListBox->ShowWindow(SW_HIDE);
-		}
-	}
+	} 
+	//TRACE("<== CreateListBox\n");
 	return m_CompletionListBox;
 }
 
@@ -1144,6 +1148,7 @@ void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
 
 	m_AutoCompleteActive = FALSE;
 	ASSERT(cmd != NULL);
+	
 	GetSelection(ptStart, ptEnd);
 
 	//Get the text buffer

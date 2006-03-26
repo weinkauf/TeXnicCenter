@@ -17,7 +17,7 @@ class CAutoCompleteListbox : public CListBox
 // Construction
 public:
 	CAutoCompleteListbox();
-
+	
 // Attributes
 public:
 private:
