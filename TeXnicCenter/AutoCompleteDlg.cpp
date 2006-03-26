@@ -140,8 +140,6 @@ BOOL CAutoCompleteDlg::IsCancelChar(WORD theChar) {
 	return theChar == VK_SPACE;
 }
 
-
-
 /* User has comfirmed selection.  */
 void CAutoCompleteDlg::ApplySelection()
 {
@@ -164,13 +162,11 @@ void CAutoCompleteDlg::ApplySelection()
 /* User cancelled completion */
 void CAutoCompleteDlg::CancelSelection()
 {		
-	TRACE("==> CancelSelection\n");
 	if (m_Listener != NULL) {
 		m_Listener->OnACCommandCancelled();
 		
 	} 
 	ShowWindow(SW_HIDE);
-	TRACE("<== CancelSelection\n");
 }
 
 /**
