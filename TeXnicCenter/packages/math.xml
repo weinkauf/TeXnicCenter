@@ -701,11 +701,81 @@
 			desc="Inserts ??? symbol"
 			parameters="0"
 	/>
+	<lxCommand name="\overbrace" 
+			icon="mathmisc.bmp"
+			index="16"
+			desc="Inserts overbrace symbol"
+			parameters="1"
+	/>
+	<lxCommand name="\underbrace" 
+			icon="mathmisc.bmp"
+			index="17"
+			desc="Inserts underbrace symbol"
+			parameters="1"
+	/>
+	</lxPackage>
+	<lxPackage name="Math Symbols (Accents)" 
+		path="" 
+		desc="Math accents" 
+		>
+	<lxCommand name="\hat" 
+			icon="accents.bmp"
+			index="0"
+			parameters="1"
+	/>
+	<lxCommand name="\check" 
+			icon="accents.bmp"
+			index="1"
+			parameters="1"
+	/>
+	<lxCommand name="\breve" 
+			icon="accents.bmp"
+			index="2"
+			parameters="1"
+	/>
+	<lxCommand name="\acute" 
+			icon="accents.bmp"
+			index="3"
+			parameters="1"
+	/>
+	<lxCommand name="\grave" 
+			icon="accents.bmp"
+			index="4"
+			parameters="1"
+	/>
+	<lxCommand name="\tilde" 
+			icon="accents.bmp"
+			index="5"
+			parameters="1"
+	/>
+	<lxCommand name="\bar" 
+			icon="accents.bmp"
+			index="6"
+			parameters="1"
+	/>
+	<lxCommand name="\vec" 
+			icon="accents.bmp"
+			index="7"
+			parameters="1"
+	/>
+	<lxCommand name="\dot" 
+			icon="accents.bmp"
+			index="8"
+			parameters="1"
+	/>
+	<lxCommand name="\ddot" 
+			icon="accents.bmp"
+			index="9"
+			parameters="1"
+	/>
 	</lxPackage>
 </lxCollection>
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.5  2006/03/27 23:31:57  owieland
+	Added misc math symbols
+	
 	Revision 1.4  2006/03/27 23:08:47  owieland
 	Extended set operators
 	
