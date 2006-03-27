@@ -340,7 +340,7 @@
 			parameters="0"
 	/>
 	</lxPackage>
-	<lxPackage name="Arrows" 
+	<lxPackage name="Math Symbols (Arrows)" 
 		path="" 
 		desc="Arrow and pointer symbols" 
 		>
@@ -512,10 +512,54 @@
 			parameters="0"
 	/>
 	</lxPackage>
+	<lxPackage name="Math Symbols (Set operators)" 
+		path="" 
+		desc="Set operators" 
+		>
+	<lxCommand name="\ni" 
+			icon="sets.bmp"
+			index="0"
+			desc="Inserts 'not in set' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\exists" 
+			icon="sets.bmp"
+			index="1"
+			desc="Inserts 'exists' quantifier"
+			parameters="0"
+	/>
+	<lxCommand name="\all" 
+			icon="sets.bmp"
+			index="2"
+			desc="Inserts 'all' quantifier"
+			parameters="0"
+	/>
+	<lxCommand name="\neg" 
+			icon="sets.bmp"
+			index="3"
+			desc="Inserts negation"
+			parameters="0"
+	/>
+	<lxCommand name="\wedge" 
+			icon="sets.bmp"
+			index="4"
+			desc="Inserts 'and' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\vee" 
+			icon="sets.bmp"
+			index="5"
+			desc="Inserts 'or' operator"
+			parameters="0"
+	/>
+	</lxPackage>
 </lxCollection>
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.2  2006/03/27 21:39:19  owieland
+	Added large greek symbols and arrows
+	
 	Revision 1.1  2006/03/27 19:56:46  owieland
 	Added math commands, env's and symbols (some icons are missing yet)
 	
