@@ -47,14 +47,14 @@
 			parameters="1"
 	/>
 	<lxCommand name="\sum" 
-			icon="math.bmp"
-			index="10"
+			icon="mathmisc.bmp"
+			index="13"			
 			desc="Inserts a sum term"
 			parameters="1"
 	/>
 	<lxCommand name="\int" 
-			icon="math.bmp"
-			index="10"
+			icon="mathmisc.bmp"
+			index="12"
 			desc="Inserts an integral term"
 			parameters="1"
 	/>
@@ -62,6 +62,18 @@
 			icon="math.bmp"
 			index="10"
 			desc="Inserts an closed-loop integral term"
+			parameters="1"
+	/>
+	<lxCommand name="\prod" 
+			icon="mathmisc.bmp"
+			index="14"			
+			desc="Inserts a product term"
+			parameters="1"
+	/>
+	<lxCommand name="\coprod" 
+			icon="mathmisc.bmp"
+			index="15"			
+			desc="Inserts a coprod term"
 			parameters="1"
 	/>
 	
@@ -613,10 +625,90 @@
 			parameters="0"
 	/>
 	</lxPackage>
+	<lxPackage name="Math Symbols (Miscellaneous)" 
+		path="" 
+		desc="Miscellaneous math operators" 
+		>
+	<lxCommand name="\partial" 
+			icon="mathmisc.bmp"
+			index="0"
+			desc="Inserts 'partial derivation' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\nabla" 
+			icon="mathmisc.bmp"
+			index="1"
+			desc="Inserts nabla operator"
+			parameters="0"
+	/>
+	<lxCommand name="\infty" 
+			icon="mathmisc.bmp"
+			index="2"
+			desc="Inserts infinity symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Im" 
+			icon="mathmisc.bmp"
+			index="3"
+			desc="Inserts imaginary part operator"
+			parameters="0"
+	/>
+	<lxCommand name="\Re" 
+			icon="mathmisc.bmp"
+			index="4"
+			desc="Inserts real part operator"
+			parameters="0"
+	/>
+	<lxCommand name="\aleph" 
+			icon="mathmisc.bmp"
+			index="5"
+			desc="Inserts ??? operator"
+			parameters="0"
+	/>
+	<lxCommand name="\angle" 
+			icon="mathmisc.bmp"
+			index="6"
+			desc="Inserts angle symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\bot" 
+			icon="mathmisc.bmp"
+			index="7"
+			desc="Inserts perpendicular symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\diamondsuit" 
+			icon="mathmisc.bmp"
+			index="8"
+			desc="Inserts ??? symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\ell" 
+			icon="mathmisc.bmp"
+			index="9"
+			desc="Inserts ??? symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\wp" 
+			icon="mathmisc.bmp"
+			index="10"
+			desc="Inserts ??? symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\hbar" 
+			icon="mathmisc.bmp"
+			index="11"
+			desc="Inserts ??? symbol"
+			parameters="0"
+	/>
+	</lxPackage>
 </lxCollection>
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.4  2006/03/27 23:08:47  owieland
+	Extended set operators
+	
 	Revision 1.3  2006/03/27 22:47:23  owieland
 	Added set operators
 	
