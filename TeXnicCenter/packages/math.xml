@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<lxCollection version="1" xmlns:txclxp="http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd">
+	<lxPackage name="Math" 
+		path="" 
+		desc="TeX/LaTeX math commands" 
+		class="false">
+		
+	<lxEnvironment name="displaymath" 
+			parameters="1" 
+			desc="Math environment"
+			icon="math.bmp"
+			index="10"
+			expafter="}&#xA;	&#xA;\end{displaymath}" 
+			expbefore="\begin{"/>
+	<lxEnvironment name="equation" 
+			parameters="1" 
+			desc="Math environment"
+			icon="math.bmp"
+			index="10"
+			expafter="}&#xA;	&#xA;\end{equation}" 
+			expbefore="\begin{"/>
+	<lxEnvironment name="math" 
+			parameters="1" 
+			desc="Embedded math environment"
+			icon="math.bmp"
+			index="10"
+			expafter="}&#xA;	&#xA;\end{math}" 
+			expbefore="\begin{"/>
+	<lxEnvironment name="eqnarray" 
+			parameters="1" 
+			desc="Math environment"
+			icon="math.bmp"
+			index="10"
+			expafter="}&#xA;	&#xA;\end{eqnarray}" 
+			expbefore="\begin{"/>
+	
+	<lxCommand name="\frac" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts a fraction term"
+			parameters="2"
+	/>
+	<lxCommand name="\sqrt" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts a square root term"
+			parameters="1"
+	/>
+	<lxCommand name="\sum" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts a sum term"
+			parameters="1"
+	/>
+	<lxCommand name="\int" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts an integral term"
+			parameters="1"
+	/>
+	<lxCommand name="\cint" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts an closed-loop integral term"
+			parameters="1"
+	/>
+	
+	<lxCommand name="\ldots" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts low dots"
+			parameters="0"
+	/>
+	<lxCommand name="\vdots" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts vertical dots"
+			parameters="0"
+	/>
+	<lxCommand name="\cdots" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts centered dots"
+			parameters="0"
+	/>
+	<lxCommand name="\ddots" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts diagonal dots"
+			parameters="0"
+	/>
+	</lxPackage>
+	<lxPackage name="Math Symbols" 
+		path="" 
+		desc="TeX/LaTeX math symbols" 
+		>
+	<lxCommand name="\alpha" 
+			icon="symbols.bmp"
+			index="0"
+			desc="Inserts greek alpha symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\beta" 
+			icon="symbols.bmp"
+			index="1"
+			desc="Inserts greek beta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\gamma" 
+			icon="symbols.bmp"
+			index="7"
+			desc="Inserts greek gamma symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\delta" 
+			icon="symbols.bmp"
+			index="3"
+			desc="Inserts greek delta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\epsilon" 
+			icon="symbols.bmp"
+			index="4"
+			desc="Inserts greek epsilon symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\varepsilon" 
+			icon="symbols.bmp"
+			index="4"
+			desc="Inserts greek epsilon symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\zeta" 
+			icon="symbols.bmp"
+			index="27"
+			desc="Inserts greek zeta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\eta" 
+			icon="symbols.bmp"
+			index="8"
+			desc="Inserts greek eta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\theta" 
+			icon="symbols.bmp"
+			index="17"
+			desc="Inserts greek theta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\vartheta" 
+			icon="symbols.bmp"
+			index="18"
+			desc="Inserts greek theta symbol (variant)"
+			parameters="0"
+	/>
+	<lxCommand name="\iota" 
+			icon="symbols.bmp"
+			index="9"
+			desc="Inserts greek iota symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\kappa" 
+			icon="symbols.bmp"
+			index="10"
+			desc="Inserts greek kappa symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\lambda" 
+			icon="symbols.bmp"
+			index="11"
+			desc="Inserts greek lambda symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\mu" 
+			icon="symbols.bmp"
+			index="12"
+			desc="Inserts greek mu symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\nu" 
+			icon="symbols.bmp"
+			index="13"
+			desc="Inserts greek nu symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\xi" 
+			icon="symbols.bmp"
+			index="25"
+			desc="Inserts greek xi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\pi" 
+			icon="symbols.bmp"
+			index="15"
+			desc="Inserts greek pi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\varpi" 
+			icon="symbols.bmp"
+			index="16"
+			desc="Inserts greek lambda symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\rho" 
+			icon="symbols.bmp"
+			index="19"
+			desc="Inserts greek rho symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\varrho" 
+			icon="symbols.bmp"
+			index="19"
+			desc="Inserts greek rho symbol (variant)"
+			parameters="0"
+	/>
+	<lxCommand name="\sigma" 
+			icon="symbols.bmp"
+			index="20"
+			desc="Inserts greek sigma symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\varsigma" 
+			icon="symbols.bmp"
+			index="21"
+			desc="Inserts greek sigma symbol (variant)"
+			parameters="0"
+	/>
+	<lxCommand name="\tau" 
+			icon="symbols.bmp"
+			index="22"
+			desc="Inserts greek tau symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\upsilon" 
+			icon="symbols.bmp"
+			index="23"
+			desc="Inserts greek upsilon symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\phi" 
+			icon="symbols.bmp"
+			index="5"
+			desc="Inserts greek phi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\varphi" 
+			icon="symbols.bmp"
+			index="6"
+			desc="Inserts greek phi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\chi" 
+			icon="symbols.bmp"
+			index="2"
+			desc="Inserts greek chi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\psi" 
+			icon="symbols.bmp"
+			index="26"
+			desc="Inserts greek psi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\omega" 
+			icon="symbols.bmp"
+			index="24"
+			desc="Inserts greek omega symbol"
+			parameters="0"
+	/>
+	</lxPackage>
+</lxCollection>
+<!-- $Id$ -->
+<!-- 
+	$Log$
+-->
