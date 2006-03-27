@@ -552,11 +552,74 @@
 			desc="Inserts 'or' operator"
 			parameters="0"
 	/>
+	<lxCommand name="\in" 
+			icon="sets.bmp"
+			index="6"
+			desc="Inserts 'in set' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\notin" 
+			icon="sets.bmp"
+			index="7"
+			desc="Inserts 'not in set' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\cup" 
+			icon="sets.bmp"
+			index="8"
+			desc="Inserts 'union' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\cap" 
+			icon="sets.bmp"
+			index="9"
+			desc="Inserts 'intersection' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\bigcup" 
+			icon="sets.bmp"
+			index="10"
+			desc="Inserts big 'union' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\bigcap" 
+			icon="sets.bmp"
+			index="11"
+			desc="Inserts big 'intersection' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\subset" 
+			icon="sets.bmp"
+			index="12"
+			desc="Inserts 'subset' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\supset" 
+			icon="sets.bmp"
+			index="13"
+			desc="Inserts 'superset' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\subseteq" 
+			icon="sets.bmp"
+			index="14"
+			desc="Inserts 'subset or equal' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\supseteq" 
+			icon="sets.bmp"
+			index="15"
+			desc="Inserts 'superset or equal' operator"
+			parameters="0"
+	/>
 	</lxPackage>
 </lxCollection>
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.3  2006/03/27 22:47:23  owieland
+	Added set operators
+	
 	Revision 1.2  2006/03/27 21:39:19  owieland
 	Added large greek symbols and arrows
 	
