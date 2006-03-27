@@ -47,6 +47,12 @@
 			index="9"
 			expafter="}[ht]&#xA;	&#xA;	\label{}&#xA;	\caption{}&#xA;\end{figure}" 
 			expbefore="\begin{"/>
+		<lxEnvironment name="equation" 
+			parameters="0"
+			desc="Provides an equation environment"
+			expafter="}&#xA;\label{eq:label}&#xA;&#xA;\end{equation}" 
+			expbefore="\begin{"/>
+
 		<lxCommand name="\caption" parameters="1"/>
 		<lxCommand name="\label" parameters="1"/>	
 					
@@ -266,6 +272,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.8  2006/03/26 22:47:39  owieland
+	Added additional commands
+	
 	Revision 1.7  2006/03/26 22:29:33  owieland
 	- Added some icons and commands
 	- Moved redundant commands and envs of standard doc classes to TeX.xml
