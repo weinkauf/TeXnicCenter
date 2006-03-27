@@ -58,7 +58,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Desc=Setup help, xsd and language files...
-PostBuild_Cmds=cd ..\TCHelp	call buildhelp.bat	cd ..\texniccenter	call buildlang.bat	call buildxml.bat
+PostBuild_Cmds=cd ..\TCHelp	call buildhelp.bat	cd ..\texniccenter	call buildlang.bat	call buildxml.bat	call buildpack.bat
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "TeXnicCenter - Win32 Debug"
