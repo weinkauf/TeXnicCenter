@@ -19,6 +19,7 @@ CAutoCompleteListbox::CAutoCompleteListbox()
 {
 	m_BoldFont = NULL;
 	m_PictureCache = new CMapStringToPtr();
+	EnableToolTips();
 }
 
 CAutoCompleteListbox::~CAutoCompleteListbox()
@@ -38,6 +39,8 @@ BEGIN_MESSAGE_MAP(CAutoCompleteListbox, CListBox)
 	//{{AFX_MSG_MAP(CAutoCompleteListbox)
 	ON_WM_LBUTTONDBLCLK()
 	//}}AFX_MSG_MAP
+	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
+	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -182,9 +185,12 @@ BOOL CAutoCompleteListbox::DrawBitmap(CDC* pDC, CString file, UINT index, CRect 
 		// Copy the bits from the in-memory DC into the on-
 		// screen DC to actually do the painting. Use the centerpoint
 		// we computed for the target offset.
+		/*
 		pDC->StretchBlt(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, 
 			&dcMemory, index * BMP_WIDTH, 0, BMP_WIDTH, BMP_HEIGHT, SRCCOPY);
-
+		*/
+		pDC->StretchBlt(rect.left, rect.top, BMP_WIDTH, BMP_HEIGHT, 
+			&dcMemory, index * BMP_WIDTH, 0, BMP_WIDTH, BMP_HEIGHT, SRCCOPY);
 		dcMemory.SelectObject(pOldBitmap);
 		return TRUE;
 	} else {
@@ -226,3 +232,48 @@ void CAutoCompleteListbox::OnLButtonDblClk(UINT nFlags, CPoint point)
 	}
 }
 
+int CAutoCompleteListbox::OnToolHitTest(CPoint point, TOOLINFO * pTI) const
+{
+    int row;
+    RECT cellrect; // cellrect - to hold the bounding rect
+    BOOL tmp = FALSE;
+    row = ItemFromPoint(point,tmp); //we call the ItemFromPoint function to determine the row,
+    //note that in NT this function may fail use the ItemFromPointNT member function
+    if ( row == -1 ) 
+        return -1;
+
+    //set up the TOOLINFO structure. GetItemRect(row,&cellrect);
+    GetItemRect(row,&cellrect);
+    pTI->rect = cellrect;
+    pTI->hwnd = m_hWnd;
+    pTI->uId = (UINT)((row)); //The ‘uId’ is assigned a value according to the row value.
+    pTI->lpszText = LPSTR_TEXTCALLBACK;  //Send a TTN_NEEDTEXT messages 
+    return pTI->uId;
+}
+
+BOOL CAutoCompleteListbox::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
+{
+// need to handle both ANSI and UNICODE versions of the message
+    TOOLTIPTEXTA* pTTTA = (TOOLTIPTEXTA*)pNMHDR;
+    TOOLTIPTEXTW* pTTTW = (TOOLTIPTEXTW*)pNMHDR;
+    CString strTipText;
+    UINT nID = pNMHDR->idFrom;  //list box item index 
+
+	CLaTeXCommand *lc = (CLaTeXCommand*)GetItemData(nID);
+    strTipText = lc->GetDescription();
+//display item text as tool tip 
+#ifndef _UNICODE
+    if (pNMHDR->code == TTN_NEEDTEXTA)
+    lstrcpyn(pTTTA->szText, strTipText, 80);
+else
+    _mbstowcsz(pTTTW->szText, strTipText, 80);
+#else
+    if (pNMHDR->code == TTN_NEEDTEXTA)
+    _wcstombsz(pTTTA->szText, strTipText, 80);
+    else
+    lstrcpyn(pTTTW->szText, strTipText, 80);
+    #endif
+    *pResult = 0;
+
+return TRUE; 
+}
