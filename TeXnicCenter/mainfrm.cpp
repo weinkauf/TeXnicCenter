@@ -1522,17 +1522,26 @@ void CMainFrame::OnContextMenu(CWnd* pWnd, CPoint point)
 	// We have to use the right window to get right coordinates ;-)
 	::ScreenToClient(pWnd->GetSafeHwnd(), &point);
 
-	if (pWnd->m_hWnd == m_hWndMDIClient || pWnd->m_hWnd == m_wndClientArea.GetMDITabs()) {
+	if (pWnd->m_hWnd == m_hWndMDIClient || pWnd->m_hWnd == m_wndClientArea.GetMDITabs())
+	{
 		// determine target window for context menu 
-		int nTab = m_wndClientArea.GetMDITabs().GetTabFromPoint(point);						
-		CChildFrame *wndEdit = dynamic_cast<CChildFrame*>(m_wndClientArea.GetMDITabs().GetTabWnd(nTab));		
-		// save pointer for later use
-		m_pTargetWindow = dynamic_cast<CLatexEdit *>(wndEdit->GetActiveView());
+		const int nTab = m_wndClientArea.GetMDITabs().GetTabFromPoint(point);
+		if (nTab >= 0)
+		{
+			CChildFrame* wndEdit = dynamic_cast<CChildFrame*>(m_wndClientArea.GetMDITabs().GetTabWnd(nTab));
+			// save pointer for later use
+			if (wndEdit)
+			{
+				m_pTargetWindow = dynamic_cast<CLatexEdit *>(wndEdit->GetActiveView());
+			}
+		}
 
 		// translate menu coordinates and show menu
 		::ClientToScreen(pWnd->GetSafeHwnd(), &point);
 		theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_MDICLIENT, point.x, point.y, this);
-	} else {
+	}
+	else
+	{
 		m_pTargetWindow = NULL; // mark as invalid
 		theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_TOOLBAR, point.x, point.y, this);		
 	}
