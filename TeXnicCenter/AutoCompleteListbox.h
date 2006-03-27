@@ -28,6 +28,9 @@ private:
 private:	
 	BOOL DrawBitmap(CDC* pDC, CString file, UINT index, CRect rect);
 	CBitmap* CAutoCompleteListbox::LoadBitmapFromFile(CString filename);
+protected:
+	int OnToolHitTest(CPoint point, TOOLINFO * pTI) const;
+	BOOL OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult );
 public:
 
 // Overrides
@@ -42,13 +45,12 @@ public:
 // Implementation
 public:
 	virtual ~CAutoCompleteListbox();
-
+	
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CAutoCompleteListbox)
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	//}}AFX_MSG
-
 	DECLARE_MESSAGE_MAP()
 };
 
