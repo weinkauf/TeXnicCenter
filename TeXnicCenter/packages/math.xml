@@ -3,7 +3,7 @@
 	<lxPackage name="Math" 
 		path="" 
 		desc="TeX/LaTeX math commands" 
-		class="false">
+	>
 		
 	<lxEnvironment name="displaymath" 
 			parameters="1" 
@@ -58,7 +58,7 @@
 			desc="Inserts an integral term"
 			parameters="1"
 	/>
-	<lxCommand name="\cint" 
+	<lxCommand name="\oint" 
 			icon="math.bmp"
 			index="10"
 			desc="Inserts an closed-loop integral term"
@@ -90,9 +90,9 @@
 			parameters="0"
 	/>
 	</lxPackage>
-	<lxPackage name="Math Symbols" 
+	<lxPackage name="Math Symbols (Small Greek)" 
 		path="" 
-		desc="TeX/LaTeX math symbols" 
+		desc="Small greek symbols" 
 		>
 	<lxCommand name="\alpha" 
 			icon="symbols.bmp"
@@ -269,8 +269,254 @@
 			parameters="0"
 	/>
 	</lxPackage>
+	<lxPackage name="Math Symbols (Large Greek)" 
+		path="" 
+		desc="Large greek symbols" 
+		>
+	<lxCommand name="\Gamma" 
+			icon="symbols2.bmp"
+			index="6"
+			desc="Inserts large greek gamma symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Delta" 
+			icon="symbols2.bmp"
+			index="3"
+			desc="Inserts large greek delta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Theta" 
+			icon="symbols2.bmp"
+			index="6"
+			desc="Inserts large greek theta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Lamdba" 
+			icon="symbols2.bmp"
+			index="10"
+			desc="Inserts large greek lambda symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Xi" 
+			icon="symbols2.bmp"
+			index="21"
+			desc="Inserts large greek xi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Pi" 
+			icon="symbols2.bmp"
+			index="14"
+			desc="Inserts large greek pi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Sigma" 
+			icon="symbols2.bmp"
+			index="17"
+			desc="Inserts large greek sigma symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Upsilon" 
+			icon="symbols2.bmp"
+			index="19"
+			desc="Inserts large greek upsilon symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Phi" 
+			icon="symbols2.bmp"
+			index="22"
+			desc="Inserts large greek phi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Psi" 
+			icon="symbols2.bmp"
+			index="22"
+			desc="Inserts large greek psi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Omega" 
+			icon="symbols2.bmp"
+			index="20"
+			desc="Inserts large greek omega symbol"
+			parameters="0"
+	/>
+	</lxPackage>
+	<lxPackage name="Arrows" 
+		path="" 
+		desc="Arrow and pointer symbols" 
+		>
+	<lxCommand name="\leftarrow" 
+			icon="arrows.bmp"
+			index="0"
+			desc="Inserts simple left arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\rightarrow" 
+			icon="arrows.bmp"
+			index="1"
+			desc="Inserts simple right arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\leftrightarrow" 
+			icon="arrows.bmp"
+			index="2"
+			desc="Inserts simple doubleheaded arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Leftarrow" 
+			icon="arrows.bmp"
+			index="3"
+			desc="Inserts thick left arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Rightarrow" 
+			icon="arrows.bmp"
+			index="4"
+			desc="Inserts simple right arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Leftrightarrow" 
+			icon="arrows.bmp"
+			index="5"
+			desc="Inserts simple doubleheaded arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\uparrow" 
+			icon="arrows.bmp"
+			index="6"
+			desc="Inserts simple up arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\downarrow" 
+			icon="arrows.bmp"
+			index="7"
+			desc="Inserts simple down arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\updownarrow" 
+			icon="arrows.bmp"
+			index="8"
+			desc="Inserts simple vertical doubleheaded arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Uparrow" 
+			icon="arrows.bmp"
+			index="9"
+			desc="Inserts thick up arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Downarrow" 
+			icon="arrows.bmp"
+			index="10"
+			desc="Inserts thick down arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Updownarrow" 
+			icon="arrows.bmp"
+			index="11"
+			desc="Inserts thick doubleheaded arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\leftharpoonup" 
+			icon="arrows.bmp"
+			index="12"
+			parameters="0"
+	/>
+	<lxCommand name="\rightharpoonup" 
+			icon="arrows.bmp"
+			index="13"
+			parameters="0"
+	/>
+	<lxCommand name="\leftrightharpoons" 
+			icon="arrows.bmp"
+			index="14"
+			parameters="0"
+	/>
+	<lxCommand name="\leftharpoondown" 
+			icon="arrows.bmp"
+			index="15"
+			parameters="0"
+	/>
+	<lxCommand name="\rightharpoondown" 
+			icon="arrows.bmp"
+			index="16"
+			parameters="0"
+	/>
+	<lxCommand name="\mapsto" 
+			icon="arrows.bmp"
+			index="17"
+			parameters="0"
+	/>
+	<lxCommand name="\longmapsto" 
+			icon="arrows.bmp"
+			index="18"
+			parameters="0"
+	/>
+	<lxCommand name="\nearrow" 
+			icon="arrows.bmp"
+			index="21"
+			desc="Inserts north east heading arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\searrow" 
+			icon="arrows.bmp"
+			index="22"
+			desc="Inserts south east heading arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\nwarrow" 
+			icon="arrows.bmp"
+			index="24"
+			desc="Inserts north west heading arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\swarrow" 
+			icon="arrows.bmp"
+			index="23"
+			desc="Inserts south west heading arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\longleftarrow" 
+			icon="arrows.bmp"
+			index="25"
+			desc="Inserts long left arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\longrightarrow" 
+			icon="arrows.bmp"
+			index="26"
+			desc="Inserts long right arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\longleftrightarrow" 
+			icon="arrows.bmp"
+			index="27"
+			desc="Inserts long doubleheaded arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Longleftarrow" 
+			icon="arrows.bmp"
+			index="28"
+			desc="Inserts long left arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Longrightarrow" 
+			icon="arrows.bmp"
+			index="29"
+			desc="Inserts long right arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Longleftrightarrow" 
+			icon="arrows.bmp"
+			index="30"
+			desc="Inserts long doubleheaded arrow"
+			parameters="0"
+	/>
+	</lxPackage>
 </lxCollection>
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.1  2006/03/27 19:56:46  owieland
+	Added math commands, env's and symbols (some icons are missing yet)
+	
 -->
