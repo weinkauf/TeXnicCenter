@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <lxCollection version="1" xmlns:txclxp="http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd">
-	<lxPackage name="Common LaTeX commands and environments" 
+	<lxPackage name="LaTeX" 
 		path="" 
 		desc="TeX/LaTeX native commands (incomplete!)" 
 		class="TRUE">		
@@ -46,11 +46,6 @@
 			icon="format.bmp"
 			index="9"
 			expafter="}[ht]&#xA;	&#xA;	\label{}&#xA;	\caption{}&#xA;\end{figure}" 
-			expbefore="\begin{"/>
-		<lxEnvironment name="equation" 
-			parameters="0"
-			desc="Provides an equation environment"
-			expafter="}&#xA;\label{eq:label}&#xA;&#xA;\end{equation}" 
 			expbefore="\begin{"/>
 
 		<lxCommand name="\caption" parameters="1"/>
@@ -272,6 +267,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.9  2006/03/27 05:24:32  niteria
+	Added equation
+	
 	Revision 1.8  2006/03/26 22:47:39  owieland
 	Added additional commands
 	
