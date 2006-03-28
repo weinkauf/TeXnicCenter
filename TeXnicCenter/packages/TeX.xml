@@ -50,10 +50,19 @@
 
 		<lxCommand name="\caption" parameters="1"/>
 		<lxCommand name="\label" parameters="1"/>	
+		<lxCommand name="\ref" parameters="1"/>	
+		<lxCommand name="\pageref" parameters="1"/>	
+		<lxCommand name="\cite" parameters="1"/>	
+		<lxCommand name="\nocite" parameters="1"/>	
 					
 		<lxEnvironment name="document"
 			desc="Starts a new document"
 			expafter="}&#xA;&#xA;\end{document}" 
+			expbefore="\begin{"
+		/>
+		
+		<lxEnvironment name="samepage"
+			expafter="}&#xA;&#xA;\end{samepage}" 
 			expbefore="\begin{"
 		/>
 		<lxCommand name="\thispagestyle" parameters="1"/>
@@ -61,7 +70,10 @@
 		<lxCommand name="\vspace" parameters="1"/>
 		<lxCommand name="\hspace" parameters="1"/>
 		<lxCommand name="\newline" parameters="0"/>
+		<lxCommand name="\linebreak" parameters="0"/>
+		<lxCommand name="\nolinebreak" parameters="0"/>
 		<lxCommand name="\newpage" parameters="0"/>
+		<lxCommand name="\clearpage" parameters="0"/>
 		<lxCommand name="\cleardoublepage" parameters="0"/>
 		<lxCommand name="\setcounter" parameters="2"/>		
 
@@ -126,8 +138,16 @@
 			icon="format.bmp"
 			index="5"
 		/>
+		<lxCommand name="\textsf" 
+			desc="Change to sans serif font"
+			parameters="1"
+			icon="format.bmp"
+			index="5"
+		/>
 		<lxCommand name="\emph" 
 			desc="Emphasize text"
+			icon="format.bmp"
+			index="0"
 			parameters="1"
 		/>
 		
@@ -181,6 +201,10 @@
 			desc="Inserts a footnote"
 			parameters="1"
 		/>
+		<lxCommand name="\marginpar" 
+			desc="Inserts a margin paragraph"
+			parameters="1"
+		/>
 		
 		<lxEnvironment name="quotation" 
 			expafter="}&#xA;&#xA;\end{quotation}" 
@@ -203,17 +227,28 @@
 		<lxCommand name="\listoffigures"/>
 		<lxCommand name="\tableofcontents"/>
 		<lxCommand name="\addcontentsline" parameters="3"/>
+		<lxCommand name="\addtocontents" parameters="2"/>
 		<lxCommand name="\appendix"/>
 		<lxCommand name="\maketitle"/>
+		<lxCommand name="\makeindex"/>
+		<lxCommand name="\index" parameters="1"/>
+		<lxCommand name="\glossaryentry" parameters="2"/>
+		<lxCommand name="\makeglossary"/>
 		
-		<lxCommand name="\emph" 
-			desc="Emphasize text"
-			parameters="1"
-		/>
-		<lxCommand name="\emph" 
-			desc="Emphasize text"
-			parameters="1"
-		/>
+		<lxCommand name="\mbox"/>
+		<lxCommand name="\makebox"/>
+		<lxCommand name="\savebox"/>
+		<lxCommand name="\usebox"/>
+		<lxCommand name="\raisebox"/>
+		<lxCommand name="\parbox"/>
+		<lxCommand name="\hrule"/>
+		<lxCommand name="\hfill"/>
+		<lxEnvironment name="minipage" 
+			expafter="}&#xA;&#xA;\end{minipage}" 
+			expbefore="\begin{"/>
+		
+		
+		<lxCommand name="\hyphenation" parameters="1"/>
 	</lxPackage>		
 	<lxPackage name="BibTeX" 
 		path="" 
@@ -267,6 +302,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.10  2006/03/27 19:57:36  owieland
+	Removed equation (part of math.xml)
+	
 	Revision 1.9  2006/03/27 05:24:32  niteria
 	Added equation
 	

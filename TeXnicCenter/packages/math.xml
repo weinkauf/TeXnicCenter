@@ -5,6 +5,13 @@
 		desc="TeX/LaTeX math commands" 
 	>
 		
+	<lxEnvironment name="math" 
+			parameters="1" 
+			desc="Math environment"
+			icon="math.bmp"
+			index="10"
+			expafter="}&#xA;	&#xA;\end{math}" 
+			expbefore="\begin{"/>
 	<lxEnvironment name="displaymath" 
 			parameters="1" 
 			desc="Math environment"
@@ -19,13 +26,6 @@
 			index="10"
 			expafter="}&#xA;	&#xA;\end{equation}" 
 			expbefore="\begin{"/>
-	<lxEnvironment name="math" 
-			parameters="1" 
-			desc="Embedded math environment"
-			icon="math.bmp"
-			index="10"
-			expafter="}&#xA;	&#xA;\end{math}" 
-			expbefore="\begin{"/>
 	<lxEnvironment name="eqnarray" 
 			parameters="1" 
 			desc="Math environment"
@@ -33,6 +33,9 @@
 			index="10"
 			expafter="}&#xA;	&#xA;\end{eqnarray}" 
 			expbefore="\begin{"/>
+	<lxCommand name="\newtheorem" 
+			parameters="2"
+	/>
 	
 	<lxCommand name="\frac" 
 			icon="math.bmp"
@@ -833,6 +836,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.8  2006/03/28 00:18:33  owieland
+	Added oint symbol
+	
 	Revision 1.7  2006/03/28 00:05:36  owieland
 	Added binary operators
 	
