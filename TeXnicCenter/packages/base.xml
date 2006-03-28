@@ -92,20 +92,6 @@
 		<lxCommand name="\printindex"/>
 		<lxCommand name="\see*" parameters="2"/>
 	</lxPackage>
-	<lxPackage name="ltxdoc" path="C:\texmf\tex\latex\base\ltxdoc.cls" desc="1999/08/08 v2.0u Standard LaTeX documentation class" class="TRUE">
-		<lxCommand name="\docincludeaux"/>
-		<lxCommand name="\task"/>
-		<lxCommand name="\filesep"/>
-		<lxCommand name="\thepart"/>
-		<lxCommand name="\currentfile"/>
-		<lxCommand name="\next"/>
-		<lxCommand name="\cmd"/>
-		<lxCommand name="\aalph"/>
-		<lxCommand name="\commentline"/>
-		<lxCommand name="\DocInclude*" parameters="1"/>
-		<lxCommand name="\partname"/>
-		<lxOption name="a5paper"/>
-	</lxPackage>
 	<lxPackage name="fontenc" path="C:\texmf\tex\latex\base\fontenc.sty" desc="2004/02/22 v1.99f&#xA;                 Standard LaTeX package">
 		<lxCommand name="\noexpand"/>
 		<lxCommand name="\expandafter"/>
@@ -192,6 +178,7 @@
 		<lxCommand name="\fntguide"/>
 		<lxCommand name="\sourcecode"/>
 		<lxEnvironment name="decl" parameters="1" expafter="}{}&#xA;&#xA;\end{decl}" expbefore="\begin{"/>
+		<lxEnvironment name="verbatim" parameters="0" expafter="}{}&#xA;&#xA;\end{verbatim}" expbefore="\begin{"/>
 		<lxCommand name="\clsguide"/>
 		<lxCommand name="\modguide"/>
 		<lxCommand name="\LaTeXWcomp"/>
