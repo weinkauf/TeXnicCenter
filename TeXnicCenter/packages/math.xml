@@ -59,8 +59,8 @@
 			parameters="1"
 	/>
 	<lxCommand name="\oint" 
-			icon="math.bmp"
-			index="10"
+			icon="mathmisc.bmp"
+			index="18"
 			desc="Inserts an closed-loop integral term"
 			parameters="1"
 	/>
@@ -833,6 +833,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.7  2006/03/28 00:05:36  owieland
+	Added binary operators
+	
 	Revision 1.6  2006/03/27 23:56:17  owieland
 	Added accents and braces
 	
