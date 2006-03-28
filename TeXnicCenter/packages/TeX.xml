@@ -136,7 +136,7 @@
 			desc="Change to small capitals"
 			parameters="1"
 			icon="format.bmp"
-			index="5"
+			index="99"
 		/>
 		<lxCommand name="\textsf" 
 			desc="Change to sans serif font"
@@ -302,6 +302,10 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.11  2006/03/28 00:45:59  owieland
+	- Added some missing commands and env#s
+	- Removed some duplicate entries
+	
 	Revision 1.10  2006/03/27 19:57:36  owieland
 	Removed equation (part of math.xml)
 	
