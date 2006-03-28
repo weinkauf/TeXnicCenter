@@ -7,6 +7,7 @@
 		<lxCommand name="\descriptionlabel*" parameters="1"/>
 		<lxCommand name="\huge"/>
 		<lxCommand name="\ttdefault"/>
+		<lxEnvironment name="abstract" expafter="}&#xA;&#xA;\end{abstract}" expbefore="\begin{"/>
 		<lxEnvironment name="quote" expafter="}&#xA;&#xA;\end{quote}" expbefore="\begin{"/>
 		<lxEnvironment name="quotation" expafter="}&#xA;&#xA;\end{quotation}" expbefore="\begin{"/>
 		<lxCommand name="\tiny"/>
@@ -19,7 +20,13 @@
 		<lxCommand name="\sldefault"/>
 		<lxCommand name="\LARGE"/>
 		<lxCommand name="\normalsize"/>
+		<lxCommand name="\footnotesize"/>
+		<lxCommand name="\scriptsize"/>
 		<lxCommand name="\today"/>
+		<lxCommand name="\author" parameters="1"/>
+		<lxCommand name="\title" parameters="1"/>
+		<lxCommand name="\thanks" parameters="1"/>
+		<lxCommand name="\date" parameters="1"/>
 	</lxPackage>
 	<lxPackage name="letter" path="C:\texmf\tex\latex\base\letter.cls" desc="1999/04/29 v1.2z&#xA;               Standard LaTeX document class" class="TRUE">
 		<lxCommand name="\pagename*"/>

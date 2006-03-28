@@ -65,6 +65,8 @@
 			expafter="}&#xA;&#xA;\end{samepage}" 
 			expbefore="\begin{"
 		/>
+		
+		<lxCommand name="\pagestyle" parameters="1"/>
 		<lxCommand name="\thispagestyle" parameters="1"/>
 		<lxCommand name="\pagenumbering" parameters="1"/>
 		<lxCommand name="\vspace" parameters="1"/>
@@ -136,13 +138,13 @@
 			desc="Change to small capitals"
 			parameters="1"
 			icon="format.bmp"
-			index="99"
+			index="5"
 		/>
 		<lxCommand name="\textsf" 
 			desc="Change to sans serif font"
 			parameters="1"
 			icon="format.bmp"
-			index="5"
+			index="99"
 		/>
 		<lxCommand name="\emph" 
 			desc="Emphasize text"
@@ -241,7 +243,7 @@
 		<lxCommand name="\usebox"/>
 		<lxCommand name="\raisebox"/>
 		<lxCommand name="\parbox"/>
-		<lxCommand name="\hrule"/>
+		<lxCommand name="\hline"/>
 		<lxCommand name="\hfill"/>
 		<lxEnvironment name="minipage" 
 			expafter="}&#xA;&#xA;\end{minipage}" 
@@ -302,6 +304,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.12  2006/03/28 00:54:57  owieland
+	Changed icon for textsf
+	
 	Revision 1.11  2006/03/28 00:45:59  owieland
 	- Added some missing commands and env#s
 	- Removed some duplicate entries

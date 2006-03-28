@@ -24,18 +24,30 @@
 			desc="Math environment"
 			icon="math.bmp"
 			index="10"
-			expafter="}&#xA;	&#xA;\end{equation}" 
+			expafter="}&#xA;	&#xA;	\label{eq:}&#xA;\end{equation}" 
 			expbefore="\begin{"/>
 	<lxEnvironment name="eqnarray" 
 			parameters="1" 
 			desc="Math environment"
 			icon="math.bmp"
 			index="10"
-			expafter="}&#xA;	&#xA;\end{eqnarray}" 
+			expafter="}&#xA;	&#xA;	\label{eq:}&#xA;\end{eqnarray}" 
+			expbefore="\begin{"/>
+	<lxEnvironment name="array" 
+			parameters="1" 
+			desc="Math environment"
+			icon="math.bmp"
+			index="10"
+			expafter="}&#xA;	&#xA;\end{array}" 
 			expbefore="\begin{"/>
 	<lxCommand name="\newtheorem" 
 			parameters="2"
 	/>
+	
+	<lxCommand name="\quad" 
+			desc="Inserts additional space in math mode"
+	/>
+	
 	
 	<lxCommand name="\frac" 
 			icon="math.bmp"
@@ -836,6 +848,10 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.9  2006/03/28 00:45:59  owieland
+	- Added some missing commands and env#s
+	- Removed some duplicate entries
+	
 	Revision 1.8  2006/03/28 00:18:33  owieland
 	Added oint symbol
 	
