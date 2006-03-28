@@ -769,10 +769,73 @@
 			parameters="1"
 	/>
 	</lxPackage>
+	<lxPackage name="Math Symbols (Binary Operators)" 
+		path="" 
+		desc="Binary operators" 
+		>
+	<lxCommand name="\leq" 
+			icon="binops.bmp"
+			index="0"
+			parameters="0"
+	/>
+	<lxCommand name="\geq" 
+			icon="binops.bmp"
+			index="1"
+			parameters="0"
+	/>
+	<lxCommand name="\prec" 
+			icon="binops.bmp"
+			index="2"
+			parameters="0"
+	/>
+	<lxCommand name="\succ" 
+			icon="binops.bmp"
+			index="3"
+			parameters="0"
+	/>
+	<lxCommand name="\lhd" 
+			icon="binops.bmp"
+			index="4"
+			parameters="0"
+	/>
+	<lxCommand name="\rhd" 
+			icon="binops.bmp"
+			index="5"
+			parameters="0"
+	/>
+	<lxCommand name="\neq" 
+			icon="binops.bmp"
+			index="6"
+			parameters="0"
+	/>
+	<lxCommand name="\equiv" 
+			icon="binops.bmp"
+			index="7"
+			parameters="0"
+	/>
+	<lxCommand name="\approx" 
+			icon="binops.bmp"
+			index="8"
+			parameters="0"
+	/>
+	<lxCommand name="\cong" 
+			icon="binops.bmp"
+			index="9"
+			parameters="0"
+	/>
+	<lxCommand name="\propto" 
+			icon="binops.bmp"
+			index="10"
+			parameters="0"
+	/>
+	</lxPackage>
 </lxCollection>
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.6  2006/03/27 23:56:17  owieland
+	Added accents and braces
+	
 	Revision 1.5  2006/03/27 23:31:57  owieland
 	Added misc math symbols
 	
