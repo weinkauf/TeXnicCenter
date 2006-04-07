@@ -561,6 +561,12 @@
 			desc="Inserts 'all' quantifier"
 			parameters="0"
 	/>
+	<lxCommand name="\forall" 
+			icon="sets.bmp"
+			index="2"
+			desc="Inserts 'all' quantifier"
+			parameters="0"
+	/>
 	<lxCommand name="\neg" 
 			icon="sets.bmp"
 			index="3"
@@ -644,90 +650,111 @@
 		path="" 
 		desc="Miscellaneous math operators" 
 		>
-	<lxCommand name="\partial" 
+		<lxCommand name="\partial" 
 			icon="mathmisc.bmp"
 			index="0"
 			desc="Inserts 'partial derivation' operator"
 			parameters="0"
-	/>
-	<lxCommand name="\nabla" 
+		/>
+		<lxCommand name="\nabla" 
 			icon="mathmisc.bmp"
 			index="1"
 			desc="Inserts nabla operator"
 			parameters="0"
-	/>
-	<lxCommand name="\infty" 
+		/>
+		<lxCommand name="\infty" 
 			icon="mathmisc.bmp"
 			index="2"
 			desc="Inserts infinity symbol"
 			parameters="0"
-	/>
-	<lxCommand name="\Im" 
+		/>
+		<lxCommand name="\Im" 
 			icon="mathmisc.bmp"
 			index="3"
 			desc="Inserts imaginary part operator"
 			parameters="0"
-	/>
-	<lxCommand name="\Re" 
+		/>
+		<lxCommand name="\Re" 
 			icon="mathmisc.bmp"
 			index="4"
 			desc="Inserts real part operator"
 			parameters="0"
-	/>
-	<lxCommand name="\aleph" 
+		/>
+		<lxCommand name="\aleph" 
 			icon="mathmisc.bmp"
 			index="5"
 			desc="Inserts ??? operator"
 			parameters="0"
-	/>
-	<lxCommand name="\angle" 
+		/>
+		<lxCommand name="\angle" 
 			icon="mathmisc.bmp"
 			index="6"
 			desc="Inserts angle symbol"
 			parameters="0"
-	/>
-	<lxCommand name="\bot" 
+		/>
+		<lxCommand name="\bot" 
 			icon="mathmisc.bmp"
 			index="7"
 			desc="Inserts perpendicular symbol"
 			parameters="0"
-	/>
-	<lxCommand name="\diamondsuit" 
+		/>
+		<lxCommand name="\diamondsuit" 
 			icon="mathmisc.bmp"
 			index="8"
 			desc="Inserts ??? symbol"
 			parameters="0"
-	/>
-	<lxCommand name="\ell" 
+		/>
+		<lxCommand name="\ell" 
 			icon="mathmisc.bmp"
 			index="9"
 			desc="Inserts ??? symbol"
 			parameters="0"
-	/>
-	<lxCommand name="\wp" 
+		/>
+		<lxCommand name="\wp" 
 			icon="mathmisc.bmp"
 			index="10"
 			desc="Inserts ??? symbol"
 			parameters="0"
-	/>
-	<lxCommand name="\hbar" 
+		/>
+		<lxCommand name="\hbar" 
 			icon="mathmisc.bmp"
 			index="11"
 			desc="Inserts ??? symbol"
 			parameters="0"
-	/>
-	<lxCommand name="\overbrace" 
+		/>
+		<lxCommand name="\overbrace" 
 			icon="mathmisc.bmp"
 			index="16"
 			desc="Inserts overbrace symbol"
 			parameters="1"
-	/>
-	<lxCommand name="\underbrace" 
+		/>
+		<lxCommand name="\underbrace" 
 			icon="mathmisc.bmp"
 			index="17"
 			desc="Inserts underbrace symbol"
 			parameters="1"
-	/>
+		/>
+		<lxCommand name="\imath"/>	
+		<lxCommand name="\jmath"/>
+		<lxCommand name="\mho"/>
+		<lxCommand name="\prime"/>
+		<lxCommand name="\emptyset"/>
+		<lxCommand name="\surd"/>
+		<lxCommand name="\top"/>
+		<lxCommand name="\vdash"/>
+		<lxCommand name="\dashv"/>
+		<lxCommand name="\flat"/>
+		<lxCommand name="\natural"/>
+		<lxCommand name="\sharp"/>
+		<lxCommand name="\|"/>
+		<lxCommand name="\backslash"/>
+		<lxCommand name="\Box"/>
+		<lxCommand name="\Diamond"/>
+		<lxCommand name="\triangle"/>
+		<lxCommand name="\clubsuit"/>
+		<lxCommand name="\heartsuite"/>
+		<lxCommand name="\spadesuit"/>
+		<lxCommand name="\Join"/>
 	</lxPackage>
 	<lxPackage name="Math Symbols (Accents)" 
 		path="" 
@@ -788,66 +815,106 @@
 		path="" 
 		desc="Binary operators" 
 		>
-	<lxCommand name="\leq" 
+		<lxCommand name="\leq" 
 			icon="binops.bmp"
 			index="0"
 			parameters="0"
-	/>
-	<lxCommand name="\geq" 
+		/>
+		<lxCommand name="\geq" 
 			icon="binops.bmp"
 			index="1"
 			parameters="0"
-	/>
-	<lxCommand name="\prec" 
+		/>
+		<lxCommand name="\prec" 
 			icon="binops.bmp"
 			index="2"
 			parameters="0"
-	/>
-	<lxCommand name="\succ" 
+		/>
+		<lxCommand name="\succ" 
 			icon="binops.bmp"
 			index="3"
 			parameters="0"
-	/>
-	<lxCommand name="\lhd" 
+		/>
+		<lxCommand name="\lhd" 
 			icon="binops.bmp"
 			index="4"
 			parameters="0"
-	/>
-	<lxCommand name="\rhd" 
+		/>
+		<lxCommand name="\rhd" 
 			icon="binops.bmp"
 			index="5"
 			parameters="0"
-	/>
-	<lxCommand name="\neq" 
+		/>
+		<lxCommand name="\neq" 
 			icon="binops.bmp"
 			index="6"
 			parameters="0"
-	/>
-	<lxCommand name="\equiv" 
+		/>
+		<lxCommand name="\equiv" 
 			icon="binops.bmp"
 			index="7"
 			parameters="0"
-	/>
-	<lxCommand name="\approx" 
+		/>
+		<lxCommand name="\approx" 
 			icon="binops.bmp"
 			index="8"
 			parameters="0"
-	/>
-	<lxCommand name="\cong" 
+		/>
+		<lxCommand name="\cong" 
 			icon="binops.bmp"
 			index="9"
 			parameters="0"
-	/>
-	<lxCommand name="\propto" 
+		/>
+		<lxCommand name="\propto" 
 			icon="binops.bmp"
 			index="10"
 			parameters="0"
 	/>
 	</lxPackage>
+	<lxPackage name="Math Symbols (function names)" 
+		path="" 
+		desc="function names" 
+		>		
+		<lxCommand name="\arccos"/>	
+		<lxCommand name="\arcsin"/>	
+		<lxCommand name="\arctan"/>	
+		<lxCommand name="\arg"/>	
+		<lxCommand name="\cos"/>	
+		<lxCommand name="\cosh"/>	
+		<lxCommand name="\cot"/>	
+		<lxCommand name="\coth"/>	
+		<lxCommand name="\csc"/>	
+		<lxCommand name="\deg"/>	
+		<lxCommand name="\det"/>	
+		<lxCommand name="\dim"/>
+		<lxCommand name="\exp"/>	
+		<lxCommand name="\gcd"/>	
+		<lxCommand name="\hom"/>	
+		<lxCommand name="\inf"/>
+		<lxCommand name="\ker"/>	
+		<lxCommand name="\lg"/>	
+		<lxCommand name="\lim"/>	
+		<lxCommand name="\liminf"/>
+		<lxCommand name="\limsup"/>	
+		<lxCommand name="\ln"/>	
+		<lxCommand name="\log"/>	
+		<lxCommand name="\max"/>
+		<lxCommand name="\min"/>	
+		<lxCommand name="\Pr"/>	
+		<lxCommand name="\sec"/>	
+		<lxCommand name="\sin"/>
+		<lxCommand name="\sinh"/>	
+		<lxCommand name="\sup"/>	
+		<lxCommand name="\tan"/>	
+		<lxCommand name="\tanh"/>
+	</lxPackage>
 </lxCollection>
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.10  2006/03/28 21:17:43  owieland
+	Added/changed some  entries
+	
 	Revision 1.9  2006/03/28 00:45:59  owieland
 	- Added some missing commands and env#s
 	- Removed some duplicate entries
