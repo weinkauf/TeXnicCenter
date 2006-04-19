@@ -2941,7 +2941,7 @@ BEGIN
         MENUITEM "&Anpassen...",                ID_EXTRAS_CUSTOMIZE
         MENUITEM "Rechtschreibung...",          ID_SPELL_FILE
         MENUITEM SEPARATOR
-        MENUITEM "&Pakete suchen",              ID_PACKAGE_SETUP
+        MENUITEM "&TeX-Kommandos importieren",  ID_PACKAGE_SETUP
         MENUITEM SEPARATOR
         MENUITEM "<User defined tools>",        ID_TOOLS_ENTRY
     END
@@ -4733,6 +4733,7 @@ BEGIN
     ID_LATEX_RUNANDVIEW     "Erzeugt aus Ihrem Projekt ein druckbares Dokument und zeigt es an\nErstellen und betrachten"
     ID_LATEX_FILECOMPILEANDVIEW 
                             "Erzeugt aus der aktuellen Datei ein druckbares Dokument und zeigt es an\nAktives Dokument erstellen und betrachten"
+    ID_PACKAGE_SETUP        "Durchsucht Verzeichnisse nach Stylefiles und Dokumentklassen nach Befehlen und macht sie für TXC verfügbar"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -6979,7 +6980,7 @@ BEGIN
         MENUITEM "&Customize...",               ID_EXTRAS_CUSTOMIZE
         MENUITEM "&Spelling...",                ID_SPELL_FILE
         MENUITEM SEPARATOR
-        MENUITEM "Search &Packages",            ID_PACKAGE_SETUP
+        MENUITEM "&Import TeX commands",        ID_PACKAGE_SETUP
         MENUITEM SEPARATOR
         MENUITEM "<User defined tools>",        ID_TOOLS_ENTRY
     END
@@ -8715,6 +8716,7 @@ BEGIN
     ID_LATEX_RUNANDVIEW     "Builds a printable document out of your project and shows it\nBuild and View Output"
     ID_LATEX_FILECOMPILEANDVIEW 
                             "Builds a printable output for the active file and shows it\nBuild and view current file"
+    ID_PACKAGE_SETUP        "Scans style files and document classes for commands and make them available for auto completion"
 END
 
 STRINGTABLE DISCARDABLE 
