@@ -225,18 +225,23 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
  */
 CBiBTeXEntry::BibType CBiBTeXFile::ProcessEntryType(const TCHAR *buf, int len, int line)
 {
+	CString entry;
 	if (!SaveCopyBuffer(buf + 1, len - 1)) { // buffer sanity check
 		HandleParseError(STE_BIBTEX_ERR_SUSPICOUS_LINE, line, 1, m_Buffer);
 	}
 
+	entry = CString(m_Buffer); // remove leading WS
+	entry.TrimLeft();
+	entry.TrimRight();
+
 	for (int i = 0; i < CBiBTeXEntry::Unknown; i++) { // search BibTeX item
-		if (0 == stricmp(m_Buffer, BibTypeVerbose[i])) {
+		if (0 == stricmp(entry, BibTypeVerbose[i])) {
 			return (CBiBTeXEntry::BibType)i;
 		}
 	}
 
 	// type not found -> raise error msg
-	HandleParseError(STE_BIBTEX_ERR_INVALID_TYPE, line, 1, m_Buffer);
+	HandleParseError(STE_BIBTEX_ERR_INVALID_TYPE, line, 1, entry);
 	return CBiBTeXEntry::Unknown;
 }
 
