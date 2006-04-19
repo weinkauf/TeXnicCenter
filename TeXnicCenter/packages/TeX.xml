@@ -20,7 +20,7 @@
 		<lxCommand name="\newcommand" 
 			desc="Declares an user defined command"
 			parameters="2"
-		/>
+		/>						
 		<lxCommand name="\newenvironment" 
 			desc="Declares an user defined environment"
 			parameters="3"
@@ -248,8 +248,6 @@
 		<lxEnvironment name="minipage" 
 			expafter="}&#xA;&#xA;\end{minipage}" 
 			expbefore="\begin{"/>
-		
-		
 		<lxCommand name="\hyphenation" parameters="1"/>
 	</lxPackage>		
 	<lxPackage name="BibTeX" 
@@ -287,6 +285,10 @@
 			desc="BibTeX entry for a PhD thesis"
 			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	school = {}&#xA;}"
 			expbefore=""/>
+		<lxEnvironment name="@Mastersthesis" 
+			desc="BibTeX entry for a master thesis"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	school = {}&#xA;}"
+			expbefore=""/>
 		<lxEnvironment name="@Proceedings" 
 			desc="BibTeX entry for an article in a conference transscript"
 			expafter="{(!!Provide a unique key here!!),&#xA;	editor = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	}"
@@ -304,6 +306,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.13  2006/03/28 21:17:43  owieland
+	Added/changed some  entries
+	
 	Revision 1.12  2006/03/28 00:54:57  owieland
 	Changed icon for textsf
 	
