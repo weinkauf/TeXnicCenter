@@ -199,6 +199,18 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 	) );
 	TRACE( "m_regexGraphic returned %d\n", nResult );
 
+	/* user commands */
+	nResult = m_regexUserCmd.set_expression( _T(
+		"\\\\newcommand\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}"
+	) );
+	TRACE( "m_regexUserCmd returned %d\n", nResult );
+
+	/* user env's */
+	nResult = m_regexUserEnv.set_expression( _T(
+		"\\\\newenvironment\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}\\s*\\{([^\\}]*)\\}"
+	) );
+	TRACE( "m_regexUserEnv returned %d\n", nResult );
+
 	::InitializeCriticalSection( &m_csSI );
 	m_paStructureItems = new CStructureItemArray;
 }
@@ -352,6 +364,29 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 	COOKIE							cookie;
 
 	lpTextEnd = lpText + nLength;
+
+	/* OW 060419: Disabled for upcoming release, will be used later to extend autocomplete function. The regexES have been
+	   tested and seem to work properly - as far as *no comments* are part of the expression
+	
+	  Searching for user commands 
+	if( reg_search( lpText, lpTextEnd, what, m_regexUserCmd, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
+	{
+		CString strCmd( what[1].first, what[1].second - what[1].first );
+		CString strPar( what[2].first + 1, what[2].second - what[2].first - 2 );
+
+		TRACE("User cmd: '%s', parameters: %s\n", strCmd, strPar);
+		return;
+	}
+
+	 Searching for user commands 
+	if( reg_search( lpText, lpTextEnd, what, m_regexUserEnv, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
+	{
+		CString strCmd( what[1].first, what[1].second - what[1].first );
+		CString strPar( what[2].first + 1, what[2].second - what[2].first - 2 );
+
+		TRACE("User env: '%s', parameters: %s\n", strCmd, strPar);
+		return;
+	}*/
 
 	// look for input command
 	if( reg_search( lpText, lpTextEnd, what, m_regexInput, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )
@@ -942,6 +977,7 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 
 		return;
 	}
+
 }
 
 

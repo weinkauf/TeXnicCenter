@@ -518,6 +518,12 @@ protected:
 	/** Regular expression describing insert graphics commands. */
 	tregex m_regexGraphic;
 
+	/** Regular expression describing the newcommand command. */
+	tregex m_regexUserCmd;
+
+	/** Regular expression describing the newenvironment command. */
+	tregex m_regexUserEnv;
+
 	/** Array containing the different headers. */
 	static CString m_astrHeader[MAX_DEPTH];
 
