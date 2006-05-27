@@ -1695,8 +1695,8 @@ STYLE WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    LTEXT           "© 1999-2005",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
-    PUSHBUTTON      "ToolsCenter",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
+    LTEXT           "© 1999-2006",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
+    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
     CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,
                     SS_CENTERIMAGE
     CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
@@ -2015,16 +2015,16 @@ BEGIN
         BLOCK "040704b0"
         BEGIN
             VALUE "Comments", "Beta version!\0"
-            VALUE "CompanyName", "ToolsCenter (www.ToolsCenter.org)\0"
+            VALUE "CompanyName", "TeXnicCenter.org (www.TeXnicCenter.org)\0"
             VALUE "FileDescription", "TeXnicCenter\0"
             VALUE "FileVersion", "1 Beta 7.00\0"
             VALUE "InternalName", "TeXnicCenter\0"
-            VALUE "LegalCopyright", "Copyright © 1999-2005 ToolsCenter\0"
+            VALUE "LegalCopyright", "Copyright © 1999-2006 TeXnicCenter\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "TEXCNTR.EXE\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "TeXnicCenter\0"
-            VALUE "ProductVersion", "1 Beta 7.00 - unstable ('Luna')\0"
+            VALUE "ProductVersion", "1 Beta 7.00 - unstable ('Greengrass')\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -4544,8 +4544,8 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_URL_TCHOME           "http://www.TeXnicCenter.org/\nTeXnicCenter Homepage\nhttp://www.TeXnicCenter.org/"
-    ID_URL_AUTHOR           "sven.wiegand@gmx.de\nNachricht an den Autor\nmailto:sven.wiegand@gmx.de"
-    ID_URL_TCERROR          "http://sourceforge.net/tracker/?func=add&group_id=36323&atid=479426\nFehlerbenachrichtigung\nhttp://sourceforge.net/tracker/?func=add&group_id=36323&atid=479426"
+    ID_URL_AUTHOR           "sven@texniccenter.org\nNachricht an den Autor\nmailto:sven@texniccenter.org"
+    ID_URL_TCERROR          "http://www.TeXnicCenter.org/issues\nFehlerbenachrichtigung\nhttp://www.TeXnicCenter.org/issues"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter Benutzerforum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
@@ -4776,8 +4776,8 @@ STYLE WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    LTEXT           "© 1999-2005",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
-    PUSHBUTTON      "ToolsCenter",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
+    LTEXT           "© 1999-2006",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
+    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
     CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,
                     SS_CENTERIMAGE
     CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
@@ -6069,16 +6069,16 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "Comments", "Beta version!\0"
-            VALUE "CompanyName", "ToolsCenter (www.ToolsCenter.org)\0"
+            VALUE "CompanyName", "TeXnicCenter.org (www.TeXnicCenter.org)\0"
             VALUE "FileDescription", "TeXnicCenter\0"
             VALUE "FileVersion", "1 Beta 7.00\0"
             VALUE "InternalName", "TeXnicCenter\0"
-            VALUE "LegalCopyright", "Copyright © 1999-2005 ToolsCenter\0"
+            VALUE "LegalCopyright", "Copyright © 1999-2006 TeXnicCenter\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "TEXCNTR.EXE\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "TeXnicCenter\0"
-            VALUE "ProductVersion", "1 Beta 7.00 - unstable ('Luna')\0"
+            VALUE "ProductVersion", "1 Beta 7.00 - unstable ('Greengrass')\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -8514,8 +8514,8 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_URL_TCHOME           "http://www.TeXnicCenter.org/\nTeXnicCenter Homepage\nhttp://www.TeXnicCenter.org/"
-    ID_URL_AUTHOR           "sven.wiegand@gmx.de\nE-Mail to the Author\nmailto:sven.wiegand@gmx.de"
-    ID_URL_TCERROR          "http://sourceforge.net/tracker/?func=add&group_id=36323&atid=479426\nReport an Error\nhttp://sourceforge.net/tracker/?func=add&group_id=36323&atid=479426"
+    ID_URL_AUTHOR           "sven@texniccenter.org\nE-Mail to the Author\nmailto:sven@texniccenter.org"
+    ID_URL_TCERROR          "http://www.TeXnicCenter.org/issues\nReport an Error\nhttp://www.TeXnicCenter.org/issues"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter User Forum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 

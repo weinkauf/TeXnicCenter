@@ -1,3 +1,7 @@
+2006/05/27 svenwiegand
+- Updated version information
+- Updated and changed links (using TeXnicCenter.org instead of ToolsCenter.org)
+
 2006/03/28 owieland
 - Fixed bug 1448263: mispelled code for greek letter O
 
