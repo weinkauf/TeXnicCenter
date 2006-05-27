@@ -5,9 +5,9 @@ Use7zip=false
 [Setup]
 OutputBaseFilename=TXCSetup
 MinVersion=4.0.950,4.0.1381
-AppCopyright=© 1999-2005 www.ToolsCenter.org
+AppCopyright=© 1999-2006 www.TeXnicCenter.org
 AppName=TeXnicCenter
-AppVerName=TeXnicCenter Version 1 Beta 6.31 (Firenze)
+AppVerName=TeXnicCenter Version 1 Beta 7.00 (Greengrass)
 LicenseFile=GPL.rtf
 AdminPrivilegesRequired=false
 DefaultGroupName=TeXnicCenter
@@ -15,17 +15,19 @@ DefaultDirName={pf}\TeXnicCenter
 UsePreviousAppDir=true
 AlwaysShowDirOnReadyPage=true
 AlwaysShowGroupOnReadyPage=true
-AppPublisher=ToolsCenter
-AppPublisherURL=www.ToolsCenter.org
+AppPublisher=TeXnicCenter.org
+AppPublisherURL=www.TeXnicCenter.org
 AppSupportURL=http://www.TeXnicCenter.org/support
 AppUpdatesURL=http://www.TeXnicCenter.org/downloads
-AppVersion=Version 1 Beta 6.31
+AppVersion=Version 1 Beta 7.00
 AppID=TeXnicCenter
 AlwaysShowComponentsList=false
 UninstallDisplayIcon={app}\TEXCNTR.EXE
 
 SolidCompression=true
 ShowLanguageDialog=yes
+WizardImageFile=compiler:wizmodernimage-IS.bmp
+WizardSmallImageFile=compiler:wizmodernsmallimage-IS.bmp
 [Components]
 Name: Application_Files; Description: Application Files (TeXnicCenter and its components); Flags: fixed; Types: compact typical custom
 Name: Help_Files; Description: Help Files (Online help for TeXnicCenter and LaTeX reference); Types: typical custom
