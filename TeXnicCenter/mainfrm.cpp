@@ -500,6 +500,7 @@ void CMainFrame::OnExtrasCustomize()
 	pDlgCust->AddMenu( IDR_LATEXPROJECT );
 	pDlgCust->AddMenu( IDR_MAINFRAME );
 	pDlgCust->AddMenu( IDR_HIDDEN_CMDS );
+	pDlgCust->AddMenu( IDR_POPUP_ITEM );
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// create combobox for output typess
