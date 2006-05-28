@@ -56,6 +56,9 @@ Source: ..\output\Release\Help\*.chw; DestDir: {app}\Help; Flags: promptifolder 
 Source: ..\output\Release\*.xsd; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
 Source: ..\output\Release\packages\*.xml; DestDir: {app}\packages; Flags: promptifolder comparetimestamp; Components: Application_Files
 Source: ..\output\Release\packages\*.bmp; DestDir: {app}\packages; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: msxml4.dll; DestDir: {sys}; Flags: regserver sharedfile
+Source: msxml4r.dll; DestDir: {sys}; Flags: sharedfile
+Source: msxml4a.dll; DestDir: {sys}; Flags: sharedfile
 [Icons]
 Name: {group}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; WorkingDir: {userdocs}; IconIndex: 0
 Name: {group}\TeXnicCenter Help; Filename: {app}\Help\TeXCntr.chm; WorkingDir: {app}\Help; IconFilename: {win}\HH.EXE; IconIndex: 0; Components: Help_Files
