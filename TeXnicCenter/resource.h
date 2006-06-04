@@ -1291,6 +1291,8 @@
 #define ID_QUERY_COMMAND                38478
 #define ID_WINDOW_REFERENCES            38480
 #define ID_WINDOW_PARSE                 38481
+#define ID_WINDOW_CLOSE_ALL_BUTACTIVE   38482
+#define ID_WINDOW_CLOSE_SELECTEDTAB     38483
 #define IDS_TEXTMODULES_NONEDEFINED     57671
 
 // Next default values for new objects
@@ -1299,7 +1301,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        282
-#define _APS_NEXT_COMMAND_VALUE         38482
+#define _APS_NEXT_COMMAND_VALUE         38484
 #define _APS_NEXT_CONTROL_VALUE         1346
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
