@@ -286,7 +286,9 @@ BEGIN
     BUTTON      ID_URL_AUTHOR
     BUTTON      ID_VIEW_FULLSCREEN
     BUTTON      ID_FILE_CLOSE
+    BUTTON      ID_WINDOW_CLOSE_SELECTEDTAB
     BUTTON      ID_WINDOW_CLOSE_ALL
+    BUTTON      ID_WINDOW_CLOSE_ALL_BUTACTIVE
     BUTTON      ID_WINDOW_NEW
     BUTTON      ID_WINDOW_SPLIT
     BUTTON      ID_WINDOW_NEXT
@@ -1696,7 +1698,8 @@ FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
     LTEXT           "© 1999-2006",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
-    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
+    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,53,211,42,13,
+                    BS_CENTER
     CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,
                     SS_CENTERIMAGE
     CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
@@ -2211,15 +2214,15 @@ BEGIN
     POPUP "_MDICLIENT_"
     BEGIN
         MENUITEM "&Neu...",                     ID_LATEX_NEW
-        MENUITEM "÷&ffnen...",                  ID_FILE_OPEN
+        MENUITEM "&÷ffnen...",                  ID_FILE_OPEN
         MENUITEM "&Speichern",                  ID_FILE_SAVE
-        MENUITEM "S&chlieﬂen",                  ID_FILE_CLOSE
-        MENUITEM SEPARATOR
-        MENUITEM "Alle Schlieﬂen",              ID_WINDOW_CLOSE_ALL
         MENUITEM "&Alle Speichern",             ID_FILE_SAVE_ALL
         MENUITEM SEPARATOR
-        MENUITEM "N‰&chstes",                   ID_WINDOW_NEXT
-        MENUITEM "&Vorhergehendes",             ID_WINDOW_PREVIOUS
+        MENUITEM "S&chlieﬂen",                  ID_WINDOW_CLOSE_SELECTEDTAB
+        MENUITEM "Alle Sc&hlieﬂen",             ID_WINDOW_CLOSE_ALL
+        MENUITEM "Alle &inaktiven Fenster schlieﬂen", 
+                                                ID_WINDOW_CLOSE_ALL_BUTACTIVE
+
     END
 END
 
@@ -2229,7 +2232,7 @@ BEGIN
     BEGIN
         MENUITEM "&Neu...",                     ID_LATEX_NEW
         MENUITEM "Neu von &Vorlage...",         ID_FILE_NEW
-        MENUITEM "÷&ffnen...",                  ID_FILE_OPEN
+        MENUITEM "&÷ffnen...",                  ID_FILE_OPEN
         MENUITEM "&Speichern",                  ID_FILE_SAVE
         MENUITEM "Speichern &unter...",         ID_FILE_SAVE_AS
         MENUITEM "&Kopie speichern unter...",   ID_FILE_SAVE_COPY_AS
@@ -2277,7 +2280,7 @@ BEGIN
         MENUITEM "B&lockkommentar entfernen",   ID_EDIT_BLOCKCOMMENT_REMOVE
         MENUITEM "Blockkommentar &wechseln",    ID_EDIT_BLOCKCOMMENT_TOOGLE
         MENUITEM SEPARATOR
-        MENUITEM "&Wort vervollst‰ndigen",      ID_QUERY_COMPLETION
+        MENUITEM "Wort &vervollst‰ndigen",      ID_QUERY_COMPLETION
     END
     POPUP "&Suchen"
     BEGIN
@@ -2951,9 +2954,12 @@ BEGIN
         MENUITEM "&Teilen",                     ID_WINDOW_SPLIT
         MENUITEM "S&chlieﬂen",                  ID_FILE_CLOSE
         MENUITEM "&Alle Schlieﬂen",             ID_WINDOW_CLOSE_ALL
+        MENUITEM "Alle &inaktiven Fenster schlieﬂen", 
+                                                ID_WINDOW_CLOSE_ALL_BUTACTIVE
+
         MENUITEM SEPARATOR
-        MENUITEM "N‰c&hstes",                   ID_WINDOW_NEXT
-        MENUITEM "&Vorhergehendes",             ID_WINDOW_PREVIOUS
+        MENUITEM "N‰c&hstes Fenster",           ID_WINDOW_NEXT
+        MENUITEM "&Vorhergehendes Fenster",     ID_WINDOW_PREVIOUS
         MENUITEM SEPARATOR
         MENUITEM "‹berla&ppend",                ID_WINDOW_CASCADE
         MENUITEM "‹&bereinander",               ID_WINDOW_TILE_HORZ
@@ -3663,6 +3669,9 @@ BEGIN
     ID_EDIT_NEXTGREPRESULT  "Springt zum n‰chsten Ergebnis der Suche in Dateien\nN‰chstes 'Suche in Dateien'-Ergebnis"
     ID_EDIT_PREVGREPRESULT  "Springt zum vorherigen Ergebnis der Suche in Dateien\nVorheriges 'Suche in Dateien'-Ergebnis"
     ID_APP_LICENSE          "Zeigt die Lizenzvereinbarungen im Webbrowser an\nLizenzvereinbarung"
+    ID_WINDOW_NEXT          "Aktiviert das n‰chste Dokument.\nN‰chstes Fenster"
+    ID_WINDOW_PREVIOUS      "Aktiviert das vorhergehende Dokument.\nVorhergehendes Fenster"
+    ID_WINDOW_CLOSE_ALL     "Schlieﬂt alle geˆffneten Dokumente.\nAlle Schlieﬂen"
     ID_LATEX_PROFILE        "Aktiviert ein Ausgabeprofil\nAusgabeprofil aktivieren"
     ID_LATEX_EDITPROFILES   "Erlaubt die Bearbeitung der Ausgabeprofile\nAusgabeprofile definieren"
     ID_LATEX_PROFILE_SEL    "Aktiviert ein Ausgabeprofil\nAusgabeprofil aktivieren"
@@ -4734,6 +4743,7 @@ BEGIN
     ID_LATEX_FILECOMPILEANDVIEW 
                             "Erzeugt aus der aktuellen Datei ein druckbares Dokument und zeigt es an\nAktives Dokument erstellen und betrachten"
     ID_PACKAGE_SETUP        "Durchsucht Verzeichnisse nach Stylefiles und Dokumentklassen nach Befehlen und macht sie f¸r TXC verf¸gbar"
+    ID_QUERY_COMPLETION     "Vervollst‰ndigt das aktuell angefangene Wort\nWort vervollst‰ndigen"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4751,6 +4761,10 @@ STRINGTABLE DISCARDABLE
 BEGIN
     ID_WINDOW_REFERENCES    "Aktiviert die Literaturansicht\nLiteraturansicht aktivieren"
     ID_WINDOW_PARSE         "Aktiviert die 'Analyse'-Ausgabe\n'Analyse'-Ausgabe aktivieren"
+    ID_WINDOW_CLOSE_ALL_BUTACTIVE 
+                            "Schlieﬂt alle geˆffneten Dokumente bis auf das aktive.\nAlle inaktiven Fenster schlieﬂen"
+    ID_WINDOW_CLOSE_SELECTEDTAB 
+                            "Schlieﬂt das selektierte Dokument.\nSchlieﬂen"
 END
 
 #endif    // German (Germany) resources
@@ -4777,7 +4791,8 @@ FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
     LTEXT           "© 1999-2006",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
-    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
+    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,53,211,42,13,
+                    BS_CENTER
     CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,
                     SS_CENTERIMAGE
     CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
@@ -6265,13 +6280,12 @@ BEGIN
         MENUITEM "&New...",                     ID_LATEX_NEW
         MENUITEM "&Open...",                    ID_FILE_OPEN
         MENUITEM "&Save",                       ID_FILE_SAVE
-        MENUITEM "&Close",                      ID_FILE_CLOSE
-        MENUITEM SEPARATOR
-        MENUITEM "C&lose All",                  ID_WINDOW_CLOSE_ALL
         MENUITEM "Sa&ve All",                   ID_FILE_SAVE_ALL
         MENUITEM SEPARATOR
-        MENUITEM "Ne&xt Window",                ID_WINDOW_NEXT
-        MENUITEM "Pre&vious Window",            ID_WINDOW_PREVIOUS
+        MENUITEM "&Close",                      ID_WINDOW_CLOSE_SELECTEDTAB
+        MENUITEM "C&lose All",                  ID_WINDOW_CLOSE_ALL
+        MENUITEM "Close All but &Active",       ID_WINDOW_CLOSE_ALL_BUTACTIVE
+
     END
 END
 
@@ -6329,7 +6343,7 @@ BEGIN
         MENUITEM "Remove &Block Comment",       ID_EDIT_BLOCKCOMMENT_REMOVE
         MENUITEM "T&oogle Block Comment",       ID_EDIT_BLOCKCOMMENT_TOOGLE
         MENUITEM SEPARATOR
-        MENUITEM "&Complete word",              ID_QUERY_COMPLETION
+        MENUITEM "Complete &Word",              ID_QUERY_COMPLETION
     END
     POPUP "&Search"
     BEGIN
@@ -6990,11 +7004,13 @@ BEGIN
         MENUITEM "&Split",                      ID_WINDOW_SPLIT
         MENUITEM "&Close",                      ID_FILE_CLOSE
         MENUITEM "C&lose All",                  ID_WINDOW_CLOSE_ALL
+        MENUITEM "Close All but &Active",       ID_WINDOW_CLOSE_ALL_BUTACTIVE
+
         MENUITEM SEPARATOR
         MENUITEM "Ne&xt Window",                ID_WINDOW_NEXT
         MENUITEM "&Previous Window",            ID_WINDOW_PREVIOUS
         MENUITEM SEPARATOR
-        MENUITEM "C&ascade",                    ID_WINDOW_CASCADE
+        MENUITEM "Casca&de",                    ID_WINDOW_CASCADE
         MENUITEM "Tile &Horizontally",          ID_WINDOW_TILE_HORZ
         MENUITEM "Tile &Vertically",            ID_WINDOW_TILE_VERT
         MENUITEM "A&rrange Icons",              ID_WINDOW_ARRANGE
@@ -7662,6 +7678,9 @@ BEGIN
     ID_EDIT_NEXTGREPRESULT  "Goes to the next result of the find in files action\nNext 'Find in Files'-Result"
     ID_EDIT_PREVGREPRESULT  "Goes to the previous result of the find in files action\nPrevious 'Find in Files'-Result"
     ID_APP_LICENSE          "Shows the license agreement in the web browser\nLicense Agreement"
+    ID_WINDOW_NEXT          "Activates the next window\nNext Window"
+    ID_WINDOW_PREVIOUS      "Activates the previous window\nPrevious Window"
+    ID_WINDOW_CLOSE_ALL     "Closes all opened documents\nClose All"
     ID_LATEX_PROFILE        "Activates an output profile\nSelect Output Profile"
     ID_LATEX_EDITPROFILES   "Allows the definition of output profiles\nDefine Output Profiles"
     ID_LATEX_PROFILE_SEL    "Activates an output profile\nOutput Profile"
@@ -8717,6 +8736,7 @@ BEGIN
     ID_LATEX_FILECOMPILEANDVIEW 
                             "Builds a printable output for the active file and shows it\nBuild and view current file"
     ID_PACKAGE_SETUP        "Scans style files and document classes for commands and make them available for auto completion"
+    ID_QUERY_COMPLETION     "Completes the currently typed word\nComplete Word"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -8734,6 +8754,9 @@ STRINGTABLE DISCARDABLE
 BEGIN
     ID_WINDOW_REFERENCES    "Activates the references view\nActivate References View"
     ID_WINDOW_PARSE         "Activates the parse output view\nActivate Parse Output"
+    ID_WINDOW_CLOSE_ALL_BUTACTIVE 
+                            "Closes all opened documents except the active one\nClose All but Active"
+    ID_WINDOW_CLOSE_SELECTEDTAB "Closes the selected document\nClose"
 END
 
 #endif    // English (U.S.) resources

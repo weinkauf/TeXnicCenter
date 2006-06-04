@@ -316,9 +316,12 @@ protected:
 	afx_msg void OnViewDocTabsNote();
 	afx_msg void OnUpdateViewDocTabs(CCmdUI* pCmdUI);
 	afx_msg void OnToolsCancel();
-	afx_msg void OnFileClose();
 	afx_msg void OnWindowReferences();
 	afx_msg void OnWindowParse();
+	afx_msg void OnWindowCloseSelectedTab();
+	afx_msg void OnUpdateWindowCloseSelectedTab(CCmdUI* pCmdUI);
+	afx_msg void OnWindowCloseAllButActive();
+	afx_msg void OnUpdateWindowCloseAllButActive(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	afx_msg void OnToggleCtrlBar( UINT nIDEvent );
 	afx_msg void OnToggleMathBar( UINT nIDEvent );
@@ -353,7 +356,7 @@ protected:
 	CMenu									m_projectMenu;
 	CBCGToolBarImages			m_userImages;
 
-	CLatexEdit*						m_pTargetWindow; // Target window from context menu
+	CView*						m_pContextMenuTargetWindow; // Target window from context menu
 
 	// Full Screen mode support
 	BOOL          m_bFSModeShowMenuBar;

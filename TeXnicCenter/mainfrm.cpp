@@ -48,7 +48,7 @@
 #include "Splash.h"
 #include "BCGToolbarCustomizeEx.h"
 #include "UserTool.h"
-#include "Latexedit.h"
+//#include "Latexedit.h"
 #include "ProfileDialog.h"
 
 #ifdef _DEBUG
@@ -100,13 +100,16 @@ BEGIN_MESSAGE_MAP(CMainFrame, CBCGMDIFrameWnd)
 	ON_COMMAND(ID_VIEW_DOCTAB_NOTE, OnViewDocTabsNote)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_BOTTOM, OnUpdateViewDocTabs)
 	ON_COMMAND(ID_TOOLS_CANCEL, OnToolsCancel)
-	ON_COMMAND(ID_FILE_CLOSE, OnFileClose)
 	ON_COMMAND(ID_WINDOW_REFERENCES, OnWindowReferences)
+	ON_COMMAND(ID_WINDOW_PARSE, OnWindowParse)
+	ON_COMMAND(ID_WINDOW_CLOSE_SELECTEDTAB, OnWindowCloseSelectedTab)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_SELECTEDTAB, OnUpdateWindowCloseSelectedTab)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_OFF, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_TOP, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_ICONS, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_NOTE, OnUpdateViewDocTabs)
-	ON_COMMAND(ID_WINDOW_PARSE, OnWindowParse)
+	ON_COMMAND(ID_WINDOW_CLOSE_ALL_BUTACTIVE, OnWindowCloseAllButActive)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_ALL_BUTACTIVE, OnUpdateWindowCloseAllButActive)
 	//}}AFX_MSG_MAP
 	// Globale Hilfebefehle
 	ON_COMMAND(ID_HELP_FINDER, CBCGMDIFrameWnd::OnHelpFinder)
@@ -167,9 +170,9 @@ CMainFrame::CMainFrame()
 	m_bFSModeShowMenuBar(FALSE),
 	m_bFSModeShowDocTabs(FALSE),
 	m_bMaxChild(FALSE),
-	m_pwndFullScrnToolBar(FALSE)
+	m_pwndFullScrnToolBar(FALSE),
+	m_pContextMenuTargetWindow(NULL)
 {
-	m_pTargetWindow = NULL;
 }
 
 
@@ -951,13 +954,6 @@ BOOL CMainFrame::OnCommand(WPARAM wParam, LPARAM lParam)
 	if( HIWORD( wParam ) == CBN_SELENDOK || HIWORD( wParam ) == CBN_EDITCHANGE )
 		SendMessage( WM_COMMAND, (WPARAM)LOWORD( wParam ) );	
 	
-	// Bug fix: 688063: Tab context menu closes wrong file
-	// We have to handle file close event from context menu seperately
-	if (wParam == ID_FILE_CLOSE) {
-		::SendMessage(m_wndClientArea.GetMDITabs(), WM_LBUTTONDOWN, 0, 0);
-		OnFileClose();
-		return TRUE;
-	}
 	return CBCGMDIFrameWnd::OnCommand(wParam, lParam);
 }
 
@@ -1520,12 +1516,16 @@ void CMainFrame::OnWindowPrevious()
 
 void CMainFrame::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
-	// We have to use the right window to get right coordinates ;-)
+	m_pContextMenuTargetWindow = NULL; //Invalidate. So we do not close the wrong file.
+
+	// We have to use the right window to get right coordinates
 	::ScreenToClient(pWnd->GetSafeHwnd(), &point);
 
+	//Show two different popups: (a) for the tabs, (b) for the toolsbars
 	if (pWnd->m_hWnd == m_hWndMDIClient || pWnd->m_hWnd == m_wndClientArea.GetMDITabs())
 	{
-		// determine target window for context menu 
+		//Show popup for the tabs
+		//But first: determine target window for context menu; will be needed to close the right file
 		const int nTab = m_wndClientArea.GetMDITabs().GetTabFromPoint(point);
 		if (nTab >= 0)
 		{
@@ -1533,7 +1533,7 @@ void CMainFrame::OnContextMenu(CWnd* pWnd, CPoint point)
 			// save pointer for later use
 			if (wndEdit)
 			{
-				m_pTargetWindow = dynamic_cast<CLatexEdit *>(wndEdit->GetActiveView());
+				m_pContextMenuTargetWindow = dynamic_cast<CView*>(wndEdit->GetActiveView());
 			}
 		}
 
@@ -1543,7 +1543,7 @@ void CMainFrame::OnContextMenu(CWnd* pWnd, CPoint point)
 	}
 	else
 	{
-		m_pTargetWindow = NULL; // mark as invalid
+		//Show popup for the toolbars
 		theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_TOOLBAR, point.x, point.y, this);		
 	}
 }
@@ -1617,13 +1617,39 @@ void CMainFrame::OnToolsCancel()
 	}
 }
 
-void CMainFrame::OnFileClose() 
+
+void CMainFrame::OnWindowCloseSelectedTab() 
 {
-	// TODO: Add your command handler code here
-	if (m_pTargetWindow != NULL) {
-		TRACE("OnFileClose :-) %s\n", m_pTargetWindow->GetDocument()->GetPathName());
-		m_pTargetWindow->GetDocument()->OnCloseDocument();
-		m_pTargetWindow = NULL;
+	//Close the tab where the user pressed the right mouse button, i.e., where the context menu was/is displayed for
+	if (m_pContextMenuTargetWindow && m_pContextMenuTargetWindow->GetDocument())
+	{
+		m_pContextMenuTargetWindow->GetDocument()->OnCloseDocument();
+		m_pContextMenuTargetWindow = NULL;
 	}
 }
 
+void CMainFrame::OnUpdateWindowCloseSelectedTab(CCmdUI* pCmdUI) 
+{
+	pCmdUI->Enable(m_pContextMenuTargetWindow != NULL);
+}
+
+void CMainFrame::OnWindowCloseAllButActive() 
+{
+	CArray<CChildFrame*, CChildFrame*> MDIChildArray;
+	const int nActiveFrame = GetMDIChilds(MDIChildArray);
+	for(int i=0;i<MDIChildArray.GetSize();i++)
+	{
+		if (i != nActiveFrame)
+		{
+			CView* pView = dynamic_cast<CView*>(MDIChildArray.GetAt(i)->GetActiveView());
+			if (pView && pView->GetDocument()) pView->GetDocument()->OnCloseDocument();
+		}
+	}
+}
+
+void CMainFrame::OnUpdateWindowCloseAllButActive(CCmdUI* pCmdUI) 
+{
+	CArray<CChildFrame*, CChildFrame*> MDIChildArray;
+	GetMDIChilds(MDIChildArray);
+	pCmdUI->Enable(MDIChildArray.GetSize() > 1);
+}
