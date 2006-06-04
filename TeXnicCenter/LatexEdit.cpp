@@ -504,8 +504,14 @@ BOOL CLatexEdit::OnInsertLatexConstruct( UINT nID )
 
 
 void CLatexEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) 
-{	
-	//TRACE("OnChar: %d (nFlags=%d)\n", nChar, nFlags);
+{
+	//If we are in incremental search mode, then we do not act here
+	if (m_bIncrementalSearchForward || m_bIncrementalSearchBackward)
+	{
+		CCrystalEditViewEx::OnChar(nChar, nRepCnt, nFlags);
+		return;
+	}
+
 	switch( nChar )
 	{
 		case _T('"'):
