@@ -138,7 +138,7 @@ private:
 protected:
 	
 
-	void ParseBuffer(TCHAR *buf);
+	void ParseBuffer(const TCHAR *buf);
 	BOOL HasCommands(const TCHAR *buf);
 	int ExtractOptionCount(const TCHAR *closePar, const TCHAR *openBr, const TCHAR *closeBr);
 };
