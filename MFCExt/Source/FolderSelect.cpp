@@ -38,9 +38,31 @@ static char THIS_FILE[]=__FILE__;
 // class CFolderSelect
 //-------------------------------------------------------------------
 
-CFolderSelect::CFolderSelect( LPCTSTR lpszTitle, UINT unFlags /*= 0*/, CWnd *pwndParent /*= NULL*/, BFFCALLBACK lpfn /*= NULL*/, LPARAM lParam /*= 0*/ )
-:	m_strTitle( lpszTitle )
+CFolderSelect::CFolderSelect( LPCTSTR lpszTitle, UINT unFlags /*= 0*/, CWnd* pwndParent /*= NULL*/, BFFCALLBACK lpfn /*= NULL*/, LPARAM lParam /*= 0*/ )
 {
+	Init(lpszTitle, unFlags, pwndParent, lpfn, lParam);
+}
+
+CFolderSelect::CFolderSelect( LPCTSTR lpszTitle, LPCTSTR lpszInitPath, UINT unFlags /*= 0*/, CWnd *pwndParent /*= NULL*/ )
+{
+	m_strInitFolder = lpszInitPath;
+	if (!m_strInitFolder.IsEmpty())
+	{
+		Init(lpszTitle, unFlags, pwndParent, (BFFCALLBACK) FolderSelectDlgCallback, (LONG)(LPCTSTR)m_strInitFolder);
+	}
+	else
+	{
+		Init(lpszTitle, unFlags, pwndParent, NULL, NULL);
+	}
+}
+
+CFolderSelect::~CFolderSelect()
+{}
+
+
+void CFolderSelect::Init(LPCTSTR lpszTitle, UINT unFlags, CWnd* pwndParent, BFFCALLBACK lpfn, LPARAM lParam)
+{
+	m_strTitle = lpszTitle;
 	m_bi.hwndOwner = pwndParent? pwndParent->GetSafeHwnd() : NULL;
 	m_bi.pidlRoot = NULL;
 	m_bi.pszDisplayName = m_strDisplayName.GetBuffer( MAX_PATH );
@@ -49,10 +71,6 @@ CFolderSelect::CFolderSelect( LPCTSTR lpszTitle, UINT unFlags /*= 0*/, CWnd *pwn
 	m_bi.lpfn = lpfn;
 	m_bi.lParam = lParam;
 }
-
-
-CFolderSelect::~CFolderSelect()
-{}
 
 
 UINT CFolderSelect::DoModal()
@@ -79,3 +97,18 @@ UINT CFolderSelect::DoModal()
 
 	return IDOK;
 }
+
+
+//---------------------------------------------------------------------
+
+int CALLBACK FolderSelectDlgCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
+{
+	if (uMsg == BFFM_INITIALIZED)
+	{
+		//Select the folder
+		::SendMessage(hwnd, BFFM_SETSELECTION, true, lpData);
+	}
+
+	return 0;
+}
+
