@@ -18,11 +18,19 @@
 			parameters="1"
 		/>
 		<lxCommand name="\newcommand" 
-			desc="Declares an user defined command"
+			desc="Declares a new command"
+			parameters="2"
+		/>						
+		<lxCommand name="\renewcommand" 
+			desc="Redefines an existing command"
 			parameters="2"
 		/>						
 		<lxCommand name="\newenvironment" 
-			desc="Declares an user defined environment"
+			desc="Declares a new environment"
+			parameters="3"
+		/>
+		<lxCommand name="\renewenvironment" 
+			desc="Redefines an existing environment"
 			parameters="3"
 		/>
 				
@@ -306,6 +314,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.14  2006/04/19 19:21:34  owieland
+	Added bibtex type "mastersthesis"
+	
 	Revision 1.13  2006/03/28 21:17:43  owieland
 	Added/changed some  entries
 	
