@@ -88,44 +88,7 @@ protected:
 	const CString GetParameterString() const;
 };
 
-/** Abstract interface for parsing events of CStylefile */
-class CLaTeXCommandListener
-{
-public:
-	/** Called by the framework, if the parser recognized a command or an environment 
-		@param command Reference to the parsed item.	
-	*/
-	virtual void OnCommandFound(CLaTeXCommand &command) = 0;
-};
 
 
 #endif // !defined(AFX_LATEXCOMMAND_H__05B66EE9_7F79_43A9_9DA1_9B65013E4233__INCLUDED_)
 
-/*
- * $Log$
- * Revision 1.7  2005/06/10 14:52:54  owieland
- * Bugfix ToLaTeX (was 'out of call hierachy', now declared as const)
- *
- * Revision 1.6  2005/06/09 22:58:47  owieland
- * Introduced ExpandBefore/After members to allow insertion of additional constructs
- * (useful for environments to insert \\begin-\\end pairs}
- *
- * Revision 1.5  2005/06/09 12:07:44  owieland
- * Addtional parameter 'showParams' in ToLaTeX()
- *
- * Revision 1.4  2005/06/07 23:14:23  owieland
- * + Load commands from packages.xml
- * + Fixed position of the auto complete listbox / beautified content
- * + Fixed some bugs
- *
- * Revision 1.3  2005/06/05 16:41:59  owieland
- * Introduced new base class CAbstractLaTeXCommand for a better
- * understandable class hierarchy and better seperation of options and commands.
- *
- * Revision 1.2  2005/06/03 22:24:56  owieland
- * + IMPLEMENT/DECLARE_DYNAMIC
- *
- * Revision 1.1  2005/06/03 20:29:43  owieland
- * Initial checkin of package and class parser
- *
- */

@@ -38,21 +38,26 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "stylefile.h"
+#include "StyleFile.h"
+
 
 
 /* Container class for all available .sty and .cls files.
  *
  */
-class CStyleFileContainer : public CObject, virtual public CLaTeXCommandListener
+class CStyleFileContainer : public CObject
 {
 public:	
+	CStyleFileContainer(CString &basePath=CString("."));
+	virtual ~CStyleFileContainer();
+
 	BOOL AddStyleFile(CStyleFile *sf);
 	BOOL LoadFromXML(const CString &file, BOOL addToExisting=FALSE);
 	static BOOL ContainsString(const CStringArray *list, const CString &string);
 	BOOL SaveAsXML(CString &path);
-	CStyleFileContainer(CString &basePath=CString("."));
-	virtual ~CStyleFileContainer();
+
+	///Merges given commands into this container.
+	void Merge(CStyleFileContainer& other);
 
 	/* Returns true, if path <dir> is already in the search path, otherwise FALSE */
 	BOOL IsDirInSearchPath(CString &dir);
@@ -63,14 +68,15 @@ public:
 	/* Removes all entries from search path */
 	void ClearSearchPath();	
 	/* Searches the given path list for files */
-	void FindStyleFiles();
+	bool FindStyleFiles();
 
 	/* Returns a list of possible completions to a given string */
-	const CStringArray* GetPossibleCompletions(const CString &cmd);
+	void GetAllPossibleCompletions(const CString& Partial, const CString& docClassName, CUniqueStringList& Result);
+
 	/*	Returns a list of possible completions to a given string. Here the function 
 		returns a map with objects instead of string, so that the receiver has more 
 		options to display the result.  */
-	const CMapStringToOb* GetPossibleItems(const CString &cmd, const CString &docClass);
+	void GetAllPossibleItems(const CString& Partial, const CString& docClassName, CMapStringToOb& Result);
 
 	/* Sets an event listener to CStyleFileContainer events */
 	void SetEventListener(CStyleFileListener *listener);
@@ -81,7 +87,6 @@ public:
 	CString GetLastItem() {return m_LastItem;};
 	int GetNoOfFiles() {return m_NoOfFiles;};
 
-	virtual void OnCommandFound(CLaTeXCommand &command);
 
 private:
 	void SetupCR(CString &s);
@@ -89,14 +94,13 @@ private:
 	void ProcessPackageNode(MsXml::CXMLDOMNode &element);
 	
 	
-	void FindStyleFilesRecursive(CString dir);
+	bool FindStyleFilesRecursive(CString dir);
 	
 	CString			m_LastItem;		/* Contains name of last item found */
 	CString			m_LastFile;		/* Contains name of last file found */
 	CString			m_LastDir;		/* Contains name of last dir found */
 	
 	CMapStringToOb 	m_StyleFiles;	/* Hash map of available style files */
-	CMapStringToOb 	m_Commands;		/* Hash map of all available commands */
 	int				m_NoOfFiles;	/* Number of scanned files */
 
 	CStyleFileListener *m_Listener;	/* Pointer to event listener (maybe NULL!) */
@@ -108,31 +112,3 @@ protected:
 
 #endif // !defined(AFX_STYLEFILECONTAINER_H__20CE8791_F3F3_4CA7_9FA6_373EAD4AAABF__INCLUDED_)
 
-/*
- * $Log$
- * Revision 1.7  2005/06/10 15:31:38  owieland
- * Moved xml constants to .cpp file
- *
- * Revision 1.6  2005/06/09 17:09:59  owieland
- * + Revised architecture (moved autocmpl-handling to listbox)
- * + Hilight commands if they are from a class (unsatisfying yet)
- * + Several bugfixes
- *
- * Revision 1.5  2005/06/07 23:14:23  owieland
- * + Load commands from packages.xml
- * + Fixed position of the auto complete listbox / beautified content
- * + Fixed some bugs
- *
- * Revision 1.4  2005/06/05 16:42:42  owieland
- * Extended user interface (prepare for loading the package rep from XML)
- *
- * Revision 1.3  2005/06/04 10:39:12  owieland
- * Added option and required package support
- *
- * Revision 1.2  2005/06/03 22:29:20  owieland
- * XML Export
- *
- * Revision 1.1  2005/06/03 20:29:43  owieland
- * Initial checkin of package and class parser
- *
- */

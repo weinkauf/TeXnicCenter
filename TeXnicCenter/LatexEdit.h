@@ -169,8 +169,6 @@ public:
 	virtual void OnACHelp(CString &command);
 	virtual void OnACBackspace();
 	virtual void OnACChar(UINT nKey, UINT nRepCount, UINT nFlags);
-	/* Searches a directory for packages */
-	void OnPackageSetup();
 	CLatexDoc* GetDocument();
 
 private:

@@ -50,6 +50,7 @@
 #include "UserTool.h"
 //#include "Latexedit.h"
 #include "ProfileDialog.h"
+#include "PackageScanProgress.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -104,12 +105,13 @@ BEGIN_MESSAGE_MAP(CMainFrame, CBCGMDIFrameWnd)
 	ON_COMMAND(ID_WINDOW_PARSE, OnWindowParse)
 	ON_COMMAND(ID_WINDOW_CLOSE_SELECTEDTAB, OnWindowCloseSelectedTab)
 	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_SELECTEDTAB, OnUpdateWindowCloseSelectedTab)
+	ON_COMMAND(ID_WINDOW_CLOSE_ALL_BUTACTIVE, OnWindowCloseAllButActive)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_ALL_BUTACTIVE, OnUpdateWindowCloseAllButActive)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_OFF, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_TOP, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_ICONS, OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_NOTE, OnUpdateViewDocTabs)
-	ON_COMMAND(ID_WINDOW_CLOSE_ALL_BUTACTIVE, OnWindowCloseAllButActive)
-	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_ALL_BUTACTIVE, OnUpdateWindowCloseAllButActive)
+	ON_COMMAND(ID_PACKAGE_SETUP, OnPackageSetup)
 	//}}AFX_MSG_MAP
 	// Globale Hilfebefehle
 	ON_COMMAND(ID_HELP_FINDER, CBCGMDIFrameWnd::OnHelpFinder)
@@ -1652,4 +1654,52 @@ void CMainFrame::OnUpdateWindowCloseAllButActive(CCmdUI* pCmdUI)
 	CArray<CChildFrame*, CChildFrame*> MDIChildArray;
 	GetMDIChilds(MDIChildArray);
 	pCmdUI->Enable(MDIChildArray.GetSize() > 1);
+}
+
+void CMainFrame::OnPackageSetup() 
+{
+	CString title(AfxLoadString(IDS_SAVE_PACKAGE_AS)); 
+	CString initialDir(theApp.GetWorkingDir() + _T("\\packages"));
+
+	CFolderSelect fsel(AfxLoadString(IDS_SELECT_PACKAGE_DIR));
+	
+	if (fsel.DoModal() == IDOK)
+	{
+		CStyleFileContainer NewCommands;
+		NewCommands.ClearSearchPath();
+		NewCommands.AddSearchPath(CString(fsel.GetPath()));
+		
+		CPackageScanProgress prg;
+		NewCommands.SetEventListener(&prg);
+
+		prg.ShowWindow(SW_SHOW);
+		prg.RedrawWindow(); //Just to be sure that it gets drawn at the beginning.
+		const bool bResult = NewCommands.FindStyleFiles();
+		//prg.CloseWindow();
+
+		//Canceled?
+		if (!bResult) return;
+
+		//Needs to be implemented: theApp.m_AvailableCommands.Merge(NewCommands);
+
+		//What about something like this:
+		//if (MsgBox("n files have been scanned and m commands have been detected. They are available for this session.\
+		// If they shall be available in future session, you need to save them. Do you want to save them?"))
+
+		CFileDialogEx fselxml(FALSE, 
+			_T("xml"), 
+			_T("packages.xml"), 
+			OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+			AfxLoadString(STE_FILE_XMLFILTER),
+			NULL);
+
+		fselxml.m_ofn.lpstrTitle = (LPCTSTR)title; 
+		fselxml.m_ofn.lpstrInitialDir = (LPCTSTR)initialDir;
+
+		if (fselxml.DoModal() == IDOK)
+		{
+			CString s = fselxml.GetPathName();
+			NewCommands.SaveAsXML(s);
+		}
+	}	
 }

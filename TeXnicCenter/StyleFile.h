@@ -68,6 +68,19 @@ const int MAX_DESC_LEN = 255;
 /* Exception ID */
 #define INVALID_LATEX_ITEM -5678
 
+
+
+
+class CStyleFileListener
+{
+public:
+	virtual BOOL OnQueryCancel() = 0;
+	virtual void OnDirectoryFound(CString &dirname) = 0;
+	virtual void OnFileFound(CString &filename) = 0;
+	virtual void OnCommandFound(CLaTeXCommand &command) = 0;
+};
+
+
 /* Represents a LaTeX-Style file or class */
 class CStyleFile :public CObject
 {
@@ -82,7 +95,7 @@ public:
 
 	virtual void Dump( CDumpContext& dc ) const;
 
-	void SetListener(CLaTeXCommandListener *listener);
+	void SetListener(CStyleFileListener* listener);
 	
 	void ProcessFile();
 	CString GetFilename() const {return m_Filename;};
@@ -93,6 +106,9 @@ public:
 	const CMapStringToOb *GetCommands() const {return &m_Commands;}
 	const CStringArray *GetOptions() const {return &m_Options;}
 	const CStringArray *GetRequiredPackages() const {return &m_ReqPackages;}
+
+	///Adds a list of possible completions of Partial to the Result.
+	void GetPossibleItems(const CString& Partial, CMapStringToOb& Result);
 	
 	
 	CNewCommand *AddCommand(CString &name, int noOfParams=0, CString &desc=CString(_T("")));		
@@ -117,7 +133,7 @@ private:
 	BOOL					m_IsClass;
 	CString					m_Filename;
 	CMapStringToOb 			m_Commands;
-	CLaTeXCommandListener	*m_Listener;
+	CStyleFileListener*		m_Listener;
 	CString					m_Desc;
 protected:
 	
@@ -127,57 +143,6 @@ protected:
 	int ExtractOptionCount(const TCHAR *closePar, const TCHAR *openBr, const TCHAR *closeBr);
 };
 
-class CStyleFileListener
-{
-public:
-	virtual BOOL OnQueryCancel() = 0;
-	virtual void OnDirectoryFound(CString &dirname) = 0;
-	virtual void OnFileFound(CString &filename) = 0;
-	virtual void OnCommandFound(CLaTeXCommand &command) = 0;
-};
 
 #endif // !defined(AFX_STYLEFILE_H__E4FDC97C_A031_4E63_890F_3DB0F0DF6950__INCLUDED_)
 
-/*
- * $Log$
- * Revision 1.10  2005/06/11 12:50:57  owieland
- * - Load also expAfter/expBefore attributes from packages.xml
- * - AddCommand/AddEnvironment now return pointers to created object
- *
- * Revision 1.9  2005/06/10 15:34:15  owieland
- * Consider \\DeclareTextCommand and \\DeclareTextSymbol
- *
- * Revision 1.8  2005/06/09 17:09:59  owieland
- * + Revised architecture (moved autocmpl-handling to listbox)
- * + Hilight commands if they are from a class (unsatisfying yet)
- * + Several bugfixes
- *
- * Revision 1.7  2005/06/09 12:09:59  owieland
- * + Consider ProvidesXXX commands for package/class description
- * + Avoid duplicate option entries
- * + Export description of packages
- * + Consider number of parameters on auto completion
- *
- * Revision 1.6  2005/06/07 23:14:23  owieland
- * + Load commands from packages.xml
- * + Fixed position of the auto complete listbox / beautified content
- * + Fixed some bugs
- *
- * Revision 1.5  2005/06/07 19:48:21  owieland
- * + Parse commands declared via \\def
- * + Revised HasCommands
- * + Added comments
- *
- * Revision 1.4  2005/06/05 16:42:42  owieland
- * Extended user interface (prepare for loading the package rep from XML)
- *
- * Revision 1.3  2005/06/04 10:39:12  owieland
- * Added option and required package support
- *
- * Revision 1.2  2005/06/03 22:28:43  owieland
- * Impl. GetName()
- *
- * Revision 1.1  2005/06/03 20:29:43  owieland
- * Initial checkin of package and class parser
- *
- */

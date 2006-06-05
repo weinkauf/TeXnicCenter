@@ -49,7 +49,6 @@
 #include "../MySpell/Character.h"
 #include "Advice.h"
 
-#include "PackageScanProgress.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -75,7 +74,6 @@ BEGIN_MESSAGE_MAP(CLatexEdit, CCrystalEditViewEx)
 	ON_COMMAND(ID_TEXTMODULES_DEFINE, OnTextmodulesDefine)
 	ON_UPDATE_COMMAND_UI(ID_TEXTMODULES_DEFINE, OnUpdateTextmodulesDefine)
 	ON_COMMAND(ID_QUERY_COMPLETION, OnQueryCompletion)
-	ON_COMMAND(ID_PACKAGE_SETUP, OnPackageSetup)
 	ON_WM_KILLFOCUS()
 	//}}AFX_MSG_MAP
 	ON_WM_SYSCOLORCHANGE()
@@ -951,43 +949,6 @@ void CLatexEdit::OnUpdateTextmodulesDefine(CCmdUI* pCmdUI)
 	pCmdUI->Enable(true);
 }
 
-void CLatexEdit::OnPackageSetup()
-{
-	CString title(AfxLoadString(IDS_SAVE_PACKAGE_AS)); 
-	CString initialDir(theApp.GetWorkingDir() + _T("\\packages"));
-
-	CFolderSelect fsel(AfxLoadString(IDS_SELECT_PACKAGE_DIR));
-	
-	if (fsel.DoModal() == IDOK) {
-		theApp.m_AvailableCommands.ClearSearchPath();
-		theApp.m_AvailableCommands.AddSearchPath(CString(fsel.GetPath()));
-		
-		CPackageScanProgress prg;
-		theApp.m_AvailableCommands.SetEventListener(&prg);
-
-		prg.ShowWindow(SW_SHOW);
-		theApp.m_AvailableCommands.FindStyleFiles();
-		prg.CloseWindow();
-
-		CFileDialogEx fselxml(FALSE, 
-			_T("xml"), 
-			_T("packages.xml"), 
-			OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
-			AfxLoadString(STE_FILE_XMLFILTER),
-			NULL);
-
-		fselxml.m_ofn.lpstrTitle = (LPCTSTR)title; 
-		fselxml.m_ofn.lpstrInitialDir = (LPCTSTR)initialDir;
-		TRACE("title = %s\n", AfxLoadString(IDS_SAVE_PACKAGE_AS)); 
-		TRACE("initDir = %s\n", CString(theApp.GetWorkingDir() + _T("\\packages")));
-
-		if (fselxml.DoModal() == IDOK) {
-			CString s = fselxml.GetPathName();
-			theApp.m_AvailableCommands.SaveAsXML(s);
-			TRACE("Package saved under '%s'\n", s);
-		}
-	}	
-}
 
 void CLatexEdit::OnQueryCompletion() 
 {	
@@ -996,14 +957,6 @@ void CLatexEdit::OnQueryCompletion()
 
 	if (m_InstTip != NULL) { // Drop advice
 		m_InstTip->ShowWindow(SW_HIDE);
-	}
-
-	if (!theApp.m_AvailableCommands.GetNoOfFiles()) {
-		/* ask user for scanning directories */		
-		if (AfxMessageBox(STE_QUERY_FILES, MB_ICONQUESTION|MB_YESNO) == IDYES) {
-			OnPackageSetup();
-			return;
-		}
 	}
 
 	// Don't allow a second window
@@ -1287,27 +1240,35 @@ BOOL CLatexEdit::RestoreFocus()
 }
 
 
-void CLatexEdit::InstantAdvice() {
+void CLatexEdit::InstantAdvice()
+{
 	CString keyw, key;
-	CPoint ptStart = GetCursorPos(), ptClient;
+	CPoint ptStart( GetCursorPos() );
+	CPoint ptClient;
 
 	GetWordBeforeCursor(keyw, ptStart, FALSE);
 
-	if (keyw.GetLength() > MINIMUM_KEYWORD_LENGTH) {
-		const CMapStringToOb *map;
+	if (keyw.GetLength() > MINIMUM_KEYWORD_LENGTH)
+	{
+		CMapStringToOb map;
 
-		map = theApp.m_AvailableCommands.GetPossibleItems(keyw, _T(""));
-		if (map != NULL && map->GetCount() == 1) { //keyword is unique -> OK
+		theApp.m_AvailableCommands.GetAllPossibleItems(keyw, _T(""), map);
+		if (map.GetCount() == 1) //keyword is unique -> OK
+		{
 			CLaTeXCommand *lc;
-			POSITION pos = map->GetStartPosition();	
-			map->GetNextAssoc(pos, key, (CObject*&)lc);
+			POSITION pos = map.GetStartPosition();
+			map.GetNextAssoc(pos, key, (CObject*&)lc);
 
-			if (lc != NULL) {
-				if (m_InstTip == NULL) {
+			if (lc != NULL)
+			{
+				if (m_InstTip == NULL)
+				{
 					m_InstTip = new CAdvice();
 					m_InstTip->Create(lc->ToLaTeX(), WS_POPUP|SS_SUNKEN, CRect(), this);
 				} 
-				if (!m_InstTip->IsWindowVisible()) {
+
+				if (!m_InstTip->IsWindowVisible())
+				{
 					// Compute window size				
 					ptClient = TextToClient(ptStart);
 					::ClientToScreen(GetSafeHwnd(), &ptClient);
@@ -1320,12 +1281,17 @@ void CLatexEdit::InstantAdvice() {
 					m_InstTip->SetTimer(1, 3000, 0);
 					SetFocus();
 				} 
-			}			
-		} else {
+			}
+			else
+			{
+				HideAdvice();
+			}
+		}
+		else
+		{
 			// Nothing found: Hide window
 			HideAdvice();
 		}
-		delete map; // DON'T FORGET THIS!
 	}
 }
 
@@ -1349,21 +1315,13 @@ void CLatexEdit::DestroyListBox()
 }
 
 /* Returns the number of possible matches */
-int CLatexEdit::GetNumberOfMatches(CString keyword) {
-	const CMapStringToOb *map;
+int CLatexEdit::GetNumberOfMatches(CString keyword)
+{
+	if (keyword.GetLength() < CAutoCompleteDlg::GetMinimumKeywordLength()) return 0;
 
-	if (keyword.GetLength() < CAutoCompleteDlg::GetMinimumKeywordLength()) {
-		return 0;
-	}
-
-	map = theApp.m_AvailableCommands.GetPossibleItems(keyword, _T(""));
-
-	if (map == NULL) return 0;
-
-	int n = map->GetCount();
-	delete map;
-
-	return n;
+	CMapStringToOb map;
+	theApp.m_AvailableCommands.GetAllPossibleItems(keyword, _T(""), map);
+	return map.GetCount();
 }
 
 /* Checks, if an window overlaps screen region */

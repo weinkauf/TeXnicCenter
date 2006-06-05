@@ -1708,15 +1708,18 @@ BEGIN
                     IDC_STATIC_VERSION,7,34,278,8
 END
 
-IDD_PACKAGE_SCAN_PROGRESS DIALOG DISCARDABLE  0, 0, 232, 89
+IDD_PACKAGE_SCAN_PROGRESS DIALOG DISCARDABLE  0, 0, 294, 76
 STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
-CAPTION "Suche Dateien..."
+CAPTION "Suche in Dateien..."
 FONT 8, "MS Sans Serif"
 BEGIN
-    LTEXT           "C:",IDC_DIR,15,28,210,9
-    LTEXT           "",IDC_FILE,15,42,210,9
-    LTEXT           "",IDC_COMMANDS,16,57,209,9
-    DEFPUSHBUTTON   "&Abbrechen",IDC_CANCEL,85,68,62,14,BS_NOTIFY
+    LTEXT           "...",IDC_DIR,57,7,230,9
+    LTEXT           "...",IDC_FILE,57,20,230,9
+    LTEXT           "...",IDC_COMMANDS,95,36,192,9
+    DEFPUSHBUTTON   "&Abbrechen",IDC_CANCEL,225,55,62,14,BS_NOTIFY
+    LTEXT           "Verzeichnis:",IDC_STATIC,7,7,39,8
+    LTEXT           "Datei:",IDC_STATIC,7,22,20,8
+    LTEXT           "Gefundene Kommandos:",IDC_STATIC,7,36,79,8
 END
 
 
@@ -1986,9 +1989,9 @@ BEGIN
     IDD_PACKAGE_SCAN_PROGRESS, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 225
+        RIGHTMARGIN, 287
         TOPMARGIN, 7
-        BOTTOMMARGIN, 82
+        BOTTOMMARGIN, 69
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -4754,7 +4757,6 @@ BEGIN
     STE_LANGUAGE_ENGLISH    "Englisch"
     STE_LANGUAGE_FRENCH     "Französisch"
     STE_CUSTOM              "Angepasst"
-    STE_QUERY_FILES         "Es sind noch keine Befehle vorhanden. Möchten Sie jetzt Verzeichnisse nach Paketen durchsuchen?"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -5780,15 +5782,18 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,314,223,50,14
 END
 
-IDD_PACKAGE_SCAN_PROGRESS DIALOG DISCARDABLE  0, 0, 232, 89
+IDD_PACKAGE_SCAN_PROGRESS DIALOG DISCARDABLE  0, 0, 294, 76
 STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
-CAPTION "Searching files..."
+CAPTION "Scanning Files..."
 FONT 8, "MS Sans Serif"
 BEGIN
-    LTEXT           "C:",IDC_DIR,15,28,210,9
-    LTEXT           "",IDC_FILE,15,42,210,9
-    LTEXT           "",IDC_COMMANDS,16,57,209,9
-    DEFPUSHBUTTON   "&Cancel",IDC_CANCEL,85,68,62,14,BS_NOTIFY
+    LTEXT           "...",IDC_DIR,57,7,230,9
+    LTEXT           "...",IDC_FILE,57,20,230,9
+    LTEXT           "...",IDC_COMMANDS,76,36,211,9
+    DEFPUSHBUTTON   "&Cancel",IDC_CANCEL,225,55,62,14,BS_NOTIFY
+    LTEXT           "Directory:",IDC_STATIC,7,7,31,8
+    LTEXT           "File:",IDC_STATIC,7,22,14,8
+    LTEXT           "Found Commands:",IDC_STATIC,7,36,60,8
 END
 
 
@@ -6052,9 +6057,9 @@ BEGIN
     IDD_PACKAGE_SCAN_PROGRESS, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 225
+        RIGHTMARGIN, 287
         TOPMARGIN, 7
-        BOTTOMMARGIN, 82
+        BOTTOMMARGIN, 69
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -8747,7 +8752,6 @@ BEGIN
     STE_LANGUAGE_ENGLISH    "English"
     STE_LANGUAGE_FRENCH     "French"
     STE_CUSTOM              "Custom"
-    STE_QUERY_FILES         "No commands available yet. Do you like to scan directories for additional packages now?"
 END
 
 STRINGTABLE DISCARDABLE 
