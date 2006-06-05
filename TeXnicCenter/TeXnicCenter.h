@@ -102,6 +102,7 @@ protected:
 	afx_msg void OnUpdateProject();
 	afx_msg void OnProjectNewFromFile();
 	afx_msg void OnUpdateProjectNewFromFile(CCmdUI* pCmdUI);
+	afx_msg void OnPackageSetup();
 	//}}AFX_MSG
 	afx_msg void OnUpdateFileMRUProjectList( CCmdUI* pCmdUI );
 	afx_msg void OnUpdateFileMRUFileList( CCmdUI* pCmdUI );
