@@ -1924,7 +1924,7 @@ void CTeXnicCenterApp::OnPackageSetup()
 	CString title(AfxLoadString(IDS_SAVE_PACKAGE_AS)); 
 	CString initialDir(GetWorkingDir() + _T("\\packages"));
 
-	CFolderSelect fsel(AfxLoadString(IDS_SELECT_PACKAGE_DIR));
+	CFolderSelect fsel(AfxLoadString(IDS_SELECT_PACKAGE_DIR) /*, "D:\\Programme\\texmf\\tex"*/);
 	
 	if (fsel.DoModal() == IDOK)
 	{
