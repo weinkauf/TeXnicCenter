@@ -322,7 +322,6 @@ protected:
 	afx_msg void OnUpdateWindowCloseSelectedTab(CCmdUI* pCmdUI);
 	afx_msg void OnWindowCloseAllButActive();
 	afx_msg void OnUpdateWindowCloseAllButActive(CCmdUI* pCmdUI);
-	afx_msg void OnPackageSetup();
 	//}}AFX_MSG
 	afx_msg void OnToggleCtrlBar( UINT nIDEvent );
 	afx_msg void OnToggleMathBar( UINT nIDEvent );
