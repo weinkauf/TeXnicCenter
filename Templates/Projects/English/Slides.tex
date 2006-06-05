@@ -1,0 +1,83 @@
+%description: Basic Slides in English
+%% Based on a TeXnicCenter-Template by Gyorgy SZEIDL.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------
+%
+\documentclass[titlepage,leqno]{slides}%
+%
+%----------------------------------------------------------
+% This is a sample document for the LaTeX Slides Class
+% Class options
+%       --  Body text point size (normalsize) is 27 (default)
+%           and can not be adjusted to any other value.
+%       --  Paper size:  letterpaper (8.5x11 inch, default)
+%                        a4paper, a5paper, b5paper,
+%                        legalpaper, executivepaper
+%       --  Orientation (portrait is the default):
+%                        landscape
+%       --  Quality:     final(default), draft
+%       --  Title page:  titlepage, notitlepage
+%       --  Columns:     onecolumn (default), [twocolumn is not avalible]
+%       --  Equation numbering (equation numbers on the right is the default)
+%                        leqno (equation numbers on the left)
+%       --  Displayed equations (centered is the default)
+%                    fleqn (flush left)
+%
+%  \documentclass[a4paper,fleqn]{slides}
+%
+%  The slides are separated from each other by the slide
+%  environment, see below:
+%
+\usepackage{amsmath}%
+\usepackage{amsfonts}%
+\usepackage{amssymb}%
+\usepackage{graphicx}
+%------------------------------------------------------------------
+\hfuzz5pt % Don't bother to report overfull boxes < 5pt
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\pagestyle{plain}
+%%% --------------------------------------------------------------
+\begin{document}
+\title{This is the Title}
+\author{Author}
+\date{The date}
+\maketitle
+% ----------------------------------------------------------------
+\begin{slide}{1}
+
+This is the first slide.
+
+You can typeset \emph{Emphasized text}.
+
+You can also typeset  \textbf{Bold}, \textit{Italics},
+\textsl{Slanted} and \texttt{Typewriter} text. Roman fonts are not
+available.
+
+Point size can be changed by making use of the {\tiny tiny},
+{\scriptsize scriptsize}, {\footnotesize footnotesize}, {\small
+small}, {\normalsize normalsize}, {\large large}, {\Large Large},
+{\LARGE LARGE}, {\huge huge} and {\Huge Huge} commands.
+
+\end{slide}
+% ----------------------------------------------------------------
+\begin{slide}{2}
+This is the second slide.
+
+The numbered equation
+\begin{equation}
+u_{tt}-\Delta u+u^{5}+u\left|  u\right|  ^{p-2}=0\text{ in }\mathbf{R}%
+^{3}\times\left[  0,\infty\right[  .\label{eqn1}%
+\end{equation}
+is automatically numbered as equation \ref{eqn1}.
+
+\end{slide}
+% ----------------------------------------------------------------
+
+\end{document}

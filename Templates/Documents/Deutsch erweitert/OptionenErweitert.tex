@@ -1,0 +1,78 @@
+%description: Zusätzliche Dokumentoptionen (Teilabbildungen u.a.)
+%% Basierend auf einer TeXnicCenter-Vorlage von Tino Weinkauf.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% OPTIONEN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ACHTUNG: Sie benötigen ein Hauptdokument, um diese Datei
+%%          benutzen zu können. Verwenden Sie im Hauptdokument
+%%          den Befehl "\input{dateiname}", um diese
+%%          Datei einzubinden.
+%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% OPTIONEN FÜR SUBFIGURES - TEILABBILDUNGEN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Neudefinition der Labelung für Subfigures
+%%Beispiel:
+%%In der Abbildung 4.1 schlicht: (a)
+%%Als Referenz im Text: 4.1a
+%\makeatletter
+%    \renewcommand{\thesubfigure}{\alph{subfigure}}
+%    \renewcommand{\@thesubfigure}{\subcaplabelfont (\thesubfigure)\space}
+%    \renewcommand{\p@subfigure}{\thefigure}
+%\makeatother
+
+%%Definitionen für Abstände zwischen den Subfigures
+%% Die Kommandos '\goodgap' und '\littlegap' werden zur Verfügung gestellt.
+%\newlength{\lengthgoodgap}
+%\addtolength{\lengthgoodgap}{\subfigtopskip}
+%\addtolength{\lengthgoodgap}{\subfigbottomskip}
+%\newcommand{\goodgap}{\hspace{\lengthgoodgap}}
+%\newlength{\lengthlittlegap}
+%\addtolength{\lengthlittlegap}{\subfigtopskip}
+%\newcommand{\littlegap}{\hspace{\lengthlittlegap}}
+
+%%Definition für Größe von Bildern, wenn 2 in einer Zeile sind
+%\newlength{\twopicwidth}
+%\addtolength{\twopicwidth}{0.5\linewidth}
+%\addtolength{\twopicwidth}{-0.5\lengthgoodgap}
+
+%%Definition für Größe von Bildern, wenn 3 in einer Zeile sind
+%\newlength{\threepicwidth}
+%\addtolength{\threepicwidth}{0.333333333\linewidth}
+%\addtolength{\threepicwidth}{-0.666666666\lengthlittlegap}
+
+
+%%Hier ein Beispiel für die Anwendung obiger Definitionen:
+%% ==> Benutzen Sie dies als Vorlage im Text; nicht hier.
+% \begin{figure}%
+% \subfigure[SubName1]%
+% {\label{SubLabel1}\includegraphics[width=\twopicwidth]{bild1}}%
+% \goodgap%
+% \subfigure[SubName2]%
+% {\label{SubLabel2}\includegraphics[width=\twopicwidth]{bild2}}%
+% \\%New Line
+% \subfigure[SubName3]%
+% {\label{SubLabel3}\includegraphics[width=\twopicwidth]{bild3}}%
+% \goodgap%
+% \subfigure[SubName4]%
+% {\label{SubLabel4}\includegraphics[width=\twopicwidth]{bild4}}%
+% \caption[Kurze Bezeichnung der Abbildung für das Abbildungsverzeichnis]%
+% {Längere Bezeichnung der Abbildung, die direkt unter der Abbildung erscheint.}%
+% \label{LabelFuerDieGesamteAbbildung}%
+% \end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ANDERE OPTIONEN UND DEFINITIONEN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%LaTeX soll keine Warnung mehr ausgeben, wenn Overfull Box < 3pt
+%\hfuzz3pt
+
+%%Größe des Speichers für LongTables - höher gesetzt für schnellere Ausführung
+%\setcounter{LTchunksize}{400}
+

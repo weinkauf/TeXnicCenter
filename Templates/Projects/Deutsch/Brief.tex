@@ -1,0 +1,154 @@
+%description: Standardbrief in Deutsch
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% HEADER
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[addressstd,a4paper,10pt]{dinbrief}
+% Alternative Settings:
+%		a4paper / letter
+%   addressstd / addresshigh
+
+
+%% Normales LaTeX oder pdfLaTeX? %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ==> Das neue if-Kommando "\ifpdf" wird an einigen wenigen
+%% ==> Stellen benötigt, um die Kompatibilität zwischen
+%% ==> LaTeX und pdfLaTeX herzustellen.
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+	\pdffalse              %%normales LaTeX wird ausgeführt
+\else
+	\pdfoutput=1           
+	\pdftrue               %%pdfLaTeX wird ausgeführt
+\fi
+
+
+%% Fonts für pdfLaTeX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ==> Nur notwendig, falls keine cm-super-Fonts installiert
+\ifpdf
+	%\usepackage{ae}       %%Benutzen Sie nur eines dieser Pakete:
+	%\usepackage{zefonts}  %%je nachdem, welches Sie besitzen.
+\else
+	%%Normales LaTeX - keine speziellen Fontpackages notwendig
+\fi
+
+
+%% Deutsche Anpassungen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+
+%% Packages für Grafiken %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ifpdf %%Einbindung von Grafiken mittels \includegraphics{datei}
+	\usepackage[pdftex]{graphicx} %%Grafiken in pdfLaTeX
+\else
+	\usepackage[dvips]{graphicx} %%Grafiken und normales LaTeX
+\fi
+
+
+%% Kommandos zur Anpassung %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\renewcommand{\ccname}{\tt Verteiler}
+%%\renewcommand{\enclname}{\tt Anlage(n)}
+%\renewcommand{\psname}{PS}
+%\renewcommand{\phonemsg}{\tt Telefon}
+%\renewcommand{\signmsgold}{\tt Unsere Zeichen}
+%\renewcommand{\signmsgnew}{\tt Unsere Zeichen, unsere Nachricht vom}
+%\renewcommand{\yourmailmsg}{\tt Ihre Zeichen, Ihre Nachricht vom}
+
+
+%% Absenderaddresse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\address{Vorname Nachname\\
+Straße Nr. 1\\
+11111 Stadt}
+
+\place{Stadt}
+\phone{030}{11111111}
+\signature{Vorname Nachname}
+
+%\nobackaddressrule
+\backaddress{Vorname Nachname, Straße Nr. 1, 11111 Stadt}
+
+
+%% Text am Ende des Briefes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bottomtext{%
+  \makebox[\textwidth][c]{\small\scshape
+   Bankverbindung $\cdot$ Web Addresse $\cdot$ Andere Informationen
+  }
+}
+
+
+%% Datum %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\date{\today} %%Wenn kommentiert, wird das aktuelle Datum verwendet
+
+
+%% Etiketten %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\labelstyle{plain} %%Art der Etiketten: nur plain möglich
+%\makelabels %%Generiert Etiketten
+
+
+%% Styles %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\nowindowrules %%Keinen Rahmen um die Empfängeraddresse
+%\nowindowtics %%Keine Faltkennzeichnungen
+\centeraddress %%Vertikale Zentrierung der Empfängeraddresse
+\pagestyle{empty} %%Keine Kopf- oder Fußzeilen
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT - BRIEF(E)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%% Dateiendungen für Grafiken %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ==> Sie können hiermit die Dateiendung einer Grafik weglassen.
+%% ==> Aus "\includegraphics{titel.eps}" wird "\includegraphics{titel}".
+%% ==> Wenn Sie nunmehr 2 inhaltsgleiche Grafiken "titel.eps" und
+%% ==> "titel.pdf" erstellen, wird jeweils nur die Grafik eingebunden,
+%% ==> die von ihrem Compiler verarbeitet werden kann.
+%% ==> pdfLaTeX benutzt "titel.pdf". LaTeX benutzt "titel.eps".
+\ifpdf
+	\DeclareGraphicsExtensions{.pdf,.jpg,.png}
+\else
+	\DeclareGraphicsExtensions{.eps}
+\fi
+
+
+%% Beginn des Briefes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{letter}{Vorname Name\\
+               Straße Nr. 2\\[\medskipamount]
+               11111 Stadt}
+
+\yourmail{A} %%Ihre Zeichen
+\sign{B} %%Unsere Zeichen
+
+%\writer{} %%Name des Sachbearbeiters
+
+\subject{\bf Betreffzeile}
+
+\opening{Sehr geehrter Herr Name,}
+
+Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief.
+
+Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief. Ich schreibe Ihnen einen Brief.
+
+\closing{Mit freundlichen Grüßen}
+
+%\ps{PostScriptum. Was auch immer.} %%PostScriptum
+
+%\encl[Anlage(n)]{Text für Anlagen} %%Anlagen
+
+\end{letter}
+
+%% Ende des Briefes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Beginn des zweiten Briefes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{letter}{Vorname Name...
+%%
+%% Sie können hier einen weiteren Brief beginnen.
+%% Kopieren Sie dazu die Kommandos des ersten Briefes an
+%% diese Stelle und passen Sie diese entsprechend an.
+%%
+%%\end{letter}
+%% Ende des zweiten Briefes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}

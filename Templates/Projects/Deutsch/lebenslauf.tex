@@ -1,0 +1,135 @@
+%% Lebenslaufvorlage unter Verwendung von currvita.sty               %%
+%% Basierend auf einer TeXNicCenter-Vorlage von Mark Müller          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Wählen Sie die Optionen aus, indem Sie % vor der Option entfernen  
+% Dokumentation von currvita.sty: currvita.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Optionen zum Layout des Curriculum Vitae                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt, a4paper]{article}
+\usepackage[%
+%LabelsAligned,					% engere vertikale Zwischenräume
+%NoDate									% keine Datumsangabe am Ende
+]{currvita}
+
+%% deutsche Anpassung %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}							
+\usepackage[latin1]{inputenc}		
+
+%% Normales LaTeX oder pdfLaTeX? %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ==> Das neue if-Kommando "\ifpdf" wird an einigen wenigen
+%% ==> Stellen benötigt, um die Kompatibilität zwischen
+%% ==> LaTeX und pdfLaTeX herzustellen.
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+	\pdffalse              	%normales LaTeX wird ausgeführt
+\else
+	\pdfoutput=1           
+	\pdftrue               	%pdfLaTeX wird ausgeführt
+\fi
+
+%% Fonts für pdfLaTeX, falls keine cm-super-Fonts installiert %%%%%%%%
+%\ifpdf
+	%\usepackage{ae}        % Benutzen Sie nur
+	%\usepackage{zefonts}  	% eines dieser Pakete
+%\else
+	%%Normales LaTeX - keine speziellen Fontpackages notwendig
+%\fi
+
+%% Packages für Grafiken & Abbildungen %%%%%%%%%%%%%%%%%%%%%%
+\ifpdf %%Einbindung von Grafiken mittels \includegraphics{datei}
+	\usepackage[pdftex]{graphicx} %%Grafiken in pdfLaTeX
+\else
+	\usepackage[dvips]{graphicx}	%%Grafiken und normales LaTeX
+\fi
+\usepackage{eso-pic}						% Für das Bewerbungsbild
+
+\begin{document}
+%% Dateiendungen für Grafiken %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ==> Sie können hiermit die Dateiendung einer Grafik weglassen.
+%% ==> Aus "\includegraphics{titel.eps}" wird "\includegraphics{titel}".
+%% ==> Wenn Sie nunmehr 2 inhaltsgleiche Grafiken "titel.eps" und
+%% ==> "titel.pdf" erstellen, wird jeweils nur die Grafik eingebunden,
+%% ==> die von ihrem Compiler verarbeitet werden kann.
+%% ==> pdfLaTeX benutzt "titel.pdf". LaTeX benutzt "titel.eps".
+\ifpdf
+	\DeclareGraphicsExtensions{.pdf,.jpg,.png}
+\else
+	\DeclareGraphicsExtensions{.eps}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Ihr Bewerbungsbild direkt auf dem Lebenslauf?                    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\AddToShipoutPicture*{%
+%  \put(450,610){\includegraphics[width=39mm]{Ihr Bild}}%
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Ihr Lebenslauf                                                   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{cv}{Lebenslauf}	% Überschrift des Lebenslaufs frei wählbar
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Einzelne Abschnitte des CV kommen in einzelne Umgebungen der Form:%
+%% \begin{cvlist}{Überschrift}                                       %
+%% \item                                                             %
+%% ...             																									 %
+%% \end{cvlist}																											 %
+%% Zu unterscheiden sind \item mit Argument (\item[Argument] Inhalt) %
+%% und ohne (\item Inhalt). Folgend ein Anwendungsbeispiel. Der Autor% 
+%% des Styles legt seine eigene ausführliche CV als cvtest.tex der   %
+%% Dokumentation bei.																								 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Abschnitt 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{cvlist}{Personalien}	% Überschrift des Abschnitts
+\item Vorname Nachname\\		% die \item haben untereinander einen 
+ 			Straße Nr.\\					% größeren Abstand, als eine neue Zeile
+ 			Postleitzahl Ort
+\item Tel.: (030) 12\,34\,56\\
+			email: irgenwer@irgendwo.ch
+\item Geb.: 30. Februar 2003, Ort
+\item mehrfach geschieden, 5 Kinder
+\end{cvlist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Abschnitt 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{cvlist}{Schulbildung}
+\item[09/82--06/85] Grundschule
+\item[07/85--12/92] Förderschule
+\item[01/93--07/97] Gymnasium, Abschluss Abitur
+\end{cvlist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Abschnitt 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{cvlist}{Studium}
+\item[04/99--07/99] Soziologiestudium, FU-Berlin
+\item[04/00--09/02] Theatherpädagogik, Uni-Zürich
+\item[10/02--07/04] Medizinstudium, Uni-Ludwigshafen, Abschluss 1,0
+\end{cvlist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Abschnitt 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beachten Sie die Wirkung kurzer Überschriften und Items ohne Argument!
+\begin{cvlist}{Sprachen}
+\item Japanisch, Norwegisch, Polnisch, Deutsch, Perl, C++
+\end{cvlist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Abschnitt 5 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{cvlist}{Interessen}
+\item[Musik] hören und drüber reden
+\item[Layout] \LaTeX -Fetischist
+\end{cvlist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Angaben der Abschlusszeile %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cvplace{Ort}						% Erstellungsort
+%\date{}								% falls anderes, als das aktuelle gewünschte
+
+\end{cv}
+\end{document}
