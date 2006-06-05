@@ -1,0 +1,33 @@
+%description: Informations in a pdf-file
+%% Based on a TeXnicCenter-Template by Tino Weinkauf.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PDF-Informations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ATTENTION: You need a main file to use this one here.
+%%            Use the command "\input{filename}" in your
+%%            main file to include this file.
+%%
+
+\pdfinfo{                               % Info dictionary of PDF output;
+                                        % all keys are optional.
+    /Author (Your Name)
+    /CreationDate (D:20011010111111)    % (D:YYYYMMDDhhmmss)
+                                        % YYYY  year
+                                        % MM    month
+                                        % DD    day
+                                        % hh    hour
+                                        % mm    minutes
+                                        % ss    seconds
+                                        %
+                                        % default: the actual date
+                                        %
+    /ModDate (D:20011010111111)         % ModDate is similar
+    /Creator (TeX && TXC)               % default: "TeX"
+    /Producer (pdfTeX)                  % default: "pdfTeX" + pdftex version
+    /Title (Title of your document)
+    /Subject (Subject of your document)
+    /Keywords (Keywords of your document)
+}

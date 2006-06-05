@@ -1,0 +1,184 @@
+%% Buchvorlage unter Verwendung der Book-Klasse des KOMA-Script      %%
+%% Basierend auf einer TeXNicCenter-Vorlage von Mark Müller          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Wählen Sie die Optionen aus, indem Sie % vor der Option entfernen  
+% Dokumentation des KOMA-Script-Packets: scrguide
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Optionen zum Layout des Buchs                                     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[
+%a5paper,							% alle weiteren Papierformat einstellbar
+%landscape,						% Querformat
+%10pt,								% Schriftgröße (12pt, 11pt (Standard))
+%BCOR1cm,							% Bindekorrektur, bspw. 1 cm
+%DIVcalc,							% führt die Satzspiegelberechnung neu aus
+%											  s. scrguide 2.4
+%oneside,							% einseitiges Layout
+%twocolumn,						% zweispaltiger Satz
+%openany,							% Kapitel können auch auf linken Seiten beginnen
+%halfparskip*,				% Absatzformatierung s. scrguide 3.1
+%headsepline,					% Trennline zum Seitenkopf	
+%footsepline,					% Trennline zum Seitenfuß
+%notitlepage,					% in-page-Titel, keine eigene Titelseite
+%chapterprefix,				% vor Kapitelüberschrift wird "Kapitel Nummer" gesetzt
+%appendixprefix,				% Anhang wird "Anhang" vor die Überschrift gesetzt 
+%normalheadings,			% Überschriften etwas kleiner (smallheadings)
+%idxtotoc,						% Index im Inhaltsverzeichnis
+%liststotoc,					% Abb.- und Tab.verzeichnis im Inhalt
+%bibtotoc,						% Literaturverzeichnis im Inhalt
+%leqno,								% Nummerierung von Gleichungen links
+%fleqn,								% Ausgabe von Gleichungen linksbündig
+%draft								% überlangen Zeilen in Ausgabe gekennzeichnet
+]
+{scrbook}
+
+%\pagestyle{empty}		% keine Kopf und Fußzeile (k. Seitenzahl)
+%\pagestyle{headings}	% lebender Kolumnentitel  
+
+%% Normales LaTeX oder pdfLaTeX? %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ==> Das neue if-Kommando "\ifpdf" wird an einigen wenigen
+%% ==> Stellen benötigt, um die Kompatibilität zwischen
+%% ==> LaTeX und pdfLaTeX herzustellen.
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+	\pdffalse              	%normales LaTeX wird ausgeführt
+\else
+	\pdfoutput=1           
+	\pdftrue               	%pdfLaTeX wird ausgeführt
+\fi
+
+%% Fonts für pdfLaTeX, falls keine cm-super-Fonts installiert%%%%%%%%%
+\ifpdf
+	%\usepackage{ae}        % Benutzen Sie nur
+	%\usepackage{zefonts}  	% eines dieser Pakete
+\else
+	%%Normales LaTeX - keine speziellen Fontpackages notwendig
+\fi
+
+%% Packages für Grafiken & Abbildungen %%%%%%%%%%%%%%%%%%%%%%
+\ifpdf %%Einbindung von Grafiken mittels \includegraphics{datei}
+	\usepackage[pdftex]{graphicx} %%Grafiken in pdfLaTeX
+\else
+	\usepackage[dvips]{graphicx} %%Grafiken und normales LaTeX
+\fi
+%\usepackage[hang]{subfigure} %%Mehrere Teilabbildungen in einer Abbildung
+%\usepackage{pst-all} %%PSTricks - nicht verwendbar mit pdfLaTeX
+
+
+%% optischer Randausgleich, falls pdflatex verwandt %%%%%%%%%%%%%%%%%%%
+\ifpdf
+\usepackage[activate]{pdfcprot}				
+\else											% pdfcprot funktioniert nur mit pdflatex
+\fi
+
+%% deutsche Anpassung %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[ngerman]{babel}		
+\usepackage[T1]{fontenc}							
+\usepackage[latin1]{inputenc}		
+
+%% Bibliographiestil %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{natbib}
+
+\begin{document}
+%% Dateiendungen für Grafiken %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ==> Sie können hiermit die Dateiendung einer Grafik weglassen.
+%% ==> Aus "\includegraphics{titel.eps}" wird "\includegraphics{titel}".
+%% ==> Wenn Sie nunmehr 2 inhaltsgleiche Grafiken "titel.eps" und
+%% ==> "titel.pdf" erstellen, wird jeweils nur die Grafik eingebunden,
+%% ==> die von ihrem Compiler verarbeitet werden kann.
+%% ==> pdfLaTeX benutzt "titel.pdf". LaTeX benutzt "titel.eps".
+\ifpdf
+	\DeclareGraphicsExtensions{.pdf,.jpg,.png}
+\else
+	\DeclareGraphicsExtensions{.eps}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Ihr Buch                                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Schmutztitel-Seite %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\extratitle{Schmutztitel}
+
+%% eigene Titelseitengestaltung %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
+%\begin{titlepage}
+%Einsetzen der TXC Vorlage "Deckblatt" möglich
+%\end{titlepage}
+
+%% Angaben zur Standardformatierung des Titels %%%%%%%%%%%%%%%%%%%%%%%%
+%\titlehead{Titelkopf}
+%\subject{Typisierung}
+\title{Der Name Ihrer Arbeit}
+\author{Ihr Name}
+%\and{Der Name des Co-Autoren}
+%\thanks{Fußnote}			% entspr. \footnote im Fließtext
+%\date{}							% falls anderes, als das aktuelle gewünscht
+%\publishers{Herausgeber}
+
+%% Rückseite der Titelseite %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\uppertitleback{Titelrückseitenkopf}
+%\lowertitleback{Titelrückseitenfuß}
+
+%% Widmungsseite %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\dedication{Widmung}
+
+\maketitle 						% Titelei wird erzeugt
+
+%% Erzeugung von Verzeichnissen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents			% Inhaltsverzeichnis
+%\listoftables				% Tabellenverzeichnis
+%\listoffigures				% Abbildungsverzeichnis
+
+
+%% Der Text %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frontmatter					% Vorspann (z.B. römische Seitenzahlen)
+\chapter{Einleitung}
+
+Bei der Book-Klasse des KOMA-Script wird durch den Gliederungsbefehl \verb#\frontmatter# automatisch auf römische Seitennummerierung gewechselt und die Nummerierung der Kapitel unterdrückt. In der Regel sollte der Vorspann nur aus einem Kapitel -- dem Vorwort -- bestehen.
+
+Der Vorspann endet für scrbook, wenn durch \verb#\mainmatter# der Hauptteil beginnt.
+
+\mainmatter						% Hauptteil
+%\setpartpreamble[Position][Breite]{Text}
+\setpartpreamble[u, r][6cm]{Dies ist ein Beispiel für eine Part-Präambel.}
+\part[]{Hauptteil}
+\chapter{Gliederung}
+
+In den report- und book-Klassen steht, im Vergleich zu den article-Klassen als zusätzliche Gliederungseinheit \verb#\chapter[Kurzform]{Langform}# zur Verfügung. 
+
+Kapitel beginnen in der Regel in Büchern auf einer ungeraden, d.\,h. rechten Seite. Will man fortlaufenden Textsatz erreichen und also den Beginn auch auf linken Seiten zulassen, verwendet man die Option \verb#openany# gleich in der Dokumenten-Präambel. Hier finden sich auch andere Optionen zur Regelung der Überschriftengröße und deren Beschriftung.
+
+
+\chapter{Präambeln}
+
+Durch den Befehl \verb#\setpartpreamble[Position][Breite]{Präambel}# wird zusammen mit der Angabe des Teils (part) zudem der angegebene Text gesetzt. Dies kann z.\,B. eine kurze Inhaltsangabe sein. Ein Beipiel ist unter Hauptteil zu sehen.  Die Präambel wird in eine Box gesetzt, deren Position und Breite angegeben werden kann. Unterbleibt dies, wird sie unterhalb der Überschriften im normalen Blocksatz über den gesamten Textbereich gesetzt.
+
+Eine ähnliche Funktion findet sich auch für Kapitel (chapter). Die Anweisung lautet hier entsprechend \verb#\setchapterpreamble[Position][Breite]{Präambel}#. 
+
+Für ein einleitendes Zitat, ein sog. Diktum bietet das KOMA-Script die Anweisung \verb#\dictum[Urheber]{Spruch}#. Sie wird in der Regel in eine \verb#\setchapterpreamble# oder \verb#\setpartpreamble# gesetzt. Ein Beispiel soll folgen:
+
+\setchapterpreamble[u]{%
+\dictum[Luhmann]{Die Klassiker sind Klassiker, weil sie Klassiker sind \dots}}
+\chapter{Diktum}
+
+Übrigens wird ohne weitere Angaben ein Drittel der aktuellen Textbreite verwendet. Wie fast alles bei der Verwendung von \LaTeX , kann dies natürlich angepasst werden. Wie das geht und auch alles andere zur Verwendung von Präambeln steht im scrguide 3.\,6.\,2.
+
+
+\appendix							% Beginn des Anhangs
+\chapter{Schluss}
+
+Für den Schluss ist zu überlegen, wie man den Anhang formatiert haben möchte: Das KOMA-Script kennt den Befehl \verb#\backmatter#. Hierdurch wird die Nummerierung der Gliederungseinheiten im Text und im Inhaltsverzeichnis unterdrückt. Erwartet man die übliche Beschriftung mit "`Anhang A"' bzw. "`A."' so verwendet man den Befehl \verb#\appendix# und verzichte auf \verb#\backmatter# oder setze es zu einem späteren Punkt ein.
+
+Viel Spaß! Für Rückfragen, die diese Vorlage betreffen, stehe ich Ihnen gern in der Mailingliste von TXC zur Verfügung. Ansonsten sind die Dokumente \texttt{lshort}, \texttt{l2tabu}, die \texttt{FAQ der Newsgroup de.text.tex} und natürlich der \texttt{scrguide} immer sehr hilfreich.
+
+%\backmatter					% Nachspann 
+
+%% Bibliographie unter Verwendung von dinnat %%%%%%%%%%%%%%%%%%%%%%%%%%
+%\setbibpreamble{Präambel}		% Text vor dem Verzeichnis
+%\bibliographystyle{dinat}
+%\bibliography{bibliographie}	% Sie benötigen einen *.bib-Datei
+
+
+
+\end{document}
