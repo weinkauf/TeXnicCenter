@@ -235,7 +235,7 @@ void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CStr
 
 		//TODO: If not in usepackage, then skip this one
 
-		//Skip this file, if it does not fit to the given class
+		//Skip this file, if it does not fit to the given document class
 		if (!docClassName.IsEmpty() && pSFile->IsDocClass() && docClassName != pSFile->GetName())
 		{
 			continue; /* skip commands which are not available in this class */
