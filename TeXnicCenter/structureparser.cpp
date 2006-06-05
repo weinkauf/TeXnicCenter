@@ -199,13 +199,13 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 	) );
 	TRACE( "m_regexGraphic returned %d\n", nResult );
 
-	/* user commands */
+	// user commands; NOTE: add "renewcommad" as well
 	nResult = m_regexUserCmd.set_expression( _T(
 		"\\\\newcommand\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}"
 	) );
 	TRACE( "m_regexUserCmd returned %d\n", nResult );
 
-	/* user env's */
+	// user environments; NOTE: add "renewenvironment" as well
 	nResult = m_regexUserEnv.set_expression( _T(
 		"\\\\newenvironment\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}\\s*\\{([^\\}]*)\\}"
 	) );
@@ -367,6 +367,8 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 
 	/* OW 060419: Disabled for upcoming release, will be used later to extend autocomplete function. The regexES have been
 	   tested and seem to work properly - as far as *no comments* are part of the expression
+
+		Tino: Add re-commands as well!
 	
 	  Searching for user commands 
 	if( reg_search( lpText, lpTextEnd, what, m_regexUserCmd, nFlags ) && IsCmdAt( lpText, what[0].first - lpText ) )

@@ -32,62 +32,6 @@
 *
 ********************************************************************/
 
-/*
- * $Log$
- * Revision 1.14  2005/07/05 22:04:25  owieland
- * Removed unnecessary trace output
- *
- * Revision 1.13  2005/06/24 11:41:15  owieland
- * Bugfix: Pass file path to listener instead of directory
- *
- * Revision 1.12  2005/06/23 22:17:13  owieland
- * - Compare words case insensitive
- * - Allow empty insertBefore/After values
- *
- * Revision 1.11  2005/06/11 12:50:57  owieland
- * - Load also expAfter/expBefore attributes from packages.xml
- * - AddCommand/AddEnvironment now return pointers to created object
- *
- * Revision 1.10  2005/06/10 15:31:38  owieland
- * Moved xml constants to .cpp file
- *
- * Revision 1.9  2005/06/09 17:09:59  owieland
- * + Revised architecture (moved autocmpl-handling to listbox)
- * + Hilight commands if they are from a class (unsatisfying yet)
- * + Several bugfixes
- *
- * Revision 1.8  2005/06/09 12:09:59  owieland
- * + Consider ProvidesXXX commands for package/class description
- * + Avoid duplicate option entries
- * + Export description of packages
- * + Consider number of parameters on auto completion
- *
- * Revision 1.7  2005/06/07 23:14:23  owieland
- * + Load commands from packages.xml
- * + Fixed position of the auto complete listbox / beautified content
- * + Fixed some bugs
- *
- * Revision 1.6  2005/06/05 19:45:18  owieland
- * - Beautified auto complete listbox (fonts, position).
- * - Bugfix: Window did not appeared after second invocation
- * - Beep, if no completion was found
- *
- * Revision 1.5  2005/06/05 16:42:42  owieland
- * Extended user interface (prepare for loading the package rep from XML)
- *
- * Revision 1.4  2005/06/04 13:09:35  owieland
- * Added rudimentary auto-complete support (Tools->Complete command).
- *
- * Revision 1.3  2005/06/04 10:39:12  owieland
- * Added option and required package support
- *
- * Revision 1.2  2005/06/03 22:29:20  owieland
- * XML Export
- *
- * Revision 1.1  2005/06/03 20:29:43  owieland
- * Initial checkin of package and class parser
- *
- */
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
@@ -136,65 +80,69 @@ CStyleFileContainer::~CStyleFileContainer()
 	ClearMap();
 }
 
-void CStyleFileContainer::FindStyleFiles()
+bool CStyleFileContainer::FindStyleFiles()
 {	
 	m_NoOfFiles = 0;
 	ClearMap();
-	for (int i = 0; i <= m_SearchPaths.GetUpperBound(); i++) {
-		FindStyleFilesRecursive(m_SearchPaths.GetAt(i));
+	bool bResult(true);
+	for (int i = 0; bResult && i <= m_SearchPaths.GetUpperBound(); i++)
+	{
+		bResult = FindStyleFilesRecursive(m_SearchPaths.GetAt(i));
 	}
-	TRACE("==\nScanned %d files\n", m_NoOfFiles);
+
+	return bResult;
 }
 
-void CStyleFileContainer::FindStyleFilesRecursive(CString dir) 
+bool CStyleFileContainer::FindStyleFilesRecursive(CString dir) 
 {
 	CFileFind finder;
-	BOOL bWorking = finder.FindFile(dir + "\\*");
+	bool bWorking = finder.FindFile(dir + "\\*");
 
 	m_LastDir = dir;
 
-	if (m_Listener != NULL) {
-		if (m_Listener->OnQueryCancel()) {
+	if (m_Listener) m_Listener->OnDirectoryFound(dir);
+
+	while (bWorking)
+	{
+		bWorking = finder.FindNextFile();
+		CPathTool Path(finder.GetFilePath());
+
+		//Progress
+		if (m_Listener && m_Listener->OnQueryCancel())
+		{
 			TRACE("** Scanning files cancelled by user break\n"); 
 			ClearMap();
-			return;
+			return false;
 		}
-	}
 
-	if (m_Listener != NULL) {
-		m_Listener->OnDirectoryFound(dir);
-	}
+		if (finder.IsDirectory() && !finder.IsDots())
+		{
+			if (!FindStyleFilesRecursive(dir + "\\" + Path.GetFile())) return false;
+		}
+		else
+		{
+			CString ext = Path.GetFileExtension();
 
-	while (bWorking) {
-		bWorking = finder.FindNextFile();
-		CString name(finder.GetFileName());
-
-		if (finder.IsDirectory() && !finder.IsDots()) {
-			FindStyleFilesRecursive(dir + "\\" + name);
-			
-		} else {
-			CString p(finder.GetFilePath());
-			//UpdateAllViews(NULL);
-			
-			CString ext = GetFileExt(name);
-
-			if (ext == "sty" || ext == "cls") {
-				m_LastFile = name;
-				CStyleFile *sf = new CStyleFile(p, ext == "cls");
-				sf->SetListener(this);				
+			if (ext == "sty" || ext == "cls")
+			{
+				m_LastFile = Path.GetFile();
+				CStyleFile* sf = new CStyleFile(Path.GetPath(), ext == "cls");
+				sf->SetListener(m_Listener);				
 				
-				if (m_Listener != NULL) {
-					m_Listener->OnFileFound(p);
-				}
-				if (!AddStyleFile(sf)) {
+				if (m_Listener) m_Listener->OnFileFound(Path.GetPath());
+
+				if (!AddStyleFile(sf))
+				{
 					delete sf;
-				} else {
-					sf->ProcessFile();
+					continue;
 				}
+
+				sf->ProcessFile();
 			}
 		}
 	}
 
+	return true;
 }
 
 
@@ -224,15 +172,6 @@ BOOL CStyleFileContainer::IsDirInSearchPath(CString &dir)
 	return ContainsString(&m_SearchPaths, dir);
 }
 
-const CString CStyleFileContainer::GetFileExt(CString &file)
-{
-	int idx = file.ReverseFind('.');
-
-	if (idx != -1 && file.GetLength() - idx == 4) {
-		return CString(file.Mid(idx + 1));
-	}
-	return CString(""); 
-}
 
 BOOL CStyleFileContainer::AddStyleFile(CStyleFile *sf)
 {	
@@ -245,87 +184,70 @@ BOOL CStyleFileContainer::AddStyleFile(CStyleFile *sf)
 	return FALSE;
 }
 
-void CStyleFileContainer::OnCommandFound(CLaTeXCommand &command) {
-	if (m_Listener != NULL) {
-		m_LastItem = command.ToString();
-		m_Listener->OnCommandFound(command);		
-	}
-	//TRACE("Adding %s\n", command.ToString());
-	m_Commands.SetAt(command.ToString(), &command);
+void CStyleFileContainer::Merge(CStyleFileContainer& other)
+{
+	ASSERT(false); //Needs to be implemented
+	//NOTE: Be carefull when merging, since CStyleFile really holds the CLaTeXCommand objects.
+	//If we simply copy the pointers, then we will crash.
 }
 
 
 /* Returns a list of possible completions to a given string */
-const CStringArray* CStyleFileContainer::GetPossibleCompletions(const CString &cmd) {
-	CStringArray *tmp = NULL;
-	int l;
+void CStyleFileContainer::GetAllPossibleCompletions(const CString& Partial, const CString& docClassName, CUniqueStringList& Result)
+{
+	CMapStringToOb AllPossibleItems;
+	GetAllPossibleItems(Partial, docClassName, AllPossibleItems);
 
-	l = cmd.GetLength();
-	if (0 == l) { /* Nothing to do */
-		return NULL;
-	}
-
-	POSITION pos = m_Commands.GetStartPosition();
-	while(pos != NULL) {
-		CLaTeXCommand *lc;
+	POSITION pos = AllPossibleItems.GetStartPosition();
+	while(pos)
+	{
+		CObject* pObj = NULL;
 		CString key;
-		m_Commands.GetNextAssoc(pos, key, (CObject*&)lc);
-		//TRACE("test '%s' = '%s' (%d)\n", key.Left(l), cmd, key.Left(l) == cmd);
-		if (lc != NULL && key.GetLength() >= l && stricmp(key.Left(l), cmd) == 0) {
-			if (tmp == NULL) {
-				tmp = new CStringArray();
-			}
+		AllPossibleItems.GetNextAssoc(pos, key, pObj);
+		CLaTeXCommand* pLatexCmd = dynamic_cast<CLaTeXCommand*>(pObj);
+		if (!pLatexCmd) continue;
 
-			if (!ContainsString(tmp, lc->ToLaTeX())) {
-				tmp->Add(lc->ToLaTeX());			 		
-			}
-			//TRACE("ADD '%s' (now %d items)\n", key, tmp->GetSize());
-		}
-	}	
-	/* TODO: Sort result */
-	return tmp;
+		Result.AddTail(pLatexCmd->ToLaTeX());
+	}
 }
 
-/* Returns a list of possible completions to a given string. Here the function retuns objects
+
+/* Returns a list of possible completions to a given string. Here the function returns objects
    instead of string, so that the receiver has more options to display the result.  */
-const CMapStringToOb* CStyleFileContainer::GetPossibleItems(const CString &cmd, const CString &docClass) {
-	CMapStringToOb *tmp = NULL;
-	int l;
+void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CString& docClassName, CMapStringToOb& Result)
+{
+	//Clear result
+	Result.RemoveAll();
 
-	l = cmd.GetLength();
-	if (0 == l) { /* Nothing to do */
-		return NULL;
-	}
+	const int CmdLength = Partial.GetLength();
+	if (CmdLength == 0) return; //Nothing to do.
 
-
-	POSITION pos = m_Commands.GetStartPosition();
-	while(pos != NULL) {
-		CLaTeXCommand *lc;
+	//Go through all style files and get their commands which correspond to the given Partial
+	POSITION filepos = m_StyleFiles.GetStartPosition();
+	while (filepos)
+	{
+		//Get style file
+		CObject* pObj = NULL;
 		CString key;
-		m_Commands.GetNextAssoc(pos, key, (CObject*&)lc);
-		//TRACE("test '%s' = '%s' (%d)\n", key.Left(l), cmd, key.Left(l) == cmd);
+		m_StyleFiles.GetNextAssoc(filepos, key, pObj);
+		CStyleFile* pSFile = dynamic_cast<CStyleFile*>(pObj);
+		if (!pSFile) continue;
 
-		if (!docClass.IsEmpty() && 
-			lc->GetParent()->IsDocClass() &&  
-			docClass != lc->GetParent()->GetName()) {
+		//TODO: If not in usepackage, then skip this one
 
+		//Skip this file, if it does not fit to the given class
+		if (!docClassName.IsEmpty() && pSFile->IsDocClass() && docClassName != pSFile->GetName())
+		{
 			continue; /* skip commands which are not available in this class */
 		}
 
-		if (lc != NULL && key.GetLength() >= l && stricmp(key.Left(l), cmd) == 0) {
-			if (tmp == NULL) {
-				tmp = new CMapStringToOb();
-			}
+		//Add the commands
+		pSFile->GetPossibleItems(Partial, Result);
+	}
 
-			if (!tmp->Lookup(key, (CObject*&)lc) || lc->GetParent()->IsDocClass()) {
-				tmp->SetAt(lc->ToLaTeX(), lc);			 		
-			}
-			//TRACE("ADD '%s' (now %d items)\n", key, tmp->GetSize());
-		}
-	}	
-	/* TODO: Sort result */
-	return tmp;
+	//TODO: Sort result
 }
+
 
 /* Removes a path entry from the search path. Returns true, if path was found and removed, otherwise false */
 BOOL CStyleFileContainer::RemoveSearchPath(CString &dir) {
@@ -468,8 +390,6 @@ void CStyleFileContainer::ClearMap()
 		}
 		m_StyleFiles.RemoveKey(key);
 	}
-	/* Note: Memory clean up in CStyleFile, we only drop the references */
-	m_Commands.RemoveAll();
 }
 
 /** Helper function for StringArrays. */
@@ -517,7 +437,6 @@ BOOL CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
 		for (long i = 0; i < lPackages; ++i) {	/* walk through child nodes */		 
 			ProcessPackageNode(nodes.GetItem(i));
 		}
-		TRACE("** Loaded %d commands\n", m_Commands.GetCount());
 		return TRUE;
 	}
 	catch (CComException *pE)
@@ -593,7 +512,7 @@ void CStyleFileContainer::ProcessPackageNode(MsXml::CXMLDOMNode &element)
 	
 	/* Create style file instance and insert it into the hash map */
 	CStyleFile *sf = new CStyleFile(nameVal, descVal, isClass);
-	sf->SetListener(this);
+	sf->SetListener(m_Listener);
 	if (!AddStyleFile(sf)) {
 		TRACE("WARNING: Unable to add file %s, seems to be duplicate\n", sf->GetName());
 		delete sf;

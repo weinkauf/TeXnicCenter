@@ -60,56 +60,51 @@ BOOL CAutoCompleteDlg::InitWithKeyword(CString &keyword)
 	CLaTeXCommand *lc;
 	CString key;
 	int idx;
-	const CMapStringToOb *map;
+	CMapStringToOb map;
 
-	map = m_Container->GetPossibleItems(keyword, _T(""));
+	m_Container->GetAllPossibleItems(keyword, _T(""), map);
 	
-	if (map == NULL || map->GetCount() == 0) { /* Nothing to do */
+	if (map.GetCount() == 0) { /* Nothing to do */
 		m_CurrentKeyword.Empty();
 		return FALSE;
 	}
 
 	m_CurrentKeyword = keyword;
 
-	POSITION pos = map->GetStartPosition();	
+	/* Just on element -> Notify caller immediatly */
+	if (map.GetCount() == 1)
+	{
+		POSITION pos = map.GetStartPosition();
+		map.GetNextAssoc(pos, key, (CObject*&)lc);
+		if (m_Listener != NULL) m_Listener->OnACCommandSelect(lc);
 
-	/* iterate through map */
-	if (map->GetCount() == 1) { /* Just on element -> Notify caller immediatly */
-		map->GetNextAssoc(pos, key, (CObject*&)lc);
-		if (m_Listener != NULL) {
-			m_Listener->OnACCommandSelect(lc);
-		}
-		//TRACE("One element only: %s\n", keyword);
-		delete map;
 		return FALSE;
-	} else {
-		if (!::IsWindow(this->GetSafeHwnd())) { // provide safe exit
-			TRACE("ERROR: Not a window\n");
-			if (m_Listener != NULL) {
-				delete map;
-				if (m_Listener != NULL) {
-					m_Listener->OnACCommandCancelled();
-				}
-			}	
-		}
-
-		m_Box->ResetContent();
-		m_Box->InitStorage(map->GetCount(), keyword.GetLength() * 2); /* prepare memory */
-		
-		while(pos != NULL) { /* fill list with items */
-			map->GetNextAssoc(pos, key, (CObject*&)lc);
-			idx = m_Box->AddString(lc->ToLaTeX());
-			
-			int ret = m_Box->SetItemDataPtr(idx, lc); // sync pointer with string 
-
-			if (ret == LB_ERR) {
-				TRACE("Error in SetItemDataPtr: %d (idx = %d)\n", ::GetLastError(), idx);
-			}
+	}
+	
+	/* iterate through map */
+	if (!::IsWindow(this->GetSafeHwnd())) { // provide safe exit
+		TRACE("ERROR: Not a window\n");
+		if (m_Listener != NULL) {
+			m_Listener->OnACCommandCancelled();
 		}	
-		ASSERT(map->GetCount() == m_Box->GetCount());
 	}
 
-	delete map;
+	m_Box->ResetContent();
+	m_Box->InitStorage(map.GetCount(), keyword.GetLength() * 2); /* prepare memory */
+	
+	POSITION pos = map.GetStartPosition();
+	while(pos != NULL) { /* fill list with items */
+		map.GetNextAssoc(pos, key, (CObject*&)lc);
+		idx = m_Box->AddString(lc->ToLaTeX());
+		
+		int ret = m_Box->SetItemDataPtr(idx, lc); // sync pointer with string 
+
+		if (ret == LB_ERR) {
+			TRACE("Error in SetItemDataPtr: %d (idx = %d)\n", ::GetLastError(), idx);
+		}
+	}	
+	ASSERT(map.GetCount() == m_Box->GetCount());
+
 	return TRUE;
 }
 

@@ -34,6 +34,9 @@
 
 /*
  * $Log$
+ * Revision 1.12  2005/07/04 23:01:11  owieland
+ * Alloc file buffer correctly
+ *
  * Revision 1.11  2005/06/22 20:19:50  owieland
  * Added \\let and \\DeclareMathSymbol to parser tokens
  *
@@ -407,7 +410,7 @@ CAbstractLaTeXCommand *CStyleFile::CreateItem(int type, CString &name, int hasSt
 /**
  Registers a listener for style file events. An existing listener will be dropped. 
  */
-void CStyleFile::SetListener(CLaTeXCommandListener *listener)
+void CStyleFile::SetListener(CStyleFileListener* listener)
 {
 	m_Listener = listener;
 }
@@ -542,3 +545,34 @@ void CStyleFile::Dump( CDumpContext& dc ) const {
 	CObject::Dump(dc);
 	dc << m_Name;	
 }
+
+
+void CStyleFile::GetPossibleItems(const CString& Partial, CMapStringToOb& Result)
+{
+	const int SearchLength = Partial.GetLength();
+	ASSERT(SearchLength != 0);
+
+	POSITION pos = m_Commands.GetStartPosition();
+	while(pos != NULL)
+	{
+		CString key;
+		CObject* pObj = NULL;
+		m_Commands.GetNextAssoc(pos, key, pObj);
+
+		CLaTeXCommand* pLatexCmd = dynamic_cast<CLaTeXCommand*>(pObj);
+		if (!pLatexCmd) continue;
+
+		if ((key.GetLength() >= SearchLength) && (key.Left(SearchLength).CompareNoCase(Partial) == 0))
+		{
+			Result[key] = pLatexCmd;
+
+			/*
+			if (!tmp->Lookup(key, (CObject*&)LatexCmd) || LatexCmd->GetParent()->IsDocClass()) {
+				tmp->SetAt(LatexCmd->ToLaTeX(), LatexCmd);			 		
+			}
+			*/
+		}
+	}	
+}
+
+

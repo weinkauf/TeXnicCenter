@@ -53,17 +53,25 @@ void CPackageScanProgress::OnDirectoryFound(CString &dirname)
 void CPackageScanProgress::OnFileFound(CString &filename) 
 {
 	SetText(IDC_FILE, filename);
+
+	CString strnFoundCommands;
+	strnFoundCommands.Format("%d", m_CommandsFound);
+	SetText(IDC_COMMANDS, strnFoundCommands);
 }
 
 BOOL CPackageScanProgress::OnQueryCancel() 
 {
+	//Process Messages, if there are any.
+	//Otherwise, we wouldn't even see the cancel button.
+	if (GetQueueStatus(QS_ALLEVENTS)) theApp.PumpMessage();
+
 	return m_Cancel;
 }
 
 void CPackageScanProgress::OnCommandFound(CLaTeXCommand &command) 
 {
 	m_CommandsFound++;
-	SetText(IDC_COMMANDS, command.ToLaTeX());
+	//SetText(IDC_COMMANDS, command.ToLaTeX());
 }
 
 BOOL CPackageScanProgress::OnInitDialog() 
