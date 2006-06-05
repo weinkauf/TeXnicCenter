@@ -32,55 +32,6 @@
 *
 ********************************************************************/
 
-/*
- * $Log$
- * Revision 1.12  2005/07/04 23:01:11  owieland
- * Alloc file buffer correctly
- *
- * Revision 1.11  2005/06/22 20:19:50  owieland
- * Added \\let and \\DeclareMathSymbol to parser tokens
- *
- * Revision 1.10  2005/06/11 12:50:57  owieland
- * - Load also expAfter/expBefore attributes from packages.xml
- * - AddCommand/AddEnvironment now return pointers to created object
- *
- * Revision 1.9  2005/06/10 15:34:15  owieland
- * Consider \\DeclareTextCommand and \\DeclareTextSymbol
- *
- * Revision 1.8  2005/06/09 17:09:59  owieland
- * + Revised architecture (moved autocmpl-handling to listbox)
- * + Hilight commands if they are from a class (unsatisfying yet)
- * + Several bugfixes
- *
- * Revision 1.7  2005/06/09 12:09:59  owieland
- * + Consider ProvidesXXX commands for package/class description
- * + Avoid duplicate option entries
- * + Export description of packages
- * + Consider number of parameters on auto completion
- *
- * Revision 1.6  2005/06/07 23:14:23  owieland
- * + Load commands from packages.xml
- * + Fixed position of the auto complete listbox / beautified content
- * + Fixed some bugs
- *
- * Revision 1.5  2005/06/07 19:48:21  owieland
- * + Parse commands declared via \\def
- * + Revised HasCommands
- * + Added comments
- *
- * Revision 1.4  2005/06/05 16:42:42  owieland
- * Extended user interface (prepare for loading the package rep from XML)
- *
- * Revision 1.3  2005/06/04 10:39:12  owieland
- * Added option and required package support
- *
- * Revision 1.2  2005/06/03 22:28:43  owieland
- * Impl. GetName()
- *
- * Revision 1.1  2005/06/03 20:29:43  owieland
- * Initial checkin of package and class parser
- *
- */
 
 
 #include "stdafx.h"
@@ -184,7 +135,7 @@ void CStyleFile::ProcessFile()
 		f.Open(m_Filename, CFile::modeRead);
 		DWORD l = f.GetLength();
 
-		TCHAR *buf = new TCHAR[l + 1];
+		TCHAR* buf = new TCHAR[l + 1];
 		f.Read(buf, l);
 
 		if (HasCommands(buf)) {
@@ -197,7 +148,7 @@ void CStyleFile::ProcessFile()
 		f.Close();				
 	} 
 	
-	f.Close();	
+	f.Close();
 }
 
 /**
@@ -217,7 +168,7 @@ BOOL CStyleFile::HasCommands(const TCHAR *buf)
  Parses a buffer and creates appropriate instances. It works on a very low level.
  Ugly, but fast :-)
  */
-void CStyleFile::ParseBuffer(TCHAR *buf)
+void CStyleFile::ParseBuffer(const TCHAR *buf)
 {
 	
 	for (int i = 0; i < TOKEN_COUNT; i++) {
