@@ -128,11 +128,26 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name TxcEnglish
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Templates
+    End Project Dependency
 }}}
 
 ###############################################################################
 
 Project: "TeXnicCenterObjects"=..\TeXnicCenterObjects\Source\TeXnicCenterObjects.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Templates"=..\Templates\Templates.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
