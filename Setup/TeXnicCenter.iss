@@ -31,6 +31,7 @@ WizardSmallImageFile=compiler:wizmodernsmallimage-IS.bmp
 [Components]
 Name: Application_Files; Description: Application Files (TeXnicCenter and its components); Flags: fixed; Types: compact typical custom
 Name: Help_Files; Description: Help Files (Online help for TeXnicCenter and LaTeX reference); Types: typical custom
+Name: Templates; Description: Templates (project and document templates); Types: custom typical
 
 [Files]
 Source: ..\output\Release\cryseditEx.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
@@ -59,6 +60,14 @@ Source: ..\output\Release\packages\*.bmp; DestDir: {app}\packages; Flags: prompt
 Source: msxml4.dll; DestDir: {sys}; Flags: regserver sharedfile
 Source: msxml4r.dll; DestDir: {sys}; Flags: sharedfile
 Source: msxml4a.dll; DestDir: {sys}; Flags: sharedfile
+DestDir: {app}\Templates\Documents\Deutsch; Source: ..\output\Release\Templates\Documents\Deutsch\*.tex; Components: " Templates"; Flags: comparetimestamp
+DestDir: {app}\Templates\Documents\Deutsch erweitert; Source: ..\output\Release\Templates\Documents\Deutsch erweitert\*.tex; Components: " Templates"; Flags: comparetimestamp
+DestDir: {app}\Templates\Documents\English; Source: ..\output\Release\Templates\Documents\English\*.tex; Components: " Templates"; Flags: comparetimestamp
+DestDir: {app}\Templates\Documents\English advanced; Source: ..\output\Release\Templates\Documents\English advanced\*.tex; Components: " Templates"; Flags: comparetimestamp
+DestDir: {app}\Templates\Projects\English advanced; Source: ..\output\Release\Templates\Projects\English advanced\*.tex; Components: " Templates"; Flags: comparetimestamp
+DestDir: {app}\Templates\Projects\English; Source: ..\output\Release\Templates\Projects\English\*.tex; Components: " Templates"; Flags: comparetimestamp
+DestDir: {app}\Templates\Projects\Deutsch erweitert; Source: ..\output\Release\Templates\Projects\Deutsch erweitert\*.tex; Components: " Templates"; Flags: comparetimestamp
+DestDir: {app}\Templates\Projects\Deutsch; Source: ..\output\Release\Templates\Projects\Deutsch\*.tex; Components: " Templates"; Flags: comparetimestamp
 [Icons]
 Name: {group}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; WorkingDir: {userdocs}; IconIndex: 0
 Name: {group}\TeXnicCenter Help; Filename: {app}\Help\TeXCntr.chm; WorkingDir: {app}\Help; IconFilename: {win}\HH.EXE; IconIndex: 0; Components: Help_Files
