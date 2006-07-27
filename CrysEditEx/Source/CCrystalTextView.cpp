@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.29  2005/06/23 21:49:34  owieland
+* Forgot to release DC after getting it
+*
 * Revision 1.28  2005/06/23 14:59:34  owieland
 * - Draw each line number with same font and color
 * - Compute size correctly
@@ -343,6 +346,10 @@ CCrystalTextView::CCrystalTextView()
 	m_pevtHoldCountZero = new CEvent(TRUE, FALSE);
 	m_bSelMargin = TRUE;
 	m_bShowLineNumbers = TRUE;
+
+	// Stephan
+	m_nFixedColumn = 80;
+
 	//BEGIN SW
 	m_panSubLines = new CArray<int, int>();
 	m_nSubLineCount = -1;
@@ -384,7 +391,7 @@ BOOL CCrystalTextView::PreCreateWindow(CREATESTRUCT& cs)
 		//	View must always create its own scrollbars,
 		//	if only it's not used within splitter
 		//BEGIN SW
-		if( m_bWordWrap )
+		if( GetWordWrapping() & WORD_WRAP_WINDOW )
 			// we do not need a horizontal scroll bar, if we wrap the lines
 			cs.style|= WS_VSCROLL;
 		else
@@ -466,9 +473,12 @@ void CCrystalTextView::ScrollToChar(int nNewOffsetChar, BOOL bNoSmoothScroll /*=
 {
 	//BEGIN SW
 	// no horizontal scrolling, when word wrapping is enabled
-	if( m_bWordWrap )
-		return;
+	//if( m_bWordWrap )
+	//	return;
 	//END SW
+	if ((GetWordWrapping() & WORD_WRAP_WINDOW)) {
+		return;
+	}
 
 	//	For now, ignoring bNoSmoothScroll and m_bSmoothScroll
 	if (m_nOffsetChar != nNewOffsetChar)
@@ -1029,7 +1039,7 @@ void CCrystalTextView::WrapLine( int nLineIndex, int nMaxLineWidth, int *anBreak
 void CCrystalTextView::WrapLineCached( int nLineIndex, int nMaxLineWidth, int *anBreaks, int &nBreaks )
 {
 	// if word wrap is not active, there is not any break in the line
-	if( !m_bWordWrap )
+	if( (GetWordWrapping() & WORD_WRAP_NONE))
 	{
 		nBreaks = 0;
 		return;
@@ -1682,7 +1692,7 @@ int CCrystalTextView::GetSubLines( int nLineIndex )
 int CCrystalTextView::CharPosToPoint( int nLineIndex, int nCharPos, CPoint &charPoint )
 {
 	// if we do not wrap lines, y is always 0 and x is equl to nCharPos
-	if( !m_bWordWrap )
+	if( (GetWordWrapping() & WORD_WRAP_NONE) )
 	{
 		charPoint.x = nCharPos;
 		charPoint.y = 0;
@@ -1771,7 +1781,7 @@ int CCrystalTextView::SubLineEndToCharPos( int nLineIndex, int nSubLineOffset )
 	int nLength = GetLineLength( nLineIndex );
 
 	// if word wrapping is disabled, the end is equal to the length of the line -1
-	if( !m_bWordWrap /*|| nLength <= GetScreenChars()*/ )
+	if( (GetWordWrapping() & WORD_WRAP_NONE) /*|| nLength <= GetScreenChars()*/ )
 		return nLength;
 
 	// wrap line
@@ -1796,7 +1806,7 @@ int CCrystalTextView::SubLineHomeToCharPos( int nLineIndex, int nSubLineOffset )
 	int nLength = GetLineLength( nLineIndex );
 
 	// if word wrapping is disabled, the start is 0
-	if( !m_bWordWrap || nSubLineOffset == 0 )
+	if( (GetWordWrapping() & WORD_WRAP_NONE) || nSubLineOffset == 0 )
 		return 0;
 
 	// wrap line
@@ -2113,7 +2123,7 @@ int CCrystalTextView::GetLineCount()
 int CCrystalTextView::GetSubLineCount()
 {
 	// if we do not wrap words, number of sub lines is equal to number of lines
-	if( !m_bWordWrap )
+	if( (GetWordWrapping() & WORD_WRAP_NONE) )
 		return GetLineCount();
 
 	if ( m_nSubLineCount == -1 )
@@ -2133,7 +2143,7 @@ int CCrystalTextView::GetSubLineCount()
 int CCrystalTextView::GetSubLineIndex( int nLineIndex )
 {
 	// if we do not wrap words, subline index of this line is equal to its index
-	if( !m_bWordWrap )
+	if( (GetWordWrapping() & WORD_WRAP_NONE) )
 		return nLineIndex;
 
 	// calculate subline index of the line
@@ -2153,7 +2163,7 @@ void CCrystalTextView::GetLineBySubLine( int nSubLineIndex, int &nLine, int &nSu
 	ASSERT( nSubLineIndex < GetSubLineCount() );
 
 	// if we do not wrap words, nLine is equal to nSubLineIndex and nSubLine is always 0
-	if( !m_bWordWrap )
+	if( (GetWordWrapping() & WORD_WRAP_NONE) )
 	{
 		nLine = nSubLineIndex;
 		nSubLine = 0;
@@ -2253,12 +2263,18 @@ BOOL CCrystalTextView::GetBold(int nColorIndex)
 
 int CCrystalTextView::GetScreenChars()
 {
+	// Stephan
+	if (GetWordWrapping() & WORD_WRAP_FIXEDCOLUMN) {
+		return GetFixedColumn();
+	}
+
 	if (m_nScreenChars == -1)
 	{
 		CRect rect;
 		GetClientRect(&rect);
 		m_nScreenChars = (rect.Width() - GetMarginWidth()) / GetCharWidth();
 	}
+
 	return m_nScreenChars;
 }
 
@@ -2506,8 +2522,14 @@ void CCrystalTextView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar
 void CCrystalTextView::RecalcHorzScrollBar(BOOL bPositionOnly /*= FALSE*/)
 {
 	// only recalc, if word wrapping is disabled
-	if( m_bWordWrap )
+	//if( m_bWordWrap )
+	//	return;
+	// Stephan: 
+	if ((GetWordWrapping() & WORD_WRAP_WINDOW)) {
 		return;
+	}
+
+
 
 	//	Again, we cannot use nPos because it's 16-bit
 	SCROLLINFO si;
@@ -2949,7 +2971,7 @@ void CCrystalTextView::EnsureVisible(CPoint pt)
 	//	Scroll horizontally
 	//BEGIN SW
 	// we do not need horizontally scrolling, if we wrap the words
-	if( m_bWordWrap )
+	if( (GetWordWrapping() & WORD_WRAP_WINDOW) )
 		return;
 	//END SW
 
@@ -3909,14 +3931,14 @@ void CCrystalTextView::SetDisableDragAndDrop(BOOL bDDAD)
 
 
 //BEGIN SW
-BOOL CCrystalTextView::GetWordWrapping() const
+DWORD CCrystalTextView::GetWordWrapping() const
 {
-	return m_bWordWrap;
+	return dwWordwrapping;
 }
 
-void CCrystalTextView::SetWordWrapping( BOOL bWordWrap )
+void CCrystalTextView::SetWordWrapping( DWORD dwWrap )
 {
-	m_bWordWrap = bWordWrap;
+	dwWordwrapping = dwWrap;
 
 	if( IsWindow( m_hWnd ) )
 		InvalidateLines( 0, -1, TRUE );
@@ -4852,4 +4874,16 @@ void CCrystalTextView::SetShowLineNumbers(BOOL show) {
  
 BOOL CCrystalTextView::GetShowLineNumbers() {
 	return m_bShowLineNumbers;
+}
+
+BOOL CCrystalTextView::IsFixedColumnWrap() {
+	return dwWordwrapping & WORD_WRAP_FIXEDCOLUMN;
+}
+
+void CCrystalTextView::SetFixedColumn(int column) {
+	m_nFixedColumn = column;
+}
+
+int CCrystalTextView::GetFixedColumn() {
+	return m_nFixedColumn;
 }
