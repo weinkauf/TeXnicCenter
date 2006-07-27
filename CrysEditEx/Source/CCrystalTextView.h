@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.15  2005/06/17 21:38:44  owieland
+* Show line numbers in editor (FR 1178333 )
+*
 * Revision 1.14  2005/03/08 16:36:08  vachis
 * Selection of block between bracket pairs in a hierarchical manner (Ctrl+M)
 * Bracket highlighting disabled if a selection is present
@@ -126,6 +129,14 @@ enum
 	UPDATE_RESET		= 0x1000		//	document was reloaded, update all!
 };
 
+// Word wrapping flags
+enum
+{
+	WORD_WRAP_NONE = 0x0001,
+	WORD_WRAP_WINDOW = 0x0002,
+	WORD_WRAP_FIXEDCOLUMN = 0x0010
+};
+
 
 class CRYSEDIT_CLASS_DECL CCrystalTextView : public CView
 {
@@ -165,6 +176,13 @@ private:
 	
 	//	Amount of lines/characters that completely fits the client area
 	int m_nScreenLines, m_nScreenChars;
+
+	//BOOL m_bUseFixedColumnWrap;
+	// the current wrapping style
+	DWORD dwWordwrapping;
+
+	// number of chars in a line when WORD_WRAP_FIXEDCOLUMN
+	int m_nFixedColumn;
 
 	//BEGIN SW
 	/**
@@ -361,7 +379,7 @@ protected:
 	//	[JRT]
 	BOOL m_bDisableDragAndDrop;
 	//BEGIN SW
-	BOOL m_bWordWrap;
+	//BOOL m_bWordWrap;
 	CCrystalParser *m_pParser;
 	//END SW
 	CWinThread *m_pBackgroundThread;
@@ -443,6 +461,34 @@ public:
 		@return false, otherwise.
 	*/
 	bool OnEditFindIncrementalStop(bool bKeepSelection);
+
+	/**
+	Sets the word wrapping style. 
+
+    @param wrap
+	the style can be one of:
+		WORD_WRAP_NONE,
+		WORD_WRAP_WINDOW,
+		WORD_WRAP_FIXEDCOLUMN
+	*/
+	void SetWordWrapping(DWORD wrap);
+
+	/**
+	Returns TRUE when word wrap style is WORD_WRAP_FIXEDCOLUMN
+	*/
+	BOOL IsFixedColumnWrap();
+
+	/**
+	Set the amount of chars per line.
+	@param column
+		chars
+	*/
+	void SetFixedColumn(int column);
+
+	/**
+	Returns the amount of chars per line.
+	*/
+	int GetFixedColumn();
 
 protected:
 	int m_nTopLine, m_nOffsetChar;
@@ -884,8 +930,8 @@ public:
 	BOOL GetDisableDragAndDrop() const;
 	void SetDisableDragAndDrop(BOOL bDDAD);
 	//BEGIN SW
-	BOOL GetWordWrapping() const;
-	void SetWordWrapping( BOOL bWordWrap );
+	DWORD GetWordWrapping() const;
+	//void SetWordWrapping( BOOL bWordWrap );
 
 	/**
 	Increment the hold view count. The view cannot be destroyed with outstanding 
