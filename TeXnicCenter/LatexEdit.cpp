@@ -101,7 +101,7 @@ END_MESSAGE_MAP()
 CLatexEdit::CLatexEdit()
 {
 	SetParser( &m_latexParser );
-	SetWordWrapping( TRUE );
+	SetWordWrapping( WORD_WRAP_WINDOW );
 	m_pBackgroundThread = theApp.GetBackgroundThread();
 	m_CompletionListBox = NULL;
 	m_Proxy = new MyListener(this);
