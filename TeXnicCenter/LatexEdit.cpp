@@ -148,6 +148,10 @@ void CLatexEdit::ApplyConfiguration()
 	// (de)activate white space view
 	SetViewTabs( g_configuration.m_bViewWhitespaces );
 
+	//word wrapping
+	SetWordWrapping(g_configuration.m_dwWordWrapStyle);
+	SetFixedColumn(g_configuration.m_nFixedColumnWrap);
+
 	// redraw
 	Invalidate();
 }

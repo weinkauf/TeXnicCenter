@@ -143,6 +143,9 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 
 	SerializeProfileInt( strSection, _T("ViewWhitespaces"), (int*)&m_bViewWhitespaces, direction, FALSE );
 
+	SerializeProfileInt( strSection, _T("WordWrapStyle"), (int*)&m_dwWordWrapStyle, direction, WORD_WRAP_WINDOW );
+	SerializeProfileInt( strSection, _T("FixedColumWrap"), (int*)&m_nFixedColumnWrap, direction, 80 );
+
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Find in files settings
 	strSection = "Settings\\FindInFiles";
