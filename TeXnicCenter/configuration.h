@@ -277,6 +277,12 @@ public:
 	/** TRUE, if line numbers should be shown */
 	BOOL m_bShowLineNumbers;
 
+	/** The word warp style. */
+	DWORD m_dwWordWrapStyle;
+
+	/**  amount of column to wrap words */
+	int m_nFixedColumnWrap;
+
 	///////////////////////////////////////////////////////////////////
 	// Other window settings
 
