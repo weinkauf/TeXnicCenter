@@ -1,16 +1,6 @@
-!!!
-!!! DO NOT CHANGE THIS FILE -- IT IS NOT NEEDED ANYMORE
-!!!
-!!! INSTEAD BE SURE, THAT AN ISSUE EXISTS IN THE TEXNICCENTER ISSUE TRACKER FOR
-!!! EACH CHANGES YOU ARE COMMITTING AND THAT YOU SPECIFY THE ISSUES ID IN THE 
-!!! CVS COMMIT MESSAGE (i.e. "Fixed bug TXC-18: Some really hard error"). YOU
-!!! WILL FIND YOUR COMMIT MESSAGES AND THE MADE CHANGES THEN IN THE ISSUE 
-!!! TRACKER:
-!!!
-!!! YOU CAN FIND THE ISSUE TRACKER AT
-!!!
-!!!   http://www.texniccenter.org/jira/
-!!!
+2006/08/11 svenwiegand
+- Replaced 'enumeration' entry in package TeX.xml by 'enumerate' what is really
+  meant.
 
 2006/05/27 svenwiegand
 - Updated version information

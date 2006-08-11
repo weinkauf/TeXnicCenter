@@ -161,12 +161,12 @@
 			parameters="1"
 		/>
 		
-		<lxEnvironment name="enumeration" 
+		<lxEnvironment name="enumerate" 
 			parameters="1" 
 			desc="Defines an environment for an enumeration (numbered itemization)"
 			icon="format.bmp"
 			index="8"
-			expafter="}&#xA;	\item &#xA;\end{enumeration}" 
+			expafter="}&#xA;	\item &#xA;\end{enumerate}" 
 			expbefore="\begin{"/>
 		<lxEnvironment name="itemize" 
 			parameters="0" 
@@ -314,6 +314,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.15  2006/06/05 01:47:31  niteria
+	Added renewcommand and renewenvironment
+	
 	Revision 1.14  2006/04/19 19:21:34  owieland
 	Added bibtex type "mastersthesis"
 	
