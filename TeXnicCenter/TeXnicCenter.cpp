@@ -187,15 +187,16 @@ BEGIN_MESSAGE_MAP(CTeXnicCenterApp, CProjectSupportingWinApp)
 	ON_COMMAND(ID_PROJECT_SAVE, OnProjectSave)
 	ON_UPDATE_COMMAND_UI(ID_PROJECT_SAVE, OnUpdateProjectSave)
 	ON_COMMAND(ID_LATEX_EDITPROFILES, OnLatexEditProfiles)
-	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_ALL, OnUpdateWindowCloseAll)
 	ON_COMMAND(ID_WINDOW_CLOSE_ALL, OnWindowCloseAll)
 	ON_COMMAND(ID_HELP, OnHelp)
 	ON_COMMAND(ID_BG_UPDATE_PROJECT, OnUpdateProject)
 	ON_COMMAND(ID_PROJECT_NEW_FROM_FILE, OnProjectNewFromFile)
 	ON_UPDATE_COMMAND_UI(ID_PROJECT_NEW_FROM_FILE, OnUpdateProjectNewFromFile)
+	ON_COMMAND(ID_PACKAGE_SETUP, OnPackageSetup)
+	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_ALL, OnUpdateDoForAllOpenWindows)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnDisableStdCmd)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS, OnDisableStdCmd)
-	ON_COMMAND(ID_PACKAGE_SETUP, OnPackageSetup)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_ALL, OnUpdateDoForAllOpenWindows)
 	//}}AFX_MSG_MAP
 	// Dateibasierte Standard-Dokumentbefehle
 	//ON_COMMAND(ID_FILE_NEW, CProjectSupportingWinApp::OnFileNew)
@@ -1665,16 +1666,6 @@ void CTeXnicCenterApp::OnAppLicense()
 }
 
 
-void CTeXnicCenterApp::OnUpdateWindowCloseAll(CCmdUI* pCmdUI) 
-{
-	CMultiDocTemplate	*pDocTemplate = GetLatexDocTemplate();
-	if (!pDocTemplate)
-		pCmdUI->Enable(FALSE);
-	else
-		pCmdUI->Enable(pDocTemplate->GetFirstDocPosition() != NULL);
-}
-
-
 void CTeXnicCenterApp::OnWindowCloseAll() 
 {
 	CMultiDocTemplate	*pDocTemplate = GetLatexDocTemplate();
@@ -1965,4 +1956,17 @@ void CTeXnicCenterApp::OnPackageSetup()
 			NewCommands.SaveAsXML(s);
 		}
 	}	
+}
+
+void CTeXnicCenterApp::OnUpdateDoForAllOpenWindows(CCmdUI* pCmdUI) 
+{
+	CMultiDocTemplate* pDocTemplate = GetLatexDocTemplate();
+	if (!pDocTemplate)
+	{
+		pCmdUI->Enable(FALSE);
+	}
+	else
+	{
+		pCmdUI->Enable(pDocTemplate->GetFirstDocPosition() != NULL);
+	}
 }
