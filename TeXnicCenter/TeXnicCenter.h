@@ -96,13 +96,13 @@ protected:
 	afx_msg void OnProjectSave();
 	afx_msg void OnUpdateProjectSave(CCmdUI* pCmdUI);
 	afx_msg void OnLatexEditProfiles();
-	afx_msg void OnUpdateWindowCloseAll(CCmdUI* pCmdUI);
 	afx_msg void OnWindowCloseAll();
 	afx_msg void OnHelp();
 	afx_msg void OnUpdateProject();
 	afx_msg void OnProjectNewFromFile();
 	afx_msg void OnUpdateProjectNewFromFile(CCmdUI* pCmdUI);
 	afx_msg void OnPackageSetup();
+	afx_msg void OnUpdateDoForAllOpenWindows(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	afx_msg void OnUpdateFileMRUProjectList( CCmdUI* pCmdUI );
 	afx_msg void OnUpdateFileMRUFileList( CCmdUI* pCmdUI );
