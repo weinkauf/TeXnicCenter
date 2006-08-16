@@ -280,6 +280,9 @@ public:
 	/** The word warp style. */
 	DWORD m_dwWordWrapStyle;
 
+	/** Wethter word wrapping is on or off */
+	BOOL m_bWordWrapEnabled;
+
 	/**  amount of column to wrap words */
 	int m_nFixedColumnWrap;
 
@@ -399,6 +402,12 @@ public:
 	next session.
 	*/
 	BOOL m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart;
+
+	///////////////////////////////////////////////////////////////////
+	// Accessability
+
+	/** TRUE to optimize the GUI for visually handicapped users. */
+	CString m_strQuickRunTmpFilePattern;
 };
 
 // declaration of one and only global configuration object
