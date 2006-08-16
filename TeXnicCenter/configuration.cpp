@@ -144,6 +144,7 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	SerializeProfileInt( strSection, _T("ViewWhitespaces"), (int*)&m_bViewWhitespaces, direction, FALSE );
 
 	SerializeProfileInt( strSection, _T("WordWrapStyle"), (int*)&m_dwWordWrapStyle, direction, WORD_WRAP_WINDOW );
+	SerializeProfileInt( strSection, _T("WordWrapEnabled"), (int*)&m_bWordWrapEnabled, direction, TRUE );
 	SerializeProfileInt( strSection, _T("FixedColumWrap"), (int*)&m_nFixedColumnWrap, direction, 80 );
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -257,6 +258,11 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	SerializeProfileInt(strSection, _T("OptimizeMenuForVisuallyHandicappedUsers"), (int*)&m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart, direction, FALSE);
 	if (direction==Load)
 		m_bOptimizeMenuForVisuallyHandicappedUsers = m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart;
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// Profiles
+	strSection = "Profiles";
+	SerializeProfileString( strSection, _T("QuickRunFilePattern"), &m_strQuickRunTmpFilePattern, direction, _T("%bm_part.tex"));
 }
 
 
