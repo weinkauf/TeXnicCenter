@@ -1,3 +1,9 @@
+2006/08/20 niteria
+- Fixed Bug 1420318: Find whole words does not work properly
+- Fixed Bug 1345980 (duplicate): 6.31 find whole word with 1...2 letters
+- Fixed Bug 1543457: Crash on startup when restoring invalid last session
+- Fixed Bug 1543480: Focus in combo box after choosing output profile
+
 2006/08/11 svenwiegand
 - Replaced 'enumeration' entry in package TeX.xml by 'enumerate' what is really
   meant.
