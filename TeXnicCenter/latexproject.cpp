@@ -75,6 +75,7 @@ CLatexProject::CLatexProject()
 	m_pwndStructureView( NULL ),
 	m_pwndEnvironmentView( NULL ),
 	m_pwndFileView(NULL),
+	m_pwndBibView(NULL),
 	m_bUseBibTex(FALSE),
 	m_bUseMakeIndex(FALSE),
 	m_nInitialNavigatorTab(0),
