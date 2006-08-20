@@ -82,6 +82,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.30  2006/07/27 15:47:17  sschrade
+* Enhanced word wrapping style. The lines can be either wrapped at the window border or at a fixed amount of columns.
+*
 * Revision 1.29  2005/06/23 21:49:34  owieland
 * Forgot to release DC after getting it
 *
@@ -3431,7 +3434,8 @@ static int FindStringHelper(LPCTSTR pszFindWhere, LPCTSTR pszFindWhat, BOOL bWho
 	ASSERT(pszFindWhere != NULL);
 	ASSERT(pszFindWhat != NULL);
 	int nCur = 0;
-	int nLength = lstrlen(pszFindWhat);
+	const int nLength = lstrlen(pszFindWhat);
+	LPCTSTR lastChar = pszFindWhere + lstrlen(pszFindWhere) - 1;
 	for (;;)
 	{
 #ifdef _UNICODE
@@ -3439,24 +3443,25 @@ static int FindStringHelper(LPCTSTR pszFindWhere, LPCTSTR pszFindWhat, BOOL bWho
 #else
 		LPCTSTR	pszPos = strstr(pszFindWhere, pszFindWhat);
 #endif
-		if (pszPos == NULL)
-			return -1;
-		if (! bWholeWord)
-			return nCur + (pszPos - pszFindWhere);
-		if (pszPos > pszFindWhere && (IsAlNum(pszPos[-1]) || pszPos[-1] == _T('_')))
+
+		if (pszPos == NULL) return -1;
+
+		if (!bWholeWord) return nCur + (pszPos - pszFindWhere);
+
+		//Whole Word Search: Look whether we have before or after the found match a non-blank character.
+		//If we have such a situation, this is not a whole word.
+		if ( (pszPos > pszFindWhere && (IsAlNum(pszPos[-1]) || pszPos[-1] == _T('_'))) //look before match
+			|| (pszPos + nLength <= lastChar && (IsAlNum(pszPos[nLength]) || pszPos[nLength] == _T('_'))) ) //look after match
 		{
-			nCur += (pszPos - pszFindWhere);
-			pszFindWhere = pszPos + 1;
-			continue;
-		}
-		if (IsAlNum(pszPos[nLength]) || pszPos[nLength] == _T('_'))
-		{
+			//Found match is not a whole word - step one char forward, so we don't find it again
 			nCur += (pszPos - pszFindWhere + 1);
 			pszFindWhere = pszPos + 1;
 			continue;
 		}
+
 		return nCur + (pszPos - pszFindWhere);
 	}
+
 	ASSERT(FALSE);		// Unreachable
 	return -1;
 }
