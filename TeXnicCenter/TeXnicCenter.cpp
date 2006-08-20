@@ -1300,25 +1300,27 @@ void CTeXnicCenterApp::OnLatexProfile()
 
 void CTeXnicCenterApp::OnLatexProfileSel() 
 {
-	CMainFrame	*pMainFrame = (CMainFrame*)m_pMainWnd;
+	CMainFrame* pMainFrame = dynamic_cast<CMainFrame*>(m_pMainWnd);
 
-	if (!m_pMainWnd || !IsWindow(m_pMainWnd->m_hWnd))
-		return;
+	if (!m_pMainWnd || !IsWindow(m_pMainWnd->m_hWnd)) return;
 
-	// get currently selected outputtype
-	POSITION									pos = NULL;
-	CBCGToolbarComboBoxButton	*pButton = 
-		(CBCGToolbarComboBoxButton*)pMainFrame->GetToolbarButton(ID_LATEX_PROFILE_SEL, pos);
-	if (!pButton)
-		return;
+	//Get combo box for selection the profile
+	POSITION pos = NULL;
+	CBCGToolbarComboBoxButton* pButton = (CBCGToolbarComboBoxButton*)(pMainFrame->GetToolbarButton(ID_LATEX_PROFILE_SEL, pos));
+	if (!pButton) return;
+	CComboBox* pBox = pButton->GetComboBox();
+	if (!pBox || !IsWindow(pBox->m_hWnd)) return;
 
-	CComboBox	*pBox = pButton->GetComboBox();
-	if (!pBox || !IsWindow(pBox->m_hWnd))
-		return;
-
+	//Get currently selected output type
 	CString	strActiveProfile;
 	pBox->GetLBText(pButton->GetCurSel(), strActiveProfile);
 	g_ProfileMap.SetActiveProfile(strActiveProfile);
+
+	//Give the focus back to the editor - otherwise, all subsequent keyboard input goes to the combo box
+	pMainFrame->SendMessage(WM_COMMAND, ID_WINDOW_EDITOR);
+	//If we do not have an open edit window, the above message will not succeed.
+	// So we set the focus to the main window.
+	if (GetFocus() == pBox->m_hWnd) pMainFrame->SetFocus();
 }
 
 
