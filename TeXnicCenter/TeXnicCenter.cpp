@@ -1594,8 +1594,12 @@ BOOL CTeXnicCenterApp::OnDDECommand(LPTSTR lpszCommand)
 		strLineNumber = strCommand.Mid( nStart + 1, nEnd - (nStart + 1) );
 		nLineNumber = _ttol( strLineNumber );
 
-		if( !OpenLatexDocument(strFileName, FALSE, nLineNumber, FALSE, true) )
-			return FALSE;
+		//Do not load the last project, if we now open a file/project via dde
+		g_configuration.m_strLastProject.Empty();
+
+		if (!OpenLatexDocument(strFileName, FALSE, nLineNumber, FALSE, true)) return FALSE;
+
+		return TRUE;
 	}
 
 	/*
