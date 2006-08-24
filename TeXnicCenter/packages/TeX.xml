@@ -36,24 +36,24 @@
 				
 		<lxEnvironment name="tabular" 
 			parameters="1" 
-			desc="Provides a tabbed environment"
+			desc="Provides a tabular environment"
 			icon="format.bmp"
 			index="10"
-			expafter="}{ccc}&#xA;	&#xA;\end{tabular}" 
+			expafter="}{ccc}&#xA;&#xA;\end{tabular}" 
 			expbefore="\begin{"/>
 		<lxEnvironment name="table" 
 			parameters="1" 
 			desc="Provides a table environment"
 			icon="format.bmp"
 			index="10"
-			expafter="}{ccc}&#xA;	&#xA;	\label{}&#xA;	\caption{}&#xA;\end{table}" 
+			expafter="}%&#xA;\begin{tabular}{lcr}&#xA;&#xA;\end{tabular}&#xA;\caption{}&#xA;\label{}&#xA;\end{table}" 
 			expbefore="\begin{"/>
 		<lxEnvironment name="figure" 
 			parameters="1" 
 			desc="Provides a figure environment"
 			icon="format.bmp"
 			index="9"
-			expafter="}[ht]&#xA;	&#xA;	\label{}&#xA;	\caption{}&#xA;\end{figure}" 
+			expafter="}%&#xA;\includegraphics[width=\columnwidth]{filename}%&#xA;\caption{}%&#xA;\label{}%&#xA;\end{figure}" 
 			expbefore="\begin{"/>
 
 		<lxCommand name="\caption" parameters="1"/>
@@ -314,6 +314,9 @@
 <!-- $Id$ -->
 <!-- 
 	$Log$
+	Revision 1.16  2006/08/11 07:58:39  svenwiegand
+	Replaced 'enumeration' entry in package TeX.xml by 'enumerate' what is really meant.
+	
 	Revision 1.15  2006/06/05 01:47:31  niteria
 	Added renewcommand and renewenvironment
 	
