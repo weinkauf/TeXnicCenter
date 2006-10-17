@@ -1,3 +1,6 @@
+2006/10/17 niteria
+ - Recognizes \nobibliography{} now
+
 2006/08/24 niteria
 - Fixed Bug 1543877: Wrong Auto-Complete with \figure
 
