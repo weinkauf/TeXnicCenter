@@ -1,37 +1,41 @@
 [_ISTool]
 EnableISX=true
 
-Use7zip=false
 [Setup]
 OutputBaseFilename=TXCSetup
 MinVersion=4.0.950,4.0.1381
-AppCopyright=© 1999-2006 www.TeXnicCenter.org
+AppCopyright=© 1999-2007 www.TeXnicCenter.org
 AppName=TeXnicCenter
 AppVerName=TeXnicCenter Version 1 Beta 7.01 (Greengrass)
 LicenseFile=GPL.rtf
-AdminPrivilegesRequired=false
+PrivilegesRequired=none
 DefaultGroupName=TeXnicCenter
+AllowNoIcons=true
 DefaultDirName={pf}\TeXnicCenter
 UsePreviousAppDir=true
 AlwaysShowDirOnReadyPage=true
 AlwaysShowGroupOnReadyPage=true
 AppPublisher=TeXnicCenter.org
-AppPublisherURL=www.TeXnicCenter.org
-AppSupportURL=http://www.TeXnicCenter.org/support
-AppUpdatesURL=http://www.TeXnicCenter.org/downloads
+AppPublisherURL=http://www.TeXnicCenter.org/
+AppSupportURL=http://www.TeXnicCenter.org/support/
+AppUpdatesURL=http://www.TeXnicCenter.org/downloads/
 AppVersion=Version 1 Beta 7.01
 AppID=TeXnicCenter
-AlwaysShowComponentsList=false
+AlwaysShowComponentsList=true
 UninstallDisplayIcon={app}\TEXCNTR.EXE
 
 SolidCompression=true
+InternalCompressLevel=ultra
+Compression=lzma/ultra
+
 ShowLanguageDialog=yes
 WizardImageFile=compiler:wizmodernimage-IS.bmp
 WizardSmallImageFile=compiler:wizmodernsmallimage-IS.bmp
+
 [Components]
-Name: Application_Files; Description: Application Files (TeXnicCenter and its components); Flags: fixed; Types: compact typical custom
-Name: Help_Files; Description: Help Files (Online help for TeXnicCenter and LaTeX reference); Types: typical custom
-Name: Templates; Description: Templates (project and document templates); Types: custom typical
+Name: Application_Files; Description: Application Files (TeXnicCenter core components); Flags: fixed; Types: compact typical custom
+Name: Help_Files; Description: Help Files (Help for TeXnicCenter and LaTeX reference); Types: typical custom
+Name: Templates; Description: LaTeX Templates (Templates for creating new projects and documents); Types: custom typical
 
 [Files]
 Source: ..\output\Release\cryseditEx.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
@@ -75,7 +79,7 @@ Name: {userdesktop}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; WorkingDir: {user
 Name: {sendto}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; Comment: TeXnicCenter; IconIndex: 0; Tasks: SendToLink; WorkingDir: {userdocs}
 
 [Registry]
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter; ValueType: string; ValueName: CurrentVersion; ValueData: 1 Beta 6.20
+Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter; ValueType: string; ValueName: CurrentVersion; ValueData: 1 Beta 7.01
 Root: HKLM; Subkey: Software\ToolsCenter; Flags: uninsdeletekeyifempty
 Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter; Flags: uninsdeletekey
 Root: HKCU; Subkey: Software\ToolsCenter; Flags: uninsdeletekeyifempty
@@ -98,7 +102,7 @@ Name: {app}\Templates\Projects; Flags: uninsalwaysuninstall
 Name: {app}\Help; Flags: uninsalwaysuninstall; Components: Help_Files
 
 [Types]
-Name: typical; Description: Typical (Will be useful for the most users)
+Name: typical; Description: Typical (Recommended)
 Name: compact; Description: Compact (Requires less space)
 Name: custom; Description: Custom (Lets you choose, which components to install); Flags: iscustom
 [Code]
