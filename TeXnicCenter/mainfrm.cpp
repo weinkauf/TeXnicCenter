@@ -482,7 +482,7 @@ BOOL CMainFrame::DestroyWindow()
 	return CBCGMDIFrameWnd::DestroyWindow();
 }
 
-#include "CustomizePageEditor.h"
+
 void CMainFrame::OnExtrasCustomize() 
 {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

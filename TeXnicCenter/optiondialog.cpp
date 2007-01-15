@@ -68,6 +68,7 @@ COptionDialog::COptionDialog( CWnd* pParentWnd, UINT iSelectPage )
 	AddPage( &m_pageLanguage );
 	AddPage( &m_pageFileClean );
 	AddPage( &m_pageEditor );
+	AddPage( &m_pageTextFormat );
 
 	//SetTreeViewMode(TRUE, TRUE);
 }

@@ -172,10 +172,6 @@ SOURCE=.\CrystalEditViewEx.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CustomizePageEditor.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\DdeCommand.cpp
 # End Source File
 # Begin Source File
@@ -332,6 +328,10 @@ SOURCE=.\OptionDialog.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\OptionPageEditor.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\OptionPageFile.cpp
 # End Source File
 # Begin Source File
@@ -349,6 +349,10 @@ SOURCE=.\OptionPageLanguage.cpp
 # Begin Source File
 
 SOURCE=.\OptionPagePath.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\OptionPageTextFormat.cpp
 # End Source File
 # Begin Source File
 
@@ -645,10 +649,6 @@ SOURCE=.\CrystalEditViewEx.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\CustomizePageEditor.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\DdeCommand.h
 # End Source File
 # Begin Source File
@@ -805,6 +805,10 @@ SOURCE=.\OptionDialog.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\OptionPageEditor.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\OptionPageFile.h
 # End Source File
 # Begin Source File
@@ -822,6 +826,10 @@ SOURCE=.\OptionPageLanguage.h
 # Begin Source File
 
 SOURCE=.\OptionPagePath.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\OptionPageTextFormat.h
 # End Source File
 # Begin Source File
 

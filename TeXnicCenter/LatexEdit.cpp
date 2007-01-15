@@ -149,7 +149,7 @@ void CLatexEdit::ApplyConfiguration()
 	SetViewTabs( g_configuration.m_bViewWhitespaces );
 
 	//word wrapping
-	SetWordWrapping(g_configuration.m_dwWordWrapStyle);
+	SetWordWrapping((TCRYSTALWORDWRAP)g_configuration.m_WordWrapStyle);
 	SetFixedColumn(g_configuration.m_nFixedColumnWrap);
 
 	// redraw
