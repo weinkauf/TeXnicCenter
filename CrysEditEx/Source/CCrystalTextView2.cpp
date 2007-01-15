@@ -64,6 +64,12 @@
 * $Author$
 *
 * $Log$
+* Revision 1.9  2005/03/16 18:17:59  vachis
+* fixed bugs: unmatched brace (after Ctrl+M) disappear when scrolling
+*                   disable higlighting when a selection is pressent
+*                   memory violation when  Ctrl+M is pressed in an emtpy document
+*                   bug in brace block selection
+*
 * Revision 1.8  2005/03/16 12:11:25  vachis
 * removed inconsistent behavior of normal selection and brace block selection
 * (brace block selection disappered when you returned from application menu
@@ -1284,3 +1290,4 @@ BOOL CCrystalTextView::GetFromClipboard(CString &text)
 	}
 	return bSuccess;
 }
+

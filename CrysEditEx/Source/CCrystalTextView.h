@@ -24,6 +24,9 @@
 * $Author$
 *
 * $Log$
+* Revision 1.16  2006/07/27 15:47:17  sschrade
+* Enhanced word wrapping style. The lines can be either wrapped at the window border or at a fixed amount of columns.
+*
 * Revision 1.15  2005/06/17 21:38:44  owieland
 * Show line numbers in editor (FR 1178333 )
 *
@@ -129,12 +132,12 @@ enum
 	UPDATE_RESET		= 0x1000		//	document was reloaded, update all!
 };
 
-// Word wrapping flags
-enum
+/// Word wrapping flags
+enum TCRYSTALWORDWRAP
 {
-	WORD_WRAP_NONE = 0x0001,
-	WORD_WRAP_WINDOW = 0x0002,
-	WORD_WRAP_FIXEDCOLUMN = 0x0010
+	WORD_WRAP_NONE = 0,
+	WORD_WRAP_WINDOW = 1,
+	WORD_WRAP_FIXEDCOLUMN = 2
 };
 
 
@@ -177,9 +180,8 @@ private:
 	//	Amount of lines/characters that completely fits the client area
 	int m_nScreenLines, m_nScreenChars;
 
-	//BOOL m_bUseFixedColumnWrap;
 	// the current wrapping style
-	DWORD dwWordwrapping;
+	TCRYSTALWORDWRAP m_WordWrapType;
 
 	// number of chars in a line when WORD_WRAP_FIXEDCOLUMN
 	int m_nFixedColumn;
@@ -471,7 +473,7 @@ public:
 		WORD_WRAP_WINDOW,
 		WORD_WRAP_FIXEDCOLUMN
 	*/
-	void SetWordWrapping(DWORD wrap);
+	void SetWordWrapping(TCRYSTALWORDWRAP wrap);
 
 	/**
 	Returns TRUE when word wrap style is WORD_WRAP_FIXEDCOLUMN
@@ -930,7 +932,7 @@ public:
 	BOOL GetDisableDragAndDrop() const;
 	void SetDisableDragAndDrop(BOOL bDDAD);
 	//BEGIN SW
-	DWORD GetWordWrapping() const;
+	TCRYSTALWORDWRAP GetWordWrapping() const;
 	//void SetWordWrapping( BOOL bWordWrap );
 
 	/**

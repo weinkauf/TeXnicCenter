@@ -1,3 +1,6 @@
+2007/01/15 niteria
+ - New property page for the editor - includes now the new feature for word wrapping.
+
 2006/10/17 niteria
  - Recognizes \nobibliography{} now
 

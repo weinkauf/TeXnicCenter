@@ -278,10 +278,7 @@ public:
 	BOOL m_bShowLineNumbers;
 
 	/** The word warp style. */
-	DWORD m_dwWordWrapStyle;
-
-	/** Wethter word wrapping is on or off */
-	BOOL m_bWordWrapEnabled;
+	int m_WordWrapStyle;
 
 	/**  amount of column to wrap words */
 	int m_nFixedColumnWrap;
