@@ -1,5 +1,5 @@
-%% Briefvorlage unter Verwendung der Briefklasse aus dem KOMA-Script %%
-%% Basierend auf einer TeXNicCenter-Vorlage von Mark Müller          %%
+%description: Briefvorlage unter Verwendung der Briefklasse aus dem KOMA-Script
+%% Basierend auf einer TeXnicCenter-Vorlage von Mark Müller
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Wählen Sie die Optionen aus, indem Sie % vor der Option entfernen  
@@ -36,31 +36,6 @@
 
 %\pagestyle{headings}			% Schaltet Kopfzeilen der Folgeseiten an
 
-%% Normales LaTeX oder pdfLaTeX? %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ==> Das neue if-Kommando "\ifpdf" wird an einigen wenigen
-%% ==> Stellen benötigt, um die Kompatibilität zwischen
-%% ==> LaTeX und pdfLaTeX herzustellen.
-\newif\ifpdf
-\ifx\pdfoutput\undefined
-	\pdffalse              	%normales LaTeX wird ausgeführt
-\else
-	\pdfoutput=1           
-	\pdftrue               	%pdfLaTeX wird ausgeführt
-\fi
-
-%% Fonts für pdfLaTeX, falls keine cm-super-Fonts installiert %%%%%%%%
-%\ifpdf
-	%\usepackage{ae}        % Benutzen Sie nur
-	%\usepackage{zefonts}  	% eines dieser Pakete
-%\else
-	%%Normales LaTeX - keine speziellen Fontpackages notwendig
-%\fi
-
-%% optischer Randausgleich, falls pdflatex verwandt %%%%%%%%%%%%%%%%%%%
-\ifpdf
-\usepackage[activate]{pdfcprot}				
-\else											% pdfcprot funktioniert nur mit pdflatex
-\fi
 
 %% Deutsche Anpassungen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{ngerman}
