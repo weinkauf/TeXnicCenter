@@ -142,13 +142,14 @@ BEGIN_MESSAGE_MAP(COutputDoc, CCmdTarget)
 	ON_COMMAND(ID_LATEX_CLEAN, OnLatexClean)
 	ON_UPDATE_COMMAND_UI(ID_LATEX_CLEAN, OnUpdateLatexClean)
 	ON_COMMAND(ID_LATEX_RUNANDVIEW, OnLatexRunAndView)
+	ON_COMMAND(ID_LATEX_FILECOMPILEANDVIEW, OnLatexFileCompileAndView)
 	ON_UPDATE_COMMAND_UI(ID_PREV_BADBOX, OnUpdateNextPrevBadbox)
 	ON_UPDATE_COMMAND_UI(ID_PREV_ERROR, OnUpdateNextPrevError)
 	ON_UPDATE_COMMAND_UI(ID_PREV_WARNING, OnUpdateNextPrevWarning)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_PREVGREPRESULT, OnUpdateGrepResultStep)
 	ON_UPDATE_COMMAND_UI(ID_LATEX_RUNANDVIEW, OnUpdateLatexRun)
 	ON_UPDATE_COMMAND_UI(ID_LATEX_FILECOMPILEANDVIEW, OnUpdateFileCompile)
-	ON_COMMAND(ID_LATEX_FILECOMPILEANDVIEW, OnLatexFileCompileAndView)
+	ON_UPDATE_COMMAND_UI(ID_LATEX_VIEW, OnUpdateLatexView)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -1367,3 +1368,9 @@ bool COutputDoc::TryOpenFile(LPCTSTR lpszFilename, const int nLineNumber)
 	MessageBeep(MB_ICONSTOP);
 	return false;
 }
+
+void COutputDoc::OnUpdateLatexView(CCmdUI* pCmdUI) 
+{
+	pCmdUI->Enable( !m_builder.IsStillRunning() && (GetActiveDocument() != NULL || theApp.GetProject() != NULL) );
+}
+
