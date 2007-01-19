@@ -1,4 +1,5 @@
 2007/01/19 niteria
+- Fixed Bug 1637567: Readonly files will be opened more than once
 - Fixed Bug 1545851: Buggy code (ifpdf...) in templates
 - Fixed Bug 1639785: Command "View Output" is always active
 - Fixed Bug 1638562: Profile wizard does not recognize installed Miktex 2.5

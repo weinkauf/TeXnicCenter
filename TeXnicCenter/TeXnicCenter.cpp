@@ -772,11 +772,6 @@ CDocument *CTeXnicCenterApp::GetOpenLatexDocument(LPCTSTR lpszFileName, BOOL bRe
 		pDoc = (CLatexDoc*)pDocTemplate->GetNextDoc( pos );
 		if( pDoc && pDoc->GetPathName().CompareNoCase(strDocPath)==0 && pDoc->IsKindOf(RUNTIME_CLASS(CLatexDoc)) )
 		{
-			// check if the document has the required read/write mode
-			if ((bReadOnly && !((CLatexDoc*)pDoc)->m_pTextBuffer->GetReadOnly()) || 
-				  (!bReadOnly && ((CLatexDoc*)pDoc)->m_pTextBuffer->GetReadOnly()))
-				continue;
-
 			bFound = TRUE;
 			break;
 		}
@@ -816,11 +811,6 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOn
 		pDoc = (CLatexDoc*)pDocTemplate->GetNextDoc( pos );
 		if( pDoc && pDoc->GetPathName().CompareNoCase(strDocPath)==0 && pDoc->IsKindOf(RUNTIME_CLASS(CLatexDoc)) )
 		{
-			// check if the document has the required read/write mode
-			if ((bReadOnly && !((CLatexDoc*)pDoc)->m_pTextBuffer->GetReadOnly()) || 
-				  (!bReadOnly && ((CLatexDoc*)pDoc)->m_pTextBuffer->GetReadOnly()))
-				continue;
-
 			bFound = TRUE;
 			break;
 		}
@@ -859,7 +849,7 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOn
 CDocument* CTeXnicCenterApp::OpenDocumentFile(LPCTSTR lpszFileName)
 {
 	return OpenLatexDocument(lpszFileName, FALSE, -1, FALSE, true);
-};
+}
 
 
 CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/,
@@ -886,11 +876,6 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 		pDoc = pDocTemplate->GetNextDoc( pos );
 		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath)==0 && pDoc->IsKindOf(RUNTIME_CLASS(CLatexDoc)))
 		{
-			// check if the document has the required read/write mode
-			if ((bReadOnly && !((CLatexDoc*)pDoc)->m_pTextBuffer->GetReadOnly()) || 
-				  (!bReadOnly && ((CLatexDoc*)pDoc)->m_pTextBuffer->GetReadOnly()))
-				continue;
-
 			bFound = TRUE;
 			break;
 		}
@@ -1163,6 +1148,7 @@ void CTeXnicCenterApp::OnFileOpen()
 
 	AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
 	// open file
+	//NOTE: dlg.GetReadOnlyPref() always return false on my WinXP SP2, Tino, Jan 2007
 	OpenLatexDocument(dlg.GetPathName(), dlg.GetReadOnlyPref(), -1, false, true);
 }
 
