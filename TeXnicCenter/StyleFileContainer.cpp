@@ -249,19 +249,24 @@ void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CStr
 	// adding all labels from the latex document
 	CString str;
 	CLatexProject* proj = theApp.GetProject();
-	int size = proj->m_aStructureItems.GetSize();
-	int SearchLength = Partial.GetLength();
-	CStyleFile* dummy = new CStyleFile(CString("Labels"), CString("All Labels from document."));
-	for(int i = 0; i < size; i++) {
-		str = proj->m_aStructureItems.ElementAt(i).m_strLabel;
-		if (!str.IsEmpty()) {
-			if ((str.GetLength() >= SearchLength) && (str.Left(SearchLength).CompareNoCase(Partial) == 0))
+	if (proj)
+	{
+		int size = proj->m_aStructureItems.GetSize();
+		int SearchLength = Partial.GetLength();
+		CStyleFile* dummy = new CStyleFile(CString("Labels"), CString("All Labels from document."));
+		for(int i = 0; i < size; i++)
+		{
+			str = proj->m_aStructureItems.ElementAt(i).m_strLabel;
+			if (!str.IsEmpty())
 			{
-				//Result[str] = CLaTeXCommand(NULL, str, 0);
-				Result.SetAt(str, new CLaTeXCommand(dummy, str, 0));
+				if ((str.GetLength() >= SearchLength) && (str.Left(SearchLength).CompareNoCase(Partial) == 0))
+				{
+					//Result[str] = CLaTeXCommand(NULL, str, 0);
+					Result.SetAt(str, new CLaTeXCommand(dummy, str, 0));
+				}
 			}
 		}
-	} 
+	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//TODO: Sort result
