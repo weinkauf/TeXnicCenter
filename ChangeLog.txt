@@ -1,4 +1,6 @@
 2007/01/19 niteria
+- Fixed Bug 1545851: Buggy code (ifpdf...) in templates
+- Fixed Bug 1639785: Command "View Output" is always active
 - Fixed Bug 1638562: Profile wizard does not recognize installed Miktex 2.5
 - Fixed Bug 1584370: "Stop build" icon cannot be reset (1beta7.01)
 
