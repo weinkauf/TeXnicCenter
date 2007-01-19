@@ -86,6 +86,9 @@ protected:
 	*/
 	CString FindApplicationForDocType(LPCTSTR lpszExt);
 
+	///Returns a string from the registry.
+	CString ReadStringFromRegistry(const bool bAdmin, CString Path, CString Key);
+
 	/**
 	*/
 	void SetActivePage(int nPage);

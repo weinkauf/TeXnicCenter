@@ -2950,10 +2950,11 @@ BEGIN
         MENUITEM "Ausgabe &erstellen",          ID_LATEX_RUN
         MENUITEM "&BibTeX",                     ID_LATEX_BIBTEX
         MENUITEM "&MakeIndex",                  ID_LATEX_MAKEINDEX
-        MENUITEM "Projekt auf&räumen",          ID_LATEX_CLEAN
+        MENUITEM "Er&stellvorgang abbrechen",   ID_LATEX_STOP_BUILD
         MENUITEM SEPARATOR
         MENUITEM "Ausgabe be&trachten",         ID_LATEX_VIEW
         MENUITEM "Ausgabe erstellen &und betrachten", ID_LATEX_RUNANDVIEW
+        MENUITEM "Projekt auf&räumen",          ID_LATEX_CLEAN
         MENUITEM SEPARATOR
         MENUITEM "Nächster &Fehler",            ID_NEXT_ERROR
         MENUITEM "&Vorheriger Fehler",          ID_PREV_ERROR
@@ -7037,10 +7038,11 @@ BEGIN
         MENUITEM "Build &Output",               ID_LATEX_RUN
         MENUITEM "&BibTeX",                     ID_LATEX_BIBTEX
         MENUITEM "&MakeIndex",                  ID_LATEX_MAKEINDEX
-        MENUITEM "&Clean Project",              ID_LATEX_CLEAN
+        MENUITEM "S&top Build",                 ID_LATEX_STOP_BUILD
         MENUITEM SEPARATOR
         MENUITEM "&View Output",                ID_LATEX_VIEW
         MENUITEM "Build &and View Output",      ID_LATEX_RUNANDVIEW
+        MENUITEM "&Clean Project",              ID_LATEX_CLEAN
         MENUITEM SEPARATOR
         MENUITEM "Next &Error",                 ID_NEXT_ERROR
         MENUITEM "&Previous Error",             ID_PREV_ERROR
@@ -8667,7 +8669,7 @@ BEGIN
     STE_OUTPUTWIZARD_NOLATEX 
                             "The application 'LaTeX' has not been found in the directory of your TeX-distribution.\n\nPlease enter the directory where the executable files (tex.exe, latex.exe, etc.) are located, as your distribution's directory."
     STE_OUTPUTWIZARD_YAPCONFIG 
-                            "The DVI-viewer YAP hast been found on your system. The combination of YAP and TeXnicCenter allows you to jump to the source code, belonging to a paragraph in the DVI-file, you doubleclicked on.\n\nCurrently YAP is configured for the communication with another editor. Should this configuration be overwritten, so that YAP and TeXnicCenter will work together?"
+                            "The DVI-viewer YAP hast been found on your system. The combination of YAP and TeXnicCenter allows you to jump to the source code belonging to a paragraph in the DVI-file you double-clicked on.\n\nCurrently YAP is configured for the communication with another editor. Should this configuration be overwritten, so that YAP and TeXnicCenter will work together?"
     STE_OUTPUTWIZARD_DVITYPE "LaTeX => DVI"
     STE_OUTPUTWIZARD_PSTYPE "LaTeX => PS"
     STE_OUTPUTWIZARD_PDFTYPE "LaTeX => PDF"

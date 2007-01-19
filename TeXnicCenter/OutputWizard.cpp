@@ -258,40 +258,52 @@ void COutputWizard::SetActivePage(int nPage)
 }
 
 
+CString COutputWizard::ReadStringFromRegistry(const bool bAdmin, CString Path, CString Key)
+{
+	CString retval;
+
+	CBCGRegistry Reg(bAdmin, true);
+	if (Reg.Open(Path))
+	{
+		if (!Reg.Read(Key, retval))
+		{
+			retval.Empty(); //Just to be sure
+		}
+
+		Reg.Close();
+	}
+
+	return retval;
+}
+
+
 void COutputWizard::LookForMikTex()
 {
-	CBCGRegistry userReg(false, true);
-	CBCGRegistry adminReg(true, true);
-	CString	strPath(_T(""));
-
 	//Get installation path of MiKTeX
 	//Where did miktex wrote its stuff?
 	// ==> mikTeX Install Options: 'install only for me' and 'install for all'
 	// User HKCU is preferred; so first try the HKLM and then let HKCU overwrite it.
-	if (adminReg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX")))
+	//
+	// We prefer mikTeX 2.5 over mikTeX 2.4
+	CStringArray mikPaths;
+
+	//miktex 2.5 - User
+	mikPaths.Add(CPathTool::Cat(ReadStringFromRegistry(false, _T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.5\\Core"), _T("Install")), _T("miktex\\bin")));
+	//miktex 2.5 - Admin
+	mikPaths.Add(CPathTool::Cat(ReadStringFromRegistry(true, _T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.5\\Core"), _T("Install")), _T("miktex\\bin")));
+	//miktex 2.4 - User
+	mikPaths.Add(CPathTool::Cat(ReadStringFromRegistry(false, _T("SOFTWARE\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX"), _T("Install Root")), _T("miktex\\bin")));
+	//miktex 2.4 - Admin
+	mikPaths.Add(CPathTool::Cat(ReadStringFromRegistry(true, _T("SOFTWARE\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX"), _T("Install Root")), _T("miktex\\bin")));
+
+	CString	strPath(_T(""));
+	for(int i=0;i<mikPaths.GetSize();i++)
 	{
-		CString adminPath;
-		if (adminReg.Read(_T("Install Root"), adminPath))
+		if ( (CPathTool::Exists(mikPaths[i])) && (CPathTool::Exists(CPathTool::Cat(mikPaths[i], _T("latex.exe")))) )
 		{
-			adminPath = CPathTool::Cat(adminPath, _T("MiKTeX\\bin"));
-			if (CPathTool::Exists(adminPath))
-				strPath = adminPath;
+			strPath = mikPaths[i];
+			break;
 		}
-
-		adminReg.Close();
-	}
-
-	if (userReg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX")))
-	{
-		CString userPath;
-		if (userReg.Read(_T("Install Root"), userPath))
-		{
-			userPath = CPathTool::Cat(userPath, _T("MiKTeX\\bin"));
-			if (CPathTool::Exists(userPath))
-				strPath = userPath;
-		}
-
-		userReg.Close();
 	}
 
 	//Did we find a path?
@@ -356,32 +368,37 @@ void COutputWizard::LookForDviViewer()
 	m_wndPageDviViewer.m_strSingleInstanceOption = _T("-1");
 	m_wndPageDviViewer.m_strForwardSearchOption = _T("-s %l\"%Wc\"");
 
-	// Let's do the YAP inverse search configuration
-	CBCGRegistry	reg(false, false);
+	//Let's do the YAP inverse search configuration
+	/* NOTE: YAP's configuration is a little bit strange here.
+		The effective setting is in the registry as we use it below.
+		This denotes the active editor. However, this string is not
+		shown in the UI of YAP. There we see the configuration of "editors.ini"
+		as it can be found in "D:\Dokumente und Einstellungen\All Users\Anwendungsdaten\MiKTeX\2.5\miktex\config" or similar.
+		If the user opens YAP's options dialog then she will not see TeXnicCenter - though they work together.
 
-	if (!reg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\Yap\\Settings")))
+		Might be that it would be nicer to add an entry to editors.ini.
+	*/
+	CBCGRegistry reg(false, false);
+	if (reg.Open(_T("Software\\MiKTeX.org\\MiKTeX\\2.5\\Yap\\Settings")) //miktex 2.5
+		|| reg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\Yap\\Settings")) ) //miktex 2.4 and earlier
 	{
-		LookForPs();
-		return;
-	}
-
-	CString	strEditor;
-	reg.Read(_T("Editor"), strEditor);
-	strEditor.MakeUpper();
-	if (!strEditor.IsEmpty() && strEditor.Find(_T("TEXCNTR.EXE")) < 0)
-	{
-		if (AfxMessageBox(STE_OUTPUTWIZARD_YAPCONFIG, MB_ICONQUESTION | MB_YESNO) == IDNO)
+		CString	strEditor;
+		reg.Read(_T("Editor"), strEditor);
+		strEditor.MakeUpper();
+		if (
+			strEditor.IsEmpty() //No editor defined
+			|| ( (strEditor.Find(_T("TEXCNTR.EXE")) < 0) //if Editor is not TXC and...
+				&& (AfxMessageBox(STE_OUTPUTWIZARD_YAPCONFIG, MB_ICONQUESTION | MB_YESNO) == IDYES)) //...the user wants us to overwrite
+			)
 		{
-			LookForPs();
-			return;
+			GetModuleFileName(NULL, strEditor.GetBuffer(_MAX_PATH), _MAX_PATH);
+			strEditor.ReleaseBuffer();
+			strEditor+= _T(" /ddecmd \"[goto('%f', '%l')]\"");
+			reg.Write(_T("Editor"), strEditor);
 		}
-	}
 
-	GetModuleFileName(NULL, strEditor.GetBuffer(_MAX_PATH), _MAX_PATH);
-	strEditor.ReleaseBuffer();
-	strEditor+= _T(" /ddecmd \"[goto('%f', '%l')]\"");
-	reg.Write(_T("Editor"), strEditor);
-	reg.Close();
+		reg.Close();
+	}
 
 	LookForPs();
 }
