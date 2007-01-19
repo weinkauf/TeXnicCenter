@@ -131,7 +131,7 @@ public:
 	CLatexEdit *GetActiveEditView();
 
 	/** Returns a pointer to the LaTeX-document with the specified path and read-only
-	attribute. If the document is not open it is NOT opened and NULL is returned.
+	attribute. If the document is not open, it is NOT opened and NULL is returned.
 
 	@param lpszFileName
 		Path of the file to find.
@@ -176,7 +176,7 @@ public:
 
 	/**
 	Opens the specified File at the specified line. If the file is already
-	open, its main view is activated an the cursor is set to the specified
+	open, its main view is activated and the cursor is set to the specified
 	line.
 
 	@param lpszFileName 
