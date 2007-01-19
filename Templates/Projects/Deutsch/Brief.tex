@@ -1,4 +1,7 @@
 %description: Standardbrief in Deutsch
+%% Basierend auf einer TeXnicCenter-Vorlage von Tino Weinkauf.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% HEADER
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -8,40 +11,27 @@
 %   addressstd / addresshigh
 
 
-%% Normales LaTeX oder pdfLaTeX? %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ==> Das neue if-Kommando "\ifpdf" wird an einigen wenigen
-%% ==> Stellen benötigt, um die Kompatibilität zwischen
-%% ==> LaTeX und pdfLaTeX herzustellen.
-\newif\ifpdf
-\ifx\pdfoutput\undefined
-	\pdffalse              %%normales LaTeX wird ausgeführt
-\else
-	\pdfoutput=1           
-	\pdftrue               %%pdfLaTeX wird ausgeführt
-\fi
-
-
-%% Fonts für pdfLaTeX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ==> Nur notwendig, falls keine cm-super-Fonts installiert
-\ifpdf
-	%\usepackage{ae}       %%Benutzen Sie nur eines dieser Pakete:
-	%\usepackage{zefonts}  %%je nachdem, welches Sie besitzen.
-\else
-	%%Normales LaTeX - keine speziellen Fontpackages notwendig
-\fi
-
-
 %% Deutsche Anpassungen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[latin1]{inputenc}
 
-%% Packages für Grafiken %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\ifpdf %%Einbindung von Grafiken mittels \includegraphics{datei}
-	\usepackage[pdftex]{graphicx} %%Grafiken in pdfLaTeX
-\else
-	\usepackage[dvips]{graphicx} %%Grafiken und normales LaTeX
-\fi
+
+%% Packages für Grafiken & Abbildungen %%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx} %%Zum Laden von Grafiken
+%\usepackage{subfig} %%Teilabbildungen in einer Abbildung
+%\usepackage{pst-all} %%PSTricks - nicht verwendbar mit pdfLaTeX
+
+%% Beachten Sie:
+%% Die Einbindung einer Grafik erfolgt mit \includegraphics{Dateiname}
+%% bzw. über den Dialog im Einfügen-Menü.
+%% 
+%% Im Modus "LaTeX => PDF" können Sie u.a. folgende Grafikformate verwenden:
+%%   .jpg  .png  .pdf  .mps
+%% 
+%% In den Modi "LaTeX => DVI", "LaTeX => PS" und "LaTeX => PS => PDF"
+%% können Sie u.a. folgende Grafikformate verwenden:
+%%   .eps  .ps  .bmp  .pict  .pntg
 
 
 %% Kommandos zur Anpassung %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -96,20 +86,6 @@ Straße Nr. 1\\
 %% DOCUMENT - BRIEF(E)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
-
-%% Dateiendungen für Grafiken %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ==> Sie können hiermit die Dateiendung einer Grafik weglassen.
-%% ==> Aus "\includegraphics{titel.eps}" wird "\includegraphics{titel}".
-%% ==> Wenn Sie nunmehr 2 inhaltsgleiche Grafiken "titel.eps" und
-%% ==> "titel.pdf" erstellen, wird jeweils nur die Grafik eingebunden,
-%% ==> die von ihrem Compiler verarbeitet werden kann.
-%% ==> pdfLaTeX benutzt "titel.pdf". LaTeX benutzt "titel.eps".
-\ifpdf
-	\DeclareGraphicsExtensions{.pdf,.jpg,.png}
-\else
-	\DeclareGraphicsExtensions{.eps}
-\fi
-
 
 %% Beginn des Briefes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{letter}{Vorname Name\\

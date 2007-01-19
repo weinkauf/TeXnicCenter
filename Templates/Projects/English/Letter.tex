@@ -10,28 +10,6 @@
 %		a4paper / letter
 %   addressstd / addresshigh
 
-%% Normal LaTeX or pdfLaTeX? %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ==> The new if-Command "\ifpdf" will be used at some
-%% ==> places to ensure the compatibility between
-%% ==> LaTeX and pdfLaTeX.
-\newif\ifpdf
-\ifx\pdfoutput\undefined
-	\pdffalse              %%normal LaTeX is executed
-\else
-	\pdfoutput=1           
-	\pdftrue               %%pdfLaTeX is executed
-\fi
-
-
-%% Fonts for pdfLaTeX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ==> Only needed, if cm-super-fonts are not installed
-\ifpdf
-	%\usepackage{ae}       %%Use only just one of these packages:
-	%\usepackage{zefonts}  %%depends on your installation.
-\else
-	%%Normal LaTeX - no special packages for fonts required
-\fi
-
 
 %% Language %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\usepackage[francais]{babel}
@@ -39,12 +17,21 @@
 \usepackage[latin1]{inputenc}
 
 
-%% Packages for Graphic Inclusion %%%%%%%%%%%%%%%%%%%%%%%%%%%
-\ifpdf %%Inclusion of graphics via \includegraphics{file}
-	\usepackage[pdftex]{graphicx} %%graphics in pdfLaTeX
-\else
-	\usepackage[dvips]{graphicx} %%graphics and normal LaTeX
-\fi
+%% Packages for Graphics & Figures %%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx} %%For loading graphic files
+%\usepackage{subfig} %%Subfigures inside a figure
+%\usepackage{pst-all} %%PSTricks - not useable with pdfLaTeX
+
+%% Please note:
+%% Images can be included using \includegraphics{Dateiname}
+%% resp. using the dialog in the Insert menu.
+%% 
+%% The mode "LaTeX => PDF" allows the following formats:
+%%   .jpg  .png  .pdf  .mps
+%% 
+%% The modes "LaTeX => DVI", "LaTeX => PS" und "LaTeX => PS => PDF"
+%% allow the following formats:
+%%   .eps  .ps  .bmp  .pict  .pntg
 
 
 %% Commands for changing the Standardtexts %%%%%%%%%%%%%%%%%%
@@ -97,20 +84,6 @@ Street No 1\\
 %% DOCUMENT - LETTER(S)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
-
-%% File Extensions of Graphics %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ==> This enables you to omit the file extension of a graphic.
-%% ==> "\includegraphics{title.eps}" becomes "\includegraphics{title}".
-%% ==> If you create 2 graphics with same content (but different file types)
-%% ==> "title.eps" and "title.pdf", only the file processable by
-%% ==> your compiler will be used.
-%% ==> pdfLaTeX uses "title.pdf". LaTeX uses "title.eps".
-\ifpdf
-	\DeclareGraphicsExtensions{.pdf,.jpg,.png}
-\else
-	\DeclareGraphicsExtensions{.eps}
-\fi
-
 
 %% Start of the Letter %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{letter}{Name Name\\ %%Address of the recipient
