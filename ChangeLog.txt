@@ -1,4 +1,6 @@
 2007/01/19 niteria
+- Fixed Bug 1443501: Content of TEX file is lost and replaced by that of TCP file
+- Fixed Bug 1448046: overwrites .tex file
 - Fixed Bug 1637567: Readonly files will be opened more than once
 - Fixed Bug 1545851: Buggy code (ifpdf...) in templates
 - Fixed Bug 1639785: Command "View Output" is always active
@@ -7,6 +9,7 @@
 
 2007/01/15 niteria
  - New property page for the editor - includes now the new feature for word wrapping.
+   The word wrapping itself has been implemented by 
 
 2006/10/17 niteria
  - Recognizes \nobibliography{} now

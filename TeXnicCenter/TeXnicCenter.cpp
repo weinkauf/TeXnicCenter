@@ -437,6 +437,9 @@ BOOL CTeXnicCenterApp::InitInstance()
 	else if (!cmdInfo.m_strDdeCommand.IsEmpty())
 	{
 		// forward command to DDE-processor
+		//TODO: Why do we not directly call OnDDECommand() here?
+		// We know here that this instance will process the stuff.
+		// Sending it via DDE causes a long pause. This is a real problem when opening TXC via YAP.
 		CDdeCommand::SendCommand(_T("TEXCNTR"), cmdInfo.m_strDdeCommand, _T("System"));
 		//OnDDECommand(const_cast<LPTSTR>((LPCTSTR)cmdInfo.m_strDdeCommand));
 	}
@@ -856,6 +859,8 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 											   int nLineNumber /*= -1*/, BOOL bError /*= FALSE*/,
 											   bool bAskForProjectLoad /*= true*/)
 {
+	TRACE("Opening LaTeX Doc: %s\n", lpszFileName);
+
 	// get the full path name of the file
 	TCHAR		lpszFilePath[_MAX_PATH];
 	LPSTR		lpszDummy;
@@ -915,8 +920,12 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 
 					if (OpenProject(strProjectPath))
 					{
-						//... and the specified file (in most cases the main file)
-						pDoc = OpenLatexDocument(lpszFileName, bReadOnly, nLineNumber, bError, false);
+						//... and the specified file (in most cases the main file), if not alreay there
+						pDoc = GetOpenLatexDocument(lpszFileName, bReadOnly);
+						if (!pDoc)
+						{
+							pDoc = OpenLatexDocument(lpszFileName, bReadOnly, nLineNumber, bError, false);
+						}
 						bLoaded = true;
 					}
 				}
@@ -1039,6 +1048,8 @@ void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt()
 
 BOOL CTeXnicCenterApp::OpenProject( LPCTSTR lpszPath )
 {
+	TRACE("Opening LaTeX Project: %s\n", lpszPath);
+
 	//Close the current project
 	AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_PROJECT_CLOSE);
 
