@@ -282,7 +282,7 @@ void COutputWizard::LookForMikTex()
 	//Get installation path of MiKTeX
 	//Where did miktex wrote its stuff?
 	// ==> mikTeX Install Options: 'install only for me' and 'install for all'
-	// User HKCU is preferred; so first try the HKLM and then let HKCU overwrite it.
+	// User HKCU is preferred
 	//
 	// We prefer mikTeX 2.5 over mikTeX 2.4
 	CStringArray mikPaths;
