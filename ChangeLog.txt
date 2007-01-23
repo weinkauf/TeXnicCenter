@@ -1,3 +1,6 @@
+2007/01/23 niteria
+- Removed option to disable word wrap due to crashes caused by the spell checker.
+
 2007/01/19 niteria
 - Fixed Bug 1443501: Content of TEX file is lost and replaced by that of TCP file
 - Fixed Bug 1448046: overwrites .tex file
@@ -9,7 +12,7 @@
 
 2007/01/15 niteria
  - New property page for the editor - includes now the new feature for word wrapping.
-   The word wrapping itself has been implemented by 
+   The word wrapping itself has been implemented by Stephan Schrader
 
 2006/10/17 niteria
  - Recognizes \nobibliography{} now
