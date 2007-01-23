@@ -22,7 +22,7 @@ COptionPageEditor::COptionPageEditor() : CPropertyPage(COptionPageEditor::IDD)
 	//{{AFX_DATA_INIT(COptionPageEditor)
 	m_nTabWidth = g_configuration.m_nTabWidth;
 	m_nFixedColumn = g_configuration.m_nFixedColumnWrap;
-	m_nWordWrapStyle = g_configuration.m_WordWrapStyle;
+	m_nWordWrapStyle = g_configuration.m_WordWrapStyle - 1;
 	m_bShowLineNumbers = g_configuration.m_bShowLineNumbers;
 	//}}AFX_DATA_INIT
 }
@@ -59,10 +59,22 @@ void COptionPageEditor::OnOK()
 {
 	UpdateData();
 
+	/* PLEASE NOTE:
+
+		Disabling the line wrapping is currently not possible since the edit control
+		crashes due to a problem with styling. This problem occurs only in combination
+		with online spell checking.
+
+		If this problem has been fixed, please edit
+
+			OptionPageEditor.cpp (m_nWordWrapStyle +/- 1)
+				and its dialog resource
+	*/
+
 	// Store settings to configuration
 	g_configuration.m_nTabWidth = m_nTabWidth;
 	g_configuration.m_nFixedColumnWrap = m_nFixedColumn;
-	g_configuration.m_WordWrapStyle = (TCRYSTALWORDWRAP)m_nWordWrapStyle;
+	g_configuration.m_WordWrapStyle = (TCRYSTALWORDWRAP)m_nWordWrapStyle + 1;
 	g_configuration.m_bShowLineNumbers = m_bShowLineNumbers;
 
 	// this message will be send to all windows of the application
@@ -75,7 +87,7 @@ void COptionPageEditor::UpdateControlStates()
 {
 	UpdateData();
 
-	m_wndFixedColumn.EnableWindow(m_nWordWrapStyle == WORD_WRAP_FIXEDCOLUMN);
+	m_wndFixedColumn.EnableWindow(m_nWordWrapStyle + 1 == WORD_WRAP_FIXEDCOLUMN);
 }
 
 

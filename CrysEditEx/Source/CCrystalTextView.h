@@ -24,6 +24,10 @@
 * $Author$
 *
 * $Log$
+* Revision 1.17  2007/01/15 18:50:40  niteria
+* New property page for the editor - includes now the new feature for word wrapping.
+* Renamed internal class and file name of property page for text format.
+*
 * Revision 1.16  2006/07/27 15:47:17  sschrade
 * Enhanced word wrapping style. The lines can be either wrapped at the window border or at a fixed amount of columns.
 *
@@ -132,7 +136,20 @@ enum
 	UPDATE_RESET		= 0x1000		//	document was reloaded, update all!
 };
 
-/// Word wrapping flags
+
+/** Word wrapping flags
+
+	PLEASE NOTE:
+
+	Disabling the line wrapping is currently not possible since the edit control
+	crashes due to a problem with styling. This problem occurs only in combination
+	with online spell checking.
+
+	If this problem has been fixed, please edit
+
+		OptionPageEditor.cpp (m_nWordWrapStyle +/- 1)
+			and its dialog resource
+*/
 enum TCRYSTALWORDWRAP
 {
 	WORD_WRAP_NONE = 0,
