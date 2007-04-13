@@ -268,6 +268,9 @@ void CTemplateDialog::FillTemplateList()
 			papTemplateItems->GetAt(i)->GetImageIndex(),
 			(LPARAM)papTemplateItems->GetAt(i));
 	}
+
+	//Select the first entry in that template list
+	m_wndTemplateList.SetItemState(0, LVNI_SELECTED, LVNI_SELECTED);
 }
 
 
@@ -354,7 +357,7 @@ BOOL CTemplateDialog::OnInitDialog()
 	CollectTemplates();
 	FillTemplateList();
 	UpdateControlStates();
-	
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben
 }
