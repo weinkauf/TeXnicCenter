@@ -191,7 +191,7 @@ UINT COutputBuilder::OnTerminate(UINT unExitCode)
 	}
 
 	//Call callback message
-	MsgAfterTermination.SendCallback();
+	MsgAfterTermination.SendCallback(unExitCode);
 
 	return retval;
 }
