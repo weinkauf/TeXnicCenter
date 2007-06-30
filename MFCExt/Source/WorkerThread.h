@@ -55,6 +55,9 @@ public:
 			,wParam(0)
 			,lParam(0)
 			,bPostMessage(false)
+			,bAutoReset(false)
+			,bCheckCode(false)
+			,nCheckCode(0)
 		{}
 
 		virtual ~CallbackMessage(){}
@@ -70,14 +73,25 @@ public:
 
 		///Whether the message shall be posted or sent
 		bool bPostMessage;
+		///Auto-reset after sending the message, i.e., invalidate the callback
+		bool bAutoReset;
+		///Whether the given code should be checked
+		bool bCheckCode;
+		///Desired Code
+		int nCheckCode;
 
-		void Set(bool bPost, HWND arghWnd, UINT argmessage, WPARAM argwParam = 0, LPARAM arglParam = 0)
+
+		void Set(bool bPost, HWND arghWnd, UINT argmessage, WPARAM argwParam = 0, LPARAM arglParam = 0,
+					bool argbAutoReset = false, bool argbCheckCode = false, int argnCheckCode = 0)
 		{
 			bPostMessage = bPost;
 			hWnd = arghWnd;
 			message = argmessage;
 			wParam = argwParam;
 			lParam = arglParam;
+			bAutoReset = argbAutoReset;
+			bCheckCode = argbCheckCode;
+			nCheckCode = argnCheckCode;
 		}
 
 		void UnSet()
@@ -85,19 +99,27 @@ public:
 			hWnd = NULL;
 		}
 
-		void SendCallback()
+		void SendCallback(int argCode)
 		{
+			//Are we valid? Is the callbeck set?
 			if (!hWnd) return;
 			if (!::IsWindow(hWnd)) return;
 
-			if (bPostMessage)
+			//Correct code?
+			if (!bCheckCode || nCheckCode == argCode)
 			{
-				::PostMessage(hWnd, message, wParam, lParam);
+				if (bPostMessage)
+				{
+					::PostMessage(hWnd, message, wParam, lParam);
+				}
+				else
+				{
+					::SendMessage(hWnd, message, wParam, lParam);
+				}
 			}
-			else
-			{
-				::SendMessage(hWnd, message, wParam, lParam);
-			}
+
+			//Reset?
+			if (bAutoReset) UnSet();
 		}
 	};
 

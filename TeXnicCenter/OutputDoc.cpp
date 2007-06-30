@@ -579,9 +579,6 @@ CDocument* COutputDoc::GetActiveDocument() const
 
 void COutputDoc::OnLatexView() 
 {
-	//Reset the message callback of the builder
-	m_builder.MsgAfterTermination.UnSet();
-
 	// check if there is an open document
 	CLatexEdit	*pView = theApp.GetActiveEditView();
 	CLatexDoc		*pDoc = NULL;
@@ -1266,10 +1263,6 @@ void COutputDoc::OnUpdateLatexStopBuild(CCmdUI *pCmdUI)
 
 void COutputDoc::OnLatexStopBuild()
 {
-	//Reset the message callback of the builder
-	// - so we won't get called after termination.
-	m_builder.MsgAfterTermination.UnSet();
-
 	//Cancel the build
 	m_builder.CancelExecution();
 }
@@ -1348,13 +1341,13 @@ void COutputDoc::OnUpdateLatexClean(CCmdUI* pCmdUI)
 
 void COutputDoc::OnLatexRunAndView() 
 {
-	m_builder.MsgAfterTermination.Set(false, AfxGetMainWnd()->m_hWnd, WM_COMMAND, ID_LATEX_VIEW);
+	m_builder.MsgAfterTermination.Set(false, AfxGetMainWnd()->m_hWnd, WM_COMMAND, ID_LATEX_VIEW, 0, true, true, 0);
 	OnLatexRun();
 }
 
 void COutputDoc::OnLatexFileCompileAndView() 
 {
-	m_builder.MsgAfterTermination.Set(false, AfxGetMainWnd()->m_hWnd, WM_COMMAND, ID_LATEX_VIEW);
+	m_builder.MsgAfterTermination.Set(false, AfxGetMainWnd()->m_hWnd, WM_COMMAND, ID_LATEX_VIEW, 0, true, true, 0);
 	OnFileCompile();
 }
 
@@ -1371,6 +1364,7 @@ bool COutputDoc::TryOpenFile(LPCTSTR lpszFilename, const int nLineNumber)
 
 void COutputDoc::OnUpdateLatexView(CCmdUI* pCmdUI) 
 {
-	pCmdUI->Enable( !m_builder.IsStillRunning() && (GetActiveDocument() != NULL || theApp.GetProject() != NULL) );
+	pCmdUI->Enable( /* !m_builder.IsStillRunning() && */ //Don't do this, since this will de-active the CompileAndView Commands
+					(GetActiveDocument() != NULL || theApp.GetProject() != NULL) );
 }
 
