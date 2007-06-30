@@ -284,9 +284,25 @@ void COutputWizard::LookForMikTex()
 	// ==> mikTeX Install Options: 'install only for me' and 'install for all'
 	// User HKCU is preferred
 	//
-	// We prefer mikTeX 2.5 over mikTeX 2.4
+	// We prefer mikTeX 2.5 over mikTeX 2.4, i.e., newer versions are prefered
+	//
+	//	==> Tested with miktex up to version 2.6
+	//
+
 	CStringArray mikPaths;
 
+	//miktex 2.8 - User
+	mikPaths.Add(CPathTool::Cat(ReadStringFromRegistry(false, _T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.8\\Core"), _T("Install")), _T("miktex\\bin")));
+	//miktex 2.8 - Admin
+	mikPaths.Add(CPathTool::Cat(ReadStringFromRegistry(true, _T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.8\\Core"), _T("Install")), _T("miktex\\bin")));
+	//miktex 2.7 - User
+	mikPaths.Add(CPathTool::Cat(ReadStringFromRegistry(false, _T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.7\\Core"), _T("Install")), _T("miktex\\bin")));
+	//miktex 2.7 - Admin
+	mikPaths.Add(CPathTool::Cat(ReadStringFromRegistry(true, _T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.7\\Core"), _T("Install")), _T("miktex\\bin")));
+	//miktex 2.6 - User
+	mikPaths.Add(CPathTool::Cat(ReadStringFromRegistry(false, _T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.6\\Core"), _T("Install")), _T("miktex\\bin")));
+	//miktex 2.6 - Admin
+	mikPaths.Add(CPathTool::Cat(ReadStringFromRegistry(true, _T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.6\\Core"), _T("Install")), _T("miktex\\bin")));
 	//miktex 2.5 - User
 	mikPaths.Add(CPathTool::Cat(ReadStringFromRegistry(false, _T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.5\\Core"), _T("Install")), _T("miktex\\bin")));
 	//miktex 2.5 - Admin
@@ -377,9 +393,15 @@ void COutputWizard::LookForDviViewer()
 		If the user opens YAP's options dialog then she will not see TeXnicCenter - though they work together.
 
 		Might be that it would be nicer to add an entry to editors.ini.
+
+		==> Tested with miktex up to version 2.6
 	*/
 	CBCGRegistry reg(false, false);
-	if (reg.Open(_T("Software\\MiKTeX.org\\MiKTeX\\2.5\\Yap\\Settings")) //miktex 2.5
+	if (
+		   reg.Open(_T("Software\\MiKTeX.org\\MiKTeX\\2.8\\Yap\\Settings")) //miktex 2.8
+		|| reg.Open(_T("Software\\MiKTeX.org\\MiKTeX\\2.7\\Yap\\Settings")) //miktex 2.7
+		|| reg.Open(_T("Software\\MiKTeX.org\\MiKTeX\\2.6\\Yap\\Settings")) //miktex 2.6
+		|| reg.Open(_T("Software\\MiKTeX.org\\MiKTeX\\2.5\\Yap\\Settings")) //miktex 2.5
 		|| reg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\Yap\\Settings")) ) //miktex 2.4 and earlier
 	{
 		CString	strEditor;
