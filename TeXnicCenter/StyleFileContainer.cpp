@@ -492,7 +492,6 @@ BOOL CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
 		//Report Error, if MsXML did not respond
 		if (!bReportedError)
 		{
-			_asm int 3; // force debug
 			if (pE->GetDescription() == _T(""))
 			{
 				//A generic COM error.
