@@ -187,7 +187,7 @@ void CSpellCheckDlg::DoNextWord()
 		LPCSTR szLine = m_pTextBuffer->GetLineChars( m_nCurLine );
 		while ( m_nCurStart != -1 )
 		{
-			if ( (m_nCurStart - m_nCurEnd) <  MAXWORDLEN )
+			if ( abs(m_nCurStart - m_nCurEnd) <  MAXWORDLEN )
 			{
 				int i = m_nCurStart;
 				int j = 0;

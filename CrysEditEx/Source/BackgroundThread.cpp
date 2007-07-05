@@ -279,7 +279,7 @@ void CBackgroundThread::SpellCheckBuffer(CCrystalTextView *pTextView)
 
 		while ( nStart != -1 )
 		{
-			if ( (nStart - nEnd) <  MAXWORDLEN )
+			if ( abs(nStart - nEnd) <  MAXWORDLEN )
 			{
 				int i = nStart;
 				int j = 0;
