@@ -4702,7 +4702,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     STE_COLOR_AUTOMATIC     "Automatisch"
     STE_COLOR_OTHERS        "Andere Farben..."
-    STE_PDICT_OPEN_ERROR    "Persönliches Wörterbuch %s kann nicht geööfnet werden.\n\nEs wird ein neues leeres Wörterbuch unter diesem Namen erzeugt."
+    STE_PDICT_OPEN_ERROR    "Persönliches Wörterbuch %s kann nicht geöffnet werden.\n\nEs wird ein neues leeres Wörterbuch unter diesem Namen erzeugt."
     IDS_LANGUAGE            "de"
     IDS_DIALECT             "DE"
     STE_DICTIONARY_OPEN_FAIL 
@@ -7514,7 +7514,7 @@ BEGIN
     IDR_LATEXPROJECT        "\nTeXnicCenter-Project\nTeXnicCenter-Project\nTeXnicCenter-Projects (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
     STE_ALL_FILES_FILTER    "All Files (*.*)|*.*||"
     STE_GET_PATH_TITLE      "Directory Selection"
-    STE_GET_PATH            "Select a direcctory..."
+    STE_GET_PATH            "Select a directory..."
     STE_GRAPHIC_FILES       "Picture-Files|*.jpg;*.jpeg;*.png;*.bmp;*.eps;*.pdf;*.ps;*.tif;*.tiff;*.wmf|All Files (*.*)|*.*||"
     STE_FILE_LATEXFILTER    "LaTeX-Files (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|BibTeX-Files (*.bib, *.bst)|*.bib;*.bst|All Files (*.*)|*.*||"
     STE_LICENSE_FILE        "GPL_english.htm"
