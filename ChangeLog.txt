@@ -1,3 +1,12 @@
+2007/07/05 niteria
+- Fixed Bug 1734335: No automatic saving when file is closed (context menu)
+- Fixed some stuff related to crashes with long lines and words.
+  The spell checker should not crash anymore on long words. It doesn't care about long lines.
+  The latex parser did crash on specific long lines with lots of backslashes etc.
+  Now, the latex parser avoids stack overflows by explicitly checking the number of recursive calls.
+  However, such long lines (40KB) can not be handled by the painting code in Crystal... This one crashes.
+- Fixed some small typos.  
+
 2007/01/23 niteria
 - Removed option to disable word wrap due to crashes caused by the spell checker.
 
