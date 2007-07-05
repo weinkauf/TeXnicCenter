@@ -1623,9 +1623,13 @@ void CMainFrame::OnWindowCloseSelectedTab()
 	//Close the tab where the user pressed the right mouse button, i.e., where the context menu was/is displayed for
 	if (m_pContextMenuTargetWindow && m_pContextMenuTargetWindow->GetDocument())
 	{
-		m_pContextMenuTargetWindow->GetDocument()->OnCloseDocument();
-		m_pContextMenuTargetWindow = NULL;
+		if (m_pContextMenuTargetWindow->GetDocument()->SaveModified())
+		{
+			m_pContextMenuTargetWindow->GetDocument()->OnCloseDocument();
+		}
 	}
+
+	m_pContextMenuTargetWindow = NULL;
 }
 
 void CMainFrame::OnUpdateWindowCloseSelectedTab(CCmdUI* pCmdUI) 
@@ -1642,7 +1646,10 @@ void CMainFrame::OnWindowCloseAllButActive()
 		if (i != nActiveFrame)
 		{
 			CView* pView = dynamic_cast<CView*>(MDIChildArray.GetAt(i)->GetActiveView());
-			if (pView && pView->GetDocument()) pView->GetDocument()->OnCloseDocument();
+			if (pView && pView->GetDocument() && pView->GetDocument()->SaveModified())
+			{
+				pView->GetDocument()->OnCloseDocument();
+			}
 		}
 	}
 }
