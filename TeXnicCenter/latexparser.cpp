@@ -303,10 +303,16 @@ DWORD CLatexParser::ClearBlocksAfterComment( DWORD dwCookie, CCrystalTextBlock *
 #define COLORINDEX_NORMAL	((dwCookie & inlineMath)? CCrystalTextView::COLORINDEX_NUMBER : CCrystalTextView::COLORINDEX_NORMALTEXT )
 #define COLORINDEX_KEYWORD ((dwCookie & inlineMath)? CCrystalTextView::COLORINDEX_PREPROCESSOR : CCrystalTextView::COLORINDEX_KEYWORD )
 
-DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCookie, CCrystalTextBlock *pTextBlock, LPCTSTR lpLine )
+//I found on my system, that 500 works while 750 and above did not work anymore, i.e., cause a stack overflow.
+#define LATEXPARSER_PARSESTRING_MAXRECURSIVECALLDEPTH 500
+
+DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCookie, CCrystalTextBlock *pTextBlock, LPCTSTR lpLine, unsigned int CurrentCallDepth )
 {
 	SUBEXPRESSION				what[3];
 
+	//In order to avoid a stack overflow, we abort if we have too many recursive calls
+	if (CurrentCallDepth > LATEXPARSER_PARSESTRING_MAXRECURSIVECALLDEPTH) return COLORINDEX_NORMAL;
+	CurrentCallDepth++;
 
 	///////////////////////////////////////////////////////////////////
 	// look for end of verb
@@ -327,7 +333,7 @@ DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCook
 				}
 
 				// Parse behind end command
-				dwCookie = ParseString( what[0].second, lpTextEnd, dwCookie, pTextBlock, lpLine );
+				dwCookie = ParseString( what[0].second, lpTextEnd, dwCookie, pTextBlock, lpLine, CurrentCallDepth );
 			}
 			else if( pTextBlock )
 				pTextBlock->Add( lpText - lpLine, CCrystalTextView::COLORINDEX_STRING );
@@ -343,7 +349,7 @@ DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCook
 	if( SearchInlineVerb( lpText, lpTextEnd, what ) && IsCmdAt( lpText, what[0].first ) )
 	{
 		// parse string before occurence
-		dwCookie = ParseString( lpText, what[0].first, dwCookie, pTextBlock, lpLine );
+		dwCookie = ParseString( lpText, what[0].first, dwCookie, pTextBlock, lpLine, CurrentCallDepth );
 
 		// was there a "\begin{verbatim}" before this \verb?
 		if( dwCookie & verb || dwCookie & verbStar )
@@ -361,7 +367,7 @@ DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCook
 		}
 
 		// parse string behind occurence
-		dwCookie = ParseString( what[0].second, lpTextEnd, dwCookie, pTextBlock, lpLine );
+		dwCookie = ParseString( what[0].second, lpTextEnd, dwCookie, pTextBlock, lpLine, CurrentCallDepth );
 
 		return dwCookie;
 	}
@@ -371,7 +377,7 @@ DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCook
 	if( SearchComment( lpText, lpTextEnd, what ) && (what[0].first == lpLine || !IsCmdAt( lpText, what[0].first - 1 )) )
 	{
 		// parse string before occurence
-		dwCookie = ParseString( lpText, what[0].first, dwCookie, pTextBlock, lpLine );
+		dwCookie = ParseString( lpText, what[0].first, dwCookie, pTextBlock, lpLine, CurrentCallDepth );
 
 		// highlicht occurence
 		if( pTextBlock ) 
@@ -387,7 +393,7 @@ DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCook
 	if( SearchVerbStart( lpText, lpTextEnd, what ) && IsCmdAt( lpText, what[0].first ) )
 	{
 		// parse string before occurence
-		dwCookie = ParseString( lpText, what[0].first, dwCookie, pTextBlock, lpLine );
+		dwCookie = ParseString( lpText, what[0].first, dwCookie, pTextBlock, lpLine, CurrentCallDepth );
 
 		// highlight occurence
 		if( pTextBlock )
@@ -403,7 +409,7 @@ DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCook
 			dwCookie|= verb;
 
 		// parse string behind occurence
-		dwCookie = ParseString( what[0].second, lpTextEnd, dwCookie, pTextBlock, lpLine );
+		dwCookie = ParseString( what[0].second, lpTextEnd, dwCookie, pTextBlock, lpLine, CurrentCallDepth );
 
 		return dwCookie;
 	}
@@ -413,7 +419,7 @@ DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCook
 	if( SearchInlineMath( lpText, lpTextEnd, what ) && (what[0].first == lpLine || !IsCmdAt( lpText, what[0].first - 1)) )
 	{
 		// parse string before occurence
-		dwCookie = ParseString( lpText, what[0].first, dwCookie, pTextBlock, lpLine );
+		dwCookie = ParseString( lpText, what[0].first, dwCookie, pTextBlock, lpLine, CurrentCallDepth );
 
 		// highlight
 		if( pTextBlock && !(dwCookie & inlineMath) )
@@ -431,7 +437,7 @@ DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCook
 			pTextBlock->Add( what[0].second - lpLine, COLORINDEX_NORMAL );
 
 		// parse string behind occurence
-		dwCookie = ParseString( what[0].second, lpTextEnd, dwCookie, pTextBlock, lpLine );
+		dwCookie = ParseString( what[0].second, lpTextEnd, dwCookie, pTextBlock, lpLine, CurrentCallDepth );
 
 		return dwCookie;
 	}
@@ -443,7 +449,7 @@ DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCook
 			 (SearchOneCharKeyword( lpText, lpTextEnd, what) && !IsCmdAt( lpText, what[0].first ))) )
 	{
 		// parse string before occurence
-		dwCookie = ParseString( lpText, what[0].first, dwCookie, pTextBlock, lpLine );
+		dwCookie = ParseString( lpText, what[0].first, dwCookie, pTextBlock, lpLine, CurrentCallDepth );
 
 		// highlicht occurence
 		if( dwCookie & inlineMath )
@@ -454,7 +460,7 @@ DWORD CLatexParser::ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCook
 		pTextBlock->Add( what[0].second - lpLine, COLORINDEX_NORMAL );
 
 		// parse string behind occurence
-		dwCookie = ParseString( what[0].second, lpTextEnd, dwCookie, pTextBlock, lpLine );
+		dwCookie = ParseString( what[0].second, lpTextEnd, dwCookie, pTextBlock, lpLine, CurrentCallDepth );
 
 		return dwCookie;
 	}
@@ -485,7 +491,7 @@ DWORD CLatexParser::ParseLine( DWORD dwCookie, int nLineIndex, CCrystalTextBlock
 		return dwCookie;
 
 	// parse
-	 DWORD dwCookie2 = ParseString( lpLine, lpLine + nLength, dwCookie, pTextBlock, lpLine );
+	 DWORD dwCookie2 = ParseString( lpLine, lpLine + nLength, dwCookie, pTextBlock, lpLine, 0 );
 	 return ClearBlocksAfterComment( dwCookie2, pTextBlock );
 
 }

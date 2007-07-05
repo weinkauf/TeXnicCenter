@@ -73,7 +73,7 @@ protected:
 	@return 
 		New cookies.
 	*/
-	virtual DWORD ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCookie, CCrystalTextBlock *pTextBlock, LPCTSTR lpLine );
+	virtual DWORD ParseString( LPCTSTR lpText, LPCTSTR lpTextEnd, DWORD dwCookie, CCrystalTextBlock *pTextBlock, LPCTSTR lpLine, const unsigned int CurrentCallDepth );
 
 	/**
 	Checks, if there is a LaTeX-command beginning with at the specified position.
