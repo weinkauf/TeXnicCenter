@@ -1,4 +1,5 @@
 2007/07/05 niteria
+- Added some new tips and edited some old ones.
 - Fixed Bug 1734335: No automatic saving when file is closed (context menu)
 - Fixed some stuff related to crashes with long lines and words.
   The spell checker should not crash anymore on long words. It doesn't care about long lines.
