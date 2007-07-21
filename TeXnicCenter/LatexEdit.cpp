@@ -766,9 +766,12 @@ void CLatexEdit::OnBlockComment(const UINT nID)
 	int nEndLineOffset = ( (nStartLine == nEndLine) || (ptEndSel.x > 0) ) ? 1 : 0;
 
 	//Commenting the First line is different, because
-	// comment can be inserted/removed/toogled in the middle of the line, too.
+	// comment could be inserted/removed/toogled in the middle of the line, too.
 	// - Where to start with acting
-	int nStartChar = ptStartSel.x;
+	//NOTE: Before and including TXC 1 Beta 7.01 we inserted the comment where the cursor was placed.
+	// Now we do it for the whole line, always.
+	//int nStartChar = ptStartSel.x; ==> old behavior
+	int nStartChar = 0;
 
 
 	//Go through all lines
