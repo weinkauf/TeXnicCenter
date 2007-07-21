@@ -665,6 +665,39 @@ BOOL CLatexEdit::IsKeywordCharacter(TCHAR tc) const
 }
 
 
+BOOL CLatexEdit::IsLabelCharacter(TCHAR tc) const
+{
+	switch (tc)
+	{
+		//All the following chars are allowed in labels.
+		// - but we do not allow all since some of them are rather strange
+		case _T('&'):
+		case _T('_'):
+		case _T('-'):
+		case _T('+'):
+		case _T('='):
+		case _T(':'):
+		//case _T('^'):
+		//case _T('.'):
+		//case _T(';'):
+		//case _T(','): //A comma can be used in \cite{weinkauf04a,weinkauf05b} and we want to see this as two bibkeys
+		//case _T('!'):
+		//case _T('`'):
+		//case _T('´'):
+		//case _T('('): //Especially braces should not be part of a label; this would kill most editor stuff
+		//case _T(')'):
+		//case _T('['):
+		//case _T(']'):
+		//case _T('<'):
+		//case _T('>'):
+			return TRUE;
+
+		default:
+			return IsKeywordCharacter(tc);
+	}
+}
+
+
 LRESULT CLatexEdit::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 {
 	CString	strKeyword;
@@ -1035,56 +1068,53 @@ void CLatexEdit::QueryComplete()
 	OnQueryCompletion();
 }
 
-/**
- Retrieves the word before or under the cursor position (thank you, Sven)
- */
-void CLatexEdit::GetWordBeforeCursor(CString &strKeyword, CPoint &start, BOOL bSelect)
+
+void CLatexEdit::GetWordBeforeCursor(CString& strKeyword, CPoint& start, bool bSelect /*=true*/)
 {
-	CPoint	ptStart, ptEnd;
-	GetSelection(ptStart, ptEnd);
-	int sx = ptStart.x;
+	const CPoint ptCursor = GetCursorPos();
 
-	if (ptStart != ptEnd)
-		GetText(ptStart, ptEnd, strKeyword);
-	else if ( GetLineLength(ptStart.y) )
+	if (GetLineLength(ptCursor.y) > 0)
 	{		
-		// retrieve the keyword, the cursor is placed on
-		CString	strLine(GetLineChars(ptStart.y));
+		//Get the line, the cursor is placed on
+		CString	strLine(GetLineChars(ptCursor.y));
 
-		if (sx >= strLine.GetLength() - 1) { // check bounds
-			sx = strLine.GetLength() - 1; 
-		}
-		// retrieve position of first character of the current word
-		for (int nStartChar = sx-1; nStartChar >= 0; nStartChar--)
+		//Get the position from where we start the backward search
+		ASSERT(ptCursor.x <= strLine.GetLength());
+		int EndX = (ptCursor.x <= strLine.GetLength()) ? ptCursor.x - 1 : (strLine.GetLength() - 1);
+		int CurrentX = EndX;
+
+		//Backward search: go to first character of the current word
+		for(;CurrentX>=0;CurrentX--)
 		{
-			if (!IsKeywordCharacter(strLine[nStartChar]))
+			if (!IsLabelCharacter(strLine[CurrentX]))
 			{
-				nStartChar++;
+				CurrentX++; //This is the last valid char
 				break;
 			}	
 		}
-		if (nStartChar < 0)
-			nStartChar = 0;
+		if (CurrentX < 0) CurrentX = 0;
 		
-		start.x = nStartChar;
-		start.y = ptStart.y;
-		// retrieve position of first character not belonging to the current word
-		for (int nEndChar = ptStart.x; nEndChar < strLine.GetLength(); nEndChar++)
-		{
-			if (!IsKeywordCharacter(strLine[nEndChar]))
-				break;
-		}
+		start.x = CurrentX;
+		start.y = ptCursor.y;
 
-		if (nEndChar <= nStartChar) {
-			strKeyword.Empty();
-		} else {
-			if (bSelect) {
-				SetSelection(start, CPoint(nEndChar, ptStart.y));
+		if (CurrentX <= EndX)
+		{
+			ASSERT(CurrentX >= 0);
+			ASSERT(EndX - CurrentX + 1 > 0);
+
+			strKeyword = strLine.Mid(CurrentX, EndX - CurrentX + 1);
+			if (bSelect)
+			{
+				SetSelection(start, ptCursor);
 			}
-			strKeyword = strLine.Mid(nStartChar, nEndChar-nStartChar);
+		}
+		else
+		{
+			strKeyword.Empty();
 		}
 	}
 }
+
 
 /* Invokes context help for a given keyword */
 BOOL CLatexEdit::InvokeContextHelp(const CString keyword)
