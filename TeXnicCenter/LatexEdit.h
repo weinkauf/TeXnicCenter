@@ -97,6 +97,10 @@ protected:
 	*/
 	BOOL IsKeywordCharacter(TCHAR tc) const;
 
+	/**	Tests if the given character could be part of a LaTeX-Label.
+	*/
+	BOOL IsLabelCharacter(TCHAR tc) const;
+
 
 	virtual void QueryComplete();
 // static operations
@@ -161,8 +165,13 @@ public:
 	static void ComputeWindowLocation(CRect &rect, int lineHeight);
 	/* Checks if given cursor position is valid */
 	BOOL IsValidTextPos(CPoint pos);
-	/* Retrieves word before cursor */
-	void GetWordBeforeCursor(CString &strKeyword, CPoint &start, BOOL bSelect=TRUE);
+	/** Retrieves word before cursor.
+
+		Returns the word before the cursor in @c strKeyword and the start position of that word in @c start.
+		If you want this word to be selected, set @c bSelect accordingly.
+	*/
+	void GetWordBeforeCursor(CString& strKeyword, CPoint& start, bool bSelect = true);
+
 	/* Handlers for events of auto complete listbox */
 	virtual void OnACCommandSelect(const CLaTeXCommand *cmd);
 	virtual void OnACCommandCancelled();
