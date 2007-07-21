@@ -1,3 +1,10 @@
+2007/07/21 niteria
+- Modified Autocompletion behavior to be similar to Visual Studio
+  and other editors where only the part before the cursor is considered.
+  Furthermore, labels can be completed as well.
+- Modified comment behavior to be similar to Visual Studio and other editors.
+  We start the comment always at the beginning of the line.
+
 2007/07/05 niteria
 - Added some new tips and edited some old ones.
 - Fixed Bug 1734335: No automatic saving when file is closed (context menu)
