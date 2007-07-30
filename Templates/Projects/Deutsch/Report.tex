@@ -17,11 +17,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[ansinew]{inputenc}
 
-%% Falls die automatische Silbentrennung in Wörtern mit Umlauten
-%% nicht funktionieren sollte oder der Text pixelig aussieht:
-%% ==> Installieren Sie die cm-super Fonts (z.B. mit dem mikTeX Package Manager).
-%% Eine nicht ganz vollwertige Alternative ist die Verwendung dieser Pakete:
-%\usepackage{ae, aeguill}
+\usepackage{lmodern} %Type1-Schriftart für nicht-englische Texte
 
 
 %% Packages für Grafiken & Abbildungen %%%%%%%%%%%%%%%%%%%%%%
@@ -127,35 +123,11 @@
 Sie können die deutschen Umlaute 'ä', 'ö' oder 'ü' direkt in dieser
 \LaTeX-Datei verwenden. Dies gilt auch für das 'ß'.
 
-Bei Verwendung bestimmter Schriftarten gibt es jedoch Probleme mit Umlauten.
-Dies wird im folgenden Abschnitt beschrieben.
-
-
-\section{Automatische Silbentrennung}\label{silbentrennung}
-Im folgenden Text sollte das lange Wort automatisch von \LaTeX\ getrennt werden.
-Bei Verwendung bestimmter Schriftarten hat \LaTeX\ jedoch Probleme mit der
-automatischen Silbentrennung von Wörtern, die Umlaute usw.\ enthalten.
-
-Test: Ein langes WortmiteinemUmlautäodergarzweiUmlautenöüumzutestenobLaTeXdieSilbentrennungschafft.
-
-Wenn das lange Wort über den Rand hinaus geht, dann hat die
-automatische Silbentrennung nicht funktioniert.
-Sie lösen das Problem wie folgt:
-
-\begin{itemize}
-\item \textbf{Empfohlen}\\
-Installieren Sie die cm-super Fonts. Das sind Schriftarten für Ihr \LaTeX-System
-und hat nichts mit TeXnicCenter selbst zu tun. Falls Sie mik\TeX\ arbeiten,
-starten Sie bitte den mik\TeX\ Package Manager ("`Browse Packages"' im Startmenü).
-Dort finden Sie dann die cm-super Fonts. Achtung: Das Paket ist sehr groß (ca.\ 70MB).
-Dann geht die Silbentrennung wieder.
-
-\item \textbf{Nicht ganz vollwertige Alternative}\\
-Binden Sie die Pakete \verb#\usepackage{ae, aeguill}# ein.
-Dann geht zwar die Silbentrennung, jedoch können Sie dann
-z.B.\ im Adobe Reader nicht mehr nach Worten mit Umlauten suchen.
-
-\end{itemize}
+Bei Verwendung sogenannter OT1-kodierter Schriftarten
+gibt es jedoch Probleme mit der automatischen Silbentrennung
+von Worten, die Umlaute enthalten. Benutzen Sie daher lieber
+T1-kodierte Schriftarten, z.B.\ die Latin Modern Schriftart,
+die Sie mittels \verb#\usepackage{lmodern}# einbinden.
 
 
 \section{Referenzen}\label{referenzen}
