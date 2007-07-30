@@ -14,8 +14,13 @@
 
 %% Language %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\usepackage[francais]{babel}
-\usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
+\usepackage[ansinew]{inputenc}
+
+%% If automatic hyphenation does not work in words with umlauts
+%% or if the text looks fuzzy/grainy/pixelated:
+%% ==> Install the cm-super fonts (e.g. using the mikTeX Package Manager).
+%% A not completely adequate alternative is this package:
+%\usepackage{ae, aeguill}
 
 
 %% Packages for Graphics & Figures %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -118,6 +123,40 @@
 
 \chapter{Some small hints}\label{hints}
 
+\section{German Umlauts and other Language Specific Characters}\label{umlauts}
+You can type german umlauts like 'ä', 'ö', or 'ü' directly in this file.
+This is also true for other language specific characters like 'é', 'è' etc.
+
+Sometimes there are problems with hyphenation when using umlauts.
+The following section deals with this.
+
+
+\section{Automatic Hyphenation}\label{hypenation}
+The long word in the following text should be splitted automatically.
+But \LaTeX\ may have trouble doing this if a certain type of fonts is used
+and language specific characters are in the word.
+
+Test: A long and nonsense word Umlautäöüédoitdoitdoitdoitdoitdoitdoitdoitdoitdoitdoitdoitdoitdoit.
+
+If the long word exceeds the margin, then automatic hyphenation did not work.
+You solve the problem as follows:
+
+\begin{itemize}
+\item \textbf{Recommended}\\
+Install cm-super fonts. These are fonts for your \LaTeX\ system and they
+have nothing to do with TeXnicCenter. If you work with mik\TeX,
+please start the mik\TeX\ package manager (``Browse Packages'' in the start menu).
+There you will find the cm-super fonts. Note: the package is rather large (ca.\ 70MB).
+Automatic hyphenation will work afterwards.
+
+\item \textbf{Not completely adequate alternative}\\
+Include \verb#\usepackage{ae, aeguill}# into your document.
+This will make hyphenation work, but searching for words with umlauts and such
+in Adobe Reader will not work anymore.
+
+\end{itemize}
+
+
 \section{References}\label{references}
 Using the commands \verb#\label{name}# and \verb#\ref{name}# you are able
 to use references in your document. Advantage: You do not need to think
@@ -132,7 +171,7 @@ Please notice, that \LaTeX\ usually needs more than one run (mostly 2) to
 resolve those references correctly.
 
 
-\section{Dividing large Documents}\label{dividing}
+\section{Dividing Large Documents}\label{dividing}
 You can divide your \LaTeX-Document into an arbitrary number of \TeX-Files
 to avoid too big and therefore unhandy files (e.g. one file for every chapter).
 
