@@ -48,7 +48,7 @@
 #include "GotoDialog.h"
 #include "../MySpell/Character.h"
 #include "Advice.h"
-
+#include "TextOutsourceDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -75,6 +75,7 @@ BEGIN_MESSAGE_MAP(CLatexEdit, CCrystalEditViewEx)
 	ON_UPDATE_COMMAND_UI(ID_TEXTMODULES_DEFINE, OnUpdateTextmodulesDefine)
 	ON_COMMAND(ID_QUERY_COMPLETION, OnQueryCompletion)
 	ON_WM_KILLFOCUS()
+	ON_COMMAND(ID_EDIT_OUTSOURCE, OnTextOutsource)
 	//}}AFX_MSG_MAP
 	ON_WM_SYSCOLORCHANGE()
 
@@ -665,7 +666,7 @@ BOOL CLatexEdit::IsKeywordCharacter(TCHAR tc) const
 }
 
 
-BOOL CLatexEdit::IsLabelCharacter(TCHAR tc) const
+BOOL CLatexEdit::IsAutoCompletionCharacter(TCHAR tc) const
 {
 	switch (tc)
 	{
@@ -675,8 +676,8 @@ BOOL CLatexEdit::IsLabelCharacter(TCHAR tc) const
 		case _T('_'):
 		case _T('-'):
 		case _T('+'):
-		case _T('='):
 		case _T(':'):
+		//case _T('='):
 		//case _T('^'):
 		//case _T('.'):
 		//case _T(';'):
@@ -690,10 +691,15 @@ BOOL CLatexEdit::IsLabelCharacter(TCHAR tc) const
 		//case _T(']'):
 		//case _T('<'):
 		//case _T('>'):
+
+		//All the following chars are allowed in keywords.
+		case _T('\\'):
+		case _T('@'):
 			return TRUE;
 
+		//Be default, labels can consist of numbers and letters; keywords only of letters
 		default:
-			return IsKeywordCharacter(tc);
+			return IsAlNum(tc);
 	}
 }
 
@@ -1089,7 +1095,7 @@ void CLatexEdit::GetWordBeforeCursor(CString& strKeyword, CPoint& start, bool bS
 		//Backward search: go to first character of the current word
 		for(;CurrentX>=0;CurrentX--)
 		{
-			if (!IsLabelCharacter(strLine[CurrentX]))
+			if (!IsAutoCompletionCharacter(strLine[CurrentX]))
 			{
 				CurrentX++; //This is the last valid char
 				break;
@@ -1374,5 +1380,52 @@ void CLatexEdit::ComputeWindowLocation(CRect &rect, int lineHeight)
 
 	if (rect.right > screenRect.right) {
 		rect.OffsetRect(CPoint(-rect.Width(), 0));
+	}
+}
+
+void CLatexEdit::OnTextOutsource() 
+{
+	//Create the dialog
+	CTextOutsourceDlg OutsourceDlg;
+
+	//Get the file name of ourselves
+	CLatexDoc* pDoc = GetDocument();
+	if (!pDoc) return;
+	CPathTool OldPath = pDoc->GetPathName();
+
+	//Suggest a directory for the new file
+	OutsourceDlg.m_Directory = OldPath.GetDirectory();
+
+	//Show the dialog
+	SetShowInteractiveSelection(true);
+	if (OutsourceDlg.DoModal() == IDCANCEL)
+	{
+		SetShowInteractiveSelection(false);
+		return;
+	}
+	SetShowInteractiveSelection(false);
+
+	//Get the new file name and write the selected lines to it
+	CFile NewFile;
+	if (NewFile.Open(OutsourceDlg.NewPath.GetPath(), CFile::modeWrite | CFile::modeCreate))
+	{
+		//Get selected text - may be empty
+		CPoint ptStart, ptEnd;
+		GetSelection(ptStart, ptEnd);
+		CString strSelectedText("");
+		if (ptStart != ptEnd) GetText(ptStart, ptEnd, strSelectedText);
+
+		//Write it to the file
+		NewFile.Write((LPCTSTR)strSelectedText, strSelectedText.GetLength());
+		NewFile.Close();
+
+		//Insert the text into this document
+		CString RelativeFilePath = CPathTool::GetRelativePath(OldPath.GetDirectory(), OutsourceDlg.NewPath);
+		LocateTextBuffer()->BeginUndoGroup();
+		ReplaceSelection(OutsourceDlg.CmdLeft + RelativeFilePath + OutsourceDlg.CmdRight);
+		LocateTextBuffer()->FlushUndoGroup(this);
+
+		//Open the new file
+		theApp.OpenLatexDocument(OutsourceDlg.NewPath, FALSE, -1, FALSE, false);
 	}
 }

@@ -97,12 +97,16 @@ protected:
 	*/
 	BOOL IsKeywordCharacter(TCHAR tc) const;
 
-	/**	Tests if the given character could be part of a LaTeX-Label.
-	*/
-	BOOL IsLabelCharacter(TCHAR tc) const;
+	/**	Tests if the given character should be considered for auto completion,
+		e.g. it could be part of a LaTeX-keyword or LaTeX-Label.
 
+		A complete list of such characters can probably not be done since one can activate almost all chars in TeX.
+		Whatever, this function should consider a reasonable set of chars.
+	*/
+	BOOL IsAutoCompletionCharacter(TCHAR tc) const;
 
 	virtual void QueryComplete();
+
 // static operations
 public:
 	/**
@@ -152,6 +156,7 @@ protected:
 	afx_msg void OnUpdateTextmodulesDefine(CCmdUI* pCmdUI);
 	afx_msg void OnQueryCompletion();
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
+	afx_msg void OnTextOutsource();
 	//}}AFX_MSG
 	afx_msg void OnUpdateTextModulesList(CCmdUI *pCmdUI);
 	afx_msg void OnBlockComment(const UINT nID);
