@@ -1,3 +1,7 @@
+2007/08/06 niteria
+- New feature to create a new file from the selected text.
+  The new file will be included using \input{}, \include{}, or some user defined command.
+
 2007/07/21 niteria
 - Modified Autocompletion behavior to be similar to Visual Studio
   and other editors where only the part before the cursor is considered.

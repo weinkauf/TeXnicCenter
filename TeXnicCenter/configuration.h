@@ -233,6 +233,17 @@ public:
 	/** Last opened tab of the document template dialog */
 	int m_nLastTabDocumentTemplateDlg;
 
+	///////////////////////////////////////////////////////////////////
+	// Dialog CTextOutsourceDlg
+
+	///Last selected type of inclusion
+	int m_TextOutsource_nIncludeType;
+
+	///Left part of the user inclusion command
+	CString m_TextOutsource_strUserCmdLeft;
+
+	///Right part of the user inclusion command
+	CString m_TextOutsource_strUserCmdRight;
 
 	///////////////////////////////////////////////////////////////////
 	// character replacement

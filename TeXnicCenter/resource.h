@@ -231,6 +231,7 @@
 #define IDD_DIALOG1                     279
 #define IDD_AUTOCOMPLETE                281
 #define IDD_OPTIONS_TEXTFORMAT          282
+#define IDD_OUTSOURCE                   285
 #define STE_HEADER_PART                 288
 #define STE_HEADER_CHAPTER              289
 #define STE_HEADER_SECTION              290
@@ -306,7 +307,7 @@
 #define STE_FILE_MRU_PROJECT_NONE       400
 #define STE_FILE_MRU_FILE_NONE          401
 #define STE_FILEFIND_BROWSEDIR          416
-#define STE_FILEFIND_NOFOLDER           418
+#define STE_NOFOLDER                    418
 #define STE_FILEFIND_INVALIDEXPRESSION  419
 #define STE_EDITOROPTIONS_WRONGTABSIZE  420
 #define STE_OUTPUTWIZARD_NOLATEX        432
@@ -664,6 +665,14 @@
 #define IDC_LIST                        1345
 #define IDC_OPTIONS_EDITOR_WORDWRAP_STYLE 1348
 #define IDC_OPTIONS_EDITOR_WORDWRAP_FIXEDCOLUMN 1349
+#define IDC_OUTSOURCE_FILENAME          1353
+#define IDC_OUTSOURCE_BROWSEBUTTON      1354
+#define IDC_OUTSOURCE_DIRECTORY         1355
+#define IDC_OUTSOURCE_CMDLEFT           1356
+#define IDC_OUTSOURCE_CMDRIGHT          1357
+#define IDC_OUTSOURCE_CMDINPUT          1358
+#define IDC_OUTSOURCE_CMDINCLUDE        1359
+#define IDC_OUTSOURCE_CMDUSERDEF        1360
 #define IDD_CUSTOMIZEPAGE_EDITOR        16105
 #define IDD_OUTPUTWIZARD_MIKTEX         16106
 #define IDD_OUTPUTWIZARD_PATH           16107
@@ -1296,6 +1305,7 @@
 #define ID_WINDOW_PARSE                 38481
 #define ID_WINDOW_CLOSE_ALL_BUTACTIVE   38482
 #define ID_WINDOW_CLOSE_SELECTEDTAB     38483
+#define ID_EDIT_OUTSOURCE               38484
 #define IDS_TEXTMODULES_NONEDEFINED     57671
 
 // Next default values for new objects
@@ -1303,9 +1313,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        285
-#define _APS_NEXT_COMMAND_VALUE         38484
-#define _APS_NEXT_CONTROL_VALUE         1350
+#define _APS_NEXT_RESOURCE_VALUE        286
+#define _APS_NEXT_COMMAND_VALUE         38485
+#define _APS_NEXT_CONTROL_VALUE         1361
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif

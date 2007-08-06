@@ -83,6 +83,11 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	SerializeProfileInt(strSection, _T("LastTabProjectTemplateDlg"), (int*)&m_nLastTabProjectTemplateDlg, direction, 0);
 	SerializeProfileInt(strSection, _T("LastTabDocumentTemplateDlg"), (int*)&m_nLastTabDocumentTemplateDlg, direction, 0);
 
+	// text outsource
+	SerializeProfileInt(strSection, _T("TextOutsourceIncludeType"), (int*)&m_TextOutsource_nIncludeType, direction, 0);
+	SerializeProfileString(strSection, _T("TextOutsourceCmdLeft"), &m_TextOutsource_strUserCmdLeft, direction);
+	SerializeProfileString(strSection, _T("TextOutsourceCmdRight"), &m_TextOutsource_strUserCmdRight, direction);
+
 	// quotation mark replacement
 	SerializeProfileInt( strSection, _T("ReplaceQuotationMarks"), (int*)&m_bReplaceQuotationMarks, direction, TRUE );
 	SerializeProfileString( strSection, _T("OpeningQuotationMark"), &m_strOpeningQuotationMark, direction, _T("\"`") );
