@@ -220,7 +220,7 @@ void CFindInFilesDialog::OnOK()
 	CFileFind	ff;
 	if( !ff.FindFile( m_strSearchIn ) )
 	{
-		AfxMessageBox( STE_FILEFIND_NOFOLDER, MB_ICONEXCLAMATION | MB_OK );
+		AfxMessageBox( STE_NOFOLDER, MB_ICONEXCLAMATION | MB_OK );
 		return;
 	}
 
