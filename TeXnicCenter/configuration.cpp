@@ -87,6 +87,8 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	SerializeProfileInt(strSection, _T("TextOutsourceIncludeType"), (int*)&m_TextOutsource_nIncludeType, direction, 0);
 	SerializeProfileString(strSection, _T("TextOutsourceCmdLeft"), &m_TextOutsource_strUserCmdLeft, direction);
 	SerializeProfileString(strSection, _T("TextOutsourceCmdRight"), &m_TextOutsource_strUserCmdRight, direction);
+	SerializeProfileInt(strSection, _T("TextOutsourceOpenNewFile"), (int*)&m_TextOutsource_bOpenNewFile, direction, TRUE);
+	SerializeProfileInt(strSection, _T("TextOutsourceOpenNewFileType"), (int*)&m_TextOutsource_nOpenNewFileType, direction, 0);
 
 	// quotation mark replacement
 	SerializeProfileInt( strSection, _T("ReplaceQuotationMarks"), (int*)&m_bReplaceQuotationMarks, direction, TRUE );

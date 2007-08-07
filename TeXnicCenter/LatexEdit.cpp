@@ -1419,13 +1419,30 @@ void CLatexEdit::OnTextOutsource()
 		NewFile.Write((LPCTSTR)strSelectedText, strSelectedText.GetLength());
 		NewFile.Close();
 
+		//Get relative path - omit tex-extension
+		CString RelativeFilePath = CPathTool::GetRelativePath(OldPath.GetDirectory(),
+																(OutsourceDlg.NewPath.GetFileExtension() == "tex")
+																	? CPathTool(OutsourceDlg.NewPath.GetBase())
+																	: OutsourceDlg.NewPath);
+
 		//Insert the text into this document
-		CString RelativeFilePath = CPathTool::GetRelativePath(OldPath.GetDirectory(), OutsourceDlg.NewPath);
 		LocateTextBuffer()->BeginUndoGroup();
 		ReplaceSelection(OutsourceDlg.CmdLeft + RelativeFilePath + OutsourceDlg.CmdRight);
 		LocateTextBuffer()->FlushUndoGroup(this);
 
 		//Open the new file
-		theApp.OpenLatexDocument(OutsourceDlg.NewPath, FALSE, -1, FALSE, false);
+		if (OutsourceDlg.m_bOpenNewFile)
+		{
+			//Open it
+			theApp.OpenLatexDocument(OutsourceDlg.NewPath, FALSE, -1, FALSE, false);
+
+			//In background? Foreground is automatically done by the line above.
+			if (OutsourceDlg.m_nOpenNewFileType == 0 /*background*/)
+			{
+				//Re-activate this view (I tried to open the new doc in background, but it did not work out)
+				CFrameWnd* pFrame = GetParentFrame();
+				if (pFrame) pFrame->ActivateFrame();
+			}
+		}
 	}
 }

@@ -245,6 +245,12 @@ public:
 	///Right part of the user inclusion command
 	CString m_TextOutsource_strUserCmdRight;
 
+	///Whether to open the new file
+	bool m_TextOutsource_bOpenNewFile;
+
+	///Last selected type of opening the new file
+	int m_TextOutsource_nOpenNewFileType;
+
 	///////////////////////////////////////////////////////////////////
 	// character replacement
 
