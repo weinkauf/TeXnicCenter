@@ -1,3 +1,7 @@
+2007/08/07 niteria
+- Texoutsource dialog: added the possibility to open the new file in background or foreground.
+- Added the "Outsource Text..." command to the context menu of the editor.
+
 2007/08/06 niteria
 - New feature to create a new file from the selected text.
   The new file will be included using \input{}, \include{}, or some user defined command.

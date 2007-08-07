@@ -1,5 +1,36 @@
-// TextOutsourceDlg.cpp : implementation file
-//
+/********************************************************************
+*
+* This file is part of the TeXnicCenter-system
+*
+* Copyright (C) 2007 Tino Weinkauf
+* Copyright (C) 2007-$CurrentYear$ ToolsCenter
+* 
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License as
+* published by the Free Software Foundation; either version 2 of
+* the License, or (at your option) any later version.
+* 
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* General Public License for more details.
+* 
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*
+* If you have further questions or if you want to support
+* further TeXnicCenter development, visit the TeXnicCenter-homepage
+*
+*    http://www.ToolsCenter.org
+*
+*********************************************************************/
+
+/********************************************************************
+*
+* $Id$
+*
+********************************************************************/
 
 #include "stdafx.h"
 #include "texniccenter.h"
@@ -27,7 +58,12 @@ CTextOutsourceDlg::CTextOutsourceDlg(CWnd* pParent /*=NULL*/)
 	m_Directory = _T("");
 	m_Filename = _T("");
 	m_nIncludeType = 0;
+	m_bOpenNewFile = FALSE;
+	m_nOpenNewFileType = -1;
 	//}}AFX_DATA_INIT
+
+	/////////////////////////////////////
+	//Init with data from configuration
 
 	m_nIncludeType = g_configuration.m_TextOutsource_nIncludeType;
 	if (m_nIncludeType == 2)
@@ -35,6 +71,9 @@ CTextOutsourceDlg::CTextOutsourceDlg(CWnd* pParent /*=NULL*/)
 		CmdLeft = g_configuration.m_TextOutsource_strUserCmdLeft;
 		CmdRight = g_configuration.m_TextOutsource_strUserCmdRight;
 	}
+
+	m_bOpenNewFile = g_configuration.m_TextOutsource_bOpenNewFile;
+	m_nOpenNewFileType = g_configuration.m_TextOutsource_nOpenNewFileType;
 }
 
 
@@ -42,6 +81,7 @@ void CTextOutsourceDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CTextOutsourceDlg)
+	DDX_Control(pDX, IDC_OUTSOURCE_OPEN_BACKGROUND, m_wndRadioOpenBackground);
 	DDX_Control(pDX, IDC_OUTSOURCE_BROWSEBUTTON, m_BrowseFolderButton);
 	DDX_Control(pDX, IDOK, m_wndOkButton);
 	DDX_Control(pDX, IDC_OUTSOURCE_CMDRIGHT, m_CmdRightCtrl);
@@ -51,7 +91,11 @@ void CTextOutsourceDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_OUTSOURCE_DIRECTORY, m_Directory);
 	DDX_Text(pDX, IDC_OUTSOURCE_FILENAME, m_Filename);
 	DDX_Radio(pDX, IDC_OUTSOURCE_CMDINPUT, m_nIncludeType);
+	DDX_Check(pDX, IDC_OUTSOURCE_OPEN, m_bOpenNewFile);
+	DDX_Radio(pDX, IDC_OUTSOURCE_OPEN_BACKGROUND, m_nOpenNewFileType);
 	//}}AFX_DATA_MAP
+
+	DDX_Control(pDX, IDC_OUTSOURCE_OPEN_FOREGROUND, m_wndRadioOpenForeground);
 }
 
 
@@ -62,6 +106,7 @@ BEGIN_MESSAGE_MAP(CTextOutsourceDlg, CDialog)
 	ON_BN_CLICKED(IDC_OUTSOURCE_CMDINCLUDE, OnIncludeTypeChanged)
 	ON_BN_CLICKED(IDC_OUTSOURCE_CMDUSERDEF, OnIncludeTypeChanged)
 	ON_EN_CHANGE(IDC_OUTSOURCE_DIRECTORY, UpdateControlStates)
+	ON_BN_CLICKED(IDC_OUTSOURCE_OPEN, UpdateControlStates)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -99,6 +144,11 @@ void CTextOutsourceDlg::OnOK()
 		MsgText.Format(STE_DOCUMENT_ALREADYEXISTS, NewPath.GetPath());
 		if (AfxMessageBox(MsgText, MB_ICONWARNING | MB_YESNO) == IDNO) return;
 	}
+
+	//Save settings in the config
+	g_configuration.m_TextOutsource_nIncludeType = m_nIncludeType;
+	g_configuration.m_TextOutsource_bOpenNewFile = m_bOpenNewFile;
+	g_configuration.m_TextOutsource_nOpenNewFileType = m_nOpenNewFileType;
 
 	CDialog::OnOK();
 }
@@ -174,6 +224,9 @@ void CTextOutsourceDlg::UpdateControlStates()
 
 	CheckAndFixFileName();
 	m_wndOkButton.EnableWindow(m_Filename.GetLength() > 0 && m_Directory.GetLength() > 0);
+
+	m_wndRadioOpenBackground.EnableWindow(m_bOpenNewFile);
+	m_wndRadioOpenForeground.EnableWindow(m_bOpenNewFile);
 }
 
 void CTextOutsourceDlg::CheckAndFixFileName()

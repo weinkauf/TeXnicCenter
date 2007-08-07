@@ -1740,7 +1740,7 @@ BEGIN
     LTEXT           "Spalte:",IDC_STATIC,20,150,23,8
 END
 
-IDD_OUTSOURCE DIALOG DISCARDABLE  0, 0, 209, 143
+IDD_OUTSOURCE DIALOG DISCARDABLE  0, 0, 209, 191
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Text auslagern"
 FONT 8, "MS Sans Serif"
@@ -1758,12 +1758,20 @@ BEGIN
                     BS_AUTORADIOBUTTON,129,94,67,10
     EDITTEXT        IDC_OUTSOURCE_CMDLEFT,14,113,68,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_OUTSOURCE_CMDRIGHT,151,113,43,14,ES_AUTOHSCROLL
+    CONTROL         "Neue Datei öffnen",IDC_OUTSOURCE_OPEN,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,14,161,74,10
+    CONTROL         "Im Hintergrund",IDC_OUTSOURCE_OPEN_BACKGROUND,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,111,156,62,10
+    CONTROL         "Im Vordergrund",IDC_OUTSOURCE_OPEN_FOREGROUND,"Button",
+                    BS_AUTORADIOBUTTON,111,168,64,10
     LTEXT           "+ Dateiname +",IDC_STATIC,91,116,47,8
     LTEXT           "Name der neuen Datei:",IDC_STATIC,7,7,74,8
     LTEXT           "Verzeichnis:",IDC_STATIC,7,45,39,8
     GROUPBOX        "Kommando zum Einfügen der externen Datei",IDC_STATIC,7,
                     80,195,56
     LTEXT           "[.tex]",IDC_STATIC,118,22,16,8
+    GROUPBOX        "Automatisches Öffnen der neuen Datei",IDC_STATIC,7,144,
+                    195,40
 END
 
 
@@ -2051,7 +2059,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 202
         TOPMARGIN, 7
-        BOTTOMMARGIN, 136
+        BOTTOMMARGIN, 184
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -2116,6 +2124,8 @@ BEGIN
         MENUITEM "&Kopieren",                   ID_EDIT_COPY
         MENUITEM "E&infügen",                   ID_EDIT_PASTE
         MENUITEM "Alles &markieren",            ID_EDIT_SELECT_ALL
+        MENUITEM SEPARATOR
+        MENUITEM "Text auslagern...",           ID_EDIT_OUTSOURCE
         MENUITEM SEPARATOR
         MENUITEM "&Suchen...",                  ID_EDIT_FIND
         MENUITEM "Erset&zen...",                ID_EDIT_REPLACE
@@ -5884,7 +5894,7 @@ BEGIN
     LTEXT           "Column:",IDC_STATIC,20,150,26,8
 END
 
-IDD_OUTSOURCE DIALOG DISCARDABLE  0, 0, 209, 143
+IDD_OUTSOURCE DIALOG DISCARDABLE  0, 0, 209, 191
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Outsource Text"
 FONT 8, "MS Sans Serif"
@@ -5902,12 +5912,20 @@ BEGIN
                     BS_AUTORADIOBUTTON,129,94,67,10
     EDITTEXT        IDC_OUTSOURCE_CMDLEFT,14,113,68,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_OUTSOURCE_CMDRIGHT,151,113,43,14,ES_AUTOHSCROLL
+    CONTROL         "Open new file",IDC_OUTSOURCE_OPEN,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,14,161,59,10
+    CONTROL         "In background",IDC_OUTSOURCE_OPEN_BACKGROUND,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,111,156,62,10
+    CONTROL         "In foreground",IDC_OUTSOURCE_OPEN_FOREGROUND,"Button",
+                    BS_AUTORADIOBUTTON,111,168,58,10
     LTEXT           "+ Filename +",IDC_STATIC,91,116,41,8
     LTEXT           "New Filename:",IDC_STATIC,7,7,48,8
     LTEXT           "Directory:",IDC_STATIC,7,45,31,8
     GROUPBOX        "Command for including the external file",IDC_STATIC,7,
                     80,195,56
     LTEXT           "[.tex]",IDC_STATIC,118,22,16,8
+    GROUPBOX        "Automatically open the new file",IDC_STATIC,7,144,195,
+                    40
 END
 
 
@@ -6189,7 +6207,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 202
         TOPMARGIN, 7
-        BOTTOMMARGIN, 136
+        BOTTOMMARGIN, 184
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -6303,6 +6321,8 @@ BEGIN
         MENUITEM "&Paste",                      ID_EDIT_PASTE
         MENUITEM "Select &All",                 ID_EDIT_SELECT_ALL
         MENUITEM SEPARATOR
+        MENUITEM "Outsource Text...",           ID_EDIT_OUTSOURCE
+        MENUITEM SEPARATOR
         MENUITEM "&Find...",                    ID_EDIT_FIND
         MENUITEM "R&eplace",                    ID_EDIT_REPLACE
         MENUITEM "Find incremental (up)",       ID_EDIT_FIND_INCREMENTAL_FORWARD
@@ -6317,7 +6337,6 @@ BEGIN
         MENUITEM "Go to next Bookmark",         ID_EDIT_GOTO_NEXT_BOOKMARK
         MENUITEM "Go to previous Bookmark",     ID_EDIT_GOTO_PREV_BOOKMARK
         MENUITEM "Remove all Bookmarks",        ID_EDIT_CLEAR_ALL_BOOKMARKS
-        MENUITEM SEPARATOR
     END
 END
 
