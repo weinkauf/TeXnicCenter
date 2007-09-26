@@ -1022,7 +1022,7 @@ void CLatexEdit::OnQueryCompletion()
 	}	
 }
 
-CAutoCompleteDlg *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLeft)
+CAutoCompleteDlg* CLatexEdit::CreateListBox(CString &keyword,const CPoint topLeft)
 {
 	CPoint	ptStart, ptText;	
 	if (!IsValidTextPos(topLeft)) {
@@ -1037,36 +1037,40 @@ CAutoCompleteDlg *CLatexEdit::CreateListBox(CString &keyword,const CPoint topLef
 	// setup listbox	
 	int nWords = GetNumberOfMatches(keyword); // find number of matches
 	//TRACE("==> CreateListBox matches = %d\n", nWords);
-	if (nWords >= 1) { // found one or more matches		
-		if (m_CompletionListBox == NULL) { // create window, if needed
+
+	//Found one or more matches?
+	if (nWords >= 1)
+	{
+		//Create window, if needed
+		if (m_CompletionListBox == NULL)
+		{ 
 			m_CompletionListBox = new CAutoCompleteDlg(&theApp.m_AvailableCommands, this /*theApp.GetMainWnd()*/);
 			m_CompletionListBox->SetListener(m_Proxy);								
 		}
-		// InitWithKeyword will notify the listener immediatly, if only one exact match exists
-		if (m_CompletionListBox->InitWithKeyword(keyword) && nWords > 1) { // show listbox for selection
-			//TRACE("==> CreateListBox: Show listbox \n");
-			CRect rc;
-			m_AutoCompleteActive = TRUE;
-			// Move box by 18 to consider the icon space
-			m_CompletionListBox->SetWindowPos(NULL, ptStart.x - 18, ptStart.y, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
-			m_CompletionListBox->GetWindowRect(&rc);
-			
-			// Check, if window overlaps with desktop
-			CPoint p1 = CPoint(rc.left, rc.top) , p2 = CPoint(rc.right, rc.bottom);
-			::ClientToScreen(GetSafeHwnd(), &p1);
-			::ClientToScreen(GetSafeHwnd(), &p2);
-			rc = CRect(p1, p2);
-			ComputeWindowLocation(rc, GetLineHeight());
 
-			if (rc.top != ptStart.y || rc.left != ptStart.x) { // correct position
-				m_CompletionListBox->SetWindowPos(NULL, rc.left, rc.top, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
-			}
+		//InitWithKeyword will notify the listener immediatly, if only one exact match exists
+		if (m_CompletionListBox->InitWithKeyword(keyword) && nWords > 1)
+		{
+			//TRACE("==> CreateListBox: Show listbox \n");
+			m_AutoCompleteActive = TRUE;
+
+			//Move box by (16 IconPixels + 2 Pixels between Icon and text + 6/2 BorderPixels + 1 Pixel Magick) = 22
+			//This way, the text matches with the editor
+			ClientToScreen(&ptStart); //yes, this works only with screen coords. do not ask me why.
+			m_CompletionListBox->SetWindowPos(NULL, ptStart.x - 22, ptStart.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+
+			//Adjust size of the box to see all content and we do not want to be over the border
+			m_CompletionListBox->AdjustSizeAndPosition(GetLineHeight());
+
 			m_CompletionListBox->ShowWindow(SW_SHOWNORMAL);
-			m_CompletionListBox->SetCurSel(0);			
-		} else {
+			m_CompletionListBox->SetCurSel(0);
+		}
+		else
+		{
 			//TRACE("==> CreateListBox: NOT Show listbox \n");
 		}
-	} 
+	}
+
 	//TRACE("<== CreateListBox\n");
 	return m_CompletionListBox;
 }
@@ -1151,55 +1155,79 @@ BOOL CLatexEdit::InvokeContextHelp(const CString keyword)
 
 /* ------------ Message handlers for auto complete listbox ------------*/
 
-void CLatexEdit::OnACCommandSelect(const CLaTeXCommand *cmd)
+void CLatexEdit::OnACCommandSelect(const CLaTeXCommand* cmd)
 {	
 	CPoint ptStart, ptEnd;
 	CPoint ptCaret;
-	BOOL bFound = FALSE;
 	BOOL isEnv = FALSE;
 
 	m_AutoCompleteActive = FALSE;
 	ASSERT(cmd != NULL);
-	
+
+	//Generate string to be inserted
+	CString InsertString = cmd->GetExpandBefore(); // collect completion...
+	InsertString += cmd->ToLaTeX();
+	InsertString += cmd->GetExpandAfter();	
+
 	GetSelection(ptStart, ptEnd);
 
 	//Get the text buffer
 	CCrystalTextBuffer* pText = LocateTextBuffer();
 
-	//Start Undo Group
+	//Insert the text
 	pText->BeginUndoGroup();
-	CString s = cmd->GetExpandBefore(); // collect completion...
-	s += cmd->ToLaTeX();
-	s += cmd->GetExpandAfter();	
-	ReplaceSelection(s);
-
+	ReplaceSelection(InsertString);
 	pText->FlushUndoGroup(this);
+
 	GetSelection(ptStart, ptEnd); // retrieve new selection pos
 	SetSelection(ptStart, ptStart); // drop selection
 
 	isEnv = cmd->GetExpandAfter().GetLength() && cmd->GetExpandBefore().GetLength();
 	
-	if (!isEnv) { // command was inserted
-		// search the first curly brace
-		for(int y = ptStart.y; y <= ptEnd.y && !bFound; y++) {
-			CString s = GetLineChars(y);
-			int nOff = (y == ptStart.y) ? ptStart.x : 0; // is there an offset?
+	if (!isEnv)
+	{
+		bool bSetPosition(false);
 
-			int pos = s.Find(_T("{"), nOff);
-			if (pos != -1) {
-				ptCaret = CPoint(pos + 1, y);
-				if (!IsValidTextPos(ptCaret)) { // position is not valid -> use position of brace itself
-					ptCaret = CPoint(pos, y);				
+		//If a command was inserted and it contains a brace, we might want to go there
+		if (InsertString.FindOneOf( _T("{[(") ) != -1)
+		{
+			//Search for the first brace
+			for(int y = ptStart.y; y <= ptEnd.y; y++)
+			{
+				CString s = GetLineChars(y);
+				
+				//Is there an offset? Only in first line.
+				int Offset = 0;
+				if (y == ptStart.y)
+				{
+					s = s.Mid(ptStart.x);
+					Offset = ptStart.x;
 				}
-				SetCursorPos(ptCaret); // place caret after the first open brace
-				bFound = TRUE;
+
+				//Find a brace and place the cursor
+				int BracePos = s.FindOneOf(_T("{[("));
+				if (BracePos != -1)
+				{
+					ptCaret = CPoint(Offset + BracePos + 1, y);
+
+					if (IsValidTextPos(ptCaret))
+					{
+						//Place caret after the first opening brace
+						SetCursorPos(ptCaret);
+						bSetPosition = true;
+					}
+
+					break;
+				}
 			}
 		}
 
-		if (!bFound) { // no brace found drop selection and place cursor after inserted word	
-			SetCursorPos(ptEnd);
-		}
-	} else { // env was inserted -> place cursor at end of next row
+		// no brace found; drop selection and place cursor after inserted word	
+		if (!bSetPosition) SetCursorPos(ptEnd);
+	} 
+	else
+	{ 
+		// env was inserted -> place cursor at end of next row
 		ptCaret.y = ptStart.y + 1;
 		ptCaret.x = GetLineLength(ptCaret.y);
 
@@ -1367,21 +1395,6 @@ int CLatexEdit::GetNumberOfMatches(CString keyword)
 	return map.GetCount();
 }
 
-/* Checks, if an window overlaps screen region */
-void CLatexEdit::ComputeWindowLocation(CRect &rect, int lineHeight)
-{
-	CWnd *w = CWnd::GetDesktopWindow();
-	CRect screenRect;
-	w->GetWindowRect(screenRect);
-	
-	if (rect.bottom > screenRect.bottom) {
-		rect.OffsetRect(CPoint(0, -lineHeight-rect.Height()));
-	}
-
-	if (rect.right > screenRect.right) {
-		rect.OffsetRect(CPoint(-rect.Width(), 0));
-	}
-}
 
 void CLatexEdit::OnTextOutsource() 
 {
