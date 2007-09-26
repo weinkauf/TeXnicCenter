@@ -9,11 +9,16 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CAutoCompleteListbox window
-const BMP_HEIGHT = 15;
-const BMP_WIDTH = 16;
 
 class CAutoCompleteListbox : public CListBox
 {
+//Types and Enums
+	enum
+	{
+		BMP_HEIGHT = 15,
+		BMP_WIDTH = 16
+	};
+
 // Construction
 public:
 	CAutoCompleteListbox();
@@ -21,17 +26,22 @@ public:
 // Attributes
 public:
 private:
-	CFont				*m_BoldFont;
-	CMapStringToPtr		*m_PictureCache;
+	CFont m_NormalFont;
+	CFont m_BoldFont;
+	CMapStringToPtr* m_PictureCache;
 
 // Operations
 private:	
 	BOOL DrawBitmap(CDC* pDC, CString file, UINT index, CRect rect);
 	CBitmap* CAutoCompleteListbox::LoadBitmapFromFile(CString filename);
+
 protected:
 	int OnToolHitTest(CPoint point, TOOLINFO * pTI) const;
 	BOOL OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult );
+
 public:
+	///Returns the size of the largest item in pixels (measured with the bold font, so this is an upper estimate)
+	CSize GetLargestItemTextExtent();
 
 // Overrides
 	// ClassWizard generated virtual function overrides

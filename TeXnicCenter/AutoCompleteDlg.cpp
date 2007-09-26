@@ -32,9 +32,7 @@ CAutoCompleteDlg::CAutoCompleteDlg(CStyleFileContainer *sfc, CWnd* pParent)
 
 CAutoCompleteDlg::~CAutoCompleteDlg()
 {
-	if (m_Box!= NULL) {
-		delete m_Box;
-	}
+	if (m_Box) delete m_Box;
 	DestroyWindow();
 }
 
@@ -45,6 +43,7 @@ BEGIN_MESSAGE_MAP(CAutoCompleteDlg, CWnd)
 	ON_WM_SHOWWINDOW()
 	ON_WM_LBUTTONDBLCLK()
 	//}}AFX_MSG_MAP
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -165,7 +164,7 @@ void CAutoCompleteDlg::CancelSelection()
 }
 
 /**
- Moves current selection by delta (e. g. delte=-1 moves selection to the previous item, delta=1 to the next
+ Moves current selection by delta (e. g. delta=-1 moves selection to the previous item, delta=1 to the next
  */
 void CAutoCompleteDlg::MoveSelection(int delta)
 {
@@ -208,9 +207,9 @@ void CAutoCompleteDlg::SetCurSel(int sel)
 BOOL CAutoCompleteDlg::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
 {
 	BOOL ok;
-	dwStyle = WS_POPUP|WS_VISIBLE|WS_DLGFRAME;
+	dwStyle = WS_POPUP | WS_VISIBLE | WS_THICKFRAME;
 
-	ok = CWnd::CreateEx(0, 
+	ok = CWnd::CreateEx(0,
 			AfxRegisterWndClass(
 				CS_HREDRAW|CS_VREDRAW|CS_OWNDC|CS_DBLCLKS,
 				theApp.LoadStandardCursor(IDC_ARROW),
@@ -338,7 +337,9 @@ void CAutoCompleteDlg::OnKillFocus(CWnd* pNewWnd)
 
 void CAutoCompleteDlg::OnShowWindow(BOOL bShow, UINT nStatus) 
 {
-	if (bShow != m_Visible) {
+	//Record the information; so that we know our status
+	if (bShow != m_Visible)
+	{
 		//TRACE("Show window show = %d, status = %d, old visible = %d\n", bShow, nStatus, m_Visible);
 		CWnd::OnShowWindow(bShow, nStatus);
 		m_Visible = bShow;
@@ -350,3 +351,151 @@ void CAutoCompleteDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	ApplySelection();
 }
+
+
+void CAutoCompleteDlg::OnSize(UINT nType, int cx, int cy)
+{
+	//Resize the list control contained in the view to
+	//fill the entire view when the view's window is resized.
+
+	//Call base class.
+	CWnd::OnSize(nType, cx, cy);
+
+	//Resize list to fill the whole view.
+	if ( ::IsWindow(m_Box->GetSafeHwnd()) ) m_Box->MoveWindow(0, 0, cx, cy);
+}
+
+
+void CAutoCompleteDlg::AdjustSizeAndPosition(const int EditorLineHeight)
+{
+	//Get the size of the largest entry
+	const CSize ItemSize = ((CAutoCompleteListbox*)m_Box)->GetLargestItemTextExtent();
+
+	//Measure the size of the borders
+	CRect WinRect;
+	GetWindowRect(&WinRect);
+	CRect ClientRect;
+	GetClientRect(&ClientRect);
+	const int BorderWidth = WinRect.Width() - ClientRect.Width();
+	const int BorderHeight = WinRect.Height() - ClientRect.Height();
+
+	//Get the desktop width
+	CRect ScreenRect;
+	CWnd::GetDesktopWindow()->GetWindowRect(&ScreenRect);
+
+	//Both Width and Height should not be smaller than a certain size and not larger than the screen
+	const int MinWidth = 200;
+	const int MaxWidth = 0.9 * ScreenRect.Width();
+	const int MinHeight = 100;
+	const int SpaceToTop = WinRect.top - EditorLineHeight;
+	const int SpaceToBottom = ScreenRect.bottom - WinRect.top;
+	const int MaxHeight = (SpaceToBottom > SpaceToTop) ? SpaceToBottom : SpaceToTop;
+
+
+	//Width - add some pixels for the left icons and some extra - don't ask, this is magick
+	int WantedWidth = ItemSize.cx + BorderWidth + 50;
+	int RubberWidth = 0;
+	// --
+	if (WantedWidth > MaxWidth) WantedWidth = MaxWidth;
+	if (WantedWidth < MinWidth)
+	{
+		//Normalize the width, but put the rest into rubber
+		RubberWidth = MinWidth - WantedWidth; //This rubber is actually white space
+		WantedWidth = MinWidth;
+	}
+	else
+	{
+		//We have a large box and a part of it can go away.
+		RubberWidth = 0.1 * WantedWidth;
+	}
+
+
+	//Height - depends on the number of items
+	int WantedHeight = m_Box->GetCount() * (ItemSize.cy + 1) + BorderHeight + 2;
+	int RubberHeight = 0;
+	// --
+	if (WantedHeight > MaxHeight) WantedHeight = MaxHeight;
+	if (WantedHeight < MinHeight)
+	{
+		//Normalize the height, but put the rest into rubber
+		RubberHeight = MinHeight - WantedHeight; //This rubber is actually white space
+		WantedHeight = MinHeight;
+	}
+	else
+	{
+		//We have a large box and a part of it can go away.
+		RubberHeight = 0.333 * WantedHeight;
+
+		//We want at least 8 items to be visible. Do not rubber below 8.
+		const int Eight = (8 * (ItemSize.cy + 1) + BorderHeight + 2);
+		if (WantedHeight - RubberHeight < Eight) RubberHeight = WantedHeight - Eight;
+		if (RubberHeight < 0) RubberHeight = 0;
+	}
+
+
+	//Adjust the rectangle accordingly
+	WinRect.right = WinRect.left + WantedWidth;
+	WinRect.bottom = WinRect.top + WantedHeight;
+
+
+	//Check, if final window overlaps with desktop
+	// - bottom
+	if (WinRect.bottom > ScreenRect.bottom)
+	{
+		const int Diff = WinRect.bottom - ScreenRect.bottom;
+
+		//Make smaller or re-position?
+		if (Diff <= RubberHeight)
+		{
+			WinRect.bottom = ScreenRect.bottom;
+		}
+		else
+		{
+			//Is there more space on the other side, i.e., to the top?
+			if (WinRect.top - EditorLineHeight > ScreenRect.bottom - WinRect.top)
+			{
+				//Yes, there we can have more fun
+				WinRect.OffsetRect(0, -(EditorLineHeight + WinRect.Height()));
+			}
+			else
+			{
+				//No, more space at the bottom
+				// ==> Leave Rect as is and cut later
+			}
+		}
+	}
+	// - right
+	if (WinRect.right > ScreenRect.right)
+	{
+		const int Diff = WinRect.right - ScreenRect.right;
+
+		//Make smaller or re-position?
+		if (Diff <= RubberWidth)
+		{
+			WinRect.right = ScreenRect.right;
+		}
+		else
+		{
+			//Is there more space on the other side, i.e., to the left?
+			if (WinRect.left > ScreenRect.right - WinRect.left)
+			{
+				//Yes, there we can have more fun
+				WinRect.OffsetRect(-Diff, 0);
+			}
+			else
+			{
+				//No, more space to the right
+				// ==> Leave Rect as is and cut later
+			}
+		}
+	}
+
+
+	//Finally: intersect with screen
+	CRect FinalRect;
+	FinalRect.IntersectRect(WinRect, ScreenRect);
+
+	//Set it (yes, this works only with screen coords. do not ask me why)
+	SetWindowPos(NULL, FinalRect.left, FinalRect.top, FinalRect.Width(), FinalRect.Height(), SWP_NOZORDER);
+}
+

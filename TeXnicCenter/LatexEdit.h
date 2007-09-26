@@ -167,7 +167,6 @@ protected:
 	CLatexParser	m_latexParser;
 
 public:
-	static void ComputeWindowLocation(CRect &rect, int lineHeight);
 	/* Checks if given cursor position is valid */
 	BOOL IsValidTextPos(CPoint pos);
 	/** Retrieves word before cursor.

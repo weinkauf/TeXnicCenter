@@ -674,10 +674,16 @@ void CStructureParser::ParseString( LPCTSTR lpText, int nLength, CCookieStack &c
 		ParseString( lpText, what[0].first - lpText, cookies, strActualFile, nActualLine, nFileDepth, aSI );
 
 		if( !cookies.IsEmpty() )
+		{
 			if( cookies.Top().nCookieType == header )
+			{
 				aSI[cookies.Pop().nItemIndex].m_strLabel = CString( what[1].first, what[1].second - what[1].first );
+			}
 			else
+			{
 				aSI[cookies.Top().nItemIndex].m_strLabel = CString( what[1].first, what[1].second - what[1].first );
+			}
+		}
 
 		// parse string behind occurence
 		ParseString( what[0].second, lpTextEnd - what[0].second, cookies, strActualFile, nActualLine, nFileDepth, aSI );

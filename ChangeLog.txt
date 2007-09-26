@@ -1,3 +1,13 @@
+2007/09/26 niteria
+- Autocompletion window uses now the same font as the editor.
+- Autocompletion window aligns itself with the text as good as possible.
+  such that typed text and suggestions are horizontally aligned.
+- Autocompletion window placement and sizing has been enhanced.
+  It now tries to maximize the shown content while still maintaining
+  a reasonable placement below the typed text.
+- Autocompletion window can now be resized by the user.
+- Fixed Autocompletion bug where the cursor was at the wrong position after insertion.
+
 2007/08/07 niteria
 - Texoutsource dialog: added the possibility to open the new file in background or foreground.
 - Added the "Outsource Text..." command to the context menu of the editor.

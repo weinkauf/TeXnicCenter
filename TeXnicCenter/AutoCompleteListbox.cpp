@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "texniccenter.h"
 #include "AutoCompleteListbox.h"
+#include "configuration.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,21 +18,27 @@ class CAutoCompleteDlg;
 
 CAutoCompleteListbox::CAutoCompleteListbox()
 {
-	m_BoldFont = NULL;
 	m_PictureCache = new CMapStringToPtr();
 	EnableToolTips();
+
+	//Init Fonts
+	// - normal weight
+	m_NormalFont.CreateFontIndirect(&g_configuration.m_fontEditor);
+	// - bold
+	LOGFONT BoldLF = g_configuration.m_fontEditor;
+	BoldLF.lfWeight = FW_BOLD;
+	m_BoldFont.CreateFontIndirect(&BoldLF);
 }
 
 CAutoCompleteListbox::~CAutoCompleteListbox()
 {
-	if (m_BoldFont != NULL) { // kill font, if necessary
-		delete m_BoldFont;
+	//Cleanup picture cache
+	if (m_PictureCache)
+	{
+		POSITION pos = m_PictureCache->GetStartPosition();
+		m_PictureCache->RemoveAll();
+		delete m_PictureCache;
 	}
-
-	// cleanup picture cache
-	POSITION pos = m_PictureCache->GetStartPosition();
-	m_PictureCache->RemoveAll();
-	delete m_PictureCache;
 }
 
 
@@ -42,6 +49,7 @@ BEGIN_MESSAGE_MAP(CAutoCompleteListbox, CListBox)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
 END_MESSAGE_MAP()
+
 
 /////////////////////////////////////////////////////////////////////////////
 // CAutoCompleteListbox message handlers
@@ -74,21 +82,14 @@ void CAutoCompleteListbox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	COLORREF crOldTextColor = dc.GetTextColor();
 	COLORREF crOldBkColor = dc.GetBkColor();
 
-	HGDIOBJ hOldFont = dc.SelectStockObject(DEFAULT_GUI_FONT);
-
-	if (m_BoldFont == NULL) { // lazy creation of bold font
-		CFont *tmp = dc.GetCurrentFont();
-		LOGFONT lf;
-		tmp->GetLogFont(&lf);
-		lf.lfWeight = FW_BOLD;
-
-		m_BoldFont = new CFont();
-		m_BoldFont->CreateFontIndirect(&lf);
+	//Select Font: bold or normal
+	if (lc->GetParent() != NULL && lc->GetParent()->IsDocClass())
+	{ 
+		dc.SelectObject(&m_BoldFont);
 	}
-
-	const CStyleFile *cs = lc->GetParent();
-	if (cs != NULL && cs->IsDocClass()) { // bold, if command is part of a document class
-		dc.SelectObject(m_BoldFont->GetSafeHandle());
+	else
+	{
+		dc.SelectObject(&m_NormalFont);
 	}
 
 	// If this item is selected, set the background color 
@@ -104,23 +105,29 @@ void CAutoCompleteListbox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	  dc.FillSolidRect(&lpDrawItemStruct->rcItem, crOldBkColor);
 	}
 
-	CRect rcItem = lpDrawItemStruct->rcItem;
-	int bmpW = rcItem.bottom - rcItem.top;	
-	CRect bmpRect = CRect(rcItem.left, rcItem.top, rcItem.left + bmpW, rcItem.bottom);
-	bmpRect.InflateRect(-1, -1);
-	CRect textRect = CRect(rcItem.left  + bmpW + 2, rcItem.top, rcItem.right, rcItem.bottom);
-	// Draw the text.
-	dc.DrawText(
-	  lpszText,
-	  strlen(lpszText),
-	  &textRect,
-	  DT_SINGLELINE|DT_VCENTER);
-	
-	if (lc->GetIconIndex() != -1) {
+	//Subdivide the space between bitmap and text and leave some pixels inbetween
+	const CRect rcItem = lpDrawItemStruct->rcItem;
+	// - bitmap
+	CRect bmpRect = rcItem;
+	bmpRect.right = bmpRect.left + BMP_WIDTH;
+	//bmpRect.InflateRect(-1, -1);
+	// - text
+	CRect textRect = rcItem;
+	textRect.left = bmpRect.right + 2;
+
+	//Draw the text
+	dc.DrawText(lpszText, strlen(lpszText), &textRect, DT_SINGLELINE|DT_VCENTER);
+
+	//Draw Bitmap, if available
+	if (lc->GetIconIndex() != -1)
+	{
 		DrawBitmap(&dc, lc->GetIconFile(), lc->GetIconIndex(), bmpRect);
 	}
+
+	//Focus Rectangle
 	if ((lpDrawItemStruct->itemAction | ODA_SELECT) &&
-	  (lpDrawItemStruct->itemState & ODS_SELECTED))	{
+	  (lpDrawItemStruct->itemState & ODS_SELECTED))
+	{
 		dc.DrawFocusRect(rcItem);
 	}
 
@@ -128,27 +135,61 @@ void CAutoCompleteListbox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	// original values.
 	dc.SetTextColor(crOldTextColor);
 	dc.SetBkColor(crOldBkColor);
-	dc.SelectObject(hOldFont);
 	
 	dc.Detach(); // disconnect from DC
 }
 
 void CAutoCompleteListbox::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct) 
 {
+	//This func is called once by the system (at creation of this box)
+	//to get info about how large the items are.
+	//Height is most important since the listbox items need to have a certain distance
+
 	ASSERT(lpMeasureItemStruct->CtlType == ODT_LISTBOX);
-	
-	CSize   sz;
-	CDC*    pDC = GetDC();
 
-	HGDIOBJ hOldFont = pDC->SelectStockObject(DEFAULT_GUI_FONT);
-	pDC->SelectObject(m_BoldFont);	
-	sz = pDC->GetTextExtent("W"); // FIXME
-	pDC->SelectObject(hOldFont);
+	CDC* pDC = GetDC();
+	CFont* pOldFont = pDC->SelectObject(&m_BoldFont);
 
+	//Measure the height of all the letters and LaTeX stuff that we might have in this box
+	//We are no interested in the width here
+	CSize sz = pDC->GetTextExtent("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890\\{}()[]");
+
+	pDC->SelectObject(pOldFont);
 	ReleaseDC(pDC);
 
-	lpMeasureItemStruct->itemHeight = 15;//sz.cy + 1;		
+	lpMeasureItemStruct->itemHeight = sz.cy + 1;
 }
+
+
+CSize CAutoCompleteListbox::GetLargestItemTextExtent()
+{
+	CSize LargestItemExtent(-1, -1);
+
+	if (GetSafeHwnd())
+	{
+		CDC* pDC = GetDC();
+		CFont* pOldFont = pDC->SelectObject(&m_BoldFont);
+
+		const int NumItems = GetCount();
+		for(int i=0;i<NumItems;i++)
+		{
+			//Get text of the item and measure it
+			CString ItemText;
+			GetText(i, ItemText);
+			CSize ItemExtent = pDC->GetTextExtent(ItemText);
+
+			//Record the largest one
+			if (ItemExtent.cx > LargestItemExtent.cx) LargestItemExtent.cx = ItemExtent.cx;
+			if (ItemExtent.cy > LargestItemExtent.cy) LargestItemExtent.cy = ItemExtent.cy;
+		}
+
+		pDC->SelectObject(pOldFont);
+		ReleaseDC(pDC);
+	}
+
+	return LargestItemExtent;
+}
+
 
 int CAutoCompleteListbox::CompareItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct) 
 {
@@ -161,39 +202,47 @@ int CAutoCompleteListbox::CompareItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct)
 }
 
 
-BOOL CAutoCompleteListbox::DrawBitmap(CDC* pDC, CString file, UINT index, CRect rect) {
+BOOL CAutoCompleteListbox::DrawBitmap(CDC* pDC, CString file, UINT index, CRect rect)
+{
 	ASSERT_VALID(pDC);
+
 	// load IDB_BITMAP1 from our resources
 	CBitmap *bmp = LoadBitmapFromFile(file);
-	if (bmp != NULL) {
+	if (bmp != NULL)
+	{
 		// Get the size of the bitmap
 		BITMAP bmpInfo;
 		bmp->GetBitmap(&bmpInfo);
 
-		if ((index + 1) * BMP_WIDTH > bmpInfo.bmWidth) {
+		if ((index + 1) * BMP_WIDTH > bmpInfo.bmWidth)
+		{
 			TRACE("Bitmap too small for index %d (width is only %d)\n", index, bmpInfo.bmWidth);
 			return FALSE;
 		}
+
 		// Create an in-memory DC compatible with the
 		// display DC we're using to paint
 		CDC dcMemory;
 		dcMemory.CreateCompatibleDC(pDC);
 
 		// Select the bitmap into the in-memory DC
-		CBitmap* pOldBitmap = dcMemory.SelectObject(bmp);
+		//CBitmap* pOldBitmap = dcMemory.SelectObject(bmp);
+		dcMemory.SelectObject(bmp);
 
-		// Copy the bits from the in-memory DC into the on-
-		// screen DC to actually do the painting. Use the centerpoint
-		// we computed for the target offset.
-		/*
-		pDC->StretchBlt(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, 
-			&dcMemory, index * BMP_WIDTH, 0, BMP_WIDTH, BMP_HEIGHT, SRCCOPY);
-		*/
-		pDC->StretchBlt(rect.left, rect.top, BMP_WIDTH, BMP_HEIGHT, 
-			&dcMemory, index * BMP_WIDTH, 0, BMP_WIDTH, BMP_HEIGHT, SRCCOPY);
-		dcMemory.SelectObject(pOldBitmap);
+		//We vertically center the bitmap
+		int VSpace = (rect.Height() - BMP_HEIGHT) / 2; //After all, we're a LaTeX editor, aren't we?
+		if (VSpace < 0) VSpace = 0;
+
+		//Copy the bits from the in-memory DC into the on-screen DC to actually do the painting.
+		pDC->StretchBlt(rect.left, rect.top + VSpace, BMP_WIDTH, BMP_HEIGHT,
+						&dcMemory,
+						index * BMP_WIDTH, 0, BMP_WIDTH, BMP_HEIGHT, SRCCOPY);
+
+		//dcMemory.SelectObject(pOldBitmap);
 		return TRUE;
-	} else {
+	}
+	else
+	{
 		return FALSE;
 	}
 }
@@ -275,5 +324,7 @@ else
     #endif
     *pResult = 0;
 
-return TRUE; 
+	return TRUE; 
 }
+
+
