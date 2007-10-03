@@ -1,3 +1,6 @@
+2007/10/03 niteria
+- Create autocompletion window out of sight
+
 2007/09/26 niteria
 - Autocompletion window uses now the same font as the editor.
 - Autocompletion window aligns itself with the text as good as possible.

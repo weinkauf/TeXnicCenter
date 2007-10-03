@@ -25,7 +25,10 @@ CAutoCompleteDlg::CAutoCompleteDlg(CStyleFileContainer *sfc, CWnd* pParent)
 	m_Container = sfc;
 	m_Visible = FALSE;
 	m_Box = new CAutoCompleteListbox;
-	if (!Create(0, 0, 0, CRect(200,200, 400, 400), pParent, ID_AUTOCOMPLETE)) {
+
+	//Create the window out of sight (otherwise it would pop up in the middle of nowhere for a short moment)
+	if (!Create(0, 0, 0, CRect(-201, -201, -1, -1), pParent, ID_AUTOCOMPLETE))
+	{
 		TRACE("Window creation (CAutoCompleteDlg) failed!\n");
 	} 
 }
