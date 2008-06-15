@@ -64,7 +64,8 @@ END_MESSAGE_MAP()
 
 CProject::CProject()
 :	m_bModified(FALSE),
-	m_pProjectTemplate(NULL)
+	m_pProjectTemplate(NULL),
+	m_bIsClosing(false)
 {
 }
 
@@ -564,6 +565,8 @@ BOOL CProject::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 
 void CProject::OnProjectClose() 
 {
+	m_bIsClosing = true;
+
 	if (!SaveModified())
 		return;
 

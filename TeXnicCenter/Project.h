@@ -125,6 +125,9 @@ public:
 	BOOL m_bModified;
 	CList<CProjectView*, CProjectView*> m_viewList;
 	CProjectTemplate *m_pProjectTemplate;
+
+protected:
+	bool m_bIsClosing;
 };
 
 

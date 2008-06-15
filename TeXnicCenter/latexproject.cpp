@@ -347,12 +347,6 @@ void CLatexProject::OnCloseProject()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Clean up
 
-	// add views to the docking bars in the frame wnd
-	CMainFrame	*pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
-
-	if (!pwndMainFrame)
-		return;
-
 	// cancel structure parsing
 	if (m_pStructureParser)
 	{
@@ -756,8 +750,7 @@ void CLatexProject::OnParsingFinished( BOOL bSuccess )
 // manage project parsing
 void CLatexProject::OnProjectParse() 
 {
-	if( !m_bCanParse )
-		return;
+	if( !m_bCanParse || m_bIsClosing) return;
 
 	// Update the background thread
 	AfxGetMainWnd()->PostMessage( WM_COMMAND, ID_BG_UPDATE_PROJECT );
