@@ -4,9 +4,9 @@ EnableISX=true
 [Setup]
 OutputBaseFilename=TXCSetup
 MinVersion=4.0.950,4.0.1381
-AppCopyright=© 1999-2007 www.TeXnicCenter.org
+AppCopyright=© 1999-2008 www.TeXnicCenter.org
 AppName=TeXnicCenter
-AppVerName=TeXnicCenter Version 1 Beta 7.01 (Greengrass)
+AppVerName=TeXnicCenter Version 1 Beta 7.50
 LicenseFile=GPL.rtf
 PrivilegesRequired=none
 DefaultGroupName=TeXnicCenter
@@ -19,7 +19,7 @@ AppPublisher=TeXnicCenter.org
 AppPublisherURL=http://www.TeXnicCenter.org/
 AppSupportURL=http://www.TeXnicCenter.org/support/
 AppUpdatesURL=http://www.TeXnicCenter.org/downloads/
-AppVersion=Version 1 Beta 7.01
+AppVersion=Version 1 Beta 7.50
 AppID=TeXnicCenter
 AlwaysShowComponentsList=true
 UninstallDisplayIcon={app}\TEXCNTR.EXE
@@ -79,7 +79,7 @@ Name: {userdesktop}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; WorkingDir: {user
 Name: {sendto}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; Comment: TeXnicCenter; IconIndex: 0; Tasks: SendToLink; WorkingDir: {userdocs}
 
 [Registry]
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter; ValueType: string; ValueName: CurrentVersion; ValueData: 1 Beta 7.01
+Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter; ValueType: string; ValueName: CurrentVersion; ValueData: 1 Beta 7.50
 Root: HKLM; Subkey: Software\ToolsCenter; Flags: uninsdeletekeyifempty
 Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter; Flags: uninsdeletekey
 Root: HKCU; Subkey: Software\ToolsCenter; Flags: uninsdeletekeyifempty
@@ -93,7 +93,7 @@ Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenter\Settings\Options\DocumentT
 Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter\Templates; ValueType: string; ValueName: DefaultDocumentTemplatePath; ValueData: {app}\Templates\Documents
 
 [Tasks]
-Name: DesktopLink; Description: Create a link on the desktop; GroupDescription: Link; Flags: unchecked
+Name: DesktopLink; Description: Create a desktop icon; GroupDescription: Link
 Name: SendToLink; Description: Add TeXnicCenter to the 'Send To' menu; GroupDescription: Link
 
 [Dirs]
