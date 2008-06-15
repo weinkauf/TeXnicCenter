@@ -1693,7 +1693,7 @@ STYLE WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    LTEXT           "© 1999-2006",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
+    LTEXT           "© 1999-2008",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
     PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,53,211,42,13,
                     BS_CENTER
     CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,
@@ -2072,8 +2072,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,7,1,0
- PRODUCTVERSION 0,7,1,0
+ FILEVERSION 0,7,5,0
+ PRODUCTVERSION 0,7,5,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -2091,14 +2091,14 @@ BEGIN
             VALUE "Comments", "Beta version!\0"
             VALUE "CompanyName", "TeXnicCenter.org (www.TeXnicCenter.org)\0"
             VALUE "FileDescription", "TeXnicCenter\0"
-            VALUE "FileVersion", "1 Beta 7.01\0"
+            VALUE "FileVersion", "1 Beta 7.50\0"
             VALUE "InternalName", "TeXnicCenter\0"
-            VALUE "LegalCopyright", "Copyright © 1999-2006 TeXnicCenter\0"
+            VALUE "LegalCopyright", "Copyright © 1999-2008 TeXnicCenter\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "TEXCNTR.EXE\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "TeXnicCenter\0"
-            VALUE "ProductVersion", "1 Beta 7.01 - unstable ('Greengrass')\0"
+            VALUE "ProductVersion", "1 Beta 7.50\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -4637,13 +4637,12 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_URL_TCHOME           "http://www.TeXnicCenter.org/\nTeXnicCenter Homepage\nhttp://www.TeXnicCenter.org/"
-    ID_URL_AUTHOR           "sven@texniccenter.org\nNachricht an den Autor\nmailto:sven@texniccenter.org"
-    ID_URL_TCERROR          "http://www.TeXnicCenter.org/issues\nFehlerbenachrichtigung\nhttp://www.TeXnicCenter.org/issues"
+    ID_URL_TCERROR          "https://sourceforge.net/tracker/?group_id=36323&atid=479426\nFehlerbenachrichtigung\nhttps://sourceforge.net/tracker/?group_id=36323&atid=479426"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter Benutzerforum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Entwicklerforum\nhttp://www.sourceforge.net/projects/texniccenter"
-    ID_URL_TCDICTDOWNLOAD   "http://lingucomponent.openoffice.org/spell_dic.html\nWörterbücher herunterladen\nhttp://lingucomponent.openoffice.org/spell_dic.html"
+    ID_URL_TCDICTDOWNLOAD   "http://wiki.services.openoffice.org/wiki/Dictionaries\nWörterbücher herunterladen\nhttp://wiki.services.openoffice.org/wiki/Dictionaries"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -4874,7 +4873,7 @@ STYLE WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    LTEXT           "© 1999-2006",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
+    LTEXT           "© 1999-2008",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
     PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,53,211,42,13,
                     BS_CENTER
     CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,
@@ -6220,8 +6219,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,7,1,0
- PRODUCTVERSION 0,7,1,0
+ FILEVERSION 0,7,5,0
+ PRODUCTVERSION 0,7,5,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -6239,14 +6238,14 @@ BEGIN
             VALUE "Comments", "Beta version!\0"
             VALUE "CompanyName", "TeXnicCenter.org (www.TeXnicCenter.org)\0"
             VALUE "FileDescription", "TeXnicCenter\0"
-            VALUE "FileVersion", "1 Beta 7.01\0"
+            VALUE "FileVersion", "1 Beta 7.50\0"
             VALUE "InternalName", "TeXnicCenter\0"
-            VALUE "LegalCopyright", "Copyright © 1999-2006 TeXnicCenter\0"
+            VALUE "LegalCopyright", "Copyright © 1999-2008 TeXnicCenter\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "TEXCNTR.EXE\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "TeXnicCenter\0"
-            VALUE "ProductVersion", "1 Beta 7.01 - unstable ('Greengrass')\0"
+            VALUE "ProductVersion", "1 Beta 7.50\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -8698,13 +8697,12 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_URL_TCHOME           "http://www.TeXnicCenter.org/\nTeXnicCenter Homepage\nhttp://www.TeXnicCenter.org/"
-    ID_URL_AUTHOR           "sven@texniccenter.org\nE-Mail to the Author\nmailto:sven@texniccenter.org"
-    ID_URL_TCERROR          "http://www.TeXnicCenter.org/issues\nReport an Error\nhttp://www.TeXnicCenter.org/issues"
+    ID_URL_TCERROR          "https://sourceforge.net/tracker/?group_id=36323&atid=479426\nReport an Error\nhttps://sourceforge.net/tracker/?group_id=36323&atid=479426"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
     ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter User Forum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Developer Forum\nhttp://www.sourceforge.net/projects/texniccenter"
-    ID_URL_TCDICTDOWNLOAD   "http://lingucomponent.openoffice.org/spell_dic.html\nDownload Dictionaries\nhttp://lingucomponent.openoffice.org/spell_dic.html"
+    ID_URL_TCDICTDOWNLOAD   "http://wiki.services.openoffice.org/wiki/Dictionaries\nDownload Dictionaries\nhttp://wiki.services.openoffice.org/wiki/Dictionaries"
 END
 
 STRINGTABLE DISCARDABLE 

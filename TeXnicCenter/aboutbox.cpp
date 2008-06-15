@@ -85,7 +85,7 @@
 // Array count. Make sure this keeps up with how many lines there are
 // in the array!
 char *pArrCredit[] = {
-						"Copyright © 1999-2006\t",
+						"Copyright © 1999-2008\t",
 						"www.ToolsCenter.org\t",
 						"",
 						"Portions Copyright © 1998-2003 by BCGSoft Ltd\f",
