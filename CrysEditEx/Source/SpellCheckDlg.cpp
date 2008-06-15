@@ -351,6 +351,9 @@ void CSpellCheckDlg::OnSpellReplaceAll()
 	{
 		m_pBuddy->HighlightText(ptFound, oldText.GetLength());
 		VERIFY(m_pBuddy->ReplaceSelection( newText ));
+
+		//Ensure that we do not find the same thing again
+		ptFound.x += newText.GetLength();
 	}
 	DoNextWord();
 	OnSpellError();
