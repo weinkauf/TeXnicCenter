@@ -1,3 +1,11 @@
+2008/06/15 niteria
+- Fixed crash when files were saved during closing a project
+- Improved detection of Ghostscript (GPL and AFPL)
+- Fixed Bug 1898865: Spelling Crash (infinite text insertion on ChangeAll)
+- Create a default user dictionary (%MyDocuments%\TXCUserDictionary.dic) if none is defined
+- Better spell checking and suggestions especially for German
+- New dictionaries for German and English
+
 2007/10/03 niteria
 - Create autocompletion window out of sight
 
