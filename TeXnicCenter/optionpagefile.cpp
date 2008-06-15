@@ -87,6 +87,7 @@ void COptionPageFile::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_OPTIONS_SAVE_AUTOMATIC, m_bSaveAutomatic);
 	DDX_Check(pDX, IDC_OPTIONS_SAVE_BEFORE_COMPILATION, m_bSaveBeforeCompilation);
 	DDX_Text(pDX, IDC_OPTIONS_SAVE_INTERVALL_EDIT, m_unSaveInterval);
+	DDV_MinMaxUInt(pDX, m_unSaveInterval, 1, 1000);
 	DDX_CBIndex(pDX, IDC_OPTIONS_FILETYPE, m_nFileFormat);
 	DDX_Check(pDX, IDC_OPTIONS_SAVE_NEWDOCS, m_bSaveNewDocuments);
 	//}}AFX_DATA_MAP
@@ -97,7 +98,7 @@ BOOL COptionPageFile::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
 
-	m_wndSaveIntervalSpin.SetRange( 0, 120 );
+	m_wndSaveIntervalSpin.SetRange( 1, 1000 );
 
 	UpdateCtrlStates();
 	
