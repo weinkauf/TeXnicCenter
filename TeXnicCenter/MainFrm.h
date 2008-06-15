@@ -56,8 +56,7 @@ class CMainFrame : public CBCGMDIFrameWnd
 protected:
 	enum tagTimers
 	{
-		timerParse = 1,
-		timerSave
+		timerSave = 1
 	};
 
 // construction/destruction

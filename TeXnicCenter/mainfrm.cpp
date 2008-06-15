@@ -536,9 +536,7 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 	switch( nIDEvent )
 	{
 		case timerSave: // save and parse project
-			theApp.SaveAllModifiedWithoutPrompt();
-		case timerParse:	// parse project
-			SendMessage( WM_COMMAND, ID_PROJECT_PARSE );
+			AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_FILE_SAVE_ALL);
 			break;
 	}
 	
@@ -578,7 +576,10 @@ void CMainFrame::OnOptionsChanged()
 	// install/uninstall timer for automatic saving
 	KillTimer( timerSave );
 	if( g_configuration.m_bSaveAutomatic )
+	{
+		if (g_configuration.m_unSaveInterval < 1) g_configuration.m_unSaveInterval = 1;
 		SetTimer( timerSave, g_configuration.m_unSaveInterval * 1000 * 60, NULL );
+	}
 }
 
 
