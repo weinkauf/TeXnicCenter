@@ -477,14 +477,15 @@ void COutputWizard::LookForPdf()
 
 	//Lets see, if Ghostscript is installed
 	// We find the Ghostscript dll in the registry here:
+	//  Path: HKEY_LOCAL_MACHINE\SOFTWARE\GPL Ghostscript\<version>
 	//  Path: HKEY_LOCAL_MACHINE\SOFTWARE\AFPL Ghostscript\<version>
 	//  Entry: GS_DLL=f:\prog\gstools\gs\gs8.12\bin\gsdll32.dll
 	// We need the directory of GS_DLL. There we find gswin32c.exe.
 	m_bGhostscriptInstalled = false;
 	CBCGRegistry gsReg(true, true); //HKEY_LOCAL_MACHINE, ReadOnly
-	if (gsReg.Open("SOFTWARE\\AFPL Ghostscript"))
+	if (gsReg.Open("SOFTWARE\\GPL Ghostscript") || gsReg.Open("SOFTWARE\\AFPL Ghostscript"))
 	{
-		//Read the subkeys - i.e. subfolders under "AFPL Ghostscript"
+		//Read the subkeys - i.e. subfolders under "GPL|AFPL Ghostscript"
 		CStringArray SubKeys;
 		gsReg.ReadSubKeys(SubKeys);
 
