@@ -106,12 +106,26 @@ int MySpell::spell(const char * word) const
 			rv = check(word); 
 			break;
 
-		case ALLCAP:
 		case INITCAP:
+			rv = check(word);
+			if (rv == NULL)
+			{
+				memcpy(wspace,word,(wl+1));
+				mkallsmall(wspace);
+				rv = check(wspace);
+			}
+			break;
+
+		case ALLCAP:
 			memcpy(wspace,word,(wl+1));
 			mkallsmall(wspace);
 			rv = check(wspace);
-			if (rv == NULL) rv = check(word);
+			if (rv == NULL)
+			{
+				mkinitcap(wspace);
+				rv = check(wspace);
+				if (rv == NULL) rv = check(word);
+			}
 			break; 
 
 	}
@@ -156,22 +170,37 @@ int MySpell::suggest(char*** slst, const char * word) const
 	int j;
 	switch(ct) {
 		case NOCAP:
+			//Try as it is
 			ns = pSMgr->suggest(pHMgr, -1, slst, word);
-			if ( !bMainOnly )
-				ns = pSMgr->suggest(pAddHash, ns, slst, word);
+			if (!bMainOnly) ns = pSMgr->suggest(pAddHash, ns, slst, word);
+			//Try with init cap for German
+			memcpy(wspace, word, (wl+1));
+			mkinitcap(wspace);
+			ns = pSMgr->suggest(pHMgr, ns, slst, wspace);
+			if (!bMainOnly) ns = pSMgr->suggest(pAddHash, ns, slst, wspace);
 			break;
 
 		case INITCAP:
-			memcpy(wspace,word,(wl+1));
-			mkallsmall(wspace);
-			ns = pSMgr->suggest(pHMgr, -1, slst, wspace);
-			if ( !bMainOnly )
-				ns = pSMgr->suggest(pAddHash, ns, slst, word);
-			for (j=0; j < ns; j++)
-				mkinitcap((*slst)[j]);
-			break;
+			{
+				//Try it as it is
+				ns = pSMgr->suggest(pHMgr, -1, slst, word);
+				if (!bMainOnly) ns = pSMgr->suggest(pAddHash, ns, slst, word);
+				//Try it in lower case
+				memcpy(wspace, word, (wl+1));
+				mkallsmall(wspace);
+				const int idxStartLowerCaseSuggestions = ns;
+				ns = pSMgr->suggest(pHMgr, ns, slst, wspace);
+				if (!bMainOnly) ns = pSMgr->suggest(pAddHash, ns, slst, wspace);
+				// - give these ones an initcap again (start of a sentence for example)
+				for (j=idxStartLowerCaseSuggestions; j < ns; j++)
+				{
+					mkinitcap((*slst)[j]);
+				}
+				break;
+			}
 
 		case HUHCAP:
+			//Try both - original and all lowercase
 			memcpy(wspace,word,(wl+1));
 			mkallsmall(wspace);
 			ns = pSMgr->suggest(pHMgr, -1, slst, word);
@@ -183,13 +212,27 @@ int MySpell::suggest(char*** slst, const char * word) const
 			break;
 
 		case ALLCAP:
-			memcpy(wspace,word,(wl+1));
-			mkallsmall(wspace);
-			ns = pSMgr->suggest(pHMgr, -1, slst, wspace);
-			if ( !bMainOnly )
-				ns = pSMgr->suggest(pAddHash, ns, slst, word);
-			for (j=0; j < ns; j++)
-				mkallcap((*slst)[j]);
+			{
+				//Try it as it is
+				ns = pSMgr->suggest(pHMgr, -1, slst, word);
+				if (!bMainOnly) ns = pSMgr->suggest(pAddHash, ns, slst, word);
+				//Try it with other cases
+				const int idxStartOtherCaseSuggestions = ns;
+				// - lower case
+				memcpy(wspace, word, (wl+1));
+				mkallsmall(wspace);
+				ns = pSMgr->suggest(pHMgr, ns, slst, wspace);
+				if (!bMainOnly) ns = pSMgr->suggest(pAddHash, ns, slst, wspace);
+				// - init cap
+				mkinitcap(wspace);
+				ns = pSMgr->suggest(pHMgr, ns, slst, wspace);
+				if (!bMainOnly) ns = pSMgr->suggest(pAddHash, ns, slst, wspace);
+				// - everything back to allcap
+				for (j=idxStartOtherCaseSuggestions; j < ns; j++)
+				{
+					mkallcap((*slst)[j]);
+				}
+			}
 			break;
 	}
 	if (ns < 1)

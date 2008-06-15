@@ -55,7 +55,8 @@ int SuggestMgr::suggest(HashMgr *pHMgr, int nsug, char*** slst, const char * wor
 	if (pHMgr == NULL)  return -2;
 
 	// did we forget to add a char
-	nsug = forgotchar(pHMgr, wlst, word, nsug);
+	if ((nsug < maxSug) && (nsug > -1))
+		nsug = forgotchar(pHMgr, wlst, word, nsug);
 
 	// did we swap the order of chars by mistake
 	if ((nsug < maxSug) && (nsug > -1))
@@ -257,12 +258,19 @@ int SuggestMgr::swapchar(HashMgr *pHMgr, char ** wlst, const char * word, int ns
 // needs to check both root words and words with affixes
 int SuggestMgr::check(HashMgr *pHMgr, const char * word, int len) const
 {
-	struct hentry * rv=NULL;
-	if (pAMgr) { 
-		rv = pAMgr->lookup(pHMgr, word);
-		if (rv == NULL) rv = pAMgr->affix_check(pHMgr, word,len);
+	if (!pHMgr) return 0;
+
+	struct hentry* rv = NULL;
+
+	//Lookup root word
+	rv = pHMgr->lookup(word);
+
+	//With affixes
+	if (rv == NULL && pAMgr)
+	{
+		rv = pAMgr->affix_check(pHMgr, word, len);
 	}
-	//if ( rv == NULL && 
+
 	if (rv) return 1;
 	return 0;
 }
