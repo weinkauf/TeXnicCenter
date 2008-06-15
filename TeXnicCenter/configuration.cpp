@@ -217,7 +217,18 @@ void CConfiguration::Serialize( SERDIRECTION direction )
 	// Language-Spelling
 	strSection = _T("Settings\\Language-Spelling");
 
-	SerializeProfileString( strSection, _T("PersonalDictionary"), &m_strSpellPersonalDictionary, direction, _T("") );
+	//Create a default name for the user dictionary (otherwise the user will always loose the added words, if a path is not specified in the options)
+	char PersonalFolderPath[MAX_PATH + 2];
+	SHGetSpecialFolderPath(NULL, PersonalFolderPath, CSIDL_PERSONAL, false);
+	CPathTool DefaultUserDic(PersonalFolderPath);
+	DefaultUserDic.Append("TXCUserDictionary.dic");
+
+	SerializeProfileString( strSection, _T("PersonalDictionary"), &m_strSpellPersonalDictionary, direction, DefaultUserDic);
+	if (m_strSpellPersonalDictionary.IsEmpty())
+	{
+		m_strSpellPersonalDictionary = DefaultUserDic;
+	}
+
 	SerializeProfileString( strSection, _T("DictionaryPath"), &m_strSpellDictionaryPath, direction, _T(""));
 	if (!CPathTool::Exists(m_strSpellDictionaryPath))
 		m_strSpellDictionaryPath = CPathTool::Cat(CPathTool::GetDirectory(theApp.m_pszHelpFilePath), _T("Language"));
