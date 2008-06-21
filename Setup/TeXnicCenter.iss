@@ -41,29 +41,31 @@ Name: Templates; Description: LaTeX Templates (Templates for creating new projec
 Source: ..\output\Release\cryseditEx.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: ..\output\Release\GPL_english.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: ..\output\Release\GPL_german.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\output\Release\MFCExt.dll; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: ..\output\Release\MFCExt.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: ..\output\Release\TEXCNTR.EXE; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\TeXnicCenter\Tips_english.txt; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
-Source: ..\output\Release\MsXmlCpp.dll; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
-Source: ..\TeXnicCenter\Tips_german.txt; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
-Source: ..\output\Release\UserImages.bmp; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
-Source: ..\output\Release\mre200l.dll; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
-Source: ..\output\Release\BCGSkinDownloader.dll; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
-Source: ..\output\Release\BCGCB63.dll; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
-Source: ..\TeXnicCenterObjects\Lib\TeXnicCenterObjects.tlb; DestDir: {app}; Flags: regtypelib promptifolder comparetimestamp; Components: Application_Files
+Source: ..\output\Release\MsXmlCpp.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\output\Release\mre200l.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\output\Release\BCGSkinDownloader.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\output\Release\BCGCB63.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\TeXnicCenter\Tips_english.txt; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\TeXnicCenter\Tips_german.txt; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\TeXnicCenterObjects\Lib\TeXnicCenterObjects.tlb; DestDir: {app}; Components: Application_Files; Flags: regtypelib promptifolder comparetimestamp
 
-Source: ..\output\Release\language\*.dll; DestDir: {app}\Language; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: ..\output\Release\UserImages.bmp; DestDir: {app}; Components: Application_Files; Flags: promptifolder comparetimestamp
+
+Source: ..\output\Release\language\*.dll; DestDir: {app}\Language; Components: Application_Files; Flags: ignoreversion
 Source: ..\output\Release\language\*.aff; DestDir: {app}\Language; Components: Application_Files; Flags: promptifolder comparetimestamp
 Source: ..\output\Release\language\*.dic; DestDir: {app}\Language; Components: Application_Files; Flags: promptifolder comparetimestamp
-Source: ..\output\Release\Help\*.chm; DestDir: {app}\Help; Flags: promptifolder comparetimestamp; Components: Help_Files
-Source: ..\output\Release\Help\*.chw; DestDir: {app}\Help; Flags: promptifolder comparetimestamp; Components: Help_Files
+Source: ..\output\Release\Help\*.chm; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
+Source: ..\output\Release\Help\*.chw; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
 
-Source: ..\output\Release\*.xsd; DestDir: {app}; Flags: promptifolder comparetimestamp; Components: Application_Files
-Source: ..\output\Release\packages\*.xml; DestDir: {app}\packages; Flags: promptifolder comparetimestamp; Components: Application_Files
-Source: ..\output\Release\packages\*.bmp; DestDir: {app}\packages; Flags: promptifolder comparetimestamp; Components: Application_Files
+Source: ..\output\Release\*.xsd; DestDir: {app}; Components: Application_Files; Flags: promptifolder comparetimestamp
+Source: ..\output\Release\packages\*.xml; DestDir: {app}\packages; Components: Application_Files; Flags: promptifolder comparetimestamp
+Source: ..\output\Release\packages\*.bmp; DestDir: {app}\packages; Components: Application_Files; Flags: promptifolder comparetimestamp
 Source: msxml4.dll; DestDir: {sys}; Flags: regserver sharedfile
 Source: msxml4r.dll; DestDir: {sys}; Flags: sharedfile
 Source: msxml4a.dll; DestDir: {sys}; Flags: sharedfile
+
 DestDir: {app}\Templates\Documents\Deutsch; Source: ..\output\Release\Templates\Documents\Deutsch\*.tex; Components: " Templates"; Flags: comparetimestamp
 DestDir: {app}\Templates\Documents\Deutsch erweitert; Source: ..\output\Release\Templates\Documents\Deutsch erweitert\*.tex; Components: " Templates"; Flags: comparetimestamp
 DestDir: {app}\Templates\Documents\English; Source: ..\output\Release\Templates\Documents\English\*.tex; Components: " Templates"; Flags: comparetimestamp
@@ -72,6 +74,7 @@ DestDir: {app}\Templates\Projects\English advanced; Source: ..\output\Release\Te
 DestDir: {app}\Templates\Projects\English; Source: ..\output\Release\Templates\Projects\English\*.tex; Components: " Templates"; Flags: comparetimestamp
 DestDir: {app}\Templates\Projects\Deutsch erweitert; Source: ..\output\Release\Templates\Projects\Deutsch erweitert\*.tex; Components: " Templates"; Flags: comparetimestamp
 DestDir: {app}\Templates\Projects\Deutsch; Source: ..\output\Release\Templates\Projects\Deutsch\*.tex; Components: " Templates"; Flags: comparetimestamp
+
 [Icons]
 Name: {group}\TeXnicCenter; Filename: {app}\TEXCNTR.EXE; WorkingDir: {userdocs}; IconIndex: 0
 Name: {group}\TeXnicCenter Help; Filename: {app}\Help\TeXCntr.chm; WorkingDir: {app}\Help; IconFilename: {win}\HH.EXE; IconIndex: 0; Components: Help_Files
