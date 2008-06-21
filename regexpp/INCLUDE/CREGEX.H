@@ -1,4 +1,0 @@
-#ifndef CREGEX_H
-#include <jm/cregex.h>
-#endif
-
