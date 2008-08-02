@@ -91,6 +91,7 @@ m_bLatexInstalled(false),
 m_bDvipsInstalled(false),
 m_bPdfLatexInstalled(false),
 m_bGhostscriptInstalled(false)
+, m_bGhostscriptViaPS2PDF(false)
 , m_wndPageWelcome(this)
 , m_wndPageMikTex(this)
 , m_wndPageFinish(this)
@@ -459,11 +460,12 @@ void COutputWizard::LookForDviViewer()
 
 void COutputWizard::LookForPs()
 {
-    // Let's see, if dvips is installed, otherwise, we won't need 
+    // Let's see, if dvips is installed, otherwise, we won't need
     // a postscript-viewer
     CFileFind ff;
 
-    if (!ff.FindFile(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("dvips.exe")))) {
+    if (!ff.FindFile(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("dvips.exe"))))
+    {
         m_bDvipsInstalled = false;
 
         // There is no dvips, so we don't need any ps-viewer
@@ -478,15 +480,19 @@ void COutputWizard::LookForPs()
 
     // DVIPS is installed
     // is there a registered viewer?
-    m_wndPagePsViewer.m_strPath = FindApplicationForDocType(_T(".ps"));
+	CString strPSViewer = FindApplicationForDocType(_T(".ps"));
+    m_wndPagePsViewer.m_strPath = strPSViewer;
 
-    if (m_wndPagePsViewer.m_strPath.Find(_T("GSVIEW32.EXE")) > -1) {
+	strPSViewer.MakeUpper();
+    if (strPSViewer.Find(_T("GSVIEW32.EXE")) > -1)
+    {
         m_wndPagePsViewer.m_strSingleInstanceOption = _T("-e");
 
         LookForPdf();
     }
-    else {
-        // lets the user make his configuration
+    else
+    {
+        // let the user make the configuration
         SetActivePage(pagePsViewer);
     }
 }
@@ -497,7 +503,8 @@ void COutputWizard::LookForPdf()
     CFileFind ff;
     m_bPdfLatexInstalled = false;
 
-    if (ff.FindFile(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("pdflatex.exe")))) {
+    if (ff.FindFile(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("pdflatex.exe"))))
+    {
         m_bPdfLatexInstalled = true;
     }
 
@@ -512,8 +519,9 @@ void COutputWizard::LookForPdf()
     m_bGhostscriptInstalled = false;
     CBCGRegistryEx gsReg(true,true); //HKEY_LOCAL_MACHINE, ReadOnly
 
-    if (gsReg.Open(_T("SOFTWARE\\GPL Ghostscript")) || 
-        gsReg.Open(_T("SOFTWARE\\AFPL Ghostscript"))) {
+    if (gsReg.Open(_T("SOFTWARE\\GPL Ghostscript")) ||
+            gsReg.Open(_T("SOFTWARE\\AFPL Ghostscript")))
+    {
         // Read the subkeys - i.e. subfolders under "GPL|AFPL Ghostscript"
         CStringArray SubKeys;
         ReadSubKeys(gsReg.GetRegKey(),SubKeys);
@@ -523,7 +531,8 @@ void COutputWizard::LookForPdf()
         int gsMajorVersion = -1;
         int gsMinorVersion = -1;
 
-        for (int i = 0; i < SubKeys.GetSize(); i++) {
+        for (int i = 0; i < SubKeys.GetSize(); i++)
+        {
             int idxPoint = SubKeys[i].Find(_T('.'));
 
             if (idxPoint <= 0)
@@ -533,7 +542,8 @@ void COutputWizard::LookForPdf()
             int gsMinorVersionThis = _ttoi(SubKeys[i].Right(SubKeys[i].GetLength() - idxPoint - 1));
 
             // (8.12 vs. 8.11) 80012 > 80011;  (8.12 at init) 80012 > -10001
-            if ((gsMajorVersionThis * 10000 + gsMinorVersionThis) > (gsMajorVersion * 10000 + gsMinorVersion)) {
+            if ((gsMajorVersionThis * 10000 + gsMinorVersionThis) > (gsMajorVersion * 10000 + gsMinorVersion))
+            {
                 idGSVersionSubKey = i;
                 gsMajorVersion = gsMajorVersionThis;
                 gsMinorVersion = gsMinorVersionThis;
@@ -541,12 +551,17 @@ void COutputWizard::LookForPdf()
         }
 
         //Did we find a version? And can we go into that subdir?
-        if ((idGSVersionSubKey >= 0) && (gsReg.Open(SubKeys[idGSVersionSubKey]))) {
-            if (gsReg.Read(_T("GS_DLL"),m_strGhostscriptPath)) {
+        if ((idGSVersionSubKey >= 0) && (gsReg.Open(SubKeys[idGSVersionSubKey])))
+        {
+            if (gsReg.Read(_T("GS_DLL"),m_strGhostscriptPath))
+            {
                 m_strGhostscriptPath = CPathTool::Cat(CPathTool::GetDirectory(m_strGhostscriptPath),_T("gswin32c.exe"));
 
                 if (ff.FindFile(m_strGhostscriptPath))
-                    m_bGhostscriptInstalled = true;
+				{
+					m_bGhostscriptInstalled = true;
+					m_bGhostscriptViaPS2PDF = false;
+				}
 
                 ff.Close();
             }
@@ -556,18 +571,22 @@ void COutputWizard::LookForPdf()
     }
 
     // No GhostScript found?
-    if (!m_bGhostscriptInstalled) {
+    if (!m_bGhostscriptInstalled)
+    {
         // Look for p2pdf.exe in the MiKTeX bin directory
         const CString path = CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("ps2pdf.exe"));
 
-        if (CPathTool::Exists(path)) {
+        if (CPathTool::Exists(path))
+        {
             m_bGhostscriptInstalled = true;
+			m_bGhostscriptViaPS2PDF = true;
             m_strGhostscriptPath = path;
         }
     }
 
     //Can the user create PDFs?
-    if (!m_bPdfLatexInstalled && !m_bGhostscriptInstalled) {
+    if (!m_bPdfLatexInstalled && !m_bGhostscriptInstalled)
+    {
         // There is no pdflatex or Ghostscript,
         // so we don't need a pdf-viewer.
         // Lets finish.
@@ -582,7 +601,8 @@ void COutputWizard::LookForPdf()
     m_wndPagePdfViewer.m_strPath = strViewer;
 
     //if (strViewer.Find(_T("ACRORD32.EXE")) > -1 || strViewer.Find(_T("ACROBAT.EXE")) > -1) {
-    if (IsAcrobat(strViewer)) {
+    if (IsAcrobat(strViewer))
+    {
         // standard viewer is Acrobat Reader
         ShowInformation();
         m_wndPagePdfViewer.m_strSingleInstanceOption.Empty();
@@ -834,11 +854,24 @@ void COutputWizard::GenerateOutputProfiles()
                     _T("-P pdf \"%Bm.dvi\""));
             p.GetPostProcessorArray().Add(ppDVIPS);
 
-            // add post processor Ghostscript ps2pdf
-            CPostProcessor ppGS(
-                    _T("Ghostscript (ps2pdf)"),m_strGhostscriptPath,
-                    _T("-sPAPERSIZE=a4 -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"%bm.pdf\" -c save pop -f \"%bm.ps\""));
-            p.GetPostProcessorArray().Add(ppGS);
+            // add post processor Ghostscript or ps2pdf
+			if (m_bGhostscriptViaPS2PDF)
+			{
+				//ps2pdf
+				CPostProcessor ppPS2PDF(
+						_T("ps2pdf"), m_strGhostscriptPath,
+						_T("\"%bm.ps\""));
+				p.GetPostProcessorArray().Add(ppPS2PDF);
+			}
+			else
+			{
+				//Ghostscript directly
+				CPostProcessor ppGS(
+						_T("Ghostscript (ps2pdf)"),m_strGhostscriptPath,
+						_T("-sPAPERSIZE=a4 -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"%bm.pdf\" -c save pop -f \"%bm.ps\""));
+				p.GetPostProcessorArray().Add(ppGS);
+			}
+
 
             // add viewer settings
             if (!m_wndPagePdfViewer.m_strPath.IsEmpty()) {
