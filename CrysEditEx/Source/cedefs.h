@@ -15,19 +15,22 @@
 ////////////////////////////////////////////////////////////////////////////
 
 /********************************************************************
-*
-* $RCSfile$
-* $Revision$
-* $Date$
-*
-* $Author$
-*
-* $Log$
-* Revision 1.0  2000-05-31 21:55:28+02  sven_wiegand
-* Initial revision
-*
-*
-********************************************************************/
+ *
+ * $RCSfile: cedefs.h,v $
+ * $Revision$
+ * $Date$
+ *
+ * $Author$
+ *
+ * $Log: cedefs.h,v $
+ * Revision 1.1.1.1  2002/02/26 08:11:59  svenwiegand
+ * Initial revision
+ *
+ * Revision 1.0  2000-05-31 21:55:28+02  sven_wiegand
+ * Initial revision
+ *
+ *
+ ********************************************************************/
 
 #ifndef CEDEFS_H__INCLUDED
 #define CEDEFS_H__INCLUDED
@@ -37,21 +40,21 @@
 #endif
 
 #ifndef CRYSEDIT_CLASS_DECL
-	#if defined(CE_DLL_BUILD)
-		#define CRYSEDIT_CLASS_DECL		__declspec(dllexport)
-	#elif defined(CE_FROM_DLL)
-		#define CRYSEDIT_CLASS_DECL		__declspec(dllimport)
-	#else
-		#define CRYSEDIT_CLASS_DECL
-	#endif
+#if defined(CE_DLL_BUILD)
+#define CRYSEDIT_CLASS_DECL		__declspec(dllexport)
+#elif defined(CE_FROM_DLL)
+#define CRYSEDIT_CLASS_DECL		__declspec(dllimport)
+#else
+#define CRYSEDIT_CLASS_DECL
+#endif
 #endif
 
 #ifndef CE_INLINE
-	#if defined(CE_DLL_BUILD) || defined(CE_FROM_DLL)
-		#define CE_INLINE
-	#else
-		#define CE_INLINE inline
-	#endif
+#if defined(CE_DLL_BUILD) || defined(CE_FROM_DLL)
+#define CE_INLINE
+#else
+#define CE_INLINE inline
+#endif
 #endif
 
 

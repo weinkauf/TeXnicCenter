@@ -43,7 +43,8 @@ last opened folder even if the dialog was cancelled by the user.
 @author Sven Wiegand
 @author Tino Weinkauf
 */
-class AFX_EXT_CLASS CFileDialogEx : public CFileDialog
+class AFX_EXT_CLASS CFileDialogEx : 
+    public CFileDialog
 {
 	DECLARE_DYNAMIC(CFileDialogEx)
 
@@ -55,11 +56,6 @@ public:
 		LPCTSTR lpszFilter = NULL,
 		CWnd* pParentWnd = NULL);
 
-//Overridings
-public:
-	///Call this to show the dialog.
-	int DoModal();
-
 protected:
 	///Catches the folder-changed-notification.
 	void OnFolderChange();
@@ -67,13 +63,12 @@ protected:
 //Methods
 public:
 	///Returns the last opened folder, even if the user cancelled the dialog.
-	CString GetLastOpenedFolder()
-		{return m_strLastFolder;};
+	 const CString& GetLastOpenedFolder() const;
 
 //Attributes
-protected:
+private:
 	///Storage to hold the last opened folder.
-	CString m_strLastFolder;
+	mutable CString m_strLastFolder;
 
 //Message handlers
 protected:

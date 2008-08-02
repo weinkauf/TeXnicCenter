@@ -43,7 +43,7 @@ for comparison.
 @author Sven Wiegand
 */
 template<class TYPE, class ARG_TYPE>
-class AFX_EXT_CLASS CSortArray : public CArray<TYPE, ARG_TYPE>  
+class /*AFX_EXT_CLASS*/ CSortArray : public CArray<TYPE, ARG_TYPE>  
 {
 // construction/destruction
 public:
@@ -127,7 +127,7 @@ int CSortArray<TYPE, ARG_TYPE>::InsertSorted(
 		{
 			// new element is greater
 			if( bSortAscending )
-				nLookAt++;
+				++nLookAt;
 
 			InsertAt( nLookAt, newElement );
 			return nLookAt;
@@ -136,7 +136,7 @@ int CSortArray<TYPE, ARG_TYPE>::InsertSorted(
 		{
 			// new element is lower
 			if( !bSortAscending )
-				nLookAt++;
+				++nLookAt;
 
 			InsertAt( nLookAt, newElement );
 			return nLookAt;

@@ -75,7 +75,7 @@ public:
 	DWORD GetBuildNumber() const;					// returns build number
 	DWORD GetPlatformID() const;					// returns platform ID
 	void GetServicePackInfo(TCHAR* szServicePack) const;// additional information about service pack
-	CString ToString();
+	const CString ToString();
 };
 
 #endif

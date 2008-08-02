@@ -46,52 +46,71 @@ static char THIS_FILE[]=__FILE__;
 //-------------------------------------------------------------------
 
 CBCGRegistryEx::CBCGRegistryEx(BOOL bAdmin, BOOL bReadOnly)
-:	CBCGRegistry(bAdmin, bReadOnly),
+:	CSettingsStore(bAdmin, bReadOnly),
 	m_bAdmin(bAdmin)
-{}
+{
+}
 
 
 CBCGRegistryEx::~CBCGRegistryEx()
 {
 	// Your push/pop-calls are not balanced!
-	ASSERT(m_KeyStack.IsEmpty());
+	ASSERT(m_KeyStack.empty());
 }
 
 
 void CBCGRegistryEx::PushKey()
 {
 	// Your push/pop-calls are not balanced!
-	m_KeyStack.Push(m_hKey);
-}
+    HANDLE key;
+    ::DuplicateHandle(::GetCurrentProcess(),m_reg.m_hKey,
+        ::GetCurrentProcess(),&key,0,FALSE,DUPLICATE_SAME_ACCESS);
 
+    m_KeyStack.push(reinterpret_cast<HKEY>(key));
+}
 
 void CBCGRegistryEx::PopKey()
 {
 	// Your push/pop-calls are not balanced!
-	ASSERT(!m_KeyStack.IsEmpty());
+	ASSERT(!m_KeyStack.empty());
 
-	m_hKey = m_KeyStack.Top();
-	m_KeyStack.Pop();
+    if (m_reg)
+        m_reg.Close();
+
+    m_reg.Attach(m_KeyStack.top());
+	m_KeyStack.pop();
 }
-
 
 void CBCGRegistryEx::TopKey()
 {
 	// Stack is empty!
-	ASSERT(!m_KeyStack.IsEmpty());
+	ASSERT(!m_KeyStack.empty());
 
-	m_hKey = m_KeyStack.Top();
+    if (m_reg)
+        m_reg.Close();
+
+    HANDLE key;
+    ::DuplicateHandle(::GetCurrentProcess(),m_KeyStack.top(),
+        ::GetCurrentProcess(),&key,0,FALSE,DUPLICATE_SAME_ACCESS);
+
+	m_reg.Attach(reinterpret_cast<HKEY>(key));
 }
-
 
 void CBCGRegistryEx::OpenRoot()
 {
-	m_hKey = m_bAdmin? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER;
-}
+    if (m_reg)
+        m_reg.Close();
 
+	m_reg.Attach(m_bAdmin ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER);
+}
 
 BOOL CBCGRegistryEx::OpenFromRoot(LPCTSTR lpszPath)
 {
 	OpenRoot();
 	return Open(lpszPath);
+}
+
+bool CBCGRegistryEx::VerifyValue( LPCTSTR v )
+{
+    return m_reg.QueryValue(v,0,0,0) == ERROR_SUCCESS;
 }

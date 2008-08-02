@@ -107,7 +107,7 @@ CNumberEdit::CNumberEdit( int nType /*= ntLong*/ )
 }
 
 
-CNumberEdit::CNumberEdit( char cMin, char cMax )
+CNumberEdit::CNumberEdit( TCHAR cMin, TCHAR cMax )
 : CFormatEdit(),
 	m_nSelStart( 0 ),
 	m_nSelEnd( 0 )
@@ -167,7 +167,7 @@ void CNumberEdit::SetType( int nType )
 	switch( nType )
 	{
 		case ntChar:
-			SetRange( (char)CHAR_MIN, (char)CHAR_MAX );
+			SetRange( (TCHAR)CHAR_MIN, (TCHAR)CHAR_MAX );
 			break;
 		case ntUChar:
 			SetRange( (UCHAR)0, (UCHAR)UCHAR_MAX );
@@ -188,7 +188,7 @@ void CNumberEdit::SetType( int nType )
 }
 
 
-void CNumberEdit::SetRange( char cMin, char cMax )
+void CNumberEdit::SetRange( TCHAR cMin, TCHAR cMax )
 {
 	SetType( ntChar, (long)cMin, (ULONG)cMax );
 }
@@ -290,14 +290,14 @@ void CNumberEdit::OnChange()
 
 	if( m_nType == ntDouble )
 	{
-		double	dVal = atof( strNew );
+		double	dVal = _tstof( strNew );
 
 		if( dVal >= m_dMin && dVal <= m_dMax )
 			return;
 	}
 	else
 	{
-		long		lVal = atol( strNew );
+		long		lVal = _tstol( strNew );
 
 		if( lVal >= m_lMin && lVal <= m_lMax )
 			return;

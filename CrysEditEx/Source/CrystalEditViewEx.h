@@ -15,70 +15,69 @@
 #include "CrystalSyntaxParser.h"
 #endif
 
-
-class CRYSEDIT_CLASS_DECL CCrystalEditViewEx : public CCrystalEditView  
+class CRYSEDIT_CLASS_DECL CCrystalEditViewEx : public CCrystalEditView 
 {
-	DECLARE_DYNCREATE(CCrystalEditViewEx)
+    DECLARE_DYNCREATE(CCrystalEditViewEx)
 
 protected:
-	friend class CCrystalSyntaxParser;
+    friend class CCrystalSyntaxParser;
 
-/** @construction/destruction */
+    /** @construction/destruction */
 public:
-	CCrystalEditViewEx();
+    CCrystalEditViewEx();
 
-/** @operations */
+    /** @operations */
 public:
-	/**
-	Attaches a syntax parser to this view.
+    /**
+    Attaches a syntax parser to this view.
 
-	@param pParser
-		The syntax parser to attach to this view. The Parser must be derived
-		from CCrystalSyntaxParser.
+    @param pParser
+            The syntax parser to attach to this view. The Parser must be derived
+            from CCrystalSyntaxParser.
 
-	@return
-		The syntax parser that was used until the call to this function or
-		NULL if no one was attached to this view.
-	*/
-	CCrystalSyntaxParser *SetSyntaxParser( CCrystalSyntaxParser *pParser );
+    @return
+            The syntax parser that was used until the call to this function or
+            NULL if no one was attached to this view.
+     */
+    CCrystalSyntaxParser *SetSyntaxParser(CCrystalSyntaxParser *pParser);
 
-/** @overridables */
+    /** @overridables */
 protected:
-	/**
-	@description
-		Is called by tht view, when there is a Line to parse.
+    /**
+    @description
+            Is called by tht view, when there is a Line to parse.
 
-	@param dwCookie
-		The result of parsing the previous line. This parameter contains flags,
-		you set while parsing the previous line. Normaly this will be flags that
-		indicate a region that was still open at the end of the last line. You
-		set those flags for a line by returning them ored (|).
-	@param nLineIndex
-		The zero-based index of the line to parse.
-	@param pBuf
-		You have to split the lines in to parts which are specified by there
-		beginning (zero-based index of the character in this line) and there text
-		color. You have to specifie each one of this blocks in this Buffer.
-		You can define a new Block with the macro DEFINE_BLOCK( pos, colorindex ).
+    @param dwCookie
+            The result of parsing the previous line. This parameter contains flags,
+            you set while parsing the previous line. Normaly this will be flags that
+            indicate a region that was still open at the end of the last line. You
+            set those flags for a line by returning them ored (|).
+    @param nLineIndex
+            The zero-based index of the line to parse.
+    @param pBuf
+            You have to split the lines in to parts which are specified by there
+            beginning (zero-based index of the character in this line) and there text
+            color. You have to specifie each one of this blocks in this Buffer.
+            You can define a new Block with the macro DEFINE_BLOCK( pos, colorindex ).
 
-		When the function ist called with this parameter set zu NULL, you only
-		have to calculate the cookies.
-	@param nActualItems
-		Used by the macro DEFINE_BLOCK.
+            When the function ist called with this parameter set zu NULL, you only
+            have to calculate the cookies.
+    @param nActualItems
+            Used by the macro DEFINE_BLOCK.
 
-	@return 
-		The calculated flags for this line (see dwCookie).
-	*/
-	virtual DWORD ParseLine( DWORD dwCookie, int nLineIndex, 
-		TEXTBLOCK *pBuf, int &nActualItems );
-	
-/** @attributes */
+    @return 
+            The calculated flags for this line (see dwCookie).
+     */
+    virtual DWORD ParseLine(DWORD dwCookie, int nLineIndex,
+                            TEXTBLOCK *pBuf, int &nActualItems);
+
+    /** @attributes */
 protected:
-	/**
-	@description
-		The parser used to parse the Text or NULL if no parser is used.
-	*/
-	CCrystalSyntaxParser *m_pSyntaxParser;
+    /**
+    @description
+            The parser used to parse the Text or NULL if no parser is used.
+     */
+    CCrystalSyntaxParser *m_pSyntaxParser;
 };
 
 #endif // !defined(AFX_CRYSTALEDITVIEWEX_H__5353A214_1059_11D3_929E_CEFE4CA77E5E__INCLUDED_)

@@ -918,7 +918,10 @@
 </lxCollection>
 <!-- $Id$ -->
 <!-- 
-	$Log$
+	$Log: math.xml,v $
+	Revision 1.12  2007/04/20 11:59:21  niteria
+	no message
+	
 	Revision 1.11  2006/04/07 19:29:30  owieland
 	- Added function names
 	- Extended misc symbols

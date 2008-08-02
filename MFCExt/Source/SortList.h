@@ -52,7 +52,7 @@ List that maintains elements in sorted order.
 @author Chris Norris
 */
 template<class TYPE, class ARG_TYPE, class Compare=std::less<TYPE> >
-class AFX_EXT_CLASS CSortList : public CList<TYPE, ARG_TYPE>
+class /*AFX_EXT_CLASS*/ CSortList : public CList<TYPE, ARG_TYPE>
 {
 public:
 	CSortList() {};

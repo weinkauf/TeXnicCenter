@@ -15,19 +15,22 @@
 ////////////////////////////////////////////////////////////////////////////
 
 /********************************************************************
-*
-* $RCSfile$
-* $Revision$
-* $Date$
-*
-* $Author$
-*
-* $Log$
-* Revision 1.0  2000-05-31 21:55:39+02  sven_wiegand
-* Initial revision
-*
-*
-********************************************************************/
+ *
+ * $RCSfile: editreg.h,v $
+ * $Revision$
+ * $Date$
+ *
+ * $Author$
+ *
+ * $Log: editreg.h,v $
+ * Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
+ * Initial revision
+ *
+ * Revision 1.0  2000-05-31 21:55:39+02  sven_wiegand
+ * Initial revision
+ *
+ *
+ ********************************************************************/
 
 #ifndef CRYSEDITREG_H__INCLUDED
 #define CRYSEDITREG_H__INCLUDED

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
+<lxCollection version="1" xmlns:txclxp="http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd">
+  <lxPackage name="PSTricks"
+		path=""
+		desc="PSTricks commands"
+	>
+
+    <lxEnvironment name="pspicture"
+        parameters="1"
+        desc="PSTricks draw environment"
+        icon="format.bmp"
+        index="6"
+        expafter="}&#xA;	&#xA;\end{pspicture}"
+        expbefore="\begin{"/>
+    <lxEnvironment name="psmatrix"
+        parameters="1"
+        desc="Matrix environment"
+        icon="format.bmp"
+        index="6"
+        expafter="}&#xA;	&#xA;\end{psmatrix}"
+        expbefore="\begin{"/>
+
+    <lxCommand name="\psline"	desc="Line"/>
+    <lxCommand name="\psframe"	desc="Frame"/>
+	<lxCommand name="\uput"	desc="uput"/>
+	<lxCommand name="\psaxes"	desc="Axes"/>
+  </lxPackage>
+</lxCollection>

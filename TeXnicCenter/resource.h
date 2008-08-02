@@ -1,19 +1,21 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by TeXnicCenter.rc
 //
-#define STE_BCGCBRESDLL                 17
 #define STE_CRYSTAL_EDIT_RESOURCE_DLL   18
 #define STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED 19
 #define IDS_SAVE_PACKAGE_AS             20
 #define IDS_SELECT_PACKAGE_DIR          21
+#define IDS_TOOLBAR_CUSTOMIZE           22
+#define IDS_ERROR_LIST                  23
+#define IDS_LOADING                     24
+#define IDS_FORMAT                      25
 #define STE_LANGUAGE_NEW                32
 #define STE_RESOURCE_CONFLICT           33
 #define STE_LANGUAGE_GERMAN             34
 #define STE_LANGUAGE_ENGLISH            35
 #define STE_LANGUAGE_FRENCH             36
 #define STE_CUSTOM                      37
-#define STE_QUERY_FILES                 38
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
 #define IDD_TIP                         103
@@ -23,11 +25,9 @@
 #define IDD_OUTPUTWIZARD_WELCOME        106
 #define CG_IDS_FILE_ABSENT              107
 #define IDD_OPTIONS_PATHS               107
-#define CG_IDP_FILE_CORRUPT             108
 #define CG_IDS_FILE_CORRUPT             108
 #define CG_IDS_TIPOFTHEDAYHELP          109
 #define IDB_SPLASH                      110
-#define STE_FILE_VERSION                110
 #define STE_TIP_FILE                    110
 #define STE_URL_CANNOTOPEN              111
 #define IDS_OPEN                        112
@@ -35,16 +35,24 @@
 #define IDD_FILECLEANCONFIRM            114
 #define STE_WARNING_COUNT               114
 #define STE_ENTRIES_COUNT               115
+#define ID_FORMAT_TEXT_BACK_COLOR       116
+#define ID_FORMAT_TEXT_FORE_COLOR       117
+#define ID_VIEW_STRUCTURE               118
+#define IDR_OUTPUT_BAR                  120
+#define ID_VIEW_BUILD_PANE              122
+#define ID_VIEW_GREP_1_PANE             123
+#define ID_VIEW_GREP_2_PANE             124
+#define ID_VIEW_PARSE_PANE              125
 #define IDR_MAINFRAME                   128
 #define IDR_LATEXTYPE                   129
+#define IDR_TEXT_BACK_COLOR             129
 #define IDR_LATEXPROJECT                130
-#define IDB_FILE_TYPES                  130
-#define IDB_NAVIGATIONTAB               131
+#define IDR_TEXT_FORE_COLOR             130
 #define STE_ALL_FILES_FILTER            131
 #define IDD_GET_PATH                    131
 #define IDR_LATEXWIZARD                 131
-#define IDB_OUTPUTTAB                   132
 #define STE_GET_PATH_TITLE              132
+#define ID_BG_UPDATE_PROJECT            132
 #define IDR_IDENTIFIERS                 133
 #define STE_GET_PATH                    133
 #define STE_GRAPHIC_FILES               134
@@ -54,7 +62,6 @@
 #define STE_FILE_EXEFILTER              137
 #define STE_FILE_INUSE                  138
 #define IDD_FILE_NEW                    139
-#define STE_FILE_READONLY               139
 #define STE_FILE_DICFILTER              139
 #define IDB_DOCUMENTTYPES               140
 #define STE_FILE_EXTERNALCHANGE         140
@@ -65,14 +72,13 @@
 #define STE_MAINFILE_DESCRIPTION        143
 #define STE_TAB_STRUCTURE               144
 #define IDD_PROJECT_NEW                 144
-#define IDB_ITEM_TYPES                  144
 #define STE_TAB_ENVIRONMENTS            145
 #define STE_TAB_FILES                   146
 #define IDR_FILEVIEW_PROJECT            146
 #define STE_NAVIGATIONBAR_TITLE         147
 #define IDD_OPTIONS_LATEX               147
 #define IDR_FILEVIEW_FILE               147
-#define IDR_NAVIGATION                  148
+#define IDR_NAVIGATION_BAR              148
 #define IDD_COMPILER_TYPE               148
 #define IDR_FILEVIEW_FOLDER             148
 #define STE_TAB_BUILD                   149
@@ -149,7 +155,6 @@
 #define STE_EMPTYDOCUMENT_TITLE         202
 #define IDD_GOTO                        203
 #define STE_EMPTYDOCUMENT_DESCRIPTION   203
-#define IDB_LOGO                        204
 #define IDD_REGISTRATION                204
 #define STE_DOCUMENT_ALREADYEXISTS      204
 #define IDD_OPTIONS_FILE                205
@@ -164,12 +169,9 @@
 #define IDD_FILESEARCH                  211
 #define IDR_POPUP_REGULAREXPRESSION     213
 #define IDR_POPUP_PLACEHOLDER           217
-#define IDR_POPUP_PLACEHOLDEREX         218
-#define IDR_POPUP_PLACEHOLDER_CURRENTDOC 219
 #define IDD_PROFILE                     222
 #define IDD_PROFILE_NAME                223
 #define STE_COMPILER_LATEX_TYPE         224
-#define IDR_FULLSCREEN                  224
 #define IDD_ACTIVE_PROFILE              224
 #define STE_COMPILER_FILTER             225
 #define STE_COMPILER_LATEX_TYPE_EXT     226
@@ -203,7 +205,6 @@
 #define STE_ITEMTYPE_QUOTE              259
 #define IDR_POPUP_PLACEHOLDER_CURRENT_OPT 259
 #define STE_ITEMTYPE_QUOTATION          260
-#define IDR_POPUP_PLACEHOLDEREX_CASC    260
 #define STE_ITEMTYPE_CENTER             261
 #define IDR_LATEXTYPE_YELLOW            261
 #define STE_ITEMTYPE_VERSE              262
@@ -235,12 +236,17 @@
 #define STE_HEADER_PART                 288
 #define STE_HEADER_CHAPTER              289
 #define STE_HEADER_SECTION              290
+#define IDB_ITEM_TYPES                  290
 #define STE_HEADER_SUBSECTION           291
+#define IDR_TOOLBAR1                    291
+#define IDR_ADDITIONAL_COMMANDS         291
 #define STE_HEADER_SUBSUBSECTION        292
 #define STE_HEADER_PARAGRAPH            293
+#define IDB_OUTPUT_BAR                  293
 #define STE_HEADER_SUBPARAGRAPH         294
 #define STE_HEADERPREFIX_PART           295
 #define STE_HEADERPREFIX_CHAPTER        296
+#define IDR_ERROR_LIST                  296
 #define STE_HEADERPREFIX_SECTION        297
 #define STE_HEADERPREFIX_SUBSECTION     298
 #define STE_HEADERPREFIX_SUBSUBSECTION  299
@@ -248,10 +254,14 @@
 #define STE_HEADERPREFIX_SUBPARAGRAPH   301
 #define STE_TB_MAINFRAME                304
 #define STE_TB_INSERT                   305
+#define IDB_BITMAP1                     305
+#define IDB_NAVIGATION_BAR              305
 #define STE_TB_FORMAT                   306
 #define STE_TB_FORMAT_RECENTLY_USED     307
 #define STE_TB_LATEX                    308
+#define IDB_BUILD_ANIMATION             308
 #define STE_TB_MATH                     309
+#define IDR_STRUCTURE                   309
 #define IDR_MATH                        310
 #define STE_TB_MATH1                    310
 #define IDR_MATHBAR1                    311
@@ -286,7 +296,6 @@
 #define STE_TB_MATH16                   325
 #define IDR_MATHBAR16                   326
 #define STE_TB_FIND                     326
-#define IDB_BUILD_VIEW                  327
 #define STE_PHSDLG_NOEXAMPLE            327
 #define STE_GREP_START                  336
 #define STE_GREP_FAILED                 337
@@ -309,7 +318,6 @@
 #define STE_FILEFIND_BROWSEDIR          416
 #define STE_NOFOLDER                    418
 #define STE_FILEFIND_INVALIDEXPRESSION  419
-#define STE_EDITOROPTIONS_WRONGTABSIZE  420
 #define STE_OUTPUTWIZARD_NOLATEX        432
 #define STE_OUTPUTWIZARD_YAPCONFIG      433
 #define STE_OUTPUTWIZARD_DVITYPE        434
@@ -317,7 +325,6 @@
 #define STE_OUTPUTWIZARD_PDFTYPE        436
 #define STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS 437
 #define STE_OUTPUTWIZARD_PDFVIAPSTYPE   438
-#define STE_OUTPUTWIZARD_PDFVIAPSTYPE2  439
 #define STE_PROFILE_ALREADYEXISTS       448
 #define STE_PROFILE_REMOVE              449
 #define STE_PROFILE_UNCOMPLETE          450
@@ -335,7 +342,6 @@
 #define STE_FILECLEAN_HEAD3             462
 #define STE_FILECLEAN_HEAD4             463
 #define STE_TOOL_NOCMDLINE              464
-#define STE_TOOL_CANTINVOKE             465
 #define STE_COLOR_AUTOMATIC             480
 #define STE_COLOR_OTHERS                481
 #define STE_PDICT_OPEN_ERROR            482
@@ -343,27 +349,23 @@
 #define IDS_DIALECT                     484
 #define STE_DICTIONARY_OPEN_FAIL        485
 #define STE_DICTIONARY_CREATE_FAIL      486
+#define ID_SPELL_ERROR_FIRST            700
+#define ID_SPELL_ERROR_LAST             ID_SPELL_ERROR_FIRST + MAXSUGGESTION
 #define ID_WINDOW_FIRST                 800
 #define ID_WINDOW_LAST                  849
 #define IDR_USER_TOOLBAR_FIRST          900
 #define IDR_USER_TOOLBAR_LAST           999
-#define IDC_BULB                        1000
 #define IDC_TREE                        1001
-#define IDC_DOCUMENT_LIST               1011
-#define IDC_DIR_TAB                     1015
 #define IDC_TAB_CATEGORIES              1015
 #define IDC_STATIC_NOTE                 1016
 #define IDC_TEMPLATE_LIST               1016
 #define IDC_LIST_TEMPLATES              1016
 #define IDC_PROJECT_NAME                1017
 #define IDC_PATH                        1018
-#define IDC_BROWSE_PATH                 1019
 #define IDC_NEW_MAIN                    1020
 #define IDC_EXISTING_MAIN               1021
 #define IDC_TEMPLATES                   1024
-#define IDC_ADD_TEMPLATES               1025
 #define IDC_REMOVE_TEMPLATES            1026
-#define IDC_ADD_TYPE                    1027
 #define IDC_DOCUMENTTEMPLATES           1027
 #define IDC_REMOVE_TYPE                 1028
 #define IDC_ADD_DOCUMENTTEMPLATES       1028
@@ -373,20 +375,14 @@
 #define IDC_INTYPE_DESCR                1030
 #define IDC_OUTTYPE_DESCR               1031
 #define IDC_OUTPUT_WIZARD               1031
-#define IDC_COMPILER                    1032
-#define IDC_BROWSE_COMPILER             1033
 #define IDC_OUTTYPE_EXT                 1034
 #define IDC_VIEWER_START                1035
 #define IDC_VIEWER_STARTEX              1036
-#define IDC_BROWSE_VIEWER               1037
 #define IDC_OUTPUTTYPES                 1037
 #define IDC_PROJECT_PATH                1038
 #define IDC_PHPOPUP_COMPILER            1038
-#define IDC_BROWSE_PROJECT_PATH         1039
-#define IDC_BROWSE_VIEWEREX             1039
 #define IDC_DIR                         1040
 #define IDC_PHPOPUP_VIEWER              1040
-#define IDC_BROWSE_DIR                  1041
 #define IDC_PHPOPUP_VIEWEREX            1041
 #define IDC_MAIN_FILE                   1042
 #define IDC_BROWSE_MAIN_FILE            1043
@@ -694,7 +690,6 @@
 #define ID_UPDATE_LATEX_OUTPUT          32773
 #define ID_NEXT_ERROR                   32774
 #define ID_PREV_ERROR                   32775
-#define ID_DATEI_PROJEKTFFNEN           32776
 #define ID_FILE_SAVE_ALL                32780
 #define ID_PROJECT_MRU_PROJECT1         32781
 #define ID_EDIT_FIND_IN_FILES           32782
@@ -1025,7 +1020,6 @@
 #define ID_INSERT_SPADESUIT             33112
 #define ID_OPTIONS_CHANGED              33113
 #define ID_WINDOW_LIST                  33114
-#define ID_BUTTON33115                  33115
 #define ID_WINDOW_LIST_MENU             33115
 #define ID_INSERT_A                     33117
 #define ID_INSERT_B                     33118
@@ -1076,7 +1070,6 @@
 #define ID_MATH15                       33208
 #define ID_MATH16                       33209
 #define ID_VIEW_MATH                    33221
-#define ID_BUTTON33244                  33244
 #define ID_VIEW_INSERT                  33254
 #define ID_VIEW_LATEX                   33255
 #define ID_VIEW_FORMAT                  33256
@@ -1088,11 +1081,7 @@
 #define ID_WINDOW_STRUCTURE             33272
 #define ID_WINDOW_ENVIRONMENT           33273
 #define ID_WINDOW_FILES                 33274
-#define ID_EDIT_VIEWWHITESPACE          33278
-#define ID_EDIT_TOGGLEWHITESPACEVIEW    33279
 #define ID_EDIT_TOGGLE_WHITESPACEVIEW   33280
-#define ID_FILE_FIND                    33283
-#define ID_EDIT_SEARCHFILES             33285
 #define ID_VIEW_USER_TOOLBAR_FIRST      33300
 #define ID_VIEW_USER_TOOLBAR_LAST       33399
 #define ID_REGEX_FIRST                  33400
@@ -1146,7 +1135,6 @@
 #define ID_FILEVIEW_INSERT_FILES        33539
 #define ID_FILEVIEW_OPEN                33540
 #define ID_FILEVIEW_UPDATE_OUTPUT       33551
-#define ID_LATEX_COMPILE                33552
 #define ID_LATEX_STOP_BUILD             33553
 #define ID_INSERT_SUPERSCRIPT           37905
 #define ID_INSERT_SUBSCRIPT             37906
@@ -1182,17 +1170,16 @@
 #define ID_INSERT_VDOTS                 37936
 #define ID_INSERT_DDOTS                 37937
 #define ID_FILE_MRU_PROJECT_FIRST       37940
-#define ID_FILE_MRU_PROJECT_LAST        37959
-#define ID_URL_FIRST                    38000
+#define ID_FILE_MRU_PROJECT_LAST        37949
 #define ID_URL_TCHOME                   38001
+#define ID_URL_FIRST                    38001
 #define ID_URL_AUTHOR                   38002
 #define ID_URL_TCERROR                  38003
 #define ID_URL_TCNEWSLETTER             38004
 #define ID_URL_TCUSERSGROUP             38005
 #define ID_URL_TCDEVELOPERSGROUP        38006
 #define ID_URL_TCDICTDOWNLOAD           38007
-#define ID_URL_LAST                     38099
-#define ID_PH_FIRST                     38100
+#define ID_URL_LAST                     38010
 #define ID_PH_MPATH                     38101
 #define ID_PH_MSLASHPATH                38102
 #define ID_PH_MBASE                     38103
@@ -1227,7 +1214,6 @@
 #define ID_PH_CSSLASHDIR                38136
 #define ID_PH_CLINENR                   38137
 #define ID_PH_PERCENT                   38140
-#define ID_PH_LAST                      38199
 #define ID_USER_TOOL_FIRST              38200
 #define ID_USER_TOOL_LAST               38299
 #define ID_PROJECT_NEW                  38300
@@ -1256,7 +1242,6 @@
 #define ID_PHS_DOLLAR                   38324
 #define ID_LATEX_CLEAN                  38325
 #define ID_PH_MAINOPTIONS               38326
-#define ID_BG_UPDATE_PROJECT            38327
 #define ID_PH_CURRENTOPTIONS            38328
 #define ID_PHS_ALLPROJECTFILES_Q        38331
 #define ID_PHS_ALLOPENEDFILES_Q         38332
@@ -1303,12 +1288,32 @@
 #define ID_LATEX_FILECOMPILEANDVIEW     38474
 #define ID_PACKAGE_SETUP                38476
 #define ID_QUERY_COMPLETION             38477
-#define ID_QUERY_COMMAND                38478
 #define ID_WINDOW_REFERENCES            38480
 #define ID_WINDOW_PARSE                 38481
 #define ID_WINDOW_CLOSE_ALL_BUTACTIVE   38482
 #define ID_WINDOW_CLOSE_SELECTEDTAB     38483
 #define ID_EDIT_OUTSOURCE               38484
+#define ID_VIEW_STRUCT_PANE             38495
+#define ID_VIEW_ENV_PANE                38496
+#define ID_VIEW_FILES_PANE              38497
+#define ID_VIEW_BIB_ENTRIES_PANE        38498
+#define ID_VIEW_ERROR_LIST_PANE         38499
+#define ID_TOOLBARS_A                   38512
+#define ID_VIEW_APP_LOOK_WIN_2000       38524
+#define ID_VIEW_APP_LOOK_OFFICE_XP      38525
+#define ID_VIEW_APP_LOOK_WIN_XP         38526
+#define ID_VIEW_APP_LOOK_OFFICE_2003    38527
+#define ID_VIEW_APP_LOOK_VS_2005        38528
+#define ID_VIEW_APP_LOOK_OFFICE_2007_BLUE 38529
+#define ID_VIEW_APP_LOOK_OFFICE_2007_BLACK 38530
+#define ID_VIEW_APP_LOOK_OFFICE_2007_SILVER 38531
+#define ID_VIEW_APP_LOOK_OFFICE_2007_AQUA 38532
+#define ID_SHOW_ERRORS                  38533
+#define ID_SHOW_WARNINGS                38534
+#define ID_SHOW_BAD_BOXES               38535
+#define ID_SHOW_IMAGES                  38536
+#define ID_SHOW_EQUATIONS               38537
+#define ID_SHOW_TABLES                  38541
 #define IDS_TEXTMODULES_NONEDEFINED     57671
 
 // Next default values for new objects
@@ -1316,9 +1321,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        286
-#define _APS_NEXT_COMMAND_VALUE         38485
+#define _APS_NEXT_RESOURCE_VALUE        328
+#define _APS_NEXT_COMMAND_VALUE         38542
 #define _APS_NEXT_CONTROL_VALUE         1363
-#define _APS_NEXT_SYMED_VALUE           115
+#define _APS_NEXT_SYMED_VALUE           135
 #endif
 #endif

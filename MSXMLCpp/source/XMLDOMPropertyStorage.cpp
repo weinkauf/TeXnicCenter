@@ -307,7 +307,7 @@ CString CXMLDOMPropertyStorage::MapType(VARTYPE vt)
 	case VT_CY:
 		return _T("Fixed.14.4");
 	case VT_BOOL:
-		return _T("boolean");
+		return _T("bool");
 	case VT_DATE:
 		return _T("dateTime");
 	case VT_I1:

@@ -47,17 +47,17 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 //-------------------------------------------------------------------
-// class CUserTool
+// class CMyUserTool
 //-------------------------------------------------------------------
 
 #define USERTOOLCURRENTFORMATVERSION 1
 
-IMPLEMENT_SERIAL(CUserTool, CBCGUserTool, USERTOOLCURRENTFORMATVERSION | VERSIONABLE_SCHEMA)
+IMPLEMENT_SERIAL(CMyUserTool, CUserTool, USERTOOLCURRENTFORMATVERSION | VERSIONABLE_SCHEMA)
 
 #undef USERTOOLCURRENTFORMATVERSION
 
-CUserTool::CUserTool()
-:	CBCGUserTool(),
+CMyUserTool::CMyUserTool()
+:	CUserTool(),
 	m_bUseOutputWindow(false),
 	m_bPromptForArguments(false),
 	m_bCloseConsoleWindow(false),
@@ -66,13 +66,13 @@ CUserTool::CUserTool()
 {}
 
 
-CUserTool::~CUserTool()
+CMyUserTool::~CMyUserTool()
 {}
 
 
-void CUserTool::Serialize(CArchive& ar)
+void CMyUserTool::Serialize(CArchive& ar)
 {
-	CBCGUserTool::Serialize(ar);
+	CUserTool::Serialize(ar);
 
 	if (ar.IsLoading())
 	{
@@ -97,8 +97,8 @@ void CUserTool::Serialize(CArchive& ar)
 			m_bUseOutputWindow = false;
 			m_bPromptForArguments = false;
 			m_bCloseConsoleWindow = false;
-			m_strInputFile = _T("");
-			m_strOutputFile = _T("");
+			m_strInputFile.Empty();
+			m_strOutputFile.Empty();
 //		}
 	}
 	else
@@ -116,45 +116,45 @@ void CUserTool::Serialize(CArchive& ar)
 
 
 
-CString CUserTool::GetAdvDescription()
+CString CMyUserTool::GetAdvDescription()
 {
 	CString retval(_T(""));
 	CString strTemp;
 
 	if (!m_strInputFile.IsEmpty())
-		retval += "In: " + m_strInputFile;
+		retval += _T("In: ") + m_strInputFile;
 
 	if (m_bUseOutputWindow)
 	{
-		if (!retval.IsEmpty()) retval += " | ";
-		retval += "Out: Window";
+		if (!retval.IsEmpty()) retval += _T(" | ");
+		retval += _T("Out: Window");
 	}
 	else
 	{
 		if (!m_strOutputFile.IsEmpty())
 		{
-			if (!retval.IsEmpty()) retval += " | ";
-			retval += "Out: " + m_strOutputFile;
+			if (!retval.IsEmpty()) retval += _T(" | ");
+			retval += _T("Out: ") + m_strOutputFile;
 		}
 
 		if (m_bCloseConsoleWindow)
 		{
-			if (!retval.IsEmpty()) retval += " | ";
-			retval += "Close";
+			if (!retval.IsEmpty()) retval += _T(" | ");
+			retval += _T("Close");
 		}
 	}
 
 	if (m_bPromptForArguments)
 	{
-			if (!retval.IsEmpty()) retval += " | ";
-			retval += "Prompt";
+			if (!retval.IsEmpty()) retval += _T(" | ");
+			retval += _T("Prompt");
 	}
 
 	return retval;
 }
 
 
-BOOL CUserTool::Invoke()
+BOOL CMyUserTool::Invoke()
 {
 //	HANDLE hStdInput = INVALID_HANDLE_VALUE;
 //	HANDLE hStdOutput = INVALID_HANDLE_VALUE;
@@ -171,14 +171,15 @@ BOOL CUserTool::Invoke()
 	long lCurrentLine = -1;
 
 	// project information
-	CLatexProject	*pProject = theApp.GetProject();
+	CLaTeXProject	*pProject = theApp.GetProject();
+
 	if (pProject)
 		strMainPath = pProject->GetMainPath();
 
 	// current document specific information
-	CLatexEdit* pEdit = theApp.GetActiveEditView();
-	if (pEdit)
-	{
+	CLaTeXEdit* pEdit = theApp.GetActiveEditView();
+
+	if (pEdit) {
 		strCurrentPath = pEdit->GetDocument()->GetPathName();
 		pEdit->GetSelectedText(strCurrentSelection);
 		lCurrentLine = pEdit->GetCursorPos().y + 1;
@@ -232,8 +233,7 @@ BOOL CUserTool::Invoke()
 		strInitialDirectory.TrimRight(_T('\"'));
 
 		//Valid directory?
-		if (!CPathTool::Exists(strInitialDirectory))
-		{
+		if (!CPathTool::Exists(strInitialDirectory)) {
 			//Get a valid one
 			strInitialDirectory = AfxGetDefaultDirectory(true);
 		};
@@ -243,8 +243,7 @@ BOOL CUserTool::Invoke()
 		pc.Set(m_strCommand, m_strArguments);//Args will be expanded by Execute
 		CProcess *p = pc.Execute(strInitialDirectory, strMainPath, strCurrentPath,
 															lCurrentLine, strCurrentSelection, true);
-		if (!p)
-		{
+		if (!p) {
 			TCHAR systemError[100];
 			::FormatMessage(
 				FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
@@ -267,7 +266,7 @@ BOOL CUserTool::Invoke()
 	}
 	catch (...)
 	{
-		return false;
+		return FALSE;
 	}
 
 	return TRUE;

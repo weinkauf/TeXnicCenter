@@ -36,7 +36,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #define DDE_SERVICE	((LPTSTR)(LPCTSTR)(CString( m_pszAppName )))
-#define DDE_TOPIC		"SingleInstanceHandling"
+#define DDE_TOPIC		_T("SingleInstanceHandling")
 
 CSingleInstanceWinApp *g_pOneApp;
 
@@ -293,13 +293,13 @@ BOOL CSingleInstanceWinApp::SendDdeCommand( LPCTSTR lpszDdeCommand )
 
 	// ensure 8-bit-string
 	int			nLen = strCmd.GetLength();
-	char		*szCmd = new char[nLen + 1];
+	TCHAR		*szCmd = new TCHAR[nLen + 1];
 
 	if( !szCmd )
 		return FALSE;
 
 	for( int i = 0; i < nLen; i++ )
-		szCmd[i] = (char)strCmd[i];
+		szCmd[i] = (TCHAR)strCmd[i];
 	szCmd[nLen] = '\0';
 
 	// send command

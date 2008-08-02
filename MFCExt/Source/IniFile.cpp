@@ -28,6 +28,9 @@
 #include "stdafx.h"
 #include "IniFile.h"
 
+#include <string>
+#include <fstream>
+
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
@@ -38,89 +41,87 @@ static char THIS_FILE[]=__FILE__;
 // class CIniFile
 //-------------------------------------------------------------------
 
-CIniFile::CIniFile(CString inipath /*= ""*/)
-:	path( inipath )
-{}
-
-
-CIniFile::~CIniFile()
-{}
-
-
-void CIniFile::SetPath(CString newpath)
+CIniFile::CIniFile(const CString& inipath /*=_T("")*/)
+: path( inipath )
 {
-	path = newpath;
 }
 
-CString CIniFile::GetPath()
+void CIniFile::SetPath( const CString& strNewPath )
+{
+	path = strNewPath;
+}
+
+const CString& CIniFile::GetPath() const
 {
 	return path;
 }
 
-
-BOOL CIniFile::ReadFile()
+bool CIniFile::ReadFile()
 {
-	CFile file;
-	CFileStatus status;
-	if (!file.GetStatus(path,status))
-		return 0;
-	ifstream inifile;
-	CString readinfo;
-	inifile.open(path);
+	//CFile file;
+	//CFileStatus status;
+
+	//if (!file.GetStatus(path,status))
+	//	return 0;
+
+	std::basic_ifstream<TCHAR> inifile(path);
+
+    if (!inifile)
+        return false;
+
+    CString readinfo;
 	int curkey = -1, curval = -1;
-	if (inifile.fail())
-		return 0;
 
 	CString keyname, valuename, value;
 	CString temp;
-	while (getline(inifile,readinfo))
-	{
-		if (readinfo != "")
-		{
-			if (readinfo[0] == '[' && readinfo[readinfo.GetLength()-1] == ']') //if a section heading
+
+    std::basic_string<TCHAR> line;
+
+    while (getline(inifile,line)) {
+        readinfo.SetString(line.c_str(),line.size());
+
+        if (!readinfo.IsEmpty()) {
+			if (readinfo[0] ==_T('[') && readinfo[readinfo.GetLength() - 1] ==_T(']')) //if a section heading
 			{
 				keyname = readinfo;
-				keyname.TrimLeft('[');
-				keyname.TrimRight(']');
+				keyname.TrimLeft(_T('['));
+				keyname.TrimRight(_T(']'));
 			}
 			else //if a value
 			{
-				valuename = readinfo.Left(readinfo.Find("="));
+				valuename = readinfo.Left(readinfo.Find(_T("=")));
 				value = readinfo.Right(readinfo.GetLength()-valuename.GetLength()-1);
 				SetValue(keyname,valuename,value);
 			}
 		}
 	}
-	inifile.close();
-	return 1;
-}
 
+	return true;
+}
 
 void CIniFile::WriteFile()
 {
-	ofstream inifile;
-	inifile.open(path);
-	for (int keynum = 0; keynum <= names.GetUpperBound(); keynum++)
-	{
-		if (keys[keynum].names.GetSize() != 0)
-		{
-			inifile << '[' << names[keynum] << ']' << endl;
-			for (int valuenum = 0; valuenum <= keys[keynum].names.GetUpperBound(); valuenum++)
-			{
-				inifile << keys[keynum].names[valuenum] << "=" << keys[keynum].values[valuenum];
+	std::basic_ofstream<TCHAR> inifile(path);
+
+	for (int keynum = 0; keynum <= names.GetUpperBound(); keynum++) {
+		if (!keys[keynum].names.IsEmpty()) {
+			inifile <<_T('[') << names[keynum] <<_T(']') << std::endl;
+
+			for (int valuenum = 0; valuenum <= keys[keynum].names.GetUpperBound(); valuenum++) {
+				inifile << keys[keynum].names[valuenum] <<_T("=") << keys[keynum].values[valuenum];
+
 				if (valuenum != keys[keynum].names.GetUpperBound())
-					inifile << endl;
+					inifile << std::endl;
 				else
 					if (keynum < names.GetSize())
-						inifile << endl;
+						inifile << std::endl;
 			}
+
 			if (keynum < names.GetSize())
-				inifile << endl;
+				inifile << std::endl;
 		}
 	}
-	inifile.close();
 }
-
 
 void CIniFile::Reset()
 {
@@ -128,14 +129,12 @@ void CIniFile::Reset()
 	names.SetSize(0);
 }
 
-
-int CIniFile::GetNumKeys()
+int CIniFile::GetNumKeys() const
 {
 	return keys.GetSize();
 }
 
-
-int CIniFile::GetNumValues(CString keyname)
+int CIniFile::GetNumValues( const CString& keyname ) const
 {
 	int keynum = FindKey(keyname);
 	if (keynum == -1)
@@ -144,8 +143,7 @@ int CIniFile::GetNumValues(CString keyname)
 		return keys[keynum].names.GetSize();
 }
 
-
-BOOL CIniFile::VerifyValue(CString keyname, CString valuename)
+bool CIniFile::VerifyValue( const CString& keyname, const CString& valuename ) const
 {
 	int	keynum = FindKey(keyname);
 	int	valuenum = FindValue(keynum, valuename);
@@ -156,8 +154,7 @@ BOOL CIniFile::VerifyValue(CString keyname, CString valuename)
 		return TRUE;
 }
 
-
-BOOL CIniFile::VerifyKey(CString keyname)
+bool CIniFile::VerifyKey( const CString& keyname ) const
 {
 	if( FindKey(keyname) == -1 )
 		return FALSE;
@@ -165,8 +162,7 @@ BOOL CIniFile::VerifyKey(CString keyname)
 		return TRUE;
 }
 
-
-CString CIniFile::GetValue(CString keyname, CString valuename, CString strDefault)
+const CString CIniFile::GetValue( const CString& keyname, const CString& valuename, const CString& strDefault ) const
 {
 	int keynum = FindKey(keyname), valuenum = FindValue(keynum,valuename);
 
@@ -179,26 +175,23 @@ CString CIniFile::GetValue(CString keyname, CString valuename, CString strDefaul
 	return keys[keynum].values[valuenum];
 }
 
-
-int CIniFile::GetValue(CString keyname, CString valuename, int nDefault)
+int CIniFile::GetValue(const CString& keyname, const CString& valuename, int nDefault) const
 {
 	CString	strDefault;
 	strDefault.Format( _T("%d"), nDefault );
 	return _ttol( GetValue(keyname, valuename, strDefault) );
 }
 
-
-double CIniFile::GetValue(CString keyname, CString valuename, double dDefault)
+double CIniFile::GetValue(const CString& keyname, const CString& valuename, double dDefault) const
 {
 	CString	strDefault;
 	strDefault.Format( _T("%e"), dDefault );
 	return _ttoi( GetValue(keyname, valuename, strDefault ) );
 }
 
-
-BOOL CIniFile::SetValue(CString keyname, CString valuename, CString value, BOOL create)
+bool CIniFile::SetValue( const CString& key, const CString& valuename, const CString& value, bool create /*= TRUE*/ )
 {
-	int keynum = FindKey(keyname), valuenum = 0;
+	int keynum = FindKey(key), valuenum = 0;
 	//find key
 	if (keynum == -1) //if key doesn't exist
 	{
@@ -207,7 +200,7 @@ BOOL CIniFile::SetValue(CString keyname, CString valuename, CString value, BOOL 
 		names.SetSize(names.GetSize()+1);
 		keys.SetSize(keys.GetSize()+1);
 		keynum = names.GetSize()-1;
-		names[keynum] = keyname;
+		names[keynum] = key;
 	}
 
 	//find value
@@ -225,24 +218,21 @@ BOOL CIniFile::SetValue(CString keyname, CString valuename, CString value, BOOL 
 	return 1;
 }
 
-
-BOOL CIniFile::SetValue(CString keyname, CString valuename, int value, BOOL create)
+bool CIniFile::SetValue(const CString& keyname, const CString& valuename, int value, bool create)
 {
 	CString temp;
-	temp.Format("%d",value);
+	temp.Format(_T("%d"),value);
 	return SetValue(keyname, valuename, temp, create);
 }
 
-
-BOOL CIniFile::SetValue(CString keyname, CString valuename, double value, BOOL create)
+bool CIniFile::SetValue(const CString& keyname, const CString& valuename, double value, bool create)
 {
 	CString temp;
-	temp.Format("%e",value);
+	temp.Format(_T("%e"),value);
 	return SetValue(keyname, valuename, temp, create);
 }
 
-
-BOOL CIniFile::DeleteValue(CString keyname, CString valuename)
+bool CIniFile::DeleteValue(const CString& keyname, const CString& valuename)
 {
 	int keynum = FindKey(keyname), valuenum = FindValue(keynum,valuename);
 	if (keynum == -1 || valuenum == -1)
@@ -253,8 +243,7 @@ BOOL CIniFile::DeleteValue(CString keyname, CString valuename)
 	return 1;
 }
 
-
-BOOL CIniFile::DeleteKey(CString keyname)
+bool CIniFile::DeleteKey(const CString& keyname)
 {
 	int keynum = FindKey(keyname);
 	if (keynum == -1)
@@ -264,35 +253,28 @@ BOOL CIniFile::DeleteKey(CString keyname)
 	return 1;
 }
 
-
-int CIniFile::FindKey(CString keyname)
+int CIniFile::FindKey( const CString& keyname ) const
 {
 	int keynum = 0;
 	while ( keynum < keys.GetSize() && names[keynum] != keyname)
-		keynum++;
+		++keynum;
 	if (keynum == keys.GetSize())
 		return -1;
 	return keynum;
 }
 
-
-int CIniFile::FindValue(int keynum, CString valuename)
+int CIniFile::FindValue( int keynum, const CString& valuename ) const
 {
 	if (keynum == -1)
 		return -1;
+
 	int valuenum = 0;
+
 	while (valuenum < keys[keynum].names.GetSize() && keys[keynum].names[valuenum] != valuename)
-		valuenum++;
+		++valuenum;
+
 	if (valuenum == keys[keynum].names.GetSize())
 		return -1;
+
 	return valuenum;
-}
-
-
-istream & CIniFile:: getline(istream & is, CString & str)
-{
-    char buf[2048];
-    is.getline(buf,2048);
-    str = buf;
-    return is;
 }

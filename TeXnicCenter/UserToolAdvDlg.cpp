@@ -55,8 +55,6 @@ CUserToolAdvDlg::CUserToolAdvDlg(CWnd* pParent /*=NULL*/)
 	m_bCloseConsoleWindow = FALSE;
 	m_bPromptForArguments = FALSE;
 	m_bUseOutputWindow = FALSE;
-	m_strInputFile = _T("");
-	m_strOutputFile = _T("");
 	//}}AFX_DATA_INIT
 }
 

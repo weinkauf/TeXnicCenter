@@ -1,36 +1,36 @@
 /********************************************************************
-*
-* This file is part of the TeXnicCenter-system
-*
-* Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License as
-* published by the Free Software Foundation; either version 2 of
-* the License, or (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*
-* If you have further questions or if you want to support
-* further TeXnicCenter development, visit the TeXnicCenter-homepage
-*
-*    http://www.ToolsCenter.org
-*
-*********************************************************************/
+ *
+ * This file is part of the TeXnicCenter-system
+ *
+ * Copyright (C) 1999-2000 Sven Wiegand
+ * Copyright (C) 2000-$CurrentYear$ ToolsCenter
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * If you have further questions or if you want to support
+ * further TeXnicCenter development, visit the TeXnicCenter-homepage
+ *
+ *    http://www.ToolsCenter.org
+ *
+ *********************************************************************/
 
 /********************************************************************
-*
-* $Id$
-*
-********************************************************************/
+ *
+ * $Id$
+ *
+ ********************************************************************/
 
 #if !defined(AFX_NAVIGATORVIEW_H__75A37CC2_20BE_11D3_929E_D32D9B17C664__INCLUDED_)
 #define AFX_NAVIGATORVIEW_H__75A37CC2_20BE_11D3_929E_D32D9B17C664__INCLUDED_
@@ -41,148 +41,148 @@
 
 #include "ProjectView.h"
 
-class CLatexProject;
-
+class CLaTeXProject;
 
 /** Base class for viewing the document structure
-	in a tree-like structure.
+        in a tree-like structure.
 
-	@author Sven Wiegand
-*/
-class CNavigatorView : 
-	public CTreeCtrl,
-	public CProjectView
+        @author Sven Wiegand
+ */
+class NavigatorTreeCtrl : 
+    public CTreeCtrl,
+    public CProjectView
 {
-// construction/destruction
+    // construction/destruction
 public:
-	CNavigatorView();
-	virtual ~CNavigatorView();
+    NavigatorTreeCtrl();
+    virtual ~NavigatorTreeCtrl();
 
-// operations
+    // operations
 public:
-	/**	Creates the view. */
-	BOOL Create(CWnd *pwndParent);
+    /**	Creates the view. */
+    BOOL Create(CWnd *pwndParent);
 
-	/**
-	Returns a pointer to the one and only <var>CLatexProject</var>-object of
-	the application.
-	*/
-	CLatexProject *GetProject() const;
+    /**
+    Returns a pointer to the one and only <var>CLaTeXProject</var>-object of
+    the application.
+     */
+    CLaTeXProject *GetProject() const;
 
-	/**
-	Returns the path of the specified tree item as a text.
-	The path contains all the parent items seperated by a newline ('\\n').
+    /**
+    Returns the path of the specified tree item as a text.
+    The path contains all the parent items seperated by a newline ('\\n').
 
-	@see #GetItemByPath
+    @see #GetItemByPath
 
-	@param hItem
-		Tree item to get the path of
-	*/
-	CString GetItemPath(HTREEITEM hItem) const;
+    @param hItem
+            Tree item to get the path of
+     */
+    CString GetItemPath(HTREEITEM hItem) const;
 
-	/**
-	Returns the item with the specified path.
+    /**
+    Returns the item with the specified path.
 
-	@see #GetItemPath
+    @see #GetItemPath
 
-	@param lpszPath
-		Path of the item to return.
+    @param lpszPath
+            Path of the item to return.
 
-	@return
-		Handle to the first tree item with the specified path
-		or NULL, if there is no matching item.
-	*/
-	HTREEITEM GetItemByPath( LPCTSTR lpszPath ) const;
+    @return
+            Handle to the first tree item with the specified path
+            or NULL, if there is no matching item.
+     */
+    HTREEITEM GetItemByPath(LPCTSTR lpszPath) const;
 
-	/**
-	Finds all expanded items in the tree view.
+    /**
+    Finds all expanded items in the tree view.
 
-	@see #GetItemPath
-	@see #ExpandItems
+    @see #GetItemPath
+    @see #ExpandItems
 
-	@param astrExpandedItems
-		Array that receives the paths of all expanded items.
-	*/
-	void GetExpandedItems( CStringArray &astrExpandedItems ) const;
+    @param astrExpandedItems
+            Array that receives the paths of all expanded items.
+     */
+    void GetExpandedItems(CStringArray &astrExpandedItems) const;
 
-	/**
-	Expands the specified items.
+    /**
+    Expands the specified items.
 
-	@see #GetExpandedItems
+    @see #GetExpandedItems
 
-	@param astrItems
-		Array with paths of the items to expand.
-	*/
-	void ExpandItems( const CStringArray &astrItems );
+    @param astrItems
+            Array with paths of the items to expand.
+     */
+    void ExpandItems(const CStringArray &astrItems);
 
-	/** Expands all items until given level.
+    /** Expands all items until given level.
 	
-		This function expands each item,
-		which has a level smaller or equal to the given one.
+            This function expands each item,
+            which has a level smaller or equal to the given one.
 
-		@param nLevel
-			Items in this level and its parents will be expanded.
-			This is zero-based.
-	*/
-	void ExpandItemsByLevel(const int nLevel);
+            @param nLevel
+                    Items in this level and its parents will be expanded.
+                    This is zero-based.
+     */
+    void ExpandItemsByLevel(const int nLevel);
 
-// implementation helpers
+    // implementation helpers
 protected:
-	/**
-	Returns the next item that is expanded starting the search
-	at the specified item.
+    /**
+    Returns the next item that is expanded starting the search
+    at the specified item.
 
-	@param hItem
-		Tree item to start the search at.
-	@param bInclude
-		TRUE to test hItem itself, if it is expanded, FALSE to start
-		with the next one after hItem.
+    @param hItem
+            Tree item to start the search at.
+    @param bInclude
+            TRUE to test hItem itself, if it is expanded, FALSE to start
+            with the next one after hItem.
 
-	@return
-		Handle to the first tree item behind hItem that is expanded.
-	*/
-	HTREEITEM GetNextExpandedItem( HTREEITEM hItem, BOOL bInclude = FALSE ) const;
+    @return
+            Handle to the first tree item behind hItem that is expanded.
+     */
+    HTREEITEM GetNextExpandedItem(HTREEITEM hItem, BOOL bInclude = FALSE) const;
 
-	/** Applies the font settings to the window */
-	void ApplyFont();
+    /** Applies the font settings to the window */
+    void ApplyFont();
 
-// overwritings
+    // overwritings
 public:
-	//{{AFX_VIRTUAL(CNavigatorView)
-	public:
-	//}}AFX_VIRTUAL
+    //{{AFX_VIRTUAL(NavigatorTreeCtrl)
+public:
+    //}}AFX_VIRTUAL
 
-// message handlers
+    // message handlers
 protected:
-	afx_msg void OnSysColorChange();
+    afx_msg void OnSysColorChange();
 
-	//{{AFX_MSG(CNavigatorView)
-	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
-	afx_msg void OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(NavigatorTreeCtrl)
+    afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+    afx_msg void OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult);
+    afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+    afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+    afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 
-// attributes
+    // attributes
 protected:
-	/** image list used by the tree ctrl. */
-	CImageList m_images;
+    /** image list used by the tree ctrl. */
+    CImageList m_images;
 
-	/** Font to be used for the view */
-	CFont m_font;
+    /** Font to be used for the view */
+    CFont m_font;
 
 private:
-	/** TRUE after construction until the first call of OnInitialUpdate. */
-	BOOL m_bFirstTime;
+    /** TRUE after construction until the first call of OnInitialUpdate. */
+    BOOL m_bFirstTime;
+public:
+    void Clear(void);
 };
 
-
-inline CLatexProject *CNavigatorView::GetProject() const
+inline CLaTeXProject *NavigatorTreeCtrl::GetProject() const
 {
-	return (CLatexProject*)CProjectView::GetProject();
+    return (CLaTeXProject*)CProjectView::GetProject();
 }
 
 /////////////////////////////////////////////////////////////////////////////

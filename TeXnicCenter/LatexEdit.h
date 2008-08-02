@@ -1,36 +1,36 @@
 /********************************************************************
-*
-* This file is part of the TeXnicCenter-system
-*
-* Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License as
-* published by the Free Software Foundation; either version 2 of
-* the License, or (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*
-* If you have further questions or if you want to support
-* further TeXnicCenter development, visit the TeXnicCenter-homepage
-*
-*    http://www.ToolsCenter.org
-*
-*********************************************************************/
+ *
+ * This file is part of the TeXnicCenter-system
+ *
+ * Copyright (C) 1999-2000 Sven Wiegand
+ * Copyright (C) 2000-$CurrentYear$ ToolsCenter
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * If you have further questions or if you want to support
+ * further TeXnicCenter development, visit the TeXnicCenter-homepage
+ *
+ *    http://www.ToolsCenter.org
+ *
+ *********************************************************************/
 
 /********************************************************************
-*
-* $Id$
-*
-********************************************************************/
+ *
+ * $Id$
+ *
+ ********************************************************************/
 
 #if !defined(AFX_LATEXEDIT_H__447410EB_1058_11D3_929E_D75EECD5B417__INCLUDED_)
 #define AFX_LATEXEDIT_H__447410EB_1058_11D3_929E_D75EECD5B417__INCLUDED_
@@ -47,167 +47,174 @@
 class MyListener;
 class CAdvice;
 
-
 /** Edit view for LaTeX files.
 
 @author Sven Wiegand
-*/
-class CLatexEdit : public CCrystalEditViewEx
-{
-// construction/destruction
+ */
+class CLaTeXEdit : public CCrystalEditViewEx {
+    // construction/destruction
 protected:
-	CLatexEdit();
-	DECLARE_DYNCREATE(CLatexEdit)
+    CLaTeXEdit();
+    DECLARE_DYNCREATE(CLaTeXEdit)
 public:
-	virtual ~CLatexEdit();
+    virtual ~CLaTeXEdit();
 
-// operations 
+    // operations 
 public:
-	/**
-	Inserts the specified text and the current cursor position.
+    /**
+    Inserts the specified text and the current cursor position.
 
-	@param lpszText
-		Text to insert.
-	*/
-	void InsertText( LPCTSTR lpszText );
+    @param lpszText
+            Text to insert.
+     */
+    void InsertText(LPCTSTR lpszText);
 
-	/**
-	Should be called, when the configuration has changed. Setzt the
-	properties of the editor to that of the configuration and
-	redraws the window.
-	*/
-	void ApplyConfiguration();
+    /**
+    Should be called, when the configuration has changed. Setzt the
+    properties of the editor to that of the configuration and
+    redraws the window.
+     */
+    void ApplyConfiguration();
 
 
-// implementation
+    // implementation
 protected:
-	/**
-	Returns the text of the current selection. If there is no 
-	selection, the LaTeXcommand, the cursor is placed on, is returned.
+    /**
+    Returns the text of the current selection. If there is no 
+    selection, the LaTeXcommand, the cursor is placed on, is returned.
 
-	@param strKeyword
-		Reference to the CString-object, that should receive the
-		selected text.
-	*/
-	void GetSelectedKeyword(CString &strKeyword);
+    @param strKeyword
+            Reference to the CString-object, that should receive the
+            selected text.
+     */
+    void GetSelectedKeyword(CString &strKeyword);
 
-	/**
-	Tests if the given character could be a character of a 
-	LaTeX-keyword.
-	*/
-	BOOL IsKeywordCharacter(TCHAR tc) const;
+    /**
+    Tests if the given character could be a character of a 
+    LaTeX-keyword.
+     */
+    BOOL IsKeywordCharacter(TCHAR tc) const;
 
-	/**	Tests if the given character should be considered for auto completion,
-		e.g. it could be part of a LaTeX-keyword or LaTeX-Label.
+    /**	Tests if the given character should be considered for auto completion,
+            e.g. it could be part of a LaTeX-keyword or LaTeX-Label.
 
-		A complete list of such characters can probably not be done since one can activate almost all chars in TeX.
-		Whatever, this function should consider a reasonable set of chars.
-	*/
-	BOOL IsAutoCompletionCharacter(TCHAR tc) const;
+            A complete list of such characters can probably not be done since one can activate almost all chars in TeX.
+            Whatever, this function should consider a reasonable set of chars.
+     */
+    BOOL IsAutoCompletionCharacter(TCHAR tc) const;
 
-	virtual void QueryComplete();
+    virtual void QueryComplete();
 
-// static operations
+    // static operations
 public:
-	/**
-	Returns the automatic color for the specified colorindex.
-	*/
-	static COLORREF GetAutomaticColor(int nColorIndex);
+    /**
+    Returns the automatic color for the specified colorindex.
+     */
+    static COLORREF GetAutomaticColor(int nColorIndex);
 
-// virtuals
+    // virtuals
 protected:
-	virtual void ResetView();
-	void InstantAdvice();
-	virtual CCrystalTextBuffer *LocateTextBuffer();
-	virtual void OnSetStatusMessage(CWnd *pStatusBar, LPCTSTR lpszMessage);
+    virtual void ResetView();
+    void InstantAdvice();
+    virtual CCrystalTextBuffer *LocateTextBuffer();
+    virtual void OnSetStatusMessage(CWnd *pStatusBar, LPCTSTR lpszMessage);
 
-	/** @see CCrystalTextView::GetColor */
-	virtual COLORREF GetColor(int nColorIndex);
+    /** @see CCrystalTextView::GetColor */
+    virtual COLORREF GetColor(int nColorIndex);
 
-// overridings
+    // overridings
 protected:
-	//{{AFX_VIRTUAL(CLatexEdit)
-	protected:
-	//}}AFX_VIRTUAL
+    //{{AFX_VIRTUAL(CLaTeXEdit)
+protected:
+    //}}AFX_VIRTUAL
 
-// debugging
+    // debugging
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+    virtual void AssertValid() const;
+    virtual void Dump(CDumpContext& dc) const;
 #endif
 
 protected:
 
-// message handler
+    // message handler
 protected:
-	afx_msg BOOL OnInsertLatexConstruct( UINT nID );
-	afx_msg LRESULT OnCommandHelp(WPARAM wParam, LPARAM lParam);
-	afx_msg void OnSysColorChange();
-	//{{AFX_MSG(CLatexEdit)
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnEditGoto();
-	afx_msg void OnEditToggleWhitespaceView();
-	afx_msg void OnUpdateEditToggleWhiteSpaceView(CCmdUI* pCmdUI);
-	afx_msg void OnSetFocus(CWnd* pOldWnd);
-	afx_msg void OnSpellFile();
-	afx_msg void OnTextmodulesDefine();
-	afx_msg void OnUpdateTextmodulesDefine(CCmdUI* pCmdUI);
-	afx_msg void OnQueryCompletion();
-	afx_msg void OnKillFocus(CWnd* pNewWnd);
-	afx_msg void OnTextOutsource();
-	//}}AFX_MSG
-	afx_msg void OnUpdateTextModulesList(CCmdUI *pCmdUI);
-	afx_msg void OnBlockComment(const UINT nID);
-	DECLARE_MESSAGE_MAP()
+    afx_msg BOOL OnInsertLatexConstruct(UINT nID);
+    afx_msg LRESULT OnCommandHelp(WPARAM wParam, LPARAM lParam);
+    afx_msg void OnSysColorChange();
+    //{{AFX_MSG(CLaTeXEdit)
+    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+    afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+    afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
+    afx_msg void OnEditGoto();
+    afx_msg void OnEditToggleWhitespaceView();
+    afx_msg void OnUpdateEditToggleWhiteSpaceView(CCmdUI* pCmdUI);
+    afx_msg void OnSetFocus(CWnd* pOldWnd);
+    afx_msg void OnSpellFile();
+    afx_msg void OnTextmodulesDefine();
+    afx_msg void OnUpdateTextmodulesDefine(CCmdUI* pCmdUI);
+    afx_msg void OnQueryCompletion();
+    afx_msg void OnKillFocus(CWnd* pNewWnd);
+    afx_msg void OnTextOutsource();
+    //}}AFX_MSG
+    afx_msg void OnUpdateTextModulesList(CCmdUI *pCmdUI);
+    afx_msg BOOL OnBlockComment(const UINT nID);
+    DECLARE_MESSAGE_MAP()
 
-// attributes
+    // attributes
 protected:
-	CLatexParser	m_latexParser;
+    CLaTeXParser m_latexParser;
 
 public:
-	/* Checks if given cursor position is valid */
-	BOOL IsValidTextPos(CPoint pos);
-	/** Retrieves word before cursor.
+    /* Checks if given cursor position is valid */
+    BOOL IsValidTextPos(CPoint pos);
+    /** Retrieves word before cursor.
 
-		Returns the word before the cursor in @c strKeyword and the start position of that word in @c start.
-		If you want this word to be selected, set @c bSelect accordingly.
-	*/
-	void GetWordBeforeCursor(CString& strKeyword, CPoint& start, bool bSelect = true);
+            Returns the word before the cursor in @c strKeyword and the start position of that word in @c start.
+            If you want this word to be selected, set @c bSelect accordingly.
+     */
+    void GetWordBeforeCursor(CString& strKeyword, CPoint& start, bool bSelect = true);
 
-	/* Handlers for events of auto complete listbox */
-	virtual void OnACCommandSelect(const CLaTeXCommand *cmd);
-	virtual void OnACCommandCancelled();
-	virtual void OnACHelp(CString &command);
-	virtual void OnACBackspace();
-	virtual void OnACChar(UINT nKey, UINT nRepCount, UINT nFlags);
-	CLatexDoc* GetDocument();
+    /* Handlers for events of auto complete listbox */
+    virtual void OnACCommandSelect(const CLaTeXCommand *cmd);
+    virtual void OnACCommandCancelled();
+    virtual void OnACHelp(CString &command);
+    virtual void OnACBackspace();
+    virtual void OnACChar(UINT nKey, UINT nRepCount, UINT nFlags);
+    CLaTeXDoc* GetDocument();
 
 private:
-	
-	void DestroyListBox();
-	void HideAdvice();
-	BOOL RestoreFocus();
 
-	/* Returns the number of possible matches */
-	int GetNumberOfMatches(CString keyword);
-	CAutoCompleteDlg *CreateListBox(CString &keyword, const CPoint topLeft);
-	BOOL InvokeContextHelp(const CString keyword);
+    void DestroyListBox();
+    void HideAdvice();
+    BOOL RestoreFocus();
+
+    /* Returns the number of possible matches */
+    int GetNumberOfMatches(CString keyword);
+    CAutoCompleteDlg *CreateListBox(CString &keyword, const CPoint topLeft);
+    BOOL InvokeContextHelp(const CString keyword);
 
 
-	CWnd* m_OldFocus;
-	CPoint m_oldStart;
-	CPoint m_oldEnd;
-	CAdvice *m_InstTip;
-	CAutoCompleteDlg* m_CompletionListBox;
-	MyListener *m_Proxy;
-	BOOL m_AutoCompleteActive;
+    CWnd* m_OldFocus;
+    CPoint m_oldStart;
+    CPoint m_oldEnd;
+    CAdvice *m_InstTip;
+    CAutoCompleteDlg* m_CompletionListBox;
+    MyListener *m_Proxy;
+    BOOL m_AutoCompleteActive;
+
+public:
+    afx_msg void OnNcPaint();
+    afx_msg void OnDestroy();
+    afx_msg void OnFormatTextBackColor();
+    afx_msg void OnFormatTextForeColor();
 };
 
 #ifndef _DEBUG  // Testversion in LatexEdit.cpp
-inline CLatexDoc* CLatexEdit::GetDocument()
-   { return (CLatexDoc*)m_pDocument; }
+
+inline CLaTeXDoc* CLaTeXEdit::GetDocument()
+{
+    return (CLaTeXDoc*)m_pDocument;
+}
 #endif
 
 /**
@@ -215,21 +222,48 @@ inline CLatexDoc* CLatexEdit::GetDocument()
  added to the base class list %&$§"*!.
  So we must redirect the listener chain to this class  (sigh).
  */
-class MyListener : public CAutoCompleteListener {
+class MyListener : 
+    public CAutoCompleteListener
+{
 public:
-	MyListener(CLatexEdit *parent) {ASSERT(parent != NULL); p = parent;}
-	/* Command was selected */
-	virtual void OnACCommandSelect(const CLaTeXCommand *cmd) {p->OnACCommandSelect(cmd);}
-	/* Auto complete was cancelled */
-	virtual void OnACCommandCancelled() {p->OnACCommandCancelled();};
-	/* User demands context help (F1 key) */
-	virtual void OnACHelp(CString &command) {p->OnACHelp(command);}
-	/* Backspace was pressed (affects keyword!) */ 
-	virtual void OnACBackspace() {p->OnACBackspace();}
-	/* A char was typed (affects keyword!) */ 
-	virtual void OnACChar(UINT nKey, UINT nRepCount, UINT nFlags) {p->OnACChar(nKey, nRepCount, nFlags);}
+
+    MyListener(CLaTeXEdit *parent)
+    {
+        ASSERT(parent != NULL);
+        p = parent;
+    }
+
+    /* Command was selected */
+    virtual void OnACCommandSelect(const CLaTeXCommand *cmd)
+    {
+        p->OnACCommandSelect(cmd);
+    }
+
+    /* Auto complete was cancelled */
+    virtual void OnACCommandCancelled()
+    {
+        p->OnACCommandCancelled();
+    };
+
+    /* User demands context help (F1 key) */
+    virtual void OnACHelp(CString &command)
+    {
+        p->OnACHelp(command);
+    }
+
+    /* Backspace was pressed (affects keyword!) */
+    virtual void OnACBackspace()
+    {
+        p->OnACBackspace();
+    }
+
+    /* A TCHAR was typed (affects keyword!) */
+    virtual void OnACChar(UINT nKey, UINT nRepCount, UINT nFlags)
+    {
+        p->OnACChar(nKey, nRepCount, nFlags);
+    }
 private:
-	CLatexEdit *p;
+    CLaTeXEdit *p;
 };
 /////////////////////////////////////////////////////////////////////////////
 

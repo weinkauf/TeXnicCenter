@@ -17,42 +17,48 @@
 ////////////////////////////////////////////////////////////////////////////
 
 /********************************************************************
-*
-* $RCSfile$
-* $Revision$
-* $Date$
-*
-* $Author$
-*
-* $Log$
-* Revision 1.7  2005/03/08 16:36:08  vachis
-* Selection of block between bracket pairs in a hierarchical manner (Ctrl+M)
-* Bracket highlighting disabled if a selection is present
-* New default colours for bracket highlighting
-*
-* Revision 1.6  2002/04/30 23:45:01  cnorris
-* Personal dictionary support
-*
-* Revision 1.5  2002/04/25 18:53:53  cnorris
-* background spell check support
-*
-* Revision 1.4  2002/04/23 21:09:10  cnorris
-* realtime spell check
-*
-* Revision 1.3  2002/04/06 05:39:53  cnorris
-* New resources for spell check
-*
-* Revision 1.2  2002/02/27 19:56:55  cnorris
-* bug-id 71 String not found during replace operation fixed
-*
-* Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
-* Initial revision
-*
-* Revision 1.0  2000-05-31 21:55:38+02  sven_wiegand
-* Initial revision
-*
-*
-********************************************************************/
+ *
+ * $RCSfile: editcmd.h,v $
+ * $Revision$
+ * $Date$
+ *
+ * $Author$
+ *
+ * $Log: editcmd.h,v $
+ * Revision 1.8  2005/03/12 21:15:53  niteria
+ * Reworked resources (translation etc.) for brace matching.
+ * Moved accelerator 'Ctrl+M' from CrysEditEx to TXC to enable customization.
+ * Slightly changed default colors for brace matching.
+ * Now they look more consistent in terms of visual perception.
+ *
+ * Revision 1.7  2005/03/08 16:36:08  vachis
+ * Selection of block between bracket pairs in a hierarchical manner (Ctrl+M)
+ * Bracket highlighting disabled if a selection is present
+ * New default colours for bracket highlighting
+ *
+ * Revision 1.6  2002/04/30 23:45:01  cnorris
+ * Personal dictionary support
+ *
+ * Revision 1.5  2002/04/25 18:53:53  cnorris
+ * background spell check support
+ *
+ * Revision 1.4  2002/04/23 21:09:10  cnorris
+ * realtime spell check
+ *
+ * Revision 1.3  2002/04/06 05:39:53  cnorris
+ * New resources for spell check
+ *
+ * Revision 1.2  2002/02/27 19:56:55  cnorris
+ * bug-id 71 String not found during replace operation fixed
+ *
+ * Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
+ * Initial revision
+ *
+ * Revision 1.0  2000-05-31 21:55:38+02  sven_wiegand
+ * Initial revision
+ *
+ *
+ ********************************************************************/
 
 #ifndef _EDITCMD_H_INCLUDED
 #define _EDITCMD_H_INCLUDED
@@ -222,5 +228,7 @@
 #define IDS_SPELL_UNEDIT                8660
 #define IDS_SPELL_DONE                  8661
 #define IDS_SPELL_NO_SUGGESTIONS        8662
+#define ID_SPELL_ERROR_FIRST            700
+#define ID_SPELL_ERROR_LAST             ID_SPELL_ERROR_FIRST + MAXSUGGESTION
 
 #endif

@@ -16,19 +16,22 @@
 ////////////////////////////////////////////////////////////////////////////
 
 /********************************************************************
-*
-* $RCSfile$
-* $Revision$
-* $Date$
-*
-* $Author$
-*
-* $Log$
-* Revision 1.0  2000-05-31 21:55:30+02  sven_wiegand
-* Initial revision
-*
-*
-********************************************************************/
+ *
+ * $RCSfile: CFindTextDlg.h,v $
+ * $Revision$
+ * $Date$
+ *
+ * $Author$
+ *
+ * $Log: CFindTextDlg.h,v $
+ * Revision 1.1.1.1  2002/02/26 08:11:59  svenwiegand
+ * Initial revision
+ *
+ * Revision 1.0  2000-05-31 21:55:30+02  sven_wiegand
+ * Initial revision
+ *
+ *
+ ********************************************************************/
 
 #if !defined(AFX_CFINDTEXTDLG_H__F59009E3_7B01_11D2_8C4F_0080ADB86836__INCLUDED_)
 #define AFX_CFINDTEXTDLG_H__F59009E3_7B01_11D2_8C4F_0080ADB86836__INCLUDED_
@@ -46,43 +49,46 @@ class CCrystalTextView;
 /////////////////////////////////////////////////////////////////////////////
 // CFindTextDlg dialog
 
-class CFindTextDlg : public CDialog
+class CFindTextDlg : public CDialog 
 {
 private:
-	CCrystalTextView *m_pBuddy;
+    CCrystalTextView *m_pBuddy;
 
-// Construction
+    // Construction
 public:
-	CFindTextDlg(CCrystalTextView *pBuddy);
+    CFindTextDlg(CCrystalTextView *pBuddy);
 
-	CPoint m_ptCurrentPos;
-// Dialog Data
-	//{{AFX_DATA(CFindTextDlg)
-	enum { IDD = IDD_EDIT_FIND };
-	int		m_nDirection;
-	BOOL	m_bMatchCase;
-	CString	m_sText;
-	BOOL	m_bWholeWord;
-	//}}AFX_DATA
+    CPoint m_ptCurrentPos;
+    // Dialog Data
+    //{{AFX_DATA(CFindTextDlg)
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFindTextDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    enum {
+        IDD = IDD_EDIT_FIND
+    };
+    int m_nDirection;
+    BOOL m_bMatchCase;
+    CString m_sText;
+    BOOL m_bWholeWord;
+    //}}AFX_DATA
 
-// Implementation
+    // Overrides
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CFindTextDlg)
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
+    //}}AFX_VIRTUAL
+
+    // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CFindTextDlg)
-	virtual void OnOK();
-	afx_msg void OnChangeEditText();
-	virtual BOOL OnInitDialog();
-	virtual void OnCancel();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(CFindTextDlg)
+    virtual void OnOK();
+    afx_msg void OnChangeEditText();
+    virtual BOOL OnInitDialog();
+    virtual void OnCancel();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

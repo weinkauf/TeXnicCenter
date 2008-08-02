@@ -9,44 +9,41 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CAdvice window
-const COLORREF ADVICE_BK_COLOR = RGB(0xFF, 0xFF, 0xC0);
 
 class CAdvice : public CStatic
 {
-// Construction
+    CFont font_;
+    // Construction
 public:
-	CAdvice();
+    CAdvice();
 
-// Attributes
+    // Attributes
 public:
 
-// Operations
+    // Operations
 public:
-	virtual BOOL Create(LPCTSTR lpszText, DWORD dwStyle,const RECT& rect, CWnd* pParentWnd, UINT nID=0);
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAdvice)
-	//}}AFX_VIRTUAL
+    virtual BOOL Create(LPCTSTR lpszText, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID = 0);
 
-// Implementation
+    // Implementation
 public:
-	void SetWindowText(LPCTSTR text);
-	virtual ~CAdvice();
-	void EnableFocusChange() {m_IgnoreFocusChange = FALSE;}
-	void DisableFocusChange() {m_IgnoreFocusChange = TRUE;}
+    void SetWindowText(LPCTSTR text);
+    ~CAdvice();
 
-	// Generated message map functions
+    void EnableFocusChange();
+    void DisableFocusChange();
+
+    // Generated message map functions
 protected:
-	//{{AFX_MSG(CAdvice)
-	afx_msg void OnPaint();
-	afx_msg void OnCaptureChanged(CWnd *pWnd);
-	afx_msg void OnActivateApp(BOOL bActive, HTASK hTask);
-	afx_msg void OnTimer(UINT nIDEvent);
-	//}}AFX_MSG
+    //{{AFX_MSG(CAdvice)
+    afx_msg void OnPaint();
+    afx_msg void OnCaptureChanged(CWnd *pWnd);
+    afx_msg void OnActivateApp(BOOL bActive, DWORD dwThreadId);
+    afx_msg void OnTimer(UINT nIDEvent);
+    //}}AFX_MSG
 
-	DECLARE_MESSAGE_MAP()
+    DECLARE_MESSAGE_MAP()
 private:
-	BOOL m_IgnoreFocusChange;
+    BOOL m_IgnoreFocusChange;
 };
 
 /////////////////////////////////////////////////////////////////////////////

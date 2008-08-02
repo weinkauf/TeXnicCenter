@@ -5,63 +5,68 @@
 #pragma once
 #endif // _MSC_VER > 1000
 // AutoCompleteListbox.h : header file
+
+#include <map>
 //
 
 /////////////////////////////////////////////////////////////////////////////
-// CAutoCompleteListbox window
+// CAutoCompleteListBox window
 
-class CAutoCompleteListbox : public CListBox
+class CAutoCompleteListBox : public CListBox 
 {
-//Types and Enums
-	enum
-	{
-		BMP_HEIGHT = 15,
-		BMP_WIDTH = 16
-	};
+    typedef std::map<CString,HIMAGELIST> ImageCacheContainer;
+    ImageCacheContainer image_cache_;
 
-// Construction
+    //Types and Enums
+
+    // Construction
 public:
-	CAutoCompleteListbox();
-	
-// Attributes
+    CAutoCompleteListBox();
+
+    // Attributes
 public:
 private:
-	CFont m_NormalFont;
-	CFont m_BoldFont;
-	CMapStringToPtr* m_PictureCache;
+    CFont m_NormalFont;
+    CFont m_BoldFont;
+    //CMapStringToPtr* m_PictureCache;
 
-// Operations
-private:	
-	BOOL DrawBitmap(CDC* pDC, CString file, UINT index, CRect rect);
-	CBitmap* CAutoCompleteListbox::LoadBitmapFromFile(CString filename);
+    // Operations
+private:
+    BOOL DrawBitmap(CDC* pDC, const CString& file, UINT index, const CRect& rect);
+    HIMAGELIST LoadBitmapFromFile(const CString& filename);
 
 protected:
-	int OnToolHitTest(CPoint point, TOOLINFO * pTI) const;
-	BOOL OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult );
+    INT_PTR OnToolHitTest(CPoint point, TOOLINFO * pTI) const;
+    BOOL OnToolTipText(UINT id, NMHDR * pNMHDR, LRESULT * pResult);
 
 public:
-	///Returns the size of the largest item in pixels (measured with the bold font, so this is an upper estimate)
-	CSize GetLargestItemTextExtent();
+    ///Returns the size of the largest item in pixels (measured with the bold font, so this is an upper estimate)
+    CSize GetLargestItemTextExtent();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAutoCompleteListbox)
-	public:
-	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
-	virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
-	virtual int CompareItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct);
-	//}}AFX_VIRTUAL
-
-// Implementation
+    // Overrides
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CAutoCompleteListBox)
 public:
-	virtual ~CAutoCompleteListbox();
-	
-	// Generated message map functions
+    virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
+    virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
+    virtual int CompareItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct);
+
+public:
+    const CSize GetItemMeasure(CDC* dc, LPCTSTR text);
+    //}}AFX_VIRTUAL
+
+    // Implementation
+public:
+    virtual ~CAutoCompleteListBox();
+
+    // Generated message map functions
 protected:
-	//{{AFX_MSG(CAutoCompleteListbox)
-	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CAutoCompleteListBox)
+    afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
+public:
+    afx_msg void OnKillFocus(CWnd* pNewWnd);
 };
 
 /////////////////////////////////////////////////////////////////////////////

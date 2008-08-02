@@ -11,44 +11,46 @@
 /////////////////////////////////////////////////////////////////////////////
 // CPackageScanProgress dialog
 
-class CPackageScanProgress : public CDialog, public CStyleFileListener
-{
-// Construction
+class CPackageScanProgress : public CDialog, public CStyleFileListener {
+    // Construction
 public:
-	CPackageScanProgress(CWnd* pParent = NULL);   // standard constructor
+    CPackageScanProgress(CWnd* pParent = NULL); // standard constructor
 
-// Dialog Data
-	//{{AFX_DATA(CPackageScanProgress)
-	enum { IDD = IDD_PACKAGE_SCAN_PROGRESS };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+    // Dialog Data
+    //{{AFX_DATA(CPackageScanProgress)
+
+    enum {
+        IDD = IDD_PACKAGE_SCAN_PROGRESS
+    };
+    // NOTE: the ClassWizard will add data members here
+    //}}AFX_DATA
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPackageScanProgress)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    // Overrides
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CPackageScanProgress)
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
+    //}}AFX_VIRTUAL
 
-	
-// Implementation
-	virtual void OnDirectoryFound(CString &dirname);
-	virtual void OnFileFound(CString &filename);
-	virtual void OnCommandFound(CLaTeXCommand &command);
-	virtual BOOL OnQueryCancel();
+
+    // Implementation
+    virtual void OnDirectoryFound(const CString &dirname);
+    virtual void OnFileFound(const CString &filename);
+    virtual void OnCommandFound(CLaTeXCommand &command);
+    virtual bool OnQueryCancel();
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CPackageScanProgress)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnCancel();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(CPackageScanProgress)
+    virtual BOOL OnInitDialog();
+    afx_msg void OnCancel();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 private:
-	BOOL m_Cancel;
-	void SetText(int id, LPCTSTR text);
-	int m_CommandsFound;
+    bool m_Cancel;
+    void SetText(int id, LPCTSTR text);
+    int m_CommandsFound;
 };
 
 //{{AFX_INSERT_LOCATION}}

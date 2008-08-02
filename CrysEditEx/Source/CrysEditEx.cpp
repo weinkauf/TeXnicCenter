@@ -12,24 +12,28 @@
 ////////////////////////////////////////////////////////////////////////////
 
 /********************************************************************
-*
-* $RCSfile$
-* $Revision$
-* $Date$
-*
-* $Author$
-*
-* $Log$
-* Revision 1.1.1.1  2002/02/26 08:11:59  svenwiegand
-* Initial revision
-*
-* Revision 1.0  2000-05-31 21:55:31+02  sven_wiegand
-* Initial revision
-*
-*
-********************************************************************/
+ *
+ * $RCSfile: CrysEditEx.cpp,v $
+ * $Revision$
+ * $Date$
+ *
+ * $Author$
+ *
+ * $Log: CrysEditEx.cpp,v $
+ * Revision 1.2  2003/12/16 20:04:38  svenwiegand
+ * Implemented Feature 726766: "Option for selecting the language for the GUI"
+ *
+ * Revision 1.1.1.1  2002/02/26 08:11:59  svenwiegand
+ * Initial revision
+ *
+ * Revision 1.0  2000-05-31 21:55:31+02  sven_wiegand
+ * Initial revision
+ *
+ *
+ ********************************************************************/
 
 #include "stdafx.h"
+
 #include <afxdllx.h>
 
 #include "CCrystalTextView.h"
@@ -44,30 +48,29 @@ static char THIS_FILE[] = __FILE__;
 // globals
 //-------------------------------------------------------------------
 
-static AFX_EXTENSION_MODULE CrysEditExDLL = { NULL, NULL };
+static AFX_EXTENSION_MODULE CrysEditExDLL = {NULL, NULL
+};
 
 extern "C" int APIENTRY
 DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
-	UNREFERENCED_PARAMETER(lpReserved);
+    UNREFERENCED_PARAMETER(lpReserved);
 
-	if (dwReason == DLL_PROCESS_ATTACH)
-	{
-		TRACE0("CRYSEDITEX.DLL Initializing!\n");
-		
-		if (!AfxInitExtensionModule(CrysEditExDLL, hInstance))
-			return 0;
+    if (dwReason == DLL_PROCESS_ATTACH) {
+        TRACE0("CRYSEDITEX.DLL Initializing!\n");
 
-		new CDynLinkLibrary(CrysEditExDLL);
+        if (!AfxInitExtensionModule(CrysEditExDLL, hInstance))
+            return 0;
 
-		CCrystalTextView::s_hResourceInst = hInstance;
-	}
-	else if (dwReason == DLL_PROCESS_DETACH)
-	{
-		TRACE0("CRYSEDITEX.DLL Terminating!\n");
-		AfxTermExtensionModule(CrysEditExDLL);
-	}
-	return 1;   // OK
+        new CDynLinkLibrary(CrysEditExDLL);
+
+        CCrystalTextView::s_hResourceInst = hInstance;
+    }
+    else if (dwReason == DLL_PROCESS_DETACH) {
+        TRACE0("CRYSEDITEX.DLL Terminating!\n");
+        AfxTermExtensionModule(CrysEditExDLL);
+    }
+    return 1; // OK
 }
 
 
@@ -75,14 +78,12 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 // globals
 //-------------------------------------------------------------------
 
-
 void CRYSEDIT_CLASS_DECL CrystalEditExSetResourceHandle(HINSTANCE hResourceDll)
 {
-	CCrystalTextView::s_hResourceInst = hResourceDll;
+    CCrystalTextView::s_hResourceInst = hResourceDll;
 }
-
 
 void CRYSEDIT_CLASS_DECL CrystalEditExResetResourceHandle()
 {
-	CCrystalTextView::s_hResourceInst = CrysEditExDLL.hModule;
+    CCrystalTextView::s_hResourceInst = CrysEditExDLL.hModule;
 }
