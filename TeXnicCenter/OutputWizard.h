@@ -177,6 +177,9 @@ protected:
     /** TRUE if Ghostscript has been found. */
     bool m_bGhostscriptInstalled;
 
+    /** TRUE if Postscript conversion is called via the ps2pdf script, e.g. from miktex. */
+    bool m_bGhostscriptViaPS2PDF;
+
     /** Path to Ghostscript. */
     CString m_strGhostscriptPath;
 

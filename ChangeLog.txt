@@ -1,3 +1,8 @@
+2008/08/02 niteria
+- Migrated CVS repository to Subversion
+- OutputWizard: Fixed problem where gsview was not recognized
+- OutputWizard: Different parameters for Ghostscript and ps2pdf.exe
+
 2008/6/20 Rainy
 - Abbreviations are recognized correctly by the spell checker
 - The state of docking windows is properly restored now
