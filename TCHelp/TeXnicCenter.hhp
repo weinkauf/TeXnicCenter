@@ -1,6 +1,6 @@
 [OPTIONS]
 Compatibility=1.1 or later
-Compiled file=..\Output\TeXCntr.chm
+Compiled file=..\Output\TeXnicCenter.chm
 Contents file=TeXnicCenter.hhc
 Default Window=$global_TxcHelpWindow
 Default topic=root.html

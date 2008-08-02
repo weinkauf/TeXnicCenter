@@ -1,36 +1,36 @@
 /********************************************************************
-*
-* This file is part of the TeXnicCenter-system
-*
-* Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License as
-* published by the Free Software Foundation; either version 2 of
-* the License, or (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*
-* If you have further questions or if you want to support
-* further TeXnicCenter development, visit the TeXnicCenter-homepage
-*
-*    http://www.ToolsCenter.org
-*
-*********************************************************************/
+ *
+ * This file is part of the TeXnicCenter-system
+ *
+ * Copyright (C) 1999-2000 Sven Wiegand
+ * Copyright (C) 2000-$CurrentYear$ ToolsCenter
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * If you have further questions or if you want to support
+ * further TeXnicCenter development, visit the TeXnicCenter-homepage
+ *
+ *    http://www.ToolsCenter.org
+ *
+ *********************************************************************/
 
 /********************************************************************
-*
-* $Id$
-*
-********************************************************************/
+ *
+ * $Id$
+ *
+ ********************************************************************/
 
 #include "stdafx.h"
 #include "texniccenter.h"
@@ -46,260 +46,245 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CPlaceholderSingleOptDlg dialog
 
-
 CPlaceholderSingleOptDlg::CPlaceholderSingleOptDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CPlaceholderSingleOptDlg::IDD, pParent)
+: CDialog(CPlaceholderSingleOptDlg::IDD,pParent)
 {
-	//{{AFX_DATA_INIT(CPlaceholderSingleOptDlg)
-	m_bForwardSlash = FALSE;
-	m_bShortFormat = FALSE;
-	//}}AFX_DATA_INIT
+    //{{AFX_DATA_INIT(CPlaceholderSingleOptDlg)
+    m_bForwardSlash = FALSE;
+    m_bShortFormat = FALSE;
+    //}}AFX_DATA_INIT
 
-	m_bAllowOptions = true;
+    m_bAllowOptions = true;
 }
-
 
 void CPlaceholderSingleOptDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPlaceholderSingleOptDlg)
-	DDX_Control(pDX, IDC_PLACEHOLDER_SINGLE_SHORT, m_ShortBtn);
-	DDX_Control(pDX, IDC_PLACEHOLDER_SINGLE_FORWARD, m_ForwardBtn);
-	DDX_Control(pDX, IDC_PLACEHOLDER_SINGLE_PHTYPE, m_PHTypeCombo);
-	DDX_Control(pDX, IDC_PLACEHOLDER_SINGLE_WHAT, m_WhatStatic);
-	DDX_Control(pDX, IDC_PLACEHOLDER_SINGLE_RESULT, m_ResultStatic);
-	DDX_Control(pDX, IDC_PLACEHOLDER_SINGLE_EXAMPLE, m_ExampleEdit);
-	DDX_Check(pDX, IDC_PLACEHOLDER_SINGLE_FORWARD, m_bForwardSlash);
-	DDX_Check(pDX, IDC_PLACEHOLDER_SINGLE_SHORT, m_bShortFormat);
-	//}}AFX_DATA_MAP
+    CDialog::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(CPlaceholderSingleOptDlg)
+    DDX_Control(pDX,IDC_PLACEHOLDER_SINGLE_SHORT,m_ShortBtn);
+    DDX_Control(pDX,IDC_PLACEHOLDER_SINGLE_FORWARD,m_ForwardBtn);
+    DDX_Control(pDX,IDC_PLACEHOLDER_SINGLE_PHTYPE,m_PHTypeCombo);
+    DDX_Control(pDX,IDC_PLACEHOLDER_SINGLE_WHAT,m_WhatStatic);
+    DDX_Control(pDX,IDC_PLACEHOLDER_SINGLE_RESULT,m_ResultStatic);
+    DDX_Control(pDX,IDC_PLACEHOLDER_SINGLE_EXAMPLE,m_ExampleEdit);
+    DDX_Check(pDX,IDC_PLACEHOLDER_SINGLE_FORWARD,m_bForwardSlash);
+    DDX_Check(pDX,IDC_PLACEHOLDER_SINGLE_SHORT,m_bShortFormat);
+    //}}AFX_DATA_MAP
 }
 
-
-BEGIN_MESSAGE_MAP(CPlaceholderSingleOptDlg, CDialog)
-	//{{AFX_MSG_MAP(CPlaceholderSingleOptDlg)
-	ON_BN_CLICKED(IDC_PLACEHOLDER_SINGLE_FORWARD, ShowExample)
-	ON_BN_CLICKED(IDC_PLACEHOLDER_SINGLE_SHORT, ShowExample)
-	ON_CBN_SELCHANGE(IDC_PLACEHOLDER_SINGLE_PHTYPE, OnPHTypeChange)
-	//}}AFX_MSG_MAP
+BEGIN_MESSAGE_MAP(CPlaceholderSingleOptDlg,CDialog)
+//{{AFX_MSG_MAP(CPlaceholderSingleOptDlg)
+ON_BN_CLICKED(IDC_PLACEHOLDER_SINGLE_FORWARD,ShowExample)
+ON_BN_CLICKED(IDC_PLACEHOLDER_SINGLE_SHORT,ShowExample)
+ON_CBN_SELCHANGE(IDC_PLACEHOLDER_SINGLE_PHTYPE,OnPHTypeChange)
+//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CPlaceholderSingleOptDlg message handlers
 
-void CPlaceholderSingleOptDlg::OnOK() 
+void CPlaceholderSingleOptDlg::OnOK()
 {
-	ConstructPlaceholder();
-	
-	CDialog::OnOK();
+    ConstructPlaceholder();
+
+    CDialog::OnOK();
 }
 
-void CPlaceholderSingleOptDlg::OnCancel() 
+void CPlaceholderSingleOptDlg::OnCancel()
 {
-	//The user pressed cancel, so we will return nothing
+    //The user pressed cancel, so we will return nothing
 
-	strPlaceholder = "";
-	
-	CDialog::OnCancel();
+    strPlaceholder = "";
+
+    CDialog::OnCancel();
 }
 
 void CPlaceholderSingleOptDlg::SetPlaceholderBase(LPCTSTR lpszPHBase)
 {
-	ASSERT(lpszPHBase);
+    ASSERT(lpszPHBase);
 
-	m_strPlaceholderBase = lpszPHBase;
-	ASSERT(CorrectPlaceholderBase());
+    m_strPlaceholderBase = lpszPHBase;
+    ASSERT(CorrectPlaceholderBase());
 
-	return;
+    return;
 }
 
 void CPlaceholderSingleOptDlg::SetAllowOptions(bool bEnable /*= true*/)
 {
-	m_bAllowOptions = bEnable;
+    m_bAllowOptions = bEnable;
 }
 
 void CPlaceholderSingleOptDlg::ConstructPlaceholder()
 {
-	if (!CorrectPlaceholderBase())
-	{
-		strPlaceholder = "";
-		return;
-	}
+    if (!CorrectPlaceholderBase()) {
+        strPlaceholder = "";
+        return;
+    }
 
-	UpdateData(true);
+    UpdateData(true);
 
-	//Get type of reference
-	CString strPHTypes = _T("pbwdnter");
-	int nPHType = m_PHTypeCombo.GetCurSel();
-	if ( (nPHType < 0) || (nPHType > 7) )
-	{
-		strPlaceholder = "";
-		return;
-	}
+    //Get type of reference
+    CString strPHTypes = _T("pbwdnter");
+    int nPHType = m_PHTypeCombo.GetCurSel();
+    if ((nPHType < 0) || (nPHType > 7)) {
+        strPlaceholder = "";
+        return;
+    }
 
-	//Get the possible options for this type of reference
-	bool bForward, bShort;
-	GetPossibleOptions(&bForward, &bShort);
+    //Get the possible options for this type of reference
+    bool bForward,bShort;
+    GetPossibleOptions(&bForward,&bShort);
 
-	if (m_bForwardSlash && bForward)
-	{
-		strPHTypes.MakeUpper();
-	}
+    if (m_bForwardSlash && bForward) {
+        strPHTypes.MakeUpper();
+    }
 
-	//Construct
-	strPlaceholder.Format("%%%s%c%s",
-													(m_bShortFormat && bShort) ? "s" : "",
-													strPHTypes[nPHType],
-													m_strPlaceholderBase);
+    //Construct
+    strPlaceholder.Format(_T("%%%s%c%s"),
+            (m_bShortFormat && bShort) ? _T("s") : _T(""),
+            strPHTypes[nPHType],
+            m_strPlaceholderBase);
 }
 
-BOOL CPlaceholderSingleOptDlg::OnInitDialog() 
+BOOL CPlaceholderSingleOptDlg::OnInitDialog()
 {
-	CDialog::OnInitDialog();
+    CDialog::OnInitDialog();
 
-	strPlaceholder = "";
+    strPlaceholder.Empty();
 
-	//Load and show description
-	CString strDescr = "";
-	if (m_strPlaceholderBase == "m")
-	{
-		strDescr.LoadString(STE_MAINFILE_DESCRIPTION);
-	}
-	else if (m_strPlaceholderBase == "c")
-		{
-			strDescr.LoadString(STE_CURRENTDOC_DESCRIPTION);
-		}
-		else ASSERT(false); //Should never happen; Error in Ressource
+    //Load and show description
+    CString strDescr;
 
-	m_WhatStatic.SetWindowText(strDescr);
+    if (m_strPlaceholderBase == _T("m")) {
+        strDescr.LoadString(STE_MAINFILE_DESCRIPTION);
+    }
+    else if (m_strPlaceholderBase == _T("c")) {
+        strDescr.LoadString(STE_CURRENTDOC_DESCRIPTION);
+    }
+    else ASSERT(false); //Should never happen; Error in Ressource
 
-	//Activate the first entry
-	m_PHTypeCombo.SetCurSel(0);
+    m_WhatStatic.SetWindowText(strDescr);
 
-	//Update Options
-	m_ForwardBtn.EnableWindow(m_bAllowOptions);
-	m_ShortBtn.EnableWindow(m_bAllowOptions);
+    //Activate the first entry
+    m_PHTypeCombo.SetCurSel(0);
 
-	//Init the example
-	ShowExample();
-	
-	return TRUE;
+    //Update Options
+    m_ForwardBtn.EnableWindow(m_bAllowOptions);
+    m_ShortBtn.EnableWindow(m_bAllowOptions);
+
+    //Init the example
+    ShowExample();
+
+    return TRUE;
 }
 
 bool CPlaceholderSingleOptDlg::CorrectPlaceholderBase()
 {
-	if (m_strPlaceholderBase.GetLength() != 1)
-		return false;
+    if (m_strPlaceholderBase.GetLength() != 1)
+        return false;
 
-	if (
-			(m_strPlaceholderBase != "m")
-		&&(m_strPlaceholderBase != "c")
-			)
-			return false;
+    if (
+            (m_strPlaceholderBase != _T("m"))
+            && (m_strPlaceholderBase != _T("c"))
+            )
+        return false;
 
-	return true;
+    return true;
 }
 
-void CPlaceholderSingleOptDlg::ShowExample() 
+void CPlaceholderSingleOptDlg::ShowExample()
 {
-	//Get the placeholder
-	ConstructPlaceholder();
-	//Show it to the user
-	m_ResultStatic.SetWindowText(strPlaceholder);
+    //Get the placeholder
+    ConstructPlaceholder();
+    //Show it to the user
+    m_ResultStatic.SetWindowText(strPlaceholder);
 
-	/////////////////////////////////
-	//Construct a real world example
-	CString strMainPath;
-	CString strCurrentPath;
+    /////////////////////////////////
+    //Construct a real world example
+    CString strMainPath;
+    CString strCurrentPath;
 
-	//Problem: For constructing a short path using AfxExpandPlaceholders(),
-	// the file needs to exist.
-	// So we take a different (=short) MainFileName in this case.
-	if (m_bShortFormat)
-	{
-		strMainPath.LoadString(STE_PLACEHOLDER_EXAMPLE_MAIN_SHORT);
-		strCurrentPath.LoadString(STE_PLACEHOLDER_EXAMPLE_CURRENT_SHORT);
-	}
-	else
-	{
-		strMainPath.LoadString(STE_PLACEHOLDER_EXAMPLE_MAIN);
-		strCurrentPath.LoadString(STE_PLACEHOLDER_EXAMPLE_CURRENT);
-	}
+    //Problem: For constructing a short path using AfxExpandPlaceholders(),
+    // the file needs to exist.
+    // So we take a different (=short) MainFileName in this case.
+    if (m_bShortFormat) {
+        strMainPath.LoadString(STE_PLACEHOLDER_EXAMPLE_MAIN_SHORT);
+        strCurrentPath.LoadString(STE_PLACEHOLDER_EXAMPLE_CURRENT_SHORT);
+    }
+    else {
+        strMainPath.LoadString(STE_PLACEHOLDER_EXAMPLE_MAIN);
+        strCurrentPath.LoadString(STE_PLACEHOLDER_EXAMPLE_CURRENT);
+    }
 
-	CString strExampleFileName;
-	try
-	{
-		strExampleFileName = AfxExpandPlaceholders(strPlaceholder,
-													strMainPath,
-													strCurrentPath,
-													-1, NULL, false,
-													CPathTool::GetDirectory(CPathTool::GetDirectory(strMainPath)));
-		//Show this example
-		m_ExampleEdit.SetWindowText(strExampleFileName);
-	}
-	catch (CMemoryException* e)
-	{
-		e->ReportError();
-		delete e;
-	}
+    CString strExampleFileName;
+    try {
+        strExampleFileName = AfxExpandPlaceholders(strPlaceholder,
+                strMainPath,
+                strCurrentPath,
+                -1,NULL,false,
+                CPathTool::GetDirectory(CPathTool::GetDirectory(strMainPath)));
+        //Show this example
+        m_ExampleEdit.SetWindowText(strExampleFileName);
+    }
+    catch (CMemoryException* e) {
+        e->ReportError();
+        delete e;
+    }
 }
 
-void CPlaceholderSingleOptDlg::OnPHTypeChange() 
+void CPlaceholderSingleOptDlg::OnPHTypeChange()
 {
-	//We need to disable some options for some types of Placeholders
-	bool bForward, bShort;
+    //We need to disable some options for some types of Placeholders
+    bool bForward,bShort;
 
-	GetPossibleOptions(&bForward, &bShort);
-	m_ForwardBtn.EnableWindow(bForward);
-	m_ShortBtn.EnableWindow(bShort);
+    GetPossibleOptions(&bForward,&bShort);
+    m_ForwardBtn.EnableWindow(bForward);
+    m_ShortBtn.EnableWindow(bShort);
 
-	ShowExample();
+    ShowExample();
 }
 
-
-void CPlaceholderSingleOptDlg::GetPossibleOptions(bool* pbForward, bool* pbShort) 
+void CPlaceholderSingleOptDlg::GetPossibleOptions(bool* pbForward,bool* pbShort)
 {
-	UpdateData(true);
+    UpdateData(true);
 
-	if (!m_bAllowOptions)
-	{
-		//Options are not allowed: Just say no.
-		*pbForward = false;
-		*pbShort = false;
-		return;
-	}
+    if (!m_bAllowOptions) {
+        //Options are not allowed: Just say no.
+        *pbForward = false;
+        *pbShort = false;
+        return;
+    }
 
-	//Get the Type of Placeholder
-	int nPHType = m_PHTypeCombo.GetCurSel();
-	if ( (nPHType < 0) || (nPHType > 6) )
-	{
-		return;
-	}
+    //Get the Type of Placeholder
+    int nPHType = m_PHTypeCombo.GetCurSel();
+    if ((nPHType < 0) || (nPHType > 6)) {
+        return;
+    }
 
-	switch (nPHType)
-	{
-		default:
-			*pbForward = true;
-			*pbShort = true;
-			break;
+    switch (nPHType) {
+        default:
+            *pbForward = true;
+            *pbShort = true;
+            break;
 
-		case 3: //Name (with extension)
-			*pbForward = false;
-			*pbShort = true;
-			break;
+        case 3: //Name (with extension)
+            *pbForward = false;
+            *pbShort = true;
+            break;
 
-		case 4: //Title (without extension)
-			*pbForward = false;
-			*pbShort = true;
-			break;
+        case 4: //Title (without extension)
+            *pbForward = false;
+            *pbShort = true;
+            break;
 
-		case 5: //Extension (without leading point)
-			*pbForward = false;
-			*pbShort = true;
-			break;
+        case 5: //Extension (without leading point)
+            *pbForward = false;
+            *pbShort = true;
+            break;
 
-		case 6: //Drive letter followed by colon (':')
-			*pbForward = false;
-			*pbShort = false;
-			break;
-	}
+        case 6: //Drive letter followed by colon (':')
+            *pbForward = false;
+            *pbShort = false;
+            break;
+    }
 }

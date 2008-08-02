@@ -16,13 +16,16 @@
 
 /********************************************************************
 *
-* $RCSfile$
+* $RCSfile: CCrystalTextView.inl,v $
 * $Revision$
 * $Date$
 *
 * $Author$
 *
-* $Log$
+* $Log: CCrystalTextView.inl,v $
+* Revision 1.1.1.1  2002/02/26 08:11:58  svenwiegand
+* Initial revision
+*
 * Revision 1.0  2000-05-31 21:55:26+02  sven_wiegand
 * Initial revision
 *

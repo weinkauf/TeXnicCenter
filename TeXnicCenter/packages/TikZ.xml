@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
+<lxCollection version="1" xmlns:txclxp="http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd">
+  <lxPackage name="TikZ"
+		path=""
+		desc="TikZ/PGF commands"
+	>
+
+    <lxEnvironment name="tikzpicture"
+        parameters="1"
+        desc="TikZ environment"
+        icon="format.bmp"
+        index="6"
+        expafter="}&#xA;	&#xA;\end{tikzpicture}"
+        expbefore="\begin{"/>
+    <lxEnvironment name="scope"
+        parameters="1"
+        desc="TikZ scope environment"
+        icon="format.bmp"
+        index="6"
+        expafter="}&#xA;	&#xA;\end{scope}"
+        expbefore="\begin{"/>
+
+    <lxCommand name="\draw"	desc="Draw"/>
+    <lxCommand name="\path"	desc="path"/>
+  </lxPackage>
+</lxCollection>

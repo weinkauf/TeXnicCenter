@@ -16,13 +16,20 @@
 
 /********************************************************************
 *
-* $RCSfile$
+* $RCSfile: CCrystalEditView.inl,v $
 * $Revision$
 * $Date$
 *
 * $Author$
 *
-* $Log$
+* $Log: CCrystalEditView.inl,v $
+* Revision 1.2  2003/12/06 19:59:58  svenwiegand
+* - Implemented Feature 601708 + additions: The user can now set the styles for
+*   the text cursor independant for the insert and the overwrite mode. The cursor
+*   style is defined by its form (line or block) and its mode (blinking or
+*   not-blinking). The defaults are 'line' for insert cursor and 'block' for
+*   overwrite cursor -- both are blinking.
+*
 * Revision 1.1.1.1  2002/02/26 08:11:52  svenwiegand
 * Initial revision
 *

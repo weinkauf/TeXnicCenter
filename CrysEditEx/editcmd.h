@@ -18,13 +18,19 @@
 
 /********************************************************************
 *
-* $RCSfile$
+* $RCSfile: editcmd.h,v $
 * $Revision$
 * $Date$
 *
 * $Author$
 *
-* $Log$
+* $Log: editcmd.h,v $
+* Revision 1.3  2005/03/12 21:15:53  niteria
+* Reworked resources (translation etc.) for brace matching.
+* Moved accelerator 'Ctrl+M' from CrysEditEx to TXC to enable customization.
+* Slightly changed default colors for brace matching.
+* Now they look more consistent in terms of visual perception.
+*
 * Revision 1.2  2005/03/08 16:36:08  vachis
 * Selection of block between bracket pairs in a hierarchical manner (Ctrl+M)
 * Bracket highlighting disabled if a selection is present

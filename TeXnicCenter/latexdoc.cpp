@@ -1,36 +1,36 @@
 /********************************************************************
-*
-* This file is part of the TeXnicCenter-system
-*
-* Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License as
-* published by the Free Software Foundation; either version 2 of
-* the License, or (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*
-* If you have further questions or if you want to support
-* further TeXnicCenter development, visit the TeXnicCenter-homepage
-*
-*    http://www.ToolsCenter.org
-*
-*********************************************************************/
+ *
+ * This file is part of the TeXnicCenter-system
+ *
+ * Copyright (C) 1999-2000 Sven Wiegand
+ * Copyright (C) 2000-$CurrentYear$ ToolsCenter
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * If you have further questions or if you want to support
+ * further TeXnicCenter development, visit the TeXnicCenter-homepage
+ *
+ *    http://www.ToolsCenter.org
+ *
+ *********************************************************************/
 
 /********************************************************************
-*
-* $Id$
-*
-********************************************************************/
+ *
+ * $Id$
+ *
+ ********************************************************************/
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
@@ -47,287 +47,292 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 //-------------------------------------------------------------------
-// class CLatexDoc
+// class CLaTeXDoc
 //-------------------------------------------------------------------
 
-IMPLEMENT_DYNCREATE(CLatexDoc, CDocument)
+IMPLEMENT_DYNCREATE(CLaTeXDoc,CDocument)
 
-BEGIN_MESSAGE_MAP(CLatexDoc, CDocument)
-	//{{AFX_MSG_MAP(CLatexDoc)
-	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnUpdateFileSave)
-	ON_COMMAND(ID_FILE_SAVE_COPY_AS, OnFileSaveCopyAs)
-	//}}AFX_MSG_MAP
-	ON_COMMAND(ID_FILE_SEND_MAIL, OnFileSendMail)
-	ON_UPDATE_COMMAND_UI(ID_FILE_SEND_MAIL, OnUpdateFileSendMail)
+BEGIN_MESSAGE_MAP(CLaTeXDoc,CDocument)
+    //{{AFX_MSG_MAP(CLaTeXDoc)
+    ON_UPDATE_COMMAND_UI(ID_FILE_SAVE,OnUpdateFileSave)
+    ON_COMMAND(ID_FILE_SAVE_COPY_AS,OnFileSaveCopyAs)
+    //}}AFX_MSG_MAP
+    ON_COMMAND(ID_FILE_SEND_MAIL,OnFileSendMail)
+    ON_UPDATE_COMMAND_UI(ID_FILE_SEND_MAIL,OnUpdateFileSendMail)
 END_MESSAGE_MAP()
 
 
-CLatexDoc::CLatexDoc()
-:	m_bSaveCopy( FALSE ),
-	m_nCRLFMode( -1 )
+CLaTeXDoc::CLaTeXDoc()
+: m_bSaveCopy(FALSE)
+, m_nCRLFMode(-1)
 {
-	m_pTextBuffer = new CCrystalTextBufferEx( this );
-	ASSERT( m_pTextBuffer );
+    m_pTextBuffer = new CCrystalTextBufferEx(this);
+    ASSERT(m_pTextBuffer);
 }
 
-CLatexDoc::~CLatexDoc()
+CLaTeXDoc::~CLaTeXDoc()
 {
-	if( m_pTextBuffer )
-		delete m_pTextBuffer;
+    if (m_pTextBuffer)
+        delete m_pTextBuffer;
 }
 
-BOOL CLatexDoc::OnNewDocument()
+BOOL CLaTeXDoc::OnNewDocument()
 {
-	if (!CDocument::OnNewDocument())
-		return FALSE;
+    if (!CDocument::OnNewDocument())
+        return FALSE;
 
-	// textbuffer must be created before use
-	IFNOT( m_pTextBuffer )
-		return FALSE;
+    // *
+    if (m_strPathName.IsEmpty())
+        m_strPathName = m_strTitle;
 
-	m_pTextBuffer->InitNew();
-	m_pTextBuffer->SetCRLFMode(g_configuration.m_nStandardFileFormat);
+    // textbuffer must be created before use
+    IFNOT(m_pTextBuffer)
+    return FALSE;
 
-	return TRUE;
+    m_pTextBuffer->InitNew();
+    m_pTextBuffer->SetCRLFMode(CConfiguration::GetInstance()->m_nStandardFileFormat);
+
+    return TRUE;
 }
 
-void CLatexDoc::SetErrorMark( int nLine )
+void CLaTeXDoc::SetErrorMark(int nLine)
 {
-	if( nLine < 0 )
-	{
-		// remove flag
-		int	nLine = m_pTextBuffer->GetLineWithFlag( LF_COMPILATION_ERROR );
-		if( nLine > -1 )
-			m_pTextBuffer->SetLineFlag( nLine, LF_COMPILATION_ERROR, FALSE, FALSE );
-	}
-	else if( nLine >= 0 && nLine <= m_pTextBuffer->GetLineCount() )
-		m_pTextBuffer->SetLineFlag( nLine - 1, LF_COMPILATION_ERROR, TRUE );
+    if (nLine < 0) {
+        // remove flag
+        int nLine = m_pTextBuffer->GetLineWithFlag(LF_COMPILATION_ERROR);
+        if (nLine > -1)
+            m_pTextBuffer->SetLineFlag(nLine,LF_COMPILATION_ERROR,FALSE,FALSE);
+    }
+    else if (nLine >= 0 && nLine <= m_pTextBuffer->GetLineCount())
+        m_pTextBuffer->SetLineFlag(nLine - 1,LF_COMPILATION_ERROR,TRUE);
 }
 
-
-void CLatexDoc::CheckForFileChanges()
+void CLaTeXDoc::CheckForFileChanges()
 {
-	WORD	wChanges = GetFileChanges();
-	if (wChanges&chReadOnly)
-		UpdateReadOnlyFlag();
-	else if (wChanges)
-		UpdateTextBufferOnExternalChange();
+    WORD wChanges = GetFileChanges();
+
+    if (wChanges & chReadOnly)
+        UpdateReadOnlyFlag();
+    else if (wChanges)
+        UpdateTextBufferOnExternalChange();
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
-// CLatexDoc Diagnose
+// CLaTeXDoc Diagnose
 
 #ifdef _DEBUG
-void CLatexDoc::AssertValid() const
+
+void CLaTeXDoc::AssertValid() const
 {
-	CDocument::AssertValid();
+    CDocument::AssertValid();
 }
 
-void CLatexDoc::Dump(CDumpContext& dc) const
+void CLaTeXDoc::Dump(CDumpContext& dc) const
 {
-	CDocument::Dump(dc);
+    CDocument::Dump(dc);
 }
 #endif //_DEBUG
 
 /////////////////////////////////////////////////////////////////////////////
 // operations
 
-void CLatexDoc::DeleteContents() 
+void CLaTeXDoc::DeleteContents()
 {
-	SetFilePath(NULL);
+    SetFilePath(NULL);
 
-	m_pTextBuffer->FreeAll();
-	m_nCurrentLine = 0;
-	
-	CDocument::DeleteContents();
+    m_pTextBuffer->FreeAll();
+    m_nCurrentLine = 0;
+
+    CDocument::DeleteContents();
 }
 
+BOOL CLaTeXDoc::OnSaveDocument(LPCTSTR lpszPathName)
+{
+    DWORD dwResult = SaveToFile(lpszPathName,m_nCRLFMode,!m_bSaveCopy);
 
-BOOL CLatexDoc::OnSaveDocument(LPCTSTR lpszPathName) 
-{	
-	DWORD dwResult = SaveToFile(lpszPathName, m_nCRLFMode, !m_bSaveCopy);
-	if(dwResult != 0)
-	{
-		CString	strMsg;
-		strMsg.Format(STE_FILE_INUSE, 
-			AfxLoadString(IDS_SAVE), 
-			lpszPathName, 
-			AfxFormatSystemString(dwResult));
-		AfxMessageBox(strMsg, MB_ICONEXCLAMATION|MB_OK);
+    if (dwResult != 0) {
+        CString strMsg;
+        strMsg.Format(STE_FILE_INUSE,
+                AfxLoadString(IDS_SAVE),
+                lpszPathName,
+                AfxFormatSystemString(dwResult));
+        AfxMessageBox(strMsg,MB_ICONEXCLAMATION | MB_OK);
 
-		m_nCRLFMode = -1;
-		m_bSaveCopy = FALSE;
-		return FALSE;
-	}
-	else if( !m_bSaveCopy && m_nCRLFMode >= 0)
-	{
-		m_pTextBuffer->SetCRLFMode(m_nCRLFMode);
-	}
+        m_nCRLFMode = -1;
+        m_bSaveCopy = FALSE;
+        return FALSE;
+    }
+    else if (!m_bSaveCopy && m_nCRLFMode >= 0) {
+        m_pTextBuffer->SetCRLFMode(m_nCRLFMode);
+    }
 
-	m_nCRLFMode = -1;
-	m_bSaveCopy = FALSE;
-	theApp.m_pMainWnd->SendMessage( WM_COMMAND, ID_DOCUMENT_SAVED );
-	return TRUE;
+    m_nCRLFMode = -1;
+    m_bSaveCopy = FALSE;
+    theApp.m_pMainWnd->SendMessage(WM_COMMAND,ID_DOCUMENT_SAVED);
+    return TRUE;
 }
 
-
-DWORD CLatexDoc::SaveToFile(LPCTSTR lpszPathName, int nCrlfStyle /*= CRLF_STYLE_AUTOMATIC*/, BOOL bClearModifiedFlag /*= TRUE*/)
+DWORD CLaTeXDoc::SaveToFile(LPCTSTR lpszPathName,int nCrlfStyle /*= CRLF_STYLE_AUTOMATIC*/,BOOL bClearModifiedFlag /*= TRUE*/)
 {
-	CheckForFileChanges();
-	DWORD dwResult = m_pTextBuffer->SaveToFile(lpszPathName, nCrlfStyle, bClearModifiedFlag);
-	SnapFileState();
+    CheckForFileChanges();
+    DWORD dwResult = m_pTextBuffer->SaveToFile(lpszPathName,nCrlfStyle,bClearModifiedFlag);
+    SnapFileState();
 
-	return dwResult;
+    return dwResult;
 }
 
-
-DWORD CLatexDoc::LoadBuffer( LPCTSTR lpszPath )
+DWORD CLaTeXDoc::LoadBuffer(LPCTSTR lpszPath)
 {
-	m_pTextBuffer->FreeAll();
-	DWORD dwResult = m_pTextBuffer->LoadFromFile( lpszPath );
-	if( dwResult == 0 )
-		SetModifiedFlag();
+    m_pTextBuffer->FreeAll();
+    DWORD dwResult = m_pTextBuffer->LoadFromFile(lpszPath);
 
-	return dwResult;
+    if (dwResult == 0)
+        SetModifiedFlag();
+
+    return dwResult;
 }
 
-
-BOOL CLatexDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL CLaTeXDoc::OnOpenDocument(LPCTSTR lpszPathName)
 {
-	return (m_pTextBuffer->LoadFromFile( lpszPathName ) == 0);
+    return (m_pTextBuffer->LoadFromFile(lpszPathName) == 0);
 }
 
-
-void CLatexDoc::OnUpdateFileSave(CCmdUI* pCmdUI) 
+void CLaTeXDoc::OnUpdateFileSave(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable( IsModified() );	
+    pCmdUI->Enable(IsModified());
 }
 
-
-BOOL CLatexDoc::DoSave( LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/ )
+BOOL CLaTeXDoc::DoSave(LPCTSTR lpszPathName,BOOL bReplace /*= TRUE*/)
 {
-	CString newName(lpszPathName);
-	if (newName.IsEmpty())
-	{
-		CDocTemplate* pTemplate = GetDocTemplate();
-		ASSERT(pTemplate != NULL);
+    CString newName(lpszPathName);
+    if (newName.IsEmpty()) {
+        CDocTemplate* pTemplate = GetDocTemplate();
+        ASSERT(pTemplate != NULL);
 
-		CString	strExt;
-		pTemplate->GetDocString( strExt, CDocTemplate::filterExt );
-		ASSERT( !strExt.IsEmpty() && strExt[0] == '.' );
+        CString strExt;
+        pTemplate->GetDocString(strExt,CDocTemplate::filterExt);
+        ASSERT(!strExt.IsEmpty() && strExt[0] == '.');
 
-		newName = m_strPathName;
-		if (bReplace && newName.IsEmpty())
-		{
-			newName = m_strTitle;
-			// check for dubious filename
-			int iBad = newName.FindOneOf(_T(" #%;/\\"));
-			if (iBad != -1)
-				newName.ReleaseBuffer(iBad);
+        newName = m_strPathName;
+        if (bReplace && newName.IsEmpty()) {
+            newName = m_strTitle;
+            // check for dubious filename
+            int iBad = newName.FindOneOf(_T(" #%;/\\"));
+            if (iBad != -1)
+                newName.ReleaseBuffer(iBad);
 
-			// append the default suffix if there is one
-			if( !strExt.IsEmpty() )
-				newName += strExt;
-		}
+            // append the default suffix if there is one
+            if (!strExt.IsEmpty())
+                newName += strExt;
+        }
 
-		CTextFileSaveDialog	dlg( 
-			bReplace ? AFX_IDS_SAVEFILE : AFX_IDS_SAVEFILECOPY,
-			strExt, newName, 
-			OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT|OFN_NOREADONLYRETURN, 
-			m_pTextBuffer ? m_pTextBuffer->GetCRLFMode() : g_configuration.m_nStandardFileFormat,
-			CString( (LPCTSTR)STE_FILE_LATEXFILTER ) );
-		
-		//Show the dialog
-		if (dlg.DoModal() != IDOK)
-		{
-			//It was cancelled - the PathName is not set.
-			// Therefore, we use GetLastOpenedFolder.
-			AfxSetLastDirectory(dlg.GetLastOpenedFolder());
-			return false;
-		}
+        CTextFileSaveDialog dlg(
+                bReplace ? AFX_IDS_SAVEFILE : AFX_IDS_SAVEFILECOPY,
+                strExt,newName,
+                OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_NOREADONLYRETURN,
+                m_pTextBuffer ? m_pTextBuffer->GetCRLFMode() : CConfiguration::GetInstance()->m_nStandardFileFormat,
+                CString((LPCTSTR)STE_FILE_LATEXFILTER));
 
-		AfxSetLastDirectory( CPathTool::GetDirectory(dlg.GetPathName()) );
-		m_nCRLFMode = dlg.GetFileFormat();
-		m_bSaveCopy = !bReplace;
-		
-		newName = dlg.GetPathName();
-	}
-	else
-		m_nCRLFMode = m_pTextBuffer->GetCRLFMode();
+        //Show the dialog
+        if (dlg.DoModal() != IDOK) {
+            //It was canceled - the PathName is not set.
+            // Therefore, we use GetLastOpenedFolder.
+            AfxSetLastDirectory(dlg.GetLastOpenedFolder());
+            return false;
+        }
 
-	return CDocument::DoSave( newName, bReplace );
+        AfxSetLastDirectory(CPathTool::GetDirectory(dlg.GetPathName()));
+        m_nCRLFMode = dlg.GetFileFormat();
+        m_bSaveCopy = !bReplace;
+
+        newName = dlg.GetPathName();
+    }
+    else
+        m_nCRLFMode = m_pTextBuffer->GetCRLFMode();
+
+    return CDocument::DoSave(newName,bReplace);
 }
 
-
-void CLatexDoc::OnFileSaveCopyAs() 
+void CLaTeXDoc::OnFileSaveCopyAs()
 {
-	DoSave( NULL, FALSE );
+    DoSave(NULL,FALSE);
 }
 
-
-void CLatexDoc::SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU) 
+void CLaTeXDoc::SetPathName(LPCTSTR lpszPathName,BOOL bAddToMRU)
 {
-	SetFilePath(lpszPathName);
-	CDocument::SetPathName(lpszPathName, bAddToMRU);
+    SetFilePath(lpszPathName);
+    CDocument::SetPathName(lpszPathName,bAddToMRU);
 }
 
-
-void CLatexDoc::UpdateReadOnlyFlag()
+void CLaTeXDoc::UpdateReadOnlyFlag()
 {
-	CFileStatus	fs;
-	if (CFile::GetStatus(GetPathName(), fs))
-		m_pTextBuffer->SetReadOnly(fs.m_attribute&CFile::readOnly);
+    CFileStatus fs;
+
+    if (CFile::GetStatus(GetPathName(),fs))
+        m_pTextBuffer->SetReadOnly(fs.m_attribute & CFile::readOnly);
 }
 
-
-void CLatexDoc::UpdateTextBufferOnExternalChange()
+void CLaTeXDoc::UpdateTextBufferOnExternalChange()
 {
-	CString	strMsg;
-	int		nResult;
+    CString strMsg;
+    int nResult;
 
-	if (IsModified())
-	{
-		strMsg.Format(STE_FILE_EXTERNALCHANGEEX, GetPathName());
-		nResult = AfxMessageBox(strMsg, MB_ICONEXCLAMATION|MB_YESNO);
-	}
-	else
-	{
-		strMsg.Format(STE_FILE_EXTERNALCHANGE, GetPathName());
-		nResult = AfxMessageBox(strMsg, MB_ICONINFORMATION|MB_YESNO);
-	}
+    if (IsModified()) {
+        strMsg.Format(STE_FILE_EXTERNALCHANGEEX,GetPathName());
+        nResult = AfxMessageBox(strMsg,MB_ICONEXCLAMATION | MB_YESNO);
+    }
+    else {
+        strMsg.Format(STE_FILE_EXTERNALCHANGE,GetPathName());
+        nResult = AfxMessageBox(strMsg,MB_ICONINFORMATION | MB_YESNO);
+    }
 
-	if (nResult == IDYES)
-	{
-		DWORD dwResult = m_pTextBuffer->LoadFromFile(GetPathName());
- 		if ( dwResult != 0)
- 		{
- 			strMsg.Format(STE_FILE_INUSE, 
-				AfxLoadString(IDS_OPEN), 
-				GetPathName(), 
-				AfxFormatSystemString(dwResult));
- 			AfxMessageBox(strMsg, MB_ICONINFORMATION|MB_OK);
- 			m_pTextBuffer->SetReadOnly(TRUE);
- 		}
-	}
+    if (nResult == IDYES) {
+        DWORD dwResult = m_pTextBuffer->LoadFromFile(GetPathName());
+        if (dwResult != 0) {
+            strMsg.Format(STE_FILE_INUSE,
+                    AfxLoadString(IDS_OPEN),
+                    GetPathName(),
+                    AfxFormatSystemString(dwResult));
+            AfxMessageBox(strMsg,MB_ICONINFORMATION | MB_OK);
+            m_pTextBuffer->SetReadOnly(TRUE);
+        }
+    }
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
 // implementation of CTextSource-virtuals
 
-BOOL CLatexDoc::GetNextLine( LPCTSTR &lpLine, int &nLength )
+BOOL CLaTeXDoc::GetNextLine(LPCTSTR &lpLine,int &nLength)
 {
-	AssertValid();
+    AssertValid();
 
-	if( m_nCurrentLine >= m_pTextBuffer->GetLineCount() )
-		return FALSE;
+    if (m_nCurrentLine >= m_pTextBuffer->GetLineCount())
+        return FALSE;
 
-	lpLine = m_pTextBuffer->GetLineChars( m_nCurrentLine );
-	nLength = m_pTextBuffer->GetLineLength( m_nCurrentLine++ );
-	return TRUE;
+    lpLine = m_pTextBuffer->GetLineChars(m_nCurrentLine);
+    nLength = m_pTextBuffer->GetLineLength(m_nCurrentLine++);
+    return TRUE;
 }
 
+void CLaTeXDoc::Delete()
+{
+}
 
-void CLatexDoc::Delete()
-{}
+void CLaTeXDoc::SetModifiedFlag(BOOL modified)
+{
+    if (IsModified() != modified) {
+        const TCHAR ch = _T('*');
+        CString title = GetTitle();
+        
+        if (modified)
+            title += ch;
+        else
+            title.TrimRight(ch);
+        
+        SetTitle(title);
+    }
+
+     __super::SetModifiedFlag(modified);
+}

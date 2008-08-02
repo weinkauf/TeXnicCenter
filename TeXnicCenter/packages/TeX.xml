@@ -313,7 +313,10 @@
 </lxCollection>
 <!-- $Id$ -->
 <!-- 
-	$Log$
+	$Log: TeX.xml,v $
+	Revision 1.17  2006/08/24 10:57:16  niteria
+	Fixed Bug 1543877: Wrong Auto-Complete with \figure
+	
 	Revision 1.16  2006/08/11 07:58:39  svenwiegand
 	Replaced 'enumeration' entry in package TeX.xml by 'enumerate' what is really meant.
 	

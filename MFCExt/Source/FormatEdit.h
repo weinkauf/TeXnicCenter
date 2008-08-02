@@ -157,7 +157,7 @@ public:
 	@param xMax
 		Maximal zulaessiger Eingabewert.
 	*/
-	CNumberEdit( char cMin, char cMax );
+	CNumberEdit( TCHAR cMin, TCHAR cMax );
 	CNumberEdit( UCHAR ucMin, UCHAR ucMax );
 	CNumberEdit( short sMin, short sMax );
 	CNumberEdit( USHORT usMin, USHORT usMax );
@@ -196,7 +196,7 @@ public:
 	@param xMax
 		Groesster zulaessiger Wert.
 	*/
-	void SetRange( char cMin, char cMax );
+	void SetRange( TCHAR cMin, TCHAR cMax );
 	void SetRange( UCHAR ucMin, UCHAR ucMax );
 	void SetRange( short sMin, short sMax );
 	void SetRange( USHORT usMin, USHORT usMax );

@@ -44,7 +44,7 @@ vom Typ <var>TYPE</var> aufnehmen kann.
 @author Sven Wiegand
 */
 template<class TYPE, int BUFFERSIZE>
-class AFX_EXT_CLASS CDoubleBuffer
+class /*AFX_EXT_CLASS*/ CDoubleBuffer
 {
 // Konstruktion/Destruktion
 public:
@@ -232,7 +232,7 @@ inline void CDoubleBuffer<TYPE, BUFFERSIZE>::Add( const TYPE &element )
 	m_aaElements[m_nWriteBufferIndex][m_anValidElements[m_nWriteBufferIndex]++] = element;
 
 #ifdef _DEBUG
-	m_nAddCount++;
+	++m_nAddCount;
 #endif
 }
 

@@ -21,30 +21,30 @@
 #define BUFSIZE 80
 
 const TCHAR* VERBOSE_OS[] = {
-	"Unknown",
-	"Win95",
-	"Win95 OSR2",
-	"Win98",
-	"Win98 SE",
-	"WinME",
-	"WinNT (Unknown)",
-	"WinNT 3.51",
-	"WinNT 4.0 Workstation",
-	"WinNT 4.0 Server",
-	"WinNT 4.0 Server Enterprise",
-	"Win2000 (Unknown)",
-	"Win2000 Professional",
-	"Win2000 Server",
-	"Win2000 Server Datacenter",
-	"Win2000 Server Advanced",
-	"WinXP (Unknown)",
-	"WinXP Home",
-	"WinXP Professional",
-	"WinServer 2003",
-	"WinServer 2003 Enterprise",
-	"WinServer 2003 Datacenter",
-	"WinServer 2003 WebEdition",
-	"Win32s"
+	_T("Unknown"),
+	_T("Win95"),
+	_T("Win95 OSR2"),
+	_T("Win98"),
+	_T("Win98 SE"),
+	_T("WinME"),
+	_T("WinNT (Unknown)"),
+	_T("WinNT 3.51"),
+	_T("WinNT 4.0 Workstation"),
+	_T("WinNT 4.0 Server"),
+	_T("WinNT 4.0 Server Enterprise"),
+	_T("Win2000 (Unknown)"),
+	_T("Win2000 Professional"),
+	_T("Win2000 Server"),
+	_T("Win2000 Server Datacenter"),
+	_T("Win2000 Server Advanced"),
+	_T("WinXP (Unknown)"),
+	_T("WinXP Home"),
+	_T("WinXP Professional"),
+	_T("WinServer 2003"),
+	_T("WinServer 2003 Enterprise"),
+	_T("WinServer 2003 Datacenter"),
+	_T("WinServer 2003 WebEdition"),
+	_T("Win32s")
 };	
 
 CSystemInfo::CSystemInfo()
@@ -158,29 +158,29 @@ int CSystemInfo::DetectWindowsVersion()
 		else  // Test for specific product on Windows NT 4.0 SP5 and earlier
 		{
             HKEY hKey;
-            char szProductType[BUFSIZE];
+            TCHAR szProductType[BUFSIZE];
             DWORD dwBufLen=BUFSIZE;
             LONG lRet;
 			
             lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
-				"SYSTEM\\CurrentControlSet\\Control\\ProductOptions",
+				_T("SYSTEM\\CurrentControlSet\\Control\\ProductOptions"),
 				0, KEY_QUERY_VALUE, &hKey );
             if( lRet != ERROR_SUCCESS )
 				return FALSE;
 			
-            lRet = RegQueryValueEx( hKey, "ProductType", NULL, NULL,
+            lRet = RegQueryValueEx( hKey, _T("ProductType"), NULL, NULL,
 				(LPBYTE) szProductType, &dwBufLen);
             if( (lRet != ERROR_SUCCESS) || (dwBufLen > BUFSIZE) )
 				return FALSE;
 			
             RegCloseKey( hKey );
 			
-            if ( lstrcmpi( "WINNT", szProductType) == 0 )
+            if ( lstrcmpi( _T("WINNT"), szProductType) == 0 )
 			{
 				if ( m_osvi.dwMajorVersion <= 4 )
 					m_nWinVersion = WinNT_40_Workstation;
 			}
-            if ( lstrcmpi( "LANMANNT", szProductType) == 0 )
+            if ( lstrcmpi( _T("LANMANNT"), szProductType) == 0 )
 			{
 				if ( m_osvi.dwMajorVersion == 5 && m_osvi.dwMinorVersion == 2 )
 					m_nWinVersion = WinServer2003;
@@ -191,7 +191,7 @@ int CSystemInfo::DetectWindowsVersion()
 				if ( m_osvi.dwMajorVersion <= 4 )
 					m_nWinVersion = WinNT_40_Server;
 			}
-            if ( lstrcmpi( "SERVERNT", szProductType) == 0 )
+            if ( lstrcmpi( _T("SERVERNT"), szProductType) == 0 )
 			{
 				if ( m_osvi.dwMajorVersion == 5 && m_osvi.dwMinorVersion == 2 )
 					m_nWinVersion = WinServer2003_Enterprise;
@@ -207,20 +207,20 @@ int CSystemInfo::DetectWindowsVersion()
 		// Display service pack (if any) and build number.
 		
 		if( m_osvi.dwMajorVersion == 4 && 
-			lstrcmpi( m_osvi.szCSDVersion, "Service Pack 6" ) == 0 )
+			lstrcmpi( m_osvi.szCSDVersion, _T("Service Pack 6") ) == 0 )
 		{
             HKEY hKey;
             LONG lRet;
 			
             // Test for SP6 versus SP6a.
             lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
-				"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix\\Q246009",
+				_T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix\\Q246009"),
 				0, KEY_QUERY_VALUE, &hKey );
             if( lRet == ERROR_SUCCESS )
-				sprintf(m_szServicePack, "Service Pack 6a (Build %d)\n", m_osvi.dwBuildNumber & 0xFFFF );         
+				_stprintf(m_szServicePack,_T("Service Pack 6a (Build %d)\n"), m_osvi.dwBuildNumber & 0xFFFF );         
             else // Windows NT 4.0 prior to SP6a
             {
-				sprintf(m_szServicePack, "%s (Build %d)\n",
+				_stprintf(m_szServicePack,_T("%s (Build %d)\n"),
 					m_osvi.szCSDVersion,
 					m_osvi.dwBuildNumber & 0xFFFF);
             }
@@ -229,7 +229,7 @@ int CSystemInfo::DetectWindowsVersion()
 		}
 		else // Windows NT 3.51 and earlier or Windows 2000 and later
 		{
-            sprintf(m_szServicePack, "%s (Build %d)\n",
+            _stprintf(m_szServicePack,_T("%s (Build %d)\n"),
 				m_osvi.szCSDVersion,
 				m_osvi.dwBuildNumber & 0xFFFF);
 		}
@@ -240,14 +240,14 @@ int CSystemInfo::DetectWindowsVersion()
 		  if (m_osvi.dwMajorVersion == 4 && m_osvi.dwMinorVersion == 0)
 		  {
 			  m_nWinVersion = Win95;
-			  if ( m_osvi.szCSDVersion[1] == 'C' || m_osvi.szCSDVersion[1] == 'B' )
+			  if ( m_osvi.szCSDVersion[1] ==_T('C') || m_osvi.szCSDVersion[1] ==_T('B') )
 				  m_nWinVersion = Win95_OSR2;
 		  } 
 		  
 		  if (m_osvi.dwMajorVersion == 4 && m_osvi.dwMinorVersion == 10)
 		  {
 			  m_nWinVersion = Win98;
-			  if ( m_osvi.szCSDVersion[1] == 'A' )
+			  if ( m_osvi.szCSDVersion[1] ==_T('A') )
 				  m_nWinVersion = Win98_SE;
 		  } 
 		  
@@ -313,10 +313,10 @@ void CSystemInfo::GetServicePackInfo(TCHAR* szServicePack) const
 	_tcscpy(szServicePack, m_szServicePack);
 }
 
-CString CSystemInfo::ToString()
+const CString CSystemInfo::ToString()
 {
 	CString str;
-	str.Format("V%d.%d, %s, %s", 
+	str.Format(_T("V%d.%d, %s, %s"), 
 		GetMajorVersion(),
 		GetMinorVersion(),
 		VERBOSE_OS[m_nWinVersion],

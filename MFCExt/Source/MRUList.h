@@ -45,7 +45,7 @@ test, if an specified object is already stored in the list.
 @author Sven Wiegand
 */
 template<class TYPE, class ARG_TYPE>
-class AFX_EXT_CLASS CMRUList : protected CArray<TYPE, ARG_TYPE>
+class /*AFX_EXT_CLASS*/ CMRUList : protected CArray<TYPE, ARG_TYPE>
 {
 // construction/destruction
 public:
@@ -235,7 +235,7 @@ void CMRUList<TYPE, ARG_TYPE>::Add( ARG_TYPE element )
 	if( m_nElementCount < GetSize() )
 	{
 		InsertAt( 0, element );
-		m_nElementCount++;
+		++m_nElementCount;
 	}
 	else
 	{
@@ -246,7 +246,7 @@ void CMRUList<TYPE, ARG_TYPE>::Add( ARG_TYPE element )
 			Remove( m_nElementCount - 1 );
 			//Now add
 			InsertAt( 0, element );
-			m_nElementCount++;
+			++m_nElementCount;
 		}
 	}
 }

@@ -1,3 +1,46 @@
+2008/6/20 Rainy
+- Abbreviations are recognized correctly by the spell checker
+- The state of docking windows is properly restored now
+
+Known issues:
+- CrystalEdit doesn't support mixing LTR and RTL languages
+- Loading Unicode files doesn't work
+
+2008/6/19 Rainy
+- Migrated from BCGSoft to native MFC libraries
+- Output and navigation bars can be docked independently from each other
+- All windows and dialogs use the default OS font
+- Fixed profile tab pages which are properly textured now using commctl >= 6
+- Navigator trees use the Vista look
+- Output wizard uses the Aero interface on Vista
+- Updated to high color icons
+- Replaced the outdated regexpp by tr1's std::basic_regex
+- Added partial Unicode support
+- Replaced MySpell by Hunspell to support languages with complex word
+  compounding like German, Hungarian etc.
+- Spell checker's suggestion menu is consistent with the application's look & feel
+- Modified documents are marked with *
+- Request 1564433: Acrobat.exe is recognized as well
+- Updated spelling dictionaries' URL 
+- Advice tips use as Visual Studio a flat look and the default OS font 
+- Images in the autocompletion listbox are drawn using a transparent background
+- File view displays only the relative name of main project's file; The main project file
+  is marked using a bold font
+- MiKTeX 2.7 is being recognized automatically; the LaTeX => PS => PDF 
+  profile will be also generated if ps2pdf.exe can be located in the miktex\bin directory
+- Adapted CrystalEdit to accumulate the delta on mouse wheel scrolling and 
+  use the system setting for the number of wheel scroll lines
+- File search dialog uses the project directory as the primary search path
+- Files that are included multiple times are shown only once in the file view
+- Added a Visual Studio style error list view
+- CAutoCompleteDlg::AdjustSizeAndPosition uses the desktop work area instead of 
+  whole desktop window to calculate the position and size; this prevents
+  portions of the autocompletion window from being covered by the taskbar
+- Main window doesn't lose the focus anymore whenever the autocompletion list popups
+- By default, dictionaries are loaded from the Dictionaries subfolder instead of Language
+- Added a build animation to the status bar
+- Synched with 7.50
+
 2008/06/15 niteria
 - Fixed crash when files were saved during closing a project
 - Improved detection of Ghostscript (GPL and AFPL)

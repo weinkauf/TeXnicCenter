@@ -11,13 +11,12 @@
 
 #include "NavigatorView.h"
 
-class CBibView : public CNavigatorView  
-{
+class CBibView : public NavigatorTreeCtrl {
 public:
-	CBibView();
-	virtual ~CBibView();
+    CBibView();
+    virtual ~CBibView();
 
-	virtual void OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint);
+    virtual void OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint);
 };
 
 #endif // !defined(AFX_BIBVIEW_H__0000D78A_D526_4484_8509_77D8892C0310__INCLUDED_)

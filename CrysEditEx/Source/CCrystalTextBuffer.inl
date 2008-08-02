@@ -16,13 +16,16 @@
 
 /********************************************************************
 *
-* $RCSfile$
+* $RCSfile: CCrystalTextBuffer.inl,v $
 * $Revision$
 * $Date$
 *
 * $Author$
 *
-* $Log$
+* $Log: CCrystalTextBuffer.inl,v $
+* Revision 1.2  2002/04/29 22:55:07  cnorris
+* Spell checker niceness
+*
 * Revision 1.1.1.1  2002/02/26 08:11:53  svenwiegand
 * Initial revision
 *

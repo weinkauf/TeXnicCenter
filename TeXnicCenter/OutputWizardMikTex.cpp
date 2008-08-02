@@ -1,34 +1,36 @@
 /********************************************************************
-*
-* This file is part of the TeXnicCenter-system
-*
-* Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License as
-* published by the Free Software Foundation; either version 2 of
-* the License, or (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*
-* If you have further questions or if you want to support
-* further TeXnicCenter development, visit the TeXnicCenter-homepage
-*
-*    http://www.ToolsCenter.org
-*
-*********************************************************************/
+ *
+ * This file is part of the TeXnicCenter-system
+ *
+ * Copyright (C) 1999-2000 Sven Wiegand
+ * Copyright (C) 2000-$CurrentYear$ ToolsCenter
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * If you have further questions or if you want to support
+ * further TeXnicCenter development, visit the TeXnicCenter-homepage
+ *
+ *    http://www.ToolsCenter.org
+ *
+ *********************************************************************/
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
+#include "OutputWizard.h"
 #include "OutputWizardMikTex.h"
+#include "RunTimeHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,36 +39,67 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 //-------------------------------------------------------------------
-// class COutputWizardMikTex 
+// class COutputWizardMiKTeX 
 //-------------------------------------------------------------------
 
-IMPLEMENT_DYNCREATE(COutputWizardMikTex, CPropertyPage)
+IMPLEMENT_DYNCREATE(COutputWizardMiKTeX,OutputWizardPage)
 
 
-BEGIN_MESSAGE_MAP(COutputWizardMikTex, CPropertyPage)
-	//{{AFX_MSG_MAP(COutputWizardMikTex)
-	//}}AFX_MSG_MAP
+BEGIN_MESSAGE_MAP(COutputWizardMiKTeX,OutputWizardPage)
+//{{AFX_MSG_MAP(COutputWizardMiKTeX)
+//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
-COutputWizardMikTex::COutputWizardMikTex() 
-: CPropertyPage(COutputWizardMikTex::IDD),
-	m_nChoice(yes)
+COutputWizardMiKTeX::COutputWizardMiKTeX(COutputWizard* w)
+: OutputWizardPage(COutputWizardMiKTeX::IDD,w)
+, m_nChoice(yes)
 {
-	//{{AFX_DATA_INIT(COutputWizardMikTex)
-	//}}AFX_DATA_INIT
+    //{{AFX_DATA_INIT(COutputWizardMiKTeX)
+    //}}AFX_DATA_INIT
 }
 
-
-COutputWizardMikTex::~COutputWizardMikTex()
+COutputWizardMiKTeX::~COutputWizardMiKTeX()
 {
 }
 
-
-void COutputWizardMikTex::DoDataExchange(CDataExchange* pDX)
+void COutputWizardMiKTeX::DoDataExchange(CDataExchange* pDX)
 {
-	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COutputWizardMikTex)
-	DDX_Radio(pDX, IDC_OW_MIKTEXYES, m_nChoice);
-	//}}AFX_DATA_MAP
+    OutputWizardPage::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(COutputWizardMiKTeX)
+    DDX_Radio(pDX,IDC_OW_MIKTEXYES,m_nChoice);
+    //}}AFX_DATA_MAP
+}
+
+BOOL COutputWizardMiKTeX::OnSetActive()
+{
+    if (RunTimeHelper::IsVista()) {
+        PropSheet_EnableWizButtons(m_hWnd,
+            PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL,
+                PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL);
+        PropSheet_ShowWizButtons(m_hWnd,
+                PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL,
+                PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH | PSWIZB_CANCEL);
+    }
+    else
+        GetWizard()->SetWizardButtons(PSWIZB_NEXT | PSWIZB_BACK);
+
+    return OutputWizardPage::OnSetActive();
+}
+
+LRESULT COutputWizardMiKTeX::OnWizardNext()
+{
+    UpdateData();
+    OutputWizardPage::OnWizardNext();
+
+    LRESULT result;
+
+    //if (m_nChoice == COutputWizardMiKTeX::yes && GetWizard()->LookForLatex()) {
+    //    GetWizard()->LookForDviViewer();
+    //    result = 0;
+    //}
+    //else
+        result = -1;
+
+    return result;
 }

@@ -32,7 +32,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include <fstream.h>
 #include <afxtempl.h>
 
 /**
@@ -55,9 +54,7 @@ public:
 		Path of the INI-file to work with or an empty string, if you want
 		to set the path later using SetPath()
 	*/
-	CIniFile( CString strPath = "" );
-
-	virtual ~CIniFile();
+	explicit CIniFile( const CString& strPath =_T("") );
 
 // Operations
 public:
@@ -67,12 +64,12 @@ public:
 	@param strNewPath
 		Full path of the INI-file to work with.
 	*/
-	void SetPath(CString strNewPath);
+	void SetPath(const CString& strNewPath);
 
 	/** 
 	Returns the path of ini file to read and write from.
 	*/
-	CString GetPath();
+    const CString& GetPath() const;
 
 	/**
 	Reads the INI file.
@@ -80,7 +77,7 @@ public:
 	@return
 		TRUE if successful, FALSE otherwise.
 	*/
-	BOOL ReadFile();
+    bool ReadFile();
 
 	/**
 	Writes the INI file.
@@ -95,12 +92,12 @@ public:
 	/**
 	Returns number of keys currently in the INI file.
 	*/
-	int GetNumKeys();
+    int GetNumKeys() const;
 
 	/** 
 	Returns number of values stored for specified key 
 	*/
-	int GetNumValues(CString keyname);
+    int GetNumValues(const CString& keyname) const;
 
 	/**
 	Checks, if the specified value exists in the INI data.
@@ -113,7 +110,7 @@ public:
 	@return
 		TRUE if the specified value exists, FALSE otherwise.
 	*/
-	BOOL VerifyValue(CString keyname, CString valuename);
+    bool VerifyValue(const CString& keyname, const CString& valuename) const;
 
 	/**
 	Checks, if the specified key exists in the INI data.
@@ -124,7 +121,7 @@ public:
 	@return
 		TRUE if the specified key exisits, FALSE otherwise.
 	*/
-	BOOL VerifyKey(CString keyname);
+    bool VerifyKey(const CString& keyname) const;
 
 	/**
 	Deletes the specified value from the INI data.
@@ -138,7 +135,7 @@ public:
 		TRUE if the value has been deleted successfully, FALSE if the
 		value did not exist.
 	*/
-	BOOL DeleteValue(CString keyname, CString valuename);
+	bool DeleteValue(const CString& keyname, const CString& valuename);
 
 	/**
 	Deletes the specified key and all of its values.
@@ -150,7 +147,7 @@ public:
 		TRUE if the key and all its values has been deleted successfully,
 		FALSE if the key did not exist.
 	*/
-	BOOL DeleteKey(CString keyname);
+	bool DeleteKey(const CString& keyname);
 
 	/**
 	Returns the specified string from the INI data.
@@ -166,7 +163,7 @@ public:
 		The string value specified by keyname and valuename or the 
 		default value, if the specified value does not exist.
 	*/
-	CString GetValue(CString keyname, CString valuename, CString strDefault); 
+    const CString GetValue(const CString& keyname, const CString& valuename, const CString& strDefault) const; 
 
 	/**
 	Returns the integer from the INI data.
@@ -182,7 +179,7 @@ public:
 		The integer value specified by keyname and valuename or the 
 		default value, if the specified value does not exist.
 	*/
-	int GetValue(CString keyname, CString valuename, int nDefault); 
+	int GetValue(const CString& keyname, const CString& valuename, int nDefault) const; 
 
 	/**
 	Returns the specified string from the INI data.
@@ -198,7 +195,7 @@ public:
 		The double value specified by keyname and valuename or the 
 		default value, if the specified value does not exist.
 	*/
-	double GetValue(CString keyname, CString valuename, double dDefault);
+	double GetValue(const CString& keyname, const CString& valuename, double dDefault) const;
 
 	/**
 	Sets a string value in the INI data.
@@ -221,7 +218,7 @@ public:
 		already existing and has been set successfuly to the specified
 		value.
 	*/
-	BOOL SetValue(CString key, CString valuename, CString value, BOOL create = TRUE);
+	bool SetValue(const CString& key, const CString& valuename, const CString& value, bool create = TRUE);
 
 	/**
 	Sets a string value in the INI data.
@@ -244,7 +241,7 @@ public:
 		already existing and has been set successfuly to the specified
 		value.
 	*/
-	BOOL SetValue(CString key, CString valuename, int value, BOOL create = TRUE);
+	bool SetValue(const CString& key, const CString& valuename, int value, bool create = TRUE);
 
 	/**
 	Sets a string value in the INI data.
@@ -257,31 +254,28 @@ public:
 		Value to store.
 	@param create
 		Specify TRUE here, to create the specified value, if it does not
-		exisit in the INI data. If you specify FALSE here, the value will
+		exist in the INI data. If you specify FALSE here, the value will
 		only be set, if it is already existing, otherwise FALSE is 
 		returned.
 
 	@return
 		If create has been set to TRUE, the function will always return
 		TRUE, otherwise, the function returns TRUE, if the value was 
-		already existing and has been set successfuly to the specified
+		already existing and has been set successfully to the specified
 		value.
 	*/
-	BOOL SetValue(CString key, CString valuename, double value, BOOL create = TRUE);
+	bool SetValue(const CString& key, const CString& valuename, double value, bool create = true);
 
 // Implementation helpers
 protected:
-	/** overloaded to take CString */
-	istream & getline( istream & is, CString & str );
-
 	/** 
 	returns index of specified value, in the specified key, or -1 
 	if not found 
 	*/
-	int FindValue(int keynum, CString valuename);
+    int FindValue(int keynum, const CString& valuename) const;
 
 	/** returns index of specified key, or -1 if not found */
-	int FindKey(CString keyname);
+    int FindKey(const CString& keyname) const;
 
 // attributes
 protected:

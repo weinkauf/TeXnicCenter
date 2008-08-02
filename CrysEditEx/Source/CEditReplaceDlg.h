@@ -16,22 +16,25 @@
 ////////////////////////////////////////////////////////////////////////////
 
 /********************************************************************
-*
-* $RCSfile$
-* $Revision$
-* $Date$
-*
-* $Author$
-*
-* $Log$
-* Revision 1.1.1.1  2002/02/26 08:11:59  svenwiegand
-* Initial revision
-*
-* Revision 1.0  2000-05-31 21:55:29+02  sven_wiegand
-* Initial revision
-*
-*
-********************************************************************/
+ *
+ * $RCSfile: CEditReplaceDlg.h,v $
+ * $Revision$
+ * $Date$
+ *
+ * $Author$
+ *
+ * $Log: CEditReplaceDlg.h,v $
+ * Revision 1.2  2002/02/27 19:56:55  cnorris
+ * bug-id 71 String not found during replace operation fixed
+ *
+ * Revision 1.1.1.1  2002/02/26 08:11:59  svenwiegand
+ * Initial revision
+ *
+ * Revision 1.0  2000-05-31 21:55:29+02  sven_wiegand
+ * Initial revision
+ *
+ *
+ ********************************************************************/
 
 #if !defined(AFX_CEDITREPLACEDLG_H__759417E3_7B18_11D2_8C50_0080ADB86836__INCLUDED_)
 #define AFX_CEDITREPLACEDLG_H__759417E3_7B18_11D2_8C50_0080ADB86836__INCLUDED_
@@ -50,54 +53,57 @@ class CCrystalEditView;
 /////////////////////////////////////////////////////////////////////////////
 // CEditReplaceDlg dialog
 
-class CEditReplaceDlg : public CDialog
+class CEditReplaceDlg : public CDialog 
 {
 private:
-	CCrystalEditView *m_pBuddy;
-	BOOL m_bFound;
-	CPoint m_ptFoundAt;
-	BOOL DoHighlightText();
+    CCrystalEditView *m_pBuddy;
+    BOOL m_bFound;
+    CPoint m_ptFoundAt;
+    BOOL DoHighlightText();
 
-// Construction
+    // Construction
 public:
-	CEditReplaceDlg(CCrystalEditView *pBuddy);
+    CEditReplaceDlg(CCrystalEditView *pBuddy);
 
-	BOOL m_bEnableScopeSelection;
-	CPoint m_ptCurrentPos;
-	CPoint m_ptBlockBegin, m_ptBlockEnd;
+    BOOL m_bEnableScopeSelection;
+    CPoint m_ptCurrentPos;
+    CPoint m_ptBlockBegin, m_ptBlockEnd;
 
-// Dialog Data
-	//{{AFX_DATA(CEditReplaceDlg)
-	enum { IDD = IDD_EDIT_REPLACE };
-	BOOL	m_bMatchCase;
-	BOOL	m_bWholeWord;
-	CString	m_sText;
-	CString	m_sNewText;
-	int		m_nScope;
-	//}}AFX_DATA
+    // Dialog Data
+    //{{AFX_DATA(CEditReplaceDlg)
+
+    enum {
+        IDD = IDD_EDIT_REPLACE
+    };
+    BOOL m_bMatchCase;
+    BOOL m_bWholeWord;
+    CString m_sText;
+    CString m_sNewText;
+    int m_nScope;
+    //}}AFX_DATA
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEditReplaceDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
-
-// Implementation
+    // Overrides
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CEditReplaceDlg)
 protected:
-	int m_nReplaceCount;
+    virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
+    //}}AFX_VIRTUAL
 
-	// Generated message map functions
-	//{{AFX_MSG(CEditReplaceDlg)
-	afx_msg void OnChangeEditText();
-	virtual void OnCancel();
-	virtual BOOL OnInitDialog();
-	afx_msg void OnEditReplace();
-	afx_msg void OnEditReplaceAll();
-	afx_msg void OnEditSkip();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Implementation
+protected:
+    int m_nReplaceCount;
+
+    // Generated message map functions
+    //{{AFX_MSG(CEditReplaceDlg)
+    afx_msg void OnChangeEditText();
+    virtual void OnCancel();
+    virtual BOOL OnInitDialog();
+    afx_msg void OnEditReplace();
+    afx_msg void OnEditReplaceAll();
+    afx_msg void OnEditSkip();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

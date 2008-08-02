@@ -1,36 +1,36 @@
 /********************************************************************
-*
-* This file is part of the TeXnicCenter-system
-*
-* Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License as
-* published by the Free Software Foundation; either version 2 of
-* the License, or (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*
-* If you have further questions or if you want to support
-* further TeXnicCenter development, visit the TeXnicCenter-homepage
-*
-*    http://www.ToolsCenter.org
-*
-*********************************************************************/
+ *
+ * This file is part of the TeXnicCenter-system
+ *
+ * Copyright (C) 1999-2000 Sven Wiegand
+ * Copyright (C) 2000-$CurrentYear$ ToolsCenter
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * If you have further questions or if you want to support
+ * further TeXnicCenter development, visit the TeXnicCenter-homepage
+ *
+ *    http://www.ToolsCenter.org
+ *
+ *********************************************************************/
 
 /********************************************************************
-*
-* $Id$
-*
-********************************************************************/
+ *
+ * $Id$
+ *
+ ********************************************************************/
 
 #include "stdafx.h"
 #include "stdafx.h"
@@ -38,181 +38,162 @@
 
 #ifdef _DEBUG
 #undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
+static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
 
 //-------------------------------------------------------------------
-// class CBCGNotifyingEditListBox
+// class NotifyingEditListBox
 //-------------------------------------------------------------------
 
-BEGIN_MESSAGE_MAP(CBCGNotifyingEditListBox, CBCGEditListBox)
-	ON_WM_ENABLE()
-	ON_NOTIFY(LVN_ITEMCHANGING, 1, OnItemChanging)
+BEGIN_MESSAGE_MAP(NotifyingEditListBox,CVSListBox)
+ON_WM_ENABLE()
+ON_NOTIFY(LVN_ITEMCHANGING,1,OnItemChanging)
 END_MESSAGE_MAP()
 
-typedef struct tagEncapsulatedNMHDR
+typedef struct tagEncapsulatedNMHDR {
+    NMHDR hdr;
+} ENCAPSULATEDNMHDR,*LPENCAPSULATEDNMHDR;
+
+NotifyingEditListBox::NotifyingEditListBox()
 {
-	NMHDR	hdr;
-} ENCAPSULATEDNMHDR, *LPENCAPSULATEDNMHDR;
-
-
-CBCGNotifyingEditListBox::CBCGNotifyingEditListBox()
-:	CBCGEditListBox()
-{}
-
-
-void CBCGNotifyingEditListBox::OnAfterAddItem(int iItem)
-{
-	CBCGEditListBox::OnAfterAddItem(iItem);
-	NMBCGCEDITLISTBOX	hdr;
-	hdr.iItem = iItem;
-	SendNotification(BCGCELN_AFTERADDITEM, (LPARAM)&hdr);
 }
 
-
-void CBCGNotifyingEditListBox::OnAfterMoveItemDown(int iItem)
+void NotifyingEditListBox::OnAfterAddItem(int iItem)
 {
-	CBCGEditListBox::OnAfterMoveItemDown(iItem);
-	NMBCGCEDITLISTBOX	hdr;
-	hdr.iItem = iItem;
-	SendNotification(BCGCELN_AFTERMOVEITEMDOWN, (LPARAM)&hdr);
+    CVSListBox::OnAfterAddItem(iItem);
+    NMBCGCEDITLISTBOX hdr;
+    hdr.iItem = iItem;
+    SendNotification(BCGCELN_AFTERADDITEM,(LPARAM) & hdr);
 }
 
-
-void CBCGNotifyingEditListBox::OnAfterMoveItemUp(int iItem)
+void NotifyingEditListBox::OnAfterMoveItemDown(int iItem)
 {
-	CBCGEditListBox::OnAfterMoveItemUp(iItem);
-	NMBCGCEDITLISTBOX	hdr;
-	hdr.iItem = iItem;
-	SendNotification(BCGCELN_AFTERMOVEITEMUP, (LPARAM)&hdr);
+    CVSListBox::OnAfterMoveItemDown(iItem);
+    NMBCGCEDITLISTBOX hdr;
+    hdr.iItem = iItem;
+    SendNotification(BCGCELN_AFTERMOVEITEMDOWN,(LPARAM) & hdr);
 }
 
-
-void CBCGNotifyingEditListBox::OnAfterRenameItem(int iItem)
+void NotifyingEditListBox::OnAfterMoveItemUp(int iItem)
 {
-	CBCGEditListBox::OnAfterRenameItem(iItem);
-	NMBCGCEDITLISTBOX	hdr;
-	hdr.iItem = iItem;
-	SendNotification(BCGCELN_AFTERRENAMEITEM, (LPARAM)&hdr);
+    CVSListBox::OnAfterMoveItemUp(iItem);
+    NMBCGCEDITLISTBOX hdr;
+    hdr.iItem = iItem;
+    SendNotification(BCGCELN_AFTERMOVEITEMUP,(LPARAM) & hdr);
 }
 
-
-BOOL CBCGNotifyingEditListBox::OnBeforeRemoveItem(int iItem)
+void NotifyingEditListBox::OnAfterRenameItem(int iItem)
 {
-	NMBCGCEDITLISTBOX	hdr;
-	hdr.iItem = iItem;
-	return !(BOOL)SendNotification(BCGCELN_BEFOREREMOVEITEM, (LPARAM)&hdr);
+    CVSListBox::OnAfterRenameItem(iItem);
+    NMBCGCEDITLISTBOX hdr;
+    hdr.iItem = iItem;
+    SendNotification(BCGCELN_AFTERRENAMEITEM,(LPARAM) & hdr);
 }
 
-
-void CBCGNotifyingEditListBox::OnClickButton(int iButton)
+BOOL NotifyingEditListBox::OnBeforeRemoveItem(int iItem)
 {
-	CBCGEditListBox::OnClickButton(iButton);
-	NMBCGCELBUTTON	hdr;
-	hdr.iButton = iButton;
-	SendNotification(BCGCELN_CLICKBUTTON, (LPARAM)&hdr);
+    NMBCGCEDITLISTBOX hdr;
+    hdr.iItem = iItem;
+    return !(BOOL) SendNotification(BCGCELN_BEFOREREMOVEITEM,(LPARAM) & hdr);
 }
 
-
-void CBCGNotifyingEditListBox::OnEndEditLabel(LPCTSTR lpszLabel)
+void NotifyingEditListBox::OnClickButton(int iButton)
 {
-	// bug fix for BCGC-library
-	CString	strLabel;
-
-	if (lpszLabel)
-		strLabel = lpszLabel;
-	else
-		strLabel = GetItemText(GetSelItem());
-
-	// call base implementation
-	CBCGEditListBox::OnEndEditLabel(strLabel);
-
-	// notification
-	NMBCGCELEDIT	hdr;
-	hdr.lpszLabel = lpszLabel;
-	SendNotification(BCGCELN_ENDEDITLABEL, (LPARAM)&hdr);
+    CVSListBox::OnClickButton(iButton);
+    NMBCGCELBUTTON hdr;
+    hdr.iButton = iButton;
+    SendNotification(BCGCELN_CLICKBUTTON,(LPARAM) & hdr);
 }
 
-
-int CBCGNotifyingEditListBox::OnGetImage(LV_ITEM *pItem)
+void NotifyingEditListBox::OnEndEditLabel(LPCTSTR lpszLabel)
 {
-	NMBCGCELGETIMAGE	hdr;
-	hdr.pItem = pItem;
-	return (int)SendNotification(BCGCELN_GETIMAGE, (LPARAM)&hdr);
+    // bug fix for BCGC-library
+    CString strLabel;
+
+    if (lpszLabel)
+        strLabel = lpszLabel;
+    else
+        strLabel = GetItemText(GetSelItem());
+
+    // call base implementation
+    CVSListBox::OnEndEditLabel(strLabel);
+
+    // notification
+    NMBCGCELEDIT hdr;
+    hdr.lpszLabel = lpszLabel;
+    SendNotification(BCGCELN_ENDEDITLABEL, (LPARAM)&hdr);
 }
 
-
-void CBCGNotifyingEditListBox::OnKey(WORD wKey, BYTE fFlags)
+int NotifyingEditListBox::OnGetImage(LV_ITEM *pItem)
 {
-	CBCGEditListBox::OnKey(wKey, fFlags);
-	NMBCGCELKEY	hdr;
-	hdr.wKey = wKey;
-	hdr.fFlags = fFlags;
-	SendNotification(BCGCELN_KEY, (LPARAM)&hdr);
+    NMBCGCELGETIMAGE hdr;
+    hdr.pItem = pItem;
+    return (int)SendNotification(BCGCELN_GETIMAGE, (LPARAM)&hdr);
 }
 
-
-void CBCGNotifyingEditListBox::OnSelectionChanged()
+void NotifyingEditListBox::OnKey(WORD wKey,BYTE fFlags)
 {
-	CBCGEditListBox::OnSelectionChanged();
-	SendNotification(BCGCELN_SELECTIONCHANGED);
+    CVSListBox::OnKey(wKey,fFlags);
+    NMBCGCELKEY hdr;
+    hdr.wKey = wKey;
+    hdr.fFlags = fFlags;
+    SendNotification(BCGCELN_KEY, (LPARAM)&hdr);
 }
 
-
-BOOL CBCGNotifyingEditListBox::OnSelectionChanging()
+void NotifyingEditListBox::OnSelectionChanged()
 {
-	return !(BOOL)SendNotification(BCGCELN_SELECTIONCHANGING);
+    CVSListBox::OnSelectionChanged();
+    SendNotification(BCGCELN_SELECTIONCHANGED);
 }
 
-
-LRESULT CBCGNotifyingEditListBox::SendNotification(UINT unCode, LPARAM lParam)
+BOOL NotifyingEditListBox::OnSelectionChanging()
 {
-	CWnd	*pParent = GetParent();
-	if (!pParent || !IsWindow(pParent->m_hWnd))
-		return 0L;
-
-	int	nControlId = GetDlgCtrlID();
-
-	if (lParam)
-	{
-		LPENCAPSULATEDNMHDR	pnmh = reinterpret_cast<LPENCAPSULATEDNMHDR>(lParam);
-		pnmh->hdr.hwndFrom = m_hWnd;
-		pnmh->hdr.idFrom = (UINT)nControlId;
-		pnmh->hdr.code = unCode;
-		lParam = reinterpret_cast<LPARAM>(pnmh);
-		return ::SendMessage(pParent->m_hWnd, WM_NOTIFY, (WPARAM)nControlId, lParam);
-	}
-	else
-	{
-		NMHDR	hdr;
-		hdr.hwndFrom = m_hWnd;
-		hdr.idFrom = (UINT)nControlId;
-		hdr.code = unCode;
-		lParam = reinterpret_cast<LPARAM>(&hdr);
-		return ::SendMessage(pParent->m_hWnd, WM_NOTIFY, (WPARAM)nControlId, lParam);
-	}
+    return !(BOOL)SendNotification(BCGCELN_SELECTIONCHANGING);
 }
 
-
-void CBCGNotifyingEditListBox::OnEnable(BOOL bEnable)
+LRESULT NotifyingEditListBox::SendNotification(UINT unCode,LPARAM lParam)
 {
-	m_pWndList->EnableWindow(bEnable);
+    CWnd *pParent = GetParent();
+    if (!pParent || !IsWindow(pParent->m_hWnd))
+        return 0L;
+
+    int nControlId = GetDlgCtrlID();
+
+    if (lParam) {
+        LPENCAPSULATEDNMHDR pnmh = reinterpret_cast<LPENCAPSULATEDNMHDR> (lParam);
+        pnmh->hdr.hwndFrom = m_hWnd;
+        pnmh->hdr.idFrom = (UINT) nControlId;
+        pnmh->hdr.code = unCode;
+        lParam = reinterpret_cast<LPARAM> (pnmh);
+        return ::SendMessage(pParent->m_hWnd,WM_NOTIFY,(WPARAM) nControlId,lParam);
+    }
+    else {
+        NMHDR hdr;
+        hdr.hwndFrom = m_hWnd;
+        hdr.idFrom = (UINT) nControlId;
+        hdr.code = unCode;
+        lParam = reinterpret_cast<LPARAM> (&hdr);
+        return ::SendMessage(pParent->m_hWnd,WM_NOTIFY,(WPARAM) nControlId,lParam);
+    }
 }
 
-
-void CBCGNotifyingEditListBox::OnItemChanging(NMHDR* pNMHDR, LRESULT* pResult)
+void NotifyingEditListBox::OnEnable(BOOL bEnable)
 {
-	ASSERT (pNMHDR != NULL);
+    m_pWndList->EnableWindow(bEnable);
+}
 
-	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
-	ASSERT (pNMListView != NULL);
+void NotifyingEditListBox::OnItemChanging(NMHDR* pNMHDR,LRESULT* pResult)
+{
+    ASSERT(pNMHDR != NULL);
 
-	*pResult = 0;
+    NM_LISTVIEW* pNMListView = (NM_LISTVIEW*) pNMHDR;
+    ASSERT(pNMListView != NULL);
 
-	if (pNMListView->uChanged == LVIF_STATE &&
-		(pNMListView->uOldState & LVIS_SELECTED) != (pNMListView->uNewState & LVIS_SELECTED))
-	{
-		*pResult = !OnSelectionChanging();
-	}
+    *pResult = 0;
+
+    if (pNMListView->uChanged == LVIF_STATE &&
+            (pNMListView->uOldState & LVIS_SELECTED) != (pNMListView->uNewState & LVIS_SELECTED)) {
+        *pResult = !OnSelectionChanging();
+    }
 }

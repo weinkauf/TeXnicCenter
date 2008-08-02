@@ -12,19 +12,22 @@
 ////////////////////////////////////////////////////////////////////////////
 
 /********************************************************************
-*
-* $RCSfile$
-* $Revision$
-* $Date$
-*
-* $Author$
-*
-* $Log$
-* Revision 1.0  2000-05-31 21:55:37+02  sven_wiegand
-* Initial revision
-*
-*
-********************************************************************/
+ *
+ * $RCSfile: CrystalTextBufferEx.h,v $
+ * $Revision$
+ * $Date$
+ *
+ * $Author$
+ *
+ * $Log: CrystalTextBufferEx.h,v $
+ * Revision 1.1.1.1  2002/02/26 08:12:01  svenwiegand
+ * Initial revision
+ *
+ * Revision 1.0  2000-05-31 21:55:37+02  sven_wiegand
+ * Initial revision
+ *
+ *
+ ********************************************************************/
 
 #if !defined(AFX_CRYSTALTEXTBUFFEREX_H__5353A212_1059_11D3_929E_CEFE4CA77E5E__INCLUDED_)
 #define AFX_CRYSTALTEXTBUFFEREX_H__5353A212_1059_11D3_929E_CEFE4CA77E5E__INCLUDED_
@@ -56,55 +59,54 @@ Add the following code to the constructor of your document:
 
 From there on you can use all the function of CCrystalTextBuffer for
 saving and loading documents.
-*/
-class CRYSEDIT_CLASS_DECL CCrystalTextBufferEx : public CCrystalTextBuffer  
-{
-		DECLARE_DYNCREATE(CCrystalTextBufferEx)
-// construction/destruction
+ */
+class CRYSEDIT_CLASS_DECL CCrystalTextBufferEx : public CCrystalTextBuffer {
+    DECLARE_DYNCREATE(CCrystalTextBufferEx)
+    // construction/destruction
 public:
-	/**
-	Creates a crystal-text-buffer and attaches a document to it.
+    /**
+    Creates a crystal-text-buffer and attaches a document to it.
 
-	@param pDoc
-		The document to attach to this crystal-text-buffer
-	*/
-	CCrystalTextBufferEx( CDocument *pDoc = NULL );
+    @param pDoc
+            The document to attach to this crystal-text-buffer
+     */
+    CCrystalTextBufferEx(CDocument *pDoc = NULL);
 
-// operations
+    // operations
 public:
-	/**
-	Sets or clears the modified-flag.
+    /**
+    Sets or clears the modified-flag.
 
-	@param bModified
-		TRUE to set the modified-flag otherwise FALSE.
-	*/
-	virtual void SetModified( BOOL bModified = TRUE );
+    @param bModified
+            TRUE to set the modified-flag otherwise FALSE.
+     */
+    virtual void SetModified(BOOL bModified = TRUE);
 
-	/**
-	Returns the line with the given zero based index, 
-	as a CString-object.
+    /**
+    Returns the line with the given zero based index, 
+    as a CString-object.
 
-	<b>Attention</b>
-	You should not use this function in your parse-functions, because they
-	need to copy the line to a newly allocated buffer -- this takes some
-	time, so that the parsing would maybe become a little bit to slow.
+    <b>Attention</b>
+    You should not use this function in your parse-functions, because they
+    need to copy the line to a newly allocated buffer -- this takes some
+    time, so that the parsing would maybe become a little bit to slow.
 
-	@param nLineIndex
-		Zero based index of the line to retrieve.
-	@param &szLine
-		Reference to the CString-object to retrieve the line.
+    @param nLineIndex
+            Zero based index of the line to retrieve.
+    @param &szLine
+            Reference to the CString-object to retrieve the line.
 
-	@return 
-		TRUE if the operation was successfull, FALSE otherwise.
-	*/
-	BOOL GetLine( int nLineIndex, CString &strLine );
+    @return 
+            TRUE if the operation was successfull, FALSE otherwise.
+     */
+    BOOL GetLine(int nLineIndex, CString &strLine);
 
-// attributes
+    // attributes
 protected:
-	/**
-	The document attached to this crystal-text-buffer.
-	*/
-	CDocument *m_pDoc;
+    /**
+    The document attached to this crystal-text-buffer.
+     */
+    CDocument *m_pDoc;
 };
 
 #endif // !defined(AFX_CRYSTALTEXTBUFFEREX_H__5353A212_1059_11D3_929E_CEFE4CA77E5E__INCLUDED_)

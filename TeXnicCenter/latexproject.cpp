@@ -1,36 +1,36 @@
 /********************************************************************
-*
-* This file is part of the TeXnicCenter-system
-*
-* Copyright (C) 1999-2000 Sven Wiegand
-* Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License as
-* published by the Free Software Foundation; either version 2 of
-* the License, or (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*
-* If you have further questions or if you want to support
-* further TeXnicCenter development, visit the TeXnicCenter-homepage
-*
-*    http://www.ToolsCenter.org
-*
-*********************************************************************/
+ *
+ * This file is part of the TeXnicCenter-system
+ *
+ * Copyright (C) 1999-2000 Sven Wiegand
+ * Copyright (C) 2000-$CurrentYear$ ToolsCenter
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * If you have further questions or if you want to support
+ * further TeXnicCenter development, visit the TeXnicCenter-homepage
+ *
+ *    http://www.ToolsCenter.org
+ *
+ *********************************************************************/
 
 /********************************************************************
-*
-* $Id$
-*
-********************************************************************/
+ *
+ * $Id$
+ *
+ ********************************************************************/
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
@@ -56,339 +56,346 @@ static char THIS_FILE[] = __FILE__;
 #define BEEP						MessageBeep( MB_OK )
 
 //-------------------------------------------------------------------
-// class CLatexProject
+// class CLaTeXProject
 //-------------------------------------------------------------------
 
-IMPLEMENT_DYNCREATE(CLatexProject, CProject)
+IMPLEMENT_DYNCREATE(CLaTeXProject,CProject)
 
 
-BEGIN_INTERFACE_MAP(CLatexProject, CProject)
-	INTERFACE_PART(CLatexProject, Interfaces::IID_IProject, Project)
+BEGIN_INTERFACE_MAP(CLaTeXProject,CProject)
+INTERFACE_PART(CLaTeXProject,Interfaces::IID_IProject,Project)
 END_INTERFACE_MAP()
 
 
-CLatexProject::CLatexProject()
-: 	m_bCanParse( TRUE ),
-	m_bCanRunLatex( TRUE ),
-	m_pStructureParser( NULL ),
-	m_nCurrentStructureItem( -1 ),
-	m_pwndStructureView( NULL ),
-	m_pwndEnvironmentView( NULL ),
-	m_pwndFileView(NULL),
-	m_pwndBibView(NULL),
-	m_bUseBibTex(FALSE),
-	m_bUseMakeIndex(FALSE),
-	m_nInitialNavigatorTab(0),
-	m_strProjectLanguage(""),
-	m_strProjectDialect("")
+CLaTeXProject::CLaTeXProject()
+: m_bCanParse(TRUE),
+m_bCanRunLatex(TRUE),
+m_pStructureParser(NULL),
+m_nCurrentStructureItem(-1),
+//m_pwndStructureView(NULL),
+//m_pwndEnvironmentView(NULL),
+//m_pwndFileView(NULL),
+//m_pwndBibView(NULL),
+m_bUseBibTex(FALSE),
+m_bUseMakeIndex(FALSE),
+m_nInitialNavigatorTab(0),
+m_strProjectLanguage(""),
+m_strProjectDialect("")
+, tabbed_pane_(0)
 {
-	// initialization
-	// Initialize the control bars and main frame pointer members
-	m_pwndMainFrame     = static_cast<CMainFrame*>(AfxGetMainWnd());
-	ASSERT(m_pwndMainFrame);
-	m_pwndWorkspaceBar = m_pwndMainFrame->GetWorkspaceBar();
-	ASSERT(m_pwndWorkspaceBar);
-	m_pwndOutputBar = m_pwndMainFrame->GetOutputBar();
-	ASSERT(m_pwndOutputBar);
+    // initialization
+    // Initialize the control bars and main frame pointer members
+    m_pwndMainFrame = static_cast<CMainFrame*>(AfxGetMainWnd());
+    ASSERT(m_pwndMainFrame);
+    //m_pwndWorkspaceBar = m_pwndMainFrame->GetWorkspaceBar();
+    //ASSERT(m_pwndWorkspaceBar);
+    //m_pwndOutputBar = m_pwndMainFrame->GetOutputBar();
+    //ASSERT(m_pwndOutputBar);
 
-	m_pStructureParser = new CStructureParser( this, m_pwndOutputBar->GetOutputDoc() /*, this */);
-	ASSERT( m_pStructureParser );
-	if( !m_pStructureParser )
-		AfxThrowMemoryException();
+    m_pStructureParser = new CStructureParser(this,m_pwndMainFrame->GetOutputDoc() /*, this */);
+    ASSERT(m_pStructureParser);
+
+    if (!m_pStructureParser)
+        AfxThrowMemoryException();
+
+   
 }
 
-
-CLatexProject::~CLatexProject()
+CLaTeXProject::~CLaTeXProject()
 {
-	if( m_pStructureParser )
-		delete m_pStructureParser;
+    if (m_pStructureParser)
+        delete m_pStructureParser;
 
-	// check for undeleted views and clean up here
-	if (m_pwndStructureView)
-		delete m_pwndStructureView;
-	if (m_pwndEnvironmentView)
-		delete m_pwndEnvironmentView;
-	if (m_pwndFileView)
-		delete m_pwndFileView;
-	if (m_pwndBibView)
-		delete m_pwndBibView;
+    //// check for undeleted views and clean up here
+    //if (m_pwndStructureView)
+    //    delete m_pwndStructureView;
+    //if (m_pwndEnvironmentView)
+    //    delete m_pwndEnvironmentView;
+    //if (m_pwndFileView)
+    //    delete m_pwndFileView;
+    //if (m_pwndBibView)
+    //    delete m_pwndBibView;
 }
 
-
-BOOL CLatexProject::OnNewProject()
+BOOL CLaTeXProject::OnNewProject()
 {
-	if (!CProject::OnNewProject())
-		return FALSE;
+    if (!CProject::OnNewProject())
+        return FALSE;
 
-	//Add views to the docking bars in the frame wnd
-	m_nInitialNavigatorTab = 0;
-	CreateProjectViews();
+    //Add views to the docking bars in the frame wnd
+    m_nInitialNavigatorTab = 0;
+    CreateProjectViews();
 
-	CProjectNewDialog	dlg;
+    CProjectNewDialog dlg;
 
-	dlg.AddTemplateFilter(_T("*.tex"), RUNTIME_CLASS(CFileBasedProjectTemplateItem));
-	dlg.AddTemplateFilter(_T("*.dll"), RUNTIME_CLASS(CWizardBasedProjectTemplateItem));
-	for (int i = 0; i < g_configuration.m_astrProjectTemplatePaths.GetSize(); i++)
-		dlg.AddSearchDir(g_configuration.m_astrProjectTemplatePaths[i]);
+    dlg.AddTemplateFilter(_T("*.tex"),RUNTIME_CLASS(CFileBasedProjectTemplateItem));
+    dlg.AddTemplateFilter(_T("*.dll"),RUNTIME_CLASS(CWizardBasedProjectTemplateItem));
+    for (int i = 0; i < CConfiguration::GetInstance()->m_astrProjectTemplatePaths.GetSize(); i++)
+        dlg.AddSearchDir(CConfiguration::GetInstance()->m_astrProjectTemplatePaths[i]);
 
-	if (dlg.DoModal() == IDCANCEL)
-		return FALSE;
+    if (dlg.DoModal() == IDCANCEL)
+        return FALSE;
 
-	//Save and add to LRU
-	DoFileSave();
-	theApp.m_recentProjectList.Add(GetPathName());
+    //Save and add to LRU
+    DoFileSave();
+    theApp.m_recentProjectList.Add(GetPathName());
 
-	//Trigger analysis - parse project
-	AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_PROJECT_PARSE);
+    //Trigger analysis - parse project
+    AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_PROJECT_PARSE);
 
-	return TRUE;
+    return TRUE;
 }
 
-BOOL CLatexProject::OnNewProjectFromDoc(LPCTSTR lpszDocPathName)
+BOOL CLaTeXProject::OnNewProjectFromDoc(LPCTSTR lpszDocPathName)
 {
-	if (!CProject::OnNewProjectFromDoc(lpszDocPathName))
-		return false;
+    if (!CProject::OnNewProjectFromDoc(lpszDocPathName))
+        return false;
 
-	if (!CPathTool::Exists(lpszDocPathName))
-	{
-		AfxMessageBox(STE_PROJECT_MAINFILENOTFOUND, MB_ICONSTOP | MB_OK);
-		return false;
-	}
+    if (!CPathTool::Exists(lpszDocPathName)) {
+        AfxMessageBox(STE_PROJECT_MAINFILENOTFOUND,MB_ICONSTOP | MB_OK);
+        return false;
+    }
 
-	//Set the path of the project file
-	CString ProjectFileName = GetProjectFileNameFromDoc(lpszDocPathName);
-	if (ProjectFileName.IsEmpty()) return false;
+    //Set the path of the project file
+    CString ProjectFileName = GetProjectFileNameFromDoc(lpszDocPathName);
+    if (ProjectFileName.IsEmpty()) return false;
 
-	//Does it already exist?
-	if (CheckExistingProjectFile(ProjectFileName))
-	{
-		// save modified documents
-		if (!theApp.SaveAllModified()) return false;
+    //Does it already exist?
+    if (CheckExistingProjectFile(ProjectFileName)) {
+        // save modified documents
+        if (!theApp.SaveAllModified()) return false;
 
-		// close latex-documents
-		// skipping annoying question in this version --
-		// just closing the documents.
-		// lets see, what the users will say ...
-		theApp.GetLatexDocTemplate()->CloseAllDocuments(theApp.m_bEndSession);
+        // close latex-documents
+        // skipping annoying question in this version --
+        // just closing the documents.
+        // lets see, what the users will say ...
+        theApp.GetLatexDocTemplate()->CloseAllDocuments(theApp.m_bEndSession);
 
-		//Open the project
-		OnOpenProject(ProjectFileName);
-		//... and (at least) the main file
-		OnProjectOpenMainfile();
+        //Open the project
+        OnOpenProject(ProjectFileName);
+        //... and (at least) the main file
+        OnProjectOpenMainfile();
 
-		return true;
-	}
+        return true;
+    }
 
-	//Set it
-	SetPathName(ProjectFileName);
+    //Set it
+    SetPathName(ProjectFileName);
 
-	//Set the main latex file
-	SetMainPath(lpszDocPathName);
+    //Set the main latex file
+    SetMainPath(lpszDocPathName);
 
-	//Open the properties dialog for the user to change some values.
-	OnProjectProperties();
+    //Open the properties dialog for the user to change some values.
+    OnProjectProperties();
 
-	//Save and add to LRU
-	//DoFileSave(); ==> This brings up the Save-Dialog, if tcp is not there - not wanted
-	OnSaveProject(GetPathName());
-	theApp.m_recentProjectList.Add(GetPathName());
+    //Save and add to LRU
+    //DoFileSave(); ==> This brings up the Save-Dialog, if tcp is not there - not wanted
+    OnSaveProject(GetPathName());
+    theApp.m_recentProjectList.Add(GetPathName());
 
-	//Add views to the docking bars in the frame wnd
-	m_nInitialNavigatorTab = 0;
-	CreateProjectViews();
+    //Add views to the docking bars in the frame wnd
+    m_nInitialNavigatorTab = 0;
+    CreateProjectViews();
 
-	//Open the main file (just to be sure)
-	OnProjectOpenMainfile();
+    //Open the main file (just to be sure)
+    OnProjectOpenMainfile();
 
-	//Trigger analysis - parse project
-	AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_PROJECT_PARSE);
+    //Trigger analysis - parse project
+    AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_PROJECT_PARSE);
 
-	return true;
+    return true;
 }
 
-CString CLatexProject::GetProjectFileNameFromDoc(LPCTSTR lpszDocPathName)
+CString CLaTeXProject::GetProjectFileNameFromDoc(LPCTSTR lpszDocPathName)
 {
-	CString ProjectFileName = (CPathTool::GetFileExtension(lpszDocPathName) == _T("tex"))
-														?
-														CPathTool::GetBase(lpszDocPathName) + _T(".tcp")
-														:
-														"";
-	return ProjectFileName;
+    CString ProjectFileName = (CPathTool::GetFileExtension(lpszDocPathName) == _T("tex"))
+            ?
+            CPathTool::GetBase(lpszDocPathName) + _T(".tcp")
+            :
+            _T("");
+    return ProjectFileName;
 };
 
-bool CLatexProject::CheckExistingProjectFile(LPCTSTR lpszPathName)
+bool CLaTeXProject::CheckExistingProjectFile(LPCTSTR lpszPathName)
 {
-	if (!CPathTool::Exists(lpszPathName)) return false;
+    if (!CPathTool::Exists(lpszPathName)) return false;
 
-	//Ask the user what to do
-	CString strMsg;
-	strMsg.Format(STE_PROJECT_EXISTS, lpszPathName);
-	return (AfxMessageBox(strMsg, MB_ICONQUESTION | MB_YESNO) == IDYES);
+    //Ask the user what to do
+    CString strMsg;
+    strMsg.Format(STE_PROJECT_EXISTS,lpszPathName);
+    return (AfxMessageBox(strMsg,MB_ICONQUESTION | MB_YESNO) == IDYES);
 };
 
-#define	TC_PROJECT_SESSION_EXT	_T("tps")
+LPCTSTR const TC_PROJECT_SESSION_EXT	= _T("tps");
 
-BOOL CLatexProject::OnOpenProject(LPCTSTR lpszPathName) 
+BOOL CLaTeXProject::OnOpenProject(LPCTSTR lpszPathName)
 {
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// load project information
-	CIniFile file(lpszPathName);
-	if (!file.ReadFile())
-		return FALSE;
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // load project information
+    CIniFile file(lpszPathName);
+    if (!file.ReadFile())
+        return FALSE;
 
-	//Check if ini file contains any useful data.
-	if (file.GetNumKeys() < 2)
-	{
-		//tcp-file not valid: inform the user about this error.
-		CString	strMsg;
-		strMsg.Format(STE_FILE_INUSE, 
-			AfxLoadString(IDS_OPEN),
-			lpszPathName,
-			AfxLoadString(STE_TCP_INVALID));
+    //Check if ini file contains any useful data.
+    if (file.GetNumKeys() < 2) {
+        //tcp-file not valid: inform the user about this error.
+        CString strMsg;
+        strMsg.Format(STE_FILE_INUSE,
+                AfxLoadString(IDS_OPEN),
+                lpszPathName,
+                AfxLoadString(STE_TCP_INVALID));
 
-		AfxMessageBox(strMsg, MB_ICONEXCLAMATION|MB_OK);
+        AfxMessageBox(strMsg,MB_ICONEXCLAMATION | MB_OK);
 
-		//and return without loading
-		return false;
-	}
+        //and return without loading
+        return false;
+    }
 
-	//Set the working dir of the project
-	SetProjectDir(CPathTool::GetDirectory(lpszPathName));
-	//Modify the LastOpenedFolder-Value to be the working dir
-	AfxSetLastDirectory(CPathTool::GetDirectory(lpszPathName));
+    //Set the working dir of the project
+    SetProjectDir(CPathTool::GetDirectory(lpszPathName));
+    //Modify the LastOpenedFolder-Value to be the working dir
+    AfxSetLastDirectory(CPathTool::GetDirectory(lpszPathName));
 
-	//Load the Project Information
-	Serialize(file, FALSE);
+    //Load the Project Information
+    Serialize(file,FALSE);
 
-	SetModifiedFlag(FALSE);
+    SetModifiedFlag(FALSE);
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// load project session
-	CIniFile session(GetSessionPathName(lpszPathName));
-	if (session.ReadFile())
-		SerializeSession(session, FALSE);
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // load project session
+    CIniFile session(GetSessionPathName(lpszPathName));
+    if (session.ReadFile())
+        SerializeSession(session,FALSE);
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// add views to the docking bars in the frame wnd
-	CreateProjectViews();
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // add views to the docking bars in the frame wnd
+    CreateProjectViews();
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Activate Editor window
-	if (m_pwndMainFrame)
-	{
-		m_pwndMainFrame->SendMessage(WM_COMMAND, ID_WINDOW_EDITOR);
-	}
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // Activate Editor window
+    if (m_pwndMainFrame) {
+        m_pwndMainFrame->SendMessage(WM_COMMAND,ID_WINDOW_EDITOR);
+    }
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// parse project
-	if (m_pwndMainFrame)
-	{
-		m_pwndMainFrame->PostMessage( WM_COMMAND, ID_PROJECT_PARSE );
-	}
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // parse project
+    if (m_pwndMainFrame) {
+        m_pwndMainFrame->PostMessage(WM_COMMAND,ID_PROJECT_PARSE);
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
-
-BOOL CLatexProject::OnSaveProject(LPCTSTR lpszPathName) 
+BOOL CLaTeXProject::OnSaveProject(LPCTSTR lpszPathName)
 {
-	//return CProject::OnSaveDocument(lpszPathName);
-	CIniFile	file(lpszPathName);
-	file.Reset();
-	if (!Serialize(file, TRUE))
-		return FALSE;
+    //return CProject::OnSaveDocument(lpszPathName);
+    CIniFile file(lpszPathName);
+    file.Reset();
+    if (!Serialize(file,TRUE))
+        return FALSE;
 
-	file.WriteFile();
-	SetModifiedFlag(FALSE);
-	return TRUE;
+    file.WriteFile();
+    SetModifiedFlag(FALSE);
+    return TRUE;
 }
 
-
-BOOL CLatexProject::SaveModified()
+BOOL CLaTeXProject::SaveModified()
 {
-	if (!CProject::SaveModified())
-		return FALSE;
+    if (!CProject::SaveModified())
+        return FALSE;
 
-	if (!theApp.GetLatexDocTemplate()->SaveAllModified())
-		return FALSE;
+    if (!theApp.GetLatexDocTemplate()->SaveAllModified())
+        return FALSE;
 
-	return TRUE;
+    return TRUE;
 }
 
+void CLaTeXProject::OnCloseProject()
+{
+    // Save ignored words
 
-void CLatexProject::OnCloseProject() 
-{	
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// store project session
-	CString SessionPathName = GetSessionPathName();
-	if (!SessionPathName.IsEmpty())
-	{
-		CIniFile session(SessionPathName);
-		session.Reset();
-		SerializeSession(session, TRUE);
-		session.WriteFile();
-	}
+    if (Speller* s = theApp.GetSpeller()) {
+        if (s->is_ignored_modified()) {
+            const CString sIgnoredPath = GetIgnoredWordsFileName();
+            s->save_ignored_words(sIgnoredPath);
+        }
+    }
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// close latex-documents?
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // store project session
+    CString SessionPathName = GetSessionPathName();
 
-	// skipping annoying question in this version --
-	// just closing the documents.
-	// lets see, what the users will say ...
-	theApp.GetLatexDocTemplate()->CloseAllDocuments(theApp.m_bEndSession);
+    if (!SessionPathName.IsEmpty()) {
+        CIniFile session(SessionPathName);
+        session.Reset();
+        SerializeSession(session,TRUE);
+        session.WriteFile();
+    }
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// remember last project
-	if (theApp.m_bEndSession)
-		g_configuration.m_strLastProject = GetPathName();
-	else
-		g_configuration.m_strLastProject.Empty();
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // close latex-documents?
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Clean up
+    // skipping annoying question in this version --
+    // just closing the documents.
+    // lets see, what the users will say ...
+    theApp.GetLatexDocTemplate()->CloseAllDocuments(theApp.m_bEndSession);
 
-	// cancel structure parsing
-	if (m_pStructureParser)
-	{
-		m_pStructureParser->CancelParsing();
-		WaitForSingleObject( m_pStructureParser->m_evtParsingDone, INFINITE );
-	}
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // remember last project
+    if (theApp.m_bEndSession)
+        CConfiguration::GetInstance()->m_strLastProject = GetPathName();
+    else
+        CConfiguration::GetInstance()->m_strLastProject.Empty();
 
-	// delete views
-	DeleteProjectViews();
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // Clean up
+
+    //// add views to the docking bars in the frame wnd
+    //CMainFrame *pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
+
+    //if (!pwndMainFrame)
+    //    return;
+
+    // cancel structure parsing
+    if (m_pStructureParser) {
+        m_pStructureParser->CancelParsing();
+        WaitForSingleObject(m_pStructureParser->m_evtParsingDone,INFINITE);
+    }
+
+    // delete views
+    DeleteProjectViews();
 }
 
-
-BEGIN_MESSAGE_MAP(CLatexProject, CProject)
-	//{{AFX_MSG_MAP(CLatexProject)
-	ON_COMMAND(ID_PROJECT_PROPERTIES, OnProjectProperties)
-	ON_COMMAND(ID_PROJECT_OPEN_MAINFILE, OnProjectOpenMainfile)
-	ON_COMMAND(ID_PROJECT_PARSED, OnProjectParsed)
-	ON_COMMAND(ID_PROJECT_PARSE, OnProjectParse)
-	ON_COMMAND(ID_ITEM_PROPERTIES, OnItemProperties)
-	ON_UPDATE_COMMAND_UI(ID_ITEM_PROPERTIES, OnUpdateItemCmd)
-	ON_COMMAND(ID_ITEM_GOTO, OnItemGoto)
-	ON_COMMAND(ID_ITEM_INSERT_PAGEREF, OnItemInsertPageref)
-	ON_COMMAND(ID_ITEM_INSERT_REF, OnItemInsertRef)
-	ON_COMMAND(ID_ITEM_INSERT_LABEL, OnItemInsertLabel)
-	ON_UPDATE_COMMAND_UI(ID_ITEM_GOTO, OnUpdateItemCmd)
-	ON_UPDATE_COMMAND_UI(ID_ITEM_INSERT_PAGEREF, OnUpdateItemCmd)
-	ON_UPDATE_COMMAND_UI(ID_ITEM_INSERT_REF, OnUpdateItemCmd)
-	ON_UPDATE_COMMAND_UI(ID_ITEM_INSERT_LABEL, OnUpdateItemCmd)
-	ON_COMMAND(ID_SPELL_PROJECT, OnSpellProject)
-	//}}AFX_MSG_MAP
+BEGIN_MESSAGE_MAP(CLaTeXProject,CProject)
+//{{AFX_MSG_MAP(CLaTeXProject)
+ON_COMMAND(ID_PROJECT_PROPERTIES,OnProjectProperties)
+ON_COMMAND(ID_PROJECT_OPEN_MAINFILE,OnProjectOpenMainfile)
+ON_COMMAND(ID_PROJECT_PARSED,OnProjectParsed)
+ON_COMMAND(ID_PROJECT_PARSE,OnProjectParse)
+ON_COMMAND(ID_ITEM_PROPERTIES,OnItemProperties)
+ON_UPDATE_COMMAND_UI(ID_ITEM_PROPERTIES,OnUpdateItemCmd)
+ON_COMMAND(ID_ITEM_GOTO,OnItemGoto)
+ON_COMMAND(ID_ITEM_INSERT_PAGEREF,OnItemInsertPageref)
+ON_COMMAND(ID_ITEM_INSERT_REF,OnItemInsertRef)
+ON_COMMAND(ID_ITEM_INSERT_LABEL,OnItemInsertLabel)
+ON_UPDATE_COMMAND_UI(ID_ITEM_GOTO,OnUpdateItemCmd)
+ON_UPDATE_COMMAND_UI(ID_ITEM_INSERT_PAGEREF,OnUpdateItemCmd)
+ON_UPDATE_COMMAND_UI(ID_ITEM_INSERT_REF,OnUpdateItemCmd)
+ON_UPDATE_COMMAND_UI(ID_ITEM_INSERT_LABEL,OnUpdateItemCmd)
+ON_COMMAND(ID_SPELL_PROJECT,OnSpellProject)
+//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
 #ifdef _DEBUG
-void CLatexProject::AssertValid() const
+void CLaTeXProject::AssertValid() const
 {
-	CProject::AssertValid();
+    CProject::AssertValid();
 }
 
-void CLatexProject::Dump(CDumpContext& dc) const
+void CLaTeXProject::Dump(CDumpContext& dc) const
 {
-	CProject::Dump(dc);
+    CProject::Dump(dc);
 }
 #endif //_DEBUG
 
@@ -410,66 +417,61 @@ void CLatexProject::Dump(CDumpContext& dc) const
 #define CURRENTFORMATVERSION				4
 #define	FORMATTYPE							_T("TeXnicCenterProjectInformation")
 
-BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
+BOOL CLaTeXProject::Serialize(CIniFile &ini,BOOL bWrite)
 {
-	if( bWrite )
-	{
-		// setting format information
-		ini.SetValue( KEY_FORMATINFO, VAL_FORMATINFO_TYPE,				FORMATTYPE );
-		ini.SetValue( KEY_FORMATINFO, VAL_FORMATINFO_VERSION,			CURRENTFORMATVERSION );
+    if (bWrite) {
+        // setting format information
+        ini.SetValue(KEY_FORMATINFO,VAL_FORMATINFO_TYPE,FORMATTYPE);
+        ini.SetValue(KEY_FORMATINFO,VAL_FORMATINFO_VERSION,CURRENTFORMATVERSION);
 
-		// setting project information
-		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_MAINFILE,			CPathTool::GetRelativePath(GetProjectDir(), m_strMainPath));
-		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEBIBTEX,		(int)m_bUseBibTex);
-		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEMAKEINDEX,		(int)m_bUseMakeIndex);
-		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_ACTIVEPROFILE,	g_ProfileMap.GetActiveProfileKey());
+        // setting project information
+        ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_MAINFILE,CPathTool::GetRelativePath(GetProjectDir(),m_strMainPath));
+        ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_USEBIBTEX,(int)m_bUseBibTex);
+        ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_USEMAKEINDEX,(int)m_bUseMakeIndex);
+        ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_ACTIVEPROFILE,CProfileMap::GetInstance()->GetActiveProfileKey());
 
-		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_PLANGUAGE,		m_strProjectLanguage);
-		ini.SetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_PDIALECT,			m_strProjectDialect);
-		return TRUE;
-	}
-	else
-	{
-		// getting format information
-		CString	strType = ini.GetValue( KEY_FORMATINFO, VAL_FORMATINFO_TYPE, "" );
-		int			nVersion = ini.GetValue( KEY_FORMATINFO, VAL_FORMATINFO_VERSION, 0 );
+        ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PLANGUAGE,m_strProjectLanguage);
+        ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PDIALECT,m_strProjectDialect);
+        return TRUE;
+    }
+    else {
+        // getting format information
+        CString strType = ini.GetValue(KEY_FORMATINFO,VAL_FORMATINFO_TYPE,_T(""));
+        int nVersion = ini.GetValue(KEY_FORMATINFO,VAL_FORMATINFO_VERSION,0);
 
-		if( strType != FORMATTYPE )
-			return FALSE;
+        if (strType != FORMATTYPE)
+            return FALSE;
 
-		// setting project information
-		if (!ini.VerifyValue(KEY_PROJECTINFO, VAL_PROJECTINFO_MAINFILE))
-			return FALSE;
+        // setting project information
+        if (!ini.VerifyValue(KEY_PROJECTINFO,VAL_PROJECTINFO_MAINFILE))
+            return FALSE;
 
-		if (nVersion == 1)
-			m_strProjectDir = ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_WORKINGDIR, "");
+        if (nVersion == 1)
+            m_strProjectDir = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_WORKINGDIR,_T(""));
 
-		m_strMainPath = ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_MAINFILE, "");
-		if (nVersion > 1)
-			m_strMainPath = CPathTool::Cat(GetProjectDir(), m_strMainPath);
+        m_strMainPath = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_MAINFILE,_T(""));
+        if (nVersion > 1)
+            m_strMainPath = CPathTool::Cat(GetProjectDir(),m_strMainPath);
 
-		m_bUseBibTex			= ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEBIBTEX,		FALSE);
-		m_bUseMakeIndex			= ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_USEMAKEINDEX,	FALSE);
+        m_bUseBibTex = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_USEBIBTEX,FALSE);
+        m_bUseMakeIndex = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_USEMAKEINDEX,FALSE);
 
-		m_strProjectLanguage	= ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_PLANGUAGE,		g_configuration.m_strLanguageDefault);
-		m_strProjectDialect		= ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_PDIALECT,		g_configuration.m_strLanguageDialectDefault);
+        m_strProjectLanguage = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PLANGUAGE,CConfiguration::GetInstance()->m_strLanguageDefault);
+        m_strProjectDialect = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PDIALECT,CConfiguration::GetInstance()->m_strLanguageDialectDefault);
 
-		if (nVersion > 2)
-		{
-			if (g_ProfileMap.SetActiveProfile(ini.GetValue(KEY_PROJECTINFO, VAL_PROJECTINFO_ACTIVEPROFILE, ""), false))
-			{
-				//Successfull change of the active profile - update UI
-				theApp.UpdateLatexProfileSel();
-			}
-			else
-			{
-				//Saved profile name not found - other profile used - set project to be modified
-				SetModifiedFlag(true);
-			}
-		}
+        if (nVersion > 2) {
+            if (CProfileMap::GetInstance()->SetActiveProfile(ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_ACTIVEPROFILE,_T("")),false)) {
+                //Successfull change of the active profile - update UI
+                theApp.UpdateLaTeXProfileSel();
+            }
+            else {
+                //Saved profile name not found - other profile used - set project to be modified
+                SetModifiedFlag(true);
+            }
+        }
 
-		return TRUE;
-	}
+        return TRUE;
+    }
 }
 
 #undef KEY_FORMATINFO			
@@ -496,690 +498,580 @@ BOOL CLatexProject::Serialize( CIniFile &ini, BOOL bWrite )
 #define CURRENTFORMATVERSION					2
 #define	FORMATTYPE								_T("TeXnicCenterProjectSessionInformation")
 
-void CLatexProject::SerializeSession(CIniFile &ini, BOOL bWrite)
+void CLaTeXProject::SerializeSession(CIniFile &ini,BOOL bWrite)
 {
-	if (bWrite)
-	{
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		//Format information
-		ini.SetValue(KEY_FORMATINFO, VAL_FORMATINFO_TYPE, FORMATTYPE);
-		ini.SetValue(KEY_FORMATINFO, VAL_FORMATINFO_VERSION, CURRENTFORMATVERSION);
+    if (bWrite) {
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //Format information
+        ini.SetValue(KEY_FORMATINFO,VAL_FORMATINFO_TYPE,FORMATTYPE);
+        ini.SetValue(KEY_FORMATINFO,VAL_FORMATINFO_VERSION,CURRENTFORMATVERSION);
 
-		//Store active tab of navigator
-		CBCGTabWnd* pwndTabs = &m_pwndWorkspaceBar->GetTabWnd();
-		if (pwndTabs && IsWindow(pwndTabs->m_hWnd))
-		{
-			ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_ACTIVETAB, pwndTabs->GetActiveTab());
-		}
+        //Store active tab of navigator
+        //CMFCTabCtrl* pwndTabs = &m_pwndWorkspaceBar->GetTabWnd();
 
-		//Store frame information
-		if (m_pwndMainFrame)
-		{
-			//Get the MDI Childs (sorted by Tabs)
-			CArray<CChildFrame*, CChildFrame*> MDIChildArray;
-			const int nActiveFrame = m_pwndMainFrame->GetMDIChilds(MDIChildArray, true);
+        //if (pwndTabs && IsWindow(pwndTabs->m_hWnd)) {
+        //    ini.SetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVETAB,pwndTabs->GetActiveTab());
+        //}
 
-			//Set Number of Frames
-			ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_FRAMECOUNT, MDIChildArray.GetSize());
-			//Set active MDI Child
-			ini.SetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_ACTIVEFRAME, nActiveFrame);
+        //Store frame information
+        if (m_pwndMainFrame) {
+            //Get the MDI Childs (sorted by Tabs)
+            CArray<CChildFrame*,CChildFrame*> MDIChildArray;
+            const int nActiveFrame = m_pwndMainFrame->GetMDIChilds(MDIChildArray,true);
 
-			for(int i=0;i<MDIChildArray.GetSize();i++)
-			{
-				//Store information for this MDI-window
-				CString strKey;
-				strKey.Format(KEY_FRAMEINFO, i);
+            //Set Number of Frames
+            ini.SetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_FRAMECOUNT,MDIChildArray.GetSize());
+            //Set active MDI Child
+            ini.SetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVEFRAME,nActiveFrame);
 
-				MDIChildArray.GetAt(i)->Serialize(ini, strKey, bWrite);
-			}
-		}
-	}
-	else
-	{
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// reading format information
-		CString	strKey;
-		const int nFrameCount = ini.GetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_FRAMECOUNT, 0);
-		const int nActiveFrame = ini.GetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_ACTIVEFRAME, -1);
-		CCreateContext cc;
+            for (int i = 0; i < MDIChildArray.GetSize(); i++) {
+                //Store information for this MDI-window
+                CString strKey;
+                strKey.Format(KEY_FRAMEINFO,i);
 
-		ZeroMemory(&cc, sizeof(cc));
-		cc.m_pNewViewClass = RUNTIME_CLASS(CLatexEdit);
+                MDIChildArray.GetAt(i)->Serialize(ini,strKey,bWrite);
+            }
+        }
+    }
+    else {
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // reading format information
+        CString strKey;
+        const int nFrameCount = ini.GetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_FRAMECOUNT,0);
+        const int nActiveFrame = ini.GetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVEFRAME,-1);
+        CCreateContext cc;
 
-		//Open all stored frames
-		bool bCouldOpenAllFrames(true);
-		CChildFrame* pChildToBeActivated = NULL;
-		for (int nFrame = 0; nFrame < nFrameCount; nFrame++)
-		{
-			CChildFrame* pChildFrame = new CChildFrame();
+        ZeroMemory(&cc,sizeof (cc));
+        cc.m_pNewViewClass = RUNTIME_CLASS(CLaTeXEdit);
 
-			ASSERT(pChildFrame);
-			if (!pChildFrame) continue;
+        //Open all stored frames
+        bool bCouldOpenAllFrames(true);
+        CChildFrame* pChildToBeActivated = NULL;
+        for (int nFrame = 0; nFrame < nFrameCount; nFrame++) {
+            CChildFrame* pChildFrame = new CChildFrame();
 
-			strKey.Format(KEY_FRAMEINFO, nFrame);
-			if (!pChildFrame->Serialize(ini, strKey, bWrite))
-			{
-				bCouldOpenAllFrames = false;
-				delete pChildFrame;
-			}
-			else
-			{
-				if (nActiveFrame == nFrame)
-				{
-					pChildToBeActivated = pChildFrame;
-				}
-			}
-		}
+            ASSERT(pChildFrame);
+            if (!pChildFrame) continue;
 
-		//Restore navigator tab selection
-		m_nInitialNavigatorTab = ini.GetValue(KEY_SESSIONINFO, VAL_SESSIONINFO_ACTIVETAB, 0);
+            strKey.Format(KEY_FRAMEINFO,nFrame);
+            if (!pChildFrame->Serialize(ini,strKey,bWrite)) {
+                bCouldOpenAllFrames = false;
+                delete pChildFrame;
+            }
+            else {
+                if (nActiveFrame == nFrame) {
+                    pChildToBeActivated = pChildFrame;
+                }
+            }
+        }
 
-		//Activate the frame that was active when closing the project
-		if (pChildToBeActivated)
-		{
-			pChildToBeActivated->ActivateFrame(SW_SHOW);
-			//NOTE: We give the focus later to this window
-		}
+        //Restore navigator tab selection
+        m_nInitialNavigatorTab = ini.GetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVETAB,0);
 
-		//Give message, if we could not open all files / frames
-		if (!bCouldOpenAllFrames)
-		{
-			AfxMessageBox(STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED,
-							MB_ICONINFORMATION|MB_OK);
-		}
-	}
+        //Activate the frame that was active when closing the project
+        if (pChildToBeActivated) {
+            pChildToBeActivated->ActivateFrame(SW_SHOW);
+            //NOTE: We give the focus later to this window
+        }
+
+        //Give message, if we could not open all files / frames
+        if (!bCouldOpenAllFrames) {
+            AfxMessageBox(STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED,
+                    MB_ICONINFORMATION | MB_OK);
+        }
+    }
 }
 
 
 
 /////////////////////////////////////////////////////////////////////
 // paths, open, save, etc.
-void CLatexProject::SetPathName(LPCTSTR lpszPathName) 
+
+void CLaTeXProject::SetPathName(LPCTSTR lpszPathName)
 {
-	CProject::SetPathName(lpszPathName);
-	SetProjectDir(CPathTool::GetDirectory(lpszPathName));
+    CProject::SetPathName(lpszPathName);
+    SetProjectDir(CPathTool::GetDirectory(lpszPathName));
+
+    // Open ignored words
+
+    if (Speller* s = theApp.GetSpeller()) {
+        const CString sIgnoredPath = GetIgnoredWordsFileName();
+
+        if (CPathTool::Exists(sIgnoredPath))
+            s->open_ignored_words(sIgnoredPath);
+    }
 }
 
-
-void CLatexProject::DoProjectSave() 
+void CLaTeXProject::DoProjectSave()
 {
-	OnSaveProject( GetPathName() );
+    OnSaveProject(GetPathName());
 }
 
-
-void CLatexProject::SetMainPath( LPCTSTR lpszMainPath )
+void CLaTeXProject::SetMainPath(LPCTSTR lpszMainPath)
 {
-	if( m_strMainPath != lpszMainPath )
-		SetModifiedFlag();
-	m_strMainPath = lpszMainPath;
+    if (m_strMainPath != lpszMainPath)
+        SetModifiedFlag();
+    m_strMainPath = lpszMainPath;
 }
 
-
-CString CLatexProject::GetMainPath() const
+const CString& CLaTeXProject::GetMainPath() const
 {
-	return m_strMainPath;
+    return m_strMainPath;
 }
 
-
-void CLatexProject::SetProjectDir(LPCTSTR lpszProjectDir)
+void CLaTeXProject::SetProjectDir(LPCTSTR lpszProjectDir)
 {
-	m_strProjectDir = lpszProjectDir;
+    m_strProjectDir = lpszProjectDir;
 }
 
-
-CString CLatexProject::GetProjectDir() const
+const CString CLaTeXProject::GetProjectDir() const
 {
-	return m_strProjectDir;
+    return m_strProjectDir;
 }
 
-
-CString CLatexProject::GetFilePath( LPCTSTR lpszFile )
+const CString CLaTeXProject::GetFilePath( LPCTSTR lpszFile ) const
 {
-	CString		strPath;
-	LPTSTR		dummy;
+    CString strPath;
+    LPTSTR dummy;
 
-	SetCurrentDirectory(CPathTool::GetDirectory(m_strMainPath));
-	GetFullPathName( lpszFile, _MAX_PATH, strPath.GetBuffer( _MAX_PATH ), &dummy );
-	strPath.ReleaseBuffer();
+    SetCurrentDirectory(CPathTool::GetDirectory(m_strMainPath));
+    GetFullPathName(lpszFile,_MAX_PATH,strPath.GetBuffer(_MAX_PATH),&dummy);
+    strPath.ReleaseBuffer();
 
-	return strPath;
+    return strPath;
 }
 
 //Returns the full path to the project session file
-CString CLatexProject::GetSessionPathName(LPCTSTR lpszPath /*= NULL*/) const
-{
-	if (!lpszPath && GetPathName().IsEmpty())
-		return CString();
 
-	return ( CPathTool::GetBase( (lpszPath != NULL) ? lpszPath : GetPathName() )
-						+ _T('.') + TC_PROJECT_SESSION_EXT );
+const CString CLaTeXProject::GetSessionPathName( LPCTSTR lpszPath /*= NULL*/ ) const
+{
+    if (!lpszPath && GetPathName().IsEmpty())
+        return CString();
+
+    return ( CPathTool::GetBase((lpszPath != NULL) ? lpszPath : GetPathName())
+            + _T('.') + TC_PROJECT_SESSION_EXT);
 }
 
-
-void CLatexProject::SetRunBibTex(BOOL bRunBibTex)
+void CLaTeXProject::SetRunBibTex(BOOL bRunBibTex)
 {
-	if (bRunBibTex != m_bUseBibTex)
-		SetModifiedFlag();
+    if (bRunBibTex != m_bUseBibTex)
+        SetModifiedFlag();
 
-	m_bUseBibTex = bRunBibTex;
+    m_bUseBibTex = bRunBibTex;
 }
 
-
-void CLatexProject::SetRunMakeIndex(BOOL bRunMakeIndex)
+void CLaTeXProject::SetRunMakeIndex(BOOL bRunMakeIndex)
 {
-	if (bRunMakeIndex != m_bUseMakeIndex)
-		SetModifiedFlag();
+    if (bRunMakeIndex != m_bUseMakeIndex)
+        SetModifiedFlag();
 
-	m_bUseMakeIndex = bRunMakeIndex;
+    m_bUseMakeIndex = bRunMakeIndex;
 }
 
-
-BOOL CLatexProject::GetRunBibTex() const
+BOOL CLaTeXProject::GetRunBibTex() const
 {
-	return m_bUseBibTex;
+    return m_bUseBibTex;
 }
 
-
-BOOL CLatexProject::GetRunMakeIndex() const
+BOOL CLaTeXProject::GetRunMakeIndex() const
 {
-	return m_bUseMakeIndex;
+    return m_bUseMakeIndex;
 }
 
-
-CString CLatexProject::GetWorkingDir() const
+CString CLaTeXProject::GetWorkingDir() const
 {
-	return CPathTool::GetDirectory(m_strMainPath);
+    return CPathTool::GetDirectory(m_strMainPath);
 }
 
-
-void CLatexProject::OnProjectProperties() 
+void CLaTeXProject::OnProjectProperties()
 {
-	CProjectPropertyDialog	dlg(theApp.m_pMainWnd);
-	dlg.m_strProjectDir		= GetProjectDir();
-	dlg.m_strMainFile		= m_strMainPath;
-	dlg.m_bUseBibTex		= m_bUseBibTex;
-	dlg.m_bUseMakeIndex		= m_bUseMakeIndex;
-	dlg.m_strLanguageCurrent= m_strProjectLanguage;
-	dlg.m_strDialectCurrent	= m_strProjectDialect;
+    CProjectPropertyDialog dlg(theApp.m_pMainWnd);
+    dlg.m_strProjectDir = GetProjectDir();
+    dlg.m_strMainFile = m_strMainPath;
+    dlg.m_bUseBibTex = m_bUseBibTex;
+    dlg.m_bUseMakeIndex = m_bUseMakeIndex;
+    dlg.m_strLanguageCurrent = m_strProjectLanguage;
+    dlg.m_strDialectCurrent = m_strProjectDialect;
 
-	if(dlg.DoModal() != IDOK )
-		return;
+    if (dlg.DoModal() != IDOK)
+        return;
 
-	if (m_strMainPath			!= dlg.m_strMainFile	||
-		m_bUseBibTex			!= dlg.m_bUseBibTex		||
-		m_bUseMakeIndex			!= dlg.m_bUseMakeIndex)
-	{
-		SetModifiedFlag();
-	}
+    if (m_strMainPath != dlg.m_strMainFile ||
+            m_bUseBibTex != dlg.m_bUseBibTex ||
+            m_bUseMakeIndex != dlg.m_bUseMakeIndex) {
+        SetModifiedFlag();
+    }
 
-	if(	m_strProjectLanguage	!= dlg.m_strLanguageCurrent	||
-		m_strProjectDialect		!= dlg.m_strDialectCurrent)
-	{
-		SetModifiedFlag();
-		// TO DO: restart the speller on the new language
-	}
+    if (m_strProjectLanguage != dlg.m_strLanguageCurrent ||
+            m_strProjectDialect != dlg.m_strDialectCurrent) {
+        SetModifiedFlag();
+        // TO DO: restart the speller on the new language
+    }
 
 
-	m_strMainPath	= dlg.m_strMainFile;
-	m_bUseBibTex	= dlg.m_bUseBibTex;
-	m_bUseMakeIndex = dlg.m_bUseMakeIndex;
-	m_strProjectLanguage	= dlg.m_strLanguageCurrent;
-	m_strProjectDialect		= dlg.m_strDialectCurrent;
+    m_strMainPath = dlg.m_strMainFile;
+    m_bUseBibTex = dlg.m_bUseBibTex;
+    m_bUseMakeIndex = dlg.m_bUseMakeIndex;
+    m_strProjectLanguage = dlg.m_strLanguageCurrent;
+    m_strProjectDialect = dlg.m_strDialectCurrent;
 }
 
-
-void CLatexProject::OnProjectOpenMainfile() 
+void CLaTeXProject::OnProjectOpenMainfile()
 {
-	theApp.OpenLatexDocument(m_strMainPath, FALSE, -1, FALSE, false);
+    theApp.OpenLatexDocument(m_strMainPath,FALSE,-1,FALSE,false);
 }
 
 
 /////////////////////////////////////////////////////////////////////
 // implementation of CStructureParserHandler virtuals
 
-void CLatexProject::OnParsingFinished( BOOL bSuccess )
+void CLaTeXProject::OnParsingFinished(BOOL bSuccess)
 {
-	// synchronize with main thread
-	if( bSuccess )
-		theApp.m_pMainWnd->SendMessage( WM_COMMAND, (WPARAM)ID_PROJECT_PARSED );
+    // synchronize with main thread
+    if (bSuccess)
+        theApp.m_pMainWnd->SendMessage(WM_COMMAND,(WPARAM)ID_PROJECT_PARSED);
 
 }
 
 
 /////////////////////////////////////////////////////////////////////
 // manage project parsing
-void CLatexProject::OnProjectParse() 
+
+void CLaTeXProject::OnProjectParse()
 {
-	if( !m_bCanParse || m_bIsClosing) return;
+    if (!m_bCanParse || IsClosing())
+        return;
 
-	// Update the background thread
-	AfxGetMainWnd()->PostMessage( WM_COMMAND, ID_BG_UPDATE_PROJECT );
+    // Update the background thread
+    AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_BG_UPDATE_PROJECT);
 
-	// change to working dir
-	SetCurrentDirectory(CPathTool::GetDirectory(m_strMainPath));
+    // change to working dir
+    SetCurrentDirectory(CPathTool::GetDirectory(m_strMainPath));
 
-	// start parsing
-	m_bCanParse = FALSE;
-	m_pStructureParser->StartParsing( m_strMainPath, GetWorkingDir() );
+    // start parsing
+    m_bCanParse = FALSE;
+    m_pStructureParser->StartParsing(m_strMainPath,GetWorkingDir());
 }
 
-
-void CLatexProject::OnProjectParsed() 
+void CLaTeXProject::OnProjectParsed()
 {
-	m_pStructureParser->GetStructureItems( &m_aStructureItems );
-	UpdateAllViews( NULL, COutputDoc::hintParsingFinished, (CObject*)&m_aStructureItems );
-	m_bCanParse = TRUE;
+    m_pStructureParser->GetStructureItems(&m_aStructureItems);
+    UpdateAllViews(NULL,COutputDoc::hintParsingFinished,(CObject*) & m_aStructureItems);
+    m_bCanParse = TRUE;
 }
 
-
-void CLatexProject::SetCurrentStructureItem( int nIndex )
+void CLaTeXProject::SetCurrentStructureItem(int nIndex)
 {
-	ASSERT( (nIndex == 0) || (nIndex < m_aStructureItems.GetSize()) ); // invalid index
-	if (nIndex < 0 || nIndex >= m_aStructureItems.GetSize())
-		return;
+    // TODO: The assert fails sometimes due to nIndex being set to -1
+    ASSERT((nIndex == 0) || (nIndex < m_aStructureItems.size())); // invalid index
+    if (nIndex < 0 || nIndex >= m_aStructureItems.size())
+        return;
 
-	m_nCurrentStructureItem = nIndex;
+    m_nCurrentStructureItem = nIndex;
 }
 
-void CLatexProject::OnUpdateItemCmd(CCmdUI* pCmdUI) 
+void CLaTeXProject::OnUpdateItemCmd(CCmdUI* pCmdUI)
 {
-	ASSERT( m_nCurrentStructureItem >= -1 && m_nCurrentStructureItem < m_aStructureItems.GetSize() );
+    ASSERT(m_nCurrentStructureItem >= -1 && m_nCurrentStructureItem < m_aStructureItems.size());
 
-	// disable command, if no valid item is selected
-	if( m_nCurrentStructureItem == -1 )
-	{
-		pCmdUI->Enable( FALSE );
-		return;
-	}
+    // disable command, if no valid item is selected
+    if (m_nCurrentStructureItem == -1) {
+        pCmdUI->Enable(FALSE);
+        return;
+    }
 
-	// check commands
-	const CStructureItem	&si = m_aStructureItems[m_nCurrentStructureItem];
+    // check commands
+    const CStructureItem &si = m_aStructureItems[m_nCurrentStructureItem];
 
-	switch( pCmdUI->m_nID )
-	{
-		case ID_ITEM_GOTO:
-			switch( si.m_nType )
-			{
-			case CStructureParser::texFile:
-			case CStructureParser::bibFile:
-				pCmdUI->Enable( !si.m_strPath.IsEmpty() );
-				break;
-			default:
-				pCmdUI->Enable( si.m_nLine > 0 && !si.m_strPath.IsEmpty() );
-			}
-			break;
-		
-		case ID_ITEM_INSERT_PAGEREF: // makes no sense for BibTeX entries
-			if (si.m_nType != CStructureParser::bibItem) {
-				pCmdUI->Enable( !si.m_strLabel.IsEmpty() && theApp.GetActiveEditView() );
-			} else {
-				pCmdUI->Enable(FALSE);
-			}
-			break;
-		case ID_ITEM_INSERT_LABEL:
-		case ID_ITEM_INSERT_REF:
-			pCmdUI->Enable( !si.m_strLabel.IsEmpty() && theApp.GetActiveEditView() );
-			break;
-		default:
-			pCmdUI->Enable();
-	}
+    switch (pCmdUI->m_nID) {
+        case ID_ITEM_GOTO:
+            switch (si.m_nType) {
+                case CStructureParser::texFile :
+                case CStructureParser::bibFile :
+                            pCmdUI->Enable(!si.m_strPath.IsEmpty());
+                    break;
+                default:
+                    pCmdUI->Enable(si.m_nLine > 0 && !si.m_strPath.IsEmpty());
+            }
+            break;
+
+        case ID_ITEM_INSERT_PAGEREF: // makes no sense for BibTeX entries
+            if (si.m_nType != CStructureParser::bibItem) {
+                pCmdUI->Enable(si.HasLabels() && theApp.GetActiveEditView());
+            }
+            else {
+                pCmdUI->Enable(FALSE);
+            }
+            break;
+        case ID_ITEM_INSERT_LABEL:
+        case ID_ITEM_INSERT_REF:
+            pCmdUI->Enable(si.HasLabels() && theApp.GetActiveEditView());
+            break;
+        default:
+            pCmdUI->Enable();
+    }
 }
 
-void CLatexProject::OnItemProperties() 
+void CLaTeXProject::OnItemProperties()
 {
-	ASSERT( m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.GetSize() );
-	CItemPropertyDialog	dialog( m_aStructureItems[m_nCurrentStructureItem] );
-	dialog.DoModal();
+    ASSERT(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size());
+    CItemPropertyDialog dialog(m_aStructureItems[m_nCurrentStructureItem]);
+    dialog.DoModal();
 }
 
-void CLatexProject::OnItemGoto() 
+void CLaTeXProject::OnItemGoto()
 {
-	if( !(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.GetSize()) )
-		return;
+    if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size()))
+        return;
 
-	const CStructureItem	&si = m_aStructureItems[m_nCurrentStructureItem];
+    const CStructureItem &si = m_aStructureItems[m_nCurrentStructureItem];
 
-	switch( si.m_nType )
-	{
-		case CStructureParser::texFile:
-		case CStructureParser::bibFile:
-			theApp.OpenLatexDocument(GetFilePath( si.m_strPath ), FALSE, -1, FALSE, false);
-			break;
-		case CStructureParser::missingTexFile:
-		case CStructureParser::missingGraphicFile:
-		case CStructureParser::missingBibFile:
-		case CStructureParser::graphicFile:
-			theApp.OpenLatexDocument(GetFilePath( si.m_strComment ), FALSE, si.m_nLine, FALSE, false);
-			break;
-		default:
-			theApp.OpenLatexDocument(GetFilePath( si.m_strPath ), FALSE, si.m_nLine, FALSE, false);
-	}
+    switch (si.GetType()) {
+        case CStructureParser::texFile :
+        case CStructureParser::bibFile :
+                    theApp.OpenLatexDocument(GetFilePath(si.GetPath()),FALSE,-1,FALSE,false);
+            break;
+        case CStructureParser::missingTexFile :
+        case CStructureParser::missingGraphicFile :
+        case CStructureParser::missingBibFile :
+        case CStructureParser::graphicFile :
+                    theApp.OpenLatexDocument(GetFilePath(si.GetComment()),FALSE,si.GetLine(),FALSE,false);
+            break;
+        default:
+            theApp.OpenLatexDocument(GetFilePath(si.GetPath()),FALSE,si.GetLine(),FALSE,false);
+    }
 }
 
-
-void CLatexProject::OnItemInsertLabel() 
+void CLaTeXProject::OnItemInsertLabel()
 {
-	if( !(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.GetSize()) )
-		return;
+    if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size()))
+        return;
 
-	CLatexEdit	*pView = theApp.GetActiveEditView();
-	if( !pView )
-		return;
+    CLaTeXEdit *pView = theApp.GetActiveEditView();
+    if (!pView)
+        return;
 
-	pView->InsertText(m_aStructureItems[m_nCurrentStructureItem].m_strLabel);
-	pView->SetFocus();
+    pView->InsertText(m_aStructureItems[m_nCurrentStructureItem].GetLabel());
+    pView->SetFocus();
 }
 
-
-void CLatexProject::OnItemInsertPageref() 
+void CLaTeXProject::OnItemInsertPageref()
 {
-	if( !(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.GetSize()) )
-		return;
+    if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size()))
+        return;
 
-	CLatexEdit	*pView = theApp.GetActiveEditView();
-	if( !pView )
-		return;
+    CLaTeXEdit *pView = theApp.GetActiveEditView();
+    if (!pView)
+        return;
 
-	pView->InsertText( 
-		AfxFormatString1( 
-			STE_LATEX_PAGEREF, 
-			m_aStructureItems[m_nCurrentStructureItem].m_strLabel ) );
-	pView->SetFocus();
+    pView->InsertText(
+            AfxFormatString1(
+            STE_LATEX_PAGEREF,
+            m_aStructureItems[m_nCurrentStructureItem].GetLabel()));
+    pView->SetFocus();
 }
 
-void CLatexProject::OnItemInsertRef() 
+void CLaTeXProject::OnItemInsertRef()
 {
-	if( !(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.GetSize()) )
-		return;
+    if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size()))
+        return;
 
-	CLatexEdit	*pView = theApp.GetActiveEditView();
-	if( !pView )
-		return;
+    CLaTeXEdit *pView = theApp.GetActiveEditView();
+    if (!pView)
+        return;
 
-	UINT strID = 0;
-	switch (m_aStructureItems[m_nCurrentStructureItem].m_nType)
-	{
-		case CStructureParser::equation:
-			strID = STE_LATEX_EQREF;
-			break;
-		case CStructureParser::bibItem:
-			strID = STE_LATEX_CITE;
-			break;
-		default:
-			strID = STE_LATEX_REF;
-			break;
-	}
+    UINT strID = 0;
+    switch (m_aStructureItems[m_nCurrentStructureItem].m_nType) {
+        case CStructureParser::equation :
+                    strID = STE_LATEX_EQREF;
+            break;
+        case CStructureParser::bibItem :
+                    strID = STE_LATEX_CITE;
+            break;
+        default:
+            strID = STE_LATEX_REF;
+            break;
+    }
 
-	pView->InsertText( 
-		AfxFormatString1(strID,
-				m_aStructureItems[m_nCurrentStructureItem].m_strLabel) );
-	pView->SetFocus();
+    pView->InsertText(
+            AfxFormatString1(strID,
+            m_aStructureItems[m_nCurrentStructureItem].GetLabel()));
+    pView->SetFocus();
 }
 
-
-void CLatexProject::OnSpellProject() 
+void CLaTeXProject::OnSpellProject()
 {
-	MySpell *pSpell = theApp.GetSpeller();
-	
-	// Setup path for ignored words
-	CString sIgnoredPath = 
-		CString(theApp.GetProject()->GetProjectDir() +
-		_T("\\ignored") + 
-		theApp.GetProject()->GetTitle() +
-		g_configuration.m_strGuiLanguage + _T(".sc"));
+    Speller *pSpell = theApp.GetSpeller();
 
-	if (pSpell == NULL)
-		return;
+    // Setup path for ignored words
+    const CString sIgnoredPath = GetIgnoredWordsFileName();
 
-	CCrystalResources	cr;
-	CSpellCheckDlg dlg( NULL, NULL );
-	dlg.m_bDoneMessage = false;
-	dlg.m_bSelection = false;
+    if (pSpell == NULL)
+        return;
 
-	// Get own copy of strucutre items.
-	CStructureItemArray aStructureItems;
-	m_pStructureParser->GetStructureItems( &aStructureItems );
+    CCrystalResources cr;
+    CSpellCheckDlg dlg(NULL,NULL);
+    dlg.m_bDoneMessage = false;
+    dlg.m_bSelection = false;
 
-	for (int i = 0; i < aStructureItems.GetSize(); ++i)
-	{
-		CStructureItem& si = aStructureItems[i];
-		if ( si.m_nType == CStructureParser::texFile )
-		{
-			boolean bWasOpen = true;
-			CDocument *pDoc = theApp.GetOpenLatexDocument(GetFilePath(si.m_strPath), FALSE);
-			if ( pDoc == NULL )
-			{
-				pDoc = theApp.OpenLatexDocument(GetFilePath(si.m_strPath), FALSE, -1, FALSE, false);
-				bWasOpen = false;
-			}
-			if ( pDoc == NULL )
-				// Can't open document, try another one.
-				continue;
+    // Get own copy of structure items.
+    StructureItemContainer aStructureItems;
+    m_pStructureParser->GetStructureItems(&aStructureItems);
 
-			POSITION pos = pDoc->GetFirstViewPosition();
-			CLatexEdit* pView = (CLatexEdit*) pDoc->GetNextView( pos );
-			ASSERT( pView );
-			if ( pView == NULL )
-				// View is NULL??
-				continue;
+    for (int i = 0; i < aStructureItems.size(); ++i) {
+        CStructureItem& si = aStructureItems[i];
+        if (si.m_nType == CStructureParser::texFile) {
+            bool bWasOpen = true;
+            CDocument *pDoc = theApp.GetOpenLatexDocument(GetFilePath(si.m_strPath),FALSE);
+            if (pDoc == NULL) {
+                pDoc = theApp.OpenLatexDocument(GetFilePath(si.m_strPath),FALSE,-1,FALSE,false);
+                bWasOpen = false;
+            }
+            if (pDoc == NULL)
+                // Can't open document, try another one.
+                continue;
 
-			dlg.Reset(pView, pSpell);
+            POSITION pos = pDoc->GetFirstViewPosition();
+            CLaTeXEdit* pView = (CLaTeXEdit*)pDoc->GetNextView(pos);
+            ASSERT(pView);
+            if (pView == NULL)
+                // View is NULL??
+                continue;
 
-			// Save selection
-			CPoint ptStart, ptEnd;
-			pView->GetSelection(ptStart, ptEnd);
-			pView->SetShowInteractiveSelection(TRUE);
+            dlg.Reset(pView,pSpell);
 
-			// begin ow
-			if (CPathTool::Exists(sIgnoredPath)) {
-				theApp.GetSpeller()->open_ignored_words(sIgnoredPath);
-			}
-			// end ow
-			int result = dlg.DoModal();
-			cr.RestorePrevResources();
+            // Save selection
+            CPoint ptStart,ptEnd;
+            pView->GetSelection(ptStart,ptEnd);
+            pView->SetShowInteractiveSelection(TRUE);
 
-			// begin ow
-			if (theApp.GetSpeller()->ismodified()) {		
-				//TRACE("SC was modified, save ign words to %s...\n", sPath);		
-				theApp.GetSpeller()->save_ignored_words(sIgnoredPath);				
-			}
-			// end ow
+            // begin ow
+            
+            // end ow
+            int result = dlg.DoModal();
+            cr.RestorePrevResources();
 
-			// Restore selection
-			pView->SetShowInteractiveSelection(FALSE);
-			pView->SetSelection(ptStart, ptEnd);
+            //// begin ow
+            //if (theApp.GetSpeller()->is_added_modified()) {
+            //    //TRACE("SC was modified, save ign words to %s...\n", sPath);		
+            //    theApp.GetSpeller()->save_ignored_words(sIgnoredPath);
+            //}
+            //// end ow
 
-			if ( !bWasOpen )
-				pView->SendMessage(WM_COMMAND, ID_FILE_CLOSE);
-			if ( result == IDABORT )
-				break;
-			else if ( result != IDOK )
-				if ( AfxMessageBox(AfxLoadString(IDS_SPELL_CONTINUE), MB_YESNO|MB_ICONQUESTION) != IDYES )
-					break;
-		}
-	}
+            // Restore selection
+            pView->SetShowInteractiveSelection(FALSE);
+            pView->SetSelection(ptStart,ptEnd);
+
+            if (!bWasOpen)
+                pView->SendMessage(WM_COMMAND,ID_FILE_CLOSE);
+            if (result == IDABORT)
+                break;
+            else if (result != IDOK)
+                if (AfxMessageBox(AfxLoadString(IDS_SPELL_CONTINUE),MB_YESNO | MB_ICONQUESTION) != IDYES)
+                    break;
+        }
+    }
 }
 
-
-BOOL CLatexProject::CreateProjectViews()
+BOOL CLaTeXProject::CreateProjectViews()
 {
-	ASSERT(m_pwndMainFrame);
-	ASSERT(m_pwndWorkspaceBar);
-	ASSERT(m_pwndOutputBar);
+    ASSERT(m_pwndMainFrame);
+    m_pwndMainFrame->OnOpenProject(this);
 
-	// Check if views are allready existing
-	if( m_pwndStructureView && IsWindow( m_pwndStructureView->m_hWnd ) )
-		return FALSE;
-
-	// Create views:
-	CRect						rectDummy;
-	rectDummy.SetRectEmpty();
-	CBCGTabWnd* pwndTabs = &m_pwndWorkspaceBar->GetTabWnd();
-
-	m_pwndStructureView   = new CStructureView;
-	m_pwndEnvironmentView = new CEnvironmentView;
-	m_pwndFileView = new CFileView;
-	m_pwndBibView = new CBibView;
-
-	if( !m_pwndStructureView || !m_pwndEnvironmentView || !m_pwndFileView || !m_pwndBibView )
-	{
-		if( m_pwndStructureView )
-			delete m_pwndStructureView;
-		if( m_pwndEnvironmentView )
-			delete m_pwndEnvironmentView;
-		if( m_pwndFileView )
-			delete m_pwndFileView;
-		if( m_pwndBibView )
-			delete m_pwndBibView;
-	}
-
-	if (!m_pwndStructureView->Create(pwndTabs))
-	{
-		TRACE0("Failed to create structure view\n");
-		return FALSE;
-	}
-	m_pwndStructureView->SetOwner(m_pwndWorkspaceBar);
-
-	if (!m_pwndEnvironmentView->Create(pwndTabs))
-	{
-		TRACE0("Failed to create environment view\n");
-		return FALSE;
-	}
-	m_pwndEnvironmentView->SetOwner(m_pwndWorkspaceBar);
-
-	if (!m_pwndFileView->Create(pwndTabs))
-	{
-		TRACE0("Failed to create file view\n");
-		return FALSE;
-	}
-	m_pwndFileView->SetOwner(m_pwndWorkspaceBar);
-
-	if (!m_pwndBibView->Create(pwndTabs))
-	{
-		TRACE0("Failed to create bib view\n");
-		return FALSE;
-	}
-	m_pwndBibView->SetOwner(m_pwndWorkspaceBar);
-
-	// Attach views to tab:
-	pwndTabs->AddTab( m_pwndStructureView, CString( (LPCTSTR)STE_TAB_STRUCTURE ), 0 );
-	pwndTabs->AddTab( m_pwndEnvironmentView, CString( (LPCTSTR)STE_TAB_ENVIRONMENTS ), 1 );
-	pwndTabs->AddTab( m_pwndFileView, CString( (LPCTSTR)STE_TAB_FILES ), 2 );
-	pwndTabs->AddTab( m_pwndBibView, CString( (LPCTSTR)STE_TAB_BIBENTRIES ), 3 );
-
-	if (m_nInitialNavigatorTab < 0 || m_nInitialNavigatorTab > 3)
-		m_nInitialNavigatorTab = 0;
-	pwndTabs->SetActiveTab(m_nInitialNavigatorTab);
-
-	// Attach views to document (project)
-	AddView( m_pwndStructureView );
-	AddView( m_pwndEnvironmentView );
-	AddView( m_pwndFileView );
-	AddView( m_pwndBibView );
-
-	return TRUE;
+    return TRUE;
 }
 
-void CLatexProject::DeleteProjectViews()
+void CLaTeXProject::DeleteProjectViews()
 {
-	ASSERT(m_pwndMainFrame);
-	ASSERT(m_pwndWorkspaceBar);
-	ASSERT(m_pwndOutputBar);
-	
-	// Check if views are valid windows
-	if( !m_pwndStructureView || !IsWindow( m_pwndStructureView->m_hWnd ) )
-		return;
-
-	// Detach views from document
-	RemoveView( m_pwndStructureView );
-	RemoveView( m_pwndEnvironmentView );
-	RemoveView( m_pwndFileView );
-	RemoveView( m_pwndBibView );
-
-	// Detach views from tab...
-	CBCGTabWnd* pwndTabs = &m_pwndWorkspaceBar->GetTabWnd();
-	pwndTabs->RemoveAllTabs();
-
-	// ... and destroy them
-	delete m_pwndStructureView;
-	delete m_pwndEnvironmentView;
-	delete m_pwndFileView;
-	delete m_pwndBibView;
-
-	// mark pointers as NULL
-	m_pwndStructureView   = NULL;
-	m_pwndEnvironmentView = NULL;
-	m_pwndFileView        = NULL;
-	m_pwndBibView         = NULL;
+    ASSERT(m_pwndMainFrame);
+    m_pwndMainFrame->OnCloseProject(this);
 }
 
-
-Interfaces::IProject *CLatexProject::GetProjectInterface()
+Interfaces::IProject *CLaTeXProject::GetProjectInterface()
 {
-	m_xProject.AddRef();
-	return &m_xProject;
+    m_xProject.AddRef();
+    return &m_xProject;
 }
 
 
 //-------------------------------------------------------------------
-// class CLatexProject::XProject
+// class CLaTeXProject::XProject
 //-------------------------------------------------------------------
 
-IMPLEMENT_AGGREGATED_IUNKNOWN(CLatexProject, Project);
+IMPLEMENT_AGGREGATED_IUNKNOWN(CLaTeXProject,Project);
 
-
-CString CLatexProject::XProject::GetTitle_() const
+CString CLaTeXProject::XProject::GetTitle_() const
 {
-	GET_OUTER(CLatexProject, Project);
-	
-	return pThis->GetTitle();
+    GET_OUTER(CLaTeXProject,Project);
+
+    return pThis->GetTitle();
 }
 
-
-CString CLatexProject::XProject::GetPath_() const
+CString CLaTeXProject::XProject::GetPath_() const
 {
-	GET_OUTER(CLatexProject, Project);
+    GET_OUTER(CLaTeXProject,Project);
 
-	return pThis->GetWorkingDir();
+    return pThis->GetWorkingDir();
 }
 
-
-CString CLatexProject::XProject::GetMainFile_() const
+CString CLaTeXProject::XProject::GetMainFile_() const
 {
-	GET_OUTER(CLatexProject, Project);
+    GET_OUTER(CLaTeXProject,Project);
 
-	return pThis->GetMainPath();
+    return pThis->GetMainPath();
 }
 
-
-BOOL CLatexProject::XProject::GetUsesBibTex_() const
+BOOL CLaTeXProject::XProject::GetUsesBibTex_() const
 {
-	GET_OUTER(CLatexProject, Project);
+    GET_OUTER(CLaTeXProject,Project);
 
-	return pThis->GetRunBibTex();
+    return pThis->GetRunBibTex();
 }
 
-
-void CLatexProject::XProject::SetUsesBibTex_(BOOL bUsesBibTex)
+void CLaTeXProject::XProject::SetUsesBibTex_(BOOL bUsesBibTex)
 {
-	GET_OUTER(CLatexProject, Project);
+    GET_OUTER(CLaTeXProject,Project);
 
-	pThis->SetRunBibTex(bUsesBibTex);
+    pThis->SetRunBibTex(bUsesBibTex);
 }
 
-
-BOOL CLatexProject::XProject::GetUsesMakeIndex_() const
+BOOL CLaTeXProject::XProject::GetUsesMakeIndex_() const
 {
-	GET_OUTER(CLatexProject, Project);
+    GET_OUTER(CLaTeXProject,Project);
 
-	return pThis->GetRunMakeIndex();
+    return pThis->GetRunMakeIndex();
 }
 
-
-void CLatexProject::XProject::SetUsesMakeIndex_(BOOL bUsesMakeIndex)
+void CLaTeXProject::XProject::SetUsesMakeIndex_(BOOL bUsesMakeIndex)
 {
-	GET_OUTER(CLatexProject, Project);
+    GET_OUTER(CLaTeXProject,Project);
 
-	pThis->SetRunMakeIndex(bUsesMakeIndex);
+    pThis->SetRunMakeIndex(bUsesMakeIndex);
 }
 
+int CLaTeXProject::GetInitialNavigatorTabIndex() const
+{
+    if (m_nInitialNavigatorTab < 0 || m_nInitialNavigatorTab > 3)
+        m_nInitialNavigatorTab = 0;
+
+    return m_nInitialNavigatorTab;
+}
+
+const StructureItemContainer& CLaTeXProject::GetStructureItems() const
+{
+    return m_aStructureItems;
+}
+
+const CString CLaTeXProject::GetIgnoredWordsFileName() const
+{
+    return
+        GetProjectDir() +
+        _T("\\ignored") +
+        GetTitle() +
+        CConfiguration::GetInstance()->m_strGuiLanguage + _T(".sc");
+}
+
+//void CLaTeXProject::SetStructureItems( const StructureItemContainer& val )
+//{
+//    m_aStructureItems = val;
+//}
