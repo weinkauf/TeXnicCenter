@@ -616,6 +616,12 @@ protected:
     //}}AFX_MSG
 
     DECLARE_MESSAGE_MAP()
+
+public:
+    /** Deletes a complete line of text
+        @param line Line to delete
+    */
+    BOOL DeleteLine(CCrystalTextView* source, int line);
 };
 
 #if ! (defined(CE_FROM_DLL) || defined(CE_DLL_BUILD))
