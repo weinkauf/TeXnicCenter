@@ -671,6 +671,7 @@
 #define IDC_OUTSOURCE_CMDINCLUDE        1359
 #define IDC_OUTSOURCE_CMDUSERDEF        1360
 #define IDC_OUTSOURCE_OPEN              1362
+#define IDC_COPYRIGHT                   1363
 #define IDD_CUSTOMIZEPAGE_EDITOR        16105
 #define IDD_OUTPUTWIZARD_MIKTEX         16106
 #define IDD_OUTPUTWIZARD_PATH           16107
@@ -1326,7 +1327,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        328
 #define _APS_NEXT_COMMAND_VALUE         38547
-#define _APS_NEXT_CONTROL_VALUE         1363
+#define _APS_NEXT_CONTROL_VALUE         1364
 #define _APS_NEXT_SYMED_VALUE           135
 #endif
 #endif

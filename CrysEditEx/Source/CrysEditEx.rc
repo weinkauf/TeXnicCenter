@@ -109,8 +109,8 @@ VS_VERSION_INFO VERSIONINFO
  FILEVERSION 2,0,0,0
  PRODUCTVERSION 2,0,0,0
 #else
- FILEVERSION 2,0,0,CRYSTAL_EDIT_REVISION
- PRODUCTVERSION 2,0,0,CRYSTAL_EDIT_REVISION
+ FILEVERSION CRYSTAL_EDIT_MAJOR_VERSION,CRYSTAL_EDIT_MINOR_VERSION,CRYSTAL_EDIT_BUILD_NUMBER,CRYSTAL_EDIT_REVISION
+ PRODUCTVERSION CRYSTAL_EDIT_MAJOR_VERSION,CRYSTAL_EDIT_MINOR_VERSION,CRYSTAL_EDIT_BUILD_NUMBER,CRYSTAL_EDIT_REVISION
 #endif
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -128,12 +128,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", " "
             VALUE "FileDescription", "Crystal Editor Classes for TeXnicCenter"
-            VALUE "FileVersion", "2"
+            VALUE "FileVersion", CRYSTAL_EDIT_VERSION_STRING
             VALUE "InternalName", "CrystalEdit"
             VALUE "LegalCopyright", "© Andrei Stcherbatchenko"
-            VALUE "OriginalFilename", "CryseditEx.dll"
+            VALUE "OriginalFilename", "CrysditEx.dll"
             VALUE "ProductName", "Crystal Editor Ex"
-            VALUE "ProductVersion", "2"
+            VALUE "ProductVersion", CRYSTAL_EDIT_VERSION_STRING
             VALUE "SpecialBuild", "Preview"
         END
     END
@@ -344,8 +344,8 @@ VS_VERSION_INFO VERSIONINFO
  FILEVERSION 2,0,0,0
  PRODUCTVERSION 2,0,0,0
 #else
- FILEVERSION 2,0,0,CRYSTAL_EDIT_REVISION
- PRODUCTVERSION 2,0,0,CRYSTAL_EDIT_REVISION
+ FILEVERSION CRYSTAL_EDIT_MAJOR_VERSION,CRYSTAL_EDIT_MINOR_VERSION,CRYSTAL_EDIT_BUILD_NUMBER,CRYSTAL_EDIT_REVISION
+ PRODUCTVERSION CRYSTAL_EDIT_MAJOR_VERSION,CRYSTAL_EDIT_MINOR_VERSION,CRYSTAL_EDIT_BUILD_NUMBER,CRYSTAL_EDIT_REVISION
 #endif
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -363,12 +363,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", " "
             VALUE "FileDescription", "Crystal Editor Classes for TeXnicCenter"
-            VALUE "FileVersion", "2"
+            VALUE "FileVersion", CRYSTAL_EDIT_VERSION_STRING
             VALUE "InternalName", "CrystalEdit"
             VALUE "LegalCopyright", "© Andrei Stcherbatchenko"
             VALUE "OriginalFilename", "CryseditEx.dll"
             VALUE "ProductName", "Crystal Editor Ex"
-            VALUE "ProductVersion", "2"
+            VALUE "ProductVersion", CRYSTAL_EDIT_VERSION_STRING
         END
     END
     BLOCK "VarFileInfo"

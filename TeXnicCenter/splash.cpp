@@ -38,6 +38,7 @@
 #include "Splash.h"  // z.B. splash.h
 #include "RunTimeHelper.h"
 #include "FontOccManager.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -147,7 +148,7 @@ void CSplashWnd::PostNcDestroy()
     // C++-Klasse freigeben
     delete this;
 }
-
+#include "Version.h"
 int CSplashWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
     if (CWnd::OnCreate(lpCreateStruct) == -1)
@@ -176,15 +177,17 @@ int CSplashWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     BITMAP bm;
     m_bitmap.GetBitmap(&bm);
 
-    CString t(MAKEINTRESOURCE(IDS_LOADING));
-    t += _T('\n');
-    t += _T("Copyright © 1999-2008 The TeXnicCenter Team.");
+	CFileVersionInfo fv(::GetModuleHandle(0));
+
+	CString version;
+	version.Format(_T("Version %s. %s\n%s."),_T(TXC_VERSION_STRING),
+		CString(MAKEINTRESOURCE(IDS_LOADING)),fv.GetLegalCopyright());
 
     CWindowDC dc(this);
     CFont* oldfont = dc.SelectObject(&font_);
 
     CRect rc;
-    dc.DrawText(t,&rc,DT_CENTER|DT_CALCRECT);
+    dc.DrawText(version,&rc,DT_CENTER|DT_CALCRECT);
     dc.SelectObject(oldfont);
 
     const CSize size = rc.Size();
@@ -192,7 +195,7 @@ int CSplashWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     const int offset = 20, cy = size.cy;
     const CRect rect(offset,bm.bmHeight - offset - cy,bm.bmWidth - offset,bm.bmHeight - offset);
 
-    message_.Create(t,WS_VISIBLE|WS_CHILD|SS_CENTER,rect,this,123);
+    message_.Create(version,WS_VISIBLE|WS_CHILD|SS_CENTER,rect,this,123);
     message_.ModifyStyleEx(0,WS_EX_TRANSPARENT);
     message_.SetFont(&font_);
 

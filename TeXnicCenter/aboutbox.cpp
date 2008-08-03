@@ -153,11 +153,6 @@ LPCTSTR const pArrCredit[] = {
                        _T(""),
                        _T("Graphics\r"),
                        _T(""),
-                       _T("Splash Screen\t"),
-                       _T(""),
-                       _T("Ralph Kocher\f"),
-                       _T(""),
-                       _T(""),
                        _T("Additional Graphics\t"),
                        _T(""),
                        _T("Felix Kaiser\f"),
@@ -246,7 +241,6 @@ BOOL CAboutDlg::OnInitDialog()
     CClientDC dc(this);
     bRet = m_dcMem.CreateCompatibleDC(&dc);
 
-
     m_bProcessingBitmap = FALSE;
 
     nArrIndex = 0;
@@ -264,7 +258,6 @@ BOOL CAboutDlg::OnInitDialog()
     _ASSERTE(m_pDisplayFrame);
 
     m_pDisplayFrame->GetClientRect(&m_ScrollRect);
-
 
     nRet = SetTimer(DISPLAY_TIMER_ID,DISPLAY_SPEED,NULL);
     _ASSERTE(nRet != 0);
