@@ -180,7 +180,7 @@ int CSplashWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CFileVersionInfo fv(::GetModuleHandle(0));
 
 	CString version;
-	version.Format(_T("Version %s. %s\n%s."),_T(TXC_VERSION_STRING),
+	version.Format(_T("Version %s. %s\n%s."),CString(TXC_VERSION_STRING),
 		CString(MAKEINTRESOURCE(IDS_LOADING)),fv.GetLegalCopyright());
 
     CWindowDC dc(this);

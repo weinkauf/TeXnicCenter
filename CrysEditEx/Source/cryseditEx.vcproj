@@ -803,6 +803,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="res\CrysEditEx.rc2"
+				>
+			</File>
+			<File
 				RelativePath="CrystalParser.cpp"
 				>
 				<FileConfiguration
@@ -1152,10 +1156,6 @@
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
-			<File
-				RelativePath="res\CrysEditEx.rc2"
-				>
-			</File>
 			<File
 				RelativePath="res\mg_cur.cur"
 				>

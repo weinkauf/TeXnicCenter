@@ -12,3 +12,8 @@
                                       CRYSTAL_EDIT_TO_STRING(CRYSTAL_EDIT_MINOR_VERSION) "." \
                                       CRYSTAL_EDIT_TO_STRING(CRYSTAL_EDIT_BUILD_NUMBER) "."  \
                                       CRYSTAL_EDIT_TO_STRING(CRYSTAL_EDIT_REVISION)
+
+#define CRYSTAL_EDIT_VERSION_SEQUENCE CRYSTAL_EDIT_MAJOR_VERSION, \
+                                      CRYSTAL_EDIT_MINOR_VERSION, \
+                                      CRYSTAL_EDIT_BUILD_NUMBER,  \
+                                      CRYSTAL_EDIT_REVISION
