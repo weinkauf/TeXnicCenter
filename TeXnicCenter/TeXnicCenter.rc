@@ -14,7 +14,6 @@
 //
 #include "afxres.h"
 #include "../CrysEditEx/Source/editcmd.h"
-#include "Version.h"
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -1490,8 +1489,8 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    LTEXT           "© 1999-2008",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
-    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
+    LTEXT           "© 1999-2008",IDC_COPYRIGHT,7,211,44,8,SS_CENTERIMAGE
+    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,57,211,121,8,BS_RIGHT
     CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,SS_CENTERIMAGE
     CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
     CONTROL         236,IDC_STATIC,"Static",SS_BITMAP,75,7,142,25
@@ -1856,13 +1855,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
-#if 0
- FILEVERSION 2,0,0,0
- PRODUCTVERSION 2,0,0,0
-#else
- FILEVERSION 2,0,0,TXC_REVISION
- PRODUCTVERSION 2,0,0,TXC_REVISION
-#endif
+ FILEVERSION 2,0,0,874
+ PRODUCTVERSION 2,0,0,874
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -1879,12 +1873,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "TeXnicCenter.org"
             VALUE "FileDescription", "TeXnicCenter"
-            VALUE "FileVersion", "2"
+            VALUE "FileVersion", "2.0.0.874"
             VALUE "InternalName", "TeXnicCenter"
             VALUE "LegalCopyright", "Copyright © 1999-2008 The TeXnicCenter Team"
             VALUE "OriginalFilename", "TeXnicCenter.exe"
             VALUE "ProductName", "TeXnicCenter"
-            VALUE "ProductVersion", "2"
+            VALUE "ProductVersion", "2.0.0.874"
             VALUE "SpecialBuild", "Preview"
         END
     END
@@ -4617,12 +4611,12 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    LTEXT           "© 1999-2008",IDC_STATIC,7,210,45,14,SS_CENTERIMAGE
-    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,53,211,42,13,BS_CENTER
     CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,SS_CENTERIMAGE
     CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
     CONTROL         236,IDC_STATIC,"Static",SS_BITMAP,75,7,142,25
     CTEXT           "DNT:Version number will be inserted here",IDC_STATIC_VERSION,7,34,278,8
+    LTEXT           "© 1999-2008",IDC_COPYRIGHT,7,211,44,8,SS_CENTERIMAGE
+    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,57,211,121,8,BS_RIGHT
 END
 
 IDD_ACTIVE_PROFILE DIALOGEX 0, 0, 257, 95
@@ -5719,13 +5713,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
-#if 0
- FILEVERSION 2,0,0,0
- PRODUCTVERSION 2,0,0,0
-#else
- FILEVERSION 2,0,0,TXC_REVISION
- PRODUCTVERSION 2,0,0,TXC_REVISION
-#endif
+ FILEVERSION 2,0,0,874
+ PRODUCTVERSION 2,0,0,874
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -5742,12 +5731,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "TeXnicCenter.org"
             VALUE "FileDescription", "TeXnicCenter"
-            VALUE "FileVersion", "2"
+            VALUE "FileVersion", "2.0.0.874"
             VALUE "InternalName", "TeXnicCenter"
             VALUE "LegalCopyright", "Copyright © 1999-2008 The TeXnicCenter Team"
             VALUE "OriginalFilename", "TeXnicCenter.exe"
             VALUE "ProductName", "TeXnicCenter"
-            VALUE "ProductVersion", "2"
+            VALUE "ProductVersion", "2.0.0.874"
             VALUE "SpecialBuild", "Preview"
         END
     END
