@@ -332,7 +332,7 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="false"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\Hunspell\src\hunspell&quot;"
-				PreprocessorDefinitions="WIN32;STRICT;NDEBUG;_WINDOWS;_AFXEXT;CE_DLL_BUILD;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE"
+				PreprocessorDefinitions="WIN32;STRICT;NDEBUG;_WINDOWS;_AFXEXT;CE_DLL_BUILD;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"

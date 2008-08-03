@@ -98,6 +98,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
 			/>
 		</Configuration>
 		<Configuration
@@ -188,6 +189,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
 			/>
 		</Configuration>
 		<Configuration
@@ -274,6 +276,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
 			/>
 		</Configuration>
 		<Configuration
@@ -364,6 +367,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
 			/>
 		</Configuration>
 	</Configurations>

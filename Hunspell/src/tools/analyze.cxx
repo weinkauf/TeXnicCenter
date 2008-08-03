@@ -50,10 +50,9 @@ int main(int argc, char **argv)
             int n = pMS->generate(&result, buf, s+1);
             for (int i = 0; i < n; i++) {
                 fprintf(stdout, "generate(%s, %s) = %s\n", buf, s+1, result[i]);
-                free(result[i]);
             }
-            if (n) free(result);
-            else fprintf(stdout, "generate(%s, %s) = NO DATA\n", buf, s+1);
+            pMS->free_list(&result, n);
+            if (n == 0) fprintf(stdout, "generate(%s, %s) = NO DATA\n", buf, s+1);
         } else {
             dp = pMS->spell(buf);
             fprintf(stdout, "> %s\n", buf);
@@ -62,19 +61,16 @@ int main(int argc, char **argv)
                 int n = pMS->analyze(&result, buf);
                 for (int i = 0; i < n; i++) {
                     fprintf(stdout, "analyze(%s) = %s\n", buf, result[i]);
-                    free(result[i]);
                 }
-                if (n) free(result);
-                result = NULL;          
+                pMS->free_list(&result, n);
                 n = pMS->stem(&result, buf);
                 for (int i = 0; i < n; i++) {
                     fprintf(stdout, "stem(%s) = %s\n", buf, result[i]);
-                    free(result[i]);
                 }
-                if (n) free(result);
+                pMS->free_list(&result, n);
             } else {
                 fprintf(stdout, "Unknown word.\n");
-            }    			
+            }
         }
     }
     delete pMS;

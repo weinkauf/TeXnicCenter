@@ -88,6 +88,10 @@ DLL int Hunspell_add_with_affix(Hunhandle *pHunspell, const char * word, const c
 
 DLL int Hunspell_remove(Hunhandle *pHunspell, const char * word);
 
+  /* free suggestion lists */
+
+DLL void Hunspell_free_list(Hunhandle *pHunspell, char *** slst, int n);
+
 #ifdef __cplusplus
 }
 #endif

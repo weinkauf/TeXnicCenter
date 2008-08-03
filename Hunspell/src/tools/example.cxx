@@ -52,10 +52,9 @@ main(int argc, char** argv)
           int ns = pMS->suggest(&wlst,buf);
           for (int i=0; i < ns; i++) {
             fprintf(stdout,"    ...\"%s\"\n",wlst[i]);
-            free(wlst[i]);
           }
+          pMS->free_list(&wlst, ns);
           fprintf(stdout,"\n");
-          free(wlst);
        }
     }
 

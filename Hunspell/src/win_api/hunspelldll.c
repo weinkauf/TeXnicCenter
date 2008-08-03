@@ -76,6 +76,12 @@ DLLEXPORT int hunspell_suggest_auto(Hunspell *pMS, char *word, char ***slst)
 }
 #endif
 
+DLLEXPORT void hunspell_free_list(Hunspell *pMS, char ***slst, int len)
+{
+    pMS->free_list(slst, len);
+}
+
+// deprecated (use hunspell_free_list)
 DLLEXPORT void hunspell_suggest_free(Hunspell *pMS, char **slst, int len)
 {
     for (int i = 0; i < len; i++) {
@@ -93,6 +99,10 @@ DLLEXPORT int hunspell_add(Hunspell *pMS, char *word)
     return pMS->add(word);
 }
 
+DLLEXPORT int hunspell_add_with_affix(Hunspell *pMS, char *word, char *modelword)
+{
+    return pMS->add_with_affix(word, modelword);
+}
 
 BOOL APIENTRY DllMain (HINSTANCE hInst     /* Library instance handle. */ ,
                        DWORD reason        /* Reason this function is being called. */ ,

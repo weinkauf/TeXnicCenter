@@ -284,6 +284,7 @@ int HashMgr::remove(const char * word)
         }
         dp = dp->next_homonym;
     }
+    return 0;
 }
 
 /* remove forbidden flag to add a personal word to the hash */
@@ -374,6 +375,7 @@ int HashMgr::load_tables(const char * tpath, const char * key)
   int al;
   char * ap;
   char * dp;
+  char * dp2;
   unsigned short * flags;
   char * ts;
 
@@ -418,15 +420,26 @@ int HashMgr::load_tables(const char * tpath, const char * key)
   while ((ts = dict->getline())) {
     mychomp(ts);
     // split each line into word and morphological description
-    dp = strchr(ts,'\t');
-    char * dp2 = strchr(ts,' ');
-    if (dp2 && (!dp || (dp2 < dp))) dp = dp2;
+    dp = ts;
+    while ((dp = strchr(dp, ':'))) {
+	if ((dp > ts + 3) && (*(dp - 3) == ' ' || *(dp - 3) == '\t')) {
+	    for (dp -= 4; dp >= ts && (*dp == ' ' || *dp == '\t'); dp--);
+	    if (dp < ts) { // missing word
+		dp = NULL;
+	    } else {
+		*(dp + 1) = '\0';
+		dp = dp + 2;
+	    }
+	    break;
+	}
+	dp++;
+    }
 
-    if (dp) {
-      *dp = '\0';
-      dp++;
-    } else {
-      dp = NULL;
+    // tabulator is the old morphological field separator
+    dp2 = strchr(ts, '\t');
+    if (dp2 && (!dp || dp2 < dp)) {
+	*dp2 = '\0';
+	dp = dp2 + 1;
     }
 
     // split each line into word and affix char strings
@@ -682,7 +695,7 @@ int  HashMgr::load_config(const char * affpath, const char * key)
        if (strncmp(line,"COMPLEXPREFIXES",15) == 0) complexprefixes = 1;
        if (((strncmp(line,"SFX",3) == 0) || (strncmp(line,"PFX",3) == 0)) && isspace(line[3])) break;
     }
-    if (csconv == NULL) csconv = get_current_cs("ISO8859-1");
+    if (csconv == NULL) csconv = get_current_cs(SPELL_ENCODING);
     delete afflst;
     return 0;
 }
@@ -710,7 +723,6 @@ int  HashMgr::parse_aliasf(char * line, FileMgr * af)
                           aliasf = NULL;
                           aliasflen = NULL;
                           HUNSPELL_WARNING(stderr, "incorrect number of entries in AF table\n");
-                          // free(piece);
                           return 1;
                        }
                        aliasf = (unsigned short **) malloc(numaliasf * sizeof(unsigned short *));
@@ -730,7 +742,6 @@ int  HashMgr::parse_aliasf(char * line, FileMgr * af)
           }
           i++;
        }
-       // free(piece);
        piece = mystrsep(&tp, 0);
    }
    if (np != 2) {
@@ -764,7 +775,6 @@ int  HashMgr::parse_aliasf(char * line, FileMgr * af)
                                  aliasf = NULL;
                                  aliasflen = NULL;
                                  HUNSPELL_WARNING(stderr, "error: AF table is corrupt\n");
-                                 // free(piece);
                                  return 1;
                              }
                              break;
@@ -778,7 +788,6 @@ int  HashMgr::parse_aliasf(char * line, FileMgr * af)
                }
                i++;
            }
-           // free(piece);
            piece = mystrsep(&tp, 0);
         }
         if (!aliasf[j]) {
@@ -828,7 +837,6 @@ int  HashMgr::parse_aliasm(char * line, FileMgr * af)
                        numaliasm = atoi(piece);
                        if (numaliasm < 1) {
                           HUNSPELL_WARNING(stderr, "incorrect number of entries in AM table\n");
-                          // free(piece);
                           return 1;
                        }
                        aliasm = (char **) malloc(numaliasm * sizeof(char *));
@@ -843,7 +851,6 @@ int  HashMgr::parse_aliasm(char * line, FileMgr * af)
           }
           i++;
        }
-       // free(piece);
        piece = mystrsep(&tp, 0);
    }
    if (np != 2) {
@@ -869,7 +876,6 @@ int  HashMgr::parse_aliasm(char * line, FileMgr * af)
                   case 0: {
                              if (strncmp(piece,"AM",2) != 0) {
                                  HUNSPELL_WARNING(stderr, "error: AM table is corrupt\n");
-                                 // free(piece);
                                  numaliasm = 0;
                                  free(aliasm);
                                  aliasm = NULL;
@@ -888,12 +894,17 @@ int  HashMgr::parse_aliasm(char * line, FileMgr * af)
                                     else reverseword(piece);
                             }
                             aliasm[j] = mystrdup(piece);
+                            if (!aliasm[j]) {
+                                 numaliasm = 0;
+                                 free(aliasm);
+                                 aliasm = NULL;
+                                 return 1;                            
+                            }
                             break; }
                   default: break;
                }
                i++;
            }
-           // free(piece);
            piece = mystrsep(&tp, ' ');
         }
         if (!aliasm[j]) {

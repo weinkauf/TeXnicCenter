@@ -9,7 +9,7 @@ mingw development package (for cygwin.dll free native Windows compilation)
  
 2. open a Cygwin shell, cd into this directory and run make
 
-HUNSPELL DLL:
+HUNSPELL DLL (not updated):
 
 hunspelldll.*: Hunspell API for Windows and Delphi
 Copyright (C) 2006 - Miha Vrhovnik (http://simail.sf.net, http://xcollect.sf.net)

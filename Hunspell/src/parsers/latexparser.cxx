@@ -11,7 +11,7 @@ using namespace std;
 #endif
 
 static struct {
-	char * pat[2];
+	const char * pat[2];
 	int arg;
 } PATTERN[] = {
 	{ { "\\(", "\\)" } , 0 },
@@ -102,7 +102,7 @@ int LaTeXParser::look_pattern(int col)
 {
 	for (unsigned int i = 0; i < PATTERN_LEN; i++) {
 		char * j = line[actual] + head;
-		char * k = PATTERN[i].pat[col];
+		const char * k = PATTERN[i].pat[col];
 		if (! k) continue;
 		while ((*k != '\0') && (tolower(*j) == *k)) {
 			j++;

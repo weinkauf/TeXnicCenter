@@ -211,5 +211,5 @@
 #define PACKAGE_TARNAME
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "1.2.2"
-#define VERSION "1.2.2"
+#define PACKAGE_VERSION "1.2.6"
+#define VERSION "1.2.6"

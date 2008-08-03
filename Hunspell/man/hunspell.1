@@ -1,4 +1,4 @@
-.TH hunspell 1 "2008-04-11"
+.TH hunspell 1 "2008-06-12"
 .LO 1
 .SH NAME
 hunspell \- spell checker, stemmer and morphological analyzer
@@ -16,9 +16,9 @@ Typing "cat" and "exsample" in two input lines, we got an asterisk
 .RS
 .nf
 $ hunspell -d en_US
-Hunspell 1.2.2
+Hunspell 1.2.3
 *
-& exsample 3 0: example, examples, ex sample
+& exsample 4 0: example, examples, ex sample, ex-sample
 .fi
 .RE
 .PP
@@ -370,16 +370,11 @@ See hunspell(4).
 .BI $HOME/.hunspell_default.
 Default path to personal dictionary.
 .SH SEE ALSO
-.B hunspell (4)
+.B hunspell (3), hunspell(4)
 .SH AUTHOR
-Hunspell based on Ispell's algorithms and OpenOffice.org's Myspell source code.
+Author of Hunspell executable is László Németh. For Hunspell library,
+see hunspell(3).
 .PP
-Author of International Ispell is Geoff Kuenning.
-.PP
-Author of MySpell is Kevin Hendricks.
-.PP
-Author of Hunspell is László Németh.
-.PP
-This manual based on Ispell's manual (See ispell(1)).
+This manual based on Ispell's manual. See ispell(1).
 .SH BUGS
 There are some layout problems with long lines.

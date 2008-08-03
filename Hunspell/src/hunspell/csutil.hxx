@@ -5,12 +5,18 @@
 
 #include "w_char.hxx"
 
+// casing
 #define NOCAP   0
 #define INITCAP 1
 #define ALLCAP  2
 #define HUHCAP  3
 #define HUHINITCAP  4
 
+// default encoding and keystring
+#define SPELL_ENCODING  "ISO8859-1"
+#define SPELL_KEYSTRING "qwertyuiop|asdfghjkl|zxcvbnm" 
+
+// default morphological fields
 #define MORPH_STEM        "st:"
 #define MORPH_ALLOMORPH   "al:"
 #define MORPH_POS         "po:"
@@ -41,6 +47,9 @@
 // hash entry macros
 #define HENTRY_DATA(h) (h->var ? ((h->var & H_OPT_ALIASM) ? \
     get_stored_pointer(&(h->word) + h->blen + 1) : &(h->word) + h->blen + 1) : NULL)
+// NULL-free version for warning-free OOo build
+#define HENTRY_DATA2(h) (h->var ? ((h->var & H_OPT_ALIASM) ? \
+    get_stored_pointer(&(h->word) + h->blen + 1) : &(h->word) + h->blen + 1) : "")
 #define HENTRY_FIND(h,p) (HENTRY_DATA(h) ? strstr(HENTRY_DATA(h), p) : NULL)
 
 #define w_char_eq(a,b) (((a).l == (b).l) && ((a).h == (b).h))

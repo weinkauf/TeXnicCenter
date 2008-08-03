@@ -6,6 +6,8 @@ XFAIL_TESTS = @XFAILED@
 
 TESTS =	\
 affixes.test \
+condition.test \
+condition_utf.test \
 base.test \
 base_utf.test \
 allcaps.test \
@@ -87,7 +89,8 @@ i68568utf.test \
 digits_in_words.test \
 colons_in_words.test \
 ngram_utf_fix.test \
-morph.test
+morph.test \
+1975530.test
 # infixes.test
 
 distclean-local:
@@ -99,6 +102,16 @@ affixes.aff \
 affixes.dic \
 affixes.good \
 affixes.test \
+condition.aff \
+condition.dic \
+condition.good \
+condition.test \
+condition.wrong \
+condition_utf.aff \
+condition_utf.dic \
+condition_utf.good \
+condition_utf.test \
+condition_utf.wrong \
 base.aff \
 base.dic \
 base.good \
@@ -509,7 +522,12 @@ morph.aff \
 morph.dic \
 morph.good \
 morph.morph \
-morph.test
+morph.test \
+1975530.aff \
+1975530.dic \
+1975530.good \
+1975530.test \
+1975530.wrong
 # infixes.aff
 # infixes.dic
 # infixes.good

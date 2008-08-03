@@ -333,7 +333,7 @@
 				AdditionalOptions="/MP"
 				Optimization="3"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\Hunspell\src\hunspell&quot;;../CrysEditEx/Include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include;../Scintilla/include"
-				PreprocessorDefinitions="NDEBUG;STRICT;WIN32;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE"
+				PreprocessorDefinitions="NDEBUG;STRICT;WIN32;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -5757,10 +5757,6 @@
 				>
 			</File>
 			<File
-				RelativePath="res\parse_vi.bmp"
-				>
-			</File>
-			<File
 				RelativePath="res\sdragcopy.cur"
 				>
 			</File>
@@ -5770,10 +5766,6 @@
 			</File>
 			<File
 				RelativePath="res\singledrag.cur"
-				>
-			</File>
-			<File
-				RelativePath="res\sort.bmp"
 				>
 			</File>
 			<File

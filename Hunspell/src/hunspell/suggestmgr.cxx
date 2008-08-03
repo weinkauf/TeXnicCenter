@@ -73,14 +73,14 @@ SuggestMgr::SuggestMgr(const char * tryme, int maxn,
   }
   
   if (tryme) {  
-    if (utf8) {
+    ctry = mystrdup(tryme);
+    if (ctry) ctryl = strlen(ctry);
+    if (ctry && utf8) {
         w_char t[MAXSWL];    
         ctryl = u8_u16(t, MAXSWL, tryme);
         ctry_utf = (w_char *) malloc(ctryl * sizeof(w_char));
         if (ctry_utf) memcpy(ctry_utf, t, ctryl * sizeof(w_char));
-    } else {
-        ctry = mystrdup(tryme);
-        ctryl = strlen(ctry);
+        else ctryl = 0;
     }
   }
 }
@@ -369,6 +369,7 @@ int SuggestMgr::map_related(const char * word, int i, char** wlst,
     if (strchr(maptable[j].set,c) != 0) {
       in_map = 1;
       char * newword = mystrdup(word);
+      if (!newword) return -1;
       for (int k = 0; k < maptable[j].len; k++) {
         *(newword + i) = *(maptable[j].set + k);
         ns = map_related(newword, (i+1), wlst, cpdsuggest,
@@ -467,6 +468,7 @@ int SuggestMgr::replchars(char** wlst, const char * word, int ns, int cpdsuggest
               if (oldns < ns) {
                 free(wlst[ns - 1]);
                 wlst[ns - 1] = mystrdup(candidate);
+                if (!wlst[ns - 1]) return -1;
               }
             }            
             *sp = ' ';
@@ -811,6 +813,23 @@ int SuggestMgr::twowords(char ** wlst, const char * word, int ns, int cpdsuggest
                     ns++;
                 }
             } else return ns;
+            // add two word suggestion with dash, if TRY string contains
+            // "a" or "-"
+            // NOTE: cwrd doesn't modified for REP twoword sugg.
+            if (ctry && (strchr(ctry, 'a') || strchr(ctry, '-')) &&
+                mystrlen(p + 1) > 1 &&
+                mystrlen(candidate) - mystrlen(p) > 1) {
+                *p = '-'; 
+                for (int k=0; k < ns; k++)
+                    if (strcmp(candidate,wlst[k]) == 0) cwrd = 0;
+                if (ns < maxSug) {
+                    if (cwrd) {
+                        wlst[ns] = mystrdup(candidate);
+                        if (wlst[ns] == NULL) return -1;
+                        ns++;
+                    }
+                } else return ns;
+            }
          }
        }
     }
@@ -1089,7 +1108,7 @@ int SuggestMgr::ngsuggest(char** wlst, char * w, int ns, HashMgr** pHMgr, int md
   }
 
   for (i = 0; i < md; i++) {  
-  while ((hp = (pHMgr[i])->walk_hashtable(col, hp))) {
+  while (0 != (hp = (pHMgr[i])->walk_hashtable(col, hp))) {
     if ((hp->astr) && (pAMgr) && 
        (TESTAFF(hp->astr, pAMgr->get_forbiddenword(), hp->alen) ||
           TESTAFF(hp->astr, ONLYUPCASEFLAG, hp->alen) ||
@@ -1339,7 +1358,10 @@ int SuggestMgr::ngsuggest(char** wlst, char * w, int ns, HashMgr** pHMgr, int md
             // check forbidden words
             !checkword(rootsphon[i], strlen(rootsphon[i]), 0, NULL, NULL)) unique = 0;
         }
-        if (unique) wlst[ns++] = mystrdup(rootsphon[i]);
+        if (unique) {
+            wlst[ns++] = mystrdup(rootsphon[i]);
+            if (!wlst[ns - 1]) return ns - 1;
+        }
       }
     }
   }
@@ -1512,7 +1534,7 @@ char * SuggestMgr::suggest_morph(const char * w)
                 }
                 if (HENTRY_DATA(rv)) {
                     strcat(result, " ");                                
-                    strcat(result, HENTRY_DATA(rv));
+                    strcat(result, HENTRY_DATA2(rv));
                 }
                 strcat(result, "\n");
         }
@@ -1572,7 +1594,7 @@ char * SuggestMgr::suggest_hentry_gen(hentry * rv, char * pattern)
     // check all allomorphs
     char allomorph[MAXLNLEN];
     char * p = NULL;
-    if (HENTRY_DATA(rv)) p = strstr(HENTRY_DATA(rv), MORPH_ALLOMORPH);
+    if (HENTRY_DATA(rv)) p = (char *) strstr(HENTRY_DATA2(rv), MORPH_ALLOMORPH);
     while (p) {
         struct hentry * rv2 = NULL;
         p += MORPH_TAG_LEN;
@@ -1583,7 +1605,7 @@ char * SuggestMgr::suggest_hentry_gen(hentry * rv, char * pattern)
         while (rv2) {
 //            if (HENTRY_DATA(rv2) && get_sfxcount(HENTRY_DATA(rv2)) <= sfxcount) {
             if (HENTRY_DATA(rv2)) {
-                char * st = strstr(HENTRY_DATA(rv2), MORPH_STEM);
+                char * st = (char *) strstr(HENTRY_DATA2(rv2), MORPH_STEM);
                 if (st && (strncmp(st + MORPH_TAG_LEN, 
                    HENTRY_WORD(rv), fieldlen(st + MORPH_TAG_LEN)) == 0)) {
                     char * aff = pAMgr->morphgen(HENTRY_WORD(rv2), rv2->blen, rv2->astr, rv2->alen,

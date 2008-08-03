@@ -4,21 +4,16 @@
 m4_pattern_allow
 
 AC_PREREQ(2.59)
-AC_INIT([hunspell],[1.2.2],[nemeth@openoffice.org])
+AC_INIT([hunspell],[1.2.6],[nemeth@openoffice.org])
 
 AC_CANONICAL_SYSTEM
 AC_SUBST(XFAILED)
 
-AM_INIT_AUTOMAKE(hunspell, 1.2.2)
+AM_INIT_AUTOMAKE(hunspell, 1.2.6)
 HUNSPELL_VERSION_MAJOR=`echo $VERSION | cut -d"." -f1`
 HUNSPELL_VERSION_MINOR=`echo $VERSION | cut -d"." -f2`
 AC_SUBST(HUNSPELL_VERSION_MAJOR)
 AC_SUBST(HUNSPELL_VERSION_MINOR)
-
-# library version
-LT_CURRENT=1
-LT_REVISION=0
-LT_AGE=0
 
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
@@ -56,8 +51,15 @@ AC_ARG_WITH(experimental,[  --with-experimental     compile with some extra func
 ])
 
 CURSESLIB=""
-AC_ARG_WITH(ui,[  --with-ui               support Curses user interface], [
-   AC_CHECK_LIB(ncursesw,tparm,CURSESLIB=-lncursesw,
+AC_ARG_WITH(
+   [ui],
+   [AS_HELP_STRING([--with-ui],[support Curses user interface])],
+   [],
+   [with_ui=no]
+)
+AS_IF(
+   [test "x$with_ui" != xno],
+   [AC_CHECK_LIB(ncursesw,tparm,CURSESLIB=-lncursesw,
      AC_CHECK_LIB(curses,tparm,CURSESLIB=-lcurses,
        AC_CHECK_LIB(ncurses,tparm,CURSESLIB=-lncurses)))
    if test "$CURSESLIB" != "" ; then
@@ -69,13 +71,19 @@ AC_ARG_WITH(ui,[  --with-ui               support Curses user interface], [
        AC_DEFINE(HAVE_NCURSESW_H,1,"Define if you have the <ncursesw/curses.h> header")       
      fi
      AC_DEFINE(HUNSPELL_WARNING_ON,1,"Define if you need warning messages")
-   fi
-])
+   fi]
+)
 AC_SUBST(CURSESLIB)
 
+AC_ARG_WITH(
+   [readline],
+   [AS_HELP_STRING([--with-readline],[support fancy command input editing])],
+   [],
+   [with_readline=no]
+)
 rl=n
-AC_ARG_WITH(readline,[  --with-readline         support fancy command input editing], [
-   AC_CHECK_LIB(curses,tparm,TERMLIB=-lncurses,
+AS_IF([test "x$with_readline" != xno],
+   [AC_CHECK_LIB(curses,tparm,TERMLIB=-lncurses,
      AC_CHECK_LIB(termcap,tgetent,TERMLIB=-ltermcap))
    LDSAVE=$LDFLAGS
    LDFLAGS="$LDFLAGS $TERMLIB"
@@ -87,9 +95,8 @@ AC_ARG_WITH(readline,[  --with-readline         support fancy command input edit
      echo Using the readline library.
      AC_DEFINE(HAVE_READLINE,1,"Define if you have fancy command input editing with Readline")
    fi
-   LDFLAGS=$LDSAVE
-])
-
+   LDFLAGS=$LDSAVE]
+)
 AC_SUBST(READLINELIB)
 
 AC_CONFIG_FILES([Makefile

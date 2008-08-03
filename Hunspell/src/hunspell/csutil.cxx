@@ -253,7 +253,11 @@ int flag_bsearch(unsigned short flags[], unsigned short flag, int length) {
    if (s) {
       int sl = strlen(s);
       d = (char *) malloc(((sl+1) * sizeof(char)));
-      if (d) memcpy(d,s,((sl+1)*sizeof(char)));
+      if (d) {
+         memcpy(d,s,((sl+1)*sizeof(char)));
+         return d;
+      }
+      HUNSPELL_WARNING(stderr, "Can't allocate memory.\n");
    }
    return d;
  }
@@ -298,7 +302,9 @@ int line_tok(const char * text, char *** lines, char breakchar) {
         p = strchr(p, breakchar);
     }
     linenum++;
+//    fprintf(stderr, "LINEN:%d %p %p\n", linenum, lines, *lines);
     *lines = (char **) malloc(linenum * sizeof(char *));
+//    fprintf(stderr, "hello\n");
     if (!(*lines)) {
         free(dup);
         return 0;
@@ -309,6 +315,11 @@ int line_tok(const char * text, char *** lines, char breakchar) {
     for (int i = 0; i < linenum; i++) {
         if (*p != '\0') {
             (*lines)[l] = mystrdup(p);
+            if (!(*lines)[l]) {
+                for (i = 0; i < l; i++) free((*lines)[i]);
+                free(dup);
+                return 0;
+            }
             l++;
         }
         p += strlen(p) + 1;
@@ -390,16 +401,18 @@ char * line_uniq_app(char ** text, char breakchar) {
     char * dup = mystrdup(dest);
     char * source = dup;
     int len = strlen(s);
-    while (*source) {
-        if (*source == '\n') {
-            strncpy(dest, s, len);
-            dest += len;
+    if (dup) {
+        while (*source) {
+            if (*source == '\n') {
+                strncpy(dest, s, len);
+                dest += len;
+            }
+            *dest = *source;
+            source++; dest++;
         }
-        *dest = *source;
-        source++; dest++;
+        strcpy(dest, s);
+        free(dup);
     }
-    strcpy(dest, s);
-    free(dup);
  }
 
 // change \n to char c
@@ -600,10 +613,10 @@ char * mystrrep(char * word, const char * pat, const char * rep) {
  }
  
  void freelist(char *** list, int n) {
-   if (list && (n > 0)) {
-      for (int i = 0; i < n; i++) if ((*list)[i]) free((*list)[i]);
-      free(*list);
-      *list = NULL;
+   if (list && *list && n > 0) {
+     for (int i = 0; i < n; i++) if ((*list)[i]) free((*list)[i]);
+     free(*list);
+     *list = NULL;
    }
  }
  
@@ -5481,6 +5494,7 @@ int parse_string(char * line, char ** out, const char * warnvar)
               case 0: { np++; break; }
               case 1: { 
                 *out = mystrdup(piece);
+                if (!*out) return 1;
                 np++;
                 break;
               }
