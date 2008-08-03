@@ -269,7 +269,8 @@ BOOL CChildFrame::Serialize(CIniFile &ini,LPCTSTR lpszKey,BOOL bWrite)
         cc.m_pNewDocTemplate = theApp.GetLatexDocTemplate();
         cc.m_pLastView = NULL;
         cc.m_pCurrentFrame = NULL;
-        if (strClass == _T("CLaTeXEdit"))
+
+        if (strClass.CompareNoCase(_T("CLaTeXEdit")) == 0)
             cc.m_pNewViewClass = RUNTIME_CLASS(CLaTeXEdit);
         else {
             TRACE(_T("Unknown view type '%s'\n"),strClass);
@@ -370,8 +371,10 @@ BOOL CChildFrame::Serialize(CIniFile &ini,LPCTSTR lpszKey,BOOL bWrite)
 CString CChildFrame::GetPathNameOfDocument()
 {
     CView* pView = dynamic_cast<CView*> /*(GetActiveView());*/(m_wndSplitter.GetPane(0,0));
+
     if (pView) {
         CDocument* pDoc = pView->GetDocument();
+
         if (pDoc) {
             return pDoc->GetPathName();
         }
