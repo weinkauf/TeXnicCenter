@@ -1,3 +1,30 @@
+2008-07-15: Hunspell 1.2.6 release:
+  - bug fix release (fix affix rule condition checking of sk_SK dictionary,
+    iconv support in stemming and morphological analysis of the Hunspell
+    utility, see also Changelog)
+
+2008-07-09: Hunspell 1.2.5 release:
+  - bug fix release (fix affix rule condition checking of en_GB dictionary,
+    also morphological analysis by dictionaries with two-level suffixes)
+
+2008-06-18: Hunspell 1.2.4-2 release:
+  - fix GCC compiler warnings
+
+2008-06-17: Hunspell 1.2.4 release:
+  - add free_list() for C, C++ interfaces to deallocate suggestion lists
+  
+  - bug fixes
+
+2008-06-17: Hunspell 1.2.3 release:
+  - extended XML interface to use morphological functions by standard
+    spell checking interface, spell() and suggest(). See hunspell.3 manual page.
+
+  - default dash suggestions for compound words: newword-> new word and new-word
+
+  - new manual pages: hunspell.3, hzip.1, hunzip.1.
+  
+  - bug fixes
+
 2008-04-12: Hunspell 1.2.2 release:
   - extended dictionary (dic file) support to use multiple base and
     special dictionaries.

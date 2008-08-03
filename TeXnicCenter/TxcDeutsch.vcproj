@@ -106,7 +106,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot;"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
 			/>
 		</Configuration>
 		<Configuration
@@ -196,7 +196,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot;"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
 			/>
 		</Configuration>
 		<Configuration
@@ -286,7 +286,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot;"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
 			/>
 		</Configuration>
 		<Configuration
@@ -380,7 +380,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot;"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
 			/>
 		</Configuration>
 	</Configurations>
@@ -413,7 +413,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\documenttypeslarge.bmp"
+				RelativePath=".\res\document.bmp"
 				>
 			</File>
 			<File
@@ -421,7 +421,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\document.bmp"
+				RelativePath=".\res\documenttypeslarge.bmp"
 				>
 			</File>
 			<File
@@ -437,15 +437,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\formatrecentlyused.bmp"
-				>
-			</File>
-			<File
 				RelativePath=".\res\format.bmp"
 				>
 			</File>
 			<File
 				RelativePath=".\res\format_r.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\formatrecentlyused.bmp"
 				>
 			</File>
 			<File
@@ -465,11 +465,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\itemtypes.bmp"
+				RelativePath=".\res\item_typ.bmp"
 				>
 			</File>
 			<File
-				RelativePath=".\res\item_typ.bmp"
+				RelativePath=".\res\itemtypes.bmp"
 				>
 			</File>
 			<File
@@ -569,11 +569,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\navigationbar.bmp"
+				RelativePath=".\res\navigation.bmp"
 				>
 			</File>
 			<File
-				RelativePath=".\res\navigation.bmp"
+				RelativePath=".\res\navigationbar.bmp"
 				>
 			</File>
 			<File

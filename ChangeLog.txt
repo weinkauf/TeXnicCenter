@@ -1,9 +1,17 @@
+2008/08/03 sergiudotenco
+- Updated Hunspell from 1.2.2 to 1.2.6
+- Updated copyright information in the English about dialog
+- Fixed: Resource files were not copied to output\language due to
+  missing directory
+- Added dictionaries to the output directory
+- Fixed some missing defines
+
 2008/08/02 niteria
 - Migrated CVS repository to Subversion
 - OutputWizard: Fixed problem where gsview was not recognized
 - OutputWizard: Different parameters for Ghostscript and ps2pdf.exe
 
-2008/6/20 Rainy
+2008/6/20 sergiudotenco
 - Abbreviations are recognized correctly by the spell checker
 - The state of docking windows is properly restored now
 
@@ -11,7 +19,7 @@ Known issues:
 - CrystalEdit doesn't support mixing LTR and RTL languages
 - Loading Unicode files doesn't work
 
-2008/6/19 Rainy
+2008/6/19 sergiudotenco
 - Migrated from BCGSoft to native MFC libraries
 - Output and navigation bars can be docked independently from each other
 - All windows and dialogs use the default OS font

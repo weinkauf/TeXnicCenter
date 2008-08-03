@@ -101,7 +101,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot;"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
 			/>
 		</Configuration>
 		<Configuration
@@ -194,7 +194,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot;"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
 			/>
 		</Configuration>
 		<Configuration
@@ -283,7 +283,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot;"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
 			/>
 		</Configuration>
 		<Configuration
@@ -376,7 +376,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot;"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
 			/>
 		</Configuration>
 	</Configurations>
@@ -401,11 +401,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\documenttypeslarge.bmp"
+				RelativePath=".\res\documenttypes.bmp"
 				>
 			</File>
 			<File
-				RelativePath=".\res\documenttypes.bmp"
+				RelativePath=".\res\documenttypeslarge.bmp"
 				>
 			</File>
 			<File
@@ -421,11 +421,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\formatrecentlyused.bmp"
+				RelativePath=".\res\format.bmp"
 				>
 			</File>
 			<File
-				RelativePath=".\res\format.bmp"
+				RelativePath=".\res\formatrecentlyused.bmp"
 				>
 			</File>
 			<File

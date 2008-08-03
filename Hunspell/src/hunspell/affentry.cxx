@@ -92,8 +92,9 @@ inline char * PfxEntry::nextchar(char * p) {
             if (p == c.conds + MAXCONDLEN_1) return c.l.conds2;
         // end of the MAXCONDLEN length condition
         } else if (p == c.conds + MAXCONDLEN) return NULL;
+	return *p ? p : NULL;
     }
-    return p;
+    return NULL;
 }
 
 inline int PfxEntry::test_condition(const char * st)
@@ -106,22 +107,27 @@ inline int PfxEntry::test_condition(const char * st)
     while (1) {
       switch (*p) {
         case '\0': return 1;
-        case '[': { p = nextchar(p); pos = st; break; }
-        case '^': { p = nextchar(p); neg = true; break; }
-        case ']': { if ((neg && ingroup) || (!neg && !ingroup)) return 0;
-                pos = NULL;
+        case '[': { 
                 neg = false;
                 ingroup = false;
                 p = nextchar(p);
-                st++;
-                if (*st == '\0' && p && *p != '\0') return 0; // word <= condition
+                pos = st; break;
+            }
+        case '^': { p = nextchar(p); neg = true; break; }
+        case ']': { 
+                if ((neg && ingroup) || (!neg && !ingroup)) return 0;
+                pos = NULL;
+                p = nextchar(p);
+                // skip the next character
+                if (!ingroup) for (st++; (opts & aeUTF8) && (*st & 0xc0) == 0x80; st++);
+                if (*st == '\0' && p) return 0; // word <= condition
                 break;
             }
          case '.': if (!pos) { // dots are not metacharacters in groups: [.]
                 p = nextchar(p);
                 // skip the next character
                 for (st++; (opts & aeUTF8) && (*st & 0xc0) == 0x80; st++);
-                if (*st == '\0') return 0; // word <= condition
+                if (*st == '\0' && p) return 0; // word <= condition
                 break;
             }
     default: {
@@ -138,8 +144,14 @@ inline int PfxEntry::test_condition(const char * st)
                             p = nextchar(p);
                             st++;
                         }
-                        if (st != pos) ingroup = true;
-                    } else if (pos) ingroup = true;
+                        if (pos && st != pos) {
+                            ingroup = true;
+                            while (p && *p != ']' && (p = nextchar(p)));
+                        }
+                    } else if (pos) {
+                        ingroup = true;
+                        while (p && *p != ']' && (p = nextchar(p)));
+                    }
                 } else if (pos) { // group
                     p = nextchar(p);
                 } else return 0;
@@ -163,7 +175,6 @@ struct hentry * PfxEntry::checkword(const char * word, int len, char in_compound
 
      tmpl = len - appndl;
 
-//     if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
      if (tmpl > 0) {
 
             // generate new root word by removing prefix and adding
@@ -226,7 +237,6 @@ struct hentry * PfxEntry::check_twosfx(const char * word, int len,
      tmpl = len - appndl;
 
      if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
-//     if (tmpl > 0) {
 
             // generate new root word by removing prefix and adding
             // back any characters that would have been stripped
@@ -273,7 +283,6 @@ char * PfxEntry::check_twosfx_morph(const char * word, int len,
      tmpl = len - appndl;
 
      if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
-//     if (tmpl > 0) {
 
             // generate new root word by removing prefix and adding
             // back any characters that would have been stripped
@@ -324,7 +333,6 @@ char * PfxEntry::check_morph(const char * word, int len, char in_compound, const
      tmpl = len - appndl;
 
      if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
-//     if (tmpl > 0) {
 
             // generate new root word by removing prefix and adding
             // back any characters that would have been stripped
@@ -357,13 +365,12 @@ char * PfxEntry::check_morph(const char * word, int len, char in_compound, const
                             if (!HENTRY_FIND(he, MORPH_STEM)) {
                                 strcat(result, " ");
                                 strcat(result, MORPH_STEM);
-                                strcat(result,HENTRY_WORD(he));
+                                strcat(result, HENTRY_WORD(he));
                             }
                             // store the pointer of the hash entry
-//                            sprintf(result + strlen(result), " %s%p", MORPH_HENTRY, he);
                             if (HENTRY_DATA(he)) {
                                 strcat(result, " ");
-                                strcat(result,HENTRY_DATA(he));
+                                strcat(result, HENTRY_DATA2(he));
                             } else {
                                 // return with debug information
                                 char * flag = pmyMgr->encode_flag(getFlag());
@@ -460,47 +467,66 @@ char * SfxEntry::add(const char * word, int len)
 }
 
 inline char * SfxEntry::nextchar(char * p) {
-    p++;
-    if (opts & aeLONGCOND) {
-        // jump to the 2nd part of the condition
-        if (p == c.l.conds1 + MAXCONDLEN_1) return c.l.conds2;
-    // end of the MAXCONDLEN length condition
-    } else if (p == c.conds + MAXCONDLEN) return NULL;
-    return p;
+    if (p) {
+	p++;
+	if (opts & aeLONGCOND) {
+    	    // jump to the 2nd part of the condition
+    	    if (p == c.l.conds1 + MAXCONDLEN_1) return c.l.conds2;
+	// end of the MAXCONDLEN length condition
+	} else if (p == c.conds + MAXCONDLEN) return NULL;
+	return *p ? p : NULL;
+    }
+    return NULL;
 }
 
 inline int SfxEntry::test_condition(const char * st, const char * beg)
 {
+//   fprintf(stderr, "ENTER: %s, %s\n", st, beg);
     const char * pos = NULL;    // group with pos input position
     bool neg = false;           // complementer
     bool ingroup = false;       // character in the group
     if (numconds == 0) return 1;
     char * p = c.conds;
+//    while (p && *p) {
+//	fprintf(stderr, "%c", *p);
+//	p = nextchar(p);
+//    }
+//    fprintf(stderr, "\n");
+//    p = c.conds;
     st--;
     int i = 1;
     while (1) {
+//      if (p) fprintf(stderr, "POS: %c, %s\n", *p, st);
       switch (*p) {
         case '\0': return 1;
         case '[': { p = nextchar(p); pos = st; break; }
         case '^': { p = nextchar(p); neg = true; break; }
         case ']': { if (!neg && !ingroup) return 0;
                 i++;
+                // skip the next character
+                if (!ingroup) {
+                    for (; (opts & aeUTF8) && (st >= beg) && (*st & 0xc0) == 0x80; st--);
+                    st--;
+                }                    
                 pos = NULL;
                 neg = false;
                 ingroup = false;
                 p = nextchar(p);
-                st--;
-                if (st < beg && p && *p != '\0') return 0; // word <= condition
+                if (st < beg && p) return 0; // word <= condition
                 break;
             }
         case '.': if (!pos) { // dots are not metacharacters in groups: [.]
                 p = nextchar(p);
                 // skip the next character
                 for (st--; (opts & aeUTF8) && (st >= beg) && (*st & 0xc0) == 0x80; st--);
-                if (st < beg) return 0; // word <= condition
-                if (*st & 0x80) { // head of the UTF-8 character
+                if (st < beg) { // word <= condition
+		    if (p) return 0; else return 1;
+		}
+                if ((opts & aeUTF8) && (*st & 0x80)) { // head of the UTF-8 character
                     st--;
-                    if (st < beg) return 0; // word <= condition
+                    if (st < beg) { // word <= condition
+			if (p) return 0; else return 1;
+		    }
                 }
                 break;
             }
@@ -524,18 +550,22 @@ inline int SfxEntry::test_condition(const char * st, const char * beg)
                             if (neg) return 0;
                             else if (i == numconds) return 1;
                             ingroup = true;
+                            while (p && *p != ']' && (p = nextchar(p)));
                         }
-                        if (p && *p != '\0') p = nextchar(p);
+                        if (p) p = nextchar(p);
                     } else if (pos) {
                         if (neg) return 0;
                         else if (i == numconds) return 1;
                         ingroup = true;
+			while (p && *p != ']' && (p = nextchar(p)));
+			if (p) p = nextchar(p);
+                        st--;
                     }
                     if (!pos) {
                         i++;
                         st--;
-                        if (st < beg && p && *p != '\0') return 0; // word <= condition
                     }
+                    if (st < beg && p) return 0; // word <= condition
                 } else if (pos) { // group
                     p = nextchar(p);
                 } else return 0;
@@ -572,7 +602,6 @@ struct hentry * SfxEntry::checkword(const char * word, int len, int optflags,
     // it checked in test_condition()
 
     if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
-//    if (tmpl > 0) {
 
             // generate new root word by removing suffix and adding
             // back any characters that would have been stripped or
@@ -672,7 +701,6 @@ struct hentry * SfxEntry::check_twosfx(const char * word, int len, int optflags,
     tmpl = len - appndl;
 
     if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
-//    if (tmpl > 0) {
 
             // generate new root word by removing suffix and adding
             // back any characters that would have been stripped or
@@ -737,7 +765,6 @@ char * SfxEntry::check_twosfx_morph(const char * word, int len, int optflags,
     tmpl = len - appndl;
 
     if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
-//    if (tmpl > 0) {
 
             // generate new root word by removing suffix and adding
             // back any characters that would have been stripped or

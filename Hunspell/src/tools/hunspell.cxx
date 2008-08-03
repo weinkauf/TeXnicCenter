@@ -64,11 +64,14 @@
 
 #define LIBDIR \
     "/usr/share/hunspell:" \
-    "/usr/share/myspell"
+    "/usr/share/myspell:" \
+    "/usr/share/myspell/dicts"
 #define USEROOODIR \
     ".openoffice.org2/user/wordbook:" \
     ".openoffice.org2.0/user/wordbook"
 #define OOODIR \
+    "/opt/openoffice.org/basis3.0/share/dict/ooo:" \
+    "/usr/lib/openoffice.org/basis3.0/share/dict/ooo:" \
     "/opt/openoffice.org2.4/share/dict/ooo:" \
     "/usr/lib/openoffice.org2.4/share/dict/ooo:" \
     "/opt/openoffice.org2.3/share/dict/ooo:" \
@@ -116,11 +119,12 @@ char text_conv[MAXLNLEN];
 #else
 #include <curses.h>
 #endif
+#endif
+
 #ifdef HAVE_READLINE
 #include <readline/readline.h>
 #else
 #define readline scanline
-#endif
 #endif
 
 #define TEMPNAME "hunSPELL.bak"
@@ -144,6 +148,7 @@ char * wordchars = NULL;
 char * dicpath = NULL;
 int wordchars_len;
 unsigned short * wordchars_utf16 = NULL;
+int wordchars_utf16_free = 0;
 int wordchars_utf16_len;
 char * dicname = NULL;
 char * privdicname = NULL;
@@ -179,7 +184,7 @@ int dmax = 0;                // dictionary count
 char * chenc(char * st, const char * enc1, const char * enc2) {
     char * out = st;
 #ifdef HAVE_ICONV
-    if (strcmp(enc1, enc2) != 0) {
+    if (enc1 && enc2 && strcmp(enc1, enc2) != 0) {
 	size_t c1 = strlen(st) + 1;
 	size_t c2 = MAXLNLEN;
 	char * source = st;
@@ -239,6 +244,7 @@ TextParser * get_parser(int format, char * extension, Hunspell * pMS) {
 	        int n = u8_u16((w_char *) wordchars_utf16, wlen, text_conv);
 	        if (n > 0) flag_qsort(wordchars_utf16, 0, n);
 	        wordchars_utf16_len = n;
+	        wordchars_utf16_free = 1;
 	    }
 	}
     } else {
@@ -248,6 +254,7 @@ TextParser * get_parser(int format, char * extension, Hunspell * pMS) {
 	char * pletters = letters;
 	char ch[2];
 	char u8[10];
+	*pletters = '\0';
 	iconv_t conv = iconv_open("UTF-8", io_enc);
         if (conv == (iconv_t) -1) {
 	    fprintf(stderr, gettext("error - iconv_open: UTF-8 -> %s\n"), io_enc);
@@ -295,7 +302,8 @@ TextParser * get_parser(int format, char * extension, Hunspell * pMS) {
 	        fprintf(stderr, gettext("error - iconv_open: %s -> %s\n"), io_enc, denc);
 	    } else {
 	        iconv(conv, (ICONV_CONST char **) &wchars, &c1, &dest, &c2);
-	        iconv_close(conv);		
+	        iconv_close(conv);
+	        *dest = '\0';
 	    }
 	}
 	if (*letters) wordchars = mystrdup(letters);
@@ -307,7 +315,7 @@ TextParser * get_parser(int format, char * extension, Hunspell * pMS) {
     } else {
 	char * casechars = get_casechars(denc);
 	wordchars = (char *) pMS->get_wordchars();
-	if (wordchars) {
+	if (casechars && wordchars) {
 	    casechars = (char *) realloc(casechars, strlen(casechars) + strlen(wordchars) + 1);
 	    strcat(casechars, wordchars);
 	}
@@ -625,11 +633,7 @@ if (pos >= 0) {
 					    token, chenc(wlst[0], dic_enc[d], io_enc), buf);
                                 }
 			}
-			for (int j = 1; j < ns; j++) {
-		    		free(wlst[j]);
-			}
-			if (wlst) free(wlst);
-		
+			pMS[d]->free_list(&wlst, ns);
 		}
 			free(token);
 			continue;			
@@ -637,40 +641,40 @@ if (pos >= 0) {
 
 		case STEM: {
                 char ** result;
-                int n = pMS[d]->stem(&result, token);
+                int n = pMS[d]->stem(&result, chenc(token, io_enc, dic_enc[d]));
                 for (int i = 0; i < n; i++) {
-                	fprintf(stdout, "%s %s\n", token, result[i]);
-                	free(result[i]);
+                	fprintf(stdout, "%s %s\n", token, chenc(result[i], dic_enc[d], ui_enc));
                 }
+                pMS[d]->free_list(&result, n);
                 if (n == 0 && token[strlen(token) - 1] == '.') {
                 	token[strlen(token) - 1] = '\0';
                         n = pMS[d]->stem(&result, token);
                         for (int i = 0; i < n; i++) {
-                	        fprintf(stdout, "%s %s\n", token, result[i]);
-                	        free(result[i]);
+                	        fprintf(stdout, "%s %s\n", token, chenc(result[i], dic_enc[d], ui_enc));
                 	}
+                        pMS[d]->free_list(&result, n);
                 }
-                if (n == 0) fprintf(stdout, "%s\n", token); else free(result);
+                if (n == 0) fprintf(stdout, "%s\n", chenc(token, dic_enc[d], ui_enc));
 		free(token);
 		continue;
 		}
 
 		case ANALYZE: {
                 char ** result;
-                int n = pMS[d]->analyze(&result, token);
+                int n = pMS[d]->analyze(&result, chenc(token, io_enc, dic_enc[d]));
                 for (int i = 0; i < n; i++) {
-                	fprintf(stdout, "%s %s\n", token, result[i]);
-                	free(result[i]);
+                	fprintf(stdout, "%s %s\n", token, chenc(result[i], dic_enc[d], ui_enc));
                 }
+                pMS[d]->free_list(&result, n);
                 if (n == 0 && token[strlen(token) - 1] == '.') {
                 	token[strlen(token) - 1] = '\0';
                         n = pMS[d]->analyze(&result, token);
                         for (int i = 0; i < n; i++) {
-                	        fprintf(stdout, "%s %s\n", token, result[i]);
-                	        free(result[i]);
+                	        fprintf(stdout, "%s %s\n", token, chenc(result[i], dic_enc[d], ui_enc));
                 	}
+                	pMS[d]->free_list(&result, n);
                 }
-                if (n == 0) fprintf(stdout, "%s\n", token); else free(result);
+                if (n == 0) fprintf(stdout, "%s\n", chenc(token, dic_enc[d], ui_enc));
 		free(token);
 		continue;
 		}
@@ -691,16 +695,13 @@ if (pos >= 0) {
 				fprintf(stdout,"& %s %d %d: ", token, ns,
 				    parser->get_tokenpos() + pos);
 				fprintf(stdout,"%s", chenc(wlst[0], dic_enc[d], io_enc));
-                                free(wlst[0]);
 			}
 			for (int j = 1; j < ns; j++) {
 				fprintf(stdout, ", %s", chenc(wlst[j], dic_enc[d], io_enc));
-		    		free(wlst[j]);
 			}
-
+			pMS[d]->free_list(&wlst, ns);
 			fprintf(stdout, "\n");
 			fflush(stdout);
-			if (wlst) free(wlst);
 		}
 		free(token);
 		continue;
@@ -727,16 +728,13 @@ if (pos >= 0) {
 				fprintf(stdout,"& %s %d %d: ", chenc(token, io_enc, ui_enc), ns,
 				    parser->get_tokenpos() + pos);
 				fprintf(stdout,"%s", chenc(wlst[0], dic_enc[d], ui_enc));
-                                free(wlst[0]);
 			}
 			for (int j = 1; j < ns; j++) {
 				fprintf(stdout, ", %s", chenc(wlst[j], dic_enc[d], ui_enc));
-		    		free(wlst[j]);
 			}
-
+			pMS[d]->free_list(&wlst, ns);
 			fprintf(stdout, "\n");
 			fflush(stdout);
-			if (wlst) free(wlst);
 		}
 		free(token);
 		}
@@ -768,11 +766,14 @@ if (pos >= 0) {
 
 if (parser) delete(parser);
 
+//			fprintf(stdout,gettext(HUNSPELL_PIPE_HEADING));
+//	fprintf(stdout, "szia vilag5.\n");
+//	exit(0);
+
 } // pipe_interface
 
 #ifndef WIN32
 
-#ifdef HAVE_CURSES_H
 #ifdef HAVE_READLINE
 static char * rltext;
 
@@ -797,6 +798,7 @@ static int rl_escape (int count, int key)
 }
 #endif
 
+#ifdef HAVE_CURSES_H
 int expand_tab(char * dest, char * src, int limit) {
 	int i = 0;
         int u8 = strcmp(ui_enc, "UTF-8") == 0 ? 1 : 0;
@@ -1303,7 +1305,7 @@ void interactive_interface(Hunspell ** pMS, char * filename, int format)
 #endif
 #endif
 
-char * add(char * dest, char * st) {
+char * add(char * dest, const char * st) {
 	if (!dest) {
 	    dest = mystrdup(st);
 	} else {
@@ -1313,7 +1315,7 @@ char * add(char * dest, char * st) {
 	return dest;
 }
 
-char * exist2(char * dir, int len, char * name, char * ext) {
+char * exist2(char * dir, int len, const char * name, const char * ext) {
 	char buf[MAXLNLEN];
 	const char * sep = (len == 0) ? "": DIRSEP;
 	strncpy(buf, dir, len);
@@ -1354,7 +1356,7 @@ int listdicpath(char * dir, int len) {
 #endif
 
 // search existing path for file "name + ext"
-char * search(char * begin, char * name, char * ext) {
+char * search(char * begin, char * name, const char * ext) {
 	char * end = begin;
 	while (1) {
 	    while (!((*end == *PATHSEP) || (*end == '\0'))) end++;
@@ -1401,8 +1403,8 @@ int main(int argc, char** argv)
 	for(int i=1; i<argc; i++) {
 #ifdef LOG
 		log(argv[i]);
-#endif
-
+#endif    
+	
 		if (argstate == 1) {
 			if (dicname) free(dicname);
 			dicname = mystrdup(argv[i]);
@@ -1508,7 +1510,7 @@ int main(int argc, char** argv)
 			}
 		}
 	}
-    
+
         if (printgood && (filter_mode == NORMAL)) filter_mode = BADWORD;
 	
 	if (! dicname) {
@@ -1641,6 +1643,7 @@ int main(int argc, char** argv)
         if (aff) free(aff);
         if (dic) free(dic);
 	if (wordchars) free(wordchars);
+	if (wordchars_utf16_free) free(wordchars_utf16);
 #ifdef HAVE_ICONV
 	free_utf_tbl();
 #endif

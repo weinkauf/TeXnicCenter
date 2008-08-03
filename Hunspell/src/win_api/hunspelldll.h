@@ -61,11 +61,15 @@ DLLEXPORT int hunspell_spell(Hunspell *pMS, char *word);
 DLLEXPORT int hunspell_suggest(Hunspell *pMS, char *word, char ***slst);
 DLLEXPORT int hunspell_suggest_auto(Hunspell *pMS, char *word, char ***slst);
 //free slst array
+DLLEXPORT void hunspell_free_list(Hunspell *pMS, char ***slst, int len);
+// deprecated (use hunspell_free_list)
 DLLEXPORT void hunspell_suggest_free(Hunspell *pMS, char **slst, int len);
 //make local copy of returned string!!
 DLLEXPORT char * hunspell_get_dic_encoding(Hunspell *pMS);
 //add word to dict (word is valid until spell object is not destroyed)
-DLLEXPORT int hunspell_put_word(Hunspell *pMS, char *word);
+DLLEXPORT int hunspell_add(Hunspell *pMS, char *word);
+//add word to dict with affixes of the modelword (word is valid until spell object is not destroyed)
+DLLEXPORT int hunspell_add_with_affix(Hunspell *pMS, char *word, char *modelword);
 
 #ifdef __cplusplus
 }

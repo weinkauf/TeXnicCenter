@@ -1,3 +1,123 @@
+2008-07-15 Németh László <nemeth at OOo>:
+        * affentry.cxx: fixes of the affix rule matching algorithm (affected
+	  only the sk_SK dictionary from all OpenOffice.org dictionaries):
+	- fix dot pattern + accented letters matching (in non Unicode encoding)
+	- word-length conditions work again
+	* tests/condition.*: extended test for the fix.
+
+	* hashmgr.cxx: load multiword expressions: spaces may be parts
+	  of the dictionary words again (but spaces also work as morphological
+	  field separators: word word2 -> "word word2", word po:noun -> "word").
+	* man/hunspell.4: updated manual
+
+	* tools/hunspell.cxx: add iconv character conversion support to
+	  stemming and morphological analysis
+
+	* tools/hunspell.cxx: add /usr/share/myspell/dicts search path for
+	  Ubuntu support
+
+2008-07-09 Németh László <nemeth at OOo>:
+        * affentry.cxx: fixes of the affix rule matching algorithm:
+	- right ASCII character handling in bracket expression;
+	- fault-tolerant nextchar() for bad rules.
+          Problem with the en_GB dictionary and nextchar() with a detailed
+	  code analysis reported by John Winters in SF.net Bug ID 2012753.
+	* tests/condition.*: extended test for the fix.
+
+	* hunspell/hunspell.*, parsers/*, tools/hunspell.cxx: fix compiler
+	  warnings (deprecated const-free char consts)
+
+	* win_api/hunspelldll.*: add hunspell_free_list(), the problem
+	  reported by Laurier Mercer.
+
+2008-06-30 Török László <torok_laszlo at users dot SF dot net>:
+	* tests/affixmgr.cxx: fix morphological analysis: strcat() on
+	  an uninitialized char array in suffix_check_morph(). 
+
+2008-06-18 Németh László <nemeth at OOo>:
+        * src/hunspell/affixmgr.cxx: fix GCC compiler warnings
+          (comparisons with string literal results in unspecified behaviour).
+          The problem reported by Ladislav Michnovič.
+
+2008-06-17 Németh László <nemeth at OOo>:
+        * src/hunspell/{hunspell.cxx,hunspell.h}: add free_list() to the C and
+          C++ interface to deallocate suggestion lists. The problem
+          reported by Laurie Mercer and Christophe Paris.
+        * csutil.cxx: fix freelist() to deallocate non-NULL list, when n = 0.
+        * tools/{analyze,example,chmorph,hunspell}.cxx: use free_list().
+
+        * tools/hunspell.cxx: fix only --with-readline compiling problem.
+          Reported by Volkov Peter in SF.net Bug 1995842.
+          
+        * man/hunspell.3,hunspell.hxx: fix analyze and generate examples in
+          the manual and comments (using char*** parameter instead of char**).
+        
+        * tools/example.cxx: fix suggestion example.
+
+2008-06-17 Németh László <nemeth at OOo>:
+        * affentry.cxx: fix the new affix rule matching algorithm of
+          Hunspell 1.2. Arabic dictionary problem reported by Khaled Hosny
+          in SF.net Bug ID 1975530. Mohamed Kebdani also sent a
+          prepared test data.
+        * tests/{1975530,condition*}: tests for the fix
+
+2008-06-13 Ingo H. de Boer <idb_winshell at SF.net>:
+        * src/hunspell/{affixmgr.cxx,hunspell.cxx}: add missing type 
+          cast to strstr() calls for VC8 compatibility.
+
+2008-06-13 Németh László <nemeth at OOo>:
+        * suggestmgr.cxx: add also part1-part2 suggestion with dash
+          for bad part1part2 word forms, suggested by Ruud Baars.
+          For example, now suggestion of "parttime": "part time"
+          and "part-time".          
+          NOTE: this feature will work only when the TRY definition
+          contains "-" or the letter "a".
+
+        * hunspell.cxx: new XML API in spell() and suggest() (see hunspell(3)).
+
+        * src/hunspell/*: fixes for OpenOffice.org build environment.
+
+        * man/{hunspell.3,hzip.1,hunzip.1}: add new manual pages for
+          Hunspell programming API and dictionary compression and
+          encryption utilities.
+          
+        * src/hunspell/*: handle failed mystrdup() calls and other potential
+          insufficient memory problems. The problem reported by Elio Voci
+          in OpenOffice.org Issue 90604 and others.
+
+        * src/tools/affixmgr.cxx: restore original behaviour of get_wordchars
+          without conditional code. Problem reported by Ingo H. de Boer
+          in SF.net Bug 1763105.
+
+        * win_api/hunspelldll.h: put_word() renamed to add() in the (old)
+          Windows DLL API bug reported in SF.net Bug 1943236. Also reported
+          by Bartkó Zoltán.
+  
+        * tools/hunspell.cxx: fix chench() for environments without
+          native language support (ENABLE_NLS 0 in config.h),
+          PHP system_exec() bug reported by Michel Weimerskirch in
+          SF.net Bug 1951087.
+        
+        * hunspell.cxx, affixmgr.cxx: remove "result" from the
+          (result && *result) conditions, when "result" is a static variable.
+          The problem and a possible solution reported by Ladislav Michnovič.
+
+        * affixmgr.cxx: parse_affix(): print line instead of NULL in
+          the warning message, when affix class header is bad.
+          The problem reported by Ladislav Michnovič.
+
+2008-06-01 Christian Lohmaier <cloph at OOo>
+        * configure.ac: patch to fix --with-readline, --with-ui logic.
+          Reported in the SF.net Bug 981395.
+
+2008-05-04: Volkov Peter <volkov_peter at users sourceforge net>
+        * configure.ac: fix LibTool 2.22 incompatibility by removing
+          unused LT_* macros. Report and patch in SF.net Bug 1957383.
+          The problem reported and fixed by Ladislav Michnovič, too.
+
+2008-04-23: Ladislav Michnovič <lmichnovic at suse cz>
+        * hunspell.pc.in: fix wrongly set directories.
+
 2008-04-12 Németh László <nemeth at OOo>:
         * src/tools/hunspell.cxx: 
         - Multilingual spell checking and special dictionary support with -d.

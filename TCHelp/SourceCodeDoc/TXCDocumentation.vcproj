@@ -68,7 +68,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Running doxygen on $(InputPath)"
-					CommandLine="$(InputDir)MakeSourceCodeDoc.bat&#x0D;&#x0A;"
+					CommandLine="&quot;$(InputDir)MakeSourceCodeDoc.bat&#x0D;&#x0A;&quot;"
 					Outputs="$(OutDir)\index.html"
 				/>
 			</FileConfiguration>

@@ -236,19 +236,19 @@ SectionGroup "Dictionaries"
 Section "Deutsch"
 SectionIn 1 3
 SetOutPath ${PATH_LANG}
-File /r "..\Output\Release\Dictionaries\*de_*.*"
+File /r "..\Output\Dictionaries\*de_*.*"
 SectionEnd
 
 Section "English"
 SectionIn 1 3
 SetOutPath ${PATH_LANG}
-File /r "..\Output\Release\Dictionaries\*en_*.*"
+File /r "..\Output\Dictionaries\*en_*.*"
 SectionEnd
 
 Section "Français"
 SectionIn 1 3
 SetOutPath ${PATH_LANG}
-File /r "..\Output\Release\Dictionaries\*fr_FR*.*"
+File /r "..\Output\Dictionaries\*fr_FR*.*"
 SectionEnd
 
 SectionGroupEnd

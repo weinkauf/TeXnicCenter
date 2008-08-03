@@ -9,14 +9,6 @@
 using namespace std;
 #endif
 
-void freelst(char *** list, int n) {
-   if (list && (n > 0)) {
-      for (int i = 0; i < n; i++) if ((*list)[i]) free((*list)[i]);
-      free(*list);
-      *list = NULL;
-   }
-}
-
 int 
 main(int argc, char** argv)
 {
@@ -75,13 +67,13 @@ main(int argc, char** argv)
 		    int pl2n = pMS->generate(&pl2, next, pl, pln);
 		    if (pl2n) {
 		        p->change_token(pl2[0]);
-		        freelst(&pl2, pl2n);
+		        pMS->free_list(&pl2, pl2n);
 		        // jump over the (possibly un)modified word
 		        free(next);
 		        next=p->next_token();
 		    }
 		}
-		freelst(&pl, pln);
+		pMS->free_list(&pl, pln);
 	  }
 	  free(next);
       }
