@@ -9,6 +9,7 @@ TeXnicCenter and all of its components:
     http://www.microsoft.com/downloads
   * Microsoft HTML Help Workshop
   * MSXML 4
+  * TortoiseSVN, freely available at http://tortoisesvn.tigris.org/
 
 To generate the setup you will need:
   * Nullsoft Scriptable Install System (NSIS) available at 

@@ -1,0 +1,3 @@
+#pragma once
+
+#define CRYSTAL_EDIT_REVISION $WCREV$

@@ -27,6 +27,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Writing SVN information..."
+				CommandLine="SubWCRev . Version.h.template Version.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -121,6 +123,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Writing SVN information..."
+				CommandLine="SubWCRev . Version.h.template Version.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -213,6 +217,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Writing SVN information..."
+				CommandLine="SubWCRev . Version.h.template Version.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -307,6 +313,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Writing SVN information..."
+				CommandLine="SubWCRev . Version.h.template Version.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"

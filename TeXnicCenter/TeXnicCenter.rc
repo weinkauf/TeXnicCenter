@@ -14,6 +14,7 @@
 //
 #include "afxres.h"
 #include "../CrysEditEx/Source/editcmd.h"
+#include "Version.h"
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -1855,8 +1856,13 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
+#if 0
  FILEVERSION 2,0,0,0
  PRODUCTVERSION 2,0,0,0
+#else
+ FILEVERSION 2,0,0,TXC_REVISION
+ PRODUCTVERSION 2,0,0,TXC_REVISION
+#endif
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -5713,8 +5719,13 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
+#if 0
  FILEVERSION 2,0,0,0
  PRODUCTVERSION 2,0,0,0
+#else
+ FILEVERSION 2,0,0,TXC_REVISION
+ PRODUCTVERSION 2,0,0,TXC_REVISION
+#endif
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
