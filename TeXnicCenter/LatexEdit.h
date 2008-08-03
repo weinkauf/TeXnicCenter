@@ -207,6 +207,7 @@ public:
     afx_msg void OnDestroy();
     afx_msg void OnFormatTextBackColor();
     afx_msg void OnFormatTextForeColor();
+    afx_msg void OnEditDeleteLine();
 };
 
 #ifndef _DEBUG  // Testversion in LatexEdit.cpp

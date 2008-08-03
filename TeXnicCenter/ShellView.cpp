@@ -45,6 +45,7 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CShellView, CEditView)
 
 CShellView::CShellView()
+: m_lf()
 {
     m_dwProcessId = DWORD(-1);
     m_pReadThread = NULL;
@@ -57,7 +58,6 @@ CShellView::CShellView()
     m_hChildStdoutRdDup = NULL;
 
     //	Initialize LOGFONT structure
-    memset(&m_lf, 0, sizeof (m_lf));
     m_lf.lfWeight = FW_NORMAL;
     m_lf.lfCharSet = GB2312_CHARSET; //ANSI_CHARSET;
     m_lf.lfOutPrecision = OUT_DEFAULT_PRECIS;
@@ -74,18 +74,18 @@ CShellView::~CShellView()
 }
 
 BEGIN_MESSAGE_MAP(CShellView, CEditView)
-//{{AFX_MSG_MAP(CShellView)
-ON_WM_CREATE()
-ON_WM_DESTROY()
-ON_WM_CHAR()
-ON_WM_KEYDOWN()
-ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
-//}}AFX_MSG_MAP
-// Standard-Druckbefehle
-ON_COMMAND(ID_FILE_PRINT, CEditView::OnFilePrint)
-ON_COMMAND(ID_FILE_PRINT_DIRECT, CEditView::OnFilePrint)
-ON_COMMAND(ID_FILE_PRINT_PREVIEW, CEditView::OnFilePrintPreview)
-ON_CONTROL_REFLECT_EX(EN_CHANGE, OnEditChange)
+    //{{AFX_MSG_MAP(CShellView)
+    ON_WM_CREATE()
+    ON_WM_DESTROY()
+    ON_WM_CHAR()
+    ON_WM_KEYDOWN()
+    ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
+    //}}AFX_MSG_MAP
+    // Standard-Druckbefehle
+    ON_COMMAND(ID_FILE_PRINT, CEditView::OnFilePrint)
+    ON_COMMAND(ID_FILE_PRINT_DIRECT, CEditView::OnFilePrint)
+    ON_COMMAND(ID_FILE_PRINT_PREVIEW, CEditView::OnFilePrintPreview)
+    ON_CONTROL_REFLECT_EX(EN_CHANGE, OnEditChange)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

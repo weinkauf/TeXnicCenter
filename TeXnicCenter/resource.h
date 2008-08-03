@@ -350,7 +350,6 @@
 #define STE_DICTIONARY_OPEN_FAIL        485
 #define STE_DICTIONARY_CREATE_FAIL      486
 #define ID_SPELL_ERROR_FIRST            700
-#define ID_SPELL_ERROR_LAST             ID_SPELL_ERROR_FIRST + MAXSUGGESTION
 #define ID_WINDOW_FIRST                 800
 #define ID_WINDOW_LAST                  849
 #define IDR_USER_TOOLBAR_FIRST          900
@@ -1314,6 +1313,10 @@
 #define ID_SHOW_IMAGES                  38536
 #define ID_SHOW_EQUATIONS               38537
 #define ID_SHOW_TABLES                  38541
+#define ID_EDIT_DELETE_LINE             38542
+#define ID_BEARBEITEN_ZEILEL38544       38544
+#define ID_ED                           38545
+#define ID_EDIT_DELETELINE              38546
 #define IDS_TEXTMODULES_NONEDEFINED     57671
 
 // Next default values for new objects
@@ -1322,7 +1325,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        328
-#define _APS_NEXT_COMMAND_VALUE         38542
+#define _APS_NEXT_COMMAND_VALUE         38547
 #define _APS_NEXT_CONTROL_VALUE         1363
 #define _APS_NEXT_SYMED_VALUE           135
 #endif

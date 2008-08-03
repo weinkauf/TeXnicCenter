@@ -60,22 +60,28 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CLaTeXEdit,CCrystalEditViewEx)
 
 BEGIN_MESSAGE_MAP(CLaTeXEdit,CCrystalEditViewEx)
-    //{{AFX_MSG_MAP(CLaTeXEdit)
     ON_WM_CREATE()
     ON_WM_CONTEXTMENU()
     ON_WM_CHAR()
+    ON_WM_SYSCOLORCHANGE()
+    ON_WM_SETFOCUS()
+    ON_WM_KILLFOCUS()
+    ON_WM_DESTROY()
+
     ON_COMMAND(ID_EDIT_GOTO,OnEditGoto)
     ON_COMMAND(ID_EDIT_TOGGLE_WHITESPACEVIEW,OnEditToggleWhitespaceView)
     ON_UPDATE_COMMAND_UI(ID_EDIT_TOGGLE_WHITESPACEVIEW,OnUpdateEditToggleWhiteSpaceView)
-    ON_WM_SETFOCUS()
+    
     ON_COMMAND(ID_SPELL_FILE,OnSpellFile)
     ON_COMMAND(ID_TEXTMODULES_DEFINE,OnTextmodulesDefine)
     ON_UPDATE_COMMAND_UI(ID_TEXTMODULES_DEFINE,OnUpdateTextmodulesDefine)
     ON_COMMAND(ID_QUERY_COMPLETION,OnQueryCompletion)
-    ON_WM_KILLFOCUS()
+    
     ON_COMMAND(ID_EDIT_OUTSOURCE,OnTextOutsource)
-    //}}AFX_MSG_MAP
-    ON_WM_SYSCOLORCHANGE()
+    
+    ON_COMMAND(ID_FORMAT_TEXT_BACK_COLOR, &CLaTeXEdit::OnFormatTextBackColor)
+    ON_COMMAND(ID_FORMAT_TEXT_FORE_COLOR, &CLaTeXEdit::OnFormatTextForeColor)
+    ON_COMMAND(ID_EDIT_DELETE_LINE, &CLaTeXEdit::OnEditDeleteLine)
 
     ON_MESSAGE(WM_COMMANDHELP,OnCommandHelp)
 
@@ -91,10 +97,7 @@ BEGIN_MESSAGE_MAP(CLaTeXEdit,CCrystalEditViewEx)
     //Commands for Block Comments
     ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_INSERT,OnBlockComment)
     ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_REMOVE,OnBlockComment)
-    ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_TOOGLE,OnBlockComment)
-    ON_WM_DESTROY()
-    ON_COMMAND(ID_FORMAT_TEXT_BACK_COLOR, &CLaTeXEdit::OnFormatTextBackColor)
-    ON_COMMAND(ID_FORMAT_TEXT_FORE_COLOR, &CLaTeXEdit::OnFormatTextForeColor)
+    ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_TOOGLE,OnBlockComment)    
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1343,7 +1346,9 @@ void CLaTeXEdit::OnTextOutsource()
 
     //Get the file name of ourselves
     CLaTeXDoc* pDoc = GetDocument();
+
     if (!pDoc) return;
+
     CPathTool OldPath = pDoc->GetPathName();
 
     //Suggest a directory for the new file
@@ -1351,10 +1356,12 @@ void CLaTeXEdit::OnTextOutsource()
 
     //Show the dialog
     SetShowInteractiveSelection(true);
+
     if (OutsourceDlg.DoModal() == IDCANCEL) {
         SetShowInteractiveSelection(false);
         return;
     }
+
     SetShowInteractiveSelection(false);
 
     //Get the new file name and write the selected lines to it
@@ -1413,4 +1420,10 @@ void CLaTeXEdit::OnFormatTextBackColor()
 void CLaTeXEdit::OnFormatTextForeColor()
 {
     // TODO: Add your command handler code here
+}
+
+void CLaTeXEdit::OnEditDeleteLine()
+{
+    if (m_pTextBuffer)
+        m_pTextBuffer->DeleteLine(this,GetCursorPos().y);
 }

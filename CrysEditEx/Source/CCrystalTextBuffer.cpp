@@ -977,6 +977,7 @@ void CCrystalTextBuffer::RemoveView(CCrystalTextView *pView)
 void CCrystalTextBuffer::UpdateViews(CCrystalTextView *pSource, CUpdateContext *pContext, DWORD dwUpdateFlags, int nLineIndex /*= -1*/)
 {
     POSITION pos = m_lpViews.GetHeadPosition();
+
     while (pos != NULL) {
         CCrystalTextView *pView = m_lpViews.GetNext(pos);
         pView->UpdateView(pSource, pContext, dwUpdateFlags, nLineIndex);
@@ -992,6 +993,7 @@ BOOL CCrystalTextBuffer::InternalDeleteText(CCrystalTextView *pSource, int nStar
     ASSERT(nEndLine >= 0 && nEndLine < m_aLines.GetSize());
     ASSERT(nEndChar >= 0 && nEndChar <= m_aLines[nEndLine].GetLength());
     ASSERT(nStartLine < nEndLine || nStartLine == nEndLine && nStartChar < nEndChar);
+
     if (m_bReadOnly)
         return FALSE;
 
@@ -1001,6 +1003,7 @@ BOOL CCrystalTextBuffer::InternalDeleteText(CCrystalTextView *pSource, int nStar
     context.m_ptEnd.y = nEndLine;
     context.m_ptEnd.x = nEndChar;
     LockLineAttributes();
+
     if (nStartLine == nEndLine) {
         m_aLines[nStartLine].RemoveText(nStartChar, nEndChar - nStartChar);
         ReleaseLineAttributes();
@@ -1010,6 +1013,7 @@ BOOL CCrystalTextBuffer::InternalDeleteText(CCrystalTextView *pSource, int nStar
         CLineInfo &start = m_aLines[nStartLine];
         CLineInfo &end = m_aLines[nEndLine];
         int nFirstDelLine = nStartLine;
+
         if (nStartChar) {
             // Append the right portion of the last line to the first line
             start.TrimText(nStartChar);
@@ -1363,13 +1367,18 @@ BOOL CCrystalTextBuffer::DeleteText(CCrystalTextView *pSource, int nStartLine, i
         return FALSE;
 
     BOOL bGroupFlag = FALSE;
+
     if (!m_bUndoGroup) {
         BeginUndoGroup();
         bGroupFlag = TRUE;
     }
-    AddUndoRecord(FALSE, CPoint(nStartChar, nStartLine), CPoint(nEndChar, nEndLine), sTextToDelete, nAction);
+
+    AddUndoRecord(FALSE, CPoint(nStartChar, nStartLine), CPoint(nEndChar, nEndLine), 
+        sTextToDelete, nAction);
+    
     if (bGroupFlag)
         FlushUndoGroup(pSource);
+
     return TRUE;
 }
 
@@ -1513,3 +1522,38 @@ CPoint CCrystalTextBuffer::GetLastChangePos() const
     return m_ptLastChange;
 }
 //END SW
+
+BOOL CCrystalTextBuffer::DeleteLine( CCrystalTextView* source, int line )
+{
+    int startline, startpos, endline;
+    int endpos = m_aLines[line].GetLength();
+
+    if (line > 0) {
+        startline = line - 1;
+        endline = line;
+        startpos = m_aLines[startline].GetLength();
+    }
+    else {
+        startline = line;
+        endline = line;
+
+        if (endline + 1 < GetLineCount()) {
+            ++endline;
+            endpos = 0;
+        }
+
+        startpos = 0;
+    }
+
+    BOOL result = DeleteText(source,startline,startpos,endline,endpos,CE_ACTION_DELETE);
+
+    // Move the cursor to the start of line
+    if (result) {
+        if (endline >= GetLineCount())
+            --endline;
+
+        source->SetCursorPos(CPoint(0,endline));
+    }
+
+    return result;
+}

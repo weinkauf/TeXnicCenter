@@ -5,6 +5,8 @@
   missing directory
 - Added dictionaries to the output directory
 - Fixed some missing defines
+- Implemented Feature 1628599: The current line can be deleted using 
+  a shortcut, by default it's Ctrl+L
 
 2008/08/02 niteria
 - Migrated CVS repository to Subversion
