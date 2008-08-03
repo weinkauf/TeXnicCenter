@@ -1,49 +1,25 @@
-BUILDING TEXNICCENTER
+Building TeXnicCenter
 
-Note: The build process has been automated. I have tested it and seems to work 
-      properly. If any problems occur, please let me know and refer to the steps 
-      of the old process which are given at the end of this document.
+1 Requirements
 
-         23.05.2005, Olli (mailto:owieland@sourceforge.net)
+The following software and libraries are required to successfully build 
+TeXnicCenter and all of its components:
+  * Visual C++ 2008 with MFC libraries
+  * Visual C++ 2008 Feature Pack, freely available at 
+    http://www.microsoft.com/downloads
+  * Microsoft HTML Help Workshop
+  * MSXML 4
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% For the following downloads, see also:
-%  http://www.texniccenter.org/downloads
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+To generate the setup you will need:
+  * Nullsoft Scriptable Install System (NSIS) available at 
+    http://nsis.sourceforge.net/
 
-1. Install Microsoft HTML Help Workshop:
-   a) Download it from Microsoft ('http://msdn.microsoft.com/downloads/')
-   b) Install it on your system (including the necessary header files)
-   c) Add the directory that includes the header files
-      to the list of include directories in the Visual C++ 6 options
-      ('Tools -> Options -> Directories -> Include files').
-   d) Add the library path as well
-      ('Tools -> Options -> Directories -> Library files').
-   e) Finally add the path to hhc.exe as well
-   	  ('Tools -> Options -> Directories -> Executable files').
+2 Build Process
+  
+  1. Open the TeXnicCenter solution TeXnicCenter.sln in Visual C++.
+  2. Build the Debug and/or Release versions of TeXnicCenter.
 
-2. Install Microsoft XML Parser:
-   a) Download the most recent version of the Microsoft XML Parser 4 (MSXML4) 
-      including the SDK from 'http://msdn.microsoft.com/downloads/'
-   b) Install it on your system.
-   c) Add the include and library paths of MSXML to the list in Visual C++ 6
-      ('Tools -> Options ->Directories').
 
-3. Download the BCGControlBarLibrary header- and lib-files from 
-
-     http://www.toolscenter.org/downloads
-
-   and unpack the ZIP-archive to the directory, this file (HowToBuild.txt) is
-   placed in.
-
-4. Open the TeXnicCenter-workspace ('TeXnicCenter\TeXnicCenter.dsw') in Visual 
-   C++.
-
-5. Build the debug and release versions of TeXnicCenter. ("Batch build")
-
-Building is now completed. You can start TeXnicCenter.
 
 Visit the TeXnicCenter-Homepage
 
@@ -51,75 +27,6 @@ Visit the TeXnicCenter-Homepage
 
 for further information. Don't hesitate to ask us, if a problem occurs.
 
-
   Sven Wiegand (sven@TeXnicCenter.org)
   Tino Weinkauf (tino@TeXnicCenter.org)
 
-
---------------------------------- Old procedure --------------------------------
-You will only need the following procedure, if the new one does not work for 
-you.
-
-1. Build regexpp-lib:
-   a) Open a command line
-   b) Ensure that the environment variables, required to use the command line
-      tools of Visual C++ 6 are setup properly. If you are not sure if this is
-      the case, then execute the 'VCVARS32.BAT' file from the command line, 
-      which should be located in the directory 'VC98\BIN' in your Visual C++
-      program directory (i.e. 'C:\Program Files\Visual C++').
-   c) Change into the 'regexpp\lib directory'
-   d) Execute the 'VC6.BAT' file to build the library
-
-2. Copy the files
-
-    mre200dl.dll
-    mre200dl.ilk
-    mre200dl.pdb
-
-   from the 'regexpp\lib' directory to the 'output\Debug' directory.
-
-3. Copy the file
-
-    mre200l.dll
-
-   from the 'regexpp\lib' directory to the 'output\Release' directory.
-
-...
-
-9. Build the TeXnicCenter-Help-File using HTML Help Workshop with the 
-    'TCHelp\TeXnicCenter.hhp' project.
-
-10. Copy all files matching
-
-     '*.chm'  or  '*.chw'
-
-    from the 'output' directory to the 'output\debug\help' and 
-    'output\release\help' directory.
-
-11. Copy the files
-
-     GPL_english.htm
-     GPL_german.htm
-     Tips_english.txt
-     Tips_german.txt
-     UserImages.bmp
-
-    from the 'TeXnicCenter' directory to
-
-     a) the 'output\debug' directory
-     b) the 'output\release' directory
-
-12. Copy all files matching '*.xsd' from the 'TeXnicCenter\xmlschema' directory
-    to 'output\debug' and 'output\release'.
-
-12. Create a directory called 'language' in 'output\debug' and 'output\release'.
-
-13. Copy the files
-
-     *.aff
-     *.dic
-
-    from the 'MySpell' directory to
-
-     a) the 'output\debug\language' directory
-     b) the 'output\release\language' directoy

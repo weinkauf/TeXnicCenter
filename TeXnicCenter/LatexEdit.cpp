@@ -273,10 +273,10 @@ int CLaTeXEdit::OnCreate(LPCREATESTRUCT lpCreateStruct)
     return 0;
 }
 
-class MyAttributeMenu : public CAttributeMenu {
+class SpellerSuggestionMenu : public CAttributeMenu {
 
 public:
-    MyAttributeMenu(CCrystalEditView* view,const CPoint& pt)
+    SpellerSuggestionMenu(CCrystalEditView* view,const CPoint& pt)
     : CAttributeMenu(view,pt)
     {
     }
@@ -300,7 +300,7 @@ void CLaTeXEdit::OnContextMenu(CWnd* pWnd, CPoint point)
     CCrystalTextBuffer::CTextAttribute *attr = pBuffer->GetLineAttribute(ptText.y,ptText.x,ptText.x + 1);
 
     if (attr != NULL) {
-        MyAttributeMenu menu(this,ptText);
+        SpellerSuggestionMenu menu(this,ptText);
 
         if (attr->m_Attribute == CCrystalTextBuffer::CTextAttribute::spellError)
             bShowDefault = !menu.ShowSpellMenu(theApp.GetSpeller(),point);
