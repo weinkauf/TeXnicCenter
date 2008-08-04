@@ -329,7 +329,9 @@ BOOL CTeXnicCenterApp::InitInstance()
 			}
 		}
 		else
+		{
 			bResourcesIncompatible = TRUE;
+		}
 	}
 
 	// loading localized resource DLL for CrystalEditEx
