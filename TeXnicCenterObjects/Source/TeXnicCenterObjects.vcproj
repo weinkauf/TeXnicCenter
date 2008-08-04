@@ -325,7 +325,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Quellcodedateien"
+			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
@@ -438,7 +438,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Header-Dateien"
+			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
@@ -463,7 +463,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Interface-Files"
+			Name="Interface Files"
 			Filter="idl"
 			>
 			<File
@@ -600,7 +600,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Typelibrary-Files"
+			Name="TypeLibrary Files"
 			>
 			<File
 				RelativePath="TeXnicCenterObjects.idl"
