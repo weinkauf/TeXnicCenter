@@ -103,6 +103,37 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 // Version
 //
 
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 2,0,0,0
+ PRODUCTVERSION 2,0,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x21L
+#else
+ FILEFLAGS 0x20L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "FileDescription", "Crystal Editor Classes for TeXnicCenter"
+            VALUE "FileVersion", "2, 0, 0, 0"
+            VALUE "InternalName", "CrysEdit"
+            VALUE "LegalCopyright", "© Andrei Stcherbatchenko and The TeXnicCenter Team"
+            VALUE "OriginalFilename", "CrysEdit.dll"
+            VALUE "ProductName", "CrysEdit Dynamic Link Library"
+            VALUE "ProductVersion", "2.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END
 
 
 #ifdef APSTUDIO_INVOKED
@@ -297,11 +328,6 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Version
-//
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // Dialog
 //
 
@@ -467,7 +493,7 @@ END
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 #pragma code_page(1252)
-#include "res\\CrysEditEx.rc2"  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen
+//#include "res\\CrysEditEx.rc2"  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen
 #include "l.DEU\\afxres.rc"  	// Standardkomponenten
 #include "l.DEU\\afxprint.rc"  // Ressourcen für Drucken/Seitenansicht
 #endif

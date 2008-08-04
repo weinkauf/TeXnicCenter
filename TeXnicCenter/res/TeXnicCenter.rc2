@@ -37,7 +37,6 @@ BEGIN
             VALUE "OriginalFilename", "TeXnicCenter.exe"
             VALUE "ProductName", "TeXnicCenter"
             VALUE "ProductVersion", TXC_VERSION_STRING
-            VALUE "SpecialBuild", "Preview"
         END
 
 		BLOCK "040904b0"
@@ -50,7 +49,6 @@ BEGIN
             VALUE "OriginalFilename", "TeXnicCenter.exe"
             VALUE "ProductName", "TeXnicCenter"
             VALUE "ProductVersion", TXC_VERSION_STRING
-            VALUE "SpecialBuild", "Preview"
         END
     END
     BLOCK "VarFileInfo"
