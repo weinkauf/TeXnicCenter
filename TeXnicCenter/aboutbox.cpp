@@ -106,6 +106,7 @@ LPCTSTR const pArrCredit[] =
 	_T(""),
 	_T("Main Code\t"),
 	_T(""),
+	_T("Sergiu Dotenco\f"),
 	_T("Chris Norris\f"),
 	_T("Stephan Schrader\f"),
 	_T("Paul Selormey\f"),
