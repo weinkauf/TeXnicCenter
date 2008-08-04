@@ -1,0 +1,80 @@
+Coding guide lines for working on TeXnicCenter
+------------------------------------------------
+
+General
+-------
+
+Before implementing a feature or fixing a bug, please visit sf.net and subscribe yourself to that bug or feature request. Otherwise, another developer may work on it in the same time.
+
+Make sure that you are 'svn up' before starting your work.
+Make sure that you are 'svn up' before committing your work.
+Make sure that you have compiled without errors and warnings before committing your work.
+
+
+
+Unicode
+-------
+
+==> Sergiu? _T() etc.
+
+
+
+Indent Style
+---------------
+
+TeXnicCenter uses two different styles of indent: ANSI and K&R. See http://en.wikipedia.org/wiki/Indent_style for explanations.
+
+The first rule is to *not* change the format of the source code. Changes to the source code should be related to the content, not the format. This allows easier diffs and merges.
+
+The second rule is to stick to the indent style that is dominating in the source file. In other words, the creator of a file dictates the indent style for that file. And this shall not be changed nor mixed with other styles.
+
+If format changes become necessary for some reason, such changes shall be committed separately to the repository. Do not mix format changes with content changes. This hinders diffs and merges.
+
+The majority of files uses ANSI style. If you create a new file and prefer ANSI or are in doubt what style to use, then use ANSI. If you create a new file and prefer K&R, then use that.
+
+
+Tabs and Spaces
+---------------
+
+We use tabs for indentation and a tab width of 4. Do not convert tabs to spaces.
+
+
+
+Hungarian Notation
+------------------
+
+We do *not* use Hungarian notation (anymore). See http://en.wikipedia.org/wiki/Hungarian_notation for explanations.
+
+You may notice that Hungarian notation is used very often in the source code of TXC. This is not encouraged anymore. However, we do not change the code just for that reason.
+
+In particular, new classes get a name without the preceeding 'C'.
+
+
+
+CamelCase
+---------
+
+It is desired to use CamelCase for variables, classes, and file names. See http://en.wikipedia.org/wiki/CamelCase for explanations.
+
+In particular, start the word with a capital letter if you use CamelCase for that word, i.e., not camelCase.
+
+
+
+Branches
+--------
+
+You may implement new features on branches if you feel that you might disturb other developers or are not yet sure about the outcome of your undertaking.
+
+You can create new branches, but it is preferred that you discuss the issue with the maintainer. Be sure to understand Chapter 4 of the SVN book (http://svnbook.red-bean.com/en/1.4/svn.branchmerge.html). You create a branch under the 'branches' subdirectory in the repository using:
+
+  svn copy https://texniccenter.svn.sourceforge.net/svnroot/texniccenter/trunk \
+           https://texniccenter.svn.sourceforge.net/svnroot/texniccenter/branches/MYBRANCHNAME \
+           -m "New branch for my development towards a new feature"
+
+You change your working copy to that branch using
+
+  svn switch https://texniccenter.svn.sourceforge.net/svnroot/texniccenter/branches/MYBRANCHNAME
+
+There is no need to have both versions (trunk and branch) checked out. Type 'svn info' to see where you are.
+
+This also works very nice with TortoiseSVN. Just make sure that you DO NOT create a branch under 'trunk'.
