@@ -404,7 +404,7 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;inl"
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;inl;h;hpp"
 			>
 			<File
 				RelativePath="AttributeMenu.cpp"
@@ -447,6 +447,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="AttributeMenu.h"
+				>
+			</File>
+			<File
 				RelativePath="BackgroundThread.cpp"
 				>
 				<FileConfiguration
@@ -485,6 +489,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="BackgroundThread.h"
+				>
 			</File>
 			<File
 				RelativePath="CCrystalEditView.cpp"
@@ -527,6 +535,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="CCrystalEditView.h"
+				>
+			</File>
+			<File
+				RelativePath="CCrystalEditView.inl"
+				>
+			</File>
+			<File
 				RelativePath="CCrystalTextBuffer.cpp"
 				>
 				<FileConfiguration
@@ -565,6 +581,14 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="CCrystalTextBuffer.h"
+				>
+			</File>
+			<File
+				RelativePath="CCrystalTextBuffer.inl"
+				>
 			</File>
 			<File
 				RelativePath="CCrystalTextView.cpp"
@@ -607,6 +631,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="CCrystalTextView.h"
+				>
+			</File>
+			<File
+				RelativePath="CCrystalTextView.inl"
+				>
+			</File>
+			<File
 				RelativePath="CCrystalTextView2.cpp"
 				>
 				<FileConfiguration
@@ -645,6 +677,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="cedefs.h"
+				>
 			</File>
 			<File
 				RelativePath="CEditReplaceDlg.cpp"
@@ -687,6 +723,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="CEditReplaceDlg.h"
+				>
+			</File>
+			<File
 				RelativePath="CFindTextDlg.cpp"
 				>
 				<FileConfiguration
@@ -727,6 +767,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="CFindTextDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CharType.h"
+				>
+			</File>
+			<File
 				RelativePath="CrysEditEx.cpp"
 				>
 				<FileConfiguration
@@ -765,6 +813,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Include\CrysEditEx.h"
+				>
 			</File>
 			<File
 				RelativePath="CrysEditEx.rc"
@@ -847,6 +899,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="CrystalParser.h"
+				>
+			</File>
+			<File
 				RelativePath="CrystalTextBlock.cpp"
 				>
 				<FileConfiguration
@@ -885,6 +941,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="CrystalTextBlock.h"
+				>
 			</File>
 			<File
 				RelativePath="CrystalTextBufferEx.cpp"
@@ -927,6 +987,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="CrystalTextBufferEx.h"
+				>
+			</File>
+			<File
+				RelativePath="editcmd.h"
+				>
+			</File>
+			<File
+				RelativePath="editreg.h"
+				>
+			</File>
+			<File
 				RelativePath="Inline.cpp"
 				>
 				<FileConfiguration
@@ -967,6 +1039,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
 				RelativePath="SpellCheckDlg.cpp"
 				>
 				<FileConfiguration
@@ -1005,6 +1081,14 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="SpellCheckDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Speller.h"
+				>
 			</File>
 			<File
 				RelativePath="StdAfx.cpp"
@@ -1049,99 +1133,6 @@
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
-			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl"
-			>
-			<File
-				RelativePath="AttributeMenu.h"
-				>
-			</File>
-			<File
-				RelativePath="BackgroundThread.h"
-				>
-			</File>
-			<File
-				RelativePath="CCrystalEditView.h"
-				>
-			</File>
-			<File
-				RelativePath="CCrystalEditView.inl"
-				>
-			</File>
-			<File
-				RelativePath="CCrystalTextBuffer.h"
-				>
-			</File>
-			<File
-				RelativePath="CCrystalTextBuffer.inl"
-				>
-			</File>
-			<File
-				RelativePath="CCrystalTextView.h"
-				>
-			</File>
-			<File
-				RelativePath="CCrystalTextView.inl"
-				>
-			</File>
-			<File
-				RelativePath="cedefs.h"
-				>
-			</File>
-			<File
-				RelativePath="CEditReplaceDlg.h"
-				>
-			</File>
-			<File
-				RelativePath="CFindTextDlg.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\myspell\character.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharType.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Include\CrysEditEx.h"
-				>
-			</File>
-			<File
-				RelativePath="CrystalParser.h"
-				>
-			</File>
-			<File
-				RelativePath="CrystalTextBlock.h"
-				>
-			</File>
-			<File
-				RelativePath="CrystalTextBufferEx.h"
-				>
-			</File>
-			<File
-				RelativePath="editcmd.h"
-				>
-			</File>
-			<File
-				RelativePath="editreg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\resource.h"
-				>
-			</File>
-			<File
-				RelativePath="SpellCheckDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Speller.h"
-				>
 			</File>
 			<File
 				RelativePath="StdAfx.h"
