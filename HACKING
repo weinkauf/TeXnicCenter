@@ -15,8 +15,29 @@ Make sure that you have compiled without errors and warnings before committing y
 Unicode
 -------
 
-==> Sergiu? _T() etc.
+String literals have to be enclosed by the _T-macro, e.g. _T("String"), to make
+sure that the Unicode version of TeXnicCenter compiles correctly. When declaring
+variables use the TCHAR-typedefs, such as LPTSTR, LPCTSTR instead of char* and 
+const char* and TCHAR instead of char.
 
+
+Macros
+------
+
+Always use inline funtions and const/enum instead of #defines. Constants 
+can be declared as follows:
+
+  const double PI = 3.14159265358979;
+  const int ArraySize = 1024;
+  LPCTSTR const FileName = _T("temp.out");
+
+
+Mostly Private
+---------------
+
+Implementation details should always be hidden using the private/protected access
+modifer. Prefer private to protected. When defining properties for an object, 
+provide a public Get and/or Set method instead of making the data member public.
 
 
 Indent Style
