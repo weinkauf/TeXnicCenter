@@ -103,6 +103,14 @@ In particular, start the word with a capital letter if you use CamelCase for
 that word, i.e., not camelCase.
 
 
+Programming Paradigm
+---------------------
+
+Follow the structured programming paradigm when possible. This means no breaks,
+continues, multiple returns in a single function and so on. Not following this
+paradigm results in spaghetti code which is hard to understand and debug.
+
+
 Branches
 --------
 
