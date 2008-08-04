@@ -366,15 +366,31 @@ BOOL CTeXnicCenterApp::InitInstance()
 		SetRegistryBase(_T("Workspace\\") + CConfiguration::GetInstance()->m_strGuiLanguage);
 
 	// Set the application look after the registry base for the workspace has been set
-	SetApplicationLook(GetProfileInt(_T("Settings"),_T("ApplicationLook"), ID_VIEW_APP_LOOK_VS_2005));
+	const UINT look_not_set = ~0U;
+	UINT application_look = GetProfileInt(_T("Settings"),_T("ApplicationLook"), look_not_set);
+
+	if (application_look == look_not_set)
+	{
+		OSVERSIONINFO vi = {sizeof(OSVERSIONINFO)};
+		::GetVersionEx(&vi);
+
+		if (vi.dwMajorVersion < 5 || vi.dwMajorVersion == 5 && vi.dwMinorVersion == 0) // Windows 2000 and previous versions
+			application_look = ID_VIEW_APP_LOOK_OFFICE_XP;
+		else if (vi.dwMajorVersion == 5) // Windows XP
+			application_look = ID_VIEW_APP_LOOK_VS_2005;
+		else // Windows Vista or higher
+			application_look = ID_VIEW_APP_LOOK_OFFICE_2007_BLUE;
+	}
+
+	SetApplicationLook(application_look);
 
 	// Dokumentvorlagen registrieren
 	// LaTeX-Document
 	m_pLatexDocTemplate = new CMultiDocTemplate(
 	    IDR_LATEXTYPE,
-	    RUNTIME_CLASS(/*LaTeXDocument*/CLaTeXDoc),
+	    RUNTIME_CLASS(CLaTeXDoc),
 	    RUNTIME_CLASS(CChildFrame), // Benutzerspezifischer MDI-Child-Rahmen
-	    RUNTIME_CLASS(/*LaTeXView*/CLaTeXEdit));
+	    RUNTIME_CLASS(CLaTeXEdit));
 	AddDocTemplate(m_pLatexDocTemplate);
 
 	m_pProjectDocTemplate = new CSingleProjectTemplate(
