@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -48,10 +48,10 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNAMIC(CNewEnvironment,CLaTeXCommand)
 
 CNewEnvironment::CNewEnvironment(const CStyleFile *parent, const CString &name,int noOfParams)
-: CLaTeXCommand(parent,name,noOfParams)
+		: CLaTeXCommand(parent,name,noOfParams)
 {
-    SetExpandBefore(CString(_T("\\begin{")));
-    SetExpandAfter(CString(_T("}") + CString(GetParameterString()) + _T("\r\n\r\n\\end{") + name + _T("}")));
+	SetExpandBefore(CString(_T("\\begin{")));
+	SetExpandAfter(CString(_T("}") + CString(GetParameterString()) + _T("\r\n\r\n\\end{") + name + _T("}")));
 }
 
 CNewEnvironment::~CNewEnvironment()
@@ -61,15 +61,15 @@ CNewEnvironment::~CNewEnvironment()
 
 const CString CNewEnvironment::ToString() const
 {
-    const CStyleFile *sf = GetStyleFile();
-    CString x = (sf != NULL ? sf->GetFileName() : CString(_T("???")));
+	const CStyleFile *sf = GetStyleFile();
+	CString x = (sf != NULL ? sf->GetFileName() : CString(_T("???")));
 
-    TCHAR buf[5];
-    _itot(GetNoOfParams(),buf,10);
+	TCHAR buf[5];
+	_itot(GetNoOfParams(),buf,10);
 
-    return CString(GetName() +
-            (GetNoOfParams() > 0 ? _T("#") + CString(buf) : _T("")) +
-            _T(" (") + x + _T(")"));
+	return CString(GetName() +
+	               (GetNoOfParams() > 0 ? _T("#") + CString(buf) : _T("")) +
+	               _T(" (") + x + _T(")"));
 }
 
 /*

@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -45,59 +45,61 @@
 
 @author Sven Wiegand
  */
-class COptionPageFile : public CPropertyPage {
-    DECLARE_DYNCREATE(COptionPageFile)
+class COptionPageFile : public CPropertyPage
+{
+	DECLARE_DYNCREATE(COptionPageFile)
 
-    // construction/destruction
+// construction/destruction
 public:
-    COptionPageFile();
-    virtual ~COptionPageFile();
+	COptionPageFile();
+	virtual ~COptionPageFile();
 
-    // operations
+// operations
 public:
 
-    // implementation helpers
+// implementation helpers
 protected:
-    /** 
-    Enables/disables controls of this page.
-     */
-    void UpdateCtrlStates();
+	/**
+	Enables/disables controls of this page.
+	 */
+	void UpdateCtrlStates();
 
-    // overridings
+// overridings
 protected:
-    //{{AFX_VIRTUAL(COptionPageFile)
+//{{AFX_VIRTUAL(COptionPageFile)
 public:
-    virtual void OnOK();
+	virtual void OnOK();
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(COptionPageFile)
-    virtual BOOL OnInitDialog();
-    afx_msg void OnUpdateCtrls();
-    //}}AFX_MSG
+	//{{AFX_MSG(COptionPageFile)
+	virtual BOOL OnInitDialog();
+	afx_msg void OnUpdateCtrls();
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
 
-    // dialog fields
+// dialog fields
 protected:
-    //{{AFX_DATA(COptionPageFile)
-    enum {
-        IDD = IDD_OPTIONS_FILE
-    };
-    CStatic m_wndSaveIntervalLabel2;
-    CStatic m_wndSaveIntervalLabel1;
-    CEdit m_wndSaveIntervalEdit;
-    CSpinButtonCtrl m_wndSaveIntervalSpin;
-    BOOL m_bSaveAutomatic;
-    BOOL m_bSaveBeforeCompilation;
-    UINT m_unSaveInterval;
-    int m_nFileFormat;
-    BOOL m_bSaveNewDocuments;
-    //}}AFX_DATA
+	//{{AFX_DATA(COptionPageFile)
+	enum
+	{
+		IDD = IDD_OPTIONS_FILE
+	};
+	CStatic m_wndSaveIntervalLabel2;
+	CStatic m_wndSaveIntervalLabel1;
+	CEdit m_wndSaveIntervalEdit;
+	CSpinButtonCtrl m_wndSaveIntervalSpin;
+	BOOL m_bSaveAutomatic;
+	BOOL m_bSaveBeforeCompilation;
+	UINT m_unSaveInterval;
+	int m_nFileFormat;
+	BOOL m_bSaveNewDocuments;
+	//}}AFX_DATA
 };
 
 //{{AFX_INSERT_LOCATION}}

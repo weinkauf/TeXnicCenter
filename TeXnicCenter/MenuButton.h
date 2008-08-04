@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -47,41 +47,42 @@ of the menu-resource on construction.
 
 @author	Sven Wiegand
  */
-class CMenuButton : public CMFCMenuButton {
-    // construction/destruction
+class CMenuButton : public CMFCMenuButton
+{
+// construction/destruction
 public:
-    /**
-    Constructs a CMenuButton-object.
+	/**
+	Constructs a CMenuButton-object.
 
-    When the button is pressed after creation, it will show the menu
-    with the given resource ID.
+	When the button is pressed after creation, it will show the menu
+	with the given resource ID.
 
-    @param unMenuId
-            Resource-Id of the menu to popup when the button has been 
-            pressed. The first sub menu of the given menu will be shown.
-    @param bRightArrow
-            TRUE to get an arrow pointing to the right, FALSE to get one
-            pointing down.
-     */
-    CMenuButton(UINT unMenuId, BOOL bRightArrow = TRUE);
-    virtual ~CMenuButton();
+	@param unMenuId
+	        Resource-Id of the menu to popup when the button has been
+	        pressed. The first sub menu of the given menu will be shown.
+	@param bRightArrow
+	        TRUE to get an arrow pointing to the right, FALSE to get one
+	        pointing down.
+	 */
+	CMenuButton(UINT unMenuId, BOOL bRightArrow = TRUE);
+	virtual ~CMenuButton();
 
-    // overridings
+// overridings
 protected:
-    //{{AFX_VIRTUAL(CMenuButton)
-    //}}AFX_VIRTUAL
+	//{{AFX_VIRTUAL(CMenuButton)
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(CMenuButton)
-    //}}AFX_MSG
+	//{{AFX_MSG(CMenuButton)
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-    // attributes
+// attributes
 protected:
-    /** The menu to popup */
-    CMenu m_menu;
+	/** The menu to popup */
+	CMenu m_menu;
 };
 
 /////////////////////////////////////////////////////////////////////////////

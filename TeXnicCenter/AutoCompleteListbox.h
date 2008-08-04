@@ -12,61 +12,61 @@
 /////////////////////////////////////////////////////////////////////////////
 // CAutoCompleteListBox window
 
-class CAutoCompleteListBox : public CListBox 
+class CAutoCompleteListBox : public CListBox
 {
-    typedef std::map<CString,HIMAGELIST> ImageCacheContainer;
-    ImageCacheContainer image_cache_;
+	typedef std::map<CString,HIMAGELIST> ImageCacheContainer;
+	ImageCacheContainer image_cache_;
 
-    //Types and Enums
+	//Types and Enums
 
-    // Construction
+// Construction
 public:
-    CAutoCompleteListBox();
+	CAutoCompleteListBox();
 
-    // Attributes
+// Attributes
 public:
 private:
-    CFont m_NormalFont;
-    CFont m_BoldFont;
-    //CMapStringToPtr* m_PictureCache;
+	CFont m_NormalFont;
+	CFont m_BoldFont;
+	//CMapStringToPtr* m_PictureCache;
 
-    // Operations
+// Operations
 private:
-    BOOL DrawBitmap(CDC* pDC, const CString& file, UINT index, const CRect& rect);
-    HIMAGELIST LoadBitmapFromFile(const CString& filename);
+	BOOL DrawBitmap(CDC* pDC, const CString& file, UINT index, const CRect& rect);
+	HIMAGELIST LoadBitmapFromFile(const CString& filename);
 
 protected:
-    INT_PTR OnToolHitTest(CPoint point, TOOLINFO * pTI) const;
-    BOOL OnToolTipText(UINT id, NMHDR * pNMHDR, LRESULT * pResult);
+	INT_PTR OnToolHitTest(CPoint point, TOOLINFO * pTI) const;
+	BOOL OnToolTipText(UINT id, NMHDR * pNMHDR, LRESULT * pResult);
 
 public:
-    ///Returns the size of the largest item in pixels (measured with the bold font, so this is an upper estimate)
-    CSize GetLargestItemTextExtent();
+	///Returns the size of the largest item in pixels (measured with the bold font, so this is an upper estimate)
+	CSize GetLargestItemTextExtent();
 
-    // Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAutoCompleteListBox)
+	// Overrides
+	// ClassWizard generated virtual function overrides
+//{{AFX_VIRTUAL(CAutoCompleteListBox)
 public:
-    virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
-    virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
-    virtual int CompareItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct);
+	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
+	virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
+	virtual int CompareItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct);
 
 public:
-    const CSize GetItemMeasure(CDC* dc, LPCTSTR text);
-    //}}AFX_VIRTUAL
+	const CSize GetItemMeasure(CDC* dc, LPCTSTR text);
+	//}}AFX_VIRTUAL
 
-    // Implementation
+// Implementation
 public:
-    virtual ~CAutoCompleteListBox();
+	virtual ~CAutoCompleteListBox();
 
-    // Generated message map functions
+// Generated message map functions
 protected:
-    //{{AFX_MSG(CAutoCompleteListBox)
-    afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+	//{{AFX_MSG(CAutoCompleteListBox)
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 public:
-    afx_msg void OnKillFocus(CWnd* pNewWnd);
+	afx_msg void OnKillFocus(CWnd* pNewWnd);
 };
 
 /////////////////////////////////////////////////////////////////////////////

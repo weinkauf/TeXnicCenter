@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -62,144 +62,147 @@ output types.
 
 @author Sven Wiegand
  */
-class COutputWizard : public CPropertySheet {
+class COutputWizard : public CPropertySheet
+{
 
-    DECLARE_DYNAMIC(COutputWizard)
+	DECLARE_DYNAMIC(COutputWizard)
 
-    friend class OutputWizardPage;
-    friend class COutputWizardDistributionPath;
-    friend class COutputWizardFinish;
-    friend class COutputWizardMiKTeX;
-    friend class COutputWizardViewer;
-    friend class COutputWizardWelcome;
+	friend class OutputWizardPage;
+	friend class COutputWizardDistributionPath;
+	friend class COutputWizardFinish;
+	friend class COutputWizardMiKTeX;
+	friend class COutputWizardViewer;
+	friend class COutputWizardWelcome;
 
-    // Construction/Destruction
+// Construction/Destruction
 public:
-    COutputWizard(CProfileMap &profiles, CWnd* pParentWnd = NULL);
-    virtual ~COutputWizard();
+	COutputWizard(CProfileMap &profiles, CWnd* pParentWnd = NULL);
+	virtual ~COutputWizard();
 
-    // Operations
+// Operations
 public:
 
-    // Overridings
+// Overridings
 protected:
-    //{{AFX_VIRTUAL(COutputWizard)
+//{{AFX_VIRTUAL(COutputWizard)
 public:
-    virtual int DoModal();
-    virtual BOOL OnInitDialog();
-    //}}AFX_VIRTUAL
+	virtual int DoModal();
+	virtual BOOL OnInitDialog();
+	//}}AFX_VIRTUAL
 
-    // Implementation Helpers
+// Implementation Helpers
 protected:
-    /**
-     */
-    CString FindApplicationForDocType(LPCTSTR lpszExt);
+	/**
+	 */
+	CString FindApplicationForDocType(LPCTSTR lpszExt);
 
-    ///Returns a string from the registry.
-    const CString ReadStringFromRegistry(bool bAdmin, const CString& Path, const CString& Key);
+	///Returns a string from the registry.
+	const CString ReadStringFromRegistry(bool bAdmin, const CString& Path, const CString& Key);
 
-    /**
-     */
-    void SetActivePage(int nPage);
+	/**
+	 */
+	void SetActivePage(int nPage);
 
-    /**
-     */
-    void LookForMikTex();
+	/**
+	 */
+	void LookForMikTex();
 
-    /**
-     */
-    BOOL LookForLatex();
+	/**
+	 */
+	BOOL LookForLatex();
 
-    /**
-     */
-    void LookForDviViewer();
+	/**
+	 */
+	void LookForDviViewer();
 
-    /**
-     */
-    void LookForPs();
+	/**
+	 */
+	void LookForPs();
 
-    /**
-     */
-    void LookForPdf();
+	/**
+	 */
+	void LookForPdf();
 
-    /**
-     */
-    void ShowInformation();
+	/**
+	 */
+	void ShowInformation();
 
-    /**
-     */
-    void GenerateOutputProfiles();
+	/**
+	 */
+	void GenerateOutputProfiles();
 
-    // Message handlers
+// Message handlers
 protected:
-    afx_msg void OnBack();
-    afx_msg void OnNext();
-    afx_msg void OnFinish();
-    //{{AFX_MSG(COutputWizard)
-    //}}AFX_MSG
+	afx_msg void OnBack();
+	afx_msg void OnNext();
+	afx_msg void OnFinish();
+	//{{AFX_MSG(COutputWizard)
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-    // Constants
+// Constants
 protected:
-    enum tagPage {
-        pageWelcome = 0,
-        pageMikTex,
-        pageDistributionPath,
-        pageDviViewer,
-        pagePsViewer,
-        pagePdfViewer,
-        pageFinish,
-        pageCount
-    };
+	enum tagPage
+	{
+		pageWelcome = 0,
+		pageMikTex,
+		pageDistributionPath,
+		pageDviViewer,
+		pagePsViewer,
+		pagePdfViewer,
+		pageFinish,
+		pageCount
+	};
 
-    enum tagViewer {
-        viewerDvi = 0,
-        viewerPs,
-        viewerPdf,
-        viewerCount
-    };
+	enum tagViewer
+	{
+		viewerDvi = 0,
+		viewerPs,
+		viewerPdf,
+		viewerCount
+	};
 
-    // Attributes
+// Attributes
 protected:
-    /** TRUE if MiKTeX has been found. */
-    bool m_bMikTexInstalled;
+	/** TRUE if MiKTeX has been found. */
+	bool m_bMikTexInstalled;
 
-    /** TRUE if latex has been found. */
-    bool m_bLatexInstalled;
+	/** TRUE if latex has been found. */
+	bool m_bLatexInstalled;
 
-    /** TRUE if dvips has been found. */
-    bool m_bDvipsInstalled;
+	/** TRUE if dvips has been found. */
+	bool m_bDvipsInstalled;
 
-    /** TRUE if pdflatex has been found. */
-    bool m_bPdfLatexInstalled;
+	/** TRUE if pdflatex has been found. */
+	bool m_bPdfLatexInstalled;
 
-    /** TRUE if Ghostscript has been found. */
-    bool m_bGhostscriptInstalled;
+	/** TRUE if Ghostscript has been found. */
+	bool m_bGhostscriptInstalled;
 
-    /** TRUE if Postscript conversion is called via the ps2pdf script, e.g. from miktex. */
-    bool m_bGhostscriptViaPS2PDF;
+	/** TRUE if Postscript conversion is called via the ps2pdf script, e.g. from miktex. */
+	bool m_bGhostscriptViaPS2PDF;
 
-    /** Path to Ghostscript. */
-    CString m_strGhostscriptPath;
+	/** Path to Ghostscript. */
+	CString m_strGhostscriptPath;
 
-    /** Profile map to modify */
-    CProfileMap &m_profiles;
+	/** Profile map to modify */
+	CProfileMap &m_profiles;
 
-    /** Stack for storing recently showed pages. */
-    std::stack<int> m_stackPageHistory;
+	/** Stack for storing recently showed pages. */
+	std::stack<int> m_stackPageHistory;
 
-    /** The pages */
-    COutputWizardWelcome m_wndPageWelcome;
-    COutputWizardMiKTeX m_wndPageMikTex;
-    COutputWizardDistributionPath m_wndPageDistributionPath;
-    COutputWizardViewer m_wndPageDviViewer;
-    COutputWizardViewer m_wndPagePsViewer;
-    COutputWizardViewer m_wndPagePdfViewer;
-    COutputWizardFinish m_wndPageFinish;
+	/** The pages */
+	COutputWizardWelcome m_wndPageWelcome;
+	COutputWizardMiKTeX m_wndPageMikTex;
+	COutputWizardDistributionPath m_wndPageDistributionPath;
+	COutputWizardViewer m_wndPageDviViewer;
+	COutputWizardViewer m_wndPagePsViewer;
+	COutputWizardViewer m_wndPagePdfViewer;
+	COutputWizardFinish m_wndPageFinish;
 
 public:
-    virtual void BuildPropPageArray(void);
+	virtual void BuildPropPageArray(void);
 };
 
 /////////////////////////////////////////////////////////////////////////////

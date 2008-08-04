@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -47,51 +47,53 @@
 
 @author Sven Wiegand
  */
-class COptionPagePath : public CPropertyPage {
-    DECLARE_DYNCREATE(COptionPagePath)
+class COptionPagePath : public CPropertyPage
+{
+	DECLARE_DYNCREATE(COptionPagePath)
 
-    // construction/destruction
+// construction/destruction
 public:
-    COptionPagePath();
-    ~COptionPagePath();
+	COptionPagePath();
+	~COptionPagePath();
 
-    // overridings
+// overridings
 protected:
-    //{{AFX_VIRTUAL(COptionPagePath)
+//{{AFX_VIRTUAL(COptionPagePath)
 public:
-    virtual void OnOK();
+	virtual void OnOK();
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(COptionPagePath)
-    afx_msg void OnAddProjectTemplates();
-    afx_msg void OnRemoveProjectTemplates();
-    afx_msg void OnSelchangeProjectTemplates();
-    afx_msg void OnAddDocumentTemplates();
-    afx_msg void OnRemoveDocumentTemplates();
-    afx_msg void OnSelchangeDocumentTemplates();
-    virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+	//{{AFX_MSG(COptionPagePath)
+	afx_msg void OnAddProjectTemplates();
+	afx_msg void OnRemoveProjectTemplates();
+	afx_msg void OnSelchangeProjectTemplates();
+	afx_msg void OnAddDocumentTemplates();
+	afx_msg void OnRemoveDocumentTemplates();
+	afx_msg void OnSelchangeDocumentTemplates();
+	virtual BOOL OnInitDialog();
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-    // dialog data
+// dialog data
 private:
-    //{{AFX_DATA(COptionPagePath)
-    enum {
-        IDD = IDD_OPTIONS_PATHS
-    };
+	//{{AFX_DATA(COptionPagePath)
+	enum
+	{
+		IDD = IDD_OPTIONS_PATHS
+	};
 
-    CBrowseButton m_wndBrowseBtn;
-    CButton m_wndProjectRemoveButton;
-    CListBox m_wndProjectTemplateList;
-    CButton m_wndDocumentRemoveButton;
-    CListBox m_wndDocumentTemplateList;
-    CString m_strDefaultPath;
-    //}}AFX_DATA
+	CBrowseButton m_wndBrowseBtn;
+	CButton m_wndProjectRemoveButton;
+	CListBox m_wndProjectTemplateList;
+	CButton m_wndDocumentRemoveButton;
+	CListBox m_wndDocumentTemplateList;
+	CString m_strDefaultPath;
+	//}}AFX_DATA
 };
 
 //{{AFX_INSERT_LOCATION}}

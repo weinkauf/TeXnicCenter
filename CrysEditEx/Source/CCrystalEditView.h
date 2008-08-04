@@ -65,106 +65,106 @@ class CEditDropTargetImpl;
 /////////////////////////////////////////////////////////////////////////////
 //	CCrystalEditView view
 
-class CRYSEDIT_CLASS_DECL CCrystalEditView : public CCrystalTextView 
+class CRYSEDIT_CLASS_DECL CCrystalEditView : public CCrystalTextView
 {
-    DECLARE_DYNCREATE(CCrystalEditView)
+	DECLARE_DYNCREATE(CCrystalEditView)
 
 private:
-    BOOL m_bOvrMode;
-    BOOL m_bDropPosVisible;
-    CPoint m_ptSavedCaretPos;
-    CPoint m_ptDropPos;
-    BOOL m_bSelectionPushed;
-    CPoint m_ptSavedSelStart, m_ptSavedSelEnd;
-    BOOL m_bAutoIndent;
+	BOOL m_bOvrMode;
+	BOOL m_bDropPosVisible;
+	CPoint m_ptSavedCaretPos;
+	CPoint m_ptDropPos;
+	BOOL m_bSelectionPushed;
+	CPoint m_ptSavedSelStart, m_ptSavedSelEnd;
+	BOOL m_bAutoIndent;
 
-    //	[JRT]
-    BOOL m_bDisableBSAtSOL; // Disable BS At Start Of Line
+	//	[JRT]
+	BOOL m_bDisableBSAtSOL; // Disable BS At Start Of Line
 
-    BOOL DeleteCurrentSelection();
+	BOOL DeleteCurrentSelection();
 
 protected:
-    CEditDropTargetImpl *m_pDropTarget;
-    virtual DROPEFFECT GetDropEffect();
-    virtual void OnDropSource(DROPEFFECT de);
-    void Paste();
-    void Cut();
-    virtual void ResetView();
+	CEditDropTargetImpl *m_pDropTarget;
+	virtual DROPEFFECT GetDropEffect();
+	virtual void OnDropSource(DROPEFFECT de);
+	void Paste();
+	void Cut();
+	virtual void ResetView();
 
-    // Attributes
+// Attributes
 public:
-    BOOL GetAutoIndent() const;
-    void SetAutoIndent(BOOL bAutoIndent);
+	BOOL GetAutoIndent() const;
+	void SetAutoIndent(BOOL bAutoIndent);
 
-    //	[JRT]
-    void SetDisableBSAtSOL(BOOL bDisableBSAtSOL);
-    BOOL GetDisableBSAtSOL() const;
+	//	[JRT]
+	void SetDisableBSAtSOL(BOOL bDisableBSAtSOL);
+	BOOL GetDisableBSAtSOL() const;
 
-    // Operations
+// Operations
 public:
-    CCrystalEditView();
-    virtual ~CCrystalEditView();
+	CCrystalEditView();
+	virtual ~CCrystalEditView();
 
-    virtual BOOL GetOverwriteMode() const;
-    void SetOverwriteMode(BOOL bOvrMode = TRUE);
+	virtual BOOL GetOverwriteMode() const;
+	void SetOverwriteMode(BOOL bOvrMode = TRUE);
 
-    void ShowDropIndicator(const CPoint &point);
-    void HideDropIndicator();
+	void ShowDropIndicator(const CPoint &point);
+	void HideDropIndicator();
 
-    BOOL DoDropText(COleDataObject *pDataObject, const CPoint &ptClient);
-    void DoDragScroll(const CPoint &point);
+	BOOL DoDropText(COleDataObject *pDataObject, const CPoint &ptClient);
+	void DoDragScroll(const CPoint &point);
 
-    virtual BOOL QueryEditable();
-    virtual void UpdateView(CCrystalTextView *pSource, CUpdateContext *pContext, DWORD dwFlags, int nLineIndex = -1);
+	virtual BOOL QueryEditable();
+	virtual void UpdateView(CCrystalTextView *pSource, CUpdateContext *pContext, DWORD dwFlags, int nLineIndex = -1);
 
-    BOOL ReplaceSelection(LPCTSTR pszNewText);
+	BOOL ReplaceSelection(LPCTSTR pszNewText);
 
-    virtual void OnEditOperation(int nAction, LPCTSTR pszText);
+	virtual void OnEditOperation(int nAction, LPCTSTR pszText);
 
-    // Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CCrystalEditView)
-    //}}AFX_VIRTUAL
+	// Overrides
+	// ClassWizard generated virtual function overrides
+	//{{AFX_VIRTUAL(CCrystalEditView)
+	//}}AFX_VIRTUAL
 
-    // Implementation
+// Implementation
 protected:
 
-    // Generated message map functions
+// Generated message map functions
 protected:
-    virtual void QueryComplete();
-    //{{AFX_MSG(CCrystalEditView)
-    afx_msg void OnEditPaste();
-    afx_msg void OnUpdateEditCut(CCmdUI* pCmdUI);
-    afx_msg void OnEditCut();
-    afx_msg void OnUpdateEditPaste(CCmdUI* pCmdUI);
-    afx_msg void OnEditDelete();
-    afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
-    afx_msg void OnEditDeleteBack();
-    afx_msg void OnEditUntab();
-    afx_msg void OnEditTab();
-    afx_msg void OnEditSwitchOvrmode();
-    afx_msg void OnUpdateEditSwitchOvrmode(CCmdUI* pCmdUI);
-    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-    afx_msg void OnDestroy();
-    afx_msg void OnEditReplace();
-    afx_msg void OnUpdateEditUndo(CCmdUI* pCmdUI);
-    afx_msg void OnEditUndo();
-    afx_msg void OnUpdateEditRedo(CCmdUI* pCmdUI);
-    afx_msg void OnEditRedo();
-    afx_msg void OnEditQueryCompletion();
-    //}}AFX_MSG
-    afx_msg void OnUpdateIndicatorCol(CCmdUI* pCmdUI);
-    afx_msg void OnUpdateIndicatorOvr(CCmdUI* pCmdUI);
-    afx_msg void OnUpdateIndicatorRead(CCmdUI* pCmdUI);
-    //BEGIN SW
-    afx_msg void OnUpdateEditGotoLastChange(CCmdUI* pCmdUI);
-    afx_msg void OnEditGotoLastChange();
-    //END SW
-    //BEGIN_SW(word deleting)
-    afx_msg void OnEditDeleteWord();
-    afx_msg void OnEditDeleteWordBack();
-    //END_SW
-    DECLARE_MESSAGE_MAP()
+	virtual void QueryComplete();
+	//{{AFX_MSG(CCrystalEditView)
+	afx_msg void OnEditPaste();
+	afx_msg void OnUpdateEditCut(CCmdUI* pCmdUI);
+	afx_msg void OnEditCut();
+	afx_msg void OnUpdateEditPaste(CCmdUI* pCmdUI);
+	afx_msg void OnEditDelete();
+	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnEditDeleteBack();
+	afx_msg void OnEditUntab();
+	afx_msg void OnEditTab();
+	afx_msg void OnEditSwitchOvrmode();
+	afx_msg void OnUpdateEditSwitchOvrmode(CCmdUI* pCmdUI);
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnDestroy();
+	afx_msg void OnEditReplace();
+	afx_msg void OnUpdateEditUndo(CCmdUI* pCmdUI);
+	afx_msg void OnEditUndo();
+	afx_msg void OnUpdateEditRedo(CCmdUI* pCmdUI);
+	afx_msg void OnEditRedo();
+	afx_msg void OnEditQueryCompletion();
+	//}}AFX_MSG
+	afx_msg void OnUpdateIndicatorCol(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateIndicatorOvr(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateIndicatorRead(CCmdUI* pCmdUI);
+	//BEGIN SW
+	afx_msg void OnUpdateEditGotoLastChange(CCmdUI* pCmdUI);
+	afx_msg void OnEditGotoLastChange();
+	//END SW
+	//BEGIN_SW(word deleting)
+	afx_msg void OnEditDeleteWord();
+	afx_msg void OnEditDeleteWordBack();
+	//END_SW
+	DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

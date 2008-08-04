@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -43,46 +43,47 @@ parse the contents of files. They get there text out of a file.
 
 @author Sven Wiegand
  */
-class CTextSourceFile : public CTextSource {
-    // construction/destruction
+class CTextSourceFile : public CTextSource
+{
+// construction/destruction
 public:
-    /**
-    Constructs an empty CTextSourceFile-object. Call create to
-    attach it to a file.
-     */
-    CTextSourceFile();
+	/**
+	Constructs an empty CTextSourceFile-object. Call create to
+	attach it to a file.
+	 */
+	CTextSourceFile();
 
-    /** Closes the file and destructs the object. */
-    virtual ~CTextSourceFile();
+	/** Closes the file and destructs the object. */
+	virtual ~CTextSourceFile();
 
-    /**
-    Creates a CTextSourceFile-object, that gets its text out
-    of the specified file.
+	/**
+	Creates a CTextSourceFile-object, that gets its text out
+	of the specified file.
 
-    @param lpszFile
-            Path of the file, the object should get its text from.
+	@param lpszFile
+	        Path of the file, the object should get its text from.
 
-    @return
-            TRUE if successfull, FALSE otherwise.
-     */
-    BOOL Create(LPCTSTR lpszFile);
+	@return
+	        TRUE if successfull, FALSE otherwise.
+	 */
+	BOOL Create(LPCTSTR lpszFile);
 
-    // operations
+// operations
 public:
-    virtual BOOL GetNextLine(LPCTSTR &lpLine,int &nLength);
-    virtual void Delete();
+	virtual BOOL GetNextLine(LPCTSTR &lpLine,int &nLength);
+	virtual void Delete();
 
-    // attributes
+// attributes
 protected:
-    /** file object */
-    CStdioFile m_file;
+	/** file object */
+	CStdioFile m_file;
 
-    /** CString-object that stores the current line. */
-    CString m_strCurrentLine;
+	/** CString-object that stores the current line. */
+	CString m_strCurrentLine;
 
 private:
-    /** TRUE if the file was opened successfully. */
-    BOOL m_bFileOpen;
+	/** TRUE if the file was opened successfully. */
+	BOOL m_bFileOpen;
 };
 
 #endif // !defined(AFX_TEXTSOURCEFILE_H__843BC263_339C_11D3_929E_444553540000__INCLUDED_)

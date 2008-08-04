@@ -12,9 +12,9 @@
 IMPLEMENT_DYNAMIC(OutputWizardPage, CPropertyPage)
 
 OutputWizardPage::OutputWizardPage(UINT id, COutputWizard* w)
-: w_(w), CPropertyPage(id)
+		: w_(w), CPropertyPage(id)
 {
-    ASSERT(w);
+	ASSERT(w);
 }
 
 BEGIN_MESSAGE_MAP(OutputWizardPage, CPropertyPage)
@@ -27,13 +27,13 @@ END_MESSAGE_MAP()
 
 LRESULT OutputWizardPage::OnWizardBack()
 {
-    GetWizard()->OnBack();
-    CPropertyPage::OnWizardBack();
-    return -1;
+	GetWizard()->OnBack();
+	CPropertyPage::OnWizardBack();
+	return -1;
 }
 
 LRESULT OutputWizardPage::OnWizardNext()
 {
-    GetWizard()->OnNext();
-    return CPropertyPage::OnWizardNext();
+	GetWizard()->OnNext();
+	return CPropertyPage::OnWizardNext();
 }

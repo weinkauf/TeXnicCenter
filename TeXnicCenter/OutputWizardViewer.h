@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -52,59 +52,62 @@ viewer.
 
 @author Sven Wiegand
  */
-class COutputWizardViewer : public OutputWizardPage {
-    DECLARE_DYNCREATE(COutputWizardViewer)
+class COutputWizardViewer : public OutputWizardPage
+{
+	DECLARE_DYNCREATE(COutputWizardViewer)
 
 public:
-    /**
-    Constructs a page for the specified dialog template.
-     */
-    COutputWizardViewer(COutputWizard* w = 0, UINT unIDTemplate = -1);
-    virtual ~COutputWizardViewer();
+	/**
+	Constructs a page for the specified dialog template.
+	 */
+	COutputWizardViewer(COutputWizard* w = 0, UINT unIDTemplate = -1);
+	virtual ~COutputWizardViewer();
 
 
-    // Overridings
+// Overridings
 protected:
-    //{{AFX_VIRTUAL(COutputWizardViewer)
+//{{AFX_VIRTUAL(COutputWizardViewer)
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);
+	//}}AFX_VIRTUAL
 
-    // Message Handlers
+// Message Handlers
 protected:
-    //{{AFX_MSG(COutputWizardViewer)
-    afx_msg void OnViewerBrowse();
-    virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+	//{{AFX_MSG(COutputWizardViewer)
+	afx_msg void OnViewerBrowse();
+	virtual BOOL OnInitDialog();
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-    // Dialog Data
+// Dialog Data
 public:
-    //{{AFX_DATA(COutputWizardViewer)
-    enum {
-        IDD = IDD_OUTPUTWIZARD_DVIVIEWER
-    };
-    CPersistPosEdit m_wndFWSearch;
-    CEditMenuButtonOpt m_wndViewerPHBtn;
-    CString m_strForwardSearchOption;
-    CString m_strPath;
-    CString m_strSingleInstanceOption;
-    //}}AFX_DATA
+	//{{AFX_DATA(COutputWizardViewer)
+	enum
+	{
+		IDD = IDD_OUTPUTWIZARD_DVIVIEWER
+	};
+	CPersistPosEdit m_wndFWSearch;
+	CEditMenuButtonOpt m_wndViewerPHBtn;
+	CString m_strForwardSearchOption;
+	CString m_strPath;
+	CString m_strSingleInstanceOption;
+	//}}AFX_DATA
 
-    // Attributes
+// Attributes
 protected:
 
-    /** 
-    Stores the current cursor position of the 
-    m_wndForwardSearchOptionEdit.
-     */
-    struct tagSelection {
-        int nStart, nEnd;
-    } m_selForwardSearchOptionEdit;
+	/**
+	Stores the current cursor position of the
+	m_wndForwardSearchOptionEdit.
+	 */
+	struct tagSelection
+	{
+		int nStart, nEnd;
+	} m_selForwardSearchOptionEdit;
 public:
-    virtual BOOL OnSetActive();
-    virtual LRESULT OnWizardNext();
+	virtual BOOL OnSetActive();
+	virtual LRESULT OnWizardNext();
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -4,17 +4,17 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License as
 * published by the Free Software Foundation; either version 2 of
 * the License, or (at your option) any later version.
-* 
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 * General Public License for more details.
-* 
+*
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -47,9 +47,9 @@ static char THIS_FILE[] = __FILE__;
 
 
 CUserToolAdvDlg::CUserToolAdvDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CUserToolAdvDlg::IDD, pParent),
-	m_wndInputBtn(IDR_POPUP_PLACEHOLDER_OPT),
-	m_wndOutputBtn(IDR_POPUP_PLACEHOLDER_OPT)
+		: CDialog(CUserToolAdvDlg::IDD, pParent),
+		m_wndInputBtn(IDR_POPUP_PLACEHOLDER_OPT),
+		m_wndOutputBtn(IDR_POPUP_PLACEHOLDER_OPT)
 {
 	//{{AFX_DATA_INIT(CUserToolAdvDlg)
 	m_bCloseConsoleWindow = FALSE;
@@ -87,7 +87,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CUserToolAdvDlg message handlers
 
-void CUserToolAdvDlg::OnUseOutput() 
+void CUserToolAdvDlg::OnUseOutput()
 {
 	UpdateData();
 
@@ -96,14 +96,14 @@ void CUserToolAdvDlg::OnUseOutput()
 	m_wndCloseWindowBtn.EnableWindow(!m_bUseOutputWindow);
 }
 
-BOOL CUserToolAdvDlg::OnInitDialog() 
+BOOL CUserToolAdvDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
 	//Attach Edits to Buttons
 	m_wndInputBtn.AttachEditCtrl(&m_wndInputFile);
 	m_wndOutputBtn.AttachEditCtrl(&m_wndOutputFile);
-	
+
 	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	// EXCEPTION: OCX Property Pages should return FALSE
 }

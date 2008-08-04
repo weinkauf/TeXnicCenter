@@ -12,47 +12,48 @@
 /////////////////////////////////////////////////////////////////////////////
 // COptionPageEditor dialog
 
-class COptionPageEditor : 
-    public PropertyPage
+class COptionPageEditor :
+			public PropertyPage
 {
-    DECLARE_DYNCREATE(COptionPageEditor)
+	DECLARE_DYNCREATE(COptionPageEditor)
 
-    // Construction
+// Construction
 public:
-    COptionPageEditor();
-    ~COptionPageEditor();
+	COptionPageEditor();
+	~COptionPageEditor();
 
-    // Dialog Data
-    //{{AFX_DATA(COptionPageEditor)
+	// Dialog Data
+	//{{AFX_DATA(COptionPageEditor)
 
-    enum {
-        IDD = IDD_OPTIONS_EDITOR
-    };
-    CEdit m_wndFixedColumn;
-    UINT m_nTabWidth;
-    UINT m_nFixedColumn;
-    int m_nWordWrapStyle;
-    BOOL m_bShowLineNumbers;
-    //}}AFX_DATA
+	enum
+	{
+		IDD = IDD_OPTIONS_EDITOR
+	};
+	CEdit m_wndFixedColumn;
+	UINT m_nTabWidth;
+	UINT m_nFixedColumn;
+	int m_nWordWrapStyle;
+	BOOL m_bShowLineNumbers;
+	//}}AFX_DATA
 
 
-    // Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(COptionPageEditor)
+	// Overrides
+	// ClassWizard generate virtual function overrides
+//{{AFX_VIRTUAL(COptionPageEditor)
 public:
-    virtual void OnOK();
+	virtual void OnOK();
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
+	//}}AFX_VIRTUAL
 
-    // Implementation
+// Implementation
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(COptionPageEditor)
-    afx_msg void UpdateControlStates();
-    virtual BOOL OnInitDialog();
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+	// Generated message map functions
+	//{{AFX_MSG(COptionPageEditor)
+	afx_msg void UpdateControlStates();
+	virtual BOOL OnInitDialog();
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

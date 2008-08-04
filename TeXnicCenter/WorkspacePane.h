@@ -6,7 +6,7 @@
 class WorkspacePane : public CDockablePane
 {
 	DECLARE_DYNAMIC(WorkspacePane)
-    CWnd* client_;
+	CWnd* client_;
 
 public:
 	WorkspacePane();
@@ -14,20 +14,20 @@ public:
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
-    
-    void SetClient(CWnd* p);
+
+	void SetClient(CWnd* p);
 private:
-    void AdjustLayout(const CRect& rc);
-    void AdjustLayout(void);
+	void AdjustLayout(const CRect& rc);
+	void AdjustLayout(void);
 
 protected:
-    afx_msg void OnDestroy();
-    afx_msg void OnSetFocus(CWnd* pOldWnd);
-    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-    afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnDestroy();
+	afx_msg void OnSetFocus(CWnd* pOldWnd);
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 public:
-    CWnd* GetClient(void) const;
-    afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	CWnd* GetClient(void) const;
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 };
 
 

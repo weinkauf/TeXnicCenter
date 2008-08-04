@@ -4,17 +4,17 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License as
 * published by the Free Software Foundation; either version 2 of
 * the License, or (at your option) any later version.
-* 
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 * General Public License for more details.
-* 
+*
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -57,12 +57,12 @@ IMPLEMENT_SERIAL(CMyUserTool, CUserTool, USERTOOLCURRENTFORMATVERSION | VERSIONA
 #undef USERTOOLCURRENTFORMATVERSION
 
 CMyUserTool::CMyUserTool()
-:	CUserTool(),
-	m_bUseOutputWindow(false),
-	m_bPromptForArguments(false),
-	m_bCloseConsoleWindow(false),
-	m_strInputFile(_T("")),
-	m_strOutputFile(_T(""))
+		:	CUserTool(),
+		m_bUseOutputWindow(false),
+		m_bPromptForArguments(false),
+		m_bCloseConsoleWindow(false),
+		m_strInputFile(_T("")),
+		m_strOutputFile(_T(""))
 {}
 
 
@@ -94,11 +94,11 @@ void CMyUserTool::Serialize(CArchive& ar)
 //		}
 //		else
 //		{
-			m_bUseOutputWindow = false;
-			m_bPromptForArguments = false;
-			m_bCloseConsoleWindow = false;
-			m_strInputFile.Empty();
-			m_strOutputFile.Empty();
+		m_bUseOutputWindow = false;
+		m_bPromptForArguments = false;
+		m_bCloseConsoleWindow = false;
+		m_strInputFile.Empty();
+		m_strOutputFile.Empty();
 //		}
 	}
 	else
@@ -146,8 +146,8 @@ CString CMyUserTool::GetAdvDescription()
 
 	if (m_bPromptForArguments)
 	{
-			if (!retval.IsEmpty()) retval += _T(" | ");
-			retval += _T("Prompt");
+		if (!retval.IsEmpty()) retval += _T(" | ");
+		retval += _T("Prompt");
 	}
 
 	return retval;
@@ -179,7 +179,8 @@ BOOL CMyUserTool::Invoke()
 	// current document specific information
 	CLaTeXEdit* pEdit = theApp.GetActiveEditView();
 
-	if (pEdit) {
+	if (pEdit)
+	{
 		strCurrentPath = pEdit->GetDocument()->GetPathName();
 		pEdit->GetSelectedText(strCurrentSelection);
 		lCurrentLine = pEdit->GetCursorPos().y + 1;
@@ -223,17 +224,18 @@ BOOL CMyUserTool::Invoke()
 		//Be careful with the InitialDirectory: With CreateProcess it is not allowed
 		// to be quoted or empty or elsewise non-valid.
 		CString	strInitialDirectory = AfxExpandPlaceholders(
-			m_strInitialDirectory,
-			strMainPath.IsEmpty()? (LPCTSTR)NULL : strMainPath,
-			strCurrentPath.IsEmpty()? (LPCTSTR)NULL : strCurrentPath,
-			lCurrentLine,
-			strCurrentSelection.IsEmpty()? (LPCTSTR)NULL : strCurrentSelection,
-			false);
+		                                  m_strInitialDirectory,
+		                                  strMainPath.IsEmpty()? (LPCTSTR)NULL : strMainPath,
+		                                  strCurrentPath.IsEmpty()? (LPCTSTR)NULL : strCurrentPath,
+		                                  lCurrentLine,
+		                                  strCurrentSelection.IsEmpty()? (LPCTSTR)NULL : strCurrentSelection,
+		                                  false);
 		strInitialDirectory.TrimLeft(_T('\"'));
 		strInitialDirectory.TrimRight(_T('\"'));
 
 		//Valid directory?
-		if (!CPathTool::Exists(strInitialDirectory)) {
+		if (!CPathTool::Exists(strInitialDirectory))
+		{
 			//Get a valid one
 			strInitialDirectory = AfxGetDefaultDirectory(true);
 		};
@@ -242,17 +244,18 @@ BOOL CMyUserTool::Invoke()
 		CProcessCommand	pc;
 		pc.Set(m_strCommand, m_strArguments);//Args will be expanded by Execute
 		CProcess *p = pc.Execute(strInitialDirectory, strMainPath, strCurrentPath,
-															lCurrentLine, strCurrentSelection, true);
-		if (!p) {
+		                         lCurrentLine, strCurrentSelection, true);
+		if (!p)
+		{
 			TCHAR systemError[100];
 			::FormatMessage(
-				FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
-				NULL,
-				pc.GetLastError(),
-				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-				systemError,
-				100,
-				NULL 
+			    FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
+			    NULL,
+			    pc.GetLastError(),
+			    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			    systemError,
+			    100,
+			    NULL
 			);
 
 			CString strProcessResult;

@@ -46,37 +46,39 @@
 
 @author Sven Wiegand
  */
-class CActiveProfileDialog : public CDialog {
-    // construction/destruction
+class CActiveProfileDialog : public CDialog
+{
+// construction/destruction
 public:
-    CActiveProfileDialog(CWnd* pParent = NULL);
+	CActiveProfileDialog(CWnd* pParent = NULL);
 
-    // overridings
+// overridings
 protected:
-    //{{AFX_VIRTUAL(CActiveProfileDialog)
+//{{AFX_VIRTUAL(CActiveProfileDialog)
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV-Unterstützung
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV-Unterstützung
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(CActiveProfileDialog)
-    virtual BOOL OnInitDialog();
-    afx_msg void OnSelchangeProfile();
-    virtual void OnOK();
-    //}}AFX_MSG
+	//{{AFX_MSG(CActiveProfileDialog)
+	virtual BOOL OnInitDialog();
+	afx_msg void OnSelchangeProfile();
+	virtual void OnOK();
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-    // dialog field data
+// dialog field data
 protected:
-    //{{AFX_DATA(CActiveProfileDialog)
-    enum {
-        IDD = IDD_ACTIVE_PROFILE
-    };
-    CButton m_wndOkButton;
-    CListBox m_wndProfileList;
-    //}}AFX_DATA
+	//{{AFX_DATA(CActiveProfileDialog)
+	enum
+	{
+		IDD = IDD_ACTIVE_PROFILE
+	};
+	CButton m_wndOkButton;
+	CListBox m_wndProfileList;
+	//}}AFX_DATA
 };
 
 //{{AFX_INSERT_LOCATION}}

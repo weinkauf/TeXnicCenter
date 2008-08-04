@@ -1112,10 +1112,6 @@
 				>
 			</File>
 			<File
-				RelativePath="CrystalEditViewEx.h"
-				>
-			</File>
-			<File
 				RelativePath="CrystalParser.h"
 				>
 			</File>

@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -59,34 +59,35 @@ we do not get the BN_CLICKED, if we would use a normal one.
 @author Tino Weinkauf
  */
 
-class ToolBarCustomizeExAdvBtn : public CButton {
-    // Construction
+class ToolBarCustomizeExAdvBtn : public CButton
+{
+// Construction
 public:
-    ToolBarCustomizeExAdvBtn();
+	ToolBarCustomizeExAdvBtn();
 
-    // Attributes
+// Attributes
 public:
-    CMyUserTool* pTool;
+	CMyUserTool* pTool;
 
-    // Operations
+// Operations
 public:
 
-    // Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(ToolBarCustomizeExAdvBtn)
-    //}}AFX_VIRTUAL
+	// Overrides
+	// ClassWizard generated virtual function overrides
+	//{{AFX_VIRTUAL(ToolBarCustomizeExAdvBtn)
+	//}}AFX_VIRTUAL
 
-    // Implementation
+// Implementation
 public:
-    virtual ~ToolBarCustomizeExAdvBtn();
+	virtual ~ToolBarCustomizeExAdvBtn();
 
-    // Generated message map functions
+// Generated message map functions
 protected:
-    //{{AFX_MSG(ToolBarCustomizeExAdvBtn)
-    afx_msg void OnClicked();
-    //}}AFX_MSG
+	//{{AFX_MSG(ToolBarCustomizeExAdvBtn)
+	afx_msg void OnClicked();
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 };
 
 
@@ -102,58 +103,59 @@ An Edit-Control and a Button are replaced.
  */
 // (AFX_CUSTOMIZE_MENU_SHADOWS | AFX_CUSTOMIZE_TEXT_LABELS | AFX_CUSTOMIZE_MENU_ANIMATIONS | AFX_CUSTOMIZE_NOHELP)
 
-class MyToolBarCustomize : public CMFCToolBarsCustomizeDialog {
-    DECLARE_DYNAMIC(MyToolBarCustomize)
+class MyToolBarCustomize : public CMFCToolBarsCustomizeDialog
+{
+	DECLARE_DYNAMIC(MyToolBarCustomize)
 
-    //Constructor / Destructor
+//Constructor / Destructor
 public:
-    MyToolBarCustomize::MyToolBarCustomize(CFrameWnd* pWndParentFrame,
-                                           BOOL bAutoSetFromMenus = FALSE,
-                                           UINT uiFlags = (AFX_CUSTOMIZE_MENU_SHADOWS | AFX_CUSTOMIZE_TEXT_LABELS | AFX_CUSTOMIZE_MENU_ANIMATIONS),
-                                           CList <CRuntimeClass*, CRuntimeClass*>* plistCustomPages = NULL);
-    virtual ~MyToolBarCustomize();
+	MyToolBarCustomize::MyToolBarCustomize(CFrameWnd* pWndParentFrame,
+	                                       BOOL bAutoSetFromMenus = FALSE,
+	                                       UINT uiFlags = (AFX_CUSTOMIZE_MENU_SHADOWS | AFX_CUSTOMIZE_TEXT_LABELS | AFX_CUSTOMIZE_MENU_ANIMATIONS),
+	                                       CList <CRuntimeClass*, CRuntimeClass*>* plistCustomPages = NULL);
+	virtual ~MyToolBarCustomize();
 
-    // Methods
+// Methods
 public:
 
-    // Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(MyToolBarCustomize)
-    //}}AFX_VIRTUAL
+	// Overrides
+	// ClassWizard generated virtual function overrides
+	//{{AFX_VIRTUAL(MyToolBarCustomize)
+	//}}AFX_VIRTUAL
 
-    virtual void OnInitToolsPage();
-    virtual void OnBeforeChangeTool(CUserTool* pSelTool);
-    virtual void OnAfterChangeTool(CUserTool* pSelTool);
-    virtual BOOL CheckToolsValidity(const CObList& lstTools);
+	virtual void OnInitToolsPage();
+	virtual void OnBeforeChangeTool(CUserTool* pSelTool);
+	virtual void OnAfterChangeTool(CUserTool* pSelTool);
+	virtual BOOL CheckToolsValidity(const CObList& lstTools);
 
 
-    // Attributes
+// Attributes
 protected:
-    /** A Button to replace the original Arguments-Menu-Button.
-                    Needed to display an advanced menu with dialog callback.
-     */
-    CEditMenuButtonOpt m_wndTXCArgumentsBtn;
+	/** A Button to replace the original Arguments-Menu-Button.
+	                Needed to display an advanced menu with dialog callback.
+	 */
+	CEditMenuButtonOpt m_wndTXCArgumentsBtn;
 
-    /** An Edit to replace the original Arguments-Edit.
-                    Needed for the new Arguments-Menu-Button.
-     */
-    CPersistPosEdit m_wndTXCArgumentsEdit;
+	/** An Edit to replace the original Arguments-Edit.
+	                Needed for the new Arguments-Menu-Button.
+	 */
+	CPersistPosEdit m_wndTXCArgumentsEdit;
 
-    ///Button for bringing up a dialog to edit advanced features
-    ToolBarCustomizeExAdvBtn m_wndAdvBtn;
+	///Button for bringing up a dialog to edit advanced features
+	ToolBarCustomizeExAdvBtn m_wndAdvBtn;
 
-    ///Display area to show summarized advanced features
-    CEdit m_wndAdvEdit;
+	///Display area to show summarized advanced features
+	CEdit m_wndAdvEdit;
 
-    // Generated message map functions
+// Generated message map functions
 protected:
-    //{{AFX_MSG(MyToolBarCustomize)
-    afx_msg void OnDestroy();
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+	//{{AFX_MSG(MyToolBarCustomize)
+	afx_msg void OnDestroy();
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 public:
-    void BuildPropPageArray(void);
-    static int CALLBACK PropSheetCallback(HWND hWnd, UINT message, LPARAM lParam);
+	void BuildPropPageArray(void);
+	static int CALLBACK PropSheetCallback(HWND hWnd, UINT message, LPARAM lParam);
 };
 
 
