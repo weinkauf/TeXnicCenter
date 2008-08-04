@@ -39,12 +39,9 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "ThemedCtrl.h"
-
 class CChildFrame : public CMDIChildWndEx //CMDIChildWnd
 {
 	CSplitterWndEx m_wndSplitter;
-	ThemedCtrl client_;
 
 	DECLARE_DYNCREATE(CChildFrame)
 public:

@@ -148,6 +148,14 @@ void CChildFrame::OnSetFocus(CWnd* pOldWnd)
 		CMDIChildWndEx::OnSetFocus(pOldWnd);
 		theApp.m_pMDIFrameManager->ActivateChildFrame(this);
 	}
+
+	CWnd* w = m_wndSplitter.GetWindow(GW_CHILD);
+
+	while (w && !w->IsKindOf(RUNTIME_CLASS(CLaTeXEdit)))
+		w = w->GetWindow(GW_HWNDNEXT);
+
+	if (w)
+		w->SetFocus();
 }
 
 
