@@ -46,7 +46,7 @@ This makes your and our life easier to debug the application.
 Global Variables
 ------------------
 
-Don't use global variables, use the Singleton pattern istead. Refer to
+Don't use global variables, use the Singleton pattern instead. Refer to
 http://en.wikipedia.org/wiki/Singleton_pattern for detailed description.  See
 also TeXnicCenter/configuration.h for a possible implementation.
 
