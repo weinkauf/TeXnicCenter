@@ -1447,8 +1447,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Writing Subversion Build Number"
-						CommandLine="SubWCRev .. $(InputFileName) Version.h"
-						Outputs="Version.h"
+						CommandLine="cd &quot;$(SolutionDir)&quot;&#x0D;&#x0A;SubWCRev . &quot;$(InputPath)&quot; &quot;$(IntDir)\Version.h&quot;"
+						Outputs="$(IntDir)\Version.h"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1457,8 +1457,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Writing Subversion Build Number"
-						CommandLine="SubWCRev .. $(InputFileName) Version.h"
-						Outputs="Version.h"
+						CommandLine="cd &quot;$(SolutionDir)&quot;&#x0D;&#x0A;SubWCRev . &quot;$(InputPath)&quot; &quot;$(IntDir)\Version.h&quot;"
+						Outputs="$(IntDir)\Version.h"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1467,8 +1467,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Writing Subversion Build Number"
-						CommandLine="SubWCRev .. $(InputFileName) Version.h"
-						Outputs="Version.h"
+						CommandLine="cd &quot;$(SolutionDir)&quot;&#x0D;&#x0A;SubWCRev . &quot;$(InputPath)&quot; &quot;$(IntDir)\Version.h&quot;"
+						Outputs="$(IntDir)\Version.h"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1477,8 +1477,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Writing Subversion Build Number"
-						CommandLine="SubWCRev .. $(InputFileName) Version.h"
-						Outputs="Version.h"
+						CommandLine="cd &quot;$(SolutionDir)&quot;&#x0D;&#x0A;SubWCRev . &quot;$(InputPath)&quot; &quot;$(IntDir)\Version.h&quot;"
+						Outputs="$(IntDir)\Version.h"
 					/>
 				</FileConfiguration>
 			</File>
