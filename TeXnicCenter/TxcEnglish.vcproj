@@ -65,6 +65,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG;AFX_RESOURCE_DLL;AFX_TARG_NEU;AFX_TARG_ENU;$(NOINHERIT)"
 				Culture="1033"
+				AdditionalIncludeDirectories="$(SolutionDir)\Output\Intermediate\TeXnicCenter\$(ConfigurationName)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -157,7 +158,8 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG;AFX_RESOURCE_DLL;AFX_TARG_NEU;AFX_TARG_ENU"
-				Culture="1031"
+				Culture="1033"
+				AdditionalIncludeDirectories="$(SolutionDir)\Output\Intermediate\TeXnicCenter\$(ConfigurationName)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -246,7 +248,8 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG;AFX_RESOURCE_DLL;AFX_TARG_NEU;AFX_TARG_ENU"
-				Culture="1031"
+				Culture="1033"
+				AdditionalIncludeDirectories="$(SolutionDir)\Output\Intermediate\TeXnicCenter\$(ConfigurationName)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -339,7 +342,8 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG;AFX_RESOURCE_DLL;AFX_TARG_NEU;AFX_TARG_ENU"
-				Culture="1031"
+				Culture="1033"
+				AdditionalIncludeDirectories="$(SolutionDir)\Output\Intermediate\TeXnicCenter\$(ConfigurationName)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -614,6 +618,10 @@
 						ResourceOutputFileName="Release/TxcEnglish.res"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\res\TeXnicCenter.rc2"
+				>
 			</File>
 			<File
 				RelativePath=".\res\TeXnicCenter_yellow.ico"
