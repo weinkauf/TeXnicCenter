@@ -196,6 +196,7 @@ const int ARRAYCOUNT = sizeof(pArrCredit)/sizeof(TCHAR*);
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 		,lf_(GetDisplayFont())
+		, CopyrightText(_T(""))
 {
 	//{{AFX_DATA_INIT(CAboutDlg)
 	//}}AFX_DATA_INIT
@@ -203,9 +204,15 @@ CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 	// retrieve version and display
 	CFileVersionInfo fvi;
 	if (fvi.Create())
+	{
 		m_strVersion = fvi.GetProductVersion();
+		CopyrightText = fvi.GetLegalCopyright();
+	}
 	else
+	{
 		m_strVersion = _T("Unknown");
+		CopyrightText = _T("(c) 1999-2008 The TeXnicCenter Team");
+	}
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
@@ -215,6 +222,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX,IDC_URL_TOOLSCENTER,m_wndURLToolsCenter);
 	DDX_Text(pDX,IDC_STATIC_VERSION,m_strVersion);
 	//}}AFX_DATA_MAP
+	DDX_Text(pDX, IDC_COPYRIGHT, CopyrightText);
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg,CDialog)
