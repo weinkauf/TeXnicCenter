@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)Output\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -27,8 +27,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="Writing SVN information..."
-				CommandLine="SubWCRev . Version.h.template Version.h"
+				Description=""
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -56,6 +56,7 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				FloatingPointModel="2"
 				ForceConformanceInForLoopScope="false"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
@@ -80,7 +81,7 @@
 				AdditionalDependencies="Hunspell.lib"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;;../../MFCExt/Lib/"
+				AdditionalLibraryDirectories="$(OutDir)"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
@@ -113,8 +114,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)Output\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -123,8 +124,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="Writing SVN information..."
-				CommandLine="SubWCRev . Version.h.template Version.h"
+				Description=""
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -152,6 +153,7 @@
 				PreprocessorDefinitions="WIN32;STRICT;NDEBUG;_WINDOWS;_AFXEXT;CE_DLL_BUILD;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC"
 				StringPooling="true"
 				RuntimeLibrary="2"
+				FloatingPointModel="2"
 				ForceConformanceInForLoopScope="false"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
@@ -176,7 +178,7 @@
 				AdditionalDependencies="Hunspell.lib"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;;../../MFCExt/Lib/"
+				AdditionalLibraryDirectories="$(OutDir)"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -208,8 +210,8 @@
 		</Configuration>
 		<Configuration
 			Name="Unicode Debug|Win32"
-			OutputDirectory="$(SolutionDir)Output\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -217,8 +219,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="Writing SVN information..."
-				CommandLine="SubWCRev . Version.h.template Version.h"
+				Description=""
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -246,6 +248,7 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				FloatingPointModel="2"
 				ForceConformanceInForLoopScope="false"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
@@ -270,7 +273,7 @@
 				AdditionalDependencies="Hunspell.lib"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;;../../MFCExt/Lib/"
+				AdditionalLibraryDirectories="$(OutDir)"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
@@ -303,8 +306,8 @@
 		</Configuration>
 		<Configuration
 			Name="Unicode Release|Win32"
-			OutputDirectory="$(SolutionDir)Output\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -313,8 +316,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="Writing SVN information..."
-				CommandLine="SubWCRev . Version.h.template Version.h"
+				Description=""
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -344,6 +347,7 @@
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
+				FloatingPointModel="2"
 				ForceConformanceInForLoopScope="false"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
@@ -368,7 +372,7 @@
 				AdditionalDependencies="Hunspell.lib"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;;../../MFCExt/Lib/"
+				AdditionalLibraryDirectories="$(OutDir)"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -819,46 +823,6 @@
 				>
 			</File>
 			<File
-				RelativePath="CrysEditEx.rc"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCResourceCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCResourceCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCResourceCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCResourceCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="res\CrysEditEx.rc2"
-				>
-			</File>
-			<File
 				RelativePath="CrystalParser.cpp"
 				>
 				<FileConfiguration
@@ -1140,9 +1104,45 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Resource Files"
+			Name="Resources"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
+			<File
+				RelativePath="CrysEditEx.rc"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Unicode Debug|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Unicode Release|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
 			<File
 				RelativePath="res\mg_cur.cur"
 				>
@@ -1154,42 +1154,6 @@
 			<File
 				RelativePath="res\textattr.bmp"
 				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Required Files"
-			>
-			<File
-				RelativePath=".\Version.h.template"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<File
