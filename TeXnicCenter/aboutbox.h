@@ -106,6 +106,8 @@ protected:
 	CDC m_dcMem;
 	BOOL m_bProcessingBitmap;
 	const LOGFONT lf_;
+public:
+	CString CopyrightText;
 };
 
 

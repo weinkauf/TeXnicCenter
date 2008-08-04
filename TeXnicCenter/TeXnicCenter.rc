@@ -1489,12 +1489,12 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    LTEXT           "© 1999-2008",IDC_COPYRIGHT,7,211,44,8,SS_CENTERIMAGE
-    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,57,211,121,8,BS_RIGHT
+    LTEXT           "DNT:LegalCopyright",IDC_COPYRIGHT,7,211,170,8,SS_CENTERIMAGE
     CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,SS_CENTERIMAGE
     CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
     CONTROL         236,IDC_STATIC,"Static",SS_BITMAP,75,7,142,25
     CTEXT           "DNT:Version number will be inserted here",IDC_STATIC_VERSION,7,34,278,8
+    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,197,211,87,8,BS_RIGHT
 END
 
 IDD_PACKAGE_SCAN_PROGRESS DIALOGEX 0, 0, 294, 76
@@ -1847,12 +1847,6 @@ BEGIN
     END
 END
 #endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Version
-//
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -4581,8 +4575,8 @@ BEGIN
     CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
     CONTROL         236,IDC_STATIC,"Static",SS_BITMAP,75,7,142,25
     CTEXT           "DNT:Version number will be inserted here",IDC_STATIC_VERSION,7,34,278,8
-    LTEXT           "© 1999-2008",IDC_COPYRIGHT,7,211,44,8,SS_CENTERIMAGE
-    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,57,211,121,8,BS_RIGHT
+    LTEXT           "DNT:LegalCopyright",IDC_COPYRIGHT,7,211,179,8,SS_CENTERIMAGE
+    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,197,211,87,8,BS_RIGHT
 END
 
 IDD_ACTIVE_PROFILE DIALOGEX 0, 0, 257, 95
@@ -5671,14 +5665,6 @@ BEGIN
     END
 END
 #endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Version
-//
-
-
 
 
 /////////////////////////////////////////////////////////////////////////////
