@@ -27,7 +27,6 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 			<Tool
@@ -124,7 +123,6 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 			<Tool
@@ -219,7 +217,6 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 			<Tool
@@ -316,7 +313,6 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 			<Tool
@@ -1104,7 +1100,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Resources"
+			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File

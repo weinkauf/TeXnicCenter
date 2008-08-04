@@ -28,7 +28,6 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 			<Tool
@@ -109,7 +108,6 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 		</Configuration>
@@ -124,7 +122,6 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 			<Tool
@@ -205,7 +202,6 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description=""
 				CommandLine=""
 				ExcludedFromBuild="true"
 			/>
@@ -221,7 +217,6 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 			<Tool
@@ -304,7 +299,6 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description=""
 				CommandLine=""
 				ExcludedFromBuild="true"
 			/>
@@ -321,7 +315,6 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 			<Tool
@@ -402,7 +395,6 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 		</Configuration>
@@ -1455,8 +1447,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Writing Subversion Build Number"
-						CommandLine="SubWCRev $(SolutionDir) $(InputPath) $(IntDir)\Version.h"
-						Outputs="$(IntDir)\Version.h"
+						CommandLine="SubWCRev .. $(InputFileName) Version.h"
+						Outputs="Version.h"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1465,8 +1457,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Writing Subversion Build Number"
-						CommandLine="SubWCRev $(SolutionDir) $(InputPath) $(IntDir)\Version.h"
-						Outputs="$(IntDir)\Version.h"
+						CommandLine="SubWCRev .. $(InputFileName) Version.h"
+						Outputs="Version.h"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1475,8 +1467,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Writing Subversion Build Number"
-						CommandLine="SubWCRev $(SolutionDir) $(InputPath) $(IntDir)\Version.h"
-						Outputs="$(IntDir)\Version.h"
+						CommandLine="SubWCRev .. $(InputFileName) Version.h"
+						Outputs="Version.h"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1485,8 +1477,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Writing Subversion Build Number"
-						CommandLine="SubWCRev $(SolutionDir) $(InputPath) $(IntDir)\Version.h"
-						Outputs="$(IntDir)\Version.h"
+						CommandLine="SubWCRev .. $(InputFileName) Version.h"
+						Outputs="Version.h"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1765,7 +1757,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1775,7 +1767,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1785,7 +1777,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1795,7 +1787,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1809,7 +1801,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1819,7 +1811,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1829,7 +1821,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1839,7 +1831,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1853,7 +1845,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1863,7 +1855,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1873,7 +1865,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1883,7 +1875,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1897,7 +1889,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1907,7 +1899,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1917,7 +1909,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1927,7 +1919,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1941,7 +1933,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1951,7 +1943,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1961,7 +1953,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1971,7 +1963,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1989,7 +1981,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -1999,7 +1991,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2009,7 +2001,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2019,7 +2011,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2033,7 +2025,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2043,7 +2035,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2053,7 +2045,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2063,7 +2055,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2077,7 +2069,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2087,7 +2079,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2097,7 +2089,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2107,7 +2099,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2121,7 +2113,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2131,7 +2123,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2141,7 +2133,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2151,7 +2143,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2165,7 +2157,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2175,7 +2167,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2185,7 +2177,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2195,7 +2187,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2209,7 +2201,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2219,7 +2211,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2229,7 +2221,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2239,7 +2231,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2253,7 +2245,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2263,7 +2255,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2273,7 +2265,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2283,7 +2275,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2297,7 +2289,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2307,7 +2299,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2317,7 +2309,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2327,7 +2319,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2341,7 +2333,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2351,7 +2343,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2361,7 +2353,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2371,7 +2363,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2385,7 +2377,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2395,7 +2387,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2405,7 +2397,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2415,7 +2407,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2429,7 +2421,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2439,7 +2431,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2449,7 +2441,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2459,7 +2451,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2473,7 +2465,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2483,7 +2475,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2493,7 +2485,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2503,7 +2495,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2517,7 +2509,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2527,7 +2519,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2537,7 +2529,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2547,7 +2539,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)\Packages&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2566,7 +2558,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2576,7 +2568,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2586,7 +2578,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2596,7 +2588,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2610,7 +2602,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2620,7 +2612,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2630,7 +2622,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2640,7 +2632,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2654,7 +2646,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2664,7 +2656,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2674,7 +2666,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2684,7 +2676,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Copying File"
-							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+							CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
