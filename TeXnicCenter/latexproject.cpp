@@ -235,6 +235,7 @@ BOOL CLaTeXProject::OnOpenProject(LPCTSTR lpszPathName)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// load project information
 	CIniFile file(lpszPathName);
+
 	if (!file.ReadFile())
 		return FALSE;
 
@@ -267,6 +268,7 @@ BOOL CLaTeXProject::OnOpenProject(LPCTSTR lpszPathName)
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// load project session
 	CIniFile session(GetSessionPathName(lpszPathName));
+
 	if (session.ReadFile())
 		SerializeSession(session,FALSE);
 

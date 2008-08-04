@@ -58,6 +58,7 @@ public:
 // operations
 public:
 	CProject *GetProject() const;
+	bool IsAttached() const;
 
 // overridables
 protected:

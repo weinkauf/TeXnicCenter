@@ -59,3 +59,8 @@ void CProjectView::OnUpdate(CProjectView *pSender, LPARAM lHint, LPVOID pHint)
 void CProjectView::OnCloseProject()
 {
 }
+
+bool CProjectView::IsAttached() const
+{
+	return m_pProject != 0;
+}

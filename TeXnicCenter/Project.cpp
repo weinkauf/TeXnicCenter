@@ -75,7 +75,7 @@ CProject::~CProject()
 
 void CProject::AddView(CProjectView *pView)
 {
-	ASSERT(pView->m_pProject == NULL); // must not be already attached
+	ASSERT(!pView->IsAttached()); // must not be already attached
 	ASSERT(m_viewList.Find(pView, NULL) == NULL); // must not be in list
 
 	m_viewList.AddTail(pView);
@@ -94,8 +94,10 @@ CProjectView *CProject::GetNextView(POSITION &pos) const
 {
 	ASSERT(pos != BEFORE_START_POSITION);
 	// use CProject::GetFirstViewPosition instead !
+
 	if (pos == NULL)
 		return NULL; // nothing left
+
 	CProjectView* pView = dynamic_cast<CProjectView*>(m_viewList.GetNext(pos));
 	ASSERT(pView);
 	return pView;
@@ -103,13 +105,13 @@ CProjectView *CProject::GetNextView(POSITION &pos) const
 
 void CProject::RemoveView(CProjectView *pView)
 {
-	ASSERT(pView->m_pProject == this); // must be attached to us
+	if (pView->IsAttached()) {
+		m_viewList.RemoveAt(m_viewList.Find(pView));
+		pView->m_pProject = NULL;
+		pView->Clear();
 
-	m_viewList.RemoveAt(m_viewList.Find(pView));
-	pView->m_pProject = NULL;
-	pView->Clear();
-
-	OnChangedViewList(); // must be the last thing done to the document
+		OnChangedViewList(); // must be the last thing done to the document
+	}
 }
 
 void CProject::SetModifiedFlag(BOOL bModified /*= TRUE*/)
@@ -219,6 +221,7 @@ BOOL CProject::OnOpenProject(LPCTSTR lpszPathName)
 	CArchive loadArchive(pFile, CArchive::load | CArchive::bNoFlushOnDelete);
 	loadArchive.m_pDocument = reinterpret_cast<CDocument*>(this);
 	loadArchive.m_bForceFlat = FALSE;
+
 	try
 	{
 		CWaitCursor wait;

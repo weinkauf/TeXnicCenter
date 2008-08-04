@@ -298,6 +298,7 @@ CProject* CSingleProjectTemplate::OpenProjectFile(LPCTSTR lpszPathName)
 		AfxMessageBox(AFX_IDP_FAILED_TO_CREATE_DOC);
 		return NULL;
 	}
+
 	ASSERT(pProject == m_pOnlyProject);
 
 	if (lpszPathName == NULL)
