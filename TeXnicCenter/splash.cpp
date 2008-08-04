@@ -151,7 +151,7 @@ void CSplashWnd::PostNcDestroy()
 	// C++-Klasse freigeben
 	delete this;
 }
-#include "Version.h"
+
 int CSplashWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
@@ -184,7 +184,7 @@ int CSplashWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CFileVersionInfo fv(::GetModuleHandle(0));
 
 	CString version;
-	version.Format(_T("Version %s. %s\n%s."),CString(TXC_VERSION_STRING),
+	version.Format(_T("Version %s. %s\n%s."),fv.GetProductVersion(),
 	               CString(MAKEINTRESOURCE(IDS_LOADING)),fv.GetLegalCopyright());
 
 	CWindowDC dc(this);
