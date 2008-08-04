@@ -106,9 +106,18 @@ that word, i.e., not camelCase.
 Programming Paradigm
 ---------------------
 
-Follow the structured programming paradigm when possible. This means no breaks,
-continues, multiple returns in a single function and so on. Not following this
-paradigm results in spaghetti code which is hard to understand and debug.
+Follow the structured programming paradigm when possible. This means no gotos,
+breaks, continues, multiple returns in a single function and so on. Not
+following this paradigm results in spaghetti code which is hard to understand
+and debug.
+
+
+const-Correctness
+------------------
+
+Use the const keyword for data and class members as much as possible, especially
+for Get-methods or the like.  See http://en.wikipedia.org/wiki/Const-correctness
+for further explanation.
 
 
 Branches
