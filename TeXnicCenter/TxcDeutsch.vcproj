@@ -106,7 +106,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -196,7 +196,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -286,7 +286,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -380,7 +380,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y"
+				CommandLine="mkdir &quot;$(TargetDir)Language&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)Language\$(TargetFileName)&quot; /Y&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -398,14 +398,6 @@
 			>
 			<File
 				RelativePath=".\res\additional.bmp"
-				>
-			</File>
-			<File
-				RelativePath=".\res\bitmap1.bmp"
-				>
-			</File>
-			<File
-				RelativePath=".\res\bmp00001.bmp"
 				>
 			</File>
 			<File
@@ -441,15 +433,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\format_r.bmp"
-				>
-			</File>
-			<File
 				RelativePath=".\res\formatrecentlyused.bmp"
-				>
-			</File>
-			<File
-				RelativePath=".\res\fullscre.bmp"
 				>
 			</File>
 			<File
@@ -462,10 +446,6 @@
 			</File>
 			<File
 				RelativePath=".\res\insert.bmp"
-				>
-			</File>
-			<File
-				RelativePath=".\res\item_typ.bmp"
 				>
 			</File>
 			<File
@@ -486,10 +466,6 @@
 			</File>
 			<File
 				RelativePath=".\res\lightbulb.bmp"
-				>
-			</File>
-			<File
-				RelativePath=".\res\litebulb.bmp"
 				>
 			</File>
 			<File
@@ -569,10 +545,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\navigation.bmp"
-				>
-			</File>
-			<File
 				RelativePath=".\res\navigationbar.bmp"
 				>
 			</File>
@@ -594,10 +566,6 @@
 			</File>
 			<File
 				RelativePath=".\res\splash.bmp"
-				>
-			</File>
-			<File
-				RelativePath=".\res\Splsh16.bmp"
 				>
 			</File>
 			<File
@@ -657,15 +625,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\Toolbar.bmp"
-				>
-			</File>
-			<File
 				RelativePath=".\res\toolbar1.bmp"
-				>
-			</File>
-			<File
-				RelativePath=".\res\Untitled-1.bmp"
 				>
 			</File>
 			<File
