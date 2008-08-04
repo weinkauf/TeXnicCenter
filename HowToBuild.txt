@@ -18,7 +18,8 @@ To generate the setup you will need:
 2 Build Process
   
   1. Open the TeXnicCenter solution TeXnicCenter.sln in Visual C++.
-  2. Build the Debug and/or Release versions of TeXnicCenter.
+  2. Build the complete solution.
+     The result can be found in the newly created 'output' folder.
 
 
 
@@ -28,6 +29,5 @@ Visit the TeXnicCenter-Homepage
 
 for further information. Don't hesitate to ask us, if a problem occurs.
 
-  Sven Wiegand (sven@TeXnicCenter.org)
   Tino Weinkauf (tino@TeXnicCenter.org)
-
+  TeXnicCenter Maintainer
