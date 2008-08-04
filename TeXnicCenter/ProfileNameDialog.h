@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -46,37 +46,39 @@
 
 @author Sven Wiegand
  */
-class CProfileNameDialog : public CDialog {
-    // construction/destruction
+class CProfileNameDialog : public CDialog
+{
+// construction/destruction
 public:
-    CProfileNameDialog(LPCTSTR lpszName, CWnd* pParent = NULL);
+	CProfileNameDialog(LPCTSTR lpszName, CWnd* pParent = NULL);
 
-    // operations
+// operations
 public:
-    CString GetName() const;
+	CString GetName() const;
 
-    // overridings
+// overridings
 protected:
-    //{{AFX_VIRTUAL(CProfileNameDialog)
+//{{AFX_VIRTUAL(CProfileNameDialog)
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(CProfileNameDialog)
-    //}}AFX_MSG
+	//{{AFX_MSG(CProfileNameDialog)
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-    // dialog field data
+// dialog field data
 protected:
-    //{{AFX_DATA(CProfileNameDialog)
-    enum {
-        IDD = IDD_PROFILE_NAME
-    };
-    CString m_strName;
-    //}}AFX_DATA
+	//{{AFX_DATA(CProfileNameDialog)
+	enum
+	{
+		IDD = IDD_PROFILE_NAME
+	};
+	CString m_strName;
+	//}}AFX_DATA
 };
 
 
@@ -85,7 +87,7 @@ protected:
 inline
 CString CProfileNameDialog::GetName() const
 {
-    return m_strName;
+	return m_strName;
 }
 
 

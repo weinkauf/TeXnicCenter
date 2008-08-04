@@ -11,72 +11,76 @@
 
 const LOGFONT GetDisplayFont()
 {
-    NONCLIENTMETRICS ncm;
-    ncm.cbSize = NONCLIENTMETRICS_V1_SIZE;
+	NONCLIENTMETRICS ncm;
+	ncm.cbSize = NONCLIENTMETRICS_V1_SIZE;
 
-    if (!::SystemParametersInfo(SPI_GETNONCLIENTMETRICS,NONCLIENTMETRICS_V1_SIZE,&ncm,0)) {
-        // Fallback
-        CFont font;
-        font.Attach(::GetStockObject(DEFAULT_GUI_FONT));
-        font.GetLogFont(&ncm.lfMessageFont);
-        font.Detach();
-    }
+	if (!::SystemParametersInfo(SPI_GETNONCLIENTMETRICS,NONCLIENTMETRICS_V1_SIZE,&ncm,0))
+	{
+		// Fallback
+		CFont font;
+		font.Attach(::GetStockObject(DEFAULT_GUI_FONT));
+		font.GetLogFont(&ncm.lfMessageFont);
+		font.Detach();
+	}
 
-    return ncm.lfMessageFont;
+	return ncm.lfMessageFont;
 }
 
 void GetDisplayFont(LOGFONT &lf,WORD & wDefSize)
 {
-    lf = GetDisplayFont();
+	lf = GetDisplayFont();
 
-    CWindowDC dc(0);
+	CWindowDC dc(0);
 
-    if (lf.lfHeight < 0)
-        lf.lfHeight = -lf.lfHeight;
+	if (lf.lfHeight < 0)
+		lf.lfHeight = -lf.lfHeight;
 
-    wDefSize = static_cast<WORD>(::MulDiv(lf.lfHeight,72,dc.GetDeviceCaps(LOGPIXELSY)));
+	wDefSize = static_cast<WORD>(::MulDiv(lf.lfHeight,72,dc.GetDeviceCaps(LOGPIXELSY)));
 }
 
 const DLGTEMPLATE* FontOccManager::PreCreateDialog(_AFX_OCC_DIALOG_INFO* pOccDialogInfo,const DLGTEMPLATE* pOrigTemplate)
 {
-    const DLGTEMPLATE *lpNewTemplate = COccManager::PreCreateDialog(pOccDialogInfo,pOrigTemplate);
+	const DLGTEMPLATE *lpNewTemplate = COccManager::PreCreateDialog(pOccDialogInfo,pOrigTemplate);
 
-    if (/*LOBYTE(GetVersion()) >= 6 &&*/!pOccDialogInfo->m_pNewTemplate) {
-        CDialogTemplate temp(lpNewTemplate);
+	if (/*LOBYTE(GetVersion()) >= 6 &&*/!pOccDialogInfo->m_pNewTemplate)
+	{
+		CDialogTemplate temp(lpNewTemplate);
 
-        if (!valid_) {
-            GetDisplayFont(lf_,def_size_);
-            valid_ = true;
-        }
+		if (!valid_)
+		{
+			GetDisplayFont(lf_,def_size_);
+			valid_ = true;
+		}
 
-        temp.SetFont(lf_.lfFaceName,def_size_);
-        lpNewTemplate = static_cast<LPDLGTEMPLATE> (temp.Detach());
-    }
+		temp.SetFont(lf_.lfFaceName,def_size_);
+		lpNewTemplate = static_cast<LPDLGTEMPLATE>(temp.Detach());
+	}
 
-    return lpNewTemplate;
+	return lpNewTemplate;
 }
 
 FontOccManager::FontOccManager()
-: valid_(false),lf_()
+		: valid_(false),lf_()
 {
 }
 
 void FixPropSheetFont(PROPSHEETHEADER& psh,CPtrArray& pages)
 {
-    LOGFONT lf;
-    WORD defsize;
-    GetDisplayFont(lf,defsize);
+	LOGFONT lf;
+	WORD defsize;
+	GetDisplayFont(lf,defsize);
 
-    PROPSHEETPAGE* ppsp = const_cast<PROPSHEETPAGE*> (psh.ppsp);
+	PROPSHEETPAGE* ppsp = const_cast<PROPSHEETPAGE*>(psh.ppsp);
 
-    for (UINT i = 0; i < psh.nPages; ++i) {
-        CPropertyPage* page = static_cast<CPropertyPage*> (pages[i]);
-        ASSERT(ppsp->dwFlags & PSP_DLGINDIRECT && ppsp->pResource);
+	for (UINT i = 0; i < psh.nPages; ++i)
+	{
+		CPropertyPage* page = static_cast<CPropertyPage*>(pages[i]);
+		ASSERT(ppsp->dwFlags & PSP_DLGINDIRECT && ppsp->pResource);
 
-        CDialogTemplate t(const_cast<LPDLGTEMPLATE> (ppsp->pResource));
-        t.SetFont(lf.lfFaceName,defsize);
-        ppsp->pResource = static_cast<LPDLGTEMPLATE> (t.Detach());
+		CDialogTemplate t(const_cast<LPDLGTEMPLATE>(ppsp->pResource));
+		t.SetFont(lf.lfFaceName,defsize);
+		ppsp->pResource = static_cast<LPDLGTEMPLATE>(t.Detach());
 
-        (BYTE*&) ppsp += page->m_psp.dwSize;
-    }
+		(BYTE*&) ppsp += page->m_psp.dwSize;
+	}
 }

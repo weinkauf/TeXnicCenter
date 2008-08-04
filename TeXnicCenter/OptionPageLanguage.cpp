@@ -4,17 +4,17 @@
  *
  * Copyright (C) 2002 Chris Norris
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -52,45 +52,45 @@ IMPLEMENT_DYNCREATE(COptionPageLanguage,CPropertyPage)
 
 COptionPageLanguage::COptionPageLanguage() : CPropertyPage(COptionPageLanguage::IDD)
 {
-    //{{AFX_DATA_INIT(COptionPageLanguage)
-    m_bEnableSpell = CConfiguration::GetInstance()->m_bSpellEnable;
-    m_bMainDictOnly = CConfiguration::GetInstance()->m_bSpellMainDictOnly;
-    m_bSkipComments = CConfiguration::GetInstance()->m_bSpellSkipComments;
-    m_bSkipNumbers = CConfiguration::GetInstance()->m_bSpellSkipNumbers;
-    m_bSkipTags = CConfiguration::GetInstance()->m_bSpellSkipTags;
-    m_bSkipCaps = CConfiguration::GetInstance()->m_bSpellSkipCaps;
-    m_strLanguageDefault = CConfiguration::GetInstance()->m_strLanguageDefault;
-    m_strDialectDefault = CConfiguration::GetInstance()->m_strLanguageDialectDefault;
-    m_strPDictionary = CConfiguration::GetInstance()->m_strSpellPersonalDictionary;
-    m_strLocale = CConfiguration::GetInstance()->m_strLocale;
-    //}}AFX_DATA_INIT
+	//{{AFX_DATA_INIT(COptionPageLanguage)
+	m_bEnableSpell = CConfiguration::GetInstance()->m_bSpellEnable;
+	m_bMainDictOnly = CConfiguration::GetInstance()->m_bSpellMainDictOnly;
+	m_bSkipComments = CConfiguration::GetInstance()->m_bSpellSkipComments;
+	m_bSkipNumbers = CConfiguration::GetInstance()->m_bSpellSkipNumbers;
+	m_bSkipTags = CConfiguration::GetInstance()->m_bSpellSkipTags;
+	m_bSkipCaps = CConfiguration::GetInstance()->m_bSpellSkipCaps;
+	m_strLanguageDefault = CConfiguration::GetInstance()->m_strLanguageDefault;
+	m_strDialectDefault = CConfiguration::GetInstance()->m_strLanguageDialectDefault;
+	m_strPDictionary = CConfiguration::GetInstance()->m_strSpellPersonalDictionary;
+	m_strLocale = CConfiguration::GetInstance()->m_strLocale;
+	//}}AFX_DATA_INIT
 }
 
 void COptionPageLanguage::DoDataExchange(CDataExchange* pDX)
 {
-    CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(COptionPageLanguage)
-    DDX_Control(pDX,IDC_OPTIONS_LANGUAGE_LOCALE,c_Locale);
-    DDX_Check(pDX,IDC_OPTIONS_SPELL_ENABLE,m_bEnableSpell);
-    DDX_Check(pDX,IDC_OPTIONS_SPELL_MAINDICT,m_bMainDictOnly);
-    DDX_Check(pDX,IDC_OPTIONS_SPELL_COMMENT,m_bSkipComments);
-    DDX_Check(pDX,IDC_OPTIONS_SPELL_IGNORE_NUM,m_bSkipNumbers);
-    DDX_Check(pDX,IDC_OPTIONS_SPELL_SKIP_TAGS,m_bSkipTags);
-    DDX_Check(pDX,IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,m_bSkipCaps);
-    DDX_CBString(pDX,IDC_OPTIONS_LANGUAGE,m_strLanguageDefault);
-    DDX_CBString(pDX,IDC_OPTIONS_LANGUAGE_DIALECT,m_strDialectDefault);
-    DDX_CBString(pDX,IDC_OPTIONS_LANGUAGE_LOCALE,m_strLocale);
-    DDX_Text(pDX,IDC_OPTIONS_SPELL_PDICT,m_strPDictionary);
-    DDX_Control(pDX,IDC_OPTIONS_LANGUAGE_DOWNLOAD,m_wndURLDownloadDicts);
-    //}}AFX_DATA_MAP
+	CPropertyPage::DoDataExchange(pDX);
+	//{{AFX_DATA_MAP(COptionPageLanguage)
+	DDX_Control(pDX,IDC_OPTIONS_LANGUAGE_LOCALE,c_Locale);
+	DDX_Check(pDX,IDC_OPTIONS_SPELL_ENABLE,m_bEnableSpell);
+	DDX_Check(pDX,IDC_OPTIONS_SPELL_MAINDICT,m_bMainDictOnly);
+	DDX_Check(pDX,IDC_OPTIONS_SPELL_COMMENT,m_bSkipComments);
+	DDX_Check(pDX,IDC_OPTIONS_SPELL_IGNORE_NUM,m_bSkipNumbers);
+	DDX_Check(pDX,IDC_OPTIONS_SPELL_SKIP_TAGS,m_bSkipTags);
+	DDX_Check(pDX,IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,m_bSkipCaps);
+	DDX_CBString(pDX,IDC_OPTIONS_LANGUAGE,m_strLanguageDefault);
+	DDX_CBString(pDX,IDC_OPTIONS_LANGUAGE_DIALECT,m_strDialectDefault);
+	DDX_CBString(pDX,IDC_OPTIONS_LANGUAGE_LOCALE,m_strLocale);
+	DDX_Text(pDX,IDC_OPTIONS_SPELL_PDICT,m_strPDictionary);
+	DDX_Control(pDX,IDC_OPTIONS_LANGUAGE_DOWNLOAD,m_wndURLDownloadDicts);
+	//}}AFX_DATA_MAP
 }
 
 BEGIN_MESSAGE_MAP(COptionPageLanguage,CPropertyPage)
-    //{{AFX_MSG_MAP(COptionPageLanguage)
-    ON_CBN_SELCHANGE(IDC_OPTIONS_LANGUAGE,OnSelchangeOptionsLanguage)
-    ON_BN_CLICKED(IDC_OPTIONS_SPELL_BROWSE,OnOptionsSpellBrowse)
-    ON_BN_CLICKED(IDC_OPTIONS_SPELL_ENABLE,UpdateControlStates)
-    //}}AFX_MSG_MAP
+	//{{AFX_MSG_MAP(COptionPageLanguage)
+	ON_CBN_SELCHANGE(IDC_OPTIONS_LANGUAGE,OnSelchangeOptionsLanguage)
+	ON_BN_CLICKED(IDC_OPTIONS_SPELL_BROWSE,OnOptionsSpellBrowse)
+	ON_BN_CLICKED(IDC_OPTIONS_SPELL_ENABLE,UpdateControlStates)
+	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -98,180 +98,190 @@ END_MESSAGE_MAP()
 
 void COptionPageLanguage::OnOK()
 {
-    if (CConfiguration::GetInstance()->m_strLocale.Compare(m_strLocale)) {
-        CConfiguration::GetInstance()->m_strLocale = m_strLocale;
-        // Invalid locale. Not really a problem. The system default will be used.
-        VERIFY(_tsetlocale(LC_ALL,CConfiguration::GetInstance()->m_strLocale)); // Raffi: setlocale defined instead of _tsetlocale
-    }
+	if (CConfiguration::GetInstance()->m_strLocale.Compare(m_strLocale))
+	{
+		CConfiguration::GetInstance()->m_strLocale = m_strLocale;
+		// Invalid locale. Not really a problem. The system default will be used.
+		VERIFY(_tsetlocale(LC_ALL,CConfiguration::GetInstance()->m_strLocale)); // Raffi: setlocale defined instead of _tsetlocale
+	}
 
-    bool bShowNextStartInfo = (CConfiguration::GetInstance()->m_strLanguageDefault != m_strLanguageDefault);
-    bShowNextStartInfo |= (CConfiguration::GetInstance()->m_strLanguageDialectDefault != m_strDialectDefault);
-    if (bShowNextStartInfo) AfxMessageBox(STE_OPTIONS_REQUIRES_RESTART,MB_ICONINFORMATION | MB_OK);
+	bool bShowNextStartInfo = (CConfiguration::GetInstance()->m_strLanguageDefault != m_strLanguageDefault);
+	bShowNextStartInfo |= (CConfiguration::GetInstance()->m_strLanguageDialectDefault != m_strDialectDefault);
+	if (bShowNextStartInfo) AfxMessageBox(STE_OPTIONS_REQUIRES_RESTART,MB_ICONINFORMATION | MB_OK);
 
-    CConfiguration::GetInstance()->m_strLanguageDefault = m_strLanguageDefault;
-    CConfiguration::GetInstance()->m_strLanguageDialectDefault = m_strDialectDefault;
-    CConfiguration::GetInstance()->m_strSpellPersonalDictionary = m_strPDictionary;
-    CConfiguration::GetInstance()->m_bSpellSkipComments = m_bSkipComments;
-    CConfiguration::GetInstance()->m_bSpellSkipNumbers = m_bSkipNumbers;
-    CConfiguration::GetInstance()->m_bSpellSkipTags = m_bSkipTags;
-    CConfiguration::GetInstance()->m_bSpellSkipCaps = m_bSkipCaps;
-    CConfiguration::GetInstance()->m_bSpellMainDictOnly = m_bMainDictOnly;
-    CConfiguration::GetInstance()->m_bSpellEnable = m_bEnableSpell;
+	CConfiguration::GetInstance()->m_strLanguageDefault = m_strLanguageDefault;
+	CConfiguration::GetInstance()->m_strLanguageDialectDefault = m_strDialectDefault;
+	CConfiguration::GetInstance()->m_strSpellPersonalDictionary = m_strPDictionary;
+	CConfiguration::GetInstance()->m_bSpellSkipComments = m_bSkipComments;
+	CConfiguration::GetInstance()->m_bSpellSkipNumbers = m_bSkipNumbers;
+	CConfiguration::GetInstance()->m_bSpellSkipTags = m_bSkipTags;
+	CConfiguration::GetInstance()->m_bSpellSkipCaps = m_bSkipCaps;
+	CConfiguration::GetInstance()->m_bSpellMainDictOnly = m_bMainDictOnly;
+	CConfiguration::GetInstance()->m_bSpellEnable = m_bEnableSpell;
 
-    if (m_bEnableSpell && !m_strPDictionary.IsEmpty() && !::PathFileExists(m_strPDictionary)) {
-        CString errMsg;
-        errMsg.Format(STE_PDICT_OPEN_ERROR,m_strPDictionary);
-        AfxMessageBox(errMsg,MB_OK,MB_ICONINFORMATION);
-    }
+	if (m_bEnableSpell && !m_strPDictionary.IsEmpty() && !::PathFileExists(m_strPDictionary))
+	{
+		CString errMsg;
+		errMsg.Format(STE_PDICT_OPEN_ERROR,m_strPDictionary);
+		AfxMessageBox(errMsg,MB_OK,MB_ICONINFORMATION);
+	}
 
-    // Inform the background thread of the new speller state.
-    theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_ENABLE_SPELLER,m_bEnableSpell,NULL);
-    if (m_bEnableSpell) {
-        CSpellerSource *pSource = static_cast<CSpellerSource*>(&theApp);
-        theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_RESET_SPELLER,0,(long)pSource);
-    }
-    AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_BG_UPDATE_PROJECT); // clear or set the line attributes
+	// Inform the background thread of the new speller state.
+	theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_ENABLE_SPELLER,m_bEnableSpell,NULL);
+	if (m_bEnableSpell)
+	{
+		CSpellerSource *pSource = static_cast<CSpellerSource*>(&theApp);
+		theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_RESET_SPELLER,0,(long)pSource);
+	}
+	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_BG_UPDATE_PROJECT); // clear or set the line attributes
 
-    CPropertyPage::OnOK();
+	CPropertyPage::OnOK();
 }
 
 void COptionPageLanguage::OnSelchangeOptionsLanguage()
 {
-    CComboBox *pDialBox = (CComboBox*)GetDlgItem(IDC_OPTIONS_LANGUAGE_DIALECT);
-    CComboBox *pLangBox = (CComboBox*)GetDlgItem(IDC_OPTIONS_LANGUAGE);
+	CComboBox *pDialBox = (CComboBox*)GetDlgItem(IDC_OPTIONS_LANGUAGE_DIALECT);
+	CComboBox *pLangBox = (CComboBox*)GetDlgItem(IDC_OPTIONS_LANGUAGE);
 
-    pDialBox->ResetContent();
-    if (pLangBox->GetCurSel() == -1)
-        return;
+	pDialBox->ResetContent();
+	if (pLangBox->GetCurSel() == -1)
+		return;
 
-    CString lang;
-    pLangBox->GetLBText(pLangBox->GetCurSel(),lang);
-    for (int i = 0; i < m_aDialect.GetSize(); ++i) {
-        if (lang == m_aLanguage[i])
-            pDialBox->AddString(m_aDialect[i]);
-    }
+	CString lang;
+	pLangBox->GetLBText(pLangBox->GetCurSel(),lang);
+	for (int i = 0; i < m_aDialect.GetSize(); ++i)
+	{
+		if (lang == m_aLanguage[i])
+			pDialBox->AddString(m_aDialect[i]);
+	}
 
-    // Select the dialect
-    int nSel = pDialBox->FindStringExact(0,m_strDialectDefault);
-    if (nSel == CB_ERR)
-        pDialBox->SetCurSel(0);
-    else
-        pDialBox->SetCurSel(nSel);
+	// Select the dialect
+	int nSel = pDialBox->FindStringExact(0,m_strDialectDefault);
+	if (nSel == CB_ERR)
+		pDialBox->SetCurSel(0);
+	else
+		pDialBox->SetCurSel(nSel);
 }
 
 BOOL COptionPageLanguage::OnInitDialog()
 {
-    CPropertyPage::OnInitDialog();
+	CPropertyPage::OnInitDialog();
 
-    //Set URLs
-    CString DictURL;
-    DictURL.LoadString(ID_URL_TCDICTDOWNLOAD);
-    int idLastLineBreak = DictURL.ReverseFind(_T('\n'));
-    ASSERT(idLastLineBreak > 0);
-    m_wndURLDownloadDicts.SetURL(DictURL.Mid(idLastLineBreak + 1));
-    m_wndURLDownloadDicts.SizeToContent(true,true);
+	//Set URLs
+	CString DictURL;
+	DictURL.LoadString(ID_URL_TCDICTDOWNLOAD);
+	int idLastLineBreak = DictURL.ReverseFind(_T('\n'));
+	ASSERT(idLastLineBreak > 0);
+	m_wndURLDownloadDicts.SetURL(DictURL.Mid(idLastLineBreak + 1));
+	m_wndURLDownloadDicts.SizeToContent(true,true);
 
-    // List of all region/language strings recognized by setlocale. 
-    // There are a number of sub-selections that are not presented
-    // here, but users may specify sub-selections in the application 
-    // configuration. The provided selection should be sufficient for
-    // most users' needs.
+	// List of all region/language strings recognized by setlocale.
+	// There are a number of sub-selections that are not presented
+	// here, but users may specify sub-selections in the application
+	// configuration. The provided selection should be sufficient for
+	// most users' needs.
 
-    // This list is in English only because it appears setlocale uses 
-    // English rather than localized strings. Not all locales on this
-    // list work with all installations. A failure of setlocale reverts
-    // the application to the system locale.
-    const TCHAR * const aLocales[] = {
-                                      // language (40)
-                                      _T("chinese"),_T("chinese-simplified"),_T("chinese-traditional"),_T("danish"),_T("dutch"),
-                                      _T("belgian"),_T("english"),_T("english-aus"),_T("english-can"),_T("english-nz"),
-                                      _T("english-uk"),_T("english-us"),_T("finnish"),_T("french"),_T("french-belgian"),
-                                      _T("french-canadian"),_T("french-swiss"),_T("german"),_T("german-austrian"),_T("german-swiss"),
-                                      _T("greek"),_T("hungarian"),_T("icelandic"),_T("italian"),_T("italian-swiss"),_T("japanese"),
-                                      _T("korean"),_T("norwegian"),_T("norwegian-bokmal"),_T("norwegian-nynorsk"),_T("polish"),
-                                      _T("portuguese"),_T("portuguese-brazil"),_T("russian"),_T("slovak"),_T("spanish"),
-                                      _T("spanish-mexican"),_T("spanish-modern"),_T("swedish"),_T("turkish")
-    };
-    const int nLocales = /*40*/sizeof (aLocales) / sizeof (TCHAR *);
+	// This list is in English only because it appears setlocale uses
+	// English rather than localized strings. Not all locales on this
+	// list work with all installations. A failure of setlocale reverts
+	// the application to the system locale.
+	const TCHAR * const aLocales[] =
+	{
+		// language (40)
+		_T("chinese"),_T("chinese-simplified"),_T("chinese-traditional"),_T("danish"),_T("dutch"),
+		_T("belgian"),_T("english"),_T("english-aus"),_T("english-can"),_T("english-nz"),
+		_T("english-uk"),_T("english-us"),_T("finnish"),_T("french"),_T("french-belgian"),
+		_T("french-canadian"),_T("french-swiss"),_T("german"),_T("german-austrian"),_T("german-swiss"),
+		_T("greek"),_T("hungarian"),_T("icelandic"),_T("italian"),_T("italian-swiss"),_T("japanese"),
+		_T("korean"),_T("norwegian"),_T("norwegian-bokmal"),_T("norwegian-nynorsk"),_T("polish"),
+		_T("portuguese"),_T("portuguese-brazil"),_T("russian"),_T("slovak"),_T("spanish"),
+		_T("spanish-mexican"),_T("spanish-modern"),_T("swedish"),_T("turkish")
+	};
+	const int nLocales = /*40*/sizeof(aLocales) / sizeof(TCHAR *);
 
-    // Add the system locale
-    c_Locale.AddString(_tsetlocale(LC_ALL,NULL));
+	// Add the system locale
+	c_Locale.AddString(_tsetlocale(LC_ALL,NULL));
 
-    // Add all the other avilable locales
-    for (int i = 0; i < nLocales; ++i)
-        c_Locale.AddString(aLocales[i]);
+	// Add all the other avilable locales
+	for (int i = 0; i < nLocales; ++i)
+		c_Locale.AddString(aLocales[i]);
 
-    if (c_Locale.SelectString(0,CConfiguration::GetInstance()->m_strLocale) == CB_ERR) {
-        if (CConfiguration::GetInstance()->m_strLocale.Compare(_T(""))) {
-            // Add the current locale to the possible selections
-            c_Locale.AddString(CConfiguration::GetInstance()->m_strLocale);
-            c_Locale.SelectString(0,CConfiguration::GetInstance()->m_strLocale);
-        }
-        else {
-            // Empty locale indicates default system locale
-            c_Locale.SetCurSel(0);
-        }
-    }
+	if (c_Locale.SelectString(0,CConfiguration::GetInstance()->m_strLocale) == CB_ERR)
+	{
+		if (CConfiguration::GetInstance()->m_strLocale.Compare(_T("")))
+		{
+			// Add the current locale to the possible selections
+			c_Locale.AddString(CConfiguration::GetInstance()->m_strLocale);
+			c_Locale.SelectString(0,CConfiguration::GetInstance()->m_strLocale);
+		}
+		else
+		{
+			// Empty locale indicates default system locale
+			c_Locale.SetCurSel(0);
+		}
+	}
 
-    FindDictionaries();
-    CComboBox *pLangBox = (CComboBox*)GetDlgItem(IDC_OPTIONS_LANGUAGE);
+	FindDictionaries();
+	CComboBox *pLangBox = (CComboBox*)GetDlgItem(IDC_OPTIONS_LANGUAGE);
 
-    // Add all the found languages
-    for (int i = 0; i < m_aLanguage.GetSize(); ++i) {
-        if (pLangBox->FindString(0,m_aLanguage[i]) == CB_ERR)
-            pLangBox->AddString(m_aLanguage[i]);
-    }
+	// Add all the found languages
+	for (int i = 0; i < m_aLanguage.GetSize(); ++i)
+	{
+		if (pLangBox->FindString(0,m_aLanguage[i]) == CB_ERR)
+			pLangBox->AddString(m_aLanguage[i]);
+	}
 
-    // Select the language
-    int nSel = pLangBox->FindStringExact(0,m_strLanguageDefault);
+	// Select the language
+	int nSel = pLangBox->FindStringExact(0,m_strLanguageDefault);
 
-    if (nSel == CB_ERR)
-        pLangBox->SetCurSel(0);
-    else
-        pLangBox->SetCurSel(nSel);
+	if (nSel == CB_ERR)
+		pLangBox->SetCurSel(0);
+	else
+		pLangBox->SetCurSel(nSel);
 
-    OnSelchangeOptionsLanguage();
-    UpdateControlStates();
+	OnSelchangeOptionsLanguage();
+	UpdateControlStates();
 
-    return TRUE; // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE; // return TRUE unless you set the focus to a control
+	// EXCEPTION: OCX Property Pages should return FALSE
 }
 
 void COptionPageLanguage::FindDictionaries()
 {
-    m_aLanguage.RemoveAll();
-    m_aDialect.RemoveAll();
-    AfxFindDictionaries(m_aLanguage,m_aDialect);
+	m_aLanguage.RemoveAll();
+	m_aDialect.RemoveAll();
+	AfxFindDictionaries(m_aLanguage,m_aDialect);
 }
 
 void COptionPageLanguage::OnOptionsSpellBrowse()
 {
-    CWnd *pPersonalDictionary = GetDlgItem(IDC_OPTIONS_SPELL_PDICT);
-    CString defaultPath;
-    pPersonalDictionary->GetWindowText(defaultPath);
+	CWnd *pPersonalDictionary = GetDlgItem(IDC_OPTIONS_SPELL_PDICT);
+	CString defaultPath;
+	pPersonalDictionary->GetWindowText(defaultPath);
 
-    CFileDialog dlg(true,NULL,defaultPath,OFN_PATHMUSTEXIST,
-            AfxLoadString(STE_FILE_DICFILTER));
+	CFileDialog dlg(true,NULL,defaultPath,OFN_PATHMUSTEXIST,
+	                AfxLoadString(STE_FILE_DICFILTER));
 
-    if (!defaultPath.IsEmpty()) {
-        LPTSTR pathStr = defaultPath.GetBuffer(0);
-        ::PathRemoveFileSpec(pathStr);
-        dlg.m_ofn.lpstrInitialDir = pathStr;
-        defaultPath.ReleaseBuffer();
-    }
+	if (!defaultPath.IsEmpty())
+	{
+		LPTSTR pathStr = defaultPath.GetBuffer(0);
+		::PathRemoveFileSpec(pathStr);
+		dlg.m_ofn.lpstrInitialDir = pathStr;
+		defaultPath.ReleaseBuffer();
+	}
 
-    if (dlg.DoModal() == IDOK)
-        pPersonalDictionary->SetWindowText(dlg.GetPathName());
+	if (dlg.DoModal() == IDOK)
+		pPersonalDictionary->SetWindowText(dlg.GetPathName());
 }
 
 void COptionPageLanguage::UpdateControlStates()
 {
-    UpdateData();
-    GetDlgItem(IDC_OPTIONS_SPELL_MAINDICT)->EnableWindow(m_bEnableSpell);
-    GetDlgItem(IDC_OPTIONS_SPELL_COMMENT)->EnableWindow(m_bEnableSpell);
-    GetDlgItem(IDC_OPTIONS_SPELL_SKIP_TAGS)->EnableWindow(m_bEnableSpell);
-    GetDlgItem(IDC_OPTIONS_SPELL_IGNORE_NUM)->EnableWindow(m_bEnableSpell);
-    GetDlgItem(IDC_OPTIONS_SPELL_IGNORE_ALLCAPS)->EnableWindow(m_bEnableSpell);
-    GetDlgItem(IDC_OPTIONS_SPELL_PDICT)->EnableWindow(m_bEnableSpell);
-    GetDlgItem(IDC_OPTIONS_SPELL_BROWSE)->EnableWindow(m_bEnableSpell);
+	UpdateData();
+	GetDlgItem(IDC_OPTIONS_SPELL_MAINDICT)->EnableWindow(m_bEnableSpell);
+	GetDlgItem(IDC_OPTIONS_SPELL_COMMENT)->EnableWindow(m_bEnableSpell);
+	GetDlgItem(IDC_OPTIONS_SPELL_SKIP_TAGS)->EnableWindow(m_bEnableSpell);
+	GetDlgItem(IDC_OPTIONS_SPELL_IGNORE_NUM)->EnableWindow(m_bEnableSpell);
+	GetDlgItem(IDC_OPTIONS_SPELL_IGNORE_ALLCAPS)->EnableWindow(m_bEnableSpell);
+	GetDlgItem(IDC_OPTIONS_SPELL_PDICT)->EnableWindow(m_bEnableSpell);
+	GetDlgItem(IDC_OPTIONS_SPELL_BROWSE)->EnableWindow(m_bEnableSpell);
 }

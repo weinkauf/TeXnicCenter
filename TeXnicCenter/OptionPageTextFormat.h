@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -45,99 +45,102 @@
 
 @author Sven Wiegand
  */
-class COptionPageTextFormat : public CPropertyPage {
-    DECLARE_DYNCREATE(COptionPageTextFormat)
+class COptionPageTextFormat : public CPropertyPage
+{
+	DECLARE_DYNCREATE(COptionPageTextFormat)
 
-    // construction/destruction
+// construction/destruction
 public:
-    COptionPageTextFormat();
-    virtual ~COptionPageTextFormat();
+	COptionPageTextFormat();
+	virtual ~COptionPageTextFormat();
 
-    // constants
+// constants
 public:
 
-    enum tagWindowType {
-        wndEditor = 0,
-        wndNavigator,
-        wndOutput
-    };
+	enum tagWindowType
+	{
+		wndEditor = 0,
+		wndNavigator,
+		wndOutput
+	};
 
-    // Implementation helpers
+// Implementation helpers
 protected:
-    /** Updates the control, that displays the font example */
-    void UpdateFontExample();
+	/** Updates the control, that displays the font example */
+	void UpdateFontExample();
 
-    /** Updates the dialog, based on the selected window type */
-    void UseWindowTypeSettings();
+	/** Updates the dialog, based on the selected window type */
+	void UseWindowTypeSettings();
 
-    /** 
-    Stores the settings of the selected window type based to the 
-    configuration.
-     */
-    void StoreWindowTypeSettings();
+	/**
+	Stores the settings of the selected window type based to the
+	configuration.
+	 */
+	void StoreWindowTypeSettings();
 
-    /** 
-    Updates the states of the dialog's controls based on the current
-    settings.
-     */
-    void UpdateControlStates();
+	/**
+	Updates the states of the dialog's controls based on the current
+	settings.
+	 */
+	void UpdateControlStates();
 
-    // Overrides
+// Overrides
 protected:
-    //{{AFX_VIRTUAL(COptionPageTextFormat)
+//{{AFX_VIRTUAL(COptionPageTextFormat)
 public:
-    virtual void OnOK();
+	virtual void OnOK();
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV-Unterstützung
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV-Unterstützung
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(COptionPageTextFormat)
-    virtual BOOL OnInitDialog();
-    afx_msg void OnSelchangeEditorElement();
-    afx_msg void OnEditorSelectfont();
-    afx_msg void OnElementColor();
-    afx_msg void OnDestroy();
-    afx_msg void OnSelchangeWindow();
-    //}}AFX_MSG
+	//{{AFX_MSG(COptionPageTextFormat)
+	virtual BOOL OnInitDialog();
+	afx_msg void OnSelchangeEditorElement();
+	afx_msg void OnEditorSelectfont();
+	afx_msg void OnElementColor();
+	afx_msg void OnDestroy();
+	afx_msg void OnSelchangeWindow();
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-    // dialog data
+// dialog data
 protected:
-    //{{AFX_DATA(COptionPageTextFormat)
-    enum {
-        IDD = IDD_OPTIONS_TEXTFORMAT
-    };
-    CComboBox m_wndInsertCursorMode;
-    CComboBox m_wndInsertCursorForm;
-    CComboBox m_wndOverwriteCursorMode;
-    CComboBox m_wndOverwriteCursorForm;
-    CStatic m_wndFontExample;
-    CComboBox m_wndEditorElement;
-    CMFCColorButton m_wndElementColorPicker;
-    int m_nEditorElement;
-    int m_nWindowElement;
-    int m_nInsertCursorForm;
-    int m_nInsertCursorMode;
-    int m_nOverwriteCursorForm;
-    int m_nOverwriteCursorMode;
-    //}}AFX_DATA
+	//{{AFX_DATA(COptionPageTextFormat)
+	enum
+	{
+		IDD = IDD_OPTIONS_TEXTFORMAT
+	};
+	CComboBox m_wndInsertCursorMode;
+	CComboBox m_wndInsertCursorForm;
+	CComboBox m_wndOverwriteCursorMode;
+	CComboBox m_wndOverwriteCursorForm;
+	CStatic m_wndFontExample;
+	CComboBox m_wndEditorElement;
+	CMFCColorButton m_wndElementColorPicker;
+	int m_nEditorElement;
+	int m_nWindowElement;
+	int m_nInsertCursorForm;
+	int m_nInsertCursorMode;
+	int m_nOverwriteCursorForm;
+	int m_nOverwriteCursorMode;
+	//}}AFX_DATA
 
-    // Attributes
+// Attributes
 protected:
-    /** array for storing color assignment */
-    COLORREF m_aColors[CCrystalTextView::COLORINDEX_ERRORBKGND];
+	/** array for storing color assignment */
+	COLORREF m_aColors[CCrystalTextView::COLORINDEX_ERRORBKGND];
 
-    /** font definitions for editor */
-    LOGFONT m_logfont;
+	/** font definitions for editor */
+	LOGFONT m_logfont;
 
-    /** font to display in the example */
-    CFont m_font;
+	/** font to display in the example */
+	CFont m_font;
 
-    /** TRUE if the OnOK function has been called. */
-    BOOL m_bApplyChanges;
+	/** TRUE if the OnOK function has been called. */
+	BOOL m_bApplyChanges;
 };
 
 //{{AFX_INSERT_LOCATION}}

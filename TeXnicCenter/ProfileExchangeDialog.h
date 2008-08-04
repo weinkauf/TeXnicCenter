@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -42,71 +42,73 @@
 #include "Profile.h"
 
 /**
-Provides a dialog, that allows the user to select the porfiles to 
+Provides a dialog, that allows the user to select the porfiles to
 export/import and set the required options.
 
 On construction a map of profiles is given to the dialog. When the
-user presses the button with the id IDOK, this class adjusts the 
+user presses the button with the id IDOK, this class adjusts the
 given map, so that it represents the settings made by the user.
 
 @author Sven Wiegand
  */
-class CProfileExchangeDialog : public CDialog {
-    // construction/destruction
+class CProfileExchangeDialog : public CDialog
+{
+// construction/destruction
 public:
-    /**
-    @param bExportMode
-            Specifies whether the dialog is used to export (TRUE) or import
-            (FALSE) output profiles.
-     */
-    CProfileExchangeDialog(CProfileMap &profiles, BOOL bExportMode, CWnd* pParent = NULL);
+	/**
+	@param bExportMode
+	        Specifies whether the dialog is used to export (TRUE) or import
+	        (FALSE) output profiles.
+	 */
+	CProfileExchangeDialog(CProfileMap &profiles, BOOL bExportMode, CWnd* pParent = NULL);
 
-    // implementation helpers
+// implementation helpers
 public:
-    /**
-    Refills the profile list.
+	/**
+	Refills the profile list.
 
-    By default all items are checked.
-     */
-    void RefillProfileList();
+	By default all items are checked.
+	 */
+	void RefillProfileList();
 
-    // overridings
+// overridings
 protected:
-    //{{AFX_VIRTUAL(CProfileExchangeDialog)
+//{{AFX_VIRTUAL(CProfileExchangeDialog)
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(CProfileExchangeDialog)
-    virtual BOOL OnInitDialog();
-    virtual void OnOK();
-    afx_msg void OnSelectAll();
-    afx_msg void OnSelectNone();
-    afx_msg void OnSelectInvert();
-    //}}AFX_MSG
+	//{{AFX_MSG(CProfileExchangeDialog)
+	virtual BOOL OnInitDialog();
+	virtual void OnOK();
+	afx_msg void OnSelectAll();
+	afx_msg void OnSelectNone();
+	afx_msg void OnSelectInvert();
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-    // dialog data
+// dialog data
 private:
-    //{{AFX_DATA(CProfileExchangeDialog)
-    enum {
-        IDD = IDD_PROFILE_EXCHANGE
-    };
-    CButton m_wndExecuteButton;
-    CListCtrl m_wndProfileList;
-    BOOL m_bRemoveDirectorySpecifications;
-    //}}AFX_DATA
+	//{{AFX_DATA(CProfileExchangeDialog)
+	enum
+	{
+		IDD = IDD_PROFILE_EXCHANGE
+	};
+	CButton m_wndExecuteButton;
+	CListCtrl m_wndProfileList;
+	BOOL m_bRemoveDirectorySpecifications;
+	//}}AFX_DATA
 
-    // attributes
+// attributes
 private:
-    /** TRUE if we are in export mode, FALSE if we are in import mode. */
-    BOOL m_bExportMode;
+	/** TRUE if we are in export mode, FALSE if we are in import mode. */
+	BOOL m_bExportMode;
 
-    /** The profile map to export from or to import to. */
-    CProfileMap &m_Profiles;
+	/** The profile map to export from or to import to. */
+	CProfileMap &m_Profiles;
 };
 
 //{{AFX_INSERT_LOCATION}}

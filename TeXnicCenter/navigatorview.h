@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -48,141 +48,141 @@ class CLaTeXProject;
 
         @author Sven Wiegand
  */
-class NavigatorTreeCtrl : 
-    public CTreeCtrl,
-    public CProjectView
+class NavigatorTreeCtrl :
+			public CTreeCtrl,
+			public CProjectView
 {
-    // construction/destruction
+// construction/destruction
 public:
-    NavigatorTreeCtrl();
-    virtual ~NavigatorTreeCtrl();
+	NavigatorTreeCtrl();
+	virtual ~NavigatorTreeCtrl();
 
-    // operations
+// operations
 public:
-    /**	Creates the view. */
-    BOOL Create(CWnd *pwndParent);
+	/**	Creates the view. */
+	BOOL Create(CWnd *pwndParent);
 
-    /**
-    Returns a pointer to the one and only <var>CLaTeXProject</var>-object of
-    the application.
-     */
-    CLaTeXProject *GetProject() const;
+	/**
+	Returns a pointer to the one and only <var>CLaTeXProject</var>-object of
+	the application.
+	 */
+	CLaTeXProject *GetProject() const;
 
-    /**
-    Returns the path of the specified tree item as a text.
-    The path contains all the parent items seperated by a newline ('\\n').
+	/**
+	Returns the path of the specified tree item as a text.
+	The path contains all the parent items seperated by a newline ('\\n').
 
-    @see #GetItemByPath
+	@see #GetItemByPath
 
-    @param hItem
-            Tree item to get the path of
-     */
-    CString GetItemPath(HTREEITEM hItem) const;
+	@param hItem
+	        Tree item to get the path of
+	 */
+	CString GetItemPath(HTREEITEM hItem) const;
 
-    /**
-    Returns the item with the specified path.
+	/**
+	Returns the item with the specified path.
 
-    @see #GetItemPath
+	@see #GetItemPath
 
-    @param lpszPath
-            Path of the item to return.
+	@param lpszPath
+	        Path of the item to return.
 
-    @return
-            Handle to the first tree item with the specified path
-            or NULL, if there is no matching item.
-     */
-    HTREEITEM GetItemByPath(LPCTSTR lpszPath) const;
+	@return
+	        Handle to the first tree item with the specified path
+	        or NULL, if there is no matching item.
+	 */
+	HTREEITEM GetItemByPath(LPCTSTR lpszPath) const;
 
-    /**
-    Finds all expanded items in the tree view.
+	/**
+	Finds all expanded items in the tree view.
 
-    @see #GetItemPath
-    @see #ExpandItems
+	@see #GetItemPath
+	@see #ExpandItems
 
-    @param astrExpandedItems
-            Array that receives the paths of all expanded items.
-     */
-    void GetExpandedItems(CStringArray &astrExpandedItems) const;
+	@param astrExpandedItems
+	        Array that receives the paths of all expanded items.
+	 */
+	void GetExpandedItems(CStringArray &astrExpandedItems) const;
 
-    /**
-    Expands the specified items.
+	/**
+	Expands the specified items.
 
-    @see #GetExpandedItems
+	@see #GetExpandedItems
 
-    @param astrItems
-            Array with paths of the items to expand.
-     */
-    void ExpandItems(const CStringArray &astrItems);
+	@param astrItems
+	        Array with paths of the items to expand.
+	 */
+	void ExpandItems(const CStringArray &astrItems);
 
-    /** Expands all items until given level.
-	
-            This function expands each item,
-            which has a level smaller or equal to the given one.
+	/** Expands all items until given level.
 
-            @param nLevel
-                    Items in this level and its parents will be expanded.
-                    This is zero-based.
-     */
-    void ExpandItemsByLevel(const int nLevel);
+	        This function expands each item,
+	        which has a level smaller or equal to the given one.
 
-    // implementation helpers
+	        @param nLevel
+	                Items in this level and its parents will be expanded.
+	                This is zero-based.
+	 */
+	void ExpandItemsByLevel(const int nLevel);
+
+// implementation helpers
 protected:
-    /**
-    Returns the next item that is expanded starting the search
-    at the specified item.
+	/**
+	Returns the next item that is expanded starting the search
+	at the specified item.
 
-    @param hItem
-            Tree item to start the search at.
-    @param bInclude
-            TRUE to test hItem itself, if it is expanded, FALSE to start
-            with the next one after hItem.
+	@param hItem
+	        Tree item to start the search at.
+	@param bInclude
+	        TRUE to test hItem itself, if it is expanded, FALSE to start
+	        with the next one after hItem.
 
-    @return
-            Handle to the first tree item behind hItem that is expanded.
-     */
-    HTREEITEM GetNextExpandedItem(HTREEITEM hItem, BOOL bInclude = FALSE) const;
+	@return
+	        Handle to the first tree item behind hItem that is expanded.
+	 */
+	HTREEITEM GetNextExpandedItem(HTREEITEM hItem, BOOL bInclude = FALSE) const;
 
-    /** Applies the font settings to the window */
-    void ApplyFont();
+	/** Applies the font settings to the window */
+	void ApplyFont();
 
-    // overwritings
+// overwritings
 public:
-    //{{AFX_VIRTUAL(NavigatorTreeCtrl)
+//{{AFX_VIRTUAL(NavigatorTreeCtrl)
 public:
-    //}}AFX_VIRTUAL
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    afx_msg void OnSysColorChange();
+	afx_msg void OnSysColorChange();
 
-    //{{AFX_MSG(NavigatorTreeCtrl)
-    afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
-    afx_msg void OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult);
-    afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-    afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-    afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
-    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+	//{{AFX_MSG(NavigatorTreeCtrl)
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 
-    // attributes
+// attributes
 protected:
-    /** image list used by the tree ctrl. */
-    CImageList m_images;
+	/** image list used by the tree ctrl. */
+	CImageList m_images;
 
-    /** Font to be used for the view */
-    CFont m_font;
+	/** Font to be used for the view */
+	CFont m_font;
 
 private:
-    /** TRUE after construction until the first call of OnInitialUpdate. */
-    BOOL m_bFirstTime;
+	/** TRUE after construction until the first call of OnInitialUpdate. */
+	BOOL m_bFirstTime;
 public:
-    void Clear(void);
+	void Clear(void);
 };
 
 inline CLaTeXProject *NavigatorTreeCtrl::GetProject() const
 {
-    return (CLaTeXProject*)CProjectView::GetProject();
+	return (CLaTeXProject*)CProjectView::GetProject();
 }
 
 /////////////////////////////////////////////////////////////////////////////

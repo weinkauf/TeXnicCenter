@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -40,17 +40,18 @@
 
 #include "LaTeXCommand.h"
 
-/** Represents a LaTeX environment. 
-        @see CLaTeXCommand 
+/** Represents a LaTeX environment.
+        @see CLaTeXCommand
 
  */
-class CNewEnvironment : public CLaTeXCommand {
+class CNewEnvironment : public CLaTeXCommand
+{
 public:
-    DECLARE_DYNAMIC(CNewEnvironment)
-    CNewEnvironment(const CStyleFile *parent, const CString &name, int noOfParams);
-    virtual ~CNewEnvironment();
+	DECLARE_DYNAMIC(CNewEnvironment)
+	CNewEnvironment(const CStyleFile *parent, const CString &name, int noOfParams);
+	virtual ~CNewEnvironment();
 
-    const CString ToString() const;
+	const CString ToString() const;
 };
 
 #endif // !defined(AFX_NEWENVIRONMENT_H__CA02E4AE_6D38_4F53_9CB6_3FE9C7D4E068__INCLUDED_)

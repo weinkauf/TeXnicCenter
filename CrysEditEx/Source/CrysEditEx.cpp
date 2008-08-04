@@ -49,28 +49,30 @@ static char THIS_FILE[] = __FILE__;
 //-------------------------------------------------------------------
 
 static AFX_EXTENSION_MODULE CrysEditExDLL = {NULL, NULL
-};
+                                            };
 
 extern "C" int APIENTRY
-DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
+	DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
-    UNREFERENCED_PARAMETER(lpReserved);
+	UNREFERENCED_PARAMETER(lpReserved);
 
-    if (dwReason == DLL_PROCESS_ATTACH) {
-        TRACE0("CRYSEDITEX.DLL Initializing!\n");
+	if (dwReason == DLL_PROCESS_ATTACH)
+	{
+		TRACE0("CRYSEDITEX.DLL Initializing!\n");
 
-        if (!AfxInitExtensionModule(CrysEditExDLL, hInstance))
-            return 0;
+		if (!AfxInitExtensionModule(CrysEditExDLL, hInstance))
+			return 0;
 
-        new CDynLinkLibrary(CrysEditExDLL);
+		new CDynLinkLibrary(CrysEditExDLL);
 
-        CCrystalTextView::s_hResourceInst = hInstance;
-    }
-    else if (dwReason == DLL_PROCESS_DETACH) {
-        TRACE0("CRYSEDITEX.DLL Terminating!\n");
-        AfxTermExtensionModule(CrysEditExDLL);
-    }
-    return 1; // OK
+		CCrystalTextView::s_hResourceInst = hInstance;
+	}
+	else if (dwReason == DLL_PROCESS_DETACH)
+	{
+		TRACE0("CRYSEDITEX.DLL Terminating!\n");
+		AfxTermExtensionModule(CrysEditExDLL);
+	}
+	return 1; // OK
 }
 
 
@@ -80,10 +82,10 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 
 void CRYSEDIT_CLASS_DECL CrystalEditExSetResourceHandle(HINSTANCE hResourceDll)
 {
-    CCrystalTextView::s_hResourceInst = hResourceDll;
+	CCrystalTextView::s_hResourceInst = hResourceDll;
 }
 
 void CRYSEDIT_CLASS_DECL CrystalEditExResetResourceHandle()
 {
-    CCrystalTextView::s_hResourceInst = CrysEditExDLL.hModule;
+	CCrystalTextView::s_hResourceInst = CrysEditExDLL.hModule;
 }

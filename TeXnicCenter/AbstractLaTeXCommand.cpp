@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -74,11 +74,11 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNAMIC(CAbstractLaTeXCommand,CObject)
 
 CAbstractLaTeXCommand::CAbstractLaTeXCommand(const CStyleFile *parent, const CString &name)
-: m_Parent(parent)
-, m_Name(name)
-, m_IconIndex(-1)
+		: m_Parent(parent)
+		, m_Name(name)
+		, m_IconIndex(-1)
 {
-    ASSERT(parent != NULL);
+	ASSERT(parent != NULL);
 }
 
 CAbstractLaTeXCommand::~CAbstractLaTeXCommand()
@@ -87,86 +87,87 @@ CAbstractLaTeXCommand::~CAbstractLaTeXCommand()
 
 const CString CAbstractLaTeXCommand::ToString() const
 {
-    return m_Name;
+	return m_Name;
 }
 
-void CAbstractLaTeXCommand::SetDescription( const CString &desc )
+void CAbstractLaTeXCommand::SetDescription(const CString &desc)
 {
-    m_Description = desc;
+	m_Description = desc;
 }
 
-void CAbstractLaTeXCommand::SetName( const CString &name )
+void CAbstractLaTeXCommand::SetName(const CString &name)
 {
-    m_Name = name;
+	m_Name = name;
 }
 
 void CAbstractLaTeXCommand::Dump(CDumpContext& dc) const
 {
-    CObject::Dump(dc);
-    dc << m_Name;
+	CObject::Dump(dc);
+	dc << m_Name;
 
-    if (m_Parent != NULL) {
-        dc << "/";
-        dc << m_Parent->GetName();
-    }
+	if (m_Parent != NULL)
+	{
+		dc << "/";
+		dc << m_Parent->GetName();
+	}
 }
 
 const CString& CAbstractLaTeXCommand::GetIconFileName() const
 {
-    return m_IconFile;
+	return m_IconFile;
 }
 
-void CAbstractLaTeXCommand::SetIconFileName( const CString& file )
+void CAbstractLaTeXCommand::SetIconFileName(const CString& file)
 {
-    m_IconFile = file;
+	m_IconFile = file;
 }
 
 int CAbstractLaTeXCommand::GetIconIndex() const
 {
-    return m_IconIndex;
+	return m_IconIndex;
 }
 
 void CAbstractLaTeXCommand::SetIconIndex(int idx)
 {
-    m_IconIndex = idx;
+	m_IconIndex = idx;
 }
 
 const CStyleFile * CAbstractLaTeXCommand::GetStyleFile() const
 {
-    return m_Parent;
+	return m_Parent;
 }
 
-const CString CAbstractLaTeXCommand::ToLaTeX( BOOL /*showParString*/ /*= TRUE*/ ) const
+const CString CAbstractLaTeXCommand::ToLaTeX(BOOL /*showParString*/ /*= TRUE*/) const
 {
-    return m_Name;
+	return m_Name;
 }
 
 const CString& CAbstractLaTeXCommand::GetDescription() const
 {
-    return m_Description;
+	return m_Description;
 }
 
 const CString& CAbstractLaTeXCommand::GetName() const
 {
-    return m_Name;
+	return m_Name;
 }
 
 const CStyleFile * CAbstractLaTeXCommand::GetParent() const
 {
-    return m_Parent;
+	return m_Parent;
 }
 
 COLORREF CAbstractLaTeXCommand::GetIconMaskColor() const
 {
-    return icon_mask_color_;
+	return icon_mask_color_;
 }
 
 const CString& CAbstractLaTeXCommand::GetHighColorIconFileName() const
 {
-    return high_color_icon_fn_;
+	return high_color_icon_fn_;
 }
 
-void CAbstractLaTeXCommand::SetHighColorIconFileName( const CString& file )
+void CAbstractLaTeXCommand::SetHighColorIconFileName(const CString& file)
 {
-    high_color_icon_fn_ = file;
+	high_color_icon_fn_ = file;
 }

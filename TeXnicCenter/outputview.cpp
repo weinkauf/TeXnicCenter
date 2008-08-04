@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -52,26 +52,26 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNAMIC(COutputView,CListCtrl)
 
 BEGIN_MESSAGE_MAP(COutputView,CListCtrl)
-    ON_MESSAGE(OPW_ADD_LINE,OnAddLine)
-    ON_MESSAGE(OPW_RESET,OnReset)
-    ON_MESSAGE(OPW_ADD_INFOLINE,OnAddInfoLine)
-    //{{AFX_MSG_MAP(COutputView)
-    ON_WM_CREATE()
-    ON_WM_LBUTTONDBLCLK()
-    ON_WM_SHOWWINDOW()
-    ON_WM_SETFOCUS()
-    //}}AFX_MSG_MAP
-    ON_WM_SYSCOLORCHANGE()
+	ON_MESSAGE(OPW_ADD_LINE,OnAddLine)
+	ON_MESSAGE(OPW_RESET,OnReset)
+	ON_MESSAGE(OPW_ADD_INFOLINE,OnAddInfoLine)
+	//{{AFX_MSG_MAP(COutputView)
+	ON_WM_CREATE()
+	ON_WM_LBUTTONDBLCLK()
+	ON_WM_SHOWWINDOW()
+	ON_WM_SETFOCUS()
+	//}}AFX_MSG_MAP
+	ON_WM_SYSCOLORCHANGE()
 END_MESSAGE_MAP()
 
 
 COutputView::COutputView()
-: m_bInitialized(FALSE)
-, m_pOutputDoc(NULL)
+		: m_bInitialized(FALSE)
+		, m_pOutputDoc(NULL)
 {
-    // create dummy font, so that m_font.DestroyObject() wont make any
-    // problems
-    m_font.CreatePointFont(100,_T("Courier New"));
+	// create dummy font, so that m_font.DestroyObject() wont make any
+	// problems
+	m_font.CreatePointFont(100,_T("Courier New"));
 }
 
 COutputView::~COutputView()
@@ -80,190 +80,194 @@ COutputView::~COutputView()
 
 BOOL COutputView::Create(const RECT &rect, CWnd *pwndParent)
 {
-    ASSERT(pwndParent && IsWindow(pwndParent->m_hWnd));
+	ASSERT(pwndParent && IsWindow(pwndParent->m_hWnd));
 
-    return CWnd::CreateEx(WS_EX_CLIENTEDGE,WC_LISTVIEW,0,
-            WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_SINGLESEL,
-            rect,pwndParent,0);
+	return CWnd::CreateEx(WS_EX_CLIENTEDGE,WC_LISTVIEW,0,
+	                      WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_SINGLESEL,
+	                      rect,pwndParent,0);
 }
 
 void COutputView::AttachDoc(COutputDoc *pDocument)
 {
-    m_pOutputDoc = pDocument;
-    m_bInitialized = TRUE;
+	m_pOutputDoc = pDocument;
+	m_bInitialized = TRUE;
 }
 
 COutputDoc *COutputView::GetDocument() const
 {
-    ASSERT(m_pOutputDoc->IsKindOf(RUNTIME_CLASS(COutputDoc)));
-    return m_pOutputDoc;
+	ASSERT(m_pOutputDoc->IsKindOf(RUNTIME_CLASS(COutputDoc)));
+	return m_pOutputDoc;
 }
 
 int COutputView::GetLineCount() const
 {
-    return GetItemCount();
+	return GetItemCount();
 }
 
 CImageList *COutputView::SetImageList(CImageList *pImageList)
 {
-    return CListCtrl::SetImageList(pImageList,LVSIL_SMALL);
+	return CListCtrl::SetImageList(pImageList,LVSIL_SMALL);
 }
 
 CImageList *COutputView::GetImageList() const
 {
-    return CListCtrl::GetImageList(LVSIL_SMALL);
+	return CListCtrl::GetImageList(LVSIL_SMALL);
 }
 
 LONG COutputView::OnReset(UINT wParam,LONG lParam)
 {
-    ResetView();
-    return 0;
+	ResetView();
+	return 0;
 }
 
 void COutputView::ResetView()
 {
-    DeleteAllItems();
+	DeleteAllItems();
 }
 
 LONG COutputView::OnAddLine(UINT wParam,LONG lParam)
 {
-    AddLine((LPCTSTR)wParam);
-    return 0L;
+	AddLine((LPCTSTR)wParam);
+	return 0L;
 }
 
 LONG COutputView::OnAddInfoLine(WPARAM wParam,LONG lParam)
 {
-    /////////////////
-    //Get the Infos
-    // - Image
-    WORD nImage = HIWORD(wParam);
-    // - Level
-    WORD nLevel = LOWORD(wParam);
-    // - Message
-    TCHAR* buffer = (TCHAR*)lParam;
+	/////////////////
+	//Get the Infos
+	// - Image
+	WORD nImage = HIWORD(wParam);
+	// - Level
+	WORD nLevel = LOWORD(wParam);
+	// - Message
+	TCHAR* buffer = (TCHAR*)lParam;
 
-    if (buffer != NULL) {
-        //Add InfoLine
-        AddLine(buffer,nImage,nLevel);
+	if (buffer != NULL)
+	{
+		//Add InfoLine
+		AddLine(buffer,nImage,nLevel);
 
-        //We need to free the TCHAR buffer
-        delete[] buffer;
-    }
-    else {
-        //Add empty line
-        AddLine(_T(""));
-    }
+		//We need to free the TCHAR buffer
+		delete[] buffer;
+	}
+	else
+	{
+		//Add empty line
+		AddLine(_T(""));
+	}
 
-    return 0L;
+	return 0L;
 }
 
 void COutputView::AddLine(LPCTSTR lpszLine,int nImage /*= -1*/,int nIndent /*= 0*/)
 {
-    int nItem = GetItemCount();
-    CString strLine(EnsureStringReadable(lpszLine));
-    LVITEM lvItem;
+	int nItem = GetItemCount();
+	CString strLine(EnsureStringReadable(lpszLine));
+	LVITEM lvItem;
 
-    lvItem.mask = LVIF_INDENT | LVIF_TEXT;
-    lvItem.iItem = nItem;
-    lvItem.iSubItem = 0;
-    //lvItem.state
-    lvItem.stateMask = 0;
-    lvItem.iIndent = nIndent;
-    lvItem.cchTextMax = strLine.GetLength();
-    lvItem.pszText = strLine.GetBuffer(0);
-    lvItem.iImage = nImage;
-    //lvItem.lParam
+	lvItem.mask = LVIF_INDENT | LVIF_TEXT;
+	lvItem.iItem = nItem;
+	lvItem.iSubItem = 0;
+	//lvItem.state
+	lvItem.stateMask = 0;
+	lvItem.iIndent = nIndent;
+	lvItem.cchTextMax = strLine.GetLength();
+	lvItem.pszText = strLine.GetBuffer(0);
+	lvItem.iImage = nImage;
+	//lvItem.lParam
 
-    if (nImage != -1)
-        lvItem.mask |= LVIF_IMAGE;
+	if (nImage != -1)
+		lvItem.mask |= LVIF_IMAGE;
 
-    nItem = InsertItem(&lvItem);
-    strLine.ReleaseBuffer();
+	nItem = InsertItem(&lvItem);
+	strLine.ReleaseBuffer();
 
-    SetColumnWidth(0,LVSCW_AUTOSIZE);
+	SetColumnWidth(0,LVSCW_AUTOSIZE);
 
-    // first line? then select
-    if (nItem == 0)
-        SelectLine(nItem);
-    else {
-        // was previous line the selected one?
-        // => then make the new line the selected one and ensure, that it
-        //    is visible,
-        // => otherwise don't scroll anywhere
-        POSITION pos = GetFirstSelectedItemPosition();
-        if (pos && GetNextSelectedItem(pos) == nItem - 1)
-            SelectLine(nItem);
-    }
+	// first line? then select
+	if (nItem == 0)
+		SelectLine(nItem);
+	else
+	{
+		// was previous line the selected one?
+		// => then make the new line the selected one and ensure, that it
+		//    is visible,
+		// => otherwise don't scroll anywhere
+		POSITION pos = GetFirstSelectedItemPosition();
+		if (pos && GetNextSelectedItem(pos) == nItem - 1)
+			SelectLine(nItem);
+	}
 }
 
 BOOL COutputView::SetLineImage(int nLine,int nImage)
 {
-    LVITEM item;
+	LVITEM item;
 
-    item.iItem = nLine;
-    item.iSubItem = 0;
-    item.mask = LVIF_IMAGE;
-    item.iImage = nImage;
+	item.iItem = nLine;
+	item.iSubItem = 0;
+	item.mask = LVIF_IMAGE;
+	item.iImage = nImage;
 
-    return CListCtrl::SetItem(&item);
+	return CListCtrl::SetItem(&item);
 }
 
 void COutputView::SelectLine(int nLine,BOOL bPlaceAtTop /*= FALSE*/)
 {
-    ASSERT(nLine >= 0 && nLine < GetLineCount());
+	ASSERT(nLine >= 0 && nLine < GetLineCount());
 
-    SetItemState(nLine,LVIS_FOCUSED | LVIS_SELECTED,LVIS_FOCUSED | LVIS_SELECTED);
-    EnsureVisible(nLine,FALSE);
+	SetItemState(nLine,LVIS_FOCUSED | LVIS_SELECTED,LVIS_FOCUSED | LVIS_SELECTED);
+	EnsureVisible(nLine,FALSE);
 
-    if (bPlaceAtTop) {
-        CRect rect;
-        GetItemRect(nLine,rect,LVIR_BOUNDS);
-        Scroll(CSize(0,rect.top));
-    }
+	if (bPlaceAtTop)
+	{
+		CRect rect;
+		GetItemRect(nLine,rect,LVIR_BOUNDS);
+		Scroll(CSize(0,rect.top));
+	}
 }
 
 int COutputView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-    if (CListCtrl::OnCreate(lpCreateStruct) == -1)
-        return -1;
+	if (CListCtrl::OnCreate(lpCreateStruct) == -1)
+		return -1;
 
-    // set font
-    ApplyFont();
+	// set font
+	ApplyFont();
 
-    // modify style
-    ModifyStyle(0xFFFFFFFF,
-            WS_CHILD | WS_VISIBLE | LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_SINGLESEL);
-    InsertColumn(0,_T(""));
+	// modify style
+	ModifyStyle(0xFFFFFFFF,
+	            WS_CHILD | WS_VISIBLE | LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_SINGLESEL);
+	InsertColumn(0,_T(""));
 
-    return 0;
+	return 0;
 }
 
 BOOL COutputView::PreCreateWindow(CREATESTRUCT& cs)
 {
-    return CListCtrl::PreCreateWindow(cs);
+	return CListCtrl::PreCreateWindow(cs);
 }
 
 void COutputView::OnLButtonDblClk(UINT nFlags,CPoint point)
 {
-    POSITION pos = GetFirstSelectedItemPosition();
+	POSITION pos = GetFirstSelectedItemPosition();
 
-    if (!pos)
-        return;
+	if (!pos)
+		return;
 
-    GetDocument()->ActivateMessageByOutputLine(GetNextSelectedItem(pos),this);
+	GetDocument()->ActivateMessageByOutputLine(GetNextSelectedItem(pos),this);
 }
 
 void COutputView::OnShowWindow(BOOL bShow,UINT nStatus)
 {
-    CListCtrl::OnShowWindow(bShow,nStatus);
+	CListCtrl::OnShowWindow(bShow,nStatus);
 
-    if (bShow && GetDocument())
-        GetDocument()->OnOutputViewActivated(this);
+	if (bShow && GetDocument())
+		GetDocument()->OnOutputViewActivated(this);
 }
 
 void COutputView::DoOnUpdate(COutputView *pSender,LPARAM lHint,CObject *pHint)
 {
-    OnUpdate(pSender,lHint,pHint);
+	OnUpdate(pSender,lHint,pHint);
 }
 
 void COutputView::OnUpdate(COutputView *pSender,LPARAM lHint,CObject *pHint)
@@ -272,32 +276,33 @@ void COutputView::OnUpdate(COutputView *pSender,LPARAM lHint,CObject *pHint)
 
 void COutputView::ApplyFont()
 {
-    m_font.DeleteObject();
-    m_font.CreateFontIndirect(&CConfiguration::GetInstance()->m_fontOutput);
-    SetFont(&m_font);
+	m_font.DeleteObject();
+	m_font.CreateFontIndirect(&CConfiguration::GetInstance()->m_fontOutput);
+	SetFont(&m_font);
 }
 
-const CString COutputView::EnsureStringReadable( LPCTSTR lpszString )
+const CString COutputView::EnsureStringReadable(LPCTSTR lpszString)
 {
-    CString strResult;
+	CString strResult;
 
-    while (lpszString && *lpszString) {
-        if (*lpszString == _T('\t'))
-            strResult += _T("  ");
-        else
-            strResult += *lpszString;
+	while (lpszString && *lpszString)
+	{
+		if (*lpszString == _T('\t'))
+			strResult += _T("  ");
+		else
+			strResult += *lpszString;
 
-        ++lpszString;
-    }
+		++lpszString;
+	}
 
-    return strResult;
+	return strResult;
 }
 
 void COutputView::OnSysColorChange()
 {
-    CListCtrl::OnSysColorChange();
+	CListCtrl::OnSysColorChange();
 
-    ApplyFont();
+	ApplyFont();
 }
 
 
@@ -305,11 +310,11 @@ void COutputView::OnSysColorChange()
 
 void COutputView::AssertValid() const
 {
-    CListCtrl::AssertValid();
+	CListCtrl::AssertValid();
 }
 
 void COutputView::Dump(CDumpContext& dc) const
 {
-    CListCtrl::Dump(dc);
+	CListCtrl::Dump(dc);
 }
 #endif //_DEBUG

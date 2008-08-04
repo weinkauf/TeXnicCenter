@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -45,53 +45,54 @@ caret position each time it looses the focus. After it has lost the
 focus, you can call the InsertText()-method to insert text at the
 remembered caret position and give the focus back to the control.
 
-This class is useful inside a dialog, in combination with 
-menu-buttons, used to insert words into an edit control by choosing 
+This class is useful inside a dialog, in combination with
+menu-buttons, used to insert words into an edit control by choosing
 them from a menu that pops-up, when clicking on the menu button.
 
 @ingroup guielements
 
 @author Sven Wiegand
  */
-class CPersistPosEdit : public CEdit {
-    // construction/destruction
+class CPersistPosEdit : public CEdit
+{
+// construction/destruction
 public:
-    CPersistPosEdit();
+	CPersistPosEdit();
 
-    // operations
+// operations
 public:
-    /**
-    Sets the input focus to this control, replaces the selection,
-    stored as the control looses the focus, and places the carret
-    behind the inserted text.
-     */
-    void InsertText(LPCTSTR lpszText);
+	/**
+	Sets the input focus to this control, replaces the selection,
+	stored as the control looses the focus, and places the carret
+	behind the inserted text.
+	 */
+	void InsertText(LPCTSTR lpszText);
 
-    // overridings
+// overridings
 protected:
-    //{{AFX_VIRTUAL(CPersistPosEdit)
-    //}}AFX_VIRTUAL
+	//{{AFX_VIRTUAL(CPersistPosEdit)
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(CPersistPosEdit)
-    afx_msg void OnKillFocus(CWnd* pNewWnd);
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+	//{{AFX_MSG(CPersistPosEdit)
+	afx_msg void OnKillFocus(CWnd* pNewWnd);
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 
-    // attributes
+// attributes
 protected:
-    /**
-    The starting character of the selection is stored here, when 
-    loosing	input focus.
-     */
-    int m_nSelStart;
+	/**
+	The starting character of the selection is stored here, when
+	loosing	input focus.
+	 */
+	int m_nSelStart;
 
-    /**
-    The ending character of the selection is stored here, when loosing
-    input focus.
-     */
-    int m_nSelEnd;
+	/**
+	The ending character of the selection is stored here, when loosing
+	input focus.
+	 */
+	int m_nSelEnd;
 };
 
 /////////////////////////////////////////////////////////////////////////////

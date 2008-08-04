@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -47,8 +47,8 @@ static char THIS_FILE[] = __FILE__;
 //-------------------------------------------------------------------
 
 BEGIN_MESSAGE_MAP(CGrepView,COutputView)
-//{{AFX_MSG_MAP(CGrepView)
-//}}AFX_MSG_MAP
+	//{{AFX_MSG_MAP(CGrepView)
+	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
@@ -56,7 +56,7 @@ IMPLEMENT_DYNCREATE(CGrepView,COutputView)
 
 
 CGrepView::CGrepView()
-: m_nIndex(-1)
+		: m_nIndex(-1)
 {
 }
 
@@ -66,14 +66,14 @@ CGrepView::~CGrepView()
 
 void CGrepView::OnUpdate(COutputView* pSender,LPARAM lHint,CObject* pHint) //UPDATE
 {
-    if (pSender == this)
-        return;
+	if (pSender == this)
+		return;
 
-    if (m_nIndex < 0)
-        return;
+	if (m_nIndex < 0)
+		return;
 
-    if ((COutputDoc::HINT)lHint == (COutputDoc::hintSelectGrep1Line + m_nIndex))
-        SelectLine(*(int*) pHint);
+	if ((COutputDoc::HINT)lHint == (COutputDoc::hintSelectGrep1Line + m_nIndex))
+		SelectLine(*(int*) pHint);
 }
 
 
@@ -81,16 +81,16 @@ void CGrepView::OnUpdate(COutputView* pSender,LPARAM lHint,CObject* pHint) //UPD
 
 void CGrepView::AssertValid() const
 {
-    COutputView::AssertValid();
+	COutputView::AssertValid();
 }
 
 void CGrepView::Dump(CDumpContext& dc) const
 {
-    COutputView::Dump(dc);
+	COutputView::Dump(dc);
 }
 #endif //_DEBUG
 
 void CGrepView::Visit(OutputViewVisitor& v)
 {
-    v.Accept(this);
+	v.Accept(this);
 }

@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -45,53 +45,55 @@
 
 @author Sven Wiegand
  */
-class CProjectPropertyDialog : public CDialog {
-    // Construction/Destruction
+class CProjectPropertyDialog : public CDialog
+{
+// Construction/Destruction
 public:
-    CProjectPropertyDialog(CWnd* pParent = NULL);
+	CProjectPropertyDialog(CWnd* pParent = NULL);
 
-    // virtuals
+// virtuals
 protected:
-    //{{AFX_VIRTUAL(CProjectPropertyDialog)
+//{{AFX_VIRTUAL(CProjectPropertyDialog)
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(CProjectPropertyDialog)
-    afx_msg void OnBrowseMainFile();
-    virtual BOOL OnInitDialog();
-    virtual void OnOK();
-    afx_msg void OnSelchangeOptionsLanguage();
-    //}}AFX_MSG
+	//{{AFX_MSG(CProjectPropertyDialog)
+	afx_msg void OnBrowseMainFile();
+	virtual BOOL OnInitDialog();
+	virtual void OnOK();
+	afx_msg void OnSelchangeOptionsLanguage();
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-    // dialog data
+// dialog data
 public:
-    //{{AFX_DATA(CProjectPropertyDialog)
-    enum {
-        IDD = IDD_PROJECT_PROPERTIES
-    };
-    CString m_strMainFile;
-    BOOL m_bUseMakeIndex;
-    BOOL m_bUseBibTex;
-    //}}AFX_DATA
+	//{{AFX_DATA(CProjectPropertyDialog)
+	enum
+	{
+		IDD = IDD_PROJECT_PROPERTIES
+	};
+	CString m_strMainFile;
+	BOOL m_bUseMakeIndex;
+	BOOL m_bUseBibTex;
+	//}}AFX_DATA
 
-    // attributes
+// attributes
 public:
-    /** project's directory */
-    CString m_strProjectDir;
+	/** project's directory */
+	CString m_strProjectDir;
 
-    CArray<CString, CString&> m_aLanguage;
-    CArray<CString, CString&> m_aDialect;
-    CString m_strLanguageCurrent;
-    CString m_strDialectCurrent;
+	CArray<CString, CString&> m_aLanguage;
+	CArray<CString, CString&> m_aDialect;
+	CString m_strLanguageCurrent;
+	CString m_strDialectCurrent;
 
 
 private:
-    void FindDictionaries();
+	void FindDictionaries();
 
 };
 

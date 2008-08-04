@@ -203,130 +203,131 @@ always unique - no duplicates of a filename.
 
 @author Tino Weinkauf
  */
-class CPlaceholderSets {
+class CPlaceholderSets
+{
 public:
-    //Constructor / Destructor
-    CPlaceholderSets(CLaTeXProject* pProject = NULL);
-    virtual ~CPlaceholderSets();
+	//Constructor / Destructor
+	CPlaceholderSets(CLaTeXProject* pProject = NULL);
+	virtual ~CPlaceholderSets();
 
-    //Operations
+//Operations
 public:
-    /**
-    Evaluates the given String and resolves the desired filenames.
+	/**
+	Evaluates the given String and resolves the desired filenames.
 
-    @param lpszStringWithPlaceholderSets
-            The String with the placeholder sets to be expanded.
+	@param lpszStringWithPlaceholderSets
+	        The String with the placeholder sets to be expanded.
 
-    @param pStrList
-            See below.
+	@param pStrList
+	        See below.
 
-    @param bIgnoreOptions
-            The Options (q, s, f, r) of a set-placeholder are ignored.
-            Example: "$rAPF" is treated as "$APF".
+	@param bIgnoreOptions
+	        The Options (q, s, f, r) of a set-placeholder are ignored.
+	        Example: "$rAPF" is treated as "$APF".
 
-    @returns
-            If pStrList == NULL , then it returns a string, where all placeholder sets have been expanded
-            to their real values.
-    @returns
-            If pStrList != NULL , then it returns an empty string and all filenames have been added to the List.
-     */
-    CString ExpandAllSets(LPCTSTR lpszStringWithPlaceholderSets,
-                          CUniqueStringList* pStrList = NULL,
-                          bool bIgnoreOptions = false);
+	@returns
+	        If pStrList == NULL , then it returns a string, where all placeholder sets have been expanded
+	        to their real values.
+	@returns
+	        If pStrList != NULL , then it returns an empty string and all filenames have been added to the List.
+	 */
+	CString ExpandAllSets(LPCTSTR lpszStringWithPlaceholderSets,
+	                      CUniqueStringList* pStrList = NULL,
+	                      bool bIgnoreOptions = false);
 
-    /**
-    Returns a string with the names of all files, that are members
-    of the sets defined in Sets.
+	/**
+	Returns a string with the names of all files, that are members
+	of the sets defined in Sets.
 
-    @param Sets
-            A value to define the set of sets of files to be returned.
-            Can be any combination of (use binary OR "|" to combine):
-                    TXC_PLACEHOLDERSET_TEXFILES
-                    TXC_PLACEHOLDERSET_BIBTEXFILES
-                    TXC_PLACEHOLDERSET_GRAPHICFILES
-                    TXC_PLACEHOLDERSET_TXCFILES
-                    TXC_PLACEHOLDERSET_CURRENTLYOPENEDFILES
+	@param Sets
+	        A value to define the set of sets of files to be returned.
+	        Can be any combination of (use binary OR "|" to combine):
+	                TXC_PLACEHOLDERSET_TEXFILES
+	                TXC_PLACEHOLDERSET_BIBTEXFILES
+	                TXC_PLACEHOLDERSET_GRAPHICFILES
+	                TXC_PLACEHOLDERSET_TXCFILES
+	                TXC_PLACEHOLDERSET_CURRENTLYOPENEDFILES
 
-            You can also use the following predefined set of sets:
-                    TXC_PLACEHOLDERSET_ALLPROJECTFILES (== TEX + BIB + GRAPHIC + TXC)
-                    TXC_PLACEHOLDERSET_ALLFILESETS (== all sets above together)
+	        You can also use the following predefined set of sets:
+	                TXC_PLACEHOLDERSET_ALLPROJECTFILES (== TEX + BIB + GRAPHIC + TXC)
+	                TXC_PLACEHOLDERSET_ALLFILESETS (== all sets above together)
 
-    @param bQuoted
-            Filenames are "quoted"
+	@param bQuoted
+	        Filenames are "quoted"
 
-    @param bShortPaths
-            Filenames are in 8.3-Format
+	@param bShortPaths
+	        Filenames are in 8.3-Format
 
-    @param bForwardSlash
-            ForwardSlash is used as directory separator
+	@param bForwardSlash
+	        ForwardSlash is used as directory separator
 
-    @param bRelativePaths
-            Filenames will be given relative to the WorkingDir of the Project (see also SetProject)
+	@param bRelativePaths
+	        Filenames will be given relative to the WorkingDir of the Project (see also SetProject)
 
 
-    NOTE: These sets can only include files, which TXC <b>REPORTED</b>
-    to be part of the current project or opened.
-     */
-    CString GetFileSets(const unsigned int Sets,
-                        const bool bQuoted = true,
-                        const bool bShortPaths = false,
-                        const bool bForwardSlash = false,
-                        const bool bRelativePaths = false) const;
+	NOTE: These sets can only include files, which TXC <b>REPORTED</b>
+	to be part of the current project or opened.
+	 */
+	CString GetFileSets(const unsigned int Sets,
+	                    const bool bQuoted = true,
+	                    const bool bShortPaths = false,
+	                    const bool bForwardSlash = false,
+	                    const bool bRelativePaths = false) const;
 
-    /**
-    Same as above, but returns a list of strings.
+	/**
+	Same as above, but returns a list of strings.
 
-    @param pStrList
-            List to be filled with found filenames. Caller must allocate/create and delete it.
+	@param pStrList
+	        List to be filled with found filenames. Caller must allocate/create and delete it.
 
-    NOTE: Strings in the list are never quoted.
-     */
-    CUniqueStringList* GetFileSets(const unsigned int Sets,
-                                   CUniqueStringList* pStrList,
-                                   const bool bShortPaths = false,
-                                   const bool bForwardSlash = false,
-                                   const bool bRelativePaths = false) const;
+	NOTE: Strings in the list are never quoted.
+	 */
+	CUniqueStringList* GetFileSets(const unsigned int Sets,
+	                               CUniqueStringList* pStrList,
+	                               const bool bShortPaths = false,
+	                               const bool bForwardSlash = false,
+	                               const bool bRelativePaths = false) const;
 
-    /**
-    Sets the pointer to the Project to retrieve information from.
+	/**
+	Sets the pointer to the Project to retrieve information from.
 
-    @param argpProject
-            Pointer to Project
+	@param argpProject
+	        Pointer to Project
 
-    @returns
-            Pointer to former Project given to this PlaceholderSet-Object
-     */
-    CLaTeXProject* SetProject(CLaTeXProject* argpProject);
+	@returns
+	        Pointer to former Project given to this PlaceholderSet-Object
+	 */
+	CLaTeXProject* SetProject(CLaTeXProject* argpProject);
 
 protected:
-    ///Returns, whether this object has valid attributes or not.
+	///Returns, whether this object has valid attributes or not.
 
-    bool IsValid() const;
+	bool IsValid() const;
 
-    /**
-    Converts a string according to the given bool parameters
-    and adds it to the given CUniqueStringList-Object.
-    It expects to get a full path of the file, i.e. \verbatim "D:\Temp\test.txt" \endverbatim
+	/**
+	Converts a string according to the given bool parameters
+	and adds it to the given CUniqueStringList-Object.
+	It expects to get a full path of the file, i.e. \verbatim "D:\Temp\test.txt" \endverbatim
 
-    @param bCheckExistence
-            Set to true, if you only want to add a Name of a File,
-            which really exists.
+	@param bCheckExistence
+	        Set to true, if you only want to add a Name of a File,
+	        which really exists.
 
-    @see GetFileSets for explanation of the other parameters.
+	@see GetFileSets for explanation of the other parameters.
 
-    Be aware, that parts of this function might throw a CMemoryException.
-    Be aware, that the given String might be altered.
-     */
-    void ConvertAndAdd(CString& strToAdd, CUniqueStringList* pStrList, bool bShortPaths, bool bForwardSlash, bool bRelativePaths, bool bCheckExistence) const;
+	Be aware, that parts of this function might throw a CMemoryException.
+	Be aware, that the given String might be altered.
+	 */
+	void ConvertAndAdd(CString& strToAdd, CUniqueStringList* pStrList, bool bShortPaths, bool bForwardSlash, bool bRelativePaths, bool bCheckExistence) const;
 
 
-    //Attributes
+//Attributes
 private:
-    ///Pointer to the Project; needed to get the names of the project files
-    CLaTeXProject* m_pProject;
+	///Pointer to the Project; needed to get the names of the project files
+	CLaTeXProject* m_pProject;
 
-    ///Regular Expression to search for the Placeholders
-    const tregex m_regexPS;
+	///Regular Expression to search for the Placeholders
+	const tregex m_regexPS;
 };
 
 #endif // !defined(AFX_PLACEHOLDER_H__65CF1821_0593_11D5_A222_006097239934__INCLUDED_)

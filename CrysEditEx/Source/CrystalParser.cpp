@@ -70,7 +70,7 @@ IMPLEMENT_DYNAMIC(CCrystalParser, CObject)
 
 CCrystalParser::CCrystalParser()
 {
-    m_pTextView = NULL;
+	m_pTextView = NULL;
 }
 
 CCrystalParser::~CCrystalParser()
@@ -79,134 +79,144 @@ CCrystalParser::~CCrystalParser()
 
 DWORD CCrystalParser::ParseLine(DWORD dwCookie, int nLineIndex, CCrystalTextBlock *pBlock)
 {
-    return 0;
+	return 0;
 }
 
 void CCrystalParser::WrapLine(int nLineIndex, int nMaxLineWidth, int *anBreaks, int &nBreaks)
 {
-    // The parser must be attached to a view!
-    ASSERT(m_pTextView);
+	// The parser must be attached to a view!
+	ASSERT(m_pTextView);
 
-    int nLineLength = m_pTextView->GetLineLength(nLineIndex);
-    int nTabWidth = m_pTextView->GetTabSize();
-    int nLineCharCount = 0;
-    int nCharCount = 0;
-    LPCTSTR szLine = m_pTextView->GetLineChars(nLineIndex);
-    int nLastBreakPos = 0;
-    int nLastCharBreakPos = 0;
-    BOOL bWhitespace = FALSE;
-    BOOL bFoundWhiteSpace = FALSE;
-    BOOL bStructureBreak = FALSE;
+	int nLineLength = m_pTextView->GetLineLength(nLineIndex);
+	int nTabWidth = m_pTextView->GetTabSize();
+	int nLineCharCount = 0;
+	int nCharCount = 0;
+	LPCTSTR szLine = m_pTextView->GetLineChars(nLineIndex);
+	int nLastBreakPos = 0;
+	int nLastCharBreakPos = 0;
+	BOOL bWhitespace = FALSE;
+	BOOL bFoundWhiteSpace = FALSE;
+	BOOL bStructureBreak = FALSE;
 
-    for (int i = 0; i < nLineLength; i++) {
-        // remember position of whitespace for wrap
-        if (bWhitespace) {
-            nLastBreakPos = i;
-            nLastCharBreakPos = nCharCount;
-            bWhitespace = FALSE;
-            bFoundWhiteSpace = TRUE;
-        }
-        else if (bStructureBreak && !bFoundWhiteSpace) {
-            // We'll use the structure break if there isn't a whitespace break
-            nLastBreakPos = i;
-            nLastCharBreakPos = nCharCount;
-            bStructureBreak = FALSE;
-        }
+	for (int i = 0; i < nLineLength; i++)
+	{
+		// remember position of whitespace for wrap
+		if (bWhitespace)
+		{
+			nLastBreakPos = i;
+			nLastCharBreakPos = nCharCount;
+			bWhitespace = FALSE;
+			bFoundWhiteSpace = TRUE;
+		}
+		else if (bStructureBreak && !bFoundWhiteSpace)
+		{
+			// We'll use the structure break if there isn't a whitespace break
+			nLastBreakPos = i;
+			nLastCharBreakPos = nCharCount;
+			bStructureBreak = FALSE;
+		}
 
-        // increment TCHAR counter (evtl. expand tab)
-        if (szLine[i] == _T('\t')) {
-            int nSpaceCount = nTabWidth ? (nTabWidth - nCharCount % nTabWidth) : 0;
-            nLineCharCount += nSpaceCount;
-            nCharCount += nSpaceCount;
-        }
-        else {
-            ++nLineCharCount;
-            ++nCharCount;
-        }
+		// increment TCHAR counter (evtl. expand tab)
+		if (szLine[i] == _T('\t'))
+		{
+			int nSpaceCount = nTabWidth ? (nTabWidth - nCharCount % nTabWidth) : 0;
+			nLineCharCount += nSpaceCount;
+			nCharCount += nSpaceCount;
+		}
+		else
+		{
+			++nLineCharCount;
+			++nCharCount;
+		}
 
-        // remember possible break points
-        if (szLine[i] == _T('\t') || szLine[i] == _T(' '))
-            bWhitespace = TRUE;
-        else if (!bFoundWhiteSpace && (szLine[i] == _T(')') || szLine[i] == _T('}')))
-            bStructureBreak = TRUE;
+		// remember possible break points
+		if (szLine[i] == _T('\t') || szLine[i] == _T(' '))
+			bWhitespace = TRUE;
+		else if (!bFoundWhiteSpace && (szLine[i] == _T(')') || szLine[i] == _T('}')))
+			bStructureBreak = TRUE;
 
-        // wrap line
-        if (nLineCharCount >= nMaxLineWidth) {
-            // if no wrap position found, but line is too wide, wrap at current position
-            if (nLastBreakPos == 0) {
-                nLastBreakPos = i;
-                nLastCharBreakPos = nCharCount;
-            }
-            if (anBreaks)
-                anBreaks[nBreaks++] = nLastBreakPos;
-            else
-                ++nBreaks;
+		// wrap line
+		if (nLineCharCount >= nMaxLineWidth)
+		{
+			// if no wrap position found, but line is too wide, wrap at current position
+			if (nLastBreakPos == 0)
+			{
+				nLastBreakPos = i;
+				nLastCharBreakPos = nCharCount;
+			}
+			if (anBreaks)
+				anBreaks[nBreaks++] = nLastBreakPos;
+			else
+				++nBreaks;
 
-            nLineCharCount = nCharCount - nLastCharBreakPos;
-            nLastBreakPos = 0;
-            bWhitespace = FALSE;
-            bFoundWhiteSpace = FALSE;
-        }
-    }
-    // Sneak the total length of the line into the anBreaks array
-    if (anBreaks && nLineLength)
-        anBreaks[nBreaks] = nCharCount;
+			nLineCharCount = nCharCount - nLastCharBreakPos;
+			nLastBreakPos = 0;
+			bWhitespace = FALSE;
+			bFoundWhiteSpace = FALSE;
+		}
+	}
+	// Sneak the total length of the line into the anBreaks array
+	if (anBreaks && nLineLength)
+		anBreaks[nBreaks] = nCharCount;
 }
 
 void CCrystalParser::NextWord(int nLineIndex, int &nStartPos, int &nEndPos)
 {
-    LPCTSTR szLine = GetLineChars(nLineIndex);
+	LPCTSTR szLine = GetLineChars(nLineIndex);
 
-    if (szLine == NULL) {
-        nStartPos = -1;
-        return;
-    }
+	if (szLine == NULL)
+	{
+		nStartPos = -1;
+		return;
+	}
 
-    int nLength = _tcsclen(szLine);    
+	int nLength = _tcsclen(szLine);
 
-    while (nStartPos < nLength) {
-        // words begin with an alpha character
-        if (CharTraitsT::IsAlpha(szLine[nStartPos]))
-            break;
+	while (nStartPos < nLength)
+	{
+		// words begin with an alpha character
+		if (CharTraitsT::IsAlpha(szLine[nStartPos]))
+			break;
 
-        ++nStartPos;
-    }
+		++nStartPos;
+	}
 
-    nEndPos = nStartPos;    
+	nEndPos = nStartPos;
 
-    while (nEndPos < nLength) {
-        // words end on terminating character 
-        if (CharTraitsT::IsSpace(szLine[nEndPos]) ||
-                (CharTraitsT::IsPunct(szLine[nEndPos]) && szLine[nEndPos] != _T('\'')))
-            break;
-        else
-            ++nEndPos;
-    }
-    if (nStartPos == nEndPos)
-        nStartPos = -1;
+	while (nEndPos < nLength)
+	{
+		// words end on terminating character
+		if (CharTraitsT::IsSpace(szLine[nEndPos]) ||
+		        (CharTraitsT::IsPunct(szLine[nEndPos]) && szLine[nEndPos] != _T('\'')))
+			break;
+		else
+			++nEndPos;
+	}
+	if (nStartPos == nEndPos)
+		nStartPos = -1;
 }
 
 LPCTSTR CCrystalParser::GetLineChars(int nLineIndex)
 {
-    ASSERT(m_pTextView);
-    return m_pTextView->GetLineChars(nLineIndex);
+	ASSERT(m_pTextView);
+	return m_pTextView->GetLineChars(nLineIndex);
 }
 
 BOOL CCrystalParser::FindPairInLine(LPCTSTR lpszLine, LPCTSTR lpszLineEnd, CCrystalTextBlock *pTextBlock, long nLineIndex,
                                     int nDirection, LPCTSTR lpszTextPos, CPairStack &aPairStack, int &nNthOpenPair, BOOL bClearToEnd,
                                     long &nFoundStrStart, long &nFoundStrEnd, CPairStack &openPairStack, BOOL &result)
 {
-    nFoundStrStart = 0;
-    nFoundStrEnd = 0;
-    result = FALSE;
-    return TRUE;
+	nFoundStrStart = 0;
+	nFoundStrEnd = 0;
+	result = FALSE;
+	return TRUE;
 }
 
 BOOL CCrystalParser::IsEndOfPairAt(LPCTSTR lpszLine, LPCTSTR lpszTextPos, const CCrystalTextBlock * pTextBlock,
                                    long &nPairStrStart, int &nPairIdx, int &nPairDir)
 {
-    nPairIdx = -1;
-    nPairDir = -1;
+	nPairIdx = -1;
+	nPairDir = -1;
 
-    return FALSE;
+	return FALSE;
 }

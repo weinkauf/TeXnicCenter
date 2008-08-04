@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -50,34 +50,35 @@ of output profiles.
 
 @author Sven Wiegand
  */
-class CProfilePage : public CPropertyDialogPage {
-    // construction/destruction
+class CProfilePage : public CPropertyDialogPage
+{
+// construction/destruction
 public:
-    CProfilePage(UINT unIDTemplate);
+	CProfilePage(UINT unIDTemplate);
 
-    // operations
+// operations
 public:
-    virtual void OnUpdateDataSet(CProfile *pProfile) = 0;
-    virtual BOOL ApplyChanges();
-    virtual BOOL OnApply();
+	virtual void OnUpdateDataSet(CProfile *pProfile) = 0;
+	virtual BOOL ApplyChanges();
+	virtual BOOL OnApply();
 
-    // implementations
+// implementations
 protected:
-    /**
-    Enables or disables all controls of the page.
-     */
-    void EnableAllControls(BOOL bEnableAllControls = TRUE);
+	/**
+	Enables or disables all controls of the page.
+	 */
+	void EnableAllControls(BOOL bEnableAllControls = TRUE);
 
-    // overridings
+// overridings
 protected:
-    //{{AFX_VIRTUAL(CProfilePage)
-    //}}AFX_VIRTUAL
+	//{{AFX_VIRTUAL(CProfilePage)
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(CProfilePage)
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+	//{{AFX_MSG(CProfilePage)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

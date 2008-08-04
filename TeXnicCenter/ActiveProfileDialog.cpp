@@ -48,67 +48,68 @@ static char THIS_FILE[] = __FILE__;
 //-------------------------------------------------------------------
 
 BEGIN_MESSAGE_MAP(CActiveProfileDialog,CDialog)
-//{{AFX_MSG_MAP(CActiveProfileDialog)
-ON_LBN_SELCHANGE(IDC_PROFILES,OnSelchangeProfile)
-//}}AFX_MSG_MAP
+	//{{AFX_MSG_MAP(CActiveProfileDialog)
+	ON_LBN_SELCHANGE(IDC_PROFILES,OnSelchangeProfile)
+	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
 CActiveProfileDialog::CActiveProfileDialog(CWnd* pParent /*=NULL*/)
-: CDialog(CActiveProfileDialog::IDD,pParent)
+		: CDialog(CActiveProfileDialog::IDD,pParent)
 {
-    //{{AFX_DATA_INIT(CActiveProfileDialog)
-    //}}AFX_DATA_INIT
+	//{{AFX_DATA_INIT(CActiveProfileDialog)
+	//}}AFX_DATA_INIT
 }
 
 void CActiveProfileDialog::DoDataExchange(CDataExchange* pDX)
 {
-    CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CActiveProfileDialog)
-    DDX_Control(pDX,IDOK,m_wndOkButton);
-    DDX_Control(pDX,IDC_PROFILES,m_wndProfileList);
-    //}}AFX_DATA_MAP
+	CDialog::DoDataExchange(pDX);
+	//{{AFX_DATA_MAP(CActiveProfileDialog)
+	DDX_Control(pDX,IDOK,m_wndOkButton);
+	DDX_Control(pDX,IDC_PROFILES,m_wndProfileList);
+	//}}AFX_DATA_MAP
 }
 
 BOOL CActiveProfileDialog::OnInitDialog()
 {
-    CDialog::OnInitDialog();
+	CDialog::OnInitDialog();
 
-    // insert profiles in list
-    POSITION pos = CProfileMap::GetInstance()->GetStartPosition();
-    CString strProfile;
-    CProfile *pProfile;
+	// insert profiles in list
+	POSITION pos = CProfileMap::GetInstance()->GetStartPosition();
+	CString strProfile;
+	CProfile *pProfile;
 
-    while (pos) {
-        CProfileMap::GetInstance()->GetNextAssoc(pos,strProfile,pProfile);
-        m_wndProfileList.AddString(strProfile);
-    }
+	while (pos)
+	{
+		CProfileMap::GetInstance()->GetNextAssoc(pos,strProfile,pProfile);
+		m_wndProfileList.AddString(strProfile);
+	}
 
-    // select active item
-    int nItem = m_wndProfileList.FindStringExact(-1,CProfileMap::GetInstance()->GetActiveProfileKey());
-    if (nItem != LB_ERR)
-        m_wndProfileList.SetCurSel(nItem);
+	// select active item
+	int nItem = m_wndProfileList.FindStringExact(-1,CProfileMap::GetInstance()->GetActiveProfileKey());
+	if (nItem != LB_ERR)
+		m_wndProfileList.SetCurSel(nItem);
 
-    // disable OK-button
-    if (nItem == LB_ERR)
-        m_wndOkButton.EnableWindow(FALSE);
+	// disable OK-button
+	if (nItem == LB_ERR)
+		m_wndOkButton.EnableWindow(FALSE);
 
-    return TRUE;
+	return TRUE;
 }
 
 void CActiveProfileDialog::OnSelchangeProfile()
 {
-    //int nListIndex = m_wndProfileList.GetCurSel();
+	//int nListIndex = m_wndProfileList.GetCurSel();
 
-    m_wndOkButton.EnableWindow(m_wndProfileList.GetCurSel() != LB_ERR);
+	m_wndOkButton.EnableWindow(m_wndProfileList.GetCurSel() != LB_ERR);
 }
 
 void CActiveProfileDialog::OnOK()
 {
-    int nListIndex = m_wndProfileList.GetCurSel();
-    CString strKey;
-    m_wndProfileList.GetText(nListIndex,strKey);
-    CProfileMap::GetInstance()->SetActiveProfile(strKey);
+	int nListIndex = m_wndProfileList.GetCurSel();
+	CString strKey;
+	m_wndProfileList.GetText(nListIndex,strKey);
+	CProfileMap::GetInstance()->SetActiveProfile(strKey);
 
-    CDialog::OnOK();
+	CDialog::OnOK();
 }

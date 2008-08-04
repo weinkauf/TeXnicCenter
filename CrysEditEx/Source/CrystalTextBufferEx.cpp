@@ -40,29 +40,29 @@ IMPLEMENT_DYNCREATE(CCrystalTextBufferEx, CCrystalTextBuffer)
 
 CCrystalTextBufferEx::CCrystalTextBufferEx(CDocument *pDoc)
 {
-    ASSERT(pDoc);
-    m_pDoc = pDoc;
+	ASSERT(pDoc);
+	m_pDoc = pDoc;
 }
 
 void CCrystalTextBufferEx::SetModified(BOOL bModified)
 {
-    CCrystalTextBuffer::SetModified(bModified);
-    ASSERT(m_pDoc);
-    if (!m_pDoc)
-        return;
+	CCrystalTextBuffer::SetModified(bModified);
+	ASSERT(m_pDoc);
+	if (!m_pDoc)
+		return;
 
-    m_pDoc->SetModifiedFlag(bModified);
+	m_pDoc->SetModifiedFlag(bModified);
 }
 
 BOOL CCrystalTextBufferEx::GetLine(int nLineIndex, CString &strLine)
 {
-    int nLineLength = CCrystalTextBuffer::GetLineLength(nLineIndex);
+	int nLineLength = CCrystalTextBuffer::GetLineLength(nLineIndex);
 
-    if (nLineLength <= 0)
-        return FALSE;
+	if (nLineLength <= 0)
+		return FALSE;
 
-    _tcsncpy(strLine.GetBuffer(nLineLength), CCrystalTextBuffer::GetLineChars(nLineIndex), nLineLength);
-    strLine.ReleaseBuffer(nLineLength);
+	_tcsncpy(strLine.GetBuffer(nLineLength), CCrystalTextBuffer::GetLineChars(nLineIndex), nLineLength);
+	strLine.ReleaseBuffer(nLineLength);
 
-    return TRUE;
+	return TRUE;
 }

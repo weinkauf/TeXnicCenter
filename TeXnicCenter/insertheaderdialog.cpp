@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -45,135 +45,141 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
-// Dialogfeld CInsertHeaderDialog 
+// Dialogfeld CInsertHeaderDialog
 
 CInsertHeaderDialog::CInsertHeaderDialog(CWnd* pParent /*=NULL*/)
-: CDialog(CInsertHeaderDialog::IDD,pParent)
+		: CDialog(CInsertHeaderDialog::IDD,pParent)
 {
-    //{{AFX_DATA_INIT(CInsertHeaderDialog)
-    m_strLabel = _T("sec:");
-    //m_strTitle = _T("");
-    m_nDepth = 2;
-    //}}AFX_DATA_INIT
+	//{{AFX_DATA_INIT(CInsertHeaderDialog)
+	m_strLabel = _T("sec:");
+	//m_strTitle = _T("");
+	m_nDepth = 2;
+	//}}AFX_DATA_INIT
 }
 
 BOOL CInsertHeaderDialog::SetProperties(const CString &strProperties)
 {
-    for (int i = 0; i < 7; i++) {
-        CString strCommand = AfxLoadString(STE_HEADER_PART + i) + _T('{');
-        int nPos;
+	for (int i = 0; i < 7; i++)
+	{
+		CString strCommand = AfxLoadString(STE_HEADER_PART + i) + _T('{');
+		int nPos;
 
-        if ((nPos = strProperties.Find(strCommand)) == -1)
-            continue;
+		if ((nPos = strProperties.Find(strCommand)) == -1)
+			continue;
 
-        // set depth
-        m_nDepth = i;
+		// set depth
+		m_nDepth = i;
 
-        // set title
-        m_strTitle.Empty();
+		// set title
+		m_strTitle.Empty();
 
-        for (nPos += strCommand.GetLength(); nPos < strProperties.GetLength(); nPos++) {
-            if (strProperties[nPos] == _T('}'))
-                break;
-            else
-                m_strTitle += strProperties[nPos];
-        }
+		for (nPos += strCommand.GetLength(); nPos < strProperties.GetLength(); nPos++)
+		{
+			if (strProperties[nPos] == _T('}'))
+				break;
+			else
+				m_strTitle += strProperties[nPos];
+		}
 
-        // set label
-        m_strLabel = AfxLoadString(STE_HEADERPREFIX_PART + m_nDepth);
-        strCommand = _T("\\label{");
-        if ((nPos = strProperties.Find(strCommand)) == -1)
-            return TRUE;
+		// set label
+		m_strLabel = AfxLoadString(STE_HEADERPREFIX_PART + m_nDepth);
+		strCommand = _T("\\label{");
+		if ((nPos = strProperties.Find(strCommand)) == -1)
+			return TRUE;
 
-        m_strLabel.Empty();
-        for (nPos += strCommand.GetLength(); nPos < strProperties.GetLength(); nPos++) {
-            if (strProperties[nPos] == _T('}'))
-                break;
-            else
-                m_strLabel += strProperties[nPos];
-        }
+		m_strLabel.Empty();
+		for (nPos += strCommand.GetLength(); nPos < strProperties.GetLength(); nPos++)
+		{
+			if (strProperties[nPos] == _T('}'))
+				break;
+			else
+				m_strLabel += strProperties[nPos];
+		}
 
-        return TRUE;
-    }
+		return TRUE;
+	}
 
-    return FALSE;
+	return FALSE;
 }
 
 CString CInsertHeaderDialog::GetProperties()
 {
-    CString strResult = _T('\r') + AfxLoadString(STE_HEADER_PART + m_nDepth) + _T('{');
+	CString strResult = _T('\r') + AfxLoadString(STE_HEADER_PART + m_nDepth) + _T('{');
 
-    if (!m_strTitle.IsEmpty()) {
-        strResult += m_strTitle + _T("}\r");
-        if (!m_strLabel.IsEmpty())
-            strResult += _T("\\label{") + m_strLabel + _T("}\r");
-    }
-    else
-        strResult += _T("\001}\r");
+	if (!m_strTitle.IsEmpty())
+	{
+		strResult += m_strTitle + _T("}\r");
+		if (!m_strLabel.IsEmpty())
+			strResult += _T("\\label{") + m_strLabel + _T("}\r");
+	}
+	else
+		strResult += _T("\001}\r");
 
-    return strResult;
+	return strResult;
 }
 
 void CInsertHeaderDialog::DoDataExchange(CDataExchange* pDX)
 {
-    CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CInsertHeaderDialog)
-    DDX_Control(pDX,IDC_LABEL,m_wndLabelEdit);
-    DDX_Text(pDX,IDC_LABEL,m_strLabel);
-    DDX_Text(pDX,IDC_TITLE,m_strTitle);
-    DDX_CBIndex(pDX,IDC_DEPTH,m_nDepth);
-    //}}AFX_DATA_MAP
+	CDialog::DoDataExchange(pDX);
+	//{{AFX_DATA_MAP(CInsertHeaderDialog)
+	DDX_Control(pDX,IDC_LABEL,m_wndLabelEdit);
+	DDX_Text(pDX,IDC_LABEL,m_strLabel);
+	DDX_Text(pDX,IDC_TITLE,m_strTitle);
+	DDX_CBIndex(pDX,IDC_DEPTH,m_nDepth);
+	//}}AFX_DATA_MAP
 }
 
 BEGIN_MESSAGE_MAP(CInsertHeaderDialog,CDialog)
-//{{AFX_MSG_MAP(CInsertHeaderDialog)
-ON_EN_CHANGE(IDC_TITLE,OnChangeTitle)
-ON_CBN_SELCHANGE(IDC_DEPTH,OnSelchangeDepth)
-//}}AFX_MSG_MAP
+	//{{AFX_MSG_MAP(CInsertHeaderDialog)
+	ON_EN_CHANGE(IDC_TITLE,OnChangeTitle)
+	ON_CBN_SELCHANGE(IDC_DEPTH,OnSelchangeDepth)
+	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
-// Behandlungsroutinen für Nachrichten CInsertHeaderDialog 
+// Behandlungsroutinen für Nachrichten CInsertHeaderDialog
 
 BOOL CInsertHeaderDialog::OnInitDialog()
 {
-    CDialog::OnInitDialog();
+	CDialog::OnInitDialog();
 
-    // enable/disable window
-    m_wndLabelEdit.EnableWindow(!m_strTitle.IsEmpty());
+	// enable/disable window
+	m_wndLabelEdit.EnableWindow(!m_strTitle.IsEmpty());
 
-    return TRUE; // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben
+	return TRUE; // return TRUE unless you set the focus to a control
+	// EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben
 }
 
 void CInsertHeaderDialog::OnChangeTitle()
 {
-    UpdateData();
+	UpdateData();
 
-    // disable label-window?
-    m_wndLabelEdit.EnableWindow(!m_strTitle.IsEmpty());
+	// disable label-window?
+	m_wndLabelEdit.EnableWindow(!m_strTitle.IsEmpty());
 
-    // auto generate label
-    BOOL bWhiteSpace = FALSE;
-    TCHAR strC[2] = _T(" ");
+	// auto generate label
+	BOOL bWhiteSpace = FALSE;
+	TCHAR strC[2] = _T(" ");
 
-    m_strLabel = AfxLoadString(STE_HEADERPREFIX_PART + m_nDepth);
+	m_strLabel = AfxLoadString(STE_HEADERPREFIX_PART + m_nDepth);
 
-    for (int i = 0; i < m_strTitle.GetLength(); i++) {
-        if (!_istalnum(m_strTitle[i]))
-            bWhiteSpace = TRUE;
-        else {
-            strC[0] = m_strTitle[i];
-            m_strLabel += (bWhiteSpace ? _tcsupr(strC) : strC);
-            bWhiteSpace = FALSE;
-        }
-    }
+	for (int i = 0; i < m_strTitle.GetLength(); i++)
+	{
+		if (!_istalnum(m_strTitle[i]))
+			bWhiteSpace = TRUE;
+		else
+		{
+			strC[0] = m_strTitle[i];
+			m_strLabel += (bWhiteSpace ? _tcsupr(strC) : strC);
+			bWhiteSpace = FALSE;
+		}
+	}
 
-    UpdateData(FALSE);
+	UpdateData(FALSE);
 }
 
 void CInsertHeaderDialog::OnSelchangeDepth()
 {
-    // auto generate label
-    OnChangeTitle();
+	// auto generate label
+	OnChangeTitle();
 }

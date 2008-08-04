@@ -12,38 +12,38 @@
 
 class CAdvice : public CStatic
 {
-    CFont font_;
-    // Construction
+	CFont font_;
+// Construction
 public:
-    CAdvice();
+	CAdvice();
 
-    // Attributes
+// Attributes
 public:
 
-    // Operations
+// Operations
 public:
-    virtual BOOL Create(LPCTSTR lpszText, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID = 0);
+	virtual BOOL Create(LPCTSTR lpszText, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID = 0);
 
-    // Implementation
+// Implementation
 public:
-    void SetWindowText(LPCTSTR text);
-    ~CAdvice();
+	void SetWindowText(LPCTSTR text);
+	~CAdvice();
 
-    void EnableFocusChange();
-    void DisableFocusChange();
+	void EnableFocusChange();
+	void DisableFocusChange();
 
-    // Generated message map functions
+// Generated message map functions
 protected:
-    //{{AFX_MSG(CAdvice)
-    afx_msg void OnPaint();
-    afx_msg void OnCaptureChanged(CWnd *pWnd);
-    afx_msg void OnActivateApp(BOOL bActive, DWORD dwThreadId);
-    afx_msg void OnTimer(UINT nIDEvent);
-    //}}AFX_MSG
+	//{{AFX_MSG(CAdvice)
+	afx_msg void OnPaint();
+	afx_msg void OnCaptureChanged(CWnd *pWnd);
+	afx_msg void OnActivateApp(BOOL bActive, DWORD dwThreadId);
+	afx_msg void OnTimer(UINT nIDEvent);
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 private:
-    BOOL m_IgnoreFocusChange;
+	BOOL m_IgnoreFocusChange;
 };
 
 /////////////////////////////////////////////////////////////////////////////

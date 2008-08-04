@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -47,7 +47,7 @@ This class provides a menu button, that can be used inside a dialog
 box, to insert text into an edit control, by choosing it from a menu,
 displayed, when the users presses this button.
 
-The description text of the menu items in the given menu resource 
+The description text of the menu items in the given menu resource
 has to specify the text to insert into the edit control.
 
 @see CPersistPosEdit
@@ -56,35 +56,36 @@ has to specify the text to insert into the edit control.
 
 @author Sven Wiegand
  */
-class CEditMenuButton : public CMenuButton {
-    // construction/destruction
+class CEditMenuButton : public CMenuButton
+{
+// construction/destruction
 public:
-    CEditMenuButton(UINT unMenuId, BOOL bRightArrow = TRUE);
+	CEditMenuButton(UINT unMenuId, BOOL bRightArrow = TRUE);
 
-    // operation
+// operation
 public:
-    /**
-    You need to call this method to specify the edit control, the 
-    choosen text should be inserted in.
-     */
-    void AttachEditCtrl(CPersistPosEdit *pEdit);
+	/**
+	You need to call this method to specify the edit control, the
+	choosen text should be inserted in.
+	 */
+	void AttachEditCtrl(CPersistPosEdit *pEdit);
 
-    // overridings
+// overridings
 protected:
-    void OnShowMenu();
-    //{{AFX_VIRTUAL(CEditMenuButton)
-    //}}AFX_VIRTUAL
+	void OnShowMenu();
+	//{{AFX_VIRTUAL(CEditMenuButton)
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(CEditMenuButton)
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+	//{{AFX_MSG(CEditMenuButton)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 
-    // attributes
+// attributes
 protected:
-    /** Pointer to the edit control, this menu button belongs to. */
-    CPersistPosEdit *m_pEdit;
+	/** Pointer to the edit control, this menu button belongs to. */
+	CPersistPosEdit *m_pEdit;
 };
 
 /////////////////////////////////////////////////////////////////////////////

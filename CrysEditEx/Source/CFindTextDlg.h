@@ -49,46 +49,47 @@ class CCrystalTextView;
 /////////////////////////////////////////////////////////////////////////////
 // CFindTextDlg dialog
 
-class CFindTextDlg : public CDialog 
+class CFindTextDlg : public CDialog
 {
 private:
-    CCrystalTextView *m_pBuddy;
+	CCrystalTextView *m_pBuddy;
 
-    // Construction
+// Construction
 public:
-    CFindTextDlg(CCrystalTextView *pBuddy);
+	CFindTextDlg(CCrystalTextView *pBuddy);
 
-    CPoint m_ptCurrentPos;
-    // Dialog Data
-    //{{AFX_DATA(CFindTextDlg)
+	CPoint m_ptCurrentPos;
+	// Dialog Data
+	//{{AFX_DATA(CFindTextDlg)
 
-    enum {
-        IDD = IDD_EDIT_FIND
-    };
-    int m_nDirection;
-    BOOL m_bMatchCase;
-    CString m_sText;
-    BOOL m_bWholeWord;
-    //}}AFX_DATA
+	enum
+	{
+		IDD = IDD_EDIT_FIND
+	};
+	int m_nDirection;
+	BOOL m_bMatchCase;
+	CString m_sText;
+	BOOL m_bWholeWord;
+	//}}AFX_DATA
 
-    // Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CFindTextDlg)
+	// Overrides
+	// ClassWizard generated virtual function overrides
+//{{AFX_VIRTUAL(CFindTextDlg)
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
+	//}}AFX_VIRTUAL
 
-    // Implementation
+// Implementation
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CFindTextDlg)
-    virtual void OnOK();
-    afx_msg void OnChangeEditText();
-    virtual BOOL OnInitDialog();
-    virtual void OnCancel();
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+	// Generated message map functions
+	//{{AFX_MSG(CFindTextDlg)
+	virtual void OnOK();
+	afx_msg void OnChangeEditText();
+	virtual BOOL OnInitDialog();
+	virtual void OnCancel();
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

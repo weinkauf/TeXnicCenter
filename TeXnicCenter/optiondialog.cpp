@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -54,31 +54,31 @@ IMPLEMENT_DYNAMIC(COptionDialog,CPropertySheet)
 
 
 BEGIN_MESSAGE_MAP(COptionDialog,CPropertySheet)
-//{{AFX_MSG_MAP(COptionDialog)
-//}}AFX_MSG_MAP
+	//{{AFX_MSG_MAP(COptionDialog)
+	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
 COptionDialog::COptionDialog(CWnd* pParentWnd,UINT iSelectPage)
-: CPropertySheet(STE_OPTIONS_TITLE,pParentWnd,iSelectPage)
+		: CPropertySheet(STE_OPTIONS_TITLE,pParentWnd,iSelectPage)
 {
-    // Remove the apply button
-    m_psh.dwFlags |= PSH_NOAPPLYNOW|PSH_NOCONTEXTHELP;
-    m_psh.dwFlags &= ~PSH_HASHELP;
+	// Remove the apply button
+	m_psh.dwFlags |= PSH_NOAPPLYNOW|PSH_NOCONTEXTHELP;
+	m_psh.dwFlags &= ~PSH_HASHELP;
 
-    AddPage(&m_pageGeneric);
-    AddPage(&m_pageFile);
-    AddPage(&m_pagePath);
-    AddPage(&m_pageLanguage);
-    AddPage(&m_pageFileClean);
-    AddPage(&m_pageEditor);
-    AddPage(&m_pageTextFormat);
+	AddPage(&m_pageGeneric);
+	AddPage(&m_pageFile);
+	AddPage(&m_pagePath);
+	AddPage(&m_pageLanguage);
+	AddPage(&m_pageFileClean);
+	AddPage(&m_pageEditor);
+	AddPage(&m_pageTextFormat);
 
-    // Remove the Help button
-    for (int i = 0; i < m_pages.GetCount(); ++i)
-        static_cast<CPropertyPage*>(m_pages[i])->m_psp.dwFlags &= ~PSP_HASHELP;
+	// Remove the Help button
+	for (int i = 0; i < m_pages.GetCount(); ++i)
+		static_cast<CPropertyPage*>(m_pages[i])->m_psp.dwFlags &= ~PSP_HASHELP;
 
-    //SetTreeViewMode(TRUE, TRUE);
+	//SetTreeViewMode(TRUE, TRUE);
 }
 
 COptionDialog::~COptionDialog()
@@ -87,51 +87,52 @@ COptionDialog::~COptionDialog()
 
 BOOL COptionDialog::OnInitDialog()
 {
-    BOOL bResult = CPropertySheet::OnInitDialog();
+	BOOL bResult = CPropertySheet::OnInitDialog();
 
-    // modify tree control
-    //GetPageTreeControl()->ModifyStyle(TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS, 0);
+	// modify tree control
+	//GetPageTreeControl()->ModifyStyle(TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS, 0);
 
-    return bResult;
+	return bResult;
 }
 
 int COptionDialog::DoModal(void)
 {
-    m_psh.dwFlags |= PSH_USECALLBACK;
-    m_psh.pfnCallback = PropSheetCallback;
-    return CPropertySheet::DoModal();
+	m_psh.dwFlags |= PSH_USECALLBACK;
+	m_psh.pfnCallback = PropSheetCallback;
+	return CPropertySheet::DoModal();
 }
 
 int COptionDialog::PropSheetCallback(HWND hWnd,UINT message,LPARAM lParam)
 {
-    extern int CALLBACK AfxPropSheetCallback(HWND,UINT message,LPARAM lParam);
-    int result;
+	extern int CALLBACK AfxPropSheetCallback(HWND,UINT message,LPARAM lParam);
+	int result;
 
-    switch (message) {
-        case PSCB_PRECREATE:
-        {
-            LPDLGTEMPLATE const lpTemplate = reinterpret_cast<LPDLGTEMPLATE>(lParam);
-            DialogTemplate t;
-            t.Attach(lpTemplate);
+	switch (message)
+	{
+		case PSCB_PRECREATE:
+		{
+			LPDLGTEMPLATE const lpTemplate = reinterpret_cast<LPDLGTEMPLATE>(lParam);
+			DialogTemplate t;
+			t.Attach(lpTemplate);
 
-            LOGFONT lf;
-            WORD size;
-            GetDisplayFont(lf,size);
+			LOGFONT lf;
+			WORD size;
+			GetDisplayFont(lf,size);
 
-            t.SetFont(lf.lfFaceName,size);
-            t.Detach();
-        }
-            result = 1;
-            break;
-        default:
-            result = AfxPropSheetCallback(hWnd,message,lParam);
-    }
+			t.SetFont(lf.lfFaceName,size);
+			t.Detach();
+		}
+		result = 1;
+		break;
+		default:
+			result = AfxPropSheetCallback(hWnd,message,lParam);
+	}
 
-    return result;
+	return result;
 }
 
 void COptionDialog::BuildPropPageArray(void)
 {
-    CPropertySheet::BuildPropPageArray();
-    FixPropSheetFont(m_psh,m_pages);
+	CPropertySheet::BuildPropPageArray();
+	FixPropSheetFont(m_psh,m_pages);
 }

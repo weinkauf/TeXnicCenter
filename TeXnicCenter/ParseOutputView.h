@@ -4,17 +4,17 @@
  *
  * Copyright (C) 2002 Chris Norris
  * Copyright (C) 2002-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -41,44 +41,46 @@
 
 #include "OutputView.h"
 
-class CParseOutputView : public COutputView {
-    DECLARE_DYNCREATE(CParseOutputView)
+class CParseOutputView : public COutputView
+{
+	DECLARE_DYNCREATE(CParseOutputView)
 
-    // construction/destruction
+// construction/destruction
 public:
-    CParseOutputView();
-    virtual ~CParseOutputView();
+	CParseOutputView();
+	virtual ~CParseOutputView();
 
-    enum tagImage {
-        imageNone = 0,
-        imageError,
-        imageWarning,
-        imageInfo
-    };
+	enum tagImage
+	{
+		imageNone = 0,
+		imageError,
+		imageWarning,
+		imageInfo
+	};
 
-    void OnUpdate(COutputView* pSender, LPARAM lHint, CObject* pHint); //UPDATE
+	void OnUpdate(COutputView* pSender, LPARAM lHint, CObject* pHint); //UPDATE
 
-    //{{AFX_VIRTUAL(CParseOutputView)
+//{{AFX_VIRTUAL(CParseOutputView)
 protected:
-    //}}AFX_VIRTUAL
+	//}}AFX_VIRTUAL
 
 #ifdef _DEBUG
-    void AssertValid() const;
-    void Dump(CDumpContext& dc) const;
+	void AssertValid() const;
+	void Dump(CDumpContext& dc) const;
 #endif //_DEBUG
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(CParseOutputView)
-    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+	//{{AFX_MSG(CParseOutputView)
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 
 protected:
-    /** images to use in this view */
-    CImageList m_images;
+	/** images to use in this view */
+	CImageList m_images;
 public:
-    void Visit(OutputViewVisitor& v);
+	void Visit(OutputViewVisitor& v);
 };
 
 #endif // !defined(AFX_PARSEOUTPUTVIEW_H__4CEB94E9_8137_4E0D_ABC4_A97B9BA5EAA0__INCLUDED_)

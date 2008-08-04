@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -65,117 +65,118 @@ TextModules can also be called "user definable insert commands".
 
 @author Tino Weinkauf
  */
-class CTextModule {
-    //Constructor / Destructor
+class CTextModule
+{
+//Constructor / Destructor
 public:
-    ///Constructor
-    CTextModule();
+	///Constructor
+	CTextModule();
 
-    //Element Constructor
-    //CTextModule(LPCTSTR lpszText, bool bEnableParams,...) //TODO
+	//Element Constructor
+	//CTextModule(LPCTSTR lpszText, bool bEnableParams,...) //TODO
 
-    ///Destructor
-    virtual ~CTextModule();
+	///Destructor
+	virtual ~CTextModule();
 
 
-    //Operators
-    /** @{*/
-    /** @name Operators*/
+	//Operators
+	/** @{*/
+	/** @name Operators*/
 public:
-    ///Assignment - assigns new values to this (left) item
+	///Assignment - assigns new values to this (left) item
 
-    inline void operator=(const CTextModule &arg)
-    {
-        Name = arg.Name;
-        strText = arg.strText;
-        bEnableParams = arg.bEnableParams;
-    };
+	inline void operator=(const CTextModule &arg)
+	{
+		Name = arg.Name;
+		strText = arg.strText;
+		bEnableParams = arg.bEnableParams;
+	};
 
-    ///Comparison of Equality - true, if equal
+	///Comparison of Equality - true, if equal
 
-    inline bool operator==(const CTextModule &arg) const
-    {
-        return (Name == arg.Name);
-    };
+	inline bool operator==(const CTextModule &arg) const
+	{
+		return (Name == arg.Name);
+	};
 
-    ///Comparison: Less
+	///Comparison: Less
 
-    inline bool operator<(const CTextModule &arg) const
-    {
-        return (Name < arg.Name);
-    };
+	inline bool operator<(const CTextModule &arg) const
+	{
+		return (Name < arg.Name);
+	};
 
-    ///Comparison: Greater
+	///Comparison: Greater
 
-    inline bool operator>(const CTextModule &arg) const
-    {
-        return (Name > arg.Name);
-    };
+	inline bool operator>(const CTextModule &arg) const
+	{
+		return (Name > arg.Name);
+	};
 
-    ///Comparison: LessEqual
+	///Comparison: LessEqual
 
-    inline bool operator<=(const CTextModule &arg) const
-    {
-        return (Name <= arg.Name);
-    };
+	inline bool operator<=(const CTextModule &arg) const
+	{
+		return (Name <= arg.Name);
+	};
 
-    ///Comparison: GreaterEqual
+	///Comparison: GreaterEqual
 
-    inline bool operator>=(const CTextModule &arg) const
-    {
-        return (Name >= arg.Name);
-    };
+	inline bool operator>=(const CTextModule &arg) const
+	{
+		return (Name >= arg.Name);
+	};
 
-    /* @} */
+	/* @} */
 
-    //Methods
+//Methods
 public:
-    /** Sets the text template of the module.
-                    Do \b not provide a "\001" TCHAR!
-                    Translates any "\n" into a "\r".
-     */
-    bool SetText(const CString& strLeft,const CString& strRight);
+	/** Sets the text template of the module.
+	                Do \b not provide a "\001" TCHAR!
+	                Translates any "\n" into a "\r".
+	 */
+	bool SetText(const CString& strLeft,const CString& strRight);
 
-    /** Returns the left part of the text.
-                    This is everything before the "\001" TCHAR.
-                    Translates any "\r" into a "\n".
-     */
-    CString GetLeftText();
+	/** Returns the left part of the text.
+	                This is everything before the "\001" TCHAR.
+	                Translates any "\r" into a "\n".
+	 */
+	CString GetLeftText();
 
-    /** Returns the right part of the text.
-                    This is everything after the "\001" TCHAR.
-                    Translates any "\r" into a "\n".
-     */
-    CString GetRightText();
+	/** Returns the right part of the text.
+	                This is everything after the "\001" TCHAR.
+	                Translates any "\r" into a "\n".
+	 */
+	CString GetRightText();
 
-    /** Returns the full text - including the "\001" TCHAR.
-                    Does \b not translate the parameters.
-     */
-    CString GetText()
-    {
-        return strText;
-    };
+	/** Returns the full text - including the "\001" TCHAR.
+	                Does \b not translate the parameters.
+	 */
+	CString GetText()
+	{
+		return strText;
+	};
 
-    ///Saves the module to the registry
-    bool SerializeToRegistry(CBCGRegistryEx &reg) const;
-    ///Loads the settings of this module from the registry
-    bool SerializeFromRegistry(CBCGRegistryEx &reg);
+	///Saves the module to the registry
+	bool SerializeToRegistry(CBCGRegistryEx &reg) const;
+	///Loads the settings of this module from the registry
+	bool SerializeFromRegistry(CBCGRegistryEx &reg);
 
-    //Attributes
+//Attributes
 public:
-    ///Name of the TextModule
-    CString Name;
+	///Name of the TextModule
+	CString Name;
 
-    ///Whether the parameters of this module are active or not.
-    bool bEnableParams;
+	///Whether the parameters of this module are active or not.
+	bool bEnableParams;
 
 protected:
-    /** The text to be inserted.
-                    May contain placeholders for parameters and files and sets of files.
-                    The String is splitted into two parts by a "\001" character.
-                    This represents the position of the cursor.
-     */
-    CString strText;
+	/** The text to be inserted.
+	                May contain placeholders for parameters and files and sets of files.
+	                The String is splitted into two parts by a "\001" character.
+	                This represents the position of the cursor.
+	 */
+	CString strText;
 };
 
 /** Sorted Collection of uniquely named TextModules.
@@ -193,32 +194,33 @@ The Text to be inserted is not considered for this.
 
 @author Tino Weinkauf
  */
-class CTextModuleGroup : public CSortArray<CTextModule,CTextModule&> {
-    //Constructor / Destructor
+class CTextModuleGroup : public CSortArray<CTextModule,CTextModule&>
+{
+//Constructor / Destructor
 public:
-    ///Constructor
-    CTextModuleGroup();
+	///Constructor
+	CTextModuleGroup();
 
-    ///Destructor
-    virtual ~CTextModuleGroup();
+	///Destructor
+	virtual ~CTextModuleGroup();
 
-    //Methods
+//Methods
 public:
-    ///Overridden to prevent duplicates. bAllowDuplicate is ignored and always set to false.
-    virtual int InsertSorted(CTextModule& newElement,bool bSortAscending = true,bool bAllowDuplicate = false);
+	///Overridden to prevent duplicates. bAllowDuplicate is ignored and always set to false.
+	virtual int InsertSorted(CTextModule& newElement,bool bSortAscending = true,bool bAllowDuplicate = false);
 
-    ///Adds a number of default TextModules.
-    void AddDefaultModules();
+	///Adds a number of default TextModules.
+	void AddDefaultModules();
 
-    ///Serializes the array to the registry.
-    bool SerializeToRegistry(LPCTSTR strStartSection) const;
-    ///Loads the array from the registry.
-    bool SerializeFromRegistry(LPCTSTR strStartSection);
+	///Serializes the array to the registry.
+	bool SerializeToRegistry(LPCTSTR strStartSection) const;
+	///Loads the array from the registry.
+	bool SerializeFromRegistry(LPCTSTR strStartSection);
 
-    //Attributes
+//Attributes
 public:
-    ///Name of the Group
-    CString Name;
+	///Name of the Group
+	CString Name;
 };
 
 /** @} */

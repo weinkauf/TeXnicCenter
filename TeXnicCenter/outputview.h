@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -52,152 +52,152 @@ class CGrepView;
 class OutputViewVisitor
 {
 public:
-    virtual void Accept(CBuildView*) = 0;
-    virtual void Accept(CParseOutputView*) = 0;
-    virtual void Accept(CGrepView*) = 0;
+	virtual void Accept(CBuildView*) = 0;
+	virtual void Accept(CParseOutputView*) = 0;
+	virtual void Accept(CGrepView*) = 0;
 
-    virtual ~OutputViewVisitor() { }
+	virtual ~OutputViewVisitor() { }
 };
 
 class COutputView : public CListCtrl
 {
-    DECLARE_DYNAMIC(COutputView)
+	DECLARE_DYNAMIC(COutputView)
 
-    // construction/destruction
-
-public:
+	// construction/destruction
 
 public:
-    COutputView();
-    virtual ~COutputView();
 
-    virtual void Visit(OutputViewVisitor& v) = 0;
-
-    // Attribute
 public:
-    COutputDoc *GetDocument() const;
+	COutputView();
+	virtual ~COutputView();
 
-    // Operationen
+	virtual void Visit(OutputViewVisitor& v) = 0;
+
+// Attribute
 public:
-    /** Creates the view */
-    BOOL Create(const RECT &rect, CWnd *pwndParent);
+	COutputDoc *GetDocument() const;
 
-    /** Attaches the specified document to the view */
-    void AttachDoc(COutputDoc* pDocument);
+// Operationen
+public:
+	/** Creates the view */
+	BOOL Create(const RECT &rect, CWnd *pwndParent);
 
-    /** Clears the view */
-    void ResetView();
+	/** Attaches the specified document to the view */
+	void AttachDoc(COutputDoc* pDocument);
 
-    /** 
-    Adds a line to the view.
+	/** Clears the view */
+	void ResetView();
 
-    @param lpszLine 
-            Line to add to the view.
-    @param nImage
-            Index of the image to display or -1 if no image should be
-            displayed for the new line.
-    @param nIndent
-            Indent level of line. Zero (default value) indicates no indentation
-     */
-    void AddLine(LPCTSTR lpszLine, int nImage = -1, int nIndent = 0);
+	/**
+	Adds a line to the view.
 
-    /**
-    Displays the specified image at the beginning of the specified 
-    line.
+	@param lpszLine
+	        Line to add to the view.
+	@param nImage
+	        Index of the image to display or -1 if no image should be
+	        displayed for the new line.
+	@param nIndent
+	        Indent level of line. Zero (default value) indicates no indentation
+	 */
+	void AddLine(LPCTSTR lpszLine, int nImage = -1, int nIndent = 0);
 
-    @param nLine
-            Line to change the image for.
-    @param nImage
-            Index of the image in the views image list, to display at the
-            beginning of the line.
-     */
-    BOOL SetLineImage(int nLine, int nImage);
+	/**
+	Displays the specified image at the beginning of the specified
+	line.
 
-    /**
-    Selects the specified line in the view an ensures, that it is visible.
+	@param nLine
+	        Line to change the image for.
+	@param nImage
+	        Index of the image in the views image list, to display at the
+	        beginning of the line.
+	 */
+	BOOL SetLineImage(int nLine, int nImage);
 
-    @param nLine Line to select.
-    @param bPlaceAtTop
-            If set to TRUE, the contents will be scrolled so, that the 
-            specified line will be at the top of the list, otherwise the
-            method will only ensure that the line will be visible anywhere
-            in the window.
-     */
-    void SelectLine(int nLine, BOOL bPlaceAtTop = FALSE);
+	/**
+	Selects the specified line in the view an ensures, that it is visible.
 
-    /** A helper function, simply calls the protected OnUpdate member to do the work */
-    void DoOnUpdate(COutputView* pSender, LPARAM lHint, CObject* pHint);
+	@param nLine Line to select.
+	@param bPlaceAtTop
+	        If set to TRUE, the contents will be scrolled so, that the
+	        specified line will be at the top of the list, otherwise the
+	        method will only ensure that the line will be visible anywhere
+	        in the window.
+	 */
+	void SelectLine(int nLine, BOOL bPlaceAtTop = FALSE);
 
-    //using CCrystalTextView::GetLineCount;
-    int GetLineCount() const;
+	/** A helper function, simply calls the protected OnUpdate member to do the work */
+	void DoOnUpdate(COutputView* pSender, LPARAM lHint, CObject* pHint);
 
-    /** 
-    Sets the image list to use 
-	
-    @return
-            Image list used previously
-     */
-    CImageList *SetImageList(CImageList *pImageList);
+	//using CCrystalTextView::GetLineCount;
+	int GetLineCount() const;
 
-    /** Returns the image list, currently in use */
-    CImageList *GetImageList() const;
+	/**
+	Sets the image list to use
 
-    // implementation helpers
+	@return
+	        Image list used previously
+	 */
+	CImageList *SetImageList(CImageList *pImageList);
+
+	/** Returns the image list, currently in use */
+	CImageList *GetImageList() const;
+
+// implementation helpers
 protected:
-    /** Applies the font settings to the window */
-    void ApplyFont();
+	/** Applies the font settings to the window */
+	void ApplyFont();
 
-    /**
-    Modifies the given string, so that it can be displayed, as expected
-    and returns the result.
-     */
-    static const CString EnsureStringReadable(LPCTSTR lpszString);
+	/**
+	Modifies the given string, so that it can be displayed, as expected
+	and returns the result.
+	 */
+	static const CString EnsureStringReadable(LPCTSTR lpszString);
 
-    // overridables
+// overridables
 protected:
-    virtual void OnUpdate(COutputView* pSender, LPARAM lHint, CObject* pHint);
+	virtual void OnUpdate(COutputView* pSender, LPARAM lHint, CObject* pHint);
 
-    // overridings
+// overridings
 protected:
-    //{{AFX_VIRTUAL(COutputView)
+//{{AFX_VIRTUAL(COutputView)
 protected:
-    virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    //}}AFX_VIRTUAL
+	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	//}}AFX_VIRTUAL
 
-    // debugging
+// debugging
 public:
 #ifdef _DEBUG
-    virtual void AssertValid() const;
-    virtual void Dump(CDumpContext& dc) const;
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-    // Generierte Nachrichtenzuordnungsfunktionen
+// Generierte Nachrichtenzuordnungsfunktionen
 protected:
-    LONG OnAddLine(UINT wParam, LONG lParam);
-    LONG OnReset(UINT wParam, LONG lParam);
-    LONG OnAddInfoLine(WPARAM wParam, LONG lParam);
-    afx_msg void OnSysColorChange();
-    //{{AFX_MSG(COutputView)
-    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-    afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
-    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+	LONG OnAddLine(UINT wParam, LONG lParam);
+	LONG OnReset(UINT wParam, LONG lParam);
+	LONG OnAddInfoLine(WPARAM wParam, LONG lParam);
+	afx_msg void OnSysColorChange();
+	//{{AFX_MSG(COutputView)
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 
-    // attributes
+// attributes
 protected:
-    /** The views document */
-    COutputDoc* m_pOutputDoc;
+	/** The views document */
+	COutputDoc* m_pOutputDoc;
 
 private:
-    /** TRUE, if the user clicked on a scrollbar during output generations. */
-    BOOL m_bDoNotScroll;
+	/** TRUE, if the user clicked on a scrollbar during output generations. */
+	BOOL m_bDoNotScroll;
 
-    /** TRUE if the view has been attached to a document */
-    BOOL m_bInitialized;
+	/** TRUE if the view has been attached to a document */
+	BOOL m_bInitialized;
 
-    /** Font to be used for the view */
-    CFont m_font;
+	/** Font to be used for the view */
+	CFont m_font;
 };
 
 /////////////////////////////////////////////////////////////////////////////

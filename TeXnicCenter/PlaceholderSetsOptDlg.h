@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -60,81 +60,83 @@ If the dialog was canceled, strPlaceholder is empty.
 
 @author Tino Weinkauf
  */
-class CPlaceholderSetsOptDlg : public CDialog {
-    // Construction
+class CPlaceholderSetsOptDlg : public CDialog
+{
+// Construction
 public:
-    CPlaceholderSetsOptDlg(CWnd* pParent = NULL); // standard constructor
+	CPlaceholderSetsOptDlg(CWnd* pParent = NULL); // standard constructor
 
-    // Dialog Data
-    //{{AFX_DATA(CPlaceholderSetsOptDlg)
+	// Dialog Data
+	//{{AFX_DATA(CPlaceholderSetsOptDlg)
 
-    enum {
-        IDD = IDD_PLACEHOLDER_SET
-    };
-    CButton m_ShortBtn;
-    CStatic m_ResultStatic;
-    CButton m_RelativeBtn;
-    CButton m_QuotedBtn;
-    CComboBox m_PHTypeCombo;
-    CButton m_ForwardBtn;
-    CEdit m_ExampleEdit;
-    BOOL m_bForwardSlash;
-    BOOL m_bQuoted;
-    BOOL m_bRelativePath;
-    BOOL m_bShortFormat;
-    //}}AFX_DATA
+	enum
+	{
+		IDD = IDD_PLACEHOLDER_SET
+	};
+	CButton m_ShortBtn;
+	CStatic m_ResultStatic;
+	CButton m_RelativeBtn;
+	CButton m_QuotedBtn;
+	CComboBox m_PHTypeCombo;
+	CButton m_ForwardBtn;
+	CEdit m_ExampleEdit;
+	BOOL m_bForwardSlash;
+	BOOL m_bQuoted;
+	BOOL m_bRelativePath;
+	BOOL m_bShortFormat;
+	//}}AFX_DATA
 
-    // Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CPlaceholderSetsOptDlg)
+	// Overrides
+	// ClassWizard generated virtual function overrides
+//{{AFX_VIRTUAL(CPlaceholderSetsOptDlg)
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
+	//}}AFX_VIRTUAL
 
-    // Implementation
+// Implementation
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CPlaceholderSetsOptDlg)
-    virtual BOOL OnInitDialog();
-    afx_msg void ShowExample();
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+	// Generated message map functions
+	//{{AFX_MSG(CPlaceholderSetsOptDlg)
+	virtual BOOL OnInitDialog();
+	afx_msg void ShowExample();
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
 
-    // Implementation
+// Implementation
 public:
-    /** Enables/Disables Support of Options.
-    Call this before calling DoModal().
-     */
-    void SetAllowOptions(bool bEnable = true);
+	/** Enables/Disables Support of Options.
+	Call this before calling DoModal().
+	 */
+	void SetAllowOptions(bool bEnable = true);
 
-    /**
-    To configure the type of example shown.
-    Call this before calling DoModal().
-     */
-    void SetShowOneLineExample(bool bShowOneLineExample = true);
+	/**
+	To configure the type of example shown.
+	Call this before calling DoModal().
+	 */
+	void SetShowOneLineExample(bool bShowOneLineExample = true);
 
 protected:
-    ///Enables/Disables controls
-    void UpdateControls();
-    void ConstructPlaceholder();
+	///Enables/Disables controls
+	void UpdateControls();
+	void ConstructPlaceholder();
 
-    //Attributes
+//Attributes
 public:
-    /**Use this to retrieve the Placeholder String with all options
-    defined by the user - after DoModal().
-     */
-    CString strPlaceholder;
+	/**Use this to retrieve the Placeholder String with all options
+	defined by the user - after DoModal().
+	 */
+	CString strPlaceholder;
 
 private:
-    ///true, if Options (forward slash, 8.3-Format, quoting, relative Path) are allowed to be configured 
-    bool m_bAllowOptions;
+	///true, if Options (forward slash, 8.3-Format, quoting, relative Path) are allowed to be configured
+	bool m_bAllowOptions;
 
-    ///true, if Example shall be shown in one line
-    bool m_bShowOneLineExample;
+	///true, if Example shall be shown in one line
+	bool m_bShowOneLineExample;
 
-    ///Helps constructing an example
-    CPlaceholderSets m_ExamplePHSets;
+	///Helps constructing an example
+	CPlaceholderSets m_ExamplePHSets;
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -4,17 +4,17 @@
  *
  * Copyright (C) 1999-2000 Sven Wiegand
  * Copyright (C) 2000-$CurrentYear$ ToolsCenter
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -50,49 +50,50 @@ the text format (Unix, Windows, Mac) to save in.
  */
 class CTextFileSaveDialog : public CFileDialogEx
 {
-    // construction/destruction
+// construction/destruction
 public:
-    CTextFileSaveDialog(UINT unTitleID = AFX_IDS_SAVEFILE,
-                        LPCTSTR lpszDefExt = NULL,LPCTSTR lpszFileName = NULL,
-                        DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_NOREADONLYRETURN,int nFileFormat = CRLF_STYLE_DOS,
-                        LPCTSTR lpszFilter = NULL,
-                        CWnd* pParent = NULL);
+	CTextFileSaveDialog(UINT unTitleID = AFX_IDS_SAVEFILE,
+	                    LPCTSTR lpszDefExt = NULL,LPCTSTR lpszFileName = NULL,
+	                    DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_NOREADONLYRETURN,int nFileFormat = CRLF_STYLE_DOS,
+	                    LPCTSTR lpszFilter = NULL,
+	                    CWnd* pParent = NULL);
 
-    // operations
+// operations
 public:
-    int GetFileFormat();
+	int GetFileFormat();
 
-    // overridings
+// overridings
 protected:
-    //{{AFX_VIRTUAL(CTextFileSaveDialog)
+//{{AFX_VIRTUAL(CTextFileSaveDialog)
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV-Unterstützung
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV-Unterstützung
+	//}}AFX_VIRTUAL
 
-    // message handlers
+// message handlers
 protected:
-    //{{AFX_MSG(CTextFileSaveDialog)
-    virtual BOOL OnInitDialog();
-    afx_msg void OnSelchangeFileFormat();
-    //}}AFX_MSG
+	//{{AFX_MSG(CTextFileSaveDialog)
+	virtual BOOL OnInitDialog();
+	afx_msg void OnSelchangeFileFormat();
+	//}}AFX_MSG
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-    // data fields
+// data fields
 protected:
-    //{{AFX_DATA(CTextFileSaveDialog)
-    enum {
-        IDD = IDD_FILE_SAVE
-    };
-    CStatic m_wndFileFormatTitle;
-    CComboBox m_wndFileFormatCombo;
-    int m_nFileFormat;
-    //}}AFX_DATA
+	//{{AFX_DATA(CTextFileSaveDialog)
+	enum
+	{
+		IDD = IDD_FILE_SAVE
+	};
+	CStatic m_wndFileFormatTitle;
+	CComboBox m_wndFileFormatCombo;
+	int m_nFileFormat;
+	//}}AFX_DATA
 
-    // attributes
+// attributes
 protected:
-    /** Title to display */
-    CString m_strTitle;
+	/** Title to display */
+	CString m_strTitle;
 };
 
 
