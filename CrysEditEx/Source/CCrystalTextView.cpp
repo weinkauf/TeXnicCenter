@@ -805,16 +805,26 @@ void CCrystalTextView::DrawLineHelperImpl(CDC *pdc, CPoint &ptOrigin, const CRec
 		CString line;
 		ExpandChars(pszChars, nOffset, nCount, line);
 		int nWidth = rcClip.right - ptOrigin.x;
+
+		CRect rc;
+
 		if (nWidth > 0)
 		{
 			int nCharWidth = GetCharWidth();
 			int nCount = line.GetLength();
 			int nCountFit = nWidth / nCharWidth + 1;
+
 			if (nCount > nCountFit)
 				nCount = nCountFit;
-			VERIFY(pdc->ExtTextOut(ptOrigin.x, ptOrigin.y, ETO_CLIPPED, &rcClip, line, nCount, NULL));
+
+			rc.left = ptOrigin.x;
+			rc.top = ptOrigin.y;
+
+			pdc->DrawText(line,nCount,rc,DT_CALCRECT|DT_SINGLELINE);
+			pdc->DrawText(line,nCount,rc,DT_SINGLELINE);
 		}
-		ptOrigin.x += GetCharWidth() * line.GetLength();
+
+		ptOrigin.x += rc.Width();
 	}
 }
 
@@ -1616,13 +1626,15 @@ void CCrystalTextView::ResetView()
 void CCrystalTextView::UpdateCaret()
 {
 	ASSERT_VALIDTEXTPOS(m_ptCursorPos);
+
 	if (m_bFocused && !m_bCursorHidden &&
 	        CalculateActualOffset(m_ptCursorPos.y, m_ptCursorPos.x) >= m_nOffsetChar)
 	{
 		if (GetCaretForm() == CARET_BLOCK)
 			CreateSolidCaret(GetCharWidth(), GetLineHeight());
 		else
-			CreateSolidCaret(GetSystemMetrics(SM_CXBORDER) + 1, GetLineHeight());
+			CreateSolidCaret(GetSystemMetrics(SM_CXBORDER), GetLineHeight());
+
 		SetCaretPos(TextToClient(m_ptCursorPos));
 		ShowCaret();
 	}
@@ -1682,11 +1694,17 @@ void CCrystalTextView::CalcLineCharDim()
 {
 	CDC *pdc = GetDC();
 	CFont *pOldFont = pdc->SelectObject(GetFont());
-	CSize szCharExt = pdc->GetTextExtent(_T("X"));
-	m_nLineHeight = szCharExt.cy;
+
+	TEXTMETRIC tm;
+	pdc->GetTextMetrics(&tm);
+
+	m_nLineHeight = tm.tmHeight;
+
 	if (m_nLineHeight < 1)
 		m_nLineHeight = 1;
-	m_nCharWidth = szCharExt.cx;
+
+	m_nCharWidth = tm.tmAveCharWidth;
+
 	pdc->SelectObject(pOldFont);
 	ReleaseDC(pdc);
 }

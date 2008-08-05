@@ -663,7 +663,54 @@ DWORD CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= C
 			SIZE_T size = mapping.GetMappingSize();
 			SIZE_T pos = 0;
 
-			Encoding encoding = DetectEncoding(data,pos,size);		
+			Encoding encoding = DetectEncoding(data,pos,size);
+
+			if (encoding == ASCII) // ASCII? Still might by Unicode without BOM
+			{
+				INT flags = IS_TEXT_UNICODE_UNICODE_MASK;
+
+				if (::IsTextUnicode(data,size,&flags)) 
+				{
+					if (flags & (IS_TEXT_UNICODE_REVERSE_ASCII16|IS_TEXT_UNICODE_REVERSE_STATISTICS))
+						encoding = UTF16BE;
+					else
+						encoding = UTF16LE;
+				}
+				else {
+					// From Wikipedia:
+					// As a consequence of the design of UTF-8, the following properties of multi-byte sequences hold:
+
+					//  * The most significant bit of a single-byte character is always 0.
+					//	* The most significant bits of the first byte of a multi-byte sequence determine the length of the sequence. These most significant bits are 110 for two-byte sequences; 1110 for three-byte sequences, and so on.
+					//	* The remaining bytes in a multi-byte sequence have 10 as their two most significant bits.
+					//	* A UTF-8 stream contains neither the byte FE nor FF. This makes sure that a UTF-8 stream never looks like a UTF-16 stream starting with U+FEFF (Byte-order mark)
+
+					bool utf8 = true;
+					int consecutive_bytes = 0;
+
+					for (std::size_t i = 0; i < size && utf8; ++i) {
+						if (data[i] == 0xfe || data[i] == 0xff)
+							utf8 = false;
+
+						if (consecutive_bytes == 0)
+						{
+							if (data[i] >> 5 == 6)
+								consecutive_bytes = 2;
+							else if (data[i] >> 4 == 0xe)
+								consecutive_bytes = 3;
+						}
+						else if (consecutive_bytes == 0 && data[i] >> 7 & 1 ||
+							consecutive_bytes > 0 && data[i] >> 6 != 2)
+							utf8 = false;
+						
+						if (consecutive_bytes > 0)
+							--consecutive_bytes;
+					}
+
+					if (utf8)
+						encoding = UTF8;
+				}
+			}
 
 			UINT code_page;
 
