@@ -3449,7 +3449,7 @@ HGLOBAL CCrystalTextView::PrepareDragData()
 
 	CString text;
 	GetText(m_ptDrawSelStart, m_ptDrawSelEnd, text);
-	HGLOBAL hData = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, _tcslen(text) + 1);
+	HGLOBAL hData = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, (text.GetLength() + 1) * sizeof(TCHAR));
 
 	if (hData == NULL)
 		return NULL;
@@ -3472,6 +3472,7 @@ static int FindStringHelper(LPCTSTR pszFindWhere, LPCTSTR pszFindWhat, BOOL bWho
 	int nCur = 0;
 	const int nLength = lstrlen(pszFindWhat);
 	LPCTSTR lastChar = pszFindWhere + lstrlen(pszFindWhere) - 1;
+
 	for (;;)
 	{
 #ifdef _UNICODE

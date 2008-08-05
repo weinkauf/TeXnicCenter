@@ -1,6 +1,3 @@
-// ErrorListView.cpp : implementation file
-//
-
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "ErrorListView.h"
@@ -14,7 +11,7 @@ IMPLEMENT_DYNAMIC(ErrorListView, CDockablePane)
 const UINT ListView = 0x1000;
 
 ErrorListView::ErrorListView()
-		: doc_(0)
+: doc_(0)
 {
 }
 
@@ -181,15 +178,15 @@ BOOL ErrorListView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT
 		switch (wParam)
 		{
 			case CBuildView::imageError:
-				fmt.Format(_T("%u Errors"),errors_);
+				fmt.Format(IDS_ERROR_LIST_ERRORS,errors_);
 				index = 0;
 				break;
 			case CBuildView::imageWarning:
-				fmt.Format(_T("%u Warnings"),warnings_);
+				fmt.Format(IDS_ERROR_LIST_WARNINGS,warnings_);
 				index = 2;
 				break;
 			case CBuildView::imageBadBox:
-				fmt.Format(_T("%u Bad boxes"),bad_boxes_);
+				fmt.Format(IDS_ERROR_LIST_BAD_BOXES,bad_boxes_);
 				index = 4;
 				break;
 			default:

@@ -3358,6 +3358,9 @@ BEGIN
     IDS_ERROR_LIST          "Fehler"
     IDS_LOADING             "Wird geladen... Bitte warten."
     IDS_FORMAT              "Format:"
+    IDS_ERROR_LIST_ERRORS   "%u Fehler"
+    IDS_ERROR_LIST_WARNINGS "%u Warnungen"
+    IDS_ERROR_LIST_BAD_BOXES "%u Bad Boxes"
 END
 
 STRINGTABLE 
@@ -7126,6 +7129,9 @@ BEGIN
     IDS_SELECT_PACKAGE_DIR  "Please select root dir where to search for packages"
     IDS_TOOLBAR_CUSTOMIZE   "Customize..."
     IDS_LOADING             "Loading... Please wait."
+    IDS_ERROR_LIST_ERRORS   "%u Errors"
+    IDS_ERROR_LIST_WARNINGS "%u Warnings"
+    IDS_ERROR_LIST_BAD_BOXES "%u Bad Boxes"
 END
 
 STRINGTABLE 

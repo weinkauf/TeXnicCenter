@@ -10,6 +10,9 @@
 #define IDS_ERROR_LIST                  23
 #define IDS_LOADING                     24
 #define IDS_FORMAT                      25
+#define IDS_ERROR_LIST_ERRORS           26
+#define IDS_ERROR_LIST_WARNINGS         27
+#define IDS_ERROR_LIST_BAD_BOXES        28
 #define STE_LANGUAGE_NEW                32
 #define STE_RESOURCE_CONFLICT           33
 #define STE_LANGUAGE_GERMAN             34
@@ -1321,7 +1324,7 @@
 #define IDS_TEXTMODULES_NONEDEFINED     57671
 
 // Next default values for new objects
-//
+// 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

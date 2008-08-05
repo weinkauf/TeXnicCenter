@@ -249,7 +249,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;AFX_RESOURCE_DLL;AFX_TARG_DEU"
+				PreprocessorDefinitions="_DEBUG;AFX_RESOURCE_DLL;AFX_TARG_NEU;AFX_TARG_DEU"
 				Culture="1031"
 				AdditionalIncludeDirectories="$(SolutionDir)\Output\Intermediate\TeXnicCenter\$(ConfigurationName)"
 			/>
@@ -344,7 +344,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;AFX_RESOURCE_DLL;AFX_TARG_DEU"
+				PreprocessorDefinitions="NDEBUG;AFX_RESOURCE_DLL;AFX_TARG_NEU;AFX_TARG_DEU"
 				Culture="1031"
 				AdditionalIncludeDirectories="$(SolutionDir)\Output\Intermediate\TeXnicCenter\$(ConfigurationName)"
 			/>

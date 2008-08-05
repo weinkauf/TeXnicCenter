@@ -117,6 +117,7 @@
 
 #include <fstream>
 #include <string>
+#include <algorithm>
 
 
 #ifndef __AFXPRIV_H__
@@ -138,6 +139,16 @@ const TCHAR crlf[] = _T("\r\n");
 #define _ADVANCED_BUGCHECK	1
 #endif
 
+namespace {
+	namespace BOM
+	{
+		const BYTE utf8[] = {0xEF,0xBB,0xBF};
+		const BYTE utf16le[] = {0xff,0xfe};
+		const BYTE utf16be[] = {0xfe,0xff};
+		const BYTE utf32le[] = {0xff,0xfe,0x00,0x00};
+		const BYTE utf32be[] = {0x00,0x00,0xfe,0xff};
+	}
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // CCrystalTextBuffer::SUndoRecord
@@ -395,6 +406,7 @@ void CCrystalTextBuffer::CDeleteContext::RecalcPoint(CPoint &ptPoint)
 IMPLEMENT_DYNCREATE(CCrystalTextBuffer, CCmdTarget)
 
 CCrystalTextBuffer::CCrystalTextBuffer()
+: encoding_(ASCII)
 {
 	m_bInit = FALSE;
 	m_bReadOnly = FALSE;
@@ -531,6 +543,7 @@ CCrystalTextBuffer::CTextAttribute *CCrystalTextBuffer::GetLineAttribute(int nLi
 	TextAttributeListType* pList = m_aLines[nLine].m_lstAttributes;
 	CCrystalTextBuffer::CTextAttribute * retValue = NULL;
 	POSITION pos = pList->GetHeadPosition();
+
 	while (pos != NULL)
 	{
 		CTextAttribute& attr = pList->GetNext(pos);
@@ -540,7 +553,9 @@ CCrystalTextBuffer::CTextAttribute *CCrystalTextBuffer::GetLineAttribute(int nLi
 			break;
 		}
 	}
+
 	::LeaveCriticalSection(&m_csLineAttributes);
+
 	return retValue;
 }
 
@@ -553,7 +568,6 @@ CCrystalTextBuffer::TextAttributeListType *CCrystalTextBuffer::GetLineAttributes
 	return pList;
 }
 
-
 const TCHAR* const crlfs[] =
 {
 	_T("\x0d\x0a"), //	DOS/Windows style
@@ -561,149 +575,378 @@ const TCHAR* const crlfs[] =
 	_T("\x0a\x0d") //	Macintosh style
 };
 
+CRLFSTYLE DetectCRLFStyle(LPCTSTR text, int size)
+{
+	CRLFSTYLE crlf_style;
+
+	//	Try to determine current CRLF mode
+	int i = std::distance(text,std::find(text,text + size,_T('\x0a')));
+	
+	if (i == size)
+	{
+		//	By default (or in the case of empty file), set DOS style
+		crlf_style = CRLF_STYLE_DOS;
+	}
+	else
+	{
+		//	Otherwise, analyze the first occurrence of line-feed character
+		if (i > 0 && text[i - 1] == _T('\x0d'))
+			crlf_style = CRLF_STYLE_DOS;
+		else
+		{
+			if (i < size - 1 && text[i + 1] == _T('\x0d'))
+				crlf_style = CRLF_STYLE_MAC;
+			else
+				crlf_style = CRLF_STYLE_UNIX;
+		}
+	}
+
+	return crlf_style;
+}
+
+void SwapCodePoint(WCHAR& ch)
+{
+	ch = (ch & 0xff) << 8 | ch >> 8 & 0xff;
+}
+
+CCrystalTextBuffer::Encoding CCrystalTextBuffer::DetectEncoding(const BYTE* data, SIZE_T& pos, SIZE_T size)
+{
+	// By default we assume ASCII text
+	Encoding encoding = ASCII;
+	pos = 0;
+
+	if (size >= 2) // minimal BOM size
+	{
+		// Try to detect Unicode using byte order mark
+		if (size >= sizeof(BOM::utf8) && std::memcmp(data,BOM::utf8,sizeof(BOM::utf8)) == 0)
+		{
+			encoding = UTF8;
+			pos += sizeof(BOM::utf8);
+		}
+		else if (std::memcmp(data,BOM::utf16le,sizeof(BOM::utf16le)) == 0)
+		{
+			encoding = UTF16LE;
+			pos += sizeof(BOM::utf16le);
+		}
+		else if (std::memcmp(data,BOM::utf16be,sizeof(BOM::utf16be)) == 0)
+		{
+			encoding = UTF16BE;
+			pos += sizeof(BOM::utf16be);
+		}
+		else if (size >= sizeof(BOM::utf32le) && std::memcmp(data,BOM::utf32le,sizeof(BOM::utf32le)) == 0)
+		{
+			encoding = UTF32LE;
+			pos += sizeof(BOM::utf32le);
+		}
+		else if (size >= sizeof(BOM::utf32be) && std::memcmp(data,BOM::utf32be,sizeof(BOM::utf32be)) == 0)
+		{
+			encoding = UTF32BE;
+			pos += sizeof(BOM::utf32be);
+		}
+	}
+
+	return encoding;
+}
+
 DWORD CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRLF_STYLE_AUTOMATIC*/)
 {
-	const BYTE utf8[] = {0xEF,0xBB,0xBF};
-	const BYTE utf16le[] = {0xff,0xfe};
-	const BYTE utf16be[] = {0xfe,0xff};
-	const BYTE utf32le[] = {0xff,0xfe,0x00,0x00};
-	const BYTE utf32be[] = {0x00,0x00,0xfe,0xff};
+	ATL::CAtlFile file;
+	DWORD result;
 
-	HANDLE hFile = NULL;
-	int nCurrentMax = 256;
-	TCHAR* pcLineBuf = new TCHAR[nCurrentMax];
-
-	DWORD result = 1;
-
-	__try
+	if (SUCCEEDED(result = file.Create(pszFileName,GENERIC_READ,FILE_SHARE_READ,OPEN_EXISTING))) 
 	{
-		DWORD dwFileAttributes = ::GetFileAttributes(pszFileName);
-
-		if (dwFileAttributes == (DWORD) -1)
-			__leave;
-
-		hFile = ::CreateFile(pszFileName, GENERIC_READ, FILE_SHARE_READ, NULL,
-		                     OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
-
-		if (hFile == INVALID_HANDLE_VALUE)
-			__leave;
-
-		int nCurrentLength = 0;
-		const DWORD dwBufSize = 32768;
-		TCHAR* pcBuf = (TCHAR*) _alloca(dwBufSize);
-		DWORD dwCurSize;
-
-		if (!::ReadFile(hFile, pcBuf, dwBufSize, &dwCurSize, NULL))
-			__leave;
-
-		FreeAll(); // release text buffer only after successful read
-
-		if (nCrlfStyle == CRLF_STYLE_AUTOMATIC)
+		ATL::CAtlFileMapping<BYTE> mapping;
+		
+		if (SUCCEEDED(result = mapping.MapFile(file)))
 		{
-			//	Try to determine current CRLF mode
-			for (DWORD I = 0; I < dwCurSize; I ++)
+			const BYTE* data = mapping;
+			SIZE_T size = mapping.GetMappingSize();
+			SIZE_T pos = 0;
+
+			Encoding encoding = DetectEncoding(data,pos,size);		
+
+			UINT code_page;
+
+			switch (encoding) 
 			{
-				if (pcBuf[I] == _T('\x0a'))
-					break;
+				case ASCII: code_page = CP_ACP; break;
+				case UTF8: code_page = CP_UTF8; break;
+				case UTF16LE: code_page = 1200; break; // Available only for managed applications
+				case UTF16BE: code_page = 1201; break;
+				case UTF32LE: code_page = 12000; break;
+				case UTF32BE: code_page = 12001; break;
+				default: ASSERT(FALSE);
 			}
 
-			if (I == dwCurSize)
-			{
-				//	By default (or in the case of empty file), set DOS style
-				nCrlfStyle = CRLF_STYLE_DOS;
+			LPTSTR text;
+			int required_size;
+
+			if (encoding != UTF16LE && encoding != UTF16BE) {
+				const UINT flags = 0;
+				required_size = ::MultiByteToWideChar(code_page,flags,
+					reinterpret_cast<LPCSTR>(data + pos),size - pos,0,0);
+				
+
+//#ifdef UNICODE
+				text = new WCHAR[required_size];
+
+				::MultiByteToWideChar(code_page,flags,
+					reinterpret_cast<LPCSTR>(data + pos),size - pos,text,required_size);	
+//#else
+
+//#endif
 			}
-			else
+			else {
+				ASSERT((size - pos) % 2 == 0); // Size must be even
+				required_size = (size - pos) / 2;
+				text = new WCHAR[required_size];
+
+				std::memcpy(text,data + pos,required_size * 2);
+
+				if (encoding == UTF16BE) // Swap bytes
+					std::for_each(text,text + required_size,SwapCodePoint);
+			}
+
+			if (nCrlfStyle == CRLF_STYLE_AUTOMATIC)
+				nCrlfStyle = DetectCRLFStyle(text,required_size);
+
+			int current_max = 256, current_length = 0;
+			LPTSTR line_buffer = new TCHAR[current_max];
+
+			ASSERT(nCrlfStyle >= 0 && nCrlfStyle <= 2);
+			m_nCRLFMode = nCrlfStyle;
+
+			m_aLines.SetSize(0, 4096);
+
+			size = required_size;
+			pos = 0;
+
+			while (pos < size)
 			{
-				//	Otherwise, analyze the first occurrence of line-feed character
-				if (I > 0 && pcBuf[I - 1] == _T('\x0d'))
-					nCrlfStyle = CRLF_STYLE_DOS;
-				else
-				{
-					if (I < dwCurSize - 1 && pcBuf[I + 1] == _T('\x0d'))
-						nCrlfStyle = CRLF_STYLE_MAC;
-					else
-						nCrlfStyle = CRLF_STYLE_UNIX;
+				TCHAR c = text[pos];
+				pos++;
+
+				// Strip \r ('\x0d') from input buffer
+				if (c != _T('\x0d')) {
+					line_buffer[current_length] = (TCHAR) c;
+					current_length++;
+
+					if (current_length == current_max)
+					{
+						//	Reallocate line buffer
+						current_max += 256;
+						LPTSTR new_buffer = new TCHAR[current_max];
+						std::memcpy(new_buffer, line_buffer, current_length);
+						delete[] line_buffer;
+						line_buffer = new_buffer;
+					}
+
+					if (c == _T('\x0a'))
+					{
+						line_buffer[current_length-1] = 0;
+						InsertLine(line_buffer, current_length - 1);
+						current_length = 0;
+					}
 				}
 			}
+
+			line_buffer[current_length] = 0;
+			InsertLine(line_buffer, current_length);
+
+			delete[] line_buffer;
+			delete[] text;
+
+			ASSERT(m_aLines.GetSize() > 0); //	At least one empty line must present
+
+			m_bInit = TRUE;
+			m_bReadOnly = (::GetFileAttributes(pszFileName) & FILE_ATTRIBUTE_READONLY) != 0;
+			m_bModified = FALSE;
+			m_bUndoGroup = m_bUndoBeginGroup = FALSE;
+			m_nUndoBufSize = UNDO_BUF_SIZE;
+			m_nSyncPosition = m_nUndoPosition = 0;
+
+			ASSERT(m_aUndoBuf.GetSize() == 0);
+			result = ERROR_SUCCESS;
+
+			encoding_ = encoding;
+			code_page_ = code_page;
+
+			UpdateViews(NULL, NULL, UPDATE_RESET);
 		}
-
-		ASSERT(nCrlfStyle >= 0 && nCrlfStyle <= 2);
-		m_nCRLFMode = nCrlfStyle;
-
-		m_aLines.SetSize(0, 4096);
-
-		DWORD dwBufPtr = 0;
-		USES_CONVERSION;
-
-		while (dwBufPtr < dwCurSize)
-		{
-			int c = pcBuf[dwBufPtr];
-			dwBufPtr++;
-
-			if (dwBufPtr == dwCurSize && dwCurSize == dwBufSize)
-			{
-				if (! ::ReadFile(hFile, pcBuf, dwBufSize, &dwCurSize, NULL))
-					__leave;
-
-				dwBufPtr = 0;
-			}
-
-			// Strip \r ('\x0d') from input buffer
-			if ((TCHAR)c == _T('\x0d'))
-				continue;
-
-			pcLineBuf[nCurrentLength] = (TCHAR) c;
-			nCurrentLength++;
-
-			if (nCurrentLength == nCurrentMax)
-			{
-				//	Reallocate line buffer
-				nCurrentMax += 256;
-				TCHAR* pcNewBuf = new TCHAR[nCurrentMax];
-				memcpy(pcNewBuf, pcLineBuf, nCurrentLength);
-				delete[] pcLineBuf;
-				pcLineBuf = pcNewBuf;
-			}
-
-			if ((TCHAR) c == _T('\x0a'))
-			{
-				pcLineBuf[nCurrentLength-1] = 0;
-				InsertLine(pcLineBuf, nCurrentLength-1);
-				nCurrentLength = 0;
-			}
-		}
-
-		pcLineBuf[nCurrentLength] = 0;
-		InsertLine(pcLineBuf, nCurrentLength);
-
-		ASSERT(m_aLines.GetSize() > 0); //	At least one empty line must present
-
-		m_bInit = TRUE;
-		m_bReadOnly = (dwFileAttributes & FILE_ATTRIBUTE_READONLY) != 0;
-		m_bModified = FALSE;
-		m_bUndoGroup = m_bUndoBeginGroup = FALSE;
-		m_nUndoBufSize = UNDO_BUF_SIZE;
-		m_nSyncPosition = m_nUndoPosition = 0;
-
-		ASSERT(m_aUndoBuf.GetSize() == 0);
-		result = 0;
-
-		UpdateViews(NULL, NULL, UPDATE_RESET);
-	}
-	__finally
-	{
-		if (result)
-			result = ::GetLastError();
-		if (pcLineBuf != NULL)
-			delete[] pcLineBuf;
-		if (hFile != NULL)
-			::CloseHandle(hFile);
 	}
 
-	//BEGIN SW
 	m_ptLastChange.x = m_ptLastChange.y = -1;
-	//END SW
+
 	return result;
+
+	//HANDLE hFile = NULL;
+	//int nCurrentMax = 256;
+	//TCHAR* pcLineBuf = new TCHAR[nCurrentMax];
+
+	//DWORD result = 1;
+
+	//__try
+	//{
+	//	DWORD dwFileAttributes = ::GetFileAttributes(pszFileName);
+
+	//	if (dwFileAttributes == (DWORD) -1)
+	//		__leave;
+
+	//	hFile = ::CreateFile(pszFileName, GENERIC_READ, FILE_SHARE_READ, NULL,
+	//	                     OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
+
+	//	if (hFile == INVALID_HANDLE_VALUE)
+	//		__leave;
+
+	//	int nCurrentLength = 0;
+	//	const DWORD dwBufSize = 32768;
+	//	TCHAR* pcBuf = (TCHAR*) _alloca(dwBufSize);
+	//	DWORD dwCurSize;
+
+	//	if (!::ReadFile(hFile, pcBuf, dwBufSize, &dwCurSize, NULL))
+	//		__leave;
+
+	//	FreeAll(); // release text buffer only after successful read
+
+	//	if (nCrlfStyle == CRLF_STYLE_AUTOMATIC)
+	//	{
+	//		//	Try to determine current CRLF mode
+	//		for (DWORD I = 0; I < dwCurSize; I ++)
+	//		{
+	//			if (pcBuf[I] == _T('\x0a'))
+	//				break;
+	//		}
+
+	//		if (I == dwCurSize)
+	//		{
+	//			//	By default (or in the case of empty file), set DOS style
+	//			nCrlfStyle = CRLF_STYLE_DOS;
+	//		}
+	//		else
+	//		{
+	//			//	Otherwise, analyze the first occurrence of line-feed character
+	//			if (I > 0 && pcBuf[I - 1] == _T('\x0d'))
+	//				nCrlfStyle = CRLF_STYLE_DOS;
+	//			else
+	//			{
+	//				if (I < dwCurSize - 1 && pcBuf[I + 1] == _T('\x0d'))
+	//					nCrlfStyle = CRLF_STYLE_MAC;
+	//				else
+	//					nCrlfStyle = CRLF_STYLE_UNIX;
+	//			}
+	//		}
+	//	}
+
+	//	ASSERT(nCrlfStyle >= 0 && nCrlfStyle <= 2);
+	//	m_nCRLFMode = nCrlfStyle;
+
+	//	m_aLines.SetSize(0, 4096);
+
+	//	DWORD dwBufPtr = 0;
+	//	USES_CONVERSION;
+
+	//	while (dwBufPtr < dwCurSize)
+	//	{
+	//		int c = pcBuf[dwBufPtr];
+	//		dwBufPtr++;
+
+	//		if (dwBufPtr == dwCurSize && dwCurSize == dwBufSize)
+	//		{
+	//			if (! ::ReadFile(hFile, pcBuf, dwBufSize, &dwCurSize, NULL))
+	//				__leave;
+
+	//			dwBufPtr = 0;
+	//		}
+
+	//		// Strip \r ('\x0d') from input buffer
+	//		if ((TCHAR)c == _T('\x0d'))
+	//			continue;
+
+	//		pcLineBuf[nCurrentLength] = (TCHAR) c;
+	//		nCurrentLength++;
+
+	//		if (nCurrentLength == nCurrentMax)
+	//		{
+	//			//	Reallocate line buffer
+	//			nCurrentMax += 256;
+	//			TCHAR* pcNewBuf = new TCHAR[nCurrentMax];
+	//			memcpy(pcNewBuf, pcLineBuf, nCurrentLength);
+	//			delete[] pcLineBuf;
+	//			pcLineBuf = pcNewBuf;
+	//		}
+
+	//		if ((TCHAR) c == _T('\x0a'))
+	//		{
+	//			pcLineBuf[nCurrentLength-1] = 0;
+	//			InsertLine(pcLineBuf, nCurrentLength-1);
+	//			nCurrentLength = 0;
+	//		}
+	//	}
+
+	//	pcLineBuf[nCurrentLength] = 0;
+	//	InsertLine(pcLineBuf, nCurrentLength);
+
+	//	ASSERT(m_aLines.GetSize() > 0); //	At least one empty line must present
+
+	//	m_bInit = TRUE;
+	//	m_bReadOnly = (dwFileAttributes & FILE_ATTRIBUTE_READONLY) != 0;
+	//	m_bModified = FALSE;
+	//	m_bUndoGroup = m_bUndoBeginGroup = FALSE;
+	//	m_nUndoBufSize = UNDO_BUF_SIZE;
+	//	m_nSyncPosition = m_nUndoPosition = 0;
+
+	//	ASSERT(m_aUndoBuf.GetSize() == 0);
+	//	result = 0;
+
+	//	UpdateViews(NULL, NULL, UPDATE_RESET);
+	//}
+	//__finally
+	//{
+	//	if (result)
+	//		result = ::GetLastError();
+	//	if (pcLineBuf != NULL)
+	//		delete[] pcLineBuf;
+	//	if (hFile != NULL)
+	//		::CloseHandle(hFile);
+	//}
+
+	////BEGIN SW
+	//m_ptLastChange.x = m_ptLastChange.y = -1;
+	////END SW
+	//return result;
+}
+
+template<class T, std::size_t S>
+const T* AssignByteOrderMark(const T (&p)[S], SIZE_T& s)
+{
+	s = S;
+	return p;
+}
+
+
+void CCrystalTextBuffer::ConvertToMultiByte(LPCWSTR input, int cch, std::vector<BYTE>& buffer, CCrystalTextBuffer::Encoding encoding, UINT cp)
+{
+	if (encoding != UTF16LE && encoding != UTF16BE) {
+		int required_size = ::WideCharToMultiByte(cp,0,input,cch,0,0,0,0);
+
+		buffer.resize(required_size);
+
+		::WideCharToMultiByte(cp,0,input,cch,reinterpret_cast<LPSTR>(&buffer[0]),buffer.size(),0,0);
+	}
+	else {
+		const BYTE* begin = reinterpret_cast<const BYTE*>(input);
+		const BYTE* end = reinterpret_cast<const BYTE*>(input + cch);
+
+		buffer.assign(begin,end);
+
+		if (encoding == UTF16BE)
+		{
+			LPWSTR begin = reinterpret_cast<LPWSTR>(&buffer[0]);
+			LPWSTR end = begin + buffer.size() / 2;
+
+			std::for_each(begin,end,SwapCodePoint);
+		}
+	}
 }
 
 DWORD CCrystalTextBuffer::SaveToFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRLF_STYLE_AUTOMATIC*/, BOOL bClearModifiedFlag /*= TRUE*/)
@@ -711,111 +954,120 @@ DWORD CCrystalTextBuffer::SaveToFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRL
 	ASSERT(nCrlfStyle == CRLF_STYLE_AUTOMATIC || nCrlfStyle == CRLF_STYLE_DOS ||
 	       nCrlfStyle == CRLF_STYLE_UNIX || nCrlfStyle == CRLF_STYLE_MAC);
 	ASSERT(m_bInit);
-	HANDLE hTempFile = INVALID_HANDLE_VALUE;
 	HANDLE hSearch = INVALID_HANDLE_VALUE;
 	TCHAR szTempFileDir[_MAX_PATH + 1];
 	TCHAR szTempFileName[_MAX_PATH + 1];
 	TCHAR szBackupFileName[_MAX_PATH + 1];
 	DWORD result = 1;
 
-	__try
-	{
-		TCHAR drive[_MAX_PATH], dir[_MAX_PATH], name[_MAX_PATH], ext[_MAX_PATH];
-		_tsplitpath(pszFileName, drive, dir, name, ext);
+	CAtlFile temp_file;
 
-		lstrcpy(szTempFileDir, drive);
-		lstrcat(szTempFileDir, dir);
-		lstrcpy(szBackupFileName, pszFileName);
-		lstrcat(szBackupFileName, _T(".bak"));
+	TCHAR drive[_MAX_PATH], dir[_MAX_PATH], name[_MAX_PATH], ext[_MAX_PATH];
+	_tsplitpath(pszFileName, drive, dir, name, ext);
 
-		if (::GetTempFileName(szTempFileDir, _T("CRE"), 0, szTempFileName) == 0)
-			__leave;
+	lstrcpy(szTempFileDir, drive);
+	lstrcat(szTempFileDir, dir);
+	lstrcpy(szBackupFileName, pszFileName);
+	lstrcat(szBackupFileName, _T(".bak"));
 
-		hTempFile = ::CreateFile(szTempFileName, GENERIC_WRITE, 0, NULL,
-		                         CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	bool error_occured = false;
 
-		if (hTempFile == INVALID_HANDLE_VALUE)
-			__leave;
+	if (::GetTempFileName(szTempFileDir, _T("CRE"), 0, szTempFileName) != 0) {
+		if (SUCCEEDED(temp_file.Create(szTempFileName, GENERIC_WRITE, 0, CREATE_ALWAYS))) {
+			if (nCrlfStyle == CRLF_STYLE_AUTOMATIC)
+				nCrlfStyle = m_nCRLFMode;
 
-		if (nCrlfStyle == CRLF_STYLE_AUTOMATIC)
-			nCrlfStyle = m_nCRLFMode;
+			ASSERT(nCrlfStyle >= 0 && nCrlfStyle <= 2);
+			LPCTSTR crlf = crlfs[nCrlfStyle];
 
-		ASSERT(nCrlfStyle >= 0 && nCrlfStyle <= 2);
-		const TCHAR* pszCRLF = crlfs[nCrlfStyle];
-		int nCRLFLength = _tcslen(pszCRLF);
+			std::vector<BYTE> line_ending;
+			ConvertToMultiByte(crlf,_tcslen(crlf),line_ending,encoding_,code_page_);
 
-		int nLineCount = m_aLines.GetSize();
-		USES_CONVERSION;
-
-		for (int nLine = 0; nLine < nLineCount; nLine++)
-		{
-			int nLength = m_aLines[nLine].GetLength();
+			int nLineCount = m_aLines.GetSize();
 			DWORD dwWrittenBytes;
 
-			if (nLength > 0)
+			if (encoding_ != ASCII)
 			{
-				if (!::WriteFile(hTempFile, T2A(m_aLines[nLine].m_pcLine), nLength, &dwWrittenBytes, NULL))
-					__leave;
-				if (nLength != (int)dwWrittenBytes)
-					__leave;
+				const BYTE* bom;
+				SIZE_T size;
+
+				switch(encoding_)
+				{
+					case UTF8: bom = AssignByteOrderMark(BOM::utf8,size); break;
+					case UTF16LE: bom = AssignByteOrderMark(BOM::utf16le,size); break;
+					case UTF16BE: bom = AssignByteOrderMark(BOM::utf16be,size); break;
+					case UTF32LE: bom = AssignByteOrderMark(BOM::utf32le,size); break;
+					case UTF32BE: bom = AssignByteOrderMark(BOM::utf32be,size); break;
+				}
+
+				::WriteFile(temp_file,bom,size,&dwWrittenBytes,0);
 			}
 
-			if (nLine < nLineCount - 1) //	Last line must not end with CRLF
+			std::vector<BYTE> line_buffer;				
+
+			for (int nLine = 0; nLine < nLineCount && !error_occured; nLine++)
 			{
-				if (!::WriteFile(hTempFile, pszCRLF, nCRLFLength, &dwWrittenBytes, NULL))
-					__leave;
-				if (nCRLFLength != (int)dwWrittenBytes)
-					__leave;
+				int nLength = m_aLines[nLine].GetLength();
+				
+				if (nLength > 0)
+				{
+					ConvertToMultiByte(m_aLines[nLine].m_pcLine, nLength,line_buffer,encoding_,code_page_);
+
+					if (!::WriteFile(temp_file, &line_buffer[0], line_buffer.size(), &dwWrittenBytes, NULL) || line_buffer.size() != (int)dwWrittenBytes)
+						error_occured = true;
+				}
+
+				if (nLine < nLineCount - 1) //	Last line must not end with CRLF
+				{
+					if (!::WriteFile(temp_file, &line_ending[0], line_ending.size(), &dwWrittenBytes, NULL) || line_ending.size() != (int)dwWrittenBytes)
+						error_occured = true;
+				}
+			}
+
+			if (m_bCreateBackupFile)
+			{
+				WIN32_FIND_DATA wfd;
+				hSearch = ::FindFirstFile(pszFileName, &wfd);
+
+				if (hSearch != INVALID_HANDLE_VALUE)
+				{
+					//	File exist - create backup file
+					::DeleteFile(szBackupFileName);
+
+					if (!::MoveFile(pszFileName, szBackupFileName))
+						error_occured = true;
+					else {
+						::FindClose(hSearch);
+						hSearch = INVALID_HANDLE_VALUE;
+					}
+				}
+			}
+			else
+				::DeleteFile(pszFileName);
+
+			temp_file.Close();
+
+			//	Move temporary file to target name
+			if (!error_occured && ::MoveFile(szTempFileName, pszFileName)) {
+				if (bClearModifiedFlag)
+				{
+					SetModified(FALSE);
+					m_nSyncPosition = m_nUndoPosition;
+				}
+
+				result = 0;
 			}
 		}
-
-		::CloseHandle(hTempFile);
-		hTempFile = INVALID_HANDLE_VALUE;
-
-		if (m_bCreateBackupFile)
-		{
-			WIN32_FIND_DATA wfd;
-			hSearch = ::FindFirstFile(pszFileName, &wfd);
-			if (hSearch != INVALID_HANDLE_VALUE)
-			{
-				//	File exist - create backup file
-				::DeleteFile(szBackupFileName);
-				if (!::MoveFile(pszFileName, szBackupFileName))
-					__leave;
-				::FindClose(hSearch);
-				hSearch = INVALID_HANDLE_VALUE;
-			}
-		}
-		else
-		{
-			::DeleteFile(pszFileName);
-		}
-
-		//	Move temporary file to target name
-		if (!::MoveFile(szTempFileName, pszFileName))
-			__leave;
-
-		if (bClearModifiedFlag)
-		{
-			SetModified(FALSE);
-			m_nSyncPosition = m_nUndoPosition;
-		}
-
-		result = 0;
 	}
-	__finally
-	{
-		if (result)
-			result = ::GetLastError();
 
-		if (hSearch != INVALID_HANDLE_VALUE)
-			::FindClose(hSearch);
+	if (result)
+		result = ::GetLastError();
 
-		if (hTempFile != INVALID_HANDLE_VALUE)
-			::CloseHandle(hTempFile);
+	if (hSearch != INVALID_HANDLE_VALUE)
+		::FindClose(hSearch);
 
-		::DeleteFile(szTempFileName);
-	}
+	::DeleteFile(szTempFileName);
+
 	return result;
 }
 
@@ -1661,4 +1913,14 @@ BOOL CCrystalTextBuffer::DeleteLine(CCrystalTextView* source, int line)
 	}
 
 	return result;
+}
+
+CCrystalTextBuffer::Encoding CCrystalTextBuffer::GetEncoding() const
+{
+	return encoding_;
+}
+
+UINT CCrystalTextBuffer::GetCodePage() const
+{
+	return code_page_;
 }
