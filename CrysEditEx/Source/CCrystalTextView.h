@@ -113,6 +113,13 @@
 class CCrystalTextBuffer;
 class CUpdateContext;
 
+const UINT CF_TTEXT =
+#ifdef UNICODE
+CF_UNICODETEXT
+#else
+CF_TEXT
+#endif
+;
 
 
 ////////////////////////////////////////////////////////////////////////////

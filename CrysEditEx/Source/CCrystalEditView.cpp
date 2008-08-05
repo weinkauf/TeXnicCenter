@@ -773,14 +773,17 @@ void CCrystalEditView::OnUpdateEditSwitchOvrmode(CCmdUI* pCmdUI)
 
 DROPEFFECT CEditDropTargetImpl::OnDragEnter(CWnd* pWnd, COleDataObject* pDataObject, DWORD dwKeyState, CPoint point)
 {
-	if (!pDataObject->IsDataAvailable(CF_TEXT))
+	if (!pDataObject->IsDataAvailable(CF_TTEXT))
 	{
 		m_pOwner->HideDropIndicator();
 		return DROPEFFECT_NONE;
 	}
+
 	m_pOwner->ShowDropIndicator(point);
+
 	if (dwKeyState & MK_CONTROL)
 		return DROPEFFECT_COPY;
+
 	return DROPEFFECT_MOVE;
 }
 
@@ -813,18 +816,23 @@ DROPEFFECT CEditDropTargetImpl::OnDragOver(CWnd* pWnd, COleDataObject* pDataObje
 	//	if ((pDataObject->IsDataAvailable( CF_TEXT ) ) ||	    // If Text Available
 	//			( pDataObject -> IsDataAvailable( xxx ) ) ||	// Or xxx Available
 	//			( pDataObject -> IsDataAvailable( yyy ) ) )		// Or yyy Available
-	if (pDataObject->IsDataAvailable(CF_TEXT)) // If Text Available
+
+	if (pDataObject->IsDataAvailable(CF_TTEXT)) // If Text Available
 	{
 		bDataSupported = true; // Set Flag
 	}
+
 	if (!bDataSupported) // If No Supported Formats Available
 	{
 		m_pOwner->HideDropIndicator(); // Hide Drop Caret
 		return DROPEFFECT_NONE; // Return DE_NONE
 	}
+
 	m_pOwner->ShowDropIndicator(point);
+
 	if (dwKeyState & MK_CONTROL)
 		return DROPEFFECT_COPY;
+
 	return DROPEFFECT_MOVE;
 }
 
@@ -845,7 +853,7 @@ BOOL CEditDropTargetImpl::OnDrop(CWnd* pWnd, COleDataObject* pDataObject, DROPEF
 	//	if( ( pDataObject -> IsDataAvailable( CF_TEXT ) ) ||	// If Text Available
 	//			( pDataObject -> IsDataAvailable( xxx ) ) ||	// Or xxx Available
 	//			( pDataObject -> IsDataAvailable( yyy ) ) )		// Or yyy Available
-	if (pDataObject->IsDataAvailable(CF_TEXT)) // If Text Available
+	if (pDataObject->IsDataAvailable(CF_TTEXT)) // If Text Available
 	{
 		bDataSupported = true; // Set Flag
 	}
@@ -906,13 +914,7 @@ void CCrystalEditView::DoDragScroll(const CPoint &point)
 
 BOOL CCrystalEditView::DoDropText(COleDataObject *pDataObject, const CPoint &ptClient)
 {
-	HGLOBAL hData = pDataObject->GetGlobalData(
-#ifndef _UNICODE
-	                    CF_TEXT
-#else
-	                    CF_UNICODETEXT
-#endif
-	                );
+	HGLOBAL hData = pDataObject->GetGlobalData(CF_TTEXT);
 
 	if (hData == NULL)
 		return FALSE;

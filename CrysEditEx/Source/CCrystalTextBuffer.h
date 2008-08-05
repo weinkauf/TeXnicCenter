@@ -59,6 +59,8 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
+#include <vector>
+
 #include "cedefs.h"
 #include "CCrystalTextView.h"
 #include "../../MFCExt/Include/ExtCollection.h"
@@ -138,12 +140,29 @@ private:
 #pragma pack(push, 1)
 //	Nested class declarations
 public:
+	enum Encoding
+	{
+		ASCII,
+		UTF8,
+		UTF16LE,
+		UTF16BE,
+		UTF32LE,
+		UTF32BE
+	};
+
+private:
+	Encoding encoding_;
+	UINT code_page_;
+
+public:
+	Encoding GetEncoding() const;
+	UINT GetCodePage() const;
 
 	class CTextAttribute
 	{
 	public:
 
-		typedef enum tagAttribute
+		enum tagAttribute
 		{
 			none,
 			spellError = 1,
@@ -633,6 +652,8 @@ public:
 	    @param line Line to delete
 	*/
 	BOOL DeleteLine(CCrystalTextView* source, int line);
+	static Encoding DetectEncoding(const BYTE* data, SIZE_T& pos, SIZE_T size);
+	static void ConvertToMultiByte(LPCWSTR input, int cch, std::vector<BYTE>& buffer, Encoding encoding, UINT cp);
 };
 
 #if ! (defined(CE_FROM_DLL) || defined(CE_DLL_BUILD))
