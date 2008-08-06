@@ -68,7 +68,7 @@ BOOL CMDIFrameManager::Install(CMDIFrameWnd *pMDIFrameWnd)
 	return CKeyboardHook::Install();
 }
 
-BOOL CMDIFrameManager::OnKeyDown(UINT nChar,UINT nRepCnt,UINT nFlags)
+BOOL CMDIFrameManager::OnKeyDown(UINT nChar, UINT /*nRepCnt*/, UINT /*nFlags*/)
 {
 	switch (nChar)
 	{
@@ -97,7 +97,7 @@ BOOL CMDIFrameManager::OnKeyDown(UINT nChar,UINT nRepCnt,UINT nFlags)
 			if (!m_bCtrl)
 				return FALSE;
 
-			// valide window index
+			// valid window index
 			if (m_nActualWndIndex < 0)
 				return FALSE;
 
@@ -115,7 +115,7 @@ BOOL CMDIFrameManager::OnKeyDown(UINT nChar,UINT nRepCnt,UINT nFlags)
 	return FALSE;
 }
 
-BOOL CMDIFrameManager::OnKeyUp(UINT nChar,UINT nRepCnt,UINT nFlags)
+BOOL CMDIFrameManager::OnKeyUp(UINT nChar, UINT /*nRepCnt*/, UINT /*nFlags*/)
 {
 	switch (nChar)
 	{

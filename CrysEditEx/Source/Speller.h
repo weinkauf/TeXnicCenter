@@ -31,8 +31,8 @@ public:
 			: added_modified_(false)
 			, ignored_modified_(false)
 	{
-		USES_CONVERSION;
-		spell_.reset(new Hunspell(T2CA(affpath),T2CA(dpath),T2CA(key)));
+		USES_CONVERSION_EX;
+		spell_.reset(new Hunspell(T2CA_EX(affpath,CP_UTF8),T2CA_EX(dpath,CP_UTF8),T2CA_EX(key,CP_UTF8)));
 	}
 
 	//~Speller()
@@ -48,20 +48,20 @@ public:
 		if (added_words_.insert(w).second)
 			added_modified_ = true;
 
-		USES_CONVERSION;
-		return spell_->add(T2CA(w));
+		USES_CONVERSION_EX;
+		return spell_->add(T2CA_EX(w,CP_UTF8));
 	}
 
 	void add_dic(LPCTSTR dpath, LPCTSTR key = 0)
 	{
-		USES_CONVERSION;
-		spell_->add_dic(T2CA(dpath),T2CA(key));
+		USES_CONVERSION_EX;
+		spell_->add_dic(T2CA_EX(dpath,CP_UTF8),T2CA_EX(key,CP_UTF8));
 	}
 
 	int remove(LPCTSTR word)
 	{
-		USES_CONVERSION;
-		return spell_->remove(T2CA(word));
+		USES_CONVERSION_EX;
+		return spell_->remove(T2CA_EX(word,CP_UTF8));
 	}
 
 	void ignore(LPCTSTR word)
@@ -72,8 +72,8 @@ public:
 
 	bool spell(LPCTSTR word)
 	{
-		USES_CONVERSION;
-		bool result = spell_->spell(T2CA(word)) != 0;
+		USES_CONVERSION_EX;
+		bool result = spell_->spell(T2CA_EX(word,CP_UTF8)) != 0;
 
 		if (!result)
 			result = added_words_.find(word) != added_words_.end() ||
@@ -84,17 +84,17 @@ public:
 
 	int suggest(LPCTSTR word, CStringArray& a)
 	{
-		USES_CONVERSION;
+		USES_CONVERSION_EX;
 		a.RemoveAll();
 
 		char** l;
-		int count = spell_->suggest(&l,T2CA(word));
+		int count = spell_->suggest(&l,T2CA_EX(word,CP_UTF8));
 
 		if (count > 0)
 		{
 			for (int i = 0; i < count; ++i)
 			{
-				a.Add(A2CT(l[i]));
+				a.Add(A2CT_EX(l[i],CP_UTF8));
 				std::free(l[i]);
 			}
 
@@ -129,8 +129,8 @@ public:
 private:
 	void xadd(const StringType& s)
 	{
-		USES_CONVERSION;
-		spell_->add(T2CA(s.c_str()));
+		USES_CONVERSION_EX;
+		spell_->add(T2CA_EX(s.c_str(),CP_UTF8));
 	}
 
 public:

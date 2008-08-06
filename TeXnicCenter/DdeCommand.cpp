@@ -53,6 +53,14 @@ HDDEDATA CALLBACK CDdeCommand_DDEProcessMessage(UINT uType,// transaction type
         DWORD dwData2 // transaction-specific data
                                                )
 {
+	UNUSED_ALWAYS(uType);
+	UNUSED_ALWAYS(uFmt);
+	UNUSED_ALWAYS(hconv);
+	UNUSED_ALWAYS(hsz1);
+	UNUSED_ALWAYS(hdata);
+	UNUSED_ALWAYS(dwData1);
+	UNUSED_ALWAYS(dwData2);
+
 	return NULL; //Not doing anything in particular!!!
 }
 
