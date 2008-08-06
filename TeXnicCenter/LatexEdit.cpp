@@ -722,8 +722,11 @@ BOOL CLaTeXEdit::IsAutoCompletionCharacter(TCHAR tc) const
 	}
 }
 
-LRESULT CLaTeXEdit::OnCommandHelp(WPARAM wParam,LPARAM lParam)
+LRESULT CLaTeXEdit::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 {
+	UNUSED_ALWAYS(wParam);
+	UNUSED_ALWAYS(lParam);
+
 	CString strKeyword;
 	GetSelectedKeyword(strKeyword);
 	return InvokeContextHelp(strKeyword);

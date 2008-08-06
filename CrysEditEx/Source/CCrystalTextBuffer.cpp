@@ -681,9 +681,12 @@ DWORD CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= C
 					// As a consequence of the design of UTF-8, the following properties of multi-byte sequences hold:
 
 					//  * The most significant bit of a single-byte character is always 0.
-					//	* The most significant bits of the first byte of a multi-byte sequence determine the length of the sequence. These most significant bits are 110 for two-byte sequences; 1110 for three-byte sequences, and so on.
+					//	* The most significant bits of the first byte of a multi-byte sequence determine the length of 
+					//	  the sequence. These most significant bits are 110 for two-byte sequences; 1110 for three-byte 
+					//	  sequences, and so on.
 					//	* The remaining bytes in a multi-byte sequence have 10 as their two most significant bits.
-					//	* A UTF-8 stream contains neither the byte FE nor FF. This makes sure that a UTF-8 stream never looks like a UTF-16 stream starting with U+FEFF (Byte-order mark)
+					//	* A UTF-8 stream contains neither the byte FE nor FF. This makes sure that a UTF-8 stream never 
+					//	  looks like a UTF-16 stream starting with U+FEFF (Byte-order mark)
 
 					bool utf8 = true;
 					int consecutive_bytes = 0;
@@ -701,7 +704,8 @@ DWORD CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= C
 						}
 						else if (consecutive_bytes == 0 && data[i] >> 7 & 1 ||
 							consecutive_bytes > 0 && data[i] >> 6 != 2)
-							utf8 = false;
+							utf8 = false; // Either MSB is not 0 or MSB of a byte in a 
+										  // multi-part sequence is not 10
 						
 						if (consecutive_bytes > 0)
 							--consecutive_bytes;
@@ -732,26 +736,45 @@ DWORD CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= C
 				const UINT flags = 0;
 				required_size = ::MultiByteToWideChar(code_page,flags,
 					reinterpret_cast<LPCSTR>(data + pos),size - pos,0,0);
-				
 
-//#ifdef UNICODE
-				text = new WCHAR[required_size];
+				LPWSTR temp = new WCHAR[required_size];
 
 				::MultiByteToWideChar(code_page,flags,
-					reinterpret_cast<LPCSTR>(data + pos),size - pos,text,required_size);	
-//#else
+					reinterpret_cast<LPCSTR>(data + pos),size - pos,temp,required_size);
 
-//#endif
+#ifdef UNICODE
+				text = temp;
+#else
+				int asize = ::WideCharToMultiByte(CP_ACP,0,temp,required_size,0,0,0,0);
+
+				LPSTR temp1 = new CHAR[asize];
+
+				::WideCharToMultiByte(CP_ACP,0,temp,required_size,temp1,asize,0,0);
+				text = temp1;
+
+				delete[] temp;
+#endif
 			}
 			else {
 				ASSERT((size - pos) % 2 == 0); // Size must be even
 				required_size = (size - pos) / 2;
-				text = new WCHAR[required_size];
+				LPWSTR temp = new WCHAR[required_size];
 
-				std::memcpy(text,data + pos,required_size * 2);
+				std::memcpy(temp,data + pos,required_size * 2);
 
 				if (encoding == UTF16BE) // Swap bytes
-					std::for_each(text,text + required_size,SwapCodePoint);
+					std::for_each(temp,temp + required_size,SwapCodePoint);
+
+#ifndef UNICODE
+				USES_CONVERSION_EX;
+				text = new char[required_size];
+				
+				std::memcpy(text,W2CA_EX(temp,required_size),required_size);
+
+				delete[] temp;
+#else
+				text = temp;
+#endif
 			}
 
 			if (nCrlfStyle == CRLF_STYLE_AUTOMATIC)
@@ -1027,8 +1050,10 @@ DWORD CCrystalTextBuffer::SaveToFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRL
 			ASSERT(nCrlfStyle >= 0 && nCrlfStyle <= 2);
 			LPCTSTR crlf = crlfs[nCrlfStyle];
 
+			USES_CONVERSION;
+
 			std::vector<BYTE> line_ending;
-			ConvertToMultiByte(crlf,_tcslen(crlf),line_ending,encoding_,code_page_);
+			ConvertToMultiByte(T2CW(crlf),_tcslen(crlf),line_ending,encoding_,code_page_);
 
 			int nLineCount = m_aLines.GetSize();
 			DWORD dwWrittenBytes;
@@ -1058,7 +1083,7 @@ DWORD CCrystalTextBuffer::SaveToFile(LPCTSTR pszFileName, int nCrlfStyle /*= CRL
 				
 				if (nLength > 0)
 				{
-					ConvertToMultiByte(m_aLines[nLine].m_pcLine, nLength,line_buffer,encoding_,code_page_);
+					ConvertToMultiByte(T2CW(m_aLines[nLine].m_pcLine), nLength,line_buffer,encoding_,code_page_);
 
 					if (!::WriteFile(temp_file, &line_buffer[0], line_buffer.size(), &dwWrittenBytes, NULL) || line_buffer.size() != (int)dwWrittenBytes)
 						error_occured = true;
