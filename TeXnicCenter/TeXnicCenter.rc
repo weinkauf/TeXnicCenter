@@ -3360,7 +3360,7 @@ BEGIN
     IDS_FORMAT              "Format:"
     IDS_ERROR_LIST_ERRORS   "%u Fehler"
     IDS_ERROR_LIST_WARNINGS "%u Warnungen"
-    IDS_ERROR_LIST_BAD_BOXES "%u Bad Boxes"
+    IDS_ERROR_LIST_BAD_BOXES "%u volle/leere Boxen"
 END
 
 STRINGTABLE 
@@ -7128,6 +7128,7 @@ BEGIN
     IDS_SAVE_PACKAGE_AS     "Save scanned packages as..."
     IDS_SELECT_PACKAGE_DIR  "Please select root dir where to search for packages"
     IDS_TOOLBAR_CUSTOMIZE   "Customize..."
+    IDS_ERROR_LIST          "Error List"
     IDS_LOADING             "Loading... Please wait."
     IDS_ERROR_LIST_ERRORS   "%u Errors"
     IDS_ERROR_LIST_WARNINGS "%u Warnings"

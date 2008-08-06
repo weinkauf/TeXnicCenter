@@ -1571,7 +1571,8 @@ bool CMainFrame::CreateOutputViews(void)
 	const DWORD pane_style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_HIDE_INPLACE;
 	const CSize size(250,150);
 
-	error_list_view_.Create(CString(MAKEINTRESOURCE(IDS_ERROR_LIST)),this,size,TRUE,ID_VIEW_ERROR_LIST_PANE,pane_style);
+	error_list_view_.Create(CString(MAKEINTRESOURCE(IDS_ERROR_LIST)),this,size,
+		TRUE,ID_VIEW_ERROR_LIST_PANE,pane_style);
 	build_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_BUILD)), this,size,
 	                        TRUE, ID_VIEW_BUILD_PANE,pane_style);
 	grep_view_1_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_GREP_1)), this,size,
