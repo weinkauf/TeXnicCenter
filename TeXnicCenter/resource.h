@@ -1324,6 +1324,9 @@
 #define ID_BEARBEITEN_ZEILEL38544       38544
 #define ID_ED                           38545
 #define ID_EDIT_DELETELINE              38546
+#define ID_ANSICHT_ZEILENENDE           38547
+#define ID_EDIT_TOGGLE_LINE_ENDIGS      38548
+#define ID_EDIT_TOGGLE_SHOW_LINE_ENDING 38549
 #define IDS_TEXTMODULES_NONEDEFINED     57671
 
 // Next default values for new objects
@@ -1332,7 +1335,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        328
-#define _APS_NEXT_COMMAND_VALUE         38547
+#define _APS_NEXT_COMMAND_VALUE         38550
 #define _APS_NEXT_CONTROL_VALUE         1364
 #define _APS_NEXT_SYMED_VALUE           135
 #endif
