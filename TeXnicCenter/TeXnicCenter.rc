@@ -2123,6 +2123,8 @@ BEGIN
         END
         MENUITEM SEPARATOR
         MENUITEM "&Leerraumanzeige",            ID_EDIT_TOGGLE_WHITESPACEVIEW
+        MENUITEM "&Zeilenendeanzeige",          ID_EDIT_TOGGLE_SHOW_LINE_ENDING
+        MENUITEM SEPARATOR
         MENUITEM "Vollbild",                    ID_VIEW_FULLSCREEN
     END
     POPUP "&Suchen"
