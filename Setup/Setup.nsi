@@ -5,7 +5,7 @@ SetCompressor /SOLID lzma
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "TeXnicCenter"
-!define PRODUCT_VERSION "2 Preview"
+!define PRODUCT_VERSION "2"
 !define PRODUCT_PUBLISHER "ToolsCenter"
 !define PRODUCT_WEB_SITE "http://www.texniccenter.org"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\TeXnicCenter.exe"
@@ -168,22 +168,23 @@ skip:
   SetOverwrite on
   
   SetOutPath "$INSTDIR\Language"
-  File /r "..\Output\Release\Language\*.dll"
-  
+  File /r "..\Output\Product\Unicode Release\Language\*.dll"
+
+
   SetOutPath "$INSTDIR"
-  File /r "..\Output\Release\Packages"
+  File /r "..\Output\Product\Unicode Release\Packages"
   
-  File "..\Output\Release\OutputProfiles.xsd"
-  File "..\Output\Release\LaTeXCommands.xsd"
-  File "..\Output\Release\CommonTypes.xsd"
-  File "..\Output\Release\TeXnicCenterObjects.tlb"
-  File "..\Output\Release\Tips_german.txt"
-  File "..\Output\Release\Tips_english.txt"
-  File "..\Output\Release\msxmlcpp.dll"
-  File "..\Output\Release\mfcext.dll"
-  File "..\Output\Release\CrysEditEx.dll"
-  File "..\Output\Release\UserImages.bmp"
-  File "..\Output\Release\TeXnicCenter.exe"
+  File "..\Output\Product\Unicode Release\OutputProfiles.xsd"
+  File "..\Output\Product\Unicode Release\LaTeXCommands.xsd"
+  File "..\Output\Product\Unicode Release\CommonTypes.xsd"
+  File "..\Output\Product\Unicode Release\TeXnicCenterObjects.tlb"
+  File "..\Output\Product\Unicode Release\Tips_german.txt"
+  File "..\Output\Product\Unicode Release\Tips_english.txt"
+  File "..\Output\Product\Unicode Release\msxmlcpp.dll"
+  File "..\Output\Product\Unicode Release\mfcext.dll"
+  File "..\Output\Product\Unicode Release\CrysEditEx.dll"
+  File "..\Output\Product\Unicode Release\UserImages.bmp"
+  File "..\Output\Product\Unicode Release\TeXnicCenter.exe"
 
 ; Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -209,7 +210,7 @@ SectionEnd
 
 Section "$(desc_help_files)" sec_help
 SectionIn 1 3
-  File /r "..\Output\Release\Help"
+  File /r "..\Output\Product\Unicode Release\Help"
   
   SetShellVarContext all
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\TeXnicCenter Help.lnk" "$INSTDIR\Help\TeXnicCenter.chm" "" "" "" "" "" "TeXnicCenter Help"
@@ -217,7 +218,7 @@ SectionEnd
 
 Section "$(desc_latex_templ)" sec_templates
 SectionIn 1 3
-  File /r "..\Output\Release\Templates"
+  File /r "..\Output\Product\Unicode Release\Templates"
   
   WriteRegStr HKLM "${PRODUCT_SOFTWARE_KEY}\Settings\Options\ProjectTemplatePaths" "AppPath" "$INSTDIR"
 
@@ -236,19 +237,22 @@ SectionGroup "Dictionaries"
 Section "Deutsch"
 SectionIn 1 3
 SetOutPath ${PATH_LANG}
-File /r "..\Output\Dictionaries\*de_*.*"
+File /r "..\Dictionaries\*de_*.aff"
+File /r "..\Dictionaries\*de_*.dic"
 SectionEnd
 
 Section "English"
 SectionIn 1 3
 SetOutPath ${PATH_LANG}
-File /r "..\Output\Dictionaries\*en_*.*"
+File /r "..\Dictionaries\*en_*.aff"
+File /r "..\Dictionaries\*en_*.dic"
 SectionEnd
 
 Section "Français"
 SectionIn 1 3
 SetOutPath ${PATH_LANG}
-File /r "..\Output\Dictionaries\*fr_FR*.*"
+File /r "..\Dictionaries\*fr_FR*.aff"
+File /r "..\Dictionaries\*fr_FR*.dic"
 SectionEnd
 
 SectionGroupEnd
