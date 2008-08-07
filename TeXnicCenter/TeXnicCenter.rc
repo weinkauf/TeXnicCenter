@@ -3361,6 +3361,9 @@ BEGIN
     IDS_ERROR_LIST_ERRORS   "%u Fehler"
     IDS_ERROR_LIST_WARNINGS "%u Warnungen"
     IDS_ERROR_LIST_BAD_BOXES "%u volle/leere Boxen"
+    IDS_LINE                "Zeile"
+    IDS_DESCRIPTION         "Beschreibung"
+    IDS_FILE                "Datei"
 END
 
 STRINGTABLE 
@@ -7133,6 +7136,9 @@ BEGIN
     IDS_ERROR_LIST_ERRORS   "%u Errors"
     IDS_ERROR_LIST_WARNINGS "%u Warnings"
     IDS_ERROR_LIST_BAD_BOXES "%u Bad Boxes"
+    IDS_LINE                "Line"
+    IDS_DESCRIPTION         "Description"
+    IDS_FILE                "File"
 END
 
 STRINGTABLE 

@@ -68,9 +68,9 @@ int ErrorListView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	list_view_.InsertColumn(0,_T(""),0,24);
 	list_view_.InsertColumn(1,_T(""),LVCFMT_RIGHT,24);
-	list_view_.InsertColumn(2,_T("Description"),0,500);
-	list_view_.InsertColumn(3,_T("Line"),LVCFMT_RIGHT,50);
-	list_view_.InsertColumn(4,_T("File"),0,150);
+	list_view_.InsertColumn(2,CString(MAKEINTRESOURCE(IDS_DESCRIPTION)),0,500);
+	list_view_.InsertColumn(3,CString(MAKEINTRESOURCE(IDS_LINE)),LVCFMT_RIGHT,50);
+	list_view_.InsertColumn(4,CString(MAKEINTRESOURCE(IDS_FILE)),0,150);
 
 	Clear();
 

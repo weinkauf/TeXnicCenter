@@ -798,22 +798,21 @@ DWORD CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= C
 
 				// Strip \r ('\x0d') from input buffer
 				if (c != _T('\x0d')) {
-					line_buffer[current_length] = (TCHAR) c;
-					current_length++;
+					line_buffer[current_length++] = c;
 
 					if (current_length == current_max)
 					{
 						//	Reallocate line buffer
 						current_max += 256;
 						LPTSTR new_buffer = new TCHAR[current_max];
-						std::memcpy(new_buffer, line_buffer, current_length);
+						std::memcpy(new_buffer, line_buffer, current_length * sizeof(TCHAR));
 						delete[] line_buffer;
 						line_buffer = new_buffer;
 					}
 
 					if (c == _T('\x0a'))
 					{
-						line_buffer[current_length-1] = 0;
+						line_buffer[current_length - 1] = 0;
 						InsertLine(line_buffer, current_length - 1);
 						current_length = 0;
 					}
