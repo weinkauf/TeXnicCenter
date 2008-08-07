@@ -41,7 +41,7 @@
 
 class CChildFrame : public CMDIChildWndEx //CMDIChildWnd
 {
-	CSplitterWndEx m_wndSplitter;
+	//CSplitterWndEx m_wndSplitter;
 
 	DECLARE_DYNCREATE(CChildFrame)
 public:

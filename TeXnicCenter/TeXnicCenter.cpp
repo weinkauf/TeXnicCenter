@@ -56,10 +56,8 @@
 #include "AboutBox.h"
 #include "OutputWizard.h"
 #include "FontOccManager.h"
-#if 0 // Scintill test
 #include "LaTeXDocument.h"
 #include "LaTeXView.h"
-#endif
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -246,12 +244,12 @@ const CString CTeXnicCenterApp::GetDDEServerName() const
 
 BOOL CTeXnicCenterApp::InitInstance()
 {
-#if 0
 	scintilla_ = AfxLoadLibrary(_T("SciLexer.dll"));
 
-	if (!scintilla_)
+	if (!scintilla_) {
+		AfxMessageBox(_T("SciLexer.dll could not be loaded. Please reinstall the application."),MB_ICONERROR);
 		return FALSE;
-#endif
+	}
 
 	// parse command line
 	CTCCommandLineInfo cmdInfo;
@@ -390,9 +388,9 @@ BOOL CTeXnicCenterApp::InitInstance()
 	// LaTeX-Document
 	m_pLatexDocTemplate = new CMultiDocTemplate(
 	    IDR_LATEXTYPE,
-	    RUNTIME_CLASS(CLaTeXDoc),
+	    RUNTIME_CLASS(LaTeXDocument),
 	    RUNTIME_CLASS(CChildFrame), // Benutzerspezifischer MDI-Child-Rahmen
-	    RUNTIME_CLASS(CLaTeXEdit));
+	    RUNTIME_CLASS(LaTeXView));
 	AddDocTemplate(m_pLatexDocTemplate);
 
 	m_pProjectDocTemplate = new CSingleProjectTemplate(
@@ -733,9 +731,7 @@ int CTeXnicCenterApp::ExitInstance()
 	if (m_hTxcResources)
 		FreeLibrary(m_hTxcResources);
 
-#if 0
 	AfxFreeLibrary(scintilla_);
-#endif
 
 	return CProjectSupportingWinApp::ExitInstance();
 }
@@ -848,7 +844,7 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOn
 	while (pos)
 	{
 		pDoc = (CLaTeXDoc*)pDocTemplate->GetNextDoc(pos);
-		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath) == 0 && pDoc->IsKindOf(RUNTIME_CLASS(CLaTeXDoc)))
+		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath) == 0 && pDoc->IsKindOf(RUNTIME_CLASS(LaTeXDocument)))
 		{
 			bFound = TRUE;
 			break;
@@ -864,7 +860,7 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOn
 			return NULL;
 
 		// open document
-		if (!pDoc->IsKindOf(RUNTIME_CLASS(CLaTeXDoc)) || !pDoc->OnOpenDocument(strDocPath))
+		if (!pDoc->IsKindOf(RUNTIME_CLASS(LaTeXDocument)) || !pDoc->OnOpenDocument(strDocPath))
 		{
 			pDocTemplate->RemoveDocument(pDoc);
 			delete pDoc;
@@ -873,16 +869,17 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOn
 
 		pDoc->SetPathName(strDocPath);
 
-		if (bReadOnly)
-			((CLaTeXDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
+		// TODO:
+		//if (bReadOnly)
+			//((CLaTeXDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
 	}
 
 	if (!pDoc)
 		return NULL;
 
 	// set write protection
-	if (pDoc && bReadOnly)
-		((CLaTeXDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
+	//if (pDoc && bReadOnly)
+	//	((CLaTeXDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
 
 	return pDoc;
 }
@@ -917,7 +914,7 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 	{
 		pDoc = pDocTemplate->GetNextDoc(pos);
 
-		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath) == 0 && pDoc->IsKindOf(RUNTIME_CLASS(CLaTeXDoc)))
+		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath) == 0 && pDoc->IsKindOf(RUNTIME_CLASS(LaTeXDocument)))
 		{
 			bFound = TRUE;
 			break;
@@ -983,12 +980,12 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 		return NULL;
 
 	// set write protection
-	if (pDoc && bReadOnly && !((CLaTeXDoc*)pDoc)->m_pTextBuffer->GetReadOnly())
-		((CLaTeXDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
+	//if (pDoc && bReadOnly && !((CLaTeXDoc*)pDoc)->m_pTextBuffer->GetReadOnly())
+	//	((CLaTeXDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
 
 	// set error mark
 	if (bError)
-		((CLaTeXDoc*)pDoc)->SetErrorMark(nLineNumber);
+		static_cast<LaTeXDocument*>(pDoc)->SetErrorMark(nLineNumber);
 
 	// activate view and go to specified line
 	POSITION viewpos = pDoc->GetFirstViewPosition();
@@ -1008,7 +1005,7 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 	if (!pView)
 		return pDoc;
 
-	if (!pView->IsKindOf(RUNTIME_CLASS(CLaTeXEdit)))
+	if (!pView->IsKindOf(RUNTIME_CLASS(LaTeXView)))
 		return pDoc;
 
 	if (nLineNumber >= 0)
@@ -1016,12 +1013,11 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 		if (nLineNumber > 0)
 			--nLineNumber;
 
-		((CLaTeXEdit*)pView)->GoToLine(nLineNumber);
+		static_cast<LaTeXView*>(pView)->GoToLine(nLineNumber);
 	}
 
 	// give input focus to view
 	pView->SetFocus();
-	//((CMainFrame*)m_pMainWnd)->SetActiveView( pView );
 
 	return pDoc;
 }

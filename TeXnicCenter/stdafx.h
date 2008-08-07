@@ -47,7 +47,6 @@
 #include <afxdtctl.h>				// MFC-Unterstützung für allgemeine Steuerelemente von Internet Explorer 4
 #include <afxtempl.h>				// MFC-Template-Klassen
 
-#if 0
 // Scintilla test
 #include "platform.h"
 #include "scintilla.h"
@@ -61,7 +60,6 @@
 
 #include "ScintillaCtrl.h"
 #include "ScintillaDocView.h"
-#endif
 
 #include <afxpriv.h>
 #include <afxmt.h>
@@ -71,6 +69,8 @@
 #ifndef _AFX_NO_AFXCMN_SUPPORT
 #include <afxcmn.h>			// MFC-Unterstützung für gängige Windows-Steuerelemente
 #endif // _AFX_NO_AFXCMN_SUPPORT
+
+#include <atlfile.h>
 
 #include "TipDlg.h"
 #include <afxcontrolbars.h>     // MFC support for ribbons and control bars
@@ -87,8 +87,8 @@
 
 namespace Interfaces
 {
-#include <TeXnicCenterObjects.h>
-};
+	#include <TeXnicCenterObjects.h>
+}
 
 #include <regex>
 

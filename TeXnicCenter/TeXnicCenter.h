@@ -67,9 +67,8 @@ public:
 
 	const CString& GetModuleFileName() const;
 
-#if 0
 	HINSTANCE scintilla_;
-#endif // 0
+
 
 public:
 	CTeXnicCenterApp();

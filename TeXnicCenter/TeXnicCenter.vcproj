@@ -52,7 +52,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="3"
-				AdditionalIncludeDirectories="..\Hunspell\src\hunspell;../CrysEditEx/Include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
+				AdditionalIncludeDirectories="../Hunspell/src/hunspell;../CrysEditEx/Include;../Scintilla/include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
 				PreprocessorDefinitions="NDEBUG;STRICT;WIN32;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -146,7 +146,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Hunspell\src\hunspell;../CrysEditEx/Include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
+				AdditionalIncludeDirectories="../Hunspell/src/hunspell;../CrysEditEx/Include;../Scintilla/include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
 				PreprocessorDefinitions="_DEBUG;STRICT;WIN32;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -243,7 +243,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Hunspell\src\hunspell;../CrysEditEx/Include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
+				AdditionalIncludeDirectories="../Hunspell/src/hunspell;../CrysEditEx/Include;../Scintilla/include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
 				PreprocessorDefinitions="_DEBUG;STRICT;WIN32;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -342,7 +342,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="3"
-				AdditionalIncludeDirectories="..\Hunspell\src\hunspell;../CrysEditEx/Include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
+				AdditionalIncludeDirectories="../Hunspell/src/hunspell;../CrysEditEx/Include;../Scintilla/include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
 				PreprocessorDefinitions="NDEBUG;STRICT;WIN32;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -783,6 +783,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LaTeXDocument.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LaTeXDocument.h"
+				>
+			</File>
+			<File
 				RelativePath=".\LatexEdit.cpp"
 				>
 			</File>
@@ -812,6 +820,14 @@
 			</File>
 			<File
 				RelativePath=".\LatexProject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LaTeXView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LaTeXView.h"
 				>
 			</File>
 			<File
@@ -1236,6 +1252,22 @@
 			</File>
 			<File
 				RelativePath=".\RunTimeHelper.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ScintillaCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ScintillaCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ScintillaDocView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ScintillaDocView.h"
 				>
 			</File>
 			<File
