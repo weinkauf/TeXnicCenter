@@ -1044,7 +1044,7 @@ void CLaTeXEdit::OnQueryCompletion()
 	}
 }
 
-CAutoCompleteDlg* CLaTeXEdit::CreateListBox(CString &keyword,const CPoint topLeft)
+CAutoCompleteDlg* CLaTeXEdit::CreateListBox(CString &keyword, const CPoint topLeft)
 {
 	CPoint ptStart,ptText;
 	if (!IsValidTextPos(topLeft))

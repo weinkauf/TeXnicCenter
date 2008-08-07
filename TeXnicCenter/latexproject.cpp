@@ -595,7 +595,7 @@ void CLaTeXProject::SerializeSession(CIniFile &ini,BOOL bWrite)
 		//Activate the frame that was active when closing the project
 		if (pChildToBeActivated)
 		{
-			pChildToBeActivated->ActivateFrame(SW_SHOW);
+			//pChildToBeActivated->ActivateFrame(SW_SHOW);
 			//NOTE: We give the focus later to this window
 		}
 
