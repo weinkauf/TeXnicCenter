@@ -13,6 +13,9 @@
 #define IDS_ERROR_LIST_ERRORS           26
 #define IDS_ERROR_LIST_WARNINGS         27
 #define IDS_ERROR_LIST_BAD_BOXES        28
+#define IDS_LINE                        29
+#define IDS_DESCRIPTION                 30
+#define IDS_FILE                        31
 #define STE_LANGUAGE_NEW                32
 #define STE_RESOURCE_CONFLICT           33
 #define STE_LANGUAGE_GERMAN             34

@@ -41,6 +41,13 @@ static char THIS_FILE[]=__FILE__;
 // class CIniFile
 //-------------------------------------------------------------------
 
+namespace {
+	std::basic_ostream<TCHAR>& operator<<(std::basic_ostream<TCHAR>& out, const CString& s)
+	{
+		return out << static_cast<LPCTSTR>(s);
+	}
+}
+
 CIniFile::CIniFile(const CString& inipath /*=_T("")*/)
 : path( inipath )
 {
