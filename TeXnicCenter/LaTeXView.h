@@ -3,6 +3,7 @@
 class CAdvice;
 class CAutoCompleteDlg;
 class LaTeXViewListener;
+class LaTeXDocument;
 
 #if 1
 
@@ -26,6 +27,8 @@ public:
 		UTF32LE,
 		UTF32BE
 	};
+
+	long old_pos_start_, old_pos_end_;
 
 private:
 	Encoding encoding_;
@@ -107,7 +110,7 @@ public:
 	void OnACCommandCancelled();
 	void OnACCommandSelect(const CLaTeXCommand* cmd);
 	void OnACHelp(CString &cmd);
-	CAutoCompleteDlg* CreateListBox(CString &keyword, const CPoint topLeft);
+	CAutoCompleteDlg* CreateListBox(CString &keyword, long pos);
 
 private:
 	CAdvice *m_InstTip;
@@ -135,8 +138,15 @@ public:
 	DWORD LoadFromFile( HANDLE file );
 	DWORD SaveToFile(LPCTSTR pszFileName, bool bClearModifiedFlag = true);
 	DWORD SaveToFile( HANDLE file );
-
+	DWORD SaveToFile( HANDLE file, LPCWSTR text, int length);
 	void ConvertToMultiByte(LPCWSTR input, int cch, std::vector<BYTE>& buffer, Encoding encoding, UINT cp);
+	afx_msg void OnEditDeleteLine();
+	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
+	afx_msg void OnEditOutsource();
+	LaTeXDocument* GetDocument() const;
+	int GetNumberOfMatches(const CString& keyword);
+	afx_msg void OnQueryCompletion();
+	void RestoreFocus();
 };
 
 #endif
