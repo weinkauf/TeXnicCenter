@@ -109,7 +109,7 @@ public:
 	void OnACChar(UINT nKey,UINT nRepCount,UINT nFlags);
 	void OnACCommandCancelled();
 	void OnACCommandSelect(const CLaTeXCommand* cmd);
-	void OnACHelp(CString &cmd);
+	void OnACHelp(const CString &cmd);
 	CAutoCompleteDlg* CreateListBox(CString &keyword, long pos);
 
 private:
@@ -147,6 +147,12 @@ public:
 	int GetNumberOfMatches(const CString& keyword);
 	afx_msg void OnQueryCompletion();
 	void RestoreFocus();
+	BOOL InvokeContextHelp(const CString& keyword);
+	afx_msg BOOL OnInsertLaTeXConstruct(UINT nID);
+	void DefineMarker(int marker, int markerType, COLORREF fore, COLORREF back);
+	void UpdateLineNumberMarginWidth();
+	void OnModified(SCNotification* n);
+	afx_msg void OnSetFocus(CWnd* pOldWnd);
 };
 
 #endif

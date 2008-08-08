@@ -55,9 +55,9 @@ CAutoCompleteDlg::~CAutoCompleteDlg()
 
 BOOL CAutoCompleteDlg::Create(LPCTSTR /*lpszClassName*/, LPCTSTR /*lpszWindowName*/, DWORD dwStyle,const RECT& rect, CWnd* pParentWnd, UINT /*nID*/, CCreateContext* pContext)
 {
-	dwStyle = WS_POPUP | WS_DLGFRAME | WS_CLIPCHILDREN;
+	dwStyle = WS_POPUP|WS_DLGFRAME|WS_CLIPCHILDREN;
 
-	return CWnd::CreateEx(0,
+	return CWnd::CreateEx(WS_EX_TOOLWINDOW,
 	                      AfxRegisterWndClass(
 	                          CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS,
 	                          theApp.LoadStandardCursor(IDC_ARROW)),//GetSysColorBrush(COLOR_WINDOW)),
@@ -601,9 +601,9 @@ int CAutoCompleteDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CRect rc;
 	GetClientRect(&rc);
 
-	if (!m_Box->CWnd::CreateEx(0/*WS_EX_CLIENTEDGE*/,WC_LISTBOX,0,
-	                           WS_CHILD | WS_VISIBLE | (LBS_STANDARD & ~WS_BORDER) | LBS_HASSTRINGS | LBS_NOINTEGRALHEIGHT | LBS_OWNERDRAWFIXED | WS_HSCROLL,
-	                           rc,this,1))
+	if (!m_Box->CWnd::CreateEx(WS_EX_WINDOWEDGE,WC_LISTBOX,0,
+		WS_CHILD | WS_VISIBLE | (LBS_STANDARD & ~WS_BORDER) | LBS_HASSTRINGS | LBS_NOINTEGRALHEIGHT | LBS_OWNERDRAWFIXED | WS_HSCROLL,
+		rc,this,1))
 		return -1;
 
 	return 0;

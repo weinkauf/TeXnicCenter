@@ -2,13 +2,21 @@
 #include "TeXnicCenter.h"
 #include "LaTeXView.h"
 
+#include <string>
+#include <algorithm>
+
 #include "Advice.h"
 #include "AutoCompleteDlg.h"
 #include "../CrysEditEx/Source/CharType.h"
 #include "Configuration.h"
 #include "gotodialog.h"
+#include "global.h"
 #include "LaTeXDocument.h"
 #include "TextOutsourceDlg.h"
+#include "insertfloatobjectdialog.h"
+#include "InsertGraphicDialog.h"
+#include "inserttabulardialog.h"
+#include "insertheaderdialog.h"
 
 #pragma region Helper functions and classes
 
@@ -104,6 +112,11 @@ BEGIN_MESSAGE_MAP(LaTeXView, CScintillaView)
 	ON_WM_CONTEXTMENU()
 	ON_COMMAND(ID_EDIT_OUTSOURCE, &LaTeXView::OnEditOutsource)
 	ON_COMMAND(ID_QUERY_COMPLETION, &LaTeXView::OnQueryCompletion)
+	ON_COMMAND_EX_RANGE(ID_INSERT_FORMULA_EMBEDDED, ID_INSERT_SPADESUIT, &LaTeXView::OnInsertLaTeXConstruct)
+	ON_COMMAND_EX_RANGE(ID_INSERT_A,ID_INSERT_NOTIN, &LaTeXView::OnInsertLaTeXConstruct)
+	ON_COMMAND_EX_RANGE(ID_INSERT_SUPERSCRIPT,ID_INSERT_DDOTS, &LaTeXView::OnInsertLaTeXConstruct)
+	ON_COMMAND_EX_RANGE(ID_TEXTMODULES_FIRST,ID_TEXTMODULES_LAST, &LaTeXView::OnInsertLaTeXConstruct)
+	ON_WM_SETFOCUS()
 END_MESSAGE_MAP()
 
 
@@ -143,7 +156,35 @@ void LaTeXView::OnInitialUpdate()
 
 	rCtrl.SetPasteConvertEndings(TRUE); // Convert line endings
 
+	// Folding
+	rCtrl.SetMarginWidthN(2, 16);
+	rCtrl.SetMarginSensitiveN(2, TRUE);
+	rCtrl.SetMarginTypeN(2, SC_MARGIN_SYMBOL);
+	rCtrl.SetMarginMaskN(2, SC_MASK_FOLDERS);
+
+	rCtrl.SetProperty(_T("fold"), _T("1"));
+
+	// Setup markers for VS style folding
+	COLORREF clr = ::GetSysColor(COLOR_3DSHADOW);
+
+	DefineMarker(SC_MARKNUM_FOLDEROPEN, SC_MARK_BOXMINUS, RGB(0xff, 0xff, 0xff), clr);
+	DefineMarker(SC_MARKNUM_FOLDER, SC_MARK_BOXPLUS, RGB(0xff, 0xff, 0xff), clr);
+	DefineMarker(SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE, RGB(0xff, 0xff, 0xff), clr);
+	DefineMarker(SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNER, RGB(0xff, 0xff, 0xff), clr);
+	DefineMarker(SC_MARKNUM_FOLDEREND, SC_MARK_BOXPLUSCONNECTED, RGB(0xff, 0xff, 0xff), clr);
+	DefineMarker(SC_MARKNUM_FOLDEROPENMID, SC_MARK_BOXMINUSCONNECTED, RGB(0xff, 0xff, 0xff),clr);
+	DefineMarker(SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_VLINE, RGB(0xff, 0xff, 0xff), clr);
+
 	UpdateSettings();
+}
+
+void LaTeXView::DefineMarker(int marker, int markerType, COLORREF fore, COLORREF back) 
+{
+	CScintillaCtrl& rCtrl = GetCtrl();
+
+	rCtrl.MarkerDefine(marker, markerType);
+	rCtrl.MarkerSetFore(marker, fore);
+	rCtrl.MarkerSetBack(marker, back);
 }
 
 void LaTeXView::SetAStyle(int style, COLORREF fore, COLORREF back, int size, LPCTSTR face) 
@@ -365,14 +406,79 @@ void LaTeXView::UpdateSettings()
 
 	rCtrl.StyleSetItalic(style_number,editor_font.lfItalic);
 	rCtrl.StyleSetItalic(style_number,editor_font.lfWeight >= FW_BOLD);
-	//rCtrl.StyleSetSize(style_number,font_height);
-		
+
+	UpdateLineNumberMarginWidth();
+
+	const int font_height = style_number;
+
+	// Brace highlighting
+	rCtrl.StyleSetFont(STYLE_BRACELIGHT,editor_font.lfFaceName);
+	rCtrl.StyleSetSize(STYLE_BRACELIGHT,font_height);
+	rCtrl.StyleSetBold(STYLE_BRACELIGHT,TRUE);
+	rCtrl.StyleSetFore(STYLE_BRACELIGHT,RGB(0,255,0));
+
+	rCtrl.StyleSetFont(STYLE_BRACEBAD,editor_font.lfFaceName);
+	rCtrl.StyleSetSize(STYLE_BRACEBAD,font_height);
+	rCtrl.StyleSetBold(STYLE_BRACEBAD,TRUE);
+	rCtrl.StyleSetFore(STYLE_BRACEBAD,RGB(255,0,0));
 }
+
+void LaTeXView::UpdateLineNumberMarginWidth()
+{
+	CScintillaCtrl& rCtrl = GetCtrl();
+	int line_count = rCtrl.GetLineCount();
+
+	int digits = 0;
+
+	while (line_count) {
+		line_count /= 10;
+		++digits;
+	}
+
+	std::string number(std::max(digits,2),'9'); // Put 9 line_count times to measure the width
+	number.insert(number.begin(),'_'); // Some padding
+
+	if (CConfiguration::GetInstance()->m_bShowLineNumbers) {
+		const int width = rCtrl.TextWidth(STYLE_LINENUMBER,number.c_str());
+		rCtrl.SetMarginWidthN(0,width);
+	}
+	else
+		rCtrl.SetMarginWidthN(0,0); // Margin invisible
+}
+
+#pragma region Scintilla notifications
 
 void LaTeXView::OnUpdateUI(SCNotification* n)
 {
-	
+	long pos = GetCtrl().GetCurrentPos();
+	TCHAR ch = GetCtrl().GetCharAt(pos);
+
+	const CString braces(_T("{}[]()"));
+
+	if (!ch || braces.Find(ch) == -1)
+		ch = GetCtrl().GetCharAt(--pos);
+
+	if (braces.Find(ch) != -1) {	
+		long brace_pos = GetCtrl().BraceMatch(pos);
+
+		if (brace_pos != -1)
+			GetCtrl().BraceHighlight(pos,brace_pos);
+		else
+			GetCtrl().BraceBadLight(pos);
+	}
+	else
+		GetCtrl().BraceHighlight(-1,-1);
 }
+
+void LaTeXView::OnModified(SCNotification* n)
+{
+	if (n->linesAdded) {
+		// Number of lines changed, update margin's width
+		UpdateLineNumberMarginWidth();
+	}
+}
+
+#pragma endregion
 
 void LaTeXView::InstantAdvice()
 {
@@ -585,9 +691,9 @@ void LaTeXView::OnACBackspace()
 	}
 }
 
-void LaTeXView::OnACHelp(CString &cmd)
+void LaTeXView::OnACHelp( const CString &cmd )
 {
-	//InvokeContextHelp(cmd);
+	InvokeContextHelp(cmd);
 }
 
 #pragma endregion
@@ -608,15 +714,13 @@ CAutoCompleteDlg* LaTeXView::CreateListBox( CString &keyword, long pos )
 	if (nWords >= 1)
 	{
 		//Create window, if needed
-		if (m_CompletionListBox == NULL)
-		{
+		if (m_CompletionListBox == NULL) {
 			m_CompletionListBox = new CAutoCompleteDlg(&theApp.m_AvailableCommands,this /*theApp.GetMainWnd()*/);
 			m_CompletionListBox->SetListener(m_Proxy);
 		}
 
 		//InitWithKeyword will notify the listener immediately, if only one exact match exists
-		if (m_CompletionListBox->InitWithKeyword(keyword) && nWords > 1)
-		{
+		if (m_CompletionListBox->InitWithKeyword(keyword) && nWords > 1) {
 			//TRACE("==> CreateListBox: Show listbox \n");
 			m_AutoCompleteActive = TRUE;
 
@@ -631,10 +735,6 @@ CAutoCompleteDlg* LaTeXView::CreateListBox( CString &keyword, long pos )
 
 			m_CompletionListBox->ShowWindow(SW_SHOW);
 			m_CompletionListBox->SetCurSel(0);
-		}
-		else
-		{
-			//TRACE("==> CreateListBox: NOT Show listbox \n");
 		}
 	}
 
@@ -1087,8 +1187,8 @@ DWORD LaTeXView::SaveToFile( HANDLE file, LPCWSTR text, int length)
 	DWORD result = ERROR_SUCCESS;
 
 	if (encoding_ != ASCII) {
-		const BYTE* bom;
-		SIZE_T size;
+		const BYTE* bom = 0;
+		SIZE_T size = 0;
 
 		switch(encoding_) {
 			case UTF8: bom = AssignByteOrderMark(BOM::utf8,size); break;
@@ -1117,6 +1217,13 @@ DWORD LaTeXView::SaveToFile( HANDLE file, LPCWSTR text, int length)
 
 DWORD LaTeXView::SaveToFile( HANDLE file )
 {
+	const int mode = GetDocument()->GetSavedEOLMode();
+
+	if (GetCtrl().GetEOLMode() != mode) {
+		GetCtrl().SetEOLMode(mode);
+		GetCtrl().ConvertEOLs(mode);
+	}
+
 	const int length = GetCtrl().GetLength();
 	DWORD result = ERROR_SUCCESS;
 
@@ -1126,6 +1233,7 @@ DWORD LaTeXView::SaveToFile( HANDLE file )
 		
 		CAtlFile f(file);
 		result = SaveToFile(file,text,length);
+		f.Detach();
 		
 		delete[] text;
 	}
@@ -1256,4 +1364,233 @@ void LaTeXView::OnQueryCompletion()
 		m_CompletionListBox = CreateListBox(keyword,topLeft); /* setup (and show) list box */
 	else
 		GetCtrl().SetSel(old_pos_start_,old_pos_end_); /* restore old position */
+}
+
+
+/* Invokes context help for a given keyword */
+BOOL LaTeXView::InvokeContextHelp( const CString& keyword )
+{
+	if (keyword.IsEmpty())
+		::HtmlHelp(NULL,AfxGetApp()->m_pszHelpFilePath,HH_DISPLAY_TOC,0L);
+	else {
+		::HtmlHelp(NULL,theApp.m_pszHelpFilePath,HH_DISPLAY_TOC,0L);
+
+		HH_AKLINK link;
+		link.cbStruct = sizeof(link);
+		link.fReserved = FALSE;
+		link.pszKeywords = (LPCTSTR)keyword;
+		link.pszUrl = NULL;
+		link.pszMsgText = NULL;
+		link.pszWindow = _T(">$global_TxcHelpWindow");
+		link.fIndexOnFail = TRUE;
+		::HtmlHelp(NULL,theApp.m_pszHelpFilePath,HH_KEYWORD_LOOKUP,(DWORD) & link);
+	}
+
+	return TRUE;
+}
+
+BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
+{
+	bool bReplaceBell = false;
+	CString strInsert; // text to insert
+
+	CInsertFloatObjectDialog *pDlg = NULL;
+
+	long ptSelStart = GetCtrl().GetSelectionStart();
+	long ptSelEnd = GetCtrl().GetSelectionEnd();
+
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	// ID specific handling
+	switch (nID) {
+		case ID_INSERT_FIGURE:
+			pDlg = new CInsertFloatObjectDialog(CInsertFloatObjectDialog::figure,this);
+			break;
+		case ID_INSERT_TABLE:
+			pDlg = new CInsertFloatObjectDialog(CInsertFloatObjectDialog::table,this);
+			break;
+		case ID_INSERT_INCLUDEGRAPHICS:
+			pDlg = new CInsertGraphicDialog(this);
+			break;
+		case ID_INSERT_TABULAR:
+			pDlg = new CInsertTabularDialog(this);
+			break;
+	}
+
+	switch (nID) {
+	case ID_INSERT_HEADER:
+		{
+			CInsertHeaderDialog dlg(this);
+
+			if (ptSelStart != ptSelEnd) {
+				CString strSel;
+				
+				GetCtrl().GetSelText(strSel.GetBuffer(ptSelEnd - ptSelStart));
+				strSel.ReleaseBuffer();
+
+				dlg.SetProperties(strSel);
+			}
+
+			if (dlg.DoModal() != IDOK)
+				return TRUE;
+
+			if (ptSelStart != ptSelEnd)
+				GetCtrl().ReplaceSel(_T(""));
+
+			strInsert = dlg.GetProperties();
+
+			if (dlg.m_strTitle.IsEmpty())
+				bReplaceBell = TRUE;
+		}
+		break;
+	case ID_INSERT_FIGURE:
+	case ID_INSERT_TABLE:
+	case ID_INSERT_INCLUDEGRAPHICS:
+	case ID_INSERT_TABULAR:
+		{
+			BOOL bIsSelectionEnvironment = FALSE;
+
+			if (ptSelStart != ptSelEnd) {
+				CString strSel;
+
+				GetCtrl().GetSelText(strSel.GetBuffer(ptSelEnd - ptSelStart));
+				strSel.ReleaseBuffer();
+
+				bIsSelectionEnvironment = pDlg->SetProperties(strSel);
+			}
+
+			if (pDlg->DoModal() != IDOK) {
+				delete pDlg;
+				return TRUE;
+			}
+
+			if (bIsSelectionEnvironment && ptSelStart != ptSelEnd)
+				GetCtrl().ReplaceSel(_T(""));
+
+			strInsert = pDlg->GetProperties();
+
+			if (!bIsSelectionEnvironment || pDlg->m_strContents.IsEmpty())
+				bReplaceBell = TRUE;
+		}
+		break;
+	default:
+		if ((nID >= ID_TEXTMODULES_FIRST) && (nID <= ID_TEXTMODULES_LAST)) {
+			ASSERT(CConfiguration::GetInstance()->m_aTextModules.GetSize() > nID - ID_TEXTMODULES_FIRST);
+
+			if (CConfiguration::GetInstance()->m_aTextModules.GetSize() > nID - ID_TEXTMODULES_FIRST)
+				strInsert = CConfiguration::GetInstance()->m_aTextModules[nID - ID_TEXTMODULES_FIRST].GetText();
+			else
+				return false;
+		}
+		else
+			strInsert = AfxLoadString(nID);
+
+		bReplaceBell = true;
+	}
+
+	if (pDlg)
+		delete pDlg;
+
+	// evaluate how to insert the text
+	CString strBeforeCursor,strBehindCursor;
+	strInsert = strInsert.Right(strInsert.GetLength() - strInsert.ReverseFind(_T('\n')) - 1);
+	strInsert.Replace(_T("\r"),_T("\r\n"));
+
+	int nIndentation = 0;
+	int nSplitPos = strInsert.Find(_T('\001'));
+
+	if (bReplaceBell && nSplitPos > -1) {
+		int nPos = nSplitPos - 1;
+
+		for (; nPos >= 0 && strInsert[nPos] == _T('\t'); nPos--)
+			;
+
+		nIndentation = nSplitPos - nPos - 1;
+		strBeforeCursor = strInsert.Left(nPos + 1);
+		strBehindCursor = strInsert.Right(strInsert.GetLength() - nSplitPos - 1);
+	}
+	else
+		strBeforeCursor = strInsert;
+
+	// get selection
+	ptSelStart = GetCtrl().GetSelectionStart();
+	ptSelEnd = GetCtrl().GetSelectionEnd();
+
+	// test, if selection anchor is at the beginning or at the end of
+	// selection.
+	bool bAnchorAtEndOfSelection = ptSelEnd != GetCtrl().GetCurrentPos();
+	long ptNewSelStart = ptSelStart;
+
+	// adapt ptSelEnd intuitive
+	if (GetCtrl().LineFromPosition(ptSelEnd) > GetCtrl().LineFromPosition(ptSelStart) && 
+		GetCtrl().GetLineEndPosition(ptSelEnd) - ptSelEnd) {
+		// don't take an 'empty' line feed with the selection
+		ptSelEnd = GetCtrl().GetLineEndPosition(GetCtrl().LineFromPosition(ptSelEnd) - 1);
+	}
+
+	// insert text before selection
+	if (!strBeforeCursor.IsEmpty()) {
+		InsertText(GetCtrl().GetLineEndPosition(ptSelEnd) - ptSelEnd == 0 && strBeforeCursor[0] == _T('\r') 
+			? strBeforeCursor.Right(strBeforeCursor.GetLength() - 2) : strBeforeCursor);
+		ptNewSelStart = GetCtrl().GetSelectionStart();
+	}
+
+	// calculate new position of the selected text
+	if (GetCtrl().LineFromPosition(ptSelStart) < GetCtrl().LineFromPosition(ptSelEnd)) {
+		// ignore horizontal moving of the selected text,
+		// if the selected text contains line feeds
+		ptSelEnd += GetCtrl().LineFromPosition(ptNewSelStart) - GetCtrl().LineFromPosition(ptSelStart);
+	}
+	else
+		ptSelEnd += ptNewSelStart - ptSelStart;
+
+	// insert text behind selection
+	if (!strBehindCursor.IsEmpty()) {
+		GetCtrl().InsertText(ptSelEnd,
+		(ptSelEnd == GetCtrl().GetLineEndPosition(GetCtrl().LineFromPosition(ptSelEnd)) && 
+			strBehindCursor[strBehindCursor.GetLength() - 1] == _T('\n')) ? 
+			strBehindCursor.Left(strBehindCursor.GetLength() - 2) : strBehindCursor);
+	}
+
+	// indent selection if wanted
+	long ptStart = ptNewSelStart;
+	long ptEnd = ptSelEnd;
+
+	if (nIndentation) {
+		for (int l = GetCtrl().LineFromPosition(ptStart); l <= GetCtrl().LineFromPosition(ptEnd); l++)
+			for (int n = 0; n < nIndentation; n++)
+				GetCtrl().InsertText(GetCtrl().PositionFromLine(l),_T("\t"));
+
+		if (GetCtrl().LineFromPosition(ptStart) == GetCtrl().LineFromPosition(ptEnd)) {
+			ptStart += nIndentation;
+			ptEnd += nIndentation;
+		}
+		else if (GetCtrl().GetLineEndPosition(GetCtrl().LineFromPosition(ptEnd)) - ptEnd > 0)
+			ptEnd += nIndentation;
+	}
+
+	// Set Selection
+	GetCtrl().SetSel(ptStart,ptEnd);
+
+	// Set Anchor and cursor for selection
+	if (ptStart != ptEnd) {
+		//SetAnchor(bAnchorAtEndOfSelection ? ptEnd : ptStart);
+		GetCtrl().GotoPos(bAnchorAtEndOfSelection ? ptStart : ptEnd);
+	}
+	else // set cursor
+		GetCtrl().GotoPos(ptStart);
+		//SetCursorPos(ptStart);
+
+	SetFocus();
+
+	return TRUE;
+}
+
+void LaTeXView::OnSetFocus(CWnd* pOldWnd)
+{
+	CScintillaView::OnSetFocus(pOldWnd);
+
+	LaTeXDocument* doc = GetDocument();
+
+	if (doc)
+		doc->CheckForFileChanges();
 }

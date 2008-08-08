@@ -869,17 +869,16 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOn
 
 		pDoc->SetPathName(strDocPath);
 
-		// TODO:
-		//if (bReadOnly)
-			//((CLaTeXDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
+		if (bReadOnly)
+			static_cast<LaTeXDocument*>(pDoc)->GetView()->GetCtrl().SetReadOnly(TRUE);
 	}
 
 	if (!pDoc)
 		return NULL;
 
 	// set write protection
-	//if (pDoc && bReadOnly)
-	//	((CLaTeXDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
+	if (pDoc && bReadOnly)
+		static_cast<LaTeXDocument*>(pDoc)->GetView()->GetCtrl().SetReadOnly(TRUE);
 
 	return pDoc;
 }
