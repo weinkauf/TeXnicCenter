@@ -1,6 +1,3 @@
-// LaTeXView.cpp : implementation file
-//
-
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "LaTeXView.h"
@@ -10,12 +7,13 @@
 #include "../CrysEditEx/Source/CharType.h"
 #include "Configuration.h"
 #include "gotodialog.h"
+#include "LaTeXDocument.h"
+#include "TextOutsourceDlg.h"
 
 #pragma region Helper functions and classes
 
 namespace {
-	namespace BOM
-	{
+	namespace BOM {
 		const BYTE utf8[] = {0xEF,0xBB,0xBF};
 		const BYTE utf16le[] = {0xff,0xfe};
 		const BYTE utf16be[] = {0xfe,0xff};
@@ -102,6 +100,10 @@ BEGIN_MESSAGE_MAP(LaTeXView, CScintillaView)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_TOGGLE_WHITESPACEVIEW, &LaTeXView::OnUpdateEditToggleWhiteSpaceView)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_TOGGLE_SHOW_LINE_ENDING, &LaTeXView::OnUpdateEditToggleShowLineEnding)
 	ON_COMMAND(ID_SPELL_FILE, &LaTeXView::OnSpellFile)
+	ON_COMMAND(ID_EDIT_DELETE_LINE, &LaTeXView::OnEditDeleteLine)
+	ON_WM_CONTEXTMENU()
+	ON_COMMAND(ID_EDIT_OUTSOURCE, &LaTeXView::OnEditOutsource)
+	ON_COMMAND(ID_QUERY_COMPLETION, &LaTeXView::OnQueryCompletion)
 END_MESSAGE_MAP()
 
 
@@ -132,6 +134,9 @@ void LaTeXView::OnInitialUpdate()
 
     theme_.SubclassWindow(m_hWnd);
     theme_.Initialize();
+
+	old_pos_start_ = old_pos_end_ = -1;
+	m_AutoCompleteActive = false;
 
 	CScintillaCtrl& rCtrl = GetCtrl();
 	rCtrl.SetLexer(SCLEX_TEX); // TeX Lexer
@@ -423,89 +428,87 @@ void LaTeXView::HideAdvice()
 		m_InstTip->ShowWindow(SW_HIDE);
 }
 
-/* ------------ Message handlers for auto complete listbox ------------*/
+
+#pragma region Message handlers for auto complete listbox
 
 void LaTeXView::OnACCommandSelect(const CLaTeXCommand* cmd)
 {
-	//CPoint ptStart,ptEnd;
-	//CPoint ptCaret;
-	//BOOL isEnv = FALSE;
+	long ptCaret;
 
-	//m_AutoCompleteActive = FALSE;
-	//ASSERT(cmd != NULL);
+	m_AutoCompleteActive = false;
+	old_pos_start_ = old_pos_end_ = -1;
 
-	////Generate string to be inserted
-	//CString InsertString = cmd->GetExpandBefore(); // collect completion...
-	//InsertString += cmd->ToLaTeX();
-	//InsertString += cmd->GetExpandAfter();
+	ASSERT(cmd != NULL);
 
-	//GetSelection(ptStart,ptEnd);
+	//Generate string to be inserted
+	CString InsertString = cmd->GetExpandBefore(); // collect completion...
+	InsertString += cmd->ToLaTeX();
+	InsertString += cmd->GetExpandAfter();
 
-	////Get the text buffer
-	//CCrystalTextBuffer* pText = LocateTextBuffer();
+	long s = GetCtrl().GetSelectionStart();
+	long e = GetCtrl().GetSelectionEnd();
 
-	////Insert the text
-	//pText->BeginUndoGroup();
-	//ReplaceSelection(InsertString);
-	//pText->FlushUndoGroup(this);
+	const long origs = s;
 
-	//GetSelection(ptStart,ptEnd); // retrieve new selection pos
-	//SetSelection(ptStart,ptStart); // drop selection
+	GetCtrl().ReplaceSel(InsertString);
+	s = GetCtrl().GetSelectionStart();
+	e = GetCtrl().GetSelectionEnd();
+	GetCtrl().SetSel(-1,s); // drop selection	
 
-	//isEnv = cmd->GetExpandAfter().GetLength() && cmd->GetExpandBefore().GetLength();
+	bool isEnv = cmd->GetExpandAfter().GetLength() && cmd->GetExpandBefore().GetLength();
 
-	//if (!isEnv)
-	//{
-	//	bool bSetPosition(false);
+	if (!isEnv) {
+		bool bSetPosition = false;
 
-	//	//If a command was inserted and it contains a brace, we might want to go there
-	//	if (InsertString.FindOneOf(_T("{[(")) != -1)
-	//	{
-	//		//Search for the first brace
-	//		for (int y = ptStart.y; y <= ptEnd.y; y++)
-	//		{
-	//			CString s = GetLineChars(y);
+		//If a command was inserted and it contains a brace, we might want to go there
+		if (InsertString.FindOneOf(_T("{[(")) != -1) {
+			long ls = GetCtrl().LineFromPosition(s);
+			long le = GetCtrl().LineFromPosition(e);
 
-	//			//Is there an offset? Only in first line.
-	//			int Offset = 0;
-	//			if (y == ptStart.y)
-	//			{
-	//				s = s.Mid(ptStart.x);
-	//				Offset = ptStart.x;
-	//			}
+			//Search for the first brace
+			for (long y = ls; y <= le; y++) {
+				CString text = GetLineText(y);
+				//Is there an offset? Only in first line.
+				int Offset = 0;
 
-	//			//Find a brace and place the cursor
-	//			int BracePos = s.FindOneOf(_T("{[("));
-	//			if (BracePos != -1)
-	//			{
-	//				ptCaret = CPoint(Offset + BracePos + 1,y);
+				if (y == s) {
+					Offset = s - GetCtrl().PositionFromLine(GetCtrl().LineFromPosition(s));
+					text = text.Mid(Offset);
+				}
 
-	//				if (IsValidTextPos(ptCaret))
-	//				{
-	//					//Place caret after the first opening brace
-	//					SetCursorPos(ptCaret);
-	//					bSetPosition = true;
-	//				}
+				//Find a brace and place the cursor
+				int BracePos = text.FindOneOf(_T("{[("));
 
-	//				break;
-	//			}
-	//		}
-	//	}
+				if (BracePos != -1) {
+					ptCaret = GetCtrl().PositionFromLine(y) + Offset + BracePos + 1;
 
-	//	// no brace found; drop selection and place cursor after inserted word
-	//	if (!bSetPosition) SetCursorPos(ptEnd);
-	//}
-	//else
-	//{
-	//	// env was inserted -> place cursor at end of next row
-	//	ptCaret.y = ptStart.y + 1;
-	//	ptCaret.x = GetLineLength(ptCaret.y);
+					if (ptCaret < GetCtrl().GetLength()) {
+						//Place caret after the first opening brace
+						GetCtrl().GotoPos(ptCaret);
+						bSetPosition = true;
+					}
 
-	//	SetCursorPos(ptCaret);
-	//}
-	//ptCaret = GetCursorPos();
-	//SetSelection(ptCaret,ptCaret); // sync selection with C'pos
-	//RestoreFocus(); // set focus back to edit view
+					break;
+				}
+			}
+		}
+
+		// no brace found; drop selection and place cursor after inserted word
+		if (!bSetPosition) 
+			GetCtrl().GotoPos(e);
+	}
+	else {
+		// env was inserted -> place cursor at end of next row
+		s = origs;
+		long l = GetCtrl().LineFromPosition(s);
+		ptCaret = GetCtrl().GetLineEndPosition(l + 1);
+
+		GetCtrl().GotoPos(ptCaret);
+	}
+
+	ptCaret = GetCtrl().GetCurrentPos();
+	GetCtrl().SetSel(-1,ptCaret); // sync selection with C'pos
+	RestoreFocus(); // set focus back to edit view
 }
 
 void LaTeXView::OnACCommandCancelled()
@@ -515,24 +518,25 @@ void LaTeXView::OnACCommandCancelled()
 	OnACCommandCancelled in this case. So we use the m_AutoCompleteActive flag to determine, if the autocomplete
 	has been finished or not */
 
-	//if (!m_AutoCompleteActive) return;
+	if (m_AutoCompleteActive) {
+		/* try to restore old cursor pos */
+		if (old_pos_start_ != -1 && old_pos_end_ != -1)
+			GetCtrl().SetSel(old_pos_start_,old_pos_end_);
+		else {  /* suggest new position */
+			long pos = GetCtrl().GetSelectionEnd();
+			GetCtrl().SetSel(-1,pos);
+		}
 
-	///* try to restore old cursor pos */
-
-	//if (IsValidTextPos(m_oldStart) && IsValidTextPos(m_oldEnd))
-	//{
-	//	SetSelection(m_oldStart,m_oldEnd);
-	//}
-	//else   /* suggest new position */
-	//{
-	//	GetSelection(m_oldStart,m_oldEnd);
-	//	SetSelection(m_oldEnd,m_oldEnd);
-	//}
-
-	//m_AutoCompleteActive = false;
-	//RestoreFocus();
+		old_pos_start_ = old_pos_end_ = -1;
+		m_AutoCompleteActive = false;
+		RestoreFocus();
+	}
 }
 
+void LaTeXView::RestoreFocus()
+{
+	SetFocus();
+}
 
 void LaTeXView::OnACChar(UINT nKey, UINT nRepCount, UINT nFlags)
 {
@@ -586,58 +590,65 @@ void LaTeXView::OnACHelp(CString &cmd)
 	//InvokeContextHelp(cmd);
 }
 
-CAutoCompleteDlg* LaTeXView::CreateListBox(CString &keyword, const CPoint topLeft)
+#pragma endregion
+
+CAutoCompleteDlg* LaTeXView::CreateListBox( CString &keyword, long pos )
 {
-	//CPoint ptStart,ptText;
-	//if (!IsValidTextPos(topLeft))
-	//{
-	//	TRACE("Invalid text pos %d, %d\n",topLeft.x,topLeft.y);
-	//	return 0;
-	//}
-	////TRACE("==> CreateListBox\n");
-	//ptStart = TextToClient(topLeft);
-	//ptStart.y += GetLineHeight(); // Goto next row
+	//TRACE("==> CreateListBox\n");
 
-	//// setup listbox
-	//int nWords = GetNumberOfMatches(keyword); // find number of matches
-	////TRACE("==> CreateListBox matches = %d\n", nWords);
+	CPoint ptStart(GetCtrl().PointXFromPosition(pos),GetCtrl().PointYFromPosition(pos));
+	ptStart.y += GetCtrl().TextHeight(GetCtrl().LineFromPosition(pos)); // Goto next row
+	ptStart.y += ::GetSystemMetrics(SM_CYDLGFRAME);
 
-	////Found one or more matches?
-	//if (nWords >= 1)
-	//{
-	//	//Create window, if needed
-	//	if (m_CompletionListBox == NULL)
-	//	{
-	//		m_CompletionListBox = new CAutoCompleteDlg(&theApp.m_AvailableCommands,this /*theApp.GetMainWnd()*/);
-	//		m_CompletionListBox->SetListener(m_Proxy);
-	//	}
+	// setup listbox
+	int nWords = GetNumberOfMatches(keyword); // find number of matches
+	//TRACE("==> CreateListBox matches = %d\n", nWords);
 
-	//	//InitWithKeyword will notify the listener immediately, if only one exact match exists
-	//	if (m_CompletionListBox->InitWithKeyword(keyword) && nWords > 1)
-	//	{
-	//		//TRACE("==> CreateListBox: Show listbox \n");
-	//		m_AutoCompleteActive = TRUE;
+	//Found one or more matches?
+	if (nWords >= 1)
+	{
+		//Create window, if needed
+		if (m_CompletionListBox == NULL)
+		{
+			m_CompletionListBox = new CAutoCompleteDlg(&theApp.m_AvailableCommands,this /*theApp.GetMainWnd()*/);
+			m_CompletionListBox->SetListener(m_Proxy);
+		}
 
-	//		//Move box by (16 IconPixels + 2 Pixels between Icon and text + 6/2 BorderPixels + 1 Pixel Magick) = 22
-	//		//This way, the text matches with the editor
-	//		ClientToScreen(&ptStart); //yes, this works only with screen coords. do not ask me why.
-	//		m_CompletionListBox->SetWindowPos(NULL,ptStart.x - 22,ptStart.y,0,0,SWP_NOSIZE | SWP_NOZORDER
-	//			| SWP_NOACTIVATE);
+		//InitWithKeyword will notify the listener immediately, if only one exact match exists
+		if (m_CompletionListBox->InitWithKeyword(keyword) && nWords > 1)
+		{
+			//TRACE("==> CreateListBox: Show listbox \n");
+			m_AutoCompleteActive = TRUE;
 
-	//		//Adjust size of the box to see all content and we do not want to be over the border
-	//		m_CompletionListBox->AdjustSizeAndPosition(GetLineHeight());
+			//Move box by (16 IconPixels + 2 Pixels between Icon and text + 6/2 BorderPixels + 1 Pixel Magick) = 22
+			//This way, the text matches with the editor
+			ClientToScreen(&ptStart); //yes, this works only with screen coords. do not ask me why.
+			m_CompletionListBox->SetWindowPos(NULL,ptStart.x - 22,ptStart.y,0,0,SWP_NOSIZE | SWP_NOZORDER
+				| SWP_NOACTIVATE);
 
-	//		m_CompletionListBox->ShowWindow(SW_SHOW);
-	//		m_CompletionListBox->SetCurSel(0);
-	//	}
-	//	else
-	//	{
-	//		//TRACE("==> CreateListBox: NOT Show listbox \n");
-	//	}
-	//}
+			//Adjust size of the box to see all content and we do not want to be over the border
+			m_CompletionListBox->AdjustSizeAndPosition(GetCtrl().TextHeight(GetCtrl().LineFromPosition(pos)));
 
-	////TRACE("<== CreateListBox\n");
+			m_CompletionListBox->ShowWindow(SW_SHOW);
+			m_CompletionListBox->SetCurSel(0);
+		}
+		else
+		{
+			//TRACE("==> CreateListBox: NOT Show listbox \n");
+		}
+	}
+
+	//TRACE("<== CreateListBox\n");
 	return m_CompletionListBox;
+}
+
+int LaTeXView::GetNumberOfMatches( const CString& keyword )
+{
+	if (keyword.GetLength() < CAutoCompleteDlg::GetMinimumKeywordLength()) return 0;
+
+	CMapStringToOb map;
+	theApp.m_AvailableCommands.GetAllPossibleItems(keyword,_T(""),map);
+	return map.GetCount();
 }
 
 void LaTeXView::GoToLine(int line)
@@ -650,9 +661,9 @@ int LaTeXView::GetLineLength(int line)
 	return GetCtrl().GetLineEndPosition(line) - GetCtrl().PositionFromLine(line);
 }
 
-void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& start, bool bSelect /*=true*/)
+void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& a, bool bSelect /*=true*/)
 {
-	long pos = start;
+	long pos = a;
 	int line = GetCtrl().LineFromPosition(pos);
 	int length = GetLineLength(line);
 	
@@ -687,6 +698,8 @@ void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& start, bool bSele
 
 				if (bSelect)
 					GetCtrl().SetSel(start + CurrentX,pos);
+
+				a = start + CurrentX;
 			}
 			else
 				strKeyword.Empty();
@@ -1068,7 +1081,7 @@ DWORD LaTeXView::SaveToFile(LPCTSTR pszFileName, bool bClearModifiedFlag)
 	return result;
 }
 
-DWORD LaTeXView::SaveToFile( HANDLE file )
+DWORD LaTeXView::SaveToFile( HANDLE file, LPCWSTR text, int length)
 {
 	CAtlFile f(file);
 	DWORD result = ERROR_SUCCESS;
@@ -1089,27 +1102,158 @@ DWORD LaTeXView::SaveToFile( HANDLE file )
 			result = ::GetLastError();
 	}
 
-	if (result == ERROR_SUCCESS) {
-		const int length = GetCtrl().GetLength();
+	if (result == ERROR_SUCCESS && length > 0) {
+		std::vector<BYTE> buffer;
+		ConvertToMultiByte(text,length,buffer,encoding_,code_page_);
 
-		if (length > 0) {
-			LPWSTR text = new WCHAR[length + 1];
-
-			GetCtrl().GetText(length + 1,text);
-
-			std::vector<BYTE> buffer;
-			ConvertToMultiByte(text,length,buffer,encoding_,code_page_);
-
-			delete[] text;
-
-			if (FAILED(f.Write(&buffer[0],buffer.size())))
-				result = ::GetLastError();
-		}
+		if (FAILED(f.Write(&buffer[0],buffer.size())))
+			result = ::GetLastError();
 	}
 
 	f.Detach();
+	
+	return result;
+}
+
+DWORD LaTeXView::SaveToFile( HANDLE file )
+{
+	const int length = GetCtrl().GetLength();
+	DWORD result = ERROR_SUCCESS;
+
+	if (length > 0) {
+		LPWSTR text = new WCHAR[length + 1];
+		GetCtrl().GetText(length + 1,text);
+		
+		CAtlFile f(file);
+		result = SaveToFile(file,text,length);
+		
+		delete[] text;
+	}
 
 	return result;
 }
 
 #pragma endregion
+void LaTeXView::OnEditDeleteLine()
+{
+	GetCtrl().LineDelete();
+}
+
+void LaTeXView::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
+{
+	CPoint ptText = point;
+	ScreenToClient(&ptText);
+
+	long pos = GetCtrl().PositionFromPoint(ptText.x,ptText.y);
+	bool bShowDefault = true;
+
+	// TODO :
+
+	//CCrystalTextBuffer::CTextAttribute *attr = pBuffer->GetLineAttribute(ptText.y,ptText.x,ptText.x + 1);
+
+	//if (attr) {
+	//	SpellerSuggestionMenu menu(this,ptText);
+
+	//	if (attr->m_Attribute == CCrystalTextBuffer::CTextAttribute::spellError)
+	//		bShowDefault = !menu.ShowSpellMenu(theApp.GetSpeller(),point);
+	//	// else your new attribute here
+	//}
+
+	if (bShowDefault) {
+		// Default popup
+		theApp.ShowPopupMenu(IDR_POPUP_EDITOR,point,this);
+	}
+}
+
+void LaTeXView::OnEditOutsource()
+{
+	//Create the dialog
+	CTextOutsourceDlg OutsourceDlg;
+
+	//Get the file name of ourselves
+	LaTeXDocument* pDoc = GetDocument();
+
+	if (!pDoc) return;
+
+	CPathTool OldPath = pDoc->GetPathName();
+
+	//Suggest a directory for the new file
+	OutsourceDlg.m_Directory = OldPath.GetDirectory();
+
+	//Show the dialog
+	if (OutsourceDlg.DoModal() == IDOK) {
+		//Get the new file name and write the selected lines to it
+		CFile NewFile;
+
+		if (NewFile.Open(OutsourceDlg.NewPath.GetPath(),CFile::modeWrite | CFile::modeCreate)) {
+			//Get selected text - may be empty
+			long s = GetCtrl().GetSelectionStart();
+			long e = GetCtrl().GetSelectionEnd();
+
+			CString strSelectedText;
+			
+			if (s != e) {
+				GetCtrl().GetSelText(strSelectedText.GetBuffer(e - s));
+				strSelectedText.ReleaseBuffer();
+			}
+
+			//Write it to the file
+			SaveToFile(NewFile,strSelectedText,strSelectedText.GetLength());
+			NewFile.Close();
+
+			//Get relative path - omit tex-extension
+			CString RelativeFilePath = CPathTool::GetRelativePath(OldPath.GetDirectory(),
+				(OutsourceDlg.NewPath.GetFileExtension() == _T("tex"))
+				? CPathTool(OutsourceDlg.NewPath.GetBase())
+				: OutsourceDlg.NewPath);
+
+			//Insert the text into this document
+			GetCtrl().ReplaceSel(OutsourceDlg.CmdLeft + RelativeFilePath + OutsourceDlg.CmdRight);
+
+			//Open the new file
+			if (OutsourceDlg.m_bOpenNewFile) {
+				//Open it
+				theApp.OpenLatexDocument(OutsourceDlg.NewPath,FALSE,-1,FALSE,false);
+
+				//In background? Foreground is automatically done by the line above.
+				if (OutsourceDlg.m_nOpenNewFileType == 0 /*background*/) {
+					//Re-activate this view (I tried to open the new doc in background, but it did not work out)
+					CFrameWnd* pFrame = GetParentFrame();
+
+					if (pFrame) 
+						pFrame->ActivateFrame();
+				}
+			}
+		}
+	}
+}
+
+LaTeXDocument* LaTeXView::GetDocument() const
+{
+	return static_cast<LaTeXDocument*>(__super::GetDocument());
+}
+
+void LaTeXView::OnQueryCompletion()
+{
+	HideAdvice();
+
+	// Don't allow a second window
+	if (m_AutoCompleteActive) {
+		TRACE("==> autocomplete is active, quitting...\n");
+		return;
+	}
+
+	/* store old position */
+	old_pos_start_ = GetCtrl().GetSelectionStart();
+	old_pos_end_ = GetCtrl().GetSelectionEnd();
+
+	CString keyword;
+	long topLeft = GetCtrl().GetCurrentPos();
+
+	GetWordBeforeCursor(keyword,topLeft); /* retrieve word to be completed */
+
+	if (!keyword.IsEmpty())
+		m_CompletionListBox = CreateListBox(keyword,topLeft); /* setup (and show) list box */
+	else
+		GetCtrl().SetSel(old_pos_start_,old_pos_end_); /* restore old position */
+}
