@@ -114,6 +114,10 @@ typedef std::tr1::basic_regex<TCHAR> tregex;
 #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif
 
+// Use std::min, std::max from <algorithm>
+#undef min
+#undef max
+
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
 
