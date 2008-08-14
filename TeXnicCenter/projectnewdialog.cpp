@@ -525,13 +525,13 @@ void CProjectNewDialog::Create()
 	CString strCrlf;
 	switch (m_nFileFormat)
 	{
-		case CRLF_STYLE_DOS:
+		case DOSStyleEOLMode:
 			strCrlf = _T("\r\n");
 			break;
-		case CRLF_STYLE_UNIX:
+		case UnixStyleEOLMode:
 			strCrlf = _T("\n");
 			break;
-		case CRLF_STYLE_MAC:
+		case MacStyleEOLMode:
 			strCrlf = _T("\n\r");
 			break;
 

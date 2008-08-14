@@ -66,10 +66,11 @@ inline bool AtlDrawThemeClientEdge(HTHEME hTheme,HWND hWnd,HRGN hRgnUpdate = NUL
 	return true;
 }
 
-LRESULT ThemedCtrl::OnDestroy(UINT /*uMsg*/,WPARAM /*wParam*/,LPARAM /*lParam*/,BOOL& bHandled)
+LRESULT ThemedCtrl::OnDestroy(UINT /*uMsg*/,WPARAM /*wParam*/,LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
-	bHandled = FALSE;
-
+	// Let the parent process the message
+	DefWindowProc();
+	// now unsubclass
 	UnsubclassWindow();
 
 	if (m_hTheme)

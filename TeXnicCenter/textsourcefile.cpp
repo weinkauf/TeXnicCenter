@@ -83,7 +83,7 @@ BOOL CTextSourceFile::GetNextLine(LPCTSTR &lpLine, int &nLength)
 	if (m_file.ReadString(m_strCurrentLine))
 	{
 		m_strCurrentLine.Remove((TCHAR)0x0a);
-		lpLine = m_strCurrentLine.GetBuffer(1);
+		lpLine = m_strCurrentLine;
 		nLength = m_strCurrentLine.GetLength();
 		return TRUE;
 	}

@@ -33,25 +33,14 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 #include "Configuration.h"
-#include "LatexDoc.h"
+
+#include "TeXnicCenter.h"
 #include "FontOccManager.h"
 #include "global.h"
+#include "LaTeXDocument.h"
+#include "LaTeXView.h"
 
-
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new DEBUG_NEW
-#endif
-
-// one and only global configuration object
-//CConfiguration g_configuration;
-
-//-------------------------------------------------------------------
-// class CConfiguration
-//-------------------------------------------------------------------
 
 const LOGFONTA ConvertLogFont(const LOGFONTW& lf)
 {
@@ -80,17 +69,25 @@ const LOGFONTW ConvertLogFont(const LOGFONTA& lf)
 std::auto_ptr<CConfiguration> CConfiguration::impl_;
 
 CConfiguration::CConfiguration()
-		: m_nStandardFileFormat(CRLF_STYLE_DOS)
+: m_nStandardFileFormat(DOSStyleEOLMode)
+, blink_insert_caret_(FALSE)
+, blink_overwrite_caret_(TRUE)
+, insert_caret_line_(FALSE)
+, overwrite_caret_line_(FALSE)
+, show_line_endings_(FALSE)
+, word_wrap_(FALSE)
 {
 }
+
+#pragma region Serialization
 
 void CConfiguration::Serialize(SERDIRECTION direction)
 {
 	CString strSection;
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// options
-	strSection = "Settings\\Options";
+#pragma region Options
+
+	strSection = _T("Settings\\Options");
 	SerializeProfileStringArray(strSection,_T("ProjectTemplatePaths"),&m_astrProjectTemplatePaths,direction);
 	SerializeProfileStringArray(strSection,_T("DocumentTemplatePaths"),&m_astrDocumentTemplatePaths,direction);
 	SerializeProfileInt(strSection,_T("SaveBeforeCompilation"),(int*) & m_bSaveBeforeCompilation,direction,TRUE);
@@ -100,36 +97,49 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 
 	SerializeProfileInt(strSection,_T("ParseInterval"),&m_nParseInterval,direction,1000);
 
-	// file
+#pragma endregion
+
+#pragma region File
+
 	SerializeProfileInt(strSection,_T("SaveAutomatic"),(int*) & m_bSaveAutomatic,direction,TRUE);
 	SerializeProfileInt(strSection,_T("SaveInterval"),(int*) & m_unSaveInterval,direction,10);
-	SerializeProfileInt(strSection,_T("StandardFileFormat"),&m_nStandardFileFormat,direction,CRLF_STYLE_DOS);
+	SerializeProfileInt(strSection,_T("StandardFileFormat"),&m_nStandardFileFormat,direction,DOSStyleEOLMode);
 	SerializeProfileString(strSection,_T("DefaultPath"),&m_strDefaultPath,direction);
 	SerializeProfileInt(strSection,_T("OpenDocWndMaximized"),(int*) & m_bOpenDocWndMaximized,direction,FALSE);
 	SerializeProfileString(strSection,_T("LastOpenedFolder"),&m_strLastOpenedFolder,direction);
 	SerializeProfileInt(strSection,_T("LastTabProjectTemplateDlg"),(int*) & m_nLastTabProjectTemplateDlg,direction,0);
 	SerializeProfileInt(strSection,_T("LastTabDocumentTemplateDlg"),(int*) & m_nLastTabDocumentTemplateDlg,direction,0);
 
-	// text outsource
+#pragma endregion
+
+#pragma region Text outsource
+
 	SerializeProfileInt(strSection,_T("TextOutsourceIncludeType"),(int*) & m_TextOutsource_nIncludeType,direction,0);
 	SerializeProfileString(strSection,_T("TextOutsourceCmdLeft"),&m_TextOutsource_strUserCmdLeft,direction);
 	SerializeProfileString(strSection,_T("TextOutsourceCmdRight"),&m_TextOutsource_strUserCmdRight,direction);
 	SerializeProfileInt(strSection,_T("TextOutsourceOpenNewFile"),(int*) & m_TextOutsource_bOpenNewFile,direction,TRUE);
 	SerializeProfileInt(strSection,_T("TextOutsourceOpenNewFileType"),(int*) & m_TextOutsource_nOpenNewFileType,direction,0);
 
-	// quotation mark replacement
+#pragma endregion
+
+#pragma region Quotation mark replacement
+
 	SerializeProfileInt(strSection,_T("ReplaceQuotationMarks"),(int*) & m_bReplaceQuotationMarks,direction,TRUE);
 	SerializeProfileString(strSection,_T("OpeningQuotationMark"),&m_strOpeningQuotationMark,direction,_T("\"`"));
 	SerializeProfileString(strSection,_T("ClosingQuotationMark"),&m_strClosingQuotationMark,direction,_T("\"'"));
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// session
-	strSection = "Session";
+#pragma endregion
+
+#pragma region Session
+
+	strSection = _T("Session");
 	SerializeProfileInt(strSection,_T("LoadLastProject"),(int*) & m_bLoadLastProject,direction,TRUE);
 	SerializeProfileString(strSection,_T("LastProject"),&m_strLastProject,direction);
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Editor settings
+#pragma endregion
+
+#pragma region Editor settings
+
 	strSection = _T("Settings\\Editor");
 
 	if (direction == Load)
@@ -157,21 +167,25 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 		SerializeProfileData(_T("Settings"),_T("NavigatorFont"),&m_fontNavigator,direction,sizeof(m_fontNavigator));
 	}
 
-	// cursor settings
-	int nInsertCaretForm = CCrystalTextView::GetCaretInsertForm();
-	int nInsertCaretMode = CCrystalTextView::GetCaretInsertMode();
-	int nOverwriteCaretForm = CCrystalTextView::GetCaretOverwriteForm();
-	int nOverwriteCaretMode = CCrystalTextView::GetCaretOverwriteMode();
+	SerializeProfileInt(strSection,_T("EditorShowLineNumbers"),&m_bShowLineNumbers,direction,0);
+	SerializeProfileInt(strSection,_T("EditorShowLineEndings"),&show_line_endings_,direction,0);
+	SerializeProfileInt(strSection,_T("EditorWordWrap"),&word_wrap_,direction,0);
+
+#pragma region Cursor settings
+
+	int& nInsertCaretForm = insert_caret_line_;
+	int& nInsertCaretMode = blink_insert_caret_;
+	int& nOverwriteCaretForm = overwrite_caret_line_;
+	int& nOverwriteCaretMode = blink_overwrite_caret_;
+
 	SerializeProfileInt(strSection,_T("InsertCaretForm"),&nInsertCaretForm,direction,nInsertCaretForm);
 	SerializeProfileInt(strSection,_T("InsertCaretMode"),&nInsertCaretMode,direction,nInsertCaretMode);
 	SerializeProfileInt(strSection,_T("OverwriteCaretForm"),&nOverwriteCaretForm,direction,nOverwriteCaretForm);
 	SerializeProfileInt(strSection,_T("OverwriteCaretMode"),&nOverwriteCaretMode,direction,nOverwriteCaretMode);
-	CCrystalTextView::SetCaretInsertStyle(nInsertCaretForm,nInsertCaretMode);
-	CCrystalTextView::SetCaretOverwriteStyle(nOverwriteCaretForm,nOverwriteCaretMode);
 
 	SerializeProfileInt(strSection,_T("EditorTabWidth"),&m_nTabWidth,direction,2);
-	SerializeProfileInt(strSection,_T("EditorShowLineNumbers"),&m_bShowLineNumbers,direction,0);
-	for (int i = 0; i < CCrystalTextView::COLORINDEX_ERRORBKGND; i++)
+
+	for (int i = 0; i < LaTeXView::COLORINDEX_ERRORBKGND; i++)
 	{
 		CString strFormat;
 		strFormat.Format(_T("EditorColor%d"),i);
@@ -180,12 +194,16 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 
 	SerializeProfileInt(strSection,_T("ViewWhitespaces"),(int*) & m_bViewWhitespaces,direction,FALSE);
 
-	SerializeProfileInt(strSection,_T("WordWrapStyle"),(int*) & m_WordWrapStyle,direction,WORD_WRAP_WINDOW);
+	//SerializeProfileInt(strSection,_T("WordWrapStyle"),(int*) & m_WordWrapStyle,direction,WORD_WRAP_WINDOW);
 	SerializeProfileInt(strSection,_T("FixedColumnWrap"),(int*) & m_nFixedColumnWrap,direction,80);
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Find in files settings
-	strSection = "Settings\\FindInFiles";
+#pragma endregion
+
+#pragma endregion
+
+#pragma region Find in files settings
+
+	strSection = _T("Settings\\FindInFiles");
 
 	SerializeProfileString(strSection,_T("FileTypes"),&m_strFileFindFileTypes,direction);
 	SerializeProfileInt(strSection,_T("FindWholeWords"),(int*) & m_bFileFindWholeWords,direction,FALSE);
@@ -194,8 +212,9 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	SerializeProfileInt(strSection,_T("IncludeSubFolders"),(int*) & m_bFileFindSubFolders,direction,TRUE);
 	SerializeProfileInt(strSection,_T("OutputBuffer"),(int*) & m_nFileFindOutput,direction,0);
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Language
+#pragma endregion
+
+#pragma region Language
 	strSection = _T("Settings\\Language");
 
 	// help german users from older version to upgrade -- so set german
@@ -220,8 +239,9 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	SerializeProfileString(strSection,_T("Locale"),
 	                       &m_strLocale,direction,_T(""));
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Language-Spelling
+#pragma endregion
+
+#pragma region Language-Spelling
 	strSection = _T("Settings\\Language-Spelling");
 
 	// Create a default name for the user dictionary (otherwise the user will always loose the added words, if a path is not specified in the options)
@@ -251,8 +271,10 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	SerializeProfileInt(strSection,_T("MainDictionaryOnly"),(int*) & m_bSpellMainDictOnly,direction,1);
 	SerializeProfileInt(strSection,_T("Enable"),(int*) & m_bSpellEnable,direction,0);
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// TextModules
+#pragma endregion
+
+#pragma region TextModules
+
 	strSection = _T("Settings\\TextModules");
 
 	//Serialize the currently one and only Group of TextModules
@@ -265,8 +287,9 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 		m_aTextModules.SerializeToRegistry(CPathTool::Cat(theApp.m_strRegistryRoot,strSection));
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// File Cleaning
+#pragma endregion
+
+#pragma region File Cleaning
 	strSection = "Settings\\FileClean";
 
 	SerializeProfileInt(strSection,_T("Confirm"),(int*) & m_bFileCleanConfirm,direction,1);
@@ -280,8 +303,9 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 		m_aFileCleanItems.SerializeToRegistry(CPathTool::Cat(theApp.m_strRegistryRoot,strSection));
 	}
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Accessibility
+#pragma endregion
+
+#pragma region Accessibility
 	strSection = "Settings\\Accessibility";
 
 	SerializeProfileInt(strSection,_T("OptimizeMenuForVisuallyHandicappedUsers"),
@@ -290,11 +314,15 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	if (direction == Load)
 		m_bOptimizeMenuForVisuallyHandicappedUsers = m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart;
 
+#pragma endregion
+
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Profiles
 	//	strSection = "Profiles";
 	//	SerializeProfileString( strSection, _T("QuickRunFilePattern"), &m_strQuickRunTmpFilePattern, direction, _T("%bm_part.tex"));
 }
+
+#pragma endregion
 
 void CConfiguration::SerializeProfileInt(LPCTSTR szSection,LPCTSTR szEntry,
         int* pnValue,SERDIRECTION direction,int nDefault)
@@ -477,4 +505,64 @@ CConfiguration* CConfiguration::GetInstance()
 		impl_.reset(new CConfiguration);
 
 	return impl_.get();
+}
+
+bool CConfiguration::IsBlinkInsertCaret() const
+{
+	return blink_insert_caret_ == 0;
+}
+
+void CConfiguration::SetBlinkInsertCaret( bool val /*= true*/ )
+{
+	blink_insert_caret_ = !val;
+}
+
+bool CConfiguration::IsBlinkOverwriteCaret() const
+{
+	return blink_overwrite_caret_ != 0;
+}
+
+void CConfiguration::SetBlinkOverwriteCaret( bool val /*= true*/ )
+{
+	blink_overwrite_caret_ = val;
+}
+
+bool CConfiguration::IsInsertCaretLine() const
+{
+	return insert_caret_line_ == 0;
+}
+
+void CConfiguration::SetInsertCaretLine( bool val /*= true*/ )
+{
+	insert_caret_line_ = !val;
+}
+
+bool CConfiguration::IsOverwriteCaretLine() const
+{
+	return overwrite_caret_line_ != 0;
+}
+
+void CConfiguration::SetOverwriteCaretLine( bool val /*= true*/ )
+{
+	overwrite_caret_line_ = val;
+}
+
+bool CConfiguration::GetShowLineEnding() const
+{
+	return show_line_endings_ != 0;
+}
+
+void CConfiguration::SetShowLineEnding( bool val /*= true*/ )
+{
+	show_line_endings_ = val;
+}
+
+bool CConfiguration::IsWordWrapEnabled() const
+{
+	return word_wrap_ != 0;
+}
+
+void CConfiguration::EnableWordWrap( bool val /*= true*/ )
+{
+	word_wrap_ = val;
 }

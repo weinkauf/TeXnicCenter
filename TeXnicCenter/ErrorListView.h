@@ -44,31 +44,34 @@ public:
 
 protected:
 	DECLARE_MESSAGE_MAP()
-public:
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+
+public:	
 	void AdjustLayout(const CRect& rect);
 	void AdjustLayout(void);
-	afx_msg void OnSetFocus(CWnd* pOldWnd);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
 	void Clear(void);
 	void AddMessage(const COutputInfo& info, CBuildView::tagImage t);
+
 private:
 	void UpdateToolBarButton(CBuildView::tagImage t);
+
 protected:
+	afx_msg void OnSetFocus(CWnd* pOldWnd);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	virtual BOOL OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-public:
 	afx_msg void OnUpdateShowErrors(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateShowWarnings(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateShowBadBoxes(CCmdUI *pCmdUI);
 	afx_msg void OnShowErrors();
 	afx_msg void OnShowWarnings();
 	afx_msg void OnShowBadBoxes();
+	afx_msg void OnNMDblClk(NMHDR*, LRESULT*);
+
 private:
 	int InsertMessage(const COutputInfo& info, CBuildView::tagImage t);
 	void Populate(unsigned set);
 	void Populate(void);
 
-	afx_msg void OnNMDblClk(NMHDR*, LRESULT*);
 public:
 	void AttachDoc(COutputDoc* doc);
 };

@@ -34,6 +34,10 @@
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
+
+#include <ddeml.h> // DDE support
+#include <dde.h>
+
 #include "OutputDoc.h"
 #include "MainFrm.h"
 #include "LatexProject.h"
@@ -50,9 +54,8 @@
 #include "FileClean.h"
 #include "FileCleanConfirmDialog.h"
 #include "ErrorListView.h"
-
-#include <ddeml.h> // DDE support
-#include <dde.h>
+#include "LaTeXDocument.h"
+#include "LaTeXView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -578,8 +581,8 @@ CDocument* COutputDoc::GetActiveDocument() const
 void COutputDoc::OnLatexView()
 {
 	// check if there is an open document
-	CLaTeXEdit *pView = theApp.GetActiveEditView();
-	CLaTeXDoc *pDoc = NULL;
+	LaTeXView *pView = theApp.GetActiveEditView();
+	LaTeXDocument *pDoc = NULL;
 	CString strCurrentPath;
 	long lCurrentLine = -1;
 
@@ -589,7 +592,7 @@ void COutputDoc::OnLatexView()
 	if (pDoc)
 	{
 		strCurrentPath = pDoc->GetPathName();
-		lCurrentLine = pView->GetCursorPos().y + 1;
+		lCurrentLine = pView->GetCurrentLine() + 1;
 	}
 
 	// execute command
@@ -1084,7 +1087,7 @@ void COutputDoc::DoLaTeXRun()
 
 		while (pos)
 		{
-			CLaTeXDoc *pDoc = dynamic_cast<CLaTeXDoc*>(pDocTemplate->GetNextDoc(pos));
+			LaTeXDocument *pDoc = dynamic_cast<LaTeXDocument*>(pDocTemplate->GetNextDoc(pos));
 			if (pDoc) pDoc->SetErrorMark(-1);
 		}
 	}

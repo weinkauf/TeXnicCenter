@@ -1,15 +1,15 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
-#include "LaTeXView.h"
 
 #include <string>
 #include <algorithm>
+#include <cstddef>
 
+#include "LaTeXView.h"
 #include "Advice.h"
 #include "AutoCompleteDlg.h"
-#include "../CrysEditEx/Source/CharType.h"
+#include "CharType.h"
 #include "Configuration.h"
-#include "gotodialog.h"
 #include "global.h"
 #include "LaTeXDocument.h"
 #include "TextOutsourceDlg.h"
@@ -17,23 +17,156 @@
 #include "InsertGraphicDialog.h"
 #include "inserttabulardialog.h"
 #include "insertheaderdialog.h"
+#include "Speller.h"
+#include "LaTeXTokenizer.h"
+#include "SpellCheckDlg.h"
+
+class SpellerSuggestionMenu
+{
+	LaTeXView* view_;
+	long text_pos_;
+	CMenu menu_;
+
+public:
+	SpellerSuggestionMenu(LaTeXView* view, long pos)
+	: view_(view), text_pos_(pos)
+	{
+	}
+
+	int TrackPopupMenu(CView* view, const CPoint& pt, CMenu* menu)
+	{
+		return theApp.GetContextMenuManager()->TrackPopupMenu(menu->m_hMenu,pt.x,pt.y,view);
+	}
+
+	BOOL ShowSpellMenu(Speller *pSpell, const CPoint& screenPoint);
+
+protected:
+	enum tagBase
+	{
+		none,
+		spellErrorCount = MAXSUGGESTION,
+		spellErrorStart = ID_SPELL_ERROR_FIRST,
+		spellErrorStop = ID_SPELL_ERROR_LAST
+	};
+};
+
+BOOL SpellerSuggestionMenu::ShowSpellMenu(Speller *pSpell, const CPoint& screenPoint)
+{
+	BOOL retValue = FALSE;
+
+	int s = view_->GetCtrl().IndicatorStart(0,text_pos_,FALSE);
+	int e = view_->GetCtrl().IndicatorEnd(0,text_pos_,FALSE);
+
+	if (s != e) {
+		std::vector<char> buffer;
+
+		TextRange tr;
+		tr.chrg.cpMin = s;
+		tr.chrg.cpMax = e;
+		tr.lpstrText = 0;
+
+		buffer.resize((e - s) * 4 + 1); // Make some room
+		tr.lpstrText = &buffer[0];
+
+		view_->GetCtrl().GetTextRange(&tr,FALSE);
+		bool clear = false;
+
+		// Test the word again
+		if (pSpell->SpellUTF8(&buffer[0])) {
+			// Word was found, remove the attribute
+			clear = true;
+		}
+		else {
+			// FIX: Menu ID offset; context manager creates
+			// a submenu for an item with the ID set to 0
+			const UINT start = 1;
+			USES_CONVERSION;
+
+			// Get the suggestion list
+			CStringArray aSuggestList;
+			int nSuggestCount = pSpell->SuggestUTF8(W2CA(A2CW_CP(&buffer[0],CP_UTF8)),aSuggestList); // argh!
+
+			if (!menu_)
+				menu_.LoadMenu(IDR_POPUP_ATTRIBUTE);
+
+			// Populate the menu
+			CMenu* pPopup = menu_.GetSubMenu(1);
+
+			ASSERT(pPopup);
+			pPopup->InsertMenu(0, MF_BYPOSITION | MF_SEPARATOR, 0, _T(""));
+
+			if (nSuggestCount == 0)
+			{
+				CString noSuggestions;
+				noSuggestions.LoadString(IDS_SPELL_NO_SUGGESTIONS);
+				pPopup->InsertMenu(0, MF_STRING | MF_GRAYED | MF_BYPOSITION | MF_DISABLED, start, noSuggestions);
+			}
+			else
+			{
+				if (nSuggestCount > spellErrorCount)
+					nSuggestCount = spellErrorCount;
+
+				for (int i = 0; i < nSuggestCount; ++i)
+					pPopup->InsertMenu(i, MF_STRING | MF_ENABLED | MF_BYPOSITION, i + spellErrorStart, aSuggestList[i]);
+			}
+
+			// Place the menu under the text
+			const int y = view_->GetCtrl().PointYFromPosition(text_pos_) + 
+				view_->GetCtrl().TextHeight(view_->GetCtrl().LineFromPosition(text_pos_));
+
+			// Use the y point for text's baseline
+			CPoint pt(0,y);
+			view_->ClientToScreen(&pt);
+
+			// and the mouse x point
+			pt.x = screenPoint.x;
+
+			const int nSel = TrackPopupMenu(view_,pt,pPopup);
+
+			if (nSel >= spellErrorStart && nSel < spellErrorStop)
+			{
+				// Save the previous selection
+				long ptStart = view_->GetCtrl().GetSelectionStart(FALSE);
+				long ptEnd = view_->GetCtrl().GetSelectionEnd(FALSE);
+
+				// Replace the word
+				view_->GetCtrl().BeginUndoAction();
+
+				view_->GetCtrl().SetSel(s,e,FALSE);
+				view_->GetCtrl().ReplaceSel(aSuggestList[nSel - spellErrorStart],FALSE);
+
+				// Restore the old selection
+				view_->GetCtrl().SetSel(ptStart, ptEnd,FALSE);
+
+				view_->GetCtrl().EndUndoAction();
+			}
+			else if (nSel == ID_EDIT_SPELL_ADD)
+			{
+				pSpell->AddUTF8(&buffer[0]);
+				clear = true;
+			}
+			else if (nSel == ID_EDIT_SPELL_IGNORE_ALL)
+			{
+				pSpell->IgnoreUTF8(&buffer[0]);
+				clear = true;
+			}
+
+			if (clear)
+				view_->GetCtrl().IndicatorClearRange(s,e - s,FALSE);
+
+			// Trigger the line to be re-checked
+			if (view_->GetDocument()->IsSpellerThreadAttached())
+				view_->GetDocument()->GetSpellerThread()->
+					RecheckSingleLineSpelling(view_->GetCtrl().LineFromPosition(text_pos_),view_);
+
+			retValue = TRUE;
+		}
+	}
+
+	return retValue;
+}
 
 #pragma region Helper functions and classes
-
-namespace {
-	namespace BOM {
-		const BYTE utf8[] = {0xEF,0xBB,0xBF};
-		const BYTE utf16le[] = {0xff,0xfe};
-		const BYTE utf16be[] = {0xfe,0xff};
-		const BYTE utf32le[] = {0xff,0xfe,0x00,0x00};
-		const BYTE utf32be[] = {0x00,0x00,0xfe,0xff};
-	}
-
-	void SwapCodePoint(WCHAR& ch)
-	{
-		ch = (ch & 0xff) << 8 | ch >> 8 & 0xff;
-	}
-}
 
 class LaTeXViewListener :
 	public CAutoCompleteListener
@@ -83,30 +216,23 @@ private:
 
 // LaTeXView
 
-IMPLEMENT_DYNCREATE(LaTeXView, CScintillaView)
+IMPLEMENT_DYNCREATE(LaTeXView, CodeView)
 
 LaTeXView::LaTeXView()
-: m_AutoCompleteActive(false)
-, m_InstTip(0)
-, m_CompletionListBox(0)
-, m_Proxy(new LaTeXViewListener(this))
-, m_pBackgroundThread(theApp.GetBackgroundThread())
-, m_bCreateBackupFile(false)
-, encoding_(ASCII)
-, code_page_(CP_ACP)
+: autocompletion_active_(false)
+, instant_advice_tip_(0)
+, autocompletion_list_(0)
+, listener_(new LaTeXViewListener(this))
 {
 }
 
 LaTeXView::~LaTeXView()
 {
+	delete listener_;
 }
 
-BEGIN_MESSAGE_MAP(LaTeXView, CScintillaView)
-	ON_COMMAND(ID_EDIT_GOTO, &LaTeXView::OnEditGoto)
-	ON_COMMAND(ID_EDIT_TOGGLE_WHITESPACEVIEW, &LaTeXView::OnEditToggleWhiteSpaceView)
-	ON_COMMAND(ID_EDIT_TOGGLE_SHOW_LINE_ENDING, &LaTeXView::OnEditToggleShowLineEnding)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_TOGGLE_WHITESPACEVIEW, &LaTeXView::OnUpdateEditToggleWhiteSpaceView)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_TOGGLE_SHOW_LINE_ENDING, &LaTeXView::OnUpdateEditToggleShowLineEnding)
+BEGIN_MESSAGE_MAP(LaTeXView, CodeView)
+	ON_WM_SETFOCUS()
 	ON_COMMAND(ID_SPELL_FILE, &LaTeXView::OnSpellFile)
 	ON_COMMAND(ID_EDIT_DELETE_LINE, &LaTeXView::OnEditDeleteLine)
 	ON_WM_CONTEXTMENU()
@@ -116,24 +242,25 @@ BEGIN_MESSAGE_MAP(LaTeXView, CScintillaView)
 	ON_COMMAND_EX_RANGE(ID_INSERT_A,ID_INSERT_NOTIN, &LaTeXView::OnInsertLaTeXConstruct)
 	ON_COMMAND_EX_RANGE(ID_INSERT_SUPERSCRIPT,ID_INSERT_DDOTS, &LaTeXView::OnInsertLaTeXConstruct)
 	ON_COMMAND_EX_RANGE(ID_TEXTMODULES_FIRST,ID_TEXTMODULES_LAST, &LaTeXView::OnInsertLaTeXConstruct)
-	ON_WM_SETFOCUS()
+	ON_WM_CREATE()
+	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_INSERT, &LaTeXView::OnBlockComment)
+	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_REMOVE, &LaTeXView::OnBlockComment)
+	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_TOOGLE, &LaTeXView::OnBlockComment)
 END_MESSAGE_MAP()
 
-
-// LaTeXView drawing
 
 // LaTeXView diagnostics
 
 #ifdef _DEBUG
 void LaTeXView::AssertValid() const
 {
-	CScintillaView::AssertValid();
+	CodeView::AssertValid();
 }
 
 #ifndef _WIN32_WCE
 void LaTeXView::Dump(CDumpContext& dc) const
 {
-	CScintillaView::Dump(dc);
+	CodeView::Dump(dc);
 }
 #endif
 #endif //_DEBUG
@@ -141,50 +268,25 @@ void LaTeXView::Dump(CDumpContext& dc) const
 
 // LaTeXView message handlers
 
-void LaTeXView::OnInitialUpdate()
+int LaTeXView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-    CScintillaView::OnInitialUpdate();
+	if (CodeView::OnCreate(lpCreateStruct) == -1)
+		return -1;
 
-    theme_.SubclassWindow(m_hWnd);
-    theme_.Initialize();
+	//EnableHardWrap();
 
 	old_pos_start_ = old_pos_end_ = -1;
-	m_AutoCompleteActive = false;
+	autocompletion_active_ = false;
 
 	CScintillaCtrl& rCtrl = GetCtrl();
 	rCtrl.SetLexer(SCLEX_TEX); // TeX Lexer
 
-	rCtrl.SetPasteConvertEndings(TRUE); // Convert line endings
-
-	// Folding
-	rCtrl.SetMarginWidthN(2, 16);
-	rCtrl.SetMarginSensitiveN(2, TRUE);
-	rCtrl.SetMarginTypeN(2, SC_MARGIN_SYMBOL);
-	rCtrl.SetMarginMaskN(2, SC_MASK_FOLDERS);
-
-	rCtrl.SetProperty(_T("fold"), _T("1"));
-
-	// Setup markers for VS style folding
-	COLORREF clr = ::GetSysColor(COLOR_3DSHADOW);
-
-	DefineMarker(SC_MARKNUM_FOLDEROPEN, SC_MARK_BOXMINUS, RGB(0xff, 0xff, 0xff), clr);
-	DefineMarker(SC_MARKNUM_FOLDER, SC_MARK_BOXPLUS, RGB(0xff, 0xff, 0xff), clr);
-	DefineMarker(SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE, RGB(0xff, 0xff, 0xff), clr);
-	DefineMarker(SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNER, RGB(0xff, 0xff, 0xff), clr);
-	DefineMarker(SC_MARKNUM_FOLDEREND, SC_MARK_BOXPLUSCONNECTED, RGB(0xff, 0xff, 0xff), clr);
-	DefineMarker(SC_MARKNUM_FOLDEROPENMID, SC_MARK_BOXMINUSCONNECTED, RGB(0xff, 0xff, 0xff),clr);
-	DefineMarker(SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_VLINE, RGB(0xff, 0xff, 0xff), clr);
-
-	UpdateSettings();
+	return 0;
 }
 
-void LaTeXView::DefineMarker(int marker, int markerType, COLORREF fore, COLORREF back) 
+void LaTeXView::OnInitialUpdate()
 {
-	CScintillaCtrl& rCtrl = GetCtrl();
-
-	rCtrl.MarkerDefine(marker, markerType);
-	rCtrl.MarkerSetFore(marker, fore);
-	rCtrl.MarkerSetBack(marker, back);
+    CodeView::OnInitialUpdate();	
 }
 
 void LaTeXView::SetAStyle(int style, COLORREF fore, COLORREF back, int size, LPCTSTR face) 
@@ -196,56 +298,60 @@ void LaTeXView::SetAStyle(int style, COLORREF fore, COLORREF back, int size, LPC
 
     if (size >= 1)
         rCtrl.StyleSetSize(style, size);
+
     if (face) 
         rCtrl.StyleSetFont(style, face);
 }
 
 void LaTeXView::OnCharAdded(SCNotification* n)
 {
-    if (GetDocument()->IsModified())
-        GetDocument()->SetModifiedFlag();
+	CodeView::OnCharAdded(n);
 
 	long pos = GetCtrl().GetCurrentPos();
 
 	if (pos > 0) {
-		TCHAR ch = n->ch;
+		char ch = static_cast<char>(n->ch);
 
 		switch (ch) {
-			case _T('"') :
+			case '"':
 				if (CConfiguration::GetInstance()->m_bReplaceQuotationMarks) {
-					long start = pos;
+					const int prev_pos = GetCtrl().PositionBefore(GetCtrl().PositionBefore(pos));
+
+					if (static_cast<char>(GetCtrl().GetCharAt(prev_pos)) != '\\') { // Skip the case \"
+						long start = pos;
 					
-					GetCtrl().SetSel(pos - 1,pos);
-					GetCtrl().ReplaceSel(_T(""));
+						GetCtrl().SetSel(GetCtrl().PositionBefore(pos),pos);
+						GetCtrl().ReplaceSel("");
 
-					pos = GetCtrl().GetCurrentPos();
+						pos = GetCtrl().GetCurrentPos();
 
-					// opening quotation mark, if character is first in line
-					if (start < 1) {
-						InsertText(CConfiguration::GetInstance()->m_strOpeningQuotationMark);					
-					}
-					else {
-						// opening quotation mark, if character left of selection is whitespace or open brace					
-						TCHAR cLeft = GetCtrl().GetCharAt(pos - 1);
+						// opening quotation mark, if character is first in line
+						if (start < 1) {
+							InsertText(CConfiguration::GetInstance()->m_strOpeningQuotationMark);					
+						}
+						else {
+							// opening quotation mark, if character left of selection is whitespace or open brace					
+							char cLeft = static_cast<char>(GetCtrl().GetCharAt(GetCtrl().PositionBefore(pos)));
 
-						if (!cLeft)
-							cLeft = _T(' ');
+							if (!cLeft)
+								cLeft = ' ';
+							
+							CString mark;
 
-						CString mark;
+							if (CharTraitsA::IsSpace(cLeft) || cLeft == '(' || cLeft == '{' || cLeft == '[')
+								mark = CConfiguration::GetInstance()->m_strOpeningQuotationMark;
+							else
+								mark = CConfiguration::GetInstance()->m_strClosingQuotationMark;
 
-						if (CharTraitsT::IsSpace(cLeft) || cLeft == _T('(') || cLeft == _T('{') || cLeft == _T('['))
-							mark = CConfiguration::GetInstance()->m_strOpeningQuotationMark;
-						else
-							mark = CConfiguration::GetInstance()->m_strClosingQuotationMark;
-
-						GetCtrl().InsertText(pos,mark);
-						
-						// Update position
-						pos += mark.GetLength();
-						// Set the current position
-						GetCtrl().SetCurrentPos(pos);
-						// Remove any possible selection
-						GetCtrl().SetSel(-1,pos);
+							GetCtrl().InsertText(pos,mark);
+							
+							// Update position
+							pos += mark.GetLength();
+							// Set the current position
+							GetCtrl().SetCurrentPos(pos);
+							// Remove any possible selection
+							GetCtrl().SetSel(-1,pos);
+						}
 					}
 				}
 
@@ -255,57 +361,6 @@ void LaTeXView::OnCharAdded(SCNotification* n)
 					InstantAdvice();
 		}
 	}
-}
-
-void LaTeXView::Serialize(CArchive& ar)
-{
-    if (ar.IsStoring())
-		SaveToFile(ar.GetFile()->m_hFile);
-    else
-		LoadFromFile(ar.GetFile()->m_hFile);
-}
-
-LaTeXView::Encoding LaTeXView::GetEncoding() const
-{
-	return encoding_;
-}
-
-UINT LaTeXView::GetCodePage() const
-{
-	return code_page_;
-}
-
-LaTeXView::Encoding LaTeXView::DetectEncoding(const BYTE* data, SIZE_T& pos, SIZE_T size)
-{
-	// By default we assume ASCII text
-	Encoding encoding = ASCII;
-	pos = 0;
-
-	if (size >= 2) {// minimal BOM size
-		// Try to detect Unicode using byte order mark
-		if (size >= sizeof(BOM::utf8) && std::memcmp(data,BOM::utf8,sizeof(BOM::utf8)) == 0) {
-			encoding = UTF8;
-			pos += sizeof(BOM::utf8);
-		}
-		else if (std::memcmp(data,BOM::utf16le,sizeof(BOM::utf16le)) == 0) {
-			encoding = UTF16LE;
-			pos += sizeof(BOM::utf16le);
-		}
-		else if (std::memcmp(data,BOM::utf16be,sizeof(BOM::utf16be)) == 0) {
-			encoding = UTF16BE;
-			pos += sizeof(BOM::utf16be);
-		}
-		else if (size >= sizeof(BOM::utf32le) && std::memcmp(data,BOM::utf32le,sizeof(BOM::utf32le)) == 0) {
-			encoding = UTF32LE;
-			pos += sizeof(BOM::utf32le);
-		}
-		else if (size >= sizeof(BOM::utf32be) && std::memcmp(data,BOM::utf32be,sizeof(BOM::utf32be)) == 0) {
-			encoding = UTF32BE;
-			pos += sizeof(BOM::utf32be);
-		}
-	}
-
-	return encoding;
 }
 
 COLORREF LaTeXView::GetAutomaticColor(int nColorIndex)
@@ -368,32 +423,27 @@ void LaTeXView::UpdateSettings()
 {
 	CScintillaCtrl& rCtrl = GetCtrl();
 
-	CWindowDC dc(this);
-
 	const LOGFONT& editor_font = CConfiguration::GetInstance()->m_fontEditor;
-
-	CFont font;
-	font.CreateFontIndirect(&editor_font);
-
-	CFont* oldfont = dc.SelectObject(&font);
-
-	TEXTMETRIC tm;
-	dc.GetTextMetrics(&tm);
-
-	dc.SelectObject(&oldfont);
-
-	const int style_number = (tm.tmHeight - tm.tmInternalLeading) * 72 / dc.GetDeviceCaps(LOGPIXELSY);
-	style_number_ = style_number;
+	const int point_size = GetLogFontPointSize(editor_font);
 
 	SetAStyle(STYLE_DEFAULT, GetColor(COLORINDEX_NORMALTEXT),GetColor(COLORINDEX_BKGND),
-		style_number,CConfiguration::GetInstance()->m_fontEditor.lfFaceName);
-
-	SetAStyle(SCE_TEX_DEFAULT, GetColor(COLORINDEX_COMMENT)); // Includes the comment
-	SetAStyle(SCE_TEX_GROUP, RGB(0,0,0));
+		point_size,CConfiguration::GetInstance()->m_fontEditor.lfFaceName);
+	
+	SetAStyle(SCE_TEX_DEFAULT, GetColor(COLORINDEX_COMMENT)); // Includes comments' color
+	SetAStyle(SCE_TEX_GROUP,RGB(125,167,217));
+	
 	SetAStyle(SCE_TEX_TEXT,GetColor(COLORINDEX_NORMALTEXT));
-	SetAStyle(SCE_TEX_SPECIAL, RGB(255,0,255));
-	SetAStyle(SCE_TEX_SYMBOL, RGB(0,165,0));
-	rCtrl.StyleSetBold(SCE_TEX_COMMAND,TRUE);
+	SetAStyle(SCE_TEX_SPECIAL, RGB(158,11,15));
+	SetAStyle(SCE_TEX_SYMBOL, RGB(145,0,145));
+
+#pragma region Comments 
+
+	// Comments displayed in italics
+	rCtrl.StyleSetFont(SCE_TEX_DEFAULT,editor_font.lfFaceName);
+	rCtrl.StyleSetSize(SCE_TEX_DEFAULT,point_size);
+	rCtrl.StyleSetItalic(SCE_TEX_DEFAULT,TRUE);
+
+#pragma endregion
 
 	rCtrl.UsePopUp(FALSE);
 	rCtrl.SetTabWidth(CConfiguration::GetInstance()->m_nTabWidth);
@@ -404,81 +454,109 @@ void LaTeXView::UpdateSettings()
 	rCtrl.SetSelFore(TRUE,GetColor(COLORINDEX_SELTEXT));
 	rCtrl.SetSelBack(TRUE,GetColor(COLORINDEX_SELBKGND));
 
-	rCtrl.StyleSetItalic(style_number,editor_font.lfItalic);
-	rCtrl.StyleSetItalic(style_number,editor_font.lfWeight >= FW_BOLD);
+	rCtrl.StyleSetItalic(STYLE_DEFAULT,editor_font.lfItalic);
+	rCtrl.StyleSetItalic(STYLE_DEFAULT,editor_font.lfWeight >= FW_BOLD);
 
-	UpdateLineNumberMarginWidth();
+#pragma region Brace highlighting
 
-	const int font_height = style_number;
-
-	// Brace highlighting
 	rCtrl.StyleSetFont(STYLE_BRACELIGHT,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(STYLE_BRACELIGHT,font_height);
+	rCtrl.StyleSetSize(STYLE_BRACELIGHT,point_size);
 	rCtrl.StyleSetBold(STYLE_BRACELIGHT,TRUE);
-	rCtrl.StyleSetFore(STYLE_BRACELIGHT,RGB(0,255,0));
+	rCtrl.StyleSetFore(STYLE_BRACELIGHT,RGB(0,0,0));
 
 	rCtrl.StyleSetFont(STYLE_BRACEBAD,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(STYLE_BRACEBAD,font_height);
+	rCtrl.StyleSetSize(STYLE_BRACEBAD,point_size);
 	rCtrl.StyleSetBold(STYLE_BRACEBAD,TRUE);
 	rCtrl.StyleSetFore(STYLE_BRACEBAD,RGB(255,0,0));
-}
 
-void LaTeXView::UpdateLineNumberMarginWidth()
-{
-	CScintillaCtrl& rCtrl = GetCtrl();
-	int line_count = rCtrl.GetLineCount();
+#pragma endregion
 
-	int digits = 0;
+#pragma region Caret
 
-	while (line_count) {
-		line_count /= 10;
-		++digits;
-	}
+	rCtrl.SetCaretStyle(CConfiguration::GetInstance()->IsInsertCaretLine() ? CARETSTYLE_LINE : CARETSTYLE_BLOCK);
+	rCtrl.SetCaretPeriod(CConfiguration::GetInstance()->IsBlinkInsertCaret() ? 500 : 0);
 
-	std::string number(std::max(digits,2),'9'); // Put 9 line_count times to measure the width
-	number.insert(number.begin(),'_'); // Some padding
-
-	if (CConfiguration::GetInstance()->m_bShowLineNumbers) {
-		const int width = rCtrl.TextWidth(STYLE_LINENUMBER,number.c_str());
-		rCtrl.SetMarginWidthN(0,width);
-	}
-	else
-		rCtrl.SetMarginWidthN(0,0); // Margin invisible
+#pragma endregion
 }
 
 #pragma region Scintilla notifications
 
 void LaTeXView::OnUpdateUI(SCNotification* n)
 {
+	CodeView::OnUpdateUI(n);
+
 	long pos = GetCtrl().GetCurrentPos();
-	TCHAR ch = GetCtrl().GetCharAt(pos);
 
-	const CString braces(_T("{}[]()"));
+	int line = GetCtrl().LineFromPosition(pos);
+	long line_start_pos = GetCtrl().PositionFromLine(line);
+	long line_end_pos = GetCtrl().GetLineEndPosition(line);
 
-	if (!ch || braces.Find(ch) == -1)
-		ch = GetCtrl().GetCharAt(--pos);
+	bool comment = false;
 
-	if (braces.Find(ch) != -1) {	
-		long brace_pos = GetCtrl().BraceMatch(pos);
+	for ( ; line_start_pos < line_end_pos && !comment; 
+		line_start_pos = GetCtrl().PositionAfter(line_start_pos))
+		if (static_cast<char>(GetCtrl().GetCharAt(line_start_pos)) == '%')
+			comment = true;
 
-		if (brace_pos != -1)
-			GetCtrl().BraceHighlight(pos,brace_pos);
+	// Do brace matching only if the line is not commented
+	if (!comment) {
+		if (pos > 0)
+			pos = GetCtrl().PositionBefore(pos); // Look at the previous character first
+
+		char ch = static_cast<char>(GetCtrl().GetCharAt(pos));
+		const CStringA braces("{}[]()");
+
+		if (!ch || braces.Find(ch) == -1)
+			pos = GetCtrl().PositionAfter(pos);
+			ch = GetCtrl().GetCharAt(pos); // Now go back
+
+		if (braces.Find(ch) != -1) {	
+			long brace_pos = GetCtrl().BraceMatch(pos);
+
+			if (brace_pos != -1)
+				GetCtrl().BraceHighlight(pos,brace_pos);
+			else
+				GetCtrl().BraceBadLight(pos);
+		}
 		else
-			GetCtrl().BraceBadLight(pos);
+			GetCtrl().BraceHighlight(-1,-1);
 	}
-	else
-		GetCtrl().BraceHighlight(-1,-1);
 }
 
 void LaTeXView::OnModified(SCNotification* n)
 {
+	// Text has been inserted or deleted but it's not a part of a
+	// multi step undo/redo action or it is the last action in this undo/redo chain
+	if (n->modificationType & (SC_MOD_INSERTTEXT|SC_MOD_DELETETEXT) && 
+		(!(n->modificationType & SC_MULTISTEPUNDOREDO) || n->modificationType & SC_LASTSTEPINUNDOREDO)) {
+		GetDocument()->SetModifiedFlag(GetCtrl().CanUndo());
+
+		if (GetDocument()->IsSpellerThreadAttached()) {
+			int line = GetCtrl().LineFromPosition(n->position);
+
+			// Only some lines have been changed, recheck only those
+			if (n->length != GetCtrl().GetLength()) {
+				int endline = line + n->linesAdded;
+
+				do {
+					GetDocument()->GetSpellerThread()->RecheckSingleLineSpelling(line,this);
+				}
+				while (++line < endline);
+			}
+			else // Document has been completely changed, recheck the whole buffer
+				GetDocument()->GetSpellerThread()->RecheckSpelling(this);
+		}
+	}
+
 	if (n->linesAdded) {
 		// Number of lines changed, update margin's width
-		UpdateLineNumberMarginWidth();
+		UpdateLineNumberMargin();
 	}
 }
 
 #pragma endregion
+
+#pragma region Advice tips
 
 void LaTeXView::InstantAdvice()
 {
@@ -499,22 +577,22 @@ void LaTeXView::InstantAdvice()
 			map.GetNextAssoc(pos,key,(CObject*&)lc);
 
 			if (lc != NULL) {
-				if (m_InstTip == NULL) {
-					m_InstTip = new CAdvice();
-					m_InstTip->Create(lc->ToLaTeX(),WS_POPUP | WS_BORDER/*SS_SUNKEN*/,CRect(),CWnd::FromHandle(GetCtrl()));
+				if (instant_advice_tip_ == NULL) {
+					instant_advice_tip_ = new CAdvice();
+					instant_advice_tip_->Create(lc->ToLaTeX(),WS_POPUP | WS_BORDER/*SS_SUNKEN*/,CRect(),CWnd::FromHandle(GetCtrl()));
 				}
 
-				if (!m_InstTip->IsWindowVisible()) {
+				if (!instant_advice_tip_->IsWindowVisible()) {
 					// Compute window size
 					CPoint ptClient(GetCtrl().PointXFromPosition(ptStart),GetCtrl().PointYFromPosition(ptStart));
 					::ClientToScreen(GetSafeHwnd(),&ptClient);
 					// Determine if there is space enough to show the window below the text
 					ptClient.y += GetCtrl().TextHeight(GetCtrl().LineFromPosition(ptStart));
 					// Place and show the window
-					m_InstTip->SetWindowPos(NULL,ptClient.x,ptClient.y,0,0,SWP_NOSIZE | SWP_NOZORDER);
-					m_InstTip->SetWindowText(lc->GetExpandBefore() + lc->ToLaTeX() + lc->GetExpandAfter());
-					m_InstTip->ShowWindow(SW_SHOWNA);
-					m_InstTip->SetTimer(1,5000,0);
+					instant_advice_tip_->SetWindowPos(NULL,ptClient.x,ptClient.y,0,0,SWP_NOSIZE | SWP_NOZORDER);
+					instant_advice_tip_->SetWindowText(lc->GetExpandBefore() + lc->ToLaTeX() + lc->GetExpandAfter());
+					instant_advice_tip_->ShowWindow(SW_SHOWNA);
+					instant_advice_tip_->SetTimer(1,5000,0);
 					SetFocus();
 				}
 			}
@@ -530,10 +608,11 @@ void LaTeXView::InstantAdvice()
 
 void LaTeXView::HideAdvice()
 {
-	if (m_InstTip)
-		m_InstTip->ShowWindow(SW_HIDE);
+	if (instant_advice_tip_)
+		instant_advice_tip_->ShowWindow(SW_HIDE);
 }
 
+#pragma endregion
 
 #pragma region Message handlers for auto complete listbox
 
@@ -541,7 +620,7 @@ void LaTeXView::OnACCommandSelect(const CLaTeXCommand* cmd)
 {
 	long ptCaret;
 
-	m_AutoCompleteActive = false;
+	autocompletion_active_ = false;
 	old_pos_start_ = old_pos_end_ = -1;
 
 	ASSERT(cmd != NULL);
@@ -621,10 +700,10 @@ void LaTeXView::OnACCommandCancelled()
 {
 	/* This issue is a little bit weird: The AC window sends a OnACCommandCancelled in every case the window is close
 	in order to react on KillFocus msgs. If the completion was finished OnACCommandSelect, we must prohibit to execute
-	OnACCommandCancelled in this case. So we use the m_AutoCompleteActive flag to determine, if the autocomplete
+	OnACCommandCancelled in this case. So we use the autocompletion_active_ flag to determine, if the autocomplete
 	has been finished or not */
 
-	if (m_AutoCompleteActive) {
+	if (autocompletion_active_) {
 		/* try to restore old cursor pos */
 		if (old_pos_start_ != -1 && old_pos_end_ != -1)
 			GetCtrl().SetSel(old_pos_start_,old_pos_end_);
@@ -634,7 +713,7 @@ void LaTeXView::OnACCommandCancelled()
 		}
 
 		old_pos_start_ = old_pos_end_ = -1;
-		m_AutoCompleteActive = false;
+		autocompletion_active_ = false;
 		RestoreFocus();
 	}
 }
@@ -644,9 +723,9 @@ void LaTeXView::RestoreFocus()
 	SetFocus();
 }
 
-void LaTeXView::OnACChar(UINT nKey, UINT nRepCount, UINT nFlags)
+void LaTeXView::OnACChar(UINT nKey, UINT /*nRepCount*/, UINT /*nFlags*/)
 {
-	if (m_CompletionListBox && m_CompletionListBox->IsWindowVisible()) {
+	if (autocompletion_list_ && autocompletion_list_->IsWindowVisible()) {
 		long pos = GetCtrl().GetCurrentPos();
 		const TCHAR text[] = {static_cast<TCHAR>(nKey),0};
 
@@ -663,7 +742,7 @@ void LaTeXView::OnACChar(UINT nKey, UINT nRepCount, UINT nFlags)
 
 void LaTeXView::OnACBackspace()
 {
-	if (m_CompletionListBox && m_CompletionListBox->IsWindowVisible())
+	if (autocompletion_list_ && autocompletion_list_->IsWindowVisible())
 	{
 		//CPoint ps,pe,dummy;
 		//GetSelection(ps,pe);
@@ -698,6 +777,8 @@ void LaTeXView::OnACHelp( const CString &cmd )
 
 #pragma endregion
 
+#pragma region Auto completion listbox handling
+
 CAutoCompleteDlg* LaTeXView::CreateListBox( CString &keyword, long pos )
 {
 	//TRACE("==> CreateListBox\n");
@@ -714,32 +795,32 @@ CAutoCompleteDlg* LaTeXView::CreateListBox( CString &keyword, long pos )
 	if (nWords >= 1)
 	{
 		//Create window, if needed
-		if (m_CompletionListBox == NULL) {
-			m_CompletionListBox = new CAutoCompleteDlg(&theApp.m_AvailableCommands,this /*theApp.GetMainWnd()*/);
-			m_CompletionListBox->SetListener(m_Proxy);
+		if (autocompletion_list_ == NULL) {
+			autocompletion_list_ = new CAutoCompleteDlg(&theApp.m_AvailableCommands,this /*theApp.GetMainWnd()*/);
+			autocompletion_list_->SetListener(listener_);
 		}
 
 		//InitWithKeyword will notify the listener immediately, if only one exact match exists
-		if (m_CompletionListBox->InitWithKeyword(keyword) && nWords > 1) {
+		if (autocompletion_list_->InitWithKeyword(keyword) && nWords > 1) {
 			//TRACE("==> CreateListBox: Show listbox \n");
-			m_AutoCompleteActive = TRUE;
+			autocompletion_active_ = TRUE;
 
 			//Move box by (16 IconPixels + 2 Pixels between Icon and text + 6/2 BorderPixels + 1 Pixel Magick) = 22
 			//This way, the text matches with the editor
 			ClientToScreen(&ptStart); //yes, this works only with screen coords. do not ask me why.
-			m_CompletionListBox->SetWindowPos(NULL,ptStart.x - 22,ptStart.y,0,0,SWP_NOSIZE | SWP_NOZORDER
+			autocompletion_list_->SetWindowPos(NULL,ptStart.x - 22,ptStart.y,0,0,SWP_NOSIZE | SWP_NOZORDER
 				| SWP_NOACTIVATE);
 
 			//Adjust size of the box to see all content and we do not want to be over the border
-			m_CompletionListBox->AdjustSizeAndPosition(GetCtrl().TextHeight(GetCtrl().LineFromPosition(pos)));
+			autocompletion_list_->AdjustSizeAndPosition(GetCtrl().TextHeight(GetCtrl().LineFromPosition(pos)));
 
-			m_CompletionListBox->ShowWindow(SW_SHOW);
-			m_CompletionListBox->SetCurSel(0);
+			autocompletion_list_->ShowWindow(SW_SHOW);
+			autocompletion_list_->SetCurSel(0);
 		}
 	}
 
 	//TRACE("<== CreateListBox\n");
-	return m_CompletionListBox;
+	return autocompletion_list_;
 }
 
 int LaTeXView::GetNumberOfMatches( const CString& keyword )
@@ -751,16 +832,6 @@ int LaTeXView::GetNumberOfMatches( const CString& keyword )
 	return map.GetCount();
 }
 
-void LaTeXView::GoToLine(int line)
-{
-	GetCtrl().GotoLine(line);
-}
-
-int LaTeXView::GetLineLength(int line)
-{
-	return GetCtrl().GetLineEndPosition(line) - GetCtrl().PositionFromLine(line);
-}
-
 void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& a, bool bSelect /*=true*/)
 {
 	long pos = a;
@@ -768,7 +839,7 @@ void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& a, bool bSelect /
 	int length = GetLineLength(line);
 	
 	if (length > 0) {
-		//Get the line, the cursor is placed on
+		// Get the line, the cursor is placed on
 		const CString strLine = GetLineText(line);
 		long start = GetCtrl().PositionFromLine(line);
 
@@ -842,409 +913,20 @@ bool LaTeXView::IsAutoCompletionCharacter(TCHAR tc)
 			return CharTraitsT::IsAlnum(tc);
 	}
 }
-void LaTeXView::OnEditGoto()
-{
-	CGotoDialog dlg(GetLineCount(),this);
-	dlg.m_nLine = GetCurrentLine() + 1;
 
-	if (dlg.DoModal() == IDOK)
-		GoToLine(dlg.m_nLine - 1);
-}
-
-int LaTeXView::GetLineCount(void)
-{
-	return GetCtrl().GetLineCount();
-}
-
-int LaTeXView::GetCurrentLine(void)
-{
-	return GetCtrl().LineFromPosition(GetCtrl().GetCurrentPos());
-}
-
-const CString LaTeXView::GetLineText( int line )
-{
-	const int length = GetLineLength(line);
-
-	CString strLine;
-	GetCtrl().GetLineEx(line,strLine.GetBuffer(length),length);
-	strLine.ReleaseBuffer(length);
-
-	return strLine;
-}
-
-void LaTeXView::InsertText( const CString& text )
-{
-	long pos = GetCtrl().GetCurrentPos();
-	GetCtrl().InsertText(pos,text);
-	GetCtrl().GotoPos(pos + text.GetLength());
-}
-
-void LaTeXView::OnEditToggleWhiteSpaceView()
-{
-	bool visible = GetCtrl().GetViewWS() != SCWS_INVISIBLE;
-	GetCtrl().SetViewWS(visible ? SCWS_INVISIBLE : SCWS_VISIBLEALWAYS);
-}
-
-void LaTeXView::OnEditToggleShowLineEnding()
-{
-	bool visible = GetCtrl().GetViewEOL() != 0;
-	GetCtrl().SetViewEOL(!visible);
-}
-
-void LaTeXView::OnUpdateEditToggleWhiteSpaceView(CCmdUI *pCmdUI)
-{
-	bool visible = GetCtrl().GetViewWS() != SCWS_INVISIBLE;
-	pCmdUI->SetCheck(visible);
-}
-
-void LaTeXView::OnUpdateEditToggleShowLineEnding(CCmdUI *pCmdUI)
-{
-	pCmdUI->SetCheck(GetCtrl().GetViewEOL());
-}
+#pragma endregion
 
 void LaTeXView::OnSpellFile()
 {
-	//// Save selection
-	//long s = GetCtrl().GetSelectionStart();
-	//long e = GetCtrl().GetSelectionEnd();
-
-	////SetShowInteractiveSelection(TRUE);
-	//
-	//CCrystalResources cr;
-	//CSpellCheckDlg dlg(this,theApp.GetSpeller());
-
-	//dlg.DoModal();
-	////SetShowInteractiveSelection(FALSE);
-
-	//// Restore selection
-	//GetCtrl().SetSel(s,e);
-}
-
-#pragma region Reading & writing to/from files
-
-DWORD LaTeXView::LoadFromFile(LPCTSTR pszFileName)
-{
-	DWORD result = ERROR_SUCCESS;
-	CAtlFile file;
-
-	if (SUCCEEDED(file.Create(pszFileName,GENERIC_READ,FILE_SHARE_READ,OPEN_EXISTING)))
-		result = LoadFromFile(file);
-	else
-		result = ::GetLastError();
-
-	return result;
-}
-
-DWORD LaTeXView::LoadFromFile(HANDLE file)
-{
-	DWORD result = ERROR_SUCCESS;
-	ATL::CAtlFileMapping<BYTE> mapping;
-
-	if (SUCCEEDED(mapping.MapFile(file))) {
-		const BYTE* data = mapping;
-		SIZE_T size = mapping.GetMappingSize();
-		SIZE_T pos = 0;
-
-		Encoding encoding = DetectEncoding(data,pos,size);
-
-		if (encoding == ASCII) { // ASCII? Still might by Unicode without BOM
-			INT flags = IS_TEXT_UNICODE_UNICODE_MASK;
-
-			if (::IsTextUnicode(data,size,&flags)) {
-				if (flags & (IS_TEXT_UNICODE_REVERSE_ASCII16|IS_TEXT_UNICODE_REVERSE_STATISTICS))
-					encoding = UTF16BE;
-				else
-					encoding = UTF16LE;
-			}
-			else {
-				// From Wikipedia:
-				// As a consequence of the design of UTF-8, the following properties of multi-byte sequences hold:
-
-				//  * The most significant bit of a single-byte character is always 0.
-				//	* The most significant bits of the first byte of a multi-byte sequence determine the length of 
-				//	  the sequence. These most significant bits are 110 for two-byte sequences; 1110 for three-byte 
-				//	  sequences, and so on.
-				//	* The remaining bytes in a multi-byte sequence have 10 as their two most significant bits.
-				//	* A UTF-8 stream contains neither the byte FE nor FF. This makes sure that a UTF-8 stream never 
-				//	  looks like a UTF-16 stream starting with U+FEFF (Byte-order mark)
-
-				bool utf8 = true;
-				int consecutive_bytes = 0;
-
-				for (std::size_t i = 0; i < size && utf8; ++i) {
-					if (data[i] == 0xfe || data[i] == 0xff)
-						utf8 = false;
-
-					if (consecutive_bytes == 0) {
-						if (data[i] >> 5 == 6)
-							consecutive_bytes = 2;
-						else if (data[i] >> 4 == 0xe)
-							consecutive_bytes = 3;
-					}
-					else if (consecutive_bytes == 0 && data[i] >> 7 & 1 ||
-						consecutive_bytes > 0 && data[i] >> 6 != 2)
-						utf8 = false; // Either MSB is not 0 or MSB of a byte in a 
-					// multi-part sequence is not 10
-
-					if (consecutive_bytes > 0)
-						--consecutive_bytes;
-				}
-
-				if (utf8)
-					encoding = UTF8;
-			}
-		}
-
-		UINT code_page;
-
-		switch (encoding) {
-			case ASCII: code_page = CP_ACP; break;
-			case UTF8: code_page = CP_UTF8; break;
-			case UTF16LE: code_page = 1200; break; // Available only for managed applications
-			case UTF16BE: code_page = 1201; break;
-			case UTF32LE: code_page = 12000; break;
-			case UTF32BE: code_page = 12001; break;
-			default: ASSERT(FALSE);
-		}
-
-		LPTSTR text;
-		int required_size;
-
-		if (encoding != UTF16LE && encoding != UTF16BE) {
-			const UINT flags = 0;
-			required_size = ::MultiByteToWideChar(code_page,flags,
-				reinterpret_cast<LPCSTR>(data + pos),size - pos,0,0);
-
-			LPWSTR temp = new WCHAR[required_size + 1];
-
-			::MultiByteToWideChar(code_page,flags,
-				reinterpret_cast<LPCSTR>(data + pos),size - pos,temp,required_size);
-
-#ifdef UNICODE
-			text = temp;
-#else
-			int asize = ::WideCharToMultiByte(CP_ACP,0,temp,required_size,0,0,0,0);
-
-			LPSTR temp1 = new CHAR[asize + 1];
-
-			::WideCharToMultiByte(CP_ACP,0,temp,required_size,temp1,asize,0,0);
-			text = temp1;
-
-			delete[] temp;
-#endif
-		}
-		else {
-			ASSERT((size - pos) % 2 == 0); // Size must be even
-			required_size = (size - pos) / 2;
-			LPWSTR temp = new WCHAR[required_size + 1];
-
-			std::memcpy(temp,data + pos,required_size * 2);
-
-			if (encoding == UTF16BE) // Swap bytes
-				std::for_each(temp,temp + required_size,SwapCodePoint);
-
-#ifndef UNICODE
-			USES_CONVERSION_EX;
-			text = new char[required_size + 1];
-
-			std::memcpy(text,W2CA_EX(temp,required_size),required_size);
-
-			delete[] temp;
-#else
-			text = temp;
-#endif
-		}
-
-		text[required_size] = 0;
-
-		GetCtrl().SetCodePage(SC_CP_UTF8);
-		GetCtrl().SetText(text);
-
-		// Detected EOL type
-		int mode = SC_EOL_CRLF;
-
-		if (!_tcsstr(text,_T("\r\n"))) {
-			if (_tcsstr(text,_T("\r")))
-				mode = SC_EOL_CR;
-			else if (_tcsstr(text,_T("\n")))
-				mode = SC_EOL_LF;
-		}
-
-		GetCtrl().SetEOLMode(mode);
-
-		delete[] text;
-
-		code_page_ = code_page;
-		encoding_ = encoding;
-	}
-	else
-		result = ::GetLastError();
-
-	return result;
-}
-
-template<class T, std::size_t S>
-const T* AssignByteOrderMark(const T (&p)[S], SIZE_T& s)
-{
-	s = S;
-	return p;
-}
-
-void LaTeXView::ConvertToMultiByte(LPCWSTR input, int cch, std::vector<BYTE>& buffer, Encoding encoding, UINT cp)
-{
-	if (encoding != UTF16LE && encoding != UTF16BE) {
-		int required_size = ::WideCharToMultiByte(cp,0,input,cch,0,0,0,0);
-
-		if (required_size > 0) {
-			buffer.resize(--required_size); // We don't need the terminating null, strip it
-			::WideCharToMultiByte(cp,0,input,cch,reinterpret_cast<LPSTR>(&buffer[0]),buffer.size(),0,0);
-		}
-	}
-	else {
-		const BYTE* begin = reinterpret_cast<const BYTE*>(input);
-		const BYTE* end = reinterpret_cast<const BYTE*>(input + cch);
-
-		buffer.assign(begin,end);
-
-		if (encoding == UTF16BE) {
-			LPWSTR begin = reinterpret_cast<LPWSTR>(&buffer[0]);
-			LPWSTR end = begin + buffer.size() / 2;
-
-			std::for_each(begin,end,SwapCodePoint);
-		}
-	}
-}
-
-DWORD LaTeXView::SaveToFile(LPCTSTR pszFileName, bool bClearModifiedFlag)
-{
-	HANDLE hSearch = INVALID_HANDLE_VALUE;
-	TCHAR szTempFileDir[_MAX_PATH + 1];
-	TCHAR szTempFileName[_MAX_PATH + 1];
-	TCHAR szBackupFileName[_MAX_PATH + 1];
-	DWORD result = 1;
-
-	CAtlFile temp_file;
-
-	TCHAR drive[_MAX_PATH], dir[_MAX_PATH], name[_MAX_PATH], ext[_MAX_PATH];
-	_tsplitpath(pszFileName, drive, dir, name, ext);
-
-	lstrcpy(szTempFileDir, drive);
-	lstrcat(szTempFileDir, dir);
-	lstrcpy(szBackupFileName, pszFileName);
-	lstrcat(szBackupFileName, _T(".bak"));
-
-	bool error_occured = false;
-
-	if (::GetTempFileName(szTempFileDir, _T("CRE"), 0, szTempFileName) != 0) {
-		if (SUCCEEDED(temp_file.Create(szTempFileName, GENERIC_WRITE, 0, CREATE_ALWAYS))) {
-			SaveToFile(temp_file);
-
-			if (m_bCreateBackupFile) {
-				WIN32_FIND_DATA wfd;
-				hSearch = ::FindFirstFile(pszFileName, &wfd);
-
-				if (hSearch != INVALID_HANDLE_VALUE) {
-					//	File exist - create backup file
-					::DeleteFile(szBackupFileName);
-
-					if (!::MoveFile(pszFileName, szBackupFileName))
-						error_occured = true;
-					else {
-						::FindClose(hSearch);
-						hSearch = INVALID_HANDLE_VALUE;
-					}
-				}
-			}
-			else
-				::DeleteFile(pszFileName);
-
-			temp_file.Close();
-
-			//	Move temporary file to target name
-			if (!error_occured && ::MoveFile(szTempFileName, pszFileName)) {
-				if (bClearModifiedFlag)
-					GetDocument()->SetModifiedFlag(FALSE);
-
-				result = ERROR_SUCCESS;
-			}
-		}
-	}
-
-	if (result)
-		result = ::GetLastError();
-
-	if (hSearch != INVALID_HANDLE_VALUE)
-		::FindClose(hSearch);
-
-	::DeleteFile(szTempFileName);
-
-	return result;
-}
-
-DWORD LaTeXView::SaveToFile( HANDLE file, LPCWSTR text, int length)
-{
-	CAtlFile f(file);
-	DWORD result = ERROR_SUCCESS;
-
-	if (encoding_ != ASCII) {
-		const BYTE* bom = 0;
-		SIZE_T size = 0;
-
-		switch(encoding_) {
-			case UTF8: bom = AssignByteOrderMark(BOM::utf8,size); break;
-			case UTF16LE: bom = AssignByteOrderMark(BOM::utf16le,size); break;
-			case UTF16BE: bom = AssignByteOrderMark(BOM::utf16be,size); break;
-			case UTF32LE: bom = AssignByteOrderMark(BOM::utf32le,size); break;
-			case UTF32BE: bom = AssignByteOrderMark(BOM::utf32be,size); break;
-		}
-
-		if (FAILED(f.Write(bom,size)))
-			result = ::GetLastError();
-	}
-
-	if (result == ERROR_SUCCESS && length > 0) {
-		std::vector<BYTE> buffer;
-		ConvertToMultiByte(text,length,buffer,encoding_,code_page_);
-
-		if (FAILED(f.Write(&buffer[0],buffer.size())))
-			result = ::GetLastError();
-	}
-
-	f.Detach();
+	// Save selection
+	long s = GetCtrl().GetSelectionStart();
+	long e = GetCtrl().GetSelectionEnd();
 	
-	return result;
-}
+	SpellCheckDlg dlg(this,theApp.GetSpeller());
+	dlg.DoModal();
 
-DWORD LaTeXView::SaveToFile( HANDLE file )
-{
-	const int mode = GetDocument()->GetSavedEOLMode();
-
-	if (GetCtrl().GetEOLMode() != mode) {
-		GetCtrl().SetEOLMode(mode);
-		GetCtrl().ConvertEOLs(mode);
-	}
-
-	const int length = GetCtrl().GetLength();
-	DWORD result = ERROR_SUCCESS;
-
-	if (length > 0) {
-		LPWSTR text = new WCHAR[length + 1];
-		GetCtrl().GetText(length + 1,text);
-		
-		CAtlFile f(file);
-		result = SaveToFile(file,text,length);
-		f.Detach();
-		
-		delete[] text;
-	}
-
-	return result;
-}
-
-#pragma endregion
-void LaTeXView::OnEditDeleteLine()
-{
-	GetCtrl().LineDelete();
+	// Restore selection
+	GetCtrl().SetSel(s,e);
 }
 
 void LaTeXView::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
@@ -1257,15 +939,11 @@ void LaTeXView::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 
 	// TODO :
 
-	//CCrystalTextBuffer::CTextAttribute *attr = pBuffer->GetLineAttribute(ptText.y,ptText.x,ptText.x + 1);
-
-	//if (attr) {
-	//	SpellerSuggestionMenu menu(this,ptText);
-
-	//	if (attr->m_Attribute == CCrystalTextBuffer::CTextAttribute::spellError)
-	//		bShowDefault = !menu.ShowSpellMenu(theApp.GetSpeller(),point);
-	//	// else your new attribute here
-	//}
+	if (GetCtrl().IndicatorValueAt(0,pos) == INDIC_SQUIGGLE) {  	
+		SpellerSuggestionMenu menu(this,pos);
+		bShowDefault = !menu.ShowSpellMenu(theApp.GetSpeller(),point);
+		// else your new attribute here
+	}
 
 	if (bShowDefault) {
 		// Default popup
@@ -1306,7 +984,7 @@ void LaTeXView::OnEditOutsource()
 			}
 
 			//Write it to the file
-			SaveToFile(NewFile,strSelectedText,strSelectedText.GetLength());
+			GetDocument()->SaveFile(NewFile,strSelectedText,strSelectedText.GetLength());
 			NewFile.Close();
 
 			//Get relative path - omit tex-extension
@@ -1346,8 +1024,8 @@ void LaTeXView::OnQueryCompletion()
 	HideAdvice();
 
 	// Don't allow a second window
-	if (m_AutoCompleteActive) {
-		TRACE("==> autocomplete is active, quitting...\n");
+	if (autocompletion_active_) {
+		TRACE0("==> autocomplete is active, quitting...\n");
 		return;
 	}
 
@@ -1361,7 +1039,7 @@ void LaTeXView::OnQueryCompletion()
 	GetWordBeforeCursor(keyword,topLeft); /* retrieve word to be completed */
 
 	if (!keyword.IsEmpty())
-		m_CompletionListBox = CreateListBox(keyword,topLeft); /* setup (and show) list box */
+		autocompletion_list_ = CreateListBox(keyword,topLeft); /* setup (and show) list box */
 	else
 		GetCtrl().SetSel(old_pos_start_,old_pos_end_); /* restore old position */
 }
@@ -1399,8 +1077,8 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 	long ptSelStart = GetCtrl().GetSelectionStart();
 	long ptSelEnd = GetCtrl().GetSelectionEnd();
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// ID specific handling
+#pragma region ID specific handling
+
 	switch (nID) {
 		case ID_INSERT_FIGURE:
 			pDlg = new CInsertFloatObjectDialog(CInsertFloatObjectDialog::figure,this);
@@ -1486,6 +1164,8 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 
 		bReplaceBell = true;
 	}
+
+#pragma endregion
 
 	if (pDlg)
 		delete pDlg;
@@ -1587,10 +1267,99 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 
 void LaTeXView::OnSetFocus(CWnd* pOldWnd)
 {
-	CScintillaView::OnSetFocus(pOldWnd);
+	CodeView::OnSetFocus(pOldWnd);
 
 	LaTeXDocument* doc = GetDocument();
 
 	if (doc)
 		doc->CheckForFileChanges();
+}
+
+DocumentTokenizer* LaTeXView::NewDocumentTokenizer() const
+{
+	return new LaTeXTokenizer;
+}
+
+void LaTeXView::OnSettingsChanged()
+{
+	UpdateSettings();
+}
+
+BOOL LaTeXView::OnBlockComment( UINT nID )
+{
+	// Get the current selection
+	long ptStartSel = GetCtrl().GetSelectionStart();
+	long ptEndSel = GetCtrl().GetSelectionEnd();
+
+	// Get the line numbers to act on
+	const int start_line = GetCtrl().LineFromPosition(ptStartSel);
+	const int end_line = GetCtrl().LineFromPosition(ptEndSel);
+
+	// Start Undo Group
+	GetCtrl().BeginUndoAction();
+
+	//We want to issue a comment even if nothing or just one line is selected ==> (start_line == end_line)
+	//And we want the last line to be commented even if it is not fully selected
+	int end_line_offset = ((start_line == end_line) || (ptEndSel - GetCtrl().PositionFromLine(end_line) > 0)) ? 1 : 0;
+
+	// Commenting the First line is different, because
+	// comment could be inserted/removed/toggled in the middle of the line, too.
+	// - Where to start with acting
+	// NOTE: Before and including TXC 1 Beta 7.01 we inserted the comment where the cursor was placed.
+	// Now we do it for the whole line, always.
+	// int start_pos = ptStartSel.x; ==> old behavior
+	
+	int start_pos = 0;
+	int count = 0;
+
+	// Go through all lines
+	for (int i = start_line; i < end_line + end_line_offset; i++) {
+		// Is this line commented?
+		bool has_comment = false;
+		char comment_test;
+
+		if (GetLineLength(i) > start_pos) {
+			comment_test = static_cast<char>(GetCtrl().GetCharAt(GetCtrl().PositionFromLine(i) + start_pos));
+			has_comment = comment_test == '%';
+		}
+
+		// What to do for the Toggle Command?
+		UINT NewID = nID;
+
+		if (nID == ID_EDIT_BLOCKCOMMENT_TOOGLE)
+			NewID = has_comment ? ID_EDIT_BLOCKCOMMENT_REMOVE : ID_EDIT_BLOCKCOMMENT_INSERT;
+
+		// Insert or Remove Comment for the current line
+		switch (NewID) {
+			case ID_EDIT_BLOCKCOMMENT_INSERT:
+				// Insert Comment
+				GetCtrl().InsertText(GetCtrl().PositionFromLine(i) + start_pos,"%");
+				++count;
+				break;
+			case ID_EDIT_BLOCKCOMMENT_REMOVE:
+				if (has_comment) {
+					long pos = GetCtrl().PositionFromLine(i) + start_pos;
+					GetCtrl().SetSel(pos,pos + 1);
+					GetCtrl().ReplaceSel("");
+					--count;
+				}
+				break;
+		}
+
+		// Speller should skip comments
+		if (CConfiguration::GetInstance()->m_bSpellSkipComments && GetDocument()->IsSpellerThreadAttached())
+			GetDocument()->GetSpellerThread()->RecheckSingleLineSpelling(i,this);
+
+		start_pos = 0;
+	} // end of "Go through all lines"
+
+	// Restore the original selection
+	const int sgn = count > 0 ? 1 : -1;
+	GetCtrl().SetSel(ptStartSel + sgn,ptEndSel + count);
+
+	// End Undo Group
+	GetCtrl().EndUndoAction();
+
+	return TRUE;
+
 }

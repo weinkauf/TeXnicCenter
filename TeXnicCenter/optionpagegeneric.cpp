@@ -36,7 +36,7 @@
 #include "TeXnicCenter.h"
 #include "OptionPageGeneric.h"
 #include "configuration.h"
-#include "../CrysEditEx/Source/CharType.h"
+#include "CharType.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

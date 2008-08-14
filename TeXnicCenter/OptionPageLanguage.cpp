@@ -127,12 +127,14 @@ void COptionPageLanguage::OnOK()
 	}
 
 	// Inform the background thread of the new speller state.
-	theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_ENABLE_SPELLER,m_bEnableSpell,NULL);
-	if (m_bEnableSpell)
+	theApp.GetSpellerThread()->EnableSpeller(m_bEnableSpell);
+
+	if (m_bEnableSpell) 
 	{
-		CSpellerSource *pSource = static_cast<CSpellerSource*>(&theApp);
-		theApp.GetBackgroundThread()->PostThreadMessage(ID_BG_RESET_SPELLER,0,(long)pSource);
+		SpellerSource* pSource = &theApp;
+		theApp.GetSpellerThread()->ResetSpeller(pSource);
 	}
+
 	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_BG_UPDATE_PROJECT); // clear or set the line attributes
 
 	CPropertyPage::OnOK();

@@ -92,7 +92,7 @@ BOOL CBiBTeXFile::ProcessFile()
 	}
 	catch (CFileException &ex)
 	{
-		TRACE("Error opening BibTeX file: %s\n",ex);
+		TRACE1("Error opening BibTeX file: %s\n",ex);
 		f.Close();
 		return FALSE;
 	}
@@ -231,7 +231,7 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 		HandleParseError(STE_BIBTEX_ERR_INVALID_EOF,line,col);
 	}
 
-	TRACE("\n%s: Found %d entries\n",m_Filename,m_Entries.GetCount());
+	TRACE2("\n%s: Found %d entries\n",m_Filename,m_Entries.GetCount());
 	return TRUE;
 }
 
@@ -286,7 +286,7 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf,int len,CBiBTeXEntry::BibType
 			m_Buffer[100] = 0;
 		}
 
-		TRACE("** Ignore unknown entry at line %d: %s\n",line,m_Buffer);
+		TRACE2("** Ignore unknown entry at line %d: %s\n",line,m_Buffer);
 		return;
 	}
 
@@ -332,7 +332,7 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf,int len,CBiBTeXEntry::BibType
 		else
 		{
 			HandleParseError(STE_BIBTEX_ERR_DUP_KEY,line,1,key);
-			TRACE("WARNING: Invalid or duplicate key <%s> (%s)\n",key,BibTypeVerbose[type]);
+			TRACE2("WARNING: Invalid or duplicate key <%s> (%s)\n",key,BibTypeVerbose[type]);
 		}
 	}
 	else   // extract name-value pair and add it to the entry
@@ -390,7 +390,7 @@ void CBiBTeXFile::HandleParseError(UINT msgID,int line,int col,const TCHAR *addD
 			s.Format(errMsgFmt,m_Filename,line,col,addDesc);
 			break;
 		default:
-			TRACE("BibTeX: Warning: No handler for msgID %d\n",msgID);
+			TRACE1("BibTeX: Warning: No handler for msgID %d\n",msgID);
 	}
 
 	//TRACE(s + "\n");

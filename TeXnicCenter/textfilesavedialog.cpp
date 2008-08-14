@@ -34,6 +34,8 @@
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
+
+#include "global.h"
 #include "TextFileSaveDialog.h"
 #include "RunTimeHelper.h"
 
@@ -54,6 +56,7 @@ BEGIN_MESSAGE_MAP(CTextFileSaveDialog, CFileDialog)
 END_MESSAGE_MAP()
 
 LPCTSTR const Format[] = {_T("Windows"),_T("Unix"),_T("Macintosh"),0};
+LPCTSTR const Encoding[] = {_T("ANSI"),_T("Unicode"),_T("Unicode Big Endian"),_T("UTF-8"),0};
 
 CTextFileSaveDialog::CTextFileSaveDialog(
     UINT unTitle /*= AFX_IDS_SAVEFILE*/,
@@ -68,6 +71,8 @@ CTextFileSaveDialog::CTextFileSaveDialog(
 	// Vista-style
 	if (IFileDialogCustomize* fdc = GetIFileDialogCustomize())
 	{
+#pragma region File Format initialization
+		// Add the File Format combo box
 		fdc->StartVisualGroup(IDC_STATIC_FORMATTITLE,CStringW(MAKEINTRESOURCE(IDS_FORMAT)));
 		fdc->AddComboBox(IDC_SELECT_FILEFORMAT);
 
@@ -80,6 +85,23 @@ CTextFileSaveDialog::CTextFileSaveDialog(
 		fdc->EndVisualGroup();
 
 		fdc->SetSelectedControlItem(IDC_SELECT_FILEFORMAT,static_cast<DWORD>(nFileFormat));
+#pragma endregion
+
+#pragma region Encoding initialization
+		id = 0;
+
+		// Add the Encoding combo box
+		fdc->StartVisualGroup(IDC_STATIC_ENCODING,CStringW(MAKEINTRESOURCE(IDS_ENCODING)));
+		fdc->AddComboBox(IDC_SELECT_ENCODING);		
+
+		for (LPCTSTR const* p = Encoding; *p; ++p)
+			fdc->AddControlItem(IDC_SELECT_ENCODING,id++,T2CW(*p));
+
+		fdc->EndVisualGroup();
+
+		fdc->SetSelectedControlItem(IDC_SELECT_ENCODING,static_cast<DWORD>(nFileFormat));
+#pragma endregion		
+
 		fdc->Release();
 	}
 	else

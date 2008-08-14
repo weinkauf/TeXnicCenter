@@ -23,7 +23,6 @@ COptionPageEditor::COptionPageEditor() : PropertyPage(COptionPageEditor::IDD)
 	m_nTabWidth = CConfiguration::GetInstance()->m_nTabWidth;
 	m_nFixedColumn = CConfiguration::GetInstance()->m_nFixedColumnWrap;
 	m_nWordWrapStyle = CConfiguration::GetInstance()->m_WordWrapStyle - 1;
-	m_bShowLineNumbers = CConfiguration::GetInstance()->m_bShowLineNumbers;
 	//}}AFX_DATA_INIT
 }
 
@@ -41,7 +40,6 @@ void COptionPageEditor::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX,IDC_OPTIONS_EDITOR_WORDWRAP_FIXEDCOLUMN,m_nFixedColumn);
 	DDV_MinMaxUInt(pDX,m_nFixedColumn,1,1000);
 	DDX_CBIndex(pDX,IDC_OPTIONS_EDITOR_WORDWRAP_STYLE,m_nWordWrapStyle);
-	DDX_Check(pDX,IDC_SHOW_LINENUMBERS,m_bShowLineNumbers);
 	//}}AFX_DATA_MAP
 }
 
@@ -58,6 +56,7 @@ void COptionPageEditor::OnOK()
 {
 	UpdateData();
 
+	// TODO:
 	/* PLEASE NOTE:
 
 	        Disabling the line wrapping is currently not possible since the edit control
@@ -73,8 +72,8 @@ void COptionPageEditor::OnOK()
 	// Store settings to configuration
 	CConfiguration::GetInstance()->m_nTabWidth = m_nTabWidth;
 	CConfiguration::GetInstance()->m_nFixedColumnWrap = m_nFixedColumn;
-	CConfiguration::GetInstance()->m_WordWrapStyle = (TCRYSTALWORDWRAP)m_nWordWrapStyle + 1;
-	CConfiguration::GetInstance()->m_bShowLineNumbers = m_bShowLineNumbers;
+	// TODO: Word wrap
+	//CConfiguration::GetInstance()->m_WordWrapStyle = (TCRYSTALWORDWRAP)m_nWordWrapStyle + 1;
 
 	// this message will be send to all windows of the application
 	AfxGetMainWnd()->SendMessage(WM_SYSCOLORCHANGE);
@@ -86,7 +85,7 @@ void COptionPageEditor::UpdateControlStates()
 {
 	UpdateData();
 
-	m_wndFixedColumn.EnableWindow(m_nWordWrapStyle + 1 == WORD_WRAP_FIXEDCOLUMN);
+	//m_wndFixedColumn.EnableWindow(m_nWordWrapStyle + 1 == WORD_WRAP_FIXEDCOLUMN);
 }
 
 BOOL COptionPageEditor::OnInitDialog()

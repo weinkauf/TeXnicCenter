@@ -1,40 +1,22 @@
 #pragma once
 
+#include "CodeView.h"
+
 class CAdvice;
 class CAutoCompleteDlg;
 class LaTeXViewListener;
 class LaTeXDocument;
+class CLaTeXCommand;
+class DocumentTokenizer;
 
-#if 1
-
-#include "ThemedCtrl.h"
-
-// LaTeXView view
-
-class LaTeXView : public CScintillaView
+class LaTeXView : 
+	public CodeView
 {
-    ThemedCtrl theme_;
+	friend class LaTeXViewListener;
 
 	DECLARE_DYNCREATE(LaTeXView)
 
-public:
-	enum Encoding
-	{
-		ASCII,
-		UTF8,
-		UTF16LE,
-		UTF16BE,
-		UTF32LE,
-		UTF32BE
-	};
-
 	long old_pos_start_, old_pos_end_;
-
-private:
-	Encoding encoding_;
-	UINT code_page_;
-	bool m_bCreateBackupFile;
-	int style_number_;
 
 protected:
 	LaTeXView();           // protected constructor used by dynamic creation
@@ -88,71 +70,62 @@ public:
 
 protected:
 	DECLARE_MESSAGE_MAP()
-public:
-    virtual void OnInitialUpdate();
+    
+	virtual void OnInitialUpdate();
 
+public:
 	void UpdateSettings();
+
+protected:
 	void SetAStyle(int style, COLORREF fore, COLORREF back = RGB(255,255,255), int size = -1, LPCTSTR face = 0);
     void OnCharAdded(SCNotification* n);
-    virtual void Serialize(CArchive& ar);
+	void OnUpdateUI(SCNotification* pSCNotification);	
 
-	Encoding GetEncoding() const;
+public:
+	static COLORREF GetAutomaticColor(int nColorIndex);
+	static COLORREF GetColor(int nColorIndex);
 
-	UINT GetCodePage() const;
-	Encoding DetectEncoding(const BYTE* data, SIZE_T& pos, SIZE_T size);
-	COLORREF GetAutomaticColor(int nColorIndex);
-	COLORREF GetColor(int nColorIndex);
-	void OnUpdateUI(SCNotification* pSCNotification);
-	void InstantAdvice();
-	void HideAdvice();
+private:
+	
 	void OnACBackspace();
 	void OnACChar(UINT nKey,UINT nRepCount,UINT nFlags);
 	void OnACCommandCancelled();
 	void OnACCommandSelect(const CLaTeXCommand* cmd);
-	void OnACHelp(const CString &cmd);
-	CAutoCompleteDlg* CreateListBox(CString &keyword, long pos);
+	void OnACHelp(const CString &cmd);	
 
 private:
-	CAdvice *m_InstTip;
-	CAutoCompleteDlg* m_CompletionListBox;
-	LaTeXViewListener *m_Proxy;
-	bool m_AutoCompleteActive;
-	CWinThread* m_pBackgroundThread;
-public:
-	void GoToLine(int line);
+	CAutoCompleteDlg* CreateListBox(CString &keyword, long pos);
+	void InstantAdvice();
+	void HideAdvice();
+
+	CAdvice* instant_advice_tip_;
+	CAutoCompleteDlg* autocompletion_list_;
+	LaTeXViewListener *listener_;
+	bool autocompletion_active_;
+
+protected:
 	void GetWordBeforeCursor(CString& strKeyword, long& start,bool bSelect = true);
 	static bool IsAutoCompletionCharacter(TCHAR tc);
-	int GetLineLength(int line);
-	afx_msg void OnEditGoto();
-	int GetLineCount(void);
-	int GetCurrentLine(void);
-	const CString GetLineText(int line);
-	void InsertText(const CString& text);
-	afx_msg void OnEditToggleWhiteSpaceView();
-	afx_msg void OnEditToggleShowLineEnding();
-	afx_msg void OnUpdateEditToggleWhiteSpaceView(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateEditToggleShowLineEnding(CCmdUI *pCmdUI);
+	
 	afx_msg void OnSpellFile();
-
-	DWORD LoadFromFile(LPCTSTR pszFileName);
-	DWORD LoadFromFile( HANDLE file );
-	DWORD SaveToFile(LPCTSTR pszFileName, bool bClearModifiedFlag = true);
-	DWORD SaveToFile( HANDLE file );
-	DWORD SaveToFile( HANDLE file, LPCWSTR text, int length);
-	void ConvertToMultiByte(LPCWSTR input, int cch, std::vector<BYTE>& buffer, Encoding encoding, UINT cp);
-	afx_msg void OnEditDeleteLine();
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
 	afx_msg void OnEditOutsource();
-	LaTeXDocument* GetDocument() const;
-	int GetNumberOfMatches(const CString& keyword);
 	afx_msg void OnQueryCompletion();
+	afx_msg BOOL OnInsertLaTeXConstruct(UINT nID);
+	afx_msg void OnSetFocus(CWnd* pOldWnd);
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	void OnModified(SCNotification* n);
+	afx_msg BOOL OnBlockComment(UINT nID);
+
+private:
 	void RestoreFocus();
 	BOOL InvokeContextHelp(const CString& keyword);
-	afx_msg BOOL OnInsertLaTeXConstruct(UINT nID);
-	void DefineMarker(int marker, int markerType, COLORREF fore, COLORREF back);
-	void UpdateLineNumberMarginWidth();
-	void OnModified(SCNotification* n);
-	afx_msg void OnSetFocus(CWnd* pOldWnd);
-};
 
-#endif
+public:	
+	LaTeXDocument* GetDocument() const;
+	int GetNumberOfMatches(const CString& keyword);	
+
+protected:
+	DocumentTokenizer* NewDocumentTokenizer() const;
+	void OnSettingsChanged(void);	
+};

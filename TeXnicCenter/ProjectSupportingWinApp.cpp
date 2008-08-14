@@ -117,6 +117,7 @@ BOOL CProjectSupportingWinApp::SaveAllModified()
 
 	if (m_pProjectManager != NULL)
 		return m_pProjectManager->SaveAllModified();
+
 	return TRUE;
 }
 

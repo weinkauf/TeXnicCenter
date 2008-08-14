@@ -52,7 +52,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="3"
-				AdditionalIncludeDirectories="../Hunspell/src/hunspell;../CrysEditEx/Include;../Scintilla/include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
+				AdditionalIncludeDirectories="../Hunspell/src/hunspell;../Scintilla/include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
 				PreprocessorDefinitions="NDEBUG;STRICT;WIN32;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -80,7 +80,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="true"
-				AdditionalDependencies="CrysEditEx.lib mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib"
+				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib"
 				AdditionalLibraryDirectories="$(OutDir)"
 				DelayLoadDLLs="uxtheme.dll"
 				SubSystem="2"
@@ -146,7 +146,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../Hunspell/src/hunspell;../CrysEditEx/Include;../Scintilla/include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
+				AdditionalIncludeDirectories="../Hunspell/src/hunspell;../Scintilla/include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
 				PreprocessorDefinitions="_DEBUG;STRICT;WIN32;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -173,7 +173,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="CrysEditEx.lib mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib"
+				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(OutDir)"
 				IgnoreDefaultLibraryNames=""
@@ -241,9 +241,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="../Hunspell/src/hunspell;../CrysEditEx/Include;../Scintilla/include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
+				AdditionalIncludeDirectories="../Hunspell/src/hunspell;../Scintilla/include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
 				PreprocessorDefinitions="_DEBUG;STRICT;WIN32;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -271,7 +270,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="CrysEditEx.lib mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib"
+				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(OutDir)"
 				IgnoreDefaultLibraryNames=""
@@ -342,7 +341,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="3"
-				AdditionalIncludeDirectories="../Hunspell/src/hunspell;../CrysEditEx/Include;../Scintilla/include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
+				AdditionalIncludeDirectories="../Hunspell/src/hunspell;../Scintilla/include;../MFCExt/Include;../TeXnicCenterObjects/Include;../MsXmlCpp/Include"
 				PreprocessorDefinitions="NDEBUG;STRICT;WIN32;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -370,7 +369,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="true"
-				AdditionalDependencies="CrysEditEx.lib mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib"
+				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib"
 				AdditionalLibraryDirectories="$(OutDir)"
 				DelayLoadDLLs="uxtheme.dll"
 				SubSystem="2"
@@ -523,6 +522,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CharType.h"
+				>
+			</File>
+			<File
 				RelativePath=".\childfrm.cpp"
 				>
 			</File>
@@ -531,19 +534,35 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CodeBookmark.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeBookmark.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeDocument.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeDocument.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeView.h"
+				>
+			</File>
+			<File
 				RelativePath=".\configuration.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\configuration.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CrystalEditViewEx.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CrystalEditViewEx.h"
 				>
 			</File>
 			<File
@@ -572,6 +591,14 @@
 			</File>
 			<File
 				RelativePath=".\DocumentNewDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DocumentTokenizer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DocumentTokenizer.h"
 				>
 			</File>
 			<File
@@ -660,6 +687,14 @@
 			</File>
 			<File
 				RelativePath=".\findinfilesdialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FindReplaceDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\FindReplaceDlg.h"
 				>
 			</File>
 			<File
@@ -775,27 +810,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\latexdoc.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\latexdoc.h"
-				>
-			</File>
-			<File
 				RelativePath=".\LaTeXDocument.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\LaTeXDocument.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LatexEdit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\LatexEdit.h"
 				>
 			</File>
 			<File
@@ -807,19 +826,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\latexparser.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\latexparser.h"
-				>
-			</File>
-			<File
 				RelativePath=".\latexproject.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\LatexProject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LaTeXTokenizer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LaTeXTokenizer.h"
 				>
 			</File>
 			<File
@@ -1271,11 +1290,39 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ShadowWindow.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ShellView.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\ShellView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SpellCheckDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SpellCheckDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Speller.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Speller.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SpellerBackgroundThread.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SpellerBackgroundThread.h"
 				>
 			</File>
 			<File
@@ -1580,6 +1627,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\Incremental search.cur"
+				>
+			</File>
+			<File
 				RelativePath="res\insert.bmp"
 				>
 			</File>
@@ -1692,6 +1743,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\Reverse incremental search.cur"
+				>
+			</File>
+			<File
 				RelativePath="res\sdragcopy.cur"
 				>
 			</File>
@@ -1765,10 +1820,6 @@
 			</File>
 			<File
 				RelativePath="res\TeXnicCenter_yellow.ico"
-				>
-			</File>
-			<File
-				RelativePath="res\toolbar1.bmp"
 				>
 			</File>
 			<File

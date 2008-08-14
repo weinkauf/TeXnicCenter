@@ -70,6 +70,9 @@ History: PJN / 19-03-2004 1. Initial implementation synchronized to the v1.59 re
                           4. Removed VC 6 style classwizard comments from the code.
                           5. Updated the sample apps document icon.
                           6. Fixed a level 4 warning when the code is compiled on VC 6.
+         PJN / 15-06-2008 1. Code now compiles cleanly using Code Analysis (/analyze)
+                          2. Updated code to compile correctly using _ATL_CSTRING_EXPLICIT_CONSTRUCTORS define
+                          3. The code now only supports VC 2005 or later.
 
 Copyright (c) 2004 - 2008 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
 
@@ -173,7 +176,7 @@ CString CScintillaCtrl::GetSelText()
 int CScintillaCtrl::W2UTF8(const wchar_t* pszText, int nLength, char*& pszUTF8Text)
 {
   //Validate our parameters
-  ASSERT(pszText);
+  AFXASSUME(pszText);
 
   //First call the function to determine how much heap space we need to allocate
 	int nUTF8Length = WideCharToMultiByte(CP_UTF8, 0, pszText, nLength, NULL, 0, NULL, NULL);
@@ -197,7 +200,7 @@ int CScintillaCtrl::W2UTF8(const wchar_t* pszText, int nLength, char*& pszUTF8Te
 int CScintillaCtrl::UTF82W(const char* pszText, int nLength, wchar_t*& pszWText)
 {
   //Validate our parameters
-  ASSERT(pszText);
+  AFXASSUME(pszText);
 
   //First call the function to determine how much heap space we need to allocate
 	int nWideLength = MultiByteToWideChar(CP_UTF8, 0, pszText, nLength, NULL, 0);
@@ -255,12 +258,8 @@ int CScintillaCtrl::GetSelText(wchar_t* text, BOOL bDirect)
   //Now convert the UTF8 text back to Unicode
   wchar_t* pszWText;
   int nWLength = UTF82W(pszUTF8, -1, pszWText);
-  ASSERT(text);
-#if (_MSC_VER >= 1400)
+  AFXASSUME(text);
   wcscpy_s(text, nWLength+1, pszWText);
-#else  
-  wcscpy(text, pszWText);
-#endif
 
   //Tidy up the heap memory before we return
   delete [] pszWText;
@@ -392,7 +391,7 @@ void CScintillaCtrl::UserListShow(int listType, const wchar_t* itemList, BOOL bD
 int CScintillaCtrl::GetLine(int line, wchar_t* text, BOOL bDirect)
 {
   //Validate our parameters
-  ASSERT(text);
+  AFXASSUME(text);
 
   //Work out how big the input buffer is (for details on this, see the EM_GETLINE documentation)
   WORD* wBuffer = reinterpret_cast<WORD*>(text);
@@ -462,7 +461,7 @@ int CScintillaCtrl::GetText(int length, wchar_t* text, BOOL bDirect)
   int nWLength = UTF82W(pszUTF8, -1, pszWText);
 
   //Copy as much text as possible into the output parameter
-  ASSERT(text);
+  AFXASSUME(text);
   int i;
 	for (i=0; i<length-1 && i<nWLength; i++) 
 		text[i] = pszWText[i];
@@ -692,11 +691,7 @@ int CScintillaCtrl::GetProperty(const wchar_t* key, wchar_t* buf, BOOL bDirect)
   wchar_t* pszWText;
   int nWLength = UTF82W(pszUTF8Value, -1, pszWText);
   if (buf)
-  #if (_MSC_VER >= 1400)
     wcscpy_s(buf, nWLength+1, pszWText);
-  #else
-    wcscpy(buf, pszWText);
-  #endif
 
   //Tidy up the heap memory before we return
   delete [] pszWText;
@@ -726,11 +721,7 @@ int CScintillaCtrl::GetPropertyExpanded(const wchar_t* key, wchar_t* buf, BOOL b
   wchar_t* pszWText;
   int nWLength = UTF82W(pszUTF8Value, -1, pszWText);
   if (buf)
-  #if (_MSC_VER >= 1400)
     wcscpy_s(buf, nWLength+1, pszWText);
-  #else
-    wcscpy(buf, pszWText);
-  #endif
 
   //Tidy up the heap memory before we return
   delete [] pszWText;
@@ -770,25 +761,19 @@ int CScintillaCtrl::StyleGetFont(int style, wchar_t* fontName, BOOL bDirect)
   wchar_t* pszWFontName;
   int nWLength = UTF82W(szUTF8FontName, -1, pszWFontName);
   if (fontName)
-  #if (_MSC_VER >= 1400)
     wcscpy_s(fontName, nWLength+1, pszWFontName);
-  #else
-    wcscpy(fontName, pszWFontName);
-    nWLength; //To get rid of "local variable is initialized but not referenced" warning when compiled in VC 6
-  #endif
 
   //Tidy up the heap memory before we return
   delete [] pszWFontName;
 
   return nReturn;
 }
-
 #endif //#ifdef _UNICODE
 
 int CScintillaCtrl::GetLineEx(int line, TCHAR* text, int nMaxChars, BOOL bDirect)
 {
   //Validate out parameters
-  ASSERT(text);
+  AFXASSUME(text);
 
   //Explicitly set the first value of text to nMaxChars (for details on this, see the EM_GETLINE documentation)
   WORD* wBuffer = reinterpret_cast<WORD*>(text);
@@ -3184,4 +3169,9 @@ int CScintillaCtrl::GetPropertyInt(const char* key, BOOL bDirect)
 int CScintillaCtrl::GetStyleBitsNeeded(BOOL bDirect)
 {
   return Call(SCI_GETSTYLEBITSNEEDED, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::ShowCursor( bool show, bool direct /*= true*/ )
+{
+	Call(SCI_SHOWCURSOR, show, 0, direct);
 }
