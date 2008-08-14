@@ -100,6 +100,8 @@ BOOL LaTeXDocument::OnSaveDocument(LPCTSTR lpszPathName)
 		theApp.m_pMainWnd->SendMessage(WM_COMMAND,ID_DOCUMENT_SAVED);
 	}
 
+	SnapFileState();
+
 	return TRUE;
 }
 
