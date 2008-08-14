@@ -106,7 +106,7 @@ to maintain a single distribution point for the source code.
 #endif
 #include "resource.h"
 
-
+#include "FontOccManager.h"
 
 
 //////////////////////////////// Statics / Macros /////////////////////////////
@@ -163,12 +163,24 @@ CScintillaFindReplaceDlg::CScintillaFindReplaceDlg(): m_bRegularExpression(FALSE
 BOOL CScintillaFindReplaceDlg::Create(BOOL bFindDialogOnly,	LPCTSTR lpszFindWhat, LPCTSTR lpszReplaceWith, DWORD dwFlags, CWnd* pParentWnd)
 {
   //Tell Windows to use our dialog instead of the standard one
-  m_fr.hInstance = AfxGetResourceHandle();
-  m_fr.Flags |= FR_ENABLETEMPLATE;
+  UINT id;
+
   if (bFindDialogOnly)
-    m_fr.lpTemplateName = MAKEINTRESOURCE(IDD_SCINTILLA_FINDDLGORD);
+	  id = IDD_SCINTILLA_FINDDLGORD;
   else
-    m_fr.lpTemplateName = MAKEINTRESOURCE(IDD_SCINTILLA_REPLACEDLGORD);
+	  id = IDD_SCINTILLA_REPLACEDLGORD;
+
+  templ_.Load(MAKEINTRESOURCE(id));
+
+  LOGFONT lf; WORD s;
+  GetDisplayFont(lf,s);
+
+  templ_.SetFont(lf.lfFaceName,s);
+
+  m_fr.Flags |= FR_ENABLETEMPLATEHANDLE;
+  m_fr.hInstance = static_cast<HINSTANCE>(templ_.m_hTemplate);
+
+  find_only_ = bFindDialogOnly != 0;
 
   //Let the base class do its thing
   return CFindReplaceDialog::Create(bFindDialogOnly,	lpszFindWhat, lpszReplaceWith, dwFlags, pParentWnd);

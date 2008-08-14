@@ -46,6 +46,7 @@
 #include <afxext.h>         // MFC-Erweiterungen
 #include <afxdtctl.h>				// MFC-Unterstützung für allgemeine Steuerelemente von Internet Explorer 4
 #include <afxtempl.h>				// MFC-Template-Klassen
+#include <afxpriv.h>
 
 // Scintilla
 #include "platform.h"
