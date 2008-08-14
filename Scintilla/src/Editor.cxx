@@ -189,6 +189,8 @@ Editor::Editor() {
 	wrapVisualStartIndent = 0;
 	actualWrapVisualStartIndent = 0;
 
+	showcursor = true; // TeXnicCenter
+
 	convertPastes = true;
 
 	hsStart = -1;
@@ -5032,10 +5034,12 @@ void Editor::SetDragPosition(int newPos) {
 }
 
 void Editor::DisplayCursor(Window::Cursor c) {
-	if (cursorMode == SC_CURSORNORMAL)
-		wMain.SetCursor(c);
-	else
-		wMain.SetCursor(static_cast<Window::Cursor>(cursorMode));
+	if (showcursor) {
+		if (cursorMode == SC_CURSORNORMAL)
+			wMain.SetCursor(c);
+		else
+			wMain.SetCursor(static_cast<Window::Cursor>(cursorMode));
+	}
 }
 
 bool Editor::DragThreshold(Point ptStart, Point ptNow) {
@@ -7585,7 +7589,11 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 
 	case SCI_GETPASTECONVERTENDINGS:
 		return convertPastes ? 1 : 0;
-
+		
+	case SCI_SHOWCURSOR: // TeXnicCenter
+		showcursor = wParam != 0;
+		break;
+		
 	default:
 		return DefWndProc(iMessage, wParam, lParam);
 	}

@@ -47,16 +47,10 @@
 #include <afxdtctl.h>				// MFC-Unterstützung für allgemeine Steuerelemente von Internet Explorer 4
 #include <afxtempl.h>				// MFC-Template-Klassen
 
-// Scintilla test
+// Scintilla
 #include "platform.h"
 #include "scintilla.h"
 #include "SciLexer.h"
-
-#define IDC_REGULAR_EXPRESSION 1
-#define IDD_SCINTILLA_FINDDLGORD 2
-#define IDS_SCINTILLA_DEFAULT_PRINT_HEADER 3
-#define IDD_SCINTILLA_REPLACEDLGORD 4
-#define IDS_SCINTILLA_DEFAULT_PRINT_FOOTER 5
 
 #include "ScintillaCtrl.h"
 #include "ScintillaDocView.h"
@@ -64,7 +58,6 @@
 #include <afxpriv.h>
 #include <afxmt.h>
 #include <afxcview.h>
-//#include <comdef.h>
 
 #ifndef _AFX_NO_AFXCMN_SUPPORT
 #include <afxcmn.h>			// MFC-Unterstützung für gängige Windows-Steuerelemente
@@ -81,7 +74,6 @@
 #include <ExtApp.h>
 #include <ExtCom.h>
 #include <ExtDialog.h>
-#include <CrysEditEx.h>
 #include <MsXmlCpp.h>
 #include <htmlhelp.h>
 

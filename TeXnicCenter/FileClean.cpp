@@ -37,14 +37,14 @@
 #include "Placeholder.h"
 
 #include "FileClean.h"
+#include "LaTeXDocument.h"
+#include "LaTeXView.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
-
-
 
 //////////////////////////////////////////////////////////////////////
 // CFileCleanItem Class
@@ -386,7 +386,7 @@ bool CFileClean::Initialize(CFileCleanItemArray& ItemArray)
 	if (!pProject) return false; //No Project = nothing to clean
 
 	CString strCurrentPath;
-	CLaTeXEdit* pEdit = theApp.GetActiveEditView();
+	LaTeXView* pEdit = theApp.GetActiveEditView();
 	if (pEdit)
 	{
 		strCurrentPath = pEdit->GetDocument()->GetPathName();

@@ -1,5 +1,5 @@
 /*
-Module : ScintillaCtrl.H
+Module : ScintillaCtrl.h
 Purpose: Defines the interface for an MFC wrapper class for the Scintilla edit control (www.scintilla.org)
 Created: PJN / 19-03-2004
 
@@ -575,6 +575,7 @@ public:
   int GetPropertyExpanded(const char* key, char* buf, BOOL bDirect = TRUE);
   int GetPropertyInt(const char* key, BOOL bDirect = TRUE);
   int GetStyleBitsNeeded(BOOL bDirect = TRUE);
+  void ShowCursor(bool show, bool direct = true);
 
 protected:
   DECLARE_DYNAMIC(CScintillaCtrl)

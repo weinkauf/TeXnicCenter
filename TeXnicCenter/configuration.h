@@ -43,6 +43,7 @@
 
 #include "FileClean.h"
 #include "TextModules.h"
+#include "LaTeXView.h"
 
 class CConfiguration
 {
@@ -51,7 +52,33 @@ class CConfiguration
 
 	CConfiguration();
 
+	BOOL blink_insert_caret_, blink_overwrite_caret_;
+	BOOL insert_caret_line_, overwrite_caret_line_;	
+
+	/** TRUE, if line endings shout be displayed as special chars, FALSE otherwise */
+	BOOL show_line_endings_;
+
+	/** TRUE, if word wrap is enabled, FALSE otherwise */
+	BOOL word_wrap_;
+
 public:
+	bool IsBlinkInsertCaret() const;
+	void SetBlinkInsertCaret(bool val = true);
+
+	bool IsBlinkOverwriteCaret() const;
+	void SetBlinkOverwriteCaret(bool val = true);
+
+	bool IsInsertCaretLine() const;
+	void SetInsertCaretLine(bool val = true);
+
+	bool IsOverwriteCaretLine() const;
+	void SetOverwriteCaretLine(bool val = true);
+
+	bool GetShowLineEnding() const;
+	void SetShowLineEnding(bool val = true);
+
+	bool IsWordWrapEnabled() const;
+	void EnableWordWrap(bool val = true);
 
 	static CConfiguration* GetInstance();
 
@@ -285,7 +312,7 @@ public:
 	LOGFONT m_fontEditor;
 
 	/** Colors for editor components */
-	COLORREF m_aEditorColors[CCrystalTextView::COLORINDEX_ERRORBKGND];
+	COLORREF m_aEditorColors[LaTeXView::COLORINDEX_ERRORBKGND];
 
 	/** Width of a tab in characters */
 	int m_nTabWidth;
@@ -347,7 +374,7 @@ public:
 	/** User interface language, that was active in the last session. */
 	CString m_strGuiLanguageOnLastSession;
 
-	/** Lanuage of the dictionary. */
+	/** Language of the dictionary. */
 	CString m_strLanguageDefault;
 
 	/** Dialect of the dictionary. */

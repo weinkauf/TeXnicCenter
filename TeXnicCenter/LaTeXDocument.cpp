@@ -6,58 +6,16 @@
 #include "global.h"
 #include "textfilesavedialog.h"
 #include "configuration.h"
-
-#pragma region Line ending mode conversion functions
-
-int ToScintillaMode(int m)
-{
-	int mode = SC_EOL_CRLF;
-
-	switch (m) {
-		case CRLF_STYLE_UNIX: mode = SC_EOL_LF; break;
-		case CRLF_STYLE_MAC: mode = SC_EOL_CR; break;
-	}
-
-	return mode;
-}
-
-int FromScintillaMode(int m)
-{
-	int mode = CRLF_STYLE_DOS;
-
-	switch (m) {
-		case SC_EOL_CR: mode = CRLF_STYLE_MAC; break;
-		case SC_EOL_LF: mode = CRLF_STYLE_UNIX; break;
-	}
-
-	return mode;
-}
-
-#pragma endregion
-
+#include "CodeBookmark.h"
 
 // LaTeXDocument
 
-IMPLEMENT_DYNCREATE(LaTeXDocument, CScintillaDoc)
+IMPLEMENT_DYNCREATE(LaTeXDocument, CodeDocument)
 
 LaTeXDocument::LaTeXDocument()
-: m_bSaveCopy(false)
-, m_nCRLFMode(-1)
+: save_copy_(false)
+, EOL_mode_(-1)
 {
-}
-
-BOOL LaTeXDocument::OnNewDocument()
-{
-	if (!CScintillaDoc::OnNewDocument())
-		return FALSE;
-
-    // *
-    if (m_strPathName.IsEmpty())
-        m_strPathName = m_strTitle;
-
-	GetView()->GetCtrl().SetEOLMode(ToScintillaMode(CConfiguration::GetInstance()->m_nStandardFileFormat));
-
-	return TRUE;
 }
 
 LaTeXDocument::~LaTeXDocument()
@@ -65,7 +23,7 @@ LaTeXDocument::~LaTeXDocument()
 }
 
 
-BEGIN_MESSAGE_MAP(LaTeXDocument, CScintillaDoc)
+BEGIN_MESSAGE_MAP(LaTeXDocument, CodeDocument)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, &LaTeXDocument::OnUpdateFileSave)
 	ON_COMMAND(ID_FILE_SAVE_COPY_AS, &LaTeXDocument::OnFileSaveCopyAs)
 END_MESSAGE_MAP()
@@ -76,51 +34,52 @@ END_MESSAGE_MAP()
 #ifdef _DEBUG
 void LaTeXDocument::AssertValid() const
 {
-	CScintillaDoc::AssertValid();
+	CodeDocument::AssertValid();
 }
 
 #ifndef _WIN32_WCE
 void LaTeXDocument::Dump(CDumpContext& dc) const
 {
-	CScintillaDoc::Dump(dc);
+	CodeDocument::Dump(dc);
 }
 #endif
 #endif //_DEBUG
 
 // LaTeXDocument commands
 
-void LaTeXDocument::SetModifiedFlag(BOOL modified)
+BOOL LaTeXDocument::OnNewDocument()
 {
-    if (m_bModified != modified) {
-        const TCHAR ch = _T('*');
-        CString title = GetTitle();
+	if (!CodeDocument::OnNewDocument())
+		return FALSE;
 
-        if (modified)
-            title += ch;
-        else
-            title.TrimRight(ch);
+	// *
+	if (m_strPathName.IsEmpty())
+		m_strPathName = m_strTitle;
 
-        SetTitle(title);
-    }
+	GetView()->GetCtrl().SetEOLMode(ToScintillaMode(CConfiguration::GetInstance()->m_nStandardFileFormat));
 
-    __super::SetModifiedFlag(modified);
+	return TRUE;
 }
 
 BOOL LaTeXDocument::OnOpenDocument(LPCTSTR lpszPathName)
 {
-    if (!CScintillaDoc::OnOpenDocument(lpszPathName))
+    if (!CodeDocument::OnOpenDocument(lpszPathName))
         return FALSE;
+
+	// Restore the bookmarks, if any
+	if (CLaTeXProject* p = theApp.GetProject()) {
+		BookmarkContainerType bookmarks;
+
+		if (p->GetBookmarks(lpszPathName,bookmarks))
+			SetBookmarks(bookmarks.begin(),bookmarks.end());
+	}
     
     return TRUE;
 }
 
-void LaTeXDocument::SetErrorMark(int /*line*/)
-{
-}
-
 BOOL LaTeXDocument::OnSaveDocument(LPCTSTR lpszPathName)
 {
-	DWORD result = static_cast<LaTeXView*>(GetView())->SaveToFile(lpszPathName,!m_bSaveCopy);
+	DWORD result = SaveFile(lpszPathName,!save_copy_);
 	BOOL b;
 
 	if (result != ERROR_SUCCESS) {
@@ -131,13 +90,13 @@ BOOL LaTeXDocument::OnSaveDocument(LPCTSTR lpszPathName)
 			AfxFormatSystemString(result));
 		AfxMessageBox(strMsg,MB_ICONEXCLAMATION | MB_OK);
 
-		m_bSaveCopy = false;
+		save_copy_ = false;
 		b = FALSE;
 	}
 	else {
 		b = TRUE;
 
-		m_bSaveCopy = false;
+		save_copy_ = false;
 		theApp.m_pMainWnd->SendMessage(WM_COMMAND,ID_DOCUMENT_SAVED);
 	}
 
@@ -163,7 +122,7 @@ BOOL LaTeXDocument::DoSave(LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/)
 {
 	CString newName(lpszPathName);
 
-	if (newName.IsEmpty()) {
+	if (ShowSaveDialog(lpszPathName)) {
 		CDocTemplate* pTemplate = GetDocTemplate();
 		ASSERT(pTemplate != NULL);
 
@@ -187,8 +146,8 @@ BOOL LaTeXDocument::DoSave(LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/)
 
 		int mode = FromScintillaMode(GetView()->GetCtrl().GetEOLMode());
 
-		if (m_nCRLFMode == -1) // Not set yet
-			m_nCRLFMode = ToScintillaMode(mode);
+		if (EOL_mode_ == -1) // Not set yet
+			EOL_mode_ = ToScintillaMode(mode);
 
 		CTextFileSaveDialog dlg(
 			bReplace ? AFX_IDS_SAVEFILE : AFX_IDS_SAVEFILECOPY,
@@ -205,28 +164,28 @@ BOOL LaTeXDocument::DoSave(LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/)
 		}
 
 		AfxSetLastDirectory(CPathTool::GetDirectory(dlg.GetPathName()));
-		m_nCRLFMode = ToScintillaMode(dlg.GetFileFormat());
+		EOL_mode_ = ToScintillaMode(dlg.GetFileFormat());
 
 		// Delay line ending conversion as long as possible
-		// LaTeXView::SaveToFile(HANDLE) will perform if it's succeeded so far
+		// LaTeXView::SaveFile(HANDLE) will perform if it's succeeded so far
 
-		m_bSaveCopy = !bReplace;
+		save_copy_ = !bReplace;
 		newName = dlg.GetPathName();
 	}
 	else
-		m_nCRLFMode = GetView()->GetCtrl().GetEOLMode();
+		EOL_mode_ = GetView()->GetCtrl().GetEOLMode();
 
-	return CDocument::DoSave(newName,bReplace);
+	return CodeDocument::DoSave(newName,bReplace);
 }
 
 BOOL LaTeXDocument::GetNextLine(LPCTSTR &lpLine, int &nLength)
 {
 	AssertValid();
 
-	if (m_nCurrentLine >= GetView()->GetCtrl().GetLineCount())
+	if (current_line_ >= GetView()->GetCtrl().GetLineCount())
 		return FALSE;
 
-	static_cast<LaTeXView*>(GetView())->GetLineText(m_nCurrentLine++);
+	static_cast<LaTeXView*>(GetView())->GetLineText(current_line_++);
 	lpLine = line_;
 	nLength = line_.GetLength();
 
@@ -240,9 +199,9 @@ void LaTeXDocument::DeleteContents()
 	if (CScintillaView* v = GetView())
 		v->GetCtrl().ClearAll();
 
-	m_nCurrentLine = 0;
+	current_line_ = 0;
 
-	CDocument::DeleteContents();
+	CodeDocument::DeleteContents();
 }
 
 void LaTeXDocument::Delete()
@@ -272,7 +231,7 @@ void LaTeXDocument::UpdateTextBufferOnExternalChange()
 	}
 
 	if (nResult == IDYES) {
-		DWORD dwResult = static_cast<LaTeXView*>(GetView())->LoadFromFile(GetPathName());
+		DWORD dwResult = LoadFile(GetPathName());
 
 		if (dwResult != ERROR_SUCCESS) {
 			strMsg.Format(STE_FILE_INUSE,
@@ -288,7 +247,7 @@ void LaTeXDocument::UpdateTextBufferOnExternalChange()
 void LaTeXDocument::SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU)
 {
 	SetFilePath(lpszPathName);
-	CDocument::SetPathName(lpszPathName,bAddToMRU);
+	CodeDocument::SetPathName(lpszPathName,bAddToMRU);
 }
 
 void LaTeXDocument::OnFileSaveCopyAs()
@@ -298,5 +257,35 @@ void LaTeXDocument::OnFileSaveCopyAs()
 
 int LaTeXDocument::GetSavedEOLMode() const
 {
-	return m_nCRLFMode;
+	return EOL_mode_;
+}
+
+DWORD LaTeXDocument::SaveFile(HANDLE file)
+{
+	const int mode = GetSavedEOLMode();
+
+	if (GetView()->GetCtrl().GetEOLMode() != mode) {
+		GetView()->GetCtrl().SetEOLMode(mode);
+		GetView()->GetCtrl().ConvertEOLs(mode);
+	}
+
+	return CodeDocument::SaveFile(file);
+}
+
+void LaTeXDocument::OnBookmarkAdded(const CodeBookmark& b)
+{
+	if (CLaTeXProject* p = theApp.GetProject())
+		p->AddBookmark(GetFilePath(),b);
+}
+
+void LaTeXDocument::OnBookmarkRemoved(const CodeBookmark& b)
+{
+	if (CLaTeXProject* p = theApp.GetProject())
+		p->RemoveBookmark(GetFilePath(),b);
+}
+
+void LaTeXDocument::OnRemovedAllBookmarks(void)
+{
+	if (CLaTeXProject* p = theApp.GetProject())
+		p->RemoveAllBookmarks(GetFilePath());
 }

@@ -58,6 +58,7 @@ BEGIN_MESSAGE_MAP(NavigatorTreeCtrl,CTreeCtrl)
 	//}}AFX_MSG_MAP
 	ON_WM_SYSCOLORCHANGE()
 	ON_NOTIFY_REFLECT(NM_DBLCLK, &NavigatorTreeCtrl::OnNMDblclk)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -379,4 +380,12 @@ void NavigatorTreeCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 	AfxGetMainWnd()->SendMessage(WM_COMMAND,ID_ITEM_GOTO);
 
 	*pResult = 0;
+}
+
+void NavigatorTreeCtrl::OnDestroy()
+{
+	__super::OnDestroy();
+
+	if (IsAttached())
+		GetProject()->RemoveView(this);
 }

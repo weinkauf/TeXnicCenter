@@ -67,7 +67,7 @@ public:
 	        TRUE on success, FALSE if an error occured. If an error occurs,
 	        the window is closed and the object can be destroyed.
 	 */
-	BOOL Serialize(CIniFile &ini, LPCTSTR lpszKey, BOOL bWrite);
+	bool Serialize(CIniFile &ini, LPCTSTR lpszKey, bool write);
 
 	/**
 	Returns the FileName / PathName of the document associated with this ChildFrame.

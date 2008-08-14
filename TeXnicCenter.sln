@@ -1,18 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CrysEditEx", "CrysEditEx\Source\cryseditEx.vcproj", "{571B4E3E-E7A3-4575-931D-A6A2FDAC951E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3179E807-56F7-47DF-BA5A-7512BC01AE4B} = {3179E807-56F7-47DF-BA5A-7512BC01AE4B}
-		{9DA15789-472F-4D0D-82D8-5CABD1BBC553} = {9DA15789-472F-4D0D-82D8-5CABD1BBC553}
-		{53609BB3-D874-465C-AF7B-DF626DB0D89B} = {53609BB3-D874-465C-AF7B-DF626DB0D89B}
-		{049FFAEF-6751-42F1-B069-DB51BD24911B} = {049FFAEF-6751-42F1-B069-DB51BD24911B}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CrysEditExDeutsch", "CrysEditEx\Source\CrysEditExDeutsch.vcproj", "{9DA15789-472F-4D0D-82D8-5CABD1BBC553}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CrysEditExEnglish", "CrysEditEx\Source\CrysEditExEnglish.vcproj", "{3179E807-56F7-47DF-BA5A-7512BC01AE4B}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InterfaceWrapper", "InterfaceWrapper\source\InterfaceWrapper.vcproj", "{884A5C93-0BE0-42E0-A688-DDC80C53DF48}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFCExt", "MFCExt\Source\MFCExt.vcproj", "{049FFAEF-6751-42F1-B069-DB51BD24911B}"
@@ -26,13 +14,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TXC Documentation", "TCHelp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TeXnicCenter", "TeXnicCenter\TeXnicCenter.vcproj", "{7795423E-417E-4C41-A629-11EFD0EBF8AD}"
 	ProjectSection(ProjectDependencies) = postProject
-		{3179E807-56F7-47DF-BA5A-7512BC01AE4B} = {3179E807-56F7-47DF-BA5A-7512BC01AE4B}
 		{12243F23-547E-4676-A36D-7DE0EE131354} = {12243F23-547E-4676-A36D-7DE0EE131354}
 		{5EECC42B-6396-41B4-BADC-27F6A98E8090} = {5EECC42B-6396-41B4-BADC-27F6A98E8090}
 		{7D010430-948A-4400-85C4-7D18CB92068F} = {7D010430-948A-4400-85C4-7D18CB92068F}
-		{571B4E3E-E7A3-4575-931D-A6A2FDAC951E} = {571B4E3E-E7A3-4575-931D-A6A2FDAC951E}
 		{5E77A852-5E2B-4E6B-B57F-70676F473C93} = {5E77A852-5E2B-4E6B-B57F-70676F473C93}
-		{9DA15789-472F-4D0D-82D8-5CABD1BBC553} = {9DA15789-472F-4D0D-82D8-5CABD1BBC553}
 		{884A5C93-0BE0-42E0-A688-DDC80C53DF48} = {884A5C93-0BE0-42E0-A688-DDC80C53DF48}
 		{8BCF7B96-863C-43BE-9B8A-84B8AAB304C7} = {8BCF7B96-863C-43BE-9B8A-84B8AAB304C7}
 		{53609BB3-D874-465C-AF7B-DF626DB0D89B} = {53609BB3-D874-465C-AF7B-DF626DB0D89B}
@@ -62,10 +47,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SciLexer", "Scintilla\vcbuild\SciLexer.vcproj", "{5EECC42B-6396-41B4-BADC-27F6A98E8090}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
@@ -73,30 +54,6 @@ Global
 		Unicode Release|Win32 = Unicode Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{571B4E3E-E7A3-4575-931D-A6A2FDAC951E}.Debug|Win32.ActiveCfg = Debug|Win32
-		{571B4E3E-E7A3-4575-931D-A6A2FDAC951E}.Debug|Win32.Build.0 = Debug|Win32
-		{571B4E3E-E7A3-4575-931D-A6A2FDAC951E}.Release|Win32.ActiveCfg = Release|Win32
-		{571B4E3E-E7A3-4575-931D-A6A2FDAC951E}.Release|Win32.Build.0 = Release|Win32
-		{571B4E3E-E7A3-4575-931D-A6A2FDAC951E}.Unicode Debug|Win32.ActiveCfg = Unicode Debug|Win32
-		{571B4E3E-E7A3-4575-931D-A6A2FDAC951E}.Unicode Debug|Win32.Build.0 = Unicode Debug|Win32
-		{571B4E3E-E7A3-4575-931D-A6A2FDAC951E}.Unicode Release|Win32.ActiveCfg = Unicode Release|Win32
-		{571B4E3E-E7A3-4575-931D-A6A2FDAC951E}.Unicode Release|Win32.Build.0 = Unicode Release|Win32
-		{9DA15789-472F-4D0D-82D8-5CABD1BBC553}.Debug|Win32.ActiveCfg = Debug|Win32
-		{9DA15789-472F-4D0D-82D8-5CABD1BBC553}.Debug|Win32.Build.0 = Debug|Win32
-		{9DA15789-472F-4D0D-82D8-5CABD1BBC553}.Release|Win32.ActiveCfg = Release|Win32
-		{9DA15789-472F-4D0D-82D8-5CABD1BBC553}.Release|Win32.Build.0 = Release|Win32
-		{9DA15789-472F-4D0D-82D8-5CABD1BBC553}.Unicode Debug|Win32.ActiveCfg = Unicode Debug|Win32
-		{9DA15789-472F-4D0D-82D8-5CABD1BBC553}.Unicode Debug|Win32.Build.0 = Unicode Debug|Win32
-		{9DA15789-472F-4D0D-82D8-5CABD1BBC553}.Unicode Release|Win32.ActiveCfg = Unicode Release|Win32
-		{9DA15789-472F-4D0D-82D8-5CABD1BBC553}.Unicode Release|Win32.Build.0 = Unicode Release|Win32
-		{3179E807-56F7-47DF-BA5A-7512BC01AE4B}.Debug|Win32.ActiveCfg = Debug|Win32
-		{3179E807-56F7-47DF-BA5A-7512BC01AE4B}.Debug|Win32.Build.0 = Debug|Win32
-		{3179E807-56F7-47DF-BA5A-7512BC01AE4B}.Release|Win32.ActiveCfg = Release|Win32
-		{3179E807-56F7-47DF-BA5A-7512BC01AE4B}.Release|Win32.Build.0 = Release|Win32
-		{3179E807-56F7-47DF-BA5A-7512BC01AE4B}.Unicode Debug|Win32.ActiveCfg = Unicode Debug|Win32
-		{3179E807-56F7-47DF-BA5A-7512BC01AE4B}.Unicode Debug|Win32.Build.0 = Unicode Debug|Win32
-		{3179E807-56F7-47DF-BA5A-7512BC01AE4B}.Unicode Release|Win32.ActiveCfg = Unicode Release|Win32
-		{3179E807-56F7-47DF-BA5A-7512BC01AE4B}.Unicode Release|Win32.Build.0 = Unicode Release|Win32
 		{884A5C93-0BE0-42E0-A688-DDC80C53DF48}.Debug|Win32.ActiveCfg = Debug|Win32
 		{884A5C93-0BE0-42E0-A688-DDC80C53DF48}.Debug|Win32.Build.0 = Debug|Win32
 		{884A5C93-0BE0-42E0-A688-DDC80C53DF48}.Release|Win32.ActiveCfg = Release|Win32
@@ -202,5 +159,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

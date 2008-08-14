@@ -36,7 +36,6 @@
 #include "TeXnicCenter.h"
 #include "OptionPageTextFormat.h"
 #include "configuration.h"
-#include "LatexEdit.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -67,7 +66,7 @@ COptionPageTextFormat::COptionPageTextFormat()
 		m_bApplyChanges(FALSE)
 {
 	// copy color array
-	for (int i = 0; i < CCrystalTextView::COLORINDEX_ERRORBKGND; i++)
+	for (int i = 0; i < LaTeXView::COLORINDEX_ERRORBKGND; i++)
 		m_aColors[i] = CConfiguration::GetInstance()->m_aEditorColors[i];
 
 	m_nEditorElement = 0;
@@ -81,11 +80,11 @@ COptionPageTextFormat::COptionPageTextFormat()
 	// preselect a window type
 	m_nWindowElement = wndEditor;
 
-	// get current caret settings
-	m_nInsertCursorForm = CCrystalTextView::GetCaretInsertForm();
-	m_nInsertCursorMode = CCrystalTextView::GetCaretInsertMode();
-	m_nOverwriteCursorForm = CCrystalTextView::GetCaretOverwriteForm();
-	m_nOverwriteCursorMode = CCrystalTextView::GetCaretOverwriteMode();
+	// TODO: get current caret settings
+	//m_nInsertCursorForm = LaTeXView::GetCaretInsertForm();
+	//m_nInsertCursorMode = LaTeXView::GetCaretInsertMode();
+	//m_nOverwriteCursorForm = LaTeXView::GetCaretOverwriteForm();
+	//m_nOverwriteCursorMode = LaTeXView::GetCaretOverwriteMode();
 }
 
 COptionPageTextFormat::~COptionPageTextFormat()
@@ -131,8 +130,9 @@ void COptionPageTextFormat::StoreWindowTypeSettings()
 	{
 		case wndEditor:
 			memcpy(&CConfiguration::GetInstance()->m_fontEditor,&m_logfont,sizeof(m_logfont));
-			CCrystalTextView::SetCaretInsertStyle(m_nInsertCursorForm,m_nInsertCursorMode);
-			CCrystalTextView::SetCaretOverwriteStyle(m_nOverwriteCursorForm,m_nOverwriteCursorMode);
+			// TODO: Cursor mode
+			//LaTeXView::SetCaretInsertStyle(m_nInsertCursorForm,m_nInsertCursorMode);
+			//LaTeXView::SetCaretOverwriteStyle(m_nOverwriteCursorForm,m_nOverwriteCursorMode);
 			break;
 
 		case wndOutput:
@@ -186,25 +186,25 @@ BOOL COptionPageTextFormat::OnInitDialog()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// set item data for element combo
 	// - Use this to sort the entries of the combobox. The rest of the code takes care.
-	m_wndEditorElement.SetItemData(0,CCrystalTextView::COLORINDEX_SELMARGIN);
-	m_wndEditorElement.SetItemData(1,CCrystalTextView::COLORINDEX_WHITESPACE);
-	m_wndEditorElement.SetItemData(2,CCrystalTextView::COLORINDEX_BKGND);
-	m_wndEditorElement.SetItemData(3,CCrystalTextView::COLORINDEX_NORMALTEXT);
-	m_wndEditorElement.SetItemData(4,CCrystalTextView::COLORINDEX_SELBKGND);
-	m_wndEditorElement.SetItemData(5,CCrystalTextView::COLORINDEX_SELTEXT);
-	m_wndEditorElement.SetItemData(6,CCrystalTextView::COLORINDEX_KEYWORD);
-	m_wndEditorElement.SetItemData(7,CCrystalTextView::COLORINDEX_COMMENT);
-	m_wndEditorElement.SetItemData(8,CCrystalTextView::COLORINDEX_OPERATOR);
-	m_wndEditorElement.SetItemData(9,CCrystalTextView::COLORINDEX_STRING);
-	m_wndEditorElement.SetItemData(10,CCrystalTextView::COLORINDEX_NUMBER);
-	m_wndEditorElement.SetItemData(11,CCrystalTextView::COLORINDEX_PREPROCESSOR);
-	m_wndEditorElement.SetItemData(12,CCrystalTextView::COLORINDEX_PAIRSTRINGBKGND);
-	m_wndEditorElement.SetItemData(13,CCrystalTextView::COLORINDEX_PAIRSTRINGTEXT);
-	m_wndEditorElement.SetItemData(14,CCrystalTextView::COLORINDEX_CURPAIRSTRINGBKGND);
-	m_wndEditorElement.SetItemData(15,CCrystalTextView::COLORINDEX_CURPAIRSTRINGTEXT);
-	m_wndEditorElement.SetItemData(16,CCrystalTextView::COLORINDEX_PAIRBLOCKBKGND);
-	m_wndEditorElement.SetItemData(17,CCrystalTextView::COLORINDEX_BADPAIRSTRINGBKGND);
-	m_wndEditorElement.SetItemData(18,CCrystalTextView::COLORINDEX_BADPAIRSTRINGTEXT);
+	m_wndEditorElement.SetItemData(0,LaTeXView::COLORINDEX_SELMARGIN);
+	m_wndEditorElement.SetItemData(1,LaTeXView::COLORINDEX_WHITESPACE);
+	m_wndEditorElement.SetItemData(2,LaTeXView::COLORINDEX_BKGND);
+	m_wndEditorElement.SetItemData(3,LaTeXView::COLORINDEX_NORMALTEXT);
+	m_wndEditorElement.SetItemData(4,LaTeXView::COLORINDEX_SELBKGND);
+	m_wndEditorElement.SetItemData(5,LaTeXView::COLORINDEX_SELTEXT);
+	m_wndEditorElement.SetItemData(6,LaTeXView::COLORINDEX_KEYWORD);
+	m_wndEditorElement.SetItemData(7,LaTeXView::COLORINDEX_COMMENT);
+	m_wndEditorElement.SetItemData(8,LaTeXView::COLORINDEX_OPERATOR);
+	m_wndEditorElement.SetItemData(9,LaTeXView::COLORINDEX_STRING);
+	m_wndEditorElement.SetItemData(10,LaTeXView::COLORINDEX_NUMBER);
+	m_wndEditorElement.SetItemData(11,LaTeXView::COLORINDEX_PREPROCESSOR);
+	m_wndEditorElement.SetItemData(12,LaTeXView::COLORINDEX_PAIRSTRINGBKGND);
+	m_wndEditorElement.SetItemData(13,LaTeXView::COLORINDEX_PAIRSTRINGTEXT);
+	m_wndEditorElement.SetItemData(14,LaTeXView::COLORINDEX_CURPAIRSTRINGBKGND);
+	m_wndEditorElement.SetItemData(15,LaTeXView::COLORINDEX_CURPAIRSTRINGTEXT);
+	m_wndEditorElement.SetItemData(16,LaTeXView::COLORINDEX_PAIRBLOCKBKGND);
+	m_wndEditorElement.SetItemData(17,LaTeXView::COLORINDEX_BADPAIRSTRINGBKGND);
+	m_wndEditorElement.SetItemData(18,LaTeXView::COLORINDEX_BADPAIRSTRINGTEXT);
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// select color
 	m_wndElementColorPicker.m_bEnabledInCustomizeMode = TRUE;
@@ -236,7 +236,7 @@ void COptionPageTextFormat::OnOK()
 	StoreWindowTypeSettings();
 
 	// copy color array
-	for (int i = 0; i < CCrystalTextView::COLORINDEX_ERRORBKGND; i++)
+	for (int i = 0; i < LaTeXView::COLORINDEX_ERRORBKGND; i++)
 		CConfiguration::GetInstance()->m_aEditorColors[i] = m_aColors[i];
 
 	// OnOK should update all windows
@@ -264,7 +264,7 @@ void COptionPageTextFormat::OnSelchangeEditorElement()
 	// select element color
 	m_wndElementColorPicker.EnableAutomaticButton(
 	    CString((LPCTSTR)STE_COLOR_AUTOMATIC),
-	    CLaTeXEdit::GetAutomaticColor(m_wndEditorElement.GetItemData(m_nEditorElement)));
+	    LaTeXView::GetAutomaticColor(m_wndEditorElement.GetItemData(m_nEditorElement)));
 	m_wndElementColorPicker.SetColor(m_aColors[m_wndEditorElement.GetItemData(m_nEditorElement)]);
 }
 
@@ -279,12 +279,12 @@ void COptionPageTextFormat::OnEditorSelectfont()
 {
 	// select font for editor
 	CFontDialog fontdlg;
-	LOGFONT tmpFont;
+	LOGFONT tmpFont = m_logfont;
 
-	memcpy(&tmpFont,&m_logfont,sizeof(tmpFont));
 	fontdlg.m_cf.lpLogFont = &tmpFont;
-	fontdlg.m_cf.Flags |= (m_nWindowElement == wndEditor) ? CF_INITTOLOGFONTSTRUCT | CF_FIXEDPITCHONLY : CF_INITTOLOGFONTSTRUCT;
+	fontdlg.m_cf.Flags |= CF_INITTOLOGFONTSTRUCT;
 	fontdlg.m_cf.Flags &= ~CF_EFFECTS;
+
 	if (fontdlg.DoModal() == IDOK)
 		fontdlg.GetCurrentFont(&m_logfont);
 
