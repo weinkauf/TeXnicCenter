@@ -28,6 +28,7 @@ to maintain a single distribution point for the source code.
 
 
 #include "ScintillaCtrl.h"
+#include "DialogTemplate.h"
 
 #ifndef __AFXTEMPL_H__
 #pragma message("To avoid this message please put afxtempl.h into your pre compiled header (normally stdafx.h)")
@@ -43,6 +44,9 @@ to maintain a single distribution point for the source code.
 
 class SCINTILLADOCVIEW_EXT_CLASS CScintillaFindReplaceDlg : public CFindReplaceDialog
 {
+	DialogTemplate templ_;
+	bool find_only_;
+
 public:
 //Constructors / Destructors
   CScintillaFindReplaceDlg();
@@ -52,6 +56,8 @@ public:
   BOOL GetRegularExpression() const { return m_bRegularExpression; };
   void SetRegularExpression(BOOL bRegularExpression) { m_bRegularExpression = bRegularExpression; };
   static CScintillaFindReplaceDlg* GetFindReplaceDlg();
+
+  bool IsFindDialogOnly() const { return find_only_; }
 
 protected:
 	virtual BOOL OnInitDialog();

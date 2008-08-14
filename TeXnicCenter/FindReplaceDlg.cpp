@@ -24,7 +24,9 @@ FindReplaceDlg::~FindReplaceDlg()
 void FindReplaceDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CScintillaFindReplaceDlg::DoDataExchange(pDX);
-	DDX_Radio(pDX,IDC_EDIT_SCOPE_SELECTION,whole_file_);
+
+	if (!IsFindDialogOnly())
+		DDX_Radio(pDX,IDC_EDIT_SCOPE_SELECTION,whole_file_);
 }
 
 
@@ -39,19 +41,21 @@ BOOL FindReplaceDlg::OnInitDialog()
 {
 	CScintillaFindReplaceDlg::OnInitDialog();
 
-	bool view_found = false;
+	if (!IsFindDialogOnly()) {
+		bool view_found = false;
 
-	if (CFrameWnd* tlf = GetTopLevelFrame()) {
-		if (CFrameWnd* cf = tlf->GetActiveFrame()) {
-			if (CScintillaView* view = dynamic_cast<CScintillaView*>(cf->GetActiveView())) {
-				whole_file_ = view->GetCtrl().GetSelectionStart() == view->GetCtrl().GetSelectionEnd();
-				UpdateData(FALSE);
-				view_found = true;
+		if (CFrameWnd* tlf = GetTopLevelFrame()) {
+			if (CFrameWnd* cf = tlf->GetActiveFrame()) {
+				if (CScintillaView* view = dynamic_cast<CScintillaView*>(cf->GetActiveView())) {
+					whole_file_ = view->GetCtrl().GetSelectionStart() == view->GetCtrl().GetSelectionEnd();
+					UpdateData(FALSE);
+					view_found = true;
+				}
 			}
-		}
-	}	
+		}	
 
-	ASSERT(view_found);
+		ASSERT(view_found);
+	}
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
