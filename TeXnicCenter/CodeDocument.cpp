@@ -334,7 +334,7 @@ void CodeDocument::ConvertToMultiByte(LPCWSTR input, int cch, std::vector<BYTE>&
 		int required_size = ::WideCharToMultiByte(cp,0,input,cch,0,0,0,0);
 
 		if (required_size > 0) {
-			buffer.resize(--required_size); // We don't need the terminating null, strip it
+			buffer.resize(required_size);
 			::WideCharToMultiByte(cp,0,input,cch,reinterpret_cast<LPSTR>(&buffer[0]),buffer.size(),0,0);
 		}
 	}
@@ -462,9 +462,7 @@ DWORD CodeDocument::SaveFile( HANDLE file )
 		LPWSTR text = new WCHAR[length + 1];
 		GetView()->GetCtrl().GetText(length + 1,text);
 
-		CAtlFile f(file);
 		result = SaveFile(file,text,length);
-		f.Detach();
 
 		delete[] text;
 	}
