@@ -83,12 +83,12 @@ protected:
 	afx_msg void OnViewLineNumbers();
 	afx_msg void OnUpdateViewLineNumbers(CCmdUI *pCmdUI);
 	void UpdateLineNumberMargin();
+	void OnCharAdded(SCNotification* n);
 	
 	virtual void OnSettingsChanged();
 
 protected:
 	DECLARE_MESSAGE_MAP()	
-	void OnCharAdded(SCNotification* n);
 
 	void HardWrapRange(long s, long e);
 
@@ -127,7 +127,9 @@ private:
 		bool first_match;
 		HCURSOR search_forward_cursor, search_backward_cursor;
 
-	public:	
+	public:
+		bool autoindent_enabled;
+
 		void SetSearchForward(bool forward = true);
 
 		ShadowWindow(CodeView* v);
@@ -166,6 +168,9 @@ protected:
 
 public:
 	CScintillaFindReplaceDlg* CreateFindReplaceDialog(void);
+
+	bool IsAutoIndentEnabled() const;
+	void EnableAutoIndent(bool enable = true);
 };
 
 template<class F>

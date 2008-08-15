@@ -11,6 +11,7 @@ CodeView::ShadowWindow::ShadowWindow(CodeView* v)
 , search_forward_cursor(0)
 , search_backward_cursor(0)
 , update_status_bar(0)
+, autoindent_enabled(false)
 {
 }
 
@@ -36,8 +37,31 @@ void CodeView::ShadowWindow::UpdateStatusBarMessage()
 	view->GetTopLevelFrame()->SetMessageText(message);
 }
 
-LRESULT CodeView::ShadowWindow::OnChar(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+LRESULT CodeView::ShadowWindow::OnChar(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
+	if (!incremental_search_enabled)
+		DefWindowProc(); // Pass the message to Scintilla
+
+	// Autoindent: Line has been added
+	if (wParam == VK_RETURN) {
+		const int line = view->GetCurrentLine();
+
+		if (line > 0) {
+			const int prev_line = line - 1;
+			int indent = view->GetCtrl().GetLineIndentation(prev_line);
+			int width = view->GetCtrl().GetIndent();
+
+			if (!width) // Use tab width
+				width = view->GetCtrl().GetTabWidth();
+
+			indent /= width;
+
+			while (indent--)
+				view->GetCtrl().Tab();
+		}
+	}
+
+	// Incremental search
 	if (incremental_search_enabled) { // Absorb the message
 		if (wParam == VK_ESCAPE || wParam == VK_RETURN)
 			EnableIncrementalSearch(false);
@@ -54,8 +78,6 @@ LRESULT CodeView::ShadowWindow::OnChar(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lP
 		else
 			HandleChar(static_cast<TCHAR>(wParam));
 	}
-	else
-		bHandled = FALSE; // Pass the message to Scintilla
 
 	return 0;
 }

@@ -170,6 +170,7 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// Indicator for spell checker errors
 	GetCtrl().SetIndicatorCurrent(0); // Default is a squiggly line, which we want to use
 	GetCtrl().IndicSetFore(0,RGB(255,0,0)); // Red color instead of dark green
+	GetCtrl().SetIndent(0);
 
 	return 0;
 }
@@ -740,3 +741,14 @@ CScintillaFindReplaceDlg* CodeView::CreateFindReplaceDialog(void)
 {
 	return new FindReplaceDlg;
 }
+
+bool CodeView::IsAutoIndentEnabled() const
+{
+	return shadow_.autoindent_enabled;
+}
+
+void CodeView::EnableAutoIndent( bool enable /*= true*/ )
+{
+	shadow_.autoindent_enabled = enable;
+}
+
