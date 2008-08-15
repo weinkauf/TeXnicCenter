@@ -281,6 +281,8 @@ int LaTeXView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CScintillaCtrl& rCtrl = GetCtrl();
 	rCtrl.SetLexer(SCLEX_TEX); // TeX Lexer
 
+	EnableAutoIndent();
+
 	return 0;
 }
 
@@ -525,6 +527,8 @@ void LaTeXView::OnUpdateUI(SCNotification* n)
 
 void LaTeXView::OnModified(SCNotification* n)
 {
+	CodeView::OnModified(n);
+
 	// Text has been inserted or deleted but it's not a part of a
 	// multi step undo/redo action or it is the last action in this undo/redo chain
 	if (n->modificationType & (SC_MOD_INSERTTEXT|SC_MOD_DELETETEXT) && 

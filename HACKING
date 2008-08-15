@@ -145,3 +145,49 @@ info' to see where you are.
 This also works very nice with TortoiseSVN. Just make sure that you DO NOT
 create a branch under 'trunk'.
 
+
+Modifications
+-------------
+
+TeXnicCenter uses the Scintilla source code editing component by Neil Hodgson 
+and Scintilla MFC wrapper classes by PJ Naughter.
+
+In order to be able to use a custom cursor for incremental search the command 
+SCI_SHOWCURSOR(bool) has been introduced which supresses cursor changes.
+
+The changes that have made can be reviewed by comparing revisions 912 and 
+916 of the following files:
+  
+  Scintilla/include/Scintilla.h
+  Scintilla/src/Editor.cxx
+  Scintilla/src/Editor.h
+
+The member function void CScintillaCtrl::ShowCursor(bool show, bool direct) 
+has been added to wrap the previously mentioned message.
+
+static CScintillaFindReplaceDlg* CScintillaFindReplaceDlg::GetFindReplaceDlg()
+has been added to TeXnicCenter/ScintillaDocView.cpp which returns
+_scintillaEditState.pFindReplaceDlg.
+
+To the same file #include "FontOccManager.h" has been added.
+
+CScintillaFindReplaceDlg::Create has been modified to use a dialog template from
+the memory by adding the FR_ENABLETEMPLATEHANDLE flag to m_fr.Flags and using
+the DialogTemplate class. This change allows to replace dialog's resource font by 
+the default OS font especially useful for Windows Vista users.
+
+CScintillaView::OnReplaceAll has been modified to use targets instead of
+selections to supress unwated display updates, see Scintilla documentation. 
+This function calls another new function 
+virtual void CScintillaView::GetReplaceAllTarget(long& s, long& e).
+
+To review these changes compare revisions 913 and 921 of the following files:
+  
+  TeXnicCenter/ScintillaDocView.cpp
+  TeXnicCenter/ScintillaDocView.h
+
+and also revisions 913 and 916 of
+
+  TeXnicCenter/ScintillaCtrl.cpp
+  TeXnicCenter/ScintillaCtrl.h
+

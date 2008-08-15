@@ -1051,11 +1051,16 @@ void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt()
 
 	// save all latex-docs
 	pos = m_pLatexDocTemplate->GetFirstDocPosition();
+	CString path;
+
 	while (pos)
 	{
 		CDocument *pDoc = m_pLatexDocTemplate->GetNextDoc(pos);
-		if (!pDoc->GetPathName().IsEmpty() && pDoc->IsModified())
-			pDoc->OnSaveDocument(pDoc->GetPathName());
+		path = pDoc->GetPathName();
+
+		// Save the document only if the file already exists
+		if (!path.IsEmpty() && CPathTool::Exists(path) && pDoc->IsModified())
+			pDoc->OnSaveDocument(path);
 	}
 
 	m_bSavingAll = FALSE;
