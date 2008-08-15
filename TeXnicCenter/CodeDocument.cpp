@@ -459,10 +459,10 @@ DWORD CodeDocument::SaveFile( HANDLE file )
 	DWORD result = ERROR_SUCCESS;
 
 	if (length > 0) {
-		LPWSTR text = new WCHAR[length + 1];
+		LPWSTR const text = new WCHAR[length + 1];
 		GetView()->GetCtrl().GetText(length + 1,text);
 
-		result = SaveFile(file,text,length);
+		result = SaveFile(file,text,std::wcslen(text));
 
 		delete[] text;
 	}
