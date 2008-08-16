@@ -7,20 +7,21 @@
 #include "global.h"
 #include "SpellerBackgroundThread.h"
 #include "CodeBookmark.h"
+#include "EncodingConverter.h"
 
-int DetectScintillaEOLMode(LPCTSTR text, std::size_t size)
+int DetectScintillaEOLMode(const char* text, std::size_t size)
 {
 	int mode = SC_EOL_CRLF;
 
-	LPCTSTR const le = _T("\r\n");
-	LPCTSTR end = text + size;
+	const char* const le = "\r\n";
+	const char* end = text + size;
 
-	LPCTSTR pos = std::find_first_of(text,end,le,le + _tcslen(le));
+	const char* pos = std::find_first_of(text,end,le,le + std::strlen(le));
 
 	if (pos != end) {
-		if (*pos == _T('\r') && pos[1] != _T('\n'))
+		if (*pos == '\r' && pos[1] != '\n')
 			mode = SC_EOL_CR;
-		else if (*pos == _T('\n'))
+		else if (*pos == '\n')
 			mode = SC_EOL_LF;
 	}
 
@@ -79,7 +80,7 @@ IMPLEMENT_DYNAMIC(CodeDocument, CScintillaDoc)
 CodeDocument::CodeDocument()
 : create_backup_file_(false)
 , encoding_(ANSI) // Current user code page, see code_page_ data member
-, code_page_(CP_ACP)
+, code_page_(::GetACP())
 , speller_thread_(theApp.GetSpellerThread())
 , error_marker_handle_(-1)
 {
@@ -176,6 +177,137 @@ DWORD CodeDocument::LoadFile(LPCTSTR pszFileName)
 	return result;
 }
 
+CodeDocument::Encoding CodeDocument::TestForUnicode(const BYTE* data, SIZE_T size)
+{
+	Encoding encoding = ANSI;
+
+	INT flags = IS_TEXT_UNICODE_UNICODE_MASK;
+
+	if (::IsTextUnicode(data,size,&flags)) {
+		if (flags & (IS_TEXT_UNICODE_REVERSE_ASCII16|IS_TEXT_UNICODE_REVERSE_STATISTICS))
+			encoding = UTF16BE;
+		else
+			encoding = UTF16LE;
+	}
+	else {
+		// From Wikipedia:
+		// As a consequence of the design of UTF-8, the following properties of multi-byte sequences hold:
+
+		//  * The most significant bit of a single-byte character is always 0.
+		//	* The most significant bits of the first byte of a multi-byte sequence determine the length of 
+		//	  the sequence. These most significant bits are 110 for two-byte sequences; 1110 for three-byte 
+		//	  sequences, and so on.
+		//	* The remaining bytes in a multi-byte sequence have 10 as their two most significant bits.
+		//	* A UTF-8 stream contains neither the byte FE nor FF. This makes sure that a UTF-8 stream never 
+		//	  looks like a UTF-16 stream starting with U+FEFF (Byte-order mark)
+
+		bool utf8 = true;
+		int consecutive_bytes = 0;
+		bool ascii = size && data[0] < 128;
+		std::size_t i = 0;
+
+		for ( ; i < size && utf8; ++i) {
+			// Might be pure ASCII
+			ascii &= data[i] < 128;
+
+			if (data[i] == 0xfe || data[i] == 0xff)
+				utf8 = false;
+
+			if (consecutive_bytes == 0) {
+				if ((data[i] & 0xc0) == 0xc0)
+					consecutive_bytes = 2;
+				else if ((data[i] & 0xe0) == 0xe0)
+					consecutive_bytes = 3;
+				else if ((data[i] & 0xf0) == 0xf0)
+					consecutive_bytes = 4;
+			}
+			else if (consecutive_bytes == 0 && data[i] >> 7 & 1 ||
+				consecutive_bytes > 0 && data[i] >> 6 != 2)
+				utf8 = false; // Either MSB is not 0 or MSB of a byte in a 
+			// multi-part sequence is not 10
+
+			if (consecutive_bytes > 0)
+				--consecutive_bytes;
+		}
+
+		if (utf8 && !(ascii && i == size))
+			encoding = UTF8;
+	}
+
+	return encoding;
+}
+
+bool CodeDocument::ReadString(LPCTSTR pszFileName, CStringW& string, UINT codepage)
+{
+	DWORD result = ERROR_SUCCESS;
+	ATL::CAtlFile file;
+
+	if (SUCCEEDED(file.Create(pszFileName,GENERIC_READ,FILE_SHARE_READ,OPEN_EXISTING))) {
+		ATL::CAtlFileMapping<BYTE> mapping;
+
+		if (SUCCEEDED(mapping.MapFile(file))) {
+			const BYTE* data = mapping;
+			SIZE_T size = mapping.GetMappingSize();
+			SIZE_T pos = 0;
+
+			Encoding encoding = DetectEncoding(data,pos,size);
+
+			if (encoding == ANSI) { // ANSI? Still might by Unicode without BOM
+				encoding = TestForUnicode(data,size);
+			}
+
+			UINT code_page = codepage; // Default user code page for ANSI text
+
+			std::vector<wchar_t> buffer;
+			const wchar_t* text = 0;
+			std::size_t n = 0;
+
+			switch (encoding) {
+				case ANSI:
+					ANSItoUTF16(reinterpret_cast<const char*>(data + pos),size - pos,buffer,code_page);
+					break;
+				case UTF8:
+					UTF8toUTF16(reinterpret_cast<const char*>(data + pos),size - pos,buffer);					
+					break;
+				case UTF16LE:
+				case UTF16BE:
+					// No conversion needed
+					text = reinterpret_cast<const wchar_t*>(data + pos);
+					n = size - pos;
+
+					if (encoding == UTF16BE) {
+						buffer.assign(text,text + n);
+						std::for_each(buffer.begin(),buffer.end(),SwapCodePoint);
+
+						text = 0; n = 0; // Will be reassigned
+					}
+					break;
+				case UTF32LE:
+				case UTF32BE:
+					UTF32toUTF16(reinterpret_cast<const char*>(data + pos),size - pos,
+						buffer,encoding == UTF32LE);
+					break;
+			}
+
+			if (!text && !buffer.empty()) {
+				text = &buffer[0];
+				n = buffer.size();
+
+				string = CStringW(text,n);
+			}
+		}
+		else
+			result = ::GetLastError();
+	}
+	else
+		result = ::GetLastError();
+
+	//if (result == ERROR_SUCCESS)
+	//	//string = 
+
+	return result == ERROR_SUCCESS;
+}
+
 DWORD CodeDocument::LoadFile(HANDLE file)
 {
 	DWORD result = ERROR_SUCCESS;
@@ -189,125 +321,49 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 		Encoding encoding = DetectEncoding(data,pos,size);
 
 		if (encoding == ANSI) { // ANSI? Still might by Unicode without BOM
-			INT flags = IS_TEXT_UNICODE_UNICODE_MASK;
-
-			if (::IsTextUnicode(data,size,&flags)) {
-				if (flags & (IS_TEXT_UNICODE_REVERSE_ASCII16|IS_TEXT_UNICODE_REVERSE_STATISTICS))
-					encoding = UTF16BE;
-				else
-					encoding = UTF16LE;
-			}
-			else {
-				// From Wikipedia:
-				// As a consequence of the design of UTF-8, the following properties of multi-byte sequences hold:
-
-				//  * The most significant bit of a single-byte character is always 0.
-				//	* The most significant bits of the first byte of a multi-byte sequence determine the length of 
-				//	  the sequence. These most significant bits are 110 for two-byte sequences; 1110 for three-byte 
-				//	  sequences, and so on.
-				//	* The remaining bytes in a multi-byte sequence have 10 as their two most significant bits.
-				//	* A UTF-8 stream contains neither the byte FE nor FF. This makes sure that a UTF-8 stream never 
-				//	  looks like a UTF-16 stream starting with U+FEFF (Byte-order mark)
-
-				bool utf8 = true;
-				int consecutive_bytes = 0;
-				bool ascii = size && data[0] < 128;
-				std::size_t i = 0;
-
-				for ( ; i < size && utf8; ++i) {
-					// Might be pure ASCII
-					ascii &= data[i] < 128;
-
-					if (data[i] == 0xfe || data[i] == 0xff)
-						utf8 = false;
-
-					if (consecutive_bytes == 0) {
-						if (data[i] >> 5 == 6)
-							consecutive_bytes = 2;
-						else if (data[i] >> 4 == 0xe)
-							consecutive_bytes = 3;
-					}
-					else if (consecutive_bytes == 0 && data[i] >> 7 & 1 ||
-						consecutive_bytes > 0 && data[i] >> 6 != 2)
-						utf8 = false; // Either MSB is not 0 or MSB of a byte in a 
-					// multi-part sequence is not 10
-
-					if (consecutive_bytes > 0)
-						--consecutive_bytes;
-				}
-
-				if (utf8 && !(ascii && i == size))
-					encoding = UTF8;
-			}
+			encoding = TestForUnicode(data,size);
 		}
 
-		UINT code_page = CP_ACP; // Default user code page for ANSI text
+		UINT code_page = ::GetACP(); // Default user code page for ANSI text
+		
+		std::vector<char> buffer;
+		const char* text = 0;
+		std::size_t n = 0;
 
 		switch (encoding) {
-			case UTF8: code_page = CP_UTF8; break;
-			case UTF16LE: code_page = 1200; break; // Available only for managed applications
-			case UTF16BE: code_page = 1201; break;
-			case UTF32LE: code_page = 12000; break;
-			case UTF32BE: code_page = 12001; break;
+			case ANSI:
+				ANSItoUTF8(reinterpret_cast<const char*>(data + pos),size - pos,buffer,code_page);
+				break;
+			case UTF8:
+				// No conversion needed
+				text = reinterpret_cast<const char*>(data + pos);
+				n = size - pos;
+				break;
+			case UTF16LE:
+			case UTF16BE:
+				UTF16toUTF8(reinterpret_cast<const char*>(data + pos),size - pos,
+					buffer,encoding == UTF16LE);
+				break;
+			case UTF32LE:
+			case UTF32BE:
+				UTF32toUTF8(reinterpret_cast<const char*>(data + pos),size - pos,
+					buffer,encoding == UTF32LE);
+				break;
 		}
 
-		LPTSTR text;
-		std::size_t required_size;
-
-		if (encoding != UTF16LE && encoding != UTF16BE) {
-			const UINT flags = 0;
-			required_size = ::MultiByteToWideChar(code_page,flags,
-				reinterpret_cast<LPCSTR>(data + pos),size - pos,0,0);
-
-			LPWSTR temp = new WCHAR[required_size + 1];
-
-			::MultiByteToWideChar(code_page,flags,
-				reinterpret_cast<LPCSTR>(data + pos),size - pos,temp,required_size);
-
-#ifdef UNICODE
-			text = temp;
-#else
-			int asize = ::WideCharToMultiByte(CP_ACP,0,temp,required_size,0,0,0,0);
-
-			LPSTR temp1 = new CHAR[asize + 1];
-
-			::WideCharToMultiByte(CP_ACP,0,temp,required_size,temp1,asize,0,0);
-			text = temp1;
-
-			delete[] temp;
-#endif
-		}
-		else {
-			ASSERT((size - pos) % 2 == 0); // Size must be even
-			required_size = (size - pos) / 2;
-			LPWSTR temp = new WCHAR[required_size + 1];
-
-			std::memcpy(temp,data + pos,required_size * 2);
-
-			if (encoding == UTF16BE) // Swap bytes
-				std::for_each(temp,temp + required_size,SwapCodePoint);
-
-#ifndef UNICODE
-			USES_CONVERSION_EX;
-			text = new char[required_size + 1];
-
-			std::memcpy(text,W2CA_EX(temp,required_size),required_size);
-
-			delete[] temp;
-#else
-			text = temp;
-#endif
+		if (!text && !buffer.empty()) {
+			text = &buffer[0];
+			n = buffer.size();
 		}
 
-		text[required_size] = 0;
+		GetView()->GetCtrl().ClearAll();
+		GetView()->GetCtrl().SetCodePage(SC_CP_UTF8);
 
-		//GetCtrl().SetCodePage(SC_CP_UTF8);
-		GetView()->GetCtrl().SetText(text);
-
-		// Detected EOL type
-		GetView()->GetCtrl().SetEOLMode(DetectScintillaEOLMode(text,required_size));
-
-		delete[] text;
+		if (n) {
+			GetView()->GetCtrl().AppendText(n,text);
+			// Detected EOL type
+			GetView()->GetCtrl().SetEOLMode(DetectScintillaEOLMode(text,n));
+		}
 
 		code_page_ = code_page;
 		encoding_ = encoding;
@@ -326,31 +382,6 @@ const T* AssignByteOrderMark(const T (&p)[S], SIZE_T& s)
 {
 	s = S;
 	return p;
-}
-
-void CodeDocument::ConvertToMultiByte(LPCWSTR input, int cch, std::vector<BYTE>& buffer, Encoding encoding, UINT cp)
-{
-	if (encoding != UTF16LE && encoding != UTF16BE) {
-		int required_size = ::WideCharToMultiByte(cp,0,input,cch,0,0,0,0);
-
-		if (required_size > 0) {
-			buffer.resize(required_size);
-			::WideCharToMultiByte(cp,0,input,cch,reinterpret_cast<LPSTR>(&buffer[0]),buffer.size(),0,0);
-		}
-	}
-	else {
-		const BYTE* begin = reinterpret_cast<const BYTE*>(input);
-		const BYTE* end = reinterpret_cast<const BYTE*>(input + cch);
-
-		buffer.assign(begin,end);
-
-		if (encoding == UTF16BE) {
-			LPWSTR begin = reinterpret_cast<LPWSTR>(&buffer[0]);
-			LPWSTR end = begin + buffer.size() / 2;
-
-			std::for_each(begin,end,SwapCodePoint);
-		}
-	}
 }
 
 DWORD CodeDocument::SaveFile(LPCTSTR pszFileName, bool bClearModifiedFlag)
@@ -419,7 +450,7 @@ DWORD CodeDocument::SaveFile(LPCTSTR pszFileName, bool bClearModifiedFlag)
 	return result;
 }
 
-DWORD CodeDocument::SaveFile( HANDLE file, LPCWSTR text, int length)
+DWORD CodeDocument::SaveFile( HANDLE file, const char* text, std::size_t n)
 {
 	CAtlFile f(file);
 	DWORD result = ERROR_SUCCESS;
@@ -440,11 +471,8 @@ DWORD CodeDocument::SaveFile( HANDLE file, LPCWSTR text, int length)
 			result = ::GetLastError();
 	}
 
-	if (result == ERROR_SUCCESS && length > 0) {
-		std::vector<BYTE> buffer;
-		ConvertToMultiByte(text,length,buffer,encoding_,code_page_);
-
-		if (FAILED(f.Write(&buffer[0],buffer.size())))
+	if (result == ERROR_SUCCESS && n > 0) {
+		if (FAILED(f.Write(text,n)))
 			result = ::GetLastError();
 	}
 
@@ -458,13 +486,41 @@ DWORD CodeDocument::SaveFile( HANDLE file )
 	const int length = GetView()->GetCtrl().GetLength();
 	DWORD result = ERROR_SUCCESS;
 
-	if (length > 0) {
-		LPWSTR const text = new WCHAR[length + 1];
-		GetView()->GetCtrl().GetText(length + 1,text);
+	if (length > 0) { 
+		std::vector<char> buffer(length + 1);
+		GetView()->GetCtrl().GetText(length + 1,&buffer[0]);
 
-		result = SaveFile(file,text,std::wcslen(text));
+		buffer.pop_back(); // Strip the terminating zero
 
-		delete[] text;
+		const char* text = 0;
+		std::size_t n = 0;
+
+		std::vector<char> convbuffer;
+
+		switch (encoding_) {
+			case ANSI:
+				UTF8toANSI(&buffer[0],buffer.size(),convbuffer,code_page_);
+				break;
+			case UTF8:
+				text = &buffer[0];
+				n = buffer.size();
+				break;
+			case UTF16LE:
+			case UTF16BE:
+				UTF8toUTF16(&buffer[0],buffer.size(),convbuffer,encoding_ == UTF16LE);
+				break;
+			case UTF32LE:
+			case UTF32BE:
+				UTF8toUTF32(&buffer[0],buffer.size(),convbuffer,encoding_ == UTF32LE);
+				break;
+		}
+
+		if (!text && !convbuffer.empty()) {
+			text = &convbuffer[0];
+			n = convbuffer.size();
+		}
+
+		result = SaveFile(file,text,n);
 	}
 
 	return result;

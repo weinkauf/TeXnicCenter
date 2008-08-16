@@ -27,46 +27,23 @@
  *********************************************************************/
 
 #include "stdafx.h"
-#include "stdafx.h"
 #include "TextSourceFile.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new DEBUG_NEW
-#endif
+#include <string>
 
-//////////////////////////////////////////////////////////////////////
-// construction/destruction
-
-CTextSourceFile::CTextSourceFile()
-		: m_bFileOpen(FALSE)
-{
-}
-
-CTextSourceFile::~CTextSourceFile()
-{
-	try
-	{
-		if (m_bFileOpen)
-			m_file.Close();
-	}
-	catch (...)
-	{
-	}
-
-}
-
-//////////////////////////////////////////////////////////////////////
-// operations
+#include "CodeDocument.h"
 
 BOOL CTextSourceFile::Create(LPCTSTR lpszFile)
 {
-	// create file
-	if (!(m_bFileOpen = m_file.Open(lpszFile, CFile::modeRead | CFile::shareDenyNone)))
-		return FALSE;
+	CStringW text;
+	bool result = CodeDocument::ReadString(lpszFile,text);
 
-	return TRUE;
+	if (result)
+		is_.str(static_cast<LPCWSTR>(text));
+	else
+		is_.str(L"");
+
+	return result;
 }
 
 void CTextSourceFile::Delete()
@@ -76,17 +53,13 @@ void CTextSourceFile::Delete()
 
 BOOL CTextSourceFile::GetNextLine(LPCTSTR &lpLine, int &nLength)
 {
-	ASSERT(m_bFileOpen);
+	std::wstring line;
+	bool result = std::getline(is_,line) != 0;
 
-	m_strCurrentLine.Empty();
-
-	if (m_file.ReadString(m_strCurrentLine))
-	{
-		m_strCurrentLine.Remove((TCHAR)0x0a);
-		lpLine = m_strCurrentLine;
+	if (result) {
+		lpLine = m_strCurrentLine = line.c_str();
 		nLength = m_strCurrentLine.GetLength();
-		return TRUE;
 	}
-	else
-		return FALSE;
+
+	return result;
 }

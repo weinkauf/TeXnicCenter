@@ -25,13 +25,9 @@
  *    http://www.ToolsCenter.org
  *
  *********************************************************************/
-
-#if !defined(AFX_TEXTSOURCEFILE_H__843BC263_339C_11D3_929E_444553540000__INCLUDED_)
-#define AFX_TEXTSOURCEFILE_H__843BC263_339C_11D3_929E_444553540000__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+
+#include <sstream>
 
 #include "StructureParser.h"
 
@@ -48,15 +44,6 @@ class CTextSourceFile : public CTextSource
 // construction/destruction
 public:
 	/**
-	Constructs an empty CTextSourceFile-object. Call create to
-	attach it to a file.
-	 */
-	CTextSourceFile();
-
-	/** Closes the file and destructs the object. */
-	virtual ~CTextSourceFile();
-
-	/**
 	Creates a CTextSourceFile-object, that gets its text out
 	of the specified file.
 
@@ -64,7 +51,7 @@ public:
 	        Path of the file, the object should get its text from.
 
 	@return
-	        TRUE if successfull, FALSE otherwise.
+	        TRUE if successful, FALSE otherwise.
 	 */
 	BOOL Create(LPCTSTR lpszFile);
 
@@ -75,15 +62,10 @@ public:
 
 // attributes
 protected:
-	/** file object */
-	CStdioFile m_file;
 
 	/** CString-object that stores the current line. */
 	CString m_strCurrentLine;
 
 private:
-	/** TRUE if the file was opened successfully. */
-	BOOL m_bFileOpen;
+	std::wstringstream is_;
 };
-
-#endif // !defined(AFX_TEXTSOURCEFILE_H__843BC263_339C_11D3_929E_444553540000__INCLUDED_)

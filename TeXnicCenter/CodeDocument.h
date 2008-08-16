@@ -1,10 +1,11 @@
 #pragma once
 
+#include "CodeBookmark.h"
+
 int ToScintillaMode(int m);
 int FromScintillaMode(int m);
 
 class SpellerBackgroundThread;
-class CodeBookmark;
 
 // CodeDocument document
 
@@ -39,8 +40,7 @@ private:
 
 	SpellerBackgroundThread* speller_thread_;
 
-	Encoding DetectEncoding(const BYTE* data, SIZE_T& pos, SIZE_T size);
-	static void ConvertToMultiByte(LPCWSTR input, int cch, std::vector<BYTE>& buffer, Encoding encoding, UINT cp);
+	static Encoding DetectEncoding(const BYTE* data, SIZE_T& pos, SIZE_T size);
 
 protected:
 	CodeDocument();
@@ -64,7 +64,7 @@ public:
 	DWORD LoadFile(LPCTSTR pszFileName);
 	DWORD SaveFile(LPCTSTR pszFileName, bool bClearModifiedFlag = true);
 	virtual DWORD SaveFile(HANDLE file);	
-	DWORD SaveFile(HANDLE file, LPCWSTR text, int length);
+	DWORD SaveFile(HANDLE file, const char* text, std::size_t n);
 	Encoding GetEncoding() const;
 
 	UINT GetCodePage() const;
@@ -93,6 +93,11 @@ public:
 	const BookmarkContainerType GetBookmarks();
 	template<class I>
 	void SetBookmarks(I first, I last);
+
+	// Tests data for UTF-8 and UTF-16 encodings
+	static Encoding TestForUnicode(const BYTE* data, SIZE_T size);
+	// Reads the whole file by detecting the right encoding
+	static bool ReadString(LPCTSTR pszFileName, CStringW& string, UINT codepage = ::GetACP());
 };
 
 template<class I>
