@@ -801,7 +801,7 @@ void CLaTeXProject::OnProjectParsed()
 void CLaTeXProject::SetCurrentStructureItem(int nIndex)
 {
 	// TODO: The assert fails sometimes due to nIndex being set to -1
-	ASSERT((nIndex == 0) || (nIndex < m_aStructureItems.size())); // invalid index
+	//ASSERT((nIndex == 0) || (nIndex < m_aStructureItems.size())); // invalid index
 	if (nIndex < 0 || nIndex >= m_aStructureItems.size())
 		return;
 
