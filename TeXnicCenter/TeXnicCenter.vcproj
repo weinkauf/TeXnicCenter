@@ -80,7 +80,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="true"
-				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib"
+				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib libcharset.lib libiconv.lib"
 				AdditionalLibraryDirectories="$(OutDir)"
 				DelayLoadDLLs="uxtheme.dll"
 				SubSystem="2"
@@ -173,7 +173,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib"
+				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib libcharset.lib libiconv.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(OutDir)"
 				IgnoreDefaultLibraryNames=""
@@ -270,7 +270,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib"
+				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib libcharset.lib libiconv.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(OutDir)"
 				IgnoreDefaultLibraryNames=""
@@ -369,7 +369,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="true"
-				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib"
+				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib libcharset.lib libiconv.lib"
 				AdditionalLibraryDirectories="$(OutDir)"
 				DelayLoadDLLs="uxtheme.dll"
 				SubSystem="2"
@@ -615,6 +615,14 @@
 			</File>
 			<File
 				RelativePath=".\EditMenuButtonOpt.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EncodingConverter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EncodingConverter.h"
 				>
 			</File>
 			<File

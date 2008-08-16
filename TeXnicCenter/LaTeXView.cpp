@@ -980,15 +980,20 @@ void LaTeXView::OnEditOutsource()
 			long s = GetCtrl().GetSelectionStart();
 			long e = GetCtrl().GetSelectionEnd();
 
-			CString strSelectedText;
+			std::vector<char> buffer;
+
+			const char* text = 0;
+			std::size_t n = 0;
 			
 			if (s != e) {
-				GetCtrl().GetSelText(strSelectedText.GetBuffer(e - s));
-				strSelectedText.ReleaseBuffer();
+				buffer.resize((e - s) + 1);
+				GetCtrl().GetSelText(&buffer[0]);
+
+				text = &buffer[0]; n = buffer.size();
 			}
 
 			//Write it to the file
-			GetDocument()->SaveFile(NewFile,strSelectedText,strSelectedText.GetLength());
+			GetDocument()->SaveFile(NewFile,text,n);
 			NewFile.Close();
 
 			//Get relative path - omit tex-extension

@@ -231,9 +231,11 @@ const CString CTeXnicCenterApp::GetDDEServerName() const
 	AfxGetModuleShortFileName(AfxGetInstanceHandle(), strShortName);
 	return CPathTool::GetFileTitle(strShortName);
 }
-
+#include "EncodingConverter.h"
 BOOL CTeXnicCenterApp::InitInstance()
 {
+	std::vector<char> data;
+	UTF8toANSI("\xda\x60",2,data);
 	scintilla_ = AfxLoadLibrary(_T("SciLexer.dll"));
 
 	if (!scintilla_) {

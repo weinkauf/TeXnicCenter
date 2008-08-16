@@ -38,6 +38,8 @@
 #include "BiBTeXFile.h"
 #include "BiBTeXEntry.h"
 
+#include "CodeDocument.h"
+
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -74,31 +76,18 @@ CBiBTeXFile::~CBiBTeXFile()
  */
 BOOL CBiBTeXFile::ProcessFile()
 {
-	CFile f;
-	BOOL ok;
+	CStringW text;
+	bool result = CodeDocument::ReadString(m_Filename,text);
 
-	try
-	{
-		f.Open(m_Filename,CFile::modeRead);
-		ULONGLONG l = f.GetLength();
-
-		TCHAR *buf = new TCHAR[static_cast<std::size_t>(l + 1)];
-
-		f.Read(buf,l);
-		m_ErrorCount = 0;
-		ok = ParseFile(buf);
-
-		delete [] buf;
+	if (result) {
+		const CString s(text); text.Empty();
+		result = ParseFile(s) != 0;
 	}
-	catch (CFileException &ex)
-	{
-		TRACE1("Error opening BibTeX file: %s\n",ex);
-		f.Close();
-		return FALSE;
+	else {
+		TRACE0("Error opening BibTeX file\n");
 	}
 
-	f.Close();
-	return ok;
+	return result;
 }
 
 /**
