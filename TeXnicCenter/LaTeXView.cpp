@@ -989,6 +989,7 @@ void LaTeXView::OnEditOutsource()
 				buffer.resize((e - s) + 1);
 				GetCtrl().GetSelText(&buffer[0]);
 
+				buffer.pop_back(); // Remove the terminating zero
 				text = &buffer[0]; n = buffer.size();
 			}
 
