@@ -2,12 +2,12 @@
 //
 
 #include "stdafx.h"
-#include "texniccenter.h"
+#include "AutoCompleteListbox.h"
 
 #include <algorithm>
 #include <functional>
 
-#include "AutoCompleteListbox.h"
+#include "AutoCompleteDlg.h"
 #include "FontOccManager.h"
 #include "configuration.h"
 
@@ -17,9 +17,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-class CAutoCompleteDlg;
-/////////////////////////////////////////////////////////////////////////////
-// CAutoCompleteListBox
 
 namespace
 {
@@ -87,7 +84,7 @@ void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	if (lc == NULL)   // sanity check
 	{
-		TRACE("Warning: lc is NULL for DrawItem: id = %d, state=0x%x\n",lpDrawItemStruct->itemID,lpDrawItemStruct->itemState);
+		TRACE2("Warning: lc is NULL for DrawItem: id = %d, state=0x%x\n",lpDrawItemStruct->itemID,lpDrawItemStruct->itemState);
 		return;
 	}
 
@@ -289,7 +286,7 @@ HIMAGELIST CAutoCompleteListBox::LoadBitmapFromFile(const CString& filename)
 		}
 		else
 		{
-			TRACE("Could not load bitmap from file %s\n",filename);
+			TRACE1("Could not load bitmap from file %s\n",filename);
 			return NULL;
 		}
 	}

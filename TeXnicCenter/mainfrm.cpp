@@ -43,9 +43,9 @@
 #include "Splash.h"
 #include "BCGToolbarCustomizeEx.h"
 #include "UserTool.h"
-//#include "Latexedit.h"
 #include "ProfileDialog.h"
 #include "RunTimeHelper.h"
+#include "LaTeXDocument.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -163,6 +163,7 @@ static UINT indicators[] =
 	ID_SEPARATOR, // Statusleistenanzeige
 	IDB_BUILD_ANIMATION, // Build animation
 	ID_EDIT_INDICATOR_POSITION,
+	ID_EDIT_INDICATOR_ENCODING,
 	ID_EDIT_INDICATOR_CRLF,
 	ID_INDICATOR_OVR,
 	ID_EDIT_INDICATOR_READ,
@@ -408,7 +409,7 @@ BOOL CMainFrame::CreateToolBar(CMFCToolBar *pToolBar, UINT unID, UINT unTitleID,
 	if (!pToolBar->Create(this, style, unID) ||
 	        !pToolBar->LoadToolBar(unID))
 	{
-		TRACE("!Failed to create %s tool bar\n", AfxLoadString(unTitleID));
+		TRACE1("!Failed to create %s tool bar\n", AfxLoadString(unTitleID));
 		return FALSE; // creation failed
 	}
 
@@ -598,7 +599,7 @@ void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 
 		while (pos)
 		{
-			CLaTeXDoc *pDoc = dynamic_cast<CLaTeXDoc*>(pTemplate->GetNextDoc(pos));
+			LaTeXDocument *pDoc = dynamic_cast<LaTeXDocument*>(pTemplate->GetNextDoc(pos));
 
 			if (pDoc)
 				pDoc->CheckForFileChanges();
@@ -695,7 +696,7 @@ void CMainFrame::OnWindowEditor()
 	// get active view
 	CView *pView = pFrame->GetActiveView();
 
-	if (!pView || !pView->IsKindOf(RUNTIME_CLASS(CLaTeXEdit)))
+	if (!pView || !pView->IsKindOf(RUNTIME_CLASS(LaTeXView)))
 		return;
 
 	// activate view
@@ -1404,11 +1405,12 @@ void CMainFrame::OnToolsCancel()
 		return;
 
 	//Get active view/edit
-	CLaTeXEdit* pEdit = NULL;
+	LaTeXView* pEdit = NULL;
 	CView* pView = pFrame->GetActiveView();
 
 	if (pView)
-		pEdit = dynamic_cast<CLaTeXEdit*>(pView);
+		pEdit = dynamic_cast<LaTeXView*>(pView);
+
 	if (!pEdit)
 		return;
 
@@ -1416,20 +1418,6 @@ void CMainFrame::OnToolsCancel()
 	{
 		//Activate view
 		pEdit->SetFocus();
-	}
-	else
-	{
-		//Cancel incremental search. Returns false, if it was not in search mode.
-		if (!(pEdit->OnEditFindIncrementalStop(false)))
-		{
-			//Close output bar
-			//ASSERT(m_wndOutputBar);
-			//ASSERT(IsWindow(m_wndOutputBar.m_hWnd));
-
-			//if (IsControlBarVisible(&m_wndOutputBar)) {
-			//    ShowPane(&m_wndOutputBar, FALSE, FALSE, FALSE);
-			//}
-		}
 	}
 }
 

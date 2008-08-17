@@ -173,17 +173,26 @@ BOOL CDdeCommand::SendCommandHelper(LPCTSTR lpszServer,LPCTSTR lpszCommand,LPCTS
 		// ensure byte string
 		int nLen = _tcslen(lpszCommand);
 		szCommand = new TCHAR[nLen + 1];
+
 		if (!szCommand)
 			throw FALSE;
-		for (int i = 0; i <= nLen; i++)
-			szCommand[i] = (TCHAR) lpszCommand[i];
+
+		_tcsncpy(szCommand,lpszCommand,nLen);
 
 		// send command
-		if (!DdeClientTransaction((LPBYTE) szCommand,nLen + 1,hConversation,NULL,0,XTYP_EXECUTE,dwTimeOut,NULL))
+		if (!DdeClientTransaction(reinterpret_cast<BYTE*>(szCommand),(nLen + 1) * sizeof(TCHAR),
+			hConversation,NULL,
+#ifdef UNICODE
+			CF_UNICODETEXT
+#else
+			CF_TEXT
+#endif
+			,XTYP_EXECUTE,dwTimeOut,NULL))
 			throw FALSE;
 
 		// clean up
 		delete[] szCommand;
+
 		DdeDisconnect(hConversation);
 		DdeFreeStringHandle(dwId,hszServerName);
 		DdeFreeStringHandle(dwId,hszTopic);
@@ -199,6 +208,7 @@ BOOL CDdeCommand::SendCommandHelper(LPCTSTR lpszServer,LPCTSTR lpszCommand,LPCTS
 			DdeFreeStringHandle(dwId,hszServerName);
 		if (hszTopic)
 			DdeFreeStringHandle(dwId,hszTopic);
+
 		DdeUninitialize(dwId);
 
 		return FALSE;

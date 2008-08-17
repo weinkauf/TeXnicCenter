@@ -182,7 +182,7 @@ skip:
   File "..\Output\Product\Unicode Release\Tips_english.txt"
   File "..\Output\Product\Unicode Release\msxmlcpp.dll"
   File "..\Output\Product\Unicode Release\mfcext.dll"
-  File "..\Output\Product\Unicode Release\CrysEditEx.dll"
+  File "..\Output\Product\Unicode Release\SciLexer.dll"
   File "..\Output\Product\Unicode Release\UserImages.bmp"
   File "..\Output\Product\Unicode Release\TeXnicCenter.exe"
 
@@ -325,7 +325,7 @@ Section Uninstall
   Delete "$INSTDIR\uninst.exe"
   Delete "$INSTDIR\TeXnicCenter.exe"
   Delete "$INSTDIR\UserImages.bmp"
-  Delete "$INSTDIR\CrystalEdit.dll"
+  Delete "$INSTDIR\SciLexer.dll"
   Delete "$INSTDIR\mfcext.dll"
   Delete "$INSTDIR\msxmlcpp.dll"
   Delete "$INSTDIR\Tips_english.txt"

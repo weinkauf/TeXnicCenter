@@ -38,7 +38,7 @@
 
 #include "ChildFrm.h"
 #include "MDIFrameManager.h"
-#include "CrystalEditViewEx.h"
+#include "LaTeXView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -70,25 +70,25 @@ CChildFrame::~CChildFrame()
 {
 }
 
-BOOL CChildFrame::OnCreateClient(LPCREATESTRUCT /*lpcs*/,
+BOOL CChildFrame::OnCreateClient(LPCREATESTRUCT lpcs,
                                  CCreateContext* pContext)
 {
-	//BOOL result = __super::OnCreateClient(lpcs,pContext);
-	//return __super::OnCreateClient(lpcs,pContext);
-	// create splitter and add to window manager
-	if (m_wndSplitter.Create(this,
-	                         2,1,
-	                         CSize(10,10),
-	                         pContext))
-	{
-		//if (result)
-		//    theApp.m_pMDIFrameManager->AddChildFrame(this);
-		//
-		return TRUE;
-		//return result;
-	}
-	else
-		return FALSE;
+	////BOOL result = __super::OnCreateClient(lpcs,pContext);
+	return __super::OnCreateClient(lpcs,pContext);
+	//// create splitter and add to window manager
+	//if (m_wndSplitter.Create(this,
+	//                         2,1,
+	//                         CSize(10,10),
+	//                         pContext))
+	//{
+	//	//if (result)
+	//	//    theApp.m_pMDIFrameManager->AddChildFrame(this);
+	//	//
+	//	return TRUE;
+	//	//return result;
+	//}
+	//else
+	//	return FALSE;
 }
 
 BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
@@ -149,9 +149,9 @@ void CChildFrame::OnSetFocus(CWnd* pOldWnd)
 		theApp.m_pMDIFrameManager->ActivateChildFrame(this);
 	}
 
-	CWnd* w = m_wndSplitter.GetWindow(GW_CHILD);
+	CWnd* w = GetWindow(GW_CHILD);
 
-	while (w && !w->IsKindOf(RUNTIME_CLASS(CLaTeXEdit)))
+	while (w && !w->IsKindOf(RUNTIME_CLASS(LaTeXView)))
 		w = w->GetWindow(GW_HWNDNEXT);
 
 	if (w)
@@ -184,23 +184,23 @@ void CChildFrame::OnSetFocus(CWnd* pOldWnd)
 
 #define KEY_VIEWINFO										_T("%s_View%d,%d")
 
-BOOL CChildFrame::Serialize(CIniFile &ini,LPCTSTR lpszKey,BOOL bWrite)
+bool CChildFrame::Serialize( CIniFile &ini, LPCTSTR lpszKey, bool write )
 {
 	const CString strBaseDir = CPathTool::GetDirectory(ini.GetPath());
 
-	if (bWrite)
+	if (write)
 	{
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// writing data
 		WINDOWPLACEMENT wp;
 		CString strKey;
-		int nRow,nRowCount = m_wndSplitter.GetRowCount();
-		int nColumn,nColumnCount = m_wndSplitter.GetColumnCount();
+		//int nRow,nRowCount = m_wndSplitter.GetRowCount();
+		//int nColumn,nColumnCount = m_wndSplitter.GetColumnCount();
 
 		GetWindowPlacement(&wp);
 
-		ini.SetValue(lpszKey,VAL_FRAMEINFO_COLCOUNT,nColumnCount);
-		ini.SetValue(lpszKey,VAL_FRAMEINFO_ROWCOUNT,nRowCount);
+		//ini.SetValue(lpszKey,VAL_FRAMEINFO_COLCOUNT,nColumnCount);
+		//ini.SetValue(lpszKey,VAL_FRAMEINFO_ROWCOUNT,nRowCount);
 		ini.SetValue(lpszKey,VAL_FRAMEINFO_FLAGS,(int) wp.flags);
 		ini.SetValue(lpszKey,VAL_FRAMEINFO_SHOWCMD,(int) wp.showCmd);
 		ini.SetValue(lpszKey,VAL_FRAMEINFO_MINPOS_X,wp.ptMinPosition.x);
@@ -215,10 +215,11 @@ BOOL CChildFrame::Serialize(CIniFile &ini,LPCTSTR lpszKey,BOOL bWrite)
 		USES_CONVERSION;
 
 		ini.SetValue(lpszKey,VAL_FRAMEINFO_VIEWCLASS,
-		             A2CT(m_wndSplitter.GetPane(0,0)->GetRuntimeClass()->m_lpszClassName));
+		             A2CT(GetWindow(GW_CHILD)->GetRuntimeClass()->m_lpszClassName));
 		ini.SetValue(lpszKey,VAL_FRAMEINFO_DOCPATH,
 		             CPathTool::GetRelativePath(strBaseDir,GetPathNameOfDocument()));
 
+#if 0
 		// storing column and row information
 		int cxCur,cxMin,cyCur,cyMin;
 
@@ -240,14 +241,16 @@ BOOL CChildFrame::Serialize(CIniFile &ini,LPCTSTR lpszKey,BOOL bWrite)
 			ini.SetValue(strKey,VAL_COLINFO_CXMIN,cxMin);
 		}
 
-		for (nRow = 0; nRow < nRowCount; nRow++)
-		{
-			for (nColumn = 0; nColumn < nColumnCount; nColumn++)
-			{
-				strKey.Format(KEY_VIEWINFO,lpszKey,nRow,nColumn);
-				((CCrystalEditViewEx*) m_wndSplitter.GetPane(nRow,nColumn))->Serialize(ini,strKey,bWrite);
-			}
-		}
+#endif // 0
+
+		//for (nRow = 0; nRow < nRowCount; nRow++)
+		//{
+		//	for (nColumn = 0; nColumn < nColumnCount; nColumn++)
+		//	{
+				strKey.Format(KEY_VIEWINFO,lpszKey,0,0);//nRow,nColumn);
+				static_cast<CodeView*>(GetWindow(GW_CHILD))->Serialize(ini,strKey,write);
+		//	}
+		//}
 	} //if
 	else
 	{
@@ -255,11 +258,11 @@ BOOL CChildFrame::Serialize(CIniFile &ini,LPCTSTR lpszKey,BOOL bWrite)
 		// reading data
 		WINDOWPLACEMENT wp;
 		CString strKey,strClass,strDocPath;
-		int nRow,nRowCount = m_wndSplitter.GetRowCount();
-		int nColumn,nColumnCount = m_wndSplitter.GetColumnCount();
+		//int nRow,nRowCount = m_wndSplitter.GetRowCount();
+		//int nColumn,nColumnCount = m_wndSplitter.GetColumnCount();
 
-		nColumnCount = ini.GetValue(lpszKey,VAL_FRAMEINFO_COLCOUNT,1);
-		nRowCount = ini.GetValue(lpszKey,VAL_FRAMEINFO_ROWCOUNT,1);
+		//nColumnCount = ini.GetValue(lpszKey,VAL_FRAMEINFO_COLCOUNT,1);
+		//nRowCount = ini.GetValue(lpszKey,VAL_FRAMEINFO_ROWCOUNT,1);
 		wp.flags = (UINT) ini.GetValue(lpszKey,VAL_FRAMEINFO_FLAGS,0);
 		wp.showCmd = (UINT) ini.GetValue(lpszKey,VAL_FRAMEINFO_SHOWCMD,SW_SHOWNORMAL);
 		wp.ptMinPosition.x = ini.GetValue(lpszKey,VAL_FRAMEINFO_MINPOS_X,0);
@@ -275,120 +278,141 @@ BOOL CChildFrame::Serialize(CIniFile &ini,LPCTSTR lpszKey,BOOL bWrite)
 
 		if (strClass.IsEmpty())
 			return FALSE;
+
 		if (strDocPath.IsEmpty())
 			return FALSE;
 
 		// reading column and row information
-		CCreateContext cc;
-
-		cc.m_pCurrentDoc = NULL;
+		CCreateContext cc;		
 		cc.m_pNewDocTemplate = theApp.GetLatexDocTemplate();
+		cc.m_pCurrentDoc = cc.m_pNewDocTemplate->CreateNewDocument();
 		cc.m_pLastView = NULL;
 		cc.m_pCurrentFrame = NULL;
 
-		if (strClass.CompareNoCase(_T("CLaTeXEdit")) == 0)
-			cc.m_pNewViewClass = RUNTIME_CLASS(CLaTeXEdit);
+		if (strClass.CompareNoCase(_T("CLatexEdit")) == 0 || strClass == RUNTIME_CLASS(LaTeXView)->m_lpszClassName)
+			cc.m_pNewViewClass = RUNTIME_CLASS(LaTeXView);
 		else
 		{
+			cc.m_pCurrentDoc->OnCloseDocument();
 			TRACE(_T("Unknown view type '%s'\n"),strClass);
 			return FALSE;
 		}
 
 		//create view for each pane
-		for (nRow = 0; nRow < nRowCount; nRow++)
-		{
-			for (nColumn = 0; nColumn < nColumnCount; nColumn++)
-			{
+		//for (nRow = 0; nRow < nRowCount; nRow++)
+		//{
+		//	for (nColumn = 0; nColumn < nColumnCount; nColumn++)
+		//	{
 				// generate key
-				strKey.Format(KEY_VIEWINFO,lpszKey,nRow,nColumn);
+				strKey.Format(KEY_VIEWINFO,lpszKey,0,0);//nRow,nColumn);
 
-				if (nRow == 0 && nColumn == 0)
-				{
-					// try to create and open document
-					CDocument* pDoc = theApp.GetLatexDocument(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
-					if (!pDoc) return FALSE;
+				//if (nRow == 0 && nColumn == 0)
+				//{
 
+				//CDocument* pDoc = theApp.GetOpenLatexDocument(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
+
+				::LockWindowUpdate(AfxGetMainWnd()->GetSafeHwnd());
+					
 					// create frame and restore window position
 					if (!LoadFrame(IDR_LATEXTYPE,WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE,AfxGetMainWnd(),&cc))
 					{
 						//TRACE0(_T("Window has not been created\n"));
 						TRACE(_T("Window has not been created\n"));
 						return FALSE;
-					}
-
-					SetWindowPlacement(&wp);
+					}					
 
 					// create view and attach it to the document
-					CView *pView = (CView*) m_wndSplitter.GetPane(0,0);
+					CView *pView = dynamic_cast<CView*>(GetWindow(GW_CHILD));
+					
+					pView->SendMessage(WM_INITIALUPDATE);
+
+					cc.m_pCurrentDoc->OnOpenDocument(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
+					cc.m_pCurrentDoc->SetTitle(CPathTool::GetFileTitle(strDocPath));
+					cc.m_pCurrentDoc->SetPathName(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
+
+					//// try to create and open document
+					//CDocument* pDoc = theApp.GetLaTeXDocument(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
+					//if (!pDoc) return FALSE;
+
+					if (!theApp.m_bMDITabs)
+						SetWindowPlacement(&wp);
+
+					InitialUpdateFrame(cc.m_pCurrentDoc,TRUE);
 
 					ASSERT(pView->IsKindOf(RUNTIME_CLASS(CView)));
 					ASSERT_VALID(pView);
 
+					::LockWindowUpdate(0);
+					
 					SetActiveView(pView);
-					pDoc->AddView(pView);
-					pView->SendMessage(WM_INITIALUPDATE);
+					
 
-					m_wndSplitter.SetActivePane(0,0);
+					//m_wndSplitter.SetActivePane(0,0);
 
 					// set row and column info
-					strKey.Format(KEY_ROWINFO,lpszKey,nRow);
-					m_wndSplitter.SetRowInfo(nRow,
-					                         ini.GetValue(strKey,VAL_ROWINFO_CYCUR,0),
-					                         ini.GetValue(strKey,VAL_ROWINFO_CYMIN,0));
+					//strKey.Format(KEY_ROWINFO,lpszKey,nRow);
+					//m_wndSplitter.SetRowInfo(nRow,
+					//                         ini.GetValue(strKey,VAL_ROWINFO_CYCUR,0),
+					//                         ini.GetValue(strKey,VAL_ROWINFO_CYMIN,0));
 
-					strKey.Format(KEY_COLINFO,lpszKey,nColumn);
-					m_wndSplitter.SetColumnInfo(nColumn,
-					                            ini.GetValue(strKey,VAL_COLINFO_CXCUR,0),
-					                            ini.GetValue(strKey,VAL_COLINFO_CXMIN,0));
-				}
-				else
-				{
-					// split window
-					if (nRow >= m_wndSplitter.GetRowCount())
-					{
-						strKey.Format(KEY_ROWINFO,lpszKey,nRow - 1);
-						if (!m_wndSplitter.SplitRow(ini.GetValue(strKey,VAL_ROWINFO_CYCUR,0)))
-							continue;
+					//strKey.Format(KEY_COLINFO,lpszKey,nColumn);
+					//m_wndSplitter.SetColumnInfo(nColumn,
+					//                            ini.GetValue(strKey,VAL_COLINFO_CXCUR,0),
+					//                            ini.GetValue(strKey,VAL_COLINFO_CXMIN,0));
+				//}
+				//else
+				//{
+				//	// split window
+				//	if (nRow >= m_wndSplitter.GetRowCount())
+				//	{
+				//		strKey.Format(KEY_ROWINFO,lpszKey,nRow - 1);
+				//		if (!m_wndSplitter.SplitRow(ini.GetValue(strKey,VAL_ROWINFO_CYCUR,0)))
+				//			continue;
 
-						strKey.Format(KEY_ROWINFO,lpszKey,nRow);
-						m_wndSplitter.SetRowInfo(nRow,
-						                         ini.GetValue(strKey,VAL_ROWINFO_CYCUR,0),
-						                         ini.GetValue(strKey,VAL_ROWINFO_CYMIN,0));
-					}
-					if (nColumn >= m_wndSplitter.GetColumnCount())
-					{
-						strKey.Format(KEY_COLINFO,lpszKey,nColumn - 1);
-						if (!m_wndSplitter.SplitColumn(ini.GetValue(strKey,VAL_COLINFO_CXCUR,0)))
-							continue;
+				//		strKey.Format(KEY_ROWINFO,lpszKey,nRow);
+				//		m_wndSplitter.SetRowInfo(nRow,
+				//		                         ini.GetValue(strKey,VAL_ROWINFO_CYCUR,0),
+				//		                         ini.GetValue(strKey,VAL_ROWINFO_CYMIN,0));
+				//	}
+				//	if (nColumn >= m_wndSplitter.GetColumnCount())
+				//	{
+				//		strKey.Format(KEY_COLINFO,lpszKey,nColumn - 1);
+				//		if (!m_wndSplitter.SplitColumn(ini.GetValue(strKey,VAL_COLINFO_CXCUR,0)))
+				//			continue;
 
-						strKey.Format(KEY_COLINFO,lpszKey,nColumn);
-						m_wndSplitter.SetColumnInfo(nColumn,
-						                            ini.GetValue(strKey,VAL_COLINFO_CXCUR,0),
-						                            ini.GetValue(strKey,VAL_COLINFO_CXMIN,0));
-					}
-				}
-			}
-		}
+				//		strKey.Format(KEY_COLINFO,lpszKey,nColumn);
+				//		m_wndSplitter.SetColumnInfo(nColumn,
+				//		                            ini.GetValue(strKey,VAL_COLINFO_CXCUR,0),
+				//		                            ini.GetValue(strKey,VAL_COLINFO_CXMIN,0));
+				//	}
+				//}
+		//	}
+		//}
 
 		// serialize view information
-		for (nRow = 0; nRow < m_wndSplitter.GetRowCount(); nRow++)
-		{
-			for (nColumn = 0; nColumn < m_wndSplitter.GetColumnCount(); nColumn++)
-			{
-				// check view type
-				CWnd *pWnd = m_wndSplitter.GetPane(nRow,nColumn);
+		//for (nRow = 0; nRow < m_wndSplitter.GetRowCount(); nRow++)
+		//{
+		//	for (nColumn = 0; nColumn < m_wndSplitter.GetColumnCount(); nColumn++)
+		//	{
+		//		// check view type
+				CWnd *pWnd = GetWindow(GW_CHILD);
 
 				ASSERT(pWnd && IsWindow(pWnd->m_hWnd));
-				ASSERT(pWnd->IsKindOf(RUNTIME_CLASS(CCrystalEditViewEx)));
-				if (!pWnd || !IsWindow(pWnd->m_hWnd) || !pWnd->IsKindOf(RUNTIME_CLASS(CCrystalEditViewEx)))
-					continue;
+				ASSERT(pWnd->IsKindOf(RUNTIME_CLASS(CodeView)));
+
+				//if (!pWnd || !IsWindow(pWnd->m_hWnd) || !pWnd->IsKindOf(RUNTIME_CLASS(CodeView)))
+				//	continue;
 
 				// serialize view information
-				strKey.Format(KEY_VIEWINFO,lpszKey,nRow,nColumn);
-				if (!((CCrystalEditViewEx*) pWnd)->Serialize(ini,strKey,bWrite))
-					m_wndSplitter.DeleteView(nRow,nColumn);
-			}
-		}
+				strKey.Format(KEY_VIEWINFO,lpszKey,0,0);//nRow,nColumn);
+
+				if (CodeView* view = dynamic_cast<CodeView*>(pWnd))
+					view->Serialize(ini,strKey,write);
+
+				//if (!((CCrystalEditViewEx*) pWnd)->Serialize(ini,strKey,bWrite))
+				//	m_wndSplitter.DeleteView(nRow,nColumn);
+		//	}
+		//}
 	} // if
 
 	return TRUE;
@@ -396,7 +420,7 @@ BOOL CChildFrame::Serialize(CIniFile &ini,LPCTSTR lpszKey,BOOL bWrite)
 
 CString CChildFrame::GetPathNameOfDocument()
 {
-	CView* pView = dynamic_cast<CView*> /*(GetActiveView());*/(m_wndSplitter.GetPane(0,0));
+	CView* pView = dynamic_cast<CView*> (GetActiveView());
 
 	if (pView)
 	{

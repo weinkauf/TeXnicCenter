@@ -13,7 +13,6 @@
 // Generated from the TEXTINCLUDE 2 resource.
 //
 #include "afxres.h"
-#include "../CrysEditEx/Source/editcmd.h"
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -191,6 +190,8 @@ IDR_LATEXWIZARD_YELLOW  ICON                    "res\\Wizard_yellow.ico"
 
 IDC_SDRAGCOPY           CURSOR                  "res\\sdragcopy.cur"
 IDC_SINGLEDRAG          CURSOR                  "res\\singledrag.cur"
+IDC_INCREMENTAL_SEARCH  CURSOR                  "res\\Incremental search.cur"
+IDC_REVERSE_INCREMENTAL_SEARCH CURSOR                  "res\\Reverse incremental search.cur"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -230,7 +231,7 @@ BEGIN
     BUTTON      ID_EDIT_PREVGREPRESULT
 END
 
-IDR_FORMAT TOOLBAR  16, 15
+IDR_FORMAT TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_FORMAT_EMPH
     BUTTON      ID_FORMAT_TEXTBF
@@ -269,7 +270,7 @@ BEGIN
     BUTTON      ID_FORMAT_FLUSHRIGHT
 END
 
-IDR_FORMAT_RECENTLY_USED TOOLBAR  16, 15
+IDR_FORMAT_RECENTLY_USED TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_FORMAT_EMPH
     BUTTON      ID_FORMAT_TEXTBF
@@ -315,7 +316,7 @@ BEGIN
     BUTTON      ID_HELP_INDEX
 END
 
-IDR_INSERT TOOLBAR  16, 15
+IDR_INSERT TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_HEADER
     SEPARATOR
@@ -333,7 +334,7 @@ BEGIN
     BUTTON      ID_VIEW_MATH
 END
 
-IDR_LATEX TOOLBAR  16, 15
+IDR_LATEX TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_LATEX_PROFILE_SEL
     SEPARATOR
@@ -356,8 +357,9 @@ BEGIN
     BUTTON      ID_PREV_BADBOX
 END
 
-IDR_MAINFRAME TOOLBAR  16, 15
+IDR_MAINFRAME TOOLBAR  16, 16
 BEGIN
+    BUTTON      ID_PROJECT_NEW
     BUTTON      ID_LATEX_NEW
     SEPARATOR
     BUTTON      ID_FILE_OPEN
@@ -372,7 +374,7 @@ BEGIN
     BUTTON      ID_EDIT_REDO
 END
 
-IDR_MATH TOOLBAR  16, 15
+IDR_MATH TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_MATH1
     BUTTON      ID_MATH2
@@ -392,7 +394,7 @@ BEGIN
     BUTTON      ID_MATH16
 END
 
-IDR_MATHBAR1 TOOLBAR  16, 15
+IDR_MATHBAR1 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_LEQ
     BUTTON      ID_INSERT_GEQ
@@ -407,7 +409,7 @@ BEGIN
     BUTTON      ID_INSERT_PROPTP
 END
 
-IDR_MATHBAR10 TOOLBAR  16, 15
+IDR_MATHBAR10 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_A
     BUTTON      ID_INSERT_B
@@ -435,7 +437,7 @@ BEGIN
     BUTTON      ID_INSERT_Z2
 END
 
-IDR_MATHBAR11 TOOLBAR  16, 15
+IDR_MATHBAR11 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_LEFTINVISIBLE
     BUTTON      ID_INSERT_RIGHTINVISIBLE
@@ -459,7 +461,7 @@ BEGIN
     BUTTON      ID_INSERT_UNDERBRACE
 END
 
-IDR_MATHBAR12 TOOLBAR  16, 15
+IDR_MATHBAR12 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_FRAC
     BUTTON      ID_INSERT_INLINEFRAC
@@ -467,7 +469,7 @@ BEGIN
     BUTTON      ID_INSERT_SQRTEX
 END
 
-IDR_MATHBAR13 TOOLBAR  16, 15
+IDR_MATHBAR13 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_SUPERSCRIPT
     BUTTON      ID_INSERT_SUBSCRIPT
@@ -480,7 +482,7 @@ BEGIN
     BUTTON      ID_INSERT_SUPERSUB
 END
 
-IDR_MATHBAR14 TOOLBAR  16, 15
+IDR_MATHBAR14 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_SUM
     BUTTON      ID_INSERT_INT
@@ -489,7 +491,7 @@ BEGIN
     BUTTON      ID_INSERT_COPROD
 END
 
-IDR_MATHBAR15 TOOLBAR  16, 15
+IDR_MATHBAR15 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_OVERLINE
     BUTTON      ID_INSERT_UNDERLINE
@@ -500,7 +502,7 @@ BEGIN
     BUTTON      ID_INSERT_UNDERBRACE
 END
 
-IDR_MATHBAR16 TOOLBAR  16, 15
+IDR_MATHBAR16 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_UNDERRIGHTARROW
     BUTTON      ID_INSERT_UNDERLEFTARROW
@@ -510,7 +512,7 @@ BEGIN
     BUTTON      ID_INSERT_OVERLEFTRIGHTARROW
 END
 
-IDR_MATHBAR2 TOOLBAR  16, 15
+IDR_MATHBAR2 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_SPACECLOSE
     BUTTON      ID_INSERT_SPACENEGATIVECLOSE
@@ -524,7 +526,7 @@ BEGIN
     BUTTON      ID_INSERT_DDOTS
 END
 
-IDR_MATHBAR3 TOOLBAR  16, 15
+IDR_MATHBAR3 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_HAT
     BUTTON      ID_INSERT_CHECK
@@ -538,7 +540,7 @@ BEGIN
     BUTTON      ID_INSERT_DDOT
 END
 
-IDR_MATHBAR4 TOOLBAR  16, 15
+IDR_MATHBAR4 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_PM
     BUTTON      ID_INSERT_MP
@@ -555,7 +557,7 @@ BEGIN
     BUTTON      ID_INSERT_OSLASH
 END
 
-IDR_MATHBAR5 TOOLBAR  16, 15
+IDR_MATHBAR5 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_LEFTARROW
     BUTTON      ID_INSERT_RIGHTARROW
@@ -599,7 +601,7 @@ BEGIN
     BUTTON      ID_INSERT_LONGLEFTRIGHTARROW2
 END
 
-IDR_MATHBAR6 TOOLBAR  16, 15
+IDR_MATHBAR6 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_NI
     BUTTON      ID_INSERT_EXISTS
@@ -609,7 +611,7 @@ BEGIN
     BUTTON      ID_INSERT_VEE
 END
 
-IDR_MATHBAR7 TOOLBAR  16, 15
+IDR_MATHBAR7 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_IN
     BUTTON      ID_INSERT_NOTIN
@@ -623,7 +625,7 @@ BEGIN
     BUTTON      ID_INSERT_SUPSETEQ
 END
 
-IDR_MATHBAR8 TOOLBAR  16, 15
+IDR_MATHBAR8 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_PARTIAL
     BUTTON      ID_INSERT_NABLA
@@ -643,7 +645,7 @@ BEGIN
     BUTTON      ID_INSERT_COPROD
 END
 
-IDR_MATHBAR9 TOOLBAR  16, 15
+IDR_MATHBAR9 TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_INSERT_ALPHA
     BUTTON      ID_INSERT_BETA
@@ -682,6 +684,12 @@ BEGIN
     BUTTON      ID_SPELL_PROJECT
     BUTTON      ID_FILE_PRINT
     BUTTON      ID_FILE_PRINT_SETUP
+    BUTTON      ID_VIEW_WHITE_SPACE
+    BUTTON      ID_VIEW_WORD_WRAP
+    BUTTON      ID_EDIT_BLOCKCOMMENT_INSERT
+    BUTTON      ID_EDIT_BLOCKCOMMENT_REMOVE
+    BUTTON      ID_FILE_CLOSE
+    BUTTON      ID_WINDOW_CLOSE_ALL
 END
 
 IDR_NAVIGATION_BAR TOOLBAR  16, 16
@@ -701,7 +709,7 @@ BEGIN
     BUTTON      ID_SHOW_BAD_BOXES
 END
 
-IDR_STRUCTURE TOOLBAR  16, 15
+IDR_STRUCTURE TOOLBAR  16, 16
 BEGIN
     BUTTON      ID_SHOW_IMAGES
     BUTTON      ID_SHOW_TABLES
@@ -880,7 +888,7 @@ BEGIN
     LTEXT           "IDC_TIPSTRING",IDC_TIPSTRING,51,49,204,139,NOT WS_VISIBLE
 END
 
-IDD_FILESEARCH DIALOGEX 0, 0, 320, 127
+IDD_FILESEARCH DIALOGEX 0, 0, 320, 116
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Suchen in Dateien"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
@@ -894,14 +902,14 @@ BEGIN
     COMBOBOX        IDC_SEARCH_SEARCHIN,85,45,150,85,CBS_DROPDOWN | CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP
     CONTROL         "Nur &ganze Wörter",IDC_SEARCH_WHOLEWORDS,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,7,65,125,10
     CONTROL         "Groß-/&Kleinschreibung beachten",IDC_SEARCH_CASESENSITIVE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,80,125,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,76,125,10
     CONTROL         "&Regulärer Ausdruck",IDC_SEARCH_REGULAREXPRESSION,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,95,125,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,88,125,10
     CONTROL         "Un&terordner durchsuchen",IDC_SEARCH_INCLUDESUBFOLDERS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,110,125,10
-    GROUPBOX        "Ausgabe",IDC_STATIC,135,65,120,40,WS_GROUP
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,99,125,10
+    GROUPBOX        "Ausgabe",IDC_STATIC,135,65,120,35,WS_GROUP
     CONTROL         "In Bereich &1",IDC_SEARCH_OUTPUT1,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,140,75,60,10
-    CONTROL         "In Bereich &2",IDC_SEARCH_OUTPUT2,"Button",BS_AUTORADIOBUTTON,140,90,60,10
+    CONTROL         "In Bereich &2",IDC_SEARCH_OUTPUT2,"Button",BS_AUTORADIOBUTTON,140,86,60,10
     DEFPUSHBUTTON   "&Suchen",IDOK,263,7,50,14,WS_GROUP
     PUSHBUTTON      "Abbrechen",IDCANCEL,263,24,50,14
     PUSHBUTTON      "&...",IDC_SEARCH_BROWSE_SEARCHIN,240,45,15,12
@@ -1087,13 +1095,15 @@ BEGIN
     GROUPBOX        "Verzeichnisse für &Dokumentvorlagen",IDC_STATIC,8,86,284,71
 END
 
-IDD_FILE_SAVE DIALOGEX 0, 0, 130, 30
-STYLE DS_SETFONT | DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
+IDD_FILE_SAVE DIALOGEX 0, 0, 130, 51
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     LTEXT           "",stc32,0,0,130,8
     LTEXT           "Datei&format:",IDC_STATIC_FORMATTITLE,7,12,39,8
     COMBOBOX        IDC_SELECT_FILEFORMAT,51,10,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Codierung:",IDC_STATIC_ENCODING,7,29,39,8
+    COMBOBOX        IDC_SELECT_ENCODING,51,27,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_PROFILE_LATEX DIALOGEX 0, 0, 242, 250
@@ -1512,7 +1522,7 @@ BEGIN
 END
 
 IDD_OPTIONS_EDITOR DIALOGEX 0, 0, 300, 200
-STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Editor"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
@@ -1520,7 +1530,6 @@ BEGIN
     GROUPBOX        "Tabulator",IDC_STATIC,8,54,284,41
     GROUPBOX        "Zeilenumbruch",IDC_STATIC,8,105,284,88
     LTEXT           "Art des Zeilenumbruchs:",IDC_STATIC,20,125,77,8
-    CONTROL         "&Zeilennummern anzeigen",IDC_SHOW_LINENUMBERS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,20,25,95,10
     LTEXT           "&Tabulatorbreite:",IDC_STATIC,20,74,50,8
     EDITTEXT        IDC_EDITOR_TABWIDTH,75,70,25,13,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "Zeichen",IDC_STATIC,105,74,27,8
@@ -1553,6 +1562,75 @@ BEGIN
     GROUPBOX        "Kommando zum Einfügen der externen Datei",IDC_STATIC,7,80,195,56
     LTEXT           "[.tex]",IDC_STATIC,118,22,16,8
     GROUPBOX        "Automatisches Öffnen der neuen Datei",IDC_STATIC,7,144,195,40
+END
+
+IDD_SPELL_CHECK DIALOGEX 0, 0, 290, 137
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Rechtschreibung"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    EDITTEXT        IDC_SPELL_TEXT,7,7,221,58,ES_MULTILINE | WS_VSCROLL
+    PUSHBUTTON      "&Ignorieren",IDC_SPELL_IGNORE,233,7,50,14
+    PUSHBUTTON      "&Alle ignorieren",IDC_SPELL_IGNORE_ALL,233,22,50,14
+    PUSHBUTTON      "&Hinzufügen",IDC_SPELL_ADD,233,37,50,14
+    PUSHBUTTON      "&Ändern",IDC_SPELL_REPLACE,233,52,50,14
+    PUSHBUTTON      "A&lle ändern",IDC_SPELL_REPLACE_ALL,233,67,50,14
+    PUSHBUTTON      "&Nächste Zeile",IDC_SPELL_NEXT,233,82,50,14
+    PUSHBUTTON      "&Übernehmen",IDC_SPELL_RESUME,233,97,50,14,WS_DISABLED
+    CONTROL         "List4",IDC_SPELL_SUGGEST,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_NOCOLUMNHEADER | LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,7,75,222,55
+    LTEXT           "&Vorschläge",IDC_STATIC,7,65,42,8
+    PUSHBUTTON      "Abbrechen",IDCANCEL,233,116,50,14
+END
+
+IDD_SCINTILLA_REPLACEDLGORD DIALOGEX 36, 44, 277, 87
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Ersetzen"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    LTEXT           "&Suchen nach:",IDC_STATIC,4,9,48,8
+    EDITTEXT        1152,57,7,149,12,ES_AUTOHSCROLL | WS_GROUP
+    LTEXT           "Ersetzen &durch:",IDC_STATIC,4,26,50,8
+    EDITTEXT        1153,57,24,149,12,ES_AUTOHSCROLL | WS_GROUP
+    CONTROL         "Nur &ganze Worte",IDC_EDIT_WHOLE_WORD,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,5,46,91,12
+    CONTROL         "Groß-/&Kleinschreibung beachten",IDC_EDIT_MATCH_CASE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,57,118,12
+    CONTROL         "Verwende reguläre Ausdrücke",IDC_REGULAR_EXPRESSION,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,68,118,12
+    GROUPBOX        "Ersetzen in",IDC_STATIC,135,43,71,37,WS_GROUP
+    CONTROL         "A&uswahl",IDC_EDIT_SCOPE_SELECTION,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,140,54,43,10
+    CONTROL         "Gesa&mte Datei",IDC_EDIT_SCOPE_WHOLE_FILE,"Button",BS_AUTORADIOBUTTON,140,66,63,10
+    DEFPUSHBUTTON   "&Weitersuchen",IDOK,212,4,58,14,WS_GROUP
+    PUSHBUTTON      "&Ersetzen",1024,212,21,58,14
+    PUSHBUTTON      "&Alle ersetzen",1025,212,38,58,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,212,55,58,14
+END
+
+IDD_SCINTILLA_FINDDLGORD DIALOGEX 30, 73, 280, 61
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Finden"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    LTEXT           "&Suchen nach:",IDC_STATIC,4,8,46,8
+    EDITTEXT        1152,52,7,157,12,ES_AUTOHSCROLL | WS_GROUP
+    CONTROL         "Nur &ganze Wörter",IDC_EDIT_WHOLE_WORD,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,4,27,73,10
+    CONTROL         "Groß-/&Kleinschreibung beachten",IDC_EDIT_MATCH_CASE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,38,118,10
+    GROUPBOX        "Richtung",IDC_STATIC,141,21,68,35,WS_GROUP
+    CONTROL         "A&ufwärts",1056,"Button",BS_AUTORADIOBUTTON | WS_GROUP,145,30,43,12
+    CONTROL         "A&bwärts",1057,"Button",BS_AUTORADIOBUTTON,145,41,44,12
+    DEFPUSHBUTTON   "&Weitersuchen",IDOK,216,5,60,14,WS_GROUP
+    PUSHBUTTON      "Abbrechen",IDCANCEL,216,23,60,14
+    CONTROL         "Verwende reguläre Ausdrücke",IDC_REGULAR_EXPRESSION,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,49,118,10
+END
+
+IDD_FINDREPLACEDLG DIALOG  0, 0, 320, 200
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,209,179,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,263,179,50,14
 END
 
 
@@ -1634,7 +1712,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 313
         TOPMARGIN, 7
-        BOTTOMMARGIN, 120
+        BOTTOMMARGIN, 109
     END
 
     IDD_OUTPUTWIZARD_DVIVIEWER, DIALOG
@@ -1681,7 +1759,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 123
         TOPMARGIN, 7
-        BOTTOMMARGIN, 23
+        BOTTOMMARGIN, 44
     END
 
     IDD_PROFILE_LATEX, DIALOG
@@ -1844,6 +1922,14 @@ BEGIN
         RIGHTMARGIN, 202
         TOPMARGIN, 7
         BOTTOMMARGIN, 184
+    END
+
+    IDD_FINDREPLACEDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 193
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -2122,7 +2208,11 @@ BEGIN
             MENUITEM "&Dokumentsymbole anzeigen",   ID_VIEW_DOCTAB_ICONS
         END
         MENUITEM SEPARATOR
-        MENUITEM "&Leerraumanzeige",            ID_EDIT_TOGGLE_WHITESPACEVIEW
+        MENUITEM "&Leerraumanzeige",            ID_VIEW_WHITE_SPACE
+        MENUITEM "&Zeilenendeanzeige",          ID_VIEW_LINE_ENDING
+        MENUITEM "Zeilennummeranzeige",         ID_VIEW_LINE_NUMBERS
+        MENUITEM "Zeilenumbruch",               ID_VIEW_WORD_WRAP
+        MENUITEM SEPARATOR
         MENUITEM "Vollbild",                    ID_VIEW_FULLSCREEN
     END
     POPUP "&Suchen"
@@ -2902,6 +2992,16 @@ BEGIN
     END
 END
 
+IDR_POPUP_ATTRIBUTE MENU 
+BEGIN
+    MENUITEM "none",                        ID_NONE40003
+    POPUP "Rechtschreibung"
+    BEGIN
+        MENUITEM "&Alle ignorieren",            ID_EDIT_SPELL_IGNORE_ALL
+        MENUITEM "&Hinzufügen",                 ID_EDIT_SPELL_ADD
+    END
+END
+
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -2916,8 +3016,7 @@ END
 
 2 TEXTINCLUDE 
 BEGIN
-    "#include ""afxres.h""\r\n"
-    "#include ""../CrysEditEx/Source/editcmd.h""\r\0"
+    "#include ""afxres.h""\r\0"
 END
 
 3 TEXTINCLUDE 
@@ -2940,8 +3039,7 @@ BEGIN
     "#include ""res\\\\TeXnicCenter.rc2""  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen\r\n"
     "#include ""l.deu\\\\afxres.rc""          // Standardkomponenten\r\n"
     "#include ""l.deu\\\\afxprint.rc""        // Ressourcen für Drucken/Seitenansicht\r\n"
-    "#endif\r\n"
-    "\r\0"
+    "#endif\r\0"
 END
 
 #endif    // APSTUDIO_INVOKED
@@ -3349,7 +3447,6 @@ END
 
 STRINGTABLE 
 BEGIN
-    STE_CRYSTAL_EDIT_RESOURCE_DLL "CrysEditExDeutsch.dll"
     STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED 
                             "Es konnten nicht alle Fenster der Sitzung wiederhergestellt werden."
     IDS_SAVE_PACKAGE_AS     "Gelesene Pakete speichern unter..."
@@ -3406,7 +3503,7 @@ END
 
 STRINGTABLE 
 BEGIN
-    ID_PROJECT_NEW          "Erstellt ein neues Projekt.\nNeues Project"
+    ID_PROJECT_NEW          "Erstellt ein neues Projekt.\nNeues Projekt"
     ID_PROJECT_OPEN         "Öffnet ein bestehendes Projekt.\nProjekt öffnen"
     ID_PROJECT_SAVE         "Speichert das aktive Projekt.\nProjekt speichern"
     ID_PROJECT_CLOSE        "Schließt das aktive Projekt.\nProjekt schließen"
@@ -3593,8 +3690,9 @@ STRINGTABLE
 BEGIN
     ID_EDIT_INDICATOR_COL   "COL"
     ID_EDIT_INDICATOR_READ  "READ"
-    ID_EDIT_INDICATOR_CRLF  "               "
-    ID_EDIT_INDICATOR_POSITION "                                   "
+    ID_EDIT_INDICATOR_CRLF  "            "
+    ID_EDIT_INDICATOR_POSITION 
+                            "                                                "
 END
 
 STRINGTABLE 
@@ -4052,6 +4150,7 @@ END
 
 STRINGTABLE 
 BEGIN
+    ID_EDIT_INDICATOR_ENCODING "                  "
     ID_INSERT_SUPERSCRIPT   "\n\n^{\001}"
     ID_INSERT_SUBSCRIPT     "\n\n_{\001}"
     ID_INSERT_SUPERSUB      "\n\n^{\001}_{}"
@@ -4213,6 +4312,8 @@ END
 STRINGTABLE 
 BEGIN
     ID_EDIT_DELETE          "Löscht die Markierung.\nLöschen"
+    ID_EDIT_SPELL_IGNORE_ALL "Wort ignorieren\nDieses Wort ignorieren."
+    ID_EDIT_SPELL_ADD       "Wort hinzufügen\nDieses Wort zum Benutzerwörterbuch hinzufügen."
 END
 
 STRINGTABLE 
@@ -4228,12 +4329,6 @@ BEGIN
     ID_WINDOW_STRUCTURE     "Aktiviert die Gliederungsansicht\nGliederungsansicht aktivieren"
     ID_WINDOW_ENVIRONMENT   "Aktiviert die Objektansicht\nObjektansicht aktivieren"
     ID_WINDOW_FILES         "Aktiviert die Dateiansicht\nDateiansicht aktivieren"
-END
-
-STRINGTABLE 
-BEGIN
-    ID_EDIT_TOGGLE_WHITESPACEVIEW 
-                            "Blendet Leerraumzeichen ein- oder ausblenden\nLeeraumzeichen ein-/ausblenden"
 END
 
 STRINGTABLE 
@@ -4523,6 +4618,9 @@ BEGIN
     STE_LANGUAGE_ENGLISH    "Englisch"
     STE_LANGUAGE_FRENCH     "Französisch"
     STE_CUSTOM              "Angepasst"
+    IDS_ENCODING            "Codierung:"
+    IDS_SCINTILLA_DEFAULT_PRINT_FOOTER "Seite %1"
+    IDS_SCINTILLA_DEFAULT_PRINT_HEADER "%1 - Gedruckt am %2"
 END
 
 STRINGTABLE 
@@ -4552,6 +4650,62 @@ BEGIN
     ID_SHOW_EQUATIONS       "Blendet Formeln in der Gliederung ein und aus.\nFormeln"
     ID_SHOW_TABLES          "Blendet Tabellen in der Gliederung ein und aus.\nTabellen"
     ID_EDIT_DELETE_LINE     "Löscht die aktuelle Zeile."
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_EDIT_TEXT_NOT_FOUND "Text ""%s"" nicht gefunden"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_MENU_UNDO_FORMAT    "&Rückgängig %s\tCtrl+Z"
+    IDS_MENU_REDO_FORMAT    "Wi&ederholen %s\tCtrl+Y"
+    IDS_MENU_UNDO_DEFAULT   "&Rückgängig\tCtrl+Z"
+    IDS_MENU_REDO_DEFAULT   "Wi&ederholen\tCtrl+Z"
+    IDS_EDITOP_UNKNOWN      "Unbekannt"
+    IDS_EDITOP_PASTE        "Einfügen"
+    IDS_EDITOP_DELSELECTION "Markierung löschen"
+    IDS_EDITOP_CUT          "Ausschneiden"
+    IDS_EDITOP_DELETE       "Löschen"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_EDITOP_TYPING       "Tippen"
+    IDS_EDITOP_BACKSPACE    "Backspace"
+    IDS_EDITOP_INDENT       "Einrücken"
+    IDS_EDITOP_DRAGDROP     "Drag And Drop"
+    IDS_EDITOP_REPLACE      "Ersetzen"
+    IDS_EDITOP_AUTOINDENT   "Automatisches Einrücken"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_FIND_INCREMENTAL_FORWARD "Inkrementelle Suche: %s"
+    IDS_FIND_INCREMENTAL_BACKWARD "Inkrementelle Suche rückwärts: %s"
+    IDS_FIND_INCREMENTAL_FAILED "Inkrementelle Suche fehlgeschlagen: %s"
+    IDS_EDIT_REPLACE_COUNT  "%d Übereinstimmungen mit\n%s\nersetzt"
+    IDS_INCREMENTAL_SEARCH_PASSED_START_SEARCH 
+                            "Inkrementelle Suche abgeschlossen: %s (Startpunkt erreicht)"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_SPELL_IGNORE        "Ignorieren"
+    IDS_SPELL_UNEDIT        "Rückgängig"
+    IDS_SPELL_DONE          "Die Rechtschreibprüfung wurde abgeschlossen."
+    IDS_SPELL_NO_SUGGESTIONS "Keine Vorschläge"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_WHITE_SPACE     "Blendet Leerraumzeichen ein- oder aus.\nLeeraumzeichen ein-/ausblenden"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_LINE_ENDING     "Blendet die Zeilenenden ein- oder aus.\nZeilenenden ein-/ausblenden"
 END
 
 #endif    // German (Germany) resources
@@ -5345,7 +5499,7 @@ BEGIN
 END
 
 IDD_OPTIONS_EDITOR DIALOGEX 0, 0, 300, 200
-STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Editor"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
@@ -5353,7 +5507,6 @@ BEGIN
     GROUPBOX        "Tabulator",IDC_STATIC,8,54,284,41
     GROUPBOX        "Word Wrap",IDC_STATIC,8,105,284,88
     LTEXT           "Type of word wrap:",IDC_STATIC,20,125,62,8
-    CONTROL         "&Show line numbers",IDC_SHOW_LINENUMBERS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,20,25,75,10
     LTEXT           "&Tab size:",IDC_STATIC,20,74,30,8
     EDITTEXT        IDC_EDITOR_TABWIDTH,75,70,25,13,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "characters",IDC_STATIC,105,74,34,8
@@ -5386,6 +5539,62 @@ BEGIN
     GROUPBOX        "Command for including the external file",IDC_STATIC,7,80,195,56
     LTEXT           "[.tex]",IDC_STATIC,118,22,16,8
     GROUPBOX        "Automatically open the new file",IDC_STATIC,7,144,195,40
+END
+
+IDD_SPELL_CHECK DIALOGEX 0, 0, 290, 137
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Spell Check"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    EDITTEXT        IDC_SPELL_TEXT,7,7,221,58,ES_MULTILINE | ES_AUTOVSCROLL
+    PUSHBUTTON      "&Ignore",IDC_SPELL_IGNORE,233,7,50,14
+    PUSHBUTTON      "I&gnore all",IDC_SPELL_IGNORE_ALL,233,22,50,14
+    PUSHBUTTON      "&Add",IDC_SPELL_ADD,233,37,50,14
+    PUSHBUTTON      "&Change",IDC_SPELL_REPLACE,233,52,50,14
+    PUSHBUTTON      "C&hange all",IDC_SPELL_REPLACE_ALL,233,67,50,14
+    PUSHBUTTON      "&Next line",IDC_SPELL_NEXT,233,82,50,14
+    PUSHBUTTON      "&Resume",IDC_SPELL_RESUME,233,97,50,14,WS_DISABLED
+    CONTROL         "List4",IDC_SPELL_SUGGEST,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_NOCOLUMNHEADER | LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,7,75,222,55
+    LTEXT           "&Suggestions",IDC_STATIC,7,65,42,8
+    PUSHBUTTON      "Cancel",IDCANCEL,233,116,50,14
+END
+
+IDD_SCINTILLA_REPLACEDLGORD DIALOGEX 36, 44, 230, 88
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Replace"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    LTEXT           "Fi&nd what:",IDC_STATIC,4,9,48,8
+    EDITTEXT        1152,54,7,114,12,ES_AUTOHSCROLL | WS_GROUP
+    LTEXT           "Re&place with:",IDC_STATIC,4,26,48,8
+    EDITTEXT        1153,54,24,114,12,ES_AUTOHSCROLL | WS_GROUP
+    CONTROL         "Match &whole word only",IDC_EDIT_WHOLE_WORD,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,5,46,89,10
+    CONTROL         "Match &case",IDC_EDIT_MATCH_CASE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,57,52,10
+    GROUPBOX        "Replace in",IDC_STATIC,97,43,71,37,WS_GROUP
+    CONTROL         "&Selection",IDC_EDIT_SCOPE_SELECTION,"Button",BS_AUTORADIOBUTTON | WS_GROUP,102,54,59,10
+    CONTROL         "Wh&ole file",IDC_EDIT_SCOPE_WHOLE_FILE,"Button",BS_AUTORADIOBUTTON,102,66,58,10
+    DEFPUSHBUTTON   "&Find Next",IDOK,174,4,50,14,WS_GROUP
+    PUSHBUTTON      "&Replace",1024,174,21,50,14
+    PUSHBUTTON      "Replace &All",1025,174,38,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,174,55,50,14
+    CONTROL         "Regular expressions",IDC_REGULAR_EXPRESSION,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,68,81,10
+END
+
+IDD_SCINTILLA_FINDDLGORD DIALOGEX 30, 73, 236, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Find"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    LTEXT           "Fi&nd what:",IDC_STATIC,4,8,42,8
+    EDITTEXT        1152,47,7,128,12,ES_AUTOHSCROLL | WS_GROUP
+    CONTROL         "Match &whole word only",IDC_EDIT_WHOLE_WORD,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,4,27,89,10
+    CONTROL         "Match &case",IDC_EDIT_MATCH_CASE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,38,52,10
+    GROUPBOX        "Direction",IDC_STATIC,107,26,68,28,WS_GROUP
+    CONTROL         "&Up",1056,"Button",BS_AUTORADIOBUTTON | WS_GROUP,111,38,25,12
+    CONTROL         "&Down",1057,"Button",BS_AUTORADIOBUTTON,138,38,35,12
+    DEFPUSHBUTTON   "&Find Next",IDOK,182,5,50,14,WS_GROUP
+    PUSHBUTTON      "Cancel",IDCANCEL,182,23,50,14
+    CONTROL         "Regular expressions",IDC_REGULAR_EXPRESSION,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,49,81,10
 END
 
 
@@ -5668,6 +5877,14 @@ BEGIN
         RIGHTMARGIN, 202
         TOPMARGIN, 7
         BOTTOMMARGIN, 184
+    END
+
+    IDD_SPELL_CHECK, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 283
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 130
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -5988,7 +6205,11 @@ BEGIN
             MENUITEM "Show &Icons",                 ID_VIEW_DOCTAB_ICONS
         END
         MENUITEM SEPARATOR
-        MENUITEM "Display White Spaces",        ID_EDIT_TOGGLE_WHITESPACEVIEW
+        MENUITEM "Display White Spaces",        ID_VIEW_TOGGLE_WHITE_SPACE
+        MENUITEM "Display End Lines",           ID_VIEW_TOGGLE_SHOW_LINE_ENDING
+        MENUITEM "Display Line Numbers",        ID_VIEW_LINE_NUMBERS
+        MENUITEM "&Word Wrap",                  ID_VIEW_TOGGLE_WORD_WRAP
+        MENUITEM SEPARATOR
         MENUITEM "Full Screen",                 ID_VIEW_FULLSCREEN
     END
     POPUP "&Insert"
@@ -6719,6 +6940,16 @@ BEGIN
     END
 END
 
+IDR_POPUP_ATTRIBUTE MENU 
+BEGIN
+    MENUITEM "none",                        ID_NONE
+    POPUP "Spelling"
+    BEGIN
+        MENUITEM "&Ignore All",                 ID_EDIT_SPELL_IGNORE_ALL
+        MENUITEM "&Add",                        ID_EDIT_SPELL_ADD
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -7125,7 +7356,6 @@ END
 
 STRINGTABLE 
 BEGIN
-    STE_CRYSTAL_EDIT_RESOURCE_DLL "CrysEditExEnglish.dll"
     STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED 
                             "Not all of the windows in the session could be opened."
     IDS_SAVE_PACKAGE_AS     "Save scanned packages as..."
@@ -7971,6 +8201,8 @@ END
 STRINGTABLE 
 BEGIN
     ID_EDIT_DELETE          "Deletes the current selection\nDelete"
+    ID_EDIT_SPELL_IGNORE_ALL "Ignore word\nIgnore this word"
+    ID_EDIT_SPELL_ADD       "Add word\nAdd this word to personal dictionary"
 END
 
 STRINGTABLE 
@@ -8279,6 +8511,9 @@ BEGIN
     STE_LANGUAGE_ENGLISH    "English"
     STE_LANGUAGE_FRENCH     "French"
     STE_CUSTOM              "Custom"
+    IDS_ENCODING            "Encoding:"
+    IDS_SCINTILLA_DEFAULT_PRINT_FOOTER "Page %1"
+    IDS_SCINTILLA_DEFAULT_PRINT_HEADER "%1 - Printed on %2"
 END
 
 STRINGTABLE 
@@ -8294,6 +8529,52 @@ END
 STRINGTABLE 
 BEGIN
     ID_EDIT_DELETE_LINE     "Deletes the current line."
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_EDIT_TEXT_NOT_FOUND "Cannot find string""%s"""
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_MENU_UNDO_FORMAT    "&Undo %s\tCtrl+Z"
+    IDS_MENU_REDO_FORMAT    "&Redo %s\tCtrl+Y"
+    IDS_MENU_UNDO_DEFAULT   "&Undo\tCtrl+Z"
+    IDS_MENU_REDO_DEFAULT   "&Redo\tCtrl+Z"
+    IDS_EDITOP_UNKNOWN      "Unknown"
+    IDS_EDITOP_PASTE        "Paste"
+    IDS_EDITOP_DELSELECTION "Delete Selection"
+    IDS_EDITOP_CUT          "Cut"
+    IDS_EDITOP_DELETE       "Delete"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_EDITOP_TYPING       "Typing"
+    IDS_EDITOP_BACKSPACE    "Backspace"
+    IDS_EDITOP_INDENT       "Indent"
+    IDS_EDITOP_DRAGDROP     "Drag And Drop"
+    IDS_EDITOP_REPLACE      "Replace"
+    IDS_EDITOP_AUTOINDENT   "Auto Indent"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_FIND_INCREMENTAL_FORWARD "Incremental search: %s"
+    IDS_FIND_INCREMENTAL_BACKWARD "Reverse incremental search: %s"
+    IDS_FIND_INCREMENTAL_FAILED "Incremental search failed: %s"
+    IDS_EDIT_REPLACE_COUNT  "%d occurrences of\n%s\nreplaced"
+    IDS_INCREMENTAL_SEARCH_PASSED_START_SEARCH 
+                            "Incremental search: %s (Passed start of search)"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_SPELL_IGNORE        "Ignore"
+    IDS_SPELL_UNEDIT        "Unedit"
+    IDS_SPELL_DONE          "Spell check complete"
+    IDS_SPELL_NO_SUGGESTIONS "No Suggestions"
 END
 
 #endif    // English (U.S.) resources
@@ -8325,7 +8606,6 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 #include "l.deu\\afxres.rc"          // Standardkomponenten
 #include "l.deu\\afxprint.rc"        // Ressourcen für Drucken/Seitenansicht
 #endif
-
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED

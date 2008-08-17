@@ -48,8 +48,9 @@ CProjectView::CProjectView()
 
 CProjectView::~CProjectView()
 {
-	if (m_pProject)
-		m_pProject->RemoveView(this);
+	ASSERT(!IsAttached());
+	// Warning: Do not call RemoveView here which otherwise will result in a 
+	// pure virtual function call of the Clear method
 }
 
 void CProjectView::OnUpdate(CProjectView *pSender, LPARAM lHint, LPVOID pHint)

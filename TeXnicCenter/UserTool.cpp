@@ -34,11 +34,12 @@
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
+
 #include "PlaceHolder.h"
 #include "global.h"
-
 #include "UserTool.h"
-
+#include "LaTeXView.h"
+#include "LaTeXDocument.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -177,13 +178,20 @@ BOOL CMyUserTool::Invoke()
 		strMainPath = pProject->GetMainPath();
 
 	// current document specific information
-	CLaTeXEdit* pEdit = theApp.GetActiveEditView();
+	LaTeXView* pEdit = theApp.GetActiveEditView();
 
 	if (pEdit)
 	{
 		strCurrentPath = pEdit->GetDocument()->GetPathName();
-		pEdit->GetSelectedText(strCurrentSelection);
-		lCurrentLine = pEdit->GetCursorPos().y + 1;
+		long s = pEdit->GetCtrl().GetSelectionStart();
+		long e = pEdit->GetCtrl().GetSelectionEnd();
+
+		if (s != e) {
+			pEdit->GetCtrl().GetSelText(strCurrentSelection.GetBuffer(e - s + 1));
+			strCurrentSelection.ReleaseBuffer(e - s);
+		}
+
+		lCurrentLine = pEdit->GetCurrentLine() + 1;
 	}
 
 	try

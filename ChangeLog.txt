@@ -19,10 +19,6 @@
 - Abbreviations are recognized correctly by the spell checker
 - The state of docking windows is properly restored now
 
-Known issues:
-- CrystalEdit doesn't support mixing LTR and RTL languages
-- Loading Unicode files doesn't work
-
 2008/6/19 sergiudotenco
 - Migrated from BCGSoft to native MFC libraries
 - Output and navigation bars can be docked independently from each other

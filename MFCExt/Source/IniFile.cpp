@@ -285,3 +285,19 @@ int CIniFile::FindValue( int keynum, const CString& valuename ) const
 
 	return valuenum;
 }
+
+bool CIniFile::GetValues( const CString& key, std::multimap<CString,CString>& result ) const
+{
+	result.clear();
+	int index = FindKey(key);
+
+	if (index != -1) 
+	{
+		const int size = keys[index].names.GetSize();
+
+		for (int i = 0; i < size; ++i)
+			result.insert(std::make_pair(keys[index].names[i],keys[index].values[i]));
+	}
+
+	return index != -1;
+}

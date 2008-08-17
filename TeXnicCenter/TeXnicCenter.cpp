@@ -40,8 +40,6 @@
 
 #include "MainFrm.h"
 #include "ChildFrm.h"
-#include "LatexDoc.h"
-#include "LatexEdit.h"
 #include "global.h"
 #include "Configuration.h"
 #include "DocumentNewDialog.h"
@@ -56,20 +54,10 @@
 #include "AboutBox.h"
 #include "OutputWizard.h"
 #include "FontOccManager.h"
-#if 0 // Scintill test
 #include "LaTeXDocument.h"
 #include "LaTeXView.h"
-#endif
+#include "Speller.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-//-------------------------------------------------------------------
-// class CTCCommandLineInfo
-//-------------------------------------------------------------------
 
 class CTCCommandLineInfo : public CCommandLineInfo
 {
@@ -243,15 +231,17 @@ const CString CTeXnicCenterApp::GetDDEServerName() const
 	AfxGetModuleShortFileName(AfxGetInstanceHandle(), strShortName);
 	return CPathTool::GetFileTitle(strShortName);
 }
-
+#include "EncodingConverter.h"
 BOOL CTeXnicCenterApp::InitInstance()
 {
-#if 0
+	std::vector<char> data;
+	UTF8toANSI("\xda\x60",2,data);
 	scintilla_ = AfxLoadLibrary(_T("SciLexer.dll"));
 
-	if (!scintilla_)
+	if (!scintilla_) {
+		AfxMessageBox(_T("SciLexer.dll could not be loaded. Please reinstall the application."),MB_ICONERROR);
 		return FALSE;
-#endif
+	}
 
 	// parse command line
 	CTCCommandLineInfo cmdInfo;
@@ -334,12 +324,6 @@ BOOL CTeXnicCenterApp::InitInstance()
 		}
 	}
 
-	// loading localized resource DLL for CrystalEditEx
-	m_hCrystalEditResources = LoadLibrary(_T("language\\") + CString((LPCTSTR)STE_CRYSTAL_EDIT_RESOURCE_DLL));
-
-	if (m_hCrystalEditResources)
-		CrystalEditExSetResourceHandle(m_hCrystalEditResources);
-
 #if 1
 	// show splash screen
 	if (cmdInfo.m_bShowSplash)
@@ -390,9 +374,9 @@ BOOL CTeXnicCenterApp::InitInstance()
 	// LaTeX-Document
 	m_pLatexDocTemplate = new CMultiDocTemplate(
 	    IDR_LATEXTYPE,
-	    RUNTIME_CLASS(CLaTeXDoc),
+	    RUNTIME_CLASS(LaTeXDocument),
 	    RUNTIME_CLASS(CChildFrame), // Benutzerspezifischer MDI-Child-Rahmen
-	    RUNTIME_CLASS(CLaTeXEdit));
+	    RUNTIME_CLASS(LaTeXView));
 	AddDocTemplate(m_pLatexDocTemplate);
 
 	m_pProjectDocTemplate = new CSingleProjectTemplate(
@@ -574,7 +558,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 		UpdateLaTeXProfileSel();
 	}
 
-	TRACE("Detected OS: %s\n", m_SystemInfo.ToString());
+	TRACE1("Detected OS: %s\n", m_SystemInfo.ToString());
 
 	return TRUE;
 }
@@ -666,8 +650,8 @@ void CTeXnicCenterApp::SaveCustomState()
 	CConfiguration::GetInstance()->Serialize(CConfiguration::Save);
 
 	// speller
-	if (m_pSpell && m_pSpell->is_added_modified() && !CConfiguration::GetInstance()->m_strSpellPersonalDictionary.IsEmpty())
-		m_pSpell->save_personal_dictionary(CConfiguration::GetInstance()->m_strSpellPersonalDictionary);
+	if (m_pSpell && m_pSpell->IsAddedModified() && !CConfiguration::GetInstance()->m_strSpellPersonalDictionary.IsEmpty())
+		m_pSpell->SavePersonalDictionary(CConfiguration::GetInstance()->m_strSpellPersonalDictionary);
 
 	///////////////////////////////
 	// Tools
@@ -723,19 +707,11 @@ int CTeXnicCenterApp::ExitInstance()
 
 	ControlBarCleanUp();
 
-	// unload CrystalEdit resource DLL
-	CrystalEditExResetResourceHandle();
-
-	if (m_hCrystalEditResources)
-		FreeLibrary(m_hCrystalEditResources);
-
 	// unload TXC resource DLL
 	if (m_hTxcResources)
 		FreeLibrary(m_hTxcResources);
 
-#if 0
 	AfxFreeLibrary(scintilla_);
-#endif
 
 	return CProjectSupportingWinApp::ExitInstance();
 }
@@ -769,7 +745,7 @@ void CTeXnicCenterApp::OnAppAbout()
 	aboutDlg.DoModal();
 }
 
-CLaTeXEdit *CTeXnicCenterApp::GetActiveEditView()
+LaTeXView* CTeXnicCenterApp::GetActiveEditView()
 {
 	// get active frame
 	if (!m_pMainWnd)
@@ -783,10 +759,10 @@ CLaTeXEdit *CTeXnicCenterApp::GetActiveEditView()
 	// get active view
 	CView *pView = pFrame->GetActiveView();
 
-	if (!pView || !pView->IsKindOf(RUNTIME_CLASS(CLaTeXEdit)))
+	if (!pView || !pView->IsKindOf(RUNTIME_CLASS(LaTeXView)))
 		return NULL;
 
-	return (CLaTeXEdit*)pView;
+	return (LaTeXView*)pView;
 }
 
 CDocument *CTeXnicCenterApp::GetOpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/)
@@ -808,9 +784,9 @@ CDocument *CTeXnicCenterApp::GetOpenLatexDocument(LPCTSTR lpszFileName, BOOL bRe
 
 	while (pos)
 	{
-		pDoc = (CLaTeXDoc*)pDocTemplate->GetNextDoc(pos);
+		pDoc = (LaTeXDocument*)pDocTemplate->GetNextDoc(pos);
 
-		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath) == 0 && pDoc->IsKindOf(RUNTIME_CLASS(CLaTeXDoc)))
+		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath) == 0 && pDoc->IsKindOf(RUNTIME_CLASS(LaTeXDocument)))
 		{
 			bFound = TRUE;
 			break;
@@ -822,14 +798,13 @@ CDocument *CTeXnicCenterApp::GetOpenLatexDocument(LPCTSTR lpszFileName, BOOL bRe
 
 	// set write protection
 	if (pDoc && bReadOnly)
-		((CLaTeXDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
+		static_cast<LaTeXDocument*>(pDoc)->GetView()->GetCtrl().SetReadOnly(TRUE);
 
 	return pDoc;
 }
 
-CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/)
+CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName,BOOL bReadOnly /*= FALSE*/)
 {
-
 	// get the full path name of the file
 	TCHAR lpszFilePath[_MAX_PATH];
 	LPTSTR lpszDummy;
@@ -847,8 +822,8 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOn
 
 	while (pos)
 	{
-		pDoc = (CLaTeXDoc*)pDocTemplate->GetNextDoc(pos);
-		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath) == 0 && pDoc->IsKindOf(RUNTIME_CLASS(CLaTeXDoc)))
+		pDoc = (LaTeXDocument*)pDocTemplate->GetNextDoc(pos);
+		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath) == 0 && pDoc->IsKindOf(RUNTIME_CLASS(LaTeXDocument)))
 		{
 			bFound = TRUE;
 			break;
@@ -864,7 +839,7 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOn
 			return NULL;
 
 		// open document
-		if (!pDoc->IsKindOf(RUNTIME_CLASS(CLaTeXDoc)) || !pDoc->OnOpenDocument(strDocPath))
+		if (!pDoc->IsKindOf(RUNTIME_CLASS(LaTeXDocument)) || !pDoc->OnOpenDocument(strDocPath))
 		{
 			pDocTemplate->RemoveDocument(pDoc);
 			delete pDoc;
@@ -874,7 +849,7 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOn
 		pDoc->SetPathName(strDocPath);
 
 		if (bReadOnly)
-			((CLaTeXDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
+			static_cast<LaTeXDocument*>(pDoc)->GetView()->GetCtrl().SetReadOnly(TRUE);
 	}
 
 	if (!pDoc)
@@ -882,7 +857,7 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOn
 
 	// set write protection
 	if (pDoc && bReadOnly)
-		((CLaTeXDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
+		static_cast<LaTeXDocument*>(pDoc)->GetView()->GetCtrl().SetReadOnly(TRUE);
 
 	return pDoc;
 }
@@ -896,7 +871,7 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
         int nLineNumber /*= -1*/, BOOL bError /*= FALSE*/,
         bool bAskForProjectLoad /*= true*/)
 {
-	TRACE("Opening LaTeX Doc: %s\n", lpszFileName);
+	TRACE1("Opening LaTeX Doc: %s\n", lpszFileName);
 
 	// get the full path name of the file
 	TCHAR lpszFilePath[_MAX_PATH];
@@ -917,7 +892,7 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 	{
 		pDoc = pDocTemplate->GetNextDoc(pos);
 
-		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath) == 0 && pDoc->IsKindOf(RUNTIME_CLASS(CLaTeXDoc)))
+		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath) == 0 && pDoc->IsKindOf(RUNTIME_CLASS(LaTeXDocument)))
 		{
 			bFound = TRUE;
 			break;
@@ -983,12 +958,15 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 		return NULL;
 
 	// set write protection
-	if (pDoc && bReadOnly && !((CLaTeXDoc*)pDoc)->m_pTextBuffer->GetReadOnly())
-		((CLaTeXDoc*)pDoc)->m_pTextBuffer->SetReadOnly();
+	if (pDoc && bReadOnly)
+	{
+		LaTeXView* view = static_cast<LaTeXView*>(static_cast<LaTeXDocument*>(pDoc)->GetView());
+		view->GetCtrl().SetReadOnly(TRUE);
+	}
 
 	// set error mark
 	if (bError)
-		((CLaTeXDoc*)pDoc)->SetErrorMark(nLineNumber);
+		static_cast<LaTeXDocument*>(pDoc)->SetErrorMark(nLineNumber);
 
 	// activate view and go to specified line
 	POSITION viewpos = pDoc->GetFirstViewPosition();
@@ -1008,7 +986,7 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 	if (!pView)
 		return pDoc;
 
-	if (!pView->IsKindOf(RUNTIME_CLASS(CLaTeXEdit)))
+	if (!pView->IsKindOf(RUNTIME_CLASS(LaTeXView)))
 		return pDoc;
 
 	if (nLineNumber >= 0)
@@ -1016,12 +994,11 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 		if (nLineNumber > 0)
 			--nLineNumber;
 
-		((CLaTeXEdit*)pView)->GoToLine(nLineNumber);
+		static_cast<LaTeXView*>(pView)->GoToLine(nLineNumber);
 	}
 
 	// give input focus to view
 	pView->SetFocus();
-	//((CMainFrame*)m_pMainWnd)->SetActiveView( pView );
 
 	return pDoc;
 }
@@ -1076,11 +1053,16 @@ void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt()
 
 	// save all latex-docs
 	pos = m_pLatexDocTemplate->GetFirstDocPosition();
+	CString path;
+
 	while (pos)
 	{
 		CDocument *pDoc = m_pLatexDocTemplate->GetNextDoc(pos);
-		if (!pDoc->GetPathName().IsEmpty() && pDoc->IsModified())
-			pDoc->OnSaveDocument(pDoc->GetPathName());
+		path = pDoc->GetPathName();
+
+		// Save the document only if the file already exists
+		if (!path.IsEmpty() && CPathTool::Exists(path) && pDoc->IsModified())
+			pDoc->OnSaveDocument(path);
 	}
 
 	m_bSavingAll = FALSE;
@@ -1088,7 +1070,7 @@ void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt()
 
 BOOL CTeXnicCenterApp::OpenProject(LPCTSTR lpszPath)
 {
-	TRACE("Opening LaTeX Project: %s\n", lpszPath);
+	TRACE1("Opening LaTeX Project: %s\n", lpszPath);
 
 	//Close the current project
 	AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_PROJECT_CLOSE);
@@ -1734,7 +1716,7 @@ Speller* CTeXnicCenterApp::GetSpeller()
 
 			// Create the personal dictionary if we have a name
 			if (!CConfiguration::GetInstance()->m_strSpellPersonalDictionary.IsEmpty())
-				m_pSpell->open_personal_dictionary(CConfiguration::GetInstance()->m_strSpellPersonalDictionary);
+				m_pSpell->LoadPersonalDictionary(CConfiguration::GetInstance()->m_strSpellPersonalDictionary);
 		}
 		catch (const CString& str)
 		{
@@ -1761,13 +1743,13 @@ Speller* CTeXnicCenterApp::GetSpeller()
 	return m_pSpell;
 }
 
-CWinThread* CTeXnicCenterApp::GetBackgroundThread()
+SpellerBackgroundThread* CTeXnicCenterApp::GetSpellerThread()
 {
 	::EnterCriticalSection(&m_csLazy);
 
 	if (m_pBackgroundThread == NULL)
 	{
-		m_pBackgroundThread = new CBackgroundThread();
+		m_pBackgroundThread = new SpellerBackgroundThread();
 		ASSERT(m_pBackgroundThread);
 		m_pBackgroundThread->CreateThread();
 		m_pBackgroundThread->SetThreadPriority(THREAD_PRIORITY_LOWEST);
@@ -1775,11 +1757,12 @@ CWinThread* CTeXnicCenterApp::GetBackgroundThread()
 		// Get the background thread to trigger the dictionary creation which
 		// may take several seconds. This allows the user to continue working
 		// without interruption.
-		m_pBackgroundThread->PostThreadMessage(ID_BG_ENABLE_SPELLER, CConfiguration::GetInstance()->m_bSpellEnable, NULL);
+		m_pBackgroundThread->EnableSpeller(CConfiguration::GetInstance()->m_bSpellEnable != 0);
+
 		if (CConfiguration::GetInstance()->m_bSpellEnable)
 		{
-			CSpellerSource *pSource = static_cast<CSpellerSource*>(this);
-			m_pBackgroundThread->PostThreadMessage(ID_BG_RESET_SPELLER, 0, (long)pSource);
+			SpellerSource *pSource = static_cast<SpellerSource*>(this);
+			m_pBackgroundThread->ResetSpeller(pSource);
 		}
 	}
 
@@ -1791,7 +1774,7 @@ CWinThread* CTeXnicCenterApp::GetBackgroundThread()
 void CTeXnicCenterApp::OnUpdateProject()
 {
 	// Inform the background thread to update all of the active views.
-	CWinThread *pBackgroundThread = GetBackgroundThread();
+	SpellerBackgroundThread *pBackgroundThread = GetSpellerThread();
 
 	// get the document template
 	CDocTemplate *pDocTemplate = m_pLatexDocTemplate;
@@ -1808,10 +1791,10 @@ void CTeXnicCenterApp::OnUpdateProject()
 			POSITION pos = pDoc->GetFirstViewPosition();
 			if (pos)
 			{
-				CCrystalTextView *pView = (CCrystalTextView *)pDoc->GetNextView(pos);
+				LaTeXView *pView = (LaTeXView *)pDoc->GetNextView(pos);
 
-				if (pView && pView->IsKindOf(RUNTIME_CLASS(CCrystalTextView)))
-					pBackgroundThread->PostThreadMessage(ID_BG_UPDATE_BUFFER, 0, (long)pView);
+				if (pView && pView->IsKindOf(RUNTIME_CLASS(LaTeXView)))
+					pBackgroundThread->RecheckSpelling(pView);
 			}
 		}
 	}
@@ -1819,10 +1802,10 @@ void CTeXnicCenterApp::OnUpdateProject()
 
 void CTeXnicCenterApp::OnProjectNewFromFile()
 {
-	CLaTeXEdit* pEdit = GetActiveEditView();
+	LaTeXView* pEdit = GetActiveEditView();
 	if (!pEdit) return;
 
-	CLaTeXDoc* pDoc = pEdit->GetDocument();
+	LaTeXDocument* pDoc = pEdit->GetDocument();
 	if (!pDoc) return;
 
 	//Empty (not yet saved) path name?
@@ -1865,10 +1848,10 @@ void CTeXnicCenterApp::OnUpdateProjectNewFromFile(CCmdUI* pCmdUI)
 {
 	bool bEnable = false;
 
-	CLaTeXEdit* pEdit = GetActiveEditView();
+	LaTeXView* pEdit = GetActiveEditView();
 	if (pEdit)
 	{
-		CLaTeXDoc* pDoc = pEdit->GetDocument();
+		LaTeXDocument* pDoc = pEdit->GetDocument();
 		if (pDoc)
 		{
 			//Is it a latex file?
@@ -1913,7 +1896,7 @@ void CTeXnicCenterApp::FindPackageFilesRecursive(CString dir)
 
 			if (!ext.CompareNoCase(_T("xml")))
 			{
-				TRACE("Adding package file: %s...\n", CPathTool::GetFileTitle(p));
+				TRACE1("Adding package file: %s...\n", CPathTool::GetFileTitle(p));
 				m_AvailableCommands.LoadFromXML(p, true);
 			}
 		}

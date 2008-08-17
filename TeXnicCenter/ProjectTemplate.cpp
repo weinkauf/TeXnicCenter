@@ -192,7 +192,7 @@ BOOL CProjectTemplate::SaveAllModified()
 	return TRUE;
 }
 
-void CProjectTemplate::CloseAllProjects(BOOL bEndSession)
+void CProjectTemplate::CloseAllProjects(BOOL /*bEndSession*/)
 {
 	POSITION pos = GetFirstProjectPosition();
 	while (pos != NULL)
@@ -1038,7 +1038,7 @@ BOOL CProjectManager::DoPromptFileName(CString& fileName, UINT nIDSTitle,
 BOOL CProjectManager::OnDDECommand(LPTSTR lpszCommand)
 {
 	CString strCommand = lpszCommand;
-	CProject* pProject = NULL;
+	//CProject* pProject = NULL;
 
 	// open format is "[open("%s")]" - no whitespace allowed, one per line
 	// print format is "[print("%s")]" - no whitespace allowed, one per line
