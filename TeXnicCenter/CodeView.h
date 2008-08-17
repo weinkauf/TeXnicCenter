@@ -28,6 +28,8 @@ class CodeView :
 	bool remove_leading_spaces_;
 	bool suppress_speller_;
 
+	long last_change_pos_;
+
 	DECLARE_DYNAMIC(CodeView)
 
 protected:
@@ -165,6 +167,9 @@ protected:
 	afx_msg void OnEditFindIncrementalForward();
 	afx_msg void OnEditFindIncrementalBackward();
 	void GetReplaceAllTarget(long& s, long& e);
+	afx_msg void OnEditGotoLastChange();
+	afx_msg void OnUpdateEditGotoLastChange(CCmdUI *pCmdUI);
+	void OnModified(SCNotification* n);
 
 public:
 	CScintillaFindReplaceDlg* CreateFindReplaceDialog(void);
