@@ -46,31 +46,25 @@
 #include <afxext.h>         // MFC-Erweiterungen
 #include <afxdtctl.h>				// MFC-Unterstützung für allgemeine Steuerelemente von Internet Explorer 4
 #include <afxtempl.h>				// MFC-Template-Klassen
+#include <afxpriv.h>
 
-#if 0
-// Scintilla test
+// Scintilla
 #include "platform.h"
 #include "scintilla.h"
 #include "SciLexer.h"
 
-#define IDC_REGULAR_EXPRESSION 1
-#define IDD_SCINTILLA_FINDDLGORD 2
-#define IDS_SCINTILLA_DEFAULT_PRINT_HEADER 3
-#define IDD_SCINTILLA_REPLACEDLGORD 4
-#define IDS_SCINTILLA_DEFAULT_PRINT_FOOTER 5
-
 #include "ScintillaCtrl.h"
 #include "ScintillaDocView.h"
-#endif
 
 #include <afxpriv.h>
 #include <afxmt.h>
 #include <afxcview.h>
-//#include <comdef.h>
 
 #ifndef _AFX_NO_AFXCMN_SUPPORT
 #include <afxcmn.h>			// MFC-Unterstützung für gängige Windows-Steuerelemente
 #endif // _AFX_NO_AFXCMN_SUPPORT
+
+#include <atlfile.h>
 
 #include "TipDlg.h"
 #include <afxcontrolbars.h>     // MFC support for ribbons and control bars
@@ -81,14 +75,13 @@
 #include <ExtApp.h>
 #include <ExtCom.h>
 #include <ExtDialog.h>
-#include <CrysEditEx.h>
 #include <MsXmlCpp.h>
 #include <htmlhelp.h>
 
 namespace Interfaces
 {
-#include <TeXnicCenterObjects.h>
-};
+	#include <TeXnicCenterObjects.h>
+}
 
 #include <regex>
 
@@ -113,6 +106,10 @@ typedef std::tr1::basic_regex<TCHAR> tregex;
 #else
 #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif
+
+// Use std::min, std::max from <algorithm>
+#undef min
+#undef max
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.

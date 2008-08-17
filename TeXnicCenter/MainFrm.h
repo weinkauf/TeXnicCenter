@@ -54,7 +54,7 @@
 #include "ErrorListView.h"
 #include "StructureView.h"
 
-class CLaTeXEdit;
+class LaTeXView;
 
 // number of mathematic toolbars
 const int MATHBAR_COUNT = 16;

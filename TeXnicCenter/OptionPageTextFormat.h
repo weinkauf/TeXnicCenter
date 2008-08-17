@@ -39,6 +39,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "LaTeXView.h"
+
 /**	Options for the editor window.
 
 @ingroup dialogs
@@ -131,7 +133,7 @@ protected:
 // Attributes
 protected:
 	/** array for storing color assignment */
-	COLORREF m_aColors[CCrystalTextView::COLORINDEX_ERRORBKGND];
+	COLORREF m_aColors[LaTeXView::COLORINDEX_ERRORBKGND];
 
 	/** font definitions for editor */
 	LOGFONT m_logfont;

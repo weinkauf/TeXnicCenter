@@ -105,7 +105,7 @@ CString COutputFilter::GetResultString()
 
 UINT COutputFilter::Run()
 {
-	TCHAR c;
+	char c;
 	DWORD dwBytesRead;
 	CString strLine;
 	DWORD dwCookie = 0;
@@ -115,8 +115,8 @@ UINT COutputFilter::Run()
 	{
 		switch (c)
 		{
-			case _T('\n') :
-			case _T('\r') :
+			case '\n' :
+			case '\r' :
 				if (!bLastWasNewLine)
 				{
 					bLastWasNewLine = TRUE;
@@ -138,6 +138,7 @@ UINT COutputFilter::Run()
 	{
 		if (m_pView)
 			m_pView->AddLine(strLine);
+
 		ParseLine(strLine,dwCookie);
 	}
 

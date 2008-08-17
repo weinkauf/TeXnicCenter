@@ -43,7 +43,7 @@ CAutoCompleteDlg::CAutoCompleteDlg(CStyleFileContainer *sfc,CWnd* pParent)
 	//Create the window out of sight (otherwise it would pop up in the middle of nowhere for a short moment)
 	if (!Create(pParent))
 	{
-		TRACE("Window creation (CAutoCompleteDlg) failed!\n");
+		TRACE0("Window creation (CAutoCompleteDlg) failed!\n");
 	}
 }
 
@@ -55,9 +55,9 @@ CAutoCompleteDlg::~CAutoCompleteDlg()
 
 BOOL CAutoCompleteDlg::Create(LPCTSTR /*lpszClassName*/, LPCTSTR /*lpszWindowName*/, DWORD dwStyle,const RECT& rect, CWnd* pParentWnd, UINT /*nID*/, CCreateContext* pContext)
 {
-	dwStyle = WS_POPUP | WS_DLGFRAME | WS_CLIPCHILDREN;
+	dwStyle = WS_POPUP|WS_DLGFRAME|WS_CLIPCHILDREN;
 
-	return CWnd::CreateEx(0,
+	return CWnd::CreateEx(WS_EX_TOOLWINDOW,
 	                      AfxRegisterWndClass(
 	                          CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS,
 	                          theApp.LoadStandardCursor(IDC_ARROW)),//GetSysColorBrush(COLOR_WINDOW)),
@@ -112,7 +112,7 @@ BOOL CAutoCompleteDlg::InitWithKeyword(const CString &keyword)
 	/* iterate through map */
 	if (!::IsWindow(this->GetSafeHwnd()))   // provide safe exit
 	{
-		TRACE("ERROR: Not a window\n");
+		TRACE0("ERROR: Not a window\n");
 		if (m_Listener != NULL)
 		{
 			m_Listener->OnACCommandCancelled();
@@ -132,7 +132,7 @@ BOOL CAutoCompleteDlg::InitWithKeyword(const CString &keyword)
 
 		if (ret == LB_ERR)
 		{
-			TRACE("Error in SetItemDataPtr: %d (idx = %d)\n",::GetLastError(),idx);
+			TRACE2("Error in SetItemDataPtr: %d (idx = %d)\n",::GetLastError(),idx);
 		}
 	}
 	ASSERT(map.GetCount() == m_Box->GetCount());
@@ -188,7 +188,7 @@ void CAutoCompleteDlg::ApplySelection()
 	}
 	else
 	{
-		TRACE("Error occurred during ApplySelection, error code %d",::GetLastError());
+		TRACE1("Error occurred during ApplySelection, error code %d",::GetLastError());
 	}
 
 	ShowWindow(SW_HIDE);
@@ -244,7 +244,7 @@ void CAutoCompleteDlg::Help()
 	}
 	else
 	{
-		TRACE("Error occurred during ApplySelection, error code %d",::GetLastError());
+		TRACE1("Error occurred during ApplySelection, error code %d",::GetLastError());
 	}
 }
 
@@ -601,9 +601,9 @@ int CAutoCompleteDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CRect rc;
 	GetClientRect(&rc);
 
-	if (!m_Box->CWnd::CreateEx(0/*WS_EX_CLIENTEDGE*/,WC_LISTBOX,0,
-	                           WS_CHILD | WS_VISIBLE | (LBS_STANDARD & ~WS_BORDER) | LBS_HASSTRINGS | LBS_NOINTEGRALHEIGHT | LBS_OWNERDRAWFIXED | WS_HSCROLL,
-	                           rc,this,1))
+	if (!m_Box->CWnd::CreateEx(WS_EX_WINDOWEDGE,WC_LISTBOX,0,
+		WS_CHILD | WS_VISIBLE | (LBS_STANDARD & ~WS_BORDER) | LBS_HASSTRINGS | LBS_NOINTEGRALHEIGHT | LBS_OWNERDRAWFIXED | WS_HSCROLL,
+		rc,this,1))
 		return -1;
 
 	return 0;
@@ -622,7 +622,7 @@ void CAutoCompleteDlg::OnSetFocus(CWnd* pOldWnd)
 		m_Box->SetFocus();
 }
 
-LRESULT CAutoCompleteDlg::OnFloatStatus(WPARAM wParam, LPARAM lParam)
+LRESULT CAutoCompleteDlg::OnFloatStatus(WPARAM wParam, LPARAM /*lParam*/)
 {
 	LRESULT result;
 

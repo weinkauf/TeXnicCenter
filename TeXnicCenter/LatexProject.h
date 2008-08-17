@@ -31,13 +31,9 @@
  * $Id$
  *
  ********************************************************************/
-
-#if !defined(AFX_LATEXPROJECT_H__75A37CC1_20BE_11D3_929E_D32D9B17C664__INCLUDED_)
-#define AFX_LATEXPROJECT_H__75A37CC1_20BE_11D3_929E_D32D9B17C664__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+
+#include <map>
 
 #include "OutputInfo.h"
 #include "StructureParser.h"
@@ -49,11 +45,15 @@
 #include "Project.h"
 #include "IProject.h"
 #include "WorkspacePane.h"
+#include "CodeView.h"
 
 class CLaTeXProject :
 			public CProject,
 			public CStructureParserHandler
 {
+	typedef std::map<CString,BookmarkContainerType> FileBookmarksContainerType;
+	FileBookmarksContainerType bookmarks_;
+
 	CBaseTabbedPane* tabbed_pane_;
 
 protected:
@@ -248,6 +248,12 @@ public:
 	/** @see CStructureParserHandler::OnParsingFinished */
 	virtual void OnParsingFinished(BOOL bSuccess);
 
+	void AddBookmark(const CString& filename, const CodeBookmark& b);
+	void RemoveBookmark(const CString& filename, const CodeBookmark& b);
+	void RemoveAllBookmarks(const CString& filename);
+
+	bool GetBookmarks(const CString& filename, BookmarkContainerType& bookmarks) const;
+
 // properties
 protected:
 	/** path of the main latex-file of the project */
@@ -321,8 +327,3 @@ public:
 	END_INTERFACE_PART(Project)
 	int GetInitialNavigatorTabIndex() const;
 };
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
-
-#endif // AFX_LATEXPROJECT_H__75A37CC1_20BE_11D3_929E_D32D9B17C664__INCLUDED_

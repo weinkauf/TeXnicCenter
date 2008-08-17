@@ -34,6 +34,9 @@
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
+
+#include <sstream>
+
 #include "MainFrm.h"
 #include "LatexProject.h"
 #include "Configuration.h"
@@ -44,23 +47,11 @@
 #include "ItemPropertyDialog.h"
 #include "ChildFrm.h"
 #include "ProjectNewDialog.h"
+#include "Speller.h"
+#include "SpellCheckDlg.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-
-// standard beep
-#define BEEP						MessageBeep( MB_OK )
-
-//-------------------------------------------------------------------
-// class CLaTeXProject
-//-------------------------------------------------------------------
 
 IMPLEMENT_DYNCREATE(CLaTeXProject,CProject)
-
 
 BEGIN_INTERFACE_MAP(CLaTeXProject,CProject)
 INTERFACE_PART(CLaTeXProject,Interfaces::IID_IProject,Project)
@@ -72,49 +63,26 @@ CLaTeXProject::CLaTeXProject()
 		m_bCanRunLatex(TRUE),
 		m_pStructureParser(NULL),
 		m_nCurrentStructureItem(-1),
-//m_pwndStructureView(NULL),
-//m_pwndEnvironmentView(NULL),
-//m_pwndFileView(NULL),
-//m_pwndBibView(NULL),
 		m_bUseBibTex(FALSE),
 		m_bUseMakeIndex(FALSE),
-		m_nInitialNavigatorTab(0),
-		m_strProjectLanguage(""),
-		m_strProjectDialect("")
+		m_nInitialNavigatorTab(0)
 		, tabbed_pane_(0)
 {
 	// initialization
 	// Initialize the control bars and main frame pointer members
 	m_pwndMainFrame = static_cast<CMainFrame*>(AfxGetMainWnd());
 	ASSERT(m_pwndMainFrame);
-	//m_pwndWorkspaceBar = m_pwndMainFrame->GetWorkspaceBar();
-	//ASSERT(m_pwndWorkspaceBar);
-	//m_pwndOutputBar = m_pwndMainFrame->GetOutputBar();
-	//ASSERT(m_pwndOutputBar);
 
 	m_pStructureParser = new CStructureParser(this,m_pwndMainFrame->GetOutputDoc() /*, this */);
 	ASSERT(m_pStructureParser);
 
 	if (!m_pStructureParser)
 		AfxThrowMemoryException();
-
-
 }
 
 CLaTeXProject::~CLaTeXProject()
 {
-	if (m_pStructureParser)
-		delete m_pStructureParser;
-
-	//// check for undeleted views and clean up here
-	//if (m_pwndStructureView)
-	//    delete m_pwndStructureView;
-	//if (m_pwndEnvironmentView)
-	//    delete m_pwndEnvironmentView;
-	//if (m_pwndFileView)
-	//    delete m_pwndFileView;
-	//if (m_pwndBibView)
-	//    delete m_pwndBibView;
+	delete m_pStructureParser;
 }
 
 BOOL CLaTeXProject::OnNewProject()
@@ -130,6 +98,7 @@ BOOL CLaTeXProject::OnNewProject()
 
 	dlg.AddTemplateFilter(_T("*.tex"),RUNTIME_CLASS(CFileBasedProjectTemplateItem));
 	dlg.AddTemplateFilter(_T("*.dll"),RUNTIME_CLASS(CWizardBasedProjectTemplateItem));
+
 	for (int i = 0; i < CConfiguration::GetInstance()->m_astrProjectTemplatePaths.GetSize(); i++)
 		dlg.AddSearchDir(CConfiguration::GetInstance()->m_astrProjectTemplatePaths[i]);
 
@@ -323,10 +292,10 @@ void CLaTeXProject::OnCloseProject()
 
 	if (Speller* s = theApp.GetSpeller())
 	{
-		if (s->is_ignored_modified())
+		if (s->IsIgnoredModified())
 		{
 			const CString sIgnoredPath = GetIgnoredWordsFileName();
-			s->save_ignored_words(sIgnoredPath);
+			s->SaveIgnoredWords(sIgnoredPath);
 		}
 	}
 
@@ -428,8 +397,10 @@ void CLaTeXProject::Dump(CDumpContext& dc) const
 #define CURRENTFORMATVERSION				4
 #define	FORMATTYPE							_T("TeXnicCenterProjectInformation")
 
-BOOL CLaTeXProject::Serialize(CIniFile &ini,BOOL bWrite)
+BOOL CLaTeXProject::Serialize(CIniFile &ini, BOOL bWrite)
 {
+	LPCTSTR const BookmarksKey = _T("Bookmarks");
+
 	if (bWrite)
 	{
 		// setting format information
@@ -444,6 +415,21 @@ BOOL CLaTeXProject::Serialize(CIniFile &ini,BOOL bWrite)
 
 		ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PLANGUAGE,m_strProjectLanguage);
 		ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PDIALECT,m_strProjectDialect);
+
+		typedef FileBookmarksContainerType::iterator I;
+		std::basic_ostringstream<TCHAR> oss;
+
+		for (I it = bookmarks_.begin(); it != bookmarks_.end(); ++it) 
+		{
+			oss.str(_T(""));
+			oss.clear();
+
+			const BookmarkContainerType& bookmarks = it->second;
+			std::copy(bookmarks.begin(),bookmarks.end(),std::ostream_iterator<CodeBookmark,TCHAR>(oss,_T(" ")));
+
+			ini.SetValue(BookmarksKey,it->first,oss.str().c_str());
+		}
+
 		return TRUE;
 	}
 	else
@@ -471,6 +457,31 @@ BOOL CLaTeXProject::Serialize(CIniFile &ini,BOOL bWrite)
 
 		m_strProjectLanguage = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PLANGUAGE,CConfiguration::GetInstance()->m_strLanguageDefault);
 		m_strProjectDialect = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PDIALECT,CConfiguration::GetInstance()->m_strLanguageDialectDefault);
+
+		typedef std::multimap<CString,CString> ValueContainerType;
+		ValueContainerType values;
+
+		bookmarks_.clear();
+
+		BookmarkContainerType bookmarks;
+
+		if (ini.GetValues(BookmarksKey,values))
+		{
+			std::basic_istringstream<TCHAR> iss;
+			typedef std::istream_iterator<CodeBookmark,TCHAR> iterator_type;
+			typedef ValueContainerType::iterator I;
+
+			for (I it = values.begin(); it != values.end(); ++it)
+			{
+				iss.clear();
+				iss.str(static_cast<LPCTSTR>(it->second)); // Value
+				
+				bookmarks.clear();
+
+				std::copy(iterator_type(iss),iterator_type(),std::back_inserter(bookmarks));
+				bookmarks_.insert(std::make_pair(it->first,bookmarks)); 
+			}
+		}
 
 		if (nVersion > 2)
 		{
@@ -559,22 +570,22 @@ void CLaTeXProject::SerializeSession(CIniFile &ini,BOOL bWrite)
 		CString strKey;
 		const int nFrameCount = ini.GetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_FRAMECOUNT,0);
 		const int nActiveFrame = ini.GetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVEFRAME,-1);
-		CCreateContext cc;
-
-		ZeroMemory(&cc,sizeof(cc));
-		cc.m_pNewViewClass = RUNTIME_CLASS(CLaTeXEdit);
 
 		//Open all stored frames
 		bool bCouldOpenAllFrames(true);
 		CChildFrame* pChildToBeActivated = NULL;
+
 		for (int nFrame = 0; nFrame < nFrameCount; nFrame++)
 		{
 			CChildFrame* pChildFrame = new CChildFrame();
 
 			ASSERT(pChildFrame);
-			if (!pChildFrame) continue;
+
+			if (!pChildFrame) 
+				continue;
 
 			strKey.Format(KEY_FRAMEINFO,nFrame);
+			
 			if (!pChildFrame->Serialize(ini,strKey,bWrite))
 			{
 				bCouldOpenAllFrames = false;
@@ -583,9 +594,7 @@ void CLaTeXProject::SerializeSession(CIniFile &ini,BOOL bWrite)
 			else
 			{
 				if (nActiveFrame == nFrame)
-				{
 					pChildToBeActivated = pChildFrame;
-				}
 			}
 		}
 
@@ -625,7 +634,7 @@ void CLaTeXProject::SetPathName(LPCTSTR lpszPathName)
 		const CString sIgnoredPath = GetIgnoredWordsFileName();
 
 		if (CPathTool::Exists(sIgnoredPath))
-			s->open_ignored_words(sIgnoredPath);
+			s->LoadIgnoredWords(sIgnoredPath);
 	}
 }
 
@@ -792,7 +801,7 @@ void CLaTeXProject::OnProjectParsed()
 void CLaTeXProject::SetCurrentStructureItem(int nIndex)
 {
 	// TODO: The assert fails sometimes due to nIndex being set to -1
-	ASSERT((nIndex == 0) || (nIndex < m_aStructureItems.size())); // invalid index
+	//ASSERT((nIndex == 0) || (nIndex < m_aStructureItems.size())); // invalid index
 	if (nIndex < 0 || nIndex >= m_aStructureItems.size())
 		return;
 
@@ -882,7 +891,8 @@ void CLaTeXProject::OnItemInsertLabel()
 	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size()))
 		return;
 
-	CLaTeXEdit *pView = theApp.GetActiveEditView();
+	LaTeXView *pView = theApp.GetActiveEditView();
+
 	if (!pView)
 		return;
 
@@ -895,7 +905,7 @@ void CLaTeXProject::OnItemInsertPageref()
 	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size()))
 		return;
 
-	CLaTeXEdit *pView = theApp.GetActiveEditView();
+	LaTeXView *pView = theApp.GetActiveEditView();
 	if (!pView)
 		return;
 
@@ -911,7 +921,7 @@ void CLaTeXProject::OnItemInsertRef()
 	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size()))
 		return;
 
-	CLaTeXEdit *pView = theApp.GetActiveEditView();
+	LaTeXView *pView = theApp.GetActiveEditView();
 	if (!pView)
 		return;
 
@@ -937,18 +947,17 @@ void CLaTeXProject::OnItemInsertRef()
 
 void CLaTeXProject::OnSpellProject()
 {
-	Speller *pSpell = theApp.GetSpeller();
-
-	// Setup path for ignored words
-	const CString sIgnoredPath = GetIgnoredWordsFileName();
+	Speller* pSpell = theApp.GetSpeller();
 
 	if (pSpell == NULL)
 		return;
 
-	CCrystalResources cr;
-	CSpellCheckDlg dlg(NULL,NULL);
-	dlg.m_bDoneMessage = false;
-	dlg.m_bSelection = false;
+	// Setup path for ignored words
+	const CString sIgnoredPath = GetIgnoredWordsFileName();
+
+	SpellCheckDlg dlg(NULL,NULL);
+	dlg.SetShowDoneMessage(false);
+	dlg.SetCheckSelectionOnly(false);
 
 	// Get own copy of structure items.
 	StructureItemContainer aStructureItems;
@@ -957,21 +966,24 @@ void CLaTeXProject::OnSpellProject()
 	for (int i = 0; i < aStructureItems.size(); ++i)
 	{
 		CStructureItem& si = aStructureItems[i];
+
 		if (si.m_nType == CStructureParser::texFile)
 		{
 			bool bWasOpen = true;
 			CDocument *pDoc = theApp.GetOpenLatexDocument(GetFilePath(si.m_strPath),FALSE);
+
 			if (pDoc == NULL)
 			{
 				pDoc = theApp.OpenLatexDocument(GetFilePath(si.m_strPath),FALSE,-1,FALSE,false);
 				bWasOpen = false;
 			}
+
 			if (pDoc == NULL)
 				// Can't open document, try another one.
 				continue;
 
 			POSITION pos = pDoc->GetFirstViewPosition();
-			CLaTeXEdit* pView = (CLaTeXEdit*)pDoc->GetNextView(pos);
+			LaTeXView* pView = (LaTeXView*)pDoc->GetNextView(pos);
 			ASSERT(pView);
 			if (pView == NULL)
 				// View is NULL??
@@ -980,26 +992,20 @@ void CLaTeXProject::OnSpellProject()
 			dlg.Reset(pView,pSpell);
 
 			// Save selection
-			CPoint ptStart,ptEnd;
-			pView->GetSelection(ptStart,ptEnd);
-			pView->SetShowInteractiveSelection(TRUE);
+			long ptStart = pView->GetCtrl().GetSelectionStart();
+			long ptEnd = pView->GetCtrl().GetSelectionEnd();
+
+			int result = dlg.DoModal();
 
 			// begin ow
-
+			if (theApp.GetSpeller()->IsAddedModified()) {
+			    //TRACE("SC was modified, save ign words to %s...\n", sPath);
+			    theApp.GetSpeller()->SaveIgnoredWords(sIgnoredPath);
+			}
 			// end ow
-			int result = dlg.DoModal();
-			cr.RestorePrevResources();
-
-			//// begin ow
-			//if (theApp.GetSpeller()->is_added_modified()) {
-			//    //TRACE("SC was modified, save ign words to %s...\n", sPath);
-			//    theApp.GetSpeller()->save_ignored_words(sIgnoredPath);
-			//}
-			//// end ow
 
 			// Restore selection
-			pView->SetShowInteractiveSelection(FALSE);
-			pView->SetSelection(ptStart,ptEnd);
+			pView->GetCtrl().SetSel(ptStart,ptEnd);
 
 			if (!bWasOpen)
 				pView->SendMessage(WM_COMMAND,ID_FILE_CLOSE);
@@ -1108,6 +1114,70 @@ const CString CLaTeXProject::GetIgnoredWordsFileName() const
 	    _T("\\ignored") +
 	    GetTitle() +
 	    CConfiguration::GetInstance()->m_strGuiLanguage + _T(".sc");
+}
+
+void CLaTeXProject::AddBookmark( const CString& filename, const CodeBookmark& b )
+{
+	SetModifiedFlag();
+
+	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+
+	BookmarkContainerType& bms = bookmarks_[name];
+	BookmarkContainerType::iterator it = std::find(bms.begin(),bms.end(),b);
+
+	if (it != bms.end())
+		bms.erase(it);
+
+	bms.push_back(b);
+}
+
+void CLaTeXProject::RemoveBookmark( const CString& filename, const CodeBookmark& b )
+{
+	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+	FileBookmarksContainerType::iterator it = bookmarks_.find(name);
+
+	if (it != bookmarks_.end()) 
+	{
+		BookmarkContainerType::iterator itb = std::find(it->second.begin(),it->second.end(),b);
+		
+		if (itb != it->second.end())
+		{
+			SetModifiedFlag();
+			it->second.erase(itb);
+		}
+	}
+}
+
+bool CLaTeXProject::GetBookmarks( const CString& filename, BookmarkContainerType& bookmarks ) const
+{
+	bool result = false;
+	bookmarks.clear();
+
+	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+
+	FileBookmarksContainerType::const_iterator it = bookmarks_.find(name);
+
+	if (it != bookmarks_.end())
+	{
+		bookmarks = it->second;
+		result = true;
+	}
+
+	return result;
+}
+
+void CLaTeXProject::RemoveAllBookmarks( const CString& filename )
+{
+	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+	FileBookmarksContainerType::iterator it = bookmarks_.find(name);
+
+	if (it != bookmarks_.end()) 
+	{
+		if (!it->second.empty()) {
+			SetModifiedFlag();
+			it->second.clear();
+		}
+	}
 }
 
 //void CLaTeXProject::SetStructureItems( const StructureItemContainer& val )

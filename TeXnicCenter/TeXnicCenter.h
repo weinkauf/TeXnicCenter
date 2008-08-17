@@ -31,34 +31,28 @@
  * $Id$
  *
  ********************************************************************/
-
-#if !defined(AFX_TEXNICCENTER_H__447410E1_1058_11D3_929E_D75EECD5B417__INCLUDED_)
-#define AFX_TEXNICCENTER_H__447410E1_1058_11D3_929E_D75EECD5B417__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #ifndef __AFXWIN_H__
 #error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"       // Hauptsymbole
+#include "resource.h"
+
 #include "LatexProject.h"
-#include "LatexEdit.h"
 #include "MDIFrameManager.h"
 #include "ProjectSupportingWinApp.h"
 #include "ProjectTemplate.h"
 #include "StyleFileContainer.h"
+#include "SpellerBackgroundThread.h"
 
 extern class CTeXnicCenterApp theApp;
 
 class CTeXnicCenterApp :
 			public CProjectSupportingWinApp,
-			public CSpellerSource
+			public SpellerSource
 {
 	UINT m_nApplicationLook;
-
 	mutable CString module_name_;
 
 public:
@@ -67,9 +61,8 @@ public:
 
 	const CString& GetModuleFileName() const;
 
-#if 0
 	HINSTANCE scintilla_;
-#endif // 0
+
 
 public:
 	CTeXnicCenterApp();
@@ -142,10 +135,10 @@ public:
 	CMultiDocTemplate *GetLatexDocTemplate();
 
 	/**
-	Returns a pointer to the active CLaTeXEdit-object or NULL, if there is
+	Returns a pointer to the active LaTeXView-object or NULL, if there is
 	none.
 	 */
-	CLaTeXEdit *GetActiveEditView();
+	LaTeXView* GetActiveEditView();
 
 	/** Returns a pointer to the LaTeX-document with the specified path and read-only
 	attribute. If the document is not open, it is NOT opened and NULL is returned.
@@ -177,7 +170,7 @@ public:
 	        A pointer to the specified document or NULL, if no such document
 	        exists.
 	 */
-	CDocument* GetLatexDocument(LPCTSTR lpszFileName,BOOL bReadOnly = FALSE);
+	CDocument* GetLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly = FALSE);
 
 	/** Opens the specified file using OpenLatexDocument.
 
@@ -301,7 +294,7 @@ public:
 	        Pointer to background thread.
 	        else NULL.
 	 */
-	CWinThread* GetBackgroundThread();
+	SpellerBackgroundThread* GetSpellerThread();
 
 // overrides
 public:
@@ -393,16 +386,11 @@ protected:
 	 */
 	HINSTANCE m_hTxcResources;
 
-	/**
-	Handle to localized version of CrystalEdit-resource-DLL.
-	 */
-	HINSTANCE m_hCrystalEditResources;
-
 	/** Spell checker */
 	Speller *m_pSpell;
 
 	/** Background thread that processes spelling and other tasks */
-	CWinThread *m_pBackgroundThread;
+	SpellerBackgroundThread *m_pBackgroundThread;
 
 	/** Critical section to protect lazy resource initialization */
 	CRITICAL_SECTION m_csLazy;
@@ -432,10 +420,3 @@ CMultiDocTemplate *CTeXnicCenterApp::GetLatexDocTemplate()
 {
 	return m_pLatexDocTemplate;
 }
-
-/////////////////////////////////////////////////////////////////////////////
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
-
-#endif // !defined(AFX_TEXNICCENTER_H__447410E1_1058_11D3_929E_D75EECD5B417__INCLUDED_)

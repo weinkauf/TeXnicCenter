@@ -32,6 +32,14 @@
  *
  ********************************************************************/
 
+enum EndOfLineMode
+{
+	AutomaticEOLMode = -1,
+	DOSStyleEOLMode = 0,
+	UnixStyleEOLMode = 1,
+	MacStyleEOLMode = 2
+};
+
 // Global Functions
 CString AfxLoadString(UINT nID);
 CString AfxFormatString1(UINT nID, LPCTSTR lpszText);

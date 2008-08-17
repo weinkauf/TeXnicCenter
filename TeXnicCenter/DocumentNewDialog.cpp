@@ -34,7 +34,11 @@
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
+
 #include "DocumentNewDialog.h"
+#include "global.h"
+#include "LaTeXDocument.h"
+#include "LaTeXView.h"
 #include "Configuration.h"
 
 #ifdef _DEBUG
@@ -398,13 +402,13 @@ void CDocumentNewDialog::Create()
 	CString strCrlf;
 	switch (m_nFileFormat)
 	{
-		case CRLF_STYLE_DOS:
+		case DOSStyleEOLMode:
 			strCrlf = _T("\r\n");
 			break;
-		case CRLF_STYLE_UNIX:
+		case UnixStyleEOLMode:
 			strCrlf = _T("\n\r");
 			break;
-		case CRLF_STYLE_MAC:
+		case MacStyleEOLMode:
 			strCrlf = _T("\n");
 			break;
 
@@ -425,11 +429,12 @@ void CDocumentNewDialog::Create()
 				if (!pTemplate)
 					throw FALSE;
 
-				CLaTeXDoc *pDoc = dynamic_cast<CLaTeXDoc*>(pTemplate->OpenDocumentFile(NULL));
+				LaTeXDocument *pDoc = dynamic_cast<LaTeXDocument*>(pTemplate->OpenDocumentFile(NULL));
+
 				if (!pDoc)
 					throw FALSE;
 
-				pDoc->LoadBuffer(strTempFilePath);
+				pDoc->LoadFile(strTempFilePath);
 				CTemplateDialog::EndDialog(IDOK);
 
 				if (CConfiguration::GetInstance()->m_bSaveNewDocuments)

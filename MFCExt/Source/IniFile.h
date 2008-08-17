@@ -34,6 +34,8 @@
 
 #include <afxtempl.h>
 
+#include <map>
+
 /**
 Class for simple INI-file handling.
 
@@ -266,6 +268,8 @@ public:
 	*/
 	bool SetValue(const CString& key, const CString& valuename, double value, bool create = true);
 
+	bool GetValues(const CString& key, std::multimap<CString,CString>& result) const;
+
 // Implementation helpers
 protected:
 	/** 
@@ -286,17 +290,17 @@ protected:
 	struct key
 	{
 		/** list of values in key */
-		CArray<CString, CString> values; 
+		CArray<CString, CString&> values; 
 
 		/** corresponding list of value names */
-		CArray<CString, CString> names;
+		CArray<CString, CString&> names;
 	};
 
 	/** list of keys in ini */
-	CArray<key, key> keys; 
+	CArray<key, key&> keys; 
 
 	/** corresponding list of keynames */
-	CArray<CString, CString> names; 
+	CArray<CString, CString&> names; 
 
 };
 

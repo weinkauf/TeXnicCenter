@@ -32,14 +32,7 @@
  *
  ********************************************************************/
 
-#if !defined(AFX_TEXTFILESAVEDIALOG_H__74DCE581_1EB3_11D4_A221_006097239934__INCLUDED_)
-#define AFX_TEXTFILESAVEDIALOG_H__74DCE581_1EB3_11D4_A221_006097239934__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#include "LatexDoc.h"
 
 /** A File Dialog with a combo box, where the user can choose
 the text format (Unix, Windows, Mac) to save in.
@@ -54,7 +47,7 @@ class CTextFileSaveDialog : public CFileDialogEx
 public:
 	CTextFileSaveDialog(UINT unTitleID = AFX_IDS_SAVEFILE,
 	                    LPCTSTR lpszDefExt = NULL,LPCTSTR lpszFileName = NULL,
-	                    DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_NOREADONLYRETURN,int nFileFormat = CRLF_STYLE_DOS,
+	                    DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_NOREADONLYRETURN,int nFileFormat = DOSStyleEOLMode,
 	                    LPCTSTR lpszFilter = NULL,
 	                    CWnd* pParent = NULL);
 
@@ -95,11 +88,3 @@ protected:
 	/** Title to display */
 	CString m_strTitle;
 };
-
-
-// inlines
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
-
-#endif // AFX_TEXTFILESAVEDIALOG_H__74DCE581_1EB3_11D4_A221_006097239934__INCLUDED_
