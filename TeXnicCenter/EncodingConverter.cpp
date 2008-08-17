@@ -6,6 +6,24 @@
 
 #include "../libiconv/include/iconv.h"
 
+bool GetUTF8CharBytes(unsigned char byte, std::size_t& n)
+{
+	bool result = true;
+
+	if ((byte & 0xf0) == 0xf0)
+		n = 4;
+	else if ((byte & 0xf0) == 0xe0)
+		n = 3;
+	else if ((byte & 0xe0) == 0xc0)
+		n = 2;
+	else if ((byte & 0x80) == 0x00)
+		n = 1;
+	else
+		result = false;
+
+	return result;
+}
+
 namespace {
 	const iconv_t invalid_handle = reinterpret_cast<iconv_t>(-1);
 	const std::size_t ConversionBufferSize = 256;
@@ -68,14 +86,22 @@ namespace {
 
 		static const char* NextChar(const char* p, std::size_t& s)
 		{
-			std::size_t advance = 1;
+			std::size_t advance;
+			const unsigned char byte = static_cast<unsigned char>(*p);
 
-			if ((static_cast<unsigned char>(*p) & 0xc0) == 0xc0)
-				advance = 2;
-			else if ((static_cast<unsigned char>(*p) & 0xe0) == 0xe0)
-				advance = 3;
-			else if ((static_cast<unsigned char>(*p) & 0xf0) == 0xf0)
-				advance = 4;
+			if (!GetUTF8CharBytes(byte,advance)) { // p doesn't point to the beginning of a character
+				int skipped = 0;
+
+				// Skip the bytes that are part of a multi byte sequence
+				for ( ; s && (static_cast<unsigned char>(*p) & 0xc0) == 0x80; ) {
+					++p; --s; ++skipped;
+				}
+
+				if (skipped > 0) // Some bytes skipped, done.
+					advance = 0;
+				else
+					advance = 1; // No bytes skipped, increment to prevent an infinite loop
+			}
 
 			if (advance > s) {
 				if (s >= 1)
