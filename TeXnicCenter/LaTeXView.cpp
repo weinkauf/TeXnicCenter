@@ -491,14 +491,16 @@ void LaTeXView::OnUpdateUI(SCNotification* n)
 
 	int line = GetCtrl().LineFromPosition(pos);
 	long line_start_pos = GetCtrl().PositionFromLine(line);
-	long line_end_pos = GetCtrl().GetLineEndPosition(line);
+	//long line_end_pos = GetCtrl().GetLineEndPosition(line);
 
 	bool comment = false;
 
-	for ( ; line_start_pos < line_end_pos && !comment; 
+	for ( ; line_start_pos < pos && !comment; 
 		line_start_pos = GetCtrl().PositionAfter(line_start_pos))
 		if (static_cast<char>(GetCtrl().GetCharAt(line_start_pos)) == '%')
 			comment = true;
+
+	bool remove_highlight = false;
 
 	// Do brace matching only if the line is not commented
 	if (!comment) {
@@ -521,8 +523,11 @@ void LaTeXView::OnUpdateUI(SCNotification* n)
 				GetCtrl().BraceBadLight(pos);
 		}
 		else
-			GetCtrl().BraceHighlight(-1,-1);
+			remove_highlight = true;
 	}
+
+	if (comment || remove_highlight)
+		GetCtrl().BraceHighlight(0,0);
 }
 
 void LaTeXView::OnModified(SCNotification* n)

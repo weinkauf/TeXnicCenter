@@ -49,6 +49,7 @@ CodeView::CodeView()
 , remove_leading_spaces_(true)
 , suppress_speller_(false)
 , shadow_(this)
+, last_change_pos_(-1)
 {
 }
 
@@ -81,6 +82,8 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_WM_CREATE()
 	ON_COMMAND(ID_EDIT_FIND_INCREMENTAL_FORWARD, &CodeView::OnEditFindIncrementalForward)
 	ON_COMMAND(ID_EDIT_FIND_INCREMENTAL_BACKWARD, &CodeView::OnEditFindIncrementalBackward)
+	ON_COMMAND(ID_EDIT_GOTO_LAST_CHANGE, &CodeView::OnEditGotoLastChange)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_GOTO_LAST_CHANGE, &CodeView::OnUpdateEditGotoLastChange)
 END_MESSAGE_MAP()
 
 
@@ -752,3 +755,19 @@ void CodeView::EnableAutoIndent( bool enable /*= true*/ )
 	shadow_.autoindent_enabled = enable;
 }
 
+void CodeView::OnModified(SCNotification* n)
+{
+	CScintillaView::OnModified(n);
+
+	last_change_pos_ = GetCtrl().GetCurrentPos();
+}
+
+void CodeView::OnEditGotoLastChange()
+{
+	GetCtrl().GotoPos(last_change_pos_);
+}
+
+void CodeView::OnUpdateEditGotoLastChange(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(last_change_pos_ != -1);
+}
