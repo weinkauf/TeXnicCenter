@@ -30,7 +30,7 @@ int DetectScintillaEOLMode(const char* text, std::size_t size)
 
 namespace {
 	namespace BOM {
-		const BYTE utf8[] = {0xEF,0xBB,0xBF};
+		const BYTE utf8[] = {0xef,0xbb,0xbf};
 		const BYTE utf16le[] = {0xff,0xfe};
 		const BYTE utf16be[] = {0xfe,0xff};
 		const BYTE utf32le[] = {0xff,0xfe,0x00,0x00};
@@ -202,7 +202,7 @@ CodeDocument::Encoding CodeDocument::TestForUnicode(const BYTE* data, SIZE_T siz
 		//	  looks like a UTF-16 stream starting with U+FEFF (Byte-order mark)
 
 		bool utf8 = true;
-		int consecutive_bytes = 0;
+		std::size_t consecutive_bytes = 0;
 		bool ascii = size && data[0] < 128;
 		std::size_t i = 0;
 
@@ -213,14 +213,8 @@ CodeDocument::Encoding CodeDocument::TestForUnicode(const BYTE* data, SIZE_T siz
 			if (data[i] == 0xfe || data[i] == 0xff)
 				utf8 = false;
 
-			if (consecutive_bytes == 0) {
-				if ((data[i] & 0xc0) == 0xc0)
-					consecutive_bytes = 2;
-				else if ((data[i] & 0xe0) == 0xe0)
-					consecutive_bytes = 3;
-				else if ((data[i] & 0xf0) == 0xf0)
-					consecutive_bytes = 4;
-			}
+			if (consecutive_bytes == 0)
+				GetUTF8CharBytes(data[i],consecutive_bytes);
 			else if (consecutive_bytes == 0 && data[i] >> 7 & 1 ||
 				consecutive_bytes > 0 && data[i] >> 6 != 2)
 				utf8 = false; // Either MSB is not 0 or MSB of a byte in a 

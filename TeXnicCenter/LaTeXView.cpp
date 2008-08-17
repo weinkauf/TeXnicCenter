@@ -527,7 +527,7 @@ void LaTeXView::OnUpdateUI(SCNotification* n)
 	}
 
 	if (comment || remove_highlight)
-		GetCtrl().BraceHighlight(0,0);
+		GetCtrl().BraceHighlight(-1,-1); // (0,0) leads to display corruption, why?
 }
 
 void LaTeXView::OnModified(SCNotification* n)
