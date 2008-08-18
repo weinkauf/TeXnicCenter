@@ -12,8 +12,7 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
-
+#include "afxres.h"
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -3302,7 +3301,7 @@ END
 
 STRINGTABLE 
 BEGIN
-    AFX_IDS_APP_TITLE       "TeXnicCenter"
+    AFX_IDS_APP_TITLE       "TeXnicCenterNT"
     AFX_IDS_IDLEMESSAGE     "Drücken Sie F1, um Hilfe zu erhalten."
     AFX_IDS_HELPMODEMESSAGE "Wählen Sie das Objekt, zu dem Sie Hilfe wünschen."
 END
@@ -7212,7 +7211,7 @@ END
 
 STRINGTABLE 
 BEGIN
-    AFX_IDS_APP_TITLE       "TeXnicCenter"
+    AFX_IDS_APP_TITLE       "TeXnicCenterNT"
     AFX_IDS_IDLEMESSAGE     "Press F1 to get help"
     AFX_IDS_HELPMODEMESSAGE "Choose the object you would like to get help on"
 END
@@ -8605,8 +8604,7 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 #include "res\\TeXnicCenter.rc2"  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen
 #include "l.deu\\afxres.rc"          // Standardkomponenten
 #include "l.deu\\afxprint.rc"        // Ressourcen für Drucken/Seitenansicht
-#endif
-
+#endif
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 
