@@ -296,9 +296,6 @@ bool CodeDocument::ReadString(LPCTSTR pszFileName, CStringW& string, UINT codepa
 	else
 		result = ::GetLastError();
 
-	//if (result == ERROR_SUCCESS)
-	//	//string = 
-
 	return result == ERROR_SUCCESS;
 }
 
@@ -527,19 +524,12 @@ CodeDocument::Encoding CodeDocument::DetectEncoding(const BYTE* data, SIZE_T& po
 	pos = 0;
 
 	if (size >= 2) {// minimal BOM size
-		// Try to detect Unicode using byte order mark
+		// Try to detect Unicode using the byte order mark
 		if (size >= sizeof(BOM::utf8) && std::memcmp(data,BOM::utf8,sizeof(BOM::utf8)) == 0) {
 			encoding = UTF8;
 			pos += sizeof(BOM::utf8);
-		}
-		else if (std::memcmp(data,BOM::utf16le,sizeof(BOM::utf16le)) == 0) {
-			encoding = UTF16LE;
-			pos += sizeof(BOM::utf16le);
-		}
-		else if (std::memcmp(data,BOM::utf16be,sizeof(BOM::utf16be)) == 0) {
-			encoding = UTF16BE;
-			pos += sizeof(BOM::utf16be);
-		}
+		} 
+		// Try UTF-32LE instead of UTF-16 since BOM's first 2 bytes are for both encodings the same
 		else if (size >= sizeof(BOM::utf32le) && std::memcmp(data,BOM::utf32le,sizeof(BOM::utf32le)) == 0) {
 			encoding = UTF32LE;
 			pos += sizeof(BOM::utf32le);
@@ -548,6 +538,14 @@ CodeDocument::Encoding CodeDocument::DetectEncoding(const BYTE* data, SIZE_T& po
 			encoding = UTF32BE;
 			pos += sizeof(BOM::utf32be);
 		}
+		else if (std::memcmp(data,BOM::utf16le,sizeof(BOM::utf16le)) == 0) {
+			encoding = UTF16LE;
+			pos += sizeof(BOM::utf16le);
+		}
+		else if (std::memcmp(data,BOM::utf16be,sizeof(BOM::utf16be)) == 0) {
+			encoding = UTF16BE;
+			pos += sizeof(BOM::utf16be);
+		}		
 	}
 
 	return encoding;
@@ -664,4 +662,9 @@ void CodeDocument::ToggleBookmark( int line )
 		GetView()->GetCtrl().MarkerAdd(line,Bookmark);
 		OnBookmarkAdded(b);
 	}
+}
+
+void CodeDocument::SetEncoding(Encoding e) 
+{
+	encoding_ = e; 
 }

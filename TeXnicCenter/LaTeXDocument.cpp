@@ -157,6 +157,8 @@ BOOL LaTeXDocument::DoSave(LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/)
 			OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_NOREADONLYRETURN,
 			mode,CString(MAKEINTRESOURCE(STE_FILE_LATEXFILTER)));
 
+		dlg.SetEncoding(GetEncoding());
+
 		//Show the dialog
 		if (dlg.DoModal() != IDOK) {
 			//It was canceled - the PathName is not set.
@@ -170,6 +172,8 @@ BOOL LaTeXDocument::DoSave(LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/)
 
 		// Delay line ending conversion as long as possible
 		// LaTeXView::SaveFile(HANDLE) will perform if it's succeeded so far
+
+		SetEncoding(dlg.GetEncoding());
 
 		save_copy_ = !bReplace;
 		newName = dlg.GetPathName();

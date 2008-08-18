@@ -66,6 +66,7 @@ public:
 	virtual DWORD SaveFile(HANDLE file);	
 	DWORD SaveFile(HANDLE file, const char* text, std::size_t n);
 	Encoding GetEncoding() const;
+	void SetEncoding(Encoding e);
 
 	UINT GetCodePage() const;
 	void SetSpellerThread(SpellerBackgroundThread* t);

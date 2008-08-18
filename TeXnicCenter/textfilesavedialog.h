@@ -34,6 +34,8 @@
 
 #pragma once
 
+#include "CodeDocument.h"
+
 /** A File Dialog with a combo box, where the user can choose
 the text format (Unix, Windows, Mac) to save in.
 
@@ -43,6 +45,7 @@ the text format (Unix, Windows, Mac) to save in.
  */
 class CTextFileSaveDialog : public CFileDialogEx
 {
+	int encoding_index_;
 // construction/destruction
 public:
 	CTextFileSaveDialog(UINT unTitleID = AFX_IDS_SAVEFILE,
@@ -54,10 +57,13 @@ public:
 // operations
 public:
 	int GetFileFormat();
+	void SetEncoding(CodeDocument::Encoding e);
 
-// overridings
-protected:
-//{{AFX_VIRTUAL(CTextFileSaveDialog)
+	CodeDocument::Encoding GetEncoding();
+
+private:
+	void AlignedResizeBelow(CWnd* wndabove, CWnd* wndlabelabove, CWnd* w, CWnd* label);
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV-Unterstützung
 	//}}AFX_VIRTUAL
@@ -80,6 +86,7 @@ protected:
 	};
 	CStatic m_wndFileFormatTitle;
 	CComboBox m_wndFileFormatCombo;
+	CComboBox encoding_;
 	int m_nFileFormat;
 	//}}AFX_DATA
 
