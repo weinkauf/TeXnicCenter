@@ -284,6 +284,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	// set registry key
 	SetRegistryKey(_T("ToolsCenter"));
+	// - construct path to registry section. Do not change this as it is in sync with the MFC functions.
 	m_strRegistryRoot = CString("Software\\") + m_pszRegistryKey;
 	m_strRegistryRoot += _T("\\");
 	m_strRegistryRoot += m_pszAppName;
