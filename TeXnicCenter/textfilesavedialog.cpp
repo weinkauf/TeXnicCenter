@@ -51,12 +51,13 @@ static char THIS_FILE[] = __FILE__;
 
 BEGIN_MESSAGE_MAP(CTextFileSaveDialog, CFileDialog)
 	//{{AFX_MSG_MAP(CTextFileSaveDialog)
-	ON_CBN_SELCHANGE(IDC_SELECT_FILEFORMAT, OnSelchangeFileFormat)
+	ON_CBN_SELCHANGE(IDC_SELECT_FILEFORMAT, &CTextFileSaveDialog::OnSelchangeFileFormat)
+	ON_CBN_SELCHANGE(IDC_SELECT_ENCODING, &CTextFileSaveDialog::OnSelchangeFileFormat)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 LPCTSTR const Format[] = {_T("Windows"),_T("Unix"),_T("Macintosh"),0};
-LPCTSTR const Encoding[] = {_T("ANSI"),_T("Unicode"),_T("Unicode Big Endian"),_T("UTF-8"),0};
+LPCTSTR const Encoding[] = {_T("ANSI"),_T("UTF-8"),_T("UTF-16"),_T("UTF-16 Big Endian"),_T("UTF-32"),_T("UTF-32 Big Endian"),0};
 
 CTextFileSaveDialog::CTextFileSaveDialog(
     UINT unTitle /*= AFX_IDS_SAVEFILE*/,
@@ -65,8 +66,9 @@ CTextFileSaveDialog::CTextFileSaveDialog(
     LPCTSTR lpszFilter /*= NULL*/,
     CWnd* pParent /*= NULL*/)
 
-		: CFileDialogEx(FALSE, lpszDefExt, lpszFileName, dwFlags, lpszFilter, pParent)
-		, m_strTitle((LPCTSTR)unTitle)
+: CFileDialogEx(FALSE, lpszDefExt, lpszFileName, dwFlags, lpszFilter, pParent)
+, m_strTitle((LPCTSTR)unTitle)
+, encoding_index_(0)
 {
 	// Vista-style
 	if (IFileDialogCustomize* fdc = GetIFileDialogCustomize())
@@ -99,7 +101,7 @@ CTextFileSaveDialog::CTextFileSaveDialog(
 
 		fdc->EndVisualGroup();
 
-		fdc->SetSelectedControlItem(IDC_SELECT_ENCODING,static_cast<DWORD>(nFileFormat));
+		fdc->SetSelectedControlItem(IDC_SELECT_ENCODING,static_cast<DWORD>(encoding_index_));
 #pragma endregion		
 
 		fdc->Release();
@@ -119,12 +121,41 @@ void CTextFileSaveDialog::DoDataExchange(CDataExchange* pDX)
 {
 	__super::DoDataExchange(pDX);
 
-	if (!RunTimeHelper::IsVista())
+	if (!m_bVistaStyle)
 	{
 		DDX_Control(pDX, IDC_STATIC_FORMATTITLE, m_wndFileFormatTitle);
 		DDX_Control(pDX, IDC_SELECT_FILEFORMAT, m_wndFileFormatCombo);
+		DDX_Control(pDX, IDC_SELECT_ENCODING, encoding_);
 		DDX_CBIndex(pDX, IDC_SELECT_FILEFORMAT, m_nFileFormat);
+		DDX_CBIndex(pDX, IDC_SELECT_ENCODING, encoding_index_);
 	}
+}
+
+void CTextFileSaveDialog::AlignedResizeBelow(CWnd* wndabove, CWnd* wndlabelabove, CWnd* w, CWnd* label)
+{
+	CRect rect;
+	wndabove->GetWindowRect(&rect);
+	ScreenToClient(&rect);
+
+	CRect recttitle;
+	wndlabelabove->GetWindowRect(&recttitle);
+	ScreenToClient(&recttitle);
+
+	CRect rc;
+	w->GetWindowRect(&rc);
+	ScreenToClient(&rc);
+
+	CRect rclabel;
+	label->GetWindowRect(&rclabel);
+	ScreenToClient(&rclabel);
+
+	rc.left = rect.left - 1;
+	rc.right = rect.right;
+
+	w->MoveWindow(&rc,FALSE);
+
+	rclabel.left = recttitle.left;
+	label->SetWindowPos(0,rclabel.left,rclabel.top,0,0,SWP_NOSIZE|SWP_NOACTIVATE|SWP_NOZORDER);
 }
 
 BOOL CTextFileSaveDialog::OnInitDialog()
@@ -134,40 +165,18 @@ BOOL CTextFileSaveDialog::OnInitDialog()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Modify position, size and tab order of the additional controls
 
-	// Get position and size of file type title (ID retrieved with Spy++)
-	CRect rectFileTypeTitle;
-	GetParent()->GetDlgItem(0x00000441)->GetWindowRect(rectFileTypeTitle);
-	ScreenToClient(rectFileTypeTitle);
+	AlignedResizeBelow(GetParent()->GetDlgItem(0x00000470),GetParent()->GetDlgItem(0x00000441),
+		&m_wndFileFormatCombo,&m_wndFileFormatTitle);
+	AlignedResizeBelow(&m_wndFileFormatCombo,&m_wndFileFormatTitle,&encoding_,
+		GetDlgItem(IDC_STATIC_ENCODING));
 
-	// Get position and size of file type combo (ID retrieved with Spy++)
-	CRect rectFileTypeCombo;
-	GetParent()->GetDlgItem(0x00000470)->GetWindowRect(rectFileTypeCombo);
-	ScreenToClient(rectFileTypeCombo);
-
-	// Get position and size of file format combo
-	CRect rectFileFormatCombo;
-	m_wndFileFormatCombo.GetWindowRect(rectFileFormatCombo);
-	ScreenToClient(rectFileFormatCombo);
-
-	// have to specify -1 here, otherwise box will jump behind the right border -- don't ask me why...
-	rectFileFormatCombo.left = rectFileTypeCombo.left - 1;
-	rectFileFormatCombo.right = rectFileFormatCombo.left + rectFileTypeCombo.Width();
-
-	// Get position and size of file format title
-	CRect rectFileFormatTitle;
-	m_wndFileFormatTitle.GetWindowRect(rectFileFormatTitle);
-	ScreenToClient(rectFileFormatTitle);
-
-	rectFileFormatTitle.left = rectFileTypeTitle.left;
-	rectFileFormatTitle.right = rectFileFormatTitle.right + rectFileTypeTitle.Width();
-
-	// adjust position
-	m_wndFileFormatTitle.MoveWindow(rectFileFormatTitle);
-	m_wndFileFormatCombo.MoveWindow(rectFileFormatCombo);
-
-	// Add data
+	// Add format data
 	for (LPCTSTR const* p = Format; *p; ++p)
 		m_wndFileFormatCombo.AddString(*p);
+
+	// Add encoding data
+	for (LPCTSTR const* p = Encoding; *p; ++p)
+		encoding_.AddString(*p);
 
 	//
 	UpdateData(FALSE);
@@ -196,6 +205,37 @@ int CTextFileSaveDialog::GetFileFormat()
 	}
 	else
 		result = m_nFileFormat;
+
+	return result;
+}
+
+void CTextFileSaveDialog::SetEncoding( CodeDocument::Encoding e )
+{
+	encoding_index_ = e;
+
+	if (m_bVistaStyle) 
+	{
+		IFileDialogCustomize* fdc = GetIFileDialogCustomize();
+		fdc->SetSelectedControlItem(IDC_SELECT_ENCODING,static_cast<DWORD>(encoding_index_));
+		fdc->Release();
+	}
+}
+
+CodeDocument::Encoding CTextFileSaveDialog::GetEncoding()
+{
+	CodeDocument::Encoding result = CodeDocument::ANSI;
+
+	if (IFileDialogCustomize* fdc = GetIFileDialogCustomize())
+	{
+		DWORD id;
+
+		if (SUCCEEDED(fdc->GetSelectedControlItem(IDC_SELECT_ENCODING,&id)))
+			result = static_cast<CodeDocument::Encoding>(id);
+
+		fdc->Release();
+	}
+	else
+		result = static_cast<CodeDocument::Encoding>(encoding_index_);
 
 	return result;
 }
