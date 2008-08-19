@@ -1,3 +1,23 @@
+2008-08-15: Hunspell 1.2.7 release:
+  - FULLSTRIP: new option for affix handling. With FULLSTRIP, affix rules can
+    strip full words, not only one less characters.
+  - COMPOUNDRULE works with all flag types. (COMPOUNDRULE is for pattern
+    matching. For example, en_US dictionary of OpenOffice.org uses COMPOUNDRULE
+    for ordinal number recognition: 1st, 2nd, 11th, 12th, 22nd, 112th, 1000122nd
+    etc.).
+  - optimized suggestions:
+    - modified 1-character distance suggestion algorithms: search a TRY character
+      in all position instead of all TRY characters in a character position
+      (it can give more readable suggestion order, also better suggestions
+      in the first positions, when TRY characters are sorted by frequency.)
+      For example, suggestions for "moze":
+      ooze, doze, Roze, maze, more etc. (Hunspell 1.2.6),
+      maze, more, mote, ooze, mole etc. (Hunspell 1.2.7).
+    - extended compound word checking for better COMPOUNDRULE related
+      suggestions, for example English ordinal numbers: 121323th -> 121323rd
+      (it needs also a th->rd REP definition).
+  - bug fixes
+
 2008-07-15: Hunspell 1.2.6 release:
   - bug fix release (fix affix rule condition checking of sk_SK dictionary,
     iconv support in stemming and morphological analysis of the Hunspell

@@ -18,7 +18,7 @@
 #define HUNSPELL_VERSION VERSION
 #define INPUTLEN 50
 
-#define HUNSPELL_PIPE_HEADING "@(#) International Ispell Version 3.2.06 (but really Hunspell "VERSION")"
+#define HUNSPELL_PIPE_HEADING "@(#) International Ispell Version 3.2.06 (but really Hunspell "VERSION")\n"
 #define HUNSPELL_HEADING "Hunspell "
 
 //for debugging only
@@ -486,29 +486,25 @@ int check(Hunspell ** pMS, int * d, char * token, int * info, char ** root) {
 }
 
 void pipe_interface(Hunspell ** pMS, int format, FILE * fileid) {
-char buf[MAXLNLEN];
-char * buf2;
-wordlist * dicwords = NULL;
-char * token;
-int pos;
-int bad;
-int lineno = 0;
-int terse_mode = 0;
-int d = 0;
+  char buf[MAXLNLEN];
+  char * buf2;
+  wordlist * dicwords = NULL;
+  char * token;
+  int pos;
+  int bad;
+  int lineno = 0;
+  int terse_mode = 0;
+  int d = 0;
 
-TextParser * parser = get_parser(format, NULL, pMS[0]);
+  TextParser * parser = get_parser(format, NULL, pMS[0]);
 
-if ((filter_mode == NORMAL) || (filter_mode == PIPE)) {
-    if (filter_mode == NORMAL) {
-	fprintf(stdout,gettext(HUNSPELL_HEADING));
-    } else {
-	fprintf(stdout,gettext(HUNSPELL_PIPE_HEADING));
-    }
+  if ((filter_mode == NORMAL)) {
+    fprintf(stdout,gettext(HUNSPELL_HEADING));
     fprintf(stdout,HUNSPELL_VERSION);
     if (pMS[0]->get_version()) fprintf(stdout," - %s", pMS[0]->get_version());
     fprintf(stdout,"\n");
     fflush(stdout);
-}
+  }
 
 nextline: while(fgets(buf, MAXLNLEN, fileid)) {
   if (*(buf + strlen(buf) - 1) == '\n') *(buf + strlen(buf) - 1) = '\0';
@@ -527,8 +523,8 @@ nextline: while(fgets(buf, MAXLNLEN, fileid)) {
     case '!': { terse_mode = 1; break; }
     case '+': {
 		delete parser;
-		parser = new LaTeXParser(wordchars);
-    		parser->set_url_checking(checkurl);
+		parser = get_parser(FMT_LATEX, NULL, pMS[0]);
+		parser->set_url_checking(checkurl);
 		break;
 	}
     case '-': {
@@ -1469,6 +1465,8 @@ int main(int argc, char** argv)
 			exit(0);
 		} else if ((strcmp(argv[i],"-a")==0)) {
 			filter_mode = PIPE;
+			fprintf(stdout,gettext(HUNSPELL_PIPE_HEADING));
+			fflush(stdout);
 		} else if ((strcmp(argv[i],"-m")==0)) {
 			filter_mode = ANALYZE;
 		} else if ((strcmp(argv[i],"-s")==0)) {

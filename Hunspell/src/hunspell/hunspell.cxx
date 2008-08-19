@@ -655,18 +655,16 @@ struct hentry * Hunspell::checkword(const char * w, int * info, char ** root)
         }
      // try check compound word
      } else if (pAMgr->get_compound()) {
-          he = pAMgr->compound_check(word, len, 
-                                  0,0,100,0,NULL,0,NULL,NULL,0);
+          he = pAMgr->compound_check(word, len, 0, 0, 100, 0, NULL, 0, 0);
           // LANG_hu section: `moving rule' with last dash
-          if ((!he) && (langnum == LANG_hu) && (word[len-1]=='-')) {
+          if ((!he) && (langnum == LANG_hu) && (word[len-1] == '-')) {
              char * dup = mystrdup(word);
              if (!dup) return NULL;
              dup[len-1] = '\0';
-             he = pAMgr->compound_check(dup, len-1, 
-                                  -5,0,100,0,NULL,1,NULL,NULL,0);
+             he = pAMgr->compound_check(dup, len-1, -5, 0, 100, 0, NULL, 1, 0);
              free(dup);
           }
-          // end of LANG speficic region          
+          // end of LANG speficic region 
           if (he) {
                 if (root) {
                     *root = mystrdup(&(he->word));
@@ -1257,7 +1255,7 @@ int Hunspell::mkinitsmall2(char * p, w_char * u, int nc)
 
 int Hunspell::add(const char * word)
 {
-    if (pHMgr[0]) return (pHMgr[0])->add(word, NULL);
+    if (pHMgr[0]) return (pHMgr[0])->add(word);
     return 0;
 }
 
@@ -1286,8 +1284,8 @@ struct cs_info * Hunspell::get_csconv()
 void Hunspell::cat_result(char * result, char * st)
 {
     if (st) {
-        if (*result) strcat(result, "\n");
-        strcat(result, st);
+        if (*result) mystrcat(result, "\n", MAXLNLEN);
+        mystrcat(result, st, MAXLNLEN);
         free(st);
     }
 }
@@ -1296,17 +1294,20 @@ int Hunspell::analyze(char*** slst, const char * word)
 {
   char cw[MAXWORDUTF8LEN];
   char wspace[MAXWORDUTF8LEN];
+  w_char unicw[MAXWORDLEN];
+  int wl2 = 0;
   *slst = NULL;
   if (! pSMgr || maxdic == 0) return 0;
-  int wl = strlen(word);
+  int nc = strlen(word);
   if (utf8) {
-    if (wl >= MAXWORDUTF8LEN) return 0;
+    if (nc >= MAXWORDUTF8LEN) return 0;
   } else {
-    if (wl >= MAXWORDLEN) return 0;
+    if (nc >= MAXWORDLEN) return 0;
   }
   int captype = 0;
   int abbv = 0;
-  wl = cleanword(cw, word, &captype, &abbv);
+  int wl = cleanword2(cw, word, unicw, &nc, &captype, &abbv);
+
   if (wl == 0) {
       if (abbv) {
           for (wl = 0; wl < abbv; wl++) cw[wl] = '.';
@@ -1340,14 +1341,14 @@ int Hunspell::analyze(char*** slst, const char * word)
 
   if ((n == wl) && (n3 > 0) && (n - n3 > 3)) return 0;
   if ((n == wl) || ((n>0) && ((cw[n]=='%') || (cw[n]=='\xB0')) && checkword(cw+n, NULL, NULL))) {
-        strcat(result, cw);
+        mystrcat(result, cw, MAXLNLEN);
         result[n - 1] = '\0';
         if (n == wl) cat_result(result, pSMgr->suggest_morph(cw + n - 1));
         else {
                 char sign = cw[n];
                 cw[n] = '\0';
                 cat_result(result, pSMgr->suggest_morph(cw + n - 1));
-                strcat(result, "+"); // XXX SPEC. MORPHCODE
+                mystrcat(result, "+", MAXLNLEN); // XXX SPEC. MORPHCODE
                 cw[n] = sign;
                 cat_result(result, pSMgr->suggest_morph(cw + n));
         }
@@ -1357,6 +1358,8 @@ int Hunspell::analyze(char*** slst, const char * word)
   // END OF LANG_hu section
   
   switch(captype) {
+     case HUHCAP:
+     case HUHINITCAP:
      case NOCAP:  { 
                     cat_result(result, pSMgr->suggest_morph(cw));
                     if (abbv) {
@@ -1368,46 +1371,48 @@ int Hunspell::analyze(char*** slst, const char * word)
                     break;
                 }
      case INITCAP: { 
+                     wl = mkallsmall2(cw, unicw, nc);
                      memcpy(wspace,cw,(wl+1));
-                     mkallsmall(wspace);
+                     wl2 = mkinitcap2(cw, unicw, nc);
                      cat_result(result, pSMgr->suggest_morph(wspace));
+                     cat_result(result, pSMgr->suggest_morph(cw));
+                     if (abbv) {
+                         *(wspace+wl) = '.';
+                         *(wspace+wl+1) = '\0';
+                         cat_result(result, pSMgr->suggest_morph(wspace));
+
+                         memcpy(wspace, cw, wl2);
+                         *(wspace+wl2) = '.';
+                         *(wspace+wl2+1) = '\0';
+
+                         cat_result(result, pSMgr->suggest_morph(wspace));
+                     }
+                     break;
+                   }
+     case ALLCAP: { 
                      cat_result(result, pSMgr->suggest_morph(cw));
                      if (abbv) {
                          memcpy(wspace,cw,wl);
                          *(wspace+wl) = '.';
                          *(wspace+wl+1) = '\0';
-                         mkallsmall(wspace);
-                         cat_result(result, pSMgr->suggest_morph(wspace));
-                         mkinitcap(wspace);
-                         cat_result(result, pSMgr->suggest_morph(wspace));
+                         cat_result(result, pSMgr->suggest_morph(cw));
                      }
-                     break;
-                   }
-     case HUHCAP: { 
+                     wl = mkallsmall2(cw, unicw, nc);
+                     memcpy(wspace,cw,(wl+1));
+                     wl2 = mkinitcap2(cw, unicw, nc);
+
+                     cat_result(result, pSMgr->suggest_morph(wspace));
                      cat_result(result, pSMgr->suggest_morph(cw));
-#if 0
-                     memcpy(wspace,cw,(wl+1));
-                     mkallsmall(wspace);
-                     cat_result(result, pSMgr->suggest_morph(wspace));
-#endif
-                     break;
-                 }
-     case ALLCAP: { 
-                     memcpy(wspace,cw,(wl+1));
-                     cat_result(result, pSMgr->suggest_morph(wspace));
-                     mkallsmall(wspace);
-                     cat_result(result, pSMgr->suggest_morph(wspace));
-                     mkinitcap(wspace);
-                     cat_result(result, pSMgr->suggest_morph(wspace));
                      if (abbv) {
-                        memcpy(wspace,cw,(wl+1));
-                        *(wspace+wl) = '.';
-                        *(wspace+wl+1) = '\0';
-                        cat_result(result, pSMgr->suggest_morph(wspace));
-                        mkallsmall(wspace);
-                        cat_result(result, pSMgr->suggest_morph(wspace));
-                        mkinitcap(wspace);
-                        cat_result(result, pSMgr->suggest_morph(wspace));
+                         *(wspace+wl) = '.';
+                         *(wspace+wl+1) = '\0';
+                         cat_result(result, pSMgr->suggest_morph(wspace));
+
+                         memcpy(wspace, cw, wl2);
+                         *(wspace+wl2) = '.';
+                         *(wspace+wl2+1) = '\0';
+
+                         cat_result(result, pSMgr->suggest_morph(wspace));
                      }
                      break;
                    }
@@ -1436,13 +1441,13 @@ int Hunspell::analyze(char*** slst, const char * word)
         if (spell(cw) && (spell("-e"))) {
                         st = pSMgr->suggest_morph(cw);
                         if (st) {
-                                strcat(result, st);
+                                mystrcat(result, st, MAXLNLEN);
                                 free(st);
                         }
-                        strcat(result,"+"); // XXX spec. separator in MORPHCODE
+                        mystrcat(result,"+", MAXLNLEN); // XXX spec. separator in MORPHCODE
                         st = pSMgr->suggest_morph("-e");
                         if (st) {
-                                strcat(result, st);
+                                mystrcat(result, st, MAXLNLEN);
                                 free(st);
                         }
                         return line_tok(result, slst, MSEP_REC);
@@ -1459,13 +1464,13 @@ int Hunspell::analyze(char*** slst, const char * word)
                 ((dash[1] > '0') && (dash[1] < '9')))) {
                             st = pSMgr->suggest_morph(cw);
                             if (st) {
-                                strcat(result, st);
+                                mystrcat(result, st, MAXLNLEN);
                                     free(st);
-                                strcat(result,"+"); // XXX spec. separator in MORPHCODE
+                                mystrcat(result,"+", MAXLNLEN); // XXX spec. separator in MORPHCODE
                             }
                             st = pSMgr->suggest_morph(dash+1);
                             if (st) {
-                                    strcat(result, st);
+                                    mystrcat(result, st, MAXLNLEN);
                                     free(st);
                             }
                             return line_tok(result, slst, MSEP_REC);
@@ -1487,11 +1492,11 @@ int Hunspell::analyze(char*** slst, const char * word)
          // 56-hoz, 6-hoz
          for(; n >= 1; n--) {
             if ((*(dash - n) >= '0') && (*(dash - n) <= '9') && checkword(dash - n, NULL, NULL)) {
-                    strcat(result, cw);
+                    mystrcat(result, cw, MAXLNLEN);
                     result[dash - cw - n] = '\0';
                         st = pSMgr->suggest_morph(dash - n);
                         if (st) {
-                        strcat(result, st);
+                        mystrcat(result, st, MAXLNLEN);
                                 free(st);
                         }
                         return line_tok(result, slst, MSEP_REC);
@@ -1698,7 +1703,7 @@ char * Hunspell::morph_with_correction(const char * word)
      case NOCAP:   { 
                      st = pSMgr->suggest_morph_for_spelling_error(cw);
                      if (st) {
-                        strcat(result, st);
+                        mystrcat(result, st, MAXLNLEN);
                         free(st);
                      }
                      if (abbv) {
@@ -1707,8 +1712,8 @@ char * Hunspell::morph_with_correction(const char * word)
                          *(wspace+wl+1) = '\0';
                          st = pSMgr->suggest_morph_for_spelling_error(wspace);
                          if (st) {
-                            if (*result) strcat(result, "\n");
-                            strcat(result, st);
+                            if (*result) mystrcat(result, "\n", MAXLNLEN);
+                            mystrcat(result, st, MAXLNLEN);
                             free(st);
                                                  }
                      }
@@ -1719,13 +1724,13 @@ char * Hunspell::morph_with_correction(const char * word)
                      mkallsmall(wspace);
                      st = pSMgr->suggest_morph_for_spelling_error(wspace);
                      if (st) {
-                        strcat(result, st);
+                        mystrcat(result, st, MAXLNLEN);
                         free(st);
                      }                                   
                      st = pSMgr->suggest_morph_for_spelling_error(cw);
                      if (st) {
-                        if (*result) strcat(result, "\n");
-                        strcat(result, st);
+                        if (*result) mystrcat(result, "\n", MAXLNLEN);
+                        mystrcat(result, st, MAXLNLEN);
                         free(st);
                      }
                      if (abbv) {
@@ -1735,15 +1740,15 @@ char * Hunspell::morph_with_correction(const char * word)
                          mkallsmall(wspace);
                          st = pSMgr->suggest_morph_for_spelling_error(wspace);
                          if (st) {
-                            if (*result) strcat(result, "\n");
-                            strcat(result, st);
+                            if (*result) mystrcat(result, "\n", MAXLNLEN);
+                            mystrcat(result, st, MAXLNLEN);
                             free(st);
                          }
                          mkinitcap(wspace);
                          st = pSMgr->suggest_morph_for_spelling_error(wspace);
                          if (st) {
-                            if (*result) strcat(result, "\n");
-                            strcat(result, st);
+                            if (*result) mystrcat(result, "\n", MAXLNLEN);
+                            mystrcat(result, st, MAXLNLEN);
                             free(st);
                          }
                      }
@@ -1752,15 +1757,15 @@ char * Hunspell::morph_with_correction(const char * word)
      case HUHCAP: { 
                      st = pSMgr->suggest_morph_for_spelling_error(cw);
                      if (st) {
-                        strcat(result, st);
+                        mystrcat(result, st, MAXLNLEN);
                         free(st);
                      }
                      memcpy(wspace,cw,(wl+1));
                      mkallsmall(wspace);
                      st = pSMgr->suggest_morph_for_spelling_error(wspace);
                      if (st) {
-                        if (*result) strcat(result, "\n");
-                        strcat(result, st);
+                        if (*result) mystrcat(result, "\n", MAXLNLEN);
+                        mystrcat(result, st, MAXLNLEN);
                         free(st);
                      }               
                      break;
@@ -1769,45 +1774,45 @@ char * Hunspell::morph_with_correction(const char * word)
                      memcpy(wspace,cw,(wl+1));
                      st = pSMgr->suggest_morph_for_spelling_error(wspace);
                      if (st) {
-                        strcat(result, st);
+                        mystrcat(result, st, MAXLNLEN);
                         free(st);
                      }               
                      mkallsmall(wspace);
                      st = pSMgr->suggest_morph_for_spelling_error(wspace);
                      if (st) {
-                        if (*result) strcat(result, "\n");
-                        strcat(result, st);
+                        if (*result) mystrcat(result, "\n", MAXLNLEN);
+                        mystrcat(result, st, MAXLNLEN);
                         free(st);
                      }
                      mkinitcap(wspace);
                      st = pSMgr->suggest_morph_for_spelling_error(wspace);
                      if (st) {
-                        if (*result) strcat(result, "\n");
-                        strcat(result, st);
+                        if (*result) mystrcat(result, "\n", MAXLNLEN);
+                        mystrcat(result, st, MAXLNLEN);
                         free(st);
                      }
                      if (abbv) {
                         memcpy(wspace,cw,(wl+1));
                         *(wspace+wl) = '.';
                         *(wspace+wl+1) = '\0';
-                        if (*result) strcat(result, "\n");
+                        if (*result) mystrcat(result, "\n", MAXLNLEN);
                         st = pSMgr->suggest_morph_for_spelling_error(wspace);
                         if (st) {
-                            strcat(result, st);
+                            mystrcat(result, st, MAXLNLEN);
                             free(st);
                         }                    
                         mkallsmall(wspace);
                         st = pSMgr->suggest_morph_for_spelling_error(wspace);
                         if (st) {
-                          if (*result) strcat(result, "\n");
-                          strcat(result, st);
+                          if (*result) mystrcat(result, "\n", MAXLNLEN);
+                          mystrcat(result, st, MAXLNLEN);
                           free(st);
                         }
                         mkinitcap(wspace);
                         st = pSMgr->suggest_morph_for_spelling_error(wspace);
                         if (st) {
-                          if (*result) strcat(result, "\n");
-                          strcat(result, st);
+                          if (*result) mystrcat(result, "\n", MAXLNLEN);
+                          mystrcat(result, st, MAXLNLEN);
                           free(st);
                         }
                      }

@@ -33,6 +33,7 @@
 #define CG_IDS_TIPOFTHEDAYMENU          105
 #define CG_IDS_DIDYOUKNOW               106
 #define IDD_OUTPUTWIZARD_WELCOME        106
+#define IDB_ANNOTATION                  106
 #define CG_IDS_FILE_ABSENT              107
 #define IDD_OPTIONS_PATHS               107
 #define CG_IDS_FILE_CORRUPT             108
@@ -315,6 +316,7 @@
 #define IDC_CURSOR1                     336
 #define IDC_REVERSE_INCREMENTAL_SEARCH  336
 #define STE_GREP_FAILED                 337
+#define ANN                             337
 #define STE_GREP_CANCELED               338
 #define STE_GREP_HIT                    339
 #define STE_GREP_FINISHEDNOHIT          340
@@ -1452,9 +1454,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        337
+#define _APS_NEXT_RESOURCE_VALUE        338
 #define _APS_NEXT_COMMAND_VALUE         38565
-#define _APS_NEXT_CONTROL_VALUE         1364
+#define _APS_NEXT_CONTROL_VALUE         1365
 #define _APS_NEXT_SYMED_VALUE           190
 #endif
 #endif

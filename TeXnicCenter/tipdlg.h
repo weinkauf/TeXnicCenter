@@ -43,6 +43,8 @@
  */
 class CTipDlg : public CDialog
 {
+	CFont title_font_;
+	COLORREF title_color_;
 // Construction
 public:
 	CTipDlg(CWnd* pParent = NULL); // standard constructor
@@ -69,16 +71,11 @@ public:
 	virtual int DoModal();
 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CTipDlg)
+
 	afx_msg void OnNextTip();
 	afx_msg HBRUSH OnCtlColor(CDC* pDC,CWnd* pWnd,UINT nCtlColor);
 	virtual void OnOK();
 	virtual BOOL OnInitDialog();
-	afx_msg void OnPaint();
-	//}}AFX_MSG
-
-	void DoPaint(CDC *pdc,BOOL updatetext);
 
 	DECLARE_MESSAGE_MAP()
 
