@@ -23,6 +23,7 @@
 #define STE_LANGUAGE_FRENCH             36
 #define STE_CUSTOM                      37
 #define IDS_ENCODING                    38
+#define IDS_ENCODING_WITH_BOM           39
 #define IDS_SCINTILLA_DEFAULT_PRINT_FOOTER 40
 #define IDS_SCINTILLA_DEFAULT_PRINT_HEADER 41
 #define IDD_ABOUTBOX                    100

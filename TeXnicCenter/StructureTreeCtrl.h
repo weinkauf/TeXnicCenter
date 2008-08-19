@@ -26,12 +26,7 @@
  *
  *********************************************************************/
 
-#if !defined(AFX_STRUCTUREVIEW_H__0EE022A0_20D1_11D3_929E_DA6C20A3421F__INCLUDED_)
-#define AFX_STRUCTUREVIEW_H__0EE022A0_20D1_11D3_929E_DA6C20A3421F__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include "NavigatorView.h"
 
@@ -40,37 +35,11 @@ class StructureTreeCtrl :
 {
 	DECLARE_DYNCREATE(StructureTreeCtrl)
 
-// construction/destruction
 public:
 	StructureTreeCtrl();
 	virtual ~StructureTreeCtrl();
 
-// operations
-public:
-
-// overridings
 protected:
 	virtual void OnUpdate(CProjectView* pSender,LPARAM lHint,LPVOID pHint);
-//{{AFX_VIRTUAL(StructureTreeCtrl)
-protected:
-	//}}AFX_VIRTUAL
-
-// implementation
-protected:
-
-// message handlers
-protected:
-	//{{AFX_MSG(StructureTreeCtrl)
-	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
-
-// attributes
-protected:
 };
-
-/////////////////////////////////////////////////////////////////////////////
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
-
-#endif // AFX_STRUCTUREVIEW_H__0EE022A0_20D1_11D3_929E_DA6C20A3421F__INCLUDED_

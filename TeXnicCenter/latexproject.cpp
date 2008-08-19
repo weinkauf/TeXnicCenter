@@ -802,7 +802,7 @@ void CLaTeXProject::SetCurrentStructureItem(int nIndex)
 {
 	// TODO: The assert fails sometimes due to nIndex being set to -1
 	//ASSERT((nIndex == 0) || (nIndex < m_aStructureItems.size())); // invalid index
-	if (nIndex < 0 || nIndex >= m_aStructureItems.size())
+	if (nIndex < 0 || nIndex >= static_cast<int>(m_aStructureItems.size()))
 		return;
 
 	m_nCurrentStructureItem = nIndex;
@@ -810,7 +810,7 @@ void CLaTeXProject::SetCurrentStructureItem(int nIndex)
 
 void CLaTeXProject::OnUpdateItemCmd(CCmdUI* pCmdUI)
 {
-	ASSERT(m_nCurrentStructureItem >= -1 && m_nCurrentStructureItem < m_aStructureItems.size());
+	ASSERT(m_nCurrentStructureItem >= -1 && m_nCurrentStructureItem < static_cast<int>(m_aStructureItems.size()));
 
 	// disable command, if no valid item is selected
 	if (m_nCurrentStructureItem == -1)
@@ -857,14 +857,14 @@ void CLaTeXProject::OnUpdateItemCmd(CCmdUI* pCmdUI)
 
 void CLaTeXProject::OnItemProperties()
 {
-	ASSERT(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size());
+	ASSERT(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < static_cast<int>(m_aStructureItems.size()));
 	CItemPropertyDialog dialog(m_aStructureItems[m_nCurrentStructureItem]);
 	dialog.DoModal();
 }
 
 void CLaTeXProject::OnItemGoto()
 {
-	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size()))
+	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < static_cast<int>(m_aStructureItems.size())))
 		return;
 
 	const CStructureItem &si = m_aStructureItems[m_nCurrentStructureItem];
@@ -888,7 +888,7 @@ void CLaTeXProject::OnItemGoto()
 
 void CLaTeXProject::OnItemInsertLabel()
 {
-	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size()))
+	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < static_cast<int>(m_aStructureItems.size())))
 		return;
 
 	LaTeXView *pView = theApp.GetActiveEditView();
@@ -902,31 +902,43 @@ void CLaTeXProject::OnItemInsertLabel()
 
 void CLaTeXProject::OnItemInsertPageref()
 {
-	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size()))
+	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < static_cast<int>(m_aStructureItems.size())))
 		return;
 
 	LaTeXView *pView = theApp.GetActiveEditView();
 	if (!pView)
 		return;
 
-	pView->InsertText(
-	    AfxFormatString1(
-	        STE_LATEX_PAGEREF,
-	        m_aStructureItems[m_nCurrentStructureItem].GetLabel()));
+	pView->InsertText(FormatPageRef(m_aStructureItems[m_nCurrentStructureItem]));
 	pView->SetFocus();
 }
 
 void CLaTeXProject::OnItemInsertRef()
 {
-	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < m_aStructureItems.size()))
+	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < static_cast<int>(m_aStructureItems.size())))
 		return;
 
 	LaTeXView *pView = theApp.GetActiveEditView();
+	
 	if (!pView)
 		return;
 
+	pView->InsertText(FormatRef(m_aStructureItems[m_nCurrentStructureItem]));
+	pView->SetFocus();
+}
+
+const CString CLaTeXProject::FormatPageRef(const CStructureItem& item)
+{
+	ASSERT(item.HasLabels());
+	return AfxFormatString1(STE_LATEX_PAGEREF,item.GetLabel());
+}
+
+const CString CLaTeXProject::FormatRef(const CStructureItem& item)
+{
+	ASSERT(item.HasLabels());
 	UINT strID = 0;
-	switch (m_aStructureItems[m_nCurrentStructureItem].m_nType)
+
+	switch (item.GetType())
 	{
 		case CStructureParser::equation :
 			strID = STE_LATEX_EQREF;
@@ -939,10 +951,7 @@ void CLaTeXProject::OnItemInsertRef()
 			break;
 	}
 
-	pView->InsertText(
-	    AfxFormatString1(strID,
-	                     m_aStructureItems[m_nCurrentStructureItem].GetLabel()));
-	pView->SetFocus();
+	return AfxFormatString1(strID,item.GetLabel());
 }
 
 void CLaTeXProject::OnSpellProject()

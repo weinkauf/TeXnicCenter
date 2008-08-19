@@ -32,22 +32,19 @@
  *
  ********************************************************************/
 
-#if !defined(AFX_OUTPUTVIEW_H__0EE022A5_20D1_11D3_929E_DA6C20A3421F__INCLUDED_)
-#define AFX_OUTPUTVIEW_H__0EE022A5_20D1_11D3_929E_DA6C20A3421F__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 class COutputDoc;
-
-#define OPW_ADD_LINE		WM_USER + 5
-#define OPW_RESET			WM_USER + 6
-#define OPW_ADD_INFOLINE	WM_USER + 7
-
 class CBuildView;
 class CParseOutputView;
 class CGrepView;
+
+enum
+{
+	OPW_ADD_LINE		= WM_USER + 5,
+	OPW_RESET			= WM_USER + 6,
+	OPW_ADD_INFOLINE	= WM_USER + 7
+};
 
 class OutputViewVisitor
 {
@@ -62,10 +59,6 @@ public:
 class COutputView : public CListCtrl
 {
 	DECLARE_DYNAMIC(COutputView)
-
-	// construction/destruction
-
-public:
 
 public:
 	COutputView();
@@ -156,11 +149,6 @@ protected:
 // overridables
 protected:
 	virtual void OnUpdate(COutputView* pSender, LPARAM lHint, CObject* pHint);
-
-// overridings
-protected:
-//{{AFX_VIRTUAL(COutputView)
-protected:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	//}}AFX_VIRTUAL
 
@@ -199,10 +187,3 @@ private:
 	/** Font to be used for the view */
 	CFont m_font;
 };
-
-/////////////////////////////////////////////////////////////////////////////
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
-
-#endif // AFX_OUTPUTVIEW_H__0EE022A5_20D1_11D3_929E_DA6C20A3421F__INCLUDED_

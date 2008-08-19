@@ -19,7 +19,7 @@ public:
 
 protected:
 	DECLARE_MESSAGE_MAP()
-public:
+
 	virtual LRESULT OnWizardBack();
 	virtual LRESULT OnWizardNext();
 };

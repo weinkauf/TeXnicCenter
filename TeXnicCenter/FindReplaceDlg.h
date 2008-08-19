@@ -1,9 +1,7 @@
 #pragma once
 
-
-// FindReplaceDlg dialog
-
-class FindReplaceDlg : public CScintillaFindReplaceDlg
+class FindReplaceDlg : 
+	public CScintillaFindReplaceDlg
 {
 	int whole_file_;
 

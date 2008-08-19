@@ -273,9 +273,9 @@ void CodeView::OnUpdateEncodingIndicator( CCmdUI* pCmdUI )
 	switch (GetDocument()->GetEncoding()) {
 		case CodeDocument::UTF8: text = _T("UTF-8"); break;
 		case CodeDocument::UTF16LE: text = _T("UTF-16"); break;
-		case CodeDocument::UTF16BE: text = _T("UTF-16 Big Endian"); break;
+		case CodeDocument::UTF16BE: text = _T("UTF-16BE"); break;
 		case CodeDocument::UTF32LE: text = _T("UTF-32"); break;
-		case CodeDocument::UTF32BE: text = _T("UTF-32 Big Endian"); break;
+		case CodeDocument::UTF32BE: text = _T("UTF-32BE"); break;
 		default: text = _T("ANSI");
 	}
 

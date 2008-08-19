@@ -311,15 +311,15 @@ bool CChildFrame::Serialize( CIniFile &ini, LPCTSTR lpszKey, bool write )
 
 				//CDocument* pDoc = theApp.GetOpenLatexDocument(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
 
-				::LockWindowUpdate(AfxGetMainWnd()->GetSafeHwnd());
-					
 					// create frame and restore window position
 					if (!LoadFrame(IDR_LATEXTYPE,WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE,AfxGetMainWnd(),&cc))
 					{
 						//TRACE0(_T("Window has not been created\n"));
 						TRACE(_T("Window has not been created\n"));
 						return FALSE;
-					}					
+					}
+
+					::LockWindowUpdate(GetSafeHwnd());
 
 					// create view and attach it to the document
 					CView *pView = dynamic_cast<CView*>(GetWindow(GW_CHILD));

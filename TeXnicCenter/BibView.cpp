@@ -1,31 +1,16 @@
-// BibView.cpp: implementation of the CBibView class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #include "stdafx.h"
 #include "texniccenter.h"
 #include "global.h"
 #include "BibView.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new DEBUG_NEW
-#endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
-CBibView::CBibView()
-{
-
-}
-
-CBibView::~CBibView()
-{
-
-}
+//CBibView::CBibView()
+//{
+//}
+//
+//CBibView::~CBibView()
+//{
+//}
 
 // Took code from CEnvironmentView
 

@@ -83,6 +83,7 @@ CodeDocument::CodeDocument()
 , code_page_(::GetACP())
 , speller_thread_(theApp.GetSpellerThread())
 , error_marker_handle_(-1)
+, use_bom_(false)
 {
 }
 
@@ -356,6 +357,7 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 			GetView()->GetCtrl().SetEOLMode(DetectScintillaEOLMode(text,n));
 		}
 
+		use_bom_ = pos > 0;
 		code_page_ = code_page;
 		encoding_ = encoding;
 
@@ -446,7 +448,7 @@ DWORD CodeDocument::SaveFile( HANDLE file, const char* text, std::size_t n)
 	CAtlFile f(file);
 	DWORD result = ERROR_SUCCESS;
 
-	if (encoding_ != ANSI) {
+	if (encoding_ != ANSI && use_bom_) {
 		const BYTE* bom = 0;
 		SIZE_T size = 0;
 
@@ -667,4 +669,14 @@ void CodeDocument::ToggleBookmark( int line )
 void CodeDocument::SetEncoding(Encoding e) 
 {
 	encoding_ = e; 
+}
+
+bool CodeDocument::GetUseBOM() const
+{
+	return use_bom_;
+}
+
+void CodeDocument::SetUseBOM( bool use /*= true*/ )
+{
+	use_bom_ = use;
 }

@@ -12,7 +12,8 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
+#include "afxres.h"
+
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -1101,7 +1102,7 @@ BEGIN
     LTEXT           "",stc32,0,0,130,8
     LTEXT           "Datei&format:",IDC_STATIC_FORMATTITLE,7,12,39,8
     COMBOBOX        IDC_SELECT_FILEFORMAT,51,10,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Codierung:",IDC_STATIC_ENCODING,7,29,39,8
+    LTEXT           "Kodierung:",IDC_STATIC_ENCODING,7,29,39,8
     COMBOBOX        IDC_SELECT_ENCODING,51,27,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
 
@@ -4618,6 +4619,7 @@ BEGIN
     STE_LANGUAGE_FRENCH     "Französisch"
     STE_CUSTOM              "Angepasst"
     IDS_ENCODING            "Codierung:"
+    IDS_ENCODING_WITH_BOM   "%s mit BOM"
     IDS_SCINTILLA_DEFAULT_PRINT_FOOTER "Seite %1"
     IDS_SCINTILLA_DEFAULT_PRINT_HEADER "%1 - Gedruckt am %2"
 END
@@ -4748,13 +4750,15 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,200,24,50,14,0,0,HIDCANCEL
 END
 
-IDD_FILE_SAVE DIALOGEX 0, 0, 130, 30
-STYLE DS_SETFONT | DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
+IDD_FILE_SAVE DIALOGEX 0, 0, 130, 46
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     LTEXT           "",stc32,0,0,130,8
-    LTEXT           "File &Format:",IDC_STATIC_FORMATTITLE,7,12,37,8
+    LTEXT           "File &Format:",IDC_STATIC_FORMATTITLE,7,12,39,8
     COMBOBOX        IDC_SELECT_FILEFORMAT,51,10,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Encoding:",IDC_STATIC_ENCODING,7,29,39,8
+    COMBOBOX        IDC_SELECT_ENCODING,51,27,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_FILESEARCH DIALOGEX 0, 0, 320, 127
@@ -5626,7 +5630,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 123
         TOPMARGIN, 7
-        BOTTOMMARGIN, 23
+        BOTTOMMARGIN, 39
     END
 
     IDD_FILESEARCH, DIALOG
@@ -8511,6 +8515,7 @@ BEGIN
     STE_LANGUAGE_FRENCH     "French"
     STE_CUSTOM              "Custom"
     IDS_ENCODING            "Encoding:"
+    IDS_ENCODING_WITH_BOM   "%s with BOM"
     IDS_SCINTILLA_DEFAULT_PRINT_FOOTER "Page %1"
     IDS_SCINTILLA_DEFAULT_PRINT_HEADER "%1 - Printed on %2"
 END
@@ -8604,7 +8609,8 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 #include "res\\TeXnicCenter.rc2"  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen
 #include "l.deu\\afxres.rc"          // Standardkomponenten
 #include "l.deu\\afxprint.rc"        // Ressourcen für Drucken/Seitenansicht
-#endif
+#endif
+
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 

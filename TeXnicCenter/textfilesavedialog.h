@@ -34,6 +34,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "CodeDocument.h"
 
 /** A File Dialog with a combo box, where the user can choose
@@ -58,14 +60,18 @@ public:
 public:
 	int GetFileFormat();
 	void SetEncoding(CodeDocument::Encoding e);
-
 	CodeDocument::Encoding GetEncoding();
+	bool GetUseBOM();
+	void SetUseBOM(bool use = true);
 
 private:
 	void AlignedResizeBelow(CWnd* wndabove, CWnd* wndlabelabove, CWnd* w, CWnd* label);
+	const std::vector<CString> GetEncodings() const;
+	int GetEncodingIndex();
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV-Unterstützung
+	
 	//}}AFX_VIRTUAL
 
 // message handlers
@@ -84,14 +90,13 @@ protected:
 	{
 		IDD = IDD_FILE_SAVE
 	};
+
+private:
 	CStatic m_wndFileFormatTitle;
 	CComboBox m_wndFileFormatCombo;
 	CComboBox encoding_;
 	int m_nFileFormat;
-	//}}AFX_DATA
-
-// attributes
-protected:
 	/** Title to display */
 	CString m_strTitle;
+	bool use_bom_;
 };

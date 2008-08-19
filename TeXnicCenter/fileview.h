@@ -32,14 +32,8 @@
  *
  ********************************************************************/
 
-#if !defined(AFX_FILEVIEW_H__0EE022A2_20D1_11D3_929E_DA6C20A3421F__INCLUDED_)
-#define AFX_FILEVIEW_H__0EE022A2_20D1_11D3_929E_DA6C20A3421F__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// FileView.h : Header-Datei
-//
+
 #include "NavigatorView.h"
 
 class CFileView : public NavigatorTreeCtrl
@@ -47,41 +41,16 @@ class CFileView : public NavigatorTreeCtrl
 	CFont bold_;
 	//	DECLARE_DYNCREATE(CFileView)
 
-// construction/destruction
 public:
 	CFileView();
 	virtual ~CFileView();
 
-// operations
-public:
-
-// overridings
 protected:
 	virtual void OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint);
-//{{AFX_VIRTUAL(CFileView)
-protected:
-	//}}AFX_VIRTUAL
 
-// implementation helpers
-protected:
-
-// message handlers
-protected:
-	//{{AFX_MSG(CFileView)
-	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
-// attributes
-protected:
-public:
 	afx_msg void OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult);
-protected:
 	virtual BOOL OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
+	bool OnBeginDragDrop(const CStructureItem& item, CString& text, UINT keystate);
 };
-
-/////////////////////////////////////////////////////////////////////////////
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
-
-#endif // AFX_FILEVIEW_H__0EE022A2_20D1_11D3_929E_DA6C20A3421F__INCLUDED_

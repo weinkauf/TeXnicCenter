@@ -170,7 +170,7 @@ namespace {
 					reinterpret_cast<const ChOut*>(buffer + size));
 		}
 
-		return !stop; // Stop only set if an error has occurred
+		return !stop; // stop only set, if an error has occurred
 	}
 
 	template<class ChOut>
