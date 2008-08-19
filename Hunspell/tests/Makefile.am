@@ -56,6 +56,8 @@ compoundrule3.test \
 compoundrule4.test \
 compoundrule5.test \
 compoundrule6.test \
+compoundrule7.test \
+compoundrule8.test \
 compoundaffix.test \
 compoundaffix2.test \
 compoundaffix3.test \
@@ -90,7 +92,8 @@ digits_in_words.test \
 colons_in_words.test \
 ngram_utf_fix.test \
 morph.test \
-1975530.test
+1975530.test \
+fullstrip.test
 # infixes.test
 
 distclean-local:
@@ -322,6 +325,16 @@ compoundrule6.dic \
 compoundrule6.good \
 compoundrule6.test \
 compoundrule6.wrong \
+compoundrule7.aff \
+compoundrule7.dic \
+compoundrule7.good \
+compoundrule7.test \
+compoundrule7.wrong \
+compoundrule8.aff \
+compoundrule8.dic \
+compoundrule8.good \
+compoundrule8.test \
+compoundrule8.wrong \
 compoundaffix.aff \
 compoundaffix.dic \
 compoundaffix.good \
@@ -527,7 +540,11 @@ morph.test \
 1975530.dic \
 1975530.good \
 1975530.test \
-1975530.wrong
+1975530.wrong \
+fullstrip.aff \
+fullstrip.dic \
+fullstrip.good \
+fullstrip.test
 # infixes.aff
 # infixes.dic
 # infixes.good

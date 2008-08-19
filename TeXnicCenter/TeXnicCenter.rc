@@ -12,8 +12,7 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
-
+#include "afxres.h"
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -34,7 +33,6 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 IDB_DOCUMENTTYPES       BITMAP                  "res\\documenttypes.bmp"
 IDB_DOCUMENTTYPES_LARGE BITMAP                  "res\\documenttypeslarge.bmp"
 IDB_SPLASH              BITMAP                  "res\\splash.bmp"
-IDB_LIGHTBULB           BITMAP                  "res\\lightbulb.bmp"
 IDB_FILE_VIEW           BITMAP                  "res\\fileview.bmp"
 IDR_FIND                BITMAP                  "res\\find.bmp"
 IDR_FORMAT              BITMAP                  "res\\format.bmp"
@@ -72,6 +70,7 @@ IDB_NAVIGATION_BAR      BITMAP                  "res\\navigationbar.bmp"
 IDR_OUTPUT_BAR          BITMAP                  "res\\outputbar.bmp"
 IDB_BUILD_ANIMATION     BITMAP                  "res\\buildanimation.bmp"
 IDR_STRUCTURE           BITMAP                  "res\\structuretoolbar.bmp"
+IDB_ANNOTATION          BITMAP                  "res\\annotation.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -875,17 +874,19 @@ BEGIN
     PUSHBUTTON      "Abbrechen",IDCANCEL,107,24,50,14
 END
 
-IDD_TIP DIALOGEX 0, 0, 270, 225
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+IDD_TIP DIALOGEX 0, 0, 284, 203
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 CAPTION "Tipps und Tricks"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "&Schließen",IDOK,211,203,50,14
-    PUSHBUTTON      "&Nächster Tipp",IDC_NEXTTIP,139,203,60,14
-    CONTROL         "",IDC_STATIC1,"Static",SS_GRAYFRAME,8,8,253,186
-    CONTROL         "&Tipps beim Starten anzeigen",IDC_STARTUP,"Button",BS_AUTOCHECKBOX | BS_TOP | WS_TABSTOP,8,205,105,12
-    ICON            "",IDB_LIGHTBULB,16,16,20,20,NOT WS_VISIBLE
-    LTEXT           "IDC_TIPSTRING",IDC_TIPSTRING,51,49,204,139,NOT WS_VISIBLE
+    DEFPUSHBUTTON   "&Schließen",IDOK,227,182,50,14
+    CONTROL         "",IDC_STATIC1,"Static",SS_WHITERECT,-1,-1,286,175
+    CONTROL         106,IDB_LIGHTBULB,"Static",SS_BITMAP,16,16,21,20
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,-1,174,287,1
+    CONTROL         "&Tipps beim Starten anzeigen",IDC_STARTUP,"Button",BS_AUTOCHECKBOX | BS_TOP | WS_TABSTOP,7,185,106,10
+    PUSHBUTTON      "&Nächster Tipp",IDC_NEXTTIP,164,182,60,14
+    EDITTEXT        IDC_TIPSTRING,51,40,209,129,ES_MULTILINE | ES_READONLY | NOT WS_BORDER,WS_EX_TRANSPARENT
+    LTEXT           "Static",IDC_TITLE,51,16,209,20,SS_CENTERIMAGE,WS_EX_TRANSPARENT
 END
 
 IDD_FILESEARCH DIALOGEX 0, 0, 320, 116
@@ -1701,10 +1702,14 @@ BEGIN
 
     IDD_TIP, DIALOG
     BEGIN
-        LEFTMARGIN, 8
-        RIGHTMARGIN, 261
-        TOPMARGIN, 8
-        BOTTOMMARGIN, 217
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 277
+        VERTGUIDE, 51
+        VERTGUIDE, 260
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 196
+        HORZGUIDE, 16
+        HORZGUIDE, 36
     END
 
     IDD_FILESEARCH, DIALOG
@@ -4974,19 +4979,6 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,186,24,50,14
 END
 
-IDD_TIP DIALOGEX 0, 0, 270, 225
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
-CAPTION "Tip of the day"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "&Close",IDOK,211,203,50,14
-    PUSHBUTTON      "&Next tip",IDC_NEXTTIP,139,203,60,14
-    CONTROL         "",IDC_STATIC1,"Static",SS_GRAYFRAME,8,8,253,186
-    CONTROL         "&Show tips on start up",IDC_STARTUP,"Button",BS_AUTOCHECKBOX | BS_TOP | WS_TABSTOP,8,205,105,12
-    ICON            "",IDB_LIGHTBULB,16,16,20,20,NOT WS_VISIBLE
-    LTEXT           "IDC_TIPSTRING",IDC_TIPSTRING,51,49,204,139,NOT WS_VISIBLE
-END
-
 IDD_OUTPUTWIZARD_DVIVIEWER DIALOGEX 0, 0, 264, 175
 STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Configuration Wizard - DVI-Viewer"
@@ -5600,6 +5592,21 @@ BEGIN
     CONTROL         "Regular expressions",IDC_REGULAR_EXPRESSION,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,49,81,10
 END
 
+IDD_TIP DIALOGEX 0, 0, 284, 203
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Tip of the day"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "&Close",IDOK,227,182,50,14
+    CONTROL         "",IDC_STATIC1,"Static",SS_WHITERECT,-1,-1,286,175
+    CONTROL         106,IDB_LIGHTBULB,"Static",SS_BITMAP,16,16,21,20
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,-1,174,287,1
+    CONTROL         "&Show tips on start up",IDC_STARTUP,"Button",BS_AUTOCHECKBOX | BS_TOP | WS_TABSTOP,7,185,84,10
+    PUSHBUTTON      "&Next tip",IDC_NEXTTIP,164,182,60,14
+    EDITTEXT        IDC_TIPSTRING,51,40,209,129,ES_MULTILINE | ES_READONLY | NOT WS_BORDER,WS_EX_TRANSPARENT
+    LTEXT           "Static",IDC_TITLE,51,16,209,20,SS_CENTERIMAGE,WS_EX_TRANSPARENT
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -5711,14 +5718,6 @@ BEGIN
         RIGHTMARGIN, 236
         TOPMARGIN, 7
         BOTTOMMARGIN, 219
-    END
-
-    IDD_TIP, DIALOG
-    BEGIN
-        LEFTMARGIN, 8
-        RIGHTMARGIN, 261
-        TOPMARGIN, 8
-        BOTTOMMARGIN, 217
     END
 
     IDD_OUTPUTWIZARD_DVIVIEWER, DIALOG
@@ -5888,6 +5887,18 @@ BEGIN
         RIGHTMARGIN, 283
         TOPMARGIN, 7
         BOTTOMMARGIN, 130
+    END
+
+    IDD_TIP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 277
+        VERTGUIDE, 51
+        VERTGUIDE, 260
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 196
+        HORZGUIDE, 16
+        HORZGUIDE, 36
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -8611,8 +8622,7 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 #include "res\\TeXnicCenter.rc2"  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen
 #include "l.deu\\afxres.rc"          // Standardkomponenten
 #include "l.deu\\afxprint.rc"        // Ressourcen für Drucken/Seitenansicht
-#endif
-
+#endif
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 

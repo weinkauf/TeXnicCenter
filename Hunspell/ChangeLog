@@ -1,5 +1,66 @@
+2008-08-15 Németh László <nemeth at OOo>:
+	* affentry.cxx: add FULLSTRIP option. With FULLSTRIP, affix rules can
+	  strip full words, not only one less characters. Suggested by
+	  Davide Prina and other developers in OOo Issue 80145.
+	* tests/fullstrip.*: Test data based on Davide Prina's example.
+	* tools/unmunch.cxx: modified for FULLSTRIP.
+
+	* affixmgr.cxx: COMPOUNDRULE now works with long and numerical flag
+	  types by parenthesized flags. Syntax: (flag)*, (flag)(flag)?(flag)*.
+	* tests/compoundrule[78].*: tests with parenthesized COMPOUNDRULE
+	  definitions.
+
+	* suggestmgr.cxx: modified badchar*(), forgotchar*() and extrachar*()
+	  1-character distance suggestion algorithms: search a TRY character
+	  in all position instead of all TRY characters in a character position
+	  (it can give more readable suggestion order, also better suggestions
+	  in the first positions, when TRY characters are sorted by frequency.)
+	  For example, suggestions for "moze":
+	  ooze, doze, Roze, maze, more etc. (Hunspell 1.2.6),
+	  maze, more, mote, ooze, mole etc. (Hunspell 1.2.7).
+
+	* suggestmgr.cxx: extended compound word checking for better COMPOUNDRULE
+	  related suggestions, for example English ordinal numbers: 121323th ->
+	  121323rd (it needs also a th->rd REP definition).
+
+	* phonet.cxx: cast unsigned char parameter of isdigit() and fix
+	  isalpha by myisalpha() (potential problems in Windows environment).
+	  Reported by Thomas Lange in OOo Issue 92736.
+
+	* hunspell/csutil.*,hunspell/{affentry,affixmgr,hunspell,suggestmgr}.cxx:
+	  fix potential buffer overloading under morphological analysis by the
+	  new mystrcat() function. Reported by Molnár Andor (dolhpy at true
+	  dot hu) in SF.net Bug 2026203.
+
+	* affixmgr.cxx: add recursion limit to defcpd(). Fix OOo Issue 76067:
+	  crash-like deceleration by checking hexadecimal numbers with long FFF
+	  sequence (combinatory explosion by the en_US words "f" and "ff").
+	  Missing fix reported by Mathias Bauer.
+
+	* affixmgr.cxx: fix the difference in the Unicode and non-Unicode
+	  parts of cpdcase_check(). Bug report by Brett Wilson.
+
+	* filemgr.*, affixmgr.cxx, csutil.*, hashmgr.*: warning messages now
+	  contain line numbers (use --with-warnings configure option for
+	  warning messages).
+
+	* hunspell.cxx: analyze(): fix case conversion of stemming and
+	  morphological analysis of UTF-8 encoded input. Reported by Ferenc Godó.
+
+	* tools/hunspell.cxx: fix LaTeX Unicode support in filter mode.
+	  Reported by Jan Seeger in SF.net Bug 2039990.
+
+	* affixmgr.hxx: 0.5 or in 64 bit environment, 1 MB (virtual) memory
+	  saving using only the requested size for sFlag and pFlag arrays.
+	  Bug report by Brett Wilson.
+
+	* affixmgr.cxx,tools/hunspell.cxx: get_version() returns with full
+	  VERSION affix parameter instead of its first word. Fixes for
+	  Hunspell's header. Some problems with Hunspell header reported in
+	  SF.net Bug 2043080.
+
 2008-07-15 Németh László <nemeth at OOo>:
-        * affentry.cxx: fixes of the affix rule matching algorithm (affected
+	* affentry.cxx: fixes of the affix rule matching algorithm (affected
 	  only the sk_SK dictionary from all OpenOffice.org dictionaries):
 	- fix dot pattern + accented letters matching (in non Unicode encoding)
 	- word-length conditions work again

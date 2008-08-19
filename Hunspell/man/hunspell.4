@@ -1,4 +1,4 @@
-.TH hunspell 4 "2008-04-11"
+.TH hunspell 4 "2008-08-15"
 .LO 1
 .SH NAME
 hunspell \- format of Hunspell dictionaries and affix files
@@ -333,19 +333,23 @@ WORDCHARS -\fB--\fR (see tests/break.*) example
 .IP "COMPOUNDRULE compound_pattern"
 Define custom compound patterns with a regex-like syntax.
 The first COMPOUNDRULE is a header with the number of the following
-COMPOUNDRULE definitions. Compound patterns consist compound flags and
-star or question mark meta characters. A flag followed by a `*' matches
+COMPOUNDRULE definitions. Compound patterns consist compound flags,
+parentheses, star and question mark meta characters. A flag followed by a `*' matches
 a word sequence of 0 or more matches of words signed with this compound flag.
 A flag followed by a `?' matches a word sequence of
 0 or 1 matches of a word signed with this compound flag.
 See tests/compound*.* examples.
 
-Note: `*' and `?' metacharacters
-work only with the default 8-bit character and the UTF-8 FLAG types.
+Note: en_US dictionary of OpenOffice.org uses COMPOUNDRULE for ordinal number recognition
+(1st, 2nd, 11th, 12th, 22nd, 112th, 1000122nd etc.).
 
-Note II: COMPOUNDRULE flags haven't been compatible with the COMPOUNDFLAG,
+Note II: In the case of long and numerical flag types use only parenthesized 
+flags: (1500)*(2000)?
+
+Note III: COMPOUNDRULE flags haven't been compatible with the COMPOUNDFLAG,
 COMPOUNDBEGIN, etc. compound flags yet (use these flags on different
 words).
+
 .IP "COMPOUNDMIN num"
 Minimum length of words in compound words.
 Default value is 3 letters.
@@ -401,9 +405,9 @@ Second parameter is the list of vowels (for calculating syllables).
 Need for special compounding rules in Hungarian.
 .SH "OPTIONS FOR AFFIX CREATION"
 .IP "PFX flag cross_product number"
-.IP "PFX flag stripping prefix condition [morphological_fields...]"
+.IP "PFX flag stripping prefix [condition [morphological_fields...]]"
 .IP "SFX flag cross_product number"
-.IP "SFX flag stripping suffix condition [morphological_fields...]"
+.IP "SFX flag stripping suffix [condition [morphological_fields...]]"
 An affix is either a prefix or a suffix attached to root words to make 
 other words. We can define affix classes with arbitrary number affix rules.
 Affix classes are signed with affix flags. The first line of an affix class definition
@@ -447,6 +451,10 @@ prefix with CIRCUMFIX flag and vice versa.
 This flag signs forbidden word form. Because affixed forms
 are also forbidden, we can subtract a subset from set of
 the accepted affixed and compound words.
+.IP "FULLSTRIP"
+With FULLSTRIP, affix rules can strip full words, not only one less characters.
+
+Note: conditions may be word length without FULLSTRIP, too.
 .IP "KEEPCASE flag"
 Forbid uppercased and capitalized forms of words 
 signed with KEEPCASE flags. Useful for special orthographies 

@@ -69,7 +69,8 @@ char * PfxEntry::add(const char * word, int len)
 {
     char tword[MAXWORDUTF8LEN + 4];
 
-    if ((len > stripl) && (len >= numconds) && test_condition(word) &&
+    if ((len > stripl || (len == 0 && pmyMgr->get_fullstrip())) && 
+       (len >= numconds) && test_condition(word) &&
        (!stripl || (strncmp(word, strip, stripl) == 0)) &&
        ((MAXWORDUTF8LEN + 4) > (len + appndl - stripl))) {
     /* we have a match so add prefix */
@@ -175,7 +176,7 @@ struct hentry * PfxEntry::checkword(const char * word, int len, char in_compound
 
      tmpl = len - appndl;
 
-     if (tmpl > 0) {
+     if (tmpl > 0 || (tmpl == 0 && pmyMgr->get_fullstrip())) {
 
             // generate new root word by removing prefix and adding
             // back any characters that would have been stripped
@@ -236,7 +237,8 @@ struct hentry * PfxEntry::check_twosfx(const char * word, int len,
 
      tmpl = len - appndl;
 
-     if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
+     if ((tmpl > 0 || (tmpl == 0 && pmyMgr->get_fullstrip())) &&
+        (tmpl + stripl >= numconds)) {
 
             // generate new root word by removing prefix and adding
             // back any characters that would have been stripped
@@ -282,7 +284,8 @@ char * PfxEntry::check_twosfx_morph(const char * word, int len,
 
      tmpl = len - appndl;
 
-     if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
+     if ((tmpl > 0 || (tmpl == 0 && pmyMgr->get_fullstrip())) &&
+        (tmpl + stripl >= numconds)) {
 
             // generate new root word by removing prefix and adding
             // back any characters that would have been stripped
@@ -332,7 +335,8 @@ char * PfxEntry::check_morph(const char * word, int len, char in_compound, const
 
      tmpl = len - appndl;
 
-     if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
+     if ((tmpl > 0 || (tmpl == 0 && pmyMgr->get_fullstrip())) &&
+        (tmpl + stripl >= numconds)) {
 
             // generate new root word by removing prefix and adding
             // back any characters that would have been stripped
@@ -359,27 +363,27 @@ char * PfxEntry::check_morph(const char * word, int len, char in_compound, const
                         ((!needflag) || TESTAFF(he->astr, needflag, he->alen) ||
                          (contclass && TESTAFF(contclass, needflag, contclasslen)))) {
                             if (morphcode) {
-                                strcat(result, " ");
-                                strcat(result, morphcode);
-                            } else strcat(result,getKey());
+                                mystrcat(result, " ", MAXLNLEN);
+                                mystrcat(result, morphcode, MAXLNLEN);
+                            } else mystrcat(result,getKey(), MAXLNLEN);
                             if (!HENTRY_FIND(he, MORPH_STEM)) {
-                                strcat(result, " ");
-                                strcat(result, MORPH_STEM);
-                                strcat(result, HENTRY_WORD(he));
+                                mystrcat(result, " ", MAXLNLEN);
+                                mystrcat(result, MORPH_STEM, MAXLNLEN);
+                                mystrcat(result, HENTRY_WORD(he), MAXLNLEN);
                             }
                             // store the pointer of the hash entry
                             if (HENTRY_DATA(he)) {
-                                strcat(result, " ");
-                                strcat(result, HENTRY_DATA2(he));
+                                mystrcat(result, " ", MAXLNLEN);
+                                mystrcat(result, HENTRY_DATA2(he), MAXLNLEN);
                             } else {
                                 // return with debug information
                                 char * flag = pmyMgr->encode_flag(getFlag());
-                                strcat(result, " ");
-                                strcat(result, MORPH_FLAG);
-                                strcat(result, flag);
+                                mystrcat(result, " ", MAXLNLEN);
+                                mystrcat(result, MORPH_FLAG, MAXLNLEN);
+                                mystrcat(result, flag, MAXLNLEN);
                                 free(flag);
                             }
-                            strcat(result, "\n");
+                            mystrcat(result, "\n", MAXLNLEN);
                       }
                       he = he->next_homonym;
                     } while (he);
@@ -393,7 +397,7 @@ char * PfxEntry::check_morph(const char * word, int len, char in_compound, const
                    st = pmyMgr->suffix_check_morph(tmpword, tmpl, aeXPRODUCT, (AffEntry *)this,
                      FLAG_NULL, needflag);
                    if (st) {
-                        strcat(result, st);
+                        mystrcat(result, st, MAXLNLEN);
                         free(st);
                    }
                 }
@@ -451,7 +455,8 @@ char * SfxEntry::add(const char * word, int len)
     char                tword[MAXWORDUTF8LEN + 4];
 
      /* make sure all conditions match */
-     if ((len > stripl) && (len >= numconds) && test_condition(word + len, word) &&
+     if ((len > stripl || (len == 0 && pmyMgr->get_fullstrip())) &&
+        (len >= numconds) && test_condition(word + len, word) &&
         (!stripl || (strcmp(word + len - stripl, strip) == 0)) &&
         ((MAXWORDUTF8LEN + 4) > (len + appndl - stripl))) {
               /* we have a match so add suffix */
@@ -601,7 +606,8 @@ struct hentry * SfxEntry::checkword(const char * word, int len, int optflags,
     // the second condition is not enough for UTF-8 strings
     // it checked in test_condition()
 
-    if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
+    if ((tmpl > 0 || (tmpl == 0 && pmyMgr->get_fullstrip())) &&
+        (tmpl + stripl >= numconds)) {
 
             // generate new root word by removing suffix and adding
             // back any characters that would have been stripped or
@@ -700,7 +706,8 @@ struct hentry * SfxEntry::check_twosfx(const char * word, int len, int optflags,
 
     tmpl = len - appndl;
 
-    if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
+    if ((tmpl > 0 || (tmpl == 0 && pmyMgr->get_fullstrip())) &&
+       (tmpl + stripl >= numconds)) {
 
             // generate new root word by removing suffix and adding
             // back any characters that would have been stripped or
@@ -764,7 +771,8 @@ char * SfxEntry::check_twosfx_morph(const char * word, int len, int optflags,
 
     tmpl = len - appndl;
 
-    if ((tmpl > 0) && (tmpl + stripl >= numconds)) {
+    if ((tmpl > 0 || (tmpl == 0 && pmyMgr->get_fullstrip())) &&
+       (tmpl + stripl >= numconds)) {
 
             // generate new root word by removing suffix and adding
             // back any characters that would have been stripped or
@@ -792,17 +800,17 @@ char * SfxEntry::check_twosfx_morph(const char * word, int len, int optflags,
                         st = pmyMgr->suffix_check_morph(tmpword, tmpl, 0, NULL, aflag, needflag);
                         if (st) {
                             if (((PfxEntry *) ppfx)->getMorph()) {
-                                strcat(result, ((PfxEntry *) ppfx)->getMorph());
-                                strcat(result, " ");
+                                mystrcat(result, ((PfxEntry *) ppfx)->getMorph(), MAXLNLEN);
+                                mystrcat(result, " ", MAXLNLEN);
                             }
-                            strcat(result,st);
+                            mystrcat(result,st, MAXLNLEN);
                             free(st);
                             mychomp(result);
                         }
                     } else {
                         st = pmyMgr->suffix_check_morph(tmpword, tmpl, optflags, ppfx, aflag, needflag);
                         if (st) {
-                            strcat(result, st);
+                            mystrcat(result, st, MAXLNLEN);
                             free(st);
                             mychomp(result);
                         }
@@ -810,7 +818,7 @@ char * SfxEntry::check_twosfx_morph(const char * word, int len, int optflags,
                 } else {
                         st = pmyMgr->suffix_check_morph(tmpword, tmpl, 0, NULL, aflag, needflag);
                         if (st) {
-                            strcat(result, st);
+                            mystrcat(result, st, MAXLNLEN);
                             free(st);
                             mychomp(result);
                         }

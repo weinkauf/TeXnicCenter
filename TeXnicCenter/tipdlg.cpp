@@ -36,44 +36,13 @@
 #include "resource.h"
 #include "tipdlg.h"
 
-#include "FontOccManager.h"
 #include "TeXnicCenter.h"
+#include "RunTimeHelper.h"
 
-//#include "misc.h"
-// CG: This file added by 'Tip of the Day' component.
-
-//#include <winreg.h>
 #include <sys\stat.h>
 #include <sys\types.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-
-
-#ifndef _WIN32
-
-// supply a replacement for CDC::FillSolidColor for MSVC 1.5
-
-void FillSolidRect(CDC *pDC,LPCRECT lpRect,COLORREF clr)
-{
-	ASSERT_VALID(pDC);
-	ASSERT(pDC->m_hDC != NULL);
-
-	pDC->SetBkColor(clr);
-	pDC->ExtTextOut(0,0,ETO_OPAQUE,lpRect,NULL,0,NULL);
-}
-
-#endif
-
-
-/////////////////////////////////////////////////////////////////////////////
-// CTipDlg dialog
-
-#define MAX_BUFLEN 1000
+const int MAX_BUFLEN = 1000;
 
 static const TCHAR szSection[] = _T("Tip");
 static const TCHAR szIntFilePos[] = _T("FilePos");
@@ -171,9 +140,7 @@ void CTipDlg::OnNextTip()
 	GetNextTipString(m_strTip);
 	UpdateData(FALSE);
 
-	CDC *pDC = GetDC();
-	DoPaint(pDC,TRUE);
-	VERIFY(ReleaseDC(pDC));
+	GetDlgItem(IDC_TIPSTRING)->SetWindowText(m_strTip);
 }
 
 void CTipDlg::GetNextTipString(CString& strNext)
@@ -187,7 +154,7 @@ void CTipDlg::GetNextTipString(CString& strNext)
 	{
 		if (_fgetts(lpsz,MAX_BUFLEN,m_pStream) == NULL)
 		{
-			// We have either reached EOF or enocuntered some problem
+			// We have either reached EOF or encountered some problem
 			// In both cases reset the pointer to the beginning of the file
 			// This behavior is same as VC++ Tips file
 			if (fseek(m_pStream,0,SEEK_SET) != 0)
@@ -208,34 +175,33 @@ void CTipDlg::GetNextTipString(CString& strNext)
 	strNext.ReleaseBuffer();
 
 	// replace '\n' with newline and '\p' with double newline (paragraph)
-	for (int i = 0; i < strNext.GetLength() - 1; i++)
-	{
-		if (strNext[i] == _T('\\'))
-		{
-			if (strNext[i + 1] == _T('\\'))
-				++i;
-			else if (strNext[i + 1] == _T('n'))
-			{
-				strNext.SetAt(i,_T(' '));
-				strNext.SetAt(i + 1,_T('\n'));
-				++i;
-			}
-			else if (strNext[i + 1] == _T('p'))
-			{
-				strNext.SetAt(i,_T('\n'));
-				strNext.SetAt(i + 1,_T('\n'));
-				++i;
-			}
-		}
-	}
+	strNext.Remove(_T('\r'));
+	strNext.Remove(_T('\n'));
+
+	strNext.Replace(_T("\\n"),_T("\r\n"));
+	strNext.Replace(_T("\\p"),_T("\r\n \r\n"));
 }
 
 HBRUSH CTipDlg::OnCtlColor(CDC* pDC,CWnd* pWnd,UINT nCtlColor)
 {
-	if (pWnd->GetDlgCtrlID() == IDC_TIPSTRING)
-		return (HBRUSH) GetStockObject(WHITE_BRUSH);
+	HBRUSH brush;
+	int id = pWnd->GetDlgCtrlID();
 
-	return CDialog::OnCtlColor(pDC,pWnd,nCtlColor);
+	switch (id)
+	{
+		case IDC_TIPSTRING:
+		case IDC_TITLE:
+			brush = reinterpret_cast<HBRUSH>(::GetStockObject(WHITE_BRUSH));
+			
+			if (id == IDC_TITLE)
+				pDC->SetTextColor(title_color_);
+
+			break;
+		default:
+			brush = CDialog::OnCtlColor(pDC,pWnd,nCtlColor);
+	}
+
+	return brush;
 }
 
 void CTipDlg::OnOK()
@@ -253,17 +219,45 @@ BOOL CTipDlg::OnInitDialog()
 	// If Tips file does not exist then disable NextTip
 	if (m_pStream == NULL)
 		GetDlgItem(IDC_NEXTTIP)->EnableWindow(FALSE);
+	else
+		GetDlgItem(IDC_TIPSTRING)->SetWindowText(m_strTip);
+
+	CWindowDC dc(this);
+	LOGFONT lf;
+
+	if (!RunTimeHelper::IsVista())
+	{
+		GetFont()->GetLogFont(&lf);
+		title_color_ = RGB(0,51,153);
+	}
+	else
+	{
+		HTHEME theme = ::OpenThemeData(m_hWnd,VSCLASS_TEXTSTYLE);
+		ASSERT(theme);
+
+#ifdef UNICODE
+		::GetThemeFont(theme,dc,TEXT_MAININSTRUCTION,0,TMT_FONT,&lf);
+#else
+		LOGFONTW lfw;
+		::GetThemeSysFont(theme,TMT_CAPTIONFONT,&lfw);
+
+		CFont tf;
+		tf.Attach(::CreateFontIndirectW(&lfw));
+		tf.GetLogFont(&lf);
+#endif
+		if (FAILED(::GetThemeColor(theme,TEXT_MAININSTRUCTION,0,TMT_TEXTCOLOR,&title_color_)))
+			title_color_ = 0;
+
+		::CloseThemeData(theme);
+	}
+
+	lf.lfHeight = 135; // 13.5pt
+	title_font_.CreatePointFontIndirect(&lf,&dc);
+
+	GetDlgItem(IDC_TITLE)->SetFont(&title_font_);
+	GetDlgItem(IDC_TITLE)->SetWindowText(CString(MAKEINTRESOURCE(CG_IDS_DIDYOUKNOW)));	
 
 	return TRUE; // return TRUE unless you set the focus to a control
-}
-
-void CTipDlg::OnPaint()
-{
-	CPaintDC dc(this); // device context for painting
-
-	DoPaint(&dc,FALSE);
-
-	// Do not call CDialog::OnPaint() for painting messages
 }
 
 int CTipDlg::DoModal()
@@ -272,129 +266,6 @@ int CTipDlg::DoModal()
 		return CDialog::DoModal();
 	else
 	{
-		// TODO: The beep is annoying
-		//MessageBeep(-1);
 		return IDOK;
 	}
-}
-
-void CTipDlg::DoPaint(CDC *pdc,BOOL updatetext)
-{
-	// Get paint area for the big static control
-	CWnd* pStatic;
-	CRect tiprect,bigrect,
-	seprect,didyourect,bulbrect;
-
-	CBrush brush;
-	brush.CreateStockObject(WHITE_BRUSH);
-
-	pStatic = GetDlgItem(IDC_STATIC1);
-	pStatic->GetWindowRect(&bigrect);
-	ScreenToClient(&bigrect);
-
-	pStatic = GetDlgItem(IDC_TIPSTRING);
-	pStatic->GetWindowRect(&tiprect);
-	ScreenToClient(&tiprect);
-
-	pStatic = (CStatic*) GetDlgItem(IDB_LIGHTBULB);
-	pStatic->GetWindowRect(bulbrect);
-
-	if (!updatetext)
-	{
-		// Paint the background white.
-#ifndef _WIN32
-		bigrect.InflateRect(-1,-1);
-#endif
-
-
-#ifndef _WIN32
-		FillSolidRect(pdc,bigrect,::GetSysColor(COLOR_WINDOW));
-#else
-		pdc->FillSolidRect(bigrect,::GetSysColor(COLOR_WINDOW));
-#endif
-
-		seprect = bigrect;
-
-		// Paint left side gray
-
-		bigrect.right = tiprect.left - 10;
-		CBrush gbrush;
-#if 0
-		gbrush.CreateStockObject(GRAY_BRUSH);
-#else
-		gbrush.CreateSolidBrush(::GetSysColor(COLOR_BTNSHADOW));
-#endif
-
-
-#ifndef _WIN32
-		FillSolidRect(pdc,bigrect,::GetSysColor(COLOR_BTNSHADOW));
-#else
-		pdc->FillSolidRect(bigrect,::GetSysColor(COLOR_BTNSHADOW));
-#endif
-		pdc->SetBkColor(::GetSysColor(COLOR_WINDOW));
-
-		// Load bitmap and get dimensions of the bitmap
-		CBitmap bmp;
-		bmp.LoadBitmap(IDB_LIGHTBULB);
-		BITMAP bmpInfo;
-#ifdef _WIN32
-		bmp.GetBitmap(&bmpInfo);
-#else
-		bmp.GetObject(sizeof(BITMAP),&bmpInfo);
-#endif
-		// Draw bitmap in top corner and validate only top portion of window
-		CDC dcTmp;
-		ScreenToClient(bulbrect);
-		dcTmp.CreateCompatibleDC(pdc);
-		dcTmp.SelectObject(&bmp);
-		bulbrect.bottom = bmpInfo.bmHeight + bulbrect.top;
-		bulbrect.right = bmpInfo.bmWidth + bulbrect.left;
-		dcTmp.SelectObject(&gbrush);
-		dcTmp.ExtFloodFill(0,0,0x00ffffff,FLOODFILLSURFACE);
-#if 1
-		pdc->BitBlt(bulbrect.left,bulbrect.top,bulbrect.Width(),bulbrect.Height(),
-		            &dcTmp,0,0,SRCCOPY);
-#endif
-
-		seprect.top = bulbrect.bottom + 6;
-		seprect.bottom = seprect.top + 1;
-
-#ifndef _WIN32
-		FillSolidRect(pdc,seprect,::GetSysColor(COLOR_BTNSHADOW));
-#else
-		pdc->FillSolidRect(seprect,::GetSysColor(COLOR_BTNSHADOW));
-#endif
-		pdc->SetBkColor(::GetSysColor(COLOR_WINDOW));
-	}
-
-	CFont font, fonttext;
-
-	LOGFONT lf = GetDisplayFont();
-	fonttext.CreateFontIndirect(&lf);
-
-	lf.lfHeight = 160;
-	lf.lfWeight = FW_BOLD;
-	font.CreatePointFontIndirect(&lf);
-
-	CFont *pOldFont = pdc->SelectObject(&font);
-
-	// Draw out "Did you know..." message next to the bitmap
-	CString strMessage;
-	strMessage.LoadString(CG_IDS_DIDYOUKNOW);
-	didyourect = tiprect;
-	didyourect.top = bulbrect.top;
-
-	pdc->DrawText(strMessage,-1,didyourect,DT_SINGLELINE);
-	pdc->SelectObject(&fonttext);
-
-	// efface le rectangle contenant le text
-
-
-#ifndef _WIN32
-	FillSolidRect(pdc,tiprect,::GetSysColor(COLOR_WINDOW));
-#else
-	pdc->FillSolidRect(tiprect,::GetSysColor(COLOR_WINDOW));
-#endif
-	pdc->DrawText(m_strTip,-1,tiprect,DT_WORDBREAK);
-	pdc->SelectObject(pOldFont);
 }

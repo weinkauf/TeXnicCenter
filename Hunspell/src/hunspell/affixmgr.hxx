@@ -24,8 +24,8 @@ class AffixMgr
 
   AffEntry *          pStart[SETSIZE];
   AffEntry *          sStart[SETSIZE];
-  AffEntry *          pFlag[CONTSIZE];
-  AffEntry *          sFlag[CONTSIZE];
+  AffEntry *          pFlag[SETSIZE];
+  AffEntry *          sFlag[SETSIZE];
   HashMgr *           pHMgr;
   HashMgr **          alldic;
   int *               maxdic;
@@ -92,11 +92,11 @@ class AffixMgr
   FLAG                keepcase;
   FLAG                substandard;
   int                 checksharps;
+  int                 fullstrip;
 
   int                 havecontclass; // boolean variable
   char                contclasses[CONTSIZE]; // flags of possible continuing classes (twofold affix)
-  flag                flag_mode;
-  
+
 public:
 
   AffixMgr(const char * affpath, HashMgr** ptr, int * md,
@@ -147,7 +147,7 @@ public:
   inline int  candidate_check(const char * word, int len);
   struct hentry * compound_check(const char * word, int len, short wordnum,
             short numsyllable, short maxwordnum, short wnum, hentry ** words,
-            char hu_mov_rule, int * cmpdstemnum, int * cmpdstem, char is_sug);
+            char hu_mov_rule, char is_sug);
 
   int compound_check_morph(const char * word, int len, short wordnum,
             short numsyllable, short maxwordnum, short wnum, hentry ** words,
@@ -194,12 +194,13 @@ public:
   FLAG                get_keepcase(void);
   int                 get_checksharps(void);
   char *              encode_flag(unsigned short aflag);
+  int                 get_fullstrip();
 
 private:
   int  parse_file(const char * affpath, const char * key);
-  int  parse_flag(char * line, unsigned short * out, const char * name);
-  int  parse_num(char * line, int * out, const char * name);
-  int  parse_cpdsyllable(char * line);
+  int  parse_flag(char * line, unsigned short * out, FileMgr * af);
+  int  parse_num(char * line, int * out, FileMgr * af);
+  int  parse_cpdsyllable(char * line, FileMgr * af);
   int  parse_reptable(char * line, FileMgr * af);
   int  parse_phonetable(char * line, FileMgr * af);
   int  parse_maptable(char * line, FileMgr * af);
@@ -221,7 +222,7 @@ private:
   int process_pfx_tree_to_list();
   int process_sfx_tree_to_list();
   int redundant_condition(char, char * strip, int stripl,
-      const char * cond, char *);
+      const char * cond, int);
 };
 
 #endif

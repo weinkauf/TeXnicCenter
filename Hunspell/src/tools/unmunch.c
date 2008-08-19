@@ -62,6 +62,7 @@ int main(int argc, char** argv)
 
   numpfx = 0;
   numsfx = 0;
+  fullstrip = 0;
 
   if (parse_aff_file(afflst)) {
     fprintf(stderr,"Error - in affix file loading\n");
@@ -139,6 +140,7 @@ int parse_aff_file(FILE * afflst)
        mychomp(line);
        ft = ' ';
        fprintf(stderr,"parsing line: %s\n",line);
+       if (strncmp(line,"FULLSTRIP",9) == 0) fullstrip = 1;
        if (strncmp(line,"PFX",3) == 0) ft = 'P';
        if (strncmp(line,"SFX",3) == 0) ft = 'S';
        if (ft != ' ') {
@@ -335,7 +337,7 @@ void pfx_add (const char * word, int len, struct affent* ep, int num)
     for (aent = ep, i = num; i > 0; aent++, i--) {
 
         /* now make sure all conditions match */        
-        if ((len > aent->stripl) && (len >= aent->numconds) &&
+        if ((len + fullstrip > aent->stripl) && (len >= aent->numconds) &&
             ((aent->stripl == 0) ||
             (strncmp(aent->strip, word, aent->stripl) == 0))) {
 
@@ -384,7 +386,7 @@ void suf_add (const char * word, int len, struct affent * ep, int num)
        * then strip off strip string and add suffix
        */
 
-      if ((len > aent->stripl) && (len >= aent->numconds) &&
+      if ((len + fullstrip > aent->stripl) && (len >= aent->numconds) &&
             ((aent->stripl == 0) ||
             (strcmp(aent->strip, word + len - aent->stripl) == 0))) {
 	cp = (unsigned char *) (word + len);

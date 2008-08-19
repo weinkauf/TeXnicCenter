@@ -46,6 +46,8 @@ struct affixptr          ptable[MAX_PREFIXES];
 /* the suffix table */
 struct affixptr          stable[MAX_SUFFIXES];
 
+int    fullstrip;
+
 
 int    numwords;	          /* number of words found */
 struct dwords
