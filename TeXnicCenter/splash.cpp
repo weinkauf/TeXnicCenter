@@ -51,8 +51,8 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 //Statics
 BOOL CSplashWnd::c_bShowSplashWnd;
-CSplashWnd* CSplashWnd::c_pSplashWnd = NULL;
-CSplashWnd* CSplashWnd::c_pSplashWndPublic = NULL;
+
+std::auto_ptr<CSplashWnd> CSplashWnd::c_pSplashWnd;
 
 CSplashWnd::CSplashWnd()
 {
@@ -61,9 +61,7 @@ CSplashWnd::CSplashWnd()
 CSplashWnd::~CSplashWnd()
 {
 	// Statischen Fensterzeiger löschen
-	ASSERT(c_pSplashWnd == this);
-	c_pSplashWnd = NULL;
-	c_pSplashWndPublic = NULL;
+	ASSERT(c_pSplashWnd.get() == this);
 }
 
 BEGIN_MESSAGE_MAP(CSplashWnd, CWnd)
@@ -81,28 +79,21 @@ void CSplashWnd::EnableSplashScreen(BOOL bEnable /*= TRUE*/)
 
 void CSplashWnd::ShowSplashScreen(CWnd* pParentWnd /*= NULL*/)
 {
-	c_pSplashWndPublic = NULL;
-
-	if (!c_bShowSplashWnd || c_pSplashWnd != NULL)
+	if (!c_bShowSplashWnd || c_pSplashWnd.get())
 		return;
 
 	// Neuen Begrüßungsbildschirm reservieren und erstellen
-	c_pSplashWnd = new CSplashWnd;
+	c_pSplashWnd.reset(new CSplashWnd);
+
 	if (!c_pSplashWnd->Create(pParentWnd))
-	{
-		delete c_pSplashWnd;
-		c_pSplashWnd = c_pSplashWndPublic = NULL;
-	}
+		c_pSplashWnd.reset();
 	else
-	{
-		c_pSplashWndPublic = c_pSplashWnd;
 		c_pSplashWnd->UpdateWindow();
-	}
 }
 
 BOOL CSplashWnd::PreTranslateAppMessage(MSG* pMsg)
 {
-	if (c_pSplashWnd == NULL)
+	if (!c_pSplashWnd.get())
 		return FALSE;
 
 	// Begrüßungsbildschirm ausblenden, falls eine Tastatur- oder Mausnachricht empfangen wird.
@@ -137,8 +128,6 @@ BOOL CSplashWnd::Create(CWnd* pParentWnd /*= NULL*/)
 
 void CSplashWnd::HideSplashScreen()
 {
-	c_pSplashWndPublic = NULL;
-
 	// Fenster entfernen und Hauptrahmen aktualisieren
 	DestroyWindow();
 
@@ -149,7 +138,7 @@ void CSplashWnd::HideSplashScreen()
 void CSplashWnd::PostNcDestroy()
 {
 	// C++-Klasse freigeben
-	delete this;
+	c_pSplashWnd.reset();
 }
 
 int CSplashWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -252,4 +241,14 @@ BOOL CSplashWnd::OnEraseBkgnd(CDC* pDC)
 	dcImage.SelectObject(pOldBitmap);
 
 	return TRUE;
+}
+
+CSplashWnd* CSplashWnd::GetInstance()
+{
+	return c_pSplashWnd.get();
+}
+
+bool CSplashWnd::IsActive()
+{
+	return GetInstance() != 0;
 }

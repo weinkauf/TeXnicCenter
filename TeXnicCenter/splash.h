@@ -32,8 +32,9 @@
  *
  ********************************************************************/
 
-#ifndef _SPLASH_SCRN_
-#define _SPLASH_SCRN_
+#pragma once
+
+#include <memory>
 
 /** Splash Screen of TeXnicCenter displayed during startup.
 
@@ -60,12 +61,6 @@ public:
 	static void ShowSplashScreen(CWnd* pParentWnd = NULL);
 	static BOOL PreTranslateAppMessage(MSG* pMsg);
 
-	// Überschreibungen
-	// Vom Klassen-Assistenten generierte Überschreibungen virtueller Funktionen
-	//{{AFX_VIRTUAL(CSplashWnd)
-	//}}AFX_VIRTUAL
-
-// Implementierung
 public:
 	virtual ~CSplashWnd();
 	virtual void PostNcDestroy();
@@ -73,25 +68,24 @@ public:
 public:
 	/** Hides the Splash Window. Do not use the public pointer after calling this function! Will be NULL.*/
 	void HideSplashScreen();
-	static CSplashWnd* c_pSplashWndPublic;
 
 protected:
 	BOOL Create(CWnd* pParentWnd = NULL);
-	static BOOL c_bShowSplashWnd;
-	static CSplashWnd* c_pSplashWnd;
 
-// Generierte Nachrichtenzuordnungsfunktionen
+private:
+	static BOOL c_bShowSplashWnd;
+	static std::auto_ptr<CSplashWnd> c_pSplashWnd;
+
 protected:
-	//{{AFX_MSG(CSplashWnd)
+	DECLARE_MESSAGE_MAP()
+
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnPaint();
 	afx_msg void OnTimer(UINT nIDEvent);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-public:
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+
+public:
+	static CSplashWnd* GetInstance();
+	static bool IsActive();
 };
-
-
-#endif

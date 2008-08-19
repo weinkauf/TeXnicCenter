@@ -231,11 +231,9 @@ const CString CTeXnicCenterApp::GetDDEServerName() const
 	AfxGetModuleShortFileName(AfxGetInstanceHandle(), strShortName);
 	return CPathTool::GetFileTitle(strShortName);
 }
-#include "EncodingConverter.h"
+
 BOOL CTeXnicCenterApp::InitInstance()
 {
-	std::vector<char> data;
-	UTF8toANSI("\xda\x60",2,data);
 	scintilla_ = AfxLoadLibrary(_T("SciLexer.dll"));
 
 	if (!scintilla_) {
@@ -484,9 +482,9 @@ BOOL CTeXnicCenterApp::InitInstance()
 	pMainFrame->UpdateWindow();
 
 	// hide the splash, if still there
-	if (CSplashWnd::c_pSplashWndPublic)
+	if (CSplashWnd::IsActive())
 	{
-		CSplashWnd::c_pSplashWndPublic->HideSplashScreen();
+		CSplashWnd::GetInstance()->HideSplashScreen();
 	}
 
 	UpdateLaTeXProfileSel();
@@ -681,6 +679,9 @@ void CTeXnicCenterApp::EndSession()
 
 int CTeXnicCenterApp::ExitInstance()
 {
+	if (CSplashWnd::IsActive())
+		CSplashWnd::GetInstance()->DestroyWindow();
+
 	// Shutdown background thread
 	if (m_pBackgroundThread)
 	{
