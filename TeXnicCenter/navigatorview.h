@@ -32,16 +32,12 @@
  *
  ********************************************************************/
 
-#if !defined(AFX_NAVIGATORVIEW_H__75A37CC2_20BE_11D3_929E_D32D9B17C664__INCLUDED_)
-#define AFX_NAVIGATORVIEW_H__75A37CC2_20BE_11D3_929E_D32D9B17C664__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include "ProjectView.h"
 
 class CLaTeXProject;
+class CStructureItem;
 
 /** Base class for viewing the document structure
         in a tree-like structure.
@@ -142,52 +138,58 @@ protected:
 	 */
 	HTREEITEM GetNextExpandedItem(HTREEITEM hItem, BOOL bInclude = FALSE) const;
 
-	/** Applies the font settings to the window */
-	void ApplyFont();
-
-// overwritings
-public:
-//{{AFX_VIRTUAL(NavigatorTreeCtrl)
-public:
-	//}}AFX_VIRTUAL
+	/** Updates the font settings to the window */
+	void UpdateFont();
 
 // message handlers
 protected:
 	afx_msg void OnSysColorChange();
-
-	//{{AFX_MSG(NavigatorTreeCtrl)
 	afx_msg void OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnTvnBeginDrag(NMHDR *pNMHDR, LRESULT *pResult);
+
 	DECLARE_MESSAGE_MAP()
 
 // attributes
-protected:
+private:
 	/** image list used by the tree ctrl. */
 	CImageList m_images;
 
 	/** Font to be used for the view */
 	CFont m_font;
 
-private:
 	/** TRUE after construction until the first call of OnInitialUpdate. */
 	BOOL m_bFirstTime;
+
+	class DragSource;
+
+	typedef CComObjectNoLock<DragSource> DataDragSource;
+	DataDragSource* drag_source_;
+
 public:
-	void Clear(void);
+	/// Removes all items in the tree view
+	void Clear();
+	/// Shows the context menu at the position indicated by the point parameters
+	/// \param point
+	///		   Position the context menu should be shown at, in screen coordinates
+	///		   If both coordinates are set to -1, the position is calculated automatically
+	void ShowContextMenu(CPoint &point);
+	/// Enables or disables the drag & drop functionality
+	void EnableDragDrop(bool enable = true);
+	/// Indicates whether the drag & drop functionality has been activated
+	bool IsDragDropEnabled() const;
+	/// Sends the ID_ITEM_GOTO command
+	void GotoItem();
+
+protected:
+	/// Called by the tree control before the drag & drop operation starts
+	/// to retrieve the text that should be used
+	virtual bool OnBeginDragDrop(HTREEITEM item, CString& text);
+	/// Called by the tree control after the drag & drop operation has been completed
+	virtual void OnEndDragDrop(HTREEITEM item);
+	virtual bool OnBeginDragDrop(const CStructureItem& item, CString& text, UINT keystate);
 };
-
-inline CLaTeXProject *NavigatorTreeCtrl::GetProject() const
-{
-	return (CLaTeXProject*)CProjectView::GetProject();
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
-
-#endif // AFX_NAVIGATORVIEW_H__75A37CC2_20BE_11D3_929E_D32D9B17C664__INCLUDED_

@@ -317,13 +317,18 @@ public:
 	DECLARE_INTERFACE_MAP()
 
 	BEGIN_INTERFACE_PART(Project, InterfaceImplementationWrappers::IProject)
-	CString GetTitle_() const;
-	CString GetPath_() const;
-	CString GetMainFile_() const;
-	BOOL GetUsesBibTex_() const;
-	void SetUsesBibTex_(BOOL bUseBibTex);
-	BOOL GetUsesMakeIndex_() const;
-	void SetUsesMakeIndex_(BOOL bUseMakeIndex);
+		CString GetTitle_() const;
+		CString GetPath_() const;
+		CString GetMainFile_() const;
+		BOOL GetUsesBibTex_() const;
+		void SetUsesBibTex_(BOOL bUseBibTex);
+		BOOL GetUsesMakeIndex_() const;
+		void SetUsesMakeIndex_(BOOL bUseMakeIndex);
 	END_INTERFACE_PART(Project)
+
 	int GetInitialNavigatorTabIndex() const;
+
+public:
+	static const CString FormatRef(const CStructureItem& item);
+	static const CString FormatPageRef(const CStructureItem& item);
 };

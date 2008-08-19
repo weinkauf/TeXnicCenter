@@ -139,15 +139,9 @@ public:
 
 	LabelContainer& GetLabels();
 
-	void AddLabel(const CString& l)
-	{
-		labels_.push_back(l);
-	}
+	void AddLabel(const CString& l);
 
-	void RemoveLabels()
-	{
-		labels_.clear();
-	}
+	void RemoveLabels();
 
 	/** Comment of this item */
 	CString m_strComment;

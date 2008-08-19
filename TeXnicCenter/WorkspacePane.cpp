@@ -1,19 +1,13 @@
-// WorkspacePane.cpp : implementation file
-//
-
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "WorkspacePane.h"
 
 
-// WorkspacePane
-
 IMPLEMENT_DYNAMIC(WorkspacePane, CDockablePane)
 
 WorkspacePane::WorkspacePane()
-		: client_(0)
+: client_(0)
 {
-
 }
 
 BEGIN_MESSAGE_MAP(WorkspacePane, CDockablePane)
@@ -22,6 +16,7 @@ BEGIN_MESSAGE_MAP(WorkspacePane, CDockablePane)
 	ON_WM_SETFOCUS()
 	ON_WM_CREATE()
 	ON_WM_ERASEBKGND()
+	ON_WM_CONTEXTMENU()
 END_MESSAGE_MAP()
 
 // WorkspacePane message handlers
@@ -37,9 +32,10 @@ void WorkspacePane::SetClient(CWnd* p)
 {
 	client_ = p;
 
-	if (m_hWnd && client_)
+	if (m_hWnd && client_ && client_->GetParent()->GetSafeHwnd() != m_hWnd)
 	{
 		client_->SetParent(this);
+		client_->SetOwner(this);
 		AdjustLayout();
 	}
 }
@@ -72,7 +68,6 @@ void WorkspacePane::OnSetFocus(CWnd* pOldWnd)
 		client_->SetFocus();
 }
 
-
 int WorkspacePane::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
@@ -95,4 +90,10 @@ CWnd* WorkspacePane::GetClient(void) const
 BOOL WorkspacePane::OnEraseBkgnd(CDC* pDC)
 {
 	return client_ ? 1 : CDockablePane::OnEraseBkgnd(pDC);
+}
+
+void WorkspacePane::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
+{
+	if (NavigatorTreeCtrl* t = dynamic_cast<NavigatorTreeCtrl*>(client_))
+		t->ShowContextMenu(point);
 }

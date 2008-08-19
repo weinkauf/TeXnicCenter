@@ -187,6 +187,16 @@ bool CStructureItem::HasLabels() const
 	return !labels_.empty();
 }
 
+void CStructureItem::AddLabel( const CString& l )
+{
+	labels_.push_back(l);
+}
+
+void CStructureItem::RemoveLabels()
+{
+	labels_.clear();
+}
+
 //-------------------------------------------------------------------
 // class CStructureParser
 //-------------------------------------------------------------------

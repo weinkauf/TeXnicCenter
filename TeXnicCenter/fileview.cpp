@@ -38,19 +38,7 @@
 #include "FontOccManager.h"
 #include "global.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-//-------------------------------------------------------------------
-// class CFileView
-//-------------------------------------------------------------------
-
 BEGIN_MESSAGE_MAP(CFileView,NavigatorTreeCtrl)
-	//{{AFX_MSG_MAP(CFileView)
-	//}}AFX_MSG_MAP
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CFileView::OnNMCustomdraw)
 END_MESSAGE_MAP()
 
@@ -66,7 +54,7 @@ CFileView::~CFileView()
 {
 }
 
-void CFileView::OnUpdate(CProjectView* pSender,LPARAM lHint,LPVOID pHint)
+void CFileView::OnUpdate(CProjectView* /*pSender*/, LPARAM lHint, LPVOID /*pHint*/)
 {
 	switch (lHint)
 	{
@@ -216,4 +204,19 @@ BOOL CFileView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pR
 	}
 
 	return NavigatorTreeCtrl::OnWndMsg(message, wParam, lParam, pResult);
+}
+
+bool CFileView::OnBeginDragDrop(const CStructureItem& item, CString& text, UINT keystate)
+{
+	switch (keystate)
+	{
+		case 0:
+			text.Format(_T("\\input{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
+			break;
+		case MK_CONTROL:
+			text.Format(_T("\\include{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
+			break;
+	}
+
+	return !text.IsEmpty();
 }

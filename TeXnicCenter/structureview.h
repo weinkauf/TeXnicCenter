@@ -16,15 +16,18 @@ private:
 public:
 	//StructureView();
 	//~StructureView();
+	void AdjustLayout(const CRect& rect);
+	void AdjustLayout();
 
 protected:
 	DECLARE_MESSAGE_MAP()
+
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	void AdjustLayout(const CRect& rect);
-	void AdjustLayout();
+	afx_msg void OnSize(UINT nType, int cx, int cy);	
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 
+public:
 	CProjectView* GetProjectView();
+	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
 };

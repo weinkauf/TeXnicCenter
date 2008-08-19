@@ -19,11 +19,11 @@ IMPLEMENT_DYNAMIC(StructureView, CDockablePane)
 //{
 //}
 
-
 BEGIN_MESSAGE_MAP(StructureView, CDockablePane)
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_WM_SETFOCUS()
+	ON_WM_CONTEXTMENU()
 END_MESSAGE_MAP()
 
 
@@ -91,4 +91,9 @@ void StructureView::OnSetFocus(CWnd* pOldWnd)
 CProjectView* StructureView::GetProjectView()
 {
 	return &tree_;
+}
+
+void StructureView::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
+{
+	tree_.ShowContextMenu(point); // We're done. Do not pass the message to the base class
 }

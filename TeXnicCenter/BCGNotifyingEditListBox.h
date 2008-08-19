@@ -104,7 +104,7 @@ public:
 	NotifyingEditListBox();
 
 // overridings
-public:
+protected:
 	void OnAfterAddItem(int iItem);
 	void OnAfterMoveItemDown(int iItem);
 	void OnAfterMoveItemUp(int iItem);

@@ -35,19 +35,16 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 
+#include <algorithm>
+#include <functional>
+
 #include "global.h"
 #include "TextFileSaveDialog.h"
 #include "RunTimeHelper.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
-//-------------------------------------------------------------------
-// class CTextFileSaveDialog
-//-------------------------------------------------------------------
+LPCTSTR const Format[] = {_T("Windows"),_T("Unix"),_T("Macintosh"),0};
+LPCTSTR const Encoding[] = {_T("ANSI"),_T("UTF-8"),_T("UTF-16"),_T("UTF-16 Big Endian"),_T("UTF-32"),_T("UTF-32 Big Endian"),0};
 
 BEGIN_MESSAGE_MAP(CTextFileSaveDialog, CFileDialog)
 	//{{AFX_MSG_MAP(CTextFileSaveDialog)
@@ -55,9 +52,6 @@ BEGIN_MESSAGE_MAP(CTextFileSaveDialog, CFileDialog)
 	ON_CBN_SELCHANGE(IDC_SELECT_ENCODING, &CTextFileSaveDialog::OnSelchangeFileFormat)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
-
-LPCTSTR const Format[] = {_T("Windows"),_T("Unix"),_T("Macintosh"),0};
-LPCTSTR const Encoding[] = {_T("ANSI"),_T("UTF-8"),_T("UTF-16"),_T("UTF-16 Big Endian"),_T("UTF-32"),_T("UTF-32 Big Endian"),0};
 
 CTextFileSaveDialog::CTextFileSaveDialog(
     UINT unTitle /*= AFX_IDS_SAVEFILE*/,
@@ -69,6 +63,7 @@ CTextFileSaveDialog::CTextFileSaveDialog(
 : CFileDialogEx(FALSE, lpszDefExt, lpszFileName, dwFlags, lpszFilter, pParent)
 , m_strTitle((LPCTSTR)unTitle)
 , encoding_index_(0)
+, use_bom_(false)
 {
 	// Vista-style
 	if (IFileDialogCustomize* fdc = GetIFileDialogCustomize())
@@ -94,10 +89,13 @@ CTextFileSaveDialog::CTextFileSaveDialog(
 
 		// Add the Encoding combo box
 		fdc->StartVisualGroup(IDC_STATIC_ENCODING,CStringW(MAKEINTRESOURCE(IDS_ENCODING)));
-		fdc->AddComboBox(IDC_SELECT_ENCODING);		
+		fdc->AddComboBox(IDC_SELECT_ENCODING);
 
-		for (LPCTSTR const* p = Encoding; *p; ++p)
-			fdc->AddControlItem(IDC_SELECT_ENCODING,id++,T2CW(*p));
+		const std::vector<CString> encodings = GetEncodings();
+		typedef std::vector<CString>::const_iterator I;
+
+		for (I it = encodings.begin(); it != encodings.end(); ++it)
+			fdc->AddControlItem(IDC_SELECT_ENCODING,id++,T2CW(*it));
 
 		fdc->EndVisualGroup();
 
@@ -113,8 +111,21 @@ CTextFileSaveDialog::CTextFileSaveDialog(
 	}
 
 	m_ofn.lpstrTitle = m_strTitle;
-
 	m_nFileFormat = nFileFormat;
+}
+
+const std::vector<CString> CTextFileSaveDialog::GetEncodings() const
+{
+	std::size_t size = sizeof(Encoding) / sizeof(*Encoding) - 1;
+	std::vector<CString> result(Encoding,Encoding + size);
+
+	CString fmt;
+	fmt.Format(IDS_ENCODING_WITH_BOM,Encoding[1]);
+
+	// Insert after UTF-8 which is the 2nd item 
+	result.insert(result.begin() + 2,fmt);
+
+	return result;
 }
 
 void CTextFileSaveDialog::DoDataExchange(CDataExchange* pDX)
@@ -175,8 +186,10 @@ BOOL CTextFileSaveDialog::OnInitDialog()
 		m_wndFileFormatCombo.AddString(*p);
 
 	// Add encoding data
-	for (LPCTSTR const* p = Encoding; *p; ++p)
-		encoding_.AddString(*p);
+	const std::vector<CString> encodings = GetEncodings();
+	
+	std::for_each(encodings.begin(),encodings.end(),
+		std::bind1st(std::mem_fun1(&CComboBox::AddString),&encoding_));
 
 	//
 	UpdateData(FALSE);
@@ -212,6 +225,11 @@ int CTextFileSaveDialog::GetFileFormat()
 void CTextFileSaveDialog::SetEncoding( CodeDocument::Encoding e )
 {
 	encoding_index_ = e;
+	ASSERT(use_bom_ && e != CodeDocument::ANSI || !use_bom_ && 
+		(e == CodeDocument::ANSI || e == CodeDocument::UTF8));
+
+	if (use_bom_)
+		++encoding_index_;
 
 	if (m_bVistaStyle) 
 	{
@@ -223,19 +241,51 @@ void CTextFileSaveDialog::SetEncoding( CodeDocument::Encoding e )
 
 CodeDocument::Encoding CTextFileSaveDialog::GetEncoding()
 {
-	CodeDocument::Encoding result = CodeDocument::ANSI;
+	int index = GetEncodingIndex();
+
+	if (index >= 2)
+		--index;
+
+	return static_cast<CodeDocument::Encoding>(index);
+}
+
+bool CTextFileSaveDialog::GetUseBOM()
+{
+	return GetEncodingIndex() >= 2;
+}
+
+void CTextFileSaveDialog::SetUseBOM( bool use /*= true*/ )
+{
+	bool previous = use_bom_;
+	use_bom_ = use;
+
+	if (use_bom_ != previous) {
+		if (use_bom_) {
+			ASSERT(encoding_index_ == 0 || encoding_index_ == 1);
+			++encoding_index_;
+		}
+		else {
+			ASSERT(encoding_index_ >= 2);
+			--encoding_index_;
+		}
+	}
+}
+
+int CTextFileSaveDialog::GetEncodingIndex()
+{
+	int index = 0;
 
 	if (IFileDialogCustomize* fdc = GetIFileDialogCustomize())
 	{
 		DWORD id;
 
 		if (SUCCEEDED(fdc->GetSelectedControlItem(IDC_SELECT_ENCODING,&id)))
-			result = static_cast<CodeDocument::Encoding>(id);
+			index = static_cast<int>(id);
 
 		fdc->Release();
 	}
 	else
-		result = static_cast<CodeDocument::Encoding>(encoding_index_);
-
-	return result;
+		index = static_cast<CodeDocument::Encoding>(encoding_index_);
+	
+	return index;
 }

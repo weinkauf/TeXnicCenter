@@ -26,10 +26,6 @@
  *
  *********************************************************************/
 
-// BackgroundThread.h: interface for the CBackgroundThread class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #pragma once
 
 class Speller;

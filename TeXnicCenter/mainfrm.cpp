@@ -1484,19 +1484,19 @@ bool CMainFrame::CreateNavigationViews(void)
 	CRect rectDummy;
 	rectDummy.SetRectEmpty();
 
-	if (!env_view_.Create(this))
+	if (!env_view_.Create(&env_view_pane_))
 	{
 		TRACE0("Failed to create environment view\n");
 		return false;
 	}
 
-	if (!file_view_.Create(this))
+	if (!file_view_.Create(&file_view_pane_))
 	{
 		TRACE0("Failed to create file view\n");
 		return false;
 	}
 
-	if (!bib_view_.Create(this))
+	if (!bib_view_.Create(&bib_view_pane_))
 	{
 		TRACE0("Failed to create bib view\n");
 		return false;

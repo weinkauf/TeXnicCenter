@@ -914,6 +914,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OleDrop.h"
+				>
+			</File>
+			<File
 				RelativePath=".\optiondialog.cpp"
 				>
 			</File>

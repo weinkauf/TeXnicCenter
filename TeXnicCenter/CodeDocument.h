@@ -13,7 +13,11 @@ class CodeDocument : public CScintillaDoc
 {
 	DECLARE_DYNAMIC(CodeDocument)
 
+	/// Handle to the error marker or -1 if invalid
 	int error_marker_handle_;
+	/// Specifies whether a BOM has been found while
+	/// opening the document or should be saved with it
+	bool use_bom_;
 
 public:
 	enum Encoding
@@ -95,10 +99,13 @@ public:
 	template<class I>
 	void SetBookmarks(I first, I last);
 
-	// Tests data for UTF-8 and UTF-16 encodings
+	/// Tests data for UTF-8 and UTF-16 encodings
 	static Encoding TestForUnicode(const BYTE* data, SIZE_T size);
-	// Reads the whole file by detecting the right encoding
+	/// Reads the whole file by detecting the right encoding
 	static bool ReadString(LPCTSTR pszFileName, CStringW& string, UINT codepage = ::GetACP());
+	/// Indicates whether this document should be saved with BOM, invalid for ANSI documents
+	bool GetUseBOM() const;
+	void SetUseBOM(bool use = true);
 };
 
 template<class I>
