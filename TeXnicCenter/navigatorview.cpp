@@ -496,9 +496,6 @@ bool NavigatorTreeCtrl::OnBeginDragDrop(HTREEITEM item, CString& text)
 		}
 	}
 
-	if (result)
-		static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(text);
-
 	return result;
 }
 
@@ -516,18 +513,33 @@ bool NavigatorTreeCtrl::OnBeginDragDrop(const CStructureItem& item, CString& tex
 {
 	if (item.HasLabels()) 
 	{
+		CString message;
+
 		switch (keystate) 
 		{
 			case 0: // \ref{label}
 				text = CLaTeXProject::FormatRef(item);
+				message.LoadString(ID_ITEM_INSERT_REF);
 				break;
 			case MK_CONTROL: // label
 				text = item.GetLabel();
-				break; // \pageref{label}
-			case MK_CONTROL|MK_SHIFT:
+				message.LoadString(ID_ITEM_INSERT_LABEL);
+				break; 
+			case MK_SHIFT: // \pageref{label}
 				text = CLaTeXProject::FormatPageRef(item);
+				message.LoadString(ID_ITEM_INSERT_PAGEREF);
 				break;
 		}
+
+		int index = message.Find(_T('\n'));
+
+		if (index != -1)
+			message.Delete(0,index + 1);
+
+		CString fmt;
+		fmt.Format(_T("%s: %s"),message,text);
+
+		static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(fmt);
 	}
 
 	return !text.IsEmpty();

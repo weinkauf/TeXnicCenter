@@ -218,5 +218,7 @@ bool CFileView::OnBeginDragDrop(const CStructureItem& item, CString& text, UINT 
 			break;
 	}
 
+	static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(text);
+
 	return !text.IsEmpty();
 }
