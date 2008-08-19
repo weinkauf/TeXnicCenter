@@ -89,8 +89,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../bin/SciLexer.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -176,8 +174,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../bin/SciLexer.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -263,8 +259,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../bin/SciLexer.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -350,8 +344,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../bin/SciLexer.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"

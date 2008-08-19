@@ -98,8 +98,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../output/Release/TeXnicCenter.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -193,8 +191,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../output/Debug/TeXnicCenter.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -290,8 +286,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../output/Debug/TeXnicCenter.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -387,8 +381,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../output/Release/TeXnicCenter.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"

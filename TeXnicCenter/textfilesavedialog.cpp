@@ -47,10 +47,8 @@ LPCTSTR const Format[] = {_T("Windows"),_T("Unix"),_T("Macintosh"),0};
 LPCTSTR const Encoding[] = {_T("ANSI"),_T("UTF-8"),_T("UTF-16"),_T("UTF-16 Big Endian"),_T("UTF-32"),_T("UTF-32 Big Endian"),0};
 
 BEGIN_MESSAGE_MAP(CTextFileSaveDialog, CFileDialog)
-	//{{AFX_MSG_MAP(CTextFileSaveDialog)
 	ON_CBN_SELCHANGE(IDC_SELECT_FILEFORMAT, &CTextFileSaveDialog::OnSelchangeFileFormat)
 	ON_CBN_SELCHANGE(IDC_SELECT_ENCODING, &CTextFileSaveDialog::OnSelchangeFileFormat)
-	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 CTextFileSaveDialog::CTextFileSaveDialog(

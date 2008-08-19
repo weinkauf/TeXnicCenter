@@ -79,7 +79,6 @@
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\../output/Release/language/TxcResDeutsch.pdb"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -96,8 +95,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../output/Release/language/TxcDeutsch.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -170,7 +167,6 @@
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\../output/Debug/language/TxcResDeutsch.pdb"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -187,8 +183,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../output/Debug/language/TxcDeutsch.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -261,7 +255,6 @@
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\../output/Debug/language/TxcResDeutsch.pdb"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -278,8 +271,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../output/Debug/language/TxcDeutsch.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -356,7 +347,6 @@
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\../output/Release/language/TxcResDeutsch.pdb"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -373,8 +363,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../output/Release/language/TxcDeutsch.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -588,7 +576,6 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						ResourceOutputFileName="Release/TxcDeutsch.res"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -597,7 +584,6 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						ResourceOutputFileName="Debug/TxcDeutsch.res"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -606,7 +592,6 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						ResourceOutputFileName="Debug/TxcDeutsch.res"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -615,7 +600,6 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						ResourceOutputFileName="Release/TxcDeutsch.res"
 					/>
 				</FileConfiguration>
 			</File>

@@ -74,7 +74,6 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
-				ProgramDatabaseFile=".\../output/Debug/language/TxcResEnglish.pdb"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -91,8 +90,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../output/Debug/language/TxcEnglish.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -185,8 +182,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../output/Release/language/TxcEnglish.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -258,7 +253,6 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
-				ProgramDatabaseFile=".\../output/Debug/language/TxcResEnglish.pdb"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -275,8 +269,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../output/Debug/language/TxcEnglish.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -369,8 +361,6 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				SuppressStartupBanner="true"
-				OutputFile=".\../output/Release/language/TxcEnglish.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -588,7 +578,6 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						ResourceOutputFileName="Debug/TxcEnglish.res"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -597,7 +586,6 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						ResourceOutputFileName="Release/TxcEnglish.res"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -606,7 +594,6 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						ResourceOutputFileName="Debug/TxcEnglish.res"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -615,7 +602,6 @@
 					<Tool
 						Name="VCResourceCompilerTool"
 						PreprocessorDefinitions=""
-						ResourceOutputFileName="Release/TxcEnglish.res"
 					/>
 				</FileConfiguration>
 			</File>
