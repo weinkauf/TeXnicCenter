@@ -104,6 +104,11 @@ LPCTSTR const pArrCredit[] =
 	_T(""),
 	_T("Development\r"),
 	_T(""),
+	_T("Maintainer\t"),
+	_T(""),
+	_T("Tino Weinkauf\f"),
+	_T(""),
+	_T(""),
 	_T("Main Code\t"),
 	_T(""),
 	_T("Sergiu Dotenco\f"),
@@ -286,7 +291,7 @@ void CAboutDlg::OnPaint()
 	//*********************************************************************
 	// FONT SELECTION
 	CFont m_fntArial;
-	CFont* pOldFont;
+	CFont* pOldFont = NULL;
 	BOOL bSuccess;
 
 	BYTE bUnderline;
