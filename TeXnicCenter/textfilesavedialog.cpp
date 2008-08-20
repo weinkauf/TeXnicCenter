@@ -64,7 +64,9 @@ CTextFileSaveDialog::CTextFileSaveDialog(
 , use_bom_(false)
 {
 	// Vista-style
-	if (IFileDialogCustomize* fdc = GetIFileDialogCustomize())
+	IFileDialogCustomize* fdc = NULL;
+	if (m_bVistaStyle) fdc = GetIFileDialogCustomize();
+	if (fdc != NULL)
 	{
 #pragma region File Format initialization
 		// Add the File Format combo box
@@ -75,7 +77,9 @@ CTextFileSaveDialog::CTextFileSaveDialog(
 		DWORD id = 0;
 
 		for (LPCTSTR const* p = Format; *p; ++p)
+		{
 			fdc->AddControlItem(IDC_SELECT_FILEFORMAT,id++,T2CW(*p));
+		}
 
 		fdc->EndVisualGroup();
 
@@ -93,7 +97,9 @@ CTextFileSaveDialog::CTextFileSaveDialog(
 		typedef std::vector<CString>::const_iterator I;
 
 		for (I it = encodings.begin(); it != encodings.end(); ++it)
+		{
 			fdc->AddControlItem(IDC_SELECT_ENCODING,id++,T2CW(*it));
+		}
 
 		fdc->EndVisualGroup();
 
