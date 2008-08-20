@@ -103,13 +103,16 @@ In particular, start the word with a capital letter if you use CamelCase for
 that word, i.e., not camelCase.
 
 
-Programming Paradigm
----------------------
+Structured Programming
+----------------------
 
-Follow the structured programming paradigm when possible. This means no gotos,
-breaks, continues, multiple returns in a single function and so on. Not
-following this paradigm results in spaghetti code which is hard to understand
-and debug.
+Follow the structured programming paradigm when possible.
+This means that especially 'goto' is not allowed at all.
+Not following this paradigm results in spaghetti code
+which is hard to understand and debug.
+Other statements such as 'break', 'continue',
+or multiple 'return's in a single function are allowed
+but should be used with care.
 
 
 const-Correctness
@@ -118,6 +121,25 @@ const-Correctness
 Use the const keyword for data and class members as much as possible, especially
 for Get-methods or the like.  See http://en.wikipedia.org/wiki/Const-correctness
 for further explanation.
+
+
+Single line 'for' and 'if' statements
+-------------------------------------
+
+If the body of a 'for' or 'if' statement consists of a single line only,
+this line is not to be written without braces.
+
+if (foo)
+{
+    bar() //Correct.
+}
+
+if (foo)
+    bar() //Wrong. Please avoid.
+
+It is also not desired to write it into a single line:
+
+if (foo) bar() //Not desired. Use only with care.
 
 
 Branches
