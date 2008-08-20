@@ -377,7 +377,7 @@ void CAboutDlg::OnPaint()
 						str.Format(_T("Could not find bitmap resource \"%s\". ")
 						           _T("Be sure to assign the bitmap a QUOTED resource name"),szBitmap);
 						KillTimer(DISPLAY_TIMER_ID);
-						MessageBox(str);
+						AfxMessageBox(str);
 						return;
 					}
 

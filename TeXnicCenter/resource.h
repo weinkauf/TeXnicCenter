@@ -26,6 +26,7 @@
 #define IDS_ENCODING_WITH_BOM           39
 #define IDS_SCINTILLA_DEFAULT_PRINT_FOOTER 40
 #define IDS_SCINTILLA_DEFAULT_PRINT_HEADER 41
+#define IDS_NO_LABEL_AVAILABLE          42
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
 #define IDD_TIP                         103
@@ -48,7 +49,6 @@
 #define STE_ENTRIES_COUNT               115
 #define ID_FORMAT_TEXT_BACK_COLOR       116
 #define ID_FORMAT_TEXT_FORE_COLOR       117
-#define ID_VIEW_STRUCTURE               118
 #define IDR_OUTPUT_BAR                  120
 #define ID_VIEW_BUILD_PANE              122
 #define ID_VIEW_GREP_1_PANE             123
@@ -316,13 +316,14 @@
 #define IDC_CURSOR1                     336
 #define IDC_REVERSE_INCREMENTAL_SEARCH  336
 #define STE_GREP_FAILED                 337
-#define ANN                             337
 #define STE_GREP_CANCELED               338
 #define STE_GREP_HIT                    339
 #define STE_GREP_FINISHEDNOHIT          340
 #define STE_GREP_FINISHED               341
 #define STE_GREP_ERROR                  342
 #define STE_PROJECT_CLOSE_ASK           343
+#define IDS_DO_SAVE                     345
+#define IDS_DO_NOT_SAVE                 346
 #define STE_PARSE_BEGIN                 350
 #define STE_PARSE_END                   351
 #define STE_PARSE_PARSING               352
@@ -398,10 +399,7 @@
 #define IDC_VIEWER_STARTEX              1036
 #define IDC_OUTPUTTYPES                 1037
 #define IDC_PROJECT_PATH                1038
-#define IDC_PHPOPUP_COMPILER            1038
 #define IDC_DIR                         1040
-#define IDC_PHPOPUP_VIEWER              1040
-#define IDC_PHPOPUP_VIEWEREX            1041
 #define IDC_MAIN_FILE                   1042
 #define IDC_BROWSE_MAIN_FILE            1043
 #define IDC_TITLE                       1043
@@ -493,7 +491,6 @@
 #define IDC_SEARCH_INCLUDESUBFOLDERS    1131
 #define IDC_SEARCH_OUTPUT1              1132
 #define IDC_SEARCH_OUTPUT2              1133
-#define IDC_EDITOR_FONTSIZE             1134
 #define IDC_EDITOR_ELEMENT              1136
 #define IDC_EDITOR_ELEMENTCOLOR         1137
 #define IDC_EDITOR_TABWIDTH             1138
@@ -599,8 +596,6 @@
 #define IDC_PROJECTTEMPLATES            1245
 #define IDC_ADD_PROJECTTEMPLATES        1246
 #define IDC_REMOVE_PROJECTTEMPLATES     1247
-#define IDC_EDIT_FILENAME               1248
-#define IDC_EDIT_DIRECTORY              1249
 #define IDC_STOPONLATEXERROR            1250
 #define IDC_OPTIONS_LANGUAGE            1256
 #define IDC_OPTIONS_SPELL_ENABLE        1258
@@ -703,8 +698,6 @@
 #define IDC_EDIT_REPLACE_ALL            8608
 #define IDC_EDIT_REPLACE_WITH           8609
 #define IDC_EDIT_SKIP                   8610
-#define IDC_EDIT_DIRECTION_UP           8611
-#define IDC_EDIT_DIRECTION_DOWN         8612
 #define IDC_EDIT_SCOPE_SELECTION        8613
 #define IDC_EDIT_SCOPE_WHOLE_FILE       8614
 #define IDS_MENU_UNDO_FORMAT            8615
@@ -1430,18 +1423,14 @@
 #define ID_SHOW_TABLES                  38541
 #define ID_EDIT_DELETE_LINE             38542
 #define ID_EDIT_TOGGLE_SHOW_LINE_ENDING 38549
-#define ID_ANSICHT_ZEILENUMBRUCH        38550
 #define ID_EDIT_WORD_WRAP               38551
 #define ID_VIEW_DISPLAYENDLINES         38552
-#define ID_VIEW_WORDWRAP                38553
 #define ID_VIEW_WORD_WRAP               38554
 #define ID_VIEW_TOGGLE_SHOW_LINE_ENDING 38555
-#define ID_VIEW_TOGGLE_WHITESPACEVIEW   38556
 #define ID_VIEW_TOGGLE_WORD_WRAP        38557
 #define ID_VIEW_TOGGLE_WHITE_SPACE      38558
 #define ID_VIEW_LINE_ENDING             38559
 #define ID_VIEW_WHITE_SPACE             38560
-#define ID_ANSICHT_ZEILENNUMMERANZEIGE  38561
 #define ID_SHOW_LINE_NUMBERS            38562
 #define ID_VIEW_LINE_NUMBERS            38563
 #define ID_VIEW_DISPLAYLINENUMBERS      38564
@@ -1454,7 +1443,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        338
+#define _APS_NEXT_RESOURCE_VALUE        346
 #define _APS_NEXT_COMMAND_VALUE         38565
 #define _APS_NEXT_CONTROL_VALUE         1365
 #define _APS_NEXT_SYMED_VALUE           190

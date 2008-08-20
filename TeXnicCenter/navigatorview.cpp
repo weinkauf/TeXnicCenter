@@ -496,6 +496,9 @@ bool NavigatorTreeCtrl::OnBeginDragDrop(HTREEITEM item, CString& text)
 		}
 	}
 
+	if (!result)
+		static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(IDS_NO_LABEL_AVAILABLE);
+
 	return result;
 }
 

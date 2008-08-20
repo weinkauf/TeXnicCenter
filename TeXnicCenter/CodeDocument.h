@@ -78,33 +78,44 @@ public:
 	bool IsSpellerThreadAttached() const;
 	void SetErrorMark(int line);
 	bool HasErrorMark() const;
+	BOOL SaveModified();
+
+private:
+	// Vista Task Dialog implementation
+	BOOL DoSaveModified();
 
 protected:
+	DECLARE_MESSAGE_MAP()
+
 	virtual BOOL OnNewDocument();
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
-	afx_msg void OnEditToggleBookmark();
 
-	bool ShowSaveDialog(LPCTSTR file) const;
-	DECLARE_MESSAGE_MAP()	
-	virtual void OnBookmarkAdded(const ::CodeBookmark& b);
-	virtual void OnBookmarkRemoved(const ::CodeBookmark& b);
-	virtual void OnRemovedAllBookmarks(void);
+	afx_msg void OnEditToggleBookmark();
 	afx_msg void OnEditClearAllBookmarks();
 
-public:
-	void RemoveAllBookmarks();
-	void ToggleBookmark( int line );
+	bool ShowSaveDialog(LPCTSTR file) const;
+	
+	virtual void OnBookmarkAdded(const ::CodeBookmark& b);
+	virtual void OnBookmarkRemoved(const ::CodeBookmark& b);
+	virtual void OnRemovedAllBookmarks(void);	
 
+public:
+	/// Removes all bookmarks that have been set
+	void RemoveAllBookmarks();
+	/// Sets or removes a bookmark on the specified line
+	void ToggleBookmark( int line );
+	/// Returns a container of CodeBookmarks that have been set for this document
 	const BookmarkContainerType GetBookmarks();
+	/// Clears all the bookmarks and sets the ones from the range specified by first last
 	template<class I>
 	void SetBookmarks(I first, I last);
-
 	/// Tests data for UTF-8 and UTF-16 encodings
 	static Encoding TestForUnicode(const BYTE* data, SIZE_T size);
 	/// Reads the whole file by detecting the right encoding
 	static bool ReadString(LPCTSTR pszFileName, CStringW& string, UINT codepage = ::GetACP());
 	/// Indicates whether this document should be saved with BOM, invalid for ANSI documents
 	bool GetUseBOM() const;
+	/// Enables or disabled the usage of a BOM for Unicode text documents
 	void SetUseBOM(bool use = true);
 };
 

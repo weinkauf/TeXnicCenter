@@ -8,6 +8,7 @@
 #include "SpellerBackgroundThread.h"
 #include "CodeBookmark.h"
 #include "EncodingConverter.h"
+#include "RunTimeHelper.h"
 
 int DetectScintillaEOLMode(const char* text, std::size_t size)
 {
@@ -679,4 +680,113 @@ bool CodeDocument::GetUseBOM() const
 void CodeDocument::SetUseBOM( bool use /*= true*/ )
 {
 	use_bom_ = use;
+}
+
+BOOL CodeDocument::SaveModified()
+{
+	BOOL result;
+
+	if (!RunTimeHelper::IsVista())
+		result = CScintillaDoc::SaveModified();
+	else
+		result = DoSaveModified();
+
+	return result;
+}
+
+BOOL CodeDocument::DoSaveModified()
+{
+	BOOL result;
+
+	if (!IsModified())
+		result = TRUE;        // ok to continue
+	else {
+		// get name/title of document
+		CString name;
+
+		if (m_strPathName.IsEmpty()) {
+			// get name based on caption
+			name = m_strTitle;
+
+			if (name.IsEmpty())
+				ENSURE(name.LoadString(AFX_IDS_UNTITLED));
+		}
+		else {
+			extern UINT AFXAPI AfxGetFileTitle(LPCTSTR, LPTSTR, UINT);
+			// get name based on file title of path name
+			name = m_strPathName;
+			AfxGetFileTitle(m_strPathName, name.GetBuffer(_MAX_PATH), _MAX_PATH);
+			name.ReleaseBuffer();
+		}
+
+		CString prompt;
+		AfxFormatString1(prompt,AFX_IDP_ASK_TO_SAVE,name);
+
+		TASKDIALOGCONFIG tdc = {sizeof(TASKDIALOGCONFIG)};
+		tdc.dwCommonButtons = TDCBF_CANCEL_BUTTON;
+
+		USES_CONVERSION;
+		tdc.pszMainInstruction = T2CW(prompt);
+
+		const CStringW save(MAKEINTRESOURCE(IDS_DO_SAVE));
+		const CStringW dont_save(MAKEINTRESOURCE(IDS_DO_NOT_SAVE));
+
+		const TASKDIALOG_BUTTON btns[] = {
+			IDYES,save,
+			IDNO,dont_save
+		};
+
+		tdc.cButtons = sizeof(btns) / sizeof(*btns);
+		tdc.pButtons = btns;
+
+		// disable windows for modal dialog
+		theApp.DoEnableModeless(FALSE);
+
+		HWND hWndTop;
+		HWND hWnd = CWnd::GetSafeOwner_(NULL, &hWndTop);
+
+		// re-enable the parent window, so that focus is restored 
+		// correctly when the dialog is dismissed.
+		if (hWnd != hWndTop)
+			EnableWindow(hWnd, TRUE);
+
+		tdc.hwndParent = hWnd;
+
+		const CStringW title(MAKEINTRESOURCE(IDR_MAINFRAME));
+		tdc.pszWindowTitle = title;
+
+		int button = 0;
+		::TaskDialogIndirect(&tdc,&button,0,0); // AfxMessageBox(prompt, MB_YESNOCANCEL, AFX_IDP_ASK_TO_SAVE)
+
+		// re-enable windows
+		if (hWndTop != NULL)
+			::EnableWindow(hWndTop, TRUE);
+
+		theApp.DoEnableModeless(TRUE);
+
+		switch (button) {
+			case IDCANCEL:
+				result = FALSE;       // don't continue
+
+			case IDYES:
+				// If so, either Save or Update, as appropriate
+				if (!DoFileSave())
+					result = FALSE;       // don't continue
+				break;
+
+			case IDNO:
+				// If not saving changes, revert the document
+				break;
+
+			case IDOK:
+				result = TRUE;    // keep going
+				break;
+
+			default:
+				ASSERT(FALSE);
+				break;
+		}
+	}
+
+	return result;
 }

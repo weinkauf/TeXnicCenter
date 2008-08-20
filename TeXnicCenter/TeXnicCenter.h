@@ -394,6 +394,10 @@ protected:
 
 	/** Critical section to protect lazy resource initialization */
 	CRITICAL_SECTION m_csLazy;
+
+protected:
+	int DoMessageBox(LPCTSTR prompt, UINT type, UINT prompt_id);
+	virtual bool DoTaskDialog( HWND hWnd, LPCTSTR prompt, UINT nType, int& result);
 };
 
 inline
