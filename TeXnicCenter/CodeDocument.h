@@ -2,6 +2,7 @@
 
 #include "CodeBookmark.h"
 
+int ShowSaveTaskDialog(LPCTSTR prompt);
 int ToScintillaMode(int m);
 int FromScintillaMode(int m);
 

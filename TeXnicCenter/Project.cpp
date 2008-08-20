@@ -34,10 +34,13 @@
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
+
 #include "Project.h"
 #include "ProjectView.h"
 #include "ProjectTemplate.h"
 #include "ProjectSupportingWinApp.h"
+#include "RunTimeHelper.h"
+#include "CodeDocument.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -50,7 +53,6 @@ static char THIS_FILE[] = __FILE__;
 //-------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC(CProject, CCmdTarget)
-
 
 BEGIN_MESSAGE_MAP(CProject, CCmdTarget)
 	//{{AFX_MSG_MAP(CProject)
@@ -438,7 +440,15 @@ BOOL CProject::SaveModified()
 
 	CString prompt;
 	AfxFormatString1(prompt, AFX_IDP_ASK_TO_SAVE, name);
-	switch (AfxMessageBox(prompt, MB_YESNOCANCEL, AFX_IDP_ASK_TO_SAVE))
+
+	int button;
+
+	if (!RunTimeHelper::IsVista())
+		button = AfxMessageBox(prompt, MB_YESNOCANCEL, AFX_IDP_ASK_TO_SAVE);
+	else
+		button = ShowSaveTaskDialog(prompt);
+
+	switch (button)
 	{
 		case IDCANCEL:
 			return FALSE; // don't continue
