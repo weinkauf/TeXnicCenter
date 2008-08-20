@@ -12,10 +12,9 @@ class CodeDocument;
 
 int GetLogFontPointSize(const LOGFONT& lf);
 
-// Base class for Code editors with support
-// for Unicode loading and saving, spell checking,
-// incremental search, bookmarking and so on
-
+/// Base class for Code editors with support
+/// for Unicode loading and saving, spell checking,
+/// incremental search, bookmarking and so on
 class CodeView : 
 	public CScintillaView
 {
