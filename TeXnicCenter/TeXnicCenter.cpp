@@ -57,6 +57,7 @@
 #include "LaTeXDocument.h"
 #include "LaTeXView.h"
 #include "Speller.h"
+#include "RunTimeHelper.h"
 
 
 class CTCCommandLineInfo : public CCommandLineInfo
@@ -1724,7 +1725,7 @@ Speller* CTeXnicCenterApp::GetSpeller()
 		{
 			// One of the dictionary files does not exist.
 			CConfiguration::GetInstance()->m_bSpellEnable = FALSE;
-			::MessageBox(NULL, str, NULL, MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL);
+			AfxMessageBox(str, MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL);
 		}
 		catch (...)
 		{
@@ -1986,4 +1987,165 @@ const CString& CTeXnicCenterApp::GetModuleFileName() const
 	}
 
 	return module_name_;
+}
+
+int CTeXnicCenterApp::DoMessageBox(LPCTSTR prompt, UINT nType, UINT nIDPrompt)
+{
+	int result;
+
+	if (!RunTimeHelper::IsVista())
+		result = CWinAppEx::DoMessageBox(prompt,nType,nIDPrompt);
+	else 
+	{
+		// disable windows for modal dialog
+		DoEnableModeless(FALSE);
+
+		HWND hWndTop;
+		HWND hWnd = CWnd::GetSafeOwner_(NULL, &hWndTop);
+
+		// re-enable the parent window, so that focus is restored 
+		// correctly when the dialog is dismissed.
+		if (hWnd != hWndTop)
+			EnableWindow(hWnd, TRUE);
+
+		// set help context if possible
+		DWORD* pdwContext = NULL;
+
+		DWORD dwWndPid=0;
+		GetWindowThreadProcessId(hWnd,&dwWndPid);
+
+		if (hWnd != NULL && dwWndPid==GetCurrentProcessId() )
+		{
+			// use app-level context or frame level context
+			LRESULT lResult = ::SendMessage(hWnd, WM_HELPPROMPTADDR, 0, 0);
+			if (lResult != 0)
+				pdwContext = (DWORD*)lResult;
+		}
+
+		// for backward compatibility use app context if possible
+		if (pdwContext == NULL)
+			pdwContext = &m_dwPromptContext;
+
+		DWORD dwOldPromptContext = 0;
+
+		if (pdwContext != NULL)
+		{
+			// save old prompt context for restoration later
+			dwOldPromptContext = *pdwContext;
+			if (nIDPrompt != 0)
+				*pdwContext = HID_BASE_PROMPT+nIDPrompt;
+		}
+
+		// determine icon based on type specified
+		if ((nType & MB_ICONMASK) == 0)
+		{
+			switch (nType & MB_TYPEMASK)
+			{
+			case MB_OK:
+			case MB_OKCANCEL:
+				nType |= MB_ICONEXCLAMATION;
+				break;
+
+			case MB_YESNO:
+			case MB_YESNOCANCEL:
+				nType |= MB_ICONQUESTION;
+				break;
+
+			case MB_ABORTRETRYIGNORE:
+			case MB_RETRYCANCEL:
+				// No default icon for these types, since they are rarely used.
+				// The caller should specify the icon.
+				break;
+			}
+		}
+
+#ifdef _DEBUG
+		if ((nType & MB_ICONMASK) == 0)
+			TRACE(traceAppMsg, 0, "Warning: no icon specified for message box.\n");
+#endif
+
+		VERIFY(DoTaskDialog(hWnd,prompt,nType,result));
+
+		// restore prompt context if possible
+		if (pdwContext != NULL)
+			*pdwContext = dwOldPromptContext;
+
+		// re-enable windows
+		if (hWndTop != NULL)
+			::EnableWindow(hWndTop, TRUE);
+
+		DoEnableModeless(TRUE);
+	}
+
+	return result;
+}
+
+bool CTeXnicCenterApp::DoTaskDialog( HWND hWnd, LPCTSTR prompt, UINT nType, int& result)
+{
+	TASKDIALOGCONFIG tdc = {sizeof(TASKDIALOGCONFIG)};
+	
+	const CStringW window_title(MAKEINTRESOURCE(IDR_MAINFRAME)); // Title: TeXnicCenter
+
+	tdc.pszWindowTitle = window_title;
+	tdc.hwndParent = hWnd;
+
+	switch (nType & MB_TYPEMASK)
+	{
+		case MB_OK:
+			tdc.dwCommonButtons |= TDCBF_OK_BUTTON;
+			break;
+		case MB_OKCANCEL:
+			tdc.dwCommonButtons |= TDCBF_OK_BUTTON|TDCBF_CANCEL_BUTTON;
+			break;
+		case MB_YESNO:
+			tdc.dwCommonButtons |= TDCBF_YES_BUTTON|TDCBF_NO_BUTTON;
+			break;
+		case MB_YESNOCANCEL:
+			tdc.dwCommonButtons |= TDCBF_YES_BUTTON|TDCBF_NO_BUTTON|TDCBF_CANCEL_BUTTON;
+			break;
+		case MB_ABORTRETRYIGNORE: // Shouldn't be used at all
+			tdc.dwCommonButtons |= TDCBF_RETRY_BUTTON|TDCBF_CANCEL_BUTTON|TDCBF_OK_BUTTON;
+			break;
+		default:
+			ASSERT(FALSE);
+	}
+
+#pragma region Icon translation
+
+	switch (nType & MB_ICONMASK)
+	{
+		case MB_ICONERROR:
+			tdc.pszMainIcon = TD_ERROR_ICON;
+			break;
+		case MB_ICONEXCLAMATION:
+			tdc.pszMainIcon = TD_WARNING_ICON;
+			break;
+		case MB_ICONQUESTION:
+			tdc.pszMainIcon = IDI_QUESTION;
+			break;
+		case MB_ICONINFORMATION:
+			tdc.pszMainIcon = TD_INFORMATION_ICON;
+			break;
+	}
+
+#pragma endregion
+
+	CStringW title, body;	
+
+	// Now, try to split up the text into a title and body by
+	// searching for the first occurrence of a double new line
+	if (LPCTSTR b = _tcsstr(prompt,_T("\n\n")))
+	{
+		title.SetString(prompt,b - prompt);
+		body.SetString(b + 2);
+	}
+	else
+		title = prompt;
+
+	tdc.pszMainInstruction = title;
+
+	if (!body.IsEmpty())
+		tdc.pszContent = body;
+
+	return SUCCEEDED(::TaskDialogIndirect(&tdc,&result,0,0));
 }

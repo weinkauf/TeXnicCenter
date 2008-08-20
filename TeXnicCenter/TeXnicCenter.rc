@@ -3486,7 +3486,8 @@ BEGIN
     IDS_SAVE                "Speichern"
     STE_WARNING_COUNT       "%d Warnungen"
     STE_ENTRIES_COUNT       "%d Einträge"
-    ID_FORMAT_TEXT_BACK_COLOR "Setzt die Hintergrundfarbe\nHintergrundfarbe"
+    ID_FORMAT_TEXT_BACK_COLOR 
+                            "Setzt die Hintergrundfarbe des Textes.\nHintergrundfarbe"
     ID_VIEW_BUILD_PANE      "Blendet die Erstellenleiste ein oder aus.\nErstellen"
     ID_VIEW_GREP_1_PANE     "Blendet die Suchergebnisse ein oder aus.\nSuchen 1"
     ID_VIEW_GREP_2_PANE     "Blendet die Suchergebnisse ein oder aus.\nSuchen 2"
@@ -4357,6 +4358,8 @@ BEGIN
     STE_GREP_FINISHED       "Es wurde(n) %d Übereinstimmung(en) gefunden."
     STE_GREP_ERROR          "! %s: Zugriff auf Datei nicht möglich!"
     STE_PROJECT_CLOSE_ASK   "Möchten Sie das aktuelle Projekt schließen?"
+    IDS_DO_SAVE             "&Speichern"
+    IDS_DO_NOT_SAVE         "&Nicht speichern"
     STE_PARSE_BEGIN         "Start der Analyse: "
     STE_PARSE_END           "Ende der Analyse: "
 END
@@ -4627,6 +4630,7 @@ BEGIN
     IDS_ENCODING_WITH_BOM   "%s mit BOM"
     IDS_SCINTILLA_DEFAULT_PRINT_FOOTER "Seite %1"
     IDS_SCINTILLA_DEFAULT_PRINT_HEADER "%1 - Gedruckt am %2"
+    IDS_NO_LABEL_AVAILABLE  "Für den ausgewählten Eintrag ist kein Verweis vorhanden."
 END
 
 STRINGTABLE 
@@ -8263,6 +8267,8 @@ BEGIN
     STE_GREP_FINISHED       "%d Match(es) has been found."
     STE_GREP_ERROR          "! %s: Cannot access file!"
     STE_PROJECT_CLOSE_ASK   "Do you want to close the current project?"
+    IDS_DO_SAVE             "&Save"
+    IDS_DO_NOT_SAVE         "&Do not save"
     STE_PARSE_BEGIN         "Begin parsing time: "
     STE_PARSE_END           "End parsing time: "
 END
@@ -8531,6 +8537,7 @@ BEGIN
     IDS_ENCODING_WITH_BOM   "%s with BOM"
     IDS_SCINTILLA_DEFAULT_PRINT_FOOTER "Page %1"
     IDS_SCINTILLA_DEFAULT_PRINT_HEADER "%1 - Printed on %2"
+    IDS_NO_LABEL_AVAILABLE  "The selected item does not have a label."
 END
 
 STRINGTABLE 

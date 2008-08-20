@@ -82,7 +82,7 @@
 				LinkLibraryDependencies="true"
 				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib libcharset.lib libiconv.lib"
 				AdditionalLibraryDirectories="$(OutDir)"
-				DelayLoadDLLs="uxtheme.dll"
+				DelayLoadDLLs="comctl32.dll;uxtheme.dll"
 				SubSystem="2"
 				OptimizeReferences="2"
 				TargetMachine="1"
@@ -175,7 +175,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(OutDir)"
 				IgnoreDefaultLibraryNames=""
-				DelayLoadDLLs="uxtheme.dll"
+				DelayLoadDLLs="comctl32.dll;uxtheme.dll"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -270,7 +270,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(OutDir)"
 				IgnoreDefaultLibraryNames=""
-				DelayLoadDLLs="uxtheme.dll"
+				DelayLoadDLLs="comctl32.dll;uxtheme.dll"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -365,7 +365,7 @@
 				LinkLibraryDependencies="true"
 				AdditionalDependencies="mfcext.lib TeXnicCenterObjects.lib shlwapi.lib mpr.lib htmlhelp.lib msxml2.lib uxtheme.lib Hunspell.lib libcharset.lib libiconv.lib"
 				AdditionalLibraryDirectories="$(OutDir)"
-				DelayLoadDLLs="uxtheme.dll"
+				DelayLoadDLLs="comctl32.dll;uxtheme.dll"
 				SubSystem="2"
 				OptimizeReferences="2"
 				TargetMachine="1"
@@ -1656,10 +1656,6 @@
 			</File>
 			<File
 				RelativePath="res\LatexDoc_yellow.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\res\lightbulb.bmp"
 				>
 			</File>
 			<File
