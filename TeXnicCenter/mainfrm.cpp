@@ -222,6 +222,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APP_LOOK_WIN_2000, ID_VIEW_APP_LOOK_OFFICE_2007_AQUA, &CMainFrame::OnUpdateApplicationLook)
 	ON_MESSAGE_VOID(StartPaneAnimation, OnStartPaneAnimation)
 	ON_MESSAGE_VOID(StopPaneAnimation, OnStopPaneAnimation)
+	ON_REGISTERED_MESSAGE(AFX_WM_ON_GET_TAB_TOOLTIP, &CMainFrame::OnGetTabToolTip)
 END_MESSAGE_MAP()
 
 const UINT BuildAnimationPane = 1;
@@ -1176,6 +1177,7 @@ void CMainFrame::DisplayDocumentTabs()
 	mdiTabParams.m_bDocumentMenu = TRUE; // enable the document menu at the right edge of the tab area
 	mdiTabParams.m_tabLocation = static_cast<CMFCTabCtrl::Location>(theApp.m_nMDITabLocation);
 	mdiTabParams.m_nTabBorderSize = 3;
+	mdiTabParams.m_bTabCustomTooltips = TRUE; // We will display the path name
 
 	EnableMDITabbedGroups(theApp.m_bMDITabs, mdiTabParams);
 }
@@ -1799,4 +1801,17 @@ void CMainFrame::OnStartPaneAnimation()
 void CMainFrame::OnStopPaneAnimation()
 {
 	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane,0);
+}
+
+LRESULT CMainFrame::OnGetTabToolTip(WPARAM, LPARAM l)
+{
+	CMFCTabToolTipInfo* ti = reinterpret_cast<CMFCTabToolTipInfo*>(l);
+	ASSERT_POINTER(ti,CMFCTabToolTipInfo);
+
+	CChildFrame* f = reinterpret_cast<CChildFrame*>(ti->m_pTabWnd->GetTabWnd(ti->m_nTabIndex));
+	ASSERT_KINDOF(CChildFrame,f);
+
+	ti->m_strText = f->GetPathNameOfDocument();
+
+	return 0;
 }

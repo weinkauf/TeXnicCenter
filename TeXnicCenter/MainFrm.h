@@ -31,13 +31,7 @@
  * $Id$
  *
  ********************************************************************/
-
-#if !defined(AFX_MAINFRM_H__447410E5_1058_11D3_929E_D75EECD5B417__INCLUDED_)
-#define AFX_MAINFRM_H__447410E5_1058_11D3_929E_D75EECD5B417__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include <set>
 
@@ -55,6 +49,7 @@
 #include "StructureView.h"
 
 class LaTeXView;
+class COutputBuilder;
 
 // number of mathematic toolbars
 const int MATHBAR_COUNT = 16;
@@ -66,6 +61,9 @@ class CMainFrame : public CMDIFrameWndEx
 	DECLARE_DYNAMIC(CMainFrame)
 
 	friend class CLaTeXProject;
+	friend class COutputBuilder;
+
+private:
 	WorkspacePane file_view_pane_, bib_view_pane_, env_view_pane_;
 
 	StructureView structure_view_;
@@ -359,7 +357,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 // attributes
-protected:
+private:
 	CMFCStatusBar m_wndStatusBar;
 	CMFCToolBar m_wndToolBar;
 	CMFCToolBar m_wndFormatBar;
@@ -383,7 +381,8 @@ private:
 	/** Identifier of the timer used to parse the project in given intervals. */
 	UINT m_unParseTimer;
 	bool CreateNavigationViews(void);
-public:
+
+protected:
 	void OnOpenProject(CLaTeXProject* p);
 	void OnCloseProject(CLaTeXProject* p);
 	afx_msg void OnUpdateViewEnvPane(CCmdUI *pCmdUI);
@@ -394,20 +393,19 @@ public:
 	afx_msg void OnViewFilesPane();
 	afx_msg void OnViewBibEntriesPane();
 	afx_msg void OnViewEnvPane();
-
-private:
-	bool CreateOutputViews(void);
-
-public:
-	COutputDoc* GetOutputDoc(void);
+	afx_msg LRESULT OnGetTabToolTip(WPARAM, LPARAM);
 	afx_msg void OnApplicationLook(UINT id);
+	
 	void OnUpdateApplicationLook(CCmdUI* pCmdUI);
 	void OnLatexRun();
 	void OnLatexStop();
 
 	void OnStartPaneAnimation();
 	void OnStopPaneAnimation();
+
+private:
+	bool CreateOutputViews(void);
+
+public:
+	COutputDoc* GetOutputDoc(void);
 };
-
-
-#endif // !defined(AFX_MAINFRM_H__447410E5_1058_11D3_929E_D75EECD5B417__INCLUDED_)
