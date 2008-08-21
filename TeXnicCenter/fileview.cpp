@@ -37,6 +37,7 @@
 #include "FileView.h"
 #include "FontOccManager.h"
 #include "global.h"
+#include "OleDrop.h"
 
 BEGIN_MESSAGE_MAP(CFileView,NavigatorTreeCtrl)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CFileView::OnNMCustomdraw)
@@ -210,7 +211,7 @@ bool CFileView::OnBeginDragDrop(const CStructureItem& item, CString& text, UINT 
 {
 	switch (keystate)
 	{
-		case 0:
+		default:
 			text.Format(_T("\\input{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
 			break;
 		case MK_CONTROL:
@@ -221,4 +222,24 @@ bool CFileView::OnBeginDragDrop(const CStructureItem& item, CString& text, UINT 
 	static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(text);
 
 	return !text.IsEmpty();
+}
+
+void CFileView::OnDragKeyStateChanged(UINT keystate)
+{
+	if (const CStructureItem* item = GetDraggedStructureItem()) 
+	{
+		CString text;
+		OnBeginDragDrop(*item,text,keystate);
+	}
+}
+
+void CFileView::OnDragGetData(ISimpleDataObjectImpl<DragObject,ATL::CComObjectNoLock>* o)
+{
+	if (const CStructureItem* item = GetDraggedStructureItem()) 
+	{
+		CString text;
+		
+		if (OnBeginDragDrop(*item,text,GetControlAsyncState()))
+			o->SetData(text,text.GetLength());
+	}
 }
