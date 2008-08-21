@@ -400,8 +400,6 @@ void CLaTeXProject::Dump(CDumpContext& dc) const
 
 BOOL CLaTeXProject::Serialize(CIniFile &ini, BOOL bWrite)
 {
-	LPCTSTR const BookmarksKey = _T("Bookmarks");
-
 	if (bWrite)
 	{
 		// setting format information
@@ -417,19 +415,6 @@ BOOL CLaTeXProject::Serialize(CIniFile &ini, BOOL bWrite)
 		ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PLANGUAGE,m_strProjectLanguage);
 		ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PDIALECT,m_strProjectDialect);
 
-		typedef FileBookmarksContainerType::iterator I;
-		std::basic_ostringstream<TCHAR> oss;
-
-		for (I it = bookmarks_.begin(); it != bookmarks_.end(); ++it) 
-		{
-			oss.str(_T(""));
-			oss.clear();
-
-			const BookmarkContainerType& bookmarks = it->second;
-			std::copy(bookmarks.begin(),bookmarks.end(),std::ostream_iterator<CodeBookmark,TCHAR>(oss,_T(" ")));
-
-			ini.SetValue(BookmarksKey,it->first,oss.str().c_str());
-		}
 
 		return TRUE;
 	}
@@ -459,30 +444,6 @@ BOOL CLaTeXProject::Serialize(CIniFile &ini, BOOL bWrite)
 		m_strProjectLanguage = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PLANGUAGE,CConfiguration::GetInstance()->m_strLanguageDefault);
 		m_strProjectDialect = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PDIALECT,CConfiguration::GetInstance()->m_strLanguageDialectDefault);
 
-		typedef std::multimap<CString,CString> ValueContainerType;
-		ValueContainerType values;
-
-		bookmarks_.clear();
-
-		BookmarkContainerType bookmarks;
-
-		if (ini.GetValues(BookmarksKey,values))
-		{
-			std::basic_istringstream<TCHAR> iss;
-			typedef std::istream_iterator<CodeBookmark,TCHAR> iterator_type;
-			typedef ValueContainerType::iterator I;
-
-			for (I it = values.begin(); it != values.end(); ++it)
-			{
-				iss.clear();
-				iss.str(static_cast<LPCTSTR>(it->second)); // Value
-				
-				bookmarks.clear();
-
-				std::copy(iterator_type(iss),iterator_type(),std::back_inserter(bookmarks));
-				bookmarks_.insert(std::make_pair(it->first,bookmarks)); 
-			}
-		}
 
 		if (nVersion > 2)
 		{
@@ -526,8 +487,10 @@ BOOL CLaTeXProject::Serialize(CIniFile &ini, BOOL bWrite)
 #define CURRENTFORMATVERSION					2
 #define	FORMATTYPE								_T("TeXnicCenterProjectSessionInformation")
 
-void CLaTeXProject::SerializeSession(CIniFile &ini,BOOL bWrite)
+void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 {
+	LPCTSTR const BookmarksKey = _T("Bookmarks");
+
 	if (bWrite)
 	{
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -563,11 +526,61 @@ void CLaTeXProject::SerializeSession(CIniFile &ini,BOOL bWrite)
 				MDIChildArray.GetAt(i)->Serialize(ini,strKey,bWrite);
 			}
 		}
+
+#pragma region Bookmarks
+
+		typedef FileBookmarksContainerType::iterator I;
+		std::basic_ostringstream<TCHAR> oss;
+
+		for (I it = bookmarks_.begin(); it != bookmarks_.end(); ++it) 
+		{
+			oss.str(_T(""));
+			oss.clear();
+
+			const BookmarkContainerType& bookmarks = it->second;
+			std::copy(bookmarks.begin(),bookmarks.end(),std::ostream_iterator<CodeBookmark,TCHAR>(oss,_T(" ")));
+
+			ini.SetValue(BookmarksKey,it->first,oss.str().c_str());
+		}
+
+#pragma endregion
 	}
 	else
 	{
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		// reading format information
+#pragma region Bookmarks
+
+		// Restore the bookmarks before the views are created
+		// otherwise the bookmarks will no be visible
+
+		typedef std::multimap<CString,CString> ValueContainerType;
+		ValueContainerType values;
+
+		bookmarks_.clear();
+
+		BookmarkContainerType bookmarks;
+
+		if (ini.GetValues(BookmarksKey,values))
+		{
+			std::basic_istringstream<TCHAR> iss;
+			typedef std::istream_iterator<CodeBookmark,TCHAR> iterator_type;
+			typedef ValueContainerType::iterator I;
+
+			for (I it = values.begin(); it != values.end(); ++it)
+			{
+				iss.clear();
+				iss.str(static_cast<LPCTSTR>(it->second)); // Value
+
+				bookmarks.clear();
+
+				std::copy(iterator_type(iss),iterator_type(),std::back_inserter(bookmarks));
+				bookmarks_.insert(std::make_pair(it->first,bookmarks)); 
+			}
+		}
+
+#pragma endregion
+		
+#pragma region Reading format information
+
 		CString strKey;
 		const int nFrameCount = ini.GetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_FRAMECOUNT,0);
 		const int nActiveFrame = ini.GetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVEFRAME,-1);
@@ -599,6 +612,8 @@ void CLaTeXProject::SerializeSession(CIniFile &ini,BOOL bWrite)
 			}
 		}
 
+#pragma endregion
+
 		//Restore navigator tab selection
 		m_nInitialNavigatorTab = ini.GetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVETAB,0);
 
@@ -617,8 +632,6 @@ void CLaTeXProject::SerializeSession(CIniFile &ini,BOOL bWrite)
 		}
 	}
 }
-
-
 
 /////////////////////////////////////////////////////////////////////
 // paths, open, save, etc.
@@ -1137,8 +1150,6 @@ const CString CLaTeXProject::GetIgnoredWordsFileName() const
 
 void CLaTeXProject::AddBookmark( const CString& filename, const CodeBookmark& b )
 {
-	SetModifiedFlag();
-
 	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
 
 	BookmarkContainerType& bms = bookmarks_[name];
@@ -1161,7 +1172,6 @@ void CLaTeXProject::RemoveBookmark( const CString& filename, const CodeBookmark&
 		
 		if (itb != it->second.end())
 		{
-			SetModifiedFlag();
 			it->second.erase(itb);
 		}
 	}
@@ -1192,10 +1202,8 @@ void CLaTeXProject::RemoveAllBookmarks( const CString& filename )
 
 	if (it != bookmarks_.end()) 
 	{
-		if (!it->second.empty()) {
-			SetModifiedFlag();
+		if (!it->second.empty()) 
 			it->second.clear();
-		}
 	}
 }
 
