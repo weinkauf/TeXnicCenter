@@ -6,6 +6,8 @@
 #include "configuration.h"
 #include "CharType.h"
 
+#define IGNORE_WORDS_IN_BRACES_ 1 // TODO: Doesn't work properly yet
+
 LaTeXTokenizer::LaTeXTokenizer()
 {
 	ResetState();
@@ -16,10 +18,13 @@ bool LaTeXTokenizer::NextWord(LPCTSTR szLine, int length, int &nStartPos, int &n
 	int nLength = length;
 	bool badWord = true;
 	TBYTE ch;
-	TCHAR& brace_encountered = brace_encountered_;
 	
+#if IGNORE_WORDS_IN_BRACES_
+	TCHAR& brace_encountered = brace_encountered_;
+
 	const TCHAR opening_braces[] = _T("{[$");
 	const std::size_t braces = sizeof(opening_braces) / sizeof(*opening_braces);
+#endif // IGNORE_WORDS_IN_BRACES_
 
 	while (nStartPos != -1 && badWord)
 	{
@@ -29,6 +34,7 @@ bool LaTeXTokenizer::NextWord(LPCTSTR szLine, int length, int &nStartPos, int &n
 		{
 			ch = szLine[nStartPos];
 
+#if IGNORE_WORDS_IN_BRACES_
 			// If we encounter an opening brace, save the state
 			if (!brace_encountered && std::find_first_of(&ch,&ch + 1,
 				opening_braces,opening_braces + braces) != &ch + 1)
@@ -40,6 +46,7 @@ bool LaTeXTokenizer::NextWord(LPCTSTR szLine, int length, int &nStartPos, int &n
 
 			// The text is not enclosed by braces, process it
 			if (brace_encountered == 0) {
+#endif // IGNORE_WORDS_IN_BRACES_
 				// words begin with an alpha character
 				if (CharTraitsT::IsAlpha(ch))
 					break;
@@ -58,7 +65,9 @@ bool LaTeXTokenizer::NextWord(LPCTSTR szLine, int length, int &nStartPos, int &n
 					nStartPos = -1;
 					return false;
 				}
+#if IGNORE_WORDS_IN_BRACES_
 			}
+#endif // IGNORE_WORDS_IN_BRACES_
 			// otherwise ignore it
 
 			++nStartPos;

@@ -27,6 +27,11 @@
 #define IDS_SCINTILLA_DEFAULT_PRINT_FOOTER 40
 #define IDS_SCINTILLA_DEFAULT_PRINT_HEADER 41
 #define IDS_NO_LABEL_AVAILABLE          42
+#define IDS_DEFINE_COLOR_NAME_PLACEHOLDER 43
+#define IDS_MORE_COLORS                 44
+#define IDS_AUTOMATIC                   45
+#define IDS_TEXT_COLORS                 46
+#define IDS_BACKGROUND_COLORS           47
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
 #define IDD_TIP                         103

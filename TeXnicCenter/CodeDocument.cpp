@@ -743,7 +743,7 @@ BOOL CodeDocument::SaveModified()
 
 BOOL CodeDocument::DoSaveModified()
 {
-	BOOL result;
+	BOOL result = TRUE;
 
 	if (!IsModified())
 		result = TRUE;        // ok to continue

@@ -16,7 +16,12 @@ void UTF32toUTF8(const char* text, std::size_t n, std::vector<char>& data, bool 
 void UTF8toUTF32(const char* text, std::size_t n, std::vector<char>& data, bool little_endian = true);
 void UTF32toUTF16(const char* text, std::size_t n, std::vector<char>& data, bool in_little_endian = true, bool out_little_endian = true);
 void UTF32toUTF16(const char* text, std::size_t n, std::vector<wchar_t>& data, bool in_little_endian = true, bool out_little_endian = true);
-inline bool GetUTF8CharBytes(unsigned char byte, std::size_t& n);
+void FromUTF8(const char* tocode, const char* text, std::size_t n, std::vector<char>& data);
+void FromUTF16(const char* tocode, const wchar_t* text, std::size_t n, std::vector<char>& data, bool little_endian = true);
+void FromANSI(const char* tocode, const char* text, std::size_t n, std::vector<char>& data, UINT codepage = ::GetACP());
+void ToUTF16(const char* fromcode, const char* text, std::size_t n, std::vector<wchar_t>& data, bool little_endian = true);
+bool GetUTF8CharBytes(unsigned char byte, std::size_t& n);
+bool IsEncodingAvailable(const char* code);
 
 class EncodingConverterError :
 	public std::runtime_error

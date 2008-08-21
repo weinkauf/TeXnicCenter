@@ -4631,6 +4631,11 @@ BEGIN
     IDS_SCINTILLA_DEFAULT_PRINT_FOOTER "Seite %1"
     IDS_SCINTILLA_DEFAULT_PRINT_HEADER "%1 - Gedruckt am %2"
     IDS_NO_LABEL_AVAILABLE  "Für den ausgewählten Eintrag ist kein Verweis vorhanden."
+    IDS_DEFINE_COLOR_NAME_PLACEHOLDER "<Bezeichnung>"
+    IDS_MORE_COLORS         "Mehr..."
+    IDS_AUTOMATIC           "Automatisch"
+    IDS_TEXT_COLORS         "Textfarbe"
+    IDS_BACKGROUND_COLORS   "Hintergrundfarbe"
 END
 
 STRINGTABLE 
@@ -8538,6 +8543,11 @@ BEGIN
     IDS_SCINTILLA_DEFAULT_PRINT_FOOTER "Page %1"
     IDS_SCINTILLA_DEFAULT_PRINT_HEADER "%1 - Printed on %2"
     IDS_NO_LABEL_AVAILABLE  "The selected item does not have a label."
+    IDS_DEFINE_COLOR_NAME_PLACEHOLDER "<Name>"
+    IDS_MORE_COLORS         "More Colors..."
+    IDS_AUTOMATIC           "Automatic"
+    IDS_TEXT_COLORS         "Text Colors"
+    IDS_BACKGROUND_COLORS   "Background Colors"
 END
 
 STRINGTABLE 

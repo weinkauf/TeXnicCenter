@@ -47,15 +47,112 @@
 #include "RunTimeHelper.h"
 #include "LaTeXDocument.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
+// To hold the colours and their names
+struct ColourTableEntry
+{
+	COLORREF crColour;
+	TCHAR    *szName;
+};
 
-//-------------------------------------------------------------------
-// class CMainFrame
-//-------------------------------------------------------------------
+const int MAX_COLOURS = 100;
+
+static ColourTableEntry crColours[] = 
+{
+	{ RGB(0x00, 0x00, 0x00),    _T("Black")             },
+	{ RGB(0xA5, 0x2A, 0x00),    _T("Brown")             },
+	{ RGB(0x00, 0x40, 0x40),    _T("Dark Olive Green")  },
+	{ RGB(0x00, 0x55, 0x00),    _T("Dark Green")        },
+	{ RGB(0x00, 0x00, 0x5E),    _T("Dark Teal")         },
+	{ RGB(0x00, 0x00, 0x8B),    _T("Dark Blue")         },
+	{ RGB(0x4B, 0x00, 0x82),    _T("Indigo")            },
+	{ RGB(0x28, 0x28, 0x28),    _T("Gray-80%")          },
+
+	{ RGB(0x8B, 0x00, 0x00),    _T("Dark Red")          },
+	{ RGB(0xFF, 0x68, 0x20),    _T("Orange")            },
+	{ RGB(0x8B, 0x8B, 0x00),    _T("Dark Yellow")       },
+	{ RGB(0x00, 0x93, 0x00),    _T("Green")             },
+	{ RGB(0x38, 0x8E, 0x8E),    _T("Teal")              },
+	{ RGB(0x00, 0x00, 0xFF),    _T("Blue")              },
+	{ RGB(0x7B, 0x7B, 0xC0),    _T("Blue-Gray")         },
+	{ RGB(0x66, 0x66, 0x66),    _T("Gray-50%")          },
+
+	{ RGB(0xFF, 0x00, 0x00),    _T("Red")               },
+	{ RGB(0xFF, 0xAD, 0x5B),    _T("Light Orange")      },
+	{ RGB(0x32, 0xCD, 0x32),    _T("Lime")              }, 
+	{ RGB(0x3C, 0xB3, 0x71),    _T("Sea Green")         },
+	{ RGB(51, 204, 204),		_T("Aqua")              },
+	{ RGB(0x7D, 0x9E, 0xC0),    _T("Light Blue")        },
+	{ RGB(0x80, 0x00, 0x80),    _T("Violet")            },
+	{ RGB(0x7F, 0x7F, 0x7F),    _T("Gray-40%")          },
+
+	{ RGB(0xFF, 0xC0, 0xCB),    _T("Pink")              },
+	{ RGB(0xFF, 0xD7, 0x00),    _T("Gold")              },
+	{ RGB(0xFF, 0xFF, 0x00),    _T("Yellow")            },    
+	{ RGB(0x00, 0xFF, 0x00),    _T("Bright Green")      },
+	{ RGB(0x00, 0xFF, 0xFF),    _T("Turquoise")         },
+	{ RGB(0, 204, 255),			_T("Sky Blue")          },
+	{ RGB(234, 128, 102),		_T("Plum")              },
+	{ RGB(0xC0, 0xC0, 0xC0),    _T("Gray-25%")          },
+
+	{ RGB(0xFF, 0xE4, 0xE1),    _T("Rose")              },
+	{ RGB(255, 254, 153),		_T("Tan")               },
+	{ RGB(0xFF, 0xFF, 0xE0),    _T("Light Yellow")      },
+	{ RGB(204, 255, 204),		_T("Light Green ")      },
+	{ RGB(204, 255, 255),		_T("Light Turquoise")	},
+	{ RGB(153, 204, 255),		_T("Pale Blue")         },
+	{ RGB(204, 153, 255),		_T("Lavender")          },
+	{ RGB(0xFF, 0xFF, 0xFF),    _T("White")             }
+};
+
+
+std::auto_ptr<CMFCColorMenuButton> CreateColorButton(UINT id, UINT tear_off_id, CPalette& palette, int& colors, UINT title_id)
+{
+	if (palette.GetSafeHandle () == NULL)
+	{
+		colors = sizeof (crColours)/sizeof(ColourTableEntry);
+		ASSERT(colors <= MAX_COLOURS);
+
+		if (colors > MAX_COLOURS)
+			colors = MAX_COLOURS;
+
+		// Create the palette
+		struct 
+		{
+			LOGPALETTE    LogPalette;
+			PALETTEENTRY  PalEntry[MAX_COLOURS];
+		}pal;
+
+		LOGPALETTE* pLogPalette = (LOGPALETTE*) &pal;
+		pLogPalette->palVersion    = 0x300;
+		pLogPalette->palNumEntries = (WORD) colors; 
+
+		for (int i = 0; i < colors; i++)
+		{
+			pLogPalette->palPalEntry[i].peRed   = GetRValue(crColours[i].crColour);
+			pLogPalette->palPalEntry[i].peGreen = GetGValue(crColours[i].crColour);
+			pLogPalette->palPalEntry[i].peBlue  = GetBValue(crColours[i].crColour);
+			pLogPalette->palPalEntry[i].peFlags = 0;
+		}
+
+		palette.CreatePalette (pLogPalette);
+	}
+
+	std::auto_ptr<CMFCColorMenuButton> pColorButton
+		(new CMFCColorMenuButton (id,CString(MAKEINTRESOURCE(title_id)), &palette));
+
+	pColorButton->EnableAutomaticButton (CString(MAKEINTRESOURCE(IDS_AUTOMATIC)), RGB (0, 0, 0));
+	pColorButton->EnableOtherButton (CString(MAKEINTRESOURCE(IDS_MORE_COLORS)));
+	pColorButton->EnableDocumentColors (_T("Document's Colors"));
+	pColorButton->SetColumnsNumber (8);
+	pColorButton->EnableTearOff (tear_off_id, 5, 2);
+
+	// Initialize color names:
+	for (int i = 0; i < colors; i++)
+		CMFCColorMenuButton::SetColorName (crColours[i].crColour, crColours[i].szName);
+
+	return pColorButton;
+}
+
 
 enum
 {
@@ -67,64 +164,64 @@ IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWndEx)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_WM_CREATE()
-	ON_COMMAND(ID_EXTRAS_CUSTOMIZE, OnExtrasCustomize)
+	ON_COMMAND(ID_EXTRAS_CUSTOMIZE, &CMainFrame::OnExtrasCustomize)
 	ON_WM_CLOSE()
 	ON_WM_TIMER()
 	ON_WM_ACTIVATE()
-	ON_COMMAND(ID_OPTIONS_CHANGED, OnOptionsChanged)
-	ON_COMMAND(ID_WINDOW_EDITOR, OnWindowEditor)
-	ON_COMMAND(ID_WINDOW_NAVIGATOR, OnWindowNavigator)
-	ON_COMMAND(ID_WINDOW_ENVIRONMENT, OnWindowEnvironment)
-	ON_COMMAND(ID_WINDOW_FILES, OnWindowFiles)
-	ON_COMMAND(ID_WINDOW_STRUCTURE, OnWindowStructure)
-	ON_COMMAND(ID_WINDOW_OUTPUT, OnWindowOutput)
-	ON_COMMAND(ID_WINDOW_BUILDRESULT, OnWindowBuildResult)
-	ON_COMMAND(ID_WINDOW_GREP1, OnWindowGrep1)
-	ON_COMMAND(ID_WINDOW_GREP2, OnWindowGrep2)
-	ON_COMMAND(ID_WINDOW_LIST, OnWindowList)
-	ON_COMMAND(ID_HELP_FINDER, OnHelpSearch)
-	ON_COMMAND(ID_HELP_INDEX, OnHelpIndex)
-	ON_COMMAND(ID_VIEW_FULLSCREEN, OnViewFullScreen)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_FULLSCREEN, OnUpdateViewFullScreen)
-	ON_COMMAND(ID_HELP_KEYMAPPING, OnHelpKeyMapping)
-	ON_UPDATE_COMMAND_UI(ID_WINDOW_NEXT, OnUpdateWindowNext)
-	ON_COMMAND(ID_WINDOW_NEXT, OnWindowNext)
-	ON_COMMAND(ID_WINDOW_PREVIOUS, OnWindowPrevious)
-	ON_UPDATE_COMMAND_UI(ID_WINDOW_PREVIOUS, OnUpdateWindowPrevious)
+	ON_COMMAND(ID_OPTIONS_CHANGED, &CMainFrame::OnOptionsChanged)
+	ON_COMMAND(ID_WINDOW_EDITOR, &CMainFrame::OnWindowEditor)
+	ON_COMMAND(ID_WINDOW_NAVIGATOR, &CMainFrame::OnWindowNavigator)
+	ON_COMMAND(ID_WINDOW_ENVIRONMENT, &CMainFrame::OnWindowEnvironment)
+	ON_COMMAND(ID_WINDOW_FILES, &CMainFrame::OnWindowFiles)
+	ON_COMMAND(ID_WINDOW_STRUCTURE, &CMainFrame::OnWindowStructure)
+	ON_COMMAND(ID_WINDOW_OUTPUT, &CMainFrame::OnWindowOutput)
+	ON_COMMAND(ID_WINDOW_BUILDRESULT, &CMainFrame::OnWindowBuildResult)
+	ON_COMMAND(ID_WINDOW_GREP1, &CMainFrame::OnWindowGrep1)
+	ON_COMMAND(ID_WINDOW_GREP2, &CMainFrame::OnWindowGrep2)
+	ON_COMMAND(ID_WINDOW_LIST, &CMainFrame::OnWindowList)
+	ON_COMMAND(ID_HELP_FINDER, &CMainFrame::OnHelpSearch)
+	ON_COMMAND(ID_HELP_INDEX, &CMainFrame::OnHelpIndex)
+	ON_COMMAND(ID_VIEW_FULLSCREEN, &CMainFrame::OnViewFullScreen)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_FULLSCREEN, &CMainFrame::OnUpdateViewFullScreen)
+	ON_COMMAND(ID_HELP_KEYMAPPING, &CMainFrame::OnHelpKeyMapping)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_NEXT, &CMainFrame::OnUpdateWindowNext)
+	ON_COMMAND(ID_WINDOW_NEXT, &CMainFrame::OnWindowNext)
+	ON_COMMAND(ID_WINDOW_PREVIOUS, &CMainFrame::OnWindowPrevious)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_PREVIOUS, &CMainFrame::OnUpdateWindowPrevious)
 	ON_WM_CONTEXTMENU()
-	ON_COMMAND(ID_HELP_CONTENTS, OnHelpContents)
+	ON_COMMAND(ID_HELP_CONTENTS, &CMainFrame::OnHelpContents)
 	ON_WM_HELPINFO()
-	ON_COMMAND(ID_VIEW_DOCTAB_BOTTOM, OnViewDocTabsBottom)
-	ON_COMMAND(ID_VIEW_DOCTAB_OFF, OnViewDocTabsOff)
-	ON_COMMAND(ID_VIEW_DOCTAB_TOP, OnViewDocTabsTop)
-	ON_COMMAND(ID_VIEW_DOCTAB_ICONS, OnViewDocTabsIcons)
-	ON_COMMAND(ID_VIEW_DOCTAB_NOTE, OnViewDocTabsNote)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_BOTTOM, OnUpdateViewDocTabs)
-	ON_COMMAND(ID_TOOLS_CANCEL, OnToolsCancel)
-	ON_COMMAND(ID_WINDOW_REFERENCES, OnWindowReferences)
-	ON_COMMAND(ID_WINDOW_PARSE, OnWindowParse)
-	ON_COMMAND(ID_WINDOW_CLOSE_SELECTEDTAB, OnWindowCloseSelectedTab)
-	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_SELECTEDTAB, OnUpdateWindowCloseSelectedTab)
-	ON_COMMAND(ID_WINDOW_CLOSE_ALL_BUTACTIVE, OnWindowCloseAllButActive)
-	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_ALL_BUTACTIVE, OnUpdateWindowCloseAllButActive)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_OFF, OnUpdateViewDocTabs)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_TOP, OnUpdateViewDocTabs)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_ICONS, OnUpdateViewDocTabs)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_NOTE, OnUpdateViewDocTabs)
+	ON_COMMAND(ID_VIEW_DOCTAB_BOTTOM, &CMainFrame::OnViewDocTabsBottom)
+	ON_COMMAND(ID_VIEW_DOCTAB_OFF, &CMainFrame::OnViewDocTabsOff)
+	ON_COMMAND(ID_VIEW_DOCTAB_TOP, &CMainFrame::OnViewDocTabsTop)
+	ON_COMMAND(ID_VIEW_DOCTAB_ICONS, &CMainFrame::OnViewDocTabsIcons)
+	ON_COMMAND(ID_VIEW_DOCTAB_NOTE, &CMainFrame::OnViewDocTabsNote)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_BOTTOM, &CMainFrame::OnUpdateViewDocTabs)
+	ON_COMMAND(ID_TOOLS_CANCEL, &CMainFrame::OnToolsCancel)
+	ON_COMMAND(ID_WINDOW_REFERENCES, &CMainFrame::OnWindowReferences)
+	ON_COMMAND(ID_WINDOW_PARSE, &CMainFrame::OnWindowParse)
+	ON_COMMAND(ID_WINDOW_CLOSE_SELECTEDTAB, &CMainFrame::OnWindowCloseSelectedTab)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_SELECTEDTAB, &CMainFrame::OnUpdateWindowCloseSelectedTab)
+	ON_COMMAND(ID_WINDOW_CLOSE_ALL_BUTACTIVE, &CMainFrame::OnWindowCloseAllButActive)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_ALL_BUTACTIVE, &CMainFrame::OnUpdateWindowCloseAllButActive)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_OFF, &CMainFrame::OnUpdateViewDocTabs)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_TOP, &CMainFrame::OnUpdateViewDocTabs)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_ICONS, &CMainFrame::OnUpdateViewDocTabs)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_NOTE, &CMainFrame::OnUpdateViewDocTabs)
 	ON_COMMAND(ID_HELP_FINDER, &CMDIFrameWndEx::OnHelpFinder)
 	ON_COMMAND(ID_HELP, &CMDIFrameWndEx::OnHelp)
 	ON_COMMAND(ID_CONTEXT_HELP, CMDIFrameWndEx::OnContextHelp)
 	ON_COMMAND(ID_DEFAULT_HELP, CMDIFrameWndEx::OnHelpFinder)
-	ON_COMMAND_EX_RANGE(ID_MATH1, ID_MATH16, OnToggleMathBar)
-	ON_UPDATE_COMMAND_UI_RANGE(ID_MATH1, ID_MATH16, OnCheckCtrlBarVisible)
-	ON_REGISTERED_MESSAGE(AFX_WM_RESETTOOLBAR, OnResetToolbar)
-	ON_REGISTERED_MESSAGE(AFX_WM_CUSTOMIZETOOLBAR, OnCustomizationMode)
-	ON_UPDATE_COMMAND_UI_RANGE(ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST, OnUpdateUserTool)
-	ON_COMMAND_RANGE(ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST, OnExecuteUserTool)
+	ON_COMMAND_EX_RANGE(ID_MATH1, ID_MATH16, &CMainFrame::OnToggleMathBar)
+	ON_UPDATE_COMMAND_UI_RANGE(ID_MATH1, ID_MATH16, &CMainFrame::OnCheckCtrlBarVisible)
+	ON_REGISTERED_MESSAGE(AFX_WM_RESETTOOLBAR, &CMainFrame::OnResetToolbar)
+	ON_REGISTERED_MESSAGE(AFX_WM_CUSTOMIZETOOLBAR, &CMainFrame::OnCustomizationMode)
+	ON_UPDATE_COMMAND_UI_RANGE(ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST, &CMainFrame::OnUpdateUserTool)
+	ON_COMMAND_RANGE(ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST, &CMainFrame::OnExecuteUserTool)
 	ON_COMMAND_RANGE(ID_VIEW_APP_LOOK_WIN_2000,ID_VIEW_APP_LOOK_OFFICE_2007_AQUA, &CMainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APP_LOOK_WIN_2000, ID_VIEW_APP_LOOK_OFFICE_2007_AQUA, &CMainFrame::OnUpdateApplicationLook)
-	ON_MESSAGE_VOID(StartPaneAnimation,OnStartPaneAnimation)
-	ON_MESSAGE_VOID(StopPaneAnimation,OnStopPaneAnimation)
+	ON_MESSAGE_VOID(StartPaneAnimation, OnStartPaneAnimation)
+	ON_MESSAGE_VOID(StopPaneAnimation, OnStopPaneAnimation)
 END_MESSAGE_MAP()
 
 const UINT BuildAnimationPane = 1;
@@ -929,21 +1026,18 @@ LRESULT CMainFrame::OnResetToolbar(WPARAM wParam, LPARAM /*lParam*/)
 
 	if (m_wndFormatRUBar && id == m_wndFormatRUBar.GetDlgCtrlID())
 	{
-		CMFCColorMenuButton b1(ID_FORMAT_TEXT_BACK_COLOR,_T("Test"));
-		b1.EnableDocumentColors(_T("Default"));
-		b1.EnableAutomaticButton(_T("Automatic"),0);
-		b1.EnableOtherButton(_T("Other"));
-		b1.EnableTearOff(IDR_TEXT_BACK_COLOR);
+		int colors;
+		CPalette palette;
 
-		m_wndFormatRUBar.ReplaceButton(b1.m_nID,b1);
+		std::auto_ptr<CMFCColorMenuButton> b1
+			(CreateColorButton(ID_FORMAT_TEXT_BACK_COLOR,IDR_TEXT_BACK_COLOR,palette,colors,IDS_BACKGROUND_COLORS));
 
-		CMFCColorMenuButton b2(ID_FORMAT_TEXT_FORE_COLOR,_T("Test"));
-		b2.EnableDocumentColors(_T("Default"));
-		b2.EnableAutomaticButton(_T("Automatic"),0);
-		b2.EnableOtherButton(_T("Other"));
-		b2.EnableTearOff(IDR_TEXT_FORE_COLOR);
+		m_wndFormatRUBar.ReplaceButton(b1->m_nID,*b1);
 
-		m_wndFormatRUBar.ReplaceButton(b2.m_nID,b2);
+		std::auto_ptr<CMFCColorMenuButton> b2
+			(CreateColorButton(ID_FORMAT_TEXT_FORE_COLOR,IDR_TEXT_FORE_COLOR,palette,colors,IDS_TEXT_COLORS));
+
+		m_wndFormatRUBar.ReplaceButton(b2->m_nID,*b2);
 	}
 
 	return 0L;

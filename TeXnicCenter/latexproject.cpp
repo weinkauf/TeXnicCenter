@@ -49,6 +49,7 @@
 #include "ProjectNewDialog.h"
 #include "Speller.h"
 #include "SpellCheckDlg.h"
+#include "LaTeXDocument.h"
 
 
 IMPLEMENT_DYNCREATE(CLaTeXProject,CProject)
@@ -668,10 +669,9 @@ const CString CLaTeXProject::GetProjectDir() const
 const CString CLaTeXProject::GetFilePath(LPCTSTR lpszFile) const
 {
 	CString strPath;
-	LPTSTR dummy;
 
 	SetCurrentDirectory(CPathTool::GetDirectory(m_strMainPath));
-	GetFullPathName(lpszFile,_MAX_PATH,strPath.GetBuffer(_MAX_PATH),&dummy);
+	GetFullPathName(lpszFile,_MAX_PATH,strPath.GetBuffer(_MAX_PATH),0);
 	strPath.ReleaseBuffer();
 
 	return strPath;
@@ -979,24 +979,29 @@ void CLaTeXProject::OnSpellProject()
 		if (si.m_nType == CStructureParser::texFile)
 		{
 			bool bWasOpen = true;
-			CDocument *pDoc = theApp.GetOpenLatexDocument(GetFilePath(si.m_strPath),FALSE);
+			LaTeXDocument* pDoc = dynamic_cast<LaTeXDocument*>(theApp.GetOpenLatexDocument(GetFilePath(si.m_strPath),FALSE));
 
 			if (pDoc == NULL)
 			{
-				pDoc = theApp.OpenLatexDocument(GetFilePath(si.m_strPath),FALSE,-1,FALSE,false);
+				pDoc = dynamic_cast<LaTeXDocument*>(theApp.OpenLatexDocument(GetFilePath(si.m_strPath),FALSE,-1,FALSE,false));
 				bWasOpen = false;
 			}
 
 			if (pDoc == NULL)
+			{
 				// Can't open document, try another one.
 				continue;
+			}
 
-			POSITION pos = pDoc->GetFirstViewPosition();
-			LaTeXView* pView = (LaTeXView*)pDoc->GetNextView(pos);
+			LaTeXView* pView = static_cast<LaTeXView*>(pDoc->GetView());
+
 			ASSERT(pView);
+
 			if (pView == NULL)
+			{
 				// View is NULL??
 				continue;
+			}
 
 			dlg.Reset(pView,pSpell);
 
@@ -1016,10 +1021,15 @@ void CLaTeXProject::OnSpellProject()
 			// Restore selection
 			pView->GetCtrl().SetSel(ptStart,ptEnd);
 
-			if (!bWasOpen)
-				pView->SendMessage(WM_COMMAND,ID_FILE_CLOSE);
+			if (!bWasOpen) 
+			{
+				//pView->SendMessage(WM_COMMAND,ID_FILE_CLOSE); // WM_COMMAND causes heap corruption
+				pDoc->OnCloseDocument();
+			}
+
 			if (result == IDABORT)
 				break;
+
 			else if (result != IDOK)
 				if (AfxMessageBox(AfxLoadString(IDS_SPELL_CONTINUE),MB_YESNO | MB_ICONQUESTION) != IDYES)
 					break;
