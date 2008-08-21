@@ -2180,6 +2180,9 @@ BEGIN
         MENUITEM "Text auslagern...",           ID_EDIT_OUTSOURCE
         MENUITEM SEPARATOR
         MENUITEM "&Zeile löschen",              ID_EDIT_DELETE_LINE
+        MENUITEM SEPARATOR
+        MENUITEM "&Paragraph aufteilen",        ID_EDIT_SPLIT_PARAGRAPH
+        MENUITEM "Paragraph &zusammenfügen",    ID_EDIT_JOIN_PARAGRAPH
     END
     POPUP "&Ansicht"
     BEGIN
@@ -6146,6 +6149,9 @@ BEGIN
         MENUITEM "Outsource Text...",           ID_EDIT_OUTSOURCE
         MENUITEM SEPARATOR
         MENUITEM "&Delete Line",                ID_EDIT_DELETE_LINE
+        MENUITEM SEPARATOR
+        MENUITEM "&Split Paragraph",            ID_EDIT_SPLIT_PARAGRAPH
+        MENUITEM "&Join Paragraph",             ID_EDIT_JOIN_PARAGRAPH
     END
     POPUP "&Search"
     BEGIN

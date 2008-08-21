@@ -1,4 +1,5 @@
 #pragma once
+#include <utility>
 
 #include "CodeBookmark.h"
 
@@ -98,7 +99,10 @@ protected:
 	
 	virtual void OnBookmarkAdded(const ::CodeBookmark& b);
 	virtual void OnBookmarkRemoved(const ::CodeBookmark& b);
-	virtual void OnRemovedAllBookmarks(void);	
+	virtual void OnRemovedAllBookmarks(void);
+
+	afx_msg void OnEditSplitParagraph();
+	afx_msg void OnEditJoinParagraph();
 
 public:
 	/// Removes all bookmarks that have been set
@@ -118,6 +122,9 @@ public:
 	bool GetUseBOM() const;
 	/// Enables or disabled the usage of a BOM for Unicode text documents
 	void SetUseBOM(bool use = true);
+	/// Returns a tuple containing the first and last line
+	/// of the paragraph the start_line parameter points to
+	const std::pair<int,int> GetParagraphRange(int start_line);
 };
 
 template<class I>

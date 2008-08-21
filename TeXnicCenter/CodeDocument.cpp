@@ -9,6 +9,7 @@
 #include "CodeBookmark.h"
 #include "EncodingConverter.h"
 #include "RunTimeHelper.h"
+#include "configuration.h"
 
 int ShowSaveTaskDialog(LPCTSTR prompt)
 {
@@ -151,6 +152,8 @@ CodeDocument::~CodeDocument()
 BEGIN_MESSAGE_MAP(CodeDocument, CScintillaDoc)
 	ON_COMMAND(ID_EDIT_TOGGLE_BOOKMARK, &CodeDocument::OnEditToggleBookmark)
 	ON_COMMAND(ID_EDIT_CLEAR_ALL_BOOKMARKS, &CodeDocument::OnEditClearAllBookmarks)
+	ON_COMMAND(ID_EDIT_SPLIT_PARAGRAPH, &CodeDocument::OnEditSplitParagraph)
+	ON_COMMAND(ID_EDIT_JOIN_PARAGRAPH, &CodeDocument::OnEditJoinParagraph)
 END_MESSAGE_MAP()
 
 
@@ -796,4 +799,80 @@ BOOL CodeDocument::DoSaveModified()
 	}
 
 	return result;
+}
+
+const std::pair<int,int> CodeDocument::GetParagraphRange( int start_line )
+{
+	CScintillaCtrl& c = GetView()->GetCtrl();
+	const int lines = c.GetLineCount();
+
+	bool stop = false;
+	int i = start_line;
+	int k = start_line;
+	int skipped = 0;
+	long pos, line_start_pos;
+
+	// Search for the first possibly empty line
+	while (k > 0 && !stop) {
+		if (static_cast<CodeView*>(GetView())->GetLineLength(k) == 0 || 
+			c.LineFromPosition(pos = c.WordStartPosition(line_start_pos = c.PositionFromLine(k),FALSE)) + 1 < 
+			c.LineFromPosition(line_start_pos) ||
+			pos >= line_start_pos && pos < c.PositionFromLine(start_line)) {
+				// Line is empty
+				stop = true;
+		}
+		else {
+			--k; ++skipped;
+		}
+	}
+
+	stop = false;
+
+	// Search for the last possibly empty line
+	while (i < lines && !stop) {
+		if (static_cast<CodeView*>(GetView())->GetLineLength(i) == 0 || 
+			(pos = c.WordStartPosition(line_start_pos = c.PositionFromLine(i),FALSE)) >= c.GetLineEndPosition(i) ||
+			pos >= line_start_pos && pos < c.PositionFromLine(start_line)) // Line is empty
+			stop = true;
+		else
+			++i;
+	}
+
+	// i points to the possibly empty line
+	// if the is empty, point to the previous one
+	if (i > start_line && i < lines)
+		--i;
+
+	return std::make_pair(k,i);
+}
+
+void CodeDocument::OnEditSplitParagraph()
+{
+	CScintillaCtrl& c = GetView()->GetCtrl();
+
+	const std::pair<int,int> range = GetParagraphRange(static_cast<CodeView*>(GetView())->GetCurrentLine());
+
+	const int start_line = range.first;
+	const int end_line = range.second;
+
+	c.SetTargetStart(c.PositionFromLine(start_line));
+	c.SetTargetEnd(c.PositionFromLine(end_line));
+
+	const int width = c.TextWidth(STYLE_DEFAULT,"_") * CConfiguration::GetInstance()->m_nFixedColumnWrap;
+	c.LinesSplit(width);
+}
+
+void CodeDocument::OnEditJoinParagraph()
+{
+	CScintillaCtrl& c = GetView()->GetCtrl();
+
+	const std::pair<int,int> range = GetParagraphRange(static_cast<CodeView*>(GetView())->GetCurrentLine());
+
+	const int start_line = range.first;
+	const int end_line = range.second;
+
+	c.SetTargetStart(c.PositionFromLine(start_line));
+	c.SetTargetEnd(c.PositionFromLine(end_line));
+
+	c.LinesJoin();
 }
