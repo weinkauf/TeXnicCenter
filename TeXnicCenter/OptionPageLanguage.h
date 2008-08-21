@@ -60,7 +60,7 @@ public:
 	{
 		IDD = IDD_OPTIONS_SPELLING
 	};
-	CComboBox c_Locale;
+
 	BOOL m_bEnableSpell;
 	BOOL m_bMainDictOnly;
 	BOOL m_bSkipComments;
@@ -70,7 +70,6 @@ public:
 	CString m_strLanguageDefault;
 	CString m_strDialectDefault;
 	CString m_strPDictionary;
-	CString m_strLocale;
 	CMFCLinkCtrl m_wndURLDownloadDicts;
 	//}}AFX_DATA
 

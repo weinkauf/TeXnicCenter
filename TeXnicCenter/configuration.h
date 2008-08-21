@@ -380,9 +380,6 @@ public:
 	/** Dialect of the dictionary. */
 	CString m_strLanguageDialectDefault;
 
-	/** Locale */
-	CString m_strLocale;
-
 	/** Directory containing dictionaries. */
 	CString m_strSpellDictionaryPath;
 
