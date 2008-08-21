@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 
+#include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <string>
 #include <algorithm>
 #include <cstddef>
@@ -20,6 +23,30 @@
 #include "Speller.h"
 #include "LaTeXTokenizer.h"
 #include "SpellCheckDlg.h"
+#include "EncodingConverter.h"
+
+
+#pragma region Helper functions and classes
+
+const CStringA FormatColorSpec(COLORREF clr, bool use_model_curly_brace = false)
+{
+	const float max = 255.0f;
+
+	const float r = GetRValue(clr) / max;
+	const float g = GetGValue(clr) / max;
+	const float b = GetBValue(clr) / max;
+
+	std::ostringstream oss;
+	oss.imbue(std::locale::classic()); // US locale for the dot as float separator
+	oss << std::setprecision(2) << r << ',' << g << ',' << b;
+
+	CStringA spec;
+	const char* fmt = use_model_curly_brace ? "{rgb}{%s}" : "[rgb]{%s}";
+
+	spec.Format(fmt,oss.str().c_str());
+
+	return spec;
+}
 
 class SpellerSuggestionMenu
 {
@@ -65,7 +92,7 @@ BOOL SpellerSuggestionMenu::ShowSpellMenu(Speller *pSpell, const CPoint& screenP
 		tr.chrg.cpMax = e;
 		tr.lpstrText = 0;
 
-		buffer.resize((e - s) * 4 + 1); // Make some room
+		buffer.resize((e - s) + 1); // Make some room
 		tr.lpstrText = &buffer[0];
 
 		view_->GetCtrl().GetTextRange(&tr,FALSE);
@@ -80,11 +107,10 @@ BOOL SpellerSuggestionMenu::ShowSpellMenu(Speller *pSpell, const CPoint& screenP
 			// FIX: Menu ID offset; context manager creates
 			// a submenu for an item with the ID set to 0
 			const UINT start = 1;
-			USES_CONVERSION;
 
 			// Get the suggestion list
 			CStringArray aSuggestList;
-			int nSuggestCount = pSpell->SuggestUTF8(W2CA(A2CW_CP(&buffer[0],CP_UTF8)),aSuggestList); // argh!
+			int nSuggestCount = pSpell->SuggestUTF8(&buffer[0],aSuggestList);
 
 			if (!menu_)
 				menu_.LoadMenu(IDR_POPUP_ATTRIBUTE);
@@ -123,41 +149,46 @@ BOOL SpellerSuggestionMenu::ShowSpellMenu(Speller *pSpell, const CPoint& screenP
 
 			const int nSel = TrackPopupMenu(view_,pt,pPopup);
 
-			if (nSel >= spellErrorStart && nSel < spellErrorStop)
-			{
-				// Save the previous selection
-				long ptStart = view_->GetCtrl().GetSelectionStart(FALSE);
-				long ptEnd = view_->GetCtrl().GetSelectionEnd(FALSE);
+			if (nSel != 0) {
+				if (nSel >= spellErrorStart && nSel < spellErrorStop)
+				{
+					// Save the previous selection
+					long ptStart = view_->GetCtrl().GetSelectionStart(FALSE);
+					long ptEnd = view_->GetCtrl().GetSelectionEnd(FALSE);
 
-				// Replace the word
-				view_->GetCtrl().BeginUndoAction();
+					// Replace the word
+					view_->GetCtrl().BeginUndoAction();
 
-				view_->GetCtrl().SetSel(s,e,FALSE);
-				view_->GetCtrl().ReplaceSel(aSuggestList[nSel - spellErrorStart],FALSE);
+					view_->GetCtrl().SetSel(s,e,FALSE);
+					view_->GetCtrl().ReplaceSel(aSuggestList[nSel - spellErrorStart],FALSE);
 
-				// Restore the old selection
-				view_->GetCtrl().SetSel(ptStart, ptEnd,FALSE);
+					// Restore the old selection
+					view_->GetCtrl().SetSel(ptStart, ptEnd,FALSE);
 
-				view_->GetCtrl().EndUndoAction();
+					view_->GetCtrl().EndUndoAction();
+				}
+				else if (nSel == ID_EDIT_SPELL_ADD)
+				{
+					pSpell->AddUTF8(&buffer[0]);
+					clear = true;
+
+					if (view_->GetDocument()->IsSpellerThreadAttached())
+						view_->GetDocument()->GetSpellerThread()->
+						RecheckSingleLineSpelling(view_->GetCtrl().LineFromPosition(text_pos_),view_);
+				}
+				else if (nSel == ID_EDIT_SPELL_IGNORE_ALL)
+				{
+					pSpell->IgnoreUTF8(&buffer[0]);
+					clear = true;
+
+					if (view_->GetDocument()->IsSpellerThreadAttached())
+						view_->GetDocument()->GetSpellerThread()->
+						RecheckSpelling(view_);
+				}
+
+				if (clear)
+					view_->GetCtrl().IndicatorClearRange(s,e - s,FALSE);				
 			}
-			else if (nSel == ID_EDIT_SPELL_ADD)
-			{
-				pSpell->AddUTF8(&buffer[0]);
-				clear = true;
-			}
-			else if (nSel == ID_EDIT_SPELL_IGNORE_ALL)
-			{
-				pSpell->IgnoreUTF8(&buffer[0]);
-				clear = true;
-			}
-
-			if (clear)
-				view_->GetCtrl().IndicatorClearRange(s,e - s,FALSE);
-
-			// Trigger the line to be re-checked
-			if (view_->GetDocument()->IsSpellerThreadAttached())
-				view_->GetDocument()->GetSpellerThread()->
-					RecheckSingleLineSpelling(view_->GetCtrl().LineFromPosition(text_pos_),view_);
 
 			retValue = TRUE;
 		}
@@ -165,8 +196,6 @@ BOOL SpellerSuggestionMenu::ShowSpellMenu(Speller *pSpell, const CPoint& screenP
 
 	return retValue;
 }
-
-#pragma region Helper functions and classes
 
 class LaTeXViewListener :
 	public CAutoCompleteListener
@@ -246,6 +275,10 @@ BEGIN_MESSAGE_MAP(LaTeXView, CodeView)
 	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_INSERT, &LaTeXView::OnBlockComment)
 	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_REMOVE, &LaTeXView::OnBlockComment)
 	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_TOOGLE, &LaTeXView::OnBlockComment)
+	ON_COMMAND(ID_FORMAT_TEXT_FORE_COLOR, &LaTeXView::OnFormatTextForeColor)
+	ON_COMMAND(ID_FORMAT_TEXT_BACK_COLOR, &LaTeXView::OnFormatTextBackColor)
+	ON_UPDATE_COMMAND_UI(ID_FORMAT_TEXT_FORE_COLOR, &LaTeXView::OnUpdateFormatTextForeColor)
+	ON_UPDATE_COMMAND_UI(ID_FORMAT_TEXT_BACK_COLOR, &LaTeXView::OnUpdateFormatTextBackColor)
 END_MESSAGE_MAP()
 
 
@@ -1186,7 +1219,7 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 		delete pDlg;
 
 	// evaluate how to insert the text
-	CString strBeforeCursor,strBehindCursor;
+	CString strBeforeCursor, strBehindCursor;
 	strInsert = strInsert.Right(strInsert.GetLength() - strInsert.ReverseFind(_T('\n')) - 1);
 	strInsert.Replace(_T("\r"),_T("\r\n"));
 
@@ -1206,6 +1239,8 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 	else
 		strBeforeCursor = strInsert;
 
+	GetCtrl().BeginUndoAction();
+
 	// get selection
 	ptSelStart = GetCtrl().GetSelectionStart();
 	ptSelEnd = GetCtrl().GetSelectionEnd();
@@ -1215,35 +1250,27 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 	bool bAnchorAtEndOfSelection = ptSelEnd != GetCtrl().GetCurrentPos();
 	long ptNewSelStart = ptSelStart;
 
-	// adapt ptSelEnd intuitive
-	if (GetCtrl().LineFromPosition(ptSelEnd) > GetCtrl().LineFromPosition(ptSelStart) && 
-		GetCtrl().GetLineEndPosition(ptSelEnd) - ptSelEnd) {
-		// don't take an 'empty' line feed with the selection
-		ptSelEnd = GetCtrl().GetLineEndPosition(GetCtrl().LineFromPosition(ptSelEnd) - 1);
-	}
-
 	// insert text before selection
-	if (!strBeforeCursor.IsEmpty()) {
-		InsertText(GetCtrl().GetLineEndPosition(ptSelEnd) - ptSelEnd == 0 && strBeforeCursor[0] == _T('\r') 
-			? strBeforeCursor.Right(strBeforeCursor.GetLength() - 2) : strBeforeCursor);
-		ptNewSelStart = GetCtrl().GetSelectionStart();
-	}
+	if (!strBeforeCursor.IsEmpty()) {		
+		std::vector<char> buffer;
+		UTF16toUTF8(strBeforeCursor,strBeforeCursor.GetLength(),buffer);
+		buffer.push_back(0);
 
-	// calculate new position of the selected text
-	if (GetCtrl().LineFromPosition(ptSelStart) < GetCtrl().LineFromPosition(ptSelEnd)) {
-		// ignore horizontal moving of the selected text,
-		// if the selected text contains line feeds
-		ptSelEnd += GetCtrl().LineFromPosition(ptNewSelStart) - GetCtrl().LineFromPosition(ptSelStart);
+		GetCtrl().InsertText(ptSelStart,&buffer[0]);
+
+		buffer.pop_back(); // Remove the null above
+
+		ptNewSelStart += buffer.size();
+		ptSelEnd += buffer.size();
 	}
-	else
-		ptSelEnd += ptNewSelStart - ptSelStart;
 
 	// insert text behind selection
 	if (!strBehindCursor.IsEmpty()) {
-		GetCtrl().InsertText(ptSelEnd,
-		(ptSelEnd == GetCtrl().GetLineEndPosition(GetCtrl().LineFromPosition(ptSelEnd)) && 
-			strBehindCursor[strBehindCursor.GetLength() - 1] == _T('\n')) ? 
-			strBehindCursor.Left(strBehindCursor.GetLength() - 2) : strBehindCursor);
+		std::vector<char> buffer;
+		UTF16toUTF8(strBehindCursor,strBehindCursor.GetLength(),buffer);
+		buffer.push_back(0);
+
+		GetCtrl().InsertText(ptSelEnd,&buffer[0]);
 	}
 
 	// indent selection if wanted
@@ -1251,29 +1278,42 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 	long ptEnd = ptSelEnd;
 
 	if (nIndentation) {
-		for (int l = GetCtrl().LineFromPosition(ptStart); l <= GetCtrl().LineFromPosition(ptEnd); l++)
+		for (int l = GetCtrl().LineFromPosition(ptStart); l <= GetCtrl().LineFromPosition(ptEnd); l++) {
+			GetCtrl().GotoPos(GetCtrl().PositionFromLine(l));
+
 			for (int n = 0; n < nIndentation; n++)
-				GetCtrl().InsertText(GetCtrl().PositionFromLine(l),_T("\t"));
+				GetCtrl().Tab();
+		}
+
+		int indent;
+
+		if (GetCtrl().GetUseTabs())
+			indent = nIndentation;
+		else {
+			indent = GetCtrl().GetIndent();
+
+			if (!indent)
+				indent = nIndentation; // Same as the tab width, see Scintilla doc
+		}
 
 		if (GetCtrl().LineFromPosition(ptStart) == GetCtrl().LineFromPosition(ptEnd)) {
-			ptStart += nIndentation;
-			ptEnd += nIndentation;
+			ptStart += indent;
+			ptEnd += indent;
 		}
 		else if (GetCtrl().GetLineEndPosition(GetCtrl().LineFromPosition(ptEnd)) - ptEnd > 0)
-			ptEnd += nIndentation;
+			ptEnd += indent;
 	}
-
-	// Set Selection
-	GetCtrl().SetSel(ptStart,ptEnd);
 
 	// Set Anchor and cursor for selection
 	if (ptStart != ptEnd) {
-		//SetAnchor(bAnchorAtEndOfSelection ? ptEnd : ptStart);
-		GetCtrl().GotoPos(bAnchorAtEndOfSelection ? ptStart : ptEnd);
+		long pos = bAnchorAtEndOfSelection ? ptEnd : ptStart;
+		GetCtrl().SetAnchor(pos);
+		GetCtrl().SetSel(ptStart,ptEnd);		
 	}
 	else // set cursor
 		GetCtrl().GotoPos(ptStart);
-		//SetCursorPos(ptStart);
+
+	GetCtrl().EndUndoAction();
 
 	SetFocus();
 
@@ -1377,4 +1417,138 @@ BOOL LaTeXView::OnBlockComment( UINT nID )
 
 	return TRUE;
 
+}
+
+UINT GetControlKeyState()
+{
+	UINT keystate = 0;
+
+	if (::GetKeyState(VK_CONTROL) >> 15 & 1)
+		keystate |= MK_CONTROL;
+
+	if (::GetKeyState(VK_SHIFT) >> 15 & 1)
+		keystate |= MK_SHIFT;
+
+	return keystate;
+}
+
+void LaTeXView::OnFormatTextForeColor()
+{
+	CScintillaCtrl& c = GetCtrl();
+
+	long s = c.GetSelectionStart();
+	long e = c.GetSelectionEnd();	
+
+	COLORREF clr = CMFCColorMenuButton::GetColorByCmdID(ID_FORMAT_TEXT_FORE_COLOR);
+
+	if (clr == 0xffffffff)
+		clr = 0; // Black
+
+	c.BeginUndoAction();
+
+	switch (GetControlKeyState()) {
+		default:
+			{
+				const CStringA spec = FormatColorSpec(clr);
+
+				if (s == e) {
+					// No text selected, use \color{}
+					CStringA text;
+					text.Format("\\color%s",spec);
+
+					c.InsertText(s,text);
+					e = s + text.GetLength();
+					c.GotoPos(e);
+				}
+				else {
+					// A selection exists
+					CStringA text;
+
+					// Get the selected text
+					const int length = e - s;
+					c.GetSelText(text.GetBuffer(length + 1));
+					text.ReleaseBuffer(length);
+
+					// Generate the \textcolor string
+					CStringA fmt1;
+					fmt1.Format("\\textcolor%s{",spec);
+
+					CStringA fmt2;
+					fmt2.Format("%s}",text);
+
+					// Replace the selection
+					c.ReplaceSel(fmt1 + fmt2);
+					// and restore the original selection
+					//e = s + fmt.GetLength();
+					c.SetSel(s + fmt1.GetLength(),s + fmt1.GetLength() + text.GetLength());
+				}
+			}
+			break;
+		case MK_CONTROL: // Ctrl+click, insert the color define
+			{
+				if (s != e) // Text is selected
+					c.ReplaceSel(""); // Remove the text
+
+				const CStringA pre("\\definecolor{");
+				const CStringA placeholder(MAKEINTRESOURCE(IDS_DEFINE_COLOR_NAME_PLACEHOLDER));
+
+				c.InsertText(s,pre + placeholder + '}' + FormatColorSpec(clr,true));
+				s += pre.GetLength();
+				e = s + placeholder.GetLength();
+				
+				c.SetSel(s,e);
+			}
+			break;
+	}
+
+	c.EndUndoAction();
+}
+
+void LaTeXView::OnFormatTextBackColor()
+{
+	CScintillaCtrl& c = GetCtrl();
+
+	long s = c.GetSelectionStart();
+	long e = c.GetSelectionEnd();
+
+	COLORREF clr = CMFCColorMenuButton::GetColorByCmdID(ID_FORMAT_TEXT_BACK_COLOR);
+
+	if (clr == 0xffffffff)
+		clr = 0; // Black
+
+	const CStringA spec = FormatColorSpec(clr);
+
+	c.BeginUndoAction();
+
+	CStringA text;
+
+	// Get the selected text
+	const int length = e - s;
+	c.GetSelText(text.GetBuffer(length + 1));
+	text.ReleaseBuffer(length);
+
+	// Generate the \textcolor string
+	CStringA fmt1;
+	fmt1.Format("\\colorbox%s{",spec);
+
+	CStringA fmt2;
+	fmt2.Format("%s}",text);
+
+	// Replace the selection
+	c.ReplaceSel(fmt1 + fmt2);	
+	// and restore the original selection
+	c.SetSel(s + fmt1.GetLength(),s + fmt1.GetLength() + text.GetLength());
+
+	c.EndUndoAction();
+}
+
+void LaTeXView::OnUpdateFormatTextForeColor(CCmdUI* /*pCmdUI*/)
+{
+	// For now, always enabled
+}
+
+void LaTeXView::OnUpdateFormatTextBackColor(CCmdUI* pCmdUI)
+{
+	// Enable only, if the selection is not empty
+	pCmdUI->Enable(GetCtrl().GetSelectionStart() != GetCtrl().GetSelectionEnd());
 }

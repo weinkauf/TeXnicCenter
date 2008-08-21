@@ -39,6 +39,7 @@
 #include "LaTeXView.h"
 #include "LaTeXDocument.h"
 #include "SpellerBackgroundThread.h"
+#include "EncodingConverter.h"
 
 
 SpellCheckDlg::SpellCheckDlg(LaTeXView* view, Speller* speller, CWnd* pParent /*= NULL*/)
@@ -58,6 +59,7 @@ void SpellCheckDlg::Reset(LaTeXView *pBuddy, Speller *pSpell)
 {
 	VERIFY(view_ = pBuddy);
 	tokenizer_ = view_->GetTokenizer();
+	tokenizer_->ResetState();
 	speller_ = pSpell;
 }
 
@@ -112,7 +114,7 @@ void SpellCheckDlg::OnSpellIgnore()
 
 void SpellCheckDlg::OnSpellIgnoreAll()
 {
-	speller_->Ignore(word_buffer_);
+	speller_->Ignore(word);
 	
 	if (view_->GetDocument()->IsSpellerThreadAttached())
 		view_->GetDocument()->GetSpellerThread()->RecheckSingleLineSpelling(current_line_,view_);
@@ -125,7 +127,7 @@ void SpellCheckDlg::OnSpellIgnoreAll()
 
 void SpellCheckDlg::OnSpellAdd()
 {
-	speller_->Add(word_buffer_);
+	speller_->Add(word);
 	
 	if (view_->GetDocument()->IsSpellerThreadAttached())
 		view_->GetDocument()->GetSpellerThread()->RecheckSingleLineSpelling(current_line_,view_);
@@ -187,26 +189,46 @@ void SpellCheckDlg::DoNextWord()
 	while (current_line_ < view_->GetCtrl().LineFromPosition(end_pos_) || 
 		(current_line_ == view_->GetCtrl().LineFromPosition(end_pos_) && 
 		view_->GetCtrl().PositionFromLine(current_line_) + current_line_end_pos_ < end_pos_))
-	{		
+	{
 		text = view_->GetLineText(current_line_);
 
 		while (tokenizer_->NextWord(text, current_line_start_pos_, current_line_end_pos_))
 		{
 			if (abs(current_line_start_pos_ - current_line_end_pos_) < MAXWORDLEN)
 			{
-				int i = current_line_start_pos_;
-				int j = 0;
-				// Convert string to TCHAR*
-				while (i < current_line_end_pos_)
-					word_buffer_[j++] = text[i++];
+				word = text.Mid(current_line_start_pos_,current_line_end_pos_ - current_line_start_pos_);
 
-				word_buffer_[j] = 0;
-
-				if (!speller_->Spell(word_buffer_))
+				if (!speller_->Spell(word))
 				{
-					view_->GetCtrl().SetSel(view_->GetCtrl().PositionFromLine(current_line_) + current_line_start_pos_,
-						view_->GetCtrl().PositionFromLine(current_line_) + current_line_end_pos_);
-					return;
+					bool decorate = true;
+					long pos = view_->GetCtrl().PositionFromLine(current_line_);
+
+					const CString left = text.Left(current_line_start_pos_);
+					
+					// Special case for words that end e.g. with a dot, such as etc., bzgl. and so on,
+					// see also SpellerBackgroundThread::DoCheckLine
+					if (current_line_end_pos_ < text.GetLength())
+						decorate = !speller_->Spell(word + text[current_line_end_pos_]);
+
+					if (decorate) {
+						// We operate on UTF-8 bytes, thus the conversion
+						std::vector<char> buffer1, buffer2;
+
+#ifdef UNICODE
+						UTF16toUTF8(left,left.GetLength(),buffer1);
+						UTF16toUTF8(word,word.GetLength(),buffer2);
+#else
+						ANSItoUTF8(left,left.GetLength(),buffer1);
+						ANSItoUTF8(word,word.GetLength(),buffer2);
+#endif
+						long s = pos + static_cast<long>(buffer1.size());
+						long e = s + static_cast<long>(buffer2.size());
+
+						view_->GetCtrl().SetSel(s,e);
+						view_->GetCtrl().EnsureVisible(current_line_);
+
+						return;
+					}					
 				}
 			}
 
@@ -248,7 +270,7 @@ void SpellCheckDlg::OnSpellError()
 	suggest_list_.DeleteAllItems();
 
 	CStringArray ssList;
-	int nCount = speller_->Suggest(word_buffer_,ssList);
+	int nCount = speller_->Suggest(word,ssList);
 
 	if (nCount < 1)
 	{
@@ -259,8 +281,6 @@ void SpellCheckDlg::OnSpellError()
 	}
 	else
 	{
-		USES_CONVERSION;
-
 		no_suggestions_ = false;
 
 		for (int i = 0; i < nCount; ++i)
@@ -359,7 +379,7 @@ void SpellCheckDlg::OnSpellReplaceAll()
 		return;
 
 	const CString newText = suggest_list_.GetItemText(suggest_list_.GetNextSelectedItem(pos), 0);
-	const CString oldText = word_buffer_;
+	const CString oldText = word;
 
 	CScintillaCtrl& c = view_->GetCtrl();
 	c.SetSearchFlags(SCFIND_MATCHCASE);

@@ -116,6 +116,10 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	void OnModified(SCNotification* n);
 	afx_msg BOOL OnBlockComment(UINT nID);
+	afx_msg void OnFormatTextForeColor();
+	afx_msg void OnFormatTextBackColor();
+	afx_msg void OnUpdateFormatTextForeColor(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateFormatTextBackColor(CCmdUI* pCmdUI);
 
 private:
 	void RestoreFocus();

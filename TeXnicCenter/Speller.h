@@ -18,8 +18,11 @@ class Speller
 	typedef std::tr1::unordered_set<StringType> WordContainer;
 	WordContainer ignored_words_;
 	bool added_modified_, ignored_modified_;
+	bool utf8_;
 
 	WordContainer added_words_;
+
+	std::string to_code_;
 
 public:
 	Speller(LPCTSTR affpath, LPCTSTR dpath, LPCTSTR key = 0);
@@ -28,6 +31,8 @@ public:
 	bool IsIgnoredModified() const;
 
 	int Add(LPCTSTR w);
+
+	int DoAdd( LPCTSTR w );
 	int AddUTF8(const char* w);
 
 	void AddDictionary(LPCTSTR dpath, LPCTSTR key = 0);
@@ -51,5 +56,6 @@ public:
 	void SavePersonalDictionary(LPCTSTR path);
 
 private:
-	void DoAdd(const StringType& s);
+	void DoLoadAdd(const StringType& s);
+	void DoConvertFromUTF8(const char* word, std::vector<char>& buffer);
 };

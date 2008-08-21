@@ -39,7 +39,7 @@ class SpellCheckDlg : public CDialog
 	long start_pos_, end_pos_;
 	Speller* speller_;
 	int current_line_, current_line_start_pos_, current_line_end_pos_;
-	TCHAR word_buffer_[MAXWORDLEN + 1];
+	CString word;
 	bool editing_;
 	bool no_suggestions_;
 	bool new_line_;

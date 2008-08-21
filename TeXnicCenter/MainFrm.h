@@ -394,8 +394,10 @@ public:
 	afx_msg void OnViewFilesPane();
 	afx_msg void OnViewBibEntriesPane();
 	afx_msg void OnViewEnvPane();
+
 private:
 	bool CreateOutputViews(void);
+
 public:
 	COutputDoc* GetOutputDoc(void);
 	afx_msg void OnApplicationLook(UINT id);

@@ -39,6 +39,7 @@
 #include "Speller.h"
 #include "DocumentTokenizer.h"
 #include "configuration.h"
+#include "EncodingConverter.h"
 
 
 enum {
@@ -270,9 +271,7 @@ void SpellerBackgroundThread::DoCheckLine(CodeView* view, int line, CString &tex
 	long length = line_end - line_start;
 
 	if (length > 0) {
-		c.GetLineEx(line,text.GetBuffer(length + 1),length + 1,FALSE);
-		text.ReleaseBuffer(length);
-
+		text = view->GetLineText(line,false);
 		int start = 0, end = 0;
 
 		while (tokenizer->NextWord(text,text.GetLength(),start,end)) {
@@ -288,17 +287,31 @@ void SpellerBackgroundThread::DoCheckLine(CodeView* view, int line, CString &tex
 					// one more character after this word
 					if (word_length <= ShortWordLength && end + 1 <= length) {
 						// Include this character and recheck the spelling
-						word += text[end];
-						decorate = !speller_->Spell(word);
+						decorate = !speller_->Spell(word + text[end]);
 					}
 
 					if (decorate) {
 						// Find word's start and end positions, add 1 otherwise
 						// the previous word will be found
-						long s = c.WordStartPosition(line_start + start + 1,TRUE,FALSE);
-						long e = c.WordEndPosition(s,TRUE,FALSE);
+						//long s = c.WordStartPosition(line_start + start + 1,TRUE,FALSE);
+						//long e = c.WordEndPosition(s,TRUE,FALSE);
+
+						const CString left = text.Left(start);
+
+						// We operate on UTF-8 bytes, thus the conversion
+						std::vector<char> buffer1, buffer2;
+
+#ifdef UNICODE
+						UTF16toUTF8(left,left.GetLength(),buffer1);
+						UTF16toUTF8(word,word.GetLength(),buffer2);
+#else
+						ANSItoUTF8(left,left.GetLength(),buffer1);
+						ANSItoUTF8(word,word.GetLength(),buffer2);
+#endif
+						long s = line_start + static_cast<long>(buffer1.size());
+						long e = s + static_cast<long>(buffer2.size());
+
 						c.IndicatorFillRange(s,e - s,FALSE);
-						//c.IndicatorFillRange(line_start + start,word_length,FALSE);
 					}
 				}
 			}

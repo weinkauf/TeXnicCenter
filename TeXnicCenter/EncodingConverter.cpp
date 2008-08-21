@@ -365,6 +365,39 @@ void UTF32toUTF16(const char* text, std::size_t n, std::vector<char>& data, bool
 	ConvertUTF32toUTF16(text,n,data,in_little_endian,out_little_endian);
 }
 
+void FromUTF8(const char* tocode, const char* text, std::size_t n, std::vector<char>& data)
+{
+	EncodingConverter converter(tocode,"UTF-8");
+	Convert<UTF8ConversionTraits<char,char> >(text,n,data,converter);
+}
+
+void ToUTF16(const char* fromcode, const char* text, std::size_t n, std::vector<wchar_t>& data, bool little_endian)
+{
+	EncodingConverter converter(little_endian ? "UTF-16LE" : "UTF-16BE",fromcode);
+	Convert<ConversionTraits<char,wchar_t> >(text,n,data,converter);
+}
+
+void FromUTF16(const char* tocode, const wchar_t* text, std::size_t n, std::vector<char>& data, bool little_endian)
+{
+	EncodingConverter converter(tocode,little_endian ? "UTF-16LE" : "UTF-16BE");
+	Convert<ConversionTraits<wchar_t,char> >(text,n,data,converter);
+}
+
+void FromANSI(const char* tocode, const char* text, std::size_t n, std::vector<char>& data, UINT codepage)
+{
+	std::ostringstream oss;
+	oss << "CP" << codepage;
+
+	EncodingConverter converter(tocode,oss.str().c_str());
+	Convert<ConversionTraits<char,char> >(text,n,data,converter);
+}
+
+bool IsEncodingAvailable(const char* code)
+{
+	EncodingConverter converter;
+	return converter.Open(code,"");
+}
+
 struct EncodingConverter::Impl
 {
 	Impl(iconv_t cd = invalid_handle)

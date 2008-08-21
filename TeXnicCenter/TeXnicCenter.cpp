@@ -772,9 +772,8 @@ CDocument *CTeXnicCenterApp::GetOpenLatexDocument(LPCTSTR lpszFileName, BOOL bRe
 {
 	// get the full path name of the file
 	TCHAR lpszFilePath[_MAX_PATH];
-	LPTSTR lpszDummy;
 
-	GetFullPathName(lpszFileName, _MAX_PATH, lpszFilePath, &lpszDummy);
+	GetFullPathName(lpszFileName, _MAX_PATH, lpszFilePath,0);
 	CString strDocPath = lpszFilePath;
 
 	// get the document template
@@ -810,9 +809,8 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName,BOOL bReadOnl
 {
 	// get the full path name of the file
 	TCHAR lpszFilePath[_MAX_PATH];
-	LPTSTR lpszDummy;
 
-	GetFullPathName(lpszFileName, _MAX_PATH, lpszFilePath, &lpszDummy);
+	GetFullPathName(lpszFileName, _MAX_PATH, lpszFilePath, 0);
 	CString strDocPath = lpszFilePath;
 
 	// get the document template
@@ -878,9 +876,8 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 
 	// get the full path name of the file
 	TCHAR lpszFilePath[_MAX_PATH];
-	LPTSTR lpszDummy;
 
-	GetFullPathName(lpszFileName, _MAX_PATH, lpszFilePath, &lpszDummy);
+	GetFullPathName(lpszFileName, _MAX_PATH, lpszFilePath,0);
 	CString strDocPath = lpszFilePath;
 
 	// get the document template
@@ -2121,7 +2118,12 @@ bool CTeXnicCenterApp::DoTaskDialog( HWND hWnd, LPCTSTR prompt, UINT nType, int&
 			tdc.pszMainIcon = TD_WARNING_ICON;
 			break;
 		case MB_ICONQUESTION:
-			tdc.pszMainIcon = IDI_QUESTION;
+			tdc.pszMainIcon = 
+#ifdef UNICODE
+				IDI_QUESTION;
+#else
+				MAKEINTRESOURCEW(32514);
+#endif
 			break;
 		case MB_ICONINFORMATION:
 			tdc.pszMainIcon = TD_INFORMATION_ICON;
@@ -2136,8 +2138,13 @@ bool CTeXnicCenterApp::DoTaskDialog( HWND hWnd, LPCTSTR prompt, UINT nType, int&
 	// searching for the first occurrence of a double new line
 	if (LPCTSTR b = _tcsstr(prompt,_T("\n\n")))
 	{
+#ifdef UNICODE
 		title.SetString(prompt,b - prompt);
 		body.SetString(b + 2);
+#else
+		title = CStringA(prompt,b - prompt);
+		body = CStringA(b + 2);
+#endif
 	}
 	else
 		title = prompt;

@@ -14,6 +14,7 @@
 #include "configuration.h"
 #include "CharType.h"
 #include "FindReplaceDlg.h"
+#include "EncodingConverter.h"
 
 #pragma region Helper functions
 
@@ -178,35 +179,47 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-void CodeView::GoToLine(int line)
+void CodeView::GoToLine( int line, bool direct /*= true*/ )
 {
-	GetCtrl().GotoLine(line);
+	GetCtrl().GotoLine(line,direct);
 }
 
-int CodeView::GetLineLength(int line)
+int CodeView::GetLineLength( int line, bool direct /*= true*/ )
 {
-	return GetCtrl().GetLineEndPosition(line) - GetCtrl().PositionFromLine(line);
+	return GetCtrl().GetLineEndPosition(line,direct) - GetCtrl().PositionFromLine(line,direct);
 }
 
-int CodeView::GetLineCount(void)
+int CodeView::GetLineCount( bool direct /*= true*/ )
 {
-	return GetCtrl().GetLineCount();
+	return GetCtrl().GetLineCount(direct);
 }
 
-int CodeView::GetCurrentLine(void)
+int CodeView::GetCurrentLine( bool direct /*= true*/ )
 {
-	return GetCtrl().LineFromPosition(GetCtrl().GetCurrentPos());
+	return GetCtrl().LineFromPosition(GetCtrl().GetCurrentPos(direct),direct);
 }
 
-const CString CodeView::GetLineText( int line )
+const CString CodeView::GetLineText( int line, bool direct /*= true*/ )
 {
-	const int length = GetLineLength(line);
-
+	const int length = GetLineLength(line,direct);
 	CString strLine;
 
 	if (length > 0) {
-		GetCtrl().GetLineEx(line,strLine.GetBuffer(length + 1),length + 1);
-		strLine.ReleaseBuffer(length);
+		CStringA temp;
+
+		GetCtrl().GetLine(line,temp.GetBuffer(length + 1),direct);
+		temp.ReleaseBuffer(length);
+
+#ifdef UNICODE
+		std::vector<wchar_t> buffer;
+		UTF8toUTF16(temp,temp.GetLength(),buffer);
+#else
+		std::vector<char> buffer;
+		UTF8toANSI(temp,temp.GetLength(),buffer);
+#endif
+
+		if (!buffer.empty())
+			strLine.SetString(&buffer[0],buffer.size());
 	}
 
 	return strLine;
