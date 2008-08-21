@@ -52,7 +52,6 @@ IMPLEMENT_DYNCREATE(COptionPageLanguage,CPropertyPage)
 
 COptionPageLanguage::COptionPageLanguage() : CPropertyPage(COptionPageLanguage::IDD)
 {
-	//{{AFX_DATA_INIT(COptionPageLanguage)
 	m_bEnableSpell = CConfiguration::GetInstance()->m_bSpellEnable;
 	m_bMainDictOnly = CConfiguration::GetInstance()->m_bSpellMainDictOnly;
 	m_bSkipComments = CConfiguration::GetInstance()->m_bSpellSkipComments;
@@ -62,15 +61,12 @@ COptionPageLanguage::COptionPageLanguage() : CPropertyPage(COptionPageLanguage::
 	m_strLanguageDefault = CConfiguration::GetInstance()->m_strLanguageDefault;
 	m_strDialectDefault = CConfiguration::GetInstance()->m_strLanguageDialectDefault;
 	m_strPDictionary = CConfiguration::GetInstance()->m_strSpellPersonalDictionary;
-	m_strLocale = CConfiguration::GetInstance()->m_strLocale;
-	//}}AFX_DATA_INIT
 }
 
 void COptionPageLanguage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPageLanguage)
-	DDX_Control(pDX,IDC_OPTIONS_LANGUAGE_LOCALE,c_Locale);
 	DDX_Check(pDX,IDC_OPTIONS_SPELL_ENABLE,m_bEnableSpell);
 	DDX_Check(pDX,IDC_OPTIONS_SPELL_MAINDICT,m_bMainDictOnly);
 	DDX_Check(pDX,IDC_OPTIONS_SPELL_COMMENT,m_bSkipComments);
@@ -79,7 +75,6 @@ void COptionPageLanguage::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX,IDC_OPTIONS_SPELL_IGNORE_ALLCAPS,m_bSkipCaps);
 	DDX_CBString(pDX,IDC_OPTIONS_LANGUAGE,m_strLanguageDefault);
 	DDX_CBString(pDX,IDC_OPTIONS_LANGUAGE_DIALECT,m_strDialectDefault);
-	DDX_CBString(pDX,IDC_OPTIONS_LANGUAGE_LOCALE,m_strLocale);
 	DDX_Text(pDX,IDC_OPTIONS_SPELL_PDICT,m_strPDictionary);
 	DDX_Control(pDX,IDC_OPTIONS_LANGUAGE_DOWNLOAD,m_wndURLDownloadDicts);
 	//}}AFX_DATA_MAP
@@ -98,13 +93,6 @@ END_MESSAGE_MAP()
 
 void COptionPageLanguage::OnOK()
 {
-	if (CConfiguration::GetInstance()->m_strLocale.Compare(m_strLocale))
-	{
-		CConfiguration::GetInstance()->m_strLocale = m_strLocale;
-		// Invalid locale. Not really a problem. The system default will be used.
-		VERIFY(_tsetlocale(LC_ALL,CConfiguration::GetInstance()->m_strLocale)); // Raffi: setlocale defined instead of _tsetlocale
-	}
-
 	bool bShowNextStartInfo = (CConfiguration::GetInstance()->m_strLanguageDefault != m_strLanguageDefault);
 	bShowNextStartInfo |= (CConfiguration::GetInstance()->m_strLanguageDialectDefault != m_strDialectDefault);
 	if (bShowNextStartInfo) AfxMessageBox(STE_OPTIONS_REQUIRES_RESTART,MB_ICONINFORMATION | MB_OK);
@@ -176,52 +164,6 @@ BOOL COptionPageLanguage::OnInitDialog()
 	ASSERT(idLastLineBreak > 0);
 	m_wndURLDownloadDicts.SetURL(DictURL.Mid(idLastLineBreak + 1));
 	m_wndURLDownloadDicts.SizeToContent(true,true);
-
-	// List of all region/language strings recognized by setlocale.
-	// There are a number of sub-selections that are not presented
-	// here, but users may specify sub-selections in the application
-	// configuration. The provided selection should be sufficient for
-	// most users' needs.
-
-	// This list is in English only because it appears setlocale uses
-	// English rather than localized strings. Not all locales on this
-	// list work with all installations. A failure of setlocale reverts
-	// the application to the system locale.
-	const TCHAR * const aLocales[] =
-	{
-		// language (40)
-		_T("chinese"),_T("chinese-simplified"),_T("chinese-traditional"),_T("danish"),_T("dutch"),
-		_T("belgian"),_T("english"),_T("english-aus"),_T("english-can"),_T("english-nz"),
-		_T("english-uk"),_T("english-us"),_T("finnish"),_T("french"),_T("french-belgian"),
-		_T("french-canadian"),_T("french-swiss"),_T("german"),_T("german-austrian"),_T("german-swiss"),
-		_T("greek"),_T("hungarian"),_T("icelandic"),_T("italian"),_T("italian-swiss"),_T("japanese"),
-		_T("korean"),_T("norwegian"),_T("norwegian-bokmal"),_T("norwegian-nynorsk"),_T("polish"),
-		_T("portuguese"),_T("portuguese-brazil"),_T("russian"),_T("slovak"),_T("spanish"),
-		_T("spanish-mexican"),_T("spanish-modern"),_T("swedish"),_T("turkish")
-	};
-	const int nLocales = /*40*/sizeof(aLocales) / sizeof(TCHAR *);
-
-	// Add the system locale
-	c_Locale.AddString(_tsetlocale(LC_ALL,NULL));
-
-	// Add all the other avilable locales
-	for (int i = 0; i < nLocales; ++i)
-		c_Locale.AddString(aLocales[i]);
-
-	if (c_Locale.SelectString(0,CConfiguration::GetInstance()->m_strLocale) == CB_ERR)
-	{
-		if (CConfiguration::GetInstance()->m_strLocale.Compare(_T("")))
-		{
-			// Add the current locale to the possible selections
-			c_Locale.AddString(CConfiguration::GetInstance()->m_strLocale);
-			c_Locale.SelectString(0,CConfiguration::GetInstance()->m_strLocale);
-		}
-		else
-		{
-			// Empty locale indicates default system locale
-			c_Locale.SetCurSel(0);
-		}
-	}
 
 	FindDictionaries();
 	CComboBox *pLangBox = (CComboBox*)GetDlgItem(IDC_OPTIONS_LANGUAGE);

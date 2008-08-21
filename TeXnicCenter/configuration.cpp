@@ -236,8 +236,6 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	                       &m_strLanguageDefault,direction,AfxLoadString(IDS_LANGUAGE));
 	SerializeProfileString(strSection,_T("Dialect"),
 	                       &m_strLanguageDialectDefault,direction,AfxLoadString(IDS_DIALECT));
-	SerializeProfileString(strSection,_T("Locale"),
-	                       &m_strLocale,direction,_T(""));
 
 #pragma endregion
 

@@ -237,10 +237,13 @@ BOOL CTeXnicCenterApp::InitInstance()
 {
 	scintilla_ = AfxLoadLibrary(_T("SciLexer.dll"));
 
-	if (!scintilla_) {
+	if (!scintilla_) 
+	{
 		AfxMessageBox(_T("SciLexer.dll could not be loaded. Please reinstall the application."),MB_ICONERROR);
 		return FALSE;
 	}
+
+	setlocale(LC_ALL,""); // User's default locale
 
 	// parse command line
 	CTCCommandLineInfo cmdInfo;
@@ -291,9 +294,6 @@ BOOL CTeXnicCenterApp::InitInstance()
 	LoadStdProfileSettings(10);
 
 	CConfiguration::GetInstance()->Serialize(CConfiguration::Load);
-
-	// Set the locale
-	_tsetlocale(LC_ALL, CConfiguration::GetInstance()->m_strLocale);
 
 	// loading localized resource DLL for TeXnicCenter itself
 	m_hTxcResources = LoadLibrary(_T("language\\TxcRes") + CConfiguration::GetInstance()->m_strGuiLanguage + _T(".dll"));
