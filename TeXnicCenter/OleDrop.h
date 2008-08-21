@@ -306,8 +306,10 @@ public:
 		DataContainerType::iterator result = std::find_if(data_.begin(),data_.end(),
 			std::bind2nd(EqualFormatEtc(),*pformatetc));
 
-		if (result != data_.end())
+		if (result != data_.end()) {
+			result->ReleaseMedium();
 			*result = data;
+		}
 		else
 			data_.push_back(data);
 
