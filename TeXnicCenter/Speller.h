@@ -31,8 +31,6 @@ public:
 	bool IsIgnoredModified() const;
 
 	int Add(LPCTSTR w);
-
-	int DoAdd( LPCTSTR w );
 	int AddUTF8(const char* w);
 
 	void AddDictionary(LPCTSTR dpath, LPCTSTR key = 0);
@@ -56,6 +54,7 @@ public:
 	void SavePersonalDictionary(LPCTSTR path);
 
 private:
+	int DoAdd( LPCTSTR w );
 	void DoLoadAdd(const StringType& s);
 	void DoConvertFromUTF8(const char* word, std::vector<char>& buffer);
 };
