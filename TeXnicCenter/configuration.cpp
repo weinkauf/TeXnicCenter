@@ -75,7 +75,7 @@ CConfiguration::CConfiguration()
 , insert_caret_line_(FALSE)
 , overwrite_caret_line_(FALSE)
 , show_line_endings_(FALSE)
-, word_wrap_(FALSE)
+, word_wrap_(TRUE)
 {
 }
 
@@ -169,7 +169,7 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 
 	SerializeProfileInt(strSection,_T("EditorShowLineNumbers"),&m_bShowLineNumbers,direction,0);
 	SerializeProfileInt(strSection,_T("EditorShowLineEndings"),&show_line_endings_,direction,0);
-	SerializeProfileInt(strSection,_T("EditorWordWrap"),&word_wrap_,direction,0);
+	SerializeProfileInt(strSection,_T("EditorWordWrap"),&word_wrap_,direction,1);
 
 #pragma region Cursor settings
 
