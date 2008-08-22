@@ -1204,8 +1204,6 @@
 #define ID_FILEVIEW_UPDATE_OUTPUT       33551
 #define ID_LATEX_STOP_BUILD             33553
 #define ID_EDIT_DELETE                  37000
-#define ID_EDIT_DELETE_BACK             37001
-#define ID_EDIT_DELETE_WORD_BACK        37002
 #define ID_EDIT_TAB                     37003
 #define ID_EDIT_UNTAB                   37004
 #define ID_EDIT_SWITCH_OVRMODE          37005
@@ -1233,9 +1231,7 @@
 #define ID_EDIT_GO_BOOKMARK7            37217
 #define ID_EDIT_GO_BOOKMARK8            37218
 #define ID_EDIT_GO_BOOKMARK9            37219
-#define ID_EDIT_CLEAR_BOOKMARKS         37220
 #define ID_EDIT_SET_BREAKPOINT          37221
-#define ID_EDIT_ENABLE_BREAKPOINT       37222
 #define ID_EDIT_TOGGLE_BOOKMARK         37223
 #define ID_EDIT_GOTO_NEXT_BOOKMARK      37224
 #define ID_EDIT_GOTO_PREV_BOOKMARK      37225
@@ -1427,7 +1423,6 @@
 #define ID_SHOW_EQUATIONS               38537
 #define ID_SHOW_TABLES                  38541
 #define ID_EDIT_DELETE_LINE             38542
-#define ID_EDIT_TOGGLE_SHOW_LINE_ENDING 38549
 #define ID_EDIT_WORD_WRAP               38551
 #define ID_VIEW_DISPLAYENDLINES         38552
 #define ID_VIEW_WORD_WRAP               38554
@@ -1439,12 +1434,11 @@
 #define ID_SHOW_LINE_NUMBERS            38562
 #define ID_VIEW_LINE_NUMBERS            38563
 #define ID_VIEW_DISPLAYLINENUMBERS      38564
-#define ID_BEARBEITEN_PARAGRAPHAUFTEILEN 38565
-#define ID_BEARBEITEN_PARAGRAPHZUSAMMENF38566 38566
 #define ID_EDIT_SPLIT_PARAGRAPH         38567
 #define ID_EDIT_JOIN_PARAGRAPH          38568
 #define ID_SEARCH_SPLITPARAGRAPH        38569
 #define ID_SEARCH_JOINPARAGRAPH         38570
+#define ID_VIEW_SHOW_LINE_ENDING        38571
 #define ID_NONE                         40002
 #define ID_NONE40003                    40003
 #define IDS_TEXTMODULES_NONEDEFINED     57671
@@ -1455,7 +1449,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        346
-#define _APS_NEXT_COMMAND_VALUE         38571
+#define _APS_NEXT_COMMAND_VALUE         38572
 #define _APS_NEXT_CONTROL_VALUE         1365
 #define _APS_NEXT_SYMED_VALUE           190
 #endif
