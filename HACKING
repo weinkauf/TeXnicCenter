@@ -127,7 +127,8 @@ Single line 'for' and 'if' statements
 -------------------------------------
 
 If the body of a 'for' or 'if' statement consists of a single line only,
-this line is not to be written without braces.
+it is desired to write it with braces.
+If you omit the braces, please insert an empty line after the statement.
 
 if (foo)
 {
@@ -135,11 +136,11 @@ if (foo)
 }
 
 if (foo)
-    bar() //Wrong. Please avoid.
+    bar() //Not desired. Use only with care. Insert empty line after statement.
 
 It is also not desired to write it into a single line:
 
-if (foo) bar() //Not desired. Use only with care.
+if (foo) bar() //Not desired. Use only with care. Insert empty line after statement.
 
 
 Branches
