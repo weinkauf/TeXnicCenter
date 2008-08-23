@@ -315,6 +315,7 @@ int LaTeXView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	rCtrl.SetLexer(SCLEX_TEX); // TeX Lexer
 
 	EnableAutoIndent();
+	rCtrl.SetCaretSticky(FALSE);
 
 	return 0;
 }
@@ -660,6 +661,10 @@ void LaTeXView::HideAdvice()
 
 void LaTeXView::OnACCommandSelect(const CLaTeXCommand* cmd)
 {
+	GetCtrl().BeginUndoAction();
+
+	int initial_line_count = GetCtrl().GetLineCount();
+
 	long ptCaret;
 
 	autocompletion_active_ = false;
@@ -674,6 +679,8 @@ void LaTeXView::OnACCommandSelect(const CLaTeXCommand* cmd)
 
 	long s = GetCtrl().GetSelectionStart();
 	long e = GetCtrl().GetSelectionEnd();
+
+	int start_line = GetCtrl().LineFromPosition(s);
 
 	const long origs = s;
 
@@ -735,7 +742,12 @@ void LaTeXView::OnACCommandSelect(const CLaTeXCommand* cmd)
 
 	ptCaret = GetCtrl().GetCurrentPos();
 	GetCtrl().SetSel(-1,ptCaret); // sync selection with C'pos
-	RestoreFocus(); // set focus back to edit view
+
+	Reindent(initial_line_count, start_line);
+
+	GetCtrl().EndUndoAction();
+
+	SetFocus(); // set focus back to edit view
 }
 
 void LaTeXView::OnACCommandCancelled()
@@ -1245,6 +1257,10 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 	ptSelStart = GetCtrl().GetSelectionStart();
 	ptSelEnd = GetCtrl().GetSelectionEnd();
 
+	int start_line = GetCtrl().LineFromPosition(ptSelStart);
+	const int initial_line_count = GetCtrl().GetLineCount();
+
+#pragma region Insertion
 	// test, if selection anchor is at the beginning or at the end of
 	// selection.
 	bool bAnchorAtEndOfSelection = ptSelEnd != GetCtrl().GetCurrentPos();
@@ -1312,6 +1328,10 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 	}
 	else // set cursor
 		GetCtrl().GotoPos(ptStart);
+
+#pragma endregion
+
+	Reindent(initial_line_count, start_line);
 
 	GetCtrl().EndUndoAction();
 
@@ -1551,4 +1571,41 @@ void LaTeXView::OnUpdateFormatTextBackColor(CCmdUI* pCmdUI)
 {
 	// Enable only, if the selection is not empty
 	pCmdUI->Enable(GetCtrl().GetSelectionStart() != GetCtrl().GetSelectionEnd());
+}
+
+void LaTeXView::Reindent( int initial_line_count, int start_line )
+{
+	int current_line_count = GetCtrl().GetLineCount();
+	int lines_added = current_line_count - initial_line_count;
+
+	// We're not interested in the first line, since it will be already correctly indented
+	if (--lines_added > 0) {
+		int indent = GetCtrl().GetLineIndentation(start_line);
+		++start_line;
+
+		int end_line = start_line + lines_added;
+
+		for ( ; start_line <= end_line; ++start_line) {
+			if (GetLineLength(start_line) != 0) {
+				// Set the indentation to the size of the first line plus the indent of the current line
+				GetCtrl().SetLineIndentation(start_line,indent + GetCtrl().GetLineIndentation(start_line));
+			}
+			else {
+				// Setting indentation on empty lines doesn't have any effect
+				// thus we need to insert tabs
+				GetCtrl().GotoPos(GetCtrl().PositionFromLine(start_line));
+				
+				int count = indent;
+				int width = GetCtrl().GetIndent();
+
+				if (!width) // Use tab width
+					width = GetCtrl().GetTabWidth();
+
+				count /= width;
+
+				for (int i = 0; i < count; ++i)
+					GetCtrl().Tab();
+			}
+		}
+	}
 }

@@ -91,6 +91,8 @@ private:
 	void OnACChar(UINT nKey,UINT nRepCount,UINT nFlags);
 	void OnACCommandCancelled();
 	void OnACCommandSelect(const CLaTeXCommand* cmd);
+
+	void Reindent( int initial_line_count, int start_line );
 	void OnACHelp(const CString &cmd);	
 
 private:
