@@ -8,8 +8,50 @@ int ToScintillaMode(int m);
 int FromScintillaMode(int m);
 
 class SpellerBackgroundThread;
+class TextDocument;
 
-// CodeDocument document
+#pragma region Line ending detection helpers
+
+template<class Ch>
+struct LineEndingTraits;
+
+template<>
+struct LineEndingTraits<char>
+{
+	static const char* Endings() { return "\r\n"; }
+	static const char* LineFeed() { return "\n"; }
+	static const char* CarriageReturn() { return "\r"; }
+};
+
+template<>
+struct LineEndingTraits<wchar_t>
+{
+	static const wchar_t* Endings() { return L"\r\n"; }
+	static const wchar_t* LineFeed() { return L"\n"; }
+	static const wchar_t* CarriageReturn() { return L"\r"; }
+};
+
+template<class Ch>
+inline const Ch* GetLineEnding(const Ch* text, std::size_t size)
+{
+	const Ch* const le = LineEndingTraits<Ch>::Endings();
+	const Ch* mode = le;
+	const Ch* end = text + size;
+
+	const Ch* pos = std::find_first_of(text,end,le,le + std::char_traits<Ch>::length(le));
+
+	if (pos != end) {
+		if (*pos == *LineEndingTraits<Ch>::CarriageReturn() && pos[1] != *LineEndingTraits<Ch>::LineFeed())
+			mode = LineEndingTraits<Ch>::CarriageReturn();
+		else if (std::char_traits<Ch>::compare(pos,le,std::char_traits<Ch>::length(le)) != 0 && 
+			*pos == *LineEndingTraits<Ch>::LineFeed())
+			mode = LineEndingTraits<Ch>::LineFeed();
+	}
+
+	return mode;
+}
+
+#pragma endregion
 
 class CodeDocument : public CScintillaDoc
 {
@@ -45,8 +87,6 @@ private:
 	bool create_backup_file_;
 
 	SpellerBackgroundThread* speller_thread_;
-
-	static Encoding DetectEncoding(const BYTE* data, SIZE_T& pos, SIZE_T size);
 
 protected:
 	CodeDocument();
@@ -113,11 +153,7 @@ public:
 	const BookmarkContainerType GetBookmarks();
 	/// Clears all the bookmarks and sets the ones from the range specified by first last
 	template<class I>
-	void SetBookmarks(I first, I last);
-	/// Tests data for UTF-8 and UTF-16 encodings
-	static Encoding TestForUnicode(const BYTE* data, SIZE_T size);
-	/// Reads the whole file by detecting the right encoding
-	static bool ReadString(LPCTSTR pszFileName, CStringW& string, UINT codepage = ::GetACP());
+	void SetBookmarks(I first, I last);	
 	/// Indicates whether this document should be saved with BOM, invalid for ANSI documents
 	bool GetUseBOM() const;
 	/// Enables or disabled the usage of a BOM for Unicode text documents
@@ -125,6 +161,32 @@ public:
 	/// Returns a tuple containing the first and last line
 	/// of the paragraph the start_line parameter points to
 	const std::pair<int,int> GetParagraphRange(int start_line);
+};
+
+class TextDocument
+{
+	bool use_bom;
+	CodeDocument::Encoding encoding;
+	UINT code_page_;
+
+	friend class CodeDocument;
+
+private:
+	TextDocument(bool use_bom, CodeDocument::Encoding e);
+
+	static CodeDocument::Encoding DetectEncoding(const BYTE* data, SIZE_T& pos, SIZE_T size);
+	/// Tests data for UTF-8 and UTF-16 encodings
+	static CodeDocument::Encoding TestForUnicode(const BYTE* data, SIZE_T size);
+
+public:
+	explicit TextDocument(UINT codepage = ::GetACP());
+	CodeDocument::Encoding GetEncoding() const;
+
+	DWORD Write(ATL::CAtlFile& file, const char* text, std::size_t);
+	/// Reads the whole file by detecting the right encoding
+	bool Read(LPCTSTR pszFileName, CStringW& string);
+	/// Writes the whole file by detecting the right encoding
+	bool Write(LPCTSTR pszFileName, const CStringW& string);
 };
 
 template<class I>

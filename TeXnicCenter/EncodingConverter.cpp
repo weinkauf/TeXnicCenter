@@ -173,26 +173,37 @@ namespace {
 		return !stop; // stop only set, if an error has occurred
 	}
 
-	template<class ChOut>
-	inline void ConvertANSItoUTF16(const char* text, std::size_t n, std::vector<ChOut>& data, UINT codepage, bool little_endian)
+	const std::string FormatEndianCode(const char* base, bool little_endian)
+	{
+		std::string code(base);
+
+		if (little_endian)
+			code += "LE";
+		else
+			code += "BE";
+
+		return code;
+	}
+
+	const std::string FormatCodePage(UINT codepage)
 	{
 		if (!(codepage >= 1250 && codepage <= 1258)) // ANSI code page range
 			throw std::invalid_argument("Invalid ANSI code page");
 
+		std::ostringstream oss;
+		oss << "CP" << codepage;
+
+		return oss.str();
+	}
+
+	template<class ChOut>
+	inline void ConvertANSItoUTF16(const char* text, std::size_t n, std::vector<ChOut>& data, UINT codepage, bool little_endian)
+	{
 		data.clear();
 
 		if (n > 0) {
-			std::ostringstream oss;
-			oss << "CP" << codepage;
-
-			std::string tocode("UTF-16");
-
-			if (little_endian)
-				tocode += "LE";
-			else
-				tocode += "BE";
-
-			EncodingConverter converter(tocode.c_str(),oss.str().c_str());
+			EncodingConverter converter(FormatEndianCode("UTF-16",little_endian).c_str(),
+				FormatCodePage(codepage).c_str());
 			Convert<ConversionTraits<char,ChOut> >(text,n,data,converter);
 		}
 	}
@@ -203,14 +214,7 @@ namespace {
 		data.clear();
 
 		if (n > 0) {
-			std::string tocode("UTF-16");
-
-			if (little_endian)
-				tocode += "LE";
-			else
-				tocode += "BE";
-
-			EncodingConverter converter(tocode.c_str(),"UTF-8");
+			EncodingConverter converter(FormatEndianCode("UTF-16",little_endian).c_str(),"UTF-8");
 			Convert<ConversionTraits<char,ChOut> >(text,n,data,converter);
 		}
 	}
@@ -221,14 +225,7 @@ namespace {
 		data.clear();
 
 		if (n > 0) {
-			std::string fromcode("UTF-16");
-
-			if (little_endian)
-				fromcode += "LE";
-			else
-				fromcode += "BE";
-
-			EncodingConverter converter("UTF-8",fromcode.c_str());
+			EncodingConverter converter("UTF-8",FormatEndianCode("UTF-16",little_endian).c_str());
 			Convert<ConversionTraits<ChIn,char> >(text,n,data,converter);
 		}
 	}
@@ -239,21 +236,8 @@ namespace {
 		data.clear();
 
 		if (n > 0) {
-			std::string fromcode("UTF-32");
-
-			if (in_little_endian)
-				fromcode += "LE";
-			else
-				fromcode += "BE";
-
-			std::string tocode("UTF-16");
-
-			if (out_little_endian)
-				tocode += "LE";
-			else
-				tocode += "BE";
-
-			EncodingConverter converter(tocode.c_str(),fromcode.c_str());
+			EncodingConverter converter(FormatEndianCode("UTF-16",out_little_endian).c_str(),
+				FormatEndianCode("UTF-32",in_little_endian).c_str());
 			Convert<ConversionTraits<char,ChOut> >(text,n,data,converter);
 		}
 	}
@@ -261,16 +245,10 @@ namespace {
 
 void ANSItoUTF8(const char* text, std::size_t n, std::vector<char>& data, UINT codepage)
 {
-	if (!(codepage >= 1250 && codepage <= 1258)) // ANSI code page range
-		throw InvalidEncodingConverterArgument("Invalid ANSI code page");
-
 	data.clear();
 
 	if (n > 0) {
-		std::ostringstream oss;
-		oss << "CP" << codepage;
-
-		EncodingConverter converter("UTF-8",oss.str().c_str());
+		EncodingConverter converter("UTF-8",FormatCodePage(codepage).c_str());
 		Convert<ConversionTraits<char,char> >(text,n,data,converter);
 	}
 }
@@ -307,16 +285,10 @@ void UTF16toUTF8(const char* text, std::size_t n, std::vector<char>& data, bool 
 
 void UTF8toANSI(const char* text, std::size_t n, std::vector<char>& data, UINT codepage, char dfault)
 {
-	if (!(codepage >= 1250 && codepage <= 1258)) // ANSI code page range
-		throw InvalidEncodingConverterArgument("Invalid ANSI code page");
-
 	data.clear();
 
 	if (n > 0) {
-		std::ostringstream oss;
-		oss << "CP" << codepage;
-
-		EncodingConverter converter(oss.str().c_str(),"UTF-8");
+		EncodingConverter converter(FormatCodePage(codepage).c_str(),"UTF-8");
 		Convert<UTF8ConversionTraits<char,char> >(text,n,data,converter,dfault);
 	}
 }
@@ -326,14 +298,7 @@ void UTF32toUTF8(const char* text, std::size_t n, std::vector<char>& data, bool 
 	data.clear();
 
 	if (n > 0) {
-		std::string fromcode("UTF-32");
-
-		if (little_endian)
-			fromcode += "LE";
-		else
-			fromcode += "BE";
-
-		EncodingConverter converter("UTF-8",fromcode.c_str());
+		EncodingConverter converter("UTF-8",FormatEndianCode("UTF-32",little_endian).c_str());
 		Convert<ConversionTraits<char,char> >(text,n,data,converter);
 	}
 }
@@ -343,14 +308,7 @@ void UTF8toUTF32(const char* text, std::size_t n, std::vector<char>& data, bool 
 	data.clear();
 
 	if (n > 0) {
-		std::string tocode("UTF-32");
-
-		if (little_endian)
-			tocode += "LE";
-		else
-			tocode += "BE";
-
-		EncodingConverter converter(tocode.c_str(),"UTF-8");
+		EncodingConverter converter(FormatEndianCode("UTF-32",little_endian).c_str(),"UTF-8");
 		Convert<ConversionTraits<char,char> >(text,n,data,converter);
 	}
 }
@@ -373,22 +331,19 @@ void FromUTF8(const char* tocode, const char* text, std::size_t n, std::vector<c
 
 void ToUTF16(const char* fromcode, const char* text, std::size_t n, std::vector<wchar_t>& data, bool little_endian)
 {
-	EncodingConverter converter(little_endian ? "UTF-16LE" : "UTF-16BE",fromcode);
+	EncodingConverter converter(FormatEndianCode("UTF-16",little_endian).c_str(),fromcode);
 	Convert<ConversionTraits<char,wchar_t> >(text,n,data,converter);
 }
 
 void FromUTF16(const char* tocode, const wchar_t* text, std::size_t n, std::vector<char>& data, bool little_endian)
 {
-	EncodingConverter converter(tocode,little_endian ? "UTF-16LE" : "UTF-16BE");
+	EncodingConverter converter(tocode,FormatEndianCode("UTF-16",little_endian).c_str());
 	Convert<ConversionTraits<wchar_t,char> >(text,n,data,converter);
 }
 
 void FromANSI(const char* tocode, const char* text, std::size_t n, std::vector<char>& data, UINT codepage)
 {
-	std::ostringstream oss;
-	oss << "CP" << codepage;
-
-	EncodingConverter converter(tocode,oss.str().c_str());
+	EncodingConverter converter(tocode,FormatCodePage(codepage).c_str());
 	Convert<ConversionTraits<char,char> >(text,n,data,converter);
 }
 
@@ -396,6 +351,12 @@ bool IsEncodingAvailable(const char* code)
 {
 	EncodingConverter converter;
 	return converter.Open(code,"");
+}
+
+void UTF16toANSI(const char* text, std::size_t n, std::vector<char>& data, UINT codepage, bool little_endian)
+{
+	EncodingConverter converter(FormatCodePage(codepage).c_str(),FormatEndianCode("UTF-16",little_endian).c_str());
+	Convert<ConversionTraits<char,char> >(text,n,data,converter);
 }
 
 struct EncodingConverter::Impl

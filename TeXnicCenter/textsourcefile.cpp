@@ -36,7 +36,9 @@
 BOOL CTextSourceFile::Create(LPCTSTR lpszFile)
 {
 	CStringW text;
-	bool result = CodeDocument::ReadString(lpszFile,text);
+	TextDocument doc;
+
+	bool result = doc.Read(lpszFile,text);
 
 	if (result)
 		is_.str(static_cast<LPCWSTR>(text));

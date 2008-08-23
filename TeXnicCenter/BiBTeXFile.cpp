@@ -77,7 +77,9 @@ CBiBTeXFile::~CBiBTeXFile()
 BOOL CBiBTeXFile::ProcessFile()
 {
 	CStringW text;
-	bool result = CodeDocument::ReadString(m_Filename,text);
+	TextDocument doc;
+
+	bool result = doc.Read(m_Filename,text);
 
 	if (result) {
 		const CString s(text); text.Empty();
