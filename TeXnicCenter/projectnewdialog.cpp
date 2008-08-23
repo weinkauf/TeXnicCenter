@@ -37,6 +37,7 @@
 #include "ProjectNewDialog.h"
 #include "Global.h"
 #include "configuration.h"
+#include "CodeDocument.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -230,59 +231,92 @@ BOOL CFileBasedProjectTemplateItem::InitProject(CLaTeXProject *pProject, LPCTSTR
 
 BOOL CFileBasedProjectTemplateItem::CreateMainFile(LPCTSTR lpszTargetPath, LPCTSTR lpszCrLf)
 {
-	CFile sourceFile;
-	if (!sourceFile.Open(m_strPath, CFile::modeRead))
-		return FALSE;
+	CStringW text;
+	TextDocument doc;
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// copy source file to destination file
-	CFile destFile;
-	if (!destFile.Open(lpszTargetPath, CFile::modeCreate | CFile::modeWrite))
+	bool result = doc.Read(m_strPath,text);
+
+	if (result)
 	{
-		sourceFile.Close();
-		return FALSE;
-	}
+		const CStringW lineendings(L"\r\n");
+		int index = text.FindOneOf(lineendings);
 
-	try
-	{
-		CArchive source(&sourceFile, CArchive::load);
-		CArchive dest(&destFile, CArchive::store);
-		CString strLine;
-
-		if (source.ReadString(strLine))
+		if (index != -1)
 		{
-			// skip leading descriptions
-			CString strKey(_T("%DESCRIPTION: "));
-			CString strStartOfLine = strLine.Left(strKey.GetLength());
+			CStringW line = text.Left(index);
+			const CStringW strKey(L"%DESCRIPTION: ");
+			CStringW strStartOfLine = line.Left(strKey.GetLength());
+
 			strStartOfLine.MakeUpper();
 
-			if (strStartOfLine == strKey)
+			if (strKey == strStartOfLine) 
 			{
-				// skip leading empty lines
-				while (source.ReadString(strLine) && strLine.IsEmpty());
+				text.Delete(0,index);
+				text.TrimLeft(lineendings + L' ');
 			}
 		}
 
-		if (!strLine.IsEmpty())
-			dest.WriteString(strLine + lpszCrLf);
+		LPCWSTR le = GetLineEnding(static_cast<LPCWSTR>(text),text.GetLength());
 
-		// copy other lines
-		while (source.ReadString(strLine))
-			dest.WriteString(strLine + lpszCrLf);
+		if (std::wcscmp(le,lpszCrLf) != 0) // Line endings not equal
+			text.Replace(le,lpszCrLf);
 
-		source.Close();
-		dest.Close();
-		sourceFile.Close();
-		destFile.Close();
-	}
-	catch (CException *pE)
-	{
-		sourceFile.Abort();
-		destFile.Abort();
-		pE->Delete();
+		result = doc.Write(lpszTargetPath,text);
 	}
 
-	return TRUE;
+	//CFile sourceFile;
+	//if (!sourceFile.Open(m_strPath, CFile::modeRead))
+	//	return FALSE;
+
+	////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	//// copy source file to destination file
+	//CFile destFile;
+	//if (!destFile.Open(lpszTargetPath, CFile::modeCreate | CFile::modeWrite))
+	//{
+	//	sourceFile.Close();
+	//	return FALSE;
+	//}
+
+	//try
+	//{
+	//	CArchive source(&sourceFile, CArchive::load);
+	//	CArchive dest(&destFile, CArchive::store);
+	//	CString strLine;
+
+	//	if (source.Read(strLine))
+	//	{
+	//		// skip leading descriptions
+	//		CString strKey(_T("%DESCRIPTION: "));
+	//		CString strStartOfLine = strLine.Left(strKey.GetLength());
+	//		strStartOfLine.MakeUpper();
+
+	//		if (strStartOfLine == strKey)
+	//		{
+	//			// skip leading empty lines
+	//			while (source.Read(strLine) && strLine.IsEmpty());
+	//		}
+	//	}
+
+	//	if (!strLine.IsEmpty())
+	//		dest.WriteString(strLine + lpszCrLf);
+
+	//	// copy other lines
+	//	while (source.Read(strLine))
+	//		dest.WriteString(strLine + lpszCrLf);
+
+	//	source.Close();
+	//	dest.Close();
+	//	sourceFile.Close();
+	//	destFile.Close();
+	//}
+	//catch (CException *pE)
+	//{
+	//	sourceFile.Abort();
+	//	destFile.Abort();
+	//	pE->Delete();
+	//}
+
+	return result;
 }
 
 
@@ -532,7 +566,7 @@ void CProjectNewDialog::Create()
 			strCrlf = _T("\n");
 			break;
 		case MacStyleEOLMode:
-			strCrlf = _T("\n\r");
+			strCrlf = _T("\r");
 			break;
 
 		default:

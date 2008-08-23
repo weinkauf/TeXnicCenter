@@ -10,6 +10,7 @@ void ANSItoUTF16(const char* text, std::size_t n, std::vector<wchar_t>& data, UI
 void UTF8toANSI(const char* text, std::size_t n, std::vector<char>& data, UINT codepage = ::GetACP(), char dfault = '?');
 void UTF8toUTF16(const char* text, std::size_t n, std::vector<char>& data, bool little_endian = true);
 void UTF8toUTF16(const char* text, std::size_t n, std::vector<wchar_t>& data, bool little_endian = true);
+void UTF16toANSI(const char* text, std::size_t n, std::vector<char>& data, UINT codepage = ::GetACP(), bool little_endian = true);
 void UTF16toUTF8(const wchar_t* text, std::size_t n, std::vector<char>& data, bool little_endian = true);
 void UTF16toUTF8(const char* text, std::size_t n, std::vector<char>& data, bool little_endian = true);
 void UTF32toUTF8(const char* text, std::size_t n, std::vector<char>& data, bool little_endian = true);
