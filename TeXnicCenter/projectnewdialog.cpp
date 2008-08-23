@@ -258,7 +258,9 @@ BOOL CFileBasedProjectTemplateItem::CreateMainFile(LPCTSTR lpszTargetPath, LPCTS
 
 		LPCWSTR le = GetLineEnding(static_cast<LPCWSTR>(text),text.GetLength());
 
-		if (std::wcscmp(le,lpszCrLf) != 0) // Line endings not equal
+		USES_CONVERSION;
+
+		if (std::wcscmp(le,T2CW(lpszCrLf)) != 0) // Line endings not equal
 			text.Replace(le,lpszCrLf);
 
 		result = doc.Write(lpszTargetPath,text);
