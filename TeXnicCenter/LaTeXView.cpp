@@ -985,12 +985,30 @@ void LaTeXView::OnSpellFile()
 void LaTeXView::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 {
 	CPoint ptText = point;
-	ScreenToClient(&ptText);
 
-	long pos = GetCtrl().PositionFromPoint(ptText.x,ptText.y);
+	CRect rect;
+	GetWindowRect(&rect);
+
+	long pos;
+
+	if (rect.PtInRect(point)) {
+		ScreenToClient(&ptText);
+		pos = GetCtrl().PositionFromPoint(ptText.x,ptText.y);
+	}
+	else {
+		// The cursor is outside this window because the
+		// user pressed the app key. Use caret's coordinates
+		pos = GetCtrl().GetCurrentPos();
+
+		// We use the baseline
+		point.SetPoint(GetCtrl().PointXFromPosition(pos),
+			GetCtrl().PointYFromPosition(pos) + GetCtrl().TextHeight(GetCtrl().LineFromPosition(pos)));
+		
+		ptText = point;
+		ClientToScreen(&point); // Scintilla returns client relative positions
+	}
+	 
 	bool bShowDefault = true;
-
-	// TODO :
 
 	if (GetCtrl().IndicatorValueAt(0,pos) == INDIC_SQUIGGLE) {  	
 		SpellerSuggestionMenu menu(this,pos);
