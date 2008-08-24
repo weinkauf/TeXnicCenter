@@ -731,19 +731,18 @@ void LaTeXView::OnACCommandSelect(const CLaTeXCommand* cmd)
 		if (!bSetPosition) 
 			GetCtrl().GotoPos(e);
 	}
-	else {
+
+	Reindent(initial_line_count, start_line);
+
+	if (isEnv) {
 		// env was inserted -> place cursor at end of next row
+		// but only after the newly inserted environment has been correctly indented
 		s = origs;
 		long l = GetCtrl().LineFromPosition(s);
 		ptCaret = GetCtrl().GetLineEndPosition(l + 1);
 
 		GetCtrl().GotoPos(ptCaret);
 	}
-
-	ptCaret = GetCtrl().GetCurrentPos();
-	GetCtrl().SetSel(-1,ptCaret); // sync selection with C'pos
-
-	Reindent(initial_line_count, start_line);
 
 	GetCtrl().EndUndoAction();
 
