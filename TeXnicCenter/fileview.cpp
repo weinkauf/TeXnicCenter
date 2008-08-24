@@ -34,10 +34,15 @@
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
+
+#include <map>
+#include <utility>
+
 #include "FileView.h"
 #include "FontOccManager.h"
 #include "global.h"
 #include "OleDrop.h"
+
 
 BEGIN_MESSAGE_MAP(CFileView,NavigatorTreeCtrl)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CFileView::OnNMCustomdraw)
@@ -60,102 +65,8 @@ void CFileView::OnUpdate(CProjectView* /*pSender*/, LPARAM lHint, LPVOID /*pHint
 	switch (lHint)
 	{
 		case COutputDoc::hintParsingFinished :
-		{
-			//How many items do we have in this view currently?
-			//If none, i.e. first filled after loading a project, then expand the zeroth level
-			const bool bExpandAll = (GetCount() == 0);
-
-			//-----------------------------------------------------------
-			// remember expanded items
-			CString strSelectedItem = GetItemPath(GetSelectedItem());
-			CStringArray astrExpandedItems;
-			GetExpandedItems(astrExpandedItems);
-
-			//-----------------------------------------------------------
-			// fill tree
-			const StructureItemContainer &a = GetProject()->m_aStructureItems;
-
-			//Lock
-			//LockWindowUpdate();
-			SetRedraw(FALSE);
-
-			// initialization
-			DeleteAllItems();
-
-			HTREEITEM hTexParent = InsertItem(AfxLoadString(STE_TEX_FILES),
-			                                  CStructureParser::texFile,CStructureParser::texFile,
-			                                  TVI_ROOT,TVI_FIRST);
-			HTREEITEM hBibParent = InsertItem(AfxLoadString(STE_BIB_FILES),
-			                                  CStructureParser::bibFile,CStructureParser::bibFile,
-			                                  TVI_ROOT,TVI_LAST);
-			HTREEITEM hGraphicParent = InsertItem(AfxLoadString(STE_GRAPHICS_FILES),
-			                                      CStructureParser::graphicFile,CStructureParser::graphicFile,
-			                                      TVI_ROOT,TVI_LAST);
-
-			HTREEITEM hItem;
-			CString text;
-
-			// fill view
-			//for (int i = 0; i < a.GetSize(); i++) {
-			for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it)
-			{
-				const CStructureItem &si = *it;//a.GetAt(i);
-
-				if (it->IsMainProjectFile())
-					text = CPathTool::GetFile(it->/*a[i]*/m_strTitle);
-				else
-					text = it->m_strTitle;
-
-				const int i = std::distance(a.begin(),it);
-
-				switch (si.m_nType)
-				{
-					case CStructureParser::texFile :
-					case CStructureParser::missingTexFile :
-						hItem = InsertItem(
-						            text,
-						            si.GetType(),si.GetType(),
-						            hTexParent,TVI_SORT);
-						SetItemData(hItem,i);
-						break;
-					case CStructureParser::graphicFile :
-					case CStructureParser::missingGraphicFile :
-						hItem = InsertItem(
-						            text,
-						            si.GetType(),si.GetType(),
-						            hGraphicParent,TVI_SORT);
-						SetItemData(hItem,i);
-						break;
-					case CStructureParser::bibFile :
-					case CStructureParser::missingBibFile :
-						hItem = InsertItem(
-						            text,
-						            si.GetType(),si.GetType(),
-						            hBibParent,TVI_SORT);
-						SetItemData(hItem,i);
-						break;
-				}
-			}
-
-			//-----------------------------------------------------------
-			//try to expand items
-			if (!bExpandAll)
-			{
-				ExpandItems(astrExpandedItems);
-				SelectItem(GetItemByPath(strSelectedItem));
-			}
-			else
-			{
-				ExpandItemsByLevel(0);
-				EnsureVisible(GetNextItem(NULL,TVGN_ROOT));
-			}
-
-			//Unlock
-			//UnlockWindowUpdate();
-			SetRedraw();
-			Invalidate();
-		}
-		break;
+			OnParsingFinished();
+			break;
 	}
 }
 
@@ -242,4 +153,150 @@ void CFileView::OnDragGetData(ISimpleDataObjectImpl<DragObject,ATL::CComObjectNo
 		if (OnBeginDragDrop(*item,text,GetControlAsyncState()))
 			o->SetData(text,text.GetLength());
 	}
+}
+
+void CFileView::OnParsingFinished()
+{
+	//How many items do we have in this view currently?
+	//If none, i.e. first filled after loading a project, then expand the zeroth level
+	const bool bExpandAll = (GetCount() == 0);
+
+	// remember expanded items
+	CString strSelectedItem = GetItemPath(GetSelectedItem());
+	CStringArray astrExpandedItems;
+	GetExpandedItems(astrExpandedItems);
+
+	// fill tree
+	const StructureItemContainer &a = GetProject()->m_aStructureItems;
+
+	SetRedraw(FALSE);
+	DeleteAllItems();
+
+	HTREEITEM hTexParent = InsertItem(AfxLoadString(STE_TEX_FILES),
+		CStructureParser::texFile,CStructureParser::texFile,
+		TVI_ROOT,TVI_FIRST);
+	HTREEITEM hBibParent = InsertItem(AfxLoadString(STE_BIB_FILES),
+		CStructureParser::bibFile,CStructureParser::bibFile,
+		TVI_ROOT,TVI_LAST);
+	HTREEITEM hGraphicParent = InsertItem(AfxLoadString(STE_GRAPHICS_FILES),
+		CStructureParser::graphicFile,CStructureParser::graphicFile,
+		TVI_ROOT,TVI_LAST);
+
+	HTREEITEM hItem;
+	CString text;
+	HTREEITEM parent;
+
+	const CString projectdir = GetProject()->GetProjectDir();
+
+	// Maps the (flat) relative path and item type to a parent tree item
+	typedef std::map<std::pair<CString,int>,HTREEITEM> ParentDirectoryContainerType;
+	ParentDirectoryContainerType parents;
+
+	int unique_type;
+
+	// fill view
+	for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it)
+	{
+		const CStructureItem &si = *it;
+		text = CPathTool::GetFile(it->GetTitle());
+
+		CString reldir = CPathTool::GetRelativePath(projectdir,CPathTool::GetParentDirectory(
+			CPathTool::GetAbsolutePath(projectdir,it->GetPath())),TRUE,TRUE);
+
+		const int i = std::distance(a.begin(),it);
+
+		switch (si.GetType())
+		{
+		case CStructureParser::texFile :
+		case CStructureParser::missingTexFile :
+			unique_type = CStructureParser::texFile;
+			parent = hTexParent;
+			break;
+		case CStructureParser::graphicFile :
+		case CStructureParser::missingGraphicFile :
+			unique_type = CStructureParser::graphicFile;
+			parent = hGraphicParent;
+			break;
+		case CStructureParser::bibFile :
+		case CStructureParser::missingBibFile :
+			unique_type = CStructureParser::bibFile;
+			parent = hBibParent;
+			break;
+		default:
+			parent = 0;
+		}
+
+		if (parent)
+		{
+			if (reldir != _T(".")) 
+			{
+				ParentDirectoryContainerType::iterator it = 
+					parents.find(std::make_pair(reldir,unique_type));
+
+				if (it != parents.end())
+					parent = it->second;
+				else 
+				{
+					CString component, path;
+					int index;
+
+					LPCTSTR const sep = _T("\\/");
+					bool stop = false;
+
+					const int folder_image = 14;
+
+					while (!stop)
+					{
+						index = reldir.FindOneOf(sep);							
+
+						if (index == -1) 
+						{
+							index = reldir.GetLength();
+							stop = true;
+						}
+
+						component = reldir.Left(index);
+						path += component;
+
+						it = parents.find(std::make_pair(path,unique_type));
+
+						if (it != parents.end())
+							parent = it->second;
+						else
+						{
+							// We insert the current path component only
+							parent = InsertItem(TVIF_TEXT|TVIF_PARAM|TVIF_IMAGE|TVIF_SELECTEDIMAGE,
+								component,folder_image,folder_image,0,0,-1,parent,TVI_SORT);
+							// but store the whole relative path
+							parents.insert(std::make_pair(std::make_pair(path,unique_type),parent));
+						}
+
+						if (!stop) 
+						{
+							path += reldir[index]; // add the \ or /
+							reldir.Delete(0,index + 1);
+						}
+					}
+				}						
+			}
+
+			hItem = InsertItem(TVIF_TEXT|TVIF_PARAM|TVIF_IMAGE|TVIF_SELECTEDIMAGE,text,si.GetType(),
+				si.GetType(),0,0,i,parent,TVI_SORT);
+		}
+	}
+
+	//try to expand items
+	if (!bExpandAll)
+	{
+		ExpandItems(astrExpandedItems);
+		SelectItem(GetItemByPath(strSelectedItem));
+	}
+	else
+	{
+		ExpandItemsByLevel(0);
+		EnsureVisible(GetNextItem(NULL,TVGN_ROOT));
+	}
+
+	SetRedraw();
+	Invalidate();
 }

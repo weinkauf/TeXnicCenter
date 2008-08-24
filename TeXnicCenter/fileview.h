@@ -55,4 +55,7 @@ protected:
 	bool OnBeginDragDrop(const CStructureItem& item, CString& text, UINT keystate);
 	void OnDragKeyStateChanged(UINT keystate);
 	void OnDragGetData(ISimpleDataObjectImpl<DragObject,ATL::CComObjectNoLock>* o);
+
+private:
+	void OnParsingFinished();
 };
