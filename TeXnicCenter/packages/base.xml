@@ -185,7 +185,7 @@
 		<lxCommand name="\fntguide"/>
 		<lxCommand name="\sourcecode"/>
 		<lxEnvironment name="decl" parameters="1" expafter="}{}&#xA;&#xA;\end{decl}" expbefore="\begin{"/>
-		<lxEnvironment name="verbatim" parameters="0" expafter="}{}&#xA;&#xA;\end{verbatim}" expbefore="\begin{"/>
+		<lxEnvironment name="verbatim" parameters="0" expafter="}&#xA;&#xA;\end{verbatim}" expbefore="\begin{"/>
 		<lxCommand name="\clsguide"/>
 		<lxCommand name="\modguide"/>
 		<lxCommand name="\LaTeXWcomp"/>
