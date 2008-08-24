@@ -489,7 +489,7 @@ private:
 	CString GetArgument(const CString &strText,TCHAR tcOpeningDelimiter,TCHAR tcClosingDelimiter);
 
 // attributes
-protected:
+private:
 	/** Handler for this structure parser */
 	CStructureParserHandler *m_pStructureParserHandler;
 

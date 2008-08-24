@@ -200,8 +200,7 @@ void CStructureItem::RemoveLabels()
 //-------------------------------------------------------------------
 // class CStructureParser
 //-------------------------------------------------------------------
-CString CStructureParser::m_astrHeader[MAX_DEPTH] ={_T("appendix"), _T("part"), _T("chapter"), _T("section"), _T("subsection"), _T("subsubsection")
-                                                   };
+CString CStructureParser::m_astrHeader[MAX_DEPTH] = {_T("appendix"), _T("part"), _T("chapter"), _T("section"), _T("subsection"), _T("subsubsection")};
 
 CStructureParser::CStructureParser()
 		: m_bCancel(FALSE)
@@ -212,64 +211,34 @@ CStructureParser::CStructureParser()
 
 CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHandler,
                                    CParseOutputHandler *pParseOutputHandler)
-		: m_bCancel(FALSE),
-		m_pStructureParserHandler(pStructureParserHandler),
-		m_pParseOutputHandler(pParseOutputHandler),
-		m_pStructureParserThread(NULL),
-		m_evtParsingDone(TRUE, TRUE, NULL, NULL)
-		, m_regexHeader(_T("\\\\(part|chapter|section|subsection|subsubsection)\\s*\\*?\\s*([\\[\\{].*\\})"))
-		, m_regexComment(_T("%"))
-		, m_regexVerbStart(_T("\\\\begin\\s*\\{verbatim\\*?\\}"))
-		, m_regexVerbEnd(_T("\\\\end\\{verbatim\\*?\\}"))
-		, m_regexFigureStart(_T("\\\\begin\\s*\\{figure\\*?\\}"))
-		, m_regexFigureEnd(_T("\\\\end\\s*\\{figure\\*?\\}"))
-		, m_regexTableStart(_T(
-		                        "\\\\begin\\s*\\{(sideways)?table\\*?\\}"
-		                    ))
-		, m_regexTableEnd(_T(
-		                      "\\\\end\\s*\\{(sideways)?table\\*?\\}"
-		                  ))
-		, m_regexEquationStart(_T(
-		                           "\\\\begin\\s*\\{(equation|eqnarray|gather|multline|align|alignat)\\}"
-		                       ))
-		, m_regexEquationEnd(_T(
-		                         "\\\\end\\s*\\{(equation|eqnarray|gather|multline|align|alignat)\\}"
-		                     ))
-		, m_regexCenterStart(_T(
-		                         "\\\\begin\\s*\\{center\\}"
-		                     ))
-		, m_regexCenterEnd(_T(
-		                       "\\\\end\\s*\\{center\\}"
-		                   ))
-		, m_regexUnknownEnvStart(_T(
-		                             "\\\\begin\\s*\\{([^\\}]*)\\}"
-		                         ))
-		, m_regexUnknownEnvEnd(_T(
-		                           "\\\\end\\s*\\{([^\\}]*)\\}"
-		                       ))
-		, m_regexCaption(_T(
-		                     "\\\\caption\\s*([\\[\\{].*\\})"
-		                 ))
-		, m_regexLabel(_T(
-		                   "\\\\label\\s*\\{([^\\}]*)\\}"
-		               ))
-		, m_regexInput(_T(
-		                   "\\\\(input|include)\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"
-		               ))
-		, m_regexBib(_T(
-		                 "\\\\(no)?bibliography\\s*\\{\\s*([^\\}]*)\\s*\\}"
-		             ))
-		, m_regexAppendix(_T("\\\\appendix([^[:graph:]]|$)"))
-		, m_regexGraphic(_T(
-		                     "\\\\includegraphics\\s*\\*?(\\s*\\[[^\\]]*\\]){0,2}\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"
-		                 ))
-		, m_regexUserCmd(_T(
-		                     "\\\\(re)?newcommand\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}"
-		                 ))
-		, m_regexUserEnv(_T(
-		                     "\\\\(re)?newenvironment\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}\\s*\\{([^\\}]*)\\}"
-		                 ))
-		, m_regexInlineVerb(_T("\\\\verb\\*(.)[^$1]*\\1|\\\\verb([^\\*])[^$2]*\\2"))
+: m_bCancel(FALSE)
+, m_pStructureParserHandler(pStructureParserHandler)
+, m_pParseOutputHandler(pParseOutputHandler)
+, m_pStructureParserThread(NULL)
+, m_evtParsingDone(TRUE, TRUE, NULL, NULL)
+, m_regexHeader(_T("\\\\(part|chapter|section|subsection|subsubsection)\\s*\\*?\\s*([\\[\\{].*\\})"))
+, m_regexComment(_T("%"))
+, m_regexVerbStart(_T("\\\\begin\\s*\\{verbatim\\*?\\}"))
+, m_regexVerbEnd(_T("\\\\end\\{verbatim\\*?\\}"))
+, m_regexFigureStart(_T("\\\\begin\\s*\\{figure\\*?\\}"))
+, m_regexFigureEnd(_T("\\\\end\\s*\\{figure\\*?\\}"))
+, m_regexTableStart(_T("\\\\begin\\s*\\{(sideways)?table\\*?\\}"))
+, m_regexTableEnd(_T("\\\\end\\s*\\{(sideways)?table\\*?\\}"))
+, m_regexEquationStart(_T("\\\\begin\\s*\\{(equation|eqnarray|gather|multline|align|alignat)\\}"))
+, m_regexEquationEnd(_T("\\\\end\\s*\\{(equation|eqnarray|gather|multline|align|alignat)\\}"))
+, m_regexCenterStart(_T("\\\\begin\\s*\\{center\\}"))
+, m_regexCenterEnd(_T("\\\\end\\s*\\{center\\}"))
+, m_regexUnknownEnvStart(_T("\\\\begin\\s*\\{([^\\}]*)\\}"))
+, m_regexUnknownEnvEnd(_T("\\\\end\\s*\\{([^\\}]*)\\}"))
+, m_regexCaption(_T("\\\\caption\\s*([\\[\\{].*\\})"))
+, m_regexLabel(_T("\\\\label\\s*\\{([^\\}]*)\\}"))
+, m_regexInput(_T("\\\\(input|include)\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"))
+, m_regexBib(_T("\\\\(no)?bibliography\\s*\\{\\s*([^\\}]*)\\s*\\}"))
+, m_regexAppendix(_T("\\\\appendix([^[:graph:]]|$)"))
+, m_regexGraphic(_T("\\\\includegraphics\\s*\\*?(\\s*\\[[^\\]]*\\]){0,2}\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"))
+, m_regexUserCmd(_T("\\\\(re)?newcommand\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}"))
+, m_regexUserEnv(_T("\\\\(re)?newenvironment\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}\\s*\\{([^\\}]*)\\}"))
+, m_regexInlineVerb(_T("\\\\verb\\*(.)[^$1]*\\1|\\\\verb([^\\*])[^$2]*\\2"))
 {
 	// initialize attributes
 	ASSERT(pStructureParserHandler);
