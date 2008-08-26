@@ -594,6 +594,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DragSourceBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DragSourceBase.h"
+				>
+			</File>
+			<File
 				RelativePath=".\EditMenuButton.cpp"
 				>
 			</File>
@@ -799,6 +807,14 @@
 			</File>
 			<File
 				RelativePath=".\keyboardhook.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LabelDragSource.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LabelDragSource.h"
 				>
 			</File>
 			<File
@@ -1306,6 +1322,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SortListCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SortListCtrl.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SpellCheckDlg.cpp"
 				>
 			</File>
@@ -1588,6 +1612,10 @@
 			</File>
 			<File
 				RelativePath=".\res\annotation.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\bibtoolbar.bmp"
 				>
 			</File>
 			<File

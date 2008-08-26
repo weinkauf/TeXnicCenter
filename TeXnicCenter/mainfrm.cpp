@@ -1087,6 +1087,9 @@ BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO*
 	if (output_doc_.OnCmdMsg(nID,nCode,pExtra,pHandlerInfo))
 		return TRUE;
 
+	if (bib_view_pane_.OnCmdMsg(nID,nCode,pExtra,pHandlerInfo))
+		return TRUE;
+
 	//if ((m_wndOutputBar.GetOutputDoc() != NULL) &&
 	//        m_wndOutputBar.GetOutputDoc()->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 	//    return TRUE;
@@ -1536,17 +1539,22 @@ void CMainFrame::OnUpdateWindowCloseAllButActive(CCmdUI* pCmdUI)
 
 bool CMainFrame::CreateNavigationViews(void)
 {
-	const DWORD pane_style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_HIDE_INPLACE;
+	const DWORD pane_style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_FLOAT_MULTI | CBRS_HIDE_INPLACE;
 	const CSize size(250,250);
 
+	const DWORD navigator_style = pane_style | CBRS_LEFT;
+
 	file_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_FILES)), this,size,
-	                       TRUE, ID_VIEW_FILES_PANE,pane_style);
-	bib_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_BIBENTRIES)), this,size,
-	                      TRUE, ID_VIEW_BIB_ENTRIES_PANE,pane_style);
+	                       TRUE, ID_VIEW_FILES_PANE,navigator_style);
 	structure_view_.Create(CString(MAKEINTRESOURCE(STE_TAB_STRUCTURE)), this,size,
-	                       TRUE, ID_VIEW_STRUCT_PANE,pane_style);
+	                       TRUE, ID_VIEW_STRUCT_PANE,navigator_style);
 	env_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_ENVIRONMENTS)), this,size,
-	                      TRUE, ID_VIEW_ENV_PANE,pane_style);
+	                      TRUE, ID_VIEW_ENV_PANE,navigator_style);
+
+	const CSize bibsize = size;
+
+	bib_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_BIBENTRIES)), this,CRect(CPoint(0,0),bibsize),
+		TRUE, ID_VIEW_BIB_ENTRIES_PANE,pane_style | CBRS_BOTTOM ); // Bottom
 
 	// Create views:
 	CRect rectDummy;
@@ -1564,15 +1572,8 @@ bool CMainFrame::CreateNavigationViews(void)
 		return false;
 	}
 
-	if (!bib_view_.Create(&bib_view_pane_))
-	{
-		TRACE0("Failed to create bib view\n");
-		return false;
-	}
-
 	env_view_pane_.SetClient(&env_view_);
 	file_view_pane_.SetClient(&file_view_);
-	bib_view_pane_.SetClient(&bib_view_);
 
 	structure_view_.EnableDocking(CBRS_ALIGN_ANY);
 	env_view_pane_.EnableDocking(CBRS_ALIGN_ANY);
@@ -1581,11 +1582,23 @@ bool CMainFrame::CreateNavigationViews(void)
 
 	DockPane(&structure_view_);
 
+	DockPane(&bib_view_pane_);
+	bib_view_pane_.SetAutoHideMode(TRUE,CBRS_BOTTOM,0,FALSE);
+
+	CRect rect;
+	bib_view_pane_.GetWindowRect(&rect);
+
+	if (rect.Height() < bibsize.cy)
+	{
+		rect.top = rect.bottom - bibsize.cy;
+		bib_view_pane_.SetWindowPos(0,0,0,rect.Width(),rect.Height(),SWP_NOZORDER|SWP_NOMOVE|SWP_NOACTIVATE);
+	}
+
 	CDockablePane* p = 0;
 
 	env_view_pane_.AttachToTabWnd(&structure_view_,DM_STANDARD,TRUE,&p);
 	file_view_pane_.AttachToTabWnd(&structure_view_,DM_STANDARD,FALSE);
-	bib_view_pane_.AttachToTabWnd(&structure_view_,DM_STANDARD,FALSE);
+	//bib_view_pane_.AttachToTabWnd(&structure_view_,DM_STANDARD,FALSE);
 
 	if (CBaseTabbedPane* pane = dynamic_cast<CBaseTabbedPane*>(p))
 	{
@@ -1596,6 +1609,7 @@ bool CMainFrame::CreateNavigationViews(void)
 		structure_view_.SetIcon(::ImageList_ExtractIcon(0,himl,0),FALSE);
 		env_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,1),FALSE);
 		file_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,2),FALSE);
+		//bib_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,3),FALSE);
 		bib_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,3),FALSE);
 
 		::ImageList_Destroy(himl);
@@ -1610,22 +1624,24 @@ void CMainFrame::OnOpenProject(CLaTeXProject* p)
 {
 	p->AddView(structure_view_.GetProjectView());
 	p->AddView(&file_view_);
-	p->AddView(&bib_view_);
+	//p->AddView(&bib_view_);
 	p->AddView(&env_view_);
+	p->AddView(&bib_view_pane_);
 }
 
 void CMainFrame::OnCloseProject(CLaTeXProject* p)
 {
 	p->RemoveView(structure_view_.GetProjectView());
 	p->RemoveView(&file_view_);
-	p->RemoveView(&bib_view_);
+	//p->RemoveView(&bib_view_);
 	p->RemoveView(&env_view_);
+	p->RemoveView(&bib_view_pane_);
 }
 
 bool CMainFrame::CreateOutputViews(void)
 {
-	const DWORD pane_style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_HIDE_INPLACE;
-	const CSize size(250,150);
+	const DWORD pane_style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_HIDE_INPLACE | CBRS_FLOAT_MULTI;
+	const CSize size(250,200);
 
 	error_list_view_.Create(CString(MAKEINTRESOURCE(IDS_ERROR_LIST)),this,size,
 		TRUE,ID_VIEW_ERROR_LIST_PANE,pane_style);
@@ -1699,6 +1715,27 @@ bool CMainFrame::CreateOutputViews(void)
 	grep_view_1_pane_.AttachToTabWnd(&build_view_pane_,DM_STANDARD,FALSE);
 	grep_view_2_pane_.AttachToTabWnd(&build_view_pane_,DM_STANDARD,FALSE);
 	parse_view_pane_.AttachToTabWnd(&build_view_pane_,DM_STANDARD,FALSE);
+
+	p->SetAutoHideMode(TRUE,CBRS_BOTTOM,0,FALSE);
+
+	// Adjust panes' size in auto hide mode or otherwise only the caption bar might be visible
+	// The size parameter of the CDockablePane::Create function doesn't seem to be 
+	// honored when switching into auto hide mode.
+	CWnd* panes[] = {&build_view_pane_,&grep_view_1_pane_,&grep_view_2_pane_,&parse_view_pane_,&error_list_view_};
+	const int count = sizeof(panes) / sizeof(*panes);
+
+	CRect rect;
+
+	for (int i = 0; i < count; ++i) 
+	{
+		panes[i]->GetWindowRect(&rect);
+
+		if (rect.Height() < size.cy)
+		{
+			rect.top = rect.bottom - size.cy;
+			panes[i]->SetWindowPos(0,0,0,rect.Width(),rect.Height(),SWP_NOZORDER|SWP_NOMOVE|SWP_NOACTIVATE);
+		}
+	}
 
 	if (CBaseTabbedPane* pane = dynamic_cast<CBaseTabbedPane*>(p))
 	{

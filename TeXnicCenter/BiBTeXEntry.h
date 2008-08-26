@@ -32,28 +32,59 @@
  *
  ********************************************************************/
 
-#if !defined(AFX_BIBTEXENTRY_H__F01E9D3A_27FE_44B2_A8F3_AD4490011BE2__INCLUDED_)
-#define AFX_BIBTEXENTRY_H__F01E9D3A_27FE_44B2_A8F3_AD4490011BE2__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include "StructureParser.h"
 
+const int BIBTEX_ENTRY_SIZE = 15;
 
-#define BIBTEX_ENTRY_SIZE 15
-
-extern const TCHAR* const BibTypeVerbose[];
+extern LPCTSTR const BibTypeVerbose[];
 
 class CBiBTeXFile;
+class CBiBTeXEntry;
+
+class BibItem :
+	public StructureItemInfo
+{
+	friend class CBiBTeXEntry;
+
+	CString type_;
+	CString author_;
+	CString editor_;
+	int year_;
+	bool has_year_;
+	CString label_;
+	CString title_;
+	CString publisher_;
+
+public:
+	BibItem()
+	: has_year_(false)
+	{
+	}
+
+	~BibItem()
+	{
+	}
+
+	const CString& GetType() const { return type_; }
+	const CString& GetAuthor() const { return author_; }
+	const CString& GetEditor() const { return editor_; }
+	int GetYear() const { ASSERT(HasYear()); return year_; }
+	const CString& GetLabel() const { return label_; }
+	const CString& GetTitle() const { return title_; }
+	const CString& GetPublisher() const { return publisher_; }
+
+	bool HasYear() const { return has_year_; }
+	bool HasEditor() const { return !editor_.IsEmpty(); }
+};
 
 class CBiBTeXEntry : public CObject, public CStructureItem
 {
 public:
 
 	/** Possible BibTeX types. The types Error and Unknown are for internal use only */
-	static enum BibType
+	enum BibType
 	{
 		Book = 0, Article, Booklet, Manual, Inproceedings,
 		Conference, Inbook, Incollection, Masterthesis,
@@ -106,6 +137,7 @@ public:
 	/* String representations of CBibTeXEntry */
 	const CString ToString() const;
 	const CString ToCaption() const;
+	const BibItem ToBibItem() const;
 
 private:
 	/* Removes ugly chars (e. g. whitespace, new lines,...) from a field
@@ -119,5 +151,3 @@ private:
 	CString m_Key;
 	CBiBTeXFile* m_Parent;
 };
-
-#endif // !defined(AFX_BIBTEXENTRY_H__F01E9D3A_27FE_44B2_A8F3_AD4490011BE2__INCLUDED_)

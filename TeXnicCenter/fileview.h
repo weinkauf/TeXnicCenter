@@ -52,10 +52,9 @@ protected:
 
 	afx_msg void OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult);
 	virtual BOOL OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-	bool OnBeginDragDrop(const CStructureItem& item, CString& text, UINT keystate);
-	void OnDragKeyStateChanged(UINT keystate);
-	void OnDragGetData(ISimpleDataObjectImpl<DragObject,ATL::CComObjectNoLock>* o);
 
 private:
 	void OnParsingFinished();
+public:
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 };

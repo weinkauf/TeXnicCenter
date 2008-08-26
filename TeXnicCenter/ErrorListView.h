@@ -4,6 +4,7 @@
 
 #include "BuildView.h"
 #include "PrivateToolBar.h"
+#include "SortListCtrl.h"
 
 class COutputDoc;
 
@@ -21,6 +22,7 @@ private:
 	{
 		COutputInfo info;
 		CBuildView::tagImage type;
+		int ordinal;
 
 		Item(const COutputInfo& info, CBuildView::tagImage type)
 				: info(info), type(type)
@@ -32,7 +34,7 @@ private:
 	ItemContainer items_;
 
 	PrivateToolBar toolbar_;
-	CListCtrl list_view_;
+	SortListCtrl list_view_;
 	CImageList image_list_;
 	int errors_, warnings_, bad_boxes_;
 	bool show_errors_, show_warnings_, show_bad_boxes_;
@@ -74,4 +76,11 @@ private:
 
 public:
 	void AttachDoc(COutputDoc* doc);
+
+private:
+	int CompareType(LPARAM l1, LPARAM l2);
+	int CompareOrdinal(LPARAM l1, LPARAM l2);
+	int CompareErrorMessage(LPARAM l1, LPARAM l2);
+	int CompareSourceLine(LPARAM l1, LPARAM l2);
+	int CompareSourceFile(LPARAM l1, LPARAM l2);
 };

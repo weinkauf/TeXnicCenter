@@ -942,29 +942,39 @@ void CLaTeXProject::OnItemInsertRef()
 
 const CString CLaTeXProject::FormatPageRef(const CStructureItem& item)
 {
-	ASSERT(item.HasLabels());
-	return AfxFormatString1(STE_LATEX_PAGEREF,item.GetLabel());
+	CString result;
+
+	if (item.HasLabels())
+		result = AfxFormatString1(STE_LATEX_PAGEREF,item.GetLabel());
+
+	return result;
 }
 
 const CString CLaTeXProject::FormatRef(const CStructureItem& item)
 {
-	ASSERT(item.HasLabels());
-	UINT strID = 0;
+	CString result;
 
-	switch (item.GetType())
+	if (item.HasLabels())
 	{
-		case CStructureParser::equation :
-			strID = STE_LATEX_EQREF;
-			break;
-		case CStructureParser::bibItem :
-			strID = STE_LATEX_CITE;
-			break;
-		default:
-			strID = STE_LATEX_REF;
-			break;
+		UINT strID = 0;
+
+		switch (item.GetType())
+		{
+			case CStructureParser::equation :
+				strID = STE_LATEX_EQREF;
+				break;
+			case CStructureParser::bibItem :
+				strID = STE_LATEX_CITE;
+				break;
+			default:
+				strID = STE_LATEX_REF;
+				break;
+		}
+
+		result = AfxFormatString1(strID,item.GetLabel());
 	}
 
-	return AfxFormatString1(strID,item.GetLabel());
+	return result;
 }
 
 void CLaTeXProject::OnSpellProject()

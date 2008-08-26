@@ -46,6 +46,7 @@
 
 BEGIN_MESSAGE_MAP(CFileView,NavigatorTreeCtrl)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CFileView::OnNMCustomdraw)
+	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
 
@@ -116,43 +117,6 @@ BOOL CFileView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pR
 	}
 
 	return NavigatorTreeCtrl::OnWndMsg(message, wParam, lParam, pResult);
-}
-
-bool CFileView::OnBeginDragDrop(const CStructureItem& item, CString& text, UINT keystate)
-{
-	switch (keystate)
-	{
-		default:
-			text.Format(_T("\\input{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
-			break;
-		case MK_CONTROL:
-			text.Format(_T("\\include{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
-			break;
-	}
-
-	static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(text);
-
-	return !text.IsEmpty();
-}
-
-void CFileView::OnDragKeyStateChanged(UINT keystate)
-{
-	if (const CStructureItem* item = GetDraggedStructureItem()) 
-	{
-		CString text;
-		OnBeginDragDrop(*item,text,keystate);
-	}
-}
-
-void CFileView::OnDragGetData(ISimpleDataObjectImpl<DragObject,ATL::CComObjectNoLock>* o)
-{
-	if (const CStructureItem* item = GetDraggedStructureItem()) 
-	{
-		CString text;
-		
-		if (OnBeginDragDrop(*item,text,GetControlAsyncState()))
-			o->SetData(text,text.GetLength());
-	}
 }
 
 void CFileView::OnParsingFinished()
@@ -299,4 +263,38 @@ void CFileView::OnParsingFinished()
 
 	SetRedraw();
 	Invalidate();
+}
+
+const CString FormatInput(const CStructureItem& item)
+{
+	CString text;
+	text.Format(_T("\\input{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
+
+	return text;
+}
+
+const CString FormatInclude(const CStructureItem& item)
+{
+	CString text;
+	text.Format(_T("\\include{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
+
+	return text;
+}
+
+int CFileView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (NavigatorTreeCtrl::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	ClearKeyStateToFormat();
+	ClearKeyStateToMessage();
+
+	using namespace std::tr1;
+	using namespace placeholders;
+
+	MapKeyStateToFormat(0,FormatInput);
+	MapKeyStateToFormat(MK_CONTROL,FormatInclude);
+	MapKeyStateToFormat(MK_SHIFT,bind(&CStructureItem::GetTitle,_1));
+
+	return 0;
 }

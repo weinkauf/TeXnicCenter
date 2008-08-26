@@ -32,6 +32,13 @@
 #define IDS_AUTOMATIC                   45
 #define IDS_TEXT_COLORS                 46
 #define IDS_BACKGROUND_COLORS           47
+#define IDS_SEARCH                      48
+#define IDS_LABEL                       49
+#define IDS_AUTHOR                      50
+#define IDS_TITLE                       51
+#define IDS_YEAR                        52
+#define IDS_PUBLICATION_TYPE            53
+#define IDS_PUBLISHER                   54
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
 #define IDD_TIP                         103
@@ -154,6 +161,7 @@
 #define STE_BIBTEX_ERR_SUSPICOUS_LINE   188
 #define IDD_FINDREPLACEDLG              189
 #define IDR_FORMAT                      190
+#define ID_START_SEARCH                 190
 #define STE_SELECT_PROJECT_PATH         192
 #define IDR_FORMAT_RECENTLY_USED        192
 #define STE_PROJECTDIR_CREATE_ERR       193
@@ -329,6 +337,11 @@
 #define STE_PROJECT_CLOSE_ASK           343
 #define IDS_DO_SAVE                     345
 #define IDS_DO_NOT_SAVE                 346
+#define ID_BIB_VIEW                     346
+#define IDR_BIB_VIEW                    346
+#define IDR_BIB_SEARCH                  346
+#define IDR_MENU1                       348
+#define IDR_BIB_SEARCH_OPTIONS          348
 #define STE_PARSE_BEGIN                 350
 #define STE_PARSE_END                   351
 #define STE_PARSE_PARSING               352
@@ -1439,6 +1452,19 @@
 #define ID_SEARCH_SPLITPARAGRAPH        38569
 #define ID_SEARCH_JOINPARAGRAPH         38570
 #define ID_VIEW_SHOW_LINE_ENDING        38571
+#define ID_SEARCH_OPTIONS               38572
+#define ID_SEARCH_EDIT                  38573
+#define ID_CLEAR_SEARCH                 38574
+#define IDS_NO_ACTION                   38575
+#define ID_MENU_AUTOR                   38575
+#define ID_MENU_TITEL                   38576
+#define ID_MENU_JAHR                    38577
+#define ID_MENU_AUTOREN                 38578
+#define ID_AUTHOR                       38579
+#define ID_YEAR                         38580
+#define ID_TITLE                        38581
+#define ID_PUBLICATION_TYPE             38582
+#define ID_PUBLISHER             38584
 #define ID_NONE                         40002
 #define ID_NONE40003                    40003
 #define IDS_TEXTMODULES_NONEDEFINED     57671
@@ -1448,9 +1474,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        346
-#define _APS_NEXT_COMMAND_VALUE         38572
+#define _APS_NEXT_RESOURCE_VALUE        349
+#define _APS_NEXT_COMMAND_VALUE         38586
 #define _APS_NEXT_CONTROL_VALUE         1365
-#define _APS_NEXT_SYMED_VALUE           190
+#define _APS_NEXT_SYMED_VALUE           191
 #endif
 #endif
