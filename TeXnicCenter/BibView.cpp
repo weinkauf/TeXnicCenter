@@ -188,6 +188,7 @@ void BibView::OnUpdate(CProjectView* /*sender*/, LPARAM lHint, LPVOID /*p*/)
 void BibView::Clear(void)
 {
 	list_view_.DeleteAllItems();
+	list_view_.RemoveAllGroups();
 }
 
 void BibView::AdjustLayout(const CRect& rect)
@@ -286,11 +287,15 @@ void BibView::OnTimer(UINT_PTR nIDEvent)
 
 void BibView::OnEnChangeSearch()
 {
-	if (search_timer_enabled_)
+	if (search_timer_enabled_) {
 		KillTimer(SearchTimerID);
+		search_timer_enabled_ = false;
+	}
 
-	if (IsAttached()) // A project has to be attached to this view
+	if (IsAttached()) { // A project has to be attached to this view
 		SetTimer(SearchTimerID,SearchTimerTimeout,0);
+		search_timer_enabled_ = true;
+	}		
 }
 
 void BibView::OnClearSearch()
@@ -405,12 +410,21 @@ void BibView::Populate( const std::tr1::function<bool (const BibItem&)>& predica
 
 	list_view_.SetRedraw(FALSE);
 	list_view_.DeleteAllItems();
+	//list_view_.RemoveAllGroups();
 
 	std::tr1::hash<std::basic_string<TCHAR> > hasher;
 	LVITEM lvi = {LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM|LVIF_GROUPID};
 
-	LVGROUP lvg = {sizeof(LVGROUP),LVGF_HEADER|LVGF_GROUPID|LVGF_STATE};
-	lvg.state = LVGS_COLLAPSIBLE;
+	LVGROUP lvg = {};
+	lvg.mask = LVGF_HEADER|LVGF_GROUPID;
+
+	if (RunTimeHelper::IsVista()) {
+		lvg.cbSize = sizeof(LVGROUP);
+		lvg.mask |= LVGF_STATE;
+		lvg.state = LVGS_COLLAPSIBLE;
+	}
+	else // Windows XP compatibility
+		lvg.cbSize = LVGROUP_V5_SIZE;
 
 	for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it) {
 		const CStructureItem &si = *it;
@@ -444,10 +458,12 @@ void BibView::Populate( const std::tr1::function<bool (const BibItem&)>& predica
 						list_view_.SetItemText(index,1,info->GetAuthor());
 						list_view_.SetItemText(index,2,info->GetTitle());
 
-						CString year;
-						year.Format(_T("%i"),info->GetYear());
+						if (info->HasYear()) {
+							CString year;
+							year.Format(_T("%i"),info->GetYear());
 
-						list_view_.SetItemText(index,3,year);
+							list_view_.SetItemText(index,3,year);
+						}
 						list_view_.SetItemText(index,4,info->GetType());
 						list_view_.SetItemText(index,5,info->GetPublisher());
 					}
@@ -571,9 +587,25 @@ int BibView::CompareYear( const CStructureItem& a, const CStructureItem& b )
 	ASSERT(dynamic_cast<const BibItem*>(a.GetItemInfo()) &&
 		dynamic_cast<const BibItem*>(b.GetItemInfo()));
 
-	int year1 = static_cast<const BibItem*>(a.GetItemInfo())->GetYear();
-	int year2 = static_cast<const BibItem*>(b.GetItemInfo())->GetYear();
-	return year1 < year2 ? -1 : year1 > year2 ? 1 : 0;
+	const BibItem* b1 = static_cast<const BibItem*>(a.GetItemInfo());
+	const BibItem* b2 = static_cast<const BibItem*>(b.GetItemInfo());
+
+	int result;
+
+	if (!b1->HasYear() && b2->HasYear())
+		result = 0;
+	else if (!b1->HasYear())
+		result = 1;
+	else if (!b2->HasYear())
+		result = -1;
+	else {
+		int year1 = static_cast<const BibItem*>(a.GetItemInfo())->GetYear();
+		int year2 = static_cast<const BibItem*>(b.GetItemInfo())->GetYear();
+		
+		result = year1 < year2 ? -1 : year1 > year2 ? 1 : 0;
+	}
+
+	return result;
 }
 
 int BibView::CompareTitle( const CStructureItem& a, const CStructureItem& b )
@@ -638,10 +670,20 @@ void BibView::OnNMDblClk(NMHDR* /*nm*/, LRESULT*)
 
 void BibView::OnEnter()
 {
-	if (::GetKeyState(VK_CONTROL) >> 15 & 1) // Ctrl+enter pressed
-		AfxGetMainWnd()->SendMessage(WM_COMMAND,ID_ITEM_INSERT_REF);
-	else
-		GotoItem();
+	if (GetFocus() == search_button_->GetEditBox()) {
+		if (search_timer_enabled_) {
+			KillTimer(SearchTimerID);
+			search_timer_enabled_ = false;
+		}
+
+		StartSearch();
+	}
+	else {
+		if (::GetKeyState(VK_CONTROL) >> 15 & 1) // Ctrl+enter pressed
+			AfxGetMainWnd()->SendMessage(WM_COMMAND,ID_ITEM_INSERT_REF);
+		else
+			GotoItem();
+	}
 }
 
 void BibView::GotoItem()

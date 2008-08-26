@@ -145,7 +145,16 @@ const BibItem CBiBTeXEntry::ToBibItem() const
 	BibItem result;
 	result.author_ = author;
 	result.has_year_ = !year.IsEmpty();
-	result.year_ = _ttoi(year);
+
+	LPCTSTR first = year;
+	LPCTSTR last =  first + year.GetLength();
+
+	// Search for the first digit, in case the year field contains e.g. a month name
+	LPCTSTR pos = std::find_if(first,last,_istdigit);
+
+	if (pos != last)
+		result.year_ = _ttoi(pos);
+
 	result.publisher_ = publisher;
 	result.title_ = title;
 	result.label_ = m_Key;

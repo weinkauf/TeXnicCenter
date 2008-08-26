@@ -925,28 +925,28 @@ BEGIN
     PUSHBUTTON      "&...",IDC_SEARCH_BROWSE_SEARCHIN,240,45,15,12
 END
 
-IDD_OUTPUTWIZARD_WELCOME DIALOGEX 0, 0, 264, 175
-STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+IDD_OUTPUTWIZARD_WELCOME DIALOGEX 0, 0, 264, 161
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Konfigurations-Assistent - Willkommen"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    LTEXT           "Willkommen zum Konfigurationsassistenten.",IDC_STATIC,80,5,175,10
-    LTEXT           "Der Konfigurationsassistent hilf Ihnen beim Einrichten der Ausgabeprofile. Ausgabeprofile sind in TeXnicCenter notwendig, um aus den LaTeX-Dateien druckbare Dateien zu erstellen.",IDC_STATIC,80,20,175,35
-    LTEXT           "Stellen Sie sicher, daß Sie bereits eine TeX-Distibution installiert haben. Sollte dies nicht der Fall sein, so beenden Sie den Assistenten und TeXnicCenter nun, installieren eine TeX-Distribution und starten den Assistenten danach erneut.",IDC_STATIC,80,60,180,45
-    LTEXT           "Tipp: Wenn Sie die MikTeX-Distribution (www.miktex.org) verwenden, so übernimmt TeXnicCenter die komplette Konfiguration für Sie.",IDC_STATIC,80,110,180,30
+    LTEXT           "Willkommen zum Konfigurationsassistenten.",IDC_STATIC,49,13,175,10
+    LTEXT           "Der Konfigurationsassistent hilf Ihnen beim Einrichten der Ausgabeprofile. Ausgabeprofile sind in TeXnicCenter notwendig, um aus den LaTeX-Dateien druckbare Dateien zu erstellen.",IDC_STATIC,49,28,175,35
+    LTEXT           "Stellen Sie sicher, daß Sie bereits eine TeX-Distibution installiert haben. Sollte dies nicht der Fall sein, so beenden Sie den Assistenten und TeXnicCenter nun, installieren eine TeX-Distribution und starten den Assistenten danach erneut.",IDC_STATIC,49,68,180,45
+    LTEXT           "Tipp: Wenn Sie die MikTeX-Distribution (www.miktex.org) verwenden, so übernimmt TeXnicCenter die komplette Konfiguration für Sie.",IDC_STATIC,49,118,180,30
 END
 
-IDD_OUTPUTWIZARD_MIKTEX DIALOGEX 0, 0, 264, 175
-STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+IDD_OUTPUTWIZARD_MIKTEX DIALOGEX 0, 0, 264, 156
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Konfigurations-Assistent - MiKTeX"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    LTEXT           "Auf Ihrem System wurde MiKTeX gefunden.",IDC_STATIC,80,5,175,10
-    LTEXT           "Soll TeXnicCenter für die Verwendung mit MikTeX konfiguriert werden?",IDC_STATIC,80,20,175,20
-    CONTROL         "",IDC_OW_MIKTEXYES,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,80,45,10,8
-    CONTROL         "",IDC_OW_MIKTEXNO,"Button",BS_AUTORADIOBUTTON,80,70,10,10
-    LTEXT           "Ja, TeXnicCenter für die Verwendung mit MiKTeX konfigurieren.",IDC_STATIC,92,44,165,20
-    LTEXT           "Nein, TeXnicCenter für die Verwendung mit einer anderen TeX-Distribution konfigurieren.",IDC_STATIC,92,70,165,20
+    LTEXT           "Auf Ihrem System wurde MiKTeX gefunden.",IDC_STATIC,18,16,175,10
+    LTEXT           "Soll TeXnicCenter für die Verwendung mit MikTeX konfiguriert werden?",IDC_STATIC,18,36,175,20
+    CONTROL         "Ja, TeXnicCenter für die Verwendung mit MiKTeX konfigurieren.",IDC_OW_MIKTEXYES,
+                    "Button",BS_AUTORADIOBUTTON | BS_TOP | WS_GROUP | WS_TABSTOP,29,60,218,10
+    CONTROL         "Nein, TeXnicCenter für die Verwendung mit einer anderen TeX-Distribution konfigurieren.",IDC_OW_MIKTEXNO,
+                    "Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE,29,74,218,22
 END
 
 IDD_OUTPUTWIZARD_PATH DIALOGEX 0, 0, 264, 175
@@ -954,9 +954,9 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Konfigurations-Assistent - Verzeichnis"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    LTEXT           "Wählen Sie das Verzeichnis aus, in dem sich die ausführbaren Dateien (TeX, LaTeX, etc.) Ihrer TeX-Distribution befinden:",-1,80,5,175,25
-    EDITTEXT        IDC_OW_PATH,80,35,158,13,ES_AUTOHSCROLL
-    PUSHBUTTON      "&...",IDC_OW_BROWSEPATH,240,34,16,14
+    LTEXT           "Wählen Sie das Verzeichnis aus, in dem sich die ausführbaren Dateien (TeX, LaTeX, etc.) Ihrer TeX-Distribution befinden:",-1,7,61,250,20
+    EDITTEXT        IDC_OW_PATH,7,80,231,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "&...",IDC_OW_BROWSEPATH,241,80,16,14
 END
 
 IDD_OUTPUTWIZARD_DVIVIEWER DIALOGEX 0, 0, 264, 175
@@ -1000,28 +1000,28 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Konfigurations-Assistent - PDF-Viewer"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    LTEXT           "Ihre TeX-Distribution unterstützt die Erzeugung von PDF-Dateien (Portable Document Format).",IDC_STATIC,80,5,175,20
-    LTEXT           "Geben Sie den vollständigen Pfad des Programms an, das zur Anzeige von PDF-Dateien verwendet werden soll:",IDC_STATIC,80,25,175,25
-    EDITTEXT        IDC_OW_VIEWERPATH,80,52,120,13,ES_AUTOHSCROLL
-    PUSHBUTTON      "&...",IDC_OW_VIEWERBROWSE,205,52,15,14
-    LTEXT           "[optional]",IDC_STATIC,225,55,30,8
-    LTEXT           "Geben Sie die Kommandozeilenoption an, die verhindert, daß mehrere Instanzen des Viewers gestartet werden:",IDC_STATIC,80,72,175,25
-    EDITTEXT        IDC_OW_VIEWERSI,80,99,120,13,ES_AUTOHSCROLL
-    LTEXT           "[optional]",IDC_STATIC,205,102,30,8
-    LTEXT           "Geben Sie die Kommandozeilenoption an, die den Viewer dazu veranlaßt, die zu einer Quelltextzeile passende Stelle anzuzeigen. Verwenden Sie die verfügbaren Platzhalter:",IDC_STATIC,80,122,175,35
-    EDITTEXT        IDC_OW_VIEWERFWSEARCH,80,158,120,13,ES_AUTOHSCROLL
-    PUSHBUTTON      ">",IDC_OW_VIEWERPOPUP,205,158,15,14
-    LTEXT           "[optional]",IDC_STATIC,225,161,30,8
+    LTEXT           "Ihre TeX-Distribution unterstützt die Erzeugung von PDF-Dateien (Portable Document Format).",IDC_STATIC,7,7,250,20
+    LTEXT           "Geben Sie den vollständigen Pfad des Programms an, das zur Anzeige von PDF-Dateien verwendet werden soll:",IDC_STATIC,7,29,250,18
+    EDITTEXT        IDC_OW_VIEWERPATH,7,48,193,13,ES_AUTOHSCROLL
+    PUSHBUTTON      "&...",IDC_OW_VIEWERBROWSE,203,48,15,14
+    LTEXT           "(optional)",IDC_STATIC,225,50,32,8
+    LTEXT           "Geben Sie die Kommandozeilenoption an, die verhindert, daß mehrere Instanzen des Viewers gestartet werden:",IDC_STATIC,7,72,250,25
+    EDITTEXT        IDC_OW_VIEWERSI,7,97,158,13,ES_AUTOHSCROLL
+    LTEXT           "Geben Sie die Kommandozeilenoption an, die den Viewer dazu veranlaßt, die zu einer Quelltextzeile passende Stelle anzuzeigen. Verwenden Sie die verfügbaren Platzhalter:",IDC_STATIC,7,118,248,25
+    EDITTEXT        IDC_OW_VIEWERFWSEARCH,7,145,193,13,ES_AUTOHSCROLL
+    PUSHBUTTON      ">",IDC_OW_VIEWERPOPUP,203,145,15,14
+    LTEXT           "(optional)",IDC_STATIC,225,147,32,8
+    LTEXT           "(optional)",IDC_STATIC,168,99,32,8
 END
 
-IDD_OUTPUTWIZARD_FINISH DIALOGEX 0, 0, 264, 175
-STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+IDD_OUTPUTWIZARD_FINISH DIALOGEX 0, 0, 264, 161
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Konfigurations-Assistent - Fertigstellen"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    LTEXT           "Die folgenden Ausgabeprofile werden erstellt:",IDC_STATIC,80,5,175,10
-    LTEXT           "Klicken Sie auf 'Fertigstellen', um die aufgelisteten Profile zu erstellen.",IDC_STATIC,80,90,175,20
-    LTEXT           "Static",IDC_OW_OPTLIST,80,20,175,60
+    LTEXT           "Die folgenden Ausgabeprofile werden erstellt:",IDC_STATIC,16,7,175,10
+    LTEXT           "Klicken Sie auf 'Fertigstellen', um die aufgelisteten Profile zu erstellen.",IDC_STATIC,16,114,175,20
+    LTEXT           "Static",IDC_OW_OPTLIST,16,22,226,80
 END
 
 IDD_PROJECT_PROPERTIES DIALOGEX 0, 0, 253, 150
@@ -1727,9 +1727,26 @@ BEGIN
         BOTTOMMARGIN, 109
     END
 
+    IDD_OUTPUTWIZARD_PATH, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 257
+        TOPMARGIN, 7
+    END
+
     IDD_OUTPUTWIZARD_DVIVIEWER, DIALOG
     BEGIN
         BOTTOMMARGIN, 173
+    END
+
+    IDD_OUTPUTWIZARD_PDFVIEWER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 257
+        VERTGUIDE, 200
+        VERTGUIDE, 203
+        VERTGUIDE, 218
+        TOPMARGIN, 7
     END
 
     IDD_PROJECT_PROPERTIES, DIALOG
@@ -4757,6 +4774,7 @@ BEGIN
     IDS_YEAR                "Erscheinungsjahr"
     IDS_PUBLICATION_TYPE    "Typ"
     IDS_PUBLISHER           "Herausgeber"
+    STE_OUTPUTWIZARD_DVIPDFMTYPE "LaTeX => DVI => PDF"
 END
 
 STRINGTABLE 
