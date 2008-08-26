@@ -2,6 +2,8 @@
 #include "TeXnicCenter.h"
 #include "ErrorListView.h"
 
+#include <functional>
+
 #include "OutputDoc.h"
 
 // ErrorListView
@@ -58,7 +60,7 @@ int ErrorListView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	list_view_.CWnd::CreateEx(WS_EX_CLIENTEDGE,WC_LISTVIEW,0,WS_CHILD|WS_VISIBLE|LVS_REPORT,CRect(),this,ListView);
 
-	const DWORD style = LVS_EX_GRIDLINES|LVS_EX_FULLROWSELECT;
+	const DWORD style = LVS_EX_GRIDLINES|LVS_EX_FULLROWSELECT|LVS_EX_DOUBLEBUFFER;
 	list_view_.SetExtendedStyle(style);
 
 	image_list_.m_hImageList = ::ImageList_LoadImage(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_PARSE_VIEW),
@@ -71,6 +73,15 @@ int ErrorListView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	list_view_.InsertColumn(2,CString(MAKEINTRESOURCE(IDS_DESCRIPTION)),0,500);
 	list_view_.InsertColumn(3,CString(MAKEINTRESOURCE(IDS_LINE)),LVCFMT_RIGHT,50);
 	list_view_.InsertColumn(4,CString(MAKEINTRESOURCE(IDS_FILE)),0,150);
+
+	using namespace std::tr1;
+	using namespace placeholders;
+
+	list_view_.SetColumnCompareFunction(0,bind(&ErrorListView::CompareType,this,_1,_2));
+	list_view_.SetColumnCompareFunction(1,bind(&ErrorListView::CompareOrdinal,this,_1,_2));
+	list_view_.SetColumnCompareFunction(2,bind(&ErrorListView::CompareErrorMessage,this,_1,_2));
+	list_view_.SetColumnCompareFunction(3,bind(&ErrorListView::CompareSourceLine,this,_1,_2));
+	list_view_.SetColumnCompareFunction(4,bind(&ErrorListView::CompareSourceFile,this,_1,_2));
 
 	Clear();
 
@@ -149,14 +160,27 @@ void ErrorListView::AddMessage(const COutputInfo& info, CBuildView::tagImage t)
 			break;
 	}
 
+	Item item(info,t);
+
+	if (insert) {
+		if (list_view_.IsSorted())
+			list_view_.SetRedraw(FALSE);
+
+		list_view_.SetItemData(InsertMessage(info,t),items_.size());
+		item.ordinal = list_view_.GetItemCount();
+	}
+
 	item_monitor_.Lock();
-	items_.push_back(Item(info,t));
+	items_.push_back(item);
 	item_monitor_.Unlock();
 
-	if (insert)
-		list_view_.SetItemData(InsertMessage(info,t),items_.size() - 1);
-
 	UpdateToolBarButton(t);
+
+	if (insert && list_view_.IsSorted()) {
+		list_view_.Sort();
+		list_view_.SetRedraw();
+		list_view_.Invalidate();
+	}
 }
 
 void ErrorListView::UpdateToolBarButton(CBuildView::tagImage t)
@@ -240,7 +264,7 @@ void ErrorListView::OnShowBadBoxes()
 
 int ErrorListView::InsertMessage(const COutputInfo& info, CBuildView::tagImage t)
 {
-	const int index = list_view_.InsertItem(0,0,t);
+	const int index = list_view_.InsertItem(list_view_.GetItemCount(),0,t);
 
 	CString line;
 	line.Format(_T("%d"),list_view_.GetItemCount());
@@ -264,11 +288,17 @@ void ErrorListView::Populate(unsigned set)
 
 	item_monitor_.Lock();
 
-	for (ItemContainer::iterator it = items_.begin(); it != items_.end(); ++it)
-		if (set & 1 << it->type)
+	for (ItemContainer::iterator it = items_.begin(); it != items_.end(); ++it) {
+		if (set & 1 << it->type) {
 			list_view_.SetItemData(InsertMessage(it->info,it->type),std::distance(items_.begin(),it));
+			it->ordinal = list_view_.GetItemCount();
+		}
+	}
 
 	item_monitor_.Unlock();
+
+	if (list_view_.IsSorted())
+		list_view_.Sort();
 
 	list_view_.SetRedraw();
 	list_view_.Invalidate();
@@ -299,4 +329,32 @@ void ErrorListView::OnNMDblClk(NMHDR*, LRESULT* result)
 void ErrorListView::AttachDoc(COutputDoc* doc)
 {
 	doc_ = doc;
+}
+
+int ErrorListView::CompareType( LPARAM l1, LPARAM l2 )
+{
+	return items_[l1].type < items_[l2].type ? -1 :
+		items_[l1].type > items_[l2].type ? 1 : 0;
+}
+
+int ErrorListView::CompareOrdinal( LPARAM l1, LPARAM l2 )
+{
+	return items_[l1].ordinal < items_[l2].ordinal ? -1 :
+		items_[l1].ordinal > items_[l2].ordinal ? 1 : 0;
+}
+
+int ErrorListView::CompareErrorMessage( LPARAM l1, LPARAM l2 )
+{
+	return items_[l1].info.GetErrorMessage().CompareNoCase(items_[l2].info.GetErrorMessage());
+}
+
+int ErrorListView::CompareSourceLine( LPARAM l1, LPARAM l2 )
+{
+	return items_[l1].info.m_nSrcLine < items_[l2].info.m_nSrcLine ? -1 :
+		items_[l1].info.m_nSrcLine > items_[l2].info.m_nSrcLine ? 1 : 0;
+}
+
+int ErrorListView::CompareSourceFile( LPARAM l1, LPARAM l2 )
+{
+	return items_[l1].info.GetSourceFile().CompareNoCase(items_[l2].info.GetSourceFile());
 }

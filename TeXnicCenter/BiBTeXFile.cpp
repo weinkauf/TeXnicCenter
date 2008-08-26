@@ -517,11 +517,9 @@ const CBiBTeXEntry* CBiBTeXFile::GetEntryByKey(const CString& key) const
 const CString CBiBTeXFile::GetString(const CString& abbrev) const
 {
 	CString expanded;
-	if (m_Strings.Lookup(abbrev,expanded))
-	{
-		return CString(expanded);
-	}
-	return CString();
+	m_Strings.Lookup(abbrev,expanded);
+
+	return expanded;
 }
 
 /**

@@ -38,7 +38,6 @@
 #include "ChildFrm.h"
 #include "WorkspacePane.h"
 #include "StructureTreeCtrl.h"
-#include "BibView.h"
 #include "fileview.h"
 #include "environmentview.h"
 #include "grepview.h"
@@ -47,6 +46,7 @@
 #include "OutputDoc.h"
 #include "ErrorListView.h"
 #include "StructureView.h"
+#include "BibView.h"
 
 class LaTeXView;
 class COutputBuilder;
@@ -64,11 +64,12 @@ class CMainFrame : public CMDIFrameWndEx
 	friend class COutputBuilder;
 
 private:
-	WorkspacePane file_view_pane_, bib_view_pane_, env_view_pane_;
+	WorkspacePane file_view_pane_, env_view_pane_;
+	BibView bib_view_pane_;
 
 	StructureView structure_view_;
 	CFileView file_view_;
-	CBibView bib_view_;
+	//CBibView bib_view_;
 	CEnvironmentView env_view_;
 
 	/** View containing the results of the build process. */

@@ -232,8 +232,16 @@ class ISimpleDataObjectImpl :
 public:
 	~ISimpleDataObjectImpl()
 	{
+		Clear();
+	}
+
+	bool IsEmpty() const { return data_.empty(); }
+
+	void Clear()
+	{
 		std::for_each(data_.begin(),data_.end(),
 			std::mem_fun_ref(&Data::ReleaseMedium));
+		data_.clear();
 	}
 
 	STDMETHOD(GetData)(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
@@ -261,6 +269,9 @@ public:
 
 	STDMETHOD(QueryGetData)(FORMATETC* pformatetc)
 	{
+		if (data_.empty())
+			return S_FALSE;
+
 		return DoQueryGetData(pformatetc);
 	}
 

@@ -37,14 +37,10 @@
 #include <memory>
 
 #include "ProjectView.h"
+#include "LabelDragSource.h"
 
 class CLaTeXProject;
 class CStructureItem;
-
-template <class T, template<class> class EC>
-class ISimpleDataObjectImpl;
-
-UINT GetControlAsyncState();
 
 /** Base class for viewing the document structure
         in a tree-like structure.
@@ -53,11 +49,10 @@ UINT GetControlAsyncState();
  */
 class NavigatorTreeCtrl :
 	public CTreeCtrl,
-	public CProjectView
+	public CProjectView,
+	public LabelDragSource
 {
-	std::auto_ptr<CStructureItem> item_;
 
-// construction/destruction
 public:
 	NavigatorTreeCtrl();
 	virtual ~NavigatorTreeCtrl();
@@ -174,16 +169,6 @@ private:
 	/** TRUE after construction until the first call of OnInitialUpdate. */
 	BOOL m_bFirstTime;
 
-	class DragSource;
-	friend class DragSource;
-
-	typedef CComObjectNoLock<DragSource> DataDragSource;
-	DataDragSource* drag_source_;
-
-protected:
-	class DragObject;
-	friend class DragObject;
-
 public:
 	/// Removes all items in the tree view
 	void Clear();
@@ -198,22 +183,5 @@ public:
 	bool IsDragDropEnabled() const;
 	/// Sends the ID_ITEM_GOTO command
 	void GotoItem();
-
-private:
-	void UpdateMessageText( UINT keystate, CString& text, const CStructureItem &item );
-
-protected:
-	/// Called by the tree control before the drag & drop operation starts
-	/// to retrieve the text that should be used
-	virtual bool OnBeginDragDrop(HTREEITEM item, CString& text);
-	/// Called by the tree control after the drag & drop operation has been completed
-	virtual void OnEndDragDrop(HTREEITEM item);
-	virtual bool OnBeginDragDrop(const CStructureItem& item, CString& text, UINT keystate);	
-	virtual void OnDragMouseMove(const CPoint& pt);
-	virtual void OnDragKeyStateChanged(UINT keystate);
-	virtual void OnDragGetData(ISimpleDataObjectImpl<DragObject,ATL::CComObjectNoLock>* o);
-	virtual const CString GetRef(UINT keystate, const CStructureItem &item) const;
-
-public:
-	const CStructureItem* GetDraggedStructureItem() const;
+	void OnOK();
 };

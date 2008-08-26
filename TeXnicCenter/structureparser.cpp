@@ -1028,9 +1028,10 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 				{
 					CString strWarnings;
 					strWarnings.Format(STE_WARNING_COUNT, aBibFile.GetErrorCount());
-					strAnnotation += ", ";
+					strAnnotation += _T(", ");
 					strAnnotation += strWarnings;
 				}
+
 				AddFileItem(strPath, bibFile, strActualFile, nActualLine, aSI, strAnnotation);
 
 				//Add the parser warnings, if any.
@@ -1070,7 +1071,11 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 						cookie.nCookieType = be->GetType();
 						//TRACE("Added si: %s, %s, %s\n", be->m_strPath, be->m_strLabel, be->m_strCaption);
 						cookie.nItemIndex = aSI.size();
-						aSI.push_back(*be);
+
+						CStructureItem item(*be);
+						item.SetItemInfo(new BibItem(be->ToBibItem()));
+
+						aSI.push_back(item);
 						cookies.push(cookie);
 					}
 					else

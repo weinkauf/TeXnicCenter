@@ -32,15 +32,11 @@
  *
  ********************************************************************/
 
-#if !defined(AFX_STRUCTUREPARSER_H__843BC262_339C_11D3_929E_444553540000__INCLUDED_)
-#define AFX_STRUCTUREPARSER_H__843BC262_339C_11D3_929E_444553540000__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include <vector>
 #include <stack>
+#include <memory>
 
 #include "TextSource.h"
 #include "OutputInfo.h"
@@ -75,6 +71,12 @@ protected:
 	int m_nOutputLines;
 };
 
+class StructureItemInfo
+{
+public:
+	virtual ~StructureItemInfo() = 0 { }
+};
+
 /**
 An object of this class contains information about one item
 of a document structure (for example a header).
@@ -85,9 +87,16 @@ class CStructureItem
 {
 	//Construction/Destruction
 	mutable int main_project_file_;
+	/// Detail item information, e.g. BibItem for BibTeX entries
+	std::tr1::shared_ptr<StructureItemInfo> item_info_;
 
 public:
 	typedef std::vector<CString> LabelContainer;
+
+	bool HasItemInfo() const { return item_info_ != 0; }
+	void SetItemInfo(StructureItemInfo* info = 0) { item_info_.reset(info); }
+	StructureItemInfo* GetItemInfo() { return item_info_.get(); }
+	const StructureItemInfo* GetItemInfo() const { return item_info_.get(); }
 
 private:
 	LabelContainer labels_;
@@ -608,5 +617,3 @@ private:
 	/** Characters parsed */
 	int m_nCharsParsed;
 };
-
-#endif // !defined(AFX_STRUCTUREPARSER_H__843BC262_339C_11D3_929E_444553540000__INCLUDED_)

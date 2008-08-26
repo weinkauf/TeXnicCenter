@@ -41,100 +41,6 @@
 #include "RunTimeHelper.h"
 #include "OleDrop.h"
 
-UINT GetControlAsyncState()
-{
-	UINT keystate = 0;
-
-	if (::GetAsyncKeyState(VK_CONTROL) >> 15 & 1)
-		keystate |= MK_CONTROL;
-
-	if (::GetAsyncKeyState(VK_SHIFT) >> 15 & 1)
-		keystate |= MK_SHIFT;
-
-	return keystate;
-}
-
-
-class ATL_NO_VTABLE NavigatorTreeCtrl::DragSource :
-	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDropSourceImpl<DragSource>
-{
-	CPoint pt_;
-	NavigatorTreeCtrl* nav_;
-	UINT keystate_;
-
-public:
-	BEGIN_COM_MAP(DragSource)
-		COM_INTERFACE_ENTRY(IDropSource)
-	END_COM_MAP()
-
-	DragSource()
-	: pt_(-1,-1)
-	, nav_(0)
-	, keystate_(~0U)
-	{
-	}
-
-	void SetNavigator(NavigatorTreeCtrl* nav = 0)
-	{
-		nav_ = nav;
-	}
-
-	STDMETHOD(GiveFeedback)(DWORD effect)
-	{
-		CPoint pt;
-		::GetCursorPos(&pt);
-
-		UINT keystate = GetControlAsyncState();
-
-		if (keystate != keystate_) {
-			keystate_ = keystate;
-
-			if (nav_)
-				nav_->OnDragKeyStateChanged(keystate);
-		}
-
-		if (pt != pt_) {
-			pt_ = pt;
-
-			if (nav_)
-				nav_->OnDragMouseMove(pt);
-		}
-
-		return __super::GiveFeedback(effect);
-	}
-};
-
-class ATL_NO_VTABLE NavigatorTreeCtrl::DragObject :
-	public CComObjectRootEx<CComSingleThreadModel>,
-	public ISimpleDataObjectImpl<DragObject>
-{
-	NavigatorTreeCtrl* nav_;
-
-public:
-	DragObject()
-	: nav_(0)
-	{
-	}
-
-	void SetNavigator(NavigatorTreeCtrl* nav = 0)
-	{
-		nav_ = nav;
-	}
-
-	BEGIN_COM_MAP(DragObject)
-		COM_INTERFACE_ENTRY(IDataObject)
-	END_COM_MAP()
-
-	STDMETHOD(GetData)(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
-	{
-		if (nav_)
-			nav_->OnDragGetData(this);
-
-		return __super::GetData(pformatetcIn,pmedium);
-	}
-};
-
 BEGIN_MESSAGE_MAP(NavigatorTreeCtrl,CTreeCtrl)
 	ON_NOTIFY_REFLECT(TVN_SELCHANGED,&NavigatorTreeCtrl::OnSelchanged)
 	ON_WM_CREATE()
@@ -143,12 +49,12 @@ BEGIN_MESSAGE_MAP(NavigatorTreeCtrl,CTreeCtrl)
 	ON_WM_DESTROY()
 	ON_WM_CONTEXTMENU()
 	ON_NOTIFY_REFLECT(TVN_BEGINDRAG, &NavigatorTreeCtrl::OnTvnBeginDrag)
+	ON_COMMAND(IDOK, &NavigatorTreeCtrl::OnOK)
 END_MESSAGE_MAP()
 
 
 NavigatorTreeCtrl::NavigatorTreeCtrl()
 : m_bFirstTime(TRUE)
-, drag_source_(0)
 {
 	m_images.Attach(::ImageList_LoadImage(AfxGetInstanceHandle(),
 	                        MAKEINTRESOURCE(IDB_ITEM_TYPES),16,1,RGB(255,0,255),IMAGE_BITMAP,
@@ -157,10 +63,6 @@ NavigatorTreeCtrl::NavigatorTreeCtrl()
 
 NavigatorTreeCtrl::~NavigatorTreeCtrl()
 {
-	if (drag_source_) {
-		drag_source_->SetNavigator();
-		drag_source_->Release();
-	}
 }
 
 BOOL NavigatorTreeCtrl::Create(CWnd *pwndParent)
@@ -378,6 +280,17 @@ int NavigatorTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	ModifyStyle(0,TVS_HASBUTTONS | TVS_SHOWSELALWAYS | TVS_DISABLEDRAGDROP);
 	m_bFirstTime = FALSE;
 
+	using namespace std::tr1;
+	using namespace placeholders;
+
+	MapKeyStateToFormat(0,CLaTeXProject::FormatRef);
+	MapKeyStateToFormat(MK_CONTROL,CLaTeXProject::FormatPageRef);
+	MapKeyStateToFormat(MK_SHIFT,bind(&CStructureItem::GetLabel,_1));
+
+	MapKeyStateToMessage(0,ID_ITEM_INSERT_REF);
+	MapKeyStateToMessage(MK_CONTROL,ID_ITEM_INSERT_PAGEREF);
+	MapKeyStateToMessage(MK_SHIFT,ID_ITEM_INSERT_LABEL);
+
 	EnableDragDrop();
 
 	return 0;
@@ -413,16 +326,9 @@ void NavigatorTreeCtrl::Clear(void)
 	Invalidate();
 }
 
-void NavigatorTreeCtrl::OnNMDblclk(NMHDR* /*pNMHDR*/, LRESULT *pResult)
+void NavigatorTreeCtrl::OnNMDblclk(NMHDR* /*pNMHDR*/, LRESULT* /*pResult*/)
 {
-	HTREEITEM hItem = GetSelectedItem();
-
-	if (hItem)
-		GetProject()->SetCurrentStructureItem(GetItemData(hItem));
-
 	GotoItem();
-
-	*pResult = 0;
 }
 
 void NavigatorTreeCtrl::OnDestroy()
@@ -480,11 +386,6 @@ void NavigatorTreeCtrl::EnableDragDrop( bool enable /*= true*/ )
 		else 
 		{		
 			ModifyStyle(0,TVS_DISABLEDRAGDROP);
-
-			if (drag_source_) {
-				drag_source_->Release();
-				drag_source_ = 0;
-			}
 		}
 	}
 }
@@ -526,177 +427,28 @@ void NavigatorTreeCtrl::GotoItem()
 	AfxGetMainWnd()->SendMessage(WM_COMMAND,ID_ITEM_GOTO);
 }
 
-#pragma region Drag & drop specific
-
 void NavigatorTreeCtrl::OnTvnBeginDrag(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
-	
-	if (!drag_source_) 
-	{
-		drag_source_ = new DataDragSource;
-		drag_source_->AddRef();
-		drag_source_->SetNavigator(this);
-	}
+	HTREEITEM item = pNMTreeView->itemNew.hItem;
 
-	if (drag_source_) 
-	{
-		CString text;
-		DWORD effects;
+	StructureItemContainer::size_type pos = GetItemData(item);
 
-		HTREEITEM item = pNMTreeView->itemNew.hItem;
+	if (pos < GetProject()->GetStructureItems().size())
+		SetDraggedItem(new CStructureItem(GetProject()->GetStructureItems()[pos]));
 
-		if (OnBeginDragDrop(item,text))
-			effects = DROPEFFECT_COPY;
-		else
-			effects = 0;
-
-		typedef CComObjectNoLock<DragObject> DataObject;
-
-		DataObject* object = new DataObject;
-		object->AddRef();
-		object->SetNavigator(this);
-
-		VERIFY(SUCCEEDED(object->SetData(text,text.GetLength())));
-		
-		DWORD result;
-		::DoDragDrop(object,drag_source_,effects,&result);
-
-		OnEndDragDrop(item);
-
-		object->SetNavigator(0);
-		object->Release();
-	}
+	DWORD result;
+	DoDragDrop(DROPEFFECT_COPY,&result);
 
 	*pResult = 0;
 }
 
-bool NavigatorTreeCtrl::OnBeginDragDrop(HTREEITEM item, CString& text)
-{
-	text.Empty();
-	bool result = false;
-
-	if (CLaTeXProject* p = theApp.GetProject())
-	{
-		const StructureItemContainer::size_type pos = 
-			static_cast<StructureItemContainer::size_type>(GetItemData(item));
-
-		if (pos < p->GetStructureItems().size()) {
-			const CStructureItem& si = p->GetStructureItems()[pos];
-			UINT state = 0;
-
-			if (GetKeyState(VK_CONTROL) >> 15 & 1) // Ctrl pressed
-				state |= MK_CONTROL;
-
-			if (GetKeyState(VK_SHIFT) >> 15 & 1) // Shift pressed
-				state |= MK_SHIFT;
-
-			item_.reset(new CStructureItem(si));
-
-			result = OnBeginDragDrop(si,text,state);
-		}
-	}
-
-	if (!result)
-		static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(IDS_NO_LABEL_AVAILABLE);
-
-	return result;
-}
-
-void NavigatorTreeCtrl::OnEndDragDrop(HTREEITEM /*item*/)
-{
-	item_.reset();
-	static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(AFX_IDS_IDLEMESSAGE);
-}
-
 CLaTeXProject * NavigatorTreeCtrl::GetProject() const
 {
-	return (CLaTeXProject*)CProjectView::GetProject();
+	return static_cast<CLaTeXProject*>(CProjectView::GetProject());
 }
 
-bool NavigatorTreeCtrl::OnBeginDragDrop(const CStructureItem& item, CString& text, UINT keystate)
+void NavigatorTreeCtrl::OnOK()
 {
-	if (item.HasLabels()) 
-		UpdateMessageText(keystate, text, item);
-
-	return !text.IsEmpty();
+	GotoItem();
 }
-
-void NavigatorTreeCtrl::OnDragMouseMove(const CPoint& /*pt*/)
-{
-}
-
-void NavigatorTreeCtrl::OnDragKeyStateChanged(UINT keystate)
-{
-	if (item_.get() && item_->HasLabels()) 
-	{
-		CString text;
-		UpdateMessageText(keystate,text,*item_);
-	}
-}
-
-const CString NavigatorTreeCtrl::GetRef(UINT keystate, const CStructureItem &item) const
-{
-	ASSERT(item.HasLabels());
-	CString text;
-
-	switch (keystate) 
-	{
-		default: // \ref{label}
-			text = CLaTeXProject::FormatRef(item);
-			break;
-		case MK_CONTROL: // label
-			text = item.GetLabel();
-			break; 
-		case MK_SHIFT: // \pageref{label}
-			text = CLaTeXProject::FormatPageRef(item);
-			break;
-	}
-
-	return text;
-}
-
-void NavigatorTreeCtrl::UpdateMessageText( UINT keystate, CString& text, const CStructureItem &item )
-{
-	CString message;
-
-	text = GetRef(keystate,item);
-
-	switch (keystate) 
-	{
-		default: // \ref{label}
-			message.LoadString(ID_ITEM_INSERT_REF);
-			break;
-		case MK_CONTROL: // label
-			message.LoadString(ID_ITEM_INSERT_LABEL);
-			break; 
-		case MK_SHIFT: // \pageref{label}
-			message.LoadString(ID_ITEM_INSERT_PAGEREF);
-			break;
-	}
-
-	int index = message.Find(_T('\n'));
-
-	if (index != -1)
-		message.Delete(0,index + 1);
-
-	CString fmt;
-	fmt.Format(_T("%s: %s"),message,text);
-
-	static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(fmt);	
-}
-
-void NavigatorTreeCtrl::OnDragGetData( ISimpleDataObjectImpl<DragObject,ATL::CComObjectNoLock>* o )
-{
-	if (item_.get() && item_->HasLabels()) 
-	{
-		const CString text = GetRef(GetControlAsyncState(),*item_);
-		o->SetData(text,text.GetLength());
-	}
-}
-
-const CStructureItem* NavigatorTreeCtrl::GetDraggedStructureItem() const
-{
-	return item_.get();
-}
-#pragma endregion

@@ -71,6 +71,7 @@ IDR_OUTPUT_BAR          BITMAP                  "res\\outputbar.bmp"
 IDB_BUILD_ANIMATION     BITMAP                  "res\\buildanimation.bmp"
 IDR_STRUCTURE           BITMAP                  "res\\structuretoolbar.bmp"
 IDB_ANNOTATION          BITMAP                  "res\\annotation.bmp"
+IDR_BIB_SEARCH          BITMAP                  "res\\bibtoolbar.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -713,6 +714,14 @@ BEGIN
     BUTTON      ID_SHOW_IMAGES
     BUTTON      ID_SHOW_TABLES
     BUTTON      ID_SHOW_EQUATIONS
+END
+
+IDR_BIB_SEARCH TOOLBAR  16, 16
+BEGIN
+    BUTTON      ID_SEARCH_OPTIONS
+    BUTTON      ID_SEARCH_EDIT
+    BUTTON      ID_START_SEARCH
+    BUTTON      ID_CLEAR_SEARCH
 END
 
 #endif    // Neutral resources
@@ -3008,6 +3017,18 @@ BEGIN
     END
 END
 
+IDR_BIB_SEARCH_OPTIONS MENU 
+BEGIN
+    POPUP "Menu"
+    BEGIN
+        MENUITEM "&Autor",                      ID_AUTHOR
+        MENUITEM "&Titel",                      ID_TITLE
+        MENUITEM "&Erscheinungsjahr",           ID_YEAR
+        MENUITEM "Ty&p",                        ID_PUBLICATION_TYPE
+        MENUITEM "&Herausgeber",                ID_PUBLISHER
+    END
+END
+
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -3594,6 +3615,7 @@ BEGIN
     STE_BIBTEX_ERR_INVALID_TYPE "(%s:%d:%d) Ungültiger BibTeX-Typ '%s'"
     STE_BIBTEX_ERR_SUSPICOUS_LINE 
                             "(%s:%d:%d) Möglicherweise falsche Klammer (Inhalt wurde abgeschnitten)"
+    ID_START_SEARCH         "Startet die Suche.\nSuche starten"
 END
 
 STRINGTABLE 
@@ -4717,11 +4739,33 @@ END
 STRINGTABLE 
 BEGIN
     ID_VIEW_WHITE_SPACE     "Blendet Leerraumzeichen ein- oder aus.\nLeeraumzeichen ein-/ausblenden"
+    ID_CLEAR_SEARCH         "\nEingabefeld leeren"
+    IDS_NO_ACTION           "Keine Aktion möglich"
 END
 
 STRINGTABLE 
 BEGIN
     ID_VIEW_LINE_ENDING     "Blendet die Zeilenenden ein- oder aus.\nZeilenenden ein-/ausblenden"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_SEARCH              "Suchen"
+    IDS_LABEL               "Label"
+    IDS_AUTHOR              "Autor"
+    IDS_TITLE               "Titel"
+    IDS_YEAR                "Erscheinungsjahr"
+    IDS_PUBLICATION_TYPE    "Typ"
+    IDS_PUBLISHER           "Herausgeber"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_AUTHOR               "Nach Autoren suchen."
+    ID_YEAR                 "Nach Erscheinungsjahr suchen."
+    ID_TITLE                "Nach Publikationstitel suchen."
+    ID_PUBLICATION_TYPE     "Nach Typ der Publikation suchen."
+    ID_PUBLISHER            "Nach Herausgeber suchen."
 END
 
 #endif    // German (Germany) resources
@@ -6975,6 +7019,18 @@ BEGIN
     END
 END
 
+IDR_BIB_SEARCH_OPTIONS MENU 
+BEGIN
+    POPUP "Menu"
+    BEGIN
+        MENUITEM "&Author",                     ID_AUTHOR
+        MENUITEM "&Title",                      ID_TITLE
+        MENUITEM "&Year",                       ID_YEAR
+        MENUITEM "Ty&pe",                       ID_PUBLICATION_TYPE
+        MENUITEM "&Publisher",                  ID_PUBLISHER
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -7518,6 +7574,7 @@ BEGIN
     STE_BIBTEX_ERR_INVALID_TYPE "(%s:%d:%d) Unknown BibTeX type '%s'"
     STE_BIBTEX_ERR_SUSPICOUS_LINE 
                             "(%s:%d:%d) Suspicous line found (maybe an invalid brace)"
+    ID_START_SEARCH         "\nStart"
 END
 
 STRINGTABLE 
@@ -8610,6 +8667,27 @@ END
 STRINGTABLE 
 BEGIN
     ID_VIEW_WHITE_SPACE     "Shows or hides white spaces\nToggle White Space View"
+    ID_CLEAR_SEARCH         "\nClear Search"
+    IDS_NO_ACTION           "No action possible."
+END
+
+STRINGTABLE 
+BEGIN
+    ID_AUTHOR               "Search for author."
+    ID_YEAR                 "Search for year."
+    ID_TITLE                "Search for title."
+    ID_PUBLICATION_TYPE     "Search for publication type."
+    ID_PUBLISHER            "Search for publisher."
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_LABEL               "Label"
+    IDS_AUTHOR              "Author"
+    IDS_TITLE               "Title"
+    IDS_YEAR                "Year"
+    IDS_PUBLICATION_TYPE    "Type"
+    IDS_PUBLISHER           "Publisher"
 END
 
 #endif    // English (U.S.) resources

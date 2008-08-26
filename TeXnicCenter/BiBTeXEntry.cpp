@@ -93,21 +93,26 @@ const CString CBiBTeXEntry::ToString() const
 	return CString(_T("[") + m_Key + _T("] ") + ToCaption());
 }
 
-const CString CBiBTeXEntry::ToCaption() const
+const BibItem CBiBTeXEntry::ToBibItem() const
 {
-	CString author,title,year;
+	CString author, title, year, editor, publisher;
+	
 	GetField(_T("author"),author);
+
+	GetField(_T("editor"),editor);
 
 	// Get editor instead
 	if (author.IsEmpty())
-	{
-		GetField(_T("editor"),author);
+	{		
+		author = editor;
 	}
+
+	GetField(_T("publisher"),publisher);
 
 	// Last chance: publisher
 	if (author.IsEmpty())
-	{
-		GetField(_T("publisher"),author);
+	{		
+		author = publisher;
 	}
 
 	GetField(_T("title"),title);
@@ -129,6 +134,7 @@ const CString CBiBTeXEntry::ToCaption() const
 	}
 
 	abbrev = m_Parent->GetString(title);
+
 	if (!abbrev.IsEmpty())
 	{
 		//TRACE("Expand %s to %s...\n", title, abbrev.Mid(0,5));
@@ -136,12 +142,26 @@ const CString CBiBTeXEntry::ToCaption() const
 		BeautifyField(title,false);
 	}
 
+	BibItem result;
+	result.author_ = author;
+	result.has_year_ = !year.IsEmpty();
+	result.year_ = _ttoi(year);
+	result.publisher_ = publisher;
+	result.title_ = title;
+	result.label_ = m_Key;
+	result.type_ = BibTypeVerbose[m_Type];
 
-	return CString(m_Key + _T(": ") + author + _T(": ") +
-	               title + _T(" (") +
-	               BibTypeVerbose[m_Type] + _T(", ") +
-	               year + _T(")")
-	              );
+	return result;
+}
+
+const CString CBiBTeXEntry::ToCaption() const
+{
+	const BibItem item = ToBibItem();
+	CString year;
+	year.Format(_T("%i"),item.year_);
+
+	return CString(item.GetLabel() + _T(": ") + item.GetAuthor() + _T(": ") +
+	               item.GetTitle() + _T(" (") + item.GetType() + _T(", ") + year + _T(")"));
 }
 
 void CBiBTeXEntry::BeautifyField(CString &value, bool bReplaceAnds)
