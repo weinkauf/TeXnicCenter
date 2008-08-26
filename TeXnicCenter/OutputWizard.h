@@ -74,6 +74,10 @@ class COutputWizard : public CPropertySheet
 	friend class COutputWizardViewer;
 	friend class COutputWizardWelcome;
 
+private:
+	bool dvipdfm_installed_;
+	CString dvipdfm_path_;
+
 // Construction/Destruction
 public:
 	COutputWizard(CProfileMap &profiles, CWnd* pParentWnd = NULL);
@@ -131,6 +135,7 @@ protected:
 	 */
 	void GenerateOutputProfiles();
 
+	void AssignPDFViewer( CProfile &p );
 // Message handlers
 protected:
 	afx_msg void OnBack();

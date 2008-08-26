@@ -97,6 +97,7 @@ COutputWizard::COutputWizard(CProfileMap &profiles,CWnd* pParentWnd)
 		, m_wndPageMikTex(this)
 		, m_wndPageFinish(this)
 		, m_wndPageDistributionPath(this)
+		, dvipdfm_installed_(false)
 {
 	m_psh.dwFlags &= ~PSH_HASHELP;
 
@@ -401,6 +402,16 @@ BOOL COutputWizard::LookForLatex()
 		m_bLatexInstalled = true;
 	}
 
+	if (m_bLatexInstalled) {
+		// Now, look for dvipdfm.exe
+		const CString path = CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("dvipdfm.exe"));
+
+		if (CPathTool::Exists(path)) {
+			dvipdfm_installed_ = true;
+			dvipdfm_path_ = path;
+		}
+	}
+
 	return m_bLatexInstalled;
 }
 
@@ -619,7 +630,7 @@ void COutputWizard::LookForPdf()
 
 	m_wndPagePdfViewer.m_strPath = strViewer;
 
-	//if (strViewer.Find(_T("ACRORD32.EXE")) > -1 || strViewer.Find(_T("ACROBAT.EXE")) > -1) {
+
 	if (IsAcrobat(strViewer))
 	{
 		// standard viewer is Acrobat Reader
@@ -628,8 +639,10 @@ void COutputWizard::LookForPdf()
 		m_wndPagePdfViewer.m_strForwardSearchOption.Empty();
 	}
 	else
+	{
 		// lets user make his configuration
 		SetActivePage(pagePdfViewer);
+	}
 }
 
 void COutputWizard::ShowInformation()
@@ -641,17 +654,21 @@ void COutputWizard::ShowInformation()
 
 	if (m_bLatexInstalled)
 		m_wndPageFinish.m_strList += _T("- ") + CString((LPCTSTR)STE_OUTPUTWIZARD_DVITYPE) + _T("\n\n");
+
+	if (dvipdfm_installed_)
+		m_wndPageFinish.m_strList += _T("- ") + CString(MAKEINTRESOURCE(STE_OUTPUTWIZARD_DVIPDFMTYPE)) + _T("\n\n");
+
 	if (m_bDvipsInstalled && m_bLatexInstalled)
 		m_wndPageFinish.m_strList += _T("- ") + CString((LPCTSTR)STE_OUTPUTWIZARD_PSTYPE) + _T("\n\n");
+
 	if (m_bPdfLatexInstalled)
 		m_wndPageFinish.m_strList += _T("- ") + CString((LPCTSTR)STE_OUTPUTWIZARD_PDFTYPE) + _T("\n\n");
+
 	if (m_bGhostscriptInstalled)
 		m_wndPageFinish.m_strList += _T("- ") + CString((LPCTSTR)STE_OUTPUTWIZARD_PDFVIAPSTYPE) + _T("\n\n");
 
 	SetActivePage(pageFinish);
 }
-
-
 
 void COutputWizard::GenerateOutputProfiles()
 {
@@ -673,7 +690,7 @@ void COutputWizard::GenerateOutputProfiles()
 	if (m_bMikTexInstalled)
 		strPDFLatexOptions = _T("-interaction=nonstopmode -max-print-line=120 \"%pm\"");
 
-	// LaTeX => DVI
+#pragma region LaTeX => DVI
 	if (m_bLatexInstalled)
 	{
 		CString strProfile((LPCTSTR)STE_OUTPUTWIZARD_DVITYPE);
@@ -681,13 +698,13 @@ void COutputWizard::GenerateOutputProfiles()
 		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
 		BOOL bExists = m_profiles.Exists(strProfile);
 
+		// create profile
+		CProfile p;
+
 		if (!bExists || AfxMessageBox(strError,MB_ICONQUESTION | MB_YESNO) == IDYES)
 		{
 			if (bExists)
-				m_profiles.Remove(strProfile);
-
-			// create profile
-			CProfile p;
+				m_profiles.Remove(strProfile);			
 
 			p.SetLatexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("latex.exe")),strLatexOptions);
 			p.SetBibTexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("bibtex.exe")),_T("\"%bm\""));
@@ -720,9 +737,39 @@ void COutputWizard::GenerateOutputProfiles()
 			// add profile to map
 			m_profiles.Add(strProfile,p);
 		}
-	}
+		else {
+			CProfile* pp;
+			
+			if (m_profiles.Lookup(strProfile,pp))
+				p = *pp;
+		}
 
-	// LaTeX => PS
+		// dvipdfm
+		if (dvipdfm_installed_) 
+		{
+			strProfile.LoadString(STE_OUTPUTWIZARD_DVIPDFMTYPE);
+
+			strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
+			bExists = m_profiles.Exists(strProfile);
+		
+			if (!bExists || AfxMessageBox(strError,MB_ICONQUESTION | MB_YESNO) == IDYES)
+			{
+
+				if (bExists)
+					m_profiles.Remove(strProfile);
+
+				CPostProcessor dvipdfm(_T("dvipdfm"),dvipdfm_path_,_T("\"%bm.dvi\""));
+				p.GetPostProcessorArray().Add(dvipdfm);
+
+				AssignPDFViewer(p);
+
+				m_profiles.Add(strProfile,p);
+			}
+		}
+	}
+#pragma endregion
+
+#pragma region LaTeX => PS
 	if (m_bLatexInstalled && m_bDvipsInstalled)
 	{
 		CString strProfile((LPCTSTR)STE_OUTPUTWIZARD_PSTYPE);
@@ -779,8 +826,9 @@ void COutputWizard::GenerateOutputProfiles()
 			m_profiles.Add(strProfile,p);
 		}
 	}
+#pragma endregion
 
-	// LaTeX => PDF
+#pragma region LaTeX => PDF
 	if (m_bPdfLatexInstalled)
 	{
 		CString strProfile((LPCTSTR)STE_OUTPUTWIZARD_PDFTYPE);
@@ -856,8 +904,9 @@ void COutputWizard::GenerateOutputProfiles()
 			m_profiles.Add(strProfile,p);
 		}
 	}
+#pragma endregion
 
-	// LaTeX => PS => PDF
+#pragma region LaTeX => PS => PDF
 	if (m_bLatexInstalled && m_bDvipsInstalled && m_bGhostscriptInstalled)
 	{
 		CString strProfile((LPCTSTR)STE_OUTPUTWIZARD_PDFVIAPSTYPE);
@@ -904,126 +953,69 @@ void COutputWizard::GenerateOutputProfiles()
 				p.GetPostProcessorArray().Add(ppGS);
 			}
 
-
-			// add viewer settings
-			if (!m_wndPagePdfViewer.m_strPath.IsEmpty())
-			{
-				p.SetViewerPath(m_wndPagePdfViewer.m_strPath);
-
-				const CString file = CPathTool::GetFile(m_wndPagePdfViewer.m_strPath);
-
-				if (IsAcrobat(file))
-				{
-					// Acrobat reader specific commands
-					CDdeCommand cmd;
-					CProfile::CCommand profileCmd;
-					profileCmd.SetActiveCommand(CProfile::CCommand::typeDde);
-
-					cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
-					cmd.SetCommand(_T("[DocOpen(\"%bm.pdf\")][FileOpen(\"%bm.pdf\")]"));
-					cmd.SetServer(_T("acroview"),_T("control"));
-					profileCmd.SetDdeCommand(cmd);
-					p.SetViewProjectCmd(profileCmd);
-
-					p.SetViewCurrentCmd(profileCmd);
-
-					cmd.SetCommand(_T("[DocClose(\"%bm.pdf\")]"));
-					profileCmd.SetDdeCommand(cmd);
-					p.SetViewCloseCmd(profileCmd);
-					p.SetCloseView(true);
-				}
-				else
-				{
-					// general commands
-					CProcessCommand cmd;
-					CProfile::CCommand profileCmd;
-					profileCmd.SetActiveCommand(CProfile::CCommand::typeProcess);
-
-					cmd.Set(
-					    m_wndPagePdfViewer.m_strPath,
-					    m_wndPagePdfViewer.m_strSingleInstanceOption + _T(" \"%bm.pdf\""));
-					profileCmd.SetProcessCommand(cmd);
-					p.SetViewProjectCmd(profileCmd);
-
-					cmd.Set(
-					    m_wndPagePdfViewer.m_strPath,
-					    m_wndPagePdfViewer.m_strSingleInstanceOption + _T(' ')
-					    + m_wndPagePdfViewer.m_strForwardSearchOption + _T(" \"%bm.pdf\""));
-					profileCmd.SetProcessCommand(cmd);
-					p.SetViewCurrentCmd(profileCmd);
-				}
-			}
+			AssignPDFViewer(p);
 
 			// add profile to map
 			m_profiles.Add(strProfile,p);
 		}
 	}
-
-	/*
-	if (m_bDvipsInstalled && m_bLatexInstalled)
-	{
-	        strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS, CString((LPCTSTR)STE_OUTPUTWIZARD_PSTYPE));
-	        nIndex = CConfiguration::GetInstance()->m_aCompilerTypes.FindOutfileDescr(CString((LPCTSTR)STE_OUTPUTWIZARD_PSTYPE));
-	        if (nIndex == -1 || AfxMessageBox(strError, MB_ICONQUESTION | MB_YESNO) == IDYES)
-	        {
-	                if (nIndex > -1)
-	                        CConfiguration::GetInstance()->m_aCompilerTypes.RemoveAt(nIndex);
-
-	                // create output type DVI
-	                CCompilerType		ct;
-	                ct.m_nInfileType = CConfiguration::GetInstance()->m_aCompilerTypes.FindOutfileExt(_T("DVI"));
-	                ct.m_strOutfileDescr.LoadString(STE_OUTPUTWIZARD_PSTYPE);
-	                ct.m_strOutfileExt = _T("PS");
-	                ct.m_strCompilerCmd =
-	                        CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("dvips.exe")) + _T(" \"%Bm.dvi\"");
-
-	                if (!m_wndPagePsViewer.m_strPath.IsEmpty())
-	                {
-	                        ct.m_strViewerStartCmd =
-	                                m_wndPagePsViewer.m_strPath + _T(' ') + m_wndPagePsViewer.m_strSingleInstanceOption + _T(" \"%bm.ps\"");
-	                        ct.m_strViewerStartCmdEx =
-	                                m_wndPagePsViewer.m_strPath + _T(' ') + m_wndPagePsViewer.m_strSingleInstanceOption +
-	                                _T(' ') + m_wndPagePsViewer.m_strForwardSearchOption + _T(" \"%bm.ps\"");
-	                }
-
-	                CConfiguration::GetInstance()->m_aCompilerTypes.Add(ct);
-	        }
-	}
-
-	if (m_bPdfLatexInstalled)
-	{
-	        strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS, CString((LPCTSTR)STE_OUTPUTWIZARD_PDFTYPE));
-	        nIndex = CConfiguration::GetInstance()->m_aCompilerTypes.FindOutfileDescr(CString((LPCTSTR)STE_OUTPUTWIZARD_PDFTYPE));
-	        if (nIndex == -1 || AfxMessageBox(strError, MB_ICONQUESTION | MB_YESNO) == IDYES)
-	        {
-	                if (nIndex > -1)
-	                        CConfiguration::GetInstance()->m_aCompilerTypes.RemoveAt(nIndex);
-
-	                // create output type DVI
-	                CCompilerType		ct;
-	                ct.m_nInfileType = -1;
-	                ct.m_strOutfileDescr.LoadString(STE_OUTPUTWIZARD_PDFTYPE);
-	                ct.m_strOutfileExt = _T("PDF");
-	                ct.m_strCompilerCmd =
-	                        CPathTool::Cat(m_wndPageDistributionPath.m_strPath, _T("pdflatex.exe")) + _T(" \\nonstopmode \\input \"%nm\"");
-
-	                if (!m_wndPagePdfViewer.m_strPath.IsEmpty())
-	                {
-	                        ct.m_strViewerStartCmd =
-	                                m_wndPagePdfViewer.m_strPath + _T(' ') + m_wndPagePdfViewer.m_strSingleInstanceOption + _T(" \"%bm.pdf\"");
-	                        ct.m_strViewerStartCmdEx =
-	                                m_wndPagePdfViewer.m_strPath + _T(' ') + m_wndPagePdfViewer.m_strSingleInstanceOption +
-	                                _T(' ') + m_wndPagePdfViewer.m_strForwardSearchOption + _T(" \"%bm.pdf\"");
-	                }
-
-	                CConfiguration::GetInstance()->m_aCompilerTypes.Add(ct);
-	        }
-	}
-	 */
+#pragma endregion
 }
 
 void COutputWizard::BuildPropPageArray()
 {
 	CPropertySheet::BuildPropPageArray();
 	FixPropSheetFont(m_psh,m_pages);
+}
+
+void COutputWizard::AssignPDFViewer( CProfile &p )
+{
+	// add viewer settings
+	if (!m_wndPagePdfViewer.m_strPath.IsEmpty())
+	{
+		p.SetViewerPath(m_wndPagePdfViewer.m_strPath);
+
+		const CString file = CPathTool::GetFile(m_wndPagePdfViewer.m_strPath);
+
+		if (IsAcrobat(file))
+		{
+			// Acrobat reader specific commands
+			CDdeCommand cmd;
+			CProfile::CCommand profileCmd;
+			profileCmd.SetActiveCommand(CProfile::CCommand::typeDde);
+
+			cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
+			cmd.SetCommand(_T("[DocOpen(\"%bm.pdf\")][FileOpen(\"%bm.pdf\")]"));
+			cmd.SetServer(_T("acroview"),_T("control"));
+			profileCmd.SetDdeCommand(cmd);
+			p.SetViewProjectCmd(profileCmd);
+
+			p.SetViewCurrentCmd(profileCmd);
+
+			cmd.SetCommand(_T("[DocClose(\"%bm.pdf\")]"));
+			profileCmd.SetDdeCommand(cmd);
+			p.SetViewCloseCmd(profileCmd);
+			p.SetCloseView(true);
+		}
+		else
+		{
+			// general commands
+			CProcessCommand cmd;
+			CProfile::CCommand profileCmd;
+			profileCmd.SetActiveCommand(CProfile::CCommand::typeProcess);
+
+			cmd.Set(
+				m_wndPagePdfViewer.m_strPath,
+				m_wndPagePdfViewer.m_strSingleInstanceOption + _T(" \"%bm.pdf\""));
+			profileCmd.SetProcessCommand(cmd);
+			p.SetViewProjectCmd(profileCmd);
+
+			cmd.Set(
+				m_wndPagePdfViewer.m_strPath,
+				m_wndPagePdfViewer.m_strSingleInstanceOption + _T(' ')
+				+ m_wndPagePdfViewer.m_strForwardSearchOption + _T(" \"%bm.pdf\""));
+			profileCmd.SetProcessCommand(cmd);
+			p.SetViewCurrentCmd(profileCmd);
+		}
+	}
 }

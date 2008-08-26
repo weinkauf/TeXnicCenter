@@ -39,6 +39,7 @@
 #define IDS_YEAR                        52
 #define IDS_PUBLICATION_TYPE            53
 #define IDS_PUBLISHER                   54
+#define STE_OUTPUTWIZARD_DVIPDFMTYPE    55
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
 #define IDD_TIP                         103
@@ -1464,7 +1465,7 @@
 #define ID_YEAR                         38580
 #define ID_TITLE                        38581
 #define ID_PUBLICATION_TYPE             38582
-#define ID_PUBLISHER             38584
+#define ID_PUBLISHER                    38584
 #define ID_NONE                         40002
 #define ID_NONE40003                    40003
 #define IDS_TEXTMODULES_NONEDEFINED     57671
