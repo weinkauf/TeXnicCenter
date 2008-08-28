@@ -50,6 +50,9 @@ END_MESSAGE_MAP()
 COutputWizardFinish::COutputWizardFinish(COutputWizard* w)
 		: OutputWizardPage(COutputWizardFinish::IDD,w)
 {
+	m_psp.dwFlags |= PSP_USEHEADERTITLE;
+	m_psp.pszHeaderTitle = MAKEINTRESOURCE(IDS_WIZARD_FINALIZE);
+	m_psp.hInstance = AfxGetResourceHandle();
 }
 
 COutputWizardFinish::~COutputWizardFinish()

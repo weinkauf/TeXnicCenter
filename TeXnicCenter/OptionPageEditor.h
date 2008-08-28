@@ -3,22 +3,29 @@
 #include "PropertyPage.h"
 
 class COptionPageEditor :
-			public PropertyPage
+	public PropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageEditor)
 
-// Construction
-public:
-	COptionPageEditor();
-	~COptionPageEditor();
-
-	enum { IDD = IDD_OPTIONS_EDITOR	};
-
+private:
 	CEdit m_wndFixedColumn;
 	UINT m_nTabWidth;
 	UINT m_nFixedColumn;
 	int m_nWordWrapStyle;
 	BOOL m_bShowLineNumbers;
+
+	BOOL show_line_below_fold_;
+	BOOL show_line_below_no_fold_;
+	BOOL show_line_above_fold_;
+	BOOL show_line_above_no_fold_;
+	BOOL use_spaces_;
+	
+// Construction
+public:
+	COptionPageEditor();
+	~COptionPageEditor();
+
+	enum { IDD = IDD_OPTIONS_EDITOR	};	
 
 protected:
 	virtual void OnOK();

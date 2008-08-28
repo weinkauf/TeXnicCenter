@@ -32,14 +32,9 @@
  *
  ********************************************************************/
 
-#if !defined(AFX_CHILDFRM_H__447410E7_1058_11D3_929E_D75EECD5B417__INCLUDED_)
-#define AFX_CHILDFRM_H__447410E7_1058_11D3_929E_D75EECD5B417__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
-class CChildFrame : public CMDIChildWndEx //CMDIChildWnd
+class CChildFrame : public CMDIChildWndEx
 {
 	//CSplitterWndEx m_wndSplitter;
 
@@ -105,10 +100,3 @@ protected:
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 };
-
-/////////////////////////////////////////////////////////////////////////////
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
-
-#endif // !defined(AFX_CHILDFRM_H__447410E7_1058_11D3_929E_D75EECD5B417__INCLUDED_)

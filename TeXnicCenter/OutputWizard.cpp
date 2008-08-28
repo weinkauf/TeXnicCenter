@@ -39,6 +39,7 @@
 
 #include "OutputWizard.h"
 #include "FontOccManager.h"
+#include "RunTimeHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -48,59 +49,61 @@ static char THIS_FILE[] = __FILE__;
 
 namespace
 {
-bool IsAcrobat(const CString& fn)
-{
-	LPCTSTR const AcrobatFileNames[] = {_T("acrord32"),_T("acrobat"),0};
-	bool result = false;
+	bool IsAcrobat(const CString& fn)
+	{
+		LPCTSTR const AcrobatFileNames[] = {_T("acrord32"),_T("acrobat"),0};
+		bool result = false;
 
-	const CString title = CPathTool::GetFileTitle(fn);
+		const CString title = CPathTool::GetFileTitle(fn);
 
-	for (LPCTSTR const* p = AcrobatFileNames; *p && !result; ++p)
-		if (!title.CompareNoCase(*p))
-			result = true; // Match
+		for (LPCTSTR const* p = AcrobatFileNames; *p && !result; ++p)
+			if (!title.CompareNoCase(*p))
+				result = true; // Match
 
-	return result;
+		return result;
+	}
+
+	const CString GetProfileName(UINT id)
+	{
+		CString text(MAKEINTRESOURCE(id));
+
+#ifdef UNICODE
+		if (RunTimeHelper::IsVista()) {
+			const wchar_t* ch = L"\u21E8"; // Some nice arrow, only for Vista or higher
+			text.Replace(_T("=>"),ch);
+		}
+#endif // UNICODE
+		return text;
+	}
 }
-}
 
-//-------------------------------------------------------------------
-// class COutputWizard
-//-------------------------------------------------------------------
+
 
 IMPLEMENT_DYNAMIC(COutputWizard,CPropertySheet)
 
-
 BEGIN_MESSAGE_MAP(COutputWizard,CPropertySheet)
-	//ON_BN_CLICKED(ID_WIZBACK,OnBack)
-	//ON_BN_CLICKED(ID_WIZNEXT,OnNext)
-	//ON_BN_CLICKED(ID_WIZFINISH,OnFinish)
-	//{{AFX_MSG_MAP(COutputWizard)
-	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-#include "RunTimeHelper.h"
 
 
 COutputWizard::COutputWizard(CProfileMap &profiles,CWnd* pParentWnd)
-		: CPropertySheet(_T(""),pParentWnd,0),
-		m_profiles(profiles),
-		m_wndPageDviViewer(this,IDD_OUTPUTWIZARD_DVIVIEWER),
-		m_wndPagePsViewer(this,IDD_OUTPUTWIZARD_PSVIEWER),
-		m_wndPagePdfViewer(this,IDD_OUTPUTWIZARD_PDFVIEWER),
-		m_bMikTexInstalled(false),
-		m_bLatexInstalled(false),
-		m_bDvipsInstalled(false),
-		m_bPdfLatexInstalled(false),
-		m_bGhostscriptInstalled(false)
-		, m_bGhostscriptViaPS2PDF(false)
-		, m_wndPageWelcome(this)
-		, m_wndPageMikTex(this)
-		, m_wndPageFinish(this)
-		, m_wndPageDistributionPath(this)
-		, dvipdfm_installed_(false)
+: CPropertySheet(_T(""),pParentWnd,0)
+, m_profiles(profiles)
+, m_wndPageDviViewer(this,IDD_OUTPUTWIZARD_DVIVIEWER,IDS_WIZARD_CONFIGURE_DVI)
+, m_wndPagePsViewer(this,IDD_OUTPUTWIZARD_PSVIEWER,IDS_WIZARD_CONFIGURE_PS)
+, m_wndPagePdfViewer(this,IDD_OUTPUTWIZARD_PDFVIEWER,IDS_WIZARD_CONFIGURE_PDF)
+, m_bMikTexInstalled(false)
+, m_bLatexInstalled(false)
+, m_bDvipsInstalled(false)
+, m_bPdfLatexInstalled(false)
+, m_bGhostscriptInstalled(false)
+, m_bGhostscriptViaPS2PDF(false)
+, m_wndPageWelcome(this)
+, m_wndPageMikTex(this)
+, m_wndPageFinish(this)
+, m_wndPageDistributionPath(this)
+, dvipdfm_installed_(false)
 {
-	m_psh.dwFlags &= ~PSH_HASHELP;
-
 	AddPage(&m_wndPageWelcome);
 	AddPage(&m_wndPageMikTex);
 	AddPage(&m_wndPageDistributionPath);
@@ -111,10 +114,18 @@ COutputWizard::COutputWizard(CProfileMap &profiles,CWnd* pParentWnd)
 
 	SetWizardMode();
 
+	m_psh.dwFlags &= ~PSH_HASHELP;
+
 	if (RunTimeHelper::IsVista())
 	{
 		m_psh.dwFlags &= ~PSH_WIZARD97;
 		m_psh.dwFlags |= PSH_AEROWIZARD | PSH_WIZARD;
+	}
+	else
+	{
+		m_psh.dwFlags |= PSH_WIZARD97|PSH_HEADER|PSH_WATERMARK;
+		m_psh.pszbmWatermark = MAKEINTRESOURCE(IDB_WIZARD);
+		m_psh.hInstance = AfxGetResourceHandle();
 	}
 }
 
@@ -652,20 +663,28 @@ void COutputWizard::ShowInformation()
 	// generate list of output types to create
 	m_wndPageFinish.m_strList.Empty();
 
+#ifdef UNICODE
+	const CString prefix(_T("\u2022 "));
+#else
+	const CString prefix(_T("- "));
+#endif // UNICODE
+
+	const CString newline(_T("\n"));
+
 	if (m_bLatexInstalled)
-		m_wndPageFinish.m_strList += _T("- ") + CString((LPCTSTR)STE_OUTPUTWIZARD_DVITYPE) + _T("\n\n");
+		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_DVITYPE) + newline;
 
 	if (dvipdfm_installed_)
-		m_wndPageFinish.m_strList += _T("- ") + CString(MAKEINTRESOURCE(STE_OUTPUTWIZARD_DVIPDFMTYPE)) + _T("\n\n");
+		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_DVIPDFMTYPE) + newline;
 
 	if (m_bDvipsInstalled && m_bLatexInstalled)
-		m_wndPageFinish.m_strList += _T("- ") + CString((LPCTSTR)STE_OUTPUTWIZARD_PSTYPE) + _T("\n\n");
+		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PSTYPE) + newline;
 
 	if (m_bPdfLatexInstalled)
-		m_wndPageFinish.m_strList += _T("- ") + CString((LPCTSTR)STE_OUTPUTWIZARD_PDFTYPE) + _T("\n\n");
+		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFTYPE) + newline;
 
 	if (m_bGhostscriptInstalled)
-		m_wndPageFinish.m_strList += _T("- ") + CString((LPCTSTR)STE_OUTPUTWIZARD_PDFVIAPSTYPE) + _T("\n\n");
+		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFVIAPSTYPE) + newline;
 
 	SetActivePage(pageFinish);
 }
@@ -693,7 +712,7 @@ void COutputWizard::GenerateOutputProfiles()
 #pragma region LaTeX => DVI
 	if (m_bLatexInstalled)
 	{
-		CString strProfile((LPCTSTR)STE_OUTPUTWIZARD_DVITYPE);
+		CString strProfile(GetProfileName(STE_OUTPUTWIZARD_DVITYPE));
 
 		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
 		BOOL bExists = m_profiles.Exists(strProfile);
@@ -747,7 +766,7 @@ void COutputWizard::GenerateOutputProfiles()
 		// dvipdfm
 		if (dvipdfm_installed_) 
 		{
-			strProfile.LoadString(STE_OUTPUTWIZARD_DVIPDFMTYPE);
+			strProfile = GetProfileName(STE_OUTPUTWIZARD_DVIPDFMTYPE);
 
 			strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
 			bExists = m_profiles.Exists(strProfile);
@@ -772,7 +791,7 @@ void COutputWizard::GenerateOutputProfiles()
 #pragma region LaTeX => PS
 	if (m_bLatexInstalled && m_bDvipsInstalled)
 	{
-		CString strProfile((LPCTSTR)STE_OUTPUTWIZARD_PSTYPE);
+		CString strProfile(GetProfileName(STE_OUTPUTWIZARD_PSTYPE));
 
 		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
 		BOOL bExists = m_profiles.Exists(strProfile);
@@ -831,7 +850,7 @@ void COutputWizard::GenerateOutputProfiles()
 #pragma region LaTeX => PDF
 	if (m_bPdfLatexInstalled)
 	{
-		CString strProfile((LPCTSTR)STE_OUTPUTWIZARD_PDFTYPE);
+		CString strProfile(GetProfileName(STE_OUTPUTWIZARD_PDFTYPE));
 
 		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
 		BOOL bExists = m_profiles.Exists(strProfile);
@@ -909,7 +928,7 @@ void COutputWizard::GenerateOutputProfiles()
 #pragma region LaTeX => PS => PDF
 	if (m_bLatexInstalled && m_bDvipsInstalled && m_bGhostscriptInstalled)
 	{
-		CString strProfile((LPCTSTR)STE_OUTPUTWIZARD_PDFVIAPSTYPE);
+		CString strProfile(GetProfileName(STE_OUTPUTWIZARD_PDFVIAPSTYPE));
 
 		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
 		BOOL bExists = m_profiles.Exists(strProfile);

@@ -40,7 +40,7 @@
 #include "resource.h"
 
 #include "LatexProject.h"
-#include "MDIFrameManager.h"
+//#include "MDIFrameManager.h"
 #include "ProjectSupportingWinApp.h"
 #include "ProjectTemplate.h"
 #include "StyleFileContainer.h"
@@ -337,7 +337,7 @@ public:
 	CString m_strRegistryRoot;
 
 	/** Frame manager that handle the MDI-child-frames. */
-	CMDIFrameManager *m_pMDIFrameManager;
+	//CMDIFrameManager *m_pMDIFrameManager;
 
 	/** List of recently used projects. */
 	CRecentFileList m_recentProjectList;

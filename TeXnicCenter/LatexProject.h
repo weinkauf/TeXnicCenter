@@ -54,6 +54,9 @@ class CLaTeXProject :
 	typedef std::map<CString,BookmarkContainerType> FileBookmarksContainerType;
 	FileBookmarksContainerType bookmarks_;
 
+	typedef std::map<CString,FoldingPointContainerType> FileFoldingPointsContainerType;
+	FileFoldingPointsContainerType folding_points_;
+
 	CBaseTabbedPane* tabbed_pane_;
 
 protected:
@@ -253,6 +256,7 @@ public:
 	void RemoveAllBookmarks(const CString& filename);
 
 	bool GetBookmarks(const CString& filename, BookmarkContainerType& bookmarks) const;
+	bool GetFoldingPoints(const CString& filename, FoldingPointContainerType& points) const;
 
 // properties
 protected:
@@ -331,4 +335,5 @@ public:
 public:
 	static const CString FormatRef(const CStructureItem& item);
 	static const CString FormatPageRef(const CStructureItem& item);
+	void SetFoldingPoints(const CString& filename, const FoldingPointContainerType& points);
 };

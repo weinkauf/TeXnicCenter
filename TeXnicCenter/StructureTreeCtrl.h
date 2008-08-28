@@ -35,11 +35,11 @@ class StructureTreeCtrl :
 {
 	DECLARE_DYNCREATE(StructureTreeCtrl)
 
-public:
-	StructureTreeCtrl();
-	virtual ~StructureTreeCtrl();
-
 protected:
 	virtual void OnUpdate(CProjectView* pSender,LPARAM lHint,LPVOID pHint);
+
 	DECLARE_MESSAGE_MAP()
+
+private:
+	void OnParsingFinished();
 };

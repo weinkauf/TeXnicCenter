@@ -52,18 +52,16 @@ BEGIN_MESSAGE_MAP(COutputWizardViewer,OutputWizardPage)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-COutputWizardViewer::COutputWizardViewer(COutputWizard* w, UINT unIDTemplate /*= -1*/)
+COutputWizardViewer::COutputWizardViewer(COutputWizard* w, UINT unIDTemplate /*= -1*/, UINT title_id)
 		: OutputWizardPage(unIDTemplate,w)
 		, m_wndViewerPHBtn(IDR_POPUP_PLACEHOLDER_CURRENT_OPT)
 {
 	// you have to specify a valid dialog template
 	ASSERT((int)unIDTemplate != -1);
 
-	//{{AFX_DATA_INIT(COutputWizardViewer)
-	//m_strForwardSearchOption = _T("");
-	//m_strPath = _T("");
-	//m_strSingleInstanceOption = _T("");
-	//}}AFX_DATA_INIT
+	m_psp.dwFlags |= PSP_USEHEADERTITLE;
+	m_psp.pszHeaderTitle = MAKEINTRESOURCE(title_id);
+	m_psp.hInstance = AfxGetResourceHandle();
 }
 
 COutputWizardViewer::~COutputWizardViewer()

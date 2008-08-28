@@ -44,6 +44,8 @@ protected:
 	void SetRemoveLeadingSpaces(bool e = true);
 	bool GetRemoveLeadingSpaces() const;
 
+	static int GetFoldingMargin() { return 2; }
+
 public:
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -169,12 +171,17 @@ protected:
 	afx_msg void OnEditGotoLastChange();
 	afx_msg void OnUpdateEditGotoLastChange(CCmdUI *pCmdUI);
 	void OnModified(SCNotification* n);
+	afx_msg void OnViewIndentationGuides();
+	afx_msg void OnUpdateViewIndentationGuides(CCmdUI *pCmdUI);
 
 public:
 	CScintillaFindReplaceDlg* CreateFindReplaceDialog(void);
 
 	bool IsAutoIndentEnabled() const;
 	void EnableAutoIndent(bool enable = true);
+
+	void EnableFolding(bool enable = true);
+	bool IsFoldingEnabled();
 };
 
 template<class F>

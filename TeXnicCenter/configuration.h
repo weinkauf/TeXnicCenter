@@ -61,6 +61,12 @@ class CConfiguration
 	/** TRUE, if word wrap is enabled, FALSE otherwise */
 	BOOL word_wrap_;
 
+	BOOL show_line_below_fold_;
+	BOOL show_line_below_no_fold_;
+	BOOL show_line_above_fold_;	
+	BOOL show_line_above_no_fold_;
+	BOOL use_spaces_;
+
 public:
 	bool IsBlinkInsertCaret() const;
 	void SetBlinkInsertCaret(bool val = true);
@@ -80,13 +86,25 @@ public:
 	bool IsWordWrapEnabled() const;
 	void EnableWordWrap(bool val = true);
 
+	bool GetShowLineBelowFold() const;
+	void SetShowLineBelowFold(bool show = true);
+	bool GetShowLineAboveNoFold() const;
+	void SetShowLineAboveNoFold(bool val);
+	bool GetShowLineAboveFold() const;
+	void SetShowLineAboveFold(bool val);
+	bool GetShowLineBelowNoFold() const;
+	void SetShowLineBelowNoFold(bool val);
+
+	bool GetUseSpaces() const;
+	void SetUseSpaces(bool val);
+
 	static CConfiguration* GetInstance();
 
 	/** Symbols for the second parameter of Serialize() */
-	typedef enum
+	enum SERDIRECTION
 	{
 		Load, Save
-	} SERDIRECTION;
+	};
 
 	/**
 	Stores the configuration to the registry or reads it from the registry.

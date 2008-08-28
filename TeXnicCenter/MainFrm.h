@@ -48,6 +48,9 @@
 #include "StructureView.h"
 #include "BibView.h"
 
+
+void CreateColorButtonPalette(CPalette& palette, int& colors, int& columns);
+
 class LaTeXView;
 class COutputBuilder;
 
@@ -336,7 +339,7 @@ protected:
 	afx_msg void OnViewDocTabsIcons();
 	afx_msg void OnViewDocTabsNote();
 	afx_msg void OnUpdateViewDocTabs(CCmdUI* pCmdUI);
-	afx_msg void OnToolsCancel();
+	afx_msg BOOL OnToolsCancel(UINT);
 	afx_msg void OnWindowReferences();
 	afx_msg void OnWindowParse();
 	afx_msg void OnWindowCloseSelectedTab();

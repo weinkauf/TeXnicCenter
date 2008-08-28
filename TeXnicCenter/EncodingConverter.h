@@ -7,7 +7,7 @@
 void ANSItoUTF8(const char* text, std::size_t n, std::vector<char>& data, UINT codepage = ::GetACP());
 void ANSItoUTF16(const char* text, std::size_t n, std::vector<char>& data, UINT codepage = ::GetACP(), bool little_endian = true);
 void ANSItoUTF16(const char* text, std::size_t n, std::vector<wchar_t>& data, UINT codepage = ::GetACP(), bool little_endian = true);
-void UTF8toANSI(const char* text, std::size_t n, std::vector<char>& data, UINT codepage = ::GetACP(), char dfault = '?');
+void UTF8toANSI(const char* text, std::size_t n, std::vector<char>& data, UINT codepage = ::GetACP(), char dfault = '?', bool throw_on_invalid_sequence = false);
 void UTF8toUTF16(const char* text, std::size_t n, std::vector<char>& data, bool little_endian = true);
 void UTF8toUTF16(const char* text, std::size_t n, std::vector<wchar_t>& data, bool little_endian = true);
 void UTF16toANSI(const char* text, std::size_t n, std::vector<char>& data, UINT codepage = ::GetACP(), bool little_endian = true);
@@ -40,6 +40,16 @@ class InvalidEncodingConverterArgument :
 public:
 	explicit InvalidEncodingConverterArgument(const std::string& message = "")
 	: invalid_argument(message)
+	{
+	}
+};
+
+class InvalidCharacterEncoutered :
+	public EncodingConverterError
+{
+public:
+	explicit InvalidCharacterEncoutered(const std::string& message = "")
+	: EncodingConverterError(message)
 	{
 	}
 };

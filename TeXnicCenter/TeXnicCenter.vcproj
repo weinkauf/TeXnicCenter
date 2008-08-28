@@ -802,14 +802,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\keyboardhook.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\keyboardhook.h"
-				>
-			</File>
-			<File
 				RelativePath=".\LabelDragSource.cpp"
 				>
 			</File>
@@ -871,14 +863,6 @@
 			</File>
 			<File
 				RelativePath=".\MainFrm.h"
-				>
-			</File>
-			<File
-				RelativePath=".\mdiframemanager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\mdiframemanager.h"
 				>
 			</File>
 			<File
@@ -1619,6 +1603,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\bitmap3.bmp"
+				>
+			</File>
+			<File
 				RelativePath=".\res\buildanimation.bmp"
 				>
 			</File>
@@ -1852,6 +1840,10 @@
 			</File>
 			<File
 				RelativePath="res\TeXnicCenter_yellow.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\wizard.bmp"
 				>
 			</File>
 			<File

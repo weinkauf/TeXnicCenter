@@ -1,10 +1,16 @@
 #pragma once
+
+#include <vector>
+
 #include "DocumentTokenizer.h"
 
 class LaTeXTokenizer :
 	public DocumentTokenizer
 {
-	TCHAR brace_encountered_;
+	typedef std::vector<TCHAR> BraceContainer;
+	BraceContainer braces_;
+
+	static TCHAR GetClosingBrace(TCHAR open);
 
 public:
 	LaTeXTokenizer();

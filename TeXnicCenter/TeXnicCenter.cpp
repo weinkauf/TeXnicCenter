@@ -421,8 +421,8 @@ BOOL CTeXnicCenterApp::InitInstance()
 	m_pMainWnd = pMainFrame;
 
 	// install frame manager
-	m_pMDIFrameManager = new CMDIFrameManager();
-	m_pMDIFrameManager->Install(pMainFrame);
+	//m_pMDIFrameManager = new CMDIFrameManager();
+	//m_pMDIFrameManager->Install(pMainFrame);
 
 	// enable file open via drag & drop
 	m_pMainWnd->DragAcceptFiles();
@@ -702,8 +702,8 @@ int CTeXnicCenterApp::ExitInstance()
 		m_pBackgroundThread = NULL;
 	}
 
-	if (m_pMDIFrameManager)
-		delete m_pMDIFrameManager;
+	//if (m_pMDIFrameManager)
+	//	delete m_pMDIFrameManager;
 
 	DeleteCriticalSection(&m_csLazy);
 	delete m_pSpell;
@@ -1403,9 +1403,9 @@ BOOL CTeXnicCenterApp::PreTranslateMessage(MSG* pMsg)
 
 BOOL CTeXnicCenterApp::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
 {
-	if (m_pMDIFrameManager &&
-	        m_pMDIFrameManager->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-		return TRUE;
+	//if (m_pMDIFrameManager &&
+	//        m_pMDIFrameManager->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+	//	return TRUE;
 
 	return CProjectSupportingWinApp::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }

@@ -208,6 +208,15 @@ BOOL COptionPageTextFormat::OnInitDialog()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// select color
 	m_wndElementColorPicker.m_bEnabledInCustomizeMode = TRUE;
+
+	CPalette palette;
+	int colors, columns;
+
+	CreateColorButtonPalette(palette,colors,columns);
+
+	m_wndElementColorPicker.SetPalette(&palette);
+	m_wndElementColorPicker.SetColumnsNumber(columns);
+
 	m_wndElementColorPicker.EnableOtherButton(CString((LPCTSTR)STE_COLOR_OTHERS));
 	OnSelchangeEditorElement();
 

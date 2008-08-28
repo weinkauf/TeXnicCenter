@@ -111,21 +111,8 @@ BOOL CEmptyProjectTemplateItem::InitProject(CLaTeXProject *pProject, LPCTSTR lps
 BOOL CEmptyProjectTemplateItem::CreateMainFile(LPCTSTR lpszTargetPath, LPCTSTR lpszCrLf)
 {
 	// create empty main file
-	try
-	{
-		CFile file(lpszTargetPath, CFile::modeCreate | CFile::modeWrite);
-		CArchive ar(&file, CArchive::store);
-		ar.WriteString(lpszCrLf); // place one line feed to define the format of the file
-		ar.Close();
-		file.Close();
-	}
-	catch (CException *pE)
-	{
-		pE->Delete();
-		return FALSE;
-	}
-
-	return TRUE;
+	TextDocument doc;
+	return doc.Write(lpszTargetPath,lpszCrLf);
 }
 
 

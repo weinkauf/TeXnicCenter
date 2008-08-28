@@ -48,7 +48,7 @@ class BibItem :
 {
 	friend class CBiBTeXEntry;
 
-	CString type_;
+	CString type_text_;
 	CString author_;
 	CString editor_;
 	int year_;
@@ -58,16 +58,44 @@ class BibItem :
 	CString publisher_;
 
 public:
+	// Known BibTeX types in alphabetical order
+	enum Type {
+		Unknown = -1,
+		Article,
+		Book,
+		Booklet,
+		Comment,
+		Conference,
+		Inbook,
+		Incollection,
+		Inproceedings,
+		Manual,
+		MastersThesis,
+		Misc,
+		PhDThesis,
+		Preamble,
+		Proceedings,
+		String,
+		Techreport,
+		Unpublished
+	};
+
+private:
+	Type type_;
+
+public:
 	BibItem()
 	: has_year_(false)
+	, type_(Unknown)
 	{
 	}
 
 	~BibItem()
 	{
 	}
-
-	const CString& GetType() const { return type_; }
+	
+	Type GetType() const { return type_; }
+	const CString& GetTypeString() const { return type_text_; }
 	const CString& GetAuthor() const { return author_; }
 	const CString& GetEditor() const { return editor_; }
 	int GetYear() const { ASSERT(HasYear()); return year_; }

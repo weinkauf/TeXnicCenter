@@ -6,7 +6,8 @@
 #include "configuration.h"
 #include "CharType.h"
 
-#define IGNORE_WORDS_IN_BRACES_ 1 // TODO: Doesn't work properly yet
+#define IGNORE_WORDS_IN_BRACES_ 1 // TODO: Doesn't work properly yet: many constructs may span over multiple lines
+								  // which isn't supported
 
 LaTeXTokenizer::LaTeXTokenizer()
 {
@@ -20,7 +21,9 @@ bool LaTeXTokenizer::NextWord(LPCTSTR szLine, int length, int &nStartPos, int &n
 	TBYTE ch;
 	
 #if IGNORE_WORDS_IN_BRACES_
-	TCHAR& brace_encountered = brace_encountered_;
+
+	if (nStartPos == 0)
+		braces_.clear(); // For now, the processing is done line by line
 
 	const TCHAR opening_braces[] = _T("{[$");
 	const std::size_t braces = sizeof(opening_braces) / sizeof(*opening_braces);
@@ -35,17 +38,15 @@ bool LaTeXTokenizer::NextWord(LPCTSTR szLine, int length, int &nStartPos, int &n
 			ch = szLine[nStartPos];
 
 #if IGNORE_WORDS_IN_BRACES_
+			
+			if (!braces_.empty() && braces_.back() == GetClosingBrace(ch))
+				braces_.pop_back();
 			// If we encounter an opening brace, save the state
-			if (!brace_encountered && std::find_first_of(&ch,&ch + 1,
-				opening_braces,opening_braces + braces) != &ch + 1)
-				brace_encountered = ch;
-			else if (brace_encountered > 0 && brace_encountered == _T('{') &&
-				ch == _T('}') || brace_encountered == _T('[') && ch == _T(']') || 
-				brace_encountered == ch) // ch == '$'
-				brace_encountered = 0;
+			else if (std::find_first_of(&ch,&ch + 1,opening_braces,opening_braces + braces) != &ch + 1)
+				braces_.push_back(ch);
 
 			// The text is not enclosed by braces, process it
-			if (brace_encountered == 0) {
+			if (braces_.empty()) {
 #endif // IGNORE_WORDS_IN_BRACES_
 				// words begin with an alpha character
 				if (CharTraitsT::IsAlpha(ch))
@@ -134,5 +135,20 @@ bool LaTeXTokenizer::IsCmdAt(LPCTSTR lpText, LPCTSTR lpPos)
 
 void LaTeXTokenizer::ResetState()
 {
-	brace_encountered_ = 0;
+	braces_.clear();
+}
+
+TCHAR LaTeXTokenizer::GetClosingBrace( TCHAR open )
+{
+	TCHAR result;
+
+	switch (open) {
+		case _T('{'): result = _T('}'); break;
+		case _T('('): result = _T(')'); break;
+		case _T('['): result = _T(']'); break;
+		case _T('$'): result = open; break;
+		default: result = 0;
+	}
+
+	return result;
 }

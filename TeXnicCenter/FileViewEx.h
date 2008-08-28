@@ -55,10 +55,6 @@ struct ProjectFileItem
 
 	ProjectFileItem()
 	{
-		// unnecessary
-		//strFolderName.Empty();
-		//strFileName.Empty();
-		//strDispName.Empty();
 		nFolderType = 0;
 		nFileType = 0;
 		bIsMainFile = FALSE;

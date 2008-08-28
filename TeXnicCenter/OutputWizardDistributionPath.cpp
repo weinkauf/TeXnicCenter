@@ -42,7 +42,7 @@ static char THIS_FILE[] = __FILE__;
 // class COutputWizardDistributionPath
 //-------------------------------------------------------------------
 
-IMPLEMENT_DYNCREATE(COutputWizardDistributionPath,OutputWizardPage)
+IMPLEMENT_DYNAMIC(COutputWizardDistributionPath,OutputWizardPage)
 
 
 BEGIN_MESSAGE_MAP(COutputWizardDistributionPath,OutputWizardPage)
@@ -55,8 +55,9 @@ END_MESSAGE_MAP()
 COutputWizardDistributionPath::COutputWizardDistributionPath(COutputWizard* w)
 		: OutputWizardPage(COutputWizardDistributionPath::IDD,w)
 {
-	//{{AFX_DATA_INIT(COutputWizardDistributionPath)
-	//}}AFX_DATA_INIT
+	m_psp.dwFlags |= PSP_USEHEADERTITLE;
+	m_psp.pszHeaderTitle = MAKEINTRESOURCE(IDS_WIZARD_DISTRIBUTION_PATH);
+	m_psp.hInstance = AfxGetResourceHandle();
 }
 
 COutputWizardDistributionPath::~COutputWizardDistributionPath()

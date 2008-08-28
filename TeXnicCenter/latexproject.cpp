@@ -306,6 +306,15 @@ void CLaTeXProject::OnCloseProject()
 
 	if (!SessionPathName.IsEmpty())
 	{
+		POSITION pos = theApp.GetLatexDocTemplate()->GetFirstDocPosition();
+		CDocument* doc;
+
+		while (pos) {
+			doc = theApp.GetLatexDocTemplate()->GetNextDoc(pos);
+			ASSERT(doc->IsKindOf(RUNTIME_CLASS(CodeDocument)));
+			SetFoldingPoints(doc->GetPathName(),static_cast<CodeDocument*>(doc)->GetFoldingPoints());
+		}
+
 		CIniFile session(SessionPathName);
 		session.Reset();
 		SerializeSession(session,TRUE);
@@ -490,6 +499,7 @@ BOOL CLaTeXProject::Serialize(CIniFile &ini, BOOL bWrite)
 void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 {
 	LPCTSTR const BookmarksKey = _T("Bookmarks");
+	LPCTSTR const FoldingKey = _T("Folding");
 
 	if (bWrite)
 	{
@@ -497,13 +507,6 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 		//Format information
 		ini.SetValue(KEY_FORMATINFO,VAL_FORMATINFO_TYPE,FORMATTYPE);
 		ini.SetValue(KEY_FORMATINFO,VAL_FORMATINFO_VERSION,CURRENTFORMATVERSION);
-
-		//Store active tab of navigator
-		//CMFCTabCtrl* pwndTabs = &m_pwndWorkspaceBar->GetTabWnd();
-
-		//if (pwndTabs && IsWindow(pwndTabs->m_hWnd)) {
-		//    ini.SetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVETAB,pwndTabs->GetActiveTab());
-		//}
 
 		//Store frame information
 		if (m_pwndMainFrame)
@@ -529,10 +532,10 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 
 #pragma region Bookmarks
 
-		typedef FileBookmarksContainerType::iterator I;
+		typedef FileBookmarksContainerType::iterator IB;
 		std::basic_ostringstream<TCHAR> oss;
 
-		for (I it = bookmarks_.begin(); it != bookmarks_.end(); ++it) 
+		for (IB it = bookmarks_.begin(); it != bookmarks_.end(); ++it) 
 		{
 			oss.str(_T(""));
 			oss.clear();
@@ -541,6 +544,23 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 			std::copy(bookmarks.begin(),bookmarks.end(),std::ostream_iterator<CodeBookmark,TCHAR>(oss,_T(" ")));
 
 			ini.SetValue(BookmarksKey,it->first,oss.str().c_str());
+		}
+
+#pragma endregion
+
+#pragma region Folding points
+
+		typedef FileFoldingPointsContainerType::iterator IF;
+
+		for (IF it = folding_points_.begin(); it != folding_points_.end(); ++it) 
+		{
+			oss.str(_T(""));
+			oss.clear();
+
+			const FoldingPointContainerType& points = it->second;
+			std::copy(points.begin(),points.end(),std::ostream_iterator<FoldingPoint,TCHAR>(oss,_T(" ")));
+
+			ini.SetValue(FoldingKey,it->first,oss.str().c_str());
 		}
 
 #pragma endregion
@@ -574,6 +594,39 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 
 				std::copy(iterator_type(iss),iterator_type(),std::back_inserter(bookmarks));
 				bookmarks_.insert(std::make_pair(it->first,bookmarks)); 
+			}
+		}
+
+#pragma endregion
+
+#pragma region Folding points
+		{
+			// Restore the folding points before the views are created
+			// otherwise the folding will no be set
+
+			typedef std::multimap<CString,CString> ValueContainerType;
+			ValueContainerType values;
+
+			folding_points_.clear();
+
+			FoldingPointContainerType points;
+
+			if (ini.GetValues(FoldingKey,values))
+			{
+				std::basic_istringstream<TCHAR> iss;
+				typedef std::istream_iterator<FoldingPoint,TCHAR> iterator_type;
+				typedef ValueContainerType::iterator I;
+
+				for (I it = values.begin(); it != values.end(); ++it)
+				{
+					iss.clear();
+					iss.str(static_cast<LPCTSTR>(it->second)); // Value
+
+					points.clear();
+
+					std::copy(iterator_type(iss),iterator_type(),std::back_inserter(points));
+					folding_points_.insert(std::make_pair(it->first,points));
+				}
 			}
 		}
 
@@ -1217,7 +1270,29 @@ void CLaTeXProject::RemoveAllBookmarks( const CString& filename )
 	}
 }
 
-//void CLaTeXProject::SetStructureItems( const StructureItemContainer& val )
-//{
-//    m_aStructureItems = val;
-//}
+bool CLaTeXProject::GetFoldingPoints( const CString& filename, FoldingPointContainerType& points ) const
+{
+	bool result = false;
+	points.clear();
+
+	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+
+	FileFoldingPointsContainerType::const_iterator it = folding_points_.find(name);
+
+	if (it != folding_points_.end())
+	{
+		points = it->second;
+		result = true;
+	}
+
+	return result;
+}
+
+void CLaTeXProject::SetFoldingPoints(const CString& filename, const FoldingPointContainerType& points)
+{
+	if (!points.empty())
+	{
+		const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+		folding_points_[name] = points;
+	}
+}
