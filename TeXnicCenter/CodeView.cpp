@@ -240,11 +240,20 @@ int CodeView::Lock(bool exclusive /*= false */)
 	ASSERT(hold_count_ >= 0);
 
 	if (exclusive) {
+		MSG msg;
+		
+		// Adjust the min/max range if new message are added to Scintilla
+		const UINT min = SCI_START;
+		const UINT max = SCI_SHOWCURSOR;
+
 		while (hold_count_ > 0) { // atomic operation, no lock needed
-			//::WaitForSingleObject(m_pevtHoldCountZero,0);
-			// Let the thread (especially Scintilla) process remaining messages
-			// otherwise a dead lock will occur
-			AfxPumpMessage();
+			// Let the thread process remaining Scintilla messages 
+			// sent by the speller otherwise a dead lock will occur.
+			// Note the m_hWnd instead of GetCtrl().
+			while (::PeekMessage(&msg,m_hWnd,min,max,PM_REMOVE) > 0) {
+				::TranslateMessage(&msg);
+				::DispatchMessage(&msg);
+			}
 		}
 
 		::InterlockedExchange(&hold_count_,1);
@@ -341,17 +350,14 @@ DocumentTokenizer* CodeView::GetTokenizer() const
 
 void CodeView::OnDestroy()
 {
-	if (GetDocument()->GetSpellerThread()) {
-		// Increase the hold count to delay destruction until the background thread
-		// processes the ID_BG_INVALIDATE_VIEW message and releases this view.
-		Lock();
+	if (GetDocument()->IsSpellerThreadAttached()) {
+		CWaitCursor wc;
 		// Inform the background thread we're being destroyed
 		GetDocument()->GetSpellerThread()->InvalidateView(this);
+		// Wait for the background thread to stop
+		Lock(true);	
+		Unlock(true);
 	}
-
-	// Wait for the background thread to stop
-	Lock(true);
-	Unlock(true);
 
 	CScintillaView::OnDestroy();
 }

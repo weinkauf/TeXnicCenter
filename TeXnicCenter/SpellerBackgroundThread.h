@@ -28,6 +28,8 @@
 
 #pragma once
 
+#include <set>
+
 class Speller;
 class CodeView;
 
@@ -45,6 +47,11 @@ class SpellerBackgroundThread : public CWinThread
 {
 	DECLARE_DYNCREATE(SpellerBackgroundThread)
 
+	CCriticalSection invalidate_monitor_;
+
+	typedef std::set<CodeView*> InvalidViewContainerType;
+	InvalidViewContainerType invalid_views_;
+
 public:
 	SpellerBackgroundThread();
 
@@ -57,7 +64,7 @@ private:
 private:
 	afx_msg void AFX_MSG_CALL OnEnableSpeller(WPARAM wParam, LPARAM lParam);
 public:
-	afx_msg void AFX_MSG_CALL OnInvalidateView(WPARAM wParam, LPARAM lParam);
+	//afx_msg void AFX_MSG_CALL OnInvalidateView(WPARAM wParam, LPARAM lParam);
 
 	DECLARE_MESSAGE_MAP()
 
@@ -112,9 +119,9 @@ public:
 	void InvalidateView(CodeView* view);
 
 private:
-	bool IsViewValid(void *pView);
+	bool IsViewValid(CodeView* view);
 	
 	Speller *speller_;
 	bool spell_enabled_;
-	CPtrList m_pInvalidViews;
+	//CPtrList m_pInvalidViews;
 };

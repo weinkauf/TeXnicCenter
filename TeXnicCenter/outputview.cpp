@@ -39,15 +39,6 @@
 #include "OutputDoc.h"
 #include "configuration.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-//-------------------------------------------------------------------
-// class COutputView
-//-------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC(COutputView,CListCtrl)
 
@@ -55,14 +46,12 @@ BEGIN_MESSAGE_MAP(COutputView,CListCtrl)
 	ON_MESSAGE(OPW_ADD_LINE,OnAddLine)
 	ON_MESSAGE(OPW_RESET,OnReset)
 	ON_MESSAGE(OPW_ADD_INFOLINE,OnAddInfoLine)
-	//{{AFX_MSG_MAP(COutputView)
 	ON_WM_CREATE()
-	ON_WM_LBUTTONDBLCLK()
 	ON_WM_SHOWWINDOW()
 	ON_WM_SETFOCUS()
-	//}}AFX_MSG_MAP
 	ON_WM_SYSCOLORCHANGE()
 	ON_WM_SETFOCUS()
+	ON_NOTIFY_REFLECT(NM_DBLCLK, &COutputView::OnNMDblclk)
 END_MESSAGE_MAP()
 
 
@@ -79,13 +68,25 @@ COutputView::~COutputView()
 {
 }
 
+#ifdef _DEBUG
+
+void COutputView::AssertValid() const
+{
+	CListCtrl::AssertValid();
+}
+
+void COutputView::Dump(CDumpContext& dc) const
+{
+	CListCtrl::Dump(dc);
+}
+#endif //_DEBUG
+
 BOOL COutputView::Create(const RECT &rect, CWnd *pwndParent)
 {
 	ASSERT(pwndParent && IsWindow(pwndParent->m_hWnd));
 
 	return CWnd::CreateEx(WS_EX_CLIENTEDGE,WC_LISTVIEW,0,
-	                      WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_SINGLESEL,
-	                      rect,pwndParent,0);
+		WS_CHILD | WS_VISIBLE | LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_SINGLESEL,rect,pwndParent,0);
 }
 
 void COutputView::AttachDoc(COutputDoc *pDocument)
@@ -96,7 +97,7 @@ void COutputView::AttachDoc(COutputDoc *pDocument)
 
 COutputDoc *COutputView::GetDocument() const
 {
-	ASSERT(m_pOutputDoc->IsKindOf(RUNTIME_CLASS(COutputDoc)));
+	ASSERT(!m_pOutputDoc || m_pOutputDoc->IsKindOf(RUNTIME_CLASS(COutputDoc)));
 	return m_pOutputDoc;
 }
 
@@ -115,7 +116,7 @@ CImageList *COutputView::GetImageList() const
 	return CListCtrl::GetImageList(LVSIL_SMALL);
 }
 
-LONG COutputView::OnReset(UINT wParam,LONG lParam)
+LONG COutputView::OnReset(UINT /*wParam*/, LONG /*lParam*/)
 {
 	ResetView();
 	return 0;
@@ -126,7 +127,7 @@ void COutputView::ResetView()
 	DeleteAllItems();
 }
 
-LONG COutputView::OnAddLine(UINT wParam,LONG lParam)
+LONG COutputView::OnAddLine(UINT wParam, LONG /*lParam*/)
 {
 	AddLine((LPCTSTR)wParam);
 	return 0L;
@@ -234,10 +235,6 @@ int COutputView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// set font
 	ApplyFont();
-
-	// modify style
-	ModifyStyle(0xFFFFFFFF,
-	            WS_CHILD | WS_VISIBLE | LVS_REPORT | LVS_NOCOLUMNHEADER | LVS_SHOWSELALWAYS | LVS_SINGLESEL);
 	InsertColumn(0,_T(""));
 
 	return 0;
@@ -246,16 +243,6 @@ int COutputView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 BOOL COutputView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	return CListCtrl::PreCreateWindow(cs);
-}
-
-void COutputView::OnLButtonDblClk(UINT nFlags,CPoint point)
-{
-	POSITION pos = GetFirstSelectedItemPosition();
-
-	if (!pos)
-		return;
-
-	GetDocument()->ActivateMessageByOutputLine(GetNextSelectedItem(pos),this);
 }
 
 void COutputView::OnShowWindow(BOOL bShow,UINT nStatus)
@@ -279,7 +266,7 @@ void COutputView::DoOnUpdate(COutputView *pSender,LPARAM lHint,CObject *pHint)
 	OnUpdate(pSender,lHint,pHint);
 }
 
-void COutputView::OnUpdate(COutputView *pSender,LPARAM lHint,CObject *pHint)
+void COutputView::OnUpdate(COutputView* /*pSender*/ ,LPARAM /*lHint*/, CObject* /*pHint*/)
 {
 }
 
@@ -314,16 +301,13 @@ void COutputView::OnSysColorChange()
 	ApplyFont();
 }
 
-
-#ifdef _DEBUG
-
-void COutputView::AssertValid() const
+void COutputView::OnNMDblclk(NMHDR* /*pNMHDR*/, LRESULT* /*pResult*/)
 {
-	CListCtrl::AssertValid();
-}
+	//LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	POSITION pos = GetFirstSelectedItemPosition();
 
-void COutputView::Dump(CDumpContext& dc) const
-{
-	CListCtrl::Dump(dc);
+	if (!pos)
+		return;
+
+	GetDocument()->ActivateMessageByOutputLine(GetNextSelectedItem(pos),this);
 }
-#endif //_DEBUG

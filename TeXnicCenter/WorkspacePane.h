@@ -1,6 +1,7 @@
 #pragma once
 
-class WorkspacePane : public CDockablePane
+class WorkspacePane : 
+	public CDockablePane
 {
 	DECLARE_DYNAMIC(WorkspacePane)
 	CWnd* client_;
@@ -14,8 +15,8 @@ protected:
 public:
 	void SetClient(CWnd* p);
 
-private:
-	void AdjustLayout(const CRect& rc);
+protected:
+	virtual void AdjustLayout(CRect& rc);
 	void AdjustLayout(void);
 
 protected:

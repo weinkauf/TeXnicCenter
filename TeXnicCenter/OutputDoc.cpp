@@ -63,7 +63,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
 // standard beep
 #define BEEP       //MessageBeep( MB_OK )
 
@@ -1303,12 +1302,15 @@ bool COutputDoc::TryOpenFile(LPCTSTR lpszFilename,const int nLineNumber)
 {
 	if (nLineNumber > 0)
 	{
-		return (theApp.OpenLatexDocument(lpszFilename,FALSE,nLineNumber,TRUE) != NULL);
+		return theApp.OpenLatexDocument(lpszFilename,FALSE,nLineNumber,TRUE) != NULL;
 	}
 
 	MessageBeep(MB_ICONSTOP);
+
 	return false;
 }
+
+
 
 void COutputDoc::OnUpdateLatexView(CCmdUI* pCmdUI)
 {

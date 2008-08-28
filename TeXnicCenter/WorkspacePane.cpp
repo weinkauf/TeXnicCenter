@@ -25,7 +25,8 @@ void WorkspacePane::OnSize(UINT nType, int cx, int cy)
 {
 	CDockablePane::OnSize(nType, cx, cy);
 
-	AdjustLayout(CRect(0,0,cx,cy));
+	CRect rc(0,0,cx,cy);
+	AdjustLayout(rc);
 }
 
 void WorkspacePane::SetClient(CWnd* p)
@@ -40,7 +41,7 @@ void WorkspacePane::SetClient(CWnd* p)
 	}
 }
 
-void WorkspacePane::AdjustLayout(const CRect& rc)
+void WorkspacePane::AdjustLayout( CRect& rc )
 {
 	if (client_)
 		client_->SetWindowPos(0,rc.left,rc.top,rc.Width(),rc.Height(),SWP_NOACTIVATE|SWP_NOZORDER);

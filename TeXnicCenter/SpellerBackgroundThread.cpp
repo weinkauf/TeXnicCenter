@@ -59,7 +59,7 @@ BEGIN_MESSAGE_MAP(SpellerBackgroundThread, CWinThread)
 	ON_THREAD_MESSAGE(ID_BG_UPDATE_LINE, &SpellerBackgroundThread::OnUpdateLine)
 	ON_THREAD_MESSAGE(ID_BG_RESET_SPELLER, &SpellerBackgroundThread::OnGetSpeller)
 	ON_THREAD_MESSAGE(ID_BG_ENABLE_SPELLER, &SpellerBackgroundThread::OnEnableSpeller)
-	ON_THREAD_MESSAGE(ID_BG_INVALIDATE_VIEW, &SpellerBackgroundThread::OnInvalidateView)
+	//ON_THREAD_MESSAGE(ID_BG_INVALIDATE_VIEW, &SpellerBackgroundThread::OnInvalidateView)
 END_MESSAGE_MAP()
 
 
@@ -162,17 +162,6 @@ void SpellerBackgroundThread::OnEnableSpeller(WPARAM wParam, LPARAM lParam)
 		OnUpdateBuffer(0, lParam);
 }
 
-void SpellerBackgroundThread::OnInvalidateView(WPARAM /*wParam*/, LPARAM lParam)
-{
-	CodeView* pTextView = reinterpret_cast<CodeView*>(lParam);
-
-	if (pTextView) {
-		m_pInvalidViews.AddHead(pTextView);
-		// Unlock the view
-		pTextView->Unlock();
-	}
-}
-
 BOOL SpellerBackgroundThread::InitInstance()
 {
 	return TRUE;
@@ -180,7 +169,11 @@ BOOL SpellerBackgroundThread::InitInstance()
 
 BOOL SpellerBackgroundThread::OnIdle(LONG /*lCount*/)
 {
-	m_pInvalidViews.RemoveAll();
+	if (!invalid_views_.empty()) {
+		CSingleLock lock(&invalidate_monitor_,TRUE);
+		invalid_views_.clear();
+	}
+
 	return 0;
 }
 
@@ -235,28 +228,17 @@ void SpellerBackgroundThread::RemoveBufferAttributes(CodeView* pTextView)
 	pTextView->Unlock();
 }
 
-bool SpellerBackgroundThread::IsViewValid( void *pView )
+bool SpellerBackgroundThread::IsViewValid( CodeView* view )
 {
-	// This in affect gives the ID_BG_INVALIDATE_VIEW message the highest priority,
-	// which is what we want.
-	MSG msg;
+	bool result = (view != NULL);
 
-	while (::PeekMessage(&msg, NULL, ID_BG_INVALIDATE_VIEW, ID_BG_INVALIDATE_VIEW, PM_REMOVE) != 0)
-		OnInvalidateView(msg.wParam, msg.lParam);
-
-	bool isValid = (pView != NULL);
-	POSITION pos = m_pInvalidViews.GetHeadPosition();
-
-	while (pos != NULL && isValid)
-	{
-		if (pView == m_pInvalidViews.GetNext(pos))
-			isValid = false;
+	if (result) {
+		CSingleLock lock(&invalidate_monitor_,TRUE);
+		result = invalid_views_.find(static_cast<CodeView*>(view)) == invalid_views_.end();
 	}
 
-	return isValid;
+	return result;
 }
-
-
 
 void SpellerBackgroundThread::DoCheckLine(CodeView* view, int line, CString &text)
 {
@@ -349,5 +331,6 @@ void SpellerBackgroundThread::ResetSpeller( SpellerSource* s )
 
 void SpellerBackgroundThread::InvalidateView( CodeView* view )
 {
-	PostThreadMessage(ID_BG_INVALIDATE_VIEW,0,reinterpret_cast<LPARAM>(view));
+	CSingleLock lock(&invalidate_monitor_,TRUE);
+	invalid_views_.insert(view);
 }

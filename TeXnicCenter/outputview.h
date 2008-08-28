@@ -168,7 +168,6 @@ protected:
 	void OnSetFocus(CWnd* pOldWnd);
 	//{{AFX_MSG(COutputView)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
@@ -187,4 +186,7 @@ private:
 
 	/** Font to be used for the view */
 	CFont m_font;
+
+protected:
+	afx_msg void OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult);
 };
