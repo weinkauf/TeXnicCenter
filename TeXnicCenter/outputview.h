@@ -165,6 +165,7 @@ protected:
 	LONG OnReset(UINT wParam, LONG lParam);
 	LONG OnAddInfoLine(WPARAM wParam, LONG lParam);
 	afx_msg void OnSysColorChange();
+	void OnSetFocus(CWnd* pOldWnd);
 	//{{AFX_MSG(COutputView)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);

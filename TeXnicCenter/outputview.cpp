@@ -62,6 +62,7 @@ BEGIN_MESSAGE_MAP(COutputView,CListCtrl)
 	ON_WM_SETFOCUS()
 	//}}AFX_MSG_MAP
 	ON_WM_SYSCOLORCHANGE()
+	ON_WM_SETFOCUS()
 END_MESSAGE_MAP()
 
 
@@ -263,6 +264,14 @@ void COutputView::OnShowWindow(BOOL bShow,UINT nStatus)
 
 	if (bShow && GetDocument())
 		GetDocument()->OnOutputViewActivated(this);
+}
+
+void COutputView::OnSetFocus(CWnd* pOldWnd)
+{
+	if (COutputDoc* doc = GetDocument())
+		GetDocument()->OnOutputViewActivated(this);
+
+	CListCtrl::OnSetFocus(pOldWnd);
 }
 
 void COutputView::DoOnUpdate(COutputView *pSender,LPARAM lHint,CObject *pHint)

@@ -219,10 +219,7 @@ void COutputDoc::OnPrevError()
 
 void COutputDoc::OnUpdateNextPrevError(CCmdUI* pCmdUI)
 {
-	if (m_pActiveOutputView == m_pBuildView)
-		pCmdUI->Enable(m_aErrors.GetSize());
-	else
-		pCmdUI->Enable(FALSE);
+	pCmdUI->Enable(!m_aErrors.IsEmpty());
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -275,7 +272,7 @@ void COutputDoc::OnUpdateNextPrevBadbox(CCmdUI* pCmdUI)
 {
 	// All views can be visible at one time
 	//if (m_pActiveOutputView == m_pBuildView)
-	pCmdUI->Enable(m_aBadBoxes.GetSize());
+	pCmdUI->Enable(!m_aBadBoxes.IsEmpty());
 	//else
 	//    pCmdUI->Enable(FALSE);
 }
