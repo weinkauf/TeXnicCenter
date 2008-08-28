@@ -85,6 +85,8 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_COMMAND(ID_EDIT_FIND_INCREMENTAL_BACKWARD, &CodeView::OnEditFindIncrementalBackward)
 	ON_COMMAND(ID_EDIT_GOTO_LAST_CHANGE, &CodeView::OnEditGotoLastChange)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_GOTO_LAST_CHANGE, &CodeView::OnUpdateEditGotoLastChange)
+	ON_COMMAND(ID_VIEW_INDENTATION_GUIDES, &CodeView::OnViewIndentationGuides)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_INDENTATION_GUIDES, &CodeView::OnUpdateViewIndentationGuides)
 END_MESSAGE_MAP()
 
 
@@ -117,6 +119,7 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	theme_.SubclassWindow(m_hWnd);
 	theme_.Initialize();
 
+	EnableFolding(); // CodeView::OnSettingsChanged depends on whether folding is enabled or not
 	OnSettingsChanged(); // Make sure derived class setup the settings such as fonts, lexers etc. first
 
 	GetCtrl().SetViewWS(CConfiguration::GetInstance()->m_bViewWhitespaces ? SCWS_VISIBLEALWAYS : SCWS_INVISIBLE);
@@ -148,15 +151,11 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 #pragma region Folding
 
-	const int folding_margin_num = 2;
-	const int width = GetCtrl().TextWidth(STYLE_DEFAULT,"9");
+	const int folding_margin_num = GetFoldingMargin();
 
-	rCtrl.SetMarginWidthN(folding_margin_num,2 * 2 + width);
 	rCtrl.SetMarginSensitiveN(folding_margin_num,TRUE); // Receive clicks
 	rCtrl.SetMarginTypeN(folding_margin_num,SC_MARGIN_SYMBOL);
 	rCtrl.SetMarginMaskN(folding_margin_num,SC_MASK_FOLDERS);
-
-	rCtrl.SetProperty("fold","1");
 
 	// Setup markers for VS style folding
 	COLORREF clr = ::GetSysColor(COLOR_3DSHADOW);
@@ -182,6 +181,9 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 void CodeView::GoToLine( int line, bool direct /*= true*/ )
 {
 	GetCtrl().GotoLine(line,direct);
+	// Make sure that lines that have been hidden due to folding
+	// will be visible as well
+	GetCtrl().EnsureVisible(line,direct); 
 }
 
 int CodeView::GetLineLength( int line, bool direct /*= true*/ )
@@ -438,6 +440,31 @@ void CodeView::OnInitialUpdate()
 void CodeView::OnSettingsChanged()
 {
 	// User changed application's settings: react here
+
+	// Folding margin width: 2px + 1.5ex + 2px
+	const int width = IsFoldingEnabled() ? GetCtrl().TextWidth(STYLE_DEFAULT,"9") + 2 * 2 : 0;
+	GetCtrl().SetMarginWidthN(GetFoldingMargin(),width);
+	GetCtrl().SetFoldMarginColour(TRUE,GetCtrl().StyleGetBack(STYLE_DEFAULT));
+	
+	int flags = 0;
+
+	if (CConfiguration::GetInstance()->GetShowLineBelowFold())
+		flags |= 16;
+
+	if (CConfiguration::GetInstance()->GetShowLineBelowNoFold())
+		flags |= 8;
+
+	if (CConfiguration::GetInstance()->GetShowLineAboveFold())
+		flags |= 4;
+
+	if (CConfiguration::GetInstance()->GetShowLineAboveNoFold())
+		flags |= 2;
+
+	GetCtrl().SetFoldFlags(flags);
+
+	GetCtrl().SetUseTabs(!CConfiguration::GetInstance()->GetUseSpaces());
+	GetCtrl().SetTabWidth(CConfiguration::GetInstance()->m_nTabWidth);
+	GetCtrl().SetIndent(GetCtrl().GetTabWidth());
 }
 
 void CodeView::OnSysColorChange()
@@ -785,4 +812,25 @@ void CodeView::OnEditGotoLastChange()
 void CodeView::OnUpdateEditGotoLastChange(CCmdUI *pCmdUI)
 {
 	pCmdUI->Enable(last_change_pos_ != -1);
+}
+
+void CodeView::EnableFolding( bool enable /*= true*/ )
+{
+	GetCtrl().SetProperty("fold",enable ? "1" : "0");
+}
+
+bool CodeView::IsFoldingEnabled()
+{
+	return GetCtrl().GetPropertyInt("fold") == 1;
+}
+
+void CodeView::OnViewIndentationGuides()
+{
+	bool enable = GetCtrl().GetIndentationGuides() == SC_IV_NONE;
+	GetCtrl().SetIndentationGuides(enable ? SC_IV_LOOKBOTH : SC_IV_NONE);
+}
+
+void CodeView::OnUpdateViewIndentationGuides(CCmdUI *pCmdUI)
+{
+	pCmdUI->SetCheck(GetCtrl().GetIndentationGuides() != SC_IV_NONE);
 }

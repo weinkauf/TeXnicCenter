@@ -2,7 +2,6 @@
 #include "TeXnicCenter.h"
 
 #include "BibView.h"
-#include "BiBTeXEntry.h"
 #include "RunTimeHelper.h"
 #include "navigatorview.h"
 #include "OleDrop.h"
@@ -56,6 +55,68 @@ void Tokenize(const CString& text, const CString& sep, std::vector<CString>& wor
 	Tokenize(first,last,sep_first,sep_last,words);
 }
 
+namespace {
+	class SearchToolBarEditCtrl :
+		public CMFCToolBarEditCtrl
+	{
+	public:
+		SearchToolBarEditCtrl(CMFCToolBarEditBoxButton& b)
+			: CMFCToolBarEditCtrl(b)
+		{
+		}
+
+		BOOL PreTranslateMessage(MSG* pMsg)
+		{
+			BOOL result = FALSE;
+
+			if (!(pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_ESCAPE)) {
+				if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_TAB) {
+					// Handle switch to the next window using Tab and Shift+Tab
+					// For now, there's only a switch between two windows:
+					// the edit box and the list control
+					ASSERT(GetParent() && GetParent()->GetParent());
+					GetParent()->GetParent()->GetNextDlgTabItem(GetParent(),
+						::GetKeyState(VK_SHIFT) >> 15 & 1)->SetFocus();
+					result = TRUE;
+				}
+				else
+					result = CMFCToolBarEditCtrl::PreTranslateMessage(pMsg);
+			}
+			else if (GetFocus() == this) {
+				if (GetWindowTextLength() != 0) { // Not empty
+					SetWindowText(0); // Clear the edit box
+					result = TRUE;
+				}
+				else // otherwise let the base deactivate the view
+					result = CMFCToolBarEditCtrl::PreTranslateMessage(pMsg);
+			}
+
+			return result;
+		}
+	};
+
+	class SearchToolBarEditButton :
+		public CMFCToolBarEditBoxButton
+	{
+		DECLARE_DYNCREATE(SearchToolBarEditButton)
+
+	public:
+		SearchToolBarEditButton()
+			: CMFCToolBarEditBoxButton(ID_SEARCH_EDIT,-1,ES_WANTRETURN|ES_AUTOHSCROLL|ES_LEFT|ES_NOHIDESEL|WS_TABSTOP,250)
+		{
+		}
+
+		CEdit* CreateEdit(CWnd* w, const CRect& rec)
+		{
+			SearchToolBarEditCtrl* e = new SearchToolBarEditCtrl(*this);
+			e->Create(m_dwStyle,rec,w,m_nID);
+			return e;
+		}
+	};
+
+	IMPLEMENT_DYNCREATE(SearchToolBarEditButton, CMFCToolBarEditBoxButton)
+}
+
 // BibView
 
 IMPLEMENT_DYNAMIC(BibView, CDockablePane)
@@ -64,6 +125,10 @@ BibView::BibView()
 : search_timer_enabled_(false)
 , dragged_item_(-1)
 , search_flags_(0)
+, can_group_(RunTimeHelper::IsCommCtrl6())
+, stop_search_(0)
+, search_semaphore_(1,1)
+, populate_was_search_(false)
 {
 }
 
@@ -88,6 +153,7 @@ BEGIN_MESSAGE_MAP(BibView, CDockablePane)
 	ON_NOTIFY(NM_DBLCLK, ListID, &BibView::OnNMDblClk)
 	ON_NOTIFY(LVN_ITEMCHANGED, ListID, &BibView::OnLvnItemChanged)
 	ON_COMMAND(IDOK, &BibView::OnEnter)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 // BibView message handlers
@@ -100,15 +166,17 @@ int BibView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// Default search options
 	search_flags_ = Author|Title|Year;
 
-	toolbar_.Create(this,AFX_DEFAULT_TOOLBAR_STYLE,IDR_BIB_SEARCH);
+	toolbar_.Create(this,AFX_DEFAULT_TOOLBAR_STYLE|WS_TABSTOP,IDR_BIB_SEARCH);
+	toolbar_.ModifyStyleEx(0,WS_EX_CONTROLPARENT);
 	toolbar_.LoadToolBar(IDR_BIB_SEARCH,0,0,TRUE);
 	toolbar_.AdjustStyle();
 
 	toolbar_.SetRouteCommandsViaFrame(FALSE);
 
-	CMFCToolBarEditBoxButton edit(ID_SEARCH_EDIT,-1,ES_WANTRETURN|ES_AUTOHSCROLL|ES_LEFT|ES_NOHIDESEL,250);
+	SearchToolBarEditButton edit;
 
 	search_button_ = static_cast<CMFCToolBarEditBoxButton*>(toolbar_.GetButton(toolbar_.ReplaceButton(ID_SEARCH_EDIT,edit)));
+	ENSURE(search_button_);
 
 	CMenu menu;
 	menu.LoadMenu(IDR_BIB_SEARCH_OPTIONS);
@@ -119,14 +187,14 @@ int BibView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (RunTimeHelper::IsCommCtrl6())
 		search_button_->GetEditBox()->SetCueBanner(CString(MAKEINTRESOURCE(IDS_SEARCH)));
 
-	list_view_.CreateEx(WS_EX_CLIENTEDGE,WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|LVS_REPORT,
+	list_view_.CreateEx(WS_EX_CLIENTEDGE,WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|WS_TABSTOP|LVS_REPORT|LVS_SHOWSELALWAYS,
 		CRect(0,0,0,0),this,ListID);
 
 	if (RunTimeHelper::IsVista())
 		::SetWindowTheme(list_view_,L"explorer",0);
 
-	list_view_.SetExtendedStyle(LVS_EX_DOUBLEBUFFER|LVS_EX_FULLROWSELECT|LVS_EX_HEADERDRAGDROP);
-	list_view_.EnableGroupView(TRUE);
+	list_view_.SetExtendedStyle(LVS_EX_DOUBLEBUFFER|LVS_EX_FULLROWSELECT|
+		LVS_EX_HEADERDRAGDROP|LVS_EX_LABELTIP);
 
 	list_view_.InsertColumn(0,CString(MAKEINTRESOURCE(IDS_LABEL)),0,150);
 	list_view_.InsertColumn(1,CString(MAKEINTRESOURCE(IDS_AUTHOR)),0,250);
@@ -220,12 +288,81 @@ void BibView::AdjustLayout()
 void BibView::OnSetFocus(CWnd* pOldWnd)
 {
 	CDockablePane::OnSetFocus(pOldWnd);
-	list_view_.SetFocus();
+
+	if (search_button_)
+		search_button_->GetEditBox()->SetFocus();
+	else
+		list_view_.SetFocus();
 }
 
 void BibView::OnParsingFinished()
 {
-	Populate();
+	::InterlockedExchange(&stop_search_,1);
+
+	search_semaphore_.Lock();
+	bib_items_.clear();
+
+	const StructureItemContainer &a = GetProject()->m_aStructureItems;
+
+	list_view_.SetRedraw(FALSE);
+	list_view_.RemoveAllGroups();
+
+	if (can_group_) {
+		// Windows XP specific: after we removed all the groups we need
+		// to reenable the group view
+		list_view_.EnableGroupView(TRUE);
+	}
+
+	list_view_.SetRedraw();
+
+	std::tr1::hash<std::basic_string<TCHAR> > hasher;
+
+	LVGROUP lvg = {};
+	lvg.mask = LVGF_HEADER|LVGF_GROUPID;
+
+	if (RunTimeHelper::IsVista()) {
+		lvg.cbSize = sizeof(LVGROUP);
+		lvg.mask |= LVGF_STATE;
+		lvg.state = LVGS_COLLAPSIBLE;
+	}
+	else // Windows XP compatibility
+		lvg.cbSize = LVGROUP_V5_SIZE;
+
+	for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it) {
+		const CStructureItem &si = *it;
+
+		switch (si.GetType()) {
+			case CStructureParser::bibFile :
+			case CStructureParser::missingBibFile :
+				{
+					// Windows XP or higher required for grouping
+					if (can_group_) {						
+						const CString& title = si.GetTitle();
+						lvg.iGroupId = static_cast<int>(hasher(std::basic_string<TCHAR>(title)));
+
+						if (!list_view_.HasGroup(lvg.iGroupId)) {
+							const_cast<LPCTSTR&>(lvg.pszHeader) = title;
+							lvg.cchHeader = title.GetLength();
+
+							VERIFY(list_view_.InsertGroup(list_view_.GetGroupCount(),&lvg) != -1);
+						}
+					}
+				}
+				break;
+			case CStructureParser::bibItem :
+				if (const BibItem* info = dynamic_cast<const BibItem*>(it->GetItemInfo())) {
+					ASSERT(lvg.iGroupId); // Must be a valid group id
+					Item item(lvg.iGroupId,si.GetType(),*info);
+					item.structure_item_index = std::distance(a.begin(),it);
+					bib_items_.push_back(item);
+				}
+				break;
+		}
+	}
+
+	search_semaphore_.Unlock();
+
+	Populate(EveryItem);
 }
 
 void BibView::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
@@ -301,7 +438,6 @@ void BibView::OnEnChangeSearch()
 void BibView::OnClearSearch()
 {
 	search_button_->GetEditBox()->SetWindowText(0);
-	Populate();
 }
 
 bool BibView::EveryItem( const BibItem& /*item*/ )
@@ -324,7 +460,7 @@ bool BibView::ContainsAny( const CString& text, std::vector<CString>& tokens )
 	// We need to find all matches. If we stop after the first match
 	// then e.g. a search for an item with more than one author will fail
 	// in case the input string contains partial names for a couple of authors
-	for ( ; it != tokens.end() && tokens.size() != pos_buffer_.size(); ++it) {
+	for ( ; it != tokens.end() && tokens.size() != pos_buffer_.size() && !stop_search_; ++it) {
 		if (Contains(text,*it))
 			pos_buffer_.push_back(it);
 	}
@@ -333,150 +469,45 @@ bool BibView::ContainsAny( const CString& text, std::vector<CString>& tokens )
 
 	// and remove these
 	for (std::vector<std::vector<CString>::iterator>::reverse_iterator it = pos_buffer_.rbegin();
-		it != pos_buffer_.rend(); ++it)
+		it != pos_buffer_.rend() && !stop_search_; ++it)
 		tokens.erase(*it);
 
-	return found;
+	return found && !stop_search_;
 }
 
 bool BibView::ItemContains( const BibItem& item, const std::vector<CString>& search_tokens )
 {
-	bool result = false;
-
 	std::vector<CString>& tokens = token_buffer_;
 	tokens = search_tokens;
 
 	if (search_flags_ & Title)
-		result = ContainsAny(item.GetTitle(),tokens);
+		ContainsAny(item.GetTitle(),tokens);
 
 	if (!tokens.empty() && search_flags_ & Author)
-		result = ContainsAny(item.GetAuthor(),tokens);
+		ContainsAny(item.GetAuthor(),tokens);
 
 	if (!tokens.empty() && search_flags_ & Year) {
 		if (item.HasYear()) {
 			CString year;
 			year.Format(_T("%i"),item.GetYear());
 
-			result = ContainsAny(year,tokens);
+			ContainsAny(year,tokens);
 		}
 	}
 
 	if (!tokens.empty() && search_flags_ & Type)
-		result = ContainsAny(item.GetType(),tokens);
+		ContainsAny(item.GetTypeString(),tokens);
 
 	if (!tokens.empty() && search_flags_ & Publisher)
-		result = ContainsAny(item.GetPublisher(),tokens);
+		ContainsAny(item.GetPublisher(),tokens);
 
-	if (!tokens.empty())
-		result = false; // Not all tokens have been matched
-	
-	// AND search
-	//if (search_flags_ & Title)
-	//	result = ContainsAny(item.GetTitle(),search_tokens);
-
-	//if (search_flags_ & Author) {
-	//	bool contains = ContainsAny(item.GetAuthor(),search_tokens);
-
-	//	if (!(search_flags_ & Title)) // No other options than Author set
-	//		result = contains;
-	//	else
-	//		result &= contains;
-	//}
-
-	//if (search_flags_ & Year) {
-	//	bool contains;
-
-	//	if (item.HasYear()) {
-	//		CString year;
-	//		year.Format(_T("%i"),item.GetYear());
-
-	//		contains = ContainsAny(year,search_tokens);
-	//	}
-	//	else
-	//		contains = false; // The year field doesn't exist
-
-	//	if (!(search_flags_ & (Title|Author))) // // No other options than Year set
-	//		result = contains;
-	//	else
-	//		result &= contains;
-	//}
-
-	return result;
+	return tokens.empty(); // If there are no remaining tokens then this item is a match
 }
 
-void BibView::Populate( const std::tr1::function<bool (const BibItem&)>& predicate )
+void BibView::Populate( const PredicateFunctionType& predicate )
 {
-	const StructureItemContainer &a = GetProject()->m_aStructureItems;
-
-	list_view_.SetRedraw(FALSE);
-	list_view_.DeleteAllItems();
-	//list_view_.RemoveAllGroups();
-
-	std::tr1::hash<std::basic_string<TCHAR> > hasher;
-	LVITEM lvi = {LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM|LVIF_GROUPID};
-
-	LVGROUP lvg = {};
-	lvg.mask = LVGF_HEADER|LVGF_GROUPID;
-
-	if (RunTimeHelper::IsVista()) {
-		lvg.cbSize = sizeof(LVGROUP);
-		lvg.mask |= LVGF_STATE;
-		lvg.state = LVGS_COLLAPSIBLE;
-	}
-	else // Windows XP compatibility
-		lvg.cbSize = LVGROUP_V5_SIZE;
-
-	for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it) {
-		const CStructureItem &si = *it;
-
-		switch (si.GetType()) {
-			case CStructureParser::bibFile :
-			case CStructureParser::missingBibFile :
-				{
-					const CString& title = si.GetTitle();
-					const_cast<LPCTSTR&>(lvg.pszHeader) = title;
-					lvg.cchHeader = title.GetLength();
-					lvg.iGroupId = static_cast<int>(hasher(std::basic_string<TCHAR>(title)));
-
-					VERIFY(list_view_.InsertGroup(list_view_.GetGroupCount(),&lvg) != -1);
-				}
-				break;
-			case CStructureParser::bibItem :
-				if (const BibItem* info = dynamic_cast<const BibItem*>(it->GetItemInfo())) {
-					if (predicate(*info)) {
-						const CString& text = info->GetLabel();
-						const_cast<LPCTSTR&>(lvi.pszText) = text;
-						lvi.cchTextMax = text.GetLength();
-						lvi.iGroupId = lvg.iGroupId;
-						lvi.iItem = std::distance(a.begin(),it);
-						lvi.iImage = si.GetType();
-						lvi.lParam = lvi.iItem;
-
-						const int index = list_view_.InsertItem(&lvi);
-						ASSERT(index != -1);
-
-						list_view_.SetItemText(index,1,info->GetAuthor());
-						list_view_.SetItemText(index,2,info->GetTitle());
-
-						if (info->HasYear()) {
-							CString year;
-							year.Format(_T("%i"),info->GetYear());
-
-							list_view_.SetItemText(index,3,year);
-						}
-						list_view_.SetItemText(index,4,info->GetType());
-						list_view_.SetItemText(index,5,info->GetPublisher());
-					}
-				}
-				break;
-		}
-	}
-
-	if (list_view_.IsSorted())
-		list_view_.Sort();
-
-	list_view_.SetRedraw();
-	list_view_.Invalidate();
+	stop_search_ = 0;
+	AfxBeginThread(PopulateThread,new PopulateParam(predicate,this));
 }
 
 void BibView::Populate()
@@ -559,48 +590,36 @@ void BibView::OnUpdateSearchOptions(CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(IsSearchOptionSet(opt));
 }
 
-int BibView::TranslateCompareFunction(LPARAM l1, LPARAM l2, BibView* pane,
-									  const std::tr1::function<int (const CStructureItem& a, const CStructureItem& b)>& f)
+int BibView::TranslateCompareFunction(LPARAM l1, LPARAM l2, BibView* pane, 
+									  const std::tr1::function<int (const BibItem& a, const BibItem& b)>& f )
 {
-	const StructureItemContainer& c = pane->GetProject()->GetStructureItems();
-	ASSERT(l1 < c.size() && l2 < c.size());
-
-	return f(c[l1],c[l2]);
+	ASSERT(l1 < pane->bib_items_.size() && l2 < pane->bib_items_.size());
+	return f(pane->bib_items_[l1].bib,pane->bib_items_[l2].bib);
 }
 
-int BibView::CompareLabel( const CStructureItem& a, const CStructureItem& b )
+int BibView::CompareLabel( const BibItem& a, const BibItem& b )
 {
 	return a.GetLabel().CompareNoCase(b.GetLabel());
 }
 
-int BibView::CompareAuthor( const CStructureItem& a, const CStructureItem& b )
+int BibView::CompareAuthor( const BibItem& a, const BibItem& b )
 {
-	ASSERT(dynamic_cast<const BibItem*>(a.GetItemInfo()) &&
-		dynamic_cast<const BibItem*>(b.GetItemInfo()));
-
-	return static_cast<const BibItem*>(a.GetItemInfo())->GetAuthor().
-		CompareNoCase(static_cast<const BibItem*>(b.GetItemInfo())->GetAuthor());
+	return a.GetAuthor().CompareNoCase(b.GetAuthor());
 }
 
-int BibView::CompareYear( const CStructureItem& a, const CStructureItem& b )
+int BibView::CompareYear( const BibItem& a, const BibItem& b )
 {
-	ASSERT(dynamic_cast<const BibItem*>(a.GetItemInfo()) &&
-		dynamic_cast<const BibItem*>(b.GetItemInfo()));
-
-	const BibItem* b1 = static_cast<const BibItem*>(a.GetItemInfo());
-	const BibItem* b2 = static_cast<const BibItem*>(b.GetItemInfo());
-
 	int result;
 
-	if (!b1->HasYear() && b2->HasYear())
+	if (!a.HasYear() && !b.HasYear())
 		result = 0;
-	else if (!b1->HasYear())
-		result = 1;
-	else if (!b2->HasYear())
+	else if (!a.HasYear())
 		result = -1;
+	else if (!b.HasYear())
+		result = 1;
 	else {
-		int year1 = static_cast<const BibItem*>(a.GetItemInfo())->GetYear();
-		int year2 = static_cast<const BibItem*>(b.GetItemInfo())->GetYear();
+		int year1 = a.GetYear();
+		int year2 = b.GetYear();
 		
 		result = year1 < year2 ? -1 : year1 > year2 ? 1 : 0;
 	}
@@ -608,44 +627,39 @@ int BibView::CompareYear( const CStructureItem& a, const CStructureItem& b )
 	return result;
 }
 
-int BibView::CompareTitle( const CStructureItem& a, const CStructureItem& b )
+int BibView::CompareTitle( const BibItem& a, const BibItem& b )
 {
-	ASSERT(dynamic_cast<const BibItem*>(a.GetItemInfo()) &&
-		dynamic_cast<const BibItem*>(b.GetItemInfo()));
-
-	return static_cast<const BibItem*>(a.GetItemInfo())->GetTitle().
-		CompareNoCase(static_cast<const BibItem*>(b.GetItemInfo())->GetTitle());
+	return a.GetTitle().CompareNoCase(b.GetTitle());
 }
 
-int BibView::ComparePublicationType( const CStructureItem& a, const CStructureItem& b )
+int BibView::ComparePublicationType( const BibItem& a, const BibItem& b )
 {
-	ASSERT(dynamic_cast<const BibItem*>(a.GetItemInfo()) &&
-		dynamic_cast<const BibItem*>(b.GetItemInfo()));
-
-	return static_cast<const BibItem*>(a.GetItemInfo())->GetType().
-		CompareNoCase(static_cast<const BibItem*>(b.GetItemInfo())->GetType());
+	return a.GetType() < b.GetType() ? -1 : a.GetType() > b.GetType() ? 1 : 0;
 }
 
-int BibView::ComparePublisher( const CStructureItem& a, const CStructureItem& b )
+int BibView::ComparePublisher( const BibItem& a, const BibItem& b )
 {
-	ASSERT(dynamic_cast<const BibItem*>(a.GetItemInfo()) &&
-		dynamic_cast<const BibItem*>(b.GetItemInfo()));
-
-	return static_cast<const BibItem*>(a.GetItemInfo())->GetPublisher().
-		CompareNoCase(static_cast<const BibItem*>(b.GetItemInfo())->GetPublisher());
+	return a.GetPublisher().CompareNoCase(b.GetPublisher());
 }
 
 void BibView::StartSearch()
 {
 	if (CEdit* edit = search_button_->GetEditBox()) {
+		::InterlockedExchange(&stop_search_,1);
+
 		CString text;
 		edit->GetWindowText(text);
 
 		text.Trim();
 
-		if (text.IsEmpty())
+		if (text.IsEmpty()) {
 			Populate(EveryItem);
+			static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(AFX_IDS_IDLEMESSAGE);
+		}
 		else {
+			static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(IDS_SEARCHING);
+			populate_was_search_ = true;
+
 			text.MakeLower();
 			using namespace std::tr1;
 			using namespace placeholders;
@@ -653,7 +667,7 @@ void BibView::StartSearch()
 			std::vector<CString> words;
 			Tokenize(text,_T(" "),words);
 
-			Populate(bind(&BibView::ItemContains,this,_1,std::tr1::ref(words)));
+			Populate(bind(&BibView::ItemContains,this,_1,words));
 		}
 	}
 }
@@ -670,7 +684,9 @@ void BibView::OnNMDblClk(NMHDR* /*nm*/, LRESULT*)
 
 void BibView::OnEnter()
 {
-	if (GetFocus() == search_button_->GetEditBox()) {
+	bool ctrl_pressed = (::GetKeyState(VK_CONTROL) >> 15 & 1) == 1;
+
+	if (!ctrl_pressed && GetFocus() == search_button_->GetEditBox()) {
 		if (search_timer_enabled_) {
 			KillTimer(SearchTimerID);
 			search_timer_enabled_ = false;
@@ -679,16 +695,16 @@ void BibView::OnEnter()
 		StartSearch();
 	}
 	else {
-		if (::GetKeyState(VK_CONTROL) >> 15 & 1) // Ctrl+enter pressed
+		if (ctrl_pressed) // Insert \cite on Ctrl+Enter
 			AfxGetMainWnd()->SendMessage(WM_COMMAND,ID_ITEM_INSERT_REF);
-		else
+		else // otherwise go to the item and show it in the editor
 			GotoItem();
 	}
 }
 
 void BibView::GotoItem()
 {
-	AfxGetMainWnd()->SendMessage(WM_COMMAND,ID_ITEM_GOTO);
+	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_ITEM_GOTO);
 }
 
 void BibView::OnLvnItemChanged(NMHDR* nm, LRESULT*)
@@ -696,5 +712,115 @@ void BibView::OnLvnItemChanged(NMHDR* nm, LRESULT*)
 	LPNMLISTVIEW p = reinterpret_cast<LPNMLISTVIEW>(nm);
 
 	if (p->uChanged & LVIF_STATE && p->iItem != -1 && p->uNewState & LVIS_SELECTED)
-		GetProject()->SetCurrentStructureItem(list_view_.GetItemData(p->iItem));
+		GetProject()->SetCurrentStructureItem(bib_items_[list_view_.GetItemData(p->iItem)].structure_item_index);
+}
+
+BOOL BibView::PreTranslateMessage(MSG* pMsg)
+{
+	BOOL handled = FALSE;
+
+	if (search_button_ && search_button_->GetEditBox()->GetSafeHwnd() == pMsg->hwnd) {
+		if (pMsg->message == WM_KEYDOWN && GetControlSyncState() == 0) { // No modifiers
+			switch (pMsg->wParam) {
+				case VK_UP: case VK_DOWN:
+				//case VK_HOME: case VK_END:
+					list_view_.SendMessage(pMsg->message,pMsg->wParam,pMsg->lParam);
+					handled = TRUE;
+					break;
+			}
+		}
+	}
+
+	if (!handled)
+		handled = CDockablePane::PreTranslateMessage(pMsg);
+
+	return handled;
+}
+
+void BibView::DoPopulate( const PredicateFunctionType& predicate )
+{
+	list_view_.DeleteAllItems();
+
+	LVITEM lvi = {LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM};
+
+	if (can_group_)
+		lvi.mask |= LVIF_GROUPID;
+
+	typedef BibItemContainerType::iterator I;
+
+	for (I it = bib_items_.begin(); it != bib_items_.end() && !stop_search_; ++it) {
+		if (predicate(it->bib)) {
+			const CString& text = it->bib.GetLabel();
+			const_cast<LPCTSTR&>(lvi.pszText) = text;
+			lvi.cchTextMax = text.GetLength();
+			lvi.iGroupId = it->group_id;
+			lvi.iItem = std::distance(bib_items_.begin(),it);
+			lvi.iImage = it->image;
+			lvi.lParam = lvi.iItem;
+
+			const int index = list_view_.InsertItem(&lvi);
+			ASSERT(index != -1);
+
+			list_view_.SetItemText(index,1,it->bib.GetAuthor());
+			list_view_.SetItemText(index,2,it->bib.GetTitle());
+
+			if (it->bib.HasYear()) {
+				CString& year = temp_;
+				year.Format(_T("%i"),it->bib.GetYear());
+
+				list_view_.SetItemText(index,3,year);
+			}
+
+			list_view_.SetItemText(index,4,it->bib.GetTypeString());
+			list_view_.SetItemText(index,5,it->bib.GetPublisher());
+		}
+	}
+
+	if (!stop_search_) {
+		// Sort only if the search hasn't been interrupted
+		if (list_view_.IsSorted())
+			list_view_.Sort();
+	}
+
+	if (populate_was_search_) {
+		if (!stop_search_) {
+			CString fmt;
+			fmt.Format(IDS_ITEMS_FOUND,list_view_.GetItemCount());
+			static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(fmt);
+		}
+		else
+			static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(AFX_IDS_IDLEMESSAGE);
+
+		populate_was_search_ = false;
+	}
+}
+
+UINT BibView::PopulateThread( LPVOID p )
+{
+	std::auto_ptr<PopulateParam> param(static_cast<PopulateParam*>(p));
+	param->view->OnPopulateThread(param->predicate);
+
+	return 0;
+}
+
+void BibView::OnPopulateThread( const PredicateFunctionType& predicate )
+{
+	search_semaphore_.Lock();
+
+	list_view_.SetRedraw(FALSE);
+
+	DoPopulate(predicate);
+
+	list_view_.SetRedraw();
+	list_view_.Invalidate();
+
+	search_semaphore_.Unlock();
+}
+
+void BibView::OnDestroy()
+{
+	::InterlockedExchange(&stop_search_,1);
+	::WaitForSingleObject(search_semaphore_,INFINITE);
+
+	CDockablePane::OnDestroy();
 }

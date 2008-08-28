@@ -76,6 +76,11 @@ CConfiguration::CConfiguration()
 , overwrite_caret_line_(FALSE)
 , show_line_endings_(FALSE)
 , word_wrap_(TRUE)
+, show_line_below_fold_(FALSE)
+, show_line_below_no_fold_(FALSE)
+, show_line_above_fold_(FALSE)
+, show_line_above_no_fold_(FALSE)
+, use_spaces_(FALSE)
 {
 }
 
@@ -170,6 +175,13 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	SerializeProfileInt(strSection,_T("EditorShowLineNumbers"),&m_bShowLineNumbers,direction,0);
 	SerializeProfileInt(strSection,_T("EditorShowLineEndings"),&show_line_endings_,direction,0);
 	SerializeProfileInt(strSection,_T("EditorWordWrap"),&word_wrap_,direction,1);
+
+	SerializeProfileInt(strSection,_T("EditorShowLineBelowFold"),&show_line_below_fold_,direction,0);
+	SerializeProfileInt(strSection,_T("EditorShowLineBelowNoFold"),&show_line_below_no_fold_,direction,0);
+	SerializeProfileInt(strSection,_T("EditorShowLineAboveFold"),&show_line_above_fold_,direction,0);
+	SerializeProfileInt(strSection,_T("EditorShowLineAboveNoFold"),&show_line_above_no_fold_,direction,0);
+
+	SerializeProfileInt(strSection,_T("EditorUseSpaces"),&use_spaces_,direction,0);
 
 #pragma region Cursor settings
 
@@ -563,4 +575,54 @@ bool CConfiguration::IsWordWrapEnabled() const
 void CConfiguration::EnableWordWrap( bool val /*= true*/ )
 {
 	word_wrap_ = val;
+}
+
+bool CConfiguration::GetShowLineBelowFold() const
+{
+	return show_line_below_fold_ != 0;
+}
+
+void CConfiguration::SetShowLineBelowFold( bool show /*= true*/ )
+{
+	show_line_below_fold_ = show;
+}
+
+bool CConfiguration::GetShowLineAboveNoFold() const
+{
+	return show_line_above_no_fold_;
+}
+
+void CConfiguration::SetShowLineAboveNoFold( bool val )
+{
+	show_line_above_no_fold_ = val;
+}
+
+bool CConfiguration::GetShowLineAboveFold() const
+{
+	return show_line_above_fold_;
+}
+
+void CConfiguration::SetShowLineAboveFold( bool val )
+{
+	show_line_above_fold_ = val;
+}
+
+bool CConfiguration::GetShowLineBelowNoFold() const
+{
+	return show_line_below_no_fold_;
+}
+
+void CConfiguration::SetShowLineBelowNoFold( bool val )
+{
+	show_line_below_no_fold_ = val;
+}
+
+bool CConfiguration::GetUseSpaces() const
+{
+	return use_spaces_ != 0;
+}
+
+void CConfiguration::SetUseSpaces( bool val )
+{
+	use_spaces_ = val;
 }

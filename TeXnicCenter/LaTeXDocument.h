@@ -53,11 +53,13 @@ public:
 	int GetSavedEOLMode() const;
 
 public:
-	DWORD SaveFile(HANDLE file);
+	DWORD SaveFile(HANDLE file, bool throw_on_invalid_sequence);
 	using CodeDocument::SaveFile;
 
 protected:
 	void OnBookmarkAdded(const CodeBookmark& b);
 	void OnBookmarkRemoved(const CodeBookmark& b);
 	void OnRemovedAllBookmarks(void);
+public:
+	virtual void OnCloseDocument();
 };

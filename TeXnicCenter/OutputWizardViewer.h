@@ -60,7 +60,7 @@ public:
 	/**
 	Constructs a page for the specified dialog template.
 	 */
-	COutputWizardViewer(COutputWizard* w = 0, UINT unIDTemplate = -1);
+	COutputWizardViewer(COutputWizard* w = 0, UINT unIDTemplate = -1, UINT title_id = 0);
 	virtual ~COutputWizardViewer();
 
 

@@ -66,12 +66,18 @@ BOOL LaTeXDocument::OnOpenDocument(LPCTSTR lpszPathName)
     if (!CodeDocument::OnOpenDocument(lpszPathName))
         return FALSE;
 
-	// Restore the bookmarks, if any
 	if (CLaTeXProject* p = theApp.GetProject()) {
 		BookmarkContainerType bookmarks;
 
+		// Restore the bookmarks, if any
 		if (p->GetBookmarks(lpszPathName,bookmarks))
 			SetBookmarks(bookmarks.begin(),bookmarks.end());
+
+		FoldingPointContainerType points;
+
+		// Restore the folding
+		if (p->GetFoldingPoints(lpszPathName,points))
+			SetFoldingPoints(points.begin(),points.end());
 	}
     
     return TRUE;
@@ -268,7 +274,7 @@ int LaTeXDocument::GetSavedEOLMode() const
 	return EOL_mode_;
 }
 
-DWORD LaTeXDocument::SaveFile(HANDLE file)
+DWORD LaTeXDocument::SaveFile(HANDLE file, bool throw_on_invalid_sequence)
 {
 	const int mode = GetSavedEOLMode();
 
@@ -277,7 +283,7 @@ DWORD LaTeXDocument::SaveFile(HANDLE file)
 		GetView()->GetCtrl().ConvertEOLs(mode);
 	}
 
-	return CodeDocument::SaveFile(file);
+	return CodeDocument::SaveFile(file,throw_on_invalid_sequence);
 }
 
 void LaTeXDocument::OnBookmarkAdded(const CodeBookmark& b)
@@ -296,4 +302,12 @@ void LaTeXDocument::OnRemovedAllBookmarks(void)
 {
 	if (CLaTeXProject* p = theApp.GetProject())
 		p->RemoveAllBookmarks(GetFilePath());
+}
+
+void LaTeXDocument::OnCloseDocument()
+{
+	if (CLaTeXProject* p = theApp.GetProject())
+		p->SetFoldingPoints(GetPathName(),GetFoldingPoints());
+
+	CodeDocument::OnCloseDocument();
 }

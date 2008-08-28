@@ -51,7 +51,7 @@
 struct ColourTableEntry
 {
 	COLORREF crColour;
-	TCHAR    *szName;
+	LPCTSTR szName;
 };
 
 const int MAX_COLOURS = 100;
@@ -104,51 +104,70 @@ static ColourTableEntry crColours[] =
 	{ RGB(0xFF, 0xFF, 0xFF),    _T("White")             }
 };
 
-
-std::auto_ptr<CMFCColorMenuButton> CreateColorButton(UINT id, UINT tear_off_id, CPalette& palette, int& colors, UINT title_id)
+namespace
 {
-	if (palette.GetSafeHandle () == NULL)
+	template<class ColotButton>
+	void DoCreateColorButtonPalette(CPalette& palette, int& colors)
 	{
-		colors = sizeof (crColours)/sizeof(ColourTableEntry);
-		ASSERT(colors <= MAX_COLOURS);
-
-		if (colors > MAX_COLOURS)
-			colors = MAX_COLOURS;
-
-		// Create the palette
-		struct 
+		if (palette.GetSafeHandle () == NULL)
 		{
-			LOGPALETTE    LogPalette;
-			PALETTEENTRY  PalEntry[MAX_COLOURS];
-		}pal;
+			colors = sizeof (crColours)/sizeof(ColourTableEntry);
+			ASSERT(colors <= MAX_COLOURS);
 
-		LOGPALETTE* pLogPalette = (LOGPALETTE*) &pal;
-		pLogPalette->palVersion    = 0x300;
-		pLogPalette->palNumEntries = (WORD) colors; 
+			if (colors > MAX_COLOURS)
+				colors = MAX_COLOURS;
 
-		for (int i = 0; i < colors; i++)
-		{
-			pLogPalette->palPalEntry[i].peRed   = GetRValue(crColours[i].crColour);
-			pLogPalette->palPalEntry[i].peGreen = GetGValue(crColours[i].crColour);
-			pLogPalette->palPalEntry[i].peBlue  = GetBValue(crColours[i].crColour);
-			pLogPalette->palPalEntry[i].peFlags = 0;
+			// Create the palette
+			struct 
+			{
+				LOGPALETTE    LogPalette;
+				PALETTEENTRY  PalEntry[MAX_COLOURS];
+			}pal;
+
+			LOGPALETTE* pLogPalette = (LOGPALETTE*) &pal;
+			pLogPalette->palVersion    = 0x300;
+			pLogPalette->palNumEntries = (WORD) colors; 
+
+			for (int i = 0; i < colors; i++)
+			{
+				pLogPalette->palPalEntry[i].peRed   = GetRValue(crColours[i].crColour);
+				pLogPalette->palPalEntry[i].peGreen = GetGValue(crColours[i].crColour);
+				pLogPalette->palPalEntry[i].peBlue  = GetBValue(crColours[i].crColour);
+				pLogPalette->palPalEntry[i].peFlags = 0;
+			}
+
+			palette.CreatePalette (pLogPalette);
 		}
 
-		palette.CreatePalette (pLogPalette);
+		// Initialize color names:
+		for (int i = 0; i < colors; i++)
+			ColotButton::SetColorName (crColours[i].crColour, crColours[i].szName);
 	}
+}
+
+void CreateColorMenuButtonPalette(CPalette& palette, int& colors)
+{
+	DoCreateColorButtonPalette<CMFCColorMenuButton>(palette,colors);
+}
+
+void CreateColorButtonPalette( CPalette& palette, int& colors, int& columns )
+{
+	DoCreateColorButtonPalette<CMFCColorButton>(palette,colors);
+	columns = 8;
+}
+
+std::auto_ptr<CMFCColorMenuButton> CreateColorMenuButton(UINT id, UINT tear_off_id, CPalette& palette, int& colors, UINT title_id)
+{
+	CreateColorMenuButtonPalette(palette,colors);
 
 	std::auto_ptr<CMFCColorMenuButton> pColorButton
 		(new CMFCColorMenuButton (id,CString(MAKEINTRESOURCE(title_id)), &palette));
 
 	pColorButton->EnableAutomaticButton (CString(MAKEINTRESOURCE(IDS_AUTOMATIC)), RGB (0, 0, 0));
-	pColorButton->EnableOtherButton (CString(MAKEINTRESOURCE(IDS_MORE_COLORS)));
+	pColorButton->EnableOtherButton (CString(MAKEINTRESOURCE(STE_COLOR_OTHERS)));
 	pColorButton->EnableDocumentColors (_T("Document's Colors"));
 	pColorButton->SetColumnsNumber (8);
-	pColorButton->EnableTearOff (tear_off_id, 5, 2);
-
-	// Initialize color names:
-	for (int i = 0; i < colors; i++)
-		CMFCColorMenuButton::SetColorName (crColours[i].crColour, crColours[i].szName);
+	pColorButton->EnableTearOff (tear_off_id, 5, 2);	
 
 	return pColorButton;
 }
@@ -197,7 +216,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_COMMAND(ID_VIEW_DOCTAB_ICONS, &CMainFrame::OnViewDocTabsIcons)
 	ON_COMMAND(ID_VIEW_DOCTAB_NOTE, &CMainFrame::OnViewDocTabsNote)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_BOTTOM, &CMainFrame::OnUpdateViewDocTabs)
-	ON_COMMAND(ID_TOOLS_CANCEL, &CMainFrame::OnToolsCancel)
+	ON_COMMAND_EX(ID_TOOLS_CANCEL, &CMainFrame::OnToolsCancel)
 	ON_COMMAND(ID_WINDOW_REFERENCES, &CMainFrame::OnWindowReferences)
 	ON_COMMAND(ID_WINDOW_PARSE, &CMainFrame::OnWindowParse)
 	ON_COMMAND(ID_WINDOW_CLOSE_SELECTEDTAB, &CMainFrame::OnWindowCloseSelectedTab)
@@ -246,7 +265,7 @@ static UINT indicators[] =
 // CMainFrame Konstruktion/Zerstörung
 
 CMainFrame::CMainFrame()
-		: m_pContextMenuTargetWindow(NULL)
+: m_pContextMenuTargetWindow(NULL)
 {
 }
 
@@ -388,12 +407,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CreateNavigationViews();
 	CreateOutputViews();
 
-	// loading toolbars
-	//CString strControlBarRegEntry = theApp.m_strRegistryRoot + _T("\\CtrlBar\\");
-
 	// Enable window list manager...
 	if (!CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsers)
-		EnableWindowsDialog(ID_WINDOW_LIST, ID_WINDOW_LIST_MENU, TRUE);
+		EnableWindowsDialog(ID_WINDOW_LIST, ID_WINDOW_LIST_MENU,TRUE);
 	else
 	{
 		// add entry for window list to the end of window menu
@@ -1031,12 +1047,12 @@ LRESULT CMainFrame::OnResetToolbar(WPARAM wParam, LPARAM /*lParam*/)
 		CPalette palette;
 
 		std::auto_ptr<CMFCColorMenuButton> b1
-			(CreateColorButton(ID_FORMAT_TEXT_BACK_COLOR,IDR_TEXT_BACK_COLOR,palette,colors,IDS_BACKGROUND_COLORS));
+			(CreateColorMenuButton(ID_FORMAT_TEXT_BACK_COLOR,IDR_TEXT_BACK_COLOR,palette,colors,IDS_BACKGROUND_COLORS));
 
 		m_wndFormatRUBar.ReplaceButton(b1->m_nID,*b1);
 
 		std::auto_ptr<CMFCColorMenuButton> b2
-			(CreateColorButton(ID_FORMAT_TEXT_FORE_COLOR,IDR_TEXT_FORE_COLOR,palette,colors,IDS_TEXT_COLORS));
+			(CreateColorMenuButton(ID_FORMAT_TEXT_FORE_COLOR,IDR_TEXT_FORE_COLOR,palette,colors,IDS_TEXT_COLORS));
 
 		m_wndFormatRUBar.ReplaceButton(b2->m_nID,*b2);
 	}
@@ -1061,38 +1077,11 @@ void CMainFrame::OnWindowList()
 
 BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
 {
-	//CWnd* pWndFocus = GetFocus();
-
-	//if ((pWndFocus != NULL) &&
-	//        (/*(m_wndNavigationBar.IsChild(pWndFocus)) ||*/
-	//        (m_wndOutputBar.IsChild(pWndFocus)))) {
-	//    // see if the window can handle this message
-	//    if (pWndFocus->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo)) {
-	//        return TRUE;
-	//    }
-	//}
-
-	//	if ((m_wndNavigationBar) &&
-	//		m_wndNavigationBar.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-	//		return TRUE;
-	//
-	//	if ((m_wndOutputBar) &&
-	//		m_wndOutputBar.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-	//		return TRUE;
-
-	//	if ((m_wndNavigationBar.GetOutputDoc() != NULL) &&
-	//		m_wndNavigationBar.GetOutputDoc()->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-	//		return TRUE;
-
 	if (output_doc_.OnCmdMsg(nID,nCode,pExtra,pHandlerInfo))
 		return TRUE;
 
 	if (bib_view_pane_.OnCmdMsg(nID,nCode,pExtra,pHandlerInfo))
 		return TRUE;
-
-	//if ((m_wndOutputBar.GetOutputDoc() != NULL) &&
-	//        m_wndOutputBar.GetOutputDoc()->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-	//    return TRUE;
 
 	return CMDIFrameWndEx::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }
@@ -1462,7 +1451,7 @@ void CMainFrame::OnExecuteUserTool(UINT nIDEvent)
 	theApp.GetUserToolsManager()->InvokeTool(nIDEvent);
 }
 
-void CMainFrame::OnToolsCancel()
+BOOL CMainFrame::OnToolsCancel( UINT )
 {
 	//Dependent on the current mode, we do some fancy stuff here.
 	// Current edit view does NOT have focus: It gets it.
@@ -1473,7 +1462,7 @@ void CMainFrame::OnToolsCancel()
 	CFrameWnd* pFrame = GetActiveFrame();
 
 	if (!pFrame)
-		return;
+		return FALSE;
 
 	//Get active view/edit
 	LaTeXView* pEdit = NULL;
@@ -1483,13 +1472,17 @@ void CMainFrame::OnToolsCancel()
 		pEdit = dynamic_cast<LaTeXView*>(pView);
 
 	if (!pEdit)
-		return;
+		return FALSE;
 
 	if (GetFocus() != pEdit)
 	{
 		//Activate view
 		pEdit->SetFocus();
 	}
+	else
+		return FALSE;
+
+	return TRUE;
 }
 
 void CMainFrame::OnWindowCloseSelectedTab()
@@ -1598,7 +1591,6 @@ bool CMainFrame::CreateNavigationViews(void)
 
 	env_view_pane_.AttachToTabWnd(&structure_view_,DM_STANDARD,TRUE,&p);
 	file_view_pane_.AttachToTabWnd(&structure_view_,DM_STANDARD,FALSE);
-	//bib_view_pane_.AttachToTabWnd(&structure_view_,DM_STANDARD,FALSE);
 
 	if (CBaseTabbedPane* pane = dynamic_cast<CBaseTabbedPane*>(p))
 	{
@@ -1609,7 +1601,6 @@ bool CMainFrame::CreateNavigationViews(void)
 		structure_view_.SetIcon(::ImageList_ExtractIcon(0,himl,0),FALSE);
 		env_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,1),FALSE);
 		file_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,2),FALSE);
-		//bib_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,3),FALSE);
 		bib_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,3),FALSE);
 
 		::ImageList_Destroy(himl);
@@ -1624,7 +1615,6 @@ void CMainFrame::OnOpenProject(CLaTeXProject* p)
 {
 	p->AddView(structure_view_.GetProjectView());
 	p->AddView(&file_view_);
-	//p->AddView(&bib_view_);
 	p->AddView(&env_view_);
 	p->AddView(&bib_view_pane_);
 }
@@ -1633,7 +1623,6 @@ void CMainFrame::OnCloseProject(CLaTeXProject* p)
 {
 	p->RemoveView(structure_view_.GetProjectView());
 	p->RemoveView(&file_view_);
-	//p->RemoveView(&bib_view_);
 	p->RemoveView(&env_view_);
 	p->RemoveView(&bib_view_pane_);
 }

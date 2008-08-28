@@ -482,9 +482,6 @@ void LaTeXView::UpdateSettings()
 #pragma endregion
 
 	rCtrl.UsePopUp(FALSE);
-	rCtrl.SetTabWidth(CConfiguration::GetInstance()->m_nTabWidth);
-	rCtrl.SetUseTabs(TRUE); // TODO: Let the user choose
-	rCtrl.SetIndent(rCtrl.GetTabWidth());
 
 	SetAStyle(SCE_TEX_COMMAND, GetColor(COLORINDEX_KEYWORD));
 	rCtrl.SetSelFore(TRUE,GetColor(COLORINDEX_SELTEXT));
@@ -1375,6 +1372,7 @@ DocumentTokenizer* LaTeXView::NewDocumentTokenizer() const
 void LaTeXView::OnSettingsChanged()
 {
 	UpdateSettings();
+	CodeView::OnSettingsChanged();
 }
 
 BOOL LaTeXView::OnBlockComment( UINT nID )

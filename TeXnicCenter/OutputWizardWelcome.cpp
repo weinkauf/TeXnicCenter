@@ -42,9 +42,9 @@ IMPLEMENT_DYNCREATE(COutputWizardWelcome,OutputWizardPage)
 COutputWizardWelcome::COutputWizardWelcome(COutputWizard* w)
 		: OutputWizardPage(COutputWizardWelcome::IDD,w)
 {
-	//{{AFX_DATA_INIT(COutputWizardWelcome)
-	// HINWEIS: Der Klassen-Assistent fügt hier Elementinitialisierung ein
-	//}}AFX_DATA_INIT
+	m_psp.dwFlags |= PSP_USEHEADERTITLE;
+	m_psp.pszHeaderTitle = MAKEINTRESOURCE(IDS_WIZARD_WELCOME);
+	m_psp.hInstance = AfxGetResourceHandle();
 }
 
 COutputWizardWelcome::~COutputWizardWelcome()

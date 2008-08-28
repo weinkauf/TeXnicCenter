@@ -37,17 +37,8 @@
 #include "Configuration.h"
 
 #include "ChildFrm.h"
-#include "MDIFrameManager.h"
 #include "LaTeXView.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame
 
 IMPLEMENT_DYNCREATE(CChildFrame,CMDIChildWndEx)
 
@@ -59,8 +50,6 @@ BEGIN_MESSAGE_MAP(CChildFrame,CMDIChildWndEx)
 	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame Konstruktion/Destruktion
 
 CChildFrame::CChildFrame()
 {
@@ -131,7 +120,7 @@ void CChildFrame::ActivateFrame(int nCmdShow)
 void CChildFrame::OnDestroy()
 {
 	// remove from MDI-Frame-Manager
-	theApp.m_pMDIFrameManager->RemoveChildFrame(this);
+	//theApp.m_pMDIFrameManager->RemoveChildFrame(this);
 
 	// if this was the last open window,
 	// then remember, if the next window should be opened maximized
@@ -143,11 +132,11 @@ void CChildFrame::OnDestroy()
 
 void CChildFrame::OnSetFocus(CWnd* pOldWnd)
 {
-	if (theApp.m_pMDIFrameManager->GetChildFrameCount())
-	{
-		CMDIChildWndEx::OnSetFocus(pOldWnd);
-		theApp.m_pMDIFrameManager->ActivateChildFrame(this);
-	}
+	//if (theApp.m_pMDIFrameManager->GetChildFrameCount())
+	//{
+	//	CMDIChildWndEx::OnSetFocus(pOldWnd);
+	//	theApp.m_pMDIFrameManager->ActivateChildFrame(this);
+	//}
 
 	CWnd* w = GetWindow(GW_CHILD);
 

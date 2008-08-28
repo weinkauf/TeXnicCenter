@@ -155,6 +155,7 @@ protected:
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnTvnBeginDrag(NMHDR *pNMHDR, LRESULT *pResult);
+	void OnEnter();
 
 	DECLARE_MESSAGE_MAP()
 
@@ -183,5 +184,4 @@ public:
 	bool IsDragDropEnabled() const;
 	/// Sends the ID_ITEM_GOTO command
 	void GotoItem();
-	void OnOK();
 };

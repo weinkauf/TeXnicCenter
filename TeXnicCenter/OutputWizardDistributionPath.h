@@ -54,12 +54,12 @@ TeX-distribution has been installed to.
 class COutputWizardDistributionPath : public OutputWizardPage
 {
 
-	DECLARE_DYNCREATE(COutputWizardDistributionPath)
+	DECLARE_DYNAMIC(COutputWizardDistributionPath)
 
 	CMFCEditBrowseCtrl browse_;
 
 public:
-	COutputWizardDistributionPath(COutputWizard* w = 0);
+	COutputWizardDistributionPath(COutputWizard* w);
 	~COutputWizardDistributionPath();
 
 protected:

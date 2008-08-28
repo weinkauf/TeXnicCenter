@@ -40,6 +40,16 @@
 #define IDS_PUBLICATION_TYPE            53
 #define IDS_PUBLISHER                   54
 #define STE_OUTPUTWIZARD_DVIPDFMTYPE    55
+#define IDS_WELCOME_WIZARD              56
+#define IDS_WIZARD_MIKTEX_DETECTED      57
+#define IDS_WIZARD_CONFIGURE_PDF        58
+#define IDS_WIZARD_FINALIZE             59
+#define IDS_WIZARD_WELCOME              60
+#define IDS_WIZARD_CONFIGURE_PS         61
+#define IDS_WIZARD_CONFIGURE_DVI        62
+#define IDS_WIZARD_DISTRIBUTION_PATH    63
+#define IDS_SEARCHING                   64
+#define IDS_ITEMS_FOUND                 65
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
 #define IDD_TIP                         103
@@ -161,7 +171,6 @@
 #define STE_BIBTEX_ERR_INVALID_TYPE     187
 #define STE_BIBTEX_ERR_SUSPICOUS_LINE   188
 #define IDD_FINDREPLACEDLG              189
-#define IDR_FORMAT                      190
 #define ID_START_SEARCH                 190
 #define STE_SELECT_PROJECT_PATH         192
 #define IDR_FORMAT_RECENTLY_USED        192
@@ -181,7 +190,6 @@
 #define STE_EMPTYDOCUMENT_TITLE         202
 #define IDD_GOTO                        203
 #define STE_EMPTYDOCUMENT_DESCRIPTION   203
-#define IDD_REGISTRATION                204
 #define STE_DOCUMENT_ALREADYEXISTS      204
 #define IDD_OPTIONS_FILE                205
 #define STE_DOCUMENTDIR_CREATE_ERR      205
@@ -327,7 +335,6 @@
 #define IDR_POPUP_ATTRIBUTE             333
 #define IDC_INCREMENTAL_SEARCH          335
 #define STE_GREP_START                  336
-#define IDC_CURSOR1                     336
 #define IDC_REVERSE_INCREMENTAL_SEARCH  336
 #define STE_GREP_FAILED                 337
 #define STE_GREP_CANCELED               338
@@ -343,8 +350,11 @@
 #define IDR_BIB_SEARCH                  346
 #define IDR_MENU1                       348
 #define IDR_BIB_SEARCH_OPTIONS          348
+#define IDB_WIZARD                      349
 #define STE_PARSE_BEGIN                 350
+#define IDB_BITMAP2                     350
 #define STE_PARSE_END                   351
+#define IDB_BITMAP3                     351
 #define STE_PARSE_PARSING               352
 #define STE_PARSE_FOUND                 353
 #define STE_PARSE_FOUND_UNMATCHED       354
@@ -487,11 +497,9 @@
 #define IDC_URL_TEXNICCENTER2           1113
 #define IDC_FILE_FORMAT                 1116
 #define IDC_SELECT_FILEFORMAT           1116
-#define IDC_RADIO2                      1117
 #define IDC_RADIO_VIEW_TYPE1            1117
 #define IDC_OUTSOURCE_OPEN_BACKGROUND   1117
 #define IDC_SELECT_ENCODING             1117
-#define IDC_RADIO3                      1118
 #define IDC_OUTSOURCE_OPEN_FOREGROUND   1118
 #define IDC_TYPE_DOS                    1119
 #define stc32                           0x045f
@@ -707,6 +715,12 @@
 #define IDC_OUTSOURCE_CMDUSERDEF        1360
 #define IDC_OUTSOURCE_OPEN              1362
 #define IDC_COPYRIGHT                   1363
+#define IDC_SHOW_LINE_BELOW_FOLD        1365
+#define IDC_SHOW_LINE_ABOVE_FOLD        1366
+#define IDC_SHOW_LINE_BELOW_NO_FOLD     1367
+#define IDC_SHOW_LINE_ABOVE_NO_FOLD     1368
+#define IDC_USE_SPACES                  1369
+#define IDC_USE                         1371
 #define IDD_SPELL_CHECK                 8600
 #define IDC_EDIT_WHOLE_WORD             8603
 #define IDC_EDIT_MATCH_CASE             8604
@@ -1457,17 +1471,18 @@
 #define ID_SEARCH_EDIT                  38573
 #define ID_CLEAR_SEARCH                 38574
 #define IDS_NO_ACTION                   38575
-#define ID_MENU_AUTOR                   38575
-#define ID_MENU_TITEL                   38576
-#define ID_MENU_JAHR                    38577
-#define ID_MENU_AUTOREN                 38578
 #define ID_AUTHOR                       38579
 #define ID_YEAR                         38580
 #define ID_TITLE                        38581
 #define ID_PUBLICATION_TYPE             38582
 #define ID_PUBLISHER                    38584
+#define ID_ANSICHT_CODEFALTUNG          38586
+#define ID_ANSICHT_OUTLINING            38587
+#define ID_ANSICHT_INDENTATIONGUIDES    38588
+#define ID_VIEW_INDENTATION_GUIDES      38589
+#define ID_VIEW_INDENTATIONGUIDES       38590
+#define IDR_FORMAT                      38700
 #define ID_NONE                         40002
-#define ID_NONE40003                    40003
 #define IDS_TEXTMODULES_NONEDEFINED     57671
 
 // Next default values for new objects
@@ -1475,9 +1490,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        349
-#define _APS_NEXT_COMMAND_VALUE         38586
-#define _APS_NEXT_CONTROL_VALUE         1365
+#define _APS_NEXT_RESOURCE_VALUE        352
+#define _APS_NEXT_COMMAND_VALUE         38591
+#define _APS_NEXT_CONTROL_VALUE         1372
 #define _APS_NEXT_SYMED_VALUE           191
 #endif
 #endif

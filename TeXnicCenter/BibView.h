@@ -6,8 +6,7 @@
 #include "LabelDragSource.h"
 #include "PrivateToolBar.h"
 #include "SortListCtrl.h"
-
-class BibItem;
+#include "BiBTeXEntry.h"
 
 // BibView
 
@@ -25,6 +24,43 @@ class BibView :
 	};
 
 	unsigned search_flags_;
+	const bool can_group_;
+	// Synchronization
+	volatile LONG stop_search_;
+	CSemaphore search_semaphore_;
+	// Indicates whether the last populate was a search operation
+	bool populate_was_search_;
+
+	struct Item
+	{
+		int group_id;
+		int image;
+		StructureItemContainer::size_type structure_item_index;
+		BibItem bib;
+
+		Item(int group_id, int image, const BibItem& b)
+		: group_id(group_id), bib(b), image(image)
+		{
+		}
+	};
+
+	typedef std::vector<Item> BibItemContainerType;
+	BibItemContainerType bib_items_;
+
+public:
+	typedef std::tr1::function<bool (const BibItem&)> PredicateFunctionType;
+
+private:
+	struct PopulateParam
+	{
+		PredicateFunctionType predicate;
+		BibView* view;
+
+		PopulateParam(const PredicateFunctionType& p, BibView* v)
+		: predicate(p), view(v)
+		{
+		}
+	};
 
 	DECLARE_DYNAMIC(BibView)
 
@@ -65,6 +101,7 @@ protected:
 	afx_msg void OnSetFocus(CWnd* pOldWnd);	
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);	
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnDestroy();
 	void OnNMDblClk(NMHDR*, LRESULT*);
 	void OnLvnItemChanged(NMHDR*, LRESULT*);
 	void OnEnter();
@@ -82,8 +119,10 @@ private:
 	/// using the current search options.
 	bool ItemContains(const BibItem& item, const std::vector<CString>& search_tokens);
 
-	void Populate(const std::tr1::function<bool (const BibItem&)>& predicate);
+	void Populate(const PredicateFunctionType& predicate);
 	void Populate();
+
+	void DoPopulate( const PredicateFunctionType& predicate );
 	void OnSearchTimerElapsed();
 
 	void StartSearch();
@@ -97,17 +136,21 @@ private:
 	bool IsSearchOptionSet(unsigned opt) const;
 	void OnUpdateSearchOptions(CCmdUI* pCmdUI);
 
-	static int TranslateCompareFunction(LPARAM l1, LPARAM l2, BibView* pane, 
-		const std::tr1::function<int (const CStructureItem& a, const CStructureItem& b)>& f);
+	static int TranslateCompareFunction(LPARAM l1, LPARAM l2, BibView* pane, const std::tr1::function<int (const BibItem& a, const BibItem& b)>& f);
 	
 	// Actual column compare functions
-	static int CompareLabel(const CStructureItem& a, const CStructureItem& b);
-	static int CompareAuthor(const CStructureItem& a, const CStructureItem& b);
-	static int CompareYear(const CStructureItem& a, const CStructureItem& b);
-	static int CompareTitle( const CStructureItem& a, const CStructureItem& b );
-	static int ComparePublicationType( const CStructureItem& a, const CStructureItem& b );
-	static int ComparePublisher( const CStructureItem& a, const CStructureItem& b );
+	static int CompareLabel(const BibItem& a, const BibItem& b);
+	static int CompareAuthor(const BibItem& a, const BibItem& b);
+	static int CompareYear(const BibItem& a, const BibItem& b);
+	static int CompareTitle( const BibItem& a, const BibItem& b );
+	static int ComparePublicationType( const BibItem& a, const BibItem& b );
+	static int ComparePublisher( const BibItem& a, const BibItem& b );
 
 public:
 	void GotoItem();	
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+
+private:
+	static UINT PopulateThread(LPVOID p);
+	void OnPopulateThread(const PredicateFunctionType& predicate);
 };

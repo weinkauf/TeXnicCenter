@@ -45,98 +45,90 @@ IMPLEMENT_DYNCREATE(StructureTreeCtrl, NavigatorTreeCtrl)
 BEGIN_MESSAGE_MAP(StructureTreeCtrl, NavigatorTreeCtrl)
 END_MESSAGE_MAP()
 
-
-StructureTreeCtrl::StructureTreeCtrl()
-{
-
-}
-
-StructureTreeCtrl::~StructureTreeCtrl()
-{
-}
-
-void StructureTreeCtrl::OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint)
+void StructureTreeCtrl::OnUpdate(CProjectView* /*pSender*/, LPARAM lHint, LPVOID /*pHint*/)
 {
 	switch (lHint)
 	{
 		case COutputDoc::hintParsingFinished :
 		{
-			//How many items do we have in this view currently?
-			//If none, i.e. first filled after loading a project, then expand the zeroth level
-			const bool bExpandAll = (GetCount() == 0);
-
-			//-----------------------------------------------------------
-			// remember expanded items
-			CString strSelectedItem = GetItemPath(GetSelectedItem());
-			CStringArray astrExpandedItems;
-			GetExpandedItems(astrExpandedItems);
-
-			//-----------------------------------------------------------
-			// fill view with parsing results
-			const StructureItemContainer &a = GetProject()->m_aStructureItems;
-			CArray<HTREEITEM, HTREEITEM> ahItems;
-
-			// initialization
-			ahItems.SetSize(a.size(), 0);
-
-			//Lock
-			SetRedraw(FALSE);
-			//LockWindowUpdate();
-
-			// empty view
-			DeleteAllItems();
-
-			// fill view
-			//for (int i = 0; i < a.GetSize(); i++) {
-			for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it)
-			{
-				const CStructureItem &si = *it;//a.GetAt(i);
-				const int i = std::distance(a.begin(),it);
-
-				switch (si.GetType())
-				{
-					case CStructureParser::equation :
-					case CStructureParser::figure :
-					case CStructureParser::table :
-					case CStructureParser::header :
-						//case CStructureParser::unknownEnv:
-					{
-						//Better display all stuff, even without a title
-						//if (si.m_strTitle.GetLength() == 0)
-						//	break; //no title -> no display
-
-						if (si.m_nParent == -1)
-							ahItems[i] = InsertItem(si.GetTitle(), si.GetType(), si.GetType());
-						else
-							ahItems[i] = InsertItem(
-							                 si.GetTitle(), si.GetType(), si.GetType(),
-							                 (si.GetParent() > -1) ? ahItems[si.GetParent()] : TVI_ROOT);
-
-						// remember Array-Index
-						SetItemData(ahItems[i], i);
-					}
-					break;
-				}
-			}
-
-			//-----------------------------------------------------------
-			//try to expand items
-			if (!bExpandAll)
-			{
-				ExpandItems(astrExpandedItems);
-				SelectItem(GetItemByPath(strSelectedItem));
-			}
-			else
-			{
-				ExpandItemsByLevel(0);
-				EnsureVisible(GetNextItem(NULL, TVGN_ROOT));
-			}
-
-			//Unlock
-			//UnlockWindowUpdate();
-			SetRedraw();
-			Invalidate();
+			OnParsingFinished();
 		}
 		break;
 	}
+}
+
+void StructureTreeCtrl::OnParsingFinished()
+{
+	//How many items do we have in this view currently?
+	//If none, i.e. first filled after loading a project, then expand the zeroth level
+	const bool bExpandAll = (GetCount() == 0);
+
+	// remember expanded items
+	CString strSelectedItem = GetItemPath(GetSelectedItem());
+	CStringArray astrExpandedItems;
+	GetExpandedItems(astrExpandedItems);
+
+	// fill view with parsing results
+	const StructureItemContainer &a = GetProject()->m_aStructureItems;
+	CArray<HTREEITEM, HTREEITEM> ahItems;
+
+	// initialization
+	ahItems.SetSize(a.size(), 0);
+
+	//Lock
+	SetRedraw(FALSE);
+	// empty view
+	DeleteAllItems();
+
+	// fill view
+	for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it)
+	{
+		const CStructureItem &si = *it;//a.GetAt(i);
+		const int i = std::distance(a.begin(),it);
+
+		switch (si.GetType())
+		{
+		case CStructureParser::equation :
+		case CStructureParser::figure :
+		case CStructureParser::table :
+		case CStructureParser::header :
+			//case CStructureParser::unknownEnv:
+			{
+				//Better display all stuff, even without a title
+				//if (si.m_strTitle.GetLength() == 0)
+				//	break; //no title -> no display
+
+				CString title = si.GetTitle();
+
+				if (si.GetType() == CStructureParser::header)
+					title.Replace(_T("\\-"),_T("")); // Cleanup \-
+
+				if (si.m_nParent == -1)
+					ahItems[i] = InsertItem(title, si.GetType(), si.GetType());
+				else
+					ahItems[i] = InsertItem(title, si.GetType(), si.GetType(),
+					(si.GetParent() > -1) ? ahItems[si.GetParent()] : TVI_ROOT);
+
+				// remember Array-Index
+				SetItemData(ahItems[i], i);
+			}
+			break;
+		}
+	}
+
+	//try to expand items
+	if (!bExpandAll)
+	{
+		ExpandItems(astrExpandedItems);
+		SelectItem(GetItemByPath(strSelectedItem));
+	}
+	else
+	{
+		ExpandItemsByLevel(0);
+		EnsureVisible(GetNextItem(NULL, TVGN_ROOT));
+	}
+
+	//Unlock
+	SetRedraw();
+	Invalidate();
 }

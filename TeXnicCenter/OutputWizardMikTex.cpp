@@ -55,8 +55,9 @@ COutputWizardMiKTeX::COutputWizardMiKTeX(COutputWizard* w)
 		: OutputWizardPage(COutputWizardMiKTeX::IDD,w)
 		, m_nChoice(yes)
 {
-	//{{AFX_DATA_INIT(COutputWizardMiKTeX)
-	//}}AFX_DATA_INIT
+	m_psp.dwFlags |= PSP_USEHEADERTITLE;
+	m_psp.pszHeaderTitle = MAKEINTRESOURCE(IDS_WIZARD_MIKTEX_DETECTED);
+	m_psp.hInstance = AfxGetResourceHandle();
 }
 
 COutputWizardMiKTeX::~COutputWizardMiKTeX()

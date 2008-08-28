@@ -126,21 +126,26 @@ int FromScintillaMode(int m)
 #pragma endregion
 
 TextDocument::TextDocument( bool use_bom, CodeDocument::Encoding e ) 
-: use_bom(use_bom), encoding(e)
+: use_bom_(use_bom), encoding_(e)
 {
-
 }
 
-TextDocument::TextDocument(UINT codepage) 
-: use_bom(false)
-, encoding(CodeDocument::ANSI)
-, code_page_(codepage)
+TextDocument::TextDocument(CodeDocument::Encoding e, UINT codepage) 
+: use_bom_(false)
+, encoding_(e)
+{
+	SetCodePage(codepage);
+}
+
+TextDocument::TextDocument() 
+: encoding_(CodeDocument::ANSI)
+, code_page_(::GetACP())
 {
 }
 
 CodeDocument::Encoding TextDocument::GetEncoding() const
 {
-	return encoding;
+	return encoding_;
 }
 
 CodeDocument::Encoding TextDocument::TestForUnicode(const BYTE* data, SIZE_T size)
@@ -235,11 +240,11 @@ DWORD TextDocument::Write( ATL::CAtlFile& f, const char* text, std::size_t n)
 {
 	DWORD result = ERROR_SUCCESS;
 
-	if (encoding != CodeDocument::ANSI && use_bom) {
+	if (encoding_ != CodeDocument::ANSI && use_bom_) {
 		const BYTE* bom = 0;
 		SIZE_T size = 0;
 
-		switch(encoding) {
+		switch(encoding_) {
 			case CodeDocument::UTF8: bom = AssignByteOrderMark(BOM::utf8,size); break;
 			case CodeDocument::UTF16LE: bom = AssignByteOrderMark(BOM::utf16le,size); break;
 			case CodeDocument::UTF16BE: bom = AssignByteOrderMark(BOM::utf16be,size); break;
@@ -303,11 +308,13 @@ bool TextDocument::Read(LPCTSTR pszFileName, CStringW& string)
 
 						text = 0; n = 0; // Will be reassigned
 					}
+					use_bom_ = true; // We use always a BOM for UTF16
 					break;
 				case CodeDocument::UTF32LE:
 				case CodeDocument::UTF32BE:
 					UTF32toUTF16(reinterpret_cast<const char*>(data + pos),size - pos,
 						buffer,encoding == CodeDocument::UTF32LE);
+					use_bom_ = true; // We use always a BOM for UTF32
 					break;
 			}
 
@@ -318,8 +325,10 @@ bool TextDocument::Read(LPCTSTR pszFileName, CStringW& string)
 				string = CStringW(text,n);
 			}
 
-			this->encoding = encoding;
-			use_bom = pos != 0;
+			this->encoding_ = encoding;
+
+			if (!use_bom_ && pos != 0)
+				use_bom_ = true;
 		}
 		else
 			result = ::GetLastError();
@@ -343,7 +352,7 @@ bool TextDocument::Write( LPCTSTR pszFileName, const CStringW& string )
 		const char* p = reinterpret_cast<const char*>(static_cast<LPCWSTR>(string));
 		std::size_t size = string.GetLength() * sizeof(wchar_t);
 
-		switch (encoding) {
+		switch (encoding_) {
 			case CodeDocument::ANSI:
 				UTF16toANSI(p,size,convbuffer,code_page_);
 				break;
@@ -352,7 +361,7 @@ bool TextDocument::Write( LPCTSTR pszFileName, const CStringW& string )
 				break;
 			case CodeDocument::UTF16LE:
 			case CodeDocument::UTF16BE:
-				if (encoding == CodeDocument::UTF16BE) {
+				if (encoding_ == CodeDocument::UTF16BE) {
 					convbuffer.assign(p,p + size);
 
 					if (!convbuffer.empty())
@@ -366,7 +375,7 @@ bool TextDocument::Write( LPCTSTR pszFileName, const CStringW& string )
 				break;
 			case CodeDocument::UTF32LE:
 			case CodeDocument::UTF32BE:
-				UTF32toUTF16(p,size,convbuffer,encoding == CodeDocument::UTF32LE);
+				UTF32toUTF16(p,size,convbuffer,encoding_ == CodeDocument::UTF32LE);
 				break;
 		}
 
@@ -384,6 +393,31 @@ bool TextDocument::Write( LPCTSTR pszFileName, const CStringW& string )
 	}
 
 	return result == ERROR_SUCCESS;
+}
+
+void TextDocument::SetEncoding( CodeDocument::Encoding e )
+{
+	encoding_ = e;
+}
+
+UINT TextDocument::GetCodePage() const
+{
+	return code_page_;
+}
+
+void TextDocument::SetCodePage( UINT codepage )
+{
+	code_page_ = codepage;
+}
+
+bool TextDocument::GetUseBOM() const
+{
+	return use_bom_;
+}
+
+void TextDocument::SetUseBOM( bool use )
+{
+	use_bom_ = use;
 }
 
 // CodeDocument
@@ -443,7 +477,7 @@ void CodeDocument::Dump(CDumpContext& dc) const
 void CodeDocument::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
-		SaveFile(ar.GetFile()->m_hFile);
+		SaveFile(ar.GetFile()->m_hFile,false);
 	else
 		LoadFile(ar.GetFile()->m_hFile);
 }
@@ -585,7 +619,7 @@ DWORD CodeDocument::SaveFile(LPCTSTR pszFileName, bool bClearModifiedFlag)
 
 	if (::GetTempFileName(szTempFileDir, _T("CRE"), 0, szTempFileName) != 0) {
 		if (SUCCEEDED(temp_file.Create(szTempFileName, GENERIC_WRITE, 0, CREATE_ALWAYS))) {
-			SaveFile(temp_file);
+			SaveFile(temp_file,false);
 
 			if (create_backup_file_) {
 				WIN32_FIND_DATA wfd;
@@ -641,7 +675,7 @@ DWORD CodeDocument::SaveFile( HANDLE file, const char* text, std::size_t n)
 	return result;
 }
 
-DWORD CodeDocument::SaveFile( HANDLE file )
+DWORD CodeDocument::SaveFile( HANDLE file, bool throw_on_invalid_sequence )
 {
 	const int length = GetView()->GetCtrl().GetLength();
 	DWORD result = ERROR_SUCCESS;
@@ -659,7 +693,7 @@ DWORD CodeDocument::SaveFile( HANDLE file )
 
 		switch (encoding_) {
 			case ANSI:
-				UTF8toANSI(&buffer[0],buffer.size(),convbuffer,code_page_);
+				UTF8toANSI(&buffer[0],buffer.size(),convbuffer,code_page_,'?',throw_on_invalid_sequence);
 				break;
 			case UTF8:
 				text = &buffer[0];
@@ -830,6 +864,8 @@ BOOL CodeDocument::DoSaveModified()
 {
 	BOOL result = TRUE;
 
+	// TODO: Sometimes this function will be called
+	// although the attached view has been already destroyed. Find out why.
 	if (!IsModified())
 		result = TRUE;        // ok to continue
 	else {
@@ -959,3 +995,26 @@ void CodeDocument::OnEditJoinParagraph()
 	c.LinesJoin();
 }
 
+const FoldingPointContainerType CodeDocument::GetFoldingPoints()
+{
+	FoldingPointContainerType points;
+
+	CScintillaCtrl& c = GetView()->GetCtrl();
+
+	const int lines = c.GetLineCount();
+	int level;
+
+	for (int i = 0; i < lines; ++i) {
+		level = c.GetFoldLevel(i);
+
+		if (level & SC_FOLDLEVELHEADERFLAG) // SC_FOLDLEVELHEADERFLAG indicates a fold point
+			points.push_back(FoldingPoint(i,c.GetFoldExpanded(i) == 0/*,level*/));
+	}
+
+	return points;
+}
+
+void CodeDocument::OnCloseDocument()
+{
+	CScintillaDoc::OnCloseDocument();
+}

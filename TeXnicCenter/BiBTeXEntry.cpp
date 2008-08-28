@@ -144,7 +144,6 @@ const BibItem CBiBTeXEntry::ToBibItem() const
 
 	BibItem result;
 	result.author_ = author;
-	result.has_year_ = !year.IsEmpty();
 
 	LPCTSTR first = year;
 	LPCTSTR last =  first + year.GetLength();
@@ -152,13 +151,40 @@ const BibItem CBiBTeXEntry::ToBibItem() const
 	// Search for the first digit, in case the year field contains e.g. a month name
 	LPCTSTR pos = std::find_if(first,last,_istdigit);
 
-	if (pos != last)
+	if (pos != last) {
 		result.year_ = _ttoi(pos);
+		result.has_year_ = true;
+	}
 
 	result.publisher_ = publisher;
 	result.title_ = title;
 	result.label_ = m_Key;
-	result.type_ = BibTypeVerbose[m_Type];
+	result.type_text_ = BibTypeVerbose[m_Type];
+
+	if (m_Type >= Booklet && m_Type <= Unpublished)
+		result.type_ = static_cast<BibItem::Type>(m_Type); // Remap
+	else {
+		// Following BibType values are incompatible with BibItem::Type
+		switch (m_Type)
+		{
+			case Article:
+				result.type_ = BibItem::Article;
+				break;
+			case Book:
+				result.type_ = BibItem::Book;
+				break;
+			case String:
+				result.type_ = BibItem::String;
+				break;
+			case Comment:
+				result.type_ = BibItem::Comment;
+				break;
+			case Preamble:
+				result.type_ = BibItem::Preamble;
+				break;
+			// otherwise unknown
+		}
+	}
 
 	return result;
 }
@@ -170,7 +196,7 @@ const CString CBiBTeXEntry::ToCaption() const
 	year.Format(_T("%i"),item.year_);
 
 	return CString(item.GetLabel() + _T(": ") + item.GetAuthor() + _T(": ") +
-	               item.GetTitle() + _T(" (") + item.GetType() + _T(", ") + year + _T(")"));
+	               item.GetTitle() + _T(" (") + item.GetTypeString() + _T(", ") + year + _T(")"));
 }
 
 void CBiBTeXEntry::BeautifyField(CString &value, bool bReplaceAnds)

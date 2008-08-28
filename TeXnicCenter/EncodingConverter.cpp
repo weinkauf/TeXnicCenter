@@ -119,7 +119,7 @@ namespace {
 	};
 
 	template<class Tr, class ChIn, class ChOut>
-	inline bool Convert(const ChIn* text, std::size_t n, std::vector<ChOut>& data, EncodingConverter& converter, ChOut dfault = 0)
+	inline bool Convert(const ChIn* text, std::size_t n, std::vector<ChOut>& data, EncodingConverter& converter, ChOut dfault = 0, bool throw_on_invalid_sequence = false)
 	{
 		converter.IsConversionTrivial();
 		data.reserve(static_cast<std::size_t>(n * sizeof(ChOut) * 1.5)); // Reserve some space
@@ -148,6 +148,9 @@ namespace {
 				if (errno == EILSEQ) { // Invalid sequence encountered
 					std::size_t ilseqbytes = sizeof(ChIn);
 					ASSERT(inbytesleft % sizeof(ChIn) == 0);
+
+					if (throw_on_invalid_sequence)
+						throw InvalidCharacterEncoutered();
 
 					while (inbytesleft && ilseqbytes--) {
 						data.push_back(dfault ? dfault : static_cast<ChOut>(Tr::ToUnsigned(*in)));
@@ -283,13 +286,14 @@ void UTF16toUTF8(const char* text, std::size_t n, std::vector<char>& data, bool 
 	ConvertUTF16toUTF8(text,n,data,little_endian);
 }
 
-void UTF8toANSI(const char* text, std::size_t n, std::vector<char>& data, UINT codepage, char dfault)
+void UTF8toANSI(const char* text, std::size_t n, std::vector<char>& data, UINT codepage /*= ::GetACP()*/, 
+				char dfault /*= '?'*/, bool throw_on_invalid_sequence /*= false*/)
 {
 	data.clear();
 
 	if (n > 0) {
 		EncodingConverter converter(FormatCodePage(codepage).c_str(),"UTF-8");
-		Convert<UTF8ConversionTraits<char,char> >(text,n,data,converter,dfault);
+		Convert<UTF8ConversionTraits<char,char> >(text,n,data,converter,dfault,throw_on_invalid_sequence);
 	}
 }
 

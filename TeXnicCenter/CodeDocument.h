@@ -108,9 +108,16 @@ public:
 
 	virtual DWORD LoadFile(HANDLE file);
 	DWORD LoadFile(LPCTSTR pszFileName);
-	DWORD SaveFile(LPCTSTR pszFileName, bool bClearModifiedFlag = true);
-	virtual DWORD SaveFile(HANDLE file);	
+
+	/// Writes the document to the specified file
+	/// \param throw_on_invalid_sequence
+	///		   Throws an InvalidSequenceEncountered exception
+	///		   if any of document's characters cannot be represented
+	///		   in the specified encoding
+	virtual DWORD SaveFile(HANDLE file, bool throw_on_invalid_sequence);	
 	DWORD SaveFile(HANDLE file, const char* text, std::size_t n);
+	DWORD SaveFile(LPCTSTR pszFileName, bool bClearModifiedFlag = true);
+
 	Encoding GetEncoding() const;
 	void SetEncoding(Encoding e);
 
@@ -161,12 +168,18 @@ public:
 	/// Returns a tuple containing the first and last line
 	/// of the paragraph the start_line parameter points to
 	const std::pair<int,int> GetParagraphRange(int start_line);
+	/// Returns a container for FoldingPoints
+	const FoldingPointContainerType GetFoldingPoints();
+
+	template<class I>
+	void SetFoldingPoints(I first, I last);
+	virtual void OnCloseDocument();
 };
 
 class TextDocument
 {
-	bool use_bom;
-	CodeDocument::Encoding encoding;
+	bool use_bom_;
+	CodeDocument::Encoding encoding_;
 	UINT code_page_;
 
 	friend class CodeDocument;
@@ -179,13 +192,20 @@ private:
 	static CodeDocument::Encoding TestForUnicode(const BYTE* data, SIZE_T size);
 
 public:
-	explicit TextDocument(UINT codepage = ::GetACP());
+	TextDocument();
+	TextDocument(CodeDocument::Encoding e, UINT codepage);
+	
 	CodeDocument::Encoding GetEncoding() const;
+	void SetEncoding(CodeDocument::Encoding e);
+	UINT GetCodePage() const;
+	void SetCodePage(UINT codepage);
+	bool GetUseBOM() const;
+	void SetUseBOM(bool use);
 
 	DWORD Write(ATL::CAtlFile& file, const char* text, std::size_t);
-	/// Reads the whole file by detecting the right encoding
+	/// Reads the whole file by detecting the right encoding_
 	bool Read(LPCTSTR pszFileName, CStringW& string);
-	/// Writes the whole file by detecting the right encoding
+	/// Writes the whole file by detecting the right encoding_
 	bool Write(LPCTSTR pszFileName, const CStringW& string);
 };
 
@@ -196,4 +216,25 @@ inline void CodeDocument::SetBookmarks(I first, I last)
 
 	for ( ; first != last; ++first)
 		GetView()->GetCtrl().MarkerAdd(first->GetLine(),Bookmark);
+}
+
+template<class I>
+inline void CodeDocument::SetFoldingPoints(I first, I last)
+{
+	CScintillaCtrl& c = GetView()->GetCtrl();
+	c.Colourise(0,-1); // Let the lexer set the folding levels
+
+	for ( ; first != last; ++first) {
+		if (first->IsContracted()) {
+			const int level = c.GetFoldLevel(first->GetLine());
+
+			if (level & SC_FOLDLEVELHEADERFLAG) {
+				const int max = c.GetLastChild(first->GetLine(),-1);
+				c.SetFoldExpanded(first->GetLine(),FALSE);
+
+				if (max > first->GetLine())
+					c.HideLines(first->GetLine() + 1,max);
+			}
+		}
+	}
 }

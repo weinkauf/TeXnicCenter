@@ -49,7 +49,7 @@ BEGIN_MESSAGE_MAP(NavigatorTreeCtrl,CTreeCtrl)
 	ON_WM_DESTROY()
 	ON_WM_CONTEXTMENU()
 	ON_NOTIFY_REFLECT(TVN_BEGINDRAG, &NavigatorTreeCtrl::OnTvnBeginDrag)
-	ON_COMMAND(IDOK, &NavigatorTreeCtrl::OnOK)
+	ON_COMMAND(IDOK, &NavigatorTreeCtrl::OnEnter)
 END_MESSAGE_MAP()
 
 
@@ -424,7 +424,8 @@ BOOL NavigatorTreeCtrl::PreTranslateMessage(MSG* pMsg)
 
 void NavigatorTreeCtrl::GotoItem()
 {
-	AfxGetMainWnd()->SendMessage(WM_COMMAND,ID_ITEM_GOTO);
+	// SendMessage doesn't work here: the focus will not be given up 
+	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_ITEM_GOTO);
 }
 
 void NavigatorTreeCtrl::OnTvnBeginDrag(NMHDR *pNMHDR, LRESULT *pResult)
@@ -448,7 +449,7 @@ CLaTeXProject * NavigatorTreeCtrl::GetProject() const
 	return static_cast<CLaTeXProject*>(CProjectView::GetProject());
 }
 
-void NavigatorTreeCtrl::OnOK()
+void NavigatorTreeCtrl::OnEnter()
 {
 	GotoItem();
 }
