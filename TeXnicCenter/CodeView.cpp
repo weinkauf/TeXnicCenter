@@ -249,8 +249,7 @@ int CodeView::Lock(bool exclusive /*= false */)
 		while (hold_count_ > 0) { // atomic operation, no lock needed
 			// Let the thread process remaining Scintilla messages 
 			// sent by the speller otherwise a dead lock will occur.
-			// Note the m_hWnd instead of GetCtrl().
-			while (::PeekMessage(&msg,m_hWnd,min,max,PM_REMOVE) > 0) {
+			while (::PeekMessage(&msg,GetCtrl(),min,max,PM_REMOVE) > 0) {
 				::TranslateMessage(&msg);
 				::DispatchMessage(&msg);
 			}

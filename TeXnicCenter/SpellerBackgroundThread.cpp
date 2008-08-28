@@ -65,72 +65,87 @@ END_MESSAGE_MAP()
 
 SpellerBackgroundThread::SpellerBackgroundThread()
 : speller_(0), spell_enabled_(false)
+, processing_(0)
 {
 }
 
 void SpellerBackgroundThread::OnUpdateBuffer(WPARAM /*wParam*/, LPARAM lParam)
 {
-	CodeView* pTextView = reinterpret_cast<CodeView*>(lParam);
+	::InterlockedExchange(&processing_,1);
 
-	ASSERT(pTextView);
+	// Check if there are any redundant message in the message queue.
+	// This should really improve speed on slower machines and machines
+	// doing background processing.
+	MSG msg;
 
-	if (IsViewValid(pTextView)) {
-		// Check if there are any redundant message in the message queue.
-		// This should really improve speed on slower machines and machines
-		// doing background processing.
-		MSG msg;
-		while (::PeekMessage(&msg, NULL, ID_BG_UPDATE_BUFFER, ID_BG_UPDATE_BUFFER, PM_NOREMOVE) != 0)
+	while (::PeekMessage(&msg, NULL, ID_BG_UPDATE_BUFFER, ID_BG_UPDATE_BUFFER, PM_NOREMOVE) != 0)
+	{
+		if (msg.lParam == lParam)
 		{
-			if (msg.lParam == lParam)
-			{
-				// Remove and discard the duplicate
-				::PeekMessage(&msg, NULL, ID_BG_UPDATE_BUFFER, ID_BG_UPDATE_BUFFER, PM_REMOVE);
-				continue;
-			}
-			break;
+			// Remove and discard the duplicate
+			::PeekMessage(&msg, NULL, ID_BG_UPDATE_BUFFER, ID_BG_UPDATE_BUFFER, PM_REMOVE);
+			continue;
 		}
+		break;
+	}
 
+	CodeView* pTextView = reinterpret_cast<CodeView*>(lParam);
+	ASSERT_NULL_OR_POINTER(pTextView,CodeView);
+
+	if (IsViewValid(pTextView)) 
+	{
 		if (spell_enabled_)
 			SpellCheckBuffer(pTextView);
 		else
 			RemoveBufferAttributes(pTextView);
 	}
+
+	::InterlockedExchange(&processing_,0);
 }
 
 void SpellerBackgroundThread::OnUpdateLine(WPARAM wParam, LPARAM lParam)
 {
+	::InterlockedExchange(&processing_,1);
+
 	CodeView *pTextView = (CodeView *)lParam;
-	ASSERT(pTextView);
-	int nLine = (int)wParam;
+	ASSERT_NULL_OR_POINTER(pTextView,CodeView);
+	
+
+	OnUpdateLine(pTextView,static_cast<int>(wParam));
+
+	::InterlockedExchange(&processing_,0);
+}
+
+void SpellerBackgroundThread::OnUpdateLine( CodeView * pTextView, int nLine )
+{
+	// Check if there are any redundant message in the message queue.
+	// This should really improve speed on slower machines and machines
+	// doing background processing.
+	MSG msg;
+
+	while (::PeekMessage(&msg, NULL, ID_BG_UPDATE_BUFFER, ID_BG_UPDATE_LINE, PM_NOREMOVE) != 0)
+	{
+		if (msg.lParam == reinterpret_cast<LPARAM>(pTextView))
+		{
+			// This buffer has a message. What could it be?
+			if (msg.message == ID_BG_UPDATE_BUFFER)
+			{
+				// A message to check the whole buffer is in the queue.
+				// There is no point checking a single line -- we're done.
+				return;
+			}
+			else if (msg.message == ID_BG_UPDATE_LINE && msg.wParam == static_cast<WPARAM>(nLine))
+			{
+				// A duplicate message. Remove and discard.
+				::PeekMessage(&msg, NULL, ID_BG_UPDATE_LINE, ID_BG_UPDATE_LINE, PM_REMOVE);
+				continue;
+			}
+			// else  We need to handle this message
+		}
+		break;
+	}
 
 	if (IsViewValid(pTextView)) {
-		// Check if there are any redundant message in the message queue.
-		// This should really improve speed on slower machines and machines
-		// doing background processing.
-		MSG msg;
-
-		while (::PeekMessage(&msg, NULL, ID_BG_UPDATE_BUFFER, ID_BG_UPDATE_LINE, PM_NOREMOVE) != 0)
-		{
-			if (msg.lParam == lParam)
-			{
-				// This buffer has a message. What could it be?
-				if (msg.message == ID_BG_UPDATE_BUFFER)
-				{
-					// A message to check the whole buffer is in the queue.
-					// There is no point checking a single line -- we're done.
-					return;
-				}
-				else if (msg.message == ID_BG_UPDATE_LINE && msg.wParam == wParam)
-				{
-					// A duplicate message. Remove and discard.
-					::PeekMessage(&msg, NULL, ID_BG_UPDATE_LINE, ID_BG_UPDATE_LINE, PM_REMOVE);
-					continue;
-				}
-				// else  We need to handle this message
-			}
-			break;
-		}
-
 		if (spell_enabled_)
 		{
 			SpellCheckSingleLine(pTextView, nLine);
@@ -138,7 +153,6 @@ void SpellerBackgroundThread::OnUpdateLine(WPARAM wParam, LPARAM lParam)
 		}
 	}
 }
-
 void SpellerBackgroundThread::OnGetSpeller(WPARAM /*wParam*/, LPARAM lParam)
 {
 	SpellerSource *pSource = (SpellerSource *)lParam;
@@ -222,10 +236,8 @@ void SpellerBackgroundThread::SpellCheckBuffer(CodeView* pTextView)
 
 void SpellerBackgroundThread::RemoveBufferAttributes(CodeView* pTextView)
 {
-	ASSERT(pTextView);
-	pTextView->Lock();
-	pTextView->GetCtrl().IndicatorClearRange(0,pTextView->GetCtrl().GetLength());
-	pTextView->Unlock();
+	ASSERT_NULL_OR_POINTER(pTextView,CodeView);
+	pTextView->GetCtrl().IndicatorClearRange(0,pTextView->GetCtrl().GetLength(),FALSE);
 }
 
 bool SpellerBackgroundThread::IsViewValid( CodeView* view )
@@ -234,7 +246,9 @@ bool SpellerBackgroundThread::IsViewValid( CodeView* view )
 
 	if (result) {
 		CSingleLock lock(&invalidate_monitor_,TRUE);
-		result = invalid_views_.find(static_cast<CodeView*>(view)) == invalid_views_.end();
+		
+		InvalidViewContainerType::iterator it = invalid_views_.find(static_cast<CodeView*>(view));
+		result = it == invalid_views_.end();
 	}
 
 	return result;
@@ -331,6 +345,9 @@ void SpellerBackgroundThread::ResetSpeller( SpellerSource* s )
 
 void SpellerBackgroundThread::InvalidateView( CodeView* view )
 {
-	CSingleLock lock(&invalidate_monitor_,TRUE);
-	invalid_views_.insert(view);
+	if (processing_) {
+		// Invalidate a view on if the buffer is being processed
+		CSingleLock lock(&invalidate_monitor_,TRUE);
+		invalid_views_.insert(view);
+	}
 }
