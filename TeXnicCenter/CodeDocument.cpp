@@ -1016,5 +1016,14 @@ const FoldingPointContainerType CodeDocument::GetFoldingPoints()
 
 void CodeDocument::OnCloseDocument()
 {
+	// Destroying big documents takes a great amount of time.
+	// While destroying the document can be found in
+	// template's list. If the user tries to reopen the *same* document rapidly
+	// it won't be shown, because CTeXnicCenterApp::OpenLatexDocument
+	// will find a valid pointer to the document that is being destroyed and
+	// return it. So we need to remove the document from the template list
+	// *before* DestroyWindow is called.
+	GetDocTemplate()->RemoveDocument(this);
+	// DestroyWindow etc.
 	CScintillaDoc::OnCloseDocument();
 }

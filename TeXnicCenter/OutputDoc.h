@@ -32,14 +32,7 @@
  *
  ********************************************************************/
 
-#if !defined(AFX_OUTPUTDOC_H__74712513_4670_11D4_8677_9E528A3B7553__INCLUDED_)
-#define AFX_OUTPUTDOC_H__74712513_4670_11D4_8677_9E528A3B7553__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// OutputDoc.h : header file
-//
 
 #include "OutputView.h"
 #include "OutputInfo.h"
@@ -48,6 +41,7 @@
 #include "StructureParser.h"
 
 class ErrorListView;
+
 
 class COutputDoc :
 			public CCmdTarget,
@@ -317,8 +311,8 @@ protected:
 	        Beeps otherwise.
 	 */
 	bool TryOpenFile(LPCTSTR lpszFilename, const int nLineNumber);
-
-// attributes
+	LRESULT DoTryOpenFile(WPARAM w, LPARAM l);
+	// attributes
 public:
 
 protected:
@@ -415,8 +409,3 @@ private:
 	/** Object used to build the output. */
 	COutputBuilder m_builder;
 };
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
-
-#endif // !defined(AFX_OUTPUTDOC_H__74712513_4670_11D4_8677_9E528A3B7553__INCLUDED_)

@@ -535,6 +535,12 @@ private:
 	/** Regular expression describing a verbatim end. */
 	const tregex m_regexVerbEnd;
 
+	/** Regular expression describing a verbatim start. */
+	const tregex listing_start_;
+
+	/** Regular expression describing a verbatim end. */
+	const tregex listing_end_;
+
 	/** Regular expression describing a figure start. */
 	const tregex m_regexFigureStart;
 

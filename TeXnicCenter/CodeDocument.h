@@ -63,6 +63,8 @@ class CodeDocument : public CScintillaDoc
 	/// opening the document or should be saved with it
 	bool use_bom_;
 
+	CSemaphore semaphore_;
+
 public:
 	enum Encoding
 	{

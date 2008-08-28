@@ -220,6 +220,8 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 , m_regexComment(_T("%"))
 , m_regexVerbStart(_T("\\\\begin\\s*\\{verbatim\\*?\\}"))
 , m_regexVerbEnd(_T("\\\\end\\{verbatim\\*?\\}"))
+, listing_start_(_T("\\\\begin\\s*\\{lstlisting\\*?\\}"))
+, listing_end_(_T("\\\\end\\{lstlisting\\*?\\}"))
 , m_regexFigureStart(_T("\\\\begin\\s*\\{figure\\*?\\}"))
 , m_regexFigureEnd(_T("\\\\end\\s*\\{figure\\*?\\}"))
 , m_regexTableStart(_T("\\\\begin\\s*\\{(sideways)?table\\*?\\}"))
@@ -1232,6 +1234,7 @@ BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
 	std::tr1::match_results<LPCTSTR> what;
 	BOOL bVerbatim = FALSE;
 	int nActualLine = 0;
+	const tregex* current_verb_end = 0;
 
 	while (!m_bCancel && pTs->GetNextLine(lpLine, nLength))
 	{
@@ -1240,6 +1243,8 @@ BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
 		nActualLine++;
 		lpOffset = lpLine;
 		lpLineEnd = lpLine + nLength;
+
+		
 
 		if (!bVerbatim)
 		{
@@ -1257,18 +1262,35 @@ BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
 				}
 			}
 
-			// find start of verbatim
-			if (regex_search(lpLine, lpLineEnd, what, m_regexVerbStart))
-			{
-				if (IsCmdAt(lpLine, what[0].first - lpLine))
-				{
-					// parse line to beginning of \begin{verbatim}-command
-					ParseString(lpLine, what[0].first - lpLine, cookies,
-					            strActualFile, nActualLine, nFileDepth, aSI);
-					bVerbatim = TRUE;
+			// Verbatim environments: verbatim, lstlisting
+			const tregex* verb_start[] = {&m_regexVerbStart,&listing_start_};
+			const int count = sizeof(verb_start) / sizeof(*verb_start);
+			bool stop = false;
 
-					// set line start to end of \begin{verbatim}-command
-					lpLine = what[0].second;
+			for (int i = 0; i < count && !stop; ++i) {
+				// find start of verbatim
+				if (regex_search(lpLine, lpLineEnd, what, *verb_start[i]))
+				{
+					stop = true;
+
+					// Set the appropriate environment end regex
+					if (verb_start[i] == &m_regexVerbStart)
+						current_verb_end = &m_regexVerbEnd;
+					else if (verb_start[i] == &listing_start_)
+						current_verb_end = &listing_end_;
+					else
+						ASSERT(FALSE);
+
+					if (IsCmdAt(lpLine, what[0].first - lpLine))
+					{
+						// parse line to beginning of \begin{verbatim}-command
+						ParseString(lpLine, what[0].first - lpLine, cookies,
+									strActualFile, nActualLine, nFileDepth, aSI);
+						bVerbatim = TRUE;
+
+						// set line start to end of \begin{verbatim}-command
+						lpLine = what[0].second;
+					}
 				}
 			}
 		}
@@ -1276,12 +1298,15 @@ BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
 		// find end of verbatim
 		if (bVerbatim)
 		{
-			if (!regex_search(lpLine, lpLineEnd, what, m_regexVerbEnd))
+			ASSERT(current_verb_end);
+
+			if (!regex_search(lpLine, lpLineEnd, what,*current_verb_end))
 				continue; // continue with next line
 
 			// we found a verbatim end, set line start to end of \end{verbatim}-command
 			lpLine = what[0].second;
 			bVerbatim = FALSE;
+			current_verb_end = 0;
 		}
 
 		// find inline verbatim
