@@ -52,6 +52,8 @@ class SpellerBackgroundThread : public CWinThread
 	typedef std::set<CodeView*> InvalidViewContainerType;
 	InvalidViewContainerType invalid_views_;
 
+	volatile LONG processing_;
+
 public:
 	SpellerBackgroundThread();
 
@@ -59,13 +61,11 @@ public:
 private:
 	afx_msg void AFX_MSG_CALL OnUpdateBuffer(WPARAM wParam, LPARAM lParam);
 	afx_msg void AFX_MSG_CALL OnUpdateLine(WPARAM wParam, LPARAM lParam);
+	afx_msg void AFX_MSG_CALL OnUpdateLine( CodeView * pTextView, int nLine );
 	afx_msg void AFX_MSG_CALL OnGetSpeller(WPARAM wParam, LPARAM lParam);
-
-private:
 	afx_msg void AFX_MSG_CALL OnEnableSpeller(WPARAM wParam, LPARAM lParam);
-public:
-	//afx_msg void AFX_MSG_CALL OnInvalidateView(WPARAM wParam, LPARAM lParam);
 
+public:
 	DECLARE_MESSAGE_MAP()
 
 // overrides
