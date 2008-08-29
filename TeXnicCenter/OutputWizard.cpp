@@ -973,6 +973,14 @@ void COutputWizard::SetupSumatraDDE( CProfile &p )
 	CProfile::CCommand profileCmd;
 	profileCmd.SetActiveCommand(CProfile::CCommand::typeDde);
 
+	CString app;
+	app.ReleaseBuffer(::GetModuleFileName(0,app.GetBuffer(MAX_PATH),MAX_PATH));
+
+	CString exec = m_wndPagePdfViewer.m_strPath;
+	exec += _T(" -inverse-search \"\\\"") + app + _T("\\\" /ddecmd \\\"[goto('%f','%l')]'\\\"\"");
+
+	p.SetViewerPath(exec);
+
 	cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
 	cmd.SetCommand(_T("[ForwardSearch(\"%bm.pdf\",\"%nc\",%l,0)]"));
 
