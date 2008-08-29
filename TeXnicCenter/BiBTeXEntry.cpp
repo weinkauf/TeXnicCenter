@@ -75,7 +75,7 @@ BOOL CBiBTeXEntry::GetField(const CString& name, CString &value) const
 	return m_Fields.Lookup(name,value);
 }
 
-BOOL CBiBTeXEntry::SetField(CString name,CString value,BOOL forceOverwrite)
+BOOL CBiBTeXEntry::SetField( const CString& name, const CString& value, BOOL forceOverwrite /*= FALSE*/ )
 {
 	CString dummy;
 
@@ -96,6 +96,7 @@ const CString CBiBTeXEntry::ToString() const
 const BibItem CBiBTeXEntry::ToBibItem() const
 {
 	CString author, title, year, editor, publisher;
+	BibItem result;
 	
 	GetField(_T("author"),author);
 
@@ -119,9 +120,12 @@ const BibItem CBiBTeXEntry::ToBibItem() const
 	GetField(_T("year"),year);
 
 	// Remove trash (slashes, whitespace,...) from string
-	BeautifyField(author,true);
-	BeautifyField(title,false);
-	BeautifyField(year,false);
+	BeautifyField(author);
+	ExtractAuthors(author,result.authors_);
+	ReplaceAnds(author);
+
+	BeautifyField(title);
+	BeautifyField(year);
 
 	// Try to expand abbreviations
 	CString abbrev = m_Parent->GetString(author);
@@ -130,7 +134,9 @@ const BibItem CBiBTeXEntry::ToBibItem() const
 	{
 		//TRACE("Expand %s to %s...\n", author, abbrev.Mid(0,5));
 		author = abbrev;
-		BeautifyField(author,true);
+		BeautifyField(author);
+		ExtractAuthors(author,result.authors_);
+		ReplaceAnds(author);
 	}
 
 	abbrev = m_Parent->GetString(title);
@@ -139,10 +145,9 @@ const BibItem CBiBTeXEntry::ToBibItem() const
 	{
 		//TRACE("Expand %s to %s...\n", title, abbrev.Mid(0,5));
 		title = abbrev;
-		BeautifyField(title,false);
+		BeautifyField(title);
 	}
 
-	BibItem result;
 	result.author_ = author;
 
 	LPCTSTR first = year;
@@ -199,11 +204,8 @@ const CString CBiBTeXEntry::ToCaption() const
 	               item.GetTitle() + _T(" (") + item.GetTypeString() + _T(", ") + year + _T(")"));
 }
 
-void CBiBTeXEntry::BeautifyField(CString &value, bool bReplaceAnds)
+void CBiBTeXEntry::BeautifyField( CString &value )
 {
-
-	if (bReplaceAnds) value.Replace(_T(" and"),_T(","));
-
 	//value.Replace(_T("\""), _T(""));
 	value.Replace(_T("~"),_T(" "));
 	value.Replace(_T("--"),_T("-"));
@@ -221,4 +223,40 @@ void CBiBTeXEntry::BeautifyField(CString &value, bool bReplaceAnds)
 
 	value.TrimLeft();
 	value.TrimRight();
+}
+
+void CBiBTeXEntry::ExtractAuthors(const CString &value, BibItem::AuthorContainerType &authors )
+{
+	int index1 = 0, index2;
+	bool stop = false;
+
+	const CString delimiter(_T(" and "));
+
+	while (!stop) {
+		while (index1 < value.GetLength() && value[index1] == _T(' '))
+			++index1;
+
+		index2 = value.Find(delimiter,index1);
+
+		if (index1 < value.GetLength()) {
+			if (index2 == -1) {
+				index2 = value.GetLength();
+
+				while (--index2 > index1 && value[index2] == _T(' '))
+					;
+
+				stop = true;
+			}
+
+			authors.push_back(value.Mid(index1,index2 - index1));
+			index1 = index2 + delimiter.GetLength();
+		}
+		else
+			stop = true;
+	}
+}
+
+void CBiBTeXEntry::ReplaceAnds( CString &value )
+{
+	value.Replace(_T(" and"),_T(","));
 }

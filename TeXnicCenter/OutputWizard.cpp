@@ -63,9 +63,9 @@ namespace
 		return result;
 	}
 
-	const CString GetProfileName(UINT id)
+	const CString GetProfileName(const CString& name)
 	{
-		CString text(MAKEINTRESOURCE(id));
+		CString text = name;
 
 #ifdef UNICODE
 		if (RunTimeHelper::IsVista()) {
@@ -75,15 +75,23 @@ namespace
 #endif // UNICODE
 		return text;
 	}
-}
 
+	const CString GetProfileName(UINT id)
+	{
+		return GetProfileName(CString(MAKEINTRESOURCE(id)));
+	}
+
+	bool IsSumatraPDF(const CString& strViewer )
+	{
+		return CPathTool::GetFileTitle(strViewer).CompareNoCase(_T("SumatraPDF")) == 0;
+	}
+}
 
 
 IMPLEMENT_DYNAMIC(COutputWizard,CPropertySheet)
 
 BEGIN_MESSAGE_MAP(COutputWizard,CPropertySheet)
 END_MESSAGE_MAP()
-
 
 
 COutputWizard::COutputWizard(CProfileMap &profiles,CWnd* pParentWnd)
@@ -103,6 +111,7 @@ COutputWizard::COutputWizard(CProfileMap &profiles,CWnd* pParentWnd)
 , m_wndPageFinish(this)
 , m_wndPageDistributionPath(this)
 , dvipdfm_installed_(false)
+, sumatra_installed_(false)
 {
 	AddPage(&m_wndPageWelcome);
 	AddPage(&m_wndPageMikTex);
@@ -379,7 +388,7 @@ void COutputWizard::LookForMikTex()
 	{
 		if ((CPathTool::Exists(*it)) && (CPathTool::Exists(CPathTool::Cat(*it,_T("latex.exe")))))
 		{
-			strPath = *it/*mikPaths[i]*/;
+			strPath = *it;
 		}
 	}
 
@@ -611,6 +620,28 @@ void COutputWizard::LookForPdf()
 		gsReg.Close();
 	}
 
+	// Detect SumatraPDF
+	ATL::CRegKey reg;
+	
+	if (reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\SumatraPDF"),
+		KEY_READ) == ERROR_SUCCESS)
+	{
+		ULONG length = MAX_PATH;		
+
+		if (reg.QueryStringValue(_T("Install_Dir"),sumatra_path_.GetBuffer(length),&length) == ERROR_SUCCESS) 
+		{
+			sumatra_path_.ReleaseBuffer(length);
+			sumatra_path_ = CPathTool::Cat(sumatra_path_,_T("SumatraPDF.exe"));
+
+			if (CPathTool::Exists(sumatra_path_))
+				sumatra_installed_ = true;
+		}
+		else
+			sumatra_path_.ReleaseBuffer(0);
+
+		reg.Close();
+	}
+
 	// No GhostScript found?
 	if (!m_bGhostscriptInstalled)
 	{
@@ -641,10 +672,9 @@ void COutputWizard::LookForPdf()
 
 	m_wndPagePdfViewer.m_strPath = strViewer;
 
-
-	if (IsAcrobat(strViewer))
+	if (IsAcrobat(strViewer) || IsSumatraPDF(strViewer))
 	{
-		// standard viewer is Acrobat Reader
+		// standard viewer is Acrobat Reader or SumatraPDF
 		ShowInformation();
 		m_wndPagePdfViewer.m_strSingleInstanceOption.Empty();
 		m_wndPagePdfViewer.m_strForwardSearchOption.Empty();
@@ -682,6 +712,8 @@ void COutputWizard::ShowInformation()
 
 	if (m_bPdfLatexInstalled)
 		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFTYPE) + newline;
+
+	// LaTeX => PDF (SumatraPDF)?
 
 	if (m_bGhostscriptInstalled)
 		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFVIAPSTYPE) + newline;
@@ -733,24 +765,7 @@ void COutputWizard::GenerateOutputProfiles()
 			// add viewer settings
 			if (!m_wndPageDviViewer.m_strPath.IsEmpty())
 			{
-				p.SetViewerPath(m_wndPageDviViewer.m_strPath);
-
-				CProcessCommand cmd;
-				CProfile::CCommand profileCmd;
-				profileCmd.SetActiveCommand(CProfile::CCommand::typeProcess);
-
-				cmd.Set(
-				    m_wndPageDviViewer.m_strPath,
-				    m_wndPageDviViewer.m_strSingleInstanceOption + _T(" \"%bm.dvi\""));
-				profileCmd.SetProcessCommand(cmd);
-				p.SetViewProjectCmd(profileCmd);
-
-				cmd.Set(
-				    m_wndPageDviViewer.m_strPath,
-				    m_wndPageDviViewer.m_strSingleInstanceOption + _T(' ')
-				    + m_wndPageDviViewer.m_strForwardSearchOption + _T(" \"%bm.dvi\""));
-				profileCmd.SetProcessCommand(cmd);
-				p.SetViewCurrentCmd(profileCmd);
+				SetupYAP(p);
 			}
 
 			// add profile to map
@@ -848,82 +863,21 @@ void COutputWizard::GenerateOutputProfiles()
 #pragma endregion
 
 #pragma region LaTeX => PDF
+
 	if (m_bPdfLatexInstalled)
-	{
-		CString strProfile(GetProfileName(STE_OUTPUTWIZARD_PDFTYPE));
+		GeneratePDFProfile(GetProfileName(STE_OUTPUTWIZARD_PDFTYPE), strPDFLatexOptions,m_wndPagePdfViewer.m_strPath);
 
-		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
-		BOOL bExists = m_profiles.Exists(strProfile);
-
-		if (!bExists || AfxMessageBox(strError,MB_ICONQUESTION | MB_YESNO) == IDYES)
-		{
-			if (bExists)
-				m_profiles.Remove(strProfile);
-
-			// create profile
-			CProfile p;
-
-			p.SetLatexPath(
-			    CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("pdflatex.exe")),strPDFLatexOptions);
-			p.SetBibTexPath(
-			    CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("bibtex.exe")),
-			    _T("\"%bm\""));
-			p.SetMakeIndexPath(
-			    CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("makeindex.exe")),
-			    _T("\"%bm\""));
-
-			// add viewer settings
-			if (!m_wndPagePdfViewer.m_strPath.IsEmpty())
-			{
-				p.SetViewerPath(m_wndPagePdfViewer.m_strPath);
-
-				if (IsAcrobat(m_wndPagePdfViewer.m_strPath))
-				{
-					// Acrobat reader specific commands
-					CDdeCommand cmd;
-					CProfile::CCommand profileCmd;
-					profileCmd.SetActiveCommand(CProfile::CCommand::typeDde);
-
-					cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
-					cmd.SetCommand(_T("[DocOpen(\"%bm.pdf\")][FileOpen(\"%bm.pdf\")]"));
-					cmd.SetServer(_T("acroview"),_T("control"));
-					profileCmd.SetDdeCommand(cmd);
-					p.SetViewProjectCmd(profileCmd);
-
-					p.SetViewCurrentCmd(profileCmd);
-
-					cmd.SetCommand(_T("[DocClose(\"%bm.pdf\")]"));
-					profileCmd.SetDdeCommand(cmd);
-					p.SetViewCloseCmd(profileCmd);
-					p.SetCloseView(true);
-				}
-				else
-				{
-					// general commands
-					CProcessCommand cmd;
-					CProfile::CCommand profileCmd;
-					profileCmd.SetActiveCommand(CProfile::CCommand::typeProcess);
-
-					cmd.Set(
-					    m_wndPagePdfViewer.m_strPath,
-					    m_wndPagePdfViewer.m_strSingleInstanceOption + _T(" \"%bm.pdf\""));
-					profileCmd.SetProcessCommand(cmd);
-					p.SetViewProjectCmd(profileCmd);
-
-					cmd.Set(
-					    m_wndPagePdfViewer.m_strPath,
-					    m_wndPagePdfViewer.m_strSingleInstanceOption + _T(' ')
-					    + m_wndPagePdfViewer.m_strForwardSearchOption + _T(" \"%bm.pdf\""));
-					profileCmd.SetProcessCommand(cmd);
-					p.SetViewCurrentCmd(profileCmd);
-				}
-			}
-
-			// add profile to map
-			m_profiles.Add(strProfile,p);
-		}
-	}
 #pragma endregion
+
+	/*
+#pragma region LaTeX => PDF (SumatraPDF)
+
+	if (sumatra_installed_)
+		GeneratePDFProfile(GetProfileName(_T("LaTeX => PDF (SumatraPDF)")), strPDFLatexOptions,sumatra_path_);
+
+#pragma endregion
+		*/
+
 
 #pragma region LaTeX => PS => PDF
 	if (m_bLatexInstalled && m_bDvipsInstalled && m_bGhostscriptInstalled)
@@ -987,54 +941,137 @@ void COutputWizard::BuildPropPageArray()
 	FixPropSheetFont(m_psh,m_pages);
 }
 
-void COutputWizard::AssignPDFViewer( CProfile &p )
+void COutputWizard::AssignPDFViewer( CProfile &p, const CString& path )
 {
 	// add viewer settings
-	if (!m_wndPagePdfViewer.m_strPath.IsEmpty())
+	if (!path.IsEmpty())
 	{
-		p.SetViewerPath(m_wndPagePdfViewer.m_strPath);
+		p.SetViewerPath(path);
 
-		const CString file = CPathTool::GetFile(m_wndPagePdfViewer.m_strPath);
+		const CString file = CPathTool::GetFile(path);
 
 		if (IsAcrobat(file))
 		{
 			// Acrobat reader specific commands
-			CDdeCommand cmd;
-			CProfile::CCommand profileCmd;
-			profileCmd.SetActiveCommand(CProfile::CCommand::typeDde);
-
-			cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
-			cmd.SetCommand(_T("[DocOpen(\"%bm.pdf\")][FileOpen(\"%bm.pdf\")]"));
-			cmd.SetServer(_T("acroview"),_T("control"));
-			profileCmd.SetDdeCommand(cmd);
-			p.SetViewProjectCmd(profileCmd);
-
-			p.SetViewCurrentCmd(profileCmd);
-
-			cmd.SetCommand(_T("[DocClose(\"%bm.pdf\")]"));
-			profileCmd.SetDdeCommand(cmd);
-			p.SetViewCloseCmd(profileCmd);
-			p.SetCloseView(true);
+			SetupAcrobatDDE(p);
 		}
+		else if (IsSumatraPDF(file))
+			SetupSumatraDDE(p);
 		else
-		{
-			// general commands
-			CProcessCommand cmd;
-			CProfile::CCommand profileCmd;
-			profileCmd.SetActiveCommand(CProfile::CCommand::typeProcess);
+			SetupGenericPDF(p);
+	}
+}
 
-			cmd.Set(
-				m_wndPagePdfViewer.m_strPath,
-				m_wndPagePdfViewer.m_strSingleInstanceOption + _T(" \"%bm.pdf\""));
-			profileCmd.SetProcessCommand(cmd);
-			p.SetViewProjectCmd(profileCmd);
+void COutputWizard::AssignPDFViewer(CProfile& p)
+{
+	AssignPDFViewer(p,m_wndPagePdfViewer.m_strPath);
+}
 
-			cmd.Set(
-				m_wndPagePdfViewer.m_strPath,
-				m_wndPagePdfViewer.m_strSingleInstanceOption + _T(' ')
-				+ m_wndPagePdfViewer.m_strForwardSearchOption + _T(" \"%bm.pdf\""));
-			profileCmd.SetProcessCommand(cmd);
-			p.SetViewCurrentCmd(profileCmd);
-		}
+void COutputWizard::SetupSumatraDDE( CProfile &p )
+{
+	CDdeCommand cmd;
+	CProfile::CCommand profileCmd;
+	profileCmd.SetActiveCommand(CProfile::CCommand::typeDde);
+
+	cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
+	cmd.SetCommand(_T("[ForwardSearch(\"%bm.pdf\",\"%nc\",%l,0)]"));
+
+	cmd.SetServer(_T("sumatra"),_T("control"));
+	profileCmd.SetDdeCommand(cmd);
+
+	p.SetViewProjectCmd(profileCmd);
+	p.SetViewCurrentCmd(profileCmd);
+
+	p.SetViewCloseCmd(profileCmd);
+	p.SetCloseView(false);
+}
+
+void COutputWizard::SetupAcrobatDDE( CProfile &p )
+{
+	// Acrobat reader specific commands
+	CDdeCommand cmd;
+	CProfile::CCommand profileCmd;
+	profileCmd.SetActiveCommand(CProfile::CCommand::typeDde);
+
+	cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
+	cmd.SetCommand(_T("[DocOpen(\"%bm.pdf\")][FileOpen(\"%bm.pdf\")]"));
+	cmd.SetServer(_T("acroview"),_T("control"));
+	profileCmd.SetDdeCommand(cmd);
+	p.SetViewProjectCmd(profileCmd);
+
+	p.SetViewCurrentCmd(profileCmd);
+
+	cmd.SetCommand(_T("[DocClose(\"%bm.pdf\")]"));
+	profileCmd.SetDdeCommand(cmd);
+	p.SetViewCloseCmd(profileCmd);
+	p.SetCloseView(true);
+}
+
+void COutputWizard::SetupYAP( CProfile &p )
+{
+	p.SetViewerPath(m_wndPageDviViewer.m_strPath);
+
+	CProcessCommand cmd;
+	CProfile::CCommand profileCmd;
+	profileCmd.SetActiveCommand(CProfile::CCommand::typeProcess);
+
+	cmd.Set(
+		m_wndPageDviViewer.m_strPath,
+		m_wndPageDviViewer.m_strSingleInstanceOption + _T(" \"%bm.dvi\""));
+	profileCmd.SetProcessCommand(cmd);
+	p.SetViewProjectCmd(profileCmd);
+
+	cmd.Set(
+		m_wndPageDviViewer.m_strPath,
+		m_wndPageDviViewer.m_strSingleInstanceOption + _T(' ')
+		+ m_wndPageDviViewer.m_strForwardSearchOption + _T(" \"%bm.dvi\""));
+	profileCmd.SetProcessCommand(cmd);
+	p.SetViewCurrentCmd(profileCmd);
+}
+
+void COutputWizard::SetupGenericPDF( CProfile &p )
+{
+	// general commands
+	CProcessCommand cmd;
+	CProfile::CCommand profileCmd;
+	profileCmd.SetActiveCommand(CProfile::CCommand::typeProcess);
+
+	cmd.Set(
+		m_wndPagePdfViewer.m_strPath,
+		m_wndPagePdfViewer.m_strSingleInstanceOption + _T(" \"%bm.pdf\""));
+	profileCmd.SetProcessCommand(cmd);
+	p.SetViewProjectCmd(profileCmd);
+
+	cmd.Set(
+		m_wndPagePdfViewer.m_strPath,
+		m_wndPagePdfViewer.m_strSingleInstanceOption + _T(' ')
+		+ m_wndPagePdfViewer.m_strForwardSearchOption + _T(" \"%bm.pdf\""));
+	profileCmd.SetProcessCommand(cmd);
+	p.SetViewCurrentCmd(profileCmd);
+}
+
+void COutputWizard::GeneratePDFProfile( const CString& name, const CString& strPDFLatexOptions, const CString& viewer_path )
+{
+	CString strError;
+	strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,name);
+	BOOL bExists = m_profiles.Exists(name);
+
+	if (!bExists || AfxMessageBox(strError,MB_ICONQUESTION | MB_YESNO) == IDYES)
+	{
+		if (bExists)
+			m_profiles.Remove(name);
+
+		// create profile
+		CProfile p;
+
+		p.SetLatexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("pdflatex.exe")),strPDFLatexOptions);
+		p.SetBibTexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("bibtex.exe")),_T("\"%bm\""));
+		p.SetMakeIndexPath(	CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("makeindex.exe")),_T("\"%bm\""));
+
+		// add viewer settings
+		AssignPDFViewer(p,viewer_path);
+
+		// add profile to map
+		m_profiles.Add(name,p);
 	}
 }

@@ -108,8 +108,7 @@ void SpellerBackgroundThread::OnUpdateLine(WPARAM wParam, LPARAM lParam)
 	::InterlockedExchange(&processing_,1);
 
 	CodeView *pTextView = (CodeView *)lParam;
-	ASSERT_NULL_OR_POINTER(pTextView,CodeView);
-	
+	ASSERT_NULL_OR_POINTER(pTextView,CodeView);	
 
 	OnUpdateLine(pTextView,static_cast<int>(wParam));
 
@@ -228,7 +227,7 @@ void SpellerBackgroundThread::SpellCheckBuffer(CodeView* pTextView)
 
 	CString text;
 
-	while (line < line_count)
+	while (line < line_count && IsViewValid(pTextView))
 		DoCheckLine(pTextView,line++,text);
 
 	pTextView->Unlock();

@@ -653,8 +653,11 @@ void BibView::StartSearch()
 		text.Trim();
 
 		if (text.IsEmpty()) {
-			Populate(EveryItem);
-			static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(AFX_IDS_IDLEMESSAGE);
+			// Avoid unnecessary list view refill
+			if (list_view_.GetItemCount() != static_cast<int>(bib_items_.size())) {
+				Populate(EveryItem);
+				static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(AFX_IDS_IDLEMESSAGE);
+			}
 		}
 		else {
 			static_cast<CFrameWnd*>(AfxGetMainWnd())->SetMessageText(IDS_SEARCHING);
