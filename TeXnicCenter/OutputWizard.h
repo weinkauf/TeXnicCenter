@@ -134,8 +134,16 @@ protected:
 	/**
 	 */
 	void GenerateOutputProfiles();
+	void GeneratePDFProfile(const CString& name, const CString& strPDFLatexOptions, const CString& viewer_path );
 
-	void AssignPDFViewer( CProfile &p );
+private:
+	void SetupYAP( CProfile &p );
+	void SetupAcrobatDDE( CProfile &p );
+	void SetupSumatraDDE( CProfile &p );
+	void AssignPDFViewer( CProfile &p, const CString& path );
+	void AssignPDFViewer(CProfile& p);
+	void SetupGenericPDF( CProfile &p );
+
 // Message handlers
 protected:
 	afx_msg void OnBack();
@@ -169,7 +177,7 @@ protected:
 	};
 
 // Attributes
-protected:
+private:
 	/** TRUE if MiKTeX has been found. */
 	bool m_bMikTexInstalled;
 
@@ -184,6 +192,11 @@ protected:
 
 	/** TRUE if Ghostscript has been found. */
 	bool m_bGhostscriptInstalled;
+
+	/** TRUE if SumatraPDF has been found. */
+	bool sumatra_installed_;
+
+	CString sumatra_path_;
 
 	/** TRUE if Postscript conversion is called via the ps2pdf script, e.g. from miktex. */
 	bool m_bGhostscriptViaPS2PDF;

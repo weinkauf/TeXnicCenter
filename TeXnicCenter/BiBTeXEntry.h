@@ -80,6 +80,10 @@ public:
 		Unpublished
 	};
 
+	typedef std::vector<CString> AuthorContainerType;
+	// Extracted author names, useful for grouping
+	AuthorContainerType authors_;
+
 private:
 	Type type_;
 
@@ -102,6 +106,7 @@ public:
 	const CString& GetLabel() const { return label_; }
 	const CString& GetTitle() const { return title_; }
 	const CString& GetPublisher() const { return publisher_; }
+	const AuthorContainerType& GetAuthors() const { return authors_; }
 
 	bool HasYear() const { return has_year_; }
 	bool HasEditor() const { return !editor_.IsEmpty(); }
@@ -136,7 +141,7 @@ public:
 	        SetField returns false, if the entry already exists. Default is false.
 	        @return True, if entry was changed successfully.
 	 */
-	BOOL SetField(CString name, CString value, BOOL forceOverwrite = FALSE);
+	BOOL SetField(const CString& name, const CString& value, BOOL forceOverwrite = FALSE);
 	/** Access to entry fields. To get the author of an entry, just call
 	        <code>CString author;
 	        SetField("author", "Asterix");
@@ -172,8 +177,9 @@ private:
 	        @param value String to beautify
 	        @param bReplaceAnds If true, 'and' (common in author fields) are replaced with a comma.
 	 */
-	static void BeautifyField(CString &value, bool bReplaceAnds);
-
+	static void BeautifyField(CString &value);
+	static void ReplaceAnds( CString &value );
+	static void ExtractAuthors(const CString &value, BibItem::AuthorContainerType &authors );
 	CMapStringToString m_Fields;
 	BibType m_Type;
 	CString m_Key;
