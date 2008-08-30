@@ -67,6 +67,8 @@ class CConfiguration
 	BOOL show_line_above_no_fold_;
 	BOOL use_spaces_;
 
+	int transparency_;
+
 public:
 	bool IsBlinkInsertCaret() const;
 	void SetBlinkInsertCaret(bool val = true);
@@ -97,6 +99,9 @@ public:
 
 	bool GetUseSpaces() const;
 	void SetUseSpaces(bool val);
+
+	int GetTransparency() const;
+	void SetTransparency(int val);
 
 	static CConfiguration* GetInstance();
 

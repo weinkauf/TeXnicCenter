@@ -399,6 +399,7 @@ protected:
 	afx_msg void OnViewEnvPane();
 	afx_msg LRESULT OnGetTabToolTip(WPARAM, LPARAM);
 	afx_msg void OnApplicationLook(UINT id);
+	afx_msg void OnViewTransparency();
 	
 	void OnUpdateApplicationLook(CCmdUI* pCmdUI);
 	void OnLatexRun();

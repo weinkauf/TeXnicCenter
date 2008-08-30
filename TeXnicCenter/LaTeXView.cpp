@@ -465,12 +465,12 @@ void LaTeXView::UpdateSettings()
 	SetAStyle(STYLE_DEFAULT, GetColor(COLORINDEX_NORMALTEXT),GetColor(COLORINDEX_BKGND),
 		point_size,CConfiguration::GetInstance()->m_fontEditor.lfFaceName);
 	
-	SetAStyle(SCE_TEX_DEFAULT, GetColor(COLORINDEX_COMMENT)); // Includes comments' color
-	SetAStyle(SCE_TEX_GROUP,RGB(125,167,217));
+	SetAStyle(SCE_TEX_DEFAULT, GetColor(COLORINDEX_COMMENT),GetColor(COLORINDEX_BKGND)); // Includes comments' color
+	SetAStyle(SCE_TEX_GROUP,RGB(125,167,217),GetColor(COLORINDEX_BKGND));
 	
-	SetAStyle(SCE_TEX_TEXT,GetColor(COLORINDEX_NORMALTEXT));
-	SetAStyle(SCE_TEX_SPECIAL, RGB(158,11,15));
-	SetAStyle(SCE_TEX_SYMBOL, RGB(145,0,145));
+	SetAStyle(SCE_TEX_TEXT,GetColor(COLORINDEX_NORMALTEXT),GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_TEX_SPECIAL, RGB(158,11,15),GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_TEX_SYMBOL, RGB(145,0,145),GetColor(COLORINDEX_BKGND));
 
 #pragma region Comments 
 
@@ -483,7 +483,7 @@ void LaTeXView::UpdateSettings()
 
 	rCtrl.UsePopUp(FALSE);
 
-	SetAStyle(SCE_TEX_COMMAND, GetColor(COLORINDEX_KEYWORD));
+	SetAStyle(SCE_TEX_COMMAND, GetColor(COLORINDEX_KEYWORD),GetColor(COLORINDEX_BKGND));
 	rCtrl.SetSelFore(TRUE,GetColor(COLORINDEX_SELTEXT));
 	rCtrl.SetSelBack(TRUE,GetColor(COLORINDEX_SELBKGND));
 

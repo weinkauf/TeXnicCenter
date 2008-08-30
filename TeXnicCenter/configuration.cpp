@@ -81,6 +81,7 @@ CConfiguration::CConfiguration()
 , show_line_above_fold_(FALSE)
 , show_line_above_no_fold_(FALSE)
 , use_spaces_(FALSE)
+, transparency_(0)
 {
 }
 
@@ -101,6 +102,8 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	SerializeProfileInt(strSection,_T("WndMenuMaxEntries"),&m_nWndMenuMaxEntries,direction,10);
 
 	SerializeProfileInt(strSection,_T("ParseInterval"),&m_nParseInterval,direction,1000);
+
+	SerializeProfileInt(strSection,_T("Transparency"),&transparency_,direction,0);
 
 #pragma endregion
 
@@ -625,4 +628,14 @@ bool CConfiguration::GetUseSpaces() const
 void CConfiguration::SetUseSpaces( bool val )
 {
 	use_spaces_ = val;
+}
+
+int CConfiguration::GetTransparency() const
+{
+	return transparency_;
+}
+
+void CConfiguration::SetTransparency( int val )
+{
+	transparency_ = val;
 }
