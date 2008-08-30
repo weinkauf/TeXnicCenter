@@ -46,6 +46,7 @@
 #include "ProfileDialog.h"
 #include "RunTimeHelper.h"
 #include "LaTeXDocument.h"
+#include "TransparencyDlg.h"
 
 // To hold the colours and their names
 struct ColourTableEntry
@@ -242,6 +243,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_MESSAGE_VOID(StartPaneAnimation, OnStartPaneAnimation)
 	ON_MESSAGE_VOID(StopPaneAnimation, OnStopPaneAnimation)
 	ON_REGISTERED_MESSAGE(AFX_WM_ON_GET_TAB_TOOLTIP, &CMainFrame::OnGetTabToolTip)
+	ON_COMMAND(ID_VIEW_TRANSPARENCY, &CMainFrame::OnViewTransparency)
 END_MESSAGE_MAP()
 
 const UINT BuildAnimationPane = 1;
@@ -452,6 +454,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//lstBasicCommands.AddTail(ID_VIEW_TOOLBAR);
 
 	//CMFCToolBar::SetBasicCommands(lstBasicCommands);
+
+	int value = CConfiguration::GetInstance()->GetTransparency();
+
+	if (value > 0)
+		TransparencyDlg::SetTransparency(this,value);
 
 	SendMessage(WM_UPDATEUISTATE, MAKEWPARAM(UIS_SET, UISF_HIDEACCEL | UISF_HIDEFOCUS));
 
@@ -1840,4 +1847,10 @@ LRESULT CMainFrame::OnGetTabToolTip(WPARAM, LPARAM l)
 	ti->m_strText = f->GetPathNameOfDocument();
 
 	return 0;
+}
+
+void CMainFrame::OnViewTransparency()
+{
+	TransparencyDlg dlg(this);
+	dlg.DoModal();
 }

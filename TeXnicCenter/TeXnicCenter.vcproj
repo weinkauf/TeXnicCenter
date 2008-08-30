@@ -1514,6 +1514,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TransparencyDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TransparencyDlg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\TreeCtrlEx.h"
 				>
 			</File>

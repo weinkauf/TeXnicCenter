@@ -1639,6 +1639,17 @@ BEGIN
     PUSHBUTTON      "",IDC_OW_VIEWERPOPUP,261,123,17,13
 END
 
+IDD_TRANSPARENCY DIALOGEX 0, 0, 200, 49
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Transparenz"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,90,28,50,14
+    PUSHBUTTON      "&Abbrechen",IDCANCEL,143,28,50,14
+    CONTROL         "",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,7,165,17
+    RTEXT           "100 %",IDC_SLIDER_VALUE,171,10,22,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1998,6 +2009,14 @@ BEGIN
         VERTGUIDE, 243
         TOPMARGIN, 7
     END
+
+    IDD_TRANSPARENCY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 193
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 42
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -2277,6 +2296,7 @@ BEGIN
             MENUITEM SEPARATOR
             MENUITEM "&Dokumentsymbole anzeigen",   ID_VIEW_DOCTAB_ICONS
         END
+        MENUITEM "&Transparenz...",             ID_VIEW_TRANSPARENCY
         MENUITEM SEPARATOR
         MENUITEM "&Indentation Guides",         ID_VIEW_INDENTATION_GUIDES
         MENUITEM "&Leerraumanzeige",            ID_VIEW_WHITE_SPACE
@@ -4685,6 +4705,7 @@ BEGIN
     IDS_SCINTILLA_DEFAULT_PRINT_HEADER "%1 - Gedruckt am %2"
     IDS_NO_LABEL_AVAILABLE  "Für den ausgewählten Eintrag ist kein Verweis vorhanden."
     IDS_DEFINE_COLOR_NAME_PLACEHOLDER "<Bezeichnung>"
+    IDS_RECURSIVE_INCLUSION "Rekursive Inklusion ist nicht erlaubt"
     IDS_AUTOMATIC           "Automatisch"
     IDS_TEXT_COLORS         "Textfarbe"
     IDS_BACKGROUND_COLORS   "Hintergrundfarbe"
@@ -4813,6 +4834,11 @@ STRINGTABLE
 BEGIN
     IDS_SEARCHING           "Wird gesucht..."
     IDS_ITEMS_FOUND         "%i Einträge gefunden"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_TRANSPARENCY    "Ändert die Transparenz des Hauptfensters.\nTransparenz ändern"
 END
 
 #endif    // German (Germany) resources
@@ -5711,6 +5737,17 @@ BEGIN
     LTEXT           "Static",IDC_TITLE,51,16,209,20,SS_CENTERIMAGE,WS_EX_TRANSPARENT
 END
 
+IDD_TRANSPARENCY DIALOGEX 0, 0, 200, 49
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Transparency"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,90,28,50,14
+    PUSHBUTTON      "&Cancel",IDCANCEL,143,28,50,14
+    CONTROL         "",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,7,165,17
+    RTEXT           "100 %",IDC_SLIDER_VALUE,171,10,22,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -6004,6 +6041,14 @@ BEGIN
         HORZGUIDE, 16
         HORZGUIDE, 36
     END
+
+    IDD_TRANSPARENCY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 193
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 42
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -6276,6 +6321,7 @@ BEGIN
             MENUITEM SEPARATOR
             MENUITEM "Show &Icons",                 ID_VIEW_DOCTAB_ICONS
         END
+        MENUITEM "T&ransparency...",            ID_VIEW_TRANSPARENCY
         MENUITEM SEPARATOR
         MENUITEM "Display End Lines",           ID_VIEW_LINE_ENDING
         MENUITEM "Display &Indentation Guides", ID_VIEW_INDENTATION_GUIDES
@@ -8624,6 +8670,7 @@ BEGIN
     IDS_SCINTILLA_DEFAULT_PRINT_HEADER "%1 - Printed on %2"
     IDS_NO_LABEL_AVAILABLE  "The selected item does not have a label."
     IDS_DEFINE_COLOR_NAME_PLACEHOLDER "<Name>"
+    IDS_RECURSIVE_INCLUSION "Recursive inclusion is not allowed"
     IDS_AUTOMATIC           "Automatic"
     IDS_TEXT_COLORS         "Text Colors"
     IDS_BACKGROUND_COLORS   "Background Colors"

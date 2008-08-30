@@ -37,6 +37,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <memory>
 
 #include "StructureParser.h"
 #include "TextSourceFile.h"
@@ -481,13 +482,38 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 		if (::PathFileExists(strPath))
 		{
-			if (m_pParseOutputHandler && !m_bCancel)
+			CString path;
+
+			if (CPathTool::IsRelativePath(strPath))
 			{
-				info.m_strError.Format(STE_PARSE_PARSING, strPath);
-				m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::information);
+				CString dir;
+				dir.ReleaseBuffer(::GetCurrentDirectory(MAX_PATH,dir.GetBuffer(MAX_PATH)));
+				
+				path = CPathTool::Cat(dir,strPath);
 			}
 
-			Parse(strPath, cookies, nFileDepth + 1, aSI);
+			const CString relative_path = CPathTool::GetRelativePath(path,strActualFile,FALSE,FALSE);
+
+			// Make sure it's not a recursive inclusion
+			// otherwise it will result in a stack overflow
+			if (relative_path.CompareNoCase(strPath) != 0)
+			{
+				if (m_pParseOutputHandler && !m_bCancel)
+				{
+					info.m_strError.Format(STE_PARSE_PARSING, strPath);
+					m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::information);
+				}
+
+				Parse(strPath, cookies, nFileDepth + 1, aSI);
+			}
+			else // otherwise notify the user about the error
+			{
+				if (m_pParseOutputHandler && !m_bCancel)
+				{
+					info.m_strError.LoadString(IDS_RECURSIVE_INCLUSION);
+					m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::error);
+				}
+			}
 		}
 		else if (m_pParseOutputHandler && !m_bCancel)
 		{
@@ -1199,17 +1225,14 @@ void CStructureParser::Done(bool bParsingResult)
 BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
                              int nFileDepth, StructureItemContainer &aSI)
 {
-	CTextSourceFile *pTs = NULL;
-	pTs = new CTextSourceFile();
-	ASSERT(pTs != NULL);
+	std::auto_ptr<CTextSourceFile> pTs(new CTextSourceFile);
 
-	if (pTs && !pTs->Create(lpszPath))
+	if (!pTs->Create(lpszPath))
 	{
-		delete pTs;
-		pTs = NULL;
+		pTs.reset();
 	}
 
-	if (!pTs)
+	if (!pTs.get())
 	{
 		if (m_pParseOutputHandler && !m_bCancel)
 		{
@@ -1243,8 +1266,6 @@ BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
 		nActualLine++;
 		lpOffset = lpLine;
 		lpLineEnd = lpLine + nLength;
-
-		
 
 		if (!bVerbatim)
 		{
@@ -1333,7 +1354,7 @@ BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
 	}
 
 	// delete text source object
-	pTs->Delete();
+	pTs.release()->Delete();
 
 	return !m_bCancel;
 }

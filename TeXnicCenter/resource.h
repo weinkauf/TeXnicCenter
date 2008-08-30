@@ -29,6 +29,8 @@
 #define IDS_NO_LABEL_AVAILABLE          42
 #define IDS_DEFINE_COLOR_NAME_PLACEHOLDER 43
 #define IDS_MORE_COLORS                 44
+#define IDS_RECUSRIVE_INCLUSION         44
+#define IDS_RECURSIVE_INCLUSION         44
 #define IDS_AUTOMATIC                   45
 #define IDS_TEXT_COLORS                 46
 #define IDS_BACKGROUND_COLORS           47
@@ -356,6 +358,7 @@
 #define STE_PARSE_END                   351
 #define IDB_BITMAP3                     351
 #define STE_PARSE_PARSING               352
+#define IDD_TRANSPARENCY                352
 #define STE_PARSE_FOUND                 353
 #define STE_PARSE_FOUND_UNMATCHED       354
 #define STE_PARSE_RESULTS               355
@@ -720,7 +723,8 @@
 #define IDC_SHOW_LINE_BELOW_NO_FOLD     1367
 #define IDC_SHOW_LINE_ABOVE_NO_FOLD     1368
 #define IDC_USE_SPACES                  1369
-#define IDC_USE                         1371
+#define IDC_SLIDER1                     1373
+#define IDC_SLIDER_VALUE                1374
 #define IDD_SPELL_CHECK                 8600
 #define IDC_EDIT_WHOLE_WORD             8603
 #define IDC_EDIT_MATCH_CASE             8604
@@ -1481,6 +1485,10 @@
 #define ID_ANSICHT_INDENTATIONGUIDES    38588
 #define ID_VIEW_INDENTATION_GUIDES      38589
 #define ID_VIEW_INDENTATIONGUIDES       38590
+#define ID_ANSICHT_TRANSPARENZ          38591
+#define ID_VIEW_TRANSPARENCY            38592
+#define ID_VIEW_TRANCPARENCY            38593
+#define ID_ANSICHT_ASD                  38594
 #define IDR_FORMAT                      38700
 #define ID_NONE                         40002
 #define IDS_TEXTMODULES_NONEDEFINED     57671
@@ -1490,9 +1498,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        352
-#define _APS_NEXT_COMMAND_VALUE         38591
-#define _APS_NEXT_CONTROL_VALUE         1372
+#define _APS_NEXT_RESOURCE_VALUE        353
+#define _APS_NEXT_COMMAND_VALUE         38595
+#define _APS_NEXT_CONTROL_VALUE         1375
 #define _APS_NEXT_SYMED_VALUE           191
 #endif
 #endif
