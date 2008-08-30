@@ -513,21 +513,32 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 		{
 			//Get the MDI Childs (sorted by Tabs)
 			CArray<CChildFrame*,CChildFrame*> MDIChildArray;
-			const int nActiveFrame = m_pwndMainFrame->GetMDIChilds(MDIChildArray,true);
 
-			//Set Number of Frames
-			ini.SetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_FRAMECOUNT,MDIChildArray.GetSize());
-			//Set active MDI Child
-			ini.SetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVEFRAME,nActiveFrame);
+			int nActiveFrame = m_pwndMainFrame->GetMDIChilds(MDIChildArray,true);			
+			int actual_frame_count = 0;
 
 			for (int i = 0; i < MDIChildArray.GetSize(); i++)
 			{
-				//Store information for this MDI-window
-				CString strKey;
-				strKey.Format(KEY_FRAMEINFO,i);
+				// Serialize the document only if it has been saved previously
+				if (CPathTool::Exists(MDIChildArray[i]->GetPathNameOfDocument()))
+				{
+					//Store information for this MDI-window
+					CString strKey;
+					strKey.Format(KEY_FRAMEINFO,actual_frame_count);
 
-				MDIChildArray.GetAt(i)->Serialize(ini,strKey,bWrite);
+					MDIChildArray[i]->Serialize(ini,strKey,bWrite);
+					++actual_frame_count;
+				}
+				else if (nActiveFrame == i)
+					nActiveFrame = -1; // This document has not been saved but was active
+									   // we don't serialize unsaved documents, reset
 			}
+
+			// Set Number of Frames
+			ini.SetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_FRAMECOUNT,actual_frame_count);
+			// Set active MDI Child
+			ini.SetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVEFRAME,nActiveFrame);
+
 		}
 
 #pragma region Bookmarks

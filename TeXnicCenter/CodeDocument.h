@@ -205,9 +205,9 @@ public:
 	void SetUseBOM(bool use);
 
 	DWORD Write(ATL::CAtlFile& file, const char* text, std::size_t);
-	/// Reads the whole file by detecting the right encoding_
+	/// Reads the whole file by detecting the right encoding
 	bool Read(LPCTSTR pszFileName, CStringW& string);
-	/// Writes the whole file by detecting the right encoding_
+	/// Writes the whole file by detecting the right encoding
 	bool Write(LPCTSTR pszFileName, const CStringW& string);
 };
 

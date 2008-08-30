@@ -326,9 +326,25 @@ void NavigatorTreeCtrl::Clear(void)
 	Invalidate();
 }
 
+bool NavigatorTreeCtrl::IsFolder(HTREEITEM item) const
+{
+	bool result = GetParentItem(item) == 0;
+
+	if (!result) 
+	{
+		int image, selected;
+		GetItemImage(item,image,selected);
+		
+		result = image == 14; // image for the (closed) folder
+	}
+
+	return result;
+}
+
 void NavigatorTreeCtrl::OnNMDblclk(NMHDR* /*pNMHDR*/, LRESULT* /*pResult*/)
 {
-	GotoItem();
+	if (!IsFolder(GetSelectedItem()))
+		GotoItem();
 }
 
 void NavigatorTreeCtrl::OnDestroy()

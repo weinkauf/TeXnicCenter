@@ -132,3 +132,9 @@ void StructureTreeCtrl::OnParsingFinished()
 	SetRedraw();
 	Invalidate();
 }
+
+bool StructureTreeCtrl::IsFolder( HTREEITEM ) const
+{
+	// No folders here
+	return false;
+}
