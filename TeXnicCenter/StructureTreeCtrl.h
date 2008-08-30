@@ -42,4 +42,7 @@ protected:
 
 private:
 	void OnParsingFinished();
+
+public:
+	bool IsFolder(HTREEITEM) const;
 };

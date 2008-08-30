@@ -184,4 +184,5 @@ public:
 	bool IsDragDropEnabled() const;
 	/// Sends the ID_ITEM_GOTO command
 	void GotoItem();
+	virtual bool IsFolder(HTREEITEM item) const;
 };
