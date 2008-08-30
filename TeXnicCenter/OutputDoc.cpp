@@ -466,16 +466,29 @@ void COutputDoc::OnOutputViewActivated(COutputView *pView)
 
 CString COutputDoc::GetMainPath() const
 {
+	CString result;
+
 	if (m_bActiveFileOperation && GetActiveDocument())
-		return GetActiveDocument()->GetPathName();
-	if (theApp.GetProject())
-		return theApp.GetProject()->GetMainPath();
+		result = GetActiveDocument()->GetPathName();
+	else if (CLaTeXProject* p = theApp.GetProject())
+		result = p->GetMainPath();
+	// Still nothing known? Try the active document anyway
+	else if (CDocument* doc = GetActiveDocument())
+		result = doc->GetPathName();
 
-	//Still nothing known? Try the active document anyway
-	if (GetActiveDocument())
-		return GetActiveDocument()->GetPathName();
+	if (!result.IsEmpty())
+	{
+		// Canonicalize the path: remove all the dots in an absolute path
+		// otherwise e.g. makeindex will try to locate the file extension
+		// and stop at the first dot found, resulting in a file not found error
+		CString temp;
+		::PathCanonicalize(temp.GetBuffer(MAX_PATH),result);
+		temp.ReleaseBuffer();
 
-	return CString(_T(""));
+		result = temp;
+	}
+
+	return result;
 }
 
 bool COutputDoc::AssureExistingMainFile()
@@ -1190,6 +1203,7 @@ void COutputDoc::DoMakeIndexRun()
 
 	// activate output bar / tab
 	CMainFrame* pwndMainFrame = (CMainFrame*)AfxGetMainWnd();
+
 	if (pwndMainFrame)
 		pwndMainFrame->ActivateOutputTab(CMainFrame::outputTabBuildResult,false);
 
