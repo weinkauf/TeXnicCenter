@@ -35,6 +35,8 @@ protected:
 	virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
 	afx_msg void OnFileSaveCopyAs();
 	afx_msg void OnUpdateFileSave(CCmdUI *pCmdUI);
+	afx_msg void OnTextModulesDefine();
+	afx_msg void OnUpdateTextModulesList(CCmdUI *pCmdUI);
 
 	DECLARE_MESSAGE_MAP()
 

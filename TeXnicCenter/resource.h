@@ -29,7 +29,6 @@
 #define IDS_NO_LABEL_AVAILABLE          42
 #define IDS_DEFINE_COLOR_NAME_PLACEHOLDER 43
 #define IDS_MORE_COLORS                 44
-#define IDS_RECUSRIVE_INCLUSION         44
 #define IDS_RECURSIVE_INCLUSION         44
 #define IDS_AUTOMATIC                   45
 #define IDS_TEXT_COLORS                 46
@@ -172,7 +171,6 @@
 #define STE_BIBTEX_ERR_DUP_KEY          186
 #define STE_BIBTEX_ERR_INVALID_TYPE     187
 #define STE_BIBTEX_ERR_SUSPICOUS_LINE   188
-#define IDD_FINDREPLACEDLG              189
 #define ID_START_SEARCH                 190
 #define STE_SELECT_PROJECT_PATH         192
 #define IDR_FORMAT_RECENTLY_USED        192
