@@ -43,6 +43,28 @@
 #include "global.h"
 #include "OleDrop.h"
 
+const CString FormatInput(const CStructureItem& item)
+{
+	CString text;
+	text.Format(_T("\\input{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
+
+	return text;
+}
+
+const CString FormatInclude(const CStructureItem& item)
+{
+	CString text;
+	text.Format(_T("\\include{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
+
+	return text;
+}
+
+namespace {
+	const CString ExtractFileTitle(const CString& text)
+	{
+		return CPathTool::GetFileTitle(text);
+	}
+}
 
 BEGIN_MESSAGE_MAP(CFileView,NavigatorTreeCtrl)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CFileView::OnNMCustomdraw)
@@ -265,22 +287,6 @@ void CFileView::OnParsingFinished()
 	Invalidate();
 }
 
-const CString FormatInput(const CStructureItem& item)
-{
-	CString text;
-	text.Format(_T("\\input{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
-
-	return text;
-}
-
-const CString FormatInclude(const CStructureItem& item)
-{
-	CString text;
-	text.Format(_T("\\include{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
-
-	return text;
-}
-
 int CFileView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (NavigatorTreeCtrl::OnCreate(lpCreateStruct) == -1)
@@ -294,7 +300,7 @@ int CFileView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	MapKeyStateToFormat(0,FormatInput);
 	MapKeyStateToFormat(MK_CONTROL,FormatInclude);
-	MapKeyStateToFormat(MK_SHIFT,bind(&CStructureItem::GetTitle,_1));
+	MapKeyStateToFormat(MK_SHIFT,bind(ExtractFileTitle,bind(&CStructureItem::GetTitle,_1)));
 
 	return 0;
 }
