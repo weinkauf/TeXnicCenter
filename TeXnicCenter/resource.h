@@ -1178,7 +1178,6 @@
 #define ID_WINDOW_STRUCTURE             33272
 #define ID_WINDOW_ENVIRONMENT           33273
 #define ID_WINDOW_FILES                 33274
-#define ID_EDIT_TOGGLE_WHITESPACEVIEW   33280
 #define ID_VIEW_USER_TOOLBAR_FIRST      33300
 #define ID_VIEW_USER_TOOLBAR_LAST       33399
 #define ID_REGEX_FIRST                  33400
@@ -1235,7 +1234,6 @@
 #define ID_LATEX_STOP_BUILD             33553
 #define ID_EDIT_DELETE                  37000
 #define ID_EDIT_TAB                     37003
-#define ID_EDIT_UNTAB                   37004
 #define ID_EDIT_SWITCH_OVRMODE          37005
 #define ID_EDIT_SPELL_IGNORE_ALL        37006
 #define ID_EDIT_SPELL_ADD               37007
@@ -1453,7 +1451,6 @@
 #define ID_SHOW_EQUATIONS               38537
 #define ID_SHOW_TABLES                  38541
 #define ID_EDIT_DELETE_LINE             38542
-#define ID_EDIT_WORD_WRAP               38551
 #define ID_VIEW_DISPLAYENDLINES         38552
 #define ID_VIEW_WORD_WRAP               38554
 #define ID_VIEW_TOGGLE_SHOW_LINE_ENDING 38555
@@ -1478,15 +1475,9 @@
 #define ID_TITLE                        38581
 #define ID_PUBLICATION_TYPE             38582
 #define ID_PUBLISHER                    38584
-#define ID_ANSICHT_CODEFALTUNG          38586
-#define ID_ANSICHT_OUTLINING            38587
-#define ID_ANSICHT_INDENTATIONGUIDES    38588
 #define ID_VIEW_INDENTATION_GUIDES      38589
 #define ID_VIEW_INDENTATIONGUIDES       38590
-#define ID_ANSICHT_TRANSPARENZ          38591
 #define ID_VIEW_TRANSPARENCY            38592
-#define ID_VIEW_TRANCPARENCY            38593
-#define ID_ANSICHT_ASD                  38594
 #define IDR_FORMAT                      38700
 #define ID_NONE                         40002
 #define IDS_TEXTMODULES_NONEDEFINED     57671
@@ -1497,7 +1488,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        353
-#define _APS_NEXT_COMMAND_VALUE         38595
+#define _APS_NEXT_COMMAND_VALUE         38598
 #define _APS_NEXT_CONTROL_VALUE         1375
 #define _APS_NEXT_SYMED_VALUE           191
 #endif
