@@ -520,8 +520,9 @@ void BibView::OnLvnBeginDrag(NMHDR* nm, LRESULT*)
 	NMLISTVIEW* p = reinterpret_cast<NMLISTVIEW*>(nm);
 	ASSERT(p->iItem != -1);
 
-	StructureItemContainer::size_type pos = list_view_.GetItemData(p->iItem);
-	const CStructureItem& item = GetProject()->GetStructureItems()[pos];
+	BibItemContainerType::size_type pos = static_cast<BibItemContainerType::size_type>
+		(list_view_.GetItemData(p->iItem));
+	const CStructureItem& item = GetProject()->GetStructureItems()[bib_items_[pos].structure_item_index];
 
 	SetDraggedItem(new CStructureItem(item));
 	DWORD result;
