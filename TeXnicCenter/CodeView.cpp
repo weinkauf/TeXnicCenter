@@ -831,11 +831,13 @@ bool CodeView::IsFoldingEnabled()
 
 void CodeView::OnViewIndentationGuides()
 {
-	bool enable = GetCtrl().GetIndentationGuides() == SC_IV_NONE;
+	bool enable = !CConfiguration::GetInstance()->GetShowIndentationGuides();
 	GetCtrl().SetIndentationGuides(enable ? SC_IV_LOOKBOTH : SC_IV_NONE);
+	CConfiguration::GetInstance()->SetShowIndentationGuides(enable);
 }
 
 void CodeView::OnUpdateViewIndentationGuides(CCmdUI *pCmdUI)
 {
-	pCmdUI->SetCheck(GetCtrl().GetIndentationGuides() != SC_IV_NONE);
+	bool check = CConfiguration::GetInstance()->GetShowIndentationGuides();
+	pCmdUI->SetCheck(check);
 }

@@ -51,6 +51,7 @@
 #define IDS_WIZARD_DISTRIBUTION_PATH    63
 #define IDS_SEARCHING                   64
 #define IDS_ITEMS_FOUND                 65
+#define IDS_CONFIGURE_FOUND_DISTRIBUTION 66
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
 #define IDD_TIP                         103

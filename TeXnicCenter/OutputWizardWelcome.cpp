@@ -96,7 +96,7 @@ LRESULT COutputWizardWelcome::OnWizardNext()
 {
 	UpdateData();
 	/*LRESULT result = */OutputWizardPage::OnWizardNext();
-	GetWizard()->LookForMikTex();
+	GetWizard()->LookForDistribution();
 	return -1;
 }
 

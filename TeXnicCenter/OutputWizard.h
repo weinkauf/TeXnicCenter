@@ -64,7 +64,6 @@ output types.
  */
 class COutputWizard : public CPropertySheet
 {
-
 	DECLARE_DYNAMIC(COutputWizard)
 
 	friend class OutputWizardPage;
@@ -77,6 +76,16 @@ class COutputWizard : public CPropertySheet
 private:
 	bool dvipdfm_installed_;
 	CString dvipdfm_path_;
+	CString distribution_name_;
+
+	enum Distribution
+	{
+		Unknown,
+		MiKTeX,
+		TeXLive
+	};
+
+	Distribution distribution_;
 
 // Construction/Destruction
 public:
@@ -94,6 +103,10 @@ public:
 	virtual BOOL OnInitDialog();
 	//}}AFX_VIRTUAL
 
+private:
+	const CString FindTeXLiveInstallLocation();
+	const CString FindMiKTeXInstallLocation();
+
 // Implementation Helpers
 protected:
 	/**
@@ -101,16 +114,13 @@ protected:
 	CString FindApplicationForDocType(LPCTSTR lpszExt);
 
 	///Returns a string from the registry.
-	const CString ReadStringFromRegistry(bool bAdmin, const CString& Path, const CString& Key);
+	static const CString ReadStringFromRegistry(bool bAdmin, const CString& Path, const CString& Key);
 
 	/**
 	 */
-	void SetActivePage(int nPage);
+	void LookForDistribution();
 
-	/**
-	 */
-	void LookForMikTex();
-
+	
 	/**
 	 */
 	BOOL LookForLatex();
@@ -221,6 +231,7 @@ private:
 
 public:
 	virtual void BuildPropPageArray(void);
+	const CString& GetDistributionName() const;
 };
 
 /////////////////////////////////////////////////////////////////////////////
