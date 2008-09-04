@@ -50,6 +50,7 @@ class COutputView;
  */
 class COutputBuilder : public CWorkerThread
 {
+	CString current_process_name_;
 // construction/destruction
 public:
 	COutputBuilder();
@@ -209,6 +210,9 @@ private:
 
 	/** Result string returned by the latex output filter. */
 	CString m_strLatexResult;
+
+public:
+	const CString& GetCurrentProcessName() const;
 };
 
 #endif // !defined(AFX_OUTPUTBUILDER_H__A0979360_2131_11D5_A222_006097239934__INCLUDED_)

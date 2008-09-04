@@ -128,6 +128,7 @@ BOOL COutputBuilder::CancelExecution()
 
 UINT COutputBuilder::Run()
 {
+	current_process_name_.Empty();
 	m_bCancel = FALSE;
 
 	// valid profile available?
@@ -232,6 +233,8 @@ BOOL COutputBuilder::RunLatex()
 		return FALSE;
 	}
 
+	current_process_name_ = CPathTool::GetFileTitle(pc.GetExecutable());
+
 	//	m_dwProcessGroupId = p->GetProcessID();
 	m_hCurrentProcess = p->GetProcessHandle();
 	p->WaitForProcess();
@@ -291,6 +294,8 @@ BOOL COutputBuilder::RunBibTex()
 		return FALSE;
 	}
 
+	current_process_name_ = _T("BibTeX");
+
 	m_hCurrentProcess = p->GetProcessHandle();
 	p->WaitForProcess();
 	delete p;
@@ -343,6 +348,8 @@ BOOL COutputBuilder::RunMakeIndex()
 		return FALSE;
 	}
 
+	current_process_name_ = _T("MakeIndex");
+
 	m_hCurrentProcess = p->GetProcessHandle();
 	p->WaitForProcess();
 	delete p;
@@ -374,6 +381,8 @@ BOOL COutputBuilder::RunPostProcessors()
 
 	for (int i = 0; ((i < a.GetSize()) && (!m_bCancel)); i++)
 	{
+		current_process_name_ = a[i].GetTitle();
+
 		if (!a[i].Execute(m_strMainPath,m_strWorkingDir,hOutput,&m_hCurrentProcess) || m_bCancel)
 		{
 			bResult = FALSE;
@@ -386,4 +395,9 @@ BOOL COutputBuilder::RunPostProcessors()
 	filter.CloseHandle();
 
 	return bResult;
+}
+
+const CString& COutputBuilder::GetCurrentProcessName() const
+{
+	return current_process_name_;
 }

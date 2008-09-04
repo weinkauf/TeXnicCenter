@@ -1400,3 +1400,8 @@ void COutputDoc::ActivateGrepMessageByOutputLine(int nLine)
 		}
 	}
 }
+
+const CString COutputDoc::GetCurrentProcessName() const
+{
+	return m_builder.GetCurrentProcessName();
+}

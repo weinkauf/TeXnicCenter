@@ -72,7 +72,12 @@ BOOL COutputFilter::Create(PHANDLE phFilterInput,
 void COutputFilter::AddLine(LPCTSTR lpszLine)
 {
 	if (m_pView)
-		m_pView->AddLine(lpszLine);
+	{
+		if (m_pDoc)
+			m_pView->AddLine(m_pDoc->GetCurrentProcessName() + _T("> ") + lpszLine);
+		else
+			m_pView->AddLine(lpszLine);
+	}
 }
 
 int COutputFilter::GetCurrentOutputLine() const
@@ -120,8 +125,8 @@ UINT COutputFilter::Run()
 				if (!bLastWasNewLine)
 				{
 					bLastWasNewLine = TRUE;
-					if (m_pView)
-						m_pView->AddLine(strLine);
+					
+					AddLine(strLine);
 					dwCookie = ParseLine(strLine,dwCookie);
 					strLine.Empty();
 				}
@@ -136,9 +141,7 @@ UINT COutputFilter::Run()
 
 	if (!strLine.IsEmpty())
 	{
-		if (m_pView)
-			m_pView->AddLine(strLine);
-
+		AddLine(strLine);
 		ParseLine(strLine,dwCookie);
 	}
 
