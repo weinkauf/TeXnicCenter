@@ -175,6 +175,8 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	GetCtrl().IndicSetFore(0,RGB(255,0,0)); // Red color instead of dark green
 	GetCtrl().SetIndent(0);
 
+	ShowIndentationGuides(CConfiguration::GetInstance()->GetShowIndentationGuides());
+
 	return 0;
 }
 
@@ -829,10 +831,15 @@ bool CodeView::IsFoldingEnabled()
 	return GetCtrl().GetPropertyInt("fold") == 1;
 }
 
+void CodeView::ShowIndentationGuides( bool show )
+{
+	GetCtrl().SetIndentationGuides(show ? SC_IV_LOOKBOTH : SC_IV_NONE);
+}
+
 void CodeView::OnViewIndentationGuides()
 {
-	bool enable = !CConfiguration::GetInstance()->GetShowIndentationGuides();
-	GetCtrl().SetIndentationGuides(enable ? SC_IV_LOOKBOTH : SC_IV_NONE);
+	bool enable = GetCtrl().GetIndentationGuides() == SC_IV_NONE;
+	ShowIndentationGuides(enable);
 	CConfiguration::GetInstance()->SetShowIndentationGuides(enable);
 }
 

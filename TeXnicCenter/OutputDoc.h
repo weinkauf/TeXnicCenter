@@ -408,4 +408,7 @@ private:
 
 	/** Object used to build the output. */
 	COutputBuilder m_builder;
+
+public:
+	const CString GetCurrentProcessName() const;
 };
