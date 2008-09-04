@@ -52,20 +52,21 @@ class CConfiguration
 
 	CConfiguration();
 
-	BOOL blink_insert_caret_, blink_overwrite_caret_;
-	BOOL insert_caret_line_, overwrite_caret_line_;	
+	bool blink_insert_caret_, blink_overwrite_caret_;
+	bool insert_caret_line_, overwrite_caret_line_;	
 
 	/** TRUE, if line endings shout be displayed as special chars, FALSE otherwise */
-	BOOL show_line_endings_;
+	bool show_line_endings_;
 
 	/** TRUE, if word wrap is enabled, FALSE otherwise */
-	BOOL word_wrap_;
+	bool word_wrap_;
 
-	BOOL show_line_below_fold_;
-	BOOL show_line_below_no_fold_;
-	BOOL show_line_above_fold_;	
-	BOOL show_line_above_no_fold_;
-	BOOL use_spaces_;
+	bool show_line_below_fold_;
+	bool show_line_below_no_fold_;
+	bool show_line_above_fold_;	
+	bool show_line_above_no_fold_;
+	bool use_spaces_;
+	bool show_indentation_guides_;
 
 	int transparency_;
 
@@ -102,6 +103,9 @@ public:
 
 	int GetTransparency() const;
 	void SetTransparency(int val);
+
+	bool GetShowIndentationGuides() const;
+	void SetShowIndentationGuides(bool val);
 
 	static CConfiguration* GetInstance();
 
@@ -161,6 +165,8 @@ protected:
 	 */
 	void SerializeProfileString(LPCTSTR szSection, LPCTSTR szEntry,
 	                            CString *pstrString, SERDIRECTION direction, LPCTSTR szDefault = _T(""));
+
+	void SerializeProfileBool(LPCTSTR szSection, LPCTSTR szEntry, bool& value, SERDIRECTION direction, bool defaultvalue = false);
 
 	/**
 	Writes binary data to or read binary data from the registry.
@@ -241,7 +247,7 @@ protected:
 	/* Attributes */
 public:
 	/** TRUE, if document-windows should be opened maximized */
-	BOOL m_bOpenDocWndMaximized;
+	bool m_bOpenDocWndMaximized;
 
 	/** Paths to search for project templates in. */
 	CStringArray m_astrProjectTemplatePaths;
@@ -256,13 +262,13 @@ public:
 	// File	Handling
 
 	/** TRUE, if TeXnicCenter should always save newly created files. */
-	BOOL m_bSaveNewDocuments;
+	bool m_bSaveNewDocuments;
 
 	/** TRUE, if TeXnicCenter should save all modified tex-files, before compilation.*/
-	BOOL m_bSaveBeforeCompilation;
+	bool m_bSaveBeforeCompilation;
 
 	/** TRUE, if TeXnicCenter should save all open files in given intervals. */
-	BOOL m_bSaveAutomatic;
+	bool m_bSaveAutomatic;
 
 	/** The interval, TeXnicCenter should save all open files in. @see m_bSaveAutomatic. */
 	UINT m_unSaveInterval;
@@ -298,7 +304,7 @@ public:
 	CString m_TextOutsource_strUserCmdRight;
 
 	///Whether to open the new file
-	BOOL m_TextOutsource_bOpenNewFile;
+	bool m_TextOutsource_bOpenNewFile;
 
 	///Last selected type of opening the new file
 	int m_TextOutsource_nOpenNewFileType;
@@ -307,7 +313,7 @@ public:
 	// character replacement
 
 	/** TRUE, if the Editor should replace opening and closing quotation marks while typing.*/
-	BOOL m_bReplaceQuotationMarks;
+	bool m_bReplaceQuotationMarks;
 
 	/** Text, the Editor should replace an opening quotation mark with. @see m_bReplaceQuotationMarks.*/
 	CString m_strOpeningQuotationMark;
@@ -323,7 +329,7 @@ public:
 	// Project specific
 
 	/** TRUE, if we should load the last project at startup. */
-	BOOL m_bLoadLastProject;
+	bool m_bLoadLastProject;
 
 	/** Path of the latest project. */
 	CString m_strLastProject;
@@ -341,10 +347,10 @@ public:
 	int m_nTabWidth;
 
 	/** TRUE, if white spaces shout be displayed as special chars, FALSE otherwise */
-	BOOL m_bViewWhitespaces;
+	bool m_bViewWhitespaces;
 
 	/** TRUE, if line numbers should be shown */
-	BOOL m_bShowLineNumbers;
+	bool m_bShowLineNumbers;
 
 	/** The word warp style. */
 	int m_WordWrapStyle;
@@ -368,16 +374,16 @@ public:
 	CString m_strFileFindFileTypes;
 
 	/** TRUE if whole words where searched last time. */
-	BOOL m_bFileFindWholeWords;
+	bool m_bFileFindWholeWords;
 
 	/** TRUE if last search was case sensitive. */
-	BOOL m_bFileFindCaseSensitive;
+	bool m_bFileFindCaseSensitive;
 
 	/** TRUE if last search was a regular expression. */
-	BOOL m_bFileFindRegularExpression;
+	bool m_bFileFindRegularExpression;
 
 	/** TRUE if last time sub folders where searched. */
-	BOOL m_bFileFindSubFolders;
+	bool m_bFileFindSubFolders;
 
 	/** Index of output buffer, where last time the output was written to */
 	int m_nFileFindOutput;
@@ -410,22 +416,22 @@ public:
 	CString m_strSpellPersonalDictionary;
 
 	/** Skip comments. */
-	BOOL m_bSpellSkipComments;
+	bool m_bSpellSkipComments;
 
 	/** Skip words with numbers. */
-	BOOL m_bSpellSkipNumbers;
+	bool m_bSpellSkipNumbers;
 
 	/** Skip LaTeX tags. */
-	BOOL m_bSpellSkipTags;
+	bool m_bSpellSkipTags;
 
 	/** Skip all uppercase words .*/
-	BOOL m_bSpellSkipCaps;
+	bool m_bSpellSkipCaps;
 
 	/** Suggest from main dictionary only. */
-	BOOL m_bSpellMainDictOnly;
+	bool m_bSpellMainDictOnly;
 
 	/** Enable spell check. */
-	BOOL m_bSpellEnable;
+	bool m_bSpellEnable;
 
 	///////////////////////////////////////////////////////////////////
 	// TextModules
@@ -439,19 +445,19 @@ public:
 	/** Array to hold the patterns for file cleaning. */
 	CFileCleanItemArray m_aFileCleanItems;
 
-	BOOL m_bFileCleanConfirm;
+	bool m_bFileCleanConfirm;
 
 	///////////////////////////////////////////////////////////////////
 	// Accessibility
 
 	/** TRUE to optimize the GUI for visually handicapped users. */
-	BOOL m_bOptimizeMenuForVisuallyHandicappedUsers;
+	bool m_bOptimizeMenuForVisuallyHandicappedUsers;
 
 	/**
 	TRUE to optimize the GUI for visually handicapped users in the
 	next session.
 	 */
-	BOOL m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart;
+	bool m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart;
 
 	///////////////////////////////////////////////////////////////////
 	// Accessibility

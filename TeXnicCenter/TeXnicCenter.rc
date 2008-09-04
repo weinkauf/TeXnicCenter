@@ -4735,7 +4735,7 @@ BEGIN
     IDS_PUBLISHER           "Herausgeber"
     STE_OUTPUTWIZARD_DVIPDFMTYPE "LaTeX => DVI => PDF"
     IDS_WELCOME_WIZARD      "Willkommen zum Konfigurationsassistenten"
-    IDS_WIZARD_MIKTEX_DETECTED "Auf Ihrem System wurde MiKTeX gefunden"
+    IDS_WIZARD_MIKTEX_DETECTED "Auf Ihrem System wurde %s gefunden"
     IDS_WIZARD_CONFIGURE_PDF 
                             "Ihre TeX-Distribution unterstützt die Erzeugung von PDF-Dateien (Portable Document Format)"
     IDS_WIZARD_FINALIZE     "Konfiguration abschließen"
@@ -4760,6 +4760,8 @@ STRINGTABLE
 BEGIN
     IDS_SEARCHING           "Wird gesucht..."
     IDS_ITEMS_FOUND         "%i Einträge gefunden"
+    IDS_CONFIGURE_FOUND_DISTRIBUTION 
+                            "Ja, TeXnicCenter für die Verwendung mit %s konfigurieren."
 END
 
 STRINGTABLE 
@@ -5065,9 +5067,8 @@ CAPTION "Configuration Wizard - MiKTeX"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     LTEXT           "Should TeXnicCenter be configured for the use with MiKTeX?",IDC_STATIC,80,20,175,20
-    CONTROL         "",IDC_OW_MIKTEXYES,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,80,45,10,8
+    CONTROL         "",IDC_OW_MIKTEXYES,"Button",BS_AUTORADIOBUTTON | BS_TOP | BS_MULTILINE | WS_GROUP | WS_TABSTOP,80,45,170,23
     CONTROL         "",IDC_OW_MIKTEXNO,"Button",BS_AUTORADIOBUTTON,80,70,10,10
-    LTEXT           "Yes, configure TeXnicCenter for the use with MiKTeX.",IDC_STATIC,92,44,165,20
     LTEXT           "No, I want to configure TeXnicCenter for the use with another TeX-distribution.",IDC_STATIC,92,70,165,20
 END
 
@@ -8687,7 +8688,7 @@ BEGIN
     IDS_YEAR                "Year"
     IDS_PUBLICATION_TYPE    "Type"
     IDS_PUBLISHER           "Publisher"
-    IDS_WIZARD_MIKTEX_DETECTED "MiKTeX has been located on your system"
+    IDS_WIZARD_MIKTEX_DETECTED "%s has been located on your system"
     IDS_WIZARD_CONFIGURE_PDF 
                             "Your TeX-distribution supports the generation of PDF-files"
     IDS_WIZARD_FINALIZE     "Finish"
@@ -8700,6 +8701,8 @@ END
 STRINGTABLE 
 BEGIN
     IDS_ITEMS_FOUND         "% items found"
+    IDS_CONFIGURE_FOUND_DISTRIBUTION 
+                            "Yes, configure TeXnicCenter for the use with %s."
 END
 
 #endif    // English (U.S.) resources

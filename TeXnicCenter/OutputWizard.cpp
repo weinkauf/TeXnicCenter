@@ -112,6 +112,7 @@ COutputWizard::COutputWizard(CProfileMap &profiles,CWnd* pParentWnd)
 , m_wndPageDistributionPath(this)
 , dvipdfm_installed_(false)
 , sumatra_installed_(false)
+, distribution_(Unknown)
 {
 	AddPage(&m_wndPageWelcome);
 	AddPage(&m_wndPageMikTex);
@@ -144,16 +145,6 @@ COutputWizard::~COutputWizard()
 
 void COutputWizard::OnBack()
 {
-	//switch (m_stackPageHistory.Top()) {
-	//    case pageWelcome:
-	//        SetWizardButtons(PSWIZB_NEXT);
-	//        break;
-
-	//    default:
-	//        SetWizardButtons(PSWIZB_NEXT | PSWIZB_BACK);
-	//        break;
-	//}
-
 	SetActivePage(m_stackPageHistory.top());
 	m_stackPageHistory.pop();
 }
@@ -181,7 +172,7 @@ void COutputWizard::OnNext()
 	switch (m_stackPageHistory.top())
 	{
 		case pageWelcome:
-			LookForMikTex();
+			LookForDistribution();
 			break;
 		case pageMikTex:
 			if (m_wndPageMikTex.m_nChoice == COutputWizardMiKTeX::yes && LookForLatex())
@@ -287,31 +278,7 @@ CString COutputWizard::FindApplicationForDocType(LPCTSTR lpszExt)
 	return oldstr;
 }
 
-void COutputWizard::SetActivePage(int nPage)
-{
-	//switch (nPage) {
-	//    case pageWelcome:
-	//        SetWizardButtons(PSWIZB_NEXT);
-	//        break;
-	//    case pageMikTex:
-	//    case pageDistributionPath:
-	//    case pageDviViewer:
-	//    case pagePsViewer:
-	//    case pagePdfViewer:
-	//        SetWizardButtons(PSWIZB_NEXT | PSWIZB_BACK);
-	//        break;
-	//    case pageFinish:
-	//        SetWizardButtons(PSWIZB_FINISH | PSWIZB_BACK);
-	//        break;
-	//    default:
-	//        // Unknown page!
-	//        ASSERT(false);
-	//}
-
-	CPropertySheet::SetActivePage(nPage);
-}
-
-const CString COutputWizard::ReadStringFromRegistry(bool bAdmin, const CString& Path, const CString& Key)
+const CString COutputWizard::ReadStringFromRegistry( bool bAdmin, const CString& Path, const CString& Key )
 {
 	CString retval;
 	CSettingsStore Reg(bAdmin,true);
@@ -329,7 +296,7 @@ const CString COutputWizard::ReadStringFromRegistry(bool bAdmin, const CString& 
 	return retval;
 }
 
-void COutputWizard::LookForMikTex()
+void COutputWizard::LookForDistribution()
 {
 	//Get installation path of MiKTeX
 	//Where did miktex wrote its stuff?
@@ -338,59 +305,21 @@ void COutputWizard::LookForMikTex()
 	//
 	// We prefer mikTeX 2.5 over mikTeX 2.4, i.e., newer versions are prefered
 	//
-	//	==> Tested with miktex up to version 2.6
+	//	==> Tested with miktex up to version 2.7
 	//
+	CString strPath = FindMiKTeXInstallLocation();
 
-	typedef std::set<CString> Paths;
-	Paths mikPaths;
+	// Look for TeX Live: tested with TeX Live 2008
+	if (strPath.IsEmpty()) {
+		strPath = FindTeXLiveInstallLocation();
 
-	LPCTSTR const mikbin = _T("miktex\\bin");
-
-	ATL::CRegKey reg;
-
-	const CString versions[] = {_T("MiKTeX 2.7"),_T("MiKTeX 2.8")};
-	const int count = sizeof(versions) / sizeof(*versions);
-
-	for (int i = 0; i < count; ++i)
-	{
-		if (reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\") +
-		             versions[i],KEY_READ) == ERROR_SUCCESS)
-		{
-			TCHAR path[MAX_PATH];
-			ULONG length = MAX_PATH;
-
-			if (reg.QueryStringValue(_T("InstallLocation"),path,&length) == ERROR_SUCCESS)
-			{
-				path[length] = 0;
-				mikPaths.insert(CPathTool::Cat(path,mikbin));
-			}
-
-			reg.Close();
-		}
+		if (!strPath.IsEmpty())
+			distribution_ = TeXLive;
+		else
+			distribution_ = Unknown;
 	}
-
-	//miktex 2.6 - User
-	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(false,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.6\\Core"),_T("Install")),mikbin));
-	//miktex 2.6 - Admin
-	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(true,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.6\\Core"),_T("Install")),mikbin));
-	//miktex 2.5 - User
-	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(false,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.5\\Core"),_T("Install")),mikbin));
-	//miktex 2.5 - Admin
-	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(true,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.5\\Core"),_T("Install")),mikbin));
-	//miktex 2.4 - User
-	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(false,_T("SOFTWARE\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX"),_T("Install Root")),mikbin));
-	//miktex 2.4 - Admin
-	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(true,_T("SOFTWARE\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX"),_T("Install Root")),mikbin));
-
-	CString strPath;
-
-	for (Paths::const_iterator it = mikPaths.begin(); it != mikPaths.end() && strPath.IsEmpty(); ++it)
-	{
-		if ((CPathTool::Exists(*it)) && (CPathTool::Exists(CPathTool::Cat(*it,_T("latex.exe")))))
-		{
-			strPath = *it;
-		}
-	}
+	else
+		distribution_ = MiKTeX;
 
 	//Did we find a path?
 	if (strPath.IsEmpty())
@@ -688,8 +617,6 @@ void COutputWizard::LookForPdf()
 
 void COutputWizard::ShowInformation()
 {
-	//SetWizardButtons(PSWIZB_FINISH | PSWIZB_BACK);
-
 	// generate list of output types to create
 	m_wndPageFinish.m_strList.Empty();
 
@@ -1082,4 +1009,123 @@ void COutputWizard::GeneratePDFProfile( const CString& name, const CString& strP
 		// add profile to map
 		m_profiles.Add(name,p);
 	}
+}
+
+const CString COutputWizard::FindMiKTeXInstallLocation()
+{
+	typedef std::set<CString> Paths;
+	Paths mikPaths;
+
+	LPCTSTR const mikbin = _T("miktex\\bin");
+
+	ATL::CRegKey reg;
+
+	const CString versions[] = {_T("MiKTeX 2.7"),_T("MiKTeX 2.8")};
+	const int count = sizeof(versions) / sizeof(*versions);
+
+	for (int i = 0; i < count; ++i)
+	{
+		if (reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\") +
+			versions[i],KEY_READ) == ERROR_SUCCESS)
+		{
+			TCHAR path[MAX_PATH];
+			ULONG length = MAX_PATH;
+
+			if (reg.QueryStringValue(_T("InstallLocation"),path,&length) == ERROR_SUCCESS)
+			{
+				path[length] = 0;
+				mikPaths.insert(CPathTool::Cat(path,mikbin));
+			}
+
+			reg.Close();
+		}
+	}
+
+	//miktex 2.6 - User
+	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(false,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.6\\Core"),_T("Install")),mikbin));
+	//miktex 2.6 - Admin
+	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(true,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.6\\Core"),_T("Install")),mikbin));
+	//miktex 2.5 - User
+	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(false,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.5\\Core"),_T("Install")),mikbin));
+	//miktex 2.5 - Admin
+	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(true,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.5\\Core"),_T("Install")),mikbin));
+	//miktex 2.4 - User
+	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(false,_T("SOFTWARE\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX"),_T("Install Root")),mikbin));
+	//miktex 2.4 - Admin
+	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(true,_T("SOFTWARE\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX"),_T("Install Root")),mikbin));
+
+	CString strPath;
+
+	for (Paths::const_iterator it = mikPaths.begin(); it != mikPaths.end() && strPath.IsEmpty(); ++it)
+	{
+		if (CPathTool::Exists(CPathTool::Cat(*it,_T("latex.exe"))))
+			strPath = *it;
+	}
+
+	if (!strPath.IsEmpty())
+		distribution_name_ = _T("MiKTeX");
+
+	return strPath;
+}
+
+const CString COutputWizard::FindTeXLiveInstallLocation()
+{
+	CString strPath;
+	ATL::CRegKey reg;
+
+	if (reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\TeXLive"),KEY_READ) == ERROR_SUCCESS)
+	{
+		ULONG length = MAX_PATH;
+
+		if (reg.QueryStringValue(_T("UninstallString"),strPath.GetBuffer(length),&length) == ERROR_SUCCESS) 
+		{
+			strPath.ReleaseBuffer(length);
+			strPath.Trim(_T('"')); // Remove the leading and trailing "
+
+			int index;
+			bool found = false;
+			CString path;
+
+			while ((index = strPath.ReverseFind(_T('\\'))) != -1 && !found)
+			{
+				strPath.Delete(index,strPath.GetLength() - index);
+				path = CPathTool::Cat(strPath,_T("bin\\win32"));
+
+				if (CPathTool::Exists(CPathTool::Cat(path,_T("latex.exe"))))
+					found = true;
+			}
+
+			if (found)
+				strPath = path;
+			else
+				strPath.Empty();
+
+			length = 0;
+			
+			LPCTSTR const key = _T("DisplayName");
+			CString name;
+
+			if (reg.QueryStringValue(key,0,&length) == ERROR_SUCCESS) 
+			{
+				if (reg.QueryStringValue(key,name.GetBuffer(length),&length) == ERROR_SUCCESS)
+					name.ReleaseBuffer(length);
+				else
+					name.ReleaseBuffer(0);
+
+				distribution_name_ = name;
+			}
+		}
+		else
+			strPath.ReleaseBuffer(0);
+	}
+
+	if (!strPath.IsEmpty() && distribution_name_.IsEmpty())
+		distribution_name_ = _T("TeX Live");
+
+	return strPath;
+}
+
+const CString& COutputWizard::GetDistributionName() const
+{
+	return distribution_name_;
 }

@@ -74,6 +74,16 @@ void COutputWizardMiKTeX::DoDataExchange(CDataExchange* pDX)
 
 BOOL COutputWizardMiKTeX::OnSetActive()
 {
+	CString fmt;
+	fmt.Format(IDS_WIZARD_MIKTEX_DETECTED,GetWizard()->GetDistributionName());
+
+	PropSheet_SetHeaderTitle(GetWizard()->GetSafeHwnd(),
+		PropSheet_HwndToIndex(GetWizard()->GetSafeHwnd(),m_hWnd),static_cast<LPCTSTR>(fmt));
+
+	fmt.Format(IDS_CONFIGURE_FOUND_DISTRIBUTION,GetWizard()->GetDistributionName());
+
+	SetDlgItemText(IDC_OW_MIKTEXYES,fmt);
+
 	if (RunTimeHelper::IsVista())
 	{
 		PropSheet_EnableWizButtons(m_hWnd,
