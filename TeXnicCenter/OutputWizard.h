@@ -188,9 +188,6 @@ protected:
 
 // Attributes
 private:
-	/** TRUE if MiKTeX has been found. */
-	bool m_bMikTexInstalled;
-
 	/** TRUE if latex has been found. */
 	bool m_bLatexInstalled;
 
