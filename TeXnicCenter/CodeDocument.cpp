@@ -995,7 +995,7 @@ void CodeDocument::OnEditJoinParagraph()
 	c.LinesJoin();
 }
 
-const FoldingPointContainerType CodeDocument::GetFoldingPoints()
+const FoldingPointContainerType CodeDocument::GetFoldingPoints( bool contracted /*= false*/ )
 {
 	FoldingPointContainerType points;
 
@@ -1003,12 +1003,14 @@ const FoldingPointContainerType CodeDocument::GetFoldingPoints()
 
 	const int lines = c.GetLineCount();
 	int level;
+	bool folded;
 
 	for (int i = 0; i < lines; ++i) {
 		level = c.GetFoldLevel(i);
+		folded = c.GetFoldExpanded(i) == 0;
 
-		if (level & SC_FOLDLEVELHEADERFLAG) // SC_FOLDLEVELHEADERFLAG indicates a fold point
-			points.push_back(FoldingPoint(i,c.GetFoldExpanded(i) == 0/*,level*/));
+		if (level & SC_FOLDLEVELHEADERFLAG && (!contracted || folded)) // SC_FOLDLEVELHEADERFLAG indicates a fold point
+			points.push_back(FoldingPoint(i,folded));
 	}
 
 	return points;
@@ -1026,4 +1028,9 @@ void CodeDocument::OnCloseDocument()
 	GetDocTemplate()->RemoveDocument(this);
 	// DestroyWindow etc.
 	CScintillaDoc::OnCloseDocument();
+}
+
+const FoldingPointContainerType CodeDocument::GetContractedFoldingPoints()
+{
+	return GetFoldingPoints(true);
 }

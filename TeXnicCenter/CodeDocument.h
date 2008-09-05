@@ -171,7 +171,8 @@ public:
 	/// of the paragraph the start_line parameter points to
 	const std::pair<int,int> GetParagraphRange(int start_line);
 	/// Returns a container for FoldingPoints
-	const FoldingPointContainerType GetFoldingPoints();
+	const FoldingPointContainerType GetFoldingPoints(bool contracted = false);
+	const FoldingPointContainerType GetContractedFoldingPoints();
 
 	template<class I>
 	void SetFoldingPoints(I first, I last);

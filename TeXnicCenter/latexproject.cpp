@@ -36,6 +36,7 @@
 #include "TeXnicCenter.h"
 
 #include <sstream>
+#include <functional>
 
 #include "MainFrm.h"
 #include "LatexProject.h"
@@ -312,7 +313,7 @@ void CLaTeXProject::OnCloseProject()
 		while (pos) {
 			doc = theApp.GetLatexDocTemplate()->GetNextDoc(pos);
 			ASSERT(doc->IsKindOf(RUNTIME_CLASS(CodeDocument)));
-			SetFoldingPoints(doc->GetPathName(),static_cast<CodeDocument*>(doc)->GetFoldingPoints());
+			SetFoldingPoints(doc->GetPathName(),static_cast<CodeDocument*>(doc)->GetContractedFoldingPoints());
 		}
 
 		CIniFile session(SessionPathName);
@@ -636,7 +637,12 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 					points.clear();
 
 					std::copy(iterator_type(iss),iterator_type(),std::back_inserter(points));
+					std::for_each(points.begin(),points.end(),
+						std::bind2nd(std::mem_fun1_ref(&FoldingPoint::SetContracted),true));
+
 					folding_points_.insert(std::make_pair(it->first,points));
+
+					
 				}
 			}
 		}
