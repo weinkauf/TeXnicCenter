@@ -1251,9 +1251,10 @@ void CLaTeXProject::RemoveBookmark( const CString& filename, const CodeBookmark&
 		BookmarkContainerType::iterator itb = std::find(it->second.begin(),it->second.end(),b);
 		
 		if (itb != it->second.end())
-		{
 			it->second.erase(itb);
-		}
+
+		if (it->second.empty())
+			bookmarks_.erase(it);
 	}
 }
 
@@ -1281,10 +1282,7 @@ void CLaTeXProject::RemoveAllBookmarks( const CString& filename )
 	FileBookmarksContainerType::iterator it = bookmarks_.find(name);
 
 	if (it != bookmarks_.end()) 
-	{
-		if (!it->second.empty()) 
-			it->second.clear();
-	}
+		bookmarks_.erase(it);
 }
 
 bool CLaTeXProject::GetFoldingPoints( const CString& filename, FoldingPointContainerType& points ) const
@@ -1307,9 +1305,10 @@ bool CLaTeXProject::GetFoldingPoints( const CString& filename, FoldingPointConta
 
 void CLaTeXProject::SetFoldingPoints(const CString& filename, const FoldingPointContainerType& points)
 {
-	if (!points.empty())
-	{
-		const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+
+	if (!points.empty())		
 		folding_points_[name] = points;
-	}
+	else
+		folding_points_.erase(name);
 }

@@ -496,11 +496,13 @@ void LaTeXView::UpdateSettings()
 	rCtrl.StyleSetSize(STYLE_BRACELIGHT,point_size);
 	rCtrl.StyleSetBold(STYLE_BRACELIGHT,TRUE);
 	rCtrl.StyleSetFore(STYLE_BRACELIGHT,RGB(0,0,0));
+	rCtrl.StyleSetBack(STYLE_BRACELIGHT,GetColor(COLORINDEX_PAIRSTRINGBKGND));
 
 	rCtrl.StyleSetFont(STYLE_BRACEBAD,editor_font.lfFaceName);
 	rCtrl.StyleSetSize(STYLE_BRACEBAD,point_size);
 	rCtrl.StyleSetBold(STYLE_BRACEBAD,TRUE);
 	rCtrl.StyleSetFore(STYLE_BRACEBAD,RGB(255,0,0));
+	rCtrl.StyleSetBack(STYLE_BRACEBAD,GetColor(COLORINDEX_BADPAIRSTRINGBKGND));
 
 #pragma endregion
 
