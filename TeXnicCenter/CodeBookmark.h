@@ -70,7 +70,7 @@ typedef std::vector<FoldingPoint> FoldingPointContainerType;
 template<class Ch, class Tr>
 inline std::basic_ostream<Ch,Tr>& operator<<(std::basic_ostream<Ch,Tr>& out, const FoldingPoint& b)
 {
-	return out << b.bookmark_ << out.widen(' ') << b.IsContracted();
+	return out << b.bookmark_/* << out.widen(' ') << b.IsContracted()*/;
 }
 
 template<class Ch, class Tr>
@@ -78,11 +78,11 @@ inline std::basic_istream<Ch,Tr>& operator>>(std::basic_istream<Ch,Tr>& in, Fold
 {
 	in >> b.bookmark_;
 	
-	bool contracted;
-	in >> contracted;
+	//bool contracted;
+	//in >> contracted;
 
-	if (in)
-		b.SetContracted(contracted);
+	//if (in)
+	//	b.SetContracted(contracted);
 
 	return in;
 }

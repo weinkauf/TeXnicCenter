@@ -310,7 +310,7 @@ void LaTeXDocument::OnRemovedAllBookmarks(void)
 void LaTeXDocument::OnCloseDocument()
 {
 	if (CLaTeXProject* p = theApp.GetProject())
-		p->SetFoldingPoints(GetPathName(),GetFoldingPoints());
+		p->SetFoldingPoints(GetPathName(),GetContractedFoldingPoints());
 
 	CodeDocument::OnCloseDocument();
 }
