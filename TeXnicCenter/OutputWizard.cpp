@@ -100,7 +100,6 @@ COutputWizard::COutputWizard(CProfileMap &profiles,CWnd* pParentWnd)
 , m_wndPageDviViewer(this,IDD_OUTPUTWIZARD_DVIVIEWER,IDS_WIZARD_CONFIGURE_DVI)
 , m_wndPagePsViewer(this,IDD_OUTPUTWIZARD_PSVIEWER,IDS_WIZARD_CONFIGURE_PS)
 , m_wndPagePdfViewer(this,IDD_OUTPUTWIZARD_PDFVIEWER,IDS_WIZARD_CONFIGURE_PDF)
-, m_bMikTexInstalled(false)
 , m_bLatexInstalled(false)
 , m_bDvipsInstalled(false)
 , m_bPdfLatexInstalled(false)
@@ -324,13 +323,11 @@ void COutputWizard::LookForDistribution()
 	//Did we find a path?
 	if (strPath.IsEmpty())
 	{
-		m_bMikTexInstalled = false;
 		SetActivePage(pageDistributionPath);
 		return;
 	}
 
 	//Yes, everything is fine.
-	m_bMikTexInstalled = true;
 	m_wndPageDistributionPath.m_strPath = strPath;
 
 	SetActivePage(pageMikTex);
@@ -657,16 +654,16 @@ void COutputWizard::GenerateOutputProfiles()
 	// - %Wm, because of the src-specials for forward/inverse search. Otherwise, things might break.
 	CString strLatexOptions(_T("--src -interaction=nonstopmode \"%Wm\""));
 
-	// - Only miktex support the -max-print-line=N feature
-	if (m_bMikTexInstalled)
-		strLatexOptions = _T("--src -interaction=nonstopmode -max-print-line=120 \"%Wm\"");
 	// - Options for PDFLatex
 	// - %pm, because it doesn't matter here. I guess, we could use %Wm as well. But %pm is tested and seems to work for all.
 	CString strPDFLatexOptions(_T("-interaction=nonstopmode \"%pm\""));
 
 	// - Only miktex support the -max-print-line=N feature
-	if (m_bMikTexInstalled)
+	if (distribution_ == MiKTeX) 
+	{
+		strLatexOptions = _T("--src -interaction=nonstopmode -max-print-line=120 \"%Wm\"");
 		strPDFLatexOptions = _T("-interaction=nonstopmode -max-print-line=120 \"%pm\"");
+	}
 
 #pragma region LaTeX => DVI
 	if (m_bLatexInstalled)
