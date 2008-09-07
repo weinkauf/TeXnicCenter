@@ -1324,6 +1324,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\LexBibTeX.cxx"
+				>
+			</File>
+			<File
 				RelativePath="..\src\LexBullant.cxx"
 				>
 				<FileConfiguration

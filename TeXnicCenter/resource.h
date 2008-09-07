@@ -2,7 +2,6 @@
 // Microsoft Visual C++ generated include file.
 // Used by TeXnicCenter.rc
 //
-#define STE_CRYSTAL_EDIT_RESOURCE_DLL   18
 #define STE_SESSION_RESTORE_NOTALLWINDOWSRESTORED 19
 #define IDS_SAVE_PACKAGE_AS             20
 #define IDS_SELECT_PACKAGE_DIR          21
@@ -52,6 +51,10 @@
 #define IDS_SEARCHING                   64
 #define IDS_ITEMS_FOUND                 65
 #define IDS_CONFIGURE_FOUND_DISTRIBUTION 66
+#define IDR_MAINFRAME                   67
+#define IDR_LATEXDOCTYPE                68
+#define IDR_BIBTEXDOCTYPE               69
+#define IDR_LATEXPROJECTDOCTYPE         70
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
 #define IDD_TIP                         103
@@ -79,10 +82,7 @@
 #define ID_VIEW_GREP_1_PANE             123
 #define ID_VIEW_GREP_2_PANE             124
 #define ID_VIEW_PARSE_PANE              125
-#define IDR_MAINFRAME                   128
-#define IDR_LATEXTYPE                   129
 #define IDR_TEXT_BACK_COLOR             129
-#define IDR_LATEXPROJECT                130
 #define IDR_TEXT_FORE_COLOR             130
 #define STE_ALL_FILES_FILTER            131
 #define IDD_GET_PATH                    131
@@ -359,6 +359,7 @@
 #define STE_PARSE_PARSING               352
 #define IDD_TRANSPARENCY                352
 #define STE_PARSE_FOUND                 353
+#define IDI_ICON1                       353
 #define STE_PARSE_FOUND_UNMATCHED       354
 #define STE_PARSE_RESULTS               355
 #define STE_PARSE_TERMINATE             356
@@ -484,16 +485,6 @@
 #define IDC_WINDOW_CLOSE                1100
 #define IDC_GOTO_LINE_EDIT              1101
 #define IDC_GOTO_LINE_SPIN              1102
-#define IDC_URL_ME                      1103
-#define IDC_URL_STAS                    1104
-#define IDC_URL_JOHN                    1105
-#define IDC_URL_JOHN_MCTAINSH           1106
-#define IDC_URL_PAUL                    1106
-#define IDC_URL_ANDREI                  1107
-#define IDC_URL_KIRK                    1108
-#define IDC_URL_GERALD                  1108
-#define IDC_URL_CODEGURU                1109
-#define IDC_URL_MAILTOME                1110
 #define IDC_URL_TEXNICCENTER            1111
 #define IDC_URL_TOOLSCENTER             1112
 #define IDC_URL_TEXNICCENTER2           1113
@@ -724,6 +715,7 @@
 #define IDC_USE_SPACES                  1369
 #define IDC_SLIDER1                     1373
 #define IDC_SLIDER_VALUE                1374
+#define IDC_FOLD_COMPACT                1376
 #define IDD_SPELL_CHECK                 8600
 #define IDC_EDIT_WHOLE_WORD             8603
 #define IDC_EDIT_MATCH_CASE             8604
@@ -1435,7 +1427,6 @@
 #define ID_VIEW_FILES_PANE              38497
 #define ID_VIEW_BIB_ENTRIES_PANE        38498
 #define ID_VIEW_ERROR_LIST_PANE         38499
-#define ID_TOOLBARS_A                   38512
 #define ID_VIEW_APP_LOOK_WIN_2000       38524
 #define ID_VIEW_APP_LOOK_OFFICE_XP      38525
 #define ID_VIEW_APP_LOOK_WIN_XP         38526
@@ -1488,9 +1479,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        353
+#define _APS_NEXT_RESOURCE_VALUE        354
 #define _APS_NEXT_COMMAND_VALUE         38598
-#define _APS_NEXT_CONTROL_VALUE         1375
+#define _APS_NEXT_CONTROL_VALUE         1378
 #define _APS_NEXT_SYMED_VALUE           191
 #endif
 #endif

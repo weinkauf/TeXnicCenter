@@ -42,7 +42,7 @@
 #include "EncodingConverter.h"
 
 
-SpellCheckDlg::SpellCheckDlg(LaTeXView* view, Speller* speller, CWnd* pParent /*= NULL*/)
+SpellCheckDlg::SpellCheckDlg(CodeView* view, Speller* speller, CWnd* pParent /*= NULL*/)
 : CDialog(SpellCheckDlg::IDD, pParent)
 , tokenizer_(0)
 , selection_only_(true)
@@ -55,7 +55,7 @@ SpellCheckDlg::SpellCheckDlg(LaTeXView* view, Speller* speller, CWnd* pParent /*
 		Reset(view,speller);	
 }
 
-void SpellCheckDlg::Reset(LaTeXView *pBuddy, Speller *pSpell)
+void SpellCheckDlg::Reset( CodeView *pBuddy, Speller *pSpell )
 {
 	VERIFY(view_ = pBuddy);
 	tokenizer_ = view_->GetTokenizer();

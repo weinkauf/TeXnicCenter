@@ -13,6 +13,7 @@ COptionPageEditor::COptionPageEditor()
 , show_line_above_fold_(CConfiguration::GetInstance()->GetShowLineAboveFold())
 , show_line_above_no_fold_(CConfiguration::GetInstance()->GetShowLineAboveNoFold())
 , use_spaces_(CConfiguration::GetInstance()->GetUseSpaces())
+, fold_compact_(CConfiguration::GetInstance()->GetFoldCompact())
 {
 	m_nTabWidth = CConfiguration::GetInstance()->m_nTabWidth;
 	m_nFixedColumn = CConfiguration::GetInstance()->m_nFixedColumnWrap;
@@ -38,6 +39,7 @@ void COptionPageEditor::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX,IDC_SHOW_LINE_ABOVE_FOLD,show_line_above_fold_);
 	DDX_Check(pDX,IDC_SHOW_LINE_ABOVE_NO_FOLD,show_line_above_no_fold_);
 	DDX_Check(pDX,IDC_USE_SPACES,use_spaces_);
+	DDX_Check(pDX,IDC_FOLD_COMPACT,fold_compact_);
 }
 
 BEGIN_MESSAGE_MAP(COptionPageEditor,PropertyPage)
@@ -73,6 +75,7 @@ void COptionPageEditor::OnOK()
 	CConfiguration::GetInstance()->SetShowLineAboveNoFold(show_line_above_no_fold_ != 0);
 
 	CConfiguration::GetInstance()->SetUseSpaces(use_spaces_ != 0);
+	CConfiguration::GetInstance()->SetFoldCompact(fold_compact_ != 0);
 
 	// TODO: Word wrap
 	//CConfiguration::GetInstance()->m_WordWrapStyle = (TCRYSTALWORDWRAP)m_nWordWrapStyle + 1;

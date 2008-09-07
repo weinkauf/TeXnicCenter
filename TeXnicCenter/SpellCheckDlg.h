@@ -28,14 +28,14 @@
 
 #pragma once
 
-class LaTeXView;
+class CodeView;
 class DocumentTokenizer;
 class Speller;
 
 class SpellCheckDlg : public CDialog
 {
 	DocumentTokenizer* tokenizer_;
-	LaTeXView* view_;
+	CodeView* view_;
 	long start_pos_, end_pos_;
 	Speller* speller_;
 	int current_line_, current_line_start_pos_, current_line_end_pos_;
@@ -59,7 +59,7 @@ public:
 	bool GetCheckSelectionOnly() const;
 	void SetCheckSelectionOnly(bool val = true);
 
-	SpellCheckDlg(LaTeXView* view, Speller* speller, CWnd* pParent = NULL);
+	SpellCheckDlg(CodeView* view, Speller* speller, CWnd* pParent = NULL);
 
 	enum
 	{
@@ -70,7 +70,7 @@ public:
 	@param pBuddy The view this dialog is attached to.
 	@param pSpell The spell object that does most of the work.
 	 */
-	void Reset(LaTeXView *pBuddy, Speller *pSpell);
+	void Reset(CodeView *pBuddy, Speller *pSpell);
 
 	// Overrides
 	// ClassWizard generated virtual function overrides

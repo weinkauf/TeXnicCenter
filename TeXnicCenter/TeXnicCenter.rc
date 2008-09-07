@@ -155,8 +155,9 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\TeXnicCenter.ico"
-IDR_LATEXTYPE           ICON                    "res\\LatexDoc.ico"
-IDR_LATEXPROJECT        ICON                    "res\\idr_late.ico"
+IDR_BIBTEXDOCTYPE       ICON                    "res\\bibtextype.ico"
+IDR_LATEXDOCTYPE        ICON                    "res\\LatexDoc.ico"
+IDR_LATEXPROJECTDOCTYPE        ICON                    "res\\idr_late.ico"
 IDR_LATEXWIZARD         ICON                    "res\\Wizard.ico"
 IDR_LATEXTYPE_YELLOW    ICON                    "res\\LatexDoc_yellow.ico"
 IDR_MAINFRAME_YELLOW    ICON                    "res\\TeXnicCenter_yellow.ico"
@@ -1471,7 +1472,7 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Editor"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    GROUPBOX        "&Outlining",IDC_STATIC,8,8,284,37
+    GROUPBOX        "&Outlining",IDC_STATIC,8,8,284,47
     CONTROL         "&Linie nach gefaltetem Code",IDC_SHOW_LINE_BELOW_FOLD,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,19,103,10
     CONTROL         "&Linie nach ungefaltetem Code",IDC_SHOW_LINE_BELOW_NO_FOLD,
@@ -1480,16 +1481,17 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,30,98,10
     CONTROL         "&Linie vor ungefaltetem Code",IDC_SHOW_LINE_ABOVE_NO_FOLD,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,121,30,106,10
-    GROUPBOX        "Tabulator",IDC_STATIC,8,54,284,41
-    LTEXT           "&Tabulatorbreite:",IDC_STATIC,15,67,53,8
-    EDITTEXT        IDC_EDITOR_TABWIDTH,70,65,25,13,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "Zeichen",IDC_STATIC,100,67,27,8
+    GROUPBOX        "Tabulator",IDC_STATIC,8,59,284,41
+    LTEXT           "&Tabulatorbreite:",IDC_STATIC,15,72,53,8
+    EDITTEXT        IDC_EDITOR_TABWIDTH,70,70,25,13,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Zeichen",IDC_STATIC,100,72,27,8
     GROUPBOX        "Zeilenumbruch",IDC_STATIC,8,105,284,88
     LTEXT           "Art des Zeilenumbruchs:",IDC_STATIC,20,125,77,8
     COMBOBOX        IDC_OPTIONS_EDITOR_WORDWRAP_STYLE,100,122,110,58,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Spalte:",IDC_STATIC,20,150,23,8
     EDITTEXT        IDC_OPTIONS_EDITOR_WORDWRAP_FIXEDCOLUMN,100,145,40,13,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
-    CONTROL         "Benutze Leerzeichen",IDC_USE_SPACES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,79,82,10
+    CONTROL         "Benutze Leerzeichen",IDC_USE_SPACES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,84,82,10
+    CONTROL         "Kompakt",IDC_FOLD_COMPACT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,41,43,10
 END
 
 IDD_OUTSOURCE DIALOGEX 0, 0, 209, 191
@@ -3320,8 +3322,12 @@ END
 STRINGTABLE 
 BEGIN
     IDR_MAINFRAME           "TeXnicCenter"
-    IDR_LATEXTYPE           "\nLaTeX\nLaTeX\nLaTeX-Dateien (*.tex)\n.tex\nLaTeX.Document\nLaTeX Document"
-    IDR_LATEXPROJECT        "\nTeXnicCenter-Projekt\nTeXnicCenter-Projekt\nTeXnicCenter-Projekte (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
+END
+
+STRINGTABLE 
+BEGIN
+    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Dateien (*.tex)\n.tex\nLaTeX.Document\nLaTeX Dokument"
+    IDR_LATEXPROJECTDOCTYPE        "\nTeXnicCenter-Projekt\nTeXnicCenter-Projekt\nTeXnicCenter-Projekte (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
     STE_ALL_FILES_FILTER    "Alle Dateien (*.*)|*.*||"
     STE_GET_PATH_TITLE      "Verzeichnis wählen"
     STE_GET_PATH            "Wählen Sie ein Verzeichnis aus..."
@@ -4762,6 +4768,7 @@ BEGIN
     IDS_ITEMS_FOUND         "%i Einträge gefunden"
     IDS_CONFIGURE_FOUND_DISTRIBUTION 
                             "Ja, TeXnicCenter für die Verwendung mit %s konfigurieren."
+    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Dateien (*.bib)\n.bib\nBibTeX.Document\nBibTeX Dokument"
 END
 
 STRINGTABLE 
@@ -5546,7 +5553,7 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Editor"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    GROUPBOX        "&Outlining",IDC_STATIC,8,8,284,37
+    GROUPBOX        "&Outlining",IDC_STATIC,8,8,284,48
     CONTROL         "&Line below folded code",IDC_SHOW_LINE_BELOW_FOLD,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,19,89,10
     CONTROL         "&Line below unfolded code",IDC_SHOW_LINE_BELOW_NO_FOLD,
@@ -5555,16 +5562,17 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,30,90,10
     CONTROL         "&Line above unfolded code",IDC_SHOW_LINE_ABOVE_NO_FOLD,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,121,30,98,10
-    GROUPBOX        "Tabulator",IDC_STATIC,8,54,284,41
-    LTEXT           "&Tab size:",IDC_STATIC,15,67,30,8
-    EDITTEXT        IDC_EDITOR_TABWIDTH,49,66,25,13,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "characters",IDC_STATIC,78,67,34,8
-    CONTROL         "Use spaces",IDC_USE_SPACES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,81,52,10
+    GROUPBOX        "Tabulator",IDC_STATIC,8,59,284,41
+    LTEXT           "&Tab size:",IDC_STATIC,15,72,30,8
+    EDITTEXT        IDC_EDITOR_TABWIDTH,49,71,25,13,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "characters",IDC_STATIC,78,72,34,8
+    CONTROL         "Use spaces",IDC_USE_SPACES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,86,52,10
     GROUPBOX        "Word Wrap",IDC_STATIC,8,105,284,88
     LTEXT           "Type of word wrap:",IDC_STATIC,20,125,62,8
     COMBOBOX        IDC_OPTIONS_EDITOR_WORDWRAP_STYLE,100,122,110,58,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Column:",IDC_STATIC,20,150,26,8
     EDITTEXT        IDC_OPTIONS_EDITOR_WORDWRAP_FIXEDCOLUMN,100,145,40,13,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Compact",IDC_FOLD_COMPACT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,41,44,10
 END
 
 IDD_OUTSOURCE DIALOGEX 0, 0, 209, 191
@@ -7273,8 +7281,12 @@ END
 STRINGTABLE 
 BEGIN
     IDR_MAINFRAME           "TeXnicCenter"
-    IDR_LATEXTYPE           "\nLaTeX\nLaTeX\nLaTeX-Files (*.tex)\n.tex\nLaTeX.Document\nLaTeX Document"
-    IDR_LATEXPROJECT        "\nTeXnicCenter-Project\nTeXnicCenter-Project\nTeXnicCenter-Projects (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
+END
+
+STRINGTABLE 
+BEGIN
+    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Files (*.tex)\n.tex\nLaTeX.Document\nLaTeX Document"
+    IDR_LATEXPROJECTDOCTYPE        "\nTeXnicCenter-Project\nTeXnicCenter-Project\nTeXnicCenter-Projects (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
     STE_ALL_FILES_FILTER    "All Files (*.*)|*.*||"
     STE_GET_PATH_TITLE      "Directory Selection"
     STE_GET_PATH            "Select a directory..."
@@ -8703,6 +8715,7 @@ BEGIN
     IDS_ITEMS_FOUND         "% items found"
     IDS_CONFIGURE_FOUND_DISTRIBUTION 
                             "Yes, configure TeXnicCenter for the use with %s."
+    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Files (*.tex)\n.tex\nBibTeX.Document\nBibTeX Document"
 END
 
 #endif    // English (U.S.) resources

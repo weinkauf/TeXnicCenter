@@ -474,6 +474,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BibTeXDocument.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BibTeXDocument.h"
+				>
+			</File>
+			<File
 				RelativePath=".\BiBTeXEntry.cpp"
 				>
 			</File>
@@ -487,6 +495,14 @@
 			</File>
 			<File
 				RelativePath=".\BiBTeXFile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BibTeXView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BibTeXView.h"
 				>
 			</File>
 			<File
@@ -826,6 +842,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LaTeXDocumentBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LaTeXDocumentBase.h"
+				>
+			</File>
+			<File
 				RelativePath=".\LatexOutputFilter.cpp"
 				>
 			</File>
@@ -855,6 +879,14 @@
 			</File>
 			<File
 				RelativePath=".\LaTeXView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LaTeXViewBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LaTeXViewBase.h"
 				>
 			</File>
 			<File
@@ -1604,6 +1636,10 @@
 			</File>
 			<File
 				RelativePath=".\res\annotation.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\bibtextype.ico"
 				>
 			</File>
 			<File

@@ -70,6 +70,8 @@ class CConfiguration
 
 	int transparency_;
 
+	bool fold_compact_;
+
 public:
 	bool IsBlinkInsertCaret() const;
 	void SetBlinkInsertCaret(bool val = true);
@@ -106,6 +108,9 @@ public:
 
 	bool GetShowIndentationGuides() const;
 	void SetShowIndentationGuides(bool val);
+
+	bool GetFoldCompact() const;
+	void SetFoldCompact(bool val);
 
 	static CConfiguration* GetInstance();
 

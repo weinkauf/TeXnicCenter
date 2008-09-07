@@ -37,6 +37,7 @@ protected:
 
 	virtual DocumentTokenizer* NewDocumentTokenizer() const = 0;
 
+public:
 	CodeDocument* GetDocument() const;
 
 	void EnableHardWrap(bool e = true);
@@ -173,6 +174,7 @@ protected:
 	void OnModified(SCNotification* n);
 	afx_msg void OnViewIndentationGuides();
 	afx_msg void OnUpdateViewIndentationGuides(CCmdUI *pCmdUI);
+	void OnZoom(SCNotification* n);
 
 public:
 	CScintillaFindReplaceDlg* CreateFindReplaceDialog(void);
