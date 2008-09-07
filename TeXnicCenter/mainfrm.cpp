@@ -309,7 +309,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
 		// load menu bars
 		m_stdMenu.LoadMenu(IDR_MAINFRAME);
-		m_projectMenu.LoadMenu(IDR_LATEXPROJECT);
+		m_projectMenu.LoadMenu(IDR_LATEXPROJECTDOCTYPE);
 		MDISetMenu(&m_stdMenu, NULL);
 	}
 
@@ -631,7 +631,7 @@ void CMainFrame::OnExtrasCustomize()
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// add menus, toolbars and commands
-	pDlgCust->AddMenu(IDR_LATEXPROJECT);
+	pDlgCust->AddMenu(IDR_LATEXPROJECTDOCTYPE);
 	pDlgCust->AddMenu(IDR_MAINFRAME);
 	pDlgCust->AddMenu(IDR_HIDDEN_CMDS);
 	pDlgCust->AddMenu(IDR_POPUP_ITEM);

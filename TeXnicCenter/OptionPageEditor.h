@@ -19,6 +19,7 @@ private:
 	BOOL show_line_above_fold_;
 	BOOL show_line_above_no_fold_;
 	BOOL use_spaces_;
+	BOOL fold_compact_;
 	
 // Construction
 public:

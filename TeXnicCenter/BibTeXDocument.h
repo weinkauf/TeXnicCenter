@@ -2,16 +2,15 @@
 
 #include "LaTeXDocumentBase.h"
 
-class CodeBookmark;
+// BibTeXDocument document
 
-class LaTeXDocument : 
-	public LaTeXDocumentBase
+class BibTeXDocument : public LaTeXDocumentBase
 {
-	DECLARE_DYNCREATE(LaTeXDocument)
+	DECLARE_DYNCREATE(BibTeXDocument)
 
 public:
-	LaTeXDocument();
-	~LaTeXDocument();
+	BibTeXDocument();
+	virtual ~BibTeXDocument();
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -21,8 +20,7 @@ public:
 #endif
 
 protected:
-	afx_msg void OnTextModulesDefine();
-	afx_msg void OnUpdateTextModulesList(CCmdUI *pCmdUI);
+	virtual BOOL OnNewDocument();
 
 	DECLARE_MESSAGE_MAP()
 };

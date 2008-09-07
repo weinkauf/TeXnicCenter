@@ -60,7 +60,7 @@ CEmptyProjectTemplateItem::CEmptyProjectTemplateItem()
 BOOL CEmptyProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &ImageList32, CImageList &ImageList16)
 {
 	//add image to image list and remember index
-	HICON hIcon = theApp.LoadIcon(IDR_LATEXTYPE);
+	HICON hIcon = theApp.LoadIcon(IDR_LATEXDOCTYPE);
 	m_nImageIndex = hIcon ? ImageList32.Add(hIcon) : -1;
 	ImageList16.Add(hIcon);
 
@@ -168,7 +168,7 @@ BOOL CFileBasedProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &Image
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//add image to image list and remember index
-	HICON hIcon = theApp.LoadIcon(IDR_LATEXTYPE);
+	HICON hIcon = theApp.LoadIcon(IDR_LATEXDOCTYPE);
 	m_nImageIndex = hIcon ? ImageList32.Add(hIcon) : -1;
 	ImageList16.Add(hIcon);
 

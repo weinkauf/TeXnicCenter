@@ -142,7 +142,7 @@ BOOL CLaTeXProject::OnNewProjectFromDoc(LPCTSTR lpszDocPathName)
 		// skipping annoying question in this version --
 		// just closing the documents.
 		// lets see, what the users will say ...
-		theApp.GetLatexDocTemplate()->CloseAllDocuments(theApp.m_bEndSession);
+		theApp.CloseAllDocuments(theApp.m_bEndSession);
 
 		//Open the project
 		OnOpenProject(ProjectFileName);
@@ -307,13 +307,17 @@ void CLaTeXProject::OnCloseProject()
 
 	if (!SessionPathName.IsEmpty())
 	{
-		POSITION pos = theApp.GetLatexDocTemplate()->GetFirstDocPosition();
-		CDocument* doc;
+		POSITION pos1 = theApp.GetFirstDocTemplatePosition();
 
-		while (pos) {
-			doc = theApp.GetLatexDocTemplate()->GetNextDoc(pos);
-			ASSERT(doc->IsKindOf(RUNTIME_CLASS(CodeDocument)));
-			SetFoldingPoints(doc->GetPathName(),static_cast<CodeDocument*>(doc)->GetContractedFoldingPoints());
+		while (pos1) {
+			CDocTemplate* t = theApp.GetNextDocTemplate(pos1);
+			POSITION pos = t->GetFirstDocPosition();
+			
+			while (pos) {
+				CDocument* doc = t->GetNextDoc(pos);
+				ASSERT(doc->IsKindOf(RUNTIME_CLASS(CodeDocument)));
+				SetFoldingPoints(doc->GetPathName(),static_cast<CodeDocument*>(doc)->GetContractedFoldingPoints());
+			}
 		}
 
 		CIniFile session(SessionPathName);
@@ -328,7 +332,7 @@ void CLaTeXProject::OnCloseProject()
 	// skipping annoying question in this version --
 	// just closing the documents.
 	// lets see, what the users will say ...
-	theApp.GetLatexDocTemplate()->CloseAllDocuments(theApp.m_bEndSession);
+	theApp.CloseAllDocuments(theApp.m_bEndSession);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// remember last project
@@ -656,36 +660,64 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 		const int nActiveFrame = ini.GetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVEFRAME,-1);
 
 		//Open all stored frames
-		bool bCouldOpenAllFrames(true);
+		bool bCouldOpenAllFrames = true;
 		CChildFrame* pChildToBeActivated = NULL;
+
+		const CString strBaseDir = CPathTool::GetDirectory(ini.GetPath());
+		
+		LPCTSTR const VAL_FRAMEINFO_DOCPATH = _T("Document");
+		LPCTSTR const KEY_VIEWINFO = _T("%s_View%d,%d");
+
+		CString key;
 
 		for (int nFrame = 0; nFrame < nFrameCount; nFrame++)
 		{
-			CChildFrame* pChildFrame = new CChildFrame();
-
-			ASSERT(pChildFrame);
-
-			if (!pChildFrame) 
-				continue;
-
 			strKey.Format(KEY_FRAMEINFO,nFrame);
-			
-			if (!pChildFrame->Serialize(ini,strKey,bWrite))
+			key.Format(KEY_VIEWINFO,strKey,0,0);			
+
+			CString strDocPath = ini.GetValue(strKey,VAL_FRAMEINFO_DOCPATH,_T(""));
+
+			if (CDocument* doc = theApp.OpenDocumentFile(CPathTool::GetAbsolutePath(strBaseDir,strDocPath))) 
 			{
+				POSITION pos = doc->GetFirstViewPosition();
+
+				if (pos) {
+					if (CChildFrame* f = dynamic_cast<CChildFrame*>(doc->GetNextView(pos)->GetParentFrame())) {
+						if (!f->Serialize(ini,strKey,bWrite)) {
+							bCouldOpenAllFrames = false;
+							f->DestroyWindow();
+						}
+						else {
+							if (nActiveFrame == nFrame)
+								pChildToBeActivated = f;
+						}
+					}
+				}
+			}
+			else if (bCouldOpenAllFrames)
 				bCouldOpenAllFrames = false;
-				delete pChildFrame;
-			}
-			else
-			{
-				if (nActiveFrame == nFrame)
-					pChildToBeActivated = pChildFrame;
-			}
+			//CChildFrame* pChildFrame = new CChildFrame();
+
+			//ASSERT(pChildFrame);
+
+			//if (!pChildFrame) 
+			//	continue;
+
+			//strKey.Format(KEY_FRAMEINFO,nFrame);
+			//
+			//if (!pChildFrame->Serialize(ini,strKey,bWrite))
+			//{
+			//	bCouldOpenAllFrames = false;
+			//	delete pChildFrame;
+			//}
+			//else
+			//{
 		}
 
 #pragma endregion
 
-		//Restore navigator tab selection
-		m_nInitialNavigatorTab = ini.GetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVETAB,0);
+		////Restore navigator tab selection
+		//m_nInitialNavigatorTab = ini.GetValue(KEY_SESSIONINFO,VAL_SESSIONINFO_ACTIVETAB,0);
 
 		//Activate the frame that was active when closing the project
 		if (pChildToBeActivated)

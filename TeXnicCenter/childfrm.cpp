@@ -262,30 +262,30 @@ bool CChildFrame::Serialize( CIniFile &ini, LPCTSTR lpszKey, bool write )
 		wp.rcNormalPosition.top = ini.GetValue(lpszKey,VAL_FRAMEINFO_NORMALPOS_TOP,0);
 		wp.rcNormalPosition.right = ini.GetValue(lpszKey,VAL_FRAMEINFO_NORMALPOS_RIGHT,0);
 		wp.rcNormalPosition.bottom = ini.GetValue(lpszKey,VAL_FRAMEINFO_NORMALPOS_BOTTOM,0);
-		strClass = ini.GetValue(lpszKey,VAL_FRAMEINFO_VIEWCLASS,_T(""));
-		strDocPath = ini.GetValue(lpszKey,VAL_FRAMEINFO_DOCPATH,_T(""));
+		//strClass = ini.GetValue(lpszKey,VAL_FRAMEINFO_VIEWCLASS,_T(""));
+		//strDocPath = ini.GetValue(lpszKey,VAL_FRAMEINFO_DOCPATH,_T(""));
 
-		if (strClass.IsEmpty())
-			return FALSE;
+		//if (strClass.IsEmpty())
+		//	return FALSE;
 
-		if (strDocPath.IsEmpty())
-			return FALSE;
+		//if (strDocPath.IsEmpty())
+		//	return FALSE;
 
 		// reading column and row information
-		CCreateContext cc;		
-		cc.m_pNewDocTemplate = theApp.GetLatexDocTemplate();
-		cc.m_pCurrentDoc = cc.m_pNewDocTemplate->CreateNewDocument();
-		cc.m_pLastView = NULL;
-		cc.m_pCurrentFrame = NULL;
+		//CCreateContext cc;		
+		//cc.m_pNewDocTemplate = theApp.GetLatexDocTemplate();
+		//cc.m_pCurrentDoc = cc.m_pNewDocTemplate->CreateNewDocument();
+		//cc.m_pLastView = NULL;
+		//cc.m_pCurrentFrame = NULL;
 
-		if (strClass.CompareNoCase(_T("CLatexEdit")) == 0 || strClass == RUNTIME_CLASS(LaTeXView)->m_lpszClassName)
-			cc.m_pNewViewClass = RUNTIME_CLASS(LaTeXView);
-		else
-		{
-			cc.m_pCurrentDoc->OnCloseDocument();
-			TRACE(_T("Unknown view type '%s'\n"),strClass);
-			return FALSE;
-		}
+		//if (strClass.CompareNoCase(_T("CLatexEdit")) == 0 || strClass == RUNTIME_CLASS(LaTeXView)->m_lpszClassName)
+		//	cc.m_pNewViewClass = RUNTIME_CLASS(LaTeXView);
+		//else
+		//{
+		//	cc.m_pCurrentDoc->OnCloseDocument();
+		//	TRACE(_T("Unknown view type '%s'\n"),strClass);
+		//	return FALSE;
+		//}
 
 		//create view for each pane
 		//for (nRow = 0; nRow < nRowCount; nRow++)
@@ -293,7 +293,7 @@ bool CChildFrame::Serialize( CIniFile &ini, LPCTSTR lpszKey, bool write )
 		//	for (nColumn = 0; nColumn < nColumnCount; nColumn++)
 		//	{
 				// generate key
-				strKey.Format(KEY_VIEWINFO,lpszKey,0,0);//nRow,nColumn);
+					//strKey.Format(KEY_VIEWINFO,lpszKey,0,0);//nRow,nColumn);
 
 				//if (nRow == 0 && nColumn == 0)
 				//{
@@ -301,40 +301,40 @@ bool CChildFrame::Serialize( CIniFile &ini, LPCTSTR lpszKey, bool write )
 				//CDocument* pDoc = theApp.GetOpenLatexDocument(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
 
 					// create frame and restore window position
-					if (!LoadFrame(IDR_LATEXTYPE,WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE,AfxGetMainWnd(),&cc))
-					{
-						//TRACE0(_T("Window has not been created\n"));
-						TRACE(_T("Window has not been created\n"));
-						return FALSE;
-					}
+					//if (!LoadFrame(IDR_LATEXDOCTYPE,WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE,AfxGetMainWnd(),&cc))
+					//{
+					//	//TRACE0(_T("Window has not been created\n"));
+					//	TRACE(_T("Window has not been created\n"));
+					//	return FALSE;
+					//}
 
-					::LockWindowUpdate(GetSafeHwnd());
+					//::LockWindowUpdate(GetSafeHwnd());
 
 					// create view and attach it to the document
 					CView *pView = dynamic_cast<CView*>(GetWindow(GW_CHILD));
 					
-					pView->SendMessage(WM_INITIALUPDATE);
+					//pView->SendMessage(WM_INITIALUPDATE);
 
-					cc.m_pCurrentDoc->OnOpenDocument(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
-					cc.m_pCurrentDoc->SetTitle(CPathTool::GetFileTitle(strDocPath));
-					cc.m_pCurrentDoc->SetPathName(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
+					//cc.m_pCurrentDoc->OnOpenDocument(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
+					//cc.m_pCurrentDoc->SetTitle(CPathTool::GetFileTitle(strDocPath));
+					//cc.m_pCurrentDoc->SetPathName(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
 
-					//// try to create and open document
-					//CDocument* pDoc = theApp.GetLaTeXDocument(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
-					//if (!pDoc) return FALSE;
+					////// try to create and open document
+					////CDocument* pDoc = theApp.GetLaTeXDocument(CPathTool::GetAbsolutePath(strBaseDir,strDocPath));
+					////if (!pDoc) return FALSE;
 
 					if (!theApp.m_bMDITabs)
 						SetWindowPlacement(&wp);
 
-					InitialUpdateFrame(cc.m_pCurrentDoc,TRUE);
+					//InitialUpdateFrame(cc.m_pCurrentDoc,TRUE);
 
-					ASSERT(pView->IsKindOf(RUNTIME_CLASS(CView)));
-					ASSERT_VALID(pView);
+					//ASSERT(pView->IsKindOf(RUNTIME_CLASS(CView)));
+					//ASSERT_VALID(pView);
 
-					::LockWindowUpdate(0);
-					
-					SetActiveView(pView);
-					
+					//::LockWindowUpdate(0);
+					//
+					//SetActiveView(pView);
+					//
 
 					//m_wndSplitter.SetActivePane(0,0);
 

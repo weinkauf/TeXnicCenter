@@ -41,48 +41,24 @@
 #include "LaTeXDocument.h"
 #include "LaTeXView.h"
 
-
-const LOGFONTA ConvertLogFont(const LOGFONTW& lf)
-{
-	LOGFONTA a;
-	std::memcpy(&a,&lf,reinterpret_cast<const BYTE*>(&lf.lfHeight)
-	            - reinterpret_cast<const BYTE*>(lf.lfFaceName));
-
-	USES_CONVERSION;
-	std::strcpy(a.lfFaceName,W2CA(lf.lfFaceName));
-
-	return a;
-}
-
-const LOGFONTW ConvertLogFont(const LOGFONTA& lf)
-{
-	LOGFONTW a;
-	std::memcpy(&a,&lf,reinterpret_cast<const BYTE*>(&lf.lfHeight)
-	            - reinterpret_cast<const BYTE*>(lf.lfFaceName));
-
-	USES_CONVERSION;
-	std::wcscpy(a.lfFaceName,A2CW(lf.lfFaceName));
-
-	return a;
-}
-
 std::auto_ptr<CConfiguration> CConfiguration::impl_;
 
 CConfiguration::CConfiguration()
 : m_nStandardFileFormat(DOSStyleEOLMode)
-, blink_insert_caret_(FALSE)
-, blink_overwrite_caret_(TRUE)
-, insert_caret_line_(FALSE)
-, overwrite_caret_line_(FALSE)
-, show_line_endings_(FALSE)
-, word_wrap_(TRUE)
-, show_line_below_fold_(FALSE)
-, show_line_below_no_fold_(FALSE)
-, show_line_above_fold_(FALSE)
-, show_line_above_no_fold_(FALSE)
-, use_spaces_(FALSE)
+, blink_insert_caret_(false)
+, blink_overwrite_caret_(true)
+, insert_caret_line_(false)
+, overwrite_caret_line_(false)
+, show_line_endings_(false)
+, word_wrap_(true)
+, show_line_below_fold_(false)
+, show_line_below_no_fold_(false)
+, show_line_above_fold_(false)
+, show_line_above_no_fold_(false)
+, use_spaces_(false)
 , transparency_(0)
 , show_indentation_guides_(false)
+, fold_compact_(true)
 {
 }
 
@@ -97,8 +73,8 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	strSection = _T("Settings\\Options");
 	SerializeProfileStringArray(strSection,_T("ProjectTemplatePaths"),&m_astrProjectTemplatePaths,direction);
 	SerializeProfileStringArray(strSection,_T("DocumentTemplatePaths"),&m_astrDocumentTemplatePaths,direction);
-	SerializeProfileBool(strSection,_T("SaveBeforeCompilation"),m_bSaveBeforeCompilation,direction,TRUE);
-	SerializeProfileBool(strSection,_T("SaveNewDocuments"),m_bSaveNewDocuments,direction,FALSE);
+	SerializeProfileBool(strSection,_T("SaveBeforeCompilation"),m_bSaveBeforeCompilation,direction,true);
+	SerializeProfileBool(strSection,_T("SaveNewDocuments"),m_bSaveNewDocuments,direction,false);
 
 	SerializeProfileInt(strSection,_T("WndMenuMaxEntries"),&m_nWndMenuMaxEntries,direction,10);
 	SerializeProfileInt(strSection,_T("ParseInterval"),&m_nParseInterval,direction,1000);
@@ -108,11 +84,11 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 
 #pragma region File
 
-	SerializeProfileBool(strSection,_T("SaveAutomatic"),m_bSaveAutomatic,direction,TRUE);
+	SerializeProfileBool(strSection,_T("SaveAutomatic"),m_bSaveAutomatic,direction,true);
 	SerializeProfileInt(strSection,_T("SaveInterval"),(int*) & m_unSaveInterval,direction,10);
 	SerializeProfileInt(strSection,_T("StandardFileFormat"),&m_nStandardFileFormat,direction,DOSStyleEOLMode);
 	SerializeProfileString(strSection,_T("DefaultPath"),&m_strDefaultPath,direction);
-	SerializeProfileBool(strSection,_T("OpenDocWndMaximized"),m_bOpenDocWndMaximized,direction,FALSE);
+	SerializeProfileBool(strSection,_T("OpenDocWndMaximized"),m_bOpenDocWndMaximized,direction,false);
 	SerializeProfileString(strSection,_T("LastOpenedFolder"),&m_strLastOpenedFolder,direction);
 	SerializeProfileInt(strSection,_T("LastTabProjectTemplateDlg"),(int*) & m_nLastTabProjectTemplateDlg,direction,0);
 	SerializeProfileInt(strSection,_T("LastTabDocumentTemplateDlg"),(int*) & m_nLastTabDocumentTemplateDlg,direction,0);
@@ -124,14 +100,14 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	SerializeProfileInt(strSection,_T("TextOutsourceIncludeType"),&m_TextOutsource_nIncludeType,direction,0);
 	SerializeProfileString(strSection,_T("TextOutsourceCmdLeft"),&m_TextOutsource_strUserCmdLeft,direction);
 	SerializeProfileString(strSection,_T("TextOutsourceCmdRight"),&m_TextOutsource_strUserCmdRight,direction);
-	SerializeProfileBool(strSection,_T("TextOutsourceOpenNewFile"),m_TextOutsource_bOpenNewFile,direction,TRUE);
+	SerializeProfileBool(strSection,_T("TextOutsourceOpenNewFile"),m_TextOutsource_bOpenNewFile,direction,true);
 	SerializeProfileInt(strSection,_T("TextOutsourceOpenNewFileType"),&m_TextOutsource_nOpenNewFileType,direction,0);
 
 #pragma endregion
 
 #pragma region Quotation mark replacement
 
-	SerializeProfileBool(strSection,_T("ReplaceQuotationMarks"),m_bReplaceQuotationMarks,direction,TRUE);
+	SerializeProfileBool(strSection,_T("ReplaceQuotationMarks"),m_bReplaceQuotationMarks,direction,true);
 	SerializeProfileString(strSection,_T("OpeningQuotationMark"),&m_strOpeningQuotationMark,direction,_T("\"`"));
 	SerializeProfileString(strSection,_T("ClosingQuotationMark"),&m_strClosingQuotationMark,direction,_T("\"'"));
 
@@ -140,7 +116,7 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 #pragma region Session
 
 	strSection = _T("Session");
-	SerializeProfileBool(strSection,_T("LoadLastProject"),m_bLoadLastProject,direction,TRUE);
+	SerializeProfileBool(strSection,_T("LoadLastProject"),m_bLoadLastProject,direction,true);
 	SerializeProfileString(strSection,_T("LastProject"),&m_strLastProject,direction);
 
 #pragma endregion
@@ -187,6 +163,8 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 
 	SerializeProfileBool(strSection,_T("EditorShowIndentationGuides"),show_indentation_guides_,direction,
 		show_indentation_guides_);
+	SerializeProfileBool(strSection,_T("EditorFoldCompact"),fold_compact_,direction,
+		fold_compact_);
 
 #pragma region Cursor settings
 
@@ -209,7 +187,7 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 		SerializeProfileInt(strSection,strFormat,(int*) & m_aEditorColors[i],direction,(int) 0xFFFFFFFF);
 	}
 
-	SerializeProfileBool(strSection,_T("ViewWhitespaces"),m_bViewWhitespaces,direction,FALSE);
+	SerializeProfileBool(strSection,_T("ViewWhitespaces"),m_bViewWhitespaces,direction,false);
 
 	//SerializeProfileInt(strSection,_T("WordWrapStyle"),(int*) & m_WordWrapStyle,direction,WORD_WRAP_WINDOW);
 	SerializeProfileInt(strSection,_T("FixedColumnWrap"),& m_nFixedColumnWrap,direction,80);
@@ -261,7 +239,7 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 
 	// Create a default name for the user dictionary (otherwise the user will always loose the added words, if a path is not specified in the options)
 	TCHAR PersonalFolderPath[MAX_PATH];
-	SHGetSpecialFolderPath(NULL, PersonalFolderPath, CSIDL_PERSONAL, FALSE);
+	SHGetSpecialFolderPath(NULL, PersonalFolderPath, CSIDL_PERSONAL, false);
 
 	CPathTool DefaultUserDic(PersonalFolderPath);
 	DefaultUserDic.Append(_T("TXCUserDictionary.dic"));
@@ -324,7 +302,7 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	strSection = "Settings\\Accessibility";
 
 	SerializeProfileBool(strSection,_T("OptimizeMenuForVisuallyHandicappedUsers"),
-	                    m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart,direction,FALSE);
+	                    m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart,direction,false);
 
 	if (direction == Load)
 		m_bOptimizeMenuForVisuallyHandicappedUsers = m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart;
@@ -408,7 +386,7 @@ BOOL CConfiguration::SerializeProfileWndPlacement(LPCTSTR szSection,
 		SerializeProfileBool(szSection,_T("Iconified"),bIconified,Save);
 		SerializeProfileBool(szSection,_T("Maximized"),bMaximized,Save);
 
-		return TRUE;
+		return true;
 	}
 	else
 	{
@@ -418,7 +396,7 @@ BOOL CConfiguration::SerializeProfileWndPlacement(LPCTSTR szSection,
 		lpWndPlc->length = 0; // mark invalid
 		SerializeProfileData(szSection,_T("Place"),lpWndPlc,Load,sizeof(WINDOWPLACEMENT),lpWndPlc);
 		if (!lpWndPlc->length)
-			return FALSE;
+			return false;
 
 		SerializeProfileBool(szSection,_T("Iconified"),bIconified,Load);
 		SerializeProfileBool(szSection,_T("Maximized"),bMaximized,Load);
@@ -442,7 +420,7 @@ BOOL CConfiguration::SerializeProfileWndPlacement(LPCTSTR szSection,
 			lpWndPlc->flags = WPF_SETMINPOSITION;
 		}
 
-		return TRUE;
+		return true;
 	}
 }
 
@@ -485,7 +463,7 @@ BOOL CConfiguration::SerializeProfileStringArray(LPCTSTR szSection,LPCTSTR szEnt
 		// load number of elements
 		SerializeProfileInt(strSection,_T("Size"),&nSize,Load);
 		if (!nSize)
-			return FALSE;
+			return false;
 
 		// load each string
 		for (i = 0; i < nSize; i++)
@@ -496,10 +474,10 @@ BOOL CConfiguration::SerializeProfileStringArray(LPCTSTR szSection,LPCTSTR szEnt
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
-BOOL CConfiguration::RegDeleteSection(LPCTSTR lpszSection,BOOL bAdmin /*= FALSE*/)
+BOOL CConfiguration::RegDeleteSection(LPCTSTR lpszSection,BOOL bAdmin /*= false*/)
 {
 	ASSERT(lpszSection);
 
@@ -509,9 +487,9 @@ BOOL CConfiguration::RegDeleteSection(LPCTSTR lpszSection,BOOL bAdmin /*= FALSE*
 	                              strSection);
 
 	if (lReturn == ERROR_SUCCESS)
-		return TRUE;
+		return true;
 
-	return FALSE;
+	return false;
 }
 
 void CConfiguration::SerializeProfileBool( LPCTSTR szSection, LPCTSTR szEntry, bool& value, 
@@ -661,4 +639,14 @@ bool CConfiguration::GetShowIndentationGuides() const
 void CConfiguration::SetShowIndentationGuides( bool val )
 {
 	show_indentation_guides_ = val;
+}
+
+bool CConfiguration::GetFoldCompact() const
+{
+	return fold_compact_;
+}
+
+void CConfiguration::SetFoldCompact( bool val )
+{
+	fold_compact_ = val;
 }

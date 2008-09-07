@@ -58,6 +58,8 @@
 #include "LaTeXView.h"
 #include "Speller.h"
 #include "RunTimeHelper.h"
+#include "BibTeXView.h"
+#include "BibTeXDocument.h"
 
 
 class CTCCommandLineInfo : public CCommandLineInfo
@@ -373,16 +375,24 @@ BOOL CTeXnicCenterApp::InitInstance()
 	// Dokumentvorlagen registrieren
 	// LaTeX-Document
 	m_pLatexDocTemplate = new CMultiDocTemplate(
-	    IDR_LATEXTYPE,
+	    IDR_LATEXDOCTYPE,
 	    RUNTIME_CLASS(LaTeXDocument),
 	    RUNTIME_CLASS(CChildFrame), // Benutzerspezifischer MDI-Child-Rahmen
 	    RUNTIME_CLASS(LaTeXView));
 	AddDocTemplate(m_pLatexDocTemplate);
 
+	// BibTeX-Document
+	CMultiDocTemplate* bibtempl = new CMultiDocTemplate(
+		IDR_BIBTEXDOCTYPE,
+		RUNTIME_CLASS(BibTeXDocument),
+		RUNTIME_CLASS(CChildFrame), // Benutzerspezifischer MDI-Child-Rahmen
+		RUNTIME_CLASS(BibTeXView));
+	AddDocTemplate(bibtempl);
+
 	m_pProjectDocTemplate = new CSingleProjectTemplate(
-	    IDR_LATEXPROJECT,
+	    IDR_LATEXPROJECTDOCTYPE,
 	    RUNTIME_CLASS(CLaTeXProject),
-	    2 // icon index in the executable
+	    3 // icon index in the executable
 	);
 
 	AddProjectTemplate(m_pProjectDocTemplate);
@@ -880,24 +890,14 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 	GetFullPathName(lpszFileName, _MAX_PATH, lpszFilePath,0);
 	CString strDocPath = lpszFilePath;
 
-	// get the document template
 	CDocTemplate *pDocTemplate = m_pLatexDocTemplate;
 
 	// try to find a document that represents the requested file
 	CDocument *pDoc = NULL;
-	POSITION pos = pDocTemplate->GetFirstDocPosition();
 	BOOL bFound = FALSE;
 
-	while (pos)
-	{
-		pDoc = pDocTemplate->GetNextDoc(pos);
-
-		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath) == 0 && pDoc->IsKindOf(RUNTIME_CLASS(LaTeXDocument)))
-		{
-			bFound = TRUE;
-			break;
-		}
-	}
+	if ((pDoc = CWinAppEx::OpenDocumentFile(lpszFileName)) != 0)
+		bFound = TRUE;
 
 	//Open new document, if we could not find one
 	// If we found one above, we just activate its view
@@ -929,13 +929,13 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 				// just closing the documents.
 				// lets see, what the users will say ...
 				// save modified documents
-				if (pDocTemplate->SaveAllModified())
+				if (theApp.SaveAllModified())
 				{
-					pDocTemplate->CloseAllDocuments(m_bEndSession);
+					theApp.CloseAllDocuments(m_bEndSession);
 
 					if (OpenProject(strProjectPath))
 					{
-						//... and the specified file (in most cases the main file), if not alreay there
+						//... and the specified file (in most cases the main file), if not already there
 						pDoc = GetOpenLatexDocument(lpszFileName, bReadOnly);
 
 						if (!pDoc)
@@ -960,13 +960,13 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 	// set write protection
 	if (pDoc && bReadOnly)
 	{
-		LaTeXView* view = static_cast<LaTeXView*>(static_cast<LaTeXDocument*>(pDoc)->GetView());
+		CodeView* view = static_cast<CodeView*>(static_cast<CodeDocument*>(pDoc)->GetView());
 		view->GetCtrl().SetReadOnly(TRUE);
 	}
 
 	// set error mark
 	if (bError)
-		static_cast<LaTeXDocument*>(pDoc)->SetErrorMark(nLineNumber);
+		static_cast<CodeDocument*>(pDoc)->SetErrorMark(nLineNumber);
 
 	// activate view and go to specified line
 	POSITION viewpos = pDoc->GetFirstViewPosition();
@@ -986,7 +986,7 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 	if (!pView)
 		return pDoc;
 
-	if (!pView->IsKindOf(RUNTIME_CLASS(LaTeXView)))
+	if (!pView->IsKindOf(RUNTIME_CLASS(CodeView)))
 		return pDoc;
 
 	if (nLineNumber >= 0)
@@ -994,7 +994,7 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 		if (nLineNumber > 0)
 			--nLineNumber;
 
-		static_cast<LaTeXView*>(pView)->GoToLine(nLineNumber);
+		static_cast<CodeView*>(pView)->GoToLine(nLineNumber);
 	}
 
 	// give input focus to view
@@ -1670,15 +1670,11 @@ void CTeXnicCenterApp::OnAppLicense()
 
 void CTeXnicCenterApp::OnWindowCloseAll()
 {
-	CMultiDocTemplate *pDocTemplate = GetLatexDocTemplate();
-	if (!pDocTemplate)
-		return;
-
 	// save modified documents
-	if (!pDocTemplate->SaveAllModified())
+	if (!theApp.SaveAllModified())
 		return;
 
-	pDocTemplate->CloseAllDocuments(FALSE);
+	theApp.CloseAllDocuments(FALSE);
 }
 
 void CTeXnicCenterApp::OnHelp()

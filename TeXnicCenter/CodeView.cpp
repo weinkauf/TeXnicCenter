@@ -472,6 +472,8 @@ void CodeView::OnSettingsChanged()
 	GetCtrl().SetUseTabs(!CConfiguration::GetInstance()->GetUseSpaces());
 	GetCtrl().SetTabWidth(CConfiguration::GetInstance()->m_nTabWidth);
 	GetCtrl().SetIndent(GetCtrl().GetTabWidth());
+
+	GetCtrl().SetProperty("fold.compact",CConfiguration::GetInstance()->GetFoldCompact() ? "1" : "0");
 }
 
 void CodeView::OnSysColorChange()
@@ -536,9 +538,6 @@ bool CodeView::IsLineMarginVisible()
 
 void CodeView::OnCharAdded(SCNotification* n)
 {
-	if (GetDocument()->IsModified())
-		GetDocument()->SetModifiedFlag();
-
 	if (!suppress_speller_) {
 		if (GetDocument()->IsSpellerThreadAttached())
 			GetDocument()->GetSpellerThread()->RecheckSingleLineSpelling(GetCurrentLine(),this);
@@ -808,7 +807,15 @@ void CodeView::OnModified(SCNotification* n)
 {
 	CScintillaView::OnModified(n);
 
+	if (GetDocument()->IsModified())
+		GetDocument()->SetModifiedFlag(GetCtrl().CanUndo());
+
 	last_change_pos_ = GetCtrl().GetCurrentPos();
+
+	if (n->linesAdded) {
+		// Number of lines changed, update margin's width
+		UpdateLineNumberMargin();
+	}
 }
 
 void CodeView::OnEditGotoLastChange()
@@ -847,4 +854,10 @@ void CodeView::OnUpdateViewIndentationGuides(CCmdUI *pCmdUI)
 {
 	bool check = CConfiguration::GetInstance()->GetShowIndentationGuides();
 	pCmdUI->SetCheck(check);
+}
+
+void CodeView::OnZoom( SCNotification* /*n*/ )
+{
+	if (CConfiguration::GetInstance()->m_bShowLineNumbers)
+		UpdateLineNumberMargin();
 }
