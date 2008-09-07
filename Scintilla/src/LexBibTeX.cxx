@@ -1,6 +1,6 @@
 // LexBibTeX.cxx - general BibTeX coloring scheme
 // Copyright 2008 by Sergiu Dotenco
-// Version: September 6, 2008
+// Version: September 7, 2008
 
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +36,23 @@ namespace {
 			name)) != entries + n;
 	}
 
+	bool EntryWithoutKey(const char* name)
+	{
+		return EqualCaseInsensitive(name,"string");
+	}
+
+	char GetClosingBrace(char openbrace)
+	{
+		char result = openbrace;
+
+		switch (openbrace) {
+			case '(': result = ')'; break;
+			case '{': result = '}'; break;
+		}
+
+		return result;
+	}
+
 	void ColorizeBibTeX(unsigned start_pos, int length, int /*init_style*/, WordList* /*keywordlists*/[], Accessor& styler) 
 	{
 		bool fold_compact = styler.GetPropertyInt("fold.compact", 1) != 0;
@@ -63,6 +80,7 @@ namespace {
 
 		bool going = sc.More(); // needed because of a fuzzy end of file state
 		char closing_brace = 0;
+		bool collect_entry_name = false;
 
 		for (; going; sc.Forward()) {
 			if (!sc.More())
@@ -78,22 +96,28 @@ namespace {
 				// Found @entry
 				if (sc.chPrev != '\\' && sc.ch == '@') {
 					sc.SetState(SCE_BIBTEX_UNKNOWN_ENTRY);
+					sc.Forward();
 					++current_level;
+
+					buffer.clear();
+					collect_entry_name = true;
 				}
 				else if ((sc.state == SCE_BIBTEX_ENTRY || sc.state == SCE_BIBTEX_UNKNOWN_ENTRY) 
 					&& (sc.ch == '{' || sc.ch == '(')) {
-					buffer.clear();
-
 					// Entry name colorization done
 					// Found either a { or a ( after entry's name, e.g. @entry(...) @entry{...}
 					// Closing counterpart needs to be stored.
-					if (sc.ch == '{')
-						closing_brace = '}';
-					else
-						closing_brace = ')';
+					closing_brace = GetClosingBrace(sc.ch);
 
 					sc.SetState(SCE_BIBTEX_DEFAULT); // Don't colorize { (
-					sc.ForwardSetState(SCE_BIBTEX_KEY); // Key/label colorization
+
+					// @string doesn't have any key
+					if (EntryWithoutKey(buffer.c_str()))
+						sc.ForwardSetState(SCE_BIBTEX_PARAMETER);
+					else
+						sc.ForwardSetState(SCE_BIBTEX_KEY); // Key/label colorization
+
+					//buffer.clear();
 				}
 
 				// Need to handle the case where entry's key is empty
@@ -204,7 +228,10 @@ namespace {
 			}
 
 			if (sc.state == SCE_BIBTEX_UNKNOWN_ENTRY || sc.state == SCE_BIBTEX_ENTRY) {
-				if (IsAlphabetic(sc.ch)) {
+				if (!IsAlphabetic(sc.ch) && collect_entry_name)
+					collect_entry_name = false;
+
+				if (collect_entry_name) {
 					buffer += static_cast<char>(sc.ch);
 
 					// Shortest known entry name is 4 characters long
