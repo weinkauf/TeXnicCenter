@@ -98,7 +98,7 @@ private:
 
 // LaTeXView
 
-IMPLEMENT_DYNCREATE(LaTeXView, CodeView)
+IMPLEMENT_DYNCREATE(LaTeXView, LaTeXViewBase)
 
 LaTeXView::LaTeXView()
 : autocompletion_active_(false)
@@ -113,7 +113,7 @@ LaTeXView::~LaTeXView()
 	delete listener_;
 }
 
-BEGIN_MESSAGE_MAP(LaTeXView, CodeView)
+BEGIN_MESSAGE_MAP(LaTeXView, LaTeXViewBase)
 	ON_WM_SETFOCUS()
 	ON_COMMAND(ID_SPELL_FILE, &LaTeXView::OnSpellFile)
 	ON_COMMAND(ID_EDIT_DELETE_LINE, &LaTeXView::OnEditDeleteLine)
@@ -139,13 +139,13 @@ END_MESSAGE_MAP()
 #ifdef _DEBUG
 void LaTeXView::AssertValid() const
 {
-	CodeView::AssertValid();
+	LaTeXViewBase::AssertValid();
 }
 
 #ifndef _WIN32_WCE
 void LaTeXView::Dump(CDumpContext& dc) const
 {
-	CodeView::Dump(dc);
+	LaTeXViewBase::Dump(dc);
 }
 #endif
 #endif //_DEBUG
@@ -155,7 +155,7 @@ void LaTeXView::Dump(CDumpContext& dc) const
 
 int LaTeXView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	if (CodeView::OnCreate(lpCreateStruct) == -1)
+	if (LaTeXViewBase::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
 	//EnableHardWrap();
@@ -174,12 +174,12 @@ int LaTeXView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void LaTeXView::OnInitialUpdate()
 {
-    CodeView::OnInitialUpdate();	
+    LaTeXViewBase::OnInitialUpdate();	
 }
 
 void LaTeXView::OnCharAdded(SCNotification* n)
 {
-	CodeView::OnCharAdded(n);
+	LaTeXViewBase::OnCharAdded(n);
 
 	long pos = GetCtrl().GetCurrentPos();
 
@@ -301,7 +301,7 @@ void LaTeXView::UpdateSettings()
 
 void LaTeXView::OnModified(SCNotification* n)
 {
-	CodeView::OnModified(n);
+	LaTeXViewBase::OnModified(n);
 
 	// Text has been inserted or deleted but it's not a part of a
 	// multi step undo/redo action or it is the last action in this undo/redo chain
@@ -1043,7 +1043,7 @@ DocumentTokenizer* LaTeXView::NewDocumentTokenizer() const
 void LaTeXView::OnSettingsChanged()
 {
 	UpdateSettings();
-	CodeView::OnSettingsChanged();
+	LaTeXViewBase::OnSettingsChanged();
 }
 
 BOOL LaTeXView::OnBlockComment( UINT nID )
