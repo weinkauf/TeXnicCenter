@@ -53,6 +53,21 @@ namespace {
 		return result;
 	}
 
+	bool IsEntryStart(char prev, char ch)
+	{
+		return prev != '\\' && ch == '@';
+	}
+
+	bool IsEntryStart(const StyleContext& sc)
+	{
+		return IsEntryStart(sc.chPrev,sc.ch);
+	}
+
+	bool IsNextEntryStart(const StyleContext& sc)
+	{
+		return IsEntryStart(sc.ch,sc.chNext);
+	}
+
 	void ColorizeBibTeX(unsigned start_pos, int length, int /*init_style*/, WordList* /*keywordlists*/[], Accessor& styler) 
 	{
 		bool fold_compact = styler.GetPropertyInt("fold.compact", 1) != 0;
@@ -62,9 +77,9 @@ namespace {
 
 		// We always colorize a section from the beginning, so let's 
 		// search for the @ character which isn't escaped, i.e. \@
-		while (start_pos > 0 && !(styler.SafeGetCharAt(start_pos) == '@' && 
-			styler.SafeGetCharAt(start_pos - 1) != '\\')) {
-				--start_pos; ++length;
+		while (start_pos > 0 && !IsEntryStart(styler.SafeGetCharAt(start_pos - 1),
+			styler.SafeGetCharAt(start_pos))) {
+			--start_pos; ++length;
 		}
 
 		styler.StartAt(start_pos);
@@ -94,7 +109,7 @@ namespace {
 			} 
 			else {
 				// Found @entry
-				if (sc.chPrev != '\\' && sc.ch == '@') {
+				if (IsEntryStart(sc)) {
 					sc.SetState(SCE_BIBTEX_UNKNOWN_ENTRY);
 					sc.Forward();
 					++current_level;
@@ -116,8 +131,6 @@ namespace {
 						sc.ForwardSetState(SCE_BIBTEX_PARAMETER);
 					else
 						sc.ForwardSetState(SCE_BIBTEX_KEY); // Key/label colorization
-
-					//buffer.clear();
 				}
 
 				// Need to handle the case where entry's key is empty
@@ -155,7 +168,8 @@ namespace {
 						if (ch) {
 							// Skip preceding " or { such as in name={{test}}.
 							// Remember how many characters have been skipped
-							while (sc.More() && sc.ch == ch) {
+							// Make sure that empty values, i.e. "" are also handled correctly
+							while (sc.More() && (sc.ch == ch && (ch != '"' || skipped < 1))) {
 								sc.Forward();
 								++skipped;
 							}
@@ -176,7 +190,7 @@ namespace {
 									++skipped; // Remember it
 								else if (sc.ch == '}')
 									--skipped;
-								else if (sc.ch == ch && ch == '"')
+								else if (skipped == 1 && sc.ch == ch && ch == '"') // Don't ignore cases like {"o}
 									skipped = 0;
 							}
 
@@ -205,7 +219,7 @@ namespace {
 					}
 
 					int end = sc.currentPos;
-					current_line += styler.GetLine(end) - styler.GetLine(start);
+					current_line = styler.GetLine(end);
 
 					// We have possibly skipped some lines, so the folding levels
 					// have to be adjusted separately
@@ -269,6 +283,10 @@ namespace {
 		}
 
 		sc.Complete();
+
+		// Fill in the real level of the next line, keeping the current flags as they will be filled in later
+		int flagsNext = styler.LevelAt(current_line) & ~SC_FOLDLEVELNUMBERMASK;
+		styler.SetLevel(current_line, prev_level | flagsNext);
 	}
 }
 
