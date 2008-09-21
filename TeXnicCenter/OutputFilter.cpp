@@ -105,7 +105,7 @@ void COutputFilter::AddBadBox(COutputInfo &badbox)
 
 CString COutputFilter::GetResultString()
 {
-	return _T("");
+	return CString();
 }
 
 UINT COutputFilter::Run()

@@ -47,9 +47,9 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // Eigenschaftenseite COptionPageGeneric
 
-IMPLEMENT_DYNCREATE(COptionPageGeneric,PropertyPage)
+IMPLEMENT_DYNCREATE(COptionPageGeneric,CMFCPropertyPage)
 
-COptionPageGeneric::COptionPageGeneric() : PropertyPage(COptionPageGeneric::IDD)
+COptionPageGeneric::COptionPageGeneric() : CMFCPropertyPage(COptionPageGeneric::IDD)
 {
 	//{{AFX_DATA_INIT(COptionPageGeneric)
 	m_bReplaceQm = CConfiguration::GetInstance()->m_bReplaceQuotationMarks;
@@ -145,7 +145,7 @@ void COptionPageGeneric::RefillPredefinedQMSets()
 
 void COptionPageGeneric::DoDataExchange(CDataExchange* pDX)
 {
-	PropertyPage::DoDataExchange(pDX);
+	CMFCPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPageGeneric)
 	DDX_Control(pDX,IDC_OPTIONS_QM_SET_LABEL,m_QMSetLabel);
 	DDX_Control(pDX,IDC_OPTIONS_REPLACE_QM_PREDEFINED_COMBO,m_wndQMSetsCombo);
@@ -184,7 +184,7 @@ void COptionPageGeneric::DoDataExchange(CDataExchange* pDX)
 	}
 }
 
-BEGIN_MESSAGE_MAP(COptionPageGeneric,PropertyPage)
+BEGIN_MESSAGE_MAP(COptionPageGeneric,CMFCPropertyPage)
 	//{{AFX_MSG_MAP(COptionPageGeneric)
 	ON_BN_CLICKED(IDC_OPTIONS_REPLACE_QM,OnUpdateCtrls)
 	ON_CBN_SELCHANGE(IDC_OPTIONS_REPLACE_QM_PREDEFINED_COMBO,OnSelchangePredefinedQMSets)
@@ -194,7 +194,7 @@ END_MESSAGE_MAP()
 
 BOOL COptionPageGeneric::OnInitDialog()
 {
-	PropertyPage::OnInitDialog();
+	CMFCPropertyPage::OnInitDialog();
 
 	RefillLanguageList();
 	RefillPredefinedQMSets();
@@ -241,7 +241,7 @@ void COptionPageGeneric::OnOK()
 	CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart = m_bOptimizeGuiForVisuallyHandicappedUsers;
 	CConfiguration::GetInstance()->m_strGuiLanguageOnNextStart = m_strGuiLanguage;
 
-	PropertyPage::OnOK();
+	CMFCPropertyPage::OnOK();
 }
 
 void COptionPageGeneric::OnUpdateCtrls()

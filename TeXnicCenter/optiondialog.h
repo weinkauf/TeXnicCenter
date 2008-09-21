@@ -60,7 +60,7 @@
 
 @author Sven Wiegand
  */
-class COptionDialog : public CPropertySheet
+class COptionDialog : public CMFCPropertySheet
 {
 	DECLARE_DYNAMIC(COptionDialog)
 

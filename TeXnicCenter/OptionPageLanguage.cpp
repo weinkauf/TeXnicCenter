@@ -48,9 +48,9 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // COptionPageLanguage property page
 
-IMPLEMENT_DYNCREATE(COptionPageLanguage,CPropertyPage)
+IMPLEMENT_DYNCREATE(COptionPageLanguage,CMFCPropertyPage)
 
-COptionPageLanguage::COptionPageLanguage() : CPropertyPage(COptionPageLanguage::IDD)
+COptionPageLanguage::COptionPageLanguage() : CMFCPropertyPage(COptionPageLanguage::IDD)
 {
 	m_bEnableSpell = CConfiguration::GetInstance()->m_bSpellEnable;
 	m_bMainDictOnly = CConfiguration::GetInstance()->m_bSpellMainDictOnly;
@@ -65,7 +65,7 @@ COptionPageLanguage::COptionPageLanguage() : CPropertyPage(COptionPageLanguage::
 
 void COptionPageLanguage::DoDataExchange(CDataExchange* pDX)
 {
-	CPropertyPage::DoDataExchange(pDX);
+	CMFCPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPageLanguage)
 	DDX_Check(pDX,IDC_OPTIONS_SPELL_ENABLE,m_bEnableSpell);
 	DDX_Check(pDX,IDC_OPTIONS_SPELL_MAINDICT,m_bMainDictOnly);
@@ -80,7 +80,7 @@ void COptionPageLanguage::DoDataExchange(CDataExchange* pDX)
 	//}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(COptionPageLanguage,CPropertyPage)
+BEGIN_MESSAGE_MAP(COptionPageLanguage,CMFCPropertyPage)
 	//{{AFX_MSG_MAP(COptionPageLanguage)
 	ON_CBN_SELCHANGE(IDC_OPTIONS_LANGUAGE,OnSelchangeOptionsLanguage)
 	ON_BN_CLICKED(IDC_OPTIONS_SPELL_BROWSE,OnOptionsSpellBrowse)
@@ -125,7 +125,7 @@ void COptionPageLanguage::OnOK()
 
 	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_BG_UPDATE_PROJECT); // clear or set the line attributes
 
-	CPropertyPage::OnOK();
+	CMFCPropertyPage::OnOK();
 }
 
 void COptionPageLanguage::OnSelchangeOptionsLanguage()
@@ -155,7 +155,7 @@ void COptionPageLanguage::OnSelchangeOptionsLanguage()
 
 BOOL COptionPageLanguage::OnInitDialog()
 {
-	CPropertyPage::OnInitDialog();
+	CMFCPropertyPage::OnInitDialog();
 
 	//Set URLs
 	CString DictURL;

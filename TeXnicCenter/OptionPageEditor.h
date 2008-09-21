@@ -3,7 +3,7 @@
 #include "PropertyPage.h"
 
 class COptionPageEditor :
-	public PropertyPage
+	public CMFCPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageEditor)
 

@@ -159,6 +159,9 @@ protected:
 	selected.
 	 */
 	CProfile *m_pCurrentProfile;
+public:
+	afx_msg void OnLvnEndlabeleditListProfiles(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnLvnKeydownListProfiles(NMHDR *pNMHDR, LRESULT *pResult);
 };
 
 //{{AFX_INSERT_LOCATION}}

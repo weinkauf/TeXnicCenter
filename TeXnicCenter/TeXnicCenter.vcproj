@@ -498,6 +498,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BibTeXOutputFilter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BibTeXOutputFilter.h"
+				>
+			</File>
+			<File
 				RelativePath=".\BibTeXView.cpp"
 				>
 			</File>
@@ -903,6 +911,22 @@
 			</File>
 			<File
 				RelativePath=".\MenuButton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MetaPostDocument.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MetaPostDocument.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MetaPostView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MetaPostView.h"
 				>
 			</File>
 			<File

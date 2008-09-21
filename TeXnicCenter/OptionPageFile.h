@@ -45,7 +45,7 @@
 
 @author Sven Wiegand
  */
-class COptionPageFile : public CPropertyPage
+class COptionPageFile : public CMFCPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageFile)
 

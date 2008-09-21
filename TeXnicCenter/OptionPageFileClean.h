@@ -50,7 +50,7 @@
 
 @author Tino Weinkauf
  */
-class COptionPageFileClean : public CPropertyPage
+class COptionPageFileClean : public CMFCPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageFileClean)
 

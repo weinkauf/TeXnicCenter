@@ -47,7 +47,7 @@
 
 @author Sven Wiegand
  */
-class COptionPageTextFormat : public CPropertyPage
+class COptionPageTextFormat : public CMFCPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageTextFormat)
 

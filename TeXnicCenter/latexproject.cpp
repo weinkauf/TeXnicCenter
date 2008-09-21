@@ -669,6 +669,10 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 		LPCTSTR const KEY_VIEWINFO = _T("%s_View%d,%d");
 
 		CString key;
+		HWND hwndlock = 0;
+		
+		if (theApp.m_bMDITabs)
+			hwndlock = ::GetWindow(static_cast<CMDIFrameWnd*>(AfxGetMainWnd())->m_hWndMDIClient,GW_CHILD);
 
 		for (int nFrame = 0; nFrame < nFrameCount; nFrame++)
 		{
@@ -676,6 +680,9 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 			key.Format(KEY_VIEWINFO,strKey,0,0);			
 
 			CString strDocPath = ini.GetValue(strKey,VAL_FRAMEINFO_DOCPATH,_T(""));
+
+			if (hwndlock) // Reduce flicker
+				::LockWindowUpdate(hwndlock);
 
 			if (CDocument* doc = theApp.OpenDocumentFile(CPathTool::GetAbsolutePath(strBaseDir,strDocPath))) 
 			{
@@ -696,6 +703,11 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 			}
 			else if (bCouldOpenAllFrames)
 				bCouldOpenAllFrames = false;
+
+			if (hwndlock)
+				::LockWindowUpdate(0);
+			//::RedrawWindow(hwndlock,0,0,RDW_UPDATENOW);
+
 			//CChildFrame* pChildFrame = new CChildFrame();
 
 			//ASSERT(pChildFrame);

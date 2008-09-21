@@ -40,6 +40,7 @@
 #include "OutputView.h"
 #include "OutputDoc.h"
 #include "MainFrm.h"
+#include "BibTeXOutputFilter.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -266,14 +267,16 @@ BOOL COutputBuilder::RunBibTex()
 	if (!m_bRunBibTex || !m_pProfile->GetRunBibTex())
 		return TRUE;
 
-	COutputFilter filter;
+	BibTeXOutputFilter filter;
 	HANDLE hOutput;
+
 	if (!filter.Create(&hOutput,m_pDoc,m_pView,FALSE))
 		return FALSE;
 
 	CProcessCommand pc;
 	pc.Set(m_pProfile->GetBibTexPath(),m_pProfile->GetBibTexArguments());
 	CProcess *p = pc.Execute(hOutput,m_strWorkingDir,m_strMainPath,NULL,-1);
+
 	if (!p)
 	{
 		::CloseHandle(hOutput);

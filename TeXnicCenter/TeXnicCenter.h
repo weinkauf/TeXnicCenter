@@ -54,6 +54,8 @@ class CTeXnicCenterApp :
 {
 	UINT m_nApplicationLook;
 	mutable CString module_name_;
+	CDocTemplate* bibtex_doc_template_;
+	CDocTemplate* metapost_doc_template_;
 
 public:
 	UINT GetApplicationLook() const;
@@ -398,6 +400,12 @@ protected:
 protected:
 	int DoMessageBox(LPCTSTR prompt, UINT type, UINT prompt_id);
 	virtual bool DoTaskDialog( HWND hWnd, LPCTSTR prompt, UINT nType, int& result);
+	void OnBibTeXNew();
+	void OnMetaPostNew();
+
+public:
+	CDocTemplate* GetBibTeXDocTemplate() const;
+	CDocTemplate* GetMetaPostDocTemplate() const;
 };
 
 inline
