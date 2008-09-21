@@ -37,6 +37,7 @@
 #include "ProfileDialog.h"
 #include "ProfileNameDialog.h"
 #include "OutputWizard.h"
+#include "RunTimeHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -61,6 +62,8 @@ BEGIN_MESSAGE_MAP(CProfileDialog, CPropertyDialog)
 	ON_BN_CLICKED(IDC_PROFILE_EXPORT, OnProfileExport)
 	ON_BN_CLICKED(IDC_PROFILE_IMPORT, OnProfileImport)
 	//}}AFX_MSG_MAP
+	ON_NOTIFY(LVN_ENDLABELEDIT, IDC_LIST_PROFILES, &CProfileDialog::OnLvnEndlabeleditListProfiles)
+	ON_NOTIFY(LVN_KEYDOWN, IDC_LIST_PROFILES, &CProfileDialog::OnLvnKeydownListProfiles)
 END_MESSAGE_MAP()
 
 
@@ -76,11 +79,13 @@ CProfileDialog::CProfileDialog(CWnd* pParent /*=NULL*/)
 	POSITION pos = CProfileMap::GetInstance()->GetStartPosition();
 	CProfile *pProfile;
 	CString strKey;
+
 	while (pos)
 	{
 		CProfileMap::GetInstance()->GetNextAssoc(pos, strKey, pProfile);
 		m_profiles.Add(strKey, *pProfile);
 	}
+
 	m_profiles.SetActiveProfile(CProfileMap::GetInstance()->GetActiveProfileKey());
 
 	//{{AFX_DATA_INIT(CProfileDialog)
@@ -195,12 +200,8 @@ void CProfileDialog::OnSelectionChanged()
 
 BOOL CProfileDialog::ValidateLabel(LPCTSTR lpszLabel)
 {
-	CString strLabel(lpszLabel);
-
-	if (m_profiles.Exists(strLabel))
-		return FALSE;
-	else
-		return TRUE;
+	const CString strLabel(lpszLabel);
+	return !m_profiles.Exists(strLabel);
 }
 
 void CProfileDialog::UnselectCurrentItem()
@@ -263,6 +264,9 @@ void CProfileDialog::DoDataExchange(CDataExchange* pDX)
 BOOL CProfileDialog::OnInitDialog()
 {
 	CPropertyDialog::OnInitDialog();
+
+	if (RunTimeHelper::IsVista())
+		::SetWindowTheme(m_wndProfileList,L"explorer",0);
 
 	// fill list with profiles
 	RefillList();
@@ -474,4 +478,44 @@ void CProfileDialog::OnProfileImport()
 	nSelectedItem = m_wndProfileList.FindItem(&lvfi);
 	if (nSelectedItem > -1)
 		m_wndProfileList.SetItemState(nSelectedItem, LVIS_SELECTED, LVIS_SELECTED);
+}
+
+void CProfileDialog::OnLvnEndlabeleditListProfiles(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	NMLVDISPINFO *pDispInfo = reinterpret_cast<NMLVDISPINFO*>(pNMHDR);
+
+	if (pDispInfo->item.pszText) // User didn't cancel editing
+	{
+		CString strOldName = m_wndProfileList.GetItemText(pDispInfo->item.iItem,0);
+		
+		if (!ValidateLabel(pDispInfo->item.pszText)) 
+		{
+			AfxMessageBox(STE_PROFILE_ALREADYEXISTS, MB_OK | MB_ICONSTOP);
+			*pResult = 0;
+		}
+		else 
+		{
+			m_profiles.Rename(strOldName, pDispInfo->item.pszText);
+			*pResult = 1; // Success
+		}
+	}	
+}
+
+void CProfileDialog::OnLvnKeydownListProfiles(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
+	
+	switch (pLVKeyDow->wVKey)
+	{
+	case VK_F2:
+		{
+			int item = m_wndProfileList.GetNextItem(-1,LVNI_ALL|LVNI_SELECTED);
+
+			if (item != -1)
+				m_wndProfileList.EditLabel(item);
+		}
+		break;
+	}
+
+	*pResult = 0;
 }

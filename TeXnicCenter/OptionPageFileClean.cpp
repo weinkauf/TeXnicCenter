@@ -46,10 +46,10 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // COptionPageFileClean property page
 
-IMPLEMENT_DYNCREATE(COptionPageFileClean,CPropertyPage)
+IMPLEMENT_DYNCREATE(COptionPageFileClean,CMFCPropertyPage)
 
 COptionPageFileClean::COptionPageFileClean()
-		: CPropertyPage(COptionPageFileClean::IDD),
+		: CMFCPropertyPage(COptionPageFileClean::IDD),
 		m_PHInsertBtn(IDR_POPUP_PLACEHOLDEREX_NOOPT),
 		m_bItemChangeLock(false),
 		m_bUpdatingList(false)
@@ -67,7 +67,7 @@ COptionPageFileClean::~COptionPageFileClean()
 
 void COptionPageFileClean::DoDataExchange(CDataExchange* pDX)
 {
-	CPropertyPage::DoDataExchange(pDX);
+	CMFCPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPageFileClean)
 	DDX_Control(pDX,IDC_OPTIONS_FILECLEAN_DELETE,m_DeleteBtn);
 	DDX_Control(pDX,IDC_OPTIONS_FILECLEAN_PHINSERT,m_PHInsertBtn);
@@ -80,7 +80,7 @@ void COptionPageFileClean::DoDataExchange(CDataExchange* pDX)
 	//}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(COptionPageFileClean,CPropertyPage)
+BEGIN_MESSAGE_MAP(COptionPageFileClean,CMFCPropertyPage)
 	//{{AFX_MSG_MAP(COptionPageFileClean)
 	ON_EN_CHANGE(IDC_OPTIONS_FILECLEAN_NAME,OnChangeName)
 	ON_EN_CHANGE(IDC_OPTIONS_FILECLEAN_PATTERN,OnChangePattern)
@@ -114,7 +114,7 @@ void COptionPageFileClean::OnOK()
 	//Just to be sure
 	CConfiguration::GetInstance()->m_aFileCleanItems.AddDefaultItems();
 
-	CPropertyPage::OnOK();
+	CMFCPropertyPage::OnOK();
 }
 
 void COptionPageFileClean::UpdateItems(CFileCleanItemArray& copyItems)
@@ -196,7 +196,7 @@ void COptionPageFileClean::RefillList()
 
 BOOL COptionPageFileClean::OnInitDialog()
 {
-	CPropertyPage::OnInitDialog();
+	CMFCPropertyPage::OnInitDialog();
 
 	//Initialize controls
 	m_PHInsertBtn.AttachEditCtrl(&m_PatternEdit);

@@ -55,6 +55,7 @@
 #define IDR_LATEXDOCTYPE                68
 #define IDR_BIBTEXDOCTYPE               69
 #define IDR_LATEXPROJECTDOCTYPE         70
+#define IDR_METAPOSTDOCTYPE             71
 #define IDD_ABOUTBOX                    100
 #define IDB_LIGHTBULB                   102
 #define IDD_TIP                         103
@@ -175,7 +176,9 @@
 #define ID_START_SEARCH                 190
 #define STE_SELECT_PROJECT_PATH         192
 #define IDR_FORMAT_RECENTLY_USED        192
+#define ID_METAPOST_NEW                 192
 #define STE_PROJECTDIR_CREATE_ERR       193
+#define ID_BIBTEX_NEW                   193
 #define STE_PROJECT_MAINFILEEXISTS      194
 #define IDR_LATEX                       194
 #define STE_PROJECT_USEEXISTINGFILE     195
@@ -1482,6 +1485,6 @@
 #define _APS_NEXT_RESOURCE_VALUE        354
 #define _APS_NEXT_COMMAND_VALUE         38598
 #define _APS_NEXT_CONTROL_VALUE         1378
-#define _APS_NEXT_SYMED_VALUE           191
+#define _APS_NEXT_SYMED_VALUE           194
 #endif
 #endif

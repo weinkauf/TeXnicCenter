@@ -39,8 +39,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "PropertyPage.h"
-
 /**	General Options.
 
 @ingroup dialogs
@@ -48,7 +46,7 @@
 @author Sven Wiegand
  */
 class COptionPageGeneric :
-			public PropertyPage
+			public CMFCPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageGeneric)
 

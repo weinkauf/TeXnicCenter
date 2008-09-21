@@ -45,7 +45,7 @@
 
 @author Chris Norris
  */
-class COptionPageLanguage : public CPropertyPage
+class COptionPageLanguage : public CMFCPropertyPage
 {
 	DECLARE_DYNCREATE(COptionPageLanguage)
 

@@ -1063,6 +1063,35 @@ LRESULT CMainFrame::OnResetToolbar(WPARAM wParam, LPARAM /*lParam*/)
 
 		m_wndFormatRUBar.ReplaceButton(b2->m_nID,*b2);
 	}
+	else if (id == m_wndToolBar.GetDlgCtrlID()) 
+	{
+		CMenu menu;
+		menu.CreatePopupMenu();
+
+		POSITION pos = theApp.GetFirstDocTemplatePosition();
+
+		while (pos)
+		{
+			CDocTemplate* t = theApp.GetNextDocTemplate(pos);
+
+			CString text;
+			t->GetDocString(text,CDocTemplate::regFileTypeName);
+
+			UINT id = ID_LATEX_NEW;
+
+			if (t == theApp.GetBibTeXDocTemplate())
+				id = ID_BIBTEX_NEW;
+			else if (t == theApp.GetMetaPostDocTemplate())
+				id = ID_METAPOST_NEW;
+
+			menu.AppendMenu(MF_STRING,id,text);
+		}
+
+		CMFCToolBarButton* pb = m_wndToolBar.GetButton(m_wndToolBar.CommandToIndex(ID_LATEX_NEW));		
+		CMFCToolBarMenuButton tbb(pb->m_nID,menu,pb->GetImage(),pb->m_strText,pb->m_bUserButton);	
+		
+		m_wndToolBar.ReplaceButton(ID_LATEX_NEW,tbb);
+	}
 
 	return 0L;
 }

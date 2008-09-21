@@ -2,14 +2,14 @@
 
 #include "FontOccManager.h"
 
-class PropertyPage : public CPropertyPage
+class PropertyPage : public CMFCPropertyPage
 {
 	CDialogTemplate res_;
 
 public:
 
 	PropertyPage(UINT id)
-			: CPropertyPage(id)
+	: CMFCPropertyPage(id)
 	{
 		//AllocPSP(sizeof(PROPSHEETPAGE));
 		//CommonConstruct(0,0);

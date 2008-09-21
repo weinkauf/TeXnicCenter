@@ -50,18 +50,20 @@ static char THIS_FILE[] = __FILE__;
 // class COptionDialog
 //-------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC(COptionDialog,CPropertySheet)
+IMPLEMENT_DYNAMIC(COptionDialog,CMFCPropertySheet)
 
 
-BEGIN_MESSAGE_MAP(COptionDialog,CPropertySheet)
+BEGIN_MESSAGE_MAP(COptionDialog,CMFCPropertySheet)
 	//{{AFX_MSG_MAP(COptionDialog)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
 COptionDialog::COptionDialog(CWnd* pParentWnd,UINT iSelectPage)
-		: CPropertySheet(STE_OPTIONS_TITLE,pParentWnd,iSelectPage)
+		: CMFCPropertySheet(STE_OPTIONS_TITLE,pParentWnd,iSelectPage)
 {
+	SetLook(PropSheetLook_List,135);
+
 	// Remove the apply button
 	m_psh.dwFlags |= PSH_NOAPPLYNOW|PSH_NOCONTEXTHELP;
 	m_psh.dwFlags &= ~PSH_HASHELP;
@@ -87,7 +89,7 @@ COptionDialog::~COptionDialog()
 
 BOOL COptionDialog::OnInitDialog()
 {
-	BOOL bResult = CPropertySheet::OnInitDialog();
+	BOOL bResult = CMFCPropertySheet::OnInitDialog();
 
 	// modify tree control
 	//GetPageTreeControl()->ModifyStyle(TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS, 0);
@@ -99,7 +101,7 @@ int COptionDialog::DoModal(void)
 {
 	m_psh.dwFlags |= PSH_USECALLBACK;
 	m_psh.pfnCallback = PropSheetCallback;
-	return CPropertySheet::DoModal();
+	return CMFCPropertySheet::DoModal();
 }
 
 int COptionDialog::PropSheetCallback(HWND hWnd,UINT message,LPARAM lParam)
@@ -133,6 +135,6 @@ int COptionDialog::PropSheetCallback(HWND hWnd,UINT message,LPARAM lParam)
 
 void COptionDialog::BuildPropPageArray(void)
 {
-	CPropertySheet::BuildPropPageArray();
+	CMFCPropertySheet::BuildPropPageArray();
 	FixPropSheetFont(m_psh,m_pages);
 }

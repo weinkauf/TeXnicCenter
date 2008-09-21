@@ -220,7 +220,7 @@ void CLaTeXOutputFilter::FlushCurrentItem()
 	m_currentItem.Clear();
 }
 
-DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine,DWORD dwCookie)
+DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 {
 	UpdateFileStack(strLine);
 

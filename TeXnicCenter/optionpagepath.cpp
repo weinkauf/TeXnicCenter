@@ -48,9 +48,9 @@ static char THIS_FILE[] = __FILE__;
 // class COptionPagePath
 //-------------------------------------------------------------------
 
-IMPLEMENT_DYNCREATE(COptionPagePath,CPropertyPage)
+IMPLEMENT_DYNCREATE(COptionPagePath,CMFCPropertyPage)
 
-BEGIN_MESSAGE_MAP(COptionPagePath,CPropertyPage)
+BEGIN_MESSAGE_MAP(COptionPagePath,CMFCPropertyPage)
 	//{{AFX_MSG_MAP(COptionPagePath)
 	ON_BN_CLICKED(IDC_ADD_PROJECTTEMPLATES,OnAddProjectTemplates)
 	ON_BN_CLICKED(IDC_REMOVE_PROJECTTEMPLATES,OnRemoveProjectTemplates)
@@ -63,7 +63,7 @@ END_MESSAGE_MAP()
 
 
 COptionPagePath::COptionPagePath()
-		: CPropertyPage(COptionPagePath::IDD),
+		: CMFCPropertyPage(COptionPagePath::IDD),
 		m_wndBrowseBtn(IDC_OPTIONS_DEFAULT_PATH_EDIT,CString((LPCTSTR)STE_GET_PATH))
 {
 	//{{AFX_DATA_INIT(COptionPagePath)
@@ -77,7 +77,7 @@ COptionPagePath::~COptionPagePath()
 
 void COptionPagePath::DoDataExchange(CDataExchange* pDX)
 {
-	CPropertyPage::DoDataExchange(pDX);
+	CMFCPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPagePath)
 	DDX_Control(pDX,IDC_BROWSE_DEFAULT_PATH,m_wndBrowseBtn);
 	DDX_Control(pDX,IDC_REMOVE_PROJECTTEMPLATES,m_wndProjectRemoveButton);
@@ -90,7 +90,7 @@ void COptionPagePath::DoDataExchange(CDataExchange* pDX)
 
 BOOL COptionPagePath::OnInitDialog()
 {
-	CPropertyPage::OnInitDialog();
+	CMFCPropertyPage::OnInitDialog();
 
 	// fill template list
 	for (int i = 0; i < CConfiguration::GetInstance()->m_astrProjectTemplatePaths.GetSize(); i++)
@@ -179,5 +179,5 @@ void COptionPagePath::OnOK()
 	//Update Default Path
 	CConfiguration::GetInstance()->m_strDefaultPath = m_strDefaultPath;
 
-	CPropertyPage::OnOK();
+	CMFCPropertyPage::OnOK();
 }

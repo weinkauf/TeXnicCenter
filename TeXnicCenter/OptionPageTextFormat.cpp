@@ -47,7 +47,7 @@ static char THIS_FILE[] = __FILE__;
 // class COptionPageTextFormat
 //-------------------------------------------------------------------
 
-BEGIN_MESSAGE_MAP(COptionPageTextFormat,CPropertyPage)
+BEGIN_MESSAGE_MAP(COptionPageTextFormat,CMFCPropertyPage)
 	//{{AFX_MSG_MAP(COptionPageTextFormat)
 	ON_CBN_SELCHANGE(IDC_EDITOR_ELEMENT,OnSelchangeEditorElement)
 	ON_BN_CLICKED(IDC_EDITOR_SELECTFONT,OnEditorSelectfont)
@@ -58,11 +58,11 @@ BEGIN_MESSAGE_MAP(COptionPageTextFormat,CPropertyPage)
 END_MESSAGE_MAP()
 
 
-IMPLEMENT_DYNCREATE(COptionPageTextFormat,CPropertyPage)
+IMPLEMENT_DYNCREATE(COptionPageTextFormat,CMFCPropertyPage)
 
 
 COptionPageTextFormat::COptionPageTextFormat()
-		: CPropertyPage(COptionPageTextFormat::IDD),
+		: CMFCPropertyPage(COptionPageTextFormat::IDD),
 		m_bApplyChanges(FALSE)
 {
 	// copy color array
@@ -161,7 +161,7 @@ void COptionPageTextFormat::UpdateControlStates()
 
 void COptionPageTextFormat::DoDataExchange(CDataExchange* pDX)
 {
-	CPropertyPage::DoDataExchange(pDX);
+	CMFCPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPageTextFormat)
 	DDX_Control(pDX,IDC_INSERTCURSOR_BLINK,m_wndInsertCursorMode);
 	DDX_Control(pDX,IDC_INSERCURSOR_STYLE,m_wndInsertCursorForm);
@@ -181,7 +181,7 @@ void COptionPageTextFormat::DoDataExchange(CDataExchange* pDX)
 
 BOOL COptionPageTextFormat::OnInitDialog()
 {
-	CPropertyPage::OnInitDialog();
+	CMFCPropertyPage::OnInitDialog();
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// set item data for element combo
@@ -251,7 +251,7 @@ void COptionPageTextFormat::OnOK()
 	// OnOK should update all windows
 	m_bApplyChanges = TRUE;
 
-	CPropertyPage::OnOK();
+	CMFCPropertyPage::OnOK();
 }
 
 void COptionPageTextFormat::OnDestroy()
@@ -263,7 +263,7 @@ void COptionPageTextFormat::OnDestroy()
 		m_bApplyChanges = FALSE;
 	}
 
-	CPropertyPage::OnDestroy();
+	CMFCPropertyPage::OnDestroy();
 }
 
 void COptionPageTextFormat::OnSelchangeEditorElement()

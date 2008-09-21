@@ -157,7 +157,7 @@ END
 IDR_MAINFRAME           ICON                    "res\\TeXnicCenter.ico"
 IDR_BIBTEXDOCTYPE       ICON                    "res\\bibtextype.ico"
 IDR_LATEXDOCTYPE        ICON                    "res\\LatexDoc.ico"
-IDR_LATEXPROJECTDOCTYPE        ICON                    "res\\idr_late.ico"
+IDR_LATEXPROJECTDOCTYPE ICON                    "res\\idr_late.ico"
 IDR_LATEXWIZARD         ICON                    "res\\Wizard.ico"
 IDR_LATEXTYPE_YELLOW    ICON                    "res\\LatexDoc_yellow.ico"
 IDR_MAINFRAME_YELLOW    ICON                    "res\\TeXnicCenter_yellow.ico"
@@ -1001,20 +1001,20 @@ BEGIN
     COMBOBOX        IDC_OPTIONS_FILETYPE,82,83,55,57,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
 
-IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 283, 200
+IDD_OPTIONS_GENERIC DIALOGEX 0, 0, 300, 200
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_DISABLED | WS_CAPTION
 CAPTION "Allgemein"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    GROUPBOX        "Allgemein",IDC_STATIC,8,8,267,31
+    GROUPBOX        "Allgemein",IDC_STATIC,8,8,284,31
     CONTROL         "&Letzte Sitzung bei Start wiederherstellen",IDC_OPTIONS_RESTORE_SESSION,
                     "Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,13,21,141,10,0,HIDC_OPTIONS_RESTORE_SESSION
-    GROUPBOX        "Automatisches Ersetzen",IDC_STATIC,8,49,267,64
+    GROUPBOX        "Automatisches Ersetzen",IDC_STATIC,8,49,284,64
     CONTROL         "&Anführungszeichen ("") ersetzen",IDC_OPTIONS_REPLACE_QM,
                     "Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,13,64,115,10,0,HIDC_OPTIONS_REPLACE_QM
     LTEXT           "&Öffnendes Zeichen:",IDC_OPTIONS_QM_LABEL1,147,77,64,8
     LTEXT           "&Schließendes Zeichen:",IDC_OPTIONS_QM_LABEL2,147,92,74,8
-    GROUPBOX        "Benutzerschnittstelle (Änderungen erfordern einen Neustart von TeXnicCenter)",IDC_STATIC,8,122,267,71
+    GROUPBOX        "Benutzerschnittstelle (Änderungen erfordern einen Neustart von TeXnicCenter)",IDC_STATIC,8,122,284,71
     LTEXT           "S&prache:",IDC_STATIC,13,157,30,8
     COMBOBOX        IDC_GUI_LANGUAGE_COMBO,57,155,103,124,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     CONTROL         "&Benutzerschnittstelle für sehbehinderte Benutzer optimieren",IDC_OPTIONS_OPTIMIZE_FOR_VISUALLY_HANDICAPPED_USERS,
@@ -1426,7 +1426,7 @@ CAPTION "Profiles"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     LTEXT           "&Profile",IDC_STATIC,7,7,123,8
-    CONTROL         "List1",IDC_LIST_PROFILES,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | LVS_NOLABELWRAP | WS_BORDER | WS_TABSTOP,7,16,120,228
+    CONTROL         "List1",IDC_LIST_PROFILES,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | LVS_NOLABELWRAP | LVS_EDITLABELS | WS_BORDER | WS_TABSTOP,7,16,120,228
     PUSHBUTTON      "&Hinzufügen",IDC_PROFILE_ADD,7,246,60,14
     PUSHBUTTON      "&Umbenennen",IDC_PROFILE_RENAME,7,261,60,14
     PUSHBUTTON      "&Kopieren",IDC_PROFILE_COPY,68,246,60,14
@@ -1768,7 +1768,7 @@ BEGIN
     IDD_OPTIONS_GENERIC, DIALOG
     BEGIN
         LEFTMARGIN, 8
-        RIGHTMARGIN, 275
+        RIGHTMARGIN, 292
         VERTGUIDE, 226
         VERTGUIDE, 246
         TOPMARGIN, 8
@@ -3321,13 +3321,19 @@ END
 
 STRINGTABLE 
 BEGIN
+    IDS_SEARCHING           "Wird gesucht..."
+    IDS_ITEMS_FOUND         "%i Einträge gefunden"
+    IDS_CONFIGURE_FOUND_DISTRIBUTION 
+                            "Ja, TeXnicCenter für die Verwendung mit %s konfigurieren."
     IDR_MAINFRAME           "TeXnicCenter"
+    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Dateien (*.tex)\n.tex\nLaTeX.Document\nLaTeX Dokument"
+    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Dateien (*.bib)\n.bib\nBibTeX.Document\nBibTeX Dokument"
+    IDR_LATEXPROJECTDOCTYPE "\nTeXnicCenter-Projekt\nTeXnicCenter-Projekt\nTeXnicCenter-Projekte (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
+    IDR_METAPOSTDOCTYPE     "\nMetaPost\nMetaPost\nMetaPost-Dateien (*.mp)\n.mp\nMetaPost.Document\nMetaPost Dokument"
 END
 
 STRINGTABLE 
 BEGIN
-    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Dateien (*.tex)\n.tex\nLaTeX.Document\nLaTeX Dokument"
-    IDR_LATEXPROJECTDOCTYPE        "\nTeXnicCenter-Projekt\nTeXnicCenter-Projekt\nTeXnicCenter-Projekte (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
     STE_ALL_FILES_FILTER    "Alle Dateien (*.*)|*.*||"
     STE_GET_PATH_TITLE      "Verzeichnis wählen"
     STE_GET_PATH            "Wählen Sie ein Verzeichnis aus..."
@@ -4760,15 +4766,6 @@ BEGIN
     ID_TITLE                "Nach Publikationstitel suchen."
     ID_PUBLICATION_TYPE     "Nach Typ der Publikation suchen."
     ID_PUBLISHER            "Nach Herausgeber suchen."
-END
-
-STRINGTABLE 
-BEGIN
-    IDS_SEARCHING           "Wird gesucht..."
-    IDS_ITEMS_FOUND         "%i Einträge gefunden"
-    IDS_CONFIGURE_FOUND_DISTRIBUTION 
-                            "Ja, TeXnicCenter für die Verwendung mit %s konfigurieren."
-    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Dateien (*.bib)\n.bib\nBibTeX.Document\nBibTeX Dokument"
 END
 
 STRINGTABLE 
@@ -7280,13 +7277,18 @@ END
 
 STRINGTABLE 
 BEGIN
+    IDS_ITEMS_FOUND         "% items found"
+    IDS_CONFIGURE_FOUND_DISTRIBUTION 
+                            "Yes, configure TeXnicCenter for the use with %s."
     IDR_MAINFRAME           "TeXnicCenter"
+    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Files (*.tex)\n.tex\nLaTeX.Document\nLaTeX Document"
+    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Files (*.tex)\n.tex\nBibTeX.Document\nBibTeX Document"
+    IDR_LATEXPROJECTDOCTYPE "\nTeXnicCenter-Project\nTeXnicCenter-Project\nTeXnicCenter-Projects (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
+    IDR_METAPOSTDOCTYPE     "\nMetaPost\nMetaPost\nMetaPost-Files (*.mp)\n.mp\nMetaPost.Document\nMetaPost Document"
 END
 
 STRINGTABLE 
 BEGIN
-    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Files (*.tex)\n.tex\nLaTeX.Document\nLaTeX Document"
-    IDR_LATEXPROJECTDOCTYPE        "\nTeXnicCenter-Project\nTeXnicCenter-Project\nTeXnicCenter-Projects (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
     STE_ALL_FILES_FILTER    "All Files (*.*)|*.*||"
     STE_GET_PATH_TITLE      "Directory Selection"
     STE_GET_PATH            "Select a directory..."
@@ -8708,14 +8710,6 @@ BEGIN
     IDS_WIZARD_CONFIGURE_PS "Your TeX-distribution supports the generation of PostScript-files"
     IDS_WIZARD_CONFIGURE_DVI "DVI-Viewer configuration"
     IDS_WIZARD_DISTRIBUTION_PATH "Distribution directory"
-END
-
-STRINGTABLE 
-BEGIN
-    IDS_ITEMS_FOUND         "% items found"
-    IDS_CONFIGURE_FOUND_DISTRIBUTION 
-                            "Yes, configure TeXnicCenter for the use with %s."
-    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Files (*.tex)\n.tex\nBibTeX.Document\nBibTeX Document"
 END
 
 #endif    // English (U.S.) resources

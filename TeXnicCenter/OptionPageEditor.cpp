@@ -4,10 +4,10 @@
 #include "configuration.h"
 
 
-IMPLEMENT_DYNCREATE(COptionPageEditor,PropertyPage)
+IMPLEMENT_DYNCREATE(COptionPageEditor,CMFCPropertyPage)
 
 COptionPageEditor::COptionPageEditor() 
-: PropertyPage(COptionPageEditor::IDD)
+: CMFCPropertyPage(COptionPageEditor::IDD)
 , show_line_below_fold_(CConfiguration::GetInstance()->GetShowLineBelowFold())
 , show_line_below_no_fold_(CConfiguration::GetInstance()->GetShowLineBelowNoFold())
 , show_line_above_fold_(CConfiguration::GetInstance()->GetShowLineAboveFold())
@@ -26,7 +26,7 @@ COptionPageEditor::~COptionPageEditor()
 
 void COptionPageEditor::DoDataExchange(CDataExchange* pDX)
 {
-	PropertyPage::DoDataExchange(pDX);
+	CMFCPropertyPage::DoDataExchange(pDX);
 
 	DDX_Control(pDX,IDC_OPTIONS_EDITOR_WORDWRAP_FIXEDCOLUMN,m_wndFixedColumn);
 	DDX_Text(pDX,IDC_EDITOR_TABWIDTH,m_nTabWidth);
@@ -42,7 +42,7 @@ void COptionPageEditor::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX,IDC_FOLD_COMPACT,fold_compact_);
 }
 
-BEGIN_MESSAGE_MAP(COptionPageEditor,PropertyPage)
+BEGIN_MESSAGE_MAP(COptionPageEditor,CMFCPropertyPage)
 	ON_CBN_SELCHANGE(IDC_OPTIONS_EDITOR_WORDWRAP_STYLE,UpdateControlStates)
 END_MESSAGE_MAP()
 
@@ -83,7 +83,7 @@ void COptionPageEditor::OnOK()
 	// this message will be send to all windows of the application
 	AfxGetMainWnd()->SendMessage(WM_SYSCOLORCHANGE);
 
-	PropertyPage::OnOK();
+	CMFCPropertyPage::OnOK();
 }
 
 void COptionPageEditor::UpdateControlStates()
@@ -95,7 +95,7 @@ void COptionPageEditor::UpdateControlStates()
 
 BOOL COptionPageEditor::OnInitDialog()
 {
-	PropertyPage::OnInitDialog();
+	CMFCPropertyPage::OnInitDialog();
 
 	UpdateControlStates();
 

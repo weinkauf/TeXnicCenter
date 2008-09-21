@@ -48,17 +48,17 @@ static char THIS_FILE[] = __FILE__;
 // class COptionPageFiles
 //-------------------------------------------------------------------
 
-IMPLEMENT_DYNCREATE(COptionPageFile,CPropertyPage)
+IMPLEMENT_DYNCREATE(COptionPageFile,CMFCPropertyPage)
 
 
-BEGIN_MESSAGE_MAP(COptionPageFile,CPropertyPage)
+BEGIN_MESSAGE_MAP(COptionPageFile,CMFCPropertyPage)
 	//{{AFX_MSG_MAP(COptionPageFile)
 	ON_BN_CLICKED(IDC_OPTIONS_SAVE_AUTOMATIC,OnUpdateCtrls)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
-COptionPageFile::COptionPageFile() : CPropertyPage(COptionPageFile::IDD)
+COptionPageFile::COptionPageFile() : CMFCPropertyPage(COptionPageFile::IDD)
 {
 	//{{AFX_DATA_INIT(COptionPageFile)
 	//}}AFX_DATA_INIT
@@ -75,7 +75,7 @@ COptionPageFile::~COptionPageFile()
 
 void COptionPageFile::DoDataExchange(CDataExchange* pDX)
 {
-	CPropertyPage::DoDataExchange(pDX);
+	CMFCPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPageFile)
 	DDX_Control(pDX,IDC_OPTIONS_SAVE_LABEL2,m_wndSaveIntervalLabel2);
 	DDX_Control(pDX,IDC_OPTIONS_SAVE_LABEL1,m_wndSaveIntervalLabel1);
@@ -92,7 +92,7 @@ void COptionPageFile::DoDataExchange(CDataExchange* pDX)
 
 BOOL COptionPageFile::OnInitDialog()
 {
-	CPropertyPage::OnInitDialog();
+	CMFCPropertyPage::OnInitDialog();
 
 	m_wndSaveIntervalSpin.SetRange(1,1000);
 
@@ -128,5 +128,5 @@ void COptionPageFile::OnOK()
 	CConfiguration::GetInstance()->m_unSaveInterval = m_unSaveInterval;
 	CConfiguration::GetInstance()->m_nStandardFileFormat = m_nFileFormat;
 
-	CPropertyPage::OnOK();
+	CMFCPropertyPage::OnOK();
 }

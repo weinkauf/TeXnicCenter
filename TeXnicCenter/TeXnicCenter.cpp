@@ -60,6 +60,8 @@
 #include "RunTimeHelper.h"
 #include "BibTeXView.h"
 #include "BibTeXDocument.h"
+#include "MetaPostView.h"
+#include "MetaPostDocument.h"
 
 
 class CTCCommandLineInfo : public CCommandLineInfo
@@ -188,6 +190,8 @@ BEGIN_MESSAGE_MAP(CTeXnicCenterApp, CProjectSupportingWinApp)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnDisableStdCmd)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS, OnDisableStdCmd)
 	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_ALL, OnUpdateDoForAllOpenWindows)
+	ON_COMMAND(ID_BIBTEX_NEW, &CTeXnicCenterApp::OnBibTeXNew)
+	ON_COMMAND(ID_METAPOST_NEW, &CTeXnicCenterApp::OnMetaPostNew)
 	//}}AFX_MSG_MAP
 	// Dateibasierte Standard-Dokumentbefehle
 	//ON_COMMAND(ID_FILE_NEW, CProjectSupportingWinApp::OnFileNew)
@@ -214,6 +218,8 @@ CTeXnicCenterApp::CTeXnicCenterApp()
 		m_bTabFlatBorders(FALSE),
 		m_pSpell(NULL),
 		m_pBackgroundThread(NULL)
+		, bibtex_doc_template_(0)
+		, metapost_doc_template_(0)
 {
 	m_eHelpType = afxHTMLHelp;
 	InitializeCriticalSection(&m_csLazy);
@@ -388,6 +394,18 @@ BOOL CTeXnicCenterApp::InitInstance()
 		RUNTIME_CLASS(CChildFrame), // Benutzerspezifischer MDI-Child-Rahmen
 		RUNTIME_CLASS(BibTeXView));
 	AddDocTemplate(bibtempl);
+
+	bibtex_doc_template_ = bibtempl;
+
+	// MetaPost-Document
+	CMultiDocTemplate* mptempl = new CMultiDocTemplate(
+		IDR_METAPOSTDOCTYPE,
+		RUNTIME_CLASS(MetaPostDocument),
+		RUNTIME_CLASS(CChildFrame), // Benutzerspezifischer MDI-Child-Rahmen
+		RUNTIME_CLASS(MetaPostView));
+	AddDocTemplate(mptempl);
+
+	metapost_doc_template_ = mptempl;
 
 	m_pProjectDocTemplate = new CSingleProjectTemplate(
 	    IDR_LATEXPROJECTDOCTYPE,
@@ -698,15 +716,8 @@ int CTeXnicCenterApp::ExitInstance()
 	{
 		m_pBackgroundThread->m_bAutoDelete = FALSE;
 		m_pBackgroundThread->PostThreadMessage(WM_QUIT, 0, 0);
-		DWORD dwError;
-
-		do
-		{
-			// Wait for the thread to terminate
-			Sleep(0);
-			::GetExitCodeThread(m_pBackgroundThread->m_hThread, &dwError);
-		}
-		while (dwError == STILL_ACTIVE);
+		
+		::WaitForSingleObject(m_pBackgroundThread->m_hThread,INFINITE);
 
 		delete m_pBackgroundThread;
 		m_pBackgroundThread = NULL;
@@ -1267,6 +1278,7 @@ void CTeXnicCenterApp::OnUpdateProjectSave(CCmdUI* pCmdUI)
 void CTeXnicCenterApp::OnLatexNew()
 {
 	CDocument *pDoc = m_pLatexDocTemplate->OpenDocumentFile(NULL);
+
 	if (pDoc && CConfiguration::GetInstance()->m_bSaveNewDocuments)
 		pDoc->DoFileSave();
 }
@@ -2151,4 +2163,24 @@ bool CTeXnicCenterApp::DoTaskDialog( HWND hWnd, LPCTSTR prompt, UINT nType, int&
 		tdc.pszContent = body;
 
 	return SUCCEEDED(::TaskDialogIndirect(&tdc,&result,0,0));
+}
+
+void CTeXnicCenterApp::OnBibTeXNew()
+{
+	bibtex_doc_template_->OpenDocumentFile(0);
+}
+
+void CTeXnicCenterApp::OnMetaPostNew()
+{
+	metapost_doc_template_->OpenDocumentFile(0);
+}
+
+CDocTemplate* CTeXnicCenterApp::GetBibTeXDocTemplate() const
+{
+	return bibtex_doc_template_;
+}
+
+CDocTemplate* CTeXnicCenterApp::GetMetaPostDocTemplate() const
+{
+	return metapost_doc_template_;
 }
