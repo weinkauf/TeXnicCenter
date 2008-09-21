@@ -1053,27 +1053,35 @@ void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt()
 
 	// save all projects
 	POSITION pos = m_pProjectDocTemplate->GetFirstProjectPosition();
+
 	while (pos)
 	{
 		CProject *pDoc = m_pProjectDocTemplate->GetNextProject(pos);
+
 		if (pDoc->GetPathName().IsEmpty())
 			pDoc->DoFileSave();
 		else
 			pDoc->OnSaveProject(pDoc->GetPathName());
 	}
 
-	// save all latex-docs
-	pos = m_pLatexDocTemplate->GetFirstDocPosition();
+	// Save all documents
+	pos = GetFirstDocTemplatePosition();
 	CString path;
 
 	while (pos)
 	{
-		CDocument *pDoc = m_pLatexDocTemplate->GetNextDoc(pos);
-		path = pDoc->GetPathName();
+		CDocTemplate* t = GetNextDocTemplate(pos);
+		POSITION pos1 = t->GetFirstDocPosition();
 
-		// Save the document only if the file already exists
-		if (!path.IsEmpty() && CPathTool::Exists(path) && pDoc->IsModified())
-			pDoc->OnSaveDocument(path);
+		while (pos1) 
+		{
+			CDocument *pDoc = m_pLatexDocTemplate->GetNextDoc(pos1);
+			path = pDoc->GetPathName();
+
+			// Save the document only if the file already exists
+			if (!path.IsEmpty() && CPathTool::Exists(path) && pDoc->IsModified())
+				pDoc->OnSaveDocument(path);
+		}
 	}
 
 	m_bSavingAll = FALSE;
