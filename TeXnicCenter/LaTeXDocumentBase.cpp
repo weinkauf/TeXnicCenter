@@ -265,8 +265,10 @@ void LaTeXDocumentBase::OnRemovedAllBookmarks(void)
 
 void LaTeXDocumentBase::OnCloseDocument()
 {
-	if (CLaTeXProject* p = theApp.GetProject())
-		p->SetFoldingPoints(GetPathName(),GetContractedFoldingPoints());
+	if (GetView()) { // Is the view attached?
+		if (CLaTeXProject* p = theApp.GetProject())
+			p->SetFoldingPoints(GetPathName(),GetContractedFoldingPoints());
+	}
 
 	CodeDocument::OnCloseDocument();
 }
