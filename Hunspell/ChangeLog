@@ -1,3 +1,83 @@
+2008-11-01 Németh László <nemeth at OOo>:
+	* replist.*, hunspell.cxx, affixmgr.cxx: new input and output
+          conversion support, see ICONV and OCONV keywords in the Hunspell(4)
+          manual page and the test examples. The input/output conversion
+          problem of syllabic languages reported by Daniel Yacob and
+          Shewangizaw Gulilat.
+        - tests/{iconv,oconv}.*: test examples
+
+	* tools/wordforms: word generation script for dictionary developers
+          (Hunspell version of the unmunch program)
+
+	* hunspell/hunspell.cxx: extended BREAK feature: ^ and $ mean in break
+          patterns the beginning and end of the word.
+	- tests/BREAK.*: modified examples.
+
+	* hunspell/hunspell.cxx: set default break at hyphen characters. 
+	  The associated problem reported by S Page in Hunspell Bug 2174061.
+          See Mozilla Bug ID 355178 and OOo Issue 64400, too.
+	- tests/breakdefault.*: test data
+	  The following definition is equivalent of the default word break:
+
+	  BREAK 3
+          BREAK -
+          BREAK ^-
+          BREAK -$
+
+	* affixmgr.cxx: SIMPLIFIEDTRIPLE is a new affix file keyword to allow
+          simplified forms of the compound words with triple repeating letters.
+	  It is useful for Swedish and Norwegian languages.
+ 
+	* affixmgr.cxx: extend CHECKCOMPOUNDPATTERN to support
+          alternations of compound words for example by sandhi
+          feature of Indian and other languages. The problem reported
+          by Kiran Chittella associated with Telugu writing system
+          (see Telugu example in tests/checkcompoundpattern4.test).
+          The new optional field of CHECKCOMPOUNDPATTERN definition is the
+          replacement of the compound boundary defined by the previous fields:
+	  CHECKCOMPOUNDPATTERN ff f ff
+	  means ff|f compound boundary has been replaced by "ff", like in
+          the (prereform) German Schiffahrt (Schiff+fahrt).
+        - CHECKCOMPOUNDPATTERN supports also optional flag conditions now:
+	  CHECKCOMPOUNDPATTERN ff/A f/B ff
+          means that the first word of the compound needs flag "A" and
+          the second word of the compound needs flag "B" to the operation.
+
+	* tools/hunspell.cxx: add empty lines as separators to the output of
+          the stemming and morphological analysis.
+
+	* affixmgr.cxx: fix condition checking algorithm. Bad suggestion
+          generation reported by Mehmet Akin in SF.net Bug 2124186 with help of
+          Eleonora Goldman.
+
+	* affixmgr,cxx: fix COMPOUNDWORDMAX feature. The problem and its
+          code details reported by Göran Andersson under SF.net Bug ID 2138001.
+
+	* csutil.cxx: fix bad conditional code for Mozilla compilation.
+          Patch by Serge Gautherie. The problem reported by Ryan VanderMeulen.
+
+	* hunspell/hunspell.cxx: add missing ngram suggestion for HUHINITCAP
+          (capitalized mixed case) words.
+
+	* w_char.hxx: use GCC conditions for GCC related code. Patch by
+          Ryan VanderMeulen.
+
+	* affixmgr.cxx: check morphological description in morphgen()
+	  (fix potential program fault by incomplete morphological
+	   description of affix rules)
+
+	* src/win_api: config.h: switch on warning messages on Windows
+
+	* tools/affixcompress: extended help for -h (use LC_ALL=C sort
+          for input word list)
+
+	* man/hunspell.4: updated manual:
+        - new and modified features (SIMPLIFIEDTRIPLE, ICONV, OCONV,
+          BREAK, CHECKCOMPOUNDPATTERN).
+        - note about costs of zero affixes, suggested by Olivier Ronez.
+
+	* hunspell/hunspell.cxx: remove deprecated word breaking codes.
+
 2008-08-15 Németh László <nemeth at OOo>:
 	* affentry.cxx: add FULLSTRIP option. With FULLSTRIP, affix rules can
 	  strip full words, not only one less characters. Suggested by

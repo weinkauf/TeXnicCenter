@@ -674,6 +674,20 @@ void mkallcap_utf(w_char * u, int nc, int langnum) {
    if (*p != '\0') *p = csconv[((unsigned char)*p)].cupper;
  }
 
+ // conversion function for protected memory
+ void store_pointer(char * dest, char * source)
+ {
+    memcpy(dest, &source, sizeof(char *));
+ }
+
+ // conversion function for protected memory
+ char * get_stored_pointer(char * s)
+ {
+    char * p;
+    memcpy(&p, s, sizeof(char *));
+    return p;
+ }
+
 #ifndef MOZILLA_CLIENT
  // convert null terminated string to all caps using encoding
  void enmkallcap(char * d, const char * p, const char * encoding)
@@ -704,20 +718,6 @@ void mkallcap_utf(w_char * u, int nc, int langnum) {
    struct cs_info * csconv = get_current_cs(encoding);
    memcpy(d,p,(strlen(p)+1));
    if (*p != '\0') *d= csconv[((unsigned char)*p)].cupper;
- }
-
- // conversion function for protected memory
- void store_pointer(char * dest, char * source)
- {
-    memcpy(dest, &source, sizeof(char *));
- }
-
- // conversion function for protected memory
- char * get_stored_pointer(char * s)
- {
-    char * p;
-    memcpy(&p, s, sizeof(char *));
-    return p;
  }
 
 // these are simple character mappings for the 

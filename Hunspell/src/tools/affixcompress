@@ -4,8 +4,14 @@
 # usage: affixcompress sorted_word_list_file [max_affix_rules]
 case $# in 
 0) echo \
-"affixcompress - compress a huge sorted word list to Hunspell aff and dic file
-Usage: affixcompress sorted_word_list_file [max_affix_rules]
+"affixcompress - compress a huge sorted word list to Hunspell format
+Usage: 
+
+LC_ALL=C sort word_list >sorted_word_list
+affixcompress sorted_word_list [max_affix_rules]
+
+Default value of max_affix_rules = 5000
+
 Note: output may need manually added affix parameters (SET character_encoding,
 TRY suggestion_characters etc., see man(4) hunspell)"
    exit 0;;

@@ -2568,6 +2568,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\LexMySQL.cxx"
+				>
+			</File>
+			<File
 				RelativePath="..\src\LexNsis.cxx"
 				>
 				<FileConfiguration

@@ -486,22 +486,14 @@ inline char * SfxEntry::nextchar(char * p) {
 
 inline int SfxEntry::test_condition(const char * st, const char * beg)
 {
-//   fprintf(stderr, "ENTER: %s, %s\n", st, beg);
     const char * pos = NULL;    // group with pos input position
     bool neg = false;           // complementer
     bool ingroup = false;       // character in the group
     if (numconds == 0) return 1;
     char * p = c.conds;
-//    while (p && *p) {
-//	fprintf(stderr, "%c", *p);
-//	p = nextchar(p);
-//    }
-//    fprintf(stderr, "\n");
-//    p = c.conds;
     st--;
     int i = 1;
     while (1) {
-//      if (p) fprintf(stderr, "POS: %c, %s\n", *p, st);
       switch (*p) {
         case '\0': return 1;
         case '[': { p = nextchar(p); pos = st; break; }
@@ -556,21 +548,22 @@ inline int SfxEntry::test_condition(const char * st, const char * beg)
                             else if (i == numconds) return 1;
                             ingroup = true;
                             while (p && *p != ']' && (p = nextchar(p)));
+			    st--;
                         }
-                        if (p) p = nextchar(p);
+                        if (p && *p != ']') p = nextchar(p);
                     } else if (pos) {
                         if (neg) return 0;
                         else if (i == numconds) return 1;
                         ingroup = true;
 			while (p && *p != ']' && (p = nextchar(p)));
-			if (p) p = nextchar(p);
+//			if (p && *p != ']') p = nextchar(p);
                         st--;
                     }
                     if (!pos) {
                         i++;
                         st--;
                     }
-                    if (st < beg && p) return 0; // word <= condition
+                    if (st < beg && p && *p != ']') return 0; // word <= condition
                 } else if (pos) { // group
                     p = nextchar(p);
                 } else return 0;

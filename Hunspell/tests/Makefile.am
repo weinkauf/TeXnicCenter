@@ -31,6 +31,7 @@ nosuggest.test \
 alias.test \
 alias2.test \
 alias3.test \
+breakdefault.test \
 break.test \
 needaffix.test \
 needaffix2.test \
@@ -63,10 +64,14 @@ compoundaffix2.test \
 compoundaffix3.test \
 checkcompounddup.test \
 checkcompoundtriple.test \
+simplifiedtriple.test \
 checkcompoundrep.test \
 checkcompoundcase2.test \
 checkcompoundcaseutf.test \
 checkcompoundpattern.test \
+checkcompoundpattern2.test \
+checkcompoundpattern3.test \
+checkcompoundpattern4.test \
 utfcompound.test \
 checksharps.test \
 checksharpsutf.test \
@@ -93,7 +98,9 @@ colons_in_words.test \
 ngram_utf_fix.test \
 morph.test \
 1975530.test \
-fullstrip.test
+fullstrip.test \
+iconv.test \
+oconv.test
 # infixes.test
 
 distclean-local:
@@ -200,6 +207,12 @@ break.dic \
 break.good \
 break.test \
 break.wrong \
+breakdefault.aff \
+breakdefault.dic \
+breakdefault.good \
+breakdefault.sug \
+breakdefault.test \
+breakdefault.wrong \
 circumfix.aff \
 circumfix.dic \
 circumfix.good \
@@ -379,11 +392,31 @@ checkcompoundtriple.dic \
 checkcompoundtriple.good \
 checkcompoundtriple.test \
 checkcompoundtriple.wrong \
+simplifiedtriple.aff \
+simplifiedtriple.dic \
+simplifiedtriple.good \
+simplifiedtriple.test \
+simplifiedtriple.wrong \
 checkcompoundpattern.aff \
 checkcompoundpattern.dic \
 checkcompoundpattern.good \
 checkcompoundpattern.test \
 checkcompoundpattern.wrong \
+checkcompoundpattern2.aff \
+checkcompoundpattern2.dic \
+checkcompoundpattern2.good \
+checkcompoundpattern2.test \
+checkcompoundpattern2.wrong \
+checkcompoundpattern3.aff \
+checkcompoundpattern3.dic \
+checkcompoundpattern3.good \
+checkcompoundpattern3.test \
+checkcompoundpattern3.wrong \
+checkcompoundpattern4.aff \
+checkcompoundpattern4.dic \
+checkcompoundpattern4.good \
+checkcompoundpattern4.test \
+checkcompoundpattern4.wrong \
 checksharps.aff \
 checksharps.dic \
 checksharps.good \
@@ -544,7 +577,17 @@ morph.test \
 fullstrip.aff \
 fullstrip.dic \
 fullstrip.good \
-fullstrip.test
+fullstrip.test \
+iconv.aff \
+iconv.dic \
+iconv.good \
+iconv.test \
+oconv.aff \
+oconv.dic \
+oconv.good \
+oconv.sug \
+oconv.test \
+oconv.wrong
 # infixes.aff
 # infixes.dic
 # infixes.good

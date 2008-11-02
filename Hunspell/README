@@ -140,6 +140,7 @@ affixcompress: dictionary generation from large (millions of words) vocabularies
 makealias: alias compression (Hunspell only, not back compatible with MySpell)
     munch: dictionary generation from vocabularies (it needs an affix file, too).
   unmunch: list all recognized words of a MySpell dictionary
+wordforms: word generation (Hunspell version of unmunch)
 
 After compiling and installing (see INSTALL) you can
 run the Hunspell spell checker (compiled with user interface)

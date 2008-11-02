@@ -4,7 +4,10 @@
 #include <string>
 #include <unordered_set>
 
+#pragma push_macro("near")
+#undef near
 #include "hunspell.hxx"
+#pragma pop_macro("near")
 
 class Speller
 {

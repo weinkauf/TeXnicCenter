@@ -1,6 +1,15 @@
-#include <stdio.h>
+#include "license.hunspell"
+#include "license.myspell"
+
+#ifndef MOZILLA_CLIENT
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
+#else
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+#endif
 
 #include "filemgr.hxx"
 
