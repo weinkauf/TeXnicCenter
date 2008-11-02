@@ -190,7 +190,7 @@
 #undef HUNSPELL_EXPERIMENTAL
 
 /* "Define if you need warning messages" */
-#undef HUNSPELL_WARNING_ON
+#define HUNSPELL_WARNING_ON
 
 /* Define as const if the declaration of iconv() needs const. */
 #define ICONV_CONST 1
@@ -211,5 +211,5 @@
 #define PACKAGE_TARNAME
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "1.2.7"
-#define VERSION "1.2.7"
+#define PACKAGE_VERSION "1.2.8"
+#define VERSION "1.2.8"

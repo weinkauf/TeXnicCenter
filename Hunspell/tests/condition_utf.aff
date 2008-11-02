@@ -1,7 +1,7 @@
 SET UTF-8
 WORDCHARS 0123456789
 
-SFX S N 16
+SFX S N 18
 SFX S   0 suf1 .
 SFX S   0 suf2  ó
 SFX S   0 suf3  [áéóú]
@@ -18,8 +18,10 @@ SFX S   0 suf13 [áéőú][^ú]
 SFX S   0 suf14 [^ú][áéóú]
 SFX S   0 suf15 [áéóú][^áéőú]
 SFX S   0 suf16 [^áéóú][^áéőú]
+SFX S   0 suf17 [áéóú][bcdfgkmnóprstvz]
+SFX S   0 suf18 [áéóú]ó
 
-PFX P N 16
+PFX P N 18
 PFX P   0 pre1 .
 PFX P   0 pre2  ó
 PFX P   0 pre3  [áéóú]
@@ -36,3 +38,5 @@ PFX P   0 pre13 [áéóú][áéőú]
 PFX P   0 pre14 [áéóú][^áéóú]
 PFX P   0 pre15 [áéóú][^áéőú]
 PFX P   0 pre16 [^áéőú][^áéóú]
+PFX P   0 pre17 [bcdfgkmnóprstvz][áéóú]
+PFX P   0 pre18 ó[áéóú]

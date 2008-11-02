@@ -300,11 +300,9 @@ UTF-8 characters yet.
 .SH "OPTIONS FOR COMPOUNDING"
 .IP "BREAK number_of_break_definitions"
 .IP "BREAK character_or_character_sequence"
-Define break points for breaking words and checking
-word parts separately.
-Rationale: useful for compounding with joining character or strings (for
-example, hyphen in English and German or hyphen and n-dash in Hungarian).
-Dashes are often bad break points for tokenization, because compounds with
+Define new break points for breaking words and checking
+word parts separately. Use ^ and $ to delete characters at end and
+start of the word. Rationale: useful for compounding with joining character or strings (for example, hyphen in English and German or hyphen and n-dash in Hungarian). Dashes are often bad break points for tokenization, because compounds with
 dashes may contain not valid parts, too.) 
 With BREAK, Hunspell can check
 both side of these compounds, breaking the words at dashes and n-dashes:
@@ -319,16 +317,37 @@ BREAK \fB--\fR    # n-dash
 .PP
 Breaking are recursive, so foo-bar, bar-foo and foo-foo\fB--\fRbar-bar 
 would be valid compounds.
-
-Note: COMPOUNDRULE is better (or will be better) for handling dashes and
+Note: The default word break of Hunspell is equivalent of the following BREAK
+definition:
+.PP
+.RS
+.nf
+BREAK 3
+BREAK -
+BREAK ^-
+BREAK -$
+.fi
+.RE
+.PP
+Hunspell doesn't accept the "-word" and "word-" forms by this BREAK definition:
+.PP
+.RS
+.nf
+BREAK 1
+BREAK -
+.fi
+.RE
+.PP
+W
+Note II: COMPOUNDRULE is better (or will be better) for handling dashes and
 other  compound joining characters or character strings. Use BREAK, if you
 want check words with dashes or other joining characters and there is no time
 or possibility to describe precise compound rules with COMPOUNDRULE
 (COMPOUNDRULE has handled only the last suffixation of
 the compound word yet).
 
-Note II: For command line spell checking, set WORDCHARS parameters:
-WORDCHARS -\fB--\fR (see tests/break.*) example
+Note III: For command line spell checking of words with extra characters,
+set WORDCHARS parameters: WORDCHARS -\fB--\fR (see tests/break.*) example
 .IP "COMPOUNDRULE number_of_compound_definitions"
 .IP "COMPOUNDRULE compound_pattern"
 Define custom compound patterns with a regex-like syntax.
@@ -388,14 +407,20 @@ a non compound word with a REP fault. Useful for languages with
 .IP "CHECKCOMPOUNDCASE"
 Forbid upper case characters at word bound in compounds.
 .IP "CHECKCOMPOUNDTRIPLE"
-Forbid compounding, if compound word contains triple letters
-(e.g. foo|ox or xo|oof).
-Bug: missing multi-byte character support in UTF-8 encoding
-(works only for 7-bit ASCII characters).
+Forbid compounding, if compound word contains triple repeating letters
+(e.g. foo|ox or xo|oof). Bug: missing multi-byte character support
+in UTF-8 encoding (works only for 7-bit ASCII characters).
+.IP "SIMPLIFIEDTRIPLE"
+Allow simplified 2-letter forms of the compounds forbidden by CHECKCOMPOUNDTRIPLE.
+It's useful for Swedish and Norwegian (and for
+the old German orthography: Schiff|fahrt -> Schiffahrt).
 .IP "CHECKCOMPOUNDPATTERN number_of_checkcompoundpattern_definitions"
-.IP "CHECKCOMPOUNDPATTERN endchars beginchars"
-Forbid compounding, if first word in compound ends with endchars, and
-next word begins with beginchars.
+.IP "CHECKCOMPOUNDPATTERN endchars[/flag] beginchars[/flag] [replacement]"
+Forbid compounding, if the first word in the compound ends with endchars, and
+next word begins with beginchars and (optionally) they have the requested flags.
+The optional replacement parameter allows simplified compound form.
+Note: COMPOUNDMIN doesn't work correctly with the compound word alternation,
+so it may need to set COMPOUNDMIN to lower value.
 .IP "COMPOUNDSYLLABLE max_syllable vowels"
 Need for special compounding rules in Hungarian.
 First parameter is the maximum syllable number, that may be in a
@@ -465,6 +490,15 @@ Note: With CHECKSHARPS declaration, words with sharp s and KEEPCASE
 flag may be capitalized and uppercased, but uppercased forms of these
 words may not contain sharp s, only SS. See germancompounding
 example in the tests directory of the Hunspell distribution.
+
+Note: Using lot of zero affixes may have a big cost, because every
+zero affix is checked under affix analysis before the other affixes.
+.IP "ICONV number_of_ICONV_definitions"
+.IP "ICONV pattern pattern2"
+Define input conversion table.
+.IP "OCONV number_of_OCONV_definitions"
+.IP "OCONV pattern pattern2"
+Define output conversion table.
 .IP "LEMMA_PRESENT flag"
 Not used in Hunspell 1.2. Use "st:" field instead of LEMMA_PRESENT.
 .IP "NEEDAFFIX flag"

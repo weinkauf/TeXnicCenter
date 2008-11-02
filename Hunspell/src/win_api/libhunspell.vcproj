@@ -444,6 +444,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\hunspell\replist.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\hunspell\replist.hxx"
+				>
+			</File>
+			<File
 				RelativePath="..\hunspell\suggestmgr.cxx"
 				>
 			</File>

@@ -1,3 +1,36 @@
+2008-11-01: Hunspell 1.2.8 release:
+  - Default BREAK feature and better hyphenated word suggestion to accept
+    and fix (compound) words with hyphen characters by spell checker
+    instead of by work breaking code of OpenOffice.org. With this feature
+    it's possible to accept hyphenated compound words, such as "scot-free",
+    where "scot" is not a correct English word.
+
+  - ICONV & OCONV: input and output conversion tables for optional character
+    handling or using special inner format. Example:
+
+  # Accepting de facto replacements of the Romanian comma acuted letters
+  SET UTF-8
+  ICONV 4
+  ICONV ş ș
+  ICONV ţ ț
+  ICONV Ş Ș
+  ICONV Ţ Ț
+
+    Typical usage of ICONV/OCONV is to manage an inner format for a segmental
+    writing system, like the Ethiopic script of the Amharic language.
+
+  - Extended CHECKCOMPOUNDPATTERN to handle conpound word alternations, like
+    sandhi feature of Telugu and other writing systems.
+
+  - SIMPLIFIEDTRIPLE compound word feature: allow simplified Swedish and
+    Norwegian compound word forms, like tillåta (till|låta) and
+    bussjåfør (buss|sjåfør)
+
+  - wordforms: word generator script for dictionary developers (Hunspell
+    version of unmunch).
+
+  - bug fixes
+
 2008-08-15: Hunspell 1.2.7 release:
   - FULLSTRIP: new option for affix handling. With FULLSTRIP, affix rules can
     strip full words, not only one less characters.

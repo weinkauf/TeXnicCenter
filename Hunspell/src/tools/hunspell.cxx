@@ -651,6 +651,7 @@ if (pos >= 0) {
                         pMS[d]->free_list(&result, n);
                 }
                 if (n == 0) fprintf(stdout, "%s\n", chenc(token, dic_enc[d], ui_enc));
+		fprintf(stdout, "\n");
 		free(token);
 		continue;
 		}
@@ -671,6 +672,7 @@ if (pos >= 0) {
                 	pMS[d]->free_list(&result, n);
                 }
                 if (n == 0) fprintf(stdout, "%s\n", chenc(token, dic_enc[d], ui_enc));
+		fprintf(stdout, "\n");
 		free(token);
 		continue;
 		}

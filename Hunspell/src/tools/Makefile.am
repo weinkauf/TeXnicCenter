@@ -25,4 +25,4 @@ chmorph_LDADD = ../hunspell/libhunspell-1.2.la ../parsers/libparsers.a
 
 noinst_PROGRAMS=example
 
-EXTRA_DIST=makealias affixcompress
+EXTRA_DIST=makealias affixcompress wordforms

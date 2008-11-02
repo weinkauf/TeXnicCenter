@@ -1,7 +1,7 @@
 SET ISO8859-2
 WORDCHARS 0123456789
 
-SFX S N 16
+SFX S N 18
 SFX S   0 suf1 .
 SFX S   0 suf2  o
 SFX S   0 suf3  [aeou]
@@ -18,6 +18,8 @@ SFX S   0 suf13 [aefu][^aefu]
 SFX S   0 suf14 [^aeou][aeou]
 SFX S   0 suf15 [aeou][^aefu]
 SFX S   0 suf16 [^aeou][^aefu]
+SFX S   0 suf17 [aeou][bcdfgkmnoprstvz]
+SFX S   0 suf18 [aeou]o
 
 SFX Q N 2
 SFX Q   0 ning  [^aeio][aeiou]n 
@@ -34,7 +36,7 @@ SFX Z   0           ch         [αινσΰϊύτ].a
 SFX Z   0           m          [αινσΰϊύτ].a
 SFX Z   a           0          [αινσϊΰύτ].a
 
-PFX P N 16
+PFX P N 18
 PFX P   0 pre1 .
 PFX P   0 pre2  o
 PFX P   0 pre3  [aeou]
@@ -51,6 +53,9 @@ PFX P   0 pre13 [aeou][aefu]
 PFX P   0 pre14 [aeou][^aeou]
 PFX P   0 pre15 [aeou][^aefu]
 PFX P   0 pre16 [^aefu][^aeou]
+PFX P   0 pre17 [bcdfgkmnoprstvz][aeou]
+PFX P   0 pre18 o[aeou]
+
 
 PFX R N 2
 PFX R   0 gnin  n[aeiou][^aeio]

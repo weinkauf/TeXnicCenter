@@ -277,7 +277,7 @@ analyze_SOURCES = analyze.cxx
 analyze_LDADD = ../hunspell/libhunspell-1.2.la
 chmorph_SOURCES = chmorph.cxx
 chmorph_LDADD = ../hunspell/libhunspell-1.2.la ../parsers/libparsers.a
-EXTRA_DIST = makealias affixcompress
+EXTRA_DIST = makealias affixcompress wordforms
 all: all-am
 
 .SUFFIXES:
