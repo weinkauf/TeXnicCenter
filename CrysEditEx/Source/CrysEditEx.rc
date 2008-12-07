@@ -94,7 +94,7 @@ IDR_MARGIN_CURSOR       CURSOR  DISCARDABLE     "res/mg_cur.cur"
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 #ifdef _WIN32
@@ -109,8 +109,8 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,7,0,0
- PRODUCTVERSION 0,7,0,0
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -125,17 +125,17 @@ BEGIN
     BEGIN
         BLOCK "040704b0"
         BEGIN
-            VALUE "Comments", "Beta version!\0"
+            VALUE "Comments", "Release Candidate\0"
             VALUE "CompanyName", " \0"
             VALUE "FileDescription", "Crystal Editor Classes for TeXnicCenter\0"
-            VALUE "FileVersion", "1 Beta 7.00\0"
+            VALUE "FileVersion", "1.0 Stable Release Candidate 1\0"
             VALUE "InternalName", "CrystalEdit\0"
             VALUE "LegalCopyright", "© Andrei Stcherbatchenko\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "CryseditEx.dll\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "Crystal Editor Ex\0"
-            VALUE "ProductVersion", "1 Beta 7.00\0"
+            VALUE "ProductVersion", "1.0 Stable Release Candidate 1\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -317,12 +317,12 @@ BEGIN
     ID_EDIT_SPELL_ADD       "Wort hinzufügen\nDieses Wort zum Benutzerwörterbuch hinzufügen."
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -537,7 +537,7 @@ BEGIN
     ID_EDIT_SPELL_ADD       "Add word\nAdd this word to personal dictionary"
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
