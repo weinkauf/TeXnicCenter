@@ -1,3 +1,6 @@
+2008/12/07 niteria
+- Fixed bug 2318985: Crash when pasting text with non-Windows file format
+
 2008/06/15 niteria
 - Fixed crash when files were saved during closing a project
 - Improved detection of Ghostscript (GPL and AFPL)
