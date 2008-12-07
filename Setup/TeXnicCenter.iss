@@ -6,7 +6,7 @@ OutputBaseFilename=TXCSetup
 MinVersion=4.0.950,4.0.1381
 AppCopyright=© 1999-2008 www.TeXnicCenter.org
 AppName=TeXnicCenter
-AppVerName=TeXnicCenter Version 1 Beta 7.50
+AppVerName=TeXnicCenter Version 1.0 Stable RC1
 LicenseFile=GPL.rtf
 PrivilegesRequired=none
 DefaultGroupName=TeXnicCenter
@@ -19,7 +19,7 @@ AppPublisher=TeXnicCenter.org
 AppPublisherURL=http://www.TeXnicCenter.org/
 AppSupportURL=http://www.TeXnicCenter.org/support/
 AppUpdatesURL=http://www.TeXnicCenter.org/downloads/
-AppVersion=Version 1 Beta 7.50
+AppVersion=Version 1.0 Stable RC1
 AppID=TeXnicCenter
 AlwaysShowComponentsList=true
 UninstallDisplayIcon={app}\TEXCNTR.EXE
@@ -97,7 +97,7 @@ Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter\Templates; ValueType: stri
 
 [Tasks]
 Name: DesktopLink; Description: Create a desktop icon; GroupDescription: Link
-Name: SendToLink; Description: Add TeXnicCenter to the 'Send To' menu; GroupDescription: Link
+Name: SendToLink; Description: Add TeXnicCenter to the 'Send To' menu; GroupDescription: Link; Flags: unchecked
 
 [Dirs]
 Name: {app}\Templates\Documents; Flags: uninsalwaysuninstall
