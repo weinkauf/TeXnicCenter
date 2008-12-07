@@ -1114,6 +1114,15 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 		return TRUE;
 	}
 
+	//Convert text format to windows
+	CString TextToBeInserted(pszText);
+	int rep1 = TextToBeInserted.Replace("\x0D\x0A", "\a\a"); //Windows to bells
+	int rep2 = TextToBeInserted.Replace("\x0A", "\a\a"); //Linux to bells
+	int rep3 = TextToBeInserted.Replace("\x0D", "\a\a"); //Mac to bells
+	int rep4 = TextToBeInserted.Replace("\a\a", "\x0D\x0A"); //bells to Windows
+	LPCTSTR pszNewText = (LPCTSTR)(TextToBeInserted); //This needs to be cast to a const pointer, otherwise the rest will fail
+
+
 	CInsertContext context;
 	context.m_ptStart.x = nPos;
 	context.m_ptStart.y = nLine;
@@ -1125,24 +1134,25 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 	for (;;)
 	{
 		nTextPos = 0;
-		while (pszText[nTextPos] != _T('\0') && pszText[nTextPos] != _T('\r'))
+		char hate = _T('\r');
+		while (pszNewText[nTextPos] != _T('\0') && pszNewText[nTextPos] != _T('\r'))
 		{
-			ASSERT(pszText[nTextPos] != _T('\n')); // invalid string format
+			ASSERT(pszNewText[nTextPos] != _T('\n')); // invalid string format
 			nTextPos ++;
 		}
 
 		if (nCurrentLine == nLine)
 		{
-			m_aLines[nLine].InsertText(nPos, pszText, nTextPos);
+			m_aLines[nLine].InsertText(nPos, pszNewText, nTextPos);
 			nPos += nTextPos;
 		}
 		else
 		{
 			bNewLines = TRUE;
-			InsertLine(pszText, nTextPos, nCurrentLine);
+			InsertLine(pszNewText, nTextPos, nCurrentLine);
 		}
 
-		if (pszText[nTextPos] == _T('\0'))
+		if (pszNewText[nTextPos] == _T('\0'))
 		{
 			nEndLine = nCurrentLine;
 			nEndChar = nPos;
@@ -1158,7 +1168,7 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 		nCurrentLine ++;
 		nTextPos ++;
 
-		if (pszText[nTextPos] == _T('\n'))
+		if (pszNewText[nTextPos] == _T('\n'))
 		{
 			nTextPos ++;
 		}
@@ -1167,7 +1177,7 @@ BOOL CCrystalTextBuffer::InternalInsertText(CCrystalTextView *pSource, int nLine
 			ASSERT(FALSE);			//	Invalid line-end format passed
 		}
 
-		pszText += nTextPos;
+		pszNewText += nTextPos;
 	}
 	context.m_ptEnd.x = nEndChar;
 	context.m_ptEnd.y = nEndLine;
