@@ -110,6 +110,7 @@ char *pArrCredit[] = {
 						"",
 						"Main Code\t",
 						"",
+						"Sergiu Dotenco\f",
 						"Chris Norris\f",
 						"Stephan Schrader\f",
 						"Paul Selormey\f",
