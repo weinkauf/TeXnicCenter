@@ -5,6 +5,7 @@ Building TeXnicCenter
 The following software and libraries are required to successfully build 
 TeXnicCenter and all of its components:
   * Visual C++ 2008 SP1 with MFC libraries
+  * Visual C++ 2008 Feature Pack
   * Microsoft HTML Help Workshop
   * MSXML 4
   * TortoiseSVN, freely available at http://tortoisesvn.tigris.org/
