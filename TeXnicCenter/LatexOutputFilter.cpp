@@ -165,6 +165,8 @@ ScanNextLine:
 					//No - push it
 					strFile.TrimLeft();
 					strFile.TrimRight();
+					strFile.Trim(_T('"'));
+
 					m_stackFile.push(strFile);
 					i = j - 1;
 				}

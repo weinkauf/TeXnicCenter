@@ -410,7 +410,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 	m_pProjectDocTemplate = new CSingleProjectTemplate(
 	    IDR_LATEXPROJECTDOCTYPE,
 	    RUNTIME_CLASS(CLaTeXProject),
-	    3 // icon index in the executable
+	    3 // Icon index within the executable
 	);
 
 	AddProjectTemplate(m_pProjectDocTemplate);
