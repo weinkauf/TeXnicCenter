@@ -747,6 +747,10 @@ void LaTeXView::OnEditOutsource()
 				? CPathTool(OutsourceDlg.NewPath.GetBase())
 				: OutsourceDlg.NewPath);
 
+			// GetRelativePath uses the backslash as a separator
+			// which denotes a TeX command start; replace it by /
+			RelativeFilePath.Replace(_T('\\'),_T('/'));
+
 			//Insert the text into this document
 			GetCtrl().ReplaceSel(OutsourceDlg.CmdLeft + RelativeFilePath + OutsourceDlg.CmdRight);
 

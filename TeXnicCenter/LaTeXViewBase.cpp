@@ -69,10 +69,6 @@ BOOL SpellerSuggestionMenu::ShowSpellMenu(Speller *pSpell, const CPoint& screenP
 			clear = true;
 		}
 		else {
-			// FIX: Menu ID offset; context manager creates
-			// a submenu for an item with the ID set to 0
-			const UINT start = 1;
-
 			// Get the suggestion list
 			CStringArray aSuggestList;
 			int nSuggestCount = pSpell->SuggestUTF8(&buffer[0],aSuggestList);
@@ -90,7 +86,7 @@ BOOL SpellerSuggestionMenu::ShowSpellMenu(Speller *pSpell, const CPoint& screenP
 			{
 				CString noSuggestions;
 				noSuggestions.LoadString(IDS_SPELL_NO_SUGGESTIONS);
-				pPopup->InsertMenu(0, MF_STRING | MF_GRAYED | MF_BYPOSITION | MF_DISABLED, start, noSuggestions);
+				pPopup->InsertMenu(0, MF_STRING | MF_GRAYED | MF_BYPOSITION | MF_DISABLED, ID_SPELL_ERROR_LAST, noSuggestions);
 			}
 			else
 			{

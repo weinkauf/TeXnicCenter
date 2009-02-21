@@ -236,7 +236,7 @@ void SpellerBackgroundThread::SpellCheckBuffer(CodeView* pTextView)
 void SpellerBackgroundThread::RemoveBufferAttributes(CodeView* pTextView)
 {
 	ASSERT_NULL_OR_POINTER(pTextView,CodeView);
-	pTextView->GetCtrl().IndicatorClearRange(0,pTextView->GetCtrl().GetLength(),FALSE);
+	pTextView->GetCtrl().IndicatorClearRange(0,pTextView->GetCtrl().GetLength(FALSE),FALSE);
 }
 
 bool SpellerBackgroundThread::IsViewValid( CodeView* view )
