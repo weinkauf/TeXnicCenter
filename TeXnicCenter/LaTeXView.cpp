@@ -362,11 +362,11 @@ void LaTeXView::InstantAdvice()
 					// Determine if there is space enough to show the window below the text
 					ptClient.y += GetCtrl().TextHeight(GetCtrl().LineFromPosition(ptStart));
 					// Place and show the window
-					instant_advice_tip_->SetWindowPos(NULL,ptClient.x,ptClient.y,0,0,SWP_NOSIZE | SWP_NOZORDER);
+					instant_advice_tip_->SetWindowPos(NULL,ptClient.x,ptClient.y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 					instant_advice_tip_->SetWindowText(lc->GetExpandBefore() + lc->ToLaTeX() + lc->GetExpandAfter());
-					instant_advice_tip_->ShowWindow(SW_SHOWNA);
-					instant_advice_tip_->SetTimer(1,5000,0);
+					instant_advice_tip_->ShowWindow(SW_SHOW);
 					SetFocus();
+					instant_advice_tip_->SetTimer(1,5000,0);
 				}
 			}
 			else
@@ -701,14 +701,13 @@ bool LaTeXView::IsAutoCompletionCharacter(TCHAR tc)
 
 void LaTeXView::OnEditOutsource()
 {
-	//Create the dialog
-	CTextOutsourceDlg OutsourceDlg;
-
 	//Get the file name of ourselves
 	LaTeXDocument* pDoc = GetDocument();
 
 	if (!pDoc) return;
 
+	//Create the dialog
+	CTextOutsourceDlg OutsourceDlg;
 	CPathTool OldPath = pDoc->GetPathName();
 
 	//Suggest a directory for the new file
@@ -717,28 +716,25 @@ void LaTeXView::OnEditOutsource()
 	//Show the dialog
 	if (OutsourceDlg.DoModal() == IDOK) {
 		//Get the new file name and write the selected lines to it
-		CFile NewFile;
+		CAtlFile NewFile;
 
-		if (NewFile.Open(OutsourceDlg.NewPath.GetPath(),CFile::modeWrite | CFile::modeCreate)) {
+		if (SUCCEEDED(NewFile.Create(OutsourceDlg.NewPath.GetPath(),GENERIC_WRITE,FILE_SHARE_READ,CREATE_ALWAYS))) {
 			//Get selected text - may be empty
 			long s = GetCtrl().GetSelectionStart();
 			long e = GetCtrl().GetSelectionEnd();
 
 			std::vector<char> buffer;
+		
+			buffer.resize((e - s) + 1);
+			GetCtrl().GetSelText(&buffer[0]);
 
-			const char* text = 0;
-			std::size_t n = 0;
-			
-			if (s != e) {
-				buffer.resize((e - s) + 1);
-				GetCtrl().GetSelText(&buffer[0]);
+			char* text = &buffer[0]; 
+			std::size_t n = buffer.size() - 1;
 
-				buffer.pop_back(); // Remove the terminating zero
-				text = &buffer[0]; n = buffer.size();
-			}
+			// Write it to the file
+			TextDocument td(GetDocument());
+			td.WriteUTF8(NewFile,text,n);
 
-			//Write it to the file
-			GetDocument()->SaveFile(NewFile,text,n);
 			NewFile.Close();
 
 			//Get relative path - omit tex-extension

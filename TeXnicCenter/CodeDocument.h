@@ -198,6 +198,8 @@ public:
 	TextDocument();
 	TextDocument(CodeDocument::Encoding e, UINT codepage);
 	
+	explicit TextDocument(CodeDocument* document);
+	
 	CodeDocument::Encoding GetEncoding() const;
 	void SetEncoding(CodeDocument::Encoding e);
 	UINT GetCodePage() const;
@@ -206,10 +208,12 @@ public:
 	void SetUseBOM(bool use);
 
 	DWORD Write(ATL::CAtlFile& file, const char* text, std::size_t);
-	/// Reads the whole file by detecting the right encoding
+	/// Reads the whole file by detecting the right encoding.
 	bool Read(LPCTSTR pszFileName, CStringW& string);
-	/// Writes the whole file by detecting the right encoding
+	/// Writes the whole file by detecting the right encoding.
 	bool Write(LPCTSTR pszFileName, const CStringW& string);
+	/// Writes UTF-8 encoded text to the file by performing any required code page conversion.
+	DWORD WriteUTF8( ATL::CAtlFile& file, const char* utf8, std::size_t size);
 };
 
 template<class I>
