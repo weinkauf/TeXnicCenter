@@ -32,6 +32,7 @@ BEGIN_MESSAGE_MAP(CAdvice,CStatic)
 	ON_WM_CAPTURECHANGED()
 	ON_WM_ACTIVATEAPP()
 	ON_WM_TIMER()
+	ON_MESSAGE(WM_FLOATSTATUS,&CAdvice::OnFloatStatus)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -42,15 +43,10 @@ BOOL CAdvice::Create(LPCTSTR /*lpszText*/,DWORD dwStyle,const RECT& /*rect*/,CWn
 {
 	//VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_BAR_REG));
 
-	BOOL bResult = CWnd::CreateEx(NULL,_T("STATIC"),NULL,
+	return CWnd::CreateEx(NULL,WC_STATIC,NULL,
 	                              WS_POPUP | dwStyle,// force WS_POPUP
 	                              CW_USEDEFAULT,CW_USEDEFAULT,CW_USEDEFAULT,CW_USEDEFAULT,
 	                              pParentWnd->GetSafeHwnd(),NULL,NULL);
-
-	if (bResult)
-		SetOwner(pParentWnd);
-
-	return bResult;
 }
 
 void CAdvice::OnPaint()
@@ -79,26 +75,28 @@ void CAdvice::OnPaint()
 	dc.SetTextColor(crOldTextColor);
 	dc.SetBkColor(crOldBkColor);
 	dc.SelectObject(hOldFont);
-
 }
 
 void CAdvice::SetWindowText(LPCTSTR text)
 {
 	//CStatic::SetWindowText(CString(text) + _T(" (CTRL + SPACE)"));
 	CStatic::SetWindowText(text);
-	CDC *pDC = GetDC();
+	
 	CRect r;
-	CString s;
-	GetWindowText(s);
-	// Compute needed window size
-	HGDIOBJ hOldFont = pDC->SelectObject(&font_);//pDC->SelectStockObject(DEFAULT_GUI_FONT);
-	pDC->DrawText(
-	    s,
-	    &r,
-	    DT_VCENTER | DT_CALCRECT);
-	pDC->SelectObject(hOldFont);
+	
+	{
+		CWindowDC dc(this);
+		CString s;
+		GetWindowText(s);
+		// Compute needed window size
+		HGDIOBJ hOldFont = dc.SelectObject(&font_);//pDC->SelectStockObject(DEFAULT_GUI_FONT);
+		dc.DrawText(
+			s,
+			&r,
+			DT_VCENTER | DT_CALCRECT);
+		dc.SelectObject(hOldFont);
+	}
 
-	ReleaseDC(pDC);
 	//TRACE("Advice: Change window size: %d, %d\n", r.Width(), r.Height());
 	SetWindowPos(NULL,0,0,r.Width() + 6,r.Height() + 4,SWP_NOMOVE | SWP_NOZORDER);
 }
@@ -139,4 +137,32 @@ void CAdvice::EnableFocusChange()
 void CAdvice::DisableFocusChange()
 {
 	m_IgnoreFocusChange = TRUE;
+}
+
+LRESULT CAdvice::OnFloatStatus(WPARAM wParam, LPARAM /*lParam*/)
+{
+	LRESULT result;
+
+	if (wParam == FS_SYNCACTIVE)
+	{
+		// Respond to this message to prevent the main frame from losing the focus
+		result = (GetStyle() & WS_VISIBLE) == WS_VISIBLE;
+	}
+	else
+		result = 0;
+
+	return result;
+}
+BOOL CAdvice::PreTranslateMessage(MSG* pMsg)
+{
+	BOOL result;
+
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_ESCAPE && (GetStyle() & WS_VISIBLE) == WS_VISIBLE) {
+		ShowWindow(SW_HIDE);
+		result = TRUE;
+	}
+	else
+		result = CStatic::PreTranslateMessage(pMsg);
+
+	return result;
 }

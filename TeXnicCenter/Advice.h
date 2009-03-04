@@ -42,8 +42,11 @@ protected:
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()
+	LRESULT OnFloatStatus(WPARAM wParam, LPARAM /*lParam*/);
 private:
 	BOOL m_IgnoreFocusChange;
+public:
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 
 /////////////////////////////////////////////////////////////////////////////

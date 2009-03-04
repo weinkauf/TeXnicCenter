@@ -143,6 +143,16 @@ TextDocument::TextDocument()
 {
 }
 
+TextDocument::TextDocument( CodeDocument* document )
+{
+	if (!document)
+		throw std::invalid_argument("document cannot be NULL");
+
+	SetEncoding(document->GetEncoding());
+	SetUseBOM(document->GetUseBOM());
+	SetCodePage(document->GetCodePage());
+}
+
 CodeDocument::Encoding TextDocument::GetEncoding() const
 {
 	return encoding_;
@@ -300,10 +310,10 @@ bool TextDocument::Read(LPCTSTR pszFileName, CStringW& string)
 				case CodeDocument::UTF16BE:
 					// No conversion needed
 					text = reinterpret_cast<const wchar_t*>(data + pos);
-					n = size - pos;
+					n = size - pos; // Number of bytes
 
 					if (encoding == CodeDocument::UTF16BE) {
-						buffer.assign(text,text + n);
+						buffer.assign(text,text + n / sizeof(wchar_t));
 						std::for_each(buffer.begin(),buffer.end(),SwapCodePoint);
 
 						text = 0; n = 0; // Will be reassigned
@@ -393,6 +403,40 @@ bool TextDocument::Write( LPCTSTR pszFileName, const CStringW& string )
 	}
 
 	return result == ERROR_SUCCESS;
+}
+
+DWORD TextDocument::WriteUTF8( ATL::CAtlFile& file, const char* utf8, std::size_t size )
+{
+	const char* text = 0;
+	std::size_t n = 0;
+
+	std::vector<char> convbuffer;
+	const char* p = utf8;
+
+	switch (encoding_) {
+		case CodeDocument::ANSI:
+			UTF8toANSI(p,size,convbuffer,code_page_);
+			break;
+		case CodeDocument::UTF8:
+			text = p;
+			n = size;
+			break;
+		case CodeDocument::UTF16LE:
+		case CodeDocument::UTF16BE:
+			UTF8toUTF16(p,size,convbuffer,encoding_ != CodeDocument::UTF16BE);
+			break;
+		case CodeDocument::UTF32LE:
+		case CodeDocument::UTF32BE:
+			UTF8toUTF16(p,size,convbuffer,encoding_ == CodeDocument::UTF32LE);
+			break;
+	}
+
+	if (!text && !convbuffer.empty()) {
+		text = &convbuffer[0];
+		n = convbuffer.size();
+	}
+
+	return Write(file,text,n);
 }
 
 void TextDocument::SetEncoding( CodeDocument::Encoding e )
@@ -597,7 +641,7 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 	return result;
 }
 
-DWORD CodeDocument::SaveFile(LPCTSTR pszFileName, bool bClearModifiedFlag)
+DWORD CodeDocument::SaveFile(LPCTSTR pszFileName, bool clearModifiedFlag)
 {
 	HANDLE hSearch = INVALID_HANDLE_VALUE;
 	TCHAR szTempFileDir[_MAX_PATH + 1];
@@ -644,7 +688,7 @@ DWORD CodeDocument::SaveFile(LPCTSTR pszFileName, bool bClearModifiedFlag)
 
 			//	Move temporary file to target name
 			if (!error_occured && ::MoveFile(szTempFileName, pszFileName)) {
-				if (bClearModifiedFlag)
+				if (clearModifiedFlag)
 					SetModifiedFlag(FALSE);
 
 				result = ERROR_SUCCESS;
