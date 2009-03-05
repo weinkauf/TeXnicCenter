@@ -496,7 +496,7 @@ private:
 	        Character that ends the argument to extract.
 	 */
 	CString GetArgument(const CString &strText,TCHAR tcOpeningDelimiter,TCHAR tcClosingDelimiter);
-
+	static const CString CreateHeaderRegularExpression();
 // attributes
 private:
 	/** Handler for this structure parser */
@@ -596,7 +596,8 @@ private:
 	const tregex m_regexUserEnv;
 
 	/** Array containing the different headers. */
-	static CString m_astrHeader[MAX_DEPTH];
+	static const int HeaderVariationsCount = 2;
+	static const CString m_astrHeader[MAX_DEPTH][HeaderVariationsCount];
 
 	/** Array containing the index of the actual item representing the depth. */
 	int m_anItem[MAX_DEPTH];

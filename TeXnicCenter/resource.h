@@ -8,6 +8,7 @@
 #define IDR_METAPOSTDOCTYPE             4
 #define IDR_LATEXPROJECTDOCTYPE         5
 #define IDB_DOCUMENTTYPES               6
+#define IDS_BIBLIOGRAPHY                6
 #define IDD_GET_PATH                    7
 #define IDR_LATEXWIZARD                 8
 #define STE_TAB_GREP_1                  9
@@ -1477,10 +1478,10 @@
 #define ID_LATEX_STOP_BUILD             33553
 
 // Next default values for new objects
-//
+// 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_3D_CONTROLS                1
+#define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57672
 #define _APS_NEXT_COMMAND_VALUE         38598
 #define _APS_NEXT_CONTROL_VALUE         1378

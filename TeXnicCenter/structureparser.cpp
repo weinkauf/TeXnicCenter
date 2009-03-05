@@ -201,13 +201,34 @@ void CStructureItem::RemoveLabels()
 //-------------------------------------------------------------------
 // class CStructureParser
 //-------------------------------------------------------------------
-CString CStructureParser::m_astrHeader[MAX_DEPTH] = {_T("appendix"), _T("part"), _T("chapter"), _T("section"), _T("subsection"), _T("subsubsection")};
+const CString CStructureParser::m_astrHeader[MAX_DEPTH][CStructureParser::HeaderVariationsCount] = {
+	{ _T("appendix") }, 
+	{ _T("part"), _T("addpart") }, 
+	{ _T("chapter"), _T("addchap") },
+	{ _T("section"), _T("addsec") },
+	{ _T("subsection"), _T("addsubsec") }, 
+	{ _T("subsubsection"), _T("addsubsubsec") },
+};
 
 CStructureParser::CStructureParser()
 		: m_bCancel(FALSE)
 {
 	// Only use the public constructor
 	ASSERT(FALSE);
+}
+
+const CString CStructureParser::CreateHeaderRegularExpression()
+{
+	CString result;
+
+	for (int i = 0; i < MAX_DEPTH; ++i) {
+		for (int j = 0; j < HeaderVariationsCount && !m_astrHeader[i][j].IsEmpty(); ++j)
+			result += m_astrHeader[i][j] + _T('|');
+	}
+
+	result.Delete(result.GetLength() - 1); // Remove the last |
+
+	return _T("\\\\(") + result + _T(")\\s*\\*?\\s*([\\[\\{].*\\})");
 }
 
 CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHandler,
@@ -217,7 +238,7 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 , m_pParseOutputHandler(pParseOutputHandler)
 , m_pStructureParserThread(NULL)
 , m_evtParsingDone(TRUE, TRUE, NULL, NULL)
-, m_regexHeader(_T("\\\\(part|chapter|section|subsection|subsubsection)\\s*\\*?\\s*([\\[\\{].*\\})"))
+, m_regexHeader(CreateHeaderRegularExpression())
 , m_regexComment(_T("%"))
 , m_regexVerbStart(_T("\\\\begin\\s*\\{verbatim\\*?\\}"))
 , m_regexVerbEnd(_T("\\\\end\\{verbatim\\*?\\}"))
@@ -727,7 +748,16 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		strHeaderType = lpText;
 		strHeaderType = strHeaderType.Mid(nTypeStart, nTypeCount);
 
-		for (m_nDepth = 0; m_nDepth < MAX_DEPTH && m_astrHeader[m_nDepth] != strHeaderType; m_nDepth++);
+		bool stop = false;
+
+		for (m_nDepth = 0; m_nDepth < MAX_DEPTH && !stop; ) {
+			for (int i = 0; i < HeaderVariationsCount && !m_astrHeader[m_nDepth][i].IsEmpty() && !stop ; ++i)
+				if (m_astrHeader[m_nDepth][i] == strHeaderType)
+					stop = true;
+
+			if (!stop)
+				++m_nDepth;
+		}
 
 		// get parent
 		if (m_nDepth < 1 || m_nDepth >= MAX_DEPTH)
