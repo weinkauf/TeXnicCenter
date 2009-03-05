@@ -69,7 +69,7 @@ void StructureTreeCtrl::OnParsingFinished()
 	GetExpandedItems(astrExpandedItems);
 
 	// fill view with parsing results
-	const StructureItemContainer &a = GetProject()->m_aStructureItems;
+	const StructureItemContainer &a = GetProject()->GetStructureItems();
 	CArray<HTREEITEM, HTREEITEM> ahItems;
 
 	// initialization
@@ -92,6 +92,7 @@ void StructureTreeCtrl::OnParsingFinished()
 		case CStructureParser::figure :
 		case CStructureParser::table :
 		case CStructureParser::header :
+		case CStructureParser::bibFile:
 			//case CStructureParser::unknownEnv:
 			{
 				//Better display all stuff, even without a title
@@ -99,15 +100,19 @@ void StructureTreeCtrl::OnParsingFinished()
 				//	break; //no title -> no display
 
 				CString title = si.GetTitle();
+				int parent = si.GetParent();
 
 				if (si.GetType() == CStructureParser::header)
 					title.Replace(_T("\\-"),_T("")); // Cleanup \-
+				else if (si.GetType() == CStructureParser::bibFile) {
+					title.Format(IDS_BIBLIOGRAPHY,si.GetPath());
+					parent = -1; // Bibliography items are always root nodes
+				}
 
-				if (si.m_nParent == -1)
+				if (parent <= -1)
 					ahItems[i] = InsertItem(title, si.GetType(), si.GetType());
 				else
-					ahItems[i] = InsertItem(title, si.GetType(), si.GetType(),
-					(si.GetParent() > -1) ? ahItems[si.GetParent()] : TVI_ROOT);
+					ahItems[i] = InsertItem(title, si.GetType(), si.GetType(), ahItems[parent]);
 
 				// remember Array-Index
 				SetItemData(ahItems[i], i);
