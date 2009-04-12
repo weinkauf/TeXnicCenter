@@ -21,7 +21,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnLvnColumnclick(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnLvnColumnClick(NMHDR *pNMHDR, LRESULT *pResult);
 	virtual void PreSubclassWindow();
 
 private:

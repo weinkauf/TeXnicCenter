@@ -47,7 +47,7 @@
 #include "ErrorListView.h"
 #include "StructureView.h"
 #include "BibView.h"
-
+#include "BookmarkView.h"
 
 void CreateColorButtonPalette(CPalette& palette, int& colors, int& columns);
 
@@ -69,10 +69,10 @@ class CMainFrame : public CMDIFrameWndEx
 private:
 	WorkspacePane file_view_pane_, env_view_pane_;
 	BibView bib_view_pane_;
+	BookmarkView bookmark_view_pane_;
 
 	StructureView structure_view_;
 	CFileView file_view_;
-	//CBibView bib_view_;
 	CEnvironmentView env_view_;
 
 	/** View containing the results of the build process. */
@@ -384,7 +384,7 @@ private:
 private:
 	/** Identifier of the timer used to parse the project in given intervals. */
 	UINT m_unParseTimer;
-	bool CreateNavigationViews(void);
+	bool CreateNavigationPanes();
 
 protected:
 	void OnOpenProject(CLaTeXProject* p);
@@ -409,8 +409,11 @@ protected:
 	void OnStopPaneAnimation();
 
 private:
-	bool CreateOutputViews(void);
+	bool CreateOutputPanes(void);
 
 public:
 	COutputDoc* GetOutputDoc(void);
+
+private:
+	const std::vector<CProjectView*> GetViews();
 };

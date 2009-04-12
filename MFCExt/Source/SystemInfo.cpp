@@ -22,29 +22,33 @@
 
 const TCHAR* VERBOSE_OS[] = {
 	_T("Unknown"),
-	_T("Win95"),
-	_T("Win95 OSR2"),
-	_T("Win98"),
-	_T("Win98 SE"),
-	_T("WinME"),
-	_T("WinNT (Unknown)"),
-	_T("WinNT 3.51"),
-	_T("WinNT 4.0 Workstation"),
-	_T("WinNT 4.0 Server"),
-	_T("WinNT 4.0 Server Enterprise"),
-	_T("Win2000 (Unknown)"),
-	_T("Win2000 Professional"),
-	_T("Win2000 Server"),
-	_T("Win2000 Server Datacenter"),
-	_T("Win2000 Server Advanced"),
-	_T("WinXP (Unknown)"),
-	_T("WinXP Home"),
-	_T("WinXP Professional"),
-	_T("WinServer 2003"),
-	_T("WinServer 2003 Enterprise"),
-	_T("WinServer 2003 Datacenter"),
-	_T("WinServer 2003 WebEdition"),
-	_T("Win32s")
+	_T("Windows 95"),
+	_T("Windows 95 OSR2"),
+	_T("Windows 98"),
+	_T("Windows 98 SE"),
+	_T("Windows ME"),
+	_T("Windows NT (Unknown)"),
+	_T("Windows NT 3.51"),
+	_T("Windows NT 4.0 Workstation"),
+	_T("Windows NT 4.0 Server"),
+	_T("Windows NT 4.0 Server Enterprise"),
+	_T("Windows 2000 (Unknown)"),
+	_T("Windows 2000 Professional"),
+	_T("Windows 2000 Server"),
+	_T("Windows 2000 Server Datacenter"),
+	_T("Windows 2000 Server Advanced"),
+	_T("Windows XP (Unknown)"),
+	_T("Windows XP Home"),
+	_T("Windows XP Professional"),
+	_T("Windows Server 2003"),
+	_T("Windows Server 2003 Enterprise"),
+	_T("Windows Server 2003 Datacenter"),
+	_T("Windows Server 2003 WebEdition"),
+	_T("Win32s"),
+	_T("Windows Vista"),
+	_T("Windows Server 2008"),
+	_T("Windows Server 2008 R2"),
+	_T("Windows 7")
 };	
 
 CSystemInfo::CSystemInfo()
@@ -82,16 +86,17 @@ int CSystemInfo::DetectWindowsVersion()
 	case VER_PLATFORM_WIN32_NT:
 		
 		// Test for the specific product family
-		if ( m_osvi.dwMajorVersion == 5 && m_osvi.dwMinorVersion == 2 )
+		if (m_osvi.dwMajorVersion == 6 && m_osvi.dwMinorVersion == 1)
+			m_nWinVersion = m_osvi.wProductType != VER_NT_WORKSTATION ? WindowsServer2008R2 : Windows7;
+		else if (m_osvi.dwMajorVersion == 6 && m_osvi.dwMinorVersion == 0)
+			m_nWinVersion = m_osvi.wProductType != VER_NT_WORKSTATION ? WindowsServer2008 : WindowsVista;
+		else if ( m_osvi.dwMajorVersion == 5 && m_osvi.dwMinorVersion == 2 )
             m_nWinVersion = WinServer2003;
-		
-		if ( m_osvi.dwMajorVersion == 5 && m_osvi.dwMinorVersion == 1 )
+		else if ( m_osvi.dwMajorVersion == 5 && m_osvi.dwMinorVersion == 1 )
 			m_nWinVersion = WinXP_Unknown;
-		
-		if ( m_osvi.dwMajorVersion == 5 && m_osvi.dwMinorVersion == 0 )
+		else if ( m_osvi.dwMajorVersion == 5 && m_osvi.dwMinorVersion == 0 )
 			m_nWinVersion = Win2000_Unknown;
-		
-		if ( m_osvi.dwMajorVersion <= 4 )
+		else if ( m_osvi.dwMajorVersion <= 4 )
             m_nWinVersion = WinNT_Unknown;
 		
 		// Test for specific product on Windows NT 4.0 SP6 and later.

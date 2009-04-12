@@ -3401,9 +3401,13 @@ BEGIN
     IDR_METAPOSTDOCTYPE     "\nMetaPost\nMetaPost\nMetaPost-Dateien (*.mp)\n.mp\nMetaPost.Document\nMetaPost Dokument"
     IDR_LATEXPROJECTDOCTYPE "\nTeXnicCenter-Projekt\nTeXnicCenter-Projekt\nTeXnicCenter-Projekte (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
     IDS_BIBLIOGRAPHY        "Literaturverzeichnis (%s)"
+    IDS_BOOKMARK            "Lesezeichen"
     STE_TAB_GREP_1          "Suchen 1"
+    ID_VIEW_BOOKMARKS_PANE  "Lesezeichen"
     IDS_EDIT_TEXT_NOT_FOUND "Text ""%s"" nicht gefunden"
     IDS_DO_NOT_SAVE         "&Nicht speichern"
+    IDS_UNNAMED_BOOKMARK_FORMAT "Lesezeichen%i"
+    IDS_BIBTEX_RESULT       "BibTeX-Ergebnis: %i Fehler, %i Warnung(en)"
 END
 
 STRINGTABLE 
@@ -7254,7 +7258,7 @@ BEGIN
     IDS_ERROR_LIST_ERRORS   "%u Errors"
     IDS_ERROR_LIST_WARNINGS "%u Warnings"
     IDS_ERROR_LIST_BAD_BOXES "%u Bad Boxes"
-    IDS_LINE                "Line"
+    IDS_LINE                "Line Number"
     IDS_DESCRIPTION         "Description"
     IDS_FILE                "File"
 END
@@ -7283,9 +7287,13 @@ BEGIN
     IDR_METAPOSTDOCTYPE     "\nMetaPost\nMetaPost\nMetaPost-Files (*.mp)\n.mp\nMetaPost.Document\nMetaPost Document"
     IDR_LATEXPROJECTDOCTYPE "\nTeXnicCenter-Project\nTeXnicCenter-Project\nTeXnicCenter-Projects (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
     IDS_BIBLIOGRAPHY        "Bibliography (%s)"
+    IDS_BOOKMARK            "Bookmark"
     STE_TAB_GREP_1          "Find 1"
+    IDS_LINE_NUMBER         "Line Number"
+    ID_VIEW_BOOKMARKS_PANE  "Bookmarks"
     IDS_EDIT_TEXT_NOT_FOUND "Cannot find string""%s"""
     IDS_DO_NOT_SAVE         "&Do not save"
+    IDS_UNNAMED_BOOKMARK_FORMAT "Bookmark%i"
 END
 
 STRINGTABLE 
@@ -7775,7 +7783,7 @@ END
 
 STRINGTABLE 
 BEGIN
-    STE_COMPILER_LATEX_TYPE "LaTeX-Document (TEX)"
+    STE_COMPILER_LATEX_TYPE "LaTeX-Document (TeX)"
     STE_COMPILER_FILTER     "Executable Files (*.exe;*.com)|*.exe;*.com|All Files (*.*)|*.*||"
     STE_COMPILER_SET_OUTEXT "You must enter a file extension for this output type."
     STE_COMPILER_DELETE_EX  "Should the selected output type and the depending output type(s)\n\n%s\n\nreally be deleted?"

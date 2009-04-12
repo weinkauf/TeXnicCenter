@@ -22,7 +22,7 @@ SortListCtrl::~SortListCtrl()
 
 BEGIN_MESSAGE_MAP(SortListCtrl, CListCtrl)
 	ON_WM_CREATE()
-	ON_NOTIFY_REFLECT(LVN_COLUMNCLICK, &SortListCtrl::OnLvnColumnclick)
+	ON_NOTIFY_REFLECT(LVN_COLUMNCLICK, &SortListCtrl::OnLvnColumnClick)
 END_MESSAGE_MAP()
 
 
@@ -37,7 +37,7 @@ int SortListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-void SortListCtrl::OnLvnColumnclick(NMHDR *pNMHDR, LRESULT* /*pResult*/)
+void SortListCtrl::OnLvnColumnClick(NMHDR *pNMHDR, LRESULT* /*pResult*/)
 {
 	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 

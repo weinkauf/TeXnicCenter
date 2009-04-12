@@ -288,7 +288,7 @@ BOOL CLaTeXProject::SaveModified()
 	return TRUE;
 }
 
-void CLaTeXProject::OnCloseProject()
+void CLaTeXProject::OnClosing()
 {
 	// Save ignored words
 
@@ -421,7 +421,7 @@ BOOL CLaTeXProject::Serialize(CIniFile &ini, BOOL bWrite)
 		ini.SetValue(KEY_FORMATINFO,VAL_FORMATINFO_VERSION,CURRENTFORMATVERSION);
 
 		// setting project information
-		ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_MAINFILE,CPathTool::GetRelativePath(GetProjectDir(),m_strMainPath));
+		ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_MAINFILE,CPathTool::GetRelativePath(GetDirectory(),m_strMainPath));
 		ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_USEBIBTEX,(int)m_bUseBibTex);
 		ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_USEMAKEINDEX,(int)m_bUseMakeIndex);
 		ini.SetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_ACTIVEPROFILE,CProfileMap::GetInstance()->GetActiveProfileKey());
@@ -450,7 +450,7 @@ BOOL CLaTeXProject::Serialize(CIniFile &ini, BOOL bWrite)
 
 		m_strMainPath = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_MAINFILE,_T(""));
 		if (nVersion > 1)
-			m_strMainPath = CPathTool::Cat(GetProjectDir(),m_strMainPath);
+			m_strMainPath = CPathTool::Cat(GetDirectory(),m_strMainPath);
 
 		m_bUseBibTex = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_USEBIBTEX,FALSE);
 		m_bUseMakeIndex = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_USEMAKEINDEX,FALSE);
@@ -788,7 +788,7 @@ void CLaTeXProject::SetProjectDir(LPCTSTR lpszProjectDir)
 	m_strProjectDir = lpszProjectDir;
 }
 
-const CString CLaTeXProject::GetProjectDir() const
+const CString CLaTeXProject::GetDirectory() const
 {
 	return m_strProjectDir;
 }
@@ -849,7 +849,7 @@ CString CLaTeXProject::GetWorkingDir() const
 void CLaTeXProject::OnProjectProperties()
 {
 	CProjectPropertyDialog dlg(theApp.m_pMainWnd);
-	dlg.m_strProjectDir = GetProjectDir();
+	dlg.m_strProjectDir = GetDirectory();
 	dlg.m_strMainFile = m_strMainPath;
 	dlg.m_bUseBibTex = m_bUseBibTex;
 	dlg.m_bUseMakeIndex = m_bUseMakeIndex;
@@ -956,10 +956,10 @@ void CLaTeXProject::OnUpdateItemCmd(CCmdUI* pCmdUI)
 			{
 				case CStructureParser::texFile :
 				case CStructureParser::bibFile :
-					pCmdUI->Enable(!si.m_strPath.IsEmpty());
+					pCmdUI->Enable(!si.GetPath().IsEmpty());
 					break;
 				default:
-					pCmdUI->Enable(si.m_nLine > 0 && !si.m_strPath.IsEmpty());
+					pCmdUI->Enable(si.GetLine() > 0 && !si.GetPath().IsEmpty());
 			}
 			break;
 
@@ -1116,11 +1116,11 @@ void CLaTeXProject::OnSpellProject()
 		if (si.m_nType == CStructureParser::texFile)
 		{
 			bool bWasOpen = true;
-			LaTeXDocument* pDoc = dynamic_cast<LaTeXDocument*>(theApp.GetOpenLatexDocument(GetFilePath(si.m_strPath),FALSE));
+			LaTeXDocument* pDoc = dynamic_cast<LaTeXDocument*>(theApp.GetOpenLatexDocument(GetFilePath(si.GetPath()),FALSE));
 
 			if (pDoc == NULL)
 			{
-				pDoc = dynamic_cast<LaTeXDocument*>(theApp.OpenLatexDocument(GetFilePath(si.m_strPath),FALSE,-1,FALSE,false));
+				pDoc = dynamic_cast<LaTeXDocument*>(theApp.OpenLatexDocument(GetFilePath(si.GetPath()),FALSE,-1,FALSE,false));
 				bWasOpen = false;
 			}
 
@@ -1266,15 +1266,23 @@ const StructureItemContainer& CLaTeXProject::GetStructureItems() const
 const CString CLaTeXProject::GetIgnoredWordsFileName() const
 {
 	return
-	    GetProjectDir() +
+	    GetDirectory() +
 	    _T("\\ignored") +
 	    GetTitle() +
 	    CConfiguration::GetInstance()->m_strGuiLanguage + _T(".sc");
 }
 
+namespace {
+	void CallEventFunction(const std::tr1::function<void (CLaTeXProject*, const BookmarkEventArgs&)>& f, 
+		CLaTeXProject* s, const BookmarkEventArgs& a)
+	{
+		f(s,a);
+	}
+}
+
 void CLaTeXProject::AddBookmark( const CString& filename, const CodeBookmark& b )
 {
-	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+	const CString name = CPathTool::GetRelativePath(GetDirectory(),filename,TRUE,FALSE);
 
 	BookmarkContainerType& bms = bookmarks_[name];
 	BookmarkContainerType::iterator it = std::find(bms.begin(),bms.end(),b);
@@ -1283,11 +1291,20 @@ void CLaTeXProject::AddBookmark( const CString& filename, const CodeBookmark& b 
 		bms.erase(it);
 
 	bms.push_back(b);
+
+	if (!bookmark_added_.empty()) {
+		const BookmarkEventArgs args(name,b);
+
+		using namespace std::tr1::placeholders;
+
+		std::for_each(bookmark_added_.begin(),bookmark_added_.end(),
+			std::tr1::bind(CallEventFunction,_1,this,args));
+	}
 }
 
 void CLaTeXProject::RemoveBookmark( const CString& filename, const CodeBookmark& b )
 {
-	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+	const CString name = CPathTool::GetRelativePath(GetDirectory(),filename,TRUE,FALSE);
 	FileBookmarksContainerType::iterator it = bookmarks_.find(name);
 
 	if (it != bookmarks_.end()) 
@@ -1299,7 +1316,41 @@ void CLaTeXProject::RemoveBookmark( const CString& filename, const CodeBookmark&
 
 		if (it->second.empty())
 			bookmarks_.erase(it);
+
+		if (!bookmark_added_.empty()) {
+			const BookmarkEventArgs args(name, b);
+
+			using namespace std::tr1::placeholders;
+
+			std::for_each(bookmark_removed_.begin(),bookmark_removed_.end(),
+				std::tr1::bind(CallEventFunction,_1,this,args));
+		}
 	}
+}
+
+const CLaTeXProject::FileBookmarksContainerType CLaTeXProject::GetAllBookmarks() const
+{
+	return bookmarks_;
+}
+
+CodeBookmark* CLaTeXProject::GetBookmark(const CString& filename, int lineNumber)
+{
+	FileBookmarksContainerType::iterator it = bookmarks_.find(filename);
+	CodeBookmark* result = 0;
+
+	if (it != bookmarks_.end())
+	{
+		using namespace std::tr1::placeholders;
+
+		BookmarkContainerType::iterator it1 = std::find_if(it->second.begin(),it->second.end(),
+			std::tr1::bind(std::equal_to<int>(),std::tr1::bind(&CodeBookmark::GetLine,_1),lineNumber));
+
+		if (it1 != it->second.end())
+			result = &*it1;
+		//result = true;
+	}
+
+	return result;
 }
 
 bool CLaTeXProject::GetBookmarks( const CString& filename, BookmarkContainerType& bookmarks ) const
@@ -1307,7 +1358,7 @@ bool CLaTeXProject::GetBookmarks( const CString& filename, BookmarkContainerType
 	bool result = false;
 	bookmarks.clear();
 
-	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+	const CString name = CPathTool::GetRelativePath(GetDirectory(),filename,TRUE,FALSE);
 
 	FileBookmarksContainerType::const_iterator it = bookmarks_.find(name);
 
@@ -1322,7 +1373,7 @@ bool CLaTeXProject::GetBookmarks( const CString& filename, BookmarkContainerType
 
 void CLaTeXProject::RemoveAllBookmarks( const CString& filename )
 {
-	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+	const CString name = CPathTool::GetRelativePath(GetDirectory(),filename,TRUE,FALSE);
 	FileBookmarksContainerType::iterator it = bookmarks_.find(name);
 
 	if (it != bookmarks_.end()) 
@@ -1334,7 +1385,7 @@ bool CLaTeXProject::GetFoldingPoints( const CString& filename, FoldingPointConta
 	bool result = false;
 	points.clear();
 
-	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+	const CString name = CPathTool::GetRelativePath(GetDirectory(),filename,TRUE,FALSE);
 
 	FileFoldingPointsContainerType::const_iterator it = folding_points_.find(name);
 
@@ -1349,7 +1400,7 @@ bool CLaTeXProject::GetFoldingPoints( const CString& filename, FoldingPointConta
 
 void CLaTeXProject::SetFoldingPoints(const CString& filename, const FoldingPointContainerType& points)
 {
-	const CString name = CPathTool::GetRelativePath(GetProjectDir(),filename,TRUE,FALSE);
+	const CString name = CPathTool::GetRelativePath(GetDirectory(),filename,TRUE,FALSE);
 
 	if (!points.empty())		
 		folding_points_[name] = points;

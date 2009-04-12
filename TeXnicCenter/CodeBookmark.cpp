@@ -1,6 +1,41 @@
 #include "stdafx.h"
 #include "CodeBookmark.h"
 
+bool operator==(const CodeBookmark& a, const CodeBookmark& b)
+{
+	return a.GetLine() == b.GetLine();
+}
+
+bool operator!=(const CodeBookmark& a, const CodeBookmark& b)
+{
+	return !operator==(a,b);
+}
+
+bool operator<(const CodeBookmark& a, const CodeBookmark& b)
+{
+	return a.GetLine() < b.GetLine();
+}
+
+bool operator>(const CodeBookmark& a, const CodeBookmark& b)
+{
+	return a.GetLine() > b.GetLine();
+}
+
+bool operator<=(const CodeBookmark& a, const CodeBookmark& b)
+{
+	return a.GetLine() <= b.GetLine();
+}
+
+bool operator>=(const CodeBookmark& a, const CodeBookmark& b)
+{
+	return a.GetLine() >= b.GetLine();
+}
+
+bool operator!=(const FoldingPoint& a, const FoldingPoint& b)
+{
+	return !(a == b);
+}
+
 CodeBookmark::CodeBookmark(int line)
 : line_(line)
 {
@@ -15,6 +50,21 @@ void CodeBookmark::SetLine( int line )
 {
 	ASSERT(line >= -1);
 	line_ = line;
+}
+
+void CodeBookmark::SetName( LPCTSTR name )
+{
+	name_ = name;
+}
+
+const CString& CodeBookmark::GetName() const
+{
+	return name_;
+}
+
+bool CodeBookmark::HasName() const
+{
+	return !name_.IsEmpty();
 }
 
 FoldingPoint::FoldingPoint( int line /*= -1*/, bool contracted /*= false*/ ) 

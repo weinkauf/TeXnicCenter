@@ -38,7 +38,6 @@
 
 class CFileView : public NavigatorTreeCtrl
 {
-	CFont bold_;
 	//	DECLARE_DYNCREATE(CFileView)
 
 public:
@@ -49,9 +48,6 @@ protected:
 	virtual void OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint);
 
 	DECLARE_MESSAGE_MAP()
-
-	afx_msg void OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult);
-	virtual BOOL OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
 private:
 	void OnParsingFinished();

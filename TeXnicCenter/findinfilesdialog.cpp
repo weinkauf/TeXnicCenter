@@ -129,7 +129,7 @@ BOOL CFindInFilesDialog::OnInitDialog()
 	m_wndSearchInCombo.RefreshCtrl();
 
 	if (CLaTeXProject* p = theApp.GetProject())
-		m_wndSearchInCombo.InsertString(0,p->GetProjectDir());
+		m_wndSearchInCombo.InsertString(0,p->GetDirectory());
 
 	// set standard strings
 	m_wndSearchInCombo.SetCurSel(0);

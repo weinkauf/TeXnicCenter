@@ -18,4 +18,7 @@ public:
 protected:
 	DWORD ParseLine(const CString& line, DWORD cookie);
 	BOOL OnTerminate();
+
+public:
+	CString GetResultString();
 };

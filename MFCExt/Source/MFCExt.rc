@@ -47,7 +47,7 @@ BEGIN
             VALUE "FileDescription", "Extension classes for Microsoft's MFC"
             VALUE "FileVersion", "2.0"
             VALUE "InternalName", "MFCExt"
-            VALUE "LegalCopyright", "Copyright © 1999-2000 Sven Wiegand, © 2000-2008 ToolsCenter"
+            VALUE "LegalCopyright", "Copyright © 1999-2000 Sven Wiegand, © 2000-2009 ToolsCenter"
             VALUE "OriginalFilename", "MFCExt.DLL"
             VALUE "ProductName", "MFCExt"
             VALUE "ProductVersion", "2.0"

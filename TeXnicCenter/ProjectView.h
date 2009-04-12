@@ -63,7 +63,7 @@ public:
 // overridables
 protected:
 	virtual void OnUpdate(CProjectView *pSender, LPARAM lHint, LPVOID pHint);
-	virtual void OnCloseProject();
+	virtual void OnClosingProject();
 
 // attributes
 private:
@@ -74,6 +74,9 @@ private:
 	friend CProject;
 public:
 	virtual void Clear() = 0;
+	
+protected:
+	virtual void OnOpeningProject();
 };
 
 

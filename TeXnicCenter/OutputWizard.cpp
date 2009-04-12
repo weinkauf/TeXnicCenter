@@ -684,7 +684,7 @@ void COutputWizard::GenerateOutputProfiles()
 			p.SetLatexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("latex.exe")),strLatexOptions);
 			p.SetBibTexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("bibtex.exe")),_T("\"%bm\""));
 			p.SetMakeIndexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("makeindex.exe")),
-			                   _T("\"%bm\""));
+			                   _T("\"%bm.idx\" -o \"%bm.ind\""));
 
 			// add viewer settings
 			if (!m_wndPageDviViewer.m_strPath.IsEmpty())

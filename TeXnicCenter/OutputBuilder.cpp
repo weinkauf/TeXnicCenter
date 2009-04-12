@@ -129,6 +129,8 @@ BOOL COutputBuilder::CancelExecution()
 
 UINT COutputBuilder::Run()
 {
+	m_strLatexResult.Empty();
+	bibtex_result_.Empty();
 	current_process_name_.Empty();
 	m_bCancel = FALSE;
 
@@ -183,10 +185,15 @@ UINT COutputBuilder::OnTerminate(UINT unExitCode)
 	}
 	else
 	{
-		if (m_pView && !m_strLatexResult.IsEmpty())
+		if (m_pView && (!m_strLatexResult.IsEmpty() || !bibtex_result_.IsEmpty()))
 		{
 			m_pView->AddLine(_T(""));
-			m_pView->AddLine(m_strLatexResult);
+
+			if (!m_strLatexResult.IsEmpty())
+				m_pView->AddLine(m_strLatexResult);
+
+			if (!bibtex_result_.IsEmpty())
+				m_pView->AddLine(bibtex_result_);
 		}
 	}
 
@@ -313,7 +320,7 @@ BOOL COutputBuilder::RunBibTex()
 	}
 
 	filter.CloseHandle();
-	//m_strLatexResult = filter.GetResultString();
+	bibtex_result_ = filter.GetResultString();
 
 	return !dwExitCode;
 }

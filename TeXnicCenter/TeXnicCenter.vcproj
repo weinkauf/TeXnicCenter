@@ -522,6 +522,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BookmarkView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BookmarkView.h"
+				>
+			</File>
+			<File
 				RelativePath=".\BrowseButton.cpp"
 				>
 			</File>

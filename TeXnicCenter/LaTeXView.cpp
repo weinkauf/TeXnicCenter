@@ -1080,7 +1080,20 @@ BOOL LaTeXView::OnBlockComment( UINT nID )
 		char comment_test;
 
 		if (GetLineLength(i) > start_pos) {
-			comment_test = static_cast<char>(GetCtrl().GetCharAt(GetCtrl().PositionFromLine(i) + start_pos));
+			int end_line_pos = GetCtrl().GetLineEndPosition(i);
+			long line_start = GetCtrl().PositionFromLine(i);
+			long pos = line_start;
+			bool stop = false;
+
+			while (!stop && pos < end_line_pos) {
+				if (!std::isspace(GetCtrl().GetCharAt(pos),std::locale::classic()))
+					stop = true;
+				else
+					++pos;
+			}
+
+			start_pos = pos - line_start;
+			comment_test = static_cast<char>(GetCtrl().GetCharAt(pos));
 			has_comment = comment_test == '%';
 		}
 
@@ -1114,9 +1127,11 @@ BOOL LaTeXView::OnBlockComment( UINT nID )
 		start_pos = 0;
 	} // end of "Go through all lines"
 
-	// Restore the original selection
-	const int sgn = count > 0 ? 1 : -1;
-	GetCtrl().SetSel(ptStartSel + sgn,ptEndSel + count);
+	if (count != 0) {
+		// Restore the original selection
+		const int sgn = count > 0 ? 1 : -1;
+		GetCtrl().SetSel(ptStartSel + sgn,ptEndSel + count);
+	}
 
 	// End Undo Group
 	GetCtrl().EndUndoAction();
