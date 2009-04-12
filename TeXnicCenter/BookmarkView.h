@@ -47,10 +47,11 @@ private:
 	int FindBookmark(const CodeBookmark b, CodeBookmark** p = 0);
 	static int CompareName(LPARAM l1, LPARAM l2);
 	static int CompareLineNumber(LPARAM l1, LPARAM l2);
-	void OnNMKeyDown(NMHDR* hdr, LRESULT*);
+	void OnLvnKeyDown(NMHDR* hdr, LRESULT*);
+
+public:
+	BOOL PreTranslateMessage(MSG* msg);
 
 protected:
-	BOOL PreTranslateMessage(MSG* msg);
-public:
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 };

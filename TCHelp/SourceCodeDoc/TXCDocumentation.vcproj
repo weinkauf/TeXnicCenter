@@ -2,8 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="TXC Documentation"
+	Name="Documentation"
 	ProjectGUID="{6A2C0D58-A215-42E0-B4B6-2151467D772A}"
+	RootNamespace="TXC Documentation"
 	Keyword="MakeFileProj"
 	TargetFrameworkVersion="0"
 	>
@@ -69,7 +70,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Running doxygen on $(InputPath)"
-					CommandLine="&quot;$(InputDir)MakeSourceCodeDoc.bat&quot;"
+					CommandLine="&quot;$(InputDir)MakeSourceCodeDoc.bat&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\index.html"
 				/>
 			</FileConfiguration>

@@ -33,7 +33,7 @@ BEGIN_MESSAGE_MAP(BookmarkView, CDockablePane)
 	ON_NOTIFY(NM_DBLCLK, ListViewID, &BookmarkView::OnNMDblClk)
 	ON_NOTIFY(LVN_ENDLABELEDIT, ListViewID, &BookmarkView::OnLvnEndEditLabel)
 	ON_NOTIFY(LVN_DELETEITEM, ListViewID, &BookmarkView::OnLvnDeleteItem)
-	ON_NOTIFY(LVN_KEYDOWN, ListViewID, &BookmarkView::OnNMKeyDown)
+	ON_NOTIFY(LVN_KEYDOWN, ListViewID, &BookmarkView::OnLvnKeyDown)
 	ON_WM_SETFOCUS()
 END_MESSAGE_MAP()
 
@@ -65,7 +65,7 @@ int BookmarkView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	list_view_.CreateEx(WS_EX_CLIENTEDGE,WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|LVS_REPORT|LVS_EDITLABELS,
 		CRect(0,0,0,0),this,ListViewID);
 
-	const DWORD style = LVS_EX_DOUBLEBUFFER;
+	const DWORD style = LVS_EX_DOUBLEBUFFER|LVS_EX_FULLROWSELECT;
 	list_view_.SetExtendedStyle(style);
 
 	list_view_.InsertColumn(0,CString(MAKEINTRESOURCE(IDS_BOOKMARK)),0,200);
@@ -76,6 +76,7 @@ int BookmarkView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	list_view_.SetColumnCompareFunction(2,CompareLineNumber);
 
 	toolbar_.Create(this);
+	toolbar_.LoadToolBar(IDR_BOOKMARK_VIEW);
 
 	if (RunTimeHelper::IsVista())
 		::SetWindowTheme(list_view_,L"explorer",0);
@@ -253,7 +254,7 @@ void BookmarkView::OnLvnDeleteItem(NMHDR* hdr, LRESULT*)
 	delete reinterpret_cast<CodeBookmark*>(list_view_.GetItemData(nm->iItem));
 }
 
-void BookmarkView::OnNMKeyDown(NMHDR* hdr, LRESULT*)
+void BookmarkView::OnLvnKeyDown(NMHDR* hdr, LRESULT*)
 {
 	NMLVKEYDOWN * key = reinterpret_cast<NMLVKEYDOWN*>(hdr);
 	
@@ -274,7 +275,7 @@ void BookmarkView::OnNMKeyDown(NMHDR* hdr, LRESULT*)
 		case VK_DELETE:
 			list_view_.SetRedraw(FALSE);
 
-			if (list_view_.GetSelectedCount() == list_view_.GetItemCount())
+			if (list_view_.GetSelectedCount() == static_cast<UINT>(list_view_.GetItemCount()))
 				list_view_.DeleteAllItems();
 			else {
 				int index = -1;

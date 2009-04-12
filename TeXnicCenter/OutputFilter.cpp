@@ -63,7 +63,7 @@ BOOL COutputFilter::Create(PHANDLE phFilterInput,
 	sa.lpSecurityDescriptor = NULL;
 	sa.bInheritHandle = TRUE;
 
-	if (!CreatePipe(&m_hOutput,phFilterInput,&sa,0))
+	if (!::CreatePipe(&m_hOutput,phFilterInput,&sa,0))
 		return FALSE;
 
 	return CWorkerThread::Create(bAutoCloseHandle,nPriority,dwCreationFlags);
@@ -118,13 +118,15 @@ UINT COutputFilter::Run()
 {
 	errors_ = warnings_ = bad_boxes_ = 0;
 
-	char c;
 	DWORD dwBytesRead;
-	CString strLine;
+
+	char c;
+	std::vector<char> line;
+
 	DWORD dwCookie = 0;
 	BOOL bLastWasNewLine = FALSE;
 
-	while (ReadFile(m_hOutput,&c,sizeof(c),&dwBytesRead,NULL) && dwBytesRead)
+	while (::ReadFile(m_hOutput,&c,sizeof(c),&dwBytesRead,NULL) && dwBytesRead)
 	{
 		switch (c)
 		{
@@ -134,23 +136,30 @@ UINT COutputFilter::Run()
 				{
 					bLastWasNewLine = TRUE;
 					
-					AddLine(strLine);
-					dwCookie = ParseLine(strLine,dwCookie);
-					strLine.Empty();
+					if (!line.empty()) 
+					{
+						const CString text(&line[0],line.size());
+
+						AddLine(text);
+						dwCookie = ParseLine(text,dwCookie);
+						line.clear();
+					}
 				}
 				break;
 
 			default:
 				bLastWasNewLine = FALSE;
-				strLine += c;
+				line.push_back(c);
 				break;
 		}
 	}
 
-	if (!strLine.IsEmpty())
+	if (!line.empty())
 	{
-		AddLine(strLine);
-		ParseLine(strLine,dwCookie);
+		const CString text(&line[0],line.size());
+
+		AddLine(text);
+		ParseLine(text,dwCookie);
 	}
 
 	return !OnTerminate();
