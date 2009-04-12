@@ -33,7 +33,9 @@
  ********************************************************************/
 #pragma once
 
+#include <vector>
 #include <map>
+#include <functional>
 
 #include "OutputInfo.h"
 #include "StructureParser.h"
@@ -47,11 +49,48 @@
 #include "WorkspacePane.h"
 #include "CodeView.h"
 
+class EventArgs
+{
+public:
+	virtual ~EventArgs()
+	{
+	}
+};
+
+class BookmarkEventArgs : public EventArgs
+{
+	const CodeBookmark b_;
+	const CString filename_;
+
+public:
+	BookmarkEventArgs(const CString& filename, const CodeBookmark& b)
+		: b_(b), filename_(filename)
+	{
+	}
+
+	const CodeBookmark& GetBookmark() const
+	{
+		return b_;
+	}
+
+	const CString& GetFileName() const
+	{
+		return filename_;
+	}
+};
+
 class CLaTeXProject :
 			public CProject,
 			public CStructureParserHandler
 {
+	typedef std::tr1::function<void (CLaTeXProject*, const BookmarkEventArgs&)> LaTeXProjectEventFunctionType;
+	typedef std::vector<LaTeXProjectEventFunctionType> LaTeXProjectEventContainerType;
+	LaTeXProjectEventContainerType bookmark_added_, bookmark_removed_;
+
+public:
 	typedef std::map<CString,BookmarkContainerType> FileBookmarksContainerType;
+
+private:
 	FileBookmarksContainerType bookmarks_;
 
 	typedef std::map<CString,FoldingPointContainerType> FileFoldingPointsContainerType;
@@ -129,7 +168,7 @@ public:
 	/**
 	Gets the directory, the project file is placed in.
 	 */
-	const CString GetProjectDir() const;
+	const CString GetDirectory() const;
 
 	/**
 	Returns the full path of the specified file in the project.
@@ -206,7 +245,7 @@ public:
 
 // overridings
 public:
-	virtual void OnCloseProject();
+	virtual void OnClosing();
 	virtual BOOL OnOpenProject(LPCTSTR lpszPathName);
 	virtual BOOL OnNewProjectFromDoc(LPCTSTR lpszDocPathName);
 	virtual void SetPathName(LPCTSTR lpszPathName);
@@ -336,4 +375,31 @@ public:
 	static const CString FormatRef(const CStructureItem& item);
 	static const CString FormatPageRef(const CStructureItem& item);
 	void SetFoldingPoints(const CString& filename, const FoldingPointContainerType& points);
+	const CLaTeXProject::FileBookmarksContainerType GetAllBookmarks() const;
+
+	template<class F>
+	void AddBookmarkAddedHandler(F func)
+	{
+		bookmark_added_.push_back(func);
+	}
+
+	template<class F>
+	void AddBookmarkRemovedHandler(F func)
+	{
+		bookmark_removed_.push_back(func);
+	}
+
+	template<class F>
+	void RemoveBookmarkAddedHandler(F func)
+	{
+		bookmark_added_.erase(std::find(bookmark_added_.begin(),bookmark_added_.end(),func),bookmark_added_.end());
+	}
+
+	template<class F>
+	void RemoveBookmarkRemovedHandler(F func)
+	{
+		bookmark_removed_.erase(std::find(bookmark_removed_.begin(),bookmark_removed_.end(),func),bookmark_removed_.end());
+	}
+
+	CodeBookmark* GetBookmark(const CString& filename, int lineNumber);
 };

@@ -32,12 +32,7 @@
  *
  ********************************************************************/
 
-#if !defined(AFX_OUTPUTBUILDER_H__A0979360_2131_11D5_A222_006097239934__INCLUDED_)
-#define AFX_OUTPUTBUILDER_H__A0979360_2131_11D5_A222_006097239934__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include "profile.h"
 
@@ -210,9 +205,9 @@ private:
 
 	/** Result string returned by the latex output filter. */
 	CString m_strLatexResult;
+	
+	CString bibtex_result_;
 
 public:
 	const CString& GetCurrentProcessName() const;
 };
-
-#endif // !defined(AFX_OUTPUTBUILDER_H__A0979360_2131_11D5_A222_006097239934__INCLUDED_)

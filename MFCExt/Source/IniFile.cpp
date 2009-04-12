@@ -30,6 +30,8 @@
 
 #include <string>
 #include <fstream>
+#include <sstream>
+#include <vector>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -65,16 +67,28 @@ const CString& CIniFile::GetPath() const
 
 bool CIniFile::ReadFile()
 {
-	//CFile file;
-	//CFileStatus status;
+	ATL::CAtlFile file;
 
-	//if (!file.GetStatus(path,status))
-	//	return 0;
+	if (FAILED(file.Create(path,GENERIC_READ,FILE_SHARE_READ,OPEN_EXISTING)))
+		return false;
 
-	std::basic_ifstream<TCHAR> inifile(path);
+	ULONGLONG s = 0;
+	
+	if (FAILED(file.GetSize(s)))
+		return false;
 
-    if (!inifile)
-        return false;
+	if (!s)
+		return true;
+
+	std::vector<char> data(s);
+	file.Read(&data[0],s);
+
+	int cch = ::MultiByteToWideChar(CP_UTF8,0,&data[0],s,0,0);
+
+	std::vector<wchar_t> buffer(cch + 1);
+	::MultiByteToWideChar(CP_UTF8,0,&data[0],s,&buffer[0],cch + 1);
+
+	std::basic_istringstream<TCHAR> inifile(&buffer[0]);
 
     CString readinfo;
 	int curkey = -1, curval = -1;
@@ -86,6 +100,8 @@ bool CIniFile::ReadFile()
 
     while (getline(inifile,line)) {
         readinfo.SetString(line.c_str(),line.size());
+		readinfo.Trim(_T('\r'));
+		readinfo.Trim(_T('\n'));
 
         if (!readinfo.IsEmpty()) {
 			if (readinfo[0] ==_T('[') && readinfo[readinfo.GetLength() - 1] ==_T(']')) //if a section heading
@@ -108,7 +124,7 @@ bool CIniFile::ReadFile()
 
 void CIniFile::WriteFile()
 {
-	std::basic_ofstream<TCHAR> inifile(path);
+	std::basic_ostringstream<TCHAR> inifile;
 
 	for (int keynum = 0; keynum <= names.GetUpperBound(); keynum++) {
 		if (!keys[keynum].names.IsEmpty()) {
@@ -128,6 +144,18 @@ void CIniFile::WriteFile()
 				inifile << std::endl;
 		}
 	}
+
+	// TODO: Handle legacy projects
+	std::basic_string<TCHAR> s = inifile.str();
+	
+	int cch = ::WideCharToMultiByte(CP_UTF8,0,s.c_str(),s.size(),0,0,0,0);
+	
+	std::vector<char> data(cch);
+	::WideCharToMultiByte(CP_UTF8,0,s.c_str(),s.size(),&data[0],cch,0,0);
+
+	ATL::CAtlFile file;
+	file.Create(path,GENERIC_WRITE,FILE_SHARE_READ,CREATE_ALWAYS);
+	file.Write(&data[0],data.size());
 }
 
 void CIniFile::Reset()

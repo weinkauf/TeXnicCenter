@@ -83,6 +83,7 @@ void CProject::AddView(CProjectView *pView)
 	m_viewList.AddTail(pView);
 	ASSERT(pView->m_pProject == NULL); // must be un-attached
 	pView->m_pProject = this;
+	pView->OnOpeningProject();
 
 	OnChangedViewList(); // must be the last thing done to the document
 }
@@ -166,7 +167,7 @@ void CProject::OnChangedViewList()
 {
 }
 
-void CProject::OnCloseProject()
+void CProject::OnClosing()
 {
 	POSITION pos = GetFirstViewPosition();
 	while (pos)
@@ -175,7 +176,7 @@ void CProject::OnCloseProject()
 		if (!pView)
 			continue;
 
-		pView->OnCloseProject();
+		pView->OnClosingProject();
 		pView->m_pProject = NULL;
 	}
 	m_viewList.RemoveAll();
@@ -569,7 +570,7 @@ void CProject::OnProjectClose()
 		return;
 
 	// shut it down
-	OnCloseProject();
+	OnClosing();
 
 	// destroy the document
 	GetProjectTemplate()->RemoveProject(this);

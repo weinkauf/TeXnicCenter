@@ -35,6 +35,9 @@
 #include "stdafx.h"
 #include "MainFrm.h"
 
+#include <vector>
+#include <functional>
+
 #include "global.h"
 #include "TeXnicCenter.h"
 #include "BuildView.h"
@@ -406,8 +409,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	for (int i = 0; i < MATHBAR_COUNT; ++i)
 		DockPane(m_awndMathBar + i);
 
-	CreateNavigationViews();
-	CreateOutputViews();
+	CreateNavigationPanes();
+	CreateOutputPanes();
 
 	// Enable window list manager...
 	if (!CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsers)
@@ -1566,7 +1569,7 @@ void CMainFrame::OnUpdateWindowCloseAllButActive(CCmdUI* pCmdUI)
 	pCmdUI->Enable(MDIChildArray.GetSize() > 1);
 }
 
-bool CMainFrame::CreateNavigationViews(void)
+bool CMainFrame::CreateNavigationPanes()
 {
 	const DWORD pane_style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_FLOAT_MULTI | CBRS_HIDE_INPLACE;
 	const CSize size(250,250);
@@ -1580,10 +1583,13 @@ bool CMainFrame::CreateNavigationViews(void)
 	env_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_ENVIRONMENTS)), this,size,
 	                      TRUE, ID_VIEW_ENV_PANE,navigator_style);
 
-	const CSize bibsize = size;
+	const CSize bottom_pane_size = size;
 
-	bib_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_BIBENTRIES)), this,CRect(CPoint(0,0),bibsize),
+	bib_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_BIBENTRIES)), this,CRect(CPoint(0,0),bottom_pane_size),
 		TRUE, ID_VIEW_BIB_ENTRIES_PANE,pane_style | CBRS_BOTTOM ); // Bottom
+
+	bookmark_view_pane_.Create(CString(MAKEINTRESOURCE(ID_VIEW_BOOKMARKS_PANE)), this,CRect(CPoint(0,0),bottom_pane_size),
+		TRUE, ID_VIEW_BOOKMARKS_PANE,pane_style | CBRS_BOTTOM ); // Bottom
 
 	// Create views:
 	CRect rectDummy;
@@ -1608,6 +1614,7 @@ bool CMainFrame::CreateNavigationViews(void)
 	env_view_pane_.EnableDocking(CBRS_ALIGN_ANY);
 	file_view_pane_.EnableDocking(CBRS_ALIGN_ANY);
 	bib_view_pane_.EnableDocking(CBRS_ALIGN_ANY);
+	bookmark_view_pane_.EnableDocking(CBRS_ALIGN_ANY);
 
 	DockPane(&structure_view_);
 
@@ -1617,9 +1624,9 @@ bool CMainFrame::CreateNavigationViews(void)
 	CRect rect;
 	bib_view_pane_.GetWindowRect(&rect);
 
-	if (rect.Height() < bibsize.cy)
+	if (rect.Height() < bottom_pane_size.cy)
 	{
-		rect.top = rect.bottom - bibsize.cy;
+		rect.top = rect.bottom - bottom_pane_size.cy;
 		bib_view_pane_.SetWindowPos(0,0,0,rect.Width(),rect.Height(),SWP_NOZORDER|SWP_NOMOVE|SWP_NOACTIVATE);
 	}
 
@@ -1638,6 +1645,7 @@ bool CMainFrame::CreateNavigationViews(void)
 		env_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,1),FALSE);
 		file_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,2),FALSE);
 		bib_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,3),FALSE);
+		bookmark_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,4),FALSE);
 
 		::ImageList_Destroy(himl);
 
@@ -1647,23 +1655,36 @@ bool CMainFrame::CreateNavigationViews(void)
 	return true;
 }
 
+const std::vector<CProjectView*> CMainFrame::GetViews()
+{
+	std::vector<CProjectView*> views;
+
+	views.push_back(structure_view_.GetProjectView());
+	views.push_back(&file_view_);
+	views.push_back(&env_view_);
+	views.push_back(&bib_view_pane_);
+	views.push_back(&bookmark_view_pane_);
+
+	return views;
+}
+
 void CMainFrame::OnOpenProject(CLaTeXProject* p)
 {
-	p->AddView(structure_view_.GetProjectView());
-	p->AddView(&file_view_);
-	p->AddView(&env_view_);
-	p->AddView(&bib_view_pane_);
+	const std::vector<CProjectView*> views = GetViews();
+
+	using namespace std::tr1::placeholders;
+	std::for_each(views.begin(),views.end(),std::tr1::bind(&CLaTeXProject::AddView,p,_1));
 }
 
 void CMainFrame::OnCloseProject(CLaTeXProject* p)
 {
-	p->RemoveView(structure_view_.GetProjectView());
-	p->RemoveView(&file_view_);
-	p->RemoveView(&env_view_);
-	p->RemoveView(&bib_view_pane_);
+	const std::vector<CProjectView*> views = GetViews();
+
+	using namespace std::tr1::placeholders;
+	std::for_each(views.begin(),views.end(),std::tr1::bind(&CLaTeXProject::RemoveView,p,_1));
 }
 
-bool CMainFrame::CreateOutputViews(void)
+bool CMainFrame::CreateOutputPanes(void)
 {
 	const DWORD pane_style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_HIDE_INPLACE | CBRS_FLOAT_MULTI;
 	const CSize size(250,200);
@@ -1740,13 +1761,15 @@ bool CMainFrame::CreateOutputViews(void)
 	grep_view_1_pane_.AttachToTabWnd(&build_view_pane_,DM_STANDARD,FALSE);
 	grep_view_2_pane_.AttachToTabWnd(&build_view_pane_,DM_STANDARD,FALSE);
 	parse_view_pane_.AttachToTabWnd(&build_view_pane_,DM_STANDARD,FALSE);
+	bookmark_view_pane_.AttachToTabWnd(&build_view_pane_,DM_STANDARD,FALSE);
 
 	p->SetAutoHideMode(TRUE,CBRS_BOTTOM,0,FALSE);
 
 	// Adjust panes' size in auto hide mode or otherwise only the caption bar might be visible
 	// The size parameter of the CDockablePane::Create function doesn't seem to be 
 	// honored when switching into auto hide mode.
-	CWnd* panes[] = {&build_view_pane_,&grep_view_1_pane_,&grep_view_2_pane_,&parse_view_pane_,&error_list_view_};
+	CWnd* panes[] = {&build_view_pane_,&grep_view_1_pane_,&grep_view_2_pane_,&parse_view_pane_,
+		&error_list_view_,&bookmark_view_pane_};
 	const int count = sizeof(panes) / sizeof(*panes);
 
 	CRect rect;

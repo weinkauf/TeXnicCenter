@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include "resource.h"
+
 #include "BibTeXOutputFilter.h"
 
 BibTeXOutputFilter::BibTeXOutputFilter()
@@ -54,4 +56,12 @@ BOOL BibTeXOutputFilter::OnTerminate()
 	}
 
 	return TRUE;
+}
+
+CString BibTeXOutputFilter::GetResultString()
+{
+	CString result;
+	result.Format(IDS_BIBTEX_RESULT,GetErrorCount(),GetWarningCount());
+
+	return result;
 }

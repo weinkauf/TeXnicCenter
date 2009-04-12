@@ -57,7 +57,11 @@ void CProjectView::OnUpdate(CProjectView *pSender, LPARAM lHint, LPVOID pHint)
 {
 }
 
-void CProjectView::OnCloseProject()
+void CProjectView::OnClosingProject()
+{
+}
+
+void CProjectView::OnOpeningProject()
 {
 }
 

@@ -51,6 +51,8 @@ to the specified view.
  */
 class COutputFilter : public CWorkerThread
 {
+	int errors_, warnings_, bad_boxes_;
+
 // construction/destruction
 public:
 	/**
@@ -175,6 +177,11 @@ private:
 
 	/** The read end of the pipe, the output to parse is written to */
 	HANDLE m_hOutput;
+
+public:
+	int GetErrorCount() const;
+	int GetWarningCount() const;
+	int GetBadBoxCount() const;
 };
 
 #endif // !defined(AFX_OUTPUTFILTER_H__078A6980_2141_11D5_A222_006097239934__INCLUDED_)

@@ -70,7 +70,7 @@ VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${PRODUCT_NAME}"
 ;VIAddVersionKey /LANG=${LANG_ENGLISH} "Comments" "A test comment"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "TeXnicCenter.org"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalTrademarks" "Free software licensed under GPL"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright © 1999-2008 The TeXnicCenter Team"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright © 1999-2009 The TeXnicCenter Team"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${PRODUCT_NAME} Setup"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${VERSION}"
 

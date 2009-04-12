@@ -198,7 +198,7 @@ void CProjectTemplate::CloseAllProjects(BOOL /*bEndSession*/)
 	while (pos != NULL)
 	{
 		CProject* pProject = GetNextProject(pos);
-		pProject->OnCloseProject();
+		pProject->OnClosing();
 	}
 }
 
@@ -284,7 +284,7 @@ CProject* CSingleProjectTemplate::OpenProjectFile(LPCTSTR lpszPathName)
 			return NULL; // leave the original one
 
 		// close current project
-		pProject->OnCloseProject();
+		pProject->OnClosing();
 		RemoveProject(pProject);
 		delete pProject;
 	}
@@ -312,7 +312,7 @@ CProject* CSingleProjectTemplate::OpenProjectFile(LPCTSTR lpszPathName)
 			// if project has been newly created, then destroy
 			if (bCreated)
 			{
-				pProject->OnCloseProject();
+				pProject->OnClosing();
 				RemoveProject(pProject);
 				delete pProject;
 			}
@@ -375,7 +375,7 @@ CProject* CSingleProjectTemplate::CreateNewProjectFileFromDoc(LPCTSTR lpszDocPat
 		if (!pProject->SaveModified())
 			return NULL; //leave the original one
 
-		pProject->OnCloseProject();
+		pProject->OnClosing();
 		RemoveProject(pProject);
 		delete pProject;
 	}
@@ -396,7 +396,7 @@ CProject* CSingleProjectTemplate::CreateNewProjectFileFromDoc(LPCTSTR lpszDocPat
 		TRACE0("CProject::OnNewProjectFromDoc returned FALSE.\n");
 
 		//Project creation not successfull, destroy
-		//pProject->OnCloseProject();
+		//pProject->OnClosing();
 		RemoveProject(pProject);
 		delete pProject;
 

@@ -22,8 +22,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-
-typedef enum WindowsVersion
+enum WindowsVersion
 {
 	Win_Unknown = 0,
 	Win95,
@@ -48,7 +47,11 @@ typedef enum WindowsVersion
 	WinServer2003_Enterprise,
 	WinServer2003_Datacenter,
 	WinServer2003_WebEdition,
-	Win32s
+	Win32s,
+	WindowsVista,
+	WindowsServer2008,
+	WindowsServer2008R2,
+	Windows7
 };
 
 class AFX_EXT_CLASS CSystemInfo  

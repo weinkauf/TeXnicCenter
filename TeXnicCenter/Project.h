@@ -91,7 +91,7 @@ public:
 public:
 	virtual void DeleteContents();
 	virtual void OnChangedViewList();
-	virtual void OnCloseProject();
+	virtual void OnClosing();
 	virtual BOOL OnNewProject();
 	virtual BOOL OnNewProjectFromDoc(LPCTSTR lpszDocPathName);
 	virtual BOOL OnOpenProject(LPCTSTR lpszPathName);

@@ -51,6 +51,7 @@
 #include <afxcmn.h>			// MFC-Unterst&uuml;tzung f&uuml;r g&auml;ngige Windows-Steuerelemente
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
+#include <atlfile.h>
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ f&uuml;gt unmittelbar vor der vorhergehenden Zeile zus&auml;tzliche Deklarationen ein.

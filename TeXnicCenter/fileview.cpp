@@ -67,16 +67,13 @@ namespace {
 }
 
 BEGIN_MESSAGE_MAP(CFileView,NavigatorTreeCtrl)
-	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CFileView::OnNMCustomdraw)
+	//ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &CFileView::OnNMCustomdraw)
 	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
 
 CFileView::CFileView()
 {
-	LOGFONT lf = GetDisplayFont();
-	lf.lfWeight = FW_BOLD;
-	bold_.CreateFontIndirect(&lf);
 }
 
 CFileView::~CFileView()
@@ -91,54 +88,6 @@ void CFileView::OnUpdate(CProjectView* /*pSender*/, LPARAM lHint, LPVOID /*pHint
 			OnParsingFinished();
 			break;
 	}
-}
-
-void CFileView::OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-
-	switch (pNMCD->dwDrawStage)
-	{
-		case CDDS_PREPAINT:
-			*pResult = CDRF_NOTIFYITEMDRAW;
-			break;
-		case CDDS_ITEMPREPAINT:
-			if (!pNMCD->lItemlParam && GetParentItem(reinterpret_cast<HTREEITEM>(pNMCD->dwItemSpec)))
-			{
-				::SelectObject(pNMCD->hdc,bold_.m_hObject);
-				*pResult = CDRF_NEWFONT;
-				break;
-			}
-		default:
-			*pResult = 0;
-	}
-}
-
-BOOL CFileView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
-{
-	if (message == WM_SETFONT)
-	{
-		bold_.DeleteObject();
-
-		LOGFONT lf;
-
-		if (wParam)
-		{
-			CFont font;
-
-			font.Attach(reinterpret_cast<HFONT>(wParam));
-			font.GetLogFont(&lf);
-			font.Detach();
-		}
-		else // Default system font
-			lf = GetDisplayFont();
-
-		lf.lfWeight = FW_BOLD;
-
-		bold_.CreateFontIndirect(&lf);
-	}
-
-	return NavigatorTreeCtrl::OnWndMsg(message, wParam, lParam, pResult);
 }
 
 void CFileView::OnParsingFinished()
@@ -172,7 +121,7 @@ void CFileView::OnParsingFinished()
 	CString text;
 	HTREEITEM parent;
 
-	const CString projectdir = GetProject()->GetProjectDir();
+	const CString projectdir = GetProject()->GetDirectory();
 
 	// Maps the (flat) relative path and item type to a parent tree item
 	typedef std::map<std::pair<CString,int>,HTREEITEM> ParentDirectoryContainerType;
@@ -266,8 +215,15 @@ void CFileView::OnParsingFinished()
 				}						
 			}
 
-			hItem = InsertItem(TVIF_TEXT|TVIF_PARAM|TVIF_IMAGE|TVIF_SELECTEDIMAGE,text,si.GetType(),
-				si.GetType(),0,0,i,parent,TVI_SORT);
+			UINT state = 0;
+			UINT flags = TVIF_TEXT|TVIF_PARAM|TVIF_IMAGE|TVIF_SELECTEDIMAGE;
+
+			if (si.IsMainProjectFile()) {
+				state = TVIS_BOLD;
+				flags |= TVIF_STATE;
+			}
+
+			hItem = InsertItem(flags,text,si.GetType(),si.GetType(),state,state,i,parent,TVI_SORT);
 		}
 	}
 

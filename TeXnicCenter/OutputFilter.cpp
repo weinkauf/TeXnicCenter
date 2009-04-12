@@ -87,18 +87,24 @@ int COutputFilter::GetCurrentOutputLine() const
 
 void COutputFilter::AddError(COutputInfo &error)
 {
+	++errors_;
+
 	if (m_pDoc)
 		m_pDoc->AddError(error);
 }
 
 void COutputFilter::AddWarning(COutputInfo &warning)
 {
+	++warnings_;
+
 	if (m_pDoc)
 		m_pDoc->AddWarning(warning);
 }
 
 void COutputFilter::AddBadBox(COutputInfo &badbox)
 {
+	++bad_boxes_;
+
 	if (m_pDoc)
 		m_pDoc->AddBadBox(badbox);
 }
@@ -110,6 +116,8 @@ CString COutputFilter::GetResultString()
 
 UINT COutputFilter::Run()
 {
+	errors_ = warnings_ = bad_boxes_ = 0;
+
 	char c;
 	DWORD dwBytesRead;
 	CString strLine;
@@ -156,4 +164,19 @@ DWORD COutputFilter::ParseLine(const CString& /*strLine*/,DWORD /*dwCookie*/)
 BOOL COutputFilter::OnTerminate()
 {
 	return TRUE;
+}
+
+int COutputFilter::GetErrorCount() const
+{
+	return errors_;
+}
+
+int COutputFilter::GetWarningCount() const
+{
+	return warnings_;
+}
+
+int COutputFilter::GetBadBoxCount() const
+{
+	return bad_boxes_;
 }
