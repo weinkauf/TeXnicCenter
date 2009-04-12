@@ -31,6 +31,10 @@ if exist Debug\nul copy "hlp\TeXnicCenter.hlp" Debug
 if exist Debug\nul copy "hlp\TeXnicCenter.cnt" Debug
 if exist Release\nul copy "hlp\TeXnicCenter.hlp" Release
 if exist Release\nul copy "hlp\TeXnicCenter.cnt" Release
+if exist "Unicode Debug" copy "hlp\TeXnicCenter.hlp" "Unicode Debug"
+if exist "Unicode Debug" copy "hlp\TeXnicCenter.cnt" "Unicode Debug"
+if exist "Unicode Release" copy "hlp\TeXnicCenter.hlp" "Unicode Release"
+if exist "Unicode Release" copy "hlp\TeXnicCenter.cnt" "Unicode Release"
 echo.
 goto :done
 

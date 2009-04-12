@@ -4,7 +4,7 @@
 	Version="9,00"
 	Name="TXCUserHelp"
 	ProjectGUID="{12243F23-547E-4676-A36D-7DE0EE131354}"
-	RootNamespace="TXCUserHelp"
+	RootNamespace="Help"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -344,8 +344,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -354,8 +354,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -364,8 +364,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -374,8 +374,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -388,8 +388,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -398,8 +398,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -408,8 +408,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -418,8 +418,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -432,8 +432,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -442,8 +442,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -452,8 +452,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -462,8 +462,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -476,8 +476,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -486,8 +486,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -496,8 +496,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -506,8 +506,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -520,8 +520,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -530,8 +530,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -540,8 +540,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -550,8 +550,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -564,8 +564,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -574,8 +574,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -584,8 +584,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -594,8 +594,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -608,8 +608,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -618,8 +618,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -628,8 +628,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -638,8 +638,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -652,8 +652,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -662,8 +662,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -672,8 +672,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -682,8 +682,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -696,8 +696,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -706,8 +706,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -716,8 +716,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -726,8 +726,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -740,8 +740,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -750,8 +750,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -760,8 +760,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -770,8 +770,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -784,8 +784,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -794,8 +794,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -804,8 +804,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -814,8 +814,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -828,8 +828,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -838,8 +838,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -848,8 +848,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -858,8 +858,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -872,8 +872,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -882,8 +882,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -892,8 +892,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -902,8 +902,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -916,8 +916,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -926,8 +926,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -936,8 +936,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -946,8 +946,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -960,8 +960,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -970,8 +970,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -980,8 +980,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -990,8 +990,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1004,8 +1004,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1014,8 +1014,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1024,8 +1024,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1034,8 +1034,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying File"
-						CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;"
 						Outputs="$(OutDir)\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -1061,8 +1061,8 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					Description="Compiling Help"
-					CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;mkdir &quot;$(IntDir)&quot;&#x0D;&#x0A;cd &quot;$(InputDir)&quot;&#x0D;&#x0A;hhc.exe &quot;$(InputFileName)&quot;&#x0D;&#x0A;copy /y &quot;$(IntDir)\TeXnicCenter.chm&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+					Description="Compiling Help..."
+					CommandLine="if not exist &quot;$(OutDir)&quot; mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;if not exist &quot;$(IntDir)&quot; mkdir &quot;$(IntDir)&quot;&#x0D;&#x0A;cd &quot;$(InputDir)&quot;&#x0D;&#x0A;hhc.exe &quot;$(InputFileName)&quot;&#x0D;&#x0A;copy /y &quot;$(IntDir)\TeXnicCenter.chm&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\TeXnicCenter.chm"
 				/>
 			</FileConfiguration>
@@ -1071,8 +1071,8 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					Description="Compiling Help"
-					CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;mkdir &quot;$(IntDir)&quot;&#x0D;&#x0A;cd &quot;$(InputDir)&quot;&#x0D;&#x0A;hhc.exe &quot;$(InputFileName)&quot;&#x0D;&#x0A;copy /y &quot;$(IntDir)\TeXnicCenter.chm&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+					Description="Compiling Help..."
+					CommandLine="if not exist &quot;$(OutDir)&quot; mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;if not exist &quot;$(IntDir)&quot; mkdir &quot;$(IntDir)&quot;&#x0D;&#x0A;cd &quot;$(InputDir)&quot;&#x0D;&#x0A;hhc.exe &quot;$(InputFileName)&quot;&#x0D;&#x0A;copy /y &quot;$(IntDir)\TeXnicCenter.chm&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\TeXnicCenter.chm"
 				/>
 			</FileConfiguration>
@@ -1081,8 +1081,8 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					Description="Compiling Help"
-					CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;mkdir &quot;$(IntDir)&quot;&#x0D;&#x0A;cd &quot;$(InputDir)&quot;&#x0D;&#x0A;hhc.exe &quot;$(InputFileName)&quot;&#x0D;&#x0A;copy /y &quot;$(IntDir)\TeXnicCenter.chm&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+					Description="Compiling Help..."
+					CommandLine="if not exist &quot;$(OutDir)&quot; mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;if not exist &quot;$(IntDir)&quot; mkdir &quot;$(IntDir)&quot;&#x0D;&#x0A;cd &quot;$(InputDir)&quot;&#x0D;&#x0A;hhc.exe &quot;$(InputFileName)&quot;&#x0D;&#x0A;copy /y &quot;$(IntDir)\TeXnicCenter.chm&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\TeXnicCenter.chm"
 				/>
 			</FileConfiguration>
@@ -1091,8 +1091,8 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					Description="Compiling Help"
-					CommandLine="mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;mkdir &quot;$(IntDir)&quot;&#x0D;&#x0A;cd &quot;$(InputDir)&quot;&#x0D;&#x0A;hhc.exe &quot;$(InputFileName)&quot;&#x0D;&#x0A;copy /y &quot;$(IntDir)\TeXnicCenter.chm&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+					Description="Compiling Help..."
+					CommandLine="if not exist &quot;$(OutDir)&quot; mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;if not exist &quot;$(IntDir)&quot; mkdir &quot;$(IntDir)&quot;&#x0D;&#x0A;cd &quot;$(InputDir)&quot;&#x0D;&#x0A;hhc.exe &quot;$(InputFileName)&quot;&#x0D;&#x0A;copy /y &quot;$(IntDir)\TeXnicCenter.chm&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\TeXnicCenter.chm"
 				/>
 			</FileConfiguration>

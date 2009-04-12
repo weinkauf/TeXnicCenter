@@ -65,9 +65,9 @@ void AfxThrowProcessException(int nCause)
 //////////////////////////////////////////////////////////////////////
 
 CProcess::CProcess()
+: m_processInfo()
+, m_bProcess(FALSE)
 {
-	ZeroMemory(&m_processInfo,sizeof(m_processInfo));
-	m_bProcess = FALSE;
 }
 
 CProcess::~CProcess()
@@ -93,6 +93,10 @@ BOOL CProcess::Create(
 	if (!lpszCmdLine)
 		return FALSE;
 
+#ifdef UNICODE
+	dwCreate |= CREATE_UNICODE_ENVIRONMENT;
+#endif
+
 	// provide standard STARTUPINFO
 	STARTUPINFO si;
 	if (!lpsiStartInfo)
@@ -102,7 +106,7 @@ BOOL CProcess::Create(
 		lpsiStartInfo = &si;
 	}
 
-	return m_bProcess = CreateProcess(
+	return m_bProcess = ::CreateProcess(
 	                        NULL,(LPTSTR)lpszCmdLine,
 	                        lpsaProcess,lpsaThread,bInheritHandles,
 	                        dwCreate,lpvEnvironment,lpszCurDir,

@@ -73,6 +73,7 @@ IDR_STRUCTURE           BITMAP                  "res\\structuretoolbar.bmp"
 IDB_ANNOTATION          BITMAP                  "res\\annotation.bmp"
 IDR_BIB_SEARCH          BITMAP                  "res\\bibtoolbar.bmp"
 IDB_WIZARD              BITMAP                  "res\\wizard.bmp"
+IDR_BOOKMARK_VIEW       BITMAP                  "res\\bookmark view toolbar.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -678,6 +679,7 @@ BEGIN
     BUTTON      ID_VIEW_ENV_PANE
     BUTTON      ID_VIEW_FILES_PANE
     BUTTON      ID_VIEW_BIB_ENTRIES_PANE
+    BUTTON      ID_VIEW_BOOKMARKS_PANE
 END
 
 IDR_ERROR_LIST TOOLBAR  16, 16
@@ -702,6 +704,12 @@ BEGIN
     BUTTON      ID_SEARCH_EDIT
     BUTTON      ID_START_SEARCH
     BUTTON      ID_CLEAR_SEARCH
+END
+
+IDR_BOOKMARK_VIEW TOOLBAR  16, 16
+BEGIN
+    BUTTON      ID_BUTTON38599
+    BUTTON      ID_BUTTON38600
 END
 
 #endif    // Neutral resources
