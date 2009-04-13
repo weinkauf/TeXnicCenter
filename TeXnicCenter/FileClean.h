@@ -167,18 +167,32 @@ public:
 	bool SerializeFromRegistry(CBCGRegistryEx &reg);
 
 //Attributes
-public:
+private:
 	///Just a textual Description of what is defined by strPattern
 	CString strDescription;
 
-	///The Pattern, that defines a set of files using Wildcards, Placeholders and Placeholder sets
-	CString strPattern;
+	///Toggle, whether to scan the directories recursive or not.
+	bool bRecursive;
 
 	///Defines, what shall be done with the files defined by strPattern
 	tagFileHandling tFileHandling;
 
-	///Toogle, whether to scan the directories recursive or not.
-	bool bRecursive;
+	///The Pattern, that defines a set of files using wildcards, Placeholders and Placeholder sets
+	CString strPattern;
+
+
+public:
+	const CString& GetDescription() const;
+	void SetDescription(const CString& val);	
+
+	const CString& GetPattern() const;
+	void SetPattern(const CString& val);	
+
+	CFileCleanItem::tagFileHandling GetFileHandling() const;
+	void SetFileHandling(CFileCleanItem::tagFileHandling val);	
+
+	bool IsRecursive() const;
+	void SetRecursive(bool val);
 };
 
 

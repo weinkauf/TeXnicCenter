@@ -35,7 +35,9 @@
 #include "stdafx.h"
 #include "texniccenter.h"
 #include "OptionPageFileClean.h"
+
 #include "Configuration.h"
+#include "RunTimeHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -52,13 +54,9 @@ COptionPageFileClean::COptionPageFileClean()
 		: CMFCPropertyPage(COptionPageFileClean::IDD),
 		m_PHInsertBtn(IDR_POPUP_PLACEHOLDEREX_NOOPT),
 		m_bItemChangeLock(false),
-		m_bUpdatingList(false)
+		m_bUpdatingList(false),
+		m_bConfirm(CConfiguration::GetInstance()->m_bFileCleanConfirm)
 {
-	//{{AFX_DATA_INIT(COptionPageFileClean)
-	//}}AFX_DATA_INIT
-
-	//Read from the config
-	m_bConfirm = CConfiguration::GetInstance()->m_bFileCleanConfirm;
 }
 
 COptionPageFileClean::~COptionPageFileClean()
@@ -88,10 +86,11 @@ BEGIN_MESSAGE_MAP(COptionPageFileClean,CMFCPropertyPage)
 	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_RECURSIVE,OnRecursive)
 	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_DELETE,OnDelete)
 	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_NEW,OnNew)
-	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_SORT,OnSort)
 	ON_EN_KILLFOCUS(IDC_OPTIONS_FILECLEAN_PATTERN,OnLeavePattern)
 	ON_NOTIFY(LVN_ITEMCHANGED,IDC_OPTIONS_FILECLEAN_LIST,OnListItemchanged)
 	//}}AFX_MSG_MAP
+	ON_NOTIFY(LVN_DELETEITEM, IDC_OPTIONS_FILECLEAN_LIST, &COptionPageFileClean::OnLvnDeleteitemOptionsFilecleanList)
+	ON_NOTIFY(LVN_KEYDOWN, IDC_OPTIONS_FILECLEAN_LIST, &COptionPageFileClean::OnLvnKeydownOptionsFilecleanList)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -107,28 +106,28 @@ void COptionPageFileClean::OnOK()
 	//Copy the array
 	CConfiguration::GetInstance()->m_aFileCleanItems.RemoveAll();
 
-	for (int i = 0; i < m_ItemArray.GetSize(); i++)
-	{
-		CConfiguration::GetInstance()->m_aFileCleanItems.InsertSorted(m_ItemArray.GetAt(i),true,true);
+	const int count = m_wndList.GetItemCount();
+
+	for (int i = 0; i < count; ++i) {
+		CFileCleanItem* item = reinterpret_cast<CFileCleanItem*>(m_wndList.GetItemData(i));
+		CConfiguration::GetInstance()->m_aFileCleanItems.InsertSorted(*item,true,true);
 	}
+
 	//Just to be sure
 	CConfiguration::GetInstance()->m_aFileCleanItems.AddDefaultItems();
 
 	CMFCPropertyPage::OnOK();
 }
 
-void COptionPageFileClean::UpdateItems(CFileCleanItemArray& copyItems)
+LVITEM COptionPageFileClean::GetLVITEM()
 {
-	//Copy the array
-	m_ItemArray.RemoveAll();
+	LVITEM lvi;
+	lvi.mask = LVIF_TEXT | LVIF_PARAM; //| LVIF_IMAGE
 
-	for (int i = 0; i < copyItems.GetSize(); i++)
-	{
-		m_ItemArray.InsertSorted(copyItems.GetAt(i),true,true);
-	}
+	return lvi;
 }
 
-void COptionPageFileClean::RefillList()
+void COptionPageFileClean::Populate()
 {
 	//Not valid?
 	if (!IsWindow(m_wndList.m_hWnd))
@@ -136,62 +135,87 @@ void COptionPageFileClean::RefillList()
 
 	//Remember the selected entry
 	int nLastSelected = m_wndList.GetNextItem(-1,LVNI_SELECTED);
-	if (nLastSelected < 0) nLastSelected = 0;
+
+	if (nLastSelected < 0) 
+		nLastSelected = 0;
 
 	//////////////////////////
 	//Clear List
+	m_wndList.SetRedraw(FALSE);
 	m_wndList.DeleteAllItems();
 
-	if (m_ItemArray.GetSize() == 0)
-		return;
+	const CFileCleanItemArray& items = CConfiguration::GetInstance()->m_aFileCleanItems;
 
-	//////////////////////////
-	//Init Structure
-	LVITEM lvi;
-	lvi.mask = LVIF_TEXT | LVIF_PARAM; //| LVIF_IMAGE
+	if (items.GetSize() > 0) {
+		//////////////////////////
+		//Init Structure
 
-	//////////////////////////
-	//Fill List
-	m_bUpdatingList = true; //Lock
-	int i;
-	int nsize = m_ItemArray.GetSize();
-	for (i = 0; i < nsize; i++)
-	{
-		//Item specific stuff
-		lvi.lParam = (LPARAM)i;
-		lvi.iItem = i;
+		LVITEM lvi = GetLVITEM();
+		
+		//////////////////////////
+		//Fill List
+		m_bUpdatingList = true; //Lock
+		int size = items.GetSize();
 
-		//First Column
-		lvi.pszText = m_ItemArray[i].strDescription.GetBuffer(1);
-		lvi.iSubItem = 0;
-		m_wndList.InsertItem(&lvi);
+		for (int i = 0; i < size; i++)
+			InsertItem(i,lvi,items[i]);
 
-		//Second Column
-		m_wndList.SetItemText(i,1,m_ItemArray[i].strPattern.GetBuffer(1));
+		m_bUpdatingList = false; //Unlock
 
-		//Third Column
-		CString strRecursive;
-		strRecursive.LoadString(m_ItemArray[i].bRecursive ? STE_FILECLEAN_RECURSIVE : STE_FILECLEAN_NOTRECURSIVE);
-		m_wndList.SetItemText(i,2,strRecursive.GetBuffer(1));
+		//Restore the last selected Item
+		if (!m_wndList.SetItemState(nLastSelected,LVNI_SELECTED,LVNI_SELECTED))
+		{
+			//Happens, if the entry could not be found (last entry deleted for example)
+			m_wndList.SetItemState(0,LVNI_SELECTED,LVNI_SELECTED);
+		}
 
-		//Fourth Column
-		CString strHandling = GetFileHandlingName(&m_ItemArray[i]);
-		m_wndList.SetItemText(i,3,strHandling.GetBuffer(1));
+		UpdateControls();
+
+		//Get the focus!
+		m_wndList.SetFocus();
 	}
 
-	m_bUpdatingList = false; //Unlock
+	m_wndList.SetRedraw(TRUE);
+}
 
-	//Restore the last selected Item
-	if (!m_wndList.SetItemState(nLastSelected,LVNI_SELECTED,LVNI_SELECTED))
+namespace {
+	template<class T>
+	int LexicographicalCompare(const T& a, const T& b)
 	{
-		//Happens, if the entry could not be found (last entry deleted for example)
-		m_wndList.SetItemState(0,LVNI_SELECTED,LVNI_SELECTED);
+		return a < b ? -1 : a > b ? 1 : 0;
 	}
+}
 
-	UpdateControls();
+int COptionPageFileClean::CompareDescription(LPARAM l1, LPARAM l2)
+{
+	const CFileCleanItem* i1 = reinterpret_cast<const CFileCleanItem*>(l1);
+	const CFileCleanItem* i2 = reinterpret_cast<const CFileCleanItem*>(l2);
 
-	//Get the focus!
-	m_wndList.SetFocus();
+	return i1->GetDescription().CompareNoCase(i2->GetDescription());
+}
+
+int COptionPageFileClean::ComparePattern(LPARAM l1, LPARAM l2)
+{
+	const CFileCleanItem* i1 = reinterpret_cast<const CFileCleanItem*>(l1);
+	const CFileCleanItem* i2 = reinterpret_cast<const CFileCleanItem*>(l2);
+
+	return i1->GetPattern().CompareNoCase(i2->GetPattern());
+}
+
+int COptionPageFileClean::CompareRecursive(LPARAM l1, LPARAM l2)
+{
+	const CFileCleanItem* i1 = reinterpret_cast<const CFileCleanItem*>(l1);
+	const CFileCleanItem* i2 = reinterpret_cast<const CFileCleanItem*>(l2);
+
+	return LexicographicalCompare(i1->IsRecursive(),i2->IsRecursive());
+}
+
+int COptionPageFileClean::CompareAction(LPARAM l1, LPARAM l2)
+{
+	const CFileCleanItem* i1 = reinterpret_cast<const CFileCleanItem*>(l1);
+	const CFileCleanItem* i2 = reinterpret_cast<const CFileCleanItem*>(l2);
+
+	return LexicographicalCompare(i1->GetFileHandling(),i2->GetFileHandling());
 }
 
 BOOL COptionPageFileClean::OnInitDialog()
@@ -204,9 +228,11 @@ BOOL COptionPageFileClean::OnInitDialog()
 	//	m_wndList.SetImageList(&m_images, TVSIL_NORMAL);
 	//	m_wndList.SetImageList(&m_images, TVSIL_STATE);
 
-
 	//Change Style
-	m_wndList.SetExtendedStyle(m_wndList.GetExtendedStyle() | LVS_EX_FULLROWSELECT); //| LVS_EX_GRIDLINES
+	m_wndList.SetExtendedStyle(m_wndList.GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER); //| LVS_EX_GRIDLINES
+
+	if (RunTimeHelper::IsVista())
+		::SetWindowTheme(m_wndList,L"explorer",0);
 
 	//Create the Columns
 	CString strAdd;
@@ -231,11 +257,15 @@ BOOL COptionPageFileClean::OnInitDialog()
 	strAdd.LoadString(STE_FILECLEAN_HPROTECT);
 	m_HandleBox.AddString(strAdd);
 
-	//Copy Data	from config
-	UpdateItems(CConfiguration::GetInstance()->m_aFileCleanItems);
+	m_wndList.SetColumnCompareFunction(0,&COptionPageFileClean::CompareDescription);
+	m_wndList.SetColumnCompareFunction(1,&COptionPageFileClean::ComparePattern);
+	m_wndList.SetColumnCompareFunction(2,&COptionPageFileClean::CompareRecursive);
+	m_wndList.SetColumnCompareFunction(3,&COptionPageFileClean::CompareAction);
 
 	//Add items to the list
-	RefillList();
+	Populate();
+
+	m_wndList.Sort(0,true);
 
 	return TRUE; // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
@@ -252,12 +282,12 @@ void COptionPageFileClean::UpdateControls()
 	}
 
 	//Is it a default Item?
-	if (pItem->tFileHandling == CFileCleanItem::protectbydefault)
+	if (ShouldBeDisabled(*pItem))
 	{
 		//Read it and set the Controls
-		m_NameEdit.SetWindowText(pItem->strDescription);
-		m_PatternEdit.SetWindowText(pItem->strPattern);
-		m_RecursiveBtn.SetCheck(pItem->bRecursive);
+		m_NameEdit.SetWindowText(pItem->GetDescription());
+		m_PatternEdit.SetWindowText(pItem->GetPattern());
+		m_RecursiveBtn.SetCheck(pItem->IsRecursive());
 		m_HandleBox.SetCurSel(-1);
 
 		//Deactivate
@@ -266,10 +296,10 @@ void COptionPageFileClean::UpdateControls()
 	else
 	{
 		//Read it and set the Controls
-		m_NameEdit.SetWindowText(pItem->strDescription);
-		m_PatternEdit.SetWindowText(pItem->strPattern);
-		m_RecursiveBtn.SetCheck(pItem->bRecursive);
-		m_HandleBox.SetCurSel(pItem->tFileHandling);
+		m_NameEdit.SetWindowText(pItem->GetDescription());
+		m_PatternEdit.SetWindowText(pItem->GetPattern());
+		m_RecursiveBtn.SetCheck(pItem->IsRecursive());
+		m_HandleBox.SetCurSel(pItem->GetFileHandling());
 
 		//Activate
 		UpdateControlsState(true);
@@ -298,7 +328,10 @@ void COptionPageFileClean::OnChangeName()
 	CFileCleanItem* pItem = GetSelectedFCItem();
 	if (!pItem) return; //Nothing selected or whatever
 
-	m_NameEdit.GetWindowText(pItem->strDescription);
+	CString text;
+	m_NameEdit.GetWindowText(text);
+
+	pItem->SetDescription(text);
 
 	UpdateSelectedListItem();
 }
@@ -312,7 +345,9 @@ void COptionPageFileClean::OnChangePattern()
 	CFileCleanItem* pItem = GetSelectedFCItem();
 	if (!pItem) return; //Nothing selected or whatever
 
-	m_PatternEdit.GetWindowText(pItem->strPattern);
+	CString text;
+	m_PatternEdit.GetWindowText(text);
+	pItem->SetPattern(text);
 
 	UpdateSelectedListItem();
 }
@@ -335,13 +370,13 @@ void COptionPageFileClean::OnSelchangeHandling()
 
 		case(int)(CFileCleanItem::clean) :
 		{
-			pItem->tFileHandling = CFileCleanItem::clean;
+			pItem->SetFileHandling(CFileCleanItem::clean);
 			break;
 		}
 
 		case(int)(CFileCleanItem::protect) :
 		{
-			pItem->tFileHandling = CFileCleanItem::protect;
+			pItem->SetFileHandling(CFileCleanItem::protect);
 			break;
 		}
 
@@ -352,7 +387,7 @@ void COptionPageFileClean::OnSelchangeHandling()
 		}
 
 		default:
-			pItem->tFileHandling = CFileCleanItem::none;
+			pItem->SetFileHandling(CFileCleanItem::none);
 	}
 
 	UpdateSelectedListItem();
@@ -367,56 +402,51 @@ void COptionPageFileClean::OnRecursive()
 	CFileCleanItem* pItem = GetSelectedFCItem();
 	if (!pItem) return; //Nothing selected or whatever
 
-	pItem->bRecursive = m_RecursiveBtn.GetCheck() != 0;
+	pItem->SetRecursive(m_RecursiveBtn.GetCheck() != 0);
 
 	UpdateSelectedListItem();
 }
 
-CFileCleanItem* COptionPageFileClean::GetSelectedFCItem()
+CFileCleanItem* COptionPageFileClean::GetSelectedFCItem(int* index)
 {
 	//Get the selected item
 	int nItemIndex = m_wndList.GetNextItem(-1,LVNI_SELECTED);
 
+	if (index)
+		*index = nItemIndex;
+
 	//Something selected at all?
 	if (nItemIndex < 0) return NULL;
-	//Index correct?
-	if (nItemIndex >= m_ItemArray.GetSize()) return NULL;
 
-	//Get it from the array
-	return &m_ItemArray[nItemIndex];
+	//Index correct?
+	return reinterpret_cast<CFileCleanItem*>(m_wndList.GetItemData(nItemIndex));
 }
 
 void COptionPageFileClean::UpdateSelectedListItem()
 {
-	//Get the selected item
-	int nItemIndex = m_wndList.GetNextItem(-1,LVNI_SELECTED);
+	int index;
+	CFileCleanItem* pItem = GetSelectedFCItem(&index);
 
-	//Something selected at all?
-	if (nItemIndex < 0) return;
-	//Index correct?
-	if (nItemIndex >= m_ItemArray.GetSize()) return;
-
-	//Get it from the array
-	CFileCleanItem* pItem = &m_ItemArray[nItemIndex];
 	if (!pItem) return;
 
 	//Lock
 	m_bUpdatingList = true;
 
 	//First Column
-	m_wndList.SetItemText(nItemIndex,0,pItem->strDescription.GetBuffer(1));
+	m_wndList.SetItemText(index,0,pItem->GetDescription());
 
 	//Second Column
-	m_wndList.SetItemText(nItemIndex,1,pItem->strPattern.GetBuffer(1));
+	m_wndList.SetItemText(index,1,pItem->GetPattern());
 
 	//Third Column
 	CString strRecursive;
-	strRecursive.LoadString(pItem->bRecursive ? STE_FILECLEAN_RECURSIVE : STE_FILECLEAN_NOTRECURSIVE);
-	m_wndList.SetItemText(nItemIndex,2,strRecursive.GetBuffer(1));
+	strRecursive.LoadString(pItem->IsRecursive() ? STE_FILECLEAN_RECURSIVE : STE_FILECLEAN_NOTRECURSIVE);
+
+	m_wndList.SetItemText(index,2,strRecursive);
 
 	//Fourth Column
 	CString strHandling = GetFileHandlingName(pItem);
-	m_wndList.SetItemText(nItemIndex,3,strHandling.GetBuffer(1));
+	m_wndList.SetItemText(index,3,strHandling);
 
 	//Unlock
 	m_bUpdatingList = false;
@@ -426,7 +456,7 @@ CString COptionPageFileClean::GetFileHandlingName(CFileCleanItem* pItem)
 {
 	//Get the FileHandling type
 	CString strHandling;
-	switch (pItem->tFileHandling)
+	switch (pItem->GetFileHandling())
 	{
 		case CFileCleanItem::none :
 		{
@@ -503,23 +533,14 @@ void COptionPageFileClean::OnDelete()
 		return; //Nothing selected or whatever
 	}
 
-	//Index correct?
-	if (nItemIndex >= m_ItemArray.GetSize())
-	{
-		ASSERT(false); //Should not happen
-		return; //Nothing selected or whatever
-	}
-
 	//Default Item? Not to be deleted
-	if (m_ItemArray.GetAt(nItemIndex).tFileHandling == CFileCleanItem::protectbydefault)
+	if (reinterpret_cast<CFileCleanItem*>(m_wndList.GetItemData(nItemIndex))->GetFileHandling() == CFileCleanItem::protectbydefault)
 	{
 		ASSERT(false); //Should not happen; Btn should be disabled
 		return;
 	}
 
-	//Remove and Refill
-	m_ItemArray.RemoveAt(nItemIndex,1);
-	RefillList();
+	m_wndList.DeleteItem(nItemIndex);
 }
 
 void COptionPageFileClean::OnNew()
@@ -528,67 +549,51 @@ void COptionPageFileClean::OnNew()
 
 	//Get the selected item
 	CFileCleanItem* pItem = GetSelectedFCItem();
+
 	if (pItem)
 	{
 		//We try to make the new Item similar to the selected one
-		newItem.strDescription.LoadString(STE_FILECLEAN_HEAD1); //= pItem->strDescription;
-		newItem.strPattern = pItem->strPattern;
-		newItem.tFileHandling = (pItem->tFileHandling == CFileCleanItem::protectbydefault) ? CFileCleanItem::protect : pItem->tFileHandling;
-		newItem.bRecursive = pItem->bRecursive;
+		newItem.SetDescription(CString(MAKEINTRESOURCE(STE_FILECLEAN_HEAD1))); //= pItem->GetDescription();
+		newItem.SetPattern(pItem->GetPattern());
+		newItem.SetFileHandling((pItem->GetFileHandling() == CFileCleanItem::protectbydefault) ? CFileCleanItem::protect : pItem->GetFileHandling());
+		newItem.SetRecursive(pItem->IsRecursive());
 	}
 	else
 	{
 		//We create a standard
-		newItem.strDescription.LoadString(STE_FILECLEAN_HEAD1); //= pItem->strDescription;
-		newItem.strPattern = "";
-		newItem.tFileHandling = CFileCleanItem::none;
-		newItem.bRecursive = false;
+		newItem.SetDescription(CString(MAKEINTRESOURCE(STE_FILECLEAN_HEAD1))); //= pItem->GetDescription();
+		newItem.SetFileHandling(CFileCleanItem::none);
+		newItem.SetRecursive(false);
 	}
 
+	const int index = 0;
+
 	//Add it at the top of the array
-	m_ItemArray.InsertAt(0,newItem);
-	//Update list
-	RefillList();
+	InsertItem(index,newItem);
+
 	//Select the first entry
-	m_wndList.SetItemState(0,LVNI_SELECTED,LVNI_SELECTED);
+	m_wndList.SetItemState(index,LVNI_SELECTED,LVNI_SELECTED);
 	UpdateControls();
+
 	//Set the Focus to the description field
 	m_NameEdit.SetFocus();
 	m_NameEdit.SetSel(0,-1,true);
-}
-
-void COptionPageFileClean::OnSort()
-{
-	//We need to build up a new array and assign it back to our member array
-	CFileCleanItemArray tempArray;
-
-	//Copy the array
-	tempArray.RemoveAll();
-	int i;
-	for (i = 0; i < m_ItemArray.GetSize(); i++)
-	{
-		tempArray.InsertSorted(m_ItemArray.GetAt(i),true,true);
-	}
-
-	//Copy Back
-	UpdateItems(tempArray);
-
-	//User Interface updaten
-	RefillList();
 }
 
 void COptionPageFileClean::OnLeavePattern()
 {
 	CFileCleanItem TestItem;
 
-	m_PatternEdit.GetWindowText(TestItem.strPattern);
+	CString text;
+	m_PatternEdit.GetWindowText(text);
+	TestItem.SetPattern(text);
 
 	//Test if valid
 	if (!TestItem.PatternIsValid())
 	{
 		//Not valid: Show Message to the user
 		CString strMsg;
-		strMsg.Format(STE_FILECLEAN_INVALIDPATTERN,TestItem.strPattern);
+		strMsg.Format(STE_FILECLEAN_INVALIDPATTERN,TestItem.GetPattern());
 		AfxMessageBox(strMsg,MB_OK | MB_ICONSTOP,0);
 
 		//Get focus back
@@ -598,7 +603,81 @@ void COptionPageFileClean::OnLeavePattern()
 		//I do not want to cancel actions like pressing the Ok-Button etc., which
 		// will happen, if we take the focus back. Now it happens only for the
 		// first try (to close the dialog).
-		//The vaildity of a pattern will be checked before deleting files anyway.
+		//The validity of a pattern will be checked before deleting files anyway.
 	}
 }
 
+
+void COptionPageFileClean::OnLvnDeleteitemOptionsFilecleanList(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	delete reinterpret_cast<CFileCleanItem*>(m_wndList.GetItemData(pNMLV->iItem));
+
+	*pResult = 0;
+}
+
+
+void COptionPageFileClean::InsertItem(int index, const CFileCleanItem& item)
+{
+	LVITEM lvi = GetLVITEM();
+	InsertItem(index,lvi,item);
+}
+
+void COptionPageFileClean::InsertItem( int index, LVITEM &lvi, const CFileCleanItem& a )
+{
+	CFileCleanItem* item = new CFileCleanItem(a);
+
+	//Item specific stuff
+	lvi.lParam = reinterpret_cast<LPARAM>(item);
+	lvi.iItem = index;
+
+	//First Column
+	const_cast<LPCTSTR&>(lvi.pszText) = item->GetDescription();
+	lvi.iSubItem = 0;
+	m_wndList.InsertItem(&lvi);
+
+	//Second Column
+	m_wndList.SetItemText(index,1,item->GetPattern());
+
+	//Third Column
+	CString strRecursive;
+	strRecursive.LoadString(item->IsRecursive() ? STE_FILECLEAN_RECURSIVE : STE_FILECLEAN_NOTRECURSIVE);
+	m_wndList.SetItemText(index,2,strRecursive);
+
+	//Fourth Column
+	m_wndList.SetItemText(index,3,GetFileHandlingName(item));
+}
+
+void COptionPageFileClean::OnLvnKeydownOptionsFilecleanList(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
+	
+	switch (pLVKeyDow->wVKey) {
+		case _T('A'):
+			if (::GetKeyState(VK_CONTROL) >> 15 & 1)
+				m_wndList.SetItemState(-1,LVIS_SELECTED,LVIS_SELECTED);
+			break;
+		case VK_DELETE:
+			{
+				m_wndList.SetRedraw(FALSE);
+
+				int index;
+
+				while ((index = m_wndList.GetNextItem(-1,LVNI_SELECTED|LVNI_ALL)) != -1) 
+				{
+					if (!ShouldBeDisabled(*reinterpret_cast<CFileCleanItem*>(m_wndList.GetItemData(index))))
+						m_wndList.DeleteItem(index);
+				}
+
+				m_wndList.SetRedraw(TRUE);
+			}
+			break;
+	}
+
+	*pResult = 0;
+}
+
+bool COptionPageFileClean::ShouldBeDisabled(const CFileCleanItem& item)
+{
+	return item.GetFileHandling() == CFileCleanItem::protectbydefault;
+}
