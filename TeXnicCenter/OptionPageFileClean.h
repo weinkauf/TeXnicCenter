@@ -43,6 +43,7 @@
 #include "FileClean.h"
 #include "PersistPosEdit.h"
 #include "EditMenuButtonOpt.h"
+#include "SortListCtrl.h"
 
 /**	Options for cleaning temporary files.
 
@@ -66,13 +67,15 @@ public:
 	{
 		IDD = IDD_OPTIONS_FILECLEAN
 	};
+
+private:
 	CButton m_DeleteBtn;
 	CEditMenuButtonOpt m_PHInsertBtn;
 	CButton m_RecursiveBtn;
 	CPersistPosEdit m_PatternEdit;
 	CEdit m_NameEdit;
 	CComboBox m_HandleBox;
-	CListCtrl m_wndList;
+	SortListCtrl m_wndList;
 	BOOL m_bConfirm;
 	//}}AFX_DATA
 
@@ -80,7 +83,7 @@ public:
 	// Overrides
 	// ClassWizard generate virtual function overrides
 //{{AFX_VIRTUAL(COptionPageFileClean)
-public:
+protected:
 	virtual void OnOK();
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
@@ -91,34 +94,47 @@ protected:
 	// Generated message map functions
 	//{{AFX_MSG(COptionPageFileClean)
 	virtual BOOL OnInitDialog();
+
+private:
 	afx_msg void OnChangeName();
 	afx_msg void OnChangePattern();
 	afx_msg void OnSelchangeHandling();
 	afx_msg void OnRecursive();
 	afx_msg void OnDelete();
 	afx_msg void OnNew();
-	afx_msg void OnSort();
 	afx_msg void OnLeavePattern();
 	afx_msg void OnListItemchanged(NMHDR* pNMHDR, LRESULT* pResult);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
 //Methods
-protected:
-	void UpdateItems(CFileCleanItemArray& copyItems);
-	void RefillList();
+private:
+	void Populate();
+
+	void InsertItem( int index, LVITEM &lvi, const CFileCleanItem& a);
+	void InsertItem(int index, const CFileCleanItem& item);
 	void UpdateControls();
+
+	static bool ShouldBeDisabled(const CFileCleanItem& item);
 	void UpdateControlsState(bool bEnable = true);
-	CFileCleanItem* GetSelectedFCItem();
+	CFileCleanItem* GetSelectedFCItem(int* index = 0);
 	void UpdateSelectedListItem();
 	CString GetFileHandlingName(CFileCleanItem* pItem);
 
 //Attributes
 private:
-	CFileCleanItemArray m_ItemArray;
 	//CImageList m_images;
 	bool m_bUpdatingList;
 	bool m_bItemChangeLock;
+
+	afx_msg void OnLvnDeleteitemOptionsFilecleanList(NMHDR *pNMHDR, LRESULT *pResult);
+	static int CompareDescription(LPARAM l1, LPARAM l2);
+	static int ComparePattern(LPARAM l1, LPARAM l2);
+	static int CompareRecursive(LPARAM l1, LPARAM l2);
+	static int CompareAction(LPARAM l1, LPARAM l2);
+	static LVITEM GetLVITEM();
+
+	afx_msg void OnLvnKeydownOptionsFilecleanList(NMHDR *pNMHDR, LRESULT *pResult);
 };
 
 //{{AFX_INSERT_LOCATION}}

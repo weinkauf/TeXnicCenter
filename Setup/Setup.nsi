@@ -30,6 +30,7 @@ SetCompressor /SOLID lzma
 
 !define MUI_COMPONENTSPAGE_SMALLDESC
 
+
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
@@ -60,7 +61,11 @@ var ICONS_GROUP
 
 ; Language files
 !insertmacro MUI_LANGUAGE "English"
-;!insertmacro MUI_LANGUAGE "German"
+!insertmacro MUI_LANGUAGE "German"
+
+; Reserve files
+!insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
+!insertmacro MUI_RESERVEFILE_LANGDLL
 
 !define VERSION "2.0.0.0"
 
@@ -112,13 +117,17 @@ FunctionEnd
 LangString desc_inst_typical ${LANG_ENGLISH} "Typical (Recommended)"
 LangString desc_inst_compact ${LANG_ENGLISH} "Compact (Requires less space)"
 
-;LangString desc_inst_typical ${LANG_GERMAN} "Standard"
-;LangString desc_inst_compact ${LANG_GERMAN} "Minimal"
+LangString documentation_folder ${LANG_ENGLISH} "Documentation"
+LangString documentation_folder ${LANG_GERMAN} "Dokumentation"
+
+LangString desc_inst_typical ${LANG_GERMAN} "Standard"
+LangString desc_inst_compact ${LANG_GERMAN} "Minimal"
 
 InstType "$(desc_inst_typical)"
 InstType "$(desc_inst_compact)"
 
 ; English section descriptions
+
 LangString desc_core ${LANG_ENGLISH} "${PRODUCT_NAME} core components"
 LangString desc_rt ${LANG_ENGLISH} "Runtime libraries"
 LangString desc_help ${LANG_ENGLISH} "Help for TeXnicCenter and LaTeX reference"
@@ -128,9 +137,35 @@ LangString desc_app_files ${LANG_ENGLISH} "Application Files"
 LangString desc_help_files ${LANG_ENGLISH} "Help Files"
 LangString desc_latex_templ ${LANG_ENGLISH} "LaTeX Templates"
 
-;LangString desc_app_files ${LANG_GERMAN} "Programm-Dateien"
-;LangString desc_help_files ${LANG_GERMAN} "Hilfe-Dateien"
-;LangString desc_latex_templ ${LANG_GERMAN} "LaTeX-Vorlagen"
+LangString texniccenter_help ${LANG_ENGLISH} "TeXnicCenter Help"
+LangString texniccenter_link ${LANG_ENGLISH} "TeXnicCenter: The (La)TeX IDE"
+
+LangString mbox_uninstall_success ${LANG_ENGLISH} "$(^Name) has been successfully uninstalled."
+LangString mbox_uninstall_question ${LANG_ENGLISH} "Do you want to uninstall $(^Name) and all its components?"
+
+LangString sec_dictionaries ${LANG_ENGLISH} "Dictionaries"
+LangString sec_create_desktop_link ${LANG_ENGLISH} "Create a link on the desktop"
+
+
+; German section descriptions
+
+LangString desc_core ${LANG_GERMAN} "${PRODUCT_NAME} Hauptkomponente"
+LangString desc_rt ${LANG_GERMAN} "Laufzeit-Bibliotheken"
+LangString desc_help ${LANG_GERMAN} "TeXnicCenter Hilfe und LaTeX Referenz"
+LangString desc_templates ${LANG_GERMAN} "Projekt- und Dokument-Vorlagen"
+
+LangString desc_app_files ${LANG_GERMAN} "Programmdateien"
+LangString desc_help_files ${LANG_GERMAN} "Hilfe-Dateien"
+LangString desc_latex_templ ${LANG_GERMAN} "LaTeX Vorlagen"
+
+LangString texniccenter_help ${LANG_GERMAN} "TeXnicCenter Hilfe"
+LangString texniccenter_link ${LANG_GERMAN} "TeXnicCenter, die (La)TeX Entwicklungsumgebung"
+
+LangString mbox_uninstall_success ${LANG_GERMAN} "$(^Name) wurde erfolgreich deinstalliert."
+LangString mbox_uninstall_question ${LANG_GERMAN} "Möchten Sie $(^Name) und alle seinen Komponenten deinstallieren?"
+
+LangString sec_dictionaries ${LANG_GERMAN} "Wörterbücher"
+LangString sec_create_desktop_link ${LANG_GERMAN} "Desktop Verknüpfung erstellen"
 
 var "ALREADY_INSTALLED"
 
@@ -192,7 +227,7 @@ skip:
   SetShellVarContext all
   
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\TeXnicCenter.lnk" "$INSTDIR\TeXnicCenter.exe"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\TeXnicCenter.lnk" "$INSTDIR\TeXnicCenter.exe" "" "" "" "" "" "$(texniccenter_link)"
   
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
@@ -213,7 +248,7 @@ SectionIn 1 3
   File /r "..\Output\Product\Unicode Release\Help"
   
   SetShellVarContext all
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\TeXnicCenter Help.lnk" "$INSTDIR\Help\TeXnicCenter.chm" "" "" "" "" "" "TeXnicCenter Help"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\TeXnicCenter Help.lnk" "$INSTDIR\Help\TeXnicCenter.chm" "" "" "" "" "" "$(texniccenter_help)"
 SectionEnd
 
 Section "$(desc_latex_templ)" sec_templates
@@ -231,7 +266,7 @@ SectionIn 1 3
   WriteRegStr HKCU "${PRODUCT_SOFTWARE_KEY}\Settings\Options\DocumentTemplatePaths" "String0" "$INSTDIR\Templates\Documents"
 SectionEnd
 
-SectionGroup "Dictionaries"
+SectionGroup "$(sec_dictionaries)"
 !define PATH_LANG "$INSTDIR\Dictionaries"
 
 Section "Deutsch"
@@ -257,10 +292,10 @@ SectionEnd
 
 SectionGroupEnd
 
-Section "Create a link on the desktop" sec_desktop_link
+Section "$(sec_create_desktop_link)" sec_desktop_link
 SectionIn 1 3
   SetShellVarContext all
-  CreateShortCut "$DESKTOP\TeXnicCenter.lnk" "$INSTDIR\TeXnicCenter.exe" "" "" "" "" "" "The (La)TeX IDE"
+  CreateShortCut "$DESKTOP\TeXnicCenter.lnk" "$INSTDIR\TeXnicCenter.exe" "" "" "" "" "" "$(texniccenter_link)"
 SectionEnd
 
 Section "Add TeXnicCenter to the 'Send To' menu" sec_send_to_link
@@ -309,7 +344,7 @@ FunctionEnd
 
 Function un.onInit
   !insertmacro MUI_UNGETLANGUAGE
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Möchten Sie $(^Name) und alle seinen Komponenten deinstallieren?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(mbox_uninstall_question)" IDYES +2
   Abort
 FunctionEnd
 

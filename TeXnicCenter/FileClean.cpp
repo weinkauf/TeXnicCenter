@@ -215,6 +215,45 @@ bool CFileCleanItem::SerializeFromRegistry(CBCGRegistryEx &reg)
 	return true;
 }
 
+const CString& CFileCleanItem::GetDescription() const
+{
+	return strDescription;
+}
+
+void CFileCleanItem::SetDescription( const CString& val )
+{
+	strDescription = val;
+}
+
+const CString& CFileCleanItem::GetPattern() const
+{
+	return strPattern;
+}
+
+void CFileCleanItem::SetPattern( const CString& val )
+{
+	strPattern = val;
+}
+
+bool CFileCleanItem::IsRecursive() const
+{
+	return bRecursive;
+}
+
+void CFileCleanItem::SetRecursive( bool val )
+{
+	bRecursive = val;
+}
+
+CFileCleanItem::tagFileHandling CFileCleanItem::GetFileHandling() const
+{
+	return tFileHandling;
+}
+
+void CFileCleanItem::SetFileHandling( tagFileHandling val )
+{
+	tFileHandling = val;
+}
 //////////////////////////////////////////////////////////////////////
 // CFileCleanItemArray
 //
@@ -265,12 +304,12 @@ bool CFileCleanItemArray::SerializeToRegistry(LPCTSTR strStartSection)
 		CFileCleanItem* pTemp = &GetAt(i);
 
 		//Is it a default item? If yes, continue, because they do not go to the registry
-		if (pTemp->tFileHandling == CFileCleanItem::protectbydefault)
+		if (pTemp->GetFileHandling() == CFileCleanItem::protectbydefault)
 			continue;
 
 		//Create a Title
 		CString strTitle;
-		strTitle.Format(_T("%s_%d"),pTemp->strDescription,pTemp->tFileHandling);
+		strTitle.Format(_T("%s_%d"),pTemp->GetDescription(),pTemp->GetFileHandling());
 
 		//Write the item
 		reg.PushKey();
@@ -404,7 +443,7 @@ bool CFileClean::Initialize(CFileCleanItemArray& ItemArray)
 	for (i = 0; i < nsize; i++)
 	{
 		//Filling the List of files to be deleted
-		if (ItemArray[i].tFileHandling == CFileCleanItem::clean)
+		if (ItemArray[i].GetFileHandling() == CFileCleanItem::clean)
 		{
 			ItemArray[i].Expand(pProject,
 			                    strCurrentPath.IsEmpty() ? (LPCTSTR) NULL : strCurrentPath,
@@ -412,8 +451,8 @@ bool CFileClean::Initialize(CFileCleanItemArray& ItemArray)
 		}
 
 		//Filling the List of files to be protected
-		if ((ItemArray[i].tFileHandling == CFileCleanItem::protect)
-		        || (ItemArray[i].tFileHandling == CFileCleanItem::protectbydefault))
+		if ((ItemArray[i].GetFileHandling() == CFileCleanItem::protect)
+		        || (ItemArray[i].GetFileHandling() == CFileCleanItem::protectbydefault))
 		{
 			ItemArray[i].Expand(pProject,
 			                    strCurrentPath.IsEmpty() ? (LPCTSTR) NULL : strCurrentPath,

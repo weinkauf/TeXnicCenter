@@ -521,7 +521,6 @@
 #define IDC_TITLE_VIEWCMD               1181
 #define IDC_OPTIONS_FILECLEAN_DELETE    2048
 #define IDC_SEARCH_BROWSE_SEARCHIN      2049
-#define IDC_OPTIONS_FILECLEAN_SORT      2050
 #define IDC_OPTIONS_DEFAULT_PATH_EDIT   2051
 #define IDC_OPTIONS_SAVE_NEWDOCS        2052
 #define IDC_ADVTOOLS_USEOUTPUT          2053
@@ -778,6 +777,7 @@
 #define IDD_PROFILE_POSTPROCESSOR       16114
 #define IDD_PROFILE_LATEX               16115
 #define IDD_DOCUMENT_NEW                16116
+#define IDD_OPTIONS_FILECLEAN1          16117
 #define ID_VIEW_BAR1                    32760
 #define ID_VIEW_BAR2                    32761
 #define ID_URL_TCHOME                   32768
@@ -1494,7 +1494,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57678
 #define _APS_NEXT_COMMAND_VALUE         38601
-#define _APS_NEXT_CONTROL_VALUE         1378
+#define _APS_NEXT_CONTROL_VALUE         1379
 #define _APS_NEXT_SYMED_VALUE           57772
 #endif
 #endif
