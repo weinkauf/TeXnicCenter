@@ -111,8 +111,8 @@ private:
 private:
 	void Populate();
 
-	void InsertItem( int index, LVITEM &lvi, const CFileCleanItem& a);
-	void InsertItem(int index, const CFileCleanItem& item);
+	int InsertItem( int index, LVITEM &lvi, const CFileCleanItem& a);
+	int InsertItem(int index, const CFileCleanItem& item);
 	void UpdateControls();
 
 	static bool ShouldBeDisabled(const CFileCleanItem& item);
