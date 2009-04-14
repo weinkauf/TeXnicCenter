@@ -275,6 +275,7 @@ void COptionPageFileClean::UpdateControls()
 {
 	//Get the selected item
 	CFileCleanItem* pItem = GetSelectedFCItem();
+
 	if (!pItem)
 	{
 		UpdateControlsState(false);
@@ -511,7 +512,16 @@ void COptionPageFileClean::OnListItemchanged(NMHDR* pNMHDR,LRESULT* pResult)
 		// - We're considering only selected Items
 		if (pNMListView->uNewState & LVIS_SELECTED)
 		{
-			//Lock this event. Should not be considered, while executing UpdateControls
+			if (m_wndList.GetSelectedCount() > 1)
+				UpdateControlsState(false);
+			else {
+				//Lock this event. Should not be considered, while executing UpdateControls
+				m_bItemChangeLock = true;
+				UpdateControls();
+				m_bItemChangeLock = false;
+			}
+		}
+		else if (m_wndList.GetSelectedCount() == 1) {
 			m_bItemChangeLock = true;
 			UpdateControls();
 			m_bItemChangeLock = false;
@@ -569,10 +579,12 @@ void COptionPageFileClean::OnNew()
 	const int index = 0;
 
 	//Add it at the top of the array
-	InsertItem(index,newItem);
+	const int pos = InsertItem(index,newItem);
 
 	//Select the first entry
-	m_wndList.SetItemState(index,LVNI_SELECTED,LVNI_SELECTED);
+	m_wndList.SetItemState(pos,LVNI_SELECTED,LVNI_SELECTED);
+	m_wndList.EnsureVisible(pos,FALSE); // Make sure the item becomes visible
+
 	UpdateControls();
 
 	//Set the Focus to the description field
@@ -617,13 +629,13 @@ void COptionPageFileClean::OnLvnDeleteitemOptionsFilecleanList(NMHDR *pNMHDR, LR
 }
 
 
-void COptionPageFileClean::InsertItem(int index, const CFileCleanItem& item)
+int COptionPageFileClean::InsertItem(int index, const CFileCleanItem& item)
 {
 	LVITEM lvi = GetLVITEM();
-	InsertItem(index,lvi,item);
+	return InsertItem(index,lvi,item);
 }
 
-void COptionPageFileClean::InsertItem( int index, LVITEM &lvi, const CFileCleanItem& a )
+int COptionPageFileClean::InsertItem( int index, LVITEM &lvi, const CFileCleanItem& a )
 {
 	CFileCleanItem* item = new CFileCleanItem(a);
 
@@ -634,18 +646,20 @@ void COptionPageFileClean::InsertItem( int index, LVITEM &lvi, const CFileCleanI
 	//First Column
 	const_cast<LPCTSTR&>(lvi.pszText) = item->GetDescription();
 	lvi.iSubItem = 0;
-	m_wndList.InsertItem(&lvi);
+	const int result = m_wndList.InsertItem(&lvi);
 
 	//Second Column
-	m_wndList.SetItemText(index,1,item->GetPattern());
+	m_wndList.SetItemText(result,1,item->GetPattern());
 
 	//Third Column
 	CString strRecursive;
 	strRecursive.LoadString(item->IsRecursive() ? STE_FILECLEAN_RECURSIVE : STE_FILECLEAN_NOTRECURSIVE);
-	m_wndList.SetItemText(index,2,strRecursive);
+	m_wndList.SetItemText(result,2,strRecursive);
 
 	//Fourth Column
-	m_wndList.SetItemText(index,3,GetFileHandlingName(item));
+	m_wndList.SetItemText(result,3,GetFileHandlingName(item));
+
+	return result;
 }
 
 void COptionPageFileClean::OnLvnKeydownOptionsFilecleanList(NMHDR *pNMHDR, LRESULT *pResult)
@@ -661,12 +675,11 @@ void COptionPageFileClean::OnLvnKeydownOptionsFilecleanList(NMHDR *pNMHDR, LRESU
 			{
 				m_wndList.SetRedraw(FALSE);
 
-				int index;
-
-				while ((index = m_wndList.GetNextItem(-1,LVNI_SELECTED|LVNI_ALL)) != -1) 
-				{
-					if (!ShouldBeDisabled(*reinterpret_cast<CFileCleanItem*>(m_wndList.GetItemData(index))))
-						m_wndList.DeleteItem(index);
+				for (int i = m_wndList.GetItemCount() - 1; i >= 0; --i) {
+					if (m_wndList.GetItemState(i,LVIS_SELECTED) == LVIS_SELECTED) {
+						if (!ShouldBeDisabled(*reinterpret_cast<CFileCleanItem*>(m_wndList.GetItemData(i))))
+							m_wndList.DeleteItem(i);
+					}
 				}
 
 				m_wndList.SetRedraw(TRUE);
