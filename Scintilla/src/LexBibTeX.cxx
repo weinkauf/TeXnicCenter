@@ -1,6 +1,6 @@
 // LexBibTeX.cxx - general BibTeX coloring scheme
 // Copyright 2008 by Sergiu Dotenco
-// Version: September 7, 2008
+// Version: April 18, 2009
 
 #include <stdlib.h>
 #include <string.h>
@@ -24,12 +24,14 @@ using namespace Scintilla;
 #endif
 
 namespace {
+	const std::size_t ShortestEntryNameLength = 3;
+
 	bool IsKnownEntryName(const char* name)
 	{
 		static const char* entries[] = {
 			"article","book","booklet","conference","inbook",
 			"incollection","inproceedings","manual","mastersthesis",
-			"misc","phdthesis","proceedings","techreport","unpublished","string"};
+			"misc","phdthesis","proceedings","techreport","unpublished","string","url"};
 		static const std::size_t n = sizeof(entries) / sizeof(*entries);
 
 		return std::find_if(entries,entries + n,std::bind2nd(std::ptr_fun(EqualCaseInsensitive),
@@ -248,8 +250,8 @@ namespace {
 				if (collect_entry_name) {
 					buffer += static_cast<char>(sc.ch);
 
-					// Shortest known entry name is 4 characters long
-					if (buffer.size() >= 4) {
+					// Shortest known entry name is ShortestEntryNameLength characters long
+					if (buffer.size() >= ShortestEntryNameLength) {
 						if (IsKnownEntryName(buffer.c_str()))
 							sc.ChangeState(SCE_BIBTEX_ENTRY);
 						else

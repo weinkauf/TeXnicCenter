@@ -154,6 +154,7 @@ LEXOBJS=\
 	$(DIR_O)\LexBaan.obj \
 	$(DIR_O)\LexBash.obj \
 	$(DIR_O)\LexBasic.obj \
+	$(DIR_O)\LexBibTeX.obj \
 	$(DIR_O)\LexBullant.obj \
 	$(DIR_O)\LexCaml.obj \
 	$(DIR_O)\LexCLW.obj \
@@ -376,6 +377,8 @@ $(DIR_O)\LexBaan.obj: ..\src\LexBaan.cxx $(LEX_HEADERS)
 $(DIR_O)\LexBash.obj: ..\src\LexBash.cxx $(LEX_HEADERS)
 
 $(DIR_O)\LexBasic.obj: ..\src\LexBasic.cxx $(LEX_HEADERS)
+
+$(DIR_O)\LexBibTeX.obj: ..\src\LexBibTeX.cxx $(LEX_HEADERS)
 
 $(DIR_O)\LexBullant.obj: ..\src\LexBullant.cxx $(LEX_HEADERS)
 
