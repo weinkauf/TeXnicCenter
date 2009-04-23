@@ -122,6 +122,7 @@ void CFileView::OnParsingFinished()
 	HTREEITEM parent;
 
 	const CString projectdir = GetProject()->GetDirectory();
+	const CString maindir = CPathTool::GetDirectory(GetProject()->GetMainPath());
 
 	// Maps the (flat) relative path and item type to a parent tree item
 	typedef std::map<std::pair<CString,int>,HTREEITEM> ParentDirectoryContainerType;
@@ -135,8 +136,8 @@ void CFileView::OnParsingFinished()
 		const CStructureItem &si = *it;
 		text = CPathTool::GetFile(it->GetTitle());
 
-		CString reldir = CPathTool::GetRelativePath(projectdir,CPathTool::GetParentDirectory(
-			CPathTool::GetAbsolutePath(projectdir,it->GetPath())),TRUE,TRUE);
+		CString reldir = CPathTool::GetRelativePath(maindir,CPathTool::GetParentDirectory(
+			CPathTool::GetAbsolutePath(maindir,it->GetPath())),TRUE,TRUE);
 
 		const int i = std::distance(a.begin(),it);
 
