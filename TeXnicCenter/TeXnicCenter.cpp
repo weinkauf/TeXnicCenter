@@ -207,14 +207,17 @@ BEGIN_MESSAGE_MAP(CTeXnicCenterApp, CProjectSupportingWinApp)
 	ON_COMMAND_RANGE(ID_URL_FIRST, ID_URL_LAST, OnURL)
 END_MESSAGE_MAP()
 
+const int MaxRecentProjects = 10;
+const int MaxRecentDocuments = MaxRecentProjects;
+const int RecentFileListMaxDisplayLength = 75;
+
 /////////////////////////////////////////////////////////////////////////////
 // CTeXnicCenterApp Konstruktion
 
 CTeXnicCenterApp::CTeXnicCenterApp()
-		: CProjectSupportingWinApp(),
-		m_bEndSession(FALSE),
+		: m_bEndSession(FALSE),
 		m_bSavingAll(FALSE),
-		m_recentProjectList(1, _T("Recent Project List"), _T("Project%d"), 4),
+		m_recentProjectList(1, _T("Recent Project List"), _T("Project%d"), MaxRecentProjects,RecentFileListMaxDisplayLength),
 		m_bTabFlatBorders(FALSE),
 		m_pSpell(NULL),
 		m_pBackgroundThread(NULL)
@@ -299,7 +302,8 @@ BOOL CTeXnicCenterApp::InitInstance()
 	m_strRegistryRoot += _T("\\");
 	m_strRegistryRoot += m_pszAppName;
 
-	LoadStdProfileSettings(10);
+	LoadStdProfileSettings(MaxRecentProjects);
+	m_pRecentFileList->m_nMaxDisplayLength = RecentFileListMaxDisplayLength;
 
 	CConfiguration::GetInstance()->Serialize(CConfiguration::Load);
 
@@ -1458,7 +1462,7 @@ void CTeXnicCenterApp::UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &rec
 		for (i = pMenu->GetMenuItemCount(); i >= 0; --i)
 			pMenu->DeleteMenu(i, MF_BYPOSITION);
 
-		for (i = 0; i < recentFileList.GetSize() && i < 4; i++)
+		for (i = 0; i < recentFileList.GetSize(); i++)
 		{
 			// get project path
 			CString strDisplayName;
@@ -1502,7 +1506,7 @@ void CTeXnicCenterApp::UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &rec
 		CMFCPopupMenuBar *pMenu = (CMFCPopupMenuBar*)pCmdUI->m_pOther;
 		BOOL bChange = FALSE;
 
-		for (int i = 0; i < recentFileList.GetSize() && i < 4; i++)
+		for (int i = 0; i < recentFileList.GetSize(); i++)
 		{
 			// get project path
 			CString strDisplayName;
@@ -1521,10 +1525,12 @@ void CTeXnicCenterApp::UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &rec
 			if (i < 10)
 			{
 				CString strFormat;
+
 				if (i == 9)
 					strFormat.Format(_T("1&0 %s"), strDisplayName);
 				else
 					strFormat.Format(_T("&%d %s"), i + 1, strDisplayName);
+
 				strDisplayName = strFormat;
 			}
 
@@ -1569,7 +1575,12 @@ void CTeXnicCenterApp::OnFileMRUProject(UINT unID)
 	int nIndex = unID - ID_FILE_MRU_PROJECT_FIRST;
 
 	ASSERT(nIndex >= 0 && nIndex < m_recentProjectList.GetSize());
-	if (!OpenProject(m_recentProjectList[nIndex]))
+
+	const CString filename = m_recentProjectList[nIndex];
+
+	if (OpenProject(filename))
+		m_recentProjectList.Add(filename); // Place on top
+	else
 		m_recentProjectList.Remove(nIndex);
 }
 
@@ -1625,7 +1636,7 @@ BOOL CTeXnicCenterApp::OnDDECommand(LPTSTR lpszCommand)
 
 	/*
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// handle projec specific stuff
+	// handle project specific stuff
 	m_pProjectDocTemplate->GetProjectString( strProjectExtension, CProjectTemplate::filterExt );
 
 	if( strFileName.Left( 7 ) == _T("[open(\"") )

@@ -717,6 +717,10 @@
 			desc="Inserts ??? symbol"
 			parameters="0"
 		/>
+    	<lxCommand name="\eqref"
+			desc="Inserts an equation reference"
+			parameters="1"
+		/>
 		<lxCommand name="\wp" 
 			icon="mathmisc.bmp"
 			index="10"

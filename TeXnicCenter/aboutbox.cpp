@@ -87,7 +87,7 @@ const TCHAR DISPLAY_BITMAP      = _T('\b');
 // in the array!
 LPCTSTR const pArrCredit[] =
 {
-	_T("Copyright © 1999-2008\t"),
+	_T("Copyright © 1999-2009\t"),
 	_T("www.ToolsCenter.org\t"),
 	_T(""),
 	_T("Portions Copyright © 1998-2002 by Cristi Posea\f"),
@@ -196,7 +196,7 @@ LPCTSTR const pArrCredit[] =
 	_T("")
 };
 
-const int ARRAYCOUNT = sizeof(pArrCredit)/sizeof(TCHAR*);
+const int ARRAYCOUNT = sizeof(pArrCredit) / sizeof(*pArrCredit);
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 		,lf_(GetDisplayFont())

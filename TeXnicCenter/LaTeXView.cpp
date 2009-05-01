@@ -366,7 +366,9 @@ void LaTeXView::InstantAdvice()
 					instant_advice_tip_->SetWindowText(lc->GetExpandBefore() + lc->ToLaTeX() + lc->GetExpandAfter());
 					instant_advice_tip_->ShowWindow(SW_SHOW);
 					SetFocus();
-					instant_advice_tip_->SetTimer(1,5000,0);
+
+					const UINT advice_tip_timeout = 5000;
+					instant_advice_tip_->SetTimer(1,advice_tip_timeout,0);
 				}
 			}
 			else
