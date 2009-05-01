@@ -1574,17 +1574,17 @@ CAPTION "Finden"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     LTEXT           "&Suchen nach:",IDC_STATIC,4,8,46,8
-    EDITTEXT        1152,52,7,157,12,ES_AUTOHSCROLL | WS_GROUP
-    CONTROL         "Nur &ganze Wörter",IDC_EDIT_WHOLE_WORD,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,4,27,73,10
+    EDITTEXT        1152,52,6,157,12,ES_AUTOHSCROLL | WS_GROUP
+    CONTROL         "Nur &ganze Wörter",IDC_EDIT_WHOLE_WORD,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,4,23,73,10
     CONTROL         "Groß-/&Kleinschreibung beachten",IDC_EDIT_MATCH_CASE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,38,118,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,34,118,10
     GROUPBOX        "Richtung",IDC_STATIC,141,21,68,35,WS_GROUP
     CONTROL         "A&ufwärts",1056,"Button",BS_AUTORADIOBUTTON | WS_GROUP,145,30,43,12
     CONTROL         "A&bwärts",1057,"Button",BS_AUTORADIOBUTTON,145,41,44,12
     DEFPUSHBUTTON   "&Weitersuchen",IDOK,216,5,60,14,WS_GROUP
     PUSHBUTTON      "Abbrechen",IDCANCEL,216,23,60,14
     CONTROL         "Verwende reguläre Ausdrücke",IDC_REGULAR_EXPRESSION,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,49,118,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,45,118,10
 END
 
 IDD_OUTPUTWIZARD_DVIVIEWER DIALOGEX 0, 0, 285, 150

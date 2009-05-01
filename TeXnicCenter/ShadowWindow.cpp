@@ -42,8 +42,10 @@ LRESULT CodeView::ShadowWindow::OnChar(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lP
 	if (!incremental_search_enabled)
 		DefWindowProc(); // Pass the message to Scintilla
 
+	bool is_new_line = IsNewLine(static_cast<TCHAR>(wParam));
+
 	// Autoindent: Line has been added
-	if (wParam == VK_RETURN) {
+	if (is_new_line) {
 		const int line = view->GetCurrentLine();
 
 		if (line > 0) {
@@ -63,7 +65,7 @@ LRESULT CodeView::ShadowWindow::OnChar(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lP
 
 	// Incremental search
 	if (incremental_search_enabled) { // Absorb the message
-		if (wParam == VK_ESCAPE || wParam == VK_RETURN)
+		if (wParam == VK_ESCAPE || is_new_line)
 			EnableIncrementalSearch(false);
 		else if (wParam == VK_BACK) {
 			if (!search_text.IsEmpty())

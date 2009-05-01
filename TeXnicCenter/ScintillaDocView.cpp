@@ -811,6 +811,9 @@ void CScintillaView::OnEditFindReplace(BOOL bFindOnly)
   //Validate our parameters
 	ASSERT_VALID(this);
 
+	CScintillaCtrl& rCtrl = GetCtrl();
+	CString strFind(rCtrl.GetSelText());
+
 	m_bFirstSearch = TRUE;
 	if (_scintillaEditState.pFindReplaceDlg != NULL)
 	{
@@ -818,6 +821,14 @@ void CScintillaView::OnEditFindReplace(BOOL bFindOnly)
 		{
 			_scintillaEditState.pFindReplaceDlg->SetActiveWindow();
 			_scintillaEditState.pFindReplaceDlg->ShowWindow(SW_SHOW);
+
+			if (!strFind.IsEmpty()) // Set the new find string
+			{
+				CEdit* edit = static_cast<CEdit*>(_scintillaEditState.pFindReplaceDlg->GetDlgItem(1152));
+				edit->SetWindowText(strFind);
+				edit->SetSel(0,-1);
+			}
+
 			return;
 		}
 		else
@@ -828,8 +839,7 @@ void CScintillaView::OnEditFindReplace(BOOL bFindOnly)
 			ASSERT_VALID(this);
 		}
 	}
-  CScintillaCtrl& rCtrl = GetCtrl();
-	CString strFind(rCtrl.GetSelText());
+  
 	//if selection is empty or spans multiple lines use old find text
 	if (strFind.IsEmpty() || (strFind.FindOneOf(_T("\n\r")) != -1))
 		strFind = _scintillaEditState.strFind;

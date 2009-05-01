@@ -861,3 +861,8 @@ void CodeView::OnZoom( SCNotification* /*n*/ )
 	if (CConfiguration::GetInstance()->m_bShowLineNumbers)
 		UpdateLineNumberMargin();
 }
+
+bool CodeView::ShadowWindow::IsNewLine(TCHAR ch)
+{
+	return ch == VK_RETURN || ch == _T('\n');
+}
