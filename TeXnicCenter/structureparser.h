@@ -455,11 +455,12 @@ private:
 	@param nFileDepth
 	        The depth of the parsed files.
 	@param aSI
-	        Structure Item Array to insert structure elemements into.
+	        Structure Item Array to insert structure elements into.
 	 */
 	void ParseString(LPCTSTR lpText,int nLength,CCookieStack &cookies,const CString &strActualFile,
 	                 int nActualLine,int nFileDepth,StructureItemContainer &aSI);
 
+	const CString Unescape(const CString &tmp );
 	/**
 	Checks, if there is a LaTeX-command at the specified position.
 

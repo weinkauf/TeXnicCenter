@@ -46,6 +46,7 @@
 #include "bibtexentry.h"
 #include "bibtexfile.h"
 #include "LatexProject.h"
+#include "CharType.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -1046,13 +1047,13 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 					// Extract last comma separated element from list
 					nFound = bibPath.GetLength();
 
-			CString strPath(bibPath.Mid(nStart, nFound - nStart));
-			strPath.TrimLeft();
-			strPath.TrimRight();
-			strPath.TrimLeft(_T('"'));
-			strPath.TrimRight(_T('"'));
+			CString strPath = Unescape(bibPath.Mid(nStart, nFound - nStart));
+
+			strPath.Trim();
+			strPath.Trim(_T('"'));
+
 			//BibTeX takes only the .bib-Extension!
-			// And in \bibliography{...} the user has to omitt the extension!
+			// And in \bibliography{...} the user has to omit the extension!
 			// We could warn the user, if he uses an extension in \bibliography{...}
 			strPath += _T(".bib");
 			strPath = ResolveFileName(strPath);
@@ -1392,4 +1393,28 @@ BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
 void CStructureParser::CancelParsing()
 {
 	m_bCancel = TRUE;
+}
+
+const CString CStructureParser::Unescape(const CString &tmp )
+{
+	CString strPath;
+
+	int pos = 0;
+
+	while (pos < tmp.GetLength()) 
+	{
+		if (tmp[pos] == _T('\\')) {
+			++pos;
+
+			while (pos < tmp.GetLength() && CharTraitsT::IsAlnum(tmp[pos]))
+				++pos;
+		}
+
+		if (pos < tmp.GetLength())
+			strPath.AppendChar(tmp[pos]);
+
+		++pos;
+	}
+
+	return strPath;
 }
