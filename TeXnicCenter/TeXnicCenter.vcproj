@@ -2298,6 +2298,46 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\packages\beamer.xml"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							Outputs="$(OutDir)\Packages\$(InputFileName)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							Outputs="$(OutDir)\Packages\$(InputFileName)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Unicode Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							Outputs="$(OutDir)\Packages\$(InputFileName)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Unicode Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							Outputs="$(OutDir)\Packages\$(InputFileName)"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\packages\binops.bmp"
 					>
 					<FileConfiguration

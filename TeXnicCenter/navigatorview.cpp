@@ -74,11 +74,14 @@ BOOL NavigatorTreeCtrl::Create(CWnd *pwndParent)
 	CRect rect;
 	pwndParent->GetClientRect(rect);
 
-	DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | TVS_LINESATROOT | TVS_DISABLEDRAGDROP;
+	DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | TVS_LINESATROOT | TVS_DISABLEDRAGDROP |
+		TVS_HASBUTTONS | TVS_SHOWSELALWAYS;
 	bool vista = RunTimeHelper::IsVista();
 
 	if (!vista)
 		style |= TVS_HASLINES;
+	else
+		style |= TVS_TRACKSELECT;
 
 	// Override, Windows XP or higher theme thin edge
 	BOOL result = CWnd::CreateEx(WS_EX_CLIENTEDGE,WC_TREEVIEW,0,style,rect,pwndParent,0);
@@ -277,7 +280,7 @@ int NavigatorTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// modify list ctrl
 	SetImageList(&m_images,TVSIL_NORMAL);
 	SetImageList(&m_images,TVSIL_STATE);
-	ModifyStyle(0,TVS_HASBUTTONS | TVS_SHOWSELALWAYS | TVS_DISABLEDRAGDROP);
+
 	m_bFirstTime = FALSE;
 
 	using namespace std::tr1;

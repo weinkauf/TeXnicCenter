@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
+<lxCollection version="1" xmlns:txclxp="http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd">
+  <lxPackage name="beamer"
+		path=""
+		desc="Beamer commands"
+	>
+    <lxEnvironment name="frame"
+        parameters="1"
+        desc="Beamer environment"
+        icon="format.bmp"
+        index="6"
+        expafter="}&#xA;	&#xA;\end{frame}"
+        expbefore="\begin{"/>
+    <lxCommand name="\draw"	desc="Draw"/>
+    <lxCommand name="\usebeamercolor"	parameters="1"/>
+    <lxCommand name="\frametitle"	parameters="1"/>
+    <lxCommand name="\framesubtitle"	parameters="1"/>
+    <lxCommand name="\titlegraphic"	parameters="1"/>
+    <lxCommand name="\pause"/>
+    <lxCommand name="\titlepage"/>
+  </lxPackage>
+</lxCollection>

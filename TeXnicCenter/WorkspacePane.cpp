@@ -93,8 +93,10 @@ BOOL WorkspacePane::OnEraseBkgnd(CDC* pDC)
 	return client_ ? 1 : CDockablePane::OnEraseBkgnd(pDC);
 }
 
-void WorkspacePane::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
+void WorkspacePane::OnContextMenu(CWnd* pWnd, CPoint point)
 {
 	if (NavigatorTreeCtrl* t = dynamic_cast<NavigatorTreeCtrl*>(client_))
 		t->ShowContextMenu(point);
+	else
+		CDockablePane::OnContextMenu(pWnd,point);
 }

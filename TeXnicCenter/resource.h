@@ -1241,8 +1241,6 @@
 #define ID_INSERT_CDOTS                 33226
 #define ID_INSERT_VDOTS                 33227
 #define ID_INSERT_DDOTS                 33228
-#define ID_FILE_MRU_PROJECT_FIRST       33229
-#define ID_FILE_MRU_PROJECT_LAST        33230
 #define ID_URL_FIRST                    33231
 #define ID_URL_AUTHOR                   33232
 #define ID_URL_TCERROR                  33233
@@ -1486,6 +1484,8 @@
 #define ID_BUTTON38600                  38600
 #define IDR_TOOLBAR1                    57672
 #define IDR_BOOKMARK_VIEW               57672
+#define ID_FILE_MRU_PROJECT_FIRST       58080
+#define ID_FILE_MRU_PROJECT_LAST        58090
 
 // Next default values for new objects
 // 
