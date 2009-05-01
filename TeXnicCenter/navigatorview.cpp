@@ -42,7 +42,7 @@
 #include "OleDrop.h"
 
 BEGIN_MESSAGE_MAP(NavigatorTreeCtrl,CTreeCtrl)
-	ON_NOTIFY_REFLECT(TVN_SELCHANGED,&NavigatorTreeCtrl::OnSelchanged)
+	ON_NOTIFY_REFLECT(TVN_SELCHANGED,&NavigatorTreeCtrl::OnSelChanged)
 	ON_WM_CREATE()
 	ON_WM_SYSCOLORCHANGE()
 	ON_NOTIFY_REFLECT(NM_DBLCLK, &NavigatorTreeCtrl::OnNMDblclk)
@@ -299,7 +299,7 @@ int NavigatorTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-void NavigatorTreeCtrl::OnSelchanged(NMHDR* pNMHDR,LRESULT* pResult)
+void NavigatorTreeCtrl::OnSelChanged(NMHDR* pNMHDR,LRESULT* pResult)
 {
 	if (CLaTeXProject* p = GetProject())
 		p->SetCurrentStructureItem(((NM_TREEVIEW*)pNMHDR)->itemNew.lParam);
@@ -346,7 +346,14 @@ bool NavigatorTreeCtrl::IsFolder(HTREEITEM item) const
 
 void NavigatorTreeCtrl::OnNMDblclk(NMHDR* /*pNMHDR*/, LRESULT* /*pResult*/)
 {
-	if (!IsFolder(GetSelectedItem()))
+	UINT flags = 0;
+	
+	CPoint pt(GetMessagePos());
+	ScreenToClient(&pt);
+
+	HTREEITEM item = HitTest(pt,&flags);
+
+	if (item && (flags & TVHT_ONITEM) && !IsFolder(item))
 		GotoItem();
 }
 
