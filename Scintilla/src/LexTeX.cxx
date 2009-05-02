@@ -17,7 +17,7 @@
 // Version: June 22, 2007
 
 // Modifications for the TeXnicCenter Project by Sergiu Dotenco
-// Version: Mai 2, 2009
+// Version: May 2, 2009
 
 #include <stdlib.h>
 #include <string.h>

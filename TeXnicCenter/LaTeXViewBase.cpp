@@ -238,6 +238,8 @@ COLORREF LaTeXViewBase::GetAutomaticColor(int nColorIndex)
 			return RGB(0xFF,0xFF,0xC0);
 		case COLORINDEX_GROUP_NAME:
 			return RGB(0,110,150);
+		case COLORINDEX_DIGIT:
+			return RGB(75,30,200);
 		default:
 			ASSERT(false); //ColorIndex not found? Shouldn't happen. Please update.
 	}
