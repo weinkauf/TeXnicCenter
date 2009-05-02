@@ -206,16 +206,16 @@ COLORREF LaTeXViewBase::GetAutomaticColor(int nColorIndex)
 			return ::GetSysColor(COLOR_WINDOWTEXT);
 		case COLORINDEX_SELMARGIN:
 			return ::GetSysColor(COLOR_BTNFACE/*COLOR_SCROLLBAR*/);
-		case COLORINDEX_PREPROCESSOR:
+		case COLORINDEX_INLINE_MATH_COMMAND:
 			return RGB(0x00,0x00,0x80);
 		case COLORINDEX_COMMENT:
 			return RGB(0x80,0x80,0x80);
-		case COLORINDEX_NUMBER:
-			return RGB(0x00,0x80,0x00);
 		case COLORINDEX_OPERATOR:
 			return RGB(0xFF,0x00,0x00);
-		case COLORINDEX_STRING:
+		case COLORINDEX_VERBATIM_TEXT:
 			return RGB(0xFF,0x00,0xFF);
+		case COLORINDEX_INLINE_MATH_TEXT:
+			return RGB(0x00,0x80,0x00);
 		case COLORINDEX_KEYWORD:
 			return RGB(0x00,0x00,0xFF);
 		case COLORINDEX_SELBKGND:
@@ -236,6 +236,8 @@ COLORREF LaTeXViewBase::GetAutomaticColor(int nColorIndex)
 			return RGB(0x00,0x00,0x00);
 		case COLORINDEX_PAIRBLOCKBKGND:
 			return RGB(0xFF,0xFF,0xC0);
+		case COLORINDEX_GROUP_NAME:
+			return RGB(0,110,150);
 		default:
 			ASSERT(false); //ColorIndex not found? Shouldn't happen. Please update.
 	}

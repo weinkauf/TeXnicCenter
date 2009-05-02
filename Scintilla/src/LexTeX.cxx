@@ -16,11 +16,17 @@
 // TeX Folding code added by instanton (soft_share@126.com) with borrowed code from VisualTeX source by Alex Romanenko.
 // Version: June 22, 2007
 
+// Modifications for the TeXnicCenter Project by Sergiu Dotenco
+// Version: Mai 2, 2009
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdarg.h>
+
+#include <algorithm>
+#include <functional>
 
 #include "Platform.h"
 
@@ -71,7 +77,7 @@ static inline bool endOfLine(Accessor &styler, unsigned int i) {
       (styler[i] == '\n') || ((styler[i] == '\r') && (styler.SafeGetCharAt(i + 1) != '\n')) ;
 }
 
-static inline bool isTeXzero(int ch) {
+static inline bool isComment(int ch) {
 	return
       (ch == '%') ;
 }
@@ -114,6 +120,13 @@ static inline bool isTeXsix(int ch) {
 static inline bool isTeXseven(int ch) {
 	return
       (ch == '^') ;
+}
+
+static inline bool isDigit(int ch) {
+	return
+		(ch == '0') || (ch == '1') || (ch == '2') || 
+		(ch == '3') || (ch == '4') || (ch == '5') || 
+		(ch == '6') || (ch == '7') || (ch == '8') || (ch == '9');
 }
 
 // Interface determination
@@ -181,7 +194,9 @@ static void ColouriseTeXDoc(
 	bool autoIf           = styler.GetPropertyInt("lexer.tex.auto.if",           1) == 1 ;
 	int  defaultInterface = styler.GetPropertyInt("lexer.tex.interface.default", 1) ;
 
-	char key[100] ;
+	char key[100];
+	const int key_length = sizeof(key) - 1;
+
 	int  k ;
 	bool newifDone = false ;
 	bool inComment = false ;
@@ -195,7 +210,17 @@ static void ColouriseTeXDoc(
 
     WordList &keywords = *keywordlists[currentInterface-1] ;
 
-	StyleContext sc(startPos, length, SCE_TEX_TEXT, styler);
+	int group_depth = 0;
+	bool next_group_name = false;
+	int text_style = SCE_TEX_TEXT;
+	int line = styler.GetLine(startPos);
+
+	if (line > 0)
+		text_style = styler.StyleAt(styler.LineStart(line) - 1);
+
+	int command_style = text_style == SCE_TEX_INLINE_MATH ? SCE_TEX_INLINE_MATH_COMMAND : SCE_TEX_COMMAND;
+
+	StyleContext sc(startPos, length, text_style, styler);
 
 	bool going = sc.More() ; // needed because of a fuzzy end of file state
 
@@ -205,89 +230,137 @@ static void ColouriseTeXDoc(
 
 		if (inComment) {
 			if (sc.atLineEnd) {
-				sc.SetState(SCE_TEX_TEXT) ;
+				sc.SetState(text_style) ;
 				newifDone = false ;
 				inComment = false ;
 			}
+			else
+				sc.SetState(SCE_TEX_COMMENT);
 		} else {
+			if (text_style == SCE_TEX_INLINE_MATH && sc.currentPos > 0 && 
+				sc.ch == '$' && (sc.chPrev != '\\' || styler.SafeGetCharAt(sc.currentPos - 2) == '\\')) {
+				sc.SetState(SCE_TEX_GROUP);
+				text_style = SCE_TEX_TEXT;
+				command_style = SCE_TEX_COMMAND;
+				sc.ForwardSetState(text_style);
+			}
+
+			bool done = false;
+			bool reset = false;
+
 			if (! isTeXfive(sc.ch)) {
-				if (sc.state == SCE_TEX_COMMAND) {
+				if (sc.state == command_style) {
 					if (sc.LengthCurrent() == 1) { // \<noncstoken>
 						if (isTeXseven(sc.ch) && isTeXseven(sc.chNext)) {
 							sc.Forward(2) ; // \^^ and \^^<token>
 						}
-						sc.ForwardSetState(SCE_TEX_TEXT) ;
+
+						if (!(text_style == SCE_TEX_INLINE_MATH && sc.chNext == '$'))
+							sc.ForwardSetState(text_style);
+						else
+							done = true;
 					} else {
-						sc.GetCurrent(key, sizeof(key)-1) ;
+						sc.GetCurrent(key,key_length) ;
 						k = strlen(key) ;
 						memmove(key,key+1,k) ; // shift left over escape token
-						key[k] = '\0' ;
-						k-- ;
+						key[k--] = '\0' ;
+
 						if (! keywords || ! useKeywords) {
-							sc.SetState(SCE_TEX_COMMAND) ;
+							sc.SetState(command_style) ;
 							newifDone = false ;
 						} else if (k == 1) { //\<cstoken>
-							sc.SetState(SCE_TEX_COMMAND) ;
+							sc.SetState(command_style) ;
 							newifDone = false ;
 						} else if (keywords.InList(key)) {
-    						sc.SetState(SCE_TEX_COMMAND) ;
+    						sc.SetState(command_style) ;
 							newifDone = autoIf && (strcmp(key,"newif") == 0) ;
 						} else if (autoIf && ! newifDone && (key[0] == 'i') && (key[1] == 'f') && keywords.InList("if")) {
-	    					sc.SetState(SCE_TEX_COMMAND) ;
+	    					sc.SetState(command_style) ;
 						} else {
-							sc.ChangeState(SCE_TEX_TEXT) ;
-							sc.SetState(SCE_TEX_TEXT) ;
+							sc.ChangeState(text_style) ;
+							sc.SetState(text_style) ;
 							newifDone = false ;
+						}
+
+						if (strcmp(key,"begin") == 0) {
+							next_group_name = true;
+							++group_depth;
+						}
+						else if (strcmp(key,"end") == 0) {
+							next_group_name = true;
+
+							if (group_depth > 0)
+								--group_depth;
 						}
 					}
 				}
-				if (isTeXzero(sc.ch)) {
-					sc.SetState(SCE_TEX_SYMBOL);
 
-					if (!endOfLine(styler,sc.currentPos + 1))
-						sc.ForwardSetState(SCE_TEX_DEFAULT) ;
+				if (!done) {
+					if (isComment(sc.ch)) {
+						sc.SetState(SCE_TEX_COMMENT);
 
-					inComment = ! processComment ;
-					newifDone = false ;
-				} else if (isTeXseven(sc.ch) && isTeXseven(sc.chNext)) {
-					sc.SetState(SCE_TEX_TEXT) ;
-					sc.ForwardSetState(SCE_TEX_TEXT) ;
-				} else if (isTeXone(sc.ch)) {
-					sc.SetState(SCE_TEX_SPECIAL) ;
-					newifDone = false ;
-				} else if (isTeXtwo(sc.ch)) {
-					sc.SetState(SCE_TEX_GROUP) ;
-					newifDone = false ;
-				} else if (isTeXthree(sc.ch)) {
-					sc.SetState(SCE_TEX_SYMBOL) ;
-					newifDone = false ;
-				} else if (isTeXfour(sc.ch)) {
-					sc.SetState(SCE_TEX_COMMAND) ;
-				} else if (isTeXsix(sc.ch)) {
-					sc.SetState(SCE_TEX_TEXT) ;
-				} else if (sc.atLineEnd) {
-					sc.SetState(SCE_TEX_TEXT) ;
-					newifDone = false ;
-					inComment = false ;
-				} else {
-					sc.SetState(SCE_TEX_TEXT) ;
+						inComment = ! processComment ;
+						newifDone = false ;
+					} else if (isTeXseven(sc.ch) && isTeXseven(sc.chNext)) {
+						sc.SetState(text_style) ;
+						sc.ForwardSetState(SCE_TEX_TEXT) ;
+					} else if (isTeXone(sc.ch)) {
+						sc.SetState(SCE_TEX_SPECIAL) ;
+						newifDone = false ;
+					} else if (sc.ch == '$' && text_style != SCE_TEX_INLINE_MATH) {
+						sc.SetState(SCE_TEX_GROUP) ;
+						text_style = SCE_TEX_INLINE_MATH;
+						command_style = SCE_TEX_INLINE_MATH_COMMAND;
+						
+						//if (sc.chNext != '\\' && sc.chNext != '$')
+						//	sc.ForwardSetState(text_style);
+
+						newifDone = false ;
+					} else if (isTeXtwo(sc.ch)) {
+						sc.SetState(SCE_TEX_GROUP) ;
+						newifDone = false ;
+
+						if (sc.ch == '{' && next_group_name) {
+							sc.ForwardSetState(SCE_TEX_GROUP_NAME);
+							
+							while (sc.More() && sc.chNext != '}')
+								sc.Forward();
+
+							next_group_name = false;
+						}
+					} else if (isTeXthree(sc.ch)) {
+						sc.SetState(SCE_TEX_SYMBOL) ;
+						newifDone = false ;
+					} else if (isTeXfour(sc.ch)) {
+						sc.SetState(command_style) ;
+					} else if (isTeXsix(sc.ch)) {
+						reset = true;
+					} else if (isDigit(sc.ch)) {
+						sc.SetState(SCE_TEX_DIGIT);
+					} else if (sc.atLineEnd) {
+						reset = true;
+
+						newifDone = false ;
+						inComment = false ;
+					} else {
+						reset = true;
+					}
+				} else if (sc.state != command_style) {
+					reset = true;
 				}
-			} else if (sc.state != SCE_TEX_COMMAND) {
-				sc.SetState(SCE_TEX_TEXT) ;
 			}
+			else if (sc.state != command_style) {
+				reset = true;
+				sc.SetState(text_style) ;
+			}
+
+			if (reset)
+				sc.SetState(text_style);
 		}
 	}
-	sc.ChangeState(SCE_TEX_TEXT) ;
+	sc.ChangeState(text_style) ;
 	sc.Complete();
 
-}
-
-
-static inline bool isNumber(int ch) {
-	return
-      (ch == '0') || (ch == '1') || (ch == '2') || 
-      (ch == '3') || (ch == '4') || (ch == '5') || 
-      (ch == '6') || (ch == '7') || (ch == '8') || (ch == '9');
 }
 
 static inline bool isWordChar(int ch) {
@@ -306,7 +379,7 @@ static int ParseTeXCommand(unsigned int pos, Accessor &styler, char *command)
   }
 
   // find end
-     while(isWordChar(ch) && !isNumber(ch) && ch!='_' && ch!='.' && length<100){
+     while(isWordChar(ch) && !isDigit(ch) && ch!='_' && ch!='.' && length<100){
           command[length]=ch;
           length++;
           ch=styler.SafeGetCharAt(pos+length+1);
@@ -318,43 +391,78 @@ static int ParseTeXCommand(unsigned int pos, Accessor &styler, char *command)
 }
 
 static int classifyFoldPointTeXPaired(const char* s) {
-	int lev=0; 
-	if (!(isdigit(s[0]) || (s[0] == '.'))){
+	int lev=0;
+
+	if (!(isdigit(s[0]) || (s[0] == '.'))) {
 		if (strcmp(s, "begin")==0||strcmp(s,"FoldStart")==0||
+			strcmp(s, "begingroup")==0 ||
 			strcmp(s,"abstract")==0||strcmp(s,"unprotect")==0||
+			strcmp(s,"makeatletter")==0||
 			strcmp(s,"title")==0||strncmp(s,"start",5)==0||strncmp(s,"Start",5)==0||
 			strcmp(s,"documentclass")==0||strncmp(s,"if",2)==0
 			)
 			lev=1;
 		if (strcmp(s, "end")==0||strcmp(s,"FoldStop")==0||
-			strcmp(s,"maketitle")==0||strcmp(s,"protect")==0||
+			strcmp(s, "endgroup")==0 ||
+			strcmp(s,"maketitle")==0 || strcmp(s,"protect")==0||
+			strcmp(s,"makeatother")==0||
 			strncmp(s,"stop",4)==0||strncmp(s,"Stop",4)==0||
 			strcmp(s,"fi")==0
 			) 
 		lev=-1;
 	}
+
 	return lev;
+}
+
+namespace {
+	bool equal_strings(const char* s1, const char* s2)
+	{
+		return strcmp(s1,s2) == 0;
+	}
 }
 
 static int classifyFoldPointTeXUnpaired(const char* s) {
 	int lev=0; 
+
 	if (!(isdigit(s[0]) || (s[0] == '.'))){
-		if (strcmp(s,"part")==0||
-			strcmp(s,"chapter")==0||
-			strcmp(s,"section")==0||
-			strcmp(s,"subsection")==0||
-			strcmp(s,"subsubsection")==0||
-			strcmp(s,"CJKfamily")==0||
-			strcmp(s,"appendix")==0||
-			strcmp(s,"Topic")==0||strcmp(s,"topic")==0||
-			strcmp(s,"subject")==0||strcmp(s,"subsubject")==0||
-			strcmp(s,"def")==0||strcmp(s,"gdef")==0||strcmp(s,"edef")==0||
-			strcmp(s,"xdef")==0||strcmp(s,"framed")==0||
-			strcmp(s,"frame")==0||
-			strcmp(s,"foilhead")==0||strcmp(s,"overlays")==0||strcmp(s,"slide")==0
-			){
-			    lev=1;
-			}
+		static const char* const sections[] = {
+			"part",
+			"chapter",
+			"section",
+			"subsubsection",
+			"paragraph",
+			"subparagraph",
+			"addpart",
+			"addchap",
+			"addsec",
+			"addsubsec",
+			"minisec",
+			//"newcommand",
+			//"renewcommand",
+			"newenvironment",
+			"renewenvironment",
+			"CJKfamily",
+			"appendix",
+			"Topic",
+			"topic",
+			"subject",
+			"subsubject",
+			"def",
+			"gdef",
+			"edef",
+			"xdef",
+			"framed",
+			"frame",
+			"foilhead",
+			"overlays",
+			"slide"
+		};
+
+		const std::size_t count = sizeof(sections) / sizeof(*sections);
+
+		if (std::find_if(sections,sections + count,std::bind2nd(std::ptr_fun(equal_strings),s)) != sections + count)
+			lev = 1;
 	}
 	return lev;
 }

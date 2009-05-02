@@ -194,10 +194,10 @@ BOOL COptionPageTextFormat::OnInitDialog()
 	m_wndEditorElement.SetItemData(5,LaTeXView::COLORINDEX_SELTEXT);
 	m_wndEditorElement.SetItemData(6,LaTeXView::COLORINDEX_KEYWORD);
 	m_wndEditorElement.SetItemData(7,LaTeXView::COLORINDEX_COMMENT);
-	m_wndEditorElement.SetItemData(8,LaTeXView::COLORINDEX_OPERATOR);
-	m_wndEditorElement.SetItemData(9,LaTeXView::COLORINDEX_STRING);
-	m_wndEditorElement.SetItemData(10,LaTeXView::COLORINDEX_NUMBER);
-	m_wndEditorElement.SetItemData(11,LaTeXView::COLORINDEX_PREPROCESSOR);
+	m_wndEditorElement.SetItemData(8,LaTeXView::COLORINDEX_VERBATIM_TEXT);
+	m_wndEditorElement.SetItemData(9,LaTeXView::COLORINDEX_INLINE_MATH_TEXT);
+	m_wndEditorElement.SetItemData(10,LaTeXView::COLORINDEX_OPERATOR);
+	m_wndEditorElement.SetItemData(11,LaTeXView::COLORINDEX_INLINE_MATH_COMMAND);
 	m_wndEditorElement.SetItemData(12,LaTeXView::COLORINDEX_PAIRSTRINGBKGND);
 	m_wndEditorElement.SetItemData(13,LaTeXView::COLORINDEX_PAIRSTRINGTEXT);
 	m_wndEditorElement.SetItemData(14,LaTeXView::COLORINDEX_CURPAIRSTRINGBKGND);
@@ -205,6 +205,7 @@ BOOL COptionPageTextFormat::OnInitDialog()
 	m_wndEditorElement.SetItemData(16,LaTeXView::COLORINDEX_PAIRBLOCKBKGND);
 	m_wndEditorElement.SetItemData(17,LaTeXView::COLORINDEX_BADPAIRSTRINGBKGND);
 	m_wndEditorElement.SetItemData(18,LaTeXView::COLORINDEX_BADPAIRSTRINGTEXT);
+	m_wndEditorElement.SetItemData(19,LaTeXView::COLORINDEX_GROUP_NAME);
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// select color
 	m_wndElementColorPicker.m_bEnabledInCustomizeMode = TRUE;

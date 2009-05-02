@@ -41,9 +41,10 @@ inline const Ch* GetLineEnding(const Ch* text, std::size_t size)
 	const Ch* pos = std::find_first_of(text,end,le,le + std::char_traits<Ch>::length(le));
 
 	if (pos != end) {
-		if (*pos == *LineEndingTraits<Ch>::CarriageReturn() && pos[1] != *LineEndingTraits<Ch>::LineFeed())
+		if (*pos == *LineEndingTraits<Ch>::CarriageReturn() && (pos + 1 == end || pos[1] != *LineEndingTraits<Ch>::LineFeed()))
 			mode = LineEndingTraits<Ch>::CarriageReturn();
-		else if (std::char_traits<Ch>::compare(pos,le,std::char_traits<Ch>::length(le)) != 0 && 
+		else if (std::char_traits<Ch>::compare(pos,le,std::min<int>(size - (pos - text),
+				std::char_traits<Ch>::length(le))) != 0 && 
 			*pos == *LineEndingTraits<Ch>::LineFeed())
 			mode = LineEndingTraits<Ch>::LineFeed();
 	}
