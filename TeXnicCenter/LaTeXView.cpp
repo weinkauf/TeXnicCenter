@@ -258,7 +258,7 @@ void LaTeXView::UpdateSettings()
 	SetAStyle(SCE_TEX_TEXT,GetColor(COLORINDEX_NORMALTEXT),GetColor(COLORINDEX_BKGND));
 	SetAStyle(SCE_TEX_SPECIAL, RGB(158,11,15),GetColor(COLORINDEX_BKGND));
 	SetAStyle(SCE_TEX_SYMBOL, RGB(145,0,145),GetColor(COLORINDEX_BKGND));
-	SetAStyle(SCE_TEX_DIGIT, RGB(75,30,200),GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_TEX_DIGIT, GetColor(COLORINDEX_DIGIT),GetColor(COLORINDEX_BKGND));
 
 #pragma region Comments 
 
@@ -295,6 +295,7 @@ void LaTeXView::UpdateSettings()
 #pragma endregion
 
 	rCtrl.StyleSetFont(SCE_TEX_GROUP_NAME,editor_font.lfFaceName);
+	rCtrl.StyleSetSize(SCE_TEX_GROUP_NAME,point_size);
 	rCtrl.StyleSetBold(SCE_TEX_GROUP_NAME,TRUE);
 
 #pragma region Caret

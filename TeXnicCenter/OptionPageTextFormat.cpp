@@ -206,6 +206,7 @@ BOOL COptionPageTextFormat::OnInitDialog()
 	m_wndEditorElement.SetItemData(17,LaTeXView::COLORINDEX_BADPAIRSTRINGBKGND);
 	m_wndEditorElement.SetItemData(18,LaTeXView::COLORINDEX_BADPAIRSTRINGTEXT);
 	m_wndEditorElement.SetItemData(19,LaTeXView::COLORINDEX_GROUP_NAME);
+	m_wndEditorElement.SetItemData(20,LaTeXView::COLORINDEX_DIGIT);
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// select color
 	m_wndElementColorPicker.m_bEnabledInCustomizeMode = TRUE;
