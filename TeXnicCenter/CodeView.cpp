@@ -808,7 +808,7 @@ void CodeView::OnModified(SCNotification* n)
 	CScintillaView::OnModified(n);
 
 	if (GetDocument()->IsModified())
-		GetDocument()->SetModifiedFlag(GetCtrl().CanUndo());
+		GetDocument()->SetModifiedFlag();
 
 	last_change_pos_ = GetCtrl().GetCurrentPos();
 

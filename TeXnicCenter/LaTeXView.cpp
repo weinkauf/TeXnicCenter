@@ -248,19 +248,24 @@ void LaTeXView::UpdateSettings()
 	SetAStyle(STYLE_DEFAULT, GetColor(COLORINDEX_NORMALTEXT),GetColor(COLORINDEX_BKGND),
 		point_size,CConfiguration::GetInstance()->m_fontEditor.lfFaceName);
 	
-	SetAStyle(SCE_TEX_DEFAULT, GetColor(COLORINDEX_COMMENT),GetColor(COLORINDEX_BKGND)); // Includes comments' color
+	SetAStyle(SCE_TEX_COMMENT, GetColor(COLORINDEX_COMMENT),GetColor(COLORINDEX_BKGND)); // Includes comments' color
 	SetAStyle(SCE_TEX_GROUP,RGB(125,167,217),GetColor(COLORINDEX_BKGND));
+
+	SetAStyle(SCE_TEX_INLINE_MATH,GetColor(COLORINDEX_INLINE_MATH_TEXT),GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_TEX_INLINE_MATH_COMMAND,GetColor(COLORINDEX_INLINE_MATH_COMMAND),GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_TEX_GROUP_NAME,GetColor(COLORINDEX_GROUP_NAME),GetColor(COLORINDEX_BKGND));
 	
 	SetAStyle(SCE_TEX_TEXT,GetColor(COLORINDEX_NORMALTEXT),GetColor(COLORINDEX_BKGND));
 	SetAStyle(SCE_TEX_SPECIAL, RGB(158,11,15),GetColor(COLORINDEX_BKGND));
 	SetAStyle(SCE_TEX_SYMBOL, RGB(145,0,145),GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_TEX_DIGIT, RGB(75,30,200),GetColor(COLORINDEX_BKGND));
 
 #pragma region Comments 
 
 	// Comments displayed in italics
-	rCtrl.StyleSetFont(SCE_TEX_DEFAULT,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(SCE_TEX_DEFAULT,point_size);
-	rCtrl.StyleSetItalic(SCE_TEX_DEFAULT,TRUE);
+	rCtrl.StyleSetFont(SCE_TEX_COMMENT,editor_font.lfFaceName);
+	rCtrl.StyleSetSize(SCE_TEX_COMMENT,point_size);
+	rCtrl.StyleSetItalic(SCE_TEX_COMMENT,TRUE);
 
 #pragma endregion
 
@@ -289,6 +294,9 @@ void LaTeXView::UpdateSettings()
 
 #pragma endregion
 
+	rCtrl.StyleSetFont(SCE_TEX_GROUP_NAME,editor_font.lfFaceName);
+	rCtrl.StyleSetBold(SCE_TEX_GROUP_NAME,TRUE);
+
 #pragma region Caret
 
 	rCtrl.SetCaretStyle(CConfiguration::GetInstance()->IsInsertCaretLine() ? CARETSTYLE_LINE : CARETSTYLE_BLOCK);
@@ -307,7 +315,7 @@ void LaTeXView::OnModified(SCNotification* n)
 	// multi step undo/redo action or it is the last action in this undo/redo chain
 	if (n->modificationType & (SC_MOD_INSERTTEXT|SC_MOD_DELETETEXT) && 
 		(!(n->modificationType & SC_MULTISTEPUNDOREDO) || n->modificationType & SC_LASTSTEPINUNDOREDO)) {
-		GetDocument()->SetModifiedFlag(GetCtrl().CanUndo());
+		GetDocument()->SetModifiedFlag();
 
 		if (GetDocument()->IsSpellerThreadAttached()) {
 			int line = GetCtrl().LineFromPosition(n->position);
