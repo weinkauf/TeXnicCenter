@@ -245,12 +245,12 @@
 		<lxCommand name="\glossaryentry" parameters="2"/>
 		<lxCommand name="\makeglossary"/>
 		
-		<lxCommand name="\mbox"/>
-		<lxCommand name="\makebox"/>
-		<lxCommand name="\savebox"/>
-		<lxCommand name="\usebox"/>
-		<lxCommand name="\raisebox"/>
-		<lxCommand name="\parbox"/>
+		<lxCommand name="\mbox" parameters="1"/>
+		<lxCommand name="\makebox" parameters="1"/>
+		<lxCommand name="\savebox" parameters="1"/>
+		<lxCommand name="\usebox" parameters="1"/>
+		<lxCommand name="\raisebox" parameters="2"/>
+		<lxCommand name="\parbox" parameters="2"/>
 		<lxCommand name="\hline"/>
 		<lxCommand name="\hfill"/>
 		<lxEnvironment name="minipage" 

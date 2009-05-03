@@ -430,6 +430,7 @@ static int classifyFoldPointTeXUnpaired(const char* s) {
 			"part",
 			"chapter",
 			"section",
+			"subsection",
 			"subsubsection",
 			"paragraph",
 			"subparagraph",
