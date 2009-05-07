@@ -232,11 +232,11 @@ void CTemplateDialog::FillTemplateList()
 {
 	int nItem = m_wndCategoriesTab.GetCurSel();
 	TCITEM item;
-	TCHAR lpszTabName[_MAX_PATH];
+	TCHAR lpszTabName[MAX_PATH];
 
 	item.mask = TCIF_TEXT;
 	item.pszText = lpszTabName;
-	item.cchTextMax = _MAX_PATH;
+	item.cchTextMax = MAX_PATH;
 
 	if (!m_wndCategoriesTab.GetItem(nItem, &item))
 		return;

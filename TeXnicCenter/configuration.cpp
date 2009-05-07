@@ -180,7 +180,7 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 
 	SerializeProfileInt(strSection,_T("EditorTabWidth"),&m_nTabWidth,direction,2);
 
-	for (int i = 0; i < LaTeXView::COLORINDEX_ERRORBKGND; i++)
+	for (int i = 0; i < LaTeXView::COLORINDEX_COUNT; i++)
 	{
 		CString strFormat;
 		strFormat.Format(_T("EditorColor%d"),i);

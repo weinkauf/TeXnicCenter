@@ -42,6 +42,7 @@
 // forwards
 class CProjectView;
 class CProjectTemplate;
+class CSingleProjectTemplate;
 
 /**
 This class can be used for classes that are implementing a project
@@ -64,6 +65,9 @@ ID_PROJECT_SAVE and ID_PROJECT_CLOSE.
 class CProject : public CCmdTarget
 {
 	DECLARE_DYNAMIC(CProject)
+
+	friend class CSingleProjectTemplate;
+	friend class CProjectTemplate;
 
 // construction/destruction
 public:
@@ -90,12 +94,19 @@ public:
 // overridables
 public:
 	virtual void DeleteContents();
+
+protected:
 	virtual void OnChangedViewList();
 	virtual void OnClosing();
 	virtual BOOL OnNewProject();
 	virtual BOOL OnNewProjectFromDoc(LPCTSTR lpszDocPathName);
 	virtual BOOL OnOpenProject(LPCTSTR lpszPathName);
 	virtual BOOL OnSaveProject(LPCTSTR lpszPathName);
+
+protected:
+	static void UpdateFrameTitle();
+
+public:	
 	virtual void ReportSaveLoadException(LPCTSTR lpszPathName, CException *e, BOOL bSaving, UINT nIDPDefault);
 	virtual CFile *GetFile(LPCTSTR lpszFileName, UINT nOpenFlags, CFileException *pError);
 	virtual void ReleaseFile(CFile *pFile, BOOL bAbort);
@@ -130,6 +141,8 @@ private:
 
 public:
 	bool IsClosing() const;
+	BOOL Save(LPCTSTR path);
+	BOOL Open(LPCTSTR path);
 };
 
 

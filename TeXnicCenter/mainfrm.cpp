@@ -1210,26 +1210,27 @@ void CMainFrame::DisplayDocumentTabs()
 	mdiTabParams.m_nTabBorderSize = 3;
 	mdiTabParams.m_bTabCustomTooltips = TRUE; // We will display the path name
 
-	EnableMDITabbedGroups(theApp.m_bMDITabs, mdiTabParams);
+	EnableMDITabbedGroups(theApp.GetShowMDITabs(), mdiTabParams);
+	UpdateFrameTitle();
 }
 
 void CMainFrame::OnViewDocTabsBottom()
 {
-	theApp.m_bMDITabs = true;
+	theApp.SetShowMDITabs(true);
 	theApp.m_nMDITabLocation = CMFCTabCtrl::LOCATION_BOTTOM;
 	DisplayDocumentTabs();
 }
 
 void CMainFrame::OnViewDocTabsTop()
 {
-	theApp.m_bMDITabs = true;
+	theApp.SetShowMDITabs();
 	theApp.m_nMDITabLocation = CMFCTabCtrl::LOCATION_TOP;
 	DisplayDocumentTabs();
 }
 
 void CMainFrame::OnViewDocTabsOff()
 {
-	theApp.m_bMDITabs = false;
+	theApp.SetShowMDITabs(false);
 	DisplayDocumentTabs();
 }
 
@@ -1258,25 +1259,25 @@ void CMainFrame::OnUpdateViewDocTabs(CCmdUI* pCmdUI)
 	switch (pCmdUI->m_nID)
 	{
 		case ID_VIEW_DOCTAB_BOTTOM:
-			pCmdUI->SetRadio(theApp.m_bMDITabs && (theApp.m_nMDITabLocation == CMFCTabCtrl::LOCATION_BOTTOM));
+			pCmdUI->SetRadio(theApp.GetShowMDITabs() && (theApp.m_nMDITabLocation == CMFCTabCtrl::LOCATION_BOTTOM));
 			break;
 
 		case ID_VIEW_DOCTAB_TOP:
-			pCmdUI->SetRadio(theApp.m_bMDITabs && (theApp.m_nMDITabLocation == CMFCTabCtrl::LOCATION_TOP));
+			pCmdUI->SetRadio(theApp.GetShowMDITabs() && (theApp.m_nMDITabLocation == CMFCTabCtrl::LOCATION_TOP));
 			break;
 
 		case ID_VIEW_DOCTAB_OFF:
-			pCmdUI->SetRadio(!theApp.m_bMDITabs);
+			pCmdUI->SetRadio(!theApp.GetShowMDITabs());
 			break;
 
 		case ID_VIEW_DOCTAB_ICONS:
 			pCmdUI->SetCheck(theApp.m_bMDITabIcons);
-			pCmdUI->Enable(theApp.m_bMDITabs);
+			pCmdUI->Enable(theApp.GetShowMDITabs());
 			break;
 
 		case ID_VIEW_DOCTAB_NOTE:
 			pCmdUI->SetCheck(theApp.m_nMDITabStyle == CMFCTabCtrl::STYLE_3D_ONENOTE);
-			pCmdUI->Enable(theApp.m_bMDITabs);
+			pCmdUI->Enable(theApp.GetShowMDITabs());
 			break;
 
 		default:
@@ -1905,4 +1906,26 @@ void CMainFrame::OnViewTransparency()
 {
 	TransparencyDlg dlg(this);
 	dlg.DoModal();
+}
+
+void CMainFrame::OnUpdateFrameTitle(BOOL bAddToTitle)
+{
+	if (!theApp.GetShowMDITabs())
+		CMDIFrameWndEx::OnUpdateFrameTitle(bAddToTitle);
+}
+
+void CMainFrame::UpdateFrameTitle()
+{
+	CLaTeXProject* project = theApp.GetProject();
+
+	CString title(MAKEINTRESOURCE(IDR_MAINFRAME));
+
+	if (project) {
+		const CString& tmp = project->GetTitle();
+
+		if (!tmp.IsEmpty())
+			title = tmp + _T(" - ") + title;
+	}
+
+	SetWindowText(title);
 }

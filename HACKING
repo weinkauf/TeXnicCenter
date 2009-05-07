@@ -175,6 +175,9 @@ Modifications
 TeXnicCenter uses the Scintilla source code editing component by Neil Hodgson 
 and Scintilla MFC wrapper classes by PJ Naughter.
 
+Scintalla's original TeX lexer (LexTeX.cxx) has been modified to allow richer syntax
+highlighting.
+
 In order to be able to use a custom cursor for incremental search the command 
 SCI_SHOWCURSOR(bool) has been introduced which supresses cursor changes.
 

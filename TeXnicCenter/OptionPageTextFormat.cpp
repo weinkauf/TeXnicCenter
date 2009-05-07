@@ -66,7 +66,7 @@ COptionPageTextFormat::COptionPageTextFormat()
 		m_bApplyChanges(FALSE)
 {
 	// copy color array
-	for (int i = 0; i < LaTeXView::COLORINDEX_ERRORBKGND; i++)
+	for (int i = 0; i < LaTeXView::COLORINDEX_COUNT; i++)
 		m_aColors[i] = CConfiguration::GetInstance()->m_aEditorColors[i];
 
 	m_nEditorElement = 0;
@@ -207,6 +207,7 @@ BOOL COptionPageTextFormat::OnInitDialog()
 	m_wndEditorElement.SetItemData(18,LaTeXView::COLORINDEX_BADPAIRSTRINGTEXT);
 	m_wndEditorElement.SetItemData(19,LaTeXView::COLORINDEX_GROUP_NAME);
 	m_wndEditorElement.SetItemData(20,LaTeXView::COLORINDEX_DIGIT);
+	m_wndEditorElement.SetItemData(21,LaTeXView::COLORINDEX_UNIT);
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// select color
 	m_wndElementColorPicker.m_bEnabledInCustomizeMode = TRUE;
@@ -247,7 +248,7 @@ void COptionPageTextFormat::OnOK()
 	StoreWindowTypeSettings();
 
 	// copy color array
-	for (int i = 0; i < LaTeXView::COLORINDEX_ERRORBKGND; i++)
+	for (int i = 0; i < LaTeXView::COLORINDEX_COUNT; i++)
 		CConfiguration::GetInstance()->m_aEditorColors[i] = m_aColors[i];
 
 	// OnOK should update all windows

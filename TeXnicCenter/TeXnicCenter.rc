@@ -1447,17 +1447,19 @@ BEGIN
     PUSHBUTTON      "Abbrechen",IDCANCEL,335,285,50,14
 END
 
-IDD_ABOUTBOX DIALOGEX 0, 0, 292, 231
-STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
+IDD_ABOUTBOX DIALOGEX 0, 0, 264, 241
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU
+CAPTION "Über TeXnicCenter"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    LTEXT           "DNT:LegalCopyright",IDC_COPYRIGHT,7,211,170,8,SS_CENTERIMAGE
-    CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,SS_CENTERIMAGE
-    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
-    CONTROL         236,IDC_STATIC,"Static",SS_BITMAP,75,7,142,25
-    CTEXT           "DNT:Version number will be inserted here",IDC_STATIC_VERSION,7,34,278,8
-    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,197,211,87,8,BS_RIGHT
+    CONTROL         "",IDC_STATIC_BACKGROUND,"Static",SS_WHITERECT,-1,0,267,212
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,212,267,1
+    PUSHBUTTON      "&OK",IDCANCEL,207,220,50,14
+    LTEXT           "DNT:LegalCopyright",IDC_COPYRIGHT,7,219,197,8,SS_CENTERIMAGE
+    PUSHBUTTON      "TeXnicCenter.org",IDC_URL,7,229,87,8,BS_RIGHT
+    CONTROL         236,IDC_LOGO,"Static",SS_BITMAP,64,4,134,24
+    CTEXT           "DNT:Version number will be inserted here",IDC_VERSION,7,28,250,8,0,WS_EX_TRANSPARENT
+    CTEXT           "DNT:Scrolling Credits",IDC_CREDITS,7,42,250,164,SS_CENTERIMAGE
 END
 
 IDD_PACKAGE_SCAN_PROGRESS DIALOGEX 0, 0, 294, 76
@@ -1938,9 +1940,9 @@ BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 285
+        RIGHTMARGIN, 257
         TOPMARGIN, 7
-        BOTTOMMARGIN, 224
+        BOTTOMMARGIN, 234
     END
 
     IDD_PACKAGE_SCAN_PROGRESS, DIALOG
@@ -3235,6 +3237,8 @@ BEGIN
 0x7247, 0x7075, 0x6570, 0x6e6e, 0x6d61, 0x0065, 
     IDC_EDITOR_ELEMENT, 0x403, 8, 0
 0x695a, 0x6666, 0x7265, 0x006e, 
+    IDC_EDITOR_ELEMENT, 0x403, 10, 0
+0x6945, 0x686e, 0x6965, 0x6574, 0x006e, 
     IDC_INSERCURSOR_STYLE, 0x403, 6, 0
 0x694c, 0x696e, 0x0065, 
     IDC_INSERCURSOR_STYLE, 0x403, 6, 0
@@ -4201,7 +4205,7 @@ BEGIN
     ID_URL_AUTHOR           "sven@texniccenter.org\nNachricht an den Autor\nmailto:sven@texniccenter.org"
     ID_URL_TCERROR          "http://www.TeXnicCenter.org/issues\nFehlerbenachrichtigung\nhttp://www.TeXnicCenter.org/issues"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
-    ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter Benutzerforum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
+    ID_URL_TCUSERSGROUP     "http://www.latex-community.org/forum/viewforum.php?f=22\nTeXnicCenter Benutzerforum\nhttp://www.latex-community.org/forum/viewforum.php?f=22"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Entwicklerforum\nhttp://www.sourceforge.net/projects/texniccenter"
     ID_URL_TCDICTDOWNLOAD   "http://wiki.services.openoffice.org/wiki/Dictionaries\nWörterbücher herunterladen\nhttp://wiki.services.openoffice.org/wiki/Dictionaries"
@@ -4766,19 +4770,6 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 // Dialog
 //
-
-IDD_ABOUTBOX DIALOGEX 0, 0, 292, 231
-STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,205,278,1
-    CTEXT           "DNT:Scrolling Credits",IDC_STATIC_CREDITS,5,45,281,156,SS_CENTERIMAGE
-    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,0,0,292,231
-    CONTROL         236,IDC_STATIC,"Static",SS_BITMAP,75,7,142,25
-    CTEXT           "DNT:Version number will be inserted here",IDC_STATIC_VERSION,7,34,278,8
-    LTEXT           "DNT:LegalCopyright",IDC_COPYRIGHT,7,211,179,8,SS_CENTERIMAGE
-    PUSHBUTTON      "TeXnicCenter.org",IDC_URL_TOOLSCENTER,197,211,87,8,BS_RIGHT
-END
 
 IDD_ACTIVE_PROFILE DIALOGEX 0, 0, 257, 95
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
@@ -5655,6 +5646,21 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,8,183,107,10
 END
 
+IDD_ABOUTBOX DIALOGEX 0, 0, 264, 241
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU
+CAPTION "About TeXnicCenter"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_STATIC_BACKGROUND,"Static",SS_WHITERECT,-1,0,267,212
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,212,265,1
+    PUSHBUTTON      "&OK",IDCANCEL,207,220,50,14
+    LTEXT           "DNT:LegalCopyright",IDC_COPYRIGHT,7,219,197,8,SS_CENTERIMAGE
+    PUSHBUTTON      "TeXnicCenter.org",IDC_URL,7,229,87,8,BS_RIGHT
+    CONTROL         236,IDC_LOGO,"Static",SS_BITMAP,30,10,203,34
+    CTEXT           "DNT:Version number will be inserted here",IDC_VERSION,7,44,250,8,0,WS_EX_TRANSPARENT
+    CTEXT           "DNT:Scrolling Credits",IDC_CREDITS,0,59,264,147,SS_CENTERIMAGE,WS_EX_TRANSPARENT
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -5664,14 +5670,6 @@ END
 #ifdef APSTUDIO_INVOKED
 GUIDELINES DESIGNINFO 
 BEGIN
-    IDD_ABOUTBOX, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 285
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 224
-    END
-
     IDD_ACTIVE_PROFILE, DIALOG
     BEGIN
         LEFTMARGIN, 7
@@ -5964,6 +5962,14 @@ BEGIN
         BOTTOMMARGIN, 193
         HORZGUIDE, 107
         HORZGUIDE, 111
+    END
+
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 257
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 234
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -7205,6 +7211,8 @@ BEGIN
 0x7247, 0x756f, 0x2070, 0x616e, 0x656d, "\000" 
     IDC_EDITOR_ELEMENT, 0x403, 7, 0
 0x6944, 0x6967, 0x7374, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 6, 0
+0x6e55, 0x7469, 0x0073, 
     IDC_INSERCURSOR_STYLE, 0x403, 5, 0
 0x694c, 0x656e, "\000" 
     IDC_INSERCURSOR_STYLE, 0x403, 6, 0
@@ -7322,6 +7330,7 @@ BEGIN
     IDS_EDIT_TEXT_NOT_FOUND "Cannot find string""%s"""
     IDS_DO_NOT_SAVE         "&Do not save"
     IDS_UNNAMED_BOOKMARK_FORMAT "Bookmark%i"
+    IDS_BIBTEX_RESULT       "BibTeX-Result: %i Error(s), %i Warning(s)"
 END
 
 STRINGTABLE 
@@ -7892,7 +7901,7 @@ BEGIN
     ID_URL_AUTHOR           "sven@texniccenter.org\nE-Mail to the Author\nmailto:sven@texniccenter.org"
     ID_URL_TCERROR          "http://www.TeXnicCenter.org/issues\nReport an Error\nhttp://www.TeXnicCenter.org/issues"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
-    ID_URL_TCUSERSGROUP     "http://groups.yahoo.com/group/TeXnicCenter-Users/\nTeXnicCenter User Forum\nhttp://groups.yahoo.com/group/TeXnicCenter-Users"
+    ID_URL_TCUSERSGROUP     "http://www.latex-community.org/forum/viewforum.php?f=22\nTeXnicCenter User Forum\nhttp://www.latex-community.org/forum/viewforum.php?f=22"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Developer Forum\nhttp://www.sourceforge.net/projects/texniccenter"
     ID_URL_TCDICTDOWNLOAD   "http://lingucomponent.openoffice.org/spell_dic.html\nDownload Dictionaries\nhttp://lingucomponent.openoffice.org/spell_dic.html"

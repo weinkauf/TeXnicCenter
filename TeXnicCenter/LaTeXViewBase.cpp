@@ -240,6 +240,8 @@ COLORREF LaTeXViewBase::GetAutomaticColor(int nColorIndex)
 			return RGB(0,110,150);
 		case COLORINDEX_DIGIT:
 			return RGB(75,30,200);
+		case COLORINDEX_UNIT:
+			return RGB(100,125,0);
 		default:
 			ASSERT(false); //ColorIndex not found? Shouldn't happen. Please update.
 	}
@@ -264,7 +266,7 @@ void LaTeXViewBase::SetAStyle(int style, COLORREF fore, COLORREF back, int size,
 
 COLORREF LaTeXViewBase::GetColor(int nColorIndex)
 {
-	if (nColorIndex >= 0 && nColorIndex < COLORINDEX_ERRORBKGND && CConfiguration::GetInstance()->m_aEditorColors[nColorIndex] != 0xFFFFFFFF)
+	if (nColorIndex >= 0 && nColorIndex < COLORINDEX_COUNT && CConfiguration::GetInstance()->m_aEditorColors[nColorIndex] != 0xFFFFFFFF)
 		return CConfiguration::GetInstance()->m_aEditorColors[nColorIndex];
 
 	// user set automatic color

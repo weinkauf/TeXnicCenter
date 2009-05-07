@@ -133,7 +133,7 @@ protected:
 // Attributes
 protected:
 	/** array for storing color assignment */
-	COLORREF m_aColors[LaTeXView::COLORINDEX_ERRORBKGND];
+	COLORREF m_aColors[LaTeXView::COLORINDEX_COUNT];
 
 	/** font definitions for editor */
 	LOGFONT m_logfont;

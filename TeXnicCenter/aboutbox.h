@@ -43,8 +43,19 @@
 
 @author Sven Wiegand
  */
-class CAboutDlg : public CDialog
+class CAboutDlg : public CDialog, CMessageMap
 {
+	CContainedWindow credits_;
+
+	BEGIN_MSG_MAP(CAboutDlg)
+	ALT_MSG_MAP(1)
+		MESSAGE_HANDLER(WM_PAINT,OnCreditsPaint)
+		MESSAGE_HANDLER(WM_ERASEBKGND,OnCreditsEraseBkgnd)
+	END_MSG_MAP()
+
+	LRESULT OnCreditsPaint(UINT, LPARAM, WPARAM, BOOL&);
+	LRESULT OnCreditsEraseBkgnd(UINT, LPARAM, WPARAM, BOOL&);
+
 // construction/destruction
 public:
 	CAboutDlg();
@@ -60,11 +71,9 @@ protected:
 protected:
 	//{{AFX_MSG(CAboutDlg)
 	virtual BOOL OnInitDialog();
-	afx_msg void OnPaint();
 	afx_msg void OnTimer(UINT nIDEvent);
 	afx_msg void OnDestroy();
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()
@@ -77,13 +86,14 @@ public:
 		IDD = IDD_ABOUTBOX
 	};
 
-	CMFCLinkCtrl m_wndURLToolsCenter;
-	CString m_strVersion;
 	//}}AFX_DATA
 
 // scrolling credits attributes
-protected:
-#define     DISPLAY_TIMER_ID		150		// timer id
+private:
+	static const UINT DISPLAY_TIMER_ID		= 150;		// timer id
+
+	CMFCLinkCtrl m_wndURLToolsCenter;
+	CString m_strVersion;
 
 	RECT m_ScrollRect, r; // rect of Static Text frame
 	int nArrIndex, nCounter; // work ints
@@ -106,7 +116,6 @@ protected:
 	CDC m_dcMem;
 	BOOL m_bProcessingBitmap;
 	const LOGFONT lf_;
-public:
 	CString CopyrightText;
 };
 
