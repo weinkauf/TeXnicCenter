@@ -578,9 +578,6 @@ BOOL CTeXnicCenterApp::InitInstance()
 		}
 	}
 
-	// Show Tip
-	ShowTipAtStartup();
-
 	// start output type wizard, if no output types are existing
 	if (start_wizard)
 	{
@@ -590,7 +587,19 @@ BOOL CTeXnicCenterApp::InitInstance()
 		UpdateLaTeXProfileSel();
 	}
 
+	// Show Tip
+	ShowTipAtStartup();
+
 	TRACE1("Detected OS: %s\n", m_SystemInfo.ToString());
+
+	// fontDefaultGUIUnderline doesn't contain the font
+	// that is consistent with all the menus and dialogs: replace it
+	afxGlobalData.fontDefaultGUIUnderline.DeleteObject();
+
+	LOGFONT lf = GetDisplayFont();
+	lf.lfUnderline = TRUE;
+
+	afxGlobalData.fontDefaultGUIUnderline.CreateFontIndirect(&lf);
 
 	return TRUE;
 }
@@ -796,9 +805,9 @@ LaTeXView* CTeXnicCenterApp::GetActiveEditView()
 CDocument *CTeXnicCenterApp::GetOpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/)
 {
 	// get the full path name of the file
-	TCHAR lpszFilePath[_MAX_PATH];
+	TCHAR lpszFilePath[MAX_PATH];
 
-	GetFullPathName(lpszFileName, _MAX_PATH, lpszFilePath,0);
+	GetFullPathName(lpszFileName, MAX_PATH, lpszFilePath,0);
 	CString strDocPath = lpszFilePath;
 
 	// get the document template
@@ -833,9 +842,9 @@ CDocument *CTeXnicCenterApp::GetOpenLatexDocument(LPCTSTR lpszFileName, BOOL bRe
 CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName,BOOL bReadOnly /*= FALSE*/)
 {
 	// get the full path name of the file
-	TCHAR lpszFilePath[_MAX_PATH];
+	TCHAR lpszFilePath[MAX_PATH];
 
-	GetFullPathName(lpszFileName, _MAX_PATH, lpszFilePath, 0);
+	GetFullPathName(lpszFileName, MAX_PATH, lpszFilePath, 0);
 	CString strDocPath = lpszFilePath;
 
 	// get the document template
@@ -900,9 +909,9 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 	TRACE1("Opening LaTeX Doc: %s\n", lpszFileName);
 
 	// get the full path name of the file
-	TCHAR lpszFilePath[_MAX_PATH];
+	TCHAR lpszFilePath[MAX_PATH];
 
-	GetFullPathName(lpszFileName, _MAX_PATH, lpszFilePath,0);
+	GetFullPathName(lpszFileName, MAX_PATH, lpszFilePath,0);
 	CString strDocPath = lpszFilePath;
 
 	CDocTemplate *pDocTemplate = m_pLatexDocTemplate;
@@ -1065,7 +1074,7 @@ void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt()
 		if (pDoc->GetPathName().IsEmpty())
 			pDoc->DoFileSave();
 		else
-			pDoc->OnSaveProject(pDoc->GetPathName());
+			pDoc->Save(pDoc->GetPathName());
 	}
 
 	// Save all documents
@@ -1468,7 +1477,7 @@ void CTeXnicCenterApp::UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &rec
 			CString strDisplayName;
 			CString strCurrentDir;
 
-			GetCurrentDirectory(_MAX_PATH, strCurrentDir.GetBuffer(_MAX_PATH));
+			GetCurrentDirectory(MAX_PATH, strCurrentDir.GetBuffer(MAX_PATH));
 			strCurrentDir.ReleaseBuffer();
 
 			if (!recentFileList.GetDisplayName(
@@ -1512,7 +1521,7 @@ void CTeXnicCenterApp::UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &rec
 			CString strDisplayName;
 			CString strCurrentDir;
 
-			GetCurrentDirectory(_MAX_PATH, strCurrentDir.GetBuffer(_MAX_PATH));
+			GetCurrentDirectory(MAX_PATH, strCurrentDir.GetBuffer(MAX_PATH));
 			strCurrentDir.ReleaseBuffer();
 
 			if (!recentFileList.GetDisplayName(
@@ -2202,4 +2211,14 @@ CDocTemplate* CTeXnicCenterApp::GetBibTeXDocTemplate() const
 CDocTemplate* CTeXnicCenterApp::GetMetaPostDocTemplate() const
 {
 	return metapost_doc_template_;
+}
+
+bool CTeXnicCenterApp::GetShowMDITabs() const
+{
+	return m_bMDITabs != 0;
+}
+
+void CTeXnicCenterApp::SetShowMDITabs( bool val )
+{
+	m_bMDITabs = val;
 }

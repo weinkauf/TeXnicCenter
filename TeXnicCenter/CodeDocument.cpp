@@ -644,14 +644,14 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 DWORD CodeDocument::SaveFile(LPCTSTR pszFileName, bool clearModifiedFlag)
 {
 	HANDLE hSearch = INVALID_HANDLE_VALUE;
-	TCHAR szTempFileDir[_MAX_PATH + 1];
-	TCHAR szTempFileName[_MAX_PATH + 1];
-	TCHAR szBackupFileName[_MAX_PATH + 1];
+	TCHAR szTempFileDir[MAX_PATH + 1];
+	TCHAR szTempFileName[MAX_PATH + 1];
+	TCHAR szBackupFileName[MAX_PATH + 1];
 	DWORD result = 1;
 
 	CAtlFile temp_file;
 
-	TCHAR drive[_MAX_PATH], dir[_MAX_PATH], name[_MAX_PATH], ext[_MAX_PATH];
+	TCHAR drive[MAX_PATH], dir[MAX_PATH], name[MAX_PATH], ext[MAX_PATH];
 	_tsplitpath(pszFileName, drive, dir, name, ext);
 
 	lstrcpy(szTempFileDir, drive);
@@ -927,7 +927,7 @@ BOOL CodeDocument::DoSaveModified()
 			extern UINT AFXAPI AfxGetFileTitle(LPCTSTR, LPTSTR, UINT);
 			// get name based on file title of path name
 			name = m_strPathName;
-			AfxGetFileTitle(m_strPathName, name.GetBuffer(_MAX_PATH), _MAX_PATH);
+			AfxGetFileTitle(m_strPathName, name.GetBuffer(MAX_PATH), MAX_PATH);
 			name.ReleaseBuffer();
 		}
 

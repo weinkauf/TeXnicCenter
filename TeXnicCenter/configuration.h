@@ -346,7 +346,7 @@ public:
 	LOGFONT m_fontEditor;
 
 	/** Colors for editor components */
-	COLORREF m_aEditorColors[LaTeXView::COLORINDEX_ERRORBKGND];
+	COLORREF m_aEditorColors[LaTeXView::COLORINDEX_COUNT];
 
 	/** Width of a tab in characters */
 	int m_nTabWidth;

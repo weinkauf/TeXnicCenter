@@ -144,7 +144,7 @@ void CTextOutsourceDlg::OnOK()
 
 	//Save settings in the config
 	CConfiguration::GetInstance()->m_TextOutsource_nIncludeType = m_nIncludeType;
-	CConfiguration::GetInstance()->m_TextOutsource_bOpenNewFile = m_bOpenNewFile;
+	CConfiguration::GetInstance()->m_TextOutsource_bOpenNewFile = m_bOpenNewFile != 0;
 	CConfiguration::GetInstance()->m_TextOutsource_nOpenNewFileType = m_nOpenNewFileType;
 
 	CDialog::OnOK();

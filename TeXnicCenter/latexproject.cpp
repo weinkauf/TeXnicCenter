@@ -252,13 +252,8 @@ BOOL CLaTeXProject::OnOpenProject(LPCTSTR lpszPathName)
 	if (m_pwndMainFrame)
 	{
 		m_pwndMainFrame->SendMessage(WM_COMMAND,ID_WINDOW_EDITOR);
-	}
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// parse project
-	if (m_pwndMainFrame)
-	{
 		m_pwndMainFrame->PostMessage(WM_COMMAND,ID_PROJECT_PARSE);
+		m_pwndMainFrame->UpdateFrameTitle();
 	}
 
 	return TRUE;
@@ -359,6 +354,8 @@ void CLaTeXProject::OnClosing()
 
 	// delete views
 	DeleteProjectViews();
+
+	CProject::OnClosing();
 }
 
 BEGIN_MESSAGE_MAP(CLaTeXProject,CProject)
@@ -671,7 +668,7 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 		CString key;
 		HWND hwndlock = 0;
 		
-		if (theApp.m_bMDITabs)
+		if (theApp.GetShowMDITabs())
 			hwndlock = ::GetWindow(static_cast<CMDIFrameWnd*>(AfxGetMainWnd())->m_hWndMDIClient,GW_CHILD);
 
 		for (int nFrame = 0; nFrame < nFrameCount; nFrame++)
@@ -798,7 +795,7 @@ const CString CLaTeXProject::GetFilePath(LPCTSTR lpszFile) const
 	CString strPath;
 
 	SetCurrentDirectory(CPathTool::GetDirectory(m_strMainPath));
-	GetFullPathName(lpszFile,_MAX_PATH,strPath.GetBuffer(_MAX_PATH),0);
+	GetFullPathName(lpszFile,MAX_PATH,strPath.GetBuffer(MAX_PATH),0);
 	strPath.ReleaseBuffer();
 
 	return strPath;

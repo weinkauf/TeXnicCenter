@@ -125,9 +125,9 @@ void CProject::SetModifiedFlag(BOOL bModified /*= TRUE*/)
 void CProject::SetPathName(LPCTSTR lpszPathName)
 {
 	// store the path fully qualified
-	TCHAR szFullPath[_MAX_PATH];
+	TCHAR szFullPath[MAX_PATH];
 	LPTSTR szDummy;
-	GetFullPathName(lpszPathName, _MAX_PATH, szFullPath, &szDummy);
+	GetFullPathName(lpszPathName, MAX_PATH, szFullPath, &szDummy);
 	m_strPathName = szFullPath;
 	ASSERT(!m_strPathName.IsEmpty()); // must be set to something
 	ASSERT_VALID(this);
@@ -179,6 +179,7 @@ void CProject::OnClosing()
 		pView->OnClosingProject();
 		pView->m_pProject = NULL;
 	}
+
 	m_viewList.RemoveAll();
 
 	// clean up contents of document
@@ -257,6 +258,8 @@ BOOL CProject::OnOpenProject(LPCTSTR lpszPathName)
 	catch (...)
 	{
 	}
+
+	UpdateFrameTitle();
 
 	SetModifiedFlag(FALSE); // start off with unmodified
 
@@ -387,8 +390,8 @@ void CProject::ReportSaveLoadException(LPCTSTR lpszPathName, CException *e, BOOL
 
 	if (prompt.IsEmpty())
 	{
-		TCHAR szTitle[_MAX_PATH];
-		GetFileTitle(lpszPathName, szTitle, _MAX_PATH);
+		TCHAR szTitle[MAX_PATH];
+		GetFileTitle(lpszPathName, szTitle, MAX_PATH);
 		AfxFormatString1(prompt, nIDP, szTitle);
 	}
 
@@ -417,6 +420,16 @@ void CProject::ReleaseFile(CFile *pFile, BOOL bAbort)
 	delete pFile;
 }
 
+BOOL CProject::Save(LPCTSTR path)
+{
+	return OnSaveProject(path);
+}
+
+BOOL CProject::Open(LPCTSTR path)
+{
+	return OnOpenProject(path);
+}
+
 BOOL CProject::SaveModified()
 {
 	if (!IsModified())
@@ -435,7 +448,7 @@ BOOL CProject::SaveModified()
 	{
 		// get name based on file title of path name
 		name = m_strPathName;
-		GetFileTitle(m_strPathName, name.GetBuffer(_MAX_PATH), _MAX_PATH);
+		GetFileTitle(m_strPathName, name.GetBuffer(MAX_PATH), MAX_PATH);
 		name.ReleaseBuffer();
 	}
 
@@ -574,6 +587,9 @@ void CProject::OnProjectClose()
 
 	// destroy the document
 	GetProjectTemplate()->RemoveProject(this);
+
+	UpdateFrameTitle();
+
 	delete this;
 }
 
@@ -595,4 +611,12 @@ void CProject::OnUpdateProjectSave(CCmdUI* pCmdUI)
 bool CProject::IsClosing() const
 {
 	return m_bIsClosing;
+}
+
+void CProject::UpdateFrameTitle()
+{
+	CMainFrame* frame = static_cast<CMainFrame*>(AfxGetMainWnd());
+	
+	if (frame)
+		frame->UpdateFrameTitle();
 }

@@ -350,8 +350,13 @@ public:
 	 */
 	BOOL m_bTabFlatBorders;
 
+private:
 	/** Specifies, whether to show document tabs or not */
 	BOOL m_bMDITabs;
+
+public:
+	bool GetShowMDITabs() const;
+	void SetShowMDITabs(bool val = true);
 
 	/** Specifies, whether to show icons on document tabs or not */
 	BOOL m_bMDITabIcons;

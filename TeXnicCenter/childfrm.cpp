@@ -85,6 +85,8 @@ BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
 	if (!CMDIChildWndEx::PreCreateWindow(cs))
 		return FALSE;
 
+	cs.style |= FWS_PREFIXTITLE;
+
 	return TRUE;
 }
 
@@ -245,7 +247,7 @@ bool CChildFrame::Serialize( CIniFile &ini, LPCTSTR lpszKey, bool write )
 		wp.rcNormalPosition.right = ini.GetValue(lpszKey,VAL_FRAMEINFO_NORMALPOS_RIGHT,0);
 		wp.rcNormalPosition.bottom = ini.GetValue(lpszKey,VAL_FRAMEINFO_NORMALPOS_BOTTOM,0);
 	
-		if (!theApp.m_bMDITabs)
+		if (!theApp.GetShowMDITabs())
 			SetWindowPlacement(&wp);
 
 		// check view type

@@ -195,6 +195,7 @@ BOOL CProjectTemplate::SaveAllModified()
 void CProjectTemplate::CloseAllProjects(BOOL /*bEndSession*/)
 {
 	POSITION pos = GetFirstProjectPosition();
+
 	while (pos != NULL)
 	{
 		CProject* pProject = GetNextProject(pos);
@@ -326,6 +327,8 @@ CProject* CSingleProjectTemplate::OpenProjectFile(LPCTSTR lpszPathName)
 	{
 		CWaitCursor wait;
 
+		pProject->SetPathName(lpszPathName);
+
 		// open an existing document
 		bWasModified = pProject->IsModified();
 		pProject->SetModifiedFlag(FALSE); // not dirty for open
@@ -353,8 +356,6 @@ CProject* CSingleProjectTemplate::OpenProjectFile(LPCTSTR lpszPathName)
 			}
 			return NULL; //open failed
 		}
-
-		pProject->SetPathName(lpszPathName);
 	}
 
 	return pProject;
@@ -471,7 +472,7 @@ BOOL AFXAPI _AfxDeleteRegKey(LPCTSTR lpszKey)
 			break;
 
 		// enumerate the keys underneath
-		TCHAR szScrap[_MAX_PATH + 1];
+		TCHAR szScrap[MAX_PATH + 1];
 		DWORD dwLen = _countof(szScrap);
 		BOOL bItExists = FALSE;
 
@@ -769,7 +770,7 @@ void CProjectManager::RegisterShellFileTypes(BOOL bCompat)
 			{
 				ASSERT(strFilterExt[0] == '.');
 
-				LONG lSize = _MAX_PATH * 2;
+				LONG lSize = MAX_PATH * 2;
 				LONG lResult = ::RegQueryValue(HKEY_CLASSES_ROOT, strFilterExt,
 				                               strTemp.GetBuffer(lSize), &lSize);
 				strTemp.ReleaseBuffer();
@@ -865,7 +866,7 @@ void CProjectManager::UnregisterShellFileTypes()
 			{
 				ASSERT(strFilterExt[0] == '.');
 
-				LONG lSize = _MAX_PATH * 2;
+				LONG lSize = MAX_PATH * 2;
 				LONG lResult = ::RegQueryValue(HKEY_CLASSES_ROOT, strFilterExt,
 				                               strTemp.GetBuffer(lSize), &lSize);
 				strTemp.ReleaseBuffer();
@@ -892,22 +893,22 @@ CProject* CProjectManager::OpenProjectFile(LPCTSTR lpszFileName)
 	CProjectTemplate* pBestTemplate = NULL;
 	CProject* pOpenProject = NULL;
 
-	TCHAR szPath[_MAX_PATH];
+	TCHAR szPath[MAX_PATH];
 	ASSERT(lstrlen(lpszFileName) < _countof(szPath));
-	TCHAR szTemp[_MAX_PATH];
+	TCHAR szTemp[MAX_PATH];
 
 	if (lpszFileName[0] == _T('\"'))
 		++lpszFileName;
 
-	lstrcpyn(szTemp, lpszFileName, _MAX_PATH);
+	lstrcpyn(szTemp, lpszFileName, MAX_PATH);
 	LPTSTR lpszLast = _tcsrchr(szTemp, _T('\"'));
 
 	if (lpszLast != NULL)
 		*lpszLast = 0;
 	AfxFullPath(szPath, szTemp);
-	TCHAR szLinkName[_MAX_PATH];
+	TCHAR szLinkName[MAX_PATH];
 
-	if (AfxResolveShortcut(AfxGetMainWnd(), szPath, szLinkName, _MAX_PATH))
+	if (AfxResolveShortcut(AfxGetMainWnd(), szPath, szLinkName, MAX_PATH))
 		lstrcpy(szPath, szLinkName);
 
 	while (pos != NULL)
@@ -1028,7 +1029,7 @@ BOOL CProjectManager::DoPromptFileName(CString& fileName, UINT nIDSTitle,
 
 	dlgFile.m_ofn.lpstrFilter = strFilter;
 	dlgFile.m_ofn.lpstrTitle = title;
-	dlgFile.m_ofn.lpstrFile = fileName.GetBuffer(_MAX_PATH);
+	dlgFile.m_ofn.lpstrFile = fileName.GetBuffer(MAX_PATH);
 
 	int nResult = dlgFile.DoModal();
 	fileName.ReleaseBuffer();

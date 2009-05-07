@@ -542,7 +542,8 @@ void CProjectNewDialog::Create()
 		AfxMessageBox(errMsg, MB_ICONSTOP | MB_OK);
 		return;
 	}
-	pProject->OnSaveProject(pProject->GetPathName());
+
+	pProject->Save(pProject->GetPathName());
 
 	// set carriage return
 	CString strCrlf;

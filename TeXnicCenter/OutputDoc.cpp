@@ -537,7 +537,7 @@ CString COutputDoc::GetFilePath(LPCTSTR lpszFile)
 	LPTSTR dummy;
 
 	SetCurrentDirectory(GetWorkingDir());
-	GetFullPathName(lpszFile,_MAX_PATH,strPath.GetBuffer(_MAX_PATH),&dummy);
+	GetFullPathName(lpszFile,MAX_PATH,strPath.GetBuffer(MAX_PATH),&dummy);
 	strPath.ReleaseBuffer();
 
 	return strPath;

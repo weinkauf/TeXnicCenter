@@ -55,11 +55,10 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CEmptyDocumentTemplateItem,CObject);
 
 CEmptyDocumentTemplateItem::CEmptyDocumentTemplateItem()
-		: CDocumentTemplateItem()
 {
 }
 
-BOOL CEmptyDocumentTemplateItem::InitItem(LPCTSTR lpszPath,CImageList &ImageList32,CImageList &ImageList16)
+BOOL CEmptyDocumentTemplateItem::InitItem(LPCTSTR /*lpszPath*/,CImageList &ImageList32,CImageList &ImageList16)
 {
 	//add image to image list and remember index
 	HICON hIcon = theApp.LoadIcon(IDR_LATEXDOCTYPE);
@@ -362,7 +361,7 @@ void CDocumentNewDialog::Create()
 
 	// Generate temporary file name
 	CString strTempPath;
-	if (GetTempPath(_MAX_PATH,strTempPath.GetBuffer(_MAX_PATH)))
+	if (GetTempPath(MAX_PATH,strTempPath.GetBuffer(MAX_PATH)))
 		strTempPath.ReleaseBuffer();
 	else
 	{
@@ -371,7 +370,7 @@ void CDocumentNewDialog::Create()
 	}
 
 	CString strTempFilePath;
-	if (GetTempFileName(strTempPath,_T("TXC"),0,strTempFilePath.GetBuffer(_MAX_PATH)))
+	if (GetTempFileName(strTempPath,_T("TXC"),0,strTempFilePath.GetBuffer(MAX_PATH)))
 		strTempFilePath.ReleaseBuffer();
 	else
 	{

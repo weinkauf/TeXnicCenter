@@ -243,15 +243,15 @@ public:
 	 */
 	static bool CheckExistingProjectFile(LPCTSTR lpszPathName);
 
-// overridings
 public:
+	virtual void SetPathName(LPCTSTR lpszPathName);
+
+protected:
 	virtual void OnClosing();
 	virtual BOOL OnOpenProject(LPCTSTR lpszPathName);
 	virtual BOOL OnNewProjectFromDoc(LPCTSTR lpszDocPathName);
-	virtual void SetPathName(LPCTSTR lpszPathName);
 	virtual BOOL OnSaveProject(LPCTSTR lpszPathName);
 	virtual BOOL SaveModified();
-protected:
 	virtual BOOL OnNewProject();
 
 // debugging

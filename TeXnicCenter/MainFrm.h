@@ -416,4 +416,8 @@ public:
 
 private:
 	const std::vector<CProjectView*> GetViews();
+protected:
+	virtual void OnUpdateFrameTitle(BOOL bAddToTitle);
+public:
+	void UpdateFrameTitle();
 };

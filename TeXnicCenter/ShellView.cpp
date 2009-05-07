@@ -262,8 +262,8 @@ BOOL CShellView::CreateChildProcess()
 	siStartInfo.hStdOutput = m_hChildStdoutWr;
 	siStartInfo.hStdError = m_hChildStdoutWr;
 
-	TCHAR shellCmd[_MAX_PATH];
-	if (!GetEnvironmentVariable(_T("ComSpec"), shellCmd, _MAX_PATH))
+	TCHAR shellCmd[MAX_PATH];
+	if (!GetEnvironmentVariable(_T("ComSpec"), shellCmd, MAX_PATH))
 		return FALSE;
 #ifdef _UNICODE
 	_tcscat(shellCmd, _T(" /U"));

@@ -269,6 +269,11 @@ void LaTeXView::UpdateSettings()
 
 #pragma endregion
 
+	rCtrl.StyleSetFont(SCE_TEX_UNIT,editor_font.lfFaceName);
+	rCtrl.StyleSetSize(SCE_TEX_UNIT,point_size);
+	rCtrl.StyleSetBold(SCE_TEX_UNIT,TRUE);
+	rCtrl.StyleSetFore(SCE_TEX_UNIT,GetColor(COLORINDEX_UNIT));
+
 	rCtrl.UsePopUp(FALSE);
 
 	SetAStyle(SCE_TEX_COMMAND, GetColor(COLORINDEX_KEYWORD),GetColor(COLORINDEX_BKGND));
