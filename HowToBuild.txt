@@ -31,9 +31,9 @@ Note: The build process has been automated. I have tested it and seems to work
    c) Add the include and library paths of MSXML to the list in Visual C++ 6
       ('Tools -> Options ->Directories').
 
-3. Download the BCGControlBarLibrary header- and lib-files from 
+3. Download the BCGControlBarLibrary header- and lib-files ("GUI Lib") from 
 
-     http://www.toolscenter.org/downloads
+     http://www.texniccenter.org/resources/developer-resources
 
    and unpack the ZIP-archive to the directory, this file (HowToBuild.txt) is
    placed in.
