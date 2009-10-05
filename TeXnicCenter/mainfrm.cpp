@@ -1895,9 +1895,11 @@ LRESULT CMainFrame::OnGetTabToolTip(WPARAM, LPARAM l)
 	ASSERT_POINTER(ti,CMFCTabToolTipInfo);
 
 	CChildFrame* f = reinterpret_cast<CChildFrame*>(ti->m_pTabWnd->GetTabWnd(ti->m_nTabIndex));
-	ASSERT_KINDOF(CChildFrame,f);
-
-	ti->m_strText = f->GetPathNameOfDocument();
+	if (f)
+	{
+		ASSERT_KINDOF(CChildFrame,f);
+		ti->m_strText = f->GetPathNameOfDocument();
+	}
 
 	return 0;
 }

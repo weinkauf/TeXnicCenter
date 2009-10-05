@@ -7341,6 +7341,7 @@ BEGIN
     IDS_YEAR                "Year"
     IDS_PUBLICATION_TYPE    "Type"
     IDS_PUBLISHER           "Publisher"
+    STE_OUTPUTWIZARD_DVIPDFMTYPE "LaTeX => DVI => PDF"
     IDS_WIZARD_MIKTEX_DETECTED "%s has been located on your system"
     IDS_WIZARD_CONFIGURE_PDF 
                             "Your TeX-distribution supports the generation of PDF-files"
