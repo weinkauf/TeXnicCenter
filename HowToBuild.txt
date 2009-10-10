@@ -11,14 +11,14 @@ TeXnicCenter and all of its components:
   * TortoiseSVN, freely available at http://tortoisesvn.tigris.org/
 
 To generate the setup you will need:
-  * Nullsoft Scriptable Install System (NSIS) available at 
-    http://nsis.sourceforge.net/
+  * Inno Setup available at 
+    http://www.jrsoftware.org/isinfo.php
 
 2 Build Process
   
   1. Open the TeXnicCenter solution TeXnicCenter.sln in Visual C++.
   2. Build the complete solution.
-     The result can be found in the newly created 'output' folder.
+     The result can be found in the newly created 'Output' folder.
 
 
 
