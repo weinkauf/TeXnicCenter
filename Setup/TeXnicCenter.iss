@@ -2,6 +2,7 @@
 EnableISX=true
 
 [Setup]
+OutputDir=..\Output\Setup
 OutputBaseFilename=TXCSetup
 MinVersion=4.0.950,5.0.2195
 AppCopyright=© 1999-2009 www.TeXnicCenter.org
@@ -15,14 +16,14 @@ DefaultDirName={pf}\TeXnicCenter 2 Alpha 1
 UsePreviousAppDir=true
 AlwaysShowDirOnReadyPage=true
 AlwaysShowGroupOnReadyPage=true
-AppPublisher=TeXnicCenter.org
-AppPublisherURL=http://www.TeXnicCenter.org/
-AppSupportURL=http://www.TeXnicCenter.org/support/
-AppUpdatesURL=http://www.TeXnicCenter.org/downloads/
+AppPublisher=The TeXnicCenter Team
+AppPublisherURL=http://www.texniccenter.org/
+AppSupportURL=http://www.texniccenter.org/support/find-help
+AppUpdatesURL=http://www.texniccenter.org/resources/downloads
 AppVersion=Version 2.0 Alpha 1
 AppID=TeXnicCenter2
 AlwaysShowComponentsList=true
-UninstallDisplayIcon={app}\TeXnicCenter.EXE
+UninstallDisplayIcon={app}\TeXnicCenter.exe
 
 SolidCompression=true
 InternalCompressLevel=ultra
@@ -91,18 +92,18 @@ Name: {userdesktop}\TeXnicCenter; Filename: {app}\TeXnicCenter.exe; WorkingDir: 
 Name: {sendto}\TeXnicCenter; Filename: {app}\TeXnicCenter.exe; Comment: TeXnicCenter; IconIndex: 0; Tasks: SendToLink; WorkingDir: {userdocs}
 
 [Registry]
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter; ValueType: string; ValueName: CurrentVersion; ValueData: 1 Beta 7.50
-Root: HKLM; Subkey: Software\ToolsCenter; Flags: uninsdeletekeyifempty
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter; Flags: uninsdeletekey
-Root: HKCU; Subkey: Software\ToolsCenter; Flags: uninsdeletekeyifempty
-Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenter; Flags: uninsdeletekey
-Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenter\Settings\Options\ProjectTemplatePaths; ValueType: dword; ValueName: Size; ValueData: 1; Flags: createvalueifdoesntexist uninsdeletekey
-Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenter\Settings\Options\ProjectTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Projects; Flags: createvalueifdoesntexist uninsdeletekey
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter; ValueType: string; ValueName: AppPath; ValueData: {app}
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter\Templates; ValueType: string; ValueName: DefaultProjectTemplatePath; ValueData: {app}\Templates\Projects
-Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenter\Settings\Options\DocumentTemplatePaths; ValueType: dword; ValueName: Size; ValueData: 1; Flags: createvalueifdoesntexist uninsdeletekey
-Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenter\Settings\Options\DocumentTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Documents; Flags: createvalueifdoesntexist uninsdeletekey
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenter\Templates; ValueType: string; ValueName: DefaultDocumentTemplatePath; ValueData: {app}\Templates\Documents
+Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenterNT; ValueType: string; ValueName: CurrentVersion; ValueData: 2.0 Alpha 1
+Root: HKLM; Subkey: Software\ToolsCenterNT; Flags: uninsdeletekeyifempty
+Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenterNT; Flags: uninsdeletekey
+Root: HKCU; Subkey: Software\ToolsCenterNT; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenterNT; Flags: uninsdeletekey
+Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenterNT\Settings\Options\ProjectTemplatePaths; ValueType: dword; ValueName: Size; ValueData: 1; Flags: createvalueifdoesntexist uninsdeletekey
+Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenterNT\Settings\Options\ProjectTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Projects; Flags: createvalueifdoesntexist uninsdeletekey
+Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenterNT; ValueType: string; ValueName: AppPath; ValueData: {app}
+Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenterNT\Templates; ValueType: string; ValueName: DefaultProjectTemplatePath; ValueData: {app}\Templates\Projects
+Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenterNT\Settings\Options\DocumentTemplatePaths; ValueType: dword; ValueName: Size; ValueData: 1; Flags: createvalueifdoesntexist uninsdeletekey
+Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenterNT\Settings\Options\DocumentTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Documents; Flags: createvalueifdoesntexist uninsdeletekey
+Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenterNT\Templates; ValueType: string; ValueName: DefaultDocumentTemplatePath; ValueData: {app}\Templates\Documents
 
 [Tasks]
 Name: DesktopLink; Description: Create a desktop icon; GroupDescription: Link
