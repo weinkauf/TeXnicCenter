@@ -492,14 +492,6 @@ LRESULT CAboutDlg::OnCreditsPaint( UINT, LPARAM, WPARAM, BOOL& )
 	r.top = r.bottom - abs(SCROLLAMOUNT);
 	pDc->DPtoLP(&r);
 
-	//if (m_bFirstTime)
-	//{
-	//	m_bFirstTime = FALSE;
-	//	pDc->FillRect(&m_ScrollRect,&bBrush);
-	//}
-	//else
-	//	pDc->FillRect(&r,&bBrush);
-
 	pDc->FillRect(&dc.m_ps.rcPaint,&bBrush);
 
 	r = m_ScrollRect;

@@ -58,8 +58,12 @@
 
 		<lxCommand name="\caption" parameters="1"/>
 		<lxCommand name="\label" parameters="1"/>	
-		<lxCommand name="\ref" parameters="1"/>	
-		<lxCommand name="\pageref" parameters="1"/>	
+		<lxCommand name="\ref" parameters="1"/>
+    		<lxCommand name="\autoref" parameters="1"/>
+		<lxCommand name="\pageref" parameters="1"/>
+		<lxCommand name="\autopageref" parameters="1"/>
+		<lxCommand name="\nameref" parameters="1"/>
+		<lxCommand name="\hyperref[]" parameters="1"/>
 		<lxCommand name="\cite" parameters="1"/>	
 		<lxCommand name="\nocite" parameters="1"/>	
 					

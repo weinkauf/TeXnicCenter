@@ -2305,7 +2305,7 @@
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2314,7 +2314,7 @@
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2323,7 +2323,7 @@
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2332,7 +2332,7 @@
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;"
+							CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\Packages\$(InputFileName)&quot;&#x0D;&#x0A;"
 							Outputs="$(OutDir)\Packages\$(InputFileName)"
 						/>
 					</FileConfiguration>
@@ -2913,6 +2913,10 @@
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
+					<File
+						RelativePath=".\OutputProfiles.h"
+						>
+					</File>
 				</File>
 			</Filter>
 		</Filter>

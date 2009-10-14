@@ -165,8 +165,8 @@
 		<lxCommand name="\boolean"/>
 		<lxCommand name="\setboolean"/>
 		<lxCommand name="\whiledo"/>
-		<lxCommand name="\value"/>
-		<lxCommand name="\ifthenelse"/>
+		<lxCommand name="\value" parameters="1"/>
+		<lxCommand name="\ifthenelse" parameters="3"/>
 		<lxCommand name="\newboolean"/>
 	</lxPackage>
 	<lxPackage name="shortvrb" path="C:\texmf\tex\latex\base\shortvrb.sty" desc="2004/02/09 v2.1b&#xA;   Standard LaTeX documentation package (FMi)">
