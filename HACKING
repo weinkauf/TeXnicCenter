@@ -181,7 +181,7 @@ highlighting.
 In order to be able to use a custom cursor for incremental search the command 
 SCI_SHOWCURSOR(bool) has been introduced which supresses cursor changes.
 
-The changes that have made can be reviewed by comparing revisions 912 and 
+The changes that have been made can be reviewed by comparing revisions 912 and 
 916 of the following files:
   
   Scintilla/include/Scintilla.h

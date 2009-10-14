@@ -17,7 +17,7 @@
 #define BITSIZEOF_WCHAR_T 8 * sizeof(wchar_t)
 
 /* Define to the number of bits in type 'wint_t'. */
-#undef BITSIZEOF_WINT_T 8 * sizeof(wint_t)
+#define BITSIZEOF_WINT_T 8 * sizeof(wint_t)
 
 /* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
    systems. This function is required for `alloca.c' support on those systems.
@@ -136,7 +136,7 @@
 #undef HAVE_DLFCN_H
 
 /* Define if you have the declaration of environ. */
-#undef HAVE_ENVIRON_DECL 1
+#define HAVE_ENVIRON_DECL 1
 
 /* Define to 1 if you have the <errno.h> header file. */
 #define HAVE_ERRNO_H 1
@@ -187,7 +187,7 @@
 #undef HAVE_PATHCONF
 
 /* Define to 1 if you have the <random.h> header file. */
-#undef HAVE_RANDOM_H 1
+#define HAVE_RANDOM_H 1
 
 /* Define to 1 if you have the `readlink' function. */
 #undef HAVE_READLINK

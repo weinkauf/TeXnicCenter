@@ -49,7 +49,7 @@ AC_DEFUN([gl_INIT],
   gl_MODULE_INDICATOR([canonicalize-lgpl])
   gl_ENVIRON
   gl_UNISTD_MODULE_INDICATOR([environ])
-  AC_REQUIRE([gl_HEADER_ERRNO_H])
+  gl_HEADER_ERRNO_H
   gl_ERROR
   m4_ifdef([AM_XGETTEXT_OPTION],
     [AM_XGETTEXT_OPTION([--flag=error:3:c-format])
@@ -63,7 +63,7 @@ AC_DEFUN([gl_INIT],
   gl_MALLOCA
   AC_TYPE_MBSTATE_T
   gl_FUNC_MEMMOVE
-  AC_REQUIRE([gl_MULTIARCH])
+  gl_MULTIARCH
   gl_PATHMAX
   gl_FUNC_READLINK
   gl_UNISTD_MODULE_INDICATOR([readlink])

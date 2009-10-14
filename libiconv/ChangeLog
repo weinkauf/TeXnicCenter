@@ -1,3 +1,38 @@
+2009-06-30  Bruno Haible  <bruno@clisp.org>
+
+	* Version 1.13.1 released.
+
+2009-06-30  Bruno Haible  <bruno@clisp.org>
+
+	* configure.ac: Bump version number to 1.13.1.
+	* README: Likewise.
+
+2009-06-04  Bruno Haible  <bruno@clisp.org>
+
+	* preload/Makefile.devel (AUTOCONF): Switch to version 2.63.
+	(ACLOCAL): Switch to version 1.11.
+
+2009-05-19  Bruno Haible  <bruno@clisp.org>
+
+	* Makefile.devel (AUTOMAKE, ACLOCAL): Switch to version 1.11.
+	* autogen.sh: Update comments.
+
+2009-04-24  Bruno Haible  <bruno@clisp.org>
+
+	Fix a compilation error on HP-UX 11.00, introduced on 2008-09-16.
+	* src/iconv_open2.h: Don't initialize nonexistent field if
+	!(HAVE_WCRTOMB || HAVE_MBRTOWC).
+	Patch by Joel Brobecker <brobecker@adacore.com>.
+
+2009-04-15  Bruno Haible  <bruno@clisp.org>
+
+	* src/Makefile.in (install, uninstall): Append the $(EXEEXT) suffix
+	explicitly. Needed on Cygwin.
+
+2009-04-11  Bruno Haible  <bruno@clisp.org>
+
+	* configure.ac: Move the statements for WOE32 and WINDRES.
+
 2009-03-26  Bruno Haible  <bruno@clisp.org>
 
 	* Version 1.13 released.

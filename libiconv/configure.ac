@@ -20,7 +20,7 @@ AC_PREREQ([2.60])
 AC_INIT
 AC_CONFIG_SRCDIR([lib/iconv.c])
 AC_CONFIG_AUX_DIR([build-aux])
-AM_INIT_AUTOMAKE([libiconv], [1.13])
+AM_INIT_AUTOMAKE([libiconv], [1.13.1])
 AC_CONFIG_HEADERS([config.h lib/config.h])
 AC_PROG_MAKE_SET
 
@@ -82,6 +82,19 @@ LT_INIT([disable-static win32-dll])
 dnl Prepares the libtool configuration for handling of Windows resources, and
 dnl sets the RC variable to a program that compiles Windows resource files.
 LT_LANG([Windows Resource])
+
+dnl On mingw and Cygwin, we can activate special Makefile rules which add
+dnl version information to the executables.
+case "$host_os" in
+  mingw* | cygwin*) is_woe32=yes ;;
+  *) is_woe32=no ;;
+esac
+WOE32=$is_woe32
+AC_SUBST([WOE32])
+if test $WOE32 = yes; then
+  dnl Check for a program that compiles Windows resource files.
+  AC_CHECK_TOOL([WINDRES], [windres])
+fi
 
 gl_VISIBILITY
 AM_ICONV
@@ -171,19 +184,6 @@ else
   DLL_VARIABLE=
 fi
 AC_SUBST([DLL_VARIABLE])
-
-dnl On mingw and Cygwin, we can activate special Makefile rules which add
-dnl version information to the executables.
-case "$host_os" in
-  mingw* | cygwin*) is_woe32=yes ;;
-  *) is_woe32=no ;;
-esac
-WOE32=$is_woe32
-AC_SUBST([WOE32])
-if test $WOE32 = yes; then
-  dnl Check for a program that compiles Windows resource files.
-  AC_CHECK_TOOL([WINDRES], [windres])
-fi
 
 AH_BOTTOM([
 /* On Windows, variables that may be in a DLL must be marked specially.  */
