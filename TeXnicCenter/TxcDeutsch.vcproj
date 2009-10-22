@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="TxcResDeutsch"
 	ProjectGUID="{E8E006D1-6599-43C2-AD30-75E5B5B9F68F}"
 	RootNamespace="TxcDeutsch"
@@ -357,6 +357,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				EmbedManifest="true"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
