@@ -1,37 +1,53 @@
+#define APP_NAME          "TeXnicCenter"
+#define APP_VERSION       "2.0 Alpha 1"
+#define APP_ID            "TeXnicCenter Alpha"
+#define REGNAME           "TeXnicCenterNT"
+
+
 [_ISTool]
 EnableISX=true
 
 [Setup]
+;Output
 OutputDir=..\Output\Setup
 OutputBaseFilename=TXCSetup
-MinVersion=4.0.950,5.0.2195
-AppCopyright=© 1999-2009 www.TeXnicCenter.org
-AppName=TeXnicCenter2
-AppVerName=TeXnicCenter Version 2.0 Alpha 1
-LicenseFile=GPL.rtf
-PrivilegesRequired=none
-DefaultGroupName=TeXnicCenter2
-AllowNoIcons=true
-DefaultDirName={pf}\TeXnicCenter 2 Alpha 1
-UsePreviousAppDir=true
-AlwaysShowDirOnReadyPage=true
-AlwaysShowGroupOnReadyPage=true
+
+;About TeXnicCenter
+AppName={#APP_NAME}
+AppVersion={#APP_VERSION}
+AppVerName={#APP_NAME} Version {#APP_VERSION}
+AppID={#APP_ID}
 AppPublisher=The TeXnicCenter Team
 AppPublisherURL=http://www.texniccenter.org/
 AppSupportURL=http://www.texniccenter.org/support/find-help
 AppUpdatesURL=http://www.texniccenter.org/resources/downloads
-AppVersion=Version 2.0 Alpha 1
-AppID=TeXnicCenter2
-AlwaysShowComponentsList=true
-UninstallDisplayIcon={app}\TeXnicCenter.exe
+AppCopyright=© 1999-2009 www.TeXnicCenter.org
+LicenseFile=GPL.rtf
 
+DefaultDirName={pf}\{#APP_ID}
+DefaultGroupName={#APP_ID}
+
+;Previous
+UsePreviousAppDir=true
+
+;Requirements
+PrivilegesRequired=none
+MinVersion=4.0.950,5.0.2195
+
+;Setup
+AllowNoIcons=true
+AlwaysShowDirOnReadyPage=true
+AlwaysShowGroupOnReadyPage=true
+AlwaysShowComponentsList=true
 SolidCompression=true
 InternalCompressLevel=ultra
 Compression=lzma/ultra
-
 ShowLanguageDialog=yes
+
+UninstallDisplayIcon={app}\TeXnicCenter.exe
 WizardImageFile=compiler:wizmodernimage-IS.bmp
 WizardSmallImageFile=compiler:wizmodernsmallimage-IS.bmp
+
 
 [Components]
 Name: Application_Files; Description: Application Files (TeXnicCenter core components); Flags: fixed; Types: compact typical custom
@@ -47,28 +63,49 @@ Name: Dictionaries\Francais; Description: Français; Types: custom
 Name: Dictionaries\Francais1990; Description: Français (appelé Réforme 1990); Types: custom
 
 [Files]
+;Application Files
+Source: ..\Output\Product\Unicode Release\TeXnicCenter.exe; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\Unicode Release\MFCExt.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\Unicode Release\MsXmlCpp.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\Unicode Release\SciLexer.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\Unicode Release\Language\*.dll; DestDir: {app}\Language; Components: Application_Files; Flags: ignoreversion
+
+;The type lib for creating wizards. We do not issue an error, if registering doesn't work.
+Source: ..\Output\Product\Unicode Release\TeXnicCenterObjects.tlb; DestDir: {app}; Components: Application_Files; Flags: regtypelib promptifolder comparetimestamp noregerror
+
+;Some other files
 Source: ..\Output\Product\Unicode Release\GPL_english.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: ..\Output\Product\Unicode Release\GPL_german.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\MFCExt.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\TeXnicCenter.exe; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\MsXmlCpp.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: ..\Output\Product\Unicode Release\Tips_english.txt; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: ..\Output\Product\Unicode Release\Tips_german.txt; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\TeXnicCenterObjects.tlb; DestDir: {app}; Components: Application_Files; Flags: regtypelib promptifolder comparetimestamp
-
 Source: ..\Output\Product\Unicode Release\UserImages.bmp; DestDir: {app}; Components: Application_Files; Flags: promptifolder comparetimestamp
 
-Source: ..\Output\Product\Unicode Release\Language\*.dll; DestDir: {app}\Language; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\Help\*.chm; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\Help\*.chw; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
-
+;Packages and other XML files
 Source: ..\Output\Product\Unicode Release\*.xsd; DestDir: {app}; Components: Application_Files; Flags: promptifolder comparetimestamp
 Source: ..\Output\Product\Unicode Release\Packages\*.xml; DestDir: {app}\Packages; Components: Application_Files; Flags: promptifolder comparetimestamp
 Source: ..\Output\Product\Unicode Release\Packages\*.bmp; DestDir: {app}\Packages; Components: Application_Files; Flags: promptifolder comparetimestamp
+
+;Help
+Source: ..\Output\Product\Unicode Release\Help\*.chm; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
+Source: ..\Output\Product\Unicode Release\Help\*.chw; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
+
+;XML System files - do we really need this? For an admin account on XP, we don't need these files at all.
+;For a regular user, we need these files in the systems dir. A simple copy to the app dir doesn't work. What am I missing?
 Source: msxml4.dll; DestDir: {sys}; Flags: regserver sharedfile
 Source: msxml4r.dll; DestDir: {sys}; Flags: sharedfile
 Source: msxml4a.dll; DestDir: {sys}; Flags: sharedfile
+;Source: msxml4.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+;Source: msxml4r.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+;Source: msxml4a.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 
+;MFC and CRT system files. Copied as private assemblies. Windows will us globally installed versions, if they are installed.
+Source: msvcr90.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: msvcp90.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: mfc90u.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: Microsoft.VC90.CRT.manifest; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: Microsoft.VC90.MFC.manifest; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+
+;Templates
 DestDir: {app}\Templates\Documents\English; Source: ..\Output\Product\Unicode Release\Templates\Documents\English\*.tex; Components: Templates\English; Flags: comparetimestamp
 DestDir: {app}\Templates\Documents\English advanced; Source: ..\Output\Product\Unicode Release\Templates\Documents\English advanced\*.tex; Components: Templates\English; Flags: comparetimestamp
 DestDir: {app}\Templates\Projects\English advanced; Source: ..\Output\Product\Unicode Release\Templates\Projects\English advanced\*.tex; Components: Templates\English; Flags: comparetimestamp
@@ -79,6 +116,7 @@ DestDir: {app}\Templates\Documents\Deutsch erweitert; Source: ..\Output\Product\
 DestDir: {app}\Templates\Projects\Deutsch erweitert; Source: ..\Output\Product\Unicode Release\Templates\Projects\Deutsch erweitert\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
 DestDir: {app}\Templates\Projects\Deutsch; Source: ..\Output\Product\Unicode Release\Templates\Projects\Deutsch\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
 
+;Dictionaries
 DestDir: {app}\Dictionaries; Source: ..\Output\Product\Unicode Release\Dictionaries\de_DE.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Deutsch
 DestDir: {app}\Dictionaries; Source: ..\Output\Product\Unicode Release\Dictionaries\en_GB.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishGB
 DestDir: {app}\Dictionaries; Source: ..\Output\Product\Unicode Release\Dictionaries\en_US.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishUS
@@ -86,24 +124,25 @@ DestDir: {app}\Dictionaries; Source: ..\Output\Product\Unicode Release\Dictionar
 DestDir: {app}\Dictionaries; Source: ..\Output\Product\Unicode Release\Dictionaries\fr_FR-1990.*; Flags: comparetimestamp promptifolder; Components: " Dictionaries\Francais1990"
 
 [Icons]
-Name: {group}\TeXnicCenter; Filename: {app}\TeXnicCenter.exe; WorkingDir: {userdocs}; IconIndex: 0
+Name: {group}\{#APP_ID}; Filename: {app}\TeXnicCenter.exe; WorkingDir: {userdocs}; IconIndex: 0
 Name: {group}\TeXnicCenter Help; Filename: {app}\Help\TeXnicCenter.chm; WorkingDir: {app}\Help; IconFilename: {win}\HH.EXE; IconIndex: 0; Components: Help_Files
-Name: {userdesktop}\TeXnicCenter; Filename: {app}\TeXnicCenter.exe; WorkingDir: {userdocs}; Comment: TeXnicCenter; IconIndex: 0; Tasks: DesktopLink
-Name: {sendto}\TeXnicCenter; Filename: {app}\TeXnicCenter.exe; Comment: TeXnicCenter; IconIndex: 0; Tasks: SendToLink; WorkingDir: {userdocs}
+Name: {userdesktop}\{#APP_ID}; Filename: {app}\TeXnicCenter.exe; WorkingDir: {userdocs}; Comment: TeXnicCenter; IconIndex: 0; Tasks: DesktopLink
+Name: {sendto}\{#APP_ID}; Filename: {app}\TeXnicCenter.exe; Comment: TeXnicCenter; IconIndex: 0; Tasks: SendToLink; WorkingDir: {userdocs}
 
 [Registry]
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenterNT; ValueType: string; ValueName: CurrentVersion; ValueData: 2.0 Alpha 1
-Root: HKLM; Subkey: Software\ToolsCenterNT; Flags: uninsdeletekeyifempty
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenterNT; Flags: uninsdeletekey
-Root: HKCU; Subkey: Software\ToolsCenterNT; Flags: uninsdeletekeyifempty
-Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenterNT; Flags: uninsdeletekey
-Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenterNT\Settings\Options\ProjectTemplatePaths; ValueType: dword; ValueName: Size; ValueData: 1; Flags: createvalueifdoesntexist uninsdeletekey
-Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenterNT\Settings\Options\ProjectTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Projects; Flags: createvalueifdoesntexist uninsdeletekey
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenterNT; ValueType: string; ValueName: AppPath; ValueData: {app}
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenterNT\Templates; ValueType: string; ValueName: DefaultProjectTemplatePath; ValueData: {app}\Templates\Projects
-Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenterNT\Settings\Options\DocumentTemplatePaths; ValueType: dword; ValueName: Size; ValueData: 1; Flags: createvalueifdoesntexist uninsdeletekey
-Root: HKCU; Subkey: Software\ToolsCenter\TeXnicCenterNT\Settings\Options\DocumentTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Documents; Flags: createvalueifdoesntexist uninsdeletekey
-Root: HKLM; Subkey: Software\ToolsCenter\TeXnicCenterNT\Templates; ValueType: string; ValueName: DefaultDocumentTemplatePath; ValueData: {app}\Templates\Documents
+;Write infos about the installation such that all other programs can access them
+Root: HKLM; Subkey: Software\ToolsCenter; Flags: uninsdeletekeyifempty noerror
+Root: HKLM; Subkey: Software\ToolsCenter\{#REGNAME}; Flags: uninsdeletekey noerror
+Root: HKLM; Subkey: Software\ToolsCenter\{#REGNAME}; ValueType: string; ValueName: AppPath; ValueData: {app}; Flags: noerror
+Root: HKLM; Subkey: Software\ToolsCenter\{#REGNAME}; ValueType: string; ValueName: CurrentVersion; ValueData: {#APP_VERSION}; Flags: noerror
+
+;Add the templates for the current user
+Root: HKCU; Subkey: Software\ToolsCenter; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}; Flags: uninsdeletekey
+Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\ProjectTemplatePaths; ValueType: dword; ValueName: Size; ValueData: 1; Flags: createvalueifdoesntexist uninsdeletekey
+Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\ProjectTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Projects; Flags: createvalueifdoesntexist uninsdeletekey
+Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\DocumentTemplatePaths; ValueType: dword; ValueName: Size; ValueData: 1; Flags: createvalueifdoesntexist uninsdeletekey
+Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\DocumentTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Documents; Flags: createvalueifdoesntexist uninsdeletekey
 
 [Tasks]
 Name: DesktopLink; Description: Create a desktop icon; GroupDescription: Link

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="MSXMLCPP"
 	ProjectGUID="{5E77A852-5E2B-4E6B-B57F-70676F473C93}"
 	Keyword="MFCProj"
@@ -49,7 +49,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../InterfaceWrapper/Include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_AFXEXT"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_AFXEXT;_BIND_TO_CURRENT_VCLIBS_VERSION"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -90,6 +90,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				EmbedManifest="true"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -147,7 +148,7 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="false"
 				AdditionalIncludeDirectories="../../InterfaceWrapper/Include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_AFXEXT"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_AFXEXT;_BIND_TO_CURRENT_VCLIBS_VERSION"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -189,6 +190,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				EmbedManifest="true"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -242,7 +244,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../InterfaceWrapper/Include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_AFXEXT"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_AFXEXT;_BIND_TO_CURRENT_VCLIBS_VERSION"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -283,6 +285,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				EmbedManifest="true"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -340,7 +343,7 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="false"
 				AdditionalIncludeDirectories="../../InterfaceWrapper/Include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_AFXEXT"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_AFXEXT;_BIND_TO_CURRENT_VCLIBS_VERSION"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -382,6 +385,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				EmbedManifest="true"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
