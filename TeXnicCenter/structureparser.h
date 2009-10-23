@@ -179,6 +179,8 @@ that implements the pure virtuals.
 class CStructureParserHandler
 {
 public:
+	virtual ~CStructureParserHandler(){}
+
 	/**
 	Called by the owning CStructureParser-object, when parsing is
 	finished.
