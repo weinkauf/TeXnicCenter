@@ -785,7 +785,7 @@ void CodeView::GetReplaceAllTarget(long& s, long& e)
 	}
 
 	if (do_default)
-		CScintillaView::GetReplaceAllTarget(s,s);
+		CScintillaView::GetReplaceAllTarget(s, e);
 }
 
 CScintillaFindReplaceDlg* CodeView::CreateFindReplaceDialog(void)
