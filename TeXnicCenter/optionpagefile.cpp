@@ -78,7 +78,6 @@ void COptionPageFile::DoDataExchange(CDataExchange* pDX)
 	CMFCPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionPageFile)
 	DDX_Control(pDX,IDC_OPTIONS_SAVE_LABEL2,m_wndSaveIntervalLabel2);
-	DDX_Control(pDX,IDC_OPTIONS_SAVE_LABEL1,m_wndSaveIntervalLabel1);
 	DDX_Control(pDX,IDC_OPTIONS_SAVE_INTERVALL_EDIT,m_wndSaveIntervalEdit);
 	DDX_Control(pDX,IDC_OPTIONS_SAVE_INTERVALL_SPIN,m_wndSaveIntervalSpin);
 	DDX_Check(pDX,IDC_OPTIONS_SAVE_AUTOMATIC,m_bSaveAutomatic);
@@ -107,7 +106,6 @@ void COptionPageFile::UpdateCtrlStates()
 	// enable/disable controls
 	m_wndSaveIntervalEdit.EnableWindow(m_bSaveAutomatic);
 	m_wndSaveIntervalSpin.EnableWindow(m_bSaveAutomatic);
-	m_wndSaveIntervalLabel1.EnableWindow(m_bSaveAutomatic);
 	m_wndSaveIntervalLabel2.EnableWindow(m_bSaveAutomatic);
 }
 
