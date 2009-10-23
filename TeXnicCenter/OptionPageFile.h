@@ -91,7 +91,6 @@ protected:
 		IDD = IDD_OPTIONS_FILE
 	};
 	CStatic m_wndSaveIntervalLabel2;
-	CStatic m_wndSaveIntervalLabel1;
 	CEdit m_wndSaveIntervalEdit;
 	CSpinButtonCtrl m_wndSaveIntervalSpin;
 	BOOL m_bSaveAutomatic;
