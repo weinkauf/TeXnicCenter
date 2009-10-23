@@ -2917,10 +2917,6 @@
 							Outputs="$(OutDir)\$(InputFileName)"
 						/>
 					</FileConfiguration>
-					<File
-						RelativePath=".\OutputProfiles.h"
-						>
-					</File>
 				</File>
 			</Filter>
 		</Filter>
