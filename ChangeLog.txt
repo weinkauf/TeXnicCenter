@@ -1,3 +1,8 @@
+2009/10/22 niteria
+- Released TXC 2.0 Alpha 1. This includes work on the inno installer.
+- Fixed bug where cursor was placed wrongly after autocompletion.
+- Fixed small internal bug regarding Replace All
+
 2008/08/03 sergiudotenco
 - Updated Hunspell from 1.2.2 to 1.2.6
 - Updated copyright information in the English about dialog
