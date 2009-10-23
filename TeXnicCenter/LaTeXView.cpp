@@ -423,16 +423,14 @@ void LaTeXView::OnACCommandSelect(const CLaTeXCommand* cmd)
 	InsertString += cmd->ToLaTeX();
 	InsertString += cmd->GetExpandAfter();
 
-	long s = GetCtrl().GetSelectionStart();
-	long e = GetCtrl().GetSelectionEnd();
+	//Get the place where we started with the completion
+	const long origs = GetCtrl().GetSelectionStart();
+	const int start_line = GetCtrl().LineFromPosition(origs);
 
-	int start_line = GetCtrl().LineFromPosition(s);
-
-	const long origs = s;
-
+	//Do the actual insertion
 	GetCtrl().ReplaceSel(InsertString);
-	s = GetCtrl().GetSelectionStart();
-	e = GetCtrl().GetSelectionEnd();
+	const long s = GetCtrl().GetSelectionStart();
+	const long e = GetCtrl().GetSelectionEnd();
 	GetCtrl().SetSel(-1,s); // drop selection	
 
 	bool isEnv = cmd->GetExpandAfter().GetLength() && cmd->GetExpandBefore().GetLength();
@@ -442,34 +440,18 @@ void LaTeXView::OnACCommandSelect(const CLaTeXCommand* cmd)
 
 		//If a command was inserted and it contains a brace, we might want to go there
 		if (InsertString.FindOneOf(_T("{[(")) != -1) {
-			long ls = GetCtrl().LineFromPosition(s);
-			long le = GetCtrl().LineFromPosition(e);
 
-			//Search for the first brace
-			for (long y = ls; y <= le; y++) {
-				CString text = GetLineText(y);
-				//Is there an offset? Only in first line.
-				int Offset = 0;
+			//Find an opening brace
+			TextToFind ttf;
+			ttf.chrg.cpMin = origs;
+			ttf.chrg.cpMax = e;
+			ttf.lpstrText = "[{\\[\\(]";
+			const long BracePos = GetCtrl().FindTextW(SCFIND_REGEXP + SCFIND_POSIX, &ttf);
 
-				if (y == s) {
-					Offset = s - GetCtrl().PositionFromLine(GetCtrl().LineFromPosition(s));
-					text = text.Mid(Offset);
-				}
-
-				//Find a brace and place the cursor
-				int BracePos = text.FindOneOf(_T("{[("));
-
-				if (BracePos != -1) {
-					ptCaret = GetCtrl().PositionFromLine(y) + Offset + BracePos + 1;
-
-					if (ptCaret < GetCtrl().GetLength()) {
-						//Place caret after the first opening brace
-						GetCtrl().GotoPos(ptCaret);
-						bSetPosition = true;
-					}
-
-					break;
-				}
+			//Place caret after the first opening brace
+			if (BracePos != -1 && BracePos + 1 < GetCtrl().GetLength()) {
+				GetCtrl().GotoPos(BracePos + 1);
+				bSetPosition = true;
 			}
 		}
 
@@ -483,8 +465,7 @@ void LaTeXView::OnACCommandSelect(const CLaTeXCommand* cmd)
 	if (isEnv) {
 		// env was inserted -> place cursor at end of next row
 		// but only after the newly inserted environment has been correctly indented
-		s = origs;
-		long l = GetCtrl().LineFromPosition(s);
+		long l = GetCtrl().LineFromPosition(origs);
 		ptCaret = GetCtrl().GetLineEndPosition(l + 1);
 
 		GetCtrl().GotoPos(ptCaret);
