@@ -2034,7 +2034,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Tips_english.txt"
+				RelativePath=".\copy\Tips_english.txt"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2078,7 +2078,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Tips_german.txt"
+				RelativePath=".\copy\Tips_german.txt"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2122,7 +2122,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="UserImages.bmp"
+				RelativePath=".\copy\UserImages.bmp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2922,10 +2922,6 @@
 		</Filter>
 		<File
 			RelativePath="..\ChangeLog.txt"
-			>
-		</File>
-		<File
-			RelativePath="TeXnicCenter.reg"
 			>
 		</File>
 	</Files>
