@@ -1017,7 +1017,8 @@ const CString COutputWizard::FindMiKTeXInstallLocation()
 
 	ATL::CRegKey reg;
 
-	const CString versions[] = {_T("MiKTeX 2.7"),_T("MiKTeX 2.8")};
+	// Known (future) MiKTeX versions
+	const CString versions[] = {_T("MiKTeX 2.7"), _T("MiKTeX 2.8"), _T("MiKTeX 2.9")};
 	const int count = sizeof(versions) / sizeof(*versions);
 
 	for (int i = 0; i < count; ++i)
