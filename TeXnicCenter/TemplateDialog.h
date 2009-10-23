@@ -102,6 +102,7 @@ class CTemplateDialog : public CDialog
 // construction/destruction
 public:
 	CTemplateDialog(UINT unIDTemplate,CWnd* pParent = NULL);
+	virtual ~CTemplateDialog(){}
 
 // operations
 public:

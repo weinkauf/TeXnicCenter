@@ -75,6 +75,7 @@ class SCINTILLADOCVIEW_EXT_CLASS CScintillaView : public CView
 public:
 //Constructors / Destructors
   CScintillaView();
+  virtual ~CScintillaView(){}
 
 //Methods
   CScintillaCtrl& GetCtrl();
