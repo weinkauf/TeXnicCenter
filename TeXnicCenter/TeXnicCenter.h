@@ -344,12 +344,6 @@ public:
 	/** List of recently used projects. */
 	CRecentFileList m_recentProjectList;
 
-	/**
-	Specifies, whether to draw flat normal borders around tab-controls
-	or flat ones.
-	 */
-	BOOL m_bTabFlatBorders;
-
 private:
 	/** Specifies, whether to show document tabs or not */
 	BOOL m_bMDITabs;

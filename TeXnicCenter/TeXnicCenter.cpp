@@ -215,14 +215,14 @@ const int RecentFileListMaxDisplayLength = 75;
 // CTeXnicCenterApp Konstruktion
 
 CTeXnicCenterApp::CTeXnicCenterApp()
-		: m_bEndSession(FALSE),
-		m_bSavingAll(FALSE),
-		m_recentProjectList(1, _T("Recent Project List"), _T("Project%d"), MaxRecentProjects,RecentFileListMaxDisplayLength),
-		m_bTabFlatBorders(FALSE),
-		m_pSpell(NULL),
-		m_pBackgroundThread(NULL)
-		, bibtex_doc_template_(0)
-		, metapost_doc_template_(0)
+	:m_bEndSession(FALSE)
+	,m_bSavingAll(FALSE)
+	,m_recentProjectList(1, _T("Recent Project List"), _T("Project%d"), MaxRecentProjects,RecentFileListMaxDisplayLength)
+	,m_pSpell(NULL)
+	,m_pBackgroundThread(NULL)
+	,bibtex_doc_template_(0)
+	,metapost_doc_template_(0)
+	,m_nApplicationLook(ID_VIEW_APP_LOOK_VS_2005)
 {
 	m_eHelpType = afxHTMLHelp;
 	InitializeCriticalSection(&m_csLazy);
@@ -593,17 +593,17 @@ void CTeXnicCenterApp::PreLoadState()
 
 void CTeXnicCenterApp::LoadCustomState()
 {
-	BOOL bControlBarCaption = GetInt(_T("ControlBarCaption"));
-	BOOL bGradientCaption = bControlBarCaption ? GetInt(_T("GradientCaption")) : FALSE;
-	m_bTabFlatBorders = GetInt(_T("TabFlatBorders"));
+	//Document tabs
 	m_bMDITabs = GetInt(_T("MDITabs"), TRUE);
 	m_bMDITabIcons = GetInt(_T("MDITabIcons"), TRUE);
 	m_nMDITabLocation = GetInt(_T("MDITabLocation"), CMFCTabCtrl::LOCATION_TOP);
 	m_nMDITabStyle = GetInt(_T("MDITabStyle"), CMFCTabCtrl::STYLE_3D_ONENOTE);
-	m_recentProjectList.ReadList();
-	CProfileMap::GetInstance()->SerializeFromRegistry();
 
-	CDockablePane::SetCaptionStyle(bControlBarCaption, bGradientCaption);
+	//Recent projects
+	m_recentProjectList.ReadList();
+
+	//Output Profiles
+	CProfileMap::GetInstance()->SerializeFromRegistry();
 
 	//Load command repository
 	FindPackageFiles();
@@ -611,15 +611,16 @@ void CTeXnicCenterApp::LoadCustomState()
 
 void CTeXnicCenterApp::SaveCustomState()
 {
-	// BCG specific stuff
-	WriteInt(_T("ControlBarCaption"), CDockablePane::IsDrawCaption());
-	//WriteInt(_T("GradientCaption"), CDockablePane::IsCaptionGradient());
-	WriteInt(_T("TabFlatBorders"), m_bTabFlatBorders);
+	//Document tabs
 	WriteInt(_T("MDITabs"), m_bMDITabs);
 	WriteInt(_T("MDITabIcons"), m_bMDITabIcons);
 	WriteInt(_T("MDITabLocation"), m_nMDITabLocation);
 	WriteInt(_T("MDITabStyle"), m_nMDITabStyle);
+
+	//Recent projects
 	m_recentProjectList.WriteList();
+
+	//Output Profiles
 	CProfileMap::GetInstance()->SerializeToRegistry();
 
 	// store global configuration
