@@ -1172,12 +1172,25 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 	}
 
 	for (int i = 0; i < MATHBAR_COUNT; ++i)
+	{
 		if (!m_awndMathBar[i].IsRestoredFromRegistry())
 			ShowPane(m_awndMathBar + i,FALSE,TRUE,FALSE);
+	}
 
 	RecalcLayout();
 
 	DisplayDocumentTabs();
+
+	//As suggested in the MSDN, we create default user tools here.
+	CUserToolsManager* pUserToolsManager = theApp.GetUserToolsManager();
+	if (pUserToolsManager && pUserToolsManager->GetUserTools().IsEmpty())
+	{
+		CUserTool* pTool1 = pUserToolsManager->CreateNewTool();
+		pTool1->m_strLabel = _T("Windows Explorer");
+		pTool1->SetCommand(_T("explorer.exe"));
+		pTool1->m_strArguments = _T("/n,/e,\"%dc\"");
+		pTool1->m_strInitialDirectory = _T("%dc");
+	}
 
 	return TRUE;
 }

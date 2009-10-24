@@ -605,52 +605,7 @@ void CTeXnicCenterApp::LoadCustomState()
 
 	CDockablePane::SetCaptionStyle(bControlBarCaption, bGradientCaption);
 
-	///////////////////////////////
-	// Tools
-
-	CUserToolsManager* pUserToolsManager = theApp.GetUserToolsManager();
-
-	if (pUserToolsManager)
-	{
-		//Load tools from different location,
-		// because the original BCG implementation does not have
-		// a versionabel serialization. This would cause a lost
-		// of all tools, if first TXC 1b6.20 is started and
-		// then an earlier version of TXC.
-		// Using this, we can at least assure, that the tools of 1b6.20
-		// are not destroyed by older versions of TXC.
-		// Conversion from older versions to 1b6.20 is done automatically.
-		//Due to the new Language-Resource-DLLs, the BCG-Workspace is serialized
-		// to some other part of the registry anyway. So older versions would
-		// not destroy our new tools. Anyway, to be on the safe side we save it here again.
-
-		CBCGRegistryEx ToolsReg(false, true); //HKCU, ReadOnly
-		//Do we have the new reg entry for tools - or first start of 1b6.20?
-		CString strNewToolsKey = CPathTool::Cat(m_strRegistryRoot, _T("Settings"));
-
-		if (ToolsReg.OpenFromRoot(strNewToolsKey))
-		{
-			if (ToolsReg.VerifyValue(_T("Tools")))
-			{
-				pUserToolsManager->LoadState(strNewToolsKey);
-			}
-
-			ToolsReg.Close();
-		}
-
-		//Add some tools for the start...subsequent tools are loaded from the registry
-		if (pUserToolsManager->GetUserTools().IsEmpty())
-		{
-			CUserTool* pTool1 = pUserToolsManager->CreateNewTool();
-			pTool1->m_strLabel = _T("Windows Explorer");
-			pTool1->SetCommand(_T("explorer.exe"));
-			pTool1->m_strArguments = _T("/n,/e,\"%dc\"");
-			pTool1->m_strInitialDirectory = _T("%dc");
-		}
-	}
-
-	/* ow: Load command repository */
-	//obsolete: m_AvailableCommands.LoadFromXML(GetWorkingDir() + _T("\\packages.xml"));
+	//Load command repository
 	FindPackageFiles();
 }
 
@@ -673,18 +628,6 @@ void CTeXnicCenterApp::SaveCustomState()
 	// speller
 	if (m_pSpell && m_pSpell->IsAddedModified() && !CConfiguration::GetInstance()->m_strSpellPersonalDictionary.IsEmpty())
 		m_pSpell->SavePersonalDictionary(CConfiguration::GetInstance()->m_strSpellPersonalDictionary);
-
-	///////////////////////////////
-	// Tools
-	CUserToolsManager* pUserToolsManager = theApp.GetUserToolsManager();
-
-	if (pUserToolsManager)
-	{
-		//Save tools to different location. Read the reason at LoadCustomState.
-		//Create new reg entry for tools - or first start of 1b6.20?
-		CString strNewToolsKey = CPathTool::Cat(m_strRegistryRoot, _T("Settings"));
-		pUserToolsManager->SaveState(strNewToolsKey);
-	}
 }
 
 void CTeXnicCenterApp::EndSession()
