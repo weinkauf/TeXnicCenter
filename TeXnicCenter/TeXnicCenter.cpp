@@ -599,7 +599,7 @@ void CTeXnicCenterApp::LoadCustomState()
 	m_bMDITabs = GetInt(_T("MDITabs"), TRUE);
 	m_bMDITabIcons = GetInt(_T("MDITabIcons"), TRUE);
 	m_nMDITabLocation = GetInt(_T("MDITabLocation"), CMFCTabCtrl::LOCATION_TOP);
-	m_nMDITabStyle = DefaultTabStyle; //GetInt(_T("MDITabStyle"), CMFCTabCtrl::STYLE_3D_ROUNDED);
+	m_nMDITabStyle = GetInt(_T("MDITabStyle"), CMFCTabCtrl::STYLE_3D_ONENOTE);
 	m_recentProjectList.ReadList();
 	CProfileMap::GetInstance()->SerializeFromRegistry();
 

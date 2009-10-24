@@ -2273,6 +2273,7 @@ BEGIN
             MENUITEM "&Aus",                        ID_VIEW_DOCTAB_OFF
             MENUITEM SEPARATOR
             MENUITEM "&Dokumentsymbole anzeigen",   ID_VIEW_DOCTAB_ICONS
+            MENUITEM "Aktenordner&stil",            ID_VIEW_DOCTAB_NOTE
         END
         MENUITEM "&Transparenz...",             ID_VIEW_TRANSPARENCY
         MENUITEM SEPARATOR
@@ -6241,6 +6242,7 @@ BEGIN
             MENUITEM "&Off",                        ID_VIEW_DOCTAB_OFF
             MENUITEM SEPARATOR
             MENUITEM "Show &Icons",                 ID_VIEW_DOCTAB_ICONS
+            MENUITEM "&Note Style",                 ID_VIEW_DOCTAB_NOTE
         END
         MENUITEM "T&ransparency...",            ID_VIEW_TRANSPARENCY
         MENUITEM SEPARATOR
