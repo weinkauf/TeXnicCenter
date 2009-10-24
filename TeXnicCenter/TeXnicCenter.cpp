@@ -354,14 +354,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 	m_strWorkingDir = CPathTool::GetDirectory(m_strWorkingDir);
 
 	// Initialize BCG
-	BOOL bLanguageProfilesExisting = GetProfileInt(_T("Workspace"), _T("LanguageProfilesDefined"), FALSE);
-
-	if (!bLanguageProfilesExisting)
-		// If language specific profiles are not already defined, then
-		// load old settings now to help users of old versions to upgrade
-		SetRegistryBase(_T("Workspace"));
-	else
-		SetRegistryBase(_T("Workspace\\") + CConfiguration::GetInstance()->m_strGuiLanguage);
+	SetRegistryBase(_T("Workspace\\") + CConfiguration::GetInstance()->m_strGuiLanguage);
 
 	// Set the application look after the registry base for the workspace has been set
 	const UINT look_not_set = ~0U;
@@ -553,29 +546,16 @@ BOOL CTeXnicCenterApp::InitInstance()
 		    fviTxc.GetFileVersion(), fviResources.GetFileVersion());
 		AfxMessageBox(strMessage);
 	}
-	if (!bLanguageProfilesExisting)
-	{
-		// if language specific profiles were not enabled until now, then
-		// save current settings now under the current language specific
-		// profile.
-		SetRegistryBase(_T("Workspace\\") + CConfiguration::GetInstance()->m_strGuiLanguage);
-		SaveState();
-		WriteProfileInt(_T("Workspace"), _T("LanguageProfilesDefined"), TRUE);
-		WriteProfileInt(_T("Workspace\\") + CConfiguration::GetInstance()->m_strGuiLanguage, _T("LanguageAlreadyUsed"), TRUE);
-	}
-	else
-	{
-		// inform the user about that the settings for all languages are
-		// stored separately...
-		BOOL bLanguageAlreadyDefined = GetProfileInt(_T("Workspace\\") + CConfiguration::GetInstance()->m_strGuiLanguage,
-		                               _T("LanguageAlreadyUsed"), FALSE);
 
-		if (!bLanguageAlreadyDefined)
-		{
-			AfxMessageBox(STE_LANGUAGE_NEW, MB_ICONINFORMATION | MB_OK);
-			WriteProfileInt(_T("Workspace\\") + CConfiguration::GetInstance()->m_strGuiLanguage,
-			                _T("LanguageAlreadyUsed"), TRUE);
-		}
+	// inform the user about that the settings for all languages are
+	// stored separately...
+	bool bLanguageAlreadyDefined = GetProfileInt(_T("Workspace\\") + CConfiguration::GetInstance()->m_strGuiLanguage,
+	                               _T("LanguageAlreadyUsed"), FALSE);
+	if (!bLanguageAlreadyDefined)
+	{
+		AfxMessageBox(STE_LANGUAGE_NEW, MB_ICONINFORMATION | MB_OK);
+		WriteProfileInt(_T("Workspace\\") + CConfiguration::GetInstance()->m_strGuiLanguage,
+		                _T("LanguageAlreadyUsed"), TRUE);
 	}
 
 	// start output type wizard, if no output types are existing
