@@ -1214,7 +1214,7 @@ void CMainFrame::OnHelpIndex()
 void CMainFrame::DisplayDocumentTabs()
 {
 	CMDITabInfo mdiTabParams;
-	mdiTabParams.m_style = CMFCTabCtrl::STYLE_3D_SCROLLED; // other styles available...
+	mdiTabParams.m_style = (CMFCTabCtrl::Style)theApp.m_nMDITabStyle;
 	mdiTabParams.m_bActiveTabCloseButton = TRUE; // set to FALSE to place close button at right of tab area
 	mdiTabParams.m_bTabIcons = theApp.m_bMDITabIcons; // set to TRUE to enable document icons on MDI taba
 	mdiTabParams.m_bAutoColor = FALSE; // set to FALSE to disable auto-coloring of MDI tabs

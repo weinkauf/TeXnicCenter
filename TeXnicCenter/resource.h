@@ -1485,6 +1485,8 @@
 #define ID_LATEX_STOP_BUILD             33553
 #define ID_BUTTON38599                  38599
 #define ID_BUTTON38600                  38600
+#define ID_DOCUMENTTABS_NOTESTYLE       38601
+#define ID_DOKUMENTREGISTER_AKTENORDNERSTIL 38602
 #define IDR_TOOLBAR1                    57672
 #define IDR_BOOKMARK_VIEW               57672
 #define ID_FILE_MRU_PROJECT_FIRST       58080
@@ -1496,7 +1498,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57678
-#define _APS_NEXT_COMMAND_VALUE         38601
+#define _APS_NEXT_COMMAND_VALUE         38603
 #define _APS_NEXT_CONTROL_VALUE         1385
 #define _APS_NEXT_SYMED_VALUE           57772
 #endif
