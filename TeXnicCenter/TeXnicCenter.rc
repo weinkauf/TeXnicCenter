@@ -70,10 +70,10 @@ IDB_NAVIGATION_BAR      BITMAP                  "res\\navigationbar.bmp"
 IDR_OUTPUT_BAR          BITMAP                  "res\\outputbar.bmp"
 IDB_BUILD_ANIMATION     BITMAP                  "res\\buildanimation.bmp"
 IDR_STRUCTURE           BITMAP                  "res\\structuretoolbar.bmp"
-IDB_ANNOTATION          BITMAP                  "res\\annotation.bmp"
 IDR_BIB_SEARCH          BITMAP                  "res\\bibtoolbar.bmp"
 IDB_WIZARD              BITMAP                  "res\\wizard.bmp"
 IDR_BOOKMARK_VIEW       BITMAP                  "res\\bookmark view toolbar.bmp"
+IDB_LIGHTBULB           BITMAP                  "res\\Lightbulb.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -878,7 +878,7 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "&Schlieﬂen",IDOK,227,182,50,14
     CONTROL         "",IDC_STATIC1,"Static",SS_WHITERECT,-1,-1,286,175
-    CONTROL         IDR_LATEXDOCTYPE,IDB_LIGHTBULB,"Static",SS_BITMAP,16,16,21,20
+    CONTROL         102,IDB_LIGHTBULB,"Static",SS_BITMAP,9,16,32,30
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,-1,174,287,1
     CONTROL         "&Tipps beim Starten anzeigen",IDC_STARTUP,"Button",BS_AUTOCHECKBOX | BS_TOP | WS_TABSTOP,7,185,106,10
     PUSHBUTTON      "&N‰chster Tipp",IDC_NEXTTIP,164,182,60,14
@@ -3417,18 +3417,26 @@ END
 STRINGTABLE 
 BEGIN
     IDR_MAINFRAME           "TeXnicCenter"
-    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Dateien (*.tex)\n.tex\nLaTeX.Document\nLaTeX Dokument"
-    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Dateien (*.bib)\n.bib\nBibTeX.Document\nBibTeX Dokument"
-    IDR_METAPOSTDOCTYPE     "\nMetaPost\nMetaPost\nMetaPost-Dateien (*.mp)\n.mp\nMetaPost.Document\nMetaPost Dokument"
-    IDR_LATEXPROJECTDOCTYPE "\nTeXnicCenter-Projekt\nTeXnicCenter-Projekt\nTeXnicCenter-Projekte (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
-    IDS_BIBLIOGRAPHY        "Literaturverzeichnis (%s)"
-    IDS_BOOKMARK            "Lesezeichen"
-    STE_TAB_GREP_1          "Suchen 1"
     ID_VIEW_BOOKMARKS_PANE  "Lesezeichen"
     IDS_EDIT_TEXT_NOT_FOUND "Text ""%s"" nicht gefunden"
     IDS_DO_NOT_SAVE         "&Nicht speichern"
     IDS_UNNAMED_BOOKMARK_FORMAT "Lesezeichen%i"
     IDS_BIBTEX_RESULT       "BibTeX-Ergebnis: %i Fehler, %i Warnung(en)"
+END
+
+STRINGTABLE 
+BEGIN
+    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Dateien (*.tex)\n.tex\nLaTeX.Document\nLaTeX Dokument"
+    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Dateien (*.bib)\n.bib\nBibTeX.Document\nBibTeX Dokument"
+END
+
+STRINGTABLE 
+BEGIN
+    IDR_METAPOSTDOCTYPE     "\nMetaPost\nMetaPost\nMetaPost-Dateien (*.mp)\n.mp\nMetaPost.Document\nMetaPost Dokument"
+    IDR_LATEXPROJECTDOCTYPE "\nTeXnicCenter-Projekt\nTeXnicCenter-Projekt\nTeXnicCenter-Projekte (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
+    IDS_BIBLIOGRAPHY        "Literaturverzeichnis (%s)"
+    IDS_BOOKMARK            "Lesezeichen"
+    STE_TAB_GREP_1          "Suchen 1"
 END
 
 STRINGTABLE 
@@ -5605,12 +5613,12 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "&Close",IDOK,227,182,50,14
     CONTROL         "",IDC_STATIC1,"Static",SS_WHITERECT,-1,-1,286,175
-    CONTROL         106,IDB_LIGHTBULB,"Static",SS_BITMAP,16,16,21,20
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,-1,174,287,1
     CONTROL         "&Show tips on start up",IDC_STARTUP,"Button",BS_AUTOCHECKBOX | BS_TOP | WS_TABSTOP,7,185,84,10
     PUSHBUTTON      "&Next tip",IDC_NEXTTIP,164,182,60,14
     EDITTEXT        IDC_TIPSTRING,51,40,209,129,ES_MULTILINE | ES_READONLY | NOT WS_BORDER,WS_EX_TRANSPARENT
     LTEXT           "Static",IDC_TITLE,51,16,209,20,SS_CENTERIMAGE,WS_EX_TRANSPARENT
+    CONTROL         102,IDB_LIGHTBULB,"Static",SS_BITMAP,9,16,32,30
 END
 
 IDD_TRANSPARENCY DIALOGEX 0, 0, 200, 49
@@ -7319,19 +7327,27 @@ END
 STRINGTABLE 
 BEGIN
     IDR_MAINFRAME           "TeXnicCenter"
-    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Files (*.tex)\n.tex\nLaTeX.Document\nLaTeX Document"
-    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Files (*.tex)\n.tex\nBibTeX.Document\nBibTeX Document"
-    IDR_METAPOSTDOCTYPE     "\nMetaPost\nMetaPost\nMetaPost-Files (*.mp)\n.mp\nMetaPost.Document\nMetaPost Document"
-    IDR_LATEXPROJECTDOCTYPE "\nTeXnicCenter-Project\nTeXnicCenter-Project\nTeXnicCenter-Projects (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
-    IDS_BIBLIOGRAPHY        "Bibliography (%s)"
-    IDS_BOOKMARK            "Bookmark"
-    STE_TAB_GREP_1          "Find 1"
     IDS_LINE_NUMBER         "Line Number"
     ID_VIEW_BOOKMARKS_PANE  "Bookmarks"
     IDS_EDIT_TEXT_NOT_FOUND "Cannot find string""%s"""
     IDS_DO_NOT_SAVE         "&Do not save"
     IDS_UNNAMED_BOOKMARK_FORMAT "Bookmark%i"
     IDS_BIBTEX_RESULT       "BibTeX-Result: %i Error(s), %i Warning(s)"
+END
+
+STRINGTABLE 
+BEGIN
+    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Files (*.tex)\n.tex\nLaTeX.Document\nLaTeX Document"
+    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Files (*.tex)\n.tex\nBibTeX.Document\nBibTeX Document"
+END
+
+STRINGTABLE 
+BEGIN
+    IDR_METAPOSTDOCTYPE     "\nMetaPost\nMetaPost\nMetaPost-Files (*.mp)\n.mp\nMetaPost.Document\nMetaPost Document"
+    IDR_LATEXPROJECTDOCTYPE "\nTeXnicCenter-Project\nTeXnicCenter-Project\nTeXnicCenter-Projects (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
+    IDS_BIBLIOGRAPHY        "Bibliography (%s)"
+    IDS_BOOKMARK            "Bookmark"
+    STE_TAB_GREP_1          "Find 1"
 END
 
 STRINGTABLE 
