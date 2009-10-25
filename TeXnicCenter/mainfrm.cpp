@@ -1900,7 +1900,10 @@ void CMainFrame::OnStartPaneAnimation()
 	// Start the animation
 	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane,build_animation_,250);
 
-	if (SUCCEEDED(taskBarList_.CoCreateInstance(CLSID_TaskbarList))) {
+	if (!taskBarList_)
+		taskBarList_.CoCreateInstance(CLSID_TaskbarList);
+	
+	if (taskBarList_) {
 		// Show a marquee progress in the taskbar if available
 		taskBarList_->SetProgressState(m_hWnd, TBPF_INDETERMINATE);
 	}
