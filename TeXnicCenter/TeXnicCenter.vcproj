@@ -1757,6 +1757,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\Lightbulb.bmp"
+				>
+			</File>
+			<File
 				RelativePath="res\logo.bmp"
 				>
 			</File>

@@ -3,17 +3,6 @@
 // Used by TeXnicCenter.rc
 //
 #define IDR_MAINFRAME                   1
-#define IDR_LATEXDOCTYPE                1502
-#define IDR_BIBTEXDOCTYPE               1503
-#define IDR_METAPOSTDOCTYPE             1504
-#define IDR_LATEXPROJECTDOCTYPE         1505
-#define IDB_DOCUMENTTYPES               1506
-#define IDS_BIBLIOGRAPHY                1507
-#define IDD_GET_PATH                    1508
-#define IDS_BOOKMARK                    1509
-#define IDR_LATEXWIZARD                 1510
-#define IDS_FILE_LOCATION               1511
-#define STE_TAB_GREP_1                  1512
 #define IDD_PROJECT_PROPERTIES          10
 #define IDS_LINE_NUMBER                 10
 #define IDD_OPTIONS_LATEX               11
@@ -78,7 +67,6 @@
 #define IDS_RECURSIVE_INCLUSION         67
 #define IDD_OPTIONS_PATHS               68
 #define IDB_SPLASH                      69
-#define IDB_ANNOTATION                  70
 #define IDD_FILE_NEW                    71
 #define IDI_ICON1                       72
 #define STE_COMPILER_LATEX_TYPE_EXT     73
@@ -523,6 +511,17 @@
 #define IDC_URL                         1382
 #define IDC_CREDITS                     1383
 #define IDC_LOGO                        1384
+#define IDR_LATEXDOCTYPE                1502
+#define IDR_BIBTEXDOCTYPE               1503
+#define IDR_METAPOSTDOCTYPE             1504
+#define IDR_LATEXPROJECTDOCTYPE         1505
+#define IDB_DOCUMENTTYPES               1506
+#define IDS_BIBLIOGRAPHY                1507
+#define IDD_GET_PATH                    1508
+#define IDS_BOOKMARK                    1509
+#define IDR_LATEXWIZARD                 1510
+#define IDS_FILE_LOCATION               1511
+#define STE_TAB_GREP_1                  1512
 #define IDC_OPTIONS_FILECLEAN_DELETE    2048
 #define IDC_SEARCH_BROWSE_SEARCHIN      2049
 #define IDC_OPTIONS_DEFAULT_PATH_EDIT   2051
@@ -1489,6 +1488,7 @@
 #define ID_DOKUMENTREGISTER_AKTENORDNERSTIL 38602
 #define IDR_TOOLBAR1                    57672
 #define IDR_BOOKMARK_VIEW               57672
+#define IDB_BITMAP4                     57678
 #define ID_FILE_MRU_PROJECT_FIRST       58080
 #define ID_FILE_MRU_PROJECT_LAST        58090
 
@@ -1497,7 +1497,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        57678
+#define _APS_NEXT_RESOURCE_VALUE        57679
 #define _APS_NEXT_COMMAND_VALUE         38603
 #define _APS_NEXT_CONTROL_VALUE         1385
 #define _APS_NEXT_SYMED_VALUE           57772
