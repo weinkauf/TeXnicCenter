@@ -2247,13 +2247,12 @@ val SCLEX_SORCUS=94
 val SCLEX_POWERPRO=95
 val SCLEX_NIMROD=96
 val SCLEX_SML=97
+# TeXnicCenter
+val SCLEX_BIBTEX=98
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
 val SCLEX_AUTOMATIC=1000
-
-# TeXnicCenter
-val SCLEX_BIBTEX=SCLEX_AUTOMATIC
 
 # Lexical states for SCLEX_PYTHON
 lex Python=SCLEX_PYTHON SCE_P_
