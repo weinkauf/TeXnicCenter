@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="TeXnicCenter"
 	ProjectGUID="{7795423E-417E-4C41-A629-11EFD0EBF8AD}"
 	RootNamespace="TeXnicCenter"
@@ -1685,10 +1685,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\bitmap3.bmp"
-				>
-			</File>
-			<File
 				RelativePath=".\res\bookmark view toolbar.bmp"
 				>
 			</File>
@@ -1926,10 +1922,6 @@
 			</File>
 			<File
 				RelativePath="res\TeXnicCenter_yellow.ico"
-				>
-			</File>
-			<File
-				RelativePath=".\res\toolbar2.bmp"
 				>
 			</File>
 			<File

@@ -18,12 +18,23 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 #include "StyleContext.h"
+#include "CharClassify.h"
 
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;
 #endif
 
 namespace {
+	bool IsAlphabetic(unsigned int ch)
+	{
+		return std::isalpha(ch) != 0;
+	}
+
+	bool EqualCaseInsensitive(const char* a, const char* b)
+	{
+		return CompareCaseInsensitive(a, b) == 0;
+	}
+
 	const std::size_t ShortestEntryNameLength = 3;
 
 	bool IsKnownEntryName(const char* name)
@@ -268,8 +279,8 @@ namespace {
 
 				if ((current_level > prev_level))
 					level |= SC_FOLDLEVELHEADERFLAG;
-				else if (current_level < prev_level)
-					level |= SC_FOLDLEVELBOXFOOTERFLAG;
+				// else if (current_level < prev_level)
+				//	level |= SC_FOLDLEVELBOXFOOTERFLAG; // Deprecated
 
 				if (level != styler.LevelAt(current_line)) {
 					styler.SetLevel(current_line, level);
