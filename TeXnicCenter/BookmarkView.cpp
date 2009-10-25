@@ -95,7 +95,7 @@ void BookmarkView::AdjustLayout(const CRect& rect)
 	if (toolbar_ && list_view_)	{
 		CSize size(0,0);
 
-		if (toolbar_.IsVisible()) {
+		if ((toolbar_.GetStyle() & WS_VISIBLE) == WS_VISIBLE) {
 			size = toolbar_.CalcFixedLayout(TRUE,TRUE);
 			toolbar_.SetWindowPos(0,rect.left,rect.top,
 				rect.right - rect.left,rect.top + size.cy,SWP_NOACTIVATE|SWP_NOZORDER);

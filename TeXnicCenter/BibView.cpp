@@ -265,7 +265,7 @@ void BibView::AdjustLayout(const CRect& rect)
 	{
 		CSize size(0,0);
 
-		if (toolbar_.IsVisible())
+		if ((toolbar_.GetStyle() & WS_VISIBLE) == WS_VISIBLE)
 		{
 			size = toolbar_.CalcFixedLayout(TRUE,TRUE);
 			toolbar_.SetWindowPos(0,rect.left,rect.top,
