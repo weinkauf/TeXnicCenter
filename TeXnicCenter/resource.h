@@ -3,17 +3,17 @@
 // Used by TeXnicCenter.rc
 //
 #define IDR_MAINFRAME                   1
-#define IDR_LATEXDOCTYPE                2
-#define IDR_BIBTEXDOCTYPE               3
-#define IDR_METAPOSTDOCTYPE             4
-#define IDR_LATEXPROJECTDOCTYPE         5
-#define IDB_DOCUMENTTYPES               6
-#define IDS_BIBLIOGRAPHY                6
-#define IDD_GET_PATH                    7
-#define IDS_BOOKMARK                    7
-#define IDR_LATEXWIZARD                 8
-#define IDS_FILE_LOCATION               8
-#define STE_TAB_GREP_1                  9
+#define IDR_LATEXDOCTYPE                1502
+#define IDR_BIBTEXDOCTYPE               1503
+#define IDR_METAPOSTDOCTYPE             1504
+#define IDR_LATEXPROJECTDOCTYPE         1505
+#define IDB_DOCUMENTTYPES               1506
+#define IDS_BIBLIOGRAPHY                1507
+#define IDD_GET_PATH                    1508
+#define IDS_BOOKMARK                    1509
+#define IDR_LATEXWIZARD                 1510
+#define IDS_FILE_LOCATION               1511
+#define STE_TAB_GREP_1                  1512
 #define IDD_PROJECT_PROPERTIES          10
 #define IDS_LINE_NUMBER                 10
 #define IDD_OPTIONS_LATEX               11

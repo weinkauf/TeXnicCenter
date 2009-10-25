@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="SciLexer"
 	ProjectGUID="{5EECC42B-6396-41B4-BADC-27F6A98E8090}"
 	RootNamespace="SciLexer"
@@ -1492,6 +1492,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\LexCOBOL.cxx"
+				>
+			</File>
+			<File
 				RelativePath="..\src\LexConf.cxx"
 				>
 				<FileConfiguration
@@ -2576,6 +2580,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\LexNimrod.cxx"
+				>
+			</File>
+			<File
 				RelativePath="..\src\LexNsis.cxx"
 				>
 				<FileConfiguration
@@ -2894,6 +2902,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\LexPowerPro.cxx"
+				>
 			</File>
 			<File
 				RelativePath="..\src\LexPowerShell.cxx"
@@ -3256,6 +3268,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\LexSML.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\src\LexSorcus.cxx"
+				>
+			</File>
+			<File
 				RelativePath="..\src\LexSpecman.cxx"
 				>
 				<FileConfiguration
@@ -3376,6 +3396,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\LexTACL.cxx"
+				>
+			</File>
+			<File
 				RelativePath="..\src\LexTADS3.cxx"
 				>
 				<FileConfiguration
@@ -3414,6 +3438,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\LexTAL.cxx"
+				>
 			</File>
 			<File
 				RelativePath="..\src\LexTCL.cxx"
@@ -3694,6 +3722,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\PerLine.cxx"
+				>
 			</File>
 			<File
 				RelativePath="..\win32\PlatWin.cxx"
@@ -4016,6 +4048,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\Selection.cxx"
+				>
+			</File>
+			<File
 				RelativePath="..\src\Style.cxx"
 				>
 				<FileConfiguration
@@ -4094,6 +4130,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\StyleContext.h"
+				>
 			</File>
 			<File
 				RelativePath="..\src\UniConversion.cxx"
