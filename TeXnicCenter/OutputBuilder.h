@@ -201,7 +201,7 @@ private:
 	HANDLE m_hCurrentProcess;
 
 	/** TRUE, if building should be canceled, FALSE otherwise. */
-	BOOL m_bCancel;
+	bool m_bCancel;
 
 	/** Result string returned by the latex output filter. */
 	CString m_strLatexResult;

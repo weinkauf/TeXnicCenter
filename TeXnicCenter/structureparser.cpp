@@ -972,7 +972,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 			if (si.m_strCaption.IsEmpty() && !si.HasLabels())
 			{
-				si.m_strTitle.Format(_T("%s: %s(%d)"), strEnvName,
+				si.m_strTitle.Format(_T("%s: %s (%d)"), strEnvName,
 				                     ResolveFileName(si.m_strPath), si.m_nLine);
 			}
 			else

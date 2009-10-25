@@ -244,7 +244,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_COMMAND_RANGE(ID_VIEW_APP_LOOK_WIN_2000,ID_VIEW_APP_LOOK_OFFICE_2007_AQUA, &CMainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APP_LOOK_WIN_2000, ID_VIEW_APP_LOOK_OFFICE_2007_AQUA, &CMainFrame::OnUpdateApplicationLook)
 	ON_MESSAGE_VOID(StartPaneAnimation, OnStartPaneAnimation)
-	ON_MESSAGE_VOID(StopPaneAnimation, OnStopPaneAnimation)
+	ON_MESSAGE(StopPaneAnimation, OnStopPaneAnimation)
 	ON_REGISTERED_MESSAGE(AFX_WM_ON_GET_TAB_TOOLTIP, &CMainFrame::OnGetTabToolTip)
 	ON_COMMAND(ID_VIEW_TRANSPARENCY, &CMainFrame::OnViewTransparency)
 END_MESSAGE_MAP()
@@ -1692,6 +1692,8 @@ void CMainFrame::OnOpenProject(CLaTeXProject* p)
 
 void CMainFrame::OnCloseProject(CLaTeXProject* p)
 {
+	HideTaskbarProgress();
+
 	const std::vector<CProjectView*> views = GetViews();
 
 	using namespace std::tr1::placeholders;
@@ -1884,22 +1886,57 @@ void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
 
 void CMainFrame::OnLatexRun()
 {
-	PostMessage(StartPaneAnimation);
+	PostMessage(StartPaneAnimation);	
 }
 
-void CMainFrame::OnLatexStop()
+void CMainFrame::OnLatexStop(bool canceled)
 {
-	PostMessage(StopPaneAnimation);
+	PostMessage(StopPaneAnimation, canceled);	
 }
 
 void CMainFrame::OnStartPaneAnimation()
 {
+	animating_ = true;
+	// Start the animation
 	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane,build_animation_,250);
+
+	if (SUCCEEDED(taskBarList_.CoCreateInstance(CLSID_TaskbarList))) {
+		// Show a marquee progress in the taskbar if available
+		taskBarList_->SetProgressState(m_hWnd, TBPF_INDETERMINATE);
+	}
 }
 
-void CMainFrame::OnStopPaneAnimation()
+LRESULT CMainFrame::OnStopPaneAnimation(WPARAM w, LPARAM)
 {
+	// Stop the animation
 	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane,0);
+
+	// Release the taskbar
+	if (taskBarList_) {
+		taskBarList_->SetProgressValue(m_hWnd, 100, 100); // 100% complete
+		taskBarList_->SetProgressState(m_hWnd, output_doc_.HasErrors() ? TBPF_ERROR : TBPF_NORMAL);
+	}
+
+	animating_ = false;
+
+	return 0;
+}
+
+void CMainFrame::OnIdle(long /*count*/)
+{
+#if 0
+	if (!animating_) {
+		HideTaskbarProgress();
+	}
+#endif
+}
+
+void CMainFrame::HideTaskbarProgress()
+{
+	if (taskBarList_) {
+		taskBarList_->SetProgressState(m_hWnd, TBPF_NOPROGRESS);
+		taskBarList_.Release();
+	}
 }
 
 LRESULT CMainFrame::OnGetTabToolTip(WPARAM, LPARAM l)
