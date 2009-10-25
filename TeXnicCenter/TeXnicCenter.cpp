@@ -591,6 +591,14 @@ void CTeXnicCenterApp::PreLoadState()
 	GetContextMenuManager()->AddMenu(STE_POPUP_MAINWINDOWAREA, IDR_POPUP_MDICLIENT);
 }
 
+BOOL CTeXnicCenterApp::OnIdle(long count)
+{
+	if (CWnd* main = AfxGetMainWnd())
+		static_cast<CMainFrame*>(main)->OnIdle(count);
+
+	return __super::OnIdle(count);
+}
+
 void CTeXnicCenterApp::LoadCustomState()
 {
 	//Document tabs

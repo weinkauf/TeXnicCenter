@@ -67,6 +67,7 @@ class CMainFrame : public CMDIFrameWndEx
 	friend class COutputBuilder;
 
 private:
+	CComPtr<ITaskbarList3> taskBarList_;
 	WorkspacePane file_view_pane_, env_view_pane_;
 	BibView bib_view_pane_;
 	BookmarkView bookmark_view_pane_;
@@ -110,6 +111,8 @@ public:
 
 // types
 public:
+
+	void OnIdle(long count);
 
 	enum tagOutputTabs
 	{
@@ -385,6 +388,7 @@ private:
 	/** Identifier of the timer used to parse the project in given intervals. */
 	UINT m_unParseTimer;
 	bool CreateNavigationPanes();
+	void HideTaskbarProgress();
 
 protected:
 	void OnOpenProject(CLaTeXProject* p);
@@ -403,12 +407,14 @@ protected:
 	
 	void OnUpdateApplicationLook(CCmdUI* pCmdUI);
 	void OnLatexRun();
-	void OnLatexStop();
+	void OnLatexStop(bool canceled);
 
 	void OnStartPaneAnimation();
-	void OnStopPaneAnimation();
+	LRESULT OnStopPaneAnimation(WPARAM, LPARAM);
 
 private:
+	bool animating_;
+
 	bool CreateOutputPanes(void);
 
 public:

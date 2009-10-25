@@ -411,4 +411,12 @@ private:
 
 public:
 	const CString GetCurrentProcessName() const;
+
+	int GetErrorCount() const { return m_aErrors.GetSize(); }
+	int GetBadBoxCount() const { return m_aBadBoxes.GetSize(); }
+	int GetWarningCount() const { return m_aWarnings.GetSize(); }
+
+	bool HasErrors() const { return GetErrorCount() > 0; }
+	bool HasBadBoxes() const { return GetBadBoxCount() > 0; }
+	bool HasWarnings() const { return GetWarningCount() > 0; }
 };

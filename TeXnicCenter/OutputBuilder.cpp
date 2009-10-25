@@ -201,7 +201,7 @@ UINT COutputBuilder::OnTerminate(UINT unExitCode)
 	MsgAfterTermination.SendCallback(unExitCode);
 
 	// Notify the main frame
-	static_cast<CMainFrame*>(AfxGetMainWnd())->OnLatexStop();
+	static_cast<CMainFrame*>(AfxGetMainWnd())->OnLatexStop(m_bCancel);
 
 	return retval;
 }

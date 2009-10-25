@@ -122,6 +122,9 @@ protected:
 	//	afx_msg void OnFileMRUFile( UINT unID );
 	afx_msg void OnUpdateURL(CCmdUI* pCmdUI);
 	afx_msg void OnURL(UINT unID);
+
+	BOOL OnIdle(long count);
+
 	DECLARE_MESSAGE_MAP()
 private:
 	void ShowTipAtStartup(void);

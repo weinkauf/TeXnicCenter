@@ -418,7 +418,7 @@ private:
 			if (si.m_strCaption.IsEmpty() && !si.HasLabels())
 			{
 				//Label and Caption empty ==> Generate a title from the filename
-				si.m_strTitle.Format(_T("%s(%d)"),ResolveFileName(si.m_strPath),si.m_nLine);
+				si.m_strTitle.Format(_T("%s (%d)"),ResolveFileName(si.m_strPath),si.m_nLine);
 			}
 			else
 			{
