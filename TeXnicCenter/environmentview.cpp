@@ -86,24 +86,54 @@ void CEnvironmentView::OnUpdate(CProjectView* /*pSender*/,LPARAM lHint,LPVOID /*
 			DeleteAllItems();
 
 			HTREEITEM ahParentItems[CStructureParser::typeCount];
+			int id;
 
 			for (int i = 0; i < CStructureParser::typeCount; i++)
 			{
 				switch (i)
 				{
 					case CStructureParser::header :
+						id = STE_ITEMTYPE_HEADER;
+						break;
 					case CStructureParser::equation :
+						id = STE_ITEMTYPE_EQUATION;
+						break;
 					case CStructureParser::figure :
+						id = STE_ITEMTYPE_FIGURE;
+						break;
 					case CStructureParser::table :
+						id = STE_ITEMTYPE_TABLE;
+						break;
+					//case CStructureParser::description:
+					//	id = STE_ITEMTYPE_DESCRIPTION;
+					//	break;
+					//case CStructureParser::enumeration:
+					//	id = STE_ITEMTYPE_ENUMERATION;
+					//	break;
+					//case CStructureParser::quotation:
+					//	id = STE_ITEMTYPE_QUOTATION;
+					//	break;
+					//case CStructureParser::quote:
+					//	id = STE_ITEMTYPE_QUOTE;
+					//	break;
+					//case CStructureParser::verse:
+					//	id = STE_ITEMTYPE_VERSE;
+					//	break;
 					case CStructureParser::unknownEnv :
-						ahParentItems[i] = InsertItem(
-						                       AfxLoadString(STE_ITEMTYPE_GENERIC + i),
-						                       CStructureParser::group,CStructureParser::group,
-						                       TVI_ROOT,TVI_SORT);
-						SetItemData(ahParentItems[i],-1);
+						id = STE_ITEMTYPE_UNKNOWNENV;
 						break;
 					default:
+						id = -1;
 						ahParentItems[i] = NULL;
+				}
+
+				if (id != -1)
+				{
+					ahParentItems[i] = InsertItem(
+						                       AfxLoadString(id),
+						                       CStructureParser::group,CStructureParser::group,
+						                       TVI_ROOT,TVI_SORT);
+					SetItemData(ahParentItems[i], static_cast<DWORD_PTR>(-1));
 				}
 			}
 
