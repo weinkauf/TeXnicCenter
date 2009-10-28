@@ -32,6 +32,8 @@
  *
  ********************************************************************/
 
+HBITMAP CreateBitmapFromWindow(CWnd* wnd);
+
 #pragma once
 
 class CChildFrame : public CMDIChildWndEx
@@ -41,6 +43,9 @@ class CChildFrame : public CMDIChildWndEx
 	DECLARE_DYNCREATE(CChildFrame)
 public:
 	CChildFrame();
+
+private:
+	LRESULT OnDwmSendIconicThumbnail(WPARAM, LPARAM);
 
 // operations
 public:
@@ -72,9 +77,10 @@ public:
 // overridings
 protected:
 //{{AFX_VIRTUAL(CChildFrame)
-public:
 	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+
+public:
 	virtual void ActivateFrame(int nCmdShow = -1);
 	//}}AFX_VIRTUAL
 
@@ -97,6 +103,6 @@ protected:
 // attributes
 protected:
 //CSplitterWnd m_wndSplitter;
-public:
+
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 };

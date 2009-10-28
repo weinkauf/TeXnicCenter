@@ -351,7 +351,7 @@ BOOL CTemplateDialog::OnInitDialog()
 	// EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben
 }
 
-void CTemplateDialog::OnSelchangeTabCategories(NMHDR* pNMHDR, LRESULT* pResult)
+void CTemplateDialog::OnSelchangeTabCategories(NMHDR* /*pNMHDR*/, LRESULT* pResult)
 {
 	FillTemplateList();
 	OnTemplateSelectionChanged();
@@ -378,7 +378,7 @@ void CTemplateDialog::OnCreate()
 	Create();
 }
 
-void CTemplateDialog::OnDblClkTemplate(NMHDR* pNMHDR, LRESULT* pResult)
+void CTemplateDialog::OnDblClkTemplate(NMHDR* /*pNMHDR*/, LRESULT* pResult)
 {
 	CWnd *pOkButton = GetDlgItem(IDC_BUTTON_CREATE);
 	if (!pOkButton || !pOkButton->IsWindowEnabled())

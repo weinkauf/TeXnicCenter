@@ -38,7 +38,7 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg void OnCaptureChanged(CWnd *pWnd);
 	afx_msg void OnActivateApp(BOOL bActive, DWORD dwThreadId);
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()

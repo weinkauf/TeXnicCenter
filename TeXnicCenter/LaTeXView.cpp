@@ -110,20 +110,18 @@ LaTeXView::LaTeXView()
 
 LaTeXView::~LaTeXView()
 {
-	delete listener_;
 }
 
 BEGIN_MESSAGE_MAP(LaTeXView, LaTeXViewBase)
+	ON_WM_CREATE()
 	ON_WM_SETFOCUS()
 	ON_COMMAND(ID_SPELL_FILE, &LaTeXView::OnSpellFile)
 	ON_COMMAND(ID_EDIT_DELETE_LINE, &LaTeXView::OnEditDeleteLine)
 	ON_COMMAND(ID_EDIT_OUTSOURCE, &LaTeXView::OnEditOutsource)
 	ON_COMMAND(ID_QUERY_COMPLETION, &LaTeXView::OnQueryCompletion)
-	ON_COMMAND_EX_RANGE(ID_INSERT_FORMULA_EMBEDDED, ID_INSERT_SPADESUIT, &LaTeXView::OnInsertLaTeXConstruct)
-	ON_COMMAND_EX_RANGE(ID_INSERT_A,ID_INSERT_NOTIN, &LaTeXView::OnInsertLaTeXConstruct)
-	ON_COMMAND_EX_RANGE(ID_INSERT_SUPERSCRIPT,ID_INSERT_DDOTS, &LaTeXView::OnInsertLaTeXConstruct)
-	ON_COMMAND_EX_RANGE(ID_TEXTMODULES_FIRST,ID_TEXTMODULES_LAST, &LaTeXView::OnInsertLaTeXConstruct)
-	ON_WM_CREATE()
+	ON_COMMAND_EX_RANGE(ID_INSERT_A, ID_INSERT_ZETA, &LaTeXView::OnInsertLaTeXConstruct)
+	ON_COMMAND_EX_RANGE(ID_FORMAT_BFSERIES, ID_FORMAT_UPSHAPE, &LaTeXView::OnInsertLaTeXConstruct)
+	ON_COMMAND_EX_RANGE(ID_TEXTMODULES_FIRST,ID_TEXTMODULES_LAST, &LaTeXView::OnInsertLaTeXConstruct)	
 	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_INSERT, &LaTeXView::OnBlockComment)
 	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_REMOVE, &LaTeXView::OnBlockComment)
 	ON_COMMAND_EX(ID_EDIT_BLOCKCOMMENT_TOOGLE, &LaTeXView::OnBlockComment)
@@ -577,7 +575,7 @@ CAutoCompleteDlg* LaTeXView::CreateListBox( CString &keyword, long pos )
 		//Create window, if needed
 		if (autocompletion_list_ == NULL) {
 			autocompletion_list_ = new CAutoCompleteDlg(&theApp.m_AvailableCommands,this /*theApp.GetMainWnd()*/);
-			autocompletion_list_->SetListener(listener_);
+			autocompletion_list_->SetListener(listener_.get());
 		}
 
 		//InitWithKeyword will notify the listener immediately, if only one exact match exists
@@ -903,9 +901,10 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 		break;
 	default:
 		if ((nID >= ID_TEXTMODULES_FIRST) && (nID <= ID_TEXTMODULES_LAST)) {
-			ASSERT(CConfiguration::GetInstance()->m_aTextModules.GetSize() > nID - ID_TEXTMODULES_FIRST);
+			ASSERT(CConfiguration::GetInstance()->m_aTextModules.GetSize() > 
+				static_cast<INT_PTR>(nID - ID_TEXTMODULES_FIRST));
 
-			if (CConfiguration::GetInstance()->m_aTextModules.GetSize() > nID - ID_TEXTMODULES_FIRST)
+			if (CConfiguration::GetInstance()->m_aTextModules.GetSize() > static_cast<INT_PTR>(nID - ID_TEXTMODULES_FIRST))
 				strInsert = CConfiguration::GetInstance()->m_aTextModules[nID - ID_TEXTMODULES_FIRST].GetText();
 			else
 				return false;
@@ -932,8 +931,8 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 	if (bReplaceBell && nSplitPos > -1) {
 		int nPos = nSplitPos - 1;
 
-		for (; nPos >= 0 && strInsert[nPos] == _T('\t'); nPos--)
-			;
+		while (nPos >= 0 && strInsert[nPos] == _T('\t'))
+			--nPos;
 
 		nIndentation = nSplitPos - nPos - 1;
 		strBeforeCursor = strInsert.Left(nPos + 1);

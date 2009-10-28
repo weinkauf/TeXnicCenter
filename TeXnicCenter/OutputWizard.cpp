@@ -205,7 +205,7 @@ void COutputWizard::OnFinish()
 	EndDialog(IDOK);
 }
 
-int COutputWizard::DoModal()
+INT_PTR COutputWizard::DoModal()
 {
 	return CPropertySheet::DoModal();
 }
@@ -589,26 +589,28 @@ void COutputWizard::LookForPdf()
 		// so we don't need a pdf-viewer.
 		// Lets finish.
 		ShowInformation();
-		return;
 	}
+	else {
+		// OK, the user can generate PDF-documents.
+		// Lets look for an application to view them
+		CString strViewer = FindApplicationForDocType(_T(".pdf"));
 
-	// OK, the user can generate PDF-documents.
-	// Lets look for AcrobatReader to view them
-	CString strViewer = FindApplicationForDocType(_T(".pdf"));
+		m_wndPagePdfViewer.m_strPath = strViewer;
 
-	m_wndPagePdfViewer.m_strPath = strViewer;
-
-	if (IsAcrobat(strViewer) || IsSumatraPDF(strViewer))
-	{
-		// standard viewer is Acrobat Reader or SumatraPDF
-		ShowInformation();
-		m_wndPagePdfViewer.m_strSingleInstanceOption.Empty();
-		m_wndPagePdfViewer.m_strForwardSearchOption.Empty();
-	}
-	else
-	{
-		// lets user make his configuration
-		SetActivePage(pagePdfViewer);
+		// Either Acrobat or SumatraPDF are installed both not both
+		if (IsAcrobat(strViewer) && !sumatra_installed_ || IsSumatraPDF(strViewer))
+		{
+			// Standard viewer is Acrobat Reader or SumatraPDF
+			ShowInformation();
+			m_wndPagePdfViewer.m_strSingleInstanceOption.Empty();
+			m_wndPagePdfViewer.m_strForwardSearchOption.Empty();
+		}
+		else
+		{
+			// Both Acrobat and SumatraPDF are installed
+			// or a viewer couln't be found: Let user make his configuration
+			SetActivePage(pagePdfViewer);
+		}
 	}
 }
 
@@ -645,6 +647,7 @@ void COutputWizard::ShowInformation()
 	SetActivePage(pageFinish);
 }
 
+/// Called at the end of the wizard when the user clicks 'Finish'.
 void COutputWizard::GenerateOutputProfiles()
 {
 	CString strError;
@@ -652,20 +655,26 @@ void COutputWizard::GenerateOutputProfiles()
 	//Some things, that we will reuse inside this function
 	// - Options for normal latex
 	// - %Wm, because of the src-specials for forward/inverse search. Otherwise, things might break.
-	CString strLatexOptions(_T("--src -interaction=nonstopmode \"%Wm\""));
+	CString strLatexOptions(_T("-interaction=nonstopmode \"%Wm\""));
 
 	// - Options for PDFLatex
 	// - %pm, because it doesn't matter here. I guess, we could use %Wm as well. But %pm is tested and seems to work for all.
 	CString strPDFLatexOptions(_T("-interaction=nonstopmode \"%pm\""));
 
-	// - Only miktex support the -max-print-line=N feature
+	// - Only MiKTeX supports the -max-print-line=N feature
 	if (distribution_ == MiKTeX) 
 	{
-		strLatexOptions = _T("--src -interaction=nonstopmode -max-print-line=120 \"%Wm\"");
+		strLatexOptions = _T("-interaction=nonstopmode -max-print-line=120 \"%Wm\"");
 		strPDFLatexOptions = _T("-interaction=nonstopmode -max-print-line=120 \"%pm\"");
 	}
 
-#pragma region LaTeX => DVI
+	// Did the user select SumatraPDF?
+	if (IsSumatraPDF(m_wndPagePdfViewer.GetViewerPath()))
+	{
+		strPDFLatexOptions = _T("-synctex=-1 ") + strPDFLatexOptions; // Use SyncTeX then
+	}
+
+	// LaTeX => DVI
 	if (m_bLatexInstalled)
 	{
 		CString strProfile(GetProfileName(STE_OUTPUTWIZARD_DVITYPE));
@@ -702,7 +711,7 @@ void COutputWizard::GenerateOutputProfiles()
 				p = *pp;
 		}
 
-		// dvipdfm
+		// DVI => PDF
 		if (dvipdfm_installed_) 
 		{
 			strProfile = GetProfileName(STE_OUTPUTWIZARD_DVIPDFMTYPE);
@@ -718,6 +727,7 @@ void COutputWizard::GenerateOutputProfiles()
 
 				CPostProcessor dvipdfm(_T("dvipdfm"),dvipdfm_path_,_T("\"%bm.dvi\""));
 				p.GetPostProcessorArray().Add(dvipdfm);
+				p.SetLaTeXArguments(strPDFLatexOptions); // Use PDF arguments
 
 				AssignPDFViewer(p);
 
@@ -725,15 +735,15 @@ void COutputWizard::GenerateOutputProfiles()
 			}
 		}
 	}
-#pragma endregion
 
-#pragma region LaTeX => PS
+	// LaTeX => PS
 	if (m_bLatexInstalled && m_bDvipsInstalled)
 	{
 		CString strProfile(GetProfileName(STE_OUTPUTWIZARD_PSTYPE));
 
 		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
 		BOOL bExists = m_profiles.Exists(strProfile);
+
 		if (!bExists || AfxMessageBox(strError,MB_ICONQUESTION | MB_YESNO) == IDYES)
 		{
 			if (bExists)
@@ -784,14 +794,10 @@ void COutputWizard::GenerateOutputProfiles()
 			m_profiles.Add(strProfile,p);
 		}
 	}
-#pragma endregion
 
-#pragma region LaTeX => PDF
-
+	// LaTeX => PDF
 	if (m_bPdfLatexInstalled)
 		GeneratePDFProfile(GetProfileName(STE_OUTPUTWIZARD_PDFTYPE), strPDFLatexOptions,m_wndPagePdfViewer.m_strPath);
-
-#pragma endregion
 
 	/*
 #pragma region LaTeX => PDF (SumatraPDF)
@@ -803,7 +809,7 @@ void COutputWizard::GenerateOutputProfiles()
 		*/
 
 
-#pragma region LaTeX => PS => PDF
+	// LaTeX => PS => PDF
 	if (m_bLatexInstalled && m_bDvipsInstalled && m_bGhostscriptInstalled)
 	{
 		CString strProfile(GetProfileName(STE_OUTPUTWIZARD_PDFVIAPSTYPE));
@@ -850,13 +856,13 @@ void COutputWizard::GenerateOutputProfiles()
 				p.GetPostProcessorArray().Add(ppGS);
 			}
 
+			p.SetLaTeXArguments(strPDFLatexOptions); // Use PDF arguments
 			AssignPDFViewer(p);
 
 			// add profile to map
 			m_profiles.Add(strProfile,p);
 		}
 	}
-#pragma endregion
 }
 
 void COutputWizard::BuildPropPageArray()

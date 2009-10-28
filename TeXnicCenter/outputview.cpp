@@ -116,7 +116,7 @@ CImageList *COutputView::GetImageList() const
 	return CListCtrl::GetImageList(LVSIL_SMALL);
 }
 
-LONG COutputView::OnReset(UINT /*wParam*/, LONG /*lParam*/)
+LRESULT COutputView::OnReset(WPARAM /*wParam*/, LPARAM /*lParam*/)
 {
 	ResetView();
 	return 0;
@@ -127,13 +127,13 @@ void COutputView::ResetView()
 	DeleteAllItems();
 }
 
-LONG COutputView::OnAddLine(UINT wParam, LONG /*lParam*/)
+LRESULT COutputView::OnAddLine(WPARAM wParam, LPARAM/*lParam*/)
 {
 	AddLine((LPCTSTR)wParam);
 	return 0L;
 }
 
-LONG COutputView::OnAddInfoLine(WPARAM wParam,LONG lParam)
+LRESULT COutputView::OnAddInfoLine(WPARAM wParam, LPARAM lParam)
 {
 	/////////////////
 	//Get the Infos

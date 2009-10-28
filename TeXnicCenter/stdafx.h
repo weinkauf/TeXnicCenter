@@ -77,6 +77,7 @@
 #include <ExtDialog.h>
 #include <MsXmlCpp.h>
 #include <htmlhelp.h>
+#include <dwmapi.h>
 
 namespace Interfaces
 {
@@ -110,6 +111,10 @@ typedef std::tr1::basic_regex<TCHAR> tregex;
 // Use std::min, std::max from <algorithm>
 #undef min
 #undef max
+
+#ifndef UNICODE
+#error You have to select a Unicode solution configuration first
+#endif
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.

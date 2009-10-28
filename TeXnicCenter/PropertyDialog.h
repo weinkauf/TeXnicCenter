@@ -147,7 +147,7 @@ public:
 public:
 	BOOL Create(LPCTSTR lpszTemplateName, UINT unTabCtrlTemplateId, CWnd *pParentWnd = NULL);
 	BOOL Create(UINT unIDTemplate, UINT unTabCtrlTemplateId, CWnd *pParentWnd = NULL);
-	int DoModal();
+	INT_PTR DoModal();
 	void AddPage(CPropertyDialogPage *pPage);
 	void RemovePage(CPropertyDialogPage *pPage);
 	void RemovePage(int nPage);

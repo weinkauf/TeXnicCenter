@@ -161,9 +161,9 @@ public:
 
 // Generierte Nachrichtenzuordnungsfunktionen
 protected:
-	LONG OnAddLine(UINT wParam, LONG lParam);
-	LONG OnReset(UINT wParam, LONG lParam);
-	LONG OnAddInfoLine(WPARAM wParam, LONG lParam);
+	LRESULT OnAddLine(WPARAM wParam, LPARAM lParam);
+	LRESULT OnReset(WPARAM wParam, LPARAM lParam);
+	LRESULT OnAddInfoLine(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnSysColorChange();
 	void OnSetFocus(CWnd* pOldWnd);
 	//{{AFX_MSG(COutputView)

@@ -57,7 +57,7 @@ SpellCheckDlg::SpellCheckDlg(CodeView* view, Speller* speller, CWnd* pParent /*=
 
 void SpellCheckDlg::Reset( CodeView *pBuddy, Speller *pSpell )
 {
-	VERIFY(view_ = pBuddy);
+	VERIFY((view_ = pBuddy) != 0);
 	tokenizer_ = view_->GetTokenizer();
 	tokenizer_->ResetState();
 	speller_ = pSpell;
@@ -428,7 +428,7 @@ void SpellCheckDlg::OnDblclkSpellSuggest(NMHDR* /*pNMHDR*/, LRESULT* pResult)
 	*pResult = 0;
 }
 
-int SpellCheckDlg::DoModal()
+INT_PTR SpellCheckDlg::DoModal()
 {
 	if (speller_ == NULL)
 		return IDABORT;

@@ -44,6 +44,7 @@ public:
 	}
 };
 
+/// Represents an exception thrown when an invalid character is encountered.
 class InvalidCharacterEncoutered :
 	public EncodingConverterError
 {

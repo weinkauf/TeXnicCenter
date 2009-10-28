@@ -125,6 +125,8 @@ CTextModuleGroup::~CTextModuleGroup()
 
 int CTextModuleGroup::InsertSorted(CTextModule& newElement, bool bSortAscending /*= true*/, bool bAllowDuplicate /*= false*/)
 {
+	UNUSED(bAllowDuplicate);
+
 	return CSortArray<CTextModule, CTextModule&>::InsertSorted(newElement, bSortAscending, false);
 }
 

@@ -311,7 +311,7 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnExtrasCustomize();
 	afx_msg void OnClose();
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
 	afx_msg void OnOptionsChanged();
 	afx_msg void OnWindowEditor();
@@ -422,8 +422,15 @@ public:
 
 private:
 	const std::vector<CProjectView*> GetViews();
+	LRESULT OnDwmSendIconicThumbnail(WPARAM, LPARAM);
+
 protected:
 	virtual void OnUpdateFrameTitle(BOOL bAddToTitle);
+
+	afx_msg void OnDestroy();
+
 public:
 	void UpdateFrameTitle();
+	void RegisterChildFrame(CFrameWnd* frame);
+	void UnregisterChildFrame(CFrameWnd* frame);
 };

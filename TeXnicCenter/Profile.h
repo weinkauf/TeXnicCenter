@@ -248,6 +248,11 @@ public:
 	CCommand& GetViewCurrentCmd();
 	CCommand& GetViewCloseCmd();
 
+	void SetLaTeXArguments(LPCTSTR args)
+	{
+		m_strLatexArguments = args;
+	}
+
 // operations
 public:
 	/**

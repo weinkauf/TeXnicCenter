@@ -493,6 +493,8 @@ BOOL CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
 	}
 	catch (CComException *pE)
 	{
+		// TODO: The following error is reported multiple times which
+		// is very annoying. The catch handler should be set by the most outer caller.
 		bool bReportedError(false);
 
 		//Ask MsXML for error description
@@ -596,6 +598,8 @@ void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyle
 	BOOL hasAfterVal = FALSE, hasBeforeVal = FALSE, hasFile = FALSE, hasIndex = FALSE;
 	int nOfParams = 0, iconIndex = 0;
 	COLORREF mask; bool has_mask = false;
+	
+	UNUSED_ALWAYS(mask);
 
 	for (int j = 0; j < attr.GetLength(); j++)
 	{

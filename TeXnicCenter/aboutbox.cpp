@@ -303,7 +303,7 @@ BOOL CAboutDlg::OnInitDialog()
 	return TRUE;
 }
 
-void CAboutDlg::OnTimer(UINT nIDEvent)
+void CAboutDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	if (nIDEvent != DISPLAY_TIMER_ID)
 	{

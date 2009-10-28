@@ -841,7 +841,7 @@ void CCFileViewEx::OnLButtonDblClk(UINT nFlags,CPoint point)
 	CCTreeCtrlEx::OnLButtonDblClk(nFlags,point);
 }
 
-void CCFileViewEx::OnTimer(UINT nIDEvent)
+void CCFileViewEx::OnTimer(UINT_PTR nIDEvent)
 {
 	if (nIDEvent == m_idTimer)
 	{

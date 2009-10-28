@@ -68,7 +68,7 @@ protected:
 // Implementation
 public:
 	virtual ~CTipDlg();
-	virtual int DoModal();
+	virtual INT_PTR DoModal();
 
 protected:
 

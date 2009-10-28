@@ -57,7 +57,7 @@ private:
 
 	CAdvice* instant_advice_tip_;
 	CAutoCompleteDlg* autocompletion_list_;
-	LaTeXViewListener *listener_;
+	const std::auto_ptr<LaTeXViewListener> listener_;
 	bool autocompletion_active_;
 
 protected:
