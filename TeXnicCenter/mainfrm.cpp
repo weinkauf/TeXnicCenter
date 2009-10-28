@@ -236,7 +236,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_COMMAND(ID_CONTEXT_HELP, CMDIFrameWndEx::OnContextHelp)
 	ON_COMMAND(ID_DEFAULT_HELP, CMDIFrameWndEx::OnHelpFinder)
 	ON_COMMAND_EX_RANGE(ID_MATH1, ID_MATH16, &CMainFrame::OnToggleMathBar)
+	ON_COMMAND_EX(ID_VIEW_MATH, &CMainFrame::OnToggleMathBar)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_MATH1, ID_MATH16, &CMainFrame::OnCheckCtrlBarVisible)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_MATH, &CMainFrame::OnCheckCtrlBarVisible)
 	ON_REGISTERED_MESSAGE(AFX_WM_RESETTOOLBAR, &CMainFrame::OnResetToolbar)
 	ON_REGISTERED_MESSAGE(AFX_WM_CUSTOMIZETOOLBAR, &CMainFrame::OnCustomizationMode)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST, &CMainFrame::OnUpdateUserTool)
@@ -557,6 +559,8 @@ CBasePane* CMainFrame::GetControlBarByCmd(UINT unID)
 		result = &m_awndMathBar[unID - ID_MATH1];
 	else if (unID >= ID_VIEW_USER_TOOLBAR_FIRST && unID <= ID_VIEW_USER_TOOLBAR_LAST)
 		result = GetUserToolBarByIndex(unID - ID_VIEW_USER_TOOLBAR_FIRST);
+	else if (unID == ID_VIEW_MATH)
+		result= &m_wndMathBar;
 	else
 		result = GetPane(unID);
 
