@@ -57,6 +57,9 @@ class CTeXnicCenterApp :
 	CDocTemplate* bibtex_doc_template_;
 	CDocTemplate* metapost_doc_template_;
 
+	/// Returns a value indicating whether recent files should be loaded and stored.
+	bool CanUseRecentFiles();
+
 public:
 	UINT GetApplicationLook() const;
 	void SetApplicationLook(UINT val);
