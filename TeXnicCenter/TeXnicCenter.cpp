@@ -228,6 +228,14 @@ CTeXnicCenterApp::CTeXnicCenterApp()
 	InitializeCriticalSection(&m_csLazy);
 }
 
+bool CTeXnicCenterApp::CanUseRecentFiles()
+{
+	BOOL bNoRecentDocs = FALSE;
+	GetSysPolicyValue(_AFX_SYSPOLICY_NORECENTDOCHISTORY, &bNoRecentDocs);
+
+	return !bNoRecentDocs;
+}
+
 BOOL CALLBACK TxcEnumResourceLanguages(HANDLE /*hModule*/, LPCTSTR lpszType, LPCTSTR /*lpszName*/, WORD wIdLang, LONG lParam)
 {
 	ASSERT(lpszType == RT_VERSION);
@@ -609,8 +617,9 @@ void CTeXnicCenterApp::LoadCustomState()
 	m_nMDITabLocation = GetInt(_T("MDITabLocation"), CMFCTabCtrl::LOCATION_TOP);
 	m_nMDITabStyle = GetInt(_T("MDITabStyle"), CMFCTabCtrl::STYLE_3D_ONENOTE);
 
-	//Recent projects
-	m_recentProjectList.ReadList();
+	// Recent projects
+	if (CanUseRecentFiles()) // Respect the group policy
+		m_recentProjectList.ReadList();
 
 	//Output Profiles
 	CProfileMap::GetInstance()->SerializeFromRegistry();
@@ -627,8 +636,9 @@ void CTeXnicCenterApp::SaveCustomState()
 	WriteInt(_T("MDITabLocation"), m_nMDITabLocation);
 	WriteInt(_T("MDITabStyle"), m_nMDITabStyle);
 
-	//Recent projects
-	m_recentProjectList.WriteList();
+	// Recent projects
+	if (CanUseRecentFiles()) // Respect the group policy
+		m_recentProjectList.WriteList();
 
 	//Output Profiles
 	CProfileMap::GetInstance()->SerializeToRegistry();
