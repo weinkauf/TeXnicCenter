@@ -247,6 +247,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_MESSAGE(StopPaneAnimation, OnStopPaneAnimation)
 	ON_REGISTERED_MESSAGE(AFX_WM_ON_GET_TAB_TOOLTIP, &CMainFrame::OnGetTabToolTip)
 	ON_COMMAND(ID_VIEW_TRANSPARENCY, &CMainFrame::OnViewTransparency)
+	ON_WM_DESTROY()
+	ON_MESSAGE(WM_DWMSENDICONICTHUMBNAIL, &CMainFrame::OnDwmSendIconicThumbnail)
 END_MESSAGE_MAP()
 
 const UINT BuildAnimationPane = 1;
@@ -465,6 +467,21 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	SendMessage(WM_UPDATEUISTATE, MAKEWPARAM(UIS_SET, UISF_HIDEACCEL | UISF_HIDEFOCUS));
 
+	if (SUCCEEDED(taskBarList_.CoCreateInstance(CLSID_TaskbarList))) {
+		if (FAILED(taskBarList_->HrInit()))
+			taskBarList_.Release();
+		else {
+#ifdef WINDOWS_7_THUMBNAILS_
+			// Success
+			BOOL provideIconThumbnail = TRUE;
+			DwmSetWindowAttribute(m_hWnd, DWMWA_HAS_ICONIC_BITMAP, 
+				&provideIconThumbnail, sizeof(provideIconThumbnail));
+			DwmSetWindowAttribute(m_hWnd, DWMWA_FORCE_ICONIC_REPRESENTATION, 
+				&provideIconThumbnail, sizeof(provideIconThumbnail));
+#endif
+		}
+	}
+
 	return 0;
 }
 
@@ -667,7 +684,7 @@ void CMainFrame::OnExtrasCustomize()
 	theApp.UpdateLaTeXProfileSel();
 }
 
-void CMainFrame::OnTimer(UINT nIDEvent)
+void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 {
 	switch (nIDEvent)
 	{
@@ -1899,9 +1916,6 @@ void CMainFrame::OnStartPaneAnimation()
 	animating_ = true;
 	// Start the animation
 	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane,build_animation_,250);
-
-	if (!taskBarList_)
-		taskBarList_.CoCreateInstance(CLSID_TaskbarList);
 	
 	if (taskBarList_) {
 		// Show a marquee progress in the taskbar if available
@@ -1909,7 +1923,7 @@ void CMainFrame::OnStartPaneAnimation()
 	}
 }
 
-LRESULT CMainFrame::OnStopPaneAnimation(WPARAM w, LPARAM)
+LRESULT CMainFrame::OnStopPaneAnimation(WPARAM, LPARAM)
 {
 	// Stop the animation
 	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane,0);
@@ -1929,6 +1943,7 @@ void CMainFrame::OnIdle(long /*count*/)
 {
 #if 0
 	if (!animating_) {
+		// Remove the taskbar progress when idle
 		HideTaskbarProgress();
 	}
 #endif
@@ -1938,7 +1953,6 @@ void CMainFrame::HideTaskbarProgress()
 {
 	if (taskBarList_) {
 		taskBarList_->SetProgressState(m_hWnd, TBPF_NOPROGRESS);
-		taskBarList_.Release();
 	}
 }
 
@@ -1983,4 +1997,50 @@ void CMainFrame::UpdateFrameTitle()
 	}
 
 	SetWindowText(title);
+}
+
+void CMainFrame::OnDestroy()
+{
+	CMDIFrameWndEx::OnDestroy();
+
+	if (taskBarList_)
+		taskBarList_.Release();
+}
+
+void CMainFrame::RegisterChildFrame(CFrameWnd* frame)
+{
+	ENSURE_ARG(frame);
+
+#ifdef WINDOWS_7_THUMBNAILS_
+	if (taskBarList_) {
+		HWND hwnd = frame->GetSafeHwnd();
+		taskBarList_->RegisterTab(hwnd, m_hWnd);
+		taskBarList_->SetTabOrder(hwnd, 0);
+
+		DwmInvalidateIconicBitmaps(m_hWnd);
+	}
+#endif
+}
+
+void CMainFrame::UnregisterChildFrame(CFrameWnd* frame)
+{
+	ENSURE_ARG(frame);
+
+#ifdef WINDOWS_7_THUMBNAILS_
+	if (taskBarList_)
+		taskBarList_->UnregisterTab(frame->m_hWnd); 
+#endif
+}
+
+LRESULT CMainFrame::OnDwmSendIconicThumbnail(WPARAM w, LPARAM l)
+{
+	LRESULT result;
+	CFrameWnd* frame = GetActiveFrame();
+
+	if (frame && frame != this)
+		result = frame->SendMessage(WM_DWMSENDICONICTHUMBNAIL, w, l);
+
+	else result = 1; // Not processed
+
+	return result;
 }

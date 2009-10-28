@@ -39,6 +39,30 @@
 #include "ChildFrm.h"
 #include "LaTeXView.h"
 
+HBITMAP CreateBitmapFromWindow(CWnd* wnd)
+{
+	ENSURE_ARG(wnd);
+
+	CWindowDC wdc(wnd);
+
+	CDC dc;
+	dc.CreateCompatibleDC(&wdc);
+
+	CRect rect;
+	wnd->GetWindowRect(&rect);
+
+	CBitmap bmp;
+	bmp.CreateCompatibleBitmap(&wdc, rect.Width(), rect.Height());
+
+	CBitmap* oldBmp = dc.SelectObject(&bmp);
+
+	wnd->SendMessage(WM_PRINT, reinterpret_cast<WPARAM>(dc.m_hDC), PRF_CHILDREN | PRF_CLIENT);
+
+	dc.SelectObject(oldBmp);
+
+	return reinterpret_cast<HBITMAP>(bmp.Detach());
+}
+
 
 IMPLEMENT_DYNCREATE(CChildFrame,CMDIChildWndEx)
 
@@ -48,6 +72,7 @@ BEGIN_MESSAGE_MAP(CChildFrame,CMDIChildWndEx)
 	ON_WM_SETFOCUS()
 	//}}AFX_MSG_MAP
 	ON_WM_CREATE()
+	ON_MESSAGE(WM_DWMSENDICONICTHUMBNAIL, &CChildFrame::OnDwmSendIconicThumbnail)
 END_MESSAGE_MAP()
 
 
@@ -125,6 +150,11 @@ void CChildFrame::OnDestroy()
 	// then remember, if the next window should be opened maximized
 	if (!GetNextWindow(GW_HWNDNEXT) && !GetNextWindow(GW_HWNDPREV))
 		CConfiguration::GetInstance()->m_bOpenDocWndMaximized = IsZoomed() != 0;
+
+	CMainFrame* m = dynamic_cast<CMainFrame*>(GetTopLevelFrame());
+	ENSURE(m);
+
+	m->UnregisterChildFrame(this);
 
 	CMDIChildWndEx::OnDestroy();
 }
@@ -292,6 +322,25 @@ int CChildFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	//client_.SubclassWindow(m_hWnd);
 	//client_.Initialize();
+
+	CMainFrame* m = dynamic_cast<CMainFrame*>(GetTopLevelFrame());
+	ENSURE(m);
+
+	m->RegisterChildFrame(this);
+
+	return 0;
+}
+
+
+LRESULT CChildFrame::OnDwmSendIconicThumbnail(WPARAM, LPARAM)
+{
+#ifdef WINDOWS_7_THUMBNAILS_
+
+	HBITMAP bmp = CreateBitmapFromWindow(this);
+	DwmSetIconicThumbnail(m_hWnd, bmp, 0);
+	::DeleteObject(bmp);
+
+#endif
 
 	return 0;
 }

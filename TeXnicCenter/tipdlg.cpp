@@ -260,7 +260,7 @@ BOOL CTipDlg::OnInitDialog()
 	return TRUE; // return TRUE unless you set the focus to a control
 }
 
-int CTipDlg::DoModal()
+INT_PTR CTipDlg::DoModal()
 {
 	if (m_pStream != NULL)
 		return CDialog::DoModal();

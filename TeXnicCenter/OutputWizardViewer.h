@@ -105,9 +105,13 @@ protected:
 	{
 		int nStart, nEnd;
 	} m_selForwardSearchOptionEdit;
+
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
+
+	/// Gets the path of the selected viewer.
+	const CString& GetViewerPath() const { return m_strPath; }
 };
 
 //{{AFX_INSERT_LOCATION}}

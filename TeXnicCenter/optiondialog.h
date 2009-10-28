@@ -96,7 +96,7 @@ protected:
 	COptionPageTextFormat m_pageTextFormat;
 
 public:
-	int DoModal();
+	INT_PTR DoModal();
 protected:
 	static int CALLBACK PropSheetCallback(HWND hWnd, UINT message, LPARAM lParam);
 public:

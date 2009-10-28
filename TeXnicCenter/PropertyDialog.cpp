@@ -277,7 +277,7 @@ BOOL CPropertyDialog::Create(UINT unIDTemplate, UINT unTabCtrlTemplateId, CWnd *
 	return CDialog::Create(unIDTemplate, pParentWnd);
 }
 
-int CPropertyDialog::DoModal()
+INT_PTR CPropertyDialog::DoModal()
 {
 	return CDialog::DoModal();
 }

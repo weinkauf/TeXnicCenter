@@ -97,7 +97,7 @@ BOOL COptionDialog::OnInitDialog()
 	return bResult;
 }
 
-int COptionDialog::DoModal(void)
+INT_PTR COptionDialog::DoModal(void)
 {
 	m_psh.dwFlags |= PSH_USECALLBACK;
 	m_psh.pfnCallback = PropSheetCallback;

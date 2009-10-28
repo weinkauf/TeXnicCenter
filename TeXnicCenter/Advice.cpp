@@ -121,7 +121,7 @@ void CAdvice::OnActivateApp(BOOL bActive,DWORD dwThreadId)
 	}
 }
 
-void CAdvice::OnTimer(UINT nIDEvent)
+void CAdvice::OnTimer(UINT_PTR nIDEvent)
 {
 	CStatic::OnTimer(nIDEvent);
 	KillTimer(nIDEvent);

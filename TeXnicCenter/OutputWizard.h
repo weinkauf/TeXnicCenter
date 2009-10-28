@@ -99,7 +99,7 @@ public:
 protected:
 //{{AFX_VIRTUAL(COutputWizard)
 public:
-	virtual int DoModal();
+	virtual INT_PTR DoModal();
 	virtual BOOL OnInitDialog();
 	//}}AFX_VIRTUAL
 
