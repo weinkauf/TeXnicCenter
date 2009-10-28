@@ -144,7 +144,12 @@ protected:
 	/**
 	 */
 	void GenerateOutputProfiles();
-	void GeneratePDFProfile(const CString& name, const CString& strPDFLatexOptions, const CString& viewer_path );
+	void GeneratePDFProfile(const CString& name, const CString& strPDFLatexOptions, const CString& viewer_path, const CString& latexFileName );
+
+	void GeneratePDFProfile(const CString& name, const CString& strPDFLatexOptions, const CString& viewer_path)
+	{
+		GeneratePDFProfile(name, strPDFLatexOptions, viewer_path, _T("pdflatex.exe"));
+	}
 
 private:
 	void SetupYAP( CProfile &p );
@@ -202,6 +207,8 @@ private:
 
 	/** TRUE if SumatraPDF has been found. */
 	bool sumatra_installed_;
+
+	bool xelatexInstalled_;
 
 	CString sumatra_path_;
 

@@ -763,6 +763,7 @@
 #define IDS_EDITOP_REPLACE              8628
 #define IDS_EDITOP_AUTOINDENT           8629
 #define IDS_EDITOP_FIRSTMODIFY          8630
+#define STE_OUTPUTWIZARD_PDFVIAXELATEX  8631
 #define IDS_FIND_INCREMENTAL_FORWARD    8640
 #define IDS_FIND_INCREMENTAL_BACKWARD   8641
 #define IDS_FIND_INCREMENTAL_FAILED     8642
@@ -1493,10 +1494,10 @@
 #define IDR_BOOKMARK_VIEW               57672
 
 // Next default values for new objects
-//
+// 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_3D_CONTROLS                1
+#define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57673
 #define _APS_NEXT_COMMAND_VALUE         40502
 #define _APS_NEXT_CONTROL_VALUE         8663

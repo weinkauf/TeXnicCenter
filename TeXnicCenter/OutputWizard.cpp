@@ -49,6 +49,8 @@ static char THIS_FILE[] = __FILE__;
 
 namespace
 {
+	LPCTSTR const XeLaTeXFileName = _T("xelatex.exe");
+
 	bool IsAcrobat(const CString& fn)
 	{
 		LPCTSTR const AcrobatFileNames[] = {_T("acrord32"),_T("acrobat"),0};
@@ -111,6 +113,7 @@ COutputWizard::COutputWizard(CProfileMap &profiles,CWnd* pParentWnd)
 , m_wndPageDistributionPath(this)
 , dvipdfm_installed_(false)
 , sumatra_installed_(false)
+, xelatexInstalled_(false)
 , distribution_(Unknown)
 {
 	AddPage(&m_wndPageWelcome);
@@ -356,6 +359,13 @@ BOOL COutputWizard::LookForLatex()
 			dvipdfm_installed_ = true;
 			dvipdfm_path_ = path;
 		}
+	}
+
+	const CString path = CPathTool::Cat(m_wndPageDistributionPath.m_strPath, XeLaTeXFileName);
+
+	// Look for XeLaTeX
+	if (CPathTool::Exists(path)) {
+		xelatexInstalled_ = true;
 	}
 
 	return m_bLatexInstalled;
@@ -644,6 +654,9 @@ void COutputWizard::ShowInformation()
 	if (m_bGhostscriptInstalled)
 		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFVIAPSTYPE) + newline;
 
+	if (xelatexInstalled_)
+		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFVIAXELATEX) + newline;
+
 	SetActivePage(pageFinish);
 }
 
@@ -863,6 +876,12 @@ void COutputWizard::GenerateOutputProfiles()
 			m_profiles.Add(strProfile,p);
 		}
 	}
+
+	// XeLaTeX => PDF
+	if (xelatexInstalled_) {
+		GeneratePDFProfile(GetProfileName(STE_OUTPUTWIZARD_PDFVIAXELATEX), 
+			strPDFLatexOptions,m_wndPagePdfViewer.GetViewerPath(), XeLaTeXFileName);
+	}
 }
 
 void COutputWizard::BuildPropPageArray()
@@ -988,7 +1007,7 @@ void COutputWizard::SetupGenericPDF( CProfile &p )
 	p.SetViewCurrentCmd(profileCmd);
 }
 
-void COutputWizard::GeneratePDFProfile( const CString& name, const CString& strPDFLatexOptions, const CString& viewer_path )
+void COutputWizard::GeneratePDFProfile( const CString& name, const CString& strPDFLatexOptions, const CString& viewer_path, const CString& latexFileName )
 {
 	CString strError;
 	strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,name);
@@ -1002,7 +1021,7 @@ void COutputWizard::GeneratePDFProfile( const CString& name, const CString& strP
 		// create profile
 		CProfile p;
 
-		p.SetLatexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("pdflatex.exe")),strPDFLatexOptions);
+		p.SetLatexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,latexFileName),strPDFLatexOptions);
 		p.SetBibTexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("bibtex.exe")),_T("\"%bm\""));
 		p.SetMakeIndexPath(	CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("makeindex.exe")),_T("\"%bm\""));
 
