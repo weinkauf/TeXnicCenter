@@ -7453,7 +7453,7 @@ END
 STRINGTABLE 
 BEGIN
     IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Files (*.tex)\n.tex\nLaTeX.Document\nLaTeX Document"
-    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Files (*.tex)\n.tex\nBibTeX.Document\nBibTeX Document"
+    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Files (*.bib)\n.bib\nBibTeX.Document\nBibTeX Document"
 END
 
 STRINGTABLE 
