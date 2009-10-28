@@ -12,7 +12,8 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
+#include "afxres.h"
+
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -919,7 +920,7 @@ CAPTION "Konfigurations-Assistent - Willkommen"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     LTEXT           "Der Konfigurationsassistent hilft Ihnen beim Einrichten der Ausgabeprofile. Ausgabeprofile sind in TeXnicCenter notwendig, um aus den LaTeX-Dateien druckbare Dateien zu erstellen.",IDC_STATIC,45,7,232,33
-    LTEXT           "Stellen Sie sicher, daß Sie bereits eine TeX-Distibution installiert haben. Sollte dies nicht der Fall sein, so beenden Sie den Assistenten und TeXnicCenter nun, installieren eine TeX-Distribution und starten den Assistenten danach erneut.",IDC_STATIC,45,48,232,47
+    LTEXT           "Stellen Sie sicher, dass Sie bereits eine TeX-Distibution installiert haben. Sollte dies nicht der Fall sein, so beenden Sie den Assistenten und TeXnicCenter nun, installieren eine TeX-Distribution und starten den Assistenten danach erneut.",IDC_STATIC,45,48,232,47
     LTEXT           "Tipp: Wenn Sie die MikTeX-Distribution (www.miktex.org) verwenden, so übernimmt TeXnicCenter die komplette Konfiguration für Sie.",IDC_STATIC,45,101,232,30
 END
 
@@ -953,9 +954,9 @@ BEGIN
     LTEXT           "Geben Sie den vollständigen Pfad des Programms an, das zur Anzeige von PDF-Dateien verwendet werden soll (optional):",IDC_STATIC,42,7,236,18
     EDITTEXT        IDC_OW_VIEWERPATH,42,26,215,13,ES_AUTOHSCROLL
     PUSHBUTTON      "&...",IDC_OW_VIEWERBROWSE,261,26,17,13
-    LTEXT           "Geben Sie die Kommandozeilenoption an, die verhindert, daß mehrere Instanzen des Viewers gestartet werden (optional):",IDC_STATIC,42,50,236,18
+    LTEXT           "Geben Sie die Kommandozeilenoption an, die verhindert, dass mehrere Instanzen des Viewers gestartet werden (optional):",IDC_STATIC,42,50,236,18
     EDITTEXT        IDC_OW_VIEWERSI,42,71,215,13,ES_AUTOHSCROLL
-    LTEXT           "Geben Sie die Kommandozeilenoption an, die den Viewer dazu veranlaßt, die zu einer Quelltextzeile passende Stelle anzuzeigen. Verwenden Sie die verfügbaren Platzhalter (optional):",IDC_STATIC,42,96,236,25
+    LTEXT           "Geben Sie die Kommandozeilenoption an, die den Viewer dazu veranlasst, die zu einer Quelltextzeile passende Stelle anzuzeigen. Verwenden Sie die verfügbaren Platzhalter (optional):",IDC_STATIC,42,96,236,25
     EDITTEXT        IDC_OW_VIEWERFWSEARCH,42,123,215,13,ES_AUTOHSCROLL
     PUSHBUTTON      "",IDC_OW_VIEWERPOPUP,261,123,17,13
 END
@@ -1589,9 +1590,9 @@ BEGIN
     LTEXT           "Geben Sie den vollständigen Pfad des Programms an, das zur Anzeige von DVI-Dateien verwendet werden soll (optional):",IDC_STATIC,42,7,236,18
     EDITTEXT        IDC_OW_VIEWERPATH,42,26,215,13,ES_AUTOHSCROLL
     PUSHBUTTON      "&...",IDC_OW_VIEWERBROWSE,261,26,17,13
-    LTEXT           "Geben Sie die Kommandozeilenoption an, die verhindert, daß mehrere Instanzen des Viewers gestartet werden (optional):",IDC_STATIC,42,50,236,18
+    LTEXT           "Geben Sie die Kommandozeilenoption an, die verhindert, dass mehrere Instanzen des Viewers gestartet werden (optional):",IDC_STATIC,42,50,236,18
     EDITTEXT        IDC_OW_VIEWERSI,42,71,215,13,ES_AUTOHSCROLL
-    LTEXT           "Geben Sie die Kommandozeilenoption an, die den Viewer dazu veranlaßt, die zu einer Quelltextzeile passende Stelle anzuzeigen. Verwenden Sie die verfügbaren Platzhalter (optional):",IDC_STATIC,42,96,236,25
+    LTEXT           "Geben Sie die Kommandozeilenoption an, die den Viewer dazu veranlasst, die zu einer Quelltextzeile passende Stelle anzuzeigen. Verwenden Sie die verfügbaren Platzhalter (optional):",IDC_STATIC,42,96,236,25
     EDITTEXT        IDC_OW_VIEWERFWSEARCH,42,123,215,13,ES_AUTOHSCROLL
     PUSHBUTTON      "",IDC_OW_VIEWERPOPUP,261,123,17,13
 END
@@ -1604,9 +1605,9 @@ BEGIN
     LTEXT           "Geben Sie den vollständigen Pfad des Programms an, das zur Anzeige von PostScript-Dateien verwendet werden soll (optional):",IDC_STATIC,42,7,236,18
     EDITTEXT        IDC_OW_VIEWERPATH,42,26,215,13,ES_AUTOHSCROLL
     PUSHBUTTON      "&...",IDC_OW_VIEWERBROWSE,261,26,17,13
-    LTEXT           "Geben Sie die Kommandozeilenoption an, die verhindert, daß mehrere Instanzen des Viewers gestartet werden (optional):",IDC_STATIC,42,50,236,18
+    LTEXT           "Geben Sie die Kommandozeilenoption an, die verhindert, dass mehrere Instanzen des Viewers gestartet werden (optional):",IDC_STATIC,42,50,236,18
     EDITTEXT        IDC_OW_VIEWERSI,42,71,215,13,ES_AUTOHSCROLL
-    LTEXT           "Geben Sie die Kommandozeilenoption an, die den Viewer dazu veranlaßt, die zu einer Quelltextzeile passende Stelle anzuzeigen. Verwenden Sie die verfügbaren Platzhalter (optional):",IDC_STATIC,42,96,236,25
+    LTEXT           "Geben Sie die Kommandozeilenoption an, die den Viewer dazu veranlasst, die zu einer Quelltextzeile passende Stelle anzuzeigen. Verwenden Sie die verfügbaren Platzhalter (optional):",IDC_STATIC,42,96,236,25
     EDITTEXT        IDC_OW_VIEWERFWSEARCH,42,123,215,13,ES_AUTOHSCROLL
     PUSHBUTTON      "",IDC_OW_VIEWERPOPUP,261,123,17,13
 END
@@ -2039,7 +2040,7 @@ BEGIN
         MENUITEM "&Gehe zu...",                 ID_EDIT_GOTO
         MENUITEM SEPARATOR
         MENUITEM "Lesezeichen setzen/entfernen", ID_EDIT_TOGGLE_BOOKMARK
-        MENUITEM "Gehe zu nächsem Lesezeichen", ID_EDIT_GOTO_NEXT_BOOKMARK
+        MENUITEM "Gehe zu nächstem Lesezeichen", ID_EDIT_GOTO_NEXT_BOOKMARK
         MENUITEM "Gehe zu vorherigem Lesezeichen", ID_EDIT_GOTO_PREV_BOOKMARK
         MENUITEM "Alle Lesezeichen entfernen",  ID_EDIT_CLEAR_ALL_BOOKMARKS
     END
@@ -2154,7 +2155,7 @@ BEGIN
     POPUP "DUMMY"
     BEGIN
         MENUITEM "Datei &Hinzufügen",           ID_FILEVIEW_INSERT_FILES
-        MENUITEM "&Ausgabedateien Aktuallisieren", ID_FILEVIEW_UPDATE_OUTPUT
+        MENUITEM "&Ausgabedateien aktualisieren", ID_FILEVIEW_UPDATE_OUTPUT
         MENUITEM SEPARATOR
         MENUITEM "&Navigator",                  ID_VIEW_NAVIGATION
         MENUITEM "&Eigenschaften",              ID_FILEVIEW_PROPERTIES
@@ -2168,7 +2169,7 @@ BEGIN
         MENUITEM "&Erstellen",                  ID_FILEVIEW_BUILD
         MENUITEM "A&lles neu erstellen",        ID_FILEVIEW_REBUILD_ALL
         MENUITEM "A&ufräumen",                  ID_FILEVIEW_CLEAN
-        MENUITEM "&Ausgabedateien aktuallisieren", ID_FILEVIEW_UPDATE_OUTPUT
+        MENUITEM "&Ausgabedateien aktualisieren", ID_FILEVIEW_UPDATE_OUTPUT
         MENUITEM "Dateien zum Projekt &hinzufügen...", ID_FILEVIEW_ADD_FILES
         MENUITEM SEPARATOR
         MENUITEM "&Navigator",                  ID_VIEW_NAVIGATION
@@ -2183,10 +2184,10 @@ BEGIN
         MENUITEM "&Neu...",                     ID_LATEX_NEW
         MENUITEM "&Öffnen...",                  ID_FILE_OPEN
         MENUITEM "&Speichern",                  ID_FILE_SAVE
-        MENUITEM "&Alle Speichern",             ID_FILE_SAVE_ALL
+        MENUITEM "&Alle speichern",             ID_FILE_SAVE_ALL
         MENUITEM SEPARATOR
         MENUITEM "S&chließen",                  ID_WINDOW_CLOSE_SELECTEDTAB
-        MENUITEM "Alle Sc&hließen",             ID_WINDOW_CLOSE_ALL
+        MENUITEM "Alle sc&hließen",             ID_WINDOW_CLOSE_ALL
         MENUITEM "Alle &inaktiven Fenster schließen", ID_WINDOW_CLOSE_ALL_BUTACTIVE
     END
 END
@@ -2215,7 +2216,7 @@ BEGIN
         MENUITEM "Pr&ojekt speichern",          ID_PROJECT_SAVE
         MENUITEM "Pro&jekt schließen",          ID_PROJECT_CLOSE
         MENUITEM SEPARATOR
-        MENUITEM "&Alle Speichern",             ID_FILE_SAVE_ALL
+        MENUITEM "&Alle speichern",             ID_FILE_SAVE_ALL
         MENUITEM SEPARATOR
         MENUITEM "&Drucken...",                 ID_FILE_PRINT
         MENUITEM "Sei&tenansicht",              ID_FILE_PRINT_PREVIEW
@@ -2315,7 +2316,7 @@ BEGIN
         POPUP "Lesezeichen"
         BEGIN
             MENUITEM "Lesezeichen setzen/entfernen", ID_EDIT_TOGGLE_BOOKMARK
-            MENUITEM "Gehe zu nächsem Lesezeichen", ID_EDIT_GOTO_NEXT_BOOKMARK
+            MENUITEM "Gehe zu nächstem Lesezeichen", ID_EDIT_GOTO_NEXT_BOOKMARK
             MENUITEM "Gehe zu vorherigem Lesezeichen", ID_EDIT_GOTO_PREV_BOOKMARK
             MENUITEM "Alle Lesezeichen entfernen",  ID_EDIT_CLEAR_ALL_BOOKMARKS
         END
@@ -2358,7 +2359,7 @@ BEGIN
             MENUITEM "&Abbildung...",               ID_INSERT_FIGURE
             MENUITEM "&Tafel...",                   ID_INSERT_TABLE
         END
-        POPUP "&Dokumentitel"
+        POPUP "&Dokumenttitel"
         BEGIN
             MENUITEM "Titel&eigenschaften",         ID_INSERT_TITLEPROPERTIES
             MENUITEM "&Titel",                      ID_INSERT_MAKETITLE
@@ -2826,7 +2827,7 @@ BEGIN
         BEGIN
             MENUITEM "&Linksbündig",                ID_FORMAT_FLUSHLEFT
             MENUITEM "&Zentriert",                  ID_FORMAT_CENTER
-            MENUITEM "&Rechtbündig",                ID_FORMAT_FLUSHRIGHT
+            MENUITEM "&Rechtsbündig",                ID_FORMAT_FLUSHRIGHT
         END
         MENUITEM SEPARATOR
         MENUITEM """Sch&lampiger"" Absatz",     ID_FORMAT_SLOPPYPAR
@@ -2883,7 +2884,7 @@ BEGIN
         MENUITEM "N&eues Fenster",              ID_WINDOW_NEW
         MENUITEM "&Teilen",                     ID_WINDOW_SPLIT
         MENUITEM "S&chließen",                  ID_FILE_CLOSE
-        MENUITEM "&Alle Schließen",             ID_WINDOW_CLOSE_ALL
+        MENUITEM "&Alle schließen",             ID_WINDOW_CLOSE_ALL
         MENUITEM "Alle &inaktiven Fenster schließen", ID_WINDOW_CLOSE_ALL_BUTACTIVE
         MENUITEM SEPARATOR
         MENUITEM "Näc&hstes Fenster",           ID_WINDOW_NEXT
@@ -3379,7 +3380,7 @@ BEGIN
     ID_VIEW_TRANSPARENCY    "Ändert die Transparenz des Hauptfensters.\nTransparenz ändern"
     ID_FORMAT_TEXT_BACK_COLOR 
                             "Setzt die Hintergrundfarbe des Textes.\nHintergrundfarbe"
-    ID_VIEW_BUILD_PANE      "Blendet die Erstellenleiste ein oder aus.\nErstellen"
+    ID_VIEW_BUILD_PANE      "Blendet das Erstellen-Fenster ein oder aus.\nErstellen"
     ID_VIEW_GREP_1_PANE     "Blendet die Suchergebnisse ein oder aus.\nSuchen 1"
     ID_VIEW_GREP_2_PANE     "Blendet die Suchergebnisse ein oder aus.\nSuchen 2"
 END
@@ -3560,7 +3561,7 @@ BEGIN
                             "C:\\LATEXD~1\\PROMOT~1\\EINFÜH~1.TEX"
     STE_CURRENTDOC_DESCRIPTION "Aktives Dokument"
     STE_FILECLEAN_INVALIDPATTERN 
-                            "Das eingegebene Pattern %s ist nicht erlaubt.\n\nPlatzhalter für Dateimengen ($) dürfen nicht zusammen\nmit Wildcards (*, ?) und Platzhaltern für Dateien (%%) verwendet werden.\n\nDesweiteren dürfen Pattern nicht leer sein."
+                            "Das eingegebene Pattern %s ist nicht erlaubt.\n\nPlatzhalter für Dateimengen ($) dürfen nicht zusammen\nmit Wildcards (*, ?) und Platzhaltern für Dateien (%%) verwendet werden.\n\nDes Weiteren dürfen Pattern nicht leer sein."
     STE_CUSTOMIZE_TOOLS_ADVBTN "Erweitert..."
     STE_TCP_INVALID         "Dies ist keine gültige Projektdatei."
     STE_XML_PARSE_ERROR     "Beim Lesen einer XML-Datei ist ein Fehler aufgetreten.\n\nFehler 0x%08x: %s\n\nDatei:\t%s\nZeile:\t%d\nZeichen:\t%d\n\n%s"
@@ -3600,7 +3601,7 @@ BEGIN
     STE_FILE_EXEFILTER      "Ausführbare Dateien (*.exe;*.com)|*.exe;*.com|Alle Dateien (*.*)|*.*||"
     CG_IDS_TIPOFTHEDAY      "Zeigt einen der Tipps und Tricks an."
     CG_IDS_TIPOFTHEDAYMENU  "Ti&pps und Tricks..."
-    CG_IDS_DIDYOUKNOW       "Wußten Sie schon..."
+    CG_IDS_DIDYOUKNOW       "Wussten Sie schon..."
     CG_IDS_FILE_ABSENT      "Tipps-Datei ist im vorgeschriebenen Verzeichnis nicht vorhanden"
     CG_IDS_FILE_CORRUPT     "Probleme beim Lesen der Tipps-Datei"
     CG_IDS_TIPOFTHEDAYHELP  "&?"
@@ -3626,7 +3627,7 @@ BEGIN
     STE_BIBTEX_ERR_QOUTEWITHINQUOTE 
                             "(%s:%d:%d) Feldwerte mit Anführungszeichen müssen mit geschweiften Klammern umschlossen werden."
     STE_BIBTEX_ERR_WRONGLEVELAT 
-                            "(%s:%d:%d)  '@'-Zeichen auf ausserhalb BibTeX-Eintrag oder nicht innerhalb Anführungszeichen."
+                            "(%s:%d:%d)  '@'-Zeichen auf außerhalb BibTeX-Eintrag oder nicht innerhalb Anführungszeichen."
     STE_BIBTEX_ERR_INVALID_EOF "(%s:%d:%d) Ungültiges Ende der BibTeX-Datei"
     STE_BIBTEX_ERR_COUNT    "(%d Warnungen)"
     STE_BIBTEX_ERR_MISSING_KEY "(%s:%d:%d) Eintrag hat keinen Schlüssel"
@@ -3717,7 +3718,7 @@ END
 STRINGTABLE 
 BEGIN
     STE_PROJECT_USEEXISTINGFILE 
-                            "Soll das Projekt mit der existierenden Datei als Haupdatei erzeugt werden?"
+                            "Soll das Projekt mit der existierenden Datei als Hauptdatei erzeugt werden?"
     STE_PROJECT_CANNOTCREATEMAINFILE 
                             "Die Hauptdatei konnte nicht erzeugt werden."
     STE_PROJECT_MAINFILENOTFOUND 
@@ -3796,7 +3797,7 @@ BEGIN
     STE_OUTPUTWIZARD_NOLATEX 
                             "In dem Verzeichnis Ihrer LaTeX-Distribution konnte das Programm 'LaTeX' nicht gefunden werden.\n\nGeben Sie als Distributionsverzeichnis bitte das Verzeichnis an, das die ausführbaren Dateien enthält (tex.exe, latex.exe, etc.)."
     STE_OUTPUTWIZARD_YAPCONFIG 
-                            "Auf Ihrem System wurde der DVI-Viewer YAP gefunden.\n\nDie Kombination von YAP und TeXnicCenter ermöglicht Ihnen den Sprung zum passenden Quelltext, wenn Sie in YAP auf eine Textstelle doppelklicken.\n\nDerzeit ist YAP für die Kommunikation mit einem anderen Programm konfiguriert. Soll diese Konfiguration so überschrieben werden, daß YAP und TeXnicCenter zusammenarbeiten?"
+                            "Auf Ihrem System wurde der DVI-Viewer YAP gefunden.\n\nDie Kombination von YAP und TeXnicCenter ermöglicht Ihnen den Sprung zum passenden Quelltext, wenn Sie in YAP auf eine Textstelle doppelklicken.\n\nDerzeit ist YAP für die Kommunikation mit einem anderen Programm konfiguriert. Soll diese Konfiguration so überschrieben werden, dass YAP und TeXnicCenter zusammenarbeiten?"
     STE_OUTPUTWIZARD_DVITYPE "LaTeX => DVI"
     STE_OUTPUTWIZARD_PSTYPE "LaTeX => PS"
     STE_OUTPUTWIZARD_PDFTYPE "LaTeX => PDF"
@@ -3840,7 +3841,7 @@ END
 STRINGTABLE 
 BEGIN
     ID_APP_ABOUT            "Zeigt Programm-Informationen, Versionsnummer und Copyright an.\nInfo"
-    ID_APP_EXIT             "Verläßt die Anwendung; fragt, ob Dokumente gespeichert werden sollen.\nBeenden"
+    ID_APP_EXIT             "Verlässt die Anwendung; fragt, ob Dokumente gespeichert werden sollen.\nBeenden"
     ID_HELP_INDEX           "Zeigt den Index der Online-Dokumentation an\nIndex"
     ID_HELP_FINDER          "Durchsucht die Online-Dokumentation\nSuchen"
     ID_HELP_USING           "Zeigt Anweisungen zum Umgang mit der Hilfe an.\nHilfe"
@@ -3964,7 +3965,7 @@ BEGIN
     STE_TB_MATH14           "Operatoren"
     STE_TB_MATH15           "Drunter & Drüber"
     STE_TB_MATH16           "Beschriftete Pfeile"
-    STE_PHSDLG_NOEXAMPLE    "Es konnte kein Beispiel konstruiert werden.\r\n\r\nDies ist nur möglich, wenn\r\nein Projekt und/oder Dateien geöffnet sind.\r\nDesweiteren muss der ausgewählte Platzhalter\r\nmindestens eine Datei spezifizieren\r\n(in Abhängigkeit vom aktuellen Projekt)."
+    STE_PHSDLG_NOEXAMPLE    "Es konnte kein Beispiel konstruiert werden.\r\n\r\nDies ist nur möglich, wenn\r\nein Projekt und/oder Dateien geöffnet sind.\r\nDes Weiteren muss der ausgewählte Platzhalter\r\nmindestens eine Datei spezifizieren\r\n(in Abhängigkeit vom aktuellen Projekt)."
 END
 
 STRINGTABLE 
@@ -4102,7 +4103,7 @@ BEGIN
     ID_ITEM_PROPERTIES      "Zeigt die Eigenschaften des Eintrags an\nEigenschaften"
     ID_DOCUMENT_SAVED       "DNT:Send by a CLatexDoc-object, after it has been saved."
     ID_INSERT_FORMULA_EMBEDDED 
-                            "Füg eine im Text eingebettete Mathematische Formel ein\nEingebettete Formel\n$\001$"
+                            "Fügt eine im Text eingebettete mathematische Formel ein\nEingebettete Formel\n$\001$"
     ID_INSERT_FORMULA       "Fügt eine abgesetzte mathematische Formel ein\nAbgesetzte Formel\n\r\\[\t\001\r\\]\r"
     ID_INSERT_EQUATION      "Fügt eine nummerierte mathematische Gleichung ein\nNummerierte Gleichung\n\r\\begin{equation}\r\t\001\r\\end{equation}\r"
     ID_INSERT_EQUATION_ARRAY 
@@ -4144,7 +4145,7 @@ BEGIN
     ID_VIEW_DOCTAB_OFF      "Deaktiviert die Reiter zum Wechseln zwischen geöffneten Dokumenten\nDokumentregister aus"
     ID_VIEW_DOCTAB_ICONS    "Stellt die Dokumentsymbole auf den Reitern zum Wechseln zwischen geöffneten Dokumenten dar\nDokumentregistersymbole an/aus"
     ID_VIEW_DOCTAB_NOTE     "Stellt die Reiter zum Wechseln zwischen geöffneten Dokumenten im Stile eines Aktenordners dar\nAktenordnerstil an/aus"
-    ID_TOOLS_CANCEL         "Aktiviert Editor, schliesst Fenster oder bricht bestimmte Vorgänge ab"
+    ID_TOOLS_CANCEL         "Aktiviert Editor, schließt Fenster oder bricht bestimmte Vorgänge ab"
     ID_LATEX_RUNANDVIEW     "Erzeugt aus Ihrem Projekt ein druckbares Dokument und zeigt es an\nErstellen und betrachten"
     ID_LATEX_FILECOMPILEANDVIEW 
                             "Erzeugt aus der aktuellen Datei ein druckbares Dokument und zeigt es an\nAktives Dokument erstellen und betrachten"
@@ -4187,7 +4188,7 @@ BEGIN
     ID_SHOW_TABLES          "Blendet Tabellen in der Gliederung ein und aus.\nTabellen"
     ID_EDIT_DELETE_LINE     "Löscht die aktuelle Zeile."
     ID_VIEW_LINE_ENDING     "Blendet die Zeilenenden ein- oder aus.\nZeilenenden ein-/ausblenden"
-    ID_VIEW_WHITE_SPACE     "Blendet Leerraumzeichen ein- oder aus.\nLeeraumzeichen ein-/ausblenden"
+    ID_VIEW_WHITE_SPACE     "Blendet Leerraumzeichen ein- oder aus.\nLeerraumzeichen ein-/ausblenden"
 END
 
 STRINGTABLE 
@@ -4250,7 +4251,7 @@ BEGIN
     ID_APP_LICENSE          "Zeigt die Lizenzvereinbarungen im Webbrowser an\nLizenzvereinbarung"
     ID_WINDOW_NEXT          "Aktiviert das nächste Dokument.\nNächstes Fenster"
     ID_WINDOW_PREVIOUS      "Aktiviert das vorhergehende Dokument.\nVorhergehendes Fenster"
-    ID_WINDOW_CLOSE_ALL     "Schließt alle geöffneten Dokumente.\nAlle Schließen"
+    ID_WINDOW_CLOSE_ALL     "Schließt alle geöffneten Dokumente.\nAlle schließen"
     ID_LATEX_PROFILE        "Aktiviert ein Ausgabeprofil\nAusgabeprofil aktivieren"
     ID_LATEX_EDITPROFILES   "Erlaubt die Bearbeitung der Ausgabeprofile\nAusgabeprofile definieren"
     ID_LATEX_PROFILE_SEL    "Aktiviert ein Ausgabeprofil\nAusgabeprofil aktivieren"
@@ -4388,7 +4389,7 @@ BEGIN
     ID_EDIT_GOTO_LAST_CHANGE 
                             "Springt zur Stelle, an der die letzte Änderung vorgenommen wurde\nGehe zur letzten Änderung"
     ID_EDIT_FIND_INCREMENTAL_FORWARD 
-                            "Startet eine inkrementelle Suche in Forwärtsrichtung\nInkrementelle Suche (vorwärts)"
+                            "Startet eine inkrementelle Suche in Vorwärtsrichtung\nInkrementelle Suche (vorwärts)"
     ID_EDIT_FIND_INCREMENTAL_BACKWARD 
                             "Startet eine inkrementelle Suche in Rückwärtsrichtung\nInkrementelle Suche (rückwärts)"
     ID_EDIT_INDICATOR_COL   "COL"
@@ -8727,7 +8728,8 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 #include "res\\TeXnicCenter.rc2"  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen
 #include "l.deu\\afxres.rc"          // Standardkomponenten
 #include "l.deu\\afxprint.rc"        // Ressourcen für Drucken/Seitenansicht
-#endif
+#endif
+
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 
