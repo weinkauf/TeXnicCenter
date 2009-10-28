@@ -188,14 +188,17 @@ DragSourceBase::~DragSourceBase(void)
 
 void DragSourceBase::OnDragKeyStateChanged(UINT keystate )
 {
+	UNUSED(keystate);
 }
 
 void DragSourceBase::OnDragMouseMove( const CPoint& pt )
 {
+	UNUSED(pt);
 }
 
 void DragSourceBase::OnDragGetData( SimpleDataObject* o )
 {
+	UNUSED(o);
 }
 
 HRESULT DragSourceBase::DoDragDrop( const CString& text, DWORD effects, LPDWORD pdwEffect )

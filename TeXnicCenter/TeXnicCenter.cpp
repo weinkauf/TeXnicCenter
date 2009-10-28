@@ -303,7 +303,9 @@ BOOL CTeXnicCenterApp::InitInstance()
 	m_strRegistryRoot += m_pszAppName;
 
 	LoadStdProfileSettings(MaxRecentProjects);
-	m_pRecentFileList->m_nMaxDisplayLength = RecentFileListMaxDisplayLength;
+	
+	if (m_pRecentFileList)
+		m_pRecentFileList->m_nMaxDisplayLength = RecentFileListMaxDisplayLength;
 
 	CConfiguration::GetInstance()->Serialize(CConfiguration::Load);
 
@@ -1508,7 +1510,10 @@ void CTeXnicCenterApp::OnUpdateFileMRU(CCmdUI* pCmdUI)
 
 void CTeXnicCenterApp::OnUpdateFileMRUFileList(CCmdUI *pCmdUI)
 {
-	UpdateRecentFileList(pCmdUI, *m_pRecentFileList, ID_FILE_MRU_FILE1, STE_FILE_MRU_FILE_NONE);
+	if (m_pRecentFileList)
+		UpdateRecentFileList(pCmdUI, *m_pRecentFileList, ID_FILE_MRU_FILE1, STE_FILE_MRU_FILE_NONE);
+	else
+		pCmdUI->Enable(FALSE);
 }
 
 void CTeXnicCenterApp::OnFileMRUProject(UINT unID)
