@@ -144,6 +144,11 @@ Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\ProjectTemp
 Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\DocumentTemplatePaths; ValueType: dword; ValueName: Size; ValueData: 1; Flags: createvalueifdoesntexist uninsdeletekey
 Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\DocumentTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Documents; Flags: createvalueifdoesntexist uninsdeletekey
 
+;Remove the GUI workspace, i.e., the toolbars and menus and short cuts etc.
+; Use this only in Alpha versions!
+Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Workspace; Flags: deletekey
+
+
 [Tasks]
 Name: DesktopLink; Description: Create a desktop icon; GroupDescription: Link
 Name: SendToLink; Description: Add TeXnicCenter to the 'Send To' menu; GroupDescription: Link; Flags: unchecked
