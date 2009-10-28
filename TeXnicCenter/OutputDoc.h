@@ -410,6 +410,8 @@ private:
 	COutputBuilder m_builder;
 
 public:
+	// Clears all the warnings, errors, bad boxes etc.
+	void Clear();
 	const CString GetCurrentProcessName() const;
 
 	int GetErrorCount() const { return m_aErrors.GetSize(); }
