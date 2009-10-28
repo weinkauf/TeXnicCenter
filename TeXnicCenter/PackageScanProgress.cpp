@@ -67,6 +67,7 @@ bool CPackageScanProgress::OnQueryCancel()
 
 void CPackageScanProgress::OnCommandFound(CLaTeXCommand &command)
 {
+	UNUSED(command);
 	++m_CommandsFound;
 	//SetText(IDC_COMMANDS, command.ToLaTeX());
 }

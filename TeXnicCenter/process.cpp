@@ -48,8 +48,11 @@ CProcessException::CProcessException()
 {
 }
 
-BOOL CProcessException::GetErrorMessage(LPTSTR lpszError,UINT nMaxError,PUINT pnHelpContext /*= NULL*/)
+BOOL CProcessException::GetErrorMessage(LPTSTR lpszError, UINT nMaxError, PUINT pnHelpContext /*= NULL*/)
 {
+	UNUSED(lpszError);
+	UNUSED(nMaxError);
+	UNUSED(pnHelpContext);
 	return FALSE;
 }
 

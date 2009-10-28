@@ -154,8 +154,12 @@ void CIniFile::WriteFile()
 	::WideCharToMultiByte(CP_UTF8,0,s.c_str(),s.size(),&data[0],cch,0,0);
 
 	ATL::CAtlFile file;
-	file.Create(path,GENERIC_WRITE,FILE_SHARE_READ,CREATE_ALWAYS);
-	file.Write(&data[0],data.size());
+	HRESULT result = file.Create(path,GENERIC_WRITE,FILE_SHARE_READ,CREATE_ALWAYS);
+
+	if (SUCCEEDED(result))
+		file.Write(&data[0],data.size());
+	else 
+		TRACE("%s failed, code: %x\n", __FUNCTION__, result);
 }
 
 void CIniFile::Reset()

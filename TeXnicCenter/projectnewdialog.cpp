@@ -59,6 +59,8 @@ CEmptyProjectTemplateItem::CEmptyProjectTemplateItem()
 
 BOOL CEmptyProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &ImageList32, CImageList &ImageList16)
 {
+	UNUSED(lpszPath);
+
 	//add image to image list and remember index
 	HICON hIcon = theApp.LoadIcon(IDR_LATEXDOCTYPE);
 	m_nImageIndex = hIcon ? ImageList32.Add(hIcon) : -1;

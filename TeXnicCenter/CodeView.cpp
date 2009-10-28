@@ -755,6 +755,7 @@ void CodeView::OnMarginClick(SCNotification* n)
 
 void CodeView::OnUpdateUI(SCNotification* n)
 {
+	UNUSED(n);
 }
 
 void CodeView::OnEditFindIncrementalForward()

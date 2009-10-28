@@ -503,12 +503,15 @@ void CBiBTeXFile::FinalizeItem()
  */
 const CBiBTeXEntry* CBiBTeXFile::GetEntryByKey(const CString& key) const
 {
+	UNUSED(key);
 	CBiBTeXEntry *be;
-	if (m_Entries.Lookup(m_LastKey,(CObject*&) be))
+
+	if (!m_Entries.Lookup(m_LastKey,(CObject*&) be))
 	{
-		return (const CBiBTeXEntry*) be;
+		be = 0;
 	}
-	return NULL;
+
+	return be;
 }
 
 /**
