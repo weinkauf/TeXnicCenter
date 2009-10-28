@@ -1222,6 +1222,13 @@ void COutputDoc::OnLatexStopBuild()
 	m_builder.CancelExecution();
 }
 
+void COutputDoc::Clear()
+{
+	ResetBuildInformation();
+	m_aParseWarning.RemoveAll();
+	m_aParseInfo.RemoveAll();
+}
+
 void COutputDoc::ResetBuildInformation()
 {
 	m_aErrors.RemoveAll();

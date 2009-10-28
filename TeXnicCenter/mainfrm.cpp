@@ -1719,6 +1719,8 @@ void CMainFrame::OnCloseProject(CLaTeXProject* p)
 
 	using namespace std::tr1::placeholders;
 	std::for_each(views.begin(),views.end(),std::tr1::bind(&CLaTeXProject::RemoveView,p,_1));
+
+	output_doc_.Clear(); // Clear all the warnings, errors etc.
 }
 
 bool CMainFrame::CreateOutputPanes(void)
