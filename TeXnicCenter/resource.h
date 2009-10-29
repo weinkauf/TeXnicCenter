@@ -786,7 +786,6 @@
 #define ID_TEXTMODULES_LAST             18000
 #define ID_VIEW_BAR1                    32760
 #define ID_VIEW_BAR2                    32761
-#define ID_URL_TCHOME                   32768
 #define ID_BIB_VIEW                     32769
 #define ID_BG_UPDATE_PROJECT            32770
 #define ID_TIP                          32771
@@ -828,14 +827,6 @@
 #define ID_MATH15                       33208
 #define ID_MATH16                       33209
 #define ID_VIEW_MATH                    33221
-#define ID_URL_FIRST                    33231
-#define ID_URL_AUTHOR                   33232
-#define ID_URL_TCERROR                  33233
-#define ID_URL_TCNEWSLETTER             33234
-#define ID_URL_TCUSERSGROUP             33235
-#define ID_URL_TCDEVELOPERSGROUP        33236
-#define ID_URL_TCDICTDOWNLOAD           33237
-#define ID_URL_LAST                     33238
 #define ID_PH_MPATH                     33239
 #define ID_PH_MSLASHPATH                33240
 #define ID_PH_MBASE                     33241
@@ -1048,6 +1039,15 @@
 #define ID_LATEX_RUNANDVIEW             33672
 #define ID_LATEX_STOP_BUILD             33673
 #define ID_LATEX_VIEW                   33674
+#define ID_URL_AUTHOR                   33700
+#define ID_URL_FIRST                    33701
+#define ID_URL_LAST                     33702
+#define ID_URL_TCDEVELOPERSGROUP        33703
+#define ID_URL_TCDICTDOWNLOAD           33704
+#define ID_URL_TCERROR                  33705
+#define ID_URL_TCHOME                   33706
+#define ID_URL_TCNEWSLETTER             33707
+#define ID_URL_TCUSERSGROUP             33708
 #define ID_BUTTON38599                  38599
 #define ID_BUTTON38600                  38600
 #define ID_DOCUMENTTABS_NOTESTYLE       38601
@@ -1494,12 +1494,12 @@
 #define IDR_BOOKMARK_VIEW               57672
 
 // Next default values for new objects
-// 
+//
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_3D_CONTROLS                     1
+#define _APS_3D_CONTROLS                1
 #define _APS_NEXT_RESOURCE_VALUE        57673
-#define _APS_NEXT_COMMAND_VALUE         40502
+#define _APS_NEXT_COMMAND_VALUE         40611
 #define _APS_NEXT_CONTROL_VALUE         8663
 #define _APS_NEXT_SYMED_VALUE           57773
 #endif
