@@ -106,7 +106,7 @@ void COutputDoc::SetAllViews(COutputView* pBuildView,COutputView* pGrepView1,
 	m_apGrepView[0] = pGrepView1;
 	m_apGrepView[1] = pGrepView2;
 
-	OnOutputViewActivated(m_pBuildView);
+	SetActiveView(m_pBuildView);
 }
 
 BEGIN_MESSAGE_MAP(COutputDoc,CCmdTarget)
@@ -218,7 +218,7 @@ void COutputDoc::OnPrevError()
 
 void COutputDoc::OnUpdateNextPrevError(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(!m_aErrors.IsEmpty());
+	pCmdUI->Enable(HasBuildErrors());
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -269,11 +269,7 @@ void COutputDoc::OnPrevBadbox()
 
 void COutputDoc::OnUpdateNextPrevBadbox(CCmdUI* pCmdUI)
 {
-	// All views can be visible at one time
-	//if (m_pActiveOutputView == m_pBuildView)
-	pCmdUI->Enable(!m_aBadBoxes.IsEmpty());
-	//else
-	//    pCmdUI->Enable(FALSE);
+	pCmdUI->Enable(HasBadBoxes());
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -355,10 +351,12 @@ void COutputDoc::OnPrevWarning()
 
 void COutputDoc::OnUpdateNextPrevWarning(CCmdUI* pCmdUI)
 {
+	ASSERT_NULL_OR_POINTER(m_pActiveOutputView, OutputViewBase);
+
 	if (m_pActiveOutputView == m_pBuildView)
-		pCmdUI->Enable(m_aWarnings.GetSize());
+		pCmdUI->Enable(HasBuildWarnings());
 	else if (m_pActiveOutputView == m_pParseView)
-		pCmdUI->Enable(m_aParseWarning.GetSize());
+		pCmdUI->Enable(!m_aParseWarning.IsEmpty());
 	else
 		pCmdUI->Enable(FALSE);
 }
@@ -442,7 +440,7 @@ void COutputDoc::OnUpdateGrepResultStep(CCmdUI* pCmdUI)
 	pCmdUI->Enable(m_apaGrepHits[m_nActiveFileGrep]->GetSize());
 }
 
-void COutputDoc::OnOutputViewActivated(COutputView *pView)
+void COutputDoc::SetActiveView(OutputViewBase *pView)
 {
 	ASSERT(pView);
 
@@ -1222,24 +1220,18 @@ void COutputDoc::OnLatexStopBuild()
 	m_builder.CancelExecution();
 }
 
-void COutputDoc::Clear()
+void COutputDoc::ClearMessages()
 {
-	ResetBuildInformation();
-	m_aParseWarning.RemoveAll();
-	m_aParseInfo.RemoveAll();
-
-	if (m_pParseView) {
-		ASSERT_VALID(m_pParseView);
-		m_pParseView->ResetView();
-	}
+	ClearBuildMessages();
+	ClearParseMessages();
 }
 
-void COutputDoc::ResetBuildInformation()
+void COutputDoc::ClearBuildMessages()
 {
 	m_aErrors.RemoveAll();
 	m_aWarnings.RemoveAll();
 	m_aBadBoxes.RemoveAll();
-	m_pBuildView->ResetView();
+	m_pBuildView->Clear();
 
 	if (error_list_view_)
 		error_list_view_->Clear();
@@ -1418,32 +1410,43 @@ const CString COutputDoc::GetCurrentProcessName() const
 	return m_builder.GetCurrentProcessName();
 }
 
-int COutputDoc::GetErrorCount() const
+int COutputDoc::GetBuildErrorCount() const
 {
 	return m_aErrors.GetSize();
 }
 
-int COutputDoc::GetBadBoxCount() const
+int COutputDoc::GetBuildBadBoxCount() const
 {
 	return m_aBadBoxes.GetSize();
 }
 
-int COutputDoc::GetWarningCount() const
+int COutputDoc::GetBuildWarningCount() const
 {
 	return m_aWarnings.GetSize();
 }
 
-bool COutputDoc::HasErrors() const
+bool COutputDoc::HasBuildErrors() const
 {
-	return GetErrorCount() > 0;
+	return GetBuildErrorCount() > 0;
 }
 
 bool COutputDoc::HasBadBoxes() const
 {
-	return GetBadBoxCount() > 0;
+	return GetBuildBadBoxCount() > 0;
 }
 
-bool COutputDoc::HasWarnings() const
+bool COutputDoc::HasBuildWarnings() const
 {
-	return GetWarningCount() > 0;
+	return GetBuildWarningCount() > 0;
+}
+
+void COutputDoc::ClearParseMessages()
+{
+	m_aParseWarning.RemoveAll();
+	m_aParseInfo.RemoveAll();
+
+	if (m_pParseView) {
+		ASSERT_VALID(m_pParseView);
+		m_pParseView->Clear();
+	}
 }

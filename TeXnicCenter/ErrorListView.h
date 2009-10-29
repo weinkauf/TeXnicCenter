@@ -5,12 +5,13 @@
 #include "BuildView.h"
 #include "PrivateToolBar.h"
 #include "SortListCtrl.h"
+#include "OutputViewBase.h"
 
 class COutputDoc;
 
 // ErrorListView
 
-class ErrorListView : public CDockablePane
+class ErrorListView : public CDockablePane, public OutputViewBase
 {
 	DECLARE_DYNAMIC(ErrorListView)
 
@@ -24,10 +25,7 @@ private:
 		CBuildView::tagImage type;
 		int ordinal;
 
-		Item(const COutputInfo& info, CBuildView::tagImage type)
-				: info(info), type(type)
-		{
-		}
+		Item(const COutputInfo& info, CBuildView::tagImage type);
 	};
 
 	typedef std::vector<Item> ItemContainer;

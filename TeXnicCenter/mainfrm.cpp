@@ -1720,7 +1720,7 @@ void CMainFrame::OnCloseProject(CLaTeXProject* p)
 	using namespace std::tr1::placeholders;
 	std::for_each(views.begin(),views.end(),std::tr1::bind(&CLaTeXProject::RemoveView,p,_1));
 
-	output_doc_.Clear(); // Clear all the warnings, errors etc.
+	output_doc_.ClearMessages(); // Clear all the warnings, errors etc.
 }
 
 bool CMainFrame::CreateOutputPanes(void)
@@ -1937,7 +1937,7 @@ LRESULT CMainFrame::OnStopPaneAnimation(WPARAM, LPARAM)
 	// Release the taskbar
 	if (taskBarList_) {
 		taskBarList_->SetProgressValue(m_hWnd, 100, 100); // 100% complete
-		taskBarList_->SetProgressState(m_hWnd, output_doc_.HasErrors() ? TBPF_ERROR : TBPF_NORMAL);
+		taskBarList_->SetProgressState(m_hWnd, output_doc_.HasBuildErrors() ? TBPF_ERROR : TBPF_NORMAL);
 	}
 
 	animating_ = false;

@@ -34,10 +34,10 @@
 
 #pragma once
 
+#include "OutputViewBase.h"
+#include "OutputViewVisitor.h"
+
 class COutputDoc;
-class CBuildView;
-class CParseOutputView;
-class CGrepView;
 
 enum
 {
@@ -46,17 +46,7 @@ enum
 	OPW_ADD_INFOLINE	= WM_USER + 7
 };
 
-class OutputViewVisitor
-{
-public:
-	virtual void Accept(CBuildView*) = 0;
-	virtual void Accept(CParseOutputView*) = 0;
-	virtual void Accept(CGrepView*) = 0;
-
-	virtual ~OutputViewVisitor() { }
-};
-
-class COutputView : public CListCtrl
+class COutputView : public CListCtrl, public OutputViewBase
 {
 	DECLARE_DYNAMIC(COutputView)
 
@@ -79,7 +69,7 @@ public:
 	void AttachDoc(COutputDoc* pDocument);
 
 	/** Clears the view */
-	void ResetView();
+	void Clear();
 
 	/**
 	Adds a line to the view.

@@ -118,11 +118,11 @@ CImageList *COutputView::GetImageList() const
 
 LRESULT COutputView::OnReset(WPARAM /*wParam*/, LPARAM /*lParam*/)
 {
-	ResetView();
+	Clear();
 	return 0;
 }
 
-void COutputView::ResetView()
+void COutputView::Clear()
 {
 	DeleteAllItems();
 }
@@ -250,13 +250,13 @@ void COutputView::OnShowWindow(BOOL bShow,UINT nStatus)
 	CListCtrl::OnShowWindow(bShow,nStatus);
 
 	if (bShow && GetDocument())
-		GetDocument()->OnOutputViewActivated(this);
+		GetDocument()->SetActiveView(this);
 }
 
 void COutputView::OnSetFocus(CWnd* pOldWnd)
 {
 	if (COutputDoc* doc = GetDocument())
-		GetDocument()->OnOutputViewActivated(this);
+		GetDocument()->SetActiveView(this);
 
 	CListCtrl::OnSetFocus(pOldWnd);
 }

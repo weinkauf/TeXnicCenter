@@ -88,7 +88,7 @@ public:
 	@param pView
 	        Pointer to the output view that has been activated.
 	 */
-	void OnOutputViewActivated(COutputView *pView);
+	void SetActiveView(OutputViewBase *pView);
 
 	void SetAllViews(COutputView* pBuildView, COutputView* pGrepView1,
 	                 COutputView* pGrepView2, COutputView* pParseView);
@@ -97,7 +97,7 @@ public:
 	Empties the build view and clears the error, warning and badbox
 	arrays.
 	 */
-	void ResetBuildInformation();
+	void ClearBuildMessages();
 
 	/**
 	Adds an error to the error list.
@@ -251,14 +251,14 @@ public:
 	//	virtual void OnParsingFinished( BOOL bSuccess );
 
 // CFileGrepHandler virtuals
-public:
+protected:
 	virtual void OnFileGrepHit(CFileGrep *pFileGrep, LPCTSTR lpszPath,
 	                           int nLine, LPCTSTR lpszLine);
 	virtual void OnFileGrepError(CFileGrep *pFileGrep, LPCTSTR lpszPath);
 	virtual void OnFileGrepFinished(CFileGrep *pFileGrep, int nHits);
 
 //CParseOutputHandler
-public:
+protected:
 	virtual void OnParseLineInfo(COutputInfo &line, int nLevel, int nSeverity);
 	virtual void OnParseBegin(bool bCancelState);
 	virtual void OnParseEnd(bool bResult, int nFiles, int nLines);
@@ -394,7 +394,7 @@ protected:
 	int m_anActiveGrepResult[2];
 
 	/** Active output view. */
-	COutputView *m_pActiveOutputView;
+	OutputViewBase *m_pActiveOutputView;
 
 private:
 	/** TRUE, if we can start latex compiler, FALSE otherwise. */
@@ -411,14 +411,16 @@ private:
 
 public:
 	// Clears all the warnings, errors, bad boxes etc.
-	void Clear();
+	void ClearMessages();
+
+	void ClearParseMessages();
 	const CString GetCurrentProcessName() const;
 
-	int GetErrorCount() const;
-	int GetBadBoxCount() const;
-	int GetWarningCount() const;
+	int GetBuildErrorCount() const;
+	int GetBuildBadBoxCount() const;
+	int GetBuildWarningCount() const;
 
-	bool HasErrors() const;
+	bool HasBuildErrors() const;
 	bool HasBadBoxes() const;
-	bool HasWarnings() const;
+	bool HasBuildWarnings() const;
 };
