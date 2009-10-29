@@ -117,6 +117,7 @@ CString COutputFilter::GetResultString()
 UINT COutputFilter::Run()
 {
 	errors_ = warnings_ = bad_boxes_ = 0;
+	cancel_ = false;
 
 	DWORD dwBytesRead;
 
@@ -126,7 +127,7 @@ UINT COutputFilter::Run()
 	DWORD dwCookie = 0;
 	BOOL bLastWasNewLine = FALSE;
 
-	while (::ReadFile(m_hOutput,&c,sizeof(c),&dwBytesRead,NULL) && dwBytesRead)
+	while (::ReadFile(m_hOutput,&c,sizeof(c),&dwBytesRead,NULL) && dwBytesRead && !cancel_)
 	{
 		switch (c)
 		{
@@ -188,4 +189,9 @@ int COutputFilter::GetWarningCount() const
 int COutputFilter::GetBadBoxCount() const
 {
 	return bad_boxes_;
+}
+
+void COutputFilter::Cancel()
+{
+	cancel_ = true;
 }

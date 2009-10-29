@@ -811,7 +811,9 @@ void CodeView::OnModified(SCNotification* n)
 	if (GetDocument()->IsModified())
 		GetDocument()->SetModifiedFlag();
 
-	last_change_pos_ = GetCtrl().GetCurrentPos();
+	// Update the last changed position only if text has been inserted or deleted
+	if (n->modificationType & (SC_MOD_INSERTTEXT|SC_MOD_DELETETEXT))
+		last_change_pos_ = GetCtrl().GetCurrentPos();
 
 	if (n->linesAdded) {
 		// Number of lines changed, update margin's width
@@ -861,6 +863,12 @@ void CodeView::OnZoom( SCNotification* /*n*/ )
 {
 	if (CConfiguration::GetInstance()->m_bShowLineNumbers)
 		UpdateLineNumberMargin();
+}
+
+void CodeView::SetModified( bool modified /*= true*/ )
+{
+	if (!modified)
+		last_change_pos_ = -1;
 }
 
 bool CodeView::ShadowWindow::IsNewLine(TCHAR ch)

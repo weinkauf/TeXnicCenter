@@ -164,6 +164,9 @@ protected:
 
 // overridings
 private:
+	volatile bool cancel_;
+
+protected:
 	virtual UINT Run();
 
 // attributes
@@ -182,6 +185,7 @@ public:
 	int GetErrorCount() const;
 	int GetWarningCount() const;
 	int GetBadBoxCount() const;
+	void Cancel();
 };
 
 #endif // !defined(AFX_OUTPUTFILTER_H__078A6980_2141_11D5_A222_006097239934__INCLUDED_)

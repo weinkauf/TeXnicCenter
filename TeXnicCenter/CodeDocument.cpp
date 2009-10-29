@@ -815,6 +815,11 @@ BOOL CodeDocument::OnOpenDocument(LPCTSTR lpszPathName)
 		return FALSE;
 
 	error_marker_handle_ = -1;
+	
+	CodeView* view = static_cast<CodeView*>(GetView());
+	ASSERT_VALID(view);
+
+	view->SetModified(false);
 
 	return TRUE;
 }

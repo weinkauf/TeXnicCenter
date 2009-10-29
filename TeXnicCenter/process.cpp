@@ -133,11 +133,10 @@ BOOL CProcess::CreateHiddenConsole(
 		lpsiStartInfo = &si;
 	}
 
-	lpsiStartInfo->dwFlags |= STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
+	lpsiStartInfo->dwFlags |= STARTF_USESTDHANDLES;
 	lpsiStartInfo->hStdInput = hStdInput;
 	lpsiStartInfo->hStdOutput = hStdOutput;
 	lpsiStartInfo->hStdError = hStdError;
-	lpsiStartInfo->wShowWindow = SW_HIDE; // hide window
 
 	return Create(lpszCmdLine,NULL,NULL,TRUE,dwCreate,NULL,lpszCurDir,lpsiStartInfo);
 }
