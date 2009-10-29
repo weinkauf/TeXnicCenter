@@ -287,7 +287,7 @@ void COutputDoc::ShowWarning(int nIndex)
 
 void COutputDoc::OnNextWarning()
 {
-	if (m_pActiveOutputView == m_pBuildView)
+	if (IsBuildViewActive())
 	{
 		if ((m_nActualWarningIndex >= m_aWarnings.GetSize() - 1) ||
 		        m_nActualWarningIndex < 0)
@@ -319,7 +319,7 @@ void COutputDoc::OnNextWarning()
 
 void COutputDoc::OnPrevWarning()
 {
-	if (m_pActiveOutputView == m_pBuildView)
+	if (IsBuildViewActive())
 	{
 		if ((m_nActualWarningIndex > m_aWarnings.GetSize() - 1) ||
 		        (m_nActualWarningIndex <= 0))
@@ -353,7 +353,7 @@ void COutputDoc::OnUpdateNextPrevWarning(CCmdUI* pCmdUI)
 {
 	ASSERT_NULL_OR_POINTER(m_pActiveOutputView, OutputViewBase);
 
-	if (m_pActiveOutputView == m_pBuildView || m_pActiveOutputView == errorListView_)
+	if (IsBuildViewActive())
 		pCmdUI->Enable(HasBuildWarnings());
 	else if (m_pActiveOutputView == m_pParseView)
 		pCmdUI->Enable(!m_aParseWarning.IsEmpty());
@@ -1449,4 +1449,9 @@ void COutputDoc::ClearParseMessages()
 		ASSERT_VALID(m_pParseView);
 		m_pParseView->Clear();
 	}
+}
+
+bool COutputDoc::IsBuildViewActive() const
+{
+	return m_pActiveOutputView == m_pBuildView || m_pActiveOutputView == errorListView_;
 }
