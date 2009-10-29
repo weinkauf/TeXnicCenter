@@ -13,6 +13,10 @@
 #include "SpellerBackgroundThread.h"
 #include "Speller.h"
 
+enum {
+	CheckForFileChangesMessageID = WM_USER + 1
+};
+
 class SpellerSuggestionMenu
 {
 	CodeView* view_;
@@ -174,6 +178,7 @@ LaTeXViewBase::~LaTeXViewBase()
 
 BEGIN_MESSAGE_MAP(LaTeXViewBase, CodeView)
 	ON_WM_CONTEXTMENU()
+	ON_MESSAGE_VOID(CheckForFileChangesMessageID, OnCheckForFileChanges)
 END_MESSAGE_MAP()
 
 
@@ -376,14 +381,29 @@ void LaTeXViewBase::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 void LaTeXViewBase::OnSetFocus(CWnd* pOldWnd)
 {
 	CodeView::OnSetFocus(pOldWnd);
-
-	LaTeXDocumentBase* doc = GetDocument();
-
-	if (doc)
-		doc->CheckForFileChanges();
+	CheckForFileChangesAsync();
 }
 
 LaTeXDocumentBase* LaTeXViewBase::GetDocument() const
 {
 	return static_cast<LaTeXDocumentBase*>(CodeView::GetDocument());
+}
+
+void LaTeXViewBase::CheckForFileChangesAsync()
+{
+	PostMessage(CheckForFileChangesMessageID);
+}
+
+void LaTeXViewBase::OnCheckForFileChanges()
+{
+	CheckForFileChanges();
+
+}
+
+void LaTeXViewBase::CheckForFileChanges()
+{
+	LaTeXDocumentBase* doc = GetDocument();
+
+	if (doc)
+		doc->CheckForFileChanges();
 }

@@ -71,6 +71,14 @@ protected:
 	afx_msg void OnSpellFile();
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
+
+private:
+	void OnCheckForFileChanges();
+
+public:
+	void CheckForFileChangesAsync();
+
+	void CheckForFileChanges();
 };
 
 

@@ -179,8 +179,9 @@ std::auto_ptr<CMFCColorMenuButton> CreateColorMenuButton(UINT id, UINT tear_off_
 
 enum
 {
-	StartPaneAnimation = WM_USER + 1,
-	StopPaneAnimation = WM_USER
+	StartPaneAnimationMessageID = WM_USER,
+	StopPaneAnimationMessageID,
+	CheckForFileChangesMessageID
 };
 
 IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWndEx)
@@ -245,12 +246,13 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_COMMAND_RANGE(ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST, &CMainFrame::OnExecuteUserTool)
 	ON_COMMAND_RANGE(ID_VIEW_APP_LOOK_WIN_2000,ID_VIEW_APP_LOOK_OFFICE_2007_AQUA, &CMainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APP_LOOK_WIN_2000, ID_VIEW_APP_LOOK_OFFICE_2007_AQUA, &CMainFrame::OnUpdateApplicationLook)
-	ON_MESSAGE_VOID(StartPaneAnimation, OnStartPaneAnimation)
-	ON_MESSAGE(StopPaneAnimation, OnStopPaneAnimation)
+	ON_MESSAGE_VOID(StartPaneAnimationMessageID, OnStartPaneAnimation)
+	ON_MESSAGE(StopPaneAnimationMessageID, OnStopPaneAnimation)
 	ON_REGISTERED_MESSAGE(AFX_WM_ON_GET_TAB_TOOLTIP, &CMainFrame::OnGetTabToolTip)
 	ON_COMMAND(ID_VIEW_TRANSPARENCY, &CMainFrame::OnViewTransparency)
 	ON_WM_DESTROY()
 	ON_MESSAGE(WM_DWMSENDICONICTHUMBNAIL, &CMainFrame::OnDwmSendIconicThumbnail)
+	ON_MESSAGE_VOID(CheckForFileChangesMessageID, CheckForFileChanges)
 END_MESSAGE_MAP()
 
 const UINT BuildAnimationPane = 1;
@@ -703,14 +705,13 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 	CMDIFrameWndEx::OnTimer(nIDEvent);
 }
 
-void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
+void CMainFrame::CheckForFileChanges()
 {
-	CMDIFrameWndEx::OnActivate(nState, pWndOther, bMinimized);
-
 	// Check if files have changed
 	CMultiDocTemplate *pTemplate = theApp.GetLatexDocTemplate();
+	ASSERT_NULL_OR_POINTER(pTemplate, CMultiDocTemplate);
 
-	if (pTemplate && (nState == WA_ACTIVE || nState == WA_CLICKACTIVE))
+	if (pTemplate)
 	{
 		POSITION pos = pTemplate->GetFirstDocPosition();
 
@@ -722,15 +723,14 @@ void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 				pDoc->CheckForFileChanges();
 		}
 	}
+}
 
-	// activate editor
+void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
+{
+	CMDIFrameWndEx::OnActivate(nState, pWndOther, bMinimized);
+
 	if (nState == WA_ACTIVE || nState == WA_CLICKACTIVE)
-	{
-		CView *pView = theApp.GetActiveEditView();
-
-		if (pView)
-			pView->SetFocus();
-	}
+		CheckForFileChangesAsync();
 }
 
 void CMainFrame::OnOptionsChanged()
@@ -1909,12 +1909,12 @@ void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
 
 void CMainFrame::OnLatexRun()
 {
-	PostMessage(StartPaneAnimation);	
+	PostMessage(StartPaneAnimationMessageID);	
 }
 
 void CMainFrame::OnLatexStop(bool canceled)
 {
-	PostMessage(StopPaneAnimation, canceled);	
+	PostMessage(StopPaneAnimationMessageID, canceled);	
 }
 
 void CMainFrame::OnStartPaneAnimation()
@@ -2049,4 +2049,9 @@ LRESULT CMainFrame::OnDwmSendIconicThumbnail(WPARAM w, LPARAM l)
 	else result = 1; // Not processed
 
 	return result;
+}
+
+void CMainFrame::CheckForFileChangesAsync()
+{
+	PostMessage(CheckForFileChangesMessageID);
 }
