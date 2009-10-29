@@ -207,6 +207,9 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
+private:
+	bool IsBuildViewActive() const;
+
 // operations
 public:
 	/**
