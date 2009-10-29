@@ -641,6 +641,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 				if (lastSi.GetType() == StructureItem::header && lastSi.GetDepth() + 1 < currentDepth) {
 					// Last inserted structure item is a header and a gap is in the structure
 					StructureItem ghostSi = si;
+					ghostSi.ClearLabels();
 					ghostSi.SetType(StructureItem::header);
 					ghostSi.SetMissing(); // All following sections are missing
 
@@ -700,28 +701,16 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		ParseString(lpText, what[0].first - lpText, cookies,
 		            strActualFile, nActualLine, nFileDepth, aSI);
 
+		StructureItem* item;
+
 		if (!cookies.empty())
-		{
-			if (cookies.top().nCookieType == StructureItem::header)
-			{
-				aSI[cookies.top().nItemIndex]. // Add the label to the set
-				AddLabel(CString(what[1].first, what[1].second - what[1].first));
-				cookies.pop();
-			}
-			else
-			{
-				//StructureItem si1(aSI[cookies.top().nItemIndex]);
-				//si1.SetLine(nActualLine);
-				//si1.SetPath(strActualFile);
-				//si1.SetParent(m_anItem[m_nDepth]);
-
-				//si1.SetLabel(CString(what[1].first, what[1].second - what[1].first));
-				//aSI.push_back(si1);
-
-				aSI[cookies.top().nItemIndex].AddLabel(
-				    CString(what[1].first, what[1].second - what[1].first));
-			}
-		}
+			item = &aSI[cookies.top().nItemIndex];
+		else if (!aSI.empty())
+			item = &aSI.back();
+		else item = 0;
+		
+		if (item)
+			item->AddLabel(CString(what[1].first, what[1].second - what[1].first));
 
 		// parse string behind occurrence
 		ParseString(what[0].second, lpTextEnd - what[0].second, cookies,
