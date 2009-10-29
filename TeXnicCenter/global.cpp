@@ -83,7 +83,7 @@ CString AfxGetDefaultDirectory(bool bForceNonEmpty /*= true*/,bool bNewProject /
 		{
 			// - Project opened? ==> Working Dir is default
 			CLaTeXProject* pLProject = theApp.GetProject();
-			if (pLProject) strPersonalDir = pLProject->GetWorkingDir();
+			if (pLProject) strPersonalDir = pLProject->GetWorkingDirectory();
 		}
 	}
 

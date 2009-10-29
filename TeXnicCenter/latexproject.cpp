@@ -227,7 +227,7 @@ BOOL CLaTeXProject::OnOpenProject(LPCTSTR lpszPathName)
 	}
 
 	//Set the working dir of the project
-	SetProjectDir(CPathTool::GetDirectory(lpszPathName));
+	SetProjectDirectory(CPathTool::GetDirectory(lpszPathName));
 	//Modify the LastOpenedFolder-Value to be the working dir
 	AfxSetLastDirectory(CPathTool::GetDirectory(lpszPathName));
 
@@ -750,7 +750,7 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 void CLaTeXProject::SetPathName(LPCTSTR lpszPathName)
 {
 	CProject::SetPathName(lpszPathName);
-	SetProjectDir(CPathTool::GetDirectory(lpszPathName));
+	SetProjectDirectory(CPathTool::GetDirectory(lpszPathName));
 
 	// Open ignored words
 
@@ -780,7 +780,7 @@ const CString& CLaTeXProject::GetMainPath() const
 	return m_strMainPath;
 }
 
-void CLaTeXProject::SetProjectDir(LPCTSTR lpszProjectDir)
+void CLaTeXProject::SetProjectDirectory(LPCTSTR lpszProjectDir)
 {
 	m_strProjectDir = lpszProjectDir;
 }
@@ -838,7 +838,7 @@ BOOL CLaTeXProject::GetRunMakeIndex() const
 	return m_bUseMakeIndex;
 }
 
-CString CLaTeXProject::GetWorkingDir() const
+CString CLaTeXProject::GetWorkingDirectory() const
 {
 	return CPathTool::GetDirectory(m_strMainPath);
 }
@@ -912,7 +912,7 @@ void CLaTeXProject::OnProjectParse()
 
 	// start parsing
 	m_bCanParse = FALSE;
-	m_pStructureParser->StartParsing(m_strMainPath,GetWorkingDir());
+	m_pStructureParser->StartParsing(m_strMainPath,GetWorkingDirectory());
 }
 
 void CLaTeXProject::OnProjectParsed()
@@ -1209,7 +1209,7 @@ CString CLaTeXProject::XProject::GetPath_() const
 {
 	GET_OUTER(CLaTeXProject,Project);
 
-	return pThis->GetWorkingDir();
+	return pThis->GetWorkingDirectory();
 }
 
 CString CLaTeXProject::XProject::GetMainFile_() const

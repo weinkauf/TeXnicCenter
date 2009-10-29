@@ -144,12 +144,9 @@ protected:
 	/**
 	 */
 	void GenerateOutputProfiles();
-	void GeneratePDFProfile(const CString& name, const CString& strPDFLatexOptions, const CString& viewer_path, const CString& latexFileName );
 
-	void GeneratePDFProfile(const CString& name, const CString& strPDFLatexOptions, const CString& viewer_path)
-	{
-		GeneratePDFProfile(name, strPDFLatexOptions, viewer_path, _T("pdflatex.exe"));
-	}
+	void GeneratePDFProfile(const CString& name, const CString& latexArguments, const CString& viewerPath, const CString& latexFileName );
+	void GeneratePDFProfile(const CString& name, const CString& latexArguments, const CString& viewerPath);
 
 private:
 	void SetupYAP( CProfile &p );

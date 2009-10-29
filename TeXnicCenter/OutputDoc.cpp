@@ -548,7 +548,7 @@ CString COutputDoc::GetWorkingDir() const
 	if (m_bActiveFileOperation && GetActiveDocument())
 		return CPathTool::GetDirectory(GetActiveDocument()->GetPathName());
 	else if (theApp.GetProject())
-		return theApp.GetProject()->GetWorkingDir();
+		return theApp.GetProject()->GetWorkingDirectory();
 
 	//Still nothing known? Try the active document anyway
 	if (GetActiveDocument())
@@ -1227,6 +1227,11 @@ void COutputDoc::Clear()
 	ResetBuildInformation();
 	m_aParseWarning.RemoveAll();
 	m_aParseInfo.RemoveAll();
+
+	if (m_pParseView) {
+		ASSERT_VALID(m_pParseView);
+		m_pParseView->ResetView();
+	}
 }
 
 void COutputDoc::ResetBuildInformation()
@@ -1411,4 +1416,34 @@ void COutputDoc::ActivateGrepMessageByOutputLine(int nLine)
 const CString COutputDoc::GetCurrentProcessName() const
 {
 	return m_builder.GetCurrentProcessName();
+}
+
+int COutputDoc::GetErrorCount() const
+{
+	return m_aErrors.GetSize();
+}
+
+int COutputDoc::GetBadBoxCount() const
+{
+	return m_aBadBoxes.GetSize();
+}
+
+int COutputDoc::GetWarningCount() const
+{
+	return m_aWarnings.GetSize();
+}
+
+bool COutputDoc::HasErrors() const
+{
+	return GetErrorCount() > 0;
+}
+
+bool COutputDoc::HasBadBoxes() const
+{
+	return GetBadBoxCount() > 0;
+}
+
+bool COutputDoc::HasWarnings() const
+{
+	return GetWarningCount() > 0;
 }

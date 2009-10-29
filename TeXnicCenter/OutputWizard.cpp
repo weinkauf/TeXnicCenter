@@ -503,7 +503,7 @@ void COutputWizard::LookForPdf()
 	//  Entry: GS_DLL=f:\prog\gstools\gs\gs8.12\bin\gsdll32.dll
 	// We need the directory of GS_DLL. There we find gswin32c.exe.
 	m_bGhostscriptInstalled = false;
-	CBCGRegistryEx gsReg(true,true); //HKEY_LOCAL_MACHINE, ReadOnly
+	RegistryStack gsReg(true,true); //HKEY_LOCAL_MACHINE, ReadOnly
 
 	if (gsReg.Open(_T("SOFTWARE\\GPL Ghostscript")) ||
 	        gsReg.Open(_T("SOFTWARE\\AFPL Ghostscript")))
@@ -1031,6 +1031,11 @@ void COutputWizard::GeneratePDFProfile( const CString& name, const CString& strP
 		// add profile to map
 		m_profiles.Add(name,p);
 	}
+}
+
+void COutputWizard::GeneratePDFProfile( const CString& name, const CString& strPDFLatexOptions, const CString& viewer_path )
+{
+	GeneratePDFProfile(name, strPDFLatexOptions, viewer_path, _T("pdflatex.exe"));
 }
 
 const CString COutputWizard::FindMiKTeXInstallLocation()

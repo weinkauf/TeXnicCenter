@@ -81,14 +81,14 @@ Extends CSettingsStore.
 
 @author Sven Wiegand
  */
-class CBCGRegistryEx : public CSettingsStore
+class RegistryStack : public CSettingsStore
 {
 // construction/destruction
 public:
 	/** See CSettingsStore-documentation for parameter description */
-	CBCGRegistryEx(BOOL bAdmin, BOOL bReadOnly);
+	RegistryStack(BOOL bAdmin, BOOL bReadOnly);
 
-	virtual ~CBCGRegistryEx();
+	virtual ~RegistryStack();
 
 	ATL::CRegKey& GetRegKey() { return m_reg; }
 	const ATL::CRegKey& GetRegKey() const { return m_reg; }

@@ -36,6 +36,7 @@
 #include "TeXnicCenter.h"
 #include "TemplateDialog.h"
 #include "Global.h"
+#include "RunTimeHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -78,12 +79,12 @@ CTemplateItem::~CTemplateItem()
 
 BEGIN_MESSAGE_MAP(CTemplateDialog, CDialog)
 	//{{AFX_MSG_MAP(CTemplateDialog)
-	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB_CATEGORIES, OnSelchangeTabCategories)
-	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_TEMPLATES, OnTemplateItemChanged)
-	ON_BN_CLICKED(IDC_BUTTON_CREATE, OnCreate)
-	ON_NOTIFY(NM_DBLCLK, IDC_LIST_TEMPLATES, OnDblClkTemplate)
-	ON_BN_CLICKED(IDC_RADIO_VIEW_TYPE, OnViewTypeSelection)
-	ON_BN_CLICKED(IDC_RADIO_VIEW_TYPE1, OnViewTypeSelection)
+	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB_CATEGORIES, &CTemplateDialog::OnSelchangeTabCategories)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_TEMPLATES, &CTemplateDialog::OnTemplateItemChanged)
+	ON_BN_CLICKED(IDC_BUTTON_CREATE, &CTemplateDialog::OnCreate)
+	ON_NOTIFY(NM_DBLCLK, IDC_LIST_TEMPLATES, &CTemplateDialog::OnDblClkTemplate)
+	ON_BN_CLICKED(IDC_RADIO_VIEW_TYPE, &CTemplateDialog::OnViewTypeSelection)
+	ON_BN_CLICKED(IDC_RADIO_VIEW_TYPE1, &CTemplateDialog::OnViewTypeSelection)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -130,7 +131,7 @@ void CTemplateDialog::CollectTemplates()
 	for (int i = 0; i < m_astrSearchPaths.GetSize(); i++)
 	{
 		CFileFind dirs;
-		if (!dirs.FindFile(m_astrSearchPaths[i] + "\\*.*", 0))
+		if (!dirs.FindFile(m_astrSearchPaths[i] + _T("\\*.*"), 0))
 			continue;
 
 		// parse all subdirs in this directory
@@ -346,6 +347,11 @@ BOOL CTemplateDialog::OnInitDialog()
 	CollectTemplates();
 	FillTemplateList();
 	UpdateControlStates();
+
+	if (RunTimeHelper::IsVista()) {
+		::SetWindowTheme(m_wndTemplateList, L"explorer", 0);
+		m_wndTemplateList.SetExtendedStyle(LVS_EX_DOUBLEBUFFER);
+	}
 
 	return TRUE; // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben

@@ -159,12 +159,12 @@ public:
 	/**
 	Saves this Item to the registry.
 	 */
-	bool SerializeToRegistry(CBCGRegistryEx &reg) const;
+	bool SerializeToRegistry(RegistryStack &reg) const;
 
 	/**
 	Reads this Item from the registry.
 	 */
-	bool SerializeFromRegistry(CBCGRegistryEx &reg);
+	bool SerializeFromRegistry(RegistryStack &reg);
 
 //Attributes
 private:

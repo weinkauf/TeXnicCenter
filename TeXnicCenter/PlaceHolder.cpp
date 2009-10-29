@@ -63,7 +63,7 @@ CString AfxExpandPlaceholders(LPCTSTR lpszStringWithPlaceholders,
 	CLaTeXProject* pLProject = ((CTeXnicCenterApp*)AfxGetApp())->GetProject();
 	if (pLProject && !lpszWorkingDir)
 	{
-		PathToWorkingDir = pLProject->GetWorkingDir();
+		PathToWorkingDir = pLProject->GetWorkingDirectory();
 	}
 
 	CString slashPathToWorkingDir = CPathTool::GetSlashPath(PathToWorkingDir);
@@ -608,7 +608,7 @@ void CPlaceholderSets::ConvertAndAdd(CString& strToAdd, CUniqueStringList* pStrL
 	//Convert to relative path, if wanted
 	if (bRelativePaths)
 	{
-		strToAdd = CPathTool::GetRelativePath(m_pProject->GetWorkingDir(),strToAdd);
+		strToAdd = CPathTool::GetRelativePath(m_pProject->GetWorkingDirectory(),strToAdd);
 	}
 
 	//Convert to short path, if wanted

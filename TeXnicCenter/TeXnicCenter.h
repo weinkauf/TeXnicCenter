@@ -68,7 +68,6 @@ public:
 
 	HINSTANCE scintilla_;
 
-
 public:
 	CTeXnicCenterApp();
 

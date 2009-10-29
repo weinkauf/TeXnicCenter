@@ -38,10 +38,7 @@ class BibView :
 		StructureItemContainer::size_type structure_item_index;
 		BibItem bib;
 
-		Item(int group_id, int image, const BibItem& b)
-		: group_id(group_id), bib(b), image(image)
-		{
-		}
+		Item(int group_id, int image, const BibItem& b);
 	};
 
 	typedef std::vector<Item> BibItemContainerType;
@@ -55,11 +52,7 @@ private:
 	{
 		PredicateFunctionType predicate;
 		BibView* view;
-
-		PopulateParam(const PredicateFunctionType& p, BibView* v)
-		: predicate(p), view(v)
-		{
-		}
+		PopulateParam(const PredicateFunctionType& p, BibView* v);
 	};
 
 	DECLARE_DYNAMIC(BibView)

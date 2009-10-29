@@ -106,13 +106,13 @@ public:
 		Will write some values so the key should be reserved only for
 		this object.
 		 */
-		BOOL SerializeToRegistry(CBCGRegistryEx &reg) const;
+		BOOL SerializeToRegistry(RegistryStack &reg) const;
 
 		/**
 		Reads its information from the current key of the given registry
 		object.
 		 */
-		BOOL SerializeFromRegistry(CBCGRegistryEx &reg);
+		BOOL SerializeFromRegistry(RegistryStack &reg);
 
 		/**
 		Saves the command properties to the specified XML element.
@@ -269,13 +269,13 @@ public:
 	Stores the object's information at the current position in the
 	given registry object.
 	 */
-	BOOL SerializeToRegistry(CBCGRegistryEx &reg) const;
+	BOOL SerializeToRegistry(RegistryStack &reg) const;
 
 	/**
 	Reads the information from the current position of the given
 	registry object.
 	 */
-	BOOL SerializeFromRegistry(CBCGRegistryEx &reg);
+	BOOL SerializeFromRegistry(RegistryStack &reg);
 
 	/**
 	Writes the profiles properties to the specified XML element.

@@ -285,7 +285,7 @@ void CProfileMap::Export() const
 
 BOOL CProfileMap::SerializeToRegistry() const
 {
-	CBCGRegistryEx reg(FALSE, FALSE);
+	RegistryStack reg(FALSE, FALSE);
 	CString strKey(CPathTool::Cat(theApp.m_strRegistryRoot, _T("Profiles")));
 	reg.DeleteKey(strKey);
 	reg.CreateKey(strKey);
@@ -311,7 +311,7 @@ BOOL CProfileMap::SerializeFromRegistry()
 {
 	RemoveAll();
 
-	CBCGRegistryEx reg(FALSE, TRUE);
+	RegistryStack reg(FALSE, TRUE);
 	CString strKey(CPathTool::Cat(theApp.m_strRegistryRoot, _T("Profiles")));
 	if (!reg.Open(strKey))
 		return FALSE;
@@ -596,7 +596,7 @@ void CProfile::RemoveDirectorySpecifications()
 	m_cmdCloseView.RemoveDirectorySpecifications();
 }
 
-BOOL CProfile::SerializeToRegistry(CBCGRegistryEx &reg) const
+BOOL CProfile::SerializeToRegistry(RegistryStack &reg) const
 {
 	reg.Write(_T("RunLatex"), m_bRunLatex);
 	reg.Write(_T("LatexPath"), m_strLatexPath);
@@ -635,7 +635,7 @@ BOOL CProfile::SerializeToRegistry(CBCGRegistryEx &reg) const
 	return TRUE;
 }
 
-BOOL CProfile::SerializeFromRegistry(CBCGRegistryEx &reg)
+BOOL CProfile::SerializeFromRegistry(RegistryStack &reg)
 {
 	reg.Read(_T("RunLatex"), m_bRunLatex);
 	reg.Read(_T("LatexPath"), m_strLatexPath);
@@ -818,7 +818,7 @@ void CProfile::CCommand::RemoveDirectorySpecifications()
 	m_cmdDde.RemoveDirectorySpecifications();
 }
 
-BOOL CProfile::CCommand::SerializeToRegistry(CBCGRegistryEx &reg) const
+BOOL CProfile::CCommand::SerializeToRegistry(RegistryStack &reg) const
 {
 	reg.Write(_T("ActiveType"), m_nActiveCommand);
 	reg.Write(_T("ProcessCmd"), m_cmdProcess.SerializeToString());
@@ -827,7 +827,7 @@ BOOL CProfile::CCommand::SerializeToRegistry(CBCGRegistryEx &reg) const
 	return TRUE;
 }
 
-BOOL CProfile::CCommand::SerializeFromRegistry(CBCGRegistryEx &reg)
+BOOL CProfile::CCommand::SerializeFromRegistry(RegistryStack &reg)
 {
 	CString strPackedInformation;
 	reg.Read(_T("ActiveType"), m_nActiveCommand);
