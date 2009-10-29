@@ -123,4 +123,27 @@ WORD CFileChangeWatcher::GetFileChanges(BOOL bSnapState /*= TRUE*/)
 	return wChanges&m_wChangeMask;
 }
 
+CString CFileChangeWatcher::GetFilePath() const
+{
+	return m_strFilePath;
+}
 
+WORD CFileChangeWatcher::GetFileChangeFlags() const
+{
+	return m_wChangeMask;
+}
+
+BOOL CFileChangeWatcher::IsFileReadOnly() const
+{
+	return m_bReadOnly;
+}
+
+CTime CFileChangeWatcher::GetFileModificationTime() const
+{
+	return m_timeModification;
+}
+
+ULONGLONG CFileChangeWatcher::GetFileLength() const
+{
+	return m_dwFileLength;
+}

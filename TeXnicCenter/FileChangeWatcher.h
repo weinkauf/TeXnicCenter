@@ -109,7 +109,7 @@ public:
 
 	@return
 	        A combination of the flags of the changeType enumeration,
-	        specifieng the file's attributes, that have change or 0 if no
+	        specifying the file's attributes, that have change or 0 if no
 	        changes have been detected.
 	 */
 	WORD GetFileChanges(BOOL bSnapState = TRUE);
@@ -118,13 +118,13 @@ public:
 	Snaps the current file attributes and stores them for later
 	comparison by GetChanges().
 
-	@retrun
+	@return
 	        FALSE if the file cannot be accessed.
 	 */
 	BOOL SnapFileState();
 
 	/**
-	Returns TRUE if the file is writeprotected at the moment and FALSE
+	Returns TRUE if the file is write protected at the moment and FALSE
 	otherwise.
 
 	The result mirrors the values, acquired by the last SnapState()
@@ -165,37 +165,5 @@ private:
 	/** Latest files length */
 	ULONGLONG m_dwFileLength;
 };
-
-
-// inlines
-
-inline
-CString CFileChangeWatcher::GetFilePath() const
-{
-	return m_strFilePath;
-}
-
-inline
-WORD CFileChangeWatcher::GetFileChangeFlags() const
-{
-	return m_wChangeMask;
-}
-
-inline
-BOOL CFileChangeWatcher::IsFileReadOnly() const
-{
-	return m_bReadOnly;
-}
-
-inline
-CTime CFileChangeWatcher::GetFileModificationTime() const
-{
-	return m_timeModification;
-}
-
-inline ULONGLONG CFileChangeWatcher::GetFileLength() const
-{
-	return m_dwFileLength;
-}
 
 #endif // !defined(AFX_FILECHANGEWATCHER_H__431478E2_B4F5_11D5_A222_006097239934__INCLUDED_)
