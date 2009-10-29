@@ -288,7 +288,7 @@ int NavigatorTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	MapKeyStateToFormat(0,CLaTeXProject::FormatRef);
 	MapKeyStateToFormat(MK_CONTROL,CLaTeXProject::FormatPageRef);
-	MapKeyStateToFormat(MK_SHIFT,bind(&CStructureItem::GetLabel,_1));
+	MapKeyStateToFormat(MK_SHIFT,bind(&StructureItem::GetLabel,_1));
 
 	MapKeyStateToMessage(0,ID_ITEM_INSERT_REF);
 	MapKeyStateToMessage(MK_CONTROL,ID_ITEM_INSERT_PAGEREF);
@@ -462,7 +462,7 @@ void NavigatorTreeCtrl::OnTvnBeginDrag(NMHDR *pNMHDR, LRESULT *pResult)
 	StructureItemContainer::size_type pos = GetItemData(item);
 
 	if (pos < GetProject()->GetStructureItems().size())
-		SetDraggedItem(new CStructureItem(GetProject()->GetStructureItems()[pos]));
+		SetDraggedItem(new StructureItem(GetProject()->GetStructureItems()[pos]));
 
 	DWORD result;
 	DoDragDrop(DROPEFFECT_COPY,&result);

@@ -344,8 +344,8 @@ public:
 	int GetInitialNavigatorTabIndex() const;
 
 public:
-	static const CString FormatRef(const CStructureItem& item);
-	static const CString FormatPageRef(const CStructureItem& item);
+	static const CString FormatRef(const StructureItem& item);
+	static const CString FormatPageRef(const StructureItem& item);
 	void SetFoldingPoints(const CString& filename, const FoldingPointContainerType& points);
 	const CLaTeXProject::FileBookmarksContainerType GetAllBookmarks() const;
 

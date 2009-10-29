@@ -45,7 +45,7 @@
 
 @ingroup dialogs
 
-@see CStructureItem
+@see StructureItem
 
 @author Sven Wiegand
  */
@@ -54,7 +54,7 @@ class CItemPropertyDialog : public CDialog
 // Konstruktion
 public:
 	CItemPropertyDialog(CWnd* pParent = NULL); // Standardkonstruktor
-	CItemPropertyDialog(CStructureItem &si, CWnd* pParent = NULL);
+	CItemPropertyDialog(StructureItem &si, CWnd* pParent = NULL);
 
 	// Dialogfelddaten
 	//{{AFX_DATA(CItemPropertyDialog)

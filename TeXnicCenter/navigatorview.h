@@ -40,7 +40,7 @@
 #include "LabelDragSource.h"
 
 class CLaTeXProject;
-class CStructureItem;
+class StructureItem;
 
 /** Base class for viewing the document structure
         in a tree-like structure.

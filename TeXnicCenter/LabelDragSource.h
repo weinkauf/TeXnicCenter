@@ -6,15 +6,15 @@
 
 #include "DragSourceBase.h"
 
-class CStructureItem;
+class StructureItem;
 
 class LabelDragSource :
 	public DragSourceBase
 {
-	std::auto_ptr<CStructureItem> dragged_item_;
+	std::auto_ptr<StructureItem> dragged_item_;
 
 public:
-	typedef std::tr1::function<const CString (const CStructureItem&)> FormatFunctionType;
+	typedef std::tr1::function<const CString (const StructureItem&)> FormatFunctionType;
 
 private:
 	// Maps a key combination such as 0, MK_SHIFT, MK_SHIFT|MK_CONTROL
@@ -29,9 +29,9 @@ public:
 	LabelDragSource();
 	~LabelDragSource();
 
-	CStructureItem* GetDraggedItem() { return dragged_item_.get(); }
-	const CStructureItem* GetDraggedItem() const { return dragged_item_.get(); }
-	void SetDraggedItem(CStructureItem* item = 0) { dragged_item_.reset(item); }
+	StructureItem* GetDraggedItem() { return dragged_item_.get(); }
+	const StructureItem* GetDraggedItem() const { return dragged_item_.get(); }
+	void SetDraggedItem(StructureItem* item = 0) { dragged_item_.reset(item); }
 
 	void MapKeyStateToFormat(UINT key, const FormatFunctionType& func);
 	void RemoveKeyStateToFormat(UINT key);
@@ -42,11 +42,11 @@ public:
 	HRESULT DoDragDrop(DWORD effects, LPDWORD result);
 
 protected:
-	const CString GetRef( UINT keystate, const CStructureItem &item ) const;
+	const CString GetRef( UINT keystate, const StructureItem &item ) const;
 
 	void OnDragKeyStateChanged(UINT keystate);
 	void OnEndDragDrop();
 	void OnDragGetData(SimpleDataObject* o);
 
-	void UpdateMessageText( UINT keystate, CString& text, const CStructureItem &item );
+	void UpdateMessageText( UINT keystate, CString& text, const StructureItem &item );
 };

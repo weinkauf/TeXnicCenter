@@ -40,22 +40,17 @@
 
 #include "TextSource.h"
 #include "OutputInfo.h"
+#include "StructureItem.h"
 
 class CParseOutputHandler
 {
 
 public:
-	virtual void OnParseLineInfo(COutputInfo &/*line*/, int /*nLevel*/, int /*nSeverity*/)
-	{
-	}
+	virtual void OnParseLineInfo(COutputInfo &/*line*/, int /*nLevel*/, int /*nSeverity*/);
 
-	virtual void OnParseBegin(bool /*bCancelState*/)
-	{
-	}
+	virtual void OnParseBegin(bool /*bCancelState*/);
 
-	virtual void OnParseEnd(bool /*bResult*/,int /*nFiles*/,int /*nLines*/)
-	{
-	}
+	virtual void OnParseEnd(bool /*bResult*/,int /*nFiles*/,int /*nLines*/);
 
 	enum tagSeverity
 	{
@@ -71,101 +66,6 @@ protected:
 	int m_nOutputLines;
 };
 
-class StructureItemInfo
-{
-public:
-	virtual ~StructureItemInfo() = 0 { }
-};
-
-/**
-An object of this class contains information about one item
-of a document structure (for example a header).
-
-@author Sven Wiegand
- */
-class CStructureItem
-{
-	//Construction/Destruction
-	mutable int main_project_file_;
-	/// Detail item information, e.g. BibItem for BibTeX entries
-	std::tr1::shared_ptr<StructureItemInfo> item_info_;
-
-public:
-	typedef std::vector<CString> LabelContainer;
-
-	bool HasItemInfo() const { return item_info_ != 0; }
-	void SetItemInfo(StructureItemInfo* info = 0) { item_info_.reset(info); }
-	StructureItemInfo* GetItemInfo() { return item_info_.get(); }
-	const StructureItemInfo* GetItemInfo() const { return item_info_.get(); }
-
-private:
-	LabelContainer labels_;
-
-public:
-	CStructureItem();
-
-//Attributes
-public:
-	/** Type this item is of. */
-	int m_nType;
-
-	int GetType() const;
-	void SetType(int val);
-
-	/** Path of file this item occurs in. */
-	CString m_strPath;
-
-	const CString& GetPath() const;
-	void SetPath(const CString& val);
-
-	/** Line in the file, this item occurs on. */
-	int m_nLine;
-
-	int GetLine() const;
-	void SetLine(int val);
-
-	/** Caption of this item */
-	CString m_strCaption;
-
-	const CString& GetCaption() const;
-	void SetCaption(const CString& val);
-
-	/** Label of this item */
-	//CString m_strLabel;
-
-	const CString GetLabel() const;
-	void SetLabel(const CString& val);
-
-	bool HasLabels() const;
-
-	/** Title of this item */
-	CString m_strTitle;
-
-	const CString& GetTitle() const;
-	void SetTitle(const CString& val);
-
-	const LabelContainer& GetLabels() const;
-
-	LabelContainer& GetLabels();
-
-	void AddLabel(const CString& l);
-
-	void RemoveLabels();
-
-	/** Comment of this item */
-	CString m_strComment;
-
-	const CString& GetComment() const;
-	void SetComment(const CString& val);
-
-	/** Index of the parent item or -1 if this item has no parent item */
-	int m_nParent;
-
-	int GetParent() const;
-	void SetParent(int val);
-
-	bool IsMainProjectFile() const;
-};
 
 /**
 An object of this class is used by a CStructureParser-object to
@@ -193,12 +93,10 @@ public:
 
 
 /**
-An Array of CStructureItem-objects.
+An Array of StructureItem-objects.
 
 @author Sven Wiegand
  */
-
-typedef std::vector<CStructureItem> StructureItemContainer;
 
 const int MAX_DEPTH	= 6;
 
@@ -225,34 +123,7 @@ private:
 
 public:
 
-	enum tagItemType
-	{
-		generic = 0,
-		header,
-		equation,
-		quote,
-		quotation,
-		center,
-		verse,
-		itemization,
-		enumeration,
-		description,
-		figure,
-		table,
-		unknownEnv,
-		texFile,
-		group,
-		bibFile,
-		graphicFile,
-		bibItem,
-		missingTexFile,
-		missingGraphicFile,
-		missingBibFile,
-		// If you add a new type, also add a description string to m_sItemNames
-		typeCount
-	};
-
-	static const CString m_sItemNames[typeCount];
+	static const CString m_sItemNames[StructureItem::typeCount];
 
 // construction/destruction
 protected:
@@ -301,7 +172,7 @@ public:
 	 */
 	BOOL StartParsing(LPCTSTR lpszMainPath,LPCTSTR lpszWorkingDir,int nPriority = THREAD_PRIORITY_IDLE);
 
-	/** Populates the provided StructureItemContainer witht the elements of
+	/** Populates the provided StructureItemContainer with the elements of
 	the last parse. This thread safe, even window threads.
 
 	@param pItemArray
@@ -398,7 +269,7 @@ private:
 	 */
 	int AddFileItem(LPCTSTR lpszPath,int nType, LPCTSTR lpszIncludeFromFile, int nIncludedFileLineNumber, StructureItemContainer &aSI,LPCTSTR lpszAnnotation = NULL);
 
-	/** Creates a title from the caption or label of a CStructureItem.
+	/** Creates a title from the caption or label of a StructureItem.
 
 	        Prefers the caption.
 	        If both label and caption are empty, then it creates a title from the filename
@@ -406,29 +277,12 @@ private:
 
 	        @note Creates only a new title, if the current title is empty or if forced by bForce.
 
-	        @see CStructureItem
+	        @see StructureItem
 
 	        @param bForce
 	                Force the generation of a new title. Even if the current title is non-empty.
 	 */
-	inline void CreateDefaultTitle(CStructureItem& si,bool bForce = false)
-	{
-		if (si.m_strTitle.IsEmpty() || bForce)
-		{
-			if (si.m_strCaption.IsEmpty() && !si.HasLabels())
-			{
-				//Label and Caption empty ==> Generate a title from the filename
-				si.m_strTitle.Format(_T("%s (%d)"),ResolveFileName(si.m_strPath),si.m_nLine);
-			}
-			else
-			{
-				if (si.GetCaption().IsEmpty())
-					si.SetTitle(si.GetLabel());
-				else
-					si.SetTitle(si.GetCaption());
-			}
-		}
-	}
+	void CreateDefaultTitle(StructureItem& si,bool bForce = false);
 
 	/**
 	Resolve a file name relative to working directory or absolute.

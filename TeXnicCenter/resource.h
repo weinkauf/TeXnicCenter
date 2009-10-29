@@ -782,6 +782,7 @@
 #define IDS_SPELL_UNEDIT                8660
 #define IDS_SPELL_DONE                  8661
 #define IDS_SPELL_NO_SUGGESTIONS        8662
+#define IDS_MISSING_SECTION             8663
 #define ID_TEXTMODULES_FIRST            17000
 #define ID_TEXTMODULES_LAST             18000
 #define ID_VIEW_BAR1                    32760
@@ -1494,10 +1495,10 @@
 #define IDR_BOOKMARK_VIEW               57672
 
 // Next default values for new objects
-//
+// 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_3D_CONTROLS                1
+#define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57673
 #define _APS_NEXT_COMMAND_VALUE         40611
 #define _APS_NEXT_CONTROL_VALUE         8663

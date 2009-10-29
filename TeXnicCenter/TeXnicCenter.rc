@@ -3624,6 +3624,7 @@ BEGIN
     IDS_SPELL_UNEDIT        "Rückgängig"
     IDS_SPELL_DONE          "Die Rechtschreibprüfung wurde abgeschlossen."
     IDS_SPELL_NO_SUGGESTIONS "Keine Vorschläge"
+    IDS_MISSING_SECTION     "Fehlender Abschnitt"
 END
 
 STRINGTABLE 
@@ -4615,7 +4616,18 @@ END
 
 STRINGTABLE 
 BEGIN
+    ID_URL_AUTHOR           "sven@texniccenter.org\nNachricht an den Autor\nmailto:sven@texniccenter.org"
+    ID_URL_TCDEVELOPERSGROUP 
+                            "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Entwicklerforum\nhttp://www.sourceforge.net/projects/texniccenter"
+    ID_URL_TCDICTDOWNLOAD   "http://wiki.services.openoffice.org/wiki/Dictionaries\nWörterbücher herunterladen\nhttp://wiki.services.openoffice.org/wiki/Dictionaries"
+    ID_URL_TCERROR          "http://www.TeXnicCenter.org/issues\nFehlerbenachrichtigung\nhttp://www.TeXnicCenter.org/issues"
     ID_URL_TCHOME           "http://www.TeXnicCenter.org/\nTeXnicCenter Homepage\nhttp://www.TeXnicCenter.org/"
+    ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
+    ID_URL_TCUSERSGROUP     "http://www.latex-community.org/forum/viewforum.php?f=22\nTeXnicCenter Benutzerforum\nhttp://www.latex-community.org/forum/viewforum.php?f=22"
+END
+
+STRINGTABLE 
+BEGIN
     ID_TIP                  "Zeigt Tipps und Tricks an\nTipps und Tricks"
     ID_UPDATE_LATEX_OUTPUT  "DNT:Is send, when the latex-output has to be updated"
     ID_NEXT_ERROR           "Springt zum nächsten Fehler\nNächster Fehler"
@@ -4642,13 +4654,6 @@ END
 
 STRINGTABLE 
 BEGIN
-    ID_URL_AUTHOR           "sven@texniccenter.org\nNachricht an den Autor\nmailto:sven@texniccenter.org"
-    ID_URL_TCERROR          "http://www.TeXnicCenter.org/issues\nFehlerbenachrichtigung\nhttp://www.TeXnicCenter.org/issues"
-    ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
-    ID_URL_TCUSERSGROUP     "http://www.latex-community.org/forum/viewforum.php?f=22\nTeXnicCenter Benutzerforum\nhttp://www.latex-community.org/forum/viewforum.php?f=22"
-    ID_URL_TCDEVELOPERSGROUP 
-                            "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Entwicklerforum\nhttp://www.sourceforge.net/projects/texniccenter"
-    ID_URL_TCDICTDOWNLOAD   "http://wiki.services.openoffice.org/wiki/Dictionaries\nWörterbücher herunterladen\nhttp://wiki.services.openoffice.org/wiki/Dictionaries"
     ID_PH_MPATH             "%pm"
     ID_PH_MSLASHPATH        "%Pm"
     ID_PH_MBASE             "%bm"
@@ -7910,11 +7915,23 @@ BEGIN
     IDS_SPELL_UNEDIT        "Unedit"
     IDS_SPELL_DONE          "Spell check complete"
     IDS_SPELL_NO_SUGGESTIONS "No Suggestions"
+    IDS_MISSING_SECTION     "Missing section"
 END
 
 STRINGTABLE 
 BEGIN
+    ID_URL_AUTHOR           "sven@texniccenter.org\nE-Mail to the Author\nmailto:sven@texniccenter.org"
+    ID_URL_TCDEVELOPERSGROUP 
+                            "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Developer Forum\nhttp://www.sourceforge.net/projects/texniccenter"
+    ID_URL_TCDICTDOWNLOAD   "http://lingucomponent.openoffice.org/spell_dic.html\nDownload Dictionaries\nhttp://lingucomponent.openoffice.org/spell_dic.html"
+    ID_URL_TCERROR          "http://www.TeXnicCenter.org/issues\nReport an Error\nhttp://www.TeXnicCenter.org/issues"
     ID_URL_TCHOME           "http://www.TeXnicCenter.org/\nTeXnicCenter Homepage\nhttp://www.TeXnicCenter.org/"
+    ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
+    ID_URL_TCUSERSGROUP     "http://www.latex-community.org/forum/viewforum.php?f=22\nTeXnicCenter User Forum\nhttp://www.latex-community.org/forum/viewforum.php?f=22"
+END
+
+STRINGTABLE 
+BEGIN
     ID_TIP                  "Displays the tip of the day\nTip of the Day"
     ID_UPDATE_LATEX_OUTPUT  "Is send, when the latex-output has to be updated"
     ID_NEXT_ERROR           "Goes to the next Error\nNext Error"
@@ -8049,13 +8066,6 @@ END
 
 STRINGTABLE 
 BEGIN
-    ID_URL_AUTHOR           "sven@texniccenter.org\nE-Mail to the Author\nmailto:sven@texniccenter.org"
-    ID_URL_TCERROR          "http://www.TeXnicCenter.org/issues\nReport an Error\nhttp://www.TeXnicCenter.org/issues"
-    ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
-    ID_URL_TCUSERSGROUP     "http://www.latex-community.org/forum/viewforum.php?f=22\nTeXnicCenter User Forum\nhttp://www.latex-community.org/forum/viewforum.php?f=22"
-    ID_URL_TCDEVELOPERSGROUP 
-                            "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Developer Forum\nhttp://www.sourceforge.net/projects/texniccenter"
-    ID_URL_TCDICTDOWNLOAD   "http://lingucomponent.openoffice.org/spell_dic.html\nDownload Dictionaries\nhttp://lingucomponent.openoffice.org/spell_dic.html"
     ID_PH_MPATH             "%pm"
     ID_PH_MSLASHPATH        "%Pm"
     ID_PH_MBASE             "%bm"

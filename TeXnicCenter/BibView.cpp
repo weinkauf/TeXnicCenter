@@ -225,7 +225,7 @@ int BibView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	using namespace placeholders;
 
 	MapKeyStateToFormat(0,CLaTeXProject::FormatRef); // No addition key pressed while dragging, output \cite{key}
-	MapKeyStateToFormat(MK_CONTROL,bind(&CStructureItem::GetLabel,_1)); // Just the label
+	MapKeyStateToFormat(MK_CONTROL,bind(&StructureItem::GetLabel,_1)); // Just the label
 	
 	MapKeyStateToMessage(0,ID_ITEM_INSERT_REF);
 	MapKeyStateToMessage(MK_CONTROL,ID_ITEM_INSERT_LABEL);
@@ -339,11 +339,11 @@ void BibView::OnParsingFinished()
 		lvg.cbSize = LVGROUP_V5_SIZE;
 
 	for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it) {
-		const CStructureItem &si = *it;
+		const StructureItem &si = *it;
 
 		switch (si.GetType()) {
-			case CStructureParser::bibFile :
-			case CStructureParser::missingBibFile :
+			case StructureItem::bibFile :
+			case StructureItem::missingBibFile :
 				{
 					// Windows XP or higher required for grouping
 					if (can_group_) {						
@@ -359,7 +359,7 @@ void BibView::OnParsingFinished()
 					}
 				}
 				break;
-			case CStructureParser::bibItem :
+			case StructureItem::bibItem :
 				if (const BibItem* info = dynamic_cast<const BibItem*>(it->GetItemInfo())) {
 					ASSERT(lvg.iGroupId); // Must be a valid group id
 					Item item(lvg.iGroupId,si.GetType(),*info);
@@ -532,9 +532,9 @@ void BibView::OnLvnBeginDrag(NMHDR* nm, LRESULT*)
 
 	BibItemContainerType::size_type pos = static_cast<BibItemContainerType::size_type>
 		(list_view_.GetItemData(p->iItem));
-	const CStructureItem& item = GetProject()->GetStructureItems()[bib_items_[pos].structure_item_index];
+	const StructureItem& item = GetProject()->GetStructureItems()[bib_items_[pos].structure_item_index];
 
-	SetDraggedItem(new CStructureItem(item));
+	SetDraggedItem(new StructureItem(item));
 	DWORD result;
 	DoDragDrop(DROPEFFECT_COPY,&result);
 }

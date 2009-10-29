@@ -85,23 +85,23 @@ void CEnvironmentView::OnUpdate(CProjectView* /*pSender*/,LPARAM lHint,LPVOID /*
 			// initialization
 			DeleteAllItems();
 
-			HTREEITEM ahParentItems[CStructureParser::typeCount];
+			HTREEITEM ahParentItems[StructureItem::typeCount];
 			int id;
 
-			for (int i = 0; i < CStructureParser::typeCount; i++)
+			for (int i = 0; i < StructureItem::typeCount; i++)
 			{
 				switch (i)
 				{
-					case CStructureParser::header :
+					case StructureItem::header :
 						id = STE_ITEMTYPE_HEADER;
 						break;
-					case CStructureParser::equation :
+					case StructureItem::equation :
 						id = STE_ITEMTYPE_EQUATION;
 						break;
-					case CStructureParser::figure :
+					case StructureItem::figure :
 						id = STE_ITEMTYPE_FIGURE;
 						break;
-					case CStructureParser::table :
+					case StructureItem::table :
 						id = STE_ITEMTYPE_TABLE;
 						break;
 					//case CStructureParser::description:
@@ -119,7 +119,7 @@ void CEnvironmentView::OnUpdate(CProjectView* /*pSender*/,LPARAM lHint,LPVOID /*
 					//case CStructureParser::verse:
 					//	id = STE_ITEMTYPE_VERSE;
 					//	break;
-					case CStructureParser::unknownEnv :
+					case StructureItem::unknownEnv :
 						id = STE_ITEMTYPE_UNKNOWNENV;
 						break;
 					default:
@@ -131,7 +131,7 @@ void CEnvironmentView::OnUpdate(CProjectView* /*pSender*/,LPARAM lHint,LPVOID /*
 				{
 					ahParentItems[i] = InsertItem(
 						                       AfxLoadString(id),
-						                       CStructureParser::group,CStructureParser::group,
+						                       StructureItem::group,StructureItem::group,
 						                       TVI_ROOT,TVI_SORT);
 					SetItemData(ahParentItems[i], static_cast<DWORD_PTR>(-1));
 				}
@@ -141,15 +141,15 @@ void CEnvironmentView::OnUpdate(CProjectView* /*pSender*/,LPARAM lHint,LPVOID /*
 			//for (int i = 0; i < a.GetSize(); i++) {
 			for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it)
 			{
-				const CStructureItem &si = *it;//a.GetAt(i);
+				const StructureItem &si = *it;//a.GetAt(i);
 
 				switch (si.GetType())
 				{
-					case CStructureParser::header :
-					case CStructureParser::equation :
-					case CStructureParser::figure :
-					case CStructureParser::table :
-					case CStructureParser::unknownEnv :
+					case StructureItem::header :
+					case StructureItem::equation :
+					case StructureItem::figure :
+					case StructureItem::table :
+					case StructureItem::unknownEnv :
 					{
 						//Better display all stuff, even without a title
 						//if (si.m_strTitle.GetLength() == 0)

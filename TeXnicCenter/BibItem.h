@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "structureparser.h"
+#include "StructureItemInfo.h"
 
 /// Represents a bibliography item used in a BibView.
 class BibItem :

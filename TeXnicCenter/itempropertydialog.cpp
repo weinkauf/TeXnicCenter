@@ -58,7 +58,7 @@ CItemPropertyDialog::CItemPropertyDialog(CWnd* pParent /*=NULL*/)
 	//}}AFX_DATA_INIT
 }
 
-CItemPropertyDialog::CItemPropertyDialog(CStructureItem &si,CWnd* pParent /*=NULL*/)
+CItemPropertyDialog::CItemPropertyDialog(StructureItem &si,CWnd* pParent /*=NULL*/)
 		: CDialog(CItemPropertyDialog::IDD,pParent)
 {
 	//{{AFX_DATA_INIT(CItemPropertyDialog)

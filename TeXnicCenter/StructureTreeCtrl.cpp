@@ -38,6 +38,7 @@
 #include "StructureParser.h"
 #include "LatexProject.h"
 #include "FontOccManager.h"
+#include "StructureItem.h"
 
 
 IMPLEMENT_DYNCREATE(StructureTreeCtrl, NavigatorTreeCtrl)
@@ -83,16 +84,16 @@ void StructureTreeCtrl::OnParsingFinished()
 	// fill view
 	for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it)
 	{
-		const CStructureItem &si = *it;//a.GetAt(i);
+		const StructureItem &si = *it;//a.GetAt(i);
 		const int i = std::distance(a.begin(),it);
 
 		switch (si.GetType())
 		{
-		case CStructureParser::equation :
-		case CStructureParser::figure :
-		case CStructureParser::table :
-		case CStructureParser::header :
-		case CStructureParser::bibFile:
+		case StructureItem::equation :
+		case StructureItem::figure :
+		case StructureItem::table :
+		case StructureItem::header :
+		case StructureItem::bibFile:
 			//case CStructureParser::unknownEnv:
 			{
 				//Better display all stuff, even without a title
@@ -102,20 +103,30 @@ void StructureTreeCtrl::OnParsingFinished()
 				CString title = si.GetTitle();
 				int parent = si.GetParent();
 
-				if (si.GetType() == CStructureParser::header)
+				if (si.GetType() == StructureItem::header)
 					title.Replace(_T("\\-"),_T("")); // Cleanup \-
-				else if (si.GetType() == CStructureParser::bibFile) {
+				else if (si.GetType() == StructureItem::bibFile) {
 					title.Format(IDS_BIBLIOGRAPHY,si.GetPath());
 					parent = -1; // Bibliography items are always root nodes
 				}
 
+				int imageIndex = si.GetType();
+
+				if (si.GetType() == StructureItem::header && si.IsMissing())
+				{
+					imageIndex = StructureItem::missingTexFile;
+				}
+
 				if (parent <= -1)
-					ahItems[i] = InsertItem(title, si.GetType(), si.GetType());
+					ahItems[i] = InsertItem(title, imageIndex, imageIndex);
 				else
-					ahItems[i] = InsertItem(title, si.GetType(), si.GetType(), ahItems[parent]);
+					ahItems[i] = InsertItem(title, imageIndex, imageIndex, ahItems[parent]);
 
 				// remember Array-Index
 				SetItemData(ahItems[i], i);
+
+				if (si.IsMissing() || si.HasParent() && si.GetParent(a)->IsMissing())
+					EnsureVisible(ahItems[i]);
 			}
 			break;
 		}
