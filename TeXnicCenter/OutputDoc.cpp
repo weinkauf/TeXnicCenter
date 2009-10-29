@@ -80,7 +80,7 @@ COutputDoc::COutputDoc()
 		,m_pActiveOutputView(NULL)
 		,m_pParseView(NULL)
 		,m_bActiveFileOperation(FALSE)
-		, error_list_view_(0)
+		, errorListView_(0)
 {
 	// initialization
 	m_apGrepView[0] = NULL;
@@ -353,7 +353,7 @@ void COutputDoc::OnUpdateNextPrevWarning(CCmdUI* pCmdUI)
 {
 	ASSERT_NULL_OR_POINTER(m_pActiveOutputView, OutputViewBase);
 
-	if (m_pActiveOutputView == m_pBuildView)
+	if (m_pActiveOutputView == m_pBuildView || m_pActiveOutputView == errorListView_)
 		pCmdUI->Enable(HasBuildWarnings());
 	else if (m_pActiveOutputView == m_pParseView)
 		pCmdUI->Enable(!m_aParseWarning.IsEmpty());
@@ -1233,8 +1233,8 @@ void COutputDoc::ClearBuildMessages()
 	m_aBadBoxes.RemoveAll();
 	m_pBuildView->Clear();
 
-	if (error_list_view_)
-		error_list_view_->Clear();
+	if (errorListView_)
+		errorListView_->Clear();
 }
 
 void COutputDoc::AddError(COutputInfo& error)
@@ -1242,8 +1242,8 @@ void COutputDoc::AddError(COutputInfo& error)
 	m_aErrors.Add(error);
 	m_pBuildView->SetLineImage(error.m_nOutputLine,CBuildView::imageError);
 
-	if (error_list_view_)
-		error_list_view_->AddMessage(error,CBuildView::imageError);
+	if (errorListView_)
+		errorListView_->AddMessage(error,CBuildView::imageError);
 }
 
 void COutputDoc::AddWarning(COutputInfo& warning)
@@ -1251,8 +1251,8 @@ void COutputDoc::AddWarning(COutputInfo& warning)
 	m_aWarnings.Add(warning);
 	m_pBuildView->SetLineImage(warning.m_nOutputLine,CBuildView::imageWarning);
 
-	if (error_list_view_)
-		error_list_view_->AddMessage(warning,CBuildView::imageWarning);
+	if (errorListView_)
+		errorListView_->AddMessage(warning,CBuildView::imageWarning);
 }
 
 void COutputDoc::AddBadBox(COutputInfo& badbox)
@@ -1260,8 +1260,8 @@ void COutputDoc::AddBadBox(COutputInfo& badbox)
 	m_aBadBoxes.Add(badbox);
 	m_pBuildView->SetLineImage(badbox.m_nOutputLine,CBuildView::imageBadBox);
 
-	if (error_list_view_)
-		error_list_view_->AddMessage(badbox,CBuildView::imageBadBox);
+	if (errorListView_)
+		errorListView_->AddMessage(badbox,CBuildView::imageBadBox);
 }
 
 void COutputDoc::OnLatexClean()

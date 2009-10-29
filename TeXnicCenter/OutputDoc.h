@@ -48,11 +48,11 @@ class COutputDoc :
 			public CFileGrepHandler,
 			public CParseOutputHandler
 {
-	ErrorListView* error_list_view_;
+	ErrorListView* errorListView_;
 
 public:
 
-	void SetErrorListView(ErrorListView* v) { error_list_view_ = v; }
+	void SetErrorListView(ErrorListView* v) { errorListView_ = v; }
 
 	typedef enum tagHint
 	{
