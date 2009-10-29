@@ -117,6 +117,16 @@ namespace {
 	IMPLEMENT_DYNCREATE(SearchToolBarEditButton, CMFCToolBarEditBoxButton)
 }
 
+BibView::Item::Item( int group_id, int image, const BibItem& b ) 
+: group_id(group_id), bib(b), image(image)
+{
+}
+
+BibView::PopulateParam::PopulateParam( const PredicateFunctionType& p, BibView* v ) 
+: predicate(p), view(v)
+{
+}
+
 // BibView
 
 IMPLEMENT_DYNAMIC(BibView, CDockablePane)

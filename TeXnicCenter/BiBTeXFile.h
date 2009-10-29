@@ -45,22 +45,22 @@
 const int MAX_BIBTEX_ARG_LENGTH = 8192;
 
 /** Represents a BibTeX file. The corresponding file name have to be passed via constructor */
-class CBiBTeXFile : public CObject
+class BibTeXFile : public CObject
 {
 public:
 	/** Constructs a new BibTeXFile object. After the object is created, call ProcessFile to
 	        scan a bib file for entries.
 	        @param file Name of the BibTeX file (.bib)
 	 */
-	explicit CBiBTeXFile(const CString& file);
+	explicit BibTeXFile(const CString& file);
 	/** Destroys the CBiBTeXFile object */
-	virtual ~CBiBTeXFile();
+	virtual ~BibTeXFile();
 
 	/** Returns current filename of the BibTeX file */
-	const CString& GetFilename() const;
+	const CString& GetFileName() const;
 
 	/** Sets a new filename */
-	void SetFilename(const CString& filename);
+	void SetFileName(const CString& filename);
 
 	/** Parses a BibTeX file @see SetFilename*/
 	BOOL ProcessFile();
@@ -71,30 +71,21 @@ public:
 	/** Returns a map with all BibteX entries. The map key corresponds to the key given
 	        in the BibTeX file.
 	 */
-	const CMapStringToOb *GetEntries() const
-	{
-		return (const CMapStringToOb *)&m_Entries;
-	}
+	const CMapStringToOb *GetEntries() const;
 	/** Returns an entry for a given key
 	        @return Pointer to corresponding entry or NULL, of no entry was found
 	 */
-	const CBiBTeXEntry* GetEntryByKey(const CString& key) const;
+	const BibTeXEntry* GetEntryByKey(const CString& key) const;
 
 	/** Returns all keys defined in the BibTeX file
 	        @return Pointer to string array containing the keys.
 	 */
-	const CStringArray* GetKeys() const
-	{
-		return (const CStringArray*)&m_Keys;
-	}
+	const CStringArray* GetKeys() const;
 
-	/** Returns all error msgs ocurred during parse
+	/** Returns all error msgs occurred during parse
 	        @return Pointer to string array containing the error msgs.
 	 */
-	const CObArray* GetErrorMsgs() const
-	{
-		return (const CObArray*)&m_ErrorMsgs;
-	}
+	const CObArray* GetErrorMessages() const;
 
 	/** Removes all BibTeX entries, including the abbrev strings */
 	void DropAllEntries();
@@ -120,7 +111,7 @@ public:
 	 */
 	BOOL IsATSignInBracesAllowed() const;
 
-	void SetATSignInBracesAllowed(BOOL flag);
+	void SetATSignInBracesAllowed(bool flag);
 
 	/** If true, a warning is issued if @ sign is not found on top level. Default is TRUE.<br>
 	Example I<br>
@@ -132,13 +123,13 @@ public:
 	 */
 	BOOL IsWarnWrongLevelAT() const;
 
-	void SetWarnWrongLevelAT(BOOL flag);
+	void SetWarnWrongLevelAT(bool flag);
 
 private:
 	/* Copies needed part of the parsed file stream for further ops. Otherwise we had to operate on
 	a very large buffer which would slow down performance significantly!
 	So the maximum buffer size is limited by MAX_BIBTEX_ARG_LENGTH. If the requested buffer is larger,
-	it will be cutted to this length. Reason: Large buffers often indicate an error (e. g. an unbalanced brace), so we
+	it will be cut to this length. Reason: Large buffers often indicate an error (e. g. an unbalanced brace), so we
 	had to take care of this. There may be cases, where BibTeX entries contain large abstracts and may exceed
 	this buffer. But we just want to show the entry in the navigator, so missing contents of the abstract field
 	are not important.
@@ -155,7 +146,7 @@ private:
 	        @param msgID ID of error msg (String in STRINGTABLE resource9
 	        @param line Line number of warning/error
 	        @param col Column of warning/error
-	        @param addDesc is an optional string (e. g. for dup keys or invalied BibTeX types)
+	        @param addDesc is an optional string (e. g. for dup keys or invalid BibTeX types)
 	 */
 	void HandleParseError(UINT msgID, int line, int col, const TCHAR *addDesc = _T(""));
 	/** Determines the BibTeX type (Article, Book, ...)
@@ -165,14 +156,14 @@ private:
 
 	        @return BibTeX type or CBiBTeXEntry::Unknown, if invalid entry
 	 */
-	CBiBTeXEntry::BibType ProcessEntryType(const TCHAR *buf, int len, int line);
+	BibTeXEntry::BibType ProcessEntryType(const TCHAR *buf, int len, int line);
 	/** Processes a field of an BibTeX entry
 	        @param buf Pointer to buffer containing the tokens
 	        @param len Length of the buffer
 	        @param type BibTeX type (Article, Book, ...)
 	        @param line Line number
 	 */
-	void ProcessArgument(const TCHAR *buf, int len, CBiBTeXEntry::BibType type, int line);
+	void ProcessArgument(const TCHAR *buf, int len, BibTeXEntry::BibType type, int line);
 	BOOL ParseFile(const TCHAR* buf);
 
 	BOOL m_IsATSignInBracesAllowed;

@@ -158,9 +158,9 @@ public:
 	};
 
 	///Saves the module to the registry
-	bool SerializeToRegistry(CBCGRegistryEx &reg) const;
+	bool SerializeToRegistry(RegistryStack &reg) const;
 	///Loads the settings of this module from the registry
-	bool SerializeFromRegistry(CBCGRegistryEx &reg);
+	bool SerializeFromRegistry(RegistryStack &reg);
 
 //Attributes
 public:

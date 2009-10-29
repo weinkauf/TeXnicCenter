@@ -52,7 +52,7 @@ extern const TCHAR* const BibTypeVerbose[];
 /**
  * Initialize object with a given BibTeX file
  */
-CBiBTeXFile::CBiBTeXFile(const CString& file)
+BibTeXFile::BibTeXFile(const CString& file)
 {
 	m_Filename = file;
 	m_ErrorCount = 0;
@@ -65,7 +65,7 @@ CBiBTeXFile::CBiBTeXFile(const CString& file)
 /**
  * Clean up
  */
-CBiBTeXFile::~CBiBTeXFile()
+BibTeXFile::~BibTeXFile()
 {
 	DropAllEntries();
 	delete [] m_Buffer;
@@ -74,7 +74,7 @@ CBiBTeXFile::~CBiBTeXFile()
 /**
  * Opens the given BibTeX file, store the contents in a buffer and passes it to the parser.
  */
-BOOL CBiBTeXFile::ProcessFile()
+BOOL BibTeXFile::ProcessFile()
 {
 	CStringW text;
 	TextDocument doc;
@@ -95,15 +95,15 @@ BOOL CBiBTeXFile::ProcessFile()
 /**
  * Parses the BibTex file.
  */
-BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
+BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 {
 	const TCHAR *begin,*lastChar = NULL;
-	CBiBTeXEntry::BibType type;
+	BibTeXEntry::BibType type;
 	int depth = 0,line = 1,col = 1;
 	BOOL inComment = FALSE,inQuote = FALSE,insideEntry = FALSE,openBrace = FALSE; // internal states
 
 	begin = buf;
-	type = CBiBTeXEntry::Unknown;
+	type = BibTeXEntry::Unknown;
 
 	while (*buf)   // Parser state machine
 	{
@@ -229,7 +229,7 @@ BOOL CBiBTeXFile::ParseFile(const TCHAR *buf)
 /**
  * Find the corresponding BibTeX entry type and issues an error, if entry type is unknown
  */
-CBiBTeXEntry::BibType CBiBTeXFile::ProcessEntryType(const TCHAR *buf,int len,int line)
+BibTeXEntry::BibType BibTeXFile::ProcessEntryType(const TCHAR *buf,int len,int line)
 {
 	CString entry;
 
@@ -242,22 +242,22 @@ CBiBTeXEntry::BibType CBiBTeXFile::ProcessEntryType(const TCHAR *buf,int len,int
 	entry.TrimLeft();
 	entry.TrimRight();
 
-	for (int i = 0; i < CBiBTeXEntry::Unknown; i++)   // search BibTeX item
+	for (int i = 0; i < BibTeXEntry::Unknown; i++)   // search BibTeX item
 	{
 		if (0 == _tcsicmp(entry,BibTypeVerbose[i]))
 		{
-			return (CBiBTeXEntry::BibType)i;
+			return (BibTeXEntry::BibType)i;
 		}
 	}
 
 	// type not found -> raise error msg
 	HandleParseError(STE_BIBTEX_ERR_INVALID_TYPE,line,1,entry);
-	return CBiBTeXEntry::Unknown;
+	return BibTeXEntry::Unknown;
 }
 
-void CBiBTeXFile::ProcessArgument(const TCHAR *buf,int len,CBiBTeXEntry::BibType type,int line)
+void BibTeXFile::ProcessArgument(const TCHAR *buf,int len,BibTeXEntry::BibType type,int line)
 {
-	CBiBTeXEntry *be,*dummy;
+	BibTeXEntry *be,*dummy;
 
 	if (!SaveCopyBuffer(buf + 1,len - 1))
 	{
@@ -265,12 +265,12 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf,int len,CBiBTeXEntry::BibType
 	}
 
 	/* Skip comments and preamble */
-	if (type == CBiBTeXEntry::Preamble || type == CBiBTeXEntry::Comment)
+	if (type == BibTeXEntry::Preamble || type == BibTeXEntry::Comment)
 	{
 		return;
 	}
 
-	if (type == CBiBTeXEntry::Unknown)
+	if (type == BibTeXEntry::Unknown)
 	{
 		if (_tcslen(m_Buffer) > 100) // limit length to satisfy TRACE macro
 		{
@@ -284,7 +284,7 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf,int len,CBiBTeXEntry::BibType
 	//TRACE("Processing argument: %s, type %d at line %d\n", m_Buffer, type, line);
 
 	// strings have no explicit key, instead we are using the first field name as key
-	if (type == CBiBTeXEntry::String && NULL != _tcsstr(buf,_T("=")))
+	if (type == BibTeXEntry::String && NULL != _tcsstr(buf,_T("=")))
 	{
 		CString name,val;
 		ParseField(m_Buffer,name,val);
@@ -312,7 +312,7 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf,int len,CBiBTeXEntry::BibType
 
 		if (!m_Entries.Lookup(key,(CObject*&) dummy))   // key already exists?
 		{
-			be = new CBiBTeXEntry(m_Buffer,this,type);
+			be = new BibTeXEntry(m_Buffer,this,type);
 			/* add entries used by structure parser */
 			be->m_nLine = line;
 			//TRACE("Adding key %s\n", key);
@@ -358,7 +358,7 @@ void CBiBTeXFile::ProcessArgument(const TCHAR *buf,int len,CBiBTeXEntry::BibType
 /**
  * Setup error message and adds it to the message list
  */
-void CBiBTeXFile::HandleParseError(UINT msgID,int line,int col,const TCHAR *addDesc)
+void BibTeXFile::HandleParseError(UINT msgID,int line,int col,const TCHAR *addDesc)
 {
 	CString s,key;
 
@@ -386,7 +386,7 @@ void CBiBTeXFile::HandleParseError(UINT msgID,int line,int col,const TCHAR *addD
 
 	//TRACE(s + "\n");
 
-	CBiBTeXEntry *be = new CBiBTeXEntry(s,this,CBiBTeXEntry::Error);
+	BibTeXEntry *be = new BibTeXEntry(s,this,BibTeXEntry::Error);
 	be->SetLine(line);
 	be->SetType(CStructureParser::bibItem);
 	be->SetTitle(s);
@@ -403,7 +403,7 @@ void CBiBTeXFile::HandleParseError(UINT msgID,int line,int col,const TCHAR *addD
 /**
  * Parses a BibTeX field and returns a corresponding key-value pair.
  */
-BOOL CBiBTeXFile::ParseField(const TCHAR *field,CString &name,CString &val)
+BOOL BibTeXFile::ParseField(const TCHAR *field,CString &name,CString &val)
 {
 	CONST TCHAR* eqChar;
 
@@ -442,12 +442,12 @@ BOOL CBiBTeXFile::ParseField(const TCHAR *field,CString &name,CString &val)
 /**
  * Drops all entries including key and string hash table
  */
-void CBiBTeXFile::DropAllEntries()
+void BibTeXFile::DropAllEntries()
 {
 	POSITION pos = m_Entries.GetStartPosition();
 	while (pos != NULL)   // delete key-entry hashtable
 	{
-		CBiBTeXEntry *be;
+		BibTeXEntry *be;
 		CString key;
 		m_Entries.GetNextAssoc(pos,key,(CObject*&) be);
 		if (be != NULL)
@@ -466,7 +466,7 @@ void CBiBTeXFile::DropAllEntries()
 	m_Strings.RemoveAll(); // drop all abbreviations
 	for (int i = 0; i < m_ErrorMsgs.GetSize(); i++)   // cleanup memory
 	{
-		CBiBTeXEntry *be = dynamic_cast<CBiBTeXEntry*>(m_ErrorMsgs.GetAt(i));
+		BibTeXEntry *be = dynamic_cast<BibTeXEntry*>(m_ErrorMsgs.GetAt(i));
 		if (be != NULL)
 		{
 			delete be;
@@ -478,9 +478,9 @@ void CBiBTeXFile::DropAllEntries()
  * Invoked by the parser if an BibTeX entry is complete. The BibTeXEntry object is filled up with the
  * missing data needed for the structure view.
  */
-void CBiBTeXFile::FinalizeItem()
+void BibTeXFile::FinalizeItem()
 {
-	CBiBTeXEntry *be;
+	BibTeXEntry *be;
 	if (m_Entries.Lookup(m_LastKey,(CObject*&) be))
 	{
 		be->SetType(CStructureParser::bibItem);
@@ -501,10 +501,10 @@ void CBiBTeXFile::FinalizeItem()
 /**
  * Returns an BibTeX entry for a given key or NULL, if key not exists
  */
-const CBiBTeXEntry* CBiBTeXFile::GetEntryByKey(const CString& key) const
+const BibTeXEntry* BibTeXFile::GetEntryByKey(const CString& key) const
 {
-	UNUSED(key);
-	CBiBTeXEntry *be;
+	UNUSED_ALWAYS(key);
+	BibTeXEntry *be;
 
 	if (!m_Entries.Lookup(m_LastKey,(CObject*&) be))
 	{
@@ -517,7 +517,7 @@ const CBiBTeXEntry* CBiBTeXFile::GetEntryByKey(const CString& key) const
 /**
  * Returns a string (an abbreviation) of the BibTeX file or an empty string, if not exist.
  */
-const CString CBiBTeXFile::GetString(const CString& abbrev) const
+const CString BibTeXFile::GetString(const CString& abbrev) const
 {
 	CString expanded;
 	m_Strings.Lookup(abbrev,expanded);
@@ -528,7 +528,7 @@ const CString CBiBTeXFile::GetString(const CString& abbrev) const
 /**
  * Removes unwanted whitespace from a string
  */
-void CBiBTeXFile::ReplaceSpecialChars(CString &value)
+void BibTeXFile::ReplaceSpecialChars(CString &value)
 {
 	// Strip off surrounding quotes
 	if (!value.IsEmpty() && value[0] == _T('\"') && value[value.GetLength() - 1] == _T('\"'))
@@ -556,7 +556,7 @@ void CBiBTeXFile::ReplaceSpecialChars(CString &value)
 /**
  * Copies a string buffer to a local buffer with checking the requested length.
  */
-BOOL CBiBTeXFile::SaveCopyBuffer(const TCHAR *buffer,int reqSize)
+BOOL BibTeXFile::SaveCopyBuffer(const TCHAR *buffer,int reqSize)
 {
 	BOOL ret = TRUE;
 	ASSERT(reqSize >= 0);
@@ -577,42 +577,57 @@ BOOL CBiBTeXFile::SaveCopyBuffer(const TCHAR *buffer,int reqSize)
 	return ret;
 }
 
-const CString& CBiBTeXFile::GetFilename() const
+const CString& BibTeXFile::GetFileName() const
 {
 	return m_Filename;
 }
 
-void CBiBTeXFile::SetFilename(const CString& filename)
+void BibTeXFile::SetFileName(const CString& filename)
 {
 	m_Filename = filename;
 }
 
-int CBiBTeXFile::GetEntriesCount() const
+int BibTeXFile::GetEntriesCount() const
 {
 	return m_Entries.GetCount();
 }
 
-int CBiBTeXFile::GetErrorCount() const
+int BibTeXFile::GetErrorCount() const
 {
 	return m_ErrorCount;
 }
 
-BOOL CBiBTeXFile::IsATSignInBracesAllowed() const
+BOOL BibTeXFile::IsATSignInBracesAllowed() const
 {
 	return m_IsATSignInBracesAllowed;
 }
 
-void CBiBTeXFile::SetATSignInBracesAllowed(BOOL flag)
+void BibTeXFile::SetATSignInBracesAllowed( bool flag )
 {
 	m_IsATSignInBracesAllowed = flag;
 }
 
-BOOL CBiBTeXFile::IsWarnWrongLevelAT() const
+BOOL BibTeXFile::IsWarnWrongLevelAT() const
 {
 	return m_WarnWrongLevelAT;
 }
 
-void CBiBTeXFile::SetWarnWrongLevelAT(BOOL flag)
+void BibTeXFile::SetWarnWrongLevelAT( bool flag )
 {
 	m_WarnWrongLevelAT = flag;
+}
+
+const CMapStringToOb * BibTeXFile::GetEntries() const
+{
+	return (const CMapStringToOb *)&m_Entries;
+}
+
+const CObArray* BibTeXFile::GetErrorMessages() const
+{
+	return (const CObArray*)&m_ErrorMsgs;
+}
+
+const CStringArray* BibTeXFile::GetKeys() const
+{
+	return (const CStringArray*)&m_Keys;
 }

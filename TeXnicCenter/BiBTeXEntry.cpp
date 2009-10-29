@@ -56,7 +56,7 @@ const TCHAR* const BibTypeVerbose[] =
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CBiBTeXEntry::CBiBTeXEntry(const CString& key, CBiBTeXFile *parent, BibType type)
+BibTeXEntry::BibTeXEntry(const CString& key, BibTeXFile *parent, BibType type)
 {
 	ASSERT(parent != NULL);
 	m_Parent = parent;
@@ -70,12 +70,12 @@ CBiBTeXEntry::CBiBTeXEntry(const CString& key, CBiBTeXFile *parent, BibType type
 	m_Type = type;
 }
 
-BOOL CBiBTeXEntry::GetField(const CString& name, CString &value) const
+BOOL BibTeXEntry::GetField(const CString& name, CString &value) const
 {
 	return m_Fields.Lookup(name,value);
 }
 
-BOOL CBiBTeXEntry::SetField( const CString& name, const CString& value, BOOL forceOverwrite /*= FALSE*/ )
+BOOL BibTeXEntry::SetField( const CString& name, const CString& value, BOOL forceOverwrite /*= FALSE*/ )
 {
 	CString dummy;
 
@@ -88,12 +88,12 @@ BOOL CBiBTeXEntry::SetField( const CString& name, const CString& value, BOOL for
 	return TRUE;
 }
 
-const CString CBiBTeXEntry::ToString() const
+const CString BibTeXEntry::ToString() const
 {
 	return CString(_T("[") + m_Key + _T("] ") + ToCaption());
 }
 
-const BibItem CBiBTeXEntry::ToBibItem() const
+const BibItem BibTeXEntry::ToBibItem() const
 {
 	CString author, title, year, editor, publisher;
 	BibItem result;
@@ -194,7 +194,7 @@ const BibItem CBiBTeXEntry::ToBibItem() const
 	return result;
 }
 
-const CString CBiBTeXEntry::ToCaption() const
+const CString BibTeXEntry::ToCaption() const
 {
 	const BibItem item = ToBibItem();
 	CString year;
@@ -204,7 +204,7 @@ const CString CBiBTeXEntry::ToCaption() const
 	               item.GetTitle() + _T(" (") + item.GetTypeString() + _T(", ") + year + _T(")"));
 }
 
-void CBiBTeXEntry::BeautifyField( CString &value )
+void BibTeXEntry::BeautifyField( CString &value )
 {
 	//value.Replace(_T("\""), _T(""));
 	value.Replace(_T("~"),_T(" "));
@@ -225,7 +225,7 @@ void CBiBTeXEntry::BeautifyField( CString &value )
 	value.TrimRight();
 }
 
-void CBiBTeXEntry::ExtractAuthors(const CString &value, BibItem::AuthorContainerType &authors )
+void BibTeXEntry::ExtractAuthors(const CString &value, BibItem::AuthorContainerType &authors )
 {
 	int index1 = 0, index2;
 	bool stop = false;
@@ -256,7 +256,22 @@ void CBiBTeXEntry::ExtractAuthors(const CString &value, BibItem::AuthorContainer
 	}
 }
 
-void CBiBTeXEntry::ReplaceAnds( CString &value )
+void BibTeXEntry::ReplaceAnds( CString &value )
 {
 	value.Replace(_T(" and"),_T(","));
+}
+
+const CString& BibTeXEntry::GetKey() const
+{
+	return m_Key;
+}
+
+void BibTeXEntry::SetBibliographyType( BibType type )
+{
+	m_Type = type;
+}
+
+BibTeXEntry::BibType BibTeXEntry::GetType() const
+{
+	return m_Type;
 }

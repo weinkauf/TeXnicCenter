@@ -35,84 +35,16 @@
 #pragma once
 
 #include "StructureParser.h"
+#include "BibItem.h"
 
 const int BIBTEX_ENTRY_SIZE = 15;
 
 extern LPCTSTR const BibTypeVerbose[];
 
-class CBiBTeXFile;
-class CBiBTeXEntry;
+class BibTeXFile;
+class BibTeXEntry;
 
-class BibItem :
-	public StructureItemInfo
-{
-	friend class CBiBTeXEntry;
-
-	CString type_text_;
-	CString author_;
-	CString editor_;
-	int year_;
-	bool has_year_;
-	CString label_;
-	CString title_;
-	CString publisher_;
-
-public:
-	// Known BibTeX types in alphabetical order
-	enum Type {
-		Unknown = -1,
-		Article,
-		Book,
-		Booklet,
-		Comment,
-		Conference,
-		Inbook,
-		Incollection,
-		Inproceedings,
-		Manual,
-		MastersThesis,
-		Misc,
-		PhDThesis,
-		Preamble,
-		Proceedings,
-		String,
-		Techreport,
-		Unpublished
-	};
-
-	typedef std::vector<CString> AuthorContainerType;
-	// Extracted author names, useful for grouping
-	AuthorContainerType authors_;
-
-private:
-	Type type_;
-
-public:
-	BibItem()
-	: has_year_(false)
-	, type_(Unknown)
-	{
-	}
-
-	~BibItem()
-	{
-	}
-	
-	Type GetType() const { return type_; }
-	const CString& GetTypeString() const { return type_text_; }
-	const CString& GetAuthor() const { return author_; }
-	const CString& GetEditor() const { return editor_; }
-	int GetYear() const { ASSERT(HasYear()); return year_; }
-	const CString& GetLabel() const { return label_; }
-	const CString& GetTitle() const { return title_; }
-	const CString& GetPublisher() const { return publisher_; }
-	const AuthorContainerType& GetAuthors() const { return authors_; }
-
-	bool HasYear() const { return has_year_; }
-	bool HasEditor() const { return !editor_.IsEmpty(); }
-};
-
-class CBiBTeXEntry : public CObject, public CStructureItem
+class BibTeXEntry : public CObject, public CStructureItem
 {
 public:
 
@@ -132,7 +64,7 @@ public:
 
 	@see BibType
 	 */
-	CBiBTeXEntry(const CString& key, CBiBTeXFile *parent, BibType type = Book);
+	BibTeXEntry(const CString& key, BibTeXFile *parent, BibType type = Book);
 	/** Set an entry fields. To set the author of an entry, just call
 	        <code>CString author;
 	        SetField("author", author);
@@ -151,21 +83,12 @@ public:
 	BOOL GetField(const CString& name, CString &value) const;
 
 	/* Sets/gets the type of the BibTeX entry */
-	BibType GetType() const
-	{
-		return m_Type;
-	}
+	BibType GetType() const;
 
-	void SetBibliographyType(BibType type)
-	{
-		m_Type = type;
-	}
+	void SetBibliographyType(BibType type);
 
 	/* Returns the key of the BibTeX entry */
-	const CString& GetKey() const
-	{
-		return m_Key;
-	}
+	const CString& GetKey() const;
 
 	/* String representations of CBibTeXEntry */
 	const CString ToString() const;
@@ -183,5 +106,5 @@ private:
 	CMapStringToString m_Fields;
 	BibType m_Type;
 	CString m_Key;
-	CBiBTeXFile* m_Parent;
+	BibTeXFile* m_Parent;
 };

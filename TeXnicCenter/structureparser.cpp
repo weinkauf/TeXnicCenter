@@ -1074,7 +1074,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 				//Now we parse the bibtex file with the bibtex parser.
 				//The bibtex parser collects all items and warnings
 				//and will add it to the structure and parse-output after its work.
-				CBiBTeXFile aBibFile(strPath);
+				BibTeXFile aBibFile(strPath);
 				aBibFile.DropAllEntries(); // clean up previous result
 				aBibFile.ProcessFile(); // parse it ...
 				const CMapStringToOb *items = aBibFile.GetEntries(); // ...and fetch the entries.
@@ -1097,11 +1097,11 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 				if (aBibFile.GetErrorCount())
 				{
 					//Write msgs to output window, if we detected some errors
-					const CObArray *msgs = aBibFile.GetErrorMsgs();
+					const CObArray *msgs = aBibFile.GetErrorMessages();
 
 					for (int i = 0; i < msgs->GetSize(); i++)
 					{
-						CBiBTeXEntry *be = dynamic_cast<CBiBTeXEntry*>(msgs->GetAt(i));
+						BibTeXEntry *be = dynamic_cast<BibTeXEntry*>(msgs->GetAt(i));
 						if (be == NULL)
 						{
 							TRACE("NP found in error msgs of BibTex file\n");
@@ -1120,7 +1120,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 				POSITION pos = items->GetStartPosition();
 				while (pos != NULL)
 				{
-					CBiBTeXEntry *be;
+					BibTeXEntry *be;
 					CString key;
 					items->GetNextAssoc(pos, key, (CObject*&)be);
 

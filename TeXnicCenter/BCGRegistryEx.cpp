@@ -45,21 +45,21 @@ static char THIS_FILE[]=__FILE__;
 // class CBCGRegistryEx
 //-------------------------------------------------------------------
 
-CBCGRegistryEx::CBCGRegistryEx(BOOL bAdmin, BOOL bReadOnly)
+RegistryStack::RegistryStack(BOOL bAdmin, BOOL bReadOnly)
 		:	CSettingsStore(bAdmin, bReadOnly),
 		m_bAdmin(bAdmin)
 {
 }
 
 
-CBCGRegistryEx::~CBCGRegistryEx()
+RegistryStack::~RegistryStack()
 {
 	// Your push/pop-calls are not balanced!
 	ASSERT(m_KeyStack.empty());
 }
 
 
-void CBCGRegistryEx::PushKey()
+void RegistryStack::PushKey()
 {
 	// Your push/pop-calls are not balanced!
 	HANDLE key;
@@ -69,7 +69,7 @@ void CBCGRegistryEx::PushKey()
 	m_KeyStack.push(reinterpret_cast<HKEY>(key));
 }
 
-void CBCGRegistryEx::PopKey()
+void RegistryStack::PopKey()
 {
 	// Your push/pop-calls are not balanced!
 	ASSERT(!m_KeyStack.empty());
@@ -81,7 +81,7 @@ void CBCGRegistryEx::PopKey()
 	m_KeyStack.pop();
 }
 
-void CBCGRegistryEx::TopKey()
+void RegistryStack::TopKey()
 {
 	// Stack is empty!
 	ASSERT(!m_KeyStack.empty());
@@ -96,7 +96,7 @@ void CBCGRegistryEx::TopKey()
 	m_reg.Attach(reinterpret_cast<HKEY>(key));
 }
 
-void CBCGRegistryEx::OpenRoot()
+void RegistryStack::OpenRoot()
 {
 	if (m_reg)
 		m_reg.Close();
@@ -104,13 +104,13 @@ void CBCGRegistryEx::OpenRoot()
 	m_reg.Attach(m_bAdmin ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER);
 }
 
-BOOL CBCGRegistryEx::OpenFromRoot(LPCTSTR lpszPath)
+BOOL RegistryStack::OpenFromRoot(LPCTSTR lpszPath)
 {
 	OpenRoot();
 	return Open(lpszPath);
 }
 
-bool CBCGRegistryEx::VerifyValue(LPCTSTR v)
+bool RegistryStack::VerifyValue(LPCTSTR v)
 {
 	return m_reg.QueryValue(v,0,0,0) == ERROR_SUCCESS;
 }

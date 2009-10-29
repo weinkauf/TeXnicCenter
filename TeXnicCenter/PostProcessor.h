@@ -90,13 +90,13 @@ class CPostProcessorArray : public CArray<class CPostProcessor, class CPostProce
 		registry object, whereby each post processor will be stored as a
 		single string.
 		 */
-		BOOL SerializeToRegistry(CBCGRegistryEx &reg) const;
+		BOOL SerializeToRegistry(RegistryStack &reg) const;
 
 		/**
 		Reads the complete array from the current position of the given
 		registry object.
 		 */
-		BOOL SerializeFromRegistry(CBCGRegistryEx &reg);
+		BOOL SerializeFromRegistry(RegistryStack &reg);
 
 		/**
 		Serializes the post processors to the specified XML element.
@@ -210,7 +210,7 @@ public:
 
 	The value can be used as a parameter to GenerateConsoleCtrlEvent().
 	 */
-	DWORD GetProcessGroupId() const;
+	DWORD GetProcessGroupID() const;
 
 	/**
 	Tries to cancel the last call to the Execute()-method sending a
@@ -222,7 +222,7 @@ public:
 	Removes the directory specifications from all path specifications
 	of this processor.
 
-	This is usefull when exporting profiles.
+	This is useful when exporting profiles.
 	 */
 	void RemoveDirectorySpecifications();
 
@@ -280,7 +280,7 @@ public:
 
 // attributes
 protected:
-	/** Title identifieing the postprossesor */
+	/** Title identifying the postprossesor */
 	CString m_strTitle;
 
 	/** Full path to the postprocessor */
@@ -309,38 +309,5 @@ private:
 	DWORD m_dwProcessGroupId;
 };
 
-
-// inlines
-
-inline const CString& CPostProcessor::GetTitle() const
-{
-	return m_strTitle;
-}
-
-inline const CString& CPostProcessor::GetPath() const
-{
-	return m_strPath;
-}
-
-inline const CString& CPostProcessor::GetArguments() const
-{
-	return m_strArguments;
-}
-
-inline const CString& CPostProcessor::GetInputFile() const
-{
-	return m_strInputFile;
-}
-
-inline const CString& CPostProcessor::GetOutputFile() const
-{
-	return m_strOutputFile;
-}
-
-inline
-DWORD CPostProcessor::GetProcessGroupId() const
-{
-	return m_dwProcessGroupId;
-}
 
 #endif // !defined(AFX_POSTPROCESSOR_H__6FC6E481_04F2_11D5_A222_006097239934__INCLUDED_)

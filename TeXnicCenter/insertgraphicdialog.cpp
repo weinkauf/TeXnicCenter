@@ -325,7 +325,7 @@ void CInsertGraphicDialog::OnGraphicBrowse()
 	CLaTeXProject* pLProject = theApp.GetProject();
 	if (pLProject)
 	{
-		m_strFile = CPathTool::GetRelativePath(pLProject->GetWorkingDir(),m_strFile);
+		m_strFile = CPathTool::GetRelativePath(pLProject->GetWorkingDirectory(),m_strFile);
 	}
 
 	m_strFile.Replace(_T('\\'),_T('/'));

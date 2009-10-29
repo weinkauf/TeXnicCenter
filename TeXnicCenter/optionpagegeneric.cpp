@@ -231,7 +231,8 @@ void COptionPageGeneric::OnOK()
 
 	// generate message, that tells the user, that his settings will be
 	// activated on next start of TXC if those settings have changed.
-	bool bShowNextStartInfo = (CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsers != m_bOptimizeGuiForVisuallyHandicappedUsers);
+	bool bShowNextStartInfo = (CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsers 
+		!= m_bOptimizeGuiForVisuallyHandicappedUsers);
 	bShowNextStartInfo |= (CConfiguration::GetInstance()->m_strGuiLanguage != m_strGuiLanguage);
 
 	//bool update_look = CConfiguration::GetInstance()->m_strLookAndFeel != m_strLookAndFeel;

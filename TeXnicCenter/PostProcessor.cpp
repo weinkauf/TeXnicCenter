@@ -59,7 +59,7 @@ void CPostProcessorArray::RemoveDirectorySpecifications()
 		ElementAt(i).RemoveDirectorySpecifications();
 }
 
-BOOL CPostProcessorArray::SerializeToRegistry(CBCGRegistryEx &reg) const
+BOOL CPostProcessorArray::SerializeToRegistry(RegistryStack &reg) const
 {
 	CString strValue;
 
@@ -72,7 +72,7 @@ BOOL CPostProcessorArray::SerializeToRegistry(CBCGRegistryEx &reg) const
 	return TRUE;
 }
 
-BOOL CPostProcessorArray::SerializeFromRegistry(CBCGRegistryEx &reg)
+BOOL CPostProcessorArray::SerializeFromRegistry(RegistryStack &reg)
 {
 	RemoveAll();
 
@@ -250,7 +250,7 @@ BOOL CPostProcessor::Execute(LPCTSTR lpszMainPath,LPCTSTR lpszWorkingDir,HANDLE 
 
 BOOL CPostProcessor::CancelExecution()
 {
-	return GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT,GetProcessGroupId());
+	return GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT,GetProcessGroupID());
 }
 
 void CPostProcessor::RemoveDirectorySpecifications()
@@ -325,4 +325,34 @@ void CPostProcessor::LoadXml(MsXml::CXMLDOMElement xmlPostProcessor)
 	m_strArguments = (LPCTSTR)(_bstr_t)xmlPostProcessor.GetAttribute(_T("arguments"));
 	m_strInputFile = (LPCTSTR)(_bstr_t)xmlPostProcessor.GetAttribute(_T("inputFile"));
 	m_strOutputFile = (LPCTSTR)(_bstr_t)xmlPostProcessor.GetAttribute(_T("outputFile"));
+}
+
+const CString& CPostProcessor::GetTitle() const
+{
+	return m_strTitle;
+}
+
+const CString& CPostProcessor::GetPath() const
+{
+	return m_strPath;
+}
+
+const CString& CPostProcessor::GetArguments() const
+{
+	return m_strArguments;
+}
+
+const CString& CPostProcessor::GetInputFile() const
+{
+	return m_strInputFile;
+}
+
+const CString& CPostProcessor::GetOutputFile() const
+{
+	return m_strOutputFile;
+}
+
+DWORD CPostProcessor::GetProcessGroupID() const
+{
+	return m_dwProcessGroupId;
 }

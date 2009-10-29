@@ -125,7 +125,7 @@ bool CFileCleanItem::Expand(CLaTeXProject* argpProject,LPCTSTR lpszCurrentPath,C
 		//May contain Wildcards as well
 		if (AfxContainsWildcards(strToAdd))
 		{
-			AfxExpandWildcard(strToAdd,bRecursive,argpProject->GetWorkingDir(),pSList);
+			AfxExpandWildcard(strToAdd,bRecursive,argpProject->GetWorkingDirectory(),pSList);
 			return true;
 		}
 
@@ -157,12 +157,12 @@ bool CFileCleanItem::Expand(CLaTeXProject* argpProject,LPCTSTR lpszCurrentPath,C
 	}
 
 	//Expand the Wildcards or just take the file in strPattern
-	AfxExpandWildcard(strPattern,bRecursive,argpProject->GetWorkingDir(),pSList);
+	AfxExpandWildcard(strPattern,bRecursive,argpProject->GetWorkingDirectory(),pSList);
 
 	return true;
 }
 
-bool CFileCleanItem::SerializeToRegistry(CBCGRegistryEx &reg) const
+bool CFileCleanItem::SerializeToRegistry(RegistryStack &reg) const
 {
 	if (tFileHandling == protectbydefault)
 	{
@@ -178,7 +178,7 @@ bool CFileCleanItem::SerializeToRegistry(CBCGRegistryEx &reg) const
 	return true;
 }
 
-bool CFileCleanItem::SerializeFromRegistry(CBCGRegistryEx &reg)
+bool CFileCleanItem::SerializeFromRegistry(RegistryStack &reg)
 {
 	reg.Read(_T("Description"),strDescription);
 	reg.Read(_T("Pattern"),strPattern);
@@ -291,7 +291,7 @@ void CFileCleanItemArray::AddDefaultItems()
 
 bool CFileCleanItemArray::SerializeToRegistry(LPCTSTR strStartSection)
 {
-	CBCGRegistryEx reg(false,false);
+	RegistryStack reg(false,false);
 	CString strKey(CPathTool::Cat(strStartSection,_T("Patterns")));
 	reg.DeleteKey(strKey);
 	reg.CreateKey(strKey);
@@ -327,7 +327,7 @@ bool CFileCleanItemArray::SerializeFromRegistry(LPCTSTR strStartSection)
 	RemoveAll();
 	AddDefaultItems();
 
-	CBCGRegistryEx reg(false,true);
+	RegistryStack reg(false,true);
 	CString strKey(CPathTool::Cat(strStartSection,_T("Patterns")));
 
 	//Does the key exist?

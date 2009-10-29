@@ -89,7 +89,7 @@ CString CTextModule::GetRightText()
 	return strRet;
 }
 
-bool CTextModule::SerializeToRegistry(CBCGRegistryEx &reg) const
+bool CTextModule::SerializeToRegistry(RegistryStack &reg) const
 {
 	reg.Write(_T("Name"), Name);
 	reg.Write(_T("Text"), strText);
@@ -98,7 +98,7 @@ bool CTextModule::SerializeToRegistry(CBCGRegistryEx &reg) const
 	return true;
 }
 
-bool CTextModule::SerializeFromRegistry(CBCGRegistryEx &reg)
+bool CTextModule::SerializeFromRegistry(RegistryStack &reg)
 {
 	reg.Read(_T("Name"), Name);
 	reg.Read(_T("Text"), strText);
@@ -157,7 +157,7 @@ void CTextModuleGroup::AddDefaultModules()
 
 bool CTextModuleGroup::SerializeToRegistry(LPCTSTR strStartSection) const
 {
-	CBCGRegistryEx reg(false, false); //HKEY_CURRENT_USER, ReadAndWrite
+	RegistryStack reg(false, false); //HKEY_CURRENT_USER, ReadAndWrite
 	CString strKey(CPathTool::Cat(strStartSection, _T("Group0")));
 	reg.DeleteKey(strKey);
 	reg.CreateKey(strKey);
@@ -189,7 +189,7 @@ bool CTextModuleGroup::SerializeFromRegistry(LPCTSTR strStartSection)
 	//Remove everything
 	RemoveAll();
 
-	CBCGRegistryEx reg(false, true); //HKEY_CURRENT_USER, ReadOnly
+	RegistryStack reg(false, true); //HKEY_CURRENT_USER, ReadOnly
 	CString strKey(CPathTool::Cat(strStartSection, _T("Group0")));
 
 	//Does the key exist?

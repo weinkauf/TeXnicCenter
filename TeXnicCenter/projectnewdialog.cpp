@@ -525,7 +525,7 @@ void CProjectNewDialog::Create()
 	pProject->SetRunMakeIndex(m_bUseMakeIndex);
 
 	// create path to the project
-	if (!CreateDirectoryRecursive(pProject->GetWorkingDir()))
+	if (!CreateDirectoryRecursive(pProject->GetWorkingDirectory()))
 	{
 		//Show error msg with path and system error message
 		TCHAR systemError[200];
@@ -540,7 +540,7 @@ void CProjectNewDialog::Create()
 		);
 
 		CString errMsg;
-		errMsg.Format(STE_PROJECTDIR_CREATE_ERR, pProject->GetWorkingDir(), systemError);
+		errMsg.Format(STE_PROJECTDIR_CREATE_ERR, pProject->GetWorkingDirectory(), systemError);
 		AfxMessageBox(errMsg, MB_ICONSTOP | MB_OK);
 		return;
 	}

@@ -48,36 +48,8 @@
 #include "IProject.h"
 #include "WorkspacePane.h"
 #include "CodeView.h"
+#include "BookmarkEventArgs.h"
 
-class EventArgs
-{
-public:
-	virtual ~EventArgs()
-	{
-	}
-};
-
-class BookmarkEventArgs : public EventArgs
-{
-	const CodeBookmark b_;
-	const CString filename_;
-
-public:
-	BookmarkEventArgs(const CString& filename, const CodeBookmark& b)
-		: b_(b), filename_(filename)
-	{
-	}
-
-	const CodeBookmark& GetBookmark() const
-	{
-		return b_;
-	}
-
-	const CString& GetFileName() const
-	{
-		return filename_;
-	}
-};
 
 class CLaTeXProject :
 			public CProject,
@@ -155,7 +127,7 @@ public:
 	        output in this directory. The returned string is empty, if no
 	        working directory is set.
 	 */
-	CString GetWorkingDir() const;
+	CString GetWorkingDirectory() const;
 
 	/**
 	Sets the project's directory.
@@ -163,7 +135,7 @@ public:
 	@param lpszProjectDir
 	        The full path of the directory, the project file is placed in.
 	 */
-	void SetProjectDir(LPCTSTR lpszProjectDir);
+	void SetProjectDirectory(LPCTSTR lpszProjectDir);
 
 	/**
 	Gets the directory, the project file is placed in.
