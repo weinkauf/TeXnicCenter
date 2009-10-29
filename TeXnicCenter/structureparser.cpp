@@ -56,7 +56,7 @@ static char THIS_FILE[] = __FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 // Statics
-const CString CStructureParser::m_sItemNames[typeCount] =
+const CString CStructureParser::m_sItemNames[StructureItem::typeCount] =
 {
 	_T("generic"), _T("header"), _T("equation"), _T("quote"), _T("quotation"),
 	_T("center"), _T("verse"), _T("itemization"), _T("enumeration"), _T("description"),
@@ -64,140 +64,6 @@ const CString CStructureParser::m_sItemNames[typeCount] =
 	_T("texFile"), _T("group"), _T("bibFile"), _T("graphic"), _T("bibitem"),
 	_T("missingTexFile"), _T("missingGraphicFile"), _T("missingBibFile")
 };
-
-//-------------------------------------------------------------------
-// class CStructureItem
-//-------------------------------------------------------------------
-
-CStructureItem::CStructureItem()
-		: main_project_file_(-1)
-		, m_nType(0)
-		, m_nLine(0)
-		, m_nParent(-1)
-{
-}
-
-bool CStructureItem::IsMainProjectFile() const
-{
-	if (main_project_file_ == -1)
-	{
-		if (CLaTeXProject* l = theApp.GetProject())
-			main_project_file_ = !CPathTool::IsRelativePath(m_strTitle) && m_strTitle == l->GetMainPath();
-	}
-
-	return main_project_file_ != 0;
-}
-
-int CStructureItem::GetType() const
-{
-	return m_nType;
-}
-
-void CStructureItem::SetType(int val)
-{
-	m_nType = val;
-}
-
-const CString& CStructureItem::GetPath() const
-{
-	return m_strPath;
-}
-
-void CStructureItem::SetPath(const CString& val)
-{
-	m_strPath = val;
-}
-
-int CStructureItem::GetLine() const
-{
-	return m_nLine;
-}
-
-void CStructureItem::SetLine(int val)
-{
-	m_nLine = val;
-}
-
-const CString& CStructureItem::GetCaption() const
-{
-	return m_strCaption;
-}
-
-void CStructureItem::SetCaption(const CString& val)
-{
-	m_strCaption = val;
-}
-
-const CString CStructureItem::GetLabel() const
-{
-	CString text;
-
-	if (!labels_.empty())
-		text = labels_[0];
-
-	return text;
-}
-
-void CStructureItem::SetLabel(const CString& val)
-{
-	RemoveLabels();
-	AddLabel(val);
-}
-
-const CString& CStructureItem::GetTitle() const
-{
-	return m_strTitle;
-}
-
-void CStructureItem::SetTitle(const CString& val)
-{
-	m_strTitle = val;
-}
-
-const CString& CStructureItem::GetComment() const
-{
-	return m_strComment;
-}
-
-void CStructureItem::SetComment(const CString& val)
-{
-	m_strComment = val;
-}
-
-int CStructureItem::GetParent() const
-{
-	return m_nParent;
-}
-
-void CStructureItem::SetParent(int val)
-{
-	m_nParent = val;
-}
-
-const CStructureItem::LabelContainer& CStructureItem::GetLabels() const
-{
-	return labels_;
-}
-
-CStructureItem::LabelContainer& CStructureItem::GetLabels()
-{
-	return labels_;
-}
-
-bool CStructureItem::HasLabels() const
-{
-	return !labels_.empty();
-}
-
-void CStructureItem::AddLabel( const CString& l )
-{
-	labels_.push_back(l);
-}
-
-void CStructureItem::RemoveLabels()
-{
-	labels_.clear();
-}
 
 //-------------------------------------------------------------------
 // class CStructureParser
@@ -413,7 +279,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
                                    int nActualLine, int nFileDepth, StructureItemContainer &aSI)
 {
 	LPCTSTR lpTextEnd = lpText;
-	CStructureItem si;
+	StructureItem si;
 	std::tr1::match_results<LPCTSTR> what;
 	std::tr1::regex_constants::match_flag_type nFlags = std::tr1::regex_constants::match_default;
 	int nTypeStart, nTypeCount, nTitleStart, nTitleCount;
@@ -539,7 +405,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		}
 		else if (m_pParseOutputHandler && !m_bCancel)
 		{
-			AddFileItem(strPath, missingTexFile, strActualFile, nActualLine, aSI);
+			AddFileItem(strPath, StructureItem::missingTexFile, strActualFile, nActualLine, aSI);
 			info.m_strError.Format(STE_FILE_EXIST, strPath);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 		}
@@ -584,7 +450,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			if (::PathFileExists(strCompletePath))
 			{
 				//File exists
-				AddFileItem(ResolveFileName(strCompletePath), graphicFile,
+				AddFileItem(ResolveFileName(strCompletePath), StructureItem::graphicFile,
 				            strActualFile, nActualLine, aSI);
 				GraphicFileFound = true;
 				break;
@@ -594,7 +460,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		//File does not exist? Add as missing.
 		if (!GraphicFileFound)
 		{
-			AddFileItem(strPath, missingGraphicFile, strActualFile, nActualLine, aSI);
+			AddFileItem(strPath, StructureItem::missingGraphicFile, strActualFile, nActualLine, aSI);
 		}
 
 		//Give information
@@ -628,16 +494,16 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		return;
 	}
 
-	// look for figure start
+	// look for StructureItem::figure start
 	if (regex_search(lpText, lpTextEnd, what, m_regexFigureStart, nFlags) && IsCmdAt(lpText, what[0].first - lpText))
 	{
 		// parse string before occurrence
 		ParseString(lpText, what[0].first - lpText, cookies,
 		            strActualFile, nActualLine, nFileDepth, aSI);
 
-		// add figure to collection
+		// add StructureItem::figure to collection
 		INITIALIZE_SI(si);
-		cookie.nCookieType = si.m_nType = figure;
+		cookie.nCookieType = si.m_nType = StructureItem::figure;
 		cookie.nItemIndex = aSI.size();
 		aSI.push_back(si);
 		cookies.push(cookie);
@@ -658,7 +524,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 		// add table to collection
 		INITIALIZE_SI(si);
-		cookie.nCookieType = si.m_nType = table;
+		cookie.nCookieType = si.m_nType = StructureItem::table;
 		cookie.nItemIndex = aSI.size();
 		aSI.push_back(si);
 		cookies.push(cookie);
@@ -678,7 +544,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 		// add equation to collection
 		INITIALIZE_SI(si);
-		cookie.nCookieType = si.m_nType = equation;
+		cookie.nCookieType = si.m_nType = StructureItem::equation;
 		cookie.nItemIndex = aSI.size();
 		aSI.push_back(si);
 		cookies.push(cookie);
@@ -717,7 +583,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 		//Add unknown environment to collection
 		INITIALIZE_SI(si);
-		cookie.nCookieType = si.m_nType = unknownEnv;
+		cookie.nCookieType = si.m_nType = StructureItem::unknownEnv;
 		si.m_strTitle = strEnvName; //Misuse the title for saving the environment name
 		cookie.nItemIndex = aSI.size();
 		aSI.push_back(si);
@@ -737,7 +603,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		            strActualFile, nActualLine, nFileDepth, aSI);
 
 		// if the top of the stack is a header, then remove it
-		if (!cookies.empty() && cookies.top().nCookieType == header)
+		if (!cookies.empty() && cookies.top().nCookieType == StructureItem::header)
 			cookies.pop();
 
 		// initialize structure
@@ -763,8 +629,41 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		// get parent
 		if (m_nDepth < 1 || m_nDepth >= MAX_DEPTH)
 			si.m_nParent = -1;
-		else
-			si.m_nParent = m_anItem[m_nDepth - 1];
+		else {
+			int parent = m_anItem[m_nDepth - 1];
+
+			if (parent == -1 && !aSI.empty()) {
+				// Current header doesn't have a parent: Check whether previously
+				// inserted structure item is a header as well
+				const StructureItem& lastSi = aSI.back();
+				int currentDepth = m_nDepth - 1; // Depth of the current structure item
+				
+				if (lastSi.GetType() == StructureItem::header && lastSi.GetDepth() + 1 < currentDepth) {
+					// Last inserted structure item is a header and a gap is in the structure
+					StructureItem ghostSi = si;
+					ghostSi.SetType(StructureItem::header);
+					ghostSi.SetMissing(); // All following sections are missing
+
+					int ghostDepth = lastSi.GetDepth();
+					const CString title(MAKEINTRESOURCE(IDS_MISSING_SECTION));
+
+					while (++ghostDepth < currentDepth) {
+						// Insert missing sections between last inserted structure item
+						// and the current one. Use a copy of the current structure
+						// item so the user can jump to the location the missing headers
+						// need to be inserted at.
+						ghostSi.SetDepth(ghostDepth);
+						ghostSi.SetParent(aSI.size() - 1);
+						ghostSi.SetTitle(title);
+						aSI.push_back(ghostSi);
+					}
+
+					parent = aSI.size() - 1;
+				}
+			}
+			
+			si.m_nParent = parent;
+		}
 
 		// get title
 		nTitleStart = what[2].first - lpText;
@@ -777,12 +676,13 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		else
 			si.m_strTitle = GetArgument(strFullMatch, _T('{'), _T('}'));
 
-		// TODO: Causes mismatched \begin{document}
-		si.m_nType = header;
+		si.m_nType = StructureItem::header;
+		si.SetDepth(m_nDepth - 1);
 		cookie.nItemIndex = m_anItem[m_nDepth] = cookie.nItemIndex = aSI.size();
 		aSI.push_back(si);
-		cookie.nCookieType = header;
-		cookies.push(cookie);
+		cookie.nCookieType = StructureItem::header;
+		// TODO: Causes mismatched \begin{document}
+		//cookies.push(cookie);
 
 		// parse string behind occurrence
 		int nEnd = nTitleStart + nTitleCount;
@@ -802,7 +702,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 		if (!cookies.empty())
 		{
-			if (cookies.top().nCookieType == header)
+			if (cookies.top().nCookieType == StructureItem::header)
 			{
 				aSI[cookies.top().nItemIndex]. // Add the label to the set
 				AddLabel(CString(what[1].first, what[1].second - what[1].first));
@@ -810,7 +710,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			}
 			else
 			{
-				//CStructureItem si1(aSI[cookies.top().nItemIndex]);
+				//StructureItem si1(aSI[cookies.top().nItemIndex]);
 				//si1.SetLine(nActualLine);
 				//si1.SetPath(strActualFile);
 				//si1.SetParent(m_anItem[m_nDepth]);
@@ -853,17 +753,17 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		return;
 	}
 
-	// find end of figure
+	// find end of StructureItem::figure
 	if (regex_search(lpText, lpTextEnd, what, m_regexFigureEnd, nFlags) && IsCmdAt(lpText, what[0].first - lpText))
 	{
 		// parse string before occurrence
 		ParseString(lpText, what[0].first - lpText, cookies, strActualFile,
 		            nActualLine, nFileDepth, aSI);
 
-		// pop figure from stack
-		if (!cookies.empty() && cookies.top().nCookieType == figure)
+		// pop StructureItem::figure from stack
+		if (!cookies.empty() && cookies.top().nCookieType == StructureItem::figure)
 		{
-			CStructureItem &si = aSI[cookies.top().nItemIndex];
+			StructureItem &si = aSI[cookies.top().nItemIndex];
 			cookies.pop();
 			CreateDefaultTitle(si);
 		}
@@ -871,7 +771,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		{
 			COutputInfo info;
 			INITIALIZE_OI(info);
-			info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[figure]);
+			info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[StructureItem::figure]);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 		}
 
@@ -888,10 +788,10 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		ParseString(lpText, what[0].first - lpText, cookies, strActualFile,
 		            nActualLine, nFileDepth, aSI);
 
-		// pop figure from stack
-		if (!cookies.empty() && cookies.top().nCookieType == table)
+		// pop StructureItem::figure from stack
+		if (!cookies.empty() && cookies.top().nCookieType == StructureItem::table)
 		{
-			CStructureItem &si = aSI[cookies.top().nItemIndex];
+			StructureItem &si = aSI[cookies.top().nItemIndex];
 			cookies.pop();
 			CreateDefaultTitle(si);
 		}
@@ -899,7 +799,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		{
 			COutputInfo info;
 			INITIALIZE_OI(info);
-			info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[table]);
+			info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[StructureItem::table]);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 		}
 
@@ -917,9 +817,9 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		            nActualLine, nFileDepth, aSI);
 
 		// pop equation from stack
-		if (!cookies.empty() && cookies.top().nCookieType == equation)
+		if (!cookies.empty() && cookies.top().nCookieType == StructureItem::equation)
 		{
-			CStructureItem &si = aSI[cookies.top().nItemIndex];
+			StructureItem &si = aSI[cookies.top().nItemIndex];
 			cookies.pop();
 			CreateDefaultTitle(si);
 		}
@@ -927,7 +827,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		{
 			COutputInfo info;
 			INITIALIZE_OI(info);
-			info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[equation]);
+			info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[StructureItem::equation]);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 		}
 
@@ -964,10 +864,10 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 		//Pop unknown environment from stack
 		if (!cookies.empty()
-		        && (cookies.top().nCookieType == unknownEnv)
+			&& (cookies.top().nCookieType == StructureItem::unknownEnv)
 		        && (aSI[cookies.top().nItemIndex].m_strTitle == strEnvName))
 		{
-			CStructureItem &si = aSI[cookies.top().nItemIndex];
+			StructureItem &si = aSI[cookies.top().nItemIndex];
 			cookies.pop();
 
 			if (si.m_strCaption.IsEmpty() && !si.HasLabels())
@@ -1006,17 +906,17 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		            nActualLine, nFileDepth, aSI);
 
 		// Reset the headers
-		EmptyCookieStack(cookies, aSI);
+		//EmptyCookieStack(cookies, aSI);
 		m_nDepth = 1;
 
 		// add appendix to collection
 		INITIALIZE_SI(si);
 		si.m_strTitle.LoadString(STE_APPENDIX);
 		si.m_nParent = -1;
-		cookie.nCookieType = si.m_nType = header;
+		cookie.nCookieType = si.m_nType = StructureItem::header;
 		cookie.nItemIndex = m_anItem[m_nDepth] = aSI.size();
 		aSI.push_back(si);
-		cookies.push(cookie);
+		// cookies.push(cookie);
 
 		// parse string behind occurrence
 		ParseString(what[0].second, lpTextEnd - what[0].second, cookies,
@@ -1091,7 +991,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 					strAnnotation += strWarnings;
 				}
 
-				AddFileItem(strPath, bibFile, strActualFile, nActualLine, aSI, strAnnotation);
+				AddFileItem(strPath, StructureItem::bibFile, strActualFile, nActualLine, aSI, strAnnotation);
 
 				//Add the parser warnings, if any.
 				if (aBibFile.GetErrorCount())
@@ -1131,11 +1031,11 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 						//TRACE("Added si: %s, %s, %s\n", be->m_strPath, be->m_strLabel, be->m_strCaption);
 						cookie.nItemIndex = aSI.size();
 
-						CStructureItem item(*be);
+						StructureItem item(*be);
 						item.SetItemInfo(new BibItem(be->ToBibItem()));
 
 						aSI.push_back(item);
-						cookies.push(cookie);
+						//cookies.push(cookie);
 					}
 					else
 					{
@@ -1147,7 +1047,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			{
 				if (m_pParseOutputHandler && !m_bCancel)
 				{
-					AddFileItem(strPath, missingBibFile, strActualFile, nActualLine, aSI);
+					AddFileItem(strPath, StructureItem::missingBibFile, strActualFile, nActualLine, aSI);
 					info.m_strError.Format(STE_FILE_EXIST, strPath);
 					m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth,
 					                                       CParseOutputHandler::warning);
@@ -1180,7 +1080,7 @@ int CStructureParser::AddFileItem(LPCTSTR lpszPath, int nType, LPCTSTR lpszInclu
                                   LPCTSTR lpszAnnotation /*= NULL*/)
 {
 	// insert file into item-array
-	CStructureItem si;
+	StructureItem si;
 	si.m_nLine = nIncludedFileLineNumber;
 	si.m_nParent = m_anItem[m_nDepth];
 	si.m_nType = nType;
@@ -1203,7 +1103,7 @@ int CStructureParser::AddFileItem(LPCTSTR lpszPath, int nType, LPCTSTR lpszInclu
 
 	StructureItemContainer::iterator it = std::find_if(aSI.begin(),aSI.end(),
 	                                      std::tr1::bind(std::equal_to<CString>(),
-	                                                     std::tr1::bind(&CStructureItem::GetPath,_1),lpszPath));
+	                                                     std::tr1::bind(&StructureItem::GetPath,_1),lpszPath));
 
 	StructureItemContainer::size_type pos;
 
@@ -1227,13 +1127,13 @@ void CStructureParser::EmptyCookieStack(CCookieStack &cookies, StructureItemCont
 			COOKIE item = cookies.top();
 			cookies.pop();
 			COutputInfo info;
-			CStructureItem &si = aSI[item.nItemIndex];
+			StructureItem &si = aSI[item.nItemIndex];
 
-			if (item.nCookieType == table || item.nCookieType == figure)
+			if (StructureItem::IsEnvironment(static_cast<StructureItem::Type>(item.nCookieType)))
 			{
 				info.m_nSrcLine = si.m_nLine;
 				info.m_strSrcFile = si.m_strPath;
-				info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[item.nCookieType]);
+				info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, aSI[item.nItemIndex].GetTitle());
 				m_pParseOutputHandler->OnParseLineInfo(info, 0, CParseOutputHandler::warning);
 			}
 		}
@@ -1279,7 +1179,7 @@ BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
 	m_nFilesParsed++;
 
 	CString strActualFile(lpszPath);
-	AddFileItem(strActualFile, texFile, _T(""), -1, aSI);
+	AddFileItem(strActualFile, StructureItem::texFile, _T(""), -1, aSI);
 
 	// parse text source
 	LPCTSTR lpLine, lpLineEnd, lpOffset;
@@ -1417,4 +1317,37 @@ const CString CStructureParser::Unescape(const CString &tmp )
 	}
 
 	return strPath;
+}
+
+void CStructureParser::CreateDefaultTitle( StructureItem& si,bool bForce /*= false*/ )
+{
+	if (si.m_strTitle.IsEmpty() || bForce)
+	{
+		if (si.m_strCaption.IsEmpty() && !si.HasLabels())
+		{
+			//Label and Caption empty ==> Generate a title from the filename
+			si.m_strTitle.Format(_T("%s (%d)"),ResolveFileName(si.m_strPath),si.m_nLine);
+		}
+		else
+		{
+			if (si.GetCaption().IsEmpty())
+				si.SetTitle(si.GetLabel());
+			else
+				si.SetTitle(si.GetCaption());
+		}
+	}
+}
+void CParseOutputHandler::OnParseLineInfo( COutputInfo &/*line*/, int /*nLevel*/, int /*nSeverity*/ )
+{
+
+}
+
+void CParseOutputHandler::OnParseBegin( bool /*bCancelState*/ )
+{
+
+}
+
+void CParseOutputHandler::OnParseEnd( bool /*bResult*/,int /*nFiles*/,int /*nLines*/ )
+{
+
 }

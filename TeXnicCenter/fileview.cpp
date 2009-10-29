@@ -43,7 +43,7 @@
 #include "global.h"
 #include "OleDrop.h"
 
-const CString FormatInput(const CStructureItem& item)
+const CString FormatInput(const StructureItem& item)
 {
 	CString text;
 	text.Format(_T("\\input{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
@@ -51,7 +51,7 @@ const CString FormatInput(const CStructureItem& item)
 	return text;
 }
 
-const CString FormatInclude(const CStructureItem& item)
+const CString FormatInclude(const StructureItem& item)
 {
 	CString text;
 	text.Format(_T("\\include{%s}"),CPathTool::GetFileTitle(item.GetTitle()));
@@ -108,13 +108,13 @@ void CFileView::OnParsingFinished()
 	DeleteAllItems();
 
 	HTREEITEM hTexParent = InsertItem(AfxLoadString(STE_TEX_FILES),
-		CStructureParser::texFile,CStructureParser::texFile,
+		StructureItem::texFile,StructureItem::texFile,
 		TVI_ROOT,TVI_FIRST);
 	HTREEITEM hBibParent = InsertItem(AfxLoadString(STE_BIB_FILES),
-		CStructureParser::bibFile,CStructureParser::bibFile,
+		StructureItem::bibFile,StructureItem::bibFile,
 		TVI_ROOT,TVI_LAST);
 	HTREEITEM hGraphicParent = InsertItem(AfxLoadString(STE_GRAPHICS_FILES),
-		CStructureParser::graphicFile,CStructureParser::graphicFile,
+		StructureItem::graphicFile,StructureItem::graphicFile,
 		TVI_ROOT,TVI_LAST);
 
 	HTREEITEM hItem;
@@ -133,7 +133,7 @@ void CFileView::OnParsingFinished()
 	// fill view
 	for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it)
 	{
-		const CStructureItem &si = *it;
+		const StructureItem &si = *it;
 		text = CPathTool::GetFile(it->GetTitle());
 
 		CString reldir = CPathTool::GetRelativePath(maindir,CPathTool::GetParentDirectory(
@@ -143,19 +143,19 @@ void CFileView::OnParsingFinished()
 
 		switch (si.GetType())
 		{
-		case CStructureParser::texFile :
-		case CStructureParser::missingTexFile :
-			unique_type = CStructureParser::texFile;
+		case StructureItem::texFile :
+		case StructureItem::missingTexFile :
+			unique_type = StructureItem::texFile;
 			parent = hTexParent;
 			break;
-		case CStructureParser::graphicFile :
-		case CStructureParser::missingGraphicFile :
-			unique_type = CStructureParser::graphicFile;
+		case StructureItem::graphicFile :
+		case StructureItem::missingGraphicFile :
+			unique_type = StructureItem::graphicFile;
 			parent = hGraphicParent;
 			break;
-		case CStructureParser::bibFile :
-		case CStructureParser::missingBibFile :
-			unique_type = CStructureParser::bibFile;
+		case StructureItem::bibFile :
+		case StructureItem::missingBibFile :
+			unique_type = StructureItem::bibFile;
 			parent = hBibParent;
 			break;
 		default:
@@ -257,7 +257,7 @@ int CFileView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	MapKeyStateToFormat(0,FormatInput);
 	MapKeyStateToFormat(MK_CONTROL,FormatInclude);
-	MapKeyStateToFormat(MK_SHIFT,bind(ExtractFileTitle,bind(&CStructureItem::GetTitle,_1)));
+	MapKeyStateToFormat(MK_SHIFT,bind(ExtractFileTitle,bind(&StructureItem::GetTitle,_1)));
 
 	return 0;
 }

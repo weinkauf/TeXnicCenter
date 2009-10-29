@@ -1906,6 +1906,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\StructureItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\StructureItem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\StructureItemInfo.h"
+				>
+			</File>
+			<File
 				RelativePath=".\structureparser.cpp"
 				>
 			</File>

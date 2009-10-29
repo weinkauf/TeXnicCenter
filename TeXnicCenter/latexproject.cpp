@@ -944,15 +944,15 @@ void CLaTeXProject::OnUpdateItemCmd(CCmdUI* pCmdUI)
 	}
 
 	// check commands
-	const CStructureItem &si = m_aStructureItems[m_nCurrentStructureItem];
+	const StructureItem &si = m_aStructureItems[m_nCurrentStructureItem];
 
 	switch (pCmdUI->m_nID)
 	{
 		case ID_ITEM_GOTO:
 			switch (si.m_nType)
 			{
-				case CStructureParser::texFile :
-				case CStructureParser::bibFile :
+				case StructureItem::texFile :
+				case StructureItem::bibFile :
 					pCmdUI->Enable(!si.GetPath().IsEmpty());
 					break;
 				default:
@@ -961,7 +961,7 @@ void CLaTeXProject::OnUpdateItemCmd(CCmdUI* pCmdUI)
 			break;
 
 		case ID_ITEM_INSERT_PAGEREF: // makes no sense for BibTeX entries
-			if (si.m_nType != CStructureParser::bibItem)
+			if (si.m_nType != StructureItem::bibItem)
 			{
 				pCmdUI->Enable(si.HasLabels() && theApp.GetActiveEditView());
 			}
@@ -991,18 +991,18 @@ void CLaTeXProject::OnItemGoto()
 	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < static_cast<int>(m_aStructureItems.size())))
 		return;
 
-	const CStructureItem &si = m_aStructureItems[m_nCurrentStructureItem];
+	const StructureItem &si = m_aStructureItems[m_nCurrentStructureItem];
 
 	switch (si.GetType())
 	{
-		case CStructureParser::texFile :
-		case CStructureParser::bibFile :
+		case StructureItem::texFile :
+		case StructureItem::bibFile :
 			theApp.OpenLatexDocument(GetFilePath(si.GetPath()),FALSE,-1,FALSE,false);
 			break;
-		case CStructureParser::missingTexFile :
-		case CStructureParser::missingGraphicFile :
-		case CStructureParser::missingBibFile :
-		case CStructureParser::graphicFile :
+		case StructureItem::missingTexFile :
+		case StructureItem::missingGraphicFile :
+		case StructureItem::missingBibFile :
+		case StructureItem::graphicFile :
 			theApp.OpenLatexDocument(GetFilePath(si.GetComment()),FALSE,si.GetLine(),FALSE,false);
 			break;
 		default:
@@ -1051,7 +1051,7 @@ void CLaTeXProject::OnItemInsertRef()
 	pView->SetFocus();
 }
 
-const CString CLaTeXProject::FormatPageRef(const CStructureItem& item)
+const CString CLaTeXProject::FormatPageRef(const StructureItem& item)
 {
 	CString result;
 
@@ -1061,7 +1061,7 @@ const CString CLaTeXProject::FormatPageRef(const CStructureItem& item)
 	return result;
 }
 
-const CString CLaTeXProject::FormatRef(const CStructureItem& item)
+const CString CLaTeXProject::FormatRef(const StructureItem& item)
 {
 	CString result;
 
@@ -1071,10 +1071,10 @@ const CString CLaTeXProject::FormatRef(const CStructureItem& item)
 
 		switch (item.GetType())
 		{
-			case CStructureParser::equation :
+			case StructureItem::equation :
 				strID = STE_LATEX_EQREF;
 				break;
-			case CStructureParser::bibItem :
+			case StructureItem::bibItem :
 				strID = STE_LATEX_CITE;
 				break;
 			default:
@@ -1108,9 +1108,9 @@ void CLaTeXProject::OnSpellProject()
 
 	for (int i = 0; i < aStructureItems.size(); ++i)
 	{
-		CStructureItem& si = aStructureItems[i];
+		StructureItem& si = aStructureItems[i];
 
-		if (si.m_nType == CStructureParser::texFile)
+		if (si.m_nType == StructureItem::texFile)
 		{
 			bool bWasOpen = true;
 			LaTeXDocument* pDoc = dynamic_cast<LaTeXDocument*>(theApp.GetOpenLatexDocument(GetFilePath(si.GetPath()),FALSE));
@@ -1147,7 +1147,7 @@ void CLaTeXProject::OnSpellProject()
 
 			// begin ow
 			if (theApp.GetSpeller()->IsAddedModified()) {
-			    //TRACE("SC was modified, save ign words to %s...\n", sPath);
+			    //TRACE("SC was modified, saving words to %s...\n", sPath);
 			    theApp.GetSpeller()->SaveIgnoredWords(sIgnoredPath);
 			}
 			// end ow

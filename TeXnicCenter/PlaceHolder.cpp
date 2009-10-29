@@ -546,14 +546,14 @@ CUniqueStringList* CPlaceholderSets::GetFileSets(const unsigned int Sets,
 		//for (i = 0; i < m_pProject->m_aStructureItems.GetSize(); i++) {
 		for (StructureItemContainer::const_iterator it = m_pProject->m_aStructureItems.begin(); it != m_pProject->m_aStructureItems.end(); ++it)
 		{
-			const CStructureItem &si = *it;//m_pProject->m_aStructureItems.GetAt(i);
+			const StructureItem &si = *it;//m_pProject->m_aStructureItems.GetAt(i);
 
 			if (
-			    ((si.GetType() == CStructureParser::texFile) && (Sets & TXC_PLACEHOLDERSET_TEXFILES))
+			    ((si.GetType() == StructureItem::texFile) && (Sets & TXC_PLACEHOLDERSET_TEXFILES))
 			    ||
-			    ((si.GetType() == CStructureParser::bibFile) && (Sets & TXC_PLACEHOLDERSET_BIBTEXFILES))
+			    ((si.GetType() == StructureItem::bibFile) && (Sets & TXC_PLACEHOLDERSET_BIBTEXFILES))
 			    ||
-			    ((si.GetType() == CStructureParser::graphicFile) && (Sets & TXC_PLACEHOLDERSET_GRAPHICFILES))
+			    ((si.GetType() == StructureItem::graphicFile) && (Sets & TXC_PLACEHOLDERSET_GRAPHICFILES))
 			)
 			{
 				//Get the absolute path; long filenames; backslashes

@@ -45,7 +45,7 @@ void LabelDragSource::ClearKeyStateToMessage()
 	key_to_message_.clear();
 }
 
-const CString LabelDragSource::GetRef( UINT keystate, const CStructureItem &item ) const
+const CString LabelDragSource::GetRef( UINT keystate, const StructureItem &item ) const
 {
 	CString text;
 
@@ -63,7 +63,7 @@ void LabelDragSource::OnEndDragDrop()
 	DragSourceBase::OnEndDragDrop();
 }
 
-void LabelDragSource::UpdateMessageText( UINT keystate, CString& text, const CStructureItem &item )
+void LabelDragSource::UpdateMessageText( UINT keystate, CString& text, const StructureItem &item )
 {
 	CString message;
 	text = GetRef(keystate,item);
@@ -119,7 +119,7 @@ void LabelDragSource::UpdateMessageText( UINT keystate, CString& text, const CSt
 
 HRESULT LabelDragSource::DoDragDrop( DWORD effects, LPDWORD result )
 {
-	const CStructureItem* item = GetDraggedItem();
+	const StructureItem* item = GetDraggedItem();
 	CString text;
 
 	KeyStateFormatLabelContainerType::const_iterator it = key_to_format_.find(GetControlAsyncState());

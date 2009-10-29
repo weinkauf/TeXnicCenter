@@ -44,7 +44,7 @@ extern LPCTSTR const BibTypeVerbose[];
 class BibTeXFile;
 class BibTeXEntry;
 
-class BibTeXEntry : public CObject, public CStructureItem
+class BibTeXEntry : public CObject, public StructureItem
 {
 public:
 

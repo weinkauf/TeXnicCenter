@@ -388,7 +388,7 @@ void BibTeXFile::HandleParseError(UINT msgID,int line,int col,const TCHAR *addDe
 
 	BibTeXEntry *be = new BibTeXEntry(s,this,BibTeXEntry::Error);
 	be->SetLine(line);
-	be->SetType(CStructureParser::bibItem);
+	be->SetType(StructureItem::bibItem);
 	be->SetTitle(s);
 	//be->m_strComment = _T("");
 	be->SetCaption(s);
@@ -483,7 +483,7 @@ void BibTeXFile::FinalizeItem()
 	BibTeXEntry *be;
 	if (m_Entries.Lookup(m_LastKey,(CObject*&) be))
 	{
-		be->SetType(CStructureParser::bibItem);
+		be->SetType(StructureItem::bibItem);
 		be->SetTitle(be->ToCaption());
 		be->SetCaption(be->ToCaption());
 		be->SetLabel(be->GetKey());
