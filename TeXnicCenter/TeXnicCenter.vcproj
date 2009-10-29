@@ -1494,6 +1494,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OutputViewBase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\OutputViewVisitor.h"
+				>
+			</File>
+			<File
 				RelativePath=".\OutputWizard.cpp"
 				>
 			</File>

@@ -12,6 +12,11 @@ IMPLEMENT_DYNAMIC(ErrorListView, CDockablePane)
 
 const UINT ListView = 0x1000;
 
+ErrorListView::Item::Item( const COutputInfo& info, CBuildView::tagImage type ) 
+: info(info), type(type)
+{
+}
+
 ErrorListView::ErrorListView()
 : doc_(0)
 {
@@ -111,6 +116,11 @@ void ErrorListView::OnSetFocus(CWnd* pOldWnd)
 {
 	CDockablePane::OnSetFocus(pOldWnd);
 	list_view_.SetFocus();
+
+	ASSERT_NULL_OR_POINTER(doc_, COutputDoc);
+	
+	if (doc_)
+		doc_->SetActiveView(this);
 }
 
 void ErrorListView::OnSize(UINT nType, int cx, int cy)

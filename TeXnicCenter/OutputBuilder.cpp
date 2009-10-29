@@ -85,7 +85,7 @@ BOOL COutputBuilder::Create(int nMode,
 
 	// initialize output view
 	if (m_pDoc)
-		m_pDoc->ResetBuildInformation();
+		m_pDoc->ClearBuildMessages();
 	if (m_pView)
 	{
 		CString strMsg;
