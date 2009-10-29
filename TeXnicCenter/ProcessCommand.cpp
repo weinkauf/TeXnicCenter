@@ -98,7 +98,8 @@ CProcess *CProcessCommand::Execute(HANDLE hOutput,LPCTSTR lpszWorkingDir,LPCTSTR
 	CProcessCommand * const localThis = (CProcessCommand * const)this;
 	CProcess* p = new CProcess;
 
-	if (p->CreateHiddenConsole(m_strExecutable + _T(' ') + strArguments,INVALID_HANDLE_VALUE,hOutput,hOutput,CREATE_NEW_CONSOLE | CREATE_NEW_PROCESS_GROUP,lpszWorkingDir))
+	if (p->CreateHiddenConsole(m_strExecutable + _T(' ') + strArguments,
+		INVALID_HANDLE_VALUE,hOutput,hOutput,CREATE_NO_WINDOW,lpszWorkingDir))
 	{
 		localThis->m_nLastError = 0;
 		return p;

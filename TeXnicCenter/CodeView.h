@@ -187,6 +187,8 @@ public:
 	void EnableFolding(bool enable = true);
 	bool IsFoldingEnabled();
 	void ShowIndentationGuides(bool show);
+
+	void SetModified(bool modified = true);
 };
 
 template<class F>
