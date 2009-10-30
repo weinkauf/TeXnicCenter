@@ -320,7 +320,7 @@ CProject* CSingleProjectTemplate::OpenProjectFile(LPCTSTR lpszPathName)
 
 			// user has been alerted to what failed in OnNewProject
 			TRACE0("CProject::OnNewProject returned FALSE.\n");
-			return NULL;
+			pProject = NULL;
 		}
 	}
 	else
@@ -354,9 +354,13 @@ CProject* CSingleProjectTemplate::OpenProjectFile(LPCTSTR lpszPathName)
 					// assume we can continue
 				}
 			}
-			return NULL; //open failed
+			
+			pProject = NULL; //open failed
 		}
 	}
+
+	if (pProject)
+		::SHAddToRecentDocs(SHARD_PATH, lpszPathName);
 
 	return pProject;
 }

@@ -1074,11 +1074,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ErrorListView.cpp"
+				RelativePath=".\ErrorListPane.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ErrorListView.h"
+				RelativePath=".\ErrorListPane.h"
 				>
 			</File>
 			<File
@@ -2163,6 +2163,14 @@
 			</File>
 			<File
 				RelativePath=".\WorkspacePane.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WorkspacePaneBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\WorkspacePaneBase.h"
 				>
 			</File>
 		</Filter>

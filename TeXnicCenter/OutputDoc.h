@@ -40,7 +40,7 @@
 #include "OutputBuilder.h"
 #include "StructureParser.h"
 
-class ErrorListView;
+class ErrorListPane;
 
 
 class COutputDoc :
@@ -48,11 +48,11 @@ class COutputDoc :
 			public CFileGrepHandler,
 			public CParseOutputHandler
 {
-	ErrorListView* errorListView_;
+	ErrorListPane* errorListView_;
 
 public:
 
-	void SetErrorListView(ErrorListView* v) { errorListView_ = v; }
+	void SetErrorListView(ErrorListPane* v) { errorListView_ = v; }
 
 	typedef enum tagHint
 	{

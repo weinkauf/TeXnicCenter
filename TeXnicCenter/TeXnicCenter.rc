@@ -4812,8 +4812,8 @@ END
 
 STRINGTABLE 
 BEGIN
-    ID_METAPOST_NEW         "Erstellt ein neues MetaPost-Document\nNeues MetaPost-Dokument"
-    ID_BIBTEX_NEW           "Erstellt ein neues BibTeX-Document\nNeues BibTeX-Dokument"
+    ID_METAPOST_NEW         "Erstellt ein neues MetaPost-Dokument\nNeues MetaPost-Dokument"
+    ID_BIBTEX_NEW           "Erstellt ein neues BibTeX-Dokument\nNeues BibTeX-Dokument"
 END
 
 #endif    // German (Germany) resources

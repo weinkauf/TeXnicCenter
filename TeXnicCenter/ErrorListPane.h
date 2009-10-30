@@ -6,14 +6,15 @@
 #include "PrivateToolBar.h"
 #include "SortListCtrl.h"
 #include "OutputViewBase.h"
+#include "WorkspacePaneBase.h"
 
 class COutputDoc;
 
 // ErrorListView
 
-class ErrorListView : public CDockablePane, public OutputViewBase
+class ErrorListPane : public WorkspacePaneBase, public OutputViewBase
 {
-	DECLARE_DYNAMIC(ErrorListView)
+	DECLARE_DYNAMIC(ErrorListPane)
 
 private:
 	COutputDoc* doc_;
@@ -40,7 +41,7 @@ private:
 	static const int UpdateToolBarButtonMessageID = WM_USER + 1;
 
 public:
-	ErrorListView();
+	ErrorListPane();
 
 protected:
 	DECLARE_MESSAGE_MAP()
@@ -81,4 +82,7 @@ private:
 	int CompareErrorMessage(LPARAM l1, LPARAM l2);
 	int CompareSourceLine(LPARAM l1, LPARAM l2);
 	int CompareSourceFile(LPARAM l1, LPARAM l2);
+
+protected:
+	void Focus();
 };

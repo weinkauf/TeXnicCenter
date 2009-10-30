@@ -44,7 +44,7 @@
 #include "buildview.h"
 #include "ParseOutputView.h"
 #include "OutputDoc.h"
-#include "ErrorListView.h"
+#include "ErrorListPane.h"
 #include "StructureView.h"
 #include "BibView.h"
 #include "BookmarkView.h"
@@ -72,7 +72,7 @@ private:
 	BibView bib_view_pane_;
 	BookmarkView bookmark_view_pane_;
 
-	StructureView structure_view_;
+	StructurePane structure_view_;
 	CFileView file_view_;
 	CEnvironmentView env_view_;
 
@@ -90,7 +90,7 @@ private:
 
 	COutputDoc output_doc_; //UPDATE
 
-	ErrorListView error_list_view_;
+	ErrorListPane error_list_view_;
 
 	WorkspacePane build_view_pane_, grep_view_1_pane_, grep_view_2_pane_, parse_view_pane_;
 
