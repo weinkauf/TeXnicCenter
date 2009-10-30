@@ -118,6 +118,16 @@ namespace {
 		return ch == '%';
 	}
 
+	bool IsUsePackage(const char* key)
+	{
+		return std::strcmp(key, "usepackage") == 0;
+	}
+
+	bool IsDocumentClass(const char* key)
+	{
+		return std::strcmp(key, "documentclass") == 0;
+	}
+
 	bool isTeXone(int ch)
 	{
 		return  (ch == '[') || (ch == ']') || (ch == '=') || (ch == '#') ||
@@ -381,7 +391,17 @@ namespace {
 								std::memmove(key, key + 1, k); // shift left over escape token
 								key[k--] = '\0';
 
-								if (!keywords || !useKeywords) {
+								if (IsUsePackage(key)) {
+									// \usepackage
+									sc.ChangeState(SCE_TEX_USE_PACKAGE);
+									newifDone = false;
+								}
+								else if (IsDocumentClass(key)) {
+									// \documentclass
+									sc.ChangeState(SCE_TEX_DOCUMENTCLASS);
+									newifDone = false;
+								}
+								else if (!keywords || !useKeywords) {
 									sc.SetState(command_style);
 									newifDone = false;
 								}
