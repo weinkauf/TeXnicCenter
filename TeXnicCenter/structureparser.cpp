@@ -645,33 +645,50 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			int parent = m_anItem[m_nDepth - 1];
 
 			if (parent == -1 && !aSI.empty()) {
-				// Current header doesn't have a parent: Check whether previously
-				// inserted structure item is a header as well
-				const StructureItem& lastSi = aSI.back();
-				int currentDepth = m_nDepth - 1; // Depth of the current structure item
-				
-				if (lastSi.GetType() == StructureItem::header && lastSi.GetDepth() + 1 < currentDepth) {
-					// Last inserted structure item is a header and a gap is in the structure
-					StructureItem ghostSi = si;
-					ghostSi.ClearLabels();
-					ghostSi.SetType(StructureItem::header);
-					ghostSi.SetMissing(); // All following sections are missing
+				using namespace std::tr1::placeholders;
+				// Current header doesn't have a parent: Find previously inserted header item
+				// and check whether is its depth
+				StructureItemContainer::reverse_iterator it = std::find_if(aSI.rbegin(), aSI.rend(),
+					std::tr1::bind(std::tr1::bind(std::equal_to<int>(),std::tr1::bind(&StructureItem::GetType,_1),
+						static_cast<int>(StructureItem::header)), _1));
 
-					int ghostDepth = lastSi.GetDepth();
-					const CString title(MAKEINTRESOURCE(IDS_MISSING_SECTION));
+				if (it != aSI.rend()) 
+				{
+					const StructureItem& lastSi = *it;
+					int currentDepth = m_nDepth - 1; // Depth of the current structure item
+					
+					if (lastSi.GetType() == StructureItem::header && lastSi.GetDepth() + 1 < currentDepth) 
+					{
+						// Last inserted structure item is a header and a gap is in the structure
+						StructureItem ghostSi = si;
+						ghostSi.RemoveLabels();
+						ghostSi.SetType(StructureItem::header);
+						ghostSi.SetMissing(); // All following sections are missing
+						ghostSi.SetParent(std::distance(aSI.begin(), it.base()) - 1);
 
-					while (++ghostDepth < currentDepth) {
-						// Insert missing sections between last inserted structure item
-						// and the current one. Use a copy of the current structure
-						// item so the user can jump to the location the missing headers
-						// need to be inserted at.
-						ghostSi.SetDepth(ghostDepth);
-						ghostSi.SetParent(aSI.size() - 1);
-						ghostSi.SetTitle(title);
-						aSI.push_back(ghostSi);
+						int ghostDepth = lastSi.GetDepth();
+						const CString title(MAKEINTRESOURCE(IDS_MISSING_SECTION));
+
+						while (++ghostDepth < currentDepth) 
+						{
+							// Insert missing sections between last inserted structure item
+							// and the current one. Use a copy of the current structure
+							// item so the user can jump to the location the missing headers
+							// need to be inserted at.
+							ghostSi.SetDepth(ghostDepth);							
+							ghostSi.SetTitle(title);
+							aSI.push_back(ghostSi);
+
+							ghostSi.SetParent(aSI.size() - 1);
+
+							COutputInfo info;
+							INITIALIZE_OI(info);
+							info.m_strError = title;
+							m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
+						}
+
+						parent = aSI.size() - 1;
 					}
-
-					parent = aSI.size() - 1;
 				}
 			}
 			

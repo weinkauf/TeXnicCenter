@@ -217,8 +217,3 @@ bool StructureItem::IsEnvironment() const
 {
 	return IsEnvironment(static_cast<Type>(m_nType));
 }
-
-void StructureItem::ClearLabels()
-{
-	labels_.clear();
-}

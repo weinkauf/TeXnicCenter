@@ -163,6 +163,8 @@ private:
 		void EnableIncrementalSearch(bool enable = true);
 		void UpdateStatusBarMessage();
 		void UpdateCursor();
+
+		bool IsIncrementalSearchEnabled() const;
 	};
 
 	ShadowWindow shadow_;
@@ -189,6 +191,7 @@ public:
 	void ShowIndentationGuides(bool show);
 
 	void SetModified(bool modified = true);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 
 template<class F>
