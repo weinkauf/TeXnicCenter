@@ -78,8 +78,6 @@ public:
 	int GetType() const;
 	void SetType(int val);
 
-	void ClearLabels();
-
 	/** Path of file this item occurs in. */
 	CString m_strPath;
 

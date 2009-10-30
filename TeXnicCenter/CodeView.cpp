@@ -875,3 +875,18 @@ bool CodeView::ShadowWindow::IsNewLine(TCHAR ch)
 {
 	return ch == VK_RETURN || ch == _T('\n');
 }
+
+BOOL CodeView::PreTranslateMessage(MSG* pMsg)
+{
+	BOOL result;
+
+	if (pMsg->message == WM_KEYDOWN && 
+		pMsg->wParam == VK_ESCAPE && shadow_.IsIncrementalSearchEnabled()) {
+		shadow_.EnableIncrementalSearch(false);
+		result = TRUE;
+	}
+	else 
+		result = CScintillaView::PreTranslateMessage(pMsg);
+
+	return result;
+}

@@ -281,3 +281,8 @@ LRESULT CodeView::ShadowWindow::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPAR
 
 	return 0;
 }
+
+bool CodeView::ShadowWindow::IsIncrementalSearchEnabled() const
+{
+	return incremental_search_enabled;
+}
