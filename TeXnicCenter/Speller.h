@@ -51,12 +51,16 @@ public:
 	int SuggestUTF8(const char* word, CStringArray& a);
 
 	void LoadIgnoredWords(LPCTSTR path);
+
 	void SaveIgnoredWords(LPCTSTR path);
 
 	void LoadPersonalDictionary(LPCTSTR path);
 	void SavePersonalDictionary(LPCTSTR path);
 
 private:
+	static bool SaveWords( LPCTSTR path, const WordContainer& words );
+	static bool LoadWords( LPCTSTR path, WordContainer& words );
+
 	int DoAdd( LPCTSTR w );
 	void DoLoadAdd(const StringType& s);
 	void DoConvertFromUTF8(const char* word, std::vector<char>& buffer);

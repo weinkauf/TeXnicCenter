@@ -204,36 +204,18 @@ int Speller::SuggestUTF8( const char* word, CStringArray& a )
 
 void Speller::LoadIgnoredWords( LPCTSTR path )
 {
-	std::basic_ifstream<TCHAR> in(path);
-	typedef std::istream_iterator<StringType,StringType::value_type,StringType::traits_type> iterator;
-
-	if (in)
-		std::copy(iterator(in),iterator(),std::inserter(ignored_words_,ignored_words_.end()));
+	LoadWords(path, ignored_words_);
 }
 
 void Speller::SaveIgnoredWords( LPCTSTR path )
 {
-	std::basic_ofstream<TCHAR> out(path);
-	typedef std::ostream_iterator<StringType,StringType::value_type,StringType::traits_type> iterator;
-
-	if (out)
-	{
-		std::copy(ignored_words_.begin(),ignored_words_.end(),
-			iterator(out,_T("\n")));
+	if (SaveWords(path, ignored_words_))
 		ignored_modified_ = false;
-	}
 }
 
 void Speller::LoadPersonalDictionary( LPCTSTR path )
 {
-	std::basic_ifstream<TCHAR> in(path);
-	typedef std::istream_iterator<StringType,StringType::value_type,StringType::traits_type> iterator;
-
-	if (in)
-	{
-		std::copy(iterator(in),iterator(),
-			std::inserter(added_words_,added_words_.end()));
-
+	if (LoadWords(path, added_words_)) {
 		using std::tr1::bind;
 		using namespace std::tr1::placeholders;
 
@@ -244,15 +226,8 @@ void Speller::LoadPersonalDictionary( LPCTSTR path )
 
 void Speller::SavePersonalDictionary( LPCTSTR path )
 {
-	std::basic_ofstream<TCHAR> out(path);
-	typedef std::ostream_iterator<StringType,StringType::value_type,StringType::traits_type> iterator;
-
-	if (out)
-	{
-		std::copy(added_words_.begin(),added_words_.end(),
-			iterator(out,_T("\n")));
+	if (SaveWords(path, added_words_))
 		added_modified_ = false;
-	}
 }
 
 void Speller::DoLoadAdd( const StringType& s )
@@ -378,4 +353,60 @@ int Speller::DoAdd( LPCTSTR w )
 	buffer.push_back(0);
 
 	return spell_->add(&buffer[0]);
+}
+
+bool Speller::SaveWords( LPCTSTR path, const WordContainer& words )
+{
+	CAtlFile file;
+	bool result = false;
+
+	if (SUCCEEDED(file.Create(path, GENERIC_WRITE, FILE_SHARE_READ, OPEN_ALWAYS)))
+	{
+		WordContainer::const_iterator it = words.begin();
+		std::vector<char> data;
+
+		for (; it != words.end(); ++it) 
+		{
+			data.clear();
+			const StringType text = *it + _T("\n");
+
+			UTF16toUTF8(text.c_str(), text.size(), data);
+
+			if (!data.empty())
+				file.Write(&data[0], data.size());
+		}
+
+		result = true;
+	}
+
+	return result;
+}
+
+bool Speller::LoadWords( LPCTSTR path, WordContainer& words )
+{
+	CAtlFile file;
+	bool result = false;
+
+	if (SUCCEEDED(file.Create(path, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING))) {
+		ULONGLONG size = 0;
+		file.GetSize(size);
+
+		if (size > 0) {
+			std::vector<char> data(static_cast<unsigned>(size));
+
+			if (SUCCEEDED(file.Read(&data[0],data.size()))) {
+				std::vector<wchar_t> unicode;
+				UTF8toUTF16(&data[0], data.size(), unicode);
+
+				std::wistringstream in(std::wstring(&unicode[0], unicode.size()));
+				typedef std::istream_iterator<StringType,StringType::value_type,
+					StringType::traits_type> iterator;
+
+				std::copy(iterator(in),iterator(),std::inserter(words,words.end()));
+				result = true;
+			}
+		}
+	}
+
+	return result;
 }
