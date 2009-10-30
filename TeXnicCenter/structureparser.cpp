@@ -446,7 +446,9 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		for (int i = 0; i < strGraphicLength; ++i)
 		{
 			strCompletePath = strPath;
-			strCompletePath += strGraphicTypes[i];
+			const CString& extension = strGraphicTypes[i];
+			strCompletePath += extension;
+
 			if (::PathFileExists(strCompletePath))
 			{
 				//File exists
@@ -476,12 +478,22 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			}
 			else
 			{
-				strCompletePath = strPath + _T(" [");
+				CString concat;
+
 				for (int i = 0; i < strGraphicLength; i++)
 				{
-					strCompletePath += _T("|") + strGraphicTypes[i];
+					const CString& extension = strGraphicTypes[i];
+
+					if (!extension.IsEmpty()) 
+					{
+						if (!concat.IsEmpty())
+							concat += _T("|");
+
+						concat += extension;
+					}
 				}
-				strCompletePath += _T("]");
+
+				strCompletePath = strPath + _T(" [") + concat + _T("]");
 				info.m_strError.Format(STE_FILE_EXIST, strCompletePath);
 				m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 			}
