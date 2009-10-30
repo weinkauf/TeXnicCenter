@@ -380,8 +380,10 @@ namespace {
 									sc.Forward(2); // \^^ and \^^<token>
 								}
 
-								if (!(text_style == SCE_TEX_INLINE_MATH && sc.chNext == '$'))
-									sc.ForwardSetState(text_style);
+								if (!(text_style == SCE_TEX_INLINE_MATH && sc.chNext == '$')) {
+									if (isTeXfive(sc.chNext))
+										sc.ForwardSetState(text_style);
+								}
 								else
 									done = true;
 							}

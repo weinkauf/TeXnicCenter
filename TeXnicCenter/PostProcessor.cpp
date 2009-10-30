@@ -222,7 +222,7 @@ BOOL CPostProcessor::Execute(LPCTSTR lpszMainPath,LPCTSTR lpszWorkingDir,HANDLE 
 		bResult = p.CreateHiddenConsole(
 		              m_strPath + _T(' ') + GetExpandedArguments(lpszMainPath),
 		              hStdInput,hStdOutput,hOutput,
-		              CREATE_NEW_PROCESS_GROUP,lpszWorkingDir);
+		              CREATE_NO_WINDOW,lpszWorkingDir);
 		if (!bResult)
 			throw FALSE;
 
