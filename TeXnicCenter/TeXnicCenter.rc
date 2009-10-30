@@ -4493,7 +4493,7 @@ END
 STRINGTABLE 
 BEGIN
     ID_LATEX_MAKEINDEX      "Führt MakeIndex für das Projekt aus\nMakeIndex"
-    ID_LATEX_NEW            "Erstellt ein neues Dokument\nNeues Dokument"
+    ID_LATEX_NEW            "Erstellt ein neues LaTeX-Dokument\nNeues LaTeX-Dokument"
     ID_LATEX_PROFILE        "Aktiviert ein Ausgabeprofil\nAusgabeprofil aktivieren"
     ID_LATEX_PROFILE_SEL    "Aktiviert ein Ausgabeprofil\nAusgabeprofil aktivieren"
     ID_LATEX_RUN            "Erzeugt aus Ihrem Projekt ein druckbares Dokument\nAusgabe erstellen"
@@ -4808,6 +4808,12 @@ END
 STRINGTABLE 
 BEGIN
     ID_WINDOW_FIRST         "Aktiviert dieses Fenster"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_METAPOST_NEW         "Erstellt ein neues MetaPost-Document\nNeues MetaPost-Dokument"
+    ID_BIBTEX_NEW           "Erstellt ein neues BibTeX-Document\nNeues BibTeX-Dokument"
 END
 
 #endif    // German (Germany) resources
@@ -7942,7 +7948,7 @@ END
 STRINGTABLE 
 BEGIN
     ID_LATEX_MAKEINDEX      "Executes MakeIndex for your project\nMakeIndex"
-    ID_LATEX_NEW            "Creates a new document\nNew document"
+    ID_LATEX_NEW            "Creates a new LaTeX document\nNew LaTeX document"
     ID_LATEX_PROFILE        "Activates an output profile\nSelect Output Profile"
     ID_LATEX_PROFILE_SEL    "Activates an output profile\nOutput Profile"
     ID_LATEX_RUN            "Builds a printable document out of your project\nBuild Output"
@@ -8765,6 +8771,12 @@ BEGIN
     ID_PHS_ALLGRAPHICFILES_QR "$qrGPF"
     ID_PHS_ALLTXCFILES_QR   "$qrTXC"
     ID_PHS_ALLFILESETS_QR   "$qrAFS"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_METAPOST_NEW         "Creates a new MetaPost document\nNew MetaPost document"
+    ID_BIBTEX_NEW           "Creates a new BibTeX document\nNew BibTeX document"
 END
 
 #endif    // English (U.S.) resources
