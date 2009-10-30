@@ -258,6 +258,9 @@ void LaTeXView::UpdateSettings()
 	SetAStyle(SCE_TEX_SYMBOL, RGB(145,0,145),GetColor(COLORINDEX_BKGND));
 	SetAStyle(SCE_TEX_DIGIT, GetColor(COLORINDEX_DIGIT),GetColor(COLORINDEX_BKGND));
 
+	SetAStyle(SCE_TEX_DOCUMENTCLASS, RGB(0x8b, 0, 0), GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_TEX_USE_PACKAGE, RGB(0, 0x80, 0x80), GetColor(COLORINDEX_BKGND));
+
 #pragma region Comments 
 
 	// Comments displayed in italics
@@ -307,6 +310,14 @@ void LaTeXView::UpdateSettings()
 	rCtrl.SetCaretPeriod(CConfiguration::GetInstance()->IsBlinkInsertCaret() ? 500 : 0);
 
 #pragma endregion
+
+	rCtrl.StyleSetFont(SCE_TEX_DOCUMENTCLASS,editor_font.lfFaceName);
+	rCtrl.StyleSetSize(SCE_TEX_DOCUMENTCLASS,point_size);
+	rCtrl.StyleSetBold(SCE_TEX_DOCUMENTCLASS,TRUE);
+
+	rCtrl.StyleSetFont(SCE_TEX_USE_PACKAGE,editor_font.lfFaceName);
+	rCtrl.StyleSetSize(SCE_TEX_USE_PACKAGE,point_size);
+	rCtrl.StyleSetItalic(SCE_TEX_USE_PACKAGE,TRUE);
 }
 
 #pragma region Scintilla notifications

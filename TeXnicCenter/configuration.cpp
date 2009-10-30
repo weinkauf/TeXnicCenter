@@ -130,7 +130,17 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 		CFont font;
 		LOGFONT logFont;
 
-		font.CreatePointFont(100,_T("Courier New"));
+		// Create the default editor font if the loading fails
+		LPCTSTR const fontNames[] = {
+			_T("Consolas"),			// Preferred monospaced font on Vista or higher
+			_T("Lucida Console"),
+			_T("Courier New")
+		};
+
+		for (int i = 0; i < sizeof(fontNames) / sizeof(*fontNames) &&
+			!font.CreatePointFont(100, fontNames[i]); )
+			 ++i; // Increment here to prevent compiler warning
+		
 		font.GetLogFont(&logFont);
 
 		SerializeProfileData(strSection,_T("EditorFont"),&m_fontEditor,direction,sizeof(logFont),&logFont);
