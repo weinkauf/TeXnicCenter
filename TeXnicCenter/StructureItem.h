@@ -136,4 +136,5 @@ public:
 
 	static bool IsEnvironment(Type type);
 	bool IsEnvironment() const;
+	bool IsHeader() const;
 };

@@ -732,7 +732,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 		StructureItem* item;
 
-		if (!cookies.empty())
+		if (!cookies.empty() && (aSI.empty() || !aSI.back().IsHeader()))
 			item = &aSI[cookies.top().nItemIndex];
 		else if (!aSI.empty())
 			item = &aSI.back();

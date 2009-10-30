@@ -217,3 +217,8 @@ bool StructureItem::IsEnvironment() const
 {
 	return IsEnvironment(static_cast<Type>(m_nType));
 }
+
+bool StructureItem::IsHeader() const
+{
+	return m_nType == header;
+}
