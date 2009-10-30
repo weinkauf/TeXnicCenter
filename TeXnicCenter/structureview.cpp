@@ -1,4 +1,4 @@
-// StructureView.cpp : implementation file
+// StructurePane.cpp : implementation file
 //
 
 #include "stdafx.h"
@@ -6,20 +6,20 @@
 #include "StructureView.h"
 
 
-// StructureView
+// StructurePane
 
-IMPLEMENT_DYNAMIC(StructureView, CDockablePane)
+IMPLEMENT_DYNAMIC(StructurePane, CDockablePane)
 
-//StructureView::StructureView()
+//StructurePane::StructurePane()
 //{
 //
 //}
 //
-//StructureView::~StructureView()
+//StructurePane::~StructurePane()
 //{
 //}
 
-BEGIN_MESSAGE_MAP(StructureView, CDockablePane)
+BEGIN_MESSAGE_MAP(StructurePane, CDockablePane)
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_WM_SETFOCUS()
@@ -27,9 +27,9 @@ BEGIN_MESSAGE_MAP(StructureView, CDockablePane)
 END_MESSAGE_MAP()
 
 
-// StructureView message handlers
+// StructurePane message handlers
 
-int StructureView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+int StructurePane::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
 		return -1;
@@ -48,13 +48,13 @@ int StructureView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-void StructureView::OnSize(UINT nType, int cx, int cy)
+void StructurePane::OnSize(UINT nType, int cx, int cy)
 {
 	CDockablePane::OnSize(nType, cx, cy);
 	AdjustLayout();
 }
 
-void StructureView::AdjustLayout(const CRect& rect)
+void StructurePane::AdjustLayout(const CRect& rect)
 {
 	if (toolbar_ && tree_)
 	{
@@ -73,14 +73,14 @@ void StructureView::AdjustLayout(const CRect& rect)
 	}
 }
 
-void StructureView::AdjustLayout()
+void StructurePane::AdjustLayout()
 {
 	CRect rect;
 	GetClientRect(&rect);
 	AdjustLayout(rect);
 }
 
-void StructureView::OnSetFocus(CWnd* pOldWnd)
+void StructurePane::OnSetFocus(CWnd* pOldWnd)
 {
 	CDockablePane::OnSetFocus(pOldWnd);
 
@@ -88,12 +88,12 @@ void StructureView::OnSetFocus(CWnd* pOldWnd)
 		tree_.SetFocus();
 }
 
-CProjectView* StructureView::GetProjectView()
+CProjectView* StructurePane::GetProjectView()
 {
 	return &tree_;
 }
 
-void StructureView::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
+void StructurePane::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 {
 	tree_.ShowContextMenu(point); // We're done. Do not pass the message to the base class
 }

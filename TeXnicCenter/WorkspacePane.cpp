@@ -3,14 +3,14 @@
 #include "WorkspacePane.h"
 
 
-IMPLEMENT_DYNAMIC(WorkspacePane, CDockablePane)
+IMPLEMENT_DYNAMIC(WorkspacePane, WorkspacePaneBase)
 
 WorkspacePane::WorkspacePane()
 : client_(0)
 {
 }
 
-BEGIN_MESSAGE_MAP(WorkspacePane, CDockablePane)
+BEGIN_MESSAGE_MAP(WorkspacePane, WorkspacePaneBase)
 	ON_WM_SIZE()
 	ON_WM_DESTROY()
 	ON_WM_SETFOCUS()
@@ -23,7 +23,7 @@ END_MESSAGE_MAP()
 
 void WorkspacePane::OnSize(UINT nType, int cx, int cy)
 {
-	CDockablePane::OnSize(nType, cx, cy);
+	WorkspacePaneBase::OnSize(nType, cx, cy);
 
 	CRect rc(0,0,cx,cy);
 	AdjustLayout(rc);
@@ -57,21 +57,19 @@ void WorkspacePane::AdjustLayout(void)
 
 void WorkspacePane::OnDestroy()
 {
-	CDockablePane::OnDestroy();
+	WorkspacePaneBase::OnDestroy();
 	client_ = 0;
 }
 
 void WorkspacePane::OnSetFocus(CWnd* pOldWnd)
 {
-	CDockablePane::OnSetFocus(pOldWnd);
-
-	if (client_)
-		client_->SetFocus();
+	WorkspacePaneBase::OnSetFocus(pOldWnd);
+	SetClientFocus();
 }
 
 int WorkspacePane::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
+	if (WorkspacePaneBase::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
 	if (client_ && client_->GetParent() != this)
@@ -90,7 +88,7 @@ CWnd* WorkspacePane::GetClient(void) const
 
 BOOL WorkspacePane::OnEraseBkgnd(CDC* pDC)
 {
-	return client_ ? 1 : CDockablePane::OnEraseBkgnd(pDC);
+	return client_ ? 1 : WorkspacePaneBase::OnEraseBkgnd(pDC);
 }
 
 void WorkspacePane::OnContextMenu(CWnd* pWnd, CPoint point)
@@ -98,5 +96,16 @@ void WorkspacePane::OnContextMenu(CWnd* pWnd, CPoint point)
 	if (NavigatorTreeCtrl* t = dynamic_cast<NavigatorTreeCtrl*>(client_))
 		t->ShowContextMenu(point);
 	else
-		CDockablePane::OnContextMenu(pWnd,point);
+		WorkspacePaneBase::OnContextMenu(pWnd,point);
+}
+
+void WorkspacePane::SetClientFocus()
+{
+	if (client_)
+		client_->SetFocus();
+}
+
+void WorkspacePane::Focus()
+{
+	SetClientFocus();
 }

@@ -179,4 +179,6 @@ private:
 
 protected:
 	afx_msg void OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult);
+public:
+	afx_msg void OnKillFocus(CWnd* pNewWnd);
 };

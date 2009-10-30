@@ -52,6 +52,7 @@ BEGIN_MESSAGE_MAP(COutputView,CListCtrl)
 	ON_WM_SYSCOLORCHANGE()
 	ON_WM_SETFOCUS()
 	ON_NOTIFY_REFLECT(NM_DBLCLK, &COutputView::OnNMDblclk)
+	ON_WM_KILLFOCUS()
 END_MESSAGE_MAP()
 
 
@@ -310,4 +311,9 @@ void COutputView::OnNMDblclk(NMHDR* /*pNMHDR*/, LRESULT* /*pResult*/)
 		return;
 
 	GetDocument()->ActivateMessageByOutputLine(GetNextSelectedItem(pos),this);
+}
+
+void COutputView::OnKillFocus(CWnd* pNewWnd)
+{
+	__super::OnKillFocus(pNewWnd);
 }

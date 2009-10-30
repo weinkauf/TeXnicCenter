@@ -820,6 +820,7 @@ BOOL CodeDocument::OnOpenDocument(LPCTSTR lpszPathName)
 	ASSERT_VALID(view);
 
 	view->SetModified(false);
+	::SHAddToRecentDocs(SHARD_PATH, lpszPathName);
 
 	return TRUE;
 }

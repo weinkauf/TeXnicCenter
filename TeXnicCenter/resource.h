@@ -873,8 +873,6 @@
 #define ID_PH_CSSLASHDIR                33281
 #define ID_PH_CLINENR                   33282
 #define ID_PH_PERCENT                   33283
-#define ID_USER_TOOL_FIRST              33284
-#define ID_USER_TOOL_LAST               33285
 #define ID_PROJECT_NEW                  33286
 #define ID_PROJECT_OPEN                 33287
 #define ID_PROJECT_SAVE                 33288
@@ -1023,7 +1021,7 @@
 #define ID_WINDOW_GREP1                 33502
 #define ID_WINDOW_GREP2                 33503
 #define ID_APP_LICENSE                  33507
-#define ID_TOOLS_ENTRY                  33508
+
 #define ID_WINDOW_NEXT                  33509
 #define ID_WINDOW_PREVIOUS              33510
 #define ID_WINDOW_CLOSE_ALL             33511
@@ -1049,6 +1047,9 @@
 #define ID_URL_TCHOME                   33706
 #define ID_URL_TCNEWSLETTER             33707
 #define ID_URL_TCUSERSGROUP             33708
+#define ID_TOOLS_ENTRY                  33799
+#define ID_USER_TOOL_FIRST              33800
+#define ID_USER_TOOL_LAST               34000
 #define ID_BUTTON38599                  38599
 #define ID_BUTTON38600                  38600
 #define ID_DOCUMENTTABS_NOTESTYLE       38601

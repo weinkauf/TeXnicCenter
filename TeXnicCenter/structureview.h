@@ -2,20 +2,21 @@
 
 #include "StructureTreeCtrl.h"
 #include "PrivateToolBar.h"
+#include "WorkspacePaneBase.h"
 
-// StructureView
+// StructurePane
 
-class StructureView : public CDockablePane
+class StructurePane : public WorkspacePaneBase
 {
-	DECLARE_DYNAMIC(StructureView)
+	DECLARE_DYNAMIC(StructurePane)
 
 private:
 	StructureTreeCtrl tree_;
 	PrivateToolBar toolbar_;
 
 public:
-	//StructureView();
-	//~StructureView();
+	//StructurePane();
+	//~StructurePane();
 	void AdjustLayout(const CRect& rect);
 	void AdjustLayout();
 

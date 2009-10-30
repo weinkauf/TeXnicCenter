@@ -53,7 +53,7 @@
 #include "OutputBuilder.h"
 #include "FileClean.h"
 #include "FileCleanConfirmDialog.h"
-#include "ErrorListView.h"
+#include "ErrorListPane.h"
 #include "LaTeXDocument.h"
 #include "LaTeXView.h"
 
@@ -451,11 +451,9 @@ void COutputDoc::SetActiveView(OutputViewBase *pView)
 		if (pView == m_apGrepView[i])
 		{
 			m_nActiveFileGrep = i;
-			return;
+			break;
 		}
 	}
-
-	return;
 }
 
 

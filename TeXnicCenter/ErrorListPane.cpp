@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
-#include "ErrorListView.h"
+#include "ErrorListPane.h"
 
 #include <functional>
 
@@ -8,38 +8,38 @@
 
 // ErrorListView
 
-IMPLEMENT_DYNAMIC(ErrorListView, CDockablePane)
+IMPLEMENT_DYNAMIC(ErrorListPane, WorkspacePaneBase)
 
 const UINT ListView = 0x1000;
 
-ErrorListView::Item::Item( const COutputInfo& info, CBuildView::tagImage type ) 
+ErrorListPane::Item::Item( const COutputInfo& info, CBuildView::tagImage type ) 
 : info(info), type(type)
 {
 }
 
-ErrorListView::ErrorListView()
+ErrorListPane::ErrorListPane()
 : doc_(0)
 {
 }
 
-BEGIN_MESSAGE_MAP(ErrorListView, CDockablePane)
+BEGIN_MESSAGE_MAP(ErrorListPane, WorkspacePaneBase)
 	ON_WM_CREATE()
 	ON_WM_SETFOCUS()
 	ON_WM_SIZE()
-	ON_UPDATE_COMMAND_UI(ID_SHOW_ERRORS, &ErrorListView::OnUpdateShowErrors)
-	ON_UPDATE_COMMAND_UI(ID_SHOW_WARNINGS, &ErrorListView::OnUpdateShowWarnings)
-	ON_UPDATE_COMMAND_UI(ID_SHOW_BAD_BOXES, &ErrorListView::OnUpdateShowBadBoxes)
-	ON_COMMAND(ID_SHOW_ERRORS, &ErrorListView::OnShowErrors)
-	ON_COMMAND(ID_SHOW_WARNINGS, &ErrorListView::OnShowWarnings)
-	ON_COMMAND(ID_SHOW_BAD_BOXES, &ErrorListView::OnShowBadBoxes)
-	ON_NOTIFY(NM_DBLCLK,ListView,&ErrorListView::OnNMDblClk)
+	ON_UPDATE_COMMAND_UI(ID_SHOW_ERRORS, &ErrorListPane::OnUpdateShowErrors)
+	ON_UPDATE_COMMAND_UI(ID_SHOW_WARNINGS, &ErrorListPane::OnUpdateShowWarnings)
+	ON_UPDATE_COMMAND_UI(ID_SHOW_BAD_BOXES, &ErrorListPane::OnUpdateShowBadBoxes)
+	ON_COMMAND(ID_SHOW_ERRORS, &ErrorListPane::OnShowErrors)
+	ON_COMMAND(ID_SHOW_WARNINGS, &ErrorListPane::OnShowWarnings)
+	ON_COMMAND(ID_SHOW_BAD_BOXES, &ErrorListPane::OnShowBadBoxes)
+	ON_NOTIFY(NM_DBLCLK,ListView,&ErrorListPane::OnNMDblClk)
 END_MESSAGE_MAP()
 
 // ErrorListView message handlers
 
-int ErrorListView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+int ErrorListPane::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
+	if (WorkspacePaneBase::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
 	show_errors_ = show_warnings_ = show_bad_boxes_ = true;
@@ -82,18 +82,18 @@ int ErrorListView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	using namespace std::tr1;
 	using namespace placeholders;
 
-	list_view_.SetColumnCompareFunction(0,bind(&ErrorListView::CompareType,this,_1,_2));
-	list_view_.SetColumnCompareFunction(1,bind(&ErrorListView::CompareOrdinal,this,_1,_2));
-	list_view_.SetColumnCompareFunction(2,bind(&ErrorListView::CompareErrorMessage,this,_1,_2));
-	list_view_.SetColumnCompareFunction(3,bind(&ErrorListView::CompareSourceLine,this,_1,_2));
-	list_view_.SetColumnCompareFunction(4,bind(&ErrorListView::CompareSourceFile,this,_1,_2));
+	list_view_.SetColumnCompareFunction(0,bind(&ErrorListPane::CompareType,this,_1,_2));
+	list_view_.SetColumnCompareFunction(1,bind(&ErrorListPane::CompareOrdinal,this,_1,_2));
+	list_view_.SetColumnCompareFunction(2,bind(&ErrorListPane::CompareErrorMessage,this,_1,_2));
+	list_view_.SetColumnCompareFunction(3,bind(&ErrorListPane::CompareSourceLine,this,_1,_2));
+	list_view_.SetColumnCompareFunction(4,bind(&ErrorListPane::CompareSourceFile,this,_1,_2));
 
 	Clear();
 
 	return 0;
 }
 
-void ErrorListView::AdjustLayout(const CRect& rect)
+void ErrorListPane::AdjustLayout(const CRect& rect)
 {
 	if (toolbar_ && list_view_)
 	{
@@ -105,17 +105,17 @@ void ErrorListView::AdjustLayout(const CRect& rect)
 	}
 }
 
-void ErrorListView::AdjustLayout(void)
+void ErrorListPane::AdjustLayout(void)
 {
 	CRect rect;
 	GetClientRect(&rect);
 	AdjustLayout(rect);
 }
 
-void ErrorListView::OnSetFocus(CWnd* pOldWnd)
+void ErrorListPane::OnSetFocus(CWnd* pOldWnd)
 {
-	CDockablePane::OnSetFocus(pOldWnd);
-	list_view_.SetFocus();
+	WorkspacePaneBase::OnSetFocus(pOldWnd);
+	Focus();
 
 	ASSERT_NULL_OR_POINTER(doc_, COutputDoc);
 	
@@ -123,13 +123,13 @@ void ErrorListView::OnSetFocus(CWnd* pOldWnd)
 		doc_->SetActiveView(this);
 }
 
-void ErrorListView::OnSize(UINT nType, int cx, int cy)
+void ErrorListPane::OnSize(UINT nType, int cx, int cy)
 {
-	CDockablePane::OnSize(nType, cx, cy);
+	WorkspacePaneBase::OnSize(nType, cx, cy);
 	AdjustLayout();
 }
 
-void ErrorListView::Clear(void)
+void ErrorListPane::Clear(void)
 {
 	list_view_.DeleteAllItems();
 	items_.clear();
@@ -141,7 +141,7 @@ void ErrorListView::Clear(void)
 	UpdateToolBarButton(CBuildView::imageError);
 }
 
-void ErrorListView::AddMessage(const COutputInfo& info, CBuildView::tagImage t)
+void ErrorListPane::AddMessage(const COutputInfo& info, CBuildView::tagImage t)
 {
 	bool insert = false;
 
@@ -193,14 +193,14 @@ void ErrorListView::AddMessage(const COutputInfo& info, CBuildView::tagImage t)
 	}
 }
 
-void ErrorListView::UpdateToolBarButton(CBuildView::tagImage t)
+void ErrorListPane::UpdateToolBarButton(CBuildView::tagImage t)
 {
 	// AddMessage and consequently UpdateToolBarButton can be
 	// called from a different thread causing an assertion
 	::PostMessage(m_hWnd,UpdateToolBarButtonMessageID,t,0);
 }
 
-BOOL ErrorListView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
+BOOL ErrorListPane::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
 	BOOL result;
 
@@ -234,45 +234,45 @@ BOOL ErrorListView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT
 		result = TRUE;
 	}
 	else
-		result = CDockablePane::OnWndMsg(message, wParam, lParam, pResult);
+		result = WorkspacePaneBase::OnWndMsg(message, wParam, lParam, pResult);
 
 	return result;
 }
 
-void ErrorListView::OnUpdateShowErrors(CCmdUI *pCmdUI)
+void ErrorListPane::OnUpdateShowErrors(CCmdUI *pCmdUI)
 {
 	pCmdUI->SetCheck(show_errors_);
 }
 
-void ErrorListView::OnUpdateShowWarnings(CCmdUI *pCmdUI)
+void ErrorListPane::OnUpdateShowWarnings(CCmdUI *pCmdUI)
 {
 	pCmdUI->SetCheck(show_warnings_);
 }
 
-void ErrorListView::OnUpdateShowBadBoxes(CCmdUI *pCmdUI)
+void ErrorListPane::OnUpdateShowBadBoxes(CCmdUI *pCmdUI)
 {
 	pCmdUI->SetCheck(show_bad_boxes_);
 }
 
-void ErrorListView::OnShowErrors()
+void ErrorListPane::OnShowErrors()
 {
 	show_errors_ = !show_errors_;
 	Populate();
 }
 
-void ErrorListView::OnShowWarnings()
+void ErrorListPane::OnShowWarnings()
 {
 	show_warnings_ = !show_warnings_;
 	Populate();
 }
 
-void ErrorListView::OnShowBadBoxes()
+void ErrorListPane::OnShowBadBoxes()
 {
 	show_bad_boxes_ = !show_bad_boxes_;
 	Populate();
 }
 
-int ErrorListView::InsertMessage(const COutputInfo& info, CBuildView::tagImage t)
+int ErrorListPane::InsertMessage(const COutputInfo& info, CBuildView::tagImage t)
 {
 	const int index = list_view_.InsertItem(list_view_.GetItemCount(),0,t);
 
@@ -291,7 +291,7 @@ int ErrorListView::InsertMessage(const COutputInfo& info, CBuildView::tagImage t
 	return index;
 }
 
-void ErrorListView::Populate(unsigned set)
+void ErrorListPane::Populate(unsigned set)
 {
 	list_view_.SetRedraw(FALSE);
 	list_view_.DeleteAllItems();
@@ -314,13 +314,13 @@ void ErrorListView::Populate(unsigned set)
 	list_view_.Invalidate();
 }
 
-void ErrorListView::Populate(void)
+void ErrorListPane::Populate(void)
 {
 	Populate(show_errors_ << CBuildView::imageError | show_warnings_ << CBuildView::imageWarning |
 	         show_bad_boxes_ << CBuildView::imageBadBox);
 }
 
-void ErrorListView::OnNMDblClk(NMHDR*, LRESULT* result)
+void ErrorListPane::OnNMDblClk(NMHDR*, LRESULT* result)
 {
 	if (doc_)
 	{
@@ -336,35 +336,40 @@ void ErrorListView::OnNMDblClk(NMHDR*, LRESULT* result)
 	}
 }
 
-void ErrorListView::AttachDoc(COutputDoc* doc)
+void ErrorListPane::AttachDoc(COutputDoc* doc)
 {
 	doc_ = doc;
 }
 
-int ErrorListView::CompareType( LPARAM l1, LPARAM l2 )
+int ErrorListPane::CompareType( LPARAM l1, LPARAM l2 )
 {
 	return items_[l1].type < items_[l2].type ? -1 :
 		items_[l1].type > items_[l2].type ? 1 : 0;
 }
 
-int ErrorListView::CompareOrdinal( LPARAM l1, LPARAM l2 )
+int ErrorListPane::CompareOrdinal( LPARAM l1, LPARAM l2 )
 {
 	return items_[l1].ordinal < items_[l2].ordinal ? -1 :
 		items_[l1].ordinal > items_[l2].ordinal ? 1 : 0;
 }
 
-int ErrorListView::CompareErrorMessage( LPARAM l1, LPARAM l2 )
+int ErrorListPane::CompareErrorMessage( LPARAM l1, LPARAM l2 )
 {
 	return items_[l1].info.GetErrorMessage().CompareNoCase(items_[l2].info.GetErrorMessage());
 }
 
-int ErrorListView::CompareSourceLine( LPARAM l1, LPARAM l2 )
+int ErrorListPane::CompareSourceLine( LPARAM l1, LPARAM l2 )
 {
 	return items_[l1].info.m_nSrcLine < items_[l2].info.m_nSrcLine ? -1 :
 		items_[l1].info.m_nSrcLine > items_[l2].info.m_nSrcLine ? 1 : 0;
 }
 
-int ErrorListView::CompareSourceFile( LPARAM l1, LPARAM l2 )
+int ErrorListPane::CompareSourceFile( LPARAM l1, LPARAM l2 )
 {
 	return items_[l1].info.GetSourceFile().CompareNoCase(items_[l2].info.GetSourceFile());
+}
+
+void ErrorListPane::Focus()
+{
+	list_view_.SetFocus();
 }
