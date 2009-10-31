@@ -217,7 +217,7 @@ namespace {
 
 	bool IsTeXSecond(int ch)
 	{
-		return std::isprint(ch) && !IsDigit(ch);
+		return std::isprint(ch);
 	}
 
 	const char* const units[] = {
@@ -484,7 +484,7 @@ namespace {
 							else if (IsEscape(sc.ch)) {
 								sc.SetState(command_style);
 
-								if (!IsTeXSecond(sc.chNext))
+								if (!IsDigit(sc.chNext) && !IsTeXSecond(sc.chNext))
 									sc.ForwardSetState(text_style);
 							}
 							else if (IsSpace(sc.ch)) {
