@@ -435,4 +435,5 @@ public:
 	void UnregisterChildFrame(CFrameWnd* frame);
 	void CheckForFileChanges();
 	void CheckForFileChangesAsync();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };

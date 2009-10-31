@@ -2055,3 +2055,41 @@ void CMainFrame::CheckForFileChangesAsync()
 {
 	PostMessage(CheckForFileChangesMessageID);
 }
+
+BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
+{
+	BOOL result = FALSE;
+
+	if (pMsg->message == WM_MBUTTONUP && AreMDITabs()) {
+		CWnd* pWnd = FromHandle(pMsg->hwnd);
+		CMFCTabCtrl* tabGroup = dynamic_cast<CMFCTabCtrl*>(pWnd);
+
+		if (tabGroup)
+		{
+			//clicked middle button on a tab group.
+			//was it on a tab?
+			CPoint point = pMsg->pt;
+			tabGroup->ScreenToClient(&point);
+
+			int tabIndex = tabGroup->GetTabFromPoint(point);
+
+			if (tabIndex != -1)
+			{
+				//clicked middle button on a tab.
+				//send a WM_CLOSE message to it
+				CWnd* pTab = tabGroup->GetTabWnd(tabIndex);
+				
+				if (pTab)
+				{
+					pTab->SendMessage(WM_CLOSE);
+					result = TRUE;
+				}
+			}
+		}		
+	}
+	
+	if (!result)
+		result = CMDIFrameWndEx::PreTranslateMessage(pMsg);
+
+	return result;
+}
