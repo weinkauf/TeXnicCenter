@@ -284,9 +284,7 @@ public:
 
 	/** register an ontransformnode event handler */
 	void SetOntransformnode(_variant_t rhs);
-
 };
-
 
 
 class AFX_EXT_CLASS CXMLDOMDocument2 : public CInterfaceCallingWrapper<IXMLDOMDocument2>

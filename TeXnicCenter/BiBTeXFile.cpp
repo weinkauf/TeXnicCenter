@@ -408,7 +408,7 @@ BOOL BibTeXFile::ParseField(const TCHAR *field,CString &name,CString &val)
 	CONST TCHAR* eqChar;
 
 	eqChar = _tcsstr(field,_T("="));
-	int len1,len2,n = _tcslen(field);
+	size_t len1, len2, n = _tcslen(field);
 
 	if (NULL == eqChar)
 	{

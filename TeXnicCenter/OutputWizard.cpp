@@ -1053,8 +1053,15 @@ const CString COutputWizard::FindMiKTeXInstallLocation()
 
 	for (int i = 0; i < count; ++i)
 	{
-		if (reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\") +
-			versions[i],KEY_READ) == ERROR_SUCCESS)
+		const CString key = 
+#ifdef _WIN64
+			_T("Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\") 
+#else
+			_T("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\") 
+#endif
+			+ versions[i];
+
+		if (reg.Open(HKEY_LOCAL_MACHINE, key ,KEY_READ) == ERROR_SUCCESS)
 		{
 			TCHAR path[MAX_PATH];
 			ULONG length = MAX_PATH;
