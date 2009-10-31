@@ -20,235 +20,13 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-				Description="Building type library..."
-				CommandLine="midl /client none /server none /win32 TeXnicCenterObjects.idl&#x0D;&#x0A;xcopy /y /f TeXnicCenterObjects.tlb &quot;$(OutDir)&quot;&#x0D;&#x0A;xcopy /f TeXnicCenterObjects.tlb &quot;$(OutDir)&quot;&#x0D;&#x0A;del TeXnicCenterObjects.tlb&#x0D;&#x0A;"
-				Outputs="$(OutDir)\TeXnicCenterObjects.tlb"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="3"
-				InlineFunctionExpansion="0"
-				EnableIntrinsicFunctions="false"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_BIND_TO_CURRENT_VCLIBS_VERSION"
-				StringPooling="true"
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				FloatingPointModel="2"
-				ForceConformanceInForLoopScope="false"
-				RuntimeTypeInfo="true"
-				WarningLevel="3"
-				SuppressStartupBanner="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1031"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
-			ConfigurationType="4"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
-			UseOfMFC="2"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-				Description="Building type library..."
-				CommandLine="midl /client none /server none /win32 TeXnicCenterObjects.idl&#x0D;&#x0A;xcopy /y /f TeXnicCenterObjects.tlb &quot;$(OutDir)&quot;&#x0D;&#x0A;xcopy /f TeXnicCenterObjects.tlb &quot;$(OutDir)&quot;&#x0D;&#x0A;del TeXnicCenterObjects.tlb&#x0D;&#x0A;"
-				Outputs="$(OutDir)\TeXnicCenterObjects.tlb"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_BIND_TO_CURRENT_VCLIBS_VERSION"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				FloatingPointModel="2"
-				ForceConformanceInForLoopScope="false"
-				RuntimeTypeInfo="true"
-				WarningLevel="3"
-				SuppressStartupBanner="true"
-				DebugInformationFormat="4"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1031"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Unicode Debug|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
-			ConfigurationType="4"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
-			UseOfMFC="2"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-				Description="Building type library..."
-				CommandLine="midl /client none /server none /win32 TeXnicCenterObjects.idl&#x0D;&#x0A;xcopy /y /f TeXnicCenterObjects.tlb &quot;$(OutDir)&quot;&#x0D;&#x0A;xcopy /f TeXnicCenterObjects.tlb &quot;$(OutDir)&quot;&#x0D;&#x0A;del TeXnicCenterObjects.tlb&#x0D;&#x0A;"
-				Outputs="$(OutDir)\TeXnicCenterObjects.tlb"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_BIND_TO_CURRENT_VCLIBS_VERSION"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				FloatingPointModel="2"
-				ForceConformanceInForLoopScope="false"
-				RuntimeTypeInfo="true"
-				WarningLevel="3"
-				SuppressStartupBanner="true"
-				DebugInformationFormat="4"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1031"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Unicode Release|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
-			ConfigurationType="4"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -318,8 +96,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -394,9 +172,82 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			UseOfMFC="2"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				Description="Building type library..."
+				CommandLine="midl /client none /server none /win32 TeXnicCenterObjects.idl&#x0D;&#x0A;xcopy /y /f TeXnicCenterObjects.tlb &quot;$(OutDir)&quot;&#x0D;&#x0A;xcopy /f TeXnicCenterObjects.tlb &quot;$(OutDir)&quot;&#x0D;&#x0A;del TeXnicCenterObjects.tlb&#x0D;&#x0A;"
+				Outputs="$(OutDir)\TeXnicCenterObjects.tlb"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_BIND_TO_CURRENT_VCLIBS_VERSION"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				FloatingPointModel="2"
+				ForceConformanceInForLoopScope="false"
+				RuntimeTypeInfo="true"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1031"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="2"
@@ -468,9 +319,82 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Unicode Debug|Win32"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			UseOfMFC="2"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				Description="Building type library..."
+				CommandLine="midl /client none /server none /win32 TeXnicCenterObjects.idl&#x0D;&#x0A;xcopy /y /f TeXnicCenterObjects.tlb &quot;$(OutDir)&quot;&#x0D;&#x0A;xcopy /f TeXnicCenterObjects.tlb &quot;$(OutDir)&quot;&#x0D;&#x0A;del TeXnicCenterObjects.tlb&#x0D;&#x0A;"
+				Outputs="$(OutDir)\TeXnicCenterObjects.tlb"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_BIND_TO_CURRENT_VCLIBS_VERSION"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				FloatingPointModel="2"
+				ForceConformanceInForLoopScope="false"
+				RuntimeTypeInfo="true"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1031"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Unicode Debug|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="2"
@@ -542,9 +466,85 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Unicode Release|Win32"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				Description="Building type library..."
+				CommandLine="midl /client none /server none /win32 TeXnicCenterObjects.idl&#x0D;&#x0A;xcopy /y /f TeXnicCenterObjects.tlb &quot;$(OutDir)&quot;&#x0D;&#x0A;xcopy /f TeXnicCenterObjects.tlb &quot;$(OutDir)&quot;&#x0D;&#x0A;del TeXnicCenterObjects.tlb&#x0D;&#x0A;"
+				Outputs="$(OutDir)\TeXnicCenterObjects.tlb"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="3"
+				InlineFunctionExpansion="0"
+				EnableIntrinsicFunctions="false"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_BIND_TO_CURRENT_VCLIBS_VERSION"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				FloatingPointModel="2"
+				ForceConformanceInForLoopScope="false"
+				RuntimeTypeInfo="true"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1031"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Unicode Release|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -638,31 +638,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -678,7 +662,23 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Unicode Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Unicode Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Unicode Release|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -706,31 +706,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -746,7 +730,23 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Unicode Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Unicode Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Unicode Release|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -774,31 +774,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -814,7 +798,23 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Unicode Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Unicode Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Unicode Release|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -874,37 +874,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="MIDL"
-						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
-						Outputs="$(InputName)_i.c;$(InputName).h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="MIDL"
-						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
-						Outputs="$(InputName)_i.c;$(InputName).h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="MIDL"
-						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
-						Outputs="$(InputName)_i.c;$(InputName).h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MIDL"
+						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
+						Outputs="$(InputName)_i.c;$(InputName).h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -924,7 +904,27 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Unicode Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MIDL"
+						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
+						Outputs="$(InputName)_i.c;$(InputName).h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Unicode Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MIDL"
+						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
+						Outputs="$(InputName)_i.c;$(InputName).h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Unicode Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -958,37 +958,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="MIDL"
-						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
-						Outputs="$(InputName)_i.c;$(InputName).h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="MIDL"
-						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
-						Outputs="$(InputName)_i.c;$(InputName).h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="MIDL"
-						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
-						Outputs="$(InputName)_i.c;$(InputName).h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MIDL"
+						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
+						Outputs="$(InputName)_i.c;$(InputName).h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1008,7 +988,27 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Unicode Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MIDL"
+						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
+						Outputs="$(InputName)_i.c;$(InputName).h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Unicode Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MIDL"
+						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
+						Outputs="$(InputName)_i.c;$(InputName).h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Unicode Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1042,37 +1042,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="MIDL"
-						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
-						Outputs="$(InputName)_i.c;$(InputName).h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="MIDL"
-						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
-						Outputs="$(InputName)_i.c;$(InputName).h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="MIDL"
-						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
-						Outputs="$(InputName)_i.c;$(InputName).h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MIDL"
+						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
+						Outputs="$(InputName)_i.c;$(InputName).h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1092,7 +1072,27 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="Unicode Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MIDL"
+						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
+						Outputs="$(InputName)_i.c;$(InputName).h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Unicode Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="MIDL"
+						CommandLine="midl /client none /server none /win32 $(InputName).idl&#x0D;&#x0A;"
+						Outputs="$(InputName)_i.c;$(InputName).h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Unicode Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"

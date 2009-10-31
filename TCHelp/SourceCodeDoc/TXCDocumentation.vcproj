@@ -21,8 +21,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="10"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -46,8 +46,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="10"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"

@@ -351,7 +351,7 @@ void CDocumentNewDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CTemplateDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CDocumentNewDialog)
-	DDX_CBIndex(pDX,IDC_SELECT_FILEFORMAT,m_nFileFormat);
+	DDX_CBIndex(pDX,IDC_FILE_FORMAT,m_nFileFormat);
 	//}}AFX_DATA_MAP
 }
 

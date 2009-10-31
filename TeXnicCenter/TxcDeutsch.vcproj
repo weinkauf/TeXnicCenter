@@ -20,8 +20,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)\Language"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Language"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -82,6 +82,7 @@
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				GenerateManifest="false"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -112,8 +113,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Language"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -174,6 +175,7 @@
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				GenerateManifest="false"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -204,12 +206,13 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)\Language"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Language"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -262,6 +265,7 @@
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				GenerateManifest="false"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -292,12 +296,13 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Language"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -350,6 +355,7 @@
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				GenerateManifest="false"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -380,12 +386,13 @@
 		</Configuration>
 		<Configuration
 			Name="Unicode Debug|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)\Language"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Language"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -438,6 +445,7 @@
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				GenerateManifest="false"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -468,12 +476,13 @@
 		</Configuration>
 		<Configuration
 			Name="Unicode Debug|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Language"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -526,6 +535,7 @@
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				GenerateManifest="false"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -556,13 +566,13 @@
 		</Configuration>
 		<Configuration
 			Name="Unicode Release|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(ConfigurationName)\Language"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Language"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
-			WholeProgramOptimization="1"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -618,6 +628,7 @@
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				GenerateManifest="false"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -649,13 +660,13 @@
 		</Configuration>
 		<Configuration
 			Name="Unicode Release|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Language"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
-			WholeProgramOptimization="1"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -711,6 +722,7 @@
 				IgnoreImportLibrary="true"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				GenerateManifest="false"
 				ResourceOnlyDLL="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"

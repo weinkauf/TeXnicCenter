@@ -47,7 +47,7 @@ LPCTSTR const Format[] = {_T("Windows"),_T("Unix"),_T("Macintosh"),0};
 LPCTSTR const Encoding[] = {_T("ANSI"),_T("UTF-8"),_T("UTF-16"),_T("UTF-16 Big Endian"),_T("UTF-32"),_T("UTF-32 Big Endian"),0};
 
 BEGIN_MESSAGE_MAP(CTextFileSaveDialog, CFileDialog)
-	ON_CBN_SELCHANGE(IDC_SELECT_FILEFORMAT, &CTextFileSaveDialog::OnSelchangeFileFormat)
+	ON_CBN_SELCHANGE(IDC_FILE_FORMAT, &CTextFileSaveDialog::OnSelchangeFileFormat)
 	ON_CBN_SELCHANGE(IDC_SELECT_ENCODING, &CTextFileSaveDialog::OnSelchangeFileFormat)
 END_MESSAGE_MAP()
 
@@ -71,19 +71,19 @@ CTextFileSaveDialog::CTextFileSaveDialog(
 #pragma region File Format initialization
 		// Add the File Format combo box
 		fdc->StartVisualGroup(IDC_STATIC_FORMATTITLE,CStringW(MAKEINTRESOURCE(IDS_FORMAT)));
-		fdc->AddComboBox(IDC_SELECT_FILEFORMAT);
+		fdc->AddComboBox(IDC_FILE_FORMAT);
 
 		USES_CONVERSION;
 		DWORD id = 0;
 
 		for (LPCTSTR const* p = Format; *p; ++p)
 		{
-			fdc->AddControlItem(IDC_SELECT_FILEFORMAT,id++,T2CW(*p));
+			fdc->AddControlItem(IDC_FILE_FORMAT,id++,T2CW(*p));
 		}
 
 		fdc->EndVisualGroup();
 
-		fdc->SetSelectedControlItem(IDC_SELECT_FILEFORMAT,static_cast<DWORD>(nFileFormat));
+		fdc->SetSelectedControlItem(IDC_FILE_FORMAT,static_cast<DWORD>(nFileFormat));
 #pragma endregion
 
 #pragma region Encoding initialization
@@ -139,9 +139,9 @@ void CTextFileSaveDialog::DoDataExchange(CDataExchange* pDX)
 	if (!m_bVistaStyle)
 	{
 		DDX_Control(pDX, IDC_STATIC_FORMATTITLE, m_wndFileFormatTitle);
-		DDX_Control(pDX, IDC_SELECT_FILEFORMAT, m_wndFileFormatCombo);
+		DDX_Control(pDX, IDC_FILE_FORMAT, m_wndFileFormatCombo);
 		DDX_Control(pDX, IDC_SELECT_ENCODING, encoding_);
-		DDX_CBIndex(pDX, IDC_SELECT_FILEFORMAT, m_nFileFormat);
+		DDX_CBIndex(pDX, IDC_FILE_FORMAT, m_nFileFormat);
 		DDX_CBIndex(pDX, IDC_SELECT_ENCODING, encoding_index_);
 	}
 }
@@ -215,7 +215,7 @@ int CTextFileSaveDialog::GetFileFormat()
 	{
 		DWORD id;
 
-		if (SUCCEEDED(fdc->GetSelectedControlItem(IDC_SELECT_FILEFORMAT,&id)))
+		if (SUCCEEDED(fdc->GetSelectedControlItem(IDC_FILE_FORMAT,&id)))
 			result = static_cast<int>(id);
 
 		fdc->Release();

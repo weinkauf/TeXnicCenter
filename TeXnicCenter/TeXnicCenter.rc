@@ -1056,7 +1056,7 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     LTEXT           "",1119,0,0,130,8
     LTEXT           "Datei&format:",IDC_STATIC_FORMATTITLE,7,12,39,8
-    COMBOBOX        IDC_SELECT_FILEFORMAT,51,10,53,147,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FILE_FORMAT,51,10,53,147,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Kodierung:",IDC_STATIC_ENCODING,7,29,39,8
     COMBOBOX        IDC_SELECT_ENCODING,51,27,53,176,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
@@ -1181,7 +1181,7 @@ BEGIN
     EDITTEXT        IDC_EDIT_PROJECTPATH,235,58,105,13,ES_AUTOHSCROLL
     PUSHBUTTON      "&...",IDC_BUTTON_BROWSE,345,58,15,14
     LTEXT           "&Dateiformat:",IDC_STATIC,235,81,39,8
-    COMBOBOX        IDC_SELECT_FILEFORMAT,275,79,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FILE_FORMAT,275,79,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     GROUPBOX        "Features",IDC_STATIC,229,101,135,43
     CONTROL         "Verwendet &BibTeX",IDC_CHECK_BIBTEX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,235,114,75,10
     CONTROL         "Verwendet &MakeIndex",IDC_CHECK_MAKEINDEX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,235,130,87,10
@@ -1228,7 +1228,7 @@ BEGIN
     CONTROL         "List1",IDC_LIST_TEMPLATES,"SysListView32",LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | LVS_NOLABELWRAP | LVS_AUTOARRANGE | WS_BORDER | WS_TABSTOP,9,21,206,182
     GROUPBOX        "Datei",IDC_STATIC,229,7,135,35
     LTEXT           "&Dateiformat:",IDC_STATIC,235,22,39,8
-    COMBOBOX        IDC_SELECT_FILEFORMAT,275,20,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FILE_FORMAT,275,20,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     GROUPBOX        "Vorlage",IDC_STATIC,229,140,135,63
     LTEXT           "",IDC_STATIC_DESCRIPTION,234,155,125,41
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,210,357,1
@@ -2225,11 +2225,11 @@ BEGIN
         MENUITEM SEPARATOR
         POPUP "&Zuletzt geöffnete Dateien"
         BEGIN
-            MENUITEM "Letzte Datei",                ID_FILE_MRU_FILE1
+            MENUITEM "&Leer",                       ID_FILE_MRU_FILE1
         END
         POPUP "Zu&letzt geöffnete Projekte"
         BEGIN
-            MENUITEM "Letztes Projekt",             ID_FILE_MRU_PROJECT_FIRST
+            MENUITEM "&Leer",                       ID_FILE_MRU_PROJECT_FIRST
         END
         MENUITEM SEPARATOR
         MENUITEM "&Beenden",                    ID_APP_EXIT
@@ -3182,11 +3182,11 @@ END
 
 IDD_PROJECT_NEW DLGINIT
 BEGIN
-    IDC_SELECT_FILEFORMAT, 0x403, 8, 0
+    IDC_FILE_FORMAT, 0x403, 8, 0
 0x6957, 0x646e, 0x776f, 0x0073, 
-    IDC_SELECT_FILEFORMAT, 0x403, 5, 0
+    IDC_FILE_FORMAT, 0x403, 5, 0
 0x6e55, 0x7869, "\000" 
-    IDC_SELECT_FILEFORMAT, 0x403, 10, 0
+    IDC_FILE_FORMAT, 0x403, 10, 0
 0x614d, 0x6963, 0x746e, 0x736f, 0x0068, 
     0
 END
@@ -3275,11 +3275,11 @@ END
 
 IDD_DOCUMENT_NEW DLGINIT
 BEGIN
-    IDC_SELECT_FILEFORMAT, 0x403, 8, 0
+    IDC_FILE_FORMAT, 0x403, 8, 0
 0x6957, 0x646e, 0x776f, 0x0073, 
-    IDC_SELECT_FILEFORMAT, 0x403, 5, 0
+    IDC_FILE_FORMAT, 0x403, 5, 0
 0x6e55, 0x7869, "\000" 
-    IDC_SELECT_FILEFORMAT, 0x403, 10, 0
+    IDC_FILE_FORMAT, 0x403, 10, 0
 0x614d, 0x6963, 0x746e, 0x736f, 0x0068, 
     0
 END
@@ -3377,8 +3377,8 @@ BEGIN
     STE_FILE_INUSE          "Es trat ein Fehler beim %s der Datei\n\n%s\n\nauf.\n\n%s"
     STE_FILE_INUSE_OPEN     "Die Datei\n\n%s\n\nkann nicht neu geladen werden. Das bereits offene Dokument wird mit einem Schreibschutz versehen."
     STE_FILE_LATEXFILTER    "LaTeX-Dateien (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|BibTeX-Dateien (*.bib, *.bst)|*.bib;*.bst|Alle Dateien (*.*)|*.*||"
-    STE_FILE_MRU_FILE_NONE  "Letzte Datei"
-    STE_FILE_MRU_PROJECT_NONE "Letztes Projekt"
+    STE_FILE_MRU_FILE_NONE  "&Leer"
+    STE_FILE_MRU_PROJECT_NONE "&Leer"
     STE_FILE_XMLFILTER      "XML-Dateien (*.xml)|*.xml|Alle Dateien (*.*)|*.*||"
     STE_FILECLEAN_ERROR     "Es trat ein Fehler beim Löschen der Dateien auf.\nÜberprüfen Sie, ob die Dateien schreibgeschützt sind."
     STE_FILECLEAN_HCLEAN    "löschen"
@@ -3959,26 +3959,26 @@ END
 STRINGTABLE 
 BEGIN
     STE_TB_MATH             "Mathematische Symbole"
-    STE_TB_MATH1            "Vergleichsoperatoren"
-    STE_TB_MATH2            "Zeichenabstände & Auslassungspunkte"
-    STE_TB_MATH3            "Zeichenakzente"
-    STE_TB_MATH4            "Binäre Operatoren"
-    STE_TB_MATH5            "Pfeile"
-    STE_TB_MATH6            "Vergleichssymbole 2"
-    STE_TB_MATH7            "Mengensymbole"
-    STE_TB_MATH8            "Verschiedene Symbole"
-    STE_TB_MATH9            "Griechische Kleinbuchstaben"
-    STE_TB_MATH10           "Griechische Großbuchstaben"
+    IDR_MATH                "Vergleichsoperatoren"
+    IDR_MATHBAR1            "Zeichenabstände & Auslassungspunkte"
+    IDR_MATHBAR2            "Zeichenakzente"
+    IDR_MATHBAR3            "Binäre Operatoren"
+    IDR_MATHBAR4            "Pfeile"
+    IDR_MATHBAR5            "Vergleichssymbole 2"
+    IDR_MATHBAR6            "Mengensymbole"
+    IDR_MATHBAR7            "Verschiedene Symbole"
+    IDR_MATHBAR8            "Griechische Kleinbuchstaben"
+    IDR_MATHBAR9            "Griechische Großbuchstaben"
 END
 
 STRINGTABLE 
 BEGIN
-    STE_TB_MATH11           "Begrenzungssymbole (Klammern)"
-    STE_TB_MATH12           "Mathematische Konstrukte"
-    STE_TB_MATH13           "Hoch- & Tiefstellung"
-    STE_TB_MATH14           "Operatoren"
-    STE_TB_MATH15           "Drunter & Drüber"
-    STE_TB_MATH16           "Beschriftete Pfeile"
+    IDR_MATHBAR10           "Begrenzungssymbole (Klammern)"
+    IDR_MATHBAR11           "Mathematische Konstrukte"
+    IDR_MATHBAR12           "Hoch- & Tiefstellung"
+    IDR_MATHBAR13           "Operatoren"
+    IDR_MATHBAR14           "Drunter & Drüber"
+    IDR_MATHBAR15           "Beschriftete Pfeile"
 END
 
 STRINGTABLE 
@@ -4850,7 +4850,7 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     LTEXT           "",1119,0,0,130,8
     LTEXT           "File &Format:",IDC_STATIC_FORMATTITLE,7,12,39,8
-    COMBOBOX        IDC_SELECT_FILEFORMAT,51,10,53,154,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FILE_FORMAT,51,10,53,154,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Encoding:",IDC_STATIC_ENCODING,7,29,39,8
     COMBOBOX        IDC_SELECT_ENCODING,51,27,53,205,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
@@ -5494,7 +5494,7 @@ BEGIN
     CONTROL         "List1",IDC_LIST_TEMPLATES,"SysListView32",LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | LVS_NOLABELWRAP | LVS_AUTOARRANGE | WS_BORDER | WS_TABSTOP,9,21,206,182
     GROUPBOX        "File",IDC_STATIC,229,7,135,35
     LTEXT           "&File &format:",IDC_STATIC,235,22,35,8
-    COMBOBOX        IDC_SELECT_FILEFORMAT,275,20,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FILE_FORMAT,275,20,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     GROUPBOX        "Template",IDC_STATIC,229,140,135,63
     LTEXT           "",IDC_STATIC_DESCRIPTION,234,155,125,41
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,210,357,1
@@ -5516,7 +5516,7 @@ BEGIN
     EDITTEXT        IDC_EDIT_PROJECTPATH,235,58,105,13,ES_AUTOHSCROLL
     PUSHBUTTON      "&...",IDC_BUTTON_BROWSE,345,58,15,14
     LTEXT           "&File format:",IDC_STATIC,235,81,35,8
-    COMBOBOX        IDC_SELECT_FILEFORMAT,275,79,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FILE_FORMAT,275,79,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     GROUPBOX        "Features",IDC_STATIC,229,101,135,43
     CONTROL         "Uses &BibTeX",IDC_CHECK_BIBTEX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,235,114,57,10
     CONTROL         "Uses &MakeIndex",IDC_CHECK_MAKEINDEX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,235,130,69,10
@@ -6237,11 +6237,11 @@ BEGIN
         MENUITEM SEPARATOR
         POPUP "Recent Files"
         BEGIN
-            MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+            MENUITEM "&None",                       ID_FILE_MRU_FILE1, GRAYED
         END
         POPUP "Recent Projects"
         BEGIN
-            MENUITEM "Recent Project",              ID_FILE_MRU_PROJECT_FIRST, GRAYED
+            MENUITEM "&None",                       ID_FILE_MRU_PROJECT_FIRST, GRAYED
         END
         MENUITEM SEPARATOR
         MENUITEM "E&xit",                       ID_APP_EXIT
@@ -7293,22 +7293,22 @@ END
 
 IDD_DOCUMENT_NEW DLGINIT
 BEGIN
-    IDC_SELECT_FILEFORMAT, 0x403, 8, 0
+    IDC_FILE_FORMAT, 0x403, 8, 0
 0x6957, 0x646e, 0x776f, 0x0073, 
-    IDC_SELECT_FILEFORMAT, 0x403, 5, 0
+    IDC_FILE_FORMAT, 0x403, 5, 0
 0x6e55, 0x7869, "\000" 
-    IDC_SELECT_FILEFORMAT, 0x403, 10, 0
+    IDC_FILE_FORMAT, 0x403, 10, 0
 0x614d, 0x6963, 0x746e, 0x736f, 0x0068, 
     0
 END
 
 IDD_PROJECT_NEW DLGINIT
 BEGIN
-    IDC_SELECT_FILEFORMAT, 0x403, 8, 0
+    IDC_FILE_FORMAT, 0x403, 8, 0
 0x6957, 0x646e, 0x776f, 0x0073, 
-    IDC_SELECT_FILEFORMAT, 0x403, 5, 0
+    IDC_FILE_FORMAT, 0x403, 5, 0
 0x6e55, 0x7869, "\000" 
-    IDC_SELECT_FILEFORMAT, 0x403, 10, 0
+    IDC_FILE_FORMAT, 0x403, 10, 0
 0x614d, 0x6963, 0x746e, 0x736f, 0x0068, 
     0
 END
@@ -7698,8 +7698,8 @@ BEGIN
     STE_FILE_INUSE          "Cannot %s the file\n\n%s\n\n%s"
     STE_FILE_INUSE_OPEN     "Cannot re-open the file\n\n%s\n\nConverting existing file to read-only"
     STE_FILE_LATEXFILTER    "LaTeX-Files (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|BibTeX-Files (*.bib, *.bst)|*.bib;*.bst|All Files (*.*)|*.*||"
-    STE_FILE_MRU_FILE_NONE  "Recent File"
-    STE_FILE_MRU_PROJECT_NONE "Recent Project"
+    STE_FILE_MRU_FILE_NONE  "&None"
+    STE_FILE_MRU_PROJECT_NONE "&None"
     STE_FILE_XMLFILTER      "XML Files (*.xml)|*.xml|All Files (*.*)|*.*||"
     STE_FILECLEAN_ERROR     "An error occured while deleting the files.\nCheck whether the files are write protected."
     STE_FILECLEAN_HCLEAN    "delete"
@@ -7888,26 +7888,26 @@ END
 STRINGTABLE 
 BEGIN
     STE_TB_MATH             "Mathematical Symbols"
-    STE_TB_MATH1            "Comparison"
-    STE_TB_MATH2            "White Spaces & Dots"
-    STE_TB_MATH3            "Accents"
-    STE_TB_MATH4            "Binary Operators"
-    STE_TB_MATH5            "Arrows"
-    STE_TB_MATH6            "Comparison 2"
-    STE_TB_MATH7            "Sets"
-    STE_TB_MATH8            "Diverse Symbols"
-    STE_TB_MATH9            "Greek small Letters"
-    STE_TB_MATH10           "Greek capital Letters"
+    IDR_MATH                "Comparison"
+    IDR_MATHBAR1            "White Spaces & Dots"
+    IDR_MATHBAR2            "Accents"
+    IDR_MATHBAR3            "Binary Operators"
+    IDR_MATHBAR4            "Arrows"
+    IDR_MATHBAR5            "Comparison 2"
+    IDR_MATHBAR6            "Sets"
+    IDR_MATHBAR7            "Diverse Symbols"
+    IDR_MATHBAR8            "Greek small Letters"
+    IDR_MATHBAR9            "Greek capital Letters"
 END
 
 STRINGTABLE 
 BEGIN
-    STE_TB_MATH11           "Boundaries"
-    STE_TB_MATH12           "Mathematical Constructions"
-    STE_TB_MATH13           "Subscript & Superscript"
-    STE_TB_MATH14           "Operators"
-    STE_TB_MATH15           "Above & Below"
-    STE_TB_MATH16           "Arrows with Captions"
+    IDR_MATHBAR10           "Boundaries"
+    IDR_MATHBAR11           "Mathematical Constructions"
+    IDR_MATHBAR12           "Subscript & Superscript"
+    IDR_MATHBAR13           "Operators"
+    IDR_MATHBAR14           "Above & Below"
+    IDR_MATHBAR15           "Arrows with Captions"
 END
 
 STRINGTABLE 

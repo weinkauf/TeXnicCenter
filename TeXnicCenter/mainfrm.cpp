@@ -369,7 +369,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// create all math bars
 	for (int i = 0; i < MATHBAR_COUNT; i++)
-		if (!CreateToolBar(&m_awndMathBar[i], IDR_MATHBAR1 + i, STE_TB_MATH1 + i))
+		if (!CreateToolBar(&m_awndMathBar[i], IDR_MATHBAR1 + i, IDR_MATH + i))
 			return -1;
 
 	// load user defined toolbars

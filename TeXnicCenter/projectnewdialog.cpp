@@ -474,7 +474,7 @@ void CProjectNewDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_BROWSE, m_wndBrowseButton);
 	DDX_Text(pDX, IDC_EDIT_PROJECTNAME, m_strProjectName);
 	DDX_Text(pDX, IDC_EDIT_PROJECTPATH, m_strProjectPath);
-	DDX_CBIndex(pDX, IDC_SELECT_FILEFORMAT, m_nFileFormat);
+	DDX_CBIndex(pDX, IDC_FILE_FORMAT, m_nFileFormat);
 	DDX_Check(pDX, IDC_CHECK_BIBTEX, m_bUseBibTex);
 	DDX_Check(pDX, IDC_CHECK_MAKEINDEX, m_bUseMakeIndex);
 	//}}AFX_DATA_MAP
