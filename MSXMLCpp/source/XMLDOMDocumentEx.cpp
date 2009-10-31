@@ -65,15 +65,15 @@ void CXMLDOMDocumentEx::Create(LPCTSTR lpszDocumentNamespaces /* = NULL */, LPCT
 	// create XML document
 	HRESULT	hr;
 
-	const CLSID clsids[] = { CLSID_DOMDocument60, CLSID_DOMDocument40 };
-	bool stop = false;
+	const CLSID clsid = 
+#ifdef _WIN64
+		CLSID_DOMDocument60
+#else
+		CLSID_DOMDocument40
+#endif
+		;
 
-	for (int i = 0; i < sizeof(clsids) / sizeof(*clsids) && !stop; ++i) {
-		hr = CoCreateInstance(clsids[i]);
-
-		if (SUCCEEDED(hr))
-			stop = true;
-	}
+	hr = CoCreateInstance(clsid);
 	
 	if (FAILED(hr))
 		AfxThrowComException(hr);

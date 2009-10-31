@@ -2055,7 +2055,7 @@ BEGIN
         MENUITEM "&Verweis einfügen",           ID_ITEM_INSERT_REF
         MENUITEM "&Seitenverweis einfügen",     ID_ITEM_INSERT_PAGEREF
         MENUITEM SEPARATOR
-        MENUITEM "&Eigenschaften...",           ID_ITEM_PROPERTIES
+        MENUITEM "&Eigenschaften",              ID_ITEM_PROPERTIES
     END
 END
 
@@ -2180,7 +2180,7 @@ IDR_POPUP_MDICLIENT MENU
 BEGIN
     POPUP "_MDICLIENT_"
     BEGIN
-        MENUITEM "&Neu...",                     ID_LATEX_NEW
+        MENUITEM "&Neu",                        ID_LATEX_NEW
         MENUITEM "&Öffnen...",                  ID_FILE_OPEN
         MENUITEM "&Speichern",                  ID_FILE_SAVE
         MENUITEM "&Alle speichern",             ID_FILE_SAVE_ALL
@@ -6118,7 +6118,7 @@ BEGIN
         MENUITEM "Insert &Reference",           ID_ITEM_INSERT_REF
         MENUITEM "Insert Reference to Pa&ge",   ID_ITEM_INSERT_PAGEREF
         MENUITEM SEPARATOR
-        MENUITEM "&Properties...",              ID_ITEM_PROPERTIES
+        MENUITEM "&Properties",                 ID_ITEM_PROPERTIES
     END
 END
 
@@ -6199,7 +6199,7 @@ IDR_POPUP_MDICLIENT MENU
 BEGIN
     POPUP "_MDICLIENT_"
     BEGIN
-        MENUITEM "&New...",                     ID_LATEX_NEW
+        MENUITEM "&New",                        ID_LATEX_NEW
         MENUITEM "&Open...",                    ID_FILE_OPEN
         MENUITEM "&Save",                       ID_FILE_SAVE
         MENUITEM "Sa&ve All",                   ID_FILE_SAVE_ALL
