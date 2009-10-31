@@ -6,7 +6,7 @@
 #include "configuration.h"
 #include "CharType.h"
 
-#define IGNORE_WORDS_IN_BRACES_ 0 // TODO: Doesn't work properly yet: many constructs may span over multiple lines
+#define IGNORE_WORDS_IN_BRACES_ 1 // TODO: Doesn't work properly yet: many constructs may span over multiple lines
 								  // which isn't supported
 
 LaTeXTokenizer::LaTeXTokenizer()
@@ -39,7 +39,7 @@ bool LaTeXTokenizer::NextWord(LPCTSTR szLine, int length, int &nStartPos, int &n
 
 #if IGNORE_WORDS_IN_BRACES_
 			
-			if (!braces_.empty() && braces_.back() == GetClosingBrace(ch))
+			if (!braces_.empty() && GetClosingBrace(braces_.back()) == ch)
 				braces_.pop_back();
 			// If we encounter an opening brace, save the state
 			else if (std::find_first_of(&ch,&ch + 1,opening_braces,opening_braces + braces) != &ch + 1)

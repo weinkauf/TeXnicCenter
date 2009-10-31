@@ -215,6 +215,11 @@ namespace {
 		return std::find_if(verbatim,end,std::bind2nd(std::ptr_fun(equal_strings),s)) != end;
 	}
 
+	bool IsTeXSecond(int ch)
+	{
+		return std::isprint(ch) && !IsDigit(ch);
+	}
+
 	const char* const units[] = {
 		"em",
 		"ex",
@@ -381,8 +386,8 @@ namespace {
 								}
 
 								if (!(text_style == SCE_TEX_INLINE_MATH && sc.chNext == '$')) {
-									if (isTeXfive(sc.chNext))
-										sc.ForwardSetState(text_style);
+									if (!IsDigit(sc.ch))
+										sc.ForwardSetState(text_style);									
 								}
 								else
 									done = true;
@@ -478,6 +483,9 @@ namespace {
 							}
 							else if (IsEscape(sc.ch)) {
 								sc.SetState(command_style);
+
+								if (!IsTeXSecond(sc.chNext))
+									sc.ForwardSetState(text_style);
 							}
 							else if (IsSpace(sc.ch)) {
 								reset = true;
