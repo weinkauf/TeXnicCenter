@@ -7,11 +7,12 @@
 #include "PrivateToolBar.h"
 #include "SortListCtrl.h"
 #include "BiBTeXEntry.h"
+#include "WorkspacePaneBase.h"
 
 // BibView
 
 class BibView : 
-	public CDockablePane,
+	public WorkspacePaneBase,
 	public CProjectView,
 	public LabelDragSource
 {

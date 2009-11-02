@@ -8,7 +8,7 @@
 
 // StructurePane
 
-IMPLEMENT_DYNAMIC(StructurePane, CDockablePane)
+IMPLEMENT_DYNAMIC(StructurePane, WorkspacePaneBase)
 
 //StructurePane::StructurePane()
 //{
@@ -19,7 +19,7 @@ IMPLEMENT_DYNAMIC(StructurePane, CDockablePane)
 //{
 //}
 
-BEGIN_MESSAGE_MAP(StructurePane, CDockablePane)
+BEGIN_MESSAGE_MAP(StructurePane, WorkspacePaneBase)
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_WM_SETFOCUS()
@@ -31,7 +31,7 @@ END_MESSAGE_MAP()
 
 int StructurePane::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
+	if (WorkspacePaneBase::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
 	// TODO: The toolbar is invisible for now
@@ -50,7 +50,7 @@ int StructurePane::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void StructurePane::OnSize(UINT nType, int cx, int cy)
 {
-	CDockablePane::OnSize(nType, cx, cy);
+	WorkspacePaneBase::OnSize(nType, cx, cy);
 	AdjustLayout();
 }
 
@@ -82,7 +82,7 @@ void StructurePane::AdjustLayout()
 
 void StructurePane::OnSetFocus(CWnd* pOldWnd)
 {
-	CDockablePane::OnSetFocus(pOldWnd);
+	WorkspacePaneBase::OnSetFocus(pOldWnd);
 
 	if (tree_)
 		tree_.SetFocus();

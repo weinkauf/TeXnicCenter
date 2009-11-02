@@ -10,6 +10,7 @@ class LaTeXTokenizer :
 	typedef std::vector<TCHAR> BraceContainer;
 	BraceContainer braces_;
 
+public:
 	static TCHAR GetClosingBrace(TCHAR open);
 
 public:

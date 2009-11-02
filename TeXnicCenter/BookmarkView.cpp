@@ -15,7 +15,7 @@ const UINT ListViewID = 1;
 
 // BookmarkView
 
-IMPLEMENT_DYNAMIC(BookmarkView, CDockablePane)
+IMPLEMENT_DYNAMIC(BookmarkView, WorkspacePaneBase)
 
 BookmarkView::BookmarkView()
 {
@@ -27,7 +27,7 @@ BookmarkView::~BookmarkView()
 }
 
 
-BEGIN_MESSAGE_MAP(BookmarkView, CDockablePane)
+BEGIN_MESSAGE_MAP(BookmarkView, WorkspacePaneBase)
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_NOTIFY(NM_DBLCLK, ListViewID, &BookmarkView::OnNMDblClk)
@@ -59,7 +59,7 @@ int BookmarkView::CompareLineNumber(LPARAM l1, LPARAM l2)
 
 int BookmarkView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
+	if (WorkspacePaneBase::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
 	list_view_.CreateEx(WS_EX_CLIENTEDGE,WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|LVS_REPORT|LVS_EDITLABELS,
@@ -86,7 +86,7 @@ int BookmarkView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void BookmarkView::OnSize(UINT nType, int cx, int cy)
 {
-	CDockablePane::OnSize(nType, cx, cy);
+	WorkspacePaneBase::OnSize(nType, cx, cy);
 	AdjustLayout(CRect(0,0,cx,cy));
 }
 
@@ -295,7 +295,7 @@ BOOL BookmarkView::PreTranslateMessage( MSG* msg )
 		::GetParent(msg->hwnd) == list_view_.GetSafeHwnd() && msg->wParam == VK_ESCAPE);
 
 	if (!handled)
-		handled = CDockablePane::PreTranslateMessage(msg);
+		handled = WorkspacePaneBase::PreTranslateMessage(msg);
 	else
 		::DispatchMessage(msg);
 
