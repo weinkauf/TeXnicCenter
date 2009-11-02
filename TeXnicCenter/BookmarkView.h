@@ -1,12 +1,13 @@
 #pragma once
 #include "PrivateToolBar.h"
+#include "WorkspacePaneBase.h"
 
 class CodeBookmark;
 class BookmarkEventArgs;
 class CLaTeXProject;
 
 class BookmarkView : 
-	public CDockablePane, 
+	public WorkspacePaneBase, 
 	public CProjectView
 {
 	DECLARE_DYNAMIC(BookmarkView)

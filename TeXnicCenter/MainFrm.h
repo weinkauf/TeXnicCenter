@@ -278,7 +278,7 @@ protected:
 	@return
 	        TRUE if successfull, FALSE otherwise.
 	 */
-	BOOL CreateToolBar(CMFCToolBar* pToolBar, UINT unID, UINT unTitleID, BOOL bVisible = TRUE);
+	bool CreateToolBar(CMFCToolBar* pToolBar, UINT unID, UINT unTitleID, bool bVisible = true);
 
 	/** Cares (display/hide) about the Document tabs.
 	 */

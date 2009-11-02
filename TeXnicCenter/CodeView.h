@@ -192,6 +192,13 @@ public:
 
 	void SetModified(bool modified = true);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+
+private:
+	static bool TerminatesIncrementalSearch( UINT ch );
+
+	afx_msg void OnEditSelBiggerBlock();
+	void SelectBlock(long pos);
+	void SelectCurrentBlock();
 };
 
 template<class F>

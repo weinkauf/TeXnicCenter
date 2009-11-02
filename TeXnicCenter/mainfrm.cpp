@@ -486,6 +486,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		}
 	}
 
+	//LoadToolBarsState();
+
 	return 0;
 }
 
@@ -516,7 +518,7 @@ BOOL CMainFrame::SetMenu(CMenu *pMenu)
 	return TRUE;
 }
 
-BOOL CMainFrame::CreateToolBar(CMFCToolBar *pToolBar, UINT unID, UINT unTitleID, BOOL bVisible /*= TRUE*/)
+bool CMainFrame::CreateToolBar( CMFCToolBar* pToolBar, UINT unID, UINT unTitleID, bool bVisible /*= true*/ )
 {
 	DWORD style = AFX_DEFAULT_TOOLBAR_STYLE;
 
@@ -527,14 +529,14 @@ BOOL CMainFrame::CreateToolBar(CMFCToolBar *pToolBar, UINT unID, UINT unTitleID,
 	        !pToolBar->LoadToolBar(unID))
 	{
 		TRACE1("!Failed to create %s tool bar\n", AfxLoadString(unTitleID));
-		return FALSE; // creation failed
+		return false; // creation failed
 	}
 
 	pToolBar->SetWindowText(AfxLoadString(unTitleID));
 	pToolBar->EnableTextLabels(FALSE);
 	pToolBar->EnableCustomizeButton(TRUE, ID_EXTRAS_CUSTOMIZE, IDS_TOOLBAR_CUSTOMIZE);
 
-	return TRUE;
+	return true;
 }
 
 void CMainFrame::ToggleControlBar(CBasePane* pCtrlBar)
@@ -729,8 +731,17 @@ void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 {
 	CMDIFrameWndEx::OnActivate(nState, pWndOther, bMinimized);
 
-	if (nState == WA_ACTIVE || nState == WA_CLICKACTIVE)
-		CheckForFileChangesAsync();
+	switch (nState) 
+	{
+		case WA_ACTIVE:
+		case WA_CLICKACTIVE:
+			CheckForFileChangesAsync();
+			break;
+		case WA_INACTIVE:
+			if (!animating_)
+				HideTaskbarProgress();
+			break;
+	}
 }
 
 void CMainFrame::OnOptionsChanged()

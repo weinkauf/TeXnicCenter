@@ -6260,7 +6260,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "&Insert Block Comment",       ID_EDIT_BLOCKCOMMENT_INSERT
         MENUITEM "Remove &Block Comment",       ID_EDIT_BLOCKCOMMENT_REMOVE
-        MENUITEM "T&oogle Block Comment",       ID_EDIT_BLOCKCOMMENT_TOOGLE
+        MENUITEM "T&oggle Block Comment",       ID_EDIT_BLOCKCOMMENT_TOOGLE
         MENUITEM SEPARATOR
         MENUITEM "Complete &Word",              ID_QUERY_COMPLETION
         MENUITEM "Outsource Text...",           ID_EDIT_OUTSOURCE

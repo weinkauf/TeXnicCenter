@@ -15,6 +15,7 @@
 #include "CharType.h"
 #include "FindReplaceDlg.h"
 #include "EncodingConverter.h"
+#include "LaTeXTokenizer.h"
 
 #pragma region Helper functions
 
@@ -36,6 +37,52 @@ int GetLogFontPointSize(const LOGFONT& lf)
 
 	// Convert logical units to points
 	return ::MulDiv(tm.tmHeight - tm.tmInternalLeading,72,dc.GetDeviceCaps(LOGPIXELSY));
+}
+
+bool IsOpenBrace(TCHAR ch) 
+{
+	return ch == _T('{') || ch == _T('(') || ch == _T('[');
+}
+
+void SelectBlock(CScintillaCtrl& ctrl, long pos) 
+{
+	long originalPos = pos;
+	std::stack<TCHAR> braces;
+	--pos;
+
+	while (pos > 0 && braces.empty()) {
+		TCHAR ch = ctrl.GetCharAt(pos);
+
+		if (IsOpenBrace(ch))
+			braces.push(ch);
+		else --pos;
+	}
+
+	long start = pos + 1;
+
+	if (!braces.empty()) {
+		pos = originalPos;
+		long length = ctrl.GetLength();
+
+		while (!braces.empty() && pos < length) {
+			TCHAR ch = ctrl.GetCharAt(pos);
+
+			if (IsOpenBrace(ch))
+				braces.push(ch);
+			else if (LaTeXTokenizer::GetClosingBrace(braces.top()) == ch)
+				braces.pop();
+
+			++pos;
+		}
+
+		if (braces.empty()) {
+			long end = pos - 1;
+
+			ctrl.EnsureVisible(ctrl.LineFromPosition(start));
+			ctrl.SetAnchor(start);
+			ctrl.SetSel(end, start);									
+		}
+	}
 }
 
 #pragma endregion
@@ -87,6 +134,7 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_GOTO_LAST_CHANGE, &CodeView::OnUpdateEditGotoLastChange)
 	ON_COMMAND(ID_VIEW_INDENTATION_GUIDES, &CodeView::OnViewIndentationGuides)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_INDENTATION_GUIDES, &CodeView::OnUpdateViewIndentationGuides)
+	ON_COMMAND(ID_EDIT_SEL_BIGGER_BLOCK, &CodeView::OnEditSelBiggerBlock)
 END_MESSAGE_MAP()
 
 
@@ -878,15 +926,41 @@ bool CodeView::ShadowWindow::IsNewLine(TCHAR ch)
 
 BOOL CodeView::PreTranslateMessage(MSG* pMsg)
 {
-	BOOL result;
+	BOOL result = FALSE;
 
-	if (pMsg->message == WM_KEYDOWN && 
-		pMsg->wParam == VK_ESCAPE && shadow_.IsIncrementalSearchEnabled()) {
-		shadow_.EnableIncrementalSearch(false);
-		result = TRUE;
+	if (pMsg->message == WM_KEYDOWN && shadow_.IsIncrementalSearchEnabled()) {
+		UINT ch = pMsg->wParam;
+
+		if (TerminatesIncrementalSearch(ch)) {
+			shadow_.EnableIncrementalSearch(false);
+			result = TRUE;
+		}
 	}
-	else 
+
+	if (!result)
 		result = CScintillaView::PreTranslateMessage(pMsg);
 
 	return result;
+}
+
+bool CodeView::TerminatesIncrementalSearch( UINT ch )
+{
+	return ch != VK_BACK && ch != VK_SHIFT && ch != VK_CONTROL && ch != VK_MENU &&
+		(ch == VK_RETURN || ch == VK_LEFT || ch == VK_RIGHT || ch == VK_UP || ch == VK_DOWN || 
+			!CharTraitsT::IsPrint(ch));
+}
+
+void CodeView::OnEditSelBiggerBlock()
+{
+	SelectCurrentBlock();
+}
+
+void CodeView::SelectBlock( long pos )
+{
+	::SelectBlock(GetCtrl(), pos);
+}
+
+void CodeView::SelectCurrentBlock()
+{
+	SelectBlock(GetCtrl().GetCurrentPos());
 }

@@ -129,7 +129,7 @@ BibView::PopulateParam::PopulateParam( const PredicateFunctionType& p, BibView* 
 
 // BibView
 
-IMPLEMENT_DYNAMIC(BibView, CDockablePane)
+IMPLEMENT_DYNAMIC(BibView, WorkspacePaneBase)
 
 BibView::BibView()
 : search_timer_enabled_(false)
@@ -147,7 +147,7 @@ BibView::~BibView()
 }
 
 
-BEGIN_MESSAGE_MAP(BibView, CDockablePane)
+BEGIN_MESSAGE_MAP(BibView, WorkspacePaneBase)
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_WM_SETFOCUS()
@@ -170,7 +170,7 @@ END_MESSAGE_MAP()
 
 int BibView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
+	if (WorkspacePaneBase::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
 	// Default search options
@@ -244,7 +244,7 @@ int BibView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void BibView::OnSize(UINT nType, int cx, int cy)
 {
-	CDockablePane::OnSize(nType, cx, cy);
+	WorkspacePaneBase::OnSize(nType, cx, cy);
 	AdjustLayout(CRect(0,0,cx,cy));
 }
 
@@ -297,7 +297,7 @@ void BibView::AdjustLayout()
 
 void BibView::OnSetFocus(CWnd* pOldWnd)
 {
-	CDockablePane::OnSetFocus(pOldWnd);
+	WorkspacePaneBase::OnSetFocus(pOldWnd);
 
 	if (search_button_)
 		search_button_->GetEditBox()->SetFocus();
@@ -429,7 +429,7 @@ void BibView::OnTimer(UINT_PTR nIDEvent)
 			break;
 	}
 
-	CDockablePane::OnTimer(nIDEvent);
+	WorkspacePaneBase::OnTimer(nIDEvent);
 }
 
 void BibView::OnEnChangeSearch()
@@ -746,7 +746,7 @@ BOOL BibView::PreTranslateMessage(MSG* pMsg)
 	}
 
 	if (!handled)
-		handled = CDockablePane::PreTranslateMessage(pMsg);
+		handled = WorkspacePaneBase::PreTranslateMessage(pMsg);
 
 	return handled;
 }
@@ -836,5 +836,5 @@ void BibView::OnDestroy()
 	::InterlockedExchange(&stop_search_,1);
 	::WaitForSingleObject(search_semaphore_,INFINITE);
 
-	CDockablePane::OnDestroy();
+	WorkspacePaneBase::OnDestroy();
 }
