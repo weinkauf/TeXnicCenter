@@ -178,6 +178,7 @@ protected:
 	void OnModified(SCNotification* n);
 	afx_msg void OnViewIndentationGuides();
 	afx_msg void OnUpdateViewIndentationGuides(CCmdUI *pCmdUI);
+	afx_msg void OnEditSelBiggerBlock();
 	void OnZoom(SCNotification* n);
 
 public:
@@ -195,8 +196,8 @@ public:
 
 private:
 	static bool TerminatesIncrementalSearch( UINT ch );
+	static bool IsDirectionKey( UINT ch );
 
-	afx_msg void OnEditSelBiggerBlock();
 	void SelectBlock(long pos);
 	void SelectCurrentBlock();
 };

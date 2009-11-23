@@ -484,6 +484,32 @@ void CodeView::OnUpdateViewShowLineEnding(CCmdUI *pCmdUI)
 
 void CodeView::OnEditDeleteLine()
 {
+	int line = GetCurrentLine(true);
+	const CString text = GetLineText(line);
+
+	if (OpenClipboard()) {
+		EmptyClipboard();
+
+		if (!text.IsEmpty()) {
+			SIZE_T n = sizeof(TCHAR) * (text.GetLength() + 1);
+			HANDLE m = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, n);
+
+			LPVOID p = ::GlobalLock(m);
+			_tcsncpy(static_cast<LPTSTR>(p), text, text.GetLength());
+			::GlobalUnlock(m);
+			
+			SetClipboardData(
+#ifdef UNICODE
+				CF_UNICODETEXT
+#else
+				CF_TEXT
+#endif
+				, m);
+		}
+
+		CloseClipboard();
+	}
+
 	GetCtrl().LineDelete();
 }
 
@@ -933,7 +959,9 @@ BOOL CodeView::PreTranslateMessage(MSG* pMsg)
 
 		if (TerminatesIncrementalSearch(ch)) {
 			shadow_.EnableIncrementalSearch(false);
-			result = TRUE;
+
+			if (!IsDirectionKey(static_cast<UINT>(pMsg->wParam)))
+				result = TRUE; // Not a direction key; surpress it.
 		}
 	}
 
@@ -946,7 +974,7 @@ BOOL CodeView::PreTranslateMessage(MSG* pMsg)
 bool CodeView::TerminatesIncrementalSearch( UINT ch )
 {
 	return ch != VK_BACK && ch != VK_SHIFT && ch != VK_CONTROL && ch != VK_MENU &&
-		(ch == VK_RETURN || ch == VK_LEFT || ch == VK_RIGHT || ch == VK_UP || ch == VK_DOWN || 
+		(ch == VK_RETURN || IsDirectionKey(ch) || 
 			!CharTraitsT::IsPrint(ch));
 }
 
@@ -963,4 +991,9 @@ void CodeView::SelectBlock( long pos )
 void CodeView::SelectCurrentBlock()
 {
 	SelectBlock(GetCtrl().GetCurrentPos());
+}
+
+bool CodeView::IsDirectionKey( UINT ch )
+{
+	return ch == VK_LEFT || ch == VK_RIGHT || ch == VK_UP || ch == VK_DOWN;
 }

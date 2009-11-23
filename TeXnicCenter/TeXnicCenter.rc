@@ -3452,6 +3452,7 @@ BEGIN
     ID_FORMAT_UPSHAPE       "Setzt den Text im Gültigkeitsbereich in senkrechter Form\nSenkrechte Form\n\\upshape"
     ID_FORMAT_TEXT_BACK_COLOR 
                             "Setzt die Hintergrundfarbe des Textes.\nHintergrundfarbe"
+    ID_FORMAT_TEXT_FORE_COLOR "Setzt die Textfarbe.\nTextfarbe"
 END
 
 STRINGTABLE 
@@ -8727,6 +8728,8 @@ BEGIN
     ID_FORMAT_TINY          "Generates tiny text inside the scope\nTiny Size\n\\tiny"
     ID_FORMAT_TTFAMILY      "Generates text of the family ""Typewriter"" inside the scope\nTypewriter-Family\n\\ttfamily"
     ID_FORMAT_UPSHAPE       "Generates vertical text inside the scope\nVertical Form\n\\upshape"
+    ID_FORMAT_TEXT_BACK_COLOR "Sets text background color.\nBackground color"
+    ID_FORMAT_TEXT_FORE_COLOR "Sets text foreground color.\nForeground color"
 END
 
 STRINGTABLE 

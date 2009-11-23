@@ -132,6 +132,26 @@ class Win32Locale
 	}
 
 public:
+	static const Win32Locale GetUserDefault()
+	{
+		return Win32Locale(LOCALE_USER_DEFAULT);
+	}
+
+	static const Win32Locale GetSystemDefault()
+	{
+		return Win32Locale(LOCALE_SYSTEM_DEFAULT);
+	}
+
+	static const Win32Locale GetNeutral()
+	{
+		return Win32Locale(LOCALE_NEUTRAL);
+	}
+
+	static const Win32Locale GetInvariant()
+	{
+		return Win32Locale(LOCALE_INVARIANT);
+	}
+
 	explicit Win32Locale(LCID lcid = LOCALE_USER_DEFAULT)
 	{
 		SetLCID(lcid);
@@ -178,5 +198,79 @@ public:
 			throw Win32LocaleError("Failed to retrieve the SNativeLangName");
 
 		return text;
+	}
+};
+
+
+template<class Ch>
+class Win32LocaleCharTraits {
+public:
+	typedef Ch CharType;
+	typedef CharTraits<Ch> Traits;
+	Win32Locale locale_;
+
+	explicit Win32LocaleCharTraits(const Win32Locale& locale) 
+	{
+		locale_ = locale;
+	}
+
+	bool MatchCharType(CharType ch, DWORD type, WORD flags) const
+	{
+		return Traits::MatchCharType(ch, type, flags, locale_.GetLCID());
+	}
+
+	bool IsAlnum(CharType ch) const
+	{
+		return Traits::IsAlnum(ch, locale_.GetLCID());
+	}
+
+	bool IsAlpha(CharType ch) const
+	{
+		return Traits::IsAlpha(ch, locale_.GetLCID());
+	}
+
+	bool IsDigit(CharType ch) const
+	{
+		return Traits::IsDigit(ch, locale_.GetLCID());
+	}
+
+	bool IsPrint(CharType ch) const
+	{
+		return Traits::IsPrint(ch, locale_.GetLCID());
+	}
+
+	bool IsPunct(CharType ch) const
+	{
+		return Traits::IsPunct(ch, locale_.GetLCID());
+	}
+
+	bool IsSpace(CharType ch) const
+	{
+		return Traits::IsSpace(ch, locale_.GetLCID());
+	}
+
+	bool IsXdigit(CharType ch) const
+	{
+		return Traits::IsXdigit(ch, locale_.GetLCID());
+	}
+
+	bool IsBlank(CharType ch) const
+	{
+		return Traits::IsBlank(ch, locale_.GetLCID());
+	}
+
+	bool IsCntrl(CharType ch) const
+	{
+		return Traits::IsCntrl(ch, locale_.GetLCID());
+	}
+
+	bool IsUpper(CharType ch) const
+	{
+		return Traits::IsUpper(ch, locale_.GetLCID());
+	}
+
+	bool IsLower(CharType ch) const
+	{
+		return Traits::IsLower(ch, locale_.GetLCID());
 	}
 };
