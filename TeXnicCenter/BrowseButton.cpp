@@ -64,7 +64,7 @@ CBrowseButton::CBrowseButton(UINT unCtrlId,
 		m_bUseEditForInitFolder(bUseEditForInitFolder)
 {
 	m_dataFolderDialog.strTitle = lpszTitle;
-	m_dataFolderDialog.unFlags = unFlags;
+	m_dataFolderDialog.unFlags = unFlags | BIF_NEWDIALOGSTYLE;
 	//We need to change the next 2 items, if the caller wants us to do a callback.
 	// But we will do this just before we open the BFF-Dialog.
 	m_dataFolderDialog.lpfn = lpfn;
