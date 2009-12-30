@@ -1,8 +1,11 @@
 #define APP_NAME          "TeXnicCenter"
-#define APP_VERSION       "2.0 Alpha 1"
+#define APP_VERSION       "2.0 Alpha 2"
 #define APP_ID            "TeXnicCenter Alpha"
 #define REGNAME           "TeXnicCenterNT"
+#define APP_COPYRIGHT     "© 1999-2010 www.TeXnicCenter.org"
 
+#define APP_PLATFORM      "Win32"
+;#define APP_PLATFORM      "x64"
 
 [_ISTool]
 EnableISX=true
@@ -21,7 +24,7 @@ AppPublisher=The TeXnicCenter Team
 AppPublisherURL=http://www.texniccenter.org/
 AppSupportURL=http://www.texniccenter.org/support/find-help
 AppUpdatesURL=http://www.texniccenter.org/resources/downloads
-AppCopyright=© 1999-2009 www.TeXnicCenter.org
+AppCopyright={#APP_COPYRIGHT}
 LicenseFile=GPL.rtf
 
 DefaultDirName={pf}\{#APP_ID}
@@ -64,30 +67,30 @@ Name: Dictionaries\Francais1990; Description: Français (appelé Réforme 1990); Ty
 
 [Files]
 ;Application Files
-Source: ..\Output\Product\Unicode Release\TeXnicCenter.exe; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\MFCExt.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\MsXmlCpp.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\SciLexer.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\Language\*.dll; DestDir: {app}\Language; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\TeXnicCenter.exe; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\MFCExt.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\MsXmlCpp.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\SciLexer.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Language\*.dll; DestDir: {app}\Language; Components: Application_Files; Flags: ignoreversion
 
 ;The type lib for creating wizards. We do not issue an error, if registering doesn't work.
-Source: ..\Output\Product\Unicode Release\TeXnicCenterObjects.tlb; DestDir: {app}; Components: Application_Files; Flags: regtypelib promptifolder comparetimestamp noregerror
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\TeXnicCenterObjects.tlb; DestDir: {app}; Components: Application_Files; Flags: regtypelib promptifolder comparetimestamp noregerror
 
 ;Some other files
-Source: ..\Output\Product\Unicode Release\GPL_english.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\GPL_german.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\Tips_english.txt; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\Tips_german.txt; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\UserImages.bmp; DestDir: {app}; Components: Application_Files; Flags: promptifolder comparetimestamp
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\GPL_english.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\GPL_german.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Tips_english.txt; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Tips_german.txt; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\UserImages.bmp; DestDir: {app}; Components: Application_Files; Flags: promptifolder comparetimestamp
 
 ;Packages and other XML files
-Source: ..\Output\Product\Unicode Release\*.xsd; DestDir: {app}; Components: Application_Files; Flags: promptifolder comparetimestamp
-Source: ..\Output\Product\Unicode Release\Packages\*.xml; DestDir: {app}\Packages; Components: Application_Files; Flags: promptifolder comparetimestamp
-Source: ..\Output\Product\Unicode Release\Packages\*.bmp; DestDir: {app}\Packages; Components: Application_Files; Flags: promptifolder comparetimestamp
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\*.xsd; DestDir: {app}; Components: Application_Files; Flags: promptifolder comparetimestamp
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Packages\*.xml; DestDir: {app}\Packages; Components: Application_Files; Flags: promptifolder comparetimestamp
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Packages\*.bmp; DestDir: {app}\Packages; Components: Application_Files; Flags: promptifolder comparetimestamp
 
 ;Help
-Source: ..\Output\Product\Unicode Release\Help\*.chm; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
-Source: ..\Output\Product\Unicode Release\Help\*.chw; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Help\*.chm; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
+Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Help\*.chw; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
 
 ;XML System files - do we really need this? For an admin account on XP, we don't need these files at all.
 ;For a regular user, we need these files in the systems dir. A simple copy to the app dir doesn't work. What am I missing?
@@ -106,22 +109,22 @@ Source: Microsoft.VC90.CRT.manifest; DestDir: {app}; Components: Application_Fil
 Source: Microsoft.VC90.MFC.manifest; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 
 ;Templates
-DestDir: {app}\Templates\Documents\English; Source: ..\Output\Product\Unicode Release\Templates\Documents\English\*.tex; Components: Templates\English; Flags: comparetimestamp
-DestDir: {app}\Templates\Documents\English advanced; Source: ..\Output\Product\Unicode Release\Templates\Documents\English advanced\*.tex; Components: Templates\English; Flags: comparetimestamp
-DestDir: {app}\Templates\Projects\English advanced; Source: ..\Output\Product\Unicode Release\Templates\Projects\English advanced\*.tex; Components: Templates\English; Flags: comparetimestamp
-DestDir: {app}\Templates\Projects\English; Source: ..\Output\Product\Unicode Release\Templates\Projects\English\*.tex; Components: Templates\English; Flags: comparetimestamp
+DestDir: {app}\Templates\Documents\English; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Templates\Documents\English\*.tex; Components: Templates\English; Flags: comparetimestamp
+DestDir: {app}\Templates\Documents\English advanced; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Templates\Documents\English advanced\*.tex; Components: Templates\English; Flags: comparetimestamp
+DestDir: {app}\Templates\Projects\English advanced; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Templates\Projects\English advanced\*.tex; Components: Templates\English; Flags: comparetimestamp
+DestDir: {app}\Templates\Projects\English; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Templates\Projects\English\*.tex; Components: Templates\English; Flags: comparetimestamp
 
-DestDir: {app}\Templates\Documents\Deutsch; Source: ..\Output\Product\Unicode Release\Templates\Documents\Deutsch\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
-DestDir: {app}\Templates\Documents\Deutsch erweitert; Source: ..\Output\Product\Unicode Release\Templates\Documents\Deutsch erweitert\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
-DestDir: {app}\Templates\Projects\Deutsch erweitert; Source: ..\Output\Product\Unicode Release\Templates\Projects\Deutsch erweitert\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
-DestDir: {app}\Templates\Projects\Deutsch; Source: ..\Output\Product\Unicode Release\Templates\Projects\Deutsch\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
+DestDir: {app}\Templates\Documents\Deutsch; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Templates\Documents\Deutsch\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
+DestDir: {app}\Templates\Documents\Deutsch erweitert; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Templates\Documents\Deutsch erweitert\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
+DestDir: {app}\Templates\Projects\Deutsch erweitert; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Templates\Projects\Deutsch erweitert\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
+DestDir: {app}\Templates\Projects\Deutsch; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Templates\Projects\Deutsch\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
 
 ;Dictionaries
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\Unicode Release\Dictionaries\de_DE.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Deutsch
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\Unicode Release\Dictionaries\en_GB.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishGB
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\Unicode Release\Dictionaries\en_US.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishUS
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\Unicode Release\Dictionaries\fr_FR.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Francais
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\Unicode Release\Dictionaries\fr_FR-1990.*; Flags: comparetimestamp promptifolder; Components: " Dictionaries\Francais1990"
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Dictionaries\de_DE.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Deutsch
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Dictionaries\en_GB.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishGB
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Dictionaries\en_US.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishUS
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Dictionaries\fr_FR.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Francais
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Unicode Release\Dictionaries\fr_FR-1990.*; Flags: comparetimestamp promptifolder; Components: " Dictionaries\Francais1990"
 
 [Icons]
 Name: {group}\{#APP_ID}; Filename: {app}\TeXnicCenter.exe; WorkingDir: {userdocs}; IconIndex: 0
