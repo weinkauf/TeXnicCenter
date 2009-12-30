@@ -63,9 +63,6 @@
 #define IDB_PARSE_VIEW                  243
 #define IDR_POPUP_PLACEHOLDER_MAIN_OPT  246
 #define IDR_POPUP_PLACEHOLDER_CURRENT_OPT 247
-#define IDR_LATEXTYPE_YELLOW            248
-#define IDR_MAINFRAME_YELLOW            250
-#define IDR_LATEXWIZARD_YELLOW          251
 #define IDS_SPELL_CONTINUE              252
 #define IDR_POPUP_PLACEHOLDEREX_NOOPT   253
 #define IDS_NO_ACTION                   255
@@ -73,7 +70,7 @@
 #define IDS_TEXTMODULES_NONEDEFINED     271
 #define IDR_STRUCTURE                   280
 #define STE_TB_MATH                     309
-#define IDR_MATH                    310
+#define IDR_MATH                        310
 #define IDR_MATHBAR1                    311
 #define IDR_MATHBAR2                    312
 #define IDR_MATHBAR3                    313
@@ -225,7 +222,7 @@
 #define IDC_OUTSOURCE_OPEN_FOREGROUND   1118
 #define IDC_TYPE_DOS                    1119
 #define IDC_TYPE_UNIX                   1120
-#define IDC_TYPE_MAC               1122
+#define IDC_TYPE_MAC                    1122
 #define IDC_SEARCH_SEARCHFOR            1123
 #define IDC_POPUP_REGULAREXPRESSION     1124
 #define IDC_SEARCH_SEARCHTHROUGH        1125
@@ -1001,7 +998,6 @@
 #define ID_WINDOW_GREP1                 33502
 #define ID_WINDOW_GREP2                 33503
 #define ID_APP_LICENSE                  33507
-
 #define ID_WINDOW_NEXT                  33509
 #define ID_WINDOW_PREVIOUS              33510
 #define ID_WINDOW_CLOSE_ALL             33511
