@@ -945,6 +945,7 @@ BOOL CodeDocument::DoSaveModified()
 		switch (button) {
 			case IDCANCEL:
 				result = FALSE;       // don't continue
+				break;
 
 			case IDYES:
 				// If so, either Save or Update, as appropriate
@@ -954,6 +955,7 @@ BOOL CodeDocument::DoSaveModified()
 
 			case IDNO:
 				// If not saving changes, revert the document
+				result = TRUE;    // keep going
 				break;
 
 			case IDOK:

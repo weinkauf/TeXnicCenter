@@ -458,14 +458,19 @@ BOOL CProject::SaveModified()
 	int button;
 
 	if (!RunTimeHelper::IsVista())
+	{
 		button = AfxMessageBox(prompt, MB_YESNOCANCEL, AFX_IDP_ASK_TO_SAVE);
+	}
 	else
+	{
 		button = ShowSaveTaskDialog(prompt);
+	}
 
 	switch (button)
 	{
 		case IDCANCEL:
 			return FALSE; // don't continue
+			break;
 
 		case IDYES:
 			// If so, either Save or Update, as appropriate
@@ -475,6 +480,7 @@ BOOL CProject::SaveModified()
 
 		case IDNO:
 			// If not saving changes, revert the document
+			return TRUE;
 			break;
 
 		default:
