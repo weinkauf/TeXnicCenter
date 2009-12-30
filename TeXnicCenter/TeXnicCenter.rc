@@ -160,9 +160,6 @@ IDR_LATEXWIZARD         ICON                    "res\\Wizard.ico"
 IDR_BIBTEXDOCTYPE       ICON                    "res\\bibtextype.ico"
 IDR_LATEXDOCTYPE        ICON                    "res\\LatexDoc.ico"
 IDR_LATEXPROJECTDOCTYPE ICON                    "res\\idr_late.ico"
-IDR_LATEXTYPE_YELLOW    ICON                    "res\\LatexDoc_yellow.ico"
-IDR_MAINFRAME_YELLOW    ICON                    "res\\TeXnicCenter_yellow.ico"
-IDR_LATEXWIZARD_YELLOW  ICON                    "res\\Wizard_yellow.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
