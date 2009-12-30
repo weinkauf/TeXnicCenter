@@ -940,7 +940,15 @@ BOOL CodeDocument::DoSaveModified()
 		CString prompt;
 		AfxFormatString1(prompt,AFX_IDP_ASK_TO_SAVE,name);
 
-		const int button = ShowSaveTaskDialog(prompt);
+		int button;
+		if (!RunTimeHelper::IsVista())
+		{
+			button = AfxMessageBox(prompt, MB_YESNOCANCEL, AFX_IDP_ASK_TO_SAVE);
+		}
+		else
+		{
+			button = ShowSaveTaskDialog(prompt);
+		}
 
 		switch (button) {
 			case IDCANCEL:
