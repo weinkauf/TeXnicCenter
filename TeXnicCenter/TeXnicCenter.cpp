@@ -394,6 +394,18 @@ BOOL CTeXnicCenterApp::InitInstance()
 	    RUNTIME_CLASS(LaTeXView));
 	AddDocTemplate(m_pLatexDocTemplate);
 
+	m_pProjectDocTemplate = new CSingleProjectTemplate(
+	    IDR_LATEXPROJECTDOCTYPE,
+	    RUNTIME_CLASS(CLaTeXProject),
+	    -IDR_LATEXPROJECTDOCTYPE // Icon index within the executable or -ID
+		);
+
+	AddProjectTemplate(m_pProjectDocTemplate);
+
+	//Register the above file types with TXC
+	RegisterShellFileTypes(TRUE);
+	//The file types below will not be registered with us
+
 	// BibTeX-Document
 	CMultiDocTemplate* bibtempl = new CMultiDocTemplate(
 		IDR_BIBTEXDOCTYPE,
@@ -414,15 +426,6 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	metapost_doc_template_ = mptempl;
 
-	m_pProjectDocTemplate = new CSingleProjectTemplate(
-	    IDR_LATEXPROJECTDOCTYPE,
-	    RUNTIME_CLASS(CLaTeXProject),
-	    -IDR_LATEXPROJECTDOCTYPE // Icon index within the executable or -ID
-	);
-
-	AddProjectTemplate(m_pProjectDocTemplate);
-
-	RegisterShellFileTypes(TRUE);
 
 	if (cmdInfo.Exit())
 		return FALSE;
