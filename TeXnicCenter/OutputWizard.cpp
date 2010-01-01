@@ -681,6 +681,8 @@ void COutputWizard::GenerateOutputProfiles()
 		strPDFLatexOptions = _T("-interaction=nonstopmode -max-print-line=120 \"%pm\"");
 	}
 
+	const CString dviOptions(_T("-src ") + strLatexOptions); // Source links
+
 	// Did the user select SumatraPDF?
 	if (IsSumatraPDF(m_wndPagePdfViewer.GetViewerPath()))
 	{
@@ -703,7 +705,7 @@ void COutputWizard::GenerateOutputProfiles()
 			if (bExists)
 				m_profiles.Remove(strProfile);			
 
-			p.SetLatexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("latex.exe")),strLatexOptions);
+			p.SetLatexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("latex.exe")),dviOptions);
 			p.SetBibTexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("bibtex.exe")),_T("\"%bm\""));
 			p.SetMakeIndexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("makeindex.exe")),
 			                   _T("\"%bm.idx\" -o \"%bm.ind\""));
@@ -766,7 +768,7 @@ void COutputWizard::GenerateOutputProfiles()
 			CProfile p;
 
 			p.SetLatexPath(
-			    CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("latex.exe")),strLatexOptions);
+				CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("latex.exe")),dviOptions);
 			p.SetBibTexPath(
 			    CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("bibtex.exe")),
 			    _T("\"%bm\""));
