@@ -205,7 +205,7 @@ CPropertyDialog::CPropertyDialog(UINT unIDTemplate, UINT unTabCtrlTemplateId, CW
 
 void CPropertyDialog::Init()
 {
-	m_unTabCtrlTemplateId = -1;
+	m_unTabCtrlTemplateId = ~0U;
 	m_pTabCtrl = NULL;
 	m_pApplyNowButton = NULL;
 	m_nActivePage = -1;

@@ -64,7 +64,7 @@ class CLaTeXCommand : public CAbstractLaTeXCommand
 public:
 
 	DECLARE_DYNAMIC(CLaTeXCommand)
-	CLaTeXCommand(const CStyleFile *parent, const CString &name, int m_NoOfParams);
+	CLaTeXCommand(const std::tr1::shared_ptr<CStyleFile>& parent, const CString &name, int m_NoOfParams);
 	//CLaTeXCommand(CLaTeXCommand &cmd);
 	virtual ~CLaTeXCommand();
 

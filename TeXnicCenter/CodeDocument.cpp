@@ -623,9 +623,9 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 		GetView()->GetCtrl().SetCodePage(SC_CP_UTF8);
 
 		if (n) {
-			GetView()->GetCtrl().AppendText(n,text);
 			// Detected EOL type
 			GetView()->GetCtrl().SetEOLMode(DetectScintillaEOLMode(text,n));
+			GetView()->GetCtrl().AppendText(n,text);			
 		}
 
 		use_bom_ = pos > 0;

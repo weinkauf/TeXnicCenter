@@ -84,10 +84,12 @@ BOOL CAutoCompleteDlg::InitWithKeyword(const CString &keyword)
 		return FALSE;
 	}
 
-	CLaTeXCommand *lc;
+	map.RemoveAll();
+
+	std::tr1::shared_ptr<CObject> c;
 	CString key;
 	int idx;
-	CMapStringToOb map;
+	
 
 	m_Container->GetAllPossibleItems(keyword,_T(""),map);
 
@@ -99,12 +101,17 @@ BOOL CAutoCompleteDlg::InitWithKeyword(const CString &keyword)
 
 	m_CurrentKeyword = keyword;
 
+	std::tr1::shared_ptr<CLaTeXCommand> lc;
+
 	/* Just on element -> Notify caller immediately */
 	if (map.GetCount() == 1)
 	{
 		POSITION pos = map.GetStartPosition();
-		map.GetNextAssoc(pos,key,(CObject*&) lc);
-		if (m_Listener != NULL) m_Listener->OnACCommandSelect(lc);
+		map.GetNextAssoc(pos,key, c);
+
+		lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
+
+		if (lc && m_Listener != NULL) m_Listener->OnACCommandSelect(lc.get());
 
 		return FALSE;
 	}
@@ -122,13 +129,16 @@ BOOL CAutoCompleteDlg::InitWithKeyword(const CString &keyword)
 	m_Box->ResetContent();
 	m_Box->InitStorage(map.GetCount(),keyword.GetLength() * 2); /* prepare memory */
 
+
 	POSITION pos = map.GetStartPosition();
 	while (pos != NULL)   /* fill list with items */
 	{
-		map.GetNextAssoc(pos,key,(CObject*&) lc);
+		map.GetNextAssoc(pos,key, c);
+
+		lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
 		idx = m_Box->AddString(lc->ToLaTeX());
 
-		int ret = m_Box->SetItemDataPtr(idx,lc); // sync pointer with string
+		int ret = m_Box->SetItemDataPtr(idx,lc.get()); // sync pointer with string
 
 		if (ret == LB_ERR)
 		{

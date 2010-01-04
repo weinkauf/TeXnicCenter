@@ -168,14 +168,15 @@ void CIniFile::Reset()
 	names.SetSize(0);
 }
 
-int CIniFile::GetNumKeys() const
+INT_PTR CIniFile::GetNumKeys() const
 {
 	return keys.GetSize();
 }
 
-int CIniFile::GetNumValues( const CString& keyname ) const
+INT_PTR CIniFile::GetNumValues( const CString& keyname ) const
 {
-	int keynum = FindKey(keyname);
+	INT_PTR keynum = FindKey(keyname);
+
 	if (keynum == -1)
 		return -1;
 	else
@@ -184,8 +185,8 @@ int CIniFile::GetNumValues( const CString& keyname ) const
 
 bool CIniFile::VerifyValue( const CString& keyname, const CString& valuename ) const
 {
-	int	keynum = FindKey(keyname);
-	int	valuenum = FindValue(keynum, valuename);
+	INT_PTR	keynum = FindKey(keyname);
+	INT_PTR	valuenum = FindValue(keynum, valuename);
 
 	if (keynum == -1 || valuenum == -1)
 		return FALSE;
@@ -203,7 +204,7 @@ bool CIniFile::VerifyKey( const CString& keyname ) const
 
 const CString CIniFile::GetValue( const CString& keyname, const CString& valuename, const CString& strDefault ) const
 {
-	int keynum = FindKey(keyname), valuenum = FindValue(keynum,valuename);
+	INT_PTR keynum = FindKey(keyname), valuenum = FindValue(keynum,valuename);
 
 	if (keynum == -1)
 		return strDefault;
@@ -230,7 +231,7 @@ double CIniFile::GetValue(const CString& keyname, const CString& valuename, doub
 
 bool CIniFile::SetValue( const CString& key, const CString& valuename, const CString& value, bool create /*= TRUE*/ )
 {
-	int keynum = FindKey(key), valuenum = 0;
+	INT_PTR keynum = FindKey(key), valuenum = 0;
 	//find key
 	if (keynum == -1) //if key doesn't exist
 	{
@@ -273,7 +274,8 @@ bool CIniFile::SetValue(const CString& keyname, const CString& valuename, double
 
 bool CIniFile::DeleteValue(const CString& keyname, const CString& valuename)
 {
-	int keynum = FindKey(keyname), valuenum = FindValue(keynum,valuename);
+	INT_PTR keynum = FindKey(keyname), valuenum = FindValue(keynum,valuename);
+
 	if (keynum == -1 || valuenum == -1)
 		return 0;
 
@@ -284,17 +286,19 @@ bool CIniFile::DeleteValue(const CString& keyname, const CString& valuename)
 
 bool CIniFile::DeleteKey(const CString& keyname)
 {
-	int keynum = FindKey(keyname);
+	INT_PTR keynum = FindKey(keyname);
+	
 	if (keynum == -1)
 		return 0;
+
 	keys.RemoveAt(keynum);
 	names.RemoveAt(keynum);
 	return 1;
 }
 
-int CIniFile::FindKey( const CString& keyname ) const
+INT_PTR CIniFile::FindKey( const CString& keyname ) const
 {
-	int keynum = 0;
+	INT_PTR keynum = 0;
 	while ( keynum < keys.GetSize() && names[keynum] != keyname)
 		++keynum;
 	if (keynum == keys.GetSize())
@@ -302,7 +306,7 @@ int CIniFile::FindKey( const CString& keyname ) const
 	return keynum;
 }
 
-int CIniFile::FindValue( int keynum, const CString& valuename ) const
+INT_PTR CIniFile::FindValue( INT_PTR keynum, const CString& valuename ) const
 {
 	if (keynum == -1)
 		return -1;
@@ -321,11 +325,11 @@ int CIniFile::FindValue( int keynum, const CString& valuename ) const
 bool CIniFile::GetValues( const CString& key, std::multimap<CString,CString>& result ) const
 {
 	result.clear();
-	int index = FindKey(key);
+	INT_PTR index = FindKey(key);
 
 	if (index != -1) 
 	{
-		const int size = keys[index].names.GetSize();
+		const INT_PTR size = keys[index].names.GetSize();
 
 		for (int i = 0; i < size; ++i)
 			result.insert(std::make_pair(keys[index].names[i],keys[index].values[i]));

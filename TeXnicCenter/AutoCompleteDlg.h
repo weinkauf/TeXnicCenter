@@ -20,6 +20,7 @@ class CAutoCompleteListener;
 
 class CAutoCompleteDlg : public CWnd
 {
+	SharedObjectMap map;
 // Construction
 public:
 

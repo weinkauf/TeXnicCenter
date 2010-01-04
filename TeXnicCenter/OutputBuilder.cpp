@@ -124,7 +124,7 @@ BOOL COutputBuilder::RunMakeIndex(COutputDoc* pDoc,COutputView* pView,
 BOOL COutputBuilder::CancelExecution()
 {
 	m_bCancel = TRUE;
-	return ::TerminateProcess(m_hCurrentProcess,-1);
+	return ::TerminateProcess(m_hCurrentProcess, ~0U);
 }
 
 UINT COutputBuilder::Run()
@@ -136,34 +136,34 @@ UINT COutputBuilder::Run()
 
 	// valid profile available?
 	if (!m_pProfile)
-		return -1;
+		return ~0U;
 
 	// run (La)TeX-compiler
 	if (m_nMode == modeBuildAll)
 	{
 		if (!RunLatex() || m_bCancel)
-			return -1;
+			return ~0U;
 	}
 
 	// run BibTeX
 	if (m_nMode == modeBuildAll || m_nMode == modeRunBibTexOnly)
 	{
 		if (!RunBibTex() || m_bCancel)
-			return -1;
+			return ~0U;
 	}
 
 	// run MakeIndex
 	if (m_nMode == modeBuildAll || m_nMode == modeRunMakeIndexOnly)
 	{
 		if (!RunMakeIndex() || m_bCancel)
-			return -1;
+			return ~0U;
 	}
 
 	// run postprocessors
 	if (m_nMode == modeBuildAll)
 	{
 		if (!RunPostProcessors() || m_bCancel)
-			return -1;
+			return ~0U;
 	}
 
 	return 0;
@@ -181,7 +181,7 @@ UINT COutputBuilder::OnTerminate(UINT unExitCode)
 			m_pView->AddLine(_T(""));
 			m_pView->AddLine(CString((LPCTSTR)STE_LATEX_CANCELED));
 		}
-		retval = -1;
+		retval = ~0U;
 	}
 	else
 	{
