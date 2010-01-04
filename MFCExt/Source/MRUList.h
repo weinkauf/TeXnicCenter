@@ -90,7 +90,7 @@ public:
 	/**
 	Returns the size of the list in elements.
 	*/
-	int GetSize() const;
+	INT_PTR GetSize() const;
 
 	/**
 	Returns the number of elements stored in the list.
@@ -194,7 +194,7 @@ void PASCAL CMRUList<TYPE, ARG_TYPE>::operator delete(void *p, LPCSTR lpszFileNa
 
 template<class TYPE, class ARG_TYPE>
 inline 
-int CMRUList<TYPE, ARG_TYPE>::GetSize() const
+INT_PTR CMRUList<TYPE, ARG_TYPE>::GetSize() const
 {
 	return CArray<TYPE, ARG_TYPE>::GetSize();
 }

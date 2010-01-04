@@ -73,7 +73,7 @@ static char THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNAMIC(CAbstractLaTeXCommand,CObject)
 
-CAbstractLaTeXCommand::CAbstractLaTeXCommand(const CStyleFile *parent, const CString &name)
+CAbstractLaTeXCommand::CAbstractLaTeXCommand(const std::tr1::shared_ptr<CStyleFile>& parent, const CString &name)
 		: m_Parent(parent)
 		, m_Name(name)
 		, m_IconIndex(-1)
@@ -132,7 +132,7 @@ void CAbstractLaTeXCommand::SetIconIndex(int idx)
 	m_IconIndex = idx;
 }
 
-const CStyleFile * CAbstractLaTeXCommand::GetStyleFile() const
+const std::tr1::shared_ptr<CStyleFile>& CAbstractLaTeXCommand::GetStyleFile() const
 {
 	return m_Parent;
 }
@@ -152,7 +152,7 @@ const CString& CAbstractLaTeXCommand::GetName() const
 	return m_Name;
 }
 
-const CStyleFile * CAbstractLaTeXCommand::GetParent() const
+const std::tr1::shared_ptr<CStyleFile>& CAbstractLaTeXCommand::GetParent() const
 {
 	return m_Parent;
 }

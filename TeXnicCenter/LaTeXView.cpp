@@ -363,14 +363,16 @@ void LaTeXView::InstantAdvice()
 	GetWordBeforeCursor(keyw,ptStart,false);
 
 	if (keyw.GetLength() > MINIMUM_KEYWORD_LENGTH) {
-		CMapStringToOb map;
+		SharedObjectMap map;
 
 		theApp.m_AvailableCommands.GetAllPossibleItems(keyw,_T(""),map);
 
 		if (map.GetCount() == 1) { //keyword is unique -> OK
-			CLaTeXCommand *lc;
+			std::tr1::shared_ptr<CObject> c;
 			POSITION pos = map.GetStartPosition();
-			map.GetNextAssoc(pos,key,(CObject*&)lc);
+			map.GetNextAssoc(pos,key,c);
+
+			std::tr1::shared_ptr<CLaTeXCommand> lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
 
 			if (lc != NULL) {
 				if (instant_advice_tip_ == NULL) {
@@ -616,7 +618,7 @@ int LaTeXView::GetNumberOfMatches( const CString& keyword )
 {
 	if (keyword.GetLength() < CAutoCompleteDlg::GetMinimumKeywordLength()) return 0;
 
-	CMapStringToOb map;
+	SharedObjectMap map;
 	theApp.m_AvailableCommands.GetAllPossibleItems(keyword,_T(""),map);
 	return map.GetCount();
 }
@@ -629,40 +631,54 @@ void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& a, bool bSelect /
 	
 	if (length > 0) {
 		// Get the line, the cursor is placed on
-		const CString strLine = GetLineText(line);
 		long start = GetCtrl().PositionFromLine(line);
 
 		// Get the position from where we start the backward search
 		long l = pos - start;
 
-		if (l <= strLine.GetLength()) {
-			long EndX = (l <= strLine.GetLength()) ? l - 1 : l + strLine.GetLength() - 1;
-			long CurrentX = EndX;
+		if (l > 0) {
+			std::vector<char> data(l + 1);
 
-			//Backward search: go to first character of the current word
-			for (; CurrentX >= 0; CurrentX--) {
-				if (!IsAutoCompletionCharacter(strLine[CurrentX])) {
-					++CurrentX; //This is the last valid TCHAR
-					break;
+			Sci_TextRange range;
+			range.chrg.cpMin = start;
+			range.chrg.cpMax = pos;
+			range.lpstrText = &data[0];
+
+			GetCtrl().GetTextRange(&range);
+
+			if (true) {
+				long EndX = l - 1;
+				long CurrentX = EndX;
+
+				//Backward search: go to first character of the current word
+				for (; CurrentX >= 0; CurrentX--) {
+					if (!IsAutoCompletionCharacter(data[CurrentX])) {
+						++CurrentX; //This is the last valid TCHAR
+						break;
+					}
 				}
+
+				if (CurrentX < 0) 
+					CurrentX = 0;
+
+				if (CurrentX <= EndX) {
+					ASSERT(CurrentX >= 0);
+					ASSERT(EndX - CurrentX >= 0);
+
+					std::vector<wchar_t> conv;
+					UTF8toUTF16(range.lpstrText + CurrentX, EndX - CurrentX, conv);
+
+					if (!conv.empty())
+						strKeyword = CString(&conv[0], conv.size());
+					
+					if (bSelect)
+						GetCtrl().SetSel(start + CurrentX,pos);
+
+					a = start + CurrentX;
+				}
+				else
+					strKeyword.Empty();
 			}
-
-			if (CurrentX < 0) 
-				CurrentX = 0;
-
-			if (CurrentX <= EndX) {
-				ASSERT(CurrentX >= 0);
-				ASSERT(EndX - CurrentX + 1 > 0);
-
-				strKeyword = strLine.Mid(CurrentX,EndX - CurrentX + 1);
-
-				if (bSelect)
-					GetCtrl().SetSel(start + CurrentX,pos);
-
-				a = start + CurrentX;
-			}
-			else
-				strKeyword.Empty();
 		}
 	}
 }
@@ -977,8 +993,9 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 
 		buffer.pop_back(); // Remove the null above
 
-		ptNewSelStart += buffer.size();
-		ptSelEnd += buffer.size();
+		long offset = static_cast<long>(buffer.size());
+		ptNewSelStart += offset;
+		ptSelEnd += offset;
 	}
 
 	// insert text behind selection

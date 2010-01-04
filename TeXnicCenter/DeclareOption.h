@@ -48,7 +48,7 @@
 class CDeclareOption : public CAbstractLaTeXCommand
 {
 public:
-	CDeclareOption(const CStyleFile *parent, const CString &name);
+	CDeclareOption(const std::tr1::shared_ptr<CStyleFile>& parent, const CString &name);
 	virtual ~CDeclareOption();
 
 };

@@ -94,12 +94,12 @@ public:
 	/**
 	Returns number of keys currently in the INI file.
 	*/
-    int GetNumKeys() const;
+    INT_PTR GetNumKeys() const;
 
 	/** 
 	Returns number of values stored for specified key 
 	*/
-    int GetNumValues(const CString& keyname) const;
+    INT_PTR GetNumValues(const CString& keyname) const;
 
 	/**
 	Checks, if the specified value exists in the INI data.
@@ -276,10 +276,10 @@ protected:
 	returns index of specified value, in the specified key, or -1 
 	if not found 
 	*/
-    int FindValue(int keynum, const CString& valuename) const;
+    INT_PTR FindValue(INT_PTR keynum, const CString& valuename) const;
 
 	/** returns index of specified key, or -1 if not found */
-    int FindKey(const CString& keyname) const;
+    INT_PTR FindKey(const CString& keyname) const;
 
 // attributes
 protected:

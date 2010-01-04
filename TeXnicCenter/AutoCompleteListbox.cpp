@@ -144,7 +144,7 @@ void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	}
 
 	//Draw the text
-	dc.DrawText(lpszText,_tcslen(lpszText),&textRect,DT_SINGLELINE | DT_VCENTER);
+	dc.DrawText(lpszText,&textRect,DT_SINGLELINE | DT_VCENTER);
 
 	//Draw Bitmap, if available
 	if (lc->GetIconIndex() != -1)

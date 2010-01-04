@@ -47,7 +47,7 @@ class CNewCommand : public CLaTeXCommand
 public:
 	DECLARE_DYNAMIC(CNewCommand)
 
-	CNewCommand(const CStyleFile *parent, const CString &name, int NoOfParam = 0, bool hasStar = false);
+	CNewCommand(const std::tr1::shared_ptr<CStyleFile>& parent, const CString &name, int NoOfParam = 0, bool hasStar = false);
 	virtual ~CNewCommand();
 
 	virtual const CString ToLaTeX(BOOL showParString = TRUE) const;

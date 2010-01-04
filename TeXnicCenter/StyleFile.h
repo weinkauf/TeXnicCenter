@@ -39,8 +39,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include <memory>
+
 #include "LaTeXCommand.h"
 
+typedef CMap<CString, LPCTSTR, std::tr1::shared_ptr<CObject>, std::tr1::shared_ptr<CObject> > SharedObjectMap;
 
 class CNewCommand;
 class CNewEnvironment;
@@ -78,7 +81,7 @@ public:
 };
 
 /* Represents a LaTeX-Style file or class */
-class CStyleFile : public CObject
+class CStyleFile : public CObject, public std::tr1::enable_shared_from_this<CStyleFile>
 {
 public:
 	const CString ToString() const;
@@ -103,21 +106,21 @@ public:
 
 	bool IsDocClass() const;
 
-	const CMapStringToOb *GetCommands() const;
+	const SharedObjectMap* GetCommands() const;
 
 	const CStringArray *GetOptions() const;
 
 	const CStringArray *GetRequiredPackages() const;
 
 	///Adds a list of possible completions of Partial to the Result.
-	void GetPossibleItems(const CString& Partial,CMapStringToOb& Result);
+	void GetPossibleItems(const CString& Partial, SharedObjectMap& Result);
 
 
-	CNewCommand *AddCommand(const CString &name,int noOfParams = 0, const CString &desc = CString());
+	std::tr1::shared_ptr<CNewCommand> AddCommand(const CString &name,int noOfParams = 0, const CString &desc = CString());
 	/** Works for both, \newcommand and \newenvironment */
-	bool AddCommand(CLaTeXCommand *cmd);
-	CNewEnvironment *AddEnvironment(const CString &name,int noOfParams = 0, const CString &desc = CString());
-	bool AddOption(CDeclareOption *cmd);
+	bool AddCommand(std::tr1::shared_ptr<CLaTeXCommand>& cmd);
+	std::tr1::shared_ptr<CNewEnvironment> AddEnvironment(const CString &name,int noOfParams = 0, const CString &desc = CString());
+	bool AddOption(std::tr1::shared_ptr<CDeclareOption>& cmd);
 	bool AddOption(const CString &name, const CString &desc = CString());
 
 	CStyleFile & operator =(const CStyleFile&);
@@ -134,7 +137,7 @@ private:
 	bool m_IsClass;
 	CString m_Filename;
 
-	CMapStringToOb m_Commands;
+	SharedObjectMap m_Commands;
 	CStyleFileListener* m_Listener;
 	CString m_Desc;
 

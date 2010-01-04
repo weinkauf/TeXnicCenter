@@ -39,6 +39,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include <memory>
+
 class CStyleFile;
 
 /**
@@ -52,13 +54,13 @@ class CAbstractLaTeXCommand : public CObject
 public:
 
 	DECLARE_DYNAMIC(CAbstractLaTeXCommand)
-	CAbstractLaTeXCommand(const CStyleFile *parent, const CString &name);
+	CAbstractLaTeXCommand(const std::tr1::shared_ptr<CStyleFile>& parent, const CString &name);
 	CAbstractLaTeXCommand(CAbstractLaTeXCommand &cmd);
 
 	virtual ~CAbstractLaTeXCommand();
 
 	/** Returns a pointer to the containing style or class file */
-	const CStyleFile *GetStyleFile() const;;
+	const std::tr1::shared_ptr<CStyleFile>& GetStyleFile() const;;
 
 	/** Returns the LaTeX string representation
 	@param showParString If true, the appropriate amount of bracket pairs is inserted behind the
@@ -76,7 +78,7 @@ public:
 	const CString& GetName() const;
 
 	/** Returns a pointer to the style file which contains this command */
-	const CStyleFile *GetParent() const;
+	const std::tr1::shared_ptr<CStyleFile>& GetParent() const;
 
 	COLORREF GetIconMaskColor() const;
 	const CString& GetHighColorIconFileName() const;
@@ -95,7 +97,7 @@ public:
 private:
 	CString m_Description;
 	CString m_Name;
-	const CStyleFile *m_Parent;
+	std::tr1::shared_ptr<CStyleFile> m_Parent;
 	int m_IconIndex;
 	CString m_IconFile;
 	COLORREF icon_mask_color_;

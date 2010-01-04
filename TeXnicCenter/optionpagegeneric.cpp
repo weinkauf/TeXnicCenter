@@ -117,7 +117,7 @@ void COptionPageGeneric::RefillLanguageList()
 			//lang = Win32Locale(MAKELCID(fv.GetLanguageId(),SORT_DEFAULT)).GetSNativeLangName();
 
 			lang = ff.GetFileTitle();
-			lang = lang.Right(lang.GetLength() - n);
+			lang = lang.Right(lang.GetLength() - static_cast<int>(n));
 
 			if (m_wndGuiLanguageList.FindStringExact(0,lang) == CB_ERR)
 				m_wndGuiLanguageList.AddString(lang);

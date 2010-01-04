@@ -235,7 +235,7 @@ BOOL CPostProcessor::Execute(LPCTSTR lpszMainPath,LPCTSTR lpszWorkingDir,HANDLE 
 	}
 	catch (...)
 	{
-		dwExitCode = -1;
+		dwExitCode = ~0U;
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

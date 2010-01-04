@@ -101,26 +101,6 @@ void CStyleFile::Init()
 
 CStyleFile::~CStyleFile()
 {
-	POSITION pos = m_Commands.GetStartPosition();
-
-	while (pos != NULL)
-	{
-		CLaTeXCommand *sf;
-		CString key;
-		m_Commands.GetNextAssoc(pos, key, (CObject*&)sf);
-
-		if (sf != NULL)
-		{
-			//TRACE("Deleting cmd %s\n", sf->ToString());
-			delete sf;
-		}
-		else
-		{
-			TRACE(_T("NP detected in file %s"), m_Filename);
-		}
-
-		m_Commands.RemoveKey(key);
-	}
 }
 
 CStyleFile& CStyleFile::operator =(const CStyleFile& sf)
@@ -129,6 +109,7 @@ CStyleFile& CStyleFile::operator =(const CStyleFile& sf)
 	{
 		m_Filename = sf.m_Filename;
 	}
+
 	return *this;
 }
 
@@ -260,7 +241,7 @@ void CStyleFile::ParseBuffer(const TCHAR *buf)
 				nameBuf[l] = 0;
 
 				/* Create appropriate instance */
-				CAbstractLaTeXCommand *lc = CreateItem(i, nameBuf, hasStar, nOptions);
+				std::tr1::shared_ptr<CAbstractLaTeXCommand> lc(CreateItem(i, nameBuf, hasStar, nOptions));
 
 				if (lc != NULL)   /* Instance valid -> Notify container and add to list */
 				{
@@ -276,9 +257,8 @@ void CStyleFile::ParseBuffer(const TCHAR *buf)
 						case LATEX_TXT_COMMAND:
 							/* Some commands may be duplicate due to conditional definitions in the
 							   style file. */
-							if (!AddCommand((CLaTeXCommand*)lc))
+							if (!AddCommand(std::tr1::dynamic_pointer_cast<CLaTeXCommand>(lc)))
 							{
-								delete lc;
 							}
 							break;
 						case LATEX_OPTION:
@@ -286,17 +266,15 @@ void CStyleFile::ParseBuffer(const TCHAR *buf)
 							{
 								m_Options.Add(lc->GetName());
 							}
-							delete lc; /* currently not needed */
+
 							break;
 						case LATEX_REQPACKAGE:
 							m_ReqPackages.Add(lc->GetName());
-							delete lc; /* currently not needed */
 							break;
 						case LATEX_CLS_DESC:
 						case LATEX_STY_DESC:
 							ExtractDescription(close, openBr, closeBr, m_Desc);
 							TRACE(_T("Desc: %s: <%s>\n"), m_Name, m_Desc);
-							delete lc;
 							break;
 					}
 				}
@@ -374,27 +352,27 @@ CAbstractLaTeXCommand * CStyleFile::CreateItem(int type, const CString &name, bo
 		case LATEX_COMMAND:
 		case LATEX_DEF:
 		case LATEX_LET:
-			return new CNewCommand(this, name, noOfParams, hasStar);
+			return new CNewCommand(shared_from_this(), name, noOfParams, hasStar);
 			break;
 		case LATEX_TXT_SYMBOL:
 		case LATEX_MATH_SYMBOL:
-			return new CNewCommand(this, name, 0, hasStar);
+			return new CNewCommand(shared_from_this(), name, 0, hasStar);
 			break;
 		case LATEX_TXT_COMMAND:
-			return new CNewCommand(this, name, noOfParams, hasStar);
+			return new CNewCommand(shared_from_this(), name, noOfParams, hasStar);
 			break;
 		case LATEX_ENVIRONMENT:
-			return new CNewEnvironment(this, name, noOfParams);
+			return new CNewEnvironment(shared_from_this(), name, noOfParams);
 			break;
 		case LATEX_OPTION:
-			return new CDeclareOption(this, name);
+			return new CDeclareOption(shared_from_this(), name);
 			break;
 		case LATEX_REQPACKAGE:
-			return new CDeclareOption(this, name); /* murx */
+			return new CDeclareOption(shared_from_this(), name); /* murx */
 			break;
 		case LATEX_CLS_DESC:
 		case LATEX_STY_DESC:
-			return new CDeclareOption(this, name); /* murx */
+			return new CDeclareOption(shared_from_this(), name); /* murx */
 			break;
 	}
 	throw INVALID_LATEX_ITEM;
@@ -412,13 +390,14 @@ void CStyleFile::SetListener(CStyleFileListener* listener)
  Adds a command to the style file. Returns true, if command was inserted successfully or false,
  if not (e. g. command already exists)
  */
-bool CStyleFile::AddCommand(CLaTeXCommand *cmd)
+bool CStyleFile::AddCommand(std::tr1::shared_ptr<CLaTeXCommand>& cmd)
 {
-	CObject *dummy;
+	std::tr1::shared_ptr<CObject> dummy;
 
 	if (!m_Commands.Lookup(cmd->ToString(), dummy))
 	{
 		m_Commands.SetAt(cmd->ToString(), cmd);
+
 		if (m_Listener != NULL)
 		{
 			m_Listener->OnCommandFound(*cmd);
@@ -436,13 +415,14 @@ bool CStyleFile::AddCommand(CLaTeXCommand *cmd)
  Adds an option to the style file. Returns true, if command was inserted successfully or false,
  if not (e. g. command already exists)
  */
-bool CStyleFile::AddOption(CDeclareOption *cmd)
+bool CStyleFile::AddOption(std::tr1::shared_ptr<CDeclareOption>& cmd)
 {
 	if (!CStyleFileContainer::ContainsString(&m_Options, cmd->GetName()))
 	{
 		m_Options.Add(cmd->GetName());
 		return true;
 	}
+
 	return false;
 }
 
@@ -450,20 +430,21 @@ bool CStyleFile::AddOption(CDeclareOption *cmd)
  Creates a LaTeX command (\newcommand) with the given parameters and sets
  current style file as parent. The parameter desc is an optional description.
  */
-CNewCommand *CStyleFile::AddCommand(const CString &name, int noOfParams, const CString &desc)
+std::tr1::shared_ptr<CNewCommand> CStyleFile::AddCommand(const CString &name, int noOfParams, const CString &desc)
 {
-	CNewCommand *nc = new CNewCommand(this, name, noOfParams);
+	std::tr1::shared_ptr<CNewCommand> nc (new CNewCommand(shared_from_this(), name, noOfParams));
 	nc->SetDescription(desc);
 
-	if (AddCommand(nc))
+	if (AddCommand(std::tr1::static_pointer_cast<CLaTeXCommand>(nc)))
 	{
 		return nc;
 	}
 	else
 	{
-		delete nc;
+		nc.reset();
 	}
-	return NULL;
+
+	return nc;
 }
 
 /**
@@ -471,15 +452,16 @@ CNewCommand *CStyleFile::AddCommand(const CString &name, int noOfParams, const C
  */
 bool CStyleFile::AddOption(const CString &name, const CString &/*desc*/)
 {
-	CDeclareOption *d = new CDeclareOption(this, name);
+	std::tr1::shared_ptr<CDeclareOption> d(new CDeclareOption(shared_from_this(), name));
+
 	if (AddOption(d))
 	{
 		return true;
 	}
 	else
 	{
-		delete d;
 	}
+
 	return false;
 }
 
@@ -488,20 +470,21 @@ bool CStyleFile::AddOption(const CString &name, const CString &/*desc*/)
  current style file as parent. The parameter desc is an optional description.
  */
 
-CNewEnvironment *CStyleFile::AddEnvironment(const CString &name, int noOfParams, const CString &desc)
+std::tr1::shared_ptr<CNewEnvironment> CStyleFile::AddEnvironment(const CString &name, int noOfParams, const CString &desc)
 {
-	CNewEnvironment *ne = new CNewEnvironment(this, name, noOfParams);
+	std::tr1::shared_ptr<CNewEnvironment> ne(new CNewEnvironment(shared_from_this(), name, noOfParams));
 	ne->SetDescription(desc);
 
-	if (AddCommand(ne))
+	if (AddCommand(std::tr1::static_pointer_cast<CLaTeXCommand>(ne)))
 	{
 		return ne;
 	}
 	else
 	{
-		delete ne;
+		ne.reset();
 	}
-	return NULL;
+
+	return ne;
 }
 
 /**
@@ -558,7 +541,7 @@ void CStyleFile::Dump(CDumpContext& dc) const
 	dc << m_Name;
 }
 
-void CStyleFile::GetPossibleItems(const CString& Partial, CMapStringToOb& Result)
+void CStyleFile::GetPossibleItems(const CString& Partial, SharedObjectMap& Result)
 {
 	const int SearchLength = Partial.GetLength();
 	ASSERT(SearchLength != 0);
@@ -567,10 +550,10 @@ void CStyleFile::GetPossibleItems(const CString& Partial, CMapStringToOb& Result
 	while (pos != NULL)
 	{
 		CString key;
-		CObject* pObj = NULL;
+		std::tr1::shared_ptr<CObject> pObj;
 		m_Commands.GetNextAssoc(pos, key, pObj);
 
-		CLaTeXCommand* pLatexCmd = dynamic_cast<CLaTeXCommand*>(pObj);
+		std::tr1::shared_ptr<CLaTeXCommand> pLatexCmd = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(pObj);
 		if (!pLatexCmd) continue;
 
 		if ((key.GetLength() >= SearchLength) && (key.Left(SearchLength).CompareNoCase(Partial) == 0))
@@ -606,7 +589,7 @@ bool CStyleFile::IsDocClass() const
 	return m_IsClass;
 }
 
-const CMapStringToOb * CStyleFile::GetCommands() const
+const SharedObjectMap*  CStyleFile::GetCommands() const
 {
 	return &m_Commands;
 }

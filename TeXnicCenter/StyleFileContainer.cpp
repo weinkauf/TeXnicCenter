@@ -128,14 +128,13 @@ bool CStyleFileContainer::FindStyleFilesRecursive(CString dir)
 			if (ext == "sty" || ext == "cls")
 			{
 				m_LastFile = Path.GetFile();
-				CStyleFile* sf = new CStyleFile(Path.GetPath(), ext == "cls");
+				std::tr1::shared_ptr<CStyleFile> sf(new CStyleFile(Path.GetPath(), ext == "cls"));
 				sf->SetListener(m_Listener);
 
 				if (m_Listener) m_Listener->OnFileFound(Path.GetPath());
 
 				if (!AddStyleFile(sf))
 				{
-					delete sf;
 					continue;
 				}
 
@@ -174,9 +173,9 @@ BOOL CStyleFileContainer::IsDirInSearchPath(const CString &dir)
 	return ContainsString(&m_SearchPaths, dir);
 }
 
-BOOL CStyleFileContainer::AddStyleFile(CStyleFile *sf)
+BOOL CStyleFileContainer::AddStyleFile(const std::tr1::shared_ptr<CStyleFile>& sf)
 {
-	CObject *dummy;
+	StyleMapArg dummy;
 	if (!m_StyleFiles.Lookup(sf->GetName(), dummy))
 	{
 		m_StyleFiles.SetAt(sf->GetName(), sf);
@@ -196,16 +195,16 @@ void CStyleFileContainer::Merge(CStyleFileContainer& /*other*/)
 /* Returns a list of possible completions to a given string */
 void CStyleFileContainer::GetAllPossibleCompletions(const CString& Partial, const CString& docClassName, CUniqueStringList& Result)
 {
-	CMapStringToOb AllPossibleItems;
+	SharedObjectMap AllPossibleItems;
 	GetAllPossibleItems(Partial, docClassName, AllPossibleItems);
 
 	POSITION pos = AllPossibleItems.GetStartPosition();
 	while (pos)
 	{
-		CObject* pObj = NULL;
+		std::tr1::shared_ptr<CObject> pObj;
 		CString key;
 		AllPossibleItems.GetNextAssoc(pos, key, pObj);
-		CLaTeXCommand* pLatexCmd = dynamic_cast<CLaTeXCommand*>(pObj);
+		std::tr1::shared_ptr<CLaTeXCommand> pLatexCmd = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(pObj);
 		if (!pLatexCmd) continue;
 
 		Result.AddTail(pLatexCmd->ToLaTeX());
@@ -214,7 +213,7 @@ void CStyleFileContainer::GetAllPossibleCompletions(const CString& Partial, cons
 
 /* Returns a list of possible completions to a given string. Here the function returns objects
    instead of string, so that the receiver has more options to display the result.  */
-void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CString& docClassName, CMapStringToOb& Result)
+void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CString& docClassName, SharedObjectMap& Result)
 {
 	//Clear result
 	Result.RemoveAll();
@@ -228,11 +227,9 @@ void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CStr
 	while (filepos)
 	{
 		//Get style file
-		CObject* pObj = NULL;
+		StyleMapArg pSFile;
 		CString key;
-		m_StyleFiles.GetNextAssoc(filepos, key, pObj);
-		CStyleFile* pSFile = dynamic_cast<CStyleFile*>(pObj);
-		if (!pSFile) continue;
+		m_StyleFiles.GetNextAssoc(filepos, key, pSFile);
 
 		//TODO: If not in usepackage, then skip this one
 
@@ -255,7 +252,8 @@ void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CStr
 	{
 		int SearchLength = Partial.GetLength();
 
-		CStyleFile* dummy = new CStyleFile(CString(_T("Labels")), CString(_T("All Labels from document.")));
+		std::tr1::shared_ptr<CStyleFile> dummy
+			(new CStyleFile(CString(_T("Labels")), CString(_T("All Labels from document."))));
 
 		//for (int i = 0; i < size; i++) {
 		for (StructureItemContainer::const_iterator it = proj->m_aStructureItems.begin(); it != proj->m_aStructureItems.end(); ++it)
@@ -267,7 +265,7 @@ void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CStr
 				if ((str.GetLength() >= SearchLength) && (str.Left(SearchLength).CompareNoCase(Partial) == 0))
 				{
 					//Result[str] = CLaTeXCommand(NULL, str, 0);
-					Result.SetAt(str, new CLaTeXCommand(dummy, str, 0));
+					Result.SetAt(str, std::tr1::shared_ptr<CObject>(new CLaTeXCommand(dummy, str, 0)));
 				}
 			}
 		}
@@ -314,9 +312,9 @@ BOOL CStyleFileContainer::SaveAsXML(const CString &path)
 		POSITION pos = m_StyleFiles.GetStartPosition();
 		while (pos != NULL)
 		{
-			CStyleFile *sf;
+			StyleMapArg sf;
 			CString key;
-			m_StyleFiles.GetNextAssoc(pos, key, (CObject*&)sf);
+			m_StyleFiles.GetNextAssoc(pos, key, sf);
 
 			MsXml::CXMLDOMElement xmlPackage(xmlDoc.CreateElement(CSF_XML_PACKAGE));
 			xmlPackage.SetAttribute(CSF_XML_NAME, (LPCTSTR)sf->GetName());
@@ -332,15 +330,17 @@ BOOL CStyleFileContainer::SaveAsXML(const CString &path)
 			}
 
 			/* Export commands and environments */
-			const CMapStringToOb *cmds = sf->GetCommands();
+			const SharedObjectMap *cmds = sf->GetCommands();
 			POSITION posC = cmds->GetStartPosition();
 			while (posC != NULL)
 			{
-				CLaTeXCommand *lc;
+				std::tr1::shared_ptr<CLaTeXCommand> lc;
+				std::tr1::shared_ptr<CObject> c;
 				CString keyC;
 				CString type;
 
-				cmds->GetNextAssoc(posC, keyC, (CObject*&)lc);
+				cmds->GetNextAssoc(posC, keyC, c);
+				lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
 
 				if (lc->IsKindOf(RUNTIME_CLASS(CNewCommand)))
 				{
@@ -425,18 +425,7 @@ BOOL CStyleFileContainer::SaveAsXML(const CString &path)
 
 void CStyleFileContainer::ClearMap()
 {
-	POSITION pos = m_StyleFiles.GetStartPosition();
-	while (pos != NULL)
-	{
-		CStyleFile *sf;
-		CString key;
-		m_StyleFiles.GetNextAssoc(pos, key, (CObject*&)sf);
-		if (sf != NULL)
-		{
-			delete sf;
-		}
-		m_StyleFiles.RemoveKey(key);
-	}
+	Clear();
 }
 
 /** Helper function for StringArrays. */
@@ -568,14 +557,13 @@ void CStyleFileContainer::ProcessPackageNode(MsXml::CXMLDOMNode &element)
 	}
 
 	/* Create style file instance and insert it into the hash map */
-	CStyleFile *sf = new CStyleFile(nameVal, descVal, isClass);
+	std::tr1::shared_ptr<CStyleFile> sf(new CStyleFile(nameVal, descVal, isClass));
 
 	sf->SetListener(m_Listener);
 
 	if (!AddStyleFile(sf))
 	{
 		TRACE("WARNING: Unable to add file %s, seems to be duplicate\n", sf->GetName());
-		delete sf;
 		return;
 	}
 
@@ -589,7 +577,7 @@ void CStyleFileContainer::ProcessPackageNode(MsXml::CXMLDOMNode &element)
 	}
 }
 
-void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyleFile *parent)
+void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, std::tr1::shared_ptr<CStyleFile>& parent)
 {
 	/* fetch attributes */
 	MsXml::CXMLDOMNamedNodeMap attr = element.GetAttributes();
@@ -650,7 +638,7 @@ void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, CStyle
 	}
 
 	/* Add element to style file */
-	CLaTeXCommand *lc = 0;
+	std::tr1::shared_ptr<CLaTeXCommand> lc;
 
 	if (element.GetNodeName() == CSF_XML_COMMAND)
 	{

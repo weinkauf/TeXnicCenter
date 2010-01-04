@@ -171,7 +171,7 @@ BOOL CDdeCommand::SendCommandHelper(LPCTSTR lpszServer,LPCTSTR lpszCommand,LPCTS
 			throw FALSE;
 
 		// ensure byte string
-		int nLen = _tcslen(lpszCommand);
+		size_t nLen = _tcslen(lpszCommand);
 		szCommand = new TCHAR[nLen + 1];
 
 		if (!szCommand)

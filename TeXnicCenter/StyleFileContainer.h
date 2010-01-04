@@ -49,7 +49,7 @@ public:
 	CStyleFileContainer(const CString &basePath = CString(_T(".")));
 	virtual ~CStyleFileContainer();
 
-	BOOL AddStyleFile(CStyleFile *sf);
+	BOOL AddStyleFile(const std::tr1::shared_ptr<CStyleFile>& sf);
 	BOOL LoadFromXML(const CString &file,BOOL addToExisting = FALSE);
 	static BOOL ContainsString(const CStringArray *list,const CString &string);
 	BOOL SaveAsXML(const CString &path);
@@ -74,7 +74,7 @@ public:
 	/*	Returns a list of possible completions to a given string. Here the function
 	        returns a map with objects instead of string, so that the receiver has more
 	        options to display the result.  */
-	void GetAllPossibleItems(const CString& Partial,const CString& docClassName,CMapStringToOb& Result);
+	void GetAllPossibleItems(const CString& Partial,const CString& docClassName, SharedObjectMap& Result);
 
 	/* Sets an event listener to CStyleFileContainer events */
 	void SetEventListener(CStyleFileListener *listener);
@@ -89,10 +89,14 @@ public:
 
 	int GetNoOfFiles() const;
 
+	void Clear()
+	{
+		m_StyleFiles.RemoveAll();
+	}
 
 private:
 	void SetupCR(CString &s);
-	void ProcessEntityNodes(MsXml::CXMLDOMNode &element,CStyleFile *parent);
+	void ProcessEntityNodes(MsXml::CXMLDOMNode &element, std::tr1::shared_ptr<CStyleFile>& parent);
 	void ProcessPackageNode(MsXml::CXMLDOMNode &element);
 
 
@@ -102,7 +106,10 @@ private:
 	CString m_LastFile; /* Contains name of last file found */
 	CString m_LastDir; /* Contains name of last dir found */
 
-	CMapStringToOb m_StyleFiles; /* Hash map of available style files */
+	typedef CString StyleMapKey;
+	typedef std::tr1::shared_ptr<CStyleFile> StyleMapArg;
+
+	CMap<StyleMapKey, LPCTSTR, StyleMapArg, const StyleMapArg> m_StyleFiles; /* Hash map of available style files */
 	int m_NoOfFiles; /* Number of scanned files */
 
 	CStyleFileListener *m_Listener; /* Pointer to event listener (maybe NULL!) */

@@ -194,7 +194,7 @@ DWORD CProcess::GetExitCode() const
 	if (!GetExitCodeProcess(m_processInfo.hProcess,&dwExitCode))
 	{
 		AfxThrowProcessException(CProcessException::generic);
-		return -1;
+		return ~0U;
 	}
 
 	return dwExitCode;
@@ -216,6 +216,6 @@ DWORD CProcess::WaitForProcess(DWORD dwTimeOut /*= INFINITE*/) const
 			return GetExitCode();
 		default:
 			AfxThrowProcessException(CProcessException::generic);
-			return -1;
+			return ~0U;
 	}
 }
