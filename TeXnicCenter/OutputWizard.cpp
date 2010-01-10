@@ -600,29 +600,41 @@ void COutputWizard::LookForPdf()
 		// Lets finish.
 		ShowInformation();
 	}
-	else {
+	else
+	{
 		// OK, the user can generate PDF-documents.
 		// Lets look for an application to view them
 		CString strViewer = FindApplicationForDocType(_T(".pdf"));
 
 		m_wndPagePdfViewer.m_strPath = strViewer;
 
-		// Either Acrobat or SumatraPDF are installed both not both
-		if (IsAcrobat(strViewer) && !sumatra_installed_ || IsSumatraPDF(strViewer))
+		//If Sumatra is installed, then we take it regardless of the registered app for PDFs
+		//Sumatra is our prefered PDF viewer due to its forward/inverse search, speed, and license.
+		// - make sure we have the right path; registered path is prefered
+		if (!IsSumatraPDF(m_wndPagePdfViewer.m_strPath) && sumatra_installed_)
+		{
+			//This overwrites Adobe Reader, if its registered for PDFs, but SumatraPDF is installed, too.
+			m_wndPagePdfViewer.m_strPath = sumatra_path_;
+		}
+
+		//If one of them is found, we are finished.
+		if (IsAcrobat(strViewer) || IsSumatraPDF(strViewer))
 		{
 			// Standard viewer is Acrobat Reader or SumatraPDF
 			ShowInformation();
+			//The options will be configured later
 			m_wndPagePdfViewer.m_strSingleInstanceOption.Empty();
 			m_wndPagePdfViewer.m_strForwardSearchOption.Empty();
 		}
 		else
 		{
-			// Both Acrobat and SumatraPDF are installed
-			// or a viewer couln't be found: Let user make his configuration
+			//Neither Adobe Reader nor SumatraPDF are installed
+			//Let user make his configuration
 			SetActivePage(pagePdfViewer);
 		}
 	}
 }
+
 
 void COutputWizard::ShowInformation()
 {
@@ -814,15 +826,6 @@ void COutputWizard::GenerateOutputProfiles()
 	if (m_bPdfLatexInstalled)
 		GeneratePDFProfile(GetProfileName(STE_OUTPUTWIZARD_PDFTYPE), strPDFLatexOptions,m_wndPagePdfViewer.m_strPath);
 
-	/*
-#pragma region LaTeX => PDF (SumatraPDF)
-
-	if (sumatra_installed_)
-		GeneratePDFProfile(GetProfileName(_T("LaTeX => PDF (SumatraPDF)")), strPDFLatexOptions,sumatra_path_);
-
-#pragma endregion
-		*/
-
 
 	// LaTeX => PS => PDF
 	if (m_bLatexInstalled && m_bDvipsInstalled && m_bGhostscriptInstalled)
@@ -907,9 +910,14 @@ void COutputWizard::AssignPDFViewer( CProfile &p, const CString& path )
 			SetupAcrobatDDE(p);
 		}
 		else if (IsSumatraPDF(file))
+		{
+			// SumatraPDF specific commands
 			SetupSumatraDDE(p);
+		}
 		else
+		{
 			SetupGenericPDF(p);
+		}
 	}
 }
 
@@ -933,7 +941,7 @@ void COutputWizard::SetupSumatraDDE( CProfile &p )
 	p.SetViewerPath(exec);
 
 	cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
-	cmd.SetCommand(_T("[ForwardSearch(\"%bm.pdf\",\"%nc\",%l,0)]"));
+	cmd.SetCommand(_T("[ForwardSearch(\"%bm.pdf\",\"%Wc\",%l,0,0,1)]"));
 
 	cmd.SetServer(_T("sumatra"),_T("control"));
 	profileCmd.SetDdeCommand(cmd);
