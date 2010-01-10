@@ -77,7 +77,7 @@ void CEditMenuButtonOpt::OnShowMenu()
 	CString strResult = CString((LPCTSTR) m_nMenuResult);
 
 	//Does the result from the menu start with '\n'?
-	if (strResult[0] != '\n')
+	if (strResult[0] != _T('\n'))
 	{
 		//No. So we insert it unmodified
 		m_pEdit->InsertText(strResult);
