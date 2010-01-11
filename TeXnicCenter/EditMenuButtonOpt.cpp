@@ -62,7 +62,7 @@ CEditMenuButtonOpt::CEditMenuButtonOpt(UINT unMenuId,BOOL bRightArrow /*= TRUE*/
 
 void CEditMenuButtonOpt::OnShowMenu()
 {
-	CEditMenuButton::OnShowMenu();
+	CMFCMenuButton::OnShowMenu();
 
 	if (!m_nMenuResult)
 		return;
