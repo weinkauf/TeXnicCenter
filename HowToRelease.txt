@@ -4,7 +4,7 @@
 
 3. Edit "TeXnicCenter\aboutbox.cpp" to reflect the current year and to make sure that all involved people are mentioned. (TODO: Need to change the manual update of the year.)
 
-4. Edit "TeXnicCenter\res\TeXnicCenter.rc2" to reflect the current year. (TODO: Need to change the manual update of the year.)
+4. Edit "TeXnicCenter\res\TeXnicCenter.rc2" to reflect the current year. (TODO: Need to change the manual update of the year.) This file includes the generated Version.h.
 
 5. Build. Test.
 
