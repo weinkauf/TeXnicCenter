@@ -55,7 +55,6 @@ END_MESSAGE_MAP()
 CEditMenuButton::CEditMenuButton(UINT unMenuId,BOOL bRightArrow /*= TRUE*/)
 		: CMenuButton(unMenuId,bRightArrow)
 {
-	//m_bOSMenu = FALSE;
 }
 
 void CEditMenuButton::AttachEditCtrl(CPersistPosEdit *pEdit)
