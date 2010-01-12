@@ -217,7 +217,7 @@ namespace {
 
 	bool IsTeXSecond(int ch)
 	{
-		return std::isprint(ch);
+		return std::isprint(ch) != 0;
 	}
 
 	const char* const units[] = {

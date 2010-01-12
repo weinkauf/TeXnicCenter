@@ -55,6 +55,9 @@ CProjectView::~CProjectView()
 
 void CProjectView::OnUpdate(CProjectView *pSender, LPARAM lHint, LPVOID pHint)
 {
+	UNUSED_ALWAYS(pSender);
+	UNUSED_ALWAYS(lHint);
+	UNUSED_ALWAYS(pHint);
 }
 
 void CProjectView::OnClosingProject()

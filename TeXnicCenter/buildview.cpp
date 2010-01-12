@@ -71,7 +71,13 @@ void CBuildView::OnUpdate(COutputView* pSender,LPARAM lHint,CObject* pHint)
 	switch ((COutputDoc::HINT)lHint) //UPDATE
 	{
 		case COutputDoc::hintSelectBuildLine :
-			SelectLine(*(int*) pHint,TRUE);
+			{
+				const Nullable<int>& line = *reinterpret_cast<const Nullable<int>*>(pHint);
+
+				if (line.HasValue())
+					SelectLine(line.GetValue(), TRUE);
+			}
+			
 			break;
 	}
 }

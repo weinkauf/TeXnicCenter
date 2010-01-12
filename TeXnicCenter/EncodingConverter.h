@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include <stdexcept>
 #include <cstddef>
 
@@ -55,6 +56,8 @@ public:
 	}
 };
 
+typedef std::vector<CString> EncodingCodeContainer;
+
 class EncodingConverter
 {
 	struct Impl;
@@ -64,11 +67,18 @@ class EncodingConverter
 	EncodingConverter& operator=(const EncodingConverter&);
 
 	Impl* impl_;
+	static std::auto_ptr<EncodingCodeContainer> codes_;
 
 public:
 	EncodingConverter();
 	~EncodingConverter();
 
+	/// Initializes the instance by opening an encoding converter
+	/// with the specified \a tocode and \a fromcode. If the initialization
+	/// fails, \ref EncodingConverterError is thrown.
+	///
+	/// \param tocode	Target encoding.
+	/// \param fromcode Source encoding.
 	EncodingConverter(const char* tocode, const char* fromcode);
 
 	bool Open(const char* tocode, const char* fromcode);
@@ -81,4 +91,6 @@ public:
 	bool GetTransliterate() const;
 	bool GetDiscardIllegalSequence() const;
 	void SetDiscardIllegalSequence(bool discard = true);
+
+	static const EncodingCodeContainer& GetSupportedCodes();
 };

@@ -47,7 +47,6 @@ inline std::basic_istream<Ch,Tr>& operator>>(std::basic_istream<Ch,Tr>& in, Code
 		b.SetLine(line);
 
 		Ch ch;
-		std::ios_base::iostate state = in.rdstate();
 
 		if (in >> ch) {
 			const Ch n = in.widen('N');

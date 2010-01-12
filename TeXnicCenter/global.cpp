@@ -160,6 +160,8 @@ void AfxFindDictionaries(CArray<CString,CString&> &aLanguage,
 
 		if (dash != NULL)
 			dot = _tcschr(dash,_T('.'));
+		else
+			dot = NULL;
 
 		if ((dash != NULL) && (dot != NULL))
 		{

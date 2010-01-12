@@ -86,7 +86,7 @@ CProfileDialog::CProfileDialog(CWnd* pParent /*=NULL*/)
 		m_profiles.Add(strKey, *pProfile);
 	}
 
-	m_profiles.SetActiveProfile(CProfileMap::GetInstance()->GetActiveProfileKey());
+	m_profiles.SetActiveProfile(CProfileMap::GetInstance()->GetActiveProfileKey(), false);
 
 	//{{AFX_DATA_INIT(CProfileDialog)
 	//}}AFX_DATA_INIT

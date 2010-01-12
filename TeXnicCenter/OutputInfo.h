@@ -39,6 +39,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "Nullable.h"
+
 /**
 Class for information outputted by another program
 (i.e. error messages of a compiler).
@@ -47,13 +49,29 @@ Class for information outputted by another program
  */
 class COutputInfo
 {
+	/** The line number in the output, where the error was reported */
+	Nullable<int> m_nOutputLine;
+
+	/** Source file, the error position is in */
+	CString m_strSrcFile;
+
+	/** Line number in the source file, the message refers to */
+	Nullable<int> m_nSrcLine;
+
+	/** An error code */
+	int m_nErrorID;
+	
+	/** The error message */
+	CString m_strError;
+
 // construction
 public:
 	/** Standard constructor */
 	COutputInfo();
 
 	/** This constructor initializes the attributes of the class with the given values. */
-	COutputInfo(const CString& strSrcFile, int nSrcLine, int nOutputLine, const CString& strError = _T(""), int nErrorID = -1);
+	COutputInfo(const CString& strSrcFile, const Nullable<int>& nSrcLine, const Nullable<int>& nOutputLine, 
+				const CString& strError = _T(""), int nErrorID = -1);
 
 // operations
 public:
@@ -62,31 +80,20 @@ public:
 
 // attributes
 public:
-	/** Source file, the error position is in */
-	CString m_strSrcFile;
+	const CString& GetSourceFile() const;
+	void SetSourceFile(const CString& val);
 
-	const CString& GetSourceFile() const { return m_strSrcFile; }
-	void SetSourceFile(const CString& val) { m_strSrcFile = val; }
-
-	/** Line number in the source file, the message referrs to */
-	int m_nSrcLine;
-
-	int GetSourceLine() const { return m_nSrcLine; }
-	void SetSourceLine(int val) { m_nSrcLine = val; }
-	/** The error message */
-	CString m_strError;
-
-	const CString& GetErrorMessage() const { return m_strError; }
-	void SetErrorMessage(const CString& val) { m_strError = val; }
-	/** An error code */
-	int m_nErrorID;
-
+	const Nullable<int>& GetSourceLine() const;
+	void SetSourceLine(const Nullable<int>& val = Nullable<int>());
+	
+	const CString& GetErrorMessage() const;
+	void SetErrorMessage(const CString& val);
+	
 	int GetErrorID() const { return m_nErrorID; }
 	void SetErrorID(int val) { m_nErrorID = val; }
-	/** The line number in the output, where the error was reported */
-	int m_nOutputLine;
-	int GetOutputLine() const { return m_nOutputLine; }
-	void SetOutputLine(int val) { m_nOutputLine = val; }
+	
+	const Nullable<int>& GetOutputLine() const;
+	void SetOutputLine(int val);
 };
 
 
