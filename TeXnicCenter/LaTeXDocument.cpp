@@ -167,6 +167,7 @@ void LaTeXDocument::OnUpdateTextModulesList(CCmdUI *pCmdUI)
 			else if (pMenu->GetCount() <= j) {
 				int nIndex = pMenu->InsertButton(CMFCToolBarMenuButton(ID_TEXTMODULES_FIRST + i,0,-1,strDisplayName),j);
 				ASSERT(nIndex > -1);
+				UNUSED_ALWAYS(nIndex);
 
 				bChange = true;
 			}

@@ -1052,9 +1052,9 @@ STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIB
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     LTEXT           "",1119,0,0,130,8
-    LTEXT           "Datei&format:",IDC_STATIC_FORMATTITLE,7,12,39,8
+    LTEXT           "Datei&format:",IDC_STATIC_FORMATTITLE,7,12,42,8
     COMBOBOX        IDC_FILE_FORMAT,51,10,53,147,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Kodierung:",IDC_STATIC_ENCODING,7,29,39,8
+    LTEXT           "Kodierung:",IDC_STATIC_ENCODING,7,29,36,8
     COMBOBOX        IDC_SELECT_ENCODING,51,27,53,176,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
 
@@ -4814,6 +4814,25 @@ BEGIN
     ID_BIBTEX_NEW           "Erstellt ein neues BibTeX-Dokument\nNeues BibTeX-Dokument"
 END
 
+STRINGTABLE 
+BEGIN
+    ID_FILE_MRU_PROJECT1    "Öffnet dieses Projekt."
+    ID_FILE_MRU_PROJECT2    "Öffnet dieses Projekt."
+    ID_FILE_MRU_PROJECT3    "Öffnet dieses Projekt."
+    ID_FILE_MRU_PROJECT4    "Öffnet dieses Projekt."
+    ID_FILE_MRU_PROJECT5    "Öffnet dieses Projekt."
+    ID_FILE_MRU_PROJECT6    "Öffnet dieses Projekt."
+    ID_FILE_MRU_PROJECT7    "Öffnet dieses Projekt."
+    ID_FILE_MRU_PROJECT8    "Öffnet dieses Projekt."
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_MRU_PROJECT9    "Öffnet dieses Projekt."
+    ID_FILE_MRU_PROJECT10   "Öffnet dieses Projekt."
+    ID_FILE_MRU_PROJECT11   "Öffnet dieses Projekt."
+END
+
 #endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -4849,7 +4868,7 @@ BEGIN
     LTEXT           "",1119,0,0,130,8
     LTEXT           "File &Format:",IDC_STATIC_FORMATTITLE,7,12,39,8
     COMBOBOX        IDC_FILE_FORMAT,51,10,53,154,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Encoding:",IDC_STATIC_ENCODING,7,29,39,8
+    LTEXT           "Encoding:",IDC_STATIC_ENCODING,7,29,32,8
     COMBOBOX        IDC_SELECT_ENCODING,51,27,53,205,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
 
@@ -7862,7 +7881,7 @@ END
 
 STRINGTABLE 
 BEGIN
-    AFX_IDS_SCSIZE          "Changes the window size"
+    AFX_IDS_SCSIZE          "Opens this Project."
     AFX_IDS_SCMOVE          "Changes the window position"
     AFX_IDS_SCMINIMIZE      "Reduces the window to an icon"
     AFX_IDS_SCMAXIMIZE      "Enlarges the window to full size"
@@ -7940,7 +7959,6 @@ BEGIN
     ID_UPDATE_LATEX_OUTPUT  "Is send, when the latex-output has to be updated"
     ID_NEXT_ERROR           "Goes to the next Error\nNext Error"
     ID_PREV_ERROR           "Goes to the previous Error\nPrevious Error"
-    ID_PROJECT_MRU_PROJECT1 "Opens this project"
 END
 
 STRINGTABLE 
@@ -8777,6 +8795,25 @@ STRINGTABLE
 BEGIN
     ID_METAPOST_NEW         "Creates a new MetaPost document\nNew MetaPost document"
     ID_BIBTEX_NEW           "Creates a new BibTeX document\nNew BibTeX document"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_MRU_PROJECT1    "Opens this project."
+    ID_FILE_MRU_PROJECT2    "Opens this project."
+    ID_FILE_MRU_PROJECT3    "Opens this project."
+    ID_FILE_MRU_PROJECT4    "Opens this project."
+    ID_FILE_MRU_PROJECT5    "Opens this project."
+    ID_FILE_MRU_PROJECT6    "Opens this project."
+    ID_FILE_MRU_PROJECT7    "Opens this project."
+    ID_FILE_MRU_PROJECT8    "Opens this project."
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_MRU_PROJECT9    "Opens this project."
+    ID_FILE_MRU_PROJECT10   "Opens this project."
+    ID_FILE_MRU_PROJECT11   "Opens this project."
 END
 
 #endif    // English (U.S.) resources

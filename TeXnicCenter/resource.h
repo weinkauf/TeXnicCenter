@@ -1467,7 +1467,18 @@
 #define ID_FORMAT_TEXT_BACK_COLOR       40500
 #define ID_FORMAT_TEXT_FORE_COLOR       40501
 #define ID_FILE_MRU_PROJECT_FIRST       40600
+#define ID_FILE_MRU_PROJECT1            40600
+#define ID_FILE_MRU_PROJECT2            40601
+#define ID_FILE_MRU_PROJECT3            40602
+#define ID_FILE_MRU_PROJECT4            40603
+#define ID_FILE_MRU_PROJECT5            40604
+#define ID_FILE_MRU_PROJECT6            40605
+#define ID_FILE_MRU_PROJECT7            40606
+#define ID_FILE_MRU_PROJECT8            40607
+#define ID_FILE_MRU_PROJECT9            40608
+#define ID_FILE_MRU_PROJECT10           40609
 #define ID_FILE_MRU_PROJECT_LAST        40610
+#define ID_FILE_MRU_PROJECT11           40610
 #define IDR_BOOKMARK_VIEW               57672
 
 // Next default values for new objects
@@ -1475,7 +1486,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        57673
+#define _APS_NEXT_RESOURCE_VALUE        57674
 #define _APS_NEXT_COMMAND_VALUE         40611
 #define _APS_NEXT_CONTROL_VALUE         8663
 #define _APS_NEXT_SYMED_VALUE           57773

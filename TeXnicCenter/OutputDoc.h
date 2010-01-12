@@ -39,6 +39,7 @@
 #include "FileGrep.h"
 #include "OutputBuilder.h"
 #include "StructureParser.h"
+#include "Nullable.h"
 
 class ErrorListPane;
 
@@ -313,7 +314,7 @@ protected:
 
 	        Beeps otherwise.
 	 */
-	bool TryOpenFile(LPCTSTR lpszFilename, const int nLineNumber);
+	bool TryOpenFile(LPCTSTR lpszFilename, const Nullable<int>& nLineNumber);
 	LRESULT DoTryOpenFile(WPARAM w, LPARAM l);
 	// attributes
 public:

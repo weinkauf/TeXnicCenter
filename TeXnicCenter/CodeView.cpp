@@ -349,7 +349,8 @@ void CodeView::OnUpdateEncodingIndicator( CCmdUI* pCmdUI )
 		case CodeDocument::UTF16BE: text = _T("UTF-16BE"); break;
 		case CodeDocument::UTF32LE: text = _T("UTF-32"); break;
 		case CodeDocument::UTF32BE: text = _T("UTF-32BE"); break;
-		default: text = _T("ANSI");
+		case CodeDocument::ANSI: text = _T("ANSI"); break;
+		default: ASSERT(FALSE);
 	}
 
 	pCmdUI->SetText(text);
@@ -359,11 +360,13 @@ void CodeView::OnUpdateEncodingIndicator( CCmdUI* pCmdUI )
 void CodeView::OnUpdateEOLModeIndicator( CCmdUI* pCmdUI )
 {
 	LPCTSTR text = 0;
+	int mode = GetCtrl().GetEOLMode();
 
-	switch (GetCtrl().GetEOLMode()) {
+	switch (mode) {
 		case SC_EOL_CRLF: text = _T("CR+LF"); break;
 		case SC_EOL_LF: text = _T("LF"); break;
 		case SC_EOL_CR: text = _T("CR"); break;
+		default: ASSERT(FALSE); break;
 	}
 
 	pCmdUI->SetText(text);
@@ -829,7 +832,7 @@ void CodeView::OnMarginClick(SCNotification* n)
 
 void CodeView::OnUpdateUI(SCNotification* n)
 {
-	UNUSED(n);
+	UNUSED_ALWAYS(n);
 }
 
 void CodeView::OnEditFindIncrementalForward()

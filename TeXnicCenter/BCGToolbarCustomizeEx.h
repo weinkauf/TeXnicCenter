@@ -50,7 +50,7 @@ on the ToolsPage of the Customization Dialog.
 We need to implement such a button, because
 we do not get the BN_CLICKED, if we would use a normal one.
 
-@see MyToolBarCustomize
+@see ToolBarsCustomizeDialog
 @see CMyUserTool
 
 @ingroup guielements
@@ -103,24 +103,24 @@ An Edit-Control and a Button are replaced.
  */
 // (AFX_CUSTOMIZE_MENU_SHADOWS | AFX_CUSTOMIZE_TEXT_LABELS | AFX_CUSTOMIZE_MENU_ANIMATIONS | AFX_CUSTOMIZE_NOHELP)
 
-class MyToolBarCustomize : public CMFCToolBarsCustomizeDialog
+class ToolBarsCustomizeDialog : public CMFCToolBarsCustomizeDialog
 {
-	DECLARE_DYNAMIC(MyToolBarCustomize)
+	DECLARE_DYNAMIC(ToolBarsCustomizeDialog)
 
 //Constructor / Destructor
 public:
-	MyToolBarCustomize::MyToolBarCustomize(CFrameWnd* pWndParentFrame,
+	ToolBarsCustomizeDialog::ToolBarsCustomizeDialog(CFrameWnd* pWndParentFrame,
 	                                       BOOL bAutoSetFromMenus = FALSE,
 	                                       UINT uiFlags = (AFX_CUSTOMIZE_MENU_SHADOWS | AFX_CUSTOMIZE_TEXT_LABELS | AFX_CUSTOMIZE_MENU_ANIMATIONS),
 	                                       CList <CRuntimeClass*, CRuntimeClass*>* plistCustomPages = NULL);
-	virtual ~MyToolBarCustomize();
+	virtual ~ToolBarsCustomizeDialog();
 
 // Methods
 public:
 
 	// Overrides
 	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(MyToolBarCustomize)
+	//{{AFX_VIRTUAL(ToolBarsCustomizeDialog)
 	//}}AFX_VIRTUAL
 
 	virtual void OnInitToolsPage();
@@ -149,7 +149,7 @@ protected:
 
 // Generated message map functions
 protected:
-	//{{AFX_MSG(MyToolBarCustomize)
+	//{{AFX_MSG(ToolBarsCustomizeDialog)
 	afx_msg void OnDestroy();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()

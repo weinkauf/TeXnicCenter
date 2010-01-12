@@ -44,6 +44,12 @@ static char THIS_FILE[]=__FILE__;
 //-------------------------------------------------------------------
 
 namespace {
+	template<class E, class T> 
+	std::basic_ostream<E, T>& endl(std::basic_ostream<E, T>& os)
+	{
+		return os.put(os.widen('\r')).put(os.widen('\n')).flush();
+	}
+
 	std::basic_ostream<TCHAR>& operator<<(std::basic_ostream<TCHAR>& out, const CString& s)
 	{
 		return out << static_cast<LPCTSTR>(s);
@@ -128,20 +134,20 @@ void CIniFile::WriteFile()
 
 	for (int keynum = 0; keynum <= names.GetUpperBound(); keynum++) {
 		if (!keys[keynum].names.IsEmpty()) {
-			inifile <<_T('[') << names[keynum] <<_T(']') << std::endl;
+			inifile <<_T('[') << names[keynum] <<_T(']') << endl;
 
 			for (int valuenum = 0; valuenum <= keys[keynum].names.GetUpperBound(); valuenum++) {
 				inifile << keys[keynum].names[valuenum] <<_T("=") << keys[keynum].values[valuenum];
 
 				if (valuenum != keys[keynum].names.GetUpperBound())
-					inifile << std::endl;
+					inifile << endl;
 				else
 					if (keynum < names.GetSize())
-						inifile << std::endl;
+						inifile << endl;
 			}
 
 			if (keynum < names.GetSize())
-				inifile << std::endl;
+				inifile << endl;
 		}
 	}
 

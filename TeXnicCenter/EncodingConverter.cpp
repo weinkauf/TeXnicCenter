@@ -190,8 +190,8 @@ namespace {
 
 	const std::string FormatCodePage(UINT codepage)
 	{
-		if (!(codepage >= 1250 && codepage <= 1258)) // ANSI code page range
-			throw std::invalid_argument("Invalid ANSI code page");
+		if (!::IsValidCodePage(codepage))
+			throw std::invalid_argument("Invalid code page");
 
 		std::ostringstream oss;
 		oss << "CP" << codepage;
@@ -363,6 +363,8 @@ void UTF16toANSI(const char* text, std::size_t n, std::vector<char>& data, UINT 
 	Convert<ConversionTraits<char,char> >(text,n,data,converter);
 }
 
+std::auto_ptr<EncodingCodeContainer> EncodingConverter::codes_;
+
 struct EncodingConverter::Impl
 {
 	Impl(iconv_t cd = invalid_handle)
@@ -472,4 +474,27 @@ void EncodingConverter::SetDiscardIllegalSequence( bool discard /*= true*/ )
 	ASSERT(IsOpen());
 	int value = discard;
 	VERIFY(iconvctl(impl_->cd,ICONV_SET_DISCARD_ILSEQ,&value) == 0);
+}
+
+namespace {
+	int EnumerateCodes(unsigned count, const char* const* codes, void* data)
+	{
+		EncodingCodeContainer* container = static_cast<EncodingCodeContainer*>(data);
+
+		for ( ; count; --count, ++codes) {
+			container->push_back(CString(*codes));
+		}
+
+		return 0;
+	}
+}
+
+const EncodingCodeContainer& EncodingConverter::GetSupportedCodes()
+{
+	if (!codes_.get()) {
+		codes_.reset(new EncodingCodeContainer());
+		iconvlist(EnumerateCodes, codes_.get());
+	}
+
+	return *codes_;
 }

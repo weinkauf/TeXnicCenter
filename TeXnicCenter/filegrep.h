@@ -177,8 +177,8 @@ public:
 
 // implementation helpers
 protected:
-	static void SplitFileList(LPCTSTR lpszFiles, CArray<CString, CString&> &astrFiles);
-	void FindFiles(const CArray<CString, CString&> &astrPatterns, LPCTSTR lpszFolder, CSortArray<CString, CString&> &astrFilePaths);
+	static void SplitFileList(LPCTSTR lpszFiles, CArray<CString, const CString&> &astrFiles);
+	void FindFiles(const CArray<CString, const CString&> &astrPatterns, LPCTSTR lpszFolder, CSortArray<CString, const CString&> &astrFilePaths);
 	BOOL GrepLine(LPCTSTR lpszLine);
 	void GrepFile(LPCTSTR lpszPath);
 	BOOL GrepHelper();

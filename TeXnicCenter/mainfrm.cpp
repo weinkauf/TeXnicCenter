@@ -648,7 +648,7 @@ void CMainFrame::OnExtrasCustomize()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// create dialog object
 
-	MyToolBarCustomize* pDlgCust = new MyToolBarCustomize(
+	ToolBarsCustomizeDialog* pDlgCust = new ToolBarsCustomizeDialog(
 	    this, TRUE,
 	    AFX_CUSTOMIZE_MENU_SHADOWS | AFX_CUSTOMIZE_TEXT_LABELS |
 	    AFX_CUSTOMIZE_MENU_ANIMATIONS | AFX_CUSTOMIZE_NOHELP);

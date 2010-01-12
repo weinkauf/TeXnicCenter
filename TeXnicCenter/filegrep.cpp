@@ -159,7 +159,7 @@ BOOL CFileGrep::Grep(
 		return GrepHelper();
 }
 
-void CFileGrep::SplitFileList(LPCTSTR lpszFiles,CArray<CString,CString&> &astrFiles)
+void CFileGrep::SplitFileList(LPCTSTR lpszFiles,CArray<CString,const CString&> &astrFiles)
 {
 	// split file list into array
 	CString strFiles(lpszFiles);
@@ -192,7 +192,7 @@ void CFileGrep::SplitFileList(LPCTSTR lpszFiles,CArray<CString,CString&> &astrFi
 	}
 }
 
-void CFileGrep::FindFiles(const CArray<CString,CString&> &astrPatterns,LPCTSTR lpszFolder,CSortArray<CString,CString&> &astrFilePaths)
+void CFileGrep::FindFiles(const CArray<CString, const CString&> &astrPatterns,LPCTSTR lpszFolder,CSortArray<CString,const CString&> &astrFilePaths)
 {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// find files
@@ -269,8 +269,8 @@ BOOL CFileGrep::GrepHelper()
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// get list of files to search
-	CSortArray<CString,CString&> astrFilePaths;
-	CArray<CString,CString&> astrFiles;
+	CSortArray<CString, const CString&> astrFilePaths;
+	CArray<CString,const CString&> astrFiles;
 
 	SplitFileList(m_strFiles,astrFiles);
 	astrFilePaths.RemoveAll();

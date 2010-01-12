@@ -137,6 +137,8 @@ LRESULT COutputWizardViewer::OnWizardNext()
 	//COutputWizard* w = dynamic_cast<COutputWizard*>(GetParent());
 	UpdateData();
 	LRESULT result = OutputWizardPage::OnWizardNext();
+	
+	UNUSED_ALWAYS(result);
 
 	return -1;
 }

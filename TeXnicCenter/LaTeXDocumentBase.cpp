@@ -20,7 +20,6 @@ IMPLEMENT_DYNAMIC(LaTeXDocumentBase, CodeDocument)
 
 LaTeXDocumentBase::LaTeXDocumentBase()
 : save_copy_(false)
-, EOL_mode_(-1)
 {
 }
 
@@ -137,7 +136,7 @@ BOOL LaTeXDocumentBase::DoSave(LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/)
 
 		int mode = FromScintillaMode(GetView()->GetCtrl().GetEOLMode());
 
-		if (EOL_mode_ == -1) // Not set yet
+		if (!EOL_mode_.HasValue()) // Not set yet
 			EOL_mode_ = ToScintillaMode(mode);
 
 		CTextFileSaveDialog dlg(
@@ -228,18 +227,20 @@ void LaTeXDocumentBase::OnFileSaveCopyAs()
 	DoSave(NULL,FALSE);
 }
 
-int LaTeXDocumentBase::GetSavedEOLMode() const
+const Nullable<int>& LaTeXDocumentBase::GetSavedEOLMode() const
 {
 	return EOL_mode_;
 }
 
 DWORD LaTeXDocumentBase::SaveFile(HANDLE file, bool throw_on_invalid_sequence)
 {
-	const int mode = GetSavedEOLMode();
+	const Nullable<int>& mode = GetSavedEOLMode();
 
-	if (GetView()->GetCtrl().GetEOLMode() != mode) {
-		GetView()->GetCtrl().SetEOLMode(mode);
-		GetView()->GetCtrl().ConvertEOLs(mode);
+	if (mode.HasValue() && GetView()->GetCtrl().GetEOLMode() != mode) {
+		ASSERT(mode == SC_EOL_CR || mode == SC_EOL_CRLF || mode == SC_EOL_LF);
+
+		GetView()->GetCtrl().SetEOLMode(mode.GetValue());
+		GetView()->GetCtrl().ConvertEOLs(mode.GetValue());
 	}
 
 	return CodeDocument::SaveFile(file,throw_on_invalid_sequence);

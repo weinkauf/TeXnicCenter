@@ -498,6 +498,9 @@ BOOL CPropertyDialog::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 	UINT unFrom = lpnmhdr->idFrom;
 	UINT unCode = lpnmhdr->code;
 
+	UNUSED_ALWAYS(nCtrlId);
+	UNUSED_ALWAYS(hFrom);
+
 	// handle tab control
 	if (unFrom == m_unTabCtrlTemplateId && unCode == TCN_SELCHANGE)
 	{

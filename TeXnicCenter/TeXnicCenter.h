@@ -255,11 +255,12 @@ public:
 
 	@param lpszPath
 	        Path of the project to open.
+	@param addToRecentList Indicates whether @lpszPath is added to the MRU list.
 
 	@return
 	        TRUE if successfull, FALSE otherwise.
 	 */
-	BOOL OpenProject(LPCTSTR lpszPath);
+	BOOL OpenProject(LPCTSTR lpszPath, bool addToRecentList = true);
 
 	/**
 	Returns a pointer to the one and only <var>CLaTeXProject</var>-object

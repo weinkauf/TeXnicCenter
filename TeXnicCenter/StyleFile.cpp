@@ -138,6 +138,8 @@ void CStyleFile::ProcessFile()
 	catch (CFileException& ex)
 	{
 		TRACE(_T("Error opening style file: %s\n"), ex);
+		UNUSED_ALWAYS(ex);
+
 		f.Close();
 	}
 
@@ -254,11 +256,14 @@ void CStyleFile::ParseBuffer(const TCHAR *buf)
 						case LATEX_LET:
 						case LATEX_TXT_SYMBOL:
 						case LATEX_MATH_SYMBOL:
-						case LATEX_TXT_COMMAND:
-							/* Some commands may be duplicate due to conditional definitions in the
-							   style file. */
-							if (!AddCommand(std::tr1::dynamic_pointer_cast<CLaTeXCommand>(lc)))
+						case LATEX_TXT_COMMAND: 
 							{
+								std::tr1::shared_ptr<CLaTeXCommand> cmd = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(lc);
+								/* Some commands may be duplicate due to conditional definitions in the
+								   style file. */
+								if (!AddCommand(cmd))
+								{
+								}
 							}
 							break;
 						case LATEX_OPTION:
@@ -435,7 +440,9 @@ std::tr1::shared_ptr<CNewCommand> CStyleFile::AddCommand(const CString &name, in
 	std::tr1::shared_ptr<CNewCommand> nc (new CNewCommand(shared_from_this(), name, noOfParams));
 	nc->SetDescription(desc);
 
-	if (AddCommand(std::tr1::static_pointer_cast<CLaTeXCommand>(nc)))
+	std::tr1::shared_ptr<CLaTeXCommand> cmd = std::tr1::static_pointer_cast<CLaTeXCommand>(nc);
+
+	if (AddCommand(cmd))
 	{
 		return nc;
 	}
@@ -475,7 +482,9 @@ std::tr1::shared_ptr<CNewEnvironment> CStyleFile::AddEnvironment(const CString &
 	std::tr1::shared_ptr<CNewEnvironment> ne(new CNewEnvironment(shared_from_this(), name, noOfParams));
 	ne->SetDescription(desc);
 
-	if (AddCommand(std::tr1::static_pointer_cast<CLaTeXCommand>(ne)))
+	std::tr1::shared_ptr<CLaTeXCommand> cmd = std::tr1::static_pointer_cast<CLaTeXCommand>(ne);
+
+	if (AddCommand(cmd))
 	{
 		return ne;
 	}

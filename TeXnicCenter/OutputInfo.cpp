@@ -39,8 +39,9 @@ static char THIS_FILE[] = __FILE__;
 // class COutputInfo
 //-------------------------------------------------------------------
 
-COutputInfo::COutputInfo(const CString& strSrcFile,int nSrcLine,int nOutputLine,
-                         const CString& strError /*= _T("")*/,int nErrorID /*= - 1*/)
+COutputInfo::COutputInfo(const CString& strSrcFile, const Nullable<int>& nSrcLine,
+						 const Nullable<int>& nOutputLine,
+                         const CString& strError /*= _T("")*/, int nErrorID /*= - 1*/)
 {
 	m_strSrcFile = strSrcFile;
 	m_nSrcLine = nSrcLine;
@@ -50,17 +51,54 @@ COutputInfo::COutputInfo(const CString& strSrcFile,int nSrcLine,int nOutputLine,
 }
 
 COutputInfo::COutputInfo()
-		: m_nSrcLine(-1)
-		, m_nOutputLine(-1)
-		, m_nErrorID(-1)
+		: m_nErrorID(-1)
 {
 }
 
 void COutputInfo::Clear()
 {
 	m_strSrcFile.Empty();
-	m_nSrcLine = -1;
-	m_nOutputLine = -1;
+	m_nSrcLine = m_nOutputLine = Nullable<int>();
 	m_strError.Empty();
 	m_nErrorID = -1;
+}
+
+const Nullable<int>& COutputInfo::GetSourceLine() const
+{
+	return m_nSrcLine;
+}
+
+void COutputInfo::SetErrorMessage( const CString& val )
+{
+	m_strError = val;
+}
+
+const Nullable<int>& COutputInfo::GetOutputLine() const
+{
+	return m_nOutputLine;
+}
+
+void COutputInfo::SetOutputLine( int val )
+{
+	m_nOutputLine = val;
+}
+
+const CString& COutputInfo::GetErrorMessage() const
+{
+	return m_strError;
+}
+
+void COutputInfo::SetSourceLine( const Nullable<int>& val )
+{
+	m_nSrcLine = val;
+}
+
+void COutputInfo::SetSourceFile( const CString& val )
+{
+	m_strSrcFile = val;
+}
+
+const CString& COutputInfo::GetSourceFile() const
+{
+	return m_strSrcFile;
 }

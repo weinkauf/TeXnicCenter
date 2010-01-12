@@ -1484,19 +1484,18 @@ void CCFileViewEx::OnProjectClean()
 void CCFileViewEx::OnUpdateProjectClean(CCmdUI* pCmdUI)
 {
 	// TODO: Add your command update UI handler code here
-
+	UNUSED_ALWAYS(pCmdUI);
 }
 
 void CCFileViewEx::OnProjectAddFiles()
 {
 	// TODO: Add your command handler code here
-
 }
 
 void CCFileViewEx::OnUpdateProjectAddFiles(CCmdUI* pCmdUI)
 {
 	// TODO: Add your command update UI handler code here
-
+	UNUSED_ALWAYS(pCmdUI);
 }
 
 void CCFileViewEx::OnProjectBuild()
@@ -1519,7 +1518,7 @@ void CCFileViewEx::OnFileCompile()
 void CCFileViewEx::OnUpdateFileCompile(CCmdUI* pCmdUI)
 {
 	// TODO: Add your command update UI handler code here
-
+	UNUSED_ALWAYS(pCmdUI);
 }
 
 void CCFileViewEx::OnFileDelete()
@@ -1562,6 +1561,7 @@ void CCFileViewEx::OnFileViewProperties()
 void CCFileViewEx::OnUpdateFileViewProperties(CCmdUI* pCmdUI)
 {
 	// TODO: Add your command update UI handler code here
+	UNUSED_ALWAYS(pCmdUI);
 
 }
 

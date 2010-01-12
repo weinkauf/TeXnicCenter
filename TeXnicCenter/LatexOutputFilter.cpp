@@ -158,7 +158,6 @@ ScanNextLine:
 					//Yes - save it and wait for the next line to read
 					m_strPartialFileName = strFile;
 					m_bFileNameOverLines = true;
-					i = j - 1;
 				}
 				else
 				{
@@ -168,8 +167,9 @@ ScanNextLine:
 					strFile.Trim(_T('"'));
 
 					m_stackFile.push(strFile);
-					i = j - 1;
 				}
+
+				i = j - 1;
 			}
 			break;
 
@@ -195,8 +195,8 @@ ScanNextLine:
 
 void CLaTeXOutputFilter::FlushCurrentItem()
 {
-	int nItemType = m_currentItem.m_nErrorID;
-	m_currentItem.m_nErrorID = -1;
+	int nItemType = m_currentItem.GetErrorID();
+	m_currentItem.SetErrorID(-1);
 
 	switch (nItemType)
 	{
@@ -260,7 +260,7 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 	                Every TeX-User needs to correct an error, if he wants to have a valid document.
 	                Therefore, errors are quite rare.
 	                For some warnings, but not all, there is also a need to correct them - to get a better document.
-	                Therefore, warnings may occure more often than errors.
+	                Therefore, warnings may occur more often than errors.
 	                Most users are not going to correct a bad box. Sometimes it is not possible at all (at least
 	                for the average TeX-user).
 	                Therefore, bad boxes are the most common type of catched entities.
@@ -314,7 +314,7 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		FlushCurrentItem();
 		m_currentItem = COutputInfo(
 		                    m_stackFile.empty() ? _T("") : m_stackFile.top(),
-		                    0,
+		                    Nullable<int>(),
 		                    GetCurrentOutputLine(),
 		                    strLine.Mid(results.position(1),results.length(1)),
 		                    itmWarning);
@@ -324,7 +324,7 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		FlushCurrentItem();
 		m_currentItem = COutputInfo(
 		                    m_stackFile.empty() ? _T("") : m_stackFile.top(),
-		                    0,
+		                    Nullable<int>(),
 		                    GetCurrentOutputLine(),
 		                    strLine.Mid(results.position(1),results.length(1)),
 		                    itmError);
@@ -334,28 +334,28 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		FlushCurrentItem();
 		m_currentItem = COutputInfo(
 		                    m_stackFile.empty() ? _T("") : m_stackFile.top(),
-		                    0,
+		                    Nullable<int>(),
 		                    GetCurrentOutputLine(),
 		                    strLine.Mid(results.position(1),results.length(1)),
 		                    itmError);
 	}
 	else if (regex_search(text,results,line1))
 	{
-		//Catching the line number of some errors/warnings types, which do not
-		// report their place of occurence in their first line. Consider the
+		// Catching the line number of some errors/warnings types, which do not
+		// report their place of occurrence in their first line. Consider the
 		// following example (catched by line1):
 		//
 		//! Undefined control sequence.
 		//<argument> \pa
 		//               rskip
 		//l.2 \setlength{\pa rskip}{0.5ex}
-		if (m_currentItem.m_nSrcLine == 0)
-			m_currentItem.m_nSrcLine = _ttoi(strLine.Mid(results.position(1),results.length(1)));
+		if (!m_currentItem.GetSourceLine().HasValue())
+			m_currentItem.SetSourceLine(_ttoi(strLine.Mid(results.position(1),results.length(1))));
 	}
 	else if (regex_search(text,results,line2))
 	{
 		//Only change the SrcLine, if it could not been assigned yet (== 0), !!!
-		// because TeX or a TeX-Package is reporting the errorneus input line
+		// because TeX or a TeX-Package is reporting the erroneous input line
 		// one line after reporting the error itself. Consider the following
 		// example (catched by line2):
 		//
@@ -363,8 +363,8 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		//(amsmath)                trying to recover with `aligned' on input line 65.
 		//
 		//But: Do not change an Item, if the SrcLine could be retrieved from the output!!!
-		if (m_currentItem.m_nSrcLine == 0)
-			m_currentItem.m_nSrcLine = _ttoi(strLine.Mid(results.position(1),results.length(1)));
+		if (!m_currentItem.GetSourceLine().HasValue())
+			m_currentItem.SetSourceLine(_ttoi(strLine.Mid(results.position(1),results.length(1))));
 	}
 	else if (regex_search(text,results,output1))
 	{

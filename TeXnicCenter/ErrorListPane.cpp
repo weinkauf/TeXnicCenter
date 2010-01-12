@@ -282,9 +282,11 @@ int ErrorListPane::InsertMessage(const COutputInfo& info, CBuildView::tagImage t
 	list_view_.SetItemText(index,1,line);
 	list_view_.SetItemText(index,2,info.GetErrorMessage());
 
-	line.Format(_T("%d"),info.m_nSrcLine);
 
-	list_view_.SetItemText(index,3,line);
+	if (info.GetSourceLine().HasValue()) {
+		line.Format(_T("%d"),info.GetSourceLine().GetValue());
+		list_view_.SetItemText(index,3,line);
+	}
 
 	list_view_.SetItemText(index,4,CPathTool::GetFile(info.GetSourceFile()));
 
@@ -327,10 +329,12 @@ void ErrorListPane::OnNMDblClk(NMHDR*, LRESULT* result)
 		if (POSITION pos = list_view_.GetFirstSelectedItemPosition())
 		{
 			item_monitor_.Lock();
-			const int line = items_[list_view_.GetItemData(list_view_.GetNextSelectedItem(pos))].info.GetOutputLine();
+			const Nullable<int> line = items_[list_view_.GetItemData(list_view_.GetNextSelectedItem(pos))].info.GetOutputLine();
 			item_monitor_.Unlock();
 
-			doc_->ActivateBuildMessageByOutputLine(line);
+			if (line.HasValue())
+				doc_->ActivateBuildMessageByOutputLine(line.GetValue());
+
 			*result = 1;
 		}
 	}
@@ -360,8 +364,8 @@ int ErrorListPane::CompareErrorMessage( LPARAM l1, LPARAM l2 )
 
 int ErrorListPane::CompareSourceLine( LPARAM l1, LPARAM l2 )
 {
-	return items_[l1].info.m_nSrcLine < items_[l2].info.m_nSrcLine ? -1 :
-		items_[l1].info.m_nSrcLine > items_[l2].info.m_nSrcLine ? 1 : 0;
+	return items_[l1].info.GetSourceLine().GetValueOrDefault() < items_[l2].info.GetSourceLine().GetValueOrDefault() ? -1 :
+		items_[l1].info.GetSourceLine().GetValueOrDefault() > items_[l2].info.GetSourceLine().GetValueOrDefault() ? 1 : 0;
 }
 
 int ErrorListPane::CompareSourceFile( LPARAM l1, LPARAM l2 )

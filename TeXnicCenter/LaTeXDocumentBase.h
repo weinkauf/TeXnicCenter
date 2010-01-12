@@ -3,6 +3,7 @@
 #include "FileChangeWatcher.h"
 #include "structureparser.h"
 #include "CodeDocument.h"
+#include "Nullable.h"
 
 // LaTeXDocumentBase document
 
@@ -12,7 +13,7 @@ class LaTeXDocumentBase :
 	public CFileChangeWatcher
 {
 	bool save_copy_;
-	int EOL_mode_;
+	Nullable<int> EOL_mode_;
 	int current_line_;
 	CString line_;
 
@@ -50,7 +51,7 @@ public:
 	void UpdateTextBufferOnExternalChange();
 	void SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU);
 
-	int GetSavedEOLMode() const;
+	const Nullable<int>& GetSavedEOLMode() const;
 
 public:
 	DWORD SaveFile(HANDLE file, bool throw_on_invalid_sequence);

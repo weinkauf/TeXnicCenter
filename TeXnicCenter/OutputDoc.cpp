@@ -181,8 +181,12 @@ void COutputDoc::ShowError(int nIndex)
 	CMainFrame* f = static_cast<CMainFrame*>(AfxGetMainWnd());
 	f->ActivateOutputTab(CMainFrame::outputTabBuildResult);
 
-	TryOpenFile(GetFilePath(m_aErrors[nIndex].m_strSrcFile),m_aErrors[nIndex].m_nSrcLine);
-	UpdateAllViews(NULL,hintSelectBuildLine,(CObject*) & m_aErrors[nIndex].m_nOutputLine);
+	TryOpenFile(GetFilePath(m_aErrors[nIndex].GetSourceFile()),m_aErrors[nIndex].GetSourceLine());
+
+	const Nullable<int>& line = m_aErrors[nIndex].GetOutputLine();
+
+	UpdateAllViews(NULL,hintSelectBuildLine,(CObject*)(&line));
+
 	m_nActualErrorIndex = nIndex;
 }
 
@@ -232,8 +236,11 @@ void COutputDoc::ShowBadBox(int nIndex)
 	CMainFrame* f = static_cast<CMainFrame*>(AfxGetMainWnd());
 	f->ActivateOutputTab(CMainFrame::outputTabBuildResult);
 
-	TryOpenFile(GetFilePath(m_aBadBoxes[nIndex].m_strSrcFile),m_aBadBoxes[nIndex].m_nSrcLine);
-	UpdateAllViews(NULL,hintSelectBuildLine,(CObject*) & m_aBadBoxes[nIndex].m_nOutputLine);
+	TryOpenFile(GetFilePath(m_aBadBoxes[nIndex].GetSourceFile()),m_aBadBoxes[nIndex].GetSourceLine());
+	
+	const Nullable<int>& line = m_aBadBoxes[nIndex].GetOutputLine();
+
+	UpdateAllViews(NULL,hintSelectBuildLine,(CObject*) &line);
 	m_nActualBadBoxIndex = nIndex;
 }
 
@@ -280,8 +287,11 @@ void COutputDoc::ShowWarning(int nIndex)
 	if (!(nIndex >= 0 && nIndex < m_aWarnings.GetSize()))
 		return;
 
-	TryOpenFile(GetFilePath(m_aWarnings[nIndex].m_strSrcFile),m_aWarnings[nIndex].m_nSrcLine);
-	UpdateAllViews(NULL,hintSelectBuildLine,(CObject*) & m_aWarnings[nIndex].m_nOutputLine);
+	TryOpenFile(GetFilePath(m_aWarnings[nIndex].GetSourceFile()),m_aWarnings[nIndex].GetSourceLine());
+
+	const Nullable<int>& line = m_aWarnings[nIndex].GetSourceLine();
+	UpdateAllViews(NULL,hintSelectBuildLine,(CObject*) &line);
+
 	m_nActualWarningIndex = nIndex;
 }
 
@@ -369,8 +379,12 @@ void COutputDoc::ShowParseWarning(int nIndex)
 	if (!(nIndex >= 0 && nIndex < m_aParseWarning.GetSize()))
 		return;
 
-	TryOpenFile(GetFilePath(m_aParseWarning[nIndex].m_strSrcFile),m_aParseWarning[nIndex].m_nSrcLine);
-	UpdateAllViews(NULL,hintSelectParseLine,(CObject*) & m_aParseWarning[nIndex].m_nOutputLine);
+	TryOpenFile(GetFilePath(m_aParseWarning[nIndex].GetSourceFile()),m_aParseWarning[nIndex].GetSourceLine());
+
+	const Nullable<int>& line = m_aParseWarning[nIndex].GetOutputLine();
+
+	UpdateAllViews(NULL,hintSelectParseLine,(CObject*) &line);
+
 	m_nParseWarningIndex = nIndex;
 }
 
@@ -379,8 +393,11 @@ void COutputDoc::ShowParseInfo(int nIndex)
 	if (!(nIndex >= 0 && nIndex < m_aParseInfo.GetSize()))
 		return;
 
-	TryOpenFile(GetFilePath(m_aParseInfo[nIndex].m_strSrcFile),m_aParseInfo[nIndex].m_nSrcLine);
-	UpdateAllViews(NULL,hintSelectParseLine,(CObject*) & m_aParseInfo[nIndex].m_nOutputLine);
+	TryOpenFile(GetFilePath(m_aParseInfo[nIndex].GetSourceFile()),m_aParseInfo[nIndex].GetSourceLine());
+
+	const Nullable<int>& line = m_aParseInfo[nIndex].GetOutputLine();
+
+	UpdateAllViews(NULL,hintSelectParseLine,(CObject*) &line);
 	m_nParseInfoIndex = nIndex;
 }
 
@@ -763,15 +780,15 @@ void COutputDoc::OnParseLineInfo(COutputInfo &line,int nLevel,int nSeverity)
 	// still blocks - I do not know why. SendMessage works for the FileGrep,
 	// but for some unknown reason not for this.
 	// NOTE: The Message handler is responsible for freeing the memory!!!
-	LPTSTR buffer = new TCHAR[line.m_strError.GetLength() + 1];
-	_tcscpy(buffer,(LPCTSTR)line.m_strError);
+	LPTSTR buffer = new TCHAR[line.GetErrorMessage().GetLength() + 1];
+	_tcscpy(buffer,(LPCTSTR)line.GetErrorMessage());
 
 	//NOTE: Because we use PostMessage, we can not rely on
 	// m_pParseView->GetLineCount() to get the number of issued output lines
 	// as not all AddInfoLines-Messages have been processed now.
 	// Therefore, we need to count the number of issued lines.
 	// This is not very nice, but I do not see another way.
-	line.m_nOutputLine = m_nOutputLines;
+	line.SetOutputLine(m_nOutputLines);
 
 	switch (nSeverity)
 	{
@@ -1238,7 +1255,7 @@ void COutputDoc::ClearBuildMessages()
 void COutputDoc::AddError(COutputInfo& error)
 {
 	m_aErrors.Add(error);
-	m_pBuildView->SetLineImage(error.m_nOutputLine,CBuildView::imageError);
+	m_pBuildView->SetLineImage(error.GetOutputLine().GetValueOrDefault(),CBuildView::imageError);
 
 	if (errorListView_)
 		errorListView_->AddMessage(error,CBuildView::imageError);
@@ -1247,7 +1264,7 @@ void COutputDoc::AddError(COutputInfo& error)
 void COutputDoc::AddWarning(COutputInfo& warning)
 {
 	m_aWarnings.Add(warning);
-	m_pBuildView->SetLineImage(warning.m_nOutputLine,CBuildView::imageWarning);
+	m_pBuildView->SetLineImage(warning.GetOutputLine().GetValueOrDefault(),CBuildView::imageWarning);
 
 	if (errorListView_)
 		errorListView_->AddMessage(warning,CBuildView::imageWarning);
@@ -1256,7 +1273,7 @@ void COutputDoc::AddWarning(COutputInfo& warning)
 void COutputDoc::AddBadBox(COutputInfo& badbox)
 {
 	m_aBadBoxes.Add(badbox);
-	m_pBuildView->SetLineImage(badbox.m_nOutputLine,CBuildView::imageBadBox);
+	m_pBuildView->SetLineImage(badbox.GetOutputLine().GetValueOrDefault(),CBuildView::imageBadBox);
 
 	if (errorListView_)
 		errorListView_->AddMessage(badbox,CBuildView::imageBadBox);
@@ -1314,19 +1331,20 @@ void COutputDoc::OnLatexFileCompileAndView()
 	OnFileCompile();
 }
 
-bool COutputDoc::TryOpenFile(LPCTSTR lpszFilename,const int nLineNumber)
+bool COutputDoc::TryOpenFile(LPCTSTR lpszFilename, const Nullable<int>& nLineNumber)
 {
-	if (nLineNumber > 0)
+	bool result;
+
+	if (nLineNumber.HasValue() && CPathTool::IsFile(lpszFilename))
+		result = theApp.OpenLatexDocument(lpszFilename,FALSE, nLineNumber.GetValueOrDefault(-1),TRUE) != NULL;
+	else 
 	{
-		return theApp.OpenLatexDocument(lpszFilename,FALSE,nLineNumber,TRUE) != NULL;
+		MessageBeep(MB_ICONSTOP);
+		result = false;
 	}
 
-	MessageBeep(MB_ICONSTOP);
-
-	return false;
+	return result;
 }
-
-
 
 void COutputDoc::OnUpdateLatexView(CCmdUI* pCmdUI)
 {
@@ -1341,7 +1359,7 @@ void COutputDoc::ActivateBuildMessageByOutputLine(int nLine)
 	// search errors for specified line
 	for (i = 0; i < m_aErrors.GetSize(); i++)
 	{
-		if (m_aErrors[i].m_nOutputLine == nLine)
+		if (m_aErrors[i].GetOutputLine() == nLine)
 		{
 			ShowError(i);
 			return;
@@ -1351,7 +1369,7 @@ void COutputDoc::ActivateBuildMessageByOutputLine(int nLine)
 	// search warnings for specified line
 	for (i = 0; i < m_aWarnings.GetSize(); i++)
 	{
-		if (m_aWarnings[i].m_nOutputLine == nLine)
+		if (m_aWarnings[i].GetOutputLine() == nLine)
 		{
 			ShowWarning(i);
 			return;
@@ -1361,7 +1379,7 @@ void COutputDoc::ActivateBuildMessageByOutputLine(int nLine)
 	// search bad boxes for specified line
 	for (i = 0; i < m_aBadBoxes.GetSize(); i++)
 	{
-		if (m_aBadBoxes[i].m_nOutputLine == nLine)
+		if (m_aBadBoxes[i].GetOutputLine() == nLine)
 		{
 			ShowBadBox(i);
 			return;
@@ -1374,7 +1392,7 @@ void COutputDoc::ActivateParseMessageByOutputLine(int nLine)
 {
 	for (int i = 0; i < m_aParseWarning.GetSize(); i++)
 	{
-		if (m_aParseWarning[i].m_nOutputLine == nLine)
+		if (m_aParseWarning[i].GetOutputLine() == nLine)
 		{
 			ShowParseWarning(i);
 			return;
@@ -1383,7 +1401,7 @@ void COutputDoc::ActivateParseMessageByOutputLine(int nLine)
 
 	for (int i = 0; i < m_aParseInfo.GetSize(); i++)
 	{
-		if (m_aParseInfo[i].m_nOutputLine == nLine)
+		if (m_aParseInfo[i].GetOutputLine() == nLine)
 		{
 			ShowParseInfo(i);
 			return;

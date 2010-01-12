@@ -264,15 +264,15 @@ CString CStructureParser::GetArgument(const CString &strText, TCHAR tcOpeningDel
 #define INITIALIZE_SI( si )\
 	si.m_nLine = nActualLine;\
 	si.m_nParent = m_anItem[m_nDepth];\
-	si.m_strComment = "";\
-	si.m_strCaption = "";\
+	si.m_strComment = _T("");\
+	si.m_strCaption = _T("");\
 	si.RemoveLabels();\
 	si.m_strPath = strActualFile;\
-	si.m_strTitle = ""
+	si.m_strTitle = _T("")
 
 #define INITIALIZE_OI( oi )\
-	oi.m_strSrcFile = strActualFile;\
-	oi.m_nSrcLine = nActualLine;
+	oi.SetSourceFile(strActualFile);\
+	oi.SetSourceLine(nActualLine);
 
 void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &cookies,
                                    const CString &strActualFile,
@@ -388,7 +388,11 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			{
 				if (m_pParseOutputHandler && !m_bCancel)
 				{
-					info.m_strError.Format(STE_PARSE_PARSING, strPath);
+					CString message;
+					message.Format(STE_PARSE_PARSING, strPath);
+					
+					info.SetErrorMessage(message);
+
 					m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::information);
 				}
 
@@ -398,7 +402,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			{
 				if (m_pParseOutputHandler && !m_bCancel)
 				{
-					info.m_strError.LoadString(IDS_RECURSIVE_INCLUSION);
+					info.SetErrorMessage(CString(MAKEINTRESOURCE(IDS_RECURSIVE_INCLUSION)));
 					m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::error);
 				}
 			}
@@ -406,7 +410,11 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		else if (m_pParseOutputHandler && !m_bCancel)
 		{
 			AddFileItem(strPath, StructureItem::missingTexFile, strActualFile, nActualLine, aSI);
-			info.m_strError.Format(STE_FILE_EXIST, strPath);
+
+			CString message;
+			message.Format(STE_FILE_EXIST, strPath);
+
+			info.SetErrorMessage(message);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 		}
 
@@ -473,7 +481,10 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 			if (GraphicFileFound)
 			{
-				info.m_strError.Format(STE_PARSE_FOUND, strCompletePath);
+				CString message;
+				message.Format(STE_PARSE_FOUND, strCompletePath);
+				
+				info.SetErrorMessage(message);
 				m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::information);
 			}
 			else
@@ -494,7 +505,11 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 				}
 
 				strCompletePath = strPath + _T(" [") + concat + _T("]");
-				info.m_strError.Format(STE_FILE_EXIST, strCompletePath);
+				
+				CString message;
+				message.Format(STE_FILE_EXIST, strCompletePath);
+				
+				info.SetErrorMessage(message);
 				m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 			}
 		}
@@ -683,7 +698,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 							COutputInfo info;
 							INITIALIZE_OI(info);
-							info.m_strError = title;
+							info.SetErrorMessage(title);
 							m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 						}
 
@@ -789,7 +804,11 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		{
 			COutputInfo info;
 			INITIALIZE_OI(info);
-			info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[StructureItem::figure]);
+
+			CString message;
+			message.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[StructureItem::figure]);
+
+			info.SetErrorMessage(message);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 		}
 
@@ -817,7 +836,11 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		{
 			COutputInfo info;
 			INITIALIZE_OI(info);
-			info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[StructureItem::table]);
+
+			CString message;
+			message.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[StructureItem::table]);
+
+			info.SetErrorMessage(message);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 		}
 
@@ -845,7 +868,11 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		{
 			COutputInfo info;
 			INITIALIZE_OI(info);
-			info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[StructureItem::equation]);
+
+			CString message;
+			message.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[StructureItem::equation]);
+
+			info.SetErrorMessage(message);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 		}
 
@@ -905,7 +932,11 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		{
 			COutputInfo info;
 			INITIALIZE_OI(info);
-			info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, strEnvName);
+
+			CString message;
+			message.Format(STE_PARSE_FOUND_UNMATCHED, strEnvName);
+
+			info.SetErrorMessage(message);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 		}
 
@@ -984,7 +1015,10 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 				//Give information that we found the bibfile and that we are going to parse it now.
 				if (m_pParseOutputHandler && !m_bCancel)
 				{
-					info.m_strError.Format(STE_PARSE_PARSING, strPath);
+					CString message;
+					message.Format(STE_PARSE_PARSING, strPath);
+
+					info.SetErrorMessage(message);
 					m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth,
 					                                       CParseOutputHandler::information);
 				}
@@ -1026,9 +1060,9 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 							continue;
 						}
 
-						info.m_strError = be->m_strTitle;
-						info.m_nSrcLine = be->m_nLine;
-						info.m_strSrcFile = be->m_strPath;
+						info.SetErrorMessage(be->m_strTitle);
+						info.SetSourceLine(be->m_nLine);
+						info.SetSourceFile(be->m_strPath);
 						m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth + 1,
 						                                       CParseOutputHandler::warning);
 					}
@@ -1066,7 +1100,12 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 				if (m_pParseOutputHandler && !m_bCancel)
 				{
 					AddFileItem(strPath, StructureItem::missingBibFile, strActualFile, nActualLine, aSI);
-					info.m_strError.Format(STE_FILE_EXIST, strPath);
+
+					CString message;
+					message.Format(STE_FILE_EXIST, strPath);
+
+					info.SetErrorMessage(message);
+
 					m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth,
 					                                       CParseOutputHandler::warning);
 				}
@@ -1149,9 +1188,14 @@ void CStructureParser::EmptyCookieStack(CCookieStack &cookies, StructureItemCont
 
 			if (StructureItem::IsEnvironment(static_cast<StructureItem::Type>(item.nCookieType)))
 			{
-				info.m_nSrcLine = si.m_nLine;
-				info.m_strSrcFile = si.m_strPath;
-				info.m_strError.Format(STE_PARSE_FOUND_UNMATCHED, aSI[item.nItemIndex].GetTitle());
+				info.SetSourceLine(si.m_nLine);
+				info.SetSourceFile(si.m_strPath);
+
+				CString message;
+				message.Format(STE_PARSE_FOUND_UNMATCHED, aSI[item.nItemIndex].GetTitle());
+
+				info.SetErrorMessage(message);
+
 				m_pParseOutputHandler->OnParseLineInfo(info, 0, CParseOutputHandler::warning);
 			}
 		}
@@ -1186,9 +1230,14 @@ BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
 		if (m_pParseOutputHandler && !m_bCancel)
 		{
 			COutputInfo info;
-			info.m_strSrcFile = lpszPath;
-			info.m_nSrcLine = 0;
-			info.m_strError.Format(STE_GREP_ERROR, lpszPath);
+			info.SetSourceFile(lpszPath);
+			info.SetSourceLine();
+
+			CString message;
+			message.Format(STE_GREP_ERROR, lpszPath);
+			
+			info.SetErrorMessage(message);
+
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
 		}
 		return FALSE;

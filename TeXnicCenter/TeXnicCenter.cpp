@@ -1047,7 +1047,7 @@ void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt()
 	m_bSavingAll = FALSE;
 }
 
-BOOL CTeXnicCenterApp::OpenProject(LPCTSTR lpszPath)
+BOOL CTeXnicCenterApp::OpenProject(LPCTSTR lpszPath, bool addToRecentList)
 {
 	TRACE1("Opening LaTeX Project: %s\n", lpszPath);
 
@@ -1055,15 +1055,22 @@ BOOL CTeXnicCenterApp::OpenProject(LPCTSTR lpszPath)
 	AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_PROJECT_CLOSE);
 
 	CProject* pDoc = m_pProjectDocTemplate->OpenProjectFile(lpszPath);
+
 	// test for success
 	if (!pDoc)
 	{
 		AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_PROJECT_CLOSE);
 		return FALSE;
 	}
-
-	// add to recent project list
-	m_recentProjectList.Add(pDoc->GetPathName());
+	else
+	{
+		// Success		
+		if (addToRecentList) 
+		{
+			// Add to recent project list
+			m_recentProjectList.Add(lpszPath);
+		}
+	}
 
 	return TRUE;
 }
@@ -1537,7 +1544,7 @@ void CTeXnicCenterApp::OnFileMRUProject(UINT unID)
 
 	const CString filename = m_recentProjectList[nIndex];
 
-	if (OpenProject(filename))
+	if (OpenProject(filename, false))
 		m_recentProjectList.Add(filename); // Place on top
 	else
 		m_recentProjectList.Remove(nIndex);

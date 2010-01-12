@@ -93,16 +93,16 @@ void ToolBarCustomizeExAdvBtn::OnClicked()
 
 
 /////////////////////////////////////////////////////////////////////////////
-// MyToolBarCustomize
+// ToolBarsCustomizeDialog
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_DYNAMIC(MyToolBarCustomize,CMFCToolBarsCustomizeDialog)
+IMPLEMENT_DYNAMIC(ToolBarsCustomizeDialog,CMFCToolBarsCustomizeDialog)
 
 
-MyToolBarCustomize::MyToolBarCustomize(CFrameWnd* pWndParentFrame,
+ToolBarsCustomizeDialog::ToolBarsCustomizeDialog(CFrameWnd* pWndParentFrame,
                                        BOOL bAutoSetFromMenus /*= FALSE*/,
                                        UINT uiFlags /*= (BCGCUSTOMIZE_MENU_SHADOWS | BCGCUSTOMIZE_TEXT_LABELS | BCGCUSTOMIZE_LOOK_2000 | BCGCUSTOMIZE_MENU_ANIMATIONS)*/,
                                        CList <CRuntimeClass*,CRuntimeClass*>* plistCustomPages /*= NULL*/)
@@ -111,21 +111,21 @@ MyToolBarCustomize::MyToolBarCustomize(CFrameWnd* pWndParentFrame,
 {
 }
 
-MyToolBarCustomize::~MyToolBarCustomize()
+ToolBarsCustomizeDialog::~ToolBarsCustomizeDialog()
 {
 }
 
-BEGIN_MESSAGE_MAP(MyToolBarCustomize,CMFCToolBarsCustomizeDialog)
-	//{{AFX_MSG_MAP(MyToolBarCustomize)
+BEGIN_MESSAGE_MAP(ToolBarsCustomizeDialog,CMFCToolBarsCustomizeDialog)
+	//{{AFX_MSG_MAP(ToolBarsCustomizeDialog)
 	ON_WM_DESTROY()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
 /////////////////////////////////////////////////////////////////////////////
-// MyToolBarCustomize message handlers
+// ToolBarsCustomizeDialog message handlers
 
-void MyToolBarCustomize::OnInitToolsPage()
+void ToolBarsCustomizeDialog::OnInitToolsPage()
 {
 	ASSERT_VALID(m_pToolsPage);
 
@@ -251,7 +251,7 @@ void MyToolBarCustomize::OnInitToolsPage()
 	dc.SelectObject(pOldFont);
 }
 
-void MyToolBarCustomize::OnBeforeChangeTool(CUserTool* pSelTool)
+void ToolBarsCustomizeDialog::OnBeforeChangeTool(CUserTool* pSelTool)
 {
 	if (pSelTool != NULL)
 	{
@@ -269,7 +269,7 @@ void MyToolBarCustomize::OnBeforeChangeTool(CUserTool* pSelTool)
 	m_pToolsPage->m_wndArgumentsEdit.ShowWindow(SW_HIDE);
 }
 
-void MyToolBarCustomize::OnAfterChangeTool(CUserTool* pSelTool)
+void ToolBarsCustomizeDialog::OnAfterChangeTool(CUserTool* pSelTool)
 {
 	if (pSelTool != NULL)
 	{
@@ -297,7 +297,7 @@ void MyToolBarCustomize::OnAfterChangeTool(CUserTool* pSelTool)
 	//	m_wndAdvEdit.EnableWindow(pSelTool != NULL);
 }
 
-void MyToolBarCustomize::OnDestroy()
+void ToolBarsCustomizeDialog::OnDestroy()
 {
 	ASSERT_VALID(m_pToolsPage);
 
@@ -321,7 +321,7 @@ void MyToolBarCustomize::OnDestroy()
 	CMFCToolBarsCustomizeDialog::OnDestroy();
 }
 
-BOOL MyToolBarCustomize::CheckToolsValidity(const CObList& lstTools)
+BOOL ToolBarsCustomizeDialog::CheckToolsValidity(const CObList& lstTools)
 {
 	//	for (POSITION pos = lstTools.GetHeadPosition (); pos != NULL;)
 	//	{
@@ -339,7 +339,7 @@ BOOL MyToolBarCustomize::CheckToolsValidity(const CObList& lstTools)
 	//	return TRUE;
 }
 
-void MyToolBarCustomize::BuildPropPageArray(void)
+void ToolBarsCustomizeDialog::BuildPropPageArray(void)
 {
 	__super::BuildPropPageArray();
 	FixPropSheetFont(m_psh,m_pages);
@@ -348,7 +348,7 @@ void MyToolBarCustomize::BuildPropPageArray(void)
 	m_psh.pfnCallback = PropSheetCallback;
 }
 
-int MyToolBarCustomize::PropSheetCallback(HWND hWnd,UINT message,LPARAM lParam)
+int ToolBarsCustomizeDialog::PropSheetCallback(HWND hWnd,UINT message,LPARAM lParam)
 {
 	extern int CALLBACK AfxPropSheetCallback(HWND,UINT message,LPARAM lParam);
 	int result;
