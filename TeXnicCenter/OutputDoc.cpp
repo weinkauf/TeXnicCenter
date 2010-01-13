@@ -289,7 +289,7 @@ void COutputDoc::ShowWarning(int nIndex)
 
 	TryOpenFile(GetFilePath(m_aWarnings[nIndex].GetSourceFile()),m_aWarnings[nIndex].GetSourceLine());
 
-	const Nullable<int>& line = m_aWarnings[nIndex].GetSourceLine();
+	const Nullable<int>& line = m_aWarnings[nIndex].GetOutputLine();
 	UpdateAllViews(NULL,hintSelectBuildLine,(CObject*) &line);
 
 	m_nActualWarningIndex = nIndex;
