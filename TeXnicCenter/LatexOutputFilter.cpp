@@ -119,14 +119,33 @@ void CLaTeXOutputFilter::UpdateFileStack(const CString &strLine)
 			{
 ScanNextLine:
 				int j = i + 1;
+				const TCHAR quote = _T('"');
+				bool setOverlines = false;
 
-				for (;
-				        (j < nStrMax)
-				        && (strLine[j] != _T('['))
-				        && (strLine[j] != _T(')'))
-				        && (strLine[j] != _T('('))
-				        && (strLine[j] != _T('{'));
-				        j++);
+				if (m_bFileNameOverLines || strLine[j] != quote)
+				{
+					for (;
+							(j < nStrMax)
+							&& (strLine[j] != _T('['))
+							&& (strLine[j] != _T(')'))
+							&& (strLine[j] != _T('('))
+							&& (strLine[j] != _T('{'));
+							j++);
+				}
+				else
+				{
+					// Quoted file: search for the quote end
+					int index = strLine.Find(quote, j + 1);
+
+					if (index != -1)
+						j = index + 1;
+					else
+					{
+						// Quote end not found: file name has been split over lines
+						j = nStrMax;
+						setOverlines = true;
+					}
+				}
 
 				/*
 				We need to push even empty strings on the stack, because only this
@@ -144,7 +163,8 @@ ScanNextLine:
 				And the hope/knowledge is, that TeX closes the brace before reporting an error.
 				 */
 
-				CString strFile(strLine.Mid(i + 1,(j - 1) - (i + 1) + 1));
+				int start = i + 1;
+				CString strFile(strLine.Mid(start, (j - 1) - (i + 1) + 1));
 
 				if (m_bFileNameOverLines)
 				{
@@ -153,7 +173,7 @@ ScanNextLine:
 				}
 
 				//Has the filename been broken up over two or even more lines?
-				if ((j == nStrMax) && (nStrMax >= 79) && (CPathTool::GetFileExtension(strFile).GetLength() < 3))
+				if (setOverlines || (j == nStrMax) && (nStrMax >= 79) && (CPathTool::GetFileExtension(strFile).GetLength() < 3))
 				{
 					//Yes - save it and wait for the next line to read
 					m_strPartialFileName = strFile;
@@ -161,12 +181,11 @@ ScanNextLine:
 				}
 				else
 				{
-					//No - push it
-					strFile.TrimLeft();
-					strFile.TrimRight();
-					strFile.Trim(_T('"'));
+					// Not broken - push it
+					strFile.Trim().Trim(quote).Trim();
 
-					m_stackFile.push(strFile);
+					PushFile(strFile);
+
 				}
 
 				i = j - 1;
@@ -222,6 +241,12 @@ void CLaTeXOutputFilter::FlushCurrentItem()
 	m_currentItem.Clear();
 }
 
+void CLaTeXOutputFilter::SetCurrentItem(const COutputInfo& item)
+{
+	FlushCurrentItem();
+	m_currentItem = item;
+}
+
 DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 {
 	UpdateFileStack(strLine);
@@ -237,8 +262,15 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 	static regex_type error2(_T("^! (.*)$"),flags); // This could catch warnings, so run it last
 
 	//Catching Warnings
-	static const regex_type warning1(_T(".+warning.*: (.*) on input line ([[:digit:]]+)"),flags); //Catches Latex and package warnings
-	static const regex_type warning2(_T(".+warning.*: (.*)"),flags); //Catches LaTeX and package warnings that split over several lines
+	
+	// Catches Latex and package warnings
+	static const regex_type warning1(_T(".+warning.*: (.*) on input line ([[:digit:]]+)"),flags); 
+
+	// Catches LaTeX and package warnings that split over several lines
+	static const regex_type warning2(_T(".+warning.*: (.*)"),flags); 
+
+	// Catches LaTeX and package warnings that split over several lines
+	static const regex_type packageWarning(_T("Package\\s+(.+)\\s+warning.*: (.*)"),flags); 
 
 	//Catching Bad Boxes
 	static const regex_type badBox1(_T("^(Over|Under)full \\\\[hv]box .* at lines ([[:digit:]]+)--([[:digit:]]+)"),flags);
@@ -273,8 +305,6 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 
 	if (regex_search(text,results,badBox1))
 	{
-		FlushCurrentItem();
-
 		//Get the srcline for it.
 		// - Mostly TeX reports something like "100--103" ==> so it is the first one.
 		// - Sometimes TeX reports "167--47". This comes up, if an input
@@ -292,52 +322,43 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		int n1 = _ttoi(strLine.Mid(results.position(2),results.length(2)));
 		int n2 = _ttoi(strLine.Mid(results.position(3),results.length(3)));
 
-		m_currentItem = COutputInfo(
-		                    m_stackFile.empty() ? _T("") : m_stackFile.top(),
-		                    (n1 < n2) ? n1 : n2,
-		                    GetCurrentOutputLine(),
-		                    strLine.Mid(results.position(1),results.length(1)),
-		                    itmBadBox);
+		int line = (n1 < n2) ? n1 : n2;
+
+		UpdateCurrentItem(strLine, itmBadBox, line);
+
 	}
 	else if (regex_search(text,results,warning1))
 	{
-		FlushCurrentItem();
-		m_currentItem = COutputInfo(
-		                    m_stackFile.empty() ? _T("") : m_stackFile.top(),
-		                    _ttoi(strLine.Mid(results.position(2),results.length(2))),
-		                    GetCurrentOutputLine(),
-		                    strLine.Mid(results.position(1),results.length(1)),
-		                    itmWarning);
+		UpdateCurrentItem(strLine, itmWarning);
+	}
+	else if (regex_search(text, results, packageWarning))
+	{
+		// Package warning: Package file name will follow the warning message
+		UpdateCurrentItem(strLine, itmWarning);
+
+		m_currentItem.SetErrorMessage(strLine.Mid(results.position(2), results.length(2)));
+
+		CString package = strLine.Mid(results.position(1), results.length(1));
+
+		FileNameContainer::const_iterator it = std::find_if(fileNames_.begin(), fileNames_.end(), 
+			FileTitleMatch(package));
+
+		if (it != fileNames_.end())
+			package = *it;
+
+		m_currentItem.SetPackage(package);
 	}
 	else if (regex_search(text,results,warning2))
 	{
-		FlushCurrentItem();
-		m_currentItem = COutputInfo(
-		                    m_stackFile.empty() ? _T("") : m_stackFile.top(),
-		                    Nullable<int>(),
-		                    GetCurrentOutputLine(),
-		                    strLine.Mid(results.position(1),results.length(1)),
-		                    itmWarning);
+		UpdateCurrentItem(strLine, itmWarning);
 	}
 	else if (regex_search(static_cast<LPCTSTR>(strLine),results,error1))
 	{
-		FlushCurrentItem();
-		m_currentItem = COutputInfo(
-		                    m_stackFile.empty() ? _T("") : m_stackFile.top(),
-		                    Nullable<int>(),
-		                    GetCurrentOutputLine(),
-		                    strLine.Mid(results.position(1),results.length(1)),
-		                    itmError);
+		UpdateCurrentItem(strLine, itmError);
 	}
 	else if (regex_search(text,results,error2))
 	{
-		FlushCurrentItem();
-		m_currentItem = COutputInfo(
-		                    m_stackFile.empty() ? _T("") : m_stackFile.top(),
-		                    Nullable<int>(),
-		                    GetCurrentOutputLine(),
-		                    strLine.Mid(results.position(1),results.length(1)),
-		                    itmError);
+		UpdateCurrentItem(strLine, itmError);
 	}
 	else if (regex_search(text,results,line1))
 	{
@@ -385,4 +406,47 @@ BOOL CLaTeXOutputFilter::OnTerminate()
 	FlushCurrentItem();
 
 	return m_nErrors == 0;
+}
+
+const CString CLaTeXOutputFilter::GetCurrentFilePath() const
+{
+	CString result;
+
+	if (!m_stackFile.empty())
+	{
+		// The stack might contain some weird strings, however
+		// we're interested in an usable file path, so search for
+		// the first occurrence of an existing file in the stack
+		const StringStack::container_type& c = m_stackFile._Get_container();
+		StringStack::container_type::size_type pos = c.size() - 1;
+
+		while (pos < c.size() && !CPathTool::IsFile(c[pos]))
+			--pos;
+
+		if (pos < c.size())
+			result = c[pos];
+		else
+			result = m_stackFile.top();
+	}
+
+	return result;
+}
+
+const COutputInfo CLaTeXOutputFilter::CreateItem( const CString &strLine, tagCookies tag, int line /*= -1*/ ) const
+{
+	return COutputInfo(GetCurrentFilePath(), line == -1 ? Nullable<int>() : line, 
+		GetCurrentOutputLine(), strLine.Mid(results.position(1),results.length(1)), tag);
+}
+
+void CLaTeXOutputFilter::UpdateCurrentItem( const CString& strLine, tagCookies tag, int line )
+{
+	SetCurrentItem(CreateItem(strLine, tag, line));
+}
+
+void CLaTeXOutputFilter::PushFile( const CString& fileName )
+{
+	m_stackFile.push(fileName);
+
+	if (CPathTool::IsFile(fileName))
+		fileNames_.insert(fileName);
 }

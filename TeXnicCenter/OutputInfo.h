@@ -64,6 +64,8 @@ class COutputInfo
 	/** The error message */
 	CString m_strError;
 
+	CString package_;
+	
 // construction
 public:
 	/** Standard constructor */
@@ -80,6 +82,9 @@ public:
 
 // attributes
 public:
+	const CString& GetPackageName() const;
+	void SetPackage(const CString& val);
+
 	const CString& GetSourceFile() const;
 	void SetSourceFile(const CString& val);
 
