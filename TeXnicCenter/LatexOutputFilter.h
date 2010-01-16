@@ -94,7 +94,12 @@ class CLaTeXOutputFilter : public COutputFilter
 	};
 
 	typedef stdext::hash_set<CString, FileNameComparer> FileNameContainer;
+
+	/// Set of all valid file names that have been encountered while parsing.
 	FileNameContainer fileNames_;
+
+	/// Name of the log file.
+	CString transcriptFileName_;
 
 // construction/destruction
 public:
@@ -106,6 +111,9 @@ public:
 	Returns the number of output pages, that have been created by LaTeX.
 	 */
 	int GetNumberOfOutputPages() const;
+
+	/// Gets the file name of the transcript file.
+	const CString& GetTranscriptFileName() const;
 
 // implementation helpers
 protected:

@@ -35,6 +35,7 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "LatexOutputFilter.h"
+#include "CharType.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -270,7 +271,10 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 	static const regex_type warning2(_T(".+warning.*: (.*)"),flags); 
 
 	// Catches LaTeX and package warnings that split over several lines
-	static const regex_type packageWarning(_T("Package\\s+(.+)\\s+warning.*: (.*)"),flags); 
+	static const regex_type packageWarning(_T("Package\\s+(.+)\\s+warning.*: (.*)"), flags); 
+
+	// Catches LaTeX and package warnings that split over several lines
+	static const regex_type classWarning(_T("Class\\s+(.+)\\s+warning.*: (.*)"), flags);
 
 	//Catching Bad Boxes
 	static const regex_type badBox1(_T("^(Over|Under)full \\\\[hv]box .* at lines ([[:digit:]]+)--([[:digit:]]+)"),flags);
@@ -331,7 +335,7 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 	{
 		UpdateCurrentItem(strLine, itmWarning);
 	}
-	else if (regex_search(text, results, packageWarning))
+	else if (regex_search(text, results, packageWarning) || regex_search(text, results, classWarning))
 	{
 		// Package warning: Package file name will follow the warning message
 		UpdateCurrentItem(strLine, itmWarning);
@@ -339,6 +343,8 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		m_currentItem.SetErrorMessage(strLine.Mid(results.position(2), results.length(2)));
 
 		CString package = strLine.Mid(results.position(1), results.length(1));
+
+		m_currentItem.SetPackageName(package);
 
 		FileNameContainer::const_iterator it = std::find_if(fileNames_.begin(), fileNames_.end(), 
 			FileTitleMatch(package));
@@ -397,6 +403,46 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		//LaTeX said 'No pages of output'
 		m_nOutputPages = 0;
 	}
+	else 
+	{
+		const CString transcript = _T("Transcript written on ");
+
+		if (strLine.Left(transcript.GetLength()) == transcript)
+		{
+			int index = transcript.GetLength();
+			int count = strLine.GetLength() - index - 1;
+
+			transcriptFileName_ = strLine.Mid(index, count);
+		}
+		else
+		{
+			// Check if the line contains a package or class message
+			CString package = m_currentItem.GetPackageName();
+			
+			if (!package.IsEmpty())
+			{
+				// Remaining message line start with '(package name)'
+				package = _T('(') + package + _T(')');
+
+				if (strLine.Left(package.GetLength()) == package) {
+					// Collect package or class message after the source line
+					int index = package.GetLength();
+					bool stop = false;
+
+					while (!stop)
+					{
+						if (index < strLine.GetLength() && CharTraitsT::IsSpace(strLine[index]))
+							++index;
+						else
+							stop = true;
+					}
+
+					const CString message = strLine.Mid(index);
+					m_currentItem.SetErrorMessage(m_currentItem.GetErrorMessage() + _T(' ') + message);
+				}
+			}
+		}
+	}
 
 	return dwCookie;
 }
@@ -449,4 +495,9 @@ void CLaTeXOutputFilter::PushFile( const CString& fileName )
 
 	if (CPathTool::IsFile(fileName))
 		fileNames_.insert(fileName);
+}
+
+const CString& CLaTeXOutputFilter::GetTranscriptFileName() const
+{
+	return transcriptFileName_;
 }

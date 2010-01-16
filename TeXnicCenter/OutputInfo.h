@@ -65,7 +65,9 @@ class COutputInfo
 	CString m_strError;
 
 	CString package_;
-	
+
+	CString packageName_;
+
 // construction
 public:
 	/** Standard constructor */
@@ -82,7 +84,7 @@ public:
 
 // attributes
 public:
-	const CString& GetPackageName() const;
+	const CString& GetPackage() const;
 	void SetPackage(const CString& val);
 
 	const CString& GetSourceFile() const;
@@ -99,6 +101,9 @@ public:
 	
 	const Nullable<int>& GetOutputLine() const;
 	void SetOutputLine(int val);
+
+	const CString& GetPackageName() const;
+	void SetPackageName(const CString& val);
 };
 
 
@@ -107,7 +112,7 @@ Array of COutputInfo
 
 @author Sven Wiegand
  */
-typedef CArray<COutputInfo, COutputInfo&> COutputInfoArray;
+typedef CArray<COutputInfo, const COutputInfo&> COutputInfoArray;
 
 
 #endif // !defined(AFX_OUTPUTINFO_H__2F2F3500_25A9_11D3_929E_DBAEDA762522__INCLUDED_)
