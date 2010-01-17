@@ -127,10 +127,10 @@ public:
 	const StructureItem* GetParent(const StructureItemContainer& items) const;
 
 	/** Index of the parent item or -1 if this item has no parent item */
-	int m_nParent;
+	StructureItemContainer::difference_type m_nParent;
 
 	int GetParent() const;
-	void SetParent(int val);
+	void SetParent(StructureItemContainer::difference_type val);
 
 	bool IsMainProjectFile() const;
 

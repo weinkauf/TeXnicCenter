@@ -116,7 +116,7 @@ private:
 	struct COOKIE
 	{
 		int nCookieType;
-		int nItemIndex;
+		StructureItemContainer::difference_type nItemIndex;
 	};
 
 	typedef std::stack<COOKIE> CCookieStack;
@@ -267,7 +267,7 @@ private:
 	@return
 	        index of file added to m_aStructureItems array.
 	 */
-	int AddFileItem(LPCTSTR lpszPath,int nType, LPCTSTR lpszIncludeFromFile, int nIncludedFileLineNumber, StructureItemContainer &aSI,LPCTSTR lpszAnnotation = NULL);
+	StructureItemContainer::size_type AddFileItem(LPCTSTR lpszPath,int nType, LPCTSTR lpszIncludeFromFile, int nIncludedFileLineNumber, StructureItemContainer &aSI,LPCTSTR lpszAnnotation = NULL);
 
 	/** Creates a title from the caption or label of a StructureItem.
 
@@ -457,14 +457,14 @@ private:
 	static const CString m_astrHeader[MAX_DEPTH][HeaderVariationsCount];
 
 	/** Array containing the index of the actual item representing the depth. */
-	int m_anItem[MAX_DEPTH];
+	StructureItemContainer::difference_type m_anItem[MAX_DEPTH];
 
 private:
 	/** Used to control access to the m_aStructureItems-member. */
 	CRITICAL_SECTION m_csSI;
 
 	/** Actual depth */
-	int m_nDepth;
+	SSIZE_T m_nDepth;
 
 	/** line counter */
 	int m_nLineCount;

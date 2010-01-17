@@ -360,7 +360,7 @@ void CMRUComboBox::SetMRURegKey ( LPCTSTR szRegKey )
 
         m_bParamsChanged = TRUE;
         }
-    catch ( CMemoryException )
+    catch ( CMemoryException& )
         {
         TRACE0("CMRUComboBox -- Memory exception in CMRUComboBox::SetMRURegKey()!\n");
         throw;
@@ -431,7 +431,7 @@ BOOL bRetVal = FALSE;
             m_bParamsChanged = TRUE;
             bRetVal = TRUE;
             }
-        catch ( CMemoryException )
+        catch ( CMemoryException& )
             {
             TRACE0("CMRUComboBox -- Memory exception in CMRUComboBox::SetMRUValueFormat()!\n");
             throw;
@@ -749,7 +749,7 @@ int      i;
             delete [] acstrOldList;
             }
         }
-    catch ( CMemoryException )
+    catch ( CMemoryException& )
         {
         TRACE0("CMRUComboBox -- Memory exception in AllocNewMRU()!\n");
         

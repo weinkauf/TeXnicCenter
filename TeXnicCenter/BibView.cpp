@@ -497,11 +497,13 @@ bool BibView::ItemContains( const BibItem& item, const std::vector<CString>& sea
 		ContainsAny(item.GetAuthor(),tokens);
 
 	if (!tokens.empty() && search_flags_ & Year) {
-		if (item.HasYear()) {
-			CString year;
-			year.Format(_T("%i"),item.GetYear());
+		const Nullable<int>& year = item.GetYear();
 
-			ContainsAny(year,tokens);
+		if (year.HasValue()) {
+			CString text;
+			text.Format(_T("%i"), year.GetValue());
+
+			ContainsAny(text, tokens);
 		}
 	}
 
@@ -604,8 +606,11 @@ void BibView::OnUpdateSearchOptions(CCmdUI* pCmdUI)
 int BibView::TranslateCompareFunction(LPARAM l1, LPARAM l2, BibView* pane, 
 									  const std::tr1::function<int (const BibItem& a, const BibItem& b)>& f )
 {
-	ASSERT(l1 < pane->bib_items_.size() && l2 < pane->bib_items_.size());
-	return f(pane->bib_items_[l1].bib,pane->bib_items_[l2].bib);
+	BibItemContainerType::size_type pos1 = static_cast<BibItemContainerType::size_type>(l1);
+	BibItemContainerType::size_type pos2 = static_cast<BibItemContainerType::size_type>(l2);
+
+	ASSERT(pos1 < pane->bib_items_.size() && pos2 < pane->bib_items_.size());
+	return f(pane->bib_items_[pos1].bib,pane->bib_items_[pos2].bib);
 }
 
 int BibView::CompareLabel( const BibItem& a, const BibItem& b )
@@ -629,8 +634,8 @@ int BibView::CompareYear( const BibItem& a, const BibItem& b )
 	else if (!b.HasYear())
 		result = 1;
 	else {
-		int year1 = a.GetYear();
-		int year2 = b.GetYear();
+		int year1 = a.GetYear().GetValueOrDefault();
+		int year2 = b.GetYear().GetValueOrDefault();
 		
 		result = year1 < year2 ? -1 : year1 > year2 ? 1 : 0;
 	}
@@ -780,7 +785,7 @@ void BibView::DoPopulate( const PredicateFunctionType& predicate )
 
 			if (it->bib.HasYear()) {
 				CString& year = temp_;
-				year.Format(_T("%i"),it->bib.GetYear());
+				year.Format(_T("%i"),it->bib.GetYear().GetValue());
 
 				list_view_.SetItemText(index,3,year);
 			}

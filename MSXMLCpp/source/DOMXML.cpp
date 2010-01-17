@@ -1843,12 +1843,12 @@ CXMLDOMNode CXMLDOMNamedNodeMap::RemoveNamedItem(LPCTSTR name)
 }
 
 
-CXMLDOMNode CXMLDOMNamedNodeMap::GetItem(long index)
+const CXMLDOMNode CXMLDOMNamedNodeMap::GetItem( long index ) const
 {
 	IXMLDOMNode* o;
 
-	HRESULT	hr = ((Raw_IXMLDOMNamedNodeMap*)P())->get_item(index, &o);
-	if (hr != S_OK) AfxThrowComException(hr, P(), &__uuidof(IXMLDOMNamedNodeMap));
+	HRESULT	hr = ((Raw_IXMLDOMNamedNodeMap*)GetP())->get_item(index, &o);
+	if (hr != S_OK) AfxThrowComException(hr, GetP(), &__uuidof(IXMLDOMNamedNodeMap));
 
 	return o;
 }
@@ -1956,12 +1956,12 @@ CXMLDOMNode::CXMLDOMNode(IUnknown *pUnknown, BOOL bIncrementRefCount /*= FALSE*/
 {}
 
 
-CString CXMLDOMNode::GetNodeName()
+const CString CXMLDOMNode::GetNodeName() const
 {
 	BSTR	bstrO = NULL;
 
-	HRESULT	hr = ((Raw_IXMLDOMNode*)P())->get_nodeName(&bstrO);
-	if (hr != S_OK) AfxThrowComException(hr, P(), &__uuidof(IXMLDOMNode));
+	HRESULT	hr = ((Raw_IXMLDOMNode*)GetP())->get_nodeName(&bstrO);
+	if (hr != S_OK) AfxThrowComException(hr, GetP(), &__uuidof(IXMLDOMNode));
 
 	CString	o((LPCTSTR)_bstr_t(bstrO, false));
 	return o;
@@ -2014,12 +2014,12 @@ CXMLDOMNode CXMLDOMNode::GetParentNode()
 }
 
 
-CXMLDOMNodeList CXMLDOMNode::GetChildNodes()
+const CXMLDOMNodeList CXMLDOMNode::GetChildNodes() const
 {
 	IXMLDOMNodeList* o;
 
-	HRESULT	hr = ((Raw_IXMLDOMNode*)P())->get_childNodes(&o);
-	if (hr != S_OK) AfxThrowComException(hr, P(), &__uuidof(IXMLDOMNode));
+	HRESULT	hr = ((Raw_IXMLDOMNode*)GetP())->get_childNodes(&o);
+	if (hr != S_OK) AfxThrowComException(hr, GetP(), &__uuidof(IXMLDOMNode));
 
 	return o;
 }
@@ -2069,12 +2069,12 @@ CXMLDOMNode CXMLDOMNode::GetNextSibling()
 }
 
 
-CXMLDOMNamedNodeMap CXMLDOMNode::GetAttributes()
+MsXml::CXMLDOMNamedNodeMap CXMLDOMNode::GetAttributes() const
 {
 	IXMLDOMNamedNodeMap* o;
 
-	HRESULT	hr = ((Raw_IXMLDOMNode*)P())->get_attributes(&o);
-	if (hr != S_OK) AfxThrowComException(hr, P(), &__uuidof(IXMLDOMNode));
+	HRESULT	hr = ((Raw_IXMLDOMNode*)GetP())->get_attributes(&o);
+	if (hr != S_OK) AfxThrowComException(hr, GetP(), &__uuidof(IXMLDOMNode));
 
 	return o;
 }
@@ -2159,24 +2159,24 @@ CXMLDOMNode CXMLDOMNode::CloneNode(BOOL deep)
 }
 
 
-CString CXMLDOMNode::GetNodeTypeString()
+const CString CXMLDOMNode::GetNodeTypeString() const
 {
 	BSTR	bstrO = NULL;
 
-	HRESULT	hr = ((Raw_IXMLDOMNode*)P())->get_nodeTypeString(&bstrO);
-	if (hr != S_OK) AfxThrowComException(hr, P(), &__uuidof(IXMLDOMNode));
+	HRESULT	hr = ((Raw_IXMLDOMNode*)GetP())->get_nodeTypeString(&bstrO);
+	if (hr != S_OK) AfxThrowComException(hr, GetP(), &__uuidof(IXMLDOMNode));
 
 	CString	o((LPCTSTR)_bstr_t(bstrO, false));
 	return o;
 }
 
 
-CString CXMLDOMNode::GetText()
+const CString CXMLDOMNode::GetText() const
 {
 	BSTR	bstrO = NULL;
 
-	HRESULT	hr = ((Raw_IXMLDOMNode*)P())->get_text(&bstrO);
-	if (hr != S_OK) AfxThrowComException(hr, P(), &__uuidof(IXMLDOMNode));
+	HRESULT	hr = ((Raw_IXMLDOMNode*)GetP())->get_text(&bstrO);
+	if (hr != S_OK) AfxThrowComException(hr, GetP(), &__uuidof(IXMLDOMNode));
 
 	CString	o((LPCTSTR)_bstr_t(bstrO, false));
 	return o;
@@ -2413,12 +2413,12 @@ CXMLDOMNode CXMLDOMNodeList::GetItem(long index)
 }
 
 
-long CXMLDOMNodeList::GetLength()
+long CXMLDOMNodeList::GetLength() const
 {
 	long o;
 
-	HRESULT	hr = ((Raw_IXMLDOMNodeList*)P())->get_length(&o);
-	if (hr != S_OK) AfxThrowComException(hr, P(), &__uuidof(IXMLDOMNodeList));
+	HRESULT	hr = ((Raw_IXMLDOMNodeList*)GetP())->get_length(&o);
+	if (hr != S_OK) AfxThrowComException(hr, GetP(), &__uuidof(IXMLDOMNodeList));
 
 	return o;
 }

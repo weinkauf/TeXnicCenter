@@ -6,6 +6,8 @@ class CodeBookmark;
 class BookmarkEventArgs;
 class CLaTeXProject;
 
+/// Represents a view that displays all the 
+/// bookmarks within a project.
 class BookmarkView : 
 	public WorkspacePaneBase, 
 	public CProjectView

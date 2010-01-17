@@ -208,6 +208,9 @@ private:
 	
 	CString bibtex_result_;
 
+	CString transcriptFileName_;
+
 public:
 	const CString& GetCurrentProcessName() const;
+	const CString& GetTranscriptFileName() const;
 };

@@ -50,9 +50,10 @@ CProcessException::CProcessException()
 
 BOOL CProcessException::GetErrorMessage(LPTSTR lpszError, UINT nMaxError, PUINT pnHelpContext /*= NULL*/)
 {
-	UNUSED(lpszError);
-	UNUSED(nMaxError);
-	UNUSED(pnHelpContext);
+	UNUSED_ALWAYS(lpszError);
+	UNUSED_ALWAYS(nMaxError);
+	UNUSED_ALWAYS(pnHelpContext);
+
 	return FALSE;
 }
 

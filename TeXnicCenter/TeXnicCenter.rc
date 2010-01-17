@@ -2218,8 +2218,6 @@ BEGIN
         MENUITEM "Sei&tenansicht",              ID_FILE_PRINT_PREVIEW
         MENUITEM "Drucker&einrichtung...",      ID_FILE_PRINT_SETUP
         MENUITEM SEPARATOR
-        MENUITEM "Nac&hricht senden...",        ID_FILE_SEND_MAIL
-        MENUITEM SEPARATOR
         POPUP "&Zuletzt geöffnete Dateien"
         BEGIN
             MENUITEM "&Leer",                       ID_FILE_MRU_FILE1
@@ -3067,6 +3065,14 @@ BEGIN
         MENUITEM "&Erscheinungsjahr",           ID_YEAR
         MENUITEM "Ty&p",                        ID_PUBLICATION_TYPE
         MENUITEM "&Herausgeber",                ID_PUBLISHER
+    END
+END
+
+IDR_ERROR_VIEW MENU 
+BEGIN
+    POPUP "ContextMenu"
+    BEGIN
+        MENUITEM "%s &öffnen",                  ID_ERROR_VIEW_SOURCE
     END
 END
 
@@ -4831,6 +4837,7 @@ BEGIN
     ID_FILE_MRU_PROJECT9    "Öffnet dieses Projekt."
     ID_FILE_MRU_PROJECT10   "Öffnet dieses Projekt."
     ID_FILE_MRU_PROJECT11   "Öffnet dieses Projekt."
+    ID_ERROR_VIEW_SOURCE    "Öffnet die Quelldatei und springt zur betroffenen Zeile."
 END
 
 #endif    // German (Germany) resources
@@ -6231,16 +6238,23 @@ IDR_MAINFRAME MENU
 BEGIN
     POPUP "&File"
     BEGIN
-        MENUITEM "&New...",                     ID_LATEX_NEW
-        MENUITEM "New from &Template...",       ID_FILE_NEW
-        MENUITEM "&Open...",                    ID_FILE_OPEN
+        POPUP "&New"
+        BEGIN
+            MENUITEM "Project...",                  ID_PROJECT_NEW
+            MENUITEM "&File...",                    ID_LATEX_NEW
+            MENUITEM "File from &Template...",      ID_FILE_NEW
+        END
+        POPUP "&Open"
+        BEGIN
+            MENUITEM "&Project...",                 ID_PROJECT_OPEN
+            MENUITEM "&File...",                    ID_FILE_OPEN
+        END
+        MENUITEM SEPARATOR
         MENUITEM "&Save",                       ID_FILE_SAVE
         MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
         MENUITEM "Save Cop&y As...",            ID_FILE_SAVE_COPY_AS
         MENUITEM "&Close",                      ID_FILE_CLOSE
         MENUITEM SEPARATOR
-        MENUITEM "New Project...",              ID_PROJECT_NEW
-        MENUITEM "Open Project...",             ID_PROJECT_OPEN
         MENUITEM "Save Project",                ID_PROJECT_SAVE
         MENUITEM "Close Project",               ID_PROJECT_CLOSE
         MENUITEM SEPARATOR
@@ -6249,8 +6263,6 @@ BEGIN
         MENUITEM "&Print...",                   ID_FILE_PRINT
         MENUITEM "Print Preview",               ID_FILE_PRINT_PREVIEW
         MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
-        MENUITEM SEPARATOR
-        MENUITEM "Send As &Message...",         ID_FILE_SEND_MAIL
         MENUITEM SEPARATOR
         POPUP "Recent Files"
         BEGIN
@@ -7102,6 +7114,14 @@ BEGIN
     END
 END
 
+IDR_ERROR_VIEW MENU 
+BEGIN
+    POPUP "ContextMenu"
+    BEGIN
+        MENUITEM "&Open %s",                    ID_ERROR_VIEW_SOURCE
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -7881,7 +7901,7 @@ END
 
 STRINGTABLE 
 BEGIN
-    AFX_IDS_SCSIZE          "Opens this Project."
+    AFX_IDS_SCSIZE          "Changes the window size"
     AFX_IDS_SCMOVE          "Changes the window position"
     AFX_IDS_SCMINIMIZE      "Reduces the window to an icon"
     AFX_IDS_SCMAXIMIZE      "Enlarges the window to full size"
@@ -8814,6 +8834,7 @@ BEGIN
     ID_FILE_MRU_PROJECT9    "Opens this project."
     ID_FILE_MRU_PROJECT10   "Opens this project."
     ID_FILE_MRU_PROJECT11   "Opens this project."
+    ID_ERROR_VIEW_SOURCE    "Opens the source file and jumps to the affected line."
 END
 
 #endif    // English (U.S.) resources

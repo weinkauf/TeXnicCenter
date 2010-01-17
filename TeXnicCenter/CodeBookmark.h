@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 
+/// Represents a bookmark within a \ref CodeDocument.
 class CodeBookmark
 {
 	int line_;
@@ -11,10 +12,25 @@ class CodeBookmark
 public:
 	explicit CodeBookmark(int line = -1);
 
+	/// Returns the line number of the bookmark.
+	///
+	/// \return Line number.
 	int GetLine() const;
+
+	/// Sets the line number of the bookmark.
 	void SetLine(int line);
+
+	/// Sets bookmark's name.
 	void SetName(LPCTSTR name);
+
+	/// Gets bookmark's name.
+	///
+	/// \return Name of the bookmark.
 	const CString& GetName() const;
+
+	/// Indicates whether the bookmark has a name.
+	///
+	/// \return \c true if the bookmark has been named, \c false otherwise.
 	bool HasName() const;
 };
 
@@ -79,6 +95,7 @@ inline std::basic_istream<Ch,Tr>& operator>>(std::basic_istream<Ch,Tr>& in, Code
 	return in;
 }
 
+/// Represents a folding point in a \ref CodeDocument.
 class FoldingPoint
 {
 	CodeBookmark bookmark_;

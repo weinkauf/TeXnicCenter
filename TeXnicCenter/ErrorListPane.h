@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "BuildView.h"
 #include "PrivateToolBar.h"
@@ -14,6 +15,8 @@ class COutputDoc;
 
 class ErrorListPane : public WorkspacePaneBase, public OutputViewBase
 {
+	std::auto_ptr<COutputInfo> selectedItem_;
+
 	DECLARE_DYNAMIC(ErrorListPane)
 
 private:
@@ -85,4 +88,7 @@ private:
 
 protected:
 	void Focus();
+
+	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
+	afx_msg void OnViewSource();
 };

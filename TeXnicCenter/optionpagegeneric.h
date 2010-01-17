@@ -76,6 +76,8 @@ protected:
 		CString ClosingQM;
 	};
 
+	typedef CArray< CQMSet, const CQMSet& > CQMSetARray;
+
 // construction/destruction
 public:
 	COptionPageGeneric();
@@ -144,7 +146,7 @@ public:
 	//}}AFX_DATA
 	CString m_strLookAndFeel;
 	CString m_strGuiLanguage;
-	CArray< CQMSet, CQMSet& > QMSets;
+	CQMSetARray QMSets;
 };
 
 //{{AFX_INSERT_LOCATION}}

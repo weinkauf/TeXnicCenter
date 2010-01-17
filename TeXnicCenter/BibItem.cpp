@@ -2,8 +2,7 @@
 #include "BibItem.h"
 
 BibItem::BibItem()
-: has_year_(false)
-, type_(Unknown)
+: type_(Unknown)
 {
 }
 
@@ -31,7 +30,7 @@ const CString& BibItem::GetEditor() const
 	return editor_;
 }
 
-int BibItem::GetYear() const
+const Nullable<int>& BibItem::GetYear() const
 {
 	ASSERT(HasYear()); return year_;
 }
@@ -58,7 +57,7 @@ const BibItem::AuthorContainerType& BibItem::GetAuthors() const
 
 bool BibItem::HasYear() const
 {
-	return has_year_;
+	return year_.HasValue();
 }
 
 bool BibItem::HasEditor() const

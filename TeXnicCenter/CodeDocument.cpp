@@ -10,6 +10,7 @@
 #include "EncodingConverter.h"
 #include "RunTimeHelper.h"
 #include "configuration.h"
+#include "EndOfLineMode.h"
 
 int ShowSaveTaskDialog(LPCTSTR prompt)
 {

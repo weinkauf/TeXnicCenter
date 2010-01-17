@@ -69,7 +69,7 @@ void CParseOutputView::OnUpdate(COutputView* pSender,LPARAM lHint,CObject* pHint
 	switch ((COutputDoc::HINT)lHint)   //UPDATE
 	{
 		case COutputDoc::hintSelectParseLine :
-			SelectLine(*(int*)pHint,TRUE);
+			SelectLine(reinterpret_cast<Nullable<int>*>(pHint)->GetValue(), FALSE);
 			break;
 	}
 }

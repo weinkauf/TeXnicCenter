@@ -1,5 +1,6 @@
 #pragma once
 #include <utility>
+#include <cstddef>
 
 #include "CodeBookmark.h"
 
@@ -43,7 +44,7 @@ inline const Ch* GetLineEnding(const Ch* text, std::size_t size)
 	if (pos != end) {
 		if (*pos == *LineEndingTraits<Ch>::CarriageReturn() && (pos + 1 == end || pos[1] != *LineEndingTraits<Ch>::LineFeed()))
 			mode = LineEndingTraits<Ch>::CarriageReturn();
-		else if (std::char_traits<Ch>::compare(pos,le,std::min<int>(size - (pos - text),
+		else if (std::char_traits<Ch>::compare(pos,le,std::min<std::size_t>(size - (pos - text),
 				std::char_traits<Ch>::length(le))) != 0 && 
 			*pos == *LineEndingTraits<Ch>::LineFeed())
 			mode = LineEndingTraits<Ch>::LineFeed();

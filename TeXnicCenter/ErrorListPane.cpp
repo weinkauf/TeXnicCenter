@@ -33,6 +33,8 @@ BEGIN_MESSAGE_MAP(ErrorListPane, WorkspacePaneBase)
 	ON_COMMAND(ID_SHOW_WARNINGS, &ErrorListPane::OnShowWarnings)
 	ON_COMMAND(ID_SHOW_BAD_BOXES, &ErrorListPane::OnShowBadBoxes)
 	ON_NOTIFY(NM_DBLCLK,ListView,&ErrorListPane::OnNMDblClk)
+	ON_WM_CONTEXTMENU()
+	ON_COMMAND(ID_ERROR_VIEW_SOURCE, &ErrorListPane::OnViewSource)
 END_MESSAGE_MAP()
 
 // ErrorListView message handlers
@@ -65,7 +67,7 @@ int ErrorListPane::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	list_view_.CWnd::CreateEx(WS_EX_CLIENTEDGE,WC_LISTVIEW,0,WS_CHILD|WS_VISIBLE|LVS_REPORT,CRect(),this,ListView);
 
-	const DWORD style = LVS_EX_GRIDLINES|LVS_EX_FULLROWSELECT|LVS_EX_DOUBLEBUFFER;
+	const DWORD style = LVS_EX_GRIDLINES|LVS_EX_FULLROWSELECT|LVS_EX_DOUBLEBUFFER|LVS_EX_LABELTIP;
 	list_view_.SetExtendedStyle(style);
 
 	image_list_.m_hImageList = ::ImageList_LoadImage(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_PARSE_VIEW),
@@ -376,4 +378,60 @@ int ErrorListPane::CompareSourceFile( LPARAM l1, LPARAM l2 )
 void ErrorListPane::Focus()
 {
 	list_view_.SetFocus();
+}
+
+void ErrorListPane::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+	CPoint pt = point;
+	int item;
+
+	if (point.x == -1 && point.y == -1) {
+		item = list_view_.GetNextItem(-1, LVNI_ALL | LVNI_SELECTED);
+
+		if (item != -1) {
+			CRect rect;
+			list_view_.GetSubItemRect(item, 2, LVIR_BOUNDS, rect);
+			point.SetPoint(rect.left, rect.bottom);
+
+			list_view_.ClientToScreen(&point);
+		}
+	}
+	else {
+		list_view_.ScreenToClient(&pt);
+		item = list_view_.HitTest(pt);
+	}
+
+	if (item != -1) {
+		CMenu menu;
+		menu.LoadMenu(IDR_ERROR_VIEW);
+
+		CMenu* subMenu = menu.GetSubMenu(0);
+
+		CString fmt;
+		subMenu->GetMenuString(ID_ERROR_VIEW_SOURCE, fmt, MF_BYCOMMAND);
+
+		const COutputInfo& oi = items_[list_view_.GetItemData(item)].info;
+		const CString path = oi.GetSourceFile();		
+
+		selectedItem_.reset(new COutputInfo(oi));
+
+		CString text;
+		text.Format(fmt, CPathTool::GetFile(path));
+
+		subMenu->ModifyMenu(ID_ERROR_VIEW_SOURCE, MF_BYCOMMAND | MF_STRING, ID_ERROR_VIEW_SOURCE, text);
+
+		theApp.GetContextMenuManager()->ShowPopupMenu(subMenu->m_hMenu, point.x, point.y, this, TRUE);
+	}
+	else
+		__super::OnContextMenu(pWnd, point);
+}
+
+void ErrorListPane::OnViewSource()
+{
+	if (selectedItem_.get()) {
+		theApp.OpenLatexDocument(selectedItem_->GetSourceFile(), FALSE, 
+			selectedItem_->GetSourceLine().GetValueOrDefault(-1));
+
+		selectedItem_.reset();
+	}
 }

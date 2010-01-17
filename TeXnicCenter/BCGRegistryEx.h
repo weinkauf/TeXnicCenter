@@ -45,9 +45,10 @@
 inline bool ReadSubKeys(ATL::CRegKey& reg, CStringArray& a)
 {
 	DWORD max_subkey_length;
-	bool result;
+	bool result = ::RegQueryInfoKey(reg,0,0,0,0,&max_subkey_length,
+		0,0,0,0,0,0) == ERROR_SUCCESS;
 
-	if (result = ::RegQueryInfoKey(reg,0,0,0,0,&max_subkey_length,0,0,0,0,0,0) == ERROR_SUCCESS)
+	if (result)
 	{
 		TCHAR* text = new TCHAR[max_subkey_length + 1];
 		DWORD length;

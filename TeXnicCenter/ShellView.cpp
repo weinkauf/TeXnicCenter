@@ -380,7 +380,9 @@ void CShellView::OnDestroy()
 void CShellView::AddTexts(LPCTSTR string, BOOL bReplace)
 {
 	// replace '\n' by '\r''\n'
-	int k, counter = 0, strLen = _tcslen(string);
+	SSIZE_T k, counter = 0;
+	SSIZE_T strLen = _tcslen(string);
+
 	for (k = 0; k <= strLen; k++)
 	{
 		if (string[k] == _T('\n') && (k == 0 || string[k - 1] != _T('\r')))

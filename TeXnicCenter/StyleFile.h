@@ -44,6 +44,7 @@
 #include "LaTeXCommand.h"
 
 typedef CMap<CString, LPCTSTR, std::tr1::shared_ptr<CObject>, std::tr1::shared_ptr<CObject> > SharedObjectMap;
+typedef std::tr1::shared_ptr<CLaTeXCommand> SharedLaTeXCommandPtr;
 
 class CNewCommand;
 class CNewEnvironment;
@@ -118,7 +119,7 @@ public:
 
 	std::tr1::shared_ptr<CNewCommand> AddCommand(const CString &name,int noOfParams = 0, const CString &desc = CString());
 	/** Works for both, \newcommand and \newenvironment */
-	bool AddCommand(std::tr1::shared_ptr<CLaTeXCommand>& cmd);
+	bool AddCommand(SharedLaTeXCommandPtr& cmd);
 	std::tr1::shared_ptr<CNewEnvironment> AddEnvironment(const CString &name,int noOfParams = 0, const CString &desc = CString());
 	bool AddOption(std::tr1::shared_ptr<CDeclareOption>& cmd);
 	bool AddOption(const CString &name, const CString &desc = CString());

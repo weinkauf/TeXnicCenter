@@ -53,7 +53,7 @@ UINT GrepThread(LPVOID lpFileGrepObject)
 	ASSERT(lpFileGrepObject);
 
 	if (!lpFileGrepObject)
-		return -1;
+		return ~0U;
 
 	// get grep object
 	CFileGrep *pThis = (CFileGrep*) lpFileGrepObject;

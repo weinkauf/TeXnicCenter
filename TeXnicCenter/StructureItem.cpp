@@ -111,7 +111,7 @@ const StructureItem* StructureItem::GetParent( const StructureItemContainer& ite
 	return !HasParent() ? 0 : &items[GetParent()];
 }
 
-void StructureItem::SetParent(int val)
+void StructureItem::SetParent(StructureItemContainer::difference_type val)
 {
 	m_nParent = val;
 }
