@@ -21,6 +21,7 @@ public:
 #endif
 
 protected:
+	const CString GetExtensionFilter() const;
 	afx_msg void OnTextModulesDefine();
 	afx_msg void OnUpdateTextModulesList(CCmdUI *pCmdUI);
 

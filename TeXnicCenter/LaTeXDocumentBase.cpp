@@ -19,7 +19,6 @@ IMPLEMENT_DYNAMIC(LaTeXDocumentBase, CodeDocument)
 
 
 LaTeXDocumentBase::LaTeXDocumentBase()
-: save_copy_(false)
 {
 }
 
@@ -27,12 +26,6 @@ BOOL LaTeXDocumentBase::OnNewDocument()
 {
 	if (!CodeDocument::OnNewDocument())
 		return FALSE;
-
-	// *
-	if (m_strPathName.IsEmpty())
-		m_strPathName = m_strTitle;
-
-	GetView()->GetCtrl().SetEOLMode(ToScintillaMode(CConfiguration::GetInstance()->m_nStandardFileFormat));
 
 	return TRUE;
 }
@@ -44,8 +37,6 @@ LaTeXDocumentBase::~LaTeXDocumentBase()
 
 
 BEGIN_MESSAGE_MAP(LaTeXDocumentBase, CodeDocument)
-	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, &LaTeXDocumentBase::OnUpdateFileSave)
-	ON_COMMAND(ID_FILE_SAVE_COPY_AS, &LaTeXDocumentBase::OnFileSaveCopyAs)
 END_MESSAGE_MAP()
 
 
@@ -103,77 +94,6 @@ void LaTeXDocumentBase::CheckForFileChanges()
 		UpdateTextBufferOnExternalChange();
 }
 
-void LaTeXDocumentBase::OnUpdateFileSave(CCmdUI *pCmdUI)
-{
-	pCmdUI->Enable(IsModified());
-}
-
-BOOL LaTeXDocumentBase::DoSave(LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/)
-{
-	CString newName(lpszPathName);
-
-	if (ShowSaveDialog(lpszPathName)) {
-		CDocTemplate* pTemplate = GetDocTemplate();
-		ASSERT(pTemplate != NULL);
-
-		CString strExt;
-		pTemplate->GetDocString(strExt,CDocTemplate::filterExt);
-		ASSERT(!strExt.IsEmpty() && strExt[0] == _T('.'));
-
-		newName = m_strPathName;
-
-		if (bReplace && newName.IsEmpty()) {
-			newName = m_strTitle;
-			// check for dubious filename
-			int iBad = newName.FindOneOf(_T(" #%;/\\"));
-			if (iBad != -1)
-				newName.ReleaseBuffer(iBad);
-
-			// append the default suffix if there is one
-			if (!strExt.IsEmpty())
-				newName += strExt;
-		}
-
-		int mode = FromScintillaMode(GetView()->GetCtrl().GetEOLMode());
-
-		if (!EOL_mode_.HasValue()) // Not set yet
-			EOL_mode_ = ToScintillaMode(mode);
-
-		CTextFileSaveDialog dlg(
-			bReplace ? AFX_IDS_SAVEFILE : AFX_IDS_SAVEFILECOPY,
-			strExt,newName,
-			OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_NOREADONLYRETURN,
-			mode,CString(MAKEINTRESOURCE(STE_FILE_LATEXFILTER)));
-
-		dlg.SetUseBOM(GetUseBOM());
-		dlg.SetEncoding(GetEncoding());
-
-		//Show the dialog
-		if (dlg.DoModal() != IDOK) {
-			//It was canceled - the PathName is not set.
-			// Therefore, we use GetLastOpenedFolder.
-			AfxSetLastDirectory(dlg.GetLastOpenedFolder());
-			return false;
-		}
-
-		AfxSetLastDirectory(CPathTool::GetDirectory(dlg.GetPathName()));
-		EOL_mode_ = ToScintillaMode(dlg.GetFileFormat());
-
-		// Delay line ending conversion as long as possible
-		// LaTeXView::SaveFile(HANDLE) will perform if it's succeeded so far
-
-		SetEncoding(dlg.GetEncoding());
-		SetUseBOM(dlg.GetUseBOM());
-
-		save_copy_ = !bReplace;
-		newName = dlg.GetPathName();
-	}
-	else
-		EOL_mode_ = GetView()->GetCtrl().GetEOLMode();
-
-	return CodeDocument::DoSave(newName,bReplace);
-}
-
 BOOL LaTeXDocumentBase::GetNextLine(LPCTSTR &lpLine, int &nLength)
 {
 	AssertValid();
@@ -220,30 +140,6 @@ void LaTeXDocumentBase::SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU)
 {
 	SetFilePath(lpszPathName);
 	CodeDocument::SetPathName(lpszPathName,bAddToMRU);
-}
-
-void LaTeXDocumentBase::OnFileSaveCopyAs()
-{
-	DoSave(NULL,FALSE);
-}
-
-const Nullable<int>& LaTeXDocumentBase::GetSavedEOLMode() const
-{
-	return EOL_mode_;
-}
-
-DWORD LaTeXDocumentBase::SaveFile(HANDLE file, bool throw_on_invalid_sequence)
-{
-	const Nullable<int>& mode = GetSavedEOLMode();
-
-	if (mode.HasValue() && GetView()->GetCtrl().GetEOLMode() != mode) {
-		ASSERT(mode == SC_EOL_CR || mode == SC_EOL_CRLF || mode == SC_EOL_LF);
-
-		GetView()->GetCtrl().SetEOLMode(mode.GetValue());
-		GetView()->GetCtrl().ConvertEOLs(mode.GetValue());
-	}
-
-	return CodeDocument::SaveFile(file,throw_on_invalid_sequence);
 }
 
 void LaTeXDocumentBase::OnBookmarkAdded(const CodeBookmark& b)

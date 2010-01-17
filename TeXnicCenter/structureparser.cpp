@@ -124,7 +124,7 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 , m_regexCaption(_T("\\\\caption\\s*([\\[\\{].*\\})"))
 , m_regexLabel(_T("\\\\label\\s*\\{([^\\}]*)\\}"))
 , m_regexInput(_T("\\\\(input|include)\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"))
-, m_regexBib(_T("\\\\(no)?bibliography\\s*\\{\\s*([^\\}]*)\\s*\\}"))
+, m_regexBib(_T("\\\\(no)?bibliography([^(style)][[:alpha:]]+)?\\s*\\{\\s*([^\\}]*)\\s*\\}"))
 , m_regexAppendix(_T("\\\\appendix([^[:graph:]]|$)"))
 , m_regexGraphic(_T("\\\\includegraphics\\s*\\*?(\\s*\\[[^\\]]*\\]){0,2}\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"))
 , m_regexUserCmd(_T("\\\\(re)?newcommand\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}"))
@@ -980,8 +980,14 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		ParseString(lpText, what[0].first - lpText, cookies, strActualFile,
 		            nActualLine, nFileDepth, aSI);
 
+		const std::size_t prefixIndex = 2;
+
+		const CString prefix(what.str(prefixIndex).c_str());
+
+		const std::size_t pathIndex = 3;
 		// parse input file
-		CString bibPath(what[2].first, what[2].second - what[2].first);
+		CString bibPath(what.str(pathIndex).c_str());
+
 		int nStart = 0;
 		int nFound;
 
@@ -1043,7 +1049,8 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 					strAnnotation += strWarnings;
 				}
 
-				AddFileItem(strPath, StructureItem::bibFile, strActualFile, nActualLine, aSI, strAnnotation);
+				AddFileItem(strPath, StructureItem::bibFile, strActualFile, nActualLine, aSI, strAnnotation, 
+					prefix.IsEmpty() ? NULL : prefix);
 
 				//Add the parser warnings, if any.
 				if (aBibFile.GetErrorCount())
@@ -1099,7 +1106,8 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			{
 				if (m_pParseOutputHandler && !m_bCancel)
 				{
-					AddFileItem(strPath, StructureItem::missingBibFile, strActualFile, nActualLine, aSI);
+					AddFileItem(strPath, StructureItem::missingBibFile, strActualFile, nActualLine, aSI, NULL, 
+						prefix.IsEmpty() ? NULL : prefix);
 
 					CString message;
 					message.Format(STE_FILE_EXIST, strPath);
@@ -1134,7 +1142,7 @@ CString CStructureParser::ResolveFileName(LPCTSTR lpszPath) const
 
 StructureItemContainer::size_type CStructureParser::AddFileItem(LPCTSTR lpszPath, int nType, LPCTSTR lpszIncludeFromFile,
                                   int nIncludedFileLineNumber, StructureItemContainer &aSI,
-                                  LPCTSTR lpszAnnotation /*= NULL*/)
+                                  LPCTSTR lpszAnnotation /*= NULL*/, LPCTSTR prefix)
 {
 	// insert file into item-array
 	StructureItem si;
@@ -1143,6 +1151,9 @@ StructureItemContainer::size_type CStructureParser::AddFileItem(LPCTSTR lpszPath
 	si.m_nType = nType;
 	si.m_strComment = lpszIncludeFromFile;
 	si.m_strPath = lpszPath;
+	
+	if (prefix)
+		si.SetPrefix(prefix);
 
 	if (lpszAnnotation == NULL)
 	{
@@ -1159,8 +1170,7 @@ StructureItemContainer::size_type CStructureParser::AddFileItem(LPCTSTR lpszPath
 	using namespace std::tr1::placeholders;
 
 	StructureItemContainer::iterator it = std::find_if(aSI.begin(),aSI.end(),
-	                                      std::tr1::bind(std::equal_to<CString>(),
-	                                                     std::tr1::bind(&StructureItem::GetPath,_1),lpszPath));
+	                                      ItemMatch(si.GetPath(), si.GetPrefix()));
 
 	StructureItemContainer::size_type pos;
 

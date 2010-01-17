@@ -135,6 +135,11 @@ private:
 
 // operations
 public:
+	/// Gets a value indicating whether the are any open documents.
+	///
+	/// \return \c true if at least one open document exists, \c false otherwise.
+	bool HasOpenDocuments() const;
+
 	/**
 	Returns a pointer to the document template, all LaTeX-documents
 	are based on.
@@ -157,7 +162,7 @@ public:
 
 	@return
 	        A pointer to an already opened document, or NULL if the document is
-	        not already opend.
+	        not already opened.
 	 */
 	CDocument *GetOpenLatexDocument(LPCTSTR lpszFileName,BOOL bReadOnly = FALSE);
 

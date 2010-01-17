@@ -19,7 +19,8 @@ class StructureItem
 	/// Detail item information, e.g. BibItem for BibTeX entries
 	std::tr1::shared_ptr<StructureItemInfo> item_info_;
 	bool missing_;
-
+	CString prefix_;
+	
 public:
 	enum Type
 	{
@@ -55,6 +56,9 @@ public:
 	void SetItemInfo(StructureItemInfo* info = 0);
 	StructureItemInfo* GetItemInfo();
 	const StructureItemInfo* GetItemInfo() const;
+
+	const CString& GetPrefix() const;
+	void SetPrefix(const CString& val);
 
 private:
 	LabelContainer labels_;
@@ -129,7 +133,7 @@ public:
 	/** Index of the parent item or -1 if this item has no parent item */
 	StructureItemContainer::difference_type m_nParent;
 
-	int GetParent() const;
+	StructureItemContainer::difference_type GetParent() const;
 	void SetParent(StructureItemContainer::difference_type val);
 
 	bool IsMainProjectFile() const;

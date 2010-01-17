@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include "resource.h"
+
 #include "MetaPostDocument.h"
 
 IMPLEMENT_DYNCREATE(MetaPostDocument, LaTeXDocumentBase)
@@ -24,5 +26,6 @@ void MetaPostDocument::Dump(CDumpContext& dc) const
 {
 	LaTeXDocumentBase::Dump(dc);
 }
+
 #endif
 #endif //_DEBUG

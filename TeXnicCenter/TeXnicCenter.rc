@@ -3379,7 +3379,7 @@ BEGIN
                             "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?\n\n(Wichtig: Sie haben Änderungen an dem Dokument vorgenommen. Wenn es neu geladen wird, gehen diese Änderungen verloren!)"
     STE_FILE_INUSE          "Es trat ein Fehler beim %s der Datei\n\n%s\n\nauf.\n\n%s"
     STE_FILE_INUSE_OPEN     "Die Datei\n\n%s\n\nkann nicht neu geladen werden. Das bereits offene Dokument wird mit einem Schreibschutz versehen."
-    STE_FILE_LATEXFILTER    "LaTeX-Dateien (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|BibTeX-Dateien (*.bib, *.bst)|*.bib;*.bst|Alle Dateien (*.*)|*.*||"
+    STE_FILE_LATEXFILTER    "LaTeX-Dateien (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|Alle Dateien (*.*)|*.*||"
     STE_FILE_MRU_FILE_NONE  "&Leer"
     STE_FILE_MRU_PROJECT_NONE "&Leer"
     STE_FILE_XMLFILTER      "XML-Dateien (*.xml)|*.xml|Alle Dateien (*.*)|*.*||"
