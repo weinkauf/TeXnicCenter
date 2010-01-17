@@ -638,7 +638,6 @@
 				PrecompiledHeaderThrough="stdafx.h"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="3"
 				DisableSpecificWarnings="4800"
 				UseFullPaths="false"
 			/>
@@ -734,7 +733,6 @@
 				PrecompiledHeaderThrough="stdafx.h"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="3"
 				DisableSpecificWarnings="4800"
 				UseFullPaths="false"
 			/>
@@ -1061,6 +1059,10 @@
 			</File>
 			<File
 				RelativePath=".\EncodingConverter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EndOfLineMode.h"
 				>
 			</File>
 			<File
@@ -2265,10 +2267,6 @@
 				>
 			</File>
 			<File
-				RelativePath="res\LatexDoc_yellow.ico"
-				>
-			</File>
-			<File
 				RelativePath=".\res\Lightbulb.bmp"
 				>
 			</File>
@@ -2473,19 +2471,11 @@
 				>
 			</File>
 			<File
-				RelativePath="res\TeXnicCenter_yellow.ico"
-				>
-			</File>
-			<File
 				RelativePath=".\res\wizard.bmp"
 				>
 			</File>
 			<File
 				RelativePath="res\Wizard.ico"
-				>
-			</File>
-			<File
-				RelativePath="res\Wizard_yellow.ico"
 				>
 			</File>
 		</Filter>

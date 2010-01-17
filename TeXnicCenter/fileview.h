@@ -51,6 +51,7 @@ protected:
 
 private:
 	void OnParsingFinished();
-public:
+
+protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 };

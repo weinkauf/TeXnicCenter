@@ -37,6 +37,7 @@
 #include <vector>
 
 #include "CodeDocument.h"
+#include "EndOfLineMode.h"
 
 /** A File Dialog with a combo box, where the user can choose
 the text format (Unix, Windows, Mac) to save in.

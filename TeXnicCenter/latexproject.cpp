@@ -1106,7 +1106,7 @@ void CLaTeXProject::OnSpellProject()
 	StructureItemContainer aStructureItems;
 	m_pStructureParser->GetStructureItems(&aStructureItems);
 
-	for (int i = 0; i < aStructureItems.size(); ++i)
+	for (std::size_t i = 0; i < aStructureItems.size(); ++i)
 	{
 		StructureItem& si = aStructureItems[i];
 

@@ -56,7 +56,7 @@ public:
 	}
 };
 
-typedef std::vector<CString> EncodingCodeContainer;
+typedef std::vector<std::vector<CString> > EncodingCodeContainer;
 
 class EncodingConverter
 {

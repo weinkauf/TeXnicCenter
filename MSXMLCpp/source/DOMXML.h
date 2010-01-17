@@ -546,7 +546,7 @@ public:
 	CXMLDOMNode RemoveNamedItem(LPCTSTR name);
 
 	/** collection of nodes */
-	CXMLDOMNode GetItem(long index);
+	const CXMLDOMNode GetItem(long index) const;
 
 	/** number of nodes in the collection */
 	long GetLength();
@@ -581,7 +581,7 @@ public:
 // method wrappers
 public:
 	/** name of the node */
-	CString GetNodeName();
+	const CString GetNodeName() const;
 
 	/** value stored in the node */
 	_variant_t GetNodeValue();
@@ -596,7 +596,7 @@ public:
 	CXMLDOMNode GetParentNode();
 
 	/** the collection of the node's children */
-	CXMLDOMNodeList GetChildNodes();
+	const CXMLDOMNodeList GetChildNodes() const;
 
 	/** first child of the node */
 	CXMLDOMNode GetFirstChild();
@@ -611,7 +611,7 @@ public:
 	CXMLDOMNode GetNextSibling();
 
 	/** the collection of the node's attributes */
-	CXMLDOMNamedNodeMap GetAttributes();
+	CXMLDOMNamedNodeMap GetAttributes() const;
 
 	/** insert a child node */
 	CXMLDOMNode InsertBefore(IXMLDOMNode* newChild, _variant_t refChild);
@@ -633,10 +633,10 @@ public:
 	CXMLDOMNode CloneNode(BOOL deep);
 
 	/** the type of node in string form */
-	CString GetNodeTypeString();
+	const CString GetNodeTypeString() const;
 
 	/** text content of the node and subtree */
-	CString GetText();
+	const CString GetText() const;
 
 	/** text content of the node and subtree */
 	void SetText(LPCTSTR rhs);
@@ -705,7 +705,7 @@ public:
 	CXMLDOMNode GetItem(long index);
 
 	/** number of nodes in the collection */
-	long GetLength();
+	long GetLength() const;
 
 	/** get next node from iterator */
 	CXMLDOMNode NextNode();

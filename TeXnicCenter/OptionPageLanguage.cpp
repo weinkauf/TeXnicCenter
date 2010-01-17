@@ -33,11 +33,12 @@
  ********************************************************************/
 
 #include "stdafx.h"
+
+#include "EndOfLineMode.h"
 #include "TeXnicCenter.h"
 #include "OptionPageLanguage.h"
 #include "Configuration.h"
 #include "global.h"
-#include <locale.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

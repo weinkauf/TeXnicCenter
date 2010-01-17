@@ -4,9 +4,7 @@
 //
 #define IDR_MAINFRAME                   1
 #define ID_VIEW_BOOKMARKS_PANE          11
-#define IDR_BIB_VIEW                    14
 #define IDB_SPLASH                      69
-#define IDI_ICON1                       72
 #define IDR_POPUP_TOOLBAR               80
 #define IDR_FORMAT_RECENTLY_USED        88
 #define IDR_INSERT                      90
@@ -53,7 +51,6 @@
 #define IDR_ADDITIONAL_COMMANDS         219
 #define IDB_OUTPUT_BAR                  220
 #define IDR_ERROR_LIST                  221
-#define IDR_MDI_CLIENT                  226
 #define IDR_POPUP_PLACEHOLDER_DIR       227
 #define IDB_FILE_VIEW                   229
 #define IDR_POPUP_MDICLIENT             231
@@ -102,47 +99,26 @@
 #define IDR_USER_TOOLBAR_FIRST          900
 #define IDR_USER_TOOLBAR_LAST           999
 #define IDD_ABOUTBOX                    1000
-#define IDC_TREE                        1001
-#define IDD_ABOUTBOX1                   1002
-#define IDD_ACTIVE_COMPILER_TYPE        1003
 #define IDD_ACTIVE_PROFILE              1004
-#define IDD_AUTOCOMPLETE                1005
-#define IDD_COMPILER_TYPE               1006
 #define IDD_CUSTOMIZE_TOOLS_ADV         1007
-#define IDD_CUSTOMIZEPAGE_EDITOR        1008
-#define IDD_DIALOG1                     1009
 #define IDD_DOCUMENT_NEW                1010
-#define IDD_FILE_NEW                    1011
 #define IDD_FILE_SAVE                   1012
-#define IDD_FILE_TEMPLATE               1013
 #define IDD_FILECLEANCONFIRM            1014
 #define IDC_TAB_CATEGORIES              1015
 #define IDD_FILESEARCH                  1016
-#define IDC_PROJECT_NAME                1017
 #define IDC_PATH                        1018
 #define IDD_FLOATOBJECT                 1019
 #define IDC_NEW_MAIN                    1020
-#define IDC_EXISTING_MAIN               1021
-#define IDD_GET_PATH                    1022
 #define IDD_GOTO                        1023
-#define IDC_TEMPLATES                   1024
 #define IDD_GRAPHIC                     1025
-#define IDC_REMOVE_TEMPLATES            1026
 #define IDC_DOCUMENTTEMPLATES           1027
 #define IDD_HEADER                      1028
 #define IDD_ITEM_PROPERTIES             1029
 #define IDD_OPTIONS_EDITOR              1030
 #define IDD_OPTIONS_FILE                1031
 #define IDD_OPTIONS_FILECLEAN           1032
-#define IDD_OPTIONS_FILECLEAN1          1033
-#define IDC_OUTTYPE_EXT                 1034
-#define IDC_VIEWER_START                1035
-#define IDC_VIEWER_STARTEX              1036
-#define IDC_OUTPUTTYPES                 1037
-#define IDC_PROJECT_PATH                1038
 #define IDD_OPTIONS_GENERIC             1039
 #define IDC_DIR                         1040
-#define IDD_OPTIONS_LATEX               1041
 #define IDC_MAIN_FILE                   1042
 #define IDD_OPTIONS_PATHS               1043
 #define IDD_OPTIONS_SPELLING            1044
@@ -191,17 +167,12 @@
 #define IDC_OPTIONS_SAVE_INTERVALL_EDIT 1087
 #define IDD_PROFILE_NAME                1088
 #define IDC_OPTIONS_SAVE_INTERVALL_SPIN 1089
-#define IDC_OPTIONS_SAVE_LABEL1         1090
 #define IDC_OPTIONS_SAVE_LABEL2         1091
 #define IDC_OPTIONS_REPLACE_QM          1092
 #define IDC_OPTIONS_QM_LABEL1           1093
 #define IDC_OPTIONS_QM_LABEL2           1094
 #define IDC_OPTIONS_REPLACE_QM_OPEN_EDIT 1095
 #define IDC_OPTIONS_REPLACE_QM_CLOSE_EDIT 1096
-#define IDC_WINDOW_LIST                 1097
-#define IDC_WINDOW_ACTIVATE             1098
-#define IDC_WINDOW_SAVE                 1099
-#define IDC_WINDOW_CLOSE                1100
 #define IDC_GOTO_LINE_EDIT              1101
 #define IDC_GOTO_LINE_SPIN              1102
 #define IDD_PROFILE_POSTPROCESSOR       1103
@@ -212,13 +183,10 @@
 #define IDD_SCINTILLA_REPLACEDLGORD     1108
 #define IDD_SPELL_CHECK                 1109
 #define IDD_TABULAR                     1110
-#define IDC_URL_TEXNICCENTER            1111
 #define IDD_TEXTMODULES                 1112
-#define IDC_URL_TEXNICCENTER2           1113
 #define IDD_TIP                         1114
 #define IDD_TRANSPARENCY                1115
 #define IDC_FILE_FORMAT                 1116
-#define IDD_WINDOW                      1117
 #define IDC_OUTSOURCE_OPEN_FOREGROUND   1118
 #define IDC_TYPE_DOS                    1119
 #define IDC_TYPE_UNIX                   1120
@@ -227,19 +195,14 @@
 #define IDC_POPUP_REGULAREXPRESSION     1124
 #define IDC_SEARCH_SEARCHTHROUGH        1125
 #define IDC_SEARCH_SEARCHIN             1126
-#define IDB_BITMAP1                     1127
 #define IDC_SEARCH_WHOLEWORDS           1128
 #define IDC_SEARCH_CASESENSITIVE        1129
 #define IDC_SEARCH_REGULAREXPRESSION    1130
 #define IDC_SEARCH_INCLUDESUBFOLDERS    1131
 #define IDC_SEARCH_OUTPUT1              1132
 #define IDC_SEARCH_OUTPUT2              1133
-#define IDB_BITMAP2                     1134
-#define IDB_BITMAP3                     1135
-#define IDB_BITMAP4                     1136
 #define IDB_BUILD_ANIMATION             1137
 #define IDS_UNNAMED_BOOKMARK_FORMAT     1138
-#define IDR_MENU1                       1139
 #define STE_ALL_FILES_FILTER            1140
 #define IDC_OW_MIKTEXYES                1141
 #define IDC_OW_MIKTEXNO                 1142
@@ -506,7 +469,6 @@
 #define IDC_EDIT_CLOSECMD               1508
 #define IDS_BOOKMARK                    1509
 #define IDR_LATEXWIZARD                 1510
-#define IDS_FILE_LOCATION               1511
 #define IDC_EDIT_CLOSEDDESERVER         1513
 #define IDC_EDIT_CLOSEDDETOPIC          1514
 #define IDC_EDIT_LATEXARGUMENTS         1515
@@ -521,14 +483,8 @@
 #define IDC_EDIT_PPOUTPUT               1524
 #define IDC_EDIT_PROJECTNAME            1525
 #define IDC_EDIT_PROJECTPATH            1526
-#define IDC_EDIT_REPLACE                1527
-#define IDC_EDIT_REPLACE_ALL            1528
-#define IDC_EDIT_REPLACE_WITH           1529
 #define IDC_EDIT_SCOPE_SELECTION        1530
 #define IDC_EDIT_SCOPE_WHOLE_FILE       1531
-#define IDC_EDIT_SKIP                   1532
-#define IDC_EDIT_TEXT                   1533
-#define IDC_EDIT_TYPE                   1534
 #define IDC_EDIT_VIEWCMD                1535
 #define IDC_EDIT_VIEWDDESERVER          1536
 #define IDC_EDIT_VIEWDDETOPIC           1537
@@ -550,7 +506,6 @@
 #define IDC_GUI_LANGUAGE_COMBO          2054
 #define IDC_BUTTON_SELECT_NONE          2055
 #define IDC_RADIO_VIEW_TYPE             2056
-#define IDC_LOOKNFEEL_COMBO             2057
 #define IDC_BUTTON_SELECT_ALL           2058
 #define IDC_OVERWRITECURSOR_STYLE       2059
 #define IDC_OPTIONS_OPTIMIZE_FOR_VISUALLY_HANDICAPPED_USERS 2060
@@ -562,15 +517,10 @@
 #define IDC_OUTSOURCE_OPEN_BACKGROUND   2066
 #define IDC_SELECT_ENCODING             2067
 #define IDC_LIST_TEMPLATES              2068
-#define IDC_TEMPLATE_LIST               2069
-#define IDC_STATIC_NOTE                 2070
 #define IDC_ADD_DOCUMENTTEMPLATES       2071
-#define IDC_REMOVE_TYPE                 2072
 #define IDC_REMOVE_DOCUMENTTEMPLATES    2073
 #define IDC_TYPES                       2074
 #define IDC_INTYPE_DESCR                2075
-#define IDC_OUTPUT_WIZARD               2077
-#define IDC_OUTTYPE_DESCR               2078
 #define IDC_TITLE                       2079
 #define IDC_BROWSE_MAIN_FILE            2080
 #define IDC_DEPTH                       2081
@@ -632,7 +582,6 @@
 #define IDC_STATIC_FORMATTITLE          2155
 #define IDC_STATIC_ENCODING             2156
 #define IDC_PROFILE_WIZARD              2158
-#define IDC_EMPTYMESSAGE                2159
 #define IDC_WINDOW                      2160
 #define IDC_PROJECTTEMPLATES            2162
 #define IDC_ADD_PROJECTTEMPLATES        2163
@@ -668,7 +617,6 @@
 #define IDC_PLACEHOLDER_SINGLE_PHTYPE   2193
 #define IDC_PLACEHOLDER_SINGLE_WHAT     2194
 #define IDC_PLACEHOLDER_SINGLE_RESULT   2195
-#define IDC_OPTIONS_LANGUAGE_LOCALE     2196
 #define IDC_GRAPHIC_SCALETEXTWIDTH      2197
 #define IDC_PLACEHOLDER_SET_EXAMPLE     2198
 #define IDC_PLACEHOLDER_SET_RESULT      2199
@@ -700,7 +648,6 @@
 #define IDC_OPTIONS_QM_SET_LABEL        2225
 #define IDC_CANCEL                      2226
 #define IDC_SHOW_LINENUMBERS            2227
-#define IDC_LIST                        2228
 #define IDC_OPTIONS_EDITOR_WORDWRAP_STYLE 2229
 #define IDC_OPTIONS_EDITOR_WORDWRAP_FIXEDCOLUMN 2230
 #define IDC_OUTSOURCE_FILENAME          2231
@@ -764,7 +711,6 @@
 #define ID_TEXTMODULES_LAST             18000
 #define ID_VIEW_BAR1                    32760
 #define ID_VIEW_BAR2                    32761
-#define ID_BIB_VIEW                     32769
 #define ID_BG_UPDATE_PROJECT            32770
 #define ID_TIP                          32771
 #define ID_UPDATE_LATEX_OUTPUT          32773
@@ -939,19 +885,13 @@
 #define ID_SHOW_IMAGES                  33380
 #define ID_SHOW_EQUATIONS               33381
 #define ID_SHOW_TABLES                  33382
-#define ID_VIEW_DISPLAYENDLINES         33384
 #define ID_VIEW_WORD_WRAP               33385
 #define ID_VIEW_TOGGLE_SHOW_LINE_ENDING 33386
 #define ID_VIEW_TOGGLE_WORD_WRAP        33387
 #define ID_VIEW_TOGGLE_WHITE_SPACE      33388
 #define ID_VIEW_LINE_ENDING             33389
 #define ID_VIEW_WHITE_SPACE             33390
-#define ID_SHOW_LINE_NUMBERS            33391
 #define ID_VIEW_LINE_NUMBERS            33392
-#define ID_VIEW_DISPLAYLINENUMBERS      33393
-#define ID_SEARCH_SPLITPARAGRAPH        33396
-#define ID_SEARCH_JOINPARAGRAPH         33397
-#define ID_VIEW_SHOW_LINE_ENDING        33398
 #define ID_VIEW_USER_TOOLBAR_LAST       33399
 #define ID_REGEX_FIRST                  33400
 #define ID_REGEX_ANYCHAR                33401
@@ -985,7 +925,6 @@
 #define ID_PUBLICATION_TYPE             33429
 #define ID_PUBLISHER                    33430
 #define ID_VIEW_INDENTATION_GUIDES      33431
-#define ID_VIEW_INDENTATIONGUIDES       33432
 #define ID_VIEW_TRANSPARENCY            33433
 #define ID_NONE                         33434
 #define ID_VIEW_BUILD_PANE              33437
@@ -1028,8 +967,6 @@
 #define ID_USER_TOOL_LAST               34000
 #define ID_BUTTON38599                  38599
 #define ID_BUTTON38600                  38600
-#define ID_DOCUMENTTABS_NOTESTYLE       38601
-#define ID_DOKUMENTREGISTER_AKTENORDNERSTIL 38602
 #define ID_INSERT_A                     40000
 #define ID_INSERT_ABSTRACT              40001
 #define ID_INSERT_ACUTE                 40002
@@ -1400,12 +1337,9 @@
 #define ID_EDIT_OUTSOURCE               40431
 #define ID_EDIT_PREVGREPRESULT          40432
 #define ID_EDIT_SEL_BIGGER_BLOCK        40433
-#define ID_EDIT_SET_BREAKPOINT          40434
 #define ID_EDIT_SPELL_ADD               40435
 #define ID_EDIT_SPELL_IGNORE_ALL        40436
 #define ID_EDIT_SPLIT_PARAGRAPH         40437
-#define ID_EDIT_SWITCH_OVRMODE          40438
-#define ID_EDIT_TAB                     40439
 #define ID_EDIT_TOGGLE_BOOKMARK         40440
 #define ID_EDIT_TOGGLE_BOOKMARK0        40441
 #define ID_EDIT_TOGGLE_BOOKMARK1        40442
@@ -1479,7 +1413,15 @@
 #define ID_FILE_MRU_PROJECT10           40609
 #define ID_FILE_MRU_PROJECT_LAST        40610
 #define ID_FILE_MRU_PROJECT11           40610
+#define ID_FILE_MRU_PROJECT12           40611
+#define ID_FILE_MRU_PROJECT13           40612
+#define ID_FILE_MRU_PROJECT14           40613
+#define ID_FILE_MRU_PROJECT15           40614
+#define ID_FILE_MRU_PROJECT16           40615
+#define ID_ERROR_VIEW_SOURCE            40621
+#define ID_OPEN_TRANSCRIPT              40622
 #define IDR_BOOKMARK_VIEW               57672
+#define IDR_ERROR_VIEW                  57673
 
 // Next default values for new objects
 // 
@@ -1487,8 +1429,8 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57674
-#define _APS_NEXT_COMMAND_VALUE         40611
-#define _APS_NEXT_CONTROL_VALUE         8663
+#define _APS_NEXT_COMMAND_VALUE         40624
+#define _APS_NEXT_CONTROL_VALUE         8665
 #define _APS_NEXT_SYMED_VALUE           57773
 #endif
 #endif

@@ -121,8 +121,13 @@ BOOL CSplashWnd::Create(CWnd* pParentWnd /*= NULL*/)
 	BITMAP bm;
 	m_bitmap.GetBitmap(&bm);
 
+	UINT classStyle = 0;
+
+	if (RunTimeHelper::IsWindowsXPOrHigher())
+		classStyle |= CS_DROPSHADOW;
+
 	return CreateEx(WS_EX_TOOLWINDOW /*| WS_EX_TOPMOST*/, //Do not hide other windows with WS_EX_TOPMOST
-	                AfxRegisterWndClass(0, AfxGetApp()->LoadStandardCursor(IDC_ARROW)),
+	                AfxRegisterWndClass(classStyle, AfxGetApp()->LoadStandardCursor(IDC_ARROW)),
 	                NULL, WS_POPUP | WS_VISIBLE, 0, 0, bm.bmWidth, bm.bmHeight, pParentWnd->GetSafeHwnd(), NULL);
 }
 

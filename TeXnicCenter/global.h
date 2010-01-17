@@ -32,13 +32,7 @@
  *
  ********************************************************************/
 
-enum EndOfLineMode
-{
-	AutomaticEOLMode = -1,
-	DOSStyleEOLMode = 0,
-	UnixStyleEOLMode = 1,
-	MacStyleEOLMode = 2
-};
+#pragma once
 
 // Global Functions
 CString AfxLoadString(UINT nID);
@@ -63,16 +57,17 @@ CString AfxGetDefaultDirectory(bool bForceNonEmpty = true, bool bNewProject = fa
  */
 void AfxSetLastDirectory(const CString& strLastFolder);
 
+typedef CArray<CString, const CString&> StringArray;
 
-/** Parse the current dictionnaries installed
+/** Parse the current dictionaries installed
 
         @param aLanguage
                 Languages installed
 
         @param aDialect
-                Dialects intalled
+                Dialects installed
 
         Remark: the files should be properly set (no error handling)
  */
-void AfxFindDictionaries(CArray<CString, CString&> &aLanguage,
-                         CArray<CString, CString&> &aDialect);
+void AfxFindDictionaries(StringArray &aLanguage,
+                         StringArray &aDialect);

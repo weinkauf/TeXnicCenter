@@ -107,9 +107,10 @@ void CFileView::OnParsingFinished()
 	SetRedraw(FALSE);
 	DeleteAllItems();
 
+	const int folderImageIndex = 14;
+
 	HTREEITEM hTexParent = InsertItem(AfxLoadString(STE_TEX_FILES),
-		StructureItem::texFile,StructureItem::texFile,
-		TVI_ROOT,TVI_FIRST);
+		folderImageIndex, folderImageIndex,	TVI_ROOT,TVI_FIRST);
 	HTREEITEM hBibParent = InsertItem(AfxLoadString(STE_BIB_FILES),
 		StructureItem::bibFile,StructureItem::bibFile,
 		TVI_ROOT,TVI_LAST);
@@ -139,7 +140,8 @@ void CFileView::OnParsingFinished()
 		CString reldir = CPathTool::GetRelativePath(maindir,CPathTool::GetParentDirectory(
 			CPathTool::GetAbsolutePath(maindir,it->GetPath())),TRUE,TRUE);
 
-		const int i = std::distance(a.begin(),it);
+		const StructureItemContainer::const_iterator::difference_type i = 
+			std::distance(a.begin(),it);
 
 		switch (si.GetType())
 		{
@@ -179,8 +181,6 @@ void CFileView::OnParsingFinished()
 					LPCTSTR const sep = _T("\\/");
 					bool stop = false;
 
-					const int folder_image = 14;
-
 					while (!stop)
 					{
 						index = reldir.FindOneOf(sep);							
@@ -202,7 +202,7 @@ void CFileView::OnParsingFinished()
 						{
 							// We insert the current path component only
 							parent = InsertItem(TVIF_TEXT|TVIF_PARAM|TVIF_IMAGE|TVIF_SELECTEDIMAGE,
-								component,folder_image,folder_image,0,0,-1,parent,TVI_SORT);
+								component,folderImageIndex,folderImageIndex,0,0,-1,parent,TVI_SORT);
 							// but store the whole relative path
 							parents.insert(std::make_pair(std::make_pair(path,unique_type),parent));
 						}
@@ -224,7 +224,9 @@ void CFileView::OnParsingFinished()
 				flags |= TVIF_STATE;
 			}
 
-			hItem = InsertItem(flags,text,si.GetType(),si.GetType(),state,state,i,parent,TVI_SORT);
+			int imageIndex = si.GetType();
+
+			hItem = InsertItem(flags,text,imageIndex, imageIndex,state,state,i,parent,TVI_SORT);
 		}
 	}
 

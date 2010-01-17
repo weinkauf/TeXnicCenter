@@ -205,7 +205,7 @@ Adds 'protectedbydefault'-Values at creation.
 @author Tino Weinkauf
  */
 class CFileCleanItemArray :
-			public CSortArray<CFileCleanItem, CFileCleanItem&>
+			public CSortArray<CFileCleanItem, const CFileCleanItem&>
 {
 //Constructor / Destructor
 public:

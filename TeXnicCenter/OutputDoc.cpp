@@ -160,12 +160,12 @@ END_MESSAGE_MAP()
 #ifdef _DEBUG
 void COutputDoc::AssertValid() const
 {
-	//	CDocument::AssertValid();
+	CCmdTarget::AssertValid();
 }
 
 void COutputDoc::Dump(CDumpContext& dc) const
 {
-	//	CDocument::Dump(dc);
+	CCmdTarget::Dump(dc);
 }
 #endif //_DEBUG
 
@@ -1470,4 +1470,9 @@ void COutputDoc::ClearParseMessages()
 bool COutputDoc::IsBuildViewActive() const
 {
 	return m_pActiveOutputView == m_pBuildView || m_pActiveOutputView == errorListView_;
+}
+
+const CString COutputDoc::GetTranscriptFilePath() const
+{
+	return CPathTool::Cat(GetWorkingDir(), m_builder.GetTranscriptFileName());
 }

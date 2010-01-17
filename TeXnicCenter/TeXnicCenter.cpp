@@ -239,6 +239,8 @@ bool CTeXnicCenterApp::CanUseRecentFiles()
 BOOL CALLBACK TxcEnumResourceLanguages(HANDLE /*hModule*/, LPCTSTR lpszType, LPCTSTR /*lpszName*/, WORD wIdLang, LONG lParam)
 {
 	ASSERT(lpszType == RT_VERSION);
+	UNUSED_ALWAYS(lpszType);
+
 	*((WORD*)lParam) = wIdLang;
 
 	// we are only interested in the first language, so return FALSE here
@@ -1506,6 +1508,7 @@ void CTeXnicCenterApp::UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &rec
 			{
 				int nIndex = pMenu->InsertButton(CMFCToolBarMenuButton(unFirstCommandId + i, 0, -1, strDisplayName), i);
 				ASSERT(nIndex > -1);
+				UNUSED_ALWAYS(nIndex);
 
 				bChange = TRUE;
 			}

@@ -101,7 +101,7 @@ BOOL CAutoCompleteDlg::InitWithKeyword(const CString &keyword)
 
 	m_CurrentKeyword = keyword;
 
-	std::tr1::shared_ptr<CLaTeXCommand> lc;
+	SharedLaTeXCommandPtr lc;
 
 	/* Just on element -> Notify caller immediately */
 	if (map.GetCount() == 1)

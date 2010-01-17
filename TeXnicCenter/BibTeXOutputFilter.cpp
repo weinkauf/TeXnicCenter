@@ -6,6 +6,7 @@
 BibTeXOutputFilter::BibTeXOutputFilter()
 : warning_line_(_T("--line (\\d+) of file (.+)"))
 , error_line_(_T("([^-]*)---line (\\d+) of file (.+)"))
+, database_file_(_T("Database file #\\d+:\\s+(.*)"))
 {
 }
 
@@ -18,10 +19,13 @@ DWORD BibTeXOutputFilter::ParseLine(const CString& line, DWORD cookie)
 	const CString warning(_T("Warning--"));
 	std::tr1::match_results<LPCTSTR> matches;
 
-	if (line.GetLength() >= warning.GetLength() && line.Mid(0,warning.GetLength()) == warning) {
+	if (line.GetLength() >= warning.GetLength() && line.Left(warning.GetLength()) == warning) {
 		COutputInfo oi;
 		oi.SetErrorMessage(line.Mid(warning.GetLength()));
 		oi.SetOutputLine(GetCurrentOutputLine());
+
+		if (fileNames_.size() == 1)
+			oi.SetSourceFile(fileNames_.front());
 
 		if (last_entry_.get())
 			AddWarning(*last_entry_);
@@ -43,6 +47,10 @@ DWORD BibTeXOutputFilter::ParseLine(const CString& line, DWORD cookie)
 		oi.SetOutputLine(GetCurrentOutputLine());
 
 		AddError(oi);
+	}
+	else if (regex_match(static_cast<LPCTSTR>(line), matches, database_file_)) {
+		CString fileName(matches.str(1).c_str());
+		fileNames_.push_back(fileName);
 	}
 
 	return cookie;

@@ -39,6 +39,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "global.h"
+
 /**	Options for spell checking.
 
 @ingroup dialogs
@@ -86,8 +88,8 @@ protected:
 protected:
 	void UpdateControlStates();
 	void FindDictionaries();
-	CArray<CString, CString&> m_aLanguage;
-	CArray<CString, CString&> m_aDialect;
+	StringArray m_aLanguage;
+	StringArray m_aDialect;
 
 	// Generated message map functions
 	//{{AFX_MSG(COptionPageLanguage)

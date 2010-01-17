@@ -157,8 +157,11 @@ const BibItem BibTeXEntry::ToBibItem() const
 	LPCTSTR pos = std::find_if(first,last,_istdigit);
 
 	if (pos != last) {
-		result.year_ = _ttoi(pos);
-		result.has_year_ = true;
+		int year = _ttoi(pos);
+
+		if (year != 0) {
+			result.year_ = year;
+		}
 	}
 
 	result.publisher_ = publisher;

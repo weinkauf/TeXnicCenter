@@ -1646,7 +1646,7 @@ void CCFileViewEx::OnFileOpen()
 void CCFileViewEx::OnUpdateFileOpen(CCmdUI* pCmdUI)
 {
 	// TODO: Add your command update UI handler code here
-
+	UNUSED_ALWAYS(pCmdUI);
 }
 
 void CCFileViewEx::OnUpdateOutputFiles()

@@ -264,11 +264,11 @@ CString CStructureParser::GetArgument(const CString &strText, TCHAR tcOpeningDel
 #define INITIALIZE_SI( si )\
 	si.m_nLine = nActualLine;\
 	si.m_nParent = m_anItem[m_nDepth];\
-	si.m_strComment = _T("");\
-	si.m_strCaption = _T("");\
+	si.m_strComment.Empty();\
+	si.m_strCaption.Empty();\
 	si.RemoveLabels();\
 	si.m_strPath = strActualFile;\
-	si.m_strTitle = _T("")
+	si.m_strTitle.Empty()
 
 #define INITIALIZE_OI( oi )\
 	oi.SetSourceFile(strActualFile);\
@@ -657,7 +657,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		if (m_nDepth < 1 || m_nDepth >= MAX_DEPTH)
 			si.m_nParent = -1;
 		else {
-			int parent = m_anItem[m_nDepth - 1];
+			StructureItemContainer::difference_type parent = m_anItem[m_nDepth - 1];
 
 			if (parent == -1 && !aSI.empty()) {
 				using namespace std::tr1::placeholders;
@@ -1132,7 +1132,7 @@ CString CStructureParser::ResolveFileName(LPCTSTR lpszPath) const
 	return (strActualFile);
 }
 
-int CStructureParser::AddFileItem(LPCTSTR lpszPath, int nType, LPCTSTR lpszIncludeFromFile,
+StructureItemContainer::size_type CStructureParser::AddFileItem(LPCTSTR lpszPath, int nType, LPCTSTR lpszIncludeFromFile,
                                   int nIncludedFileLineNumber, StructureItemContainer &aSI,
                                   LPCTSTR lpszAnnotation /*= NULL*/)
 {

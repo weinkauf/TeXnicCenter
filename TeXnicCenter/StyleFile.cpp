@@ -258,7 +258,7 @@ void CStyleFile::ParseBuffer(const TCHAR *buf)
 						case LATEX_MATH_SYMBOL:
 						case LATEX_TXT_COMMAND: 
 							{
-								std::tr1::shared_ptr<CLaTeXCommand> cmd = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(lc);
+								SharedLaTeXCommandPtr cmd = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(lc);
 								/* Some commands may be duplicate due to conditional definitions in the
 								   style file. */
 								if (!AddCommand(cmd))
@@ -395,7 +395,7 @@ void CStyleFile::SetListener(CStyleFileListener* listener)
  Adds a command to the style file. Returns true, if command was inserted successfully or false,
  if not (e. g. command already exists)
  */
-bool CStyleFile::AddCommand(std::tr1::shared_ptr<CLaTeXCommand>& cmd)
+bool CStyleFile::AddCommand(SharedLaTeXCommandPtr& cmd)
 {
 	std::tr1::shared_ptr<CObject> dummy;
 
@@ -440,7 +440,7 @@ std::tr1::shared_ptr<CNewCommand> CStyleFile::AddCommand(const CString &name, in
 	std::tr1::shared_ptr<CNewCommand> nc (new CNewCommand(shared_from_this(), name, noOfParams));
 	nc->SetDescription(desc);
 
-	std::tr1::shared_ptr<CLaTeXCommand> cmd = std::tr1::static_pointer_cast<CLaTeXCommand>(nc);
+	SharedLaTeXCommandPtr cmd = std::tr1::static_pointer_cast<CLaTeXCommand>(nc);
 
 	if (AddCommand(cmd))
 	{
@@ -482,7 +482,7 @@ std::tr1::shared_ptr<CNewEnvironment> CStyleFile::AddEnvironment(const CString &
 	std::tr1::shared_ptr<CNewEnvironment> ne(new CNewEnvironment(shared_from_this(), name, noOfParams));
 	ne->SetDescription(desc);
 
-	std::tr1::shared_ptr<CLaTeXCommand> cmd = std::tr1::static_pointer_cast<CLaTeXCommand>(ne);
+	SharedLaTeXCommandPtr cmd = std::tr1::static_pointer_cast<CLaTeXCommand>(ne);
 
 	if (AddCommand(cmd))
 	{
@@ -562,7 +562,7 @@ void CStyleFile::GetPossibleItems(const CString& Partial, SharedObjectMap& Resul
 		std::tr1::shared_ptr<CObject> pObj;
 		m_Commands.GetNextAssoc(pos, key, pObj);
 
-		std::tr1::shared_ptr<CLaTeXCommand> pLatexCmd = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(pObj);
+		SharedLaTeXCommandPtr pLatexCmd = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(pObj);
 		if (!pLatexCmd) continue;
 
 		if ((key.GetLength() >= SearchLength) && (key.Left(SearchLength).CompareNoCase(Partial) == 0))

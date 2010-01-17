@@ -39,6 +39,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "global.h"
+
 /**	Edits the properties of the current project.
 
 @ingroup dialogs
@@ -86,8 +88,8 @@ public:
 	/** project's directory */
 	CString m_strProjectDir;
 
-	CArray<CString, CString&> m_aLanguage;
-	CArray<CString, CString&> m_aDialect;
+	StringArray m_aLanguage;
+	StringArray m_aDialect;
 	CString m_strLanguageCurrent;
 	CString m_strDialectCurrent;
 

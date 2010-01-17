@@ -189,7 +189,9 @@ void CProject::OnClosing()
 BOOL CProject::OnNewProject()
 {
 	if (IsModified())
+	{
 		TRACE0("Warning: OnNewProject replaces an unsaved document.\n");
+	}
 
 	DeleteContents();
 	m_strPathName.Empty(); // no path name yet
@@ -207,7 +209,9 @@ BOOL CProject::OnNewProjectFromDoc(LPCTSTR /*lpszDocPathName*/)
 BOOL CProject::OnOpenProject(LPCTSTR lpszPathName)
 {
 	if (IsModified())
+	{
 		TRACE0("Warning: OnOpenProject replaces an unsaved document.\n");
+	}
 
 	CFileException fe;
 	CFile* pFile = GetFile(lpszPathName,

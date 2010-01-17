@@ -33,6 +33,8 @@
  ********************************************************************/
 
 #include "stdafx.h"
+
+#include "EndOfLineMode.h"
 #include "TeXnicCenter.h"
 #include "ProjectNewDialog.h"
 #include "Global.h"
@@ -59,7 +61,7 @@ CEmptyProjectTemplateItem::CEmptyProjectTemplateItem()
 
 BOOL CEmptyProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &ImageList32, CImageList &ImageList16)
 {
-	UNUSED(lpszPath);
+	UNUSED_ALWAYS(lpszPath);
 
 	//add image to image list and remember index
 	HICON hIcon = theApp.LoadIcon(IDR_LATEXDOCTYPE);

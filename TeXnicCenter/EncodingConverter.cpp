@@ -480,10 +480,13 @@ namespace {
 	int EnumerateCodes(unsigned count, const char* const* codes, void* data)
 	{
 		EncodingCodeContainer* container = static_cast<EncodingCodeContainer*>(data);
+		EncodingCodeContainer::value_type c;
 
 		for ( ; count; --count, ++codes) {
-			container->push_back(CString(*codes));
+			c.push_back(CString(*codes));
 		}
+
+		container->push_back(c);
 
 		return 0;
 	}

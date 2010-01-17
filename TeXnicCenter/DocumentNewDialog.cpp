@@ -35,6 +35,7 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 
+#include "EndOfLineMode.h"
 #include "DocumentNewDialog.h"
 #include "global.h"
 #include "LaTeXDocument.h"

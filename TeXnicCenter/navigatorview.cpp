@@ -56,9 +56,16 @@ END_MESSAGE_MAP()
 NavigatorTreeCtrl::NavigatorTreeCtrl()
 : m_bFirstTime(TRUE)
 {
+	const int cx = 16;
 	m_images.Attach(::ImageList_LoadImage(AfxGetInstanceHandle(),
-	                        MAKEINTRESOURCE(IDB_ITEM_TYPES),16,1,RGB(255,0,255),IMAGE_BITMAP,
+	                        MAKEINTRESOURCE(IDB_ITEM_TYPES),cx,1,RGB(255,0,255),IMAGE_BITMAP,
 	                        LR_CREATEDIBSECTION));
+
+	// Use the LaTeX icon used for the shell
+	HICON icon = static_cast<HICON>(::LoadImage(AfxGetResourceHandle(), 
+		MAKEINTRESOURCE(IDR_LATEXDOCTYPE), IMAGE_ICON, cx, cx, LR_CREATEDIBSECTION));
+	m_images.Replace(StructureItem::texFile, icon);
+	::DestroyIcon(icon);
 }
 
 NavigatorTreeCtrl::~NavigatorTreeCtrl()
@@ -89,7 +96,10 @@ BOOL NavigatorTreeCtrl::Create(CWnd *pwndParent)
 	if (result && vista)
 	{
 		::SetWindowTheme(m_hWnd,L"explorer",0);
-		const DWORD style = TVS_EX_DOUBLEBUFFER | TVS_EX_FADEINOUTEXPANDOS | TVS_EX_AUTOHSCROLL;
+		
+		const DWORD style = TVS_EX_DOUBLEBUFFER | TVS_EX_FADEINOUTEXPANDOS | 
+			TVS_EX_AUTOHSCROLL | TVS_EX_RICHTOOLTIP;
+
 		SendMessage(TVM_SETEXTENDEDSTYLE,style,style);
 	}
 
@@ -293,7 +303,7 @@ int NavigatorTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	MapKeyStateToMessage(0,ID_ITEM_INSERT_REF);
 	MapKeyStateToMessage(MK_CONTROL,ID_ITEM_INSERT_PAGEREF);
 	MapKeyStateToMessage(MK_SHIFT,ID_ITEM_INSERT_LABEL);
-
+ 
 	EnableDragDrop();
 
 	return 0;

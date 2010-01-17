@@ -259,6 +259,7 @@ BOOL COutputBuilder::RunLatex()
 
 	filter.CloseHandle();
 	m_strLatexResult = filter.GetResultString();
+	transcriptFileName_= filter.GetTranscriptFileName();
 
 	//Error handling
 	if (m_pProfile->GetStopOnLatexError())
@@ -410,4 +411,9 @@ BOOL COutputBuilder::RunPostProcessors()
 const CString& COutputBuilder::GetCurrentProcessName() const
 {
 	return current_process_name_;
+}
+
+const CString& COutputBuilder::GetTranscriptFileName() const
+{
+	return transcriptFileName_;
 }

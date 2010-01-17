@@ -35,6 +35,7 @@
 #include "stdafx.h"
 #include "Configuration.h"
 
+#include "EndOfLineMode.h"
 #include "TeXnicCenter.h"
 #include "FontOccManager.h"
 #include "global.h"

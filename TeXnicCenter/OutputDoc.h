@@ -427,4 +427,6 @@ public:
 	bool HasBuildErrors() const;
 	bool HasBadBoxes() const;
 	bool HasBuildWarnings() const;
+
+	const CString GetTranscriptFilePath() const;
 };

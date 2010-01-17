@@ -204,7 +204,7 @@ void CStyleFileContainer::GetAllPossibleCompletions(const CString& Partial, cons
 		std::tr1::shared_ptr<CObject> pObj;
 		CString key;
 		AllPossibleItems.GetNextAssoc(pos, key, pObj);
-		std::tr1::shared_ptr<CLaTeXCommand> pLatexCmd = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(pObj);
+		SharedLaTeXCommandPtr pLatexCmd = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(pObj);
 		if (!pLatexCmd) continue;
 
 		Result.AddTail(pLatexCmd->ToLaTeX());
@@ -334,7 +334,7 @@ BOOL CStyleFileContainer::SaveAsXML(const CString &path)
 			POSITION posC = cmds->GetStartPosition();
 			while (posC != NULL)
 			{
-				std::tr1::shared_ptr<CLaTeXCommand> lc;
+				SharedLaTeXCommandPtr lc;
 				std::tr1::shared_ptr<CObject> c;
 				CString keyC;
 				CString type;
@@ -531,7 +531,7 @@ BOOL CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
 	}
 }
 
-void CStyleFileContainer::ProcessPackageNode(MsXml::CXMLDOMNode &element)
+void CStyleFileContainer::ProcessPackageNode( const MsXml::CXMLDOMNode &element )
 {
 	/* fetch attributes */
 	MsXml::CXMLDOMNamedNodeMap attr = element.GetAttributes();
@@ -577,7 +577,7 @@ void CStyleFileContainer::ProcessPackageNode(MsXml::CXMLDOMNode &element)
 	}
 }
 
-void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, std::tr1::shared_ptr<CStyleFile>& parent)
+void CStyleFileContainer::ProcessEntityNodes( const MsXml::CXMLDOMNode &element, std::tr1::shared_ptr<CStyleFile>& parent )
 {
 	/* fetch attributes */
 	MsXml::CXMLDOMNamedNodeMap attr = element.GetAttributes();
@@ -638,7 +638,7 @@ void CStyleFileContainer::ProcessEntityNodes(MsXml::CXMLDOMNode &element, std::t
 	}
 
 	/* Add element to style file */
-	std::tr1::shared_ptr<CLaTeXCommand> lc;
+	SharedLaTeXCommandPtr lc;
 
 	if (element.GetNodeName() == CSF_XML_COMMAND)
 	{

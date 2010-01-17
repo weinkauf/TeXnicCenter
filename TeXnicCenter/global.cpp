@@ -138,8 +138,8 @@ void AfxSetLastDirectory(const CString& strLastFolder)
 // Raffi: get dictionaries
 //----------------------------------------------------------------
 
-void AfxFindDictionaries(CArray<CString,CString&> &aLanguage,
-                         CArray<CString,CString&> &aDialect)
+void AfxFindDictionaries(StringArray &aLanguage,
+                         StringArray &aDialect)
 {
 	CString dicFileMatch = CConfiguration::GetInstance()->m_strSpellDictionaryPath + _T("\\*.dic");
 

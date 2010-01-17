@@ -372,7 +372,7 @@ void LaTeXView::InstantAdvice()
 			POSITION pos = map.GetStartPosition();
 			map.GetNextAssoc(pos,key,c);
 
-			std::tr1::shared_ptr<CLaTeXCommand> lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
+			SharedLaTeXCommandPtr lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
 
 			if (lc != NULL) {
 				if (instant_advice_tip_ == NULL) {

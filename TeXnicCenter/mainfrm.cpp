@@ -113,75 +113,73 @@ namespace
 	template<class ColotButton>
 	void DoCreateColorButtonPalette(CPalette& palette, int& colors)
 	{
-		if (palette.GetSafeHandle () == NULL)
+		if (palette.GetSafeHandle() == NULL)
 		{
-			colors = sizeof (crColours)/sizeof(ColourTableEntry);
+			colors = sizeof(crColours) / sizeof(ColourTableEntry);
 			ASSERT(colors <= MAX_COLOURS);
 
 			if (colors > MAX_COLOURS)
 				colors = MAX_COLOURS;
 
 			// Create the palette
-			struct 
+			struct
 			{
-				LOGPALETTE    LogPalette;
-				PALETTEENTRY  PalEntry[MAX_COLOURS];
-			}pal;
+				LOGPALETTE LogPalette;
+				PALETTEENTRY PalEntry[MAX_COLOURS];
+			} pal;
 
-			LOGPALETTE* pLogPalette = (LOGPALETTE*) &pal;
-			pLogPalette->palVersion    = 0x300;
-			pLogPalette->palNumEntries = (WORD) colors; 
+			LOGPALETTE* pLogPalette = (LOGPALETTE*)&pal;
+			pLogPalette->palVersion = 0x300;
+			pLogPalette->palNumEntries = (WORD)colors;
 
 			for (int i = 0; i < colors; i++)
 			{
-				pLogPalette->palPalEntry[i].peRed   = GetRValue(crColours[i].crColour);
+				pLogPalette->palPalEntry[i].peRed = GetRValue(crColours[i].crColour);
 				pLogPalette->palPalEntry[i].peGreen = GetGValue(crColours[i].crColour);
-				pLogPalette->palPalEntry[i].peBlue  = GetBValue(crColours[i].crColour);
+				pLogPalette->palPalEntry[i].peBlue = GetBValue(crColours[i].crColour);
 				pLogPalette->palPalEntry[i].peFlags = 0;
 			}
 
-			palette.CreatePalette (pLogPalette);
+			palette.CreatePalette(pLogPalette);
 		}
 
 		// Initialize color names:
 		for (int i = 0; i < colors; i++)
-			ColotButton::SetColorName (crColours[i].crColour, crColours[i].szName);
+			ColotButton::SetColorName(crColours[i].crColour, crColours[i].szName);
 	}
 }
 
 void CreateColorMenuButtonPalette(CPalette& palette, int& colors)
 {
-	DoCreateColorButtonPalette<CMFCColorMenuButton>(palette,colors);
+	DoCreateColorButtonPalette<CMFCColorMenuButton> (palette, colors);
 }
 
-void CreateColorButtonPalette( CPalette& palette, int& colors, int& columns )
+void CreateColorButtonPalette(CPalette& palette, int& colors, int& columns)
 {
-	DoCreateColorButtonPalette<CMFCColorButton>(palette,colors);
+	DoCreateColorButtonPalette<CMFCColorButton> (palette, colors);
 	columns = 8;
 }
 
-std::auto_ptr<CMFCColorMenuButton> CreateColorMenuButton(UINT id, UINT tear_off_id, CPalette& palette, int& colors, UINT title_id)
+std::auto_ptr<CMFCColorMenuButton> CreateColorMenuButton(UINT id, UINT tear_off_id,
+		CPalette& palette, int& colors, UINT title_id)
 {
-	CreateColorMenuButtonPalette(palette,colors);
+	CreateColorMenuButtonPalette(palette, colors);
 
-	std::auto_ptr<CMFCColorMenuButton> pColorButton
-		(new CMFCColorMenuButton (id,CString(MAKEINTRESOURCE(title_id)), &palette));
+	std::auto_ptr<CMFCColorMenuButton> pColorButton(new CMFCColorMenuButton(id, CString(
+		MAKEINTRESOURCE(title_id)), &palette));
 
-	pColorButton->EnableAutomaticButton (CString(MAKEINTRESOURCE(IDS_AUTOMATIC)), RGB (0, 0, 0));
-	pColorButton->EnableOtherButton (CString(MAKEINTRESOURCE(STE_COLOR_OTHERS)));
-	pColorButton->EnableDocumentColors (_T("Document's Colors"));
-	pColorButton->SetColumnsNumber (8);
-	pColorButton->EnableTearOff (tear_off_id, 5, 2);	
+	pColorButton->EnableAutomaticButton(CString(MAKEINTRESOURCE(IDS_AUTOMATIC)), RGB(0, 0, 0));
+	pColorButton->EnableOtherButton(CString(MAKEINTRESOURCE(STE_COLOR_OTHERS)));
+	pColorButton->EnableDocumentColors(_T("Document's Colors"));
+	pColorButton->SetColumnsNumber(8);
+	pColorButton->EnableTearOff(tear_off_id, 5, 2);
 
 	return pColorButton;
 }
 
-
 enum
 {
-	StartPaneAnimationMessageID = WM_USER,
-	StopPaneAnimationMessageID,
-	CheckForFileChangesMessageID
+	StartPaneAnimationMessageID = WM_USER, StopPaneAnimationMessageID, CheckForFileChangesMessageID
 };
 
 IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWndEx)
@@ -311,8 +309,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 			return -1;
 		}
 
-		m_wndMenuBar.SetPaneStyle(m_wndMenuBar.GetPaneStyle() |
-		                          CBRS_SIZE_DYNAMIC | CBRS_TOOLTIPS | CBRS_FLYBY);
+		m_wndMenuBar.SetPaneStyle(m_wndMenuBar.GetPaneStyle() | CBRS_SIZE_DYNAMIC | CBRS_TOOLTIPS
+				| CBRS_FLYBY);
 	}
 	else
 	{
@@ -323,9 +321,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	// create status bar
-	if (!m_wndStatusBar.Create(this) ||
-	        !m_wndStatusBar.SetIndicators(indicators,
-	                                      sizeof(indicators) / sizeof(UINT)))
+	if (!m_wndStatusBar.Create(this) || !m_wndStatusBar.SetIndicators(indicators,
+		sizeof(indicators) / sizeof(UINT)))
 	{
 		TRACE0("Failed to create status bar\n");
 		return -1; // creation failed
@@ -403,14 +400,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		DockPane(&m_wndMenuBar);
 
 	DockPane(&m_wndLatexBar);
-	DockPaneLeftOf(&m_wndToolBar,&m_wndLatexBar);
+	DockPaneLeftOf(&m_wndToolBar, &m_wndLatexBar);
 
 	DockPane(&m_wndFindBar);
-	DockPaneLeftOf(&m_wndFormatRUBar,&m_wndFindBar);
-	DockPaneLeftOf(&m_wndInsertBar,&m_wndFormatRUBar);
+	DockPaneLeftOf(&m_wndFormatRUBar, &m_wndFindBar);
+	DockPaneLeftOf(&m_wndInsertBar, &m_wndFormatRUBar);
 
 	DockPane(&m_wndMathBar);
-	DockPaneLeftOf(&m_wndFormatBar,&m_wndMathBar);
+	DockPaneLeftOf(&m_wndFormatBar, &m_wndMathBar);
 
 	for (int i = 0; i < MATHBAR_COUNT; ++i)
 		DockPane(m_awndMathBar + i);
@@ -420,33 +417,34 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// Enable window list manager...
 	if (!CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsers)
-		EnableWindowsDialog(ID_WINDOW_LIST, ID_WINDOW_LIST_MENU,TRUE);
+		EnableWindowsDialog(ID_WINDOW_LIST, ID_WINDOW_LIST_MENU, TRUE);
 	else
 	{
 		// add entry for window list to the end of window menu
 		CMenu *pmnuWindowMenu = m_stdMenu.GetSubMenu(m_stdMenu.GetMenuItemCount() - 2);
 		pmnuWindowMenu->AppendMenu(MF_SEPARATOR);
-		pmnuWindowMenu->AppendMenu(MF_BYPOSITION, ID_WINDOW_LIST, CString((LPCTSTR)ID_WINDOW_LIST_MENU));
+		pmnuWindowMenu->AppendMenu(MF_BYPOSITION, ID_WINDOW_LIST, CString(
+			(LPCTSTR)ID_WINDOW_LIST_MENU));
 	}
 
-	EnablePaneMenu(TRUE, ID_EXTRAS_CUSTOMIZE,
-	               CString(MAKEINTRESOURCE(IDS_TOOLBAR_CUSTOMIZE)),ID_VIEW_TOOLBAR,TRUE,FALSE);
+	EnablePaneMenu(TRUE, ID_EXTRAS_CUSTOMIZE, CString(MAKEINTRESOURCE(IDS_TOOLBAR_CUSTOMIZE)),
+		ID_VIEW_TOOLBAR, TRUE, FALSE);
 
-	build_animation_.m_hImageList = ::ImageList_LoadImage(AfxGetResourceHandle(),MAKEINTRESOURCE(IDB_BUILD_ANIMATION),16,1,
-	                                RGB(192,192,192),IMAGE_BITMAP,LR_CREATEDIBSECTION);
+	build_animation_.m_hImageList = ::ImageList_LoadImage(AfxGetResourceHandle(), MAKEINTRESOURCE(
+		IDB_BUILD_ANIMATION), 16, 1, RGB(192, 192, 192), IMAGE_BITMAP, LR_CREATEDIBSECTION);
 
 	// Recalculate layout
-	m_wndStatusBar.SetPaneText(BuildAnimationPane,0);
+	m_wndStatusBar.SetPaneText(BuildAnimationPane, 0);
 
-	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane,build_animation_);
-	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane,0);
+	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane, build_animation_);
+	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane, 0);
 
 	int cx, cy;
 
-	if (::ImageList_GetIconSize(build_animation_,&cx,&cy))
-		m_wndStatusBar.SetPaneWidth(BuildAnimationPane,cx); // Adjust the width
+	if (::ImageList_GetIconSize(build_animation_, &cx, &cy))
+		m_wndStatusBar.SetPaneWidth(BuildAnimationPane, cx); // Adjust the width
 
-	m_wndStatusBar.SetPaneStyle(BuildAnimationPane,SBPS_NOBORDERS);
+	m_wndStatusBar.SetPaneStyle(BuildAnimationPane, SBPS_NOBORDERS);
 
 	//CList<UINT, UINT> lstBasicCommands;
 
@@ -467,21 +465,23 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	int value = CConfiguration::GetInstance()->GetTransparency();
 
 	if (value > 0)
-		TransparencyDlg::SetTransparency(this,value);
+		TransparencyDlg::SetTransparency(this, value);
 
 	SendMessage(WM_UPDATEUISTATE, MAKEWPARAM(UIS_SET, UISF_HIDEACCEL | UISF_HIDEFOCUS));
 
-	if (SUCCEEDED(taskBarList_.CoCreateInstance(CLSID_TaskbarList))) {
+	if (SUCCEEDED(taskBarList_.CoCreateInstance(CLSID_TaskbarList)))
+	{
 		if (FAILED(taskBarList_->HrInit()))
 			taskBarList_.Release();
-		else {
+		else
+		{
 #ifdef WINDOWS_7_THUMBNAILS_
 			// Success
 			BOOL provideIconThumbnail = TRUE;
-			DwmSetWindowAttribute(m_hWnd, DWMWA_HAS_ICONIC_BITMAP, 
-				&provideIconThumbnail, sizeof(provideIconThumbnail));
-			DwmSetWindowAttribute(m_hWnd, DWMWA_FORCE_ICONIC_REPRESENTATION, 
-				&provideIconThumbnail, sizeof(provideIconThumbnail));
+			DwmSetWindowAttribute(m_hWnd, DWMWA_HAS_ICONIC_BITMAP,
+					&provideIconThumbnail, sizeof(provideIconThumbnail));
+			DwmSetWindowAttribute(m_hWnd, DWMWA_FORCE_ICONIC_REPRESENTATION,
+					&provideIconThumbnail, sizeof(provideIconThumbnail));
 #endif
 		}
 	}
@@ -518,15 +518,14 @@ BOOL CMainFrame::SetMenu(CMenu *pMenu)
 	return TRUE;
 }
 
-bool CMainFrame::CreateToolBar( CMFCToolBar* pToolBar, UINT unID, UINT unTitleID, bool bVisible /*= true*/ )
+bool CMainFrame::CreateToolBar(CMFCToolBar* pToolBar, UINT unID, UINT unTitleID, bool bVisible /*= true*/)
 {
 	DWORD style = AFX_DEFAULT_TOOLBAR_STYLE;
 
 	if (!bVisible)
 		style &= ~WS_VISIBLE;
 
-	if (!pToolBar->Create(this, style, unID) ||
-	        !pToolBar->LoadToolBar(unID))
+	if (!pToolBar->Create(this, style, unID) || !pToolBar->LoadToolBar(unID))
 	{
 		TRACE1("!Failed to create %s tool bar\n", AfxLoadString(unTitleID));
 		return false; // creation failed
@@ -545,7 +544,7 @@ void CMainFrame::ToggleControlBar(CBasePane* pCtrlBar)
 	ASSERT(IsWindow(pCtrlBar->m_hWnd));
 
 	// control bars for math symbols are exclusive
-	ShowPane(pCtrlBar,!IsControlBarVisible(pCtrlBar), FALSE, TRUE);
+	ShowPane(pCtrlBar, !IsControlBarVisible(pCtrlBar), FALSE, TRUE);
 }
 
 BOOL CMainFrame::IsControlBarVisible(CBasePane* pCtrlBar)
@@ -564,7 +563,7 @@ CBasePane* CMainFrame::GetControlBarByCmd(UINT unID)
 	else if (unID >= ID_VIEW_USER_TOOLBAR_FIRST && unID <= ID_VIEW_USER_TOOLBAR_LAST)
 		result = GetUserToolBarByIndex(unID - ID_VIEW_USER_TOOLBAR_FIRST);
 	else if (unID == ID_VIEW_MATH)
-		result= &m_wndMathBar;
+		result = &m_wndMathBar;
 	else
 		result = GetPane(unID);
 
@@ -634,7 +633,6 @@ void CMainFrame::Dump(CDumpContext& dc) const
 }
 
 #endif //_DEBUG
-
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame Nachrichten-Handler
 
@@ -648,10 +646,9 @@ void CMainFrame::OnExtrasCustomize()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// create dialog object
 
-	ToolBarsCustomizeDialog* pDlgCust = new ToolBarsCustomizeDialog(
-	    this, TRUE,
-	    AFX_CUSTOMIZE_MENU_SHADOWS | AFX_CUSTOMIZE_TEXT_LABELS |
-	    AFX_CUSTOMIZE_MENU_ANIMATIONS | AFX_CUSTOMIZE_NOHELP);
+	ToolBarsCustomizeDialog* pDlgCust = new ToolBarsCustomizeDialog(this, TRUE,
+		AFX_CUSTOMIZE_MENU_SHADOWS | AFX_CUSTOMIZE_TEXT_LABELS | AFX_CUSTOMIZE_MENU_ANIMATIONS
+				| AFX_CUSTOMIZE_NOHELP);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// enable create/delete of user defined toolbars
@@ -667,11 +664,9 @@ void CMainFrame::OnExtrasCustomize()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// create combobox for output typess
 
-	CMFCToolBarComboBoxButton profileButton(
-	    ID_LATEX_PROFILE_SEL,
-	    1,
-	    //CImageHash::GetImageOfCommand( ID_LATEX_PROFILE_SEL, FALSE ),
-	    CBS_DROPDOWNLIST | CBS_SORT);
+	CMFCToolBarComboBoxButton profileButton(ID_LATEX_PROFILE_SEL, 1,
+	//CImageHash::GetImageOfCommand( ID_LATEX_PROFILE_SEL, FALSE ),
+		CBS_DROPDOWNLIST | CBS_SORT);
 
 	// add available outputtypes to combo box
 	CStringArray astrProfiles;
@@ -719,7 +714,7 @@ void CMainFrame::CheckForFileChanges()
 
 		while (pos)
 		{
-			LaTeXDocument *pDoc = dynamic_cast<LaTeXDocument*>(pTemplate->GetNextDoc(pos));
+			LaTeXDocument *pDoc = dynamic_cast<LaTeXDocument*> (pTemplate->GetNextDoc(pos));
 
 			if (pDoc)
 				pDoc->CheckForFileChanges();
@@ -731,7 +726,7 @@ void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 {
 	CMDIFrameWndEx::OnActivate(nState, pWndOther, bMinimized);
 
-	switch (nState) 
+	switch (nState)
 	{
 		case WA_ACTIVE:
 		case WA_CLICKACTIVE:
@@ -747,7 +742,7 @@ void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 void CMainFrame::OnOptionsChanged()
 {
 	// install/uninstall timer for automatic saving
-	KillTimer(timerSave);
+	KillTimer( timerSave);
 
 	if (CConfiguration::GetInstance()->m_bSaveAutomatic)
 		SetTimer(timerSave, CConfiguration::GetInstance()->m_unSaveInterval * 1000 * 60, NULL);
@@ -768,7 +763,7 @@ BOOL CMainFrame::OnToggleMathBar(UINT nIDEvent)
 	ASSERT(pCtrlBar);
 	ASSERT(IsWindow(pCtrlBar->m_hWnd));
 
-	ShowPane(pCtrlBar,!pCtrlBar->IsPaneVisible(), FALSE, TRUE);
+	ShowPane(pCtrlBar, !pCtrlBar->IsPaneVisible(), FALSE, TRUE);
 
 	return TRUE;
 }
@@ -802,7 +797,8 @@ LRESULT CMainFrame::OnToolbarContextMenu(WPARAM /*wp*/, LPARAM lp)
 			// add title of current tool bar to menu
 			CString strToolbarName;
 			pToolBar->GetWindowText(strToolbarName);
-			pPopup->InsertMenu(pPopup->GetMenuItemCount() - 2, MF_STRING | MF_BYPOSITION, ID_VIEW_USER_TOOLBAR_FIRST + i, strToolbarName);
+			pPopup->InsertMenu(pPopup->GetMenuItemCount() - 2, MF_STRING | MF_BYPOSITION,
+				ID_VIEW_USER_TOOLBAR_FIRST + i, strToolbarName);
 		}
 	}
 
@@ -864,22 +860,22 @@ void CMainFrame::ActivateNavigationTab(int /*nTab*/)
 
 void CMainFrame::OnWindowStructure()
 {
-	ActivateNavigationTab(navigatorTabStructure);
+	ActivateNavigationTab( navigatorTabStructure);
 }
 
 void CMainFrame::OnWindowEnvironment()
 {
-	ActivateNavigationTab(navigatorTabEnvironments);
+	ActivateNavigationTab( navigatorTabEnvironments);
 }
 
 void CMainFrame::OnWindowFiles()
 {
-	ActivateNavigationTab(navigatorTabFiles);
+	ActivateNavigationTab( navigatorTabFiles);
 }
 
 void CMainFrame::OnWindowReferences()
 {
-	ActivateNavigationTab(navigatorTabReferences);
+	ActivateNavigationTab( navigatorTabReferences);
 }
 
 void CMainFrame::OnWindowOutput()
@@ -889,14 +885,15 @@ void CMainFrame::OnWindowOutput()
 
 void CMainFrame::ActivateOutputTab(int nTab, bool /*bSetFocus*/)
 {
-	CDockablePane* const panes[] = {&build_view_pane_,&grep_view_1_pane_,&grep_view_2_pane_,&parse_view_pane_,&error_list_view_};
+	CDockablePane* const panes[] = { &build_view_pane_, &grep_view_1_pane_, &grep_view_2_pane_,
+			&parse_view_pane_, &error_list_view_ };
 	const int count = sizeof(panes) / sizeof(*panes);
 
 	if (nTab >= 0 && nTab < count && (panes[nTab]->IsVisible() || panes[nTab]->IsAutoHideMode()))
 	{
 		// Special case: Activate the build view only if the error list view isn't active
 		if (nTab != outputTabBuildResult || !error_list_view_.IsWindowVisible())
-			panes[nTab]->ShowPane(TRUE,TRUE,TRUE);
+			panes[nTab]->ShowPane(TRUE, TRUE, TRUE);
 	}
 }
 
@@ -1047,13 +1044,13 @@ CMFCToolBarButton *CMainFrame::GetToolBarButton(UINT unCmdID, POSITION &pos) con
 		if (!pToolBar)
 			continue;
 
-		if (nStartBar < (i + 8 + MATHBAR_COUNT) && (nIndex = pToolBar->CommandToIndex(unCmdID)) > -1)
+		if (nStartBar < (i + 8 + MATHBAR_COUNT) && (nIndex = pToolBar->CommandToIndex(unCmdID))
+				> -1)
 		{
 			pos = (POSITION)(i + 8 + MATHBAR_COUNT);
 			return pToolBar->GetButton(nIndex);
 		}
 	}
-
 
 	// button not found
 	return NULL;
@@ -1066,16 +1063,14 @@ LRESULT CMainFrame::OnResetToolbar(WPARAM wParam, LPARAM /*lParam*/)
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// create combobox for output types
-	CMFCToolBarComboBoxButton profileButton(
-	    ID_LATEX_PROFILE_SEL,
-	    -1, //CImageHash::GetImageOfCommand( ID_LATEX_PROFILE_SEL, FALSE ),
-	    CBS_DROPDOWNLIST | CBS_SORT);
+	CMFCToolBarComboBoxButton profileButton(ID_LATEX_PROFILE_SEL, -1, //CImageHash::GetImageOfCommand( ID_LATEX_PROFILE_SEL, FALSE ),
+		CBS_DROPDOWNLIST | CBS_SORT);
 
 	// add available outputtypes to combo box
 	CStringArray astrProfiles;
 	CProfileMap::GetInstance()->GetKeyList(astrProfiles);
 
-	for (int i = 0; i < astrProfiles.GetSize(); i++)
+	for (INT_PTR i = 0; i < astrProfiles.GetSize(); i++)
 		profileButton.AddItem(astrProfiles[i]);
 
 	profileButton.SelectItem(CProfileMap::GetInstance()->GetActiveProfileKey());
@@ -1088,17 +1083,17 @@ LRESULT CMainFrame::OnResetToolbar(WPARAM wParam, LPARAM /*lParam*/)
 		int colors;
 		CPalette palette;
 
-		std::auto_ptr<CMFCColorMenuButton> b1
-			(CreateColorMenuButton(ID_FORMAT_TEXT_BACK_COLOR,IDR_TEXT_BACK_COLOR,palette,colors,IDS_BACKGROUND_COLORS));
+		std::auto_ptr<CMFCColorMenuButton> b1(CreateColorMenuButton(ID_FORMAT_TEXT_BACK_COLOR,
+			IDR_TEXT_BACK_COLOR, palette, colors, IDS_BACKGROUND_COLORS));
 
-		m_wndFormatRUBar.ReplaceButton(b1->m_nID,*b1);
+		m_wndFormatRUBar.ReplaceButton(b1->m_nID, *b1);
 
-		std::auto_ptr<CMFCColorMenuButton> b2
-			(CreateColorMenuButton(ID_FORMAT_TEXT_FORE_COLOR,IDR_TEXT_FORE_COLOR,palette,colors,IDS_TEXT_COLORS));
+		std::auto_ptr<CMFCColorMenuButton> b2(CreateColorMenuButton(ID_FORMAT_TEXT_FORE_COLOR,
+			IDR_TEXT_FORE_COLOR, palette, colors, IDS_TEXT_COLORS));
 
-		m_wndFormatRUBar.ReplaceButton(b2->m_nID,*b2);
+		m_wndFormatRUBar.ReplaceButton(b2->m_nID, *b2);
 	}
-	else if (id == m_wndToolBar.GetDlgCtrlID()) 
+	else if (id == m_wndToolBar.GetDlgCtrlID())
 	{
 		CMenu menu;
 		menu.CreatePopupMenu();
@@ -1110,7 +1105,7 @@ LRESULT CMainFrame::OnResetToolbar(WPARAM wParam, LPARAM /*lParam*/)
 			CDocTemplate* t = theApp.GetNextDocTemplate(pos);
 
 			CString text;
-			t->GetDocString(text,CDocTemplate::regFileTypeName);
+			t->GetDocString(text, CDocTemplate::regFileTypeName);
 
 			UINT id = ID_LATEX_NEW;
 
@@ -1119,13 +1114,14 @@ LRESULT CMainFrame::OnResetToolbar(WPARAM wParam, LPARAM /*lParam*/)
 			else if (t == theApp.GetMetaPostDocTemplate())
 				id = ID_METAPOST_NEW;
 
-			menu.AppendMenu(MF_STRING,id,text);
+			menu.AppendMenu(MF_STRING, id, text);
 		}
 
-		CMFCToolBarButton* pb = m_wndToolBar.GetButton(m_wndToolBar.CommandToIndex(ID_LATEX_NEW));		
-		CMFCToolBarMenuButton tbb(pb->m_nID,menu,pb->GetImage(),pb->m_strText,pb->m_bUserButton);	
-		
-		m_wndToolBar.ReplaceButton(ID_LATEX_NEW,tbb);
+		CMFCToolBarButton* pb = m_wndToolBar.GetButton(m_wndToolBar.CommandToIndex(ID_LATEX_NEW));
+		CMFCToolBarMenuButton
+				tbb(pb->m_nID, menu, pb->GetImage(), pb->m_strText, pb->m_bUserButton);
+
+		m_wndToolBar.ReplaceButton(ID_LATEX_NEW, tbb);
 	}
 
 	return 0L;
@@ -1148,10 +1144,10 @@ void CMainFrame::OnWindowList()
 
 BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
 {
-	if (output_doc_.OnCmdMsg(nID,nCode,pExtra,pHandlerInfo))
+	if (output_doc_.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 		return TRUE;
 
-	if (bib_view_pane_.OnCmdMsg(nID,nCode,pExtra,pHandlerInfo))
+	if (bib_view_pane_.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 		return TRUE;
 
 	return CMDIFrameWndEx::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
@@ -1196,7 +1192,8 @@ void CMainFrame::GetControlBarsEx(CArray<CPane*, CPane*>& arrBars)
 	}
 }
 
-BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParentWnd, CCreateContext* pContext)
+BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParentWnd,
+		CCreateContext* pContext)
 {
 	if (!CMDIFrameWndEx::LoadFrame(nIDResource, dwDefaultStyle, pParentWnd, pContext))
 	{
@@ -1206,7 +1203,7 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 	for (int i = 0; i < MATHBAR_COUNT; ++i)
 	{
 		if (!m_awndMathBar[i].IsRestoredFromRegistry())
-			ShowPane(m_awndMathBar + i,FALSE,TRUE,FALSE);
+			ShowPane(m_awndMathBar + i, FALSE, TRUE, FALSE);
 	}
 
 	RecalcLayout();
@@ -1229,18 +1226,18 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 
 void CMainFrame::OnHelpContents()
 {
-	HtmlHelp(0,HH_DISPLAY_TOC);
+	HtmlHelp(0, HH_DISPLAY_TOC);
 }
 
 void CMainFrame::OnHelpSearch()
 {
-	HH_FTS_QUERY query = {sizeof(HH_FTS_QUERY)};
-	HtmlHelp(reinterpret_cast<DWORD>(&query),HH_DISPLAY_SEARCH);
+	HH_FTS_QUERY query = { sizeof(HH_FTS_QUERY) };
+	HtmlHelp(reinterpret_cast<DWORD> (&query), HH_DISPLAY_SEARCH);
 }
 
 void CMainFrame::OnHelpIndex()
 {
-	HtmlHelp(0,HH_DISPLAY_INDEX);
+	HtmlHelp(0, HH_DISPLAY_INDEX);
 }
 
 void CMainFrame::DisplayDocumentTabs()
@@ -1248,7 +1245,7 @@ void CMainFrame::DisplayDocumentTabs()
 	CMDITabInfo mdiTabParams;
 	mdiTabParams.m_style = (CMFCTabCtrl::Style)theApp.m_nMDITabStyle;
 	mdiTabParams.m_bActiveTabCloseButton = TRUE; // set to FALSE to place close button at right of tab area
-	mdiTabParams.m_bTabIcons = theApp.m_bMDITabIcons; // set to TRUE to enable document icons on MDI taba
+	mdiTabParams.m_bTabIcons = theApp.m_bMDITabIcons; // set to TRUE to enable document icons on MDI tabs
 	mdiTabParams.m_bAutoColor = FALSE; // set to FALSE to disable auto-coloring of MDI tabs
 	mdiTabParams.m_bDocumentMenu = TRUE; // enable the document menu at the right edge of the tab area
 	mdiTabParams.m_tabLocation = static_cast<CMFCTabCtrl::Location>(theApp.m_nMDITabLocation);
@@ -1304,11 +1301,13 @@ void CMainFrame::OnUpdateViewDocTabs(CCmdUI* pCmdUI)
 	switch (pCmdUI->m_nID)
 	{
 		case ID_VIEW_DOCTAB_BOTTOM:
-			pCmdUI->SetRadio(theApp.GetShowMDITabs() && (theApp.m_nMDITabLocation == CMFCTabCtrl::LOCATION_BOTTOM));
+			pCmdUI->SetRadio(theApp.GetShowMDITabs() && (theApp.m_nMDITabLocation
+					== CMFCTabCtrl::LOCATION_BOTTOM));
 			break;
 
 		case ID_VIEW_DOCTAB_TOP:
-			pCmdUI->SetRadio(theApp.GetShowMDITabs() && (theApp.m_nMDITabLocation == CMFCTabCtrl::LOCATION_TOP));
+			pCmdUI->SetRadio(theApp.GetShowMDITabs() && (theApp.m_nMDITabLocation
+					== CMFCTabCtrl::LOCATION_TOP));
 			break;
 
 		case ID_VIEW_DOCTAB_OFF:
@@ -1351,7 +1350,8 @@ void CMainFrame::RebuildToolsMenu()
 	VERIFY(mnuRef.LoadMenu(IDR_MAINFRAME));
 
 	CString strToolsMenuTitle;
-	mnuRef.GetMenuString(mnuRef.GetMenuItemCount() - nToolsMenuIndexOffset, strToolsMenuTitle, MF_BYPOSITION);
+	mnuRef.GetMenuString(mnuRef.GetMenuItemCount() - nToolsMenuIndexOffset, strToolsMenuTitle,
+		MF_BYPOSITION);
 
 	//
 	// Get the tools menu from the current menu
@@ -1370,14 +1370,14 @@ void CMainFrame::RebuildToolsMenu()
 	}
 	if (nToolsMenuIndex < 0)
 	{
-		ASSERT(FALSE);
+		ASSERT( FALSE);
 		return;
 	}
 
 	CMenu *pToolsMenu = m_stdMenu.GetSubMenu(nToolsMenuIndex);
 	if (!IsMenu(pToolsMenu->GetSafeHmenu()))
 	{
-		ASSERT(FALSE);
+		ASSERT( FALSE);
 		return;
 	}
 
@@ -1385,9 +1385,9 @@ void CMainFrame::RebuildToolsMenu()
 
 	int nLastEntryIndex = pToolsMenu->GetMenuItemCount() - 1;
 
-	while (pToolsMenu->GetMenuItemID(nLastEntryIndex) == ID_TOOLS_ENTRY ||
-	        (pToolsMenu->GetMenuItemID(nLastEntryIndex) >= ID_USER_TOOL_FIRST &&
-	         pToolsMenu->GetMenuItemID(nLastEntryIndex) <= ID_USER_TOOL_LAST))
+	while (pToolsMenu->GetMenuItemID(nLastEntryIndex) == ID_TOOLS_ENTRY
+			|| (pToolsMenu->GetMenuItemID(nLastEntryIndex) >= ID_USER_TOOL_FIRST
+					&& pToolsMenu->GetMenuItemID(nLastEntryIndex) <= ID_USER_TOOL_LAST))
 	{
 		pToolsMenu->DeleteMenu(nLastEntryIndex, MF_BYPOSITION);
 		nLastEntryIndex = pToolsMenu->GetMenuItemCount() - 1;
@@ -1404,7 +1404,7 @@ void CMainFrame::RebuildToolsMenu()
 	}
 }
 
-int CMainFrame::GetMDIChilds(CArray<CChildFrame*, CChildFrame*>& MDIChildArray, bool /*bSortByTabs*/ /*= true*/)
+int CMainFrame::GetMDIChilds(CArray<CChildFrame*, CChildFrame*>& MDIChildArray, bool /*bSortByTabs*//*= true*/)
 {
 	int index = 0, ActiveChild = -1;
 
@@ -1482,7 +1482,7 @@ void CMainFrame::OnContextMenu(CWnd* pWnd, CPoint point)
 	// We have to use the right window to get right coordinates
 	::ScreenToClient(pWnd->GetSafeHwnd(), &point);
 
-	//Show two different popups: (a) for the tabs, (b) for the toolsbars
+	//Show two different popups: (a) for the tabs, (b) for the tool bars
 	if (pWnd->m_hWnd == m_hWndMDIClient || pWnd->m_hWnd == m_wndClientArea.GetMDITabs())
 	{
 		//Show popup for the tabs
@@ -1491,11 +1491,12 @@ void CMainFrame::OnContextMenu(CWnd* pWnd, CPoint point)
 
 		if (nTab >= 0)
 		{
-			CChildFrame* wndEdit = dynamic_cast<CChildFrame*>(m_wndClientArea.GetMDITabs().GetTabWnd(nTab));
+			CChildFrame* wndEdit =
+					dynamic_cast<CChildFrame*> (m_wndClientArea.GetMDITabs().GetTabWnd(nTab));
 			// save pointer for later use
 			if (wndEdit)
 			{
-				m_pContextMenuTargetWindow = dynamic_cast<CView*>(wndEdit->GetActiveView());
+				m_pContextMenuTargetWindow = dynamic_cast<CView*> (wndEdit->GetActiveView());
 			}
 		}
 
@@ -1505,8 +1506,19 @@ void CMainFrame::OnContextMenu(CWnd* pWnd, CPoint point)
 	}
 	else
 	{
-		//Show popup for the toolbars
-		theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_TOOLBAR, point.x, point.y, this);
+		CRect client;
+		GetClientRect(&client);
+
+		if (client.PtInRect(point))
+		{
+			//Show popup for the tool bars
+			theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_TOOLBAR, point.x, point.y, this);
+		}
+		else
+		{
+			// Show caption bar menu
+			CFrameWnd::OnContextMenu(pWnd, point);
+		}
 	}
 }
 
@@ -1536,7 +1548,7 @@ void CMainFrame::OnExecuteUserTool(UINT nIDEvent)
 	theApp.GetUserToolsManager()->InvokeTool(nIDEvent);
 }
 
-BOOL CMainFrame::OnToolsCancel( UINT )
+BOOL CMainFrame::OnToolsCancel(UINT)
 {
 	//Dependent on the current mode, we do some fancy stuff here.
 	// Current edit view does NOT have focus: It gets it.
@@ -1598,7 +1610,7 @@ void CMainFrame::OnWindowCloseAllButActive()
 	{
 		if (i != nActiveFrame)
 		{
-			CView* pView = dynamic_cast<CView*>(MDIChildArray.GetAt(i)->GetActiveView());
+			CView* pView = dynamic_cast<CView*> (MDIChildArray.GetAt(i)->GetActiveView());
 
 			if (pView && pView->GetDocument() && pView->GetDocument()->SaveModified())
 			{
@@ -1617,25 +1629,26 @@ void CMainFrame::OnUpdateWindowCloseAllButActive(CCmdUI* pCmdUI)
 
 bool CMainFrame::CreateNavigationPanes()
 {
-	const DWORD pane_style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_FLOAT_MULTI | CBRS_HIDE_INPLACE;
-	const CSize size(250,250);
+	const DWORD pane_style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+			| CBRS_FLOAT_MULTI | CBRS_HIDE_INPLACE;
+	const CSize size(250, 250);
 
 	const DWORD navigator_style = pane_style | CBRS_LEFT;
 
-	file_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_FILES)), this,size,
-	                       TRUE, ID_VIEW_FILES_PANE,navigator_style);
-	structure_view_.Create(CString(MAKEINTRESOURCE(STE_TAB_STRUCTURE)), this,size,
-	                       TRUE, ID_VIEW_STRUCT_PANE,navigator_style);
-	env_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_ENVIRONMENTS)), this,size,
-	                      TRUE, ID_VIEW_ENV_PANE,navigator_style);
+	file_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_FILES)), this, size, TRUE,
+		ID_VIEW_FILES_PANE, navigator_style);
+	structure_view_.Create(CString(MAKEINTRESOURCE(STE_TAB_STRUCTURE)), this, size, TRUE,
+		ID_VIEW_STRUCT_PANE, navigator_style);
+	env_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_ENVIRONMENTS)), this, size, TRUE,
+		ID_VIEW_ENV_PANE, navigator_style);
 
 	const CSize bottom_pane_size = size;
 
-	bib_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_BIBENTRIES)), this,CRect(CPoint(0,0),bottom_pane_size),
-		TRUE, ID_VIEW_BIB_ENTRIES_PANE,pane_style | CBRS_BOTTOM ); // Bottom
+	bib_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_BIBENTRIES)), this, CRect(CPoint(0, 0),
+		bottom_pane_size), TRUE, ID_VIEW_BIB_ENTRIES_PANE, pane_style | CBRS_BOTTOM); // Bottom
 
-	bookmark_view_pane_.Create(CString(MAKEINTRESOURCE(ID_VIEW_BOOKMARKS_PANE)), this,CRect(CPoint(0,0),bottom_pane_size),
-		TRUE, ID_VIEW_BOOKMARKS_PANE,pane_style | CBRS_BOTTOM ); // Bottom
+	bookmark_view_pane_.Create(CString(MAKEINTRESOURCE(ID_VIEW_BOOKMARKS_PANE)), this, CRect(
+		CPoint(0, 0), bottom_pane_size), TRUE, ID_VIEW_BOOKMARKS_PANE, pane_style | CBRS_BOTTOM); // Bottom
 
 	// Create views:
 	CRect rectDummy;
@@ -1665,7 +1678,7 @@ bool CMainFrame::CreateNavigationPanes()
 	DockPane(&structure_view_);
 
 	DockPane(&bib_view_pane_);
-	bib_view_pane_.SetAutoHideMode(TRUE,CBRS_BOTTOM,0,FALSE);
+	bib_view_pane_.SetAutoHideMode(TRUE, CBRS_BOTTOM, 0, FALSE);
 
 	CRect rect;
 	bib_view_pane_.GetWindowRect(&rect);
@@ -1673,25 +1686,25 @@ bool CMainFrame::CreateNavigationPanes()
 	if (rect.Height() < bottom_pane_size.cy)
 	{
 		rect.top = rect.bottom - bottom_pane_size.cy;
-		bib_view_pane_.SetWindowPos(0,0,0,rect.Width(),rect.Height(),SWP_NOZORDER|SWP_NOMOVE|SWP_NOACTIVATE);
+		bib_view_pane_.SetWindowPos(0, 0, 0, rect.Width(), rect.Height(), SWP_NOZORDER | SWP_NOMOVE
+				| SWP_NOACTIVATE);
 	}
 
 	CDockablePane* p = 0;
 
-	env_view_pane_.AttachToTabWnd(&structure_view_,DM_STANDARD,TRUE,&p);
-	file_view_pane_.AttachToTabWnd(&structure_view_,DM_STANDARD,FALSE);
+	env_view_pane_.AttachToTabWnd(&structure_view_, DM_STANDARD, TRUE, &p);
+	file_view_pane_.AttachToTabWnd(&structure_view_, DM_STANDARD, FALSE);
 
 	if (CBaseTabbedPane* pane = dynamic_cast<CBaseTabbedPane*>(p))
 	{
-		HIMAGELIST himl = ::ImageList_LoadImage(AfxGetResourceHandle(),
-		                                        MAKEINTRESOURCE(IDB_NAVIGATION_BAR),16,1,RGB(192,192,192),IMAGE_BITMAP,
-		                                        LR_CREATEDIBSECTION);
+		HIMAGELIST himl = ::ImageList_LoadImage(AfxGetResourceHandle(), MAKEINTRESOURCE(
+			IDB_NAVIGATION_BAR), 16, 1, RGB(192, 192, 192), IMAGE_BITMAP, LR_CREATEDIBSECTION);
 
-		structure_view_.SetIcon(::ImageList_ExtractIcon(0,himl,0),FALSE);
-		env_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,1),FALSE);
-		file_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,2),FALSE);
-		bib_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,3),FALSE);
-		bookmark_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,4),FALSE);
+		structure_view_.SetIcon(::ImageList_ExtractIcon(0, himl, 0), FALSE);
+		env_view_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 1), FALSE);
+		file_view_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 2), FALSE);
+		bib_view_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 3), FALSE);
+		bookmark_view_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 4), FALSE);
 
 		::ImageList_Destroy(himl);
 
@@ -1719,7 +1732,7 @@ void CMainFrame::OnOpenProject(CLaTeXProject* p)
 	const std::vector<CProjectView*> views = GetViews();
 
 	using namespace std::tr1::placeholders;
-	std::for_each(views.begin(),views.end(),std::tr1::bind(&CLaTeXProject::AddView,p,_1));
+	std::for_each(views.begin(), views.end(), std::tr1::bind(&CLaTeXProject::AddView, p, _1));
 }
 
 void CMainFrame::OnCloseProject(CLaTeXProject* p)
@@ -1729,50 +1742,51 @@ void CMainFrame::OnCloseProject(CLaTeXProject* p)
 	const std::vector<CProjectView*> views = GetViews();
 
 	using namespace std::tr1::placeholders;
-	std::for_each(views.begin(),views.end(),std::tr1::bind(&CLaTeXProject::RemoveView,p,_1));
+	std::for_each(views.begin(), views.end(), std::tr1::bind(&CLaTeXProject::RemoveView, p, _1));
 
 	output_doc_.ClearMessages(); // Clear all the warnings, errors etc.
 }
 
 bool CMainFrame::CreateOutputPanes(void)
 {
-	const DWORD pane_style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_HIDE_INPLACE | CBRS_FLOAT_MULTI;
-	const CSize size(250,200);
+	const DWORD pane_style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+			| CBRS_BOTTOM | CBRS_HIDE_INPLACE | CBRS_FLOAT_MULTI;
+	const CSize size(250, 200);
 
-	error_list_view_.Create(CString(MAKEINTRESOURCE(IDS_ERROR_LIST)),this,size,
-		TRUE,ID_VIEW_ERROR_LIST_PANE,pane_style);
-	build_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_BUILD)), this,size,
-	                        TRUE, ID_VIEW_BUILD_PANE,pane_style);
-	grep_view_1_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_GREP_1)), this,size,
-	                         TRUE, ID_VIEW_GREP_1_PANE,pane_style);
-	grep_view_2_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_GREP_2)), this,size,
-	                         TRUE, ID_VIEW_GREP_2_PANE,pane_style);
-	parse_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_PARSE)), this,size,
-	                        TRUE, ID_VIEW_PARSE_PANE,pane_style);
+	error_list_view_.Create(CString(MAKEINTRESOURCE(IDS_ERROR_LIST)), this, size, TRUE,
+		ID_VIEW_ERROR_LIST_PANE, pane_style);
+	build_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_BUILD)), this, size, TRUE,
+		ID_VIEW_BUILD_PANE, pane_style);
+	grep_view_1_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_GREP_1)), this, size, TRUE,
+		ID_VIEW_GREP_1_PANE, pane_style);
+	grep_view_2_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_GREP_2)), this, size, TRUE,
+		ID_VIEW_GREP_2_PANE, pane_style);
+	parse_view_pane_.Create(CString(MAKEINTRESOURCE(STE_TAB_PARSE)), this, size, TRUE,
+		ID_VIEW_PARSE_PANE, pane_style);
 
 	// Create views:
 	CRect rectDummy;
 	rectDummy.SetRectEmpty();
 
-	if (!build_view_.Create(rectDummy,this))
+	if (!build_view_.Create(rectDummy, this))
 	{
 		TRACE0("Failed to create structure view\n");
 		return false;
 	}
 
-	if (!grep_view_1_.Create(rectDummy,this))
+	if (!grep_view_1_.Create(rectDummy, this))
 	{
 		TRACE0("Failed to create environment view\n");
 		return false;
 	}
 
-	if (!grep_view_2_.Create(rectDummy,this))
+	if (!grep_view_2_.Create(rectDummy, this))
 	{
 		TRACE0("Failed to create file view\n");
 		return false;
 	}
 
-	if (!parse_view_.Create(rectDummy,this))
+	if (!parse_view_.Create(rectDummy, this))
 	{
 		TRACE0("Failed to create bib view\n");
 		return false;
@@ -1781,8 +1795,7 @@ bool CMainFrame::CreateOutputPanes(void)
 	grep_view_1_.SetIndex(0);
 	grep_view_2_.SetIndex(1);
 
-	output_doc_.SetAllViews(&build_view_,
-	                        &grep_view_1_,&grep_view_2_,&parse_view_);
+	output_doc_.SetAllViews(&build_view_, &grep_view_1_, &grep_view_2_, &parse_view_);
 
 	build_view_.AttachDoc(&output_doc_);
 	grep_view_1_.AttachDoc(&output_doc_);
@@ -1807,45 +1820,45 @@ bool CMainFrame::CreateOutputPanes(void)
 
 	CDockablePane* p = 0;
 
-	error_list_view_.AttachToTabWnd(&build_view_pane_,DM_STANDARD,TRUE,&p);
-	grep_view_1_pane_.AttachToTabWnd(&build_view_pane_,DM_STANDARD,FALSE);
-	grep_view_2_pane_.AttachToTabWnd(&build_view_pane_,DM_STANDARD,FALSE);
-	parse_view_pane_.AttachToTabWnd(&build_view_pane_,DM_STANDARD,FALSE);
-	bookmark_view_pane_.AttachToTabWnd(&build_view_pane_,DM_STANDARD,FALSE);
+	error_list_view_.AttachToTabWnd(&build_view_pane_, DM_STANDARD, TRUE, &p);
+	grep_view_1_pane_.AttachToTabWnd(&build_view_pane_, DM_STANDARD, FALSE);
+	grep_view_2_pane_.AttachToTabWnd(&build_view_pane_, DM_STANDARD, FALSE);
+	parse_view_pane_.AttachToTabWnd(&build_view_pane_, DM_STANDARD, FALSE);
+	bookmark_view_pane_.AttachToTabWnd(&build_view_pane_, DM_STANDARD, FALSE);
 
-	p->SetAutoHideMode(TRUE,CBRS_BOTTOM,0,FALSE);
+	p->SetAutoHideMode(TRUE, CBRS_BOTTOM, 0, FALSE);
 
 	// Adjust panes' size in auto hide mode or otherwise only the caption bar might be visible
 	// The size parameter of the CDockablePane::Create function doesn't seem to be 
 	// honored when switching into auto hide mode.
-	CWnd* panes[] = {&build_view_pane_,&grep_view_1_pane_,&grep_view_2_pane_,&parse_view_pane_,
-		&error_list_view_,&bookmark_view_pane_};
+	CWnd* panes[] = { &build_view_pane_, &grep_view_1_pane_, &grep_view_2_pane_, &parse_view_pane_,
+			&error_list_view_, &bookmark_view_pane_ };
 	const int count = sizeof(panes) / sizeof(*panes);
 
 	CRect rect;
 
-	for (int i = 0; i < count; ++i) 
+	for (int i = 0; i < count; ++i)
 	{
 		panes[i]->GetWindowRect(&rect);
 
 		if (rect.Height() < size.cy)
 		{
 			rect.top = rect.bottom - size.cy;
-			panes[i]->SetWindowPos(0,0,0,rect.Width(),rect.Height(),SWP_NOZORDER|SWP_NOMOVE|SWP_NOACTIVATE);
+			panes[i]->SetWindowPos(0, 0, 0, rect.Width(), rect.Height(), SWP_NOZORDER | SWP_NOMOVE
+					| SWP_NOACTIVATE);
 		}
 	}
 
 	if (CBaseTabbedPane* pane = dynamic_cast<CBaseTabbedPane*>(p))
 	{
-		HIMAGELIST himl = ::ImageList_LoadImage(AfxGetResourceHandle(),
-		                                        MAKEINTRESOURCE(IDB_OUTPUT_BAR),16,1,RGB(192,192,192),IMAGE_BITMAP,
-		                                        LR_CREATEDIBSECTION);
+		HIMAGELIST himl = ::ImageList_LoadImage(AfxGetResourceHandle(), MAKEINTRESOURCE(
+			IDB_OUTPUT_BAR), 16, 1, RGB(192, 192, 192), IMAGE_BITMAP, LR_CREATEDIBSECTION);
 
-		build_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,0),FALSE);
-		grep_view_1_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,1),FALSE);
-		grep_view_2_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,2),FALSE);
-		parse_view_pane_.SetIcon(::ImageList_ExtractIcon(0,himl,3),FALSE);
-		error_list_view_.SetIcon(::ImageList_ExtractIcon(0,himl,4),FALSE);
+		build_view_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 0), FALSE);
+		grep_view_1_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 1), FALSE);
+		grep_view_2_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 2), FALSE);
+		parse_view_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 3), FALSE);
+		error_list_view_.SetIcon(::ImageList_ExtractIcon(0, himl, 4), FALSE);
 
 		::ImageList_Destroy(himl);
 
@@ -1869,45 +1882,50 @@ void CMainFrame::OnApplicationLook(UINT id)
 	switch (theApp.GetApplicationLook())
 	{
 		case ID_VIEW_APP_LOOK_WIN_2000:
-			CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManager));
+			CMFCVisualManager::SetDefaultManager( RUNTIME_CLASS(CMFCVisualManager));
 			break;
 		case ID_VIEW_APP_LOOK_OFFICE_XP:
-			CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerOfficeXP));
+			CMFCVisualManager::SetDefaultManager( RUNTIME_CLASS(CMFCVisualManagerOfficeXP));
 			break;
 		case ID_VIEW_APP_LOOK_WIN_XP:
 			CMFCVisualManagerWindows::m_b3DTabsXPTheme = TRUE;
-			CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerWindows));
+			CMFCVisualManager::SetDefaultManager( RUNTIME_CLASS(CMFCVisualManagerWindows));
 			break;
 		case ID_VIEW_APP_LOOK_OFFICE_2003:
-			CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerOffice2003));
-			CDockingManager::SetDockingMode(DT_SMART);
+			CMFCVisualManager::SetDefaultManager( RUNTIME_CLASS(CMFCVisualManagerOffice2003));
+			CDockingManager::SetDockingMode( DT_SMART);
 			break;
 		case ID_VIEW_APP_LOOK_VS_2005:
-			CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerVS2005));
+			CMFCVisualManager::SetDefaultManager( RUNTIME_CLASS(CMFCVisualManagerVS2005));
 			CDockingManager::SetDockingMode(DT_SMART);
 			break;
 		default:
 			switch (theApp.GetApplicationLook())
 			{
 				case ID_VIEW_APP_LOOK_OFFICE_2007_BLUE:
-					CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_LunaBlue);
+					CMFCVisualManagerOffice2007::SetStyle(
+						CMFCVisualManagerOffice2007::Office2007_LunaBlue);
 					break;
 				case ID_VIEW_APP_LOOK_OFFICE_2007_BLACK:
-					CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_ObsidianBlack);
+					CMFCVisualManagerOffice2007::SetStyle(
+						CMFCVisualManagerOffice2007::Office2007_ObsidianBlack);
 					break;
 				case ID_VIEW_APP_LOOK_OFFICE_2007_SILVER:
-					CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_Silver);
+					CMFCVisualManagerOffice2007::SetStyle(
+						CMFCVisualManagerOffice2007::Office2007_Silver);
 					break;
 				case ID_VIEW_APP_LOOK_OFFICE_2007_AQUA:
-					CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_Aqua);
+					CMFCVisualManagerOffice2007::SetStyle(
+						CMFCVisualManagerOffice2007::Office2007_Aqua);
 					break;
 			}
 
-			CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerOffice2007));
+			CMFCVisualManager::SetDefaultManager( RUNTIME_CLASS(CMFCVisualManagerOffice2007));
 			CDockingManager::SetDockingMode(DT_SMART);
 	}
 
-	RedrawWindow(NULL, NULL, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_FRAME | RDW_ERASE);
+	RedrawWindow(NULL, NULL, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_FRAME
+			| RDW_ERASE);
 }
 
 void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
@@ -1920,21 +1938,22 @@ void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
 
 void CMainFrame::OnLatexRun()
 {
-	PostMessage(StartPaneAnimationMessageID);	
+	PostMessage( StartPaneAnimationMessageID);
 }
 
 void CMainFrame::OnLatexStop(bool canceled)
 {
-	PostMessage(StopPaneAnimationMessageID, canceled);	
+	PostMessage(StopPaneAnimationMessageID, canceled);
 }
 
 void CMainFrame::OnStartPaneAnimation()
 {
 	animating_ = true;
 	// Start the animation
-	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane,build_animation_,250);
-	
-	if (taskBarList_) {
+	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane, build_animation_, 250);
+
+	if (taskBarList_)
+	{
 		// Show a marquee progress in the taskbar if available
 		taskBarList_->SetProgressState(m_hWnd, TBPF_INDETERMINATE);
 	}
@@ -1943,12 +1962,14 @@ void CMainFrame::OnStartPaneAnimation()
 LRESULT CMainFrame::OnStopPaneAnimation(WPARAM, LPARAM)
 {
 	// Stop the animation
-	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane,0);
+	m_wndStatusBar.SetPaneAnimation(BuildAnimationPane, 0);
 
 	// Release the taskbar
-	if (taskBarList_) {
+	if (taskBarList_)
+	{
 		taskBarList_->SetProgressValue(m_hWnd, 100, 100); // 100% complete
-		taskBarList_->SetProgressState(m_hWnd, output_doc_.HasBuildErrors() ? TBPF_ERROR : TBPF_NORMAL);
+		taskBarList_->SetProgressState(m_hWnd, output_doc_.HasBuildErrors() ? TBPF_ERROR
+				: TBPF_NORMAL);
 	}
 
 	animating_ = false;
@@ -1959,7 +1980,8 @@ LRESULT CMainFrame::OnStopPaneAnimation(WPARAM, LPARAM)
 void CMainFrame::OnIdle(long /*count*/)
 {
 #if 0
-	if (!animating_) {
+	if (!animating_)
+	{
 		// Remove the taskbar progress when idle
 		HideTaskbarProgress();
 	}
@@ -1968,20 +1990,21 @@ void CMainFrame::OnIdle(long /*count*/)
 
 void CMainFrame::HideTaskbarProgress()
 {
-	if (taskBarList_) {
+	if (taskBarList_)
+	{
 		taskBarList_->SetProgressState(m_hWnd, TBPF_NOPROGRESS);
 	}
 }
 
 LRESULT CMainFrame::OnGetTabToolTip(WPARAM, LPARAM l)
 {
-	CMFCTabToolTipInfo* ti = reinterpret_cast<CMFCTabToolTipInfo*>(l);
-	ASSERT_POINTER(ti,CMFCTabToolTipInfo);
+	CMFCTabToolTipInfo* ti = reinterpret_cast<CMFCTabToolTipInfo*> (l);
+	ASSERT_POINTER(ti, CMFCTabToolTipInfo);
 
-	CChildFrame* f = reinterpret_cast<CChildFrame*>(ti->m_pTabWnd->GetTabWnd(ti->m_nTabIndex));
+	CChildFrame* f = reinterpret_cast<CChildFrame*> (ti->m_pTabWnd->GetTabWnd(ti->m_nTabIndex));
 	if (f)
 	{
-		ASSERT_KINDOF(CChildFrame,f);
+		ASSERT_KINDOF(CChildFrame, f);
 		ti->m_strText = f->GetPathNameOfDocument();
 	}
 
@@ -2004,9 +2027,10 @@ void CMainFrame::UpdateFrameTitle()
 {
 	CLaTeXProject* project = theApp.GetProject();
 
-	CString title(MAKEINTRESOURCE(IDR_MAINFRAME));
+	CString title(MAKEINTRESOURCE( IDR_MAINFRAME));
 
-	if (project) {
+	if (project)
+	{
 		const CString& tmp = project->GetTitle();
 
 		if (!tmp.IsEmpty())
@@ -2029,7 +2053,8 @@ void CMainFrame::RegisterChildFrame(CFrameWnd* frame)
 	ENSURE_ARG(frame);
 
 #ifdef WINDOWS_7_THUMBNAILS_
-	if (taskBarList_) {
+	if (taskBarList_)
+	{
 		HWND hwnd = frame->GetSafeHwnd();
 		taskBarList_->RegisterTab(hwnd, m_hWnd);
 		taskBarList_->SetTabOrder(hwnd, 0);
@@ -2045,7 +2070,7 @@ void CMainFrame::UnregisterChildFrame(CFrameWnd* frame)
 
 #ifdef WINDOWS_7_THUMBNAILS_
 	if (taskBarList_)
-		taskBarList_->UnregisterTab(frame->m_hWnd); 
+	taskBarList_->UnregisterTab(frame->m_hWnd);
 #endif
 }
 
@@ -2057,23 +2082,25 @@ LRESULT CMainFrame::OnDwmSendIconicThumbnail(WPARAM w, LPARAM l)
 	if (frame && frame != this)
 		result = frame->SendMessage(WM_DWMSENDICONICTHUMBNAIL, w, l);
 
-	else result = 1; // Not processed
+	else
+		result = 1; // Not processed
 
 	return result;
 }
 
 void CMainFrame::CheckForFileChangesAsync()
 {
-	PostMessage(CheckForFileChangesMessageID);
+	PostMessage( CheckForFileChangesMessageID);
 }
 
 BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 {
 	BOOL result = FALSE;
 
-	if (pMsg->message == WM_MBUTTONUP && AreMDITabs()) {
+	if (pMsg->message == WM_MBUTTONUP && AreMDITabs())
+	{
 		CWnd* pWnd = FromHandle(pMsg->hwnd);
-		CMFCTabCtrl* tabGroup = dynamic_cast<CMFCTabCtrl*>(pWnd);
+		CMFCTabCtrl* tabGroup = dynamic_cast<CMFCTabCtrl*> (pWnd);
 
 		if (tabGroup)
 		{
@@ -2089,16 +2116,16 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 				//clicked middle button on a tab.
 				//send a WM_CLOSE message to it
 				CWnd* pTab = tabGroup->GetTabWnd(tabIndex);
-				
+
 				if (pTab)
 				{
 					pTab->SendMessage(WM_CLOSE);
 					result = TRUE;
 				}
 			}
-		}		
+		}
 	}
-	
+
 	if (!result)
 		result = CMDIFrameWndEx::PreTranslateMessage(pMsg);
 
