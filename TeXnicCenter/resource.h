@@ -409,6 +409,7 @@
 #define STE_TB_LATEX                    1343
 #define STE_TB_MAINFRAME                1344
 #define IDS_LINE_NUMBER                 1345
+#define IDS_BIBTEX_FILTER               1345
 #define IDS_EDIT_TEXT_NOT_FOUND         1346
 #define IDS_DO_NOT_SAVE                 1347
 #define IDS_BIBTEX_RESULT               1348
@@ -431,6 +432,7 @@
 #define IDS_NO_LABEL_AVAILABLE          1365
 #define IDS_DEFINE_COLOR_NAME_PLACEHOLDER 1366
 #define IDS_MORE_COLORS                 1367
+#define IDS_METAPOST_FILTER             1367
 #define IDS_AUTOMATIC                   1368
 #define IDS_TEXT_COLORS                 1369
 #define IDS_BACKGROUND_COLORS           1370
@@ -467,6 +469,7 @@
 #define IDB_DOCUMENTTYPES               1506
 #define IDS_BIBLIOGRAPHY                1507
 #define IDC_EDIT_CLOSECMD               1508
+#define IDS_BIBLIOGRAPHY2               1508
 #define IDS_BOOKMARK                    1509
 #define IDR_LATEXWIZARD                 1510
 #define IDC_EDIT_CLOSEDDESERVER         1513

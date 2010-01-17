@@ -187,8 +187,8 @@ BEGIN_MESSAGE_MAP(CTeXnicCenterApp, CProjectSupportingWinApp)
 	ON_UPDATE_COMMAND_UI(ID_PROJECT_NEW_FROM_FILE, OnUpdateProjectNewFromFile)
 	ON_COMMAND(ID_PACKAGE_SETUP, OnPackageSetup)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_ALL, OnUpdateDoForAllOpenWindows)
-	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnDisableStdCmd)
-	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS, OnDisableStdCmd)
+	//ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnDisableStdCmd)
+	//ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS, OnDisableStdCmd)
 	ON_UPDATE_COMMAND_UI(ID_WINDOW_CLOSE_ALL, OnUpdateDoForAllOpenWindows)
 	ON_COMMAND(ID_BIBTEX_NEW, &CTeXnicCenterApp::OnBibTeXNew)
 	ON_COMMAND(ID_METAPOST_NEW, &CTeXnicCenterApp::OnMetaPostNew)
@@ -1140,7 +1140,7 @@ void CTeXnicCenterApp::OnFileSaveAll()
 void CTeXnicCenterApp::OnDisableStdCmd(CCmdUI* pCmdUI)
 {
 	// disables standard document commands for project document
-	pCmdUI->Enable((BOOL)m_pLatexDocTemplate->GetFirstDocPosition());
+	pCmdUI->Enable(HasOpenDocuments());
 }
 
 void CTeXnicCenterApp::OnFileOpen()
@@ -2181,4 +2181,23 @@ bool CTeXnicCenterApp::GetShowMDITabs() const
 void CTeXnicCenterApp::SetShowMDITabs( bool val )
 {
 	m_bMDITabs = val;
+}
+
+bool CTeXnicCenterApp::HasOpenDocuments() const
+{
+	bool found = false;
+	POSITION pos = GetFirstDocTemplatePosition();
+
+	while (pos && !found)
+	{
+		if (CDocTemplate* t = GetNextDocTemplate(pos))
+		{
+			POSITION pos1 = t->GetFirstDocPosition();
+
+			if (pos1 && t->GetNextDoc(pos1))
+				found = true;
+		}
+	}
+
+	return found;
 }

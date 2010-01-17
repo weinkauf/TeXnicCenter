@@ -101,7 +101,7 @@ void StructureItem::SetComment(const CString& val)
 	m_strComment = val;
 }
 
-int StructureItem::GetParent() const
+StructureItemContainer::difference_type StructureItem::GetParent() const
 {
 	return m_nParent;
 }
@@ -221,4 +221,14 @@ bool StructureItem::IsEnvironment() const
 bool StructureItem::IsHeader() const
 {
 	return m_nType == header;
+}
+
+const CString& StructureItem::GetPrefix() const
+{
+	return prefix_;
+}
+
+void StructureItem::SetPrefix( const CString& val )
+{
+	prefix_ = val;
 }

@@ -106,7 +106,12 @@ void StructureTreeCtrl::OnParsingFinished()
 				if (si.GetType() == StructureItem::header)
 					title.Replace(_T("\\-"),_T("")); // Cleanup \-
 				else if (si.GetType() == StructureItem::bibFile) {
-					title.Format(IDS_BIBLIOGRAPHY,si.GetPath());
+					CString path = si.GetPath();
+
+					if (!si.GetPrefix().IsEmpty())
+						path = si.GetPrefix() + _T(", ") + path;
+
+					title.Format(IDS_BIBLIOGRAPHY, path);
 					parent = -1; // Bibliography items are always root nodes
 				}
 

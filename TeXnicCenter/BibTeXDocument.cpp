@@ -42,6 +42,7 @@ void BibTeXDocument::Dump(CDumpContext& dc) const
 {
 	LaTeXDocumentBase::Dump(dc);
 }
+
 #endif
 #endif //_DEBUG
 

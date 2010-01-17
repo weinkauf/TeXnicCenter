@@ -182,7 +182,7 @@ void LaTeXView::OnCharAdded(SCNotification* n)
 	long pos = GetCtrl().GetCurrentPos();
 
 	if (pos > 0) {
-		char ch = static_cast<char>(n->ch);
+		int ch = n->ch;
 
 		switch (ch) {
 			case '"':

@@ -66,6 +66,8 @@ class CodeDocument : public CScintillaDoc
 	bool use_bom_;
 
 	CSemaphore semaphore_;
+	Nullable<int> EOL_mode_;
+	bool save_copy_;
 
 public:
 	enum Encoding
@@ -124,7 +126,6 @@ public:
 
 	Encoding GetEncoding() const;
 	void SetEncoding(Encoding e);
-
 	UINT GetCodePage() const;
 	void SetSpellerThread(SpellerBackgroundThread* t);
 	SpellerBackgroundThread* GetSpellerThread() const;
@@ -142,43 +143,66 @@ protected:
 
 	virtual BOOL OnNewDocument();
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
-
 	afx_msg void OnEditToggleBookmark();
 	afx_msg void OnEditClearAllBookmarks();
-
-	bool ShowSaveDialog(LPCTSTR file) const;
-	
 	virtual void OnBookmarkAdded(const ::CodeBookmark& b);
 	virtual void OnBookmarkRemoved(const ::CodeBookmark& b);
 	virtual void OnRemovedAllBookmarks(void);
-
 	afx_msg void OnEditSplitParagraph();
 	afx_msg void OnEditJoinParagraph();
 
+	/// Indicates whether the save dialog should be shown.
+	///
+	/// \param file File name.
+	bool ShowSaveDialog(LPCTSTR file) const;
+
 public:
-	/// Removes all bookmarks that have been set
+	BOOL DoSave(LPCTSTR lpszPathName, BOOL bReplace = TRUE);
+
+	/// Removes all bookmarks that have been set.
 	void RemoveAllBookmarks();
-	/// Sets or removes a bookmark on the specified line
+
+	/// Sets or removes a bookmark on the specified line.
 	void ToggleBookmark( int line );
-	/// Returns a container of CodeBookmarks that have been set for this document
+
+	/// Returns a container of CodeBookmarks that have been set for this document.
 	const BookmarkContainerType GetBookmarks();
-	/// Clears all the bookmarks and sets the ones from the range specified by first last
+
+	/// Clears all the bookmarks and sets the ones from the range specified by first last.
 	template<class I>
 	void SetBookmarks(I first, I last);	
-	/// Indicates whether this document should be saved with BOM, invalid for ANSI documents
+
+	/// Indicates whether this document should be saved with BOM, invalid for ANSI documents.
 	bool GetUseBOM() const;
-	/// Enables or disabled the usage of a BOM for Unicode text documents
+
+	/// Enables or disabled the usage of a BOM for Unicode text documents.
 	void SetUseBOM(bool use = true);
+
 	/// Returns a tuple containing the first and last line
 	/// of the paragraph the start_line parameter points to
 	const std::pair<int,int> GetParagraphRange(int start_line);
-	/// Returns a container for FoldingPoints
+
+	/// Returns a collection of folding points.
 	const FoldingPointContainerType GetFoldingPoints(bool contracted = false);
+
+	/// Returns a collection of folding points that have been contracted.
 	const FoldingPointContainerType GetContractedFoldingPoints();
 
 	template<class I>
 	void SetFoldingPoints(I first, I last);
 	virtual void OnCloseDocument();
+
+protected:
+	const Nullable<int>& GetSavedEOLMode() const;
+	virtual const CString GetExtensionFilter() const;
+
+	afx_msg void OnFileSaveCopyAs();
+	afx_msg void OnUpdateFileSave(CCmdUI *pCmdUI);
+	
+private:
+	DWORD DoSaveFile( HANDLE file, bool throw_on_invalid_sequence );
+public:
+	afx_msg void OnUpdateFileSaveAs(CCmdUI *pCmdUI);
 };
 
 class TextDocument

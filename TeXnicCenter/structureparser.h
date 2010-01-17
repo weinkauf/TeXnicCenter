@@ -110,6 +110,24 @@ class CStructureParser
 	/** This function is used as a worker thread to parse the structure. */
 	friend UINT StructureParserThread(LPVOID pStructureParser);
 
+	/// \ref StructureItem comparison predicate that matches items 
+	/// with the same file path and prefix.
+	class ItemMatch {
+		const CString& prefix_;
+		const CString& path_;
+
+	public:
+		ItemMatch(const CString& path, const CString& prefix)
+			: prefix_(prefix), path_(path)
+		{
+		}
+
+		bool operator()(const StructureItem& item) const 
+		{
+			return item.GetPath().CompareNoCase(path_) == 0 && prefix_ == item.GetPrefix();
+		}
+	};
+
 // Item types
 private:
 
@@ -267,7 +285,8 @@ private:
 	@return
 	        index of file added to m_aStructureItems array.
 	 */
-	StructureItemContainer::size_type AddFileItem(LPCTSTR lpszPath,int nType, LPCTSTR lpszIncludeFromFile, int nIncludedFileLineNumber, StructureItemContainer &aSI,LPCTSTR lpszAnnotation = NULL);
+	StructureItemContainer::size_type AddFileItem(LPCTSTR lpszPath,int nType, LPCTSTR lpszIncludeFromFile, 
+		int nIncludedFileLineNumber, StructureItemContainer &aSI,LPCTSTR lpszAnnotation = NULL, LPCTSTR prefix = NULL);
 
 	/** Creates a title from the caption or label of a StructureItem.
 
