@@ -1200,6 +1200,8 @@ const CString CodeDocument::GetExtensionFilter() const
 {
 	CString text;
 	GetDocTemplate()->GetDocString(text, CDocTemplate::filterName);
+	
+	text += _T("||");
 
 	return text;
 }
