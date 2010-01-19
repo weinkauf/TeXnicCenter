@@ -2883,6 +2883,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Näc&hstes Fenster",           ID_WINDOW_NEXT
         MENUITEM "&Vorhergehendes Fenster",     ID_WINDOW_PREVIOUS
+        MENUITEM "&Zuletzt aktives Fenster",    ID_WINDOW_RECENTLY_USED
         MENUITEM SEPARATOR
         MENUITEM "Überla&ppend",                ID_WINDOW_CASCADE
         MENUITEM "Ü&bereinander",               ID_WINDOW_TILE_HORZ
@@ -4838,6 +4839,11 @@ BEGIN
     ID_FILE_MRU_PROJECT10   "Öffnet dieses Projekt."
     ID_FILE_MRU_PROJECT11   "Öffnet dieses Projekt."
     ID_ERROR_VIEW_SOURCE    "Öffnet die Quelldatei und springt zur betroffenen Zeile."
+END
+
+STRINGTABLE 
+BEGIN
+    ID_WINDOW_RECENTLY_USED "Aktiviert das zuletzt benutze Fenster"
 END
 
 #endif    // German (Germany) resources
@@ -6929,6 +6935,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Ne&xt Window",                ID_WINDOW_NEXT
         MENUITEM "&Previous Window",            ID_WINDOW_PREVIOUS
+        MENUITEM "&Recently Used Window",       ID_WINDOW_RECENTLY_USED
         MENUITEM SEPARATOR
         MENUITEM "Casca&de",                    ID_WINDOW_CASCADE
         MENUITEM "Tile &Horizontally",          ID_WINDOW_TILE_HORZ
@@ -8835,6 +8842,11 @@ BEGIN
     ID_FILE_MRU_PROJECT10   "Opens this project."
     ID_FILE_MRU_PROJECT11   "Opens this project."
     ID_ERROR_VIEW_SOURCE    "Opens the source file and jumps to the affected line."
+END
+
+STRINGTABLE 
+BEGIN
+    ID_WINDOW_RECENTLY_USED "Activates recently used window."
 END
 
 #endif    // English (U.S.) resources

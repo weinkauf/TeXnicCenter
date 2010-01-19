@@ -251,6 +251,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_WM_DESTROY()
 	ON_MESSAGE(WM_DWMSENDICONICTHUMBNAIL, &CMainFrame::OnDwmSendIconicThumbnail)
 	ON_MESSAGE_VOID(CheckForFileChangesMessageID, CheckForFileChanges)
+	ON_COMMAND(ID_WINDOW_RECENTLY_USED, &CMainFrame::OnWindowRecentlyUsed)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_RECENTLY_USED, &CMainFrame::OnUpdateWindowRecentlyUsed)
 END_MESSAGE_MAP()
 
 const UINT BuildAnimationPane = 1;
@@ -287,6 +289,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CMDIFrameWndEx::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
+	recentUsed_ = NULL;
 	OnApplicationLook(theApp.GetApplicationLook());
 
 	// load user images
@@ -2072,6 +2075,9 @@ void CMainFrame::UnregisterChildFrame(CFrameWnd* frame)
 	if (taskBarList_)
 	taskBarList_->UnregisterTab(frame->m_hWnd);
 #endif
+
+	if (recentUsed_ == frame)
+		recentUsed_ = NULL;
 }
 
 LRESULT CMainFrame::OnDwmSendIconicThumbnail(WPARAM w, LPARAM l)
@@ -2130,4 +2136,26 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 		result = CMDIFrameWndEx::PreTranslateMessage(pMsg);
 
 	return result;
+}
+
+void CMainFrame::OnWindowRecentlyUsed()
+{
+	ENSURE_VALID(recentUsed_);
+	recentUsed_->ActivateFrame();
+}
+
+void CMainFrame::OnUpdateWindowRecentlyUsed(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(recentUsed_ != NULL);
+}
+
+void CMainFrame::SetRecentlyUsedChildFrame( CFrameWnd* child, bool force /*= false*/ )
+{
+	if (child != NULL || force)
+		recentUsed_ = child;
+}
+
+CFrameWnd* CMainFrame::GetRecentUsedChildFrame() const
+{
+	return recentUsed_;
 }
