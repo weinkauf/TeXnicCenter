@@ -65,6 +65,7 @@ class CMainFrame : public CMDIFrameWndEx
 
 	friend class CLaTeXProject;
 	friend class COutputBuilder;
+	CFrameWnd* recentUsed_;
 
 private:
 	CComPtr<ITaskbarList3> taskBarList_;
@@ -428,6 +429,8 @@ protected:
 	virtual void OnUpdateFrameTitle(BOOL bAddToTitle);
 
 	afx_msg void OnDestroy();
+	afx_msg void OnWindowRecentlyUsed();
+	afx_msg void OnUpdateWindowRecentlyUsed(CCmdUI *pCmdUI);
 
 public:
 	void UpdateFrameTitle();
@@ -436,4 +439,7 @@ public:
 	void CheckForFileChanges();
 	void CheckForFileChangesAsync();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+
+	void SetRecentlyUsedChildFrame(CFrameWnd* child, bool force = false);
+	CFrameWnd* GetRecentUsedChildFrame() const;
 };

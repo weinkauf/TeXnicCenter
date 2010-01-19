@@ -73,6 +73,7 @@ BEGIN_MESSAGE_MAP(CChildFrame,CMDIChildWndEx)
 	//}}AFX_MSG_MAP
 	ON_WM_CREATE()
 	ON_MESSAGE(WM_DWMSENDICONICTHUMBNAIL, &CChildFrame::OnDwmSendIconicThumbnail)
+	ON_WM_MDIACTIVATE()
 END_MESSAGE_MAP()
 
 
@@ -343,4 +344,22 @@ LRESULT CChildFrame::OnDwmSendIconicThumbnail(WPARAM, LPARAM)
 #endif
 
 	return 0;
+}
+void CChildFrame::OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDeactivateWnd)
+{
+	CMDIChildWndEx::OnMDIActivate(bActivate, pActivateWnd, pDeactivateWnd);
+
+	// Prevent the recently used frame from being updated while closing the frame
+	if (bActivate)
+	{
+		CChildFrame* frame = dynamic_cast<CChildFrame*>(pDeactivateWnd);
+
+		if (frame && !frame->m_bToBeDestroyed)
+		{
+			CMainFrame* m = dynamic_cast<CMainFrame*>(GetTopLevelFrame());
+			ENSURE(m);
+
+			m->SetRecentlyUsedChildFrame(frame);
+		}
+	}
 }

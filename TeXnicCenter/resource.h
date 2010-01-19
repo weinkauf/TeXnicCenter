@@ -469,7 +469,6 @@
 #define IDB_DOCUMENTTYPES               1506
 #define IDS_BIBLIOGRAPHY                1507
 #define IDC_EDIT_CLOSECMD               1508
-#define IDS_BIBLIOGRAPHY2               1508
 #define IDS_BOOKMARK                    1509
 #define IDR_LATEXWIZARD                 1510
 #define IDC_EDIT_CLOSEDDESERVER         1513
@@ -1423,6 +1422,7 @@
 #define ID_FILE_MRU_PROJECT16           40615
 #define ID_ERROR_VIEW_SOURCE            40621
 #define ID_OPEN_TRANSCRIPT              40622
+#define ID_WINDOW_RECENTLY_USED         40623
 #define IDR_BOOKMARK_VIEW               57672
 #define IDR_ERROR_VIEW                  57673
 

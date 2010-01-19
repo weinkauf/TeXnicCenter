@@ -38,8 +38,6 @@ HBITMAP CreateBitmapFromWindow(CWnd* wnd);
 
 class CChildFrame : public CMDIChildWndEx
 {
-	//CSplitterWndEx m_wndSplitter;
-
 	DECLARE_DYNCREATE(CChildFrame)
 public:
 	CChildFrame();
@@ -105,4 +103,5 @@ protected:
 //CSplitterWnd m_wndSplitter;
 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDeactivateWnd);
 };
