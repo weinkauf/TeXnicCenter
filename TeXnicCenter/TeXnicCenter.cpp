@@ -35,6 +35,8 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 
+#include <vector>
+
 #include <locale.h>
 #include <direct.h>
 
@@ -62,6 +64,7 @@
 #include "BibTeXDocument.h"
 #include "MetaPostView.h"
 #include "MetaPostDocument.h"
+#include "MultiExtensionDocTemplate.h"
 
 
 class CTCCommandLineInfo : public CCommandLineInfo
@@ -389,7 +392,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	// Dokumentvorlagen registrieren
 	// LaTeX-Document
-	m_pLatexDocTemplate = new CMultiDocTemplate(
+	m_pLatexDocTemplate = new MultiExtensionDocTemplate(
 	    IDR_LATEXDOCTYPE,
 	    RUNTIME_CLASS(LaTeXDocument),
 	    RUNTIME_CLASS(CChildFrame), // Benutzerspezifischer MDI-Child-Rahmen
@@ -409,7 +412,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 	//The file types below will not be registered with us
 
 	// BibTeX-Document
-	CMultiDocTemplate* bibtempl = new CMultiDocTemplate(
+	CMultiDocTemplate* bibtempl = new MultiExtensionDocTemplate(
 		IDR_BIBTEXDOCTYPE,
 		RUNTIME_CLASS(BibTeXDocument),
 		RUNTIME_CLASS(CChildFrame), // Benutzerspezifischer MDI-Child-Rahmen
@@ -1145,10 +1148,28 @@ void CTeXnicCenterApp::OnDisableStdCmd(CCmdUI* pCmdUI)
 
 void CTeXnicCenterApp::OnFileOpen()
 {
+	CString filter;//((LPCTSTR)STE_FILE_LATEXFILTER)
+
+	POSITION pos = GetFirstDocTemplatePosition();
+
+	while (pos)
+	{
+		if (CDocTemplate* doc = GetNextDocTemplate(pos))
+		{
+			filter += GetDocTemplateFilter(doc);
+		}
+	}
+
+	filter += CString(MAKEINTRESOURCE(STE_ALL_FILES_FILTER));
+
 	CFileDialogEx dlg(
 	    TRUE,
 	    GetLatexString(CDocTemplate::filterExt), NULL,
-	    OFN_FILEMUSTEXIST, CString((LPCTSTR)STE_FILE_LATEXFILTER));
+	    OFN_FILEMUSTEXIST | OFN_ALLOWMULTISELECT, filter);
+
+	std::vector<TCHAR> buffer(0x10000); 
+	dlg.m_ofn.lpstrFile = &buffer[0]; // Use a larger buffer
+	dlg.m_ofn.nMaxFile = buffer.size();
 
 	//Get default path
 	CString strInitialDir = AfxGetDefaultDirectory();
@@ -1163,10 +1184,17 @@ void CTeXnicCenterApp::OnFileOpen()
 		return;
 	}
 
-	AfxSetLastDirectory(CPathTool::GetDirectory(dlg.GetPathName()));
-	// open file
-	//NOTE: dlg.GetReadOnlyPref() always return false on my WinXP SP2, Tino, Jan 2007
-	OpenLatexDocument(dlg.GetPathName(), dlg.GetReadOnlyPref(), -1, false, true);
+	POSITION file = dlg.GetStartPosition();
+
+	while (file)
+	{
+		const CString path = dlg.GetNextPathName(file);
+		// open file
+		//NOTE: dlg.GetReadOnlyPref() always return false on my WinXP SP2, Tino, Jan 2007
+		OpenLatexDocument(path, dlg.GetReadOnlyPref(), -1, false, true);
+	}
+
+	AfxSetLastDirectory(CPathTool::GetDirectory(dlg.GetPathName()));	
 }
 
 void CTeXnicCenterApp::OnProjectOpen()
@@ -2200,4 +2228,43 @@ bool CTeXnicCenterApp::HasOpenDocuments() const
 	}
 
 	return found;
+}
+
+const CString CTeXnicCenterApp::GetDocTemplateFilter( CDocTemplate* doc)
+{
+	CString text;
+
+	doc->GetDocString(text, CDocTemplate::filterName);
+
+	CString filter = text + _T('|');
+
+	doc->GetDocString(text, CDocTemplate::filterExt);
+
+	int index;
+	CString ext;
+
+	do
+	{
+		index = text.Find(_T(';'));
+
+		if (index == -1)
+			index = text.GetLength();
+
+		ext = text.Left(index);
+		filter += _T('*') + ext;
+
+		if (index < text.GetLength())
+		{
+			filter += _T(';');
+			text = text.Mid(index + 1);
+		}
+		else
+			text.Empty();
+
+	}
+	while (!text.IsEmpty());
+
+	filter += _T('|');	
+	
+	return filter;
 }

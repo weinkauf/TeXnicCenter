@@ -92,6 +92,7 @@ typedef std::tr1::basic_regex<TCHAR> tregex;
 
 #include <atlbase.h>
 #include <atlwin.h>
+#include <afx.h>
 
 // globale Makros
 #define IFNOT( s )\

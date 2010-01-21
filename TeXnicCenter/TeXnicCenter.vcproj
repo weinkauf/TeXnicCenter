@@ -1362,6 +1362,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MultiExtensionDocTemplate.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MultiExtensionDocTemplate.h"
+				>
+			</File>
+			<File
 				RelativePath=".\navigatorview.cpp"
 				>
 			</File>

@@ -3380,7 +3380,6 @@ BEGIN
                             "Die Datei\n\n%s\n\nwurde außerhalb von TeXnicCenter geändert. Soll Sie neu geladen werden?\n\n(Wichtig: Sie haben Änderungen an dem Dokument vorgenommen. Wenn es neu geladen wird, gehen diese Änderungen verloren!)"
     STE_FILE_INUSE          "Es trat ein Fehler beim %s der Datei\n\n%s\n\nauf.\n\n%s"
     STE_FILE_INUSE_OPEN     "Die Datei\n\n%s\n\nkann nicht neu geladen werden. Das bereits offene Dokument wird mit einem Schreibschutz versehen."
-    STE_FILE_LATEXFILTER    "LaTeX-Dateien (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|Alle Dateien (*.*)|*.*||"
     STE_FILE_MRU_FILE_NONE  "&Leer"
     STE_FILE_MRU_PROJECT_NONE "&Leer"
     STE_FILE_XMLFILTER      "XML-Dateien (*.xml)|*.xml|Alle Dateien (*.*)|*.*||"
@@ -3585,8 +3584,8 @@ END
 
 STRINGTABLE 
 BEGIN
-    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Dateien (*.tex)\n.tex\nLaTeX.Document\nLaTeX Dokument"
-    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Dateien (*.bib)\n.bib\nBibTeX.Document\nBibTeX Dokument"
+    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Dateien (*.tex, *.sty, *.cls)\n.tex;.sty;.cls\nLaTeX.Document\nLaTeX Dokument"
+    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Dateien (*.bib, *.bst)\n.bib;.bst\nBibTeX.Document\nBibTeX Dokument"
 END
 
 STRINGTABLE 
@@ -4839,10 +4838,6 @@ BEGIN
     ID_FILE_MRU_PROJECT10   "Öffnet dieses Projekt."
     ID_FILE_MRU_PROJECT11   "Öffnet dieses Projekt."
     ID_ERROR_VIEW_SOURCE    "Öffnet die Quelldatei und springt zur betroffenen Zeile."
-END
-
-STRINGTABLE 
-BEGIN
     ID_WINDOW_RECENTLY_USED "Aktiviert das zuletzt benutze Fenster"
 END
 
@@ -7507,8 +7502,8 @@ END
 
 STRINGTABLE 
 BEGIN
-    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Files (*.tex)\n.tex\nLaTeX.Document\nLaTeX Document"
-    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Files (*.bib)\n.bib\nBibTeX.Document\nBibTeX Document"
+    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Files (*.tex, *.sty, *.cls)\n.tex;.sty;.cls\nLaTeX.Document\nLaTeX Document"
+    IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Files (*.bib, *.bst)\n.bib;.bst\nBibTeX.Document\nBibTeX Document"
 END
 
 STRINGTABLE 
@@ -7741,7 +7736,6 @@ BEGIN
                             "The file\n\n%s\n\nhas been modified outside TeXnicCenter. Should TeXnicCenter reload the document?\n\n(Important: You have made changes to the document. If you decide to reload it, your changes will be lost!)"
     STE_FILE_INUSE          "Cannot %s the file\n\n%s\n\n%s"
     STE_FILE_INUSE_OPEN     "Cannot re-open the file\n\n%s\n\nConverting existing file to read-only"
-    STE_FILE_LATEXFILTER    "LaTeX-Files (*.tex, *.sty, *.cls)|*.tex;*.sty;*.cls|BibTeX-Files (*.bib, *.bst)|*.bib;*.bst|All Files (*.*)|*.*||"
     STE_FILE_MRU_FILE_NONE  "&None"
     STE_FILE_MRU_PROJECT_NONE "&None"
     STE_FILE_XMLFILTER      "XML Files (*.xml)|*.xml|All Files (*.*)|*.*||"
@@ -8842,10 +8836,6 @@ BEGIN
     ID_FILE_MRU_PROJECT10   "Opens this project."
     ID_FILE_MRU_PROJECT11   "Opens this project."
     ID_ERROR_VIEW_SOURCE    "Opens the source file and jumps to the affected line."
-END
-
-STRINGTABLE 
-BEGIN
     ID_WINDOW_RECENTLY_USED "Activates recently used window."
 END
 
