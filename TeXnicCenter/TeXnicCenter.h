@@ -416,6 +416,11 @@ protected:
 public:
 	CDocTemplate* GetBibTeXDocTemplate() const;
 	CDocTemplate* GetMetaPostDocTemplate() const;
+
+	/// Generates a file dialog filter for the specified \c CDocTemplate.
+	///
+	/// \return Filter string.
+	static const CString GetDocTemplateFilter( CDocTemplate* doc);
 };
 
 inline

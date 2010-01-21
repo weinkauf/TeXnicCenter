@@ -948,6 +948,11 @@ BOOL CodeDocument::DoSave(LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/)
 		pTemplate->GetDocString(extension,CDocTemplate::filterExt);
 		ASSERT(!extension.IsEmpty() && extension[0] == _T('.'));
 
+		int semicolon = extension.Find(_T(';'));
+
+		if (semicolon != -1)
+			extension = extension.Left(semicolon);
+
 		newName = m_strPathName;
 
 		if (bReplace && newName.IsEmpty()) {
@@ -1198,10 +1203,8 @@ const Nullable<int>& CodeDocument::GetSavedEOLMode() const
 
 const CString CodeDocument::GetExtensionFilter() const
 {
-	CString text;
-	GetDocTemplate()->GetDocString(text, CDocTemplate::filterName);
-	
-	text += _T("||");
+	CString text = CTeXnicCenterApp::GetDocTemplateFilter(GetDocTemplate());	
+	text += CString(MAKEINTRESOURCE(STE_ALL_FILES_FILTER));
 
 	return text;
 }

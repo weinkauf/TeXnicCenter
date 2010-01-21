@@ -182,8 +182,3 @@ void LaTeXDocument::OnUpdateTextModulesList(CCmdUI *pCmdUI)
 		}
 	}
 }
-
-const CString LaTeXDocument::GetExtensionFilter() const
-{
-	return CString(MAKEINTRESOURCE(STE_FILE_LATEXFILTER));
-}

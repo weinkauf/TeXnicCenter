@@ -62,7 +62,7 @@ public:
 	        should be written to the file.
 
 	@return
-	        TRUE on success, FALSE if an error occured. If an error occurs,
+	        TRUE on success, FALSE if an error occurred. If an error occurs,
 	        the window is closed and the object can be destroyed.
 	 */
 	bool Serialize(CIniFile &ini, LPCTSTR lpszKey, bool write);
