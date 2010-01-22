@@ -10,6 +10,8 @@ StructureItem::StructureItem()
 , m_nParent(-1)
 , depth_(-1)
 , missing_(false)
+, isCopy_(false)
+, original_(-1)
 {
 }
 
@@ -231,4 +233,24 @@ const CString& StructureItem::GetPrefix() const
 void StructureItem::SetPrefix( const CString& val )
 {
 	prefix_ = val;
+}
+
+bool StructureItem::IsCopy() const
+{
+	return isCopy_;
+}
+
+void StructureItem::SetCopy( bool val )
+{
+	isCopy_ = val;
+}
+
+StructureItemContainer::difference_type StructureItem::GetOriginal() const
+{
+	return original_;
+}
+
+void StructureItem::SetOriginal( StructureItemContainer::difference_type val )
+{
+	original_ = val;
 }

@@ -1018,89 +1018,105 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 			if (::PathFileExists(strPath))
 			{
-				//Give information that we found the bibfile and that we are going to parse it now.
-				if (m_pParseOutputHandler && !m_bCancel)
-				{
-					CString message;
-					message.Format(STE_PARSE_PARSING, strPath);
+				StructureItemContainer::iterator it = FindItemByPath(aSI.begin(), aSI.end(), strPath);
 
-					info.SetErrorMessage(message);
-					m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth,
-					                                       CParseOutputHandler::information);
+				if (it != aSI.end())
+				{
+					StructureItemContainer::difference_type original = std::distance(aSI.begin(), it);
+
+					StructureItem copy = *it;
+					copy.SetCopy();
+					copy.SetOriginal(original);
+					copy.SetPrefix(prefix);
+					copy.SetLine(nActualLine);
+
+					aSI.push_back(copy);
 				}
-
-				//Now we parse the bibtex file with the bibtex parser.
-				//The bibtex parser collects all items and warnings
-				//and will add it to the structure and parse-output after its work.
-				BibTeXFile aBibFile(strPath);
-				aBibFile.DropAllEntries(); // clean up previous result
-				aBibFile.ProcessFile(); // parse it ...
-				const CMapStringToOb *items = aBibFile.GetEntries(); // ...and fetch the entries.
-
-				//Add the bibfile itself to the structure
-				CString strAnnotation;
-				strAnnotation.Format(STE_ENTRIES_COUNT, aBibFile.GetEntriesCount());
-
-				if (aBibFile.GetErrorCount())
-				{
-					CString strWarnings;
-					strWarnings.Format(STE_WARNING_COUNT, aBibFile.GetErrorCount());
-					strAnnotation += _T(", ");
-					strAnnotation += strWarnings;
-				}
-
-				StructureItemContainer::size_type parentPos =
-					AddFileItem(strPath, StructureItem::bibFile, strActualFile, nActualLine, aSI, strAnnotation, 
-						prefix.IsEmpty() ? NULL : prefix);
-
-				//Add the parser warnings, if any.
-				if (aBibFile.GetErrorCount())
-				{
-					//Write msgs to output window, if we detected some errors
-					const CObArray *msgs = aBibFile.GetErrorMessages();
-
-					for (int i = 0; i < msgs->GetSize(); i++)
+				else {
+					//Give information that we found the bibfile and that we are going to parse it now.
+					if (m_pParseOutputHandler && !m_bCancel)
 					{
-						BibTeXEntry *be = dynamic_cast<BibTeXEntry*>(msgs->GetAt(i));
-						if (be == NULL)
+						CString message;
+						message.Format(STE_PARSE_PARSING, strPath);
+
+						info.SetErrorMessage(message);
+						m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth,
+															   CParseOutputHandler::information);
+					}
+
+					//Now we parse the bibtex file with the bibtex parser.
+					//The bibtex parser collects all items and warnings
+					//and will add it to the structure and parse-output after its work.
+					BibTeXFile aBibFile(strPath);
+					aBibFile.DropAllEntries(); // clean up previous result
+					aBibFile.ProcessFile(); // parse it ...
+					const CMapStringToOb *items = aBibFile.GetEntries(); // ...and fetch the entries.
+
+					//Add the bibfile itself to the structure
+					CString strAnnotation;
+					strAnnotation.Format(STE_ENTRIES_COUNT, aBibFile.GetEntriesCount());
+
+					if (aBibFile.GetErrorCount())
+					{
+						CString strWarnings;
+						strWarnings.Format(STE_WARNING_COUNT, aBibFile.GetErrorCount());
+						strAnnotation += _T(", ");
+						strAnnotation += strWarnings;
+					}
+
+					StructureItemContainer::size_type parentPos =
+						AddFileItem(strPath, StructureItem::bibFile, strActualFile, nActualLine, aSI, strAnnotation, 
+							prefix.IsEmpty() ? NULL : prefix);
+
+					//Add the parser warnings, if any.
+					if (aBibFile.GetErrorCount())
+					{
+						//Write msgs to output window, if we detected some errors
+						const CObArray *msgs = aBibFile.GetErrorMessages();
+
+						for (int i = 0; i < msgs->GetSize(); i++)
 						{
-							TRACE("NP found in error msgs of BibTex file\n");
-							continue;
+							BibTeXEntry *be = dynamic_cast<BibTeXEntry*>(msgs->GetAt(i));
+							if (be == NULL)
+							{
+								TRACE("NP found in error msgs of BibTex file\n");
+								continue;
+							}
+
+							info.SetErrorMessage(be->m_strTitle);
+							info.SetSourceLine(be->m_nLine);
+							info.SetSourceFile(be->m_strPath);
+							m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth + 1,
+																   CParseOutputHandler::warning);
 						}
-
-						info.SetErrorMessage(be->m_strTitle);
-						info.SetSourceLine(be->m_nLine);
-						info.SetSourceFile(be->m_strPath);
-						m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth + 1,
-						                                       CParseOutputHandler::warning);
 					}
-				}
 
-				//Iterate over entry map and add the collected bibitems
-				POSITION pos = items->GetStartPosition();
+					//Iterate over entry map and add the collected bibitems
+					POSITION pos = items->GetStartPosition();
 
-				while (pos != NULL)
-				{
-					BibTeXEntry *be;
-					CString key;
-					items->GetNextAssoc(pos, key, (CObject*&)be);
-
-					if (be != NULL)   // setup entry
+					while (pos != NULL)
 					{
-						be->SetParent(parentPos);
-						cookie.nCookieType = be->GetType();
-						//TRACE("Added si: %s, %s, %s\n", be->m_strPath, be->m_strLabel, be->m_strCaption);
-						cookie.nItemIndex = aSI.size();
+						BibTeXEntry *be;
+						CString key;
+						items->GetNextAssoc(pos, key, (CObject*&)be);
 
-						StructureItem item(*be);
-						item.SetItemInfo(new BibItem(be->ToBibItem()));
+						if (be != NULL)   // setup entry
+						{
+							be->SetParent(parentPos);
+							cookie.nCookieType = be->GetType();
+							//TRACE("Added si: %s, %s, %s\n", be->m_strPath, be->m_strLabel, be->m_strCaption);
+							cookie.nItemIndex = aSI.size();
 
-						aSI.push_back(item);
-						//cookies.push(cookie);
-					}
-					else
-					{
-						TRACE("NP detected in CBiBTeXFile %s", strPath);
+							StructureItem item(*be);
+							item.SetItemInfo(new BibItem(be->ToBibItem()));
+
+							aSI.push_back(item);
+							//cookies.push(cookie);
+						}
+						else
+						{
+							TRACE("NP detected in CBiBTeXFile %s", strPath);
+						}
 					}
 				}
 			}
@@ -1169,11 +1185,10 @@ StructureItemContainer::size_type CStructureParser::AddFileItem(LPCTSTR lpszPath
 		si.m_strTitle.Format(_T("%s (%s)"), lpszPath, lpszAnnotation);
 	}
 
-	// Look for item with the same file path
-	using namespace std::tr1::placeholders;
+	// Look for item with the same file path and prefix
 
-	StructureItemContainer::iterator it = std::find_if(aSI.begin(),aSI.end(),
-	                                      ItemMatch(si.GetPath(), si.GetPrefix()));
+	StructureItemContainer::iterator it = 
+		std::find_if(aSI.begin(),aSI.end(), ItemMatch(si.GetPath(), si.GetPrefix()));
 
 	StructureItemContainer::size_type pos;
 

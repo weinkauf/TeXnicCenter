@@ -135,6 +135,10 @@ void CFileView::OnParsingFinished()
 	for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it)
 	{
 		const StructureItem &si = *it;
+
+		if (si.IsCopy())
+			continue;
+
 		text = CPathTool::GetFile(it->GetTitle());
 
 		CString reldir = CPathTool::GetRelativePath(maindir,CPathTool::GetParentDirectory(

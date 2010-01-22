@@ -499,4 +499,13 @@ private:
 
 	/** Characters parsed */
 	int m_nCharsParsed;
+
+	template<class It>
+	static It FindItemByPath(It first, It last, LPCTSTR path)
+	{
+		using namespace std::tr1::placeholders;
+
+		return std::find_if(first, last, std::tr1::bind(std::equal_to<CString>(), 
+			std::tr1::bind(&StructureItem::GetPath,_1), path));
+	}	
 };
