@@ -38,6 +38,7 @@ void Tokenize(const Ch* first, const Ch* last, const Ch* sep_first, const Ch* se
 }
 
 /// Splits a string into tokens.
+/// 
 /// \param text 
 ///		   String to split
 /// \param sep 
@@ -366,6 +367,9 @@ void BibView::OnParsingFinished()
 					item.structure_item_index = std::distance(a.begin(),it);
 					bib_items_.push_back(item);
 				}
+				else
+					ASSERT(it->GetItemInfo() == NULL);
+
 				break;
 		}
 	}

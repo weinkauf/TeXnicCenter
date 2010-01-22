@@ -115,7 +115,7 @@ BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 				break;
 			case _T('\"') : // Toggle quote
 				if (inComment || !insideEntry) break;
-				/* Quotes must be included in arbitry braces, if the fields are delimited by quotes */
+				/* Quotes must be included in arbitrary braces, if the fields are delimited by quotes */
 				if (depth == 1 && inQuote && (lastChar && lastChar[0] == _T('\\')))
 				{
 					HandleParseError(STE_BIBTEX_ERR_QOUTEWITHINQUOTE,line,col);
@@ -239,8 +239,7 @@ BibTeXEntry::BibType BibTeXFile::ProcessEntryType(const TCHAR *buf,int len,int l
 	}
 
 	entry = m_Buffer; // remove leading WS
-	entry.TrimLeft();
-	entry.TrimRight();
+	entry.Trim();
 
 	for (int i = 0; i < BibTeXEntry::Unknown; i++)   // search BibTeX item
 	{
@@ -289,10 +288,8 @@ void BibTeXFile::ProcessArgument(const TCHAR *buf,int len,BibTeXEntry::BibType t
 		CString name,val;
 		ParseField(m_Buffer,name,val);
 
-		name.TrimLeft();
-		name.TrimRight();
-		val.TrimLeft();
-		val.TrimRight();
+		name.Trim();
+		val.Trim();
 
 		m_Strings.SetAt(name,val);
 		return;
@@ -301,9 +298,7 @@ void BibTeXFile::ProcessArgument(const TCHAR *buf,int len,BibTeXEntry::BibType t
 	if (NULL == _tcsstr(m_Buffer,_T("=")))   // argument is key?
 	{
 		CString key = m_Buffer;
-
-		key.TrimLeft();
-		key.TrimRight();
+		key.Trim();
 
 		if (key.IsEmpty())   // invalid key?
 		{
@@ -341,11 +336,11 @@ void BibTeXFile::ProcessArgument(const TCHAR *buf,int len,BibTeXEntry::BibType t
 
 			// Clean up contents
 			name.MakeLower();
-			name.TrimLeft();
-			name.TrimRight();
+			name.Trim();
+
 			ReplaceSpecialChars(val);
-			val.TrimLeft();
-			val.TrimRight();
+			
+			val.Trim();
 			be->SetField(name,val);
 		}
 		else   // error: key not found -> likely an error in the bibtex file
@@ -431,10 +426,8 @@ BOOL BibTeXFile::ParseField(const TCHAR *field,CString &name,CString &val)
 	val.Delete(0,len1 + 1);
 
 	/// remove whitespace
-	name.TrimRight();
-	name.TrimLeft();
-	val.TrimLeft();
-	val.TrimRight();
+	name.Trim();
+	val.Trim();
 
 	return TRUE;
 }

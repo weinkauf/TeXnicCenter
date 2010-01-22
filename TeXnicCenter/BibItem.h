@@ -20,7 +20,7 @@ class BibItem :
 	CString publisher_;
 
 public:
-	// Known BibTeX types in alphabetical order
+	/// Known BibTeX types in alphabetical order.
 	enum Type {
 		Unknown = -1,
 		Article,
@@ -42,8 +42,11 @@ public:
 		Unpublished
 	};
 
+	/// Container type that holds author names.
 	typedef std::vector<CString> AuthorContainerType;
-	// Extracted author names, useful for grouping
+
+private:
+	/// Extracted author names, useful for grouping.
 	AuthorContainerType authors_;
 
 private:

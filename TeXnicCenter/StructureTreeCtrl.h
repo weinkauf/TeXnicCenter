@@ -29,6 +29,7 @@
 #pragma once
 
 #include "NavigatorView.h"
+#include "StructureItem.h"
 
 class StructureTreeCtrl :
 			public NavigatorTreeCtrl
@@ -37,11 +38,15 @@ class StructureTreeCtrl :
 
 protected:
 	virtual void OnUpdate(CProjectView* pSender,LPARAM lHint,LPVOID pHint);
+	void GotoItem(HTREEITEM item);
+	bool ShouldBeExpanded(HTREEITEM item) const;
 
 	DECLARE_MESSAGE_MAP()
 
 private:
 	void OnParsingFinished();
+	LRESULT OnGotoBibliographyLine(WPARAM w, LPARAM l);
+	void InsertBibItems(const StructureItem& item, StructureItemContainer::difference_type index, HTREEITEM parentItem);
 
 public:
 	bool IsFolder(HTREEITEM) const;

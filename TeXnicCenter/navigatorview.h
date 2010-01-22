@@ -157,6 +157,9 @@ protected:
 	afx_msg void OnTvnBeginDrag(NMHDR *pNMHDR, LRESULT *pResult);
 	void OnEnter();
 
+	virtual void GotoItem(HTREEITEM item);
+	virtual bool ShouldBeExpanded(HTREEITEM item) const;
+
 	DECLARE_MESSAGE_MAP()
 
 // attributes

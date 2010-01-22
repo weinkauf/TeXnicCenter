@@ -208,13 +208,14 @@ void NavigatorTreeCtrl::ExpandItemsByLevel(const int nLevel)
 	HTREEITEM hItem = GetNextItem(NULL,TVGN_ROOT);
 	bool bLookForParent(false);
 	int currLevel = 0;
+
 	while (currLevel >= 0)
 	{
 		if ((currLevel <= nLevel) && !bLookForParent)
 		{
 			//Expand this item, if it has children
 			//Furthermore, go down.
-			if (ItemHasChildren(hItem))
+			if (ItemHasChildren(hItem) && ShouldBeExpanded(hItem))
 			{
 				Expand(hItem,TVE_EXPAND);
 				hItem = GetChildItem(hItem);
@@ -364,7 +365,10 @@ void NavigatorTreeCtrl::OnNMDblclk(NMHDR* /*pNMHDR*/, LRESULT* /*pResult*/)
 	HTREEITEM item = HitTest(pt,&flags);
 
 	if (item && (flags & TVHT_ONITEM) && !IsFolder(item))
-		GotoItem();
+	{
+		//GotoItem();
+		GotoItem(item);
+	}
 }
 
 void NavigatorTreeCtrl::OnDestroy()
@@ -442,7 +446,7 @@ BOOL NavigatorTreeCtrl::PreTranslateMessage(MSG* pMsg)
 		switch (pMsg->wParam) 
 		{
 			case VK_RETURN:
-				GotoItem();
+				OnEnter();
 				break;
 			case VK_SPACE:
 				OnContextMenu(this,CPoint(-1,-1));
@@ -462,6 +466,11 @@ void NavigatorTreeCtrl::GotoItem()
 {
 	// SendMessage doesn't work here: the focus will not be given up 
 	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_ITEM_GOTO);
+}
+
+void NavigatorTreeCtrl::GotoItem( HTREEITEM /*item*/ )
+{
+	GotoItem();
 }
 
 void NavigatorTreeCtrl::OnTvnBeginDrag(NMHDR *pNMHDR, LRESULT *pResult)
@@ -487,5 +496,10 @@ CLaTeXProject * NavigatorTreeCtrl::GetProject() const
 
 void NavigatorTreeCtrl::OnEnter()
 {
-	GotoItem();
+	GotoItem(GetSelectedItem());
+}
+
+bool NavigatorTreeCtrl::ShouldBeExpanded( HTREEITEM /*item*/ ) const
+{
+	return true;
 }
