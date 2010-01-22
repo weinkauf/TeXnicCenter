@@ -200,11 +200,14 @@ const BibItem BibTeXEntry::ToBibItem() const
 const CString BibTeXEntry::ToCaption() const
 {
 	const BibItem item = ToBibItem();
-	CString year;
-	year.Format(_T("%i"),item.year_);
 
-	return CString(item.GetLabel() + _T(": ") + item.GetAuthor() + _T(": ") +
-	               item.GetTitle() + _T(" (") + item.GetTypeString() + _T(", ") + year + _T(")"));
+	CString year;
+	
+	if (item.HasYear())
+		year.Format(_T("%i"), item.GetYear().GetValue());
+
+	return item.GetLabel() + _T(": ") + item.GetAuthor() + _T(": ") +
+	       item.GetTitle() + _T(" (") + item.GetTypeString() + _T(", ") + year + _T(")");
 }
 
 void BibTeXEntry::BeautifyField( CString &value )

@@ -2,8 +2,7 @@
 
 #include "LaTeXDocumentBase.h"
 
-// BibTeXDocument document
-
+/// BibTeX document.
 class BibTeXDocument : public LaTeXDocumentBase
 {
 	DECLARE_DYNCREATE(BibTeXDocument)

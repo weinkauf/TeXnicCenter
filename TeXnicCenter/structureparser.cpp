@@ -1049,8 +1049,9 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 					strAnnotation += strWarnings;
 				}
 
-				AddFileItem(strPath, StructureItem::bibFile, strActualFile, nActualLine, aSI, strAnnotation, 
-					prefix.IsEmpty() ? NULL : prefix);
+				StructureItemContainer::size_type parentPos =
+					AddFileItem(strPath, StructureItem::bibFile, strActualFile, nActualLine, aSI, strAnnotation, 
+						prefix.IsEmpty() ? NULL : prefix);
 
 				//Add the parser warnings, if any.
 				if (aBibFile.GetErrorCount())
@@ -1077,6 +1078,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 				//Iterate over entry map and add the collected bibitems
 				POSITION pos = items->GetStartPosition();
+
 				while (pos != NULL)
 				{
 					BibTeXEntry *be;
@@ -1085,7 +1087,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 					if (be != NULL)   // setup entry
 					{
-						be->SetParent(m_anItem[m_nDepth]);
+						be->SetParent(parentPos);
 						cookie.nCookieType = be->GetType();
 						//TRACE("Added si: %s, %s, %s\n", be->m_strPath, be->m_strLabel, be->m_strCaption);
 						cookie.nItemIndex = aSI.size();
@@ -1118,6 +1120,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 					                                       CParseOutputHandler::warning);
 				}
 			}
+
 			nStart = nFound + 1;
 		}
 

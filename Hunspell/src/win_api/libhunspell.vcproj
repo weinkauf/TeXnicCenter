@@ -53,8 +53,6 @@
 				RuntimeLibrary="3"
 				FloatingPointModel="2"
 				UsePrecompiledHeader="0"
-				WarningLevel="4"
-				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -191,8 +189,6 @@
 				EnableFunctionLevelLinking="true"
 				FloatingPointModel="2"
 				UsePrecompiledHeader="0"
-				WarningLevel="4"
-				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
 			/>
 			<Tool
@@ -335,8 +331,6 @@
 				RuntimeLibrary="3"
 				FloatingPointModel="2"
 				UsePrecompiledHeader="0"
-				WarningLevel="4"
-				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -473,8 +467,6 @@
 				EnableFunctionLevelLinking="true"
 				FloatingPointModel="2"
 				UsePrecompiledHeader="0"
-				WarningLevel="4"
-				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
 			/>
 			<Tool

@@ -9,8 +9,7 @@
 #include "BiBTeXEntry.h"
 #include "WorkspacePaneBase.h"
 
-// BibView
-
+/// Bibliography view.
 class BibView : 
 	public WorkspacePaneBase,
 	public CProjectView,

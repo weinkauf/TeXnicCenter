@@ -2,8 +2,7 @@
 
 #include "LaTeXViewBase.h"
 
-// BibTeXView view
-
+/// BibTeX view.
 class BibTeXView : public LaTeXViewBase
 {
 	DECLARE_DYNCREATE(BibTeXView)
