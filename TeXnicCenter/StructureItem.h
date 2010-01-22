@@ -63,6 +63,8 @@ public:
 private:
 	LabelContainer labels_;
 	int depth_;
+	bool isCopy_;
+	StructureItemContainer::difference_type original_;
 
 public:
 	StructureItem();
@@ -141,4 +143,14 @@ public:
 	static bool IsEnvironment(Type type);
 	bool IsEnvironment() const;
 	bool IsHeader() const;
+
+	/// Gets a value indicating whether this item is a copy of an existing one.
+	bool IsCopy() const;
+
+	void SetCopy(bool val = true);
+	
+	/// If this item is a copy the method return the index of the original item or -1 otherwise.
+	StructureItemContainer::difference_type GetOriginal() const;
+
+	void SetOriginal(StructureItemContainer::difference_type val);
 };

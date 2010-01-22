@@ -91,7 +91,7 @@ void StructureTreeCtrl::OnParsingFinished()
 	for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it)
 	{
 		const StructureItem &si = *it;//a.GetAt(index);
-		const StructureItemContainer::difference_type index = std::distance(a.begin(), it);
+		StructureItemContainer::difference_type index = std::distance(a.begin(), it);
 
 		switch (si.GetType())
 		{
@@ -141,7 +141,7 @@ void StructureTreeCtrl::OnParsingFinished()
 
 				if (si.GetType() == StructureItem::bibFile)
 				{
-					InsertBibItems(si, index, currentItem);
+					InsertBibItems(si, si.IsCopy() ? si.GetOriginal() : index, currentItem);
 				}
 			}
 			break;
