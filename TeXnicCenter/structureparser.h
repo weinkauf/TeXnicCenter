@@ -354,7 +354,7 @@ private:
 	@return
 	        TRUE if there is a command at nPos, FALSE otherwise.
 	 */
-	BOOL IsCmdAt(LPCTSTR lpText,int nPos);
+	static bool IsCmdAt(LPCTSTR lpText, int nPos);
 
 	/**
 	Extracts the argument, delimited by the character, which is the
@@ -470,6 +470,10 @@ private:
 
 	/** Regular expression describing the newenvironment command. */
 	const tregex m_regexUserEnv;
+
+	const tregex index_;
+
+	const tregex nomencl_;
 
 	/** Array containing the different headers. */
 	static const int HeaderVariationsCount = 2;

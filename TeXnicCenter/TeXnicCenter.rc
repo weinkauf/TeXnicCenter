@@ -3786,7 +3786,9 @@ BEGIN
     IDS_EDITOP_DRAGDROP     "Drag And Drop"
     IDS_EDITOP_REPLACE      "Ersetzen"
     IDS_EDITOP_AUTOINDENT   "Automatisches Einrücken"
+    IDS_INDEX               "Index"
     STE_OUTPUTWIZARD_PDFVIAXELATEX "XeLaTeX => PDF"
+    IDS_NOMENCLATURE        "Glossar"
 END
 
 STRINGTABLE 
@@ -7721,7 +7723,9 @@ BEGIN
     IDS_EDITOP_DRAGDROP     "Drag And Drop"
     IDS_EDITOP_REPLACE      "Replace"
     IDS_EDITOP_AUTOINDENT   "Auto Indent"
+    IDS_INDEX               "Index"
     STE_OUTPUTWIZARD_PDFVIAXELATEX "XeLaTeX => PDF"
+    IDS_NOMENCLATURE        "Glossary"
 END
 
 STRINGTABLE 
