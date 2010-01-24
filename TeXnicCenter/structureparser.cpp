@@ -115,8 +115,8 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 , m_regexFigureEnd(_T("\\\\end\\s*\\{figure\\*?\\}"))
 , m_regexTableStart(_T("\\\\begin\\s*\\{(sideways)?table\\*?\\}"))
 , m_regexTableEnd(_T("\\\\end\\s*\\{(sideways)?table\\*?\\}"))
-, m_regexEquationStart(_T("\\\\begin\\s*\\{(equation|eqnarray|gather|multline|align|alignat)\\}"))
-, m_regexEquationEnd(_T("\\\\end\\s*\\{(equation|eqnarray|gather|multline|align|alignat)\\}"))
+, m_regexEquationStart(_T("\\\\begin\\s*\\{(equation|eqnarray|gather|multline|align|alignat|flalign)\\}"))
+, m_regexEquationEnd(_T("\\\\end\\s*\\{(equation|eqnarray|gather|multline|align|alignat|flalign)\\}"))
 , m_regexCenterStart(_T("\\\\begin\\s*\\{center\\}"))
 , m_regexCenterEnd(_T("\\\\end\\s*\\{center\\}"))
 , m_regexUnknownEnvStart(_T("\\\\begin\\s*\\{([^\\}]*)\\}"))
@@ -130,6 +130,8 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 , m_regexUserCmd(_T("\\\\(re)?newcommand\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}"))
 , m_regexUserEnv(_T("\\\\(re)?newenvironment\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}\\s*\\{([^\\}]*)\\}"))
 , m_regexInlineVerb(_T("\\\\verb\\*(.)[^$1]*\\1|\\\\verb([^\\*])[^$2]*\\2"))
+, index_(_T("\\\\printindex"))
+, nomencl_(_T("\\\\print(nomenclature|glossary)"))
 {
 	// initialize attributes
 	ASSERT(pStructureParserHandler);
@@ -213,7 +215,7 @@ UINT StructureParserThread(LPVOID pStructureParser)
 	return 0;
 }
 
-BOOL CStructureParser::IsCmdAt(LPCTSTR lpText, int nPos)
+bool CStructureParser::IsCmdAt(LPCTSTR lpText, int nPos)
 {
 	// count number of backslashes before command (including command backslash)
 	int nCount = 0;
@@ -444,10 +446,8 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 		// parse input file
 		CString strPath(what[2].first, what[2].second - what[2].first);
-		strPath.TrimLeft();
-		strPath.TrimRight();
-		strPath.TrimLeft(_T('"'));
-		strPath.TrimRight(_T('"'));
+		strPath.Trim();
+		strPath.Trim(_T('"'));
 		bool GraphicFileFound = false;
 		CString strCompletePath;
 
@@ -759,6 +759,52 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		// parse string behind occurrence
 		ParseString(what[0].second, lpTextEnd - what[0].second, cookies,
 		            strActualFile, nActualLine, nFileDepth, aSI);
+
+		return;
+	}
+
+	// Find \printindex
+	if (regex_search(lpText, lpTextEnd, what, index_, nFlags) && IsCmdAt(lpText, what[0].first - lpText))
+	{
+		// parse string before occurrence
+		ParseString(lpText, what[0].first - lpText, cookies,
+			strActualFile, nActualLine, nFileDepth, aSI);
+
+		StructureItem si;
+		INITIALIZE_SI(si);
+
+		si.SetParent(-1);
+		si.SetType(StructureItem::header);
+		si.SetTitle(CString(MAKEINTRESOURCE(IDS_INDEX)));
+
+		aSI.push_back(si);
+
+		// parse string behind occurrence
+		ParseString(what[0].second, lpTextEnd - what[0].second, cookies,
+			strActualFile, nActualLine, nFileDepth, aSI);
+
+		return;
+	}
+
+	// Find print nomencl
+	if (regex_search(lpText, lpTextEnd, what, nomencl_, nFlags) && IsCmdAt(lpText, what[0].first - lpText))
+	{
+		// parse string before occurrence
+		ParseString(lpText, what[0].first - lpText, cookies,
+			strActualFile, nActualLine, nFileDepth, aSI);
+
+		StructureItem si;
+		INITIALIZE_SI(si);
+
+		si.SetParent(-1);
+		si.SetType(StructureItem::header);
+		si.SetTitle(CString(MAKEINTRESOURCE(IDS_NOMENCLATURE)));
+
+		aSI.push_back(si);
+
+		// parse string behind occurrence
+		ParseString(what[0].second, lpTextEnd - what[0].second, cookies,
+			strActualFile, nActualLine, nFileDepth, aSI);
 
 		return;
 	}
