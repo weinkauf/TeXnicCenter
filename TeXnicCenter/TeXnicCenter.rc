@@ -3584,7 +3584,7 @@ END
 
 STRINGTABLE 
 BEGIN
-    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Dateien (*.tex, *.sty, *.cls)\n.tex;.sty;.cls\nLaTeX.Document\nLaTeX Dokument"
+    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Dateien (*.tex, *.sty, *.cls, *.dtx, *.ins, *.ltx)\n.tex;.sty;.cls;.dtx;.ins;.ltx\nLaTeX.Document\nLaTeX Dokument"
     IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Dateien (*.bib, *.bst)\n.bib;.bst\nBibTeX.Document\nBibTeX Dokument"
 END
 
@@ -7504,7 +7504,7 @@ END
 
 STRINGTABLE 
 BEGIN
-    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Files (*.tex, *.sty, *.cls)\n.tex;.sty;.cls\nLaTeX.Document\nLaTeX Document"
+    IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Files (*.tex, *.sty, *.cls, *.dtx, *.ins, *.ltx)\n.tex;.sty;.cls;.dtx;.ins;.ltx\nLaTeX.Document\nLaTeX Document"
     IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Files (*.bib, *.bst)\n.bib;.bst\nBibTeX.Document\nBibTeX Document"
 END
 
