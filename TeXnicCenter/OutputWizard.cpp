@@ -49,7 +49,11 @@ static char THIS_FILE[] = __FILE__;
 
 namespace
 {
+	/// XeLaTeX executable name.
 	LPCTSTR const XeLaTeXFileName = _T("xelatex.exe");
+
+	/// LuaLaTeX executable name.
+	LPCTSTR const LuaLaTeXFileName = _T("lualatex.exe");
 
 	bool IsAcrobat(const CString& fn)
 	{
@@ -114,6 +118,7 @@ COutputWizard::COutputWizard(CProfileMap &profiles,CWnd* pParentWnd)
 , dvipdfm_installed_(false)
 , sumatra_installed_(false)
 , xelatexInstalled_(false)
+, lualatexInstalled_(false)
 , distribution_(Unknown)
 {
 	AddPage(&m_wndPageWelcome);
@@ -340,7 +345,7 @@ BOOL COutputWizard::LookForLatex()
 {
 	CFileFind ff;
 
-	if (!ff.FindFile(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("latex.exe"))))
+	if (!ff.FindFile(GetDistributionFilePath(_T("latex.exe"))))
 	{
 		AfxMessageBox(STE_OUTPUTWIZARD_NOLATEX,MB_ICONSTOP | MB_OK);
 		m_bLatexInstalled = false;
@@ -353,7 +358,7 @@ BOOL COutputWizard::LookForLatex()
 
 	if (m_bLatexInstalled) {
 		// Now, look for dvipdfm.exe
-		const CString path = CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("dvipdfm.exe"));
+		const CString path = GetDistributionFilePath(_T("dvipdfm.exe"));
 
 		if (CPathTool::Exists(path)) {
 			dvipdfm_installed_ = true;
@@ -361,12 +366,8 @@ BOOL COutputWizard::LookForLatex()
 		}
 	}
 
-	const CString path = CPathTool::Cat(m_wndPageDistributionPath.m_strPath, XeLaTeXFileName);
-
-	// Look for XeLaTeX
-	if (CPathTool::Exists(path)) {
-		xelatexInstalled_ = true;
-	}
+	xelatexInstalled_ = IsCompilerAvailable(XeLaTeXFileName);
+	lualatexInstalled_ = IsCompilerAvailable(LuaLaTeXFileName);
 
 	return m_bLatexInstalled;
 }
@@ -450,7 +451,7 @@ void COutputWizard::LookForPs()
 	// a postscript-viewer
 	CFileFind ff;
 
-	if (!ff.FindFile(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("dvips.exe"))))
+	if (!ff.FindFile(GetDistributionFilePath(_T("dvips.exe"))))
 	{
 		m_bDvipsInstalled = false;
 
@@ -489,7 +490,7 @@ void COutputWizard::LookForPdf()
 	CFileFind ff;
 	m_bPdfLatexInstalled = false;
 
-	if (ff.FindFile(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("pdflatex.exe"))))
+	if (ff.FindFile(GetDistributionFilePath(_T("pdflatex.exe"))))
 	{
 		m_bPdfLatexInstalled = true;
 	}
@@ -582,7 +583,7 @@ void COutputWizard::LookForPdf()
 	if (!m_bGhostscriptInstalled)
 	{
 		// Look for p2pdf.exe in the MiKTeX bin directory
-		const CString path = CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("ps2pdf.exe"));
+		const CString path = GetDistributionFilePath(_T("ps2pdf.exe"));
 
 		if (CPathTool::Exists(path))
 		{
@@ -666,6 +667,10 @@ void COutputWizard::ShowInformation()
 	if (m_bGhostscriptInstalled)
 		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFVIAPSTYPE) + newline;
 
+
+	if (lualatexInstalled_)
+		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFVIALUALATEX) + newline;
+
 	if (xelatexInstalled_)
 		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFVIAXELATEX) + newline;
 
@@ -717,9 +722,9 @@ void COutputWizard::GenerateOutputProfiles()
 			if (bExists)
 				m_profiles.Remove(strProfile);			
 
-			p.SetLatexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("latex.exe")),dviOptions);
-			p.SetBibTexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("bibtex.exe")),_T("\"%bm\""));
-			p.SetMakeIndexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("makeindex.exe")),
+			p.SetLatexPath(GetDistributionFilePath(_T("latex.exe")),dviOptions);
+			p.SetBibTexPath(GetDistributionFilePath(_T("bibtex.exe")),_T("\"%bm\""));
+			p.SetMakeIndexPath(GetDistributionFilePath(_T("makeindex.exe")),
 			                   _T("\"%bm.idx\" -o \"%bm.ind\""));
 
 			// add viewer settings
@@ -780,17 +785,17 @@ void COutputWizard::GenerateOutputProfiles()
 			CProfile p;
 
 			p.SetLatexPath(
-				CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("latex.exe")),dviOptions);
+				GetDistributionFilePath(_T("latex.exe")),dviOptions);
 			p.SetBibTexPath(
-			    CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("bibtex.exe")),
+			    GetDistributionFilePath(_T("bibtex.exe")),
 			    _T("\"%bm\""));
 			p.SetMakeIndexPath(
-			    CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("makeindex.exe")),
+			    GetDistributionFilePath(_T("makeindex.exe")),
 			    _T("\"%bm\""));
 
 			// add post processor dvips
 			CPostProcessor pp(
-			    _T("DviPs"),CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("dvips.exe")),
+			    _T("DviPs"),GetDistributionFilePath(_T("dvips.exe")),
 			    _T("\"%Bm.dvi\""));
 			p.GetPostProcessorArray().Add(pp);
 
@@ -843,16 +848,16 @@ void COutputWizard::GenerateOutputProfiles()
 			// create profile
 			CProfile p;
 
-			p.SetLatexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,
+			p.SetLatexPath(GetDistributionFilePath(
 			                              _T("latex.exe")),strLatexOptions);
-			p.SetBibTexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,
+			p.SetBibTexPath(GetDistributionFilePath(
 			                               _T("bibtex.exe")),_T("\"%bm\""));
-			p.SetMakeIndexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,
+			p.SetMakeIndexPath(GetDistributionFilePath(
 			                                  _T("makeindex.exe")),_T("\"%bm\""));
 
 			// add post processor dvips
 			CPostProcessor ppDVIPS(
-			    _T("DviPs (PDF)"),CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("dvips.exe")),
+			    _T("DviPs (PDF)"),GetDistributionFilePath(_T("dvips.exe")),
 			    _T("-P pdf \"%Bm.dvi\""));
 			p.GetPostProcessorArray().Add(ppDVIPS);
 
@@ -880,6 +885,12 @@ void COutputWizard::GenerateOutputProfiles()
 			// add profile to map
 			m_profiles.Add(strProfile,p);
 		}
+	}
+
+	// LuaLaTeX => PDF
+	if (lualatexInstalled_) {
+		GeneratePDFProfile(GetProfileName(STE_OUTPUTWIZARD_PDFVIALUALATEX), 
+			strPDFLatexOptions,m_wndPagePdfViewer.GetViewerPath(), LuaLaTeXFileName);
 	}
 
 	// XeLaTeX => PDF
@@ -1031,9 +1042,9 @@ void COutputWizard::GeneratePDFProfile( const CString& name, const CString& strP
 		// create profile
 		CProfile p;
 
-		p.SetLatexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,latexFileName),strPDFLatexOptions);
-		p.SetBibTexPath(CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("bibtex.exe")),_T("\"%bm\""));
-		p.SetMakeIndexPath(	CPathTool::Cat(m_wndPageDistributionPath.m_strPath,_T("makeindex.exe")),_T("\"%bm\""));
+		p.SetLatexPath(GetDistributionFilePath(latexFileName),strPDFLatexOptions);
+		p.SetBibTexPath(GetDistributionFilePath(_T("bibtex.exe")),_T("\"%bm\""));
+		p.SetMakeIndexPath(	GetDistributionFilePath(_T("makeindex.exe")),_T("\"%bm\""));
 
 		// add viewer settings
 		AssignPDFViewer(p,viewer_path);
@@ -1173,4 +1184,23 @@ const CString COutputWizard::FindTeXLiveInstallLocation()
 const CString& COutputWizard::GetDistributionName() const
 {
 	return distribution_name_;
+}
+
+const CString COutputWizard::GetDistributionFilePath( LPCTSTR fileName ) const
+{
+	return CPathTool::Cat(m_wndPageDistributionPath.m_strPath, fileName);
+}
+
+bool COutputWizard::IsCompilerAvailable(LPCTSTR fileName) const
+{
+	const CString path = GetDistributionFilePath(fileName);
+	bool result;
+
+	if (CPathTool::Exists(path)) {
+		result = true;
+	}
+	else
+		result = false;
+
+	return result;
 }
