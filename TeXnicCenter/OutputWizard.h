@@ -91,14 +91,6 @@ private:
 public:
 	COutputWizard(CProfileMap &profiles, CWnd* pParentWnd = NULL);
 	virtual ~COutputWizard();
-
-// Operations
-public:
-
-// Overridings
-protected:
-//{{AFX_VIRTUAL(COutputWizard)
-public:
 	virtual INT_PTR DoModal();
 	virtual BOOL OnInitDialog();
 	//}}AFX_VIRTUAL
@@ -106,6 +98,23 @@ public:
 private:
 	const CString FindTeXLiveInstallLocation();
 	const CString FindMiKTeXInstallLocation();
+
+	/// Generates the full path for the specified \a fileName
+	/// using distribution's 'bin' directory as root.
+	/// 
+	/// \param  fileName File name.
+	///
+	/// \return Full path of the file within distribution's 'bin' directory.
+	const CString GetDistributionFilePath( LPCTSTR fileName ) const;
+
+	/// Gets a value indicating whether the compiler with the specified \a fileName
+	/// is available in distribution's 'bin' directory.
+	///
+	/// \param  fileName Compiler's executable name, e.g. pdflatex.exe.
+	///
+	/// \return \c true if the specified executable is available,
+	///         \c false otherwise.
+	bool IsCompilerAvailable(LPCTSTR fileName) const;
 
 // Implementation Helpers
 protected:
@@ -190,22 +199,26 @@ protected:
 
 // Attributes
 private:
-	/** TRUE if latex has been found. */
+	/** \c true if latex has been found. */
 	bool m_bLatexInstalled;
 
-	/** TRUE if dvips has been found. */
+	/** \c true if dvips has been found. */
 	bool m_bDvipsInstalled;
 
-	/** TRUE if pdflatex has been found. */
+	/** \c true if pdflatex has been found. */
 	bool m_bPdfLatexInstalled;
 
-	/** TRUE if Ghostscript has been found. */
+	/** \c true if Ghostscript has been found. */
 	bool m_bGhostscriptInstalled;
 
-	/** TRUE if SumatraPDF has been found. */
+	/** \c true if SumatraPDF has been found. */
 	bool sumatra_installed_;
 
+	/// \c true if XeLaTeX has been found.
 	bool xelatexInstalled_;
+
+	/// \c true if LuaLaTeX has been found.
+	bool lualatexInstalled_;
 
 	CString sumatra_path_;
 
