@@ -104,23 +104,22 @@ void COptionPageGeneric::RefillLanguageList()
 
 	// parse language directory to determine additional languages
 	CFileFind ff;
-
-	if (ff.FindFile(CPathTool::Cat(theApp.GetWorkingDir(),_T("language\\TxcRes*.dll"))))
+	bool bWorking = ff.FindFile(CPathTool::Cat(theApp.GetWorkingDir(),_T("language\\TxcRes*.dll")));
+	const size_t n = _tcslen(_T("TxcRes"));
+	while (bWorking)
 	{
-		const size_t n = _tcslen(_T("TxcRes"));
-		CString lang;
+		bWorking = ff.FindNextFile();
 
-		while (ff.FindNextFile())
+		//HMODULE module = ::LoadLibrary(ff.GetFileName());
+		//CFileVersionInfo fv(module);
+		//lang = Win32Locale(MAKELCID(fv.GetLanguageId(),SORT_DEFAULT)).GetSNativeLangName();
+
+		CString lang = ff.GetFileTitle();
+		lang = lang.Right(lang.GetLength() - static_cast<int>(n));
+
+		if (m_wndGuiLanguageList.FindStringExact(0,lang) == CB_ERR)
 		{
-			//HMODULE module = ::LoadLibrary(ff.GetFileName());
-			//CFileVersionInfo fv(module);
-			//lang = Win32Locale(MAKELCID(fv.GetLanguageId(),SORT_DEFAULT)).GetSNativeLangName();
-
-			lang = ff.GetFileTitle();
-			lang = lang.Right(lang.GetLength() - static_cast<int>(n));
-
-			if (m_wndGuiLanguageList.FindStringExact(0,lang) == CB_ERR)
-				m_wndGuiLanguageList.AddString(lang);
+			m_wndGuiLanguageList.AddString(lang);
 		}
 	}
 }
