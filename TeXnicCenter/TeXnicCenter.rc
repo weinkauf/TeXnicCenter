@@ -1511,8 +1511,8 @@ BEGIN
     CONTROL         "Im Hintergrund",IDC_OUTSOURCE_OPEN_BACKGROUND,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,111,156,62,10
     CONTROL         "Im Vordergrund",IDC_OUTSOURCE_OPEN_FOREGROUND,"Button",BS_AUTORADIOBUTTON,111,168,64,10
     LTEXT           "+ Dateiname +",IDC_STATIC,91,116,47,8
-    LTEXT           "Name der neuen Datei:",IDC_STATIC,7,7,74,8
-    LTEXT           "Verzeichnis:",IDC_STATIC,7,45,39,8
+    LTEXT           "Name der neuen Datei:",IDC_STATIC,7,7,129,8
+    LTEXT           "Verzeichnis:",IDC_STATIC,7,45,108,8
     GROUPBOX        "Kommando zum Einfügen der externen Datei",IDC_STATIC,7,80,195,56
     LTEXT           "[.tex]",IDC_STATIC,118,22,20,8
     GROUPBOX        "Automatisches Öffnen der neuen Datei",IDC_STATIC,7,144,195,40
@@ -5601,7 +5601,7 @@ BEGIN
 END
 
 IDD_OUTSOURCE DIALOGEX 0, 0, 209, 191
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Outsource Text"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
@@ -5619,7 +5619,7 @@ BEGIN
     CONTROL         "In background",IDC_OUTSOURCE_OPEN_BACKGROUND,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,111,156,62,10
     CONTROL         "In foreground",IDC_OUTSOURCE_OPEN_FOREGROUND,"Button",BS_AUTORADIOBUTTON,111,168,58,10
     LTEXT           "+ Filename +",IDC_STATIC,91,116,41,8
-    LTEXT           "New Filename:",IDC_STATIC,7,7,48,8
+    LTEXT           "New Filename:",IDC_STATIC,7,7,131,8
     LTEXT           "Directory:",IDC_STATIC,7,45,31,8
     GROUPBOX        "Command for including the external file",IDC_STATIC,7,80,195,56
     LTEXT           "[.tex]",IDC_STATIC,118,22,16,8
