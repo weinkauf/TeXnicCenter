@@ -666,7 +666,7 @@ void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& a, bool bSelect /
 					ASSERT(EndX - CurrentX >= 0);
 
 					std::vector<wchar_t> conv;
-					UTF8toUTF16(range.lpstrText + CurrentX, EndX - CurrentX, conv);
+					UTF8toUTF16(range.lpstrText + CurrentX, EndX - CurrentX + 1, conv);
 
 					if (!conv.empty())
 						strKeyword = CString(&conv[0], conv.size());
