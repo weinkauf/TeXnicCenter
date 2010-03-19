@@ -6,7 +6,7 @@
 #include "configuration.h"
 #include "CharType.h"
 
-#define IGNORE_WORDS_IN_BRACES_ 1 // TODO: Doesn't work properly yet: many constructs may span over multiple lines
+#define IGNORE_WORDS_IN_BRACES_ 0 // TODO: Doesn't work properly yet: many constructs may span over multiple lines
 								  // which isn't supported
 
 LaTeXTokenizer::LaTeXTokenizer()
