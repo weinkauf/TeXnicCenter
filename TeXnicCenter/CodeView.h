@@ -197,9 +197,6 @@ public:
 private:
 	static bool TerminatesIncrementalSearch( UINT ch );
 	static bool IsDirectionKey( UINT ch );
-
-	void SelectBlock(long pos);
-	void SelectCurrentBlock();
 };
 
 template<class F>

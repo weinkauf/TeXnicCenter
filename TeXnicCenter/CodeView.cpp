@@ -39,51 +39,6 @@ int GetLogFontPointSize(const LOGFONT& lf)
 	return ::MulDiv(tm.tmHeight - tm.tmInternalLeading,72,dc.GetDeviceCaps(LOGPIXELSY));
 }
 
-bool IsOpenBrace(TCHAR ch) 
-{
-	return ch == _T('{') || ch == _T('(') || ch == _T('[');
-}
-
-void SelectBlock(CScintillaCtrl& ctrl, long pos) 
-{
-	long originalPos = pos;
-	std::stack<TCHAR> braces;
-	--pos;
-
-	while (pos > 0 && braces.empty()) {
-		TCHAR ch = ctrl.GetCharAt(pos);
-
-		if (IsOpenBrace(ch))
-			braces.push(ch);
-		else --pos;
-	}
-
-	long start = pos + 1;
-
-	if (!braces.empty()) {
-		pos = originalPos;
-		long length = ctrl.GetLength();
-
-		while (!braces.empty() && pos < length) {
-			TCHAR ch = ctrl.GetCharAt(pos);
-
-			if (IsOpenBrace(ch))
-				braces.push(ch);
-			else if (LaTeXTokenizer::GetClosingBrace(braces.top()) == ch)
-				braces.pop();
-
-			++pos;
-		}
-
-		if (braces.empty()) {
-			long end = pos - 1;
-
-			ctrl.EnsureVisible(ctrl.LineFromPosition(start));
-			ctrl.SetAnchor(start);
-			ctrl.SetSel(end, start);									
-		}
-	}
-}
 
 #pragma endregion
 
@@ -981,20 +936,103 @@ bool CodeView::TerminatesIncrementalSearch( UINT ch )
 			!CharTraitsT::IsPrint(ch));
 }
 
+
+bool IsOpeningBrace(TCHAR ch) 
+{
+	return ch == _T('{') || ch == _T('(') || ch == _T('[');
+}
+
+bool IsClosingBrace(TCHAR ch) 
+{
+	return ch == _T('}') || ch == _T(')') || ch == _T(']');
+}
+
 void CodeView::OnEditSelBiggerBlock()
 {
-	SelectCurrentBlock();
+	//Shorthand
+	CScintillaCtrl& ctrl = GetCtrl();
+
+	const long BeginSelectionStart = ctrl.GetSelectionStart();
+	const long BeginSelectionEnd = ctrl.GetSelectionEnd();
+	const bool bHadSelectionAtBeginning = (BeginSelectionStart != BeginSelectionEnd);
+
+	//This is arbitrary, but we cannot use the current cursor position
+	// as it might be inside the selection after a call to this function.
+	// And we want to be able to grow the selection using this function.
+	long CurrentPosition = BeginSelectionStart;
+
+	//TODO: What about $ signs as opening/closing braces?
+	//A little bit difficult to handle, I assume,
+	//since there is no easy, character-based distinction between opening and closing.
+	//Also, Scintilla does not natively match them using BraceMatch().
+
+	//Search for the next opening brace.
+	long StackCounter(0); //Obviously, the current position is at zero-th level.
+	//We start with the character before the cursor, searching to the left.
+    CurrentPosition--;
+    while (CurrentPosition >= 0 && StackCounter != 1)
+    {
+		//Take care of the the style, such that we do not match braces in comments.
+		if (ctrl.GetStyleAt(CurrentPosition) != SCE_TEX_COMMENT)
+		{
+			TCHAR ch = ctrl.GetCharAt(CurrentPosition);
+
+			if (IsOpeningBrace(ch))
+			{
+				StackCounter++;
+			}
+			else if (IsClosingBrace(ch))
+			{
+				StackCounter--;
+			}
+		}
+
+		//Next char!
+		CurrentPosition--;
+    }
+
+	//Are we leveled out, i.e., did we find a proper opening brace or did we just hit the end?
+	if (StackCounter == 1)
+	{
+		//The starting point for the new selection
+		// - we had one "pos--" too much above
+		// - and we actually do not want to select the brace itself
+		// - therefore the + 2
+		long NewSelectionStart = CurrentPosition + 2;
+
+		//Let Scintilla find the closing brace, starting from the found opening brace.
+		long NewSelectionEnd = ctrl.BraceMatch(NewSelectionStart - 1);
+
+		//Did we find something?
+		if (NewSelectionEnd >= 0)
+		{
+			//Did anything change? If not, then we extend the selection by one char in each direction,
+			//since we have actually already selected a brace block.
+			if (BeginSelectionStart == NewSelectionStart && BeginSelectionEnd == NewSelectionEnd)
+			{
+				NewSelectionStart--; //Scintilla will be graceful
+				NewSelectionEnd++;   //if this gets us out of bounds
+			}
+
+			//We explicitly do not change the caret position.
+			// I want people to be able to keep the cursor where it is.
+			ctrl.SetSelectionStart(NewSelectionStart);
+			ctrl.SetSelectionEnd(NewSelectionEnd);
+		}
+	}
+	else if (bHadSelectionAtBeginning)
+	{
+		//We had a selection at the beginning, but could not extend it in any way.
+		//Lets remove the selection.
+		//By going up/down, we might actually keep the original cursor position,
+		// if the selection is still in one line. If we wanted to have this behavior
+		// in all situations, we needed to save the cursor position from the first call
+		// to this function, i.e., Ctrl-M.
+		ctrl.LineUp();
+		ctrl.LineDown();
+	}
 }
 
-void CodeView::SelectBlock( long pos )
-{
-	::SelectBlock(GetCtrl(), pos);
-}
-
-void CodeView::SelectCurrentBlock()
-{
-	SelectBlock(GetCtrl().GetCurrentPos());
-}
 
 bool CodeView::IsDirectionKey( UINT ch )
 {
