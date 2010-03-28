@@ -507,6 +507,8 @@ class CProfileMap : protected CMap<CString, LPCTSTR, CProfile*, CProfile*>
 	static std::auto_ptr<CProfileMap> impl_;
 
 public:
+	using CObject::operator delete;
+
 	CProfileMap();
 	virtual ~CProfileMap();
 

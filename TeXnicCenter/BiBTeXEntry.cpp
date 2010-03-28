@@ -61,6 +61,7 @@ BibTeXEntry::BibTeXEntry(const CString& key, BibTeXFile *parent, BibType type)
 	ASSERT(parent != NULL);
 	m_Parent = parent;
 	m_Key = key;
+	m_Key.Trim(); // Remove excessive whitespace
 
 	if (m_Key.GetLength() == 0)
 	{
