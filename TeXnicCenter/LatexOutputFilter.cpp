@@ -252,7 +252,7 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 {
 	UpdateFileStack(strLine);
 
-	typedef std::tr1::basic_regex<TCHAR> regex_type;
+	typedef tregex regex_type;
 	static const regex_type::flag_type flags = regex_type::ECMAScript | regex_type::icase;
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

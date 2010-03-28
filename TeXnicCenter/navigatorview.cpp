@@ -209,7 +209,7 @@ void NavigatorTreeCtrl::ExpandItemsByLevel(const int nLevel)
 	bool bLookForParent(false);
 	int currLevel = 0;
 
-	while (currLevel >= 0)
+	while (currLevel >= 0 && hItem)
 	{
 		if ((currLevel <= nLevel) && !bLookForParent)
 		{
