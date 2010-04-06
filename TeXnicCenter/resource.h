@@ -1428,13 +1428,15 @@
 #define ID_WINDOW_RECENTLY_USED         40623
 #define IDR_BOOKMARK_VIEW               57672
 #define IDR_ERROR_VIEW                  57673
+#define IDR_MAINFRAMEOLD                57675
+#define IDR_LATEXDOCTYPEOLD             57676
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        57674
+#define _APS_NEXT_RESOURCE_VALUE        57677
 #define _APS_NEXT_COMMAND_VALUE         40624
 #define _APS_NEXT_CONTROL_VALUE         8665
 #define _APS_NEXT_SYMED_VALUE           57773
