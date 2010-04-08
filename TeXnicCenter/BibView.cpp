@@ -243,6 +243,16 @@ int BibView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
+//BOOL BibView::CanBeTabbedDocument() const
+//{
+//	return true;
+//}
+//
+//BOOL BibView::CanBeDocked(CBasePane* /*pDockBar*/) const
+//{
+//	return false;
+//}
+
 void BibView::OnSize(UINT nType, int cx, int cy)
 {
 	WorkspacePaneBase::OnSize(nType, cx, cy);

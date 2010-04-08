@@ -119,7 +119,7 @@ void BookmarkView::AdjustLayout(const CRect& rect)
 
 void BookmarkView::Clear()
 {
-	list_view_.DeleteAllItems();
+	if (list_view_.m_hWnd) list_view_.DeleteAllItems();
 }
 
 void BookmarkView::InsertBookmark(int index, const CString& filename, const CodeBookmark& b)

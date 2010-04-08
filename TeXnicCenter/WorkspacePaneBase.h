@@ -23,6 +23,7 @@ protected:
 	void OnSlide( BOOL bSlideOut );
 
 public:
+
 	CMFCAutoHideBar* SetAutoHideMode( BOOL bMode, DWORD dwAlignment, CMFCAutoHideBar* pCurrAutoHideBar /* = NULL */, BOOL bUseTimer /* = TRUE */ );
 };
 

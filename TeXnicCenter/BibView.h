@@ -89,7 +89,10 @@ public:
 	void AdjustLayout(const CRect& rect);
 	void AdjustLayout();
 	CLaTeXProject* GetProject();
-	
+	/////The window can be a tabbed document
+	//virtual BOOL CanBeTabbedDocument() const;
+	//virtual BOOL CanBeDocked(CBasePane* pDockBar) const;
+
 protected:
 	afx_msg void OnSetFocus(CWnd* pOldWnd);	
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);	

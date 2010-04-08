@@ -140,11 +140,15 @@ BEGIN
     VK_F10,         ID_PREV_WARNING,        VIRTKEY, SHIFT, NOINVERT
     VK_SPACE,       ID_QUERY_COMPLETION,    VIRTKEY, CONTROL, NOINVERT
     VK_ESCAPE,      ID_TOOLS_CANCEL,        VIRTKEY, NOINVERT
-    "U",            ID_WINDOW_ENVIRONMENT,  VIRTKEY, CONTROL, NOINVERT
-    "D",            ID_WINDOW_FILES,        VIRTKEY, CONTROL, NOINVERT
-    "1",            ID_WINDOW_GREP1,        VIRTKEY, CONTROL, ALT, NOINVERT
-    "2",            ID_WINDOW_GREP2,        VIRTKEY, CONTROL, ALT, NOINVERT
-    "G",            ID_WINDOW_STRUCTURE,    VIRTKEY, CONTROL, NOINVERT
+    "L",            ID_VIEW_BIB_ENTRIES_PANE, VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "1",            ID_VIEW_TOGGLEBOTTOMDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
+    VK_OEM_3,       ID_VIEW_TOGGLELEFTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
+    VK_OEM_5,       ID_VIEW_TOGGLELEFTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
+    "2",            ID_VIEW_TOGGLERIGHTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_VIEW_STRUCT_PANE,    VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "F",            ID_VIEW_FILES_PANE,     VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "B",            ID_VIEW_BUILD_PANE,     VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "R",            ID_VIEW_ERROR_LIST_PANE, VIRTKEY, SHIFT, CONTROL, NOINVERT
 END
 
 
@@ -2068,17 +2072,6 @@ BEGIN
     BEGIN
         MENUITEM "Editorfenster aktivieren",    ID_WINDOW_EDITOR
         MENUITEM SEPARATOR
-        MENUITEM "Navigatorfenster aktivieren", ID_WINDOW_NAVIGATOR
-        MENUITEM "Gliederungsansicht aktivieren", ID_WINDOW_STRUCTURE
-        MENUITEM "Objektansicht aktivieren",    ID_WINDOW_ENVIRONMENT
-        MENUITEM "Dateiansicht aktivieren",     ID_WINDOW_FILES
-        MENUITEM "Literaturansicht aktivieren", ID_WINDOW_REFERENCES
-        MENUITEM SEPARATOR
-        MENUITEM "Ausgabefenster aktivieren",   ID_WINDOW_OUTPUT
-        MENUITEM "'Erstellen'-Ausgabe aktivieren", ID_WINDOW_BUILDRESULT
-        MENUITEM "'Suchen 1'-Ausgabe aktivieren", ID_WINDOW_GREP1
-        MENUITEM "'Suchen 2'-Ausgabe aktivieren", ID_WINDOW_GREP2
-        MENUITEM "'Analyse'-Ausgabe aktivieren", ID_WINDOW_PARSE
     END
     POPUP "A&usgabe"
     BEGIN
@@ -2257,9 +2250,27 @@ BEGIN
     END
     POPUP "&Ansicht"
     BEGIN
-        POPUP "Toolbars"
+        POPUP "&Symbolleisten"
         BEGIN
             MENUITEM "<placeholder>",               ID_VIEW_TOOLBAR
+        END
+        POPUP "&Hilfsfenster"
+        BEGIN
+            MENUITEM "Gliederung",                  ID_VIEW_STRUCT_PANE
+            MENUITEM "Literatur",                   ID_VIEW_BIB_ENTRIES_PANE
+            MENUITEM "Umgebungen",                  ID_VIEW_ENV_PANE
+            MENUITEM "Dateien",                     ID_VIEW_FILES_PANE
+            MENUITEM "Lesezeichen",                 ID_VIEW_BOOKMARKS_PANE
+            MENUITEM "Erstellung Ausgabe",          ID_VIEW_BUILD_PANE
+            MENUITEM "Erstellung Ergebnis",         ID_VIEW_ERROR_LIST_PANE
+            MENUITEM "Suchen 1",                    ID_VIEW_GREP_1_PANE
+            MENUITEM "Suchen 2",                    ID_VIEW_GREP_2_PANE
+            MENUITEM "Analyse",                     ID_VIEW_PARSE_PANE
+            MENUITEM SEPARATOR
+            MENUITEM "&Linke Hilfsfenster ein-/ausblenden", ID_VIEW_TOGGLELEFTDOCKINGBARS
+            MENUITEM "&Rechte Hilfsfenster ein-/ausblenden", ID_VIEW_TOGGLERIGHTDOCKINGBARS
+            MENUITEM "&Obere Hilfsfenster ein-/ausblenden", ID_VIEW_TOGGLETOPDOCKINGBARS
+            MENUITEM "&Untere Hilfsfenster ein-/ausblenden", ID_VIEW_TOGGLEBOTTOMDOCKINGBARS
         END
         MENUITEM "Statusleiste",                ID_VIEW_STATUS_BAR
         MENUITEM SEPARATOR
@@ -3444,7 +3455,7 @@ BEGIN
     ID_PUBLICATION_TYPE     "Nach Typ der Publikation suchen."
     ID_PUBLISHER            "Nach Herausgeber suchen."
     ID_VIEW_TRANSPARENCY    "Ändert die Transparenz des Hauptfensters.\nTransparenz ändern"
-    ID_VIEW_BUILD_PANE      "Blendet das Erstellen-Fenster ein oder aus.\nErstellen"
+    ID_VIEW_BUILD_PANE      "Blendet das Fenster mit der Ausgabe der Erstellung ein oder aus.\nErstellung"
     ID_VIEW_GREP_1_PANE     "Blendet die Suchergebnisse ein oder aus.\nSuchen 1"
     ID_VIEW_GREP_2_PANE     "Blendet die Suchergebnisse ein oder aus.\nSuchen 2"
 END
@@ -3550,7 +3561,7 @@ END
 STRINGTABLE 
 BEGIN
     IDR_MAINFRAME           "TeXnicCenter"
-    ID_VIEW_BOOKMARKS_PANE  "Lesezeichen"
+    ID_VIEW_BOOKMARKS_PANE  "Blendet die Lesezeichen ein oder aus\nLesezeichen"
 END
 
 STRINGTABLE 
@@ -4439,8 +4450,8 @@ BEGIN
     ID_VIEW_ENV_PANE        "Blendet die Umgebungsliste ein oder aus.\nUmgebungen"
     ID_VIEW_FILES_PANE      "Blendet die Dateienliste ein oder aus.\nDateien"
     ID_VIEW_BIB_ENTRIES_PANE 
-                            "Blendet die Literatureinträge ein oder aus.\nLiteratureinträge"
-    ID_VIEW_ERROR_LIST_PANE "Blendet die Fehlerliste ein oder aus.\nFehlerliste"
+                            "Blendet die Literatureinträge ein oder aus.\nLiteratur"
+    ID_VIEW_ERROR_LIST_PANE "Blendet das Fenster mit den Ergebnissen der Erstellung ein oder aus.\nErstellung Ergebnis"
 END
 
 STRINGTABLE 
@@ -4495,8 +4506,6 @@ BEGIN
     ID_LATEX_FILE_NEW       "Erstellt ein neues LaTeX-Dokument\nNeues LaTeX-Dokument"
     ID_PACKAGE_SETUP        "Durchsucht Verzeichnisse nach Stylefiles und Dokumentklassen nach Befehlen und macht sie für TXC verfügbar"
     ID_QUERY_COMPLETION     "Vervollständigt das aktuell angefangene Wort\nWort vervollständigen"
-    ID_WINDOW_REFERENCES    "Aktiviert die Literaturansicht\nLiteraturansicht aktivieren"
-    ID_WINDOW_PARSE         "Aktiviert die 'Analyse'-Ausgabe\n'Analyse'-Ausgabe aktivieren"
 END
 
 STRINGTABLE 
@@ -4722,10 +4731,6 @@ BEGIN
     ID_PH_CNAME             "%nc"
     ID_PH_CTITLE            "%tc"
     ID_WINDOW_EDITOR        "Aktiviert das Editorfenster\nEditorfenster aktivieren"
-    ID_WINDOW_NAVIGATOR     "Aktiviert die Navigatorleiste\nNavigatorleiste aktivieren"
-    ID_WINDOW_STRUCTURE     "Aktiviert die Gliederungsansicht\nGliederungsansicht aktivieren"
-    ID_WINDOW_ENVIRONMENT   "Aktiviert die Objektansicht\nObjektansicht aktivieren"
-    ID_WINDOW_FILES         "Aktiviert die Dateiansicht\nDateiansicht aktivieren"
     ID_PH_CEXTENSION        "%ec"
     ID_PH_CSPATH            "%spc"
     ID_PH_CSSLASHPATH       "%sPc"
@@ -4804,14 +4809,6 @@ BEGIN
     ID_REGEX_EOL            "\\Z"
     ID_REGEX_SOW            "\\<"
     ID_REGEX_EOW            "\\>"
-END
-
-STRINGTABLE 
-BEGIN
-    ID_WINDOW_OUTPUT        "Aktiviert die Ausgabeleiste\nAusgabeleiste aktivieren"
-    ID_WINDOW_BUILDRESULT   "Aktiviert die 'Erstellen'-Ausgabe\n'Erstellen'-Ausgabe aktivieren"
-    ID_WINDOW_GREP1         "Aktiviert die 'Suchen 1'-Ausgabe\n'Suchen 1'-Ausgabe aktivieren"
-    ID_WINDOW_GREP2         "Aktiviert die 'Suchen 2'-Ausgabe\n'Suchen 2'-Ausgabe aktivieren"
 END
 
 STRINGTABLE 
@@ -6094,17 +6091,6 @@ BEGIN
     BEGIN
         MENUITEM "Activate editor",             ID_WINDOW_EDITOR
         MENUITEM SEPARATOR
-        MENUITEM "Activate navigator bar",      ID_WINDOW_NAVIGATOR
-        MENUITEM "Activate structure view",     ID_WINDOW_STRUCTURE
-        MENUITEM "Activate object view",        ID_WINDOW_ENVIRONMENT
-        MENUITEM "Activate file view",          ID_WINDOW_FILES
-        MENUITEM "Activate references view",    ID_WINDOW_REFERENCES
-        MENUITEM SEPARATOR
-        MENUITEM "Activate output bar",         ID_WINDOW_OUTPUT
-        MENUITEM "Activate build output",       ID_WINDOW_BUILDRESULT
-        MENUITEM "Activate 'Find 1' output",    ID_WINDOW_GREP1
-        MENUITEM "Activate 'Find 2' output",    ID_WINDOW_GREP2
-        MENUITEM "Activate parse output",       ID_WINDOW_PARSE
     END
     POPUP "&Output"
     BEGIN
@@ -6307,9 +6293,27 @@ BEGIN
     END
     POPUP "&View"
     BEGIN
-        POPUP "Toolbars"
+        POPUP "&Toolbars"
         BEGIN
             MENUITEM "<placeholder>",               ID_VIEW_TOOLBAR
+        END
+        POPUP "Tool &Windows"
+        BEGIN
+            MENUITEM "Outline",                     ID_VIEW_STRUCT_PANE
+            MENUITEM "Literature",                  ID_VIEW_BIB_ENTRIES_PANE
+            MENUITEM "Environments",                ID_VIEW_ENV_PANE
+            MENUITEM "Files",                       ID_VIEW_FILES_PANE
+            MENUITEM "Bookmarks",                   ID_VIEW_BOOKMARKS_PANE
+            MENUITEM "Build Output",                ID_VIEW_BUILD_PANE
+            MENUITEM "Compilation Results",         ID_VIEW_ERROR_LIST_PANE
+            MENUITEM "Find 1",                      ID_VIEW_GREP_1_PANE
+            MENUITEM "Find 2",                      ID_VIEW_GREP_2_PANE
+            MENUITEM "Parse",                       ID_VIEW_PARSE_PANE
+            MENUITEM SEPARATOR
+            MENUITEM "Toggle &Left Tool Windows",   ID_VIEW_TOGGLELEFTDOCKINGBARS
+            MENUITEM "Toggle &Right Tool Windows",  ID_VIEW_TOGGLERIGHTDOCKINGBARS
+            MENUITEM "Toggle &Top Tool Windows",    ID_VIEW_TOGGLETOPDOCKINGBARS
+            MENUITEM "Toggle &Bottom Tool Windows", ID_VIEW_TOGGLEBOTTOMDOCKINGBARS
         END
         MENUITEM "Status Bar",                  ID_VIEW_STATUS_BAR
         MENUITEM SEPARATOR
@@ -6328,7 +6332,7 @@ BEGIN
                 MENUITEM "&Aqua",                       ID_VIEW_APP_LOOK_OFFICE_2007_AQUA
             END
         END
-        POPUP "Document &Tabs"
+        POPUP "Document Tabs"
         BEGIN
             MENUITEM "&Top",                        ID_VIEW_DOCTAB_TOP
             MENUITEM "&Bottom",                     ID_VIEW_DOCTAB_BOTTOM
@@ -7490,7 +7494,7 @@ END
 STRINGTABLE 
 BEGIN
     IDR_MAINFRAME           "TeXnicCenter"
-    ID_VIEW_BOOKMARKS_PANE  "Bookmarks"
+    ID_VIEW_BOOKMARKS_PANE  "Shows or hides the Bookmarks view\nBookmarks"
 END
 
 STRINGTABLE 
@@ -8084,6 +8088,9 @@ BEGIN
     ID_TITLE                "Search for title."
     ID_PUBLICATION_TYPE     "Search for publication type."
     ID_PUBLISHER            "Search for publisher."
+    ID_VIEW_BUILD_PANE      "Shows or hides the Build Output\nBuild Output"
+    ID_VIEW_GREP_1_PANE     "Shows or hides the Find 1 view\nFind 1"
+    ID_VIEW_GREP_2_PANE     "Shows or hides the Find 2 view\nFind 2"
 END
 
 STRINGTABLE 
@@ -8099,8 +8106,6 @@ BEGIN
     ID_LATEX_FILE_NEW       "Creates a new LaTeX-document\nNew LaTeX-Document"
     ID_PACKAGE_SETUP        "Scans style files and document classes for commands and make them available for auto completion"
     ID_QUERY_COMPLETION     "Completes the currently typed word\nComplete Word"
-    ID_WINDOW_REFERENCES    "Activates the references view\nActivate References View"
-    ID_WINDOW_PARSE         "Activates the parse output view\nActivate Parse Output"
 END
 
 STRINGTABLE 
@@ -8400,10 +8405,6 @@ BEGIN
     ID_PH_CNAME             "%nc"
     ID_PH_CTITLE            "%tc"
     ID_WINDOW_EDITOR        "Activates the editor window\nActivate Editor Window"
-    ID_WINDOW_NAVIGATOR     "Activates the navigator bar\nActivate Navigator Bar"
-    ID_WINDOW_STRUCTURE     "Activates the structure view\nActivate Structure View"
-    ID_WINDOW_ENVIRONMENT   "Activates the object view\nActivate Object View"
-    ID_WINDOW_FILES         "Activates the file view\nActivate File View"
     ID_PH_CEXTENSION        "%ec"
     ID_PH_CSPATH            "%spc"
     ID_PH_CSSLASHPATH       "%sPc"
@@ -8751,14 +8752,16 @@ BEGIN
     ID_WINDOW_CLOSE_ALL_BUTACTIVE 
                             "Closes all opened documents except the active one\nClose All but Active"
     ID_WINDOW_CLOSE_SELECTEDTAB "Closes the selected document\nClose"
+    ID_VIEW_STRUCT_PANE     "Shows or hides the Outline view\nOutline"
+    ID_VIEW_ENV_PANE        "Shows or hides the Environments view\nEnvironments"
+    ID_VIEW_FILES_PANE      "Shows or hides the Files view\nFiles"
+    ID_VIEW_BIB_ENTRIES_PANE "Shows or hides the Literature view\nLiterature"
+    ID_VIEW_ERROR_LIST_PANE "Shows or hides the overview of the compilation results\nCompilation Results"
 END
 
 STRINGTABLE 
 BEGIN
     ID_WINDOW_OUTPUT        "Activates the output bar\nActivate Output Bar"
-    ID_WINDOW_BUILDRESULT   "Activates the build output view\nActivate Build Output"
-    ID_WINDOW_GREP1         "Activates the 'Find 1' output view\nActivate 'Find 1' Output"
-    ID_WINDOW_GREP2         "Activates the 'Find 2' output view\nActivate 'Find 2' Output View"
 END
 
 STRINGTABLE 
@@ -8845,6 +8848,23 @@ BEGIN
     ID_FILE_MRU_PROJECT11   "Opens this project."
     ID_ERROR_VIEW_SOURCE    "Opens the source file and jumps to the affected line."
     ID_WINDOW_RECENTLY_USED "Activates recently used window."
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_TOGGLELEFTDOCKINGBARS 
+                            "Toggles all tool windows docked at the left side\nToggle left tool windows"
+    ID_VIEW_TOGGLERIGHTDOCKINGBARS 
+                            "Toggles all tool windows docked at the right side\nToggle right tool windows"
+    ID_VIEW_TOGGLETOPDOCKINGBARS 
+                            "Toggles all tool windows docked at the top\nToggle top tool windows"
+    ID_VIEW_TOGGLEBOTTOMDOCKINGBARS 
+                            "Toggles all tool windows docked at the bottom\nToggle bottom tool windows"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_PARSE_PANE      "Shows or hides the output of parsing the project.\nParse"
 END
 
 #endif    // English (U.S.) resources

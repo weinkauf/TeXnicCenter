@@ -32,7 +32,8 @@ const CString& BibItem::GetEditor() const
 
 const Nullable<int>& BibItem::GetYear() const
 {
-	ASSERT(HasYear()); return year_;
+	//ASSERT(HasYear());
+	return year_;
 }
 
 const CString& BibItem::GetLabel() const
