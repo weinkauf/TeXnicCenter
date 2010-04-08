@@ -452,6 +452,9 @@ BOOL CTeXnicCenterApp::InitInstance()
 	for (unCommand = ID_TEXTMODULES_FIRST; unCommand <= ID_TEXTMODULES_LAST; ++unCommand)
 		m_listProtectedCommands.AddTail(unCommand);
 
+	// - Placeholder for the toolbars and windows.
+	m_listProtectedCommands.AddTail(ID_VIEW_TOOLBAR);
+
 	// - Pass the info to the BCG
 	CMFCToolBarButton::SetProtectedCommands(m_listProtectedCommands);
 

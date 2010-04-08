@@ -67,36 +67,6 @@ class CMainFrame : public CMDIFrameWndEx
 	friend class COutputBuilder;
 	CFrameWnd* recentUsed_;
 
-private:
-	CComPtr<ITaskbarList3> taskBarList_;
-	WorkspacePane file_view_pane_, env_view_pane_;
-	BibView bib_view_pane_;
-	BookmarkView bookmark_view_pane_;
-
-	StructurePane structure_view_;
-	CFileView file_view_;
-	CEnvironmentView env_view_;
-
-	/** View containing the results of the build process. */
-	CBuildView build_view_;
-
-	/** View containing the results of file grep 1. */
-	CGrepView grep_view_1_;
-
-	/** View containing the results of file grep 2. */
-	CGrepView grep_view_2_;
-
-	/** Structure parser output view. */
-	CParseOutputView parse_view_;
-
-	COutputDoc output_doc_; //UPDATE
-
-	ErrorListPane error_list_view_;
-
-	WorkspacePane build_view_pane_, grep_view_1_pane_, grep_view_2_pane_, parse_view_pane_;
-
-	CImageList build_animation_;
-
 // types
 protected:
 
@@ -115,20 +85,24 @@ public:
 
 	void OnIdle(long count);
 
+	///Enumeration of output panes. Make sure, this matches the code in GetAllPanes()
 	enum tagOutputTabs
 	{
-		outputTabBuildResult = 0,
+		outputTabErrors = 0,
 		outputTabGrep1 = 1,
 		outputTabGrep2 = 2,
-		outputTabParse = 3
+		outputTabParse = 3,
+		outputTabBuildResult = 4
 	};
 
+	///Enumeration of navigator panes. Make sure, this matches the code in GetAllPanes()
 	enum tagNavigatorTabs
 	{
-		navigatorTabStructure = 0,
+		navigatorTabBookmarks = 0,
 		navigatorTabEnvironments = 1,
 		navigatorTabFiles = 2,
-		navigatorTabReferences = 3
+		navigatorTabReferences = 3,
+		navigatorTabStructure = 4
 	};
 
 // operations
@@ -184,13 +158,13 @@ public:
 	 */
 	BOOL SetMenu(CMenu* pMenu);
 
-	/**
-	Activates the specified tab on the navigation bar and sets the focus on it.
+	/** Toggles the specified navigation pane.
 
-	@param nTab
-	        Zero based index of the tab on the navigation bar to activate.
+		@param nTab
+			Zero based index of the tab on the navigation bar to be toggled.
+			@see tagNavigatorTabs
 	 */
-	void ActivateNavigationTab(int nTab);
+	void ToggleNavigationPane(unsigned int nTab);
 
 	/**
 	Activates the specified tab on the output bar.
@@ -227,31 +201,8 @@ public:
 	int GetMDIChilds(CArray<CChildFrame*, CChildFrame*>& MDIChildArray, bool bSortByTabs = true);
 
 
-
 // implementation helpers
 protected:
-
-
-
-	/**
-	Toggles the specified control bar.
-
-	@param pCtrlBar
-	        Control bar to toggle.
-	 */
-	void ToggleControlBar(CBasePane* pCtrlBar);
-
-	/**
-	Checks if the specified control bar is visible
-
-	@param pCtrlBar
-	        Control bar to check.
-
-	@return
-	        TRUE, if the specified control bar is visible, FALSE otherwise.
-	 */
-	BOOL IsControlBarVisible(CBasePane* pCtrlBar);
-
 	/**
 	Returns the control bar associated with the specified command ID.
 
@@ -263,6 +214,21 @@ protected:
 	        command ID or NULL, if there is no matching control bar.
 	 */
 	CBasePane* GetControlBarByCmd(UINT unID);
+
+
+	/** Returns an array of pointers to all panes.
+
+	@param pAllPanes
+	        The array of requested panes.
+
+	@param bNavigatorPanes
+	        Whether or not to include Navigator panes.
+
+	@param bOutputPanes
+	        Whether or not to include Output panes.
+	 */
+	void GetAllPanes(std::vector< CBasePane* >& pAllPanes, bool bNavigatorPanes = true, bool bOutputPanes = true);
+
 
 	/**
 	Creates the specified tool bar
@@ -316,14 +282,6 @@ protected:
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
 	afx_msg void OnOptionsChanged();
 	afx_msg void OnWindowEditor();
-	afx_msg void OnWindowNavigator();
-	afx_msg void OnWindowEnvironment();
-	afx_msg void OnWindowFiles();
-	afx_msg void OnWindowStructure();
-	afx_msg void OnWindowOutput();
-	afx_msg void OnWindowBuildResult();
-	afx_msg void OnWindowGrep1();
-	afx_msg void OnWindowGrep2();
 	afx_msg void OnWindowList();
 	afx_msg void OnHelpSearch();
 	afx_msg void OnHelpIndex();
@@ -344,23 +302,23 @@ protected:
 	afx_msg void OnViewDocTabsNote();
 	afx_msg void OnUpdateViewDocTabs(CCmdUI* pCmdUI);
 	afx_msg BOOL OnToolsCancel(UINT);
-	afx_msg void OnWindowReferences();
-	afx_msg void OnWindowParse();
 	afx_msg void OnWindowCloseSelectedTab();
 	afx_msg void OnUpdateWindowCloseSelectedTab(CCmdUI* pCmdUI);
 	afx_msg void OnWindowCloseAllButActive();
 	afx_msg void OnUpdateWindowCloseAllButActive(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	afx_msg BOOL OnToggleCtrlBar(UINT nIDEvent);
-	afx_msg BOOL OnToggleMathBar(UINT nIDEvent);
+	afx_msg BOOL OnToggleDockingBar(UINT nIDEvent);
 	afx_msg void OnCheckCtrlBarVisible(CCmdUI *pCmdUI);
 	afx_msg LRESULT OnToolbarContextMenu(WPARAM wp, LPARAM lp);
 	afx_msg LRESULT OnResetToolbar(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnCustomizationMode(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnUpdateUserTool(CCmdUI *pCmdUI);
 	afx_msg void OnExecuteUserTool(UINT nIDEvent);
-
-	//BOOL InitializeDockingWindows();
+	afx_msg void OnViewToggleBottomDockingBars();
+	afx_msg void OnViewToggleLeftDockingBars();
+	afx_msg void OnViewToggleRightDockingBars();
+	afx_msg void OnViewToggleTopDockingBars();
 
 	DECLARE_MESSAGE_MAP()
 
@@ -385,23 +343,64 @@ private:
 
 	CView* m_pContextMenuTargetWindow; // Target window from context menu
 
+	CComPtr<ITaskbarList3> taskBarList_;
+
+	///View for the structure of a project
+	StructurePane structure_view_;
+
+	///Pane showing the files of a project
+	WorkspacePane file_view_pane_;
+	///View for the files of a project
+	CFileView file_view_;
+	
+	///Pane showing the latex environments of a project
+	WorkspacePane env_view_pane_;
+	///View for the latex environments of a project
+	CEnvironmentView env_view_;
+
+	///Pane showing the contents of the bibtex files
+	BibView bib_view_pane_;
+
+	///Pane showing all bookmarks
+	BookmarkView bookmark_view_pane_;
+
+	///Pane showing the results of the build process.
+	WorkspacePane build_view_pane_;
+	/** View containing the results of the build process. */
+	CBuildView build_view_;
+
+	///Pane listing the errors of a compilation
+	ErrorListPane error_list_view_;
+
+	///Pane containing the results of file grep 1.
+	WorkspacePane grep_view_1_pane_;
+	/** View containing the results of file grep 1. */
+	CGrepView grep_view_1_;
+
+	///Pane containing the results of file grep 2.
+	WorkspacePane grep_view_2_pane_;
+	/** View containing the results of file grep 2. */
+	CGrepView grep_view_2_;
+
+	///Pane for the Structure parser output view.
+	WorkspacePane parse_view_pane_;
+	/** Structure parser output view. */
+	CParseOutputView parse_view_;
+
+
+	COutputDoc output_doc_; //UPDATE
+
+	CImageList build_animation_;
+
 private:
 	/** Identifier of the timer used to parse the project in given intervals. */
 	UINT m_unParseTimer;
-	bool CreateNavigationPanes();
+	bool CreateToolWindows();
 	void HideTaskbarProgress();
 
 protected:
 	void OnOpenProject(CLaTeXProject* p);
 	void OnCloseProject(CLaTeXProject* p);
-	afx_msg void OnUpdateViewEnvPane(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateViewFilesPane(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateViewBibEntriesPane(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateViewStructPane(CCmdUI *pCmdUI);
-	afx_msg void OnViewStructPane();
-	afx_msg void OnViewFilesPane();
-	afx_msg void OnViewBibEntriesPane();
-	afx_msg void OnViewEnvPane();
 	afx_msg LRESULT OnGetTabToolTip(WPARAM, LPARAM);
 	afx_msg void OnApplicationLook(UINT id);
 	afx_msg void OnViewTransparency();
@@ -416,7 +415,7 @@ protected:
 private:
 	bool animating_;
 
-	bool CreateOutputPanes(void);
+	void ToggleDockingBars(const DWORD dwAlignment);
 
 public:
 	COutputDoc* GetOutputDoc(void);
