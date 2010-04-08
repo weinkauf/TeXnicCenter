@@ -851,15 +851,16 @@ void CMainFrame::OnWindowEditor()
 
 void CMainFrame::ActivateOutputTab(int nTab, bool /*bSetFocus*/)
 {
-	CDockablePane* const panes[] = { &build_view_pane_, &grep_view_1_pane_, &grep_view_2_pane_,
-			&parse_view_pane_, &error_list_view_ };
-	const int count = sizeof(panes) / sizeof(*panes);
+	std::vector< CBasePane* > pAllPanes;
+	GetAllPanes(pAllPanes, false, true);
 
-	if (nTab >= 0 && nTab < count && (panes[nTab]->IsVisible() || panes[nTab]->IsAutoHideMode()))
+	if (nTab >= 0 && (unsigned int)(nTab) < pAllPanes.size())
 	{
 		// Special case: Activate the build view only if the error list view isn't active
 		if (nTab != outputTabBuildResult || !error_list_view_.IsWindowVisible())
-			panes[nTab]->ShowPane(TRUE, TRUE, TRUE);
+		{
+			pAllPanes[nTab]->ShowPane(true, false, true);
+		}
 	}
 }
 
@@ -1518,13 +1519,16 @@ BOOL CMainFrame::OnToolsCancel(UINT)
 	if (!pEdit)
 		return FALSE;
 
-	if (GetFocus() != pEdit)
+	if (GetFocus() != &pEdit->GetCtrl())
 	{
 		//Activate view
 		pEdit->SetFocus();
 	}
 	else
-		return FALSE;
+	{
+		//Close output bars. Basically, we toggle the bottom tool windows.
+		ToggleDockingBars(CBRS_ALIGN_BOTTOM, true);
+	}
 
 	return TRUE;
 }
@@ -2085,7 +2089,7 @@ CFrameWnd* CMainFrame::GetRecentUsedChildFrame() const
 }
 
 
-void CMainFrame::ToggleDockingBars(const DWORD dwAlignment)
+void CMainFrame::ToggleDockingBars(const DWORD dwAlignment, const bool bCloseOnly /*= false*/)
 {
 	std::vector< CBasePane* > pAllPanes;
 	GetAllPanes(pAllPanes, true, true);
@@ -2115,7 +2119,7 @@ void CMainFrame::ToggleDockingBars(const DWORD dwAlignment)
 			&& !pAllPanes[i]->IsAutoHideMode()
 			&& !pAllPanes[i]->IsMDITabbed())
 		{
-			pAllPanes[i]->ShowPane(!bOneIsVisible, false, !bOneIsVisible);
+			pAllPanes[i]->ShowPane(!bOneIsVisible && !bCloseOnly, false, !bOneIsVisible && !bCloseOnly);
 		}
 	}
 }

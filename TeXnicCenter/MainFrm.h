@@ -415,7 +415,7 @@ protected:
 private:
 	bool animating_;
 
-	void ToggleDockingBars(const DWORD dwAlignment);
+	void ToggleDockingBars(const DWORD dwAlignment, const bool bCloseOnly = false);
 
 public:
 	COutputDoc* GetOutputDoc(void);
