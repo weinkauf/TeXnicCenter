@@ -4519,6 +4519,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\LexMarkdown.cxx"
+				>
+			</File>
+			<File
 				RelativePath="..\src\LexMatlab.cxx"
 				>
 				<FileConfiguration
@@ -8135,6 +8139,10 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl"
 			>
+			<File
+				RelativePath="..\src\FontQuality.h"
+				>
+			</File>
 			<File
 				RelativePath="..\include\Platform.h"
 				>
