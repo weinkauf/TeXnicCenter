@@ -15,8 +15,9 @@ private:
 	PrivateToolBar toolbar_;
 
 public:
-	//StructurePane();
-	//~StructurePane();
+	StructurePane();
+	virtual ~StructurePane();
+
 	void AdjustLayout(const CRect& rect);
 	void AdjustLayout();
 

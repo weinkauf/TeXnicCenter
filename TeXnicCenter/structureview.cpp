@@ -10,14 +10,14 @@
 
 IMPLEMENT_DYNAMIC(StructurePane, WorkspacePaneBase)
 
-//StructurePane::StructurePane()
-//{
-//
-//}
-//
-//StructurePane::~StructurePane()
-//{
-//}
+StructurePane::StructurePane()
+{
+
+}
+
+StructurePane::~StructurePane()
+{
+}
 
 BEGIN_MESSAGE_MAP(StructurePane, WorkspacePaneBase)
 	ON_WM_CREATE()
