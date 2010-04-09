@@ -185,10 +185,11 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void CodeView::GoToLine( int line, bool direct /*= true*/ )
 {
-	GetCtrl().GotoLine(line,direct);
-	// Make sure that lines that have been hidden due to folding
-	// will be visible as well
-	GetCtrl().EnsureVisible(line,direct); 
+	//Go to the given line and put it into display such that it is not directly at the borders.
+	GetCtrl().SetYCaretPolicy(CARET_SLOP | CARET_STRICT, 5, direct);
+	GetCtrl().EnsureVisibleEnforcePolicy(line, direct); //If folding is on, this is needed.
+	GetCtrl().GotoLine(line, direct);
+	GetCtrl().SetYCaretPolicy(CARET_EVEN, 1, direct); //Restore default policy
 }
 
 int CodeView::GetLineLength( int line, bool direct /*= true*/ )
