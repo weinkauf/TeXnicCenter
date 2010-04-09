@@ -1517,9 +1517,9 @@ BOOL CMainFrame::OnToolsCancel(UINT)
 	}
 	else
 	{
-		//Close output bars. Basically, we toggle the bottom tool windows.
+		//Close the bottom tool windows to get more space for the editor.
 		ToggleDockingBars(CBRS_ALIGN_BOTTOM, true);
-		//...and we make sure that the build output is closed as well.
+		//...and we make sure that the build output is closed as well, since we open it with every compilation.
 		build_view_pane_.ShowPane(false, false, false);
 	}
 
