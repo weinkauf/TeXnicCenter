@@ -45,7 +45,7 @@ BEGIN_MESSAGE_MAP(NavigatorTreeCtrl,CTreeCtrl)
 	ON_NOTIFY_REFLECT(TVN_SELCHANGED,&NavigatorTreeCtrl::OnSelChanged)
 	ON_WM_CREATE()
 	ON_WM_SYSCOLORCHANGE()
-	ON_NOTIFY_REFLECT(NM_DBLCLK, &NavigatorTreeCtrl::OnNMDblclk)
+	ON_WM_LBUTTONDBLCLK()
 	ON_WM_DESTROY()
 	ON_WM_CONTEXTMENU()
 	ON_NOTIFY_REFLECT(TVN_BEGINDRAG, &NavigatorTreeCtrl::OnTvnBeginDrag)
@@ -97,8 +97,11 @@ BOOL NavigatorTreeCtrl::Create(CWnd *pwndParent)
 	{
 		::SetWindowTheme(m_hWnd,L"explorer",0);
 		
-		const DWORD style = TVS_EX_DOUBLEBUFFER | TVS_EX_FADEINOUTEXPANDOS | 
-			TVS_EX_AUTOHSCROLL | TVS_EX_RICHTOOLTIP;
+		const DWORD style = 
+							  TVS_EX_DOUBLEBUFFER
+							//| TVS_EX_FADEINOUTEXPANDOS
+							//| TVS_EX_AUTOHSCROLL
+							| TVS_EX_RICHTOOLTIP;
 
 		SendMessage(TVM_SETEXTENDEDSTYLE,style,style);
 	}
@@ -355,19 +358,25 @@ bool NavigatorTreeCtrl::IsFolder(HTREEITEM item) const
 	return result;
 }
 
-void NavigatorTreeCtrl::OnNMDblclk(NMHDR* /*pNMHDR*/, LRESULT* /*pResult*/)
+void NavigatorTreeCtrl::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	UINT flags = 0;
 	
-	CPoint pt(GetMessagePos());
-	ScreenToClient(&pt);
+	HTREEITEM item = HitTest(point, &flags);
 
-	HTREEITEM item = HitTest(pt,&flags);
-
-	if (item && (flags & TVHT_ONITEM) && !IsFolder(item))
+	if (item && (flags & TVHT_ONITEM))
 	{
-		//GotoItem();
-		GotoItem(item);
+		if (!IsFolder(item))
+		{
+			//GotoItem();
+			GotoItem(item);
+		}
+		else
+		{
+			//Calling the base class causes parents to collapse/expand.
+			// We want that behavior for folders, but not for structure items (like sections)
+			__super::OnLButtonDblClk(nFlags, point);
+		}
 	}
 }
 
