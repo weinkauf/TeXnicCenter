@@ -37,6 +37,7 @@ protected:
 
 public:
 	void UpdateSettings();
+	void HideAdvice();
 
 protected:
     void OnCharAdded(SCNotification* n);
@@ -53,7 +54,6 @@ private:
 private:
 	CAutoCompleteDlg* CreateListBox(CString &keyword, long pos);
 	void InstantAdvice();
-	void HideAdvice();
 
 	CAdvice* instant_advice_tip_;
 	CAutoCompleteDlg* autocompletion_list_;
