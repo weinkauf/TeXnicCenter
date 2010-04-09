@@ -1491,8 +1491,8 @@ BOOL CMainFrame::OnToolsCancel(UINT)
 {
 	//Dependent on the current mode, we do some fancy stuff here.
 	// Current edit view does NOT have focus: It gets it.
-	// Current edit view is in incremental search mode: Cancel search.
-	// Current edit view does have focus: Close output bar.
+	// old: Current edit view is in incremental search mode: Cancel search.
+	// Current edit view does have focus: Close tool windows at bottom and the build output window.
 
 	//Get active frame
 	CFrameWnd* pFrame = GetActiveFrame();
@@ -1519,6 +1519,8 @@ BOOL CMainFrame::OnToolsCancel(UINT)
 	{
 		//Close output bars. Basically, we toggle the bottom tool windows.
 		ToggleDockingBars(CBRS_ALIGN_BOTTOM, true);
+		//...and we make sure that the build output is closed as well.
+		build_view_pane_.ShowPane(false, false, false);
 	}
 
 	return TRUE;
