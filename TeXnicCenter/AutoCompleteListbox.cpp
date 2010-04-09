@@ -46,6 +46,10 @@ CAutoCompleteListBox::CAutoCompleteListBox()
 	// - bold
 	lf.lfWeight = FW_BOLD;
 	m_BoldFont.CreateFontIndirect(&lf);
+	// - italic
+	lf = GetDisplayFont();
+	lf.lfItalic = 1;
+	m_ItalicFont.CreateFontIndirect(&lf);
 }
 
 CAutoCompleteListBox::~CAutoCompleteListBox()
@@ -100,16 +104,6 @@ void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	COLORREF crOldTextColor = dc.GetTextColor();
 	COLORREF crOldBkColor = dc.GetBkColor();
 
-	//Select Font: bold or normal
-	if (lc->GetParent() != NULL && lc->GetParent()->IsDocClass())
-	{
-		dc.SelectObject(&m_BoldFont);
-	}
-	else
-	{
-		dc.SelectObject(&m_NormalFont);
-	}
-
 	//Subdivide the space between bitmap and text and leave some pixels in between
 	const CRect rcItem = lpDrawItemStruct->rcItem;
 	// - bitmap
@@ -125,26 +119,50 @@ void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	dc.SetBkMode(TRANSPARENT);
 	dc.SetTextColor(::GetSysColor(COLOR_WINDOWTEXT));
 
-	// If this item is selected, set the background color
-	// and the text color to appropriate values. Also, erase
-	// rect by filling it with the background color.
+	//If this item is selected, highlight it.
+	//Earlier, we set the background color and the text color to appropriate values.
+	//But these values are not appropriate on Vista anymore.
+	//Also, erase rect by filling it with the background color.
 	if ((lpDrawItemStruct->itemAction | ODA_SELECT) &&
 	        (lpDrawItemStruct->itemState & ODS_SELECTED))
 	{
 		//dc.SetTextColor(::GetSysColor(COLOR_HIGHLIGHTTEXT));
 		//dc.SetBkColor(::GetSysColor(COLOR_HIGHLIGHT));
-		dc.FillSolidRect(&fillRect,
-		                 ::GetSysColor(COLOR_BTNFACE));
+		dc.FillSolidRect(&fillRect, ::GetSysColor(COLOR_BTNFACE));
 	}
 	else
 	{
-
 		//dc.SetBkColor(::GetSysColor(COLOR_WINDOW));
-		dc.FillSolidRect(&fillRect,crOldBkColor);
+		dc.FillSolidRect(&fillRect, crOldBkColor);
 	}
 
-	//Draw the text
-	dc.DrawText(lpszText,&textRect,DT_SINGLELINE | DT_VCENTER);
+	//Select Font: bold or normal
+	if (lc->GetParent() != NULL && lc->GetParent()->IsDocClass())
+	{
+		dc.SelectObject(&m_BoldFont);
+	}
+	else
+	{
+		dc.SelectObject(&m_NormalFont);
+	}
+
+	//Draw the primary text
+	dc.DrawText(lpszText, &textRect, DT_SINGLELINE | DT_LEFT);
+
+	//Draw the comment text, if any
+	if (!lc->GetDescription().IsEmpty())
+	{
+		//Get the horizontal extent of the primary text. We do not want to overprint it.
+		CSize PrimaryExtent = GetItemMeasure(&dc, lpszText);
+		// - remove it from the text rect
+		textRect.left += PrimaryExtent.cx /*+ padding*/; //padding not needed, looks good without
+		// - and get some white space at the right
+		textRect.right -= padding;
+
+		dc.SelectObject(&m_ItalicFont);
+		dc.SetTextColor(::GetSysColor(COLOR_GRAYTEXT));
+		dc.DrawText(lc->GetDescription(), &textRect, DT_SINGLELINE | DT_RIGHT | DT_WORD_ELLIPSIS);
+	}
 
 	//Draw Bitmap, if available
 	if (lc->GetIconIndex() != -1)
@@ -205,11 +223,33 @@ CSize CAutoCompleteListBox::GetLargestItemTextExtent()
 		const int NumItems = GetCount();
 		for (int i = 0; i < NumItems; i++)
 		{
-			//Get text of the item and measure it
-			CString ItemText;
-			GetText(i,ItemText);
+			//Get the command
+			CLaTeXCommand* lc = (CLaTeXCommand*) GetItemData(i);
 
-			ItemExtent = GetItemMeasure(pDC,ItemText);
+			//Get text of the item and measure it with the correct font
+			CString ItemText;
+			GetText(i, ItemText);
+
+			//Select Font: bold or normal
+			if (lc->GetParent() != NULL && lc->GetParent()->IsDocClass())
+			{
+				pDC->SelectObject(&m_BoldFont);
+			}
+			else
+			{
+				pDC->SelectObject(&m_NormalFont);
+			}
+
+			//Measure the primary text
+			ItemExtent = GetItemMeasure(pDC, ItemText);
+
+			//Measure the comment text, if any
+			if (!lc->GetDescription().IsEmpty())
+			{
+				pDC->SelectObject(&m_ItalicFont);
+				CSize CommentExtent = GetItemMeasure(pDC, lc->GetDescription());
+				ItemExtent.cx += /*padding +*/ CommentExtent.cx + padding;
+			}
 
 			//Record the largest one
 			if (ItemExtent.cx > LargestItemExtent.cx) LargestItemExtent.cx = ItemExtent.cx;

@@ -28,6 +28,7 @@ public:
 private:
 	CFont m_NormalFont;
 	CFont m_BoldFont;
+	CFont m_ItalicFont;
 	//CMapStringToPtr* m_PictureCache;
 
 // Operations

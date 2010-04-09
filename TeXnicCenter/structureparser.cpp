@@ -1078,7 +1078,8 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 					aSI.push_back(copy);
 				}
-				else {
+				else
+				{
 					//Give information that we found the bibfile and that we are going to parse it now.
 					if (m_pParseOutputHandler && !m_bCancel)
 					{
