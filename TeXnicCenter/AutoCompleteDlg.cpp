@@ -139,7 +139,6 @@ BOOL CAutoCompleteDlg::InitWithKeyword(const CString &keyword)
 		idx = m_Box->AddString(lc->ToLaTeX());
 
 		int ret = m_Box->SetItemDataPtr(idx,lc.get()); // sync pointer with string
-
 		if (ret == LB_ERR)
 		{
 			TRACE2("Error in SetItemDataPtr: %d (idx = %d)\n",::GetLastError(),idx);
@@ -274,9 +273,20 @@ BOOL CAutoCompleteDlg::PreTranslateMessage(MSG* pMsg)
 
 	switch (pMsg->message)
 	{
+		case WM_KEYUP:
+			switch (pMsg->wParam)
+			{
+				case VK_CONTROL:
+					MakeTransparent(0);
+					return 1;
+			}
+
 		case WM_KEYDOWN:
 			switch (pMsg->wParam)
 			{
+				case VK_CONTROL:
+					MakeTransparent(75);
+					return 1;
 
 				case VK_TAB:
 				case VK_RETURN:
@@ -645,5 +655,16 @@ LRESULT CAutoCompleteDlg::OnFloatStatus(WPARAM wParam, LPARAM /*lParam*/)
 		result = 0;
 
 	return result;
+}
+
+void CAutoCompleteDlg::MakeTransparent(int value)
+{
+	if (value != 0 && !(this->GetExStyle() & WS_EX_LAYERED))
+		this->ModifyStyleEx(0,WS_EX_LAYERED);
+	else if (value == 0 && this->GetExStyle() & WS_EX_LAYERED)
+		this->ModifyStyleEx(WS_EX_LAYERED,0);
+
+	::SetLayeredWindowAttributes(this->GetSafeHwnd(),0,
+		static_cast<BYTE>((100 - value) * 255 / 100.0),LWA_ALPHA);
 }
 

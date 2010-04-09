@@ -255,17 +255,18 @@ void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CStr
 		std::tr1::shared_ptr<CStyleFile> dummy
 			(new CStyleFile(CString(_T("Labels")), CString(_T("All Labels from document."))));
 
-		//for (int i = 0; i < size; i++) {
 		for (StructureItemContainer::const_iterator it = proj->m_aStructureItems.begin(); it != proj->m_aStructureItems.end(); ++it)
 		{
-			str = it->GetLabel();//proj->m_aStructureItems.ElementAt(i).m_strLabel;
+			str = it->GetLabel();
 
 			if (!str.IsEmpty())
 			{
 				if ((str.GetLength() >= SearchLength) && (str.Left(SearchLength).CompareNoCase(Partial) == 0))
 				{
-					//Result[str] = CLaTeXCommand(NULL, str, 0);
-					Result.SetAt(str, std::tr1::shared_ptr<CObject>(new CLaTeXCommand(dummy, str, 0)));
+					CLaTeXCommand* NewCmd = new CLaTeXCommand(dummy, str, 0);
+					NewCmd->SetDescription(it->GetComment());
+					Result.SetAt(str, std::tr1::shared_ptr<CObject>(NewCmd));
+					//Result.SetAt(str, std::tr1::shared_ptr<CObject>(new CLaTeXCommand(dummy, str, 0)));
 				}
 			}
 		}

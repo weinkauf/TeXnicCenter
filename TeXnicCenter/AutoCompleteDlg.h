@@ -97,6 +97,8 @@ private:
 	void MeasureListItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
 	int CompareListItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct);
 
+	void MakeTransparent(int value);
+
 	CString m_CurrentKeyword;
 
 	CStyleFileContainer *m_Container;

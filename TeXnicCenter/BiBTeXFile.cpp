@@ -477,10 +477,14 @@ void BibTeXFile::FinalizeItem()
 	if (m_Entries.Lookup(m_LastKey,(CObject*&) be))
 	{
 		be->SetType(StructureItem::bibItem);
-		be->SetTitle(be->ToCaption());
-		be->SetCaption(be->ToCaption());
-		be->SetLabel(be->GetKey());
-		be->SetComment(BibTypeVerbose[be->GetType()]);
+
+		CString BeCaption, BeTitle, BeKey;
+		be->ToCaptionTitleKey(BeCaption, BeTitle, BeKey);
+
+		be->SetTitle(BeCaption);
+		be->SetCaption(BeCaption);
+		be->SetLabel(BeKey);
+		be->SetComment(BeTitle);
 		be->m_strPath = m_Filename;
 		//TRACE("Finalized %s\n", be->ToString());
 	}

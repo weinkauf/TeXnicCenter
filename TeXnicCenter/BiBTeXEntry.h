@@ -93,7 +93,12 @@ public:
 	/* String representations of CBibTeXEntry */
 	const CString ToString() const;
 	const CString ToCaption() const;
+	void ToCaptionTitleKey(CString& resCaption, CString& resTitle, CString& resKey) const;
 	const BibItem ToBibItem() const;
+
+protected:
+	const CString ToCaption(const BibItem& item) const;
+
 
 private:
 	/* Removes ugly chars (e. g. whitespace, new lines,...) from a field
