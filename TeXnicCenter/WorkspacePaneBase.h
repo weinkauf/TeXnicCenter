@@ -9,7 +9,7 @@ class WorkspacePaneBase : public CDockablePane
 
 public:
 	WorkspacePaneBase();
-	~WorkspacePaneBase();
+	virtual ~WorkspacePaneBase();
 
 protected:
 	DECLARE_MESSAGE_MAP()
