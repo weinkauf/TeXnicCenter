@@ -150,14 +150,6 @@ public:
 	 */
 	CMFCToolBarButton* GetToolBarButton(UINT unCmdID, POSITION &pos) const;
 
-	/**
-	Activates the specified menu.
-
-	@param pMenu
-	        The Menu to activate.
-	 */
-	BOOL SetMenu(CMenu* pMenu);
-
 	/** Toggles the specified navigation pane.
 
 		@param nTab

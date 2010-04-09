@@ -344,37 +344,31 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CMFCPopupMenu::SetForceMenuFocus(FALSE);
 
 	// create main tool bar
-	if (!CreateToolBar(&m_wndToolBar, IDR_MAINFRAME, STE_TB_MAINFRAME))
-		return -1;
+	if (!CreateToolBar(&m_wndToolBar, IDR_MAINFRAME, STE_TB_MAINFRAME)) return -1;
 
 	// create find bar
-	if (!CreateToolBar(&m_wndFindBar, IDR_FIND, STE_TB_FIND))
-		return -1;
+	if (!CreateToolBar(&m_wndFindBar, IDR_FIND, STE_TB_FIND, false)) return -1;
 
 	// create insert bar
-	if (!CreateToolBar(&m_wndInsertBar, IDR_INSERT, STE_TB_INSERT))
-		return -1;
+	if (!CreateToolBar(&m_wndInsertBar, IDR_INSERT, STE_TB_INSERT)) return -1;
 
 	// create format recently used tool bar
-	if (!CreateToolBar(&m_wndFormatRUBar, IDR_FORMAT_RECENTLY_USED, STE_TB_FORMAT_RECENTLY_USED))
-		return -1;
+	if (!CreateToolBar(&m_wndFormatRUBar, IDR_FORMAT_RECENTLY_USED, STE_TB_FORMAT_RECENTLY_USED)) return -1;
 
 	// create format tool bar
-	if (!CreateToolBar(&m_wndFormatBar, IDR_FORMAT, STE_TB_FORMAT))
-		return -1;
+	if (!CreateToolBar(&m_wndFormatBar, IDR_FORMAT, STE_TB_FORMAT, false)) return -1;
 
 	// create latex tool bar
-	if (!CreateToolBar(&m_wndLatexBar, IDR_LATEX, STE_TB_LATEX))
-		return -1;
+	if (!CreateToolBar(&m_wndLatexBar, IDR_LATEX, STE_TB_LATEX)) return -1;
 
 	// create math tool bar
-	if (!CreateToolBar(&m_wndMathBar, IDR_MATH, STE_TB_MATH))
-		return -1;
+	if (!CreateToolBar(&m_wndMathBar, IDR_MATH, STE_TB_MATH)) return -1;
 
 	// create all math bars
 	for (int i = 0; i < MATHBAR_COUNT; i++)
-		if (!CreateToolBar(&m_awndMathBar[i], IDR_MATHBAR1 + i, IDR_MATH + i))
-			return -1;
+	{
+		if (!CreateToolBar(&m_awndMathBar[i], IDR_MATHBAR1 + i, IDR_MATH + i)) return -1;
+	}
 
 	// load user defined toolbars
 	InitUserToolbars(NULL, IDR_USER_TOOLBAR_FIRST, IDR_USER_TOOLBAR_LAST);
@@ -401,29 +395,34 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	EnableDocking(CBRS_ALIGN_ANY);
 
 	for (int i = 0; i < MATHBAR_COUNT; i++)
+	{
 		m_awndMathBar[i].EnableDocking(CBRS_ALIGN_ANY);
+	}
 
 	if (!CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsers)
+	{
 		DockPane(&m_wndMenuBar);
+	}
 
 	DockPane(&m_wndLatexBar);
 	DockPaneLeftOf(&m_wndToolBar, &m_wndLatexBar);
 
-	DockPane(&m_wndFindBar);
-	DockPaneLeftOf(&m_wndFormatRUBar, &m_wndFindBar);
+	DockPane(&m_wndMathBar);
+	DockPaneLeftOf(&m_wndFormatRUBar, &m_wndMathBar);
 	DockPaneLeftOf(&m_wndInsertBar, &m_wndFormatRUBar);
 
-	DockPane(&m_wndMathBar);
-	DockPaneLeftOf(&m_wndFormatBar, &m_wndMathBar);
-
 	for (int i = 0; i < MATHBAR_COUNT; ++i)
+	{
 		DockPane(m_awndMathBar + i);
+	}
 
 	CreateToolWindows();
 
 	// Enable window list manager...
 	if (!CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsers)
+	{
 		EnableWindowsDialog(ID_WINDOW_LIST, ID_WINDOW_LIST_MENU, TRUE);
+	}
 	else
 	{
 		// add entry for window list to the end of window menu
@@ -513,14 +512,6 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if (!CMDIFrameWndEx::PreCreateWindow(cs))
 		return FALSE;
-	return TRUE;
-}
-
-BOOL CMainFrame::SetMenu(CMenu *pMenu)
-{
-	CMDIFrameWnd::SetMenu(pMenu);
-	//if (!CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsers)
-	//	m_wndMenuBar.CreateFromMenu( pMenu->m_hMenu, FALSE );
 	return TRUE;
 }
 
