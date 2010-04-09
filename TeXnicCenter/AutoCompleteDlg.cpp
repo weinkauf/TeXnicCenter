@@ -280,6 +280,7 @@ BOOL CAutoCompleteDlg::PreTranslateMessage(MSG* pMsg)
 					MakeTransparent(0);
 					return 1;
 			}
+			break;
 
 		case WM_KEYDOWN:
 			switch (pMsg->wParam)
