@@ -1493,6 +1493,7 @@ BOOL CMainFrame::OnToolsCancel(UINT)
 	// Current edit view does NOT have focus: It gets it.
 	// old: Current edit view is in incremental search mode: Cancel search.
 	// Current edit view does have focus: Close tool windows at bottom and the build output window.
+	// In any case: close the instant advice tip.
 
 	//Get active frame
 	CFrameWnd* pFrame = GetActiveFrame();
@@ -1509,6 +1510,9 @@ BOOL CMainFrame::OnToolsCancel(UINT)
 
 	if (!pEdit)
 		return FALSE;
+
+	//Close instant advice tip
+	pEdit->HideAdvice();
 
 	if (GetFocus() != &pEdit->GetCtrl())
 	{
