@@ -508,6 +508,8 @@ BEGIN_MESSAGE_MAP(CodeDocument, CScintillaDoc)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, &CodeDocument::OnUpdateFileSave)
 	ON_COMMAND(ID_FILE_SAVE_COPY_AS, &CodeDocument::OnFileSaveCopyAs)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS, &CodeDocument::OnUpdateFileSaveAs)
+	ON_COMMAND(ID_EDIT_MAKELOWERCASE, &CodeDocument::OnEditMakeLowerCase)
+	ON_COMMAND(ID_EDIT_MAKEUPPERCASE, &CodeDocument::OnEditMakeUpperCase)
 END_MESSAGE_MAP()
 
 
@@ -1222,4 +1224,20 @@ void CodeDocument::OnFileSaveCopyAs()
 void CodeDocument::OnUpdateFileSaveAs(CCmdUI *pCmdUI)
 {
 	UNUSED_ALWAYS(pCmdUI);
+}
+
+void CodeDocument::OnEditMakeLowerCase()
+{
+	if (GetView() && GetView()->GetCtrl())
+	{
+		GetView()->GetCtrl().LowerCase();
+	}
+}
+
+void CodeDocument::OnEditMakeUpperCase()
+{
+	if (GetView() && GetView()->GetCtrl())
+	{
+		GetView()->GetCtrl().UpperCase();
+	}
 }
