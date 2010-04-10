@@ -172,6 +172,8 @@ private:
 protected:
 	afx_msg void OnEditFindIncrementalForward();
 	afx_msg void OnEditFindIncrementalBackward();
+	afx_msg void OnSearchFindNextSelected();
+	afx_msg void OnSearchFindPreviousSelected();
 	void GetReplaceAllTarget(long& s, long& e);
 	afx_msg void OnEditGotoLastChange();
 	afx_msg void OnUpdateEditGotoLastChange(CCmdUI *pCmdUI);
@@ -197,6 +199,8 @@ public:
 private:
 	static bool TerminatesIncrementalSearch( UINT ch );
 	static bool IsDirectionKey( UINT ch );
+	CString SelectionExtend(bool stripEol = true);
+	CString RangeExtendAndGrab(int& selStart, int& selEnd, bool stripEol = true);
 };
 
 template<class F>
