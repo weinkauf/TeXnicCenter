@@ -187,8 +187,7 @@ BOOL CMyUserTool::Invoke()
 		long e = pEdit->GetCtrl().GetSelectionEnd();
 
 		if (s != e) {
-			pEdit->GetCtrl().GetSelText(strCurrentSelection.GetBuffer(e - s + 1));
-			strCurrentSelection.ReleaseBuffer(e - s);
+			strCurrentSelection = pEdit->GetCtrl().GetSelText();
 		}
 
 		lCurrentLine = pEdit->GetCurrentLine() + 1;

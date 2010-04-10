@@ -80,8 +80,14 @@ History: PJN / 12-08-2004 1. Made all the remaining non virtual functions relate
          PJN / 19-03-2008 1. Fixed a copy and paste bug in CScintillaView::PrintPage where the incorrect margin value
                           was being used in the calculation of "rfPrint.rc.left". Thanks to Steve Arnold for reporting
                           this bug.
+         PJN / 20-01-2009 1. Updated copyright details
+                          2. Fixed a bug in CScintillaView::SameAsSelected where it did not correctly handle the fact
+                          that GetSelectionStart() and GetSelectionEnd() returns the positions in UTF-8 encoded text
+                          which would result in failures in the logic for multibyte encoded characters. This made it
+                          impossible to replace multibyte character sequences in find / replace operations. Thanks to
+                          Alexei Letov for reporting this bug.
 
-Copyright (c) 2004 - 2008 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
+Copyright (c) 2004 - 2009 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
 
 All rights reserved.
 
@@ -96,7 +102,7 @@ to maintain a single distribution point for the source code.
 */
 
 
-/////////////////////////////////  Includes  //////////////////////////////////
+///////////////////////////////// Includes ////////////////////////////////////
 
 #include "stdafx.h"
 #include "ScintillaDocView.h"
@@ -154,7 +160,6 @@ CScintillaFindReplaceDlg* CScintillaFindReplaceDlg::GetFindReplaceDlg()
 BEGIN_MESSAGE_MAP(CScintillaFindReplaceDlg, CFindReplaceDialog)
   ON_BN_CLICKED(IDC_REGULAR_EXPRESSION, OnRegularExpression)
 END_MESSAGE_MAP()
-
 
 CScintillaFindReplaceDlg::CScintillaFindReplaceDlg(): m_bRegularExpression(FALSE)
 {
@@ -1021,17 +1026,24 @@ BOOL CScintillaView::SameAsSelected(LPCTSTR lpszCompare, BOOL bCase, BOOL bWord,
   CScintillaCtrl& rCtrl = GetCtrl();
 
   //check length first
-	int nStartChar = rCtrl.GetSelectionStart();                           //get the selection size    
-  int nEndChar = rCtrl.GetSelectionEnd();
-  size_t nLen = lstrlen(lpszCompare);                                   //get the #chars to search for
-  if (!bRegularExpression && (nLen != (size_t)(nEndChar - nStartChar))) //if not a regular expression...
-    return FALSE;                                                       //...sizes must match,
+	long nStartChar = rCtrl.GetSelectionStart(); //get the selection size    
+  long nEndChar = rCtrl.GetSelectionEnd();
+  size_t nLen = lstrlen(lpszCompare);         //get the #chars to search for
+  
+  //Calculate the logical length of the selection. This logic handles the case where Scintilla is hosting multibyte characters
+  size_t nCnt = 0;
+  for (long nPos=nStartChar; nPos<nEndChar; nPos=rCtrl.PositionAfter(nPos))
+    nCnt++;
+  
+  //if not a regular expression then sizes must match
+  if (!bRegularExpression && (nLen != nCnt))
+    return FALSE;
 
   //Now use the advanced search functionality of scintilla to determine the result
-  int iFlags = bCase ? SCFIND_MATCHCASE : 0;
-  iFlags |= bWord ? SCFIND_WHOLEWORD : 0;
-  iFlags |= bRegularExpression ? SCFIND_REGEXP : 0;
-  rCtrl.SetSearchFlags(iFlags);
+  int nFlags = bCase ? SCFIND_MATCHCASE : 0;
+  nFlags |= bWord ? SCFIND_WHOLEWORD : 0;
+  nFlags |= bRegularExpression ? SCFIND_REGEXP : 0;
+  rCtrl.SetSearchFlags(nFlags);
   rCtrl.TargetFromSelection();                     //set target
   if (rCtrl.SearchInTarget(static_cast<int>(nLen), lpszCompare) < 0) //see what we got
     return FALSE;                                  //no match
@@ -1063,21 +1075,23 @@ BOOL CScintillaView::FindTextSimple(LPCTSTR lpszFind, BOOL bNext, BOOL bCase, BO
 		m_bFirstSearch = FALSE;
 
 #ifdef _UNICODE
-	CScintillaCtrl::W2UTF8(lpszFind, -1, ft.lpstrText);
+  CStringA sUTF8Text(CScintillaCtrl::W2UTF8(lpszFind, -1));
+  ft.lpstrText = sUTF8Text.GetBuffer(sUTF8Text.GetLength());
 #else
-	ft.lpstrText = T2A(const_cast<LPTSTR>(lpszFind));
+  CStringA sAsciiText(lpszFind);
+	ft.lpstrText = sAsciiText.GetBuffer(sAsciiText.GetLength());
 #endif
 	if (ft.chrg.cpMin != ft.chrg.cpMax) // i.e. there is a selection
 	{
 #ifndef _UNICODE
-		// If byte at beginning of selection is a DBCS lead byte,
-		// increment by one extra byte.
+		//If byte at beginning of selection is a DBCS lead byte,
+		//increment by one extra byte.
 		TEXTRANGE textRange;
 		TCHAR ch[2];
 		textRange.chrg.cpMin = ft.chrg.cpMin;
 		textRange.chrg.cpMax = ft.chrg.cpMin + 1;
 		textRange.lpstrText = ch;
-		rCtrl.SendMessage(EM_GETTEXTRANGE, 0, (LPARAM)&textRange);
+		rCtrl.SendMessage(EM_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&textRange));
 		if (_istlead(ch[0]))
 		{
 			ASSERT(ft.chrg.cpMax - ft.chrg.cpMin >= 2);
@@ -1115,13 +1129,14 @@ BOOL CScintillaView::FindTextSimple(LPCTSTR lpszFind, BOOL bNext, BOOL bCase, BO
 
 	//if we find the text return TRUE
 	BOOL bFound = (FindAndSelect(dwFlags, ft) != -1);
-
+	
 #ifdef _UNICODE
-  //Tidy up the heap memory before we return
-  delete [] ft.lpstrText;
+  sUTF8Text.ReleaseBuffer();
+#else
+  sAsciiText.ReleaseBuffer();
 #endif
-
-  return bFound;
+	
+  return bFound;	
 }
 
 long CScintillaView::FindAndSelect(DWORD dwFlags, TextToFind& ft)
