@@ -73,8 +73,41 @@ History: PJN / 19-03-2004 1. Initial implementation synchronized to the v1.59 re
          PJN / 15-06-2008 1. Code now compiles cleanly using Code Analysis (/analyze)
                           2. Updated code to compile correctly using _ATL_CSTRING_EXPLICIT_CONSTRUCTORS define
                           3. The code now only supports VC 2005 or later.
+         PJN / 01-11-2008 1. Updated class to work with Scintilla v1.77. New messages wrapped include: 
+                          SCI_GETCHARACTERPOINTER, SCI_SETKEYSUNICODE & SCI_GETKEYSUNICODE
+                          2. Reworked all the key Unicode functions which expose string length management and 
+                          reimplemented them to use CStringW output parameters. Equivalent ASCII versions have also been 
+                          provided. This new approach helps to raise the level of abstraction provided by the wrapper 
+                          class. In the process the need for the GetLineEx function has been removed. Thanks to Alexei 
+                          Letov for prompting this update.
+         PJN / 20-01-2009 1. Updated copyright details.
+         PJN / 03-10-2009 1. Fixed a bug in CScintillaCtrl::Create where a crash can occur in a Unicode build if the CreateEx
+                          call fails (for example, if the Scintilla DLL was not loaded). Thanks to Simon Smith for reporting
+                          this bug
+                          2. Updated class to work with Scintilla v2.01. New messages wrapped include:
+                          SCI_SETWRAPINDENTMODE, SCI_GETWRAPINDENTMODE, SCI_INDICSETALPHA, SCI_INDICGETALPHA, SCI_SETEXTRAASCENT, 
+                          SCI_GETEXTRAASCENT, SCI_SETEXTRADESCENT, SCI_GETEXTRADESCENT, SCI_MARKERSYMBOLDEFINED, SCI_MARGINSETTEXT, 
+                          SCI_MARGINGETTEXT, SCI_MARGINSETSTYLE, SCI_MARGINGETSTYLE, SCI_MARGINSETSTYLES, SCI_MARGINGETSTYLES, 
+                          SCI_MARGINTEXTCLEARALL, SCI_MARGINSETSTYLEOFFSET, SCI_MARGINGETSTYLEOFFSET, SCI_ANNOTATIONSETTEXT, 
+                          SCI_ANNOTATIONGETTEXT, SCI_ANNOTATIONSETSTYLE, SCI_ANNOTATIONGETSTYLE, SCI_ANNOTATIONSETSTYLES, 
+                          SCI_ANNOTATIONGETSTYLES, SCI_ANNOTATIONGETLINES, SCI_ANNOTATIONCLEARALL, SCI_ANNOTATIONSETVISIBLE, 
+                          SCI_ANNOTATIONGETVISIBLE, SCI_ANNOTATIONSETSTYLEOFFSET, SCI_ANNOTATIONGETSTYLEOFFSET, 
+                          SCI_ADDUNDOACTION, SCI_CHARPOSITIONFROMPOINT, SCI_CHARPOSITIONFROMPOINTCLOSE, SCI_SETMULTIPLESELECTION, 
+                          SCI_GETMULTIPLESELECTION, SCI_SETADDITIONALSELECTIONTYPING, SCI_GETADDITIONALSELECTIONTYPING, 
+                          SCI_SETADDITIONALCARETSBLINK, SCI_GETADDITIONALCARETSBLINK, SCI_GETSELECTIONS, SCI_CLEARSELECTIONS, 
+                          SCI_SETSELECTION, SCI_ADDSELECTION, SCI_SETMAINSELECTION, SCI_GETMAINSELECTION, SCI_SETSELECTIONNCARET, 
+                          SCI_GETSELECTIONNCARET, SCI_SETSELECTIONNANCHOR, SCI_GETSELECTIONNANCHOR, SCI_SETSELECTIONNCARETVIRTUALSPACE, 
+                          SCI_GETSELECTIONNCARETVIRTUALSPACE, SCI_SETSELECTIONNANCHORVIRTUALSPACE, SCI_GETSELECTIONNANCHORVIRTUALSPACE, 
+                          SCI_SETSELECTIONNSTART, SCI_GETSELECTIONNSTART, SCI_SETSELECTIONNEND, SCI_GETSELECTIONNEND, 
+                          SCI_SETRECTANGULARSELECTIONCARET, SCI_GETRECTANGULARSELECTIONCARET, SCI_SETRECTANGULARSELECTIONANCHOR, 
+                          SCI_GETRECTANGULARSELECTIONANCHOR, SCI_SETRECTANGULARSELECTIONCARETVIRTUALSPACE, SCI_GETRECTANGULARSELECTIONCARETVIRTUALSPACE, 
+                          SCI_SETRECTANGULARSELECTIONANCHORVIRTUALSPACE, SCI_GETRECTANGULARSELECTIONANCHORVIRTUALSPACE, 
+                          SCI_SETVIRTUALSPACEOPTIONS, SCI_GETVIRTUALSPACEOPTIONS, SCI_SETRECTANGULARSELECTIONMODIFIER, 
+                          SCI_GETRECTANGULARSELECTIONMODIFIER, SCI_SETADDITIONALSELFORE, SCI_SETADDITIONALSELBACK, SCI_SETADDITIONALSELALPHA, 
+                          SCI_GETADDITIONALSELALPHA, SCI_SETADDITIONALCARETFORE, SCI_GETADDITIONALCARETFORE, SCI_ROTATESELECTION &
+                          SCI_SWAPMAINANCHORCARET
 
-Copyright (c) 2004 - 2008 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
+Copyright (c) 2004 - 2009 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
 
 All rights reserved.
 
@@ -114,18 +147,18 @@ CScintillaCtrl::CScintillaCtrl() : m_DirectFunction(0),
 BOOL CScintillaCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, DWORD dwExStyle, LPVOID lpParam)
 {
   //Call our base class implementation of CWnd::CreateEx
-	BOOL bSuccess = CreateEx(dwExStyle, _T("scintilla"), NULL, dwStyle, rect, pParentWnd, nID, lpParam);
+	if (!CreateEx(dwExStyle, _T("scintilla"), NULL, dwStyle, rect, pParentWnd, nID, lpParam))
+	  return FALSE;
 
   //Setup the direct access data
-  if (bSuccess)
-    SetupDirectAccess();
+  SetupDirectAccess();
 
   //If we are running as Unicode, then use the UTF8 codepage
 #ifdef _UNICODE
   SetCodePage(SC_CP_UTF8);
 #endif
 
-  return bSuccess;
+  return TRUE;
 }
 
 void CScintillaCtrl::SetupDirectAccess()
@@ -163,625 +196,531 @@ LRESULT CScintillaCtrl::GetDirectPointer()
   return SendMessage(SCI_GETDIRECTPOINTER, 0, 0);
 }
 
-CString CScintillaCtrl::GetSelText()
-{
-  //Call the function which does the work
-  CString sSelText;
-  GetSelText(sSelText.GetBufferSetLength(GetSelectionEnd() - GetSelectionStart()));
-  sSelText.ReleaseBuffer();
-  return sSelText;
-}
-
 #ifdef _UNICODE
-int CScintillaCtrl::W2UTF8(const wchar_t* pszText, int nLength, char*& pszUTF8Text)
+CStringA CScintillaCtrl::W2UTF8(const wchar_t* pszText, int nLength)
 {
-  //Validate our parameters
-  AFXASSUME(pszText);
-
-  //First call the function to determine how much heap space we need to allocate
+  //First call the function to determine how much space we need to allocate
 	int nUTF8Length = WideCharToMultiByte(CP_UTF8, 0, pszText, nLength, NULL, 0, NULL, NULL);
 
   //If the calculated length is zero, then ensure we have at least room for a NULL terminator
   if (nUTF8Length == 0)
     nUTF8Length = 1;
 
-  //Now allocate the heap space
-  pszUTF8Text = new char[nUTF8Length];
-  pszUTF8Text[0] = '\0';
-
-  //And now recall with the buffer to get the converted text
+  //Now recall with the buffer to get the converted text
+  CStringA sUTF;
+  char* pszUTF8Text = sUTF.GetBuffer(nUTF8Length + 1); //include an extra byte because we may be null terminating the string ourselves
 	int nCharsWritten = WideCharToMultiByte(CP_UTF8, 0, pszText, nLength, pszUTF8Text, nUTF8Length, NULL, NULL);
-  if (nLength != -1)
-    return nCharsWritten; //Trust the return value
-  else
-    return nCharsWritten ? nCharsWritten - 1 : 0; //Exclude the NULL terminator written
+	
+	//Ensure we NULL terminate the text if WideCharToMultiByte doesn't do it for us
+	if (nLength != -1)
+	{
+	  AFXASSUME(nCharsWritten <= nUTF8Length);
+	  pszUTF8Text[nCharsWritten] = '\0';
+	}
+	
+  sUTF.ReleaseBuffer();
+  
+  return sUTF;
 }
 
-int CScintillaCtrl::UTF82W(const char* pszText, int nLength, wchar_t*& pszWText)
+CStringW CScintillaCtrl::UTF82W(const char* pszText, int nLength)
 {
-  //Validate our parameters
-  AFXASSUME(pszText);
-
-  //First call the function to determine how much heap space we need to allocate
+  //First call the function to determine how much space we need to allocate
 	int nWideLength = MultiByteToWideChar(CP_UTF8, 0, pszText, nLength, NULL, 0);
 
   //If the calculated length is zero, then ensure we have at least room for a NULL terminator
   if (nWideLength == 0)
     nWideLength = 1;
 
-  //Now allocate the heap space
-  pszWText = new wchar_t[nWideLength];
-  pszWText[0] = '\0';
-
-  //And now recall with the buffer to get the converted text
+  //Now recall with the buffer to get the converted text
+  CStringW sWideString;
+  wchar_t* pszWText = sWideString.GetBuffer(nWideLength + 1); //include an extra byte because we may be null terminating the string ourselves
 	int nCharsWritten = MultiByteToWideChar(CP_UTF8, 0, pszText, nLength, pszWText, nWideLength);
-  if (nLength != -1)
-    return nCharsWritten; //Trust the return value
-  else
-    return nCharsWritten ? nCharsWritten - 1 : 0; //Exclude the NULL terminator written
+	
+	//Ensure we NULL terminate the text if MultiByteToWideChar doesn't do it for us
+	if (nLength != -1)
+	{
+	  AFXASSUME(nCharsWritten <= nWideLength);
+	  pszWText[nCharsWritten] = '\0';
+	}
+	
+	sWideString.ReleaseBuffer();
+
+	return sWideString;
 }
 
 void CScintillaCtrl::AddText(int length, const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  int nUTF8Length = W2UTF8(text, length, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, length));
 
   //Call the native scintilla version of the function with the UTF8 text
-  AddText(nUTF8Length, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  AddText(sUTF8.GetLength(), sUTF8, bDirect);
 }
 
 void CScintillaCtrl::InsertText(long pos, const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(text, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  InsertText(pos, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  InsertText(pos, sUTF8, bDirect);
 }
 
-int CScintillaCtrl::GetSelText(wchar_t* text, BOOL bDirect)
+CStringW CScintillaCtrl::GetSelText(BOOL bDirect)
 {
-  //Allocate some heap memory to contain the UTF8 text
-  char* pszUTF8 = new char[GetSelectionEnd() - GetSelectionStart() + 1];
+  //Work out the length of string to allocate
+  int nUTF8Length = GetSelectionEnd() - GetSelectionStart();
 
   //Call the function which does the work
-  GetSelText(pszUTF8, bDirect);
+  CStringA sUTF8;
+  GetSelText(sUTF8.GetBufferSetLength(nUTF8Length), bDirect);
+  sUTF8.ReleaseBuffer();
 
   //Now convert the UTF8 text back to Unicode
-  wchar_t* pszWText;
-  int nWLength = UTF82W(pszUTF8, -1, pszWText);
-  AFXASSUME(text);
-  wcscpy_s(text, nWLength+1, pszWText);
-
-  //Tidy up the heap memory before we return
-  delete [] pszWText;
-  delete [] pszUTF8;
-
-  return nWLength;  
+  return UTF82W(sUTF8, -1);
 }
 
-int CScintillaCtrl::GetCurLine(int length, wchar_t* text, BOOL bDirect)
+CStringW CScintillaCtrl::GetCurLine(BOOL bDirect)
 {
-  //Allocate some heap memory to contain the UTF8 text
-  int nUTF8Length = text ? length*4 : GetCurLine(0, static_cast<char*>(NULL), bDirect)*4;
-  char* pszUTF8 = new char[nUTF8Length]; //A Unicode character can take up to 4 octets when expressed as UTF8
+  //Work out the length of string to allocate
+  int nUTF8Length = GetCurLine(0, NULL, bDirect);
 
   //Call the function which does the work
-  int nOriginalReturn = GetCurLine(nUTF8Length, pszUTF8, bDirect);
-
-  //Now convert the UTF8 text back to Unicode
-  wchar_t* pszWText;
-  int nReturnLength = UTF82W(pszUTF8, -1, pszWText);
-  int nReturn = nReturnLength + 1;
-  if (text)
-  {
-    //Copy as much text as possible into the output parameter
-    int i;
-		for (i=0; i<length-1 && i<nReturnLength; i++) 
-			text[i] = pszWText[i];
-		text[i] = L'\0';
-
-    //What we have text to return, use the original return value
-    nReturn = nOriginalReturn;
-  }
-
-  //Tidy up the heap memory before we return
-  delete [] pszWText;
-  delete [] pszUTF8;
-
-  return nReturn;  
+  CStringA sUTF8;
+  GetCurLine(nUTF8Length, sUTF8.GetBufferSetLength(nUTF8Length), bDirect);
+  sUTF8.ReleaseBuffer();
+  
+  return UTF82W(sUTF8, -1);
 }
 
 void CScintillaCtrl::StyleSetFont(int style, const wchar_t* fontName, BOOL bDirect)
 {
-  char* pszUTF8;
-  W2UTF8(fontName, -1, pszUTF8);
+  //Convert the unicode text to UTF8
+  CStringA sUTF8(W2UTF8(fontName, -1));
 
-  StyleSetFont(style, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  StyleSetFont(style, sUTF8, bDirect);
 }
 
 void CScintillaCtrl::SetWordChars(const wchar_t* characters, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(characters, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(characters, -1));
 
-  SetWordChars(pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  SetWordChars(sUTF8, bDirect);
 }
 
 void CScintillaCtrl::AutoCShow(int lenEntered, const wchar_t* itemList, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(itemList, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(itemList, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  AutoCShow(lenEntered, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  AutoCShow(lenEntered, sUTF8, bDirect);
 }
 
 void CScintillaCtrl::AutoCStops(const wchar_t* characterSet, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(characterSet, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(characterSet, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  AutoCStops(pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  AutoCStops(sUTF8, bDirect);
 }
 
 void CScintillaCtrl::AutoCSelect(const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(text, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  AutoCSelect(pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  AutoCSelect(sUTF8, bDirect);
 }
 
 void CScintillaCtrl::AutoCSetFillUps(const wchar_t* characterSet, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(characterSet, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(characterSet, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  AutoCSetFillUps(pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  AutoCSetFillUps(sUTF8, bDirect);
 }
 
 void CScintillaCtrl::UserListShow(int listType, const wchar_t* itemList, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(itemList, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(itemList, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  UserListShow(listType, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  UserListShow(listType, sUTF8, bDirect);
 }
 
-int CScintillaCtrl::GetLine(int line, wchar_t* text, BOOL bDirect)
+CStringW CScintillaCtrl::GetLine(int line, BOOL bDirect)
 {
-  //Validate our parameters
-  AFXASSUME(text);
-
-  //Work out how big the input buffer is (for details on this, see the EM_GETLINE documentation)
-  WORD* wBuffer = reinterpret_cast<WORD*>(text);
-  WORD wInputBufferSize = wBuffer[0];
-
-  //Allocate some heap memory to contain the UTF8 text
-  int nUTF8Length = wInputBufferSize*4;
-  char* pszUTF8 = new char[nUTF8Length]; //A Unicode character can take up to 4 octets when expressed as UTF8
-
-  //Set the buffer size in the new buffer
-  wBuffer = reinterpret_cast<WORD*>(pszUTF8);
-  wBuffer[0] = wInputBufferSize;
+  //Work out the length of string to allocate
+  int nUTF8Length = LineLength(line, bDirect);
 
   //Call the function which does the work
-  int nChars = GetLine(line, pszUTF8, bDirect);
-
-  //Now convert the UTF8 text back to Unicode
-  wchar_t* pszWText;
-  int nWLength = UTF82W(pszUTF8, nChars, pszWText);
-  for (int i=0; i<=nWLength && i<=wInputBufferSize; i++)
-    text[i] = pszWText[i];  
-
-  //Tidy up the heap memory before we return
-  delete [] pszWText;
-  delete [] pszUTF8;
-
-  return nWLength;  
+  CStringA sUTF8;
+  GetLine(line, sUTF8.GetBufferSetLength(nUTF8Length), bDirect);
+  sUTF8.ReleaseBuffer();
+  
+  return UTF82W(sUTF8, -1);
 }
 
 void CScintillaCtrl::ReplaceSel(const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(text, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  ReplaceSel(pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  ReplaceSel(sUTF8, bDirect);
 }
 
 void CScintillaCtrl::SetText(const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(text, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  SetText(pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  SetText(sUTF8, bDirect);
 }
 
-int CScintillaCtrl::GetText(int length, wchar_t* text, BOOL bDirect)
+CStringW CScintillaCtrl::GetText(int length, BOOL bDirect)
 {
-  //Allocate some heap memory to contain the UTF8 text
-  int nUTF8Length = length*4;
-  char* pszUTF8 = new char[nUTF8Length]; //A Unicode character can take up to 4 octets when expressed as UTF8
+  //Work out the length of string to allocate
+  int nUTF8Length = length*4; //A Unicode character can take up to 4 octets when expressed as UTF8
 
   //Call the function which does the work
-  GetText(nUTF8Length, pszUTF8, bDirect);
+  CStringA sUTF8;
+  GetText(nUTF8Length, sUTF8.GetBufferSetLength(nUTF8Length), bDirect);
+  sUTF8.ReleaseBuffer();
 
   //Now convert the UTF8 text back to Unicode
-  wchar_t* pszWText;
-  int nWLength = UTF82W(pszUTF8, -1, pszWText);
+  CStringW sWideText(UTF82W(sUTF8, -1));
 
-  //Copy as much text as possible into the output parameter
-  AFXASSUME(text);
-  int i;
-	for (i=0; i<length-1 && i<nWLength; i++) 
-		text[i] = pszWText[i];
-	text[i] = L'\0';
-
-  //Tidy up the heap memory before we return
-  delete [] pszWText;
-  delete [] pszUTF8;
-
-  return nWLength;  
+  return sWideText.Left(length-1);
 }
 
 int CScintillaCtrl::ReplaceTarget(int length, const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  int nUTF8Length = W2UTF8(text, length, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, length));
 
   //Call the native scintilla version of the function with the UTF8 text
-  int nReturn = ReplaceTarget(nUTF8Length, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
-
-  return nReturn;
+  return ReplaceTarget(sUTF8.GetLength(), sUTF8, bDirect);
 }
 
 int CScintillaCtrl::ReplaceTargetRE(int length, const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  int nUTF8Length = W2UTF8(text, length, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, length));
 
   //Call the native scintilla version of the function with the UTF8 text
-  int nReturn = ReplaceTargetRE(nUTF8Length, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
-
-  return nReturn;
+  return ReplaceTargetRE(sUTF8.GetLength(), sUTF8, bDirect);
 }
 
 int CScintillaCtrl::SearchInTarget(int length, const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  int nUTF8Length = W2UTF8(text, length, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, length));
 
   //Call the native scintilla version of the function with the UTF8 text
-  int nReturn = SearchInTarget(nUTF8Length, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
-
-  return nReturn;
+  return SearchInTarget(sUTF8.GetLength(), sUTF8, bDirect);
 }
 
 void CScintillaCtrl::CallTipShow(long pos, const wchar_t* definition, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(definition, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(definition, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  CallTipShow(pos, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  CallTipShow(pos, sUTF8, bDirect);
 }
 
 int CScintillaCtrl::TextWidth(int style, const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(text, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  int nReturn = TextWidth(style, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
-
-  return nReturn;
+  return TextWidth(style, sUTF8, bDirect);
 }
 
 void CScintillaCtrl::AppendText(int length, const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  int nUTF8Length = W2UTF8(text, length, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, length));
 
   //Call the native scintilla version of the function with the UTF8 text
-  AppendText(nUTF8Length, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  AppendText(sUTF8.GetLength(), sUTF8, bDirect);
 }
 
 int CScintillaCtrl::SearchNext(int flags, const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(text, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  int nReturn = SearchNext(flags, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
-
-  return nReturn;
+  return SearchNext(flags, sUTF8, bDirect);
 }
 
 int CScintillaCtrl::SearchPrev(int flags, const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(text, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  int nReturn = SearchPrev(flags, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
-
-  return nReturn;
+  return SearchPrev(flags, sUTF8, bDirect);
 }
 
 void CScintillaCtrl::CopyText(int length, const wchar_t* text, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  int nUTF8Length = W2UTF8(text, length, pszUTF8);
+  CStringA sUTF8(W2UTF8(text, length));
 
   //Call the native scintilla version of the function with the UTF8 text
-  CopyText(nUTF8Length, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  CopyText(sUTF8.GetLength(), sUTF8, bDirect);
 }
 
 void CScintillaCtrl::SetWhitespaceChars(const wchar_t* characters, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(characters, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(characters, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  SetWhitespaceChars(pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  SetWhitespaceChars(sUTF8, bDirect);
 }
 
 void CScintillaCtrl::SetProperty(const wchar_t* key, const wchar_t* value, BOOL bDirect)
 {
-  //Convert the unicode text to UTF8
-  char* pszUTF8Key;
-  W2UTF8(key, -1, pszUTF8Key);
-  char* pszUTF8Value;
-  W2UTF8(value, -1, pszUTF8Value);
+  //Convert the unicode texts to UTF8
+  CStringA sUTF8Key(W2UTF8(key, -1));
+  CStringA sUTF8Value(W2UTF8(value, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  SetProperty(pszUTF8Key, pszUTF8Value, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8Value;
-  delete [] pszUTF8Key;
+  SetProperty(sUTF8Key, sUTF8Value, bDirect);
 }
 
 void CScintillaCtrl::SetKeyWords(int keywordSet, const wchar_t* keyWords, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(keyWords, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(keyWords, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  SetKeyWords(keywordSet, pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  SetKeyWords(keywordSet, sUTF8, bDirect);
 }
 
 void CScintillaCtrl::SetLexerLanguage(const wchar_t* language, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(language, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(language, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  SetLexerLanguage(pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  SetLexerLanguage(sUTF8, bDirect);
 }
 
 void CScintillaCtrl::LoadLexerLibrary(const wchar_t* path, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(path, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(path, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  LoadLexerLibrary(pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
+  LoadLexerLibrary(sUTF8, bDirect);
 }
 
-int CScintillaCtrl::GetProperty(const wchar_t* key, wchar_t* buf, BOOL bDirect)
+CStringW CScintillaCtrl::GetProperty(const wchar_t* key, BOOL bDirect)
 {
   //Validate our parameters
   ASSERT(key);
 
   //Convert the Key value to UTF8
-  char* pszUTF8Key;
-  W2UTF8(key, -1, pszUTF8Key);
+  CStringA sUTF8Key(W2UTF8(key, -1));
 
-  //Allocate some heap memory to contain the UTF8 text
-  int nUTF8ValueLength = GetProperty(pszUTF8Key, 0, bDirect);
-  char* pszUTF8Value = new char[nUTF8ValueLength + 1]; //Don't forget the NULL terminator
+  //Work out the length of string to allocate
+  int nUTF8ValueLength = GetProperty(sUTF8Key, 0, bDirect);
 
   //Call the function which does the work
-  GetProperty(pszUTF8Key, pszUTF8Value, bDirect);
+  CStringA sUTF8Value;
+  GetProperty(sUTF8Key, sUTF8Value.GetBufferSetLength(nUTF8ValueLength), bDirect);
+  sUTF8Value.ReleaseBuffer();
 
-  //Now convert the UTF8 text back to Unicode
-  wchar_t* pszWText;
-  int nWLength = UTF82W(pszUTF8Value, -1, pszWText);
-  if (buf)
-    wcscpy_s(buf, nWLength+1, pszWText);
-
-  //Tidy up the heap memory before we return
-  delete [] pszWText;
-  delete [] pszUTF8Value;
-  delete [] pszUTF8Key;
-
-  return nWLength;  
+  return UTF82W(sUTF8Value, -1);
 }
 
-int CScintillaCtrl::GetPropertyExpanded(const wchar_t* key, wchar_t* buf, BOOL bDirect)
+CStringW CScintillaCtrl::GetPropertyExpanded(const wchar_t* key, BOOL bDirect)
 {
   //Validate our parameters
   ASSERT(key);
 
   //Convert the Key value to UTF8
-  char* pszUTF8Key;
-  W2UTF8(key, -1, pszUTF8Key);
+  CStringA sUTF8Key(W2UTF8(key, -1));
 
-  //Allocate some heap memory to contain the UTF8 text
-  int nUTF8ValueLength = GetPropertyExpanded(pszUTF8Key, 0, bDirect);
-  char* pszUTF8Value = new char[nUTF8ValueLength + 1]; //Don't forget the NULL terminator
+  //Work out the length of string to allocate
+  int nUTF8ValueLength = GetPropertyExpanded(sUTF8Key, 0, bDirect);
 
   //Call the function which does the work
-  GetPropertyExpanded(pszUTF8Key, pszUTF8Value, bDirect);
+  CStringA sUTF8Value;
+  GetPropertyExpanded(sUTF8Key, sUTF8Value.GetBufferSetLength(nUTF8ValueLength), bDirect);
+  sUTF8Value.ReleaseBuffer();
 
-  //Now convert the UTF8 text back to Unicode
-  wchar_t* pszWText;
-  int nWLength = UTF82W(pszUTF8Value, -1, pszWText);
-  if (buf)
-    wcscpy_s(buf, nWLength+1, pszWText);
-
-  //Tidy up the heap memory before we return
-  delete [] pszWText;
-  delete [] pszUTF8Value;
-  delete [] pszUTF8Key;
-
-  return nWLength;  
+  return UTF82W(sUTF8Value, -1);  
 }
 
 int CScintillaCtrl::GetPropertyInt(const wchar_t* key, BOOL bDirect)
 {
   //Convert the unicode text to UTF8
-  char* pszUTF8;
-  W2UTF8(key, -1, pszUTF8);
+  CStringA sUTF8(W2UTF8(key, -1));
 
   //Call the native scintilla version of the function with the UTF8 text
-  int nReturn = GetPropertyInt(pszUTF8, bDirect);
-
-  //Tidy up the heap memory before we return
-  delete [] pszUTF8;
-
-  return nReturn;
+  return GetPropertyInt(sUTF8, bDirect);
 }
 
-int CScintillaCtrl::StyleGetFont(int style, wchar_t* fontName, BOOL bDirect)
+CStringW CScintillaCtrl::StyleGetFont(int style, BOOL bDirect)
 {
   //Allocate a UTF8 buffer to contain the font name. See the notes for
   //SCI_STYLEGETFONT / SCI_STYLESETFONT on the reasons why we can use
   //a statically sized buffer of 32 characters in size. Note it is 33 below
   //to include space for the NULL terminator
   char szUTF8FontName[33*4]; //A Unicode character can take up to 4 octets when expressed as UTF8
+  szUTF8FontName[0] = '\0';
 
   //Call the native scintilla version of the function with a UTF8 text buffer
-  int nReturn = StyleGetFont(style, szUTF8FontName, bDirect);
+  StyleGetFont(style, szUTF8FontName, bDirect);
 
-  //Now convert the UTF8 text back to Unicode
-  wchar_t* pszWFontName;
-  int nWLength = UTF82W(szUTF8FontName, -1, pszWFontName);
-  if (fontName)
-    wcscpy_s(fontName, nWLength+1, pszWFontName);
+  return UTF82W(szUTF8FontName, -1);
+}
 
-  //Tidy up the heap memory before we return
-  delete [] pszWFontName;
+void CScintillaCtrl::MarginSetText(int line, const wchar_t* text, BOOL bDirect)
+{
+  //Convert the unicode text to UTF8
+  CStringA sUTF8(W2UTF8(text, -1));
 
-  return nReturn;
+  //Call the native scintilla version of the function with the UTF8 text
+  MarginSetText(line, sUTF8, bDirect);
+}
+
+void CScintillaCtrl::MarginSetStyles(int line, const wchar_t* styles, BOOL bDirect)
+{
+  //Convert the unicode text to UTF8
+  CStringA sUTF8(W2UTF8(styles, -1));
+
+  //Call the native scintilla version of the function with the UTF8 text
+  MarginSetStyles(line, sUTF8, bDirect);
+}
+
+void CScintillaCtrl::AnnotationSetText(int line, const wchar_t* text, BOOL bDirect)
+{
+  //Convert the unicode text to UTF8
+  CStringA sUTF8(W2UTF8(text, -1));
+
+  //Call the native scintilla version of the function with the UTF8 text
+  AnnotationSetText(line, sUTF8, bDirect);
+}
+
+void CScintillaCtrl::AnnotationSetStyles(int line, const wchar_t* styles, BOOL bDirect)
+{
+  //Convert the unicode text to UTF8
+  CStringA sUTF8(W2UTF8(styles, -1));
+
+  //Call the native scintilla version of the function with the UTF8 text
+  AnnotationSetStyles(line, sUTF8, bDirect);
+}
+
+#else
+CStringA CScintillaCtrl::GetSelText(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nLength = GetSelectionEnd() - GetSelectionStart();
+
+  //Call the function which does the work
+  CStringA sSelText;
+  GetSelText(sSelText.GetBufferSetLength(nLength), bDirect);
+  sSelText.ReleaseBuffer();
+  return sSelText;
+}
+
+CStringA CScintillaCtrl::GetCurLine(BOOL bDirect)
+{
+  //Call the function which does the work
+  CStringA sCurLine;
+  int nLength = GetCurLine(0, NULL, bDirect);
+  char* pszCurLine = sCurLine.GetBufferSetLength(nLength);
+  GetCurLine(nLength, pszCurLine, bDirect);
+  sCurLine.ReleaseBuffer();
+  
+  return sCurLine;
+}
+
+CStringA CScintillaCtrl::GetLine(int line, BOOL bDirect)
+{
+  //Call the function which does the work
+  CStringA sLine;
+  int nLength = LineLength(line, bDirect);
+  char* pszLine = sLine.GetBufferSetLength(nLength);
+  GetLine(line, pszLine, bDirect);
+  sLine.ReleaseBuffer();
+  
+  return sLine;
+}
+
+CStringA CScintillaCtrl::GetProperty(const char* key, BOOL bDirect)
+{
+  //Validate our parameters
+  ASSERT(key);
+
+  //Work out the length of string to allocate
+  int nValueLength = GetProperty(key, 0, bDirect);
+
+  //Call the function which does the work
+  CStringA sValue;
+  GetProperty(key, sValue.GetBufferSetLength(nValueLength), bDirect);
+  sValue.ReleaseBuffer();
+
+  return sValue;
+}
+
+CStringA CScintillaCtrl::GetText(int length, BOOL bDirect)
+{
+  //Call the function which does the work
+  CString sText;
+  GetText(length, sText.GetBufferSetLength(length), bDirect);
+  sText.ReleaseBuffer();
+
+  return sText;
+}
+
+CStringA CScintillaCtrl::GetPropertyExpanded(const char* key, BOOL bDirect)
+{
+  //Validate our parameters
+  ASSERT(key);
+
+  //Work out the length of string to allocate
+  int nValueLength = GetPropertyExpanded(key, 0, bDirect);
+
+  //Call the function which does the work
+  CStringA sValue;
+  GetPropertyExpanded(key, sValue.GetBufferSetLength(nValueLength), bDirect);
+  sValue.ReleaseBuffer();
+
+  return sValue;  
+}
+
+CStringA CScintillaCtrl::StyleGetFont(int style, BOOL bDirect)
+{
+  //Allocate a buffer to contain the font name. See the notes for
+  //SCI_STYLEGETFONT / SCI_STYLESETFONT on the reasons why we can use
+  //a statically sized buffer of 32 characters in size. Note it is 33 below
+  //to include space for the NULL terminator
+  char szFontName[33];
+  szFontName[0] = '\0';
+
+  //Call the native scintilla version of the function with a text buffer
+  StyleGetFont(style, szFontName, bDirect);
+
+  return szFontName;
 }
 #endif //#ifdef _UNICODE
-
-int CScintillaCtrl::GetLineEx(int line, TCHAR* text, int nMaxChars, BOOL bDirect)
-{
-  //Validate out parameters
-  AFXASSUME(text);
-
-  //Explicitly set the first value of text to nMaxChars (for details on this, see the EM_GETLINE documentation)
-  WORD* wBuffer = reinterpret_cast<WORD*>(text);
-  wBuffer[0] = nMaxChars;
-
-  //now call off to the other implementation to do the real work
-  return GetLine(line, text, bDirect);
-}
 
 
 //Everything else after this point was auto generated using the "ConvertScintillaiface.js" script
@@ -2111,6 +2050,16 @@ int CScintillaCtrl::GetWrapStartIndent(BOOL bDirect)
   return Call(SCI_GETWRAPSTARTINDENT, 0, 0, bDirect);
 }
 
+void CScintillaCtrl::SetWrapIndentMode(int mode, BOOL bDirect)
+{
+  Call(SCI_SETWRAPINDENTMODE, static_cast<WPARAM>(mode), 0, bDirect);
+}
+
+int CScintillaCtrl::GetWrapIndentMode(BOOL bDirect)
+{
+  return Call(SCI_GETWRAPINDENTMODE, 0, 0, bDirect);
+}
+
 void CScintillaCtrl::SetLayoutCache(int mode, BOOL bDirect)
 {
   Call(SCI_SETLAYOUTCACHE, static_cast<WPARAM>(mode), 0, bDirect);
@@ -3104,6 +3053,396 @@ int CScintillaCtrl::GetPositionCache(BOOL bDirect)
 void CScintillaCtrl::CopyAllowLine(BOOL bDirect)
 {
   Call(SCI_COPYALLOWLINE, 0, 0, bDirect);
+}
+
+LRESULT CScintillaCtrl::GetCharacterPointer(BOOL bDirect)
+{
+  return Call(SCI_GETCHARACTERPOINTER, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetKeysUnicode(BOOL keysUnicode, BOOL bDirect)
+{
+  Call(SCI_SETKEYSUNICODE, static_cast<WPARAM>(keysUnicode), 0, bDirect);
+}
+
+BOOL CScintillaCtrl::GetKeysUnicode(BOOL bDirect)
+{
+  return Call(SCI_GETKEYSUNICODE, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::IndicSetAlpha(int indicator, int alpha, BOOL bDirect)
+{
+  Call(SCI_INDICSETALPHA, static_cast<WPARAM>(indicator), static_cast<LPARAM>(alpha), bDirect);
+}
+
+int CScintillaCtrl::IndicGetAlpha(int indicator, BOOL bDirect)
+{
+  return Call(SCI_INDICGETALPHA, static_cast<WPARAM>(indicator), 0, bDirect);
+}
+
+void CScintillaCtrl::SetExtraAscent(int extraAscent, BOOL bDirect)
+{
+  Call(SCI_SETEXTRAASCENT, static_cast<WPARAM>(extraAscent), 0, bDirect);
+}
+
+int CScintillaCtrl::GetExtraAscent(BOOL bDirect)
+{
+  return Call(SCI_GETEXTRAASCENT, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetExtraDescent(int extraDescent, BOOL bDirect)
+{
+  Call(SCI_SETEXTRADESCENT, static_cast<WPARAM>(extraDescent), 0, bDirect);
+}
+
+int CScintillaCtrl::GetExtraDescent(BOOL bDirect)
+{
+  return Call(SCI_GETEXTRADESCENT, 0, 0, bDirect);
+}
+
+int CScintillaCtrl::MarkerSymbolDefined(int markerNumber, BOOL bDirect)
+{
+  return Call(SCI_MARKERSYMBOLDEFINED, static_cast<WPARAM>(markerNumber), 0, bDirect);
+}
+
+void CScintillaCtrl::MarginSetText(int line, const char* text, BOOL bDirect)
+{
+  Call(SCI_MARGINSETTEXT, static_cast<WPARAM>(line), reinterpret_cast<LPARAM>(text), bDirect);
+}
+
+int CScintillaCtrl::MarginGetText(int line, char* text, BOOL bDirect)
+{
+  return Call(SCI_MARGINGETTEXT, static_cast<WPARAM>(line), reinterpret_cast<LPARAM>(text), bDirect);
+}
+
+void CScintillaCtrl::MarginSetStyle(int line, int style, BOOL bDirect)
+{
+  Call(SCI_MARGINSETSTYLE, static_cast<WPARAM>(line), static_cast<LPARAM>(style), bDirect);
+}
+
+int CScintillaCtrl::MarginGetStyle(int line, BOOL bDirect)
+{
+  return Call(SCI_MARGINGETSTYLE, static_cast<WPARAM>(line), 0, bDirect);
+}
+
+void CScintillaCtrl::MarginSetStyles(int line, const char* styles, BOOL bDirect)
+{
+  Call(SCI_MARGINSETSTYLES, static_cast<WPARAM>(line), reinterpret_cast<LPARAM>(styles), bDirect);
+}
+
+int CScintillaCtrl::MarginGetStyles(int line, char* styles, BOOL bDirect)
+{
+  return Call(SCI_MARGINGETSTYLES, static_cast<WPARAM>(line), reinterpret_cast<LPARAM>(styles), bDirect);
+}
+
+void CScintillaCtrl::MarginTextClearAll(BOOL bDirect)
+{
+  Call(SCI_MARGINTEXTCLEARALL, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::MarginSetStyleOffset(int style, BOOL bDirect)
+{
+  Call(SCI_MARGINSETSTYLEOFFSET, static_cast<WPARAM>(style), 0, bDirect);
+}
+
+int CScintillaCtrl::MarginGetStyleOffset(BOOL bDirect)
+{
+  return Call(SCI_MARGINGETSTYLEOFFSET, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::AnnotationSetText(int line, const char* text, BOOL bDirect)
+{
+  Call(SCI_ANNOTATIONSETTEXT, static_cast<WPARAM>(line), reinterpret_cast<LPARAM>(text), bDirect);
+}
+
+int CScintillaCtrl::AnnotationGetText(int line, char* text, BOOL bDirect)
+{
+  return Call(SCI_ANNOTATIONGETTEXT, static_cast<WPARAM>(line), reinterpret_cast<LPARAM>(text), bDirect);
+}
+
+void CScintillaCtrl::AnnotationSetStyle(int line, int style, BOOL bDirect)
+{
+  Call(SCI_ANNOTATIONSETSTYLE, static_cast<WPARAM>(line), static_cast<LPARAM>(style), bDirect);
+}
+
+int CScintillaCtrl::AnnotationGetStyle(int line, BOOL bDirect)
+{
+  return Call(SCI_ANNOTATIONGETSTYLE, static_cast<WPARAM>(line), 0, bDirect);
+}
+
+void CScintillaCtrl::AnnotationSetStyles(int line, const char* styles, BOOL bDirect)
+{
+  Call(SCI_ANNOTATIONSETSTYLES, static_cast<WPARAM>(line), reinterpret_cast<LPARAM>(styles), bDirect);
+}
+
+int CScintillaCtrl::AnnotationGetStyles(int line, char* styles, BOOL bDirect)
+{
+  return Call(SCI_ANNOTATIONGETSTYLES, static_cast<WPARAM>(line), reinterpret_cast<LPARAM>(styles), bDirect);
+}
+
+int CScintillaCtrl::AnnotationGetLines(int line, BOOL bDirect)
+{
+  return Call(SCI_ANNOTATIONGETLINES, static_cast<WPARAM>(line), 0, bDirect);
+}
+
+void CScintillaCtrl::AnnotationClearAll(BOOL bDirect)
+{
+  Call(SCI_ANNOTATIONCLEARALL, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::AnnotationSetVisible(int visible, BOOL bDirect)
+{
+  Call(SCI_ANNOTATIONSETVISIBLE, static_cast<WPARAM>(visible), 0, bDirect);
+}
+
+int CScintillaCtrl::AnnotationGetVisible(BOOL bDirect)
+{
+  return Call(SCI_ANNOTATIONGETVISIBLE, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::AnnotationSetStyleOffset(int style, BOOL bDirect)
+{
+  Call(SCI_ANNOTATIONSETSTYLEOFFSET, static_cast<WPARAM>(style), 0, bDirect);
+}
+
+int CScintillaCtrl::AnnotationGetStyleOffset(BOOL bDirect)
+{
+  return Call(SCI_ANNOTATIONGETSTYLEOFFSET, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::AddUndoAction(int token, int flags, BOOL bDirect)
+{
+  Call(SCI_ADDUNDOACTION, static_cast<WPARAM>(token), static_cast<LPARAM>(flags), bDirect);
+}
+
+long CScintillaCtrl::CharPositionFromPoint(int x, int y, BOOL bDirect)
+{
+  return Call(SCI_CHARPOSITIONFROMPOINT, static_cast<WPARAM>(x), static_cast<LPARAM>(y), bDirect);
+}
+
+long CScintillaCtrl::CharPositionFromPointClose(int x, int y, BOOL bDirect)
+{
+  return Call(SCI_CHARPOSITIONFROMPOINTCLOSE, static_cast<WPARAM>(x), static_cast<LPARAM>(y), bDirect);
+}
+
+void CScintillaCtrl::SetMultipleSelection(BOOL multipleSelection, BOOL bDirect)
+{
+  Call(SCI_SETMULTIPLESELECTION, static_cast<WPARAM>(multipleSelection), 0, bDirect);
+}
+
+BOOL CScintillaCtrl::GetMultipleSelection(BOOL bDirect)
+{
+  return Call(SCI_GETMULTIPLESELECTION, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetAdditionalSelectionTyping(BOOL additionalSelectionTyping, BOOL bDirect)
+{
+  Call(SCI_SETADDITIONALSELECTIONTYPING, static_cast<WPARAM>(additionalSelectionTyping), 0, bDirect);
+}
+
+BOOL CScintillaCtrl::GetAdditionalSelectionTyping(BOOL bDirect)
+{
+  return Call(SCI_GETADDITIONALSELECTIONTYPING, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetAdditionalCaretsBlink(BOOL additionalCaretsBlink, BOOL bDirect)
+{
+  Call(SCI_SETADDITIONALCARETSBLINK, static_cast<WPARAM>(additionalCaretsBlink), 0, bDirect);
+}
+
+BOOL CScintillaCtrl::GetAdditionalCaretsBlink(BOOL bDirect)
+{
+  return Call(SCI_GETADDITIONALCARETSBLINK, 0, 0, bDirect);
+}
+
+int CScintillaCtrl::GetSelections(BOOL bDirect)
+{
+  return Call(SCI_GETSELECTIONS, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::ClearSelections(BOOL bDirect)
+{
+  Call(SCI_CLEARSELECTIONS, 0, 0, bDirect);
+}
+
+int CScintillaCtrl::SetSelection(int caret,int anchor, BOOL bDirect)
+{
+  return Call(SCI_SETSELECTION, static_cast<WPARAM>(caret), static_cast<LPARAM>(anchor), bDirect);
+}
+
+int CScintillaCtrl::AddSelection(int caret,int anchor, BOOL bDirect)
+{
+  return Call(SCI_ADDSELECTION, static_cast<WPARAM>(caret), static_cast<LPARAM>(anchor), bDirect);
+}
+
+void CScintillaCtrl::SetMainSelection(int selection, BOOL bDirect)
+{
+  Call(SCI_SETMAINSELECTION, static_cast<WPARAM>(selection), 0, bDirect);
+}
+
+int CScintillaCtrl::GetMainSelection(BOOL bDirect)
+{
+  return Call(SCI_GETMAINSELECTION, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetSelectionNCaret(int selection, long pos, BOOL bDirect)
+{
+  Call(SCI_SETSELECTIONNCARET, static_cast<WPARAM>(selection), static_cast<LPARAM>(pos), bDirect);
+}
+
+long CScintillaCtrl::GetSelectionNCaret(int selection, BOOL bDirect)
+{
+  return Call(SCI_GETSELECTIONNCARET, static_cast<WPARAM>(selection), 0, bDirect);
+}
+
+void CScintillaCtrl::SetSelectionNAnchor(int selection, long posAnchor, BOOL bDirect)
+{
+  Call(SCI_SETSELECTIONNANCHOR, static_cast<WPARAM>(selection), static_cast<LPARAM>(posAnchor), bDirect);
+}
+
+long CScintillaCtrl::GetSelectionNAnchor(int selection, BOOL bDirect)
+{
+  return Call(SCI_GETSELECTIONNANCHOR, static_cast<WPARAM>(selection), 0, bDirect);
+}
+
+void CScintillaCtrl::SetSelectionNCaretVirtualSpace(int selection, int space, BOOL bDirect)
+{
+  Call(SCI_SETSELECTIONNCARETVIRTUALSPACE, static_cast<WPARAM>(selection), static_cast<LPARAM>(space), bDirect);
+}
+
+int CScintillaCtrl::GetSelectionNCaretVirtualSpace(int selection, BOOL bDirect)
+{
+  return Call(SCI_GETSELECTIONNCARETVIRTUALSPACE, static_cast<WPARAM>(selection), 0, bDirect);
+}
+
+void CScintillaCtrl::SetSelectionNAnchorVirtualSpace(int selection, int space, BOOL bDirect)
+{
+  Call(SCI_SETSELECTIONNANCHORVIRTUALSPACE, static_cast<WPARAM>(selection), static_cast<LPARAM>(space), bDirect);
+}
+
+int CScintillaCtrl::GetSelectionNAnchorVirtualSpace(int selection, BOOL bDirect)
+{
+  return Call(SCI_GETSELECTIONNANCHORVIRTUALSPACE, static_cast<WPARAM>(selection), 0, bDirect);
+}
+
+void CScintillaCtrl::SetSelectionNStart(int selection, long pos, BOOL bDirect)
+{
+  Call(SCI_SETSELECTIONNSTART, static_cast<WPARAM>(selection), static_cast<LPARAM>(pos), bDirect);
+}
+
+long CScintillaCtrl::GetSelectionNStart(BOOL bDirect)
+{
+  return Call(SCI_GETSELECTIONNSTART, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetSelectionNEnd(int selection, long pos, BOOL bDirect)
+{
+  Call(SCI_SETSELECTIONNEND, static_cast<WPARAM>(selection), static_cast<LPARAM>(pos), bDirect);
+}
+
+long CScintillaCtrl::GetSelectionNEnd(BOOL bDirect)
+{
+  return Call(SCI_GETSELECTIONNEND, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetRectangularSelectionCaret(long pos, BOOL bDirect)
+{
+  Call(SCI_SETRECTANGULARSELECTIONCARET, static_cast<WPARAM>(pos), 0, bDirect);
+}
+
+long CScintillaCtrl::GetRectangularSelectionCaret(BOOL bDirect)
+{
+  return Call(SCI_GETRECTANGULARSELECTIONCARET, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetRectangularSelectionAnchor(long posAnchor, BOOL bDirect)
+{
+  Call(SCI_SETRECTANGULARSELECTIONANCHOR, static_cast<WPARAM>(posAnchor), 0, bDirect);
+}
+
+long CScintillaCtrl::GetRectangularSelectionAnchor(BOOL bDirect)
+{
+  return Call(SCI_GETRECTANGULARSELECTIONANCHOR, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetRectangularSelectionCaretVirtualSpace(int space, BOOL bDirect)
+{
+  Call(SCI_SETRECTANGULARSELECTIONCARETVIRTUALSPACE, static_cast<WPARAM>(space), 0, bDirect);
+}
+
+int CScintillaCtrl::GetRectangularSelectionCaretVirtualSpace(BOOL bDirect)
+{
+  return Call(SCI_GETRECTANGULARSELECTIONCARETVIRTUALSPACE, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetRectangularSelectionAnchorVirtualSpace(int space, BOOL bDirect)
+{
+  Call(SCI_SETRECTANGULARSELECTIONANCHORVIRTUALSPACE, static_cast<WPARAM>(space), 0, bDirect);
+}
+
+int CScintillaCtrl::GetRectangularSelectionAnchorVirtualSpace(BOOL bDirect)
+{
+  return Call(SCI_GETRECTANGULARSELECTIONANCHORVIRTUALSPACE, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetVirtualSpaceOptions(int virtualSpaceOptions, BOOL bDirect)
+{
+  Call(SCI_SETVIRTUALSPACEOPTIONS, static_cast<WPARAM>(virtualSpaceOptions), 0, bDirect);
+}
+
+int CScintillaCtrl::GetVirtualSpaceOptions(BOOL bDirect)
+{
+  return Call(SCI_GETVIRTUALSPACEOPTIONS, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetRectangularSelectionModifier(int modifier, BOOL bDirect)
+{
+  Call(SCI_SETRECTANGULARSELECTIONMODIFIER, static_cast<WPARAM>(modifier), 0, bDirect);
+}
+
+int CScintillaCtrl::GetRectangularSelectionModifier(BOOL bDirect)
+{
+  return Call(SCI_GETRECTANGULARSELECTIONMODIFIER, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetAdditionalSelFore(COLORREF fore, BOOL bDirect)
+{
+  Call(SCI_SETADDITIONALSELFORE, static_cast<WPARAM>(fore), 0, bDirect);
+}
+
+void CScintillaCtrl::SetAdditionalSelBack(COLORREF back, BOOL bDirect)
+{
+  Call(SCI_SETADDITIONALSELBACK, static_cast<WPARAM>(back), 0, bDirect);
+}
+
+void CScintillaCtrl::SetAdditionalSelAlpha(int alpha, BOOL bDirect)
+{
+  Call(SCI_SETADDITIONALSELALPHA, static_cast<WPARAM>(alpha), 0, bDirect);
+}
+
+int CScintillaCtrl::GetAdditionalSelAlpha(BOOL bDirect)
+{
+  return Call(SCI_GETADDITIONALSELALPHA, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetAdditionalCaretFore(COLORREF fore, BOOL bDirect)
+{
+  Call(SCI_SETADDITIONALCARETFORE, static_cast<WPARAM>(fore), 0, bDirect);
+}
+
+COLORREF CScintillaCtrl::GetAdditionalCaretFore(BOOL bDirect)
+{
+  return Call(SCI_GETADDITIONALCARETFORE, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::RotateSelection(BOOL bDirect)
+{
+  Call(SCI_ROTATESELECTION, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SwapMainAnchorCaret(BOOL bDirect)
+{
+  Call(SCI_SWAPMAINANCHORCARET, 0, 0, bDirect);
 }
 
 void CScintillaCtrl::StartRecord(BOOL bDirect)

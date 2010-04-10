@@ -3,7 +3,7 @@ Module : ScintillaCtrl.h
 Purpose: Defines the interface for an MFC wrapper class for the Scintilla edit control (www.scintilla.org)
 Created: PJN / 19-03-2004
 
-Copyright (c) 2004 - 2008 by PJ Naughter.  (Web: www.naughter.com, Email: pjna@naughter.com)
+Copyright (c) 2004 - 2009 by PJ Naughter.  (Web: www.naughter.com, Email: pjna@naughter.com)
 
 All rights reserved.
 
@@ -52,14 +52,13 @@ public:
   inline LRESULT Call(UINT message, WPARAM wParam, LPARAM lParam, BOOL bDirect = TRUE);
   LRESULT GetDirectFunction();
   LRESULT GetDirectPointer();
-  CString GetSelText();
 
 //Unicode support
 #ifdef _UNICODE
   void AddText(int length, const wchar_t* text, BOOL bDirect = TRUE);
   void InsertText(long pos, const wchar_t* text, BOOL bDirect = TRUE);
-  int GetSelText(wchar_t* text, BOOL bDirect = TRUE);
-  int GetCurLine(int length, wchar_t* text, BOOL bDirect = TRUE);
+  CStringW GetSelText(BOOL bDirect = TRUE);
+  CStringW GetCurLine(BOOL bDirect = TRUE);
   void StyleSetFont(int style, const wchar_t* fontName, BOOL bDirect = TRUE);
   void SetWordChars(const wchar_t* characters, BOOL bDirect = TRUE);
   void AutoCShow(int lenEntered, const wchar_t* itemList, BOOL bDirect = TRUE);
@@ -67,10 +66,10 @@ public:
   void AutoCSelect(const wchar_t* text, BOOL bDirect = TRUE);
   void AutoCSetFillUps(const wchar_t* characterSet, BOOL bDirect = TRUE);
   void UserListShow(int listType, const wchar_t* itemList, BOOL bDirect = TRUE);
-  int GetLine(int line, wchar_t* text, BOOL bDirect = TRUE);
+  CStringW GetLine(int line, BOOL bDirect = TRUE);
   void ReplaceSel(const wchar_t* text, BOOL bDirect = TRUE);
   void SetText(const wchar_t* text, BOOL bDirect = TRUE);
-  int GetText(int length, wchar_t* text, BOOL bDirect = TRUE);
+  CStringW GetText(int length, BOOL bDirect = TRUE);
   int ReplaceTarget(int length, const wchar_t* text, BOOL bDirect = TRUE);
   int ReplaceTargetRE(int length, const wchar_t* text, BOOL bDirect = TRUE);
   int SearchInTarget(int length, const wchar_t* text, BOOL bDirect = TRUE);
@@ -85,17 +84,32 @@ public:
   void SetKeyWords(int keywordSet, const wchar_t* keyWords, BOOL bDirect = TRUE);
   void SetLexerLanguage(const wchar_t* language, BOOL bDirect = TRUE);
   void LoadLexerLibrary(const wchar_t* path, BOOL bDirect = TRUE);
-  int GetProperty(const wchar_t* key, wchar_t* buf, BOOL bDirect = TRUE);
-  int GetPropertyExpanded(const wchar_t* key, wchar_t* buf, BOOL bDirect = TRUE);
+  CStringW GetProperty(const wchar_t* key, BOOL bDirect = TRUE);
+  CStringW GetPropertyExpanded(const wchar_t* key, BOOL bDirect = TRUE);
   int GetPropertyInt(const wchar_t* key, BOOL bDirect = TRUE);
-  int StyleGetFont(int style, wchar_t* fontName, BOOL bDirect = TRUE);
+  CStringW StyleGetFont(int style, BOOL bDirect = TRUE);
+  void MarginSetText(int line, const wchar_t* text, BOOL bDirect = TRUE);
+  //Note we do not have a MarginGetText method as Scintilla does not provide a way of a priori working out a valid length of a UTF8 buffer for SCI_MARGINGETTEXT
+  void MarginSetStyles(int line, const wchar_t* styles, BOOL bDirect = TRUE);
+  //Note we do not have a MarginGetStyles method as Scintilla does not provide a way of a priori working out a valid length of a UTF8 buffer for SCI_MARGINGETSTYLES
+  void AnnotationSetText(int line, const wchar_t* text, BOOL bDirect = TRUE);
+  //Note we do not have a AnnotationGetText method as Scintilla does not provide a way of a priori working out a valid length of a UTF8 buffer for SCI_ANNOTATIONGETTEXT
+  void AnnotationSetStyles(int line, const wchar_t* styles, BOOL bDirect = TRUE);
+  //Note we do not have a AnnotationGetStyles method as Scintilla does not provide a way of a priori working out a valid length of a UTF8 buffer for SCI_ANNOTATIONGETSTYLES
 
-  static int UTF82W(const char* pszText, int nLength, wchar_t*& pszWText);
-  static int W2UTF8(const wchar_t* pszText, int nLength, char*& pszUTF8Text);
+  static CStringW UTF82W(const char* pszText, int nLength);
+#ifdef _UNICODE
+  static CStringA W2UTF8(const wchar_t* pszText, int nLength);
 #endif
-
-//A special version of GetLine which hides the weird semantics of the EM_GETLINE call.  
-  int GetLineEx(int line, TCHAR* text, int nMaxChars, BOOL bDirect = TRUE);
+#else
+  CStringA GetSelText(BOOL bDirect = TRUE);
+  CStringA GetCurLine(BOOL bDirect = TRUE);
+  CStringA GetLine(int line, BOOL bDirect = TRUE);
+  CStringA GetProperty(const char* key, BOOL bDirect = TRUE);
+  CStringA GetText(int length, BOOL bDirect = TRUE);
+  CStringA GetPropertyExpanded(const char* key, BOOL bDirect = TRUE);
+  CStringA StyleGetFont(int style, BOOL bDirect = TRUE);
+#endif
 
 //Auto generated using the "ConvertScintillaiface.js" script
   void AddText(int length, const char* text, BOOL bDirect = TRUE);
@@ -363,6 +377,8 @@ public:
   int GetWrapVisualFlagsLocation(BOOL bDirect = TRUE);
   void SetWrapStartIndent(int indent, BOOL bDirect = TRUE);
   int GetWrapStartIndent(BOOL bDirect = TRUE);
+  void SetWrapIndentMode(int mode, BOOL bDirect = TRUE);
+  int GetWrapIndentMode(BOOL bDirect = TRUE);
   void SetLayoutCache(int mode, BOOL bDirect = TRUE);
   int GetLayoutCache(BOOL bDirect = TRUE);
   void SetScrollWidth(int pixelWidth, BOOL bDirect = TRUE);
@@ -562,6 +578,84 @@ public:
   void SetPositionCache(int size, BOOL bDirect = TRUE);
   int GetPositionCache(BOOL bDirect = TRUE);
   void CopyAllowLine(BOOL bDirect = TRUE);
+  LRESULT GetCharacterPointer(BOOL bDirect = TRUE);
+  void SetKeysUnicode(BOOL keysUnicode, BOOL bDirect = TRUE);
+  BOOL GetKeysUnicode(BOOL bDirect = TRUE);
+  void IndicSetAlpha(int indicator, int alpha, BOOL bDirect = TRUE);
+  int IndicGetAlpha(int indicator, BOOL bDirect = TRUE);
+  void SetExtraAscent(int extraAscent, BOOL bDirect = TRUE);
+  int GetExtraAscent(BOOL bDirect = TRUE);
+  void SetExtraDescent(int extraDescent, BOOL bDirect = TRUE);
+  int GetExtraDescent(BOOL bDirect = TRUE);
+  int MarkerSymbolDefined(int markerNumber, BOOL bDirect = TRUE);
+  void MarginSetText(int line, const char* text, BOOL bDirect = TRUE);
+  int MarginGetText(int line, char* text, BOOL bDirect = TRUE);
+  void MarginSetStyle(int line, int style, BOOL bDirect = TRUE);
+  int MarginGetStyle(int line, BOOL bDirect = TRUE);
+  void MarginSetStyles(int line, const char* styles, BOOL bDirect = TRUE);
+  int MarginGetStyles(int line, char* styles, BOOL bDirect = TRUE);
+  void MarginTextClearAll(BOOL bDirect = TRUE);
+  void MarginSetStyleOffset(int style, BOOL bDirect = TRUE);
+  int MarginGetStyleOffset(BOOL bDirect = TRUE);
+  void AnnotationSetText(int line, const char* text, BOOL bDirect = TRUE);
+  int AnnotationGetText(int line, char* text, BOOL bDirect = TRUE);
+  void AnnotationSetStyle(int line, int style, BOOL bDirect = TRUE);
+  int AnnotationGetStyle(int line, BOOL bDirect = TRUE);
+  void AnnotationSetStyles(int line, const char* styles, BOOL bDirect = TRUE);
+  int AnnotationGetStyles(int line, char* styles, BOOL bDirect = TRUE);
+  int AnnotationGetLines(int line, BOOL bDirect = TRUE);
+  void AnnotationClearAll(BOOL bDirect = TRUE);
+  void AnnotationSetVisible(int visible, BOOL bDirect = TRUE);
+  int AnnotationGetVisible(BOOL bDirect = TRUE);
+  void AnnotationSetStyleOffset(int style, BOOL bDirect = TRUE);
+  int AnnotationGetStyleOffset(BOOL bDirect = TRUE);
+  void AddUndoAction(int token, int flags, BOOL bDirect = TRUE);
+  long CharPositionFromPoint(int x, int y, BOOL bDirect = TRUE);
+  long CharPositionFromPointClose(int x, int y, BOOL bDirect = TRUE);
+  void SetMultipleSelection(BOOL multipleSelection, BOOL bDirect = TRUE);
+  BOOL GetMultipleSelection(BOOL bDirect = TRUE);
+  void SetAdditionalSelectionTyping(BOOL additionalSelectionTyping, BOOL bDirect = TRUE);
+  BOOL GetAdditionalSelectionTyping(BOOL bDirect = TRUE);
+  void SetAdditionalCaretsBlink(BOOL additionalCaretsBlink, BOOL bDirect = TRUE);
+  BOOL GetAdditionalCaretsBlink(BOOL bDirect = TRUE);
+  int GetSelections(BOOL bDirect = TRUE);
+  void ClearSelections(BOOL bDirect = TRUE);
+  int SetSelection(int caret, int anchor, BOOL bDirect = TRUE);
+  int AddSelection(int caret, int anchor, BOOL bDirect = TRUE);
+  void SetMainSelection(int selection, BOOL bDirect = TRUE);
+  int GetMainSelection(BOOL bDirect = TRUE);
+  void SetSelectionNCaret(int selection, long pos, BOOL bDirect = TRUE);
+  long GetSelectionNCaret(int selection, BOOL bDirect = TRUE);
+  void SetSelectionNAnchor(int selection, long posAnchor, BOOL bDirect = TRUE);
+  long GetSelectionNAnchor(int selection, BOOL bDirect = TRUE);
+  void SetSelectionNCaretVirtualSpace(int selection, int space, BOOL bDirect = TRUE);
+  int GetSelectionNCaretVirtualSpace(int selection, BOOL bDirect = TRUE);
+  void SetSelectionNAnchorVirtualSpace(int selection, int space, BOOL bDirect = TRUE);
+  int GetSelectionNAnchorVirtualSpace(int selection, BOOL bDirect = TRUE);
+  void SetSelectionNStart(int selection, long pos, BOOL bDirect = TRUE);
+  long GetSelectionNStart(BOOL bDirect = TRUE);
+  void SetSelectionNEnd(int selection, long pos, BOOL bDirect = TRUE);
+  long GetSelectionNEnd(BOOL bDirect = TRUE);
+  void SetRectangularSelectionCaret(long pos, BOOL bDirect = TRUE);
+  long GetRectangularSelectionCaret(BOOL bDirect = TRUE);
+  void SetRectangularSelectionAnchor(long posAnchor, BOOL bDirect = TRUE);
+  long GetRectangularSelectionAnchor(BOOL bDirect = TRUE);
+  void SetRectangularSelectionCaretVirtualSpace(int space, BOOL bDirect = TRUE);
+  int GetRectangularSelectionCaretVirtualSpace(BOOL bDirect = TRUE);
+  void SetRectangularSelectionAnchorVirtualSpace(int space, BOOL bDirect = TRUE);
+  int GetRectangularSelectionAnchorVirtualSpace(BOOL bDirect = TRUE);
+  void SetVirtualSpaceOptions(int virtualSpaceOptions, BOOL bDirect = TRUE);
+  int GetVirtualSpaceOptions(BOOL bDirect = TRUE);
+  void SetRectangularSelectionModifier(int modifier, BOOL bDirect = TRUE);
+  int GetRectangularSelectionModifier(BOOL bDirect = TRUE);
+  void SetAdditionalSelFore(COLORREF fore, BOOL bDirect = TRUE);
+  void SetAdditionalSelBack(COLORREF back, BOOL bDirect = TRUE);
+  void SetAdditionalSelAlpha(int alpha, BOOL bDirect = TRUE);
+  int GetAdditionalSelAlpha(BOOL bDirect = TRUE);
+  void SetAdditionalCaretFore(COLORREF fore, BOOL bDirect = TRUE);
+  COLORREF GetAdditionalCaretFore(BOOL bDirect = TRUE);
+  void RotateSelection(BOOL bDirect = TRUE);
+  void SwapMainAnchorCaret(BOOL bDirect = TRUE);
   void StartRecord(BOOL bDirect = TRUE);
   void StopRecord(BOOL bDirect = TRUE);
   void SetLexer(int lexer, BOOL bDirect = TRUE);

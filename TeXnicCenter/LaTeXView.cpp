@@ -888,10 +888,7 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 			CInsertHeaderDialog dlg(this);
 
 			if (ptSelStart != ptSelEnd) {
-				CString strSel;
-				
-				GetCtrl().GetSelText(strSel.GetBuffer(ptSelEnd - ptSelStart));
-				strSel.ReleaseBuffer();
+				CString strSel = GetCtrl().GetSelText();
 
 				dlg.SetProperties(strSel);
 			}
@@ -916,11 +913,7 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 			BOOL bIsSelectionEnvironment = FALSE;
 
 			if (ptSelStart != ptSelEnd) {
-				CString strSel;
-
-				GetCtrl().GetSelText(strSel.GetBuffer(ptSelEnd - ptSelStart));
-				strSel.ReleaseBuffer();
-
+				CString strSel = GetCtrl().GetSelText();
 				bIsSelectionEnvironment = pDlg->SetProperties(strSel);
 			}
 
