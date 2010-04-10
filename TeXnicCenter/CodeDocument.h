@@ -150,6 +150,9 @@ protected:
 	virtual void OnRemovedAllBookmarks(void);
 	afx_msg void OnEditSplitParagraph();
 	afx_msg void OnEditJoinParagraph();
+	afx_msg void OnUpdateFileSaveAs(CCmdUI *pCmdUI);
+	afx_msg void OnEditMakeLowerCase();
+	afx_msg void OnEditMakeUpperCase();
 
 	/// Indicates whether the save dialog should be shown.
 	///
@@ -201,8 +204,6 @@ protected:
 	
 private:
 	DWORD DoSaveFile( HANDLE file, bool throw_on_invalid_sequence );
-public:
-	afx_msg void OnUpdateFileSaveAs(CCmdUI *pCmdUI);
 };
 
 class TextDocument

@@ -98,6 +98,7 @@ BEGIN
     "B",            ID_EDIT_GOTO_LAST_CHANGE, VIRTKEY, CONTROL, NOINVERT
     VK_F2,          ID_EDIT_GOTO_NEXT_BOOKMARK, VIRTKEY, NOINVERT
     VK_F2,          ID_EDIT_GOTO_PREV_BOOKMARK, VIRTKEY, SHIFT, NOINVERT
+    "J",            ID_EDIT_JOIN_PARAGRAPH, VIRTKEY, CONTROL, NOINVERT
     "N",            ID_EDIT_OUTSOURCE,      VIRTKEY, SHIFT, CONTROL, NOINVERT
     "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
     VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
@@ -106,6 +107,7 @@ BEGIN
     "H",            ID_EDIT_REPLACE,        VIRTKEY, CONTROL, NOINVERT
     "M",            ID_EDIT_SEL_BIGGER_BLOCK, VIRTKEY, CONTROL, NOINVERT
     "A",            ID_EDIT_SELECT_ALL,     VIRTKEY, CONTROL, NOINVERT
+    "K",            ID_EDIT_SPLIT_PARAGRAPH, VIRTKEY, CONTROL, NOINVERT
     VK_F2,          ID_EDIT_TOGGLE_BOOKMARK, VIRTKEY, CONTROL, NOINVERT
     "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
     "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
@@ -139,6 +141,8 @@ BEGIN
     VK_F9,          ID_PREV_ERROR,          VIRTKEY, SHIFT, NOINVERT
     VK_F10,         ID_PREV_WARNING,        VIRTKEY, SHIFT, NOINVERT
     VK_SPACE,       ID_QUERY_COMPLETION,    VIRTKEY, CONTROL, NOINVERT
+    VK_F3,          ID_SEARCH_FINDNEXTSELECTED, VIRTKEY, CONTROL, NOINVERT
+    VK_F3,          ID_SEARCH_FINDPREVIOUSSELECTED, VIRTKEY, SHIFT, CONTROL, NOINVERT
     VK_ESCAPE,      ID_TOOLS_CANCEL,        VIRTKEY, NOINVERT
     "L",            ID_VIEW_BIB_ENTRIES_PANE, VIRTKEY, SHIFT, CONTROL, NOINVERT
     "B",            ID_VIEW_BUILD_PANE,     VIRTKEY, SHIFT, CONTROL, NOINVERT
@@ -149,8 +153,8 @@ BEGIN
     VK_OEM_3,       ID_VIEW_TOGGLELEFTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
     VK_OEM_5,       ID_VIEW_TOGGLELEFTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
     "2",            ID_VIEW_TOGGLERIGHTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
-    VK_F3,          ID_SEARCH_FINDNEXTSELECTED, VIRTKEY, CONTROL, NOINVERT
-    VK_F3,          ID_SEARCH_FINDPREVIOUSSELECTED, VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "U",            ID_EDIT_MAKELOWERCASE,  VIRTKEY, CONTROL, NOINVERT
+    "U",            ID_EDIT_MAKEUPPERCASE,  VIRTKEY, SHIFT, CONTROL, NOINVERT
 END
 
 
@@ -2245,10 +2249,14 @@ BEGIN
         MENUITEM "Wort &vervollständigen",      ID_QUERY_COMPLETION
         MENUITEM "Text auslagern...",           ID_EDIT_OUTSOURCE
         MENUITEM SEPARATOR
-        MENUITEM "&Zeile löschen",              ID_EDIT_DELETE_LINE
-        MENUITEM SEPARATOR
-        MENUITEM "&Paragraph aufteilen",        ID_EDIT_SPLIT_PARAGRAPH
-        MENUITEM "Paragraph &zusammenfügen",    ID_EDIT_JOIN_PARAGRAPH
+        POPUP "Erweitert"
+        BEGIN
+            MENUITEM "&Zeile löschen",              ID_EDIT_DELETE_LINE
+            MENUITEM "&Paragraph aufteilen",        ID_EDIT_SPLIT_PARAGRAPH
+            MENUITEM "Paragraph &zusammenfügen",    ID_EDIT_JOIN_PARAGRAPH
+            MENUITEM "In &Großbuchstaben umwandeln", ID_EDIT_MAKEUPPERCASE
+            MENUITEM "In Kleinbuchstaben umw&andeln", ID_EDIT_MAKELOWERCASE
+        END
     END
     POPUP "&Ansicht"
     BEGIN
@@ -6262,11 +6270,11 @@ BEGIN
         MENUITEM SEPARATOR
         POPUP "Recent Files"
         BEGIN
-            MENUITEM "&None",                       ID_FILE_MRU_FILE1, GRAYED
+            MENUITEM "&None",                       ID_FILE_MRU_FILE1
         END
         POPUP "Recent Projects"
         BEGIN
-            MENUITEM "&None",                       ID_FILE_MRU_PROJECT_FIRST, GRAYED
+            MENUITEM "&None",                       ID_FILE_MRU_PROJECT_FIRST
         END
         MENUITEM SEPARATOR
         MENUITEM "E&xit",                       ID_APP_EXIT
@@ -6290,10 +6298,14 @@ BEGIN
         MENUITEM "Complete &Word",              ID_QUERY_COMPLETION
         MENUITEM "Outsource Text...",           ID_EDIT_OUTSOURCE
         MENUITEM SEPARATOR
-        MENUITEM "&Delete Line",                ID_EDIT_DELETE_LINE
-        MENUITEM SEPARATOR
-        MENUITEM "&Split Paragraph",            ID_EDIT_SPLIT_PARAGRAPH
-        MENUITEM "&Join Paragraph",             ID_EDIT_JOIN_PARAGRAPH
+        POPUP "Advanced"
+        BEGIN
+            MENUITEM "&Delete Line",                ID_EDIT_DELETE_LINE
+            MENUITEM "&Split Paragraph",            ID_EDIT_SPLIT_PARAGRAPH
+            MENUITEM "&Join Paragraph",             ID_EDIT_JOIN_PARAGRAPH
+            MENUITEM "Make Uppercase",              ID_EDIT_MAKEUPPERCASE
+            MENUITEM "Make Lowercase",              ID_EDIT_MAKELOWERCASE
+        END
     END
     POPUP "&View"
     BEGIN
@@ -6442,7 +6454,7 @@ BEGIN
         BEGIN
             MENUITEM "&Manage Text Modules...",     ID_TEXTMODULES_DEFINE
             MENUITEM SEPARATOR
-            MENUITEM "Own Text Module",             ID_TEXTMODULES_FIRST, GRAYED
+            MENUITEM "Own Text Module",             ID_TEXTMODULES_FIRST
         END
     END
     POPUP "&Math"

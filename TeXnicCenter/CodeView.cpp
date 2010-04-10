@@ -123,6 +123,11 @@ void AssignScintillaKey(CScintillaCtrl& rCtrl, int key, int mods, int cmd)
 						cmd, 1);
 }
 
+void ClearScintillaKey(CScintillaCtrl& rCtrl, int key, int mods)
+{
+	rCtrl.ClearCmdKey(LongFromTwoShorts(static_cast<short>(key), static_cast<short>(mods)), 1);
+}
+
 // CodeView message handlers
 
 int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -196,12 +201,23 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	rCtrl.SetPasteConvertEndings(TRUE); // Convert line endings
 
+#pragma endregion
+
+#pragma region Scintilla Keyboard Assignments
+
 	//Wrap-aware home/end keys
 	AssignScintillaKey(rCtrl, SCK_HOME, 0, SCI_VCHOMEWRAP);
 	AssignScintillaKey(rCtrl, SCK_HOME, SCMOD_SHIFT, SCI_VCHOMEWRAPEXTEND);
 	AssignScintillaKey(rCtrl, SCK_HOME, SCMOD_SHIFT | SCMOD_ALT, SCI_VCHOMERECTEXTEND);
 	AssignScintillaKey(rCtrl, SCK_END, 0, SCI_LINEENDWRAP);
 	AssignScintillaKey(rCtrl, SCK_END, SCMOD_SHIFT, SCI_LINEENDWRAPEXTEND);
+
+	//Take away the shortcuts for Upper/Lowercase, since we want the user to be able to customize that
+	// I found, that we do not need to do this, since we process the keyboard shortcuts first.
+	// And if we defined Ctrl-U with something, Scintilla will just not get it.
+	// So let's leave the defaults.
+	//ClearScintillaKey(rCtrl, 'U', SCMOD_CTRL);
+	//ClearScintillaKey(rCtrl, 'U', SCMOD_CTRL | SCMOD_SHIFT);
 
 #pragma endregion
 
