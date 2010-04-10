@@ -85,6 +85,8 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_WM_CREATE()
 	ON_COMMAND(ID_EDIT_FIND_INCREMENTAL_FORWARD, &CodeView::OnEditFindIncrementalForward)
 	ON_COMMAND(ID_EDIT_FIND_INCREMENTAL_BACKWARD, &CodeView::OnEditFindIncrementalBackward)
+	ON_COMMAND(ID_SEARCH_FINDNEXTSELECTED, &CodeView::OnSearchFindNextSelected)
+	ON_COMMAND(ID_SEARCH_FINDPREVIOUSSELECTED, &CodeView::OnSearchFindPreviousSelected)
 	ON_COMMAND(ID_EDIT_GOTO_LAST_CHANGE, &CodeView::OnEditGotoLastChange)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_GOTO_LAST_CHANGE, &CodeView::OnUpdateEditGotoLastChange)
 	ON_COMMAND(ID_VIEW_INDENTATION_GUIDES, &CodeView::OnViewIndentationGuides)
@@ -110,6 +112,17 @@ void CodeView::Dump(CDumpContext& dc) const
 #endif //_DEBUG
 
 
+long LongFromTwoShorts(short a,short b)
+{
+	return (a) | ((b) << 16);
+}
+
+void AssignScintillaKey(CScintillaCtrl& rCtrl, int key, int mods, int cmd)
+{
+	rCtrl.AssignCmdKey(LongFromTwoShorts(static_cast<short>(key), static_cast<short>(mods)),
+						cmd, 1);
+}
+
 // CodeView message handlers
 
 int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -122,35 +135,34 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	theme_.SubclassWindow(m_hWnd);
 	theme_.Initialize();
 
+	//Get a shorthand
+	CScintillaCtrl& rCtrl = GetCtrl();
+
 	EnableFolding(); // CodeView::OnSettingsChanged depends on whether folding is enabled or not
 	OnSettingsChanged(); // Make sure derived class setup the settings such as fonts, lexers etc. first
 
-	GetCtrl().SetViewWS(CConfiguration::GetInstance()->m_bViewWhitespaces ? SCWS_VISIBLEALWAYS : SCWS_INVISIBLE);
-	GetCtrl().SetViewEOL(CConfiguration::GetInstance()->GetShowLineEnding());
-	GetCtrl().SetWrapMode(CConfiguration::GetInstance()->IsWordWrapEnabled() ? SC_WRAP_WORD : SC_WRAP_NONE);
+	rCtrl.SetViewWS(CConfiguration::GetInstance()->m_bViewWhitespaces ? SCWS_VISIBLEALWAYS : SCWS_INVISIBLE);
+	rCtrl.SetViewEOL(CConfiguration::GetInstance()->GetShowLineEnding());
+	rCtrl.SetWrapMode(CConfiguration::GetInstance()->IsWordWrapEnabled() ? SC_WRAP_WORD : SC_WRAP_NONE);
 
 	UpdateLineNumberMargin();
 
 #pragma region Markers
 
-	GetCtrl().SetMarginSensitiveN(1,TRUE); // React on clicks
+	rCtrl.SetMarginSensitiveN(1,TRUE); // React on clicks
 
-	GetCtrl().MarkerDefine(CodeDocument::Errormark,SC_MARK_ARROW);
+	rCtrl.MarkerDefine(CodeDocument::Errormark,SC_MARK_ARROW);
 
-	GetCtrl().MarkerSetFore(CodeDocument::Errormark,RGB(158,0,57));
-	GetCtrl().MarkerSetBack(CodeDocument::Errormark,RGB(237,28,36));
+	rCtrl.MarkerSetFore(CodeDocument::Errormark,RGB(158,0,57));
+	rCtrl.MarkerSetBack(CodeDocument::Errormark,RGB(237,28,36));
 
 
-	GetCtrl().MarkerDefine(CodeDocument::Bookmark,SC_MARK_SMALLRECT);
+	rCtrl.MarkerDefine(CodeDocument::Bookmark,SC_MARK_SMALLRECT);
 
-	GetCtrl().MarkerSetFore(CodeDocument::Bookmark,RGB(70,105,175));
-	GetCtrl().MarkerSetBack(CodeDocument::Bookmark,RGB(232,241,255));	
+	rCtrl.MarkerSetFore(CodeDocument::Bookmark,RGB(70,105,175));
+	rCtrl.MarkerSetBack(CodeDocument::Bookmark,RGB(232,241,255));	
 
 #pragma endregion
-
-	CScintillaCtrl& rCtrl = GetCtrl();
-
-	rCtrl.SetPasteConvertEndings(TRUE); // Convert line endings
 
 #pragma region Folding
 
@@ -173,15 +185,30 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 #pragma endregion
 
+#pragma region Misc Scintilla Options
+
 	// Indicator for spell checker errors
-	GetCtrl().SetIndicatorCurrent(0); // Default is a squiggly line, which we want to use
-	GetCtrl().IndicSetFore(0,RGB(255,0,0)); // Red color instead of dark green
-	GetCtrl().SetIndent(0);
+	rCtrl.SetIndicatorCurrent(0); // Default is a squiggly line, which we want to use
+	rCtrl.IndicSetFore(0,RGB(255,0,0)); // Red color instead of dark green
+	rCtrl.SetIndent(0);
 
 	ShowIndentationGuides(CConfiguration::GetInstance()->GetShowIndentationGuides());
 
+	rCtrl.SetPasteConvertEndings(TRUE); // Convert line endings
+
+	//Wrap-aware home/end keys
+	AssignScintillaKey(rCtrl, SCK_HOME, 0, SCI_VCHOMEWRAP);
+	AssignScintillaKey(rCtrl, SCK_HOME, SCMOD_SHIFT, SCI_VCHOMEWRAPEXTEND);
+	AssignScintillaKey(rCtrl, SCK_HOME, SCMOD_SHIFT | SCMOD_ALT, SCI_VCHOMERECTEXTEND);
+	AssignScintillaKey(rCtrl, SCK_END, 0, SCI_LINEENDWRAP);
+	AssignScintillaKey(rCtrl, SCK_END, SCMOD_SHIFT, SCI_LINEENDWRAPEXTEND);
+
+#pragma endregion
+
+
 	return 0;
 }
+
 
 void CodeView::GoToLine( int line, bool direct /*= true*/ )
 {
@@ -803,6 +830,79 @@ void CodeView::OnEditFindIncrementalBackward()
 	shadow_.EnableIncrementalSearch(true);
 }
 
+void CodeView::OnSearchFindNextSelected()
+{
+    CString sel = SelectionExtend(true);
+	if (sel.GetLength() && sel.Find(_T('\r')) < 0 && sel.Find(_T('\n')) < 0)
+    {
+		//We would need to set the _scintillaEditState, but that one is local to ScintillaDocView.cpp
+		// Now we cannot use F3 after Ctrl-F3, which is not so nice.
+		//_scintillaEditState.strFind = sel;
+		FindText(sel, true, true, true, false);
+	}
+}
+
+
+void CodeView::OnSearchFindPreviousSelected()
+{
+    CString sel = SelectionExtend(true);
+	if (sel.GetLength() && sel.Find(_T('\r')) < 0 && sel.Find(_T('\n')) < 0)
+    {
+		//_scintillaEditState.strFind = sel;
+		FindText(sel, false, true, true, false);
+	}
+}
+
+
+CString CodeView::SelectionExtend(bool stripEol /*= true*/)
+{
+	int selStart = GetCtrl().GetSelectionStart();
+	int selEnd = GetCtrl().GetSelectionEnd();
+	return RangeExtendAndGrab(selStart, selEnd, stripEol);
+}
+
+CString CodeView::RangeExtendAndGrab(int& selStart, int& selEnd, bool stripEol /*= true*/)
+{
+	CScintillaCtrl& Ctrl = GetCtrl();
+    if (selStart == selEnd)
+    {
+        //Empty range: Try to find a word
+		selStart = Ctrl.WordStartPosition(selStart, true);
+		selEnd = Ctrl.WordEndPosition(selEnd, true);
+    }
+
+    CString SelectedString;
+    if (selStart != selEnd)
+    {
+		Sci_TextRange TRange;
+		TRange.chrg.cpMin = selStart;
+		TRange.chrg.cpMax = selEnd;
+		char* Buffer = new char[abs(selEnd - selStart) + 1];
+		TRange.lpstrText = Buffer;
+        Ctrl.GetTextRange(&TRange);
+		SelectedString = Buffer;
+		delete[] Buffer;
+    }
+
+    if (stripEol)
+    {
+        // Change whole line selected but normally end of line characters not wanted.
+        // Remove possible terminating \r, \n, or \r\n.
+		size_t sellen = SelectedString.GetLength();
+        if (sellen >= 2 && (SelectedString[sellen - 2] == '\r' && SelectedString[sellen - 1] == '\n'))
+        {
+            SelectedString.Left(sellen - 2);
+        }
+        else if (sellen >= 1 && (SelectedString[sellen - 1] == '\r' || SelectedString[sellen - 1] == '\n'))
+        {
+            SelectedString.Left(sellen - 1);
+        }
+    }
+
+    return SelectedString;
+}
+
+
 void CodeView::GetReplaceAllTarget(long& s, long& e)
 {
 	CScintillaCtrl& c = GetCtrl();
@@ -1039,3 +1139,5 @@ bool CodeView::IsDirectionKey( UINT ch )
 {
 	return ch == VK_LEFT || ch == VK_RIGHT || ch == VK_UP || ch == VK_DOWN;
 }
+
+
