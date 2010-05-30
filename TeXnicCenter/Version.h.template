@@ -10,7 +10,7 @@
 
 #define TXC_VERSION_STRING   TXC_TO_STRING(TXC_MAJOR_VERSION) "." \
                              TXC_TO_STRING(TXC_MINOR_VERSION) \
-                             " Alpha 2 (build " TXC_TO_STRING(TXC_REVISION) ")"
+                             " Alpha 3 (build " TXC_TO_STRING(TXC_REVISION) ")"
 
 #define TXC_VERSION_SEQUENCE TXC_MAJOR_VERSION, \
                              TXC_MINOR_VERSION, \
