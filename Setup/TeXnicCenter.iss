@@ -1,5 +1,5 @@
 #define APP_NAME          "TeXnicCenter"
-#define APP_VERSION       "2.0 Alpha 2"
+#define APP_VERSION       "2.0 Alpha 3"
 #define APP_ID            "TeXnicCenter Alpha"
 #define REGNAME           "TeXnicCenterNT"
 #define APP_COPYRIGHT     "© 1999-2010 www.TeXnicCenter.org"
