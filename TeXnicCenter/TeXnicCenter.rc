@@ -2317,6 +2317,7 @@ BEGIN
         MENUITEM "Zeilen&nummern",              ID_VIEW_LINE_NUMBERS
         MENUITEM "&Leerräume",                  ID_VIEW_WHITE_SPACE
         MENUITEM "&Zeilenenden",                ID_VIEW_LINE_ENDING
+        MENUITEM "&Faltungsrand",               ID_VIEW_FOLDMARGIN
         MENUITEM "Zeilen&umbruch",              ID_VIEW_WORD_WRAP
         MENUITEM "&Gleicher Einzug bei Zeilenumbruch", ID_VIEW_WORD_WRAP_INDENT
         POPUP "Zeilenumbruchanzeige"
@@ -6372,6 +6373,7 @@ BEGIN
         MENUITEM "Line &Numbers",               ID_VIEW_LINE_NUMBERS
         MENUITEM "White &Spaces",               ID_VIEW_WHITE_SPACE
         MENUITEM "&End of Lines",               ID_VIEW_LINE_ENDING
+        MENUITEM "&Fold Margin",                ID_VIEW_FOLDMARGIN
         MENUITEM "&Word Wrap",                  ID_VIEW_WORD_WRAP
         MENUITEM "Same &Indent for Wrapped Lines", ID_VIEW_WORD_WRAP_INDENT
         POPUP "Word Wrap Indicators"

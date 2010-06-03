@@ -77,6 +77,8 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_WORDWRAPINDICATORS_START, &CodeView::OnUpdateViewWordWrapIndicators)
 	ON_COMMAND(ID_VIEW_WORDWRAPINDICATORS_END, &CodeView::OnViewWordWrapIndicatorsEnd)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_WORDWRAPINDICATORS_END, &CodeView::OnUpdateViewWordWrapIndicators)
+	ON_COMMAND(ID_VIEW_FOLDMARGIN, &CodeView::OnViewFoldMargin)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_FOLDMARGIN, &CodeView::OnUpdateViewFoldMargin)
 	ON_COMMAND(ID_VIEW_WHITE_SPACE, &CodeView::OnViewWhiteSpace)
 	ON_COMMAND(ID_VIEW_LINE_ENDING, &CodeView::OnViewLineEnding)	
 	ON_WM_SYSCOLORCHANGE()
@@ -149,7 +151,7 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//Get a shorthand
 	CScintillaCtrl& rCtrl = GetCtrl();
 
-	EnableFolding(); // CodeView::OnSettingsChanged depends on whether folding is enabled or not
+	EnableFolding(CConfiguration::GetInstance()->IsFoldingEnabled()); // CodeView::OnSettingsChanged depends on whether folding is enabled or not
 	OnSettingsChanged(); // Make sure derived class setup the settings such as fonts, lexers etc. first
 
 	rCtrl.SetViewWS(CConfiguration::GetInstance()->m_bViewWhitespaces ? SCWS_VISIBLEALWAYS : SCWS_INVISIBLE);
@@ -492,7 +494,7 @@ void CodeView::OnViewWordWrapIndicatorsStart()
 {
 	const int CurrentFlags = GetCtrl().GetWrapVisualFlags();
 	const int NewFlags = (CurrentFlags & 2) ? CurrentFlags - 2 : CurrentFlags + 2;
-	assert(NewFlags >= 0 && NewFlags <= 3);
+	ASSERT(NewFlags >= 0 && NewFlags <= 3);
 	
 	CConfiguration::GetInstance()->SetWordWrapIndicators(NewFlags);
 
@@ -508,7 +510,7 @@ void CodeView::OnViewWordWrapIndicatorsEnd()
 {
 	const int CurrentFlags = GetCtrl().GetWrapVisualFlags();
 	const int NewFlags = (CurrentFlags & 1) ? CurrentFlags - 1 : CurrentFlags + 1;
-	assert(NewFlags >= 0 && NewFlags <= 3);
+	ASSERT(NewFlags >= 0 && NewFlags <= 3);
 	
 	CConfiguration::GetInstance()->SetWordWrapIndicators(NewFlags);
 
@@ -533,8 +535,25 @@ void CodeView::OnUpdateViewWordWrapIndicators(CCmdUI *pCmdUI)
 			pCmdUI->SetCheck(CurrentFlags & 1);
 			break;
 		default:
-			assert(false);
+			ASSERT(false);
 	}
+}
+
+void CodeView::OnViewFoldMargin()
+{
+	const bool bNewFoldState = !IsFoldingEnabled();
+
+	EnableFolding(bNewFoldState);
+	OnSettingsChanged();
+
+	//TODO: When the window was opened without folding, the markers will not come back.
+
+	CConfiguration::GetInstance()->EnableFolding(bNewFoldState);
+}
+
+void CodeView::OnUpdateViewFoldMargin(CCmdUI *pCmdUI)
+{
+	pCmdUI->SetCheck(IsFoldingEnabled());
 }
 
 void CodeView::OnViewLineNumbers()
