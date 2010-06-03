@@ -71,6 +71,8 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_LINE_ENDING, &CodeView::OnUpdateViewShowLineEnding)
 	ON_COMMAND(ID_VIEW_WORD_WRAP, &CodeView::OnViewWordWrap)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_WORD_WRAP, &CodeView::OnUpdateViewWordWrap)
+	ON_COMMAND(ID_VIEW_WORD_WRAP_INDENT, &CodeView::OnViewWordWrapIndent)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_WORD_WRAP_INDENT, &CodeView::OnUpdateViewWordWrapIndent)
 	ON_COMMAND(ID_VIEW_WHITE_SPACE, &CodeView::OnViewWhiteSpace)
 	ON_COMMAND(ID_VIEW_LINE_ENDING, &CodeView::OnViewLineEnding)	
 	ON_WM_SYSCOLORCHANGE()
@@ -149,6 +151,9 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	rCtrl.SetViewWS(CConfiguration::GetInstance()->m_bViewWhitespaces ? SCWS_VISIBLEALWAYS : SCWS_INVISIBLE);
 	rCtrl.SetViewEOL(CConfiguration::GetInstance()->GetShowLineEnding());
 	rCtrl.SetWrapMode(CConfiguration::GetInstance()->IsWordWrapEnabled() ? SC_WRAP_WORD : SC_WRAP_NONE);
+	rCtrl.SetWrapIndentMode(CConfiguration::GetInstance()->IsWordWrapIndentEnabled() ? SC_WRAPINDENT_SAME : SC_WRAPINDENT_FIXED);
+	rCtrl.SetWrapVisualFlags(0);
+	rCtrl.SetWrapStartIndent(0); //That is our default; we do not put it in the UI.
 
 	UpdateLineNumberMargin();
 
@@ -464,6 +469,21 @@ void CodeView::OnViewWordWrap()
 		bind(&CodeView::GetCtrl,_1)));
 }
 
+void CodeView::OnViewWordWrapIndent()
+{
+	const bool indent = GetCtrl().GetWrapIndentMode() != SC_WRAPINDENT_SAME;
+	CConfiguration::GetInstance()->EnableWordWrapIndent(indent);
+
+	int mode = indent ? SC_WRAPINDENT_SAME : SC_WRAPINDENT_FIXED;
+
+	using namespace std::tr1;
+	using namespace placeholders;
+
+	// Chained update: call for every view GetCtrl().SetWrapMode(!visible,TRUE)
+	ForEveryView(bind(bind(&CScintillaCtrl::SetWrapIndentMode,_1,mode,TRUE),
+		bind(&CodeView::GetCtrl,_1)));
+}
+
 void CodeView::OnViewLineNumbers()
 {
 	CConfiguration::GetInstance()->m_bShowLineNumbers = 
@@ -566,6 +586,12 @@ CodeDocument* CodeView::GetDocument() const
 void CodeView::OnUpdateViewWordWrap(CCmdUI *pCmdUI)
 {
 	pCmdUI->SetCheck(GetCtrl().GetWrapMode() == SC_WRAP_WORD);
+}
+
+void CodeView::OnUpdateViewWordWrapIndent(CCmdUI *pCmdUI)
+{
+	pCmdUI->SetCheck(GetCtrl().GetWrapIndentMode() == SC_WRAPINDENT_SAME);
+	pCmdUI->Enable(GetCtrl().GetWrapMode() == SC_WRAP_WORD);
 }
 
 void CodeView::OnEditGoto()

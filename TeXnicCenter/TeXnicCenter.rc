@@ -99,6 +99,8 @@ BEGIN
     VK_F2,          ID_EDIT_GOTO_NEXT_BOOKMARK, VIRTKEY, NOINVERT
     VK_F2,          ID_EDIT_GOTO_PREV_BOOKMARK, VIRTKEY, SHIFT, NOINVERT
     "J",            ID_EDIT_JOIN_PARAGRAPH, VIRTKEY, CONTROL, NOINVERT
+    "U",            ID_EDIT_MAKELOWERCASE,  VIRTKEY, CONTROL, NOINVERT
+    "U",            ID_EDIT_MAKEUPPERCASE,  VIRTKEY, SHIFT, CONTROL, NOINVERT
     "N",            ID_EDIT_OUTSOURCE,      VIRTKEY, SHIFT, CONTROL, NOINVERT
     "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
     VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
@@ -153,8 +155,9 @@ BEGIN
     VK_OEM_3,       ID_VIEW_TOGGLELEFTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
     VK_OEM_5,       ID_VIEW_TOGGLELEFTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
     "2",            ID_VIEW_TOGGLERIGHTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
-    "U",            ID_EDIT_MAKELOWERCASE,  VIRTKEY, CONTROL, NOINVERT
-    "U",            ID_EDIT_MAKEUPPERCASE,  VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "8",            ID_VIEW_WHITE_SPACE,    VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "9",            ID_VIEW_LINE_ENDING,    VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "7",            ID_VIEW_LINE_NUMBERS,   VIRTKEY, SHIFT, CONTROL, NOINVERT
 END
 
 
@@ -2253,7 +2256,7 @@ BEGIN
         BEGIN
             MENUITEM "&Zeile löschen",              ID_EDIT_DELETE_LINE
             MENUITEM "&Paragraph aufteilen",        ID_EDIT_SPLIT_PARAGRAPH
-            MENUITEM "Paragraph &zusammenfügen",    ID_EDIT_JOIN_PARAGRAPH
+            MENUITEM "Paragraph zusammen&fügen",    ID_EDIT_JOIN_PARAGRAPH
             MENUITEM "In &Großbuchstaben umwandeln", ID_EDIT_MAKEUPPERCASE
             MENUITEM "In Kleinbuchstaben umw&andeln", ID_EDIT_MAKELOWERCASE
         END
@@ -2310,11 +2313,12 @@ BEGIN
         END
         MENUITEM "&Transparenz...",             ID_VIEW_TRANSPARENCY
         MENUITEM SEPARATOR
-        MENUITEM "&Indentation Guides",         ID_VIEW_INDENTATION_GUIDES
-        MENUITEM "&Leerraumanzeige",            ID_VIEW_WHITE_SPACE
-        MENUITEM "&Zeilenendeanzeige",          ID_VIEW_LINE_ENDING
-        MENUITEM "Zeilennummeranzeige",         ID_VIEW_LINE_NUMBERS
-        MENUITEM "Zeilenumbruch",               ID_VIEW_WORD_WRAP
+        MENUITEM "&Einzugshilfslinien",         ID_VIEW_INDENTATION_GUIDES
+        MENUITEM "Zeilen&nummern",              ID_VIEW_LINE_NUMBERS
+        MENUITEM "&Leerräume",                  ID_VIEW_WHITE_SPACE
+        MENUITEM "&Zeilenenden",                ID_VIEW_LINE_ENDING
+        MENUITEM "Zeilen&umbruch",              ID_VIEW_WORD_WRAP
+        MENUITEM "&Gleicher Einzug bei Zeilenumbruch", ID_VIEW_WORD_WRAP_INDENT
         MENUITEM SEPARATOR
         MENUITEM "Vollbild",                    ID_VIEW_FULLSCREEN
     END
@@ -6313,7 +6317,7 @@ BEGIN
         BEGIN
             MENUITEM "<placeholder>",               ID_VIEW_TOOLBAR
         END
-        POPUP "Tool &Windows"
+        POPUP "T&ool Windows"
         BEGIN
             MENUITEM "Outline",                     ID_VIEW_STRUCT_PANE
             MENUITEM "Literature",                  ID_VIEW_BIB_ENTRIES_PANE
@@ -6359,11 +6363,12 @@ BEGIN
         END
         MENUITEM "T&ransparency...",            ID_VIEW_TRANSPARENCY
         MENUITEM SEPARATOR
-        MENUITEM "Display End Lines",           ID_VIEW_LINE_ENDING
-        MENUITEM "Display &Indentation Guides", ID_VIEW_INDENTATION_GUIDES
-        MENUITEM "Display Line Numbers",        ID_VIEW_LINE_NUMBERS
-        MENUITEM "Display White Spaces",        ID_VIEW_WHITE_SPACE
+        MENUITEM "Indentation &Guides",         ID_VIEW_INDENTATION_GUIDES
+        MENUITEM "Line &Numbers",               ID_VIEW_LINE_NUMBERS
+        MENUITEM "White &Spaces",               ID_VIEW_WHITE_SPACE
+        MENUITEM "&End of Lines",               ID_VIEW_LINE_ENDING
         MENUITEM "&Word Wrap",                  ID_VIEW_WORD_WRAP
+        MENUITEM "Same &Indent for Wrapped Lines", ID_VIEW_WORD_WRAP_INDENT
         MENUITEM SEPARATOR
         MENUITEM "Full Screen",                 ID_VIEW_FULLSCREEN
     END
