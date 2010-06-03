@@ -67,6 +67,9 @@ class CConfiguration
 	/** 0 for no indicators, 1 for indicators at the end, 2 for indicators at the beginning, and 3 for both */
 	int word_wrap_indicators_;
 
+	///Wether or not folding is enabled.
+	bool fold_;
+
 	bool show_line_below_fold_;
 	bool show_line_below_no_fold_;
 	bool show_line_above_fold_;	
@@ -102,6 +105,9 @@ public:
 
 	int GetWordWrapIndicators() const;
 	void SetWordWrapIndicators( int val = 0 );
+
+	bool IsFoldingEnabled() const;
+	void EnableFolding(bool val = true);
 
 	bool GetShowLineBelowFold() const;
 	void SetShowLineBelowFold(bool show = true);

@@ -54,6 +54,7 @@ CConfiguration::CConfiguration()
 , word_wrap_(true)
 , word_wrap_indent_(false)
 , word_wrap_indicators_(0)
+, fold_(false)
 , show_line_below_fold_(false)
 , show_line_below_no_fold_(false)
 , show_line_above_fold_(false)
@@ -169,6 +170,7 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	SerializeProfileBool(strSection,_T("EditorWordWrapIndent"),word_wrap_indent_,direction,0);
 	SerializeProfileInt(strSection,_T("EditorWordWrapIndicators"),&word_wrap_indicators_,direction,0);
 
+	SerializeProfileBool(strSection,_T("EditorFold"),fold_,direction,0);
 	SerializeProfileBool(strSection,_T("EditorShowLineBelowFold"),show_line_below_fold_,direction,0);
 	SerializeProfileBool(strSection,_T("EditorShowLineBelowNoFold"),show_line_below_no_fold_,direction,0);
 	SerializeProfileBool(strSection,_T("EditorShowLineAboveFold"),show_line_above_fold_,direction,0);
@@ -609,6 +611,16 @@ int CConfiguration::GetWordWrapIndicators() const
 void CConfiguration::SetWordWrapIndicators( int val /*= 0*/ )
 {
 	word_wrap_indicators_ = val;
+}
+
+bool CConfiguration::IsFoldingEnabled() const
+{
+	return fold_;
+}
+
+void CConfiguration::EnableFolding(bool val /*= true*/)
+{
+	fold_ = val;
 }
 
 bool CConfiguration::GetShowLineBelowFold() const
