@@ -11,18 +11,14 @@
 #ifndef SCINTILLA_H
 #define SCINTILLA_H
 
-#if LCCWIN
-typedef BOOL bool;
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #if defined(_WIN32)
 /* Return false on failure: */
-bool Scintilla_RegisterClasses(void *hInstance);
-bool Scintilla_ReleaseResources();
+int Scintilla_RegisterClasses(void *hInstance);
+int Scintilla_ReleaseResources();
 #endif
 int Scintilla_LinkLexers();
 
@@ -922,9 +918,9 @@ struct Sci_Rectangle {
 struct Sci_RangeToFormat {
 	Sci_SurfaceID hdc;
 	Sci_SurfaceID hdcTarget;
-	Sci_Rectangle rc;
-	Sci_Rectangle rcPage;
-	Sci_CharacterRange chrg;
+	struct Sci_Rectangle rc;
+	struct Sci_Rectangle rcPage;
+	struct Sci_CharacterRange chrg;
 };
 
 #define RangeToFormat Sci_RangeToFormat
