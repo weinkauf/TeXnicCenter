@@ -82,6 +82,9 @@ protected:
 	afx_msg void OnUpdateViewWordWrap(CCmdUI *pCmdUI);
 	afx_msg void OnViewWordWrapIndent();
 	afx_msg void OnUpdateViewWordWrapIndent(CCmdUI *pCmdUI);
+	afx_msg void OnViewWordWrapIndicatorsStart();
+	afx_msg void OnViewWordWrapIndicatorsEnd();
+	afx_msg void OnUpdateViewWordWrapIndicators(CCmdUI *pCmdUI);
 	void OnUpdatePositionIndicator(CCmdUI* pCmdUI);
 	void OnUpdateEncodingIndicator(CCmdUI* pCmdUI);
 	void OnUpdateEOLModeIndicator(CCmdUI* pCmdUI);

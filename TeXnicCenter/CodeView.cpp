@@ -73,6 +73,10 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_WORD_WRAP, &CodeView::OnUpdateViewWordWrap)
 	ON_COMMAND(ID_VIEW_WORD_WRAP_INDENT, &CodeView::OnViewWordWrapIndent)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_WORD_WRAP_INDENT, &CodeView::OnUpdateViewWordWrapIndent)
+	ON_COMMAND(ID_VIEW_WORDWRAPINDICATORS_START, &CodeView::OnViewWordWrapIndicatorsStart)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_WORDWRAPINDICATORS_START, &CodeView::OnUpdateViewWordWrapIndicators)
+	ON_COMMAND(ID_VIEW_WORDWRAPINDICATORS_END, &CodeView::OnViewWordWrapIndicatorsEnd)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_WORDWRAPINDICATORS_END, &CodeView::OnUpdateViewWordWrapIndicators)
 	ON_COMMAND(ID_VIEW_WHITE_SPACE, &CodeView::OnViewWhiteSpace)
 	ON_COMMAND(ID_VIEW_LINE_ENDING, &CodeView::OnViewLineEnding)	
 	ON_WM_SYSCOLORCHANGE()
@@ -152,7 +156,7 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	rCtrl.SetViewEOL(CConfiguration::GetInstance()->GetShowLineEnding());
 	rCtrl.SetWrapMode(CConfiguration::GetInstance()->IsWordWrapEnabled() ? SC_WRAP_WORD : SC_WRAP_NONE);
 	rCtrl.SetWrapIndentMode(CConfiguration::GetInstance()->IsWordWrapIndentEnabled() ? SC_WRAPINDENT_SAME : SC_WRAPINDENT_FIXED);
-	rCtrl.SetWrapVisualFlags(0);
+	rCtrl.SetWrapVisualFlags(CConfiguration::GetInstance()->GetWordWrapIndicators());
 	rCtrl.SetWrapStartIndent(0); //That is our default; we do not put it in the UI.
 
 	UpdateLineNumberMargin();
@@ -464,7 +468,7 @@ void CodeView::OnViewWordWrap()
 	using namespace std::tr1;
 	using namespace placeholders;
 
-	// Chained update: call for every view GetCtrl().SetWrapMode(!visible,TRUE)
+	// Chained update: call every view
 	ForEveryView(bind(bind(&CScintillaCtrl::SetWrapMode,_1,mode,TRUE),
 		bind(&CodeView::GetCtrl,_1)));
 }
@@ -479,9 +483,58 @@ void CodeView::OnViewWordWrapIndent()
 	using namespace std::tr1;
 	using namespace placeholders;
 
-	// Chained update: call for every view GetCtrl().SetWrapMode(!visible,TRUE)
+	// Chained update: call every view
 	ForEveryView(bind(bind(&CScintillaCtrl::SetWrapIndentMode,_1,mode,TRUE),
 		bind(&CodeView::GetCtrl,_1)));
+}
+
+void CodeView::OnViewWordWrapIndicatorsStart()
+{
+	const int CurrentFlags = GetCtrl().GetWrapVisualFlags();
+	const int NewFlags = (CurrentFlags & 2) ? CurrentFlags - 2 : CurrentFlags + 2;
+	assert(NewFlags >= 0 && NewFlags <= 3);
+	
+	CConfiguration::GetInstance()->SetWordWrapIndicators(NewFlags);
+
+	using namespace std::tr1;
+	using namespace placeholders;
+
+	// Chained update: call every view
+	ForEveryView(bind(bind(&CScintillaCtrl::SetWrapVisualFlags,_1,NewFlags,TRUE),
+		bind(&CodeView::GetCtrl,_1)));
+}
+
+void CodeView::OnViewWordWrapIndicatorsEnd()
+{
+	const int CurrentFlags = GetCtrl().GetWrapVisualFlags();
+	const int NewFlags = (CurrentFlags & 1) ? CurrentFlags - 1 : CurrentFlags + 1;
+	assert(NewFlags >= 0 && NewFlags <= 3);
+	
+	CConfiguration::GetInstance()->SetWordWrapIndicators(NewFlags);
+
+	using namespace std::tr1;
+	using namespace placeholders;
+
+	// Chained update: call every view
+	ForEveryView(bind(bind(&CScintillaCtrl::SetWrapVisualFlags,_1,NewFlags,TRUE),
+		bind(&CodeView::GetCtrl,_1)));
+}
+
+void CodeView::OnUpdateViewWordWrapIndicators(CCmdUI *pCmdUI)
+{
+	const int CurrentFlags = GetCtrl().GetWrapVisualFlags();
+
+	switch (pCmdUI->m_nID)
+	{
+		case ID_VIEW_WORDWRAPINDICATORS_START:
+			pCmdUI->SetCheck(CurrentFlags >= 2);
+			break;
+		case ID_VIEW_WORDWRAPINDICATORS_END:
+			pCmdUI->SetCheck(CurrentFlags & 1);
+			break;
+		default:
+			assert(false);
+	}
 }
 
 void CodeView::OnViewLineNumbers()
