@@ -1446,6 +1446,8 @@
 #define ID_EDIT_MAKELOWERCASE           40660
 #define ID_BEARBEITEN_ERWEITERT         40661
 #define ID_ERWEITERT_D                  40662
+#define ID_VIEW_INDENTWRAPPEDLINES      40665
+#define ID_VIEW_WORD_WRAP_INDENT        40666
 #define IDR_BOOKMARK_VIEW               57672
 #define IDR_ERROR_VIEW                  57673
 #define IDR_MAINFRAMEOLD                57675
@@ -1457,7 +1459,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57678
-#define _APS_NEXT_COMMAND_VALUE         40665
+#define _APS_NEXT_COMMAND_VALUE         40670
 #define _APS_NEXT_CONTROL_VALUE         8665
 #define _APS_NEXT_SYMED_VALUE           57773
 #endif
