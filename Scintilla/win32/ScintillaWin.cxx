@@ -268,12 +268,6 @@ public:
 	/// Implement important part of IDataObject
 	STDMETHODIMP GetData(FORMATETC *pFEIn, STGMEDIUM *pSTM);
 
-	// External Lexers
-#ifdef SCI_LEXER
-	void SetLexerLanguage(const char *languageName);
-	void SetLexer(uptr_t wParam);
-#endif
-
 	static bool Register(HINSTANCE hInstance_);
 	static bool Unregister();
 
@@ -1381,11 +1375,11 @@ std::string ScintillaWin::CaseMapString(const std::string &s, int caseMapping) {
 
 	UINT cpDoc = CodePageOfDocument();
 
-	unsigned int lengthUTF16 = ::MultiByteToWideChar(cpDoc, 0, s.c_str(), s.size(), NULL, NULL);
+	unsigned int lengthUTF16 = ::MultiByteToWideChar(cpDoc, 0, s.c_str(), s.size(), NULL, 0);
 	if (lengthUTF16 == 0)	// Failed to convert
 		return s;
 
-	DWORD mapFlags = LCMAP_LINGUISTIC_CASING | 
+	DWORD mapFlags = LCMAP_LINGUISTIC_CASING |
 		((caseMapping == cmUpper) ? LCMAP_UPPERCASE : LCMAP_LOWERCASE);
 
 	// Many conversions performed by search function are short so optimize this case.
@@ -1402,16 +1396,16 @@ std::string ScintillaWin::CaseMapString(const std::string &s, int caseMapping) {
 		int charsConverted = ::LCMapStringW(LOCALE_SYSTEM_DEFAULT, mapFlags,
 			&vwcText[0], lengthUTF16, NULL, 0);
 		std::vector<wchar_t> vwcConverted(charsConverted);
-		::LCMapStringW(LOCALE_SYSTEM_DEFAULT, mapFlags, 
+		::LCMapStringW(LOCALE_SYSTEM_DEFAULT, mapFlags,
 			&vwcText[0], lengthUTF16, &vwcConverted[0], charsConverted);
 
 		// Change back to document encoding
 		unsigned int lengthConverted = ::WideCharToMultiByte(cpDoc, 0,
-			&vwcConverted[0], vwcConverted.size(), 
+			&vwcConverted[0], vwcConverted.size(),
 			NULL, 0, NULL, 0);
 		std::vector<char> vcConverted(lengthConverted);
-		::WideCharToMultiByte(cpDoc, 0, 
-			&vwcConverted[0], vwcConverted.size(), 
+		::WideCharToMultiByte(cpDoc, 0,
+			&vwcConverted[0], vwcConverted.size(),
 			&vcConverted[0], vcConverted.size(), NULL, 0);
 
 		return std::string(&vcConverted[0], vcConverted.size());
@@ -1434,12 +1428,12 @@ std::string ScintillaWin::CaseMapString(const std::string &s, int caseMapping) {
 
 		// Change back to document encoding
 		unsigned int lengthConverted = ::WideCharToMultiByte(cpDoc, 0,
-			vwcConverted, charsConverted, 
+			vwcConverted, charsConverted,
 			NULL, 0, NULL, 0);
 		// Each UTF-16 code unit may need up to 3 bytes in UTF-8
 		char vcConverted[shortSize * 3 * 3];
-		::WideCharToMultiByte(cpDoc, 0, 
-			vwcConverted, charsConverted, 
+		::WideCharToMultiByte(cpDoc, 0,
+			vwcConverted, charsConverted,
 			vcConverted, lengthConverted, NULL, 0);
 
 		return std::string(vcConverted, lengthConverted);
@@ -1502,7 +1496,7 @@ public:
 	void SetClip(UINT uFormat) {
 		::SetClipboardData(uFormat, Unlock());
 	}
-	operator bool() {
+	operator bool() const {
 		return ptr != 0;
 	}
 	SIZE_T Size() {
@@ -1646,35 +1640,6 @@ void ScintillaWin::AddToPopUp(const char *label, int cmd, bool enabled) {
 void ScintillaWin::ClaimSelection() {
 	// Windows does not have a primary selection
 }
-
-#ifdef SCI_LEXER
-
-/*
-
-  Initial Windows-Only implementation of the external lexer
-  system in ScintillaWin class. Intention is to create a LexerModule
-  subclass (?) to have lex and fold methods which will call out to their
-  relevant DLLs...
-
-*/
-
-void ScintillaWin::SetLexer(uptr_t wParam) {
-	lexLanguage = wParam;
-	lexCurrent = LexerModule::Find(lexLanguage);
-	if (!lexCurrent)
-		lexCurrent = LexerModule::Find(SCLEX_NULL);
-}
-
-void ScintillaWin::SetLexerLanguage(const char *languageName) {
-	lexLanguage = SCLEX_CONTAINER;
-	lexCurrent = LexerModule::Find(languageName);
-	if (!lexCurrent)
-		lexCurrent = LexerModule::Find(SCLEX_NULL);
-	if (lexCurrent)
-		lexLanguage = lexCurrent->GetLanguage();
-}
-
-#endif
 
 /// Implement IUnknown
 
@@ -2412,6 +2377,16 @@ STDMETHODIMP ScintillaWin::Drop(LPDATAOBJECT pIDataSource, DWORD grfKeyState,
 			}
 		}
 
+		if (data && convertPastes) {
+			// Convert line endings of the drop into our local line-endings mode
+			int len = strlen(data);
+			char *convertedText = Document::TransformLineEnds(&len, data, len, pdoc->eolMode);
+			if (dataAllocated)
+				delete []data;
+			data = convertedText;
+			dataAllocated = true;
+		}
+
 		if (!data) {
 			//Platform::DebugPrintf("Bad data format: 0x%x\n", hres);
 			return hr;
@@ -2717,7 +2692,7 @@ sptr_t PASCAL ScintillaWin::SWndProc(
 
 // This function is externally visible so it can be called from container when building statically.
 // Must be called once only.
-bool Scintilla_RegisterClasses(void *hInstance) {
+int Scintilla_RegisterClasses(void *hInstance) {
 	Platform_Initialise(hInstance);
 	bool result = ScintillaWin::Register(reinterpret_cast<HINSTANCE>(hInstance));
 #ifdef SCI_LEXER
@@ -2727,7 +2702,7 @@ bool Scintilla_RegisterClasses(void *hInstance) {
 }
 
 // This function is externally visible so it can be called from container when building statically.
-bool Scintilla_ReleaseResources() {
+int Scintilla_ReleaseResources() {
 	bool result = ScintillaWin::Unregister();
 	Platform_Finalise();
 	return result;
