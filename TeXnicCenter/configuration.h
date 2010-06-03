@@ -64,6 +64,9 @@ class CConfiguration
 	/** TRUE, if wrapped lines are indented, FALSE otherwise */
 	bool word_wrap_indent_;
 
+	/** 0 for no indicators, 1 for indicators at the end, 2 for indicators at the beginning, and 3 for both */
+	int word_wrap_indicators_;
+
 	bool show_line_below_fold_;
 	bool show_line_below_no_fold_;
 	bool show_line_above_fold_;	
@@ -96,6 +99,9 @@ public:
 
 	bool IsWordWrapIndentEnabled() const;
 	void EnableWordWrapIndent(bool val = true);
+
+	int GetWordWrapIndicators() const;
+	void SetWordWrapIndicators( int val = 0 );
 
 	bool GetShowLineBelowFold() const;
 	void SetShowLineBelowFold(bool show = true);

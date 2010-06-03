@@ -2319,6 +2319,11 @@ BEGIN
         MENUITEM "&Zeilenenden",                ID_VIEW_LINE_ENDING
         MENUITEM "Zeilen&umbruch",              ID_VIEW_WORD_WRAP
         MENUITEM "&Gleicher Einzug bei Zeilenumbruch", ID_VIEW_WORD_WRAP_INDENT
+        POPUP "Zeilenumbruchanzeige"
+        BEGIN
+            MENUITEM "Am &Anfang einer Zeile",      ID_VIEW_WORDWRAPINDICATORS_START
+            MENUITEM "Am &Ende einer Zeile",        ID_VIEW_WORDWRAPINDICATORS_END
+        END
         MENUITEM SEPARATOR
         MENUITEM "Vollbild",                    ID_VIEW_FULLSCREEN
     END
@@ -6369,6 +6374,11 @@ BEGIN
         MENUITEM "&End of Lines",               ID_VIEW_LINE_ENDING
         MENUITEM "&Word Wrap",                  ID_VIEW_WORD_WRAP
         MENUITEM "Same &Indent for Wrapped Lines", ID_VIEW_WORD_WRAP_INDENT
+        POPUP "Word Wrap Indicators"
+        BEGIN
+            MENUITEM "At the &Start of a Line",     ID_VIEW_WORDWRAPINDICATORS_START
+            MENUITEM "At the &End of a Line",       ID_VIEW_WORDWRAPINDICATORS_END
+        END
         MENUITEM SEPARATOR
         MENUITEM "Full Screen",                 ID_VIEW_FULLSCREEN
     END
