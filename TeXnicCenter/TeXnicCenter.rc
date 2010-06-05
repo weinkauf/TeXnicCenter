@@ -114,7 +114,7 @@ BEGIN
     "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
     "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
-    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL, NOINVERT
+    "P",            ID_EDIT_SELECTPARAGRAPH, VIRTKEY, CONTROL, NOINVERT
     "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
     "S",            ID_FILE_SAVE_ALL,       VIRTKEY, SHIFT, CONTROL, NOINVERT
     "E",            ID_FORMAT_EMPH,         VIRTKEY, CONTROL, NOINVERT
@@ -150,14 +150,14 @@ BEGIN
     "B",            ID_VIEW_BUILD_PANE,     VIRTKEY, SHIFT, CONTROL, NOINVERT
     "R",            ID_VIEW_ERROR_LIST_PANE, VIRTKEY, SHIFT, CONTROL, NOINVERT
     "F",            ID_VIEW_FILES_PANE,     VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "9",            ID_VIEW_LINE_ENDING,    VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "7",            ID_VIEW_LINE_NUMBERS,   VIRTKEY, SHIFT, CONTROL, NOINVERT
     "O",            ID_VIEW_STRUCT_PANE,    VIRTKEY, SHIFT, CONTROL, NOINVERT
     "1",            ID_VIEW_TOGGLEBOTTOMDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
     VK_OEM_3,       ID_VIEW_TOGGLELEFTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
     VK_OEM_5,       ID_VIEW_TOGGLELEFTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
     "2",            ID_VIEW_TOGGLERIGHTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
     "8",            ID_VIEW_WHITE_SPACE,    VIRTKEY, SHIFT, CONTROL, NOINVERT
-    "9",            ID_VIEW_LINE_ENDING,    VIRTKEY, SHIFT, CONTROL, NOINVERT
-    "7",            ID_VIEW_LINE_NUMBERS,   VIRTKEY, SHIFT, CONTROL, NOINVERT
 END
 
 
@@ -2243,6 +2243,7 @@ BEGIN
         MENUITEM "&Einfügen",                   ID_EDIT_PASTE
         MENUITEM SEPARATOR
         MENUITEM "Alles &markieren",            ID_EDIT_SELECT_ALL
+        MENUITEM "Ab&satz markieren",           ID_EDIT_SELECTPARAGRAPH
         MENUITEM "Klammerbl&ock markieren",     ID_EDIT_SEL_BIGGER_BLOCK
         MENUITEM SEPARATOR
         MENUITEM "&Blockkommentar einfügen",    ID_EDIT_BLOCKCOMMENT_INSERT
@@ -2250,7 +2251,7 @@ BEGIN
         MENUITEM "Blockkommentar &wechseln",    ID_EDIT_BLOCKCOMMENT_TOOGLE
         MENUITEM SEPARATOR
         MENUITEM "Wort &vervollständigen",      ID_QUERY_COMPLETION
-        MENUITEM "Text auslagern...",           ID_EDIT_OUTSOURCE
+        MENUITEM "&Text auslagern...",          ID_EDIT_OUTSOURCE
         MENUITEM SEPARATOR
         POPUP "Erweitert"
         BEGIN
@@ -4865,6 +4866,11 @@ BEGIN
     ID_WINDOW_RECENTLY_USED "Aktiviert das zuletzt benutze Fenster"
 END
 
+STRINGTABLE 
+BEGIN
+    ID_EDIT_SELECTPARAGRAPH "Markiert den aktuellen Absatz\nAbsatz markieren"
+END
+
 #endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -6299,6 +6305,7 @@ BEGIN
         MENUITEM "&Paste",                      ID_EDIT_PASTE
         MENUITEM SEPARATOR
         MENUITEM "Select &All",                 ID_EDIT_SELECT_ALL
+        MENUITEM "S&elect Paragraph",           ID_EDIT_SELECTPARAGRAPH
         MENUITEM "&Select Brace Block",         ID_EDIT_SEL_BIGGER_BLOCK
         MENUITEM SEPARATOR
         MENUITEM "&Insert Block Comment",       ID_EDIT_BLOCKCOMMENT_INSERT
@@ -8699,6 +8706,7 @@ END
 
 STRINGTABLE 
 BEGIN
+    ID_VIEW_LINE_ENDING     "Shows or hides line endings.\nToggle Line Ending View"
     ID_VIEW_WHITE_SPACE     "Shows or hides white spaces\nToggle White Space View"
 END
 
@@ -8742,6 +8750,7 @@ END
 
 STRINGTABLE 
 BEGIN
+    ID_VIEW_LINE_NUMBERS    "Shows or hides line numbers\nToggle Line Number View"
     ID_REGEX_ANYCHAR        "."
     ID_REGEX_CHARSET        "[\001]"
     ID_REGEX_NOTCHARSET     "[^\001]"
@@ -8900,6 +8909,11 @@ END
 STRINGTABLE 
 BEGIN
     ID_VIEW_PARSE_PANE      "Shows or hides the output of parsing the project.\nParse"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_SELECTPARAGRAPH "Selects the current paragraph\nSelect Paragraph"
 END
 
 #endif    // English (U.S.) resources
