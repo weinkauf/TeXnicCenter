@@ -1150,17 +1150,20 @@ const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos
 	const int UpPos = Ctrl.PositionFromLine(UpLine);
 
 
-	//Find the end of the paragraph
-	do
+	//Find the end of the paragraph; if the start line does not have a comment.
+	if (CommentStartInStartLine < 0)
 	{
-		DownLine++;
-	}
-	while (DownLine < NumLines && !LineContainsOnlyWhiteSpace(DownLine) && !LineContainsComment(DownLine));
+		do
+		{
+			DownLine++;
+		}
+		while (DownLine < NumLines && !LineContainsOnlyWhiteSpace(DownLine) && !LineContainsComment(DownLine));
 
-	//Current DownLine did not match, i.e., contains whites or comments or is above maximal num
-	if (DownLine >= NumLines || LineContainsOnlyWhiteSpace(DownLine))
-	{
-		DownLine--;
+		//Current DownLine did not match, i.e., contains whites or comments or is above maximal num
+		if (DownLine >= NumLines || LineContainsOnlyWhiteSpace(DownLine))
+		{
+			DownLine--;
+		}
 	}
 
 	long DownPos = Ctrl.GetLineEndPosition(DownLine);
