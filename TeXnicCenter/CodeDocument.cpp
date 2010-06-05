@@ -1082,62 +1082,122 @@ BOOL CodeDocument::DoSaveModified()
 	return result;
 }
 
-const std::pair<int,int> CodeDocument::GetParagraphRange( int start_line )
+bool CodeDocument::LineContainsOnlyWhiteSpace(const int Line) const
 {
-	CScintillaCtrl& c = GetView()->GetCtrl();
-	const int lines = c.GetLineCount();
+	CScintillaCtrl& Ctrl = GetView()->GetCtrl();
 
-	bool stop = false;
-	int i = start_line;
-	int k = start_line;
-	int skipped = 0;
-	long pos, line_start_pos;
+	if (Line < 0 || Line >= Ctrl.GetLineCount()) return false;
 
-	// Search for the first possibly empty line
-	while (k > 0 && !stop) {
-		if (static_cast<CodeView*>(GetView())->GetLineLength(k) == 0 || 
-			c.LineFromPosition(pos = c.WordStartPosition(line_start_pos = c.PositionFromLine(k),FALSE)) + 1 < 
-			c.LineFromPosition(line_start_pos) ||
-			pos >= line_start_pos && pos < c.PositionFromLine(start_line)) {
-				// Line is empty
-				stop = true;
-		}
-		else {
-			--k; ++skipped;
-		}
+	long CurrentPosition = Ctrl.PositionFromLine(Line);
+	long EndPosition = Ctrl.GetLineEndPosition(Line);
+	for(;CurrentPosition<EndPosition;CurrentPosition++)
+	{
+		int Character = Ctrl.GetCharAt(CurrentPosition);
+		if (Character != _T(' ') && Character != _T('\t')) return false;
 	}
 
-	stop = false;
+	return true;
+}
 
-	// Search for the last possibly empty line
-	while (i < lines && !stop) {
-		if (static_cast<CodeView*>(GetView())->GetLineLength(i) == 0 || 
-			(pos = c.WordStartPosition(line_start_pos = c.PositionFromLine(i),FALSE)) >= c.GetLineEndPosition(i) ||
-			pos >= line_start_pos && pos < c.PositionFromLine(start_line)) // Line is empty
-			stop = true;
-		else
-			++i;
+bool CodeDocument::LineContainsComment(const int Line) const
+{
+	return (LineFindCommentStartPos(Line) >= 0);
+}
+
+long CodeDocument::LineFindCommentStartPos(const int Line) const
+{
+	CScintillaCtrl& Ctrl = GetView()->GetCtrl();
+
+	if (Line < 0 || Line >= Ctrl.GetLineCount()) return -1;
+
+	long CurrentPosition = Ctrl.PositionFromLine(Line);
+	long EndPosition = Ctrl.GetLineEndPosition(Line);
+	for(;CurrentPosition<EndPosition;CurrentPosition++)
+	{
+		if (Ctrl.GetStyleAt(CurrentPosition) == SCE_TEX_COMMENT) return CurrentPosition;
 	}
 
-	// i points to the possibly empty line
-	// if the is empty, point to the previous one
-	if (i > start_line && i < lines)
-		--i;
+	return -1;
+}
 
-	return std::make_pair(k,i);
+const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos) const
+{
+	CScintillaCtrl& Ctrl = GetView()->GetCtrl();
+	const int NumLines = Ctrl.GetLineCount();
+	const int StartLine = Ctrl.LineFromPosition(StartPos);
+
+	if (LineContainsOnlyWhiteSpace(StartLine)) return std::make_pair(StartPos, StartPos);
+
+	const int CommentStartInStartLine = LineFindCommentStartPos(StartLine);
+	if (CommentStartInStartLine >= 0 && CommentStartInStartLine <= StartPos)
+	{
+		//We do not treat comments as parts of a paragraph
+		return std::make_pair(StartPos, StartPos);
+	}
+
+	int UpLine = StartLine;
+	int DownLine = StartLine;
+
+	//Find the start of the paragraph
+	do
+	{
+		UpLine--;
+	}
+	while (UpLine >= 0 && !LineContainsOnlyWhiteSpace(UpLine) && !LineContainsComment(UpLine));
+
+	//Current UpLine did not match, i.e., contains whites or comments or is below zero
+	UpLine++;
+	const int UpPos = Ctrl.PositionFromLine(UpLine);
+
+
+	//Find the end of the paragraph
+	do
+	{
+		DownLine++;
+	}
+	while (DownLine < NumLines && !LineContainsOnlyWhiteSpace(DownLine) && !LineContainsComment(DownLine));
+
+	//Current DownLine did not match, i.e., contains whites or comments or is above maximal num
+	if (DownLine >= NumLines || LineContainsOnlyWhiteSpace(DownLine))
+	{
+		DownLine--;
+	}
+
+	long DownPos = Ctrl.GetLineEndPosition(DownLine);
+	const long CommentStartInLastLine = LineFindCommentStartPos(DownLine);
+	if (CommentStartInLastLine >= 0)
+	{
+		DownPos = CommentStartInLastLine;
+	}
+
+	return std::make_pair(UpPos, DownPos);
 }
 
 void CodeDocument::OnEditSplitParagraph()
 {
 	CScintillaCtrl& c = GetView()->GetCtrl();
 
-	const std::pair<int,int> range = GetParagraphRange(static_cast<CodeView*>(GetView())->GetCurrentLine());
+	std::pair<long,long> Range;
+	Range.first = c.GetSelectionStart();
+	Range.second = c.GetSelectionEnd();
 
-	const int start_line = range.first;
-	const int end_line = range.second;
+	//Nothing selected by the user?
+	if (Range.first == Range.second)
+	{
+		Range = GetParagraphRangePos(c.GetCurrentPos());
+		//Anything useful from the automatic detection?
+		if (Range.first == c.GetCurrentPos() && Range.second == c.GetCurrentPos()) return;
+	}
 
-	c.SetTargetStart(c.PositionFromLine(start_line));
-	c.SetTargetEnd(c.PositionFromLine(end_line));
+	//Is our end in the middle of a line?
+	if (c.GetLineEndPosition(c.LineFromPosition(Range.second)) != Range.second)
+	{
+		//Insert a line break
+		c.InsertText(Range.second, _T("\n"));
+	}
+
+	c.SetTargetStart(Range.first);
+	c.SetTargetEnd(Range.second);
 
 	const int width = c.TextWidth(STYLE_DEFAULT,"_") * CConfiguration::GetInstance()->m_nFixedColumnWrap;
 	c.LinesSplit(width);
@@ -1147,13 +1207,20 @@ void CodeDocument::OnEditJoinParagraph()
 {
 	CScintillaCtrl& c = GetView()->GetCtrl();
 
-	const std::pair<int,int> range = GetParagraphRange(static_cast<CodeView*>(GetView())->GetCurrentLine());
+	std::pair<long,long> Range;
+	Range.first = c.GetSelectionStart();
+	Range.second = c.GetSelectionEnd();
 
-	const int start_line = range.first;
-	const int end_line = range.second;
+	//Nothing selected by the user?
+	if (Range.first == Range.second)
+	{
+		Range = GetParagraphRangePos(c.GetCurrentPos());
+		//Anything useful from the automatic detection?
+		if (Range.first == c.GetCurrentPos() && Range.second == c.GetCurrentPos()) return;
+	}
 
-	c.SetTargetStart(c.PositionFromLine(start_line));
-	c.SetTargetEnd(c.PositionFromLine(end_line));
+	c.SetTargetStart(Range.first);
+	c.SetTargetEnd(Range.second);
 
 	c.LinesJoin();
 }

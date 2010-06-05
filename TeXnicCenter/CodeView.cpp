@@ -100,6 +100,7 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_COMMAND(ID_VIEW_INDENTATION_GUIDES, &CodeView::OnViewIndentationGuides)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_INDENTATION_GUIDES, &CodeView::OnUpdateViewIndentationGuides)
 	ON_COMMAND(ID_EDIT_SEL_BIGGER_BLOCK, &CodeView::OnEditSelBiggerBlock)
+	ON_COMMAND(ID_EDIT_SELECTPARAGRAPH, &CodeView::OnEditSelParagraph)
 END_MESSAGE_MAP()
 
 
@@ -1245,6 +1246,21 @@ void CodeView::OnEditSelBiggerBlock()
 		// to this function, i.e., Ctrl-M.
 		ctrl.LineUp();
 		ctrl.LineDown();
+	}
+}
+
+
+void CodeView::OnEditSelParagraph()
+{
+	CodeDocument* pDoc = GetDocument();
+	if (pDoc)
+	{
+		CScintillaCtrl& c = GetCtrl();
+		const std::pair<long,long> range = pDoc->GetParagraphRangePos(c.GetCurrentPos());
+
+		//Select full lines
+		c.SetSelectionStart(c.PositionFromLine(c.LineFromPosition(range.first)));
+		c.SetSelectionEnd(c.GetLineEndPosition(c.LineFromPosition(range.second)));
 	}
 }
 

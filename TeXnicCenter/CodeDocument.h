@@ -181,9 +181,18 @@ public:
 	/// Enables or disabled the usage of a BOM for Unicode text documents.
 	void SetUseBOM(bool use = true);
 
-	/// Returns a tuple containing the first and last line
-	/// of the paragraph the start_line parameter points to
-	const std::pair<int,int> GetParagraphRange(int start_line);
+	/// Returns a tuple containing the first and last pos
+	/// of the paragraph starting from the current position.
+	const std::pair<long,long> GetParagraphRangePos(const int StartPos) const;
+
+	///Returns true if a line contains only white space
+	bool LineContainsOnlyWhiteSpace(const int Line) const;
+
+	///Returns true if a line contains a comment. It might also contain other parts.
+	bool LineContainsComment(const int Line) const;
+
+	///Returns the position in a line where a comment starts.`
+	long LineFindCommentStartPos(const int Line) const;
 
 	/// Returns a collection of folding points.
 	const FoldingPointContainerType GetFoldingPoints(bool contracted = false);

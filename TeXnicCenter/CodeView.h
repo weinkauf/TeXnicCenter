@@ -188,6 +188,7 @@ protected:
 	afx_msg void OnViewIndentationGuides();
 	afx_msg void OnUpdateViewIndentationGuides(CCmdUI *pCmdUI);
 	afx_msg void OnEditSelBiggerBlock();
+	afx_msg void OnEditSelParagraph();
 	void OnZoom(SCNotification* n);
 
 public:
