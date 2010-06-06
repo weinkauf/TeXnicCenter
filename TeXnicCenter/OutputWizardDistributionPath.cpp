@@ -47,13 +47,14 @@ IMPLEMENT_DYNAMIC(COutputWizardDistributionPath,OutputWizardPage)
 
 BEGIN_MESSAGE_MAP(COutputWizardDistributionPath,OutputWizardPage)
 	//{{AFX_MSG_MAP(COutputWizardDistributionPath)
-	ON_BN_CLICKED(IDC_OW_BROWSEPATH,OnOwBrowsepath)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
 COutputWizardDistributionPath::COutputWizardDistributionPath(COutputWizard* w)
-		: OutputWizardPage(COutputWizardDistributionPath::IDD,w)
+	:OutputWizardPage(COutputWizardDistributionPath::IDD,w)
+	,m_wndBrowseButton(IDC_OW_PATH, CString((LPCTSTR)STE_GET_PATH))
+
 {
 	m_psp.dwFlags |= PSP_USEHEADERTITLE;
 	m_psp.pszHeaderTitle = MAKEINTRESOURCE(IDS_WIZARD_DISTRIBUTION_PATH);
@@ -70,26 +71,12 @@ void COutputWizardDistributionPath::DoDataExchange(CDataExchange* pDX)
 	//{{AFX_DATA_MAP(COutputWizardDistributionPath)
 	DDX_Text(pDX,IDC_OW_PATH,m_strPath);
 	//}}AFX_DATA_MAP
-}
-
-void COutputWizardDistributionPath::OnOwBrowsepath()
-{
-	CFolderSelect dlg(CString((LPCTSTR)STE_GET_PATH));
-
-	if (dlg.DoModal() != IDOK)
-		return;
-
-	m_strPath = dlg.GetPath();
-
-	UpdateData(FALSE);
+	DDX_Control(pDX, IDC_OW_BROWSEPATH, m_wndBrowseButton);
 }
 
 BOOL COutputWizardDistributionPath::OnInitDialog()
 {
 	OutputWizardPage::OnInitDialog();
-
-	//browse_.SubclassWindow(GetDlgItem(IDC_OW_PATH)->m_hWnd);
-	//browse_.EnableBrowseButton();
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
@@ -117,16 +104,5 @@ LRESULT COutputWizardDistributionPath::OnWizardNext()
 	UpdateData();
 	OutputWizardPage::OnWizardNext();
 
-	//LRESULT result;
-
-	//if (GetWizard()->LookForLatex()) {
-	//    GetWizard()->LookForDviViewer();
-	//    result = 0;
-	//}
-	//else {
-	//    GetWizard()->m_stackPageHistory.Pop();
-	//    result = -1;
-	//}
-
-	return -1/*result*/;
+	return -1;
 }

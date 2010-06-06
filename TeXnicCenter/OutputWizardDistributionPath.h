@@ -40,6 +40,7 @@
 #endif // _MSC_VER > 1000
 
 #include "OutputWizardPage.h"
+#include "BrowseButton.h"
 
 /**
 This property page is part of the output wizard (COutputWizard) and
@@ -69,7 +70,6 @@ protected:
 // Message Handlers
 protected:
 	//{{AFX_MSG(COutputWizardDistributionPath)
-	afx_msg void OnOwBrowsepath();
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()
@@ -86,6 +86,7 @@ public:
 	virtual BOOL OnInitDialog();
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
+	CBrowseButton m_wndBrowseButton;
 };
 
 //{{AFX_INSERT_LOCATION}}
