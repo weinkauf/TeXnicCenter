@@ -6,16 +6,38 @@
 	>
     <lxEnvironment name="frame"
         parameters="1"
-        desc="Beamer environment"
+        desc="Creates a new frame"
         icon="format.bmp"
         index="6"
         expafter="}&#xA;	&#xA;\end{frame}"
+        expbefore="\begin{"/>
+    <lxEnvironment name="onlyenv"
+        parameters="1"
+        desc="Beamer environment"
+        icon="format.bmp"
+        index="6"
+        expafter="}&#xA;	&#xA;\end{onlyenv}"
+        expbefore="\begin{"/>
+    <lxEnvironment name="actionenv"
+        parameters="1"
+        desc="Beamer environment"
+        icon="format.bmp"
+        index="6"
+        expafter="}&#xA;	&#xA;\end{actionenv}"
         expbefore="\begin{"/>
     <lxCommand name="\draw"	desc="Draw"/>
     <lxCommand name="\usebeamercolor"	parameters="1"/>
     <lxCommand name="\frametitle"	parameters="1"/>
     <lxCommand name="\framesubtitle"	parameters="1"/>
     <lxCommand name="\titlegraphic"	parameters="1"/>
+    <lxCommand name="\alert"	parameters="1"/>
+    <lxCommand name="\uncover"	parameters="1"/>
+    <lxCommand name="\action"	parameters="1"/>
+    <lxCommand name="\visible"	parameters="1"/>
+    <lxCommand name="\invisible"	parameters="1"/>
+    <lxCommand name="\AtBeginSection"	parameters="1"/>
+    <lxCommand name="\only" parameters="1"/>
+    <lxCommand name="\frame" parameters="1"/>
     <lxCommand name="\pause"/>
     <lxCommand name="\titlepage"/>
   </lxPackage>
