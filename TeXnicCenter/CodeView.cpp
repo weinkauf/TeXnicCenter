@@ -207,8 +207,8 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// Indicator for spell checker errors
 	rCtrl.SetIndicatorCurrent(0); // Default is a squiggly line, which we want to use
 	rCtrl.IndicSetFore(0,RGB(255,0,0)); // Red color instead of dark green
-	rCtrl.SetIndent(0);
 
+	rCtrl.SetIndent(0); //Indent same as tab size
 	ShowIndentationGuides(CConfiguration::GetInstance()->GetShowIndentationGuides());
 
 	rCtrl.SetPasteConvertEndings(TRUE); // Convert line endings
@@ -1256,11 +1256,22 @@ void CodeView::OnEditSelParagraph()
 	if (pDoc)
 	{
 		CScintillaCtrl& c = GetCtrl();
-		const std::pair<long,long> range = pDoc->GetParagraphRangePos(c.GetCurrentPos());
+		//No previous selection: get the current paragraph respecting comments
+		//Previous selection: get the paragraph ignoring comments
+		//This allows to grow paragraph selections by pressing Ctrl-P twice.
+		const std::pair<long,long> range = pDoc->GetParagraphRangePos(c.GetCurrentPos(), c.GetSelectionStart() == c.GetSelectionEnd());
 
 		//Select full lines
-		c.SetSelectionStart(c.PositionFromLine(c.LineFromPosition(range.first)));
-		c.SetSelectionEnd(c.GetLineEndPosition(c.LineFromPosition(range.second)));
+		long FullLineStartPos = c.PositionFromLine(c.LineFromPosition(range.first));
+		long FullLineEndPos = c.GetLineEndPosition(c.LineFromPosition(range.second));
+		//If the given pos is the first char in a line, we go back to the last char of the previous line.
+		if (range.first != range.second && range.second == c.PositionFromLine(c.LineFromPosition(range.second)))
+		{
+			FullLineEndPos = c.GetLineEndPosition(c.LineFromPosition(range.second) - 1);
+		}
+
+		c.SetSelectionStart(FullLineStartPos);
+		c.SetSelectionEnd(FullLineEndPos);
 	}
 }
 

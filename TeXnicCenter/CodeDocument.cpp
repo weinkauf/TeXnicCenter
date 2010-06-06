@@ -1120,7 +1120,7 @@ long CodeDocument::LineFindCommentStartPos(const int Line) const
 	return -1;
 }
 
-const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos) const
+const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos, const bool bRespectComments /*= true*/) const
 {
 	CScintillaCtrl& Ctrl = GetView()->GetCtrl();
 	const int NumLines = Ctrl.GetLineCount();
@@ -1128,11 +1128,15 @@ const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos
 
 	if (LineContainsOnlyWhiteSpace(StartLine)) return std::make_pair(StartPos, StartPos);
 
-	const int CommentStartInStartLine = LineFindCommentStartPos(StartLine);
-	if (CommentStartInStartLine >= 0 && CommentStartInStartLine <= StartPos)
+	int CommentStartInStartLine(-1);
+	if (bRespectComments)
 	{
-		//We do not treat comments as parts of a paragraph
-		return std::make_pair(StartPos, StartPos);
+		CommentStartInStartLine = LineFindCommentStartPos(StartLine);
+		if (CommentStartInStartLine >= 0 && CommentStartInStartLine <= StartPos)
+		{
+			//We do not treat comments as parts of a paragraph
+			return std::make_pair(StartPos, StartPos);
+		}
 	}
 
 	int UpLine = StartLine;
@@ -1143,7 +1147,7 @@ const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos
 	{
 		UpLine--;
 	}
-	while (UpLine >= 0 && !LineContainsOnlyWhiteSpace(UpLine) && !LineContainsComment(UpLine));
+	while (UpLine >= 0 && !LineContainsOnlyWhiteSpace(UpLine) && (!bRespectComments || !LineContainsComment(UpLine)));
 
 	//Current UpLine did not match, i.e., contains whites or comments or is below zero
 	UpLine++;
@@ -1157,7 +1161,7 @@ const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos
 		{
 			DownLine++;
 		}
-		while (DownLine < NumLines && !LineContainsOnlyWhiteSpace(DownLine) && !LineContainsComment(DownLine));
+		while (DownLine < NumLines && !LineContainsOnlyWhiteSpace(DownLine) && (!bRespectComments || !LineContainsComment(DownLine)));
 
 		//Current DownLine did not match, i.e., contains whites or comments or is above maximal num
 		if (DownLine >= NumLines || LineContainsOnlyWhiteSpace(DownLine))
@@ -1167,10 +1171,13 @@ const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos
 	}
 
 	long DownPos = Ctrl.GetLineEndPosition(DownLine);
-	const long CommentStartInLastLine = LineFindCommentStartPos(DownLine);
-	if (CommentStartInLastLine >= 0)
+	if (bRespectComments)
 	{
-		DownPos = CommentStartInLastLine;
+		const long CommentStartInLastLine = LineFindCommentStartPos(DownLine);
+		if (CommentStartInLastLine >= 0)
+		{
+			DownPos = CommentStartInLastLine;
+		}
 	}
 
 	return std::make_pair(UpPos, DownPos);
