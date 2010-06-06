@@ -4871,6 +4871,14 @@ BEGIN
     ID_EDIT_SELECTPARAGRAPH "Markiert den aktuellen Absatz\nAbsatz markieren"
 END
 
+STRINGTABLE 
+BEGIN
+    ID_SEARCH_FINDNEXTSELECTED 
+                            "(Selektiertes) Wort unter dem Cursor in Vorwärtsrichtung suchen.\nNächsten Treffer finden (selektiert)"
+    ID_SEARCH_FINDPREVIOUSSELECTED 
+                            "(Selektiertes) Wort unter dem Cursor in Rückwärtsrichtung suchen.\nVorherigen Treffer finden (selektiert)"
+END
+
 #endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -6394,9 +6402,9 @@ BEGIN
     POPUP "&Search"
     BEGIN
         MENUITEM "&Find...",                    ID_EDIT_FIND
-        MENUITEM "Find Next\tF3",               ID_EDIT_REPEAT
+        MENUITEM "Find Next",                   ID_EDIT_REPEAT
         MENUITEM "Find Next &Selected",         ID_SEARCH_FINDNEXTSELECTED
-        MENUITEM "Find Previous\tShift+F3",     ID_EDIT_FIND_PREVIOUS
+        MENUITEM "Find Previous",               ID_EDIT_FIND_PREVIOUS
         MENUITEM "Find Previous S&elected",     ID_SEARCH_FINDPREVIOUSSELECTED
         MENUITEM "F&ind in Files...",           ID_EDIT_FIND_IN_FILES
         MENUITEM SEPARATOR
@@ -8914,6 +8922,14 @@ END
 STRINGTABLE 
 BEGIN
     ID_EDIT_SELECTPARAGRAPH "Selects the current paragraph\nSelect Paragraph"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_SEARCH_FINDNEXTSELECTED 
+                            "Find next word under cursor or in selection.\nFind next selected."
+    ID_SEARCH_FINDPREVIOUSSELECTED 
+                            "Find previous word under cursor or in selection.\nFind previous selected."
 END
 
 #endif    // English (U.S.) resources
