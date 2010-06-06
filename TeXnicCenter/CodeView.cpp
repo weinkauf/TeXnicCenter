@@ -211,6 +211,12 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	rCtrl.SetIndent(0); //Indent same as tab size
 	ShowIndentationGuides(CConfiguration::GetInstance()->GetShowIndentationGuides());
 
+	//SCI_SETWHITESPACESIZE(int size)
+	// ==> Size of the white space dots; not yet supported by the MFC abstraction.
+	// ==> Came with Scintilla 2.02, but the Ctrl in version 1.25 only supports Scintilla 2.01.
+
+	rCtrl.SetWordChars(_T("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$\\"));
+
 	rCtrl.SetPasteConvertEndings(TRUE); // Convert line endings
 
 #pragma endregion
