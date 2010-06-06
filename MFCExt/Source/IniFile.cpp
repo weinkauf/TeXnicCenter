@@ -105,7 +105,7 @@ bool CIniFile::ReadFile()
     std::basic_string<TCHAR> line;
 
     while (getline(inifile,line)) {
-        readinfo.SetString(line.c_str(),line.size());
+        readinfo.SetString(line.c_str(), static_cast<int>(line.size()));
 		readinfo.Trim(_T('\r'));
 		readinfo.Trim(_T('\n'));
 
@@ -154,16 +154,16 @@ void CIniFile::WriteFile()
 	// TODO: Handle legacy projects
 	std::basic_string<TCHAR> s = inifile.str();
 	
-	int cch = ::WideCharToMultiByte(CP_UTF8,0,s.c_str(),s.size(),0,0,0,0);
+	int cch = ::WideCharToMultiByte(CP_UTF8,0,s.c_str(),static_cast<int>(s.size()),0,0,0,0);
 	
 	std::vector<char> data(cch);
-	::WideCharToMultiByte(CP_UTF8,0,s.c_str(),s.size(),&data[0],cch,0,0);
+	::WideCharToMultiByte(CP_UTF8,0,s.c_str(),static_cast<int>(s.size()),&data[0],cch,0,0);
 
 	ATL::CAtlFile file;
 	HRESULT result = file.Create(path,GENERIC_WRITE,FILE_SHARE_READ,CREATE_ALWAYS);
 
 	if (SUCCEEDED(result))
-		file.Write(&data[0],data.size());
+		file.Write(&data[0],static_cast<int>(data.size()));
 	else 
 		TRACE("%s failed, code: %x\n", __FUNCTION__, result);
 }

@@ -200,8 +200,7 @@ BOOL CDdeCommand::SendCommandHelper(LPCTSTR lpszServer,LPCTSTR lpszCommand,LPCTS
 	}
 	catch (...)
 	{
-		if (szCommand)
-			delete[] szCommand;
+		delete[] szCommand;
 		if (hConversation)
 			DdeDisconnect(hConversation);
 		if (hszServerName)

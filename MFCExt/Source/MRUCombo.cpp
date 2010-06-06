@@ -181,7 +181,7 @@ BOOL CMRUComboBox::AddToMRU ( LPCTSTR szNewItem )
 
 void CMRUComboBox::EmptyMRU()
 {
-int i;
+	INT_PTR i;
 
     if ( NULL != m_pMRU )
         {
@@ -191,7 +191,7 @@ int i;
                                         // while we're doing our dirty work.
         for ( i = m_pMRU->GetSize() - 1; i >= 0; i-- )
             {
-            m_pMRU->Remove(i);
+            m_pMRU->Remove(static_cast<int>(i));
             }
         }
 }
@@ -687,9 +687,9 @@ BOOL bRetVal = TRUE;
 
 BOOL CMRUComboBox::AllocNewMRU()
 {
-CString* acstrOldList = NULL;
-int      nItemsToCopy;
-int      i;
+	CString* acstrOldList = NULL;
+	INT_PTR      nItemsToCopy;
+	INT_PTR      i;
 
                                         // Make sure the MRU params are OK.
     if ( !VerifyMRUParams() )

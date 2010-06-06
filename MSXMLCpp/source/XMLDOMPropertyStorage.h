@@ -218,7 +218,7 @@ public:
 	@return
 		The number or elements in the array.
 	*/
-	int GetPropertyArray(LPCTSTR lpszArrayName, LPCTSTR lpszName, CVariantArray &aValues);
+	INT_PTR GetPropertyArray(LPCTSTR lpszArrayName, LPCTSTR lpszName, CVariantArray &aValues);
 
 // static helpers
 public:

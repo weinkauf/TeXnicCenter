@@ -28,6 +28,8 @@
 
 #pragma once
 
+#include <cstddef>
+
 class CodeView;
 class DocumentTokenizer;
 class Speller;
@@ -123,7 +125,7 @@ public:
 	        The index of the first character that differs in the two strings. If
 	        both strings are identical return -1.
 	 */
-	static int FirstDifference(const TCHAR *one, const TCHAR *two);
+	static std::ptrdiff_t FirstDifference(const TCHAR *one, const TCHAR *two);
 
 	/**
 	Find the last difference in two strings. Starting from the back of both
@@ -143,5 +145,5 @@ public:
 	        The length of the common string found at the end of string one and
 	        string two. If both strings are identical return -1.
 	 */
-	static int LastDifference(const TCHAR *one, int &oneIndex, const TCHAR *two, int &twoIndex);
+	static std::ptrdiff_t LastDifference(const TCHAR *one, std::ptrdiff_t &oneIndex, const TCHAR *two, std::ptrdiff_t &twoIndex);
 };

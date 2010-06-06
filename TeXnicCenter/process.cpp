@@ -149,7 +149,7 @@ BOOL CProcess::CreateHiddenConsole(
     LPCTSTR lpszCurDir /*= NULL*/,
     LPSTARTUPINFO lpsiStartInfo /*= NULL*/)
 {
-	HANDLE hOutPipeIn,hOutPipeOut,hErrorPipeIn,hErrorPipeOut;
+	HANDLE hOutPipeIn = NULL, hOutPipeOut = NULL, hErrorPipeIn = NULL, hErrorPipeOut = NULL;
 	SECURITY_ATTRIBUTES sa;
 
 	// creating pipe
@@ -170,10 +170,17 @@ BOOL CProcess::CreateHiddenConsole(
 	}
 	catch (...)
 	{
-		CloseHandle(hOutPipeIn);
-		CloseHandle(hOutPipeOut);
-		CloseHandle(hErrorPipeIn);
-		CloseHandle(hErrorPipeOut);
+		if (hOutPipeIn)
+			CloseHandle(hOutPipeIn);
+
+		if (hOutPipeOut)
+			CloseHandle(hOutPipeOut);
+
+		if (hErrorPipeIn)
+			CloseHandle(hErrorPipeIn);
+
+		if (hErrorPipeOut)
+			CloseHandle(hErrorPipeOut);
 
 		return FALSE;
 	}
