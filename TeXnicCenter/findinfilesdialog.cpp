@@ -143,20 +143,6 @@ BOOL CFindInFilesDialog::OnInitDialog()
 	// EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben
 }
 
-//void CFindInFilesDialog::OnBrowseSearchIn()
-//{
-//	CFolderSelect	fs( CString( (LPCTSTR)STE_FILEFIND_BROWSEDIR ) );
-//
-//	if( fs.DoModal() != IDOK )
-//		return;
-//
-//	m_strSearchIn = fs.GetPath();
-//
-//	UpdateData( FALSE );
-//
-//	UpdateControls();
-//}
-
 void CFindInFilesDialog::OnInsertRegularExpression()
 {
 	// set cursor

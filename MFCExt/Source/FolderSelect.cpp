@@ -67,7 +67,7 @@ void CFolderSelect::Init(LPCTSTR lpszTitle, UINT unFlags, CWnd* pwndParent, BFFC
 	m_bi.pidlRoot = NULL;
 	m_bi.pszDisplayName = m_strDisplayName.GetBuffer( MAX_PATH );
 	m_bi.lpszTitle = m_strTitle;
-	m_bi.ulFlags = unFlags;
+	m_bi.ulFlags = unFlags | BIF_NEWDIALOGSTYLE;
 	m_bi.lpfn = lpfn;
 	m_bi.lParam = lParam;
 }

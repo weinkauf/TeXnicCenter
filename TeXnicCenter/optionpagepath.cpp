@@ -108,9 +108,18 @@ BOOL COptionPagePath::OnInitDialog()
 
 void COptionPagePath::OnAddProjectTemplates()
 {
-	CFolderSelect dlg(AfxLoadString(STE_GET_PATH));
+	CString InitFolder;
+	if (m_wndProjectTemplateList.GetCount() > 0)
+	{
+		m_wndProjectTemplateList.GetText(m_wndProjectTemplateList.GetCount() - 1, InitFolder);
+	}
+
+	CFolderSelect dlg(AfxLoadString(STE_GET_PATH), InitFolder.IsEmpty() ? NULL : InitFolder);
+
 	if (dlg.DoModal() == IDOK)
+	{
 		m_wndProjectTemplateList.AddString(dlg.GetPath());
+	}
 }
 
 void COptionPagePath::OnRemoveProjectTemplates()
@@ -130,9 +139,18 @@ void COptionPagePath::OnSelchangeProjectTemplates()
 
 void COptionPagePath::OnAddDocumentTemplates()
 {
-	CFolderSelect dlg(AfxLoadString(STE_GET_PATH));
+	CString InitFolder;
+	if (m_wndDocumentTemplateList.GetCount() > 0)
+	{
+		m_wndDocumentTemplateList.GetText(m_wndDocumentTemplateList.GetCount() - 1, InitFolder);
+	}
+
+	CFolderSelect dlg(AfxLoadString(STE_GET_PATH), InitFolder.IsEmpty() ? NULL : InitFolder);
+
 	if (dlg.DoModal() == IDOK)
+	{
 		m_wndDocumentTemplateList.AddString(dlg.GetPath());
+	}
 }
 
 void COptionPagePath::OnRemoveDocumentTemplates()
