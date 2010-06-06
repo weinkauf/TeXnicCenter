@@ -333,10 +333,10 @@ void SpellCheckDlg::OnSpellResume()
 	// Find the first change position
 	CString newText;
 	edit_.GetWindowText(newText);
-	int start = FirstDifference(view_->GetLineText(current_line_), newText);
+	std::ptrdiff_t start = FirstDifference(view_->GetLineText(current_line_), newText);
 	if (start != -1)
 	{
-		int endOld, endNew;
+        std::ptrdiff_t endOld, endNew;
 		LastDifference(view_->GetLineText(current_line_), endOld, newText, endNew);
 		++endOld; // point one past last difference
 		++endNew; // point one past last difference
@@ -436,9 +436,9 @@ INT_PTR SpellCheckDlg::DoModal()
 	return CDialog::DoModal();
 }
 
-int SpellCheckDlg::FirstDifference( const TCHAR *one, const TCHAR *two )
+std::ptrdiff_t SpellCheckDlg::FirstDifference( const TCHAR *one, const TCHAR *two )
 {
-	int index = 0;
+	std::ptrdiff_t index = 0;
 	while (*one != _T('\0') && *two != _T('\0'))
 	{
 		if (*one++ != *two++)
@@ -450,11 +450,11 @@ int SpellCheckDlg::FirstDifference( const TCHAR *one, const TCHAR *two )
 	return index;
 }
 
-int SpellCheckDlg::LastDifference( const TCHAR *one, int &oneIndex, const TCHAR *two, int &twoIndex )
+std::ptrdiff_t SpellCheckDlg::LastDifference( const TCHAR *one, std::ptrdiff_t &oneIndex, const TCHAR *two, std::ptrdiff_t &twoIndex )
 {
 	oneIndex = _tcsclen(one);
 	twoIndex = _tcsclen(two);
-	int nLength = 0;
+    std::ptrdiff_t nLength = 0;
 	while (oneIndex >= 0 && twoIndex >= 0)
 	{
 		if (one[oneIndex] != two[twoIndex])

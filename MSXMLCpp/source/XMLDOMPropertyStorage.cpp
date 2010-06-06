@@ -266,7 +266,7 @@ _variant_t CXMLDOMPropertyStorage::GetPropertyAttribute(LPCTSTR lpszName, LPCTST
 }
 
 
-int CXMLDOMPropertyStorage::GetPropertyArray(LPCTSTR lpszArrayName, LPCTSTR lpszName, CVariantArray &aValues)
+INT_PTR CXMLDOMPropertyStorage::GetPropertyArray(LPCTSTR lpszArrayName, LPCTSTR lpszName, CVariantArray &aValues)
 {
 	aValues.RemoveAll();
 

@@ -253,7 +253,7 @@ SectionEnd
 
 Section "$(desc_latex_templ)" sec_templates
 SectionIn 1 3
-  File /r "..\Output\Product\Unicode Release\Templates"
+  File /r "..\Output\Product\Win32\Unicode Release\Templates"
   
   WriteRegStr HKLM "${PRODUCT_SOFTWARE_KEY}\Settings\Options\ProjectTemplatePaths" "AppPath" "$INSTDIR"
 

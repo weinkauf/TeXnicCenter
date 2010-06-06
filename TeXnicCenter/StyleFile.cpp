@@ -172,7 +172,7 @@ void CStyleFile::ParseBuffer(const TCHAR *buf)
 	{
 		const TCHAR *t, *token;
 		TCHAR nameBuf[255];
-		int lTok = _tcslen(TOKENS[i]);
+        std::size_t lTok = _tcslen(TOKENS[i]);
 
 		token = _tcsstr(buf, TOKENS[i]);
 		while (token != NULL)
