@@ -947,7 +947,7 @@ void COutputWizard::SetupSumatraDDE( CProfile &p )
 	app.ReleaseBuffer(::GetModuleFileName(0,app.GetBuffer(MAX_PATH),MAX_PATH));
 
 	CString exec = m_wndPagePdfViewer.m_strPath;
-	exec += _T(" -inverse-search \"\\\"") + app + _T("\\\" /ddecmd \\\"[goto('%f','%l')]'\\\"\"");
+	exec += _T(" -inverse-search \"\\\"") + app + _T("\\\" /ddecmd \\\"[goto('%f','%l')]\\\"\"");
 
 	p.SetViewerPath(exec);
 
