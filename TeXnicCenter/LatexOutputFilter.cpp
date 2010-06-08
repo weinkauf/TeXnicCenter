@@ -323,8 +323,8 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		// - ==> Take min(n1,n2) as the srcline. This will do a good job for more cases than
 		// - just taking the first number. But the problem still remains for some (rare) cases.
 		// -
-		int n1 = _ttoi(strLine.Mid(results.position(2),results.length(2)));
-		int n2 = _ttoi(strLine.Mid(results.position(3),results.length(3)));
+		int n1 = _ttoi(results.str(2).c_str());
+		int n2 = _ttoi(results.str(3).c_str());
 
 		int line = (n1 < n2) ? n1 : n2;
 
@@ -333,7 +333,7 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 	}
 	else if (regex_search(text,results,warning1))
 	{
-		UpdateCurrentItem(strLine, itmWarning);
+		UpdateCurrentItem(strLine, itmWarning, _ttoi(results.str(2).c_str()));
 	}
 	else if (regex_search(text, results, packageWarning) || regex_search(text, results, classWarning))
 	{
@@ -377,7 +377,7 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		//               rskip
 		//l.2 \setlength{\pa rskip}{0.5ex}
 		if (!m_currentItem.GetSourceLine().HasValue())
-			m_currentItem.SetSourceLine(_ttoi(strLine.Mid(results.position(1),results.length(1))));
+			m_currentItem.SetSourceLine(_ttoi(results.str(1).c_str()));
 	}
 	else if (regex_search(text,results,line2))
 	{
@@ -391,12 +391,12 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		//
 		//But: Do not change an Item, if the SrcLine could be retrieved from the output!!!
 		if (!m_currentItem.GetSourceLine().HasValue())
-			m_currentItem.SetSourceLine(_ttoi(strLine.Mid(results.position(1),results.length(1))));
+			m_currentItem.SetSourceLine(_ttoi(results.str(1).c_str()));
 	}
 	else if (regex_search(text,results,output1))
 	{
 		//LaTeX said 'Output written on _file_ (%m_nOutputPages% pages, _number_ bytes)'
-		m_nOutputPages = _ttoi(strLine.Mid(results.position(1),results.length(1)));
+		m_nOutputPages = _ttoi(results.str(1).c_str());
 	}
 	else if (regex_search(text,results,output2))
 	{

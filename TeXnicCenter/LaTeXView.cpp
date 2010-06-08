@@ -681,7 +681,7 @@ void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& a, bool bSelect /
 					UTF8toUTF16(range.lpstrText + CurrentX, EndX - CurrentX + 1, conv);
 
 					if (!conv.empty())
-						strKeyword = CString(&conv[0], conv.size());
+						strKeyword.SetString(&conv[0], conv.size());
 					
 					if (bSelect)
 						GetCtrl().SetSel(start + CurrentX,pos);
