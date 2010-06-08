@@ -38,11 +38,29 @@
 #include "global.h"
 //#include "../Speller/Character.h"
 
+#include <utility>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
+
+namespace {
+#pragma push_macro("DEFINE_SECTION")
+#define DEFINE_SECTION(name) std::make_pair(STE_HEADER_##name, STE_HEADERPREFIX_##name)
+
+	const std::pair<int, int> SectionIDs[] = { 
+		DEFINE_SECTION(PART),
+		DEFINE_SECTION(CHAPTER),
+		DEFINE_SECTION(SECTION),
+		DEFINE_SECTION(SUBSECTION),
+		DEFINE_SECTION(SUBSUBSECTION),
+		DEFINE_SECTION(PARAGRAPH),
+		DEFINE_SECTION(SUBPARAGRAPH)
+	};
+#pragma pop_macro("DEFINE_SECTION")
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // Dialogfeld CInsertHeaderDialog
@@ -59,9 +77,11 @@ CInsertHeaderDialog::CInsertHeaderDialog(CWnd* pParent /*=NULL*/)
 
 BOOL CInsertHeaderDialog::SetProperties(const CString &strProperties)
 {
-	for (int i = 0; i < 7; i++)
+	const int count = sizeof(SectionIDs) / sizeof(*SectionIDs);
+
+	for (int i = 0; i < count; i++)
 	{
-		CString strCommand = AfxLoadString(STE_HEADER_PART + i) + _T('{');
+		CString strCommand = AfxLoadString(SectionIDs[i].first) + _T('{');
 		int nPos;
 
 		if ((nPos = strProperties.Find(strCommand)) == -1)
@@ -82,7 +102,7 @@ BOOL CInsertHeaderDialog::SetProperties(const CString &strProperties)
 		}
 
 		// set label
-		m_strLabel = AfxLoadString(STE_HEADERPREFIX_PART + m_nDepth);
+		m_strLabel = AfxLoadString(SectionIDs[m_nDepth].second);
 		strCommand = _T("\\label{");
 		if ((nPos = strProperties.Find(strCommand)) == -1)
 			return TRUE;
@@ -104,7 +124,7 @@ BOOL CInsertHeaderDialog::SetProperties(const CString &strProperties)
 
 CString CInsertHeaderDialog::GetProperties()
 {
-	CString strResult = _T('\r') + AfxLoadString(STE_HEADER_PART + m_nDepth) + _T('{');
+	CString strResult = _T('\r') + AfxLoadString(SectionIDs[m_nDepth].first) + _T('{');
 
 	if (!m_strTitle.IsEmpty())
 	{
@@ -161,7 +181,7 @@ void CInsertHeaderDialog::OnChangeTitle()
 	BOOL bWhiteSpace = FALSE;
 	TCHAR strC[2] = _T(" ");
 
-	m_strLabel = AfxLoadString(STE_HEADERPREFIX_PART + m_nDepth);
+	m_strLabel = AfxLoadString(SectionIDs[m_nDepth].second);
 
 	for (int i = 0; i < m_strTitle.GetLength(); i++)
 	{
