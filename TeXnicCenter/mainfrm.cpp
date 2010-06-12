@@ -772,7 +772,7 @@ BOOL CMainFrame::OnToggleDockingBar(UINT nIDEvent)
 
 	if (pCtrlBar)
 	{
-		ShowPane(pCtrlBar, !pCtrlBar->IsPaneVisible(), FALSE, !pCtrlBar->IsPaneVisible());
+		ShowPaneEnsureVisibility(pCtrlBar, !pCtrlBar->IsPaneVisible(), FALSE, !pCtrlBar->IsPaneVisible());
 		return true;
 	}
 
@@ -850,7 +850,78 @@ void CMainFrame::ActivateOutputTab(int nTab, bool /*bSetFocus*/)
 		// Special case: Activate the build view only if the error list view isn't active
 		if (nTab != outputTabBuildResult || !error_list_view_.IsWindowVisible())
 		{
-			pAllPanes[nTab]->ShowPane(true, false, true);
+			ShowPaneEnsureVisibility(pAllPanes[nTab], true, false, true);
+		}
+	}
+}
+
+
+#define PANE_MINIMUM_HEIGHT 100
+#define PANE_MINIMUM_WIDTH 100
+void CMainFrame::ShowPaneEnsureVisibility(CBasePane* pPane, bool bShow, bool bDelay, bool bActivate /*= true*/)
+{
+	if (!pPane) return;
+
+	//Call the actual implementation
+	pPane->ShowPane(bShow, bDelay, bActivate);
+
+	//Make sure the pane is actually visible
+	if (bShow)
+	{
+		CBasePane* pBase = pPane->GetParentTabbedPane();
+		if (!pBase)
+		{
+			pBase = pPane; //If we are not tabbed, we are on our own.
+		}
+
+		//Get its geometry
+		CRect Rect;
+		pBase->GetWindowRect(&Rect);
+
+		//Check Height
+		bool bAdjust(false);
+		if (Rect.Height() < PANE_MINIMUM_HEIGHT)
+		{
+			if (pBase->GetCurrentAlignment() == CBRS_ALIGN_BOTTOM)
+			{
+				Rect.top = Rect.bottom - PANE_MINIMUM_HEIGHT;
+			}
+			else
+			{
+				Rect.bottom = Rect.top + PANE_MINIMUM_HEIGHT;
+			}
+
+			bAdjust = true;
+		}
+
+		//Check Width
+		bool bWorkaroundRightAlignment(false);
+		if (Rect.Width() < PANE_MINIMUM_WIDTH)
+		{
+			if (pBase->GetCurrentAlignment() == CBRS_ALIGN_RIGHT)
+			{
+				Rect.left = Rect.right - PANE_MINIMUM_WIDTH;
+				bWorkaroundRightAlignment = true;
+			}
+			else
+			{
+				Rect.right = Rect.left + PANE_MINIMUM_WIDTH;
+			}
+
+			bAdjust = true;
+		}
+
+		//Adjust, if necessary
+		if (bAdjust)
+		{
+			pBase->SetWindowPos(0, 0, 0, Rect.Width(), Rect.Height(), SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
+
+			//If the pane is right aligned, it will not be properly adjusted the first time. Don't ask why.
+			if (bWorkaroundRightAlignment)
+			{
+				pPane->ShowPane(false, false, false);
+				pPane->ShowPane(bShow, bDelay, bActivate);
+			}
 		}
 	}
 }
@@ -1524,7 +1595,7 @@ BOOL CMainFrame::OnToolsCancel(UINT)
 		//Close the bottom tool windows to get more space for the editor.
 		ToggleDockingBars(CBRS_ALIGN_BOTTOM, true);
 		//...and we make sure that the build output is closed as well, since we open it with every compilation.
-		build_view_pane_.ShowPane(false, false, false);
+		ShowPaneEnsureVisibility(&build_view_pane_, false, false, false);
 	}
 
 	return TRUE;
@@ -1753,12 +1824,12 @@ bool CMainFrame::CreateToolWindows()
 
 
 	//Do not show all of them at first startup
-	bookmark_view_pane_.ShowPane(false, false, false);
-	build_view_pane_.ShowPane(false, false, false);
-	error_list_view_.ShowPane(false, false, false);
-	grep_view_1_pane_.ShowPane(false, false, false);
-	grep_view_2_pane_.ShowPane(false, false, false);
-	parse_view_pane_.ShowPane(false, false, false);
+	ShowPaneEnsureVisibility(&bookmark_view_pane_, false, false, false);
+	ShowPaneEnsureVisibility(&build_view_pane_, false, false, false);
+	ShowPaneEnsureVisibility(&error_list_view_, false, false, false);
+	ShowPaneEnsureVisibility(&grep_view_1_pane_, false, false, false);
+	ShowPaneEnsureVisibility(&grep_view_2_pane_, false, false, false);
+	ShowPaneEnsureVisibility(&parse_view_pane_, false, false, false);
 
 	return true;
 }
@@ -2116,7 +2187,7 @@ void CMainFrame::ToggleDockingBars(const DWORD dwAlignment, const bool bCloseOnl
 			&& !pAllPanes[i]->IsAutoHideMode()
 			&& !pAllPanes[i]->IsMDITabbed())
 		{
-			pAllPanes[i]->ShowPane(!bOneIsVisible && !bCloseOnly, false, !bOneIsVisible && !bCloseOnly);
+			ShowPaneEnsureVisibility(pAllPanes[i], !bOneIsVisible && !bCloseOnly, false, !bOneIsVisible && !bCloseOnly);
 		}
 	}
 }
