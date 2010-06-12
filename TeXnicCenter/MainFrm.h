@@ -150,14 +150,6 @@ public:
 	 */
 	CMFCToolBarButton* GetToolBarButton(UINT unCmdID, POSITION &pos) const;
 
-	/** Toggles the specified navigation pane.
-
-		@param nTab
-			Zero based index of the tab on the navigation bar to be toggled.
-			@see tagNavigatorTabs
-	 */
-	void ToggleNavigationPane(unsigned int nTab);
-
 	/**
 	Activates the specified tab on the output bar.
 
@@ -168,6 +160,11 @@ public:
 	        Whether to set the focus to the specified tab or not.
 	 */
 	void ActivateOutputTab(int nTab, bool bSetFocus = true);
+
+	/** Shows or hides a pane and makes sure that it is visible,
+		if it is about to be shown.
+	*/
+	void ShowPaneEnsureVisibility(CBasePane* pPane, bool bShow, bool bDelay, bool bActivate = true);
 
 	/**
 	Should be called, when the user may have changed the external, user
