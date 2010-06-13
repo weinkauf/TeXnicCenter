@@ -433,6 +433,7 @@
 #define IDS_DEFINE_COLOR_NAME_PLACEHOLDER 1366
 #define IDS_MORE_COLORS                 1367
 #define IDS_METAPOST_FILTER             1367
+#define STE_LANGUAGE_RUSSIAN            1367
 #define IDS_AUTOMATIC                   1368
 #define IDS_TEXT_COLORS                 1369
 #define IDS_BACKGROUND_COLORS           1370
@@ -1463,7 +1464,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57678
-#define _APS_NEXT_COMMAND_VALUE         40680
+#define _APS_NEXT_COMMAND_VALUE         40681
 #define _APS_NEXT_CONTROL_VALUE         8665
 #define _APS_NEXT_SYMED_VALUE           57773
 #endif
