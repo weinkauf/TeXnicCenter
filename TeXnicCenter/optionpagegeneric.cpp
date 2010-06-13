@@ -68,6 +68,8 @@ COptionPageGeneric::COptionPageGeneric() : CMFCPropertyPage(COptionPageGeneric::
 	QMSets.Add(CQMSet(STE_LANGUAGE_GERMAN,_T("\"`"),_T("\"'")));
 	// - French
 	QMSets.Add(CQMSet(STE_LANGUAGE_FRENCH,_T("\"<"),_T("\">")));
+	// - Russian
+	QMSets.Add(CQMSet(STE_LANGUAGE_RUSSIAN,_T("<<"),_T(">>")));
 }
 
 COptionPageGeneric::~COptionPageGeneric()
