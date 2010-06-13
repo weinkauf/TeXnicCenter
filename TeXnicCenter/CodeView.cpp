@@ -101,6 +101,7 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_INDENTATION_GUIDES, &CodeView::OnUpdateViewIndentationGuides)
 	ON_COMMAND(ID_EDIT_SEL_BIGGER_BLOCK, &CodeView::OnEditSelBiggerBlock)
 	ON_COMMAND(ID_EDIT_SELECTPARAGRAPH, &CodeView::OnEditSelParagraph)
+	ON_COMMAND(ID_EDIT_DELETE_LINE, &CodeView::OnEditDeleteLine)
 END_MESSAGE_MAP()
 
 
