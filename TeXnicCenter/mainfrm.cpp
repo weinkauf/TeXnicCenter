@@ -1573,17 +1573,17 @@ BOOL CMainFrame::OnToolsCancel(UINT)
 		return FALSE;
 
 	//Get active view/edit
-	LaTeXView* pEdit = NULL;
 	CView* pView = pFrame->GetActiveView();
-
-	if (pView)
-		pEdit = dynamic_cast<LaTeXView*>(pView);
-
-	if (!pEdit)
-		return FALSE;
+	if (!pView) return false;
 
 	//Close instant advice tip
-	pEdit->HideAdvice();
+	if (dynamic_cast<LaTeXView*>(pView))
+	{
+		dynamic_cast<LaTeXView*>(pView)->HideAdvice();
+	}
+
+	CodeView* pEdit = dynamic_cast<CodeView*>(pView);
+	if (!pEdit) return false;
 
 	if (GetFocus() != &pEdit->GetCtrl())
 	{
