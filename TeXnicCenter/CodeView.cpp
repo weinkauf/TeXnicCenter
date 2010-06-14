@@ -183,6 +183,17 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 #pragma endregion
 
+#pragma region Caret
+
+	//Think about this. It should be an option and go to the menu.
+	//In the options dialog it should be possible to define these colors
+	//together with all other colors.
+	//rCtrl.SetCaretLineBack(RGB(220, 220, 255));
+	//rCtrl.SetCaretLineVisible(true);
+	//Not so nice: rCtrl.SetCaretLineBackAlpha(90);
+
+#pragma endregion
+
 #pragma region Folding
 
 	const int folding_margin_num = GetFoldingMargin();
