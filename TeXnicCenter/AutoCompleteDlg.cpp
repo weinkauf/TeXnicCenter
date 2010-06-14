@@ -424,12 +424,34 @@ void CAutoCompleteDlg::AdjustSizeAndPosition(const int EditorLineHeight)
 	CRect WinRect;
 	GetWindowRect(&WinRect);
 
-	//Get the desktop width
+	//Get the desktop width.
+	//Since we might have several desktops, we first need to find the right monitor.
 	CRect ScreenRect;
-	CRect rect;
+	CMainFrame* pFrame = dynamic_cast<CMainFrame*>(AfxGetMainWnd());
+	if (pFrame && pFrame->GetActiveFrame())
+	{
+		//Get the rect of the active edit window.
+		CRect ParentRect;
+		pFrame->GetActiveFrame()->GetWindowRect(&ParentRect);
 
-	if (!::SystemParametersInfo(SPI_GETWORKAREA,0,&ScreenRect,0))
-		CWnd::GetDesktopWindow()->GetWindowRect(&ScreenRect); // Just in case SPI fails
+		//Get the nearest monitor to the parent rect.
+		HMONITOR hMonitor;
+		hMonitor = MonitorFromRect(ParentRect, MONITOR_DEFAULTTONEAREST);
+
+		//Get the work area of the monitor.
+		MONITORINFO mi;
+		mi.cbSize = sizeof(mi);
+		GetMonitorInfo(hMonitor, &mi);
+		ScreenRect = mi.rcWork;
+	}
+	else
+	{
+		//If we don't have a parent, we just take the primary monitor.
+		if (!::SystemParametersInfo(SPI_GETWORKAREA, 0, &ScreenRect, 0))
+		{
+			CWnd::GetDesktopWindow()->GetWindowRect(&ScreenRect); // Just in case SPI fails
+		}
+	}
 
 	//Both Width and Height should not be smaller than a certain size and not larger than the screen
 	const int MinWidth = 0; // Fit the area, no min width needed
