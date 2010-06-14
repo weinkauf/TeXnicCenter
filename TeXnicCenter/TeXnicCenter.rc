@@ -158,6 +158,7 @@ BEGIN
     VK_OEM_5,       ID_VIEW_TOGGLELEFTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
     "2",            ID_VIEW_TOGGLERIGHTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
     "8",            ID_VIEW_WHITE_SPACE,    VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "D",            ID_ADVANCED_DUPLICATE,  VIRTKEY, CONTROL, NOINVERT
 END
 
 
@@ -2255,11 +2256,12 @@ BEGIN
         MENUITEM SEPARATOR
         POPUP "Erweitert"
         BEGIN
-            MENUITEM "&Zeile löschen",              ID_EDIT_DELETE_LINE
-            MENUITEM "&Paragraph aufteilen",        ID_EDIT_SPLIT_PARAGRAPH
-            MENUITEM "Paragraph zusammen&fügen",    ID_EDIT_JOIN_PARAGRAPH
+            MENUITEM "&Zeile ausschneiden",         ID_EDIT_DELETE_LINE
+            MENUITEM "Zeile/Auswahl &duplizieren",  ID_ADVANCED_DUPLICATE
+            MENUITEM "&Absatz aufteilen",           ID_EDIT_SPLIT_PARAGRAPH
+            MENUITEM "Absatz zusammen&fügen",       ID_EDIT_JOIN_PARAGRAPH
             MENUITEM "In &Großbuchstaben umwandeln", ID_EDIT_MAKEUPPERCASE
-            MENUITEM "In Kleinbuchstaben umw&andeln", ID_EDIT_MAKELOWERCASE
+            MENUITEM "In &Kleinbuchstaben umwandeln", ID_EDIT_MAKELOWERCASE
         END
     END
     POPUP "&Ansicht"
@@ -4870,6 +4872,7 @@ END
 STRINGTABLE 
 BEGIN
     ID_EDIT_SELECTPARAGRAPH "Markiert den aktuellen Absatz\nAbsatz markieren"
+    ID_ADVANCED_DUPLICATE   "Fügt eine Kopie der aktuelle Zeile oder Auswahl ein.\nZeile oder Auswahl duplizieren"
 END
 
 STRINGTABLE 
@@ -6326,11 +6329,12 @@ BEGIN
         MENUITEM SEPARATOR
         POPUP "Advanced"
         BEGIN
-            MENUITEM "&Delete Line",                ID_EDIT_DELETE_LINE
+            MENUITEM "&Cut Line",                   ID_EDIT_DELETE_LINE
+            MENUITEM "&Duplicate Line/Selection",   ID_ADVANCED_DUPLICATE
             MENUITEM "&Split Paragraph",            ID_EDIT_SPLIT_PARAGRAPH
             MENUITEM "&Join Paragraph",             ID_EDIT_JOIN_PARAGRAPH
-            MENUITEM "Make Uppercase",              ID_EDIT_MAKEUPPERCASE
-            MENUITEM "Make Lowercase",              ID_EDIT_MAKELOWERCASE
+            MENUITEM "Make &Uppercase",             ID_EDIT_MAKEUPPERCASE
+            MENUITEM "Make &Lowercase",             ID_EDIT_MAKELOWERCASE
         END
     END
     POPUP "&View"
@@ -8924,6 +8928,7 @@ END
 STRINGTABLE 
 BEGIN
     ID_EDIT_SELECTPARAGRAPH "Selects the current paragraph\nSelect Paragraph"
+    ID_ADVANCED_DUPLICATE   "Duplicates the current line or selection.\nDuplicate line or selection"
 END
 
 STRINGTABLE 

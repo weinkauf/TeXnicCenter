@@ -74,6 +74,7 @@ protected:
 	afx_msg void OnUpdateViewWhiteSpace(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateViewShowLineEnding(CCmdUI *pCmdUI);
 	afx_msg void OnEditDeleteLine();
+	afx_msg void OnEditDuplicateLine();
 	afx_msg void OnSysColorChange();
 	virtual void OnInitialUpdate();
 	afx_msg void OnDestroy();

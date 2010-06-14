@@ -102,6 +102,7 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_COMMAND(ID_EDIT_SEL_BIGGER_BLOCK, &CodeView::OnEditSelBiggerBlock)
 	ON_COMMAND(ID_EDIT_SELECTPARAGRAPH, &CodeView::OnEditSelParagraph)
 	ON_COMMAND(ID_EDIT_DELETE_LINE, &CodeView::OnEditDeleteLine)
+	ON_COMMAND(ID_ADVANCED_DUPLICATE, &CodeView::OnEditDuplicateLine)
 END_MESSAGE_MAP()
 
 
@@ -178,7 +179,7 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	rCtrl.MarkerDefine(CodeDocument::Bookmark,SC_MARK_SMALLRECT);
 
 	rCtrl.MarkerSetFore(CodeDocument::Bookmark,RGB(70,105,175));
-	rCtrl.MarkerSetBack(CodeDocument::Bookmark,RGB(232,241,255));	
+	rCtrl.MarkerSetBack(CodeDocument::Bookmark,RGB(232,241,255));
 
 #pragma endregion
 
@@ -237,6 +238,7 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// So let's leave the defaults.
 	//ClearScintillaKey(rCtrl, 'U', SCMOD_CTRL);
 	//ClearScintillaKey(rCtrl, 'U', SCMOD_CTRL | SCMOD_SHIFT);
+	//Similar for: LineCut, SelectionDuplicate
 
 #pragma endregion
 
@@ -586,33 +588,12 @@ void CodeView::OnUpdateViewShowLineEnding(CCmdUI *pCmdUI)
 
 void CodeView::OnEditDeleteLine()
 {
-	int line = GetCurrentLine(true);
-	const CString text = GetLineText(line);
+	GetCtrl().LineCut();
+}
 
-	if (OpenClipboard()) {
-		EmptyClipboard();
-
-		if (!text.IsEmpty()) {
-			SIZE_T n = sizeof(TCHAR) * (text.GetLength() + 1);
-			HANDLE m = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, n);
-
-			LPVOID p = ::GlobalLock(m);
-			_tcsncpy(static_cast<LPTSTR>(p), text, text.GetLength());
-			::GlobalUnlock(m);
-			
-			SetClipboardData(
-#ifdef UNICODE
-				CF_UNICODETEXT
-#else
-				CF_TEXT
-#endif
-				, m);
-		}
-
-		CloseClipboard();
-	}
-
-	GetCtrl().LineDelete();
+void CodeView::OnEditDuplicateLine()
+{
+	GetCtrl().SelectionDuplicate();
 }
 
 void CodeView::OnInitialUpdate()
