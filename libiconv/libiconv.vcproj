@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="./; ./include;./libcharset/include"
-				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION;LIBDIR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -108,7 +108,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="./; ./include;./libcharset/include"
-				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION;LIBDIR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -174,7 +174,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="./; ./include;./libcharset/include"
-				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION;LIBDIR"
 				ExceptionHandling="0"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
@@ -242,7 +242,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="./; ./include;./libcharset/include"
-				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION;LIBDIR"
 				ExceptionHandling="0"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
@@ -305,7 +305,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="./; ./include;./libcharset/include"
-				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION;LIBDIR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -368,7 +368,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="./; ./include;./libcharset/include"
-				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION;LIBDIR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -434,7 +434,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="./; ./include;./libcharset/include"
-				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION;LIBDIR"
 				ExceptionHandling="0"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
@@ -502,7 +502,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="./; ./include;./libcharset/include"
-				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_VCLIBS_VERSION;LIBDIR"
 				ExceptionHandling="0"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
@@ -550,6 +550,10 @@
 			>
 			<File
 				RelativePath=".\lib\iconv.c"
+				>
+			</File>
+			<File
+				RelativePath=".\libcharset\lib\localcharset.c"
 				>
 			</File>
 			<File
