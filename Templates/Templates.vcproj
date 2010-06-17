@@ -27,7 +27,7 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -78,6 +78,8 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -102,110 +104,6 @@
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
-				TypeLibraryName=".\../output/Release/Templates.tlb"
-				HeaderFileName=""
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Unicode Debug|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
-			ConfigurationType="10"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
-			UseOfMFC="2"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName=".\..\output\Debug/Templates.tlb"
-				HeaderFileName=""
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Unicode Debug|x64"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
-			ConfigurationType="10"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
-			UseOfMFC="2"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
-				TypeLibraryName=".\..\output\Debug/Templates.tlb"
-				HeaderFileName=""
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Unicode Release|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
-			ConfigurationType="10"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName=".\../output/Release/Templates.tlb"
-				HeaderFileName=""
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Unicode Release|x64"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
-			ConfigurationType="10"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -269,42 +167,6 @@
 						Outputs="$(OutDir)\Templates\Documents\Deutsch\Deckblatt.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch\Deckblatt.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch\Deckblatt.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch\Deckblatt.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch\Deckblatt.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch\Deckblatt.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch\Deckblatt.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch\Deckblatt.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch\Deckblatt.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch\Deckblatt.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch\Deckblatt.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch\Deckblatt.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch\Deckblatt.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Documents\Deutsch\OptionenAbkürzungen.tex"
@@ -345,42 +207,6 @@
 						Outputs="$(OutDir)\Templates\Documents\Deutsch\OptionenAbkürzungen.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch\OptionenAbkürzungen.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch\OptionenAbkürzungen.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch\OptionenAbkürzungen.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch\OptionenAbkürzungen.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch\OptionenAbkürzungen.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch\OptionenAbkürzungen.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch\OptionenAbkürzungen.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch\OptionenAbkürzungen.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch\OptionenAbkürzungen.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch\OptionenAbkürzungen.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch\OptionenAbkürzungen.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch\OptionenAbkürzungen.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Documents\Deutsch\OptionenLayout.tex"
@@ -414,42 +240,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch\OptionenLayout.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch\OptionenLayout.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch\OptionenLayout.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch\OptionenLayout.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch\OptionenLayout.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch\OptionenLayout.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch\OptionenLayout.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch\OptionenLayout.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch\OptionenLayout.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch\OptionenLayout.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch\OptionenLayout.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch\OptionenLayout.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -501,42 +291,6 @@
 						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenErweitert.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch erweitert\OptionenErweitert.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenErweitert.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenErweitert.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch erweitert\OptionenErweitert.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenErweitert.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenErweitert.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch erweitert\OptionenErweitert.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenErweitert.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenErweitert.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch erweitert\OptionenErweitert.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenErweitert.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenErweitert.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Documents\Deutsch erweitert\OptionenMath.tex"
@@ -577,42 +331,6 @@
 						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenMath.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch erweitert\OptionenMath.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenMath.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenMath.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch erweitert\OptionenMath.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenMath.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenMath.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch erweitert\OptionenMath.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenMath.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenMath.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch erweitert\OptionenMath.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenMath.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\OptionenMath.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Documents\Deutsch erweitert\PDFInfos.tex"
@@ -646,42 +364,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch erweitert\PDFInfos.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch erweitert\PDFInfos.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\PDFInfos.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch erweitert\PDFInfos.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch erweitert\PDFInfos.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\PDFInfos.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch erweitert\PDFInfos.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch erweitert\PDFInfos.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\PDFInfos.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\Deutsch erweitert\PDFInfos.tex&quot; &quot;$(OutDir)\Templates\Documents\Deutsch erweitert\PDFInfos.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\Deutsch erweitert\PDFInfos.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -733,42 +415,6 @@
 						Outputs="$(OutDir)\Templates\Documents\English\OptionsAbbreviations.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English\OptionsAbbreviations.tex&quot; &quot;$(OutDir)\Templates\Documents\English\OptionsAbbreviations.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English\OptionsAbbreviations.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English\OptionsAbbreviations.tex&quot; &quot;$(OutDir)\Templates\Documents\English\OptionsAbbreviations.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English\OptionsAbbreviations.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English\OptionsAbbreviations.tex&quot; &quot;$(OutDir)\Templates\Documents\English\OptionsAbbreviations.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English\OptionsAbbreviations.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English\OptionsAbbreviations.tex&quot; &quot;$(OutDir)\Templates\Documents\English\OptionsAbbreviations.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English\OptionsAbbreviations.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Documents\English\OptionsLayout.tex"
@@ -809,42 +455,6 @@
 						Outputs="$(OutDir)\Templates\Documents\English\OptionsLayout.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English\OptionsLayout.tex&quot; &quot;$(OutDir)\Templates\Documents\English\OptionsLayout.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English\OptionsLayout.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English\OptionsLayout.tex&quot; &quot;$(OutDir)\Templates\Documents\English\OptionsLayout.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English\OptionsLayout.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English\OptionsLayout.tex&quot; &quot;$(OutDir)\Templates\Documents\English\OptionsLayout.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English\OptionsLayout.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English\OptionsLayout.tex&quot; &quot;$(OutDir)\Templates\Documents\English\OptionsLayout.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English\OptionsLayout.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Documents\English\Titlepage.tex"
@@ -878,42 +488,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English\Titlepage.tex&quot; &quot;$(OutDir)\Templates\Documents\English\Titlepage.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English\Titlepage.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English\Titlepage.tex&quot; &quot;$(OutDir)\Templates\Documents\English\Titlepage.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English\Titlepage.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English\Titlepage.tex&quot; &quot;$(OutDir)\Templates\Documents\English\Titlepage.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English\Titlepage.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English\Titlepage.tex&quot; &quot;$(OutDir)\Templates\Documents\English\Titlepage.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English\Titlepage.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -965,42 +539,6 @@
 						Outputs="$(OutDir)\Templates\Documents\English advanced\OptionsAdvanced.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English advanced\OptionsAdvanced.tex&quot; &quot;$(OutDir)\Templates\Documents\English advanced\OptionsAdvanced.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English advanced\OptionsAdvanced.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English advanced\OptionsAdvanced.tex&quot; &quot;$(OutDir)\Templates\Documents\English advanced\OptionsAdvanced.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English advanced\OptionsAdvanced.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English advanced\OptionsAdvanced.tex&quot; &quot;$(OutDir)\Templates\Documents\English advanced\OptionsAdvanced.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English advanced\OptionsAdvanced.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English advanced\OptionsAdvanced.tex&quot; &quot;$(OutDir)\Templates\Documents\English advanced\OptionsAdvanced.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English advanced\OptionsAdvanced.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Documents\English advanced\OptionsMath.tex"
@@ -1041,42 +579,6 @@
 						Outputs="$(OutDir)\Templates\Documents\English advanced\OptionsMath.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English advanced\OptionsMath.tex&quot; &quot;$(OutDir)\Templates\Documents\English advanced\OptionsMath.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English advanced\OptionsMath.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English advanced\OptionsMath.tex&quot; &quot;$(OutDir)\Templates\Documents\English advanced\OptionsMath.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English advanced\OptionsMath.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English advanced\OptionsMath.tex&quot; &quot;$(OutDir)\Templates\Documents\English advanced\OptionsMath.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English advanced\OptionsMath.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English advanced\OptionsMath.tex&quot; &quot;$(OutDir)\Templates\Documents\English advanced\OptionsMath.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English advanced\OptionsMath.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Documents\English advanced\PDFInfos.tex"
@@ -1110,42 +612,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English advanced\PDFInfos.tex&quot; &quot;$(OutDir)\Templates\Documents\English advanced\PDFInfos.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English advanced\PDFInfos.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English advanced\PDFInfos.tex&quot; &quot;$(OutDir)\Templates\Documents\English advanced\PDFInfos.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English advanced\PDFInfos.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English advanced\PDFInfos.tex&quot; &quot;$(OutDir)\Templates\Documents\English advanced\PDFInfos.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English advanced\PDFInfos.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Documents\English advanced\PDFInfos.tex&quot; &quot;$(OutDir)\Templates\Documents\English advanced\PDFInfos.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Documents\English advanced\PDFInfos.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1197,42 +663,6 @@
 						Outputs="$(OutDir)\Templates\Projects\Deutsch\Brief.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\Brief.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\Brief.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\Brief.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\Brief.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\Brief.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\Brief.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\Brief.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\Brief.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\Brief.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\Brief.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\Brief.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\Brief.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Projects\Deutsch\KOMA-Brief.tex"
@@ -1266,42 +696,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\KOMA-Brief.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\KOMA-Brief.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\KOMA-Brief.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\KOMA-Brief.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\KOMA-Brief.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\KOMA-Brief.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\KOMA-Brief.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\KOMA-Brief.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\KOMA-Brief.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\KOMA-Brief.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\KOMA-Brief.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\KOMA-Brief.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1349,42 +743,6 @@
 						Outputs="$(OutDir)\Templates\Projects\Deutsch\KOMAArtikel.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\KOMAArtikel.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\KOMAArtikel.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\KOMAArtikel.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\KOMAArtikel.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\KOMAArtikel.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\KOMAArtikel.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\KOMAArtikel.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\KOMAArtikel.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\KOMAArtikel.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\KOMAArtikel.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\KOMAArtikel.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\KOMAArtikel.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Projects\Deutsch\lebenslauf.tex"
@@ -1425,42 +783,6 @@
 						Outputs="$(OutDir)\Templates\Projects\Deutsch\lebenslauf.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\lebenslauf.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\lebenslauf.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\lebenslauf.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\lebenslauf.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\lebenslauf.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\lebenslauf.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\lebenslauf.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\lebenslauf.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\lebenslauf.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\lebenslauf.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\lebenslauf.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\lebenslauf.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Projects\Deutsch\Report.tex"
@@ -1494,42 +816,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\Report.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\Report.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\Report.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch\Report.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch\Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch\Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1581,42 +867,6 @@
 						Outputs="$(OutDir)\Templates\Projects\Deutsch erweitert\KOMABuch.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch erweitert\KOMABuch.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch erweitert\KOMABuch.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch erweitert\KOMABuch.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch erweitert\KOMABuch.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch erweitert\KOMABuch.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch erweitert\KOMABuch.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch erweitert\KOMABuch.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch erweitert\KOMABuch.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch erweitert\KOMABuch.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch erweitert\KOMABuch.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch erweitert\KOMABuch.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch erweitert\KOMABuch.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Projects\Deutsch erweitert\prospereinfach.tex"
@@ -1650,42 +900,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch erweitert\prospereinfach.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch erweitert\prospereinfach.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch erweitert\prospereinfach.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch erweitert\prospereinfach.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch erweitert\prospereinfach.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch erweitert\prospereinfach.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch erweitert\prospereinfach.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch erweitert\prospereinfach.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch erweitert\prospereinfach.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\Deutsch erweitert\prospereinfach.tex&quot; &quot;$(OutDir)\Templates\Projects\Deutsch erweitert\prospereinfach.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\Deutsch erweitert\prospereinfach.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1737,42 +951,6 @@
 						Outputs="$(OutDir)\Templates\Projects\English\Letter.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English\Letter.tex&quot; &quot;$(OutDir)\Templates\Projects\English\Letter.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English\Letter.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English\Letter.tex&quot; &quot;$(OutDir)\Templates\Projects\English\Letter.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English\Letter.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English\Letter.tex&quot; &quot;$(OutDir)\Templates\Projects\English\Letter.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English\Letter.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English\Letter.tex&quot; &quot;$(OutDir)\Templates\Projects\English\Letter.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English\Letter.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Projects\English\Report.tex"
@@ -1813,42 +991,6 @@
 						Outputs="$(OutDir)\Templates\Projects\English\Report.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English\Report.tex&quot; &quot;$(OutDir)\Templates\Projects\English\Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English\Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English\Report.tex&quot; &quot;$(OutDir)\Templates\Projects\English\Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English\Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English\Report.tex&quot; &quot;$(OutDir)\Templates\Projects\English\Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English\Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English\Report.tex&quot; &quot;$(OutDir)\Templates\Projects\English\Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English\Report.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Projects\English\Slides.tex"
@@ -1882,42 +1024,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English\Slides.tex&quot; &quot;$(OutDir)\Templates\Projects\English\Slides.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English\Slides.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English\Slides.tex&quot; &quot;$(OutDir)\Templates\Projects\English\Slides.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English\Slides.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English\Slides.tex&quot; &quot;$(OutDir)\Templates\Projects\English\Slides.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English\Slides.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English\Slides.tex&quot; &quot;$(OutDir)\Templates\Projects\English\Slides.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English\Slides.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1969,42 +1075,6 @@
 						Outputs="$(OutDir)\Templates\Projects\English advanced\Basic Article.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Basic Article.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Basic Article.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Basic Article.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Basic Article.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Basic Article.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Basic Article.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Basic Article.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Basic Article.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Basic Article.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Basic Article.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Basic Article.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Basic Article.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Projects\English advanced\Book.tex"
@@ -2038,42 +1108,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Book.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Book.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Book.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Book.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Book.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Book.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Book.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Book.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Book.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Book.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Book.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Book.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -2121,42 +1155,6 @@
 						Outputs="$(OutDir)\Templates\Projects\English advanced\Foils.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Foils.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Foils.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Foils.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Foils.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Foils.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Foils.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Foils.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Foils.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Foils.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Foils.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Foils.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Foils.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Projects\English advanced\Mathematical Article.tex"
@@ -2190,42 +1188,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Mathematical Article.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Mathematical Article.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Mathematical Article.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Mathematical Article.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Mathematical Article.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Mathematical Article.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Mathematical Article.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Mathematical Article.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Mathematical Article.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Mathematical Article.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Mathematical Article.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Mathematical Article.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -2273,42 +1235,6 @@
 						Outputs="$(OutDir)\Templates\Projects\English advanced\Mathematical Book.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Mathematical Book.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Mathematical Book.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Mathematical Book.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Mathematical Book.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Mathematical Book.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Mathematical Book.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Mathematical Book.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Mathematical Book.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Mathematical Book.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Mathematical Book.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Mathematical Book.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Mathematical Book.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Projects\English advanced\Simple Letter.tex"
@@ -2342,42 +1268,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Simple Letter.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Simple Letter.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Simple Letter.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Simple Letter.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Simple Letter.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Simple Letter.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Simple Letter.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Simple Letter.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Simple Letter.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Simple Letter.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Simple Letter.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Simple Letter.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -2425,42 +1315,6 @@
 						Outputs="$(OutDir)\Templates\Projects\English advanced\Simple Report.tex"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Simple Report.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Simple Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Simple Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Simple Report.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Simple Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Simple Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Simple Report.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Simple Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Simple Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Simple Report.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Simple Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Simple Report.tex"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Projects\English advanced\Technical Report.tex"
@@ -2494,42 +1348,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Technical Report.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Technical Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Technical Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Technical Report.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Technical Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Technical Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Technical Report.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Technical Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Technical Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;Projects\English advanced\Technical Report.tex&quot; &quot;$(OutDir)\Templates\Projects\English advanced\Technical Report.tex&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Templates\Projects\English advanced\Technical Report.tex"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
