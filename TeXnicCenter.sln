@@ -39,7 +39,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TxcResEnglish", "TeXnicCent
 		{E8E006D1-6599-43C2-AD30-75E5B5B9F68F} = {E8E006D1-6599-43C2-AD30-75E5B5B9F68F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hunspell", "Hunspell\src\win_api\libhunspell.vcproj", "{53609BB3-D874-465C-AF7B-DF626DB0D89B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libhunspell", "Hunspell\src\win_api\libhunspell.vcproj", "{53609BB3-D874-465C-AF7B-DF626DB0D89B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TXCUserHelp", "TCHelp\TXCUserHelp.vcproj", "{12243F23-547E-4676-A36D-7DE0EE131354}"
 EndProject

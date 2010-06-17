@@ -628,7 +628,7 @@ void add_affix_char(struct hentry * ep, char ac)
   int i;
   char * tmp;
   if (ep->affstr == NULL) {
-     ep->affstr = (char *) malloc(2*sizeof(char));
+     ep->affstr = (char *) malloc(2);
      *(ep->affstr) = ac;
      *((ep->affstr)+1) = '\0';
      return;
@@ -636,7 +636,7 @@ void add_affix_char(struct hentry * ep, char ac)
   al = strlen(ep->affstr);
   for (i=0; i< al; i++)
     if (ac == (ep->affstr)[i]) return;
-  tmp = calloc((al+2),sizeof(char));
+  tmp = calloc(al+2,1);
   memcpy(tmp,ep->affstr,(al+1));
   *(tmp+al) = ac;
   *(tmp+al+1)='\0';
@@ -794,18 +794,20 @@ char * mystrsep(char ** stringp, const char delim)
       *stringp = dp+1;
       nc = (int)((unsigned long)dp - (unsigned long)mp);
       rv = (char *) malloc(nc+1);
-      memcpy(rv,mp,nc);
-      *(rv+nc) = '\0';
-      return rv;
+      if (rv) {
+        memcpy(rv,mp,nc);
+        *(rv+nc) = '\0';
+      }
     } else {
       rv = (char *) malloc(n+1);
-      memcpy(rv, mp, n);
-      *(rv+n) = '\0';
-      *stringp = mp + n;
-      return rv;
+      if (rv) {
+        memcpy(rv, mp, n);
+        *(rv+n) = '\0';
+        *stringp = mp + n;
+      }
     }
   }
-  return NULL;
+  return rv;
 }
 
 
@@ -813,9 +815,9 @@ char * mystrdup(const char * s)
 {
   char * d = NULL;
   if (s) {
-    int sl = strlen(s);
-    d = (char *) malloc(((sl+1) * sizeof(char)));
-    if (d) memcpy(d,s,((sl+1)*sizeof(char)));
+    int sl = strlen(s)+1;
+    d = (char *) malloc(sl);
+    if (d) memcpy(d,s,sl);
   }
   return d;
 }

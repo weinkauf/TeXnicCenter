@@ -83,7 +83,10 @@ int main(int argc, char** argv)
   }
 
   /* skip over the hash table size */
-  if (! fgets(ts, MAX_LN_LEN-1,wrdlst)) return 2;
+  if (! fgets(ts, MAX_LN_LEN-1,wrdlst)) {
+    fclose(wrdlst);
+    return 2;
+  }
   mychomp(ts);
 
   while (fgets(ts,MAX_LN_LEN-1,wrdlst)) {
@@ -473,18 +476,20 @@ char * mystrsep(char ** stringp, const char delim)
       *stringp = dp+1;
       nc = (int)((unsigned long)dp - (unsigned long)mp);
       rv = (char *) malloc(nc+1);
-      memcpy(rv,mp,nc);
-      *(rv+nc) = '\0';
-      return rv;
+      if (rv) {
+        memcpy(rv,mp,nc);
+        *(rv+nc) = '\0';
+      }
     } else {
       rv = (char *) malloc(n+1);
-      memcpy(rv, mp, n);
-      *(rv+n) = '\0';
-      *stringp = mp + n;
-      return rv;
+      if (rv) {
+        memcpy(rv, mp, n);
+        *(rv+n) = '\0';
+        *stringp = mp + n;
+      }
     }
   }
-  return NULL;
+  return rv;
 }
 
 
@@ -492,9 +497,9 @@ char * mystrdup(const char * s)
 {
   char * d = NULL;
   if (s) {
-    int sl = strlen(s);
-    d = (char *) malloc(((sl+1) * sizeof(char)));
-    if (d) memcpy(d,s,((sl+1)*sizeof(char)));
+    int sl = strlen(s)+1;
+    d = (char *) malloc(sl);
+    if (d) memcpy(d,s,sl);
   }
   return d;
 }

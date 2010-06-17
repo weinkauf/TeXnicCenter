@@ -1,3 +1,98 @@
+2010-05-05 Caolán McNamara <cmc at OOo>:
+	* rhbz#589326 malloc of int that should have been of char**
+
+2010-04-28 Caolán McNamara <cmc at OOo>:
+	* moz#550942 get_xml_list doesn't handle failure from get_xml_par
+
+2010-04-27 Caolán McNamara <cmc at OOo>:
+	* moz#465612 mozilla-specific code leaks
+	* moz#430900 phone is dereferenced before oom check
+	* moz#418348 ckey_utf alloc is used unchecked in SuggestMgr::badcharkey_utf
+	* CID#1487 pointer "rl" dereferenced before NULL check
+	* CID#1464 Returned without freeing storage "ptr"
+	* CID#1459 Avoid duplicate strchr
+	* CID#1443 Avoid any chance of dereferencing *slst
+	* CID#1442 Unsafe to have a null morph
+	* CID#1440 Avoid null filenames
+	* CID#1302 Dereferencing NULL value "apostrophe"
+	* CID#1441 Avoid deferencing null ppfx
+
+2010-04-16 Caolán McNamara <cmc at OOo>:
+	* hun#2344123 fix U)ncap in utf-8 locale
+	* fix up hunspell text UI and lines wider than terminal
+
+2010-04-15 Caolán McNamara <cmc at OOo>:
+	* hun#2613701 fix small leak in FileMgr::FileMgr
+	* fix small leak in tools/hunspell
+	* hun#2871300 avoid crash if def and words are NULL
+	* hun#2904479 fix length of hzip file
+	* hun#2986756 mingw build fix
+	* hun#2986756 fix double-free
+	* hun#2059896 fix crash in interactive mode without nls
+	* hun#2917914 add some extra words to the latexparser
+	* make some structs static
+	* C-api has duped symbol names
+	* regenerate gettext/intl with recent version
+	* hun#2796772 build a .dll under MinGW
+	* rhbz#502387 allow cross-compiling for MinGW target
+	* hun#2467643 update .vcproj files to include replist.?xx
+	* unify visiblity/dll_export support across platforms
+	* hun#2831289 sizeof(short) typo
+	* hun#2986756 add -u3 gcc style output
+
+2010-04-14 Caolán McNamara <cmc at OOo>:
+	* hun#2813804 fix segfault on hu_HU stemming
+
+2010-04-13 Caolán McNamara <cmc at OOo>:
+	* hun#2806689 fix ironic misspellings
+	* hun#2836240 add Italian translations
+
+2010-04-09 Caolán McNamara <cmc at OOo>:
+	* fix titchy possible leak in command-line spellchecker
+
+2010-04-07 Caolán McNamara <cmc at OOo>:
+	* hun#2973827 apply win64 patch
+	* hun#2005643 fix broken mystrdup
+
+2010-03-04 Caolán McNamara <cmc at OOo>:
+	* ooo#107768 fix crash in long strings in spellml mode
+	* hun#1999737 add some malloc checks
+	* hun#1999769 drop old buffer on realloc failure
+	* hun#2005643 tidy string functions
+	* hun#2005643 micro-opt
+	* hun#2006077 free strings on failed dict parse
+	* hun#2110783 ispell-alike verbose mode implementation
+
+2010-03-03 Németh László <nemeth at OOo>:
+	* hunspell/(affixmgr, suggestmgr).cxx: add character sequence
+	  support for MAP suggestion, using parenthesized character groups
+	  in the syntax, eg. MAP ß(ss).
+	* man/hunspell.4, tests/map*: documentation and test files
+
+2010-02-25 Németh László <nemeth at OOo>:
+	* hunspell/hunspell.cxx: add recursion limit for BREAK (fix OOo Issue 106267)
+
+	* hunspell/hunspell.cxx: fix crash in morphological analysis of
+	  capitalized words with ending dashes
+
+	* affixmgr.cxx: fix morphological analysis of long numbers combined with dash,
+	  eg. 45-00000045 (reported by a@freeblog.hu).
+
+2010-02-23 Caolán McNamara <cmc at OOo>:
+	* hun#2314461 improve ispell-alike mode
+	* hun#2784983 improve default language detection
+	* hun#2812045 fix some compiler warnings
+	* hun#2910695 survive missing HOME dir
+	* hun#2934195 fix suggestmgr crash
+	* hun#2921129 remove unused variables
+	* hun#2826164 make sure make check uses the in-tree libhunspell
+	* bump toolchain to support --disable-rpath
+	* hun#2843984 fix coverity warning
+	* hun#2843986 fix coverity warning
+	* hun#2077630 add iconv lib
+	* make gcc strict-aliasing warning free
+	* make cppcheck warning free
+
 2008-11-01 Németh László <nemeth at OOo>:
 	* replist.*, hunspell.cxx, affixmgr.cxx: new input and output
           conversion support, see ICONV and OCONV keywords in the Hunspell(4)
