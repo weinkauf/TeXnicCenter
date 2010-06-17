@@ -1088,7 +1088,7 @@ LRESULT CMainFrame::OnResetToolbar(WPARAM wParam, LPARAM /*lParam*/)
 	// replace button
 	ReplaceToolbarButton(ID_LATEX_PROFILE_SEL, profileButton);
 
-	if (m_wndFormatRUBar && id == m_wndFormatRUBar.GetDlgCtrlID())
+	if (m_wndFormatRUBar && id == static_cast<UINT>(m_wndFormatRUBar.GetDlgCtrlID()))
 	{
 		int colors;
 		CPalette palette;
@@ -1103,7 +1103,7 @@ LRESULT CMainFrame::OnResetToolbar(WPARAM wParam, LPARAM /*lParam*/)
 
 		m_wndFormatRUBar.ReplaceButton(b2->m_nID, *b2);
 	}
-	else if (id == m_wndToolBar.GetDlgCtrlID())
+	else if (id == static_cast<UINT>(m_wndToolBar.GetDlgCtrlID()))
 	{
 		CMenu menu;
 		menu.CreatePopupMenu();

@@ -400,19 +400,18 @@ void BibTeXFile::HandleParseError(UINT msgID,int line,int col,const TCHAR *addDe
  */
 BOOL BibTeXFile::ParseField(const TCHAR *field,CString &name,CString &val)
 {
-	CONST TCHAR* eqChar;
-
-	eqChar = _tcsstr(field,_T("="));
-	size_t len1, len2, n = _tcslen(field);
-
-	if (NULL == eqChar)
+	CONST TCHAR* eqChar = _tcsstr(field,_T("="));
+	
+    if (NULL == eqChar)
 	{
 		return FALSE;
 	}
 
+    size_t n = _tcslen(field);
+
 	// Extract name and value
-	len1 = eqChar - field;
-	len2 = n - (eqChar - field) - 1;
+	size_t len1 = eqChar - field;
+	size_t len2 = n - (eqChar - field) - 1;
 
 	if (len1 > MAX_BIBTEX_ARG_LENGTH || len2 > MAX_BIBTEX_ARG_LENGTH)
 	{
