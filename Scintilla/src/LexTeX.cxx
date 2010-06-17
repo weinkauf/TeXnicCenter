@@ -306,7 +306,7 @@ namespace {
 		char key[100];
 		const int key_length = sizeof(key) - 1;
 
-		int k;
+        std::size_t k;
 		bool newifDone = false;
 		bool inComment = false;
 
