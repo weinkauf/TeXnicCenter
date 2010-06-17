@@ -17,8 +17,7 @@ To generate the setup you will need:
 2 Build Process
   
   1. Open the TeXnicCenter solution TeXnicCenter.sln in Visual C++.
-  2. Choose either 'Unicode Debug' or the 'Unicode Release' solution
-     configuration.
+  2. Choose either 'Debug' or the 'Release' solution configuration.
   3. Build the complete solution.
      The result can be found in the newly created 'Output' folder.
 

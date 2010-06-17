@@ -203,23 +203,23 @@ skip:
   SetOverwrite on
   
   SetOutPath "$INSTDIR\Language"
-  File /r "..\Output\Product\Win32\Unicode Release\Language\*.dll"
+  File /r "..\Output\Product\Win32\Release\Language\*.dll"
 
 
   SetOutPath "$INSTDIR"
-  File /r "..\Output\Product\\Win32\Unicode Release\Packages"
+  File /r "..\Output\Product\\Win32\Release\Packages"
   
-  File "..\Output\Product\Win32\Unicode Release\OutputProfiles.xsd"
-  File "..\Output\Product\Win32\Unicode Release\LaTeXCommands.xsd"
-  File "..\Output\Product\Win32\Unicode Release\CommonTypes.xsd"
-  File "..\Output\Product\Win32\Unicode Release\TeXnicCenterObjects.tlb"
-  File "..\Output\Product\Win32\Unicode Release\Tips_german.txt"
-  File "..\Output\Product\Win32\Unicode Release\Tips_english.txt"
-  File "..\Output\Product\Win32\Unicode Release\msxmlcpp.dll"
-  File "..\Output\Product\Win32\Unicode Release\mfcext.dll"
-  File "..\Output\Product\Win32\Unicode Release\SciLexer.dll"
-  File "..\Output\Product\Win32\Unicode Release\UserImages.bmp"
-  File "..\Output\Product\Win32\Unicode Release\TeXnicCenter.exe"
+  File "..\Output\Product\Win32\Release\OutputProfiles.xsd"
+  File "..\Output\Product\Win32\Release\LaTeXCommands.xsd"
+  File "..\Output\Product\Win32\Release\CommonTypes.xsd"
+  File "..\Output\Product\Win32\Release\TeXnicCenterObjects.tlb"
+  File "..\Output\Product\Win32\Release\Tips_german.txt"
+  File "..\Output\Product\Win32\Release\Tips_english.txt"
+  File "..\Output\Product\Win32\Release\msxmlcpp.dll"
+  File "..\Output\Product\Win32\Release\mfcext.dll"
+  File "..\Output\Product\Win32\Release\SciLexer.dll"
+  File "..\Output\Product\Win32\Release\UserImages.bmp"
+  File "..\Output\Product\Win32\Release\TeXnicCenter.exe"
 
 ; Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -245,7 +245,7 @@ SectionEnd
 
 Section "$(desc_help_files)" sec_help
 SectionIn 1 3
-  File /r "..\Output\Product\Win32\Unicode Release\Help"
+  File /r "..\Output\Product\Win32\Release\Help"
   
   SetShellVarContext all
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\TeXnicCenter Help.lnk" "$INSTDIR\Help\TeXnicCenter.chm" "" "" "" "" "" "$(texniccenter_help)"
@@ -253,7 +253,7 @@ SectionEnd
 
 Section "$(desc_latex_templ)" sec_templates
 SectionIn 1 3
-  File /r "..\Output\Product\Win32\Unicode Release\Templates"
+  File /r "..\Output\Product\Win32\Release\Templates"
   
   WriteRegStr HKLM "${PRODUCT_SOFTWARE_KEY}\Settings\Options\ProjectTemplatePaths" "AppPath" "$INSTDIR"
 
