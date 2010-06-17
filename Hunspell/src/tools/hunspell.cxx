@@ -1,12 +1,11 @@
-#include <cstring>
-
 // glibc < 3.0 (for mkstemp)
 #ifndef __USE_MISC
 #define __USE_MISC
 #endif
 
-#include <cstdlib>
-#include <cstdio>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "config.h"
 #include "hunspell.hxx"
 #include "csutil.hxx"
@@ -28,7 +27,6 @@
 
 #ifdef WIN32
 
-#define gettext
 #define LIBDIR "C:\\Hunspell\\"
 #define USEROOODIR "Application Data\\OpenOffice.org 2\\user\\wordbook"
 #define OOODIR \
@@ -67,6 +65,7 @@
     "/usr/share/myspell:" \
     "/usr/share/myspell/dicts"
 #define USEROOODIR \
+    ".openoffice.org/3/user/wordbook:" \
     ".openoffice.org2/user/wordbook:" \
     ".openoffice.org2.0/user/wordbook"
 #define OOODIR \
@@ -96,21 +95,21 @@ char text_conv[MAXLNLEN];
 #endif
 
 #if ENABLE_NLS
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
-#include <langinfo.h>
-#endif
-
-#ifdef HAVE_LIBINTL_H
-#include <libintl.h>
+#  ifdef HAVE_LOCALE_H
+#    include <locale.h>
+#    ifdef HAVE_LANGINFO_CODESET
+#      include <langinfo.h>
+#    endif
+#  endif
+#  ifdef HAVE_LIBINTL_H
+#    include <libintl.h>
+#  else
+#    include <../../intl/libintl.h>
+#  endif
 #else
-#include <../../intl/libintl.h>
-#endif
-
-#else
-#define gettext
-#undef HAVE_LOCALE_H
-#undef HAVE_LIBINTL_H
+#  define gettext
+#  undef HAVE_LOCALE_H
+#  undef HAVE_LIBINTL_H
 #endif
 
 #ifdef HAVE_CURSES_H
@@ -135,8 +134,6 @@ extern char * mystrdup(const char * s);
 
 enum { FMT_TEXT, FMT_LATEX, FMT_HTML, FMT_MAN, FMT_FIRST };
 
-//using namespace std;
-
 struct wordlist {
     char * word;
     wordlist * next;
@@ -152,6 +149,7 @@ int wordchars_utf16_free = 0;
 int wordchars_utf16_len;
 char * dicname = NULL;
 char * privdicname = NULL;
+const char * currentfilename = NULL;
 
 int modified;   // modified file sign
 enum { NORMAL,
@@ -163,12 +161,12 @@ enum { NORMAL,
        PIPE,       // print only stars for LyX compatibility
        AUTO0,      // search typical error (based on SuggestMgr::suggest_auto())
        AUTO,       // automatic spelling to standard output
-       AUTO2	    };    // automatic spelling to standard output with sed log
+       AUTO2,      // automatic spelling to standard output with sed log
+       AUTO3   };  // automatic spelling to standard output with gcc error format
 int filter_mode = NORMAL;
 int printgood = 0; // print only good words and lines
 int showpath = 0;  // show detected path of the dictionary
 int checkurl = 0;  // check URLs and mail addresses
-char * ui_lang = NULL; // locale for default dic_name
 const char * ui_enc = NULL;  // locale character encoding (default for I/O)
 const char * io_enc = NULL;  // I/O character encoding
 
@@ -378,7 +376,7 @@ TextParser * get_parser(int format, char * extension, Hunspell * pMS) {
 #ifdef LOG
 void log(char * message)
 {
-        FILE *f = fopen(LOGFILE,"a");
+	FILE *f = fopen(LOGFILE,"a");
 	if (f) {
     	    fprintf(f,"%s\n",message);
     	    fclose(f);
@@ -391,6 +389,8 @@ void log(char * message)
 int putdic(char * word, Hunspell * pMS)
 {
     char * w;
+
+    word = chenc(word, ui_enc, dic_enc[0]);
     
     if (((w = strstr(word + 1, "/")) == NULL)) {
         if (*word == '*') return pMS->remove(word + 1);
@@ -445,9 +445,10 @@ int save_privdic(char * filename, char * filename2, wordlist * w)
     }
     if (! dic) return 0;
     while (w != NULL) {
-	fprintf(dic,"%s\n",w->word);
+	char *word = chenc(w->word, io_enc, ui_enc);
+	fprintf(dic,"%s\n",word);
 #ifdef LOG
-	log(w->word);log("\n");
+	log(word);log("\n");
 #endif
 	r = w;
 	free(w->word);
@@ -494,6 +495,7 @@ void pipe_interface(Hunspell ** pMS, int format, FILE * fileid) {
   int bad;
   int lineno = 0;
   int terse_mode = 0;
+  int verbose_mode = 0;
   int d = 0;
 
   TextParser * parser = get_parser(format, NULL, pMS[0]);
@@ -519,8 +521,9 @@ nextline: while(fgets(buf, MAXLNLEN, fileid)) {
     if (filter_mode == PIPE) {
     pos = -1;
     switch (buf[0]) {
-    case '%': { terse_mode = 0; break; }
+    case '%': { verbose_mode = terse_mode = 0; break; }
     case '!': { terse_mode = 1; break; }
+    case '`': { verbose_mode = 1; break; }
     case '+': {
 		delete parser;
 		parser = get_parser(FMT_LATEX, NULL, pMS[0]);
@@ -608,29 +611,33 @@ if (pos >= 0) {
 			continue;
 		}
 
-                case AUTO0:
+		case AUTO0:
 		case AUTO:
-		case AUTO2: {
-                FILE * f = (filter_mode == AUTO) ? stderr : stdout;
-		if (!check(pMS, &d, token, NULL, NULL)) {
-			char ** wlst = NULL;
-			bad = 1;
-			int ns = pMS[d]->suggest_auto(&wlst, chenc(token, io_enc, dic_enc[d]));
-			if (ns > 0) {
-				parser->change_token(chenc(wlst[0], dic_enc[d], io_enc));
-				if (filter_mode != AUTO2) {
-					fprintf(f,gettext("Line %d: %s -> "), lineno,
-					    chenc(token, io_enc, ui_enc));
-					fprintf(f, "%s\n",
-					    chenc(wlst[0], dic_enc[d], ui_enc));
-                                        free(wlst[0]);
-                                } else {
-					fprintf(f,"%ds/%s/%s/g; # %s\n", lineno,
-					    token, chenc(wlst[0], dic_enc[d], io_enc), buf);
-                                }
+		case AUTO2:
+		case AUTO3: {
+			FILE * f = (filter_mode == AUTO) ? stderr : stdout;
+			if (!check(pMS, &d, token, NULL, NULL)) {
+				char ** wlst = NULL;
+				bad = 1;
+				int ns = pMS[d]->suggest_auto(&wlst, chenc(token, io_enc, dic_enc[d]));
+				if (ns > 0) {
+					parser->change_token(chenc(wlst[0], dic_enc[d], io_enc));
+					if (filter_mode == AUTO3) {
+						fprintf(f,"%s:%d: Locate: %s | Try: %s\n",
+							currentfilename, lineno,
+							token, chenc(wlst[0], dic_enc[d], io_enc));
+					} else if (filter_mode == AUTO2) {
+						fprintf(f,"%ds/%s/%s/g; # %s\n", lineno,
+							token, chenc(wlst[0], dic_enc[d], io_enc), buf);
+					} else {
+						fprintf(f,gettext("Line %d: %s -> "), lineno,
+							chenc(token, io_enc, ui_enc));
+						fprintf(f, "%s\n",
+							chenc(wlst[0], dic_enc[d], ui_enc));
+					}
+				}
+				pMS[d]->free_list(&wlst, ns);
 			}
-			pMS[d]->free_list(&wlst, ns);
-		}
 			free(token);
 			continue;			
 		}
@@ -681,8 +688,12 @@ if (pos >= 0) {
 		int info;
                 char * root = NULL;
 		if (check(pMS, &d, token, &info, &root)) {
-			if (!terse_mode) fprintf(stdout,"*\n");
+			if (!terse_mode) {
+				if (verbose_mode) fprintf(stdout,"* %s\n", token);
+				else fprintf(stdout,"*\n");
+			    }
 			fflush(stdout);
+			if (root) free(root);
 		} else {
 			char ** wlst = NULL;
 			int ns = pMS[d]->suggest(&wlst, token);
@@ -716,6 +727,7 @@ if (pos >= 0) {
 				fprintf(stdout,"*\n");
 			}			
 			fflush(stdout);
+			if (root) free(root);
 		} else {
 			char ** wlst = NULL;
 			int ns = pMS[d]->suggest(&wlst, chenc(token, io_enc, dic_enc[d]));
@@ -770,10 +782,10 @@ if (parser) delete(parser);
 
 } // pipe_interface
 
-#ifndef WIN32
-
 #ifdef HAVE_READLINE
-static char * rltext;
+
+#ifdef HAVE_CURSES_H
+static const char * rltext;
 
 // set base text of input line
 static int set_rltext ()
@@ -781,11 +793,13 @@ static int set_rltext ()
   if (rltext)
     {
       rl_insert_text (rltext);
-      rltext = (char *)NULL;
+      rltext = NULL;
       rl_startup_hook = (rl_hook_func_t *)NULL;
     }
   return 0;
 }
+
+#endif
 
 // Readline escape 
 static int rl_escape (int count, int key)
@@ -799,7 +813,7 @@ static int rl_escape (int count, int key)
 #ifdef HAVE_CURSES_H
 int expand_tab(char * dest, char * src, int limit) {
 	int i = 0;
-        int u8 = strcmp(ui_enc, "UTF-8") == 0 ? 1 : 0;
+        int u8 = ((ui_enc != NULL) && (strcmp(ui_enc, "UTF-8") == 0)) ? 1 : 0;
         int chpos = 0;
 	for(int j = 0; (i < limit) && (src[j] != '\0') && (src[j] != '\r'); j++) {
 		dest[i] = src[j];
@@ -819,21 +833,39 @@ int expand_tab(char * dest, char * src, int limit) {
 	return chpos;
 }
 
-// UTF-8 version of strncpy (but output is always null terminated)
-char * strncpyu8(char * dest, const char * src, int begin, size_t n) {
-        int u8 = strcmp(ui_enc, "UTF-8") == 0 ? 1 : 0;
-        for (int i = 0; i <= begin + n;) {
-            if (!u8 || (*src & 0xc0) != 0x80) i++;
-            if (i >= begin && i <= begin + n) {
-                if (*src) {
-                    *dest = *src;
-                    src++;
-                } else *dest = '\0';
-                dest++;
-            }
-        }
-        if (n) *(dest - 1) = '\0'; else *dest = '\0';
-        return dest;
+// UTF-8-aware version of strncpy (but output is always null terminated)
+// What we should deal in is cursor position cells in a terminal emulator,
+// i.e. the number of visual columns occupied like wcwidth/wcswidth does
+// What we're really current doing is to deal in the number of characters,
+// like mbstowcs which isn't quite correct, but close enough for western
+// text in UTF-8
+void strncpyu8(char * dest, const char * src, int begin, int n) {
+	int u8 = ((ui_enc != NULL) && (strcmp(ui_enc, "UTF-8") == 0)) ? 1 : 0;
+	int i = 0;
+	while (i < begin + n) {
+		if (i >= begin)
+		{
+			if (!*src)
+				break;
+			*dest++ = *src;
+		}
+		if (!u8 || (*src & 0xc0) != 0x80)
+			i++;
+		++src;
+	}
+	*dest = '\0';
+}
+
+//See strncpyu8 for gotchas
+int strlenu8(const char * src) {
+	int u8 = ((ui_enc != NULL) && (strcmp(ui_enc, "UTF-8") == 0)) ? 1 : 0;
+	int i = 0;
+	while (*src) {
+		if (!u8 || (*src & 0xc0) != 0x80)
+			i++;
+		++src;
+	}
+	return i;
 }
 
 void dialogscreen(TextParser * parser, char * token,
@@ -875,11 +907,12 @@ void dialogscreen(TextParser * parser, char * token,
 		rowindex--;
 		if (rowindex == -1) {
 			prevline++;
-			rowindex = strlen(lines[prevline]) / x;
+			rowindex = strlenu8(lines[prevline]) / x;
 		}
 	}
 
-	strncpyu8(line, lines[0], x * rowindex, (tokenbeg + 1) % x);
+	int linestartpos = tokenbeg - (tokenbeg % x);
+	strncpyu8(line, lines[0], x * rowindex + linestartpos, tokenbeg % x);
 	mvprintw(MAXPREVLINE + 1 - beginrow, 0, "%s", line);
 	attron(A_REVERSE);    
 	printw("%s", chenc(token, io_enc, ui_enc));
@@ -900,6 +933,27 @@ void dialogscreen(TextParser * parser, char * token,
 		gettext("\n[SPACE] R)epl A)ccept I)nsert U)ncap S)tem Q)uit e(X)it or ? for help\n"));
 }
 
+char * lower_first_char(char *token, const char *io_enc, int langnum)
+{
+	const char *utf8str = chenc(token, io_enc, "UTF-8");
+	int max = strlen(utf8str);
+	w_char *u = new w_char[max];
+	int len = u8_u16(u, max, utf8str);
+	unsigned short idx = (u[0].h << 8) + u[0].l;
+	idx = unicodetolower(idx, langnum);
+	u[0].h = (unsigned char) (idx >> 8);
+	u[0].l = (unsigned char) (idx & 0x00FF);
+	char *scratch = (char*)malloc(max + 1 + 4);
+	u16_u8(scratch, max+4, u, len);
+	delete[] u;
+	char *result = chenc(scratch, "UTF-8", io_enc);
+	if (result != scratch)
+	{
+		free (scratch);
+		result = mystrdup(result);
+	}
+	return result;
+}
 
  // for terminal interface
 int dialog(TextParser * parser, Hunspell * pMS, char * token, char * filename,
@@ -1003,21 +1057,17 @@ printw(gettext("\n-- Type space to continue -- \n"));
 		
 		return 2; // replace
 	    }
-/* TRANSLATORS: translate this letter according to the shortcut letter used
-   previously in the  translation of "U)ncap" before */
-	    if (c==(gettext("u"))[0]) {
-		*token = (pMS->get_csconv())[(*token)].clower;
-	    }
-/* TRANSLATORS: translate this letter according to the shortcut letter used
+/* TRANSLATORS: translate these letters according to the shortcut letter used
    previously in the  translation of "U)ncap" and I)nsert before */
-	    if ((c==(gettext("u"))[0]) || (c==(gettext("i"))[0])) {
-		struct wordlist* i = 
-		    (struct wordlist *) malloc (sizeof(struct wordlist));
-    		i->word = mystrdup(token);
+	    int u_key = gettext("u")[0];
+	    int i_key = gettext("i")[0];
+
+	    if (c==u_key || c==i_key) {
+		struct wordlist* i = (struct wordlist *) malloc (sizeof(struct wordlist));
+    		i->word = (c==i_key) ? mystrdup(token) : lower_first_char(token, io_enc, pMS->get_langnum());
 		i->next = dicwords;
 		dicwords = i;
 		// save
-		strcpy(buf,HOME);
 		if (HOME) strcpy(buf,HOME); else {
 		    fprintf(stderr, gettext("error - missing HOME variable\n"));
 		    break;
@@ -1148,7 +1198,6 @@ printw(gettext("\n-- Type space to continue -- \n"));
 		    }
 		    // save
 		    		    
-		    strcpy(buf,HOME);
 		    if (HOME) strcpy(buf,HOME); else {
 			fprintf(stderr, gettext("error - missing HOME variable\n"));
 			continue;
@@ -1301,7 +1350,6 @@ void interactive_interface(Hunspell ** pMS, char * filename, int format)
 }
 
 #endif
-#endif
 
 char * add(char * dest, const char * st) {
 	if (!dest) {
@@ -1382,11 +1430,13 @@ int main(int argc, char** argv)
 	int argstate = 0;
 	
 #ifdef ENABLE_NLS
-#ifdef HAVE_LOCALE_H
-	ui_lang = setlocale(LC_ALL, "");
+#  ifdef HAVE_LOCALE_H
+	setlocale(LC_ALL, "");
 	textdomain("hunspell");
-        ui_enc = nl_langinfo(CODESET);
-#endif
+#    ifdef HAVE_LANGINFO_CODESET
+	ui_enc = nl_langinfo(CODESET);
+#    endif
+#  endif
 #endif
 
 #ifdef HAVE_READLINE
@@ -1415,7 +1465,7 @@ int main(int argc, char** argv)
 			io_enc = argv[i];
 			argstate = 0;
 		} else if (argstate == 4) {
-		        key = argv[i];
+			key = argv[i];
 			argstate = 0;
 		} else if (strcmp(argv[i],"-d")==0) argstate=1;
 		else if (strcmp(argv[i],"-p")==0) argstate=2;
@@ -1433,8 +1483,8 @@ int main(int argc, char** argv)
 			fprintf(stderr,gettext("  -h, --help\tdisplay this help and exit\n"));
 			fprintf(stderr,gettext("  -H\t\tHTML input file format\n"));
 			fprintf(stderr,gettext("  -i enc\tinput encoding\n"));
-			fprintf(stderr,gettext("  -l\t\tprint mispelled words\n"));
-			fprintf(stderr,gettext("  -L\t\tprint lines with mispelled words\n"));
+			fprintf(stderr,gettext("  -l\t\tprint misspelled words\n"));
+			fprintf(stderr,gettext("  -L\t\tprint lines with misspelled words\n"));
 			fprintf(stderr,gettext("  -m \t\tanalyze the words of the input text\n"));
 			fprintf(stderr,gettext("  -n\t\tnroff/troff input file format\n"));
 			fprintf(stderr,gettext("  -p dict\tset dict custom dictionary\n"));
@@ -1444,10 +1494,11 @@ int main(int argc, char** argv)
 // experimental functions: missing Unicode support
 //			fprintf(stderr,gettext("  -u\t\tshow typical misspellings\n"));
 //			fprintf(stderr,gettext("  -u2\t\tprint typical misspellings in sed format\n"));
+//			fprintf(stderr,gettext("  -u3\t\tprint typical misspellings in gcc error format\n"));
 //			fprintf(stderr,gettext("  -U\t\tautomatic correction of typical misspellings to stdout\n"));
 			fprintf(stderr,gettext("  -v, --version\tprint version number\n"));
 			fprintf(stderr,gettext("  -vv\t\tprint Ispell compatible version number\n"));
-			fprintf(stderr,gettext("  -w\t\tprint mispelled words (= lines) from one word/line input.\n\n"));
+			fprintf(stderr,gettext("  -w\t\tprint misspelled words (= lines) from one word/line input.\n\n"));
 			fprintf(stderr,gettext("Example: hunspell -d en_US file.txt    # interactive spelling\n"
                                                "         hunspell -l file.txt          # print misspelled words\n"
                                                "         hunspell -i utf-8 file.txt    # check UTF-8 encoded file\n\n"));
@@ -1470,9 +1521,21 @@ int main(int argc, char** argv)
 			fprintf(stdout,gettext(HUNSPELL_PIPE_HEADING));
 			fflush(stdout);
 		} else if ((strcmp(argv[i],"-m")==0)) {
-			filter_mode = ANALYZE;
+            /*
+             if -a was used, don't override, i.e. keep ispell compatability
+             ispell:   Make possible root/affix combinations that aren't in the dictionary.
+             hunspell: Analyze the words of the input text
+            */
+			if (filter_mode != PIPE)
+			    filter_mode = ANALYZE;
 		} else if ((strcmp(argv[i],"-s")==0)) {
-			filter_mode = STEM;
+            /*
+             if -a was used, don't override, i.e. keep ispell compatability
+             ispell:   Stop itself with a SIGTSTP signal after each line of input.
+             hunspell: Stem the words of the input text
+            */
+			if (filter_mode != PIPE)
+			    filter_mode = STEM;
 		} else if ((strcmp(argv[i],"-t")==0)) {
 			format = FMT_LATEX;
 		} else if ((strcmp(argv[i],"-n")==0)) {
@@ -1482,15 +1545,53 @@ int main(int argc, char** argv)
 		} else if ((strcmp(argv[i],"-l")==0)) {
 			filter_mode = BADWORD;
 		} else if ((strcmp(argv[i],"-w")==0)) {
-			filter_mode = WORDFILTER;
+            /*
+             if -a was used, don't override, i.e. keep ispell compatability
+             ispell:   Specify additional characters that can be part of a word.
+             hunspell: Print misspelled words (= lines) from one word/line input
+            */
+			if (filter_mode != PIPE)
+			    filter_mode = WORDFILTER;
 		} else if ((strcmp(argv[i],"-L")==0)) {
-			filter_mode = BADLINE;
+            /*
+             if -a was used, don't override, i.e. keep ispell compatability
+             ispell:   Number of lines of context to be shown at the bottom of the screen
+             hunspell: Print lines with misspelled words
+            */
+			if (filter_mode != PIPE)
+			    filter_mode = BADLINE;
 		} else if ((strcmp(argv[i],"-u")==0)) {
-			filter_mode = AUTO0;
+            /*
+             if -a was used, don't override, i.e. keep ispell compatability
+             ispell: None
+             hunspell: Show typical misspellings
+            */
+			if (filter_mode != PIPE)
+			    filter_mode = AUTO0;
 		} else if ((strcmp(argv[i],"-U")==0)) {
-			filter_mode = AUTO;
+            /*
+             if -a was used, don't override, i.e. keep ispell compatability
+             ispell: None
+             hunspell: Automatic correction of typical misspellings to stdout
+            */
+			if (filter_mode != PIPE)
+			    filter_mode = AUTO;
 		} else if ((strcmp(argv[i],"-u2")==0)) {
-			filter_mode = AUTO2;
+            /*
+             if -a was used, don't override, i.e. keep ispell compatability
+             ispell: None
+             hunspell: Print typical misspellings in sed format
+            */
+			if (filter_mode != PIPE)
+			    filter_mode = AUTO2;
+		} else if ((strcmp(argv[i],"-u3")==0)) {         
+            /*
+             if -a was used, don't override, i.e. keep ispell compatability
+             ispell: None
+             hunspell: Print typical misspellings in gcc error format
+            */
+			if (filter_mode != PIPE)
+				filter_mode = AUTO3;
 		} else if ((strcmp(argv[i],"-G")==0)) {
 			printgood = 1;
 		} else if ((strcmp(argv[i],"-1")==0)) {
@@ -1515,13 +1616,28 @@ int main(int argc, char** argv)
 	
 	if (! dicname) {
 		if (! (dicname=getenv("DICTIONARY"))) {
-			if ((dicname=ui_lang) || (dicname=getenv("LANG"))) {
-			    dicname = mystrdup(dicname);
-			    char * dot = strchr(dicname, '.');
-			    if (dot) *dot = '\0';
-			    char * at = strchr(dicname, '@');
-			    if (at) *at = '\0';
-			} else {
+			/*
+			 * Search in order of LC_ALL, LC_MESSAGES &
+			 * LANG
+			*/
+			const char *tests[] = { "LC_ALL", "LC_MESSAGES", "LANG" };
+			for (size_t i = 0; i < sizeof(tests) / sizeof(const char*); ++i) {
+				if ((dicname=getenv(tests[i])) && strcmp(dicname, "") != 0) {
+					dicname = mystrdup(dicname);
+					char * dot = strchr(dicname, '.');
+					if (dot) *dot = '\0';
+					char * at = strchr(dicname, '@');
+					if (at) *at = '\0';
+					break;
+				}
+			}
+
+			if (dicname && ((strcmp(dicname, "C") == 0) || (strcmp(dicname, "POSIX") == 0))) {
+			    free(dicname);
+			    dicname=mystrdup("en_US");
+			}
+
+			if (! dicname) {
 		            dicname=mystrdup(DEFAULTDICNAME);
 			}
 		} else {
@@ -1532,21 +1648,23 @@ int main(int argc, char** argv)
 	path = add(path, PATHSEP);          // <- check path in root directory
 	if (getenv("DICPATH")) path = add(add(path, getenv("DICPATH")), PATHSEP);
 	path = add(add(path, LIBDIR), PATHSEP);
-	path = add(add(add(add(path, HOME), DIRSEP), USEROOODIR), PATHSEP);
+	if (HOME) path = add(add(add(add(path, HOME), DIRSEP), USEROOODIR), PATHSEP);
 	path = add(path, OOODIR);
+
+	if (showpath) {
+		fprintf(stderr, gettext("SEARCH PATH:\n%s\n"), path);
+		fprintf(stderr, gettext("AVAILABLE DICTIONARIES (path is not mandatory for -d option):\n"));
+		search(path, NULL, NULL);
+	}
 
 	if (!privdicname) privdicname = mystrdup(getenv("WORDLIST"));
 
-        int diclen = strlen(dicname);
         char * dicplus = strchr(dicname, ',');
         if (dicplus) *dicplus = '\0';
 	char * aff = search(path, dicname, ".aff");
 	char * dic = search(path, dicname, ".dic");
 	if (aff && dic) {
 		if (showpath) {
-			fprintf(stderr, gettext("SEARCH PATH:\n%s\n"), path);
-			fprintf(stderr, gettext("AVAILABLE DICTIONARIES (path is not mandatory for -d option):\n"), path);
-			search(path, NULL, NULL);
 			fprintf(stderr, gettext("LOADED DICTIONARY:\n%s\n%s\n"), aff, dic);
 		}
 		pMS[0] = new Hunspell(aff, dic, key);
@@ -1569,7 +1687,7 @@ int main(int argc, char** argv)
                     } else if (dic) pMS[dmax-1]->add_dic(dic);
 		}
 	} else {
-		fprintf(stderr,gettext("Can't open affix or dictionary files.\n"));
+		fprintf(stderr,gettext("Can't open affix or dictionary files for dictionary named \"%s\".\n"), dicname);
 		exit(1);
 	}
 
@@ -1596,57 +1714,56 @@ int main(int argc, char** argv)
 
 	if (arg_files==-1) {
 		pipe_interface(pMS, format, stdin);
-	} else {
-#ifndef WIN32
-#ifdef HAVE_CURSES_H
-		if (filter_mode == NORMAL) {
-		    initscr();
-		    cbreak();
-		    noecho();
-		    nonl();
-		    intrflush(stdscr,FALSE);
+	} else if (filter_mode != NORMAL) {
+		for (int i = arg_files; i < argc; i++) {
+			if (exist(argv[i])) {
+				modified = 0;
+				currentfilename = argv[i];
+				FILE * f = fopen(argv[i], "r");
+				pipe_interface(pMS, format, f);
+				fclose(f);
+			} else {
+				fprintf(stderr, gettext("Can't open %s.\n"), argv[i]);
+				exit(1);
+			}
 		}
+	} else if (filter_mode == NORMAL) {
+#ifdef HAVE_CURSES_H
+	    initscr();
+	    cbreak();
+	    noecho();
+	    nonl();
+	    intrflush(stdscr,FALSE);
 		
 		for (int i = arg_files; i < argc; i++) {
 			if (exist(argv[i])) {
 				modified = 0;
-				if (filter_mode != NORMAL) {
-                                        FILE * f = fopen(argv[i], "r");
-                                	pipe_interface(pMS, format, f);
-                                        fclose(f);
-				} else {
-					interactive_interface(pMS, argv[i], format);
-				}
+				interactive_interface(pMS, argv[i], format);
 			} else {
-	    			fprintf(stderr, gettext("Can't open %s.\n"), argv[i]);
+				fprintf(stderr, gettext("Can't open %s.\n"), argv[i]);
 				endwin();
 				exit(1);
 			}
 		}
 
-		if (filter_mode == NORMAL) {
 		clear();
 		refresh();
 		endwin();
-		}
 #else
-        fprintf(stderr, gettext("Hunspell has been compiled without Ncurses user interface.\n"));
-#endif
-#else
-        fprintf(stderr, gettext("Hunspell has been compiled without Ncurses user interface.\n"));
+		fprintf(stderr, gettext("Hunspell has been compiled without Ncurses user interface.\n"));
 #endif
 	}
 
-        if (dicname) free(dicname);
-        if (privdicname) free(privdicname);
-        if (path) free(path);
-        if (aff) free(aff);
-        if (dic) free(dic);
+	if (dicname) free(dicname);
+	if (privdicname) free(privdicname);
+	if (path) free(path);
+	if (aff) free(aff);
+	if (dic) free(dic);
 	if (wordchars) free(wordchars);
 	if (wordchars_utf16_free) free(wordchars_utf16);
 #ifdef HAVE_ICONV
 	free_utf_tbl();
 #endif
-        for (int i = 0; i < dmax; i++) delete pMS[i];
+	for (int i = 0; i < dmax; i++) delete pMS[i];
 	return 0;
 }

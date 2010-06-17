@@ -4,12 +4,12 @@
 m4_pattern_allow
 
 AC_PREREQ(2.59)
-AC_INIT([hunspell],[1.2.8],[nemeth@openoffice.org])
+AC_INIT([hunspell],[1.2.11],[nemeth@openoffice.org])
 
 AC_CANONICAL_SYSTEM
 AC_SUBST(XFAILED)
 
-AM_INIT_AUTOMAKE(hunspell, 1.2.8)
+AM_INIT_AUTOMAKE(hunspell, 1.2.11)
 HUNSPELL_VERSION_MAJOR=`echo $VERSION | cut -d"." -f1`
 HUNSPELL_VERSION_MINOR=`echo $VERSION | cut -d"." -f2`
 AC_SUBST(HUNSPELL_VERSION_MAJOR)
@@ -22,6 +22,7 @@ AC_CONFIG_HEADER([config.h])
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_LIBTOOL
+AC_LIBTOOL_WIN32_DLL
 
 # Checks for libraries.
 
@@ -35,12 +36,12 @@ AC_C_INLINE
 
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
-AC_FUNC_MALLOC
 AC_HEADER_STDC
 AC_CHECK_FUNCS([memchr setlocale strchr strstr])
 
 dnl internationalization macros
 AM_GNU_GETTEXT
+AM_GNU_GETTEXT_VERSION(0.17)
 
 AC_ARG_WITH(warnings,[  --with-warnings         compile with warning messages], [
      AC_DEFINE(HUNSPELL_WARNING_ON,1,"Define if you need warning messages")
@@ -108,6 +109,7 @@ AC_CONFIG_FILES([Makefile
                  m4/Makefile
 		 src/Makefile
 		 src/hunspell/Makefile
+		 src/hunspell/hunvisapi.h
 		 src/parsers/Makefile
 		 src/tools/Makefile
 		 src/win_api/Makefile

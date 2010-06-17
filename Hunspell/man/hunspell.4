@@ -1,4 +1,4 @@
-.TH hunspell 4 "2008-08-15"
+.TH hunspell 4 "2010-03-03"
 .LO 1
 .SH NAME
 hunspell \- format of Hunspell dictionaries and affix files
@@ -121,7 +121,7 @@ Set twofold prefix stripping (but single suffix stripping) for agglutinative
 languages with right-to-left writing system.
 .IP "LANG langcode"
 Set language code. In Hunspell may be language specific codes enabled
-by LANG code. At present there are az_AZ, hu_HU, TR_tr specific
+by LANG code. At present there are az_AZ, hu_HU, tr_TR specific
 codes in Hunspell (see the source code).
 .IP "IGNORE characters"
 Ignore characters from dictionary words, affixes and input words.
@@ -267,13 +267,13 @@ generated compound words, if they are also simple words with typical fault,
 see CHECKCOMPOUNDREP).
 
 .IP "MAP number_of_map_definitions"
-.IP "MAP string_of_related_chars"
-We can define language-dependent information on characters that
-should be considered related (i.e. nearer than other chars not in the set)
-in the affix file (.aff)  by a character map table. With this 
-table, Hunspell can suggest the right forms for words, which
-incorrectly choose the wrong letter from a related set more than once
-in a word.
+.IP "MAP string_of_related_chars_or_parenthesized_character_sequences"
+We can define language-dependent information on characters and
+character sequences that should be considered related (i.e. nearer than
+other chars not in the set) in the affix file (.aff)  by a map table.
+With this table, Hunspell can suggest the right forms for words, which
+incorrectly choose the wrong letter or letter groups from a related
+set more than once in a word (see REP).
 
 For example a possible mapping could be for the German
 umlauted ü versus the regular u; the word
@@ -283,6 +283,18 @@ Frühstück really should be written with umlauted u's and not regular ones
 .nf
 MAP 1
 MAP uü
+.fi
+.RE
+.PP
+Use parenthesized groups for character sequences (eg. for
+composed Unicode characters):
+.PP
+.RS
+.nf
+MAP 3
+MAP ß(ss)  (character sequence)
+MAP ﬁ(fi)  ("fi" compatibility characters for Unicode fi ligature)
+MAP (ọ́)o   (composed Unicode character: ó with bottom dot)
 .fi
 .RE
 .PP
@@ -1270,6 +1282,38 @@ in mostly UTF-8, under condition checking and suggestion are converted to
 UTF-16. Unicode text analysis and spell checking have a minimal (0-20%)
 time overhead and minimal or reasonable memory overhead depends from
 the language (its UTF-8 encoding and affixation).
+
+.SH "Conversion of aspell dictionaries"
+Aspell dictionaries can be easily converted into hunspell. Conversion steps:
+
+\fBdictionary (xx.cwl -> xx.wl):\fR
+
+.nf
+preunzip xx.cwl
+wc -l < xx.wl > xx.dic
+cat xx.wl >> xx.dic
+.fi
+
+\fBaffix file\fR
+
+If the affix file exists, copy it:
+.nf
+cp xx_affix.dat xx.aff
+.fi
+If not, create it with the suitable character encoding (see xx.dat)
+.nf
+echo "SET ISO8859-x" > xx.aff
+.fi
+or
+.nf
+echo "SET UTF-8" > xx.aff
+.fi
+
+It's useful to add a TRY option with the characters of the dictionary with
+frequency order to set edit distance suggestions:
+.nf
+echo "TRY qwertzuiopasdfghjklyxcvbnmQWERTZUIOPASDFGHJKLYXCVBNM" >>xx.aff
+.fi
 
 .SH "SEE ALSO"
 .B hunspell (1),
