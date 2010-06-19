@@ -405,7 +405,7 @@ protected:
 	SpellerBackgroundThread *m_pBackgroundThread;
 
 	/** Critical section to protect lazy resource initialization */
-	CRITICAL_SECTION m_csLazy;
+    CCriticalSection m_csLazy;
 
 protected:
 	int DoMessageBox(LPCTSTR prompt, UINT type, UINT prompt_id);
