@@ -135,23 +135,19 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 {
 	// initialize attributes
 	ASSERT(pStructureParserHandler);
-
-	::InitializeCriticalSection(&m_csSI);
-	m_paStructureItems = new StructureItemContainer;
 }
 
 CStructureParser::~CStructureParser()
 {
-	::DeleteCriticalSection(&m_csSI);
-	delete m_paStructureItems;
 }
 
 BOOL CStructureParser::GetStructureItems(StructureItemContainer *pItemArray)
 {
 	pItemArray->clear();
-	Lock();
-	* pItemArray = *m_paStructureItems;
-	Unlock();
+    
+    CSingleLock lock(&m_csSI);
+	*pItemArray = m_paStructureItems;
+
 	return TRUE;
 }
 
@@ -196,16 +192,16 @@ UINT StructureParserThread(LPVOID pStructureParser)
 
 	CStructureParser* pParser = (CStructureParser*)pStructureParser;
 
-	StructureItemContainer *paSI = new StructureItemContainer;
-	bParsingResult = pParser->Parse(pParser->m_strMainPath, cookies, 0, *paSI);
+	StructureItemContainer paSI;
+	bParsingResult = pParser->Parse(pParser->m_strMainPath, cookies, 0, paSI);
 
-	pParser->EmptyCookieStack(cookies, *paSI);
-
-	// Save the results
-	pParser->Lock();
-	delete pParser->m_paStructureItems;
-	pParser->m_paStructureItems = paSI;
-	pParser->Unlock();
+	pParser->EmptyCookieStack(cookies, paSI);
+	
+    {
+        // Save the results
+        CSingleLock lock(&pParser->m_csSI);
+        pParser->m_paStructureItems.swap(paSI);
+    }
 
 	pParser->Done(bParsingResult != 0);
 	pParser->m_bCancel = FALSE;

@@ -228,7 +228,6 @@ CTeXnicCenterApp::CTeXnicCenterApp()
 	,m_nApplicationLook(ID_VIEW_APP_LOOK_VS_2005)
 {
 	m_eHelpType = afxHTMLHelp;
-	InitializeCriticalSection(&m_csLazy);
 }
 
 bool CTeXnicCenterApp::CanUseRecentFiles()
@@ -694,7 +693,6 @@ int CTeXnicCenterApp::ExitInstance()
 	//if (m_pMDIFrameManager)
 	//	delete m_pMDIFrameManager;
 
-	DeleteCriticalSection(&m_csLazy);
 	delete m_pSpell;
 
 	ControlBarCleanUp();
@@ -1715,7 +1713,7 @@ void CTeXnicCenterApp::OnHelp()
 
 Speller* CTeXnicCenterApp::GetSpeller()
 {
-	::EnterCriticalSection(&m_csLazy);
+	CSingleLock lock(&m_csLazy);
 
 	if (m_pSpell == NULL)
 	{
@@ -1765,14 +1763,12 @@ Speller* CTeXnicCenterApp::GetSpeller()
 	//if (m_pSpell)
 	//    m_pSpell->suggest_main(CConfiguration::GetInstance()->m_bSpellMainDictOnly);
 
-	::LeaveCriticalSection(&m_csLazy);
-
 	return m_pSpell;
 }
 
 SpellerBackgroundThread* CTeXnicCenterApp::GetSpellerThread()
 {
-	::EnterCriticalSection(&m_csLazy);
+    CSingleLock lock(&m_csLazy);
 
 	if (m_pBackgroundThread == NULL)
 	{
@@ -1792,8 +1788,6 @@ SpellerBackgroundThread* CTeXnicCenterApp::GetSpellerThread()
 			m_pBackgroundThread->ResetSpeller(pSource);
 		}
 	}
-
-	::LeaveCriticalSection(&m_csLazy);
 
 	return m_pBackgroundThread;
 }

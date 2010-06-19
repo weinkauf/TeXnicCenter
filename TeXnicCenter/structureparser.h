@@ -213,23 +213,6 @@ public:
 
 // implementation
 private:
-
-	/**
-	Lock the internal structure item array.
-	 */
-	inline void Lock()
-	{
-		::EnterCriticalSection(&m_csSI);
-	}
-
-	/**
-	Unlock the internal structure item array.
-	 */
-	inline void Unlock()
-	{
-		::LeaveCriticalSection(&m_csSI);
-	}
-
 	/**
 	Signals the end of parsing.
 	@param bParsingResult <var>TRUE</var> if parsing was successful, else <var>FALSE</var>.
@@ -385,7 +368,7 @@ private:
 	CTextSourceManager *m_pTextSourceManager;
 
 	/** The array of structure items that describe the structure of the project. */
-	StructureItemContainer *m_paStructureItems;
+	StructureItemContainer m_paStructureItems;
 
 	/** The thread object, that does the parsing. */
 	CWinThread *m_pStructureParserThread;
@@ -484,7 +467,7 @@ private:
 
 private:
 	/** Used to control access to the m_aStructureItems-member. */
-	CRITICAL_SECTION m_csSI;
+    CCriticalSection m_csSI;
 
 	/** Actual depth */
 	SSIZE_T m_nDepth;
