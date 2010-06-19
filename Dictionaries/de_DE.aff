@@ -1,20 +1,17 @@
 # this is the affix file of the de_DE Hunspell dictionary
 # derived from the igerman98 dictionary
 #
-# Release date: 20080306
+# Version: 20091006 (build 20100128)
 #
-# Copyright (C) 1998-2007 Bjoern Jacke <bjoern@j3e.de>
+# Copyright (C) 1998-2009 Bjoern Jacke <bjoern@j3e.de>
 #
-# License: GPLv2 or OASIS distribution license agreement
+# License: GPLv2, GPLv3 or OASIS distribution license agreement
 # There should be a copy of both of this licenses included
 # with every distribution of this dictionary. Modified
 # versions using the GPL may only include the GPL
 
 SET ISO8859-1
 TRY esijanrtolcdugmphbyfvkwqxz‰¸ˆﬂ·ÈÍ‡‚ÒESIJANRTOLCDUGMPHBYFVKWQXZƒ‹÷…-.
-
-PFX G N 1
-PFX G   0     ge           .
 
 PFX U Y 1
 PFX U   0     un       .
@@ -26,8 +23,8 @@ SFX F Y 35
 SFX F   0     nen        in
 SFX F   e     in         e
 SFX F   e     innen      e
-SFX F   0     in         [^ie]n
-SFX F   0     innen      [^ie]n
+SFX F   0     in         [^i]n
+SFX F   0     innen      [^i]n
 SFX F   0     in         [^enr]
 SFX F   0     innen      [^enr]
 SFX F   0     in         [^e]r
@@ -44,8 +41,8 @@ SFX F   in    In         in
 SFX F   in    Innen      in
 SFX F   e     In         e
 SFX F   e     Innen      e
-SFX F   0     In         [^ie]n
-SFX F   0     Innen      [^ie]n
+SFX F   0     In         [^i]n
+SFX F   0     Innen      [^i]n
 SFX F   0     In         [^en]
 SFX F   0     Innen      [^en]
 SFX F   0     In         [^e]r
@@ -77,14 +74,14 @@ SFX L   0       lichem     [^n]
 SFX L   0       lichen     [^n]
 
 
-SFX H N 2
-SFX H   0       heit       .
-SFX H   0       heiten     .
+#SFX H N 2
+#SFX H   0       heit       .
+#SFX H   0       heiten     .
 
 
-SFX K N 2
-SFX K   0       keit       .
-SFX K   0       keiten     .
+#SFX K N 2
+#SFX K   0       keit       .
+#SFX K   0       keiten     .
 
 
 SFX M N 10
@@ -300,14 +297,14 @@ SFX S   0       s          .
 
 
 SFX q Y 2
-SFX q   s       sse        s
-SFX q   s       ssen       s
+SFX q   0       se        s
+SFX q   0       sen       s
 
 
-SFX Q Y 3
-SFX Q   s       sse        s
-SFX Q   s       ssen       s
-SFX Q   s       sses       s
+SFX Q Y 1
+SFX Q   0       ses       s
+#SFX Q   0       se        s
+#SFX Q   0       sen       s
 
 
 SFX T Y 1
@@ -354,12 +351,9 @@ SFX D   0       dem        n
 
 
 
-SFX W Y 8
-SFX W   en      0          [^imn]en
-SFX W   en      0          eien
-SFX W   en      0          [^bght][mn]en
-SFX W   en      0          [^c]hnen
-SFX W   n       0          e[lr]n
+SFX W Y 5
+SFX W   en      0          en
+SFX W   n       0          [^e]n
 SFX W   st      0          [^s]st
 SFX W   t       0          sst
 SFX W   t       0          [^s]t
