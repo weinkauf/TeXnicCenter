@@ -233,7 +233,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST, &CMainFrame::OnUpdateUserTool)
 	ON_COMMAND_RANGE(ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST, &CMainFrame::OnExecuteUserTool)
 	ON_COMMAND_RANGE(ID_VIEW_APP_LOOK_WIN_2000,ID_VIEW_APP_LOOK_OFFICE_2007_AQUA, &CMainFrame::OnApplicationLook)
+    ON_COMMAND_RANGE(ID_VIEW_APP_LOOK_WIN7, ID_VIEW_APP_LOOK_WIN7, &CMainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APP_LOOK_WIN_2000, ID_VIEW_APP_LOOK_OFFICE_2007_AQUA, &CMainFrame::OnUpdateApplicationLook)
+    ON_UPDATE_COMMAND_UI(ID_VIEW_APP_LOOK_WIN7, &CMainFrame::OnUpdateApplicationLook)
 	ON_MESSAGE_VOID(StartPaneAnimationMessageID, OnStartPaneAnimation)
 	ON_MESSAGE(StopPaneAnimationMessageID, OnStopPaneAnimation)
 	ON_REGISTERED_MESSAGE(AFX_WM_ON_GET_TAB_TOOLTIP, &CMainFrame::OnGetTabToolTip)
@@ -1897,6 +1899,10 @@ void CMainFrame::OnApplicationLook(UINT id)
 		case ID_VIEW_APP_LOOK_VS_2005:
 			CMFCVisualManager::SetDefaultManager( RUNTIME_CLASS(CMFCVisualManagerVS2005));
 			CDockingManager::SetDockingMode(DT_SMART);
+			break;
+        case ID_VIEW_APP_LOOK_WIN7:
+            CMFCVisualManager::SetDefaultManager( RUNTIME_CLASS(CMFCVisualManagerWindows7));
+            CDockingManager::SetDockingMode(DT_SMART);
 			break;
 		default:
 			switch (theApp.GetApplicationLook())
