@@ -20,10 +20,8 @@
 // Neutral resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
-#ifdef _WIN32
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
-#endif //_WIN32
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -80,7 +78,7 @@ IDB_LIGHTBULB           BITMAP                  "res\\Lightbulb.bmp"
 // Accelerator
 //
 
-IDR_MAINFRAME ACCELERATORS 
+IDR_MAINFRAME ACCELERATORS
 BEGIN
     "1",            ID_VIEW_TOGGLEBOTTOMDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
     "2",            ID_VIEW_TOGGLERIGHTDOCKINGBARS, VIRTKEY, CONTROL, NOINVERT
@@ -189,7 +187,7 @@ IDC_REVERSE_INCREMENTAL_SEARCH CURSOR                  "res\\Reverse incremental
 // Toolbar
 //
 
-IDR_OUTPUT_BAR TOOLBAR  16, 16
+IDR_OUTPUT_BAR TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_VIEW_BUILD_PANE
     BUTTON      ID_VIEW_GREP_1_PANE
@@ -198,7 +196,7 @@ BEGIN
     BUTTON      ID_VIEW_ERROR_LIST_PANE
 END
 
-IDR_FIND TOOLBAR  16, 16
+IDR_FIND TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_EDIT_FIND
     BUTTON      ID_EDIT_REPEAT
@@ -222,7 +220,7 @@ BEGIN
     BUTTON      ID_EDIT_PREVGREPRESULT
 END
 
-IDR_FORMAT TOOLBAR  16, 16
+IDR_FORMAT TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_FORMAT_EMPH
     BUTTON      ID_FORMAT_TEXTBF
@@ -261,7 +259,7 @@ BEGIN
     BUTTON      ID_FORMAT_FLUSHRIGHT
 END
 
-IDR_FORMAT_RECENTLY_USED TOOLBAR  16, 16
+IDR_FORMAT_RECENTLY_USED TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_FORMAT_EMPH
     BUTTON      ID_FORMAT_TEXTBF
@@ -278,7 +276,7 @@ BEGIN
     BUTTON      ID_FORMAT_TEXT_FORE_COLOR
 END
 
-IDR_IMAGES TOOLBAR  16, 16
+IDR_IMAGES TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_LATEX_PROFILE
     BUTTON      ID_APP_ABOUT
@@ -307,7 +305,7 @@ BEGIN
     BUTTON      ID_HELP_INDEX
 END
 
-IDR_INSERT TOOLBAR  16, 16
+IDR_INSERT TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_HEADER
     SEPARATOR
@@ -325,7 +323,7 @@ BEGIN
     BUTTON      ID_VIEW_MATH
 END
 
-IDR_LATEX TOOLBAR  16, 16
+IDR_LATEX TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_LATEX_PROFILE_SEL
     SEPARATOR
@@ -348,7 +346,7 @@ BEGIN
     BUTTON      ID_PREV_BADBOX
 END
 
-IDR_MAINFRAME TOOLBAR  16, 16
+IDR_MAINFRAME TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_PROJECT_NEW
     BUTTON      ID_LATEX_NEW
@@ -365,7 +363,7 @@ BEGIN
     BUTTON      ID_EDIT_REDO
 END
 
-IDR_MATH TOOLBAR  16, 16
+IDR_MATH TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_MATH1
     BUTTON      ID_MATH2
@@ -385,7 +383,7 @@ BEGIN
     BUTTON      ID_MATH16
 END
 
-IDR_MATHBAR1 TOOLBAR  16, 16
+IDR_MATHBAR1 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_LEQ
     BUTTON      ID_INSERT_GEQ
@@ -400,7 +398,7 @@ BEGIN
     BUTTON      ID_INSERT_PROPTP
 END
 
-IDR_MATHBAR10 TOOLBAR  16, 16
+IDR_MATHBAR10 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_A
     BUTTON      ID_INSERT_B
@@ -428,7 +426,7 @@ BEGIN
     BUTTON      ID_INSERT_Z2
 END
 
-IDR_MATHBAR11 TOOLBAR  16, 16
+IDR_MATHBAR11 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_LEFTINVISIBLE
     BUTTON      ID_INSERT_RIGHTINVISIBLE
@@ -452,7 +450,7 @@ BEGIN
     BUTTON      ID_INSERT_UNDERBRACE
 END
 
-IDR_MATHBAR12 TOOLBAR  16, 16
+IDR_MATHBAR12 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_FRAC
     BUTTON      ID_INSERT_INLINEFRAC
@@ -460,7 +458,7 @@ BEGIN
     BUTTON      ID_INSERT_SQRTEX
 END
 
-IDR_MATHBAR13 TOOLBAR  16, 16
+IDR_MATHBAR13 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_SUPERSCRIPT
     BUTTON      ID_INSERT_SUBSCRIPT
@@ -473,7 +471,7 @@ BEGIN
     BUTTON      ID_INSERT_SUPERSUB
 END
 
-IDR_MATHBAR14 TOOLBAR  16, 16
+IDR_MATHBAR14 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_SUM
     BUTTON      ID_INSERT_INT
@@ -482,7 +480,7 @@ BEGIN
     BUTTON      ID_INSERT_COPROD
 END
 
-IDR_MATHBAR15 TOOLBAR  16, 16
+IDR_MATHBAR15 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_OVERLINE
     BUTTON      ID_INSERT_UNDERLINE
@@ -493,7 +491,7 @@ BEGIN
     BUTTON      ID_INSERT_UNDERBRACE
 END
 
-IDR_MATHBAR16 TOOLBAR  16, 16
+IDR_MATHBAR16 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_UNDERRIGHTARROW
     BUTTON      ID_INSERT_UNDERLEFTARROW
@@ -503,7 +501,7 @@ BEGIN
     BUTTON      ID_INSERT_OVERLEFTRIGHTARROW
 END
 
-IDR_MATHBAR2 TOOLBAR  16, 16
+IDR_MATHBAR2 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_SPACECLOSE
     BUTTON      ID_INSERT_SPACENEGATIVECLOSE
@@ -517,7 +515,7 @@ BEGIN
     BUTTON      ID_INSERT_DDOTS
 END
 
-IDR_MATHBAR3 TOOLBAR  16, 16
+IDR_MATHBAR3 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_HAT
     BUTTON      ID_INSERT_CHECK
@@ -531,7 +529,7 @@ BEGIN
     BUTTON      ID_INSERT_DDOT
 END
 
-IDR_MATHBAR4 TOOLBAR  16, 16
+IDR_MATHBAR4 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_PM
     BUTTON      ID_INSERT_MP
@@ -548,7 +546,7 @@ BEGIN
     BUTTON      ID_INSERT_OSLASH
 END
 
-IDR_MATHBAR5 TOOLBAR  16, 16
+IDR_MATHBAR5 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_LEFTARROW
     BUTTON      ID_INSERT_RIGHTARROW
@@ -592,7 +590,7 @@ BEGIN
     BUTTON      ID_INSERT_LONGLEFTRIGHTARROW2
 END
 
-IDR_MATHBAR6 TOOLBAR  16, 16
+IDR_MATHBAR6 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_NI
     BUTTON      ID_INSERT_EXISTS
@@ -602,7 +600,7 @@ BEGIN
     BUTTON      ID_INSERT_VEE
 END
 
-IDR_MATHBAR7 TOOLBAR  16, 16
+IDR_MATHBAR7 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_IN
     BUTTON      ID_INSERT_NOTIN
@@ -616,7 +614,7 @@ BEGIN
     BUTTON      ID_INSERT_SUPSETEQ
 END
 
-IDR_MATHBAR8 TOOLBAR  16, 16
+IDR_MATHBAR8 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_PARTIAL
     BUTTON      ID_INSERT_NABLA
@@ -636,7 +634,7 @@ BEGIN
     BUTTON      ID_INSERT_COPROD
 END
 
-IDR_MATHBAR9 TOOLBAR  16, 16
+IDR_MATHBAR9 TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_INSERT_ALPHA
     BUTTON      ID_INSERT_BETA
@@ -668,7 +666,7 @@ BEGIN
     BUTTON      ID_INSERT_ZETA
 END
 
-IDR_ADDITIONAL_COMMANDS TOOLBAR  16, 16
+IDR_ADDITIONAL_COMMANDS TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_PROJECT_PROPERTIES
     BUTTON      ID_FILE_PRINT_PREVIEW
@@ -683,7 +681,7 @@ BEGIN
     BUTTON      ID_WINDOW_CLOSE_ALL
 END
 
-IDR_NAVIGATION_BAR TOOLBAR  16, 16
+IDR_NAVIGATION_BAR TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_VIEW_STRUCT_PANE
     BUTTON      ID_VIEW_ENV_PANE
@@ -692,7 +690,7 @@ BEGIN
     BUTTON      ID_VIEW_BOOKMARKS_PANE
 END
 
-IDR_ERROR_LIST TOOLBAR  16, 16
+IDR_ERROR_LIST TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_SHOW_ERRORS
     SEPARATOR
@@ -701,14 +699,14 @@ BEGIN
     BUTTON      ID_SHOW_BAD_BOXES
 END
 
-IDR_STRUCTURE TOOLBAR  16, 16
+IDR_STRUCTURE TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_SHOW_IMAGES
     BUTTON      ID_SHOW_TABLES
     BUTTON      ID_SHOW_EQUATIONS
 END
 
-IDR_BIB_SEARCH TOOLBAR  16, 16
+IDR_BIB_SEARCH TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_SEARCH_OPTIONS
     BUTTON      ID_SEARCH_EDIT
@@ -716,7 +714,7 @@ BEGIN
     BUTTON      ID_CLEAR_SEARCH
 END
 
-IDR_BOOKMARK_VIEW TOOLBAR  16, 16
+IDR_BOOKMARK_VIEW TOOLBAR 16, 16
 BEGIN
     BUTTON      ID_BUTTON38599
     BUTTON      ID_BUTTON38600
@@ -730,10 +728,8 @@ END
 // German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
-#ifdef _WIN32
 LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 #pragma code_page(1252)
-#endif //_WIN32
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1639,7 +1635,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
+GUIDELINES DESIGNINFO
 BEGIN
     IDD_ACTIVE_PROFILE, DIALOG
     BEGIN
@@ -2029,7 +2025,7 @@ END
 // Menu
 //
 
-IDR_POPUP_EDITOR MENU 
+IDR_POPUP_EDITOR MENU
 BEGIN
     POPUP "EDITOR_POPUP"
     BEGIN
@@ -2055,7 +2051,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_ITEM MENU 
+IDR_POPUP_ITEM MENU
 BEGIN
     POPUP "Navigatoreinträge"
     BEGIN
@@ -2069,7 +2065,7 @@ BEGIN
     END
 END
 
-IDR_HIDDEN_CMDS MENU 
+IDR_HIDDEN_CMDS MENU
 BEGIN
     POPUP "E&xtras"
     BEGIN
@@ -2086,7 +2082,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_REGULAREXPRESSION MENU 
+IDR_POPUP_REGULAREXPRESSION MENU
 BEGIN
     POPUP "IDR_POPUP_REGULAREXPRESSION"
     BEGIN
@@ -2117,7 +2113,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_TOOLBAR MENU 
+IDR_POPUP_TOOLBAR MENU
 BEGIN
     POPUP "IDR_POPUP_TOOLBAR"
     BEGIN
@@ -2133,7 +2129,7 @@ BEGIN
     END
 END
 
-IDR_FILEVIEW_FILE MENU 
+IDR_FILEVIEW_FILE MENU
 BEGIN
     POPUP "DUMMY"
     BEGIN
@@ -2148,7 +2144,7 @@ BEGIN
     END
 END
 
-IDR_FILEVIEW_FOLDER MENU 
+IDR_FILEVIEW_FOLDER MENU
 BEGIN
     POPUP "DUMMY"
     BEGIN
@@ -2160,7 +2156,7 @@ BEGIN
     END
 END
 
-IDR_FILEVIEW_PROJECT MENU 
+IDR_FILEVIEW_PROJECT MENU
 BEGIN
     POPUP "DUMMY"
     BEGIN
@@ -2175,7 +2171,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_MDICLIENT MENU 
+IDR_POPUP_MDICLIENT MENU
 BEGIN
     POPUP "_MDICLIENT_"
     BEGIN
@@ -2190,7 +2186,7 @@ BEGIN
     END
 END
 
-IDR_MAINFRAME MENU 
+IDR_MAINFRAME MENU
 BEGIN
     POPUP "&Datei"
     BEGIN
@@ -2301,6 +2297,7 @@ BEGIN
                 MENUITEM "&Silver",                     ID_VIEW_APP_LOOK_OFFICE_2007_SILVER
                 MENUITEM "&Aqua",                       ID_VIEW_APP_LOOK_OFFICE_2007_AQUA
             END
+            MENUITEM "Windows &7",                  ID_VIEW_APP_LOOK_WIN7
         END
         POPUP "&Dokumentregister"
         BEGIN
@@ -2951,7 +2948,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDER_DIR MENU 
+IDR_POPUP_PLACEHOLDER_DIR MENU
 BEGIN
     POPUP "IDR_POPUP_PLACEHOLDER_DIR"
     BEGIN
@@ -2969,7 +2966,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDEREX_NOOPT MENU 
+IDR_POPUP_PLACEHOLDEREX_NOOPT MENU
 BEGIN
     POPUP "IDR_POPUP_PLACEHOLDEREX_NOOPT"
     BEGIN
@@ -2993,7 +2990,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDER_OPT MENU 
+IDR_POPUP_PLACEHOLDER_OPT MENU
 BEGIN
     POPUP "IDR_POPUP_PLACEHOLDER_OPT"
     BEGIN
@@ -3014,7 +3011,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDER_MAIN_OPT MENU 
+IDR_POPUP_PLACEHOLDER_MAIN_OPT MENU
 BEGIN
     POPUP "IDR_POPUP_PLACEHOLDER_MAIN_OPT"
     BEGIN
@@ -3027,7 +3024,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDER_CURRENT_OPT MENU 
+IDR_POPUP_PLACEHOLDER_CURRENT_OPT MENU
 BEGIN
     POPUP "IDR_POPUP_PLACEHOLDER_CURRENT_OPT"
     BEGIN
@@ -3043,7 +3040,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDEREX_OPT MENU 
+IDR_POPUP_PLACEHOLDEREX_OPT MENU
 BEGIN
     POPUP "IDR_POPUP_PLACEHOLDEREX_OPT"
     BEGIN
@@ -3070,7 +3067,7 @@ BEGIN
     END
 END
 
-IDR_IDENTIFIERS MENU 
+IDR_IDENTIFIERS MENU
 BEGIN
     POPUP "DNT:Identifiers"
     BEGIN
@@ -3082,7 +3079,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_ATTRIBUTE MENU 
+IDR_POPUP_ATTRIBUTE MENU
 BEGIN
     MENUITEM "none",                        ID_NONE
     POPUP "Rechtschreibung"
@@ -3092,7 +3089,7 @@ BEGIN
     END
 END
 
-IDR_BIB_SEARCH_OPTIONS MENU 
+IDR_BIB_SEARCH_OPTIONS MENU
 BEGIN
     POPUP "Menu"
     BEGIN
@@ -3104,7 +3101,7 @@ BEGIN
     END
 END
 
-IDR_ERROR_VIEW MENU 
+IDR_ERROR_VIEW MENU
 BEGIN
     POPUP "ContextMenu"
     BEGIN
@@ -3395,7 +3392,7 @@ END
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_OPEN                "Öffnen"
     IDS_SAVE                "Speichern"
@@ -3403,7 +3400,7 @@ BEGIN
     IDR_NAVIGATION_BAR      "Kennung für die Navigationsleiste"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_EMPTYPROJECT_TITLE  "Leeres Projekt"
     STE_ENTRIES_COUNT       "%d Einträge"
@@ -3423,7 +3420,7 @@ BEGIN
     STE_FILECLEAN_HEAD1     "Beschreibung"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_RESOURCE_CONFLICT   "Die Sprachdatei für die gewünschte Sprache (%s) ist nicht mit dieser Version von TeXnicCenter kompatibel.\n\nTeXnicCenter-Version:\t%s\nSprachdatei-Version:\t%s\n\nStatt dessen wird die Standardsprache (Englisch) verwendet."
     STE_SELECT_PROJECT_PATH "Wählen Sie ein Verzeichnis für das neue Projekt aus..."
@@ -3444,7 +3441,7 @@ BEGIN
     STE_TB_LATEX            "LaTeX"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_LATEX_RESULT        "LaTeX-Ergebnis: %d Fehler, %d Warnung(en), %d zu volle/leere Box(en), %d Seite(n)"
     STE_LATEX_START         "--------------------Ausgabeprofil: %s--------------------"
@@ -3468,7 +3465,7 @@ BEGIN
     STE_OUTPUTWIZARD_PDFTYPE "LaTeX => PDF"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_CLEAR_SEARCH         "\nEingabefeld leeren"
     ID_AUTHOR               "Nach Autoren suchen."
@@ -3482,7 +3479,7 @@ BEGIN
     ID_VIEW_GREP_2_PANE     "Blendet die Suchergebnisse ein oder aus.\nSuchen 2"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FORMAT_TEXTTT        "Setzt Text im Argument diktengleich (Schreibmaschinenschrift)\nTypewriter\n\\texttt{\001}"
     ID_FORMAT_TINY          "Setzt den Text im Gültigkeitsbereich in winziger Größe\nWinzige Größe\n\\tiny"
@@ -3493,12 +3490,12 @@ BEGIN
     ID_FORMAT_TEXT_FORE_COLOR "Setzt die Textfarbe.\nTextfarbe"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_PARSE_PANE      "Blendet die Analyseleiste ein oder aus.\nAnalyse"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_FILE                "Datei"
     IDS_ENCODING            "Kodierung:"
@@ -3518,7 +3515,7 @@ BEGIN
     IDS_YEAR                "Erscheinungsjahr"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_PUBLICATION_TYPE    "Typ"
     IDS_PUBLISHER           "Herausgeber"
@@ -3536,7 +3533,7 @@ BEGIN
     IDS_SEARCHING           "Wird gesucht..."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_ITEMS_FOUND         "%i Einträge gefunden"
     IDS_CONFIGURE_FOUND_DISTRIBUTION 
@@ -3544,7 +3541,7 @@ BEGIN
     IDS_RECURSIVE_INCLUSION "Rekursive Inklusion ist nicht erlaubt"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_COMPILER_DELETE     "Soll der gewählte Ausgabetyp wirklich gelöscht werden?"
     STE_COMPILER_DELETE_EX  "Sollen der gewählte Ausgabetyp und der/die von ihm abhängige(n) Ausgabetype(n)\n\n%s\nwirklich gelöscht werden?"
@@ -3556,7 +3553,7 @@ BEGIN
     STE_COMPILER_SET_INTYPE "Sie müssen den Typ der Eingabedatei für diesen Compiler auswählen."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_COMPILER_SET_OUTDESCR 
                             "Sie müssen eine Beschreibung für den Ausgabetyp eingeben."
@@ -3581,13 +3578,13 @@ BEGIN
                             "Erzeugt ein Projekt mit einer leeren Hauptdatei."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDR_MAINFRAME           "TeXnicCenter"
     ID_VIEW_BOOKMARKS_PANE  "Blendet die Lesezeichen ein oder aus\nLesezeichen"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_TB_MAINFRAME        "Standard"
     IDS_EDIT_TEXT_NOT_FOUND "Text ""%s"" nicht gefunden"
@@ -3606,7 +3603,7 @@ BEGIN
     IDS_DESCRIPTION         "Beschreibung"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDB_BUILD_ANIMATION     "     "
     IDS_UNNAMED_BOOKMARK_FORMAT "Lesezeichen%i"
@@ -3618,13 +3615,13 @@ BEGIN
     STE_BIBTEX_ERR_INVALID_EOF "(%s:%d:%d) Ungültiges Ende der BibTeX-Datei"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Dateien (*.tex, *.sty, *.cls, *.dtx, *.ins, *.ltx)\n.tex;.sty;.cls;.dtx;.ins;.ltx\nLaTeX.Document\nLaTeX Dokument"
     IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Dateien (*.bib, *.bst)\n.bib;.bst\nBibTeX.Document\nBibTeX Dokument"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDR_METAPOSTDOCTYPE     "\nMetaPost\nMetaPost\nMetaPost-Dateien (*.mp)\n.mp\nMetaPost.Document\nMetaPost Dokument"
     IDR_LATEXPROJECTDOCTYPE "\nTeXnicCenter-Projekt\nTeXnicCenter-Projekt\nTeXnicCenter-Projekte (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
@@ -3632,7 +3629,7 @@ BEGIN
     IDS_BOOKMARK            "Lesezeichen"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_ITEMTYPE_HEADER     "Überschrift"
     STE_ITEMTYPE_ITEMIZATION "Aufzählung"
@@ -3652,13 +3649,13 @@ BEGIN
     STE_LATEX_REF           "\\ref{%s}"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_SPELL_CONTINUE      "Soll die Rechtschreibprüfung für den Rest des Projektes fortgesetzt werden?"
     IDS_NO_ACTION           "Keine Aktion möglich"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_SPELL_IGNORE        "Ignorieren"
     IDS_SPELL_UNEDIT        "Rückgängig"
@@ -3667,7 +3664,7 @@ BEGIN
     IDS_MISSING_SECTION     "Fehlender Abschnitt"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_FIND_INCREMENTAL_FORWARD "Inkrementelle Suche: %s"
     IDS_FIND_INCREMENTAL_BACKWARD "Inkrementelle Suche rückwärts: %s"
@@ -3677,7 +3674,7 @@ BEGIN
                             "Inkrementelle Suche abgeschlossen: %s (Startpunkt erreicht)"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_BIBTEX_ERR_INVALID_TYPE "(%s:%d:%d) Ungültiger BibTeX-Typ '%s'"
     STE_BIBTEX_ERR_MISSING_KEY "(%s:%d:%d) Eintrag hat keinen Schlüssel"
@@ -3691,7 +3688,7 @@ BEGIN
     STE_COLOR_OTHERS        "Andere Farben..."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_OUTPUTWIZARD_PDFVIAPSTYPE "LaTeX => PS => PDF"
     STE_OUTPUTWIZARD_PSTYPE "LaTeX => PS"
@@ -3715,13 +3712,13 @@ BEGIN
     STE_PLACEHOLDER_EXAMPLE_MAIN_SHORT "C:\\LATEXD~1\\PROMOT~1\\PROMOT~1.TEX"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_LANGUAGE            "de"
     IDS_DIALECT             "DE"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_MENU_UNDO_FORMAT    "&Rückgängig %s\tCtrl+Z"
     IDS_MENU_REDO_FORMAT    "Wi&ederholen %s\tCtrl+Y"
@@ -3734,7 +3731,7 @@ BEGIN
     IDS_EDITOP_DELETE       "Löschen"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_FILECLEAN_HEAD2     "Pattern"
     STE_FILECLEAN_HEAD3     "Rekursiv"
@@ -3755,7 +3752,7 @@ BEGIN
     STE_FLOATTYPE_FIGURE    "figure"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_TCP_INVALID         "Dies ist keine gültige Projektdatei."
     STE_XML_PARSE_ERROR     "Beim Lesen einer XML-Datei ist ein Fehler aufgetreten.\n\nFehler 0x%08x: %s\n\nDatei:\t%s\nZeile:\t%d\nZeichen:\t%d\n\n%s"
@@ -3763,7 +3760,7 @@ BEGIN
     STE_XML_INSTALLNEEDED   "Zur Nutzung dieser Funktion muss folgende Software auf Ihrem System korrekt installiert sein\n\n\tMicrosoft XML Parser (MSXML)\n\nEinen Verweis auf die aktuelle Version finden Sie im Download-Bereich von\n\n\thttp://www.TeXnicCenter.org/"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_PLACEHOLDERSETS_APF "Alle Projektdateien"
     STE_PLACEHOLDERSETS_COF "Geöffnete Dateien"
@@ -3789,7 +3786,7 @@ BEGIN
                             "Das Projektverzeichnis\n\n%s\n\nkonnte aus folgendem Grund nicht erzeugt werden:\n\n%s"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_FLOATTYPE_TABLE     "table"
     STE_GET_PATH            "Wählen Sie ein Verzeichnis aus..."
@@ -3809,12 +3806,12 @@ BEGIN
     STE_HEADER_SECTION      "\\section"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_DO_SAVE             "&Speichern"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_EDITOP_TYPING       "Tippen"
     IDS_EDITOP_BACKSPACE    "Backspace"
@@ -3828,7 +3825,7 @@ BEGIN
     STE_OUTPUTWIZARD_PDFVIALUALATEX "LuaLaTeX => PDF"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     CG_IDS_TIPOFTHEDAY      "Zeigt einen der Tipps und Tricks an."
     CG_IDS_TIPOFTHEDAYMENU  "Ti&pps und Tricks..."
@@ -3840,13 +3837,13 @@ BEGIN
     STE_URL_CANNOTOPEN      "Die URL konnte nicht geöffnet werden."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_START_SEARCH         "Startet die Suche.\nSuche starten"
     IDR_OUTPUT              "Kennung für die Ausgabeleiste"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_HEADER_SUBPARAGRAPH "\\subparagraph"
     STE_HEADER_SUBSECTION   "\\subsection"
@@ -3866,24 +3863,24 @@ BEGIN
     STE_ITEMTYPE_GENERIC    "Sonstiges"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_TEXTMODULES_NONEDEFINED "Kein Textbaustein definiert"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_TEX_FILES           "LaTeX-Dateien"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     AFX_IDS_APP_TITLE       "TeXnicCenterNT"
     AFX_IDS_IDLEMESSAGE     "Drücken Sie F1, um Hilfe zu erhalten."
     AFX_IDS_HELPMODEMESSAGE "Wählen Sie das Objekt, zu dem Sie Hilfe wünschen."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INDICATOR_EXT        "ER"
     ID_INDICATOR_CAPS       "UF"
@@ -3893,7 +3890,7 @@ BEGIN
     ID_INDICATOR_REC        "MA"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FILE_NEW             "Erstellt ein neues Dokument basierend auf einer Vorlage.\nNeu von Vorlage"
     ID_FILE_OPEN            "Öffnet ein bestehendes Dokument.\nÖffnen"
@@ -3908,7 +3905,7 @@ BEGIN
     ID_FILE_SEND_MAIL       "Versendet das aktive Dokument mittels elektronischer Post.\nNachricht senden"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_APP_ABOUT            "Zeigt Programm-Informationen, Versionsnummer und Copyright an.\nInfo"
     ID_APP_EXIT             "Verlässt die Anwendung; fragt, ob Dokumente gespeichert werden sollen.\nBeenden"
@@ -3919,7 +3916,7 @@ BEGIN
     ID_HELP                 "Zeigt Hilfe zum aktuellen Vorgang oder Befehl an.\nHilfe"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FILE_MRU_FILE1       "Öffnet dieses Dokument."
     ID_FILE_MRU_FILE2       "Öffnet dieses Dokument."
@@ -3939,13 +3936,13 @@ BEGIN
     ID_FILE_MRU_FILE16      "Öffnet dieses Dokument."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_NEXT_PANE            "Wechselt zum nächsten Fensterausschnitt.\nNächster Ausschnitt"
     ID_PREV_PANE            "Springt zum vorherigen Fensterausschnitt zurück.\nVorheriger Ausschnitt"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_WINDOW_NEW           "Öffnet ein weiteres Fenster für das aktive Dokument.\nNeues Fenster"
     ID_WINDOW_ARRANGE       "Ordnet die Symbole im unteren Bereich des Fensters an.\nSymbole anordnen"
@@ -3955,7 +3952,7 @@ BEGIN
     ID_WINDOW_SPLIT         "Teilt das aktive Fenster in Ausschnitte.\nTeilen"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_EDIT_CLEAR           "Löscht die Markierung.\nLöschen"
     ID_EDIT_CLEAR_ALL       "Löscht alles.\nAlles löschen"
@@ -3970,13 +3967,13 @@ BEGIN
     ID_EDIT_REDO            "Wiederholt die vorher rückgängig gemachte Aktion.\nWiederherstellen"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_TOOLBAR         "Blendet die Standard-Symbolleiste ein oder aus.\nStandard-Symbolleiste ein-/ausschalten"
     ID_VIEW_STATUS_BAR      "Blendet die Statusleiste ein oder aus.\nStatusleiste ein-/ausschalten"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     AFX_IDS_SCSIZE          "Ändert die Fenstergröße."
     AFX_IDS_SCMOVE          "Ändert die Position des Fensters."
@@ -3987,19 +3984,19 @@ BEGIN
     AFX_IDS_SCCLOSE         "Schließt das aktive Fenster und fordert zur Dokumentspeicherung auf."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     AFX_IDS_SCRESTORE       "Stellt das Fenster in seiner normalen Größe wieder her."
     AFX_IDS_SCTASKLIST      "Aktiviert die Task-Liste."
     AFX_IDS_MDICHILD        "Aktiviert dieses Fenster."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     AFX_IDS_PREVIEW_CLOSE   "Beendet die Seitenansicht.\nSeitenansicht beenden"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_TB_MATH             "Mathematische Symbole"
     IDR_MATH                "Vergleichsoperatoren"
@@ -4014,7 +4011,7 @@ BEGIN
     IDR_MATHBAR9            "Griechische Großbuchstaben"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDR_MATHBAR10           "Begrenzungssymbole (Klammern)"
     IDR_MATHBAR11           "Mathematische Konstrukte"
@@ -4024,12 +4021,12 @@ BEGIN
     IDR_MATHBAR15           "Beschriftete Pfeile"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_TOOL_NOCMDLINE      "Für das Tool wurde keine Kommandozeile definiert.\n\nGeben Sie bitte für das Tool eine Kommandozeile an und versuchen Sie es erneut."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FORMAT_LARGE3        "Setzt den Text im Gültigkeitsbereich in noch größerer Größe\nNoch größere Größe\n\\LARGE"
     ID_FORMAT_MDSERIES      "Setzt den Text im Gültigkeitsbereich in ""medium Serie""\nMedium Serie\n\\mdseries"
@@ -4049,7 +4046,7 @@ BEGIN
     ID_FORMAT_TEXTSL        "Setzt Text im Argument schräggestellt\nSchräggestellt\n\\textsl{\001}"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FORMAT_BFSERIES      "Setzt den Text im Gültigkeitsbereich in ""fette Serie""\nFette Serie\n\\bfseries"
     ID_FORMAT_CENTER        "Setzt Text zentriert\nZentriert\n\r\\begin{center}\r\001\r\\end{center}\r"
@@ -4064,7 +4061,7 @@ BEGIN
     ID_FORMAT_LARGE2        "Setzt den Text im Gültigkeitsbereich in größerer Größe\nGrößere Größe\n\\Large"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_ETA           "Fügt ein kleines Eta ein\nKleines Eta\n\\eta"
     ID_INSERT_EXISTS        "\n\n\\exists"
@@ -4085,7 +4082,7 @@ BEGIN
     ID_INSERT_GESCHWEIFTEKLAMMERAUF "\n\n\\{"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_A             "\n\nA"
     ID_INSERT_ABSTRACT      "Fügt eine Zusammenfassung ein\nZusammenfassung\n\r\\begin{abstract}\r\t\001\r\\end{abstract}\r"
@@ -4105,7 +4102,7 @@ BEGIN
     ID_INSERT_B             "\n\nB"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_BACKSLASH     "\n\n\\backslash"
     ID_INSERT_BAR           "\n\n\\bar{\001}"
@@ -4125,7 +4122,7 @@ BEGIN
     ID_INSERT_BOT           "\n\n\\bot"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_COTH          "\n\n\\coth"
     ID_INSERT_CSC           "\n\n\\csc"
@@ -4145,7 +4142,7 @@ BEGIN
     ID_INSERT_DIM           "\n\n\\dim"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_INF           "\n\n\\inf"
     ID_INSERT_INFTY         "\n\n\\infty"
@@ -4165,7 +4162,7 @@ BEGIN
     ID_INSERT_LAMBDA        "Fügt ein kleines Lambda ein\nKleines Lambda\n\\lambda"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_SUPERSCRIPT   "\n\n^{\001}"
     ID_INSERT_SUPERSUB      "\n\n^{\001}_{}"
@@ -4187,7 +4184,7 @@ BEGIN
     ID_INSERT_THETA2        "Fügt ein großes Theta ein\nGroßes Theta\n\\Theta"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_LEFTSLASH     "\n\n\\left/"
     ID_INSERT_LEFTVERTLINE  "\n\n\\left|\001"
@@ -4207,7 +4204,7 @@ BEGIN
     ID_INSERT_LONGLEFTRIGHTARROW2 "\n\n\\Longleftrightarrow"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_LONGMAPSTO    "\n\n\\longmapsto"
     ID_INSERT_LONGRIGHTARROW "\n\n\\longrightarrow"
@@ -4227,7 +4224,7 @@ BEGIN
     ID_INSERT_N2            "\n\nN"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_VERBATIMSTAR  "Fügt abgesetzten Quellcode ein\nCode\n\r\\begin{verbatim*}\r\001\r\\end{verbatim*}\r"
     ID_INSERT_VERBSTAR      "Fügt in Text eingebetteten Code ein\nEingebetteter Code\n\\verb*|\001|"
@@ -4247,7 +4244,7 @@ BEGIN
     ID_INSERT_ZETA          "Fügt ein kleines Zeta ein\nKleines Zeta\n\\zeta"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_TILDE         "\n\n\\tilde{\001}"
     ID_INSERT_TIMES         "\n\n\\times"
@@ -4268,7 +4265,7 @@ BEGIN
     ID_INSERT_UPDOWNARROW   "\n\n\\updownarrow"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_GESCHWEIFTEKLAMMERZU "\n\n\\}"
     ID_INSERT_GG            "\n\n\\gg"
@@ -4288,7 +4285,7 @@ BEGIN
     ID_INSERT_INCLUDEGRAPHICS "Fügt eine Grafik aus einer Datei ein\nGrafik"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_DIV           "\n\n\\div"
     ID_INSERT_DOT           "\n\n\\dot{\001}"
@@ -4309,7 +4306,7 @@ BEGIN
     ID_INSERT_EQUIV         "\n\n\\equiv"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_NABLA         "\n\n\\nabla"
     ID_INSERT_NATURAL       "\n\n\\natural"
@@ -4329,7 +4326,7 @@ BEGIN
     ID_INSERT_OMEGA2        "Fügt ein großes Omega ein\nGroßes Omega\n\\Omega"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_OMINUS        "\n\n\\ominus"
     ID_INSERT_OPLUS         "\n\n\\oplus"
@@ -4349,7 +4346,7 @@ BEGIN
     ID_INSERT_PI            "Fügt ein kleines Pi ein\nKleines Pi\n\\pi"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_SPITZEKLAMMERZU "\n\n\\rangle"
     ID_INSERT_SQCAP         "\n\n\\sqcap"
@@ -4369,7 +4366,7 @@ BEGIN
     ID_INSERT_SUP           "\n\n\\sup"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_PI2           "Fügt ein großes Pi ein\nGroßes Pi\n\\Pi"
     ID_INSERT_PM            "\n\n\\pm"
@@ -4389,7 +4386,7 @@ BEGIN
     ID_INSERT_RIGHTARROW2   "\n\n\\Rightarrow"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PH_CSDIR             "%sdc"
     ID_PH_CLINENR           "%l"
@@ -4406,14 +4403,14 @@ BEGIN
     ID_PH_CSELECTION        "%s"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_HELP_CONTENTS        "Zeigt das Inhaltsverzeichnis der Online-Dokumentation an\nInhalt"
     ID_HELP_KEYMAPPING      "Zeigt alle Tastaturbefehle an\nTastaturbelegung"
     ID_IDRPOPUPITEM_GEHEZU  "Springt zur Stelle der Definition\nGehe zur Definition"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_LATEX_BIBTEX         "Führt BibTeX für das Projekt aus\nBibTeX"
     ID_SPELL_PROJECT        "Führt die Rechtschreibprüfung für das gesamte Projekt durch.\nRechtschreibprüfung für Projekt"
@@ -4430,14 +4427,14 @@ BEGIN
     ID_PH_MAINOPTIONS       "\n[1]m"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PROJECT_PARSED       "DNT:Is send, when the project has been parsed and the views should be updated"
     ID_PROJECT_PARSE        "DNT:Send by CMainFrame to parse project."
     ID_DOCUMENT_SAVED       "DNT:Send by a CLatexDoc-object, after it has been saved."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_BOWTIE        "\n\n\\bowtie"
     ID_INSERT_BREVE         "\n\n\\breve{\001}"
@@ -4457,13 +4454,13 @@ BEGIN
     ID_INSERT_COT           "\n\n\\cot"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_BAR1            "Springt zum nächsten Fehler\nNächster Fehler"
     ID_VIEW_BAR2            "Springt zum vorherigen Fehler\nVorheriger Fehler"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_WINDOW_CLOSE_ALL_BUTACTIVE 
                             "Schließt alle geöffneten Dokumente bis auf das aktive.\nAlle inaktiven Fenster schließen"
@@ -4477,7 +4474,7 @@ BEGIN
     ID_VIEW_ERROR_LIST_PANE "Blendet das Fenster mit den Ergebnissen der Erstellung ein oder aus.\nErstellung Ergebnis"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_EDIT_GOTO            "Geht zur angegebenen Position\nGehe zu"
     ID_EDIT_GOTO_LAST_CHANGE 
@@ -4496,7 +4493,7 @@ BEGIN
     ID_EDIT_OUTSOURCE       "Lagert den markierten Text in eine externe Datei aus.\nText auslagern..."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_EDIT_BLOCKCOMMENT_INSERT 
                             "Kommentiert alle selektierten Zeilen mittels %-Zeichen.\nBlockkommentar einfügen"
@@ -4516,7 +4513,7 @@ BEGIN
     ID_EDIT_FIND_PREVIOUS   "Wiederholt die letzte Suche in Rückwärtsrichtung.\nWeitersuchen (rückwärts)"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_TEXTMODULES_DEFINE   "Zeigt Dialog zum Anpassen der Textbausteine an.\nTextbausteine"
     ID_VIEW_DOCTAB_TOP      "Aktiviert die Reiter zum Wechseln zwischen geöffneten Dokumenten am oberen Rand\nDokumentregister oben"
@@ -4531,7 +4528,7 @@ BEGIN
     ID_QUERY_COMPLETION     "Vervollständigt das aktuell angefangene Wort\nWort vervollständigen"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_LATEX_MAKEINDEX      "Führt MakeIndex für das Projekt aus\nMakeIndex"
     ID_LATEX_NEW            "Erstellt ein neues LaTeX-Dokument\nNeues LaTeX-Dokument"
@@ -4543,7 +4540,7 @@ BEGIN
     ID_LATEX_VIEW           "Zeigt die erzeugte Ausgabe in einem Betrachter an\nAusgabe betrachten"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_APP_LICENSE          "Zeigt die Lizenzvereinbarungen im Webbrowser an\nLizenzvereinbarung"
     ID_WINDOW_NEXT          "Aktiviert das nächste Dokument.\nNächstes Fenster"
@@ -4555,7 +4552,7 @@ BEGIN
                             "Erzeugt aus der aktuellen Datei ein druckbares Dokument und zeigt es an\nAktives Dokument erstellen und betrachten"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PH_MEXTENSION        "%em"
     ID_PH_MSPATH            "%spm"
@@ -4576,12 +4573,12 @@ BEGIN
     ID_PH_CBASE             "%bc"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_FULLSCREEN      "Schaltet den Vollbild-Modus ein und aus\nVollbild"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_SHOW_IMAGES          "Blendet Bilder in der Gliederung ein und aus.\nBilder"
     ID_SHOW_EQUATIONS       "Blendet Formeln in der Gliederung ein und aus.\nFormeln"
@@ -4590,7 +4587,7 @@ BEGIN
     ID_VIEW_WHITE_SPACE     "Blendet Leerraumzeichen ein- oder aus.\nLeerraumzeichen ein-/ausblenden"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_SIGMA         "Fügt ein kleines Sigma ein\nKleines Sigma\n\\sigma"
     ID_INSERT_SIGMA2        "Fügt ein großes Sigma ein\nGroßes Sigma\n\\Sigma"
@@ -4610,12 +4607,12 @@ BEGIN
     ID_INSERT_SPITZEKLAMMERAUF "\n\n\\langle"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_MATH            "Blendet die Matheleiste ein oder aus.\nMatheleiste ein-/ausschalten"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_LAMBDA2       "Fügt ein großes Lambda ein\nGroßes Lambda\n\\Lambda"
     ID_INSERT_LDOTS         "\n\n\\ldots"
@@ -4635,7 +4632,7 @@ BEGIN
     ID_INSERT_LEFTRIGHTARROW2 "\n\n\\Leftrightarrow"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_UPDOWNARROW2  "\n\n\\Updownarrow"
     ID_INSERT_UPLUS         "\n\n\\uplus"
@@ -4655,7 +4652,7 @@ BEGIN
     ID_INSERT_VERBATIM      "Fügt abgesetzten Quellcode ein\nCode\n\r\\begin{verbatim}\r\001\r\\end{verbatim}\r"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_URL_AUTHOR           "sven@texniccenter.org\nNachricht an den Autor\nmailto:sven@texniccenter.org"
     ID_URL_TCDEVELOPERSGROUP 
@@ -4667,7 +4664,7 @@ BEGIN
     ID_URL_TCUSERSGROUP     "http://www.latex-community.org/forum/viewforum.php?f=22\nTeXnicCenter Benutzerforum\nhttp://www.latex-community.org/forum/viewforum.php?f=22"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_TIP                  "Zeigt Tipps und Tricks an\nTipps und Tricks"
     ID_UPDATE_LATEX_OUTPUT  "DNT:Is send, when the latex-output has to be updated"
@@ -4676,7 +4673,7 @@ BEGIN
     ID_PROJECT_MRU_PROJECT1 "Öffnet dieses Projekt"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_EDIT_PREVGREPRESULT  "Springt zum vorherigen Ergebnis der Suche in Dateien\nVorheriges 'Suche in Dateien'-Ergebnis"
     ID_EDIT_SEL_BIGGER_BLOCK 
@@ -4685,7 +4682,7 @@ BEGIN
     ID_EDIT_SPELL_IGNORE_ALL "Wort ignorieren\nDieses Wort ignorieren."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_EXTRAS_ADAPT         "Öffnet einen Dialog zur persönlichen Anpassung der Tastatur und Symbolleisten\nAnpassen"
     ID_EXTRAS_CUSTOMIZE     "Öffnet einen Dialog zur persönlichen Anpassung der Tastatur und Symbolleisten\nAnpassen"
@@ -4693,7 +4690,7 @@ BEGIN
     ID_FILE_SAVE_ALL        "Speichert alle geöffneten Dateien\nAlle speichern"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PH_MPATH             "%pm"
     ID_PH_MSLASHPATH        "%Pm"
@@ -4706,7 +4703,7 @@ BEGIN
     ID_PH_MTITLE            "%tm"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PROJECT_PROPERTIES   "Bearbeitet die Einstellungen vom aktiven Projekt"
     ID_NEXT_WARNING         "Springt zur nächsten Warnung\nNächste Warnung"
@@ -4717,7 +4714,7 @@ BEGIN
                             "Öffnet die Hauptdatei des Projekts\nHauptdatei öffnen"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_RIGHTDOUBLEVERTLINE "\n\n\001\\right\\|"
     ID_INSERT_RIGHTECKIGEKLAMMER "\n\n\001\\right]"
@@ -4738,14 +4735,14 @@ BEGIN
     ID_INSERT_SHARP         "\n\n\\sharp"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_OPTIONS_CHANGED      "DNT:Send, when the user changed options in the options dialog."
     ID_WINDOW_LIST          "Verwaltet die momentan geöffneten Fenster.\nGeöffnete Fenster"
     ID_WINDOW_LIST_MENU     "&Fenster..."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PH_CSLASHBASE        "%Bc"
     ID_PH_CROOT             "%rc"
@@ -4761,12 +4758,12 @@ BEGIN
     ID_PH_CSSLASHBASE       "%sBc"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_LATEX_FILEMAKEINDEX  "Führt MakeIndex für das gerade aktive Dokument aus\nMakeIndex für aktives Dokument"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PHS_TEST_OPT         "\n[3]"
     ID_PHS_MORESETS_NOOPT   "\n[3]"
@@ -4785,7 +4782,7 @@ BEGIN
                             "Erzeugt ein Projekt mit der aktuell geöffneten Datei als Hauptdatei.\nNeues Projekt mit aktueller Datei"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PH_CURRENTOPTIONS    "\n[1]c"
     ID_PHS_ALLPROJECTFILES_Q "$qAPF"
@@ -4805,7 +4802,7 @@ BEGIN
     ID_PHS_TEST_NOOPT       "\n[2]"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_REGEX_GROUP          "\\(\001\\)"
     ID_REGEX_STAR           "*"
@@ -4823,7 +4820,7 @@ BEGIN
     ID_REGEX_LOWERALPHA     "\\l"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_REGEX_ANYCHAR        "."
     ID_REGEX_CHARSET        "[\001]"
@@ -4834,18 +4831,18 @@ BEGIN
     ID_REGEX_EOW            "\\>"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_WINDOW_FIRST         "Aktiviert dieses Fenster"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_METAPOST_NEW         "Erstellt ein neues MetaPost-Dokument\nNeues MetaPost-Dokument"
     ID_BIBTEX_NEW           "Erstellt ein neues BibTeX-Dokument\nNeues BibTeX-Dokument"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FILE_MRU_PROJECT1    "Öffnet dieses Projekt."
     ID_FILE_MRU_PROJECT2    "Öffnet dieses Projekt."
@@ -4857,7 +4854,7 @@ BEGIN
     ID_FILE_MRU_PROJECT8    "Öffnet dieses Projekt."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FILE_MRU_PROJECT9    "Öffnet dieses Projekt."
     ID_FILE_MRU_PROJECT10   "Öffnet dieses Projekt."
@@ -4866,13 +4863,13 @@ BEGIN
     ID_WINDOW_RECENTLY_USED "Aktiviert das zuletzt benutze Fenster"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_EDIT_SELECTPARAGRAPH "Markiert den aktuellen Absatz\nAbsatz markieren"
     ID_ADVANCED_DUPLICATE   "Fügt eine Kopie der aktuelle Zeile oder Auswahl ein.\nZeile oder Auswahl duplizieren"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_SEARCH_FINDNEXTSELECTED 
                             "(Selektiertes) Wort unter dem Cursor in Vorwärtsrichtung suchen.\nNächsten Treffer finden (selektiert)"
@@ -4885,13 +4882,11 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-#ifdef _WIN32
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
-#endif //_WIN32
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -5788,7 +5783,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
+GUIDELINES DESIGNINFO
 BEGIN
     IDD_ACTIVE_PROFILE, DIALOG
     BEGIN
@@ -6102,7 +6097,7 @@ END
 // Menu
 //
 
-IDR_POPUP_TOOLBAR MENU 
+IDR_POPUP_TOOLBAR MENU
 BEGIN
     POPUP "IDR_POPUP_TOOLBAR"
     BEGIN
@@ -6118,7 +6113,7 @@ BEGIN
     END
 END
 
-IDR_HIDDEN_CMDS MENU 
+IDR_HIDDEN_CMDS MENU
 BEGIN
     POPUP "&Tools"
     BEGIN
@@ -6135,7 +6130,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_EDITOR MENU 
+IDR_POPUP_EDITOR MENU
 BEGIN
     POPUP "EDITOR_POPUP"
     BEGIN
@@ -6161,7 +6156,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_ITEM MENU 
+IDR_POPUP_ITEM MENU
 BEGIN
     POPUP "Navigation Items"
     BEGIN
@@ -6175,7 +6170,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_REGULAREXPRESSION MENU 
+IDR_POPUP_REGULAREXPRESSION MENU
 BEGIN
     POPUP "IDR_POPUP_REGULAREXPRESSION"
     BEGIN
@@ -6206,7 +6201,7 @@ BEGIN
     END
 END
 
-IDR_FILEVIEW_FILE MENU 
+IDR_FILEVIEW_FILE MENU
 BEGIN
     POPUP "DUMMY"
     BEGIN
@@ -6221,7 +6216,7 @@ BEGIN
     END
 END
 
-IDR_FILEVIEW_FOLDER MENU 
+IDR_FILEVIEW_FOLDER MENU
 BEGIN
     POPUP "DUMMY"
     BEGIN
@@ -6233,7 +6228,7 @@ BEGIN
     END
 END
 
-IDR_FILEVIEW_PROJECT MENU 
+IDR_FILEVIEW_PROJECT MENU
 BEGIN
     POPUP "DUMMY"
     BEGIN
@@ -6248,7 +6243,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_MDICLIENT MENU 
+IDR_POPUP_MDICLIENT MENU
 BEGIN
     POPUP "_MDICLIENT_"
     BEGIN
@@ -6263,7 +6258,7 @@ BEGIN
     END
 END
 
-IDR_MAINFRAME MENU 
+IDR_MAINFRAME MENU
 BEGIN
     POPUP "&File"
     BEGIN
@@ -6374,6 +6369,7 @@ BEGIN
                 MENUITEM "&Silver",                     ID_VIEW_APP_LOOK_OFFICE_2007_SILVER
                 MENUITEM "&Aqua",                       ID_VIEW_APP_LOOK_OFFICE_2007_AQUA
             END
+            MENUITEM "Windows &7",                  ID_VIEW_APP_LOOK_WIN7
         END
         POPUP "Document Tabs"
         BEGIN
@@ -7024,7 +7020,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDER_DIR MENU 
+IDR_POPUP_PLACEHOLDER_DIR MENU
 BEGIN
     POPUP "IDR_POPUP_PLACEHOLDER_DIR"
     BEGIN
@@ -7042,7 +7038,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDEREX_NOOPT MENU 
+IDR_POPUP_PLACEHOLDEREX_NOOPT MENU
 BEGIN
     POPUP "IDR_POPUP_PLACEHOLDEREX_NOOPT"
     BEGIN
@@ -7066,7 +7062,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDER_CURRENT_OPT MENU 
+IDR_POPUP_PLACEHOLDER_CURRENT_OPT MENU
 BEGIN
     POPUP "IDR_POPUP_PLACEHOLDER_CURRENT_OPT"
     BEGIN
@@ -7082,7 +7078,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDER_MAIN_OPT MENU 
+IDR_POPUP_PLACEHOLDER_MAIN_OPT MENU
 BEGIN
     POPUP "IDR_POPUP_PLACEHOLDER_MAIN_OPT"
     BEGIN
@@ -7095,7 +7091,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDER_OPT MENU 
+IDR_POPUP_PLACEHOLDER_OPT MENU
 BEGIN
     POPUP "IDR_POPUP_PLACEHOLDER_OPT"
     BEGIN
@@ -7116,7 +7112,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_PLACEHOLDEREX_OPT MENU 
+IDR_POPUP_PLACEHOLDEREX_OPT MENU
 BEGIN
     POPUP "IDR_POPUP_PLACEHOLDEREX_OPT"
     BEGIN
@@ -7143,7 +7139,7 @@ BEGIN
     END
 END
 
-IDR_IDENTIFIERS MENU 
+IDR_IDENTIFIERS MENU
 BEGIN
     POPUP "DNT:Identifiers"
     BEGIN
@@ -7155,7 +7151,7 @@ BEGIN
     END
 END
 
-IDR_POPUP_ATTRIBUTE MENU 
+IDR_POPUP_ATTRIBUTE MENU
 BEGIN
     MENUITEM "none",                        ID_NONE
     POPUP "Spelling"
@@ -7165,7 +7161,7 @@ BEGIN
     END
 END
 
-IDR_BIB_SEARCH_OPTIONS MENU 
+IDR_BIB_SEARCH_OPTIONS MENU
 BEGIN
     POPUP "Menu"
     BEGIN
@@ -7177,7 +7173,7 @@ BEGIN
     END
 END
 
-IDR_ERROR_VIEW MENU 
+IDR_ERROR_VIEW MENU
 BEGIN
     POPUP "ContextMenu"
     BEGIN
@@ -7430,7 +7426,7 @@ END
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_FIND_INCREMENTAL_FORWARD "Incremental search: %s"
     IDS_FIND_INCREMENTAL_BACKWARD "Reverse incremental search: %s"
@@ -7440,7 +7436,7 @@ BEGIN
                             "Incremental search: %s (Passed start of search)"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_RESOURCE_CONFLICT   "The language file for the selected language (%s) is not compatible with this version of TeXnicCenter.\n\nVersion of TeXnicCenter:\t%s\nVersion of language file:\t%s\n\nThe default language (English) will be used instead."
     STE_SELECT_PROJECT_PATH "Select a directory for the new project..."
@@ -7461,7 +7457,7 @@ BEGIN
     STE_TB_LATEX            "LaTeX"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_TB_MAINFRAME        "Standard"
     IDS_LINE_NUMBER         "Line Number"
@@ -7481,7 +7477,7 @@ BEGIN
     IDS_DESCRIPTION         "Description"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_FILE                "File"
     IDS_ENCODING            "Encoding:"
@@ -7500,7 +7496,7 @@ BEGIN
     IDS_YEAR                "Year"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_ITEMS_FOUND         "% items found"
     IDS_CONFIGURE_FOUND_DISTRIBUTION 
@@ -7508,7 +7504,7 @@ BEGIN
     IDS_RECURSIVE_INCLUSION "Recursive inclusion is not allowed"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_COMPILER_DELETE     "Should the selected output type be deleted?"
     STE_COMPILER_DELETE_EX  "Should the selected output type and the depending output type(s)\n\n%s\n\nreally be deleted?"
@@ -7520,7 +7516,7 @@ BEGIN
     STE_COMPILER_SET_INTYPE "You must select the input type for this output type."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_COMPILER_SET_OUTDESCR 
                             "You must enter an description for this output type."
@@ -7544,13 +7540,13 @@ BEGIN
     STE_EMPTYPROJECT_DESCRIPTION "Creates a project with an empty main file."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDR_MAINFRAME           "TeXnicCenter"
     ID_VIEW_BOOKMARKS_PANE  "Shows or hides the Bookmarks view\nBookmarks"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDB_BUILD_ANIMATION     "     "
     IDS_UNNAMED_BOOKMARK_FORMAT "Bookmark%i"
@@ -7562,13 +7558,13 @@ BEGIN
     STE_BIBTEX_ERR_INVALID_EOF "(%s:%d:%d) Invalid end of BibTeX file"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDR_LATEXDOCTYPE        "\nLaTeX\nLaTeX\nLaTeX-Files (*.tex, *.sty, *.cls, *.dtx, *.ins, *.ltx)\n.tex;.sty;.cls;.dtx;.ins;.ltx\nLaTeX.Document\nLaTeX Document"
     IDR_BIBTEXDOCTYPE       "\nBibTeX\nBibTeX\nBibTeX-Files (*.bib, *.bst)\n.bib;.bst\nBibTeX.Document\nBibTeX Document"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDR_METAPOSTDOCTYPE     "\nMetaPost\nMetaPost\nMetaPost-Files (*.mp)\n.mp\nMetaPost.Document\nMetaPost Document"
     IDR_LATEXPROJECTDOCTYPE "\nTeXnicCenter-Project\nTeXnicCenter-Project\nTeXnicCenter-Projects (*.tcp)\n.tcp\nTeXnicCenter.Project\nTeXnicCenter Project"
@@ -7576,7 +7572,7 @@ BEGIN
     IDS_BOOKMARK            "Bookmark"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_PUBLICATION_TYPE    "Type"
     IDS_PUBLISHER           "Publisher"
@@ -7590,7 +7586,7 @@ BEGIN
     IDS_WIZARD_DISTRIBUTION_PATH "Distribution directory"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_LATEX_RESULT        "LaTeX-Result: %d Error(s), %d Warning(s), %d Bad Box(es), %d Page(s)"
     STE_LATEX_START         "--------------------Output Profile: %s--------------------"
@@ -7614,7 +7610,7 @@ BEGIN
     STE_OUTPUTWIZARD_PDFTYPE "LaTeX => PDF"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_BIBTEX_ERR_INVALID_TYPE "(%s:%d:%d) Unknown BibTeX type '%s'"
     STE_BIBTEX_ERR_MISSING_KEY "(%s:%d:%d) Entry has ko key"
@@ -7628,7 +7624,7 @@ BEGIN
     STE_COLOR_OTHERS        "Other Colors..."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_OUTPUTWIZARD_PDFVIAPSTYPE "LaTeX => PS => PDF"
     STE_OUTPUTWIZARD_PSTYPE "LaTeX => PS"
@@ -7651,13 +7647,13 @@ BEGIN
     STE_PLACEHOLDER_EXAMPLE_MAIN_SHORT "C:\\LATEXD~1\\PHDTHE~1\\PHD.TEX"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_LANGUAGE            "en"
     IDS_DIALECT             "US"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_MENU_UNDO_FORMAT    "&Undo %s\tCtrl+Z"
     IDS_MENU_REDO_FORMAT    "&Redo %s\tCtrl+Y"
@@ -7670,7 +7666,7 @@ BEGIN
     IDS_EDITOP_DELETE       "Delete"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_ITEMTYPE_HEADER     "Header"
     STE_ITEMTYPE_ITEMIZATION "Itemization"
@@ -7690,7 +7686,7 @@ BEGIN
     STE_LATEX_REF           "\\ref{%s}"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_FILECLEAN_HEAD2     "Pattern"
     STE_FILECLEAN_HEAD3     "Recursive"
@@ -7711,7 +7707,7 @@ BEGIN
     STE_FLOATTYPE_FIGURE    "figure"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_TCP_INVALID         "This is not a valid project file."
     STE_XML_PARSE_ERROR     "An error occured while reading an XML file.\n\nError 0x%08x: %s\n\nFile:\t%s\nLine:\t%d\nCharacter:\t%d\n\n%s"
@@ -7719,7 +7715,7 @@ BEGIN
     STE_XML_INSTALLNEEDED   "In order to use this function, the following software must be properly installed on your system\n\n\tMicrosoft XML Parser (MSXML)\n\nA link to the newest version can be found in the download area of\n\n\thttp://www.TeXnicCenter.org/"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_PLACEHOLDERSETS_APF "All project files"
     STE_PLACEHOLDERSETS_COF "Opened files"
@@ -7744,13 +7740,13 @@ BEGIN
                             "The project directory\n\n%s\n\ncould not be created due to the following reason:\n\n%s"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_SPELL_CONTINUE      "Continue spell checking remainder of project?"
     IDS_NO_ACTION           "No action possible."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_FLOATTYPE_TABLE     "table"
     STE_GET_PATH            "Select a directory..."
@@ -7770,12 +7766,12 @@ BEGIN
     STE_HEADER_SECTION      "\\section"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_DO_SAVE             "&Save"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_EDITOP_TYPING       "Typing"
     IDS_EDITOP_BACKSPACE    "Backspace"
@@ -7789,7 +7785,7 @@ BEGIN
     STE_OUTPUTWIZARD_PDFVIALUALATEX "LuaLaTeX => PDF"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_EMPTYPROJECT_TITLE  "Empty Project"
     STE_ENTRIES_COUNT       "%d entries"
@@ -7809,7 +7805,7 @@ BEGIN
     STE_FILECLEAN_HEAD1     "Description"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     CG_IDS_TIPOFTHEDAY      "Shows the Tip of the day"
     CG_IDS_TIPOFTHEDAYMENU  "Ti&p of the Day..."
@@ -7821,7 +7817,7 @@ BEGIN
     STE_URL_CANNOTOPEN      "The URL cannot be opened."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_OPEN                "open"
     IDS_SAVE                "save"
@@ -7829,13 +7825,13 @@ BEGIN
     IDR_NAVIGATION_BAR      "Identifier of the navigator bar"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_START_SEARCH         "\nStart"
     IDR_OUTPUT              "Identifier for the output bar"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_HEADER_SUBPARAGRAPH "\\subparagraph"
     STE_HEADER_SUBSECTION   "\\subsection"
@@ -7855,24 +7851,24 @@ BEGIN
     STE_ITEMTYPE_GENERIC    "Other"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_TEXTMODULES_NONEDEFINED "No text module defined"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_TEX_FILES           "LaTeX files"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     AFX_IDS_APP_TITLE       "TeXnicCenterNT"
     AFX_IDS_IDLEMESSAGE     "Press F1 to get help"
     AFX_IDS_HELPMODEMESSAGE "Choose the object you would like to get help on"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INDICATOR_EXT        "ER"
     ID_INDICATOR_CAPS       "UF"
@@ -7882,7 +7878,7 @@ BEGIN
     ID_INDICATOR_REC        "MA"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FILE_NEW             "Creates a new document based on a template\nNew From Template"
     ID_FILE_OPEN            "Opens an existing document\nOpen"
@@ -7897,7 +7893,7 @@ BEGIN
     ID_FILE_SEND_MAIL       "Sends the active document as e-mail\nSend"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_APP_ABOUT            "Display program information, version number and copyright\nAbout..."
     ID_APP_EXIT             "Quits the application; prompts to save documents\nExit"
@@ -7908,7 +7904,7 @@ BEGIN
     ID_HELP                 "Shows help on the current action or command\nHelp"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FILE_MRU_FILE1       "Opens this document."
     ID_FILE_MRU_FILE2       "Opens this document."
@@ -7928,13 +7924,13 @@ BEGIN
     ID_FILE_MRU_FILE16      "Opens this document."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_NEXT_PANE            "Switch to the next window splitter\nNext Splitter"
     ID_PREV_PANE            "Switch to the previous window splitter\nPrevious Splitter"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_WINDOW_NEW           "Opens another window for the active document\nNew Window"
     ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
@@ -7944,7 +7940,7 @@ BEGIN
     ID_WINDOW_SPLIT         "Splits the active window in splitters\nSplit"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_EDIT_CLEAR           "Deletes the current selection\nDelete"
     ID_EDIT_CLEAR_ALL       "Deletes all\nDelete All"
@@ -7959,13 +7955,13 @@ BEGIN
     ID_EDIT_REDO            "Redo the previously undone action\nRedo"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_TOOLBAR         "Shows or hides the standard bar\nToggle Standard Bar"
     ID_VIEW_STATUS_BAR      "Shows or hides the status bar\nToggle Status Bar"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     AFX_IDS_SCSIZE          "Changes the window size"
     AFX_IDS_SCMOVE          "Changes the window position"
@@ -7976,19 +7972,19 @@ BEGIN
     AFX_IDS_SCCLOSE         "Closes the active window and prompts to save the document"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     AFX_IDS_SCRESTORE       "Restores the window to normal size"
     AFX_IDS_SCTASKLIST      "Activates the task list"
     AFX_IDS_MDICHILD        "Activates this window"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     AFX_IDS_PREVIEW_CLOSE   "Closes the page preview\nClose Page Preview"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_TB_MATH             "Mathematical Symbols"
     IDR_MATH                "Comparison"
@@ -8003,7 +7999,7 @@ BEGIN
     IDR_MATHBAR9            "Greek capital Letters"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDR_MATHBAR10           "Boundaries"
     IDR_MATHBAR11           "Mathematical Constructions"
@@ -8013,12 +8009,12 @@ BEGIN
     IDR_MATHBAR15           "Arrows with Captions"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     STE_TOOL_NOCMDLINE      "No command line has been specified for this tool.\n\nPlease specify a command line for the tool and try again."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_SPELL_IGNORE        "Ignore"
     IDS_SPELL_UNEDIT        "Unedit"
@@ -8027,7 +8023,7 @@ BEGIN
     IDS_MISSING_SECTION     "Missing section"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_URL_AUTHOR           "sven@texniccenter.org\nE-Mail to the Author\nmailto:sven@texniccenter.org"
     ID_URL_TCDEVELOPERSGROUP 
@@ -8039,7 +8035,7 @@ BEGIN
     ID_URL_TCUSERSGROUP     "http://www.latex-community.org/forum/viewforum.php?f=22\nTeXnicCenter User Forum\nhttp://www.latex-community.org/forum/viewforum.php?f=22"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_TIP                  "Displays the tip of the day\nTip of the Day"
     ID_UPDATE_LATEX_OUTPUT  "Is send, when the latex-output has to be updated"
@@ -8047,7 +8043,7 @@ BEGIN
     ID_PREV_ERROR           "Goes to the previous Error\nPrevious Error"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_LATEX_MAKEINDEX      "Executes MakeIndex for your project\nMakeIndex"
     ID_LATEX_NEW            "Creates a new LaTeX document\nNew LaTeX document"
@@ -8059,7 +8055,7 @@ BEGIN
     ID_LATEX_VIEW           "Shows the build output in an external viewer\nView Output"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_EDIT_BLOCKCOMMENT_INSERT 
                             "Comments all selected lines using %-Signs.\nInsert Block Comment"
@@ -8084,7 +8080,7 @@ BEGIN
     ID_EDIT_GO_BOOKMARK5    "Goes to bookmark 5\nGo to Bookmark 5"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_EDIT_PREVGREPRESULT  "Goes to the previous result of the find in files action\nPrevious 'Find in Files'-Result"
     ID_EDIT_SEL_BIGGER_BLOCK 
@@ -8101,7 +8097,7 @@ BEGIN
     ID_EDIT_TOGGLE_BOOKMARK6 "Toggles the bookmark 6\nToggle Bookmark 6"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_EDIT_TOGGLE_BOOKMARK7 "Toggles the bookmark 7\nToggle Bookmark 7"
     ID_EDIT_TOGGLE_BOOKMARK8 "Toggles the bookmark 8\nToggle Bookmark 8"
@@ -8112,7 +8108,7 @@ BEGIN
     ID_FILE_SAVE_ALL        "Saves all open documents\nSave All"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_EDIT_GO_BOOKMARK6    "Goes to bookmark 6\nGo to Bookmark 6"
     ID_EDIT_GO_BOOKMARK7    "Goes to bookmark 7\nGo to Bookmark 7"
@@ -8133,7 +8129,7 @@ BEGIN
     ID_EDIT_OUTSOURCE       "Outsources the selected text to an external file.\nOutsource Text..."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_CLEAR_SEARCH         "\nClear Search"
     ID_AUTHOR               "Search for author."
@@ -8146,7 +8142,7 @@ BEGIN
     ID_VIEW_GREP_2_PANE     "Shows or hides the Find 2 view\nFind 2"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_TEXTMODULES_DEFINE   "Displays dialog to manage text modules.\nText Modules"
     ID_VIEW_DOCTAB_TOP      "Activates the tabs to switch between open documents at the top\nDocument tabs top"
@@ -8161,7 +8157,7 @@ BEGIN
     ID_QUERY_COMPLETION     "Completes the currently typed word\nComplete Word"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_APP_LICENSE          "Shows the license agreement in the web browser\nLicense Agreement"
     ID_WINDOW_NEXT          "Activates the next window\nNext Window"
@@ -8173,7 +8169,7 @@ BEGIN
                             "Builds a printable output for the active file and shows it\nBuild and view current file"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PH_MPATH             "%pm"
     ID_PH_MSLASHPATH        "%Pm"
@@ -8186,7 +8182,7 @@ BEGIN
     ID_PH_MTITLE            "%tm"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_NAVIGATION      "Shows or hides the navigator bar\nToggle Navigator Bar"
     ID_VIEW_OUTPUT          "Shows or hides the output bar\nToggle Output Bar"
@@ -8199,7 +8195,7 @@ BEGIN
                             "Opens the main file of the current project\nOpen Main File"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_NABLA         "\n\n\\nabla"
     ID_INSERT_NATURAL       "\n\n\\natural"
@@ -8219,7 +8215,7 @@ BEGIN
     ID_INSERT_OMEGA2        "Inserts a capital Omega\nCapital Omega\n\\Omega"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_RIGHTDOUBLEVERTLINE "\n\n\001\\right\\|"
     ID_INSERT_RIGHTECKIGEKLAMMER "\n\n\001\\right]"
@@ -8240,7 +8236,7 @@ BEGIN
     ID_INSERT_SHARP         "\n\n\\sharp"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_OMINUS        "\n\n\\ominus"
     ID_INSERT_OPLUS         "\n\n\\oplus"
@@ -8260,7 +8256,7 @@ BEGIN
     ID_INSERT_PI            "Inserts a small Pi\nSmall Pi\n\\pi"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_INF           "\n\n\\inf"
     ID_INSERT_INFTY         "\n\n\\infty"
@@ -8280,7 +8276,7 @@ BEGIN
     ID_INSERT_LAMBDA        "Inserts a small Lambda\nSmall Lambda\n\\lambda"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_TILDE         "\n\n\\tilde{\001}"
     ID_INSERT_TIMES         "\n\n\\times"
@@ -8301,7 +8297,7 @@ BEGIN
     ID_INSERT_UPDOWNARROW   "\n\n\\updownarrow"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_BOWTIE        "\n\n\\bowtie"
     ID_INSERT_BREVE         "\n\n\\breve{\001}"
@@ -8321,7 +8317,7 @@ BEGIN
     ID_INSERT_COT           "\n\n\\cot"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_COTH          "\n\n\\coth"
     ID_INSERT_CSC           "\n\n\\csc"
@@ -8341,7 +8337,7 @@ BEGIN
     ID_INSERT_DIM           "\n\n\\dim"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_GESCHWEIFTEKLAMMERZU "\n\n\\}"
     ID_INSERT_GG            "\n\n\\gg"
@@ -8361,7 +8357,7 @@ BEGIN
     ID_INSERT_INCLUDEGRAPHICS "Inserts a picture from a file\nPicture"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_SIGMA         "Inserts a small Sigma\nSmall Sigma\n\\sigma"
     ID_INSERT_SIGMA2        "Inserts a capital Sigma\nCapital Sigma\n\\Sigma"
@@ -8381,14 +8377,14 @@ BEGIN
     ID_INSERT_SPITZEKLAMMERAUF "\n\n\\langle"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_OPTIONS_CHANGED      "Send, when the user changed options in the options dialog."
     ID_WINDOW_LIST          "Manages the currently open windows.\nWindow List"
     ID_WINDOW_LIST_MENU     "&Windows..."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_A             "\n\nA"
     ID_INSERT_ABSTRACT      "Inserts an abstract\nAbstract\n\r\\begin{abstract}\r\t\001\r\\end{abstract}\r"
@@ -8408,7 +8404,7 @@ BEGIN
     ID_INSERT_B             "\n\nB"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_VERBATIMSTAR  "Inserts code with visible white spaces\nCode\n\r\\begin{verbatim*}\r\001\r\\end{verbatim*}\r"
     ID_INSERT_VERBSTAR      "Inserts embedded code with visible white spaces\nEmbedded Code\n\\verb*|\001|"
@@ -8428,7 +8424,7 @@ BEGIN
     ID_INSERT_ZETA          "Inserts a small Zeta\nSmall Zeta\n\\zeta"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PH_MEXTENSION        "%em"
     ID_PH_MSPATH            "%spm"
@@ -8449,7 +8445,7 @@ BEGIN
     ID_PH_CBASE             "%bc"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PH_CSLASHBASE        "%Bc"
     ID_PH_CROOT             "%rc"
@@ -8465,7 +8461,7 @@ BEGIN
     ID_PH_CSSLASHBASE       "%sBc"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PH_CSDIR             "%sdc"
     ID_PH_CLINENR           "%l"
@@ -8482,12 +8478,12 @@ BEGIN
     ID_PH_CSELECTION        "%s"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_LATEX_FILEMAKEINDEX  "Executes MakeIndex for the active file\nMakeIndex for current file"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_LATEX_BIBTEX         "Executes BibTeX for your project\nBibTeX"
     ID_SPELL_PROJECT        "Spell check entire project\nSpell check project"
@@ -8504,14 +8500,14 @@ BEGIN
     ID_PH_MAINOPTIONS       "\n[1]m"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_HELP_CONTENTS        "Shows the contents of the online documentation\nContents"
     ID_HELP_KEYMAPPING      "Displays all short cuts\nKeyboard Command Mapping"
     ID_IDRPOPUPITEM_GEHEZU  "Goes to the definition\nGo to Definition"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PHS_MORESETS_NOOPT   "\n[3]"
     ID_PH_MAINOPTIONS_NOOPT "\n[2]m"
@@ -8529,14 +8525,14 @@ BEGIN
                             "Creates a new project and sets the active file as the main file of the project.\nNew project with active file"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PROJECT_PARSED       "Is send, when the project has been parsed and the views should be updated"
     ID_PROJECT_PARSE        "Send by CMainFrame to parse project."
     ID_DOCUMENT_SAVED       "Send by a CLatexDoc-object, after it has been saved."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_ETA           "Inserts a small Eta\nSmall Eta\n\\eta"
     ID_INSERT_EXISTS        "\n\n\\exists"
@@ -8557,7 +8553,7 @@ BEGIN
     ID_INSERT_GESCHWEIFTEKLAMMERAUF "\n\n\\{"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_DIV           "\n\n\\div"
     ID_INSERT_DOT           "\n\n\\dot{\001}"
@@ -8578,7 +8574,7 @@ BEGIN
     ID_INSERT_EQUIV         "\n\n\\equiv"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_PI2           "Inserts a capital Pi\nCapital Pi\n\\Pi"
     ID_INSERT_PM            "\n\n\\pm"
@@ -8598,7 +8594,7 @@ BEGIN
     ID_INSERT_RIGHTARROW2   "\n\n\\Rightarrow"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_SUPERSCRIPT   "\n\n^{\001}"
     ID_INSERT_SUPERSUB      "\n\n^{\001}_{}"
@@ -8620,7 +8616,7 @@ BEGIN
     ID_INSERT_THETA2        "Inserts a capital Theta\nCapital Theta\n\\Theta"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_LEFTSLASH     "\n\n\\left/"
     ID_INSERT_LEFTVERTLINE  "\n\n\\left|\001"
@@ -8640,7 +8636,7 @@ BEGIN
     ID_INSERT_LONGLEFTRIGHTARROW2 "\n\n\\Longleftrightarrow"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_LONGMAPSTO    "\n\n\\longmapsto"
     ID_INSERT_LONGRIGHTARROW "\n\n\\longrightarrow"
@@ -8660,7 +8656,7 @@ BEGIN
     ID_INSERT_N2            "\n\nN"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FORMAT_BFSERIES      "Generates text of the ""bold series"" inside the scope\nBold Series\n\\bfseries"
     ID_FORMAT_CENTER        "Centers text\nCenter\n\r\\begin{center}\r\001\r\\end{center}\r"
@@ -8675,7 +8671,7 @@ BEGIN
     ID_FORMAT_LARGE2        "Generates larger text inside the scope\nLarger Size\n\\Large"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FORMAT_LARGE3        "Generate more large text inside the scope\nMore Large Size\n\\LARGE"
     ID_FORMAT_MDSERIES      "Generates text of the ""medium series"" inside the scope\nMedium Series\n\\mdseries"
@@ -8695,7 +8691,7 @@ BEGIN
     ID_FORMAT_TEXTSL        "Generates slanted text\nSlanted\n\\textsl{\001}"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_SPITZEKLAMMERZU "\n\n\\rangle"
     ID_INSERT_SQCAP         "\n\n\\sqcap"
@@ -8715,13 +8711,13 @@ BEGIN
     ID_INSERT_SUP           "\n\n\\sup"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_LINE_ENDING     "Shows or hides line endings.\nToggle Line Ending View"
     ID_VIEW_WHITE_SPACE     "Shows or hides white spaces\nToggle White Space View"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_LAMBDA2       "Inserts a capital Lambda\nCapital Lambda\n\\Lambda"
     ID_INSERT_LDOTS         "\n\n\\ldots"
@@ -8741,7 +8737,7 @@ BEGIN
     ID_INSERT_LEFTRIGHTARROW2 "\n\n\\Leftrightarrow"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_REGEX_GROUP          "\\(\001\\)"
     ID_REGEX_STAR           "*"
@@ -8759,7 +8755,7 @@ BEGIN
     ID_REGEX_LOWERALPHA     "\\l"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_LINE_NUMBERS    "Shows or hides line numbers\nToggle Line Number View"
     ID_REGEX_ANYCHAR        "."
@@ -8771,18 +8767,18 @@ BEGIN
     ID_REGEX_EOW            "\\>"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_BAR1            "Goes to the next error\nNext Error"
     ID_VIEW_BAR2            "Goes to the previous error\nPrevious Error"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_MATH            "Shows or hides the math bar.\nToggle Math Bar"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_UPDOWNARROW2  "\n\n\\Updownarrow"
     ID_INSERT_UPLUS         "\n\n\\uplus"
@@ -8802,7 +8798,7 @@ BEGIN
     ID_INSERT_VERBATIM      "Inserts source code\nCode\n\r\\begin{verbatim}\r\001\r\\end{verbatim}\r"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_WINDOW_CLOSE_ALL_BUTACTIVE 
                             "Closes all opened documents except the active one\nClose All but Active"
@@ -8814,17 +8810,17 @@ BEGIN
     ID_VIEW_ERROR_LIST_PANE "Shows or hides the overview of the compilation results\nCompilation Results"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_WINDOW_OUTPUT        "Activates the output bar\nActivate Output Bar"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_WINDOW_FIRST         "Activates this window"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FORMAT_TEXTTT        "Generates typewriter text\nTypewriter\n\\texttt{\001}"
     ID_FORMAT_TINY          "Generates tiny text inside the scope\nTiny Size\n\\tiny"
@@ -8834,7 +8830,7 @@ BEGIN
     ID_FORMAT_TEXT_FORE_COLOR "Sets text foreground color.\nForeground color"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_INSERT_BACKSLASH     "\n\n\\backslash"
     ID_INSERT_BAR           "\n\n\\bar{\001}"
@@ -8854,12 +8850,12 @@ BEGIN
     ID_INSERT_BOT           "\n\n\\bot"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_FULLSCREEN      "Activates or deactivates the full screen display\nFull Screen Display"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_PH_CURRENTOPTIONS    "\n[1]c"
     ID_PHS_ALLPROJECTFILES_Q "$qAPF"
@@ -8878,13 +8874,13 @@ BEGIN
     ID_PHS_ALLFILESETS_QR   "$qrAFS"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_METAPOST_NEW         "Creates a new MetaPost document\nNew MetaPost document"
     ID_BIBTEX_NEW           "Creates a new BibTeX document\nNew BibTeX document"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FILE_MRU_PROJECT1    "Opens this project."
     ID_FILE_MRU_PROJECT2    "Opens this project."
@@ -8896,7 +8892,7 @@ BEGIN
     ID_FILE_MRU_PROJECT8    "Opens this project."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_FILE_MRU_PROJECT9    "Opens this project."
     ID_FILE_MRU_PROJECT10   "Opens this project."
@@ -8905,7 +8901,7 @@ BEGIN
     ID_WINDOW_RECENTLY_USED "Activates recently used window."
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_TOGGLELEFTDOCKINGBARS 
                             "Toggles all tool windows docked at the left side\nToggle left tool windows"
@@ -8917,18 +8913,18 @@ BEGIN
                             "Toggles all tool windows docked at the bottom\nToggle bottom tool windows"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_VIEW_PARSE_PANE      "Shows or hides the output of parsing the project.\nParse"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_EDIT_SELECTPARAGRAPH "Selects the current paragraph\nSelect Paragraph"
     ID_ADVANCED_DUPLICATE   "Duplicates the current line or selection.\nDuplicate line or selection"
 END
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     ID_SEARCH_FINDNEXTSELECTED 
                             "Find next word under cursor or in selection.\nFind next selected."
@@ -8936,7 +8932,7 @@ BEGIN
                             "Find previous word under cursor or in selection.\nFind previous selected."
 END
 
-#endif    // English (U.S.) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
