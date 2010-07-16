@@ -17,52 +17,20 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Unicode Debug|Win32">
-      <Configuration>Unicode Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Unicode Debug|x64">
-      <Configuration>Unicode Debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Unicode Release|Win32">
-      <Configuration>Unicode Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Unicode Release|x64">
-      <Configuration>Unicode Release</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{12243F23-547E-4676-A36D-7DE0EE131354}</ProjectGuid>
     <RootNamespace>Help</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
-    <CharacterSet>MultiByte</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
-    <CharacterSet>MultiByte</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
@@ -70,22 +38,10 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
@@ -101,20 +57,10 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\Output\Intermediate\$(ProjectName)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\Output\Product\$(Platform)\$(Configuration)\Help\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\Output\Intermediate\$(ProjectName)\</IntDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">*.chm%3b*.chw%3b$(TargetPath)</ExtensionsToDeleteOnClean>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(SolutionDir)\Output\Product\$(Platform)\$(Configuration)\Help\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(SolutionDir)\Output\Intermediate\$(ProjectName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(SolutionDir)\Output\Product\$(Platform)\$(Configuration)\Help\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(SolutionDir)\Output\Intermediate\$(ProjectName)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\Output\Product\$(Platform)\$(Configuration)\Help\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\Output\Intermediate\$(Platform)\$(ProjectName)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\Output\Product\$(Platform)\$(Configuration)\Help\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\Output\Intermediate\$(Platform)\$(ProjectName)\</IntDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|x64'">*.chm%3b*.chw%3b$(TargetPath)</ExtensionsToDeleteOnClean>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(SolutionDir)\Output\Product\$(Platform)\$(Configuration)\Help\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(SolutionDir)\Output\Intermediate\$(Platform)\$(ProjectName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(SolutionDir)\Output\Product\$(Platform)\$(Configuration)\Help\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(SolutionDir)\Output\Intermediate\$(Platform)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
@@ -122,16 +68,6 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Midl>
-      <TargetEnvironment>X64</TargetEnvironment>
-    </Midl>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">
-    <Midl>
-      <TargetEnvironment>X64</TargetEnvironment>
-    </Midl>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
@@ -214,22 +150,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\Bibtex.chm">
       <FileType>Document</FileType>
@@ -249,22 +169,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\CfgGuide.chm">
       <FileType>Document</FileType>
@@ -284,22 +188,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\ClsGuide.chm">
       <FileType>Document</FileType>
@@ -319,22 +207,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\FAQ.chm">
       <FileType>Document</FileType>
@@ -354,22 +226,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\FntGuide.chm">
       <FileType>Document</FileType>
@@ -389,22 +245,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\Latex.chm">
       <FileType>Document</FileType>
@@ -424,22 +264,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\Latex2e.chm">
       <FileType>Document</FileType>
@@ -459,22 +283,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\Latex2eForAuthors.chm">
       <FileType>Document</FileType>
@@ -494,22 +302,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\LatexAdv.chm">
       <FileType>Document</FileType>
@@ -529,22 +321,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\LatexHelpBook.chm">
       <FileType>Document</FileType>
@@ -564,22 +340,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\LatexHelpBook.chw">
       <FileType>Document</FileType>
@@ -599,22 +359,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\LatexMathsPix.chm">
       <FileType>Document</FileType>
@@ -634,22 +378,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\MakeIndex.chm">
       <FileType>Document</FileType>
@@ -669,22 +397,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\ModGuide.chm">
       <FileType>Document</FileType>
@@ -704,22 +416,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="LaTeXHelp\TexCatalogue.chm">
       <FileType>Document</FileType>
@@ -739,22 +435,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <None Include="Change.log" />
     <None Include="TeXnicCenter.hhc" />
@@ -793,38 +473,6 @@ hhc.exe "%(Filename)%(Extension)"
 copy /y "$(IntDir)TeXnicCenter.chm" "$(OutDir)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)TeXnicCenter.chm;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">Compiling Help...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">if not exist "$(OutDir)" mkdir "$(OutDir)"
-if not exist "$(IntDir)" mkdir "$(IntDir)"
-cd "%(RootDir)%(Directory)"
-hhc.exe "%(Filename)%(Extension)"
-copy /y "$(IntDir)TeXnicCenter.chm" "$(OutDir)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|Win32'">$(OutDir)TeXnicCenter.chm;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Compiling Help...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">if not exist "$(OutDir)" mkdir "$(OutDir)"
-if not exist "$(IntDir)" mkdir "$(IntDir)"
-cd "%(RootDir)%(Directory)"
-hhc.exe "%(Filename)%(Extension)"
-copy /y "$(IntDir)TeXnicCenter.chm" "$(OutDir)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">$(OutDir)TeXnicCenter.chm;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">Compiling Help...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">if not exist "$(OutDir)" mkdir "$(OutDir)"
-if not exist "$(IntDir)" mkdir "$(IntDir)"
-cd "%(RootDir)%(Directory)"
-hhc.exe "%(Filename)%(Extension)"
-copy /y "$(IntDir)TeXnicCenter.chm" "$(OutDir)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">$(OutDir)TeXnicCenter.chm;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Compiling Help...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">if not exist "$(OutDir)" mkdir "$(OutDir)"
-if not exist "$(IntDir)" mkdir "$(IntDir)"
-cd "%(RootDir)%(Directory)"
-hhc.exe "%(Filename)%(Extension)"
-copy /y "$(IntDir)TeXnicCenter.chm" "$(OutDir)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">$(OutDir)TeXnicCenter.chm;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

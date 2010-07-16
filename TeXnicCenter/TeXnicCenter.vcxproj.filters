@@ -961,6 +961,15 @@
     <ClInclude Include="WorkspacePaneBase.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="CommonTypes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LaTeXCommands.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputProfiles.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\additional.bmp">
