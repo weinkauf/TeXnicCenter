@@ -45,7 +45,7 @@
 #include "PersistPosEdit.h"
 #include "EditMenuButton.h"
 #include "EditMenuButtonOpt.h"
-#include "BCGNotifyingEditListBox.h"
+#include "NotifyingEditListBox.h"
 
 /**	Edits the Postprocessors of output profiles.
 
