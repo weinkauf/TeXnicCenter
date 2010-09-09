@@ -68,7 +68,7 @@
 
 #include "TipDlg.h"
 #include <afxcontrolbars.h>     // MFC support for ribbons and control bars
-#include "BCGRegistryEx.h"
+#include "RegistryStack.h"
 #include <ExtCollection.h>
 #include <ExtControls.h>
 #include <ExtTools.h>
