@@ -51,7 +51,7 @@ We need to implement such a button, because
 we do not get the BN_CLICKED, if we would use a normal one.
 
 @see ToolBarsCustomizeDialog
-@see CMyUserTool
+@see UserTool
 
 @ingroup guielements
 @ingroup bcgext
@@ -67,7 +67,7 @@ public:
 
 // Attributes
 public:
-	CMyUserTool* pTool;
+	UserTool* pTool;
 
 // Operations
 public:

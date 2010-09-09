@@ -33,8 +33,7 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "stdafx.h"
-#include "BCGNotifyingEditListBox.h"
+#include "NotifyingEditListBox.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

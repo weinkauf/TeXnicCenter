@@ -32,23 +32,21 @@
  *
  ********************************************************************/
 
-#ifndef __CUSERTOOL_H__
-#define __CUSERTOOL_H__
+#ifndef USERTOOL_H
+#define USERTOOL_H
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
-//#include "BCGUserTool.h"
-
-class CMyUserTool : public CUserTool
+class UserTool : public CUserTool
 {
-	DECLARE_SERIAL(CMyUserTool)
+	DECLARE_SERIAL(UserTool)
 
 // Construction/Destruction
 public:
-	CMyUserTool();
-	virtual ~CMyUserTool();
+	UserTool();
+	virtual ~UserTool();
 
 // Operations
 public:
@@ -88,9 +86,4 @@ public:
 	CString m_strOutputFile;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
-
-#endif //__CUSERTOOL_H__
+#endif //USERTOOL_H
