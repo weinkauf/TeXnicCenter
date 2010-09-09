@@ -75,7 +75,7 @@ const TCHAR* const PAR_STRINGS[] = {_T(""),_T("{}"),_T("{}{}"),_T("{}{}{}"),_T("
 
 IMPLEMENT_DYNAMIC(CLaTeXCommand,CAbstractLaTeXCommand)
 
-CLaTeXCommand::CLaTeXCommand(const std::tr1::shared_ptr<CStyleFile>& parent, const CString &name, int noOfParams)
+CLaTeXCommand::CLaTeXCommand(const WeakStyleFilePtr& parent, const CString &name, int noOfParams)
 		: CAbstractLaTeXCommand(parent,name)
 {
 	m_NoOfParams = noOfParams > 0 ? noOfParams : 0;

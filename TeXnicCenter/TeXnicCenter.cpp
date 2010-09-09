@@ -1365,8 +1365,8 @@ void CTeXnicCenterApp::UpdateLaTeXProfileSel()
 	POSITION pos = NULL;
 	CMFCToolBarComboBoxButton *pButton = NULL;
 
-	while (pButton =
-	            (CMFCToolBarComboBoxButton*)pMainFrame->GetToolBarButton(ID_LATEX_PROFILE_SEL, pos))
+	while ((pButton =
+	            (CMFCToolBarComboBoxButton*)pMainFrame->GetToolBarButton(ID_LATEX_PROFILE_SEL, pos)) != NULL)
 	{
 		// refill Button
 		pButton->RemoveAllItems();
