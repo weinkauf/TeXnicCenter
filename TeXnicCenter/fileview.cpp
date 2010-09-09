@@ -165,6 +165,7 @@ void CFileView::OnParsingFinished()
 			parent = hBibParent;
 			break;
 		default:
+            unique_type = 0;
 			parent = 0;
 		}
 

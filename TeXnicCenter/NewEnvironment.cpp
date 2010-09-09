@@ -61,8 +61,8 @@ CNewEnvironment::~CNewEnvironment()
 
 const CString CNewEnvironment::ToString() const
 {
-	const std::tr1::shared_ptr<CStyleFile>& sf = GetStyleFile();
-	CString x = (sf != NULL ? sf->GetFileName() : CString(_T("???")));
+	SharedStyleFilePtr sf(GetStyleFile().lock());
+	CString x = (sf ? sf->GetFileName() : CString(_T("???")));
 
 	TCHAR buf[5];
 	_itot(GetNoOfParams(),buf,10);

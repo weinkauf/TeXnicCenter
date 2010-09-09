@@ -49,7 +49,7 @@ static char THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNAMIC(CNewCommand,CLaTeXCommand)
 
-CNewCommand::CNewCommand(const std::tr1::shared_ptr<CStyleFile>& parent, const CString &n, int noOfParam, bool hasStar)
+CNewCommand::CNewCommand(const WeakStyleFilePtr& parent, const CString &n, int noOfParam, bool hasStar)
 		: CLaTeXCommand(parent,n,noOfParam)
 {
 	m_HasStar = hasStar;
@@ -76,8 +76,8 @@ CNewCommand::~CNewCommand()
 
 const CString CNewCommand::ToString() const
 {
-	const std::tr1::shared_ptr<CStyleFile>& sf = GetStyleFile();
-	CString x = (sf != NULL ? sf->GetName() : CString(_T("???")));
+	SharedStyleFilePtr sf(GetStyleFile().lock());
+	CString x = (sf ? sf->GetName() : CString(_T("???")));
 
 	TCHAR buf[5];
 	_itot(GetNoOfParams(),buf,10);

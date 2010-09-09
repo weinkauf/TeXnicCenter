@@ -136,8 +136,10 @@ void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		dc.FillSolidRect(&fillRect, crOldBkColor);
 	}
 
+    SharedStyleFilePtr parent(lc->GetParent().lock());
+
 	//Select Font: bold or normal
-	if (lc->GetParent() != NULL && lc->GetParent()->IsDocClass())
+	if (parent && parent->IsDocClass())
 	{
 		dc.SelectObject(&m_BoldFont);
 	}
@@ -230,8 +232,10 @@ CSize CAutoCompleteListBox::GetLargestItemTextExtent()
 			CString ItemText;
 			GetText(i, ItemText);
 
+            SharedStyleFilePtr parent(lc->GetParent().lock());
+
 			//Select Font: bold or normal
-			if (lc->GetParent() != NULL && lc->GetParent()->IsDocClass())
+			if (parent && parent->IsDocClass())
 			{
 				pDC->SelectObject(&m_BoldFont);
 			}
