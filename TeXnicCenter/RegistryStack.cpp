@@ -33,17 +33,13 @@
 ********************************************************************/
 
 #include "stdafx.h"
-#include "BCGRegistryEx.h"
+#include "RegistryStack.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
-
-//-------------------------------------------------------------------
-// class CBCGRegistryEx
-//-------------------------------------------------------------------
 
 RegistryStack::RegistryStack(BOOL bAdmin, BOOL bReadOnly)
 		:	CSettingsStore(bAdmin, bReadOnly),

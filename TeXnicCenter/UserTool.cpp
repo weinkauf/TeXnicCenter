@@ -47,17 +47,13 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//-------------------------------------------------------------------
-// class CMyUserTool
-//-------------------------------------------------------------------
-
 #define USERTOOLCURRENTFORMATVERSION 1
 
-IMPLEMENT_SERIAL(CMyUserTool, CUserTool, USERTOOLCURRENTFORMATVERSION | VERSIONABLE_SCHEMA)
+IMPLEMENT_SERIAL(UserTool, CUserTool, USERTOOLCURRENTFORMATVERSION | VERSIONABLE_SCHEMA)
 
 #undef USERTOOLCURRENTFORMATVERSION
 
-CMyUserTool::CMyUserTool()
+UserTool::UserTool()
 		:	CUserTool(),
 		m_bUseOutputWindow(false),
 		m_bPromptForArguments(false),
@@ -67,57 +63,25 @@ CMyUserTool::CMyUserTool()
 {}
 
 
-CMyUserTool::~CMyUserTool()
+UserTool::~UserTool()
 {}
 
 
-void CMyUserTool::Serialize(CArchive& ar)
+void UserTool::Serialize(CArchive& ar)
 {
 	CUserTool::Serialize(ar);
 
 	if (ar.IsLoading())
 	{
-		////////////////////////////
-		// Loading
-
-//		int nVer = ar.GetObjectSchema();
-//		if (nVer > 0)
-//		{
-//			int nTemp;
-//			ar >> nTemp;
-//			m_bUseOutputWindow = (bool)nTemp;
-//			ar >> nTemp;
-//			m_bPromptForArguments = (bool)nTemp;
-//			ar >> nTemp;
-//			m_bCloseConsoleWindow = (bool)nTemp;
-//			ar >> m_strInputFile;
-//			ar >> m_strOutputFile;
-//		}
-//		else
-//		{
 		m_bUseOutputWindow = false;
 		m_bPromptForArguments = false;
 		m_bCloseConsoleWindow = false;
 		m_strInputFile.Empty();
 		m_strOutputFile.Empty();
-//		}
-	}
-	else
-	{
-		////////////////////////////
-		// Saving
-
-//		ar << (int)m_bUseOutputWindow;
-//		ar << (int)m_bPromptForArguments;
-//		ar << (int)m_bCloseConsoleWindow;
-//		ar << m_strInputFile;
-//		ar << m_strOutputFile;
 	}
 }
 
-
-
-CString CMyUserTool::GetAdvDescription()
+CString UserTool::GetAdvDescription()
 {
 	CString retval(_T(""));
 	CString strTemp;
@@ -155,11 +119,8 @@ CString CMyUserTool::GetAdvDescription()
 }
 
 
-BOOL CMyUserTool::Invoke()
+BOOL UserTool::Invoke()
 {
-//	HANDLE hStdInput = INVALID_HANDLE_VALUE;
-//	HANDLE hStdOutput = INVALID_HANDLE_VALUE;
-
 	if (m_strCommand.IsEmpty())
 	{
 		AfxMessageBox(STE_TOOL_NOCMDLINE, MB_ICONINFORMATION|MB_OK);
@@ -195,37 +156,6 @@ BOOL CMyUserTool::Invoke()
 
 	try
 	{
-//		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//		// prepare handles for input and output redirection
-//		SECURITY_ATTRIBUTES	sa = {
-//			sizeof(SECURITY_ATTRIBUTES),
-//			NULL,
-//			TRUE
-//		};
-//
-//		// Opening file, if input redirection should be used
-//		if (!m_strInputFile.IsEmpty())
-//		{
-//			hStdInput = CreateFile(
-//				AfxExpandPlaceholders(m_strInputFile, strMainPath, strCurrentPath),
-//				GENERIC_READ, FILE_SHARE_READ,
-//				&sa, OPEN_EXISTING, 0, NULL);
-//			if (hStdInput == INVALID_HANDLE_VALUE)
-//				throw FALSE;
-//		}
-//
-//		// Creating new file, if output redirection should be used
-//		if (!m_strOutputFile.IsEmpty())
-//		{
-//			hStdOutput = CreateFile(
-//				AfxExpandPlaceholders(m_strOutputFile, strMainPath, strCurrentPath),
-//				GENERIC_WRITE, 0,
-//				&sa, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-//			if (hStdOutput == INVALID_HANDLE_VALUE)
-//				throw FALSE;
-//		}
-
-
 		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Invoke tool
 		//Be careful with the InitialDirectory: With CreateProcess it is not allowed

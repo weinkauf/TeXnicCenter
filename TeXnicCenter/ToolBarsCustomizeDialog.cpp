@@ -36,7 +36,7 @@
 #include "texniccenter.h"
 #include "UserToolAdvDlg.h"
 
-#include "BCGToolbarCustomizeEx.h"
+#include "ToolBarsCustomizeDialog.h"
 #include "FontOccManager.h"
 #include "DialogTemplate.h"
 
@@ -88,16 +88,6 @@ void ToolBarCustomizeExAdvBtn::OnClicked()
 		pTool->m_strOutputFile = AdvDlg.m_strOutputFile;
 	}
 }
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-// ToolBarsCustomizeDialog
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 IMPLEMENT_DYNAMIC(ToolBarsCustomizeDialog,CMFCToolBarsCustomizeDialog)
 
@@ -258,7 +248,7 @@ void ToolBarsCustomizeDialog::OnBeforeChangeTool(CUserTool* pSelTool)
 		//--------------------------------------------------
 		// Update selected tool properties (screen -> data):
 		//--------------------------------------------------
-		CMyUserTool* pTool = DYNAMIC_DOWNCAST(CMyUserTool,pSelTool);
+		UserTool* pTool = DYNAMIC_DOWNCAST(UserTool,pSelTool);
 		ASSERT_VALID(pTool);
 
 		m_wndTXCArgumentsEdit.GetWindowText(pTool->m_strArguments);
@@ -276,7 +266,7 @@ void ToolBarsCustomizeDialog::OnAfterChangeTool(CUserTool* pSelTool)
 		//--------------------------------------------------
 		// Update selected tool properties (data -> screen):
 		//--------------------------------------------------
-		CMyUserTool* pTool = DYNAMIC_DOWNCAST(CMyUserTool,pSelTool);
+		UserTool* pTool = DYNAMIC_DOWNCAST(UserTool,pSelTool);
 		ASSERT_VALID(pTool);
 
 		m_wndTXCArgumentsEdit.SetWindowText(pTool->m_strArguments);
@@ -310,7 +300,7 @@ void ToolBarsCustomizeDialog::OnDestroy()
 
 		if (iCurSel >= 0)
 		{
-			CMyUserTool* pTool = DYNAMIC_DOWNCAST(CMyUserTool,
+			UserTool* pTool = DYNAMIC_DOWNCAST(UserTool,
 			                                      (CUserTool*) m_pToolsPage->m_wndToolsList.GetItemData(iCurSel));
 			ASSERT_VALID(pTool);
 
@@ -325,7 +315,7 @@ BOOL ToolBarsCustomizeDialog::CheckToolsValidity(const CObList& lstTools)
 {
 	//	for (POSITION pos = lstTools.GetHeadPosition (); pos != NULL;)
 	//	{
-	//		CMyUserTool* pTool = (CMyUserTool*) lstTools.GetNext (pos);
+	//		UserTool* pTool = (UserTool*) lstTools.GetNext (pos);
 	//		ASSERT_VALID (pTool);
 	//
 	//		if (pTool->GetCommand ().IsEmpty ())

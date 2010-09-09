@@ -435,7 +435,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 		return FALSE;
 
 	EnableUserTools(ID_TOOLS_ENTRY, ID_USER_TOOL_FIRST, ID_USER_TOOL_LAST,
-	                RUNTIME_CLASS(CMyUserTool),
+	                RUNTIME_CLASS(UserTool),
 	                0, IDR_POPUP_PLACEHOLDER_DIR);
 
 	//Prevent some commands from being customized

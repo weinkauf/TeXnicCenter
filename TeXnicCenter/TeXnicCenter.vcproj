@@ -457,30 +457,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\BCGNotifyingEditListBox.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\BCGNotifyingEditListBox.h"
-				>
-			</File>
-			<File
-				RelativePath=".\BCGRegistryEx.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\BCGRegistryEx.h"
-				>
-			</File>
-			<File
-				RelativePath=".\BCGToolbarCustomizeEx.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\BCGToolbarCustomizeEx.h"
-				>
-			</File>
-			<File
 				RelativePath=".\BibItem.cpp"
 				>
 			</File>
@@ -1013,6 +989,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\NotifyingEditListBox.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NotifyingEditListBox.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Nullable.h"
 				>
 			</File>
@@ -1389,6 +1373,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\RegistryStack.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RegistryStack.h"
+				>
+			</File>
+			<File
 				RelativePath=".\resource.h"
 				>
 			</File>
@@ -1642,6 +1634,14 @@
 			</File>
 			<File
 				RelativePath=".\tipdlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ToolBarsCustomizeDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ToolBarsCustomizeDialog.h"
 				>
 			</File>
 			<File
