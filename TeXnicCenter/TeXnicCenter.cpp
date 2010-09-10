@@ -66,6 +66,45 @@
 #include "MetaPostDocument.h"
 #include "MultiExtensionDocTemplate.h"
 
+namespace {
+	/**
+	 * Loads the MFC resource module with the specified @a lcid, sets it as the 
+	 * current instance and releases the previous one.
+	 * 
+	 * @param lcid Resource locale of the module to be loaded.
+	 */
+	void LoadModuleResources(LCID lcid)
+	{
+		CString strLanguage;
+
+		::GetLocaleInfo(lcid, LOCALE_SABBREVLANGNAME, strLanguage.GetBuffer(MAX_PATH), MAX_PATH);
+		strLanguage.ReleaseBuffer();
+
+		CString strPath;
+		AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
+		LPTSTR pszPath = strPath.GetBuffer(MAX_PATH);
+
+		::GetModuleFileName(pModuleState->m_appLangDLL, pszPath, MAX_PATH);
+		::PathRemoveExtension(pszPath);
+		strPath.ReleaseBuffer();
+		
+		const int minExtensionLength = 3;
+
+		ASSERT(strPath.GetLength() >= minExtensionLength);
+		strPath.GetBufferSetLength(strPath.GetLength() - minExtensionLength);
+		strPath += strLanguage;
+		strPath += _T(".DLL");
+
+		HINSTANCE hInstance = AfxLoadLibrary(strPath);
+
+		if (hInstance)
+		{
+			AfxFreeLibrary(pModuleState->m_appLangDLL);
+			pModuleState->m_appLangDLL = hInstance;
+		}	
+	}
+}
+
 
 class CTCCommandLineInfo : public CCommandLineInfo
 {
@@ -341,7 +380,13 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 			if (fviResources.GetLanguageId() != MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL))
 			{
-				::SetThreadLocale(MAKELCID(fviResources.GetLanguageId(), SORT_DEFAULT));
+				LANGID id = fviResources.GetLanguageId();
+				LCID lcid = MAKELCID(id, SORT_DEFAULT);
+
+				::SetThreadLocale(lcid);
+				::SetThreadUILanguage(id);
+
+				LoadModuleResources(lcid);
 			}
 		}
 		else
