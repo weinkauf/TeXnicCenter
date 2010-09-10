@@ -49,7 +49,7 @@ public:
 	CStyleFileContainer(const CString &basePath = CString(_T(".")));
 	virtual ~CStyleFileContainer();
 
-	BOOL AddStyleFile(const std::tr1::shared_ptr<CStyleFile>& sf);
+	BOOL AddStyleFile(const SharedStyleFilePtr& sf);
 	BOOL LoadFromXML(const CString &file,BOOL addToExisting = FALSE);
 	static BOOL ContainsString(const CStringArray *list,const CString &string);
 	BOOL SaveAsXML(const CString &path);
@@ -96,7 +96,7 @@ public:
 
 private:
 	void SetupCR(CString &s);
-	void ProcessEntityNodes(const MsXml::CXMLDOMNode &element, std::tr1::shared_ptr<CStyleFile>& parent);
+	void ProcessEntityNodes(const MsXml::CXMLDOMNode &element, SharedStyleFilePtr& parent);
 	void ProcessPackageNode(const MsXml::CXMLDOMNode &element);
 
 
@@ -107,7 +107,7 @@ private:
 	CString m_LastDir; /* Contains name of last dir found */
 
 	typedef CString StyleMapKey;
-	typedef std::tr1::shared_ptr<CStyleFile> StyleMapArg;
+	typedef SharedStyleFilePtr StyleMapArg;
 
 	CMap<StyleMapKey, LPCTSTR, StyleMapArg, const StyleMapArg> m_StyleFiles; /* Hash map of available style files */
 	int m_NoOfFiles; /* Number of scanned files */

@@ -48,7 +48,7 @@ class CNewEnvironment : public CLaTeXCommand
 {
 public:
 	DECLARE_DYNAMIC(CNewEnvironment)
-	CNewEnvironment(const std::tr1::shared_ptr<CStyleFile>& parent, const CString &name, int noOfParams);
+	CNewEnvironment(const WeakStyleFilePtr& parent, const CString &name, int noOfParams);
 	virtual ~CNewEnvironment();
 
 	const CString ToString() const;

@@ -128,7 +128,7 @@ bool CStyleFileContainer::FindStyleFilesRecursive(CString dir)
 			if (ext == "sty" || ext == "cls")
 			{
 				m_LastFile = Path.GetFile();
-				std::tr1::shared_ptr<CStyleFile> sf(new CStyleFile(Path.GetPath(), ext == "cls"));
+				SharedStyleFilePtr sf(new CStyleFile(Path.GetPath(), ext == "cls"));
 				sf->SetListener(m_Listener);
 
 				if (m_Listener) m_Listener->OnFileFound(Path.GetPath());
@@ -173,7 +173,7 @@ BOOL CStyleFileContainer::IsDirInSearchPath(const CString &dir)
 	return ContainsString(&m_SearchPaths, dir);
 }
 
-BOOL CStyleFileContainer::AddStyleFile(const std::tr1::shared_ptr<CStyleFile>& sf)
+BOOL CStyleFileContainer::AddStyleFile(const SharedStyleFilePtr& sf)
 {
 	StyleMapArg dummy;
 	if (!m_StyleFiles.Lookup(sf->GetName(), dummy))
@@ -252,7 +252,7 @@ void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CStr
 	{
 		int SearchLength = Partial.GetLength();
 
-		std::tr1::shared_ptr<CStyleFile> dummy
+		SharedStyleFilePtr dummy
 			(new CStyleFile(CString(_T("Labels")), CString(_T("All Labels from document."))));
 
 		for (StructureItemContainer::const_iterator it = proj->m_aStructureItems.begin(); it != proj->m_aStructureItems.end(); ++it)
@@ -558,7 +558,7 @@ void CStyleFileContainer::ProcessPackageNode( const MsXml::CXMLDOMNode &element 
 	}
 
 	/* Create style file instance and insert it into the hash map */
-	std::tr1::shared_ptr<CStyleFile> sf(new CStyleFile(nameVal, descVal, isClass));
+	SharedStyleFilePtr sf(new CStyleFile(nameVal, descVal, isClass));
 
 	sf->SetListener(m_Listener);
 
@@ -578,7 +578,7 @@ void CStyleFileContainer::ProcessPackageNode( const MsXml::CXMLDOMNode &element 
 	}
 }
 
-void CStyleFileContainer::ProcessEntityNodes( const MsXml::CXMLDOMNode &element, std::tr1::shared_ptr<CStyleFile>& parent )
+void CStyleFileContainer::ProcessEntityNodes( const MsXml::CXMLDOMNode &element, SharedStyleFilePtr& parent )
 {
 	/* fetch attributes */
 	MsXml::CXMLDOMNamedNodeMap attr = element.GetAttributes();
