@@ -116,18 +116,11 @@ public:
 	virtual ~ToolBarsCustomizeDialog();
 
 // Methods
-public:
-
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(ToolBarsCustomizeDialog)
-	//}}AFX_VIRTUAL
-
+protected:
 	virtual void OnInitToolsPage();
 	virtual void OnBeforeChangeTool(CUserTool* pSelTool);
 	virtual void OnAfterChangeTool(CUserTool* pSelTool);
 	virtual BOOL CheckToolsValidity(const CObList& lstTools);
-
 
 // Attributes
 protected:
@@ -153,9 +146,17 @@ protected:
 	afx_msg void OnDestroy();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+
 public:
-	void BuildPropPageArray(void);
+	void BuildPropPageArray();
+	BOOL Create(CWnd* pParentWnd, DWORD dwStyle, DWORD dwExStyle);
+	BOOL Create();
+
+private:
 	static int CALLBACK PropSheetCallback(HWND hWnd, UINT message, LPARAM lParam);
+
+	static void OnPropSheetCreate(LPARAM lParam);
+
 };
 
 

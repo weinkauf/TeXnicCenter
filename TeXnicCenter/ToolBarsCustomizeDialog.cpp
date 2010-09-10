@@ -46,8 +46,22 @@ static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// ToolBarCustomizeExAdvBtn
+int CALLBACK AfxPropSheetCallback(HWND,UINT message,LPARAM lParam);
+const TCHAR*  PROP_CLOSEPENDING_NAME = _T("AfxClosePending");
+BOOL AFXAPI AfxEndDeferRegisterClass(LONG fToRegister);
+
+#define AfxDeferRegisterClass(fClass) AfxEndDeferRegisterClass(fClass)
+#define AFX_WNDCOMMCTLS_REG             0x00010 // means all original Win95
+
+#ifndef _UNICODE
+#define AFX_WNDCOMMCTLSALL_REG          0x3C010 // COMMCTLS|INTERNET|COOL|USEREX|DATE
+#define AFX_WNDCOMMCTLSNEW_REG          0x3C000 // INTERNET|COOL|USEREX|DATE
+#else
+#define AFX_WNDCOMMCTLSALL_REG          0xFC010 // COMMCTLS|INTERNET|COOL|USEREX|DATE|LINK|PAGER
+#define AFX_WNDCOMMCTLSNEW_REG          0xFC000 // INTERNET|COOL|USEREX|DATE|LINK|PAGER
+#endif
+
+BOOL AFXAPI AfxInitNetworkAddressControl();
 
 ToolBarCustomizeExAdvBtn::ToolBarCustomizeExAdvBtn()
 		: pTool(NULL)
@@ -63,9 +77,6 @@ BEGIN_MESSAGE_MAP(ToolBarCustomizeExAdvBtn,CButton)
 	ON_CONTROL_REFLECT(BN_CLICKED,OnClicked)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
-
-/////////////////////////////////////////////////////////////////////////////
-// ToolBarCustomizeExAdvBtn message handlers
 
 void ToolBarCustomizeExAdvBtn::OnClicked()
 {
@@ -313,20 +324,7 @@ void ToolBarsCustomizeDialog::OnDestroy()
 
 BOOL ToolBarsCustomizeDialog::CheckToolsValidity(const CObList& lstTools)
 {
-	//	for (POSITION pos = lstTools.GetHeadPosition (); pos != NULL;)
-	//	{
-	//		UserTool* pTool = (UserTool*) lstTools.GetNext (pos);
-	//		ASSERT_VALID (pTool);
-	//
-	//		if (pTool->GetCommand ().IsEmpty ())
-	//		{
-	//			MessageBox (_T("Command is required"));
-	//			return FALSE;
-	//		}
-	//	}
-
 	return CMFCToolBarsCustomizeDialog::CheckToolsValidity(lstTools);
-	//	return TRUE;
 }
 
 void ToolBarsCustomizeDialog::BuildPropPageArray(void)
@@ -334,33 +332,19 @@ void ToolBarsCustomizeDialog::BuildPropPageArray(void)
 	__super::BuildPropPageArray();
 	FixPropSheetFont(m_psh,m_pages);
 
-	m_psh.dwFlags |= PSH_USECALLBACK;
 	m_psh.pfnCallback = PropSheetCallback;
 }
 
-int ToolBarsCustomizeDialog::PropSheetCallback(HWND hWnd,UINT message,LPARAM lParam)
+int ToolBarsCustomizeDialog::PropSheetCallback(HWND hWnd, UINT message, LPARAM lParam)
 {
-	extern int CALLBACK AfxPropSheetCallback(HWND,UINT message,LPARAM lParam);
 	int result;
 
 	switch (message)
 	{
 		case PSCB_PRECREATE:
-		{
-			LPDLGTEMPLATE const lpTemplate = reinterpret_cast<LPDLGTEMPLATE>(lParam);
-			CDialogTemplate t;
-			t.m_hTemplate = reinterpret_cast<HGLOBAL>(lpTemplate);
-			t.m_dwTemplateSize = DialogTemplate::GetTemplateSize(lpTemplate);
-
-			LOGFONT lf;
-			WORD size;
-			GetDisplayFont(lf,size);
-
-			t.SetFont(lf.lfFaceName,size);
-			t.Detach();
-		}
-		result = 1;
-		break;
+			OnPropSheetCreate(lParam);
+			result = 1;
+			break;
 		default:
 			result = AfxPropSheetCallback(hWnd,message,lParam);
 	}
@@ -368,4 +352,127 @@ int ToolBarsCustomizeDialog::PropSheetCallback(HWND hWnd,UINT message,LPARAM lPa
 	return result;
 }
 
+// This function has been extracted from dlgprop.cpp and modified to allow 
+// hooking the property sheet callback. Unfortunately, the original function
+// always overwrites m_psh.pfnCallback which makes it impossible to set up a
+// hook. This version doesn't overwrite m_psh.pfnCallback if it's non-NULL.
+BOOL ToolBarsCustomizeDialog::Create(CWnd* pParentWnd, DWORD dwStyle, DWORD dwExStyle)
+{
+	ENSURE( 0 == ( m_psh.dwFlags & PSH_AEROWIZARD ) );
 
+	_AFX_THREAD_STATE* pState = AfxGetThreadState();
+
+	// Calculate the default window style.
+	if (dwStyle == (DWORD)-1)
+	{
+		pState->m_dwPropStyle = DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP |
+			DS_SETFONT | WS_POPUP | WS_VISIBLE | WS_CAPTION;
+
+		// Wizards don't have WS_SYSMENU.
+		if (!IsWizard())
+			pState->m_dwPropStyle |= WS_SYSMENU;
+	}
+	else
+	{
+		pState->m_dwPropStyle = dwStyle;
+	}
+
+	pState->m_dwPropExStyle = dwExStyle;
+
+	ASSERT_VALID(this);
+	ASSERT(m_hWnd == NULL);
+
+	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTLS_REG));
+	AfxDeferRegisterClass(AFX_WNDCOMMCTLSNEW_REG);
+
+#ifdef _UNICODE
+	AfxInitNetworkAddressControl();
+#endif
+
+	// finish building PROPSHEETHEADER structure
+	BuildPropPageArray();
+	m_bModeless = TRUE;
+	m_psh.dwFlags |= (PSH_MODELESS|PSH_USECALLBACK);
+
+	// Modification: Don't overwrite the callback if it has been set to allow hooks
+	if (!m_psh.pfnCallback)
+		m_psh.pfnCallback = AfxPropSheetCallback;
+
+	m_psh.hwndParent = pParentWnd->GetSafeHwnd();
+
+	// hook the window creation process
+	AfxHookWindowCreate(this);
+	HWND hWnd = (HWND)AfxPropertySheet(&m_psh);
+#ifdef _DEBUG
+	DWORD dwError = ::GetLastError();
+#endif
+
+	// cleanup on failure, otherwise return TRUE
+	if (!AfxUnhookWindowCreate())
+		PostNcDestroy();    // cleanup if Create fails
+
+	// setting a custom property in our window
+	HGLOBAL hMem = GlobalAlloc(GPTR, sizeof(BOOL)); 
+	BOOL* pBool = static_cast<BOOL*>(GlobalLock(hMem));
+	if (pBool != NULL)
+	{
+		*pBool = TRUE;
+		GlobalUnlock(hMem); 
+		if (SetProp(this->m_hWnd, PROP_CLOSEPENDING_NAME, hMem) == 0)
+		{
+			GlobalFree(hMem);
+			this->DestroyWindow();
+			return FALSE;
+		}
+	}
+	else
+	{
+		this->DestroyWindow();
+		return FALSE;
+	}
+
+	if (hWnd == NULL || hWnd == (HWND)-1)
+	{
+#ifdef _DEBUG
+		TRACE(traceAppMsg, 0, "PropertySheet() failed: GetLastError returned %d\n", dwError);
+#endif
+		return FALSE;
+	}
+
+	ASSERT(hWnd == m_hWnd);
+	return TRUE;
+}
+
+// Original function, slightly modified
+BOOL ToolBarsCustomizeDialog::Create()
+{
+	DWORD dwExStyle = 0;
+
+	if ((m_pParentFrame != NULL) &&(m_pParentFrame->GetExStyle() & WS_EX_LAYOUTRTL))
+	{
+		dwExStyle |= WS_EX_LAYOUTRTL;
+	}
+
+	if (!Create(m_pParentFrame, (DWORD)-1, dwExStyle)) // Modified
+	{
+		return FALSE;
+	}
+
+	SetFrameCustMode(TRUE);
+	return TRUE;
+}
+
+void ToolBarsCustomizeDialog::OnPropSheetCreate(LPARAM lParam)
+{
+	LPDLGTEMPLATE const lpTemplate = reinterpret_cast<LPDLGTEMPLATE>(lParam);
+	CDialogTemplate t;
+	t.m_hTemplate = reinterpret_cast<HGLOBAL>(lpTemplate);
+	t.m_dwTemplateSize = DialogTemplate::GetTemplateSize(lpTemplate);
+
+	LOGFONT lf;
+	WORD size;
+	GetDisplayFont(lf,size);
+
+	t.SetFont(lf.lfFaceName,size);
+	t.Detach();
+}
