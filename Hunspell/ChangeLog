@@ -1,5 +1,27 @@
+2010-07-05 Caolán McNamara <cmc at OOo>:
+	* hun#2286060 add Hangul syllables to unicode tables
+
+2010-06-26 Caolán McNamara <cmc at OOo>:
+	* moz#571728 keep new[]/delete[] wrappers in sync for embedded in moz
+	case
+
+2010-06-13 Caolán McNamara <cmc at OOo>:
+	* moz#571728 keep new[]/delete[] wrappers in sync for embedded in moz
+	case
+
+2010-06-02 Caolán McNamara <cmc at OOo>:
+	* moz#569611 compile cleanly under win64
+
+2010-05-22 Caolán McNamara <cmc at OOo>:
+	* moz#525581 apply mozilla's current preferred get_current_cs impl
+
+2010-05-17 Németh László <nemeth at OOo>:
+	* affixmgr.cxx: fix bad limitation of parenthesized flags at
+	  COMPOUNDRULEs. Windows crash reported by Ruud Baars and Simon Brouwer.
+
 2010-05-05 Caolán McNamara <cmc at OOo>:
 	* rhbz#589326 malloc of int that should have been of char**
+	* hun#2997388 fix ironic misspellings
 
 2010-04-28 Caolán McNamara <cmc at OOo>:
 	* moz#550942 get_xml_list doesn't handle failure from get_xml_par
