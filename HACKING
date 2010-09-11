@@ -202,8 +202,8 @@ purposes use the --dry-run option. Finally, update the patch by invoking
 
 to synchronize it.
 
-MFC wrapper classes
-^^^^^^^^^^^^^^^^^^^
+Scintilla MFC wrapper classes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The member function void CScintillaCtrl::ShowCursor(bool show, bool direct) has
 been added to wrap the previously mentioned message.
