@@ -88,6 +88,7 @@ protected:
 	afx_msg void OnUpdateViewWordWrapIndicators(CCmdUI *pCmdUI);
 	afx_msg void OnViewFoldMargin();
 	afx_msg void OnUpdateViewFoldMargin(CCmdUI *pCmdUI);
+	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	void OnUpdatePositionIndicator(CCmdUI* pCmdUI);
 	void OnUpdateEncodingIndicator(CCmdUI* pCmdUI);
 	void OnUpdateEOLModeIndicator(CCmdUI* pCmdUI);
@@ -210,6 +211,11 @@ private:
 	static bool IsDirectionKey( UINT ch );
 	CString SelectionExtend(bool stripEol = true);
 	CString RangeExtendAndGrab(int& selStart, int& selEnd, bool stripEol = true);
+	void OnCheckForFileChanges();
+
+public:
+	void CheckForFileChangesAsync();
+	void CheckForFileChanges();
 };
 
 template<class F>
