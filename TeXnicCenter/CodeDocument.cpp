@@ -478,6 +478,7 @@ CodeDocument::CodeDocument()
 , error_marker_handle_(-1)
 , use_bom_(false)
 , save_copy_(false)
+, surpressModifiedChange_(false)
 {
 }
 
@@ -545,7 +546,7 @@ void CodeDocument::Serialize(CArchive& ar)
 
 void CodeDocument::SetModifiedFlag(BOOL modified)
 {
-	if (m_bModified != modified) {
+	if (m_bModified != modified && !surpressModifiedChange_) {
 		const TCHAR ch = ModifiedMarker;
 		CString title = GetTitle();
 
@@ -633,7 +634,11 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 			n = buffer.size();
 		}
 
-		GetView()->GetCtrl().ClearAll();
+		// Prevent * to show up quickly in tab's title while the content is
+		// reloaded
+		surpressModifiedChange_ = true;
+
+		CScintillaDoc::DeleteContents();
 		GetView()->GetCtrl().SetCodePage(SC_CP_UTF8);
 
 		if (n) {
@@ -648,6 +653,10 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 
 		// No undo operation needed so far, we have just opened the document
 		GetView()->GetCtrl().EmptyUndoBuffer();
+
+		surpressModifiedChange_ = false;
+
+		SetModifiedFlag(FALSE);
 	}
 	else
 		result = ::GetLastError();

@@ -232,6 +232,7 @@ private:
 private:
 	int current_line_;
 	CString line_;
+	bool surpressModifiedChange_;
 };
 
 class TextDocument
