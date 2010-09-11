@@ -1056,8 +1056,12 @@ void CodeView::OnModified(SCNotification* n)
 {
 	CScintillaView::OnModified(n);
 
-	if (GetDocument()->IsModified())
-		GetDocument()->SetModifiedFlag();
+	CodeDocument* doc = GetDocument();
+
+	if (!GetCtrl().CanUndo())
+		doc->SetModifiedFlag(FALSE);
+	else if (doc->IsModified())
+		doc->SetModifiedFlag();
 
 	// Update the last changed position only if text has been inserted or deleted
 	if (n->modificationType & (SC_MOD_INSERTTEXT|SC_MOD_DELETETEXT))
