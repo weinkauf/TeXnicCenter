@@ -1,0 +1,251 @@
+diff -dru --strip-trailing-cr original/ScintillaCtrl.cpp modified/ScintillaCtrl.cpp
+--- original/ScintillaCtrl.cpp	2009-10-03 22:30:44.773000000 +0200
++++ modified/ScintillaCtrl.cpp	2010-04-10 21:02:54.874023400 +0200
+@@ -3510,6 +3510,7 @@
+   return Call(SCI_GETSTYLEBITSNEEDED, 0, 0, bDirect);
+ }
+ 
+-
+-
+-
++void CScintillaCtrl::ShowCursor( bool show, bool direct /*= true*/ )
++{
++	Call(SCI_SHOWCURSOR, show, 0, direct);
++}
+\ Kein Zeilenumbruch am Dateiende.
+diff -dru --strip-trailing-cr original/ScintillaCtrl.h modified/ScintillaCtrl.h
+--- original/ScintillaCtrl.h	2009-10-03 22:27:32.149000000 +0200
++++ modified/ScintillaCtrl.h	2010-04-10 21:05:10.605468700 +0200
+@@ -98,7 +98,9 @@
+   //Note we do not have a AnnotationGetStyles method as Scintilla does not provide a way of a priori working out a valid length of a UTF8 buffer for SCI_ANNOTATIONGETSTYLES
+ 
+   static CStringW UTF82W(const char* pszText, int nLength);
++#ifdef _UNICODE
+   static CStringA W2UTF8(const wchar_t* pszText, int nLength);
++#endif
+ #else
+   CStringA GetSelText(BOOL bDirect = TRUE);
+   CStringA GetCurLine(BOOL bDirect = TRUE);
+@@ -667,6 +669,7 @@
+   int GetPropertyExpanded(const char* key, char* buf, BOOL bDirect = TRUE);
+   int GetPropertyInt(const char* key, BOOL bDirect = TRUE);
+   int GetStyleBitsNeeded(BOOL bDirect = TRUE);
++  void ShowCursor(bool show, bool direct = true);
+ 
+ protected:
+   DECLARE_DYNAMIC(CScintillaCtrl)
+diff -dru --strip-trailing-cr original/ScintillaDocView.cpp modified/ScintillaDocView.cpp
+--- original/ScintillaDocView.cpp	2009-06-05 02:01:49.153000000 +0200
++++ modified/ScintillaDocView.cpp	2010-09-09 05:08:00.127929600 +0200
+@@ -112,6 +112,8 @@
+ #endif
+ #include "resource.h"
+ 
++#include "FontOccManager.h"
++
+ 
+ //////////////////////////////// Statics / Macros /////////////////////////////
+ 
+@@ -150,6 +152,10 @@
+ 
+ _SCINTILLA_EDIT_STATE _scintillaEditState;
+ 
++CScintillaFindReplaceDlg* CScintillaFindReplaceDlg::GetFindReplaceDlg()
++{
++	return _scintillaEditState.pFindReplaceDlg;
++}
+ 
+ BEGIN_MESSAGE_MAP(CScintillaFindReplaceDlg, CFindReplaceDialog)
+   ON_BN_CLICKED(IDC_REGULAR_EXPRESSION, OnRegularExpression)
+@@ -162,12 +168,24 @@
+ BOOL CScintillaFindReplaceDlg::Create(BOOL bFindDialogOnly,	LPCTSTR lpszFindWhat, LPCTSTR lpszReplaceWith, DWORD dwFlags, CWnd* pParentWnd)
+ {
+   //Tell Windows to use our dialog instead of the standard one
+-  m_fr.hInstance = AfxGetResourceHandle();
+-  m_fr.Flags |= FR_ENABLETEMPLATE;
++  UINT id;
++
+   if (bFindDialogOnly)
+-    m_fr.lpTemplateName = MAKEINTRESOURCE(IDD_SCINTILLA_FINDDLGORD);
++	  id = IDD_SCINTILLA_FINDDLGORD;
+   else
+-    m_fr.lpTemplateName = MAKEINTRESOURCE(IDD_SCINTILLA_REPLACEDLGORD);
++	  id = IDD_SCINTILLA_REPLACEDLGORD;
++
++  templ_.Load(MAKEINTRESOURCE(id));
++
++  LOGFONT lf; WORD s;
++  GetDisplayFont(lf,s);
++
++  templ_.SetFont(lf.lfFaceName,s);
++
++  m_fr.Flags |= FR_ENABLETEMPLATEHANDLE;
++  m_fr.hInstance = static_cast<HINSTANCE>(templ_.m_hTemplate);
++
++  find_only_ = bFindDialogOnly != 0;
+ 
+   //Let the base class do its thing
+   return CFindReplaceDialog::Create(bFindDialogOnly,	lpszFindWhat, lpszReplaceWith, dwFlags, pParentWnd);
+@@ -798,6 +816,9 @@
+   //Validate our parameters
+ 	ASSERT_VALID(this);
+ 
++	CScintillaCtrl& rCtrl = GetCtrl();
++	CString strFind(rCtrl.GetSelText());
++
+ 	m_bFirstSearch = TRUE;
+ 	if (_scintillaEditState.pFindReplaceDlg != NULL)
+ 	{
+@@ -805,6 +826,14 @@
+ 		{
+ 			_scintillaEditState.pFindReplaceDlg->SetActiveWindow();
+ 			_scintillaEditState.pFindReplaceDlg->ShowWindow(SW_SHOW);
++
++			if (!strFind.IsEmpty()) // Set the new find string
++			{
++				CEdit* edit = static_cast<CEdit*>(_scintillaEditState.pFindReplaceDlg->GetDlgItem(1152));
++				edit->SetWindowText(strFind);
++				edit->SetSel(0,-1);
++			}
++
+ 			return;
+ 		}
+ 		else
+@@ -815,8 +844,7 @@
+ 			ASSERT_VALID(this);
+ 		}
+ 	}
+-  CScintillaCtrl& rCtrl = GetCtrl();
+-	CString strFind(rCtrl.GetSelText());
++  
+ 	//if selection is empty or spans multiple lines use old find text
+ 	if (strFind.IsEmpty() || (strFind.FindOneOf(_T("\n\r")) != -1))
+ 		strFind = _scintillaEditState.strFind;
+@@ -917,26 +945,46 @@
+ 	CWaitCursor wait;
+ 
+   //Set the selection to the begining of the document to ensure all text is replaced in the document
+-  CScintillaCtrl& rCtrl = GetCtrl();
+-  rCtrl.SetSel(0, 0);
++  long start_pos, end_pos;
++  GetReplaceAllTarget(start_pos,end_pos);
+ 
+-  //Do the replacments
+-	rCtrl.HideSelection(TRUE, FALSE);
+-  BOOL bFoundSomething = FALSE;
+-	while (FindTextSimple(_scintillaEditState.strFind, _scintillaEditState.bNext, bCase, bWord, bRegularExpression))
++  CScintillaCtrl& c = GetCtrl();
++  bool has_selection = c.GetSelectionStart() != c.GetSelectionEnd();
++
++  int flags = 0;
++
++  if (bCase)
++	  flags |= SCFIND_MATCHCASE;
++
++  if (bRegularExpression)
++	  flags |= SCFIND_REGEXP;
++
++  if (bWord)
++	  flags |= SCFIND_WHOLEWORD;
++
++  c.SetSearchFlags(flags);
++  c.BeginUndoAction();
++
++  c.SetTargetStart(start_pos);
++  c.SetTargetEnd(end_pos);
++
++  long find_pos;
++  bool bFoundSomething = false;
++
++  while ((find_pos = c.SearchInTarget(_scintillaEditState.strFind.GetLength(),_scintillaEditState.strFind)) != -1)
+   {
+-    bFoundSomething = TRUE;
+-    if (bRegularExpression)
+-    {
+-      rCtrl.TargetFromSelection();
+-      rCtrl.ReplaceTargetRE(_scintillaEditState.strReplace.GetLength(), _scintillaEditState.strReplace);
+-    }
+-    else
+-		  rCtrl.ReplaceSel(_scintillaEditState.strReplace);
++	  c.ReplaceTarget(_scintillaEditState.strReplace.GetLength(),_scintillaEditState.strReplace);
++	  c.SetTargetStart(c.GetTargetEnd() + 1);
++	  c.SetTargetEnd(end_pos); // Still end position
++
++	  if (!bFoundSomething)
++		  bFoundSomething = true;
+   }
+ 
+-  //Restore the old selection
+-	rCtrl.HideSelection(FALSE, FALSE);
++  c.EndUndoAction();
++
++  if (has_selection) // Was the text previously selected?
++	  c.SetSel(start_pos,c.GetTargetEnd());
+ 
+   //Inform the user if we could not find anything
+   if (!bFoundSomething)
+@@ -1580,6 +1628,10 @@
+   }
+ }
+ 
++void CScintillaView::GetReplaceAllTarget( long& s, long& e )
++{
++	s = 0; e = GetCtrl().GetLength();
++}
+ 
+ IMPLEMENT_DYNAMIC(CScintillaDoc, CDocument)
+ 
+diff -dru --strip-trailing-cr original/ScintillaDocView.h modified/ScintillaDocView.h
+--- original/ScintillaDocView.h	2009-06-05 02:01:49.146000000 +0200
++++ modified/ScintillaDocView.h	2010-04-10 20:49:58.470703100 +0200
+@@ -28,6 +28,7 @@
+ 
+ 
+ #include "ScintillaCtrl.h"
++#include "DialogTemplate.h"
+ 
+ #ifndef __AFXTEMPL_H__
+ #pragma message("To avoid this message please put afxtempl.h into your pre compiled header (normally stdafx.h)")
+@@ -43,6 +44,9 @@
+ 
+ class SCINTILLADOCVIEW_EXT_CLASS CScintillaFindReplaceDlg : public CFindReplaceDialog
+ {
++	DialogTemplate templ_;
++	bool find_only_;
++
+ public:
+ //Constructors / Destructors
+   CScintillaFindReplaceDlg();
+@@ -51,12 +55,15 @@
+   BOOL Create(BOOL bFindDialogOnly, LPCTSTR lpszFindWhat, LPCTSTR lpszReplaceWith = NULL, DWORD dwFlags = FR_DOWN, CWnd* pParentWnd = NULL);
+   BOOL GetRegularExpression() const { return m_bRegularExpression; };
+   void SetRegularExpression(BOOL bRegularExpression) { m_bRegularExpression = bRegularExpression; };
++  static CScintillaFindReplaceDlg* GetFindReplaceDlg();
++
++  bool IsFindDialogOnly() const { return find_only_; }
+ 
+ protected:
+ 	virtual BOOL OnInitDialog();
+ 
+   afx_msg void OnRegularExpression();
+-  
++
+ //Member variables
+   BOOL m_bRegularExpression;
+ 
+@@ -68,6 +75,7 @@
+ public:
+ //Constructors / Destructors
+   CScintillaView();
++  virtual ~CScintillaView(){}
+ 
+ //Methods
+   CScintillaCtrl& GetCtrl();
+@@ -101,6 +109,7 @@
+ 	virtual BOOL FindTextSimple(LPCTSTR lpszFind, BOOL bNext, BOOL bCase, BOOL bWord, BOOL bRegularExpression);
+ 	virtual void OnReplaceSel(LPCTSTR lpszFind, BOOL bNext, BOOL bCase,	BOOL bWord, BOOL bRegularExpression, LPCTSTR lpszReplace);
+ 	virtual void OnReplaceAll(LPCTSTR lpszFind, LPCTSTR lpszReplace, BOOL bCase, BOOL bWord, BOOL bRegularExpression);
++	virtual void GetReplaceAllTarget(long& s, long& e);
+ 	virtual BOOL SameAsSelected(LPCTSTR lpszCompare, BOOL bCase, BOOL bWord, BOOL bRegularExpression);
+ 	virtual long FindAndSelect(DWORD dwFlags, TextToFind& ft);
+   virtual void AdjustFindDialogPosition();
