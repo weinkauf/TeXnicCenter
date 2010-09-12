@@ -578,7 +578,7 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 
 #pragma endregion
 	}
-	else
+	else // Restore
 	{
 #pragma region Bookmarks
 
@@ -671,7 +671,9 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 		if (theApp.GetShowMDITabs())
 			hwndlock = ::GetWindow(static_cast<CMDIFrameWnd*>(AfxGetMainWnd())->m_hWndMDIClient,GW_CHILD);
 
-		for (int nFrame = 0; nFrame < nFrameCount; nFrame++)
+        // To restore previous frame appearance order the frames are created in
+        // reversed order
+		for (int nFrame = nFrameCount - 1; nFrame >= 0; --nFrame)
 		{
 			strKey.Format(KEY_FRAMEINFO,nFrame);
 			key.Format(KEY_VIEWINFO,strKey,0,0);			
@@ -703,24 +705,6 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 
 			if (hwndlock)
 				::LockWindowUpdate(0);
-			//::RedrawWindow(hwndlock,0,0,RDW_UPDATENOW);
-
-			//CChildFrame* pChildFrame = new CChildFrame();
-
-			//ASSERT(pChildFrame);
-
-			//if (!pChildFrame) 
-			//	continue;
-
-			//strKey.Format(KEY_FRAMEINFO,nFrame);
-			//
-			//if (!pChildFrame->Serialize(ini,strKey,bWrite))
-			//{
-			//	bCouldOpenAllFrames = false;
-			//	delete pChildFrame;
-			//}
-			//else
-			//{
 		}
 
 #pragma endregion
