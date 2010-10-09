@@ -2,6 +2,7 @@
 #include "resource.h"
 
 #include "BibTeXOutputFilter.h"
+#include "OutputInfo.h"
 
 BibTeXOutputFilter::BibTeXOutputFilter()
 : warning_line_(_T("--line (\\d+) of file (.+)"))

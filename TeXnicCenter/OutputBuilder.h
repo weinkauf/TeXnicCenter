@@ -106,12 +106,9 @@ public:
 	BOOL CancelExecution();
 
 	/**
-	Returns whether the last build was cancelled or not.
+	Returns whether the last build was canceled or not.
 	 */
-	BOOL WasCancelled()
-	{
-		return m_bCancel;
-	}
+    bool WasCancelled() const;
 
 // overridings
 protected:
