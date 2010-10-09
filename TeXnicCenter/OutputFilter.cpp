@@ -123,6 +123,7 @@ UINT COutputFilter::Run()
 
 	char c;
 	std::vector<char> line;
+    line.reserve(128);
 
 	DWORD dwCookie = 0;
 	BOOL bLastWasNewLine = FALSE;
