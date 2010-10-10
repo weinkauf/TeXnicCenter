@@ -169,7 +169,6 @@ protected:
 // overridings
 private:
 	volatile bool cancel_;
-    volatile bool stop_;
 
     typedef std::vector<char> CharVector;
     typedef std::deque<CharVector> DispatchDeque;
