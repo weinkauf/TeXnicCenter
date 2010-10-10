@@ -136,7 +136,7 @@ UINT COutputFilter::Run()
     dispatcher->m_bAutoDelete = FALSE;
 
 	errors_ = warnings_ = bad_boxes_ = 0;
-	stop_ = cancel_ = false;
+	cancel_ = false;
     dispatchQueue_.clear();
 
 	DWORD dwBytesRead;
@@ -181,12 +181,18 @@ UINT COutputFilter::Run()
     if (cancel_)
     {
         TRACE0("Output filter processing canceled\n");
+
+        CSingleLock lock(&dispatchMonitor_, TRUE);
+        dispatchQueue_.clear();
     }
 
-    stop_ = true;
-    // Wake up LineDispatcherThread so it can exit the loop
-    processLineEvent_.SetEvent();
+    ASSERT(line.empty());
+    // An empty line indicates the loop exit
+    ProcessLine(line);
+
     ::WaitForSingleObject(*dispatcher, INFINITE);
+
+    ASSERT(dispatchQueue_.empty());
 
 	return !OnTerminate();
 }
@@ -243,10 +249,13 @@ UINT COutputFilter::LineDispatcherThread()
     TRACE0("Starting output filter line dispatcher thread\n");
 
     DWORD cookie = 0;
+    bool stop = false;
 
-    while (!stop_ && processLineEvent_.Lock())
-    {        
-        CSingleLock lock(&dispatchMonitor_, TRUE);
+    CSingleLock monitorLock(&dispatchMonitor_);
+
+    while (!stop && processLineEvent_.Lock())
+    {
+        monitorLock.Lock();
 
         // Exit the queue processing loop for the current event only if the 
         // processing has been canceled
@@ -262,7 +271,14 @@ UINT COutputFilter::LineDispatcherThread()
                 AddLine(text);
                 cookie = ParseLine(text, cookie);
             }
+            else
+            {
+                // An empty line indicates the end of the processing loop
+                stop = true;
+            }
         }
+
+        monitorLock.Unlock();
     }
 
     TRACE0("Exiting output filter line dispatcher thread\n");
