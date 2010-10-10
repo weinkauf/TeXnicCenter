@@ -251,34 +251,41 @@ UINT COutputFilter::LineDispatcherThread()
     DWORD cookie = 0;
     bool stop = false;
 
-    CSingleLock monitorLock(&dispatchMonitor_);
-
     while (!stop && processLineEvent_.Lock())
     {
-        monitorLock.Lock();
+        bool done = false;
 
         // Exit the queue processing loop for the current event only if the 
         // processing has been canceled
-        while (!cancel_ && !dispatchQueue_.empty())
+        while (!cancel_ && !done)
         {
-            const CharVector line = dispatchQueue_.front();
-            dispatchQueue_.pop_front();
+            CSingleLock monitorLock(&dispatchMonitor_, TRUE);
 
-            if (!line.empty())
+            if (!dispatchQueue_.empty())
             {
-                const CString text(&line[0], line.size());            
+                const CharVector line = dispatchQueue_.front();
+                dispatchQueue_.pop_front();
 
-                AddLine(text);
-                cookie = ParseLine(text, cookie);
+                // Allow COutputFilter::Run to fill dispatchQueue_ while the
+                // line is being processed
+                monitorLock.Unlock();
+
+                if (!line.empty())
+                {
+                    const CString text(&line[0], line.size());            
+
+                    AddLine(text);
+                    cookie = ParseLine(text, cookie);
+                }
+                else
+                {
+                    // An empty line indicates the end of the processing loop
+                    stop = true;
+                }
             }
             else
-            {
-                // An empty line indicates the end of the processing loop
-                stop = true;
-            }
+                done = true;
         }
-
-        monitorLock.Unlock();
     }
 
     TRACE0("Exiting output filter line dispatcher thread\n");
