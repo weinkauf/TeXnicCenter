@@ -35,7 +35,7 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 
-#include <set>
+#include <vector>
 
 #include "OutputWizard.h"
 #include "FontOccManager.h"
@@ -46,6 +46,15 @@
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
+
+/**
+ * @brief Generates a string literal that identifies the MiKTeX Yap settings
+ *        registry key.
+ *        
+ * @param version MiKTeX version, e.g. 2.9.
+ */
+#define MIKTEX_YAP_SETTINGS_REG_KEY(version) \
+    _T("Software\\MiKTeX.org\\MiKTeX\\") _T(#version) _T("\\Yap\\Settings")
 
 namespace
 {
@@ -416,11 +425,11 @@ void COutputWizard::LookForDviViewer()
 	 */
 	CSettingsStore reg(false,false);
 
-	if (
-	    reg.Open(_T("Software\\MiKTeX.org\\MiKTeX\\2.8\\Yap\\Settings")) //miktex 2.8
-	    || reg.Open(_T("Software\\MiKTeX.org\\MiKTeX\\2.7\\Yap\\Settings")) //miktex 2.7
-	    || reg.Open(_T("Software\\MiKTeX.org\\MiKTeX\\2.6\\Yap\\Settings")) //miktex 2.6
-	    || reg.Open(_T("Software\\MiKTeX.org\\MiKTeX\\2.5\\Yap\\Settings")) //miktex 2.5
+	if (reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.9)) //miktex 2.9
+	    || reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.8)) //miktex 2.8
+	    || reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.7)) //miktex 2.7
+	    || reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.6)) //miktex 2.6
+	    || reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.5)) //miktex 2.5
 	    || reg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\Yap\\Settings"))) //miktex 2.4 and earlier
 	{
 		CString strEditor;
@@ -610,7 +619,7 @@ void COutputWizard::LookForPdf()
 		m_wndPagePdfViewer.m_strPath = strViewer;
 
 		//If Sumatra is installed, then we take it regardless of the registered app for PDFs
-		//Sumatra is our prefered PDF viewer due to its forward/inverse search, speed, and license.
+		//Sumatra is our preferred PDF viewer due to its forward/inverse search, speed, and license.
 		// - make sure we have the right path; registered path is prefered
 		if (!IsSumatraPDF(m_wndPagePdfViewer.m_strPath) && sumatra_installed_)
 		{
@@ -666,7 +675,6 @@ void COutputWizard::ShowInformation()
 
 	if (m_bGhostscriptInstalled)
 		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFVIAPSTYPE) + newline;
-
 
 	if (lualatexInstalled_)
 		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFVIALUALATEX) + newline;
@@ -1061,15 +1069,22 @@ void COutputWizard::GeneratePDFProfile( const CString& name, const CString& strP
 
 const CString COutputWizard::FindMiKTeXInstallLocation()
 {
-	typedef std::set<CString> Paths;
-	Paths mikPaths;
+	typedef std::vector<CString> StringVector;
+	
+    StringVector paths;
+    paths.reserve(10);
 
 	LPCTSTR const mikbin = _T("miktex\\bin");
 
 	ATL::CRegKey reg;
 
 	// Known (future) MiKTeX versions
-	const CString versions[] = {_T("MiKTeX 2.7"), _T("MiKTeX 2.8"), _T("MiKTeX 2.9")};
+	const CString versions[] = { 
+        _T("MiKTeX 2.9"), 
+        _T("MiKTeX 2.8"), 
+        _T("MiKTeX 2.7")
+    };
+
 	const int count = sizeof(versions) / sizeof(*versions);
 
 	for (int i = 0; i < count; ++i)
@@ -1090,7 +1105,7 @@ const CString COutputWizard::FindMiKTeXInstallLocation()
 			if (reg.QueryStringValue(_T("InstallLocation"),path,&length) == ERROR_SUCCESS)
 			{
 				path[length] = 0;
-				mikPaths.insert(CPathTool::Cat(path,mikbin));
+				paths.push_back(CPathTool::Cat(path,mikbin));
 			}
 
 			reg.Close();
@@ -1098,21 +1113,21 @@ const CString COutputWizard::FindMiKTeXInstallLocation()
 	}
 
 	//miktex 2.6 - User
-	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(false,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.6\\Core"),_T("Install")),mikbin));
+	paths.push_back(CPathTool::Cat(ReadStringFromRegistry(false,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.6\\Core"),_T("Install")),mikbin));
 	//miktex 2.6 - Admin
-	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(true,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.6\\Core"),_T("Install")),mikbin));
+	paths.push_back(CPathTool::Cat(ReadStringFromRegistry(true,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.6\\Core"),_T("Install")),mikbin));
 	//miktex 2.5 - User
-	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(false,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.5\\Core"),_T("Install")),mikbin));
+	paths.push_back(CPathTool::Cat(ReadStringFromRegistry(false,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.5\\Core"),_T("Install")),mikbin));
 	//miktex 2.5 - Admin
-	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(true,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.5\\Core"),_T("Install")),mikbin));
+	paths.push_back(CPathTool::Cat(ReadStringFromRegistry(true,_T("SOFTWARE\\MiKTeX.org\\MiKTeX\\2.5\\Core"),_T("Install")),mikbin));
 	//miktex 2.4 - User
-	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(false,_T("SOFTWARE\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX"),_T("Install Root")),mikbin));
+	paths.push_back(CPathTool::Cat(ReadStringFromRegistry(false,_T("SOFTWARE\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX"),_T("Install Root")),mikbin));
 	//miktex 2.4 - Admin
-	mikPaths.insert(CPathTool::Cat(ReadStringFromRegistry(true,_T("SOFTWARE\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX"),_T("Install Root")),mikbin));
+	paths.push_back(CPathTool::Cat(ReadStringFromRegistry(true,_T("SOFTWARE\\MiK\\MiKTeX\\CurrentVersion\\MiKTeX"),_T("Install Root")),mikbin));
 
 	CString strPath;
 
-	for (Paths::const_iterator it = mikPaths.begin(); it != mikPaths.end() && strPath.IsEmpty(); ++it)
+	for (StringVector::const_iterator it = paths.begin(); it != paths.end() && strPath.IsEmpty(); ++it)
 	{
 		if (CPathTool::Exists(CPathTool::Cat(*it,_T("latex.exe"))))
 			strPath = *it;
