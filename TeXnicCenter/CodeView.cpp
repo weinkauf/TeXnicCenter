@@ -17,6 +17,10 @@
 #include "EncodingConverter.h"
 #include "LaTeXTokenizer.h"
 
+enum {
+	CheckForFileChangesMessageID = WM_USER + 1
+};
+
 #pragma region Helper functions
 
 int GetLogFontPointSize(const LOGFONT& lf)
@@ -62,6 +66,7 @@ CodeView::~CodeView()
 }
 
 BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
+	ON_WM_SETFOCUS()
 	ON_COMMAND(ID_EDIT_GOTO, &CodeView::OnEditGoto)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CodeView::OnFilePrintPreview)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_INDICATOR_ENCODING, &CodeView::OnUpdateEncodingIndicator)
@@ -103,6 +108,7 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_COMMAND(ID_EDIT_SELECTPARAGRAPH, &CodeView::OnEditSelParagraph)
 	ON_COMMAND(ID_EDIT_DELETE_LINE, &CodeView::OnEditDeleteLine)
 	ON_COMMAND(ID_ADVANCED_DUPLICATE, &CodeView::OnEditDuplicateLine)
+	ON_MESSAGE_VOID(CheckForFileChangesMessageID, OnCheckForFileChanges)
 END_MESSAGE_MAP()
 
 
@@ -650,11 +656,6 @@ void CodeView::OnSysColorChange()
 	OnSettingsChanged();
 }
 
-CodeDocument* CodeView::GetDocument() const
-{
-	return static_cast<CodeDocument*>(CScintillaView::GetDocument());
-}
-
 void CodeView::OnUpdateViewWordWrap(CCmdUI *pCmdUI)
 {
 	pCmdUI->SetCheck(GetCtrl().GetWrapMode() == SC_WRAP_WORD);
@@ -1055,8 +1056,12 @@ void CodeView::OnModified(SCNotification* n)
 {
 	CScintillaView::OnModified(n);
 
-	if (GetDocument()->IsModified())
-		GetDocument()->SetModifiedFlag();
+	CodeDocument* doc = GetDocument();
+
+	if (!GetCtrl().CanUndo())
+		doc->SetModifiedFlag(FALSE);
+	else if (doc->IsModified())
+		doc->SetModifiedFlag();
 
 	// Update the last changed position only if text has been inserted or deleted
 	if (n->modificationType & (SC_MOD_INSERTTEXT|SC_MOD_DELETETEXT))
@@ -1280,4 +1285,26 @@ bool CodeView::IsDirectionKey( UINT ch )
 	return ch == VK_LEFT || ch == VK_RIGHT || ch == VK_UP || ch == VK_DOWN;
 }
 
+void CodeView::OnSetFocus(CWnd* pOldWnd)
+{
+	CScintillaView::OnSetFocus(pOldWnd);
+	CheckForFileChangesAsync();
+}
 
+void CodeView::CheckForFileChangesAsync()
+{
+	PostMessage(CheckForFileChangesMessageID);
+}
+
+void CodeView::OnCheckForFileChanges()
+{
+	CheckForFileChanges();
+}
+
+void CodeView::CheckForFileChanges()
+{
+	CodeDocument* doc = dynamic_cast<CodeDocument*>(GetDocument());
+
+	if (doc)
+		doc->CheckForFileChanges();
+}

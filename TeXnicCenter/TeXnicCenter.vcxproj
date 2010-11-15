@@ -301,9 +301,6 @@
     <ClCompile Include="Advice.cpp" />
     <ClCompile Include="AutoCompleteDlg.cpp" />
     <ClCompile Include="AutoCompleteListbox.cpp" />
-    <ClCompile Include="BCGNotifyingEditListBox.cpp" />
-    <ClCompile Include="BCGRegistryEx.cpp" />
-    <ClCompile Include="BCGToolbarCustomizeEx.cpp" />
     <ClCompile Include="BibItem.cpp" />
     <ClCompile Include="BibTeXDocument.cpp" />
     <ClCompile Include="BiBTeXEntry.cpp" />
@@ -369,6 +366,7 @@
     <ClCompile Include="navigatorview.cpp" />
     <ClCompile Include="NewCommand.cpp" />
     <ClCompile Include="NewEnvironment.cpp" />
+    <ClCompile Include="NotifyingEditListBox.cpp" />
     <ClCompile Include="optiondialog.cpp" />
     <ClCompile Include="OptionPageEditor.cpp" />
     <ClCompile Include="optionpagefile.cpp" />
@@ -413,6 +411,7 @@
     <ClCompile Include="ProjectTemplate.cpp" />
     <ClCompile Include="ProjectView.cpp" />
     <ClCompile Include="PropertyDialog.cpp" />
+    <ClCompile Include="RegistryStack.cpp" />
     <ClCompile Include="ScintillaCtrl.cpp" />
     <ClCompile Include="ScintillaDocView.cpp" />
     <ClCompile Include="ShadowWindow.cpp" />
@@ -444,6 +443,7 @@
     <ClCompile Include="textsourcefile.cpp" />
     <ClCompile Include="ThemedCtrl.cpp" />
     <ClCompile Include="tipdlg.cpp" />
+    <ClCompile Include="ToolBarsCustomizeDialog.cpp" />
     <ClCompile Include="TransparencyDlg.cpp" />
     <ClCompile Include="UserTool.cpp" />
     <ClCompile Include="UserToolAdvDlg.cpp" />
@@ -457,9 +457,6 @@
     <ClInclude Include="Advice.h" />
     <ClInclude Include="AutoCompleteDlg.h" />
     <ClInclude Include="AutoCompleteListbox.h" />
-    <ClInclude Include="BCGNotifyingEditListBox.h" />
-    <ClInclude Include="BCGRegistryEx.h" />
-    <ClInclude Include="BCGToolbarCustomizeEx.h" />
     <ClInclude Include="BibItem.h" />
     <ClInclude Include="BibTeXDocument.h" />
     <ClInclude Include="BiBTeXEntry.h" />
@@ -534,6 +531,7 @@
     <ClInclude Include="navigatorview.h" />
     <ClInclude Include="NewCommand.h" />
     <ClInclude Include="NewEnvironment.h" />
+    <ClInclude Include="NotifyingEditListBox.h" />
     <ClInclude Include="Nullable.h" />
     <ClInclude Include="OleDrop.h" />
     <ClInclude Include="optiondialog.h" />
@@ -587,6 +585,7 @@
     <ClInclude Include="ProjectView.h" />
     <ClInclude Include="PropertyDialog.h" />
     <ClInclude Include="PropertyPage.h" />
+    <ClInclude Include="RegistryStack.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="RunTimeHelper.h" />
     <ClInclude Include="ScintillaCtrl.h" />
@@ -617,10 +616,12 @@
     <ClInclude Include="textsourcefile.h" />
     <ClInclude Include="ThemedCtrl.h" />
     <ClInclude Include="tipdlg.h" />
+    <ClInclude Include="ToolBarsCustomizeDialog.h" />
     <ClInclude Include="TransparencyDlg.h" />
     <ClInclude Include="TreeCtrlEx.h" />
     <ClInclude Include="UserTool.h" />
     <ClInclude Include="UserToolAdvDlg.h" />
+    <ClInclude Include="Version.h" />
     <ClInclude Include="WorkspacePane.h" />
     <ClInclude Include="WorkspacePaneBase.h" />
   </ItemGroup>
@@ -1152,8 +1153,7 @@ SubWCRev . "%(FullPath)" "%(RootDir)%(Directory)\Version.h"
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\Scintilla\vcbuild\SciLexer.vcxproj">
-      <Project>{5eecc42b-6396-41b4-badc-27f6a98e8090}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <Project>{08c13851-869a-49a9-bc48-cbd0779a2280}</Project>
     </ProjectReference>
     <ProjectReference Include="..\TeXnicCenterObjects\Source\TeXnicCenterObjects.vcxproj">
       <Project>{7d010430-948a-4400-85c4-7d18cb92068f}</Project>

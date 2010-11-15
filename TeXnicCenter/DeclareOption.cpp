@@ -46,7 +46,7 @@ static char THIS_FILE[] = __FILE__;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CDeclareOption::CDeclareOption(const std::tr1::shared_ptr<CStyleFile>& parent, const CString &name)
+CDeclareOption::CDeclareOption(const WeakStyleFilePtr& parent, const CString &name)
 		: CAbstractLaTeXCommand(parent,name)
 {
 

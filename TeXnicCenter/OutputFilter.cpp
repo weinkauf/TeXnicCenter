@@ -27,8 +27,14 @@
  *********************************************************************/
 
 #include "stdafx.h"
+
+#include <memory>
+
 #include "TeXnicCenter.h"
 #include "OutputFilter.h"
+#include "OutputDoc.h"
+#include "OutputView.h"
+#include "OutputInfo.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -43,6 +49,11 @@ static char THIS_FILE[] = __FILE__;
 COutputFilter::COutputFilter(BOOL bAutoDelete /*= FALSE*/)
 		: CWorkerThread(bAutoDelete)
 		, m_pView(NULL)
+        , processLineEvent_(FALSE, FALSE)
+{
+}
+
+COutputFilter::~COutputFilter()
 {
 }
 
@@ -116,16 +127,27 @@ CString COutputFilter::GetResultString()
 
 UINT COutputFilter::Run()
 {
+    std::auto_ptr<CWinThread> dispatcher(AfxBeginThread(LineDispatcherThread, 
+        this, THREAD_PRIORITY_LOWEST, 0, CREATE_SUSPENDED));
+
+    if (!dispatcher.get())
+        return ~0U;
+
+    dispatcher->m_bAutoDelete = FALSE;
+
 	errors_ = warnings_ = bad_boxes_ = 0;
 	cancel_ = false;
+    dispatchQueue_.clear();
 
 	DWORD dwBytesRead;
 
 	char c;
-	std::vector<char> line;
+	CharVector line;
+    line.reserve(128);
 
-	DWORD dwCookie = 0;
 	BOOL bLastWasNewLine = FALSE;
+
+    dispatcher->ResumeThread();
 
 	while (::ReadFile(m_hOutput,&c,sizeof(c),&dwBytesRead,NULL) && dwBytesRead && !cancel_)
 	{
@@ -139,11 +161,7 @@ UINT COutputFilter::Run()
 					
 					if (!line.empty()) 
 					{
-						const CString text(&line[0],line.size());
-
-						AddLine(text);
-						dwCookie = ParseLine(text,dwCookie);
-						line.clear();
+                        ProcessLine(line);
 					}
 				}
 				break;
@@ -155,13 +173,26 @@ UINT COutputFilter::Run()
 		}
 	}
 
-	if (!line.empty())
-	{
-		const CString text(&line[0],line.size());
+    if (!line.empty()) 
+    {
+        ProcessLine(line);
+    }
 
-		AddLine(text);
-		ParseLine(text,dwCookie);
-	}
+    if (cancel_)
+    {
+        TRACE0("Output filter processing canceled\n");
+
+        CSingleLock lock(&dispatchMonitor_, TRUE);
+        dispatchQueue_.clear();
+    }
+
+    ASSERT(line.empty());
+    // An empty line indicates the loop exit
+    ProcessLine(line);
+
+    ::WaitForSingleObject(*dispatcher, INFINITE);
+
+    ASSERT(dispatchQueue_.empty());
 
 	return !OnTerminate();
 }
@@ -194,4 +225,70 @@ int COutputFilter::GetBadBoxCount() const
 void COutputFilter::Cancel()
 {
 	cancel_ = true;
+}
+
+void COutputFilter::ProcessLine(CharVector& line)
+{
+    CSingleLock lock(&dispatchMonitor_, TRUE);
+
+    dispatchQueue_.push_back(line);
+
+    lock.Unlock();
+    processLineEvent_.SetEvent();
+
+    line.clear();    
+}
+
+UINT COutputFilter::LineDispatcherThread(LPVOID data)
+{
+    return static_cast<COutputFilter*>(data)->LineDispatcherThread();
+}
+
+UINT COutputFilter::LineDispatcherThread()
+{
+    TRACE0("Starting output filter line dispatcher thread\n");
+
+    DWORD cookie = 0;
+    bool stop = false;
+
+    while (!stop && processLineEvent_.Lock())
+    {
+        bool done = false;
+
+        // Exit the queue processing loop for the current event only if the 
+        // processing has been canceled
+        while (!cancel_ && !done)
+        {
+            CSingleLock monitorLock(&dispatchMonitor_, TRUE);
+
+            if (!dispatchQueue_.empty())
+            {
+                const CharVector line = dispatchQueue_.front();
+                dispatchQueue_.pop_front();
+
+                // Allow COutputFilter::Run to fill dispatchQueue_ while the
+                // line is being processed
+                monitorLock.Unlock();
+
+                if (!line.empty())
+                {
+                    const CString text(&line[0], line.size());            
+
+                    AddLine(text);
+                    cookie = ParseLine(text, cookie);
+                }
+                else
+                {
+                    // An empty line indicates the end of the processing loop
+                    stop = true;
+                }
+            }
+            else
+                done = true;
+        }
+    }
+
+    TRACE0("Exiting output filter line dispatcher thread\n");
+
+    return 0;
 }

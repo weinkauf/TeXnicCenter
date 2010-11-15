@@ -47,7 +47,7 @@ static char THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNAMIC(CNewEnvironment,CLaTeXCommand)
 
-CNewEnvironment::CNewEnvironment(const std::tr1::shared_ptr<CStyleFile>& parent, const CString &name,int noOfParams)
+CNewEnvironment::CNewEnvironment(const WeakStyleFilePtr& parent, const CString &name,int noOfParams)
 		: CLaTeXCommand(parent,name,noOfParams)
 {
 	SetExpandBefore(CString(_T("\\begin{")));
@@ -61,8 +61,8 @@ CNewEnvironment::~CNewEnvironment()
 
 const CString CNewEnvironment::ToString() const
 {
-	const std::tr1::shared_ptr<CStyleFile>& sf = GetStyleFile();
-	CString x = (sf != NULL ? sf->GetFileName() : CString(_T("???")));
+	SharedStyleFilePtr sf(GetStyleFile().lock());
+	CString x = (sf ? sf->GetFileName() : CString(_T("???")));
 
 	TCHAR buf[5];
 	_itot(GetNoOfParams(),buf,10);

@@ -478,6 +478,7 @@ CodeDocument::CodeDocument()
 , error_marker_handle_(-1)
 , use_bom_(false)
 , save_copy_(false)
+, surpressModifiedChange_(false)
 {
 }
 
@@ -545,7 +546,7 @@ void CodeDocument::Serialize(CArchive& ar)
 
 void CodeDocument::SetModifiedFlag(BOOL modified)
 {
-	if (m_bModified != modified) {
+	if (m_bModified != modified && !surpressModifiedChange_) {
 		const TCHAR ch = ModifiedMarker;
 		CString title = GetTitle();
 
@@ -633,7 +634,11 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 			n = buffer.size();
 		}
 
-		GetView()->GetCtrl().ClearAll();
+		// Prevent * to show up quickly in tab's title while the content is
+		// reloaded
+		surpressModifiedChange_ = true;
+
+		CScintillaDoc::DeleteContents();
 		GetView()->GetCtrl().SetCodePage(SC_CP_UTF8);
 
 		if (n) {
@@ -648,6 +653,10 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 
 		// No undo operation needed so far, we have just opened the document
 		GetView()->GetCtrl().EmptyUndoBuffer();
+
+		surpressModifiedChange_ = false;
+
+		SetModifiedFlag(FALSE);
 	}
 	else
 		result = ::GetLastError();
@@ -850,6 +859,20 @@ BOOL CodeDocument::OnOpenDocument(LPCTSTR lpszPathName)
 	view->SetModified(false);
 	::SHAddToRecentDocs(SHARD_PATH, lpszPathName);
 
+	if (CLaTeXProject* p = theApp.GetProject()) {
+		BookmarkContainerType bookmarks;
+
+		// Restore the bookmarks, if any
+		if (p->GetBookmarks(lpszPathName,bookmarks))
+			SetBookmarks(bookmarks.begin(),bookmarks.end());
+
+		FoldingPointContainerType points;
+
+		// Restore the folding
+		if (p->GetFoldingPoints(lpszPathName,points))
+			SetFoldingPoints(points.begin(),points.end());
+	}
+
 	return TRUE;
 }
 
@@ -857,14 +880,6 @@ void CodeDocument::OnEditToggleBookmark()
 {
 	int line = GetView()->GetCtrl().LineFromPosition(GetView()->GetCtrl().GetCurrentPos());
 	ToggleBookmark(line);
-}
-
-void CodeDocument::OnBookmarkAdded(const ::CodeBookmark& /*b*/)
-{
-}
-
-void CodeDocument::OnBookmarkRemoved(const ::CodeBookmark& /*b*/)
-{
 }
 
 void CodeDocument::OnEditClearAllBookmarks()
@@ -875,6 +890,8 @@ void CodeDocument::OnEditClearAllBookmarks()
 
 void CodeDocument::OnRemovedAllBookmarks(void)
 {
+	if (CLaTeXProject* p = theApp.GetProject())
+		p->RemoveAllBookmarks(GetFilePath());
 }
 
 void CodeDocument::RemoveAllBookmarks()
@@ -1258,6 +1275,11 @@ const FoldingPointContainerType CodeDocument::GetFoldingPoints( bool contracted 
 
 void CodeDocument::OnCloseDocument()
 {
+	if (GetView()) { // Is the view attached?
+		if (CLaTeXProject* p = theApp.GetProject())
+			p->SetFoldingPoints(GetPathName(),GetContractedFoldingPoints());
+	}
+
 	// Destroying big documents takes a great amount of time.
 	// While destroying the document can be found in
 	// template's list. If the user tries to reopen the *same* document rapidly
@@ -1317,4 +1339,126 @@ void CodeDocument::OnEditMakeUpperCase()
 	{
 		GetView()->GetCtrl().UpperCase();
 	}
+}
+
+void CodeDocument::UpdateReadOnlyFlag()
+{
+	CFileStatus fs;
+
+	if (CFile::GetStatus(GetPathName(),fs))
+		GetView()->GetCtrl().SetReadOnly(fs.m_attribute & CFile::readOnly);
+}
+
+void CodeDocument::CheckForFileChanges()
+{
+	WORD wChanges = GetFileChanges();
+
+	if (wChanges & chReadOnly)
+		UpdateReadOnlyFlag();
+	else if (wChanges)
+		UpdateTextBufferOnExternalChange();
+}
+
+void CodeDocument::UpdateTextBufferOnExternalChange()
+{
+	CString strMsg;
+	int nResult;
+
+	if (IsModified()) {
+		strMsg.Format(STE_FILE_EXTERNALCHANGEEX,GetPathName());
+		nResult = AfxMessageBox(strMsg,MB_ICONEXCLAMATION | MB_YESNO);
+	}
+	else {
+		strMsg.Format(STE_FILE_EXTERNALCHANGE,GetPathName());
+		nResult = AfxMessageBox(strMsg,MB_ICONINFORMATION | MB_YESNO);
+	}
+
+	if (nResult == IDYES) {
+		DWORD dwResult = LoadFile(GetPathName());
+
+		if (dwResult != ERROR_SUCCESS) {
+			strMsg.Format(STE_FILE_INUSE,
+				AfxLoadString(IDS_OPEN),
+				GetPathName(),
+				AfxFormatSystemString(dwResult));
+			AfxMessageBox(strMsg,MB_ICONINFORMATION | MB_OK);
+			GetView()->GetCtrl().SetReadOnly(TRUE);
+		}
+	}
+}
+
+void CodeDocument::DeleteContents()
+{
+	SetFilePath(NULL);
+
+	if (CScintillaView* v = GetView())
+		v->GetCtrl().ClearAll();
+
+	current_line_ = 0;
+
+	CScintillaDoc::DeleteContents();
+}
+
+void CodeDocument::Delete()
+{
+}
+
+BOOL CodeDocument::GetNextLine(LPCTSTR &lpLine, int &nLength)
+{
+	AssertValid();
+
+	if (current_line_ >= GetView()->GetCtrl().GetLineCount())
+		return FALSE;
+
+	static_cast<CodeView*>(GetView())->GetLineText(current_line_++);
+	lpLine = line_;
+	nLength = line_.GetLength();
+
+	return TRUE;
+}
+
+void CodeDocument::SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU)
+{
+	SetFilePath(lpszPathName);
+	CScintillaDoc::SetPathName(lpszPathName,bAddToMRU);
+}
+
+void CodeDocument::OnBookmarkAdded(const CodeBookmark& b)
+{
+	if (CLaTeXProject* p = theApp.GetProject())
+		p->AddBookmark(GetFilePath(),b);
+}
+
+void CodeDocument::OnBookmarkRemoved(const CodeBookmark& b)
+{
+	if (CLaTeXProject* p = theApp.GetProject())
+		p->RemoveBookmark(GetFilePath(),b);
+}
+
+BOOL CodeDocument::OnSaveDocument(LPCTSTR lpszPathName)
+{
+	DWORD result = SaveFile(lpszPathName,!save_copy_);
+	BOOL b;
+
+	if (result != ERROR_SUCCESS) {
+		CString strMsg;
+		strMsg.Format(STE_FILE_INUSE,
+			AfxLoadString(IDS_SAVE),
+			lpszPathName,
+			AfxFormatSystemString(result));
+		AfxMessageBox(strMsg,MB_ICONEXCLAMATION | MB_OK);
+
+		save_copy_ = false;
+		b = FALSE;
+	}
+	else {
+		b = TRUE;
+
+		save_copy_ = false;
+		theApp.m_pMainWnd->SendMessage(WM_COMMAND,ID_DOCUMENT_SAVED);
+	}
+
+	SnapFileState();
+
+	return TRUE;
 }

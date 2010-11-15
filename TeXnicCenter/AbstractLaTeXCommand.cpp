@@ -73,12 +73,11 @@ static char THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNAMIC(CAbstractLaTeXCommand,CObject)
 
-CAbstractLaTeXCommand::CAbstractLaTeXCommand(const std::tr1::shared_ptr<CStyleFile>& parent, const CString &name)
+CAbstractLaTeXCommand::CAbstractLaTeXCommand(const WeakStyleFilePtr& parent, const CString &name)
 		: m_Parent(parent)
 		, m_Name(name)
 		, m_IconIndex(-1)
 {
-	ASSERT(parent != NULL);
 }
 
 CAbstractLaTeXCommand::~CAbstractLaTeXCommand()
@@ -105,10 +104,12 @@ void CAbstractLaTeXCommand::Dump(CDumpContext& dc) const
 	CObject::Dump(dc);
 	dc << m_Name;
 
-	if (m_Parent != NULL)
+    SharedStyleFilePtr parent(m_Parent.lock());
+
+	if (parent)
 	{
 		dc << "/";
-		dc << m_Parent->GetName();
+		dc << parent->GetName();
 	}
 }
 
@@ -132,7 +133,7 @@ void CAbstractLaTeXCommand::SetIconIndex(int idx)
 	m_IconIndex = idx;
 }
 
-const std::tr1::shared_ptr<CStyleFile>& CAbstractLaTeXCommand::GetStyleFile() const
+const WeakStyleFilePtr& CAbstractLaTeXCommand::GetStyleFile() const
 {
 	return m_Parent;
 }
@@ -152,7 +153,7 @@ const CString& CAbstractLaTeXCommand::GetName() const
 	return m_Name;
 }
 
-const std::tr1::shared_ptr<CStyleFile>& CAbstractLaTeXCommand::GetParent() const
+const WeakStyleFilePtr& CAbstractLaTeXCommand::GetParent() const
 {
 	return m_Parent;
 }

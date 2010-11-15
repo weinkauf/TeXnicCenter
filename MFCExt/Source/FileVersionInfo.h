@@ -120,7 +120,7 @@ public:
 	@return
 		A value like created by MAKELANGID.
 	*/
-	WORD GetLanguageId() const;
+	LANGID GetLanguageId() const;
 
 	/**
 	Returns the codepage identifier the loaded version information
@@ -150,7 +150,7 @@ private:
 	CString m_strPrivateBuild;
 	CString m_strSpecialBuild;
 
-	WORD m_wLanguageId;
+	LANGID m_wLanguageId;
 	WORD m_wCodePageId;
 };
 

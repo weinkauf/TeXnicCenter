@@ -339,7 +339,7 @@ CString CFileVersionInfo::GetSpecialBuild() const
 }
 
 
-WORD CFileVersionInfo::GetLanguageId() const
+LANGID CFileVersionInfo::GetLanguageId() const
 {
 	return m_wLanguageId;
 }

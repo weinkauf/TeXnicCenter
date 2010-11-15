@@ -3,6 +3,7 @@
 #include <cstddef>
 
 #include "CodeBookmark.h"
+#include "FileChangeWatcher.h"
 
 int ShowSaveTaskDialog(LPCTSTR prompt);
 int ToScintillaMode(int m);
@@ -55,7 +56,10 @@ inline const Ch* GetLineEnding(const Ch* text, std::size_t size)
 
 #pragma endregion
 
-class CodeDocument : public CScintillaDoc
+class CodeDocument 
+	: public CScintillaDoc
+	, public CTextSource
+	, public CFileChangeWatcher
 {
 	DECLARE_DYNAMIC(CodeDocument)
 
@@ -153,6 +157,7 @@ protected:
 	afx_msg void OnUpdateFileSaveAs(CCmdUI *pCmdUI);
 	afx_msg void OnEditMakeLowerCase();
 	afx_msg void OnEditMakeUpperCase();
+	virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
 
 	/// Indicates whether the save dialog should be shown.
 	///
@@ -160,6 +165,11 @@ protected:
 	bool ShowSaveDialog(LPCTSTR file) const;
 
 public:
+	BOOL GetNextLine(LPCTSTR &lpLine, int &nLength);
+	void DeleteContents();
+	void Delete();
+	void SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU);
+
 	BOOL DoSave(LPCTSTR lpszPathName, BOOL bReplace = TRUE);
 
 	/// Removes all bookmarks that have been set.
@@ -210,9 +220,19 @@ protected:
 
 	afx_msg void OnFileSaveCopyAs();
 	afx_msg void OnUpdateFileSave(CCmdUI *pCmdUI);
+
+public:
+	void CheckForFileChanges();
 	
 private:
 	DWORD DoSaveFile( HANDLE file, bool throw_on_invalid_sequence );
+	void UpdateReadOnlyFlag();
+	void UpdateTextBufferOnExternalChange();
+
+private:
+	int current_line_;
+	CString line_;
+	bool surpressModifiedChange_;
 };
 
 class TextDocument
@@ -250,6 +270,10 @@ public:
 	bool Write(LPCTSTR pszFileName, const CStringW& string);
 	/// Writes UTF-8 encoded text to the file by performing any required code page conversion.
 	DWORD WriteUTF8( ATL::CAtlFile& file, const char* utf8, std::size_t size);
+
+	void CheckForFileChanges();
+	void UpdateReadOnlyFlag();
+	void UpdateTextBufferOnExternalChange();
 };
 
 template<class I>

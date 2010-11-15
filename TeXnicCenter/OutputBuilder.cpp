@@ -123,7 +123,7 @@ BOOL COutputBuilder::RunMakeIndex(COutputDoc* pDoc,COutputView* pView,
 
 BOOL COutputBuilder::CancelExecution()
 {
-	m_bCancel = TRUE;
+	m_bCancel = true;
 	return ::TerminateProcess(m_hCurrentProcess, ~0U);
 }
 
@@ -416,4 +416,9 @@ const CString& COutputBuilder::GetCurrentProcessName() const
 const CString& COutputBuilder::GetTranscriptFileName() const
 {
 	return transcriptFileName_;
+}
+
+bool COutputBuilder::WasCancelled() const
+{
+    return m_bCancel;
 }
