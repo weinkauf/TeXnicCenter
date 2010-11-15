@@ -44,7 +44,7 @@
 #include "GrepView.h"
 #include "Configuration.h"
 #include "Splash.h"
-#include "BCGToolbarCustomizeEx.h"
+#include "ToolBarsCustomizeDialog.h"
 #include "UserTool.h"
 #include "ProfileDialog.h"
 #include "RunTimeHelper.h"

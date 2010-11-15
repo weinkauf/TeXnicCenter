@@ -41,15 +41,6 @@
     <ClCompile Include="AutoCompleteListbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BCGNotifyingEditListBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BCGRegistryEx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BCGToolbarCustomizeEx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BibItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -470,6 +461,15 @@
     <ClCompile Include="WorkspacePaneBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NotifyingEditListBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RegistryStack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolBarsCustomizeDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aboutbox.h">
@@ -488,15 +488,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="AutoCompleteListbox.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCGNotifyingEditListBox.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCGRegistryEx.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BCGToolbarCustomizeEx.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="BibItem.h">
@@ -968,6 +959,18 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="OutputProfiles.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NotifyingEditListBox.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RegistryStack.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolBarsCustomizeDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Version.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

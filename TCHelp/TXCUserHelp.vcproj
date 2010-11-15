@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="TXCUserHelp"
 	ProjectGUID="{12243F23-547E-4676-A36D-7DE0EE131354}"
 	RootNamespace="Help"
@@ -20,66 +20,6 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Help"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)"
-			ConfigurationType="10"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Help"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)"
-			ConfigurationType="10"
-			CharacterSet="2"
-			DeleteExtensionsOnClean="*.chm;*.chw;$(TargetPath)"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Unicode Debug|Win32"
-			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Help"
-			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)"
-			ConfigurationType="10"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Unicode Release|Win32"
 			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Help"
 			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)"
 			ConfigurationType="10"
@@ -118,6 +58,28 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Help"
+			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(ProjectName)"
+			ConfigurationType="10"
+			CharacterSet="2"
+			DeleteExtensionsOnClean="*.chm;*.chw;$(TargetPath)"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Release|x64"
 			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Help"
 			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)"
@@ -141,6 +103,63 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Unicode Debug|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Unicode Debug|x64"
 			OutputDirectory="$(SolutionDir)\Output\Product\$(PlatformName)\$(ConfigurationName)\Help"
 			IntermediateDirectory="$(SolutionDir)\Output\Intermediate\$(PlatformName)\$(ProjectName)"
@@ -155,6 +174,63 @@
 			<Tool
 				Name="VCMIDLTool"
 				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Unicode Release|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -436,37 +512,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -520,37 +576,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -604,37 +640,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -688,37 +704,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -772,37 +768,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -856,37 +832,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -940,37 +896,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1024,37 +960,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1108,37 +1024,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1192,37 +1088,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1276,37 +1152,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1360,37 +1216,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1444,37 +1280,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1528,37 +1344,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1612,37 +1408,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1696,37 +1472,17 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Unicode Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying File..."
-						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying File..."
+						CommandLine="copy /y &quot;$(InputPath)&quot; &quot;$(OutDir)\$(InputFileName)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -1793,37 +1549,17 @@
 				/>
 			</FileConfiguration>
 			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					Description="Compiling Help..."
-					CommandLine="if not exist &quot;$(OutDir)&quot; mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;if not exist &quot;$(IntDir)&quot; mkdir &quot;$(IntDir)&quot;&#x0D;&#x0A;cd &quot;$(InputDir)&quot;&#x0D;&#x0A;hhc.exe &quot;$(InputFileName)&quot;&#x0D;&#x0A;copy /y &quot;$(IntDir)\TeXnicCenter.chm&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
-					Outputs="$(OutDir)\TeXnicCenter.chm"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Debug|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					Description="Compiling Help..."
-					CommandLine="if not exist &quot;$(OutDir)&quot; mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;if not exist &quot;$(IntDir)&quot; mkdir &quot;$(IntDir)&quot;&#x0D;&#x0A;cd &quot;$(InputDir)&quot;&#x0D;&#x0A;hhc.exe &quot;$(InputFileName)&quot;&#x0D;&#x0A;copy /y &quot;$(IntDir)\TeXnicCenter.chm&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
-					Outputs="$(OutDir)\TeXnicCenter.chm"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Unicode Release|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					Description="Compiling Help..."
-					CommandLine="if not exist &quot;$(OutDir)&quot; mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;if not exist &quot;$(IntDir)&quot; mkdir &quot;$(IntDir)&quot;&#x0D;&#x0A;cd &quot;$(InputDir)&quot;&#x0D;&#x0A;hhc.exe &quot;$(InputFileName)&quot;&#x0D;&#x0A;copy /y &quot;$(IntDir)\TeXnicCenter.chm&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
-					Outputs="$(OutDir)\TeXnicCenter.chm"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
 				Name="Debug|x64"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Compiling Help..."
+					CommandLine="if not exist &quot;$(OutDir)&quot; mkdir &quot;$(OutDir)&quot;&#x0D;&#x0A;if not exist &quot;$(IntDir)&quot; mkdir &quot;$(IntDir)&quot;&#x0D;&#x0A;cd &quot;$(InputDir)&quot;&#x0D;&#x0A;hhc.exe &quot;$(InputFileName)&quot;&#x0D;&#x0A;copy /y &quot;$(IntDir)\TeXnicCenter.chm&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+					Outputs="$(OutDir)\TeXnicCenter.chm"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
 				>
 				<Tool
 					Name="VCCustomBuildTool"

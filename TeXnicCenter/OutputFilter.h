@@ -33,9 +33,12 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "OutputDoc.h"
-#include "OutputView.h"
-#include "OutputInfo.h"
+#include <deque>
+#include <vector>
+
+class COutputDoc;
+class COutputView;
+class COutputInfo;
 
 /**
 An object of this or an derived class can be used to parse the output
@@ -61,6 +64,7 @@ public:
 	See description of CWorkerThread::CWorkerThread for details.
 	 */
 	COutputFilter(BOOL bAutoDelete = FALSE);
+    ~COutputFilter();
 
 // operations
 public:
@@ -121,7 +125,7 @@ public:
 	/**
 	Should return a result string that informs the user about how many
 	errors and warnings have been found in the output or an empty
-	string if the filter does not realy parse the output.
+	string if the filter does not really parse the output.
 
 	The string must not contain line feeds.
 
@@ -165,6 +169,17 @@ protected:
 // overridings
 private:
 	volatile bool cancel_;
+
+    typedef std::vector<char> CharVector;
+    typedef std::deque<CharVector> DispatchDeque;
+
+    DispatchDeque dispatchQueue_;
+    CEvent processLineEvent_;
+    CCriticalSection dispatchMonitor_;
+
+    void ProcessLine(CharVector& line);
+    static UINT LineDispatcherThread(LPVOID data);
+    UINT LineDispatcherThread();
 
 protected:
 	virtual UINT Run();

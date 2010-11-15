@@ -43,7 +43,19 @@
 
 #include "LaTeXCommand.h"
 
-typedef CMap<CString, LPCTSTR, std::tr1::shared_ptr<CObject>, std::tr1::shared_ptr<CObject> > SharedObjectMap;
+/**
+ * @brief @c CObject smart pointer type.
+ */
+typedef std::tr1::shared_ptr<CObject> SharedCObjectPtr;
+
+/**
+ * @brief @c CString to @ref SharedCObjectPtr map type.
+ */
+typedef CMap<CString, LPCTSTR, SharedCObjectPtr, SharedCObjectPtr> SharedObjectMap;
+
+/**
+ * @brief @ref CLaTeXCommand smart pointer type.
+ */
 typedef std::tr1::shared_ptr<CLaTeXCommand> SharedLaTeXCommandPtr;
 
 class CNewCommand;
