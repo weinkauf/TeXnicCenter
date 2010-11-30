@@ -61,7 +61,9 @@ class CLaTeXOutputFilter : public COutputFilter
 	public:
 		enum {
 			bucket_size = UsedComparer::bucket_size,
+#if _MSC_VER < 1600 
 			min_buckets = UsedComparer::min_buckets
+#endif
 		};
 
 		std::size_t operator()(CString text) const

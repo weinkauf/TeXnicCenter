@@ -358,7 +358,7 @@ void CScintillaView::DeleteContents()
 
 void CScintillaView::OnDraw(CDC*)
 {
-	ASSERT(FALSE);
+	//ASSERT(FALSE);
 }
 
 void CScintillaView::OnPaint()
