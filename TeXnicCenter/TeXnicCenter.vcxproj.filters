@@ -1,0 +1,1227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{24c13a7f-77e4-4f52-9b48-582444e6b313}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;h;hpp</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{2a4ab32d-b29c-4444-a30a-607fdcba32f3}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="Copy">
+      <UniqueIdentifier>{984d7ed3-6d9c-4ee7-b160-1ae8e63d7c80}</UniqueIdentifier>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Copy\Packages">
+      <UniqueIdentifier>{440331cb-fc27-40d5-bf2a-0a657df6d25b}</UniqueIdentifier>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Copy\XMLSchema">
+      <UniqueIdentifier>{78b250fe-f808-4229-91ee-f0e7a99cdcdd}</UniqueIdentifier>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="aboutbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractLaTeXCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ActiveProfileDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Advice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoCompleteDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoCompleteListbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BibItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BibTeXDocument.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BiBTeXEntry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BiBTeXFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BibTeXOutputFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BibTeXView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BibView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BookmarkEventArgs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BookmarkView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BrowseButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="buildview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="childfrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeBookmark.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeDocument.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="configuration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DdeCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeclareOption.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DocumentNewDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DocumentTokenizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DragSourceBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EditMenuButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EditMenuButtonOpt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EncodingConverter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="environmentview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorListPane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventArgs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileChangeWatcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileClean.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCleanConfirmDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="filegrep.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fileview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileViewEx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="findinfilesdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FindReplaceDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FontOccManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="global.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gotodialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="grepview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IDocumentWizard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="insertfloatobjectdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="insertgraphicdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="insertheaderdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="inserttabulardialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IProject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IProjectWizard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="itempropertydialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LabelDragSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LaTeXCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LaTeXDocument.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LaTeXDocumentBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LatexOutputFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="latexproject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LaTeXTokenizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LaTeXView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LaTeXViewBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mainfrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MetaPostDocument.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MetaPostView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mrutrackselcombobox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiExtensionDocTemplate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="navigatorview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NewCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NewEnvironment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="optiondialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionPageEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="optionpagefile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionPageFileClean.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="optionpagegeneric.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionPageLanguage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="optionpagepath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionPageTextFormat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputDoc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="outputview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWizard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWizardDistributionPath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWizardFinish.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWizardMikTex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWizardPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWizardViewer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWizardWelcome.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PackageScanProgress.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParseOutputView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PersistPosEdit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaceHolder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaceholderSetsOptDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaceholderSingleOptDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="process.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProcessCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Profile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfileDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfileExchangeDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfileNameDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfilePage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfilePageLatex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfilePagePostprocessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfilePageViewer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Project.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="projectnewdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="projectpropertydialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectSupportingWinApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectTemplate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropertyDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScintillaCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScintillaDocView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShellView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SortListCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpellCheckDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Speller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpellerBackgroundThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="splash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StructureItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="structureparser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StructureTreeCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="structureview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StyleFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StyleFileContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TabPersistPosEdit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TemplateDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TeXnicCenter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="textfilesavedialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextModules.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextModulesDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextOutsourceDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="textsourcefile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ThemedCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tipdlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TransparencyDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserTool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserToolAdvDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkspacePane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkspacePaneBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NotifyingEditListBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RegistryStack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolBarsCustomizeDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="aboutbox.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractLaTeXCommand.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveProfileDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Advice.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoCompleteDlg.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoCompleteListbox.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BibItem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BibTeXDocument.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BiBTeXEntry.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BiBTeXFile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BibTeXOutputFilter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BibTeXView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BibView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BookmarkEventArgs.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BookmarkView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BrowseButton.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="buildview.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CharType.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="childfrm.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeBookmark.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeDocument.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="configuration.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DdeCommand.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeclareOption.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogTemplate.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DocumentNewDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DocumentTokenizer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DragSourceBase.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EditMenuButton.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EditMenuButtonOpt.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EncodingConverter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EndOfLineMode.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="environmentview.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorListPane.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventArgs.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileChangeWatcher.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileClean.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCleanConfirmDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="filegrep.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fileview.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileViewEx.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="findinfilesdialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FindReplaceDlg.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FontOccManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="global.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gotodialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="grepview.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IDocumentWizard.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="insertfloatobjectdialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InsertGraphicDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="insertheaderdialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inserttabulardialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IProject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IProjectWizard.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="itempropertydialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LabelDragSource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LaTeXCommand.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LaTeXDocument.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LaTeXDocumentBase.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LatexOutputFilter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LatexProject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LaTeXTokenizer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LaTeXView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LaTeXViewBase.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuButton.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaPostDocument.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaPostView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mrutrackselcombobox.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiExtensionDocTemplate.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="navigatorview.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NewCommand.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NewEnvironment.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Nullable.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OleDrop.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="optiondialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionPageEditor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionPageFile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionPageFileClean.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="optionpagegeneric.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionPageLanguage.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="optionpagepath.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionPageTextFormat.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputBuilder.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputDoc.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputFilter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="outputview.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputViewBase.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputViewVisitor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputWizard.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputWizardDistributionPath.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputWizardFinish.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputWizardMikTex.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputWizardPage.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputWizardViewer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputWizardWelcome.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PackageScanProgress.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParseOutputView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PersistPosEdit.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaceHolder.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaceholderSetsOptDlg.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaceholderSingleOptDlg.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PrivateToolBar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="process.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProcessCommand.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Profile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileExchangeDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileNameDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfilePage.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfilePageLatex.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfilePagePostprocessor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfilePageViewer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Project.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectNewDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectPropertyDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectSupportingWinApp.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectTemplate.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertyDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertyPage.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RunTimeHelper.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScintillaCtrl.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScintillaDocView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShellView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SortListCtrl.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpellCheckDlg.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Speller.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpellerBackgroundThread.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="splash.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StructureItem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StructureItemInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structureparser.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StructureTreeCtrl.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structureview.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StyleFile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StyleFileContainer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TabPersistPosEdit.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TemplateDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TeXnicCenter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="textfilesavedialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextModules.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextModulesDlg.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextOutsourceDlg.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="textsource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="textsourcefile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThemedCtrl.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tipdlg.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TransparencyDlg.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeCtrlEx.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserTool.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserToolAdvDlg.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WorkspacePane.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WorkspacePaneBase.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonTypes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LaTeXCommands.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputProfiles.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NotifyingEditListBox.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RegistryStack.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolBarsCustomizeDialog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Version.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\additional.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\bibtextype.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\bibtoolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\bookmark view toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\buildanimation.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\document.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\documenttypes.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\documenttypeslarge.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\errorlist.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\fileview.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\find.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\format.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\formatrecentlyused.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\idr_late.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\idr_main.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\images.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\Incremental search.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\insert.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\itemtypes.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\latex.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\LatexDoc.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\LatexDocOld.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\Lightbulb.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\logo.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mainframe.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\math.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar1.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar10.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar11.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar12.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar13.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar14.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar15.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar16.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar17.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar2.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar3.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar4.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar5.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar6.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar7.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar8.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\mathbar9.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\navigationbar.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\outputbar.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\Reverse incremental search.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\sdragcopy.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\separator.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\singledrag.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\splash.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\structuretoolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\successindicators.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\TeXnicCenter.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\TeXnicCenter.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\TeXnicCenterOld.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\wizard.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\Wizard.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\ChangeLog.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TeXnicCenter.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Version.h.template">
+      <Filter>Source Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GPL_english.htm">
+      <Filter>Copy</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GPL_german.htm">
+      <Filter>Copy</Filter>
+    </CustomBuild>
+    <CustomBuild Include="copy\Tips_english.txt">
+      <Filter>Copy</Filter>
+    </CustomBuild>
+    <CustomBuild Include="copy\Tips_german.txt">
+      <Filter>Copy</Filter>
+    </CustomBuild>
+    <CustomBuild Include="copy\UserImages.bmp">
+      <Filter>Copy</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\accents.bmp">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\arrows.bmp">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\base.xml">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\beamer.xml">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\binops.bmp">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\format.bmp">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\math.xml">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\mathmisc.bmp">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\PSTricks.xml">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\sets.bmp">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\symbols.bmp">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\symbols2.bmp">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\TeX.xml">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="packages\TikZ.xml">
+      <Filter>Copy\Packages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="xmlschema\CommonTypes.xsd">
+      <Filter>Copy\XMLSchema</Filter>
+    </CustomBuild>
+    <CustomBuild Include="xmlschema\LaTeXCommands.xsd">
+      <Filter>Copy\XMLSchema</Filter>
+    </CustomBuild>
+    <CustomBuild Include="xmlschema\OutputProfiles.xsd">
+      <Filter>Copy\XMLSchema</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

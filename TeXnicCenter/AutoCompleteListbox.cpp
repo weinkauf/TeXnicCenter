@@ -57,8 +57,8 @@ CAutoCompleteListBox::~CAutoCompleteListBox()
 	using namespace std::tr1::placeholders;
 
 	// Destroy every image list in the map
-	std::for_each(image_cache_.begin(),image_cache_.end(),
-	              std::tr1::bind(std::ptr_fun(::ImageList_Destroy),
+	std::for_each(image_cache_.cbegin(),image_cache_.cend(),
+	              std::tr1::bind(std::ptr_fun<HIMAGELIST>(::ImageList_Destroy),
 	                             std::tr1::bind(&ImageCacheContainer::value_type::second,_1)));
 }
 
