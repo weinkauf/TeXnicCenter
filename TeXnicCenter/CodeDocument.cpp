@@ -1226,8 +1226,29 @@ void CodeDocument::OnEditSplitParagraph()
 	c.SetTargetStart(Range.first);
 	c.SetTargetEnd(Range.second);
 
+	//Get the width for the wrapping
 	const int width = c.TextWidth(STYLE_DEFAULT,"_") * CConfiguration::GetInstance()->m_nFixedColumnWrap;
+
+	//Call LinesSplit()
 	c.LinesSplit(width);
+
+	/* Would be nice, if this worked properly. Press Ctrl-K more than once and you'll see.
+	//NOTE: This is a workaround for a the current tex lexer, which makes underscores
+	// and other characters to symbols, i.e., gives them a special style.
+	// Scintilla wraps between styles or at spaces/tabs.
+	// By disabling all styles here, we allow breaks only at spaces/tabs.
+	// - get old lexer
+	const int idOldLexer = c.GetLexer();
+	// - set null lexer
+	c.SetLexer(SCLEX_NULL);
+	c.ClearDocumentStyle();
+	// - actual splitting
+	c.LinesSplit(width);
+	// - reset old lexer
+	c.SetLexer(idOldLexer);
+	c.ClearDocumentStyle();
+	c.Colourise(0, -1);
+	*/
 }
 
 void CodeDocument::OnEditJoinParagraph()
