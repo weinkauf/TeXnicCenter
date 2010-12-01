@@ -36,6 +36,7 @@
 #include "TeXnicCenter.h"
 #include "Configuration.h"
 
+#include "MainFrm.h"
 #include "ChildFrm.h"
 #include "LaTeXView.h"
 

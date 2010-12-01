@@ -35,6 +35,7 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 
+#include "MainFrm.h"
 #include "Project.h"
 #include "ProjectView.h"
 #include "ProjectTemplate.h"

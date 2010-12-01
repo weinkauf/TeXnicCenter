@@ -39,6 +39,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+class RegistryStack;
+
 /** An array of postprocessor specifications */
 class CPostProcessorArray : public CArray<class CPostProcessor, class CPostProcessor&>
 	{

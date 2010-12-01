@@ -36,6 +36,7 @@
 #include "TeXnicCenter.h"
 #include "EnvironmentView.h"
 #include "global.h"
+#include "OutputDoc.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

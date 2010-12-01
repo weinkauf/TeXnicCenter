@@ -65,6 +65,7 @@
 #include "MetaPostView.h"
 #include "MetaPostDocument.h"
 #include "MultiExtensionDocTemplate.h"
+#include "tipdlg.h"
 
 namespace {
 	/**

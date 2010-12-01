@@ -40,6 +40,7 @@
 #include "OutputWizard.h"
 #include "FontOccManager.h"
 #include "RunTimeHelper.h"
+#include "RegistryStack.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

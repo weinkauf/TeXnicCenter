@@ -6,6 +6,9 @@
 #include <cstring>
 #include <cstddef>
 
+#pragma push_macro("max")
+#undef max
+
 inline UINT GetDragQueryFileCount(HDROP hDrop)
 {
 	return ::DragQueryFile(hDrop,~0u,0,0);
@@ -462,3 +465,5 @@ public:
 		COM_INTERFACE_ENTRY(IDropSource)
 	END_COM_MAP()
 };
+
+#pragma pop_macro("max")

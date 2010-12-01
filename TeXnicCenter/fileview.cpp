@@ -34,6 +34,7 @@
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
+#include "OutputDoc.h"
 
 #include <map>
 #include <utility>

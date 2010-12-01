@@ -36,6 +36,7 @@
 #include "TeXnicCenter.h"
 #include "OptionPageTextFormat.h"
 #include "configuration.h"
+#include "MainFrm.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

@@ -45,6 +45,8 @@
 #include "ProcessCommand.h"
 #include "DDECommand.h"
 
+class RegistryStack;
+
 /**
 Profile definition. Specifies how to build the output.
 

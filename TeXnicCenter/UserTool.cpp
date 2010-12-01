@@ -40,6 +40,8 @@
 #include "UserTool.h"
 #include "LaTeXView.h"
 #include "LaTeXDocument.h"
+#include "process.h"
+#include "ProcessCommand.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

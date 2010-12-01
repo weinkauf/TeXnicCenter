@@ -5,6 +5,7 @@
 #include "RunTimeHelper.h"
 #include "navigatorview.h"
 #include "OleDrop.h"
+#include "OutputDoc.h"
 
 enum {
 	ListID = 100,

@@ -34,6 +34,7 @@
 
 #include "stdafx.h"
 #include "TextModules.h"
+#include "RegistryStack.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

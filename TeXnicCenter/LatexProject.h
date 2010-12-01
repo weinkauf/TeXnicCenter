@@ -39,7 +39,6 @@
 
 #include "OutputInfo.h"
 #include "StructureParser.h"
-#include "MainFrm.h"
 #include "StructureTreeCtrl.h"
 #include "EnvironmentView.h"
 #include "FileView.h"
@@ -50,6 +49,7 @@
 #include "CodeView.h"
 #include "BookmarkEventArgs.h"
 
+class CMainFrame;
 
 class CLaTeXProject :
 			public CProject,

@@ -17,6 +17,9 @@
 #include "EncodingConverter.h"
 #include "LaTeXTokenizer.h"
 
+#pragma push_macro("max")
+#undef max
+
 enum {
 	CheckForFileChangesMessageID = WM_USER + 1
 };
@@ -1310,3 +1313,5 @@ void CodeView::CheckForFileChanges()
 	if (doc)
 		doc->CheckForFileChanges();
 }
+
+#pragma pop_macro("max")
