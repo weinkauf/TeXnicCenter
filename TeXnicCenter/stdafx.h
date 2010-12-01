@@ -66,9 +66,7 @@
 
 #include <atlfile.h>
 
-#include "TipDlg.h"
 #include <afxcontrolbars.h>     // MFC support for ribbons and control bars
-#include "RegistryStack.h"
 #include <ExtCollection.h>
 #include <ExtControls.h>
 #include <ExtTools.h>
@@ -94,11 +92,6 @@ typedef std::tr1::basic_regex<TCHAR> tregex;
 #include <atlwin.h>
 #include <afx.h>
 
-// globale Makros
-#define IFNOT( s )\
-	ASSERT( s );\
-	if( !s )
-
 #if defined _M_IX86
 #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #elif defined _M_IA64
@@ -108,10 +101,6 @@ typedef std::tr1::basic_regex<TCHAR> tregex;
 #else
 #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif
-
-// Use std::min, std::max from <algorithm>
-#undef min
-#undef max
 
 #ifndef UNICODE
 #error You have to select a Unicode solution configuration first

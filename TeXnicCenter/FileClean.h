@@ -41,6 +41,8 @@
 
 #include "LatexProject.h"
 
+class RegistryStack;
+
 /**
 A storage to define a pattern, that matches files to be deleted/protected.
 

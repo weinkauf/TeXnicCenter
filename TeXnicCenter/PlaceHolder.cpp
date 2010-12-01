@@ -36,6 +36,7 @@
 #include "ChildFrm.h"
 #include "TeXnicCenter.h"
 #include "PlaceHolder.h"
+#include "MainFrm.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

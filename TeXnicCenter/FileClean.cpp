@@ -39,6 +39,7 @@
 #include "FileClean.h"
 #include "LaTeXDocument.h"
 #include "LaTeXView.h"
+#include "RegistryStack.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

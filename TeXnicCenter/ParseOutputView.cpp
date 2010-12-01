@@ -33,6 +33,7 @@
 #include "stdafx.h"
 #include "texniccenter.h"
 #include "ParseOutputView.h"
+#include "MainFrm.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

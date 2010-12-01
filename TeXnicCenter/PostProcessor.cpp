@@ -30,6 +30,7 @@
 #include "PostProcessor.h"
 #include "PlaceHolder.h"
 #include "Process.h"
+#include "RegistryStack.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

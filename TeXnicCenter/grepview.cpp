@@ -35,6 +35,7 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "GrepView.h"
+#include "OutputDoc.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

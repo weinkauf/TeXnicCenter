@@ -46,6 +46,8 @@
 #include "StyleFileContainer.h"
 #include "SpellerBackgroundThread.h"
 
+class LaTeXView;
+
 extern class CTeXnicCenterApp theApp;
 
 class CTeXnicCenterApp :

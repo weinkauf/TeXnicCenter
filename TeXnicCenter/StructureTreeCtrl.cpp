@@ -41,6 +41,7 @@
 #include "StructureParser.h"
 #include "LatexProject.h"
 #include "FontOccManager.h"
+#include "OutputDoc.h"
 
 const UINT GotoBibliographyLine = WM_USER + 1;
 

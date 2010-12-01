@@ -35,6 +35,7 @@
 #include "stdafx.h"
 #include "TeXnicCenter.h"
 #include "BuildView.h"
+#include "MainFrm.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
