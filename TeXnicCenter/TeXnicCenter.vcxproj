@@ -140,8 +140,8 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <TargetMachine>MachineX86</TargetMachine>
@@ -188,8 +188,8 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <TargetMachine>MachineX64</TargetMachine>
@@ -235,9 +235,9 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -282,9 +282,9 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
