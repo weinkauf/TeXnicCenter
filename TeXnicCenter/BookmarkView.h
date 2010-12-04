@@ -1,5 +1,7 @@
 #pragma once
+
 #include "PrivateToolBar.h"
+#include "SortListCtrl.h"
 #include "WorkspacePaneBase.h"
 
 class CodeBookmark;
