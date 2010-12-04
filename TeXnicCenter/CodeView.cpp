@@ -1097,6 +1097,8 @@ void CodeView::OnZoom( SCNotification* /*n*/ )
 {
 	if (CConfiguration::GetInstance()->m_bShowLineNumbers)
 		UpdateLineNumberMargin();
+
+    UpdateFoldMargin();
 }
 
 void CodeView::SetModified( bool modified /*= true*/ )
