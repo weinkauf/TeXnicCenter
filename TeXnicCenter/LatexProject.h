@@ -40,13 +40,8 @@
 #include "OutputInfo.h"
 #include "StructureParser.h"
 #include "StructureTreeCtrl.h"
-#include "EnvironmentView.h"
-#include "FileView.h"
-#include "BibView.h"
 #include "Project.h"
 #include "IProject.h"
-#include "WorkspacePane.h"
-#include "CodeView.h"
 #include "BookmarkEventArgs.h"
 
 class CMainFrame;

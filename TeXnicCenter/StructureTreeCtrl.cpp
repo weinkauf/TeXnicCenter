@@ -37,6 +37,7 @@
 
 #include <vector>
 
+#include "BibItem.h"
 #include "StructureTreeCtrl.h"
 #include "StructureParser.h"
 #include "LatexProject.h"
