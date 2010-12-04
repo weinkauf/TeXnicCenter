@@ -51,11 +51,8 @@ int BibTeXView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (LaTeXViewBase::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	GetCtrl().SetLexer(SCLEX_BIBTEX);
-
 	return 0;
 }
-
 
 void BibTeXView::UpdateSettings()
 {
@@ -135,4 +132,9 @@ void BibTeXView::OnSettingsChanged()
 DocumentTokenizer* BibTeXView::NewDocumentTokenizer() const
 {
 	return new LaTeXTokenizer();
+}
+
+int BibTeXView::GetLexer() const
+{
+    return SCLEX_BIBTEX;
 }

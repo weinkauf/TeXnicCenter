@@ -40,7 +40,6 @@ int MetaPostView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (LaTeXViewBase::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	GetCtrl().SetLexer(SCLEX_METAPOST);
 	UpdateSettings();
 
 	return 0;
@@ -108,4 +107,9 @@ void MetaPostView::UpdateSettings()
 DocumentTokenizer* MetaPostView::NewDocumentTokenizer() const
 {
 	return new LaTeXTokenizer();
+}
+
+int MetaPostView::GetLexer() const
+{
+    return SCLEX_METAPOST;
 }

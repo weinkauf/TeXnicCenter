@@ -87,4 +87,5 @@ public:
 protected:
 	DocumentTokenizer* NewDocumentTokenizer() const;
 	void OnSettingsChanged(void);
+    int GetLexer() const;
 };

@@ -87,7 +87,8 @@ protected:
 	afx_msg void OnViewWordWrapIndicatorsEnd();
 	afx_msg void OnUpdateViewWordWrapIndicators(CCmdUI *pCmdUI);
 	afx_msg void OnViewFoldMargin();
-	afx_msg void OnUpdateViewFoldMargin(CCmdUI *pCmdUI);
+
+    afx_msg void OnUpdateViewFoldMargin(CCmdUI *pCmdUI);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	void OnUpdatePositionIndicator(CCmdUI* pCmdUI);
 	void OnUpdateEncodingIndicator(CCmdUI* pCmdUI);
@@ -125,6 +126,12 @@ protected:
 	void OnUpdateUI(SCNotification* n);
 
 private:
+    void EnableFoldMargin(bool value = true);
+    void EnableViewFolding(bool enable = true);
+    void UpdateFoldMargin();
+    void UpdateFoldSettings();
+    void UpdateFoldMarginColor();
+
 	class ShadowWindow :
 		public CWindowImpl<ShadowWindow>
 	{
@@ -193,15 +200,17 @@ protected:
 	afx_msg void OnEditSelParagraph();
 	void OnZoom(SCNotification* n);
 
+    virtual int GetLexer() const = 0;
+
 public:
 	CScintillaFindReplaceDlg* CreateFindReplaceDialog(void);
 
 	bool IsAutoIndentEnabled() const;
 	void EnableAutoIndent(bool enable = true);
-
-	void EnableFolding(bool enable = true);
 	bool IsFoldingEnabled();
 	void ShowIndentationGuides(bool show);
+    void ToggleFolding();
+    void EnableFolding(bool value = true);
 
 	void SetModified(bool modified = true);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);

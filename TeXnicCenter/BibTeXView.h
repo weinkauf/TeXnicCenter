@@ -25,6 +25,7 @@ protected:
 	DocumentTokenizer* NewDocumentTokenizer() const;
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	void OnSettingsChanged();
+    int GetLexer() const;
 
 private:
 	void UpdateSettings();
