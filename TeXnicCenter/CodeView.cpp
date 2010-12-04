@@ -163,6 +163,9 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//Get a shorthand
 	CScintillaCtrl& rCtrl = GetCtrl();
 
+    // The lexer has to be set before fold settings are modified
+    rCtrl.SetLexer(GetLexer());
+
 	EnableFolding(CConfiguration::GetInstance()->IsFoldingEnabled()); // CodeView::OnSettingsChanged depends on whether folding is enabled or not
 	OnSettingsChanged(); // Make sure derived class setup the settings such as fonts, lexers etc. first
 
@@ -263,7 +266,6 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//Similar for: LineCut, SelectionDuplicate
 
 #pragma endregion
-
 
 	return 0;
 }
@@ -573,14 +575,7 @@ void CodeView::OnUpdateViewWordWrapIndicators(CCmdUI *pCmdUI)
 
 void CodeView::OnViewFoldMargin()
 {
-	const bool bNewFoldState = !IsFoldingEnabled();
-
-	EnableFolding(bNewFoldState);
-	OnSettingsChanged();
-
-	//TODO: When the window was opened without folding, the markers will not come back.
-
-	CConfiguration::GetInstance()->EnableFolding(bNewFoldState);
+    ToggleFolding();
 }
 
 void CodeView::OnUpdateViewFoldMargin(CCmdUI *pCmdUI)
@@ -627,32 +622,14 @@ void CodeView::OnSettingsChanged()
 {
 	// User changed application's settings: react here
 
-	// Folding margin width: 2px + 1.5ex + 2px
-	const int width = IsFoldingEnabled() ? GetCtrl().TextWidth(STYLE_DEFAULT,"9") + 2 * 2 : 0;
-	GetCtrl().SetMarginWidthN(GetFoldingMargin(),width);
-	GetCtrl().SetFoldMarginColour(TRUE,GetCtrl().StyleGetBack(STYLE_DEFAULT));
-	
-	int flags = 0;
+    UpdateFoldMargin();
 
-	if (CConfiguration::GetInstance()->GetShowLineBelowFold())
-		flags |= 16;
-
-	if (CConfiguration::GetInstance()->GetShowLineBelowNoFold())
-		flags |= 8;
-
-	if (CConfiguration::GetInstance()->GetShowLineAboveFold())
-		flags |= 4;
-
-	if (CConfiguration::GetInstance()->GetShowLineAboveNoFold())
-		flags |= 2;
-
-	GetCtrl().SetFoldFlags(flags);
+    UpdateFoldMarginColor();
+    UpdateFoldSettings();
 
 	GetCtrl().SetUseTabs(!CConfiguration::GetInstance()->GetUseSpaces());
 	GetCtrl().SetTabWidth(CConfiguration::GetInstance()->m_nTabWidth);
 	GetCtrl().SetIndent(GetCtrl().GetTabWidth());
-
-	GetCtrl().SetProperty("fold.compact",CConfiguration::GetInstance()->GetFoldCompact() ? "1" : "0");
 }
 
 void CodeView::OnSysColorChange()
@@ -1088,9 +1065,9 @@ void CodeView::OnUpdateEditGotoLastChange(CCmdUI *pCmdUI)
 	pCmdUI->Enable(last_change_pos_ != -1);
 }
 
-void CodeView::EnableFolding( bool enable /*= true*/ )
+void CodeView::EnableViewFolding( bool enable /*= true*/ )
 {
-	GetCtrl().SetProperty("fold",enable ? "1" : "0");
+	GetCtrl().SetProperty("fold", enable ? "1" : "0");
 }
 
 bool CodeView::IsFoldingEnabled()
@@ -1312,6 +1289,61 @@ void CodeView::CheckForFileChanges()
 
 	if (doc)
 		doc->CheckForFileChanges();
+}
+
+void CodeView::ToggleFolding()
+{
+    EnableFolding(!IsFoldingEnabled());
+}
+
+void CodeView::EnableFolding(bool value)
+{
+    UpdateFoldSettings();
+
+    EnableFoldMargin(value);
+    EnableViewFolding(value);
+
+    CConfiguration::GetInstance()->EnableFolding(value);
+}
+
+void CodeView::EnableFoldMargin(bool value)
+{
+    // Folding margin width: 2px + 1.5ex + 2px
+    const int width = value ? GetCtrl().
+        TextWidth(STYLE_DEFAULT, "9") + 2 * 2 : 0;
+
+    GetCtrl().SetMarginWidthN(GetFoldingMargin(), width);
+}
+
+void CodeView::UpdateFoldMarginColor()
+{
+    GetCtrl().SetFoldMarginColour(TRUE,GetCtrl().StyleGetBack(STYLE_DEFAULT));
+}
+
+void CodeView::UpdateFoldSettings()
+{
+    int flags = 0;
+
+    if (CConfiguration::GetInstance()->GetShowLineBelowFold())
+        flags |= 16;
+
+    if (CConfiguration::GetInstance()->GetShowLineBelowNoFold())
+        flags |= 8;
+
+    if (CConfiguration::GetInstance()->GetShowLineAboveFold())
+        flags |= 4;
+
+    if (CConfiguration::GetInstance()->GetShowLineAboveNoFold())
+        flags |= 2;
+
+    GetCtrl().SetFoldFlags(flags);
+    GetCtrl().SetProperty("fold.compact", 
+        CConfiguration::GetInstance()->GetFoldCompact() ? "1" : "0");
+}
+
+void CodeView::UpdateFoldMargin()
+{
+    EnableFoldMargin(CConfiguration::GetInstance()->IsFoldingEnabled());
 }
 
 #pragma pop_macro("max")

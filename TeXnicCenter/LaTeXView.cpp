@@ -160,11 +160,8 @@ int LaTeXView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	old_pos_start_ = old_pos_end_ = -1;
 	autocompletion_active_ = false;
 
-	CScintillaCtrl& rCtrl = GetCtrl();
-	rCtrl.SetLexer(SCLEX_TEX); // TeX Lexer
-
 	EnableAutoIndent();
-	rCtrl.SetCaretSticky(FALSE);
+	GetCtrl().SetCaretSticky(FALSE);
 
 	return 0;
 }
@@ -1337,4 +1334,9 @@ void LaTeXView::Reindent( int initial_line_count, int start_line )
 			}
 		}
 	}
+}
+
+int LaTeXView::GetLexer() const
+{
+    return SCLEX_TEX;
 }
