@@ -12,3 +12,6 @@ glob:TeXnicCenterObjects/Source/Project.h
 glob:TeXnicCenterObjects/Source/DocumentWizard.h
 glob:*.bsc
 glob:*.swp
+glob:*.orig
+glob:*.rej
+glob:*.ipch
