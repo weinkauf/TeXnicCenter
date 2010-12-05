@@ -39,7 +39,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "Project.h"
+class CProject;
 
 /**
 This class is to CProject, what CDocTemplate is to CDocument.

@@ -34,6 +34,8 @@
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
+
+#include "Project.h"
 #include "ProjectTemplate.h"
 #include "ProjectSupportingWinApp.h"
 
