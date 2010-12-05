@@ -575,7 +575,13 @@ void CodeView::OnUpdateViewWordWrapIndicators(CCmdUI *pCmdUI)
 
 void CodeView::OnViewFoldMargin()
 {
-    ToggleFolding();
+    bool enable = !IsFoldingEnabled();
+
+    using namespace std::placeholders;
+    EnableFolding(!IsFoldingEnabled());
+
+    // Chained update
+    ForEveryView(std::bind(&CodeView::EnableFolding, _1, enable));
 }
 
 void CodeView::OnUpdateViewFoldMargin(CCmdUI *pCmdUI)
