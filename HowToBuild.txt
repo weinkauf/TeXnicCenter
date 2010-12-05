@@ -2,13 +2,13 @@ Building TeXnicCenter
 
 1 Requirements
 
-The following software and libraries are required to successfully build 
+The following tools and libraries are required to successfully build
 TeXnicCenter and all of its components:
-  * Visual C++ 2008 SP1 with MFC libraries
+  * Visual C++ 2010 with MFC libraries
   * Microsoft Windows 7 SDK
   * Microsoft HTML Help Workshop
   * MSXML 4
-  * TortoiseSVN, freely available at http://tortoisesvn.tigris.org/
+  * Mercurial, freely available at http://mercurial.selenic.com/
 
 To generate the setup you will need:
   * Inno Setup available at 
@@ -20,7 +20,6 @@ To generate the setup you will need:
   2. Choose either 'Debug' or the 'Release' solution configuration.
   3. Build the complete solution.
      The result can be found in the newly created 'Output' folder.
-
 
 
 Visit the TeXnicCenter-Homepage
