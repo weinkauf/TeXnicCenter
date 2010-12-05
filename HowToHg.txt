@@ -1,0 +1,19 @@
+TeXnicCenter consists of several Mercurial repositories. The main development
+line repository can be accessed using
+
+  hg clone http://texniccenter.hg.sourceforge.net:8000/hgroot/texniccenter/texniccenter
+
+This creates a clone of the repository in a subdirectory called 'texniccenter'.
+
+The tutorials repository can be cloned using
+
+  hg clone http://texniccenter.hg.sourceforge.net:8000/hgroot/texniccenter/tutorials
+and the user manual using
+
+  hg clone http://texniccenter.hg.sourceforge.net:8000/hgroot/texniccenter/manual
+
+You can create new branches, but it is preferred that you discuss the issue with
+the maintainer. Be sure to understand Chapter 8 of the Mercurial: The Definitive
+Guide book available at
+http://hgbook.red-bean.com/read/managing-releases-and-branchy-development.html.
+The book is also part of the TortoiseHg package.
