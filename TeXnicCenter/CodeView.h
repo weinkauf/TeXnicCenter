@@ -106,6 +106,13 @@ protected:
 
 	void HardWrapRange(long s, long e);
 
+    /**
+     * @brief Executes the specified function object @a f for every @ref
+     *        CodeView.
+     *
+     * @param f The function object to be executed for each view. A pointer to
+     *        the view is a passed as an argument.
+     */
 	template<class F>
 	void ForEveryView(F f);
 
