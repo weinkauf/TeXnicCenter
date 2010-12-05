@@ -101,12 +101,10 @@ Source: msxml4a.dll; DestDir: {sys}; Flags: sharedfile
 ;Source: msxml4r.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 ;Source: msxml4a.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 
-;MFC and CRT system files. Copied as private assemblies. Windows will us globally installed versions, if they are installed.
-Source: msvcr90.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: msvcp90.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: mfc90u.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: Microsoft.VC90.CRT.manifest; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: Microsoft.VC90.MFC.manifest; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+;MFC files. Copied as private assemblies. Windows will us globally installed versions, if they are installed.
+Source: msvcr100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: msvcp100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: mfc100u.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 
 ;Templates
 DestDir: {app}\Templates\Documents\English; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Templates\Documents\English\*.tex; Components: Templates\English; Flags: comparetimestamp
