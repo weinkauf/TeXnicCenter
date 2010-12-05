@@ -733,5 +733,4 @@ namespace {
 	};
 }
 
-
 LexerModule lmTeX(SCLEX_TEX, ColouriseTeXDoc, "tex", FoldTexDoc, texWordListDesc);

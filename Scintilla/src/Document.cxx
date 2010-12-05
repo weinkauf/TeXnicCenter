@@ -194,7 +194,7 @@ int Document::GetMark(int line) {
 }
 
 int Document::AddMark(int line, int markerNum) {
-	if (line <= LinesTotal()) {
+	if (line >= 0 && line <= LinesTotal()) {
 		int prev = static_cast<LineMarkers *>(perLineData[ldMarkers])->
 			AddMark(line, markerNum, LinesTotal());
 		DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
@@ -206,6 +206,9 @@ int Document::AddMark(int line, int markerNum) {
 }
 
 void Document::AddMarkSet(int line, int valueSet) {
+	if (line < 0 || line > LinesTotal()) {
+		return;
+	}
 	unsigned int m = valueSet;
 	for (int i = 0; m; i++, m >>= 1)
 		if (m & 1)
@@ -416,7 +419,7 @@ static int BytesFromLead(int leadByte) {
 	return 0;
 }
 
-bool Document::InGoodUTF8(int pos, int &start, int &end) {
+bool Document::InGoodUTF8(int pos, int &start, int &end) const {
 	int lead = pos;
 	while ((lead>0) && (pos-lead < 4) && IsTrailByte(static_cast<unsigned char>(cb.CharAt(lead-1))))
 		lead--;
@@ -515,7 +518,7 @@ int Document::MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd) {
 // NextPosition moves between valid positions - it can not handle a position in the middle of a
 // multi-byte character. It is used to iterate through text more efficiently than MovePositionOutsideChar.
 // A \r\n pair is treated as two characters.
-int Document::NextPosition(int pos, int moveDir) {
+int Document::NextPosition(int pos, int moveDir) const {
 	// If out of range, just return minimum/maximum value.
 	int increment = (moveDir > 0) ? 1 : -1;
 	if (pos + increment <= 0)
@@ -549,7 +552,7 @@ int Document::NextPosition(int pos, int moveDir) {
 				// See http://msdn.microsoft.com/en-us/library/cc194792%28v=MSDN.10%29.aspx
 				// http://msdn.microsoft.com/en-us/library/cc194790.aspx
 				if ((pos - 1) <= posStartLine) {
-					return posStartLine;
+					return posStartLine - 1;
 				} else if (IsDBCSLeadByte(cb.CharAt(pos - 1))) {
 					// Must actually be trail byte
 					return pos - 2;
@@ -1544,7 +1547,7 @@ void Document::LexerChanged() {
 int SCI_METHOD Document::SetLineState(int line, int state) {
 	int statePrevious = static_cast<LineState *>(perLineData[ldState])->SetLineState(line, state);
 	if (state != statePrevious) {
-		DocModification mh(SC_MOD_CHANGELINESTATE, 0, 0, 0, 0, line);
+		DocModification mh(SC_MOD_CHANGELINESTATE, LineStart(line), 0, 0, 0, line);
 		NotifyModified(mh);
 	}
 	return statePrevious;
