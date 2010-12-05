@@ -1,0 +1,14 @@
+glob:Output
+glob:*~
+glob:*.user
+glob:*.suo
+glob:*.opensdf
+glob:*.sdf
+glob:TeXnicCenterObjects/Source/*_[i|p].[c|h]
+glob:TeXnicCenterObjects/Source/dlldata.c
+glob:TeXnicCenterObjects/Source/TeXnicCenterObjects_h.h
+glob:TeXnicCenterObjects/Source/ProjectWizard.h
+glob:TeXnicCenterObjects/Source/Project.h
+glob:TeXnicCenterObjects/Source/DocumentWizard.h
+glob:*.bsc
+glob:*.swp
