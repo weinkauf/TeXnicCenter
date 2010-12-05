@@ -425,7 +425,7 @@ void CodeView::OnUpdatePositionIndicator( CCmdUI* pCmdUI )
 	int col = rCtrl.GetColumn(pos);
 
 	CString text;
-	text.Format(_T("Ln %d, Col %d, Ch %d"),line + 1,col + 1,pos + 1);
+	text.Format(IDS_CODE_VIEW_INDICATOR, line + 1, col + 1, pos + 1);
 
 	pCmdUI->SetText(text);
 	pCmdUI->Enable();
