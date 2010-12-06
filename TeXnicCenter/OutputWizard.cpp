@@ -55,7 +55,7 @@ static char THIS_FILE[] = __FILE__;
  * @param version MiKTeX version, e.g. 2.9.
  */
 #define MIKTEX_YAP_SETTINGS_REG_KEY(version) \
-    _T("Software\\MiKTeX.org\\MiKTeX\\") _T(#version) _T("\\Yap\\Settings")
+	_T("Software\\MiKTeX.org\\MiKTeX\\") _T(#version) _T("\\Yap\\Settings")
 
 namespace
 {
@@ -414,24 +414,24 @@ void COutputWizard::LookForDviViewer()
 
 	//Let's do the YAP inverse search configuration
 	/* NOTE: YAP's configuration is a little bit strange here.
-	        The effective setting is in the registry as we use it below.
-	        This denotes the active editor. However, this string is not
-	        shown in the UI of YAP. There we see the configuration of "editors.ini"
-	        as it can be found in "D:\Dokumente und Einstellungen\All Users\Anwendungsdaten\MiKTeX\2.5\miktex\config" or similar.
-	        If the user opens YAP's options dialog then she will not see TeXnicCenter - though they work together.
+			The effective setting is in the registry as we use it below.
+			This denotes the active editor. However, this string is not
+			shown in the UI of YAP. There we see the configuration of "editors.ini"
+			as it can be found in "D:\Dokumente und Einstellungen\All Users\Anwendungsdaten\MiKTeX\2.5\miktex\config" or similar.
+			If the user opens YAP's options dialog then she will not see TeXnicCenter - though they work together.
 
-	        Might be that it would be nicer to add an entry to editors.ini.
+			Might be that it would be nicer to add an entry to editors.ini.
 
-	        ==> Tested with miktex up to version 2.6
+			==> Tested with miktex up to version 2.6
 	 */
 	CSettingsStore reg(false,false);
 
 	if (reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.9)) //miktex 2.9
-	    || reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.8)) //miktex 2.8
-	    || reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.7)) //miktex 2.7
-	    || reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.6)) //miktex 2.6
-	    || reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.5)) //miktex 2.5
-	    || reg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\Yap\\Settings"))) //miktex 2.4 and earlier
+		|| reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.8)) //miktex 2.8
+		|| reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.7)) //miktex 2.7
+		|| reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.6)) //miktex 2.6
+		|| reg.Open(MIKTEX_YAP_SETTINGS_REG_KEY(2.5)) //miktex 2.5
+		|| reg.Open(_T("Software\\MiK\\MiKTeX\\CurrentVersion\\Yap\\Settings"))) //miktex 2.4 and earlier
 	{
 		CString strEditor;
 		reg.Read(_T("Editor"),strEditor);
@@ -440,9 +440,9 @@ void COutputWizard::LookForDviViewer()
 		const CString& module = theApp.GetModuleFileName();
 
 		if (strEditor.IsEmpty() || // No editor defined
-		        ((CPathTool::GetFileTitle(strEditor).
-		          CompareNoCase(CPathTool::GetFileTitle(module))) && // if Editor is not TXC and...
-		         (AfxMessageBox(STE_OUTPUTWIZARD_YAPCONFIG,MB_ICONQUESTION | MB_YESNO) == IDYES)))   // ...the user wants us to overwrite
+				((CPathTool::GetFileTitle(strEditor).
+				  CompareNoCase(CPathTool::GetFileTitle(module))) && // if Editor is not TXC and...
+				 (AfxMessageBox(STE_OUTPUTWIZARD_YAPCONFIG,MB_ICONQUESTION | MB_YESNO) == IDYES)))   // ...the user wants us to overwrite
 		{
 			strEditor = module;
 			strEditor += _T(" /ddecmd \"[goto('%f', '%l')]\"");
@@ -517,7 +517,7 @@ void COutputWizard::LookForPdf()
 	RegistryStack gsReg(true,true); //HKEY_LOCAL_MACHINE, ReadOnly
 
 	if (gsReg.Open(_T("SOFTWARE\\GPL Ghostscript")) ||
-	        gsReg.Open(_T("SOFTWARE\\AFPL Ghostscript")))
+			gsReg.Open(_T("SOFTWARE\\AFPL Ghostscript")))
 	{
 		// Read the subkeys - i.e. subfolders under "GPL|AFPL Ghostscript"
 		CStringArray SubKeys;
@@ -734,7 +734,7 @@ void COutputWizard::GenerateOutputProfiles()
 			p.SetLatexPath(GetDistributionFilePath(_T("latex.exe")),dviOptions);
 			p.SetBibTexPath(GetDistributionFilePath(_T("bibtex.exe")),_T("\"%bm\""));
 			p.SetMakeIndexPath(GetDistributionFilePath(_T("makeindex.exe")),
-			                   _T("\"%bm.idx\" -o \"%bm.ind\""));
+							   _T("\"%bm.idx\" -o \"%bm.ind\""));
 
 			// add viewer settings
 			if (!m_wndPageDviViewer.m_strPath.IsEmpty())
@@ -796,16 +796,16 @@ void COutputWizard::GenerateOutputProfiles()
 			p.SetLatexPath(
 				GetDistributionFilePath(_T("latex.exe")),dviOptions);
 			p.SetBibTexPath(
-			    GetDistributionFilePath(_T("bibtex.exe")),
-			    _T("\"%bm\""));
+				GetDistributionFilePath(_T("bibtex.exe")),
+				_T("\"%bm\""));
 			p.SetMakeIndexPath(
-			    GetDistributionFilePath(_T("makeindex.exe")),
-			    _T("\"%bm\""));
+				GetDistributionFilePath(_T("makeindex.exe")),
+				_T("\"%bm\""));
 
 			// add post processor dvips
 			CPostProcessor pp(
-			    _T("DviPs"),GetDistributionFilePath(_T("dvips.exe")),
-			    _T("\"%Bm.dvi\""));
+				_T("DviPs"),GetDistributionFilePath(_T("dvips.exe")),
+				_T("\"%Bm.dvi\""));
 			p.GetPostProcessorArray().Add(pp);
 
 			// add viewer settings
@@ -818,15 +818,15 @@ void COutputWizard::GenerateOutputProfiles()
 				profileCmd.SetActiveCommand(CProfile::CCommand::typeProcess);
 
 				cmd.Set(
-				    m_wndPagePsViewer.m_strPath,
-				    m_wndPagePsViewer.m_strSingleInstanceOption + _T(" \"%bm.ps\""));
+					m_wndPagePsViewer.m_strPath,
+					m_wndPagePsViewer.m_strSingleInstanceOption + _T(" \"%bm.ps\""));
 				profileCmd.SetProcessCommand(cmd);
 				p.SetViewProjectCmd(profileCmd);
 
 				cmd.Set(
-				    m_wndPagePsViewer.m_strPath,
-				    m_wndPagePsViewer.m_strSingleInstanceOption + _T(' ')
-				    + m_wndPagePsViewer.m_strForwardSearchOption + _T(" \"%bm.ps\""));
+					m_wndPagePsViewer.m_strPath,
+					m_wndPagePsViewer.m_strSingleInstanceOption + _T(' ')
+					+ m_wndPagePsViewer.m_strForwardSearchOption + _T(" \"%bm.ps\""));
 				profileCmd.SetProcessCommand(cmd);
 				p.SetViewCurrentCmd(profileCmd);
 			}
@@ -858,16 +858,16 @@ void COutputWizard::GenerateOutputProfiles()
 			CProfile p;
 
 			p.SetLatexPath(GetDistributionFilePath(
-			                              _T("latex.exe")),strLatexOptions);
+										  _T("latex.exe")),strLatexOptions);
 			p.SetBibTexPath(GetDistributionFilePath(
-			                               _T("bibtex.exe")),_T("\"%bm\""));
+										   _T("bibtex.exe")),_T("\"%bm\""));
 			p.SetMakeIndexPath(GetDistributionFilePath(
-			                                  _T("makeindex.exe")),_T("\"%bm\""));
+											  _T("makeindex.exe")),_T("\"%bm\""));
 
 			// add post processor dvips
 			CPostProcessor ppDVIPS(
-			    _T("DviPs (PDF)"),GetDistributionFilePath(_T("dvips.exe")),
-			    _T("-P pdf \"%Bm.dvi\""));
+				_T("DviPs (PDF)"),GetDistributionFilePath(_T("dvips.exe")),
+				_T("-P pdf \"%Bm.dvi\""));
 			p.GetPostProcessorArray().Add(ppDVIPS);
 
 			// add post processor Ghostscript or ps2pdf
@@ -875,16 +875,16 @@ void COutputWizard::GenerateOutputProfiles()
 			{
 				//ps2pdf
 				CPostProcessor ppPS2PDF(
-				    _T("ps2pdf"), m_strGhostscriptPath,
-				    _T("\"%bm.ps\""));
+					_T("ps2pdf"), m_strGhostscriptPath,
+					_T("\"%bm.ps\""));
 				p.GetPostProcessorArray().Add(ppPS2PDF);
 			}
 			else
 			{
 				//Ghostscript directly
 				CPostProcessor ppGS(
-				    _T("Ghostscript (ps2pdf)"),m_strGhostscriptPath,
-				    _T("-sPAPERSIZE=a4 -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"%bm.pdf\" -c save pop -f \"%bm.ps\""));
+					_T("Ghostscript (ps2pdf)"),m_strGhostscriptPath,
+					_T("-sPAPERSIZE=a4 -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"%bm.pdf\" -c save pop -f \"%bm.ps\""));
 				p.GetPostProcessorArray().Add(ppGS);
 			}
 
@@ -1072,8 +1072,8 @@ const CString COutputWizard::FindMiKTeXInstallLocation()
 {
 	typedef std::vector<CString> StringVector;
 	
-    StringVector paths;
-    paths.reserve(10);
+	StringVector paths;
+	paths.reserve(10);
 
 	LPCTSTR const mikbin = _T("miktex\\bin");
 
@@ -1081,10 +1081,10 @@ const CString COutputWizard::FindMiKTeXInstallLocation()
 
 	// Known (future) MiKTeX versions
 	const CString versions[] = { 
-        _T("MiKTeX 2.9"), 
-        _T("MiKTeX 2.8"), 
-        _T("MiKTeX 2.7")
-    };
+		_T("MiKTeX 2.9"), 
+		_T("MiKTeX 2.8"), 
+		_T("MiKTeX 2.7")
+	};
 
 	const int count = sizeof(versions) / sizeof(*versions);
 

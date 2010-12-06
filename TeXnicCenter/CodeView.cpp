@@ -163,8 +163,8 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//Get a shorthand
 	CScintillaCtrl& rCtrl = GetCtrl();
 
-    // The lexer has to be set before fold settings are modified
-    rCtrl.SetLexer(GetLexer());
+	// The lexer has to be set before fold settings are modified
+	rCtrl.SetLexer(GetLexer());
 
 	EnableFolding(CConfiguration::GetInstance()->IsFoldingEnabled()); // CodeView::OnSettingsChanged depends on whether folding is enabled or not
 	OnSettingsChanged(); // Make sure derived class setup the settings such as fonts, lexers etc. first
@@ -575,13 +575,13 @@ void CodeView::OnUpdateViewWordWrapIndicators(CCmdUI *pCmdUI)
 
 void CodeView::OnViewFoldMargin()
 {
-    bool enable = !IsFoldingEnabled();
+	bool enable = !IsFoldingEnabled();
 
-    using namespace std::placeholders;
-    EnableFolding(!IsFoldingEnabled());
+	using namespace std::placeholders;
+	EnableFolding(!IsFoldingEnabled());
 
-    // Chained update
-    ForEveryView(std::bind(&CodeView::EnableFolding, _1, enable));
+	// Chained update
+	ForEveryView(std::bind(&CodeView::EnableFolding, _1, enable));
 }
 
 void CodeView::OnUpdateViewFoldMargin(CCmdUI *pCmdUI)
@@ -628,10 +628,10 @@ void CodeView::OnSettingsChanged()
 {
 	// User changed application's settings: react here
 
-    UpdateFoldMargin();
+	UpdateFoldMargin();
 
-    UpdateFoldMarginColor();
-    UpdateFoldSettings();
+	UpdateFoldMarginColor();
+	UpdateFoldSettings();
 
 	GetCtrl().SetUseTabs(!CConfiguration::GetInstance()->GetUseSpaces());
 	GetCtrl().SetTabWidth(CConfiguration::GetInstance()->m_nTabWidth);
@@ -935,9 +935,9 @@ void CodeView::OnEditFindIncrementalBackward()
 
 void CodeView::OnSearchFindNextSelected()
 {
-    CString sel = SelectionExtend(true);
+	CString sel = SelectionExtend(true);
 	if (sel.GetLength() && sel.Find(_T('\r')) < 0 && sel.Find(_T('\n')) < 0)
-    {
+	{
 		//We would need to set the _scintillaEditState, but that one is local to ScintillaDocView.cpp
 		// Now we cannot use F3 after Ctrl-F3, which is not so nice.
 		//_scintillaEditState.strFind = sel;
@@ -948,9 +948,9 @@ void CodeView::OnSearchFindNextSelected()
 
 void CodeView::OnSearchFindPreviousSelected()
 {
-    CString sel = SelectionExtend(true);
+	CString sel = SelectionExtend(true);
 	if (sel.GetLength() && sel.Find(_T('\r')) < 0 && sel.Find(_T('\n')) < 0)
-    {
+	{
 		//_scintillaEditState.strFind = sel;
 		FindText(sel, false, true, true, false);
 	}
@@ -967,42 +967,42 @@ CString CodeView::SelectionExtend(bool stripEol /*= true*/)
 CString CodeView::RangeExtendAndGrab(int& selStart, int& selEnd, bool stripEol /*= true*/)
 {
 	CScintillaCtrl& Ctrl = GetCtrl();
-    if (selStart == selEnd)
-    {
-        //Empty range: Try to find a word
+	if (selStart == selEnd)
+	{
+		//Empty range: Try to find a word
 		selStart = Ctrl.WordStartPosition(selStart, true);
 		selEnd = Ctrl.WordEndPosition(selEnd, true);
-    }
+	}
 
-    CString SelectedString;
-    if (selStart != selEnd)
-    {
+	CString SelectedString;
+	if (selStart != selEnd)
+	{
 		Sci_TextRange TRange;
 		TRange.chrg.cpMin = selStart;
 		TRange.chrg.cpMax = selEnd;
 		char* Buffer = new char[abs(selEnd - selStart) + 1];
 		TRange.lpstrText = Buffer;
-        Ctrl.GetTextRange(&TRange);
+		Ctrl.GetTextRange(&TRange);
 		SelectedString = Buffer;
 		delete[] Buffer;
-    }
+	}
 
-    if (stripEol)
-    {
-        // Change whole line selected but normally end of line characters not wanted.
-        // Remove possible terminating \r, \n, or \r\n.
+	if (stripEol)
+	{
+		// Change whole line selected but normally end of line characters not wanted.
+		// Remove possible terminating \r, \n, or \r\n.
 		size_t sellen = SelectedString.GetLength();
-        if (sellen >= 2 && (SelectedString[sellen - 2] == '\r' && SelectedString[sellen - 1] == '\n'))
-        {
-            SelectedString.Left(sellen - 2);
-        }
-        else if (sellen >= 1 && (SelectedString[sellen - 1] == '\r' || SelectedString[sellen - 1] == '\n'))
-        {
-            SelectedString.Left(sellen - 1);
-        }
-    }
+		if (sellen >= 2 && (SelectedString[sellen - 2] == '\r' && SelectedString[sellen - 1] == '\n'))
+		{
+			SelectedString.Left(sellen - 2);
+		}
+		else if (sellen >= 1 && (SelectedString[sellen - 1] == '\r' || SelectedString[sellen - 1] == '\n'))
+		{
+			SelectedString.Left(sellen - 1);
+		}
+	}
 
-    return SelectedString;
+	return SelectedString;
 }
 
 
@@ -1097,7 +1097,7 @@ void CodeView::OnZoom( SCNotification* /*n*/ )
 	if (CConfiguration::GetInstance()->m_bShowLineNumbers)
 		UpdateLineNumberMargin();
 
-    UpdateFoldMargin();
+	UpdateFoldMargin();
 }
 
 void CodeView::SetModified( bool modified /*= true*/ )
@@ -1172,9 +1172,9 @@ void CodeView::OnEditSelBiggerBlock()
 	//Search for the next opening brace.
 	long StackCounter(0); //Obviously, the current position is at zero-th level.
 	//We start with the character before the cursor, searching to the left.
-    CurrentPosition--;
-    while (CurrentPosition >= 0 && StackCounter != 1)
-    {
+	CurrentPosition--;
+	while (CurrentPosition >= 0 && StackCounter != 1)
+	{
 		//Take care of the the style, such that we do not match braces in comments.
 		if (ctrl.GetStyleAt(CurrentPosition) != SCE_TEX_COMMENT)
 		{
@@ -1192,7 +1192,7 @@ void CodeView::OnEditSelBiggerBlock()
 
 		//Next char!
 		CurrentPosition--;
-    }
+	}
 
 	//Are we leveled out, i.e., did we find a proper opening brace or did we just hit the end?
 	if (StackCounter == 1)
@@ -1294,57 +1294,57 @@ void CodeView::CheckForFileChanges()
 
 void CodeView::ToggleFolding()
 {
-    EnableFolding(!IsFoldingEnabled());
+	EnableFolding(!IsFoldingEnabled());
 }
 
 void CodeView::EnableFolding(bool value)
 {
-    UpdateFoldSettings();
+	UpdateFoldSettings();
 
-    EnableFoldMargin(value);
-    EnableViewFolding(value);
+	EnableFoldMargin(value);
+	EnableViewFolding(value);
 
-    CConfiguration::GetInstance()->EnableFolding(value);
+	CConfiguration::GetInstance()->EnableFolding(value);
 }
 
 void CodeView::EnableFoldMargin(bool value)
 {
-    // Folding margin width: 2px + 1.5ex + 2px
-    const int width = value ? GetCtrl().
-        TextWidth(STYLE_DEFAULT, "9") + 2 * 2 : 0;
+	// Folding margin width: 2px + 1.5ex + 2px
+	const int width = value ? GetCtrl().
+		TextWidth(STYLE_DEFAULT, "9") + 2 * 2 : 0;
 
-    GetCtrl().SetMarginWidthN(GetFoldingMargin(), width);
+	GetCtrl().SetMarginWidthN(GetFoldingMargin(), width);
 }
 
 void CodeView::UpdateFoldMarginColor()
 {
-    GetCtrl().SetFoldMarginColour(TRUE,GetCtrl().StyleGetBack(STYLE_DEFAULT));
+	GetCtrl().SetFoldMarginColour(TRUE,GetCtrl().StyleGetBack(STYLE_DEFAULT));
 }
 
 void CodeView::UpdateFoldSettings()
 {
-    int flags = 0;
+	int flags = 0;
 
-    if (CConfiguration::GetInstance()->GetShowLineBelowFold())
-        flags |= 16;
+	if (CConfiguration::GetInstance()->GetShowLineBelowFold())
+		flags |= 16;
 
-    if (CConfiguration::GetInstance()->GetShowLineBelowNoFold())
-        flags |= 8;
+	if (CConfiguration::GetInstance()->GetShowLineBelowNoFold())
+		flags |= 8;
 
-    if (CConfiguration::GetInstance()->GetShowLineAboveFold())
-        flags |= 4;
+	if (CConfiguration::GetInstance()->GetShowLineAboveFold())
+		flags |= 4;
 
-    if (CConfiguration::GetInstance()->GetShowLineAboveNoFold())
-        flags |= 2;
+	if (CConfiguration::GetInstance()->GetShowLineAboveNoFold())
+		flags |= 2;
 
-    GetCtrl().SetFoldFlags(flags);
-    GetCtrl().SetProperty("fold.compact", 
-        CConfiguration::GetInstance()->GetFoldCompact() ? "1" : "0");
+	GetCtrl().SetFoldFlags(flags);
+	GetCtrl().SetProperty("fold.compact", 
+		CConfiguration::GetInstance()->GetFoldCompact() ? "1" : "0");
 }
 
 void CodeView::UpdateFoldMargin()
 {
-    EnableFoldMargin(CConfiguration::GetInstance()->IsFoldingEnabled());
+	EnableFoldMargin(CConfiguration::GetInstance()->IsFoldingEnabled());
 }
 
 void CodeView::OnSavePointLeft(SCNotification* /*n*/)

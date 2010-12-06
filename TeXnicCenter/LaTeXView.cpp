@@ -168,7 +168,7 @@ int LaTeXView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void LaTeXView::OnInitialUpdate()
 {
-    LaTeXViewBase::OnInitialUpdate();	
+	LaTeXViewBase::OnInitialUpdate();	
 }
 
 void LaTeXView::OnCharAdded(SCNotification* n)
@@ -352,67 +352,67 @@ void LaTeXView::OnModified(SCNotification* n)
 
 void LaTeXView::InstantAdvice()
 {
-    CString keyw,key;
-    long ptStart = GetCtrl().GetCurrentPos();
-    CPoint ptClient;
+	CString keyw,key;
+	long ptStart = GetCtrl().GetCurrentPos();
+	CPoint ptClient;
 
-    GetWordBeforeCursor(keyw,ptStart,false);
+	GetWordBeforeCursor(keyw,ptStart,false);
 
-    if (keyw.GetLength() > MINIMUM_KEYWORD_LENGTH)
-    {
-        SharedObjectMap map;
+	if (keyw.GetLength() > MINIMUM_KEYWORD_LENGTH)
+	{
+		SharedObjectMap map;
 
-        theApp.m_AvailableCommands.GetAllPossibleItems(keyw,_T(""),map);
+		theApp.m_AvailableCommands.GetAllPossibleItems(keyw,_T(""),map);
 
-        if (map.GetCount() == 1)   //keyword is unique -> OK
-        {
-            std::tr1::shared_ptr<CObject> c;
-            POSITION pos = map.GetStartPosition();
-            map.GetNextAssoc(pos,key,c);
+		if (map.GetCount() == 1)   //keyword is unique -> OK
+		{
+			std::tr1::shared_ptr<CObject> c;
+			POSITION pos = map.GetStartPosition();
+			map.GetNextAssoc(pos,key,c);
 
-            SharedLaTeXCommandPtr lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
+			SharedLaTeXCommandPtr lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
 
-            if (lc != NULL)
-            {
-                if (instant_advice_tip_ == NULL)
-                {
-                    instant_advice_tip_ = new CAdvice();
-                    instant_advice_tip_->Create(lc->ToLaTeX(),WS_POPUP | WS_BORDER/*SS_SUNKEN*/,CRect(),CWnd::FromHandle(GetCtrl()));
-                }
-
-                if (!instant_advice_tip_->IsWindowVisible())
-                {
-                    // Compute window size
-                    CPoint ptClient(GetCtrl().PointXFromPosition(ptStart),GetCtrl().PointYFromPosition(ptStart));
-                    ::ClientToScreen(GetSafeHwnd(),&ptClient);
-                    // Determine if there is space enough to show the window below the text
-                    ptClient.y += GetCtrl().TextHeight(GetCtrl().LineFromPosition(ptStart));
-                    // Place and show the window
-                    instant_advice_tip_->SetWindowPos(NULL,ptClient.x,ptClient.y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-                    instant_advice_tip_->SetWindowText(lc->GetExpandBefore() + lc->ToLaTeX() + lc->GetExpandAfter());
-                    instant_advice_tip_->ShowWindow(SW_SHOW);
-                    SetFocus();
-
-                    const UINT advice_tip_timeout = 3000;
-                    instant_advice_tip_->SetTimer(1,advice_tip_timeout,0);
-                }
-            }
-            else
+			if (lc != NULL)
 			{
-                HideAdvice();
+				if (instant_advice_tip_ == NULL)
+				{
+					instant_advice_tip_ = new CAdvice();
+					instant_advice_tip_->Create(lc->ToLaTeX(),WS_POPUP | WS_BORDER/*SS_SUNKEN*/,CRect(),CWnd::FromHandle(GetCtrl()));
+				}
+
+				if (!instant_advice_tip_->IsWindowVisible())
+				{
+					// Compute window size
+					CPoint ptClient(GetCtrl().PointXFromPosition(ptStart),GetCtrl().PointYFromPosition(ptStart));
+					::ClientToScreen(GetSafeHwnd(),&ptClient);
+					// Determine if there is space enough to show the window below the text
+					ptClient.y += GetCtrl().TextHeight(GetCtrl().LineFromPosition(ptStart));
+					// Place and show the window
+					instant_advice_tip_->SetWindowPos(NULL,ptClient.x,ptClient.y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+					instant_advice_tip_->SetWindowText(lc->GetExpandBefore() + lc->ToLaTeX() + lc->GetExpandAfter());
+					instant_advice_tip_->ShowWindow(SW_SHOW);
+					SetFocus();
+
+					const UINT advice_tip_timeout = 3000;
+					instant_advice_tip_->SetTimer(1,advice_tip_timeout,0);
+				}
 			}
-        }
-        else
-        {
-            // Nothing found: Hide window
-            HideAdvice();
-        }
-    }
-    else
-    {
-        //Keyword before cursor is too small
-        HideAdvice();
-    }
+			else
+			{
+				HideAdvice();
+			}
+		}
+		else
+		{
+			// Nothing found: Hide window
+			HideAdvice();
+		}
+	}
+	else
+	{
+		//Keyword before cursor is too small
+		HideAdvice();
+	}
 }
 
 void LaTeXView::HideAdvice()
@@ -1338,5 +1338,5 @@ void LaTeXView::Reindent( int initial_line_count, int start_line )
 
 int LaTeXView::GetLexer() const
 {
-    return SCLEX_TEX;
+	return SCLEX_TEX;
 }
