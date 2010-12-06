@@ -4,7 +4,7 @@ Purpose: Defines the interface for MFC CView and CDocument derived wrapper class
          edit control (www.scintilla.org)
 Created: PJN / 19-03-2004
 
-Copyright (c) 2004 - 2009 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
+Copyright (c) 2004 - 2010 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
 
 All rights reserved.
 
@@ -44,8 +44,8 @@ to maintain a single distribution point for the source code.
 
 class SCINTILLADOCVIEW_EXT_CLASS CScintillaFindReplaceDlg : public CFindReplaceDialog
 {
-	DialogTemplate templ_;
-	bool find_only_;
+  DialogTemplate templ_;
+  bool find_only_;
 
 public:
 //Constructors / Destructors

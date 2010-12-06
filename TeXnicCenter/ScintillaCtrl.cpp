@@ -106,6 +106,14 @@ History: PJN / 19-03-2004 1. Initial implementation synchronized to the v1.59 re
                           SCI_GETRECTANGULARSELECTIONMODIFIER, SCI_SETADDITIONALSELFORE, SCI_SETADDITIONALSELBACK, SCI_SETADDITIONALSELALPHA, 
                           SCI_GETADDITIONALSELALPHA, SCI_SETADDITIONALCARETFORE, SCI_GETADDITIONALCARETFORE, SCI_ROTATESELECTION &
                           SCI_SWAPMAINANCHORCARET
+         PJN / 22-11-2010 1. Updated copyright details.
+                          2. Updated sample app to clean compile on VC 2010
+                          3. Updated class to work with Scintilla v2.22. New messages wrapped include:
+                          SCI_SETWHITESPACESIZE, SCI_GETWHITESPACESIZE, SCI_SETFONTQUALITY, SCI_GETFONTQUALITY, SCI_SETFIRSTVISIBLELINE, 
+                          SCI_SETMULTIPASTE, SCI_GETMULTIPASTE, SCI_GETTAG, SCI_AUTOCGETCURRENTTEXT, SCI_SETADDITIONALCARETSVISIBLE,
+                          SCI_GETADDITIONALCARETSVISIBLE, SCI_CHANGELEXERSTATE, SCI_CONTRACTEDFOLDNEXT, SCI_VERTICALCENTRECARET,
+                          SCI_GETLEXERLANGUAGE, SCI_PRIVATELEXERCALL, SCI_PROPERTYNAMES, SCI_PROPERTYTYPE, SCI_DESCRIBEPROPERTY, 
+                          SCI_DESCRIBEKEYWORDSETS. Also there were some parameter changes to existing messages.
 
 Copyright (c) 2004 - 2009 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
 
@@ -627,7 +635,103 @@ void CScintillaCtrl::AnnotationSetStyles(int line, const wchar_t* styles, BOOL b
   AnnotationSetStyles(line, sUTF8, bDirect);
 }
 
+CStringW CScintillaCtrl::AutoCGetCurrentText(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nUTF8Length = AutoCGetCurrentText(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sUTF8;
+  AutoCGetCurrentText(sUTF8.GetBufferSetLength(nUTF8Length), bDirect);
+  sUTF8.ReleaseBuffer();
+
+  //Now convert the UTF8 text back to Unicode
+  return UTF82W(sUTF8, -1);
+}
+
+CStringW CScintillaCtrl::GetLexerLanguage(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nUTF8Length = GetLexerLanguage(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sUTF8;
+  GetLexerLanguage(sUTF8.GetBufferSetLength(nUTF8Length), bDirect);
+  sUTF8.ReleaseBuffer();
+
+  //Now convert the UTF8 text back to Unicode
+  return UTF82W(sUTF8, -1);
+}
+
+CStringW CScintillaCtrl::PropertyNames(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nUTF8Length = PropertyNames(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sUTF8;
+  PropertyNames(sUTF8.GetBufferSetLength(nUTF8Length), bDirect);
+  sUTF8.ReleaseBuffer();
+
+  //Now convert the UTF8 text back to Unicode
+  return UTF82W(sUTF8, -1);
+}
+
+int CScintillaCtrl::PropertyType(const wchar_t* name, BOOL bDirect)
+{
+  //Convert the unicode text to UTF8
+  CStringA sUTF8(W2UTF8(name, -1));
+
+  //Call the native scintilla version of the function with the UTF8 text
+  return PropertyType(sUTF8, bDirect);
+}
+
+CStringW CScintillaCtrl::DescribeProperty(const wchar_t* name, BOOL bDirect)
+{
+  //Convert the name value to UTF8
+  CStringA sUTF8KName(W2UTF8(name, -1));
+
+  //Work out the length of string to allocate
+  int nUTF8Length = DescribeProperty(sUTF8KName, NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sUTF8;
+  DescribeProperty(sUTF8KName, sUTF8.GetBufferSetLength(nUTF8Length), bDirect);
+  sUTF8.ReleaseBuffer();
+
+  //Now convert the UTF8 text back to Unicode
+  return UTF82W(sUTF8, -1);
+}
+
+CStringW CScintillaCtrl::DescribeKeyWordSets(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nUTF8Length = DescribeKeyWordSets(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sUTF8;
+  DescribeKeyWordSets(sUTF8.GetBufferSetLength(nUTF8Length), bDirect);
+  sUTF8.ReleaseBuffer();
+
+  //Now convert the UTF8 text back to Unicode
+  return UTF82W(sUTF8, -1);
+}
+
+CStringW CScintillaCtrl::GetTag(int tagNumber, BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nUTF8Length = GetTag(tagNumber, NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sUTF8;
+  GetTag(tagNumber, sUTF8.GetBufferSetLength(nUTF8Length), bDirect);
+  sUTF8.ReleaseBuffer();
+  
+  return UTF82W(sUTF8, -1);
+}
+
 #else
+
 CStringA CScintillaCtrl::GetSelText(BOOL bDirect)
 {
   //Work out the length of string to allocate
@@ -670,7 +774,7 @@ CStringA CScintillaCtrl::GetProperty(const char* key, BOOL bDirect)
   ASSERT(key);
 
   //Work out the length of string to allocate
-  int nValueLength = GetProperty(key, 0, bDirect);
+  int nValueLength = GetProperty(key, NULL, bDirect);
 
   //Call the function which does the work
   CStringA sValue;
@@ -696,7 +800,7 @@ CStringA CScintillaCtrl::GetPropertyExpanded(const char* key, BOOL bDirect)
   ASSERT(key);
 
   //Work out the length of string to allocate
-  int nValueLength = GetPropertyExpanded(key, 0, bDirect);
+  int nValueLength = GetPropertyExpanded(key, NULL, bDirect);
 
   //Call the function which does the work
   CStringA sValue;
@@ -720,6 +824,85 @@ CStringA CScintillaCtrl::StyleGetFont(int style, BOOL bDirect)
 
   return szFontName;
 }
+
+CStringA CScintillaCtrl::AutoCGetCurrentText(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nLength = AutoCGetCurrentText(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sText;
+  AutoCGetCurrentText(sText.GetBufferSetLength(nLength), bDirect);
+  sText.ReleaseBuffer();
+
+  return sText;
+}
+
+CStringA CScintillaCtrl::GetLexerLanguage(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nValueLength = GetLexerLanguage(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sLanguage;
+  GetLexerLanguage(sLanguage.GetBufferSetLength(nValueLength), bDirect);
+  sLanguage.ReleaseBuffer();
+
+  return sLanguage;
+}
+
+CStringA CScintillaCtrl::PropertyNames(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nValueLength = PropertyNames(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sPropertyNames;
+  PropertyNames(sPropertyNames.GetBufferSetLength(nValueLength), bDirect);
+  sPropertyNames.ReleaseBuffer();
+
+  return sPropertyNames;
+}
+
+CStringA CScintillaCtrl::DescribeProperty(const char* name, BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nValueLength = DescribeProperty(name, NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sDescribeProperty;
+  DescribeProperty(name, sDescribeProperty.GetBufferSetLength(nValueLength), bDirect);
+  sDescribeProperty.ReleaseBuffer();
+
+  return sDescribeProperty;
+}
+
+CStringA CScintillaCtrl::DescribeKeyWordSets(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nValueLength = DescribeKeyWordSets(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sDescribeKeyWordSets;
+  DescribeKeyWordSets(sDescribeKeyWordSets.GetBufferSetLength(nValueLength), bDirect);
+  sDescribeKeyWordSets.ReleaseBuffer();
+
+  return sDescribeKeyWordSets;
+}
+
+CStringA CScintillaCtrl::GetTag(int tagNumber, BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nValueLength = GetTag(tagNumber, NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sTag;
+  GetTag(tagNumber, sTag.GetBufferSetLength(nValueLength), bDirect);
+  sTag.ReleaseBuffer();
+
+  return sTag;
+}
+
 #endif //#ifdef _UNICODE
 
 
@@ -1273,6 +1456,16 @@ void CScintillaCtrl::SetWhitespaceFore(BOOL useSetting, COLORREF fore, BOOL bDir
 void CScintillaCtrl::SetWhitespaceBack(BOOL useSetting, COLORREF back, BOOL bDirect)
 {
   Call(SCI_SETWHITESPACEBACK, static_cast<WPARAM>(useSetting), static_cast<LPARAM>(back), bDirect);
+}
+
+void CScintillaCtrl::SetWhitespaceSize(int size, BOOL bDirect)
+{
+  Call(SCI_SETWHITESPACESIZE, static_cast<WPARAM>(size), 0, bDirect);
+}
+
+int CScintillaCtrl::GetWhitespaceSize(BOOL bDirect)
+{
+  return Call(SCI_GETWHITESPACESIZE, 0, 0, bDirect);
 }
 
 void CScintillaCtrl::SetStyleBits(int bits, BOOL bDirect)
@@ -2135,6 +2328,36 @@ void CScintillaCtrl::SetTwoPhaseDraw(BOOL twoPhase, BOOL bDirect)
   Call(SCI_SETTWOPHASEDRAW, static_cast<WPARAM>(twoPhase), 0, bDirect);
 }
 
+void CScintillaCtrl::SetFontQuality(int fontQuality, BOOL bDirect)
+{
+  Call(SCI_SETFONTQUALITY, static_cast<WPARAM>(fontQuality), 0, bDirect);
+}
+
+int CScintillaCtrl::GetFontQuality(BOOL bDirect)
+{
+  return Call(SCI_GETFONTQUALITY, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetFirstVisibleLine(int lineDisplay, BOOL bDirect)
+{
+  Call(SCI_SETFIRSTVISIBLELINE, static_cast<WPARAM>(lineDisplay), 0, bDirect);
+}
+
+void CScintillaCtrl::SetMultiPaste(int multiPaste, BOOL bDirect)
+{
+  Call(SCI_SETMULTIPASTE, static_cast<WPARAM>(multiPaste), 0, bDirect);
+}
+
+int CScintillaCtrl::GetMultiPaste(BOOL bDirect)
+{
+  return Call(SCI_GETMULTIPASTE, 0, 0, bDirect);
+}
+
+int CScintillaCtrl::GetTag(int tagNumber, char* tagValue, BOOL bDirect)
+{
+  return Call(SCI_GETTAG, static_cast<WPARAM>(tagNumber), reinterpret_cast<LPARAM>(tagValue), bDirect);
+}
+
 void CScintillaCtrl::TargetFromSelection(BOOL bDirect)
 {
   Call(SCI_TARGETFROMSELECTION, 0, 0, bDirect);
@@ -2915,6 +3138,11 @@ int CScintillaCtrl::AutoCGetCurrent(BOOL bDirect)
   return Call(SCI_AUTOCGETCURRENT, 0, 0, bDirect);
 }
 
+int CScintillaCtrl::AutoCGetCurrentText(char* s, BOOL bDirect)
+{
+  return Call(SCI_AUTOCGETCURRENTTEXT, 0, reinterpret_cast<LPARAM>(s), bDirect);
+}
+
 void CScintillaCtrl::Allocate(int bytes, BOOL bDirect)
 {
   Call(SCI_ALLOCATE, static_cast<WPARAM>(bytes), 0, bDirect);
@@ -2940,12 +3168,12 @@ int CScintillaCtrl::FindColumn(int line, int column, BOOL bDirect)
   return Call(SCI_FINDCOLUMN, static_cast<WPARAM>(line), static_cast<LPARAM>(column), bDirect);
 }
 
-BOOL CScintillaCtrl::GetCaretSticky(BOOL bDirect)
+int CScintillaCtrl::GetCaretSticky(BOOL bDirect)
 {
   return Call(SCI_GETCARETSTICKY, 0, 0, bDirect);
 }
 
-void CScintillaCtrl::SetCaretSticky(BOOL useCaretStickyBehaviour, BOOL bDirect)
+void CScintillaCtrl::SetCaretSticky(int useCaretStickyBehaviour, BOOL bDirect)
 {
   Call(SCI_SETCARETSTICKY, static_cast<WPARAM>(useCaretStickyBehaviour), 0, bDirect);
 }
@@ -3055,9 +3283,9 @@ void CScintillaCtrl::CopyAllowLine(BOOL bDirect)
   Call(SCI_COPYALLOWLINE, 0, 0, bDirect);
 }
 
-LRESULT CScintillaCtrl::GetCharacterPointer(BOOL bDirect)
+const char* CScintillaCtrl::GetCharacterPointer(BOOL bDirect)
 {
-  return Call(SCI_GETCHARACTERPOINTER, 0, 0, bDirect);
+  return reinterpret_cast<const char*>(Call(SCI_GETCHARACTERPOINTER, 0, 0, bDirect));
 }
 
 void CScintillaCtrl::SetKeysUnicode(BOOL keysUnicode, BOOL bDirect)
@@ -3255,6 +3483,16 @@ BOOL CScintillaCtrl::GetAdditionalCaretsBlink(BOOL bDirect)
   return Call(SCI_GETADDITIONALCARETSBLINK, 0, 0, bDirect);
 }
 
+void CScintillaCtrl::SetAdditionalCaretsVisible(BOOL additionalCaretsBlink, BOOL bDirect)
+{
+  Call(SCI_SETADDITIONALCARETSVISIBLE, static_cast<WPARAM>(additionalCaretsBlink), 0, bDirect);
+}
+
+BOOL CScintillaCtrl::GetAdditionalCaretsVisible(BOOL bDirect)
+{
+  return Call(SCI_GETADDITIONALCARETSVISIBLE, 0, 0, bDirect);
+}
+
 int CScintillaCtrl::GetSelections(BOOL bDirect)
 {
   return Call(SCI_GETSELECTIONS, 0, 0, bDirect);
@@ -3330,9 +3568,9 @@ void CScintillaCtrl::SetSelectionNStart(int selection, long pos, BOOL bDirect)
   Call(SCI_SETSELECTIONNSTART, static_cast<WPARAM>(selection), static_cast<LPARAM>(pos), bDirect);
 }
 
-long CScintillaCtrl::GetSelectionNStart(BOOL bDirect)
+long CScintillaCtrl::GetSelectionNStart(int selection, BOOL bDirect)
 {
-  return Call(SCI_GETSELECTIONNSTART, 0, 0, bDirect);
+  return Call(SCI_GETSELECTIONNSTART, static_cast<WPARAM>(selection), 0, bDirect);
 }
 
 void CScintillaCtrl::SetSelectionNEnd(int selection, long pos, BOOL bDirect)
@@ -3340,9 +3578,9 @@ void CScintillaCtrl::SetSelectionNEnd(int selection, long pos, BOOL bDirect)
   Call(SCI_SETSELECTIONNEND, static_cast<WPARAM>(selection), static_cast<LPARAM>(pos), bDirect);
 }
 
-long CScintillaCtrl::GetSelectionNEnd(BOOL bDirect)
+long CScintillaCtrl::GetSelectionNEnd(int selection, BOOL bDirect)
 {
-  return Call(SCI_GETSELECTIONNEND, 0, 0, bDirect);
+  return Call(SCI_GETSELECTIONNEND, static_cast<WPARAM>(selection), 0, bDirect);
 }
 
 void CScintillaCtrl::SetRectangularSelectionCaret(long pos, BOOL bDirect)
@@ -3445,6 +3683,21 @@ void CScintillaCtrl::SwapMainAnchorCaret(BOOL bDirect)
   Call(SCI_SWAPMAINANCHORCARET, 0, 0, bDirect);
 }
 
+int CScintillaCtrl::ChangeLexerState(long start, long end, BOOL bDirect)
+{
+  return Call(SCI_CHANGELEXERSTATE, static_cast<WPARAM>(start), static_cast<LPARAM>(end), bDirect);
+}
+
+int CScintillaCtrl::ContractedFoldNext(int lineStart, BOOL bDirect)
+{
+  return Call(SCI_CONTRACTEDFOLDNEXT, static_cast<WPARAM>(lineStart), 0, bDirect);
+}
+
+void CScintillaCtrl::VerticalCentreCaret(BOOL bDirect)
+{
+  Call(SCI_VERTICALCENTRECARET, 0, 0, bDirect);
+}
+
 void CScintillaCtrl::StartRecord(BOOL bDirect)
 {
   Call(SCI_STARTRECORD, 0, 0, bDirect);
@@ -3510,7 +3763,37 @@ int CScintillaCtrl::GetStyleBitsNeeded(BOOL bDirect)
   return Call(SCI_GETSTYLEBITSNEEDED, 0, 0, bDirect);
 }
 
-void CScintillaCtrl::ShowCursor( bool show, bool direct /*= true*/ )
+int CScintillaCtrl::GetLexerLanguage(char* text, BOOL bDirect)
 {
-	Call(SCI_SHOWCURSOR, show, 0, direct);
+  return Call(SCI_GETLEXERLANGUAGE, 0, reinterpret_cast<LPARAM>(text), bDirect);
+}
+
+int CScintillaCtrl::PrivateLexerCall(int operation, int pointer, BOOL bDirect)
+{
+  return Call(SCI_PRIVATELEXERCALL, static_cast<WPARAM>(operation), static_cast<LPARAM>(pointer), bDirect);
+}
+
+int CScintillaCtrl::PropertyNames(char* names, BOOL bDirect)
+{
+  return Call(SCI_PROPERTYNAMES, 0, reinterpret_cast<LPARAM>(names), bDirect);
+}
+
+int CScintillaCtrl::PropertyType(const char* name, BOOL bDirect)
+{
+  return Call(SCI_PROPERTYTYPE, reinterpret_cast<WPARAM>(name), 0, bDirect);
+}
+
+int CScintillaCtrl::DescribeProperty(const char* name, char* description, BOOL bDirect)
+{
+  return Call(SCI_DESCRIBEPROPERTY, reinterpret_cast<WPARAM>(name), reinterpret_cast<LPARAM>(description), bDirect);
+}
+
+int CScintillaCtrl::DescribeKeyWordSets(char* descriptions, BOOL bDirect)
+{
+  return Call(SCI_DESCRIBEKEYWORDSETS, 0, reinterpret_cast<LPARAM>(descriptions), bDirect);
+}
+
+void CScintillaCtrl::ShowCursor(bool show, bool direct /*= true*/)
+{
+  Call(SCI_SHOWCURSOR, show, 0, direct);
 }
