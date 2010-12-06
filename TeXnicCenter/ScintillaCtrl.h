@@ -3,7 +3,7 @@ Module : ScintillaCtrl.h
 Purpose: Defines the interface for an MFC wrapper class for the Scintilla edit control (www.scintilla.org)
 Created: PJN / 19-03-2004
 
-Copyright (c) 2004 - 2009 by PJ Naughter.  (Web: www.naughter.com, Email: pjna@naughter.com)
+Copyright (c) 2004 - 2010 by PJ Naughter.  (Web: www.naughter.com, Email: pjna@naughter.com)
 
 All rights reserved.
 
@@ -96,6 +96,13 @@ public:
   //Note we do not have a AnnotationGetText method as Scintilla does not provide a way of a priori working out a valid length of a UTF8 buffer for SCI_ANNOTATIONGETTEXT
   void AnnotationSetStyles(int line, const wchar_t* styles, BOOL bDirect = TRUE);
   //Note we do not have a AnnotationGetStyles method as Scintilla does not provide a way of a priori working out a valid length of a UTF8 buffer for SCI_ANNOTATIONGETSTYLES
+  CStringW AutoCGetCurrentText(BOOL bDirect = TRUE);
+  CStringW GetLexerLanguage(BOOL bDirect = TRUE);
+  CStringW PropertyNames(BOOL bDirect = TRUE);
+  int PropertyType(const wchar_t* name, BOOL bDirect = TRUE);
+  CStringW DescribeProperty(const wchar_t* name, BOOL bDirect = TRUE);
+  CStringW DescribeKeyWordSets(BOOL bDirect = TRUE);
+  CStringW GetTag(int tagNumber, BOOL bDirect = TRUE);
 
   static CStringW UTF82W(const char* pszText, int nLength);
 #ifdef _UNICODE
@@ -109,6 +116,12 @@ public:
   CStringA GetText(int length, BOOL bDirect = TRUE);
   CStringA GetPropertyExpanded(const char* key, BOOL bDirect = TRUE);
   CStringA StyleGetFont(int style, BOOL bDirect = TRUE);
+  CStringA AutoCGetCurrentText(BOOL bDirect = TRUE);
+  CStringA GetLexerLanguage(BOOL bDirect = TRUE);
+  CStringA PropertyNames(BOOL bDirect = TRUE);
+  CStringA DescribeProperty(const char* name, BOOL bDirect = TRUE);
+  CStringA DescribeKeyWordSets(BOOL bDirect = TRUE);
+  CStringA GetTag(int tagNumber, BOOL bDirect = TRUE);
 #endif
 
 //Auto generated using the "ConvertScintillaiface.js" script
@@ -222,6 +235,8 @@ public:
   BOOL IndicGetUnder(int indic, BOOL bDirect = TRUE);
   void SetWhitespaceFore(BOOL useSetting, COLORREF fore, BOOL bDirect = TRUE);
   void SetWhitespaceBack(BOOL useSetting, COLORREF back, BOOL bDirect = TRUE);
+  void SetWhitespaceSize(int size, BOOL bDirect = TRUE);
+  int GetWhitespaceSize(BOOL bDirect = TRUE);
   void SetStyleBits(int bits, BOOL bDirect = TRUE);
   int GetStyleBits(BOOL bDirect = TRUE);
   void SetLineState(int line, int state, BOOL bDirect = TRUE);
@@ -394,6 +409,12 @@ public:
   void AppendText(int length, const char* text, BOOL bDirect = TRUE);
   BOOL GetTwoPhaseDraw(BOOL bDirect = TRUE);
   void SetTwoPhaseDraw(BOOL twoPhase, BOOL bDirect = TRUE);
+  void SetFontQuality(int fontQuality, BOOL bDirect = TRUE);
+  int GetFontQuality(BOOL bDirect = TRUE);
+  void SetFirstVisibleLine(int lineDisplay, BOOL bDirect = TRUE);
+  void SetMultiPaste(int multiPaste, BOOL bDirect = TRUE);
+  int GetMultiPaste(BOOL bDirect = TRUE);
+  int GetTag(int tagNumber, char* tagValue, BOOL bDirect = TRUE);
   void TargetFromSelection(BOOL bDirect = TRUE);
   void LinesJoin(BOOL bDirect = TRUE);
   void LinesSplit(int pixelWidth, BOOL bDirect = TRUE);
@@ -511,9 +532,9 @@ public:
   void SetPrintWrapMode(int mode, BOOL bDirect = TRUE);
   int GetPrintWrapMode(BOOL bDirect = TRUE);
   void SetHotspotActiveFore(BOOL useSetting, COLORREF fore, BOOL bDirect = TRUE);
-  COLORREF GetHotspotActiveFore(BOOL bDirect = TRUE);  
+  COLORREF GetHotspotActiveFore(BOOL bDirect = TRUE);
   void SetHotspotActiveBack(BOOL useSetting, COLORREF back, BOOL bDirect = TRUE);
-  COLORREF GetHotspotActiveBack(BOOL bDirect = TRUE);  
+  COLORREF GetHotspotActiveBack(BOOL bDirect = TRUE);
   void SetHotspotActiveUnderline(BOOL underline, BOOL bDirect = TRUE);
   BOOL GetHotspotActiveUnderline(BOOL bDirect = TRUE);
   void SetHotspotSingleLine(BOOL singleLine, BOOL bDirect = TRUE);
@@ -550,13 +571,14 @@ public:
   void SetWhitespaceChars(const char* characters, BOOL bDirect = TRUE);
   void SetCharsDefault(BOOL bDirect = TRUE);
   int AutoCGetCurrent(BOOL bDirect = TRUE);
+  int AutoCGetCurrentText(char* s, BOOL bDirect = TRUE);
   void Allocate(int bytes, BOOL bDirect = TRUE);
   int TargetAsUTF8(char* s, BOOL bDirect = TRUE);
   void SetLengthForEncode(int bytes, BOOL bDirect = TRUE);
   int EncodedFromUTF8(const char* utf8, char* encoded, BOOL bDirect = TRUE);
   int FindColumn(int line, int column, BOOL bDirect = TRUE);
-  BOOL GetCaretSticky(BOOL bDirect = TRUE);
-  void SetCaretSticky(BOOL useCaretStickyBehaviour, BOOL bDirect = TRUE);
+  int GetCaretSticky(BOOL bDirect = TRUE);
+  void SetCaretSticky(int useCaretStickyBehaviour, BOOL bDirect = TRUE);
   void ToggleCaretSticky(BOOL bDirect = TRUE);
   void SetPasteConvertEndings(BOOL convert, BOOL bDirect = TRUE);
   BOOL GetPasteConvertEndings(BOOL bDirect = TRUE);
@@ -578,7 +600,7 @@ public:
   void SetPositionCache(int size, BOOL bDirect = TRUE);
   int GetPositionCache(BOOL bDirect = TRUE);
   void CopyAllowLine(BOOL bDirect = TRUE);
-  LRESULT GetCharacterPointer(BOOL bDirect = TRUE);
+  const char* GetCharacterPointer(BOOL bDirect = TRUE);
   void SetKeysUnicode(BOOL keysUnicode, BOOL bDirect = TRUE);
   BOOL GetKeysUnicode(BOOL bDirect = TRUE);
   void IndicSetAlpha(int indicator, int alpha, BOOL bDirect = TRUE);
@@ -618,6 +640,8 @@ public:
   BOOL GetAdditionalSelectionTyping(BOOL bDirect = TRUE);
   void SetAdditionalCaretsBlink(BOOL additionalCaretsBlink, BOOL bDirect = TRUE);
   BOOL GetAdditionalCaretsBlink(BOOL bDirect = TRUE);
+  void SetAdditionalCaretsVisible(BOOL additionalCaretsBlink, BOOL bDirect = TRUE);
+  BOOL GetAdditionalCaretsVisible(BOOL bDirect = TRUE);
   int GetSelections(BOOL bDirect = TRUE);
   void ClearSelections(BOOL bDirect = TRUE);
   int SetSelection(int caret, int anchor, BOOL bDirect = TRUE);
@@ -633,9 +657,9 @@ public:
   void SetSelectionNAnchorVirtualSpace(int selection, int space, BOOL bDirect = TRUE);
   int GetSelectionNAnchorVirtualSpace(int selection, BOOL bDirect = TRUE);
   void SetSelectionNStart(int selection, long pos, BOOL bDirect = TRUE);
-  long GetSelectionNStart(BOOL bDirect = TRUE);
+  long GetSelectionNStart(int selection, BOOL bDirect = TRUE);
   void SetSelectionNEnd(int selection, long pos, BOOL bDirect = TRUE);
-  long GetSelectionNEnd(BOOL bDirect = TRUE);
+  long GetSelectionNEnd(int selection, BOOL bDirect = TRUE);
   void SetRectangularSelectionCaret(long pos, BOOL bDirect = TRUE);
   long GetRectangularSelectionCaret(BOOL bDirect = TRUE);
   void SetRectangularSelectionAnchor(long posAnchor, BOOL bDirect = TRUE);
@@ -656,6 +680,9 @@ public:
   COLORREF GetAdditionalCaretFore(BOOL bDirect = TRUE);
   void RotateSelection(BOOL bDirect = TRUE);
   void SwapMainAnchorCaret(BOOL bDirect = TRUE);
+  int ChangeLexerState(long start, long end, BOOL bDirect = TRUE);
+  int ContractedFoldNext(int lineStart, BOOL bDirect = TRUE);
+  void VerticalCentreCaret(BOOL bDirect = TRUE);
   void StartRecord(BOOL bDirect = TRUE);
   void StopRecord(BOOL bDirect = TRUE);
   void SetLexer(int lexer, BOOL bDirect = TRUE);
@@ -669,6 +696,12 @@ public:
   int GetPropertyExpanded(const char* key, char* buf, BOOL bDirect = TRUE);
   int GetPropertyInt(const char* key, BOOL bDirect = TRUE);
   int GetStyleBitsNeeded(BOOL bDirect = TRUE);
+  int GetLexerLanguage(char* text, BOOL bDirect = TRUE);
+  int PrivateLexerCall(int operation, int pointer, BOOL bDirect = TRUE);
+  int PropertyNames(char* names, BOOL bDirect = TRUE);
+  int PropertyType(const char* name, BOOL bDirect = TRUE);
+  int DescribeProperty(const char* name, char* description, BOOL bDirect = TRUE);
+  int DescribeKeyWordSets(char* descriptions, BOOL bDirect = TRUE);
   void ShowCursor(bool show, bool direct = true);
 
 protected:
