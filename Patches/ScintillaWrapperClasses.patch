@@ -1,23 +1,24 @@
-diff -dru --strip-trailing-cr original/ScintillaCtrl.cpp modified/ScintillaCtrl.cpp
---- original/ScintillaCtrl.cpp	2009-10-03 22:30:44.773000000 +0200
-+++ modified/ScintillaCtrl.cpp	2010-04-10 21:02:54.874023400 +0200
-@@ -3510,6 +3510,7 @@
-   return Call(SCI_GETSTYLEBITSNEEDED, 0, 0, bDirect);
+# HG changeset patch
+# User Sergiu Dotenco
+Use default OS font and support Scintilla additions
+
+diff --git a/TeXnicCenter/ScintillaCtrl.cpp b/TeXnicCenter/ScintillaCtrl.cpp
+--- a/TeXnicCenter/ScintillaCtrl.cpp
++++ b/TeXnicCenter/ScintillaCtrl.cpp
+@@ -3792,3 +3792,8 @@
+ {
+   return Call(SCI_DESCRIBEKEYWORDSETS, 0, reinterpret_cast<LPARAM>(descriptions), bDirect);
  }
- 
--
--
--
-+void CScintillaCtrl::ShowCursor( bool show, bool direct /*= true*/ )
++
++void CScintillaCtrl::ShowCursor(bool show, bool direct /*= true*/)
 +{
-+	Call(SCI_SHOWCURSOR, show, 0, direct);
++  Call(SCI_SHOWCURSOR, show, 0, direct);
 +}
-\ Kein Zeilenumbruch am Dateiende.
-diff -dru --strip-trailing-cr original/ScintillaCtrl.h modified/ScintillaCtrl.h
---- original/ScintillaCtrl.h	2009-10-03 22:27:32.149000000 +0200
-+++ modified/ScintillaCtrl.h	2010-04-10 21:05:10.605468700 +0200
-@@ -98,7 +98,9 @@
-   //Note we do not have a AnnotationGetStyles method as Scintilla does not provide a way of a priori working out a valid length of a UTF8 buffer for SCI_ANNOTATIONGETSTYLES
+diff --git a/TeXnicCenter/ScintillaCtrl.h b/TeXnicCenter/ScintillaCtrl.h
+--- a/TeXnicCenter/ScintillaCtrl.h
++++ b/TeXnicCenter/ScintillaCtrl.h
+@@ -105,7 +105,9 @@
+   CStringW GetTag(int tagNumber, BOOL bDirect = TRUE);
  
    static CStringW UTF82W(const char* pszText, int nLength);
 +#ifdef _UNICODE
@@ -26,17 +27,17 @@ diff -dru --strip-trailing-cr original/ScintillaCtrl.h modified/ScintillaCtrl.h
  #else
    CStringA GetSelText(BOOL bDirect = TRUE);
    CStringA GetCurLine(BOOL bDirect = TRUE);
-@@ -667,6 +669,7 @@
-   int GetPropertyExpanded(const char* key, char* buf, BOOL bDirect = TRUE);
-   int GetPropertyInt(const char* key, BOOL bDirect = TRUE);
-   int GetStyleBitsNeeded(BOOL bDirect = TRUE);
+@@ -700,6 +702,7 @@
+   int PropertyType(const char* name, BOOL bDirect = TRUE);
+   int DescribeProperty(const char* name, char* description, BOOL bDirect = TRUE);
+   int DescribeKeyWordSets(char* descriptions, BOOL bDirect = TRUE);
 +  void ShowCursor(bool show, bool direct = true);
  
  protected:
    DECLARE_DYNAMIC(CScintillaCtrl)
-diff -dru --strip-trailing-cr original/ScintillaDocView.cpp modified/ScintillaDocView.cpp
---- original/ScintillaDocView.cpp	2009-06-05 02:01:49.153000000 +0200
-+++ modified/ScintillaDocView.cpp	2010-09-09 05:08:00.127929600 +0200
+diff --git a/TeXnicCenter/ScintillaDocView.cpp b/TeXnicCenter/ScintillaDocView.cpp
+--- a/TeXnicCenter/ScintillaDocView.cpp
++++ b/TeXnicCenter/ScintillaDocView.cpp
 @@ -112,6 +112,8 @@
  #endif
  #include "resource.h"
@@ -52,7 +53,7 @@ diff -dru --strip-trailing-cr original/ScintillaDocView.cpp modified/ScintillaDo
  
 +CScintillaFindReplaceDlg* CScintillaFindReplaceDlg::GetFindReplaceDlg()
 +{
-+	return _scintillaEditState.pFindReplaceDlg;
++  return _scintillaEditState.pFindReplaceDlg;
 +}
  
  BEGIN_MESSAGE_MAP(CScintillaFindReplaceDlg, CFindReplaceDialog)
@@ -188,16 +189,16 @@ diff -dru --strip-trailing-cr original/ScintillaDocView.cpp modified/ScintillaDo
    }
  }
  
-+void CScintillaView::GetReplaceAllTarget( long& s, long& e )
++void CScintillaView::GetReplaceAllTarget(long& s, long& e)
 +{
-+	s = 0; e = GetCtrl().GetLength();
++  s = 0; e = GetCtrl().GetLength();
 +}
  
  IMPLEMENT_DYNAMIC(CScintillaDoc, CDocument)
  
-diff -dru --strip-trailing-cr original/ScintillaDocView.h modified/ScintillaDocView.h
---- original/ScintillaDocView.h	2009-06-05 02:01:49.146000000 +0200
-+++ modified/ScintillaDocView.h	2010-04-10 20:49:58.470703100 +0200
+diff --git a/TeXnicCenter/ScintillaDocView.h b/TeXnicCenter/ScintillaDocView.h
+--- a/TeXnicCenter/ScintillaDocView.h
++++ b/TeXnicCenter/ScintillaDocView.h
 @@ -28,6 +28,7 @@
  
  
@@ -210,8 +211,8 @@ diff -dru --strip-trailing-cr original/ScintillaDocView.h modified/ScintillaDocV
  
  class SCINTILLADOCVIEW_EXT_CLASS CScintillaFindReplaceDlg : public CFindReplaceDialog
  {
-+	DialogTemplate templ_;
-+	bool find_only_;
++  DialogTemplate templ_;
++  bool find_only_;
 +
  public:
  //Constructors / Destructors
