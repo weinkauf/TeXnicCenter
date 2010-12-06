@@ -1044,13 +1044,6 @@ void CodeView::OnModified(SCNotification* n)
 {
 	CScintillaView::OnModified(n);
 
-	CodeDocument* doc = GetDocument();
-
-	if (!GetCtrl().CanUndo())
-		doc->SetModifiedFlag(FALSE);
-	else if (doc->IsModified())
-		doc->SetModifiedFlag();
-
 	// Update the last changed position only if text has been inserted or deleted
 	if (n->modificationType & (SC_MOD_INSERTTEXT|SC_MOD_DELETETEXT))
 		last_change_pos_ = GetCtrl().GetCurrentPos();
@@ -1352,6 +1345,16 @@ void CodeView::UpdateFoldSettings()
 void CodeView::UpdateFoldMargin()
 {
     EnableFoldMargin(CConfiguration::GetInstance()->IsFoldingEnabled());
+}
+
+void CodeView::OnSavePointLeft(SCNotification* /*n*/)
+{
+	GetDocument()->MarkTitleAsModified(true);
+}
+
+void CodeView::OnSavePointReached(SCNotification* /*n*/)
+{
+	GetDocument()->MarkTitleAsModified(false);
 }
 
 #pragma pop_macro("max")

@@ -201,6 +201,8 @@ protected:
 	afx_msg void OnEditGotoLastChange();
 	afx_msg void OnUpdateEditGotoLastChange(CCmdUI *pCmdUI);
 	void OnModified(SCNotification* n);
+	void OnSavePointLeft(SCNotification* n);
+	void OnSavePointReached(SCNotification* n);
 	afx_msg void OnViewIndentationGuides();
 	afx_msg void OnUpdateViewIndentationGuides(CCmdUI *pCmdUI);
 	afx_msg void OnEditSelBiggerBlock();
