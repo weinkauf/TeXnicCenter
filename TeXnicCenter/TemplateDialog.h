@@ -39,6 +39,10 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include <map>
+#include <vector>
+#include <memory>
+
 /** @addtogroup templates
         @{
  */
@@ -67,7 +71,7 @@ public:
 	        Image list, the index returned by GetImageIndex() references to.
 
 	@return
-	        Nonzero if successfull, FALSE otherwise.
+	        Nonzero if successful, FALSE otherwise.
 	 */
 	virtual BOOL InitItem(LPCTSTR lpszPath,CImageList &ImageList32,CImageList &ImageList16) = 0;
 
@@ -86,9 +90,7 @@ public:
 
 
 /** An array of template items */
-typedef CArray<CTemplateItem*,CTemplateItem*> CTemplateItemArray;
-
-void AFXAPI DestructElements(CTemplateItem **pElements,int nCount);
+typedef std::vector<std::unique_ptr<CTemplateItem> > CTemplateItemArray;
 
 /**
 Dialog for creating new elements based on template files.
@@ -128,7 +130,7 @@ public:
 	/**
 	Adds the specified item to the specified category (tab).
 	 */
-	void AddTemplateItem(LPCTSTR lpszCategory,CTemplateItem *pItem);
+	void AddTemplateItem(LPCTSTR lpszCategory, std::unique_ptr<CTemplateItem>&& pItem);
 
 // implementation helpers
 protected:
@@ -235,7 +237,9 @@ private:
 	CStringArray m_astrSearchPaths;
 
 	/** Stores all files by their subdirectories, the key is the subdirectory. */
-	CMap<CString,LPCTSTR,CTemplateItemArray*,CTemplateItemArray*> m_mapSubdirToTemplates;
+	typedef std::map<CString, CTemplateItemArray> StringTemplateItemArrayMap; 
+	
+	StringTemplateItemArrayMap m_mapSubdirToTemplates;
 
 	/** Image list for the template list (large icons) */
 	CImageList m_ImageList32;
@@ -243,8 +247,6 @@ private:
 	/** Image list for the template list (small icons) */
 	CImageList m_ImageList16;
 };
-
-void AFXAPI DestructElements(CTemplateItemArray* *pElements,int nCount);
 
 /** @} */
 

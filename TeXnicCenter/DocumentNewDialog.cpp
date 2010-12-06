@@ -332,9 +332,9 @@ CDocumentNewDialog::CDocumentNewDialog(CWnd* pParent /*=NULL*/)
 	//}}AFX_DATA_INIT
 
 	//Add template for empty project
-	CTemplateItem *pItem = new CEmptyDocumentTemplateItem;
-	if (pItem)
-		AddTemplateItem(CString((LPCTSTR) STE_EMPTYDOCUMENT_CATEGORY),pItem);
+	std::unique_ptr<CTemplateItem> pItem(new CEmptyDocumentTemplateItem);
+	AddTemplateItem(CString((LPCTSTR) STE_EMPTYDOCUMENT_CATEGORY), 
+		std::move(pItem));
 
 	m_nFileFormat = CConfiguration::GetInstance()->m_nStandardFileFormat;
 
