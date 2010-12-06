@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "StructureItem.h"
+#include "StructureItemInfo.h"
 #include "LatexProject.h"
 #include "TeXnicCenter.h"
 
