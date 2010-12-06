@@ -87,7 +87,15 @@ diff --git a/TeXnicCenter/ScintillaDocView.cpp b/TeXnicCenter/ScintillaDocView.c
  
    //Let the base class do its thing
    return CFindReplaceDialog::Create(bFindDialogOnly,	lpszFindWhat, lpszReplaceWith, dwFlags, pParentWnd);
-@@ -798,6 +816,9 @@
+@@ -340,7 +358,6 @@
+ 
+ void CScintillaView::OnDraw(CDC*)
+ {
+-	ASSERT(FALSE);
+ }
+ 
+ void CScintillaView::OnPaint()
+@@ -798,6 +815,9 @@
    //Validate our parameters
  	ASSERT_VALID(this);
  
@@ -97,7 +105,7 @@ diff --git a/TeXnicCenter/ScintillaDocView.cpp b/TeXnicCenter/ScintillaDocView.c
  	m_bFirstSearch = TRUE;
  	if (_scintillaEditState.pFindReplaceDlg != NULL)
  	{
-@@ -805,6 +826,14 @@
+@@ -805,6 +825,14 @@
  		{
  			_scintillaEditState.pFindReplaceDlg->SetActiveWindow();
  			_scintillaEditState.pFindReplaceDlg->ShowWindow(SW_SHOW);
@@ -112,7 +120,7 @@ diff --git a/TeXnicCenter/ScintillaDocView.cpp b/TeXnicCenter/ScintillaDocView.c
  			return;
  		}
  		else
-@@ -815,8 +844,7 @@
+@@ -815,8 +843,7 @@
  			ASSERT_VALID(this);
  		}
  	}
@@ -122,7 +130,7 @@ diff --git a/TeXnicCenter/ScintillaDocView.cpp b/TeXnicCenter/ScintillaDocView.c
  	//if selection is empty or spans multiple lines use old find text
  	if (strFind.IsEmpty() || (strFind.FindOneOf(_T("\n\r")) != -1))
  		strFind = _scintillaEditState.strFind;
-@@ -917,26 +945,46 @@
+@@ -917,26 +944,46 @@
  	CWaitCursor wait;
  
    //Set the selection to the begining of the document to ensure all text is replaced in the document
@@ -185,7 +193,7 @@ diff --git a/TeXnicCenter/ScintillaDocView.cpp b/TeXnicCenter/ScintillaDocView.c
  
    //Inform the user if we could not find anything
    if (!bFoundSomething)
-@@ -1580,6 +1628,10 @@
+@@ -1580,6 +1627,10 @@
    }
  }
  
