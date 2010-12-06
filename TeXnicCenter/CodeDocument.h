@@ -172,42 +172,70 @@ public:
 
 	BOOL DoSave(LPCTSTR lpszPathName, BOOL bReplace = TRUE);
 
-	/// Removes all bookmarks that have been set.
+	/**
+	 * @brief Removes all bookmarks that have been set.
+	 */
 	void RemoveAllBookmarks();
 
-	/// Sets or removes a bookmark on the specified line.
+	/**
+	 * @brief Sets or removes a bookmark on the specified @a line.
+	 */
 	void ToggleBookmark( int line );
 
-	/// Returns a container of CodeBookmarks that have been set for this document.
+	/**
+	 * @brief Returns a container of CodeBookmarks that have been set for this 
+	 *        document.
+	 */
 	const BookmarkContainerType GetBookmarks();
 
-	/// Clears all the bookmarks and sets the ones from the range specified by first last.
+	/**
+	 * @brief Clears all the bookmarks and sets the ones from the range 
+			  specified by first last.
+	 */
 	template<class I>
 	void SetBookmarks(I first, I last);	
 
-	/// Indicates whether this document should be saved with BOM, invalid for ANSI documents.
+	/**
+	 * @brief Indicates whether this document should be saved with BOM, invalid
+	 *        for ANSI documents.
+	 */
 	bool GetUseBOM() const;
 
-	/// Enables or disabled the usage of a BOM for Unicode text documents.
+	/**
+	 * @brief Enables or disabled the usage of a BOM for Unicode text documents.
+	 */
 	void SetUseBOM(bool use = true);
 
-	/// Returns a tuple containing the first and last pos
-	/// of the paragraph starting from the current position.
+	/**
+	 * @brief Returns a tuple containing the first and last pos of the 
+	 *        paragraph starting from the current position.
+	 */
 	const std::pair<long,long> GetParagraphRangePos(const int StartPos, const bool bRespectComments = true) const;
 
-	///Returns true if a line contains only white space
+	/**
+	 * @brief Returns true if a line contains only white space.
+	 */
 	bool LineContainsOnlyWhiteSpace(const int Line) const;
 
-	///Returns true if a line contains a comment. It might also contain other parts.
+	/**
+	 * @brief Returns true if a line contains a comment. It might also contain 
+	 *        other parts.
+	 */
 	bool LineContainsComment(const int Line) const;
 
-	///Returns the position in a line where a comment starts.`
+	/**
+	 * @brief Returns the position in a line where a comment starts.
+	 */
 	long LineFindCommentStartPos(const int Line) const;
 
-	/// Returns a collection of folding points.
+	/**
+	 * @brief Returns a collection of folding points.
+	 */
 	const FoldingPointContainerType GetFoldingPoints(bool contracted = false);
 
-	/// Returns a collection of folding points that have been contracted.
+	/**
+	 * @brief Returns a collection of folding points that have been contracted.
+	 */
 	const FoldingPointContainerType GetContractedFoldingPoints();
 
 	template<class I>
@@ -256,7 +284,10 @@ private:
 	TextDocument(bool use_bom, CodeDocument::Encoding e);
 
 	static CodeDocument::Encoding DetectEncoding(const BYTE* data, SIZE_T& pos, SIZE_T size);
-	/// Tests data for UTF-8 and UTF-16 encodings
+	
+	/**
+	 * @brief Tests data for UTF-8 and UTF-16 encodings.
+	 */
 	static CodeDocument::Encoding TestForUnicode(const BYTE* data, SIZE_T size);
 
 public:
@@ -273,11 +304,21 @@ public:
 	void SetUseBOM(bool use);
 
 	DWORD Write(ATL::CAtlFile& file, const char* text, std::size_t);
-	/// Reads the whole file by detecting the right encoding.
+	
+	/**
+	 * @brief Reads the whole file by detecting the right encoding.
+	 */
 	bool Read(LPCTSTR pszFileName, CStringW& string);
-	/// Writes the whole file by detecting the right encoding.
+	
+	/**
+	 * @brief Writes the whole file by detecting the right encoding.
+	 */
 	bool Write(LPCTSTR pszFileName, const CStringW& string);
-	/// Writes UTF-8 encoded text to the file by performing any required code page conversion.
+	
+	/**
+	 * @brief Writes UTF-8 encoded text to the file by performing any required 
+	 *        code page conversion.
+	 */
 	DWORD WriteUTF8( ATL::CAtlFile& file, const char* utf8, std::size_t size);
 
 	void CheckForFileChanges();

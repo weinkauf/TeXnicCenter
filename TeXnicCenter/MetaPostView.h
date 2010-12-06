@@ -18,7 +18,7 @@ protected:
 	void UpdateSettings();
 
 	DocumentTokenizer* NewDocumentTokenizer() const;
-    int GetLexer() const;
+	int GetLexer() const;
 
 public:
 #ifdef _DEBUG

@@ -136,5 +136,5 @@ DocumentTokenizer* BibTeXView::NewDocumentTokenizer() const
 
 int BibTeXView::GetLexer() const
 {
-    return SCLEX_BIBTEX;
+	return SCLEX_BIBTEX;
 }

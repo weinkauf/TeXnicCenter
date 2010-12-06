@@ -111,5 +111,5 @@ DocumentTokenizer* MetaPostView::NewDocumentTokenizer() const
 
 int MetaPostView::GetLexer() const
 {
-    return SCLEX_METAPOST;
+	return SCLEX_METAPOST;
 }
