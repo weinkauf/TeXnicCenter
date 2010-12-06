@@ -79,8 +79,8 @@ CTemplateDialog::CTemplateDialog(UINT unIDTemplate, CWnd* pParent /*=NULL*/)
 		: CDialog(unIDTemplate, pParent),
 		m_nFirstTab(0), m_nLastTab(0)
 {
-	m_ImageList32.Create(32, 32, ILC_COLOR24 | ILC_MASK, 1, 1);
-	m_ImageList16.Create(16, 16, ILC_COLOR24 | ILC_MASK, 1, 1);
+	m_ImageList32.Create(32, 32, ILC_COLOR32, 1, 1);
+	m_ImageList16.Create(16, 16, ILC_COLOR32, 1, 1);
 
 	//{{AFX_DATA_INIT(CTemplateDialog)
 	//}}AFX_DATA_INIT
