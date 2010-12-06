@@ -409,9 +409,10 @@ CProjectNewDialog::CProjectNewDialog(CWnd* pParent /*=NULL*/)
 	//}}AFX_DATA_INIT
 
 	// Add template for empty project
-	CTemplateItem *pItem = new CEmptyProjectTemplateItem;
-	if (pItem)
-		AddTemplateItem(CString((LPCTSTR)STE_EMPTYPROJECT_CATEGORY), pItem);
+	std::unique_ptr<CTemplateItem> pItem(new CEmptyProjectTemplateItem);
+
+	AddTemplateItem(CString((LPCTSTR)STE_EMPTYPROJECT_CATEGORY), 
+		std::move(pItem));
 
 	//Get Project base path
 	m_strProjectBasePath = AfxGetDefaultDirectory(true, true);

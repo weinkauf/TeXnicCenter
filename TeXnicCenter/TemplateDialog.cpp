@@ -34,6 +34,9 @@
 
 #include "stdafx.h"
 #include "TeXnicCenter.h"
+
+#include <set>
+
 #include "TemplateDialog.h"
 #include "Global.h"
 #include "RunTimeHelper.h"
@@ -43,22 +46,6 @@
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-
-//-------------------------------------------------------------------
-// globals
-//-------------------------------------------------------------------
-
-void AFXAPI DestructElements(CTemplateItemArray* *pElements, int nCount)
-{
-	for (int i = 0; i < nCount; i++)
-		delete pElements[i];
-}
-
-void AFXAPI DestructElements(CTemplateItem **pElements, int nCount)
-{
-	for (int i = 0; i < nCount; i++)
-		delete pElements[i];
-}
 
 //-------------------------------------------------------------------
 // CTemplateItem
@@ -71,7 +58,6 @@ CTemplateItem::CTemplateItem()
 CTemplateItem::~CTemplateItem()
 {
 }
-
 
 //-------------------------------------------------------------------
 // CTemplateDialog
@@ -113,16 +99,17 @@ void CTemplateDialog::AddTemplateFilter(LPCTSTR lpszFilter, CRuntimeClass *pTemp
 	m_apTemplateItemClass.Add(pTemplateItemClass);
 }
 
-void CTemplateDialog::AddTemplateItem(LPCTSTR lpszCategory, CTemplateItem *pItem)
+void CTemplateDialog::AddTemplateItem(LPCTSTR lpszCategory, std::unique_ptr<CTemplateItem>&& pItem)
 {
 	if (!pItem->InitItem(NULL, m_ImageList32, m_ImageList16))
 		return;
 
-	CTemplateItemArray *pTemplateArray;
-	if (!m_mapSubdirToTemplates.Lookup(lpszCategory, pTemplateArray))
-		m_mapSubdirToTemplates.SetAt(lpszCategory, pTemplateArray = new CTemplateItemArray);
+	StringTemplateItemArrayMap::iterator it = m_mapSubdirToTemplates.find(lpszCategory);
 
-	pTemplateArray->Add(pItem);
+	if (it == m_mapSubdirToTemplates.end())
+		it = m_mapSubdirToTemplates.insert(it, std::make_pair(lpszCategory, CTemplateItemArray()));
+
+	it->second.push_back(std::move(pItem));
 }
 
 void CTemplateDialog::CollectTemplates()
@@ -148,12 +135,11 @@ void CTemplateDialog::CollectTemplates()
 			CString strSubdirName = dirs.GetFileName();
 
 			// check, if name of this subdir is already existing
-			CTemplateItemArray *pTemplateArray = NULL;
-			if (!m_mapSubdirToTemplates.Lookup(strSubdirName, pTemplateArray))
-				m_mapSubdirToTemplates.SetAt(strSubdirName, pTemplateArray = new CTemplateItemArray);
+			StringTemplateItemArrayMap::iterator it = 
+				m_mapSubdirToTemplates.find(strSubdirName);
 
-			if (!pTemplateArray)
-				continue;
+			if (it == m_mapSubdirToTemplates.end())
+				it = m_mapSubdirToTemplates.insert(it, std::make_pair(strSubdirName, CTemplateItemArray()));
 
 			// parse all files of interest in the directory
 			for (int nFilter = 0; nFilter < m_astrFilters.GetSize(); nFilter++)
@@ -170,11 +156,11 @@ void CTemplateDialog::CollectTemplates()
 					bTemplatesContinue = templates.FindNextFile();
 					if (!templates.IsDirectory())
 					{
-						CTemplateItem *pItem = dynamic_cast<CTemplateItem*>(m_apTemplateItemClass[nFilter]->CreateObject());
+						std::unique_ptr<CTemplateItem> pItem
+							(dynamic_cast<CTemplateItem*>(m_apTemplateItemClass[nFilter]->CreateObject()));
+
 						if (pItem->InitItem(templates.GetFilePath(), m_ImageList16, m_ImageList32))
-							pTemplateArray->Add(pItem);
-						else
-							delete pItem;
+							it->second.push_back(std::move(pItem));
 					}
 				}
 				templates.Close();
@@ -185,19 +171,18 @@ void CTemplateDialog::CollectTemplates()
 
 
 	//Create a sorted array, so we can add the tabs in alphabetical order
-	POSITION pos = m_mapSubdirToTemplates.GetStartPosition();
 	bool bTemplateFilesFound = false;
-	CSortArray<CString, CString&> astrSubDirsNonEmpty;
-	while (pos)
+
+	typedef std::set<CString> StringSet;
+	StringSet astrSubDirsNonEmpty;
+
+	for (StringTemplateItemArrayMap::const_iterator it = m_mapSubdirToTemplates.begin();
+		it != m_mapSubdirToTemplates.end(); ++it)
 	{
-		//Get the active subdir
-		CTemplateItemArray* pTemplateItemArray;
-		CString strKey;
-		m_mapSubdirToTemplates.GetNextAssoc(pos, strKey, pTemplateItemArray);
 		//Any templates in this subdir? ==> If yes, then insert it sorted
-		if (pTemplateItemArray->GetSize())
+		if (!it->second.empty())
 		{
-			astrSubDirsNonEmpty.InsertSorted(strKey, true, false);
+			astrSubDirsNonEmpty.insert(it->first);
 			bTemplateFilesFound = true;
 		}
 	}
@@ -205,9 +190,12 @@ void CTemplateDialog::CollectTemplates()
 	//Add a category tab for each non-empty SubDir in the map
 	if (bTemplateFilesFound)
 	{
-		for (int i = 0; i < astrSubDirsNonEmpty.GetSize(); i++)
+		int index = 0;
+
+		for (StringSet::const_iterator it = astrSubDirsNonEmpty.begin(); 
+			it != astrSubDirsNonEmpty.end(); ++it)
 		{
-			m_wndCategoriesTab.InsertItem(i, astrSubDirsNonEmpty[i]);
+			m_wndCategoriesTab.InsertItem(index++, *it);
 		}
 	}
 
@@ -243,26 +231,25 @@ void CTemplateDialog::FillTemplateList()
 		return;
 
 	CString strKey = item.pszText;
-	CTemplateItemArray* papTemplateItems = NULL;
 
-	if (!m_mapSubdirToTemplates.Lookup(strKey, papTemplateItems))
-		return;
+	StringTemplateItemArrayMap::iterator it = m_mapSubdirToTemplates.find(strKey);
 
-	if (!papTemplateItems)
+	if (it == m_mapSubdirToTemplates.end())
 		return;
 
 	// fill list ctrl with titles
 	m_wndTemplateList.DeleteAllItems();
 
 	//int nListItem = 0;
-	for (int i = 0; i < papTemplateItems->GetSize(); i++)
+	for (CTemplateItemArray::const_iterator it1 = it->second.begin(); 
+		it1 != it->second.end(); ++it1)
 	{
 		m_wndTemplateList.InsertItem(
 		    LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM,
 		    0,
-		    papTemplateItems->GetAt(i)->GetTitle(), 0, 0,
-		    papTemplateItems->GetAt(i)->GetImageIndex(),
-		    (LPARAM)papTemplateItems->GetAt(i));
+		    (*it1)->GetTitle(), 0, 0,
+		    (*it1)->GetImageIndex(),
+		    (LPARAM)it1->get());
 	}
 
 	//Select the first entry in that template list
