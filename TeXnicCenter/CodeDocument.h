@@ -214,6 +214,16 @@ public:
 	void SetFoldingPoints(I first, I last);
 	virtual void OnCloseDocument();
 
+	/**
+	 * @brief Updates the document title according to its state.
+	 * 
+	 * @param modified Appends a * to the title if the value is @a true, or
+	 *        removes the * if the value is @a false.
+	 */
+	void MarkTitleAsModified(bool modified);
+
+	BOOL IsModified();
+
 protected:
 	const Nullable<int>& GetSavedEOLMode() const;
 	virtual const CString GetExtensionFilter() const;
@@ -232,7 +242,6 @@ private:
 private:
 	int current_line_;
 	CString line_;
-	bool surpressModifiedChange_;
 };
 
 class TextDocument

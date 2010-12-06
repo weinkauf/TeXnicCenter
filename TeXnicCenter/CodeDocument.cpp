@@ -478,7 +478,6 @@ CodeDocument::CodeDocument()
 , error_marker_handle_(-1)
 , use_bom_(false)
 , save_copy_(false)
-, surpressModifiedChange_(false)
 {
 }
 
@@ -546,19 +545,7 @@ void CodeDocument::Serialize(CArchive& ar)
 
 void CodeDocument::SetModifiedFlag(BOOL modified)
 {
-	if (m_bModified != modified && !surpressModifiedChange_) {
-		const TCHAR ch = ModifiedMarker;
-		CString title = GetTitle();
-
-		if (modified)
-			title += ch;
-		else
-			title.TrimRight(ch);
-
-		SetTitle(title);
-	}
-
-	__super::SetModifiedFlag(modified);
+	CScintillaDoc::SetModifiedFlag(modified);
 }
 
 CodeDocument::Encoding CodeDocument::GetEncoding() const
@@ -634,10 +621,6 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 			n = buffer.size();
 		}
 
-		// Prevent * to show up quickly in tab's title while the content is
-		// reloaded
-		surpressModifiedChange_ = true;
-
 		CScintillaDoc::DeleteContents();
 		GetView()->GetCtrl().SetCodePage(SC_CP_UTF8);
 
@@ -653,8 +636,6 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 
 		// No undo operation needed so far, we have just opened the document
 		GetView()->GetCtrl().EmptyUndoBuffer();
-
-		surpressModifiedChange_ = false;
 
 		SetModifiedFlag(FALSE);
 	}
@@ -1482,4 +1463,22 @@ BOOL CodeDocument::OnSaveDocument(LPCTSTR lpszPathName)
 	SnapFileState();
 
 	return TRUE;
+}
+
+void CodeDocument::MarkTitleAsModified(bool modified)
+{
+	const TCHAR ch = ModifiedMarker;
+	CString title = GetTitle();
+
+	if (modified)
+		title += ch;
+	else
+		title.TrimRight(ch);
+
+	SetTitle(title);
+}
+
+BOOL CodeDocument::IsModified()
+{
+	return GetView()->GetCtrl().GetModify();
 }
