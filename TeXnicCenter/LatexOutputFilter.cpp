@@ -65,7 +65,7 @@ int CLaTeXOutputFilter::GetNumberOfOutputPages() const
 	return m_nOutputPages;
 }
 
-CString CLaTeXOutputFilter::GetResultString()
+CString CLaTeXOutputFilter::GetResultString() const
 {
 	CString strResult;
 	strResult.Format(STE_LATEX_RESULT,m_nErrors,m_nWarnings,m_nBadBoxes,m_nOutputPages);

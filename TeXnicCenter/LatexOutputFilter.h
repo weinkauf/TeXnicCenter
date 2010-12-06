@@ -136,7 +136,7 @@ protected:
 
 // overridings
 public:
-	virtual CString GetResultString();
+	CString GetResultString() const;
 
 private:
 	std::tr1::match_results<LPCTSTR> results;

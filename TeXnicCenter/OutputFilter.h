@@ -131,7 +131,7 @@ public:
 
 	This base implementation returns an empty string.
 	 */
-	virtual CString GetResultString();
+	virtual CString GetResultString() const;
 
 protected:
 	/**

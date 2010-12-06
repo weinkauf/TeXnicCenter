@@ -67,7 +67,7 @@ BOOL BibTeXOutputFilter::OnTerminate()
 	return TRUE;
 }
 
-CString BibTeXOutputFilter::GetResultString()
+CString BibTeXOutputFilter::GetResultString() const
 {
 	CString result;
 	result.Format(IDS_BIBTEX_RESULT,GetErrorCount(),GetWarningCount());
