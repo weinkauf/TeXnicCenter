@@ -1370,7 +1370,7 @@ void CMainFrame::RebuildToolsMenu()
 	//
 	int nToolsMenuIndex = -1;
 
-	for (UINT nItem = 0; nItem < m_stdMenu.GetMenuItemCount(); ++nItem)
+	for (int nItem = 0; nItem < m_stdMenu.GetMenuItemCount(); ++nItem)
 	{
 		CString strItem;
 		m_stdMenu.GetMenuString(nItem, strItem, MF_BYPOSITION);

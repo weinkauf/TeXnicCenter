@@ -120,7 +120,7 @@ void COutputFilter::AddBadBox(COutputInfo &badbox)
 		m_pDoc->AddBadBox(badbox);
 }
 
-CString COutputFilter::GetResultString()
+CString COutputFilter::GetResultString() const
 {
 	return CString();
 }

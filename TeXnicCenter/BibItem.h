@@ -5,22 +5,16 @@
 #include "StructureItemInfo.h"
 #include "Nullable.h"
 
-/// Represents a bibliography item used in a \ref BibView.
+/**
+ * @brief Represents a bibliography item used in a @ref BibView.
+ */
 class BibItem :
 	public StructureItemInfo
 {
-	friend class BibTeXEntry;
-
-	CString type_text_;
-	CString author_;
-	CString editor_;
-	Nullable<int> year_;
-	CString label_;
-	CString title_;
-	CString publisher_;
-
 public:
-	/// Known BibTeX types in alphabetical order.
+	/**
+	 * @brief Known BibTeX types in alphabetical order.
+	 */
 	enum Type {
 		Unknown = -1,
 		Article,
@@ -42,17 +36,11 @@ public:
 		Unpublished
 	};
 
-	/// Container type that holds author names.
+	/**
+	 * @brief Container type that holds author names.
+	 */
 	typedef std::vector<CString> AuthorContainerType;
 
-private:
-	/// Extracted author names, useful for grouping.
-	AuthorContainerType authors_;
-
-private:
-	Type type_;
-
-public:
 	BibItem();
 	~BibItem();
 
@@ -68,4 +56,21 @@ public:
 
 	bool HasYear() const;
 	bool HasEditor() const;
+
+private:
+	friend class BibTeXEntry;
+
+	/**
+	 * @brief Extracted author names, useful for grouping.
+	 */
+	AuthorContainerType authors_;
+	Type type_;
+
+	CString type_text_;
+	CString author_;
+	CString editor_;
+	Nullable<int> year_;
+	CString label_;
+	CString title_;
+	CString publisher_;
 };

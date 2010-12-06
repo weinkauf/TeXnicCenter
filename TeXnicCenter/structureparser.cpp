@@ -173,7 +173,10 @@ BOOL CStructureParser::StartParsing(LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDir
 
 	// start parsing thread
 	if (!bFailed)
-		bFailed = !(m_pStructureParserThread = AfxBeginThread(StructureParserThread, this, nPriority));
+	{
+		m_pStructureParserThread = AfxBeginThread(StructureParserThread, this, nPriority);
+		bFailed = !m_pStructureParserThread;
+	}
 
 	if (bFailed)
 	{
