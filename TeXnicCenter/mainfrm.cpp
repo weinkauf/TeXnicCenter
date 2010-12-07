@@ -241,7 +241,6 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_REGISTERED_MESSAGE(AFX_WM_ON_GET_TAB_TOOLTIP, &CMainFrame::OnGetTabToolTip)
 	ON_COMMAND(ID_VIEW_TRANSPARENCY, &CMainFrame::OnViewTransparency)
 	ON_WM_DESTROY()
-	ON_MESSAGE(WM_DWMSENDICONICTHUMBNAIL, &CMainFrame::OnDwmSendIconicThumbnail)
 	ON_MESSAGE_VOID(CheckForFileChangesMessageID, CheckForFileChanges)
 	ON_COMMAND(ID_WINDOW_RECENTLY_USED, &CMainFrame::OnWindowRecentlyUsed)
 	ON_UPDATE_COMMAND_UI(ID_WINDOW_RECENTLY_USED, &CMainFrame::OnUpdateWindowRecentlyUsed)
@@ -478,19 +477,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	if (SUCCEEDED(taskBarList_.CoCreateInstance(CLSID_TaskbarList)))
 	{
-		if (FAILED(taskBarList_->HrInit()))
-			taskBarList_.Release();
-		else
-		{
-#ifdef WINDOWS_7_THUMBNAILS_
-			// Success
-			BOOL provideIconThumbnail = TRUE;
-			DwmSetWindowAttribute(m_hWnd, DWMWA_HAS_ICONIC_BITMAP,
-					&provideIconThumbnail, sizeof(provideIconThumbnail));
-			DwmSetWindowAttribute(m_hWnd, DWMWA_FORCE_ICONIC_REPRESENTATION,
-					&provideIconThumbnail, sizeof(provideIconThumbnail));
-#endif
-		}
+		if (FAILED(taskBarList_->HrInit())) taskBarList_.Release();
 	}
 
 	//LoadToolBarsState();
@@ -2053,47 +2040,12 @@ void CMainFrame::OnDestroy()
 		taskBarList_.Release();
 }
 
-void CMainFrame::RegisterChildFrame(CFrameWnd* frame)
-{
-	ENSURE_ARG(frame);
-
-#ifdef WINDOWS_7_THUMBNAILS_
-	if (taskBarList_)
-	{
-		HWND hwnd = frame->GetSafeHwnd();
-		taskBarList_->RegisterTab(hwnd, m_hWnd);
-		taskBarList_->SetTabOrder(hwnd, 0);
-
-		DwmInvalidateIconicBitmaps(m_hWnd);
-	}
-#endif
-}
-
 void CMainFrame::UnregisterChildFrame(CFrameWnd* frame)
 {
 	ENSURE_ARG(frame);
 
-#ifdef WINDOWS_7_THUMBNAILS_
-	if (taskBarList_)
-	taskBarList_->UnregisterTab(frame->m_hWnd);
-#endif
-
 	if (recentUsed_ == frame)
 		recentUsed_ = NULL;
-}
-
-LRESULT CMainFrame::OnDwmSendIconicThumbnail(WPARAM w, LPARAM l)
-{
-	LRESULT result;
-	CFrameWnd* frame = GetActiveFrame();
-
-	if (frame && frame != this)
-		result = frame->SendMessage(WM_DWMSENDICONICTHUMBNAIL, w, l);
-
-	else
-		result = 1; // Not processed
-
-	return result;
 }
 
 void CMainFrame::CheckForFileChangesAsync()

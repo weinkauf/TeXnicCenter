@@ -268,6 +268,10 @@ CTeXnicCenterApp::CTeXnicCenterApp()
 	,m_nApplicationLook(ID_VIEW_APP_LOOK_VS_2005)
 {
 	m_eHelpType = afxHTMLHelp;
+
+	//Disable the display of thumbnails in the Windows 7 taskbar
+	// for every MDI child frame. The thumbnail for the whole app is still rendered.
+	EnableTaskbarInteraction(false);
 }
 
 bool CTeXnicCenterApp::CanUseRecentFiles()

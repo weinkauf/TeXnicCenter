@@ -422,7 +422,6 @@ protected:
 
 public:
 	void UpdateFrameTitle();
-	void RegisterChildFrame(CFrameWnd* frame);
 	void UnregisterChildFrame(CFrameWnd* frame);
 	void CheckForFileChanges();
 	void CheckForFileChangesAsync();
