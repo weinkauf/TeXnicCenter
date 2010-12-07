@@ -73,7 +73,6 @@ BEGIN_MESSAGE_MAP(CChildFrame,CMDIChildWndEx)
 	ON_WM_SETFOCUS()
 	//}}AFX_MSG_MAP
 	ON_WM_CREATE()
-	ON_MESSAGE(WM_DWMSENDICONICTHUMBNAIL, &CChildFrame::OnDwmSendIconicThumbnail)
 	ON_WM_MDIACTIVATE()
 END_MESSAGE_MAP()
 
@@ -325,27 +324,10 @@ int CChildFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//client_.SubclassWindow(m_hWnd);
 	//client_.Initialize();
 
-	CMainFrame* m = dynamic_cast<CMainFrame*>(GetTopLevelFrame());
-	ENSURE(m);
-
-	m->RegisterChildFrame(this);
-
 	return 0;
 }
 
 
-LRESULT CChildFrame::OnDwmSendIconicThumbnail(WPARAM, LPARAM)
-{
-#ifdef WINDOWS_7_THUMBNAILS_
-
-	HBITMAP bmp = CreateBitmapFromWindow(this);
-	DwmSetIconicThumbnail(m_hWnd, bmp, 0);
-	::DeleteObject(bmp);
-
-#endif
-
-	return 0;
-}
 void CChildFrame::OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDeactivateWnd)
 {
 	CMDIChildWndEx::OnMDIActivate(bActivate, pActivateWnd, pDeactivateWnd);

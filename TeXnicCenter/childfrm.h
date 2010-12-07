@@ -43,7 +43,7 @@ public:
 	CChildFrame();
 
 private:
-	LRESULT OnDwmSendIconicThumbnail(WPARAM, LPARAM);
+//	LRESULT OnDwmSendIconicThumbnail(WPARAM, LPARAM);
 
 // operations
 public:
