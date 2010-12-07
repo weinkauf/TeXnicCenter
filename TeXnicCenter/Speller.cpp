@@ -189,7 +189,7 @@ int Speller::SuggestUTF8( const char* word, CStringArray& a )
 				ToUTF16(to_code_.c_str(),l[i],std::strlen(l[i]),buffer);
 
 			if (!buffer.empty())
-				a.Add(CStringW(&buffer[0],buffer.size()));
+				a.Add(CStringW(&buffer[0],static_cast<int>(buffer.size())));
 
 			std::free(l[i]);
 
@@ -373,7 +373,7 @@ bool Speller::SaveWords( LPCTSTR path, const WordContainer& words )
 			UTF16toUTF8(text.c_str(), text.size(), data);
 
 			if (!data.empty())
-				file.Write(&data[0], data.size());
+				file.Write(&data[0], static_cast<DWORD>(data.size()));
 		}
 
 		result = true;
@@ -394,7 +394,7 @@ bool Speller::LoadWords( LPCTSTR path, WordContainer& words )
 		if (size > 0) {
 			std::vector<char> data(static_cast<unsigned>(size));
 
-			if (SUCCEEDED(file.Read(&data[0],data.size()))) {
+			if (SUCCEEDED(file.Read(&data[0], static_cast<DWORD>(data.size())))) {
 				std::vector<wchar_t> unicode;
 				UTF8toUTF16(&data[0], data.size(), unicode);
 
