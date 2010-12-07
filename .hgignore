@@ -16,3 +16,7 @@ glob:*.orig
 glob:*.rej
 glob:*.ipch
 glob:*.aps
+glob:TCHelp/SourceCodeDoc/html/*
+glob:TCHelp/SourceCodeDoc/x64/*
+glob:TCHelp/SourceCodeDoc/warnings.log
+glob:TCHelp/SourceCodeDoc/TXCSourceCodeDoc.chm
