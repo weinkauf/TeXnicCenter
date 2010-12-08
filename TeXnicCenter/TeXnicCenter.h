@@ -87,7 +87,6 @@ public:
 	virtual BOOL InitInstance();
 
 	virtual int ExitInstance();
-	virtual BOOL OnCmdMsg(UINT nID,int nCode,void* pExtra,AFX_CMDHANDLERINFO* pHandlerInfo);
 	virtual BOOL OnDDECommand(LPTSTR lpszCommand);
 	//}}AFX_VIRTUAL
 
