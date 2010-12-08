@@ -952,15 +952,6 @@
     <ClInclude Include="WorkspacePaneBase.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="CommonTypes.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LaTeXCommands.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OutputProfiles.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="NotifyingEditListBox.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -1146,7 +1137,6 @@
     <None Include="res\Wizard.ico">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\ChangeLog.txt" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TeXnicCenter.rc">

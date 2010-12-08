@@ -473,9 +473,6 @@
     <ClInclude Include="CodeBookmark.h" />
     <ClInclude Include="CodeDocument.h" />
     <ClInclude Include="CodeView.h" />
-    <ClInclude Include="CommonTypes.h">
-      <DependentUpon>CommonTypes.xsd</DependentUpon>
-    </ClInclude>
     <ClInclude Include="configuration.h" />
     <ClInclude Include="DdeCommand.h" />
     <ClInclude Include="DeclareOption.h" />
@@ -512,9 +509,6 @@
     <ClInclude Include="itempropertydialog.h" />
     <ClInclude Include="LabelDragSource.h" />
     <ClInclude Include="LaTeXCommand.h" />
-    <ClInclude Include="LaTeXCommands.h">
-      <DependentUpon>LaTeXCommands.xsd</DependentUpon>
-    </ClInclude>
     <ClInclude Include="LaTeXDocument.h" />
     <ClInclude Include="LaTeXDocumentBase.h" />
     <ClInclude Include="LatexOutputFilter.h" />
@@ -546,9 +540,6 @@
     <ClInclude Include="OutputDoc.h" />
     <ClInclude Include="OutputFilter.h" />
     <ClInclude Include="OutputInfo.h" />
-    <ClInclude Include="OutputProfiles.h">
-      <DependentUpon>OutputProfiles.xsd</DependentUpon>
-    </ClInclude>
     <ClInclude Include="outputview.h" />
     <ClInclude Include="OutputViewBase.h" />
     <ClInclude Include="OutputViewVisitor.h" />
@@ -1051,7 +1042,6 @@ SubWCRev . "%(FullPath)" "%(RootDir)%(Directory)\Version.h"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Packages\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
-    <None Include="..\ChangeLog.txt" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TeXnicCenter.rc">
