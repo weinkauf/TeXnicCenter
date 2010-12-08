@@ -116,11 +116,20 @@ public:
 	virtual ~ToolBarsCustomizeDialog();
 
 // Methods
+public:
+	void BuildPropPageArray();
+	BOOL Create(CWnd* pParentWnd, DWORD dwStyle, DWORD dwExStyle);
+	BOOL Create();
+
 protected:
 	virtual void OnInitToolsPage();
 	virtual void OnBeforeChangeTool(CUserTool* pSelTool);
 	virtual void OnAfterChangeTool(CUserTool* pSelTool);
 	virtual BOOL CheckToolsValidity(const CObList& lstTools);
+
+private:
+	static int CALLBACK PropSheetCallback(HWND hWnd, UINT message, LPARAM lParam);
+	static void OnPropSheetCreate(LPARAM lParam);
 
 // Attributes
 protected:
@@ -146,17 +155,6 @@ protected:
 	afx_msg void OnDestroy();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
-
-public:
-	void BuildPropPageArray();
-	BOOL Create(CWnd* pParentWnd, DWORD dwStyle, DWORD dwExStyle);
-	BOOL Create();
-
-private:
-	static int CALLBACK PropSheetCallback(HWND hWnd, UINT message, LPARAM lParam);
-
-	static void OnPropSheetCreate(LPARAM lParam);
-
 };
 
 
