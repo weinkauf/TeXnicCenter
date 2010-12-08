@@ -319,10 +319,9 @@ int CChildFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CMDIChildWndEx::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	//ModifyStyleEx(WS_EX_CLIENTEDGE,0);
-
-	//client_.SubclassWindow(m_hWnd);
-	//client_.Initialize();
+	CMainFrame* m = dynamic_cast<CMainFrame*>(GetTopLevelFrame());
+	ENSURE(m);
+	m->RegisterChildFrame(this);
 
 	return 0;
 }
@@ -335,9 +334,11 @@ void CChildFrame::OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDeact
 	// Prevent the recently used frame from being updated while closing the frame
 	if (bActivate)
 	{
-		CChildFrame* frame = dynamic_cast<CChildFrame*>(pDeactivateWnd);
+		CChildFrame* frame = dynamic_cast<CChildFrame*>(pActivateWnd);
 
-		if (frame && !frame->m_bToBeDestroyed)
+		//Make this child the most recently used one.
+		//But only, if Ctrl key is not pressed.
+		if (frame && !frame->m_bToBeDestroyed && GetKeyState(VK_CONTROL) >= 0)
 		{
 			CMainFrame* m = dynamic_cast<CMainFrame*>(GetTopLevelFrame());
 			ENSURE(m);

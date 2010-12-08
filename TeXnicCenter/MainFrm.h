@@ -34,6 +34,7 @@
 #pragma once
 
 #include <set>
+#include <list>
 
 #include "ChildFrm.h"
 #include "WorkspacePane.h"
@@ -65,7 +66,6 @@ class CMainFrame : public CMDIFrameWndEx
 
 	friend class CLaTeXProject;
 	friend class COutputBuilder;
-	CFrameWnd* recentUsed_;
 
 // types
 protected:
@@ -251,7 +251,6 @@ public:
 //virtual void WinHelp(DWORD dwData, UINT nCmd = HELP_CONTEXT);
 protected:
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	//}}AFX_VIRTUAL
 
 // debug
@@ -381,6 +380,11 @@ private:
 
 	CImageList build_animation_;
 
+	///MDI children list in MRU order
+	std::list< CFrameWnd* > MDIChildrenMRU;
+	///Last activated MDI child
+	CFrameWnd* MDITopChild;
+
 private:
 	/** Identifier of the timer used to parse the project in given intervals. */
 	UINT m_unParseTimer;
@@ -422,11 +426,21 @@ protected:
 
 public:
 	void UpdateFrameTitle();
+
+	///Called by child frame on creation
+	void RegisterChildFrame(CFrameWnd* frame);
+	///Called by child frame on deletion
 	void UnregisterChildFrame(CFrameWnd* frame);
+	///Called to put the current child at the top of the MRU list
+	void SetCurrentChildFrameAsRecentlyUsed();
+	///The given child will be at the top of the MRU list.
+	void SetRecentlyUsedChildFrame(CFrameWnd* child);
+	///Activates the next/previous MDI child based on the MRU list
+	void ActivateMDIChildByMRUList(const bool bPrevious);
+
+	//void DbgMRUList(const char* Msg);
+
 	void CheckForFileChanges();
 	void CheckForFileChangesAsync();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-
-	void SetRecentlyUsedChildFrame(CFrameWnd* child, bool force = false);
-	CFrameWnd* GetRecentUsedChildFrame() const;
 };

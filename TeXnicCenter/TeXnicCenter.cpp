@@ -515,10 +515,6 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	m_pMainWnd = pMainFrame;
 
-	// install frame manager
-	//m_pMDIFrameManager = new CMDIFrameManager();
-	//m_pMDIFrameManager->Install(pMainFrame);
-
 	// enable file open via drag & drop
 	m_pMainWnd->DragAcceptFiles();
 
@@ -1466,17 +1462,19 @@ BOOL CTeXnicCenterApp::PreTranslateMessage(MSG* pMsg)
 	//	return TRUE;
 	//}
 
+	//Cycling through MDI windows in MRU order: process the release of the CTRL key
+	if (pMsg->message == WM_KEYUP && pMsg->wParam == VK_CONTROL)
+	{
+		CMainFrame* pMainFrame = dynamic_cast<CMainFrame*>(m_pMainWnd);
+		if (m_pMainWnd && IsWindow(m_pMainWnd->m_hWnd))
+		{
+			pMainFrame->SetCurrentChildFrameAsRecentlyUsed();
+		}
+	}
+
 	return CProjectSupportingWinApp::PreTranslateMessage(pMsg);
 }
 
-BOOL CTeXnicCenterApp::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
-{
-	//if (m_pMDIFrameManager &&
-	//        m_pMDIFrameManager->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-	//	return TRUE;
-
-	return CProjectSupportingWinApp::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
-}
 
 void CTeXnicCenterApp::UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &recentFileList, UINT unFirstCommandId, UINT unNoFileStringId)
 {

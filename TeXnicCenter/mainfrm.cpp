@@ -242,8 +242,6 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_COMMAND(ID_VIEW_TRANSPARENCY, &CMainFrame::OnViewTransparency)
 	ON_WM_DESTROY()
 	ON_MESSAGE_VOID(CheckForFileChangesMessageID, CheckForFileChanges)
-	ON_COMMAND(ID_WINDOW_RECENTLY_USED, &CMainFrame::OnWindowRecentlyUsed)
-	ON_UPDATE_COMMAND_UI(ID_WINDOW_RECENTLY_USED, &CMainFrame::OnUpdateWindowRecentlyUsed)
 	ON_COMMAND(ID_VIEW_TOGGLEBOTTOMDOCKINGBARS, &CMainFrame::OnViewToggleBottomDockingBars)
 	ON_COMMAND(ID_VIEW_TOGGLELEFTDOCKINGBARS, &CMainFrame::OnViewToggleLeftDockingBars)
 	ON_COMMAND(ID_VIEW_TOGGLERIGHTDOCKINGBARS, &CMainFrame::OnViewToggleRightDockingBars)
@@ -294,7 +292,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CMDIFrameWndEx::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	recentUsed_ = NULL;
+	EnableMDITabsLastActiveActivation(true);
 	OnApplicationLook(theApp.GetApplicationLook());
 
 	// load user images
@@ -1403,28 +1401,39 @@ void CMainFrame::RebuildToolsMenu()
 	}
 }
 
-int CMainFrame::GetMDIChilds(CArray<CChildFrame*, CChildFrame*>& MDIChildArray, bool /*bSortByTabs*//*= true*/)
+int CMainFrame::GetMDIChilds(CArray<CChildFrame*, CChildFrame*>& MDIChildArray, bool bSortByTabs /*= true*/)
 {
 	int index = 0, ActiveChild = -1;
 
 	//Clean up
 	MDIChildArray.RemoveAll();
 
-	HWND hwndMDIChild = ::GetWindow(m_hWndMDIClient, GW_CHILD);
-
-	for (; hwndMDIChild; ++index)
+	if (bSortByTabs)
 	{
-		CChildFrame* pMDIChildFrame = DYNAMIC_DOWNCAST(CChildFrame, CWnd::FromHandle(hwndMDIChild));
+		HWND hwndMDIChild = ::GetWindow(m_hWndMDIClient, GW_CHILD);
 
-		if (pMDIChildFrame)
+		for (; hwndMDIChild; ++index)
 		{
-			MDIChildArray.Add(pMDIChildFrame);
+			CChildFrame* pMDIChildFrame = DYNAMIC_DOWNCAST(CChildFrame, CWnd::FromHandle(hwndMDIChild));
 
-			if (GetActiveFrame() == pMDIChildFrame)
-				ActiveChild = index;
+			if (pMDIChildFrame)
+			{
+				MDIChildArray.Add(pMDIChildFrame);
+
+				if (GetActiveFrame() == pMDIChildFrame)
+					ActiveChild = index;
+			}
+
+			hwndMDIChild = ::GetWindow(hwndMDIChild, GW_HWNDNEXT);
 		}
-
-		hwndMDIChild = ::GetWindow(hwndMDIChild, GW_HWNDNEXT);
+	}
+	else
+	{
+		for (auto it=MDIChildrenMRU.begin(); it!=MDIChildrenMRU.end(); it++)
+		{
+			CChildFrame* pMDIChildFrame = dynamic_cast< CChildFrame* >(*it);
+			MDIChildArray.Add(pMDIChildFrame);
+		}
 	}
 
 	return ActiveChild;
@@ -1444,34 +1453,6 @@ void CMainFrame::OnHelpKeyMapping()
 {
 	CMFCKeyMapDialog dlg(this, TRUE);
 	dlg.DoModal();
-}
-
-LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
-{
-	// Pass message through file change notifier
-	//theApp.m_FileChangeNotifier.PreTranslateMessage(message, wParam, lParam);
-
-	return CMDIFrameWndEx::WindowProc(message, wParam, lParam);
-}
-
-void CMainFrame::OnUpdateWindowNext(CCmdUI* pCmdUI)
-{
-	pCmdUI->Enable(MDIGetActive() != NULL);
-}
-
-void CMainFrame::OnWindowNext()
-{
-	::SendMessage(m_hWndMDIClient, WM_MDINEXT, 0, FALSE);
-}
-
-void CMainFrame::OnUpdateWindowPrevious(CCmdUI* pCmdUI)
-{
-	pCmdUI->Enable(MDIGetActive() != NULL);
-}
-
-void CMainFrame::OnWindowPrevious()
-{
-	::SendMessage(m_hWndMDIClient, WM_MDINEXT, 0, TRUE);
 }
 
 void CMainFrame::OnContextMenu(CWnd* pWnd, CPoint point)
@@ -2040,14 +2021,6 @@ void CMainFrame::OnDestroy()
 		taskBarList_.Release();
 }
 
-void CMainFrame::UnregisterChildFrame(CFrameWnd* frame)
-{
-	ENSURE_ARG(frame);
-
-	if (recentUsed_ == frame)
-		recentUsed_ = NULL;
-}
-
 void CMainFrame::CheckForFileChangesAsync()
 {
 	PostMessage( CheckForFileChangesMessageID);
@@ -2090,28 +2063,6 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 		result = CMDIFrameWndEx::PreTranslateMessage(pMsg);
 
 	return result;
-}
-
-void CMainFrame::OnWindowRecentlyUsed()
-{
-	ENSURE_VALID(recentUsed_);
-	recentUsed_->ActivateFrame();
-}
-
-void CMainFrame::OnUpdateWindowRecentlyUsed(CCmdUI *pCmdUI)
-{
-	pCmdUI->Enable(recentUsed_ != NULL);
-}
-
-void CMainFrame::SetRecentlyUsedChildFrame( CFrameWnd* child, bool force /*= false*/ )
-{
-	if (child != NULL || force)
-		recentUsed_ = child;
-}
-
-CFrameWnd* CMainFrame::GetRecentUsedChildFrame() const
-{
-	return recentUsed_;
 }
 
 
@@ -2171,3 +2122,153 @@ void CMainFrame::OnViewToggleTopDockingBars()
 	ToggleDockingBars(CBRS_ALIGN_TOP);
 }
 
+
+#pragma region MRU cycling of MDI windows
+
+void CMainFrame::RegisterChildFrame(CFrameWnd* frame)
+{
+	ENSURE_ARG(frame);
+
+	//Add a new MDI Child to the front of the MRU list of MDI children
+	MDIChildrenMRU.push_front(frame);
+}
+
+void CMainFrame::UnregisterChildFrame(CFrameWnd* frame)
+{
+	ENSURE_ARG(frame);
+
+	//Remove a MDI Child from the MRU list of MDI children
+	for (auto it=MDIChildrenMRU.begin(); it!=MDIChildrenMRU.end(); it++)
+	{
+		if (*it == frame)
+		{
+			MDIChildrenMRU.erase(it);
+			break;
+		}
+	}
+}
+
+void CMainFrame::SetCurrentChildFrameAsRecentlyUsed()
+{
+	SetRecentlyUsedChildFrame(GetActiveFrame());
+}
+
+
+void CMainFrame::SetRecentlyUsedChildFrame(CFrameWnd* child)
+{
+	//TRACE(_T("SetRecentlyUsedChildFrame called with child: %s\n"), CPathTool::GetFileTitle(((CChildFrame*)child)->GetPathNameOfDocument()));
+	//DbgMRUList("SetRecentlyUsedChildFrame::Start");
+
+	if (child && MDIChildrenMRU.front() != child)
+	{
+		//Put the child at the top of the MRU list of MDI children
+		for (auto it=MDIChildrenMRU.begin(); it!=MDIChildrenMRU.end(); it++)
+		{
+			if (*it == child)
+			{
+				MDIChildrenMRU.erase(it);
+				MDIChildrenMRU.push_front(child);
+				break;
+			}
+		}
+	}
+
+	//DbgMRUList("SetRecentlyUsedChildFrame::End");
+}
+
+
+//void CMainFrame::DbgMRUList(const char* Msg)
+//{
+//	TRACE("%s:", Msg);
+//	int idx(0);
+//	for (auto it=MDIChildrenMRU.begin(); it!=MDIChildrenMRU.end(); it++, idx++)
+//	{
+//		CChildFrame* pMDIChildFrame = dynamic_cast< CChildFrame* >(*it);
+//		TRACE(_T("  %s"), CPathTool::GetFileTitle(pMDIChildFrame->GetPathNameOfDocument()));
+//	}
+//	TRACE("\n");
+//}
+
+void CMainFrame::ActivateMDIChildByMRUList(const bool bPrevious)
+{
+	//Current window
+	CFrameWnd* pCurrentFrame = GetActiveFrame();
+	CFrameWnd* pNextFrame = NULL;
+
+	//Get next or previous window
+	if (bPrevious)
+	{
+		//DbgMRUList("ActivateMDIChildByMRUList::Next");
+
+		//Forward in the list - this is what we're usually doing
+		for (auto it=MDIChildrenMRU.begin(); it!=MDIChildrenMRU.end(); it++)
+		{
+			if (*it == pCurrentFrame)
+			{
+				it++;
+				if (it==MDIChildrenMRU.end())
+				{
+					pNextFrame = *MDIChildrenMRU.begin();
+				}
+				else
+				{
+					pNextFrame = *it;
+				}
+				break;
+			}
+		}
+	}
+	else
+	{
+		//DbgMRUList("ActivateMDIChildByMRUList::Previous");
+
+		//Backward in the list - on the first run, the next frame is the LEAST recently used one
+		for (auto it=MDIChildrenMRU.begin(); it!=MDIChildrenMRU.end(); it++)
+		{
+			if (*it == pCurrentFrame)
+			{
+				if (it==MDIChildrenMRU.begin())
+				{
+					pNextFrame = *MDIChildrenMRU.rbegin();
+				}
+				else
+				{
+					//pNextFrame = *(it);
+					pNextFrame = *(--it);
+				}
+				break;
+			}
+		}
+	}
+
+	//Activate!
+	if (pNextFrame)
+	{
+		//TRACE(_T("Activating: %s\n"), CPathTool::GetFileTitle(((CChildFrame*)pNextFrame)->GetPathNameOfDocument()));
+		pNextFrame->ActivateFrame();
+	}
+}
+
+void CMainFrame::OnUpdateWindowNext(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(MDIGetActive() != NULL);
+}
+
+void CMainFrame::OnWindowNext()
+{
+	ActivateMDIChildByMRUList(false);
+	//::SendMessage(m_hWndMDIClient, WM_MDINEXT, 0, FALSE);
+}
+
+void CMainFrame::OnUpdateWindowPrevious(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(MDIGetActive() != NULL);
+}
+
+void CMainFrame::OnWindowPrevious()
+{
+	ActivateMDIChildByMRUList(true);
+	//::SendMessage(m_hWndMDIClient, WM_MDINEXT, 0, TRUE);
+}
+
+#pragma endregion 
