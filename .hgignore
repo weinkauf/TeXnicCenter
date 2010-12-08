@@ -20,3 +20,4 @@ glob:TCHelp/SourceCodeDoc/html/*
 glob:TCHelp/SourceCodeDoc/x64/*
 glob:TCHelp/SourceCodeDoc/warnings.log
 glob:TCHelp/SourceCodeDoc/TXCSourceCodeDoc.chm
+glob:Anmerkungen/*
