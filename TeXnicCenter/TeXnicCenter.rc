@@ -12,7 +12,7 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
+#include "afxres.h"
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -1310,6 +1310,7 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,150,160,126,10
     CONTROL         "Vor dem &Löschen bestätigen",IDC_OPTIONS_FILECLEAN_CONFIRM,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,8,183,130,10
+    PUSHBUTTON      "&Standard wiederherstellen",IDC_OPTIONS_FILECLEAN_RESTOREDEFAULTS,13,111,95,14
 END
 
 IDD_PLACEHOLDER_SINGLE DIALOGEX 0, 0, 186, 170
@@ -3663,6 +3664,7 @@ BEGIN
     IDS_EDIT_REPLACE_COUNT  "%d Übereinstimmungen mit\n%s\nersetzt"
     IDS_INCREMENTAL_SEARCH_PASSED_START_SEARCH 
                             "Inkrementelle Suche abgeschlossen: %s (Startpunkt erreicht)"
+    IDS_RESTORE_DEFAULTS    "Möchten Sie wirklich den Standard wiederherstellen?"
 END
 
 STRINGTABLE
@@ -5749,6 +5751,7 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,150,160,115,10
     CONTROL         "&Confirm before delete",IDC_OPTIONS_FILECLEAN_CONFIRM,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,8,183,112,10
+    PUSHBUTTON      "Re&store Defaults",IDC_OPTIONS_FILECLEAN_RESTOREDEFAULTS,13,111,95,14
 END
 
 IDD_ABOUTBOX DIALOGEX 0, 0, 264, 241
@@ -7412,6 +7415,7 @@ BEGIN
     IDS_EDIT_REPLACE_COUNT  "%d occurrences of\n%s\nreplaced"
     IDS_INCREMENTAL_SEARCH_PASSED_START_SEARCH 
                             "Incremental search: %s (Passed start of search)"
+    IDS_RESTORE_DEFAULTS    "Do you really want to restore the defaults?"
 END
 
 STRINGTABLE
@@ -8939,7 +8943,7 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 #include "res\\TeXnicCenter.rc2"  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen
 #include "l.deu\\afxres.rc"          // Standardkomponenten
 #include "l.deu\\afxprint.rc"        // Ressourcen für Drucken/Seitenansicht
-#endif
+#endif
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 

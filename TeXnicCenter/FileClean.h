@@ -67,7 +67,6 @@ public:
 	CFileCleanItem();
 
 	///Copy Constructor
-
 	CFileCleanItem(const CFileCleanItem &arg)
 	{
 		*this = arg;
@@ -80,12 +79,13 @@ public:
 
 	virtual ~CFileCleanItem();
 
-	//Operators
+
+//Operators
 	/** @{*/
 	/** @name Operators*/
+
 public:
 	///Assignment - assigns new values to this (left) item
-
 	inline void operator=(const CFileCleanItem &arg)
 	{
 		strDescription = arg.strDescription;
@@ -95,7 +95,6 @@ public:
 	};
 
 	///Comparison of Equality - true, if equal
-
 	inline bool operator==(const CFileCleanItem &arg) const
 	{
 		return ((strDescription == arg.strDescription)
@@ -103,7 +102,6 @@ public:
 	};
 
 	///Comparison: Less
-
 	inline bool operator<(const CFileCleanItem &arg) const
 	{
 		return (
@@ -113,7 +111,6 @@ public:
 	};
 
 	///Comparison: Greater
-
 	inline bool operator>(const CFileCleanItem &arg) const
 	{
 		return (
@@ -123,7 +120,6 @@ public:
 	};
 
 	///Comparison: LessEqual
-
 	inline bool operator<=(const CFileCleanItem &arg) const
 	{
 		return (
@@ -133,7 +129,6 @@ public:
 	};
 
 	///Comparison: GreaterEqual
-
 	inline bool operator>=(const CFileCleanItem &arg) const
 	{
 		return (
@@ -200,14 +195,12 @@ public:
 
 //typedef CSortArray<CFileCleanItem, CFileCleanItem&> CFileCleanItemArray;
 
-/**
-An Array to hold the Definitions (Items) for file cleaning.
-Adds 'protectedbydefault'-Values at creation.
+/** An Array to hold the Definitions (Items) for file cleaning.
+	Adds 'protectedbydefault'-Values at creation.
 
-@author Tino Weinkauf
- */
-class CFileCleanItemArray :
-			public CSortArray<CFileCleanItem, const CFileCleanItem&>
+	@author Tino Weinkauf
+*/
+class CFileCleanItemArray : public CSortArray<CFileCleanItem, const CFileCleanItem&>
 {
 //Constructor / Destructor
 public:
@@ -217,8 +210,11 @@ public:
 
 //Methods
 public:
-	///Adds a number of default Items.
-	void AddDefaultItems();
+	///Adds a minimal number of default Items.
+	void AddMinimalDefaultItems();
+
+	///Removes all existing items and adds a large number of default Items.
+	void RestoreAllDefaultItems();
 
 	///Serializes the array to the registry.
 	bool SerializeToRegistry(LPCTSTR strStartSection);
@@ -226,13 +222,13 @@ public:
 	bool SerializeFromRegistry(LPCTSTR strStartSection);
 };
 
-/**
-A Class to delete (clean) Files defined by Wildcards,
-Placeholders and Placeholder sets.
-Supports Protection of Files.
 
-@author Tino Weinkauf
- */
+/** A Class to delete (clean) Files defined by Wildcards,
+	Placeholders and Placeholder sets.
+	Supports Protection of Files.
+
+	@author Tino Weinkauf
+*/
 class CFileClean
 {
 public:

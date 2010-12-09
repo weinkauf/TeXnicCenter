@@ -91,6 +91,7 @@ BEGIN_MESSAGE_MAP(COptionPageFileClean,CMFCPropertyPage)
 	//}}AFX_MSG_MAP
 	ON_NOTIFY(LVN_DELETEITEM, IDC_OPTIONS_FILECLEAN_LIST, &COptionPageFileClean::OnLvnDeleteitemOptionsFilecleanList)
 	ON_NOTIFY(LVN_KEYDOWN, IDC_OPTIONS_FILECLEAN_LIST, &COptionPageFileClean::OnLvnKeydownOptionsFilecleanList)
+	ON_BN_CLICKED(IDC_OPTIONS_FILECLEAN_RESTOREDEFAULTS, &COptionPageFileClean::OnRestoreDefaults)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -113,7 +114,7 @@ void COptionPageFileClean::OnOK()
 	}
 
 	//Just to be sure
-	CConfiguration::GetInstance()->m_aFileCleanItems.AddDefaultItems();
+	CConfiguration::GetInstance()->m_aFileCleanItems.AddMinimalDefaultItems();
 
 	CMFCPropertyPage::OnOK();
 }
@@ -126,7 +127,7 @@ LVITEM COptionPageFileClean::GetLVITEM()
 	return lvi;
 }
 
-void COptionPageFileClean::Populate()
+void COptionPageFileClean::Populate(const CFileCleanItemArray& items)
 {
 	//Not valid?
 	if (!IsWindow(m_wndList.m_hWnd)) return;
@@ -140,8 +141,6 @@ void COptionPageFileClean::Populate()
 	//Clear List
 	m_wndList.SetRedraw(FALSE);
 	m_wndList.DeleteAllItems();
-
-	const CFileCleanItemArray& items = CConfiguration::GetInstance()->m_aFileCleanItems;
 
 	if (items.GetSize() > 0)
 	{
@@ -243,7 +242,7 @@ BOOL COptionPageFileClean::OnInitDialog()
 	m_wndList.InsertColumn(0,strAdd,LVCFMT_LEFT,115,-1);
 
 	strAdd.LoadString(STE_FILECLEAN_HEAD2);
-	m_wndList.InsertColumn(1,strAdd,LVCFMT_LEFT,65,1);
+	m_wndList.InsertColumn(1,strAdd,LVCFMT_LEFT,90,1);
 
 	strAdd.LoadString(STE_FILECLEAN_HEAD3);
 	m_wndList.InsertColumn(2,strAdd,LVCFMT_LEFT,100,2);
@@ -266,7 +265,7 @@ BOOL COptionPageFileClean::OnInitDialog()
 	m_wndList.SetColumnCompareFunction(3,&COptionPageFileClean::CompareAction);
 
 	//Add items to the list
-	Populate();
+	Populate(CConfiguration::GetInstance()->m_aFileCleanItems);
 
 	m_wndList.Sort(0,true);
 
@@ -599,6 +598,20 @@ void COptionPageFileClean::OnNew()
 	m_NameEdit.SetSel(0,-1,true);
 }
 
+void COptionPageFileClean::OnRestoreDefaults()
+{
+	//Really?
+	if (AfxMessageBox(IDS_RESTORE_DEFAULTS, MB_YESNO | MB_ICONQUESTION, 0) == IDYES)
+	{
+		//Create a temporary list and add it
+		CFileCleanItemArray DefaultList;
+		DefaultList.RestoreAllDefaultItems();
+
+		//Set it
+		Populate(DefaultList);
+	}
+}
+
 void COptionPageFileClean::OnLeavePattern()
 {
 	CFileCleanItem TestItem;
@@ -708,3 +721,4 @@ bool COptionPageFileClean::ShouldBeDisabled(const CFileCleanItem& item)
 {
 	return (item.GetFileHandling() == CFileCleanItem::protectbydefault);
 }
+

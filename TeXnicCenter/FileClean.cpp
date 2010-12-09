@@ -277,7 +277,7 @@ CFileCleanItemArray::~CFileCleanItemArray()
 {
 }
 
-void CFileCleanItemArray::AddDefaultItems()
+void CFileCleanItemArray::AddMinimalDefaultItems()
 {
 	CString strDescr;
 
@@ -288,6 +288,52 @@ void CFileCleanItemArray::AddDefaultItems()
 	//Add protection for currently opened files
 	strDescr.LoadString(STE_PLACEHOLDERSETS_COF);
 	InsertSorted(CFileCleanItem(strDescr,_T("$COF"),CFileCleanItem::protectbydefault,false),true,false);
+}
+
+void CFileCleanItemArray::RestoreAllDefaultItems()
+{
+	//Remove everything and add the defaults
+	RemoveAll();
+	AddMinimalDefaultItems();
+
+	// - not cleaned, not protected; just here to assist the user
+	InsertSorted(CFileCleanItem(_T("Postscript"),_T("%bm.ps"),CFileCleanItem::none,false),true,true);
+	InsertSorted(CFileCleanItem(_T("DVI"),_T("%bm.dvi"),CFileCleanItem::none,false),true,true);
+	InsertSorted(CFileCleanItem(_T("PDF"),_T("%bm.pdf"),CFileCleanItem::none,false),true,true);
+	InsertSorted(CFileCleanItem(_T("bak"),_T("*.bak"),CFileCleanItem::none,true),true,true);
+
+	// - files to be cleaned
+	InsertSorted(CFileCleanItem(_T("aux"),_T("*.aux"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("bbl"),_T("*.bbl"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("blg"),_T("*.blg"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("bmt"),_T("*.bmt"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("brf"),_T("*.brf"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("ent"),_T("%bm.ent"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("lbl"),_T("*.lbl"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("lof"),_T("*.lof"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("log"),_T("*.log"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("lot"),_T("*.lot"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("mpx"),_T("*.mpx"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("mtc"),_T("*.mtc"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("idx"),_T("*.idx"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("ilg"),_T("*.ilg"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("ind"),_T("*.ind"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("out"),_T("*.out"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("synctex"),_T("*.synctex"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("toc"),_T("*.toc"),CFileCleanItem::clean,true),true,true);
+
+	// - files to be protected
+	InsertSorted(CFileCleanItem(_T("bmp"),_T("*.bmp"),CFileCleanItem::protect,true),true,true);
+	InsertSorted(CFileCleanItem(_T("eps"),_T("*.eps"),CFileCleanItem::protect,true),true,true);
+	InsertSorted(CFileCleanItem(_T("jpeg"),_T("*.jpeg"),CFileCleanItem::protect,true),true,true);
+	InsertSorted(CFileCleanItem(_T("jpg"),_T("*.jpg"),CFileCleanItem::protect,true),true,true);
+	InsertSorted(CFileCleanItem(_T("png"),_T("*.png"),CFileCleanItem::protect,true),true,true);
+	InsertSorted(CFileCleanItem(_T("tex"),_T("*.tex"),CFileCleanItem::protect,true),true,true);
+	InsertSorted(CFileCleanItem(_T("bib"),_T("*.bib"),CFileCleanItem::protect,true),true,true);
+	InsertSorted(CFileCleanItem(_T("sty"),_T("*.sty"),CFileCleanItem::protect,true),true,true);
+	InsertSorted(CFileCleanItem(_T("bst"),_T("*.bst"),CFileCleanItem::protect,true),true,true);
+	InsertSorted(CFileCleanItem(_T("dtx"),_T("*.dtx"),CFileCleanItem::protect,true),true,true);
+	InsertSorted(CFileCleanItem(_T("ins"),_T("*.ins"),CFileCleanItem::protect,true),true,true);
 }
 
 bool CFileCleanItemArray::SerializeToRegistry(LPCTSTR strStartSection)
@@ -326,7 +372,7 @@ bool CFileCleanItemArray::SerializeFromRegistry(LPCTSTR strStartSection)
 {
 	//Remove everything and add the defaults
 	RemoveAll();
-	AddDefaultItems();
+	AddMinimalDefaultItems();
 
 	RegistryStack reg(false,true);
 	CString strKey(CPathTool::Cat(strStartSection,_T("Patterns")));
@@ -335,39 +381,7 @@ bool CFileCleanItemArray::SerializeFromRegistry(LPCTSTR strStartSection)
 	if (!reg.Open(strKey))
 	{
 		//Key does not exist; so I assume, that we need some standards
-		// - not cleaned, not protected; just here to assist the user
-		InsertSorted(CFileCleanItem(_T("Postscript"),_T("%bm.ps"),CFileCleanItem::none,false),true,true);
-		InsertSorted(CFileCleanItem(_T("DVI"),_T("%bm.dvi"),CFileCleanItem::none,false),true,true);
-		InsertSorted(CFileCleanItem(_T("PDF"),_T("%bm.pdf"),CFileCleanItem::none,false),true,true);
-		InsertSorted(CFileCleanItem(_T("bak"),_T("*.bak"),CFileCleanItem::none,true),true,true);
-
-		// - files to be cleaned
-		InsertSorted(CFileCleanItem(_T("aux"),_T("*.aux"),CFileCleanItem::clean,true),true,true);
-		InsertSorted(CFileCleanItem(_T("bbl"),_T("*.bbl"),CFileCleanItem::clean,true),true,true);
-		InsertSorted(CFileCleanItem(_T("blg"),_T("*.blg"),CFileCleanItem::clean,true),true,true);
-		InsertSorted(CFileCleanItem(_T("ent"),_T("%bm.ent"),CFileCleanItem::clean,true),true,true);
-		InsertSorted(CFileCleanItem(_T("lof"),_T("*.lof"),CFileCleanItem::clean,true),true,true);
-		InsertSorted(CFileCleanItem(_T("log"),_T("*.log"),CFileCleanItem::clean,true),true,true);
-		InsertSorted(CFileCleanItem(_T("lot"),_T("*.lot"),CFileCleanItem::clean,true),true,true);
-		InsertSorted(CFileCleanItem(_T("mpx"),_T("*.mpx"),CFileCleanItem::clean,true),true,true);
-		InsertSorted(CFileCleanItem(_T("idx"),_T("*.idx"),CFileCleanItem::clean,true),true,true);
-		InsertSorted(CFileCleanItem(_T("ilg"),_T("*.ilg"),CFileCleanItem::clean,true),true,true);
-		InsertSorted(CFileCleanItem(_T("ind"),_T("*.ind"),CFileCleanItem::clean,true),true,true);
-		InsertSorted(CFileCleanItem(_T("out"),_T("*.out"),CFileCleanItem::clean,true),true,true);
-		InsertSorted(CFileCleanItem(_T("toc"),_T("*.toc"),CFileCleanItem::clean,true),true,true);
-
-		// - files to be protected
-		InsertSorted(CFileCleanItem(_T("bmp"),_T("*.bmp"),CFileCleanItem::protect,true),true,true);
-		InsertSorted(CFileCleanItem(_T("eps"),_T("*.eps"),CFileCleanItem::protect,true),true,true);
-		InsertSorted(CFileCleanItem(_T("jpeg"),_T("*.jpeg"),CFileCleanItem::protect,true),true,true);
-		InsertSorted(CFileCleanItem(_T("jpg"),_T("*.jpg"),CFileCleanItem::protect,true),true,true);
-		InsertSorted(CFileCleanItem(_T("png"),_T("*.png"),CFileCleanItem::protect,true),true,true);
-		InsertSorted(CFileCleanItem(_T("tex"),_T("*.tex"),CFileCleanItem::protect,true),true,true);
-		InsertSorted(CFileCleanItem(_T("bib"),_T("*.bib"),CFileCleanItem::protect,true),true,true);
-		InsertSorted(CFileCleanItem(_T("sty"),_T("*.sty"),CFileCleanItem::protect,true),true,true);
-		InsertSorted(CFileCleanItem(_T("bst"),_T("*.bst"),CFileCleanItem::protect,true),true,true);
-		InsertSorted(CFileCleanItem(_T("dtx"),_T("*.dtx"),CFileCleanItem::protect,true),true,true);
-		InsertSorted(CFileCleanItem(_T("ins"),_T("*.ins"),CFileCleanItem::protect,true),true,true);
+		RestoreAllDefaultItems();
 
 		//Well, lets say everything was fine
 		return true;
