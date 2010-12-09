@@ -102,6 +102,7 @@ private:
 	afx_msg void OnRecursive();
 	afx_msg void OnDelete();
 	afx_msg void OnNew();
+	afx_msg void OnRestoreDefaults();
 	afx_msg void OnLeavePattern();
 	afx_msg void OnListItemchanged(NMHDR* pNMHDR, LRESULT* pResult);
 	//}}AFX_MSG
@@ -109,7 +110,7 @@ private:
 
 //Methods
 private:
-	void Populate();
+	void Populate(const CFileCleanItemArray& items);
 
 	int InsertItem( int index, LVITEM &lvi, const CFileCleanItem& a);
 	int InsertItem(int index, const CFileCleanItem& item);
