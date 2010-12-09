@@ -233,21 +233,23 @@ BOOL COptionPageFileClean::OnInitDialog()
 	m_wndList.SetExtendedStyle(m_wndList.GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER); //| LVS_EX_GRIDLINES
 
 	if (RunTimeHelper::IsVista())
+	{
 		::SetWindowTheme(m_wndList,L"explorer",0);
+	}
 
 	//Create the Columns
 	CString strAdd;
 	strAdd.LoadString(STE_FILECLEAN_HEAD1);
-	m_wndList.InsertColumn(0,strAdd,LVCFMT_LEFT,95,-1);
+	m_wndList.InsertColumn(0,strAdd,LVCFMT_LEFT,115,-1);
 
 	strAdd.LoadString(STE_FILECLEAN_HEAD2);
-	m_wndList.InsertColumn(1,strAdd,LVCFMT_LEFT,55,1);
+	m_wndList.InsertColumn(1,strAdd,LVCFMT_LEFT,65,1);
 
 	strAdd.LoadString(STE_FILECLEAN_HEAD3);
-	m_wndList.InsertColumn(2,strAdd,LVCFMT_LEFT,75,2);
+	m_wndList.InsertColumn(2,strAdd,LVCFMT_LEFT,100,2);
 
 	strAdd.LoadString(STE_FILECLEAN_HEAD4);
-	m_wndList.InsertColumn(3,strAdd,LVCFMT_LEFT,85,3);
+	m_wndList.InsertColumn(3,strAdd,LVCFMT_LEFT,110,3);
 
 	//Add some text to the combobox
 	m_HandleBox.ResetContent(); //Just to be sure...
