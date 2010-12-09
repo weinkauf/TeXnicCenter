@@ -203,6 +203,7 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	SerializeProfileBool(strSection,_T("InsertCaretMode"),nInsertCaretMode,direction,nInsertCaretMode);
 	SerializeProfileBool(strSection,_T("OverwriteCaretForm"),nOverwriteCaretForm,direction,nOverwriteCaretForm);
 	SerializeProfileBool(strSection,_T("OverwriteCaretMode"),nOverwriteCaretMode,direction,nOverwriteCaretMode);
+	SerializeProfileBool(strSection,_T("HighlightCaretLine"),highlight_caret_line_,direction,0);
 
 #pragma endregion
 
@@ -561,6 +562,16 @@ bool CConfiguration::IsOverwriteCaretLine() const
 void CConfiguration::SetOverwriteCaretLine( bool val /*= true*/ )
 {
 	overwrite_caret_line_ = val;
+}
+
+bool CConfiguration::IsHighlightCaretLine() const
+{
+	return highlight_caret_line_;
+}
+
+void CConfiguration::SetHighlightCaretLine( bool val /*= true*/ )
+{
+	highlight_caret_line_ = val;
 }
 
 bool CConfiguration::GetShowLineEnding() const
