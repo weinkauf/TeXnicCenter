@@ -1,11 +1,5 @@
-// AutoCompleteListbox.cpp : implementation file
-//
-
 #include "stdafx.h"
 #include "AutoCompleteListbox.h"
-
-#include <algorithm>
-#include <functional>
 
 #include "AutoCompleteDlg.h"
 #include "FontOccManager.h"
@@ -17,22 +11,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
 namespace
 {
-enum
-{
-	BMP_HEIGHT = 15,
-	BMP_WIDTH = 16
-};
+	enum
+	{
+		BMP_HEIGHT = 15,
+		BMP_WIDTH = 16
+	};
 
-const int padding = 4;
+	const int padding = 4;
 
-void AdjustRect(CRect& rect)
-{
-	rect.bottom += padding;
-	rect.right += BMP_WIDTH + padding * 3; // bmp right, text left an right
-}
+	void AdjustRect(CRect& rect)
+	{
+		rect.bottom += padding;
+		rect.right += BMP_WIDTH + padding * 3; // bmp right, text left an right
+	}
 }
 
 CAutoCompleteListBox::CAutoCompleteListBox()
@@ -54,12 +47,6 @@ CAutoCompleteListBox::CAutoCompleteListBox()
 
 CAutoCompleteListBox::~CAutoCompleteListBox()
 {
-	using namespace std::tr1::placeholders;
-
-	// Destroy every image list in the map
-	std::for_each(image_cache_.cbegin(),image_cache_.cend(),
-	              std::tr1::bind(std::ptr_fun<HIMAGELIST>(::ImageList_Destroy),
-	                             std::tr1::bind(&ImageCacheContainer::value_type::second,_1)));
 }
 
 BEGIN_MESSAGE_MAP(CAutoCompleteListBox,CListBox)
@@ -69,14 +56,9 @@ BEGIN_MESSAGE_MAP(CAutoCompleteListBox,CListBox)
 	ON_WM_KILLFOCUS()
 END_MESSAGE_MAP()
 
-
-/////////////////////////////////////////////////////////////////////////////
-// CAutoCompleteListBox message handlers
-
 void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
 	ASSERT(lpDrawItemStruct->CtlType == ODT_LISTBOX);
-	CString str;
 
 	if (lpDrawItemStruct->itemState == ODS_FOCUS /*|| lpDrawItemStruct->itemID < 0*/ || lpDrawItemStruct->itemID >= static_cast<UINT>(GetCount()))
 	{
@@ -92,7 +74,8 @@ void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		return;
 	}
 
-	GetText(lpDrawItemStruct->itemID,str);
+	CString str;
+	GetText(lpDrawItemStruct->itemID, str);
 	ASSERT(str.GetLength() >= 0);
 
 	LPCTSTR lpszText = str;
@@ -104,7 +87,7 @@ void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	COLORREF crOldTextColor = dc.GetTextColor();
 	COLORREF crOldBkColor = dc.GetBkColor();
 
-	//Subdivide the space between bitmap and text and leave some pixels in between
+	// Subdivide the space between bitmap and text and leave some pixels in between
 	const CRect rcItem = lpDrawItemStruct->rcItem;
 	// - bitmap
 	CRect bmpRect = rcItem;
@@ -119,26 +102,23 @@ void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 	dc.SetBkMode(TRANSPARENT);
 	dc.SetTextColor(::GetSysColor(COLOR_WINDOWTEXT));
 
-	//If this item is selected, highlight it.
-	//Earlier, we set the background color and the text color to appropriate values.
-	//But these values are not appropriate on Vista anymore.
-	//Also, erase rect by filling it with the background color.
+	// If this item is selected, highlight it.  Earlier, we set the background
+	// color and the text color to appropriate values.  But these values are not
+	// appropriate on Vista anymore.  Also, erase rect by filling it with the
+	// background color.
 	if ((lpDrawItemStruct->itemAction | ODA_SELECT) &&
-	        (lpDrawItemStruct->itemState & ODS_SELECTED))
+			(lpDrawItemStruct->itemState & ODS_SELECTED))
 	{
-		//dc.SetTextColor(::GetSysColor(COLOR_HIGHLIGHTTEXT));
-		//dc.SetBkColor(::GetSysColor(COLOR_HIGHLIGHT));
 		dc.FillSolidRect(&fillRect, ::GetSysColor(COLOR_BTNFACE));
 	}
 	else
 	{
-		//dc.SetBkColor(::GetSysColor(COLOR_WINDOW));
 		dc.FillSolidRect(&fillRect, crOldBkColor);
 	}
 
-    SharedStyleFilePtr parent(lc->GetParent().lock());
+	SharedStyleFilePtr parent(lc->GetParent().lock());
 
-	//Select Font: bold or normal
+	// Select Font: bold or normal
 	if (parent && parent->IsDocClass())
 	{
 		dc.SelectObject(&m_BoldFont);
@@ -148,16 +128,17 @@ void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		dc.SelectObject(&m_NormalFont);
 	}
 
-	//Draw the primary text
-	dc.DrawText(lpszText, &textRect, DT_SINGLELINE | DT_LEFT);
+	// Draw the primary text
+	dc.DrawText(lpszText, &textRect, DT_SINGLELINE | DT_LEFT | DT_VCENTER);
 
-	//Draw the comment text, if any
+	// Draw the comment text, if any
 	if (!lc->GetDescription().IsEmpty())
 	{
-		//Get the horizontal extent of the primary text. We do not want to overprint it.
+		// Get the horizontal extent of the primary text. We do not want to
+		// overprint it.
 		CSize PrimaryExtent = GetItemMeasure(&dc, lpszText);
 		// - remove it from the text rect
-		textRect.left += PrimaryExtent.cx /*+ padding*/; //padding not needed, looks good without
+		textRect.left += PrimaryExtent.cx; //padding not needed, looks good without
 		// - and get some white space at the right
 		textRect.right -= padding;
 
@@ -166,21 +147,21 @@ void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 		dc.DrawText(lc->GetDescription(), &textRect, DT_SINGLELINE | DT_RIGHT | DT_WORD_ELLIPSIS);
 	}
 
-	//Draw Bitmap, if available
+	// Draw Bitmap, if available
 	if (lc->GetIconIndex() != -1)
 	{
 		DrawBitmap(&dc,lc->GetIconFileName(),lc->GetIconIndex(),bmpRect);
 	}
 
-	//Focus Rectangle; draw only if needed
+	// Focus Rectangle; draw only if needed
 	if ((lpDrawItemStruct->itemAction & ODA_FOCUS) &&
-	        (lpDrawItemStruct->itemState & ODS_FOCUS))
+			(lpDrawItemStruct->itemState & ODS_FOCUS))
 	{
 		dc.DrawFocusRect(fillRect);
 	}
 
-	// Reset the background color and the text color back to their
-	// original values.
+	// Reset the background color and the text color back to their original
+	// values.
 	dc.SetTextColor(crOldTextColor);
 	dc.SetBkColor(crOldBkColor);
 
@@ -189,20 +170,20 @@ void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 void CAutoCompleteListBox::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 {
-	//This func is called once by the system (at creation of this box)
-	//to get info about how large the items are.
-	//Height is most important since the listbox items need to have a certain distance
+	// This func is called once by the system (at creation of this box) to get
+	// info about how large the items are.  Height is most important since the
+	// listbox items need to have a certain distance
 
 	ASSERT(lpMeasureItemStruct->CtlType == ODT_LISTBOX);
 
 	CDC* pDC = GetDC();
 	CFont* pOldFont = pDC->SelectObject(&m_BoldFont);
 
-	//Measure the height of all the letters and LaTeX stuff that we might have in this box
-	//We are no interested in the width here
+	// Measure the height of all the letters and LaTeX stuff that we might have
+	// in this box We are no interested in the width here
 
 	const CSize size =
-	    GetItemMeasure(pDC,_T("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890\\{}()[]"));
+		GetItemMeasure(pDC,_T("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890\\{}()[]"));
 
 	pDC->SelectObject(pOldFont);
 	ReleaseDC(pDC);
@@ -232,7 +213,7 @@ CSize CAutoCompleteListBox::GetLargestItemTextExtent()
 			CString ItemText;
 			GetText(i, ItemText);
 
-            SharedStyleFilePtr parent(lc->GetParent().lock());
+			SharedStyleFilePtr parent(lc->GetParent().lock());
 
 			//Select Font: bold or normal
 			if (parent && parent->IsDocClass())
@@ -252,7 +233,7 @@ CSize CAutoCompleteListBox::GetLargestItemTextExtent()
 			{
 				pDC->SelectObject(&m_ItalicFont);
 				CSize CommentExtent = GetItemMeasure(pDC, lc->GetDescription());
-				ItemExtent.cx += /*padding +*/ CommentExtent.cx + padding;
+				ItemExtent.cx += CommentExtent.cx + padding;
 			}
 
 			//Record the largest one
@@ -267,7 +248,7 @@ CSize CAutoCompleteListBox::GetLargestItemTextExtent()
 	return LargestItemExtent;
 }
 
-const CSize CAutoCompleteListBox::GetItemMeasure(CDC* dc, LPCTSTR text)
+CSize CAutoCompleteListBox::GetItemMeasure(CDC* dc, LPCTSTR text)
 {
 	CRect rc;
 	dc->DrawText(text,-1,&rc,DT_SINGLELINE|DT_CALCRECT);
@@ -276,7 +257,6 @@ const CSize CAutoCompleteListBox::GetItemMeasure(CDC* dc, LPCTSTR text)
 
 	return rc.Size();
 }
-
 
 int CAutoCompleteListBox::CompareItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct)
 {
@@ -291,53 +271,50 @@ int CAutoCompleteListBox::CompareItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct)
 BOOL CAutoCompleteListBox::DrawBitmap(CDC* pDC, const CString& file, UINT index, const CRect& rect)
 {
 	ASSERT_VALID(pDC);
+	CImageList* imageList = LoadBitmapFromFile(file);
 
-	// load IDB_BITMAP1 from our resources
-	HIMAGELIST himl = LoadBitmapFromFile(file);
-
-	if (himl)
+	if (imageList)
 	{
 		int cx, cy;
-		::ImageList_GetIconSize(himl,&cx,&cy);
+		::ImageList_GetIconSize(*imageList, &cx, &cy);
 
 		// Center the image
-		::ImageList_Draw(himl,index,pDC->m_hDC,rect.left + (rect.Width() - cx) / 2,
-		                 rect.top + (rect.Height() - cy) / 2,ILD_TRANSPARENT);
+		::ImageList_Draw(*imageList, index, pDC->m_hDC, rect.left + (rect.Width() - cx) / 2,
+			rect.top + (rect.Height() - cy) / 2, ILD_TRANSPARENT);
 	}
 
-	return himl != 0;
+	return imageList != 0;
 }
 
-/* Loads a bitmap from file. Will be replaced by CImage, if we'll we upgrade to a higher version of MFC/ATL */
-HIMAGELIST CAutoCompleteListBox::LoadBitmapFromFile(const CString& filename)
+CImageList* CAutoCompleteListBox::LoadBitmapFromFile(const CString& filename)
 {
-	//HBITMAP hbm;
-	HIMAGELIST hbm;
+	CImageList* result = NULL;
 
-	//if (!m_PictureCache->Lookup(filename,(void*&) hbm)) { // not in cache?
-	ImageCacheContainer::iterator it = image_cache_.find(filename);
+	ImageListMap::const_iterator it = image_cache_.find(filename);
 
 	if (it == image_cache_.end())
 	{
-		hbm = ::ImageList_LoadImage(0,filename,16,1,RGB(255,255,255),
-		                            IMAGE_BITMAP,LR_DEFAULTSIZE|LR_LOADFROMFILE|LR_CREATEDIBSECTION);
-		// ... create it
-		if (hbm)
+		HIMAGELIST hImageList = ::ImageList_LoadImage(0, filename, 16, 1, RGB(255,255,255),
+			IMAGE_BITMAP, LR_DEFAULTSIZE | LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+		
+		if (hImageList)
 		{
-			// ... and put it into the map
-			image_cache_.insert(std::make_pair(filename,hbm));
-			//m_PictureCache->SetAt(filename,hbm);
+			std::unique_ptr<CImageList> imageList(new CImageList());
+			imageList->Attach(hImageList);
+
+			result = imageList.get();
+
+			image_cache_.insert(std::make_pair(filename, std::move(imageList)));
 		}
 		else
 		{
-			TRACE1("Could not load bitmap from file %s\n",filename);
-			return NULL;
+			TRACE1("Could not load bitmap from file %s\n", filename);
 		}
 	}
 	else
-		hbm = it->second;
+		result = it->second.get();
 
-	return hbm;//CBitmap::FromHandle(hbm);
+	return result;
 }
 
 /** Treat dblclk as confirmation */
