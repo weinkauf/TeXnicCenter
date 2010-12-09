@@ -55,6 +55,9 @@ class CConfiguration
 	bool blink_insert_caret_, blink_overwrite_caret_;
 	bool insert_caret_line_, overwrite_caret_line_;	
 
+	/** TRUE, if caret line is highlighted, FALSE otherwise */
+	bool highlight_caret_line_;
+
 	/** TRUE, if line endings shout be displayed as special chars, FALSE otherwise */
 	bool show_line_endings_;
 
@@ -93,6 +96,9 @@ public:
 
 	bool IsOverwriteCaretLine() const;
 	void SetOverwriteCaretLine(bool val = true);
+
+	bool IsHighlightCaretLine() const;
+	void SetHighlightCaretLine(bool val = true);
 
 	bool GetShowLineEnding() const;
 	void SetShowLineEnding(bool val = true);

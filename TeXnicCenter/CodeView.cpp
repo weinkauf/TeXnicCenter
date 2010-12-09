@@ -112,6 +112,8 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_COMMAND(ID_EDIT_DELETE_LINE, &CodeView::OnEditDeleteLine)
 	ON_COMMAND(ID_ADVANCED_DUPLICATE, &CodeView::OnEditDuplicateLine)
 	ON_MESSAGE_VOID(CheckForFileChangesMessageID, OnCheckForFileChanges)
+	ON_COMMAND(ID_VIEW_HIGHLIGHTACTIVELINE, &CodeView::OnViewHighlightActiveLine)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_HIGHLIGHTACTIVELINE, &CodeView::OnUpdateViewHighlightActiveLine)
 END_MESSAGE_MAP()
 
 
@@ -197,12 +199,11 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 #pragma region Caret
 
-	//Think about this. It should be an option and go to the menu.
 	//In the options dialog it should be possible to define these colors
 	//together with all other colors.
-	//rCtrl.SetCaretLineBack(RGB(220, 220, 255));
-	//rCtrl.SetCaretLineVisible(true);
+	rCtrl.SetCaretLineBack(RGB(220, 220, 255));
 	//Not so nice: rCtrl.SetCaretLineBackAlpha(90);
+	HighlightActiveLine(CConfiguration::GetInstance()->IsHighlightCaretLine());
 
 #pragma endregion
 
@@ -1074,6 +1075,24 @@ bool CodeView::IsFoldingEnabled()
 	return GetCtrl().GetPropertyInt("fold") == 1;
 }
 
+void CodeView::HighlightActiveLine(bool show)
+{
+	GetCtrl().SetCaretLineVisible(show);
+}
+
+void CodeView::OnViewHighlightActiveLine()
+{
+	const bool bEnable = !GetCtrl().GetCaretLineVisible();
+	HighlightActiveLine(bEnable);
+	CConfiguration::GetInstance()->SetHighlightCaretLine(bEnable);
+}
+
+void CodeView::OnUpdateViewHighlightActiveLine(CCmdUI *pCmdUI)
+{
+	bool check = CConfiguration::GetInstance()->IsHighlightCaretLine();
+	pCmdUI->SetCheck(check);
+}
+
 void CodeView::ShowIndentationGuides( bool show )
 {
 	GetCtrl().SetIndentationGuides(show ? SC_IV_LOOKBOTH : SC_IV_NONE);
@@ -1358,3 +1377,4 @@ void CodeView::OnSavePointReached(SCNotification* /*n*/)
 }
 
 #pragma pop_macro("max")
+

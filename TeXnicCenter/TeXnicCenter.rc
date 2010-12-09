@@ -2293,7 +2293,7 @@ BEGIN
             MENUITEM "&Windows XP",                 ID_VIEW_APP_LOOK_WIN_XP
             MENUITEM "Office 200&3",                ID_VIEW_APP_LOOK_OFFICE_2003
             MENUITEM "Visual Studio .NET 200&5",    ID_VIEW_APP_LOOK_VS_2005
-            POPUP "Office 200&7"
+            POPUP "&Office 2007"
             BEGIN
                 MENUITEM "&Blue",                       ID_VIEW_APP_LOOK_OFFICE_2007_BLUE
                 MENUITEM "B&lack",                      ID_VIEW_APP_LOOK_OFFICE_2007_BLACK
@@ -2313,6 +2313,7 @@ BEGIN
         END
         MENUITEM "&Transparenz...",             ID_VIEW_TRANSPARENCY
         MENUITEM SEPARATOR
+        MENUITEM "A&ktive Zeile hervorheben",   ID_VIEW_HIGHLIGHTACTIVELINE
         MENUITEM "&Einzugshilfslinien",         ID_VIEW_INDENTATION_GUIDES
         MENUITEM "Zeilen&nummern",              ID_VIEW_LINE_NUMBERS
         MENUITEM "&Leerräume",                  ID_VIEW_WHITE_SPACE
@@ -2320,13 +2321,13 @@ BEGIN
         MENUITEM "&Faltungsrand",               ID_VIEW_FOLDMARGIN
         MENUITEM "Zeilen&umbruch",              ID_VIEW_WORD_WRAP
         MENUITEM "&Gleicher Einzug bei Zeilenumbruch", ID_VIEW_WORD_WRAP_INDENT
-        POPUP "Zeilenumbruchanzeige"
+        POPUP "Zeilenum&bruchanzeige"
         BEGIN
             MENUITEM "Am &Anfang einer Zeile",      ID_VIEW_WORDWRAPINDICATORS_START
             MENUITEM "Am &Ende einer Zeile",        ID_VIEW_WORDWRAPINDICATORS_END
         END
         MENUITEM SEPARATOR
-        MENUITEM "Vollbild",                    ID_VIEW_FULLSCREEN
+        MENUITEM "&Vollbild",                   ID_VIEW_FULLSCREEN
     END
     POPUP "&Suchen"
     BEGIN
@@ -6346,7 +6347,7 @@ BEGIN
             MENUITEM "Toggle &Top Tool Windows",    ID_VIEW_TOGGLETOPDOCKINGBARS
             MENUITEM "Toggle &Bottom Tool Windows", ID_VIEW_TOGGLEBOTTOMDOCKINGBARS
         END
-        MENUITEM "Status Bar",                  ID_VIEW_STATUS_BAR
+        MENUITEM "Status &Bar",                 ID_VIEW_STATUS_BAR
         MENUITEM SEPARATOR
         POPUP "&Application Look"
         BEGIN
@@ -6355,7 +6356,7 @@ BEGIN
             MENUITEM "&Windows XP",                 ID_VIEW_APP_LOOK_WIN_XP
             MENUITEM "Office 200&3",                ID_VIEW_APP_LOOK_OFFICE_2003
             MENUITEM "Visual Studio .NET 200&5",    ID_VIEW_APP_LOOK_VS_2005
-            POPUP "Office 200&7"
+            POPUP "&Office 2007"
             BEGIN
                 MENUITEM "&Blue",                       ID_VIEW_APP_LOOK_OFFICE_2007_BLUE
                 MENUITEM "B&lack",                      ID_VIEW_APP_LOOK_OFFICE_2007_BLACK
@@ -6364,7 +6365,7 @@ BEGIN
             END
             MENUITEM "Windows &7",                  ID_VIEW_APP_LOOK_WIN7
         END
-        POPUP "Document Tabs"
+        POPUP "&Document Tabs"
         BEGIN
             MENUITEM "&Top",                        ID_VIEW_DOCTAB_TOP
             MENUITEM "&Bottom",                     ID_VIEW_DOCTAB_BOTTOM
@@ -6375,6 +6376,7 @@ BEGIN
         END
         MENUITEM "T&ransparency...",            ID_VIEW_TRANSPARENCY
         MENUITEM SEPARATOR
+        MENUITEM "&Highlight Active Line",      ID_VIEW_HIGHLIGHTACTIVELINE
         MENUITEM "Indentation &Guides",         ID_VIEW_INDENTATION_GUIDES
         MENUITEM "Line &Numbers",               ID_VIEW_LINE_NUMBERS
         MENUITEM "White &Spaces",               ID_VIEW_WHITE_SPACE
@@ -6382,13 +6384,13 @@ BEGIN
         MENUITEM "&Fold Margin",                ID_VIEW_FOLDMARGIN
         MENUITEM "&Word Wrap",                  ID_VIEW_WORD_WRAP
         MENUITEM "Same &Indent for Wrapped Lines", ID_VIEW_WORD_WRAP_INDENT
-        POPUP "Word Wrap Indicators"
+        POPUP "Word Wrap Indi&cators"
         BEGIN
             MENUITEM "At the &Start of a Line",     ID_VIEW_WORDWRAPINDICATORS_START
             MENUITEM "At the &End of a Line",       ID_VIEW_WORDWRAPINDICATORS_END
         END
         MENUITEM SEPARATOR
-        MENUITEM "Full Screen",                 ID_VIEW_FULLSCREEN
+        MENUITEM "F&ull Screen",                ID_VIEW_FULLSCREEN
     END
     POPUP "&Search"
     BEGIN
@@ -6399,7 +6401,7 @@ BEGIN
         MENUITEM "Find Previous S&elected",     ID_SEARCH_FINDPREVIOUSSELECTED
         MENUITEM "F&ind in Files...",           ID_EDIT_FIND_IN_FILES
         MENUITEM SEPARATOR
-        MENUITEM "R&eplace",                    ID_EDIT_REPLACE
+        MENUITEM "&Replace",                    ID_EDIT_REPLACE
         MENUITEM SEPARATOR
         MENUITEM "Find incremental (up)",       ID_EDIT_FIND_INCREMENTAL_FORWARD
         MENUITEM "Find incremental (down)",     ID_EDIT_FIND_INCREMENTAL_BACKWARD

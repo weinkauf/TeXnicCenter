@@ -203,6 +203,8 @@ protected:
 	void OnModified(SCNotification* n);
 	void OnSavePointLeft(SCNotification* n);
 	void OnSavePointReached(SCNotification* n);
+	afx_msg void OnViewHighlightActiveLine();
+	afx_msg void OnUpdateViewHighlightActiveLine(CCmdUI *pCmdUI);
 	afx_msg void OnViewIndentationGuides();
 	afx_msg void OnUpdateViewIndentationGuides(CCmdUI *pCmdUI);
 	afx_msg void OnEditSelBiggerBlock();
@@ -220,6 +222,7 @@ public:
 	void ShowIndentationGuides(bool show);
 	void ToggleFolding();
 	void EnableFolding(bool value = true);
+	void HighlightActiveLine(bool show);
 
 	void SetModified(bool modified = true);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
