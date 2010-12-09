@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "LaTeXViewBase.h"
 
 class CAdvice;
@@ -56,7 +58,7 @@ private:
 	void InstantAdvice();
 
 	CAdvice* instant_advice_tip_;
-	CAutoCompleteDlg* autocompletion_list_;
+	std::unique_ptr<CAutoCompleteDlg> autocompletion_list_;
 	const std::auto_ptr<LaTeXViewListener> listener_;
 	bool autocompletion_active_;
 

@@ -32,13 +32,13 @@ END_MESSAGE_MAP()
 // CAutoCompleteDlg
 
 CAutoCompleteDlg::CAutoCompleteDlg(CStyleFileContainer *sfc,CWnd* pParent)
+	: m_Box(new CAutoCompleteListBox)
 {
 	ASSERT(sfc != NULL);
 
 	m_Listener = NULL;
 	m_Container = sfc;
 	m_Visible = FALSE;
-	m_Box = new CAutoCompleteListBox;
 
 	//Create the window out of sight (otherwise it would pop up in the middle of nowhere for a short moment)
 	if (!Create(pParent))
@@ -49,7 +49,6 @@ CAutoCompleteDlg::CAutoCompleteDlg(CStyleFileContainer *sfc,CWnd* pParent)
 
 CAutoCompleteDlg::~CAutoCompleteDlg()
 {
-	if (m_Box) delete m_Box;
 	DestroyWindow();
 }
 
@@ -418,7 +417,7 @@ void CAutoCompleteDlg::OnSize(UINT nType,int cx,int cy)
 void CAutoCompleteDlg::AdjustSizeAndPosition(const int EditorLineHeight)
 {
 	//Get the size of the largest entry
-	const CSize ItemSize = ((CAutoCompleteListBox*) m_Box)->GetLargestItemTextExtent();
+	const CSize ItemSize = m_Box->GetLargestItemTextExtent();
 
 	//Measure the size of the borders
 	CRect WinRect;
