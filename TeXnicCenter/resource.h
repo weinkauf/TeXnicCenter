@@ -714,6 +714,7 @@
 #define IDS_SPELL_DONE                  8661
 #define IDS_SPELL_NO_SUGGESTIONS        8662
 #define IDS_MISSING_SECTION             8663
+#define IDC_EDITOR_CLOSETOOLWINDOWS_ESC 8667
 #define ID_TEXTMODULES_FIRST            17000
 #define ID_TEXTMODULES_LAST             18000
 #define ID_VIEW_BAR1                    32760
@@ -1462,7 +1463,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57678
 #define _APS_NEXT_COMMAND_VALUE         40685
-#define _APS_NEXT_CONTROL_VALUE         8665
+#define _APS_NEXT_CONTROL_VALUE         8668
 #define _APS_NEXT_SYMED_VALUE           57773
 #endif
 #endif

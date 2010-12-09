@@ -166,22 +166,31 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 
 	SerializeProfileBool(strSection,_T("EditorShowLineNumbers"),m_bShowLineNumbers,direction,0);
 	SerializeProfileBool(strSection,_T("EditorShowLineEndings"),show_line_endings_,direction,0);
+	SerializeProfileBool(strSection,_T("ViewWhitespaces"),m_bViewWhitespaces,direction,false);
 	SerializeProfileBool(strSection,_T("EditorWordWrap"),word_wrap_,direction,1);
 	SerializeProfileBool(strSection,_T("EditorWordWrapIndent"),word_wrap_indent_,direction,0);
 	SerializeProfileInt(strSection,_T("EditorWordWrapIndicators"),&word_wrap_indicators_,direction,0);
+	SerializeProfileBool(strSection,_T("EditorShowIndentationGuides"),show_indentation_guides_,direction, show_indentation_guides_);
+	SerializeProfileInt(strSection,_T("FixedColumnWrap"),&m_nFixedColumnWrap,direction,80);
 
 	SerializeProfileBool(strSection,_T("EditorFold"),fold_,direction,0);
 	SerializeProfileBool(strSection,_T("EditorShowLineBelowFold"),show_line_below_fold_,direction,0);
 	SerializeProfileBool(strSection,_T("EditorShowLineBelowNoFold"),show_line_below_no_fold_,direction,0);
 	SerializeProfileBool(strSection,_T("EditorShowLineAboveFold"),show_line_above_fold_,direction,0);
 	SerializeProfileBool(strSection,_T("EditorShowLineAboveNoFold"),show_line_above_no_fold_,direction,0);
+	SerializeProfileBool(strSection,_T("EditorFoldCompact"),fold_compact_,direction, fold_compact_);
 
+	SerializeProfileInt(strSection,_T("EditorTabWidth"),&m_nTabWidth,direction,2);
 	SerializeProfileBool(strSection,_T("EditorUseSpaces"),use_spaces_,direction,0);
 
-	SerializeProfileBool(strSection,_T("EditorShowIndentationGuides"),show_indentation_guides_,direction,
-		show_indentation_guides_);
-	SerializeProfileBool(strSection,_T("EditorFoldCompact"),fold_compact_,direction,
-		fold_compact_);
+	SerializeProfileBool(strSection,_T("CloseToolWindowsOnEscape"), m_bCloseToolWindowsOnEscape, direction, 1);
+
+	for (int i = 0; i < LaTeXView::COLORINDEX_COUNT; i++)
+	{
+		CString strFormat;
+		strFormat.Format(_T("EditorColor%d"),i);
+		SerializeProfileInt(strSection,strFormat,(int*) &m_aEditorColors[i],direction,(int) 0xFFFFFFFF);
+	}
 
 #pragma region Cursor settings
 
@@ -194,20 +203,6 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	SerializeProfileBool(strSection,_T("InsertCaretMode"),nInsertCaretMode,direction,nInsertCaretMode);
 	SerializeProfileBool(strSection,_T("OverwriteCaretForm"),nOverwriteCaretForm,direction,nOverwriteCaretForm);
 	SerializeProfileBool(strSection,_T("OverwriteCaretMode"),nOverwriteCaretMode,direction,nOverwriteCaretMode);
-
-	SerializeProfileInt(strSection,_T("EditorTabWidth"),&m_nTabWidth,direction,2);
-
-	for (int i = 0; i < LaTeXView::COLORINDEX_COUNT; i++)
-	{
-		CString strFormat;
-		strFormat.Format(_T("EditorColor%d"),i);
-		SerializeProfileInt(strSection,strFormat,(int*) & m_aEditorColors[i],direction,(int) 0xFFFFFFFF);
-	}
-
-	SerializeProfileBool(strSection,_T("ViewWhitespaces"),m_bViewWhitespaces,direction,false);
-
-	//SerializeProfileInt(strSection,_T("WordWrapStyle"),(int*) & m_WordWrapStyle,direction,WORD_WRAP_WINDOW);
-	SerializeProfileInt(strSection,_T("FixedColumnWrap"),& m_nFixedColumnWrap,direction,80);
 
 #pragma endregion
 

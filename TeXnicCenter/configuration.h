@@ -375,11 +375,11 @@ public:
 	/** TRUE, if line numbers should be shown */
 	bool m_bShowLineNumbers;
 
-	/** The word warp style. */
-	int m_WordWrapStyle;
-
-	/**  amount of column to wrap words */
+	/** Column for hard wrap via Edit | Advanced | Split Paragraphs */
 	int m_nFixedColumnWrap;
+
+	/** Close ToolWindows on pressing ESC when the editor has the focus. */
+	bool m_bCloseToolWindowsOnEscape;
 
 	///////////////////////////////////////////////////////////////////
 	// Other window settings

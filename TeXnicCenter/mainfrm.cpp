@@ -1562,10 +1562,13 @@ BOOL CMainFrame::OnToolsCancel(UINT)
 	}
 	else
 	{
-		//Close the bottom tool windows to get more space for the editor.
-		ToggleDockingBars(CBRS_ALIGN_BOTTOM, true);
-		//...and we make sure that the build output is closed as well, since we open it with every compilation.
-		ShowPaneEnsureVisibility(&build_view_pane_, false, false, false);
+		if (CConfiguration::GetInstance()->m_bCloseToolWindowsOnEscape)
+		{
+			//Close the bottom tool windows to get more space for the editor.
+			ToggleDockingBars(CBRS_ALIGN_BOTTOM, true);
+			//...and we make sure that the build output is closed as well, since we open it with every compilation.
+			ShowPaneEnsureVisibility(&build_view_pane_, false, false, false);
+		}
 	}
 
 	return TRUE;
