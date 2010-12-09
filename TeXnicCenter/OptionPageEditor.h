@@ -8,11 +8,8 @@ class COptionPageEditor :
 	DECLARE_DYNCREATE(COptionPageEditor)
 
 private:
-	CEdit m_wndFixedColumn;
 	UINT m_nTabWidth;
 	UINT m_nFixedColumn;
-	int m_nWordWrapStyle;
-	BOOL m_bShowLineNumbers;
 
 	BOOL show_line_below_fold_;
 	BOOL show_line_below_no_fold_;
@@ -20,6 +17,7 @@ private:
 	BOOL show_line_above_no_fold_;
 	BOOL use_spaces_;
 	BOOL fold_compact_;
+	BOOL close_toolwindows_on_escape_;
 	
 // Construction
 public:
@@ -31,8 +29,4 @@ public:
 protected:
 	virtual void OnOK();
 	virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
-	afx_msg void UpdateControlStates();
-	virtual BOOL OnInitDialog();
-
-	DECLARE_MESSAGE_MAP()
 };
