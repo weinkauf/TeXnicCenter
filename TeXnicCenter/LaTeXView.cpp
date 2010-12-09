@@ -103,7 +103,6 @@ IMPLEMENT_DYNCREATE(LaTeXView, LaTeXViewBase)
 LaTeXView::LaTeXView()
 : autocompletion_active_(false)
 , instant_advice_tip_(0)
-, autocompletion_list_(0)
 , listener_(new LaTeXViewListener(this))
 {
 }
@@ -594,8 +593,8 @@ CAutoCompleteDlg* LaTeXView::CreateListBox( CString &keyword, long pos )
 	if (nWords >= 1)
 	{
 		//Create window, if needed
-		if (autocompletion_list_ == NULL) {
-			autocompletion_list_ = new CAutoCompleteDlg(&theApp.m_AvailableCommands,this /*theApp.GetMainWnd()*/);
+		if (!autocompletion_list_) {
+			autocompletion_list_.reset(new CAutoCompleteDlg(&theApp.m_AvailableCommands, this));
 			autocompletion_list_->SetListener(listener_.get());
 		}
 
@@ -619,7 +618,7 @@ CAutoCompleteDlg* LaTeXView::CreateListBox( CString &keyword, long pos )
 	}
 
 	//TRACE("<== CreateListBox\n");
-	return autocompletion_list_;
+	return autocompletion_list_.get();
 }
 
 int LaTeXView::GetNumberOfMatches( const CString& keyword )
@@ -823,11 +822,10 @@ void LaTeXView::OnQueryCompletion()
 	GetWordBeforeCursor(keyword,topLeft); /* retrieve word to be completed */
 
 	if (!keyword.IsEmpty())
-		autocompletion_list_ = CreateListBox(keyword,topLeft); /* setup (and show) list box */
+		autocompletion_list_.reset(CreateListBox(keyword, topLeft)); /* setup (and show) list box */
 	else
 		GetCtrl().SetSel(old_pos_start_,old_pos_end_); /* restore old position */
 }
-
 
 /* Invokes context help for a given keyword */
 BOOL LaTeXView::InvokeContextHelp( const CString& keyword )
@@ -856,7 +854,7 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 	bool bReplaceBell = false;
 	CString strInsert; // text to insert
 
-	CInsertFloatObjectDialog *pDlg = NULL;
+	std::unique_ptr<CInsertFloatObjectDialog> pDlg;
 
 	long ptSelStart = GetCtrl().GetSelectionStart();
 	long ptSelEnd = GetCtrl().GetSelectionEnd();
@@ -865,16 +863,16 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 
 	switch (nID) {
 		case ID_INSERT_FIGURE:
-			pDlg = new CInsertFloatObjectDialog(CInsertFloatObjectDialog::figure,this);
+			pDlg.reset(new CInsertFloatObjectDialog(CInsertFloatObjectDialog::figure, this));
 			break;
 		case ID_INSERT_TABLE:
-			pDlg = new CInsertFloatObjectDialog(CInsertFloatObjectDialog::table,this);
+			pDlg.reset(new CInsertFloatObjectDialog(CInsertFloatObjectDialog::table, this));
 			break;
 		case ID_INSERT_INCLUDEGRAPHICS:
-			pDlg = new CInsertGraphicDialog(this);
+			pDlg.reset(new CInsertGraphicDialog(this));
 			break;
 		case ID_INSERT_TABULAR:
-			pDlg = new CInsertTabularDialog(this);
+			pDlg.reset(new CInsertTabularDialog(this));
 			break;
 	}
 
@@ -914,7 +912,6 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 			}
 
 			if (pDlg->DoModal() != IDOK) {
-				delete pDlg;
 				return TRUE;
 			}
 
@@ -944,9 +941,6 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 	}
 
 #pragma endregion
-
-	if (pDlg)
-		delete pDlg;
 
 	// evaluate how to insert the text
 	CString strBeforeCursor, strBehindCursor;
@@ -1058,7 +1052,6 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 
 	return TRUE;
 }
-
 
 DocumentTokenizer* LaTeXView::NewDocumentTokenizer() const
 {

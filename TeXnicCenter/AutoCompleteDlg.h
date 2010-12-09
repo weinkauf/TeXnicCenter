@@ -4,39 +4,27 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// AutoCompleteDlg.h : header file
-//
+
+#include <memory>
 
 #include "StyleFileContainer.h"
 
 /* Minimum keyword length to trigger listbox */
 const int MINIMUM_KEYWORD_LENGTH = 2;
 
-
+class CAutoCompleteListBox;
 class CAutoCompleteListener;
-
-/////////////////////////////////////////////////////////////////////////////
-// CAutoCompleteDlg window
 
 class CAutoCompleteDlg : public CWnd
 {
-	SharedObjectMap map;
-// Construction
 public:
-
 	enum
 	{
 		ID_AUTOCOMPLETE = 1234
 	};
 
 	CAutoCompleteDlg(CStyleFileContainer *sfc, CWnd* pParent = NULL);
-	friend class CAutoCompleteListBox;
-// Attributes
-public:
-
-// Operations
-public:
-
+	~CAutoCompleteDlg();
 
 	/** Select an item in the listbox by the zero-based position. See also CListBox::SetCurSel */
 	void SetCurSel(int);
@@ -69,25 +57,28 @@ public:
 	///Adjusts the size and position of the dialog to match its content.
 	void AdjustSizeAndPosition(const int EditorLineHeight);
 
-
-	// Overrides
-	// ClassWizard generated virtual function overrides
-//{{AFX_VIRTUAL(CAutoCompleteDlg)
-public:
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	//}}AFX_VIRTUAL
-
-// Implementation
-public:
-
 	static int GetMinimumKeywordLength();
 
-	~CAutoCompleteDlg();
-
 protected:
+	DECLARE_MESSAGE_MAP()
+
+	afx_msg void OnKillFocus(CWnd* pNewWnd);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg LRESULT OnNcHitTest(CPoint point);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnDestroy();
+	afx_msg void OnSetFocus(CWnd* pOldWnd);
+	BOOL Create(CWnd* pParentWnd);
+	LRESULT OnFloatStatus(WPARAM wParam, LPARAM lParam);
 	void MoveSelection(int delta);
+
 private:
+	friend class CAutoCompleteListBox;
 
 	void ApplySelection();
 	void CancelSelection();
@@ -96,36 +87,14 @@ private:
 	void DrawListItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 	void MeasureListItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
 	int CompareListItem(LPCOMPAREITEMSTRUCT lpCompareItemStruct);
-
 	void MakeTransparent(int value);
 
 	CString m_CurrentKeyword;
-
 	CStyleFileContainer *m_Container;
-	//CString m_WndClass;
 	CAutoCompleteListener *m_Listener;
-	CListBox *m_Box;
 	BOOL m_Visible;
-// Generated message map functions
-protected:
-	//{{AFX_MSG(CAutoCompleteDlg)
-	afx_msg void OnKillFocus(CWnd* pNewWnd);
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-public:
-	afx_msg LRESULT OnNcHitTest(CPoint point);
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnDestroy();
-	afx_msg void OnSetFocus(CWnd* pOldWnd);
-	BOOL Create(CWnd* pParentWnd);
-protected:
-	LRESULT OnFloatStatus(WPARAM wParam, LPARAM lParam);
-
+	const std::unique_ptr<CAutoCompleteListBox> m_Box;
+	SharedObjectMap map;
 };
 
 /**
