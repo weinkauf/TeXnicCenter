@@ -105,10 +105,9 @@ void COptionPageFileClean::OnOK()
 
 	//Copy the array
 	CConfiguration::GetInstance()->m_aFileCleanItems.RemoveAll();
-
 	const int count = m_wndList.GetItemCount();
-
-	for (int i = 0; i < count; ++i) {
+	for (int i = 0; i < count; ++i)
+	{
 		CFileCleanItem* item = reinterpret_cast<CFileCleanItem*>(m_wndList.GetItemData(i));
 		CConfiguration::GetInstance()->m_aFileCleanItems.InsertSorted(*item,true,true);
 	}
@@ -130,14 +129,12 @@ LVITEM COptionPageFileClean::GetLVITEM()
 void COptionPageFileClean::Populate()
 {
 	//Not valid?
-	if (!IsWindow(m_wndList.m_hWnd))
-		return;
+	if (!IsWindow(m_wndList.m_hWnd)) return;
 
 	//Remember the selected entry
 	int nLastSelected = m_wndList.GetNextItem(-1,LVNI_SELECTED);
 
-	if (nLastSelected < 0) 
-		nLastSelected = 0;
+	if (nLastSelected < 0) nLastSelected = 0;
 
 	//////////////////////////
 	//Clear List
@@ -146,19 +143,22 @@ void COptionPageFileClean::Populate()
 
 	const CFileCleanItemArray& items = CConfiguration::GetInstance()->m_aFileCleanItems;
 
-	if (items.GetSize() > 0) {
+	if (items.GetSize() > 0)
+	{
 		//////////////////////////
 		//Init Structure
 
 		LVITEM lvi = GetLVITEM();
-		
+
 		//////////////////////////
 		//Fill List
 		m_bUpdatingList = true; //Lock
 		int size = items.GetSize();
 
 		for (int i = 0; i < size; i++)
+		{
 			InsertItem(i,lvi,items[i]);
+		}
 
 		m_bUpdatingList = false; //Unlock
 
@@ -178,7 +178,8 @@ void COptionPageFileClean::Populate()
 	m_wndList.SetRedraw(TRUE);
 }
 
-namespace {
+namespace
+{
 	template<class T>
 	int LexicographicalCompare(const T& a, const T& b)
 	{
@@ -513,15 +514,19 @@ void COptionPageFileClean::OnListItemchanged(NMHDR* pNMHDR,LRESULT* pResult)
 		if (pNMListView->uNewState & LVIS_SELECTED)
 		{
 			if (m_wndList.GetSelectedCount() > 1)
+			{
 				UpdateControlsState(false);
-			else {
+			}
+			else
+			{
 				//Lock this event. Should not be considered, while executing UpdateControls
 				m_bItemChangeLock = true;
 				UpdateControls();
 				m_bItemChangeLock = false;
 			}
 		}
-		else if (m_wndList.GetSelectedCount() == 1) {
+		else if (m_wndList.GetSelectedCount() == 1)
+		{
 			m_bItemChangeLock = true;
 			UpdateControls();
 			m_bItemChangeLock = false;
@@ -665,26 +670,33 @@ int COptionPageFileClean::InsertItem( int index, LVITEM &lvi, const CFileCleanIt
 void COptionPageFileClean::OnLvnKeydownOptionsFilecleanList(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
-	
-	switch (pLVKeyDow->wVKey) {
-		case _T('A'):
-			if (::GetKeyState(VK_CONTROL) >> 15 & 1)
-				m_wndList.SetItemState(-1,LVIS_SELECTED,LVIS_SELECTED);
-			break;
-		case VK_DELETE:
-			{
-				m_wndList.SetRedraw(FALSE);
 
-				for (int i = m_wndList.GetItemCount() - 1; i >= 0; --i) {
-					if (m_wndList.GetItemState(i,LVIS_SELECTED) == LVIS_SELECTED) {
-						if (!ShouldBeDisabled(*reinterpret_cast<CFileCleanItem*>(m_wndList.GetItemData(i))))
-							m_wndList.DeleteItem(i);
+	switch (pLVKeyDow->wVKey)
+	{
+		case _T('A'):
+		{
+			if (::GetKeyState(VK_CONTROL) >> 15 & 1) m_wndList.SetItemState(-1,LVIS_SELECTED,LVIS_SELECTED);
+			break;
+		}
+
+		case VK_DELETE:
+		{
+			m_wndList.SetRedraw(FALSE);
+
+			for (int i = m_wndList.GetItemCount() - 1; i >= 0; --i)
+			{
+				if (m_wndList.GetItemState(i,LVIS_SELECTED) == LVIS_SELECTED)
+				{
+					if (!ShouldBeDisabled(*reinterpret_cast<CFileCleanItem*>(m_wndList.GetItemData(i))))
+					{
+						m_wndList.DeleteItem(i);
 					}
 				}
-
-				m_wndList.SetRedraw(TRUE);
 			}
-			break;
+
+			m_wndList.SetRedraw(TRUE);
+		}
+		break;
 	}
 
 	*pResult = 0;
@@ -692,5 +704,5 @@ void COptionPageFileClean::OnLvnKeydownOptionsFilecleanList(NMHDR *pNMHDR, LRESU
 
 bool COptionPageFileClean::ShouldBeDisabled(const CFileCleanItem& item)
 {
-	return item.GetFileHandling() == CFileCleanItem::protectbydefault;
+	return (item.GetFileHandling() == CFileCleanItem::protectbydefault);
 }
