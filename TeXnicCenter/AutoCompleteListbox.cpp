@@ -144,7 +144,8 @@ void CAutoCompleteListBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 		dc.SelectObject(&m_ItalicFont);
 		dc.SetTextColor(::GetSysColor(COLOR_GRAYTEXT));
-		dc.DrawText(lc->GetDescription(), &textRect, DT_SINGLELINE | DT_RIGHT | DT_WORD_ELLIPSIS);
+		dc.DrawText(lc->GetDescription(), &textRect, DT_SINGLELINE | DT_RIGHT | 
+			DT_WORD_ELLIPSIS | DT_VCENTER);
 	}
 
 	// Draw Bitmap, if available
