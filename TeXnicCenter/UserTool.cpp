@@ -33,8 +33,7 @@
 ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-
+#include "resource.h"
 #include "PlaceHolder.h"
 #include "global.h"
 #include "UserTool.h"
@@ -42,6 +41,7 @@
 #include "LaTeXDocument.h"
 #include "process.h"
 #include "ProcessCommand.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

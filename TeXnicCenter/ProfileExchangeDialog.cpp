@@ -33,7 +33,7 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "texniccenter.h"
+#include "resource.h"
 #include "ProfileExchangeDialog.h"
 
 #ifdef _DEBUG

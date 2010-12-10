@@ -33,16 +33,17 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 
 #include <vector>
 
+#include "resource.h"
 #include "BibItem.h"
 #include "StructureTreeCtrl.h"
 #include "StructureParser.h"
 #include "LatexProject.h"
 #include "FontOccManager.h"
 #include "OutputDoc.h"
+#include "TeXnicCenter.h"
 
 const UINT GotoBibliographyLine = WM_USER + 1;
 

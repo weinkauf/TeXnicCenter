@@ -33,11 +33,11 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-
+#include "resource.h"
 #include "Project.h"
 #include "ProjectTemplate.h"
 #include "ProjectSupportingWinApp.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

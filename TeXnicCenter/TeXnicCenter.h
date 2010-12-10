@@ -37,22 +37,22 @@
 #error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"
+#include <memory>
 
-#include "LatexProject.h"
-//#include "MDIFrameManager.h"
 #include "ProjectSupportingWinApp.h"
 #include "ProjectTemplate.h"
 #include "StyleFileContainer.h"
-#include "SpellerBackgroundThread.h"
 
+class CLaTeXProject;
 class LaTeXView;
+class Speller;
+class SpellerSource;
+class SpellerBackgroundThread;
 
 extern class CTeXnicCenterApp theApp;
 
 class CTeXnicCenterApp :
-			public CProjectSupportingWinApp,
-			public SpellerSource
+			public CProjectSupportingWinApp
 {
 	UINT m_nApplicationLook;
 	mutable CString module_name_;
@@ -400,10 +400,10 @@ protected:
 	HINSTANCE m_hTxcResources;
 
 	/** Spell checker */
-	Speller *m_pSpell;
+	std::unique_ptr<Speller> m_pSpell;
 
 	/** Background thread that processes spelling and other tasks */
-	SpellerBackgroundThread *m_pBackgroundThread;
+	std::unique_ptr<SpellerBackgroundThread> m_pBackgroundThread;
 
 	/** Critical section to protect lazy resource initialization */
     CCriticalSection m_csLazy;
@@ -422,6 +422,10 @@ public:
 	///
 	/// \return Filter string.
 	static const CString GetDocTemplateFilter( CDocTemplate* doc);
+	void ResetSpeller();
+
+private:
+	std::unique_ptr<SpellerSource> spellerSource_;
 };
 
 inline

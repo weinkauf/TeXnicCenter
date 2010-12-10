@@ -33,9 +33,8 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "texniccenter.h"
+#include "resource.h"
 #include "OptionPageFileClean.h"
-
 #include "Configuration.h"
 #include "RunTimeHelper.h"
 

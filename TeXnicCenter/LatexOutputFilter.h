@@ -44,6 +44,7 @@
 #include <cstddef>
 
 #include "OutputFilter.h"
+#include "OutputInfo.h"
 
 /**
 An object of this class is used to parse the output messages

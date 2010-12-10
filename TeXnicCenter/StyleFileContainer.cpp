@@ -34,12 +34,14 @@
 
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "StyleFile.h"
 #include "StyleFileContainer.h"
 #include "LaTeXCommand.h"
+#include "LatexProject.h"
 #include "NewCommand.h"
 #include "NewEnvironment.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

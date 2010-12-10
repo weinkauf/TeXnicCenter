@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 #include "BibTeXView.h"
 #include "LaTeXTokenizer.h"
 #include "configuration.h"

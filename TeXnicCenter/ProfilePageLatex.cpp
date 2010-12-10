@@ -27,7 +27,7 @@
  *********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "ProfilePageLatex.h"
 
 #ifdef _DEBUG

@@ -33,23 +33,35 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "MainFrm.h"
+#include "resource.h"
 
 #include <vector>
 #include <functional>
 
+#include "ChildFrm.h"
+#include "environmentview.h"
+#include "BibView.h"
+#include "BookmarkView.h"
+#include "fileview.h"
+#include "ParseOutputView.h"
+#include "OutputDoc.h"
+#include "ErrorListPane.h"
+#include "StructureView.h"
+#include "StructureTreeCtrl.h"
+#include "MainFrm.h"
 #include "global.h"
-#include "TeXnicCenter.h"
 #include "BuildView.h"
 #include "GrepView.h"
 #include "Configuration.h"
 #include "Splash.h"
 #include "ToolBarsCustomizeDialog.h"
-#include "UserTool.h"
 #include "ProfileDialog.h"
 #include "RunTimeHelper.h"
 #include "LaTeXDocument.h"
+#include "TeXnicCenter.h"
 #include "TransparencyDlg.h"
+#include "UserTool.h"
+#include "WorkspacePane.h"
 
 // To hold the colours and their names
 struct ColourTableEntry
@@ -275,11 +287,25 @@ static UINT indicators[] =
 	ID_INDICATOR_SCRL,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame Konstruktion/Zerstörung
-
 CMainFrame::CMainFrame()
-: m_pContextMenuTargetWindow(NULL)
+	: m_pContextMenuTargetWindow(NULL)
+	, structure_view_(new StructurePane)
+	, file_view_pane_(new WorkspacePane)
+	, file_view_(new CFileView)
+	, env_view_pane_(new WorkspacePane)
+	, env_view_(new CEnvironmentView)
+	, bib_view_pane_(new BibView)
+	, bookmark_view_pane_(new BookmarkView)
+	, build_view_pane_(new WorkspacePane)
+	, build_view_(new CBuildView)
+	, error_list_view_(new ErrorListPane)
+	, grep_view_1_pane_(new WorkspacePane)
+	, grep_view_1_(new CGrepView)
+	, grep_view_2_(new CGrepView)
+	, grep_view_2_pane_(new WorkspacePane)
+	, parse_view_pane_(new WorkspacePane)
+	, output_doc_(new COutputDoc)
+	, parse_view_(new CParseOutputView)
 {
 }
 
@@ -545,20 +571,20 @@ void CMainFrame::GetAllPanes(std::vector< CBasePane* >& pAllPanes, bool bNavigat
 
 	if (bNavigatorPanes)
 	{
-		pAllPanes.push_back(&bookmark_view_pane_);
-		pAllPanes.push_back(&env_view_pane_);
-		pAllPanes.push_back(&file_view_pane_);
-		pAllPanes.push_back(&bib_view_pane_);
-		pAllPanes.push_back(&structure_view_);
+		pAllPanes.push_back(bookmark_view_pane_.get());
+		pAllPanes.push_back(env_view_pane_.get());
+		pAllPanes.push_back(file_view_pane_.get());
+		pAllPanes.push_back(bib_view_pane_.get());
+		pAllPanes.push_back(structure_view_.get());
 	}
 
 	if (bOutputPanes)
 	{
-		pAllPanes.push_back(&error_list_view_);
-		pAllPanes.push_back(&grep_view_1_pane_);
-		pAllPanes.push_back(&grep_view_2_pane_);
-		pAllPanes.push_back(&parse_view_pane_);
-		pAllPanes.push_back(&build_view_pane_);
+		pAllPanes.push_back(error_list_view_.get());
+		pAllPanes.push_back(grep_view_1_pane_.get());
+		pAllPanes.push_back(grep_view_2_pane_.get());
+		pAllPanes.push_back(parse_view_pane_.get());
+		pAllPanes.push_back(build_view_pane_.get());
 	}
 }
 
@@ -717,43 +743,43 @@ BOOL CMainFrame::OnToggleDockingBar(UINT nIDEvent)
 	switch (nIDEvent)
 	{
 		case ID_VIEW_STRUCT_PANE:
-			pCtrlBar = &structure_view_;
+			pCtrlBar = structure_view_.get();
 			break;
 
 		case ID_VIEW_ENV_PANE:
-			pCtrlBar = &env_view_pane_;
+			pCtrlBar = env_view_pane_.get();
 			break;
 
 		case ID_VIEW_FILES_PANE:
-			pCtrlBar = &file_view_pane_;
+			pCtrlBar = file_view_pane_.get();
 			break;
 
 		case ID_VIEW_BIB_ENTRIES_PANE:
-			pCtrlBar = &bib_view_pane_;
+			pCtrlBar = bib_view_pane_.get();
 			break;
 
 		case ID_VIEW_ERROR_LIST_PANE:
-			pCtrlBar = &error_list_view_;
+			pCtrlBar = error_list_view_.get();
 			break;
 
 		case ID_VIEW_BOOKMARKS_PANE:
-			pCtrlBar = &bookmark_view_pane_;
+			pCtrlBar = bookmark_view_pane_.get();
 			break;
 
 		case ID_VIEW_BUILD_PANE:
-			pCtrlBar = &build_view_pane_;
+			pCtrlBar = build_view_pane_.get();
 			break;
 
 		case ID_VIEW_GREP_1_PANE:
-			pCtrlBar = &grep_view_1_pane_;
+			pCtrlBar = grep_view_1_pane_.get();
 			break;
 
 		case ID_VIEW_GREP_2_PANE:
-			pCtrlBar = &grep_view_2_pane_;
+			pCtrlBar = grep_view_2_pane_.get();
 			break;
 
 		case ID_VIEW_PARSE_PANE:
-			pCtrlBar = &parse_view_pane_;
+			pCtrlBar = parse_view_pane_.get();
 			break;
 	}
 
@@ -835,7 +861,7 @@ void CMainFrame::ActivateOutputTab(int nTab, bool /*bSetFocus*/)
 	if (nTab >= 0 && (unsigned int)(nTab) < pAllPanes.size())
 	{
 		// Special case: Activate the build view only if the error list view isn't active
-		if (nTab != outputTabBuildResult || !error_list_view_.IsWindowVisible())
+		if (nTab != outputTabBuildResult || !error_list_view_->IsWindowVisible())
 		{
 			ShowPaneEnsureVisibility(pAllPanes[nTab], true, false, true);
 		}
@@ -1141,10 +1167,10 @@ void CMainFrame::OnWindowList()
 
 BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
 {
-	if (output_doc_.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+	if (output_doc_->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 		return TRUE;
 
-	if (bib_view_pane_.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+	if (bib_view_pane_->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 		return TRUE;
 
 	return CMDIFrameWndEx::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
@@ -1567,7 +1593,7 @@ BOOL CMainFrame::OnToolsCancel(UINT)
 			//Close the bottom tool windows to get more space for the editor.
 			ToggleDockingBars(CBRS_ALIGN_BOTTOM, true);
 			//...and we make sure that the build output is closed as well, since we open it with every compilation.
-			ShowPaneEnsureVisibility(&build_view_pane_, false, false, false);
+			ShowPaneEnsureVisibility(build_view_pane_.get(), false, false, false);
 		}
 	}
 
@@ -1635,108 +1661,113 @@ bool CMainFrame::CreateToolWindows()
 	const CSize bottom_pane_size(350, 350);
 
 	//Left windows
-	structure_view_.Create(GetCaption(ID_VIEW_STRUCT_PANE), this,
+	structure_view_->Create(GetCaption(ID_VIEW_STRUCT_PANE), this,
 		CRect(CPoint(0, 0), size), TRUE, ID_VIEW_STRUCT_PANE, pane_style | CBRS_LEFT);
-	env_view_pane_.Create(GetCaption(ID_VIEW_ENV_PANE), this,
+	env_view_pane_->Create(GetCaption(ID_VIEW_ENV_PANE), this,
 		CRect(CPoint(0, 0), size), TRUE, ID_VIEW_ENV_PANE, pane_style | CBRS_LEFT);
-	file_view_pane_.Create(GetCaption(ID_VIEW_FILES_PANE), this,
+	file_view_pane_->Create(GetCaption(ID_VIEW_FILES_PANE), this,
 		CRect(CPoint(0, 0), size), TRUE, ID_VIEW_FILES_PANE, pane_style | CBRS_LEFT);
 	//Right windows
-	bookmark_view_pane_.Create(GetCaption(ID_VIEW_BOOKMARKS_PANE), this,
+	bookmark_view_pane_->Create(GetCaption(ID_VIEW_BOOKMARKS_PANE), this,
 		CRect(CPoint(0, 0), size), TRUE, ID_VIEW_BOOKMARKS_PANE, pane_style | CBRS_RIGHT);
 	//Bottom windows
-	error_list_view_.Create(GetCaption(ID_VIEW_ERROR_LIST_PANE), this,
+	error_list_view_->Create(GetCaption(ID_VIEW_ERROR_LIST_PANE), this,
 		CRect(CPoint(0, 0), bottom_pane_size), TRUE, ID_VIEW_ERROR_LIST_PANE, pane_style | CBRS_BOTTOM);
-	build_view_pane_.Create(GetCaption(ID_VIEW_BUILD_PANE), this,
+	build_view_pane_->Create(GetCaption(ID_VIEW_BUILD_PANE), this,
 		CRect(CPoint(0, 0), bottom_pane_size), TRUE, ID_VIEW_BUILD_PANE, pane_style | CBRS_BOTTOM);
-	grep_view_1_pane_.Create(GetCaption(ID_VIEW_GREP_1_PANE), this,
+	grep_view_1_pane_->Create(GetCaption(ID_VIEW_GREP_1_PANE), this,
 		CRect(CPoint(0, 0), bottom_pane_size), TRUE, ID_VIEW_GREP_1_PANE, pane_style | CBRS_BOTTOM);
-	grep_view_2_pane_.Create(GetCaption(ID_VIEW_GREP_2_PANE), this,
+	grep_view_2_pane_->Create(GetCaption(ID_VIEW_GREP_2_PANE), this,
 		CRect(CPoint(0, 0), bottom_pane_size), TRUE, ID_VIEW_GREP_2_PANE, pane_style | CBRS_BOTTOM);
-	parse_view_pane_.Create(GetCaption(ID_VIEW_PARSE_PANE), this,
+	parse_view_pane_->Create(GetCaption(ID_VIEW_PARSE_PANE), this,
 		CRect(CPoint(0, 0), bottom_pane_size), TRUE, ID_VIEW_PARSE_PANE, pane_style | CBRS_BOTTOM);
 	//Auto-Hide windows
-	bib_view_pane_.Create(GetCaption(ID_VIEW_BIB_ENTRIES_PANE), this,
+	bib_view_pane_->Create(GetCaption(ID_VIEW_BIB_ENTRIES_PANE), this,
 		CRect(CPoint(250, 100), CPoint(800, 500)), TRUE, ID_VIEW_BIB_ENTRIES_PANE, pane_style | CBRS_BOTTOM);
 
 	//Create views
 	CRect rectDummy;
 	rectDummy.SetRectEmpty();
-	if (!env_view_.Create(&env_view_pane_))
+	if (!env_view_->Create(env_view_pane_.get()))
 	{
 		TRACE0("Failed to create environment view\n");
 		return false;
 	}
-	if (!file_view_.Create(&file_view_pane_))
+	if (!file_view_->Create(file_view_pane_.get()))
 	{
 		TRACE0("Failed to create file view\n");
 		return false;
 	}
-	if (!build_view_.Create(rectDummy, this))
+	if (!build_view_->Create(rectDummy, this))
 	{
 		TRACE0("Failed to create build output view\n");
 		return false;
 	}
-	if (!grep_view_1_.Create(rectDummy, this))
+	if (!grep_view_1_->Create(rectDummy, this))
 	{
 		TRACE0("Failed to create find 1 output view\n");
 		return false;
 	}
-	grep_view_1_.SetIndex(0);
-	if (!grep_view_2_.Create(rectDummy, this))
+	
+	grep_view_1_->SetIndex(0);
+
+	if (!grep_view_2_->Create(rectDummy, this))
 	{
 		TRACE0("Failed to create find 2 output view\n");
 		return false;
 	}
-	grep_view_2_.SetIndex(1);
-	if (!parse_view_.Create(rectDummy, this))
+
+	grep_view_2_->SetIndex(1);
+
+	if (!parse_view_->Create(rectDummy, this))
 	{
 		TRACE0("Failed to create parse output view\n");
 		return false;
 	}
 	// - and set them
-	env_view_pane_.SetClient(&env_view_);
-	file_view_pane_.SetClient(&file_view_);
-	output_doc_.SetAllViews(&build_view_, &grep_view_1_, &grep_view_2_, &parse_view_);
-	build_view_.AttachDoc(&output_doc_);
-	grep_view_1_.AttachDoc(&output_doc_);
-	grep_view_2_.AttachDoc(&output_doc_);
-	parse_view_.AttachDoc(&output_doc_);
-	error_list_view_.AttachDoc(&output_doc_);
-	output_doc_.SetErrorListView(&error_list_view_);
+	env_view_pane_->SetClient(env_view_.get());
+	file_view_pane_->SetClient(file_view_.get());
+	output_doc_->SetAllViews(build_view_.get(), grep_view_1_.get(), 
+		grep_view_2_.get(), parse_view_.get());
+	build_view_->AttachDoc(output_doc_.get());
+	grep_view_1_->AttachDoc(output_doc_.get());
+	grep_view_2_->AttachDoc(output_doc_.get());
+	parse_view_->AttachDoc(output_doc_.get());
+	error_list_view_->AttachDoc(output_doc_.get());
+	output_doc_->SetErrorListView(error_list_view_.get());
 
 	//Set clients
-	build_view_pane_.SetClient(&build_view_);
-	grep_view_1_pane_.SetClient(&grep_view_1_);
-	grep_view_2_pane_.SetClient(&grep_view_2_);
-	parse_view_pane_.SetClient(&parse_view_);
+	build_view_pane_->SetClient(build_view_.get());
+	grep_view_1_pane_->SetClient(grep_view_1_.get());
+	grep_view_2_pane_->SetClient(grep_view_2_.get());
+	parse_view_pane_->SetClient(parse_view_.get());
 
 	//Enable Docking
-	structure_view_.EnableDocking(CBRS_ALIGN_ANY);
-	env_view_pane_.EnableDocking(CBRS_ALIGN_ANY);
-	file_view_pane_.EnableDocking(CBRS_ALIGN_ANY);
-	bib_view_pane_.EnableDocking(CBRS_ALIGN_ANY);
-	bookmark_view_pane_.EnableDocking(CBRS_ALIGN_ANY);
-	error_list_view_.EnableDocking(CBRS_ALIGN_ANY);
-	build_view_pane_.EnableDocking(CBRS_ALIGN_ANY);
-	grep_view_1_pane_.EnableDocking(CBRS_ALIGN_ANY);
-	grep_view_2_pane_.EnableDocking(CBRS_ALIGN_ANY);
-	parse_view_pane_.EnableDocking(CBRS_ALIGN_ANY);
+	structure_view_->EnableDocking(CBRS_ALIGN_ANY);
+	env_view_pane_->EnableDocking(CBRS_ALIGN_ANY);
+	file_view_pane_->EnableDocking(CBRS_ALIGN_ANY);
+	bib_view_pane_->EnableDocking(CBRS_ALIGN_ANY);
+	bookmark_view_pane_->EnableDocking(CBRS_ALIGN_ANY);
+	error_list_view_->EnableDocking(CBRS_ALIGN_ANY);
+	build_view_pane_->EnableDocking(CBRS_ALIGN_ANY);
+	grep_view_1_pane_->EnableDocking(CBRS_ALIGN_ANY);
+	grep_view_2_pane_->EnableDocking(CBRS_ALIGN_ANY);
+	parse_view_pane_->EnableDocking(CBRS_ALIGN_ANY);
 
 	//Dock the major panes
-	DockPane(&structure_view_);
-	DockPane(&build_view_pane_);
-	DockPane(&bookmark_view_pane_);
-	DockPane(&bib_view_pane_);
-	bib_view_pane_.SetAutoHideMode(TRUE, CBRS_BOTTOM, 0, FALSE);
+	DockPane(structure_view_.get());
+	DockPane(build_view_pane_.get());
+	DockPane(bookmark_view_pane_.get());
+	DockPane(bib_view_pane_.get());
+	bib_view_pane_->SetAutoHideMode(TRUE, CBRS_BOTTOM, 0, FALSE);
 
 	//Adjust the size of the Literature pane
 	CRect BibRect;
-	bib_view_pane_.GetWindowRect(&BibRect);
+	bib_view_pane_->GetWindowRect(&BibRect);
 	if (BibRect.Height() < bottom_pane_size.cy)
 	{
 		BibRect.top = BibRect.bottom - bottom_pane_size.cy;
-		bib_view_pane_.SetWindowPos(0, 0, 0, BibRect.Width(), BibRect.Height(), SWP_NOZORDER | SWP_NOMOVE
+		bib_view_pane_->SetWindowPos(0, 0, 0, BibRect.Width(), BibRect.Height(), SWP_NOZORDER | SWP_NOMOVE
 				| SWP_NOACTIVATE);
 	}
 
@@ -1744,65 +1775,64 @@ bool CMainFrame::CreateToolWindows()
 	CDockablePane* pDockablePane = NULL;
 
 	//Structure view and its other windows
-	env_view_pane_.AttachToTabWnd(&structure_view_, DM_STANDARD, TRUE, &pDockablePane);
-	file_view_pane_.AttachToTabWnd(&structure_view_, DM_STANDARD, FALSE);
+	env_view_pane_->AttachToTabWnd(structure_view_.get(), DM_STANDARD, TRUE, &pDockablePane);
+	file_view_pane_->AttachToTabWnd(structure_view_.get(), DM_STANDARD, FALSE);
 
 	//Set Images
 	HIMAGELIST himl = ::ImageList_LoadImage(AfxGetResourceHandle(), MAKEINTRESOURCE(
 		IDB_NAVIGATION_BAR), 16, 1, RGB(192, 192, 192), IMAGE_BITMAP, LR_CREATEDIBSECTION);
-	structure_view_.SetIcon(::ImageList_ExtractIcon(0, himl, 0), FALSE);
-	env_view_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 1), FALSE);
-	file_view_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 2), FALSE);
-	bib_view_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 3), FALSE);
-	bookmark_view_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 4), FALSE);
+	structure_view_->SetIcon(::ImageList_ExtractIcon(0, himl, 0), FALSE);
+	env_view_pane_->SetIcon(::ImageList_ExtractIcon(0, himl, 1), FALSE);
+	file_view_pane_->SetIcon(::ImageList_ExtractIcon(0, himl, 2), FALSE);
+	bib_view_pane_->SetIcon(::ImageList_ExtractIcon(0, himl, 3), FALSE);
+	bookmark_view_pane_->SetIcon(::ImageList_ExtractIcon(0, himl, 4), FALSE);
 	::ImageList_Destroy(himl);
+	
 	if (CBaseTabbedPane* pane = dynamic_cast<CBaseTabbedPane*>(pDockablePane))
 	{
 		pane->GetUnderlyingWindow()->SetActiveTab(0);
 	}
 
-
 	//Build output and its other windows
 	pDockablePane = NULL;
-	error_list_view_.AttachToTabWnd(&build_view_pane_, DM_STANDARD, TRUE, &pDockablePane);
-	grep_view_1_pane_.AttachToTabWnd(&build_view_pane_, DM_STANDARD, FALSE);
-	grep_view_2_pane_.AttachToTabWnd(&build_view_pane_, DM_STANDARD, FALSE);
-	parse_view_pane_.AttachToTabWnd(&build_view_pane_, DM_STANDARD, FALSE);
+	error_list_view_->AttachToTabWnd(build_view_pane_.get(), DM_STANDARD, TRUE, &pDockablePane);
+	grep_view_1_pane_->AttachToTabWnd(build_view_pane_.get(), DM_STANDARD, FALSE);
+	grep_view_2_pane_->AttachToTabWnd(build_view_pane_.get(), DM_STANDARD, FALSE);
+	parse_view_pane_->AttachToTabWnd(build_view_pane_.get(), DM_STANDARD, FALSE);
 
 	//Set images
 	himl = ::ImageList_LoadImage(AfxGetResourceHandle(), MAKEINTRESOURCE(
 		IDB_OUTPUT_BAR), 16, 1, RGB(192, 192, 192), IMAGE_BITMAP, LR_CREATEDIBSECTION);
-	build_view_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 0), FALSE);
-	grep_view_1_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 1), FALSE);
-	grep_view_2_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 2), FALSE);
-	parse_view_pane_.SetIcon(::ImageList_ExtractIcon(0, himl, 3), FALSE);
-	error_list_view_.SetIcon(::ImageList_ExtractIcon(0, himl, 4), FALSE);
+	build_view_pane_->SetIcon(::ImageList_ExtractIcon(0, himl, 0), FALSE);
+	grep_view_1_pane_->SetIcon(::ImageList_ExtractIcon(0, himl, 1), FALSE);
+	grep_view_2_pane_->SetIcon(::ImageList_ExtractIcon(0, himl, 2), FALSE);
+	parse_view_pane_->SetIcon(::ImageList_ExtractIcon(0, himl, 3), FALSE);
+	error_list_view_->SetIcon(::ImageList_ExtractIcon(0, himl, 4), FALSE);
 	::ImageList_Destroy(himl);
+
 	if (CBaseTabbedPane* pane = dynamic_cast<CBaseTabbedPane*>(pDockablePane))
 	{
 		pane->GetUnderlyingWindow()->SetActiveTab(0);
 	}
-
-	//pDockablePane->SetAutoHideMode(TRUE, CBRS_BOTTOM, 0, FALSE);
 
 	//Adjust the size of the bottom panes
 	//The size parameter of the CDockablePane::Create function doesn't seem to be honored.
 	CRect rect;
 	pDockablePane->GetWindowRect(&rect);
+
 	if (rect.Height() < bottom_pane_size.cy)
 	{
 		rect.top = rect.bottom - size.cy;
 		pDockablePane->SetWindowPos(0, 0, 0, rect.Width(), rect.Height(), SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
 	}
 
-
 	//Do not show all of them at first startup
-	ShowPaneEnsureVisibility(&bookmark_view_pane_, false, false, false);
-	ShowPaneEnsureVisibility(&build_view_pane_, false, false, false);
-	ShowPaneEnsureVisibility(&error_list_view_, false, false, false);
-	ShowPaneEnsureVisibility(&grep_view_1_pane_, false, false, false);
-	ShowPaneEnsureVisibility(&grep_view_2_pane_, false, false, false);
-	ShowPaneEnsureVisibility(&parse_view_pane_, false, false, false);
+	ShowPaneEnsureVisibility(bookmark_view_pane_.get(), false, false, false);
+	ShowPaneEnsureVisibility(build_view_pane_.get(), false, false, false);
+	ShowPaneEnsureVisibility(error_list_view_.get(), false, false, false);
+	ShowPaneEnsureVisibility(grep_view_1_pane_.get(), false, false, false);
+	ShowPaneEnsureVisibility(grep_view_2_pane_.get(), false, false, false);
+	ShowPaneEnsureVisibility(parse_view_pane_.get(), false, false, false);
 
 	return true;
 }
@@ -1811,18 +1841,18 @@ const std::vector<CProjectView*> CMainFrame::GetViews()
 {
 	std::vector<CProjectView*> views;
 
-	views.push_back(structure_view_.GetProjectView());
-	views.push_back(&file_view_);
-	views.push_back(&env_view_);
-	views.push_back(&bib_view_pane_);
-	views.push_back(&bookmark_view_pane_);
+	views.push_back(structure_view_->GetProjectView());
+	views.push_back(file_view_.get());
+	views.push_back(env_view_.get());
+	views.push_back(bib_view_pane_.get());
+	views.push_back(bookmark_view_pane_.get());
 
 	return views;
 }
 
 void CMainFrame::OnOpenProject(CLaTeXProject* p)
 {
-	const std::vector<CProjectView*> views = GetViews();
+	const std::vector<CProjectView*>& views = GetViews();
 
 	using namespace std::tr1::placeholders;
 	std::for_each(views.begin(), views.end(), std::tr1::bind(&CLaTeXProject::AddView, p, _1));
@@ -1832,17 +1862,17 @@ void CMainFrame::OnCloseProject(CLaTeXProject* p)
 {
 	HideTaskbarProgress();
 
-	const std::vector<CProjectView*> views = GetViews();
+	const std::vector<CProjectView*>& views = GetViews();
 
 	using namespace std::tr1::placeholders;
 	std::for_each(views.begin(), views.end(), std::tr1::bind(&CLaTeXProject::RemoveView, p, _1));
 
-	output_doc_.ClearMessages(); // Clear all the warnings, errors etc.
+	output_doc_->ClearMessages(); // Clear all the warnings, errors etc.
 }
 
 COutputDoc* CMainFrame::GetOutputDoc(void)
 {
-	return &output_doc_;
+	return output_doc_.get();
 }
 
 void CMainFrame::OnApplicationLook(UINT id)
@@ -1944,7 +1974,7 @@ LRESULT CMainFrame::OnStopPaneAnimation(WPARAM, LPARAM)
 	if (taskBarList_)
 	{
 		taskBarList_->SetProgressValue(m_hWnd, 100, 100); // 100% complete
-		taskBarList_->SetProgressState(m_hWnd, output_doc_.HasBuildErrors() ? TBPF_ERROR
+		taskBarList_->SetProgressState(m_hWnd, output_doc_->HasBuildErrors() ? TBPF_ERROR
 				: TBPF_NORMAL);
 	}
 

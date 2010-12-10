@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 
 #include <sstream>
 #include <string>
@@ -8,6 +7,7 @@
 #include <cstring>
 #include <cstddef>
 
+#include "resource.h"
 #include "CodeDocument.h"
 #include "CodeView.h"
 #include "gotodialog.h"
@@ -16,6 +16,7 @@
 #include "FindReplaceDlg.h"
 #include "EncodingConverter.h"
 #include "LaTeXTokenizer.h"
+#include "SpellerBackgroundThread.h"
 
 #pragma push_macro("max")
 #undef max

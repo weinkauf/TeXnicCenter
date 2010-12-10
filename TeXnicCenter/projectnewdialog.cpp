@@ -33,13 +33,13 @@
  ********************************************************************/
 
 #include "stdafx.h"
-
+#include "resource.h"
 #include "EndOfLineMode.h"
-#include "TeXnicCenter.h"
 #include "ProjectNewDialog.h"
 #include "Global.h"
 #include "configuration.h"
 #include "CodeDocument.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

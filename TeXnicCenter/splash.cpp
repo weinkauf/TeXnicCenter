@@ -38,7 +38,6 @@
 #include "Splash.h"  // z.B. splash.h
 #include "RunTimeHelper.h"
 #include "FontOccManager.h"
-#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

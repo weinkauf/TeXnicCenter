@@ -33,10 +33,11 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "OptionPageGeneric.h"
 #include "configuration.h"
 #include "CharType.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

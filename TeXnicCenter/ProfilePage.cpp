@@ -33,7 +33,6 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 #include "ProfilePage.h"
 
 #ifdef _DEBUG

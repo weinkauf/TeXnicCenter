@@ -2,10 +2,10 @@
 //
 
 #include "stdafx.h"
-#include "texniccenter.h"
 #include "AutoCompleteDlg.h"
 #include "AutoCompleteListbox.h"
 #include "MainFrm.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

@@ -1,7 +1,6 @@
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "LaTeXDocument.h"
-
 #include "LaTeXView.h"
 #include "global.h"
 #include "textfilesavedialog.h"

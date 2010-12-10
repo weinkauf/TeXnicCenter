@@ -33,7 +33,7 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+
 #include "BrowseButton.h"
 
 #ifdef _DEBUG

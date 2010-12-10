@@ -33,7 +33,7 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "texniccenter.h"
+#include "resource.h"
 #include "FileCleanConfirmDialog.h"
 
 #ifdef _DEBUG

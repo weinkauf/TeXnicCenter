@@ -33,13 +33,13 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 
 #include <vector>
 
 #include <locale.h>
 #include <direct.h>
 
+#include "resource.h"
 #include "MainFrm.h"
 #include "ChildFrm.h"
 #include "global.h"
@@ -65,7 +65,10 @@
 #include "MetaPostView.h"
 #include "MetaPostDocument.h"
 #include "MultiExtensionDocTemplate.h"
+#include "SpellerBackgroundThread.h"
+#include "SpellerSource.h"
 #include "tipdlg.h"
+#include "TeXnicCenter.h"
 
 namespace {
 	/**
@@ -106,6 +109,23 @@ namespace {
 	}
 }
 
+class TeXnicCenterAppSpellerSource
+	: public SpellerSource
+{
+public:
+	TeXnicCenterAppSpellerSource(CTeXnicCenterApp* app)
+		: app(app)
+	{
+	}
+
+	Speller* GetSpeller()
+	{
+		return app->GetSpeller();
+	}
+
+private:
+	CTeXnicCenterApp* const app;
+};
 
 class CTCCommandLineInfo : public CCommandLineInfo
 {
@@ -261,8 +281,6 @@ CTeXnicCenterApp::CTeXnicCenterApp()
 	:m_bEndSession(FALSE)
 	,m_bSavingAll(FALSE)
 	,m_recentProjectList(1, _T("Recent Project List"), _T("Project%d"), MaxRecentProjects,RecentFileListMaxDisplayLength)
-	,m_pSpell(NULL)
-	,m_pBackgroundThread(NULL)
 	,bibtex_doc_template_(0)
 	,metapost_doc_template_(0)
 	,m_nApplicationLook(ID_VIEW_APP_LOOK_VS_2005)
@@ -272,6 +290,8 @@ CTeXnicCenterApp::CTeXnicCenterApp()
 	//Disable the display of thumbnails in the Windows 7 taskbar
 	// for every MDI child frame. The thumbnail for the whole app is still rendered.
 	EnableTaskbarInteraction(false);
+
+	spellerSource_.reset(new TeXnicCenterAppSpellerSource(this));
 }
 
 bool CTeXnicCenterApp::CanUseRecentFiles()
@@ -727,19 +747,12 @@ int CTeXnicCenterApp::ExitInstance()
 	// Shutdown background thread
 	if (m_pBackgroundThread)
 	{
-		m_pBackgroundThread->m_bAutoDelete = FALSE;
 		m_pBackgroundThread->PostThreadMessage(WM_QUIT, 0, 0);
 		
-		::WaitForSingleObject(m_pBackgroundThread->m_hThread,INFINITE);
+		::WaitForSingleObject(m_pBackgroundThread->m_hThread, INFINITE);
 
-		delete m_pBackgroundThread;
-		m_pBackgroundThread = NULL;
+		m_pBackgroundThread.reset();
 	}
-
-	//if (m_pMDIFrameManager)
-	//	delete m_pMDIFrameManager;
-
-	delete m_pSpell;
 
 	ControlBarCleanUp();
 
@@ -1763,7 +1776,7 @@ Speller* CTeXnicCenterApp::GetSpeller()
 {
 	CSingleLock lock(&m_csLazy);
 
-	if (m_pSpell == NULL)
+	if (!m_pSpell)
 	{
 		CWaitCursor wait;
 		CString dicName, affName;
@@ -1785,7 +1798,7 @@ Speller* CTeXnicCenterApp::GetSpeller()
 			if (!::PathFileExists(dicName))
 				throw AfxFormatString1(STE_DICTIONARY_OPEN_FAIL, dicName);
 
-			m_pSpell = new Speller(affName, dicName);
+			m_pSpell.reset(new Speller(affName, dicName));
 
 			// Create the personal dictionary if we have a name
 			if (!CConfiguration::GetInstance()->m_strSpellPersonalDictionary.IsEmpty())
@@ -1811,7 +1824,7 @@ Speller* CTeXnicCenterApp::GetSpeller()
 	//if (m_pSpell)
 	//    m_pSpell->suggest_main(CConfiguration::GetInstance()->m_bSpellMainDictOnly);
 
-	return m_pSpell;
+	return m_pSpell.get();
 }
 
 SpellerBackgroundThread* CTeXnicCenterApp::GetSpellerThread()
@@ -1820,8 +1833,8 @@ SpellerBackgroundThread* CTeXnicCenterApp::GetSpellerThread()
 
 	if (m_pBackgroundThread == NULL)
 	{
-		m_pBackgroundThread = new SpellerBackgroundThread();
-		ASSERT(m_pBackgroundThread);
+		m_pBackgroundThread.reset(new SpellerBackgroundThread());
+		m_pBackgroundThread->m_bAutoDelete = FALSE;
 		m_pBackgroundThread->CreateThread();
 		m_pBackgroundThread->SetThreadPriority(THREAD_PRIORITY_LOWEST);
 
@@ -1832,12 +1845,11 @@ SpellerBackgroundThread* CTeXnicCenterApp::GetSpellerThread()
 
 		if (CConfiguration::GetInstance()->m_bSpellEnable)
 		{
-			SpellerSource *pSource = static_cast<SpellerSource*>(this);
-			m_pBackgroundThread->ResetSpeller(pSource);
+			ResetSpeller();
 		}
 	}
 
-	return m_pBackgroundThread;
+	return m_pBackgroundThread.get();
 }
 
 void CTeXnicCenterApp::OnUpdateProject()
@@ -2312,4 +2324,9 @@ const CString CTeXnicCenterApp::GetDocTemplateFilter( CDocTemplate* doc)
 	filter += _T('|');	
 	
 	return filter;
+}
+
+void CTeXnicCenterApp::ResetSpeller()
+{
+	GetSpellerThread()->ResetSpeller(spellerSource_.get());
 }

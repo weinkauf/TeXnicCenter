@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 
 #include <algorithm>
 
+#include "resource.h"
 #include "CodeDocument.h"
 #include "global.h"
 #include "SpellerBackgroundThread.h"
@@ -12,6 +12,7 @@
 #include "configuration.h"
 #include "EndOfLineMode.h"
 #include "textfilesavedialog.h"
+#include "TeXnicCenter.h"
 
 int ShowSaveTaskDialog(LPCTSTR prompt)
 {

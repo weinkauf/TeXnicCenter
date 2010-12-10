@@ -420,6 +420,7 @@
     <ClCompile Include="SpellCheckDlg.cpp" />
     <ClCompile Include="Speller.cpp" />
     <ClCompile Include="SpellerBackgroundThread.cpp" />
+    <ClCompile Include="SpellerSource.cpp" />
     <ClCompile Include="splash.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -586,6 +587,7 @@
     <ClInclude Include="SpellCheckDlg.h" />
     <ClInclude Include="Speller.h" />
     <ClInclude Include="SpellerBackgroundThread.h" />
+    <ClInclude Include="SpellerSource.h" />
     <ClInclude Include="splash.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StructureItem.h" />

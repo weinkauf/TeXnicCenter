@@ -2,9 +2,8 @@
 //
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "FindReplaceDlg.h"
-
 #include "ScintillaDocView.h"
 
 // FindReplaceDlg dialog

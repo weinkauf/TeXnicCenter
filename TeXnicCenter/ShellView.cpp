@@ -27,8 +27,8 @@
  *********************************************************************/
 
 #include "StdAfx.h"
-#include "TeXnicCenter.h"
 #include "ShellView.h"
+#include "TeXnicCenter.h"
 
 #pragma push_macro("BUFSIZE")
 #undef BUFSIZE

@@ -11,8 +11,6 @@ class StructureItem;
 class LabelDragSource :
 	public DragSourceBase
 {
-	std::auto_ptr<StructureItem> dragged_item_;
-
 public:
 	typedef std::tr1::function<const CString (const StructureItem&)> FormatFunctionType;
 
@@ -29,9 +27,9 @@ public:
 	LabelDragSource();
 	~LabelDragSource();
 
-	StructureItem* GetDraggedItem() { return dragged_item_.get(); }
-	const StructureItem* GetDraggedItem() const { return dragged_item_.get(); }
-	void SetDraggedItem(StructureItem* item = 0) { dragged_item_.reset(item); }
+	StructureItem* GetDraggedItem();
+	const StructureItem* GetDraggedItem() const;
+	void SetDraggedItem(StructureItem* item = 0);
 
 	void MapKeyStateToFormat(UINT key, const FormatFunctionType& func);
 	void RemoveKeyStateToFormat(UINT key);
@@ -49,4 +47,7 @@ protected:
 	void OnDragGetData(SimpleDataObject* o);
 
 	void UpdateMessageText( UINT keystate, CString& text, const StructureItem &item );
+
+private:
+	std::auto_ptr<StructureItem> dragged_item_;
 };

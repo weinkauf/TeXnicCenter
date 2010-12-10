@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-#include "texniccenter.h"
 #include "Advice.h"
 #include "FontOccManager.h"
 #include "Configuration.h"

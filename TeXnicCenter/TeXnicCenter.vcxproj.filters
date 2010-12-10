@@ -470,6 +470,9 @@
     <ClCompile Include="ToolBarsCustomizeDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SpellerSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aboutbox.h">
@@ -962,6 +965,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Version.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpellerSource.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

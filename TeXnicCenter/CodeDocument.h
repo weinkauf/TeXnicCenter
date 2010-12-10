@@ -4,6 +4,8 @@
 
 #include "CodeBookmark.h"
 #include "FileChangeWatcher.h"
+#include "Nullable.h"
+#include "textsource.h"
 
 int ShowSaveTaskDialog(LPCTSTR prompt);
 int ToScintillaMode(int m);

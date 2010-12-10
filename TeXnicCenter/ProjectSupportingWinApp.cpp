@@ -27,8 +27,9 @@
  *********************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
+#include "Project.h"
 #include "TeXnicCenter.h"
-
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

@@ -33,14 +33,15 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
+#include "BibTeXOutputFilter.h"
+#include "LatexOutputFilter.h"
+#include "MainFrm.h"
 #include "OutputBuilder.h"
 #include "OutputFilter.h"
-#include "LatexOutputFilter.h"
 #include "OutputView.h"
 #include "OutputDoc.h"
-#include "MainFrm.h"
-#include "BibTeXOutputFilter.h"
+#include "process.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

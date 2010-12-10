@@ -30,7 +30,6 @@
 
 #include <memory>
 
-#include "TeXnicCenter.h"
 #include "OutputFilter.h"
 #include "OutputDoc.h"
 #include "OutputView.h"

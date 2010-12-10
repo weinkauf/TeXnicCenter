@@ -2,13 +2,14 @@
 //
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-#include "BookmarkView.h"
 
 #include <functional>
 
+#include "resource.h"
+#include "BookmarkView.h"
 #include "RunTimeHelper.h"
 #include "LatexProject.h"
+#include "TeXnicCenter.h"
 
 
 const UINT ListViewID = 1;

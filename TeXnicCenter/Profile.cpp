@@ -33,11 +33,12 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
+#include "LatexProject.h"
 #include "Profile.h"
 #include "ProfileExchangeDialog.h"
-
 #include "RegistryStack.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

@@ -27,11 +27,11 @@
  *********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "ProjectPropertyDialog.h"
 #include "global.h"
 #include "Configuration.h"
-
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

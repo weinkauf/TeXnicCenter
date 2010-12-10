@@ -33,13 +33,14 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 
 #include <set>
 
-#include "TemplateDialog.h"
+#include "resource.h"
 #include "Global.h"
 #include "RunTimeHelper.h"
+#include "TemplateDialog.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

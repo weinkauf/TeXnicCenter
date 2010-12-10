@@ -1,7 +1,6 @@
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "navigatorview.h"
 #include "WorkspacePane.h"
-
 
 IMPLEMENT_DYNAMIC(WorkspacePane, WorkspacePaneBase)
 

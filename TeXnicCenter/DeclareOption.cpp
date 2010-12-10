@@ -33,7 +33,6 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "texniccenter.h"
 #include "DeclareOption.h"
 
 #ifdef _DEBUG

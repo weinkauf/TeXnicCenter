@@ -33,12 +33,11 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "InsertGraphicDialog.h"
 #include "global.h"
 #include "Configuration.h"
-#include <locale.h>
-//#include "../Speller/Character.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

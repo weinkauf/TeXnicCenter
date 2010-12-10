@@ -6,8 +6,11 @@
 #include "BibItem.h"
 #include "LabelDragSource.h"
 #include "PrivateToolBar.h"
+#include "ProjectView.h"
 #include "SortListCtrl.h"
 #include "WorkspacePaneBase.h"
+
+class CLaTeXProject;
 
 /**
  * @brief Bibliography view.
@@ -56,15 +59,7 @@ private:
 		PopulateParam(const PredicateFunctionType& p, BibView* v);
 	};
 
-	struct Item
-	{
-		int group_id;
-		int image;
-		StructureItemContainer::size_type structure_item_index;
-		BibItem bib;
-
-		Item(int group_id, int image, const BibItem& b);
-	};
+	struct Item;
 
 	typedef std::vector<Item> BibItemContainerType;
 
