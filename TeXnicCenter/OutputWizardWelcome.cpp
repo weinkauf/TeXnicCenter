@@ -27,7 +27,8 @@
  *********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+
+#include "resource.h"
 #include "OutputWizard.h"
 #include "OutputWizardWelcome.h"
 

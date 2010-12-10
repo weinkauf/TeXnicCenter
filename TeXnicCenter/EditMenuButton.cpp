@@ -33,7 +33,6 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 #include "EditMenuButton.h"
 
 #ifdef _DEBUG

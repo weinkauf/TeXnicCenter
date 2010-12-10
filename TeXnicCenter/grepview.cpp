@@ -33,7 +33,6 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 #include "GrepView.h"
 #include "OutputDoc.h"
 

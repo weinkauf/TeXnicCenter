@@ -2,8 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-
+#include "resource.h"
 #include "CodeView.h"
 #include "CodeDocument.h"
 #include "configuration.h"
@@ -12,6 +11,7 @@
 #include "SpellCheckDlg.h"
 #include "SpellerBackgroundThread.h"
 #include "Speller.h"
+#include "TeXnicCenter.h"
 
 class SpellerSuggestionMenu
 {

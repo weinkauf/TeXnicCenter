@@ -33,13 +33,14 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "Placeholder.h"
-
 #include "FileClean.h"
 #include "LaTeXDocument.h"
+#include "LatexProject.h"
 #include "LaTeXView.h"
 #include "RegistryStack.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

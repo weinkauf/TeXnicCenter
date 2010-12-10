@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "texniccenter.h"
+#include "resource.h"
 #include "OptionPageEditor.h"
 #include "configuration.h"
 

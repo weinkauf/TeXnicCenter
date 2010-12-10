@@ -33,13 +33,13 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-
+#include "resource.h"
 #include "LatexProject.h"
 #include "configuration.h"
 #include "NavigatorView.h"
 #include "RunTimeHelper.h"
 #include "OleDrop.h"
+#include "TeXnicCenter.h"
 
 BEGIN_MESSAGE_MAP(NavigatorTreeCtrl,CTreeCtrl)
 	ON_NOTIFY_REFLECT(TVN_SELCHANGED,&NavigatorTreeCtrl::OnSelChanged)

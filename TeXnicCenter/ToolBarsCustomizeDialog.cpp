@@ -33,9 +33,8 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "texniccenter.h"
+#include "resource.h"
 #include "UserToolAdvDlg.h"
-
 #include "ToolBarsCustomizeDialog.h"
 #include "FontOccManager.h"
 #include "DialogTemplate.h"

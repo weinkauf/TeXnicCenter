@@ -33,7 +33,7 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "ActiveProfileDialog.h"
 #include "profile.h"
 

@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "TransparencyDlg.h"
 #include "configuration.h"
 

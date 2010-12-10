@@ -33,9 +33,10 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "BuildView.h"
 #include "MainFrm.h"
+#include "OutputDoc.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

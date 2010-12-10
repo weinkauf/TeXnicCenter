@@ -30,18 +30,9 @@
 
 #include <set>
 
-class Speller;
 class CodeView;
-
-class SpellerSource
-{
-public:
-	/**
-	Get a speller
-	@return Initialized and configured spell checker
-	 */
-	virtual Speller *GetSpeller() = 0;
-};
+class Speller;
+class SpellerSource;
 
 class SpellerBackgroundThread : public CWinThread
 {

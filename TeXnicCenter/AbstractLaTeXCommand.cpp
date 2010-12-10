@@ -58,8 +58,8 @@
  *
  */
 #include "stdafx.h"
-#include "texniccenter.h"
 #include "AbstractLaTeXCommand.h"
+#include "StyleFile.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

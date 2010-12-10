@@ -33,14 +33,15 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 
 #include <vector>
 
+#include "resource.h"
 #include "OutputWizard.h"
 #include "FontOccManager.h"
 #include "RunTimeHelper.h"
 #include "RegistryStack.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 #include "MultiExtensionDocTemplate.h"
 
 MultiExtensionDocTemplate::MultiExtensionDocTemplate(UINT nIDResource, CRuntimeClass* pDocClass,

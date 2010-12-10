@@ -33,9 +33,10 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "LatexOutputFilter.h"
 #include "CharType.h"
+#include "OutputInfo.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

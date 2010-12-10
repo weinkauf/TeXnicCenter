@@ -33,12 +33,13 @@
  ********************************************************************/
 
 #include "stdafx.h"
-
+#include "resource.h"
 #include "EndOfLineMode.h"
-#include "TeXnicCenter.h"
 #include "OptionPageLanguage.h"
 #include "Configuration.h"
 #include "global.h"
+#include "SpellerBackgroundThread.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -120,8 +121,7 @@ void COptionPageLanguage::OnOK()
 
 	if (m_bEnableSpell) 
 	{
-		SpellerSource* pSource = &theApp;
-		theApp.GetSpellerThread()->ResetSpeller(pSource);
+		theApp.ResetSpeller();
 	}
 
 	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_BG_UPDATE_PROJECT); // clear or set the line attributes

@@ -33,16 +33,17 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-#include "OutputDoc.h"
 
 #include <map>
 #include <utility>
 
+#include "resource.h"
 #include "FileView.h"
 #include "FontOccManager.h"
 #include "global.h"
+#include "LatexProject.h"
 #include "OleDrop.h"
+#include "OutputDoc.h"
 
 const CString FormatInput(const StructureItem& item)
 {

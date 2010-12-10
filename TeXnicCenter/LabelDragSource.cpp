@@ -4,12 +4,13 @@
 #include "OleDrop.h"
 #include "LabelDragSource.h"
 #include "structureparser.h"
+#include "StructureItem.h"
 
-LabelDragSource::LabelDragSource(void)
+LabelDragSource::LabelDragSource()
 {
 }
 
-LabelDragSource::~LabelDragSource(void)
+LabelDragSource::~LabelDragSource()
 {
 }
 
@@ -169,4 +170,19 @@ void LabelDragSource::OnDragGetData(SimpleDataObject* o)
 		o->Clear();
 
 	DragSourceBase::OnDragGetData(o);
+}
+
+StructureItem* LabelDragSource::GetDraggedItem()
+{
+	return dragged_item_.get();
+}
+
+const StructureItem* LabelDragSource::GetDraggedItem() const
+{
+	return dragged_item_.get();
+}
+
+void LabelDragSource::SetDraggedItem(StructureItem* item /*= 0*/)
+{
+	dragged_item_.reset(item);
 }

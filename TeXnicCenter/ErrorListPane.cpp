@@ -1,16 +1,27 @@
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-#include "ErrorListPane.h"
 
 #include <functional>
 
+#include "resource.h"
+#include "ErrorListPane.h"
 #include "OutputDoc.h"
+#include "OutputInfo.h"
+#include "TeXnicCenter.h"
 
 // ErrorListView
 
 IMPLEMENT_DYNAMIC(ErrorListPane, WorkspacePaneBase)
 
 const UINT ListView = 0x1000;
+
+struct ErrorListPane::Item
+{
+	COutputInfo info;
+	CBuildView::tagImage type;
+	int ordinal;
+
+	Item(const COutputInfo& info, CBuildView::tagImage type);
+};
 
 ErrorListPane::Item::Item( const COutputInfo& info, CBuildView::tagImage type ) 
 : info(info), type(type)
@@ -19,6 +30,10 @@ ErrorListPane::Item::Item( const COutputInfo& info, CBuildView::tagImage type )
 
 ErrorListPane::ErrorListPane()
 : doc_(0)
+{
+}
+
+ErrorListPane::~ErrorListPane()
 {
 }
 

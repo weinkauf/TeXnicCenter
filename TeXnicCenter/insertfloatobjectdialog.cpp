@@ -33,10 +33,9 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "InsertFloatObjectDialog.h"
 #include "global.h"
-//#include "../Speller/Character.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

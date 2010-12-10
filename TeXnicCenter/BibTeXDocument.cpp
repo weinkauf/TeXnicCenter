@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 #include "BibTeXDocument.h"
 
 

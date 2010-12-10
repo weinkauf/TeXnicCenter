@@ -34,8 +34,9 @@
 
 #include "stdafx.h"
 #include "global.h"
-#include "TeXnicCenter.h"
 #include "configuration.h"
+#include "LatexProject.h"
+#include "TeXnicCenter.h"
 
 CString AfxLoadString(UINT nID)
 {

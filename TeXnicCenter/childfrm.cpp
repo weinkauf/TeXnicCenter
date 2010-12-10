@@ -33,12 +33,12 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-#include "Configuration.h"
 
-#include "MainFrm.h"
+#include "Configuration.h"
 #include "ChildFrm.h"
 #include "LaTeXView.h"
+#include "MainFrm.h"
+#include "TeXnicCenter.h"
 
 HBITMAP CreateBitmapFromWindow(CWnd* wnd)
 {

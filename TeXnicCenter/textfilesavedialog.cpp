@@ -33,15 +33,14 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 
 #include <algorithm>
 #include <functional>
 
+#include "resource.h"
 #include "global.h"
 #include "TextFileSaveDialog.h"
 #include "RunTimeHelper.h"
-
 
 LPCTSTR const Format[] = {_T("Windows"),_T("Unix"),_T("Macintosh"),0};
 LPCTSTR const Encoding[] = {_T("ANSI"),_T("UTF-8"),_T("UTF-16"),_T("UTF-16 Big Endian"),_T("UTF-32"),_T("UTF-32 Big Endian"),0};

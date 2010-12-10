@@ -33,6 +33,7 @@
  ********************************************************************/
 
 #include "stdafx.h"
+#include "process.h"
 #include "ProcessCommand.h"
 #include "PlaceHolder.h"
 

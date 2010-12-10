@@ -33,9 +33,9 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "texniccenter.h"
-#include "TextOutsourceDlg.h"
+#include "resource.h"
 #include "configuration.h"
+#include "TextOutsourceDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

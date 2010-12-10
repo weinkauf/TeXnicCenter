@@ -33,14 +33,14 @@
  ********************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "Configuration.h"
-
 #include "EndOfLineMode.h"
-#include "TeXnicCenter.h"
 #include "FontOccManager.h"
 #include "global.h"
 #include "LaTeXDocument.h"
 #include "LaTeXView.h"
+#include "TeXnicCenter.h"
 
 std::auto_ptr<CConfiguration> CConfiguration::impl_;
 

@@ -10,6 +10,7 @@
 #include "WorkspacePaneBase.h"
 
 class COutputDoc;
+class COutputInfo;
 
 // ErrorListView
 
@@ -23,14 +24,7 @@ private:
 	COutputDoc* doc_;
 	CCriticalSection item_monitor_;
 
-	struct Item
-	{
-		COutputInfo info;
-		CBuildView::tagImage type;
-		int ordinal;
-
-		Item(const COutputInfo& info, CBuildView::tagImage type);
-	};
+	struct Item;
 
 	typedef std::vector<Item> ItemContainer;
 	ItemContainer items_;
@@ -45,6 +39,7 @@ private:
 
 public:
 	ErrorListPane();
+	~ErrorListPane();
 
 protected:
 	DECLARE_MESSAGE_MAP()

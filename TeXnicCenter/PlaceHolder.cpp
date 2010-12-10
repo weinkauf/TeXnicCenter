@@ -34,9 +34,9 @@
 
 #include "stdafx.h"
 #include "ChildFrm.h"
-#include "TeXnicCenter.h"
-#include "PlaceHolder.h"
 #include "MainFrm.h"
+#include "PlaceHolder.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

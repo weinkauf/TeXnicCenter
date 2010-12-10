@@ -33,8 +33,7 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-
+#include "resource.h"
 #include "OptionDialog.h"
 #include "OptionPagePath.h"
 #include "FontOccManager.h"

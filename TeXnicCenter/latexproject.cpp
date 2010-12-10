@@ -33,11 +33,12 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 
 #include <sstream>
 #include <functional>
 
+#include "resource.h"
+#include "Profile.h"
 #include "MainFrm.h"
 #include "LatexProject.h"
 #include "Configuration.h"
@@ -47,18 +48,18 @@
 #include "TextSourceFile.h"
 #include "ItemPropertyDialog.h"
 #include "ChildFrm.h"
+#include "OutputDoc.h"
 #include "ProjectNewDialog.h"
 #include "Speller.h"
 #include "SpellCheckDlg.h"
 #include "LaTeXDocument.h"
-
+#include "TeXnicCenter.h"
 
 IMPLEMENT_DYNCREATE(CLaTeXProject,CProject)
 
 BEGIN_INTERFACE_MAP(CLaTeXProject,CProject)
 INTERFACE_PART(CLaTeXProject,Interfaces::IID_IProject,Project)
 END_INTERFACE_MAP()
-
 
 CLaTeXProject::CLaTeXProject()
 		: m_bCanParse(TRUE),

@@ -33,10 +33,9 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-
-#include "FontOccManager.h"
+#include "resource.h"
 #include "AboutBox.h"
+#include "FontOccManager.h"
 
 
 const int SCROLLAMOUNT				= -1;

@@ -27,7 +27,6 @@
  *********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 #include "MRUTrackSelComboBox.h"
 
 #ifdef _DEBUG

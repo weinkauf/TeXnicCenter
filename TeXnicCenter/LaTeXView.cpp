@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 
 #include <iostream>
 #include <iomanip>
@@ -8,6 +7,7 @@
 #include <algorithm>
 #include <cstddef>
 
+#include "resource.h"
 #include "LaTeXView.h"
 #include "Advice.h"
 #include "AutoCompleteDlg.h"
@@ -24,7 +24,8 @@
 #include "LaTeXTokenizer.h"
 #include "SpellCheckDlg.h"
 #include "EncodingConverter.h"
-
+#include "SpellerBackgroundThread.h"
+#include "TeXnicCenter.h"
 
 #pragma region Helper functions and classes
 

@@ -40,6 +40,7 @@
 #include "DocumentTokenizer.h"
 #include "configuration.h"
 #include "EncodingConverter.h"
+#include "SpellerSource.h"
 
 
 enum {

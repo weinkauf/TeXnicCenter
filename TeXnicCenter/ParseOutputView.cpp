@@ -31,9 +31,10 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "texniccenter.h"
-#include "ParseOutputView.h"
+#include "resource.h"
 #include "MainFrm.h"
+#include "ParseOutputView.h"
+#include "OutputDoc.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

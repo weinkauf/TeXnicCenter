@@ -35,25 +35,25 @@
 
 #include <set>
 #include <list>
+#include <memory>
 
-#include "ChildFrm.h"
-#include "WorkspacePane.h"
-#include "StructureTreeCtrl.h"
-#include "fileview.h"
-#include "environmentview.h"
-#include "grepview.h"
-#include "buildview.h"
-#include "ParseOutputView.h"
-#include "OutputDoc.h"
-#include "ErrorListPane.h"
-#include "StructureView.h"
-#include "BibView.h"
-#include "BookmarkView.h"
-
-void CreateColorButtonPalette(CPalette& palette, int& colors, int& columns);
-
+class BibView;
+class BookmarkView;
+class CBuildView;
+class CChildFrame;
+class CEnvironmentView;
+class CFileView;
+class CGrepView;
+class COutputDoc;
+class CParseOutputView;
+class CProjectView;
+class ErrorListPane;
+class StructurePane;
+class WorkspacePane;
 class LaTeXView;
 class COutputBuilder;
+
+void CreateColorButtonPalette(CPalette& palette, int& colors, int& columns);
 
 // number of mathematic toolbars
 const int MATHBAR_COUNT = 16;
@@ -107,10 +107,6 @@ public:
 
 // operations
 public:
-
-	//CWorkspaceBar* GetWorkspaceBar();
-	//COutputBar* GetOutputBar();
-
 	void GetControlBarsEx(CArray<CPane*, CPane*>& arrBars);
 
 	/**
@@ -125,7 +121,7 @@ public:
 	        Toolbar button the specified button shout be replaced by.
 
 	@return
-	        TRUE if successfull, FALSE otherwise.
+	        TRUE if successful, FALSE otherwise.
 	 */
 	BOOL ReplaceToolbarButton(UINT unCmdID, const CMFCToolBarButton &button);
 
@@ -134,7 +130,7 @@ public:
 	command ID.
 
 	You can get all instances of a button if you use iteration. Set
-	pos to NULL to get the first ocurrence, after the call the
+	pos to NULL to get the first occurrence, after the call the
 	referenced pos variable will contain a position information.
 	Using this information in the next call, you will get the next
 	instance of the button.
@@ -232,7 +228,7 @@ protected:
 	        TRUE to make the tool bar initial visible, FALSE to hide it.
 
 	@return
-	        TRUE if successfull, FALSE otherwise.
+	        TRUE if successful, FALSE otherwise.
 	 */
 	bool CreateToolBar(CMFCToolBar* pToolBar, UINT unID, UINT unTitleID, bool bVisible = true);
 
@@ -334,49 +330,48 @@ private:
 	CComPtr<ITaskbarList3> taskBarList_;
 
 	///View for the structure of a project
-	StructurePane structure_view_;
+	std::unique_ptr<StructurePane> structure_view_;
 
 	///Pane showing the files of a project
-	WorkspacePane file_view_pane_;
+	std::unique_ptr<WorkspacePane> file_view_pane_;
 	///View for the files of a project
-	CFileView file_view_;
+	std::unique_ptr<CFileView> file_view_;
 	
 	///Pane showing the latex environments of a project
-	WorkspacePane env_view_pane_;
+	std::unique_ptr<WorkspacePane> env_view_pane_;
 	///View for the latex environments of a project
-	CEnvironmentView env_view_;
+	std::unique_ptr<CEnvironmentView> env_view_;
 
 	///Pane showing the contents of the bibtex files
-	BibView bib_view_pane_;
+	std::unique_ptr<BibView> bib_view_pane_;
 
 	///Pane showing all bookmarks
-	BookmarkView bookmark_view_pane_;
+	std::unique_ptr<BookmarkView> bookmark_view_pane_;
 
 	///Pane showing the results of the build process.
-	WorkspacePane build_view_pane_;
+	std::unique_ptr<WorkspacePane> build_view_pane_;
 	/** View containing the results of the build process. */
-	CBuildView build_view_;
+	std::unique_ptr<CBuildView> build_view_;
 
 	///Pane listing the errors of a compilation
-	ErrorListPane error_list_view_;
+	std::unique_ptr<ErrorListPane> error_list_view_;
 
 	///Pane containing the results of file grep 1.
-	WorkspacePane grep_view_1_pane_;
+	std::unique_ptr<WorkspacePane> grep_view_1_pane_;
 	/** View containing the results of file grep 1. */
-	CGrepView grep_view_1_;
+	std::unique_ptr<CGrepView> grep_view_1_;
 
 	///Pane containing the results of file grep 2.
-	WorkspacePane grep_view_2_pane_;
+	std::unique_ptr<WorkspacePane> grep_view_2_pane_;
 	/** View containing the results of file grep 2. */
-	CGrepView grep_view_2_;
+	std::unique_ptr<CGrepView> grep_view_2_;
 
 	///Pane for the Structure parser output view.
-	WorkspacePane parse_view_pane_;
+	std::unique_ptr<WorkspacePane> parse_view_pane_;
 	/** Structure parser output view. */
-	CParseOutputView parse_view_;
+	std::unique_ptr<CParseOutputView> parse_view_;
 
-
-	COutputDoc output_doc_; //UPDATE
+	std::unique_ptr<COutputDoc> output_doc_; //UPDATE
 
 	CImageList build_animation_;
 
@@ -437,8 +432,6 @@ public:
 	void SetRecentlyUsedChildFrame(CFrameWnd* child);
 	///Activates the next/previous MDI child based on the MRU list
 	void ActivateMDIChildByMRUList(const bool bPrevious);
-
-	//void DbgMRUList(const char* Msg);
 
 	void CheckForFileChanges();
 	void CheckForFileChangesAsync();

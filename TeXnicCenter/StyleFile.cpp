@@ -40,8 +40,8 @@
 #include "LaTeXCommand.h"
 #include "NewCommand.h"
 #include "NewEnvironment.h"
-#include "TeXnicCenter.h"
 #include "DeclareOption.h"
+#include "StyleFileContainer.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

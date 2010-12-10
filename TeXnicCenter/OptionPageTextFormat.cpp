@@ -33,10 +33,10 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-#include "OptionPageTextFormat.h"
+#include "resource.h"
 #include "configuration.h"
 #include "MainFrm.h"
+#include "OptionPageTextFormat.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

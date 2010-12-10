@@ -2,9 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 #include "SortListCtrl.h"
-
 
 // SortListCtrl
 

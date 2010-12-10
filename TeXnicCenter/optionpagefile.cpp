@@ -33,7 +33,7 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "OptionPageFile.h"
 #include "Configuration.h"
 #include "global.h"

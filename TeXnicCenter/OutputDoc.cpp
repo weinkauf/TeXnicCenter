@@ -33,17 +33,18 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 
 #include <ddeml.h> // DDE support
 #include <dde.h>
 
+#include "resource.h"
 #include "OutputDoc.h"
 #include "MainFrm.h"
 #include "LatexProject.h"
 #include "Configuration.h"
 #include "BuildView.h"
 #include "global.h"
+#include "ParseOutputView.h"
 #include "ProjectPropertyDialog.h"
 #include "Process.h"
 #include "TextSourceFile.h"
@@ -56,6 +57,7 @@
 #include "ErrorListPane.h"
 #include "LaTeXDocument.h"
 #include "LaTeXView.h"
+#include "TeXnicCenter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

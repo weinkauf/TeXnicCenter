@@ -33,9 +33,10 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
+#include "resource.h"
 #include "EnvironmentView.h"
 #include "global.h"
+#include "LatexProject.h"
 #include "OutputDoc.h"
 
 #ifdef _DEBUG

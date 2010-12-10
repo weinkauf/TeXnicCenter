@@ -33,9 +33,7 @@
  ********************************************************************/
 
 #include "stdafx.h"
-#include "TeXnicCenter.h"
 #include "OutputView.h"
-
 #include "OutputDoc.h"
 #include "configuration.h"
 

@@ -33,7 +33,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "process.h"
+class CProcess;
 
 /**
 Stores information about a process to start and provides

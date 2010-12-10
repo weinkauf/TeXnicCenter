@@ -34,9 +34,8 @@
 
 #include "stdafx.h"
 #include "resource.h"
-#include "tipdlg.h"
-
 #include "TeXnicCenter.h"
+#include "tipdlg.h"
 #include "RunTimeHelper.h"
 
 #include <sys\stat.h>

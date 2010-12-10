@@ -1,11 +1,12 @@
 #include "stdafx.h"
-#include "TeXnicCenter.h"
-
+#include "resource.h"
 #include "BibView.h"
 #include "RunTimeHelper.h"
 #include "navigatorview.h"
+#include "LatexProject.h"
 #include "OleDrop.h"
 #include "OutputDoc.h"
+#include "TeXnicCenter.h"
 
 enum {
 	ListID = 100,
@@ -118,6 +119,15 @@ namespace {
 
 	IMPLEMENT_DYNCREATE(SearchToolBarEditButton, CMFCToolBarEditBoxButton)
 }
+
+struct BibView::Item {
+	int group_id;
+	int image;
+	StructureItemContainer::size_type structure_item_index;
+	BibItem bib;
+
+	Item(int group_id, int image, const BibItem& b);
+};
 
 BibView::Item::Item( int group_id, int image, const BibItem& b ) 
 : group_id(group_id), bib(b), image(image)
