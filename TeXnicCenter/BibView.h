@@ -3,13 +3,13 @@
 #include <vector>
 #include <functional>
 
-#include "BibItem.h"
 #include "LabelDragSource.h"
 #include "PrivateToolBar.h"
 #include "ProjectView.h"
 #include "SortListCtrl.h"
 #include "WorkspacePaneBase.h"
 
+class BibItem;
 class CLaTeXProject;
 
 /**

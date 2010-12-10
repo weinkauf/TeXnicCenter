@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "resource.h"
+#include "BibItem.h"
 #include "BibView.h"
 #include "RunTimeHelper.h"
 #include "navigatorview.h"
