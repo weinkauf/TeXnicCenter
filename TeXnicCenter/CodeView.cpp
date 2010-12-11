@@ -1078,14 +1078,18 @@ bool CodeView::IsFoldingEnabled()
 
 void CodeView::HighlightActiveLine(bool show)
 {
-	GetCtrl().SetCaretLineVisible(show);
+	CConfiguration::GetInstance()->SetHighlightCaretLine(show);
+
+	//Chained update
+	using namespace std::placeholders;
+	ForEveryView(bind(bind(&CScintillaCtrl::SetCaretLineVisible,_1,show,TRUE),
+		bind(&CodeView::GetCtrl,_1)));
 }
 
 void CodeView::OnViewHighlightActiveLine()
 {
 	const bool bEnable = !GetCtrl().GetCaretLineVisible();
 	HighlightActiveLine(bEnable);
-	CConfiguration::GetInstance()->SetHighlightCaretLine(bEnable);
 }
 
 void CodeView::OnUpdateViewHighlightActiveLine(CCmdUI *pCmdUI)
