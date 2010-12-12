@@ -1465,7 +1465,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57678
-#define _APS_NEXT_COMMAND_VALUE         40687
+#define _APS_NEXT_COMMAND_VALUE         40691
 #define _APS_NEXT_CONTROL_VALUE         8668
 #define _APS_NEXT_SYMED_VALUE           57773
 #endif

@@ -12,7 +12,7 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
+#include "afxres.h"
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -95,7 +95,7 @@ BEGIN
     "I",            ID_EDIT_FIND_INCREMENTAL_BACKWARD, VIRTKEY, SHIFT, CONTROL, NOINVERT
     "I",            ID_EDIT_FIND_INCREMENTAL_FORWARD, VIRTKEY, CONTROL, NOINVERT
     VK_F3,          ID_EDIT_FIND_PREVIOUS,  VIRTKEY, SHIFT, NOINVERT
-    "B",            ID_EDIT_GOTO_LAST_CHANGE, VIRTKEY, CONTROL, NOINVERT
+    VK_LEFT,        ID_EDIT_GOTO_LAST_CHANGE, VIRTKEY, ALT, NOINVERT
     VK_F2,          ID_EDIT_GOTO_NEXT_BOOKMARK, VIRTKEY, NOINVERT
     VK_F2,          ID_EDIT_GOTO_PREV_BOOKMARK, VIRTKEY, SHIFT, NOINVERT
     "J",            ID_EDIT_JOIN_PARAGRAPH, VIRTKEY, CONTROL, NOINVERT
@@ -118,6 +118,7 @@ BEGIN
     "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
     "S",            ID_FILE_SAVE_ALL,       VIRTKEY, SHIFT, CONTROL, NOINVERT
     "E",            ID_FORMAT_EMPH,         VIRTKEY, CONTROL, NOINVERT
+    "B",            ID_FORMAT_TEXTBF,       VIRTKEY, CONTROL, NOINVERT
     VK_F1,          ID_HELP,                VIRTKEY, NOINVERT
     "N",            ID_INSERT_ENUMERATE,    VIRTKEY, CONTROL, ALT, NOINVERT
     "A",            ID_INSERT_FIGURE,       VIRTKEY, CONTROL, ALT, NOINVERT
@@ -138,6 +139,7 @@ BEGIN
     VK_F11,         ID_PREV_BADBOX,         VIRTKEY, SHIFT, NOINVERT
     VK_F9,          ID_PREV_ERROR,          VIRTKEY, SHIFT, NOINVERT
     VK_F10,         ID_PREV_WARNING,        VIRTKEY, SHIFT, NOINVERT
+    "O",            ID_PROJECT_OPEN,        VIRTKEY, SHIFT, CONTROL, NOINVERT
     VK_SPACE,       ID_QUERY_COMPLETION,    VIRTKEY, CONTROL, NOINVERT
     VK_F3,          ID_SEARCH_FINDNEXTSELECTED, VIRTKEY, CONTROL, NOINVERT
     VK_F3,          ID_SEARCH_FINDPREVIOUSSELECTED, VIRTKEY, SHIFT, CONTROL, NOINVERT
@@ -3465,6 +3467,8 @@ BEGIN
     ID_TITLE                "Nach Publikationstitel suchen."
     ID_PUBLICATION_TYPE     "Nach Typ der Publikation suchen."
     ID_PUBLISHER            "Nach Herausgeber suchen."
+    ID_VIEW_INDENTATION_GUIDES 
+                            "Blendet Hilfslinien für den Einzug ein- oder aus (sichtbar bei zwei oder mehr Tabs).\nEinzugshilfslinien ein-/ausblenden"
     ID_VIEW_TRANSPARENCY    "Ändert die Transparenz des Hauptfensters.\nTransparenz ändern"
     ID_VIEW_BUILD_PANE      "Blendet das Fenster mit der Ausgabe der Erstellung ein oder aus.\nErstellung"
     ID_VIEW_GREP_1_PANE     "Blendet die Suchergebnisse ein oder aus.\nSuchen 1"
@@ -4816,6 +4820,7 @@ END
 
 STRINGTABLE
 BEGIN
+    ID_VIEW_LINE_NUMBERS    "Blendet einen Rand mit Zeilennummern ein- oder aus.\nZeilennummern ein-/ausblenden"
     ID_REGEX_ANYCHAR        "."
     ID_REGEX_CHARSET        "[\001]"
     ID_REGEX_NOTCHARSET     "[^\001]"
@@ -4860,6 +4865,8 @@ STRINGTABLE
 BEGIN
     ID_EDIT_SELECTPARAGRAPH "Markiert den aktuellen Absatz\nAbsatz markieren"
     ID_ADVANCED_DUPLICATE   "Fügt eine Kopie der aktuelle Zeile oder Auswahl ein.\nZeile oder Auswahl duplizieren"
+    ID_VIEW_HIGHLIGHTACTIVELINE 
+                            "Zeigt die aktuelle Zeile im Editor in einer anderen Farbe an.\nAktive Zeile hervorheben"
 END
 
 STRINGTABLE
@@ -7446,7 +7453,7 @@ BEGIN
     STE_TB_MAINFRAME        "Standard"
     IDS_LINE_NUMBER         "Line Number"
     IDS_EDIT_TEXT_NOT_FOUND "Cannot find string""%s"""
-    IDS_DO_NOT_SAVE         "&Do not save"
+    IDS_DO_NOT_SAVE         "Do &not save"
     IDS_BIBTEX_RESULT       "BibTeX-Result: %i Error(s), %i Warning(s)"
     IDS_SAVE_PACKAGE_AS     "Save scanned packages as..."
     IDS_SELECT_PACKAGE_DIR  "Please select root dir where to search for packages"
@@ -8123,6 +8130,8 @@ BEGIN
     ID_TITLE                "Search for title."
     ID_PUBLICATION_TYPE     "Search for publication type."
     ID_PUBLISHER            "Search for publisher."
+    ID_VIEW_INDENTATION_GUIDES 
+                            "Shows or hides indentation guides (visible with two or more tabs)\nToggle Indentation Guides"
     ID_VIEW_BUILD_PANE      "Shows or hides the Build Output\nBuild Output"
     ID_VIEW_GREP_1_PANE     "Shows or hides the Find 1 view\nFind 1"
     ID_VIEW_GREP_2_PANE     "Shows or hides the Find 2 view\nFind 2"
@@ -8907,6 +8916,8 @@ STRINGTABLE
 BEGIN
     ID_EDIT_SELECTPARAGRAPH "Selects the current paragraph\nSelect Paragraph"
     ID_ADVANCED_DUPLICATE   "Duplicates the current line or selection.\nDuplicate line or selection"
+    ID_VIEW_HIGHLIGHTACTIVELINE 
+                            "Shows or hides a highlight for the line with the caret\nToggle Active Line Highlight"
 END
 
 STRINGTABLE
@@ -8945,7 +8956,7 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 #include "res\\TeXnicCenter.rc2"  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen
 #include "l.deu\\afxres.rc"          // Standardkomponenten
 #include "l.deu\\afxprint.rc"        // Ressourcen für Drucken/Seitenansicht
-#endif
+#endif
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 
