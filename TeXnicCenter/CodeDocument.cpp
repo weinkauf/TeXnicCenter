@@ -655,66 +655,47 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 
 DWORD CodeDocument::SaveFile(LPCTSTR pszFileName, bool clearModifiedFlag)
 {
-	HANDLE hSearch = INVALID_HANDLE_VALUE;
-	TCHAR szTempFileDir[MAX_PATH + 1];
-	TCHAR szTempFileName[MAX_PATH + 1];
-	TCHAR szBackupFileName[MAX_PATH + 1];
-	DWORD result = 1;
+	DWORD result = ERROR_ACCESS_DENIED;
 
-	CAtlFile temp_file;
+	const CString& directory = CPathTool::GetDirectory(pszFileName);
+	const CString& tempFileName = CPathTool::GetTempFileName(directory, _T("CRE"), 0);
 
-	TCHAR drive[MAX_PATH], dir[MAX_PATH], name[MAX_PATH], ext[MAX_PATH];
-	_tsplitpath(pszFileName, drive, dir, name, ext);
+	const DWORD moveFlags = MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH;
 
-	lstrcpy(szTempFileDir, drive);
-	lstrcat(szTempFileDir, dir);
-	lstrcpy(szBackupFileName, pszFileName);
-	lstrcat(szBackupFileName, _T(".bak"));
+	if (!tempFileName.IsEmpty()) {
+		ATL::CAtlFile tempFile;
 
-	bool error_occured = false;
-
-	if (::GetTempFileName(szTempFileDir, _T("CRE"), 0, szTempFileName) != 0) {
-		if (SUCCEEDED(temp_file.Create(szTempFileName, GENERIC_WRITE, 0, CREATE_ALWAYS))) {
-			SaveFile(temp_file,false);
+		if (SUCCEEDED(tempFile.Create(tempFileName, GENERIC_WRITE, FILE_SHARE_READ, CREATE_ALWAYS))) {
+			DWORD tempResult = SaveFile(tempFile, false);
 
 			if (create_backup_file_) {
-				WIN32_FIND_DATA wfd;
-				hSearch = ::FindFirstFile(pszFileName, &wfd);
-
-				if (hSearch != INVALID_HANDLE_VALUE) {
-					//	File exist - create backup file
-					::DeleteFile(szBackupFileName);
-
-					if (!::MoveFile(pszFileName, szBackupFileName))
-						error_occured = true;
-					else {
-						::FindClose(hSearch);
-						hSearch = INVALID_HANDLE_VALUE;
-					}
+				if (CPathTool::Exists(pszFileName)) {
+					const CString& backupFileName = CString(pszFileName) + _T(".bak");
+					// File exists: create backup file
+					MoveFileEx(pszFileName, backupFileName, moveFlags);
 				}
 			}
-			else
-				::DeleteFile(pszFileName);
 
-			temp_file.Close();
+			tempFile.Close();
 
-			//	Move temporary file to target name
-			if (!error_occured && ::MoveFile(szTempFileName, pszFileName)) {
-				if (clearModifiedFlag)
-					SetModifiedFlag(FALSE);
-
-				result = ERROR_SUCCESS;
+			// Move temporary file to target name
+			if (tempResult == ERROR_SUCCESS) {				
+				if (MoveFileEx(tempFileName, pszFileName, moveFlags))
+					result = ERROR_SUCCESS;
 			}
+			else
+				result = tempResult;
 		}
 	}
 
-	if (result)
+	if (result == ERROR_SUCCESS) {
+		DeleteFile(tempFileName);
+
+		if (clearModifiedFlag)
+			SetModifiedFlag(FALSE);
+	}
+	else
 		result = ::GetLastError();
-
-	if (hSearch != INVALID_HANDLE_VALUE)
-		::FindClose(hSearch);
-
-	::DeleteFile(szTempFileName);
 
 	return result;
 }

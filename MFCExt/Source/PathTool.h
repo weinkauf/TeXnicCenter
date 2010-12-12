@@ -59,6 +59,7 @@ public:
 
 // static
 public:
+	static CString GetTempFileName(LPCTSTR lpPathName, LPCTSTR lpPrefixString, UINT uUnique);
 	/**
 	@brief Replaces the place holders in lpszText with the path lpszPath.
 
