@@ -423,3 +423,13 @@ BOOL CPathTool::IsRelativePath( LPCTSTR lpszPath )
 	return (GetDrive(lpszPath).GetLength() == 0);
 }
 
+CString CPathTool::GetTempFileName(LPCTSTR lpPathName, LPCTSTR lpPrefixString, UINT uUnique)
+{
+	CString fileName;
+	UINT result = ::GetTempFileName(lpPathName, lpPrefixString, uUnique, 
+		fileName.GetBufferSetLength(MAX_PATH + 1));
+	// Discard the string buffer if an error occurred, i.e., result is 0
+	fileName.ReleaseBuffer(result == 0 ? 0 : -1);
+
+	return fileName;
+}
