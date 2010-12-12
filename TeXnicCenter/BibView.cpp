@@ -7,6 +7,8 @@
 #include "LatexProject.h"
 #include "OleDrop.h"
 #include "OutputDoc.h"
+#include "SearchToolBarEditButton.h"
+#include "SearchToolBarEditCtrl.h"
 #include "TeXnicCenter.h"
 
 enum {
@@ -57,68 +59,6 @@ void Tokenize(const CString& text, const CString& sep, std::vector<CString>& wor
 	LPCTSTR sep_last = sep_first + sep.GetLength();
 
 	Tokenize(first,last,sep_first,sep_last,words);
-}
-
-namespace {
-	class SearchToolBarEditCtrl :
-		public CMFCToolBarEditCtrl
-	{
-	public:
-		SearchToolBarEditCtrl(CMFCToolBarEditBoxButton& b)
-			: CMFCToolBarEditCtrl(b)
-		{
-		}
-
-		BOOL PreTranslateMessage(MSG* pMsg)
-		{
-			BOOL result = FALSE;
-
-			if (!(pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_ESCAPE)) {
-				if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_TAB) {
-					// Handle switch to the next window using Tab and Shift+Tab
-					// For now, there's only a switch between two windows:
-					// the edit box and the list control
-					ASSERT(GetParent() && GetParent()->GetParent());
-					GetParent()->GetParent()->GetNextDlgTabItem(GetParent(),
-						::GetKeyState(VK_SHIFT) >> 15 & 1)->SetFocus();
-					result = TRUE;
-				}
-				else
-					result = CMFCToolBarEditCtrl::PreTranslateMessage(pMsg);
-			}
-			else if (GetFocus() == this) {
-				if (GetWindowTextLength() != 0) { // Not empty
-					SetWindowText(0); // Clear the edit box
-					result = TRUE;
-				}
-				else // otherwise let the base deactivate the view
-					result = CMFCToolBarEditCtrl::PreTranslateMessage(pMsg);
-			}
-
-			return result;
-		}
-	};
-
-	class SearchToolBarEditButton :
-		public CMFCToolBarEditBoxButton
-	{
-		DECLARE_DYNCREATE(SearchToolBarEditButton)
-
-	public:
-		SearchToolBarEditButton()
-			: CMFCToolBarEditBoxButton(ID_SEARCH_EDIT,-1,ES_WANTRETURN|ES_AUTOHSCROLL|ES_LEFT|ES_NOHIDESEL|WS_TABSTOP,250)
-		{
-		}
-
-		CEdit* CreateEdit(CWnd* w, const CRect& rec)
-		{
-			SearchToolBarEditCtrl* e = new SearchToolBarEditCtrl(*this);
-			e->Create(m_dwStyle,rec,w,m_nID);
-			return e;
-		}
-	};
-
-	IMPLEMENT_DYNCREATE(SearchToolBarEditButton, CMFCToolBarEditBoxButton)
 }
 
 struct BibView::Item {
@@ -196,10 +136,12 @@ int BibView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	toolbar_.SetRouteCommandsViaFrame(FALSE);
 
-	SearchToolBarEditButton edit;
+	SearchToolBarEditButton edit(ID_SEARCH_EDIT);
 
 	search_button_ = static_cast<CMFCToolBarEditBoxButton*>(toolbar_.GetButton(toolbar_.ReplaceButton(ID_SEARCH_EDIT,edit)));
+	
 	ENSURE(search_button_);
+	ASSERT(search_button_->m_nID == ID_SEARCH_EDIT);
 
 	CMenu menu;
 	menu.LoadMenu(IDR_BIB_SEARCH_OPTIONS);
@@ -255,16 +197,6 @@ int BibView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-//BOOL BibView::CanBeTabbedDocument() const
-//{
-//	return true;
-//}
-//
-//BOOL BibView::CanBeDocked(CBasePane* /*pDockBar*/) const
-//{
-//	return false;
-//}
-
 void BibView::OnSize(UINT nType, int cx, int cy)
 {
 	WorkspacePaneBase::OnSize(nType, cx, cy);
@@ -294,12 +226,10 @@ void BibView::Clear(void)
 
 void BibView::AdjustLayout(const CRect& rect)
 {
-	if (toolbar_ && list_view_)
-	{
+	if (toolbar_ && list_view_) {
 		CSize size(0,0);
 
-		if ((toolbar_.GetStyle() & WS_VISIBLE) == WS_VISIBLE)
-		{
+		if ((toolbar_.GetStyle() & WS_VISIBLE) == WS_VISIBLE) {
 			size = toolbar_.CalcFixedLayout(TRUE,TRUE);
 			toolbar_.SetWindowPos(0,rect.left,rect.top,
 				rect.right - rect.left,rect.top + size.cy,SWP_NOACTIVATE|SWP_NOZORDER);

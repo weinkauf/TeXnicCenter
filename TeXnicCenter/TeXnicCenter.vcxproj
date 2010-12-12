@@ -415,6 +415,8 @@
     <ClCompile Include="RegistryStack.cpp" />
     <ClCompile Include="ScintillaCtrl.cpp" />
     <ClCompile Include="ScintillaDocView.cpp" />
+    <ClCompile Include="SearchToolBarEditButton.cpp" />
+    <ClCompile Include="SearchToolBarEditCtrl.cpp" />
     <ClCompile Include="ShadowWindow.cpp" />
     <ClCompile Include="ShellView.cpp" />
     <ClCompile Include="SortListCtrl.cpp" />
@@ -584,6 +586,8 @@
     <ClInclude Include="RunTimeHelper.h" />
     <ClInclude Include="ScintillaCtrl.h" />
     <ClInclude Include="ScintillaDocView.h" />
+    <ClInclude Include="SearchToolBarEditButton.h" />
+    <ClInclude Include="SearchToolBarEditCtrl.h" />
     <ClInclude Include="ShellView.h" />
     <ClInclude Include="SortListCtrl.h" />
     <ClInclude Include="SpellCheckDlg.h" />

@@ -1,15 +1,15 @@
 #pragma once
 
-
-// WorkspacePaneBase
-
-class WorkspacePaneBase : public CDockablePane
+class WorkspacePaneBase
+	: public CDockablePane
 {
 	DECLARE_DYNAMIC(WorkspacePaneBase)
-
 public:
 	WorkspacePaneBase();
 	virtual ~WorkspacePaneBase();
+
+	CMFCAutoHideBar* SetAutoHideMode(BOOL bMode, DWORD dwAlignment, 
+		CMFCAutoHideBar* pCurrAutoHideBar /* = NULL */, BOOL bUseTimer /* = TRUE */);
 
 protected:
 	DECLARE_MESSAGE_MAP()
@@ -19,12 +19,4 @@ protected:
 
 	/// Sets the focus on one of pane's children or pane itself.
 	virtual void Focus();
-
-	void OnSlide( BOOL bSlideOut );
-
-public:
-
-	CMFCAutoHideBar* SetAutoHideMode( BOOL bMode, DWORD dwAlignment, CMFCAutoHideBar* pCurrAutoHideBar /* = NULL */, BOOL bUseTimer /* = TRUE */ );
 };
-
-

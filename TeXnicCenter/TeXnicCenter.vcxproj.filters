@@ -473,7 +473,13 @@
     <ClCompile Include="SpellerSource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SearchToolBarEditButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="BibTeXEntryType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchToolBarEditCtrl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -973,7 +979,13 @@
     <ClInclude Include="SpellerSource.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="SearchToolBarEditButton.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="BibTeXEntryType.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchToolBarEditCtrl.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
