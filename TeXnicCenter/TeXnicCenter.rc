@@ -4655,7 +4655,7 @@ BEGIN
     ID_URL_AUTHOR           "sven@texniccenter.org\nNachricht an den Autor\nmailto:sven@texniccenter.org"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Entwicklerforum\nhttp://www.sourceforge.net/projects/texniccenter"
-    ID_URL_TCDICTDOWNLOAD   "http://wiki.services.openoffice.org/wiki/Dictionaries\nWörterbücher herunterladen\nhttp://wiki.services.openoffice.org/wiki/Dictionaries"
+    ID_URL_TCDICTDOWNLOAD   "http://extensions.services.openoffice.org/dictionaries\nWörterbücher herunterladen\nhttp://extensions.services.openoffice.org/dictionaries"
     ID_URL_TCERROR          "http://sourceforge.net/tracker/?group_id=36323&atid=479426\nFehlerbenachrichtigung\nhttp://sourceforge.net/tracker/?group_id=36323&atid=479426"
     ID_URL_TCHOME           "http://www.TeXnicCenter.org/\nTeXnicCenter Homepage\nhttp://www.TeXnicCenter.org/"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
@@ -8020,7 +8020,7 @@ BEGIN
     ID_URL_AUTHOR           "sven@texniccenter.org\nE-Mail to the Author\nmailto:sven@texniccenter.org"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Developer Forum\nhttp://www.sourceforge.net/projects/texniccenter"
-    ID_URL_TCDICTDOWNLOAD   "http://lingucomponent.openoffice.org/spell_dic.html\nDownload Dictionaries\nhttp://lingucomponent.openoffice.org/spell_dic.html"
+    ID_URL_TCDICTDOWNLOAD   "http://extensions.services.openoffice.org/dictionaries\nDownload Dictionaries\nhttp://extensions.services.openoffice.org/dictionaries"
     ID_URL_TCERROR          "http://sourceforge.net/tracker/?group_id=36323&atid=479426\nReport an Error\nhttp://sourceforge.net/tracker/?group_id=36323&atid=479426"
     ID_URL_TCHOME           "http://www.TeXnicCenter.org/\nTeXnicCenter Homepage\nhttp://www.TeXnicCenter.org/"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
