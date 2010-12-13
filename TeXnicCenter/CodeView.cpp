@@ -62,6 +62,7 @@ CodeView::CodeView()
 , suppress_speller_(false)
 , shadow_(this)
 , last_change_pos_(-1)
+, topline_from_serialization_(-1)
 {
 }
 
@@ -860,16 +861,14 @@ void CodeView::OnEditGotoNextBookmark()
 {
 	int line = GetNextBookmark();
 
-	if (line >= 0)
-		GetCtrl().GotoLine(line);
+	if (line >= 0) GoToLine(line);
 }
 
 void CodeView::OnEditGotoPrevBookmark()
 {
 	int line = GetPreviousBookmark();
 
-	if (line >= 0)
-		GetCtrl().GotoLine(line);
+	if (line >= 0) GoToLine(line);
 }
 
 void CodeView::OnUpdateEditGotoPrevBookmark(CCmdUI *pCmdUI)
@@ -902,18 +901,29 @@ bool CodeView::Serialize(CIniFile &ini, LPCTSTR lpszKey, bool write)
 	LPCTSTR const TopLine = _T("TopLine");
 
 	if (write) {
-		ini.SetValue(lpszKey,TopLine,GetCtrl().GetFirstVisibleLine());
+		ini.SetValue(lpszKey, TopLine, GetCtrl().GetFirstVisibleLine());
 		ini.SetValue(lpszKey,VAL_VIEWINFO_CURSOR,GetCtrl().GetCurrentPos());
 	}
 	else {
-		// TODO: Figure out how to set the top line
-		//GetCtrl().GotoLine(ini.GetValue(lpszKey,TopLine,0));
+		//Go to the cursor position first
+		GetCtrl().GotoPos(ini.GetValue(lpszKey,VAL_VIEWINFO_CURSOR,0));
 
-		// Go to the cursor position first
-		GetCtrl().GotoPos(ini.GetValue(lpszKey,VAL_VIEWINFO_CURSOR,0));		
+		//Restore the top line of the view in the first OnPainted Notification.
+		topline_from_serialization_ = ini.GetValue(lpszKey,TopLine,0);
 	}
 
 	return true;
+}
+
+void CodeView::OnPainted(SCNotification* /*pSCNotification*/)
+{
+	if (topline_from_serialization_ >= 0)
+	{
+		//It doesn't restore the first visible line perfectly when word wrap is enabled,
+		// but that might just be a bug in Scintilla.
+		GetCtrl().SetFirstVisibleLine(topline_from_serialization_);
+		topline_from_serialization_ = -1;
+	}
 }
 
 void CodeView::OnMarginClick(SCNotification* n)

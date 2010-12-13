@@ -29,6 +29,10 @@ class CodeView :
 
 	long last_change_pos_;
 
+	///The top line from the ini file. It can only be properly restored
+	///  in the first OnPainted Notification from Scinitlla.
+	int topline_from_serialization_;
+
 	DECLARE_DYNAMIC(CodeView)
 
 protected:
@@ -98,6 +102,7 @@ protected:
 	afx_msg void OnUpdateViewLineNumbers(CCmdUI *pCmdUI);
 	void UpdateLineNumberMargin();
 	void OnCharAdded(SCNotification* n);
+	void OnPainted(SCNotification* pSCNotification);
 	
 	virtual void OnSettingsChanged();
 
