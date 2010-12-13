@@ -184,6 +184,10 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	UpdateLineNumberMargin();
 
+	//Selection Margin
+	rCtrl.SetMarginWidthN(2, 16);
+	rCtrl.SetMarginTypeN(2, SC_MARGIN_BACK);
+
 #pragma region Markers
 
 	rCtrl.SetMarginSensitiveN(1,TRUE); // React on clicks
@@ -681,26 +685,28 @@ void CodeView::OnUpdateViewLineNumbers(CCmdUI *pCmdUI)
 void CodeView::UpdateLineNumberMargin()
 {
 	CScintillaCtrl& rCtrl = GetCtrl();
-	int line_count = rCtrl.GetLineCount();
-
-	// Calculate the number of digits
-	// used to display the line_count value
-	int digits = 0;
-
-	while (line_count) {
-		line_count /= 10;
-		++digits;
-	}
-
-	std::string number(std::max(digits,2),'9'); // Put 9 line_count times to measure the width
-	number.insert(number.begin(),'_'); // Some padding
 
 	if (CConfiguration::GetInstance()->m_bShowLineNumbers) {
+		int line_count = rCtrl.GetLineCount();
+
+		// Calculate the number of digits
+		// used to display the line_count value
+		int digits = 0;
+
+		while (line_count) {
+			line_count /= 10;
+			++digits;
+		}
+
+		std::string number(std::max(digits,2),'9'); // Put 9 line_count times to measure the width
+		number.insert(number.begin(),'_'); // Some padding
+
 		const int width = rCtrl.TextWidth(STYLE_LINENUMBER,number.c_str());
 		rCtrl.SetMarginWidthN(0,width);
 	}
-	else
+	else {
 		rCtrl.SetMarginWidthN(0,0); // Margin invisible
+	}
 }
 
 bool CodeView::IsLineMarginVisible()
