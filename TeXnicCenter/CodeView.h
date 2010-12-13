@@ -49,7 +49,7 @@ public:
 	void SetRemoveLeadingSpaces(bool e = true);
 	bool GetRemoveLeadingSpaces() const;
 
-	static int GetFoldingMargin() { return 2; }
+	static int GetFoldingMargin() { return 3; }
 
 public:
 #ifdef _DEBUG
