@@ -57,7 +57,7 @@ public:
 	int GetLineLength(int line, bool direct = true);
 	int GetLineCount(bool direct = true);
 	int GetCurrentLine(bool direct = true);
-	const CString GetLineText(int line, bool direct = true);
+	CString GetLineText(int line, bool direct = true);
 	void InsertText(const CString& text);
 	void GoToLine(int line, bool direct = true);
 
@@ -228,6 +228,8 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 
 private:
+	afx_msg LRESULT OnGetLineText(WPARAM wParam, LPARAM lParam);
+
 	static bool TerminatesIncrementalSearch( UINT ch );
 	static bool IsDirectionKey( UINT ch );
 	CString SelectionExtend(bool stripEol = true);
