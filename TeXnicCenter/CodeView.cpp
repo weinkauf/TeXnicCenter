@@ -22,7 +22,8 @@
 #undef max
 
 enum {
-	CheckForFileChangesMessageID = WM_USER + 1
+	CheckForFileChangesMessageID = WM_USER + 1,
+	CStringLineTextMessageID
 };
 
 #pragma region Helper functions
@@ -115,6 +116,7 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_MESSAGE_VOID(CheckForFileChangesMessageID, OnCheckForFileChanges)
 	ON_COMMAND(ID_VIEW_HIGHLIGHTACTIVELINE, &CodeView::OnViewHighlightActiveLine)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_HIGHLIGHTACTIVELINE, &CodeView::OnUpdateViewHighlightActiveLine)
+	ON_MESSAGE(CStringLineTextMessageID, &CodeView::OnGetLineText)
 END_MESSAGE_MAP()
 
 
@@ -284,7 +286,7 @@ void CodeView::GoToLine( int line, bool direct /*= true*/ )
 
 int CodeView::GetLineLength( int line, bool direct /*= true*/ )
 {
-	return GetCtrl().GetLineEndPosition(line,direct) - GetCtrl().PositionFromLine(line,direct);
+	return GetCtrl().GetLine(line, NULL, direct);
 }
 
 int CodeView::GetLineCount( bool direct /*= true*/ )
@@ -297,28 +299,33 @@ int CodeView::GetCurrentLine( bool direct /*= true*/ )
 	return GetCtrl().LineFromPosition(GetCtrl().GetCurrentPos(direct),direct);
 }
 
-const CString CodeView::GetLineText( int line, bool direct /*= true*/ )
+CString CodeView::GetLineText(int line, bool direct /*= true*/)
 {
-	const int length = GetLineLength(line,direct);
 	CString strLine;
 
-	if (length > 0) {
-		CStringA temp;
+	if (direct) {
+		const int length = GetLineLength(line, direct);
 
-		GetCtrl().GetLine(line,temp.GetBuffer(length + 1),direct);
-		temp.ReleaseBuffer(length);
+		if (length > 0) {
+			CStringA temp;
+
+			GetCtrl().GetLine(line, temp.GetBuffer(length), direct);
+			temp.ReleaseBuffer(length);
 
 #ifdef UNICODE
-		std::vector<wchar_t> buffer;
-		UTF8toUTF16(temp,temp.GetLength(),buffer);
+			std::vector<wchar_t> buffer;
+			UTF8toUTF16(temp, temp.GetLength(), buffer);
 #else
-		std::vector<char> buffer;
-		UTF8toANSI(temp,temp.GetLength(),buffer);
+			std::vector<char> buffer;
+			UTF8toANSI(temp, temp.GetLength(), buffer);
 #endif
 
-		if (!buffer.empty())
-			strLine.SetString(&buffer[0],buffer.size());
+			if (!buffer.empty())
+				strLine.SetString(&buffer[0], buffer.size());
+		}
 	}
+	else
+		SendMessage(CStringLineTextMessageID, line, reinterpret_cast<LPARAM>(&strLine));
 
 	return strLine;
 }
@@ -329,7 +336,6 @@ void CodeView::InsertText( const CString& text )
 	GetCtrl().InsertText(pos,text);
 	GetCtrl().GotoPos(pos + text.GetLength());
 }
-
 
 int CodeView::Lock(bool exclusive /*= false */)
 {
@@ -1381,5 +1387,10 @@ void CodeView::OnSavePointReached(SCNotification* /*n*/)
 	GetDocument()->MarkTitleAsModified(false);
 }
 
-#pragma pop_macro("max")
+LRESULT CodeView::OnGetLineText(WPARAM wParam, LPARAM lParam)
+{
+	*reinterpret_cast<CString*>(lParam) = GetLineText(static_cast<int>(wParam));
+	return 0;
+}
 
+#pragma pop_macro("max")
