@@ -733,9 +733,8 @@ void COutputWizard::GenerateOutputProfiles()
 				m_profiles.Remove(strProfile);			
 
 			p.SetLatexPath(GetDistributionFilePath(_T("latex.exe")),dviOptions);
-			p.SetBibTexPath(GetDistributionFilePath(_T("bibtex.exe")),_T("\"%bm\""));
-			p.SetMakeIndexPath(GetDistributionFilePath(_T("makeindex.exe")),
-							   _T("\"%bm.idx\" -o \"%bm.ind\""));
+			SetupBibTeX(p);
+			SetupMakeIndex(p);
 
 			// add viewer settings
 			if (!m_wndPageDviViewer.m_strPath.IsEmpty())
@@ -796,12 +795,8 @@ void COutputWizard::GenerateOutputProfiles()
 
 			p.SetLatexPath(
 				GetDistributionFilePath(_T("latex.exe")),dviOptions);
-			p.SetBibTexPath(
-				GetDistributionFilePath(_T("bibtex.exe")),
-				_T("\"%bm\""));
-			p.SetMakeIndexPath(
-				GetDistributionFilePath(_T("makeindex.exe")),
-				_T("\"%bm\""));
+			SetupBibTeX(p);
+			SetupMakeIndex(p);
 
 			// add post processor dvips
 			CPostProcessor pp(
@@ -860,10 +855,8 @@ void COutputWizard::GenerateOutputProfiles()
 
 			p.SetLatexPath(GetDistributionFilePath(
 										  _T("latex.exe")),strLatexOptions);
-			p.SetBibTexPath(GetDistributionFilePath(
-										   _T("bibtex.exe")),_T("\"%bm\""));
-			p.SetMakeIndexPath(GetDistributionFilePath(
-											  _T("makeindex.exe")),_T("\"%bm\""));
+			SetupBibTeX(p);
+			SetupMakeIndex(p);
 
 			// add post processor dvips
 			CPostProcessor ppDVIPS(
@@ -1053,8 +1046,8 @@ void COutputWizard::GeneratePDFProfile( const CString& name, const CString& strP
 		CProfile p;
 
 		p.SetLatexPath(GetDistributionFilePath(latexFileName),strPDFLatexOptions);
-		p.SetBibTexPath(GetDistributionFilePath(_T("bibtex.exe")),_T("\"%bm\""));
-		p.SetMakeIndexPath(	GetDistributionFilePath(_T("makeindex.exe")),_T("\"%bm\""));
+		SetupBibTeX(p);
+		SetupMakeIndex(p);
 
 		// add viewer settings
 		AssignPDFViewer(p,viewer_path);
@@ -1220,4 +1213,15 @@ bool COutputWizard::IsCompilerAvailable(LPCTSTR fileName) const
 		result = false;
 
 	return result;
+}
+
+void COutputWizard::SetupBibTeX(CProfile &p)
+{
+	p.SetBibTexPath(GetDistributionFilePath(_T("bibtex.exe")), _T("\"%bm\""));
+}
+
+void COutputWizard::SetupMakeIndex(CProfile &p)
+{
+	p.SetMakeIndexPath(GetDistributionFilePath(_T("makeindex.exe")),
+		_T("\"%bm.idx\" -o \"%bm.ind\""));
 }
