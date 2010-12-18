@@ -1224,5 +1224,5 @@ void COutputWizard::SetupBibTeX(CProfile &p)
 void COutputWizard::SetupMakeIndex(CProfile &p)
 {
 	p.SetMakeIndexPath(GetDistributionFilePath(_T("makeindex.exe")),
-		_T("\"%bm.idx\" -t \"%tm.ilg\" -o \"%tm.ind\""));
+		_T("\"%tm.idx\" -t \"%tm.ilg\" -o \"%tm.ind\""));
 }
