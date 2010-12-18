@@ -35,6 +35,7 @@
 #include "stdafx.h"
 #include "resource.h"
 
+#include <algorithm>
 #include <vector>
 #include <functional>
 
@@ -2192,17 +2193,15 @@ void CMainFrame::SetRecentlyUsedChildFrame(CFrameWnd* child)
 	//TRACE(_T("SetRecentlyUsedChildFrame called with child: %s\n"), CPathTool::GetFileTitle(((CChildFrame*)child)->GetPathNameOfDocument()));
 	//DbgMRUList("SetRecentlyUsedChildFrame::Start");
 
-	if (child && MDIChildrenMRU.front() != child)
+	if (!MDIChildrenMRU.empty() && child && MDIChildrenMRU.front() != child)
 	{
-		//Put the child at the top of the MRU list of MDI children
-		for (auto it=MDIChildrenMRU.begin(); it!=MDIChildrenMRU.end(); it++)
+		auto it = std::find(MDIChildrenMRU.begin(), MDIChildrenMRU.end(), child);
+
+		if (it != MDIChildrenMRU.end())
 		{
-			if (*it == child)
-			{
-				MDIChildrenMRU.erase(it);
-				MDIChildrenMRU.push_front(child);
-				break;
-			}
+			// Put the child at the top of the MRU list of MDI children
+			MDIChildrenMRU.erase(it);
+			MDIChildrenMRU.push_front(child);
 		}
 	}
 
