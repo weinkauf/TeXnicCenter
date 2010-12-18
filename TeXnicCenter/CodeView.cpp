@@ -22,7 +22,8 @@
 #undef max
 
 enum {
-	CheckForFileChangesMessageID = WM_USER + 1
+	CheckForFileChangesMessageID = WM_USER + 1,
+	CStringLineTextMessageID
 };
 
 #pragma region Helper functions
@@ -61,6 +62,7 @@ CodeView::CodeView()
 , suppress_speller_(false)
 , shadow_(this)
 , last_change_pos_(-1)
+, topline_from_serialization_(-1)
 {
 }
 
@@ -115,6 +117,7 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_MESSAGE_VOID(CheckForFileChangesMessageID, OnCheckForFileChanges)
 	ON_COMMAND(ID_VIEW_HIGHLIGHTACTIVELINE, &CodeView::OnViewHighlightActiveLine)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_HIGHLIGHTACTIVELINE, &CodeView::OnUpdateViewHighlightActiveLine)
+	ON_MESSAGE(CStringLineTextMessageID, &CodeView::OnGetLineText)
 END_MESSAGE_MAP()
 
 
@@ -181,6 +184,10 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	UpdateLineNumberMargin();
 
+	//Selection Margin
+	rCtrl.SetMarginWidthN(2, 16);
+	rCtrl.SetMarginTypeN(2, SC_MARGIN_BACK);
+
 #pragma region Markers
 
 	rCtrl.SetMarginSensitiveN(1,TRUE); // React on clicks
@@ -205,6 +212,17 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	rCtrl.SetCaretLineBack(RGB(220, 220, 255));
 	//Not so nice: rCtrl.SetCaretLineBackAlpha(90);
 	HighlightActiveLine(CConfiguration::GetInstance()->IsHighlightCaretLine());
+
+#pragma endregion
+
+#pragma region Multiple Selections
+
+	//We enable multiple selections by default.
+	//This is not optional, since the single and multiple modes are easy to distinguish for the user.
+	rCtrl.SetMultipleSelection(true);
+	rCtrl.SetAdditionalSelectionTyping(true);
+	rCtrl.SetMultiPaste(SC_MULTIPASTE_EACH);
+	rCtrl.SetAdditionalCaretsBlink(false);
 
 #pragma endregion
 
@@ -238,9 +256,14 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	rCtrl.SetIndent(0); //Indent same as tab size
 	ShowIndentationGuides(CConfiguration::GetInstance()->GetShowIndentationGuides());
 
-	//SCI_SETWHITESPACESIZE(int size)
-	// ==> Size of the white space dots; not yet supported by the MFC abstraction.
-	// ==> Came with Scintilla 2.02, but the Ctrl in version 1.25 only supports Scintilla 2.01.
+	//Size of the white space dots. Default is 1, but that is too small.
+	rCtrl.SetWhitespaceSize(2);
+
+	//Virtual Space could be an option, but I don't see its value in a LaTeX editor.
+	//For rectangular selections it could be nice, but since virtual space is never copied,
+	// it would only communicate the wrong idea to the user.
+	//Hence, leave the default: completely off.
+	//rCtrl.SetVirtualSpaceOptions(SCVS_RECTANGULARSELECTION | SCVS_USERACCESSIBLE);
 
 	//rCtrl.SetWordChars: We take the default definition of what makes up a word.
 	//rCtrl.SetWhitespaceChars: Use default.
@@ -284,7 +307,7 @@ void CodeView::GoToLine( int line, bool direct /*= true*/ )
 
 int CodeView::GetLineLength( int line, bool direct /*= true*/ )
 {
-	return GetCtrl().GetLineEndPosition(line,direct) - GetCtrl().PositionFromLine(line,direct);
+	return GetCtrl().GetLine(line, NULL, direct);
 }
 
 int CodeView::GetLineCount( bool direct /*= true*/ )
@@ -297,28 +320,33 @@ int CodeView::GetCurrentLine( bool direct /*= true*/ )
 	return GetCtrl().LineFromPosition(GetCtrl().GetCurrentPos(direct),direct);
 }
 
-const CString CodeView::GetLineText( int line, bool direct /*= true*/ )
+CString CodeView::GetLineText(int line, bool direct /*= true*/)
 {
-	const int length = GetLineLength(line,direct);
 	CString strLine;
 
-	if (length > 0) {
-		CStringA temp;
+	if (direct) {
+		const int length = GetLineLength(line, direct);
 
-		GetCtrl().GetLine(line,temp.GetBuffer(length + 1),direct);
-		temp.ReleaseBuffer(length);
+		if (length > 0) {
+			CStringA temp;
+
+			GetCtrl().GetLine(line, temp.GetBuffer(length), direct);
+			temp.ReleaseBuffer(length);
 
 #ifdef UNICODE
-		std::vector<wchar_t> buffer;
-		UTF8toUTF16(temp,temp.GetLength(),buffer);
+			std::vector<wchar_t> buffer;
+			UTF8toUTF16(temp, temp.GetLength(), buffer);
 #else
-		std::vector<char> buffer;
-		UTF8toANSI(temp,temp.GetLength(),buffer);
+			std::vector<char> buffer;
+			UTF8toANSI(temp, temp.GetLength(), buffer);
 #endif
 
-		if (!buffer.empty())
-			strLine.SetString(&buffer[0],buffer.size());
+			if (!buffer.empty())
+				strLine.SetString(&buffer[0], buffer.size());
+		}
 	}
+	else
+		SendMessage(CStringLineTextMessageID, line, reinterpret_cast<LPARAM>(&strLine));
 
 	return strLine;
 }
@@ -329,7 +357,6 @@ void CodeView::InsertText( const CString& text )
 	GetCtrl().InsertText(pos,text);
 	GetCtrl().GotoPos(pos + text.GetLength());
 }
-
 
 int CodeView::Lock(bool exclusive /*= false */)
 {
@@ -674,26 +701,28 @@ void CodeView::OnUpdateViewLineNumbers(CCmdUI *pCmdUI)
 void CodeView::UpdateLineNumberMargin()
 {
 	CScintillaCtrl& rCtrl = GetCtrl();
-	int line_count = rCtrl.GetLineCount();
-
-	// Calculate the number of digits
-	// used to display the line_count value
-	int digits = 0;
-
-	while (line_count) {
-		line_count /= 10;
-		++digits;
-	}
-
-	std::string number(std::max(digits,2),'9'); // Put 9 line_count times to measure the width
-	number.insert(number.begin(),'_'); // Some padding
 
 	if (CConfiguration::GetInstance()->m_bShowLineNumbers) {
+		int line_count = rCtrl.GetLineCount();
+
+		// Calculate the number of digits
+		// used to display the line_count value
+		int digits = 0;
+
+		while (line_count) {
+			line_count /= 10;
+			++digits;
+		}
+
+		std::string number(std::max(digits,2),'9'); // Put 9 line_count times to measure the width
+		number.insert(number.begin(),'_'); // Some padding
+
 		const int width = rCtrl.TextWidth(STYLE_LINENUMBER,number.c_str());
 		rCtrl.SetMarginWidthN(0,width);
 	}
-	else
+	else {
 		rCtrl.SetMarginWidthN(0,0); // Margin invisible
+	}
 }
 
 bool CodeView::IsLineMarginVisible()
@@ -854,16 +883,14 @@ void CodeView::OnEditGotoNextBookmark()
 {
 	int line = GetNextBookmark();
 
-	if (line >= 0)
-		GetCtrl().GotoLine(line);
+	if (line >= 0) GoToLine(line);
 }
 
 void CodeView::OnEditGotoPrevBookmark()
 {
 	int line = GetPreviousBookmark();
 
-	if (line >= 0)
-		GetCtrl().GotoLine(line);
+	if (line >= 0) GoToLine(line);
 }
 
 void CodeView::OnUpdateEditGotoPrevBookmark(CCmdUI *pCmdUI)
@@ -896,18 +923,29 @@ bool CodeView::Serialize(CIniFile &ini, LPCTSTR lpszKey, bool write)
 	LPCTSTR const TopLine = _T("TopLine");
 
 	if (write) {
-		ini.SetValue(lpszKey,TopLine,GetCtrl().GetFirstVisibleLine());
+		ini.SetValue(lpszKey, TopLine, GetCtrl().GetFirstVisibleLine());
 		ini.SetValue(lpszKey,VAL_VIEWINFO_CURSOR,GetCtrl().GetCurrentPos());
 	}
 	else {
-		// TODO: Figure out how to set the top line
-		//GetCtrl().GotoLine(ini.GetValue(lpszKey,TopLine,0));
+		//Go to the cursor position first
+		GetCtrl().GotoPos(ini.GetValue(lpszKey,VAL_VIEWINFO_CURSOR,0));
 
-		// Go to the cursor position first
-		GetCtrl().GotoPos(ini.GetValue(lpszKey,VAL_VIEWINFO_CURSOR,0));		
+		//Restore the top line of the view in the first OnPainted Notification.
+		topline_from_serialization_ = ini.GetValue(lpszKey,TopLine,0);
 	}
 
 	return true;
+}
+
+void CodeView::OnPainted(SCNotification* /*pSCNotification*/)
+{
+	if (topline_from_serialization_ >= 0)
+	{
+		//It doesn't restore the first visible line perfectly when word wrap is enabled,
+		// but that might just be a bug in Scintilla.
+		GetCtrl().SetFirstVisibleLine(topline_from_serialization_);
+		topline_from_serialization_ = -1;
+	}
 }
 
 void CodeView::OnMarginClick(SCNotification* n)
@@ -1381,5 +1419,10 @@ void CodeView::OnSavePointReached(SCNotification* /*n*/)
 	GetDocument()->MarkTitleAsModified(false);
 }
 
-#pragma pop_macro("max")
+LRESULT CodeView::OnGetLineText(WPARAM wParam, LPARAM lParam)
+{
+	*reinterpret_cast<CString*>(lParam) = GetLineText(static_cast<int>(wParam));
+	return 0;
+}
 
+#pragma pop_macro("max")

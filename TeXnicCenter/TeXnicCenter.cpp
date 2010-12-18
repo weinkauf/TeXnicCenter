@@ -530,7 +530,9 @@ BOOL CTeXnicCenterApp::InitInstance()
 	// Haupt-MDI-Rahmenfenster erzeugen
 	CMainFrame *pMainFrame = new CMainFrame;
 
-	if (!pMainFrame->LoadFrame(IDR_MAINFRAME))
+	const DWORD frameStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE | FWS_PREFIXTITLE;
+
+	if (!pMainFrame->LoadFrame(IDR_MAINFRAME, frameStyle))
 		return FALSE;
 
 	m_pMainWnd = pMainFrame;

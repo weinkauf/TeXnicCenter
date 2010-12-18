@@ -29,6 +29,10 @@ class CodeView :
 
 	long last_change_pos_;
 
+	///The top line from the ini file. It can only be properly restored
+	///  in the first OnPainted Notification from Scinitlla.
+	int topline_from_serialization_;
+
 	DECLARE_DYNAMIC(CodeView)
 
 protected:
@@ -45,7 +49,7 @@ public:
 	void SetRemoveLeadingSpaces(bool e = true);
 	bool GetRemoveLeadingSpaces() const;
 
-	static int GetFoldingMargin() { return 2; }
+	static int GetFoldingMargin() { return 3; }
 
 public:
 #ifdef _DEBUG
@@ -57,7 +61,7 @@ public:
 	int GetLineLength(int line, bool direct = true);
 	int GetLineCount(bool direct = true);
 	int GetCurrentLine(bool direct = true);
-	const CString GetLineText(int line, bool direct = true);
+	CString GetLineText(int line, bool direct = true);
 	void InsertText(const CString& text);
 	void GoToLine(int line, bool direct = true);
 
@@ -98,6 +102,7 @@ protected:
 	afx_msg void OnUpdateViewLineNumbers(CCmdUI *pCmdUI);
 	void UpdateLineNumberMargin();
 	void OnCharAdded(SCNotification* n);
+	void OnPainted(SCNotification* pSCNotification);
 	
 	virtual void OnSettingsChanged();
 
@@ -228,6 +233,8 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 
 private:
+	afx_msg LRESULT OnGetLineText(WPARAM wParam, LPARAM lParam);
+
 	static bool TerminatesIncrementalSearch( UINT ch );
 	static bool IsDirectionKey( UINT ch );
 	CString SelectionExtend(bool stripEol = true);
