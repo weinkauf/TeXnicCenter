@@ -307,7 +307,8 @@ void CodeView::GoToLine( int line, bool direct /*= true*/ )
 
 int CodeView::GetLineLength( int line, bool direct /*= true*/ )
 {
-	return GetCtrl().GetLine(line, NULL, direct);
+	return GetCtrl().GetLineEndPosition(line, direct) -
+		GetCtrl().PositionFromLine(line, direct);
 }
 
 int CodeView::GetLineCount( bool direct /*= true*/ )
@@ -325,7 +326,7 @@ CString CodeView::GetLineText(int line, bool direct /*= true*/)
 	CString strLine;
 
 	if (direct) {
-		const int length = GetLineLength(line, direct);
+		const int length = GetCtrl().GetLine(line, NULL, direct);
 
 		if (length > 0) {
 			CStringA temp;
