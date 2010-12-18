@@ -1487,6 +1487,14 @@ BOOL CTeXnicCenterApp::PreTranslateMessage(MSG* pMsg)
 		}
 	}
 
+	//Disable the activation of the main menu on F10 or Alt keys.
+	//Important for cycling through Warnings and for Ctrl-Alt-Shortcuts.
+	//==> Main menu can still be accessed by pressing Alt-<Letter>, e.g., Alt-F for File menu.
+	if (pMsg->message == WM_SYSKEYUP && (pMsg->wParam == VK_MENU || pMsg->wParam == VK_F10))
+	{
+		return true;
+	}
+
 	return CProjectSupportingWinApp::PreTranslateMessage(pMsg);
 }
 
