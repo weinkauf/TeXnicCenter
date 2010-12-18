@@ -1217,11 +1217,12 @@ bool COutputWizard::IsCompilerAvailable(LPCTSTR fileName) const
 
 void COutputWizard::SetupBibTeX(CProfile &p)
 {
-	p.SetBibTexPath(GetDistributionFilePath(_T("bibtex.exe")), _T("\"%bm\""));
+	p.SetBibTexPath(GetDistributionFilePath(_T("bibtex.exe")),
+		_T("\"%tm\""));
 }
 
 void COutputWizard::SetupMakeIndex(CProfile &p)
 {
 	p.SetMakeIndexPath(GetDistributionFilePath(_T("makeindex.exe")),
-		_T("\"%bm.idx\" -o \"%bm.ind\""));
+		_T("\"%bm.idx\" -t \"%tm.ilg\" -o \"%tm.ind\""));
 }
