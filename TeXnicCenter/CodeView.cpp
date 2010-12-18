@@ -215,6 +215,17 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 #pragma endregion
 
+#pragma region Multiple Selections
+
+	//We enable multiple selections by default.
+	//This is not optional, since the single and multiple modes are easy to distinguish for the user.
+	rCtrl.SetMultipleSelection(true);
+	rCtrl.SetAdditionalSelectionTyping(true);
+	rCtrl.SetMultiPaste(SC_MULTIPASTE_EACH);
+	rCtrl.SetAdditionalCaretsBlink(false);
+
+#pragma endregion
+
 #pragma region Folding
 
 	const int folding_margin_num = GetFoldingMargin();
@@ -245,9 +256,14 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	rCtrl.SetIndent(0); //Indent same as tab size
 	ShowIndentationGuides(CConfiguration::GetInstance()->GetShowIndentationGuides());
 
-	//SCI_SETWHITESPACESIZE(int size)
-	// ==> Size of the white space dots; not yet supported by the MFC abstraction.
-	// ==> Came with Scintilla 2.02, but the Ctrl in version 1.25 only supports Scintilla 2.01.
+	//Size of the white space dots. Default is 1, but that is too small.
+	rCtrl.SetWhitespaceSize(2);
+
+	//Virtual Space could be an option, but I don't see its value in a LaTeX editor.
+	//For rectangular selections it could be nice, but since virtual space is never copied,
+	// it would only communicate the wrong idea to the user.
+	//Hence, leave the default: completely off.
+	//rCtrl.SetVirtualSpaceOptions(SCVS_RECTANGULARSELECTION | SCVS_USERACCESSIBLE);
 
 	//rCtrl.SetWordChars: We take the default definition of what makes up a word.
 	//rCtrl.SetWhitespaceChars: Use default.
