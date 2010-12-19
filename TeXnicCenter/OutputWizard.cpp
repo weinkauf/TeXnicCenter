@@ -772,7 +772,8 @@ void COutputWizard::GenerateOutputProfiles()
 				if (bExists)
 					m_profiles.Remove(strProfile);
 
-				CPostProcessor dvipdfm(_T("dvipdfm"), dvipdfm_path_);
+				CPostProcessor dvipdfm(_T("dvipdfm"), dvipdfm_path_,
+					_T("\"%bm.dvi\""));
 				p.GetPostProcessorArray().Add(dvipdfm);
 				p.SetLaTeXArguments(strPDFLatexOptions); // Use PDF arguments
 
