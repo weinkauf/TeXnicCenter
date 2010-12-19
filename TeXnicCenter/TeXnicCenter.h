@@ -426,15 +426,6 @@ public:
 
 private:
 	std::unique_ptr<SpellerSource> spellerSource_;
-
-	///Whether the CONTROL key is pressed (Workaround for the buggy activation of the main menu on F10 or Alt keys).
-	bool m_bControlKeyIsDown;
-
-	///Whether the ALT key is pressed (Workaround for the buggy activation of the main menu on F10 or Alt keys).
-	bool m_bAltKeyIsDown;
-
-	///Whether the ALT key is pressed together with some other key (Workaround for the buggy activation of the main menu on F10 or Alt keys).
-	bool m_bAltKeyDownWithControlKey;
 };
 
 inline
