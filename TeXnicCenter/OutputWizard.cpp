@@ -102,6 +102,11 @@ namespace
 	{
 		return CPathTool::GetFileTitle(strViewer).CompareNoCase(_T("SumatraPDF")) == 0;
 	}
+
+	/**
+	 * @brief The default placeholder used for LaTeX, PDFLaTeX, etc.
+	 */
+	LPCTSTR const defaultInputPlaceholder = _T("\"%wm\"");
 }
 
 
@@ -692,20 +697,21 @@ void COutputWizard::GenerateOutputProfiles()
 {
 	CString strError;
 
-	//Some things, that we will reuse inside this function
+	// Some things, that we will reuse inside this function
 	// - Options for normal latex
-	// - %Wm, because of the src-specials for forward/inverse search. Otherwise, things might break.
-	CString strLatexOptions(_T("-interaction=nonstopmode \"%Wm\""));
+	CString strLatexOptions(_T("-interaction=nonstopmode "));
+	strLatexOptions += defaultInputPlaceholder;
 
 	// - Options for PDFLatex
-	// - %pm, because it doesn't matter here. I guess, we could use %Wm as well. But %pm is tested and seems to work for all.
-	CString strPDFLatexOptions(_T("-interaction=nonstopmode \"%pm\""));
+	CString strPDFLatexOptions(_T("-interaction=nonstopmode "));
+	strPDFLatexOptions += defaultInputPlaceholder;
 
 	// - Only MiKTeX supports the -max-print-line=N feature
 	if (distribution_ == MiKTeX) 
 	{
-		strLatexOptions = _T("-interaction=nonstopmode -max-print-line=120 \"%Wm\"");
-		strPDFLatexOptions = _T("-interaction=nonstopmode -max-print-line=120 \"%pm\"");
+		// Put the options before the input file placeholder
+		strLatexOptions = _T("-max-print-line=120 ") + strLatexOptions;
+		strPDFLatexOptions = _T("-max-print-line=120 ") + strPDFLatexOptions;
 	}
 
 	const CString dviOptions(_T("-src ") + strLatexOptions); // Source links
@@ -766,7 +772,7 @@ void COutputWizard::GenerateOutputProfiles()
 				if (bExists)
 					m_profiles.Remove(strProfile);
 
-				CPostProcessor dvipdfm(_T("dvipdfm"),dvipdfm_path_,_T("\"%bm.dvi\""));
+				CPostProcessor dvipdfm(_T("dvipdfm"), dvipdfm_path_);
 				p.GetPostProcessorArray().Add(dvipdfm);
 				p.SetLaTeXArguments(strPDFLatexOptions); // Use PDF arguments
 
