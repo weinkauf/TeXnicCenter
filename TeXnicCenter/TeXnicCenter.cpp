@@ -284,9 +284,6 @@ CTeXnicCenterApp::CTeXnicCenterApp()
 	,bibtex_doc_template_(0)
 	,metapost_doc_template_(0)
 	,m_nApplicationLook(ID_VIEW_APP_LOOK_VS_2005)
-	,m_bControlKeyIsDown(false)
-	,m_bAltKeyIsDown(false)
-	,m_bAltKeyDownWithControlKey(false)
 {
 	m_eHelpType = afxHTMLHelp;
 
@@ -1495,35 +1492,10 @@ BOOL CTeXnicCenterApp::PreTranslateMessage(MSG* pMsg)
 	// Important for cycling through Warnings and for Ctrl-Alt-Shortcuts.
 	//==> With this workaround, TXC behaves like a normal Windows application.
 
-	//Track pressing of Control and Alt key
-	if (pMsg->message == WM_KEYDOWN || pMsg->message == WM_SYSKEYDOWN)
+	//Eat the WM_SYSKEYUP of the Alt key, if it was pressed togther with the Control key.
+	if (pMsg->message == WM_SYSKEYUP && pMsg->wParam == VK_MENU && GetAsyncKeyState(VK_CONTROL) < 0)
 	{
-		if (pMsg->wParam == VK_CONTROL)
-		{
-			m_bControlKeyIsDown = true;
-			m_bAltKeyDownWithControlKey = m_bAltKeyIsDown;
-		}
-		else if (pMsg->wParam == VK_MENU)
-		{
-			m_bAltKeyIsDown = true;
-			m_bAltKeyDownWithControlKey = m_bControlKeyIsDown;
-		}
-	}
-
-	//Track release of Control and Alt key.
-	//And eat the WM_SYSKEYUP of the Alt key, if it was pressed togther with the Control key.
-	//Otherwise, the menu would be activated, which is not the Windos default.
-	if (pMsg->message == WM_KEYUP || pMsg->message == WM_SYSKEYUP)
-	{
-		if (pMsg->wParam == VK_CONTROL)
-		{
-			m_bControlKeyIsDown = false;
-		}
-		else if (pMsg->wParam == VK_MENU)
-		{
-			m_bAltKeyIsDown = false;
-			if (m_bAltKeyDownWithControlKey && pMsg->message == WM_SYSKEYUP) return true; //Eat
-		}
+		return true;
 	}
 
 	//Eat the WM_SYSKEYUP of F10, if we have a shortcut for F10.
