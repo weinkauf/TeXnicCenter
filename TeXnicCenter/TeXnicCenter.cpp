@@ -1494,7 +1494,7 @@ BOOL CTeXnicCenterApp::PreTranslateMessage(MSG* pMsg)
 	//==> With this workaround, TXC behaves like a normal Windows application.
 
 	//Eat the WM_SYSKEYUP of the Alt key, if it was pressed togther with the Control key.
-	if (pMsg->message == WM_SYSKEYUP && pMsg->wParam == VK_MENU && GetAsyncKeyState(VK_CONTROL) < 0)
+	if (pMsg->message == WM_SYSKEYUP && pMsg->wParam == VK_MENU && GetKeyState(VK_CONTROL) < 0)
 	{
 		return true;
 	}
