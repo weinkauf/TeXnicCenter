@@ -284,6 +284,7 @@ CTeXnicCenterApp::CTeXnicCenterApp()
 	,bibtex_doc_template_(0)
 	,metapost_doc_template_(0)
 	,m_nApplicationLook(ID_VIEW_APP_LOOK_VS_2005)
+	,m_bAltKeyDownWithMouseButton(false)
 {
 	m_eHelpType = afxHTMLHelp;
 
@@ -1489,12 +1490,25 @@ BOOL CTeXnicCenterApp::PreTranslateMessage(MSG* pMsg)
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Workaround for the buggy activation of the main menu on F10 or Alt keys.
-	// Important for cycling through Warnings and for Ctrl-Alt-Shortcuts.
+	// Important for cycling through Warnings, for Ctrl-Alt-Shortcuts, and rectangular selections.
 	//==> With this workaround, TXC behaves like a normal Windows application.
 
 	//Eat the WM_SYSKEYUP of the Alt key, if it was pressed togther with the Control key.
 	if (pMsg->message == WM_SYSKEYUP && pMsg->wParam == VK_MENU && GetAsyncKeyState(VK_CONTROL) < 0)
 	{
+		return true;
+	}
+
+	//Check whether the Alt key is pressed when a mouse button gets pressed too
+	if (pMsg->message == WM_LBUTTONDOWN || pMsg->message == WM_MBUTTONDOWN || pMsg->message == WM_RBUTTONDOWN)
+	{
+		m_bAltKeyDownWithMouseButton = (GetKeyState(VK_MENU) < 0);
+	}
+	// - and eat the next WM_SYSKEYUP of the Alt key
+	// - ==> Rectangular selections are not followed by a menu activation.
+	if (m_bAltKeyDownWithMouseButton && pMsg->message == WM_SYSKEYUP && pMsg->wParam == VK_MENU)
+	{
+		m_bAltKeyDownWithMouseButton = false; //Reset for the next pressed Alt key
 		return true;
 	}
 

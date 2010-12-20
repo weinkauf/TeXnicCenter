@@ -426,6 +426,10 @@ public:
 
 private:
 	std::unique_ptr<SpellerSource> spellerSource_;
+
+	///Whether the ALT key was pressed when a mouse button was pressed.
+	///Used to cancel a subsequent menu activation.
+	bool m_bAltKeyDownWithMouseButton;
 };
 
 inline
