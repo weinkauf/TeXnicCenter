@@ -32,3 +32,4 @@
 #include "../source/Wildcard.h"
 #include "../source/WorkerThread.h"
 #include "../source/SystemInfo.h"
+#include "../source/PerformanceTimer.h"
