@@ -214,10 +214,9 @@ bool CTextModuleGroup::SerializeFromRegistry(LPCTSTR strStartSection)
 	ReadSubKeys(reg.GetRegKey(),astrKeys);
 	reg.PushKey();
 
-	int i;
-	for (i = 0; i < astrKeys.GetSize(); i++)
+	for (int i = 0; i < astrKeys.GetSize(); i++)
 	{
-		//reg.TopKey();
+		reg.TopKey();
 		reg.Open(astrKeys[i]);
 
 		//Get the Infos and Insert
