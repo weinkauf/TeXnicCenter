@@ -1,20 +1,23 @@
 #define APP_NAME          "TeXnicCenter"
-#define APP_VERSION       "2.0 Alpha 3"
+#define APP_VERSION       "2.0 Alpha 4"
 #define APP_ID            "TeXnicCenter Alpha"
 #define REGNAME           "TeXnicCenterNT"
-#define APP_COPYRIGHT     "© 1999-2010 www.TeXnicCenter.org"
+#define APP_COPYRIGHT     "© 1999-2011 www.TeXnicCenter.org"
 
-#define APP_PLATFORM      "Win32"
-;#define APP_PLATFORM      "x64"
+;Uncomment this for x64
+;#define TARGET_x64
 
-[_ISTool]
-EnableISX=true
+#ifdef TARGET_x64
+  #define APP_PLATFORM      "x64"
+#else
+  #define APP_PLATFORM      "Win32"
+#endif
+
 
 [Setup]
 ;Output
 OutputDir=..\Output\Setup
 OutputBaseFilename=TXCSetup
-
 ;About TeXnicCenter
 AppName={#APP_NAME}
 AppVersion={#APP_VERSION}
@@ -26,30 +29,33 @@ AppSupportURL=http://www.texniccenter.org/support/find-help
 AppUpdatesURL=http://www.texniccenter.org/resources/downloads
 AppCopyright={#APP_COPYRIGHT}
 LicenseFile=GPL.rtf
-
 DefaultDirName={pf}\{#APP_ID}
 DefaultGroupName={#APP_ID}
-
 ;Previous
 UsePreviousAppDir=true
-
 ;Requirements
 PrivilegesRequired=none
 MinVersion=4.0.950,5.0.2195
-
 ;Setup
 AllowNoIcons=true
 AlwaysShowDirOnReadyPage=true
 AlwaysShowGroupOnReadyPage=true
 AlwaysShowComponentsList=true
-SolidCompression=true
-InternalCompressLevel=ultra
-Compression=lzma/ultra
 ShowLanguageDialog=yes
-
 UninstallDisplayIcon={app}\TeXnicCenter.exe
 WizardImageFile=compiler:wizmodernimage-IS.bmp
 WizardSmallImageFile=compiler:wizmodernsmallimage-IS.bmp
+ChangesAssociations=true
+;Compression
+SolidCompression=true
+InternalCompressLevel=Ultra64
+;Compression=none
+Compression=lzma2/Ultra64
+;Architecture (don't use these for Win32, since 32bit code can run on x64 as well. See Inno Help.)
+#ifdef TARGET_x64
+  ArchitecturesAllowed=x64
+  ArchitecturesInstallIn64BitMode=x64
+#endif
 
 
 [Components]
@@ -101,7 +107,7 @@ Source: msxml4a.dll; DestDir: {sys}; Flags: sharedfile
 ;Source: msxml4r.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 ;Source: msxml4a.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 
-;MFC files. Copied as private assemblies. Windows will us globally installed versions, if they are installed.
+;MFC files. Copied as private assemblies. Windows will use globally installed versions, if they are installed.
 Source: msvcr100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: msvcp100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: mfc100u.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
@@ -145,14 +151,27 @@ Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\ProjectTemp
 Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\DocumentTemplatePaths; ValueType: dword; ValueName: Size; ValueData: 1; Flags: createvalueifdoesntexist uninsdeletekey
 Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\DocumentTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Documents; Flags: createvalueifdoesntexist uninsdeletekey
 
-;Remove the GUI workspace, i.e., the toolbars and menus and short cuts etc.
-; Use this only in Alpha versions!
-Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Workspace; Flags: deletekey
+;Reset the GUI workspace, i.e., the toolbars and menus and short cuts etc., if desired by the user
+Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Workspace; Flags: deletekey; Tasks: ResetWorkspace;
+
+;Register file type: tex ; if the user wants it
+Root: HKCR; SubKey: .tex; ValueType: string; ValueData: TeXnicCenter.tex; Flags: UninsDeleteValue; Tasks: FileAssociations; 
+Root: HKCR; SubKey: TeXnicCenter.tex; ValueType: string; ValueData: "LaTeX Document"; Flags: UninsDeleteKey; Tasks: FileAssociations; 
+Root: HKCR; SubKey: TeXnicCenter.tex\DefaultIcon; ValueType: string; ValueData: {app}\TeXnicCenter.exe,1; Tasks: FileAssociations;
+Root: HKCR; SubKey: TeXnicCenter.tex\shell\open\command; ValueType: string; ValueData: """{app}\TeXnicCenter.exe"" ""%1"""; Tasks: FileAssociations;
+
+;Register file type: tcp ; always (for now) 
+Root: HKCR; SubKey: .tcp; ValueType: string; ValueData: TeXnicCenter.tcp; Flags: UninsDeleteValue; 
+Root: HKCR; SubKey: TeXnicCenter.tcp; ValueType: string; ValueData: "TeXnicCenter Project"; Flags: UninsDeleteKey; 
+Root: HKCR; SubKey: TeXnicCenter.tcp\DefaultIcon; ValueType: string; ValueData: {app}\TeXnicCenter.exe,3; 
+Root: HKCR; SubKey: TeXnicCenter.tcp\shell\open\command; ValueType: string; ValueData: """{app}\TeXnicCenter.exe"" ""%1""";
 
 
 [Tasks]
-Name: DesktopLink; Description: Create a desktop icon; GroupDescription: Link
-Name: SendToLink; Description: Add TeXnicCenter to the 'Send To' menu; GroupDescription: Link; Flags: unchecked
+Name: DesktopLink; Description: Create a desktop icon; GroupDescription: Links and Associations
+Name: SendToLink; Description: Add TeXnicCenter to the 'Send To' menu; GroupDescription: Links and Associations; Flags: unchecked
+Name: FileAssociations; Description: "Make TeXnicCenter the default LaTeX Editor"; GroupDescription: Links and Associations; 
+Name: ResetWorkspace; Description: "Reset customizations (menus, toolbars, shortcuts) [recommended]"; GroupDescription: "Customizations of previously installed versions of TeXnicCenter 2"; 
 
 [Dirs]
 Name: {app}\Templates\Documents; Flags: uninsalwaysuninstall
@@ -163,3 +182,9 @@ Name: {app}\Help; Flags: uninsalwaysuninstall; Components: Help_Files
 Name: typical; Description: Typical (Recommended)
 Name: compact; Description: Compact (Requires less space)
 Name: custom; Description: Custom (Lets you choose, which components to install); Flags: iscustom
+
+[Run]
+Filename: {app}\TeXnicCenter.exe; Description: "Launch TeXnicCenter"; Flags: postinstall nowait skipifsilent
+
+[InnoIDE_Settings]
+LogFileOverwrite=false
