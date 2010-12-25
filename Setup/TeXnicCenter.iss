@@ -1,16 +1,59 @@
-#define APP_NAME          "TeXnicCenter"
-#define APP_VERSION       "2.0 Alpha 4"
-#define APP_ID            "TeXnicCenter Alpha"
-#define REGNAME           "TeXnicCenterNT"
-#define APP_COPYRIGHT     "© 1999-2011 www.TeXnicCenter.org"
+;TeXnicCenter Inno Setup Script
+
+;-------------------------------------------
+; Some defines
+;-------------------------------------------
 
 ;Uncomment this for x64
 ;#define TARGET_x64
+
+;Uncomment this for an Alpha Build
+#define ALPHA_BUILD
+
+;For debugging the Inno preprocessor
+;#define Debug
+
+;-------------------------------------------
+; TODO
+;-------------------------------------------
+
+;~ Setup for current user  versus  Setup for all users:
+;~ We need elevated priveleges to write to HKLM and such.
+;~ For the "all users" case: more or less like now. Except for HKCR -> needs to be some other like HKLM/Classes
+;~ For "current user" case: copy msxml to local dir (maybe do this always?). HKCR -> HKCU/Classes. Not in "Program Files".
+
+;~ msxml is weird. Maybe deliver an appropriate installer? Would that require admin privileges?
+
+;~ The defaults for the doc and project templates should really be handled from within TXC.
+;~ If the key or dir doesn't exist, then use the defaults.
+
+;~ Artwork: Setup Icon, Setup wizard image
+
+
+
+
+;-------------------------------------------
+; Start of the actual script
+;-------------------------------------------
 
 #ifdef TARGET_x64
   #define APP_PLATFORM      "x64"
 #else
   #define APP_PLATFORM      "Win32"
+#endif
+
+#define APP_NAME          GetStringFileInfo("..\Output\Product\" + APP_PLATFORM + "\Release\TeXnicCenter.exe", PRODUCT_NAME)
+#define APP_VERSION       GetStringFileInfo("..\Output\Product\" + APP_PLATFORM + "\Release\TeXnicCenter.exe", PRODUCT_VERSION)
+#define APP_PUBLISHER     GetStringFileInfo("..\Output\Product\" + APP_PLATFORM + "\Release\TeXnicCenter.exe", COMPANY_NAME)
+#define APP_COPYRIGHT     GetStringFileInfo("..\Output\Product\" + APP_PLATFORM + "\Release\TeXnicCenter.exe", LEGAL_COPYRIGHT)
+#define REGNAME           "TeXnicCenterNT"
+
+;Alpha Builds can be used side-by-side with stable builds.
+;Hence, they go by default into other directories.
+#ifdef ALPHA_BUILD
+  #define APP_ID            APP_NAME + " Alpha"
+#else
+  #define APP_ID            APP_NAME
 #endif
 
 
@@ -23,7 +66,7 @@ AppName={#APP_NAME}
 AppVersion={#APP_VERSION}
 AppVerName={#APP_NAME} Version {#APP_VERSION}
 AppID={#APP_ID}
-AppPublisher=The TeXnicCenter Team
+AppPublisher={#APP_PUBLISHER}
 AppPublisherURL=http://www.texniccenter.org/
 AppSupportURL=http://www.texniccenter.org/support/find-help
 AppUpdatesURL=http://www.texniccenter.org/resources/downloads
@@ -34,7 +77,7 @@ DefaultGroupName={#APP_ID}
 ;Previous
 UsePreviousAppDir=true
 ;Requirements
-PrivilegesRequired=none
+;PrivilegesRequired=none
 MinVersion=4.0.950,5.0.2195
 ;Setup
 AllowNoIcons=true
@@ -188,3 +231,9 @@ Filename: {app}\TeXnicCenter.exe; Description: "Launch TeXnicCenter"; Flags: pos
 
 [InnoIDE_Settings]
 LogFileOverwrite=false
+
+
+
+#ifdef Debug
+  #expr SaveToFile(AddBackslash(SourcePath) + "Preprocessed.iss")
+#endif
