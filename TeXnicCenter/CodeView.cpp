@@ -259,11 +259,9 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//Size of the white space dots. Default is 1, but that is too small.
 	rCtrl.SetWhitespaceSize(2);
 
-	//Virtual Space could be an option, but I don't see its value in a LaTeX editor.
-	//For rectangular selections it could be nice, but since virtual space is never copied,
-	// it would only communicate the wrong idea to the user.
-	//Hence, leave the default: completely off.
-	//rCtrl.SetVirtualSpaceOptions(SCVS_RECTANGULARSELECTION | SCVS_USERACCESSIBLE);
+	//Virtual Space is only enabled for rectangular selections.
+	//It could be an option in general, but I don't see its value in a LaTeX editor.
+	rCtrl.SetVirtualSpaceOptions(SCVS_RECTANGULARSELECTION);
 
 	//rCtrl.SetWordChars: We take the default definition of what makes up a word.
 	//rCtrl.SetWhitespaceChars: Use default.
