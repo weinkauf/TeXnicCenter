@@ -1582,23 +1582,33 @@ BOOL CMainFrame::OnToolsCancel(UINT)
 	CodeView* pEdit = dynamic_cast<CodeView*>(pView);
 	if (!pEdit) return false;
 
+	//Focus to the editor
 	if (GetFocus() != &pEdit->GetCtrl())
 	{
 		//Activate view
 		pEdit->SetFocus();
-	}
-	else
-	{
-		if (CConfiguration::GetInstance()->m_bCloseToolWindowsOnEscape)
-		{
-			//Close the bottom tool windows to get more space for the editor.
-			ToggleDockingBars(CBRS_ALIGN_BOTTOM, true);
-			//...and we make sure that the build output is closed as well, since we open it with every compilation.
-			ShowPaneEnsureVisibility(build_view_pane_.get(), false, false, false);
-		}
+		return true;
 	}
 
-	return TRUE;
+	//Close the bottom tool windows to get more space for the editor.
+	if (CConfiguration::GetInstance()->m_bCloseToolWindowsOnEscape)
+	{
+		//Close the bottom tool windows
+		bool bClosedSomething = ToggleDockingBars(CBRS_ALIGN_BOTTOM, true);
+		//...and we make sure that the build output is closed as well, since we open it with every compilation.
+		bClosedSomething = bClosedSomething || build_view_pane_.get()->IsVisible();
+		ShowPaneEnsureVisibility(build_view_pane_.get(), false, false, false);
+
+		if (bClosedSomething) return true;
+	}
+
+	//Abort selections
+	const long CurrentPos = pEdit->GetCtrl().GetCurrentPos();
+	pEdit->GetCtrl().ClearSelections();
+	pEdit->GetCtrl().SetAnchor(CurrentPos);
+	pEdit->GetCtrl().SetCurrentPos(CurrentPos);
+
+	return true;
 }
 
 void CMainFrame::OnWindowCloseSelectedTab()
@@ -2100,7 +2110,7 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 }
 
 
-void CMainFrame::ToggleDockingBars(const DWORD dwAlignment, const bool bCloseOnly /*= false*/)
+bool CMainFrame::ToggleDockingBars(const DWORD dwAlignment, const bool bCloseOnly /*= false*/)
 {
 	std::vector< CBasePane* > pAllPanes;
 	GetAllPanes(pAllPanes, true, true);
@@ -2133,6 +2143,8 @@ void CMainFrame::ToggleDockingBars(const DWORD dwAlignment, const bool bCloseOnl
 			ShowPaneEnsureVisibility(pAllPanes[i], !bOneIsVisible && !bCloseOnly, false, !bOneIsVisible && !bCloseOnly);
 		}
 	}
+
+	return bOneIsVisible;
 }
 
 
