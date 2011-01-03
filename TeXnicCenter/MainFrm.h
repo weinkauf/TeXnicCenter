@@ -403,7 +403,11 @@ protected:
 private:
 	bool animating_;
 
-	void ToggleDockingBars(const DWORD dwAlignment, const bool bCloseOnly = false);
+	/** Toogles docking bars with a certain alignment.
+
+		@returns true, if one of them was visible before calling this function.
+	*/
+	bool ToggleDockingBars(const DWORD dwAlignment, const bool bCloseOnly = false);
 
 public:
 	COutputDoc* GetOutputDoc(void);
