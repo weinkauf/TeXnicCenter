@@ -304,6 +304,7 @@
     <ClCompile Include="BibItem.cpp" />
     <ClCompile Include="BibTeXDocument.cpp" />
     <ClCompile Include="BiBTeXEntry.cpp" />
+    <ClCompile Include="BibTeXEntryType.cpp" />
     <ClCompile Include="BiBTeXFile.cpp" />
     <ClCompile Include="BibTeXOutputFilter.cpp" />
     <ClCompile Include="BibTeXView.cpp" />
@@ -461,6 +462,7 @@
     <ClInclude Include="BibItem.h" />
     <ClInclude Include="BibTeXDocument.h" />
     <ClInclude Include="BiBTeXEntry.h" />
+    <ClInclude Include="BibTeXEntryType.h" />
     <ClInclude Include="BiBTeXFile.h" />
     <ClInclude Include="BibTeXOutputFilter.h" />
     <ClInclude Include="BibTeXView.h" />

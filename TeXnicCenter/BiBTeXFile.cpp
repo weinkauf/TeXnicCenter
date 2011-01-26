@@ -47,8 +47,6 @@ static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
 
-extern const TCHAR* const BibTypeVerbose[];
-
 /**
  * Initialize object with a given BibTeX file
  */
@@ -98,12 +96,12 @@ BOOL BibTeXFile::ProcessFile()
 BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 {
 	const TCHAR *begin,*lastChar = NULL;
-	BibTeXEntry::BibType type;
+	BibTeXEntryType type;
 	int depth = 0,line = 1,col = 1;
 	BOOL inComment = FALSE,inQuote = FALSE,insideEntry = FALSE,openBrace = FALSE; // internal states
 
 	begin = buf;
-	type = BibTeXEntry::Unknown;
+	type = BIBTEX_ENTRY_TYPE_UNKNOWN;
 
 	while (*buf)   // Parser state machine
 	{
@@ -229,7 +227,7 @@ BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 /**
  * Find the corresponding BibTeX entry type and issues an error, if entry type is unknown
  */
-BibTeXEntry::BibType BibTeXFile::ProcessEntryType(const TCHAR *buf,int len,int line)
+BibTeXEntryType BibTeXFile::ProcessEntryType(const TCHAR *buf,int len,int line)
 {
 	CString entry;
 
@@ -241,20 +239,18 @@ BibTeXEntry::BibType BibTeXFile::ProcessEntryType(const TCHAR *buf,int len,int l
 	entry = m_Buffer; // remove leading WS
 	entry.Trim();
 
-	for (int i = 0; i < BibTeXEntry::Unknown; i++)   // search BibTeX item
-	{
-		if (0 == _tcsicmp(entry,BibTypeVerbose[i]))
-		{
-			return (BibTeXEntry::BibType)i;
-		}
+	try {
+		return GetBibTeXEntryTypeFromString(entry);
+	}
+	catch (std::invalid_argument&) {
+		// type not found -> raise error msg
+		HandleParseError(STE_BIBTEX_ERR_INVALID_TYPE,line,1,entry);
 	}
 
-	// type not found -> raise error msg
-	HandleParseError(STE_BIBTEX_ERR_INVALID_TYPE,line,1,entry);
-	return BibTeXEntry::Unknown;
+	return BIBTEX_ENTRY_TYPE_UNKNOWN;
 }
 
-void BibTeXFile::ProcessArgument(const TCHAR *buf,int len,BibTeXEntry::BibType type,int line)
+void BibTeXFile::ProcessArgument(const TCHAR *buf,int len, BibTeXEntryType type,int line)
 {
 	BibTeXEntry *be,*dummy;
 
@@ -264,12 +260,12 @@ void BibTeXFile::ProcessArgument(const TCHAR *buf,int len,BibTeXEntry::BibType t
 	}
 
 	/* Skip comments and preamble */
-	if (type == BibTeXEntry::Preamble || type == BibTeXEntry::Comment)
+	if (type == BIBTEX_ENTRY_TYPE_PREAMBLE || type == BIBTEX_ENTRY_TYPE_COMMENT)
 	{
 		return;
 	}
 
-	if (type == BibTeXEntry::Unknown)
+	if (type == BIBTEX_ENTRY_TYPE_UNKNOWN)
 	{
 		if (_tcslen(m_Buffer) > 100) // limit length to satisfy TRACE macro
 		{
@@ -283,7 +279,7 @@ void BibTeXFile::ProcessArgument(const TCHAR *buf,int len,BibTeXEntry::BibType t
 	//TRACE("Processing argument: %s, type %d at line %d\n", m_Buffer, type, line);
 
 	// strings have no explicit key, instead we are using the first field name as key
-	if (type == BibTeXEntry::String && NULL != _tcsstr(buf,_T("=")))
+	if (type == BIBTEX_ENTRY_TYPE_STRING && NULL != _tcsstr(buf,_T("=")))
 	{
 		CString name,val;
 		ParseField(m_Buffer,name,val);
@@ -318,7 +314,8 @@ void BibTeXFile::ProcessArgument(const TCHAR *buf,int len,BibTeXEntry::BibType t
 		else
 		{
 			HandleParseError(STE_BIBTEX_ERR_DUP_KEY,line,1,key);
-			TRACE2("WARNING: Invalid or duplicate key <%s> (%s)\n",key,BibTypeVerbose[type]);
+			TRACE2("WARNING: Invalid or duplicate key <%s> (%s)\n",key,
+				::GetString(type));
 		}
 	}
 	else   // extract name-value pair and add it to the entry
@@ -381,7 +378,7 @@ void BibTeXFile::HandleParseError(UINT msgID,int line,int col,const TCHAR *addDe
 
 	//TRACE(s + "\n");
 
-	BibTeXEntry *be = new BibTeXEntry(s,this,BibTeXEntry::Error);
+	BibTeXEntry *be = new BibTeXEntry(s,this, BIBTEX_ENTRY_TYPE_UNKNOWN);
 	be->SetLine(line);
 	be->SetType(StructureItem::bibItem);
 	be->SetTitle(s);

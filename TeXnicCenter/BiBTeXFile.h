@@ -156,14 +156,14 @@ private:
 
 	        @return BibTeX type or CBiBTeXEntry::Unknown, if invalid entry
 	 */
-	BibTeXEntry::BibType ProcessEntryType(const TCHAR *buf, int len, int line);
+	BibTeXEntryType ProcessEntryType(const TCHAR *buf, int len, int line);
 	/** Processes a field of an BibTeX entry
 	        @param buf Pointer to buffer containing the tokens
 	        @param len Length of the buffer
 	        @param type BibTeX type (Article, Book, ...)
 	        @param line Line number
 	 */
-	void ProcessArgument(const TCHAR *buf, int len, BibTeXEntry::BibType type, int line);
+	void ProcessArgument(const TCHAR *buf, int len, BibTeXEntryType type, int line);
 	BOOL ParseFile(const TCHAR* buf);
 
 	BOOL m_IsATSignInBracesAllowed;

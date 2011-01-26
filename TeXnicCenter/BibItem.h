@@ -2,8 +2,9 @@
 
 #include <vector>
 
-#include "StructureItemInfo.h"
+#include "BibTeXEntryType.h"
 #include "Nullable.h"
+#include "StructureItemInfo.h"
 
 /**
  * @brief Represents a bibliography item used in a @ref BibView.
@@ -13,30 +14,6 @@ class BibItem :
 {
 public:
 	/**
-	 * @brief Known BibTeX types in alphabetical order.
-	 */
-	enum Type {
-		Unknown = -1,
-		Article,
-		Book,
-		Booklet,
-		Comment,
-		Conference,
-		Inbook,
-		Incollection,
-		Inproceedings,
-		Manual,
-		MastersThesis,
-		Misc,
-		PhDThesis,
-		Preamble,
-		Proceedings,
-		String,
-		Techreport,
-		Unpublished
-	};
-
-	/**
 	 * @brief Container type that holds author names.
 	 */
 	typedef std::vector<CString> AuthorContainerType;
@@ -44,7 +21,7 @@ public:
 	BibItem();
 	~BibItem();
 
-	Type GetType() const;
+	BibTeXEntryType GetType() const;
 	const CString& GetTypeString() const;
 	const CString& GetAuthor() const;
 	const CString& GetEditor() const;
@@ -64,7 +41,7 @@ private:
 	 * @brief Extracted author names, useful for grouping.
 	 */
 	AuthorContainerType authors_;
-	Type type_;
+	BibTeXEntryType type_;
 
 	CString type_text_;
 	CString author_;

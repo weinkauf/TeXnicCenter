@@ -2,7 +2,7 @@
 #include "BibItem.h"
 
 BibItem::BibItem()
-: type_(Unknown)
+: type_(BIBTEX_ENTRY_TYPE_UNKNOWN)
 {
 }
 
@@ -10,7 +10,7 @@ BibItem::~BibItem()
 {
 }
 
-BibItem::Type BibItem::GetType() const
+BibTeXEntryType BibItem::GetType() const
 {
 	return type_;
 }
