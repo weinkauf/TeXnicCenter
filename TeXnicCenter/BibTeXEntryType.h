@@ -2,9 +2,6 @@
 
 /**
  * @brief Possible BibTeX entry types.
- *
- * The types @ref BIBTEX_ENTRY_TYPE_ERROR and @ref BIBTEX_ENTRY_TYPE_UNKNOWN are
- * for internal use only.
  */
 enum BibTeXEntryType
 {
