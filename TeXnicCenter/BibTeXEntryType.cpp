@@ -5,6 +5,14 @@
 
 #include "BibTeXEntryType.h"
 
+/**
+ * @brief BibTeX and BibLaTeX entry names.
+ *
+ * The strings are used for @ref BibTeXEntryType to string and string to @ref
+ * BibTeXEntryType conversion.
+ *
+ * @note The values must be kept sorted and in sync with @ref BibTeXEntryType.
+ */
 LPCTSTR const names[] = {
 	_T("Article"),
 	_T("Artwork"),
@@ -16,12 +24,12 @@ LPCTSTR const names[] = {
 	_T("Comment"),
 	_T("Commentary"),
 	_T("Conference"),
-	_T("Custom A"),
-	_T("Custom B"),
-	_T("Custom C"),
-	_T("Custom D"),
-	_T("Custom E"),
-	_T("Custom F"),
+	_T("CustomA"),
+	_T("CustomB"),
+	_T("CustomC"),
+	_T("CustomD"),
+	_T("CustomE"),
+	_T("CustomF"),
 	_T("Electronic"),
 	_T("Image"),
 	_T("Inbook"),
