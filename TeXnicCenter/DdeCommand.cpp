@@ -180,7 +180,8 @@ BOOL CDdeCommand::SendCommandHelper(LPCTSTR lpszServer,LPCTSTR lpszCommand,LPCTS
 		_tcsncpy(szCommand,lpszCommand,nLen);
 
 		// send command
-		if (!DdeClientTransaction(reinterpret_cast<BYTE*>(szCommand),(nLen + 1) * sizeof(TCHAR),
+		if (!DdeClientTransaction(reinterpret_cast<BYTE*>(szCommand),
+			static_cast<DWORD>((nLen + 1) * sizeof(TCHAR)),
 			hConversation,NULL,
 #ifdef UNICODE
 			CF_UNICODETEXT

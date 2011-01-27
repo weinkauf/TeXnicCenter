@@ -72,9 +72,9 @@
 
 namespace {
 	/**
-	 * Loads the MFC resource module with the specified @a lcid, sets it as the 
+	 * Loads the MFC resource module with the specified @a lcid, sets it as the
 	 * current instance and releases the previous one.
-	 * 
+	 *
 	 * @param lcid Resource locale of the module to be loaded.
 	 */
 	void LoadModuleResources(LCID lcid)
@@ -325,7 +325,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 {
 	scintilla_ = AfxLoadLibrary(_T("SciLexer.dll"));
 
-	if (!scintilla_) 
+	if (!scintilla_)
 	{
 		AfxMessageBox(_T("SciLexer.dll could not be loaded. Please reinstall the application."),MB_ICONERROR);
 		return FALSE;
@@ -1101,7 +1101,7 @@ void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt()
 		CDocTemplate* t = GetNextDocTemplate(pos);
 		POSITION pos1 = t->GetFirstDocPosition();
 
-		while (pos1) 
+		while (pos1)
 		{
 			CDocument *pDoc = m_pLatexDocTemplate->GetNextDoc(pos1);
 			path = pDoc->GetPathName();
@@ -1133,7 +1133,7 @@ BOOL CTeXnicCenterApp::OpenProject(LPCTSTR lpszPath, bool addToRecentList)
 	else
 	{
 		// Success		
-		if (addToRecentList) 
+		if (addToRecentList)
 		{
 			// Add to recent project list
 			m_recentProjectList.Add(lpszPath);
@@ -1230,9 +1230,9 @@ void CTeXnicCenterApp::OnFileOpen()
 	    GetLatexString(CDocTemplate::filterExt), NULL,
 	    OFN_FILEMUSTEXIST | OFN_ALLOWMULTISELECT, filter);
 
-	std::vector<TCHAR> buffer(0x10000); 
+	std::vector<TCHAR> buffer(0x10000);
 	dlg.m_ofn.lpstrFile = &buffer[0]; // Use a larger buffer
-	dlg.m_ofn.nMaxFile = buffer.size();
+	dlg.m_ofn.nMaxFile = static_cast<DWORD>(buffer.size());
 
 	//Get default path
 	CString strInitialDir = AfxGetDefaultDirectory();
@@ -2116,7 +2116,7 @@ int CTeXnicCenterApp::DoMessageBox(LPCTSTR prompt, UINT nType, UINT nIDPrompt)
 
 	if (!RunTimeHelper::IsVista())
 		result = CWinAppEx::DoMessageBox(prompt,nType,nIDPrompt);
-	else 
+	else
 	{
 		// disable windows for modal dialog
 		DoEnableModeless(FALSE);
@@ -2124,7 +2124,7 @@ int CTeXnicCenterApp::DoMessageBox(LPCTSTR prompt, UINT nType, UINT nIDPrompt)
 		HWND hWndTop;
 		HWND hWnd = CWnd::GetSafeOwner_(NULL, &hWndTop);
 
-		// re-enable the parent window, so that focus is restored 
+		// re-enable the parent window, so that focus is restored
 		// correctly when the dialog is dismissed.
 		if (hWnd != hWndTop)
 			EnableWindow(hWnd, TRUE);
@@ -2242,7 +2242,7 @@ bool CTeXnicCenterApp::DoTaskDialog( HWND hWnd, LPCTSTR prompt, UINT nType, int&
 			tdc.pszMainIcon = TD_WARNING_ICON;
 			break;
 		case MB_ICONQUESTION:
-			tdc.pszMainIcon = 
+			tdc.pszMainIcon =
 #ifdef UNICODE
 				IDI_QUESTION;
 #else

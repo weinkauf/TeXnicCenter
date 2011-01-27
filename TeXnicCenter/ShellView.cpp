@@ -291,7 +291,7 @@ void CShellView::WriteToPipe(LPCTSTR line)
 {
 	DWORD dwWritten;
 
-	WriteFile(m_hChildStdinWrDup, line, _tcslen(line) * sizeof(TCHAR),
+	WriteFile(m_hChildStdinWrDup, line, static_cast<DWORD>(_tcslen(line) * sizeof(TCHAR)),
 	          &dwWritten, NULL);
 }
 
