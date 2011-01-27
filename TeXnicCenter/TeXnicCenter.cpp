@@ -1197,7 +1197,7 @@ void CTeXnicCenterApp::OnFileNew()
 void CTeXnicCenterApp::OnFileSaveAll()
 {
 	// save all
-	SaveAllModifiedWithoutPrompt();
+	SaveAllModified();
 
 	// reparse project
 	m_pMainWnd->SendMessage(WM_COMMAND, ID_PROJECT_PARSE);
