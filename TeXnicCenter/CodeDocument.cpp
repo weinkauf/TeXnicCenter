@@ -39,7 +39,7 @@ int ShowSaveTaskDialog(LPCTSTR prompt)
 	HWND hWndTop;
 	HWND hWnd = CWnd::GetSafeOwner_(NULL, &hWndTop);
 
-	// re-enable the parent window, so that focus is restored 
+	// re-enable the parent window, so that focus is restored
 	// correctly when the dialog is dismissed.
 	if (hWnd != hWndTop)
 		EnableWindow(hWnd, TRUE);
@@ -128,19 +128,19 @@ int FromScintillaMode(int m)
 
 #pragma endregion
 
-TextDocument::TextDocument( bool use_bom, CodeDocument::Encoding e ) 
+TextDocument::TextDocument( bool use_bom, CodeDocument::Encoding e )
 : use_bom_(use_bom), encoding_(e)
 {
 }
 
-TextDocument::TextDocument(CodeDocument::Encoding e, UINT codepage) 
+TextDocument::TextDocument(CodeDocument::Encoding e, UINT codepage)
 : use_bom_(false)
 , encoding_(e)
 {
 	SetCodePage(codepage);
 }
 
-TextDocument::TextDocument() 
+TextDocument::TextDocument()
 : encoding_(CodeDocument::ANSI)
 , code_page_(::GetACP())
 {
@@ -178,11 +178,11 @@ CodeDocument::Encoding TextDocument::TestForUnicode(const BYTE* data, SIZE_T siz
 		// As a consequence of the design of UTF-8, the following properties of multi-byte sequences hold:
 
 		//  * The most significant bit of a single-byte character is always 0.
-		//	* The most significant bits of the first byte of a multi-byte sequence determine the length of 
-		//	  the sequence. These most significant bits are 110 for two-byte sequences; 1110 for three-byte 
+		//	* The most significant bits of the first byte of a multi-byte sequence determine the length of
+		//	  the sequence. These most significant bits are 110 for two-byte sequences; 1110 for three-byte
 		//	  sequences, and so on.
 		//	* The remaining bytes in a multi-byte sequence have 10 as their two most significant bits.
-		//	* A UTF-8 stream contains neither the byte FE nor FF. This makes sure that a UTF-8 stream never 
+		//	* A UTF-8 stream contains neither the byte FE nor FF. This makes sure that a UTF-8 stream never
 		//	  looks like a UTF-16 stream starting with U+FEFF (Byte-order mark)
 
 		bool utf8 = true;
@@ -201,7 +201,7 @@ CodeDocument::Encoding TextDocument::TestForUnicode(const BYTE* data, SIZE_T siz
 				GetUTF8CharBytes(data[i],consecutive_bytes);
 			else if (consecutive_bytes == 0 && data[i] >> 7 & 1 ||
 				consecutive_bytes > 0 && data[i] >> 6 != 2)
-				utf8 = false; // Either MSB is not 0 or MSB of a byte in a 
+				utf8 = false; // Either MSB is not 0 or MSB of a byte in a
 			// multi-part sequence is not 10
 
 			if (consecutive_bytes > 0)
@@ -226,7 +226,7 @@ CodeDocument::Encoding TextDocument::DetectEncoding(const BYTE* data, SIZE_T& po
 		if (size >= sizeof(BOM::utf8) && std::memcmp(data,BOM::utf8,sizeof(BOM::utf8)) == 0) {
 			encoding = CodeDocument::UTF8;
 			pos += sizeof(BOM::utf8);
-		} 
+		}
 		// Try UTF-32LE instead of UTF-16 since BOM's first 2 bytes are for both encodings the same
 		else if (size >= sizeof(BOM::utf32le) && std::memcmp(data,BOM::utf32le,sizeof(BOM::utf32le)) == 0) {
 			encoding = CodeDocument::UTF32LE;
@@ -270,7 +270,7 @@ DWORD TextDocument::Write( ATL::CAtlFile& f, const char* text, std::size_t n)
 	}
 
 	if (result == ERROR_SUCCESS && n > 0) {
-		if (FAILED(f.Write(text,n)))
+		if (FAILED(f.Write(text, static_cast<DWORD>(n))))
 			result = ::GetLastError();
 	}
 
@@ -335,7 +335,7 @@ bool TextDocument::Read(LPCTSTR pszFileName, CStringW& string)
 				text = &buffer[0];
 				n = buffer.size();
 
-				string = CStringW(text,n);
+				string.SetString(text, static_cast<int>(n));
 			}
 
 			this->encoding_ = encoding;
@@ -632,8 +632,8 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 
 		if (n) {
 			// Detected EOL type
-			GetView()->GetCtrl().SetEOLMode(DetectScintillaEOLMode(text,n));
-			GetView()->GetCtrl().AppendText(n,text);			
+			GetView()->GetCtrl().SetEOLMode(DetectScintillaEOLMode(text, n));
+			GetView()->GetCtrl().AppendText(static_cast<int>(n), text);			
 		}
 
 		use_bom_ = pos > 0;
@@ -731,7 +731,7 @@ DWORD CodeDocument::DoSaveFile( HANDLE file, bool throw_on_invalid_sequence )
 	const int length = GetView()->GetCtrl().GetLength();
 	DWORD result = ERROR_SUCCESS;
 
-	if (length > 0) { 
+	if (length > 0) {
 		std::vector<char> buffer(length + 1);
 		GetView()->GetCtrl().GetText(length + 1,&buffer[0]);
 
@@ -898,9 +898,9 @@ void CodeDocument::ToggleBookmark( int line )
 	}
 }
 
-void CodeDocument::SetEncoding(Encoding e) 
+void CodeDocument::SetEncoding(Encoding e)
 {
-	encoding_ = e; 
+	encoding_ = e;
 }
 
 bool CodeDocument::GetUseBOM() const

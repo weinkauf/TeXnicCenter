@@ -418,8 +418,8 @@ BOOL BibTeXFile::ParseField(const TCHAR *field,CString &name,CString &val)
 	name = field;
 	val = field;
 
-	name.Delete(len1,n - len1);
-	val.Delete(0,len1 + 1);
+	name.Delete(static_cast<int>(len1), static_cast<int>(n - len1));
+	val.Delete(0, static_cast<int>(len1 + 1));
 
 	/// remove whitespace
 	name.Trim();
