@@ -98,7 +98,7 @@ BOOL WorkspacePane::OnEraseBkgnd(CDC* pDC)
 
 void WorkspacePane::OnContextMenu(CWnd* pWnd, CPoint point)
 {
-	if (NavigatorTreeCtrl* t = dynamic_cast<NavigatorTreeCtrl*>(client_))
+	if (NavigatorTreeCtrl* t = dynamic_cast<NavigatorTreeCtrl*>(pWnd))
 		t->ShowContextMenu(point);
 	else
 		WorkspacePaneBase::OnContextMenu(pWnd,point);
