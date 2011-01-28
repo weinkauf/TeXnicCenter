@@ -246,10 +246,16 @@ public:
 	 */
 	CString GetLatexFileFilter();
 
-	/**
-	Saves all modified files, without prompting the user.
+	/** Saves all modified files, without prompting the user.
+
+		By default, the user will not be prompted at all.
+		Hence, only existing files will be saved.
+		Documents without a file on disk will not be saved.
+
+		However, if bAskForFilenameIfNeeded is true, then the user will
+		be asked to provide a filename in these cases.
 	 */
-	void SaveAllModifiedWithoutPrompt();
+	void SaveAllModifiedWithoutPrompt(const bool bAskForFilenameIfNeeded = false);
 
 	/**
 	Opens the procject with the specified path.
