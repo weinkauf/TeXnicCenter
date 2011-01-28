@@ -30,7 +30,7 @@ BEGIN
         BLOCK "040704b0"
         BEGIN
             VALUE "CompanyName", "The TeXnicCenter Team"
-            VALUE "FileDescription", "TeXnicCenter"
+            VALUE "FileDescription", "Integrierte Entwicklungsumgebung für LaTeX-Dokumente"
             VALUE "FileVersion", TXC_VERSION_STRING
             VALUE "InternalName", "TeXnicCenter"
             VALUE "LegalCopyright", "Copyright © 1999-2011 The TeXnicCenter Team"
@@ -42,7 +42,7 @@ BEGIN
 		BLOCK "040904b0"
         BEGIN
             VALUE "CompanyName", "The TeXnicCenter Team"
-            VALUE "FileDescription", "TeXnicCenter"
+            VALUE "FileDescription", "Integrated development environment for LaTeX documents"
             VALUE "FileVersion", TXC_VERSION_STRING
             VALUE "InternalName", "TeXnicCenter"
             VALUE "LegalCopyright", "Copyright © 1999-2011 The TeXnicCenter Team"
