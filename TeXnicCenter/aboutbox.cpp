@@ -86,7 +86,7 @@ const TCHAR DISPLAY_BITMAP      = _T('\b');
 // in the array!
 LPCTSTR const pArrCredit[] =
 {
-	_T("Copyright © 1999-2010\t"),
+	_T("Copyright © 1999-2011\t"),
 	_T("www.TeXnicCenter.org\t"),
 	_T(""),
 	_T("Portions Copyright © 1998-2002 by Cristi Posea\f"),
@@ -216,7 +216,7 @@ CAboutDlg::CAboutDlg()
 	else
 	{
 		m_strVersion = _T("Unknown");
-		CopyrightText = _T("(c) 1999-2010 The TeXnicCenter Team");
+		CopyrightText = _T("(c) 1999-2011 The TeXnicCenter Team");
 	}
 }
 
