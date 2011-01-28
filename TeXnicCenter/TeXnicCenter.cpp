@@ -1075,7 +1075,7 @@ CString CTeXnicCenterApp::GetLatexFileFilter()
 	    + AfxLoadString(STE_ALL_FILES_FILTER);
 }
 
-void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt()
+void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt(const bool bAskForFilenameIfNeeded /*= false*/)
 {
 	m_bSavingAll = TRUE;
 
@@ -1094,8 +1094,6 @@ void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt()
 
 	// Save all documents
 	pos = GetFirstDocTemplatePosition();
-	CString path;
-
 	while (pos)
 	{
 		CDocTemplate* t = GetNextDocTemplate(pos);
@@ -1104,11 +1102,28 @@ void CTeXnicCenterApp::SaveAllModifiedWithoutPrompt()
 		while (pos1)
 		{
 			CDocument *pDoc = m_pLatexDocTemplate->GetNextDoc(pos1);
-			path = pDoc->GetPathName();
 
-			// Save the document only if the file already exists
-			if (!path.IsEmpty() && CPathTool::Exists(path) && pDoc->IsModified())
-				pDoc->OnSaveDocument(path);
+			// We are only interested in modified documents
+			if (pDoc->IsModified())
+			{
+				CPathTool Path(pDoc->GetPathName());
+
+				// File name is ok, if the file actually exists on disk or if its directory exists
+				const bool bFileNameIsOK = Path.Exists()
+										|| ( CPathTool::Exists(Path.GetDirectory()) && !Path.GetFile().IsEmpty());
+
+				// Default behavior: Never prompt the user, even if we don't have a file name.
+				if (bFileNameIsOK)
+				{
+					// The file already exists or can be created in the existing directory
+					pDoc->OnSaveDocument(Path);
+				}
+				else
+				{
+					// The file does not yet exist. Ask for a filename, if the calling function wants that.
+					if (bAskForFilenameIfNeeded) pDoc->DoFileSave();
+				}
+			}
 		}
 	}
 
@@ -1197,7 +1212,7 @@ void CTeXnicCenterApp::OnFileNew()
 void CTeXnicCenterApp::OnFileSaveAll()
 {
 	// save all
-	SaveAllModified();
+	SaveAllModifiedWithoutPrompt(true);
 
 	// reparse project
 	m_pMainWnd->SendMessage(WM_COMMAND, ID_PROJECT_PARSE);
