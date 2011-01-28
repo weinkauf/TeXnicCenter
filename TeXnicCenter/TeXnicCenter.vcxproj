@@ -1155,6 +1155,14 @@ SubWCRev . "%(FullPath)" "%(RootDir)%(Directory)\Version.h"
     <ProjectReference Include="..\Scintilla\vcbuild\SciLexer.vcxproj">
       <Project>{08c13851-869a-49a9-bc48-cbd0779a2280}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Shared\Shared.vcxproj">
+      <Project>{3a301d39-a50c-4d6e-adc1-2ec869ca78db}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
     <ProjectReference Include="..\TeXnicCenterObjects\Source\TeXnicCenterObjects.vcxproj">
       <Project>{7d010430-948a-4400-85c4-7d18cb92068f}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

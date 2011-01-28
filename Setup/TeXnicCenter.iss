@@ -120,6 +120,7 @@ Source: ..\Output\Product\{#APP_PLATFORM}\Release\TeXnicCenter.exe; DestDir: {ap
 Source: ..\Output\Product\{#APP_PLATFORM}\Release\MFCExt.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: ..\Output\Product\{#APP_PLATFORM}\Release\MsXmlCpp.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: ..\Output\Product\{#APP_PLATFORM}\Release\SciLexer.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: ..\Output\Product\{#APP_PLATFORM}\Release\Shared.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: ..\Output\Product\{#APP_PLATFORM}\Release\Language\*.dll; DestDir: {app}\Language; Components: Application_Files; Flags: ignoreversion
 
 ;The type lib for creating wizards. We do not issue an error, if registering doesn't work.
@@ -209,6 +210,46 @@ Root: HKCR; SubKey: TeXnicCenter.tcp; ValueType: string; ValueData: "TeXnicCente
 Root: HKCR; SubKey: TeXnicCenter.tcp\DefaultIcon; ValueType: string; ValueData: {app}\TeXnicCenter.exe,3; 
 Root: HKCR; SubKey: TeXnicCenter.tcp\shell\open\command; ValueType: string; ValueData: """{app}\TeXnicCenter.exe"" ""%1""";
 
+;Register with default programs
+
+; tex
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.tex; ValueType: expandsz; ValueName: FriendlyTypeName; ValueData: "@""{app}\Shared.dll"",-1001"; Flags: UninsDeleteValue;
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.tex\CLSID; ValueType: string; ValueData: "{{573345AA-E76C-44E0-8CC3-7392506E442A}";
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.tex\DefaultIcon; ValueType: string; ValueData: {app}\TeXnicCenter.exe,1;
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.tex\shell\open\command; ValueType: string; ValueData: """{app}\TeXnicCenter.exe"" ""%1""";
+
+; dtx
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.dtx; ValueType: expandsz; ValueName: FriendlyTypeName; ValueData: "@""{app}\Shared.dll"",-1003"; Flags: UninsDeleteValue;
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.dtx\CLSID; ValueType: string; ValueData: "{{04409A22-D986-4AEE-9F0D-B344159F8A35}";
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.dtx\DefaultIcon; ValueType: string; ValueData: {app}\TeXnicCenter.exe,1;
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.dtx\shell\open\command; ValueType: string; ValueData: """{app}\TeXnicCenter.exe"" ""%1""";
+
+; ltx
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.ltx; ValueType: expandsz; ValueName: FriendlyTypeName; ValueData: "@""{app}\Shared.dll"",-1002"; Flags: UninsDeleteValue;
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.ltx\CLSID; ValueType: string; ValueData: "{{0B48F570-9642-4A6C-A8F5-8F4D92CBEFA3}";
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.ltx\DefaultIcon; ValueType: string; ValueData: {app}\TeXnicCenter.exe,1;
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.ltx\shell\open\command; ValueType: string; ValueData: """{app}\TeXnicCenter.exe"" ""%1""";
+
+; sty
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.sty; ValueType: expandsz; ValueName: FriendlyTypeName; ValueData: "@""{app}\Shared.dll"",-1004"; Flags: UninsDeleteValue;
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.sty\CLSID; ValueType: string; ValueData: "{{497E9AD0-F881-4AC2-91C3-4488717EB1FD}";
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.sty\DefaultIcon; ValueData: {app}\TeXnicCenter.exe,1;
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.sty\shell\open\command; ValueType: string; ValueData: """{app}\TeXnicCenter.exe"" ""%1""";
+
+; ins
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.ins; ValueType: expandsz; ValueName: FriendlyTypeName; ValueData: "@""{app}\Shared.dll"",-1005"; Flags: UninsDeleteValue;
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.ins\CLSID; ValueType: string; ValueData: "{{ABFB8011-FA0A-4DAD-9F75-75852358F387}";
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.ins\DefaultIcon; ValueData: {app}\TeXnicCenter.exe,1;
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.ins\shell\open\command; ValueType: string; ValueData: """{app}\TeXnicCenter.exe"" ""%1""";
+
+Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities; ValueType: string; ValueName: ApplicationDescription; ValueData: "@""{app}\Shared.dll"",-1000"; Flags: UninsDeleteValue;
+Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities\FileAssociations; ValueType: string; ValueName: .tex; ValueData: TeXnicCenter2.AssocFile.tex;
+Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities\FileAssociations; ValueType: string; ValueName: .dtx; ValueData: TeXnicCenter2.AssocFile.dtx;
+Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities\FileAssociations; ValueType: string; ValueName: .ltx; ValueData: TeXnicCenter2.AssocFile.ltx;
+Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities\FileAssociations; ValueType: string; ValueName: .sty; ValueData: TeXnicCenter2.AssocFile.sty;
+Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities\FileAssociations; ValueType: string; ValueName: .ins; ValueData: TeXnicCenter2.AssocFile.ins;
+
+Root: HKLM; SubKey: SOFTWARE\RegisteredApplications; ValueType: string; ValueName: TeXnicCenter; ValueData: SOFTWARE\TeXnicCenter2\Capabilities;
 
 [Tasks]
 Name: DesktopLink; Description: Create a desktop icon; GroupDescription: Links and Associations

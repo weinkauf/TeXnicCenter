@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libiconv", "libiconv\libico
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SciLexer", "Scintilla\vcbuild\SciLexer.vcxproj", "{08C13851-869A-49A9-BC48-CBD0779A2280}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shared", "Shared\Shared.vcxproj", "{3A301D39-A50C-4D6E-ADC1-2EC869CA78DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -147,6 +149,13 @@ Global
 		{08C13851-869A-49A9-BC48-CBD0779A2280}.Release|Win32.Build.0 = Release|Win32
 		{08C13851-869A-49A9-BC48-CBD0779A2280}.Release|x64.ActiveCfg = Release|x64
 		{08C13851-869A-49A9-BC48-CBD0779A2280}.Release|x64.Build.0 = Release|x64
+		{3A301D39-A50C-4D6E-ADC1-2EC869CA78DB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3A301D39-A50C-4D6E-ADC1-2EC869CA78DB}.Debug|Win32.Build.0 = Debug|Win32
+		{3A301D39-A50C-4D6E-ADC1-2EC869CA78DB}.Debug|x64.ActiveCfg = Debug|Win32
+		{3A301D39-A50C-4D6E-ADC1-2EC869CA78DB}.Release|Win32.ActiveCfg = Release|Win32
+		{3A301D39-A50C-4D6E-ADC1-2EC869CA78DB}.Release|Win32.Build.0 = Release|Win32
+		{3A301D39-A50C-4D6E-ADC1-2EC869CA78DB}.Release|x64.ActiveCfg = Release|x64
+		{3A301D39-A50C-4D6E-ADC1-2EC869CA78DB}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
