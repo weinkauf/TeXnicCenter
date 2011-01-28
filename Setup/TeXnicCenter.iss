@@ -242,12 +242,19 @@ Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.ins\CLSID; ValueTyp
 Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.ins\DefaultIcon; ValueData: {app}\TeXnicCenter.exe,1;
 Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.ins\shell\open\command; ValueType: string; ValueData: """{app}\TeXnicCenter.exe"" ""%1""";
 
+; bib
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.bib; ValueType: expandsz; ValueName: FriendlyTypeName; ValueData: "@""{app}\Shared.dll"",-1006"; Flags: UninsDeleteValue;
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.bib\CLSID; ValueType: string; ValueData: "{{C10CF936-2EE8-4A9D-8A64-E1B2FD03E133}";
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.bib\DefaultIcon; ValueData: {app}\TeXnicCenter.exe,1;
+Root: HKLM; SubKey: SOFTWARE\Classes\TeXnicCenter2.AssocFile.bib\shell\open\command; ValueType: string; ValueData: """{app}\TeXnicCenter.exe"" ""%1""";
+
 Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities; ValueType: string; ValueName: ApplicationDescription; ValueData: "@""{app}\Shared.dll"",-1000"; Flags: UninsDeleteValue;
 Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities\FileAssociations; ValueType: string; ValueName: .tex; ValueData: TeXnicCenter2.AssocFile.tex;
 Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities\FileAssociations; ValueType: string; ValueName: .dtx; ValueData: TeXnicCenter2.AssocFile.dtx;
 Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities\FileAssociations; ValueType: string; ValueName: .ltx; ValueData: TeXnicCenter2.AssocFile.ltx;
 Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities\FileAssociations; ValueType: string; ValueName: .sty; ValueData: TeXnicCenter2.AssocFile.sty;
 Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities\FileAssociations; ValueType: string; ValueName: .ins; ValueData: TeXnicCenter2.AssocFile.ins;
+Root: HKLM; SubKey: SOFTWARE\TeXnicCenter2\Capabilities\FileAssociations; ValueType: string; ValueName: .bib; ValueData: TeXnicCenter2.AssocFile.bib;
 
 Root: HKLM; SubKey: SOFTWARE\RegisteredApplications; ValueType: string; ValueName: TeXnicCenter; ValueData: SOFTWARE\TeXnicCenter2\Capabilities;
 
