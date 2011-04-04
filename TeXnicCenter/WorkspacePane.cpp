@@ -12,11 +12,11 @@ WorkspacePane::WorkspacePane()
 }
 
 BEGIN_MESSAGE_MAP(WorkspacePane, WorkspacePaneBase)
-	ON_WM_SIZE()
-	ON_WM_SETFOCUS()
+	ON_WM_CONTEXTMENU()
 	ON_WM_CREATE()
 	ON_WM_ERASEBKGND()
-	ON_WM_CONTEXTMENU()
+	ON_WM_SETFOCUS()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 // WorkspacePane message handlers

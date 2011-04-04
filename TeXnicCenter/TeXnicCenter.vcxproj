@@ -333,8 +333,9 @@
     <ClCompile Include="FileClean.cpp" />
     <ClCompile Include="FileCleanConfirmDialog.cpp" />
     <ClCompile Include="filegrep.cpp" />
-    <ClCompile Include="fileview.cpp" />
+    <ClCompile Include="FileTreeCtrl.cpp" />
     <ClCompile Include="FileViewEx.cpp" />
+    <ClCompile Include="FileViewPane.cpp" />
     <ClCompile Include="findinfilesdialog.cpp" />
     <ClCompile Include="FindReplaceDlg.cpp" />
     <ClCompile Include="FontOccManager.cpp" />
@@ -348,6 +349,14 @@
     <ClCompile Include="inserttabulardialog.cpp" />
     <ClCompile Include="IProject.cpp" />
     <ClCompile Include="IProjectWizard.cpp" />
+    <ClCompile Include="ItemIDList.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Template|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="itempropertydialog.cpp" />
     <ClCompile Include="LabelDragSource.cpp" />
     <ClCompile Include="LaTeXCommand.cpp" />
@@ -496,8 +505,9 @@
     <ClInclude Include="FileClean.h" />
     <ClInclude Include="FileCleanConfirmDialog.h" />
     <ClInclude Include="filegrep.h" />
-    <ClInclude Include="fileview.h" />
+    <ClInclude Include="FileTreeCtrl.h" />
     <ClInclude Include="FileViewEx.h" />
+    <ClInclude Include="FileViewPane.h" />
     <ClInclude Include="findinfilesdialog.h" />
     <ClInclude Include="FindReplaceDlg.h" />
     <ClInclude Include="FontOccManager.h" />
@@ -511,6 +521,7 @@
     <ClInclude Include="inserttabulardialog.h" />
     <ClInclude Include="IProject.h" />
     <ClInclude Include="IProjectWizard.h" />
+    <ClInclude Include="ItemIDList.h" />
     <ClInclude Include="itempropertydialog.h" />
     <ClInclude Include="LabelDragSource.h" />
     <ClInclude Include="LaTeXCommand.h" />

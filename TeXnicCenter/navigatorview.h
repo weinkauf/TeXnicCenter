@@ -34,6 +34,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <memory>
 
 #include "ProjectView.h"
@@ -52,7 +53,7 @@ class NavigatorTreeCtrl :
 	public CProjectView,
 	public LabelDragSource
 {
-
+	DECLARE_DYNAMIC(NavigatorTreeCtrl)
 public:
 	NavigatorTreeCtrl();
 	virtual ~NavigatorTreeCtrl();
@@ -145,11 +146,16 @@ protected:
 	/** Updates the font settings to the window */
 	void UpdateFont();
 
+	virtual std::size_t GetItemIndex(HTREEITEM hItem) const;
+
 // message handlers
 protected:
 	afx_msg void OnSysColorChange();
 	afx_msg void OnSelChanged(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+
+	void SetImageLists();
+
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnDestroy();
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
@@ -180,7 +186,7 @@ public:
 	/// \param point
 	///		   Position the context menu should be shown at, in screen coordinates
 	///		   If both coordinates are set to -1, the position is calculated automatically
-	void ShowContextMenu(CPoint &point);
+	virtual void ShowContextMenu(CPoint &point);
 	/// Enables or disables the drag & drop functionality
 	void EnableDragDrop(bool enable = true);
 	/// Indicates whether the drag & drop functionality has been activated

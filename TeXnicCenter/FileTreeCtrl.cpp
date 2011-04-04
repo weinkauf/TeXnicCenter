@@ -1,0 +1,940 @@
+/********************************************************************
+ *
+ * This file is part of the TeXnicCenter-system
+ *
+ * Copyright (C) 1999-2000 Sven Wiegand
+ * Copyright (C) 2000-$CurrentYear$ ToolsCenter
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * If you have further questions or if you want to support
+ * further TeXnicCenter development, visit the TeXnicCenter-homepage
+ *
+ *    http://www.ToolsCenter.org
+ *
+ *********************************************************************/
+
+#include "stdafx.h"
+
+#include <algorithm>
+#include <cstddef>
+#include <functional>
+#include <map>
+#include <utility>
+#include <vector>
+
+#include "resource.h"
+#include "FileTreeCtrl.h"
+#include "FontOccManager.h"
+#include "ItemIDList.h"
+#include "LatexProject.h"
+#include "OleDrop.h"
+#include "OutputDoc.h"
+#include "RunTimeHelper.h"
+
+CString FormatInput(const StructureItem& item)
+{
+	CString text;
+	text.Format(_T("\\input{%s}"), CPathTool::GetFileTitle(item.GetTitle()));
+
+	return text;
+}
+
+CString FormatInclude(const StructureItem& item)
+{
+	CString text;
+	text.Format(_T("\\include{%s}"), CPathTool::GetFileTitle(item.GetTitle()));
+
+	return text;
+}
+
+namespace {
+	CString ExtractFileTitle(const CString& text)
+	{
+		return CPathTool::GetFileTitle(text);
+	}
+}
+
+struct FileTreeCtrl::Entry
+{
+	explicit Entry(ItemIDList&& pidl)
+		: pidl(std::forward<ItemIDList>(pidl))
+	{
+	}
+
+	virtual ~Entry()
+	{
+	}
+
+	bool IsMissing() const
+	{
+		return pidl.IsEmpty();
+	}
+
+	ItemIDList pidl;
+	ItemIDList oldPidl;
+};
+
+struct FileTreeCtrl::FileEntry
+	: Entry
+{
+	explicit FileEntry(ItemIDList&& pidl, StructureItemContainer::size_type index)
+		: Entry(std::forward<ItemIDList>(pidl))
+		, itemIndex(index)
+	{
+	}
+
+	StructureItemContainer::size_type itemIndex;
+};
+
+struct FileTreeCtrl::DirectoryEntry
+	: Entry
+{
+	explicit DirectoryEntry(ItemIDList&& pidl)
+		: Entry(std::forward<ItemIDList>(pidl))
+	{
+	}
+};
+
+FileTreeCtrl::FolderItemIDListLessPredicate::FolderItemIDListLessPredicate
+		(CComPtr<IShellFolder> shellFolder)
+	: shellFolder(shellFolder)
+{
+}
+
+FileTreeCtrl::FolderItemIDListLessPredicate::FolderItemIDListLessPredicate()
+{
+	HRESULT code = SHGetDesktopFolder(&shellFolder);
+
+	if (FAILED(code)) {
+		TRACE0("Failed to get the shell folder interface of the desktop\n");
+	}
+}
+
+bool FileTreeCtrl::FolderItemIDListLessPredicate::operator()
+		(const ItemIDList& lhs, const ItemIDList& rhs) const
+{
+	return static_cast<short>
+		(HRESULT_CODE(shellFolder->CompareIDs(0, lhs, rhs))) < 0;
+}
+
+
+enum {
+	ShellUpdateMessageID = WM_USER + 1
+};
+
+IMPLEMENT_DYNAMIC(FileTreeCtrl, NavigatorTreeCtrl)
+
+BEGIN_MESSAGE_MAP(FileTreeCtrl, NavigatorTreeCtrl)
+	ON_WM_CREATE()
+	ON_WM_CONTEXTMENU()
+	ON_NOTIFY_REFLECT(TVN_DELETEITEM, &FileTreeCtrl::OnTvnDeleteitem)
+	ON_NOTIFY_REFLECT(TVN_GETINFOTIP, &FileTreeCtrl::OnTvnGetInfoTip)
+	ON_MESSAGE(ShellUpdateMessageID, &FileTreeCtrl::OnShellChange)
+	ON_NOTIFY_REFLECT(TVN_KEYDOWN, &FileTreeCtrl::OnTvnKeydown)
+	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &FileTreeCtrl::OnNMCustomdraw)
+END_MESSAGE_MAP()
+
+FileTreeCtrl::FileTreeCtrl()
+	: shellNotifyId_(0)
+	, missingItemColor_(RGB(255, 0, 0)) // Red
+{
+	SHGetDesktopFolder(&shellFolder_);
+	itemIdTreeItem_.key_comp().shellFolder = shellFolder_;
+}
+
+FileTreeCtrl::~FileTreeCtrl()
+{
+}
+
+int FileTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (NavigatorTreeCtrl::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	SetupImageLists();
+
+	ClearKeyStateToFormat();
+	ClearKeyStateToMessage();
+
+	using namespace std::tr1;
+	using namespace placeholders;
+
+	MapKeyStateToFormat(0, FormatInput);
+	MapKeyStateToFormat(MK_CONTROL, FormatInclude);
+	MapKeyStateToFormat(MK_SHIFT, bind(ExtractFileTitle, bind(&StructureItem::GetTitle, _1)));
+
+	if (RunTimeHelper::IsVista()) {
+		const DWORD style = TVS_EX_AUTOHSCROLL;
+		SetExtendedStyle(style, style);
+	}
+
+	// ModifyStyle(0, TVS_INFOTIP);
+
+	return 0;
+}
+
+void FileTreeCtrl::OnUpdate(CProjectView* /*pSender*/, LPARAM lHint, LPVOID /*pHint*/)
+{
+	switch (lHint)
+	{
+		case COutputDoc::hintParsingFinished :
+			OnParsingFinished();
+			break;
+	}
+}
+
+void FileTreeCtrl::OnParsingFinished()
+{
+	SetRedraw(FALSE);
+	ForceClear();
+
+	Initialize();
+	Populate();
+
+	SetRedraw();
+	Invalidate();
+}
+
+void FileTreeCtrl::Populate()
+{
+	itemIdTreeItem_.clear();
+
+	// How many items do we have in this view currently?  If none, i.e. first
+	// filled after loading a project, then expand the zeroth level
+	const bool bExpandAll = GetCount() == 0;
+
+	// remember expanded items
+	CString strSelectedItem = GetItemPath(GetSelectedItem());
+	CStringArray astrExpandedItems;
+	GetExpandedItems(astrExpandedItems);
+
+	const StructureItemContainer& items = GetProject()->GetStructureItems();
+
+	const CString& mainDirectory = CPathTool::GetDirectory(GetProject()->GetMainPath());
+	const CString& projectDirectory = GetProject()->GetDirectory();
+	const CString& projectDirectoryName = CPathTool::GetRelativePath
+		(CPathTool::GetParentDirectory(projectDirectory), projectDirectory);
+
+	HTREEITEM projectItem = InsertEntry(TVI_ROOT, projectDirectoryName, 
+		new DirectoryEntry(GetPathItemIDList(projectDirectory)));
+
+	CString text;
+	HTREEITEM parent;
+
+	// Maps the (flat) relative path to a parent tree item
+	typedef std::map<CString, HTREEITEM> ParentDirectoryMap;
+	ParentDirectoryMap parents;
+
+	typedef std::vector<HTREEITEM> TreeItemVector;
+	TreeItemVector missingItems;
+
+	for (StructureItemContainer::const_iterator it = items.begin(); it != items.end(); ++it)
+	{
+		const StructureItem& item = *it;
+
+		if (item.IsCopy())
+			continue;
+
+		text = CPathTool::GetFile(it->GetPath());
+
+		CString reldir = CPathTool::GetRelativePath(mainDirectory, 
+			CPathTool::GetParentDirectory(CPathTool::GetAbsolutePath(mainDirectory, 
+				it->GetPath())), TRUE, TRUE);
+
+		const StructureItemContainer::const_iterator::difference_type index = 
+			std::distance(items.begin(), it);
+
+		switch (item.GetType())
+		{
+			case StructureItem::texFile :
+			case StructureItem::missingTexFile :
+				parent = projectItem;
+				break;
+			case StructureItem::graphicFile :
+			case StructureItem::missingGraphicFile :
+				parent = projectItem;
+				break;
+			case StructureItem::bibFile :
+			case StructureItem::missingBibFile :
+				parent = projectItem;
+				break;
+			default:
+				parent = 0;
+		}
+
+		if (parent)
+		{
+			if (reldir != _T(".")) 
+			{
+				ParentDirectoryMap::iterator it = parents.find(reldir);
+
+				if (it != parents.end())
+					parent = it->second;
+				else 
+				{
+					CString component, path;
+					int index;
+
+					LPCTSTR const sep = _T("\\/");
+					bool stop = false;
+
+					while (!stop)
+					{
+						index = reldir.FindOneOf(sep);							
+
+						if (index == -1) 
+						{
+							index = reldir.GetLength();
+							stop = true;
+						}
+
+						component = reldir.Left(index);
+						path += component;
+
+						it = parents.find(path);
+
+						if (it != parents.end())
+							parent = it->second;
+						else
+						{
+							const CString& absolutePath = CPathTool::Cat(mainDirectory, path);
+
+							parent = InsertEntry(parent, component, 
+								new DirectoryEntry(GetPathItemIDList(absolutePath)));
+
+							// but store the whole relative path
+							parents.insert(std::make_pair(path, parent));
+						}
+
+						if (!stop) 
+						{
+							path += reldir[index]; // add the \ or /
+							reldir.Delete(0, index + 1);
+						}
+					}
+				}						
+			}
+
+			ItemIDList pidl = GetPathItemIDList(GetProject()->GetFullPath(item));
+			std::unique_ptr<FileEntry> entry(new FileEntry(std::move(pidl), index));
+
+			HTREEITEM hItem = InsertEntry(parent, text, entry.get(),
+				item.IsMainProjectFile());
+
+			if (entry->IsMissing())
+				missingItems.push_back(hItem);
+
+			entry.release();
+		}
+	}
+
+	// Missing items should be visible
+	std::for_each(missingItems.begin(), missingItems.end(), 
+		std::bind(&FileTreeCtrl::EnsureVisible, this, std::placeholders::_1));
+
+	if (!bExpandAll) {
+		ExpandItems(astrExpandedItems);
+		SelectItem(GetItemByPath(strSelectedItem));
+	}
+	else
+	{
+		ExpandItemsByLevel(0);
+		EnsureVisible(GetRootItem());
+	}
+}
+
+int FileTreeCtrl::GetItemImageIndex(std::size_t index, int flags /*= 0*/)
+{
+	const StructureItemContainer& si = GetProject()->GetStructureItems();
+	const StructureItem& item = si[index];
+
+	const CString& path = GetProject()->GetFullPath(item);
+
+	return GetImageIndex(path, flags);
+}
+
+int FileTreeCtrl::GetImageIndex(LPCWSTR path, int flags)
+{
+	SHFILEINFO shfi = { };
+
+	HIMAGELIST systemImageList = reinterpret_cast<HIMAGELIST>
+		(::SHGetFileInfo(path, 0, &shfi, sizeof(shfi), flags | 
+			SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_ICON));
+
+	int imageIndex;
+
+	if (systemImageList) {
+		imageIndex = shfi.iIcon;
+		DestroyIcon(shfi.hIcon);
+	}
+	else
+		imageIndex = -1;
+
+	return imageIndex;
+}
+
+int FileTreeCtrl::GetImageIndex(LPCITEMIDLIST pidl, int flags /*= 0*/)
+{
+	return GetImageIndex(reinterpret_cast<LPCWSTR>(pidl), flags | SHGFI_PIDL);
+}
+
+void FileTreeCtrl::Initialize()
+{
+	if (shellNotifyId_ != 0)
+		Unregister();
+
+	const CString& directory = GetProject()->GetDirectory();
+
+	ItemIDList pidl;
+	
+	HRESULT code = SHILCreateFromPath(directory, &pidl, NULL);
+
+	if (SUCCEEDED(code)) {
+		CComPtr<IShellFolder> shellFolder;
+		code = SHBindToObject(shellFolder_, pidl, NULL, IID_IShellFolder, 
+			reinterpret_cast<void**>(&shellFolder));
+
+		if (SUCCEEDED(code)) {
+			projectShellFolder_ = shellFolder;
+			//itemIdTreeItem_.key_comp().shellFolder = shellFolder;
+		}
+	}
+
+	Register(directory);
+}
+
+void FileTreeCtrl::Register(const CString& path, bool recursive /*= true*/)
+{
+	ASSERT(shellNotifyId_ == 0);
+
+	ItemIDList pidl = GetPathItemIDList(path);
+
+	SHChangeNotifyEntry e;
+	e.pidl = pidl;
+	e.fRecursive = recursive;
+
+	const LONG notifications = SHCNE_CREATE | SHCNE_UPDATEITEM |
+		SHCNE_RENAMEITEM | SHCNE_DELETE | SHCNE_UPDATEIMAGE;
+	
+	shellNotifyId_ = SHChangeNotifyRegister(m_hWnd, SHCNRF_ShellLevel |
+		SHCNRF_InterruptLevel, notifications, ShellUpdateMessageID, 1, &e);
+}
+
+void FileTreeCtrl::Unregister()
+{
+	ASSERT(shellNotifyId_);
+
+	SHChangeNotifyDeregister(shellNotifyId_);
+	shellNotifyId_ = 0;
+}
+
+LRESULT FileTreeCtrl::OnShellChange(WPARAM wParam, LPARAM lParam)
+{
+	switch (lParam) {
+		case SHCNE_CREATE:
+			OnShellCreateItem(reinterpret_cast<PIDLIST_ABSOLUTE*>(wParam));
+			break;
+		case SHCNE_UPDATEITEM:
+			OnShellUpdateItem(reinterpret_cast<PIDLIST_ABSOLUTE*>(wParam));
+			break;
+		case SHCNE_RENAMEITEM:
+			OnShellRenameItem(reinterpret_cast<PIDLIST_ABSOLUTE*>(wParam));
+			break;
+		case SHCNE_DELETE:
+			OnShellDeleteItem(reinterpret_cast<PIDLIST_ABSOLUTE*>(wParam));
+			break;
+		case SHCNE_UPDATEIMAGE:
+			OnShellUpdateImage();
+			break;
+	}
+
+	return 0;
+}
+
+void FileTreeCtrl::OnShellCreateItem(PIDLIST_ABSOLUTE* pidls)
+{
+	MarkItemAsMissing(ItemIDList(pidls[0]), false);
+}
+
+void FileTreeCtrl::OnTvnDeleteitem(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
+
+	delete reinterpret_cast<Entry*>(pNMTreeView->itemOld.lParam);
+
+	*pResult = 0;
+}
+
+void FileTreeCtrl::OnShellUpdateItem(PIDLIST_ABSOLUTE* pidls)
+{
+	ItemIDList key(pidls[0]);
+	ItemIDListTreeItemMap::const_iterator it = itemIdTreeItem_.find(key);
+
+	if (it == itemIdTreeItem_.end()) {
+		it = std::find_if(itemIdTreeItem_.begin(), itemIdTreeItem_.end(),
+			[&key] (const ItemIDListTreeItemMap::value_type& item)
+			{
+				return item.first == key;
+			});
+	}
+
+	if (it != itemIdTreeItem_.end()) {
+		SetRedraw(FALSE);
+		UpdateEntryTree(it->second);
+		SetRedraw();
+	}
+}
+
+void FileTreeCtrl::OnShellRenameItem(PIDLIST_ABSOLUTE* pidls)
+{
+	PIDLIST_ABSOLUTE oldpidl = pidls[0];
+	ItemIDList key(oldpidl);
+	
+	ItemIDListTreeItemMap::iterator it = itemIdTreeItem_.find(key);
+
+	if (it != itemIdTreeItem_.end()) {
+		ItemIDListTreeItemMap::value_type tmp = *it;
+		itemIdTreeItem_.erase(it);
+		itemIdTreeItem_.insert(std::make_pair(key, it->second));
+
+		MarkItemAsMissing(it->second, true);
+	}
+}
+
+void FileTreeCtrl::OnShellDeleteItem(PIDLIST_ABSOLUTE* pidls)
+{
+	PIDLIST_ABSOLUTE oldpidl = pidls[0];
+	ItemIDList key(oldpidl);
+
+	MarkItemAsMissing(key);
+}
+
+ItemIDList FileTreeCtrl::GetPathItemIDList(const CString& path) const
+{
+	ItemIDList pidl;
+
+	HRESULT code = SHILCreateFromPath(path, &pidl, NULL);
+
+	if (FAILED(code)) {
+		TRACE0("CFileView: Failed to convert a path to PIDL\n");
+	}
+
+	return pidl;
+}
+
+void FileTreeCtrl::UpdateEntryImages(HTREEITEM hItem)
+{
+	const Entry* entry = reinterpret_cast<const Entry*>(GetItemData(hItem));
+	
+	AFXASSUME(entry);
+
+	int normalImageIndex = entry->IsMissing() ? -1 :
+		GetImageIndex(entry->pidl, SHGFI_OVERLAYINDEX);
+	int stateImageIndex = entry->IsMissing() ? -1 :
+		GetImageIndex(entry->pidl);
+
+	SetItem(hItem, TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE, NULL,
+		normalImageIndex & 0xffffff, stateImageIndex,
+		INDEXTOOVERLAYMASK(normalImageIndex >> 24), TVIS_OVERLAYMASK, 0);
+}
+
+void FileTreeCtrl::UpdateEntryTree(HTREEITEM hItem)
+{
+	// Update the item
+	UpdateEntryImages(hItem);
+
+	// Update item's children
+	HTREEITEM hChildItem = GetChildItem(hItem);
+
+	while (hChildItem) {
+		UpdateEntryImages(hChildItem);
+		hChildItem = GetNextSiblingItem(hChildItem);
+	}
+
+	// Update item's parents
+	HTREEITEM hParent = hItem;
+	
+	while ((hParent = GetParentItem(hParent)) != NULL) {
+		UpdateEntryImages(hParent);
+	}
+}
+
+HTREEITEM FileTreeCtrl::InsertEntry(HTREEITEM parent, const CString& text, Entry* entry, bool bold /*= false*/)
+{
+	AFXASSUME(entry);
+
+	int normalImageIndex = GetImageIndex(entry->pidl, SHGFI_PIDL | SHGFI_OVERLAYINDEX);
+	int stateImageIndex = GetImageIndex(entry->pidl, SHGFI_PIDL | SHGFI_SELECTED);
+
+	UINT state = INDEXTOOVERLAYMASK(normalImageIndex >> 24 & 0xff);
+	UINT stateMask = TVIS_OVERLAYMASK;
+
+	if (bold) {
+		state |= TVIS_BOLD;
+		stateMask |= TVIS_BOLD;
+	}
+
+	parent = InsertItem(TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE,
+		text, normalImageIndex & 0xffffff, stateImageIndex, state, stateMask, 
+		reinterpret_cast<LPARAM>(entry), parent, TVI_SORT);
+
+	if (!entry->pidl.IsEmpty())
+		itemIdTreeItem_.insert(std::make_pair(entry->pidl, parent));
+	
+	return parent;
+}
+
+std::size_t FileTreeCtrl::GetItemIndex(HTREEITEM hItem) const
+{
+	const FileEntry* entry = dynamic_cast<const FileEntry*>
+		(reinterpret_cast<const Entry*>(GetItemData(hItem)));
+	
+	AFXASSUME(entry);
+
+	return entry->itemIndex;
+}
+
+bool FileTreeCtrl::IsFolder(HTREEITEM item) const
+{
+	return dynamic_cast<const DirectoryEntry*>
+		(reinterpret_cast<const Entry*>(GetItemData(item))) != NULL;
+}
+
+void FileTreeCtrl::OnTvnGetInfoTip(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMTVGETINFOTIP pGetInfoTip = reinterpret_cast<LPNMTVGETINFOTIP>(pNMHDR);
+	
+	const Entry* entry = reinterpret_cast<const Entry*>(pGetInfoTip->lParam);
+	
+	AFXASSUME(entry);
+
+	CComPtr<IShellFolder> sf;
+	PCUITEMID_CHILD childPidl;
+
+	HRESULT code = SHBindToParent(entry->pidl, IID_IShellFolder, 
+		reinterpret_cast<void**>(&sf), &childPidl);
+
+	if (FAILED(code))
+		return;
+
+	CComPtr<IQueryInfo> queryInfo;
+
+	if (SUCCEEDED(sf->GetUIObjectOf(m_hWnd, 1, &childPidl, IID_IQueryInfo, NULL,
+		reinterpret_cast<void**>(&queryInfo)))) {
+		LPWSTR text = 0;
+
+		if (SUCCEEDED(queryInfo->GetInfoTip(0, &text))) {
+			std::size_t n = std::min<std::size_t>(pGetInfoTip->cchTextMax - 1,
+				std::wcslen(text));
+
+			USES_CONVERSION_EX;
+			std::memcpy(pGetInfoTip->pszText, W2CT_EX(text, static_cast<UINT>(n)),
+				n * sizeof(TCHAR));
+
+			pGetInfoTip->pszText[n] = 0;
+			pGetInfoTip->cchTextMax = static_cast<int>(n);
+
+			::CoTaskMemFree(text);
+		}
+	}
+
+	*pResult = 0;
+}
+
+LRESULT FileTreeCtrl::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+{
+	LRESULT result = 0;
+
+	switch (message) {
+		case WM_MENUCHAR:
+		case WM_INITMENUPOPUP:
+		case WM_DRAWITEM:
+		case WM_MEASUREITEM:
+			{
+				bool handled = false;
+
+				if (contextMenu3_)
+					handled = SUCCEEDED(contextMenu3_->HandleMenuMsg2(message,
+						wParam, lParam, &result));
+				else if (contextMenu2_) 
+					handled = SUCCEEDED(contextMenu2_->HandleMenuMsg(message, 
+						wParam, lParam));
+				else
+					handled = false;
+
+			if (handled)
+				break;
+			}
+		default:
+			result = NavigatorTreeCtrl::WindowProc(message, wParam, lParam);
+	}
+
+	return result;
+}
+
+void FileTreeCtrl::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
+{
+	ShowContextMenu(point);
+}
+
+void FileTreeCtrl::ShowContextMenu(CPoint& point)
+{
+	HTREEITEM hItem;
+
+	if (point.x == -1 && point.y == -1) {
+		// The display of the context menu has been issue using the keyboard:
+		// display the menu below the bounding rectangle of the selected item
+		hItem = GetSelectedItem();
+	}
+	else {
+		CPoint tmp(point);
+		ScreenToClient(&tmp);
+
+		hItem = HitTest(tmp);
+
+		if (hItem)
+			SelectItem(hItem);
+		else
+			hItem = GetSelectedItem();
+	}
+
+	if (!hItem)
+		return;
+
+	CRect rect;
+
+	GetItemRect(hItem, &rect, TRUE);
+	ClientToScreen(&rect);
+
+	const Entry* entry = reinterpret_cast<const Entry*>(GetItemData(hItem));
+
+	AFXASSUME(entry);
+
+	CComPtr<IShellFolder> sf;
+	PCUITEMID_CHILD childPidl;
+
+	HRESULT code = SHBindToParent(entry->pidl, IID_IShellFolder, 
+		reinterpret_cast<void**>(&sf), &childPidl);
+
+	if (FAILED(code))
+		return;
+
+	CComPtr<IContextMenu> cm;
+
+	code = sf->GetUIObjectOf(m_hWnd, 1, &childPidl, IID_IContextMenu, NULL, 
+		reinterpret_cast<void**>(&cm));
+
+	if (FAILED(code))
+		return;
+
+	contextMenu2_ = cm;
+	contextMenu3_ = cm;
+
+	CMenu menu;
+	menu.CreatePopupMenu();
+
+	if (FAILED(cm->QueryContextMenu(menu, 0, 1, 0x7fff, CMF_EXPLORE)))
+		return;
+
+	TPMPARAMS tpmp = { sizeof(TPMPARAMS), rect };
+
+	UINT id = menu.TrackPopupMenuEx(TPM_VERTICAL | TPM_LEFTALIGN | TPM_TOPALIGN |
+		TPM_RETURNCMD, rect.left, rect.bottom, this, &tpmp);
+
+	if (contextMenu3_)
+		contextMenu3_.Release();
+
+	if (contextMenu2_)
+		contextMenu2_.Release();
+
+	if (id) {
+		USES_CONVERSION;
+
+		CMINVOKECOMMANDINFO cmi = { sizeof(CMINVOKECOMMANDINFO) };
+		cmi.hwnd = m_hWnd;
+		cmi.lpVerb = MAKEINTRESOURCEA(id - 1);
+		cmi.nShow = SW_SHOWDEFAULT;
+
+		cm->InvokeCommand(&cmi);
+	}
+}
+
+void FileTreeCtrl::Refresh()
+{
+	HTREEITEM hItem = GetSelectedItem();
+
+	if (hItem) {
+		const Entry* entry = reinterpret_cast<const Entry*>(GetItemData(hItem));
+
+		AFXASSUME(entry);
+
+		SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_IDLIST | SHCNF_FLUSH |
+			SHCNF_NOTIFYRECURSIVE, entry->pidl, NULL);
+	}
+}
+
+void FileTreeCtrl::OnTvnKeydown(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMTVKEYDOWN pTVKeyDown = reinterpret_cast<LPNMTVKEYDOWN>(pNMHDR);
+
+	switch (pTVKeyDown->wVKey) {
+		case VK_F5:
+			Refresh();
+			break;
+	}
+	
+	*pResult = 0;
+}
+
+void FileTreeCtrl::OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMTVCUSTOMDRAW pNMCD = reinterpret_cast<LPNMTVCUSTOMDRAW>(pNMHDR);
+
+	switch (pNMCD->nmcd.dwDrawStage) {
+		case CDDS_PREPAINT:
+			*pResult = CDRF_NOTIFYITEMDRAW;
+			break;
+		case CDDS_ITEMPREPAINT:
+			{
+				const Entry* entry = reinterpret_cast<const Entry*>
+					(pNMCD->nmcd.lItemlParam);
+
+				if (entry->IsMissing())
+					pNMCD->clrText = missingItemColor_;
+
+				*pResult = CDRF_DODEFAULT;
+			}
+			break;
+		default:
+			*pResult = CDRF_DODEFAULT;
+	}
+}
+
+BOOL FileTreeCtrl::PreTranslateMessage(MSG* pMsg)
+{
+	BOOL result;
+
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_F5) {
+		Refresh();
+		result = TRUE;
+	}
+	else
+		result = NavigatorTreeCtrl::PreTranslateMessage(pMsg);
+
+	return result;
+}
+
+void FileTreeCtrl::MarkItemAsMissing(HTREEITEM hItem, bool missing /*= true*/)
+{
+	Entry* entry = reinterpret_cast<Entry*>(GetItemData(hItem));
+
+	AFXASSUME(entry);
+
+	if (entry->pidl.IsEmpty() && !missing || !entry->pidl.IsEmpty() && missing)
+		std::swap(entry->pidl, entry->oldPidl);
+
+	if (missing) {
+		const UINT noImage = ~0U;
+
+		SetItem(hItem, TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE, NULL, 
+			noImage, noImage, static_cast<UINT>(INDEXTOOVERLAYMASK(-1)),
+			TVIS_OVERLAYMASK, 0);
+	}
+	else
+		UpdateEntryImages(hItem);
+
+	CRect rect;
+	GetItemRect(hItem, &rect, FALSE);
+
+	InvalidateRect(&rect);
+}
+
+void FileTreeCtrl::MarkItemAsMissing(const ItemIDList& key, bool missing)
+{
+	ItemIDListTreeItemMap::iterator it = itemIdTreeItem_.find(key);
+
+	if (it == itemIdTreeItem_.end()) {
+		TRACE0("FileTreeCtrl: Search using IShellFolder::CompareIDs failed. ");
+		TRACE0("Using binary comparison to find the PIDL of the deleted file.\n");
+
+		// The search using IShellFolder::CompareIDs will likely fail for files
+		// that are being deleted. Try to find an ItemIDList (binary) equal to
+		// the key
+
+		it = std::find_if(itemIdTreeItem_.begin(), itemIdTreeItem_.end(),
+			[&key] (const ItemIDListTreeItemMap::value_type& item)
+			{
+				return item.first == key;
+			});
+	}
+	else
+		TRACE0("FileTreeCtrl: Found deleted item using IShellFolder::CompareIDs.\n");
+
+	if (it != itemIdTreeItem_.end()) {
+		HTREEITEM hItem = it->second;
+		MarkItemAsMissing(hItem, missing);
+
+		//itemIdTreeItem_.erase(it);
+	}
+}
+
+void FileTreeCtrl::Clear()
+{
+	NavigatorTreeCtrl::Clear();
+	ForceClear();
+}
+
+void FileTreeCtrl::SetMissingItemColor(COLORREF value, bool redraw /*= true*/)
+{
+	missingItemColor_ = value;
+
+	if (m_hWnd && redraw)
+		Invalidate();
+}
+
+COLORREF FileTreeCtrl::GetMissingItemColor() const
+{
+	return missingItemColor_;
+}
+
+void FileTreeCtrl::ForceClear()
+{
+	DeleteAllItems();
+	itemIdTreeItem_.clear();
+}
+
+void FileTreeCtrl::OnShellUpdateImage()
+{
+	SetupImageLists();
+}
+
+void FileTreeCtrl::SetupImageLists()
+{
+	SHFILEINFO shfi = { };
+
+	HIMAGELIST imageList;
+
+	imageList = reinterpret_cast<HIMAGELIST>(::SHGetFileInfo(_T(""), 0, &shfi,
+		sizeof(shfi), SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_ICON));
+
+	TreeView_SetImageList(m_hWnd, imageList, TVSIL_NORMAL);
+
+	imageList = reinterpret_cast<HIMAGELIST>(::SHGetFileInfo(_T(""), 0, &shfi,
+		sizeof(shfi), SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_ICON | 
+		SHGFI_SELECTED));
+
+	TreeView_SetImageList(m_hWnd, imageList, TVSIL_STATE);
+}
