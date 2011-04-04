@@ -217,4 +217,11 @@ LIBHUNSPELL_DLL_EXPORTED inline char* HENTRY_FIND(struct hentry *h, const char *
 
 #define w_char_eq(a,b) (((a).l == (b).l) && ((a).h == (b).h))
 
+// Unicode character encoding information
+struct unicode_info {
+	unsigned short c;
+	unsigned short cupper;
+	unsigned short clower;
+};
+
 #endif
