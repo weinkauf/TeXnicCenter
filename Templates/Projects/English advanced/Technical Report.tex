@@ -1,0 +1,215 @@
+%description: Technical Report in English (pdfLaTeX only)
+%% Based on a TeXnicCenter-Template, which was
+%% created by Christoph Börensen
+%% and slightly modified by Tino Weinkauf.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper,12pt]{scrartcl} %This is a special class provided by the KOMA script, which does a lot of adjustments to adapt the standard LaTeX classes to european habits, change to [a4paper,12pt,twoside] for doublesided layout
+
+
+%########################### Preferences #################################
+
+
+% ******** vmargin settings *********
+\usepackage{vmargin} %This give you full control over the used page arae, it maybe not the idea od Latex to do so, but I wanted to reduce to amount of white space on the page
+\setpapersize{A4}
+\setmargins{3.5cm}%			%linker Rand, left edge
+					 {1.5cm}%     %oberer Rand, top edge
+           {14.7cm}%		%Textbreite, text width
+           {23.42cm}%   %Texthoehe, text hight
+           {14pt}%			%Kopfzeilenhöhe, header hight
+           {1cm}%   	  %Kopfzeilenabstand, header distance
+           {0pt}%				%Fußzeilenhoehe footer hight
+           {2cm}%    	  %Fusszeilenabstand, footer distance         
+
+% ********* Font definiton ************
+\usepackage{t1enc} % as usual
+\usepackage[latin1]{inputenc} % as usual
+\usepackage{times}		
+%\usepackage{mathptmx}  	%mathematical fonts for use with times, I encountered some problems using this package togather with pdftex, which I was not able to resolve
+
+% ********* Graphics definition *******
+\usepackage[pdftex]{graphicx} % required to import graphic files
+\usepackage{color} %allows to mark some entries in the tables with color
+\usepackage{eso-pic} % these two are required to add the little picture on top of every page
+\usepackage{everyshi} % these two are required to add the little picture on top of every page
+\renewcommand{\floatpagefraction}{0.7} %default:0.5 allows two big pictures on one page
+
+%********** Enybeling Hyperlinks *******
+\usepackage[pdfborder=000,pdftex=true]{hyperref}% this enables jumping from a reference and table of content in the pdf file to its target
+
+% ********* Table layout **************
+\usepackage{booktabs}	  	%design of table, has an excellent documentation
+%\usepackage{lscape}			%use this if you want to rotate the table together with the lines around the table
+
+% ********* Caption Layout ************
+\usepackage{ccaption} % allows special formating of the captions
+\captionnamefont{\bf\footnotesize\sffamily} % defines the font of the caption name (e.g. Figure: or Table:)
+\captiontitlefont{\footnotesize\sffamily} % defines the font of the caption text (same as above, but not bold)
+\setlength{\abovecaptionskip}{0mm} %lowers the distace of captions to the figure
+
+
+% ********* Header and Footer **********
+% This is something to play with forever. I use here the advanced settings of the KOMA script
+
+\usepackage{scrpage2} %header and footer using the options for the KOMA script
+\renewcommand{\headfont}{\footnotesize\sffamily} % font for the header
+\renewcommand{\pnumfont}{\footnotesize\sffamily} % font for the pagenumbers
+
+%the following lines define the pagestyle for the main document
+\defpagestyle{cb}{%
+(\textwidth,0pt)% sets the border line above the header
+{\pagemark\hfill\headmark\hfill}% doublesided, left page
+{\hfill\headmark\hfill\pagemark}% doublesided, right page
+{\hfill\headmark\hfill\pagemark}%  onesided
+(\textwidth,1pt)}% sets the border line below the header
+%
+{(\textwidth,1pt)% sets the border line above the footer
+{{\it Federation Confidential}\hfill Chief O'Brian}% doublesided, left page
+{Chief O'Brian\hfill{\it Federation Confidential}}% doublesided, right page
+{Chief O'Brian\hfill{\it Federation Confidential}} % one sided printing
+(\textwidth,0pt)% sets the border line below the footer
+}
+
+%this defines the page style for the first pages: all empty
+\renewpagestyle{plain}%
+	{(\textwidth,0pt)%
+		{\hfill}{\hfill}{\hfill}%
+	(\textwidth,0pt)}%
+	{(\textwidth,0pt)%	
+		{\hfill}{\hfill}{\hfill}%
+	(\textwidth,0pt)}
+
+%********** Footnotes **********
+\renewcommand{\footnoterule}{\rule{5cm}{0.2mm} \vspace{0.3cm}} %increases the distance of footnotes from the text
+\deffootnote[1em]{1em}{1em}{\textsuperscript{\normalfont\thefootnotemark}} %some moe formattion on footnotes
+
+%################ End Preferences, Begin Document #####################
+
+\pagestyle{plain} % on headers or footers on the first page
+
+\begin{document}
+
+\begin{center}
+
+\begin{figure}[th]
+    \centering
+		%\includegraphics[width=10cm]{logo.jpg}
+	\label{fig:logo}
+\end{figure}
+
+\vspace{2cm}
+
+% There might be better solutions for the title page, giving all distances and sizes manually was simply the easiest solution
+
+{\Huge\bf\sf Template for a }
+
+\vspace{.5cm}
+
+{\Huge\bf\sf Technical Report}
+
+\vspace{.5cm}
+
+{\Huge\bf\sf to use with TeXnicCenter}
+
+\vspace{2cm}
+
+{\Large\bf\sf C. B{\"o}rensen}%as this is an english text I didn't load the german package, this would ease the use of special characters
+\vspace{2cm}
+
+{\Large\bf\sf \today} %adds the current date
+
+\vspace{\fill}
+
+cboerens@gmx.de
+
+\end{center}
+\newpage
+
+%%The following loads the picture on top of every page, the numbers in \put() define the position on the page:
+%\AddToShipoutPicture{\setlength\unitlength{0.1mm}\put(604,2522){\includegraphics[width=1.5cm]{logo.jpg}}}
+
+\pagestyle{cb} % now we want to have headers and footers
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+
+Mineral aerosol represents one of the largest mass fractions of the global aerosol. It consists of windblown soil and is produced mainly in the arid areas of our planet, in particular in the great deserts. Its annual production rate is estimated to be in the order of 200 to 5000 Tg. The smaller size fraction (< 20 $mu$m) may be transported over long distances  of up to 5000 km. Mineral aerosol has been considered a nonreactive, hydrophobic surface . Nevertheless, its impact on the atmospheric radiation budget and on the concentration of cloud condensation nuclei (CCN) have been discussed. Recently, its possible role as a surface for heterogeneous reactions has been taken into account. 
+\subsection{Modeling}
+For example, in a recent modeling study Dentener et. al.  calculated that in large areas more than 40\% of the total atmospheric nitrate is associated with mineral aerosol. However, their results still suffer from large uncertainties in the heterogeneous reaction rates. There is also evidence from field measurements for a correlation of the aerosol nitrate content and the aerosol mineral fraction. A correlation between the nitrate mass size distribution and the mineral aerosol distribution has also been reported . 
+\subsection{Composition}
+Mineral aerosol has a complex chemical and mineralogical composition  in which aluminum in the chemical form of alumosilicates contributes 8 \% by mass. For the present investigation alumina has been chosen as model substance. It has a defined chemical composition and mainly because of its relevance as supporting material for catalysts its surface features have been investigated by infrared spectroscopy, and ab initio calculations. Also, the heterogeneous reactions of CFC's with alumina produced by solid-fuel rocket engines have been discussed with regard to stratospheric ozone depletion .
+
+
+\section{Experimental}
+
+Vibrational spectra were recorded in the spectral range from 4000 to 600 cm?1 with a Bruker Equinox 55 FTIR Spectrometer equipped with an MCT detector and diffuse reflectance infrared Fourier transform spectroscopy optics (model DRA-2CO, Harrick Scientific Corp.). The vacuum chamber (model HVC-DR3, Harrick Scientific Corp.) was connected to a standard flow system (Figure 1). Spectra were recorded at a resolution of 4 cm$^{-1}$. 100 scans were averaged for each spectrum resulting in a time resolution of one minute. In order to improve the time resolution for experiments with high NO$_2$ concentrations during the initial phase only 50 scans were averaged.
+
+
+%\begin{landscape} %in case a table becomes to big this rotates it, uncheck also \end{landscape} and lscape package in the preferences
+	\begin{table}
+		\caption[Substrate matrix 1]{\rule[-2mm]{0mm}{0mm}{Physical properties of the tested substrate samples}}
+		\begin{tabular}{@{}*{8}l@{}} \toprule \addlinespace[0.1em]
+
+      No.  &  Supplier  &  Material  &    Sample  &    Length  &  Identifier  &      Mass  &       Mass \\
+
+           &            &            &            &       /cm  &              &      Mass  & /g$^{a)}$ \\
+
+\cmidrule{1-8} % &            &            &            &            &            &            &            \\
+
+         1 &        SST &     Galaxy &  warp unit &         15 &   \color{red}ncc1701e &     1927.6 &     1920.2 \\
+
+         2 &        SST & Constellat. &  warp unit &       14.9 &   11016910 &    ---     &    ---     \\
+
+         3 &        SST &  Prototype &        ops &         15 &  302/09     &    107.766 &    107.771 \\
+
+         4 &    KEmpire &        BoP &  warp unit &       15.1 &     c836f5 &    129.711 &    129.711 \\
+
+         5 &    KEmpire &        BoP &        ops &       15.3 &     c836f6 &     131.65 &    139.656 \\
+
+         6 &    KEmpire &  AC Mullite   &    core    &        3.2 &     c836f7 &      9.896 &      9.889 \\
+
+         7 &    REmpire &  Proptotye &       body &      ---   &   \color{blue}DHC 1703 &    ---     &    ---     \\
+
+         8 &    REmpire &  Proptotye &       body & {\it 15.2} &   DHC 1704 &    ---     &    ---     \\
+
+		\bottomrule
+		\multicolumn{8}{l}{{\footnotesize$^{a)}$After heat test at 2000°K for 5~h}}\\		
+	\end{tabular}
+	\label{tab:matrix_1}
+	\end{table}
+%\end{landscape}
+
+
+\section{Results}
+
+The results for the loss of weight are listed in table~\ref{tab:matrix_1} and in figure~\ref{fig:particle_size}.
+
+Mineral aerosol represents one of the largest mass fractions of the global aerosol. It consists of windblown soil and is produced mainly in the arid areas of our planet, in particular in the great deserts. Its annual production rate is estimated to be in the order of 200 to 5000 Tg. The smaller size fraction (< 20 $mu$m) may be transported over long distances  of up to 5000 km. Mineral aerosol has been considered a nonreactive, hydrophobic surface . Nevertheless, its impact on the atmospheric radiation budget and on the concentration of cloud condensation nuclei (CCN) have been discussed. Recently, its possible role as a surface for heterogeneous reactions has been taken into account. 
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=13cm]{particle_size.pdf}
+	\end{center}
+	\caption{Particle size distribution for three different sources.}
+	\label{fig:particle_size}
+\end{figure}
+
+\subsection{Modeling Copy2}
+For example, in a recent modeling study Dentener et. al.  calculated that in large areas more than 40\% of the total atmospheric nitrate is associated with mineral aerosol. However, their results still suffer from large uncertainties in the heterogeneous reaction rates. There is also evidence from field measurements for a correlation of the aerosol nitrate content and the aerosol mineral fraction. A correlation between the nitrate mass size distribution and the mineral aerosol distribution has also been reported . 
+\subsubsection{Composition Copy2}
+Mineral aerosol has a complex chemical and mineralogical composition  in which aluminum in the chemical form of alumosilicates contributes 8 \% by mass. For the present investigation alumina has been chosen as model substance. It has a defined chemical composition and mainly because of its relevance as supporting material for catalysts its surface features have been investigated by infrared spectroscopy, and ab initio calculations. Also, the heterogeneous reactions of CFC's with alumina produced by solid-fuel rocket engines have been discussed with regard to stratospheric ozone depletion .
+
+Mineral aerosol represents one of the largest mass fractions of the global aerosol. It consists of windblown soil and is produced mainly in the arid areas of our planet, in particular in the great deserts. Its annual production rate is estimated to be in the order of 200 to 5000 Tg , , . The smaller size fraction (< 20 $mu$m) may be transported over long distances  of up to 5000 km. Mineral aerosol has been considered a nonreactive, hydrophobic surface . Nevertheless, its impact on the atmospheric radiation budget and on the concentration of cloud condensation nuclei (CCN) have been discussed. Recently, its possible role as a surface for heterogeneous reactions has been taken into account. 
+\subsection{Modeling Copy3}
+For example, in a recent modeling study Dentener et. al.  calculated that in large areas more than 40\% of the total atmospheric nitrate is associated with mineral aerosol. However, their results still suffer from large uncertainties in the heterogeneous reaction rates. There is also evidence from field measurements for a correlation of the aerosol nitrate content and the aerosol mineral fraction. A correlation between the nitrate mass size distribution and the mineral aerosol distribution has also been reported. 
+\subsubsection{Composition Cpoy3}
+Mineral aerosol has a complex chemical and mineralogical composition  in which aluminum in the chemical form of alumosilicates contributes 8 \% by mass. For the present investigation alumina has been chosen as model substance. It has a defined chemical composition and mainly because of its relevance as supporting material for catalysts its surface features have been investigated by infrared spectroscopy, and ab initio calculations. Also, the heterogeneous reactions of CFC's with alumina produced by solid-fuel rocket engines have been discussed with regard to stratospheric ozone depletion.
+
+\end{document}
+
+
+

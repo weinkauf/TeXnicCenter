@@ -1,0 +1,49 @@
+1. svn up
+
+2. Edit "TeXnicCenter\Version.h.template" appropriately.
+
+3. Edit "TeXnicCenter\aboutbox.cpp" to reflect the current year and to make sure that all involved people are mentioned. (TODO: Need to change the manual update of the year.)
+
+4. Edit "TeXnicCenter\res\TeXnicCenter.rc2" to reflect the current year. (TODO: Need to change the manual update of the year.) This file includes the generated Version.h.
+
+5. Build. Test.
+
+6. Change "setup\TeXnicCenter.iss" at the top to reflect the current version. Define APP_PLATFORM to Win32 or x64. Make sure, the rest of the setup script looks still good. Test building the setup.
+
+7. svn commit.
+
+8. Create a svn tag for the release.
+
+Namescheme: 'Release' MajorVersion (Alpha|Beta|.) MinorVersion
+without any spaces
+
+Examples:
+Release2Alpha1
+Release2Beta2
+Release2.0
+Release2.01
+
+9. svn up
+
+10. rm Output/Product/*
+rm Output/Intermediate/*
+rm TeXnicCenter/Version.h
+
+11. Rebuild All
+
+12. Create setup. Can be found in Output/Setup/TXCSetup.exe. Rename it appropriately.
+
+13. Test setup on a fresh Windows.
+
+14. AntiVirus check of the freshly installed TXC.
+
+15. Write Release Notes. Use this as a startinig point (where 1071 stands for the revision of the last release):
+    svn log -r 1074:HEAD > log.txt
+
+16. Upload the release notes and the setup file to sf.net. Use the "Project Admin | File manager" tool. Check the release notes to be release notes. Set the release notes of the setup file to the new release notes file. If this is going to be the new default, set it in its properties as well.
+
+17. Change the download link at texniccenter.org.
+
+18. Publish news at texniccenter.org and latex-community.org. texniccenter.org requires FireFox to edit an article properly.
+
+19. Add a new artifact group at sf.net for the User Reports. To do so, (try to) add a new report, click on the admin link next to the group drop-down box.

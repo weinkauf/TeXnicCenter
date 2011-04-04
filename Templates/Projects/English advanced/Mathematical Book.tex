@@ -1,0 +1,440 @@
+%description: Mathematical Book in English (AMS)
+%% Based on a TeXnicCenter-Template by Gyorgy SZEIDL.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------
+%
+\documentclass{amsbook}%
+%
+%----------------------------------------------------------
+% This is a sample document for the AMS LaTeX Book or Monograph Class
+% Class options
+%       --  Body text point size:
+%                        8pt, 9pt, 10pt (default), 11pt, 12pt
+%       --  Paper size:  letterpaper (8.5x11 inch, default), a4paper
+%       --  Orientation: portrait(default), landscape
+%       --  Print side:  oneside, twoside (default)
+%       --  Quality:     final(default), draft
+%       --  Title page:  titlepage, notitlepage
+%       --  Start chapter on left:
+%                        openright (no, default), openany
+%       --  Columns:     onecolumn (default), twocolumn
+%       --  Omit extra math features:
+%                        nomath
+%       --  AMS fonts (noamasfonts available):
+%                        noamsfonts
+%       --  PSAMSfonts (fewer AMSfontsizes)
+%                        psamsfonts
+%       --  Equation numbering (equation numbers on the left is the default)
+%                        leqno (default), reqno
+%       --  Equation centering (equations centered is the default)
+%                        centeredtags (default}, tbtags (top, bottom)
+%       --  Displayed equations (centered is the default)
+%                        fleqn (flush left)
+% For instance the command
+%          \documentclass[a4paper,12p,reqno]{amsbook}
+% ensures that the paper size is a4, fonts are typeset at the size 12p
+% and the equation numbers are on the right side.
+%
+\usepackage{amsmath}%
+\usepackage{amsfonts}%
+\usepackage{amssymb}%
+\usepackage{graphicx}
+%----------------------------------------------------------
+\theoremstyle{plain}
+\newtheorem{acknowledgement}{Acknowledgement}
+\newtheorem{algorithm}{Algorithm}
+\newtheorem{axiom}{Axiom}
+\newtheorem{case}{Case}
+\newtheorem{claim}{Claim}
+\newtheorem{conclusion}{Conclusion}
+\newtheorem{condition}{Condition}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}{Criterion}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{exercise}{Exercise}
+\newtheorem{lemma}{Lemma}
+\newtheorem{notation}{Notation}
+\newtheorem{problem}{Problem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+\newtheorem{solution}{Solution}
+\newtheorem{summary}{Summary}
+\newtheorem{theorem}{Theorem}
+\numberwithin{equation}{section}
+%-----------------------------------------------------------
+\begin{document}
+\frontmatter
+\title[Short Title]{The Full Title of an AMS Book or Monograph}
+\author[P. Carlson]{Name of the First Author (Peter Carlson)}
+\address[P. Carlson]{Author One address, line 1%
+\hspace*{\fill}\linebreak\indent%
+Author One address, line 2}%
+\curraddr[P. Carlson]{Author One, current address, line 1
+\hspace*{\fill}\linebreak
+\indent Author One, current address, line 2}%
+\email[P. Carlson]{P. Carlson@autherone-inst.de}
+\urladdr{http://www.authorone.uni-aone.de}
+\author{Name of the Second Author}
+\thanks{The Author thanks J. Smith}
+\subjclass{Primary 05C38, 15A15; Secondary 05A15, 15A18}
+\dedicatory{Dedicated to Professor XY}
+
+\begin{abstract}
+This is a sample document which shows the most important features
+of the AMS Book or Monograph Article class.
+\end{abstract}
+\maketitle
+\tableofcontents
+
+
+\chapter*{Preface}
+
+\markboth{PREFACE}{PREFACE} This is the preface and it is created
+using a TeX field in a paragraph by itself containing
+\verb|\chapter*{Preface}|. When the document is loaded, this
+appears if it were a normal chapter, but it is actually an
+unnumbered chapter.
+
+\mainmatter
+
+\part{The First Part}
+
+\chapter{About the AMS Book or Monograph Class}
+
+This is the body (mainmatter) of the AMS Book or Monograph sample
+document.
+
+The front matter has a number of sample entries that you should
+replace with your own.
+
+Replace this text with the body of your book. Do not delete the
+\verb|mainmatter| TeX field found above in a paragraph by itself
+or the numbering of different objects will be wrong.
+
+The typesetting specification selected by this document uses the
+default class options. There are, however, a number of class
+options. The available options include setting the paper size and
+the point size of the font used in the body of the document etc.
+Details are given as comments right after the \verb|documentclass|
+command.
+
+\chapter{Features of this Sample Document}
+
+\section{Section}
+
+Use the \verb"\section{Section}" command for major sections, and
+the \verb"\subsection{Subsection}" command for subsections, etc.
+
+\subsection{Subsection}
+
+This is just some text under a subsection.
+
+\subsubsection{Subsubsection}
+
+This is just some text under a subsubsection.
+
+\paragraph{Subsubsubsection}
+
+This is just some  text under a subsubsubsection.
+
+\subparagraph{Subsubsubsubsection}
+
+This is just some text under a subsubsubsubsection.
+
+\section{Typesetting Commands}
+
+Select a part of the text then click on the button Emphasize (H!),
+or Bold (Fs), or Italic (Kt), or Slanted (Kt) to typeset
+\emph{Emphasize}, \textbf{Bold}, \textit{Italics},
+\textsl{Slanted} texts.
+
+You can also typeset \textrm{Roman}, \textsf{Sans Serif},
+\textsc{Small Caps}, and \texttt{Typewriter} texts.
+
+You can also apply the special, mathematics only commands
+$\mathbb{BLACKBOARD}$ $\mathbb{BOLD}$, $\mathcal{CALLIGRAPHIC}$,
+and $\mathfrak{fraktur}$. Note that blackboard bold and
+calligraphic are correct only when applied to uppercase letters A
+through Z.
+
+You can apply the size tags -- Format menu, Font size submenu --
+{\tiny tiny}, {\scriptsize scriptsize}, {\footnotesize
+footnotesize}, {\small small}, {\normalsize normalsize}, {\large
+large}, {\Large Large}, {\LARGE LARGE}, {\huge huge} and {\Huge
+Huge}.
+
+You can use the \verb"\begin{quote} etc. \end{quote}" environment
+for typesetting short quotations. Select the text then click on
+Insert, Quotations, Short Quotations:
+
+\begin{quote}
+The buck stops here. \emph{Harry Truman}
+
+Ask not what your country can do for you; ask what you can do for
+your country. \emph{John F Kennedy}
+
+I am not a crook. \emph{Richard Nixon}
+
+I did not have sexual relations with that woman, Miss Lewinsky.
+\emph{Bill Clinton}
+\end{quote}
+
+The Quotation environment is used for quotations of more than one
+paragraph. Following is the beginning of \emph{The Jungle Books}
+by Rudyard Kipling. (You should select the text first then click
+on Insert, Quotations, Quotation):
+
+\begin{quotation}
+It was seven o'clock of a very warm evening in the Seeonee Hills
+when Father Wolf woke up from his day's rest, scratched himself,
+yawned  and spread out his paws one after the other to get rid of
+sleepy feeling in their tips. Mother Wolf lay with her big gray
+nose dropped across her four tumbling, squealing cubs, and the
+moon shone into the mouth of the cave where they all lived.
+``\emph{Augrh}'' said Father Wolf, ``it is time to hunt again.''
+And he was going to spring down hill when a little shadow with a
+bushy tail crossed the threshold and whined: ``Good luck go with
+you, O Chief of the Wolves; and good luck and strong white teeth
+go with the noble children, that they may never forget the hungry
+in this world.''
+
+It was the jackal---Tabaqui the Dish-licker---and the wolves of
+India despise Tabaqui because he runs about making mischief, and
+telling tales, and eating rags and pieces of leather from the
+village rubbish-heaps. But they are afraid of him too, because
+Tabaqui, more than any one else in the jungle, is apt to go mad,
+and then he forgets that he was afraid of anyone, and runs through
+the forest biting everything in his way.
+\end{quotation}
+
+Use the Verbatim environment if you want \LaTeX\ to preserve
+spacing, perhaps when including a fragment from a program such as:
+\begin{verbatim}
+#include <iostream>         // < > is used for standard libraries.
+void main(void)             // ''main'' method always called first.
+{
+ cout << ''This is a message.'';
+                            // Send to output stream.
+}
+\end{verbatim}
+(After selecting the text click on Insert, Code Environments,
+Code.)
+
+
+\section{Mathematics and Text}
+
+It holds \cite{KarelRektorys} the following
+\begin{theorem}
+(The Currant minimax principle.) Let $T$ be completely continuous
+selfadjoint operator in a Hilbert space $H$. Let $n$ be an
+arbitrary integer and let $u_1,\ldots,u_{n-1}$ be an arbitrary
+system of $n-1$ linearly independent elements of $H$. Denote
+\begin{equation}
+\max_{\substack{v\in H, v\neq
+0\\(v,u_1)=0,\ldots,(v,u_n)=0}}\frac{(Tv,v)}{(v,v)}=m(u_1,\ldots,
+u_{n-1}) \label{eqn10}
+\end{equation}
+Then the $n$-th eigenvalue of $T$ is equal to the minimum of these
+maxima, when minimizing over all linearly independent systems
+$u_1,\ldots u_{n-1}$ in $H$,
+\begin{equation}
+\mu_n = \min_{\substack{u_1,\ldots, u_{n-1}\in H}} m(u_1,\ldots,
+u_{n-1}) \label{eqn20}
+\end{equation}
+\end{theorem}
+The above equations are automatically numbered as equation
+(\ref{eqn10}) and (\ref{eqn20}).
+
+
+\section{Lists Environments}
+
+You can create numbered, bulleted, and description lists (Use the
+Itemization or Enumeration buttons, or click on the Insert menu
+then chose an item from the Enumeration submenu):
+
+\begin{enumerate}
+\item List item 1
+
+\item List item 2
+
+\begin{enumerate}
+\item A list item under a list item.
+
+\item Just another list item under a list item.
+
+\begin{enumerate}
+\item Third level list item under a list item.
+
+\begin{enumerate}
+\item Fourth and final level of list items allowed.
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+
+\begin{itemize}
+\item Bullet item 1
+
+\item Bullet item 2
+
+\begin{itemize}
+\item Second level bullet item.
+
+\begin{itemize}
+\item Third level bullet item.
+
+\begin{itemize}
+\item Fourth (and final) level bullet item.
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\begin{description}
+\item[Description List] Each description list item has a term
+followed by the description of that term.
+
+\item[Bunyip] Mythical beast of Australian Aboriginal legends.
+\end{description}
+
+
+\section{Theorem-Like Environments}
+
+The following theorem-like environments (in alphabetical order) are available
+in this style.
+
+\begin{acknowledgement}
+This is an acknowledgement
+\end{acknowledgement}
+
+\begin{algorithm}
+This is an algorithm
+\end{algorithm}
+
+\begin{axiom}
+This is an axiom
+\end{axiom}
+
+\begin{case}
+This is a case
+\end{case}
+
+\begin{claim}
+This is a claim
+\end{claim}
+
+\begin{conclusion}
+This is a conclusion
+\end{conclusion}
+
+\begin{condition}
+This is a condition
+\end{condition}
+
+\begin{conjecture}
+This is a conjecture
+\end{conjecture}
+
+\begin{corollary}
+This is a corollary
+\end{corollary}
+
+\begin{criterion}
+This is a criterion
+\end{criterion}
+
+\begin{definition}
+This is a definition
+\end{definition}
+
+\begin{example}
+This is an example
+\end{example}
+
+\begin{exercise}
+This is an exercise
+\end{exercise}
+
+\begin{lemma}
+This is a lemma
+\end{lemma}
+
+\begin{proof}
+This is the proof of the lemma.
+\end{proof}
+
+\begin{notation}
+This is notation
+\end{notation}
+
+\begin{problem}
+This is a problem
+\end{problem}
+
+\begin{proposition}
+This is a proposition
+\end{proposition}
+
+\begin{remark}
+This is a remark
+\end{remark}
+
+\begin{solution}
+This is a solution
+\end{solution}
+
+\begin{summary}
+This is a summary
+\end{summary}
+
+\begin{theorem}
+This is a theorem
+\end{theorem}
+
+\begin{proof}
+[Proof of the Main Theorem]This is the proof.
+\end{proof}
+
+\backmatter \appendix
+
+\chapter{The First Appendix}
+
+The \verb"\appendix" command should be used only once. Subsequent
+appendices can be created using the Chapter command.
+
+\chapter{The Second Appendix}
+
+Some text for the second Appendix.
+
+This text is a sample for a short bibliography. You can cite a
+book by making use of the command \verb"\cite{KarelRektorys}":
+\cite{KarelRektorys}. Papers can be cited similarly:
+\cite{Bertoti97}. If you want multiple citations to appear in a
+single set of square brackets you must type all of the citation
+keys inside a single citation, separating each with a comma. Here
+is an example: \cite{Bertoti97, Szeidl2001, Carlson67}.
+
+\begin{thebibliography}{9}
+\bibitem {KarelRektorys}Rektorys, K., \textit{Variational methods in Mathematics,
+Science and Engineering}, D. Reidel Publishing Company,
+Dordrecht-Hollanf/Boston-U.S.A., 2th edition, 1975
+
+\bibitem {Bertoti97} \textsc{Bert\'{o}ti, E.}:\ \textit{On mixed variational formulation
+of linear elasticity using nonsymmetric stresses and
+displacements}, International Journal for Numerical Methods in
+Engineering., \textbf{42}, (1997), 561-578.
+
+\bibitem {Szeidl2001} \textsc{Szeidl, G.}:\ \textit{Boundary integral equations for
+plane problems in terms of stress functions of order one}, Journal
+of Computational and Applied Mechanics, \textbf{2}(2), (2001),
+237-261.
+
+\bibitem {Carlson67}  \textsc{Carlson D. E.}:\ \textit{On G\"{u}nther's stress functions
+for couple stresses}, Quart. Appl. Math., \textbf{25}, (1967),
+139-146.
+\end{thebibliography}
+
+\end{document}

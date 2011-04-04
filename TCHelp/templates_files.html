@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>File based Document Templates</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h3">File based Document Templates</td>
+</tr>
+</table>
+</p>
+
+<p>File based Document Templates are document templates created most easily-
+Templates of this type will be marked with this icon in the dialog
+'<var>Project New</var>':</p>
+
+<p>
+<div align="center"><img src="images/template_file.gif" width="32" height="32" border="0" alt=""></div>
+</p>
+
+<p>A file based document template is a simple text file with the extension
+".tex", placed in one of the template directories, specified on the tab
+<a href="options_page_paths.html">Path options</a>.</p>
+
+<p>Such a file can contain an optional description, that will be displayed
+in the field template description of the dialog '<var>Project New</var>',
+when the template has been selected by the user. To create such a description,
+simply place a line starting with <code>%description:</code> followed by a
+space as the frist line of the template.</p>
+
+<p>When creating a project based on a file based document template,
+TeXnicCenter will copy the selected template file to the project's
+directory, rename it to the project's name, remove the description
+line (if there is any) and replace the line delimiters with the ones,
+specified in the dialog '<var>Project New</var>'.</p>
+
+
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h5">Example</td>
+</tr>
+</table>
+</p>
+
+<p>This is a very simple example for a document template:</p>
+
+<p>
+<pre>
+%description: An Article with a Title Page
+
+% Preamble
+\documentclass{article}
+
+\title{Insert the title here}
+\author{Insert the author here}
+
+% Document
+\begin{document}
+% create title page and toc
+\maketitle\thispagestyle{empty}\clearpage
+\tableofcontents\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% start text here!!
+
+\end{document}
+</pre>
+</p>
+
+</body>
+</html>

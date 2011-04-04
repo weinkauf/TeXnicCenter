@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Tab 'Clean'</title>
+  <link rel="stylesheet" href="STYLE.CSS" type="text/css">
+</head>
+<body>
+<p>
+<table border="0" width="100%">
+  <tbody>
+    <tr>
+      <td class="h3">Tab '<var>Clean</var>'</td>
+    </tr>
+  </tbody>
+</table>
+</p>
+<p>The tab '<var>Clean</var>' in the dialog
+<a href="options.html">'<var>Options</var>'</a> allows users to modify
+file
+protection and file deletion options when using the command <var>Clean
+Project</var>
+in the menu <var>Build</var>.</p>
+<p><b>IMPORTANT NOTE:</b><br>
+Please be carefull when configuring this command. Deleting the wrong
+files
+may cause loss of important data. While TeXnicCenter tries its best to
+prevent deletion of essential files, you are responsible for this, too.</p>
+<p>
+</p>
+<div align="center"><img src="images/options_clean.gif"
+ style="border: 0px solid ; width: 476px; height: 419px;" alt=""
+ title=""></div>
+<p>The meaning of the controls is:</p>
+<p>
+</p>
+<dl>
+  <dt>'<var>File groups</var>'</dt>
+  <dd>The entries in the list box below define the files to be deleted
+or protected. Scroll through this list and select an entry to edit or
+remove it.</dd>
+  <dd>There are two entries at the end of the list, which can not be
+edited or removed. These two entries are used to protect all files of
+the project and all files that are currently opened within the editor.
+Files recognized by TeXnicCenter as a part of the project are shown on
+the tab <var>Files</var> in the <var>Navigation</var> window. The
+listed
+set may not include all files of the current project.&nbsp; You may add
+any not already recognized by TeXnicCenter.</dd>
+  <dt>'<var>New</var>'</dt>
+  <dd>Pressing this button adds a new entry to the list.</dd>
+  <dt>'<var>Remove</var>'</dt>
+  <dd>Pressing this button removes the selected entry from the list.</dd>
+  <dt>'<var>Sort</var>'</dt>
+  <dd>Pressing this button sorts the list of entries for a better
+overview.</dd>
+  <dt>'<var>Description</var>'</dt>
+  <dd>This edit box is used to change the description text of the
+selected entry. This text does not mean anything to TeXnicCenter --
+type
+here whatever would be helpful in understanding the selected entry.</dd>
+  <dt>'<var>Pattern</var>'</dt>
+  <dd>The text in this control defines a file or a set of files to act
+on for the selected entry.</dd>
+  <dd>It is permissible to use the same wildcards (<b>*</b> and <b>?</b>)
+permitted in a Windows command line. Additionally, you may use <a
+ href="placeholdersingle.html">placeholders for single files</a> and <a
+ href="placeholdersets.html">placeholders for sets of files</a> here.
+The combination of wildcards with placeholders for single files is
+supported, but no other combination is permitted.<br>
+Use the button on the right of the edit box to select a <a
+ href="placeholders.html">placeholder</a> from a list.&nbsp;
+Alternatively, you may type it in manually.</dd>
+  <dt>'<var>Action</var>'</dt>
+  <dd>This control selects the action to be performed on the file(s)
+defined by <b>'<var>Pattern</var>'</b> for the selected entry. The
+following actions are available:
+    <ul>
+      <li><b>none</b> - The selected entry will not be used to build up
+the lists for deletion or protection. Use this action to deactivate an
+entry without removing it altogether.</li>
+      <li><b>delete</b> - The files defined by <b>'<var>Pattern</var>'</b>
+will be deleted unless they are protected by another entry in the
+list.</li>
+      <li><b>protect</b> - The files defined by <b>'<var>Pattern</var>'</b>
+will be protected from deletion. If an entry defines a file to be
+protected and another entry defines the same file to be deleted, the
+file will be protected, i.e., the deletion entry will be ignored.</li>
+    </ul>
+  </dd>
+  <dt>'<var>Include subdirectories</var>'</dt>
+  <dd>If selected, TeXnicCenter searches the subdirectories of the
+active project for matching files defined by <b>'<var>Pattern</var>'</b>,
+too. The choice can differ for different file groups.</dd>
+  <dt>'<var>Confirm before delete</var>'</dt>
+  <dd>If selected, TeXnicCenter will show a dialog before deleting
+files. This dialog lists all the files to be deleted and protected. <br>
+    <br>
+This entry refers to all entries in the table,
+not just the one
+currently selected.<br>
+  </dd>
+</dl>
+Clicking on the Cancel button will terminate cancel any changes without
+finalizing them.
+</body>
+</html>

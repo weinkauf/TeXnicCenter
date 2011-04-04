@@ -1,0 +1,964 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<lxCollection version="1" xmlns:txclxp="http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd">
+	<lxPackage name="Math" 
+		path="" 
+		desc="TeX/LaTeX math commands" 
+	>
+		
+	<lxEnvironment name="math" 
+			parameters="1" 
+			desc="Math environment"
+			icon="math.bmp"
+			index="10"
+			expafter="}&#xA;	&#xA;\end{math}" 
+			expbefore="\begin{"/>
+	<lxEnvironment name="displaymath" 
+			parameters="1" 
+			desc="Math environment"
+			icon="math.bmp"
+			index="10"
+			expafter="}&#xA;	&#xA;\end{displaymath}" 
+			expbefore="\begin{"/>
+	<lxEnvironment name="equation" 
+			parameters="1" 
+			desc="Math environment"
+			icon="math.bmp"
+			index="10"
+			expafter="}&#xA;&#xA;\label{eq:}&#xA;\end{equation}" 
+			expbefore="\begin{"/>
+	<lxEnvironment name="eqnarray" 
+			parameters="1" 
+			desc="Math environment"
+			icon="math.bmp"
+			index="10"
+			expafter="}&#xA;&#xA;\label{eq:}&#xA;\end{eqnarray}" 
+			expbefore="\begin{"/>
+	<lxEnvironment name="array" 
+			parameters="1" 
+			desc="Math environment"
+			icon="math.bmp"
+			index="10"
+			expafter="}&#xA;	&#xA;\end{array}" 
+			expbefore="\begin{"/>
+	<lxEnvironment name="pmatrix" 
+			parameters="1" 
+			desc="Math environment"
+			icon="math.bmp"
+			index="10"
+			expafter="}&#xA;	&#xA;\end{pmatrix}" 
+			expbefore="\begin{"/>
+	<lxCommand name="\newtheorem" 
+			parameters="2"
+	/>
+	
+	<lxCommand name="\quad" 
+			desc="Inserts additional space in math mode"
+	/>
+	
+	
+	<lxCommand name="\frac" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts a fraction term"
+			parameters="2"
+	/>
+	<lxCommand name="\sqrt" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts a square root term"
+			parameters="1"
+	/>
+	<lxCommand name="\sum" 
+			icon="mathmisc.bmp"
+			index="13"			
+			desc="Inserts a sum term"
+			parameters="1"
+	/>
+	<lxCommand name="\int" 
+			icon="mathmisc.bmp"
+			index="12"
+			desc="Inserts an integral term"
+			parameters="1"
+	/>
+	<lxCommand name="\oint" 
+			icon="mathmisc.bmp"
+			index="18"
+			desc="Inserts an closed-loop integral term"
+			parameters="1"
+	/>
+	<lxCommand name="\prod" 
+			icon="mathmisc.bmp"
+			index="14"			
+			desc="Inserts a product term"
+			parameters="1"
+	/>
+	<lxCommand name="\coprod" 
+			icon="mathmisc.bmp"
+			index="15"			
+			desc="Inserts a coprod term"
+			parameters="1"
+	/>
+	
+	<lxCommand name="\ldots" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts low dots"
+			parameters="0"
+	/>
+	<lxCommand name="\vdots" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts vertical dots"
+			parameters="0"
+	/>
+	<lxCommand name="\cdots" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts centered dots"
+			parameters="0"
+	/>
+	<lxCommand name="\ddots" 
+			icon="math.bmp"
+			index="10"
+			desc="Inserts diagonal dots"
+			parameters="0"
+	/>
+	</lxPackage>
+	<lxPackage name="Math Symbols (Small Greek)" 
+		path="" 
+		desc="Small greek symbols" 
+		>
+	<lxCommand name="\alpha" 
+			icon="symbols.bmp"
+			index="0"
+			desc="Inserts greek alpha symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\beta" 
+			icon="symbols.bmp"
+			index="1"
+			desc="Inserts greek beta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\gamma" 
+			icon="symbols.bmp"
+			index="7"
+			desc="Inserts greek gamma symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\delta" 
+			icon="symbols.bmp"
+			index="3"
+			desc="Inserts greek delta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\epsilon" 
+			icon="symbols.bmp"
+			index="4"
+			desc="Inserts greek epsilon symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\varepsilon" 
+			icon="symbols.bmp"
+			index="4"
+			desc="Inserts greek epsilon symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\zeta" 
+			icon="symbols.bmp"
+			index="27"
+			desc="Inserts greek zeta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\eta" 
+			icon="symbols.bmp"
+			index="8"
+			desc="Inserts greek eta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\theta" 
+			icon="symbols.bmp"
+			index="17"
+			desc="Inserts greek theta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\vartheta" 
+			icon="symbols.bmp"
+			index="18"
+			desc="Inserts greek theta symbol (variant)"
+			parameters="0"
+	/>
+	<lxCommand name="\iota" 
+			icon="symbols.bmp"
+			index="9"
+			desc="Inserts greek iota symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\kappa" 
+			icon="symbols.bmp"
+			index="10"
+			desc="Inserts greek kappa symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\lambda" 
+			icon="symbols.bmp"
+			index="11"
+			desc="Inserts greek lambda symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\mu" 
+			icon="symbols.bmp"
+			index="12"
+			desc="Inserts greek mu symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\nu" 
+			icon="symbols.bmp"
+			index="13"
+			desc="Inserts greek nu symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\xi" 
+			icon="symbols.bmp"
+			index="25"
+			desc="Inserts greek xi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\pi" 
+			icon="symbols.bmp"
+			index="15"
+			desc="Inserts greek pi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\varpi" 
+			icon="symbols.bmp"
+			index="16"
+			desc="Inserts greek lambda symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\rho" 
+			icon="symbols.bmp"
+			index="19"
+			desc="Inserts greek rho symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\varrho" 
+			icon="symbols.bmp"
+			index="19"
+			desc="Inserts greek rho symbol (variant)"
+			parameters="0"
+	/>
+	<lxCommand name="\sigma" 
+			icon="symbols.bmp"
+			index="20"
+			desc="Inserts greek sigma symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\varsigma" 
+			icon="symbols.bmp"
+			index="21"
+			desc="Inserts greek sigma symbol (variant)"
+			parameters="0"
+	/>
+	<lxCommand name="\tau" 
+			icon="symbols.bmp"
+			index="22"
+			desc="Inserts greek tau symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\upsilon" 
+			icon="symbols.bmp"
+			index="23"
+			desc="Inserts greek upsilon symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\phi" 
+			icon="symbols.bmp"
+			index="5"
+			desc="Inserts greek phi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\varphi" 
+			icon="symbols.bmp"
+			index="6"
+			desc="Inserts greek phi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\chi" 
+			icon="symbols.bmp"
+			index="2"
+			desc="Inserts greek chi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\psi" 
+			icon="symbols.bmp"
+			index="26"
+			desc="Inserts greek psi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\omega" 
+			icon="symbols.bmp"
+			index="24"
+			desc="Inserts greek omega symbol"
+			parameters="0"
+	/>
+	</lxPackage>
+	<lxPackage name="Math Symbols (Large Greek)" 
+		path="" 
+		desc="Large greek symbols" 
+		>
+	<lxCommand name="\Gamma" 
+			icon="symbols2.bmp"
+			index="6"
+			desc="Inserts large greek gamma symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Delta" 
+			icon="symbols2.bmp"
+			index="3"
+			desc="Inserts large greek delta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Theta" 
+			icon="symbols2.bmp"
+			index="6"
+			desc="Inserts large greek theta symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Lamdba" 
+			icon="symbols2.bmp"
+			index="10"
+			desc="Inserts large greek lambda symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Xi" 
+			icon="symbols2.bmp"
+			index="21"
+			desc="Inserts large greek xi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Pi" 
+			icon="symbols2.bmp"
+			index="14"
+			desc="Inserts large greek pi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Sigma" 
+			icon="symbols2.bmp"
+			index="17"
+			desc="Inserts large greek sigma symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Upsilon" 
+			icon="symbols2.bmp"
+			index="19"
+			desc="Inserts large greek upsilon symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Phi" 
+			icon="symbols2.bmp"
+			index="22"
+			desc="Inserts large greek phi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Psi" 
+			icon="symbols2.bmp"
+			index="22"
+			desc="Inserts large greek psi symbol"
+			parameters="0"
+	/>
+	<lxCommand name="\Omega" 
+			icon="symbols2.bmp"
+			index="20"
+			desc="Inserts large greek omega symbol"
+			parameters="0"
+	/>
+	</lxPackage>
+	<lxPackage name="Math Symbols (Arrows)" 
+		path="" 
+		desc="Arrow and pointer symbols" 
+		>
+	<lxCommand name="\leftarrow" 
+			icon="arrows.bmp"
+			index="0"
+			desc="Inserts simple left arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\rightarrow" 
+			icon="arrows.bmp"
+			index="1"
+			desc="Inserts simple right arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\leftrightarrow" 
+			icon="arrows.bmp"
+			index="2"
+			desc="Inserts simple doubleheaded arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Leftarrow" 
+			icon="arrows.bmp"
+			index="3"
+			desc="Inserts thick left arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Rightarrow" 
+			icon="arrows.bmp"
+			index="4"
+			desc="Inserts simple right arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Leftrightarrow" 
+			icon="arrows.bmp"
+			index="5"
+			desc="Inserts simple doubleheaded arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\uparrow" 
+			icon="arrows.bmp"
+			index="6"
+			desc="Inserts simple up arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\downarrow" 
+			icon="arrows.bmp"
+			index="7"
+			desc="Inserts simple down arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\updownarrow" 
+			icon="arrows.bmp"
+			index="8"
+			desc="Inserts simple vertical doubleheaded arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Uparrow" 
+			icon="arrows.bmp"
+			index="9"
+			desc="Inserts thick up arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Downarrow" 
+			icon="arrows.bmp"
+			index="10"
+			desc="Inserts thick down arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Updownarrow" 
+			icon="arrows.bmp"
+			index="11"
+			desc="Inserts thick doubleheaded arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\leftharpoonup" 
+			icon="arrows.bmp"
+			index="12"
+			parameters="0"
+	/>
+	<lxCommand name="\rightharpoonup" 
+			icon="arrows.bmp"
+			index="13"
+			parameters="0"
+	/>
+	<lxCommand name="\leftrightharpoons" 
+			icon="arrows.bmp"
+			index="14"
+			parameters="0"
+	/>
+	<lxCommand name="\leftharpoondown" 
+			icon="arrows.bmp"
+			index="15"
+			parameters="0"
+	/>
+	<lxCommand name="\rightharpoondown" 
+			icon="arrows.bmp"
+			index="16"
+			parameters="0"
+	/>
+	<lxCommand name="\mapsto" 
+			icon="arrows.bmp"
+			index="17"
+			parameters="0"
+	/>
+	<lxCommand name="\longmapsto" 
+			icon="arrows.bmp"
+			index="18"
+			parameters="0"
+	/>
+	<lxCommand name="\nearrow" 
+			icon="arrows.bmp"
+			index="21"
+			desc="Inserts north east heading arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\searrow" 
+			icon="arrows.bmp"
+			index="22"
+			desc="Inserts south east heading arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\nwarrow" 
+			icon="arrows.bmp"
+			index="24"
+			desc="Inserts north west heading arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\swarrow" 
+			icon="arrows.bmp"
+			index="23"
+			desc="Inserts south west heading arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\longleftarrow" 
+			icon="arrows.bmp"
+			index="25"
+			desc="Inserts long left arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\longrightarrow" 
+			icon="arrows.bmp"
+			index="26"
+			desc="Inserts long right arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\longleftrightarrow" 
+			icon="arrows.bmp"
+			index="27"
+			desc="Inserts long doubleheaded arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Longleftarrow" 
+			icon="arrows.bmp"
+			index="28"
+			desc="Inserts long left arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Longrightarrow" 
+			icon="arrows.bmp"
+			index="29"
+			desc="Inserts long right arrow"
+			parameters="0"
+	/>
+	<lxCommand name="\Longleftrightarrow" 
+			icon="arrows.bmp"
+			index="30"
+			desc="Inserts long doubleheaded arrow"
+			parameters="0"
+	/>
+	</lxPackage>
+	<lxPackage name="Math Symbols (Set operators)" 
+		path="" 
+		desc="Set operators" 
+		>
+	<lxCommand name="\ni" 
+			icon="sets.bmp"
+			index="0"
+			desc="Inserts 'not in set' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\exists" 
+			icon="sets.bmp"
+			index="1"
+			desc="Inserts 'exists' quantifier"
+			parameters="0"
+	/>
+	<lxCommand name="\all" 
+			icon="sets.bmp"
+			index="2"
+			desc="Inserts 'all' quantifier"
+			parameters="0"
+	/>
+	<lxCommand name="\forall" 
+			icon="sets.bmp"
+			index="2"
+			desc="Inserts 'all' quantifier"
+			parameters="0"
+	/>
+	<lxCommand name="\neg" 
+			icon="sets.bmp"
+			index="3"
+			desc="Inserts negation"
+			parameters="0"
+	/>
+	<lxCommand name="\wedge" 
+			icon="sets.bmp"
+			index="4"
+			desc="Inserts 'and' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\vee" 
+			icon="sets.bmp"
+			index="5"
+			desc="Inserts 'or' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\in" 
+			icon="sets.bmp"
+			index="6"
+			desc="Inserts 'in set' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\notin" 
+			icon="sets.bmp"
+			index="7"
+			desc="Inserts 'not in set' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\cup" 
+			icon="sets.bmp"
+			index="8"
+			desc="Inserts 'union' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\cap" 
+			icon="sets.bmp"
+			index="9"
+			desc="Inserts 'intersection' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\bigcup" 
+			icon="sets.bmp"
+			index="10"
+			desc="Inserts big 'union' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\bigcap" 
+			icon="sets.bmp"
+			index="11"
+			desc="Inserts big 'intersection' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\subset" 
+			icon="sets.bmp"
+			index="12"
+			desc="Inserts 'subset' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\supset" 
+			icon="sets.bmp"
+			index="13"
+			desc="Inserts 'superset' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\subseteq" 
+			icon="sets.bmp"
+			index="14"
+			desc="Inserts 'subset or equal' operator"
+			parameters="0"
+	/>
+	<lxCommand name="\supseteq" 
+			icon="sets.bmp"
+			index="15"
+			desc="Inserts 'superset or equal' operator"
+			parameters="0"
+	/>
+	</lxPackage>
+	<lxPackage name="Math Symbols (Miscellaneous)" 
+		path="" 
+		desc="Miscellaneous math operators" 
+		>
+		<lxCommand name="\partial" 
+			icon="mathmisc.bmp"
+			index="0"
+			desc="Inserts 'partial derivation' operator"
+			parameters="0"
+		/>
+		<lxCommand name="\nabla" 
+			icon="mathmisc.bmp"
+			index="1"
+			desc="Inserts nabla operator"
+			parameters="0"
+		/>
+		<lxCommand name="\infty" 
+			icon="mathmisc.bmp"
+			index="2"
+			desc="Inserts infinity symbol"
+			parameters="0"
+		/>
+		<lxCommand name="\Im" 
+			icon="mathmisc.bmp"
+			index="3"
+			desc="Inserts imaginary part operator"
+			parameters="0"
+		/>
+		<lxCommand name="\Re" 
+			icon="mathmisc.bmp"
+			index="4"
+			desc="Inserts real part operator"
+			parameters="0"
+		/>
+		<lxCommand name="\aleph" 
+			icon="mathmisc.bmp"
+			index="5"
+			desc="Inserts ??? operator"
+			parameters="0"
+		/>
+		<lxCommand name="\angle" 
+			icon="mathmisc.bmp"
+			index="6"
+			desc="Inserts angle symbol"
+			parameters="0"
+		/>
+		<lxCommand name="\bot" 
+			icon="mathmisc.bmp"
+			index="7"
+			desc="Inserts perpendicular symbol"
+			parameters="0"
+		/>
+		<lxCommand name="\diamondsuit" 
+			icon="mathmisc.bmp"
+			index="8"
+			desc="Inserts ??? symbol"
+			parameters="0"
+		/>
+		<lxCommand name="\ell" 
+			icon="mathmisc.bmp"
+			index="9"
+			desc="Inserts ??? symbol"
+			parameters="0"
+		/>
+    	<lxCommand name="\eqref"
+			desc="Inserts an equation reference"
+			parameters="1"
+		/>
+		<lxCommand name="\wp" 
+			icon="mathmisc.bmp"
+			index="10"
+			desc="Inserts ??? symbol"
+			parameters="0"
+		/>
+		<lxCommand name="\hbar" 
+			icon="mathmisc.bmp"
+			index="11"
+			desc="Inserts ??? symbol"
+			parameters="0"
+		/>
+		<lxCommand name="\overbrace" 
+			icon="mathmisc.bmp"
+			index="16"
+			desc="Inserts overbrace symbol"
+			parameters="1"
+		/>
+		<lxCommand name="\underbrace" 
+			icon="mathmisc.bmp"
+			index="17"
+			desc="Inserts underbrace symbol"
+			parameters="1"
+		/>
+		<lxCommand name="\imath"/>	
+		<lxCommand name="\jmath"/>
+		<lxCommand name="\mho"/>
+		<lxCommand name="\prime"/>
+		<lxCommand name="\emptyset"/>
+		<lxCommand name="\surd"/>
+		<lxCommand name="\top"/>
+		<lxCommand name="\vdash"/>
+		<lxCommand name="\dashv"/>
+		<lxCommand name="\flat"/>
+		<lxCommand name="\natural"/>
+		<lxCommand name="\sharp"/>
+		<lxCommand name="\|"/>
+		<lxCommand name="\backslash"/>
+		<lxCommand name="\Box"/>
+		<lxCommand name="\Diamond"/>
+		<lxCommand name="\triangle"/>
+		<lxCommand name="\clubsuit"/>
+		<lxCommand name="\heartsuite"/>
+		<lxCommand name="\spadesuit"/>
+		<lxCommand name="\Join"/>
+	</lxPackage>
+	<lxPackage name="Math Symbols (Accents)" 
+		path="" 
+		desc="Math accents" 
+		>
+	<lxCommand name="\hat" 
+			icon="accents.bmp"
+			index="0"
+			parameters="1"
+	/>
+	<lxCommand name="\check" 
+			icon="accents.bmp"
+			index="1"
+			parameters="1"
+	/>
+	<lxCommand name="\breve" 
+			icon="accents.bmp"
+			index="2"
+			parameters="1"
+	/>
+	<lxCommand name="\acute" 
+			icon="accents.bmp"
+			index="3"
+			parameters="1"
+	/>
+	<lxCommand name="\grave" 
+			icon="accents.bmp"
+			index="4"
+			parameters="1"
+	/>
+	<lxCommand name="\tilde" 
+			icon="accents.bmp"
+			index="5"
+			parameters="1"
+	/>
+	<lxCommand name="\bar" 
+			icon="accents.bmp"
+			index="6"
+			parameters="1"
+	/>
+	<lxCommand name="\vec" 
+			icon="accents.bmp"
+			index="7"
+			parameters="1"
+	/>
+	<lxCommand name="\dot" 
+			icon="accents.bmp"
+			index="8"
+			parameters="1"
+	/>
+	<lxCommand name="\ddot" 
+			icon="accents.bmp"
+			index="9"
+			parameters="1"
+	/>
+	</lxPackage>
+	<lxPackage name="Math Symbols (Binary Operators)" 
+		path="" 
+		desc="Binary operators" 
+		>
+		<lxCommand name="\leq" 
+			icon="binops.bmp"
+			index="0"
+			parameters="0"
+		/>
+		<lxCommand name="\geq" 
+			icon="binops.bmp"
+			index="1"
+			parameters="0"
+		/>
+		<lxCommand name="\prec" 
+			icon="binops.bmp"
+			index="2"
+			parameters="0"
+		/>
+		<lxCommand name="\succ" 
+			icon="binops.bmp"
+			index="3"
+			parameters="0"
+		/>
+		<lxCommand name="\lhd" 
+			icon="binops.bmp"
+			index="4"
+			parameters="0"
+		/>
+		<lxCommand name="\rhd" 
+			icon="binops.bmp"
+			index="5"
+			parameters="0"
+		/>
+		<lxCommand name="\neq" 
+			icon="binops.bmp"
+			index="6"
+			parameters="0"
+		/>
+		<lxCommand name="\equiv" 
+			icon="binops.bmp"
+			index="7"
+			parameters="0"
+		/>
+		<lxCommand name="\approx" 
+			icon="binops.bmp"
+			index="8"
+			parameters="0"
+		/>
+		<lxCommand name="\cong" 
+			icon="binops.bmp"
+			index="9"
+			parameters="0"
+		/>
+		<lxCommand name="\propto" 
+			icon="binops.bmp"
+			index="10"
+			parameters="0"
+	/>
+	</lxPackage>
+	<lxPackage name="Math Symbols (function names)" 
+		path="" 
+		desc="function names" 
+		>		
+		<lxCommand name="\arccos"/>	
+		<lxCommand name="\arcsin"/>	
+		<lxCommand name="\arctan"/>	
+		<lxCommand name="\arg"/>	
+		<lxCommand name="\cos"/>	
+		<lxCommand name="\cosh"/>	
+		<lxCommand name="\cot"/>	
+		<lxCommand name="\coth"/>	
+		<lxCommand name="\csc"/>	
+		<lxCommand name="\deg"/>	
+		<lxCommand name="\det"/>	
+		<lxCommand name="\dim"/>
+		<lxCommand name="\exp"/>	
+		<lxCommand name="\gcd"/>	
+		<lxCommand name="\hom"/>	
+		<lxCommand name="\inf"/>
+		<lxCommand name="\ker"/>	
+		<lxCommand name="\lg"/>	
+		<lxCommand name="\lim"/>	
+		<lxCommand name="\liminf"/>
+		<lxCommand name="\limsup"/>	
+		<lxCommand name="\ln"/>	
+		<lxCommand name="\log"/>	
+		<lxCommand name="\max"/>
+		<lxCommand name="\min"/>	
+		<lxCommand name="\Pr"/>	
+		<lxCommand name="\sec"/>	
+		<lxCommand name="\sin"/>
+		<lxCommand name="\sinh"/>	
+		<lxCommand name="\sup"/>	
+		<lxCommand name="\tan"/>	
+		<lxCommand name="\tanh"/>
+	</lxPackage>
+</lxCollection>
+<!-- $Id$ -->
+<!-- 
+	$Log: math.xml,v $
+	Revision 1.12  2007/04/20 11:59:21  niteria
+	no message
+	
+	Revision 1.11  2006/04/07 19:29:30  owieland
+	- Added function names
+	- Extended misc symbols
+	
+	Revision 1.10  2006/03/28 21:17:43  owieland
+	Added/changed some  entries
+	
+	Revision 1.9  2006/03/28 00:45:59  owieland
+	- Added some missing commands and env#s
+	- Removed some duplicate entries
+	
+	Revision 1.8  2006/03/28 00:18:33  owieland
+	Added oint symbol
+	
+	Revision 1.7  2006/03/28 00:05:36  owieland
+	Added binary operators
+	
+	Revision 1.6  2006/03/27 23:56:17  owieland
+	Added accents and braces
+	
+	Revision 1.5  2006/03/27 23:31:57  owieland
+	Added misc math symbols
+	
+	Revision 1.4  2006/03/27 23:08:47  owieland
+	Extended set operators
+	
+	Revision 1.3  2006/03/27 22:47:23  owieland
+	Added set operators
+	
+	Revision 1.2  2006/03/27 21:39:19  owieland
+	Added large greek symbols and arrows
+	
+	Revision 1.1  2006/03/27 19:56:46  owieland
+	Added math commands, env's and symbols (some icons are missing yet)
+	
+-->

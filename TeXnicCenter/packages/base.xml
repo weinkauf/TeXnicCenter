@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<lxCollection version="1" xmlns:txclxp="http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd">
+	<lxPackage name="slides" path="C:\texmf\tex\latex\base\slides.cls" desc="1997/08/15 v2.3z&#xA;               Standard LaTeX document class" class="TRUE">
+		<lxCommand name="\small"/>
+		<lxCommand name="\large"/>
+		<lxCommand name="\rmdefault"/>
+		<lxCommand name="\descriptionlabel*" parameters="1"/>
+		<lxCommand name="\huge"/>
+		<lxCommand name="\ttdefault"/>
+		<lxEnvironment name="abstract" expafter="}&#xA;&#xA;\end{abstract}" expbefore="\begin{"/>
+		<lxEnvironment name="quote" expafter="}&#xA;&#xA;\end{quote}" expbefore="\begin{"/>
+		<lxEnvironment name="quotation" expafter="}&#xA;&#xA;\end{quotation}" expbefore="\begin{"/>
+		<lxCommand name="\tiny"/>
+		<lxCommand name="\maketitle"/>
+		<lxCommand name="\Large"/>
+		<lxCommand name="\bfdefault"/>
+		<lxEnvironment name="verse" expafter="}&#xA;&#xA;\end{verse}" expbefore="\begin{"/>
+		<lxCommand name="\sfdefault"/>
+		<lxEnvironment name="titlepage" expafter="}&#xA;&#xA;\end{titlepage}" expbefore="\begin{"/>
+		<lxCommand name="\sldefault"/>
+		<lxCommand name="\LARGE"/>
+		<lxCommand name="\normalsize"/>
+		<lxCommand name="\footnotesize"/>
+		<lxCommand name="\scriptsize"/>
+		<lxCommand name="\today"/>
+		<lxCommand name="\author" parameters="1"/>
+		<lxCommand name="\title" parameters="1"/>
+		<lxCommand name="\thanks" parameters="1"/>
+		<lxCommand name="\date" parameters="1"/>
+	</lxPackage>
+	<lxPackage name="letter" path="C:\texmf\tex\latex\base\letter.cls" desc="1999/04/29 v1.2z&#xA;               Standard LaTeX document class" class="TRUE">
+		<lxCommand name="\pagename*"/>
+		<lxCommand name="\startbreaks*"/>
+		<lxCommand name="\headtoname*"/>
+		<lxCommand name="\descriptionlabel*" parameters="1"/>
+		<lxCommand name="\stopbreaks*"/>
+		<lxCommand name="\toaddress"/>
+		<lxEnvironment name="letter" parameters="1" expafter="}{}&#xA;&#xA;\end{letter}" expbefore="\begin{"/>
+		<lxCommand name="\mlabel*" parameters="2"/>
+		<lxEnvironment name="quote" expafter="}&#xA;&#xA;\end{quote}" expbefore="\begin{"/>
+		<lxEnvironment name="description" expafter="}&#xA;&#xA;\end{description}" expbefore="\begin{"/>
+		<lxCommand name="\ccname*"/>
+		<lxCommand name="\makelabels*"/>
+		<lxCommand name="\signature*" parameters="1"/>
+		<lxCommand name="\par"/>
+		<lxCommand name="\today*"/>
+		<lxCommand name="\enclname*"/>
+		<lxCommand name="\returnaddress*"/>
+		<lxEnvironment name="verse" expafter="}&#xA;&#xA;\end{verse}" expbefore="\begin{"/>
+		<lxCommand name="\ps*"/>
+		<lxCommand name="\startlabels*"/>
+		<lxCommand name="\fromname"/>
+		<lxCommand name="\fromlocation"/>
+		<lxCommand name="\fromsig"/>
+		<lxCommand name="\stopletter*"/>
+		<lxCommand name="\cc*" parameters="1"/>
+		<lxCommand name="\location*" parameters="1"/>
+		<lxCommand name="\address*" parameters="1"/>
+		<lxCommand name="\name*" parameters="1"/>
+		<lxCommand name="\closing" parameters="1"/>
+		<lxCommand name="\opening*" parameters="1"/>
+		<lxCommand name="\telephone*" parameters="1"/>
+		<lxCommand name="\fromaddress"/>
+		<lxCommand name="\encl*" parameters="1"/>
+		<lxCommand name="\toname"/>
+		<lxCommand name="\telephonenum"/>
+		<lxOption name="a4paper"/>
+		<lxOption name="a5paper"/>
+		<lxOption name="b5paper"/>
+		<lxOption name="letterpaper"/>
+		<lxOption name="legalpaper"/>
+		<lxOption name="executivepaper"/>
+		<lxOption name="landscape"/>
+		<lxOption name="10pt"/>
+		<lxOption name="11pt"/>
+		<lxOption name="12pt"/>
+		<lxOption name="twoside"/>
+		<lxOption name="oneside"/>
+		<lxOption name="draft"/>
+		<lxOption name="final"/>
+		<lxOption name="leqno"/>
+	</lxPackage>
+	<lxPackage name="exscale" path="C:\texmf\tex\latex\base\exscale.sty" desc="1997/06/16 v2.1g&#xA;                         Standard LaTeX package exscale">
+		<lxCommand name="\Bigg"/>
+		<lxCommand name="\big"/>
+		<lxCommand name="\bigg"/>
+		<lxCommand name="\Big"/>
+	</lxPackage>
+	<lxPackage name="autoerr" path="C:\texmf\tex\latex\base\autoerr.sty">
+		<lxCommand name="\errmessage"/>
+		<lxCommand name="\typeout"/>
+		<lxCommand name="\MessageBreak"/>
+	</lxPackage>
+	<lxPackage name="showidx" path="C:\texmf\tex\latex\base\showidx.sty" desc="2000/03/29 v1.0m Standard LaTeX package">
+		<lxCommand name="\index"/>
+		<lxCommand name="\protect"/>
+	</lxPackage>
+	<lxPackage name="makeidx" path="C:\texmf\tex\latex\base\makeidx.sty" desc="2000/03/29 v1.0m Standard LaTeX package">
+		<lxCommand name="\printindex"/>
+		<lxCommand name="\see*" parameters="2"/>
+	</lxPackage>
+	<lxPackage name="fontenc" path="C:\texmf\tex\latex\base\fontenc.sty" desc="2004/02/22 v1.99f&#xA;                 Standard LaTeX package">
+		<lxCommand name="\noexpand"/>
+		<lxCommand name="\expandafter"/>
+	</lxPackage>
+	<lxPackage name="autoout1" path="C:\texmf\tex\latex\base\autoout1.sty"/>
+	<lxPackage name="tracefnt" path="C:\texmf\tex\latex\base\tracefnt.sty" desc="1997/05/29 v3.0j  Standard LaTeX package (font tracing)">
+		<lxCommand name="\fontsubfuzz"/>
+		<lxOption name="errorshow"/>
+		<lxOption name="warningshow"/>
+		<lxOption name="infoshow"/>
+		<lxOption name="loading"/>
+		<lxOption name="debugshow"/>
+	</lxPackage>
+	<lxPackage name="ltnews" path="C:\texmf\tex\latex\base\ltnews.cls" desc="2004/02/28 v1.01  Standard LaTeX class" class="TRUE">
+		<lxCommand name="\phvTeX"/>
+		<lxCommand name="\pplTeX"/>
+		<lxCommand name="\AW"/>
+		<lxCommand name="\NFSS"/>
+		<lxCommand name="\class*" parameters="1"/>
+		<lxCommand name="\SLiTeX"/>
+		<lxCommand name="\ctanhttp"/>
+		<lxCommand name="\latex" parameters="1"/>
+		<lxCommand name="\babel"/>
+		<lxEnvironment name="latexonly" expafter="}&#xA;&#xA;\end{latexonly}" expbefore="\begin{"/>
+		<lxCommand name="\file*" parameters="1"/>
+		<lxCommand name="\cs" parameters="1"/>
+		<lxCommand name="\PSNFSS"/>
+		<lxCommand name="\ctan"/>
+		<lxCommand name="\issuename"/>
+		<lxCommand name="\publicationmonth"/>
+		<lxCommand name="\cmssTeX"/>
+		<lxCommand name="\publicationyear"/>
+		<lxCommand name="\package*" parameters="1"/>
+		<lxCommand name="\AmS"/>
+		<lxCommand name="\LaTeXNews"/>
+		<lxCommand name="\excludecomment" parameters="1"/>
+		<lxCommand name="\AmSLaTeX"/>
+		<lxCommand name="\url*" parameters="1"/>
+		<lxCommand name="\ugqTeX"/>
+		<lxCommand name="\raisefirstsection"/>
+		<lxCommand name="\publicationissue"/>
+		<lxEnvironment name="citations" expafter="}&#xA;&#xA;\end{citations}" expbefore="\begin{"/>
+		<lxCommand name="\email*" parameters="1"/>
+		<lxCommand name="\email"/>
+		<lxCommand name="\putTeX"/>
+		<lxCommand name="\indicia"/>
+		<lxOption name="a4paper"/>
+		<lxOption name="a5paper"/>
+		<lxOption name="b5paper"/>
+		<lxOption name="letterpaper"/>
+		<lxOption name="legalpaper"/>
+		<lxOption name="executivepaper"/>
+		<lxOption name="landscape"/>
+		<lxOption name="twoside"/>
+		<lxOption name="titlepage"/>
+		<lxOption name="onecolumn"/>
+		<lxOption name="lw35fonts"/>
+		<lxOption name="type1fonts"/>
+		<lxReqPackage name="url"/>
+		<lxReqPackage name="html"/>
+	</lxPackage>
+	<lxPackage name="ifthen" path="C:\texmf\tex\latex\base\ifthen.sty" desc="2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)">
+		<lxCommand name="\provideboolean"/>
+		<lxCommand name="\boolean"/>
+		<lxCommand name="\setboolean"/>
+		<lxCommand name="\whiledo"/>
+		<lxCommand name="\value" parameters="1"/>
+		<lxCommand name="\ifthenelse" parameters="3"/>
+		<lxCommand name="\newboolean"/>
+	</lxPackage>
+	<lxPackage name="shortvrb" path="C:\texmf\tex\latex\base\shortvrb.sty" desc="2004/02/09 v2.1b&#xA;   Standard LaTeX documentation package (FMi)">
+		<lxCommand name="\do"/>
+		<lxCommand name="\DeleteShortVerb"/>
+		<lxCommand name="\MakeShortVerb"/>
+	</lxPackage>
+	<lxPackage name="ltxguide" path="C:\texmf\tex\latex\base\ltxguide.cls" desc="2001/05/28 Standard LaTeX class" class="TRUE">
+		<lxCommand name="\NEWdescription" parameters="1"/>
+		<lxCommand name="\SLiTeX"/>
+		<lxCommand name="\AmSLaTeX"/>
+		<lxCommand name="\cyrguide"/>
+		<lxCommand name="\verbatim"/>
+		<lxCommand name="\cfgguide"/>
+		<lxCommand name="\usrguide"/>
+		<lxCommand name="\fntguide"/>
+		<lxCommand name="\sourcecode"/>
+		<lxEnvironment name="decl" parameters="1" expafter="}{}&#xA;&#xA;\end{decl}" expbefore="\begin{"/>
+		<lxEnvironment name="verbatim" parameters="0" expafter="}&#xA;&#xA;\end{verbatim}" expbefore="\begin{"/>
+		<lxCommand name="\clsguide"/>
+		<lxCommand name="\modguide"/>
+		<lxCommand name="\LaTeXWcomp"/>
+		<lxCommand name="\ie"/>
+		<lxCommand name="\ctan"/>
+		<lxCommand name="\URL" parameters="1"/>
+		<lxCommand name="\LaTeXbook"/>
+		<lxCommand name="\NEWfeature" parameters="1"/>
+		<lxCommand name="\oarg" parameters="1"/>
+		<lxCommand name="\LaTeXGcomp"/>
+		<lxCommand name="\eg"/>
+		<lxCommand name="\babel"/>
+		<lxCommand name="\AmS"/>
+		<lxCommand name="\NFSS"/>
+		<lxCommand name="\LaTeXcomp"/>
+		<lxReqPackage name="shortvrb"/>
+	</lxPackage>
+	<lxPackage name="alltt" path="C:\texmf\tex\latex\base\alltt.sty" desc="1997/06/16 v2.0g defines alltt environment">
+		<lxCommand name="\par"/>
+		<lxEnvironment name="alltt" expafter="}&#xA;&#xA;\end{alltt}" expbefore="\begin{"/>
+	</lxPackage>
+	<lxPackage name="inputenc" path="C:\texmf\tex\latex\base\inputenc.sty" desc="2004/02/05 v1.0d Input encoding file">
+		<lxCommand name="\inputencoding"/>
+		<lxCommand name="\IeC"/>
+		<lxCommand name="\def"/>
+		<lxCommand name="\DeclareInputMath"/>
+		<lxCommand name="\DeclareInputText"/>
+	</lxPackage>
+	<lxPackage name="autopict" path="C:\texmf\tex\latex\base\autopict.sty">
+		<lxCommand name="\qbezier" parameters="2"/>
+	</lxPackage>
+</lxCollection>

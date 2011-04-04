@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<lxCollection version="1" xmlns:txclxp="http://schemas.ToolsCenter.org/TeXnicCenter/LaTeXCommands.xsd">
+	<lxPackage name="LaTeX" 
+		path="" 
+		desc="TeX/LaTeX native commands (incomplete!)" 
+		class="TRUE">		
+		<lxCommand name="usepackage" parameters="1" desc="Includes additional packages"/>
+		<lxCommand name="documentclass" 
+			parameters="1" 
+			desc="Defines the document class (e. g. article)"
+		/>
+		<lxCommand name="\input" 
+			desc="Includes additional document files"
+			parameters="1"
+		/>		
+		<lxCommand name="\include" 
+			desc="Includes additional document files"
+			parameters="1"
+		/>
+		<lxCommand name="\newcommand" 
+			desc="Declares a new command"
+			parameters="2"
+		/>						
+		<lxCommand name="\renewcommand" 
+			desc="Redefines an existing command"
+			parameters="2"
+		/>						
+		<lxCommand name="\newenvironment" 
+			desc="Declares a new environment"
+			parameters="3"
+		/>
+		<lxCommand name="\renewenvironment" 
+			desc="Redefines an existing environment"
+			parameters="3"
+		/>
+				
+		<lxEnvironment name="tabular" 
+			parameters="1" 
+			desc="Provides a tabular environment"
+			icon="format.bmp"
+			index="10"
+			expafter="}{ccc}&#xA;&#xA;\end{tabular}" 
+			expbefore="\begin{"/>
+		<lxEnvironment name="table" 
+			parameters="1" 
+			desc="Provides a table environment"
+			icon="format.bmp"
+			index="10"
+			expafter="}%&#xA;\begin{tabular}{lcr}&#xA;&#xA;\end{tabular}&#xA;\caption{}&#xA;\label{}&#xA;\end{table}" 
+			expbefore="\begin{"/>
+		<lxEnvironment name="figure" 
+			parameters="1" 
+			desc="Provides a figure environment"
+			icon="format.bmp"
+			index="9"
+			expafter="}%&#xA;\includegraphics[width=\columnwidth]{filename}%&#xA;\caption{}%&#xA;\label{}%&#xA;\end{figure}" 
+			expbefore="\begin{"/>
+
+		<lxCommand name="\caption" parameters="1"/>
+		<lxCommand name="\label" parameters="1"/>	
+		<lxCommand name="\ref" parameters="1"/>
+    		<lxCommand name="\autoref" parameters="1"/>
+		<lxCommand name="\pageref" parameters="1"/>
+		<lxCommand name="\autopageref" parameters="1"/>
+		<lxCommand name="\nameref" parameters="1"/>
+		<lxCommand name="\hyperref[]" parameters="1"/>
+		<lxCommand name="\cite" parameters="1"/>	
+		<lxCommand name="\nocite" parameters="1"/>	
+					
+		<lxEnvironment name="document"
+			desc="Starts a new document"
+			expafter="}&#xA;&#xA;\end{document}" 
+			expbefore="\begin{"
+		/>
+		
+		<lxEnvironment name="samepage"
+			expafter="}&#xA;&#xA;\end{samepage}" 
+			expbefore="\begin{"
+		/>
+		
+		<lxCommand name="\pagestyle" parameters="1"/>
+		<lxCommand name="\thispagestyle" parameters="1"/>
+		<lxCommand name="\pagenumbering" parameters="1"/>
+		<lxCommand name="\vspace" parameters="1"/>
+		<lxCommand name="\hspace" parameters="1"/>
+		<lxCommand name="\newline" parameters="0"/>
+		<lxCommand name="\linebreak" parameters="0"/>
+		<lxCommand name="\nolinebreak" parameters="0"/>
+		<lxCommand name="\newpage" parameters="0"/>
+		<lxCommand name="\clearpage" parameters="0"/>
+		<lxCommand name="\cleardoublepage" parameters="0"/>
+		<lxCommand name="\setcounter" parameters="2"/>		
+
+		<lxCommand name="\part" 
+			desc="Starts a new part (book only)"
+			icon="format.bmp"
+			index="6"
+			parameters="1"
+		/>
+		<lxCommand name="\chapter" 
+			desc="Starts a new chapter"
+			icon="format.bmp"
+			index="6"
+			parameters="1"
+		/>
+		<lxCommand name="\section" 
+			desc="Starts a new section"
+			icon="format.bmp"
+			index="6"
+			parameters="1"
+		/>
+		<lxCommand name="\subsection" 
+			desc="Starts a new subsection"
+			icon="format.bmp"
+			index="6"
+			parameters="1"
+		/>
+		<lxCommand name="\subsubsection" 
+			desc="Starts a new subsubsection"
+			icon="format.bmp"
+			index="6"
+			parameters="1"
+		/>
+		
+		<lxCommand name="\textbf" 
+			desc="Change to bold font"
+			parameters="1"
+			icon="format.bmp"
+			index="1"
+		/>
+		<lxCommand name="\textit" 
+			desc="Change to italic font"
+			parameters="1"
+			icon="format.bmp"
+			index="2"
+		/>
+		<lxCommand name="\textsl" 
+			desc="Change to slanted font"
+			parameters="1"
+			icon="format.bmp"
+			index="3"
+		/>
+		<lxCommand name="\texttt" 
+			desc="Change to typewriter font"
+			parameters="1"
+			icon="format.bmp"
+			index="4"
+		/>
+		<lxCommand name="\textsc" 
+			desc="Change to small capitals"
+			parameters="1"
+			icon="format.bmp"
+			index="5"
+		/>
+		<lxCommand name="\textsf" 
+			desc="Change to sans serif font"
+			parameters="1"
+			icon="format.bmp"
+			index="99"
+		/>
+		<lxCommand name="\emph" 
+			desc="Emphasize text"
+			icon="format.bmp"
+			index="0"
+			parameters="1"
+		/>
+		
+		<lxEnvironment name="enumerate" 
+			parameters="1" 
+			desc="Defines an environment for an enumeration (numbered itemization)"
+			icon="format.bmp"
+			index="8"
+			expafter="}&#xA;	\item &#xA;\end{enumerate}" 
+			expbefore="\begin{"/>
+		<lxEnvironment name="itemize" 
+			parameters="0" 
+			desc="Defines an environment for an itemization"
+			icon="format.bmp"
+			index="7"
+			expafter="}&#xA;	\item &#xA;\end{itemize}" 
+			expbefore="\begin{"/>
+		<lxEnvironment name="description" 
+			parameters="0" 
+			desc="Defines an environment for a description list"
+			icon="format.bmp"
+			index="8"
+			expafter="}&#xA;	\item[myDesc] &#xA;\end{description}" 
+			expbefore="\begin{"/>
+		<lxCommand name="\item"/>
+		<lxCommand name="\subitem"/>
+			
+		<lxEnvironment name="flushleft" 
+			parameters="0" 
+			desc="Defines an environment with left aligned text"
+			icon="format.bmp"
+			index="26"
+			expafter="}&#xA;	&#xA;\end{flushleft}" 
+			expbefore="\begin{"/>		
+		<lxEnvironment name="flushright" 
+			parameters="0" 
+			desc="Defines an environment with right aligned text"
+			icon="format.bmp"
+			index="28"
+			expafter="}&#xA;	&#xA;\end{flushright}" 
+			expbefore="\begin{"/>			
+		<lxEnvironment name="center" 
+			parameters="0" 
+			desc="Defines an environment with centered text"
+			icon="format.bmp"
+			index="27"
+			expafter="}&#xA;	&#xA;\end{center}" 
+			expbefore="\begin{"/>
+			
+		<lxCommand name="\footnote" 
+			desc="Inserts a footnote"
+			parameters="1"
+		/>
+		<lxCommand name="\marginpar" 
+			desc="Inserts a margin paragraph"
+			parameters="1"
+		/>
+		
+		<lxEnvironment name="quotation" 
+			expafter="}&#xA;&#xA;\end{quotation}" 
+			expbefore="\begin{"/>
+		
+		<lxCommand name="\bibliography" 
+			desc="Includes one or more bibliography databases"
+			icon="format.bmp"
+			index="15"
+			parameters="1"
+		/>
+		<lxCommand name="\bibliographystyle" 
+			desc="Sets the style of the bibliography"
+			icon="format.bmp"
+			index="15"
+			parameters="1"
+		/>
+		
+		<lxCommand name="\listoftables"/>
+		<lxCommand name="\listoffigures"/>
+		<lxCommand name="\tableofcontents"/>
+		<lxCommand name="\addcontentsline" parameters="3"/>
+		<lxCommand name="\addtocontents" parameters="2"/>
+		<lxCommand name="\appendix"/>
+		<lxCommand name="\maketitle"/>
+		<lxCommand name="\makeindex"/>
+		<lxCommand name="\index" parameters="1"/>
+		<lxCommand name="\glossaryentry" parameters="2"/>
+		<lxCommand name="\makeglossary"/>
+		
+		<lxCommand name="\mbox" parameters="1"/>
+		<lxCommand name="\makebox" parameters="1"/>
+		<lxCommand name="\savebox" parameters="1"/>
+		<lxCommand name="\usebox" parameters="1"/>
+		<lxCommand name="\raisebox" parameters="2"/>
+		<lxCommand name="\parbox" parameters="2"/>
+		<lxCommand name="\hline"/>
+		<lxCommand name="\hfill"/>
+		<lxEnvironment name="minipage" 
+			expafter="}&#xA;&#xA;\end{minipage}" 
+			expbefore="\begin{"/>
+		<lxCommand name="\hyphenation" parameters="1"/>
+	</lxPackage>		
+	<lxPackage name="BibTeX" 
+		path="" 
+		desc="BibTeX entry types (incomplete)">		
+		<lxEnvironment name="@Book" 
+			desc="BibTeX entry for a published book"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title = {},&#xA;	year = {},&#xA;	publisher = {}&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@Article" 
+			desc="BibTeX entry for an article in a journal or magazine"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title = {},&#xA;	year  ={},&#xA;	journal = {}&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@Booklet" 
+			desc="BibTeX entry for a book without publisher"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title = {},&#xA;	year = {},&#xA;	howpublished = {}&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@InBook" 
+			desc="BibTeX entry for a book excerpt (e. g. an article within a book)"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title = {},&#xA;	year = {},&#xA;	pages = {},&#xA;	publisher = {}&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@Inproceedings" 
+			desc="BibTeX entry for an article in a conference transscript"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	pages = {},&#xA;	booktitle = {}&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@Manual" 
+			desc="BibTeX entry for a technical documentation"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@Misc" 
+			desc="BibTeX entry for any other citation"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	howpublished = {}&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@PhDThesis" 
+			desc="BibTeX entry for a PhD thesis"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	school = {}&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@Mastersthesis" 
+			desc="BibTeX entry for a master thesis"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	school = {}&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@Proceedings" 
+			desc="BibTeX entry for an article in a conference transscript"
+			expafter="{(!!Provide a unique key here!!),&#xA;	editor = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	}"
+			expbefore=""/>
+		<lxEnvironment name="@TechReport" 
+			desc="BibTeX entry for a report of a school or research institute"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	year = {},&#xA;	institution = {}&#xA;}"
+			expbefore=""/>
+		<lxEnvironment name="@Unpublished" 
+			desc="BibTeX entry for an unpublished paper"
+			expafter="{(!!Provide a unique key here!!),&#xA;	author = {},&#xA;	title  ={},&#xA;	note = {},&#xA;	year = {}&#xA;}"
+			expbefore=""/>
+	</lxPackage>
+</lxCollection>
+<!-- $Id$ -->
+<!-- 
+	$Log: TeX.xml,v $
+	Revision 1.17  2006/08/24 10:57:16  niteria
+	Fixed Bug 1543877: Wrong Auto-Complete with \figure
+	
+	Revision 1.16  2006/08/11 07:58:39  svenwiegand
+	Replaced 'enumeration' entry in package TeX.xml by 'enumerate' what is really meant.
+	
+	Revision 1.15  2006/06/05 01:47:31  niteria
+	Added renewcommand and renewenvironment
+	
+	Revision 1.14  2006/04/19 19:21:34  owieland
+	Added bibtex type "mastersthesis"
+	
+	Revision 1.13  2006/03/28 21:17:43  owieland
+	Added/changed some  entries
+	
+	Revision 1.12  2006/03/28 00:54:57  owieland
+	Changed icon for textsf
+	
+	Revision 1.11  2006/03/28 00:45:59  owieland
+	- Added some missing commands and env#s
+	- Removed some duplicate entries
+	
+	Revision 1.10  2006/03/27 19:57:36  owieland
+	Removed equation (part of math.xml)
+	
+	Revision 1.9  2006/03/27 05:24:32  niteria
+	Added equation
+	
+	Revision 1.8  2006/03/26 22:47:39  owieland
+	Added additional commands
+	
+	Revision 1.7  2006/03/26 22:29:33  owieland
+	- Added some icons and commands
+	- Moved redundant commands and envs of standard doc classes to TeX.xml
+	- Removed empty packages
+	
+	Revision 1.6  2006/03/24 22:56:23  owieland
+	Added opportunity to decorate each command/environment with an icon
+	
+	Revision 1.5  2006/03/24 14:28:56  owieland
+	Added some common commands and envs
+	
+	Revision 1.4  2005/07/04 23:01:51  owieland
+	Fixed \\(re)newcommand parameters
+	
+	Revision 1.3  2005/06/24 00:36:43  owieland
+	Added/fixed some BibTeX entry types
+	
+	Revision 1.2  2005/06/24 00:23:52  owieland
+	Added some BibTeX entry types and some commands
+	
+	Revision 1.1  2005/06/23 20:15:39  owieland
+	Read packages from subdirectory instead of single file
+	 
+-->

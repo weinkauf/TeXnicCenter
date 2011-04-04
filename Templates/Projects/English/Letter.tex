@@ -1,0 +1,129 @@
+%description: Basic Letter in English
+%% Based on a TeXnicCenter-Template by Tino Weinkauf.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% HEADER
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[addressstd,a4paper,10pt]{dinbrief}
+% Alternative Settings:
+%		a4paper / letter
+%   addressstd / addresshigh
+
+
+%% Language %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[USenglish]{babel} %francais, polish, spanish, ...
+\usepackage[T1]{fontenc}
+\usepackage[ansinew]{inputenc}
+
+\usepackage{lmodern} %Type1-font for non-english texts and characters
+
+
+%% Packages for Graphics & Figures %%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx} %%For loading graphic files
+%\usepackage{subfig} %%Subfigures inside a figure
+%\usepackage{pst-all} %%PSTricks - not useable with pdfLaTeX
+
+%% Please note:
+%% Images can be included using \includegraphics{Dateiname}
+%% resp. using the dialog in the Insert menu.
+%% 
+%% The mode "LaTeX => PDF" allows the following formats:
+%%   .jpg  .png  .pdf  .mps
+%% 
+%% The modes "LaTeX => DVI", "LaTeX => PS" und "LaTeX => PS => PDF"
+%% allow the following formats:
+%%   .eps  .ps  .bmp  .pict  .pntg
+
+
+%% Commands for changing the Standardtexts %%%%%%%%%%%%%%%%%%
+\renewcommand{\ccname}{Copies}
+\renewcommand{\phonemsg}{Telephone}
+\renewcommand{\signmsgold}{Our signs}
+\renewcommand{\signmsgnew}{Our signs, our mail from}
+\renewcommand{\yourmailmsg}{Your signs, Your mail from}
+%\renewcommand{\psname}{PS}
+%\renewcommand{\enclname}{\tt Anlage(n)}
+
+
+%% Address of the Sender %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\address{Firstname Lastname\\
+Street No 1\\
+11111 Town}
+
+\place{Town}
+\phone{030}{11111111}
+\signature{Firstname Lastname}
+
+%\nobackaddressrule
+\backaddress{Firstname Lastname, Street No. 1, 11111 Town}
+
+
+%% Text at Bottom of Letter %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bottomtext{%
+  \makebox[\textwidth][c]{\small\scshape
+   Account Information $\cdot$ Web Address $\cdot$ Any Other Information
+  }
+}
+
+
+%% Other %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\date{\today} %%If commented, the current date is used in a short form
+
+%% Labels %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\labelstyle{plain} %%Type of Labels: only plain is possible
+%\makelabels %%Generates Labels
+
+%% Styles %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\nowindowrules %%No rules around the address of the recipient
+%\nowindowtics %%No tics
+\centeraddress %%Vertical centering of the address of the recipient
+\pagestyle{empty} %%No heads and feets
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT - LETTER(S)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%% Start of the Letter %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{letter}{Name Name\\ %%Address of the recipient
+               Street No. 2\\[\medskipamount]
+               11111 Town}
+
+\yourmail{A} %%Your signs
+\sign{B} %%Our signs
+
+%\writer{} %%Name of the person who wrote this (only if different from signature)
+
+\subject{\bf Subject of the letter}
+
+\opening{Dear Mr. Name,}
+
+I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter.
+
+I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter. I am writing you a letter.
+
+\closing{Sincerely, yours}
+
+%\ps{PostScriptum. Whatever you forgot to say before.} %%PostScriptum
+
+%\encl[Enclosings]{Text about enclosings} %%Enclosings
+
+\end{letter}
+%% End of the Letter %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Start of the second Letter %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{letter}{Name Name...
+%%
+%% You may start another letter here.
+%% For this, copy the commands of the first letter
+%% and change them to your needs.
+%%
+%%\end{letter}
+%% End of the second Letter %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}

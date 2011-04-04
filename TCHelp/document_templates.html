@@ -1,0 +1,115 @@
+<html>
+<head>
+<title>Document Templates</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h2">Document Templates</td>
+</tr>
+</table>
+</p>
+
+<p>TeXnicCenter provides a powerfull feature called document templates.</p>
+
+<p>A document template is a simple file or a wizard, that generates a
+frame for a new document. When using document frames over and over again
+(i.e. a letter), then using document templates will be a big help.</p>
+
+<p>TeXnicCenter knows those types of document templates:</p>
+
+<ul>
+   <li><a href="templates_files.html">File based document templates</a> and</li>
+   <li><a href="templates_wizards.html">Document wizards</a>.</li>
+</ul>
+
+<p>You can specify several directories, that are containing document
+templates in the <a href="options_page_paths.html">path options</a>.
+The directories specified there should contain sub directories,
+which should represent the categories of the templates,
+located in those sub folders.</p>
+
+<p>When <a href="project_create.html">a new project</a> is created,
+TeXnicCenter provides the document templates found on the left side of the
+dialog '<var>New Project</var>'.</p>
+
+<p>
+<div align="center"><img src="images/project_new.gif" width="394" height="288" border="0" alt=""></div>
+</p>
+
+<p>The tabs are representing the sub folders of the directories, specified
+in the <a href="options_page_paths.html">path options</a>. If one or more
+directories contain the same sub folders, TeXnicCenter will displaye the
+files found in those sub folders together in one merged list.</p>
+
+<p><b>Example:</b></p>
+
+<p>Lets assume that in the <a href="options_page_paths.html">path options</a>
+two template directories were specified:</p>
+
+<p>
+<ol start="1" type="1">
+   <li>A local directory that keeps private templates and</li>
+   <li>a directory on the companies network, that contains company
+   specific templates.</li>
+</ol>
+</p>
+<p>The local directory contains the following subfolders:</p>
+<p>
+<ul>
+   <li>Letters</li>
+   <li>University</li>
+</ul>
+</p>
+<p>Whereby the directory "Letters" contains the following templates:</p>
+<p>
+<ul>
+   <li>Love Letter.tex</li>
+</ul>
+</p>
+<p>The company's directory contains the following subfolders:</p>
+<ul>
+   <li>General</li>
+   <li>Articles</li>
+   <li>Letters</li>
+</ul>
+<p>
+<p>Whereby the directory "Letters" contains the following templates:</p>
+<p>
+<ul>
+   <li>Order.tex</li>
+   <li>Notice.tex</li>
+</ul>
+</p>
+
+<p>When creating a new project, TeXnicCenter will analyse the directories
+specified in the path options. The sub folders of the template directories
+listed there will become categories, which are represented by the tabs on
+the left side of the dialog '<var>Project New</var>' and the files contained
+in the sub folders will be listed, when choosing the according tab.</p>
+
+<p>In our example, these tabs would be available:</p>
+<ul>
+   <li>Articles</li>
+   <li>General</li>
+   <li>Letters</li>
+   <li>University</li>
+</ul>
+
+<p>The categories "Articles" and "General" would contain the
+templates from the company's directory. The category "University"
+would contain the templates from the local drive. The category "Letters"
+would contain the templates from the company's directory merged with the
+one's from the local drive:</p>
+<p>
+<ul>
+   <li>"Order" (company/Letters/Order.tex)</li>
+   <li>"Notice" (company/Letters/Order.tex)</li>
+   <li>"Love Letter" (local/Letters/Love Letter.tex)</li>
+</ul>
+</p>
+</body>
+</html>

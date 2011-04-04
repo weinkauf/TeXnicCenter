@@ -1,0 +1,107 @@
+%description: Simple Letter in English
+%% Based on a TeXnicCenter-Template by Gyorgy SZEIDL.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%------------------------------------------------------------
+%
+\documentclass[a4paper,12pt]{letter}%
+%Options -- Point size:  10pt (default), 11pt, 12pt
+%        -- Paper size:  letterpaper (default), a4paper, a5paper
+%        -- Orientation  (portrait is the default)
+%                        landscape
+%        -- Print size:  oneside (default), twoside
+%        -- Quality      final(default), draft
+%        -- Title page   notitlepage(default)
+%        -- Columns      onecolumn(default)
+%        -- Equation numbering (equation numbers on the right is the default)
+%                        leqno
+%        -- Displayed equations (centered is the default)
+%                        fleqn (equations start at the same distance from the
+%                        right side)
+%        -- Open bibliography style (closed is the default)
+% For instance the command
+%           \documentclass[a4paper,12pt,leqno]{letter}
+% ensures that the paper size is a4, the fonts are typeset at the size 12p
+% and the equation numbers are on the left side
+%
+\usepackage{amsmath}%
+\usepackage{amsfonts}%
+\usepackage{amssymb}%
+\usepackage{graphicx}
+%
+\usepackage{t1enc}
+\usepackage[latin2]{inputenc}
+%
+%---- Setting the margins
+%
+\setlength{\textwidth}{160mm}%
+\setlength{\hoffset}{-0.4mm}%
+\setlength{\oddsidemargin}{0mm}%
+\setlength{\topskip}{0mm}%
+\setlength{\textheight}{240mm}%
+\setlength{\topmargin}{0mm}%
+\setlength{\voffset}{-5.4mm}
+%
+%-------------------------------------------------------------
+%
+\name{Dr. J. Smith}%
+\address{University of Miskolc\\
+         P.\,O. Box 116\\
+         H-3515 Miskolc-Egyetemváros\\
+         Hungary\\
+         \hrulefill\\
+         Tel: \mbox{36-46-565-111 ext. 18-92}\\
+         E-mail: \mbox{\texttt{john.smith@uni-miskolc.hu}}}
+\signature{John Smith}%
+\date{January 18, 2002.}
+%-------------------------------------------------------------
+\begin{document}
+\begin{letter}%
+{Robert Brown\\
+P.\,O. Box 87\\
+L-9876 Wordtown\\
+LaTeXLand}%
+\opening{Dear Mr. Brown,}
+
+The present letter is a sample for the \LaTeX\ Letter class. The most important
+features are as follows:
+
+\begin{enumerate}
+  \item The commands \verb"\name{}", \verb"\address{}", \verb"\signature{}" and
+  \verb"\date{}" should be put into the preamble. In this letter we have used the
+  following commands:
+  \begin{verbatim}
+  \name{Dr. J. Smith}%
+  \address{University of Miskolc\\
+         P.\,O. Box 116\\
+         H-3515 Miskolc-Egyetemváros\\
+         Hungary\\
+         \hrulefill\\
+         Tel: \mbox{36-46-565-111 ext. 18-92}\\
+         E-mail: \mbox{\texttt{john.smith@uni-miskolc.hu}}}
+  \signature{John Smith}%
+  \date{January 18, 2002.}
+  \end{verbatim}
+  \item If \verb"\signature{}" has not been specified the \verb"\name{}" entry
+  is used at the end of the letter.
+  \item The actual text of the letter should be put into the\\\hspace*{\fill}
+  \verb"\begin{letter}" \emph{text of letter} \verb"\end{letter}"\hspace*{\fill}\\
+  environment.
+  \item The very first command is the \verb"\opening{}" command. In this letter
+  we have used the\\\hspace*{\fill}
+  \verb"\opening{Dear Mr. Brown,}"\hspace*{\fill}\\
+  form.
+  \item This letter is ended by the \verb"\closing{Very truly yours}"
+  command.\pagebreak
+  \item The above command can be followed by the commands\\
+  \verb"\cc{name1\\name2 etc.}}" and \verb"\encl{enclosure1\\enclosure 2 etc}".\\
+  \item If you would like to learn more about the letter class see the book\\
+  \hspace*{\fill}A Guide to \LaTeX\hspace{-0.8mm}2$\varepsilon$
+  by Helmut Kopka and Patrick W. Daily\hspace*{\fill}\\
+  for more details.
+\end{enumerate}
+\closing{Very truly yours} \vspace{5mm}%
+\encl{A diskkette with the text of this letter on it}%
+\cc{J. Smith\\A. Carlson}
+\end{letter}
+\end{document}

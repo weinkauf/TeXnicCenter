@@ -1,0 +1,117 @@
+%description: Lebenslaufvorlage unter Verwendung von currvita.sty
+%% Basierend auf einer TeXnicCenter-Vorlage von Mark Müller
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Wählen Sie die Optionen aus, indem Sie % vor der Option entfernen  
+% Dokumentation von currvita.sty: currvita.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Optionen zum Layout des Curriculum Vitae                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt, a4paper]{article}
+\usepackage[%
+%LabelsAligned,					% engere vertikale Zwischenräume
+%NoDate									% keine Datumsangabe am Ende
+]{currvita}
+
+
+%% Deutsche Anpassungen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[ansinew]{inputenc}
+
+\usepackage{lmodern} %Type1-Schriftart für nicht-englische Texte
+
+
+%% Packages für Grafiken & Abbildungen %%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx} %%Zum Laden von Grafiken
+%\usepackage{subfig} %%Teilabbildungen in einer Abbildung
+%\usepackage{pst-all} %%PSTricks - nicht verwendbar mit pdfLaTeX
+\usepackage{eso-pic} %%Für das Bewerbungsbild
+
+%% Beachten Sie:
+%% Die Einbindung einer Grafik erfolgt mit \includegraphics{Dateiname}
+%% bzw. über den Dialog im Einfügen-Menü.
+%% 
+%% Im Modus "LaTeX => PDF" können Sie u.a. folgende Grafikformate verwenden:
+%%   .jpg  .png  .pdf  .mps
+%% 
+%% In den Modi "LaTeX => DVI", "LaTeX => PS" und "LaTeX => PS => PDF"
+%% können Sie u.a. folgende Grafikformate verwenden:
+%%   .eps  .ps  .bmp  .pict  .pntg
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Ihr Bewerbungsbild direkt auf dem Lebenslauf?                    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\AddToShipoutPicture*{%
+%  \put(450,610){\includegraphics[width=39mm]{Ihr Bild}}%
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Ihr Lebenslauf                                                   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{cv}{Lebenslauf}	% Überschrift des Lebenslaufs frei wählbar
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Einzelne Abschnitte des CV kommen in einzelne Umgebungen der Form:%
+%% \begin{cvlist}{Überschrift}                                       %
+%% \item                                                             %
+%% ...             																									 %
+%% \end{cvlist}																											 %
+%% Zu unterscheiden sind \item mit Argument (\item[Argument] Inhalt) %
+%% und ohne (\item Inhalt). Folgend ein Anwendungsbeispiel. Der Autor% 
+%% des Styles legt seine eigene ausführliche CV als cvtest.tex der   %
+%% Dokumentation bei.																								 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Abschnitt 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{cvlist}{Personalien}	% Überschrift des Abschnitts
+\item Vorname Nachname\\		% die \item haben untereinander einen 
+ 			Straße Nr.\\					% größeren Abstand, als eine neue Zeile
+ 			Postleitzahl Ort
+\item Tel.: (030) 12\,34\,56\\
+			email: irgenwer@irgendwo.ch
+\item Geb.: 30. Februar 2003, Ort
+\item mehrfach geschieden, 5 Kinder
+\end{cvlist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Abschnitt 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{cvlist}{Schulbildung}
+\item[09/82--06/85] Grundschule
+\item[07/85--12/92] Förderschule
+\item[01/93--07/97] Gymnasium, Abschluss Abitur
+\end{cvlist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Abschnitt 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{cvlist}{Studium}
+\item[04/99--07/99] Soziologiestudium, FU-Berlin
+\item[04/00--09/02] Theatherpädagogik, Uni-Zürich
+\item[10/02--07/04] Medizinstudium, Uni-Ludwigshafen, Abschluss 1,0
+\end{cvlist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Abschnitt 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beachten Sie die Wirkung kurzer Überschriften und Items ohne Argument!
+\begin{cvlist}{Sprachen}
+\item Japanisch, Norwegisch, Polnisch, Deutsch, Perl, C++
+\end{cvlist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Abschnitt 5 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{cvlist}{Interessen}
+\item[Musik] hören und drüber reden
+\item[Layout] \LaTeX -Fetischist
+\end{cvlist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Angaben der Abschlusszeile %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cvplace{Ort}						% Erstellungsort
+%\date{}								% falls anderes, als das aktuelle gewünschte
+
+\end{cv}
+\end{document}

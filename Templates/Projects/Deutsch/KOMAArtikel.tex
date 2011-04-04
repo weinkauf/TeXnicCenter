@@ -1,0 +1,161 @@
+%description: Artikelvorlage unter Verwendung der Artikelklasse des KOMA-Script
+%% Basierend auf einer TeXnicCenter-Vorlage von Mark Müller
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Wählen Sie die Optionen aus, indem Sie % vor der Option entfernen  
+% Dokumentation des KOMA-Script-Packets: scrguide
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Optionen zum Layout des Artikels                                  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[%
+%a5paper,							% alle weiteren Papierformat einstellbar
+%landscape,						% Querformat
+%10pt,								% Schriftgröße (12pt, 11pt (Standard))
+%BCOR1cm,							% Bindekorrektur, bspw. 1 cm
+%DIVcalc,							% führt die Satzspiegelberechnung neu aus
+%											  s. scrguide 2.4
+%twoside,							% Doppelseiten
+%twocolumn,						% zweispaltiger Satz
+%halfparskip*,				% Absatzformatierung s. scrguide 3.1
+%headsepline,					% Trennline zum Seitenkopf	
+%footsepline,					% Trennline zum Seitenfuß
+%titlepage,						% Titelei auf eigener Seite
+%normalheadings,			% Überschriften etwas kleiner (smallheadings)
+%idxtotoc,						% Index im Inhaltsverzeichnis
+%liststotoc,					% Abb.- und Tab.verzeichnis im Inhalt
+%bibtotoc,						% Literaturverzeichnis im Inhalt
+%abstracton,					% Überschrift über der Zusammenfassung an	
+%leqno,   						% Nummerierung von Gleichungen links
+%fleqn,								% Ausgabe von Gleichungen linksbündig
+%draft								% überlangen Zeilen in Ausgabe gekennzeichnet
+]
+{scrartcl}
+
+%\pagestyle{empty}		% keine Kopf und Fußzeile (k. Seitenzahl)
+%\pagestyle{headings}	% lebender Kolumnentitel  
+
+
+%% Deutsche Anpassungen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[ansinew]{inputenc}
+
+\usepackage{lmodern} %Type1-Schriftart für nicht-englische Texte
+
+
+%% Packages für Grafiken & Abbildungen %%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx} %%Zum Laden von Grafiken
+%\usepackage{subfig} %%Teilabbildungen in einer Abbildung
+%\usepackage{pst-all} %%PSTricks - nicht verwendbar mit pdfLaTeX
+
+%% Beachten Sie:
+%% Die Einbindung einer Grafik erfolgt mit \includegraphics{Dateiname}
+%% bzw. über den Dialog im Einfügen-Menü.
+%% 
+%% Im Modus "LaTeX => PDF" können Sie u.a. folgende Grafikformate verwenden:
+%%   .jpg  .png  .pdf  .mps
+%% 
+%% In den Modi "LaTeX => DVI", "LaTeX => PS" und "LaTeX => PS => PDF"
+%% können Sie u.a. folgende Grafikformate verwenden:
+%%   .eps  .ps  .bmp  .pict  .pntg
+
+
+%% Bibliographiestil %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{natbib}
+
+\begin{document}
+
+\pagestyle{empty} %%Keine Kopf-/Fusszeilen auf den ersten Seiten.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Ihr Artikel                                                       %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% eigene Titelseitengestaltung %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
+%\begin{titlepage}
+%Einsetzen der TXC Vorlage "Deckblatt" möglich
+%\end{titlepage}
+
+%% Angaben zur Standardformatierung des Titels %%%%%%%%%%%%%%%%%%%%%%%%
+%\titlehead{Titelkopf }
+%\subject{Typisierung}
+\title{Der Name Ihrer Arbeit}
+\author{Ihr Name}
+%\and{Der Name des Co-Autoren}
+%\thanks{Fußnote}			% entspr. \footnote im Fließtext
+%\date{}							% falls anderes, als das aktuelle gewünscht
+%\publishers{Herausgeber}
+
+%% Widmungsseite %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\dedication{Widmung}
+
+\maketitle 						% Titelei wird erzeugt
+
+%% Zusammenfassung nach Titel, vor Inhaltsverzeichnis %%%%%%%%%%%%%%%%%
+%\begin{abstract}
+% Für eine kurze Zusammenfassung des folgenden Artikels.
+% Für die Überschrift s. \documentclass[abstracton].
+%\end{abstract}
+
+%% Erzeugung von Verzeichnissen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents			% Inhaltsverzeichnis
+%\listoftables				% Tabellenverzeichnis
+%\listoffigures				% Abbildungsverzeichnis
+
+
+%% Der Text %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part[Erster Streich]{wenige Erläuterungen}
+\section[Überschriften]{Überschrift und das Inhaltsverzeichnis}
+Die meisten Artikel werden ab \verb#\section{}# gegliedert. Es steht jedoch grundsätzlich auch der sehr gewaltige, übergeordnete Gliederungspunkt \verb#\part{}# zur Verfügung.
+
+Durch das optionale Argument [Kurzform] in \verb#\section[Kurzform]{Überschrift}# kann für das Inhaltsverzeichnis eine alternative Formulierung der Überschrift definiert werden. Das heißt, dass bei Verwendung des Arguments der Inhalt der eckigen Klammern in das Inhaltsverzeichnis aufgenommen wird, die Überschrift im Fließtext jedoch durch den Inhalt der geschweiften Klammern gebildet wird. 
+
+Die Überschrift dieses Abschnitts ist ein Beispiel dafür: Erstellen Sie ein Beispiel!
+
+\subsection{Erstellung des Beispiels}
+Entfernen Sie das \%-Zeichen vor \verb#\tableofcontens#, speichern Sie das Dokument (Datei, Speichern unter) und compilieren Sie das Dokument (F7) zweimal. Sehen Sie sich das Beispiel an (F5). Beachten Sie die Bezeichnung im Inhaltsverzeichnis und im Fließtext.
+
+\section{weitere Gliederungspunkte}
+Die folgenden Gliederungsschritte nach \verb#\section[]{}# und \verb#\subsection[]{}# sind 
+\begin{verbatim}
+\subsubsection[]{},\paragraph[]{} und \subparagraph[]{}.
+\end{verbatim}
+
+Sie alle sind erreichbar über das Menü: Einfügen, Überschrift.
+
+\subsection{die Sternvariante}
+Durch den * wird der Gliederungspunkt weder nummeriert, noch als Kolumnentitel gesetzt und es erfolgt kein Eintrag
+ins Inhaltsverzeichnis.
+
+Ein Beispiel ist die nächste Subsection:
+
+\subsection*{das Beispiel}
+Diesen Gliederungspunkt findet man im Inhaltsverzeichnis nicht!
+An dieser Stelle möchte ich Sie auf Besonderheiten der KOMA-Scriptklasse hinweisen, die Sie im scrguide nachlesen können:
+\begin{verbatim}
+\addpart[Kurzform]{Überschrift}
+\addpart*{Überschrift}
+\addchap[Kurzform]{Überschrift}
+\addchap*{Überschrift}
+\addsec[Kurzform]{Überschrift}
+\addsec*{Überschrift}
+und
+\minisec{Überschrift}
+\end{verbatim}
+Es liefert einige interessante Optionen!\footnote{Hierin kann auch nachgelesen werden, wie individuelle Kopfzeilen mit scrpage2 erstellt werden können.}
+
+\section{persönlicher Tipp}
+Arbeiten Sie mit TeXnicCenter stets mit Projekten, speichern Sie die einzelnen Teile Ihrer Arbeit in einzelnen Dateien und binden Sie diese mit Hilfe von \verb#\input{Dateiname}# in das Hauptdokument ein.
+
+Persönlich nutze ich einen eigene Datei für jede Section. 
+
+Viel Spaß! Für Rückfragen, die diese Vorlage betreffen, stehe ich Ihnen gern in der Mailingliste von TXC zur Verfügung. Ansonsten sind die Dokumente \texttt{lshort}, \texttt{l2tabu}, die \texttt{FAQ der Newsgroup de.text.tex} und natürlich der \texttt{scrguide} immer sehr hilfreich.
+
+%% Bibliographie unter Verwendung von dinnat %%%%%%%%%%%%%%%%%%%%%%%%%%
+%\setbibpreamble{Präambel}		% Text vor dem Verzeichnis
+%\bibliographystyle{dinat}
+%\bibliography{bibliographie}	% Sie benötigen einen *.bib-Datei
+
+\end{document}

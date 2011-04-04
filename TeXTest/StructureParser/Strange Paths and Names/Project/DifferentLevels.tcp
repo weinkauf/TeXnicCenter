@@ -1,0 +1,10 @@
+[FormatInfo]
+Type=TeXnicCenterProjectInformation
+Version=3
+
+[ProjectInfo]
+MainFile=DifferentLevels.tex
+UseBibTeX=0
+UseMakeIndex=0
+ActiveProfile=Fast: LaTeX => DVI
+

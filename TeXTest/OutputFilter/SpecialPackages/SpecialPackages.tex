@@ -1,0 +1,98 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% $Id$
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This file and the files in this directory and its subdirectories
+% are intended to test several parts of the TeXnicCenter-system.
+%
+% Copyright (C) 2002-$CurrentYear$ ToolsCenter
+
+% Their main purpose is to reproduce several bugs or behaviours coming
+% up from missing features. They are neither a good starting point for
+% working with TeX nor with the TeXnicCenter-system. If you use them,
+% you do this on your own risk. They come WITHOUT ANY WARRANTY;
+% without even the implied warranty of MERCHANTABILITY or
+% FITNESS FOR A PARTICULAR PURPOSE.
+%
+% Anything below the "end of prolog"-line is for testing purposes only
+% and does not reflect the opinions of the author(s) and is not meant
+% to be a statement at all; it is even not said to be true or reliable.
+%
+% If you have further questions or if you want to support
+% further TeXnicCenter development, visit the TeXnicCenter-homepage
+%
+%     http://www.ToolsCenter.org
+%
+% end of prolog %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% HEADER
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,twoside,10pt]{report}
+\usepackage[latin1]{inputenc}
+%\usepackage{textcomp}
+\usepackage[dvips]{epsfig}
+\usepackage{ngerman}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{longtable}
+\usepackage{pst-node}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% COMMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Checking whether TXC catches warnings and errors of
+% specific TeX-packages.
+%
+% If this document does not compile with your personal
+% TeX-Distribution, because you do not have a special
+% package, comment out this special \usepackage above
+% and the special \include below.
+%
+% NOTE: DO NOT COMMIT A VERSION OF THIS DOCUMENT, WHERE
+% YOU COMMENTED OUT SOME PACKAGES, BECAUSE YOU DO NOT HAVE
+% THEM!!!
+%
+% You are invited to contribute to this document.
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\message{! pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has been already used, duplicate ignored}
+
+% Testing undefined citations
+% - this one will fit into one line
+\cite{hesselink2d}
+% - this one will split over two lines
+\cite{hesselink2dsimple}
+
+
+% Testing generic package warnings
+% - an empty one
+\PackageWarning{example}{}
+
+% - a short one
+\PackageWarning{example}{short warning message}
+
+% - a longer one, that breaks automatically
+\PackageWarning{example}{warning message that is longer and even longer and even longer so that the line breakes automatically}
+
+% - one with a manual break
+\PackageWarning{example}{warning message with manual\MessageBreak line break.}
+
+
+
+% Testing errors and warnings from amsmath
+\input{amsmathtest}
+
+
+\end{document}
+

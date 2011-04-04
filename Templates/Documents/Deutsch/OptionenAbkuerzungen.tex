@@ -1,0 +1,35 @@
+%description: Abkürzungen und eigene Kommandos.
+%% Basierend auf einer TeXnicCenter-Vorlage von Tino Weinkauf.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% OPTIONEN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ACHTUNG: Sie benötigen ein Hauptdokument, um diese Datei
+%%          benutzen zu können. Verwenden Sie im Hauptdokument
+%%          den Befehl "\input{dateiname}", um diese
+%%          Datei einzubinden.
+%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ABKÜRZUNGEN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%Definitionen für Abbildung-Referenzen
+\newcommand{\abb}[1]{(Abbildung \ref{#1})}
+\newcommand{\ABB}[1]{Abbildung \ref{#1}}
+
+%%Definitionen für Tabellen-Referenzen
+\newcommand{\tab}[1]{(Tabelle \ref{#1})}
+\newcommand{\TAB}[1]{Tabelle \ref{#1}}
+
+%%Definitionen für Seiten-Referenzen
+\newcommand{\seite}[1]{(Seite \pageref{#1})}
+\newcommand{\SEITE}[1]{Seite \pageref{#1}}
+
+%%Definitionen für Code
+\newcommand{\precode}[1]{\textbf{\footnotesize #1}}
+\newcommand{\code}[1]{\texttt{\footnotesize #1}}
+

@@ -1,0 +1,237 @@
+Coding guide lines for working on TeXnicCenter
+==============================================
+
+General
+-------
+
+Before implementing a feature or fixing a bug, please visit sf.net and subscribe
+yourself to that bug or feature request. Otherwise, another developer may work
+on it in the same time.
+
+* Make sure that you are 'svn up' before starting your work.
+* Make sure that you are 'svn up' before committing your work.
+* Make sure that you have compiled without errors and warnings before committing
+your work.
+
+
+Unicode
+-------
+
+String literals have to be enclosed by the _T-macro, e.g. _T("String"), to make
+sure that the Unicode version of TeXnicCenter compiles correctly. When declaring
+variables use the TCHAR-typedefs, such as LPTSTR, LPCTSTR instead of char* and
+const char* and TCHAR instead of char.
+
+
+Macros
+------
+
+Always use inline funtions and const/enum instead of #defines. Constants can be
+declared as follows:
+
+  const double PI = 3.14159265358979;
+  const int ArraySize = 1024;
+  LPCTSTR const FileName = _T("temp.out");
+
+
+Mostly Private: Encapsulation
+-----------------------------
+
+Implementation details should always be hidden using the private/protected
+access modifier. Prefer private to protected. When defining object properties,
+provide a public Get and/or Set method instead of making the data member public.
+This makes your and our life easier to debug the application.
+
+
+Global Variables
+----------------
+
+Don't use global variables, use the Singleton pattern instead. Refer to
+http://en.wikipedia.org/wiki/Singleton_pattern for detailed description.  See
+also TeXnicCenter/configuration.h for a possible implementation.
+
+
+Indent Style
+------------
+
+TeXnicCenter uses two different styles of indent: ANSI and K&R. See
+http://en.wikipedia.org/wiki/Indent_style for explanations.
+
+The first rule is to *not* change the format of the source code. Changes to the
+source code should be related to the content, not the format. This allows easier
+diffs and merges.
+
+The second rule is to stick to the indent style that is dominating in the source
+file. In other words, the creator of a file dictates the indent style for that
+file. And this shall not be changed nor mixed with other styles.
+
+If format changes become necessary for some reason, such changes shall be
+committed separately to the repository. Do not mix format changes with content
+changes. This hinders diffs and merges.
+
+The majority of files uses ANSI style. If you create a new file and prefer ANSI
+or are in doubt what style to use, then use ANSI. If you create a new file and
+prefer K&R, then use that.
+
+
+Tabs and Spaces
+---------------
+
+We use tabs for indentation and a tab width of 4. Do not convert tabs to spaces.
+
+
+Hungarian Notation
+------------------
+
+We do *not* use Hungarian notation (anymore). See
+http://en.wikipedia.org/wiki/Hungarian_notation for explanations.
+
+You may notice that Hungarian notation is used very often in the source code of
+TXC. This is not encouraged anymore. However, we do not change the code just for
+that reason.
+
+In particular, new classes get a name without the preceding 'C'.
+
+
+CamelCase
+---------
+
+It is desired to use CamelCase for variables, classes, and file names. See
+http://en.wikipedia.org/wiki/CamelCase for explanations.
+
+In particular, start the word with a capital letter if you use CamelCase for
+that word, i.e., not camelCase.
+
+
+Structured Programming
+----------------------
+
+Follow the structured programming paradigm when possible.  This means that
+especially 'goto' is not allowed at all.  Not following this paradigm results in
+spaghetti code which is hard to understand and debug.  Other statements such as
+'break', 'continue', or multiple 'return's in a single function are allowed but
+should be used with care.
+
+
+const-Correctness
+------------------
+
+Use the const keyword for data and class members as much as possible, especially
+for Get-methods or the like.  See http://en.wikipedia.org/wiki/Const-correctness
+for further explanation.
+
+
+Single line 'for' and 'if' statements
+-------------------------------------
+
+If the body of a 'for' or 'if' statement consists of a single line only, it is
+desired to write it with braces.  If you omit the braces, please insert an empty
+line after the statement.
+
+if (foo)
+{
+    bar() //Correct.
+}
+
+if (foo)
+    bar() //Not desired. Use only with care. Insert empty line after statement.
+
+It is also not desired to write it into a single line:
+
+if (foo) bar() //Not desired. Use only with care. Insert empty line after statement.
+
+
+Branches
+--------
+
+You may implement new features on branches if you feel that you might disturb
+other developers or are not yet sure about the outcome of your undertaking.
+
+You can create new branches, but it is preferred that you discuss the issue with
+the maintainer. Be sure to understand Chapter 4 of the SVN book
+(http://svnbook.red-bean.com/en/1.4/svn.branchmerge.html). You create a branch
+under the 'branches' subdirectory in the repository using:
+
+  svn copy https://texniccenter.svn.sourceforge.net/svnroot/texniccenter/trunk \
+           https://texniccenter.svn.sourceforge.net/svnroot/texniccenter/branches/MYBRANCHNAME \
+           -m "New branch for my development towards a new feature"
+
+You change your working copy to that branch using
+
+  svn switch https://texniccenter.svn.sourceforge.net/svnroot/texniccenter/branches/MYBRANCHNAME
+
+There is no need to have both versions (trunk and branch) checked out. Type 'svn
+info' to see where you are.
+
+This also works very nice with TortoiseSVN. Just make sure that you DO NOT
+create a branch under 'trunk'.
+
+
+Modifications
+-------------
+
+TeXnicCenter uses the Scintilla source code editing component by Neil Hodgson
+and Scintilla MFC wrapper classes by PJ Naughter.
+
+Scintilla
+^^^^^^^^^
+
+Scintalla's original TeX lexer (LexTeX.cxx) has been modified to allow richer
+syntax highlighting and a BibTeX lexer (LexBibTeX.cxx) has been added.
+
+In order to be able to use a custom cursor for incremental search the command
+SCI_SHOWCURSOR(bool) has been introduced which suppresses cursor changes.
+
+The changes that have been made can be reviewed by comparing revisions 912 and 
+916 of the following files:
+  
+  Scintilla/include/Scintilla.h
+  Scintilla/src/Editor.cxx
+  Scintilla/src/Editor.h
+
+Patches/Scintilla.patch contains the described changes that should be applied
+once Scintilla has been updated. To apply the patch use
+
+  patch -p1 -d original < Scintilla.patch
+
+where 'original' is the directory with unmodified Scintilla sources. If patching
+fails one can use the -F num option. 'num' denotes the fuzz factor. For testing
+purposes use the --dry-run option. Finally, update the patch by invoking
+
+  diff -druN --strip-trailing-cr original modified > Scintilla.patch
+
+to synchronize it.
+
+Scintilla MFC wrapper classes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The member function void CScintillaCtrl::ShowCursor(bool show, bool direct) has
+been added to wrap the previously mentioned message.
+
+static CScintillaFindReplaceDlg* CScintillaFindReplaceDlg::GetFindReplaceDlg()
+has been added to TeXnicCenter/ScintillaDocView.cpp which returns
+_scintillaEditState.pFindReplaceDlg.
+
+To the same file #include "FontOccManager.h" has been added.
+
+CScintillaFindReplaceDlg::Create has been modified to use a dialog template from
+the memory by adding the FR_ENABLETEMPLATEHANDLE flag to m_fr.Flags and using
+the DialogTemplate class. This change allows to replace dialog's resource font
+by the default OS font especially useful for Windows Vista users.
+
+CScintillaView::OnReplaceAll has been modified to use targets instead of
+selections to supress unwated display updates, see Scintilla documentation.
+This function calls another new function 
+  
+  virtual void CScintillaView::GetReplaceAllTarget(long& s, long& e).
+
+To review these changes compare revisions 913 and 921 of the following files:
+  
+  TeXnicCenter/ScintillaDocView.cpp
+  TeXnicCenter/ScintillaDocView.h
+
+and also revisions 913 and 916 of
+
+  TeXnicCenter/ScintillaCtrl.cpp
+  TeXnicCenter/ScintillaCtrl.h
+

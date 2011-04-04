@@ -1,0 +1,48 @@
+%description: Layoutoptionen für Abstände, Kopf- und Fusszeilen u.a.
+%% Basierend auf einer TeXnicCenter-Vorlage von Tino Weinkauf.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% OPTIONEN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% ACHTUNG: Sie benötigen ein Hauptdokument, um diese Datei
+%%          benutzen zu können. Verwenden Sie im Hauptdokument
+%%          den Befehl "\input{dateiname}", um diese
+%%          Datei einzubinden.
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% OPTIONEN FÜR ABSTÄNDE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%Abstand zwischen den Absätzen: halbe Höhe vom kleinen x
+\setlength{\parskip}{0.5ex}
+
+%%Einzug am Anfang eines Absatzes: auf Null setzen
+%\setlength{\parindent}{0ex}
+
+%%Zeilenabstand: 1.5 fach
+%% ==> Erwägen Sie, anstelle dieses Kommandos das Paket 'setspace' zu verwenden.
+%\linespread{1.5}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% OPTIONEN FÜR KOPF- UND FUSSZEILEN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Beispiel für recht nette Kopf- und Fußzeilen
+%% ==> Nutzen Sie '\usepackage{fancyhdr}' und '\pagestyle{fancy}'
+%% ==> im Hauptdokument, um diese zu benutzen.
+%\pagestyle{fancy}
+%\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+%\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+%\fancyhf{}
+%\fancyhead[LE,RO]{\thepage}
+%\fancyhead[LO]{\rightmark}
+%\fancyhead[RE]{\leftmark}
+%\fancypagestyle{plain}{%
+%    \fancyhead{}
+%    \renewcommand{\headrulewidth}{0pt}
+%}
+
+

@@ -1,0 +1,98 @@
+%description: Folienvorlage unter Verwendung der Prosperklasse
+%% Basierend auf einer TeXnicCenter-Vorlage von Mark Müller
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Nutzen Sie zum Kompilieren LaTeX => PS, als Anzeigeprogramm GhostView
+% Wählen Sie die Optionen aus, indem Sie % vor der Option entfernen  
+% Dokumtentation von Prosper: prosper-doc.pdf
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Optionen zum Layout der Folien                                    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[%
+%nontotal,					% nur aktuelle Seitennummer
+%slideBW,						% für schwarz/weiß Druck
+%nocolorBG,					% Hintergrund ist durchsichtig 
+ps,									% nur Postscript (für Folien)
+%noFooter,					% keine Angabe im Fuß der Folie\mid\mid
+%frames,						% vordefinierte Folien- und Prä-
+%azure,							% sentationsvorlagen
+%contemporain,
+%nuancegris,
+%troispoints,
+%lignesbleues,
+%darkblue,
+%alienglow,
+%autumn
+]{prosper}
+
+%% Deutsche Anpassungen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[ngerman]{babel}
+\usepackage[ansinew]{inputenc}
+
+%% Falls die automatische Worttrennung in Wörtern mit Umlauten
+%% nicht funktionieren sollte oder der Text pixelig aussieht:
+%% ==> Installieren Sie die cm-super Fonts (z.B. mit dem mikTeX Package Manager).
+%% Eine nicht ganz vollwertige Alternative ist die Verwendung dieses Pakets:
+%\usepackage{ae, aeguill}
+
+%% Titelangaben der Folien %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Titel der Präsentation}
+\subtitle{Prosper -- ein Möglichkeit zum Erzeugen von Folien}
+\author{Ihr Name}
+\institution{Name Ihres Arbeitgebers}
+\email{irgendwer@irgendwo.at}
+\slideCaption{alternativer Titel für den Fuß jeder Seite}
+
+\begin{document}
+\maketitle					% Titelfolie wird erzeugt
+
+%% Folie %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Überschrift der Folie}
+\begin{itemize}
+	\item Der Platz für den ersten Stichpunkt
+	\item Und ein anderer Stichpunkt
+	\item Oder man untergliedert:
+		\begin{itemize}
+			\item ein Unterpunkt, 
+			\item und noch einer.
+		\end{itemize}
+	\item Machen wir noch einen -- dann ist aber Schluss!
+\end{itemize}
+\end{slide}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Folie %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Der Punkt}
+\begin{itemize}
+		\item Das Aussehen des Punkts kann übrigens mit \verb#\myitem{Nummer der Gliederungsebene}{Zeichen}# definiert werden.
+		\item \verb#\myitem{2}{$\circ$}# verändert z.\,B. in der zweiten Gliederungsebene den grünen 3D-Punkt in einen schlichten $\circ$.
+		\item Das muss man vor \verb#\begin{document}# definieren.
+\end{itemize}
+\end{slide}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Folie %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Positionierung }
+\vspace{2cm}
+\begin{itemize}
+	\item Zur vertikalen Positionierung schlage ich vor, \verb#\vspace{Maß}# 
+				zu verwenden
+	\item In diesem Beispiel sind es übrigens 2 cm
+\end{itemize}
+\end{slide}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Folie %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{slide}{Möglichkeiten}
+\begin{itemize}
+	\item Ich nutze hier \verb#Prosper# nur rudimentär.
+	\item Es kann zum Erstellen von Präsentationen mit Überblendungen verwendet werden.
+	\item Dazu verwendet man als Anzeige z.\,B. den \verb#Acrobat Reader# von \verb#Adobe#.
+	\item Ein Beispiel für die Funktionalität von \verb#Prosper# ist \verb#prosper-tour.pdf# -- zu finden im Dokumentationsordner von \verb#Prosper#.
+\end{itemize}
+\end{slide}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

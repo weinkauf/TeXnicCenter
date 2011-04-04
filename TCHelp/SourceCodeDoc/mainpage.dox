@@ -1,0 +1,43 @@
+/* $Id$ */
+
+/**
+    \mainpage notitle
+
+\image html logo.png TeXnicCenter SourceCode Documentation 1 Beta 7.02
+
+<BR>
+
+\section welcome Welcome to the SourceCode Documentation of TeXnicCenter
+
+<em>Start browsing this documentation in
+the <A HREF="modules.html">Modules</A> section
+where the most important classes have been gathered.
+Or see the complete list of all classes in the
+<A HREF="classes.html">Alphabetical List</A>.</em>
+
+<BR>
+
+TeXnicCenter is an Integrated Development Environment (IDE)
+for writing TeX/LaTeX-documents on Microsoft Windows platforms.
+It provides a lot of enhanced features like structure parsing,
+project management, syntax highlighting, etc.
+
+You can find the homepage of TeXnicCenter at
+<A HREF="http://www.ToolsCenter.org/products/texniccenter/">http://www.ToolsCenter.org/products/texniccenter/</A>
+
+\htmlonly
+The development of TeXnicCenter is powered by
+<A HREF="http://sourceforge.net/projects/texniccenter/">
+ <IMG SRC="sflogo.png" BORDER="0" HEIGHT="31" WIDTH="88" ALT="SourceForge.net">
+</A>
+\endhtmlonly
+
+<BR>
+<BR>
+<BR>
+
+\htmlinclude credits.html
+
+\htmlinclude copyright.html
+ 
+*/

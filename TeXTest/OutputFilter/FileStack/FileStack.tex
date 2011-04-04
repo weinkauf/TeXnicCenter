@@ -1,0 +1,70 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% $Id$
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This file and the files in this directory and its subdirectories
+% are intended to test several parts of the TeXnicCenter-system.
+%
+% Copyright (C) 2002-$CurrentYear$ ToolsCenter
+
+% Their main purpose is to reproduce several bugs or behaviours coming
+% up from missing features. They are neither a good starting point for
+% working with TeX nor with the TeXnicCenter-system. If you use them,
+% you do this on your own risk. They come WITHOUT ANY WARRANTY;
+% without even the implied warranty of MERCHANTABILITY or
+% FITNESS FOR A PARTICULAR PURPOSE.
+%
+% Anything below the "end of prolog"-line is for testing purposes only
+% and does not reflect the opinions of the author(s) and is not meant
+% to be a statement at all; it is even not said to be true or reliable.
+%
+% If you have further questions or if you want to support
+% further TeXnicCenter development, visit the TeXnicCenter-homepage
+%
+%     http://www.ToolsCenter.org
+%
+% end of prolog %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% HEADER
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,twoside,10pt]{report}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% COMMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+% TeX splits its output over several lines, if an item does not fit
+% into one line. An item is for example a filename. Most TeX-Distributions
+% allow to config the maximal width of an output line. Mostly this
+% defaults to something <80, because 80 is the normal terminal width.
+%
+% We need to catch even those filenames. It is very likely, that this
+% happens, because a lot of users will work in a path like
+%
+% "C:\Documents and Settings\username\My Documents\PHD thesis\latex\..."
+%
+% and TeX prints out the full name for the main file.
+% So there is no way around: We need to catch it.
+\input{"A Long Path With Spaces and so on to test the FileStack/A Long Filename with Spaces and so on.tex"}
+
+% TeX reports here some bad boxes and prints out the
+% text which generates the bad box in a verbatim way.
+%
+% If this verbatim output includes a ')', the FileStack
+% of the output filter will be corrupted.
+\input{VerbatimTeXOutput}
+
+
+\end{document}
+

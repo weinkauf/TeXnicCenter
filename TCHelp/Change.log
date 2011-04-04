@@ -1,0 +1,151 @@
+Change.log
+
+To do:
+- Add text for alt tag!
+- Popup for glossary items??
+
+20040928 - cameroncb
+- Corrected wording, grammar, etc. in the following files:
+   project.html
+   welcome.html
+   TeXnicCenter.html
+   requirements.html
+   whatis.html
+
+
+
+20031206 - niteria
+
+- updated to new version 1 Beta 6.20
+	* copyright.html
+	* credits.html
+
+
+
+20030928 - niteria
+Compile time: 0 minutes, 4 seconds
+55 Topics, 415 Local links, 9 Internet links, 24 Graphics
+
+- very small fixes in
+	* copyright.html
+	* placeholdersets.html
+
+
+20030916
+Compile time: 0 minutes, 6 seconds
+55 Topics, 415 Local links, 9 Internet links, 24 Graphics
+
+
+- changed:
+	* reference.html
+	* spell_check.html
+	* template_files.html
+	* template_wizards.html
+	* texniccenter.html
+	* using.html
+	* welcome.html
+	* whatis.html
+
+  - hhc: change order, removed some unnecessary entries,
+  - help file opens with TXC and LaTeX Help Book entries in naviagtion.
+
+
+20030915
+
+Compile time: 0 minutes, 9 seconds
+55 Topics, 415 Local links, 9 Internet links, 24 Graphics
+
+- changed:
+	* Style.css: removed all unused items
+	* Color of headings: same as homepage
+	* welcome.html
+	* placeholders.html
+	* placeholdersets.html
+	* placeholdersingle.html
+	* project.html
+	* project_create.html
+	* project_modify.html
+	* projects.html
+	* quick_start.html
+	* refrence.html
+	* requirements.html
+	* root.html
+- changed page ' ' to tab ' ' in hhp file.
+
+
+20030913
+
+Compile time: 0 minutes, 7 seconds
+55 Topics, 415 Local links, 9 Internet links, 23 Graphics
+
+- changed:
+	* options_page_clean.html
+	* options_page_file.html
+	* options_page_general.html
+	* options_page_paths.html
+	* options_page_spelling.html
+	* output.html
+	* output_concept.html	
+	* output_config.html	
+	* output_config_manually.html	
+	* output_config_manually_page_latex.html	
+	* output_config_manually_page_postprocessing.hml
+	* output_config_manually_page_viewers.html
+	* output_config_wizard.html
+	
+
+20030912
+
+Compile time: 0 minutes, 7 seconds
+55 Topics, 411 Local links, 9 Internet links, 23 Graphics
+
+
+- changed:
+	* ddecmds.html
+	* document_templates.html
+	* generating_output.html
+	* getting_help.html
+	* introduction.html
+	* license.html
+	* options.html
+	* options_page_clean.html
+	
+
+
+
+20030909
+
+Compile time: 0 minutes, 6 seconds
+55 Topics, 414 Local links, 9 Internet links, 23 Graphics
+
+
+
+- creating_project.html: 
+	* Changed order of fields etc. Before xyz-field, now field xyz.
+	* Added end tags like </li>
+- custom*.html
+
+- changed Style Sheet:
+	* All header tags appear inside a colored table now. No <h_>-tag, use class="h_" instead
+
+- .html!
+
+20030903 
+Compile time: 0 minutes, 6 seconds
+55 topics, 412 local links, 9 internet links, 23 graphics
+
+- Shifted all images to own directory (images)
+- Set all file names to end with .html
+- Changed SPACES in file names to _
+- Changed whatdoineed.html to requirements.html
+- Changed TeXnicCenter.html to texniccenter.html
+- Changed file name in links to lower cases
+- Changed all html files to new directory structure
+- Changed TeXnicCenter.hpp accordingly
+- Changed TeXnicCenter.hhk accordingly
+- Changed file order in TeXnicCenter.hhp to alphabetical order
+- Beautified STYLE.CSS
+- Edited:
+	- advanced_configuration.html
+	- cmdlineargs.html
+

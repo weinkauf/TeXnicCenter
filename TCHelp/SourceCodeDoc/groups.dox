@@ -1,0 +1,63 @@
+/* $Id$ */
+
+/**
+    @defgroup mfcext MFCExt - Extension Classes to MFC
+    @brief Extension Classes to MFC.
+*/
+
+
+
+/**
+    @defgroup main TeXnicCenter
+    @{
+*/
+
+/**
+        @defgroup dialogs Dialogs
+        @brief All Dialogs of TeXnicCenter.
+*/
+
+/**
+        @defgroup bcgext Extensions to BCG
+        @brief Extensions to BCG made for TeXnicCenter.
+*/
+
+/**
+        @defgroup guielements GUI Elements
+        @brief Additional GUI Elements implemented for TeXnicCenter.
+*/
+
+/**
+        @defgroup templates Templates
+        @brief Modules dealing with LaTeX Templates for Documents or Projects.
+*/
+
+/**
+        @defgroup textmodules TextModules
+        @brief Classes dealing with user definable pieces of text to be inserted.
+*/
+
+/**
+        @defgroup process Process Calling
+        @brief Modules related to Process Calling.
+*/
+
+/**
+        @defgroup profiles Output Profiles
+        @brief Modules related to Output Profiles.
+*/
+
+/**
+        @defgroup cominterface COM Interface
+        @brief Modules for the COM Interface.
+*/
+
+/**
+        @defgroup misc Miscellaneous Modules
+        @brief Modules that do not fit into the other categories.
+*/
+
+/**
+    @}
+*/
+

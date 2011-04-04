@@ -1,0 +1,82 @@
+<html>
+<head>
+<title>The Output Wizard</title>
+<link rel="stylesheet" href="STYLE.CSS" type="text/css">
+</head>
+<body >
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h4">The Output Wizard</td>
+</tr>
+</table>
+</p>
+
+<p>The Output Wizard leads through the configuration of some basic output
+profiles step by step. If the MiKTeX distribution is installed, the Output
+Wizard canl do nearly all the work without user interaction.</p>
+
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h5">Invoking the Output Wizard</td>
+</tr>
+</table>
+</p>
+
+<p>After TeXnicCenter has started, it checks to see whether output profiles are
+already defined. If this is not the case, TeXnicCenter will then start the
+Output Wizard automatically.</p>
+
+<p>To start the Output Wizard manually, please select the menu item
+'<var>Build|Define Output Profiles...</var>' and click on the button
+'<var>Wizard</var>' in the next dialog.</p>
+
+
+<p>
+<table border="0" width="100%">
+<tr>
+<td class="h5">Using the Output Wizard</td>
+</tr>
+</table>
+</p>
+
+<p>At first the Wizard will look for an installed  MikTeX distribution. If
+MikTeX is found on the system, the Wizard asks for permission to configure
+TeXnicCenter accordingly or to use another distribution.</p>
+
+<p>To configure TeXnicCenter to use MikTeX, the Wizard will perform the
+following steps:</p>
+<p>
+<ol>
+   <li>It will look for the TeX compiler. If no compiler can be found, the
+   path to the compiler can be entered in a dialog.</li>
+   <li>Afterwards the Wizard will look for the registered DVI-viewer. If
+   the registered viewer is YAP, TeXnicCenter will be configured to YAP as
+   default viewer. If another viewer is found, command line parameters to
+   start the viewer, to view documents and to perform a forward search, can be
+   entered in a dialog.</li>
+   <li>Now the wizard will test if DVIPS (a tool that convert DVI documents
+   into PostScript files) is installed. If DVIPS is found, the path for
+   command line arguments can be entered in a dialog.</li>
+   <li>Finally the Wizard will test if pdfLaTeX is installed. If this test
+   is successfull, the Wizard will look for the viewer registered for
+   PDF files. If the viewer is the Adobe AcrobatReader, the wizard will do
+   the configuration, otherwise the path and the command line arguments
+   for a different PDF viewer can be entered in a dialog.</li>
+   <li>Now TeXnicCenter will create the following output profiles:
+      <ul>
+         <li>LaTeX =&gt; DVI (only if LaTeX has been found);</li>
+         <li>LaTeX =&gt; PS (only if DVIPS and LaTeX have been found);</li>
+         <li>LaTeX =&gt; PDF (only if pdfLaTeX has been found).</li>
+      </ul>
+      If one of the above mentioned output profiles already exists, the Wizard
+      will ask permission to overwrite or to keep the existing one.</li>
+</ol>
+</p>
+
+<p>To check, what the Wizard has created, open the dialog
+<a href="output_config_manually.html">Manual Configuration</a>.</p>
+
+</body>
+</html>

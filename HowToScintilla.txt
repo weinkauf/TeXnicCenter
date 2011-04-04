@@ -1,0 +1,8 @@
+When merging a new version of Scintilla, be aware that the following files have been changed by the TXC team:
+
+TeXnicCenter\Scintilla\include\SciLexer.h
+TeXnicCenter\Scintilla\include\Scintilla.h
+TeXnicCenter\Scintilla\include\Scintilla.iface
+TeXnicCenter\Scintilla\src\Editor.cxx
+TeXnicCenter\Scintilla\src\Editor.h
+TeXnicCenter\Scintilla\src\LexTeX.cxx
