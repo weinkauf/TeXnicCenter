@@ -16,17 +16,21 @@
 // TeX Folding code added by instanton (soft_share@126.com) with borrowed code from VisualTeX source by Alex Romanenko.
 // Version: June 22, 2007
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <assert.h>
-#include <ctype.h>
+// Modifications for the TeXnicCenter Project by Sergiu Dotenco
+// Version: May 4, 2009
+
+#include <algorithm>
+#include <functional>
+#include <cassert>
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
 
 #include "ILexer.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#include "PropSetSimple.h"
 #include "WordList.h"
 #include "LexAccessor.h"
 #include "Accessor.h"
@@ -68,430 +72,665 @@ using namespace Scintilla;
 // todo: lexer.tex.auto.if
 
 // Auxiliary functions:
+namespace {
+#pragma region Auxiliary functions
 
-static inline bool endOfLine(Accessor &styler, unsigned int i) {
-	return
-      (styler[i] == '\n') || ((styler[i] == '\r') && (styler.SafeGetCharAt(i + 1) != '\n')) ;
-}
+	template<class Predicate>
+	bool SkipWhileCurrent( StyleContext &sc, Predicate pred)
+	{
+		while (sc.More() && pred(sc.ch))
+			sc.Forward();
 
-static inline bool isTeXzero(int ch) {
-	return
-      (ch == '%') ;
-}
+		return pred(sc.ch);
+	}
 
-static inline bool isTeXone(int ch) {
-	return
-      (ch == '[') || (ch == ']') || (ch == '=') || (ch == '#') ||
-      (ch == '(') || (ch == ')') || (ch == '<') || (ch == '>') ||
-      (ch == '"') ;
-}
+	template<class Predicate>
+	bool SkipWhileNext( StyleContext &sc, Predicate pred)
+	{
+		while (sc.More() && pred(sc.chNext))
+			sc.Forward();
 
-static inline bool isTeXtwo(int ch) {
-	return
-      (ch == '{') || (ch == '}') || (ch == '$') ;
-}
+		return pred(sc.chNext);
+	}
 
-static inline bool isTeXthree(int ch) {
-	return
-      (ch == '~') || (ch == '^') || (ch == '_') || (ch == '&') ||
-      (ch == '-') || (ch == '+') || (ch == '\"') || (ch == '`') ||
-      (ch == '/') || (ch == '|') || (ch == '%') ;
-}
+	template<class Predicate>
+	bool SkipWhileContext( StyleContext &sc, Predicate pred)
+	{
+		while (sc.More() && pred(sc))
+			sc.Forward();
 
-static inline bool isTeXfour(int ch) {
-	return
-      (ch == '\\') ;
-}
+		return pred(sc);
+	}
 
-static inline bool isTeXfive(int ch) {
-	return
-      ((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z')) ||
-      (ch == '@') || (ch == '!') || (ch == '?') ;
-}
+	bool SkipSpaces( StyleContext& sc )
+	{
+		return SkipWhileCurrent(sc,std::bind2nd(std::equal_to<char>(),' '));
+	}
 
-static inline bool isTeXsix(int ch) {
-	return
-      (ch == ' ') ;
-}
+	bool SkipToOpenBrace( StyleContext& sc )
+	{
+		return SkipWhileCurrent(sc,std::bind2nd(std::not2(std::equal_to<char>()),'{'));
+	}
 
-static inline bool isTeXseven(int ch) {
-	return
-      (ch == '^') ;
-}
+	bool EndOfLine(Accessor &styler, unsigned int i)
+	{
+		return (styler[i] == '\n') || ((styler[i] == '\r') && (styler.SafeGetCharAt(i + 1) != '\n'));
+	}
 
-// Interface determination
+	bool IsComment(int ch)
+	{
+		return ch == '%';
+	}
 
-static int CheckTeXInterface(
-    unsigned int startPos,
-    int length,
-    Accessor &styler,
-	int defaultInterface) {
+	bool IsUsePackage(const char* key)
+	{
+		return std::strcmp(key, "usepackage") == 0;
+	}
 
-    char lineBuffer[1024] ;
-	unsigned int linePos = 0 ;
+	bool IsDocumentClass(const char* key)
+	{
+		return std::strcmp(key, "documentclass") == 0;
+	}
 
-    // some day we can make something lexer.tex.mapping=(all,0)(nl,1)(en,2)...
+	bool isTeXone(int ch)
+	{
+		return  (ch == '[') || (ch == ']') || (ch == '=') || (ch == '#') ||
+			(ch == '(') || (ch == ')') || (ch == '<') || (ch == '>') ||
+			(ch == '"');
+	}
 
-    if (styler.SafeGetCharAt(0) == '%') {
-        for (unsigned int i = 0; i < startPos + length; i++) {
-            lineBuffer[linePos++] = styler.SafeGetCharAt(i) ;
-            if (endOfLine(styler, i) || (linePos >= sizeof(lineBuffer) - 1)) {
-                lineBuffer[linePos] = '\0';
-                if (strstr(lineBuffer, "interface=all")) {
-                    return 0 ;
-				} else if (strstr(lineBuffer, "interface=tex")) {
-                    return 1 ;
-                } else if (strstr(lineBuffer, "interface=nl")) {
-                    return 2 ;
-                } else if (strstr(lineBuffer, "interface=en")) {
-                    return 3 ;
-                } else if (strstr(lineBuffer, "interface=de")) {
-                    return 4 ;
-                } else if (strstr(lineBuffer, "interface=cz")) {
-                    return 5 ;
-                } else if (strstr(lineBuffer, "interface=it")) {
-                    return 6 ;
-                } else if (strstr(lineBuffer, "interface=ro")) {
-                    return 7 ;
-                } else if (strstr(lineBuffer, "interface=latex")) {
-					// we will move latex cum suis up to 91+ when more keyword lists are supported
-                    return 8 ;
-				} else if (styler.SafeGetCharAt(1) == 'D' && strstr(lineBuffer, "%D \\module")) {
-					// better would be to limit the search to just one line
-					return 3 ;
-                } else {
-                    return defaultInterface ;
-                }
-            }
+	bool isWordChar(int ch)
+	{
+		return ((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z'));
+	}
+
+	bool isTeXtwo(int ch)
+	{
+		return ch == '{' || ch == '}' || ch == '$';
+	}
+
+	bool isTeXthree(int ch)
+	{
+		return (ch == '~') || (ch == '^') || (ch == '_') || (ch == '&') ||
+			(ch == '-') || (ch == '+') || (ch == '\"') || (ch == '`') ||
+			(ch == '/') || (ch == '|') || (ch == '%');
+	}
+
+	bool IsEscape(int ch)
+	{
+		return ch == '\\';
+	}
+
+	bool isTeXfive(int ch)
+	{
+		return ((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z')) ||
+			(ch == '@') || (ch == '!') || (ch == '?');
+	}
+
+	bool IsSpace(int ch)
+	{
+		return ch == ' ';
+	}
+
+	bool isTeXseven(int ch)
+	{
+		return ch == '^';
+	}
+
+	bool IsDigit(int ch)
+	{
+		return ch >= '0' && ch <= '9';
+	}
+
+	bool equal_strings(const char* s1, const char* s2)
+	{
+		return std::strcmp(s1, s2) == 0;
+	}
+
+	bool IsCommentLine(int line, Accessor &styler)
+	{
+		int pos = styler.LineStart(line);
+		int eol_pos = styler.LineStart(line + 1) - 1;
+
+		int startpos = pos;
+
+		while (startpos < eol_pos) {
+			char ch = styler[startpos];
+
+			if (ch != '%' && ch != ' ') 
+				return false;
+			else if (ch == '%')
+				return true;
+
+			++startpos;
 		}
-    }
 
-    return defaultInterface ;
-}
+		return false;
+	}
 
-static void ColouriseTeXDoc(
-    unsigned int startPos,
-    int length,
-    int,
-    WordList *keywordlists[],
-    Accessor &styler) {
+	const char* const verbatim[] = {
+		"verbatim",
+		"listings"
+	};
 
-	styler.StartAt(startPos) ;
-	styler.StartSegment(startPos) ;
+	bool IsVerbatimEnvironment(const char* s)
+	{
+		const char* const* end = verbatim + sizeof(verbatim) / sizeof(*verbatim);
+		return std::find_if(verbatim,end,std::bind2nd(std::ptr_fun(equal_strings),s)) != end;
+	}
 
-	bool processComment   = styler.GetPropertyInt("lexer.tex.comment.process",   0) == 1 ;
-	bool useKeywords      = styler.GetPropertyInt("lexer.tex.use.keywords",      1) == 1 ;
-	bool autoIf           = styler.GetPropertyInt("lexer.tex.auto.if",           1) == 1 ;
-	int  defaultInterface = styler.GetPropertyInt("lexer.tex.interface.default", 1) ;
+	bool IsTeXSecond(int ch)
+	{
+		return std::isprint(ch) != 0;
+	}
 
-	char key[100] ;
-	int  k ;
-	bool newifDone = false ;
-	bool inComment = false ;
+	const char* const units[] = {
+		"em",
+		"ex",
+		"pt",
+		"pc",
+		"in",
+		"bp",
+		"cm",
+		"mm",
+		"dd",
+		"cc",
+		"sp"
+	};
 
-	int currentInterface = CheckTeXInterface(startPos,length,styler,defaultInterface) ;
+#pragma endregion
 
-    if (currentInterface == 0) {
-        useKeywords = false ;
-        currentInterface = 1 ;
-    }
+	// Interface determination
+	int CheckTeXInterface(unsigned startPos, int length, Accessor &styler, int defaultInterface)
+	{
+		char lineBuffer[1024];
+		unsigned int linePos = 0;
 
-    WordList &keywords = *keywordlists[currentInterface-1] ;
+		// some day we can make something lexer.tex.mapping=(all,0)(nl,1)(en,2)...
 
-	StyleContext sc(startPos, length, SCE_TEX_TEXT, styler);
+		if (styler.SafeGetCharAt(0) == '%') {
+			for (unsigned int i = 0; i < startPos + length; i++) {
+				lineBuffer[linePos++] = styler.SafeGetCharAt(i);
 
-	bool going = sc.More() ; // needed because of a fuzzy end of file state
+				if (EndOfLine(styler, i) || (linePos >= sizeof (lineBuffer) - 1)) {
+					lineBuffer[linePos] = '\0';
 
-	for (; going; sc.Forward()) {
-
-		if (! sc.More()) { going = false ; } // we need to go one behind the end of text
-
-		if (inComment) {
-			if (sc.atLineEnd) {
-				sc.SetState(SCE_TEX_TEXT) ;
-				newifDone = false ;
-				inComment = false ;
-			}
-		} else {
-			if (! isTeXfive(sc.ch)) {
-				if (sc.state == SCE_TEX_COMMAND) {
-					if (sc.LengthCurrent() == 1) { // \<noncstoken>
-						if (isTeXseven(sc.ch) && isTeXseven(sc.chNext)) {
-							sc.Forward(2) ; // \^^ and \^^<token>
-						}
-						sc.ForwardSetState(SCE_TEX_TEXT) ;
-					} else {
-						sc.GetCurrent(key, sizeof(key)-1) ;
-						k = strlen(key) ;
-						memmove(key,key+1,k) ; // shift left over escape token
-						key[k] = '\0' ;
-						k-- ;
-						if (! keywords || ! useKeywords) {
-							sc.SetState(SCE_TEX_COMMAND) ;
-							newifDone = false ;
-						} else if (k == 1) { //\<cstoken>
-							sc.SetState(SCE_TEX_COMMAND) ;
-							newifDone = false ;
-						} else if (keywords.InList(key)) {
-    						sc.SetState(SCE_TEX_COMMAND) ;
-							newifDone = autoIf && (strcmp(key,"newif") == 0) ;
-						} else if (autoIf && ! newifDone && (key[0] == 'i') && (key[1] == 'f') && keywords.InList("if")) {
-	    					sc.SetState(SCE_TEX_COMMAND) ;
-						} else {
-							sc.ChangeState(SCE_TEX_TEXT) ;
-							sc.SetState(SCE_TEX_TEXT) ;
-							newifDone = false ;
-						}
+					if (std::strstr(lineBuffer, "interface=all")) {
+						return 0;
+					}
+					else if (std::strstr(lineBuffer, "interface=tex")) {
+						return 1;
+					}
+					else if (std::strstr(lineBuffer, "interface=nl")) {
+						return 2;
+					}
+					else if (std::strstr(lineBuffer, "interface=en")) {
+						return 3;
+					}
+					else if (std::strstr(lineBuffer, "interface=de")) {
+						return 4;
+					}
+					else if (std::strstr(lineBuffer, "interface=cz")) {
+						return 5;
+					}
+					else if (std::strstr(lineBuffer, "interface=it")) {
+						return 6;
+					}
+					else if (std::strstr(lineBuffer, "interface=ro")) {
+						return 7;
+					}
+					else if (std::strstr(lineBuffer, "interface=latex")) {
+						// we will move latex cum suis up to 91+ when more keyword lists are supported
+						return 8;
+					}
+					else if (styler.SafeGetCharAt(1) == 'D' && std::strstr(lineBuffer, "%D \\module")) {
+						// better would be to limit the search to just one line
+						return 3;
+					}
+					else {
+						return defaultInterface;
 					}
 				}
-				if (isTeXzero(sc.ch)) {
-					sc.SetState(SCE_TEX_SYMBOL);
+			}
+		}
 
-					if (!endOfLine(styler,sc.currentPos + 1))
-						sc.ForwardSetState(SCE_TEX_DEFAULT) ;
+		return defaultInterface;
+	}
 
-					inComment = ! processComment ;
-					newifDone = false ;
-				} else if (isTeXseven(sc.ch) && isTeXseven(sc.chNext)) {
-					sc.SetState(SCE_TEX_TEXT) ;
-					sc.ForwardSetState(SCE_TEX_TEXT) ;
-				} else if (isTeXone(sc.ch)) {
-					sc.SetState(SCE_TEX_SPECIAL) ;
-					newifDone = false ;
-				} else if (isTeXtwo(sc.ch)) {
-					sc.SetState(SCE_TEX_GROUP) ;
-					newifDone = false ;
-				} else if (isTeXthree(sc.ch)) {
-					sc.SetState(SCE_TEX_SYMBOL) ;
-					newifDone = false ;
-				} else if (isTeXfour(sc.ch)) {
-					sc.SetState(SCE_TEX_COMMAND) ;
-				} else if (isTeXsix(sc.ch)) {
-					sc.SetState(SCE_TEX_TEXT) ;
-				} else if (sc.atLineEnd) {
-					sc.SetState(SCE_TEX_TEXT) ;
-					newifDone = false ;
-					inComment = false ;
-				} else {
-					sc.SetState(SCE_TEX_TEXT) ;
+	void ColouriseTeXDoc(unsigned startPos, int length, int, WordList** keywordlists, Accessor &styler)
+	{
+		styler.StartAt(startPos);
+		styler.StartSegment(startPos);
+
+		bool processComment = styler.GetPropertyInt("lexer.tex.comment.process", 0) == 1;
+		bool useKeywords = styler.GetPropertyInt("lexer.tex.use.keywords", 1) == 1;
+		bool autoIf = styler.GetPropertyInt("lexer.tex.auto.if", 1) == 1;
+		int defaultInterface = styler.GetPropertyInt("lexer.tex.interface.default", 1);
+
+		char key[100];
+		const int key_length = sizeof(key) - 1;
+
+		int k;
+		bool newifDone = false;
+		bool inComment = false;
+
+		int currentInterface = CheckTeXInterface(startPos, length, styler, defaultInterface);
+
+		if (currentInterface == 0) {
+			useKeywords = false;
+			currentInterface = 1;
+		}
+
+		WordList &keywords = *keywordlists[currentInterface - 1];
+
+		int group_depth = 0;
+		bool next_group_name = false;
+		int text_style = SCE_TEX_TEXT;
+		int line = styler.GetLine(startPos);
+
+		if (line > 0)
+			text_style = styler.StyleAt(styler.LineStart(line) - 1);
+
+		int command_style = text_style == SCE_TEX_INLINE_MATH ? SCE_TEX_INLINE_MATH_COMMAND : SCE_TEX_COMMAND;
+
+		StyleContext sc(startPos, length, text_style, styler);
+
+		bool going = sc.More(); // needed because of a fuzzy end of file state
+
+		for (; going; sc.Forward()) {
+
+			if (!sc.More()) {
+				going = false;
+			} // we need to go one behind the end of text
+
+			if (inComment) {
+				if (sc.atLineEnd) {
+					sc.SetState(text_style);
+					newifDone = false;
+					inComment = false;
 				}
-			} else if (sc.state != SCE_TEX_COMMAND) {
-				sc.SetState(SCE_TEX_TEXT) ;
+				else
+					sc.SetState(SCE_TEX_COMMENT);
+			}
+			else {
+				if (text_style == SCE_TEX_INLINE_MATH && sc.currentPos > 0 &&
+						sc.ch == '$' && (sc.chPrev != '\\' || styler.SafeGetCharAt(sc.currentPos - 2) == '\\')) {
+					sc.SetState(SCE_TEX_GROUP);
+					text_style = SCE_TEX_TEXT;
+					command_style = SCE_TEX_COMMAND;
+					sc.ForwardSetState(text_style);
+				}
+
+				bool done = false;
+				bool reset = false;
+				bool cnt = true;
+
+				if (sc.state == SCE_TEX_DIGIT) {
+					const int count = sizeof(units) / sizeof(*units);
+					bool stop = false;
+
+					for (int i = 0; i < count && !stop; ++i)
+						if (sc.Match(units[i]))
+							stop = true;
+
+					if (stop) {
+						sc.SetState(SCE_TEX_UNIT);
+						sc.ForwardSetState(sc.state);
+						done = true;
+						cnt = false;
+					}
+				}
+
+				if (cnt) {
+					if (!isTeXfive(sc.ch)) {
+						if (sc.state == command_style) {
+							if (sc.LengthCurrent() == 1) { // \<noncstoken>
+								if (isTeXseven(sc.ch) && isTeXseven(sc.chNext)) {
+									sc.Forward(2); // \^^ and \^^<token>
+								}
+
+								if (!(text_style == SCE_TEX_INLINE_MATH && sc.chNext == '$')) {
+									if (!IsDigit(sc.ch))
+										sc.ForwardSetState(text_style);									
+								}
+								else
+									done = true;
+							}
+							else {
+								sc.GetCurrent(key, key_length);
+								k = std::strlen(key);
+								std::memmove(key, key + 1, k); // shift left over escape token
+								key[k--] = '\0';
+
+								if (IsUsePackage(key)) {
+									// \usepackage
+									sc.ChangeState(SCE_TEX_USE_PACKAGE);
+									newifDone = false;
+								}
+								else if (IsDocumentClass(key)) {
+									// \documentclass
+									sc.ChangeState(SCE_TEX_DOCUMENTCLASS);
+									newifDone = false;
+								}
+								else if (!keywords || !useKeywords) {
+									sc.SetState(command_style);
+									newifDone = false;
+								}
+								else if (k == 1) { //\<cstoken>
+									sc.SetState(command_style);
+									newifDone = false;
+								}
+								else if (keywords.InList(key)) {
+									sc.SetState(command_style);
+									newifDone = autoIf && (std::strcmp(key, "newif") == 0);
+								}
+								else if (autoIf && !newifDone && (key[0] == 'i') && (key[1] == 'f') && keywords.InList("if")) {
+									sc.SetState(command_style);
+								}
+								else {
+									sc.ChangeState(text_style);
+									sc.SetState(text_style);
+									newifDone = false;
+								}
+
+								if (std::strcmp(key, "begin") == 0) {
+									next_group_name = true;
+									++group_depth;
+								}
+								else if (std::strcmp(key, "end") == 0) {
+									next_group_name = true;
+
+									if (group_depth > 0)
+										--group_depth;
+								}
+							}
+						}
+
+						if (!done) {
+							if (IsComment(sc.ch)) {
+								sc.SetState(SCE_TEX_COMMENT);
+
+								inComment = !processComment;
+								newifDone = false;
+							}
+							else if (isTeXseven(sc.ch) && isTeXseven(sc.chNext)) {
+								sc.SetState(text_style);
+								sc.ForwardSetState(SCE_TEX_TEXT);
+							}
+							else if (isTeXone(sc.ch)) {
+								sc.SetState(SCE_TEX_SPECIAL);
+								newifDone = false;
+							}
+							else if (sc.ch == '$' && text_style != SCE_TEX_INLINE_MATH) {
+								sc.SetState(SCE_TEX_GROUP);
+								text_style = SCE_TEX_INLINE_MATH;
+								command_style = SCE_TEX_INLINE_MATH_COMMAND;
+
+								newifDone = false;
+							}
+							else if (isTeXtwo(sc.ch)) {
+								sc.SetState(SCE_TEX_GROUP);
+								newifDone = false;
+
+								if (sc.ch == '{' && next_group_name) {
+									sc.ForwardSetState(SCE_TEX_GROUP_NAME);
+
+									SkipWhileNext(sc,std::bind2nd(std::equal_to<char>(),' ')); // while sc.chNext == ' '
+									SkipWhileNext(sc,std::bind2nd(std::not2(std::equal_to<char>()),'}')); // while sc.chNext != '}'
+
+									next_group_name = false;
+								}
+							}
+							else if (isTeXthree(sc.ch)) {
+								sc.SetState(SCE_TEX_SYMBOL);
+								newifDone = false;
+							}
+							else if (IsEscape(sc.ch)) {
+								sc.SetState(command_style);
+
+								if (!IsDigit(sc.chNext) && !IsTeXSecond(sc.chNext))
+									sc.ForwardSetState(text_style);
+							}
+							else if (IsSpace(sc.ch)) {
+								reset = true;
+							}
+							else if (IsDigit(sc.ch)) {
+								sc.SetState(SCE_TEX_DIGIT);
+							}
+							else if (sc.atLineEnd) {
+								reset = true;
+								newifDone = inComment = false;
+							}
+							else {
+								reset = true;
+							}
+						}
+						else if (sc.state != command_style) {
+							reset = true;
+						}
+					}
+					else if (sc.state != command_style) {
+						reset = true;
+						sc.SetState(text_style);
+					}
+				}
+
+				if (reset)
+					sc.SetState(text_style);
 			}
 		}
+
+		sc.ChangeState(text_style);
+		sc.Complete();
 	}
-	sc.ChangeState(SCE_TEX_TEXT) ;
-	sc.Complete();
 
-}
+	int ParseTeXCommand(unsigned int pos, Accessor &styler, char *command)
+	{
+		int length = 0;
+		char ch = styler.SafeGetCharAt(pos + 1);
 
+		if (ch == ',' || ch == ':' || ch == ';' || ch == '%') {
+			command[0] = ch;
+			command[1] = 0;
+			return 1;
+		}
 
-static inline bool isNumber(int ch) {
-	return
-      (ch == '0') || (ch == '1') || (ch == '2') ||
-      (ch == '3') || (ch == '4') || (ch == '5') ||
-      (ch == '6') || (ch == '7') || (ch == '8') || (ch == '9');
-}
+		// find end
+		while (isWordChar(ch) && !IsDigit(ch) && ch != '_' && ch != '.' && length < 100) {
+			command[length] = ch;
+			++length;
+			ch = styler.SafeGetCharAt(pos + length + 1);
+		}
 
-static inline bool isWordChar(int ch) {
-	return ((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z'));
-}
+		command[length] = '\0';
 
-static int ParseTeXCommand(unsigned int pos, Accessor &styler, char *command)
-{
-  int length=0;
-  char ch=styler.SafeGetCharAt(pos+1);
+		if (!length)
+			return 0;
 
-  if(ch==',' || ch==':' || ch==';' || ch=='%'){
-      command[0]=ch;
-      command[1]=0;
-	  return 1;
-  }
-
-  // find end
-     while(isWordChar(ch) && !isNumber(ch) && ch!='_' && ch!='.' && length<100){
-          command[length]=ch;
-          length++;
-          ch=styler.SafeGetCharAt(pos+length+1);
-     }
-
-  command[length]='\0';
-  if(!length) return 0;
-  return length+1;
-}
-
-static int classifyFoldPointTeXPaired(const char* s) {
-	int lev=0;
-	if (!(isdigit(s[0]) || (s[0] == '.'))){
-		if (strcmp(s, "begin")==0||strcmp(s,"FoldStart")==0||
-			strcmp(s,"abstract")==0||strcmp(s,"unprotect")==0||
-			strcmp(s,"title")==0||strncmp(s,"start",5)==0||strncmp(s,"Start",5)==0||
-			strcmp(s,"documentclass")==0||strncmp(s,"if",2)==0
-			)
-			lev=1;
-		if (strcmp(s, "end")==0||strcmp(s,"FoldStop")==0||
-			strcmp(s,"maketitle")==0||strcmp(s,"protect")==0||
-			strncmp(s,"stop",4)==0||strncmp(s,"Stop",4)==0||
-			strcmp(s,"fi")==0
-			)
-		lev=-1;
+		return length + 1;
 	}
-	return lev;
-}
 
-static int classifyFoldPointTeXUnpaired(const char* s) {
-	int lev=0;
-	if (!(isdigit(s[0]) || (s[0] == '.'))){
-		if (strcmp(s,"part")==0||
-			strcmp(s,"chapter")==0||
-			strcmp(s,"section")==0||
-			strcmp(s,"subsection")==0||
-			strcmp(s,"subsubsection")==0||
-			strcmp(s,"CJKfamily")==0||
-			strcmp(s,"appendix")==0||
-			strcmp(s,"Topic")==0||strcmp(s,"topic")==0||
-			strcmp(s,"subject")==0||strcmp(s,"subsubject")==0||
-			strcmp(s,"def")==0||strcmp(s,"gdef")==0||strcmp(s,"edef")==0||
-			strcmp(s,"xdef")==0||strcmp(s,"framed")==0||
-			strcmp(s,"frame")==0||
-			strcmp(s,"foilhead")==0||strcmp(s,"overlays")==0||strcmp(s,"slide")==0
-			){
-			    lev=1;
+	int classifyFoldPointTeXPaired(const char* s)
+	{
+		int lev = 0;
+
+		if (!(std::isdigit(s[0]) || (s[0] == '.'))) {
+			if (std::strcmp(s, "begin") == 0 || std::strcmp(s, "FoldStart") == 0 ||
+					std::strcmp(s, "begingroup") == 0 ||
+					std::strcmp(s, "abstract") == 0 || std::strcmp(s, "unprotect") == 0 ||
+					std::strcmp(s, "makeatletter") == 0 ||
+					std::strcmp(s, "title") == 0 || std::strncmp(s, "start", 5) == 0 || std::strncmp(s, "Start", 5) == 0 ||
+					std::strcmp(s, "documentclass") == 0 || std::strncmp(s, "if", 2) == 0
+					)
+				lev = 1;
+			if (std::strcmp(s, "end") == 0 || std::strcmp(s, "FoldStop") == 0 ||
+					std::strcmp(s, "endgroup") == 0 ||
+					std::strcmp(s, "maketitle") == 0 || std::strcmp(s, "protect") == 0 ||
+					std::strcmp(s, "makeatother") == 0 ||
+					std::strncmp(s, "stop", 4) == 0 || std::strncmp(s, "Stop", 4) == 0 ||
+					std::strcmp(s, "fi") == 0
+					)
+				lev = -1;
+		}
+
+		return lev;
+	}
+
+	int classifyFoldPointTeXUnpaired(const char* s)
+	{
+		int lev = 0;
+
+		if (!(std::isdigit(s[0]) || (s[0] == '.'))) {
+			static const char* const sections[] = {
+			   "part",
+			   "chapter",
+			   "section",
+			   "subsection",
+			   "subsubsection",
+			   "paragraph",
+			   "subparagraph",
+			   "addpart",
+			   "addchap",
+			   "addsec",
+			   "addsubsec",
+			   "minisec",
+			   //"newcommand",
+			   //"renewcommand",
+			   "newenvironment",
+			   "renewenvironment",
+			   "CJKfamily",
+			   "appendix",
+			   "Topic",
+			   "topic",
+			   "subject",
+			   "subsubject",
+			   "def",
+			   "gdef",
+			   "edef",
+			   "xdef",
+			   "framed",
+			   "frame",
+			   "foilhead",
+			   "overlays",
+			   "slide"
+			};
+
+			const std::size_t count = sizeof (sections) / sizeof (*sections);
+
+			if (std::find_if(sections, sections + count, std::bind2nd(std::ptr_fun(equal_strings), s)) != sections + count)
+				lev = 1;
+		}
+
+		return lev;
+	}
+
+	// FoldTeXDoc: borrowed from VisualTeX with modifications
+	void FoldTexDoc(unsigned startPos, int length, int, WordList**, Accessor &styler)
+	{
+		bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
+		unsigned endPos = startPos + length;
+		int visibleChars = 0;
+		int lineCurrent = styler.GetLine(startPos);
+		int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
+		int levelCurrent = levelPrev;
+		char chNext = styler[startPos];
+		char buffer[100] = "";
+
+		for (unsigned i = startPos; i < endPos; ++i) {
+			char ch = chNext;
+			chNext = styler.SafeGetCharAt(i + 1);
+			bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
+
+			if (ch == '\\') {
+				ParseTeXCommand(i, styler, buffer);
+				levelCurrent += classifyFoldPointTeXPaired(buffer) + classifyFoldPointTeXUnpaired(buffer);
 			}
-	}
-	return lev;
-}
 
-static bool IsTeXCommentLine(int line, Accessor &styler) {
-	int pos = styler.LineStart(line);
-	int eol_pos = styler.LineStart(line + 1) - 1;
-
-	int startpos = pos;
-
-	while (startpos<eol_pos){
-		char ch = styler[startpos];
-		if (ch!='%' && ch!=' ') return false;
-		else if (ch=='%') return true;
-		startpos++;
-	}
-
-	return false;
-}
-
-// FoldTeXDoc: borrowed from VisualTeX with modifications
-
-static void FoldTexDoc(unsigned int startPos, int length, int, WordList *[], Accessor &styler)
-{
-	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
-	unsigned int endPos = startPos+length;
-	int visibleChars=0;
-	int lineCurrent=styler.GetLine(startPos);
-	int levelPrev=styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
-	int levelCurrent=levelPrev;
-	char chNext=styler[startPos];
-	char buffer[100]="";
-
-	for (unsigned int i=startPos; i < endPos; i++) {
-		char ch=chNext;
-		chNext=styler.SafeGetCharAt(i+1);
-		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
-
-        if(ch=='\\') {
-            ParseTeXCommand(i, styler, buffer);
-			levelCurrent += classifyFoldPointTeXPaired(buffer)+classifyFoldPointTeXUnpaired(buffer);
-		}
-
-		if (levelCurrent > SC_FOLDLEVELBASE && ((ch == '\r' || ch=='\n') && (chNext == '\\'))) {
-            ParseTeXCommand(i+1, styler, buffer);
-			levelCurrent -= classifyFoldPointTeXUnpaired(buffer);
-		}
-
-	char chNext2;
-	char chNext3;
-	char chNext4;
-	char chNext5;
-	chNext2=styler.SafeGetCharAt(i+2);
-	chNext3=styler.SafeGetCharAt(i+3);
-	chNext4=styler.SafeGetCharAt(i+4);
-	chNext5=styler.SafeGetCharAt(i+5);
-
-	bool atEOfold = (ch == '%') &&
-			(chNext == '%') && (chNext2=='}') &&
-				(chNext3=='}')&& (chNext4=='-')&& (chNext5=='-');
-
-	bool atBOfold = (ch == '%') &&
-			(chNext == '%') && (chNext2=='-') &&
-				(chNext3=='-')&& (chNext4=='{')&& (chNext5=='{');
-
-	if(atBOfold){
-		levelCurrent+=1;
-	}
-
-	if(atEOfold){
-		levelCurrent-=1;
-	}
-
-	if(ch=='\\' && chNext=='['){
-		levelCurrent+=1;
-	}
-
-	if(ch=='\\' && chNext==']'){
-		levelCurrent-=1;
-	}
-
-	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
-
-	if (foldComment && atEOL && IsTeXCommentLine(lineCurrent, styler))
-        {
-            if (lineCurrent==0 && IsTeXCommentLine(lineCurrent + 1, styler)
-				)
-                levelCurrent++;
-            else if (lineCurrent!=0 && !IsTeXCommentLine(lineCurrent - 1, styler)
-               && IsTeXCommentLine(lineCurrent + 1, styler)
-				)
-                levelCurrent++;
-            else if (lineCurrent!=0 && IsTeXCommentLine(lineCurrent - 1, styler) &&
-                     !IsTeXCommentLine(lineCurrent+1, styler))
-                levelCurrent--;
-        }
-
-//---------------------------------------------------------------------------------------------
-
-		if (atEOL) {
-			int lev = levelPrev;
-			if (visibleChars == 0 && foldCompact)
-				lev |= SC_FOLDLEVELWHITEFLAG;
-			if ((levelCurrent > levelPrev) && (visibleChars > 0))
-				lev |= SC_FOLDLEVELHEADERFLAG;
-			if (lev != styler.LevelAt(lineCurrent)) {
-				styler.SetLevel(lineCurrent, lev);
+			if (levelCurrent > SC_FOLDLEVELBASE && ((ch == '\r' || ch == '\n') && (chNext == '\\'))) {
+				ParseTeXCommand(i + 1, styler, buffer);
+				levelCurrent -= classifyFoldPointTeXUnpaired(buffer);
 			}
-			lineCurrent++;
-			levelPrev = levelCurrent;
-			visibleChars = 0;
+
+			char chNext2 = styler.SafeGetCharAt(i + 2);
+			char chNext3 = styler.SafeGetCharAt(i + 3);
+			char chNext4 = styler.SafeGetCharAt(i + 4);
+			char chNext5 = styler.SafeGetCharAt(i + 5);
+
+			bool atEOfold = (ch == '%') &&
+					(chNext == '%') && (chNext2 == '}') &&
+					(chNext3 == '}') && (chNext4 == '-') && (chNext5 == '-');
+
+			bool atBOfold = (ch == '%') &&
+					(chNext == '%') && (chNext2 == '-') &&
+					(chNext3 == '-') && (chNext4 == '{') && (chNext5 == '{');
+
+			if (atBOfold) {
+				++levelCurrent;
+			}
+
+			if (atEOfold) {
+				--levelCurrent;
+			}
+
+			if (ch == '\\' && chNext == '[') {
+				++levelCurrent;
+			}
+
+			if (ch == '\\' && chNext == ']') {
+				--levelCurrent;
+			}
+
+			bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
+
+			if (foldComment && atEOL && IsCommentLine(lineCurrent, styler)) {
+				if (lineCurrent == 0 && IsCommentLine(lineCurrent + 1, styler)
+						)
+					++levelCurrent;
+				else if (lineCurrent != 0 && !IsCommentLine(lineCurrent - 1, styler)
+						&& IsCommentLine(lineCurrent + 1, styler)
+						)
+					++levelCurrent;
+				else if (lineCurrent != 0 && IsCommentLine(lineCurrent - 1, styler) &&
+						!IsCommentLine(lineCurrent + 1, styler))
+					--levelCurrent;
+			}
+
+			//---------------------------------------------------------------------------------------------
+
+			if (atEOL) {
+				int lev = levelPrev;
+				if (visibleChars == 0 && foldCompact)
+					lev |= SC_FOLDLEVELWHITEFLAG;
+				if ((levelCurrent > levelPrev) && (visibleChars > 0))
+					lev |= SC_FOLDLEVELHEADERFLAG;
+				if (lev != styler.LevelAt(lineCurrent)) {
+					styler.SetLevel(lineCurrent, lev);
+				}
+
+				++lineCurrent;
+				levelPrev = levelCurrent;
+				visibleChars = 0;
+			}
+
+			if (!isspacechar(ch))
+				++visibleChars;
 		}
 
-		if (!isspacechar(ch))
-			visibleChars++;
+		// Fill in the real level of the next line, keeping the current flags as they will be filled in later
+		int flagsNext = styler.LevelAt(lineCurrent) & ~SC_FOLDLEVELNUMBERMASK;
+		styler.SetLevel(lineCurrent, levelPrev | flagsNext);
 	}
 
-	// Fill in the real level of the next line, keeping the current flags as they will be filled in later
-	int flagsNext = styler.LevelAt(lineCurrent) & ~SC_FOLDLEVELNUMBERMASK;
-	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
+	const char * const texWordListDesc[] = {
+	   "TeX, eTeX, pdfTeX, Omega",
+	   "ConTeXt Dutch",
+	   "ConTeXt English",
+	   "ConTeXt German",
+	   "ConTeXt Czech",
+	   "ConTeXt Italian",
+	   "ConTeXt Romanian",
+	   0,
+	};
 }
 
-
-
-
-static const char * const texWordListDesc[] = {
-    "TeX, eTeX, pdfTeX, Omega",
-    "ConTeXt Dutch",
-    "ConTeXt English",
-    "ConTeXt German",
-    "ConTeXt Czech",
-    "ConTeXt Italian",
-    "ConTeXt Romanian",
-	0,
-} ;
-
-LexerModule lmTeX(SCLEX_TEX,   ColouriseTeXDoc, "tex", FoldTexDoc, texWordListDesc);
+LexerModule lmTeX(SCLEX_TEX, ColouriseTeXDoc, "tex", FoldTexDoc, texWordListDesc);
