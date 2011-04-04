@@ -114,8 +114,11 @@ History: PJN / 19-03-2004 1. Initial implementation synchronized to the v1.59 re
                           SCI_GETADDITIONALCARETSVISIBLE, SCI_CHANGELEXERSTATE, SCI_CONTRACTEDFOLDNEXT, SCI_VERTICALCENTRECARET,
                           SCI_GETLEXERLANGUAGE, SCI_PRIVATELEXERCALL, SCI_PROPERTYNAMES, SCI_PROPERTYTYPE, SCI_DESCRIBEPROPERTY, 
                           SCI_DESCRIBEKEYWORDSETS. Also there were some parameter changes to existing messages.
+         PJN / 01-04-2011 1. Updated copyright details.
+                          2. Updated class to work with Scintilla v2.25. New messages wrapped include:
+                          SCI_SETMARGINCURSORN & SCI_GETMARGINCURSORN
 
-Copyright (c) 2004 - 2009 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
+Copyright (c) 2004 - 2011 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
 
 All rights reserved.
 
@@ -1201,6 +1204,16 @@ void CScintillaCtrl::SetMarginSensitiveN(int margin, BOOL sensitive, BOOL bDirec
 BOOL CScintillaCtrl::GetMarginSensitiveN(int margin, BOOL bDirect)
 {
   return Call(SCI_GETMARGINSENSITIVEN, static_cast<WPARAM>(margin), 0, bDirect);
+}
+
+void CScintillaCtrl::SetMarginCursorN(int margin, int cursor, BOOL bDirect)
+{
+  Call(SCI_SETMARGINCURSORN, static_cast<WPARAM>(margin), static_cast<LPARAM>(cursor), bDirect);
+}
+
+int CScintillaCtrl::GetMarginCursorN(int margin, BOOL bDirect)
+{
+  return Call(SCI_GETMARGINCURSORN, static_cast<WPARAM>(margin), 0, bDirect);
 }
 
 void CScintillaCtrl::StyleClearAll(BOOL bDirect)
@@ -3791,9 +3804,4 @@ int CScintillaCtrl::DescribeProperty(const char* name, char* description, BOOL b
 int CScintillaCtrl::DescribeKeyWordSets(char* descriptions, BOOL bDirect)
 {
   return Call(SCI_DESCRIBEKEYWORDSETS, 0, reinterpret_cast<LPARAM>(descriptions), bDirect);
-}
-
-void CScintillaCtrl::ShowCursor(bool show, bool direct /*= true*/)
-{
-  Call(SCI_SHOWCURSOR, show, 0, direct);
 }
