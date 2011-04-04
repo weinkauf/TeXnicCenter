@@ -1389,3 +1389,16 @@ void CLaTeXProject::SetFoldingPoints(const CString& filename, const FoldingPoint
 	else
 		folding_points_.erase(name);
 }
+
+CString CLaTeXProject::GetFullPath(const StructureItem& item) const
+{
+	CString result;
+
+	if (item.IsMainProjectFile())
+		result = item.GetPath();
+	else
+		result = CPathTool::GetAbsolutePath(CPathTool::GetDirectory(GetMainPath()),
+			item.GetPath());
+	
+	return result;
+}

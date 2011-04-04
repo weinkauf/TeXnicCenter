@@ -41,6 +41,8 @@
 #include "OleDrop.h"
 #include "TeXnicCenter.h"
 
+IMPLEMENT_DYNAMIC(NavigatorTreeCtrl, CTreeCtrl)
+
 BEGIN_MESSAGE_MAP(NavigatorTreeCtrl,CTreeCtrl)
 	ON_NOTIFY_REFLECT(TVN_SELCHANGED,&NavigatorTreeCtrl::OnSelChanged)
 	ON_WM_CREATE()
@@ -292,8 +294,7 @@ int NavigatorTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	UpdateFont();
 
 	// modify list ctrl
-	SetImageList(&m_images,TVSIL_NORMAL);
-	SetImageList(&m_images,TVSIL_STATE);
+	SetImageLists();
 
 	m_bFirstTime = FALSE;
 
@@ -316,7 +317,12 @@ int NavigatorTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 void NavigatorTreeCtrl::OnSelChanged(NMHDR* pNMHDR,LRESULT* pResult)
 {
 	if (CLaTeXProject* p = GetProject())
-		p->SetCurrentStructureItem(((NM_TREEVIEW*)pNMHDR)->itemNew.lParam);
+	{
+		HTREEITEM hItem = reinterpret_cast<NM_TREEVIEW*>(pNMHDR)->itemNew.hItem;
+
+		if (!IsFolder(hItem))
+			p->SetCurrentStructureItem(GetItemIndex(hItem));
+	}		
 
 	*pResult = 0;
 }
@@ -368,7 +374,6 @@ void NavigatorTreeCtrl::OnLButtonDblClk(UINT nFlags, CPoint point)
 	{
 		if (!IsFolder(item))
 		{
-			//GotoItem();
 			GotoItem(item);
 		}
 		else
@@ -487,7 +492,7 @@ void NavigatorTreeCtrl::OnTvnBeginDrag(NMHDR *pNMHDR, LRESULT *pResult)
 	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
 	HTREEITEM item = pNMTreeView->itemNew.hItem;
 
-	StructureItemContainer::size_type pos = GetItemData(item);
+	StructureItemContainer::size_type pos = GetItemIndex(item);
 
 	if (pos < GetProject()->GetStructureItems().size())
 		SetDraggedItem(new StructureItem(GetProject()->GetStructureItems()[pos]));
@@ -511,4 +516,15 @@ void NavigatorTreeCtrl::OnEnter()
 bool NavigatorTreeCtrl::ShouldBeExpanded( HTREEITEM /*item*/ ) const
 {
 	return true;
+}
+
+void NavigatorTreeCtrl::SetImageLists()
+{
+	SetImageList(&m_images, TVSIL_NORMAL);
+	SetImageList(&m_images, TVSIL_STATE);
+}
+
+std::size_t NavigatorTreeCtrl::GetItemIndex(HTREEITEM hItem) const
+{
+	return static_cast<std::size_t>(GetItemData(hItem));
 }

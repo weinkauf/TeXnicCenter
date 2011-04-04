@@ -264,6 +264,8 @@ public:
 	bool GetBookmarks(const CString& filename, BookmarkContainerType& bookmarks) const;
 	bool GetFoldingPoints(const CString& filename, FoldingPointContainerType& points) const;
 
+	CString GetFullPath(const StructureItem& item) const;
+
 // properties
 protected:
 	/** path of the main latex-file of the project */

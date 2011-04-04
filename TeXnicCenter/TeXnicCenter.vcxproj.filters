@@ -134,9 +134,6 @@
     <ClCompile Include="filegrep.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fileview.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FileViewEx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -602,9 +599,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="filegrep.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fileview.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="FileViewEx.h">
