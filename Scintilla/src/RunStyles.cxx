@@ -148,8 +148,9 @@ bool RunStyles::FillRange(int &position, int value, int &fillLength) {
 		RemoveRunIfSameAsPrevious(runEnd);
 		RemoveRunIfSameAsPrevious(runStart);
 		return true;
+	} else {
+		return false;
 	}
-	return false;
 }
 
 void RunStyles::SetValueAt(int position, int value) {

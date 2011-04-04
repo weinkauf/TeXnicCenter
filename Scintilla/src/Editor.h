@@ -202,6 +202,9 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int lastXChosen;
 	int lineAnchor;
 	int originalAnchorPos;
+	int wordSelectAnchorStartPos;
+	int wordSelectAnchorEndPos;
+	int wordSelectInitialCaretPos;
 	int targetStart;
 	int targetEnd;
 	int searchFlags;
@@ -209,7 +212,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int posTopLine;
 	int lengthForEncode;
 
-	bool needUpdateUI;
+	int needUpdateUI;
 	Position braces[2];
 	int bracesMatchStyle;
 	int highlightGuideColumn;
@@ -392,7 +395,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void AddChar(char ch);
 	virtual void AddCharUTF(char *s, unsigned int len, bool treatAsDBCS=false);
 	void InsertPaste(SelectionPosition selStart, const char *text, int len);
-	void ClearSelection();
+	void ClearSelection(bool retainMultipleSelections=false);
 	void ClearAll();
 	void ClearDocumentStyle();
 	void Cut();
@@ -439,6 +442,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void NotifyErrorOccurred(Document *doc, void *userData, int status);
 	void NotifyMacroRecord(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
 
+	void ContainerNeedsUpdate(int flags);
 	void PageMove(int direction, Selection::selTypes sel=Selection::noSel, bool stuttered = false);
 	enum { cmSame, cmUpper, cmLower } caseMap;
 	virtual std::string CaseMapString(const std::string &s, int caseMapping);
@@ -480,7 +484,9 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool PositionInSelection(int pos);
 	bool PointInSelection(Point pt);
 	bool PointInSelMargin(Point pt);
+	Window::Cursor GetMarginCursor(Point pt);
 	void LineSelection(int lineCurrent_, int lineAnchor_);
+	void WordSelection(int pos);
 	void DwellEnd(bool mouseMoved);
 	void MouseLeave();
 	virtual void ButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
