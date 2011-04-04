@@ -3,7 +3,7 @@ Module : ScintillaCtrl.h
 Purpose: Defines the interface for an MFC wrapper class for the Scintilla edit control (www.scintilla.org)
 Created: PJN / 19-03-2004
 
-Copyright (c) 2004 - 2010 by PJ Naughter.  (Web: www.naughter.com, Email: pjna@naughter.com)
+Copyright (c) 2004 - 2011 by PJ Naughter.  (Web: www.naughter.com, Email: pjna@naughter.com)
 
 All rights reserved.
 
@@ -105,9 +105,7 @@ public:
   CStringW GetTag(int tagNumber, BOOL bDirect = TRUE);
 
   static CStringW UTF82W(const char* pszText, int nLength);
-#ifdef _UNICODE
   static CStringA W2UTF8(const wchar_t* pszText, int nLength);
-#endif
 #else
   CStringA GetSelText(BOOL bDirect = TRUE);
   CStringA GetCurLine(BOOL bDirect = TRUE);
@@ -184,6 +182,8 @@ public:
   int GetMarginMaskN(int margin, BOOL bDirect = TRUE);
   void SetMarginSensitiveN(int margin, BOOL sensitive, BOOL bDirect = TRUE);
   BOOL GetMarginSensitiveN(int margin, BOOL bDirect = TRUE);
+  void SetMarginCursorN(int margin, int cursor, BOOL bDirect = TRUE);
+  int GetMarginCursorN(int margin, BOOL bDirect = TRUE);
   void StyleClearAll(BOOL bDirect = TRUE);
   void StyleSetFore(int style, COLORREF fore, BOOL bDirect = TRUE);
   void StyleSetBack(int style, COLORREF back, BOOL bDirect = TRUE);
@@ -702,7 +702,6 @@ public:
   int PropertyType(const char* name, BOOL bDirect = TRUE);
   int DescribeProperty(const char* name, char* description, BOOL bDirect = TRUE);
   int DescribeKeyWordSets(char* descriptions, BOOL bDirect = TRUE);
-  void ShowCursor(bool show, bool direct = true);
 
 protected:
   DECLARE_DYNAMIC(CScintillaCtrl)

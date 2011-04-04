@@ -86,8 +86,10 @@ History: PJN / 12-08-2004 1. Made all the remaining non virtual functions relate
                           which would result in failures in the logic for multibyte encoded characters. This made it
                           impossible to replace multibyte character sequences in find / replace operations. Thanks to
                           Alexei Letov for reporting this bug.
+         PJN / 01-04-2011 1. Updated CScintillaFindReplaceDlg::Create to use AfxFindResourceHandle instead of 
+                          AfxGetResourceHandle. Thanks to Niﬂl Markus for reporting this nice addition.
 
-Copyright (c) 2004 - 2010 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
+Copyright (c) 2004 - 2011 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
 
 All rights reserved.
 
@@ -111,8 +113,6 @@ to maintain a single distribution point for the source code.
 #include <afxdisp.h>
 #endif
 #include "resource.h"
-
-#include "FontOccManager.h"
 
 
 //////////////////////////////// Statics / Macros /////////////////////////////
@@ -152,10 +152,6 @@ _SCINTILLA_EDIT_STATE::_SCINTILLA_EDIT_STATE() : bRegularExpression(FALSE),
 
 _SCINTILLA_EDIT_STATE _scintillaEditState;
 
-CScintillaFindReplaceDlg* CScintillaFindReplaceDlg::GetFindReplaceDlg()
-{
-  return _scintillaEditState.pFindReplaceDlg;
-}
 
 BEGIN_MESSAGE_MAP(CScintillaFindReplaceDlg, CFindReplaceDialog)
   ON_BN_CLICKED(IDC_REGULAR_EXPRESSION, OnRegularExpression)
@@ -168,24 +164,12 @@ CScintillaFindReplaceDlg::CScintillaFindReplaceDlg(): m_bRegularExpression(FALSE
 BOOL CScintillaFindReplaceDlg::Create(BOOL bFindDialogOnly,	LPCTSTR lpszFindWhat, LPCTSTR lpszReplaceWith, DWORD dwFlags, CWnd* pParentWnd)
 {
   //Tell Windows to use our dialog instead of the standard one
-  UINT id;
-
+  m_fr.Flags |= FR_ENABLETEMPLATE;
   if (bFindDialogOnly)
-	  id = IDD_SCINTILLA_FINDDLGORD;
+    m_fr.lpTemplateName = MAKEINTRESOURCE(IDD_SCINTILLA_FINDDLGORD);
   else
-	  id = IDD_SCINTILLA_REPLACEDLGORD;
-
-  templ_.Load(MAKEINTRESOURCE(id));
-
-  LOGFONT lf; WORD s;
-  GetDisplayFont(lf,s);
-
-  templ_.SetFont(lf.lfFaceName,s);
-
-  m_fr.Flags |= FR_ENABLETEMPLATEHANDLE;
-  m_fr.hInstance = static_cast<HINSTANCE>(templ_.m_hTemplate);
-
-  find_only_ = bFindDialogOnly != 0;
+    m_fr.lpTemplateName = MAKEINTRESOURCE(IDD_SCINTILLA_REPLACEDLGORD);
+  m_fr.hInstance = AfxFindResourceHandle(m_fr.lpTemplateName, RT_DIALOG);
 
   //Let the base class do its thing
   return CFindReplaceDialog::Create(bFindDialogOnly,	lpszFindWhat, lpszReplaceWith, dwFlags, pParentWnd);
@@ -358,7 +342,7 @@ void CScintillaView::DeleteContents()
 
 void CScintillaView::OnDraw(CDC*)
 {
-	//ASSERT(FALSE);
+	ASSERT(FALSE);
 }
 
 void CScintillaView::OnPaint()
@@ -816,9 +800,6 @@ void CScintillaView::OnEditFindReplace(BOOL bFindOnly)
   //Validate our parameters
 	ASSERT_VALID(this);
 
-	CScintillaCtrl& rCtrl = GetCtrl();
-	CString strFind(rCtrl.GetSelText());
-
 	m_bFirstSearch = TRUE;
 	if (_scintillaEditState.pFindReplaceDlg != NULL)
 	{
@@ -826,14 +807,6 @@ void CScintillaView::OnEditFindReplace(BOOL bFindOnly)
 		{
 			_scintillaEditState.pFindReplaceDlg->SetActiveWindow();
 			_scintillaEditState.pFindReplaceDlg->ShowWindow(SW_SHOW);
-
-			if (!strFind.IsEmpty()) // Set the new find string
-			{
-				CEdit* edit = static_cast<CEdit*>(_scintillaEditState.pFindReplaceDlg->GetDlgItem(1152));
-				edit->SetWindowText(strFind);
-				edit->SetSel(0,-1);
-			}
-
 			return;
 		}
 		else
@@ -844,7 +817,8 @@ void CScintillaView::OnEditFindReplace(BOOL bFindOnly)
 			ASSERT_VALID(this);
 		}
 	}
-  
+  CScintillaCtrl& rCtrl = GetCtrl();
+	CString strFind(rCtrl.GetSelText());
 	//if selection is empty or spans multiple lines use old find text
 	if (strFind.IsEmpty() || (strFind.FindOneOf(_T("\n\r")) != -1))
 		strFind = _scintillaEditState.strFind;
@@ -945,46 +919,26 @@ void CScintillaView::OnReplaceAll(LPCTSTR lpszFind, LPCTSTR lpszReplace, BOOL bC
 	CWaitCursor wait;
 
   //Set the selection to the begining of the document to ensure all text is replaced in the document
-  long start_pos, end_pos;
-  GetReplaceAllTarget(start_pos,end_pos);
+  CScintillaCtrl& rCtrl = GetCtrl();
+  rCtrl.SetSel(0, 0);
 
-  CScintillaCtrl& c = GetCtrl();
-  bool has_selection = c.GetSelectionStart() != c.GetSelectionEnd();
-
-  int flags = 0;
-
-  if (bCase)
-	  flags |= SCFIND_MATCHCASE;
-
-  if (bRegularExpression)
-	  flags |= SCFIND_REGEXP;
-
-  if (bWord)
-	  flags |= SCFIND_WHOLEWORD;
-
-  c.SetSearchFlags(flags);
-  c.BeginUndoAction();
-
-  c.SetTargetStart(start_pos);
-  c.SetTargetEnd(end_pos);
-
-  long find_pos;
-  bool bFoundSomething = false;
-
-  while ((find_pos = c.SearchInTarget(_scintillaEditState.strFind.GetLength(),_scintillaEditState.strFind)) != -1)
+  //Do the replacments
+	rCtrl.HideSelection(TRUE, FALSE);
+  BOOL bFoundSomething = FALSE;
+	while (FindTextSimple(_scintillaEditState.strFind, _scintillaEditState.bNext, bCase, bWord, bRegularExpression))
   {
-	  c.ReplaceTarget(_scintillaEditState.strReplace.GetLength(),_scintillaEditState.strReplace);
-	  c.SetTargetStart(c.GetTargetEnd() + 1);
-	  c.SetTargetEnd(end_pos); // Still end position
-
-	  if (!bFoundSomething)
-		  bFoundSomething = true;
+    bFoundSomething = TRUE;
+    if (bRegularExpression)
+    {
+      rCtrl.TargetFromSelection();
+      rCtrl.ReplaceTargetRE(_scintillaEditState.strReplace.GetLength(), _scintillaEditState.strReplace);
+    }
+    else
+		  rCtrl.ReplaceSel(_scintillaEditState.strReplace);
   }
 
-  c.EndUndoAction();
-
-  if (has_selection) // Was the text previously selected?
-	  c.SetSel(start_pos,c.GetTargetEnd());
+  //Restore the old selection
+	rCtrl.HideSelection(FALSE, FALSE);
 
   //Inform the user if we could not find anything
   if (!bFoundSomething)
@@ -1628,10 +1582,6 @@ BOOL CScintillaView::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
   }
 }
 
-void CScintillaView::GetReplaceAllTarget(long& s, long& e)
-{
-  s = 0; e = GetCtrl().GetLength();
-}
 
 IMPLEMENT_DYNAMIC(CScintillaDoc, CDocument)
 
