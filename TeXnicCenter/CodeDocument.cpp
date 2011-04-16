@@ -186,8 +186,8 @@ CodeDocument::Encoding TextDocument::TestForUnicode(const BYTE* data, SIZE_T siz
 		//	  looks like a UTF-16 stream starting with U+FEFF (Byte-order mark)
 
 		bool utf8 = true;
+		bool ascii = true;
 		std::size_t consecutive_bytes = 0;
-		bool ascii = size && data[0] < 128;
 		std::size_t i = 0;
 
 		for ( ; i < size && utf8; ++i) {
@@ -208,7 +208,7 @@ CodeDocument::Encoding TextDocument::TestForUnicode(const BYTE* data, SIZE_T siz
 				--consecutive_bytes;
 		}
 
-		if (utf8 && !(ascii && i == size))
+		if (utf8 || ascii && i == size)
 			encoding = CodeDocument::UTF8;
 	}
 
