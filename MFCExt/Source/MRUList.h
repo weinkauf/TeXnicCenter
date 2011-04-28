@@ -4,9 +4,9 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This library is free software; you can redistribute it and/or
-* modify, but leave the headers intact and do not remove any 
+* modify, but leave the headers intact and do not remove any
 * copyrights from the source.
 *
 * This library does not only contain file from us, but also from
@@ -67,7 +67,7 @@ public:
 	@param nIndex
 		Zero based index of the element to return.
 	*/
-	TYPE operator[]( int nIndex );
+	TYPE operator[]( INT_PTR nIndex );
 
 	// make protected CObject-operators public
 	void* PASCAL operator new(size_t nSize);
@@ -129,15 +129,15 @@ CMRUList<TYPE, ARG_TYPE>::CMRUList( int nSize )
 
 
 template<class TYPE, class ARG_TYPE>
-inline 
-TYPE CMRUList<TYPE, ARG_TYPE>::operator[]( int nIndex )
+inline
+TYPE CMRUList<TYPE, ARG_TYPE>::operator[]( INT_PTR nIndex )
 {
 	return CArray<TYPE, ARG_TYPE>::operator[]( nIndex );
 }
 
 
 template<class TYPE, class ARG_TYPE>
-inline 
+inline
 void* PASCAL CMRUList<TYPE, ARG_TYPE>::operator new(size_t nSize)
 {
 	return CArray<TYPE, ARG_TYPE>::operator new( nSize );
@@ -145,7 +145,7 @@ void* PASCAL CMRUList<TYPE, ARG_TYPE>::operator new(size_t nSize)
 
 
 template<class TYPE, class ARG_TYPE>
-inline 
+inline
 void* PASCAL CMRUList<TYPE, ARG_TYPE>::operator new(size_t nSize , void* p)
 {
 	return CArray<TYPE, ARG_TYPE>::operator new( nSize, p );
@@ -153,7 +153,7 @@ void* PASCAL CMRUList<TYPE, ARG_TYPE>::operator new(size_t nSize , void* p)
 
 
 template<class TYPE, class ARG_TYPE>
-inline 
+inline
 void PASCAL CMRUList<TYPE, ARG_TYPE>::operator delete(void* p)
 {
 	CArray<TYPE, ARG_TYPE>::operator delete( p );
@@ -162,7 +162,7 @@ void PASCAL CMRUList<TYPE, ARG_TYPE>::operator delete(void* p)
 
 #if _MSC_VER >= 1200
 template<class TYPE, class ARG_TYPE>
-inline 
+inline
 void PASCAL CMRUList<TYPE, ARG_TYPE>::operator delete(void* p, void* pPlace)
 {
 	return CArray<TYPE, ARG_TYPE>::operator delete( p, pPlace );
@@ -172,7 +172,7 @@ void PASCAL CMRUList<TYPE, ARG_TYPE>::operator delete(void* p, void* pPlace)
 
 #if defined(_DEBUG) && !defined(_AFX_NO_DEBUG_CRT)
 template<class TYPE, class ARG_TYPE>
-inline 
+inline
 void* PASCAL CMRUList<TYPE, ARG_TYPE>::operator new(size_t nSize, LPCSTR lpszFileName, int nLine)
 {
 	return CArray<TYPE, ARG_TYPE>::operator new( nSize, lpszFileName, nLine );
@@ -181,7 +181,7 @@ void* PASCAL CMRUList<TYPE, ARG_TYPE>::operator new(size_t nSize, LPCSTR lpszFil
 
 #if _MSC_VER >= 1200
 template<class TYPE, class ARG_TYPE>
-inline 
+inline
 void PASCAL CMRUList<TYPE, ARG_TYPE>::operator delete(void *p, LPCSTR lpszFileName, int nLine)
 {
 	CArray<TYPE, ARG_TYPE>::operator delete( p, lpszFileName, nLine );
@@ -193,7 +193,7 @@ void PASCAL CMRUList<TYPE, ARG_TYPE>::operator delete(void *p, LPCSTR lpszFileNa
 
 
 template<class TYPE, class ARG_TYPE>
-inline 
+inline
 INT_PTR CMRUList<TYPE, ARG_TYPE>::GetSize() const
 {
 	return CArray<TYPE, ARG_TYPE>::GetSize();

@@ -52,7 +52,7 @@ static char THIS_FILE[] = __FILE__;
 /**
  * @brief Generates a string literal that identifies the MiKTeX Yap settings
  *        registry key.
- *        
+ *
  * @param version MiKTeX version, e.g. 2.9.
  */
 #define MIKTEX_YAP_SETTINGS_REG_KEY(version) \
@@ -85,10 +85,13 @@ namespace
 		CString text = name;
 
 #ifdef UNICODE
+#pragma warning(push)
+#pragma warning(disable: 4428) // universal-character-name encountered in source
 		if (RunTimeHelper::IsVista()) {
 			const wchar_t* ch = L"\u21E8"; // Some nice arrow, only for Vista or higher
 			text.Replace(_T("=>"),ch);
 		}
+#pragma warning(pop)
 #endif // UNICODE
 		return text;
 	}
@@ -581,7 +584,7 @@ void COutputWizard::LookForPdf()
 	{
 		ULONG length = MAX_PATH;		
 
-		if (reg.QueryStringValue(_T("Install_Dir"),sumatra_path_.GetBuffer(length),&length) == ERROR_SUCCESS) 
+		if (reg.QueryStringValue(_T("Install_Dir"),sumatra_path_.GetBuffer(length),&length) == ERROR_SUCCESS)
 		{
 			sumatra_path_.ReleaseBuffer(length);
 			sumatra_path_ = CPathTool::Cat(sumatra_path_,_T("SumatraPDF.exe"));
@@ -659,7 +662,10 @@ void COutputWizard::ShowInformation()
 	m_wndPageFinish.m_strList.Empty();
 
 #ifdef UNICODE
+#pragma warning(push)
+#pragma warning(disable: 4428) // universal-character-name encountered in source
 	const CString prefix(_T("\u2022 "));
+#pragma warning(pop)
 #else
 	const CString prefix(_T("- "));
 #endif // UNICODE
@@ -707,7 +713,7 @@ void COutputWizard::GenerateOutputProfiles()
 	strPDFLatexOptions += defaultInputPlaceholder;
 
 	// - Only MiKTeX supports the -max-print-line=N feature
-	if (distribution_ == MiKTeX) 
+	if (distribution_ == MiKTeX)
 	{
 		// Put the options before the input file placeholder
 		strLatexOptions = _T("-max-print-line=120 ") + strLatexOptions;
@@ -759,7 +765,7 @@ void COutputWizard::GenerateOutputProfiles()
 		}
 
 		// DVI => PDF
-		if (dvipdfm_installed_) 
+		if (dvipdfm_installed_)
 		{
 			strProfile = GetProfileName(STE_OUTPUTWIZARD_DVIPDFMTYPE);
 
@@ -899,13 +905,13 @@ void COutputWizard::GenerateOutputProfiles()
 
 	// LuaLaTeX => PDF
 	if (lualatexInstalled_) {
-		GeneratePDFProfile(GetProfileName(STE_OUTPUTWIZARD_PDFVIALUALATEX), 
+		GeneratePDFProfile(GetProfileName(STE_OUTPUTWIZARD_PDFVIALUALATEX),
 			strPDFLatexOptions,m_wndPagePdfViewer.GetViewerPath(), LuaLaTeXFileName);
 	}
 
 	// XeLaTeX => PDF
 	if (xelatexInstalled_) {
-		GeneratePDFProfile(GetProfileName(STE_OUTPUTWIZARD_PDFVIAXELATEX), 
+		GeneratePDFProfile(GetProfileName(STE_OUTPUTWIZARD_PDFVIAXELATEX),
 			strPDFLatexOptions,m_wndPagePdfViewer.GetViewerPath(), XeLaTeXFileName);
 	}
 }
@@ -1081,9 +1087,9 @@ const CString COutputWizard::FindMiKTeXInstallLocation()
 	ATL::CRegKey reg;
 
 	// Known (future) MiKTeX versions
-	const CString versions[] = { 
-		_T("MiKTeX 2.9"), 
-		_T("MiKTeX 2.8"), 
+	const CString versions[] = {
+		_T("MiKTeX 2.9"),
+		_T("MiKTeX 2.8"),
 		_T("MiKTeX 2.7")
 	};
 
@@ -1091,11 +1097,11 @@ const CString COutputWizard::FindMiKTeXInstallLocation()
 
 	for (int i = 0; i < count; ++i)
 	{
-		const CString key = 
+		const CString key =
 #ifdef _WIN64
-			_T("Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\") 
+			_T("Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\")
 #else
-			_T("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\") 
+			_T("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\")
 #endif
 			+ versions[i];
 
@@ -1150,7 +1156,7 @@ const CString COutputWizard::FindTeXLiveInstallLocation()
 	{
 		ULONG length = MAX_PATH;
 
-		if (reg.QueryStringValue(_T("UninstallString"),strPath.GetBuffer(length),&length) == ERROR_SUCCESS) 
+		if (reg.QueryStringValue(_T("UninstallString"),strPath.GetBuffer(length),&length) == ERROR_SUCCESS)
 		{
 			strPath.ReleaseBuffer(length);
 			strPath.Trim(_T('"')); // Remove the leading and trailing "
@@ -1178,7 +1184,7 @@ const CString COutputWizard::FindTeXLiveInstallLocation()
 			LPCTSTR const key = _T("DisplayName");
 			CString name;
 
-			if (reg.QueryStringValue(key,0,&length) == ERROR_SUCCESS) 
+			if (reg.QueryStringValue(key,0,&length) == ERROR_SUCCESS)
 			{
 				if (reg.QueryStringValue(key,name.GetBuffer(length),&length) == ERROR_SUCCESS)
 					name.ReleaseBuffer(length);
