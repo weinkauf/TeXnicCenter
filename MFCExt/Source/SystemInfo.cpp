@@ -1,7 +1,7 @@
 /********************************************************************
 *
 * This file is part of the TeXnicCenter-system
-* 
+*
 * Copyright (C) Marius Bancila (thanks for providing this class)
 *
 *********************************************************************/
@@ -75,7 +75,7 @@ int CSystemInfo::DetectWindowsVersion()
 	{
 		// If that fails, try using the OSVERSIONINFO structure.
 		m_osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
-		if (! GetVersionEx ( (OSVERSIONINFO *) &m_osvi) ) 
+		if (! GetVersionEx ( (OSVERSIONINFO *) &m_osvi) )
 			return 0;
 	}
 	
@@ -122,7 +122,7 @@ int CSystemInfo::DetectWindowsVersion()
 						m_nWinVersion = Win2000_Professional;
 				}
             }
-            
+
             // Test for the server type.
             else if ( m_osvi.wProductType == VER_NT_SERVER )
             {
@@ -150,8 +150,8 @@ int CSystemInfo::DetectWindowsVersion()
 						m_nWinVersion = Win2000_Server;
 				}
 				
-				// Windows NT 4.0 
-				else 
+				// Windows NT 4.0
+				else
 				{
 					if( m_osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
 						m_nWinVersion = WinNT_40_Server_Enterprise;					
@@ -211,7 +211,7 @@ int CSystemInfo::DetectWindowsVersion()
 		
 		// Display service pack (if any) and build number.
 		
-		if( m_osvi.dwMajorVersion == 4 && 
+		if( m_osvi.dwMajorVersion == 4 &&
 			lstrcmpi( m_osvi.szCSDVersion, _T("Service Pack 6") ) == 0 )
 		{
             HKEY hKey;
@@ -222,10 +222,10 @@ int CSystemInfo::DetectWindowsVersion()
 				_T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix\\Q246009"),
 				0, KEY_QUERY_VALUE, &hKey );
             if( lRet == ERROR_SUCCESS )
-				_stprintf(m_szServicePack,_T("Service Pack 6a (Build %d)\n"), m_osvi.dwBuildNumber & 0xFFFF );         
+				_stprintf_s(m_szServicePack, _T("Service Pack 6a (Build %d)\n"), m_osvi.dwBuildNumber & 0xFFFF );
             else // Windows NT 4.0 prior to SP6a
             {
-				_stprintf(m_szServicePack,_T("%s (Build %d)\n"),
+				_stprintf_s(m_szServicePack,_T("%s (Build %d)\n"),
 					m_osvi.szCSDVersion,
 					m_osvi.dwBuildNumber & 0xFFFF);
             }
@@ -234,7 +234,7 @@ int CSystemInfo::DetectWindowsVersion()
 		}
 		else // Windows NT 3.51 and earlier or Windows 2000 and later
 		{
-            _stprintf(m_szServicePack,_T("%s (Build %d)\n"),
+            _stprintf_s(m_szServicePack,_T("%s (Build %d)\n"),
 				m_osvi.szCSDVersion,
 				m_osvi.dwBuildNumber & 0xFFFF);
 		}
@@ -247,21 +247,21 @@ int CSystemInfo::DetectWindowsVersion()
 			  m_nWinVersion = Win95;
 			  if ( m_osvi.szCSDVersion[1] ==_T('C') || m_osvi.szCSDVersion[1] ==_T('B') )
 				  m_nWinVersion = Win95_OSR2;
-		  } 
-		  
+		  }
+		
 		  if (m_osvi.dwMajorVersion == 4 && m_osvi.dwMinorVersion == 10)
 		  {
 			  m_nWinVersion = Win98;
 			  if ( m_osvi.szCSDVersion[1] ==_T('A') )
 				  m_nWinVersion = Win98_SE;
-		  } 
-		  
+		  }
+		
 		  if (m_osvi.dwMajorVersion == 4 && m_osvi.dwMinorVersion == 90)
 		  {
 			  m_nWinVersion = WinMe;
-		  } 
+		  }
 		  break;
-		  
+		
       case VER_PLATFORM_WIN32s:
 		  m_nWinVersion = Win32s;
 		  break;
@@ -321,7 +321,7 @@ void CSystemInfo::GetServicePackInfo(TCHAR* szServicePack) const
 const CString CSystemInfo::ToString()
 {
 	CString str;
-	str.Format(_T("V%d.%d, %s, %s"), 
+	str.Format(_T("V%d.%d, %s, %s"),
 		GetMajorVersion(),
 		GetMinorVersion(),
 		VERBOSE_OS[m_nWinVersion],
