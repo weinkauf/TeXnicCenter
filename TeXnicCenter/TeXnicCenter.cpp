@@ -1733,6 +1733,17 @@ BOOL CTeXnicCenterApp::OnDDECommand(LPTSTR lpszCommand)
 
 		strFileName = strCommand.Mid(nStart + 1, nEnd - (nStart + 1));
 
+		// Some LaTeX engines, such as XeLaTeX, seem to omit the file extension
+		// in pdfsync data leading to failures when using inverse search.
+		if (!CPathTool::Exists(strFileName) &&
+			CPathTool::GetFileExtension(strFileName).IsEmpty())
+		{
+			const CString tmp = strFileName + _T(".tex");
+
+			if (CPathTool::Exists(tmp))
+				strFileName = tmp;
+		}
+
 		// get line number
 		nStart = strCommand.Find(_T('"'), nEnd + 1);
 		nEnd = strCommand.Find(_T('"'), nStart + 1);
