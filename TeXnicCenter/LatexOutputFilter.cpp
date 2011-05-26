@@ -266,13 +266,13 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 	//Catching Warnings
 	
 	// Catches Latex and package warnings
-	static const regex_type warning1(_T(".+warning.*: (.*) on input line ([[:digit:]]+)"),flags); 
+	static const regex_type warning1(_T(".+warning.*: (.*) on input line ([[:digit:]]+)"),flags);
 
 	// Catches LaTeX and package warnings that split over several lines
-	static const regex_type warning2(_T(".+warning.*: (.*)"),flags); 
+	static const regex_type warning2(_T(".+warning.*: (.*)"),flags);
 
 	// Catches LaTeX and package warnings that split over several lines
-	static const regex_type packageWarning(_T("Package\\s+(.+)\\s+warning.*: (.*)"), flags); 
+	static const regex_type packageWarning(_T("Package\\s+(.+)\\s+warning.*: (.*)"), flags);
 
 	// Catches LaTeX and package warnings that split over several lines
 	static const regex_type classWarning(_T("Class\\s+(.+)\\s+warning.*: (.*)"), flags);
@@ -281,7 +281,7 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 	static const regex_type badBox1(_T("^(Over|Under)full \\\\[hv]box .* at lines ([[:digit:]]+)--([[:digit:]]+)"),flags);
 	//Use the following only, if you know how to get the source line for it.
 	// This is not simple, as TeX is not reporting it.
-	//static regex_type	badBox2(_T("^(Over|Under)full \\\\[hv]box .* has occurred while \\output is active"), true);
+	static const regex_type badBox2(_T("^(Over|Under)full \\\\[hv]box .* has occurred while \\\\output is active"), flags);
 
 	//Catching the source line numbers of error/warning types
 	// which are reported over more than one line in the output
@@ -330,7 +330,10 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		int line = (n1 < n2) ? n1 : n2;
 
 		UpdateCurrentItem(strLine, itmBadBox, line);
-
+	}
+	else if (regex_search(text, results, badBox2))
+	{
+		UpdateCurrentItem(strLine, itmBadBox);
 	}
 	else if (regex_search(text,results,warning1))
 	{
@@ -347,7 +350,7 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 
 		m_currentItem.SetPackageName(package);
 
-		FileNameContainer::const_iterator it = std::find_if(fileNames_.begin(), fileNames_.end(), 
+		FileNameContainer::const_iterator it = std::find_if(fileNames_.begin(), fileNames_.end(),
 			FileTitleMatch(package));
 
 		if (it != fileNames_.end())
@@ -404,7 +407,7 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		//LaTeX said 'No pages of output'
 		m_nOutputPages = 0;
 	}
-	else 
+	else
 	{
 		const CString transcript = _T("Transcript written on ");
 
@@ -481,7 +484,7 @@ const CString CLaTeXOutputFilter::GetCurrentFilePath() const
 
 const COutputInfo CLaTeXOutputFilter::CreateItem( const CString &strLine, tagCookies tag, int line /*= -1*/ ) const
 {
-	return COutputInfo(GetCurrentFilePath(), line == -1 ? Nullable<int>() : line, 
+	return COutputInfo(GetCurrentFilePath(), line == -1 ? Nullable<int>() : line,
 		GetCurrentOutputLine(), strLine.Mid(results.position(1),results.length(1)), tag);
 }
 
