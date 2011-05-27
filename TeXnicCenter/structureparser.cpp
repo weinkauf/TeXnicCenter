@@ -126,6 +126,7 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 , m_regexBib(_T("\\\\(no)?bibliography([^(style)][[:alpha:]]+)?\\s*\\{\\s*([^\\}]*)\\s*\\}"))
 , m_regexAppendix(_T("\\\\appendix([^[:graph:]]|$)"))
 , m_regexGraphic(_T("\\\\includegraphics\\s*\\*?(\\s*\\[[^\\]]*\\]){0,2}\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"))
+, m_regexGraphicsPath(_T("\\\\graphicspath\\s*\\{(.*)\\}"))
 , m_regexUserCmd(_T("\\\\(re)?newcommand\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}"))
 , m_regexUserEnv(_T("\\\\(re)?newenvironment\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}\\s*\\{([^\\}]*)\\}"))
 , m_regexInlineVerb(_T("\\\\verb\\*(.)[^$1]*\\1|\\\\verb([^\\*])[^$2]*\\2"))
@@ -425,6 +426,34 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		return;
 	}
 
+	// Look for \graphicspath
+	if (regex_search(lpText, lpTextEnd, what, m_regexGraphicsPath, nFlags) && IsCmdAt(lpText, what[0].first - lpText))
+	{
+		// parse string before occurrence
+		ParseString(lpText, what[0].first - lpText, cookies,
+		            strActualFile, nActualLine, nFileDepth, aSI);
+
+		// Replace the list of graphics paths with the new one (LaTeX behavior)
+		GraphicPaths.clear();
+		CString strPaths(what[1].first, what[1].second - what[1].first);
+		// - find all paths within that argument list
+		tregex regexSplitPaths(_T("\\{([^}]*)\\}"));
+		LPCTSTR lpPathsStart = strPaths;
+		LPCTSTR lpPathsEnd = lpPathsStart + strPaths.GetLength();
+		std::tr1::match_results<LPCTSTR> MatchResult;
+		while (regex_search(lpPathsStart, lpPathsEnd, MatchResult, regexSplitPaths, nFlags))
+		{
+			GraphicPaths.push_back(CString(MatchResult[1].first, MatchResult[1].second - MatchResult[1].first));
+			lpPathsStart = MatchResult[0].second;
+		}
+
+		// parse string behind occurrence
+		ParseString(what[0].second, lpTextEnd - what[0].second, cookies,
+		            strActualFile, nActualLine, nFileDepth, aSI);
+
+		return;
+	}
+
 	// look for graphic file
 	if (regex_search(lpText, lpTextEnd, what, m_regexGraphic, nFlags) && IsCmdAt(lpText, what[0].first - lpText))
 	{
@@ -449,19 +478,25 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		bool GraphicFileFound = false;
 		CString strCompletePath;
 
-		for (int i = 0; i < strGraphicLength; ++i)
+		//We look in all paths that are registered for graphics. This is \graphicspath and TODO: also TEXINPUTS
+		for (int p = -1; p < (int)GraphicPaths.size() && !GraphicFileFound; p++)
 		{
-			strCompletePath = strPath;
-			const CString& extension = strGraphicTypes[i];
-			strCompletePath += extension;
+			CString strPathWOExt(strPath);
+			if (p >= 0) strPathWOExt = GraphicPaths[p] + strPath; //First path (p==-1) is current dir
 
-			if (::PathFileExists(strCompletePath))
+			//And now for the extensions
+			for (int i = 0; i < strGraphicLength; i++)
 			{
-				//File exists
-				AddFileItem(ResolveFileName(strCompletePath), StructureItem::graphicFile,
-				            strActualFile, nActualLine, aSI);
-				GraphicFileFound = true;
-				break;
+				strCompletePath = strPathWOExt + strGraphicTypes[i];
+
+				if (::PathFileExists(strCompletePath))
+				{
+					//File exists
+					AddFileItem(ResolveFileName(strCompletePath), StructureItem::graphicFile,
+								strActualFile, nActualLine, aSI);
+					GraphicFileFound = true;
+					break;
+				}
 			}
 		}
 
