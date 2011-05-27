@@ -73,7 +73,7 @@ const CString StructureItem::GetLabel() const
 	CString text;
 
 	if (!labels_.empty())
-		text = labels_[0];
+		text = labels_.back(); //The last one, since this is most likely the right one. Think of a figure-env with subfigures.
 
 	return text;
 }
