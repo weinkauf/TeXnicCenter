@@ -247,7 +247,6 @@ void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CStr
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// adding all labels from the latex document
-	CString str;
 	CLaTeXProject* proj = theApp.GetProject();
 
 	if (proj)
@@ -259,16 +258,21 @@ void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CStr
 
 		for (StructureItemContainer::const_iterator it = proj->m_aStructureItems.begin(); it != proj->m_aStructureItems.end(); ++it)
 		{
-			str = it->GetLabel();
+			const StructureItem::LabelContainer& Labels = it->GetLabels();
 
-			if (!str.IsEmpty())
+			for(auto itLabel=Labels.begin();itLabel!=Labels.end();itLabel++)
 			{
-				if ((str.GetLength() >= SearchLength) && (str.Left(SearchLength).CompareNoCase(Partial) == 0))
+				const CString& str = *itLabel;
+
+				if (!str.IsEmpty())
 				{
-					CLaTeXCommand* NewCmd = new CLaTeXCommand(dummy, str, 0);
-					NewCmd->SetDescription(it->GetComment());
-					Result.SetAt(str, std::tr1::shared_ptr<CObject>(NewCmd));
-					//Result.SetAt(str, std::tr1::shared_ptr<CObject>(new CLaTeXCommand(dummy, str, 0)));
+					if ((str.GetLength() >= SearchLength) && (str.Left(SearchLength).CompareNoCase(Partial) == 0))
+					{
+						CLaTeXCommand* NewCmd = new CLaTeXCommand(dummy, str, 0);
+						NewCmd->SetDescription(it->GetComment());
+						Result.SetAt(str, std::tr1::shared_ptr<CObject>(NewCmd));
+						//Result.SetAt(str, std::tr1::shared_ptr<CObject>(new CLaTeXCommand(dummy, str, 0)));
+					}
 				}
 			}
 		}
