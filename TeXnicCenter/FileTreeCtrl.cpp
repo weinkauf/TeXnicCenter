@@ -181,8 +181,6 @@ int FileTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		SetExtendedStyle(style, style);
 	}
 
-	// ModifyStyle(0, TVS_INFOTIP);
-
 	return 0;
 }
 
@@ -228,7 +226,7 @@ void FileTreeCtrl::Populate()
 	const CString& projectDirectoryName = CPathTool::GetRelativePath
 		(CPathTool::GetParentDirectory(projectDirectory), projectDirectory);
 
-	HTREEITEM projectItem = InsertEntry(TVI_ROOT, projectDirectoryName, 
+	HTREEITEM projectItem = InsertEntry(TVI_ROOT, projectDirectoryName,
 		new DirectoryEntry(GetPathItemIDList(projectDirectory)));
 
 	CString text;
@@ -250,11 +248,11 @@ void FileTreeCtrl::Populate()
 
 		text = CPathTool::GetFile(it->GetPath());
 
-		CString reldir = CPathTool::GetRelativePath(mainDirectory, 
-			CPathTool::GetParentDirectory(CPathTool::GetAbsolutePath(mainDirectory, 
+		CString reldir = CPathTool::GetRelativePath(mainDirectory,
+			CPathTool::GetParentDirectory(CPathTool::GetAbsolutePath(mainDirectory,
 				it->GetPath())), TRUE, TRUE);
 
-		const StructureItemContainer::const_iterator::difference_type index = 
+		const StructureItemContainer::const_iterator::difference_type index =
 			std::distance(items.begin(), it);
 
 		switch (item.GetType())
@@ -277,13 +275,13 @@ void FileTreeCtrl::Populate()
 
 		if (parent)
 		{
-			if (reldir != _T(".")) 
+			if (reldir != _T("."))
 			{
 				ParentDirectoryMap::iterator it = parents.find(reldir);
 
 				if (it != parents.end())
 					parent = it->second;
-				else 
+				else
 				{
 					CString component, path;
 					int index;
@@ -293,9 +291,9 @@ void FileTreeCtrl::Populate()
 
 					while (!stop)
 					{
-						index = reldir.FindOneOf(sep);							
+						index = reldir.FindOneOf(sep);
 
-						if (index == -1) 
+						if (index == -1)
 						{
 							index = reldir.GetLength();
 							stop = true;
@@ -312,26 +310,26 @@ void FileTreeCtrl::Populate()
 						{
 							const CString& absolutePath = CPathTool::Cat(mainDirectory, path);
 
-							parent = InsertEntry(parent, component, 
+							parent = InsertEntry(parent, component,
 								new DirectoryEntry(GetPathItemIDList(absolutePath)));
 
 							// but store the whole relative path
 							parents.insert(std::make_pair(path, parent));
 						}
 
-						if (!stop) 
+						if (!stop)
 						{
 							path += reldir[index]; // add the \ or /
 							reldir.Delete(0, index + 1);
 						}
 					}
-				}						
+				}
 			}
 
 			ItemIDList pidl = GetPathItemIDList(GetProject()->GetFullPath(item));
 			std::unique_ptr<FileEntry> entry(new FileEntry(std::move(pidl), index));
 
-			HTREEITEM hItem = InsertEntry(parent, text, entry.get(),
+			HTREEITEM hItem = InsertEntry(parent, text, entry.get(), &item,
 				item.IsMainProjectFile());
 
 			if (entry->IsMissing())
@@ -342,7 +340,7 @@ void FileTreeCtrl::Populate()
 	}
 
 	// Missing items should be visible
-	std::for_each(missingItems.begin(), missingItems.end(), 
+	std::for_each(missingItems.begin(), missingItems.end(),
 		std::bind(&FileTreeCtrl::EnsureVisible, this, std::placeholders::_1));
 
 	if (!bExpandAll) {
@@ -366,12 +364,12 @@ int FileTreeCtrl::GetItemImageIndex(std::size_t index, int flags /*= 0*/)
 	return GetImageIndex(path, flags);
 }
 
-int FileTreeCtrl::GetImageIndex(LPCWSTR path, int flags)
+int FileTreeCtrl::GetImageIndex(LPCWSTR path, int flags, DWORD fileAttributes)
 {
 	SHFILEINFO shfi = { };
 
 	HIMAGELIST systemImageList = reinterpret_cast<HIMAGELIST>
-		(::SHGetFileInfo(path, 0, &shfi, sizeof(shfi), flags | 
+		(::SHGetFileInfo(path, fileAttributes, &shfi, sizeof(shfi), flags |
 			SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_ICON));
 
 	int imageIndex;
@@ -399,17 +397,16 @@ void FileTreeCtrl::Initialize()
 	const CString& directory = GetProject()->GetDirectory();
 
 	ItemIDList pidl;
-	
+
 	HRESULT code = SHILCreateFromPath(directory, &pidl, NULL);
 
 	if (SUCCEEDED(code)) {
 		CComPtr<IShellFolder> shellFolder;
-		code = SHBindToObject(shellFolder_, pidl, NULL, IID_IShellFolder, 
+		code = SHBindToObject(shellFolder_, pidl, NULL, IID_IShellFolder,
 			reinterpret_cast<void**>(&shellFolder));
 
 		if (SUCCEEDED(code)) {
 			projectShellFolder_ = shellFolder;
-			//itemIdTreeItem_.key_comp().shellFolder = shellFolder;
 		}
 	}
 
@@ -428,7 +425,7 @@ void FileTreeCtrl::Register(const CString& path, bool recursive /*= true*/)
 
 	const LONG notifications = SHCNE_CREATE | SHCNE_UPDATEITEM |
 		SHCNE_RENAMEITEM | SHCNE_DELETE | SHCNE_UPDATEIMAGE;
-	
+
 	shellNotifyId_ = SHChangeNotifyRegister(m_hWnd, SHCNRF_ShellLevel |
 		SHCNRF_InterruptLevel, notifications, ShellUpdateMessageID, 1, &e);
 }
@@ -502,7 +499,7 @@ void FileTreeCtrl::OnShellRenameItem(PIDLIST_ABSOLUTE* pidls)
 {
 	PIDLIST_ABSOLUTE oldpidl = pidls[0];
 	ItemIDList key(oldpidl);
-	
+
 	ItemIDListTreeItemMap::iterator it = itemIdTreeItem_.find(key);
 
 	if (it != itemIdTreeItem_.end()) {
@@ -538,7 +535,7 @@ ItemIDList FileTreeCtrl::GetPathItemIDList(const CString& path) const
 void FileTreeCtrl::UpdateEntryImages(HTREEITEM hItem)
 {
 	const Entry* entry = reinterpret_cast<const Entry*>(GetItemData(hItem));
-	
+
 	AFXASSUME(entry);
 
 	int normalImageIndex = entry->IsMissing() ? -1 :
@@ -566,18 +563,55 @@ void FileTreeCtrl::UpdateEntryTree(HTREEITEM hItem)
 
 	// Update item's parents
 	HTREEITEM hParent = hItem;
-	
+
 	while ((hParent = GetParentItem(hParent)) != NULL) {
 		UpdateEntryImages(hParent);
 	}
 }
 
-HTREEITEM FileTreeCtrl::InsertEntry(HTREEITEM parent, const CString& text, Entry* entry, bool bold /*= false*/)
+HTREEITEM FileTreeCtrl::InsertEntry(HTREEITEM parent, const CString& text,
+	Entry* entry, const StructureItem* item, bool bold /*= false*/)
 {
 	AFXASSUME(entry);
 
-	int normalImageIndex = GetImageIndex(entry->pidl, SHGFI_PIDL | SHGFI_OVERLAYINDEX);
-	int stateImageIndex = GetImageIndex(entry->pidl, SHGFI_PIDL | SHGFI_SELECTED);
+	int normalImageIndex = GetImageIndex(entry->pidl, SHGFI_PIDL |
+		SHGFI_OVERLAYINDEX);
+	int stateImageIndex = GetImageIndex(entry->pidl, SHGFI_PIDL |
+		SHGFI_SELECTED);
+
+	if (normalImageIndex == -1 && item) {
+		// The file item is missing so there's no way to find out file's
+		// specific icon. Hence, extract file's generic icon by using the file
+		// extension.
+
+		CStringW extension;
+
+		switch (item->GetType()) {
+			case StructureItem::missingBibFile:
+			case StructureItem::bibFile:
+				extension = L".bib";
+				break;
+			case StructureItem::missingTexFile:
+			case StructureItem::texFile:
+				extension = L".tex";
+				break;
+			case StructureItem::missingGraphicFile:
+			case StructureItem::graphicFile:
+				extension = CPathTool::GetFileExtension(item->GetTitle());
+
+				if (extension.IsEmpty())
+					extension = L".png"; // assume Portable Network Graphics
+				else
+					extension.Insert(0, L'.'); // prepend the period
+
+				break;
+		}
+
+		normalImageIndex = GetImageIndex(extension, SHGFI_OVERLAYINDEX |
+			SHGFI_USEFILEATTRIBUTES, FILE_ATTRIBUTE_NORMAL);
+		stateImageIndex = GetImageIndex(extension, SHGFI_SELECTED |
+			SHGFI_USEFILEATTRIBUTES, FILE_ATTRIBUTE_NORMAL);
+	}
 
 	UINT state = INDEXTOOVERLAYMASK(normalImageIndex >> 24 & 0xff);
 	UINT stateMask = TVIS_OVERLAYMASK;
@@ -588,12 +622,12 @@ HTREEITEM FileTreeCtrl::InsertEntry(HTREEITEM parent, const CString& text, Entry
 	}
 
 	parent = InsertItem(TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE,
-		text, normalImageIndex & 0xffffff, stateImageIndex, state, stateMask, 
+		text, normalImageIndex & 0xffffff, stateImageIndex, state, stateMask,
 		reinterpret_cast<LPARAM>(entry), parent, TVI_SORT);
 
 	if (!entry->pidl.IsEmpty())
 		itemIdTreeItem_.insert(std::make_pair(entry->pidl, parent));
-	
+
 	return parent;
 }
 
@@ -601,7 +635,7 @@ std::size_t FileTreeCtrl::GetItemIndex(HTREEITEM hItem) const
 {
 	const FileEntry* entry = dynamic_cast<const FileEntry*>
 		(reinterpret_cast<const Entry*>(GetItemData(hItem)));
-	
+
 	AFXASSUME(entry);
 
 	return entry->itemIndex;
@@ -616,15 +650,15 @@ bool FileTreeCtrl::IsFolder(HTREEITEM item) const
 void FileTreeCtrl::OnTvnGetInfoTip(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMTVGETINFOTIP pGetInfoTip = reinterpret_cast<LPNMTVGETINFOTIP>(pNMHDR);
-	
+
 	const Entry* entry = reinterpret_cast<const Entry*>(pGetInfoTip->lParam);
-	
+
 	AFXASSUME(entry);
 
 	CComPtr<IShellFolder> sf;
 	PCUITEMID_CHILD childPidl;
 
-	HRESULT code = SHBindToParent(entry->pidl, IID_IShellFolder, 
+	HRESULT code = SHBindToParent(entry->pidl, IID_IShellFolder,
 		reinterpret_cast<void**>(&sf), &childPidl);
 
 	if (FAILED(code))
@@ -669,8 +703,8 @@ LRESULT FileTreeCtrl::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 				if (contextMenu3_)
 					handled = SUCCEEDED(contextMenu3_->HandleMenuMsg2(message,
 						wParam, lParam, &result));
-				else if (contextMenu2_) 
-					handled = SUCCEEDED(contextMenu2_->HandleMenuMsg(message, 
+				else if (contextMenu2_)
+					handled = SUCCEEDED(contextMenu2_->HandleMenuMsg(message,
 						wParam, lParam));
 				else
 					handled = false;
@@ -726,7 +760,7 @@ void FileTreeCtrl::ShowContextMenu(CPoint& point)
 	CComPtr<IShellFolder> sf;
 	PCUITEMID_CHILD childPidl;
 
-	HRESULT code = SHBindToParent(entry->pidl, IID_IShellFolder, 
+	HRESULT code = SHBindToParent(entry->pidl, IID_IShellFolder,
 		reinterpret_cast<void**>(&sf), &childPidl);
 
 	if (FAILED(code))
@@ -734,7 +768,7 @@ void FileTreeCtrl::ShowContextMenu(CPoint& point)
 
 	CComPtr<IContextMenu> cm;
 
-	code = sf->GetUIObjectOf(m_hWnd, 1, &childPidl, IID_IContextMenu, NULL, 
+	code = sf->GetUIObjectOf(m_hWnd, 1, &childPidl, IID_IContextMenu, NULL,
 		reinterpret_cast<void**>(&cm));
 
 	if (FAILED(code))
@@ -795,7 +829,7 @@ void FileTreeCtrl::OnTvnKeydown(NMHDR *pNMHDR, LRESULT *pResult)
 			Refresh();
 			break;
 	}
-	
+
 	*pResult = 0;
 }
 
@@ -849,7 +883,7 @@ void FileTreeCtrl::MarkItemAsMissing(HTREEITEM hItem, bool missing /*= true*/)
 	if (missing) {
 		const UINT noImage = ~0U;
 
-		SetItem(hItem, TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE, NULL, 
+		SetItem(hItem, TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE, NULL,
 			noImage, noImage, static_cast<UINT>(INDEXTOOVERLAYMASK(-1)),
 			TVIS_OVERLAYMASK, 0);
 	}
@@ -886,8 +920,6 @@ void FileTreeCtrl::MarkItemAsMissing(const ItemIDList& key, bool missing)
 	if (it != itemIdTreeItem_.end()) {
 		HTREEITEM hItem = it->second;
 		MarkItemAsMissing(hItem, missing);
-
-		//itemIdTreeItem_.erase(it);
 	}
 }
 
@@ -933,7 +965,7 @@ void FileTreeCtrl::SetupImageLists()
 	TreeView_SetImageList(m_hWnd, imageList, TVSIL_NORMAL);
 
 	imageList = reinterpret_cast<HIMAGELIST>(::SHGetFileInfo(_T(""), 0, &shfi,
-		sizeof(shfi), SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_ICON | 
+		sizeof(shfi), SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_ICON |
 		SHGFI_SELECTED));
 
 	TreeView_SetImageList(m_hWnd, imageList, TVSIL_STATE);
