@@ -65,7 +65,7 @@ protected:
 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
-	void OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint);	
+	void OnUpdate(CProjectView* pSender, LPARAM lHint, LPVOID pHint);
 	std::size_t GetItemIndex(HTREEITEM hItem) const;
 	bool IsFolder(HTREEITEM item) const;
 	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
@@ -101,7 +101,7 @@ private:
 	void OnParsingFinished();
 
 	int GetItemImageIndex(std::size_t index, int flags = 0);
-	int GetImageIndex(LPCWSTR path, int flags = 0);
+	int GetImageIndex(LPCWSTR path, int flags = 0, DWORD fileAttributes = 0);
 	int GetImageIndex(LPCITEMIDLIST pidl, int flags = 0);
 
 	void Initialize();
@@ -119,7 +119,8 @@ private:
 	void MarkItemAsMissing(HTREEITEM hItem, bool missing = true);
 	void MarkItemAsMissing(const ItemIDList& key, bool missing = true);
 
-	HTREEITEM InsertEntry(HTREEITEM parent, const CString& text, Entry* entry, bool bold = false);
+	HTREEITEM InsertEntry(HTREEITEM parent, const CString& text, Entry* entry,
+		const StructureItem* item = NULL, bool bold = false);
 	void UpdateEntryTree(HTREEITEM hItem);
 	void UpdateEntryImages(HTREEITEM hItem);
 	ItemIDList GetPathItemIDList(const CString& path) const;
