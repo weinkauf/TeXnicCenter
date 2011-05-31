@@ -119,14 +119,15 @@ private:
 	void MarkItemAsMissing(HTREEITEM hItem, bool missing = true);
 	void MarkItemAsMissing(const ItemIDList& key, bool missing = true);
 
-	HTREEITEM InsertEntry(HTREEITEM parent, const CString& text, Entry* entry,
-		const StructureItem* item = NULL, bool bold = false);
+	HTREEITEM InsertEntry(HTREEITEM parent, Entry* entry, const StructureItem* item = NULL, bool bold = false);
 	void UpdateEntryTree(HTREEITEM hItem);
 	void UpdateEntryImages(HTREEITEM hItem);
 	ItemIDList GetPathItemIDList(const CString& path) const;
 	void ForceClear();
 	void OnShellUpdateImage();
 	void SetupImageLists();
+	static int CALLBACK SortComparer(LPARAM l1, LPARAM l2, LPARAM p);
+	int SortComparer(LPARAM l1, LPARAM l2);
 
 	ItemIDListTreeItemMap itemIdTreeItem_;
 	ULONG shellNotifyId_;
