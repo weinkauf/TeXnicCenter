@@ -69,8 +69,9 @@ namespace {
 
 struct FileTreeCtrl::Entry
 {
-	explicit Entry(ItemIDList&& pidl)
+	explicit Entry(ItemIDList&& pidl, const CString& text)
 		: pidl(std::forward<ItemIDList>(pidl))
+		, text(text)
 	{
 	}
 
@@ -83,30 +84,67 @@ struct FileTreeCtrl::Entry
 		return pidl.IsEmpty();
 	}
 
+	virtual int CompareTo(const Entry& other) const;
+
 	ItemIDList pidl;
 	ItemIDList oldPidl;
+	CString text;
 };
 
 struct FileTreeCtrl::FileEntry
 	: Entry
 {
-	explicit FileEntry(ItemIDList&& pidl, StructureItemContainer::size_type index)
-		: Entry(std::forward<ItemIDList>(pidl))
+	explicit FileEntry(ItemIDList&& pidl,
+		StructureItemContainer::size_type index, const CString& text)
+		: Entry(std::forward<ItemIDList>(pidl), text)
 		, itemIndex(index)
 	{
 	}
 
+	int CompareTo(const Entry& other) const;
+
 	StructureItemContainer::size_type itemIndex;
 };
+
+int FileTreeCtrl::Entry::CompareTo(const Entry& other) const
+{
+	return text.CompareNoCase(other.text);
+}
 
 struct FileTreeCtrl::DirectoryEntry
 	: Entry
 {
-	explicit DirectoryEntry(ItemIDList&& pidl)
-		: Entry(std::forward<ItemIDList>(pidl))
+	explicit DirectoryEntry(ItemIDList&& pidl, const CString& text)
+		: Entry(std::forward<ItemIDList>(pidl), text)
 	{
 	}
+
+	int CompareTo(const Entry& other) const;
 };
+
+int FileTreeCtrl::DirectoryEntry::CompareTo(const Entry& other) const
+{
+	int result;
+
+	if (dynamic_cast<const FileEntry*>(&other))
+		result = -1;
+	else
+		result = Entry::CompareTo(other);
+
+	return result;
+}
+
+int FileTreeCtrl::FileEntry::CompareTo(const Entry& other) const
+{
+	int result;
+
+	if (dynamic_cast<const DirectoryEntry*>(&other))
+		result = 1;
+	else
+		result = Entry::CompareTo(other);
+
+	return result;
+}
 
 FileTreeCtrl::FolderItemIDListLessPredicate::FolderItemIDListLessPredicate
 		(CComPtr<IShellFolder> shellFolder)
@@ -226,8 +264,9 @@ void FileTreeCtrl::Populate()
 	const CString& projectDirectoryName = CPathTool::GetRelativePath
 		(CPathTool::GetParentDirectory(projectDirectory), projectDirectory);
 
-	HTREEITEM projectItem = InsertEntry(TVI_ROOT, projectDirectoryName,
-		new DirectoryEntry(GetPathItemIDList(projectDirectory)));
+	HTREEITEM projectItem = InsertEntry(TVI_ROOT,
+		new DirectoryEntry(GetPathItemIDList(projectDirectory),
+		projectDirectoryName));
 
 	CString text;
 	HTREEITEM parent;
@@ -308,10 +347,12 @@ void FileTreeCtrl::Populate()
 							parent = it->second;
 						else
 						{
-							const CString& absolutePath = CPathTool::Cat(mainDirectory, path);
+							const CString& absolutePath =
+								CPathTool::Cat(mainDirectory, path);
 
-							parent = InsertEntry(parent, component,
-								new DirectoryEntry(GetPathItemIDList(absolutePath)));
+							parent = InsertEntry(parent,
+								new DirectoryEntry(GetPathItemIDList(absolutePath),
+									component));
 
 							// but store the whole relative path
 							parents.insert(std::make_pair(path, parent));
@@ -327,9 +368,10 @@ void FileTreeCtrl::Populate()
 			}
 
 			ItemIDList pidl = GetPathItemIDList(GetProject()->GetFullPath(item));
-			std::unique_ptr<FileEntry> entry(new FileEntry(std::move(pidl), index));
+			std::unique_ptr<FileEntry> entry(new FileEntry(std::move(pidl), index,
+				text));
 
-			HTREEITEM hItem = InsertEntry(parent, text, entry.get(), &item,
+			HTREEITEM hItem = InsertEntry(parent, entry.get(), &item,
 				item.IsMainProjectFile());
 
 			if (entry->IsMissing())
@@ -352,6 +394,17 @@ void FileTreeCtrl::Populate()
 		ExpandItemsByLevel(0);
 		EnsureVisible(GetRootItem());
 	}
+
+	// Sort children of all items
+	parents.insert(std::make_pair(CString(), projectItem));
+
+	std::for_each(parents.begin(), parents.end(),
+		[this](ParentDirectoryMap::const_reference item)
+	{
+		TVSORTCB cb = { item.second, &FileTreeCtrl::SortComparer,
+			reinterpret_cast<LPARAM>(this) };
+		SortChildrenCB(&cb);
+	});
 }
 
 int FileTreeCtrl::GetItemImageIndex(std::size_t index, int flags /*= 0*/)
@@ -569,8 +622,8 @@ void FileTreeCtrl::UpdateEntryTree(HTREEITEM hItem)
 	}
 }
 
-HTREEITEM FileTreeCtrl::InsertEntry(HTREEITEM parent, const CString& text,
-	Entry* entry, const StructureItem* item, bool bold /*= false*/)
+HTREEITEM FileTreeCtrl::InsertEntry(HTREEITEM parent, Entry* entry,
+	const StructureItem* item /*= NULL*/, bool bold /*= false*/)
 {
 	AFXASSUME(entry);
 
@@ -621,9 +674,10 @@ HTREEITEM FileTreeCtrl::InsertEntry(HTREEITEM parent, const CString& text,
 		stateMask |= TVIS_BOLD;
 	}
 
-	parent = InsertItem(TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE,
-		text, normalImageIndex & 0xffffff, stateImageIndex, state, stateMask,
-		reinterpret_cast<LPARAM>(entry), parent, TVI_SORT);
+	parent = InsertItem(TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE |
+		TVIF_SELECTEDIMAGE | TVIF_STATE, entry->text,
+		normalImageIndex & 0xffffff, stateImageIndex, state, stateMask,
+		reinterpret_cast<LPARAM>(entry), parent, TVI_LAST);
 
 	if (!entry->pidl.IsEmpty())
 		itemIdTreeItem_.insert(std::make_pair(entry->pidl, parent));
@@ -969,4 +1023,20 @@ void FileTreeCtrl::SetupImageLists()
 		SHGFI_SELECTED));
 
 	TreeView_SetImageList(m_hWnd, imageList, TVSIL_STATE);
+}
+
+int CALLBACK FileTreeCtrl::SortComparer(LPARAM l1, LPARAM l2, LPARAM p)
+{
+	return reinterpret_cast<FileTreeCtrl*>(p)->SortComparer(l1, l2);
+}
+
+int FileTreeCtrl::SortComparer(LPARAM l1, LPARAM l2)
+{
+	const Entry* lhs = reinterpret_cast<const Entry*>(l1);
+	const Entry* rhs = reinterpret_cast<const Entry*>(l2);
+
+	AFXASSUME(lhs);
+	AFXASSUME(rhs);
+
+	return lhs->CompareTo(*rhs);
 }
