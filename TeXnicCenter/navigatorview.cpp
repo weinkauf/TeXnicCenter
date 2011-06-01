@@ -60,11 +60,11 @@ NavigatorTreeCtrl::NavigatorTreeCtrl()
 {
 	const int cx = 16;
 	m_images.Attach(::ImageList_LoadImage(AfxGetInstanceHandle(),
-	                        MAKEINTRESOURCE(IDB_ITEM_TYPES),cx,1,RGB(255,0,255),IMAGE_BITMAP,
-	                        LR_CREATEDIBSECTION));
+							MAKEINTRESOURCE(IDB_ITEM_TYPES),cx,1,RGB(255,0,255),IMAGE_BITMAP,
+							LR_CREATEDIBSECTION));
 
 	// Use the LaTeX icon used for the shell
-	HICON icon = static_cast<HICON>(::LoadImage(AfxGetResourceHandle(), 
+	HICON icon = static_cast<HICON>(::LoadImage(AfxGetResourceHandle(),
 		MAKEINTRESOURCE(IDR_LATEXDOCTYPE), IMAGE_ICON, cx, cx, LR_CREATEDIBSECTION));
 	m_images.Replace(StructureItem::texFile, icon);
 	::DestroyIcon(icon);
@@ -98,8 +98,8 @@ BOOL NavigatorTreeCtrl::Create(CWnd *pwndParent)
 	if (result && vista)
 	{
 		::SetWindowTheme(m_hWnd,L"explorer",0);
-		
-		const DWORD style = 
+
+		const DWORD style =
 							  TVS_EX_DOUBLEBUFFER
 							//| TVS_EX_FADEINOUTEXPANDOS
 							//| TVS_EX_AUTOHSCROLL
@@ -308,7 +308,7 @@ int NavigatorTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	MapKeyStateToMessage(0,ID_ITEM_INSERT_REF);
 	MapKeyStateToMessage(MK_CONTROL,ID_ITEM_INSERT_PAGEREF);
 	MapKeyStateToMessage(MK_SHIFT,ID_ITEM_INSERT_LABEL);
- 
+
 	EnableDragDrop();
 
 	return 0;
@@ -322,7 +322,7 @@ void NavigatorTreeCtrl::OnSelChanged(NMHDR* pNMHDR,LRESULT* pResult)
 
 		if (!IsFolder(hItem))
 			p->SetCurrentStructureItem(GetItemIndex(hItem));
-	}		
+	}
 
 	*pResult = 0;
 }
@@ -353,11 +353,11 @@ bool NavigatorTreeCtrl::IsFolder(HTREEITEM item) const
 {
 	bool result = GetParentItem(item) == 0;
 
-	if (!result) 
+	if (!result)
 	{
 		int image, selected;
 		GetItemImage(item,image,selected);
-		
+
 		result = image == 14; // image for the (closed) folder
 	}
 
@@ -367,7 +367,7 @@ bool NavigatorTreeCtrl::IsFolder(HTREEITEM item) const
 void NavigatorTreeCtrl::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	UINT flags = 0;
-	
+
 	HTREEITEM item = HitTest(point, &flags);
 
 	if (item && (flags & TVHT_ONITEM))
@@ -414,7 +414,7 @@ void NavigatorTreeCtrl::ShowContextMenu(CPoint &point)
 	else {
 		CPoint pt = point;
 		ScreenToClient(&pt);
-		HTREEITEM hItem = HitTest(pt);	
+		HTREEITEM hItem = HitTest(pt);
 
 		if (hItem)
 		{
@@ -435,10 +435,10 @@ void NavigatorTreeCtrl::EnableDragDrop( bool enable /*= true*/ )
 {
 	if (enable != IsDragDropEnabled())
 	{
-		if (enable) 
+		if (enable)
 			ModifyStyle(TVS_DISABLEDRAGDROP,0);
-		else 
-		{		
+		else
+		{
 			ModifyStyle(0,TVS_DISABLEDRAGDROP);
 		}
 	}
@@ -453,11 +453,11 @@ BOOL NavigatorTreeCtrl::PreTranslateMessage(MSG* pMsg)
 {
 	BOOL handled = FALSE;
 
-	if (pMsg->hwnd == m_hWnd && pMsg->message == WM_KEYDOWN) 
+	if (pMsg->hwnd == m_hWnd && pMsg->message == WM_KEYDOWN)
 	{
 		handled = TRUE;
 
-		switch (pMsg->wParam) 
+		switch (pMsg->wParam)
 		{
 			case VK_RETURN:
 				OnEnter();
@@ -469,7 +469,7 @@ BOOL NavigatorTreeCtrl::PreTranslateMessage(MSG* pMsg)
 				handled = FALSE;
 		}
 	}
-	
+
 	if (!handled)
 		handled = CTreeCtrl::PreTranslateMessage(pMsg);
 
@@ -478,7 +478,7 @@ BOOL NavigatorTreeCtrl::PreTranslateMessage(MSG* pMsg)
 
 void NavigatorTreeCtrl::GotoItem()
 {
-	// SendMessage doesn't work here: the focus will not be given up 
+	// SendMessage doesn't work here: the focus will not be given up
 	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_ITEM_GOTO);
 }
 
@@ -492,13 +492,25 @@ void NavigatorTreeCtrl::OnTvnBeginDrag(NMHDR *pNMHDR, LRESULT *pResult)
 	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
 	HTREEITEM item = pNMTreeView->itemNew.hItem;
 
-	StructureItemContainer::size_type pos = GetItemIndex(item);
+	DWORD flags;
 
-	if (pos < GetProject()->GetStructureItems().size())
-		SetDraggedItem(new StructureItem(GetProject()->GetStructureItems()[pos]));
+	if (!IsFolder(item))
+	{
+		flags = DROPEFFECT_COPY;
+		StructureItemContainer::size_type pos = GetItemIndex(item);
+
+		if (pos < GetProject()->GetStructureItems().size())
+			SetDraggedItem(new StructureItem
+				(GetProject()->GetStructureItems()[pos]));
+	}
+	else
+	{
+		flags = DROPEFFECT_NONE;
+		SetDraggedItem();
+	}
 
 	DWORD result;
-	DoDragDrop(DROPEFFECT_COPY,&result);
+	DoDragDrop(flags, &result);
 
 	*pResult = 0;
 }
