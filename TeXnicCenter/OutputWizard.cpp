@@ -987,9 +987,26 @@ void COutputWizard::SetupAcrobatDDE( CProfile &p )
 	CProfile::CCommand profileCmd;
 	profileCmd.SetActiveCommand(CProfile::CCommand::typeDde);
 
+	//Get the version of the targeted Adobe Reader/Acrobat
+	// in order to properly setup the DDE server name
+	CString DDEServerName(_T("acroview"));
+	const tregex regexReaderVersion(_T(".*\\\\Reader ([\\d]+)\\..*"));
+	const tregex regexAcrobatVersion(_T(".*\\\\Acrobat ([\\d]+)\\..*"));
+	std::tr1::match_results<LPCTSTR> what;
+	LPCTSTR lpStart = m_wndPagePdfViewer.m_strPath;
+	LPCTSTR lpEnd = lpStart + m_wndPagePdfViewer.m_strPath.GetLength();
+	if (regex_search(lpStart, lpEnd, what, regexReaderVersion))
+	{
+		DDEServerName = CString(_T("acroview")) + _T("R") + CString(what[1].first, what[1].second - what[1].first);
+	}
+	else if (regex_search(lpStart, lpEnd, what, regexAcrobatVersion))
+	{
+		DDEServerName = CString(_T("acroview")) + _T("A") + CString(what[1].first, what[1].second - what[1].first);
+	}
+
 	cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
 	cmd.SetCommand(_T("[DocOpen(\"%bm.pdf\")][FileOpen(\"%bm.pdf\")]"));
-	cmd.SetServer(_T("acroview"),_T("control"));
+	cmd.SetServer(DDEServerName, _T("control"));
 	profileCmd.SetDdeCommand(cmd);
 	p.SetViewProjectCmd(profileCmd);
 
