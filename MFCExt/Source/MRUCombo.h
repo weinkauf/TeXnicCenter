@@ -47,7 +47,7 @@ There is a hand-written documentation "MRUCombo_docs.html" near the implementati
 @author Michael Dunn (mdunn at inreach dot com)
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CMRUComboBox : public CComboBox
+class  CMRUComboBox : public CComboBox
 {
 // Construction
 public:

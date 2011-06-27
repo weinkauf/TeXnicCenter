@@ -47,7 +47,7 @@ Menge definiert ist, so wird der Tastendruck ignoriert.
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CFormatEdit : public CEdit
+class  CFormatEdit : public CEdit
 {
 // Konstruktion/Destruktion
 public:
@@ -114,7 +114,7 @@ in einem definierbaren Bereich befindet.
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CNumberEdit : public CFormatEdit
+class  CNumberEdit : public CFormatEdit
 {
 // Typen
 enum tagNumberType

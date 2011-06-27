@@ -47,7 +47,7 @@ For further information see the template class CMRUList.
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CMRUStringList : public CMRUList<CString, LPCTSTR>
+class  CMRUStringList : public CMRUList<CString, LPCTSTR>
 {
 // construction/destruction
 public:

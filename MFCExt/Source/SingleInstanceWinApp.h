@@ -60,7 +60,7 @@ Raymon Shawn (raymon@public1.sz.js.cn), found at Code Guru
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CSingleInstanceWinApp : public CWinApp
+class  CSingleInstanceWinApp : public CWinApp
 {
 // friends
 	friend HDDEDATA CALLBACK DdeCallback( UINT unType, UINT unFmt, HCONV hconv, HSZ hsz1, HSZ hsz2, HDDEDATA hdata, DWORD dwData1, DWORD dwData2 );
