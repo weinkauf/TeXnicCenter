@@ -35,7 +35,7 @@ class CSAXAttributes30Class;
 class CSAXAttributes40Class;
 
 
-class AFX_EXT_CLASS CMXAttributes : public CInterfaceCallingWrapper<IMXAttributes>
+class CMXAttributes : public CInterfaceCallingWrapper<IMXAttributes>
 {
 // construction/destruction
 public:
@@ -83,7 +83,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CMXWriter : public CInterfaceCallingWrapper<IMXWriter>
+class CMXWriter : public CInterfaceCallingWrapper<IMXWriter>
 {
 // construction/destruction
 public:
@@ -149,7 +149,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CVBSAXXMLReader : public CInterfaceCallingWrapper<IVBSAXXMLReader>
+class CVBSAXXMLReader : public CInterfaceCallingWrapper<IVBSAXXMLReader>
 {
 // construction/destruction
 public:
@@ -218,7 +218,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CVBSAXLocator : public CInterfaceCallingWrapper<IVBSAXLocator>
+class CVBSAXLocator : public CInterfaceCallingWrapper<IVBSAXLocator>
 {
 // construction/destruction
 public:
@@ -245,7 +245,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CVBSAXAttributes : public CInterfaceCallingWrapper<IVBSAXAttributes>
+class CVBSAXAttributes : public CInterfaceCallingWrapper<IVBSAXAttributes>
 {
 // construction/destruction
 public:
@@ -296,7 +296,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CVBSAXXMLFilter : public CInterfaceCallingWrapper<IVBSAXXMLFilter>
+class CVBSAXXMLFilter : public CInterfaceCallingWrapper<IVBSAXXMLFilter>
 {
 // construction/destruction
 public:
@@ -317,7 +317,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CSAXXMLReaderClass : public CCoClassWrapper<IVBSAXXMLReader>
+class CSAXXMLReaderClass : public CCoClassWrapper<IVBSAXXMLReader>
 {
 // construction/destruction
 public:
@@ -336,7 +336,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CSAXXMLReader30Class : public CCoClassWrapper<IVBSAXXMLReader>
+class CSAXXMLReader30Class : public CCoClassWrapper<IVBSAXXMLReader>
 {
 // construction/destruction
 public:
@@ -355,7 +355,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CSAXXMLReader40Class : public CCoClassWrapper<IVBSAXXMLReader>
+class CSAXXMLReader40Class : public CCoClassWrapper<IVBSAXXMLReader>
 {
 // construction/destruction
 public:
@@ -373,7 +373,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CMXXMLWriterClass : public CCoClassWrapper<IMXWriter>
+class CMXXMLWriterClass : public CCoClassWrapper<IMXWriter>
 {
 // construction/destruction
 public:
@@ -400,7 +400,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CMXXMLWriter30Class : public CCoClassWrapper<IMXWriter>
+class CMXXMLWriter30Class : public CCoClassWrapper<IMXWriter>
 {
 // construction/destruction
 public:
@@ -427,7 +427,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CMXXMLWriter40Class : public CCoClassWrapper<IMXWriter>
+class CMXXMLWriter40Class : public CCoClassWrapper<IMXWriter>
 {
 // construction/destruction
 public:
@@ -454,7 +454,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CSAXAttributesClass : public CCoClassWrapper<IMXAttributes>
+class CSAXAttributesClass : public CCoClassWrapper<IMXAttributes>
 {
 // construction/destruction
 public:
@@ -473,7 +473,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CSAXAttributes30Class : public CCoClassWrapper<IMXAttributes>
+class CSAXAttributes30Class : public CCoClassWrapper<IMXAttributes>
 {
 // construction/destruction
 public:
@@ -492,7 +492,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CSAXAttributes40Class : public CCoClassWrapper<IMXAttributes>
+class CSAXAttributes40Class : public CCoClassWrapper<IMXAttributes>
 {
 // construction/destruction
 public:
@@ -511,7 +511,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CVBSAXContentHandlerImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXContentHandler>
+class CVBSAXContentHandlerImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXContentHandler>
 {
 // construction/destruction
 public:
@@ -618,7 +618,7 @@ protected:
 
 
 
-class AFX_EXT_CLASS CVBSAXDeclHandlerImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXDeclHandler>
+class CVBSAXDeclHandlerImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXDeclHandler>
 {
 // construction/destruction
 public:
@@ -683,7 +683,7 @@ protected:
 
 
 
-class AFX_EXT_CLASS CVBSAXDTDHandlerImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXDTDHandler>
+class CVBSAXDTDHandlerImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXDTDHandler>
 {
 // construction/destruction
 public:
@@ -736,7 +736,7 @@ protected:
 
 
 
-class AFX_EXT_CLASS CVBSAXLexicalHandlerImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXLexicalHandler>
+class CVBSAXLexicalHandlerImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXLexicalHandler>
 {
 // construction/destruction
 public:
@@ -819,7 +819,7 @@ protected:
 
 
 
-class AFX_EXT_CLASS CVBSAXEntityResolverImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXEntityResolver>
+class CVBSAXEntityResolverImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXEntityResolver>
 {
 // construction/destruction
 public:
@@ -866,7 +866,7 @@ protected:
 
 
 
-class AFX_EXT_CLASS CVBSAXErrorHandlerImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXErrorHandler>
+class CVBSAXErrorHandlerImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXErrorHandler>
 {
 // construction/destruction
 public:
@@ -925,7 +925,7 @@ protected:
 
 
 
-class AFX_EXT_CLASS CVBSAXXMLFilterImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXXMLFilter>
+class CVBSAXXMLFilterImpl : public CDispatchInterfaceImplementationWrapper<IVBSAXXMLFilter>
 {
 // construction/destruction
 public:

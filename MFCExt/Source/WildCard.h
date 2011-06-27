@@ -47,7 +47,7 @@ Supported wilcards are:
 
 @author Sven Wiegand (based on match algorithm by Yuantu Huang <yuantuh@techsim.com.au>)
 */
-class AFX_EXT_CLASS CWildcard
+class  CWildcard
 {
 // construction/destruction
 public:
@@ -97,7 +97,7 @@ The class allows matching one string with all elements in the array.
 
 @see #CWildcard
 */
-class AFX_EXT_CLASS CWildcardArray : public CArray<CWildcard, CWildcard&>
+class  CWildcardArray : public CArray<CWildcard, CWildcard&>
 {
 // construction/destruction
 public:

@@ -4,9 +4,9 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This library is free software; you can redistribute it and/or
-* modify, but leave the headers intact and do not remove any 
+* modify, but leave the headers intact and do not remove any
 * copyrights from the source.
 *
 * This library does not only contain file from us, but also from
@@ -39,7 +39,7 @@ Helps dealing with Version Information of files.
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CFileVersionInfo
+class CFileVersionInfo
 {
 // construction/destruction
 public:
@@ -78,7 +78,7 @@ public:
 		NULL to load the information for the module, that has been used
 		to create the current process.
 	@param dwLanguageCodepageId
-		Identifier for a language and codepage to load the version 
+		Identifier for a language and codepage to load the version
 		information in. If no information in this format is available,
 		the method will load nothing. Specify 0xFFFFFFFF if the method
 		should determine the language by itself. See VerQueryValue of the

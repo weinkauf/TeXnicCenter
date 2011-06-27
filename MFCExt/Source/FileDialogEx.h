@@ -43,7 +43,7 @@ last opened folder even if the dialog was cancelled by the user.
 @author Sven Wiegand
 @author Tino Weinkauf
 */
-class AFX_EXT_CLASS CFileDialogEx : 
+class  CFileDialogEx : 
     public CFileDialog
 {
 	DECLARE_DYNAMIC(CFileDialogEx)

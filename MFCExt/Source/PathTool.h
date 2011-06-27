@@ -45,7 +45,7 @@ two paths, etc.
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CPathTool  
+class  CPathTool  
 {
 // construction/destruction
 public:
