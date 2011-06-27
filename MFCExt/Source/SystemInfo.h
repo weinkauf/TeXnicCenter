@@ -4,7 +4,7 @@
 /********************************************************************
 *
 * This file is part of the TeXnicCenter-system
-* 
+*
 * Copyright (C) Marius Bancila (thanks for providing this class)
 *
 *********************************************************************/
@@ -54,7 +54,7 @@ enum WindowsVersion
 	Windows7
 };
 
-class AFX_EXT_CLASS CSystemInfo  
+class CSystemInfo
 {
 	WindowsVersion	m_nWinVersion;
 	TCHAR			m_szServicePack[128];
@@ -62,7 +62,7 @@ class AFX_EXT_CLASS CSystemInfo
 	BOOL			m_bOsVersionInfoEx;
 
 private:
-	int DetectWindowsVersion();	 
+	int DetectWindowsVersion();	
 
 public:
 	

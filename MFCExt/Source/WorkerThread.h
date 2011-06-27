@@ -4,9 +4,9 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This library is free software; you can redistribute it and/or
-* modify, but leave the headers intact and do not remove any 
+* modify, but leave the headers intact and do not remove any
 * copyrights from the source.
 *
 * This library does not only contain file from us, but also from
@@ -34,7 +34,7 @@
 
 /** Class creating worker threads without GUI activity.
 
-	Derive your own class and override the virtual Run()-method, which 
+	Derive your own class and override the virtual Run()-method, which
 	will be called when the thread is started.
 
 
@@ -42,7 +42,7 @@
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CWorkerThread  
+class  CWorkerThread
 {
 //Types
 public:
@@ -129,7 +129,7 @@ public:
 	Constructs a worker thread object.
 
 	@param bAutoDelete
-		If set to TRUE the object will delete itself, when the 
+		If set to TRUE the object will delete itself, when the
 		Run()-method terminates. Only set this to TRUE if the object has
 		been created on the heap.
 	*/
@@ -141,8 +141,8 @@ public:
 	/**
 	Creates the thread -- makes it run.
 
-	If you call Create() a second time for an object, you have to 
-	ensure, that the previous thread's handle has been closed, by 
+	If you call Create() a second time for an object, you have to
+	ensure, that the previous thread's handle has been closed, by
 	either calling Create() with bAutoCloseHandle set to TRUE or
 	calling CloseHandle().
 
@@ -160,8 +160,8 @@ public:
 	*/
 	BOOL Create(
 		BOOL bAutoCloseHandle = TRUE,
-		int nPriority = THREAD_PRIORITY_NORMAL, 
-		UINT nStackSize = 0, DWORD dwCreationFlags = 0, 
+		int nPriority = THREAD_PRIORITY_NORMAL,
+		UINT nStackSize = 0, DWORD dwCreationFlags = 0,
 		LPSECURITY_ATTRIBUTES lpSecurityAttrs = NULL);
 
 	/**
@@ -202,7 +202,7 @@ public:
 	*/
 	BOOL GetExitCode(LPDWORD lpdwExitCode);
 
-	/** 
+	/**
 	Suspends the thread.
 
 	Will only work, when m_hThread is valid.
@@ -235,7 +235,7 @@ public:
 
 	Will only work, when m_hThread is valid.
 
-	See documentation of ::GetThreadPriority() for detailed 
+	See documentation of ::GetThreadPriority() for detailed
 	information.
 	*/
 	int GetPriority();
@@ -260,7 +260,7 @@ protected:
 	This base implementation just returns TRUE.
 
 	@return
-		Return TRUE to allow the thread to be started and FALSE 
+		Return TRUE to allow the thread to be started and FALSE
 		otherwise.
 	*/
 	virtual BOOL OnPreCreate();
@@ -273,7 +273,7 @@ protected:
 	virtual UINT Run() = 0;
 
 	/**
-	This virtual method is called, when the Run()-method has 
+	This virtual method is called, when the Run()-method has
 	terminated.
 
 	This base implementation simply calls the @c MsgAfterTermination
@@ -283,7 +283,7 @@ protected:
 		Value returned by the Run()-method
 
 	@return
-		Return the threads return value here. In most case you will 
+		Return the threads return value here. In most case you will
 		simply return the unExitCode parameter.
 	*/
 	virtual UINT OnTerminate(UINT unExitCode);
@@ -303,7 +303,7 @@ private:
 
 // attributes
 public:
-	/** 
+	/**
 	Handle to the current thread.
 
 	If you sepcified bAutoCloseHandle with the Create()-method, this

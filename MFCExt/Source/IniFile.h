@@ -45,7 +45,7 @@ Class is mainly based on the code of Adam Clauss' CIniFile class.
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CIniFile  
+class  CIniFile  
 {
 // Construction/Destruction
 public:

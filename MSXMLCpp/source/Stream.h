@@ -60,7 +60,7 @@ for the compiler.
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CFileStream : public IStream
+class CFileStream : public IStream
 {
 // construction/destruction
 public:

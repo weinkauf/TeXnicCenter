@@ -140,7 +140,7 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -188,7 +188,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -235,7 +235,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -282,7 +282,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -293,6 +293,16 @@
       <Command>
       </Command>
     </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <Link>
+      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'">
+    <Link>
+      <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="aboutbox.cpp" />
@@ -1144,11 +1154,9 @@ SubWCRev . "%(FullPath)" "%(RootDir)%(Directory)\Version.h"
     </ProjectReference>
     <ProjectReference Include="..\MFCExt\Source\MFCExt.vcxproj">
       <Project>{049ffaef-6751-42f1-b069-db51bd24911b}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\MSXMLCpp\source\MSXMLCPP.vcxproj">
       <Project>{5e77a852-5e2b-4e6b-b57f-70676f473c93}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\Scintilla\vcbuild\SciLexer.vcxproj">
       <Project>{08c13851-869a-49a9-bc48-cbd0779a2280}</Project>

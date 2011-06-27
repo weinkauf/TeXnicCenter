@@ -46,7 +46,7 @@ This is defined by the attribute bIgnoreCase, which defaults to true.
 
 @author Tino Weinkauf
 */
-class AFX_EXT_CLASS CUniqueStringList : public CStringList
+class  CUniqueStringList : public CStringList
 {
 public:
 	///Standard Constructor
