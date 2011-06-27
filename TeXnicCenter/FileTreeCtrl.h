@@ -69,7 +69,6 @@ protected:
 	std::size_t GetItemIndex(HTREEITEM hItem) const;
 	bool IsFolder(HTREEITEM item) const;
 	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-	BOOL PreTranslateMessage(MSG* pMsg);
 
 private:
 	struct Entry;
@@ -94,7 +93,6 @@ private:
 
 	afx_msg void OnTvnDeleteitem(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnTvnGetInfoTip(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg void OnTvnKeydown(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult);
 
