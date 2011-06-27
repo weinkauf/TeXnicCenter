@@ -181,7 +181,6 @@ BEGIN_MESSAGE_MAP(FileTreeCtrl, NavigatorTreeCtrl)
 	ON_NOTIFY_REFLECT(TVN_DELETEITEM, &FileTreeCtrl::OnTvnDeleteitem)
 	ON_NOTIFY_REFLECT(TVN_GETINFOTIP, &FileTreeCtrl::OnTvnGetInfoTip)
 	ON_MESSAGE(ShellUpdateMessageID, &FileTreeCtrl::OnShellChange)
-	ON_NOTIFY_REFLECT(TVN_KEYDOWN, &FileTreeCtrl::OnTvnKeydown)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, &FileTreeCtrl::OnNMCustomdraw)
 END_MESSAGE_MAP()
 
@@ -874,19 +873,6 @@ void FileTreeCtrl::Refresh()
 	}
 }
 
-void FileTreeCtrl::OnTvnKeydown(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMTVKEYDOWN pTVKeyDown = reinterpret_cast<LPNMTVKEYDOWN>(pNMHDR);
-
-	switch (pTVKeyDown->wVKey) {
-		case VK_F5:
-			Refresh();
-			break;
-	}
-
-	*pResult = 0;
-}
-
 void FileTreeCtrl::OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMTVCUSTOMDRAW pNMCD = reinterpret_cast<LPNMTVCUSTOMDRAW>(pNMHDR);
@@ -909,20 +895,6 @@ void FileTreeCtrl::OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
 		default:
 			*pResult = CDRF_DODEFAULT;
 	}
-}
-
-BOOL FileTreeCtrl::PreTranslateMessage(MSG* pMsg)
-{
-	BOOL result;
-
-	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_F5) {
-		Refresh();
-		result = TRUE;
-	}
-	else
-		result = NavigatorTreeCtrl::PreTranslateMessage(pMsg);
-
-	return result;
 }
 
 void FileTreeCtrl::MarkItemAsMissing(HTREEITEM hItem, bool missing /*= true*/)
