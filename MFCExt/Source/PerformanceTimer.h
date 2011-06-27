@@ -50,7 +50,7 @@
 
 @author Tino Weinkauf
 */
-class AFX_EXT_CLASS PerformanceTimer
+class PerformanceTimer
 {
 //Friends
 //Types
