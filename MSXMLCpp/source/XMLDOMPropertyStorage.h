@@ -13,9 +13,9 @@
 /********************************************************************
 *
 * Copyright (C) 2001 Sven Wiegand
-* 
+*
 * This file is free software; you can redistribute it and/or
-* modify, but leave the headers intact and do not remove any 
+* modify, but leave the headers intact and do not remove any
 * copyrights from the source.
 *
 * If you have further questions, suggestions or bug fixes, please
@@ -45,7 +45,7 @@ namespace MsXml
 typedef CArray<_variant_t, _variant_t&> CVariantArray;
 
 
-class AFX_EXT_CLASS CXMLDOMPropertyStorage : public CXMLDOMElement  
+class CXMLDOMPropertyStorage : public CXMLDOMElement
 {
 // construction/destruction
 public:
@@ -71,7 +71,7 @@ public:
 	@param lpszName
 		The name of the element node.
 	@param Property
-		Value to store in the newly created element. See 
+		Value to store in the newly created element. See
 		IDOMXMLElement::SetNodeTypedValue() for details.
 
 	@return
@@ -94,10 +94,10 @@ public:
 	@param lpszName
 		The name of the element node.
 	@param lpszDataType
-		Type of the property to store. See IDOMXMLElement::SetDataType() 
+		Type of the property to store. See IDOMXMLElement::SetDataType()
 		for details.
 	@param Property
-		Value to store in the newly created element. See 
+		Value to store in the newly created element. See
 		IDOMXMLElement::SetNodeTypedValue() for details.
 
 	@return
@@ -135,9 +135,9 @@ public:
 	Adds a list of values to the storage.
 
 	Creates the Element lpszArrayName as a child of this element, if it
-	does not already exist. For each element in the given Array, a 
-	element	of the name lpszName will be create as a child of the 
-	lpszArrayName-element and the value will be set to the 
+	does not already exist. For each element in the given Array, a
+	element	of the name lpszName will be create as a child of the
+	lpszArrayName-element and the value will be set to the
 	corresponding array value.
 
 	If the lpszArrayName-Element does alreay exist, all childs will
@@ -151,7 +151,7 @@ public:
 	/**
 	Returns a property stored in this node.
 
-	Searches for the element with the specified name (has to be a 
+	Searches for the element with the specified name (has to be a
 	direct child of this node) and returns its typed data.
 
 	@param lpszName
@@ -159,7 +159,7 @@ public:
 	@param Default
 		Default value to return, if the specified element does not exist.
 		If an empty value is provided (VT_EMPTY) as default value, an
-		exception will be thrown, if the specified element does not 
+		exception will be thrown, if the specified element does not
 		exist.
 	@param bEnsureType
 		If TRUE, the element's value will only be returned, if it is of
@@ -174,7 +174,7 @@ public:
 	/**
 	Returns a property stored in this node.
 
-	Searches for the element with the specified name (has to be a 
+	Searches for the element with the specified name (has to be a
 	direct child of this node) and returns its typed data.
 
 	@param lpszName
@@ -185,7 +185,7 @@ public:
 		Default value to return, if the specified element does not exist
 		or if the data in the element is not of the specified type.
 		If an empty value is provided (VT_EMPTY) as default value, an
-		exception will be thrown, if the specified element does not 
+		exception will be thrown, if the specified element does not
 		exist or is not of the specified type.
 
 	@throws CComException
@@ -201,8 +201,8 @@ public:
 		The name of the attribute to retrieve.
 	@param Default
 		Default value to return, if the specified element or attribute
-		does not exist.	If an empty value is provided (VT_EMPTY) as 
-		default value, an	exception will be thrown, if the specified 
+		does not exist.	If an empty value is provided (VT_EMPTY) as
+		default value, an	exception will be thrown, if the specified
 		element or attribute does not exist.
 	*/
 	_variant_t GetPropertyAttribute(LPCTSTR lpszName, LPCTSTR lpszAttributeName, const _variant_t &Default = _variant_t());

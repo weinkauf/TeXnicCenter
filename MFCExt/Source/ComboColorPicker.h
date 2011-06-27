@@ -44,7 +44,7 @@ A Combo Box for picking colors.
 
 @author Baldvin Hansson
 */
-class AFX_EXT_CLASS CComboColorPicker : public CComboBox
+class  CComboColorPicker : public CComboBox
 {
 // Construction
 public:

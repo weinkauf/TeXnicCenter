@@ -41,7 +41,7 @@ wrapper class for SHBrowseForFolder.
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CFolderSelect  
+class  CFolderSelect  
 {
 // construction/destruction
 public:

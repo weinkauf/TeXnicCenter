@@ -2,10 +2,10 @@
 *
 * © Photon Laser Engineering GmbH
 *
-* Diese Datei ist urheberrechtlich geschützt. Ohne ausdrückliche 
-* schriftliche Erlaubnis der Photon Laser Engineering GmbH darf kein 
-* Teil dieser Datei für irgendwelche Zwecke vervielfältigt oder 
-* übertragen werden unabhängig davon, auf welche Art und Weise oder 
+* Diese Datei ist urheberrechtlich geschützt. Ohne ausdrückliche
+* schriftliche Erlaubnis der Photon Laser Engineering GmbH darf kein
+* Teil dieser Datei für irgendwelche Zwecke vervielfältigt oder
+* übertragen werden unabhängig davon, auf welche Art und Weise oder
 * mit welchen Mitteln elektronisch oder mechanisch, dies geschieht.
 *
 *********************************************************************
@@ -49,7 +49,7 @@ namespace MsXml
 	@return
 		S_OK on success or an error code describing the error.
 	*/
-	AFX_EXT_CLASS HRESULT DOMSavePretty(IXMLDOMDocument *pDoc, LPCTSTR lpszPath, LPCTSTR lpszEncoding = _T("ISO-8859-1"));
+	HRESULT DOMSavePretty(IXMLDOMDocument *pDoc, LPCTSTR lpszPath, LPCTSTR lpszEncoding = _T("ISO-8859-1"));
 
 } //namespace MsXml
 

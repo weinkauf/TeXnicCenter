@@ -42,7 +42,7 @@ Adds some methods, to make the work with CXMLDOMDocument2 more easier.
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CXMLDOMDocumentEx : public CXMLDOMDocument2  
+class CXMLDOMDocumentEx : public CXMLDOMDocument2  
 {
 // construction/destruction
 public:

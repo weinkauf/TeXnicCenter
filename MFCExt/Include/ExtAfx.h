@@ -35,14 +35,14 @@
 Laedt den String mit der spezifizierten Kennung aus der Stringtabelle
 und gibt ihn zurueck.
 */
-AFX_EXT_CLASS CString AfxLoadStringEx( UINT unID );
+ CString AfxLoadStringEx( UINT unID );
 
 
 /**
 Laedt den String <var>unID</var> und ersetzt ein enthaltenes '%s' durch
 den Text <var>lpszText</var>. Der entstandene String wird zurueckgegeben.
 */
-AFX_EXT_CLASS CString AfxFormatString( UINT unID, LPCTSTR lpszText );
+ CString AfxFormatString( UINT unID, LPCTSTR lpszText );
 
 
 /**
@@ -50,7 +50,7 @@ Laedt den String <var>unID</var> und ersetzt ein enthaltenes '%d' unter
 Beruecksichtigung der Formatierungsanweisungen durch
 den Wert von <var>n</var>. Der entstandene String wird zurueckgegeben.
 */
-AFX_EXT_CLASS CString AfxFormatString( UINT unID, int n );
+ CString AfxFormatString( UINT unID, int n );
 
 
 /**
@@ -58,7 +58,7 @@ Laedt den String <var>unID</var> und ersetzt ein enthaltenes '%f' unter
 Beruecksichtigung der Formatierungsanweisungen durch
 den Wert von <var>d</var>. Der entstandene String wird zurueckgegeben.
 */
-AFX_EXT_CLASS CString AfxFormatString( UINT unID, double d );
+ CString AfxFormatString( UINT unID, double d );
 
 
 /**
@@ -80,7 +80,7 @@ Zeigt eine MessageBox an.
 	0, wenn ein Fehler aufgetreten ist, sonst die Kennung des Betaetigten
 	Buttons.
 */
-AFX_EXT_CLASS int MessageBoxEx( UINT unPromptID, UINT unTitleID, UINT unType = MB_OK, CWnd *pwndParent = NULL );
+ int MessageBoxEx( UINT unPromptID, UINT unTitleID, UINT unType = MB_OK, CWnd *pwndParent = NULL );
 
 
 /**
@@ -102,7 +102,7 @@ Zeigt eine MessageBox an.
 	0, wenn ein Fehler aufgetreten ist, sonst die Kennung des Betaetigten
 	Buttons.
 */
-AFX_EXT_CLASS int MessageBoxEx( LPCTSTR lpszPrompt, UINT unTitleID, UINT unType = MB_OK, CWnd *pwndParent = NULL );
+ int MessageBoxEx( LPCTSTR lpszPrompt, UINT unTitleID, UINT unType = MB_OK, CWnd *pwndParent = NULL );
 
 
 /** @} */

@@ -69,7 +69,7 @@ class CServerXMLHTTP30Class;
 class CServerXMLHTTP40Class;
 
 
-class AFX_EXT_CLASS CXMLDOMDocument : public CInterfaceCallingWrapper<IXMLDOMDocument>
+class CXMLDOMDocument : public CInterfaceCallingWrapper<IXMLDOMDocument>
 {
 // construction/destruction
 public:
@@ -287,7 +287,7 @@ public:
 };
 
 
-class AFX_EXT_CLASS CXMLDOMDocument2 : public CInterfaceCallingWrapper<IXMLDOMDocument2>
+class CXMLDOMDocument2 : public CInterfaceCallingWrapper<IXMLDOMDocument2>
 {
 // construction/destruction
 public:
@@ -525,7 +525,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMNamedNodeMap : public CInterfaceCallingWrapper<IXMLDOMNamedNodeMap>
+class CXMLDOMNamedNodeMap : public CInterfaceCallingWrapper<IXMLDOMNamedNodeMap>
 {
 // construction/destruction
 public:
@@ -569,7 +569,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMNode : public CInterfaceCallingWrapper<IXMLDOMNode>
+class CXMLDOMNode : public CInterfaceCallingWrapper<IXMLDOMNode>
 {
 // construction/destruction
 public:
@@ -690,7 +690,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMNodeList : public CInterfaceCallingWrapper<IXMLDOMNodeList>
+class CXMLDOMNodeList : public CInterfaceCallingWrapper<IXMLDOMNodeList>
 {
 // construction/destruction
 public:
@@ -719,7 +719,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMParseError : public CInterfaceCallingWrapper<IXMLDOMParseError>
+class CXMLDOMParseError : public CInterfaceCallingWrapper<IXMLDOMParseError>
 {
 // construction/destruction
 public:
@@ -755,7 +755,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLHTTPRequest : public CInterfaceCallingWrapper<IXMLHTTPRequest>
+class CXMLHTTPRequest : public CInterfaceCallingWrapper<IXMLHTTPRequest>
 {
 // construction/destruction
 public:
@@ -812,7 +812,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CServerXMLHTTPRequest : public CInterfaceCallingWrapper<IServerXMLHTTPRequest>
+class CServerXMLHTTPRequest : public CInterfaceCallingWrapper<IServerXMLHTTPRequest>
 {
 // construction/destruction
 public:
@@ -881,7 +881,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMAttribute : public CInterfaceCallingWrapper<IXMLDOMAttribute>
+class CXMLDOMAttribute : public CInterfaceCallingWrapper<IXMLDOMAttribute>
 {
 // construction/destruction
 public:
@@ -1011,7 +1011,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMCDATASection : public CInterfaceCallingWrapper<IXMLDOMCDATASection>
+class CXMLDOMCDATASection : public CInterfaceCallingWrapper<IXMLDOMCDATASection>
 {
 // construction/destruction
 public:
@@ -1159,7 +1159,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMCharacterData : public CInterfaceCallingWrapper<IXMLDOMCharacterData>
+class CXMLDOMCharacterData : public CInterfaceCallingWrapper<IXMLDOMCharacterData>
 {
 // construction/destruction
 public:
@@ -1304,7 +1304,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMComment : public CInterfaceCallingWrapper<IXMLDOMComment>
+class CXMLDOMComment : public CInterfaceCallingWrapper<IXMLDOMComment>
 {
 // construction/destruction
 public:
@@ -1449,7 +1449,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMDocumentFragment : public CInterfaceCallingWrapper<IXMLDOMDocumentFragment>
+class CXMLDOMDocumentFragment : public CInterfaceCallingWrapper<IXMLDOMDocumentFragment>
 {
 // construction/destruction
 public:
@@ -1570,7 +1570,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMDocumentType : public CInterfaceCallingWrapper<IXMLDOMDocumentType>
+class CXMLDOMDocumentType : public CInterfaceCallingWrapper<IXMLDOMDocumentType>
 {
 // construction/destruction
 public:
@@ -1700,7 +1700,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMElement : public CInterfaceCallingWrapper<IXMLDOMElement>
+class CXMLDOMElement : public CInterfaceCallingWrapper<IXMLDOMElement>
 {
 // construction/destruction
 public:
@@ -1848,7 +1848,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMEntity : public CInterfaceCallingWrapper<IXMLDOMEntity>
+class CXMLDOMEntity : public CInterfaceCallingWrapper<IXMLDOMEntity>
 {
 // construction/destruction
 public:
@@ -1978,7 +1978,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMEntityReference : public CInterfaceCallingWrapper<IXMLDOMEntityReference>
+class CXMLDOMEntityReference : public CInterfaceCallingWrapper<IXMLDOMEntityReference>
 {
 // construction/destruction
 public:
@@ -2099,7 +2099,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMImplementation : public CInterfaceCallingWrapper<IXMLDOMImplementation>
+class CXMLDOMImplementation : public CInterfaceCallingWrapper<IXMLDOMImplementation>
 {
 // construction/destruction
 public:
@@ -2116,7 +2116,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMNotation : public CInterfaceCallingWrapper<IXMLDOMNotation>
+class CXMLDOMNotation : public CInterfaceCallingWrapper<IXMLDOMNotation>
 {
 // construction/destruction
 public:
@@ -2243,7 +2243,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMProcessingInstruction : public CInterfaceCallingWrapper<IXMLDOMProcessingInstruction>
+class CXMLDOMProcessingInstruction : public CInterfaceCallingWrapper<IXMLDOMProcessingInstruction>
 {
 // construction/destruction
 public:
@@ -2373,7 +2373,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMSchemaCollection : public CInterfaceCallingWrapper<IXMLDOMSchemaCollection>
+class CXMLDOMSchemaCollection : public CInterfaceCallingWrapper<IXMLDOMSchemaCollection>
 {
 // construction/destruction
 public:
@@ -2408,7 +2408,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMSchemaCollection2 : public CInterfaceCallingWrapper<IXMLDOMSchemaCollection2>
+class CXMLDOMSchemaCollection2 : public CInterfaceCallingWrapper<IXMLDOMSchemaCollection2>
 {
 // construction/destruction
 public:
@@ -2453,7 +2453,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMSelection : public CInterfaceCallingWrapper<IXMLDOMSelection>
+class CXMLDOMSelection : public CInterfaceCallingWrapper<IXMLDOMSelection>
 {
 // construction/destruction
 public:
@@ -2515,7 +2515,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLDOMText : public CInterfaceCallingWrapper<IXMLDOMText>
+class CXMLDOMText : public CInterfaceCallingWrapper<IXMLDOMText>
 {
 // construction/destruction
 public:
@@ -2663,7 +2663,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXSLProcessor : public CInterfaceCallingWrapper<IXSLProcessor>
+class CXSLProcessor : public CInterfaceCallingWrapper<IXSLProcessor>
 {
 // construction/destruction
 public:
@@ -2720,7 +2720,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXSLTemplate : public CInterfaceCallingWrapper<IXSLTemplate>
+class CXSLTemplate : public CInterfaceCallingWrapper<IXSLTemplate>
 {
 // construction/destruction
 public:
@@ -2744,7 +2744,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CDOMDocumentClass : public CCoClassWrapper<IXMLDOMDocument2>
+class CDOMDocumentClass : public CCoClassWrapper<IXMLDOMDocument2>
 {
 // construction/destruction
 public:
@@ -2762,7 +2762,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CDOMDocument26Class : public CCoClassWrapper<IXMLDOMDocument2>
+class CDOMDocument26Class : public CCoClassWrapper<IXMLDOMDocument2>
 {
 // construction/destruction
 public:
@@ -2780,7 +2780,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CDOMDocument30Class : public CCoClassWrapper<IXMLDOMDocument2>
+class CDOMDocument30Class : public CCoClassWrapper<IXMLDOMDocument2>
 {
 // construction/destruction
 public:
@@ -2798,7 +2798,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CDOMDocument40Class : public CCoClassWrapper<IXMLDOMDocument2>
+class CDOMDocument40Class : public CCoClassWrapper<IXMLDOMDocument2>
 {
 // construction/destruction
 public:
@@ -2816,7 +2816,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CFreeThreadedDOMDocumentClass : public CCoClassWrapper<IXMLDOMDocument2>
+class CFreeThreadedDOMDocumentClass : public CCoClassWrapper<IXMLDOMDocument2>
 {
 // construction/destruction
 public:
@@ -2834,7 +2834,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CFreeThreadedDOMDocument26Class : public CCoClassWrapper<IXMLDOMDocument2>
+class CFreeThreadedDOMDocument26Class : public CCoClassWrapper<IXMLDOMDocument2>
 {
 // construction/destruction
 public:
@@ -2852,7 +2852,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CFreeThreadedDOMDocument30Class : public CCoClassWrapper<IXMLDOMDocument2>
+class CFreeThreadedDOMDocument30Class : public CCoClassWrapper<IXMLDOMDocument2>
 {
 // construction/destruction
 public:
@@ -2870,7 +2870,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CFreeThreadedDOMDocument40Class : public CCoClassWrapper<IXMLDOMDocument2>
+class CFreeThreadedDOMDocument40Class : public CCoClassWrapper<IXMLDOMDocument2>
 {
 // construction/destruction
 public:
@@ -2888,7 +2888,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLSchemaCacheClass : public CCoClassWrapper<IXMLDOMSchemaCollection>
+class CXMLSchemaCacheClass : public CCoClassWrapper<IXMLDOMSchemaCollection>
 {
 // construction/destruction
 public:
@@ -2905,7 +2905,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLSchemaCache26Class : public CCoClassWrapper<IXMLDOMSchemaCollection>
+class CXMLSchemaCache26Class : public CCoClassWrapper<IXMLDOMSchemaCollection>
 {
 // construction/destruction
 public:
@@ -2922,7 +2922,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLSchemaCache30Class : public CCoClassWrapper<IXMLDOMSchemaCollection>
+class CXMLSchemaCache30Class : public CCoClassWrapper<IXMLDOMSchemaCollection>
 {
 // construction/destruction
 public:
@@ -2939,7 +2939,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLSchemaCache40Class : public CCoClassWrapper<IXMLDOMSchemaCollection2>
+class CXMLSchemaCache40Class : public CCoClassWrapper<IXMLDOMSchemaCollection2>
 {
 // construction/destruction
 public:
@@ -2956,7 +2956,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXSLTemplateClass : public CCoClassWrapper<IXSLTemplate>
+class CXSLTemplateClass : public CCoClassWrapper<IXSLTemplate>
 {
 // construction/destruction
 public:
@@ -2973,7 +2973,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXSLTemplate26Class : public CCoClassWrapper<IXSLTemplate>
+class CXSLTemplate26Class : public CCoClassWrapper<IXSLTemplate>
 {
 // construction/destruction
 public:
@@ -2990,7 +2990,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXSLTemplate30Class : public CCoClassWrapper<IXSLTemplate>
+class CXSLTemplate30Class : public CCoClassWrapper<IXSLTemplate>
 {
 // construction/destruction
 public:
@@ -3007,7 +3007,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXSLTemplate40Class : public CCoClassWrapper<IXSLTemplate>
+class CXSLTemplate40Class : public CCoClassWrapper<IXSLTemplate>
 {
 // construction/destruction
 public:
@@ -3024,7 +3024,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLHTTPClass : public CCoClassWrapper<IXMLHTTPRequest>
+class CXMLHTTPClass : public CCoClassWrapper<IXMLHTTPRequest>
 {
 // construction/destruction
 public:
@@ -3041,7 +3041,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLHTTP26Class : public CCoClassWrapper<IXMLHTTPRequest>
+class CXMLHTTP26Class : public CCoClassWrapper<IXMLHTTPRequest>
 {
 // construction/destruction
 public:
@@ -3058,7 +3058,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLHTTP30Class : public CCoClassWrapper<IXMLHTTPRequest>
+class CXMLHTTP30Class : public CCoClassWrapper<IXMLHTTPRequest>
 {
 // construction/destruction
 public:
@@ -3075,7 +3075,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CXMLHTTP40Class : public CCoClassWrapper<IXMLHTTPRequest>
+class CXMLHTTP40Class : public CCoClassWrapper<IXMLHTTPRequest>
 {
 // construction/destruction
 public:
@@ -3092,7 +3092,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CServerXMLHTTPClass : public CCoClassWrapper<IServerXMLHTTPRequest2>
+class CServerXMLHTTPClass : public CCoClassWrapper<IServerXMLHTTPRequest2>
 {
 // construction/destruction
 public:
@@ -3109,7 +3109,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CServerXMLHTTP30Class : public CCoClassWrapper<IServerXMLHTTPRequest2>
+class CServerXMLHTTP30Class : public CCoClassWrapper<IServerXMLHTTPRequest2>
 {
 // construction/destruction
 public:
@@ -3126,7 +3126,7 @@ public:
 
 
 
-class AFX_EXT_CLASS CServerXMLHTTP40Class : public CCoClassWrapper<IServerXMLHTTPRequest2>
+class CServerXMLHTTP40Class : public CCoClassWrapper<IServerXMLHTTPRequest2>
 {
 // construction/destruction
 public:

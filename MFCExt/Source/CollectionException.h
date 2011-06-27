@@ -41,7 +41,7 @@ Bei den anderen Objekten handelt es sich um Sammlungs-Objekte (Arrays, Listen, e
 
 @author Sven Wiegand
 */
-class AFX_EXT_CLASS CCollectionException : public CException  
+class  CCollectionException : public CException  
 {
 // Typen
 public:
