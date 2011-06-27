@@ -103,12 +103,82 @@ struct FileTreeCtrl::FileEntry
 
 	int CompareTo(const Entry& other) const;
 
+	static int GetExtensionPriority(const CString& ext)
+	{
+		int result;
+
+		if (ext.CompareNoCase(_T("sty")) == 0)
+			result = 5;
+		else if (ext.CompareNoCase(_T("tex")) == 0)
+			result = 4;
+		else if (ext.CompareNoCase(_T("bib")) == 0)
+			result = 3;
+		else if (IsImage(ext))
+			result = 2;
+		else
+			result = 1;
+
+		return result;
+	}
+
+	//! Indicates whether the specified @a extension belongs to an image.
+	static bool IsImage(const CString& extension)
+	{
+		// Note: the following array has to be kept sorted
+		LPCTSTR const extentions[] = {
+			_T("bmp"),
+			_T("eps"),
+			_T("gif"),
+			_T("jpeg"),
+			_T("jpg"),
+			_T("pdf"),
+			_T("png"),
+			_T("ps"),
+			_T("tiff")
+		};
+
+		return std::binary_search(std::begin(extentions), std::end(extentions),
+			extension, [](const CString& value, LPCTSTR ext)
+		{
+			return value.CompareNoCase(ext) < 0;
+		});
+	}
+
 	StructureItemContainer::size_type itemIndex;
 };
 
 int FileTreeCtrl::Entry::CompareTo(const Entry& other) const
 {
-	return text.CompareNoCase(other.text);
+	// Note: The StrCmpLogicalW function used below allows to sort strings
+	// according to their natural order instead of the lexicographical one. For
+	// instance, the lexicographically sorted file names 1, 10, 100, 2 will be
+	// sorted as 1, 2, 10, 100.
+
+	const CString& ext1 = CPathTool::GetFileExtension(text);
+	const CString& ext2 = CPathTool::GetFileExtension(other.text);
+
+	int result;
+
+	if (ext1.CompareNoCase(ext2) == 0) // extensions are equal
+		result = StrCmpLogicalW(CPathTool::GetFileTitle(text),
+			CPathTool::GetFileTitle(other.text));
+	else {
+		int prio1 = FileEntry::GetExtensionPriority(ext1);
+		int prio2 = FileEntry::GetExtensionPriority(ext2);
+
+		result = prio2 - prio1;
+
+		if (result == 0) {
+			// same priorities: compare by extension
+			result = StrCmpLogicalW(CPathTool::GetFileTitle(text),
+				CPathTool::GetFileTitle(other.text));
+
+			if (result == 0)
+				result = StrCmpLogicalW(ext1, ext2);
+		}
+	}
+
+	return result;
 }
 
 struct FileTreeCtrl::DirectoryEntry
