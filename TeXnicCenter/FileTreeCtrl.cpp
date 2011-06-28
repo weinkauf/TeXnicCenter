@@ -906,7 +906,12 @@ void FileTreeCtrl::ShowContextMenu(CPoint& point)
 	CMenu menu;
 	menu.CreatePopupMenu();
 
-	if (FAILED(cm->QueryContextMenu(menu, 0, 1, 0x7fff, CMF_EXPLORE)))
+	UINT queryFlags = CMF_EXPLORE;
+
+	if (GetKeyState(VK_SHIFT) < 0)
+		queryFlags |= CMF_EXTENDEDVERBS;
+
+	if (FAILED(cm->QueryContextMenu(menu, 0, 1, 0x7fff, queryFlags)))
 		return;
 
 	TPMPARAMS tpmp = { sizeof(TPMPARAMS), rect };
@@ -921,12 +926,16 @@ void FileTreeCtrl::ShowContextMenu(CPoint& point)
 		contextMenu2_.Release();
 
 	if (id) {
-		USES_CONVERSION;
-
 		CMINVOKECOMMANDINFO cmi = { sizeof(CMINVOKECOMMANDINFO) };
 		cmi.hwnd = m_hWnd;
 		cmi.lpVerb = MAKEINTRESOURCEA(id - 1);
 		cmi.nShow = SW_SHOWDEFAULT;
+
+		if (GetKeyState(VK_SHIFT) < 0)
+			cmi.fMask |= CMIC_MASK_SHIFT_DOWN;
+
+		if (GetKeyState(VK_CONTROL) < 0)
+			cmi.fMask |= CMIC_MASK_CONTROL_DOWN;
 
 		cm->InvokeCommand(&cmi);
 	}
