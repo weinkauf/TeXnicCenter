@@ -163,18 +163,21 @@ int FileTreeCtrl::Entry::CompareTo(const Entry& other) const
 		result = StrCmpLogicalW(CPathTool::GetFileTitle(text),
 			CPathTool::GetFileTitle(other.text));
 	else {
+		// Perform chained comparison
 		int prio1 = FileEntry::GetExtensionPriority(ext1);
 		int prio2 = FileEntry::GetExtensionPriority(ext2);
 
 		result = prio2 - prio1;
 
 		if (result == 0) {
-			// same priorities: compare by extension
+			// same priorities: compare by file title
 			result = StrCmpLogicalW(CPathTool::GetFileTitle(text),
 				CPathTool::GetFileTitle(other.text));
 
-			if (result == 0)
+			if (result == 0) {
+				// same file titles: compare by extension
 				result = StrCmpLogicalW(ext1, ext2);
+			}
 		}
 	}
 
