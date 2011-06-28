@@ -134,6 +134,7 @@ struct FileTreeCtrl::FileEntry
 			_T("pdf"),
 			_T("png"),
 			_T("ps"),
+			_T("tif"),
 			_T("tiff")
 		};
 
