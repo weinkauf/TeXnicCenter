@@ -351,7 +351,8 @@ void FileTreeCtrl::Populate()
 	typedef std::vector<HTREEITEM> TreeItemVector;
 	TreeItemVector missingItems;
 
-	for (StructureItemContainer::const_iterator it = items.begin(); it != items.end(); ++it)
+	for (StructureItemContainer::const_iterator it = items.begin();
+			it != items.end(); ++it)
 	{
 		const StructureItem& item = *it;
 
@@ -361,8 +362,8 @@ void FileTreeCtrl::Populate()
 		text = CPathTool::GetFile(it->GetPath());
 
 		CString reldir = CPathTool::GetRelativePath(mainDirectory,
-			CPathTool::GetParentDirectory(CPathTool::GetAbsolutePath(mainDirectory,
-				it->GetPath())), TRUE, TRUE);
+			CPathTool::GetParentDirectory(CPathTool::GetAbsolutePath
+				(mainDirectory, it->GetPath())), TRUE, TRUE);
 
 		const StructureItemContainer::const_iterator::difference_type index =
 			std::distance(items.begin(), it);
@@ -704,8 +705,9 @@ HTREEITEM FileTreeCtrl::InsertEntry(HTREEITEM parent, Entry* entry,
 		SHGFI_OVERLAYINDEX);
 	int stateImageIndex = GetImageIndex(entry->pidl, SHGFI_PIDL |
 		SHGFI_SELECTED);
+	bool iconMissing = normalImageIndex == -1;
 
-	if (normalImageIndex == -1 && item) {
+	if (iconMissing && item) {
 		// The file item is missing so there's no way to find out file's
 		// specific icon. Hence, extract file's generic icon by using the file
 		// extension.
@@ -737,6 +739,16 @@ HTREEITEM FileTreeCtrl::InsertEntry(HTREEITEM parent, Entry* entry,
 			SHGFI_USEFILEATTRIBUTES, FILE_ATTRIBUTE_NORMAL);
 		stateImageIndex = GetImageIndex(extension, SHGFI_SELECTED |
 			SHGFI_USEFILEATTRIBUTES, FILE_ATTRIBUTE_NORMAL);
+	}
+	else if (iconMissing && dynamic_cast<const DirectoryEntry*>(entry)) {
+		// The folder doesn't exist: query the generic directory icon of the
+        // project folder.
+		const CStringW& folder = GetProject()->GetMainPath();
+
+		normalImageIndex = GetImageIndex(folder, SHGFI_USEFILEATTRIBUTES,
+			FILE_ATTRIBUTE_DIRECTORY);
+		stateImageIndex = GetImageIndex(folder, SHGFI_SELECTED |
+			SHGFI_USEFILEATTRIBUTES, FILE_ATTRIBUTE_DIRECTORY);
 	}
 
 	UINT state = INDEXTOOVERLAYMASK(normalImageIndex >> 24 & 0xff);
