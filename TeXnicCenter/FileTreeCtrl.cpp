@@ -29,9 +29,7 @@
 #include "stdafx.h"
 
 #include <algorithm>
-#include <cstddef>
 #include <functional>
-#include <map>
 #include <utility>
 #include <vector>
 
