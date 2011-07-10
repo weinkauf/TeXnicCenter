@@ -420,7 +420,7 @@ void FileTreeCtrl::Populate()
 						else
 						{
 							const CString& absolutePath =
-								CPathTool::Cat(mainDirectory, path);
+								CPathTool::GetAbsolutePath(mainDirectory, path);
 
 							parent = InsertEntry(parent,
 								new DirectoryEntry(GetPathItemIDList(absolutePath),
@@ -648,7 +648,9 @@ ItemIDList FileTreeCtrl::GetPathItemIDList(const CString& path) const
 {
 	ItemIDList pidl;
 
-	HRESULT code = SHILCreateFromPath(path, &pidl, NULL);
+	//SHILCreateFromPath needs a canonical path
+	CString CanonicalPath = CPathTool::GetCanonicalPath(path);
+	HRESULT code = SHILCreateFromPath(CanonicalPath, &pidl, NULL);
 
 	if (FAILED(code)) {
 		TRACE0("CFileView: Failed to convert a path to PIDL\n");
