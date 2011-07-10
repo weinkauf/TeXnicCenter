@@ -1,10 +1,12 @@
 [FormatInfo]
 Type=TeXnicCenterProjectInformation
-Version=3
+Version=4
 
 [ProjectInfo]
 MainFile=DifferentLevels.tex
 UseBibTeX=0
 UseMakeIndex=0
-ActiveProfile=Fast: LaTeX => DVI
+ActiveProfile=LaTeX ⇨ PDF
+ProjectLanguage=en
+ProjectDialect=US
 
