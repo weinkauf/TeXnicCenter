@@ -15,6 +15,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #undef _WIN32_WINNT
 #define _WIN32_WINNT  0x0500
@@ -679,6 +680,13 @@ sptr_t ScintillaWin::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam
 			break;
 
 		case WM_MOUSEWHEEL:
+			// if autocomplete list active then send mousewheel message to it
+			if (ac.Active()) {
+				HWND hWnd = reinterpret_cast<HWND>(ac.lb->GetID());
+				::SendMessage(hWnd, iMessage, wParam, lParam);
+				break;
+			}
+			
 			// Don't handle datazoom.
 			// (A good idea for datazoom would be to "fold" or "unfold" details.
 			// i.e. if datazoomed out only class structures are visible, when datazooming in the control
@@ -1344,8 +1352,10 @@ public:
 			if (lenMixed > utf16Mixed.size()) {
 				utf16Mixed.resize(lenMixed + 8);
 			}
-			size_t nUtf16Mixed = ::MultiByteToWideChar(65001, 0, mixed, lenMixed,
-				&utf16Mixed[0], utf16Mixed.size());
+			size_t nUtf16Mixed = ::MultiByteToWideChar(65001, 0, mixed,
+				static_cast<int>(lenMixed),
+				&utf16Mixed[0],
+				static_cast<int>(utf16Mixed.size()));
 
 			if (nUtf16Mixed == 0) {
 				// Failed to convert -> bad UTF-8
@@ -1358,11 +1368,14 @@ public:
 			}
 			int lenFlat = ::LCMapStringW(LOCALE_SYSTEM_DEFAULT,
 				LCMAP_LINGUISTIC_CASING | LCMAP_LOWERCASE,
-				&utf16Mixed[0], nUtf16Mixed, &utf16Folded[0], utf16Folded.size());
+				&utf16Mixed[0],
+				static_cast<int>(nUtf16Mixed),
+				&utf16Folded[0],
+				static_cast<int>(utf16Folded.size()));
 
 			size_t lenOut = UTF8Length(&utf16Folded[0], lenFlat);
 			if (lenOut < sizeFolded) {
-				UTF8FromUTF16(&utf16Folded[0], lenFlat, folded, lenOut);
+				UTF8FromUTF16(&utf16Folded[0], lenFlat, folded, static_cast<int>(lenOut));
 				return lenOut;
 			} else {
 				return 0;
@@ -1389,8 +1402,10 @@ public:
 			if (lenMixed > utf16Mixed.size()) {
 				utf16Mixed.resize(lenMixed + 8);
 			}
-			size_t nUtf16Mixed = ::MultiByteToWideChar(cp, 0, mixed, lenMixed,
-				&utf16Mixed[0], utf16Mixed.size());
+			size_t nUtf16Mixed = ::MultiByteToWideChar(cp, 0, mixed,
+				static_cast<int>(lenMixed),
+				&utf16Mixed[0],
+				static_cast<int>(utf16Mixed.size()));
 
 			if (nUtf16Mixed == 0) {
 				// Failed to convert -> bad input
@@ -1403,7 +1418,10 @@ public:
 			}
 			int lenFlat = ::LCMapStringW(LOCALE_SYSTEM_DEFAULT,
 				LCMAP_LINGUISTIC_CASING | LCMAP_LOWERCASE,
-				&utf16Mixed[0], nUtf16Mixed, &utf16Folded[0], utf16Folded.size());
+				&utf16Mixed[0],
+				static_cast<int>(nUtf16Mixed),
+				&utf16Folded[0],
+				static_cast<int>(utf16Folded.size()));
 
 			size_t lenOut = ::WideCharToMultiByte(cp, 0,
 				&utf16Folded[0], lenFlat,
@@ -1412,7 +1430,7 @@ public:
 			if (lenOut < sizeFolded) {
 				::WideCharToMultiByte(cp, 0,
 					&utf16Folded[0], lenFlat,
-					folded, lenOut, NULL, 0);
+					folded, static_cast<int>(lenOut), NULL, 0);
 				return lenOut;
 			} else {
 				return 0;
@@ -1467,7 +1485,8 @@ std::string ScintillaWin::CaseMapString(const std::string &s, int caseMapping) {
 
 	UINT cpDoc = CodePageOfDocument();
 
-	unsigned int lengthUTF16 = ::MultiByteToWideChar(cpDoc, 0, s.c_str(), s.size(), NULL, 0);
+	unsigned int lengthUTF16 = ::MultiByteToWideChar(cpDoc, 0, s.c_str(),
+		static_cast<int>(s.size()), NULL, 0);
 	if (lengthUTF16 == 0)	// Failed to convert
 		return s;
 
@@ -1482,7 +1501,7 @@ std::string ScintillaWin::CaseMapString(const std::string &s, int caseMapping) {
 
 		// Change text to UTF-16
 		std::vector<wchar_t> vwcText(lengthUTF16);
-		::MultiByteToWideChar(cpDoc, 0, s.c_str(), s.size(), &vwcText[0], lengthUTF16);
+		::MultiByteToWideChar(cpDoc, 0, s.c_str(), static_cast<int>(s.size()), &vwcText[0], lengthUTF16);
 
 		// Change case
 		int charsConverted = ::LCMapStringW(LOCALE_SYSTEM_DEFAULT, mapFlags,
@@ -1493,12 +1512,12 @@ std::string ScintillaWin::CaseMapString(const std::string &s, int caseMapping) {
 
 		// Change back to document encoding
 		unsigned int lengthConverted = ::WideCharToMultiByte(cpDoc, 0,
-			&vwcConverted[0], vwcConverted.size(),
+			&vwcConverted[0], static_cast<int>(vwcConverted.size()),
 			NULL, 0, NULL, 0);
 		std::vector<char> vcConverted(lengthConverted);
 		::WideCharToMultiByte(cpDoc, 0,
-			&vwcConverted[0], vwcConverted.size(),
-			&vcConverted[0], vcConverted.size(), NULL, 0);
+			&vwcConverted[0], static_cast<int>(vwcConverted.size()),
+			&vcConverted[0], static_cast<int>(vcConverted.size()), NULL, 0);
 
 		return std::string(&vcConverted[0], vcConverted.size());
 
@@ -1508,7 +1527,8 @@ std::string ScintillaWin::CaseMapString(const std::string &s, int caseMapping) {
 
 		// Change text to UTF-16
 		wchar_t vwcText[shortSize];
-		::MultiByteToWideChar(cpDoc, 0, s.c_str(), s.size(), vwcText, lengthUTF16);
+		::MultiByteToWideChar(cpDoc, 0, s.c_str(), static_cast<int>(s.size()),
+			vwcText, lengthUTF16);
 
 		// Change case
 		int charsConverted = ::LCMapStringW(LOCALE_SYSTEM_DEFAULT, mapFlags,
@@ -1612,8 +1632,8 @@ void ScintillaWin::InsertPasteText(const char *text, int len, SelectionPosition 
 			// add the newline if necessary
 			if ((len > 0) && (text[len-1] != '\n' && text[len-1] != '\r')) {
 				const char *endline = StringFromEOLMode(pdoc->eolMode);
-				pdoc->InsertString(insertPos + len, endline, strlen(endline));
-				len += strlen(endline);
+				pdoc->InsertString(insertPos + len, endline, static_cast<int>(strlen(endline)));
+				len += static_cast<int>(strlen(endline));
 			}
 			if (sel.MainCaret() == insertPos) {
 				SetEmptySelection(sel.MainCaret() + len);
@@ -2471,7 +2491,7 @@ STDMETHODIMP ScintillaWin::Drop(LPDATAOBJECT pIDataSource, DWORD grfKeyState,
 
 		if (data && convertPastes) {
 			// Convert line endings of the drop into our local line-endings mode
-			int len = strlen(data);
+			int len = static_cast<int>(strlen(data));
 			char *convertedText = Document::TransformLineEnds(&len, data, len, pdoc->eolMode);
 			if (dataAllocated)
 				delete []data;
