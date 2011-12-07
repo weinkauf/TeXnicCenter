@@ -490,7 +490,7 @@ void COutputWizard::LookForPs()
 	m_wndPagePsViewer.m_strPath = strPSViewer;
 
 	strPSViewer.MakeUpper();
-	if (strPSViewer.Find(_T("GSVIEW32.EXE")) > -1)
+	if (strPSViewer.Find(_T("GSVIEW32.EXE")) > -1 || strPSViewer.Find(_T("GSVIEW64.EXE")) > -1)
 	{
 		m_wndPagePsViewer.m_strSingleInstanceOption = _T("-e");
 
@@ -579,8 +579,8 @@ void COutputWizard::LookForPdf()
 	// Detect SumatraPDF
 	ATL::CRegKey reg;
 	
-	if (reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\SumatraPDF"),
-		KEY_READ) == ERROR_SUCCESS)
+	if (reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS
+		|| reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\Wow6432Node\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS)
 	{
 		ULONG length = MAX_PATH;		
 
@@ -1100,40 +1100,46 @@ const CString COutputWizard::FindMiKTeXInstallLocation()
 	paths.reserve(10);
 
 	LPCTSTR const mikbin = _T("miktex\\bin");
+	LPCTSTR const mikbin64 = _T("miktex\\bin\\x64");
 
 	ATL::CRegKey reg;
 
-	// Known (future) MiKTeX versions
+	// Known (future) MiKTeX versions - prefering newer ones
 	const CString versions[] = {
 		_T("MiKTeX 2.9"),
 		_T("MiKTeX 2.8"),
 		_T("MiKTeX 2.7")
 	};
 
-	const int count = sizeof(versions) / sizeof(*versions);
+	// Possible locations in the registry - as of today (30th July 2011), a 64 Bit mikTeX 2.9 writes its uninstall info into the first path
+	const CString registrylocations[] = {
+		_T("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"),
+		_T("Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\")
+	};
 
-	for (int i = 0; i < count; ++i)
+	const int NumVersions = sizeof(versions) / sizeof(*versions);
+	const int NumRegLoc = sizeof(registrylocations) / sizeof(*registrylocations);
+
+	for (int i = 0; i < NumVersions; i++)
 	{
-		const CString key =
-#ifdef _WIN64
-			_T("Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\")
-#else
-			_T("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\")
-#endif
-			+ versions[i];
-
-		if (reg.Open(HKEY_LOCAL_MACHINE, key ,KEY_READ) == ERROR_SUCCESS)
+		for(int j = 0; j < NumRegLoc; j++)
 		{
-			TCHAR path[MAX_PATH];
-			ULONG length = MAX_PATH;
+			const CString key = registrylocations[j] + versions[i];
 
-			if (reg.QueryStringValue(_T("InstallLocation"),path,&length) == ERROR_SUCCESS)
+			if (reg.Open(HKEY_LOCAL_MACHINE, key ,KEY_READ) == ERROR_SUCCESS)
 			{
-				path[length] = 0;
-				paths.push_back(CPathTool::Cat(path,mikbin));
-			}
+				TCHAR path[MAX_PATH];
+				ULONG length = MAX_PATH;
 
-			reg.Close();
+				if (reg.QueryStringValue(_T("InstallLocation"),path,&length) == ERROR_SUCCESS)
+				{
+					path[length] = 0;
+					paths.push_back(CPathTool::Cat(path, mikbin64)); //We prefer a 64 Bit version, if available
+					paths.push_back(CPathTool::Cat(path, mikbin));
+				}
+
+				reg.Close();
+			}
 		}
 	}
 
