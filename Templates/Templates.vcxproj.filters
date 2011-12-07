@@ -30,9 +30,6 @@
     <CustomBuild Include="Documents\Deutsch\Deckblatt.tex">
       <Filter>Documents Deutsch</Filter>
     </CustomBuild>
-    <CustomBuild Include="Documents\Deutsch\OptionenAbkürzungen.tex">
-      <Filter>Documents Deutsch</Filter>
-    </CustomBuild>
     <CustomBuild Include="Documents\Deutsch\OptionenLayout.tex">
       <Filter>Documents Deutsch</Filter>
     </CustomBuild>
@@ -116,6 +113,9 @@
     </CustomBuild>
     <CustomBuild Include="Projects\English advanced\Technical Report.tex">
       <Filter>Projects English advanced</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Documents\Deutsch\OptionenAbkuerzungen.tex">
+      <Filter>Documents Deutsch</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>
