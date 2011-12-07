@@ -1,6 +1,6 @@
-1. svn up
+1. hg up
 
-2. Edit "TeXnicCenter\Version.h.template" appropriately.
+2. Edit "TeXnicCenter\Version.h" appropriately.
 
 3. Edit "TeXnicCenter\aboutbox.cpp" to reflect the current year and to make sure that all involved people are mentioned. (TODO: Need to change the manual update of the year.)
 
@@ -8,11 +8,11 @@
 
 5. Build. Test.
 
-6. Change "setup\TeXnicCenter.iss" at the top to reflect the current version. Define APP_PLATFORM to Win32 or x64. Make sure, the rest of the setup script looks still good. Test building the setup.
+6. Change "setup\TeXnicCenter.iss" at the top to define the target Win32 or x64. Make sure, the rest of the setup script looks still good. Test building the setup.
 
-7. svn commit.
+7. hg commit.
 
-8. Create a svn tag for the release.
+8. Create a tag for the release.
 
 Namescheme: 'Release' MajorVersion (Alpha|Beta|.) MinorVersion
 without any spaces
