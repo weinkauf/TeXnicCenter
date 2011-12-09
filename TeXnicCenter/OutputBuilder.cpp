@@ -58,6 +58,7 @@ COutputBuilder::COutputBuilder()
 		,m_pView(NULL)
 		,m_pProfile(NULL)
 		,m_bCancel(FALSE)
+		,m_pCurrentFilter(NULL)
 {
 }
 
@@ -125,7 +126,16 @@ BOOL COutputBuilder::RunMakeIndex(COutputDoc* pDoc,COutputView* pView,
 BOOL COutputBuilder::CancelExecution()
 {
 	m_bCancel = true;
-	return ::TerminateProcess(m_hCurrentProcess, ~0U);
+
+	// make sure that m_pCurrentFilter is not invalid
+	CSingleLock filterLock(&m_csfilterMonitor, TRUE);
+
+	BOOL result = ::TerminateProcess(m_hCurrentProcess, ~0U);
+	if (m_pCurrentFilter)
+	{
+		m_pCurrentFilter->Cancel();
+	}
+	return result;
 }
 
 UINT COutputBuilder::Run()
@@ -225,6 +235,11 @@ BOOL COutputBuilder::RunLatex()
 	if (!filter.Create(&hOutput,m_pDoc,m_pView,FALSE))
 		return FALSE;
 
+	// make sure that m_pCurrentFilter is not invalid
+	CSingleLock filterLock(&m_csfilterMonitor, TRUE);
+	m_pCurrentFilter = &filter;
+	filterLock.Unlock();
+
 	CProcessCommand pc;
 	pc.Set(m_pProfile->GetLatexPath(),m_pProfile->GetLatexArguments());
 	CProcess *p = pc.Execute(hOutput,m_strWorkingDir,m_strMainPath,NULL,-1);
@@ -257,6 +272,11 @@ BOOL COutputBuilder::RunLatex()
 	delete p;
 	::CloseHandle(hOutput);
 	filter.WaitForThread();
+
+	// make sure that m_pCurrentFilter is not invalid
+	filterLock.Lock();
+	m_pCurrentFilter = NULL;
+	filterLock.Unlock();
 
 	DWORD dwExitCode;
 	if (!filter.GetExitCode(&dwExitCode))

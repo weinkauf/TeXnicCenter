@@ -38,6 +38,7 @@
 
 class COutputDoc;
 class COutputView;
+class COutputFilter;
 
 /** This class builds the output.
 
@@ -204,6 +205,10 @@ protected:
 private:
 	/** Process handle of the currently executed build process. */
 	HANDLE m_hCurrentProcess;
+	/** Pointer to current output filter. */
+	COutputFilter* m_pCurrentFilter;
+	/** Locked while accessing m_pCurrentFilter */
+	CCriticalSection m_csfilterMonitor;
 
 	/** TRUE, if building should be canceled, FALSE otherwise. */
 	bool m_bCancel;

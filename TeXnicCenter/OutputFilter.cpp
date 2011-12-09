@@ -177,21 +177,19 @@ UINT COutputFilter::Run()
         ProcessLine(line);
     }
 
-    if (cancel_)
-    {
-        TRACE0("Output filter processing canceled\n");
-
-        CSingleLock lock(&dispatchMonitor_, TRUE);
-        dispatchQueue_.clear();
-    }
-
     ASSERT(line.empty());
     // An empty line indicates the loop exit
     ProcessLine(line);
 
-    ::WaitForSingleObject(*dispatcher, INFINITE);
+   ::WaitForSingleObject(*dispatcher, INFINITE);
 
+	dispatchQueue_.clear();						// leeren, fall nach Cancel() noch in dispatchQueue_ geschrieben
     ASSERT(dispatchQueue_.empty());
+
+    if (cancel_)
+    {
+        TRACE0("Output filter processing canceled\n");
+    }
 
 	return !OnTerminate();
 }
@@ -224,6 +222,11 @@ int COutputFilter::GetBadBoxCount() const
 void COutputFilter::Cancel()
 {
 	cancel_ = true;
+
+	CSingleLock lock(&dispatchMonitor_, TRUE);
+    dispatchQueue_.clear();				// nothing to do for filter any more
+	CharVector line;
+	ProcessLine(line);					// send empty line -> stop signal for filter
 }
 
 void COutputFilter::ProcessLine(CharVector& line)
@@ -254,9 +257,8 @@ UINT COutputFilter::LineDispatcherThread()
     {
         bool done = false;
 
-        // Exit the queue processing loop for the current event only if the
-        // processing has been canceled
-        while (!cancel_ && !done)
+        // Exit the queue processing loop for the current event only if empty line was read
+        while (!done)
         {
             CSingleLock monitorLock(&dispatchMonitor_, TRUE);
 
