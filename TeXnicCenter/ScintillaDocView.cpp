@@ -973,11 +973,14 @@ void CScintillaView::OnReplaceAll(LPCTSTR lpszFind, LPCTSTR lpszReplace, BOOL bC
   long find_pos;
   bool bFoundSomething = false;
 
-  while ((find_pos = c.SearchInTarget(_scintillaEditState.strFind.GetLength(),_scintillaEditState.strFind)) != -1)
+  while ((find_pos = c.SearchInTarget(_scintillaEditState.strFind.GetLength(),_scintillaEditState.strFind)) != -1 && find_pos < end_pos)
   {
 	  c.ReplaceTarget(_scintillaEditState.strReplace.GetLength(),_scintillaEditState.strReplace);
 	  c.SetTargetStart(c.GetTargetEnd() + 1);
-	  c.SetTargetEnd(end_pos); // Still end position
+
+	  //end_pos shifts by length difference of replace vs. find string length
+	  end_pos += _scintillaEditState.strReplace.GetLength() - _scintillaEditState.strFind.GetLength();
+	  c.SetTargetEnd(end_pos); // new end position
 
 	  if (!bFoundSomething)
 		  bFoundSomething = true;
