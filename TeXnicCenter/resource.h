@@ -717,6 +717,15 @@
 #define IDS_SPELL_NO_SUGGESTIONS        8662
 #define IDS_MISSING_SECTION             8663
 #define IDC_EDITOR_CLOSETOOLWINDOWS_ESC 8667
+#define IDC_PREPROCESSORLIST            8668
+#define IDC_EDIT_PRPEXE                 8669
+#define IDC_EDIT_PRPARGUMENTS           8670
+#define IDC_EDIT_PRPINPUT               8671
+#define IDC_EDIT_PRPOUTPUT              8672
+#define IDC_BROWSE_PREPROCESSOR         8673
+#define IDC_INSERTPH_PRPARGUMENTS       8674
+#define IDC_INSERTPH_PRPINPUT           8675
+#define IDC_INSERTPH_PRPOUTPUT          8676
 #define ID_TEXTMODULES_FIRST            17000
 #define ID_TEXTMODULES_LAST             18000
 #define ID_VIEW_BAR1                    32760
@@ -1458,15 +1467,16 @@
 #define IDR_ERROR_VIEW                  57673
 #define IDR_MAINFRAMEOLD                57675
 #define IDR_LATEXDOCTYPEOLD             57676
+#define IDD_PROFILE_PREPROCESSOR        57678
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        57678
+#define _APS_NEXT_RESOURCE_VALUE        57679
 #define _APS_NEXT_COMMAND_VALUE         40689
-#define _APS_NEXT_CONTROL_VALUE         8668
+#define _APS_NEXT_CONTROL_VALUE         8677
 #define _APS_NEXT_SYMED_VALUE           57773
 #endif
 #endif

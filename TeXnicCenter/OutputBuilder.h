@@ -135,6 +135,14 @@ protected:
 	    int nPriority = THREAD_PRIORITY_BELOW_NORMAL);
 
 	/**
+	Executes all the preprocessors of the current profile if necessary
+	and returns, when all the preprocessors have been executed.
+
+	m_pProfile has to be valid.
+	 */
+	BOOL RunPreProcessors();
+
+	/**
 	Executes the (La)TeX compiler if necessary and returns, when the
 	compiler completed.
 
