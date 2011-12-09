@@ -513,6 +513,8 @@ CProfile::~CProfile()
 
 CProfile &CProfile::operator=(const CProfile &p)
 {
+	m_aPreProcessors.RemoveAll();
+	m_aPreProcessors.Append(p.m_aPreProcessors);
 	m_aPostProcessors.RemoveAll();
 	m_aPostProcessors.Append(p.m_aPostProcessors);
 
@@ -591,6 +593,7 @@ void CProfile::RemoveDirectorySpecifications()
 	m_strBibTexPath = CPathTool::GetFile(m_strBibTexPath);
 	m_strMakeIndexPath = CPathTool::GetFile(m_strMakeIndexPath);
 
+	m_aPreProcessors.RemoveDirectorySpecifications();
 	m_aPostProcessors.RemoveDirectorySpecifications();
 
 	m_strViewerPath = CPathTool::GetFile(m_strViewerPath);
@@ -618,6 +621,10 @@ BOOL CProfile::SerializeToRegistry(RegistryStack &reg) const
 	reg.Write(_T("CloseViewBeforeCompilation"), m_bCloseBeforeCompilation);
 
 	reg.PushKey();
+	reg.CreateKey(_T("PreProcessors"));
+	m_aPreProcessors.SerializeToRegistry(reg);
+
+	reg.TopKey();
 	reg.CreateKey(_T("PostProcessors"));
 	m_aPostProcessors.SerializeToRegistry(reg);
 
@@ -657,6 +664,10 @@ BOOL CProfile::SerializeFromRegistry(RegistryStack &reg)
 	reg.Read(_T("CloseViewBeforeCompilation"), m_bCloseBeforeCompilation);
 
 	reg.PushKey();
+	reg.Open(_T("PreProcessors"));
+	m_aPreProcessors.SerializeFromRegistry(reg);
+
+	reg.TopKey();
 	reg.Open(_T("PostProcessors"));
 	m_aPostProcessors.SerializeFromRegistry(reg);
 
@@ -702,6 +713,11 @@ void CProfile::SaveXml(MsXml::CXMLDOMElement &xmlProfile) const
 	xmlMakeIndexCommand.SetAttribute(_T("path"), (LPCTSTR)m_strMakeIndexPath);
 	xmlMakeIndexCommand.SetAttribute(_T("arguments"), (LPCTSTR)m_strMakeIndexArguments);
 	xmlProfile.AppendChild(xmlMakeIndexCommand);
+
+	// serialize preprocessors
+	MsXml::CXMLDOMElement xmlPreProcessors(xmlProfile.GetOwnerDocument().CreateElement(_T("preProcessors")));
+	m_aPreProcessors.SaveXml(xmlPreProcessors);
+	xmlProfile.AppendChild(xmlPreProcessors);
 
 	// serialize postprocessors
 	MsXml::CXMLDOMElement xmlPostProcessors(xmlProfile.GetOwnerDocument().CreateElement(_T("postProcessors")));
@@ -757,6 +773,10 @@ void CProfile::LoadXml(MsXml::CXMLDOMElement &xmlProfile)
 	m_bRunMakeIndex = (bool)xmlMakeIndexCommand.GetAttribute(_T("execute"));
 	m_strMakeIndexPath = (LPCTSTR)(_bstr_t)xmlMakeIndexCommand.GetAttribute(_T("path"));
 	m_strMakeIndexArguments = (LPCTSTR)(_bstr_t)xmlMakeIndexCommand.GetAttribute(_T("arguments"));
+
+	// serialize preprocessors
+	MsXml::CXMLDOMElement xmlPreProcessors(xmlProfile.SelectSingleNode(_T("preProcessors")).QueryInterface(IID_IXMLDOMElement));
+	m_aPreProcessors.LoadXml(xmlPreProcessors);
 
 	// serialize postprocessors
 	MsXml::CXMLDOMElement xmlPostProcessors(xmlProfile.SelectSingleNode(_T("postProcessors")).QueryInterface(IID_IXMLDOMElement));

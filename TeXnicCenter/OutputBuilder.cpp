@@ -139,6 +139,13 @@ UINT COutputBuilder::Run()
 	if (!m_pProfile)
 		return ~0U;
 
+	// run preprocessors
+	if (m_nMode == modeBuildAll)
+	{
+		if (!RunPreProcessors() || m_bCancel)
+			return ~0U;
+	}
+
 	// run (La)TeX-compiler
 	if (m_nMode == modeBuildAll)
 	{
@@ -379,6 +386,34 @@ BOOL COutputBuilder::RunMakeIndex()
 	//m_strLatexResult = filter.GetResultString();
 
 	return !dwExitCode;
+}
+
+BOOL COutputBuilder::RunPreProcessors()
+{
+	COutputFilter filter;
+	HANDLE hOutput;
+	if (!filter.Create(&hOutput,m_pDoc,m_pView,FALSE))
+		return FALSE;
+
+	CPreProcessorArray &a = m_pProfile->GetPreProcessorArray();
+	BOOL bResult = TRUE;
+
+	for (int i = 0; ((i < a.GetSize()) && (!m_bCancel)); i++)
+	{
+		current_process_name_ = a[i].GetTitle();
+
+		if (!a[i].Execute(m_strMainPath,m_strWorkingDir,hOutput,&m_hCurrentProcess) || m_bCancel)
+		{
+			bResult = FALSE;
+			break;
+		}
+	}
+
+	::CloseHandle(hOutput);
+	filter.WaitForThread();
+	filter.CloseHandle();
+
+	return bResult;
 }
 
 BOOL COutputBuilder::RunPostProcessors()
