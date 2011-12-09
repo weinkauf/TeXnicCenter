@@ -1560,8 +1560,8 @@ BEGIN
     EDITTEXT        1152,57,7,149,12,ES_AUTOHSCROLL | WS_GROUP
     LTEXT           "Ersetzen &durch:",IDC_STATIC,4,26,50,8
     EDITTEXT        1153,57,24,149,12,ES_AUTOHSCROLL | WS_GROUP
-    CONTROL         "Nur &ganze Worte",IDC_EDIT_WHOLE_WORD,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,5,46,91,12
-    CONTROL         "Groß-/&Kleinschreibung beachten",IDC_EDIT_MATCH_CASE,
+    CONTROL         "Nur &ganze Worte",1040,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,5,46,91,12
+    CONTROL         "Groß-/&Kleinschreibung beachten",1041,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,57,118,12
     CONTROL         "Verwende reguläre Ausdrücke",IDC_REGULAR_EXPRESSION,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,68,118,12
@@ -1581,8 +1581,8 @@ FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     LTEXT           "&Suchen nach:",IDC_STATIC,4,8,46,8
     EDITTEXT        1152,52,6,157,12,ES_AUTOHSCROLL | WS_GROUP
-    CONTROL         "Nur &ganze Wörter",IDC_EDIT_WHOLE_WORD,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,4,23,73,10
-    CONTROL         "Groß-/&Kleinschreibung beachten",IDC_EDIT_MATCH_CASE,
+    CONTROL         "Nur &ganze Wörter",1040,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,4,23,73,10
+    CONTROL         "Groß-/&Kleinschreibung beachten",1041,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,34,118,10
     GROUPBOX        "Richtung",IDC_STATIC,141,21,68,35,WS_GROUP
     CONTROL         "A&ufwärts",1056,"Button",BS_AUTORADIOBUTTON | WS_GROUP,145,30,43,12
@@ -5711,8 +5711,8 @@ BEGIN
     EDITTEXT        1152,54,7,114,12,ES_AUTOHSCROLL | WS_GROUP
     LTEXT           "Re&place with:",IDC_STATIC,4,26,48,8
     EDITTEXT        1153,54,24,114,12,ES_AUTOHSCROLL | WS_GROUP
-    CONTROL         "Match &whole word only",IDC_EDIT_WHOLE_WORD,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,5,46,89,10
-    CONTROL         "Match &case",IDC_EDIT_MATCH_CASE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,57,52,10
+    CONTROL         "Match &whole word only",1040,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,5,46,89,10
+    CONTROL         "Match &case",1041,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,57,52,10
     GROUPBOX        "Replace in",IDC_STATIC,97,43,71,37,WS_GROUP
     CONTROL         "&Selection",IDC_EDIT_SCOPE_SELECTION,"Button",BS_AUTORADIOBUTTON | WS_GROUP,102,54,59,10
     CONTROL         "Wh&ole file",IDC_EDIT_SCOPE_WHOLE_FILE,"Button",BS_AUTORADIOBUTTON,102,66,58,10
@@ -5730,8 +5730,8 @@ FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     LTEXT           "Fi&nd what:",IDC_STATIC,4,8,42,8
     EDITTEXT        1152,47,7,128,12,ES_AUTOHSCROLL | WS_GROUP
-    CONTROL         "Match &whole word only",IDC_EDIT_WHOLE_WORD,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,4,27,89,10
-    CONTROL         "Match &case",IDC_EDIT_MATCH_CASE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,38,52,10
+    CONTROL         "Match &whole word only",1040,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,4,27,89,10
+    CONTROL         "Match &case",1041,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,38,52,10
     GROUPBOX        "Direction",IDC_STATIC,107,26,68,28,WS_GROUP
     CONTROL         "&Up",1056,"Button",BS_AUTORADIOBUTTON | WS_GROUP,111,38,25,12
     CONTROL         "&Down",1057,"Button",BS_AUTORADIOBUTTON,138,38,35,12
