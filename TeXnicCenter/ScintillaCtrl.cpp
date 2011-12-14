@@ -1101,10 +1101,12 @@ void CScintillaCtrl::SetCodePage(int codePage, BOOL bDirect)
   Call(SCI_SETCODEPAGE, static_cast<WPARAM>(codePage), 0, bDirect);
 }
 
+#ifdef INCLUDE_DEPRECATED_FEATURES
 void CScintillaCtrl::SetUsePalette(BOOL usePalette, BOOL bDirect)
 {
   Call(SCI_SETUSEPALETTE, static_cast<WPARAM>(usePalette), 0, bDirect);
 }
+#endif
 
 void CScintillaCtrl::MarkerDefine(int markerNumber, int markerSymbol, BOOL bDirect)
 {
@@ -1761,10 +1763,12 @@ COLORREF CScintillaCtrl::GetCaretFore(BOOL bDirect)
   return Call(SCI_GETCARETFORE, 0, 0, bDirect);
 }
 
+#ifdef INCLUDE_DEPRECATED_FEATURES
 BOOL CScintillaCtrl::GetUsePalette(BOOL bDirect)
 {
   return Call(SCI_GETUSEPALETTE, 0, 0, bDirect);
 }
+#endif
 
 BOOL CScintillaCtrl::GetReadOnly(BOOL bDirect)
 {

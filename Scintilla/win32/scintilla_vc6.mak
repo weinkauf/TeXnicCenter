@@ -102,6 +102,7 @@ LEXOBJS=\
 	$(DIR_O)\LexCLW.obj \
 	$(DIR_O)\LexCmake.obj \
 	$(DIR_O)\LexCOBOL.obj \
+	$(DIR_O)\LexCoffeeScript.obj \
 	$(DIR_O)\LexConf.obj \
 	$(DIR_O)\LexCPP.obj \
 	$(DIR_O)\LexCrontab.obj \
@@ -314,6 +315,8 @@ $(DIR_O)\LexCLW.obj: ..\lexers\LexCLW.cxx $(LEX_HEADERS)
 $(DIR_O)\LexCmake.obj: ..\lexers\LexCmake.cxx $(LEX_HEADERS)
 
 $(DIR_O)\LexCOBOL.obj: ..\lexers\LexCOBOL.cxx $(LEX_HEADERS)
+
+$(DIR_O)\LexCoffeeScript.obj: ..\lexers\LexCoffeeScript.cxx $(LEX_HEADERS)
 
 $(DIR_O)\LexConf.obj: ..\lexers\LexConf.cxx $(LEX_HEADERS)
 
