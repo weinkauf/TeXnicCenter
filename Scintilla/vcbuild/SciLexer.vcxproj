@@ -249,6 +249,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lexers\LexA68k.cxx" />
+    <ClCompile Include="..\lexers\LexCoffeeScript.cxx" />
     <ClCompile Include="..\lexers\LexModula.cxx" />
     <ClCompile Include="..\lexlib\Accessor.cxx">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

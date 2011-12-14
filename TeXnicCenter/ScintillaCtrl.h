@@ -9,11 +9,11 @@ All rights reserved.
 
 Copyright / Usage Details:
 
-You are allowed to include the source code in any product (commercial, shareware, freeware or otherwise) 
-when your product is released in binary form. You are allowed to modify the source code in any way you want 
-except you cannot modify the copyright details at the top of each module. If you want to distribute source 
-code with your application, then you are only allowed to distribute versions released by the author. This is 
-to maintain a single distribution point for the source code. 
+You are allowed to include the source code in any product (commercial, shareware, freeware or otherwise)
+when your product is released in binary form. You are allowed to modify the source code in any way you want
+except you cannot modify the copyright details at the top of each module. If you want to distribute source
+code with your application, then you are only allowed to distribute versions released by the author. This is
+to maintain a single distribution point for the source code.
 
 */
 
@@ -161,7 +161,9 @@ public:
   void SetTabWidth(int tabWidth, BOOL bDirect = TRUE);
   int GetTabWidth(BOOL bDirect = TRUE);
   void SetCodePage(int codePage, BOOL bDirect = TRUE);
+#ifdef INCLUDE_DEPRECATED_FEATURES
   void SetUsePalette(BOOL usePalette, BOOL bDirect = TRUE);
+#endif
   void MarkerDefine(int markerNumber, int markerSymbol, BOOL bDirect = TRUE);
   void MarkerSetFore(int markerNumber, COLORREF fore, BOOL bDirect = TRUE);
   void MarkerSetBack(int markerNumber, COLORREF back, BOOL bDirect = TRUE);
@@ -293,7 +295,9 @@ public:
   int GetLineEndPosition(int line, BOOL bDirect = TRUE);
   int GetCodePage(BOOL bDirect = TRUE);
   COLORREF GetCaretFore(BOOL bDirect = TRUE);
+#ifdef INCLUDE_DEPRECATED_FEATURES
   BOOL GetUsePalette(BOOL bDirect = TRUE);
+#endif
   BOOL GetReadOnly(BOOL bDirect = TRUE);
   void SetCurrentPos(long pos, BOOL bDirect = TRUE);
   void SetSelectionStart(long pos, BOOL bDirect = TRUE);
