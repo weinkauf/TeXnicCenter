@@ -117,7 +117,6 @@ Name: Dictionaries\Francais1990; Description: Français (appelé Réforme 1990); Ty
 [Files]
 ;Application Files
 Source: ..\Output\Product\{#APP_PLATFORM}\Release\TeXnicCenter.exe; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\SciLexer.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: ..\Output\Product\{#APP_PLATFORM}\Release\Shared.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 Source: ..\Output\Product\{#APP_PLATFORM}\Release\Language\*.dll; DestDir: {app}\Language; Components: Application_Files; Flags: ignoreversion
 

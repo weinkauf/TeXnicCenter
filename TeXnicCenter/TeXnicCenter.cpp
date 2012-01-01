@@ -323,11 +323,9 @@ const CString CTeXnicCenterApp::GetDDEServerName() const
 
 BOOL CTeXnicCenterApp::InitInstance()
 {
-	scintilla_ = AfxLoadLibrary(_T("SciLexer.dll"));
-
-	if (!scintilla_)
+	if (!Scintilla_RegisterClasses(AfxGetInstanceHandle()))
 	{
-		AfxMessageBox(_T("SciLexer.dll could not be loaded. Please reinstall the application."),MB_ICONERROR);
+		AfxMessageBox(_T("SciLexe could not be registed."), MB_ICONERROR);
 		return FALSE;
 	}
 
@@ -763,7 +761,7 @@ int CTeXnicCenterApp::ExitInstance()
 	if (m_hTxcResources)
 		FreeLibrary(m_hTxcResources);
 
-	AfxFreeLibrary(scintilla_);
+	Scintilla_ReleaseResources();
 
 	return CProjectSupportingWinApp::ExitInstance();
 }
