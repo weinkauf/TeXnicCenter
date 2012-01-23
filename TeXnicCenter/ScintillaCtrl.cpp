@@ -117,6 +117,14 @@ History: PJN / 19-03-2004 1. Initial implementation synchronized to the v1.59 re
          PJN / 01-04-2011 1. Updated copyright details.
                           2. Updated class to work with Scintilla v2.25. New messages wrapped include:
                           SCI_SETMARGINCURSORN & SCI_GETMARGINCURSORN
+         PJN / 09-12-2011 1. Updated class to work with Scintilla v3.0.2. New messages wrapped include: SCI_MARKERSETBACKSELECTED, 
+                          SCI_MARKERENABLEHIGHLIGHT, SCI_STYLESETSIZEFRACTIONAL, SCI_STYLEGETSIZEFRACTIONAL, SCI_STYLESETWEIGHT, 
+                          SCI_STYLEGETWEIGHT, SCI_COUNTCHARACTERS, SCI_SETEMPTYSELECTION, SCI_CALLTIPSETPOSITION, SCI_GETALLLINESVISIBLE,
+                          SCI_BRACEHIGHLIGHTINDICATOR, SCI_BRACEBADLIGHTINDICATOR, SCI_INDICSETOUTLINEALPHA, SCI_INDICGETOUTLINEALPHA,
+                          SCI_SETMARGINOPTIONS, SCI_GETMARGINOPTIONS, SCI_MOVESELECTEDLINESUP, SCI_MOVESELECTEDLINESDOWN, SCI_SETIDENTIFIER, 
+                          SCI_GETIDENTIFIER, SCI_RGBAIMAGESETWIDTH, SCI_RGBAIMAGESETHEIGHT, SCI_MARKERDEFINERGBAIMAGE, SCI_REGISTERRGBAIMAGE, 
+                          SCI_SCROLLTOSTART, SCI_SCROLLTOEND, SCI_SETTECHNOLOGY, SCI_GETTECHNOLOGY & SCI_CREATELOADER
+                          Messages dropped include: SCI_SETUSEPALETTE & SCI_GETUSEPALETTE
 
 Copyright (c) 2004 - 2011 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
 
@@ -1101,11 +1109,6 @@ void CScintillaCtrl::SetCodePage(int codePage, BOOL bDirect)
   Call(SCI_SETCODEPAGE, static_cast<WPARAM>(codePage), 0, bDirect);
 }
 
-void CScintillaCtrl::SetUsePalette(BOOL usePalette, BOOL bDirect)
-{
-  Call(SCI_SETUSEPALETTE, static_cast<WPARAM>(usePalette), 0, bDirect);
-}
-
 void CScintillaCtrl::MarkerDefine(int markerNumber, int markerSymbol, BOOL bDirect)
 {
   Call(SCI_MARKERDEFINE, static_cast<WPARAM>(markerNumber), static_cast<LPARAM>(markerSymbol), bDirect);
@@ -1119,6 +1122,16 @@ void CScintillaCtrl::MarkerSetFore(int markerNumber, COLORREF fore, BOOL bDirect
 void CScintillaCtrl::MarkerSetBack(int markerNumber, COLORREF back, BOOL bDirect)
 {
   Call(SCI_MARKERSETBACK, static_cast<WPARAM>(markerNumber), static_cast<LPARAM>(back), bDirect);
+}
+
+void CScintillaCtrl::MarkerSetBackSelected(int markerNumber, COLORREF back, BOOL bDirect)
+{
+  Call(SCI_MARKERSETBACKSELECTED, static_cast<WPARAM>(markerNumber), static_cast<LPARAM>(back), bDirect);
+}
+
+void CScintillaCtrl::MarkerEnableHighlight(BOOL enabled, BOOL bDirect)
+{
+  Call(SCI_MARKERENABLEHIGHLIGHT, static_cast<WPARAM>(enabled), 0, bDirect);
 }
 
 int CScintillaCtrl::MarkerAdd(int line, int markerNumber, BOOL bDirect)
@@ -1334,6 +1347,26 @@ BOOL CScintillaCtrl::StyleGetHotSpot(int style, BOOL bDirect)
 void CScintillaCtrl::StyleSetCase(int style, int caseForce, BOOL bDirect)
 {
   Call(SCI_STYLESETCASE, static_cast<WPARAM>(style), static_cast<LPARAM>(caseForce), bDirect);
+}
+
+void CScintillaCtrl::StyleSetSizeFractional(int style, int sizeInHundredthPoints, BOOL bDirect)
+{
+  Call(SCI_STYLESETSIZEFRACTIONAL, static_cast<WPARAM>(style), static_cast<LPARAM>(sizeInHundredthPoints), bDirect);
+}
+
+int CScintillaCtrl::StyleGetSizeFractional(int style, BOOL bDirect)
+{
+  return Call(SCI_STYLEGETSIZEFRACTIONAL, static_cast<WPARAM>(style), 0, bDirect);
+}
+
+void CScintillaCtrl::StyleSetWeight(int style, int weight, BOOL bDirect)
+{
+  Call(SCI_STYLESETWEIGHT, static_cast<WPARAM>(style), static_cast<LPARAM>(weight), bDirect);
+}
+
+int CScintillaCtrl::StyleGetWeight(int style, BOOL bDirect)
+{
+  return Call(SCI_STYLEGETWEIGHT, static_cast<WPARAM>(style), 0, bDirect);
 }
 
 void CScintillaCtrl::StyleSetCharacterSet(int style, int characterSet, BOOL bDirect)
@@ -1716,6 +1749,11 @@ int CScintillaCtrl::GetColumn(long pos, BOOL bDirect)
   return Call(SCI_GETCOLUMN, static_cast<WPARAM>(pos), 0, bDirect);
 }
 
+int CScintillaCtrl::CountCharacters(int startPos, int endPos, BOOL bDirect)
+{
+  return Call(SCI_COUNTCHARACTERS, static_cast<WPARAM>(startPos), static_cast<LPARAM>(endPos), bDirect);
+}
+
 void CScintillaCtrl::SetHScrollBar(BOOL show, BOOL bDirect)
 {
   Call(SCI_SETHSCROLLBAR, static_cast<WPARAM>(show), 0, bDirect);
@@ -1761,11 +1799,6 @@ COLORREF CScintillaCtrl::GetCaretFore(BOOL bDirect)
   return Call(SCI_GETCARETFORE, 0, 0, bDirect);
 }
 
-BOOL CScintillaCtrl::GetUsePalette(BOOL bDirect)
-{
-  return Call(SCI_GETUSEPALETTE, 0, 0, bDirect);
-}
-
 BOOL CScintillaCtrl::GetReadOnly(BOOL bDirect)
 {
   return Call(SCI_GETREADONLY, 0, 0, bDirect);
@@ -1794,6 +1827,11 @@ void CScintillaCtrl::SetSelectionEnd(long pos, BOOL bDirect)
 long CScintillaCtrl::GetSelectionEnd(BOOL bDirect)
 {
   return Call(SCI_GETSELECTIONEND, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetEmptySelection(long pos, BOOL bDirect)
+{
+  Call(SCI_SETEMPTYSELECTION, static_cast<WPARAM>(pos), 0, bDirect);
 }
 
 void CScintillaCtrl::SetPrintMagnification(int magnification, BOOL bDirect)
@@ -2096,6 +2134,11 @@ void CScintillaCtrl::CallTipUseStyle(int tabSize, BOOL bDirect)
   Call(SCI_CALLTIPUSESTYLE, static_cast<WPARAM>(tabSize), 0, bDirect);
 }
 
+void CScintillaCtrl::CallTipSetPosition(BOOL above, BOOL bDirect)
+{
+  Call(SCI_CALLTIPSETPOSITION, static_cast<WPARAM>(above), 0, bDirect);
+}
+
 int CScintillaCtrl::VisibleFromDocLine(int line, BOOL bDirect)
 {
   return Call(SCI_VISIBLEFROMDOCLINE, static_cast<WPARAM>(line), 0, bDirect);
@@ -2144,6 +2187,11 @@ void CScintillaCtrl::HideLines(int lineStart, int lineEnd, BOOL bDirect)
 BOOL CScintillaCtrl::GetLineVisible(int line, BOOL bDirect)
 {
   return Call(SCI_GETLINEVISIBLE, static_cast<WPARAM>(line), 0, bDirect);
+}
+
+BOOL CScintillaCtrl::GetAllLinesVisible(BOOL bDirect)
+{
+  return Call(SCI_GETALLLINESVISIBLE, 0, 0, bDirect);
 }
 
 void CScintillaCtrl::SetFoldExpanded(int line, BOOL expanded, BOOL bDirect)
@@ -2701,9 +2749,19 @@ void CScintillaCtrl::BraceHighlight(long pos1, long pos2, BOOL bDirect)
   Call(SCI_BRACEHIGHLIGHT, static_cast<WPARAM>(pos1), static_cast<LPARAM>(pos2), bDirect);
 }
 
+void CScintillaCtrl::BraceHighlightIndicator(BOOL useBraceHighlightIndicator, int indicator, BOOL bDirect)
+{
+  Call(SCI_BRACEHIGHLIGHTINDICATOR, static_cast<WPARAM>(useBraceHighlightIndicator), static_cast<LPARAM>(indicator), bDirect);
+}
+
 void CScintillaCtrl::BraceBadLight(long pos, BOOL bDirect)
 {
   Call(SCI_BRACEBADLIGHT, static_cast<WPARAM>(pos), 0, bDirect);
+}
+
+void CScintillaCtrl::BraceBadLightIndicator(BOOL useBraceBadLightIndicator, int indicator, BOOL bDirect)
+{
+  Call(SCI_BRACEBADLIGHTINDICATOR, static_cast<WPARAM>(useBraceBadLightIndicator), static_cast<LPARAM>(indicator), bDirect);
 }
 
 long CScintillaCtrl::BraceMatch(long pos, BOOL bDirect)
@@ -3321,6 +3379,16 @@ int CScintillaCtrl::IndicGetAlpha(int indicator, BOOL bDirect)
   return Call(SCI_INDICGETALPHA, static_cast<WPARAM>(indicator), 0, bDirect);
 }
 
+void CScintillaCtrl::IndicSetOutlineAlpha(int indicator, int alpha, BOOL bDirect)
+{
+  Call(SCI_INDICSETOUTLINEALPHA, static_cast<WPARAM>(indicator), static_cast<LPARAM>(alpha), bDirect);
+}
+
+int CScintillaCtrl::IndicGetOutlineAlpha(int indicator, BOOL bDirect)
+{
+  return Call(SCI_INDICGETOUTLINEALPHA, static_cast<WPARAM>(indicator), 0, bDirect);
+}
+
 void CScintillaCtrl::SetExtraAscent(int extraAscent, BOOL bDirect)
 {
   Call(SCI_SETEXTRAASCENT, static_cast<WPARAM>(extraAscent), 0, bDirect);
@@ -3389,6 +3457,16 @@ void CScintillaCtrl::MarginSetStyleOffset(int style, BOOL bDirect)
 int CScintillaCtrl::MarginGetStyleOffset(BOOL bDirect)
 {
   return Call(SCI_MARGINGETSTYLEOFFSET, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetMarginOptions(int marginOptions, BOOL bDirect)
+{
+  Call(SCI_SETMARGINOPTIONS, static_cast<WPARAM>(marginOptions), 0, bDirect);
+}
+
+int CScintillaCtrl::GetMarginOptions(BOOL bDirect)
+{
+  return Call(SCI_GETMARGINOPTIONS, 0, 0, bDirect);
 }
 
 void CScintillaCtrl::AnnotationSetText(int line, const char* text, BOOL bDirect)
@@ -3709,6 +3787,71 @@ int CScintillaCtrl::ContractedFoldNext(int lineStart, BOOL bDirect)
 void CScintillaCtrl::VerticalCentreCaret(BOOL bDirect)
 {
   Call(SCI_VERTICALCENTRECARET, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::MoveSelectedLinesUp(BOOL bDirect)
+{
+  Call(SCI_MOVESELECTEDLINESUP, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::MoveSelectedLinesDown(BOOL bDirect)
+{
+  Call(SCI_MOVESELECTEDLINESDOWN, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetIdentifier(int identifier, BOOL bDirect)
+{
+  Call(SCI_SETIDENTIFIER, static_cast<WPARAM>(identifier), 0, bDirect);
+}
+
+int CScintillaCtrl::GetIdentifier(BOOL bDirect)
+{
+  return Call(SCI_GETIDENTIFIER, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::RGBAImageSetWidth(int width, BOOL bDirect)
+{
+  Call(SCI_RGBAIMAGESETWIDTH, static_cast<WPARAM>(width), 0, bDirect);
+}
+
+void CScintillaCtrl::RGBAImageSetHeight(int height, BOOL bDirect)
+{
+  Call(SCI_RGBAIMAGESETHEIGHT, static_cast<WPARAM>(height), 0, bDirect);
+}
+
+void CScintillaCtrl::MarkerDefineRGBAImage(int markerNumber, const char* pixels, BOOL bDirect)
+{
+  Call(SCI_MARKERDEFINERGBAIMAGE, static_cast<WPARAM>(markerNumber), reinterpret_cast<LPARAM>(pixels), bDirect);
+}
+
+void CScintillaCtrl::RegisterRGBAImage(int type, const char* pixels, BOOL bDirect)
+{
+  Call(SCI_REGISTERRGBAIMAGE, static_cast<WPARAM>(type), reinterpret_cast<LPARAM>(pixels), bDirect);
+}
+
+void CScintillaCtrl::ScrollToStart(BOOL bDirect)
+{
+  Call(SCI_SCROLLTOSTART, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::ScrollToEnd(BOOL bDirect)
+{
+  Call(SCI_SCROLLTOEND, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::SetTechnology(int technology, BOOL bDirect)
+{
+  Call(SCI_SETTECHNOLOGY, static_cast<WPARAM>(technology), 0, bDirect);
+}
+
+int CScintillaCtrl::GetTechnology(BOOL bDirect)
+{
+  return Call(SCI_GETTECHNOLOGY, 0, 0, bDirect);
+}
+
+int CScintillaCtrl::CreateLoader(int bytes, BOOL bDirect)
+{
+  return Call(SCI_CREATELOADER, static_cast<WPARAM>(bytes), 0, bDirect);
 }
 
 void CScintillaCtrl::StartRecord(BOOL bDirect)
