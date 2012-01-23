@@ -325,7 +325,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 {
 	if (!Scintilla_RegisterClasses(AfxGetInstanceHandle()))
 	{
-		AfxMessageBox(_T("SciLexe could not be registed."), MB_ICONERROR);
+		AfxMessageBox(_T("SciLexer could not be registered."), MB_ICONERROR);
 		return FALSE;
 	}
 
