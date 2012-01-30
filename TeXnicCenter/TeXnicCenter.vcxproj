@@ -141,7 +141,7 @@
     </ProjectReference>
     <Link>
       <AdditionalDependencies>shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>shell32.dll;comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <TargetMachine>MachineX86</TargetMachine>
@@ -437,6 +437,7 @@
     <ClCompile Include="SearchToolBarEditButton.cpp" />
     <ClCompile Include="SearchToolBarEditCtrl.cpp" />
     <ClCompile Include="ShadowWindow.cpp" />
+    <ClCompile Include="ShellUtilXP.cpp" />
     <ClCompile Include="ShellView.cpp" />
     <ClCompile Include="SortListCtrl.cpp" />
     <ClCompile Include="SpellCheckDlg.cpp" />
@@ -609,6 +610,7 @@
     <ClInclude Include="ScintillaDocView.h" />
     <ClInclude Include="SearchToolBarEditButton.h" />
     <ClInclude Include="SearchToolBarEditCtrl.h" />
+    <ClInclude Include="ShellUtilXP.h" />
     <ClInclude Include="ShellView.h" />
     <ClInclude Include="SortListCtrl.h" />
     <ClInclude Include="SpellCheckDlg.h" />

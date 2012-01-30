@@ -488,6 +488,9 @@
     <ClCompile Include="ItemIDList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShellUtilXP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aboutbox.h">
@@ -998,6 +1001,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ItemIDList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShellUtilXP.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

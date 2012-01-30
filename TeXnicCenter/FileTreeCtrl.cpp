@@ -33,6 +33,7 @@
 #include <utility>
 #include <vector>
 
+#include "ShellUtilXP.h"
 #include "resource.h"
 #include "FileTreeCtrl.h"
 #include "FontOccManager.h"
@@ -527,8 +528,16 @@ void FileTreeCtrl::Initialize()
 
 	if (SUCCEEDED(code)) {
 		CComPtr<IShellFolder> shellFolder;
-		code = SHBindToObject(shellFolder_, pidl, NULL, IID_IShellFolder,
-			reinterpret_cast<void**>(&shellFolder));
+		if (RunTimeHelper::IsVista())
+		{
+			code = SHBindToObject(shellFolder_, pidl, NULL, IID_IShellFolder,
+				reinterpret_cast<void**>(&shellFolder));
+		}
+		else
+		{
+			code = ShellUtilXP_BindToObject(shellFolder_, pidl, IID_IShellFolder,
+				reinterpret_cast<void**>(&shellFolder));
+		}
 
 		if (SUCCEEDED(code)) {
 			projectShellFolder_ = shellFolder;
