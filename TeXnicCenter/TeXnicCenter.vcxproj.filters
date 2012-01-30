@@ -488,6 +488,15 @@
     <ClCompile Include="ItemIDList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShellUtilXP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PreProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfilePagePreprocessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aboutbox.h">
@@ -1000,6 +1009,15 @@
     <ClInclude Include="ItemIDList.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="ShellUtilXP.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PreProcessor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfilePagePreprocessor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\additional.bmp">
@@ -1180,6 +1198,9 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="Version.h.template">
+      <Filter>Source Files</Filter>
+    </CustomBuild>
     <CustomBuild Include="GPL_english.htm">
       <Filter>Copy</Filter>
     </CustomBuild>

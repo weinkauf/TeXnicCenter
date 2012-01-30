@@ -41,6 +41,7 @@
 
 #include <memory>
 
+#include "PreProcessor.h"
 #include "PostProcessor.h"
 #include "ProcessCommand.h"
 #include "DDECommand.h"
@@ -176,6 +177,12 @@ public:
 	void SetMakeIndexPath(LPCTSTR lpszPath, LPCTSTR lpszArguments, BOOL bUseMakeIndex = TRUE);
 
 	/**
+	Gets a reference to the array of the preprocessors, which can be
+	used to read from and write to the array.
+	 */
+	CPreProcessorArray &GetPreProcessorArray();
+
+	/**
 	Gets a reference to the array of the postprocessors, which can be
 	used to read from and write to the array.
 	 */
@@ -296,7 +303,7 @@ public:
 // attributes
 protected:
 	/**
-	TRUE if (La)TeX should be run, FALSE if only the postprocessors
+	TRUE if (La)TeX should be run, FALSE if only the pre- and postprocessors
 	should be run.
 	 */
 	BOOL m_bRunLatex;
@@ -343,7 +350,10 @@ protected:
 	CString m_strMakeIndexArguments;
 
 
-	/** The post processors to run after the (La)TeX-compiler. */
+	/** The preprocessors to run after the (La)TeX-compiler. */
+	CPreProcessorArray m_aPreProcessors;
+
+	/** The postprocessors to run after the (La)TeX-compiler. */
 	CPostProcessorArray m_aPostProcessors;
 
 	/** Full path of the viewer */
@@ -367,6 +377,12 @@ protected:
 
 
 // inlines
+
+inline
+CPreProcessorArray& CProfile::GetPreProcessorArray()
+{
+	return m_aPreProcessors;
+}
 
 inline
 CPostProcessorArray& CProfile::GetPostProcessorArray()

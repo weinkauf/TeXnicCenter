@@ -141,7 +141,7 @@
     </ProjectReference>
     <Link>
       <AdditionalDependencies>imm32.lib;shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>shell32.dll;comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <TargetMachine>MachineX86</TargetMachine>
@@ -414,6 +414,7 @@
     <ClCompile Include="PlaceholderSetsOptDlg.cpp" />
     <ClCompile Include="PlaceholderSingleOptDlg.cpp" />
     <ClCompile Include="PostProcessor.cpp" />
+    <ClCompile Include="PreProcessor.cpp" />
     <ClCompile Include="process.cpp" />
     <ClCompile Include="ProcessCommand.cpp" />
     <ClCompile Include="Profile.cpp" />
@@ -423,6 +424,7 @@
     <ClCompile Include="ProfilePage.cpp" />
     <ClCompile Include="ProfilePageLatex.cpp" />
     <ClCompile Include="ProfilePagePostprocessor.cpp" />
+    <ClCompile Include="ProfilePagePreprocessor.cpp" />
     <ClCompile Include="ProfilePageViewer.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="projectnewdialog.cpp" />
@@ -437,6 +439,7 @@
     <ClCompile Include="SearchToolBarEditButton.cpp" />
     <ClCompile Include="SearchToolBarEditCtrl.cpp" />
     <ClCompile Include="ShadowWindow.cpp" />
+    <ClCompile Include="ShellUtilXP.cpp" />
     <ClCompile Include="ShellView.cpp" />
     <ClCompile Include="SortListCtrl.cpp" />
     <ClCompile Include="SpellCheckDlg.cpp" />
@@ -583,6 +586,7 @@
     <ClInclude Include="PlaceholderSetsOptDlg.h" />
     <ClInclude Include="PlaceholderSingleOptDlg.h" />
     <ClInclude Include="PostProcessor.h" />
+    <ClInclude Include="PreProcessor.h" />
     <ClInclude Include="PrivateToolBar.h" />
     <ClInclude Include="process.h" />
     <ClInclude Include="ProcessCommand.h" />
@@ -593,6 +597,7 @@
     <ClInclude Include="ProfilePage.h" />
     <ClInclude Include="ProfilePageLatex.h" />
     <ClInclude Include="ProfilePagePostprocessor.h" />
+    <ClInclude Include="ProfilePagePreprocessor.h" />
     <ClInclude Include="ProfilePageViewer.h" />
     <ClInclude Include="Project.h" />
     <ClInclude Include="ProjectNewDialog.h" />
@@ -609,6 +614,7 @@
     <ClInclude Include="ScintillaDocView.h" />
     <ClInclude Include="SearchToolBarEditButton.h" />
     <ClInclude Include="SearchToolBarEditCtrl.h" />
+    <ClInclude Include="ShellUtilXP.h" />
     <ClInclude Include="ShellView.h" />
     <ClInclude Include="SortListCtrl.h" />
     <ClInclude Include="SpellCheckDlg.h" />
