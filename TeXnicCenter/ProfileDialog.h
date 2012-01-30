@@ -42,6 +42,7 @@
 #include "PropertyDialog.h"
 #include "ProfilePage.h"
 #include "ProfilePageLatex.h"
+#include "ProfilePagePreprocessor.h"
 #include "ProfilePagePostprocessor.h"
 #include "ProfilePageViewer.h"
 
@@ -51,6 +52,7 @@
 @ingroup profiles
 
 @see CProfilePageLaTeX
+@see CProfilePagePreprocessor
 @see CProfilePagePostprocessor
 @see CProfilePageViewer
 
@@ -149,6 +151,7 @@ public:
 // attributes
 protected:
 	CProfilePageLaTeX m_wndPageLatex;
+	CProfilePagePreprocessor m_wndPagePreprocessor;
 	CProfilePagePostprocessor m_wndPagePostprocessor;
 	CProfilePageViewer m_wndPageViewer;
 

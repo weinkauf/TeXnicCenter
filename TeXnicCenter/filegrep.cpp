@@ -131,9 +131,9 @@ BOOL CFileGrep::Grep(
 	try
 	{
 		if (m_bCaseSensitive)
-			m_regEx.assign(strSearch,std::tr1::regex_constants::icase);
-		else
 			m_regEx.assign(strSearch);
+		else
+			m_regEx.assign(strSearch,std::tr1::regex_constants::icase);
 	}
 	catch (...)
 	{

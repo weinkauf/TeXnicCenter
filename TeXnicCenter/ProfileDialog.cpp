@@ -72,6 +72,7 @@ CProfileDialog::CProfileDialog(CWnd* pParent /*=NULL*/)
 		m_pCurrentProfile(NULL)
 {
 	AddPage(&m_wndPageLatex);
+	AddPage(&m_wndPagePreprocessor);
 	AddPage(&m_wndPagePostprocessor);
 	AddPage(&m_wndPageViewer);
 
@@ -152,10 +153,12 @@ BOOL CProfileDialog::ApplyChanges()
 	{
 		if (!m_wndPageLatex.ApplyChanges())
 			throw 0;
-		if (!m_wndPagePostprocessor.ApplyChanges())
+		if (!m_wndPagePreprocessor.ApplyChanges())
 			throw 1;
-		if (!m_wndPageViewer.ApplyChanges())
+		if (!m_wndPagePostprocessor.ApplyChanges())
 			throw 2;
+		if (!m_wndPageViewer.ApplyChanges())
+			throw 3;
 	}
 	catch (int nPage)
 	{
@@ -190,6 +193,7 @@ void CProfileDialog::OnSelectionChanged()
 	}
 
 	m_wndPageLatex.OnUpdateDataSet(pProfile);
+	m_wndPagePreprocessor.OnUpdateDataSet(pProfile);
 	m_wndPagePostprocessor.OnUpdateDataSet(pProfile);
 	m_wndPageViewer.OnUpdateDataSet(pProfile);
 
