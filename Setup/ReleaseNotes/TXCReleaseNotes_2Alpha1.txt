@@ -1,0 +1,28 @@
+This is TeXnicCenter 2.0 Alpha 1 (2009/10/22)
+
+This is an ALPHA version of the software. It is not stable, very likely to crash, and you may loose your data.
+
+Having said that, the developers work with this version on a daily basis without too much trouble. It is designed to work alongside TeXnicCenter Version 1, i.e., you can have both installed in different directories.
+
+TeXnicCenter 2.0 has lots of new features. We have changed almost everything. Most noteworthy:
+
+* New editor component based on Scintilla (zoom, proportional fonts, code folding).
+* Unicode support. You should be able to write in Russian, Hebrew, Chinese, Japanese, Korean, ... We are very interested in any issues that you may encounter regarding the Unicode support.
+* Modern user interface. Try re-arranging the tool windows.
+* Better support for bibtex (error parsing, search in Literature tool window).
+* Developed with Visual Studio 2008. However, the free edition does not work. You need access to the MFC. If you are interested in helping us, contact the maintainer: http://www.texniccenter.org/contact/tino
+
+
+Known Issues:
+
+* Replace in selection: selection shrinks. Be careful with that.
+* Spell check does not work inside braces {}. This may be a feature. Lets see.
+* After auto-completion the cursor may end up at an unexpected position.
+* TXC 1 and TXC 2 may compete for the file associations *.tex and *.tcp.
+* Some toolbars re-appear after re-starting TXC.
+* The defaults are not very user-friendly. Toolbars, menu, shortcuts are all subject to change in the future.
+
+
+Happy TeXing!
+
+The TeXnicCenter Team
