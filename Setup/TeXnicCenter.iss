@@ -5,7 +5,7 @@
 ;-------------------------------------------
 
 ;Uncomment this for x64
-;#define TARGET_x64
+#define TARGET_x64
 
 ;Uncomment this for an Alpha Build
 #define ALPHA_BUILD
@@ -60,7 +60,7 @@
 [Setup]
 ;Output
 OutputDir=..\Output\Setup
-OutputBaseFilename=TXCSetup
+OutputBaseFilename=TXCSetup_{#APP_PLATFORM}
 ;About TeXnicCenter
 AppName={#APP_NAME}
 AppVersion={#APP_VERSION}
@@ -141,17 +141,21 @@ Source: ..\Output\Product\{#APP_PLATFORM}\Release\Help\*.chw; DestDir: {app}\Hel
 
 ;XML System files - do we really need this? For an admin account on XP, we don't need these files at all.
 ;For a regular user, we need these files in the systems dir. A simple copy to the app dir doesn't work. What am I missing?
-Source: msxml4.dll; DestDir: {sys}; Flags: regserver sharedfile
-Source: msxml4r.dll; DestDir: {sys}; Flags: sharedfile
-Source: msxml4a.dll; DestDir: {sys}; Flags: sharedfile
 ;Source: msxml4.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 ;Source: msxml4r.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 ;Source: msxml4a.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+;And installing them on x64 fails anyway. We need to switch to msxml6. That one is available on all systems (needs to be checked).
+#ifndef TARGET_x64
+    Source: msxml4.dll; DestDir: {sys}; Flags: regserver sharedfile
+    Source: msxml4r.dll; DestDir: {sys}; Flags: sharedfile
+    Source: msxml4a.dll; DestDir: {sys}; Flags: sharedfile
+#endif
+
 
 ;MFC files. Copied as private assemblies. Windows will use globally installed versions, if they are installed.
-Source: msvcr100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: msvcp100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: mfc100u.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#APP_PLATFORM}\msvcr100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#APP_PLATFORM}\msvcp100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#APP_PLATFORM}\mfc100u.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
 
 ;Templates
 DestDir: {app}\Templates\Documents\English; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Templates\Documents\English\*.tex; Components: Templates\English; Flags: comparetimestamp
