@@ -59,6 +59,7 @@ public:
 
 private:
 	void UpdateToolBarButton(CBuildView::tagImage t);
+	void UpdateToolBarButtons();
 
 protected:
 	afx_msg void OnSetFocus(CWnd* pOldWnd);

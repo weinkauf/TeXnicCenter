@@ -153,9 +153,7 @@ void ErrorListPane::Clear(void)
 
 	errors_ = warnings_ = bad_boxes_ = 0;
 
-	UpdateToolBarButton(CBuildView::imageBadBox);
-	UpdateToolBarButton(CBuildView::imageWarning);
-	UpdateToolBarButton(CBuildView::imageError);
+	UpdateToolBarButtons();
 }
 
 void ErrorListPane::AddMessage(const COutputInfo& info, CBuildView::tagImage t)
@@ -231,17 +229,7 @@ void ErrorListPane::EnableUpdate(const bool bEnable)
 		//list_view_.UpdateWindow();
 
 		//Update Buttons
-		//UpdateToolBarButton(CBuildView::imageBadBox);
-		//UpdateToolBarButton(CBuildView::imageWarning);
-		//UpdateToolBarButton(CBuildView::imageError);
-		CString fmt;
-		fmt.Format(IDS_ERROR_LIST_ERRORS, errors_);
-		toolbar_.SetButtonText(0, fmt);
-		fmt.Format(IDS_ERROR_LIST_WARNINGS, warnings_);
-		toolbar_.SetButtonText(2, fmt);
-		fmt.Format(IDS_ERROR_LIST_BAD_BOXES, bad_boxes_);
-		toolbar_.SetButtonText(4, fmt);
-		toolbar_.AdjustLayout();
+		UpdateToolBarButtons();
 	}
 	else
 	{
@@ -256,6 +244,13 @@ void ErrorListPane::UpdateToolBarButton(CBuildView::tagImage t)
 	::PostMessage(m_hWnd,UpdateToolBarButtonMessageID,t,0);
 }
 
+void ErrorListPane::UpdateToolBarButtons()
+{
+	// AddMessage and consequently UpdateToolBarButton can be
+	// called from a different thread causing an assertion
+	::PostMessage(m_hWnd, UpdateToolBarButtonMessageID, 0, 1);
+}
+
 BOOL ErrorListPane::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
 	BOOL result;
@@ -263,29 +258,43 @@ BOOL ErrorListPane::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT
 	if (message == UpdateToolBarButtonMessageID)
 	{
 		CString fmt;
-		int index;
 
-		switch (wParam)
+		if (lParam == 1)
 		{
-			case CBuildView::imageError:
-				fmt.Format(IDS_ERROR_LIST_ERRORS,errors_);
-				index = 0;
-				break;
-			case CBuildView::imageWarning:
-				fmt.Format(IDS_ERROR_LIST_WARNINGS,warnings_);
-				index = 2;
-				break;
-			case CBuildView::imageBadBox:
-				fmt.Format(IDS_ERROR_LIST_BAD_BOXES,bad_boxes_);
-				index = 4;
-				break;
-			default:
-				index = -1;
+			CString fmt;
+			fmt.Format(IDS_ERROR_LIST_ERRORS, errors_);
+			toolbar_.SetButtonText(0, fmt);
+			fmt.Format(IDS_ERROR_LIST_WARNINGS, warnings_);
+			toolbar_.SetButtonText(2, fmt);
+			fmt.Format(IDS_ERROR_LIST_BAD_BOXES, bad_boxes_);
+			toolbar_.SetButtonText(4, fmt);
+			toolbar_.AdjustLayout();
 		}
+		else
+		{
+			int index;
+			switch (wParam)
+			{
+				case CBuildView::imageError:
+					fmt.Format(IDS_ERROR_LIST_ERRORS,errors_);
+					index = 0;
+					break;
+				case CBuildView::imageWarning:
+					fmt.Format(IDS_ERROR_LIST_WARNINGS,warnings_);
+					index = 2;
+					break;
+				case CBuildView::imageBadBox:
+					fmt.Format(IDS_ERROR_LIST_BAD_BOXES,bad_boxes_);
+					index = 4;
+					break;
+				default:
+					index = -1;
+			}
 
-		ASSERT(index >= 0);
-		toolbar_.SetButtonText(index,fmt);
-		toolbar_.AdjustLayout();
+			ASSERT(index >= 0);
+			toolbar_.SetButtonText(index,fmt);
+			toolbar_.AdjustLayout();
+		}
 
 		result = TRUE;
 	}
