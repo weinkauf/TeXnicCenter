@@ -33,7 +33,7 @@ BEGIN
             VALUE "FileDescription", "TeXnicCenter"
             VALUE "FileVersion", TXC_VERSION_STRING
             VALUE "InternalName", "TeXnicCenter"
-            VALUE "LegalCopyright", "Copyright © 1999-2011 The TeXnicCenter Team"
+            VALUE "LegalCopyright", "Copyright © 1999-2012 The TeXnicCenter Team"
             VALUE "OriginalFilename", "TeXnicCenter.exe"
             VALUE "ProductName", "TeXnicCenter"
             VALUE "ProductVersion", TXC_VERSION_STRING
@@ -45,7 +45,7 @@ BEGIN
             VALUE "FileDescription", "TeXnicCenter"
             VALUE "FileVersion", TXC_VERSION_STRING
             VALUE "InternalName", "TeXnicCenter"
-            VALUE "LegalCopyright", "Copyright © 1999-2011 The TeXnicCenter Team"
+            VALUE "LegalCopyright", "Copyright © 1999-2012 The TeXnicCenter Team"
             VALUE "OriginalFilename", "TeXnicCenter.exe"
             VALUE "ProductName", "TeXnicCenter"
             VALUE "ProductVersion", TXC_VERSION_STRING
