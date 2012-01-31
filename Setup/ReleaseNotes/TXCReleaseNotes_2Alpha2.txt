@@ -1,0 +1,37 @@
+This is TeXnicCenter 2.0 Alpha 2 (2009/12/30)
+
+This is an ALPHA version of the software. It is not stable, very likely to crash, and you may loose your data.
+
+Having said that, the developers work with this version on a daily basis without too much trouble. It is designed to work alongside TeXnicCenter Version 1, i.e., you can have both installed in different directories.
+
+We have fixed many issues since TXC 2.0 Alpha 1. Most noteworthy:
+
+Bibtex and MP files are not registered anymore with TXC.
+Use new style for browse for folder dialogs.
+Fixed bug where modified documents were not properly handled on close.
+The content of a line deleted using Ctrl+L is copied to clipboard.
+Modified incremental search behavior.
+Select block between braces was not working.
+Middle button click closes active tab.
+Fixed #2889654: Unicode characters after a backslash were unreadable.
+While executing post processors console windows became visible.
+Fixed #2889317: Personal dictionary is stored in UTF8.
+Added colorization for \usepackage and \documentclass.
+Default editor font is chosen from the following list: Consolas, Lucida Console, Courier New. First successfully created font will be used.
+Applied patch for bug #2841142: Package Installation dialog not shown.
+
+
+If you are interested in helping us, contact the maintainer: http://www.texniccenter.org/contact/tino
+
+Known Issues:
+
+* Replace in selection: selection shrinks. Be careful with that.
+* Spell check does not work inside braces {}. This may be a feature. Lets see.
+* TXC 1 and TXC 2 may compete for the file associations *.tex and *.tcp.
+* Some toolbars re-appear after re-starting TXC.
+* The defaults are not very user-friendly. Toolbars, menu, shortcuts are all subject to change in the future.
+
+
+Happy TeXing!
+
+The TeXnicCenter Team
