@@ -42,7 +42,7 @@ class BookmarkView;
 class CBuildView;
 class CChildFrame;
 class CEnvironmentView;
-class CFileView;
+class FileViewPane;
 class CGrepView;
 class COutputDoc;
 class CParseOutputView;
@@ -333,9 +333,7 @@ private:
 	std::unique_ptr<StructurePane> structure_view_;
 
 	///Pane showing the files of a project
-	std::unique_ptr<WorkspacePane> file_view_pane_;
-	///View for the files of a project
-	std::unique_ptr<CFileView> file_view_;
+	std::unique_ptr<FileViewPane> file_view_pane_;
 	
 	///Pane showing the latex environments of a project
 	std::unique_ptr<WorkspacePane> env_view_pane_;

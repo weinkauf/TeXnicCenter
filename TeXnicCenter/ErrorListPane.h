@@ -50,8 +50,16 @@ public:
 	void Clear(void);
 	void AddMessage(const COutputInfo& info, CBuildView::tagImage t);
 
+	/** Enables or disables the redrawing of this view.
+
+		When disabled, the view will not redraw.
+		If enabled, it will redraw.
+	*/
+	virtual void EnableUpdate(const bool bEnable);
+
 private:
 	void UpdateToolBarButton(CBuildView::tagImage t);
+	void UpdateToolBarButtons();
 
 protected:
 	afx_msg void OnSetFocus(CWnd* pOldWnd);

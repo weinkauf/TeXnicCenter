@@ -341,7 +341,7 @@ CString CodeView::GetLineText(int line, bool direct /*= true*/)
 #endif
 
 			if (!buffer.empty())
-				strLine.SetString(&buffer[0], buffer.size());
+				strLine.SetString(&buffer[0], static_cast<int>(buffer.size()));
 		}
 	}
 	else
@@ -369,7 +369,7 @@ int CodeView::Lock(bool exclusive /*= false */)
 		const UINT max = SCI_SHOWCURSOR;
 
 		while (hold_count_ > 0) { // atomic operation, no lock needed
-			// Let the thread process remaining Scintilla messages 
+			// Let the thread process remaining Scintilla messages
 			// sent by the speller otherwise a dead lock will occur.
 			while (::PeekMessage(&msg,GetCtrl(),min,max,PM_REMOVE) > 0) {
 				::TranslateMessage(&msg);
@@ -619,7 +619,7 @@ void CodeView::OnUpdateViewFoldMargin(CCmdUI *pCmdUI)
 
 void CodeView::OnViewLineNumbers()
 {
-	CConfiguration::GetInstance()->m_bShowLineNumbers = 
+	CConfiguration::GetInstance()->m_bShowLineNumbers =
 		!CConfiguration::GetInstance()->m_bShowLineNumbers;
 
 	// Chained update
@@ -761,7 +761,7 @@ void CodeView::OnCharAdded(SCNotification* n)
 
 						if (remove_leading_spaces_) {
 							// Count the number of leading spaces
-							while (new_line_pos < new_line_end && 
+							while (new_line_pos < new_line_end &&
 								GetCtrl().GetCharAt(new_line_pos) == _T(' ')) {
 								++new_line_pos;
 							}
@@ -907,7 +907,7 @@ void CodeView::OnUpdateEditClearAllBookmarks(CCmdUI *pCmdUI)
 	pCmdUI->Enable(GetCtrl().MarkerNext(0,1 << CodeDocument::Bookmark) >= 0);
 }
 
-void CodeView::DefineMarker(int marker, int markerType, COLORREF fore, COLORREF back) 
+void CodeView::DefineMarker(int marker, int markerType, COLORREF fore, COLORREF back)
 {
 	CScintillaCtrl& rCtrl = GetCtrl();
 
@@ -1030,7 +1030,7 @@ CString CodeView::RangeExtendAndGrab(int& selStart, int& selEnd, bool stripEol /
 	{
 		// Change whole line selected but normally end of line characters not wanted.
 		// Remove possible terminating \r, \n, or \r\n.
-		size_t sellen = SelectedString.GetLength();
+		int sellen = SelectedString.GetLength();
 		if (sellen >= 2 && (SelectedString[sellen - 2] == '\r' && SelectedString[sellen - 1] == '\n'))
 		{
 			SelectedString.Left(sellen - 2);
@@ -1196,17 +1196,17 @@ BOOL CodeView::PreTranslateMessage(MSG* pMsg)
 bool CodeView::TerminatesIncrementalSearch( UINT ch )
 {
 	return ch != VK_BACK && ch != VK_SHIFT && ch != VK_CONTROL && ch != VK_MENU &&
-		(ch == VK_RETURN || IsDirectionKey(ch) || 
+		(ch == VK_RETURN || IsDirectionKey(ch) ||
 			!CharTraitsT::IsPrint(ch));
 }
 
 
-bool IsOpeningBrace(TCHAR ch) 
+bool IsOpeningBrace(TCHAR ch)
 {
 	return ch == _T('{') || ch == _T('(') || ch == _T('[');
 }
 
-bool IsClosingBrace(TCHAR ch) 
+bool IsClosingBrace(TCHAR ch)
 {
 	return ch == _T('}') || ch == _T(')') || ch == _T(']');
 }
@@ -1399,7 +1399,7 @@ void CodeView::UpdateFoldSettings()
 		flags |= 2;
 
 	GetCtrl().SetFoldFlags(flags);
-	GetCtrl().SetProperty("fold.compact", 
+	GetCtrl().SetProperty("fold.compact",
 		CConfiguration::GetInstance()->GetFoldCompact() ? "1" : "0");
 }
 

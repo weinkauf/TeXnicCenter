@@ -364,6 +364,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="PerformanceTimer.cpp" />
     <ClCompile Include="SingleInstanceWinApp.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -437,6 +438,7 @@
     <ClInclude Include="MRUList.h" />
     <ClInclude Include="MRUStringList.h" />
     <ClInclude Include="PathTool.h" />
+    <ClInclude Include="PerformanceTimer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SingleInstanceWinApp.h" />
     <ClInclude Include="SortArray.h" />

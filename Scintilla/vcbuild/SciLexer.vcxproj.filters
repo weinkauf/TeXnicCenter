@@ -354,6 +354,15 @@
     <ClCompile Include="..\src\XPM.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\lexers\LexA68k.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lexers\LexModula.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lexers\LexCoffeeScript.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\win32\ScintRes.rc">

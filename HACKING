@@ -189,18 +189,6 @@ The changes that have been made can be reviewed by comparing revisions 912 and
   Scintilla/src/Editor.cxx
   Scintilla/src/Editor.h
 
-Patches/Scintilla.patch contains the described changes that should be applied
-once Scintilla has been updated. To apply the patch use
-
-  patch -p1 -d original < Scintilla.patch
-
-where 'original' is the directory with unmodified Scintilla sources. If patching
-fails one can use the -F num option. 'num' denotes the fuzz factor. For testing
-purposes use the --dry-run option. Finally, update the patch by invoking
-
-  diff -druN --strip-trailing-cr original modified > Scintilla.patch
-
-to synchronize it.
 
 Scintilla MFC wrapper classes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -235,3 +223,9 @@ and also revisions 913 and 916 of
   TeXnicCenter/ScintillaCtrl.cpp
   TeXnicCenter/ScintillaCtrl.h
 
+
+Updating third-party libraries
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Every library update has to be committed into the vendor branch which is then
+merged with the default or the stable branch.

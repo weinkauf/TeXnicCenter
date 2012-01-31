@@ -259,12 +259,11 @@ void SpellerBackgroundThread::DoCheckLine(CodeView* view, int line, CString &tex
 	CScintillaCtrl &c = view->GetCtrl();
 	DocumentTokenizer* tokenizer = view->GetTokenizer();
 
-	long line_start = c.PositionFromLine(line,FALSE);
-	long line_end = c.GetLineEndPosition(line,FALSE);
+	const long line_start = c.PositionFromLine(line,FALSE);
+	const long line_end = c.GetLineEndPosition(line,FALSE);
+	const long length = line_end - line_start;
 
-	// Clear the line indicators
-	c.IndicatorClearRange(line_start,line_end - line_start,FALSE);
-	long length = line_end - line_start;
+	long last_decoration_end = line_start;
 
 	if (length > 0) {
 		text = view->GetLineText(line,false);
@@ -274,7 +273,7 @@ void SpellerBackgroundThread::DoCheckLine(CodeView* view, int line, CString &tex
 			int word_length = end - start;
 
 			if (word_length > 0 && word_length < MAXWORDLEN) {
-				CString word(text.Mid(start,word_length));
+				const CString word(text.Mid(start,word_length));
 
 				if (!speller_->Spell(word)) {
 					bool decorate = true;
@@ -304,16 +303,24 @@ void SpellerBackgroundThread::DoCheckLine(CodeView* view, int line, CString &tex
 						ANSItoUTF8(left,left.GetLength(),buffer1);
 						ANSItoUTF8(word,word.GetLength(),buffer2);
 #endif
-						long s = line_start + static_cast<long>(buffer1.size());
-						long e = s + static_cast<long>(buffer2.size());
+						const long s = line_start + static_cast<long>(buffer1.size());
+						const long e = s + static_cast<long>(buffer2.size());
 
-						c.IndicatorFillRange(s,e - s,FALSE);
+						// Clear the line indicators from the previous mis-spelled word to here
+						c.IndicatorClearRange(last_decoration_end, s - last_decoration_end, false);
+						last_decoration_end = e; //For the next clearing
+
+						// Indicate the mis-spelled word using a line decoration
+						c.IndicatorFillRange(s, e - s, false);
 					}
 				}
 			}
 
 			start = end;
 		}
+
+		// Clear the line indicators from the previous mis-spelled word (or start of the line) to the end of the line
+		c.IndicatorClearRange(last_decoration_end, line_end - last_decoration_end, false);
 	}
 }
 

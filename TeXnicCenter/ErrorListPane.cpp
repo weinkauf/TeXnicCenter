@@ -153,60 +153,87 @@ void ErrorListPane::Clear(void)
 
 	errors_ = warnings_ = bad_boxes_ = 0;
 
-	UpdateToolBarButton(CBuildView::imageBadBox);
-	UpdateToolBarButton(CBuildView::imageWarning);
-	UpdateToolBarButton(CBuildView::imageError);
+	UpdateToolBarButtons();
 }
 
 void ErrorListPane::AddMessage(const COutputInfo& info, CBuildView::tagImage t)
 {
-	bool insert = false;
+	//Insert only, if the type of message is currently shown
+	bool bInsert(false);
 
+	//Type of message
 	switch (t)
 	{
 		case CBuildView::imageError:
-			++errors_;
-
-			if (show_errors_)
-				insert = true;
-
+		{
+			errors_++;
+			bInsert = show_errors_;
 			break;
+		}
+
 		case CBuildView::imageWarning:
-			++warnings_;
-
-			if (show_warnings_)
-				insert = true;
-
+		{
+			warnings_++;
+			bInsert = show_warnings_;
 			break;
+		}
+
 		case CBuildView::imageBadBox:
-			++bad_boxes_;
-
-			if (show_bad_boxes_)
-				insert = true;
-
+		{
+			bad_boxes_++;
+			bInsert = show_bad_boxes_;
 			break;
+		}
 	}
 
-	Item item(info,t);
+	//Prepare the item
+	Item item(info, t);
 
-	if (insert) {
-		if (list_view_.IsSorted())
-			list_view_.SetRedraw(FALSE);
+	//Insert it, if desired
+	if (bInsert)
+	{
+		if (list_view_.IsSorted()) list_view_.SetRedraw(0);
 
-		list_view_.SetItemData(InsertMessage(info,t),items_.size());
+		list_view_.SetItemData(InsertMessage(info, t), items_.size());
 		item.ordinal = list_view_.GetItemCount();
 	}
 
+	//Put it into our array
 	item_monitor_.Lock();
 	items_.push_back(item);
 	item_monitor_.Unlock();
 
-	UpdateToolBarButton(t);
+	if (bUpdateIsEnabled)
+	{
+		UpdateToolBarButton(t);
 
-	if (insert && list_view_.IsSorted()) {
-		list_view_.Sort();
-		list_view_.SetRedraw();
+		if (bInsert && list_view_.IsSorted())
+		{
+			list_view_.Sort();
+			list_view_.SetRedraw(1);
+			list_view_.Invalidate();
+		}
+	}
+}
+
+void ErrorListPane::EnableUpdate(const bool bEnable)
+{
+	bUpdateIsEnabled = bEnable;
+
+	if (bEnable)
+	{
+		if (list_view_.IsSorted()) list_view_.Sort();
+
+		list_view_.SetRedraw(1);
 		list_view_.Invalidate();
+		//list_view_.UpdateWindow();
+
+		//Update Buttons
+		UpdateToolBarButtons();
+	}
+	else
+	{
+		list_view_.SetRedraw(0);
 	}
 }
 
@@ -217,6 +244,13 @@ void ErrorListPane::UpdateToolBarButton(CBuildView::tagImage t)
 	::PostMessage(m_hWnd,UpdateToolBarButtonMessageID,t,0);
 }
 
+void ErrorListPane::UpdateToolBarButtons()
+{
+	// AddMessage and consequently UpdateToolBarButton can be
+	// called from a different thread causing an assertion
+	::PostMessage(m_hWnd, UpdateToolBarButtonMessageID, 0, 1);
+}
+
 BOOL ErrorListPane::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
 	BOOL result;
@@ -224,29 +258,43 @@ BOOL ErrorListPane::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT
 	if (message == UpdateToolBarButtonMessageID)
 	{
 		CString fmt;
-		int index;
 
-		switch (wParam)
+		if (lParam == 1)
 		{
-			case CBuildView::imageError:
-				fmt.Format(IDS_ERROR_LIST_ERRORS,errors_);
-				index = 0;
-				break;
-			case CBuildView::imageWarning:
-				fmt.Format(IDS_ERROR_LIST_WARNINGS,warnings_);
-				index = 2;
-				break;
-			case CBuildView::imageBadBox:
-				fmt.Format(IDS_ERROR_LIST_BAD_BOXES,bad_boxes_);
-				index = 4;
-				break;
-			default:
-				index = -1;
+			CString fmt;
+			fmt.Format(IDS_ERROR_LIST_ERRORS, errors_);
+			toolbar_.SetButtonText(0, fmt);
+			fmt.Format(IDS_ERROR_LIST_WARNINGS, warnings_);
+			toolbar_.SetButtonText(2, fmt);
+			fmt.Format(IDS_ERROR_LIST_BAD_BOXES, bad_boxes_);
+			toolbar_.SetButtonText(4, fmt);
+			toolbar_.AdjustLayout();
 		}
+		else
+		{
+			int index;
+			switch (wParam)
+			{
+				case CBuildView::imageError:
+					fmt.Format(IDS_ERROR_LIST_ERRORS,errors_);
+					index = 0;
+					break;
+				case CBuildView::imageWarning:
+					fmt.Format(IDS_ERROR_LIST_WARNINGS,warnings_);
+					index = 2;
+					break;
+				case CBuildView::imageBadBox:
+					fmt.Format(IDS_ERROR_LIST_BAD_BOXES,bad_boxes_);
+					index = 4;
+					break;
+				default:
+					index = -1;
+			}
 
-		ASSERT(index >= 0);
-		toolbar_.SetButtonText(index,fmt);
-		toolbar_.AdjustLayout();
+			ASSERT(index >= 0);
+			toolbar_.SetButtonText(index,fmt);
+			toolbar_.AdjustLayout();
+		}
 
 		result = TRUE;
 	}

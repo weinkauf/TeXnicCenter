@@ -42,21 +42,11 @@ static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
 
-// NOTE: The string must have an case-insensitive match with the corresponding keyword in bibtex!
-const TCHAR* const BibTypeVerbose[] =
-{
-	_T("Book"),_T("Article"),_T("Booklet"),_T("Manual"),_T("Inproceedings"),
-	_T("Conference"),_T("Inbook"),_T("Incollection"),_T("Mastersthesis"),
-	_T("Misc"),_T("PhDthesis"),_T("Proceedings"),_T("TechReport"),
-	_T("Unpublished"),_T("String"),_T("Comment"),_T("Preamble"),_T("Parse Error"),_T("Unknown")
-}; // must be kept in sync with bibtype!
-
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-BibTeXEntry::BibTeXEntry(const CString& key, BibTeXFile *parent, BibType type)
+BibTeXEntry::BibTeXEntry(const CString& key, BibTeXFile *parent, BibTeXEntryType type)
 {
 	ASSERT(parent != NULL);
 	m_Parent = parent;
@@ -168,32 +158,8 @@ const BibItem BibTeXEntry::ToBibItem() const
 	result.publisher_ = publisher;
 	result.title_ = title;
 	result.label_ = m_Key;
-	result.type_text_ = BibTypeVerbose[m_Type];
-
-	if (m_Type >= Booklet && m_Type <= Unpublished)
-		result.type_ = static_cast<BibItem::Type>(m_Type); // Remap
-	else {
-		// Following BibType values are incompatible with BibItem::Type
-		switch (m_Type)
-		{
-			case Article:
-				result.type_ = BibItem::Article;
-				break;
-			case Book:
-				result.type_ = BibItem::Book;
-				break;
-			case String:
-				result.type_ = BibItem::String;
-				break;
-			case Comment:
-				result.type_ = BibItem::Comment;
-				break;
-			case Preamble:
-				result.type_ = BibItem::Preamble;
-				break;
-			// otherwise unknown
-		}
-	}
+	result.type_text_ = GetString(m_Type);
+	result.type_ = m_Type;
 
 	return result;
 }
@@ -286,12 +252,12 @@ const CString& BibTeXEntry::GetKey() const
 	return m_Key;
 }
 
-void BibTeXEntry::SetBibliographyType( BibType type )
+void BibTeXEntry::SetBibliographyType( BibTeXEntryType type )
 {
 	m_Type = type;
 }
 
-BibTeXEntry::BibType BibTeXEntry::GetType() const
+BibTeXEntryType BibTeXEntry::GetType() const
 {
 	return m_Type;
 }

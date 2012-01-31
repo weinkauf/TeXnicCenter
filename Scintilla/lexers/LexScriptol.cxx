@@ -14,7 +14,6 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-#include "PropSetSimple.h"
 #include "WordList.h"
 #include "LexAccessor.h"
 #include "Accessor.h"
@@ -369,7 +368,7 @@ static void FoldSolDoc(unsigned int startPos, int length, int initStyle,
 	int state = initStyle & 31;
 	int spaceFlags = 0;
         int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, IsSolComment);
-        if ((state == SCE_SCRIPTOL_TRIPLE))
+        if (state == SCE_SCRIPTOL_TRIPLE)
              indentCurrent |= SC_FOLDLEVELWHITEFLAG;
 	char chNext = styler[startPos];
 	for (int i = startPos; i < lengthDoc; i++)

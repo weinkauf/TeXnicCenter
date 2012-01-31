@@ -43,7 +43,7 @@
 #include "environmentview.h"
 #include "BibView.h"
 #include "BookmarkView.h"
-#include "fileview.h"
+#include "FileViewPane.h"
 #include "ParseOutputView.h"
 #include "OutputDoc.h"
 #include "ErrorListPane.h"
@@ -291,8 +291,7 @@ static UINT indicators[] =
 CMainFrame::CMainFrame()
 	: m_pContextMenuTargetWindow(NULL)
 	, structure_view_(new StructurePane)
-	, file_view_pane_(new WorkspacePane)
-	, file_view_(new CFileView)
+	, file_view_pane_(new FileViewPane)
 	, env_view_pane_(new WorkspacePane)
 	, env_view_(new CEnvironmentView)
 	, bib_view_pane_(new BibView)
@@ -1699,21 +1698,19 @@ bool CMainFrame::CreateToolWindows()
 	//Create views
 	CRect rectDummy;
 	rectDummy.SetRectEmpty();
+
 	if (!env_view_->Create(env_view_pane_.get()))
 	{
 		TRACE0("Failed to create environment view\n");
 		return false;
 	}
-	if (!file_view_->Create(file_view_pane_.get()))
-	{
-		TRACE0("Failed to create file view\n");
-		return false;
-	}
+
 	if (!build_view_->Create(rectDummy, this))
 	{
 		TRACE0("Failed to create build output view\n");
 		return false;
 	}
+
 	if (!grep_view_1_->Create(rectDummy, this))
 	{
 		TRACE0("Failed to create find 1 output view\n");
@@ -1737,7 +1734,6 @@ bool CMainFrame::CreateToolWindows()
 	}
 	// - and set them
 	env_view_pane_->SetClient(env_view_.get());
-	file_view_pane_->SetClient(file_view_.get());
 	output_doc_->SetAllViews(build_view_.get(), grep_view_1_.get(), 
 		grep_view_2_.get(), parse_view_.get());
 	build_view_->AttachDoc(output_doc_.get());
@@ -1853,7 +1849,7 @@ const std::vector<CProjectView*> CMainFrame::GetViews()
 	std::vector<CProjectView*> views;
 
 	views.push_back(structure_view_->GetProjectView());
-	views.push_back(file_view_.get());
+	views.push_back(file_view_pane_->GetProjectView());
 	views.push_back(env_view_.get());
 	views.push_back(bib_view_pane_.get());
 	views.push_back(bookmark_view_pane_.get());

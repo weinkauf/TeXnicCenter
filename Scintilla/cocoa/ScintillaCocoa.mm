@@ -32,24 +32,31 @@ NSString* ScintillaRecPboardType = @"com.scintilla.utf16-plain-text.rectangular"
 //--------------------------------------------------------------------------------------------------
 
 // Define keyboard shortcuts (equivalents) the Mac way.
-#define SCI_CMD ( SCI_ALT | SCI_CTRL)
+#define SCI_CMD ( SCI_CTRL)
 #define SCI_SCMD ( SCI_CMD | SCI_SHIFT)
+#define SCI_SMETA ( SCI_META | SCI_SHIFT)
 
 static const KeyToCommand macMapDefault[] =
 {
-  {SCK_DOWN,      SCI_CMD,    SCI_DOCUMENTEND},
-  {SCK_UP,        SCI_CMD,    SCI_DOCUMENTSTART},
-  {SCK_LEFT,      SCI_CMD,    SCI_VCHOME},
-  {SCK_LEFT,      SCI_SCMD,   SCI_VCHOMEEXTEND},
-  {SCK_RIGHT,     SCI_CMD,    SCI_LINEEND},
-  {SCK_RIGHT,     SCI_SCMD,   SCI_LINEENDEXTEND},
+  // OS X specific
+  {SCK_DOWN,      SCI_CTRL,   SCI_DOCUMENTEND},
+  {SCK_DOWN,      SCI_CSHIFT, SCI_DOCUMENTENDEXTEND},
+  {SCK_UP,        SCI_CTRL,   SCI_DOCUMENTSTART},
+  {SCK_UP,        SCI_CSHIFT, SCI_DOCUMENTSTARTEXTEND},
+  {SCK_LEFT,      SCI_CTRL,   SCI_VCHOME},
+  {SCK_LEFT,      SCI_CSHIFT, SCI_VCHOMEEXTEND},
+  {SCK_RIGHT,     SCI_CTRL,   SCI_LINEEND},
+  {SCK_RIGHT,     SCI_CSHIFT, SCI_LINEENDEXTEND},
+
+  // Similar to Windows and GTK+
+  // Where equivalent clashes with OS X standard, use Meta instead
   {SCK_DOWN,      SCI_NORM,   SCI_LINEDOWN},
   {SCK_DOWN,      SCI_SHIFT,  SCI_LINEDOWNEXTEND},
-  {SCK_DOWN,      SCI_CTRL,   SCI_LINESCROLLDOWN},
+  {SCK_DOWN,      SCI_META,   SCI_LINESCROLLDOWN},
   {SCK_DOWN,      SCI_ASHIFT, SCI_LINEDOWNRECTEXTEND},
   {SCK_UP,        SCI_NORM,   SCI_LINEUP},
   {SCK_UP,        SCI_SHIFT,  SCI_LINEUPEXTEND},
-  {SCK_UP,        SCI_CTRL,   SCI_LINESCROLLUP},
+  {SCK_UP,        SCI_META,   SCI_LINESCROLLUP},
   {SCK_UP,        SCI_ASHIFT, SCI_LINEUPRECTEXTEND},
   {'[',           SCI_CTRL,   SCI_PARAUP},
   {'[',           SCI_CSHIFT, SCI_PARAUPEXTEND},
@@ -58,13 +65,15 @@ static const KeyToCommand macMapDefault[] =
   {SCK_LEFT,      SCI_NORM,   SCI_CHARLEFT},
   {SCK_LEFT,      SCI_SHIFT,  SCI_CHARLEFTEXTEND},
   {SCK_LEFT,      SCI_ALT,    SCI_WORDLEFT},
-  {SCK_LEFT,      SCI_CSHIFT, SCI_WORDLEFTEXTEND},
-  {SCK_LEFT,      SCI_ASHIFT, SCI_WORDLEFTEXTEND},
+  {SCK_LEFT,      SCI_META,   SCI_WORDLEFT},
+  {SCK_LEFT,      SCI_SMETA,  SCI_WORDLEFTEXTEND},
+  {SCK_LEFT,      SCI_ASHIFT, SCI_CHARLEFTRECTEXTEND},
   {SCK_RIGHT,     SCI_NORM,   SCI_CHARRIGHT},
   {SCK_RIGHT,     SCI_SHIFT,  SCI_CHARRIGHTEXTEND},
   {SCK_RIGHT,     SCI_ALT,    SCI_WORDRIGHT},
-  {SCK_RIGHT,     SCI_CSHIFT, SCI_WORDRIGHTEXTEND},
-  {SCK_RIGHT,     SCI_ASHIFT, SCI_WORDRIGHTEXTEND},
+  {SCK_RIGHT,     SCI_META,   SCI_WORDRIGHT},
+  {SCK_RIGHT,     SCI_SMETA,  SCI_WORDRIGHTEXTEND},
+  {SCK_RIGHT,     SCI_ASHIFT, SCI_CHARRIGHTRECTEXTEND},
   {'/',           SCI_CTRL,   SCI_WORDPARTLEFT},
   {'/',           SCI_CSHIFT, SCI_WORDPARTLEFTEXTEND},
   {'\\',          SCI_CTRL,   SCI_WORDPARTRIGHT},
@@ -129,7 +138,7 @@ static const KeyToCommand macMapDefault[] =
 
 - (id) init: (void*) target
 {
-  [super init];
+  self = [super init];
   if (self != nil)
   {
     mTarget = target;
@@ -169,6 +178,7 @@ static const KeyToCommand macMapDefault[] =
  */
 - (void) idleTimerFired: (NSTimer*) timer
 {
+#pragma unused(timer)
   // Idle timer event.
   // Post a new idle notification, which gets executed when the run loop is idle.
   // Since we are coalescing on name and sender there will always be only one actual notification
@@ -188,6 +198,7 @@ static const KeyToCommand macMapDefault[] =
  */
 - (void) idleTriggered: (NSNotification*) notification
 {
+#pragma unused(notification)
   reinterpret_cast<ScintillaCocoa*>(mTarget)->IdleTimerFired();
 }
 
@@ -220,7 +231,8 @@ ScintillaCocoa::~ScintillaCocoa()
 void ScintillaCocoa::Initialise() 
 {
   static bool initedLexers = false;
-  if (!initedLexers) {
+  if (!initedLexers)
+  {
     initedLexers = true;
     Scintilla_LinkLexers();
   }
@@ -255,25 +267,164 @@ void ScintillaCocoa::Finalise()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * Convert a core foundation string into an array of bytes in a particular encoding
+ */
+
+static char *EncodedBytes(CFStringRef cfsRef, CFStringEncoding encoding) {
+    CFRange rangeAll = {0, CFStringGetLength(cfsRef)};
+    CFIndex usedLen = 0;
+    CFStringGetBytes(cfsRef, rangeAll, encoding, '?',
+                     false, NULL, 0, &usedLen);
+    
+    char *buffer = new char[usedLen+1];
+    CFStringGetBytes(cfsRef, rangeAll, encoding, '?',
+                     false, (UInt8 *)buffer,usedLen, NULL);
+    buffer[usedLen] = '\0';
+    return buffer;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * Case folders.
+ */
+
+class CaseFolderUTF8 : public CaseFolderTable {
+public:
+	CaseFolderUTF8() {
+		StandardASCII();
+	}
+	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) {
+		if ((lenMixed == 1) && (sizeFolded > 0)) {
+			folded[0] = mapping[static_cast<unsigned char>(mixed[0])];
+			return 1;
+		} else {
+            CFStringRef cfsVal = CFStringCreateWithBytes(kCFAllocatorDefault,
+                                                         reinterpret_cast<const UInt8 *>(mixed), 
+                                                         lenMixed, kCFStringEncodingUTF8, false);
+
+            NSString *sMapped = [(NSString *)cfsVal stringByFoldingWithOptions:NSCaseInsensitiveSearch
+                                                            locale:[NSLocale currentLocale]];
+
+            const char *cpMapped = [sMapped UTF8String];
+			size_t lenMapped = strlen(cpMapped);
+			if (lenMapped < sizeFolded) {
+				memcpy(folded, cpMapped,  lenMapped);
+			} else {
+				lenMapped = 0;
+			}
+            CFRelease(cfsVal);
+			return lenMapped;
+		}
+	}
+};
+
+class CaseFolderDBCS : public CaseFolderTable {
+	CFStringEncoding encoding;
+public:
+	CaseFolderDBCS(CFStringEncoding encoding_) : encoding(encoding_) {
+		StandardASCII();
+	}
+	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) {
+		if ((lenMixed == 1) && (sizeFolded > 0)) {
+			folded[0] = mapping[static_cast<unsigned char>(mixed[0])];
+			return 1;
+		} else {
+            CFStringRef cfsVal = CFStringCreateWithBytes(kCFAllocatorDefault,
+                                                         reinterpret_cast<const UInt8 *>(mixed), 
+                                                         lenMixed, encoding, false);
+
+            NSString *sMapped = [(NSString *)cfsVal stringByFoldingWithOptions:NSCaseInsensitiveSearch
+                                                                        locale:[NSLocale currentLocale]];
+            
+            char *encoded = EncodedBytes((CFStringRef)sMapped, encoding);
+
+			size_t lenMapped = strlen(encoded);
+            if (lenMapped < sizeFolded) {
+                memcpy(folded, encoded,  lenMapped);
+            } else {
+                folded[0] = '\0';
+                lenMapped = 1;
+            }
+            delete []encoded;
+            CFRelease(cfsVal);
+			return lenMapped;
+		}
+		// Something failed so return a single NUL byte
+		folded[0] = '\0';
+		return 1;
+	}
+};
+
+CaseFolder *ScintillaCocoa::CaseFolderForEncoding() {
+	if (pdoc->dbcsCodePage == SC_CP_UTF8) {
+		return new CaseFolderUTF8();
+	} else {
+        CFStringEncoding encoding = EncodingFromCharacterSet(IsUnicodeMode(),
+                                                             vs.styles[STYLE_DEFAULT].characterSet);
+        if (pdoc->dbcsCodePage == 0) {
+            CaseFolderTable *pcf = new CaseFolderTable();
+            pcf->StandardASCII();
+            // Only for single byte encodings
+            for (int i=0x80; i<0x100; i++) {
+                char sCharacter[2] = "A";
+                sCharacter[0] = i;
+                CFStringRef cfsVal = CFStringCreateWithBytes(kCFAllocatorDefault,
+                                                             reinterpret_cast<const UInt8 *>(sCharacter), 
+                                                             1, encoding, false);
+                
+                NSString *sMapped = [(NSString *)cfsVal stringByFoldingWithOptions:NSCaseInsensitiveSearch
+                                                                            locale:[NSLocale currentLocale]];
+                
+                char *encoded = EncodedBytes((CFStringRef)sMapped, encoding);
+                
+                if (strlen(encoded) == 1) {
+                    pcf->SetTranslation(sCharacter[0], encoded[0]);
+                }
+                
+                delete []encoded;
+                CFRelease(cfsVal);
+            }
+            return pcf;
+        } else {
+            return new CaseFolderDBCS(encoding);
+        }
+		return 0;
+	}
+}
+
+
+//--------------------------------------------------------------------------------------------------
+
+/**
  * Case-fold the given string depending on the specified case mapping type.
- * Note: ScintillaCocoa exclusively works with Unicode. We don't even think about adding support for
- *       obsolete code page stuff.    
  */
 std::string ScintillaCocoa::CaseMapString(const std::string &s, int caseMapping)
 {
-  NSString* textToConvert = [NSString stringWithUTF8String: s.c_str()];
-  std::string result;
+  CFStringEncoding encoding = EncodingFromCharacterSet(IsUnicodeMode(),
+                                                       vs.styles[STYLE_DEFAULT].characterSet);
+  CFStringRef cfsVal = CFStringCreateWithBytes(kCFAllocatorDefault,
+                                               reinterpret_cast<const UInt8 *>(s.c_str()), 
+                                               s.length(), encoding, false);
+
+  NSString *sMapped;
   switch (caseMapping)
   {
     case cmUpper:
-      result = [[textToConvert uppercaseString] UTF8String];
+      sMapped = [(NSString *)cfsVal uppercaseString];
       break;
     case cmLower:
-      result = [[textToConvert lowercaseString] UTF8String];
+      sMapped = [(NSString *)cfsVal lowercaseString];
       break;
     default:
-      result = s;
+      sMapped = (NSString *)cfsVal;
   }
+
+  // Back to encoding
+  char *encoded = EncodedBytes((CFStringRef)sMapped, encoding);
+  std::string result(encoded);
+  delete []encoded;
+  CFRelease(cfsVal);
   return result;
 }
 
@@ -378,7 +529,12 @@ sptr_t ScintillaCocoa::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPar
       return reinterpret_cast<sptr_t>(this);
       
     case SCI_GRABFOCUS:
-      // TODO: implement it
+	  [[ContentView() window] makeFirstResponder:ContentView()];
+      break;
+
+    case SCI_SETBUFFEREDDRAW:
+      // Buffered drawing not supported on Cocoa 
+      bufferedDraw = false;
       break;
 
     case WM_UNICHAR: 
@@ -387,15 +543,15 @@ sptr_t ScintillaCocoa::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPar
       // performed.
       if (IsUnicodeMode())
       {
-        NSString* input = [[NSString stringWithCharacters: (const unichar*) &wParam length: 1] autorelease];
+        NSString* input = [NSString stringWithCharacters: (const unichar*) &wParam length: 1];
         const char* utf8 = [input UTF8String];
-        AddCharUTF((char*) utf8, strlen(utf8), false);
+        AddCharUTF((char*) utf8, static_cast<unsigned int>(strlen(utf8)), false);
         return 1;
       }
       return 0;
       
     default:
-      unsigned int r = ScintillaBase::WndProc(iMessage, wParam, lParam);
+      sptr_t r = ScintillaBase::WndProc(iMessage, wParam, lParam);
       
       return r;
   }
@@ -427,12 +583,11 @@ void ScintillaCocoa::SetTicking(bool on)
     if (timer.ticking)
     {
       // Scintilla ticks = milliseconds
-      // Using userInfo as flag to distinct between tick and idle timer.
-      NSTimer* tickTimer = [NSTimer scheduledTimerWithTimeInterval: timer.tickSize / 1000.0
-                                                            target: timerTarget
-                                                          selector: @selector(timerFired:)
-                                                          userInfo: nil
-                                                           repeats: YES];
+      tickTimer = [NSTimer scheduledTimerWithTimeInterval: timer.tickSize / 1000.0
+						   target: timerTarget
+						 selector: @selector(timerFired:)
+						 userInfo: nil
+						  repeats: YES];
       timer.tickerID = reinterpret_cast<TickerID>(tickTimer);
     }
     else
@@ -455,11 +610,11 @@ bool ScintillaCocoa::SetIdle(bool on)
     if (idler.state)
     {
       // Scintilla ticks = milliseconds
-      NSTimer* idleTimer = [NSTimer scheduledTimerWithTimeInterval: timer.tickSize / 1000.0
-                                                            target: timerTarget
-                                                          selector: @selector(idleTimerFired:)
-                                                          userInfo: nil
-                                                           repeats: YES];
+      idleTimer = [NSTimer scheduledTimerWithTimeInterval: timer.tickSize / 1000.0
+						   target: timerTarget
+						 selector: @selector(idleTimerFired:)
+						 userInfo: nil
+						  repeats: YES];
       idler.idlerID = reinterpret_cast<IdlerID>(idleTimer);
     }
     else
@@ -525,7 +680,7 @@ void ScintillaCocoa::Paste(bool forceRectangular)
     return;
   
   pdoc->BeginUndoAction();
-  ClearSelection();
+  ClearSelection(false);
   int length = selectedText.len - 1; // One less to avoid inserting the terminating 0 character.
   if (selectedText.rectangular)
   {
@@ -544,76 +699,97 @@ void ScintillaCocoa::Paste(bool forceRectangular)
 
 //--------------------------------------------------------------------------------------------------
 
-void ScintillaCocoa::CreateCallTipWindow(PRectangle rc)
-{
-/*
-  // create a calltip window
-  if (!ct.wCallTip.Created()) {
-    WindowClass windowClass = kHelpWindowClass;
-    WindowAttributes attributes = kWindowNoAttributes;
-    Rect contentBounds;
-    WindowRef outWindow;
-    
-    // convert PRectangle to Rect
-    // this adjustment gets the calltip window placed in the correct location relative
-    // to our editor window
-    Rect bounds;
-    OSStatus err;
-    err = GetWindowBounds( this->GetOwner(), kWindowGlobalPortRgn, &bounds );
-    assert( err == noErr );
-    contentBounds.top = rc.top + bounds.top;
-    contentBounds.bottom = rc.bottom + bounds.top;
-    contentBounds.right = rc.right + bounds.left;
-    contentBounds.left = rc.left + bounds.left;
-    
-    // create our calltip hiview
-    HIViewRef ctw = scintilla_calltip_new();
-    CallTip* objectPtr = &ct;
-    ScintillaCocoa* sciThis = this;
-    SetControlProperty( ctw, scintillaMacOSType, 0, sizeof( this ), &sciThis );
-    SetControlProperty( ctw, scintillaCallTipType, 0, sizeof( objectPtr ), &objectPtr );
-    
-    CreateNewWindow(windowClass, attributes, &contentBounds, &outWindow);
-    ControlRef root;
-    CreateRootControl(outWindow, &root);
-    
-    HIViewRef hiroot = HIViewGetRoot (outWindow);
-    HIViewAddSubview(hiroot, ctw);
-    
-    HIRect boundsRect;
-    HIViewGetFrame(hiroot, &boundsRect);
-    HIViewSetFrame( ctw, &boundsRect );
-    
-    // bind the size of the calltip to the size of it's container window
-    HILayoutInfo layout = {
-      kHILayoutInfoVersionZero,
-      {
-        { NULL, kHILayoutBindTop, 0 },
-        { NULL, kHILayoutBindLeft, 0 },
-        { NULL, kHILayoutBindBottom, 0 },
-        { NULL, kHILayoutBindRight, 0 }
-      },
-      {
-        { NULL, kHILayoutScaleAbsolute, 0 },
-        { NULL, kHILayoutScaleAbsolute, 0 }
-        
-      },
-      {
-        { NULL, kHILayoutPositionTop, 0 },
-        { NULL, kHILayoutPositionLeft, 0 }
-      }
-    };
-    HIViewSetLayoutInfo(ctw, &layout);
-    
-    ct.wCallTip = root;
-    ct.wDraw = ctw;
-    ct.wCallTip.SetWindow(outWindow);
-    HIViewSetVisible(ctw,true);
-    
-  }
-*/
+void ScintillaCocoa::CTPaint(void* gc, NSRect rc) {
+#pragma unused(rc)
+    Surface *surfaceWindow = Surface::Allocate(SC_TECHNOLOGY_DEFAULT);
+    if (surfaceWindow) {
+        surfaceWindow->Init(gc, wMain.GetID());
+        surfaceWindow->SetUnicodeMode(SC_CP_UTF8 == ct.codePage);
+        surfaceWindow->SetDBCSMode(ct.codePage);
+        ct.PaintCT(surfaceWindow);
+        surfaceWindow->Release();
+        delete surfaceWindow;
+    }
 }
 
+@interface CallTipView : NSControl {
+    ScintillaCocoa *sci;
+}
+
+@end
+
+@implementation CallTipView
+
+- (NSView*) initWithFrame: (NSRect) frame {
+	self = [super initWithFrame: frame];
+
+	if (self) {
+        sci = NULL;
+	}
+	
+	return self;
+}
+
+- (void) dealloc {
+	[super dealloc];
+}
+
+- (BOOL) isFlipped {
+	return YES;
+}
+
+- (void) setSci: (ScintillaCocoa *) sci_ {
+    sci = sci_;
+}
+
+- (void) drawRect: (NSRect) needsDisplayInRect {
+    if (sci) {
+        CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+        sci->CTPaint(context, needsDisplayInRect);
+    }
+}
+
+- (void) mouseDown: (NSEvent *) event {
+    if (sci) {
+        sci->CallTipMouseDown([event locationInWindow]);
+    }
+}
+
+// On OS X, only the key view should modify the cursor so the calltip can't.
+// This view does not become key so resetCursorRects never called.
+- (void) resetCursorRects {
+    //[super resetCursorRects];
+    //[self addCursorRect: [self bounds] cursor: [NSCursor arrowCursor]];
+}
+
+@end
+
+void ScintillaCocoa::CallTipMouseDown(NSPoint pt) {
+    NSRect rectBounds = [(NSView *)(ct.wDraw.GetID()) bounds];
+    Point location(pt.x, rectBounds.size.height - pt.y);
+    ct.MouseClick(location);
+    CallTipClick();
+}
+
+void ScintillaCocoa::CreateCallTipWindow(PRectangle rc) {
+    if (!ct.wCallTip.Created()) {
+        NSRect ctRect = NSMakeRect(rc.top,rc.bottom, rc.Width(), rc.Height());
+        NSWindow *callTip = [[NSWindow alloc] initWithContentRect: ctRect 
+                                                        styleMask: NSBorderlessWindowMask
+                                                          backing: NSBackingStoreBuffered
+                                                            defer: NO];
+        [callTip setLevel:NSFloatingWindowLevel];
+        [callTip setHasShadow:YES];
+        NSRect ctContent = NSMakeRect(0,0, rc.Width(), rc.Height());
+        CallTipView *caption = [[CallTipView alloc] initWithFrame: ctContent];
+        [caption setAutoresizingMask: NSViewWidthSizable | NSViewMaxYMargin];
+        [caption setSci: this];
+        [[callTip contentView] addSubview: caption];
+        [callTip orderFront:caption];
+        ct.wCallTip = callTip;
+        ct.wDraw = caption;
+    }
+}
 
 void ScintillaCocoa::AddToPopUp(const char *label, int cmd, bool enabled)
 {
@@ -622,15 +798,15 @@ void ScintillaCocoa::AddToPopUp(const char *label, int cmd, bool enabled)
   [menu setOwner: this];
   [menu setAutoenablesItems: NO];
   
-  if (cmd == 0)
+  if (cmd == 0) {
     item = [NSMenuItem separatorItem];
-  else
-    item = [[NSMenuItem alloc] init];
-  
+  } else {
+    item = [[[NSMenuItem alloc] init] autorelease];
+    [item setTitle: [NSString stringWithUTF8String: label]];
+  }
   [item setTarget: menu];
   [item setAction: @selector(handleCommand:)];
   [item setTag: cmd];
-  [item setTitle: [NSString stringWithUTF8String: label]];
   [item setEnabled: enabled];
   
   [menu addItem: item];
@@ -660,7 +836,7 @@ NSPoint ScintillaCocoa::GetCaretPosition()
 
 // -------------------------------------------------------------------------------------------------
 
-#pragma segment Drag
+#pragma mark Drag
 
 /**
  * Triggered by the tick timer on a regular basis to scroll the content during a drag operation.
@@ -721,13 +897,84 @@ void ScintillaCocoa::StartDrag()
   CopySelectionRange(&selectedText);
   SetPasteboardData(pasteboard, selectedText);
   
+  // calculate the bounds of the selection
+  PRectangle client = GetTextRectangle();
+  int selStart = sel.RangeMain().Start().Position();
+  int selEnd = sel.RangeMain().End().Position();
+  int startLine = pdoc->LineFromPosition(selStart);
+  int endLine = pdoc->LineFromPosition(selEnd);
+  Point pt;
+  long startPos, endPos, ep;
+  Rect rcSel;
+  
+  if (startLine==endLine && WndProc(SCI_GETWRAPMODE, 0, 0) != SC_WRAP_NONE) {
+    // Komodo bug http://bugs.activestate.com/show_bug.cgi?id=87571
+    // Scintilla bug https://sourceforge.net/tracker/?func=detail&atid=102439&aid=3040200&group_id=2439
+    // If the width on a wrapped-line selection is negative,
+    // find a better bounding rectangle.
+    
+    Point ptStart, ptEnd;
+    startPos = WndProc(SCI_GETLINESELSTARTPOSITION, startLine, 0);
+    endPos =   WndProc(SCI_GETLINESELENDPOSITION,   startLine, 0);
+    // step back a position if we're counting the newline
+    ep =       WndProc(SCI_GETLINEENDPOSITION,      startLine, 0);
+    if (endPos > ep) endPos = ep;
+    ptStart = LocationFromPosition(static_cast<int>(startPos));
+    ptEnd =   LocationFromPosition(static_cast<int>(endPos));
+    if (ptStart.y == ptEnd.y) {
+      // We're just selecting part of one visible line
+      rcSel.left = ptStart.x;
+      rcSel.right = ptEnd.x < client.right ? ptEnd.x : client.right;
+    } else {
+      // Find the bounding box.
+      startPos = WndProc(SCI_POSITIONFROMLINE, startLine, 0);
+      rcSel.left = LocationFromPosition(static_cast<int>(startPos)).x;
+      rcSel.right = client.right;
+    }
+    rcSel.top = ptStart.y;
+    rcSel.bottom = ptEnd.y + vs.lineHeight;
+    if (rcSel.bottom > client.bottom) {
+      rcSel.bottom = client.bottom;
+    }
+  } else {
+    rcSel.top = rcSel.bottom = rcSel.right = rcSel.left = -1;
+    for (int l = startLine; l <= endLine; l++) {
+      startPos = WndProc(SCI_GETLINESELSTARTPOSITION, l, 0);
+      endPos = WndProc(SCI_GETLINESELENDPOSITION, l, 0);
+      if (endPos == startPos) continue;
+      // step back a position if we're counting the newline
+      ep = WndProc(SCI_GETLINEENDPOSITION, l, 0);
+      if (endPos > ep) endPos = ep;
+      pt = LocationFromPosition(static_cast<int>(startPos)); // top left of line selection
+      if (pt.x < rcSel.left || rcSel.left < 0) rcSel.left = pt.x;
+      if (pt.y < rcSel.top || rcSel.top < 0) rcSel.top = pt.y;
+      pt = LocationFromPosition(static_cast<int>(endPos)); // top right of line selection
+      pt.y += vs.lineHeight; // get to the bottom of the line
+      if (pt.x > rcSel.right || rcSel.right < 0) {
+        if (pt.x > client.right)
+          rcSel.right = client.right;
+        else
+          rcSel.right = pt.x;
+      }
+      if (pt.y > rcSel.bottom || rcSel.bottom < 0) {
+        if (pt.y > client.bottom)
+          rcSel.bottom = client.bottom;
+        else
+          rcSel.bottom = pt.y;
+      }
+    }
+  }
+  // must convert to global coordinates for drag regions, but also save the
+  // image rectangle for further calculations and copy operations
+  PRectangle localRectangle = PRectangle(rcSel.left, rcSel.top, rcSel.right, rcSel.bottom);
+    
   // Prepare drag image.
-  PRectangle localRectangle = RectangleFromRange(sel.RangeMain().Start().Position(), sel.RangeMain().End().Position());
   NSRect selectionRectangle = PRectangleToNSRect(localRectangle);
   
   NSView* content = ContentView();
+    
+#if 1
 
-#if 0 // TODO: fix initialization of the drag image with CGImageRef.
   // To get a bitmap of the text we're dragging, we just use Paint on a pixmap surface.
   SurfaceImpl *sw = new SurfaceImpl();
   SurfaceImpl *pixmap = NULL;
@@ -739,19 +986,22 @@ void ScintillaCocoa::StartDrag()
     pixmap = new SurfaceImpl();
     if (pixmap)
     {
-      PRectangle client = GetClientRectangle();
       PRectangle imageRect = NSRectToPRectangle(selectionRectangle);
       paintState = painting;
-      //sw->InitPixMap(client.Width(), client.Height(), NULL, NULL);
-      sw->InitPixMap(imageRect.Width(), imageRect.Height(), NULL, NULL);
+      sw->InitPixMap(client.Width(), client.Height(), NULL, NULL);
       paintingAllText = true;
-      Paint(sw, imageRect);
+      // Have to create a new context and make current as text drawing goes 
+      // to the current context, not a passed context.
+      CGContextRef gcsw = sw->GetContext(); 
+      NSGraphicsContext *nsgc = [NSGraphicsContext graphicsContextWithGraphicsPort: gcsw 
+                                                                           flipped: YES];
+      [NSGraphicsContext setCurrentContext:nsgc];
+      Paint(sw, client);
       paintState = notPainting;
       
       pixmap->InitPixMap(imageRect.Width(), imageRect.Height(), NULL, NULL);
       
       CGContextRef gc = pixmap->GetContext(); 
-      
       // To make Paint() work on a bitmap, we have to flip our coordinates and translate the origin
       CGContextTranslateCTM(gc, 0, imageRect.Height());
       CGContextScaleCTM(gc, 1.0, -1.0);
@@ -769,7 +1019,9 @@ void ScintillaCocoa::StartDrag()
   NSBitmapImageRep* bitmap = NULL;
   if (pixmap)
   {
-    bitmap = [[[NSBitmapImageRep alloc] initWithCGImage: pixmap->GetImage()] autorelease];
+    CGImageRef imagePixmap = pixmap->GetImage();
+    bitmap = [[[NSBitmapImageRep alloc] initWithCGImage: imagePixmap] autorelease];
+    CGImageRelease(imagePixmap);
     pixmap->Release();
     delete pixmap;
   }
@@ -852,6 +1104,7 @@ NSDragOperation ScintillaCocoa::DraggingUpdated(id <NSDraggingInfo> info)
  */
 void ScintillaCocoa::DraggingExited(id <NSDraggingInfo> info)
 {
+#pragma unused(info)
   SetDragPosition(SelectionPosition(invalidPosition));
   inDragDrop = ddNone;
 }
@@ -895,8 +1148,11 @@ void ScintillaCocoa::SetPasteboardData(NSPasteboard* board, const SelectionText 
   if (selectedText.len == 0)
     return;
 
-  NSString *string;
-  string = [NSString stringWithUTF8String: selectedText.s];
+  CFStringEncoding encoding = EncodingFromCharacterSet(selectedText.codePage == SC_CP_UTF8,
+                                                       selectedText.characterSet);
+  CFStringRef cfsVal = CFStringCreateWithBytes(kCFAllocatorDefault,
+                                               reinterpret_cast<const UInt8 *>(selectedText.s), 
+                                               selectedText.len-1, encoding, false);
 
   [board declareTypes:[NSArray arrayWithObjects:
                        NSStringPboardType,
@@ -906,11 +1162,12 @@ void ScintillaCocoa::SetPasteboardData(NSPasteboard* board, const SelectionText 
   if (selectedText.rectangular)
   {
     // This is specific to scintilla, allows us to drag rectangular selections around the document.
-    [board setString: string forType: ScintillaRecPboardType];
+    [board setString: (NSString *)cfsVal forType: ScintillaRecPboardType];
   }
   
-  [board setString: string forType: NSStringPboardType];
-  
+  [board setString: (NSString *)cfsVal forType: NSStringPboardType];
+
+  CFRelease(cfsVal);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -930,9 +1187,26 @@ bool ScintillaCocoa::GetPasteboardData(NSPasteboard* board, SelectionText* selec
   {
     if (selectedText != nil)
     {
-      char* text = (char*) [data UTF8String];
+      CFStringEncoding encoding = EncodingFromCharacterSet(IsUnicodeMode(),
+                                                           vs.styles[STYLE_DEFAULT].characterSet);
+      CFRange rangeAll = {0, [data length]};
+      CFIndex usedLen = 0;
+      CFStringGetBytes((CFStringRef)data, rangeAll, encoding, '?',
+                       false, NULL, 0, &usedLen);
+
+      UInt8 *buffer = new UInt8[usedLen];
+    
+      CFStringGetBytes((CFStringRef)data, rangeAll, encoding, '?',
+                       false, buffer,usedLen, NULL);
+
       bool rectangular = bestType == ScintillaRecPboardType;
-      selectedText->Copy(text, strlen(text) + 1, SC_CP_UTF8, SC_CHARSET_DEFAULT , rectangular, false);
+
+      int len = static_cast<int>(usedLen);
+      char *dest = Document::TransformLineEnds(&len, (char *)buffer, len, pdoc->eolMode);
+
+      selectedText->Set(dest, len+1, pdoc->dbcsCodePage, 
+                         vs.styles[STYLE_DEFAULT].characterSet , rectangular, false);
+      delete []buffer;
     }
     return true;
   }
@@ -975,7 +1249,7 @@ void ScintillaCocoa::SyncPaint(void* gc, PRectangle rc)
   rcPaint = rc;
   PRectangle rcText = GetTextRectangle();
   paintingAllText = rcPaint.Contains(rcText);
-  Surface *sw = Surface::Allocate();
+  Surface *sw = Surface::Allocate(SC_TECHNOLOGY_DEFAULT);
   if (sw)
   {
     sw->Init(gc, wMain.GetID());
@@ -992,6 +1266,51 @@ void ScintillaCocoa::SyncPaint(void* gc, PRectangle rc)
     delete sw;
   }
   paintState = notPainting;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * Scrolls the pixels in the window some number of lines.
+ * Invalidates the pixels scrolled into view.
+ */
+void ScintillaCocoa::ScrollText(int linesToMove)
+{
+	// Move those pixels
+	NSView *content = ContentView();
+    
+	[content lockFocus];
+	int diff = vs.lineHeight * linesToMove;
+	PRectangle textRect = GetTextRectangle();
+	// Include margins as they must scroll
+	textRect.left = 0;
+	NSRect textRectangle = PRectangleToNSRect(textRect);
+	NSPoint destPoint = textRectangle.origin;
+    destPoint.y += diff;
+	NSCopyBits(0, textRectangle, destPoint);
+
+	// Paint them nice
+	NSRect redrawRectangle = textRectangle;
+	if (linesToMove < 0) {
+		// Repaint bottom
+		redrawRectangle.origin.y = redrawRectangle.origin.y + redrawRectangle.size.height + diff;
+		redrawRectangle.size.height = -diff;
+	} else {
+		// Repaint top
+		redrawRectangle.size.height = diff;
+	}
+	
+	[content drawRect: redrawRectangle];
+	[content unlockFocus];
+
+	// If no flush done here then multiple scrolls will get buffered and screen 
+	// will only update a few times a second.
+	//[[content window] flushWindow];
+    // However, doing the flush leads to the caret updating as a separate operation
+    // which looks bad when scrolling by holding down the down arrow key.
+
+	// Could invalidate instead of synchronous draw but that may not be as smooth
+	//[content setNeedsDisplayInRect: redrawRectangle];
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1033,8 +1352,9 @@ void ScintillaCocoa::SetHorizontalScrollPos()
  */
 bool ScintillaCocoa::ModifyScrollBars(int nMax, int nPage)
 {
+#pragma unused(nPage)
   // Input values are given in lines, not pixels, so we have to convert.
-  int lineHeight = WndProc(SCI_TEXTHEIGHT, 0, 0);
+  int lineHeight = static_cast<int>(WndProc(SCI_TEXTHEIGHT, 0, 0));
   PRectangle bounds = GetTextRectangle();
   ScintillaView* topContainer = TopContainer();
 
@@ -1105,25 +1425,29 @@ void ScintillaCocoa::DoScroll(float position, NSScrollerPart part, bool horizont
   }
   else
   {
-    // VerticalScrolling is by line.
-    int topLine = (int) (position * MaxScrollPos());
-    int page = LinesOnScreen();
+    // VerticalScrolling is by line. If the user is scrolling using the knob we can directly
+    // set the new scroll position. Otherwise we have to compute it first.
+    if (part == NSScrollerKnob)
+      ScrollTo(position * MaxScrollPos(), false);
+    else
+    {
     switch (part)
     {
       case NSScrollerDecrementLine:
-        topLine--;
+          ScrollTo(topLine - 1, true);
         break;
       case NSScrollerDecrementPage:
-        topLine -= page;
+          ScrollTo(topLine - LinesOnScreen(), true);
         break;
       case NSScrollerIncrementLine:
-        topLine++;
+          ScrollTo(topLine + 1, true);
         break;
       case NSScrollerIncrementPage:
-        topLine += page;
+          ScrollTo(topLine + LinesOnScreen(), true);
         break;
     };
-    ScrollTo(topLine, true);
+      
+    }
   }
 }
 
@@ -1149,7 +1473,8 @@ void ScintillaCocoa::RegisterNotifyCallback(intptr_t windowid, SciNotifyFunc cal
 void ScintillaCocoa::NotifyChange()
 {
   if (notifyProc != NULL)
-    notifyProc(notifyObj, WM_COMMAND, (uintptr_t) (SCEN_CHANGE << 16), (uintptr_t) this);
+    notifyProc(notifyObj, WM_COMMAND, Platform::LongFromTwoShorts(GetCtrlID(), SCEN_CHANGE),
+	       (uintptr_t) this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1157,7 +1482,8 @@ void ScintillaCocoa::NotifyChange()
 void ScintillaCocoa::NotifyFocus(bool focus)
 {
   if (notifyProc != NULL)
-    notifyProc(notifyObj, WM_COMMAND, (uintptr_t) ((focus ? SCEN_SETFOCUS : SCEN_KILLFOCUS) << 16), (uintptr_t) this);
+    notifyProc(notifyObj, WM_COMMAND, Platform::LongFromTwoShorts(GetCtrlID(), (focus ? SCEN_SETFOCUS : SCEN_KILLFOCUS)),
+	       (uintptr_t) this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1173,7 +1499,7 @@ void ScintillaCocoa::NotifyParent(SCNotification scn)
   if (notifyProc != NULL)
   {
     scn.nmhdr.hwndFrom = (void*) this;
-    scn.nmhdr.idFrom = (unsigned int) wMain.GetID();
+    scn.nmhdr.idFrom = GetCtrlID();
     notifyProc(notifyObj, WM_NOTIFY, (uintptr_t) 0, (uintptr_t) &scn);
   }
 }
@@ -1214,6 +1540,7 @@ bool ScintillaCocoa::CanRedo()
 
 void ScintillaCocoa::TimerFired(NSTimer* timer)
 {
+#pragma unused(timer)
   Tick();
   DragScroll();
 }
@@ -1232,7 +1559,7 @@ void ScintillaCocoa::IdleTimerFired()
 /**
  * Main entry point for drawing the control.
  *
- * @param rect The area to paint, given in the sender's coordinate.
+ * @param rect The area to paint, given in the sender's coordinate system.
  * @param gc The context we can use to paint.
  */
 void ScintillaCocoa::Draw(NSRect rect, CGContextRef gc)
@@ -1308,16 +1635,20 @@ bool ScintillaCocoa::KeyboardInput(NSEvent* event)
   bool handled = false;
   
   // Handle each entry individually. Usually we only have one entry anway.
-  for (int i = 0; i < input.length; i++)
+  for (size_t i = 0; i < input.length; i++)
   {
     const UniChar originalKey = [input characterAtIndex: i];
     UniChar key = KeyTranslate(originalKey);
     
     bool consumed = false; // Consumed as command?
     
-    // Signal command as control + alt. This leaves us without command + control and command + alt
-    // but that's what we get when we have a modifier key more than other platforms.
-    if (KeyDown(key, shift, control || command, alt || command, &consumed))
+    // Signal Control as SCMOD_META
+    int modifierKeys = 
+	  (shift ? SCI_SHIFT : 0) | 
+	  (command ? SCI_CTRL : 0) |
+	  (alt ? SCI_ALT : 0) |
+	  (control ? SCI_META : 0);
+    if (KeyDownWithModifiers(key, modifierKeys, &consumed))
       handled = true;
     if (consumed)
       handled = true;
@@ -1333,9 +1664,21 @@ bool ScintillaCocoa::KeyboardInput(NSEvent* event)
  */
 int ScintillaCocoa::InsertText(NSString* input)
 {
-  const char* utf8 = [input UTF8String];
-  AddCharUTF((char*) utf8, strlen(utf8), false);
-  return true;
+  CFStringEncoding encoding = EncodingFromCharacterSet(IsUnicodeMode(),
+                                                         vs.styles[STYLE_DEFAULT].characterSet);
+  CFRange rangeAll = {0, [input length]};
+  CFIndex usedLen = 0;
+  CFStringGetBytes((CFStringRef)input, rangeAll, encoding, '?',
+                   false, NULL, 0, &usedLen);
+    
+  UInt8 *buffer = new UInt8[usedLen];
+    
+  CFStringGetBytes((CFStringRef)input, rangeAll, encoding, '?',
+                     false, buffer,usedLen, NULL);
+    
+  AddCharUTF((char*) buffer, static_cast<unsigned int>(usedLen), false);
+  delete []buffer;
+  return static_cast<int>(usedLen);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1357,7 +1700,7 @@ void ScintillaCocoa::MouseEntered(NSEvent* event)
 
 //--------------------------------------------------------------------------------------------------
 
-void ScintillaCocoa::MouseExited(NSEvent* event)
+void ScintillaCocoa::MouseExited(NSEvent* /* event */)
 {
   // Nothing to do here.
 }
@@ -1370,9 +1713,9 @@ void ScintillaCocoa::MouseDown(NSEvent* event)
   NSTimeInterval time = [event timestamp];
   bool command = ([event modifierFlags] & NSCommandKeyMask) != 0;
   bool shift = ([event modifierFlags] & NSShiftKeyMask) != 0;
-  bool control = ([event modifierFlags] & NSControlKeyMask) != 0;
+  bool alt = ([event modifierFlags] & NSAlternateKeyMask) != 0;
     
-  ButtonDown(Point(location.x, location.y), (int) (time * 1000), shift, control, command);
+  ButtonDown(Point(location.x, location.y), (int) (time * 1000), shift, command, alt);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1461,7 +1804,7 @@ void ScintillaCocoa::Redo()
 /**
  * Creates and returns a popup menu, which is then displayed by the Cocoa framework.
  */
-NSMenu* ScintillaCocoa::CreateContextMenu(NSEvent* event)
+NSMenu* ScintillaCocoa::CreateContextMenu(NSEvent* /* event */)
 {
   // Call ScintillaBase to create the context menu.
   ContextMenu(Point(0, 0));
@@ -1477,24 +1820,23 @@ NSMenu* ScintillaCocoa::CreateContextMenu(NSEvent* event)
  */
 void ScintillaCocoa::HandleCommand(NSInteger command)
 {
-  Command(command);
+  Command(static_cast<int>(command));
 }
 
 //--------------------------------------------------------------------------------------------------
 
-//OSStatus ScintillaCocoa::ActiveStateChanged()
-//{
-//  // If the window is being deactivated, lose the focus and turn off the ticking
-//  if ( ! this->IsActive() ) {
-//    DropCaret();
-//    //SetFocusState( false );
-//    SetTicking( false );
-//  } else {
-//    ShowCaretAtCurrentPosition();
-//  }
-//  return noErr;
-//}
-//
+void ScintillaCocoa::ActiveStateChanged(bool isActive)
+{
+  // If the window is being deactivated, lose the focus and turn off the ticking
+  if (!isActive) {
+    DropCaret();
+    //SetFocusState( false );
+    SetTicking( false );
+  } else {
+    ShowCaretAtCurrentPosition();
+  }
+}
+
 
 //--------------------------------------------------------------------------------------------------
 

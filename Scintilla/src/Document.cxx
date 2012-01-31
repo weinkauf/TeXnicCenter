@@ -2,7 +2,7 @@
 /** @file Document.cxx
  ** Text document that handles notifications, DBCS, styling, words and end of line.
  **/
-// Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2011 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
@@ -13,14 +13,6 @@
 
 #include <string>
 #include <vector>
-
-// With Borland C++ 5.5, including <string> includes Windows.h leading to defining
-// FindText to FindTextA which makes calls here to Document::FindText fail.
-#ifdef __BORLANDC__
-#ifdef FindText
-#undef FindText
-#endif
-#endif
 
 #include "Platform.h"
 
@@ -95,10 +87,10 @@ void LexInterface::Colourise(int start, int end) {
 
 Document::Document() {
 	refCount = 0;
-#ifdef unix
-	eolMode = SC_EOL_LF;
-#else
+#ifdef _WIN32
 	eolMode = SC_EOL_CRLF;
+#else
+	eolMode = SC_EOL_LF;
 #endif
 	dbcsCodePage = 0;
 	stylingBits = 5;
@@ -177,7 +169,7 @@ int Document::AddRef() {
 
 // Decrease reference count and return its previous value.
 // Delete the document if reference count reaches zero.
-int Document::Release() {
+int SCI_METHOD Document::Release() {
 	int curRefCount = --refCount;
 	if (curRefCount == 0)
 		delete this;
@@ -191,6 +183,10 @@ void Document::SetSavePoint() {
 
 int Document::GetMark(int line) {
 	return static_cast<LineMarkers *>(perLineData[ldMarkers])->MarkValue(line);
+}
+
+int Document::MarkerNext(int lineStart, int mask) const {
+	return static_cast<LineMarkers *>(perLineData[ldMarkers])->MarkerNext(lineStart, mask);
 }
 
 int Document::AddMark(int line, int markerNum) {
@@ -324,14 +320,17 @@ static bool IsSubordinate(int levelStart, int levelTry) {
 		return (levelStart & SC_FOLDLEVELNUMBERMASK) < (levelTry & SC_FOLDLEVELNUMBERMASK);
 }
 
-int Document::GetLastChild(int lineParent, int level) {
+int Document::GetLastChild(int lineParent, int level, int lastLine) {
 	if (level == -1)
 		level = GetLevel(lineParent) & SC_FOLDLEVELNUMBERMASK;
 	int maxLine = LinesTotal();
+	int lookLastLine = (lastLine != -1) ? Platform::Minimum(LinesTotal() - 1, lastLine) : -1;
 	int lineMaxSubord = lineParent;
 	while (lineMaxSubord < maxLine - 1) {
 		EnsureStyledTo(LineStart(lineMaxSubord + 2));
 		if (!IsSubordinate(level, GetLevel(lineMaxSubord + 1)))
+			break;
+		if ((lookLastLine != -1) && (lineMaxSubord >= lookLastLine) && !(GetLevel(lineMaxSubord) & SC_FOLDLEVELWHITEFLAG))
 			break;
 		lineMaxSubord++;
 	}
@@ -361,6 +360,76 @@ int Document::GetFoldParent(int line) {
 	} else {
 		return -1;
 	}
+}
+
+void Document::GetHighlightDelimiters(HighlightDelimiter &highlightDelimiter, int line, int lastLine) {
+	int level = GetLevel(line);
+	int lookLastLine = Platform::Maximum(line, lastLine) + 1;
+
+	int lookLine = line;
+	int lookLineLevel = level;
+	int lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK;
+	while ((lookLine > 0) && ((lookLineLevel & SC_FOLDLEVELWHITEFLAG) || 
+		((lookLineLevel & SC_FOLDLEVELHEADERFLAG) && (lookLineLevelNum >= (GetLevel(lookLine + 1) & SC_FOLDLEVELNUMBERMASK))))) {
+		lookLineLevel = GetLevel(--lookLine);
+		lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK;
+	}
+
+	int beginFoldBlock = (lookLineLevel & SC_FOLDLEVELHEADERFLAG) ? lookLine : GetFoldParent(lookLine);
+	if (beginFoldBlock == -1) {
+		highlightDelimiter.Clear();
+		return;
+	}
+
+	int endFoldBlock = GetLastChild(beginFoldBlock, -1, lookLastLine);
+	int firstChangeableLineBefore = -1;
+	if (endFoldBlock < line) {
+		lookLine = beginFoldBlock - 1;
+		lookLineLevel = GetLevel(lookLine);
+		lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK;
+		while ((lookLine >= 0) && (lookLineLevelNum >= SC_FOLDLEVELBASE)) {
+			if (lookLineLevel & SC_FOLDLEVELHEADERFLAG) {
+				if (GetLastChild(lookLine, -1, lookLastLine) == line) {
+					beginFoldBlock = lookLine;
+					endFoldBlock = line;
+					firstChangeableLineBefore = line - 1;
+				}
+			}
+			if ((lookLine > 0) && (lookLineLevelNum == SC_FOLDLEVELBASE) && ((GetLevel(lookLine - 1) & SC_FOLDLEVELNUMBERMASK) > lookLineLevelNum))
+				break;
+			lookLineLevel = GetLevel(--lookLine);
+			lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK;
+		}
+	}
+	if (firstChangeableLineBefore == -1) {
+		for (lookLine = line - 1, lookLineLevel = GetLevel(lookLine), lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK; 
+			lookLine >= beginFoldBlock; 
+			lookLineLevel = GetLevel(--lookLine), lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK) {
+			if ((lookLineLevel & SC_FOLDLEVELWHITEFLAG) || (lookLineLevelNum > (level & SC_FOLDLEVELNUMBERMASK))) {
+				firstChangeableLineBefore = lookLine;
+				break;
+			}
+		}
+	}
+	if (firstChangeableLineBefore == -1)
+		firstChangeableLineBefore = beginFoldBlock - 1;
+
+	int firstChangeableLineAfter = -1;
+	for (lookLine = line + 1, lookLineLevel = GetLevel(lookLine), lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK; 
+		lookLine <= endFoldBlock; 
+		lookLineLevel = GetLevel(++lookLine), lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK) {
+		if ((lookLineLevel & SC_FOLDLEVELHEADERFLAG) && (lookLineLevelNum < (GetLevel(lookLine + 1) & SC_FOLDLEVELNUMBERMASK))) {
+			firstChangeableLineAfter = lookLine;
+			break;
+		}
+	}
+	if (firstChangeableLineAfter == -1)
+		firstChangeableLineAfter = endFoldBlock + 1;
+
+	highlightDelimiter.beginFoldBlock = beginFoldBlock;
+	highlightDelimiter.endFoldBlock = endFoldBlock;
+	highlightDelimiter.firstChangeableLineBefore = firstChangeableLineBefore;
+	highlightDelimiter.firstChangeableLineAfter = firstChangeableLineAfter;
 }
 
 int Document::ClampPositionIntoDocument(int pos) {
@@ -552,7 +621,7 @@ int Document::NextPosition(int pos, int moveDir) const {
 				// See http://msdn.microsoft.com/en-us/library/cc194792%28v=MSDN.10%29.aspx
 				// http://msdn.microsoft.com/en-us/library/cc194790.aspx
 				if ((pos - 1) <= posStartLine) {
-					return posStartLine - 1;
+					return pos - 1;
 				} else if (IsDBCSLeadByte(cb.CharAt(pos - 1))) {
 					// Must actually be trail byte
 					return pos - 2;
@@ -597,7 +666,8 @@ bool SCI_METHOD Document::IsDBCSLeadByte(char ch) const {
 		case 932:
 			// Shift_jis
 			return ((uch >= 0x81) && (uch <= 0x9F)) ||
-				((uch >= 0xE0) && (uch <= 0xEF));
+				((uch >= 0xE0) && (uch <= 0xFC));
+				// Lead bytes F0 to FC may be a Microsoft addition. 
 		case 936:
 			// GBK
 			return (uch >= 0x81) && (uch <= 0xFE);
@@ -615,6 +685,55 @@ bool SCI_METHOD Document::IsDBCSLeadByte(char ch) const {
 				((uch >= 0xE0) && (uch <= 0xF9));
 	}
 	return false;
+}
+
+inline bool IsSpaceOrTab(int ch) {
+	return ch == ' ' || ch == '\t';
+}
+
+// Need to break text into segments near lengthSegment but taking into
+// account the encoding to not break inside a UTF-8 or DBCS character
+// and also trying to avoid breaking inside a pair of combining characters.
+// The segment length must always be long enough (more than 4 bytes)
+// so that there will be at least one whole character to make a segment.
+// For UTF-8, text must consist only of valid whole characters.
+// In preference order from best to worst:
+//   1) Break after space
+//   2) Break before punctuation
+//   3) Break after whole character
+
+int Document::SafeSegment(const char *text, int length, int lengthSegment) {
+	if (length <= lengthSegment)
+		return length;
+	int lastSpaceBreak = -1;
+	int lastPunctuationBreak = -1;
+	int lastEncodingAllowedBreak = -1;
+	for (int j=0; j < lengthSegment;) {
+		unsigned char ch = static_cast<unsigned char>(text[j]);
+		if (j > 0) {
+			if (IsSpaceOrTab(text[j - 1]) && !IsSpaceOrTab(text[j])) {
+				lastSpaceBreak = j;
+			}
+			if (ch < 'A') {
+				lastPunctuationBreak = j;
+			}
+		}
+		lastEncodingAllowedBreak = j;
+
+		if (dbcsCodePage == SC_CP_UTF8) {
+			j += (ch < 0x80) ? 1 : BytesFromLead(ch);
+		} else if (dbcsCodePage) {
+			j += IsDBCSLeadByte(ch) ? 2 : 1;
+		} else {
+			j++;
+		}
+	}
+	if (lastSpaceBreak >= 0) {
+		return lastSpaceBreak;
+	} else if (lastPunctuationBreak >= 0) {
+		return lastPunctuationBreak;
+	}
+	return lastEncodingAllowedBreak;
 }
 
 void Document::ModifiedAt(int pos) {
@@ -704,6 +823,22 @@ bool Document::InsertString(int position, const char *s, int insertLength) {
 		enteredModification--;
 	}
 	return !cb.IsReadOnly();
+}
+
+int SCI_METHOD Document::AddData(char *data, int length) {
+	try {
+		int position = Length();
+		InsertString(position,data, length);
+	} catch (std::bad_alloc &) {
+		return SC_STATUS_BADALLOC;
+	} catch (...) {
+		return SC_STATUS_FAILURE;
+	}
+	return 0;
+}
+
+void * SCI_METHOD Document::ConvertToDocument() {
+	return this;
 }
 
 int Document::Undo() {
@@ -841,7 +976,7 @@ bool Document::InsertChar(int pos, char ch) {
  * Insert a null terminated string.
  */
 bool Document::InsertCString(int position, const char *s) {
-	return InsertString(position, s, strlen(s));
+	return InsertString(position, s, static_cast<int>(strlen(s)));
 }
 
 void Document::ChangeChar(int pos, char ch) {
@@ -959,6 +1094,20 @@ int Document::GetColumn(int pos) {
 	return column;
 }
 
+int Document::CountCharacters(int startPos, int endPos) {
+	startPos = MovePositionOutsideChar(startPos, 1, false);
+	endPos = MovePositionOutsideChar(endPos, -1, false);
+	int count = 0;
+	int i = startPos;
+	while (i < endPos) {
+		count++;
+		if (IsCrLf(i))
+			i++;
+		i = NextPosition(i, 1);
+	}
+	return count;
+}
+
 int Document::FindColumn(int line, int column) {
 	int position = LineStart(line);
 	if ((line >= 0) && (line < LinesTotal())) {
@@ -998,17 +1147,17 @@ void Document::Indent(bool forwards, int lineBottom, int lineTop) {
 // Convert line endings for a piece of text to a particular mode.
 // Stop at len or when a NUL is found.
 // Caller must delete the returned pointer.
-char *Document::TransformLineEnds(int *pLenOut, const char *s, size_t len, int eolMode) {
+char *Document::TransformLineEnds(int *pLenOut, const char *s, size_t len, int eolModeWanted) {
 	char *dest = new char[2 * len + 1];
 	const char *sptr = s;
 	char *dptr = dest;
 	for (size_t i = 0; (i < len) && (*sptr != '\0'); i++) {
 		if (*sptr == '\n' || *sptr == '\r') {
-			if (eolMode == SC_EOL_CR) {
+			if (eolModeWanted == SC_EOL_CR) {
 				*dptr++ = '\r';
-			} else if (eolMode == SC_EOL_LF) {
+			} else if (eolModeWanted == SC_EOL_LF) {
 				*dptr++ = '\n';
-			} else { // eolMode == SC_EOL_CRLF
+			} else { // eolModeWanted == SC_EOL_CRLF
 				*dptr++ = '\r';
 				*dptr++ = '\n';
 			}
@@ -1240,7 +1389,7 @@ size_t Document::ExtractChar(int pos, char *bytes) {
 	size_t widthChar = UTF8CharLength(ch);
 	bytes[0] = ch;
 	for (size_t i=1; i<widthChar; i++) {
-		bytes[i] = cb.CharAt(pos+i);
+		bytes[i] = cb.CharAt(static_cast<int>(pos+i));
 		if (!GoodTrailByte(static_cast<unsigned char>(bytes[i]))) { // Bad byte
 			widthChar = 1;
 		}
@@ -1312,13 +1461,17 @@ long Document::FindText(int minPos, int maxPos, const char *search,
 		const int endPos = MovePositionOutsideChar(maxPos, increment, false);
 
 		// Compute actual search ranges needed
-		const int lengthFind = (*length == -1) ? static_cast<int>(strlen(search)) : *length;
-		const int endSearch = (startPos <= endPos) ? endPos - lengthFind + 1 : endPos;
+		const int lengthFind = *length;
 
 		//Platform::DebugPrintf("Find %d %d %s %d\n", startPos, endPos, ft->lpstrText, lengthFind);
 		const int limitPos = Platform::Maximum(startPos, endPos);
-		int pos = forward ? startPos : (startPos - 1);
+		int pos = startPos;
+		if (!forward) {
+			// Back all of a character
+			pos = NextPosition(pos, increment);
+		}
 		if (caseSensitive) {
+			const int endSearch = (startPos <= endPos) ? endPos - lengthFind + 1 : endPos;
 			while (forward ? (pos < endSearch) : (pos >= endSearch)) {
 				bool found = (pos + lengthFind) <= limitPos;
 				for (int indexSearch = 0; (indexSearch < lengthFind) && found; indexSearch++) {
@@ -1334,8 +1487,9 @@ long Document::FindText(int minPos, int maxPos, const char *search,
 			const size_t maxBytesCharacter = 4;
 			const size_t maxFoldingExpansion = 4;
 			std::vector<char> searchThing(lengthFind * maxBytesCharacter * maxFoldingExpansion + 1);
-			const int lenSearch = pcf->Fold(&searchThing[0], searchThing.size(), search, lengthFind);
-			while (forward ? (pos < endSearch) : (pos >= endSearch)) {
+			const int lenSearch = static_cast<int>(
+				pcf->Fold(&searchThing[0], searchThing.size(), search, lengthFind));
+			while (forward ? (pos < endPos) : (pos >= endPos)) {
 				int widthFirstCharacter = 0;
 				int indexDocument = 0;
 				int indexSearch = 0;
@@ -1345,11 +1499,13 @@ long Document::FindText(int minPos, int maxPos, const char *search,
 					(indexSearch < lenSearch)) {
 					char bytes[maxBytesCharacter + 1];
 					bytes[maxBytesCharacter] = 0;
-					const int widthChar = ExtractChar(pos + indexDocument, bytes);
+					const int widthChar = static_cast<int>(ExtractChar(pos + indexDocument, bytes));
 					if (!widthFirstCharacter)
 						widthFirstCharacter = widthChar;
+					if ((pos + indexDocument + widthChar) > limitPos)
+						break;
 					char folded[maxBytesCharacter * maxFoldingExpansion + 1];
-					const int lenFlat = pcf->Fold(folded, sizeof(folded), bytes, widthChar);
+					const int lenFlat = static_cast<int>(pcf->Fold(folded, sizeof(folded), bytes, widthChar));
 					folded[lenFlat] = 0;
 					// Does folded match the buffer
 					characterMatches = 0 == memcmp(folded, &searchThing[0] + indexSearch, lenFlat);
@@ -1373,8 +1529,9 @@ long Document::FindText(int minPos, int maxPos, const char *search,
 			const size_t maxBytesCharacter = 2;
 			const size_t maxFoldingExpansion = 4;
 			std::vector<char> searchThing(lengthFind * maxBytesCharacter * maxFoldingExpansion + 1);
-			const int lenSearch = pcf->Fold(&searchThing[0], searchThing.size(), search, lengthFind);
-			while (forward ? (pos < endSearch) : (pos >= endSearch)) {
+			const int lenSearch = static_cast<int>(
+				pcf->Fold(&searchThing[0], searchThing.size(), search, lengthFind));
+			while (forward ? (pos < endPos) : (pos >= endPos)) {
 				int indexDocument = 0;
 				int indexSearch = 0;
 				bool characterMatches = true;
@@ -1386,8 +1543,10 @@ long Document::FindText(int minPos, int maxPos, const char *search,
 					const int widthChar = IsDBCSLeadByte(bytes[0]) ? 2 : 1;
 					if (widthChar == 2)
 						bytes[1] = cb.CharAt(pos + indexDocument + 1);
+					if ((pos + indexDocument + widthChar) > limitPos)
+						break;
 					char folded[maxBytesCharacter * maxFoldingExpansion + 1];
-					const int lenFlat = pcf->Fold(folded, sizeof(folded), bytes, widthChar);
+					const int lenFlat = static_cast<int>(pcf->Fold(folded, sizeof(folded), bytes, widthChar));
 					folded[lenFlat] = 0;
 					// Does folded match the buffer
 					characterMatches = 0 == memcmp(folded, &searchThing[0] + indexSearch, lenFlat);
@@ -1404,7 +1563,7 @@ long Document::FindText(int minPos, int maxPos, const char *search,
 					break;
 			}
 		} else {
-			CaseFolderTable caseFolder;
+			const int endSearch = (startPos <= endPos) ? endPos - lengthFind + 1 : endPos;
 			std::vector<char> searchThing(lengthFind + 1);
 			pcf->Fold(&searchThing[0], searchThing.size(), search, lengthFind);
 			while (forward ? (pos < endSearch) : (pos >= endSearch)) {
@@ -1526,8 +1685,8 @@ void Document::EnsureStyledTo(int pos) {
 		IncrementStyleClock();
 		if (pli && !pli->UseContainerLexing()) {
 			int lineEndStyled = LineFromPosition(GetEndStyled());
-			int endStyled = LineStart(lineEndStyled);
-			pli->Colourise(endStyled, pos);
+			int endStyledTo = LineStart(lineEndStyled);
+			pli->Colourise(endStyledTo, pos);
 		} else {
 			// Ask the watchers to style, and stop as soon as one responds.
 			for (int i = 0; pos > GetEndStyled() && i < lenWatchers; i++) {
@@ -1954,10 +2113,17 @@ long BuiltinRegex::FindText(Document *doc, int minPos, int maxPos, const char *s
 		// the start position is at end of line or between line end characters.
 		lineRangeStart++;
 		startPos = doc->LineStart(lineRangeStart);
+	} else if ((increment == -1) &&
+	           (startPos <= doc->LineStart(lineRangeStart)) &&
+	           (lineRangeStart > lineRangeEnd)) {
+		// the start position is at beginning of line.
+		lineRangeStart--;
+		startPos = doc->LineEnd(lineRangeStart);
 	}
 	int pos = -1;
 	int lenRet = 0;
 	char searchEnd = s[*length - 1];
+	char searchEndPrev = (*length > 1) ? s[*length - 2] : '\0';
 	int lineRangeBreak = lineRangeEnd + increment;
 	for (int line = lineRangeStart; line != lineRangeBreak; line += increment) {
 		int startOfLine = doc->LineStart(line);
@@ -1969,7 +2135,7 @@ long BuiltinRegex::FindText(Document *doc, int minPos, int maxPos, const char *s
 				startOfLine = startPos;
 			}
 			if (line == lineRangeEnd) {
-				if ((endPos != endOfLine) && (searchEnd == '$'))
+				if ((endPos != endOfLine) && (searchEnd == '$') && (searchEndPrev != '\\'))
 					continue;	// Can't match end of line if end position before end of line
 				endOfLine = endPos;
 			}
@@ -1980,7 +2146,7 @@ long BuiltinRegex::FindText(Document *doc, int minPos, int maxPos, const char *s
 				startOfLine = endPos;
 			}
 			if (line == lineRangeStart) {
-				if ((startPos != endOfLine) && (searchEnd == '$'))
+				if ((startPos != endOfLine) && (searchEnd == '$') && (searchEndPrev != '\\'))
 					continue;	// Can't match end of line if start position before end of line
 				endOfLine = startPos;
 			}
@@ -1991,7 +2157,8 @@ long BuiltinRegex::FindText(Document *doc, int minPos, int maxPos, const char *s
 		if (success) {
 			pos = search.bopat[0];
 			lenRet = search.eopat[0] - search.bopat[0];
-			if (increment == -1) {
+			// There can be only one start of a line, so no need to look for last match in line
+			if ((increment == -1) && (s[0] != '^')) {
 				// Check for the last match on this line.
 				int repetitions = 1000;	// Break out of infinite loop
 				while (success && (search.eopat[0] <= endOfLine) && (repetitions--)) {

@@ -34,37 +34,26 @@
 
 #pragma once
 
-#include "StructureParser.h"
 #include "BibItem.h"
+#include "BibTeXEntryType.h"
+#include "StructureParser.h"
 
-const int BIBTEX_ENTRY_SIZE = 15;
-
-extern LPCTSTR const BibTypeVerbose[];
-
-class BibTeXFile;
 class BibTeXEntry;
+class BibTeXFile;
 
-class BibTeXEntry : public CObject, public StructureItem
+class BibTeXEntry
+	: public CObject
+	, public StructureItem
 {
 public:
-
-	/** Possible BibTeX types. The types Error and Unknown are for internal use only */
-	enum BibType
-	{
-		Book = 0, Article, Booklet, Manual, Inproceedings,
-		Conference, Inbook, Incollection, Masterthesis,
-		Misc, Phdthesis, Proceedings, Techreport,
-		Unpublished, String, Comment, Preamble, Error, Unknown
-	};
-
 	/** Constructs a new BibTeX entry
 	        @param key Key of the BibTeX entry
 	        @param parent Pointer to the BibTeX file containing the entry
 	        @param type Entry type (default: @book)
 
-	@see BibType
+	@see BibTeXEntryType
 	 */
-	BibTeXEntry(const CString& key, BibTeXFile *parent, BibType type = Book);
+	BibTeXEntry(const CString& key, BibTeXFile *parent, BibTeXEntryType type);
 	/** Set an entry fields. To set the author of an entry, just call
 	        <code>CString author;
 	        SetField("author", author);
@@ -83,9 +72,9 @@ public:
 	BOOL GetField(const CString& name, CString &value) const;
 
 	/* Sets/gets the type of the BibTeX entry */
-	BibType GetType() const;
+	BibTeXEntryType GetType() const;
 
-	void SetBibliographyType(BibType type);
+	void SetBibliographyType(BibTeXEntryType type);
 
 	/* Returns the key of the BibTeX entry */
 	const CString& GetKey() const;
@@ -109,7 +98,7 @@ private:
 	static void ReplaceAnds( CString &value );
 	static void ExtractAuthors(const CString &value, BibItem::AuthorContainerType &authors );
 	CMapStringToString m_Fields;
-	BibType m_Type;
+	BibTeXEntryType m_Type;
 	CString m_Key;
 	BibTeXFile* m_Parent;
 };

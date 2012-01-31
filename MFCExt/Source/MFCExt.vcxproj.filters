@@ -69,6 +69,9 @@
     <ClCompile Include="WorkerThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PerformanceTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MFCExt.rc">
@@ -167,6 +170,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WorkerThread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PerformanceTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
