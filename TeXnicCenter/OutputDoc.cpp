@@ -1281,6 +1281,21 @@ void COutputDoc::AddBadBox(COutputInfo& badbox)
 		errorListView_->AddMessage(badbox,CBuildView::imageBadBox);
 }
 
+void COutputDoc::EnableUpdateOfViews(const bool bEnable)
+{
+	//Enable/disable update of build output
+	if (m_pBuildView)
+	{
+		m_pBuildView->EnableUpdate(bEnable);
+	}
+
+	//Enable/disable update of error list
+	if (errorListView_)
+	{
+		errorListView_->EnableUpdate(bEnable);
+	}
+}
+
 void COutputDoc::OnLatexClean()
 {
 	CFileClean fc;

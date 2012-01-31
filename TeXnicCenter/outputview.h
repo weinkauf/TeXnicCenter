@@ -84,6 +84,14 @@ public:
 	 */
 	void AddLine(LPCTSTR lpszLine, int nImage = -1, int nIndent = 0);
 
+	/** Enables or disables the redrawing of this view.
+
+		When disabled, the view will not redraw.
+		If enabled, it will redraw and scroll to the last line
+		(if the previously last line was selected).
+	*/
+	virtual void EnableUpdate(const bool bEnable);
+
 	/**
 	Displays the specified image at the beginning of the specified
 	line.
@@ -168,14 +176,14 @@ protected:
 	COutputDoc* m_pOutputDoc;
 
 private:
-	/** TRUE, if the user clicked on a scrollbar during output generations. */
-	BOOL m_bDoNotScroll;
-
 	/** TRUE if the view has been attached to a document */
 	BOOL m_bInitialized;
 
 	/** Font to be used for the view */
 	CFont m_font;
+
+	///Index of the last line before we disabled update using EnableUpdate().
+	int idxLastLineOnLastUpdateDisable;
 
 protected:
 	afx_msg void OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult);
