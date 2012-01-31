@@ -1,0 +1,58 @@
+This is TeXnicCenter 2.0 Alpha 3 (2010/05/30)
+
+This is an ALPHA version of the software. It is not stable, very likely to crash, and you may loose your data.
+
+Having said that, the developers work with this version on a daily basis without too much trouble. It is designed to work alongside TeXnicCenter Version 1, i.e., you can have both installed in different directories.
+
+We have fixed many issues since TXC 2.0 Alpha 2. Most noteworthy:
+
+* Added new logo from Lukas Schneider.
+* Reworked behavior of tool windows.
+* Navigator Views: No automatic horizontal scrolling
+* Navigator Views: Arrows are not faded in/out
+* Navigator Views: Double-click does not collapse/expand sections anymore, but still folders.
+* Show comments/descriptions in the AutoComplete Box. This includes the titles of bibtex entries.
+* Make the AutoComplete Box transparent when CTRL is pressed.
+* Implemented "Find next selected", which allows to press Ctrl-F3 to search for the word under the cursor.
+* Re-implemented selection of brace blocks. It now works as expected and is able to grow the selection. Use Ctrl-M to try it out.
+* Added LuaLaTeX => PDF profile
+* Added multibib support
+
+* When going to a line, put it into display such that it is not directly at the borders.
+* Pressing ESC in the editor makes sure to close the Build Output window.
+* The instant advice is now hidden in more situations. Especially, it was still shown after pressing Enter. Furthermore, one can press ESC to close it.
+* Source links were missing in the DVI output
+* Fixed #2902456: Auto completion works on lines with non-ASCII characters now
+* SumatraPDF is now our default PDF viewer if it can be found on the system somewhere. This is regardless of the presence of Adobe Reader.
+* Fixed duplicated insertion of placeholders via the menu buttons.
+* Project save prompt is not shown anymore after opening the profile dialog
+* Chinese code page has been falsely rejected
+* Line numbers in the error view are shown only if they're valid
+* Fixed #2895080: Inconsistent line endings
+* Fixed #2930701: LaTeX messages are parsed incorrectly
+* Added a context menu to the error view
+* Fixed #2928222: Russian capital T inserted quotes
+* Implemented #2927463: Activation of the last used tab
+* Multiple files can be opened at once
+* Bibliography file items in the structure view will display their labels
+* Added index and nomencl support
+* TXC did not recognize the last TxcResLanguage.dll in the language folder.
+* Re-enabled spell checking inside braces.
+* Put Make Upper/Lowercase into the edit menu.
+* Merged with Scintilla 2.10
+
+
+
+If you are interested in helping us, contact the maintainer: http://www.texniccenter.org/contact/tino
+
+Known Issues:
+
+* Replace in selection: selection shrinks. Be careful with that.
+* TXC 1 and TXC 2 may compete for the file associations *.tex and *.tcp.
+* Some toolbars re-appear after re-starting TXC.
+* The defaults are not very user-friendly. Toolbars, menu, shortcuts are all subject to change in the future.
+
+
+Happy TeXing!
+
+The TeXnicCenter Team

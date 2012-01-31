@@ -1,0 +1,107 @@
+Links:
+"32-bit version":
+index.php?option=com_weblinks&view=weblink&id=27:texniccenter-alpha-installer&catid=29:downloads&Itemid=79
+"64-bit version":
+index.php?option=com_weblinks&view=weblink&id=32:texniccenter-alpha-installer-64&catid=29:downloads&Itemid=79
+"Tino Weinkauf":
+index.php?option=com_contact&view=contact&catid=12&id=1:tino
+
+
+We have released the fourth Alpha version of the new TeXnicCenter 2.0 development branch. You may download a 32-bit version or 64-bit version. It can be installed alongside the stable TXC 1.0 (put it in a different directory).
+
+This is an ALPHA version of the software. It is not fully stable, it may crash, and you may loose your data.
+
+Having said that, the developers work with this version on a daily basis without any trouble. It is designed to work alongside TeXnicCenter Version 1, i.e., you can have both installed in different directories.
+
+We have fixed many issues since TXC 2.0 Alpha 3. Most noteworthy:
+
+
+Highlights:
+Completely new File View with support for TortoiseSVN and similar tools. See below for more details.
+Preprocessors are now supported when building the output.
+The editor knows much more commands and options now. For example, multiple selections are now possible.
+File extensions managed by TeXnicCenter can be chosen through the 'Default Programs' control panel.
+Native 64-Bit support.
+It is (again) possible to cycle through the documents in Most-Recently-Used order. Also, we fixed a long-standing issue with shortcuts using the Alt key.
+
+
+And this is the full list of changes:
+
+Editor:
+Multiple selections are now possible in TeXnicCenter. They can be used by holding down the Ctrl key while selecting text with the mouse. Subsequent typing edits the text in all selections at the same time. This works also for rectangular selections.
+Selection of paragraphs (Ctrl-P; also try pressing it several times).
+Selections (normal, multiple, rectangular) can be cleared by pressing ESC.
+Joining and splitting of paragraphs is now sensitive to comments and selections made by the user (Ctrl-J and Ctrl-K).
+Duplication of a line (or the current selection). Try Ctrl-D.
+Highlight active line, i.e., the line where the caret is. Available from the View menu. Implements Feature Request 1591884.
+Selection Margin is now available on the left side of the editor. Always there and always in the same color as the text background.
+Syntax highlighting for BibTeX files (issue #3153542)
+Editor Options: Optionally close bottom tool windows when ESC is pressed and the editor has the focus.
+ASCII documents default to UTF-8 character encoding instead of ANSI
+Indentation for wrapped lines. Can be switched on/off in the View menu.
+Display of word wrap indicators at the beginning or end of a wrapped line.
+Switch off folding (View menu | Fold margin).
+
+User Interface:
+Implemented Most-Recently-Used cycling of open documents. Pressing Ctrl-Tab brings you back to the last active document. Pressing it several times (without releasing the Ctrl key) allows to cycle through this list. Ctrl-Shift-Tab goes into the other direction of the list. The shortcuts can be configured. However, the Ctrl key should be involved to get the desired behavior.
+Shortcuts using the Alt key work now correctly. Same for F10. Those were long-standing issues. Important for cycling through Warnings and for Ctrl-Alt-Shortcuts. Please let us know if you still experience issues.
+Tool Windows are now accessed via Ctrl+Alt+Letter shortcuts.
+Find in Files is now accessed via Ctrl+Shift+F as it should be.
+Shortcuts: F12 for opening the main file
+
+Navigation:
+The File View displays the project file tree in the same manner as Windows Explorer does (except that we sort them in groups 'latex', 'bibex', 'pictures', ...). This allows to use TortoiseSVN (or TortoiseHG, TortoiseGit, ...) directly from within TeXnicCenter. The Tortoise overlay icons are automatically updated when a file or folder is modified or committed within or outside TeXnicCenter. The shell context menus for files and folders can be accessed directly by right-clicking on the item (extended verbs are supported - so try using Shift+RightClick). Missing files are emphasized in red. When opening a project with missing files, it is ensured that the missing file items are visible to the user.  As a side note, shell extensions such as Tortoise* require the same bitness as the host process, i.e., the application itself. For instance, a 32-bit version of TeXnicCenter will not be able to display overlay icons of a 64-bit shell extension or vice versa.
+Implemented support for the LaTeX command \graphicspath. Now, images are found in subfolders and so on.
+ALL labels are now available for auto-completion (if they have been defined using \label{}).
+
+Building Documents:
+Preprocessors are now supported when building the output. They are run before the LaTeX compiler. Have a look at "Build menu | Define output profiles..." (Alt+F7). Preprocessors can be used to set up stuff before latex gets its hands on it. Think of automatically resizing images, copying files, etc.
+Significant speed-up of build process, i.e., output parsing. In one example (180 pages dissertation) the old version ran about 10 seconds longer than pdflatex, if many warnings were issued. The new version practically finishes together with pdflatex.
+Better support for newer versions of Sumatra and miktex, including x64 versions.
+Implemented support for Adobe Reader 10 and Adobe Acrobat 10 (and upwards).
+
+Spellchecker:
+Avoid flickering and faster update of the squiggle lines.
+Updated dictionaries
+
+System:
+Native 64-Bit support. Install a 64-bit version of TeXnicCenter on a 64-bit Windows. There are still some small issues with dependent libraries such as msxml, but it should not affect you too much.
+File extensions managed by TeXnicCenter can be chosen through the 'Default Programs' control panel. Usually available in the Windows Start menu. Or find it here: 'Control Panel\Programs\Default Programs\Set Default Programs'.
+TeXnicCenter should be compatible with Windows XP. Please tell us, if not.
+
+General:
+Cleaned up the code responsible for saving text documents. Safer now. First, a temporary file is created and the content is saved to it. Then it is moved to the proper location. In case moving a temporary file fails, the original document will remain intact.  Also, the temporary file will be not be deleted allowing the user to recover the document content that should have been saved.
+
+Miscellaneous:
+Fixed 2906945: Restrictive 'browse for folder' in profile wizard.
+New Style 'Browse For Folder' dialogs are now used throughout TXC.
+Fixed #3013106: "Insert header" dialog generated incorrect headers
+Implemented Feature 2048532: Russian quotes
+Fixed 2866438: AutoCompletion box doesn't appear on 2nd screen
+Fixed bug where text modules were not properly loaded from registry.
+Fixed #2932747: Customize dialog doesn't fit its content for high DPI values
+Related to #2932747: Customization dialog language doesn't match the selected user interface language
+Fixed #3019494: Externally modified BibTeX files not reloaded
+Fixed #3036405: Editor becomes dirty after reloading changed files
+Fixed #2980528: Opening a project shows open tex-files in different order
+Fixed heap corruption caused by the speller background thread (issue #3137651)
+Better restoration of the top line when loading a session.
+Fixed Bug 3164091: Save all button does not recognize unsaved files
+Structure parser handles multibib (better).
+Restored case-sensitivity in "Search in Files".
+2 bugs in "Replace" corrected.
+Match case + whole word only in Search/Replace dialogs corrected.
+
+
+Known Issues:
+64-bit version cannot export output profiles (msxml issue).
+TXC 1 and TXC 2 may compete for the file associations *.tex and *.tcp.
+The defaults are not very user-friendly. Toolbars, menu, shortcuts are all subject to change in the future.
+
+
+If you are interested in helping us, contact the maintainer Tino Weinkauf.
+
+
+Happy TeXing!
+
+The TeXnicCenter Team
