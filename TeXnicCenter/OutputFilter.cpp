@@ -254,6 +254,9 @@ UINT COutputFilter::LineDispatcherThread()
     {
         bool done = false;
 
+		//Disable redraws of the views until we emptied our queue
+		if (m_pDoc) m_pDoc->EnableUpdateOfViews(false);
+
         // Exit the queue processing loop for the current event only if the
         // processing has been canceled
         while (!cancel_ && !done)
@@ -283,8 +286,13 @@ UINT COutputFilter::LineDispatcherThread()
                 }
             }
             else
+			{
                 done = true;
+			}
         }
+
+		//Re-Enable redraws of the views
+		if (m_pDoc) m_pDoc->EnableUpdateOfViews(true);
     }
 
     TRACE0("Exiting output filter line dispatcher thread\n");
