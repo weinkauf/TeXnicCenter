@@ -49,12 +49,8 @@ class COutputDoc :
 			public CFileGrepHandler,
 			public CParseOutputHandler
 {
-	ErrorListPane* errorListView_;
-
+//Types and Friends
 public:
-
-	void SetErrorListView(ErrorListPane* v) { errorListView_ = v; }
-
 	typedef enum tagHint
 	{
 		hintSelectBuildLine = 1,
@@ -114,6 +110,9 @@ public:
 	Adds a bad box to the bad box list.
 	 */
 	void AddBadBox(COutputInfo& badbox);
+
+	///Sets the pointer to the error list view
+	void SetErrorListView(ErrorListPane* v) { errorListView_ = v; }
 
 // implementation helpers
 protected:
@@ -399,6 +398,9 @@ protected:
 
 	/** Active output view. */
 	OutputViewBase *m_pActiveOutputView;
+
+	///List view showing all errors, warnings, bad boxes.
+	ErrorListPane* errorListView_;
 
 private:
 	/** TRUE, if we can start latex compiler, FALSE otherwise. */
