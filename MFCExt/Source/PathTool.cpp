@@ -49,7 +49,7 @@ CPathTool::CPathTool( LPCTSTR lpszPath /*= NULL*/ )
 /////////////////////////////////////////////////////////////////////
 // statics
 
-CString CPathTool::Cat( LPCTSTR lpszBasePath, LPCTSTR lpszPath )
+CString CPathTool::Cat( LPCTSTR lpszBasePath, LPCTSTR lpszPath, const bool bCanonicalize /*= false*/ )
 {
 	CString	strBasePath = GetBackslashPath( lpszBasePath );
 	CString	strPath = GetBackslashPath( lpszPath );
@@ -65,6 +65,10 @@ CString CPathTool::Cat( LPCTSTR lpszBasePath, LPCTSTR lpszPath )
 
 	// append path to base path
 	strBasePath+= _T('\\') + strPath;
+
+	//Canonicalize - resolve relative path components
+	if (bCanonicalize) strBasePath = GetCanonicalPath(strBasePath);
+
 	return bWasSlashPath? GetSlashPath( strBasePath ) : strBasePath;
 }
 
@@ -334,12 +338,23 @@ CString CPathTool::GetRelativePath( LPCTSTR lpszFrom, LPCTSTR lpszTo )
 		Exists(lpszTo)? IsDirectory(lpszTo) : FALSE);
 }
 
-CString CPathTool::GetAbsolutePath( LPCTSTR lpszDirectory, LPCTSTR lpszRelative )
+CString CPathTool::GetAbsolutePath( LPCTSTR lpszDirectory, LPCTSTR lpszRelative, const bool bCanonicalize /*= false*/ )
 {
 	if (!IsRelativePath(lpszRelative)) return lpszRelative;
 	if (IsRelativePath(lpszDirectory)) return lpszRelative;
 
-	return Cat(lpszDirectory, lpszRelative);
+	return Cat(lpszDirectory, lpszRelative, bCanonicalize);
+}
+
+CString CPathTool::GetCanonicalPath( LPCTSTR lpszPath )
+{
+	CString strCanonicalPath;
+	const BOOL bSuccess = PathCanonicalize(strCanonicalPath.GetBuffer(MAX_PATH), lpszPath);
+	strCanonicalPath.ReleaseBuffer();
+	if (bSuccess)
+		return strCanonicalPath;
+	else
+		return CString(lpszPath);
 }
 
 BOOL CPathTool::Exists( LPCTSTR lpszPath )
@@ -423,3 +438,13 @@ BOOL CPathTool::IsRelativePath( LPCTSTR lpszPath )
 	return (GetDrive(lpszPath).GetLength() == 0);
 }
 
+CString CPathTool::GetTempFileName(LPCTSTR lpPathName, LPCTSTR lpPrefixString, UINT uUnique)
+{
+	CString fileName;
+	UINT result = ::GetTempFileName(lpPathName, lpPrefixString, uUnique, 
+		fileName.GetBufferSetLength(MAX_PATH + 1));
+	// Discard the string buffer if an error occurred, i.e., result is 0
+	fileName.ReleaseBuffer(result == 0 ? 0 : -1);
+
+	return fileName;
+}

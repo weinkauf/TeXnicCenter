@@ -1,4 +1,4 @@
-// Copyright 2008-2010 Sergiu Dotenco. The License.txt file describes the 
+// Copyright 2008-2011 Sergiu Dotenco. The License.txt file describes the
 // conditions under which this software may be distributed.
 
 /**
@@ -44,23 +44,83 @@ namespace {
 		return CompareCaseInsensitive(a, b) == 0;
 	}
 
+	bool LessCaseInsensitive(const char* a, const char* b)
+	{
+		return CompareCaseInsensitive(a, b) < 0;
+	}
+
 	const std::size_t ShortestEntryNameLength = 3;
+
+	/**
+	 * @brief Known entry types.
+	 */
+	const char* const entries[] = {
+		"article",
+		"artwork",
+		"audio",
+		"book",
+		"bookinbook",
+		"booklet",
+		"collection",
+		"comment",
+		"commentary",
+		"conference",
+		"customa",
+		"customb",
+		"customc",
+		"customd",
+		"custome",
+		"customf",
+		"electronic",
+		"image",
+		"inbook",
+		"incollection",
+		"inproceedings",
+		"inreference",
+		"jurisdiction",
+		"legal",
+		"legislation",
+		"letter",
+		"manual",
+		"masterthesis",
+		"misc",
+		"movie",
+		"music",
+		"online",
+		"patent",
+		"performance",
+		"periodical",
+		"phdthesis",
+		"preamble",
+		"proceedings",
+		"reference",
+		"report",
+		"review",
+		"set",
+		"software",
+		"standard",
+		"string",
+		"suppbook",
+		"suppcollection",
+		"suppperiodical",
+		"techreport",
+		"thesis",
+		"unpublished",
+		"video",
+		"www"
+	};
 
 	bool IsKnownEntryName(const char* name)
 	{
-		static const char* entries[] = {
-			"article","book","booklet","conference","inbook",
-			"incollection","inproceedings","manual","mastersthesis",
-			"misc","phdthesis","proceedings","techreport","unpublished","string","url"};
 		static const std::size_t n = sizeof(entries) / sizeof(*entries);
 
-		return std::find_if(entries, entries + n, 
-			std::bind2nd(std::ptr_fun(EqualCaseInsensitive), name)) != entries + n;
+		return std::binary_search(entries, entries + n, name,
+			LessCaseInsensitive);
 	}
 
 	bool EntryWithoutKey(const char* name)
 	{
-		return EqualCaseInsensitive(name,"string");
+		return EqualCaseInsensitive(name, "string");
 	}
 
 	char GetClosingBrace(char openbrace)
@@ -90,14 +150,14 @@ namespace {
 		return IsEntryStart(sc.ch, sc.chNext);
 	}
 
-	void ColorizeBibTeX(unsigned start_pos, int length, int /*init_style*/, WordList* /*keywordlists*/[], Accessor& styler) 
+	void ColorizeBibTeX(unsigned start_pos, int length, int /*init_style*/, WordList* /*keywordlists*/[], Accessor& styler)
 	{
 		bool fold_compact = styler.GetPropertyInt("fold.compact", 1) != 0;
 
 		std::string buffer;
 		buffer.reserve(25);
 
-		// We always colorize a section from the beginning, so let's 
+		// We always colorize a section from the beginning, so let's
 		// search for the @ character which isn't escaped, i.e. \@
 		while (start_pos > 0 && !IsEntryStart(styler.SafeGetCharAt(start_pos - 1),
 			styler.SafeGetCharAt(start_pos))) {
@@ -128,7 +188,7 @@ namespace {
 					sc.SetState(SCE_BIBTEX_DEFAULT);
 					in_comment = false;
 				}
-			} 
+			}
 			else {
 				// Found @entry
 				if (IsEntryStart(sc)) {
@@ -139,11 +199,11 @@ namespace {
 					buffer.clear();
 					collect_entry_name = true;
 				}
-				else if ((sc.state == SCE_BIBTEX_ENTRY || sc.state == SCE_BIBTEX_UNKNOWN_ENTRY) 
+				else if ((sc.state == SCE_BIBTEX_ENTRY || sc.state == SCE_BIBTEX_UNKNOWN_ENTRY)
 					&& (sc.ch == '{' || sc.ch == '(')) {
-					// Entry name colorization done
-					// Found either a { or a ( after entry's name, e.g. @entry(...) @entry{...}
-					// Closing counterpart needs to be stored.
+					// Entry name colorization done. Found either a { or a (
+					// after entry's name, e.g. @entry(...) @entry{...} Closing
+					// counterpart needs to be stored.
 					closing_brace = GetClosingBrace(sc.ch);
 
 					sc.SetState(SCE_BIBTEX_DEFAULT); // Don't colorize { (
@@ -155,8 +215,8 @@ namespace {
 						sc.ForwardSetState(SCE_BIBTEX_KEY); // Key/label colorization
 				}
 
-				// Need to handle the case where entry's key is empty
-				// e.g. @book{,...}
+				// Need to handle the case where entry's key is empty e.g.
+				// @book{,...}
 				if (sc.state == SCE_BIBTEX_KEY && sc.ch == ',') {
 					// Key/label colorization done
 					sc.SetState(SCE_BIBTEX_DEFAULT); // Don't colorize the ,
@@ -173,7 +233,8 @@ namespace {
 					// 2. name={one {one two {two}} three}
 					// 3. year=2005
 
-					// Skip ", { until we encounter the first alphanumerical character
+					// Skip ", { until we encounter the first alphanumerical
+                    // character
 					while (sc.More() && !(std::isalnum(sc.ch) || sc.ch == '"' || sc.ch == '{'))
 						sc.Forward();
 
@@ -190,7 +251,8 @@ namespace {
 						if (ch) {
 							// Skip preceding " or { such as in name={{test}}.
 							// Remember how many characters have been skipped
-							// Make sure that empty values, i.e. "" are also handled correctly
+							// Make sure that empty values, i.e. "" are also
+                            // handled correctly
 							while (sc.More() && (sc.ch == ch && (ch != '"' || skipped < 1))) {
 								sc.Forward();
 								++skipped;
@@ -201,13 +263,14 @@ namespace {
 						if (ch == '{')
 							ch = '}';
 
-						// We have reached the parameter value
-						// In case the open character was a alnum char, skip until , is found
+						// We have reached the parameter value. In case the open
+						// character was a alnum char, skip until , is found
 						// otherwise until skipped == 0
 						while (sc.More() && (skipped > 0 || !ch && !(sc.ch == ',' || sc.ch == closing_brace))) {
 							// Make sure the character isn't escaped
 							if (sc.chPrev != '\\') {
-								// Parameter value contains a { which is the 2nd case described above
+								// Parameter value contains a { which is the 2nd
+                                // case described above
 								if (sc.ch == '{')
 									++skipped; // Remember it
 								else if (sc.ch == '}')
@@ -223,28 +286,28 @@ namespace {
 					// Don't colorize the ,
 					sc.SetState(SCE_BIBTEX_DEFAULT);
 					
-					// Skip until the , or entry's closing closing_brace is found
-					// since this parameter might be the last one
+					// Skip until the , or entry's closing closing_brace is
+					// found since this parameter might be the last one
 					while (sc.More() && !(sc.ch == ',' || sc.ch == closing_brace))
 						sc.Forward();
 
 					int state = SCE_BIBTEX_PARAMETER; // The might be more parameters
 
 					// We've reached the closing closing_brace for the bib entry
-					// in case no " or {} has been used to enclose the value,
-					// as in 3rd case described above
+					// in case no " or {} has been used to enclose the value, as
+					// in 3rd case described above
 					if (sc.ch == closing_brace) {
 						--current_level;
 						// Make sure the text between entries is not colored
 						// using parameter's style
-						state = SCE_BIBTEX_DEFAULT; 
+						state = SCE_BIBTEX_DEFAULT;
 					}
 
 					int end = sc.currentPos;
 					current_line = styler.GetLine(end);
 
-					// We have possibly skipped some lines, so the folding levels
-					// have to be adjusted separately
+					// We have possibly skipped some lines, so the folding
+					// levels have to be adjusted separately
 					for (int i = styler.GetLine(start); i <= styler.GetLine(end); ++i)
 						styler.SetLevel(i, prev_level);
 
@@ -256,7 +319,8 @@ namespace {
 					--current_level;
 				}
 
-				// Non escaped % found which represents a comment until the end of the line
+				// Non escaped % found which represents a comment until the end
+                // of the line
 				if (sc.chPrev != '\\' && sc.ch == '%') {
 					in_comment = true;
 					sc.SetState(SCE_BIBTEX_COMMENT);
@@ -270,7 +334,8 @@ namespace {
 				if (collect_entry_name) {
 					buffer += static_cast<char>(sc.ch);
 
-					// Shortest known entry name is ShortestEntryNameLength characters long
+					// Shortest known entry name is ShortestEntryNameLength
+                    // characters long
 					if (buffer.size() >= ShortestEntryNameLength) {
 						if (IsKnownEntryName(buffer.c_str()))
 							sc.ChangeState(SCE_BIBTEX_ENTRY);
@@ -306,7 +371,8 @@ namespace {
 
 		sc.Complete();
 
-		// Fill in the real level of the next line, keeping the current flags as they will be filled in later
+		// Fill in the real level of the next line, keeping the current flags as
+        // they will be filled in later
 		int flagsNext = styler.LevelAt(current_line) & ~SC_FOLDLEVELNUMBERMASK;
 		styler.SetLevel(current_line, prev_level | flagsNext);
 	}

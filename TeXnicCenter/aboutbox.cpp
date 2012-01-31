@@ -81,12 +81,9 @@ const TCHAR DISPLAY_BITMAP      = _T('\b');
 // an escape character corresponding to the desired font effect. Empty
 // strings do not get a font assignment.
 // (see #defines above)
-//
-// Array count. Make sure this keeps up with how many lines there are
-// in the array!
 LPCTSTR const pArrCredit[] =
 {
-	_T("Copyright © 1999-2011\t"),
+	_T("Copyright © 1999-2012\t"),
 	_T("www.TeXnicCenter.org\t"),
 	_T(""),
 	_T("Portions Copyright © 1998-2002 by Cristi Posea\f"),
@@ -111,12 +108,9 @@ LPCTSTR const pArrCredit[] =
 	_T("Main Code\t"),
 	_T(""),
 	_T("Sergiu Dotenco\f"),
+	_T("Alexander Müller\f"),
 	_T("Chris Norris\f"),
-	_T("Stephan Schrader\f"),
-	_T("Paul Selormey\f"),
-	_T("Pavel Vacha\f"),
 	_T("Tino Weinkauf\f"),
-	_T("Christian Welzel\f"),
 	_T("Sven Wiegand\f"),
 	_T("Oliver Wieland\f"),
 	_T(""),
@@ -134,7 +128,8 @@ LPCTSTR const pArrCredit[] =
 	_T("Additional Codes\t"),
 	_T(""),
 	_T("Loïc d'Anterroches, Stefan Ascher, Adam Clauss, Michael Dunn\f"),
-	_T("Raffi Enficiaud, Mark Findlay, Martin Stanek\f"),
+	_T("Raffi Enficiaud, Mark Findlay, Stephan Schrader, Paul Selormey\f"),
+	_T("Martin Stanek, Pavel Vacha, Christian Welzel\f"),
 	_T(""),
 	_T(""),
 	_T("IDB_SEPARATOR\b"),
@@ -195,6 +190,7 @@ LPCTSTR const pArrCredit[] =
 	_T("")
 };
 
+// Array count. This should keep up with the number of lines above.
 const int ARRAYCOUNT = sizeof(pArrCredit) / sizeof(*pArrCredit);
 
 CAboutDlg::CAboutDlg() 
@@ -216,7 +212,7 @@ CAboutDlg::CAboutDlg()
 	else
 	{
 		m_strVersion = _T("Unknown");
-		CopyrightText = _T("(c) 1999-2011 The TeXnicCenter Team");
+		CopyrightText = _T("(c) 1999-2012 The TeXnicCenter Team");
 	}
 }
 

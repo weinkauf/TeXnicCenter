@@ -57,6 +57,7 @@ END_MESSAGE_MAP()
 COutputView::COutputView()
 		: m_bInitialized(FALSE)
 		, m_pOutputDoc(NULL)
+		, idxLastLineOnLastUpdateDisable(0)
 {
 	// create dummy font, so that m_font.DestroyObject() wont make any
 	// problems
@@ -185,10 +186,13 @@ void COutputView::AddLine(LPCTSTR lpszLine,int nImage /*= -1*/,int nIndent /*= 0
 
 	SetColumnWidth(0,LVSCW_AUTOSIZE);
 
-	// first line? then select
+	//First line? Always select the first one, since this allows us to follow the output.
 	if (nItem == 0)
+	{
 		SelectLine(nItem);
-	else
+	}
+	//Follow other lines only if the update is enabled. See also EnableUpdate().
+	else if (bUpdateIsEnabled)
 	{
 		// was previous line the selected one?
 		// => then make the new line the selected one and ensure, that it
@@ -197,6 +201,33 @@ void COutputView::AddLine(LPCTSTR lpszLine,int nImage /*= -1*/,int nIndent /*= 0
 		POSITION pos = GetFirstSelectedItemPosition();
 		if (pos && GetNextSelectedItem(pos) == nItem - 1)
 			SelectLine(nItem);
+	}
+}
+
+void COutputView::EnableUpdate(const bool bEnable)
+{
+	bUpdateIsEnabled = bEnable;
+
+	if (bEnable)
+	{
+		SetRedraw(1);
+		//Invalidate();
+		//UpdateWindow();
+
+		//Which line is currently selected?
+		POSITION pos = GetFirstSelectedItemPosition();
+		if (pos && GetNextSelectedItem(pos) == idxLastLineOnLastUpdateDisable)
+		{
+			//The selected line was also selected when we disabled update.
+			// ==> So we follow the output to the currently last line.
+			SelectLine(GetLineCount() - 1);
+		}
+	}
+	else
+	{
+		//We follow the output, if the currently last line is selected when we re-enable the view update.
+		idxLastLineOnLastUpdateDisable = GetLineCount() - 1;
+		SetRedraw(0);
 	}
 }
 

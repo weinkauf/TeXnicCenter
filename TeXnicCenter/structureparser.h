@@ -448,6 +448,9 @@ private:
 	/** Regular expression describing insert graphics commands. */
 	const tregex m_regexGraphic;
 
+	/** Regular expressions describing the graphicspath command. */
+	const tregex m_regexGraphicsPath;
+
 	/** Regular expression describing the newcommand command. */
 	const tregex m_regexUserCmd;
 
@@ -464,6 +467,9 @@ private:
 
 	/** Array containing the index of the actual item representing the depth. */
 	StructureItemContainer::difference_type m_anItem[MAX_DEPTH];
+
+	///Paths to look for graphics
+	std::vector< CString > GraphicPaths;
 
 private:
 	/** Used to control access to the m_aStructureItems-member. */

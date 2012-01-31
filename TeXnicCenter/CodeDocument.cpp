@@ -39,7 +39,7 @@ int ShowSaveTaskDialog(LPCTSTR prompt)
 	HWND hWndTop;
 	HWND hWnd = CWnd::GetSafeOwner_(NULL, &hWndTop);
 
-	// re-enable the parent window, so that focus is restored 
+	// re-enable the parent window, so that focus is restored
 	// correctly when the dialog is dismissed.
 	if (hWnd != hWndTop)
 		EnableWindow(hWnd, TRUE);
@@ -128,19 +128,19 @@ int FromScintillaMode(int m)
 
 #pragma endregion
 
-TextDocument::TextDocument( bool use_bom, CodeDocument::Encoding e ) 
+TextDocument::TextDocument( bool use_bom, CodeDocument::Encoding e )
 : use_bom_(use_bom), encoding_(e)
 {
 }
 
-TextDocument::TextDocument(CodeDocument::Encoding e, UINT codepage) 
+TextDocument::TextDocument(CodeDocument::Encoding e, UINT codepage)
 : use_bom_(false)
 , encoding_(e)
 {
 	SetCodePage(codepage);
 }
 
-TextDocument::TextDocument() 
+TextDocument::TextDocument()
 : encoding_(CodeDocument::ANSI)
 , code_page_(::GetACP())
 {
@@ -178,16 +178,16 @@ CodeDocument::Encoding TextDocument::TestForUnicode(const BYTE* data, SIZE_T siz
 		// As a consequence of the design of UTF-8, the following properties of multi-byte sequences hold:
 
 		//  * The most significant bit of a single-byte character is always 0.
-		//	* The most significant bits of the first byte of a multi-byte sequence determine the length of 
-		//	  the sequence. These most significant bits are 110 for two-byte sequences; 1110 for three-byte 
+		//	* The most significant bits of the first byte of a multi-byte sequence determine the length of
+		//	  the sequence. These most significant bits are 110 for two-byte sequences; 1110 for three-byte
 		//	  sequences, and so on.
 		//	* The remaining bytes in a multi-byte sequence have 10 as their two most significant bits.
-		//	* A UTF-8 stream contains neither the byte FE nor FF. This makes sure that a UTF-8 stream never 
+		//	* A UTF-8 stream contains neither the byte FE nor FF. This makes sure that a UTF-8 stream never
 		//	  looks like a UTF-16 stream starting with U+FEFF (Byte-order mark)
 
 		bool utf8 = true;
+		bool ascii = true;
 		std::size_t consecutive_bytes = 0;
-		bool ascii = size && data[0] < 128;
 		std::size_t i = 0;
 
 		for ( ; i < size && utf8; ++i) {
@@ -201,14 +201,14 @@ CodeDocument::Encoding TextDocument::TestForUnicode(const BYTE* data, SIZE_T siz
 				GetUTF8CharBytes(data[i],consecutive_bytes);
 			else if (consecutive_bytes == 0 && data[i] >> 7 & 1 ||
 				consecutive_bytes > 0 && data[i] >> 6 != 2)
-				utf8 = false; // Either MSB is not 0 or MSB of a byte in a 
+				utf8 = false; // Either MSB is not 0 or MSB of a byte in a
 			// multi-part sequence is not 10
 
 			if (consecutive_bytes > 0)
 				--consecutive_bytes;
 		}
 
-		if (utf8 && !(ascii && i == size))
+		if (utf8 || ascii && i == size)
 			encoding = CodeDocument::UTF8;
 	}
 
@@ -226,7 +226,7 @@ CodeDocument::Encoding TextDocument::DetectEncoding(const BYTE* data, SIZE_T& po
 		if (size >= sizeof(BOM::utf8) && std::memcmp(data,BOM::utf8,sizeof(BOM::utf8)) == 0) {
 			encoding = CodeDocument::UTF8;
 			pos += sizeof(BOM::utf8);
-		} 
+		}
 		// Try UTF-32LE instead of UTF-16 since BOM's first 2 bytes are for both encodings the same
 		else if (size >= sizeof(BOM::utf32le) && std::memcmp(data,BOM::utf32le,sizeof(BOM::utf32le)) == 0) {
 			encoding = CodeDocument::UTF32LE;
@@ -270,7 +270,7 @@ DWORD TextDocument::Write( ATL::CAtlFile& f, const char* text, std::size_t n)
 	}
 
 	if (result == ERROR_SUCCESS && n > 0) {
-		if (FAILED(f.Write(text,n)))
+		if (FAILED(f.Write(text, static_cast<DWORD>(n))))
 			result = ::GetLastError();
 	}
 
@@ -335,7 +335,7 @@ bool TextDocument::Read(LPCTSTR pszFileName, CStringW& string)
 				text = &buffer[0];
 				n = buffer.size();
 
-				string = CStringW(text,n);
+				string.SetString(text, static_cast<int>(n));
 			}
 
 			this->encoding_ = encoding;
@@ -632,8 +632,8 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 
 		if (n) {
 			// Detected EOL type
-			GetView()->GetCtrl().SetEOLMode(DetectScintillaEOLMode(text,n));
-			GetView()->GetCtrl().AppendText(n,text);			
+			GetView()->GetCtrl().SetEOLMode(DetectScintillaEOLMode(text, n));
+			GetView()->GetCtrl().AppendText(static_cast<int>(n), text);			
 		}
 
 		use_bom_ = pos > 0;
@@ -655,66 +655,47 @@ DWORD CodeDocument::LoadFile(HANDLE file)
 
 DWORD CodeDocument::SaveFile(LPCTSTR pszFileName, bool clearModifiedFlag)
 {
-	HANDLE hSearch = INVALID_HANDLE_VALUE;
-	TCHAR szTempFileDir[MAX_PATH + 1];
-	TCHAR szTempFileName[MAX_PATH + 1];
-	TCHAR szBackupFileName[MAX_PATH + 1];
-	DWORD result = 1;
+	DWORD result = ERROR_ACCESS_DENIED;
 
-	CAtlFile temp_file;
+	const CString& directory = CPathTool::GetDirectory(pszFileName);
+	const CString& tempFileName = CPathTool::GetTempFileName(directory, _T("CRE"), 0);
 
-	TCHAR drive[MAX_PATH], dir[MAX_PATH], name[MAX_PATH], ext[MAX_PATH];
-	_tsplitpath(pszFileName, drive, dir, name, ext);
+	const DWORD moveFlags = MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH;
 
-	lstrcpy(szTempFileDir, drive);
-	lstrcat(szTempFileDir, dir);
-	lstrcpy(szBackupFileName, pszFileName);
-	lstrcat(szBackupFileName, _T(".bak"));
+	if (!tempFileName.IsEmpty()) {
+		ATL::CAtlFile tempFile;
 
-	bool error_occured = false;
-
-	if (::GetTempFileName(szTempFileDir, _T("CRE"), 0, szTempFileName) != 0) {
-		if (SUCCEEDED(temp_file.Create(szTempFileName, GENERIC_WRITE, 0, CREATE_ALWAYS))) {
-			SaveFile(temp_file,false);
+		if (SUCCEEDED(tempFile.Create(tempFileName, GENERIC_WRITE, FILE_SHARE_READ, CREATE_ALWAYS))) {
+			DWORD tempResult = SaveFile(tempFile, false);
 
 			if (create_backup_file_) {
-				WIN32_FIND_DATA wfd;
-				hSearch = ::FindFirstFile(pszFileName, &wfd);
-
-				if (hSearch != INVALID_HANDLE_VALUE) {
-					//	File exist - create backup file
-					::DeleteFile(szBackupFileName);
-
-					if (!::MoveFile(pszFileName, szBackupFileName))
-						error_occured = true;
-					else {
-						::FindClose(hSearch);
-						hSearch = INVALID_HANDLE_VALUE;
-					}
+				if (CPathTool::Exists(pszFileName)) {
+					const CString& backupFileName = CString(pszFileName) + _T(".bak");
+					// File exists: create backup file
+					MoveFileEx(pszFileName, backupFileName, moveFlags);
 				}
 			}
-			else
-				::DeleteFile(pszFileName);
 
-			temp_file.Close();
+			tempFile.Close();
 
-			//	Move temporary file to target name
-			if (!error_occured && ::MoveFile(szTempFileName, pszFileName)) {
-				if (clearModifiedFlag)
-					SetModifiedFlag(FALSE);
-
-				result = ERROR_SUCCESS;
+			// Move temporary file to target name
+			if (tempResult == ERROR_SUCCESS) {				
+				if (MoveFileEx(tempFileName, pszFileName, moveFlags))
+					result = ERROR_SUCCESS;
 			}
+			else
+				result = tempResult;
 		}
 	}
 
-	if (result)
+	if (result == ERROR_SUCCESS) {
+		DeleteFile(tempFileName);
+
+		if (clearModifiedFlag)
+			SetModifiedFlag(FALSE);
+	}
+	else
 		result = ::GetLastError();
-
-	if (hSearch != INVALID_HANDLE_VALUE)
-		::FindClose(hSearch);
-
-	::DeleteFile(szTempFileName);
 
 	return result;
 }
@@ -750,7 +731,7 @@ DWORD CodeDocument::DoSaveFile( HANDLE file, bool throw_on_invalid_sequence )
 	const int length = GetView()->GetCtrl().GetLength();
 	DWORD result = ERROR_SUCCESS;
 
-	if (length > 0) { 
+	if (length > 0) {
 		std::vector<char> buffer(length + 1);
 		GetView()->GetCtrl().GetText(length + 1,&buffer[0]);
 
@@ -917,9 +898,9 @@ void CodeDocument::ToggleBookmark( int line )
 	}
 }
 
-void CodeDocument::SetEncoding(Encoding e) 
+void CodeDocument::SetEncoding(Encoding e)
 {
-	encoding_ = e; 
+	encoding_ = e;
 }
 
 bool CodeDocument::GetUseBOM() const

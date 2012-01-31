@@ -86,8 +86,10 @@ History: PJN / 12-08-2004 1. Made all the remaining non virtual functions relate
                           which would result in failures in the logic for multibyte encoded characters. This made it
                           impossible to replace multibyte character sequences in find / replace operations. Thanks to
                           Alexei Letov for reporting this bug.
+         PJN / 01-04-2011 1. Updated CScintillaFindReplaceDlg::Create to use AfxFindResourceHandle instead of 
+                          AfxGetResourceHandle. Thanks to Niﬂl Markus for reporting this nice addition.
 
-Copyright (c) 2004 - 2010 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
+Copyright (c) 2004 - 2011 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
 
 All rights reserved.
 
@@ -971,11 +973,14 @@ void CScintillaView::OnReplaceAll(LPCTSTR lpszFind, LPCTSTR lpszReplace, BOOL bC
   long find_pos;
   bool bFoundSomething = false;
 
-  while ((find_pos = c.SearchInTarget(_scintillaEditState.strFind.GetLength(),_scintillaEditState.strFind)) != -1)
+  while ((find_pos = c.SearchInTarget(_scintillaEditState.strFind.GetLength(),_scintillaEditState.strFind)) != -1 && find_pos < end_pos)
   {
 	  c.ReplaceTarget(_scintillaEditState.strReplace.GetLength(),_scintillaEditState.strReplace);
 	  c.SetTargetStart(c.GetTargetEnd() + 1);
-	  c.SetTargetEnd(end_pos); // Still end position
+
+	  //end_pos shifts by length difference of replace vs. find string length
+	  end_pos += _scintillaEditState.strReplace.GetLength() - _scintillaEditState.strFind.GetLength();
+	  c.SetTargetEnd(end_pos); // new end position
 
 	  if (!bFoundSomething)
 		  bFoundSomething = true;

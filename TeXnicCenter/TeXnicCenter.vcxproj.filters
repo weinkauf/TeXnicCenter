@@ -134,9 +134,6 @@
     <ClCompile Include="filegrep.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fileview.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FileViewEx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -473,6 +470,33 @@
     <ClCompile Include="SpellerSource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SearchToolBarEditButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BibTeXEntryType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchToolBarEditCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileTreeCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileViewPane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemIDList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShellUtilXP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PreProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfilePagePreprocessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aboutbox.h">
@@ -593,9 +617,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="filegrep.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fileview.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="FileViewEx.h">
@@ -968,6 +989,33 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="SpellerSource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchToolBarEditButton.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BibTeXEntryType.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchToolBarEditCtrl.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileTreeCtrl.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileViewPane.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemIDList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShellUtilXP.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PreProcessor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfilePagePreprocessor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

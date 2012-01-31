@@ -257,7 +257,7 @@ void LaTeXView::UpdateSettings()
 	SetAStyle(SCE_TEX_DOCUMENTCLASS, RGB(0x8b, 0, 0), GetColor(COLORINDEX_BKGND));
 	SetAStyle(SCE_TEX_USE_PACKAGE, RGB(0, 0x80, 0x80), GetColor(COLORINDEX_BKGND));
 
-#pragma region Comments 
+#pragma region Comments
 
 	// Comments displayed in italics
 	rCtrl.StyleSetFont(SCE_TEX_COMMENT,editor_font.lfFaceName);
@@ -324,7 +324,7 @@ void LaTeXView::OnModified(SCNotification* n)
 
 	// Text has been inserted or deleted but it's not a part of a
 	// multi step undo/redo action or it is the last action in this undo/redo chain
-	if (n->modificationType & (SC_MOD_INSERTTEXT|SC_MOD_DELETETEXT) && 
+	if (n->modificationType & (SC_MOD_INSERTTEXT|SC_MOD_DELETETEXT) &&
 		(!(n->modificationType & SC_MULTISTEPUNDOREDO) || n->modificationType & SC_LASTSTEPINUNDOREDO)) {
 		GetDocument()->SetModifiedFlag();
 
@@ -475,7 +475,7 @@ void LaTeXView::OnACCommandSelect(const CLaTeXCommand* cmd)
 		}
 
 		// no brace found; drop selection and place cursor after inserted word
-		if (!bSetPosition) 
+		if (!bSetPosition)
 			GetCtrl().GotoPos(e);
 	}
 
@@ -666,7 +666,7 @@ void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& a, bool bSelect /
 					}
 				}
 
-				if (CurrentX < 0) 
+				if (CurrentX < 0)
 					CurrentX = 0;
 
 				if (CurrentX <= EndX) {
@@ -677,7 +677,7 @@ void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& a, bool bSelect /
 					UTF8toUTF16(range.lpstrText + CurrentX, EndX - CurrentX + 1, conv);
 
 					if (!conv.empty())
-						strKeyword.SetString(&conv[0], conv.size());
+						strKeyword.SetString(&conv[0], static_cast<int>(conv.size()));
 					
 					if (bSelect)
 						GetCtrl().SetSel(start + CurrentX,pos);
@@ -758,7 +758,7 @@ void LaTeXView::OnEditOutsource()
 			buffer.resize((e - s) + 1);
 			GetCtrl().GetSelText(&buffer[0]);
 
-			char* text = &buffer[0]; 
+			char* text = &buffer[0];
 			std::size_t n = buffer.size() - 1;
 
 			// Write it to the file
@@ -790,7 +790,7 @@ void LaTeXView::OnEditOutsource()
 					//Re-activate this view (I tried to open the new doc in background, but it did not work out)
 					CFrameWnd* pFrame = GetParentFrame();
 
-					if (pFrame) 
+					if (pFrame)
 						pFrame->ActivateFrame();
 				}
 			}
@@ -927,7 +927,7 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 		break;
 	default:
 		if ((nID >= ID_TEXTMODULES_FIRST) && (nID <= ID_TEXTMODULES_LAST)) {
-			ASSERT(CConfiguration::GetInstance()->m_aTextModules.GetSize() > 
+			ASSERT(CConfiguration::GetInstance()->m_aTextModules.GetSize() >
 				static_cast<INT_PTR>(nID - ID_TEXTMODULES_FIRST));
 
 			if (CConfiguration::GetInstance()->m_aTextModules.GetSize() > static_cast<INT_PTR>(nID - ID_TEXTMODULES_FIRST))

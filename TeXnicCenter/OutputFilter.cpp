@@ -126,7 +126,7 @@ CString COutputFilter::GetResultString() const
 
 UINT COutputFilter::Run()
 {
-    std::auto_ptr<CWinThread> dispatcher(AfxBeginThread(LineDispatcherThread, 
+    std::auto_ptr<CWinThread> dispatcher(AfxBeginThread(LineDispatcherThread,
         this, THREAD_PRIORITY_LOWEST, 0, CREATE_SUSPENDED));
 
     if (!dispatcher.get())
@@ -158,7 +158,7 @@ UINT COutputFilter::Run()
 				{
 					bLastWasNewLine = TRUE;
 					
-					if (!line.empty()) 
+					if (!line.empty())
 					{
                         ProcessLine(line);
 					}
@@ -172,7 +172,7 @@ UINT COutputFilter::Run()
 		}
 	}
 
-    if (!line.empty()) 
+    if (!line.empty())
     {
         ProcessLine(line);
     }
@@ -235,7 +235,7 @@ void COutputFilter::ProcessLine(CharVector& line)
     lock.Unlock();
     processLineEvent_.SetEvent();
 
-    line.clear();    
+    line.clear();
 }
 
 UINT COutputFilter::LineDispatcherThread(LPVOID data)
@@ -254,7 +254,10 @@ UINT COutputFilter::LineDispatcherThread()
     {
         bool done = false;
 
-        // Exit the queue processing loop for the current event only if the 
+		//Disable redraws of the views until we emptied our queue
+		if (m_pDoc) m_pDoc->EnableUpdateOfViews(false);
+
+        // Exit the queue processing loop for the current event only if the
         // processing has been canceled
         while (!cancel_ && !done)
         {
@@ -271,7 +274,7 @@ UINT COutputFilter::LineDispatcherThread()
 
                 if (!line.empty())
                 {
-                    const CString text(&line[0], line.size());            
+                    const CString text(&line[0], static_cast<int>(line.size()));
 
                     AddLine(text);
                     cookie = ParseLine(text, cookie);
@@ -283,8 +286,13 @@ UINT COutputFilter::LineDispatcherThread()
                 }
             }
             else
+			{
                 done = true;
+			}
         }
+
+		//Re-Enable redraws of the views
+		if (m_pDoc) m_pDoc->EnableUpdateOfViews(true);
     }
 
     TRACE0("Exiting output filter line dispatcher thread\n");

@@ -10,6 +10,7 @@ syntax: glob
 *.suo
 *.swp
 *.user
+*.tps
 *~
 Anmerkungen/*
 Output

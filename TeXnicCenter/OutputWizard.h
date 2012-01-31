@@ -26,46 +26,55 @@
  *
  *********************************************************************/
 
-/********************************************************************
- *
- * $Id$
- *
- ********************************************************************/
-
-#if !defined(AFX_OUTPUTWIZARD_H__627C2BE3_5B16_11D4_A222_006097239934__INCLUDED_)
-#define AFX_OUTPUTWIZARD_H__627C2BE3_5B16_11D4_A222_006097239934__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include <stack>
 
-#include "OutputWizardWelcome.h"
-#include "OutputWizardMikTex.h"
 #include "OutputWizardDistributionPath.h"
-#include "OutputWizardViewer.h"
 #include "OutputWizardFinish.h"
+#include "OutputWizardMikTex.h"
+#include "OutputWizardViewer.h"
+#include "OutputWizardWelcome.h"
 #include "Profile.h"
 
 /**
-The output wizard allows the user a step by step configuration of the
-output types.
-
-@ingroup dialogs
-@ingroup profiles
-
-@see COutputWizardMiKTeX
-@see COutputWizardDistributionPath
-@see COutputWizardViewer
-@see COutputWizardFinish
-
-@author Sven Wiegand
+ * The output wizard allows the user a step by step configuration of the output
+ * types.
+ *
+ * @ingroup dialogs
+ * @ingroup profiles
+ *
+ * @see COutputWizardMiKTeX
+ * @see COutputWizardDistributionPath
+ * @see COutputWizardViewer
+ * @see COutputWizardFinish
+ * 
+ * @author Sven Wiegand
  */
 class COutputWizard : public CPropertySheet
 {
 	DECLARE_DYNAMIC(COutputWizard)
+public:
+	COutputWizard(CProfileMap &profiles, CWnd* pParentWnd = NULL);
+	virtual ~COutputWizard();
 
+	virtual INT_PTR DoModal();
+	virtual void BuildPropPageArray();
+
+	/**
+	 * @brief Returns the name of the detected distribution.
+	 */
+	const CString& GetDistributionName() const;
+
+protected:
+	DECLARE_MESSAGE_MAP()
+
+	afx_msg void OnBack();
+	afx_msg void OnNext();
+	afx_msg void OnFinish();
+	virtual BOOL OnInitDialog();
+
+private:
 	friend class OutputWizardPage;
 	friend class COutputWizardDistributionPath;
 	friend class COutputWizardFinish;
@@ -73,110 +82,6 @@ class COutputWizard : public CPropertySheet
 	friend class COutputWizardViewer;
 	friend class COutputWizardWelcome;
 
-private:
-	bool dvipdfm_installed_;
-	CString dvipdfm_path_;
-	CString distribution_name_;
-
-	enum Distribution
-	{
-		Unknown,
-		MiKTeX,
-		TeXLive
-	};
-
-	Distribution distribution_;
-
-// Construction/Destruction
-public:
-	COutputWizard(CProfileMap &profiles, CWnd* pParentWnd = NULL);
-	virtual ~COutputWizard();
-	virtual INT_PTR DoModal();
-	virtual BOOL OnInitDialog();
-	//}}AFX_VIRTUAL
-
-private:
-	const CString FindTeXLiveInstallLocation();
-	const CString FindMiKTeXInstallLocation();
-
-	/// Generates the full path for the specified \a fileName
-	/// using distribution's 'bin' directory as root.
-	/// 
-	/// \param  fileName File name.
-	///
-	/// \return Full path of the file within distribution's 'bin' directory.
-	const CString GetDistributionFilePath( LPCTSTR fileName ) const;
-
-	/// Gets a value indicating whether the compiler with the specified \a fileName
-	/// is available in distribution's 'bin' directory.
-	///
-	/// \param  fileName Compiler's executable name, e.g. pdflatex.exe.
-	///
-	/// \return \c true if the specified executable is available,
-	///         \c false otherwise.
-	bool IsCompilerAvailable(LPCTSTR fileName) const;
-
-// Implementation Helpers
-protected:
-	/**
-	 */
-	CString FindApplicationForDocType(LPCTSTR lpszExt);
-
-	///Returns a string from the registry.
-	static const CString ReadStringFromRegistry(bool bAdmin, const CString& Path, const CString& Key);
-
-	/**
-	 */
-	void LookForDistribution();
-
-	
-	/**
-	 */
-	BOOL LookForLatex();
-
-	/**
-	 */
-	void LookForDviViewer();
-
-	/**
-	 */
-	void LookForPs();
-
-	/**
-	 */
-	void LookForPdf();
-
-	/**
-	 */
-	void ShowInformation();
-
-	/**
-	 */
-	void GenerateOutputProfiles();
-
-	void GeneratePDFProfile(const CString& name, const CString& latexArguments, const CString& viewerPath, const CString& latexFileName );
-	void GeneratePDFProfile(const CString& name, const CString& latexArguments, const CString& viewerPath);
-
-private:
-	void SetupYAP( CProfile &p );
-	void SetupAcrobatDDE( CProfile &p );
-	void SetupSumatraDDE( CProfile &p );
-	void AssignPDFViewer( CProfile &p, const CString& path );
-	void AssignPDFViewer(CProfile& p);
-	void SetupGenericPDF( CProfile &p );
-
-// Message handlers
-protected:
-	afx_msg void OnBack();
-	afx_msg void OnNext();
-	afx_msg void OnFinish();
-	//{{AFX_MSG(COutputWizard)
-	//}}AFX_MSG
-
-	DECLARE_MESSAGE_MAP()
-
-// Constants
-protected:
 	enum tagPage
 	{
 		pageWelcome = 0,
@@ -197,8 +102,64 @@ protected:
 		viewerCount
 	};
 
-// Attributes
-private:
+	enum Distribution
+	{
+		Unknown,
+		MiKTeX,
+		TeXLive
+	};
+
+	const CString FindTeXLiveInstallLocation();
+	const CString FindMiKTeXInstallLocation();
+
+	/**
+	 * Generates the full path for the specified @a fileName using
+	 * distribution's 'bin' directory as root.
+	 * 
+	 * @param fileName File name.
+	 * 
+	 * @return Full path of the file within distribution's 'bin' directory.
+	 */
+	const CString GetDistributionFilePath( LPCTSTR fileName ) const;
+
+	/**
+	 * Gets a value indicating whether the compiler with the specified @a
+	 * fileName is available in distribution's 'bin' directory.
+	 * 
+	 * @param fileName Compiler's executable name, e.g. pdflatex.exe.
+	 * 
+	 * @return @c true if the specified executable is available, @c false
+	 *         otherwise.
+	 */
+	bool IsCompilerAvailable(LPCTSTR fileName) const;
+
+	CString FindApplicationForDocType(LPCTSTR lpszExt);
+
+	/**
+	 * @brief Returns a string from the registry.
+	 */
+	static const CString ReadStringFromRegistry(bool bAdmin, const CString& Path, const CString& Key);
+
+	void LookForDistribution();
+	BOOL LookForLatex();
+	void LookForDviViewer();
+	void LookForPs();
+	void LookForPdf();
+	void ShowInformation();
+	void GenerateOutputProfiles();
+	void SetupMakeIndex(CProfile &p);
+	void SetupBibTeX(CProfile &p);
+	void GeneratePDFProfile(const CString& name, const CString& latexArguments,
+			const CString& viewerPath, const CString& latexFileName );
+	void GeneratePDFProfile(const CString& name, const CString& latexArguments,
+			const CString& viewerPath);
+	void SetupYAP(CProfile &p);
+	void SetupAcrobatDDE(CProfile &p);
+	void SetupSumatraDDE(CProfile &p);
+	void AssignPDFViewer(CProfile &p, const CString& path);
+	void AssignPDFViewer(CProfile& p);
+	void SetupGenericPDF(CProfile &p);
+
 	/** \c true if latex has been found. */
 	bool m_bLatexInstalled;
 
@@ -222,7 +183,10 @@ private:
 
 	CString sumatra_path_;
 
-	/** TRUE if Postscript conversion is called via the ps2pdf script, e.g. from miktex. */
+	/**
+	 * TRUE if Postscript conversion is called via the ps2pdf script, e.g. from
+	 * miktex.
+	 */
 	bool m_bGhostscriptViaPS2PDF;
 
 	/** Path to Ghostscript. */
@@ -243,14 +207,8 @@ private:
 	COutputWizardViewer m_wndPagePdfViewer;
 	COutputWizardFinish m_wndPageFinish;
 
-public:
-	virtual void BuildPropPageArray(void);
-	const CString& GetDistributionName() const;
+	bool dvipdfm_installed_;
+	CString dvipdfm_path_;
+	CString distribution_name_;
+	Distribution distribution_;
 };
-
-/////////////////////////////////////////////////////////////////////////////
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
-
-#endif // AFX_OUTPUTWIZARD_H__627C2BE3_5B16_11D4_A222_006097239934__INCLUDED_

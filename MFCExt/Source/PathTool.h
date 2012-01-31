@@ -59,6 +59,7 @@ public:
 
 // static
 public:
+	static CString GetTempFileName(LPCTSTR lpPathName, LPCTSTR lpPrefixString, UINT uUnique);
 	/**
 	@brief Replaces the place holders in lpszText with the path lpszPath.
 
@@ -108,11 +109,13 @@ public:
 		Path, lpszPath should be appended to.
 	@param lpszPath
 		Path, that should be appende to lpszBasePath.
+	@param bCanonicalize
+		If true, then relative path components such as '..' and '.' are resolved.
 
 	@return
 		The two paths catenated.
 	*/
-	static CString Cat( LPCTSTR lpszBasePath, LPCTSTR lpszPath );
+	static CString Cat( LPCTSTR lpszBasePath, LPCTSTR lpszPath, const bool bCanonicalize = false );
 
 	/**
 	@brief Returns the drive letter of the path.
@@ -309,8 +312,22 @@ public:
 	@param lpszRelative
 		Relative path to be added to base directory.
 		If this is not relative, the function will return it unmodified.
+
+	@param bCanonicalize
+		If true, then relative path components such as '..' and '.' are resolved.
 	*/
-	static CString GetAbsolutePath( LPCTSTR lpszDirectory, LPCTSTR lpszRelative );
+	static CString GetAbsolutePath( LPCTSTR lpszDirectory, LPCTSTR lpszRelative, const bool bCanonicalize = false );
+
+	/**
+	@brief Resolves relative path components and returns a path without '..' and '.'.
+
+	If the called function PathCanonicalize() fails for some reason,
+	then the original path is returned unmodified.
+
+	@param lpszPath
+		A path with possibly some '..' and '.' in it.
+	*/
+	static CString GetCanonicalPath( LPCTSTR lpszPath );
 
 	/**
 	@brief Returns TRUE, if the specified path really exists in the file 
@@ -642,7 +659,15 @@ public:
 		Relative path to be added to base directory.
 		If this is not relative, the function will return it unmodified.
 	*/
-	CString GetAbsolutePath( LPCTSTR lpszRelative ) const;
+	CString GetAbsolutePath( LPCTSTR lpszRelative, const bool bCanonicalize = false ) const;
+
+	/**
+	@brief Resolves relative path components and returns a path without '..' and '.'.
+
+	If the called function PathCanonicalize() fails for some reason,
+	then the original path is returned unmodified.
+	*/
+	CString GetCanonicalPath() const;
 
 	/**
 	Returns TRUE, if the specified path really exists in the file 
@@ -873,9 +898,15 @@ CString CPathTool::GetRelativePath( LPCTSTR lpszTo ) const
 }
 
 inline
-CString CPathTool::GetAbsolutePath( LPCTSTR lpszRelative ) const
+CString CPathTool::GetAbsolutePath( LPCTSTR lpszRelative, const bool bCanonicalize /*= false*/ ) const
 {
-	return GetAbsolutePath(	m_strPath, lpszRelative );
+	return GetAbsolutePath(	m_strPath, lpszRelative, bCanonicalize );
+}
+
+inline
+CString CPathTool::GetCanonicalPath() const
+{
+	return GetCanonicalPath(m_strPath);
 }
 
 
