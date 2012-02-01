@@ -1561,8 +1561,7 @@ BEGIN
     LTEXT           "Ersetzen &durch:",IDC_STATIC,4,26,50,8
     EDITTEXT        1153,57,24,149,12,ES_AUTOHSCROLL | WS_GROUP
     CONTROL         "Nur &ganze Worte",1040,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,5,46,91,12
-    CONTROL         "Groß-/&Kleinschreibung beachten",1041,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,57,118,12
+    CONTROL         "Groß-/&Kleinschreibung beachten",1041,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,57,118,12
     CONTROL         "Verwende reguläre Ausdrücke",IDC_REGULAR_EXPRESSION,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,68,118,12
     GROUPBOX        "Ersetzen in",IDC_STATIC,135,43,71,37,WS_GROUP
@@ -1582,8 +1581,7 @@ BEGIN
     LTEXT           "&Suchen nach:",IDC_STATIC,4,8,46,8
     EDITTEXT        1152,52,6,157,12,ES_AUTOHSCROLL | WS_GROUP
     CONTROL         "Nur &ganze Wörter",1040,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,4,23,73,10
-    CONTROL         "Groß-/&Kleinschreibung beachten",1041,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,34,118,10
+    CONTROL         "Groß-/&Kleinschreibung beachten",1041,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,34,118,10
     GROUPBOX        "Richtung",IDC_STATIC,141,21,68,35,WS_GROUP
     CONTROL         "A&ufwärts",1056,"Button",BS_AUTORADIOBUTTON | WS_GROUP,145,30,43,12
     CONTROL         "A&bwärts",1057,"Button",BS_AUTORADIOBUTTON,145,41,44,12
@@ -3563,6 +3561,7 @@ BEGIN
                             "Ja, TeXnicCenter für die Verwendung mit %s konfigurieren."
     IDS_RECURSIVE_INCLUSION "Rekursive Inklusion ist nicht erlaubt"
     IDS_CODE_VIEW_INDICATOR "Zeile %d Spalte %d Zeichen %d"
+    IDS_CODE_VIEW_INDICATOR_SELECTION "%d Markierungen"
 END
 
 STRINGTABLE
@@ -4520,6 +4519,16 @@ END
 
 STRINGTABLE
 BEGIN
+    ID_EDIT_PREVGREPRESULT  "Springt zum vorherigen Ergebnis der Suche in Dateien\nVorheriges 'Suche in Dateien'-Ergebnis"
+    ID_EDIT_SEL_BIGGER_BLOCK 
+                            "Markiert den Block zwischen den nächstliegenden Klammern.\nKlammerblock markieren"
+    ID_EDIT_INDICATOR_SELECTION "                              "
+    ID_EDIT_SPELL_ADD       "Wort hinzufügen\nDieses Wort zum Benutzerwörterbuch hinzufügen."
+    ID_EDIT_SPELL_IGNORE_ALL "Wort ignorieren\nDieses Wort ignorieren."
+END
+
+STRINGTABLE
+BEGIN
     ID_EDIT_BLOCKCOMMENT_INSERT 
                             "Kommentiert alle selektierten Zeilen mittels %-Zeichen.\nBlockkommentar einfügen"
     ID_EDIT_BLOCKCOMMENT_REMOVE 
@@ -4696,15 +4705,6 @@ BEGIN
     ID_NEXT_ERROR           "Springt zum nächsten Fehler\nNächster Fehler"
     ID_PREV_ERROR           "Springt zum vorherigen Fehler\nVorheriger Fehler"
     ID_PROJECT_MRU_PROJECT1 "Öffnet dieses Projekt"
-END
-
-STRINGTABLE
-BEGIN
-    ID_EDIT_PREVGREPRESULT  "Springt zum vorherigen Ergebnis der Suche in Dateien\nVorheriges 'Suche in Dateien'-Ergebnis"
-    ID_EDIT_SEL_BIGGER_BLOCK 
-                            "Markiert den Block zwischen den nächstliegenden Klammern.\nKlammerblock markieren"
-    ID_EDIT_SPELL_ADD       "Wort hinzufügen\nDieses Wort zum Benutzerwörterbuch hinzufügen."
-    ID_EDIT_SPELL_IGNORE_ALL "Wort ignorieren\nDieses Wort ignorieren."
 END
 
 STRINGTABLE
@@ -7547,6 +7547,7 @@ BEGIN
                             "Yes, configure TeXnicCenter for the use with %s."
     IDS_RECURSIVE_INCLUSION "Recursive inclusion is not allowed"
     IDS_CODE_VIEW_INDICATOR "Line %d Column %d Character %d"
+    IDS_CODE_VIEW_INDICATOR_SELECTION "%d Selections"
 END
 
 STRINGTABLE
@@ -8130,6 +8131,7 @@ BEGIN
     ID_EDIT_PREVGREPRESULT  "Goes to the previous result of the find in files action\nPrevious 'Find in Files'-Result"
     ID_EDIT_SEL_BIGGER_BLOCK 
                             "Selects all text to the left and right until the next braces.\nSelect Brace Block"
+    ID_EDIT_INDICATOR_SELECTION "                         "
     ID_EDIT_SPELL_ADD       "Add word\nAdd this word to personal dictionary"
     ID_EDIT_SPELL_IGNORE_ALL "Ignore word\nIgnore this word"
     ID_EDIT_TOGGLE_BOOKMARK "Toggles a Bookmark at the current line\nToggle Bookmark"
