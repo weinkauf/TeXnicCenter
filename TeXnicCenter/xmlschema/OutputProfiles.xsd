@@ -35,6 +35,12 @@
 			<xs:element name="texCommand" type="DisableableCommandLineCommandDefinition" />
 			<xs:element name="bibTexCommand" type="DisableableCommandLineCommandDefinition" />
 			<xs:element name="makeIndexCommand" type="DisableableCommandLineCommandDefinition" />
+			<xs:element name="preProcessors" type="ProcessorList" minOccurs="0">
+				<xs:unique name="preProcessorNames">
+					<xs:selector xpath="processor" />
+					<xs:field xpath="@name" />
+				</xs:unique>
+			</xs:element>
 			<xs:element name="postProcessors" type="ProcessorList">
 				<xs:unique name="postProcessorNames">
 					<xs:selector xpath="processor" />
