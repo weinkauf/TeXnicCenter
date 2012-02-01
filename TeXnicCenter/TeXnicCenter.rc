@@ -12,7 +12,7 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
+#include "afxres.h"
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -5345,7 +5345,7 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,180,131,10
     LTEXT           "Path to MakeIndex executable:",IDC_TITLE_MAKEINDEXPATH,5,194,102,8
     LTEXT           "&Command line arguments to pass to MakeIndex:",IDC_TITLE_MAKEINDEXARGUMENTS,5,220,155,8
-    CONTROL         "&Stop Compilation, if LaTeX-Error occures",IDC_STOPONLATEXERROR,
+    CONTROL         "&Stop compilation on LaTeX error",IDC_STOPONLATEXERROR,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,23,145,10
     EDITTEXT        IDC_EDIT_LATEXPATH,5,45,210,13,ES_AUTOHSCROLL
     PUSHBUTTON      "...",IDC_BROWSELATEX,219,44,16,14
@@ -9011,7 +9011,7 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 #include "res\\TeXnicCenter.rc2"  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen
 #include "l.deu\\afxres.rc"          // Standardkomponenten
 #include "l.deu\\afxprint.rc"        // Ressourcen für Drucken/Seitenansicht
-#endif
+#endif
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 
