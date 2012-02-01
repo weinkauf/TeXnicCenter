@@ -76,6 +76,7 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_COMMAND(ID_EDIT_GOTO, &CodeView::OnEditGoto)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CodeView::OnFilePrintPreview)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_INDICATOR_ENCODING, &CodeView::OnUpdateEncodingIndicator)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_INDICATOR_SELECTION, &CodeView::OnUpdateSelectionIndicator)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_INDICATOR_POSITION, &CodeView::OnUpdatePositionIndicator)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_INDICATOR_CRLF, &CodeView::OnUpdateEOLModeIndicator)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_WHITE_SPACE, &CodeView::OnUpdateViewWhiteSpace)
@@ -448,12 +449,27 @@ void CodeView::OnUpdateEOLModeIndicator( CCmdUI* pCmdUI )
 void CodeView::OnUpdatePositionIndicator( CCmdUI* pCmdUI )
 {
 	CScintillaCtrl& rCtrl = GetCtrl();
-	int pos = rCtrl.GetCurrentPos();
-	int line = rCtrl.LineFromPosition(pos);
-	int col = rCtrl.GetColumn(pos);
+	const int pos = rCtrl.GetCurrentPos();
+	const int line = rCtrl.LineFromPosition(pos);
+	const int col = rCtrl.GetColumn(pos);
 
 	CString text;
 	text.Format(IDS_CODE_VIEW_INDICATOR, line + 1, col + 1, pos + 1);
+
+	pCmdUI->SetText(text);
+	pCmdUI->Enable();
+}
+
+void CodeView::OnUpdateSelectionIndicator( CCmdUI* pCmdUI )
+{
+	CScintillaCtrl& rCtrl = GetCtrl();
+	const int nSel = rCtrl.GetSelections();
+
+	CString text;
+	if (nSel > 1)
+	{
+		text.Format(IDS_CODE_VIEW_INDICATOR_SELECTION, nSel);
+	}
 
 	pCmdUI->SetText(text);
 	pCmdUI->Enable();

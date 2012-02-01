@@ -112,6 +112,7 @@ protected:
 
 	afx_msg void OnUpdateViewFoldMargin(CCmdUI *pCmdUI);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
+	void OnUpdateSelectionIndicator(CCmdUI* pCmdUI);
 	void OnUpdatePositionIndicator(CCmdUI* pCmdUI);
 	void OnUpdateEncodingIndicator(CCmdUI* pCmdUI);
 	void OnUpdateEOLModeIndicator(CCmdUI* pCmdUI);
