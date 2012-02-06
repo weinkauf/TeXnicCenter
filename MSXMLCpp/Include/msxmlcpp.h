@@ -25,7 +25,7 @@
 *
 ********************************************************************/
 
-#include <msxml2.h>
+#include <msxml6.h>
 #ifdef UNDER_CE
 	#include "../Source/CeDomXml.h"
 	#include "../Source/CeSaxXml.h"

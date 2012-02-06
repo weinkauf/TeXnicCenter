@@ -6,7 +6,6 @@ The following tools and libraries are required to successfully build
 TeXnicCenter and all of its components:
   * Visual C++ 2010 with MFC libraries
   * Microsoft HTML Help Workshop
-  * MSXML 4
   * Mercurial, freely available at http://mercurial.selenic.com/
 
 To generate the setup you will need:

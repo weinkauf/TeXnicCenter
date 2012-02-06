@@ -19,7 +19,7 @@ namespace MsXml
 
 static GUID LIBID = {0xf5078f18, 0xc551, 0x11d3, {0x89, 0xb9, 0x00, 0x00, 0xf8, 0x1f, 0xe2, 0x21}};
 
-#define LIBVER_MAJOR 4
+#define LIBVER_MAJOR 6
 #define LIBVER_MINOR 0
 
 //--------------------------------------------------------------------
@@ -10147,6 +10147,27 @@ CXMLSchemaCache40Class::CXMLSchemaCache40Class()
 
 
 CXMLDOMSchemaCollection2 CXMLSchemaCache40Class::GetXMLDOMSchemaCollection2()
+{
+	IXMLDOMSchemaCollection2 *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+//--------------------------------------------------------------------
+// class CXMLSchemaCache60Class
+//--------------------------------------------------------------------
+
+const CLSID CXMLSchemaCache60Class::s_ClsId = CLSID_XMLSchemaCache60;
+
+
+CXMLSchemaCache60Class::CXMLSchemaCache60Class()
+:	CCoClassWrapper<IXMLDOMSchemaCollection2>(s_ClsId)
+{}
+
+
+CXMLDOMSchemaCollection2 CXMLSchemaCache60Class::GetXMLDOMSchemaCollection2()
 {
 	IXMLDOMSchemaCollection2 *p = NULL;
 	HRESULT	hr = m_p.QueryInterface(&p);

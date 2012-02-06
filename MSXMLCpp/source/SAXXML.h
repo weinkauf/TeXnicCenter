@@ -11,7 +11,7 @@
 #define __SAXXML_H__
 
 #include "../../InterfaceWrapper/Include/InterfaceWrapper.h"
-#include <msxml2.h>
+#include <msxml6.h>
 
 namespace MsXml
 {
@@ -27,9 +27,11 @@ class CVBSAXXMLFilter;
 class CSAXXMLReaderClass;
 class CSAXXMLReader30Class;
 class CSAXXMLReader40Class;
+class CSAXXMLReader60Class;
 class CMXXMLWriterClass;
 class CMXXMLWriter30Class;
 class CMXXMLWriter40Class;
+class CMXXMLWriter60Class;
 class CSAXAttributesClass;
 class CSAXAttributes30Class;
 class CSAXAttributes40Class;
@@ -372,6 +374,24 @@ public:
 };
 
 
+///Manually added
+class CSAXXMLReader60Class : public CCoClassWrapper<IVBSAXXMLReader>
+{
+// construction/destruction
+public:
+	CSAXXMLReader60Class();
+
+// operations
+public:
+	CVBSAXXMLReader GetVBSAXXMLReader();
+	ISAXXMLReader* GetSAXXMLReader();
+
+// Attributes
+public:
+	static const CLSID s_ClsId;
+};
+
+
 
 class CMXXMLWriterClass : public CCoClassWrapper<IMXWriter>
 {
@@ -432,6 +452,33 @@ class CMXXMLWriter40Class : public CCoClassWrapper<IMXWriter>
 // construction/destruction
 public:
 	CMXXMLWriter40Class();
+
+// operations
+public:
+	CMXWriter GetMXWriter();
+	ISAXContentHandler* GetSAXContentHandler();
+	ISAXDeclHandler* GetSAXDeclHandler();
+	ISAXDTDHandler* GetSAXDTDHandler();
+	ISAXErrorHandler* GetSAXErrorHandler();
+	ISAXLexicalHandler* GetSAXLexicalHandler();
+	IVBSAXContentHandler* GetVBSAXContentHandler();
+	IVBSAXDeclHandler* GetVBSAXDeclHandler();
+	IVBSAXDTDHandler* GetVBSAXDTDHandler();
+	IVBSAXErrorHandler* GetVBSAXErrorHandler();
+	IVBSAXLexicalHandler* GetVBSAXLexicalHandler();
+
+// Attributes
+public:
+	static const CLSID s_ClsId;
+};
+
+
+///Manually added
+class CMXXMLWriter60Class : public CCoClassWrapper<IMXWriter>
+{
+// construction/destruction
+public:
+	CMXXMLWriter60Class();
 
 // operations
 public:
