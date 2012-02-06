@@ -1198,9 +1198,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="Version.h.template">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="GPL_english.htm">
       <Filter>Copy</Filter>
     </CustomBuild>
