@@ -654,39 +654,37 @@ void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& a, bool bSelect /
 
 			GetCtrl().GetTextRange(&range);
 
-			if (true) {
-				long EndX = l - 1;
-				long CurrentX = EndX;
+			long EndX = l - 1;
+			long CurrentX = EndX;
 
-				//Backward search: go to first character of the current word
-				for (; CurrentX >= 0; CurrentX--) {
-					if (!IsAutoCompletionCharacter(data[CurrentX])) {
-						++CurrentX; //This is the last valid TCHAR
-						break;
-					}
+			//Backward search: go to first character of the current word
+			for (; CurrentX >= 0; CurrentX--) {
+				if (!IsAutoCompletionCharacter(data[CurrentX])) {
+					++CurrentX; //This is the last valid TCHAR
+					break;
 				}
-
-				if (CurrentX < 0)
-					CurrentX = 0;
-
-				if (CurrentX <= EndX) {
-					ASSERT(CurrentX >= 0);
-					ASSERT(EndX - CurrentX >= 0);
-
-					std::vector<wchar_t> conv;
-					UTF8toUTF16(range.lpstrText + CurrentX, EndX - CurrentX + 1, conv);
-
-					if (!conv.empty())
-						strKeyword.SetString(&conv[0], static_cast<int>(conv.size()));
-					
-					if (bSelect)
-						GetCtrl().SetSel(start + CurrentX,pos);
-
-					a = start + CurrentX;
-				}
-				else
-					strKeyword.Empty();
 			}
+
+			if (CurrentX < 0)
+				CurrentX = 0;
+
+			if (CurrentX <= EndX) {
+				ASSERT(CurrentX >= 0);
+				ASSERT(EndX - CurrentX >= 0);
+
+				std::vector<wchar_t> conv;
+				UTF8toUTF16(range.lpstrText + CurrentX, EndX - CurrentX + 1, conv);
+
+				if (!conv.empty())
+					strKeyword.SetString(&conv[0], static_cast<int>(conv.size()));
+					
+				if (bSelect)
+					GetCtrl().SetSel(start + CurrentX,pos);
+
+				a = start + CurrentX;
+			}
+			else
+				strKeyword.Empty();
 		}
 	}
 }
@@ -694,34 +692,34 @@ void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& a, bool bSelect /
 bool LaTeXView::IsAutoCompletionCharacter(TCHAR tc)
 {
 	switch (tc) {
-			//All the following chars are allowed in labels.
-			// - but we do not allow all since some of them are rather strange
+		//All the following chars are allowed in labels.
+		// - but we do not allow all since some of them are rather strange
 		case _T('&') :
 		case _T('_') :
 		case _T('-') :
 		case _T('+') :
 		case _T(':') :
-			//case _T('='):
-			//case _T('^'):
-			//case _T('.'):
-			//case _T(';'):
-			//case _T(','): //A comma can be used in \cite{weinkauf04a,weinkauf05b} and we want to see this as two bibkeys
-			//case _T('!'):
-			//case _T('`'):
-			//case _T('´'):
-			//case _T('('): //Especially braces should not be part of a label; this would kill most editor stuff
-			//case _T(')'):
-			//case _T('['):
-			//case _T(']'):
-			//case _T('<'):
-			//case _T('>'):
+		//case _T('='):
+		//case _T('^'):
+		//case _T('.'):
+		//case _T(';'):
+		//case _T(','): //A comma can be used in \cite{weinkauf04a,weinkauf05b} and we want to see this as two bibkeys
+		//case _T('!'):
+		//case _T('`'):
+		//case _T('´'):
+		//case _T('('): //Especially braces should not be part of a label; this would kill most editor stuff
+		//case _T(')'):
+		//case _T('['):
+		//case _T(']'):
+		//case _T('<'):
+		//case _T('>'):
 
-			//All the following chars are allowed in keywords.
+		//All the following chars are allowed in keywords.
 		case _T('\\') :
 		case _T('@') :
 			return TRUE;
 
-			//Be default, labels can consist of numbers and letters; keywords only of letters
+		//By default, labels can consist of numbers and letters; keywords only of letters
 		default:
 			return CharTraitsT::IsAlnum(tc);
 	}
