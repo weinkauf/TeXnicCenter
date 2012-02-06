@@ -53,7 +53,7 @@ HRESULT DOMSavePretty(IXMLDOMDocument *pDoc, LPCTSTR lpszPath, LPCTSTR lpszEncod
 	#ifdef UNDER_CE
 		hr = Reader.CoCreateInstance(CSAXXMLReaderClass::s_ClsId);
 	#else
-		hr = Reader.CoCreateInstance(CSAXXMLReader40Class::s_ClsId);
+		hr = Reader.CoCreateInstance(CSAXXMLReader60Class::s_ClsId);
 	#endif
 	if (FAILED(hr))
 		return hr;
@@ -62,7 +62,7 @@ HRESULT DOMSavePretty(IXMLDOMDocument *pDoc, LPCTSTR lpszPath, LPCTSTR lpszEncod
 	#ifdef UNDER_CE
 		CMXXMLWriterClass	Writer;
 	#else
-		CMXXMLWriter40Class	Writer;
+		CMXXMLWriter60Class	Writer;
 	#endif
 	Writer.Create(CLSCTX_INPROC);
 	Writer.GetMXWriter().SetIndent(VARIANT_TRUE);
