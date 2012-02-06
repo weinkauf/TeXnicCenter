@@ -684,8 +684,6 @@ void COutputWizard::ShowInformation()
 	if (m_bPdfLatexInstalled)
 		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFTYPE) + newline;
 
-	// LaTeX => PDF (SumatraPDF)?
-
 	if (m_bGhostscriptInstalled)
 		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFVIAPSTYPE) + newline;
 
@@ -955,10 +953,6 @@ void COutputWizard::AssignPDFViewer(CProfile& p)
 
 void COutputWizard::SetupSumatraDDE( CProfile &p )
 {
-	CDdeCommand cmd;
-	CProfile::CCommand profileCmd;
-	profileCmd.SetActiveCommand(CProfile::CCommand::typeDde);
-
 	CString app;
 	app.ReleaseBuffer(::GetModuleFileName(0,app.GetBuffer(MAX_PATH),MAX_PATH));
 
@@ -967,16 +961,26 @@ void COutputWizard::SetupSumatraDDE( CProfile &p )
 
 	p.SetViewerPath(exec);
 
-	cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
-	cmd.SetCommand(_T("[ForwardSearch(\"%bm.pdf\",\"%Wc\",%l,0,0,1)]"));
+	CProfile::CCommand ViewOutputCmd;
+	ViewOutputCmd.SetActiveCommand(CProfile::CCommand::typeProcess);
+	CProcessCommand SumatraProcessCmd;
+	SumatraProcessCmd.Set(m_wndPagePdfViewer.m_strPath, _T("\"%bm.pdf\""));
+	ViewOutputCmd.SetProcessCommand(SumatraProcessCmd);
+	p.SetViewProjectCmd(ViewOutputCmd);
 
-	cmd.SetServer(_T("sumatra"),_T("control"));
-	profileCmd.SetDdeCommand(cmd);
+	CDdeCommand SumatraDDECmd;
+	CProfile::CCommand ForwardSearchCmd;
+	ForwardSearchCmd.SetActiveCommand(CProfile::CCommand::typeDde);
 
-	p.SetViewProjectCmd(profileCmd);
-	p.SetViewCurrentCmd(profileCmd);
+	SumatraDDECmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
+	SumatraDDECmd.SetCommand(_T("[ForwardSearch(\"%bm.pdf\",\"%Wc\",%l,0,0,1)]"));
 
-	p.SetViewCloseCmd(profileCmd);
+	SumatraDDECmd.SetServer(_T("sumatra"),_T("control"));
+	ForwardSearchCmd.SetDdeCommand(SumatraDDECmd);
+
+	p.SetViewCurrentCmd(ForwardSearchCmd);
+
+	p.SetViewCloseCmd(CProfile::CCommand());
 	p.SetCloseView(false);
 }
 
