@@ -578,13 +578,13 @@ void COutputWizard::LookForPdf()
 
 	// Detect SumatraPDF
 	ATL::CRegKey reg;
-	
-	if (reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS
-		|| reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\Wow6432Node\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS)
+
+	if (reg.Open(HKEY_LOCAL_MACHINE,_T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS
+		|| reg.Open(HKEY_LOCAL_MACHINE,_T("SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS)
 	{
 		ULONG length = MAX_PATH;		
 
-		if (reg.QueryStringValue(_T("Install_Dir"),sumatra_path_.GetBuffer(length),&length) == ERROR_SUCCESS)
+		if (reg.QueryStringValue(_T("InstallLocation"),sumatra_path_.GetBuffer(length),&length) == ERROR_SUCCESS)
 		{
 			sumatra_path_.ReleaseBuffer(length);
 			sumatra_path_ = CPathTool::Cat(sumatra_path_,_T("SumatraPDF.exe"));
@@ -596,6 +596,28 @@ void COutputWizard::LookForPdf()
 			sumatra_path_.ReleaseBuffer(0);
 
 		reg.Close();
+	}
+	else
+	{
+		//Older versions of Sumatra wrote their installation directory here:	
+		if (reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS
+			|| reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\Wow6432Node\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS)
+		{
+			ULONG length = MAX_PATH;		
+
+			if (reg.QueryStringValue(_T("Install_Dir"),sumatra_path_.GetBuffer(length),&length) == ERROR_SUCCESS)
+			{
+				sumatra_path_.ReleaseBuffer(length);
+				sumatra_path_ = CPathTool::Cat(sumatra_path_,_T("SumatraPDF.exe"));
+
+				if (CPathTool::Exists(sumatra_path_))
+					sumatra_installed_ = true;
+			}
+			else
+				sumatra_path_.ReleaseBuffer(0);
+
+			reg.Close();
+		}
 	}
 
 	// No GhostScript found?
