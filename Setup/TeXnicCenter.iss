@@ -5,7 +5,7 @@
 ;-------------------------------------------
 
 ;Uncomment this for x64
-;#define TARGET_x64
+#define TARGET_x64
 
 ;Uncomment this for an Alpha Build
 #define ALPHA_BUILD
@@ -54,11 +54,14 @@
   #define APP_ID            APP_NAME
 #endif
 
+;~ We need that for the file name of the setup itself
+#define APP_VERSION_NOSPACE StringChange(APP_VERSION, " ", "")
+
 
 [Setup]
 ;Output
 OutputDir=..\Output\Setup
-OutputBaseFilename=TXCSetup_{#APP_PLATFORM}
+OutputBaseFilename=TXCSetup_{#APP_VERSION_NOSPACE}_{#APP_PLATFORM}
 ;About TeXnicCenter
 AppName={#APP_NAME}
 AppVersion={#APP_VERSION}
