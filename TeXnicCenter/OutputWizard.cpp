@@ -1015,6 +1015,7 @@ void COutputWizard::SetupAcrobatDDE( CProfile &p )
 
 	//Get the version of the targeted Adobe Reader/Acrobat
 	// in order to properly setup the DDE server name
+	// (only for versions >= 10; older versions just use "acroview")
 	CString DDEServerName(_T("acroview"));
 	const tregex regexReaderVersion(_T(".*\\\\Reader ([\\d]+)\\..*"));
 	const tregex regexAcrobatVersion(_T(".*\\\\Acrobat ([\\d]+)\\..*"));
@@ -1023,11 +1024,19 @@ void COutputWizard::SetupAcrobatDDE( CProfile &p )
 	LPCTSTR lpEnd = lpStart + m_wndPagePdfViewer.m_strPath.GetLength();
 	if (regex_search(lpStart, lpEnd, what, regexReaderVersion))
 	{
-		DDEServerName = CString(_T("acroview")) + _T("R") + CString(what[1].first, what[1].second - what[1].first);
+		CString VersionNumberString(what[1].first, what[1].second - what[1].first);
+		if (_wtoi(VersionNumberString) >= 10)
+		{
+			DDEServerName = CString(_T("acroview")) + _T("R") + VersionNumberString;
+		}
 	}
 	else if (regex_search(lpStart, lpEnd, what, regexAcrobatVersion))
 	{
-		DDEServerName = CString(_T("acroview")) + _T("A") + CString(what[1].first, what[1].second - what[1].first);
+		CString VersionNumberString(what[1].first, what[1].second - what[1].first);
+		if (_wtoi(VersionNumberString) >= 10)
+		{
+			DDEServerName = CString(_T("acroview")) + _T("A") + VersionNumberString;
+		}
 	}
 
 	cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
