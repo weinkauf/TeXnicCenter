@@ -115,11 +115,10 @@ class CPreProcessorArray : public CArray<class CPreProcessor, class CPreProcesso
 		void LoadXml(MsXml::CXMLDOMElement xmlPreProcessors);
 	};
 
-/**
-Specification the properties of a compiler to be called, after the
-(La)TeX-compiler (i.e. dvips).
 
-@author Sven Wiegand
+/** Specification of a tool to be called before the (La)TeX-compiler is called.
+
+	@author Alexander Mueller
  */
 class CPreProcessor
 {

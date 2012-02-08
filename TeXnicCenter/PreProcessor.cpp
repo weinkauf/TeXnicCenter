@@ -263,7 +263,7 @@ void CPreProcessor::RemoveDirectorySpecifications()
 
 CString CPreProcessor::GetExpandedArguments(LPCTSTR lpszPath) const
 {
-	return AfxExpandPlaceholders(m_strArguments,lpszPath);
+	return AfxExpandPlaceholders(m_strArguments, lpszPath, NULL, -1, NULL, true);
 }
 
 CString CPreProcessor::GetExpandedInputFile(LPCTSTR lpszPath) const
