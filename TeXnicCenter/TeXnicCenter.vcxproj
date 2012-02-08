@@ -133,7 +133,7 @@
     </ProjectReference>
     <Link>
       <AdditionalDependencies>imm32.lib;shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>shell32.dll;comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <TargetMachine>MachineX86</TargetMachine>
@@ -182,7 +182,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>imm32.lib;shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>shell32.dll;comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <TargetMachine>MachineX64</TargetMachine>
@@ -229,7 +229,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>imm32.lib;shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>shell32.dll;comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -275,7 +275,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>imm32.lib;shlwapi.lib;mpr.lib;htmlhelp.lib;msxml2.lib;uxtheme.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <DelayLoadDLLs>comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>shell32.dll;comctl32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
