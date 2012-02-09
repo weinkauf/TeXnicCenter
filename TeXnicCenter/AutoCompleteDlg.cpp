@@ -173,13 +173,8 @@ BOOL CAutoCompleteDlg::UpdateSelection(CString &newKeyword)
 	}
 }
 
-BOOL CAutoCompleteDlg::IsCancelChar(WORD theChar)
-{
-	return theChar == VK_SPACE;
-}
-
 /* User has comfirmed selection.  */
-void CAutoCompleteDlg::ApplySelection()
+void CAutoCompleteDlg::ApplySelection(const TCHAR AdditionalInsertChar)
 {
 	int n = m_Box->GetCurSel();
 	CString selectedItem;
@@ -191,7 +186,7 @@ void CAutoCompleteDlg::ApplySelection()
 		ASSERT(lc != NULL);
 		if (m_Listener != NULL)
 		{
-			m_Listener->OnACCommandSelect(lc);
+			m_Listener->OnACCommandSelect(lc, AdditionalInsertChar);
 		}
 	}
 	else
@@ -290,6 +285,7 @@ BOOL CAutoCompleteDlg::PreTranslateMessage(MSG* pMsg)
 
 				case VK_TAB:
 				case VK_RETURN:
+				case VK_SPACE:
 					ApplySelection();
 					return 1;
 				case VK_ESCAPE:
@@ -321,8 +317,6 @@ BOOL CAutoCompleteDlg::PreTranslateMessage(MSG* pMsg)
 				case VK_F1:
 					Help();
 					return 1;
-				case VK_SPACE:
-					break;
 					/* Delete last TCHAR */
 				case VK_BACK:
 					if (m_CurrentKeyword.GetLength() > MINIMUM_KEYWORD_LENGTH)
@@ -346,26 +340,38 @@ BOOL CAutoCompleteDlg::PreTranslateMessage(MSG* pMsg)
 					return 1;
 			}
 			break;
+
 		case WM_CHAR:
 			if (IsWindowVisible())
 			{
-				if (!IsCancelChar(pMsg->wParam))   /* check, if TCHAR interrupts keyword (e. g. space) */
+				//Did the user press a char that applies the selection and adds the char as well?
+				// Such keys are:
+				// "," ==> think of \cite{weinkauf10c, weinkauf07c}
+				// "_" or "^" ==> think of and sub- or super-scripts in math mode
+				const TCHAR c = (TCHAR) pMsg->wParam;
+				if (   c == _T(',') || c == _T('_') || c == _T('^') || c == _T('=') || c == _T('+') || c == _T('-')
+					|| c == _T('[') || c == _T(']') || c == _T('{') || c == _T('}') || c == _T('(') || c == _T(')')
+					|| c == _T('.') || c == _T(';') || c == _T('<') || c == _T('>') || c == _T('\\')
+					)
 				{
-					m_CurrentKeyword += (TCHAR) pMsg->wParam;
-					UpdateSelection(m_CurrentKeyword);
+					//Apply and add char.
+					// We cannot send it via OnACChar(), because after applying the selection the listener won't listen anymore.
+					ApplySelection(c);
 				}
 				else
 				{
+					//Add the char to the keyword and update selection in list box
+					m_CurrentKeyword += (TCHAR) pMsg->wParam;
+					UpdateSelection(m_CurrentKeyword);
+
+					//Send the char to the listener
 					if (m_Listener != NULL)
 					{
 						m_Listener->OnACChar(pMsg->wParam,LOWORD(pMsg->lParam),HIWORD(pMsg->lParam));
 					}
-					CancelSelection();
 				}
-				if (m_Listener != NULL)
-				{
-					m_Listener->OnACChar(pMsg->wParam,LOWORD(pMsg->lParam),HIWORD(pMsg->lParam));
-				}
+
+				return 0;
 			}
 			break;
 	}
