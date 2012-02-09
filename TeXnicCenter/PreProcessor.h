@@ -41,7 +41,10 @@
 
 class RegistryStack;
 
-/** An array of postprocessor specifications */
+/** An array of postprocessor specifications.
+
+	@todo Create a common base class for preprocessors and postprocessors.
+*/
 class CPreProcessorArray : public CArray<class CPreProcessor, class CPreProcessor&>
 	{
 		// operations
@@ -117,6 +120,8 @@ class CPreProcessorArray : public CArray<class CPreProcessor, class CPreProcesso
 
 
 /** Specification of a tool to be called before the (La)TeX-compiler is called.
+
+	@todo Create a common base class for preprocessors and postprocessors.
 
 	@author Alexander Mueller
  */
