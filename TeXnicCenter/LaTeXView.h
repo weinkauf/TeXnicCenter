@@ -48,7 +48,8 @@ private:
 	void OnACBackspace();
 	void OnACChar(UINT nKey,UINT nRepCount,UINT nFlags);
 	void OnACCommandCancelled();
-	void OnACCommandSelect(const CLaTeXCommand* cmd);
+	///@todo Do not try to guess the cursor pos, but define it in the latex command (in xml). Default: after the inserted text
+	void OnACCommandSelect(const CLaTeXCommand* cmd, const TCHAR AdditionalInsertChar = _T(''));
 
 	void Reindent( int initial_line_count, int start_line );
 	void OnACHelp(const CString &cmd);	
@@ -79,7 +80,6 @@ protected:
 	afx_msg void OnUpdateFormatTextBackColor(CCmdUI* pCmdUI);
 
 private:
-	void RestoreFocus();
 	BOOL InvokeContextHelp(const CString& keyword);
 
 public:	
