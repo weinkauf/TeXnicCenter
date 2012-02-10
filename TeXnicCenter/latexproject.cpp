@@ -684,7 +684,7 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 			if (hwndlock) // Reduce flicker
 				::LockWindowUpdate(hwndlock);
 
-			if (CDocument* doc = theApp.OpenDocumentFile(CPathTool::GetAbsolutePath(strBaseDir,strDocPath))) 
+			if (CDocument* doc = theApp.OpenDocumentFile(CPathTool::GetAbsolutePath(strBaseDir,strDocPath), FALSE)) 
 			{
 				POSITION pos = doc->GetFirstViewPosition();
 

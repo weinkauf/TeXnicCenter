@@ -194,7 +194,7 @@ public:
 	@return A pointer to the document.
 	 */
 	virtual CDocument* OpenDocumentFile(LPCTSTR lpszFileName);
-
+	virtual CDocument* OpenDocumentFile(LPCTSTR lpszFileName, BOOL bAddToMRU);
 	/**
 	Opens the specified File at the specified line. If the file is already
 	open, its main view is activated and the cursor is set to the specified
@@ -216,7 +216,7 @@ public:
 	 */
 	CDocument* OpenLatexDocument(LPCTSTR lpszFileName,BOOL bReadOnly = FALSE,
 	                             int nLineNumber = -1,BOOL bError = FALSE,
-	                             bool bAskForProjectLoad = true);
+	                             bool bAskForProjectLoad = true, BOOL bAddToMRU = FALSE);
 
 	/**
 	Returns a string associated with the project document template.
