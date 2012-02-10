@@ -51,7 +51,7 @@ inline bool AtlDrawThemeClientEdge(HTHEME hTheme,HWND hWnd,HRGN hRgnUpdate = NUL
 	{
 		if (hBrush == NULL)
 			// need conditional code because types don't match in winuser.h
-#ifdef WIN64
+#ifdef _WIN64
 			hBrush = (HBRUSH)::GetClassLongPtr(hWnd,GCLP_HBRBACKGROUND);
 #else
 			hBrush = (HBRUSH)UlongToPtr(::GetClassLongPtr(hWnd,GCLP_HBRBACKGROUND));
