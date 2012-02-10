@@ -912,12 +912,17 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName,BOOL bReadOnl
 
 CDocument* CTeXnicCenterApp::OpenDocumentFile(LPCTSTR lpszFileName)
 {
-	return OpenLatexDocument(lpszFileName, FALSE, -1, FALSE, true);
+	return OpenLatexDocument(lpszFileName, FALSE, -1, FALSE, true, TRUE);
+}
+
+CDocument* CTeXnicCenterApp::OpenDocumentFile(LPCTSTR lpszFileName, BOOL bAddToMRU)
+{
+	return OpenLatexDocument(lpszFileName, FALSE, -1, FALSE, true, bAddToMRU);
 }
 
 CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/,
         int nLineNumber /*= -1*/, BOOL bError /*= FALSE*/,
-        bool bAskForProjectLoad /*= true*/)
+        bool bAskForProjectLoad /*= true*/, BOOL bAddToMRU /*= FALSE*/)
 {
 	TRACE1("Opening LaTeX Doc: %s\n", lpszFileName);
 
@@ -933,7 +938,7 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 	CDocument *pDoc = NULL;
 	BOOL bFound = FALSE;
 
-	if ((pDoc = CWinAppEx::OpenDocumentFile(lpszFileName)) != 0)
+	if ((pDoc = CWinAppEx::OpenDocumentFile(lpszFileName, bAddToMRU)) != 0)
 		bFound = TRUE;
 
 	//Open new document, if we could not find one
@@ -1267,7 +1272,7 @@ void CTeXnicCenterApp::OnFileOpen()
 		const CString path = dlg.GetNextPathName(file);
 		// open file
 		//NOTE: dlg.GetReadOnlyPref() always return false on my WinXP SP2, Tino, Jan 2007
-		OpenLatexDocument(path, dlg.GetReadOnlyPref(), -1, false, true);
+		OpenLatexDocument(path, dlg.GetReadOnlyPref(), -1, false, true, TRUE);
 	}
 
 	AfxSetLastDirectory(CPathTool::GetDirectory(dlg.GetPathName()));	
