@@ -134,7 +134,7 @@ namespace std {
 			const unsigned char* s = reinterpret_cast<const unsigned char*>(pidl);
 			const unsigned char* e = reinterpret_cast<const unsigned char*>(pidl) + value.GetSize();
 
-#ifdef WIN64
+#ifdef _WIN64
 			size_t hash = 14695981039346656037;
 			const size_t prime = 1099511628211;
 #else
