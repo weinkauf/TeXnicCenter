@@ -687,7 +687,8 @@ void BibView::OnLvnItemChanged(NMHDR* nm, LRESULT*)
 	LPNMLISTVIEW p = reinterpret_cast<LPNMLISTVIEW>(nm);
 
 	if (p->uChanged & LVIF_STATE && p->iItem != -1 && p->uNewState & LVIS_SELECTED)
-		GetProject()->SetCurrentStructureItem(bib_items_[list_view_.GetItemData(p->iItem)].structure_item_index);
+		GetProject()->SetCurrentStructureItem(static_cast<int>
+			(bib_items_[list_view_.GetItemData(p->iItem)].structure_item_index));
 }
 
 BOOL BibView::PreTranslateMessage(MSG* pMsg)
