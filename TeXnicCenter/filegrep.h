@@ -93,7 +93,7 @@ public:
 /**
 An object of the class CFileGrep can be used to search for a text or
 a regular expression in one ore more files, which names matches a
-wildcard in one directory (and maybe its subdirectories)
+wild card in one directory (and maybe its subdirectories)
 
 An object that implements CFileGrepHandler is needed to get the
 results of the search.
@@ -165,11 +165,11 @@ public:
 
 	@return
 	        If the flag flagOwnThread is set, the return parameter is TRUE, if the
-	        search thread has been startet successfully and FALSE, if the
+	        search thread has been started successfully and FALSE, if the
 	        thread has not been started (maybe there is already a running grep
 	        thread. If the flag flagOwnThread is not set,
 	        the the parameter is TRUE when the search finished or FALSE if
-	        an error occured.
+	        an error occurred.
 	 */
 	BOOL Grep(
 	    CFileGrepHandler *pFileGrepHandler, /*CTextSourceManager *pTextSourceManager,*/
