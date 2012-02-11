@@ -11,10 +11,7 @@ echo ----------------------------------------
 echo                                        -
 echo Running doxygen
 
-D:\Programme\doxygen\bin\doxygen.exe txc.doxy
-C:\Programme\doxygen\bin\doxygen.exe txc.doxy
-"D:\Program Files\doxygen\bin\doxygen.exe" txc.doxy
-"C:\Program Files\doxygen\bin\doxygen.exe" txc.doxy
+doxygen txc.doxy
 
 echo                                        -
 echo                                        -
