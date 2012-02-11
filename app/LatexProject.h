@@ -40,7 +40,7 @@
 #include "OutputInfo.h"
 #include "StructureParser.h"
 #include "StructureTreeCtrl.h"
-#include "Project.h"
+#include "Project.hpp"
 #include "IProject.h"
 #include "BookmarkEventArgs.h"
 

@@ -511,10 +511,10 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 		ini.SetValue(KEY_FORMATINFO,VAL_FORMATINFO_TYPE,FORMATTYPE);
 		ini.SetValue(KEY_FORMATINFO,VAL_FORMATINFO_VERSION,CURRENTFORMATVERSION);
 
-		//Store frame information
+		// Store frame information
 		if (m_pwndMainFrame)
 		{
-			//Get the MDI Childs (sorted by Tabs)
+			// Get the MDI children (sorted by Tabs)
 			CArray<CChildFrame*,CChildFrame*> MDIChildArray;
 
 			int nActiveFrame = m_pwndMainFrame->GetMDIChilds(MDIChildArray,true);			
@@ -529,7 +529,7 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 					CString strKey;
 					strKey.Format(KEY_FRAMEINFO,actual_frame_count);
 
-					MDIChildArray[i]->Serialize(ini,strKey,bWrite);
+					MDIChildArray[i]->Serialize(ini,strKey,!!bWrite);
 					++actual_frame_count;
 				}
 				else if (nActiveFrame == i)
@@ -549,7 +549,7 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 		typedef FileBookmarksContainerType::iterator IB;
 		std::basic_ostringstream<TCHAR> oss;
 
-		for (IB it = bookmarks_.begin(); it != bookmarks_.end(); ++it) 
+		for (IB it = bookmarks_.begin(); it != bookmarks_.end(); ++it)
 		{
 			oss.str(_T(""));
 			oss.clear();
@@ -566,7 +566,7 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 
 		typedef FileFoldingPointsContainerType::iterator IF;
 
-		for (IF it = folding_points_.begin(); it != folding_points_.end(); ++it) 
+		for (IF it = folding_points_.begin(); it != folding_points_.end(); ++it)
 		{
 			oss.str(_T(""));
 			oss.clear();
@@ -607,7 +607,7 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 				bookmarks.clear();
 
 				std::copy(iterator_type(iss),iterator_type(),std::back_inserter(bookmarks));
-				bookmarks_.insert(std::make_pair(it->first,bookmarks)); 
+				bookmarks_.insert(std::make_pair(it->first,bookmarks));
 			}
 		}
 
@@ -684,13 +684,13 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 			if (hwndlock) // Reduce flicker
 				::LockWindowUpdate(hwndlock);
 
-			if (CDocument* doc = theApp.OpenDocumentFile(CPathTool::GetAbsolutePath(strBaseDir,strDocPath), FALSE)) 
+			if (CDocument* doc = theApp.OpenDocumentFile(CPathTool::GetAbsolutePath(strBaseDir,strDocPath), FALSE))
 			{
 				POSITION pos = doc->GetFirstViewPosition();
 
 				if (pos) {
 					if (CChildFrame* f = dynamic_cast<CChildFrame*>(doc->GetNextView(pos)->GetParentFrame())) {
-						if (!f->Serialize(ini,strKey,bWrite)) {
+						if (!f->Serialize(ini,strKey,!!bWrite)) {
 							bCouldOpenAllFrames = false;
 							f->DestroyWindow();
 						}
@@ -1140,7 +1140,7 @@ void CLaTeXProject::OnSpellProject()
 			// Restore selection
 			pView->GetCtrl().SetSel(ptStart,ptEnd);
 
-			if (!bWasOpen) 
+			if (!bWasOpen)
 			{
 				//pView->SendMessage(WM_COMMAND,ID_FILE_CLOSE); // WM_COMMAND causes heap corruption
 				pDoc->OnCloseDocument();
@@ -1255,7 +1255,7 @@ const CString CLaTeXProject::GetIgnoredWordsFileName() const
 }
 
 namespace {
-	void CallEventFunction(const std::tr1::function<void (CLaTeXProject*, const BookmarkEventArgs&)>& f, 
+	void CallEventFunction(const std::tr1::function<void (CLaTeXProject*, const BookmarkEventArgs&)>& f,
 		CLaTeXProject* s, const BookmarkEventArgs& a)
 	{
 		f(s,a);
@@ -1289,7 +1289,7 @@ void CLaTeXProject::RemoveBookmark( const CString& filename, const CodeBookmark&
 	const CString name = CPathTool::GetRelativePath(GetDirectory(),filename,TRUE,FALSE);
 	FileBookmarksContainerType::iterator it = bookmarks_.find(name);
 
-	if (it != bookmarks_.end()) 
+	if (it != bookmarks_.end())
 	{
 		BookmarkContainerType::iterator itb = std::find(it->second.begin(),it->second.end(),b);
 		
@@ -1358,7 +1358,7 @@ void CLaTeXProject::RemoveAllBookmarks( const CString& filename )
 	const CString name = CPathTool::GetRelativePath(GetDirectory(),filename,TRUE,FALSE);
 	FileBookmarksContainerType::iterator it = bookmarks_.find(name);
 
-	if (it != bookmarks_.end()) 
+	if (it != bookmarks_.end())
 		bookmarks_.erase(it);
 }
 

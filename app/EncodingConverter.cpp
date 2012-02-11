@@ -4,7 +4,7 @@
 #include <sstream>
 #include <cstdlib>
 
-#include "../libiconv/include/iconv.h"
+#include "iconv.h"
 
 bool GetUTF8CharBytes(unsigned char byte, std::size_t& n)
 {
@@ -286,7 +286,7 @@ void UTF16toUTF8(const char* text, std::size_t n, std::vector<char>& data, bool 
 	ConvertUTF16toUTF8(text,n,data,little_endian);
 }
 
-void UTF8toANSI(const char* text, std::size_t n, std::vector<char>& data, UINT codepage /*= ::GetACP()*/, 
+void UTF8toANSI(const char* text, std::size_t n, std::vector<char>& data, UINT codepage /*= ::GetACP()*/,
 				char dfault /*= '?'*/, bool throw_on_invalid_sequence /*= false*/)
 {
 	data.clear();
@@ -380,7 +380,7 @@ EncodingConverter::EncodingConverter()
 {
 }
 
-EncodingConverter::EncodingConverter( const char* tocode, const char* fromcode ) 
+EncodingConverter::EncodingConverter( const char* tocode, const char* fromcode )
 : impl_(0)
 {
 	if (!Open(tocode,fromcode))

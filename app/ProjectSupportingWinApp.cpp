@@ -28,7 +28,7 @@
 
 #include "stdafx.h"
 #include "resource.h"
-#include "Project.h"
+#include "Project.hpp"
 #include "TeXnicCenter.h"
 
 #ifdef _DEBUG

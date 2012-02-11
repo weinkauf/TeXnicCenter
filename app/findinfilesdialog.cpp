@@ -209,12 +209,12 @@ void CFindInFilesDialog::OnOK()
 		m_wndSearchForCombo.AddToMRU(m_strSearchFor);
 		m_wndSearchInCombo.AddToMRU(m_strSearchIn);
 
-		CConfiguration::GetInstance()->m_bFileFindCaseSensitive = m_bCaseSensitive;
-		CConfiguration::GetInstance()->m_bFileFindSubFolders = m_bIncludeSubFolders;
+		CConfiguration::GetInstance()->m_bFileFindCaseSensitive = !!m_bCaseSensitive;
+		CConfiguration::GetInstance()->m_bFileFindSubFolders = !!m_bIncludeSubFolders;
 		CConfiguration::GetInstance()->m_nFileFindOutput = m_nOutput;
-		CConfiguration::GetInstance()->m_bFileFindRegularExpression = m_bRegularExpression;
+		CConfiguration::GetInstance()->m_bFileFindRegularExpression = !!m_bRegularExpression;
 		CConfiguration::GetInstance()->m_strFileFindFileTypes = m_strSearchThrough;
-		CConfiguration::GetInstance()->m_bFileFindWholeWords = m_bWholeWords;
+		CConfiguration::GetInstance()->m_bFileFindWholeWords = !!m_bWholeWords;
 
 		// standard implementation
 		CDialog::OnOK();

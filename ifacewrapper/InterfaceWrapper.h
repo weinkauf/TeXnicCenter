@@ -93,7 +93,7 @@ public:
 	(AddRef(), Release() and QueryInterface()) to.
 
 	This will usually be used to construct an object as part of a
-	C++ aggregation. 
+	C++ aggregation.
 	
 	This should only be called directly after the construction of the
 	object.
@@ -109,7 +109,7 @@ public:
 	/** Returns the pointer to the wrapped COM interface.	*/
 	virtual T* GetInterface() = 0;
 
-	/** 
+	/**
 	Returns the pointer to the specified interface, if implemented
 	by the object or NULL otherwise.
 
@@ -139,31 +139,31 @@ public:
 	virtual ULONG Release();
 
 	/**
-	If a owner has been set at construction time, the owner's 
-	QueryInterface() will be called, otherwise 
+	If a owner has been set at construction time, the owner's
+	QueryInterface() will be called, otherwise
 	NonDelegatingQueryInterface() will be called.
 	*/
 	virtual HRESULT QueryInterface(REFIID riid, void **ppv);
 
 	/**
 	If FALSE has been specified for the bNoDelete parameter of the
-	object's constructor, the internal reference counter will be 
-	incremented and returned afterwards, else only 2 will be 
+	object's constructor, the internal reference counter will be
+	incremented and returned afterwards, else only 2 will be
 	returned.
 	*/
 	virtual ULONG NonDelegatingAddRef();
 
 	/**
 	If FALSE has been specified for the bNoDelete parameter of the
-	object's constructor, the internal reference counter will be 
+	object's constructor, the internal reference counter will be
 	decremented, checked if it is zero and if it is the object will
-	be destroyed by calling delete and the decremented reference 
+	be destroyed by calling delete and the decremented reference
 	counter will be returned afterwards, else only 1 will be returned.
 	*/
 	virtual ULONG NonDelegatingRelease();
 
 	/**
-	Implements IUnknown::QueryInterface() by calling 
+	Implements IUnknown::QueryInterface() by calling
 	GetInterface(riid). If the returned pointer is not NULL, its
 	AddRef() method will be called and the pointer will be provided
 	by the ppv parameter.
@@ -180,7 +180,7 @@ protected:
 	if this is the case returns this pointer. Otherwise it checks if a
 	valid function pointer for a function that returns a module state
 	has been specified with the constructor and returns the result of
-	that function. Otherwise the method will return NULL and the debug 
+	that function. Otherwise the method will return NULL and the debug
 	version will do an ASSERT(FALSE).
 	*/
 	virtual AFX_MODULE_STATE* GetModuleState();
@@ -189,7 +189,7 @@ protected:
 private:
 	/**
 	TRUE if the object should not be destroyed, when the reference
-	counter becomes zero. 
+	counter becomes zero.
 	*/
 	BOOL m_bNoDelete;
 
@@ -204,7 +204,7 @@ private:
 	*/
 	IUnknown *m_pOwner;
 
-	/** 
+	/**
 	Module state to activate, when a COM-method is invoked, or NULL,
 	if none has been specified with the constructor.
 	*/
@@ -262,18 +262,18 @@ private:
 
 
 /**
-Base class to implement an aggregate of classes implementing 
+Base class to implement an aggregate of classes implementing
 interfaces.
 
 Derive your class from CInterfaceAggregate. Implement
 the virtual inerface implementation wrappers, to implement the
-necessary interfaces. Add one attribute for each interface 
+necessary interfaces. Add one attribute for each interface
 implementation that should be aggregated. In the constructor
 of your aggregate pass the m_xUnknown-pointer as the pOwner
 pointer to the aggregated attributes.
 
 All calls to the IUnknown-methods of the attributes will be deligated
-to the calls of the aggregate. Override GetInterface() of the 
+to the calls of the aggregate. Override GetInterface() of the
 aggregate, so that it calls GetInterface() for all the attributes.
 
 Use the GETTHIS() macro from InterfaceWrapperTools.h to retrieve
@@ -354,7 +354,7 @@ public:
 	it had before the constructor was called. If bIncrementRefCount
 	is set to TRUE, the constructor will do nothing additional, because
 	AddRef() has already been called by QueryInterface. That way, the
-	constructor seems to behave the same way as the 
+	constructor seems to behave the same way as the
 	CInterfaceCallingWrapper(T *p,...) version.
 
 	@param pUnknown
@@ -398,10 +398,10 @@ public:
 
 // operations
 public:
-	/** 
+	/**
 	Attaches the specified pointer.
 
-	Will fail if there is already an interface attached to this 
+	Will fail if there is already an interface attached to this
 	wrapper. Call Detach() first.
 
 	@param bIncrementRefCount
@@ -415,7 +415,7 @@ public:
 	BOOL Attach(T *p, BOOL bIncrementRefCount = FALSE);
 
 	/**
-	Returns the member pointer and detaches it from this object by 
+	Returns the member pointer and detaches it from this object by
 	setting it to NULL.
 
 	@param bIncrementRefCount
@@ -425,7 +425,7 @@ public:
 	T* Detach(BOOL bDecrementRefCount = FALSE);
 
 	/**
-	Copies the internal pointer to a target pointer. The pointer's 
+	Copies the internal pointer to a target pointer. The pointer's
 	reference count is incremented if successful. Returns NULL if the
 	wrapped interface pointer is NULL.
 	*/
@@ -442,7 +442,7 @@ public:
 	HRESULT CoCreateInstance(LPCTSTR lpszProgId, LPUNKNOWN pUnkOuter = NULL, DWORD dwClsContext = CLSCTX_ALL);
 
 	/**
-	Calls QueryInterface() on the internal pointer in a type-safe 
+	Calls QueryInterface() on the internal pointer in a type-safe
 	manner.
 	*/
 	template<class Q> HRESULT QueryInterface(Q **p)
@@ -451,11 +451,11 @@ public:
 	}
 
 	/**
-	Calls QueryInterface() on the internal pointer in a type-safe 
+	Calls QueryInterface() on the internal pointer in a type-safe
 	manner.
 
 	@param bThrowException
-		If TRUE the method will throw a CComException if the call to 
+		If TRUE the method will throw a CComException if the call to
 		QueryInterface() fails, otherwise only a NULL pointer will
 		be returned if the call fails.
 	*/
@@ -480,7 +480,7 @@ public:
 	@param riid
 		The interface ID of the interface to return a pointer to.
 	@param bThrowException
-		If TRUE the method will throw a CComException if the call to 
+		If TRUE the method will throw a CComException if the call to
 		QueryInterface() fails, otherwise only a NULL pointer will
 		be returned if the call fails.
 	*/
@@ -538,7 +538,7 @@ public:
 
 	/**
 	Returns the interface, declared as the default interface for the
-	COM class. Does not increase the reference counter of the 
+	COM class. Does not increase the reference counter of the
 	interface.
 	*/
 	T* DefaultInterface();
@@ -573,7 +573,7 @@ public:
 // static helpers
 public:
 	/**
-	Constructs a CComException object on the heap and throws the 
+	Constructs a CComException object on the heap and throws the
 	pointer.
 	*/
 	static void Throw(HRESULT hr, IUnknown *pInterface = NULL, const GUID *piid = NULL);
@@ -584,7 +584,7 @@ public:
 	HRESULT GetResult() const;
 
 	/**
-	Returns the GUID of the interface that caused the error or 
+	Returns the GUID of the interface that caused the error or
 	GUID_NULL if this information is not available.
 	*/
 	GUID GetInterfaceId() const;
@@ -595,7 +595,7 @@ public:
 	CString GetDescription() const;
 
 	/**
-	Returns the path of the help file that describes the error, if 
+	Returns the path of the help file that describes the error, if
 	available.
 	*/
 	CString GetHelpFile() const;
@@ -631,8 +631,8 @@ private:
 	/** Path of the help file that describes the error */
 	CString m_strHelpFile;
 
-	/** 
-	Language dependent programmatic ID (ProgID) for the class or 
+	/**
+	Language dependent programmatic ID (ProgID) for the class or
 	application that raised the error.
 	*/
 	CString m_strSource;
@@ -654,7 +654,7 @@ void AfxThrowComException(HRESULT hr, CInterfaceImplementationWrapper<T> *pWrapp
 
 
 // include template definitions
-#include "../Source/InterfaceWrapper.inl"
+#include "InterfaceWrapper.inl"
 
 
 #endif //__INTERFACEWRAPPERS_H__

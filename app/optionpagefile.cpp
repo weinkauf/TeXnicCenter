@@ -120,9 +120,9 @@ void COptionPageFile::OnOK()
 	UpdateData();
 
 	// Store settings to configuration
-	CConfiguration::GetInstance()->m_bSaveNewDocuments = m_bSaveNewDocuments;
-	CConfiguration::GetInstance()->m_bSaveAutomatic = m_bSaveAutomatic;
-	CConfiguration::GetInstance()->m_bSaveBeforeCompilation = m_bSaveBeforeCompilation;
+	CConfiguration::GetInstance()->m_bSaveNewDocuments = !!m_bSaveNewDocuments;
+	CConfiguration::GetInstance()->m_bSaveAutomatic = !!m_bSaveAutomatic;
+	CConfiguration::GetInstance()->m_bSaveBeforeCompilation = !!m_bSaveBeforeCompilation;
 	CConfiguration::GetInstance()->m_unSaveInterval = m_unSaveInterval;
 	CConfiguration::GetInstance()->m_nStandardFileFormat = m_nFileFormat;
 
