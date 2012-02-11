@@ -2,7 +2,7 @@
 *
 * File created by COM Interface Wrapper Wizard (CIWW) ver 1.00.000
 * at Wed Oct 01 18:25:36 2003
-* 
+*
 * (CIWW - Copyright © 2001-2002 Sven Wiegand (sven.wiegand@web.de))
 *
 ********************************************************************/
@@ -10,7 +10,7 @@
 #ifndef __SAXXML_H__
 #define __SAXXML_H__
 
-#include "../../InterfaceWrapper/Include/InterfaceWrapper.h"
+#include "../InterfaceWrapper/InterfaceWrapper.h"
 #include <msxml6.h>
 
 namespace MsXml

@@ -4,9 +4,9 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This library is free software; you can redistribute it and/or
-* modify, but leave the headers intact and do not remove any 
+* modify, but leave the headers intact and do not remove any
 * copyrights from the source.
 *
 * This library does not only contain file from us, but also from
@@ -25,11 +25,11 @@
 *
 ********************************************************************/
 
-#include "../source/FileVersionInfo.h"
-#include "../source/FolderSelect.h"
-#include "../source/IniFile.h"
-#include "../source/PathTool.h"
-#include "../source/Wildcard.h"
-#include "../source/WorkerThread.h"
-#include "../source/SystemInfo.h"
-#include "../source/PerformanceTimer.h"
+#include "FileVersionInfo.h"
+#include "FolderSelect.h"
+#include "IniFile.h"
+#include "PathTool.h"
+#include "Wildcard.h"
+#include "WorkerThread.h"
+#include "SystemInfo.h"
+#include "PerformanceTimer.h"

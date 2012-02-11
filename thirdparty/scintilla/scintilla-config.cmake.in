@@ -1,0 +1,19 @@
+get_filename_component (_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+if (EXISTS ${_DIR}/scintilla-config-build.cmake)
+  # In build tree
+  include (${_DIR}/scintilla-config-build.cmake)
+else (EXISTS ${_DIR}/scintilla-config-build.cmake)
+  set (scintilla_INCLUDE_DIRS ${_DIR}/include)
+endif (EXISTS ${_DIR}/scintilla-config-build.cmake)
+
+if (NOT TARGET scintilla)
+  include (${_DIR}/scintilla-targets.cmake)
+endif (NOT TARGET scintilla)
+
+set (scintilla_DEFINITIONS)
+set (scintilla_LIBRARIES scintilla)
+
+if (WIN32)
+  list (APPEND scintilla_LIBRARIES imm32)
+endif (WIN32)

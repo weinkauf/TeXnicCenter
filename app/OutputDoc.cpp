@@ -1317,7 +1317,7 @@ void COutputDoc::OnLatexClean()
 		else
 		{
 			//bCleanIt = true;
-			CConfiguration::GetInstance()->m_bFileCleanConfirm = fcDlg.m_bShowDialog;
+			CConfiguration::GetInstance()->m_bFileCleanConfirm = !!fcDlg.m_bShowDialog;
 		}
 	}
 

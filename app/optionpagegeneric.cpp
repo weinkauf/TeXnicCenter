@@ -107,7 +107,7 @@ void COptionPageGeneric::RefillLanguageList()
 
 	// parse language directory to determine additional languages
 	CFileFind ff;
-	bool bWorking = ff.FindFile(CPathTool::Cat(theApp.GetWorkingDir(),_T("language\\TxcRes*.dll")));
+	BOOL bWorking = ff.FindFile(CPathTool::Cat(theApp.GetWorkingDir(),_T("language\\TxcRes*.dll")));
 	const size_t n = _tcslen(_T("TxcRes"));
 	while (bWorking)
 	{
@@ -226,22 +226,22 @@ void COptionPageGeneric::OnOK()
 	UpdateData();
 
 	// Store settings to configuration
-	CConfiguration::GetInstance()->m_bReplaceQuotationMarks = m_bReplaceQm;
+	CConfiguration::GetInstance()->m_bReplaceQuotationMarks = !!m_bReplaceQm;
 	CConfiguration::GetInstance()->m_strClosingQuotationMark = m_strClosingQm;
 	CConfiguration::GetInstance()->m_strOpeningQuotationMark = m_strOpeningQm;
-	CConfiguration::GetInstance()->m_bLoadLastProject = m_bRestoreSession;
+	CConfiguration::GetInstance()->m_bLoadLastProject = !!m_bRestoreSession;
 
 	// generate message, that tells the user, that his settings will be
 	// activated on next start of TXC if those settings have changed.
-	bool bShowNextStartInfo = (CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsers 
-		!= static_cast<bool>(m_bOptimizeGuiForVisuallyHandicappedUsers));
+	bool bShowNextStartInfo = (CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsers
+		!= !!m_bOptimizeGuiForVisuallyHandicappedUsers);
 	bShowNextStartInfo |= (CConfiguration::GetInstance()->m_strGuiLanguage != m_strGuiLanguage);
 
 	//bool update_look = CConfiguration::GetInstance()->m_strLookAndFeel != m_strLookAndFeel;
 
 	if (bShowNextStartInfo) AfxMessageBox(STE_OPTIONS_REQUIRES_RESTART,MB_ICONINFORMATION | MB_OK);
 
-	CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart = m_bOptimizeGuiForVisuallyHandicappedUsers;
+	CConfiguration::GetInstance()->m_bOptimizeMenuForVisuallyHandicappedUsersOnNextStart = !!m_bOptimizeGuiForVisuallyHandicappedUsers;
 	CConfiguration::GetInstance()->m_strGuiLanguageOnNextStart = m_strGuiLanguage;
 
 	CMFCPropertyPage::OnOK();

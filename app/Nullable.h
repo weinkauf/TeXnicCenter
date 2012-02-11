@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 
-/// Represents an immutable value container 
+/// Represents an immutable value container
 /// for types that should be made nullable.
 ///
 /// \ingroup utilities
@@ -55,7 +55,7 @@ public:
 	/// \return \c true if a value is available, \c false otherwise.
 	bool HasValue() const
 	{
-		return value_.get();
+		return !!value_.get();
 	}
 
 	static const Nullable<int> Empty()

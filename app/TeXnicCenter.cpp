@@ -636,7 +636,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	// inform the user about that the settings for all languages are
 	// stored separately...
-	bool bLanguageAlreadyDefined = GetProfileInt(_T("Workspace\\") + CConfiguration::GetInstance()->m_strGuiLanguage,
+	bool bLanguageAlreadyDefined = !!GetProfileInt(_T("Workspace\\") + CConfiguration::GetInstance()->m_strGuiLanguage,
 	                               _T("LanguageAlreadyUsed"), FALSE);
 	if (!bLanguageAlreadyDefined)
 	{

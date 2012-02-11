@@ -1,0 +1,1 @@
+set (scintilla_INCLUDE_DIRS "@PROJECT_SOURCE_DIR@/include")

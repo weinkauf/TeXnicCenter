@@ -102,12 +102,12 @@ void COptionPageLanguage::OnOK()
 	CConfiguration::GetInstance()->m_strLanguageDefault = m_strLanguageDefault;
 	CConfiguration::GetInstance()->m_strLanguageDialectDefault = m_strDialectDefault;
 	CConfiguration::GetInstance()->m_strSpellPersonalDictionary = m_strPDictionary;
-	CConfiguration::GetInstance()->m_bSpellSkipComments = m_bSkipComments;
-	CConfiguration::GetInstance()->m_bSpellSkipNumbers = m_bSkipNumbers;
-	CConfiguration::GetInstance()->m_bSpellSkipTags = m_bSkipTags;
-	CConfiguration::GetInstance()->m_bSpellSkipCaps = m_bSkipCaps;
-	CConfiguration::GetInstance()->m_bSpellMainDictOnly = m_bMainDictOnly;
-	CConfiguration::GetInstance()->m_bSpellEnable = m_bEnableSpell;
+	CConfiguration::GetInstance()->m_bSpellSkipComments = !!m_bSkipComments;
+	CConfiguration::GetInstance()->m_bSpellSkipNumbers = !!m_bSkipNumbers;
+	CConfiguration::GetInstance()->m_bSpellSkipTags = !!m_bSkipTags;
+	CConfiguration::GetInstance()->m_bSpellSkipCaps = !!m_bSkipCaps;
+	CConfiguration::GetInstance()->m_bSpellMainDictOnly = !!m_bMainDictOnly;
+	CConfiguration::GetInstance()->m_bSpellEnable = !!m_bEnableSpell;
 
 	if (m_bEnableSpell && !m_strPDictionary.IsEmpty() && !::PathFileExists(m_strPDictionary))
 	{
@@ -117,9 +117,9 @@ void COptionPageLanguage::OnOK()
 	}
 
 	// Inform the background thread of the new speller state.
-	theApp.GetSpellerThread()->EnableSpeller(m_bEnableSpell);
+	theApp.GetSpellerThread()->EnableSpeller(!!m_bEnableSpell);
 
-	if (m_bEnableSpell) 
+	if (m_bEnableSpell)
 	{
 		theApp.ResetSpeller();
 	}

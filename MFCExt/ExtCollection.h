@@ -4,9 +4,9 @@
 *
 * Copyright (C) 1999-2000 Sven Wiegand
 * Copyright (C) 2000-$CurrentYear$ ToolsCenter
-* 
+*
 * This library is free software; you can redistribute it and/or
-* modify, but leave the headers intact and do not remove any 
+* modify, but leave the headers intact and do not remove any
 * copyrights from the source.
 *
 * This library does not only contain file from us, but also from
@@ -25,9 +25,9 @@
 *
 ********************************************************************/
 
-#include "../source/DoubleBuffer.h"
-#include "../source/SortArray.h"
-#include "../source/SortList.h"
-#include "../source/MRUList.h"
-#include "../source/MRUStringList.h"
-#include "../source/UniqueStringList.h"
+#include "DoubleBuffer.h"
+#include "SortArray.h"
+#include "SortList.h"
+#include "MRUList.h"
+#include "MRUStringList.h"
+#include "UniqueStringList.h"

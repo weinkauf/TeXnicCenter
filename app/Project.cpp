@@ -36,7 +36,7 @@
 #include "resource.h"
 
 #include "MainFrm.h"
-#include "Project.h"
+#include "Project.hpp"
 #include "ProjectView.h"
 #include "ProjectTemplate.h"
 #include "ProjectSupportingWinApp.h"

@@ -20,7 +20,7 @@
 ********************************************************************/
 
 #include "stdafx.h"
-#include "../Include/InterfaceWrapper.h"
+#include "InterfaceWrapper.h"
 #include <comdef.h>
 
 

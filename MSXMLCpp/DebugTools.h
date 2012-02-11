@@ -2,10 +2,10 @@
 *
 * © Photon Laser Engineering GmbH
 *
-* Diese Datei ist urheberrechtlich geschützt. Ohne ausdrückliche 
-* schriftliche Erlaubnis der Photon Laser Engineering GmbH darf kein 
-* Teil dieser Datei für irgendwelche Zwecke vervielfältigt oder 
-* übertragen werden unabhängig davon, auf welche Art und Weise oder 
+* Diese Datei ist urheberrechtlich geschützt. Ohne ausdrückliche
+* schriftliche Erlaubnis der Photon Laser Engineering GmbH darf kein
+* Teil dieser Datei für irgendwelche Zwecke vervielfältigt oder
+* übertragen werden unabhängig davon, auf welche Art und Weise oder
 * mit welchen Mitteln elektronisch oder mechanisch, dies geschieht.
 *
 *********************************************************************
@@ -27,7 +27,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "../Include/MsXmlCpp.h"
+#include "MsXmlCpp.h"
 
 #ifdef _DEBUG
 	void AFX_EXT_CLASS AfxDumpXmlNode(IXMLDOMNode *pNode, DWORD dwCategory = traceAppMsg, UINT unLevel = 0);

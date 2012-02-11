@@ -13,9 +13,9 @@
 /********************************************************************
 *
 * Copyright (C) 2001 Sven Wiegand
-* 
+*
 * This file is free software; you can redistribute it and/or
-* modify, but leave the headers intact and do not remove any 
+* modify, but leave the headers intact and do not remove any
 * copyrights from the source.
 *
 * If you have further questions, suggestions or bug fixes, please
@@ -27,7 +27,7 @@
 
 #include "stdafx.h"
 #include <afxdllx.h>
-#include <InterfaceWrapper.h>
+#include "../InterfaceWrapper/InterfaceWrapper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

@@ -6,7 +6,7 @@
 
 IMPLEMENT_DYNCREATE(COptionPageEditor,CMFCPropertyPage)
 
-COptionPageEditor::COptionPageEditor() 
+COptionPageEditor::COptionPageEditor()
 : CMFCPropertyPage(COptionPageEditor::IDD)
 , show_line_below_fold_(CConfiguration::GetInstance()->GetShowLineBelowFold())
 , show_line_below_no_fold_(CConfiguration::GetInstance()->GetShowLineBelowNoFold())
@@ -60,7 +60,7 @@ void COptionPageEditor::OnOK()
 	CConfiguration::GetInstance()->SetUseSpaces(use_spaces_ != 0);
 	CConfiguration::GetInstance()->SetFoldCompact(fold_compact_ != 0);
 
-	CConfiguration::GetInstance()->m_bCloseToolWindowsOnEscape = close_toolwindows_on_escape_;
+	CConfiguration::GetInstance()->m_bCloseToolWindowsOnEscape = !!close_toolwindows_on_escape_;
 
 
 	// this message will be send to all windows of the application

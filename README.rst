@@ -1,0 +1,34 @@
+Building TeXnicCenter
+=====================
+
+Requirements
+------------
+
+The following tools and libraries are required to successfully build
+TeXnicCenter and all of its components:
+
+* Visual C++ 2010 with MFC libraries
+* Microsoft HTML Help Workshop
+* Mercurial, freely available at http://mercurial.selenic.com/
+
+To generate the setup you will need:
+
+* Inno Setup available at http://www.jrsoftware.org/isinfo.php
+
+Build Process
+-------------
+
+1. Open the TeXnicCenter solution TeXnicCenter.sln in Visual C++.
+2. Choose either 'Debug' or the 'Release' solution configuration.
+3. Build the complete solution. The result can be found in the newly created
+   'Output' folder.
+
+
+Visit the TeXnicCenter-Homepage
+
+     http://www.texniccenter.org/
+
+for further information. Don't hesitate to ask us, if a problem occurs.
+
+  Tino Weinkauf (tino@TeXnicCenter.org)
+  TeXnicCenter Maintainer
