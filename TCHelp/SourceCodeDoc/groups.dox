@@ -18,8 +18,8 @@
 */
 
 /**
-        @defgroup bcgext Extensions to BCG
-        @brief Extensions to BCG made for TeXnicCenter.
+        @defgroup bcgext UI framework extensions
+        @brief Extensions to the UI framework made for TeXnicCenter.
 */
 
 /**
