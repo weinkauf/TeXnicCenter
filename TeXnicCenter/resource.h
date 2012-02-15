@@ -727,6 +727,8 @@
 #define IDC_INSERTPH_PRPARGUMENTS       8674
 #define IDC_INSERTPH_PRPINPUT           8675
 #define IDC_INSERTPH_PRPOUTPUT          8676
+#define IDC_BROWSE_PPROCESSOR           8677
+#define IDC_PPROCESSORLIST              8678
 #define ID_TEXTMODULES_FIRST            17000
 #define ID_TEXTMODULES_LAST             18000
 #define ID_VIEW_BAR1                    32760
@@ -1478,7 +1480,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57679
 #define _APS_NEXT_COMMAND_VALUE         40689
-#define _APS_NEXT_CONTROL_VALUE         8677
+#define _APS_NEXT_CONTROL_VALUE         8679
 #define _APS_NEXT_SYMED_VALUE           57773
 #endif
 #endif

@@ -32,8 +32,8 @@
  *
  ********************************************************************/
 
-#if !defined(AFX_PROFILEPAGEPOSTPROCESSOR_H__5C552766_082E_11D5_A222_006097239934__INCLUDED_)
-#define AFX_PROFILEPAGEPOSTPROCESSOR_H__5C552766_082E_11D5_A222_006097239934__INCLUDED_
+#if !defined(AFX_PROFILEPAGEPPROCESSOR_H__5C552766_082E_11D5_A222_006097239934__INCLUDED_)
+#define AFX_PROFILEPAGEPPROCESSOR_H__5C552766_082E_11D5_A222_006097239934__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
@@ -47,18 +47,18 @@
 #include "EditMenuButtonOpt.h"
 #include "NotifyingEditListBox.h"
 
-/**	Edits the Postprocessors of output profiles.
+/**	Edits the processors of output profiles.
 
 @ingroup dialogs
 @ingroup profiles
 
 @author Sven Wiegand
  */
-class CProfilePagePostprocessor : public CProfilePage
+class CProfilePagePprocessor : public CProfilePage
 {
 // construction/destruction
 public:
-	CProfilePagePostprocessor();
+	CProfilePagePprocessor(int ProfilePageIDD, CPProcessorArray& (CProfile::*GetPProcessorArray)());
 
 // implementation
 protected:
@@ -75,7 +75,7 @@ protected:
 public:
 	void OnUpdateDataSet(CProfile *pProfile);
 
-//{{AFX_VIRTUAL(CProfilePagePostprocessor)
+//{{AFX_VIRTUAL(CProfilePagePprocessor)
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV-Unterstützung
 	//}}AFX_VIRTUAL
@@ -84,7 +84,7 @@ protected:
 protected:
 	afx_msg void OnItemAction(NMHDR *pNMHDR, LRESULT *pResult);
 
-	//{{AFX_MSG(CProfilePagePostprocessor)
+	//{{AFX_MSG(CProfilePagePprocessor)
 	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 
@@ -92,11 +92,10 @@ protected:
 
 // dialog field data
 protected:
-	//{{AFX_DATA(CProfilePagePostprocessor)
-	enum
-	{
-		IDD = IDD_PROFILE_POSTPROCESSOR
-	};
+	//{{AFX_DATA(CProfilePagePprocessor)
+
+	const int IDD;
+
 	CEdit m_wndExe;
 	CStatic m_wndTitleArguments;
 	CStatic m_wndTitleOutput;
@@ -109,16 +108,18 @@ protected:
 	CPersistPosEdit m_wndOutput;
 	CPersistPosEdit m_wndInput;
 	CPersistPosEdit m_wndArguments;
-	CBrowseButton m_wndBrowsePostprocessor;
+	CBrowseButton m_wndBrowsePprocessor;
 	//}}AFX_DATA
 
 // attributes
 protected:
 	CProfile *m_pProfile;
+	CPProcessorArray& (CProfile::*m_pGetPProcessorArray)();
+
 	int m_nSelectedItem;
 };
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ fügt unmittelbar vor der vorhergehenden Zeile zusätzliche Deklarationen ein.
 
-#endif // AFX_PROFILEPAGEPOSTPROCESSOR_H__5C552766_082E_11D5_A222_006097239934__INCLUDED_
+#endif // AFX_PROFILEPAGEPPROCESSOR_H__5C552766_082E_11D5_A222_006097239934__INCLUDED_

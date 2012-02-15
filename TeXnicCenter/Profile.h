@@ -41,8 +41,7 @@
 
 #include <memory>
 
-#include "PreProcessor.h"
-#include "PostProcessor.h"
+#include "PProcessor.h"
 #include "ProcessCommand.h"
 #include "DDECommand.h"
 
@@ -180,13 +179,13 @@ public:
 	Gets a reference to the array of the preprocessors, which can be
 	used to read from and write to the array.
 	 */
-	CPreProcessorArray &GetPreProcessorArray();
+	CPProcessorArray &GetPreProcessorArray();
 
 	/**
 	Gets a reference to the array of the postprocessors, which can be
 	used to read from and write to the array.
 	 */
-	CPostProcessorArray &GetPostProcessorArray();
+	CPProcessorArray &GetPostProcessorArray();
 
 	/**
 	Sets the path of the viewer-executable to use to view output,
@@ -351,10 +350,10 @@ protected:
 
 
 	/** The preprocessors to run after the (La)TeX-compiler. */
-	CPreProcessorArray m_aPreProcessors;
+	CPProcessorArray m_aPreProcessors;
 
 	/** The postprocessors to run after the (La)TeX-compiler. */
-	CPostProcessorArray m_aPostProcessors;
+	CPProcessorArray m_aPostProcessors;
 
 	/** Full path of the viewer */
 	CString m_strViewerPath;
@@ -379,13 +378,13 @@ protected:
 // inlines
 
 inline
-CPreProcessorArray& CProfile::GetPreProcessorArray()
+CPProcessorArray& CProfile::GetPreProcessorArray()
 {
 	return m_aPreProcessors;
 }
 
 inline
-CPostProcessorArray& CProfile::GetPostProcessorArray()
+CPProcessorArray& CProfile::GetPostProcessorArray()
 {
 	return m_aPostProcessors;
 }

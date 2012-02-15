@@ -311,9 +311,6 @@
     <ClCompile Include="PlaceholderSingleOptDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PostProcessor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="process.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -336,9 +333,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ProfilePageLatex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ProfilePagePostprocessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ProfilePageViewer.cpp">
@@ -491,10 +485,10 @@
     <ClCompile Include="ShellUtilXP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PreProcessor.cpp">
+    <ClCompile Include="PProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProfilePagePreprocessor.cpp">
+    <ClCompile Include="ProfilePagePprocessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -808,9 +802,6 @@
     <ClInclude Include="PlaceholderSingleOptDlg.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="PostProcessor.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="PrivateToolBar.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -836,9 +827,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ProfilePageLatex.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ProfilePagePostprocessor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ProfilePageViewer.h">
@@ -1012,10 +1000,10 @@
     <ClInclude Include="ShellUtilXP.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="PreProcessor.h">
+    <ClInclude Include="PProcessor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ProfilePagePreprocessor.h">
+    <ClInclude Include="ProfilePagePprocessor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
