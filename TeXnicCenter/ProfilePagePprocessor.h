@@ -58,7 +58,7 @@ class CProfilePagePprocessor : public CProfilePage
 {
 // construction/destruction
 public:
-	CProfilePagePprocessor(int ProfilePageIDD, CPProcessorArray& (CProfile::*GetPProcessorArray)());
+	CProfilePagePprocessor(UINT unIDCaption, CPProcessorArray& (CProfile::*GetPProcessorArray)());
 
 // implementation
 protected:
@@ -93,8 +93,10 @@ protected:
 // dialog field data
 protected:
 	//{{AFX_DATA(CProfilePagePprocessor)
-
-	const int IDD;
+	enum
+	{
+		IDD = IDD_PROFILE_PPROCESSOR
+	};
 
 	CEdit m_wndExe;
 	CStatic m_wndTitleArguments;

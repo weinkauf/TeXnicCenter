@@ -54,7 +54,7 @@ class CProfilePage : public CPropertyDialogPage
 {
 // construction/destruction
 public:
-	CProfilePage(UINT unIDTemplate);
+	CProfilePage(UINT unIDTemplate, UINT unIDCaption = 0);
 
 // operations
 public:

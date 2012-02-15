@@ -69,8 +69,8 @@ END_MESSAGE_MAP()
 
 CProfileDialog::CProfileDialog(CWnd* pParent /*=NULL*/)
 		: CPropertyDialog(CProfileDialog::IDD, IDC_TAB_PROFILEPAGES, pParent),
-		m_wndPagePreprocessor(IDD_PROFILE_PREPROCESSOR, &CProfile::GetPreProcessorArray),
-		m_wndPagePostprocessor(IDD_PROFILE_POSTPROCESSOR, &CProfile::GetPostProcessorArray),
+		m_wndPagePreprocessor(IDS_PREPROCESSOR, &CProfile::GetPreProcessorArray),
+		m_wndPagePostprocessor(IDS_POSTPROCESSOR, &CProfile::GetPostProcessorArray),
 		m_pCurrentProfile(NULL)
 {
 	AddPage(&m_wndPageLatex);
