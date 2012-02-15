@@ -395,7 +395,7 @@ BOOL COutputBuilder::RunPreProcessors()
 	if (!filter.Create(&hOutput,m_pDoc,m_pView,FALSE))
 		return FALSE;
 
-	CPreProcessorArray &a = m_pProfile->GetPreProcessorArray();
+	CPProcessorArray &a = m_pProfile->GetPreProcessorArray();
 	BOOL bResult = TRUE;
 
 	for (int i = 0; ((i < a.GetSize()) && (!m_bCancel)); i++)
@@ -423,7 +423,7 @@ BOOL COutputBuilder::RunPostProcessors()
 	if (!filter.Create(&hOutput,m_pDoc,m_pView,FALSE))
 		return FALSE;
 
-	CPostProcessorArray &a = m_pProfile->GetPostProcessorArray();
+	CPProcessorArray &a = m_pProfile->GetPostProcessorArray();
 	BOOL bResult = TRUE;
 
 	for (int i = 0; ((i < a.GetSize()) && (!m_bCancel)); i++)

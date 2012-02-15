@@ -622,11 +622,11 @@ BOOL CProfile::SerializeToRegistry(RegistryStack &reg) const
 
 	reg.PushKey();
 	reg.CreateKey(_T("PreProcessors"));
-	m_aPreProcessors.SerializeToRegistry(reg);
+	m_aPreProcessors.SerializeToRegistry(reg, _T("PreProcessor"));
 
 	reg.TopKey();
 	reg.CreateKey(_T("PostProcessors"));
-	m_aPostProcessors.SerializeToRegistry(reg);
+	m_aPostProcessors.SerializeToRegistry(reg, _T("PostProcessor"));
 
 	reg.TopKey();
 	reg.CreateKey(_T("ViewProjectCmd"));
@@ -665,11 +665,11 @@ BOOL CProfile::SerializeFromRegistry(RegistryStack &reg)
 
 	reg.PushKey();
 	reg.Open(_T("PreProcessors"));
-	m_aPreProcessors.SerializeFromRegistry(reg);
+	m_aPreProcessors.SerializeFromRegistry(reg, _T("PreProcessor"));
 
 	reg.TopKey();
 	reg.Open(_T("PostProcessors"));
-	m_aPostProcessors.SerializeFromRegistry(reg);
+	m_aPostProcessors.SerializeFromRegistry(reg, _T("PostProcessor"));
 
 	reg.TopKey();
 	reg.Open(_T("ViewProjectCmd"));

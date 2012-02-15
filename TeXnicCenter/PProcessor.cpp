@@ -27,7 +27,7 @@
  *********************************************************************/
 
 #include "stdafx.h"
-#include "PreProcessor.h"
+#include "PProcessor.h"
 #include "PlaceHolder.h"
 #include "Process.h"
 #include "RegistryStack.h"
@@ -39,10 +39,10 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 //-------------------------------------------------------------------
-// class CPreProcessorArray
+// class CPProcessorArray
 //-------------------------------------------------------------------
 
-int CPreProcessorArray::ExecuteAll(LPCTSTR lpszMainPath,LPCTSTR lpszWorkingDir,HANDLE hOutput)
+int CPProcessorArray::ExecuteAll(LPCTSTR lpszMainPath,LPCTSTR lpszWorkingDir,HANDLE hOutput)
 {
 	for (int i = 0; i < GetSize(); i++)
 	{
@@ -54,26 +54,26 @@ int CPreProcessorArray::ExecuteAll(LPCTSTR lpszMainPath,LPCTSTR lpszWorkingDir,H
 	return -1;
 }
 
-void CPreProcessorArray::RemoveDirectorySpecifications()
+void CPProcessorArray::RemoveDirectorySpecifications()
 {
 	for (int i = 0; i < GetSize(); ++i)
 		ElementAt(i).RemoveDirectorySpecifications();
 }
 
-BOOL CPreProcessorArray::SerializeToRegistry(RegistryStack &reg) const
+BOOL CPProcessorArray::SerializeToRegistry(RegistryStack &reg, LPCTSTR lpszTypeName) const
 {
 	CString strValue;
 
 	for (int i = 0; i < GetSize(); i++)
 	{
-		strValue.Format(_T("PreProcessor%d"),i);
+		strValue.Format(_T("%s%d"),lpszTypeName,i);
 		reg.Write(strValue,GetAt(i).SerializeToString());
 	}
 
 	return TRUE;
 }
 
-BOOL CPreProcessorArray::SerializeFromRegistry(RegistryStack &reg)
+BOOL CPProcessorArray::SerializeFromRegistry(RegistryStack &reg, LPCTSTR lpszTypeName)
 {
 	RemoveAll();
 
@@ -83,9 +83,9 @@ BOOL CPreProcessorArray::SerializeFromRegistry(RegistryStack &reg)
 	while (true)
 	{
 		CString strPackedInformation;
-		CPreProcessor pp;
+		CPProcessor pp;
 
-		strValue.Format(_T("PreProcessor%d"),i++);
+		strValue.Format(_T("%s%d"),lpszTypeName,i++);
 
 		if (!reg.Read(strValue,strPackedInformation))
 			break;
@@ -97,37 +97,37 @@ BOOL CPreProcessorArray::SerializeFromRegistry(RegistryStack &reg)
 	return TRUE;
 }
 
-void CPreProcessorArray::SaveXml(MsXml::CXMLDOMElement xmlPreProcessors) const
+void CPProcessorArray::SaveXml(MsXml::CXMLDOMElement xmlPProcessors) const
 {
 	for (int i = 0; i < GetSize(); ++i)
 	{
-		MsXml::CXMLDOMElement xmlPreProcessor(xmlPreProcessors.GetOwnerDocument().CreateElement(_T("processor")));
-		GetAt(i).SaveXml(xmlPreProcessor);
-		xmlPreProcessors.AppendChild(xmlPreProcessor);
+		MsXml::CXMLDOMElement xmlPProcessor(xmlPProcessors.GetOwnerDocument().CreateElement(_T("processor")));
+		GetAt(i).SaveXml(xmlPProcessor);
+		xmlPProcessors.AppendChild(xmlPProcessor);
 	}
 }
 
-void CPreProcessorArray::LoadXml(MsXml::CXMLDOMElement xmlPreProcessors)
+void CPProcessorArray::LoadXml(MsXml::CXMLDOMElement xmlPProcessors)
 {
 	RemoveAll();
 
-	MsXml::CXMLDOMNodeList xmlPreProcessorList(xmlPreProcessors.SelectNodes(_T("processor")));
-	const long lProcessors = xmlPreProcessorList.GetLength();
+	MsXml::CXMLDOMNodeList xmlPProcessorList(xmlPProcessors.SelectNodes(_T("processor")));
+	const long lProcessors = xmlPProcessorList.GetLength();
 	for (long lProcessor = 0; lProcessor < lProcessors; ++lProcessor)
 	{
-		MsXml::CXMLDOMElement xmlPreProcessor(xmlPreProcessorList.GetItem(lProcessor).QueryInterface(IID_IXMLDOMElement));
-		CPreProcessor pp;
-		pp.LoadXml(xmlPreProcessor);
+		MsXml::CXMLDOMElement xmlPProcessor(xmlPProcessorList.GetItem(lProcessor).QueryInterface(IID_IXMLDOMElement));
+		CPProcessor pp;
+		pp.LoadXml(xmlPProcessor);
 		Add(pp);
 	}
 }
 
 
 //-------------------------------------------------------------------
-// class CPreProcessor
+// class CPProcessor
 //-------------------------------------------------------------------
 
-CPreProcessor::CPreProcessor(LPCTSTR lpszTitle /*= _T("")*/,LPCTSTR lpszPath /*= _T("")*/,
+CPProcessor::CPProcessor(LPCTSTR lpszTitle /*= _T("")*/,LPCTSTR lpszPath /*= _T("")*/,
                                LPCTSTR lpszArguments /*= _T("")*/,
                                LPCTSTR lpszInputFile /*= _T("")*/,LPCTSTR lpszOutputFile /*= _T("")*/)
 {
@@ -140,36 +140,36 @@ CPreProcessor::CPreProcessor(LPCTSTR lpszTitle /*= _T("")*/,LPCTSTR lpszPath /*=
 	m_strOutputFile = lpszOutputFile;
 }
 
-CPreProcessor::~CPreProcessor()
+CPProcessor::~CPProcessor()
 {
 }
 
-void CPreProcessor::SetTitle(LPCTSTR lpszTitle)
+void CPProcessor::SetTitle(LPCTSTR lpszTitle)
 {
 	m_strTitle = lpszTitle;
 }
 
-void CPreProcessor::SetPath(LPCTSTR lpszPath)
+void CPProcessor::SetPath(LPCTSTR lpszPath)
 {
 	m_strPath = lpszPath;
 }
 
-void CPreProcessor::SetArguments(LPCTSTR lpszArguments)
+void CPProcessor::SetArguments(LPCTSTR lpszArguments)
 {
 	m_strArguments = lpszArguments;
 }
 
-void CPreProcessor::SetInputFile(LPCTSTR lpszInputFile)
+void CPProcessor::SetInputFile(LPCTSTR lpszInputFile)
 {
 	m_strInputFile = lpszInputFile;
 }
 
-void CPreProcessor::SetOutputFile(LPCTSTR lpszOutputFile)
+void CPProcessor::SetOutputFile(LPCTSTR lpszOutputFile)
 {
 	m_strOutputFile = lpszOutputFile;
 }
 
-BOOL CPreProcessor::Execute(LPCTSTR lpszMainPath,LPCTSTR lpszWorkingDir,HANDLE hOutput,PHANDLE phProcess /*= NULL*/)
+BOOL CPProcessor::Execute(LPCTSTR lpszMainPath,LPCTSTR lpszWorkingDir,HANDLE hOutput,PHANDLE phProcess /*= NULL*/)
 {
 	HANDLE hStdInput = INVALID_HANDLE_VALUE;
 	HANDLE hStdOutput = INVALID_HANDLE_VALUE;
@@ -249,34 +249,34 @@ BOOL CPreProcessor::Execute(LPCTSTR lpszMainPath,LPCTSTR lpszWorkingDir,HANDLE h
 	return dwExitCode ? FALSE : TRUE;
 }
 
-BOOL CPreProcessor::CancelExecution()
+BOOL CPProcessor::CancelExecution()
 {
 	return GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT,GetProcessGroupID());
 }
 
-void CPreProcessor::RemoveDirectorySpecifications()
+void CPProcessor::RemoveDirectorySpecifications()
 {
 	m_strPath = CPathTool::GetFile(m_strPath);
 	m_strInputFile = CPathTool::GetFile(m_strInputFile);
 	m_strOutputFile = CPathTool::GetFile(m_strOutputFile);
 }
 
-CString CPreProcessor::GetExpandedArguments(LPCTSTR lpszPath) const
+CString CPProcessor::GetExpandedArguments(LPCTSTR lpszPath) const
 {
 	return AfxExpandPlaceholders(m_strArguments, lpszPath, NULL, -1, NULL, true);
 }
 
-CString CPreProcessor::GetExpandedInputFile(LPCTSTR lpszPath) const
+CString CPProcessor::GetExpandedInputFile(LPCTSTR lpszPath) const
 {
 	return AfxExpandPlaceholders(m_strInputFile,lpszPath);
 }
 
-CString CPreProcessor::GetExpandedOutputFile(LPCTSTR lpszPath) const
+CString CPProcessor::GetExpandedOutputFile(LPCTSTR lpszPath) const
 {
 	return AfxExpandPlaceholders(m_strOutputFile,lpszPath);
 }
 
-CString CPreProcessor::SerializeToString() const
+CString CPProcessor::SerializeToString() const
 {
 	return
 	    m_strTitle + _T('\n') +
@@ -286,7 +286,7 @@ CString CPreProcessor::SerializeToString() const
 	    m_strOutputFile;
 }
 
-BOOL CPreProcessor::SerializeFromString(LPCTSTR lpszPackedInformation)
+BOOL CPProcessor::SerializeFromString(LPCTSTR lpszPackedInformation)
 {
 	CString strTitle,strPath,strArguments,strInputFile,strOutputFile;
 
@@ -310,50 +310,50 @@ BOOL CPreProcessor::SerializeFromString(LPCTSTR lpszPackedInformation)
 	return TRUE;
 }
 
-void CPreProcessor::SaveXml(MsXml::CXMLDOMElement xmlPreProcessor) const
+void CPProcessor::SaveXml(MsXml::CXMLDOMElement xmlPProcessor) const
 {
-	xmlPreProcessor.SetAttribute(_T("name"),(LPCTSTR)m_strTitle);
-	xmlPreProcessor.SetAttribute(_T("path"),(LPCTSTR)m_strPath);
-	xmlPreProcessor.SetAttribute(_T("arguments"),(LPCTSTR)m_strArguments);
-	xmlPreProcessor.SetAttribute(_T("inputFile"),(LPCTSTR)m_strInputFile);
-	xmlPreProcessor.SetAttribute(_T("outputFile"),(LPCTSTR)m_strOutputFile);
+	xmlPProcessor.SetAttribute(_T("name"),(LPCTSTR)m_strTitle);
+	xmlPProcessor.SetAttribute(_T("path"),(LPCTSTR)m_strPath);
+	xmlPProcessor.SetAttribute(_T("arguments"),(LPCTSTR)m_strArguments);
+	xmlPProcessor.SetAttribute(_T("inputFile"),(LPCTSTR)m_strInputFile);
+	xmlPProcessor.SetAttribute(_T("outputFile"),(LPCTSTR)m_strOutputFile);
 }
 
-void CPreProcessor::LoadXml(MsXml::CXMLDOMElement xmlPreProcessor)
+void CPProcessor::LoadXml(MsXml::CXMLDOMElement xmlPProcessor)
 {
-	m_strTitle = (LPCTSTR)(_bstr_t)xmlPreProcessor.GetAttribute(_T("name"));
-	m_strPath = (LPCTSTR)(_bstr_t)xmlPreProcessor.GetAttribute(_T("path"));
-	m_strArguments = (LPCTSTR)(_bstr_t)xmlPreProcessor.GetAttribute(_T("arguments"));
-	m_strInputFile = (LPCTSTR)(_bstr_t)xmlPreProcessor.GetAttribute(_T("inputFile"));
-	m_strOutputFile = (LPCTSTR)(_bstr_t)xmlPreProcessor.GetAttribute(_T("outputFile"));
+	m_strTitle = (LPCTSTR)(_bstr_t)xmlPProcessor.GetAttribute(_T("name"));
+	m_strPath = (LPCTSTR)(_bstr_t)xmlPProcessor.GetAttribute(_T("path"));
+	m_strArguments = (LPCTSTR)(_bstr_t)xmlPProcessor.GetAttribute(_T("arguments"));
+	m_strInputFile = (LPCTSTR)(_bstr_t)xmlPProcessor.GetAttribute(_T("inputFile"));
+	m_strOutputFile = (LPCTSTR)(_bstr_t)xmlPProcessor.GetAttribute(_T("outputFile"));
 }
 
-const CString& CPreProcessor::GetTitle() const
+const CString& CPProcessor::GetTitle() const
 {
 	return m_strTitle;
 }
 
-const CString& CPreProcessor::GetPath() const
+const CString& CPProcessor::GetPath() const
 {
 	return m_strPath;
 }
 
-const CString& CPreProcessor::GetArguments() const
+const CString& CPProcessor::GetArguments() const
 {
 	return m_strArguments;
 }
 
-const CString& CPreProcessor::GetInputFile() const
+const CString& CPProcessor::GetInputFile() const
 {
 	return m_strInputFile;
 }
 
-const CString& CPreProcessor::GetOutputFile() const
+const CString& CPProcessor::GetOutputFile() const
 {
 	return m_strOutputFile;
 }
 
-DWORD CPreProcessor::GetProcessGroupID() const
+DWORD CPProcessor::GetProcessGroupID() const
 {
 	return m_dwProcessGroupId;
 }

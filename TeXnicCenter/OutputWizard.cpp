@@ -798,7 +798,7 @@ void COutputWizard::GenerateOutputProfiles()
 				if (bExists)
 					m_profiles.Remove(strProfile);
 
-				CPostProcessor dvipdfm(_T("dvipdfm"), dvipdfm_path_,
+				CPProcessor dvipdfm(_T("dvipdfm"), dvipdfm_path_,
 					_T("\"%bm.dvi\""));
 				p.GetPostProcessorArray().Add(dvipdfm);
 				p.SetLaTeXArguments(strPDFLatexOptions); // Use PDF arguments
@@ -832,7 +832,7 @@ void COutputWizard::GenerateOutputProfiles()
 			SetupMakeIndex(p);
 
 			// add post processor dvips
-			CPostProcessor pp(
+			CPProcessor pp(
 				_T("DviPs"),GetDistributionFilePath(_T("dvips.exe")),
 				_T("\"%Bm.dvi\""));
 			p.GetPostProcessorArray().Add(pp);
@@ -892,7 +892,7 @@ void COutputWizard::GenerateOutputProfiles()
 			SetupMakeIndex(p);
 
 			// add post processor dvips
-			CPostProcessor ppDVIPS(
+			CPProcessor ppDVIPS(
 				_T("DviPs (PDF)"),GetDistributionFilePath(_T("dvips.exe")),
 				_T("-P pdf \"%Bm.dvi\""));
 			p.GetPostProcessorArray().Add(ppDVIPS);
@@ -901,7 +901,7 @@ void COutputWizard::GenerateOutputProfiles()
 			if (m_bGhostscriptViaPS2PDF)
 			{
 				//ps2pdf
-				CPostProcessor ppPS2PDF(
+				CPProcessor ppPS2PDF(
 					_T("ps2pdf"), m_strGhostscriptPath,
 					_T("\"%bm.ps\""));
 				p.GetPostProcessorArray().Add(ppPS2PDF);
@@ -909,7 +909,7 @@ void COutputWizard::GenerateOutputProfiles()
 			else
 			{
 				//Ghostscript directly
-				CPostProcessor ppGS(
+				CPProcessor ppGS(
 					_T("Ghostscript (ps2pdf)"),m_strGhostscriptPath,
 					_T("-sPAPERSIZE=a4 -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"%bm.pdf\" -c save pop -f \"%bm.ps\""));
 				p.GetPostProcessorArray().Add(ppGS);
