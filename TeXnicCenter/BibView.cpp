@@ -801,14 +801,14 @@ void BibView::OnPopulateThread( const PredicateFunctionType& predicate )
 
 void BibView::OnDestroy()
 {
-	::InterlockedExchange(&stop_search_,1);
-	while (::WaitForSingleObject(search_semaphore_,0) == WAIT_TIMEOUT)
-	{
-		MSG msg;
+	::InterlockedExchange(&stop_search_, 1);
+
+	MSG msg;
+
+	while (::WaitForSingleObject(search_semaphore_, 0) == WAIT_TIMEOUT) {
 		// Let the main window process remaining messages sent from
 		// OnPopulateThread, otherwise a dead lock may occur.
-		while (::PeekMessage(&msg, list_view_.m_hWnd, 0, 0, PM_REMOVE | PM_QS_SENDMESSAGE) > 0)
-		{
+		while (::PeekMessage(&msg, list_view_.m_hWnd, 0, 0, PM_REMOVE | PM_QS_SENDMESSAGE) > 0) {
 			::TranslateMessage(&msg);
 			::DispatchMessage(&msg);
 		}
