@@ -737,11 +737,8 @@ void BibView::DoPopulate( const PredicateFunctionType& predicate )
 			const int index = list_view_.InsertItem(&lvi);
 
 			if (index == -1)
-			{
 				::InterlockedExchange(&stop_search_, 1);
-			}
-			else
-			{
+			else {
 				list_view_.SetItemText(index,1,it->bib.GetAuthor());
 				list_view_.SetItemText(index,2,it->bib.GetTitle());
 
