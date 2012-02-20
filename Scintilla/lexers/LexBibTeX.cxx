@@ -82,7 +82,7 @@ namespace {
 		"legislation",
 		"letter",
 		"manual",
-		"masterthesis",
+		"mastersthesis",
 		"misc",
 		"movie",
 		"music",
