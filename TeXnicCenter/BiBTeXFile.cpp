@@ -50,14 +50,13 @@ static char THIS_FILE[] = __FILE__;
 /**
  * Initialize object with a given BibTeX file
  */
-BibTeXFile::BibTeXFile(const CString& file)
+BibTeXFile::BibTeXFile(const CString& fileName)
 {
-	m_Filename = file;
+	m_Filename = fileName;
 	m_ErrorCount = 0;
 	m_IsATSignInBracesAllowed = TRUE;
 	m_WarnWrongLevelAT = TRUE;
 	m_BufferSize = MAX_BIBTEX_ARG_LENGTH;
-	m_Buffer = new TCHAR[m_BufferSize];
 }
 
 /**
@@ -66,7 +65,6 @@ BibTeXFile::BibTeXFile(const CString& file)
 BibTeXFile::~BibTeXFile()
 {
 	DropAllEntries();
-	delete [] m_Buffer;
 }
 
 /**
@@ -267,11 +265,6 @@ void BibTeXFile::ProcessArgument(const TCHAR *buf,int len, BibTeXEntryType type,
 
 	if (type == BIBTEX_ENTRY_TYPE_UNKNOWN)
 	{
-		if (_tcslen(m_Buffer) > 100) // limit length to satisfy TRACE macro
-		{
-			m_Buffer[100] = 0;
-		}
-
 		TRACE2("** Ignore unknown entry at line %d: %s\n",line,m_Buffer);
 		return;
 	}
@@ -549,7 +542,7 @@ void BibTeXFile::ReplaceSpecialChars(CString &value)
 /**
  * Copies a string buffer to a local buffer with checking the requested length.
  */
-BOOL BibTeXFile::SaveCopyBuffer(const TCHAR *buffer,int reqSize)
+BOOL BibTeXFile::SaveCopyBuffer(LPCTSTR buffer, int reqSize)
 {
 	BOOL ret = TRUE;
 	ASSERT(reqSize >= 0);
@@ -564,8 +557,8 @@ BOOL BibTeXFile::SaveCopyBuffer(const TCHAR *buffer,int reqSize)
 		reqSize = m_BufferSize - 1;
 		ret = FALSE;
 	}
-	_tcsncpy(m_Buffer,buffer,reqSize);
-	m_Buffer[reqSize] = 0;
+
+	m_Buffer.SetString(buffer, static_cast<int>(reqSize));
 
 	return ret;
 }
