@@ -97,6 +97,7 @@ BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 	BibTeXEntryType type;
 	int depth = 0,line = 1,col = 1;
 	BOOL inComment = FALSE,inQuote = FALSE,insideEntry = FALSE,openBrace = FALSE; // internal states
+	bool inKey = false;
 
 	begin = buf;
 	type = BIBTEX_ENTRY_TYPE_UNKNOWN;
@@ -154,6 +155,8 @@ BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 			case _T('{') : // beginning of an entry, field or special chars within a field
 				if (inComment || !insideEntry) break;
 				openBrace = TRUE;
+				inKey = true;
+
 				if (0 == depth)   // process entry type, e. g. @Article
 				{
 					type = ProcessEntryType(begin,buf - begin,line);
@@ -162,6 +165,8 @@ BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 				++depth;
 				break;
 			case _T(',') : // field delimiter
+				inKey = false;
+
 				if (inComment || inQuote || !insideEntry) break;
 				if (1 == depth)   // process entry field
 				{
@@ -170,7 +175,7 @@ BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 				}
 				break;
 			case _T(')') : // alternative end of an entry
-				if (inComment || inQuote || !insideEntry) break;
+				if (inComment || inQuote || !insideEntry || inKey) break;
 				if (1 == depth)   // process entry field and decrease stack depth
 				{
 					ProcessArgument(begin,buf - begin,type,line);
