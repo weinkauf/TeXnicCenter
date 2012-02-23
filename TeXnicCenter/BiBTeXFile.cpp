@@ -50,14 +50,13 @@ static char THIS_FILE[] = __FILE__;
 /**
  * Initialize object with a given BibTeX file
  */
-BibTeXFile::BibTeXFile(const CString& file)
+BibTeXFile::BibTeXFile(const CString& fileName)
 {
-	m_Filename = file;
+	m_Filename = fileName;
 	m_ErrorCount = 0;
 	m_IsATSignInBracesAllowed = TRUE;
 	m_WarnWrongLevelAT = TRUE;
 	m_BufferSize = MAX_BIBTEX_ARG_LENGTH;
-	m_Buffer = new TCHAR[m_BufferSize];
 }
 
 /**
@@ -66,7 +65,6 @@ BibTeXFile::BibTeXFile(const CString& file)
 BibTeXFile::~BibTeXFile()
 {
 	DropAllEntries();
-	delete [] m_Buffer;
 }
 
 /**
@@ -99,6 +97,7 @@ BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 	BibTeXEntryType type;
 	int depth = 0,line = 1,col = 1;
 	BOOL inComment = FALSE,inQuote = FALSE,insideEntry = FALSE,openBrace = FALSE; // internal states
+	bool inKey = false;
 
 	begin = buf;
 	type = BIBTEX_ENTRY_TYPE_UNKNOWN;
@@ -156,6 +155,8 @@ BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 			case _T('{') : // beginning of an entry, field or special chars within a field
 				if (inComment || !insideEntry) break;
 				openBrace = TRUE;
+				inKey = true;
+
 				if (0 == depth)   // process entry type, e. g. @Article
 				{
 					type = ProcessEntryType(begin,buf - begin,line);
@@ -164,6 +165,8 @@ BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 				++depth;
 				break;
 			case _T(',') : // field delimiter
+				inKey = false;
+
 				if (inComment || inQuote || !insideEntry) break;
 				if (1 == depth)   // process entry field
 				{
@@ -172,7 +175,7 @@ BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 				}
 				break;
 			case _T(')') : // alternative end of an entry
-				if (inComment || inQuote || !insideEntry) break;
+				if (inComment || inQuote || !insideEntry || inKey) break;
 				if (1 == depth)   // process entry field and decrease stack depth
 				{
 					ProcessArgument(begin,buf - begin,type,line);
@@ -267,11 +270,6 @@ void BibTeXFile::ProcessArgument(const TCHAR *buf,int len, BibTeXEntryType type,
 
 	if (type == BIBTEX_ENTRY_TYPE_UNKNOWN)
 	{
-		if (_tcslen(m_Buffer) > 100) // limit length to satisfy TRACE macro
-		{
-			m_Buffer[100] = 0;
-		}
-
 		TRACE2("** Ignore unknown entry at line %d: %s\n",line,m_Buffer);
 		return;
 	}
@@ -549,7 +547,7 @@ void BibTeXFile::ReplaceSpecialChars(CString &value)
 /**
  * Copies a string buffer to a local buffer with checking the requested length.
  */
-BOOL BibTeXFile::SaveCopyBuffer(const TCHAR *buffer,int reqSize)
+BOOL BibTeXFile::SaveCopyBuffer(LPCTSTR buffer, int reqSize)
 {
 	BOOL ret = TRUE;
 	ASSERT(reqSize >= 0);
@@ -564,8 +562,8 @@ BOOL BibTeXFile::SaveCopyBuffer(const TCHAR *buffer,int reqSize)
 		reqSize = m_BufferSize - 1;
 		ret = FALSE;
 	}
-	_tcsncpy(m_Buffer,buffer,reqSize);
-	m_Buffer[reqSize] = 0;
+
+	m_Buffer.SetString(buffer, static_cast<int>(reqSize));
 
 	return ret;
 }
