@@ -213,6 +213,8 @@ public:
 	        to load this project.
 
 	@return A pointer to the document.
+
+	@todo Should be renamed to OpenCodeDocument, since it actually opens all kinds of documents.
 	 */
 	CDocument* OpenLatexDocument(LPCTSTR lpszFileName,BOOL bReadOnly = FALSE,
 	                             int nLineNumber = -1,BOOL bError = FALSE,
