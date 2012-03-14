@@ -930,16 +930,22 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 	TCHAR lpszFilePath[MAX_PATH];
 
 	GetFullPathName(lpszFileName, MAX_PATH, lpszFilePath,0);
-	CString strDocPath = lpszFilePath;
-
-	CDocTemplate *pDocTemplate = m_pLatexDocTemplate;
+	const CString strDocPath = lpszFilePath;
 
 	// try to find a document that represents the requested file
 	CDocument *pDoc = NULL;
+	CDocTemplate* pDocTemplate = m_pLatexDocTemplate;
+	POSITION pos = pDocTemplate->GetFirstDocPosition();
 	BOOL bFound = FALSE;
-
-	if ((pDoc = CWinAppEx::OpenDocumentFile(lpszFileName, bAddToMRU)) != 0)
-		bFound = TRUE;
+	while (pos)
+	{
+		pDoc = pDocTemplate->GetNextDoc(pos);
+		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath)==0 /*&& pDoc->IsKindOf(RUNTIME_CLASS(CLatexDoc))*/)
+		{
+			bFound = TRUE;
+			break;
+		}
+	}
 
 	//Open new document, if we could not find one
 	// If we found one above, we just activate its view
@@ -973,8 +979,6 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 				// save modified documents
 				if (theApp.SaveAllModified())
 				{
-					theApp.CloseAllDocuments(m_bEndSession);
-
 					if (OpenProject(strProjectPath))
 					{
 						//... and the specified file (in most cases the main file), if not already there
@@ -993,7 +997,10 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 
 		//Just load the file, if a project was not loaded
 		if (!bLoaded)
-			pDoc = pDocTemplate->OpenDocumentFile(strDocPath);
+		{
+			//pDoc = pDocTemplate->OpenDocumentFile(strDocPath); ==> This opens it always as a tex-file
+			pDoc = CWinAppEx::OpenDocumentFile(strDocPath, bAddToMRU); //This may open as tex or bib-file, etc.
+		}
 	}
 
 	if (!pDoc)
