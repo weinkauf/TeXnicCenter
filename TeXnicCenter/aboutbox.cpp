@@ -214,6 +214,13 @@ CAboutDlg::CAboutDlg()
 		m_strVersion = _T("Unknown");
 		CopyrightText = _T("(c) 1999-2012 The TeXnicCenter Team");
 	}
+
+	//Add 32-bit or 64-bit to the version info. That is good for error reports.
+	#ifdef _WIN64
+		m_strVersion += _T(" (64 bit)");
+	#else
+		m_strVersion += _T(" (32 bit)");
+	#endif
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
