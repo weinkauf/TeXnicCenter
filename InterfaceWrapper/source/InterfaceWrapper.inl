@@ -253,6 +253,7 @@ HRESULT CDispatchInterfaceImplementationWrapper<T>::GetTypeInfoCount(UINT *pctin
 template<class T>
 HRESULT CDispatchInterfaceImplementationWrapper<T>::GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo **ppTInfo)
 {
+	UNREFERENCED_PARAMETER(lcid);
 	ASSERT(iTInfo == 0 && ppTInfo != 0);
 	(*ppTInfo = m_pTypeInfo)->AddRef();
 	return S_OK;
@@ -262,6 +263,7 @@ HRESULT CDispatchInterfaceImplementationWrapper<T>::GetTypeInfo(UINT iTInfo, LCI
 template<class T>
 HRESULT CDispatchInterfaceImplementationWrapper<T>::GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgid)
 {
+	UNREFERENCED_PARAMETER(lcid);
 	ASSERT(riid == IID_NULL);
 	return m_pTypeInfo->GetIDsOfNames(rgszNames, cNames, rgid);
 }
@@ -270,6 +272,7 @@ HRESULT CDispatchInterfaceImplementationWrapper<T>::GetIDsOfNames(REFIID riid, L
 template<class T>
 HRESULT CDispatchInterfaceImplementationWrapper<T>::Invoke(DISPID id, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr)
 {
+	UNREFERENCED_PARAMETER(lcid);
 	ASSERT(riid == IID_NULL);
 	return m_pTypeInfo->Invoke((PVOID)GetInterface(), id, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);
 }
