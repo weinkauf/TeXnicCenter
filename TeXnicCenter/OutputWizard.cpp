@@ -521,7 +521,7 @@ void COutputWizard::LookForPdf()
 	//  Path: HKEY_LOCAL_MACHINE\SOFTWARE\AFPL Ghostscript\<version>
 	//  Path: HKEY_LOCAL_MACHINE\SOFTWARE\GPL Ghostscript\<version>
 	//  Entry: GS_DLL=f:\prog\gstools\gs\gs8.12\bin\gsdll32.dll
-	// We need the directory of GS_DLL. There we find gswin32c.exe.
+	// We need the directory of GS_DLL. There we find gswin32c.exe or gswin64c.exe.
 	m_bGhostscriptInstalled = false;
 	RegistryStack gsReg(true,true); //HKEY_LOCAL_MACHINE, ReadOnly
 
@@ -561,12 +561,20 @@ void COutputWizard::LookForPdf()
 		{
 			if (gsReg.Read(_T("GS_DLL"),m_strGhostscriptPath))
 			{
-				m_strGhostscriptPath = CPathTool::Cat(CPathTool::GetDirectory(m_strGhostscriptPath),_T("gswin32c.exe"));
-
+				m_strGhostscriptPath = CPathTool::Cat(CPathTool::GetDirectory(m_strGhostscriptPath),_T("gswin64c.exe"));
 				if (ff.FindFile(m_strGhostscriptPath))
 				{
 					m_bGhostscriptInstalled = true;
 					m_bGhostscriptViaPS2PDF = false;
+				}
+				else
+				{
+					m_strGhostscriptPath = CPathTool::Cat(CPathTool::GetDirectory(m_strGhostscriptPath),_T("gswin32c.exe"));
+					if (ff.FindFile(m_strGhostscriptPath))
+					{
+						m_bGhostscriptInstalled = true;
+						m_bGhostscriptViaPS2PDF = false;
+					}
 				}
 
 				ff.Close();
