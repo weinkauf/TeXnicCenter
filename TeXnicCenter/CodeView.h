@@ -251,8 +251,9 @@ public:
 	void SetModified(bool modified = true);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 
-protected:
 	CString SelectionExtend(bool stripEol = true);
+
+protected:
 	CString RangeExtendAndGrab(int& selStart, int& selEnd, bool stripEol = true);
 
 private:
