@@ -78,6 +78,7 @@ protected:
 	afx_msg void OnFormatTextBackColor();
 	afx_msg void OnUpdateFormatTextForeColor(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateFormatTextBackColor(CCmdUI* pCmdUI);
+	afx_msg LRESULT OnCommandHelp(WPARAM wParam, LPARAM lParam);
 
 private:
 	BOOL InvokeContextHelp(const CString& keyword);

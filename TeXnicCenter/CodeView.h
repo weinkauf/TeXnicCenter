@@ -251,13 +251,15 @@ public:
 	void SetModified(bool modified = true);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 
+protected:
+	CString SelectionExtend(bool stripEol = true);
+	CString RangeExtendAndGrab(int& selStart, int& selEnd, bool stripEol = true);
+
 private:
 	afx_msg LRESULT OnGetLineText(WPARAM wParam, LPARAM lParam);
 
 	static bool TerminatesIncrementalSearch( UINT ch );
 	static bool IsDirectionKey( UINT ch );
-	CString SelectionExtend(bool stripEol = true);
-	CString RangeExtendAndGrab(int& selStart, int& selEnd, bool stripEol = true);
 	void OnCheckForFileChanges();
 
 public:
