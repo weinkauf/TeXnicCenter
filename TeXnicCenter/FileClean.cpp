@@ -301,27 +301,27 @@ void CFileCleanItemArray::RestoreAllDefaultItems()
 	InsertSorted(CFileCleanItem(_T("Postscript"),_T("%bm.ps"),CFileCleanItem::none,false),true,true);
 	InsertSorted(CFileCleanItem(_T("DVI"),_T("%bm.dvi"),CFileCleanItem::none,false),true,true);
 	InsertSorted(CFileCleanItem(_T("PDF"),_T("%bm.pdf"),CFileCleanItem::none,false),true,true);
-	InsertSorted(CFileCleanItem(_T("bak"),_T("*.bak"),CFileCleanItem::none,true),true,true);
+	InsertSorted(CFileCleanItem(_T("bak"),_T("*.bak"),CFileCleanItem::none,false),true,true);
 
 	// - files to be cleaned
-	InsertSorted(CFileCleanItem(_T("aux"),_T("*.aux"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("bbl"),_T("*.bbl"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("blg"),_T("*.blg"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("bmt"),_T("*.bmt"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("brf"),_T("*.brf"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("ent"),_T("%bm.ent"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("lbl"),_T("*.lbl"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("lof"),_T("*.lof"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("log"),_T("*.log"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("lot"),_T("*.lot"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("mpx"),_T("*.mpx"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("mtc"),_T("*.mtc"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("idx"),_T("*.idx"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("ilg"),_T("*.ilg"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("ind"),_T("*.ind"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("out"),_T("*.out"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("synctex"),_T("*.synctex"),CFileCleanItem::clean,true),true,true);
-	InsertSorted(CFileCleanItem(_T("toc"),_T("*.toc"),CFileCleanItem::clean,true),true,true);
+	InsertSorted(CFileCleanItem(_T("aux"),_T("*.aux"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("bbl"),_T("*.bbl"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("blg"),_T("*.blg"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("bmt"),_T("*.bmt"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("brf"),_T("*.brf"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("ent"),_T("%bm.ent"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("lbl"),_T("*.lbl"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("lof"),_T("*.lof"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("log"),_T("*.log"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("lot"),_T("*.lot"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("mpx"),_T("*.mpx"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("mtc"),_T("*.mtc"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("idx"),_T("*.idx"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("ilg"),_T("*.ilg"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("ind"),_T("*.ind"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("out"),_T("*.out"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("synctex"),_T("*.synctex"),CFileCleanItem::clean,false),true,true);
+	InsertSorted(CFileCleanItem(_T("toc"),_T("*.toc"),CFileCleanItem::clean,false),true,true);
 
 	// - files to be protected
 	InsertSorted(CFileCleanItem(_T("bmp"),_T("*.bmp"),CFileCleanItem::protect,true),true,true);
