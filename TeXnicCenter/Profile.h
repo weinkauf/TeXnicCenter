@@ -297,7 +297,7 @@ public:
 
 	@exception CComException
 	 */
-	void LoadXml(MsXml::CXMLDOMElement &xmlProfile);
+	void LoadXml(MsXml::CXMLDOMElement &xmlProfile, const int Version);
 
 // attributes
 protected:
