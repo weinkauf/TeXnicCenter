@@ -128,6 +128,7 @@ BEGIN_MESSAGE_MAP(LaTeXView, LaTeXViewBase)
 	ON_COMMAND(ID_FORMAT_TEXT_BACK_COLOR, &LaTeXView::OnFormatTextBackColor)
 	ON_UPDATE_COMMAND_UI(ID_FORMAT_TEXT_FORE_COLOR, &LaTeXView::OnUpdateFormatTextForeColor)
 	ON_UPDATE_COMMAND_UI(ID_FORMAT_TEXT_BACK_COLOR, &LaTeXView::OnUpdateFormatTextBackColor)
+	ON_MESSAGE(WM_COMMANDHELP, &LaTeXView::OnCommandHelp)
 END_MESSAGE_MAP()
 
 
@@ -685,6 +686,7 @@ void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& a, bool bSelect /
 	}
 }
 
+
 bool LaTeXView::IsAutoCompletionCharacter(TCHAR tc)
 {
 	switch (tc) {
@@ -822,27 +824,40 @@ void LaTeXView::OnQueryCompletion()
 		GetCtrl().SetSel(old_pos_start_,old_pos_end_); /* restore old position */
 }
 
+
+afx_msg LRESULT LaTeXView::OnCommandHelp(WPARAM wParam, LPARAM lParam)
+{
+	CString	CurrentWord = SelectionExtend();
+	CString Keywords = CurrentWord + ";\\" + CurrentWord;
+	return InvokeContextHelp(Keywords);	
+}
+
+
 /* Invokes context help for a given keyword */
 BOOL LaTeXView::InvokeContextHelp( const CString& keyword )
 {
 	if (keyword.IsEmpty())
-		::HtmlHelp(NULL,AfxGetApp()->m_pszHelpFilePath,HH_DISPLAY_TOC,0L);
-	else {
-		::HtmlHelp(NULL,theApp.m_pszHelpFilePath,HH_DISPLAY_TOC,0L);
+	{
+		HtmlHelp(0L, HH_DISPLAY_TOC);
+	}
+	else
+	{
+		HtmlHelp(0L, HH_DISPLAY_TOC);
 
 		HH_AKLINK link;
-		link.cbStruct = sizeof(link);
+		link.cbStruct = sizeof(HH_AKLINK);
 		link.fReserved = FALSE;
 		link.pszKeywords = (LPCTSTR)keyword;
 		link.pszUrl = NULL;
 		link.pszMsgText = NULL;
-		link.pszWindow = _T(">$global_TxcHelpWindow");
+		link.pszWindow = NULL;
 		link.fIndexOnFail = TRUE;
-		::HtmlHelp(NULL,theApp.m_pszHelpFilePath,HH_KEYWORD_LOOKUP,(DWORD) & link);
+		HtmlHelp((DWORD) &link, HH_KEYWORD_LOOKUP);
 	}
 
 	return TRUE;
 }
+
 
 BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 {
