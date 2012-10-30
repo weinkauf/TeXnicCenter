@@ -730,7 +730,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Deutsch (Deutschland) resources
+// German (Germany) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
@@ -4880,12 +4880,12 @@ BEGIN
                             "(Selektiertes) Wort unter dem Cursor in Rückwärtsrichtung suchen.\nVorherigen Treffer finden (selektiert)"
 END
 
-#endif    // Deutsch (Deutschland) resources
+#endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Englisch (USA) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -7752,7 +7752,7 @@ BEGIN
     STE_GREP_CANCELED       "Canceled"
     STE_GREP_ERROR          "! %s: Cannot access file!"
     STE_GREP_FAILED         "Failed"
-    STE_GREP_FINISHED       "%d Match(es) has been found."
+    STE_GREP_FINISHED       "%d Match(es) found."
     STE_GREP_FINISHEDNOHIT  "String not found."
     STE_GREP_HIT            "%s(%d): %s"
     STE_GREP_START          "Finding ""%s""..."
@@ -8935,7 +8935,7 @@ BEGIN
                             "Find previous word under cursor or in selection.\nFind previous selected."
 END
 
-#endif    // Englisch (USA) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
