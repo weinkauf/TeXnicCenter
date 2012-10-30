@@ -702,8 +702,14 @@ void COutputDoc::OnEditFindInFiles()
 	if (!m_bCanGrep)
 		return;
 
+	//Get active word
+	LaTeXView* pView = theApp.GetActiveEditView();
+	CString ActiveWord(_T(""));
+	if (pView) ActiveWord = pView->SelectionExtend();
+
 	// show dialog
 	CFindInFilesDialog dlg;
+	dlg.m_strSearchFor = ActiveWord;
 
 	if (dlg.DoModal() != IDOK)
 		return; // cancel pressed
