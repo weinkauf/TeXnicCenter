@@ -119,6 +119,7 @@ BEGIN_MESSAGE_MAP(CodeView, CScintillaView)
 	ON_COMMAND(ID_VIEW_HIGHLIGHTACTIVELINE, &CodeView::OnViewHighlightActiveLine)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_HIGHLIGHTACTIVELINE, &CodeView::OnUpdateViewHighlightActiveLine)
 	ON_MESSAGE(CStringLineTextMessageID, &CodeView::OnGetLineText)
+	ON_MESSAGE(WM_COMMANDHELP, &CodeView::OnCommandHelp)
 END_MESSAGE_MAP()
 
 
@@ -990,7 +991,7 @@ void CodeView::OnEditFindIncrementalBackward()
 
 void CodeView::OnSearchFindNextSelected()
 {
-	CString sel = SelectionExtend(true);
+	CString sel = GetCurrentWordOrSelection(true, false, true);
 	if (sel.GetLength() && sel.Find(_T('\r')) < 0 && sel.Find(_T('\n')) < 0)
 	{
 		//We would need to set the _scintillaEditState, but that one is local to ScintillaDocView.cpp
@@ -1003,7 +1004,7 @@ void CodeView::OnSearchFindNextSelected()
 
 void CodeView::OnSearchFindPreviousSelected()
 {
-	CString sel = SelectionExtend(true);
+	CString sel = GetCurrentWordOrSelection(true, false, true);
 	if (sel.GetLength() && sel.Find(_T('\r')) < 0 && sel.Find(_T('\n')) < 0)
 	{
 		//_scintillaEditState.strFind = sel;
@@ -1012,46 +1013,113 @@ void CodeView::OnSearchFindPreviousSelected()
 }
 
 
-CString CodeView::SelectionExtend(bool stripEol /*= true*/)
+CString CodeView::GetCurrentWordOrSelection(const bool bDefaultWordChars, const bool bIncludingEscapeChar, const bool bStripEol)
 {
-	int selStart = GetCtrl().GetSelectionStart();
-	int selEnd = GetCtrl().GetSelectionEnd();
-	return RangeExtendAndGrab(selStart, selEnd, stripEol);
+	const long startPos = GetCtrl().GetSelectionStart();
+	const long endPos = GetCtrl().GetSelectionEnd();
+	return GetWordAroundRange(startPos, endPos, (startPos == endPos), (startPos == endPos), bDefaultWordChars, bIncludingEscapeChar, bStripEol, true, false);
 }
 
-CString CodeView::RangeExtendAndGrab(int& selStart, int& selEnd, bool stripEol /*= true*/)
+
+CString CodeView::GetWordAroundRange(const long startPos, const long endPos, const bool bToLeft, const bool bToRight,
+										const bool bDefaultWordChars, const bool bIncludingEscapeChar, const bool bStripEol,
+										const bool bConvertEncoding, const bool bSelect)
 {
 	CScintillaCtrl& Ctrl = GetCtrl();
-	if (selStart == selEnd)
+
+	//Use a different definition of what constitutes a word?
+	CString DefaultWordChars;
+	if (!bDefaultWordChars)
 	{
-		//Empty range: Try to find a word
-		selStart = Ctrl.WordStartPosition(selStart, true);
-		selEnd = Ctrl.WordEndPosition(selEnd, true);
+		//Save default definition
+		//const int nRequiredLength = Ctrl.GetWordChars(NULL, NULL);
+		//...
+		DefaultWordChars = _T("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"); //That is the default of Scintilla, but it would be better to retrieve it (once that func is available through our interface).
+		CString WordChars(DefaultWordChars);
+
+		//Extend definition
+		AddExtendedWordChars(WordChars);
+
+		//Set it temporarily
+		Ctrl.SetWordChars(WordChars);
 	}
 
+	//Extend range, if wanted
+	long RangeStart = bToLeft ? Ctrl.WordStartPosition(startPos, true) : startPos;
+	long RangeEnd = bToRight ? Ctrl.WordEndPosition(endPos, true) : endPos;
+
+	//Include escape character, if wanted
+	if (bIncludingEscapeChar && RangeStart > 0)
+	{
+		CString EscapeChars;
+		AddEscapeChars(EscapeChars);
+		if (EscapeChars.Find(Ctrl.GetCharAt(RangeStart - 1)) >= 0) RangeStart--;
+	}
+
+	//Restore default word definition
+	if (!bDefaultWordChars)
+	{
+		Ctrl.SetWordChars(DefaultWordChars);
+	}
+
+	//Select the range
+	if (bSelect)
+	{
+		Ctrl.SetSel(RangeStart, RangeEnd);
+	}
+
+	return GetText(RangeStart, RangeEnd, bStripEol, bConvertEncoding);
+}
+
+
+CString CodeView::GetText(const long startPos, const long endPos, bool bStripEol, const bool bConvertEncoding)
+{
+	//Prepare Range data structure for scinitlla
+	Sci_TextRange TRange;
+	TRange.chrg.cpMin = startPos;
+	TRange.chrg.cpMax = endPos;
+	std::vector<char> CharsFromScintilla(abs(TRange.chrg.cpMax - TRange.chrg.cpMin) + 1);
+	TRange.lpstrText = &CharsFromScintilla[0];
+
+	//Get the text from scintilla as an array of chars
+	GetCtrl().GetTextRange(&TRange);
+
+	//Set the string with possible conversion to a different encoding, see below
 	CString SelectedString;
-	if (selStart != selEnd)
+	//IMPORTANT: Convert to proper encoding, if you use this text in the user interface
+	if (bConvertEncoding)
 	{
-		Sci_TextRange TRange;
-		TRange.chrg.cpMin = selStart;
-		TRange.chrg.cpMax = selEnd;
-		char* Buffer = new char[abs(selEnd - selStart) + 1];
-		TRange.lpstrText = Buffer;
-		Ctrl.GetTextRange(&TRange);
-		SelectedString = Buffer;
-		delete[] Buffer;
+		#ifdef UNICODE
+			std::vector<wchar_t> TextWithProperEncoding;
+			UTF8toUTF16(&CharsFromScintilla[0], CharsFromScintilla.size(), TextWithProperEncoding);
+		#else
+			std::vector<char> TextWithProperEncoding;
+			UTF8toANSI(&CharsFromScintilla[0], CharsFromScintilla.size(), TextWithProperEncoding);
+		#endif
+
+		//Set it
+		if (!TextWithProperEncoding.empty())
+		{
+			SelectedString.SetString(&TextWithProperEncoding[0], static_cast<int>(TextWithProperEncoding.size()));
+		}
+	}
+	else
+	{
+		//No change in the encoding
+		SelectedString = &CharsFromScintilla[0];
 	}
 
-	if (stripEol)
+
+	//Strip some unwanted characters?
+	if (bStripEol)
 	{
-		// Change whole line selected but normally end of line characters not wanted.
-		// Remove possible terminating \r, \n, or \r\n.
+		//Remove terminating \r, \n, or \r\n.
 		int sellen = SelectedString.GetLength();
-		if (sellen >= 2 && (SelectedString[sellen - 2] == '\r' && SelectedString[sellen - 1] == '\n'))
+		if (sellen >= 2 && (SelectedString[sellen - 2] == _T('\r') && SelectedString[sellen - 1] == _T('\n')))
 		{
 			SelectedString.Left(sellen - 2);
 		}
-		else if (sellen >= 1 && (SelectedString[sellen - 1] == '\r' || SelectedString[sellen - 1] == '\n'))
+		else if (sellen >= 1 && (SelectedString[sellen - 1] == _T('\r') || SelectedString[sellen - 1] == _T('\n')))
 		{
 			SelectedString.Left(sellen - 1);
 		}
@@ -1439,5 +1507,36 @@ LRESULT CodeView::OnGetLineText(WPARAM wParam, LPARAM lParam)
 	*reinterpret_cast<CString*>(lParam) = GetLineText(static_cast<int>(wParam));
 	return 0;
 }
+
+afx_msg LRESULT CodeView::OnCommandHelp(WPARAM /*wParam*/, LPARAM /*lParam*/)
+{
+	return InvokeContextHelp(GetCurrentWordOrSelection(true, true, true));	
+}
+
+
+BOOL CodeView::InvokeContextHelp(const CString& keyword)
+{
+	if (keyword.IsEmpty())
+	{
+		HtmlHelp(0L, HH_DISPLAY_TOC);
+	}
+	else
+	{
+		HtmlHelp(0L, HH_DISPLAY_TOC);
+
+		HH_AKLINK link;
+		link.cbStruct = sizeof(HH_AKLINK);
+		link.fReserved = FALSE;
+		link.pszKeywords = (LPCTSTR)keyword;
+		link.pszUrl = NULL;
+		link.pszMsgText = NULL;
+		link.pszWindow = NULL;
+		link.fIndexOnFail = TRUE;
+		HtmlHelp((DWORD) &link, HH_KEYWORD_LOOKUP);
+	}
+
+	return TRUE;
+}
+
 
 #pragma pop_macro("max")

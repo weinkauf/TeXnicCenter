@@ -64,9 +64,8 @@ private:
 	bool autocompletion_active_;
 
 protected:
-	void GetWordBeforeCursor(CString& strKeyword, long& start,bool bSelect = true);
-	static bool IsAutoCompletionCharacter(TCHAR tc);
-	
+	virtual void AddExtendedWordChars(CString& WordChars);
+	virtual void AddEscapeChars(CString& EscapeChars);
 	
 	afx_msg void OnEditOutsource();
 	afx_msg void OnQueryCompletion();
@@ -78,10 +77,6 @@ protected:
 	afx_msg void OnFormatTextBackColor();
 	afx_msg void OnUpdateFormatTextForeColor(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateFormatTextBackColor(CCmdUI* pCmdUI);
-	afx_msg LRESULT OnCommandHelp(WPARAM wParam, LPARAM lParam);
-
-private:
-	BOOL InvokeContextHelp(const CString& keyword);
 
 public:	
 	LaTeXDocument* GetDocument() const;

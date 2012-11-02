@@ -948,7 +948,7 @@ void CLaTeXProject::OnUpdateItemCmd(CCmdUI* pCmdUI)
 		case ID_ITEM_INSERT_PAGEREF: // makes no sense for BibTeX entries
 			if (si.m_nType != StructureItem::bibItem)
 			{
-				pCmdUI->Enable(si.HasLabels() && theApp.GetActiveEditView());
+				pCmdUI->Enable(si.HasLabels() && theApp.GetActiveLaTeXView());
 			}
 			else
 			{
@@ -957,7 +957,7 @@ void CLaTeXProject::OnUpdateItemCmd(CCmdUI* pCmdUI)
 			break;
 		case ID_ITEM_INSERT_LABEL:
 		case ID_ITEM_INSERT_REF:
-			pCmdUI->Enable(si.HasLabels() && theApp.GetActiveEditView());
+			pCmdUI->Enable(si.HasLabels() && theApp.GetActiveLaTeXView());
 			break;
 		default:
 			pCmdUI->Enable();
@@ -1000,7 +1000,7 @@ void CLaTeXProject::OnItemInsertLabel()
 	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < static_cast<int>(m_aStructureItems.size())))
 		return;
 
-	LaTeXView *pView = theApp.GetActiveEditView();
+	LaTeXView *pView = theApp.GetActiveLaTeXView();
 
 	if (!pView)
 		return;
@@ -1014,7 +1014,7 @@ void CLaTeXProject::OnItemInsertPageref()
 	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < static_cast<int>(m_aStructureItems.size())))
 		return;
 
-	LaTeXView *pView = theApp.GetActiveEditView();
+	LaTeXView *pView = theApp.GetActiveLaTeXView();
 	if (!pView)
 		return;
 
@@ -1027,7 +1027,7 @@ void CLaTeXProject::OnItemInsertRef()
 	if (!(m_nCurrentStructureItem >= 0 && m_nCurrentStructureItem < static_cast<int>(m_aStructureItems.size())))
 		return;
 
-	LaTeXView *pView = theApp.GetActiveEditView();
+	LaTeXView *pView = theApp.GetActiveLaTeXView();
 	
 	if (!pView)
 		return;

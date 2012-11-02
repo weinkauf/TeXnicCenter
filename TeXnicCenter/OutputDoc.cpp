@@ -605,8 +605,8 @@ CDocument* COutputDoc::GetActiveDocument() const
 void COutputDoc::OnLatexView()
 {
 	// check if there is an open document
-	LaTeXView *pView = theApp.GetActiveEditView();
-	LaTeXDocument *pDoc = NULL;
+	CodeView* pView = theApp.GetActiveCodeView();
+	CodeDocument* pDoc = NULL;
 	CString strCurrentPath;
 	long lCurrentLine = -1;
 
@@ -702,14 +702,9 @@ void COutputDoc::OnEditFindInFiles()
 	if (!m_bCanGrep)
 		return;
 
-	//Get active word
-	LaTeXView* pView = theApp.GetActiveEditView();
-	CString ActiveWord(_T(""));
-	if (pView) ActiveWord = pView->SelectionExtend();
-
-	// show dialog
+	//Show dialog
 	CFindInFilesDialog dlg;
-	dlg.m_strSearchFor = ActiveWord;
+	dlg.m_strSearchFor = theApp.GetCurrentWordOrSelection(false, true, true);
 
 	if (dlg.DoModal() != IDOK)
 		return; // cancel pressed

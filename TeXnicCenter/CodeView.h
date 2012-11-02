@@ -122,7 +122,10 @@ protected:
 	void UpdateLineNumberMargin();
 	void OnCharAdded(SCNotification* n);
 	void OnPainted(SCNotification* pSCNotification);
-	
+
+	afx_msg LRESULT OnCommandHelp(WPARAM wParam, LPARAM lParam);
+	BOOL InvokeContextHelp(const CString& keyword);
+
 	virtual void OnSettingsChanged();
 
 protected:
@@ -251,10 +254,34 @@ public:
 	void SetModified(bool modified = true);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 
-	CString SelectionExtend(bool stripEol = true);
+	/** Returns the word under the cursor, or the selection.
+
+		If nothing is selected, the word under the cursor is returned.
+		The definition of a whole word depends on the characters that make up a word.
+		LaTeX and BibTeX differ here.
+		Furthermore, it may be wanted to include a preceeding backslash or @-sign (escape char).
+
+		@see AddExtendedWordChars()
+		@see AddEscapeChars()
+	*/
+	CString GetCurrentWordOrSelection(const bool bDefaultWordChars, const bool bIncludingEscapeChar, const bool bStripEol);
 
 protected:
-	CString RangeExtendAndGrab(int& selStart, int& selEnd, bool stripEol = true);
+	///A derived class shall announce its extra word characters using this function.
+	virtual void AddExtendedWordChars(CString& WordChars){UNREFERENCED_PARAMETER(WordChars);}
+
+	///A derived class shall announce its escape character(s) using this function.
+	/// This would be a backslash for LaTeX and a @-sign for BibTeX.
+	virtual void AddEscapeChars(CString& EscapeChars){UNREFERENCED_PARAMETER(EscapeChars);}
+
+	CString GetWordAroundRange(const long startPos, const long endPos, const bool bToLeft, const bool bToRight,
+								const bool bDefaultWordChars, const bool bIncludingEscapeChar, const bool bStripEol,
+								const bool bConvertEncoding, const bool bSelect);
+
+	///Retrieves the text between the start and end position, possibly with stripped-off EOL characters.
+	///The text can be either encoded into the encoding of the program (UTF16 or ANSI),
+	/// or it can be kept as it has been given by Scintilla.
+	CString GetText(const long startPos, const long endPos, const bool bStripEol, const bool bConvertEncoding);
 
 private:
 	afx_msg LRESULT OnGetLineText(WPARAM wParam, LPARAM lParam);

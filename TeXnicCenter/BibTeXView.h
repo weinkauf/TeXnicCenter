@@ -26,6 +26,8 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	void OnSettingsChanged();
 	int GetLexer() const;
+	//virtual void AddExtendedWordChars(CString& WordChars); ==> Same as CodeView; default word chars
+	virtual void AddEscapeChars(CString& EscapeChars);
 
 private:
 	void UpdateSettings();
