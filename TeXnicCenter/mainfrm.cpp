@@ -208,6 +208,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_COMMAND(ID_WINDOW_LIST, &CMainFrame::OnWindowList)
 	ON_COMMAND(ID_HELP_FINDER, &CMainFrame::OnHelpSearch)
 	ON_COMMAND(ID_HELP_INDEX, &CMainFrame::OnHelpIndex)
+	//ON_COMMAND(ID_HELP, &CMainFrame::WinHelp)
 	ON_COMMAND(ID_VIEW_FULLSCREEN, &CMainFrame::OnViewFullScreen)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_FULLSCREEN, &CMainFrame::OnUpdateViewFullScreen)
 	ON_COMMAND(ID_HELP_KEYMAPPING, &CMainFrame::OnHelpKeyMapping)
@@ -233,10 +234,10 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_TOP, &CMainFrame::OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_ICONS, &CMainFrame::OnUpdateViewDocTabs)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DOCTAB_NOTE, &CMainFrame::OnUpdateViewDocTabs)
-	ON_COMMAND(ID_HELP_FINDER, &CMDIFrameWndEx::OnHelpFinder)
-	ON_COMMAND(ID_HELP, &CMDIFrameWndEx::OnHelp)
-	ON_COMMAND(ID_CONTEXT_HELP, CMDIFrameWndEx::OnContextHelp)
-	ON_COMMAND(ID_DEFAULT_HELP, CMDIFrameWndEx::OnHelpFinder)
+	//ON_COMMAND(ID_HELP_FINDER, &CMDIFrameWndEx::OnHelpFinder)
+	//ON_COMMAND(ID_HELP, &CMDIFrameWndEx::OnHelp)
+	//ON_COMMAND(ID_CONTEXT_HELP, CMDIFrameWndEx::OnContextHelp)
+	//ON_COMMAND(ID_DEFAULT_HELP, CMDIFrameWndEx::OnHelpFinder)
 	ON_COMMAND_EX_RANGE(ID_MATH1, ID_MATH16, &CMainFrame::OnToggleCtrlBar)
 	ON_COMMAND_EX(ID_VIEW_MATH, &CMainFrame::OnToggleCtrlBar)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_MATH1, ID_MATH16, &CMainFrame::OnCheckCtrlBarVisible)
@@ -269,6 +270,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_COMMAND_EX(ID_VIEW_GREP_1_PANE, &CMainFrame::OnToggleDockingBar)
 	ON_COMMAND_EX(ID_VIEW_GREP_2_PANE, &CMainFrame::OnToggleDockingBar)
 	ON_COMMAND_EX(ID_VIEW_PARSE_PANE, &CMainFrame::OnToggleDockingBar)
+	ON_MESSAGE(WM_COMMANDHELP, &CMainFrame::OnCommandHelp)
 END_MESSAGE_MAP()
 
 const UINT BuildAnimationPane = 1;
@@ -1263,6 +1265,13 @@ void CMainFrame::OnHelpIndex()
 {
 	HtmlHelp(0, HH_DISPLAY_INDEX);
 }
+
+LRESULT CMainFrame::OnCommandHelp(WPARAM /*wParam*/, LPARAM /*lParam*/)
+{
+	HtmlHelp(0, HH_DISPLAY_TOC);
+	return true;
+}
+
 
 void CMainFrame::DisplayDocumentTabs()
 {

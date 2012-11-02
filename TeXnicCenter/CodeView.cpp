@@ -1508,7 +1508,7 @@ LRESULT CodeView::OnGetLineText(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-afx_msg LRESULT CodeView::OnCommandHelp(WPARAM /*wParam*/, LPARAM /*lParam*/)
+LRESULT CodeView::OnCommandHelp(WPARAM /*wParam*/, LPARAM /*lParam*/)
 {
 	return InvokeContextHelp(GetCurrentWordOrSelection(true, true, true));	
 }
