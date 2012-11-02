@@ -1863,7 +1863,7 @@ void CTeXnicCenterApp::OnWindowCloseAll()
 
 void CTeXnicCenterApp::OnHelp()
 {
-	HtmlHelp(0, HH_DISPLAY_TOC);
+	CWinApp::OnHelp();
 }
 
 Speller* CTeXnicCenterApp::GetSpeller()
