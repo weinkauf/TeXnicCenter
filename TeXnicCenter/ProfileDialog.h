@@ -42,8 +42,7 @@
 #include "PropertyDialog.h"
 #include "ProfilePage.h"
 #include "ProfilePageLatex.h"
-#include "ProfilePagePreprocessor.h"
-#include "ProfilePagePostprocessor.h"
+#include "ProfilePagePprocessor.h"
 #include "ProfilePageViewer.h"
 
 /**	Dialog for defining output profiles.
@@ -151,8 +150,8 @@ public:
 // attributes
 protected:
 	CProfilePageLaTeX m_wndPageLatex;
-	CProfilePagePreprocessor m_wndPagePreprocessor;
-	CProfilePagePostprocessor m_wndPagePostprocessor;
+	CProfilePagePprocessor m_wndPagePreprocessor;
+	CProfilePagePprocessor m_wndPagePostprocessor;
 	CProfilePageViewer m_wndPageViewer;
 
 	CProfileMap m_profiles;

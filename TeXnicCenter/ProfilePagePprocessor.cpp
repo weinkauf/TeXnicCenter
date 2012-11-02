@@ -28,7 +28,7 @@
 
 #include "stdafx.h"
 #include "resource.h"
-#include "ProfilePagePostprocessor.h"
+#include "ProfilePagePprocessor.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,33 +37,34 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 //-------------------------------------------------------------------
-// class CProfilePagePostprocessor
+// class CProfilePagePprocessor
 //-------------------------------------------------------------------
 
-BEGIN_MESSAGE_MAP(CProfilePagePostprocessor, CProfilePage)
-	ON_NOTIFY(BCGCELN_AFTERADDITEM, IDC_POSTPROCESSORLIST, OnItemAction)
-	ON_NOTIFY(BCGCELN_BEFOREREMOVEITEM, IDC_POSTPROCESSORLIST, OnItemAction)
-	ON_NOTIFY(BCGCELN_SELECTIONCHANGED, IDC_POSTPROCESSORLIST, OnItemAction)
-	ON_NOTIFY(BCGCELN_AFTERRENAMEITEM, IDC_POSTPROCESSORLIST, OnItemAction)
-	ON_NOTIFY(BCGCELN_AFTERMOVEITEMDOWN, IDC_POSTPROCESSORLIST, OnItemAction)
-	ON_NOTIFY(BCGCELN_AFTERMOVEITEMUP, IDC_POSTPROCESSORLIST, OnItemAction)
+BEGIN_MESSAGE_MAP(CProfilePagePprocessor, CProfilePage)
+	ON_NOTIFY(BCGCELN_AFTERADDITEM, IDC_PPROCESSORLIST, OnItemAction)
+	ON_NOTIFY(BCGCELN_BEFOREREMOVEITEM, IDC_PPROCESSORLIST, OnItemAction)
+	ON_NOTIFY(BCGCELN_SELECTIONCHANGED, IDC_PPROCESSORLIST, OnItemAction)
+	ON_NOTIFY(BCGCELN_AFTERRENAMEITEM, IDC_PPROCESSORLIST, OnItemAction)
+	ON_NOTIFY(BCGCELN_AFTERMOVEITEMDOWN, IDC_PPROCESSORLIST, OnItemAction)
+	ON_NOTIFY(BCGCELN_AFTERMOVEITEMUP, IDC_PPROCESSORLIST, OnItemAction)
 END_MESSAGE_MAP()
 
 
-CProfilePagePostprocessor::CProfilePagePostprocessor()
-		: CProfilePage(CProfilePagePostprocessor::IDD),
-		m_wndBrowsePostprocessor(IDC_EDIT_PPEXE, TRUE, NULL, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, CString((LPCTSTR)STE_COMPILER_FILTER)),
+CProfilePagePprocessor::CProfilePagePprocessor(UINT unIDCaption, CPProcessorArray& (CProfile::*GetPProcessorArray)())
+		: CProfilePage(IDD, unIDCaption),
+		m_wndBrowsePprocessor(IDC_EDIT_PPEXE, TRUE, NULL, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, CString((LPCTSTR)STE_COMPILER_FILTER)),
 		m_wndArgumentsPh(IDR_POPUP_PLACEHOLDER_MAIN_OPT),
 		m_wndInputPh(IDR_POPUP_PLACEHOLDER_MAIN_OPT),
 		m_wndOutputPh(IDR_POPUP_PLACEHOLDER_MAIN_OPT),
 		m_nSelectedItem(-1),
-		m_pProfile(NULL)
+		m_pProfile(NULL),
+		m_pGetPProcessorArray(GetPProcessorArray)
 {
-	//{{AFX_DATA_INIT(CProfilePagePostprocessor)
+	//{{AFX_DATA_INIT(CProfilePagePprocessor)
 	//}}AFX_DATA_INIT
 }
 
-void CProfilePagePostprocessor::UpdateControlStates()
+void CProfilePagePprocessor::UpdateControlStates()
 {
 	int nItem = m_nSelectedItem;
 
@@ -72,7 +73,7 @@ void CProfilePagePostprocessor::UpdateControlStates()
 
 	m_wndTitleExe.EnableWindow(nItem > -1);
 	m_wndExe.EnableWindow(nItem > -1);
-	m_wndBrowsePostprocessor.EnableWindow(nItem > -1);
+	m_wndBrowsePprocessor.EnableWindow(nItem > -1);
 	m_wndTitleArguments.EnableWindow(nItem > -1);
 	m_wndArguments.EnableWindow(nItem > -1);
 	m_wndArgumentsPh.EnableWindow(nItem > -1);
@@ -87,7 +88,7 @@ void CProfilePagePostprocessor::UpdateControlStates()
 		EnableAllControls(FALSE);
 }
 
-void CProfilePagePostprocessor::RefillList()
+void CProfilePagePprocessor::RefillList()
 {
 	if (!IsWindow(m_wndList.m_hWnd))
 		return;
@@ -100,11 +101,11 @@ void CProfilePagePostprocessor::RefillList()
 		return;
 
 	// fill list
-	for (int i = 0; i < m_pProfile->GetPostProcessorArray().GetSize(); i++)
-		m_wndList.AddItem(m_pProfile->GetPostProcessorArray().GetAt(i).GetTitle());
+	for (int i = 0; i < (m_pProfile->*m_pGetPProcessorArray)().GetSize(); i++)
+		m_wndList.AddItem((m_pProfile->*m_pGetPProcessorArray)().GetAt(i).GetTitle());
 }
 
-void CProfilePagePostprocessor::OnUpdateDataSet(CProfile *pProfile)
+void CProfilePagePprocessor::OnUpdateDataSet(CProfile *pProfile)
 {
 	m_pProfile = pProfile;
 
@@ -115,26 +116,26 @@ void CProfilePagePostprocessor::OnUpdateDataSet(CProfile *pProfile)
 	}
 }
 
-void CProfilePagePostprocessor::OnAddItem(int nIndex)
+void CProfilePagePprocessor::OnAddItem(int nIndex)
 {
 	if (!m_pProfile)
 		return;
 
-	CPostProcessor pp(m_wndList.GetItemText(nIndex));
-	m_pProfile->GetPostProcessorArray().InsertAt(nIndex,pp);
+	CPProcessor pp(m_wndList.GetItemText(nIndex));
+	(m_pProfile->*m_pGetPProcessorArray)().InsertAt(nIndex,pp);
 }
 
-BOOL CProfilePagePostprocessor::OnRemoveItem(int nIndex)
+BOOL CProfilePagePprocessor::OnRemoveItem(int nIndex)
 {
 	if (!m_pProfile)
 		return TRUE;
 
-	m_pProfile->GetPostProcessorArray().RemoveAt(nIndex);
+	(m_pProfile->*m_pGetPProcessorArray)().RemoveAt(nIndex);
 	m_nSelectedItem = -1;
 	return TRUE;
 }
 
-void CProfilePagePostprocessor::OnSelectionChanged()
+void CProfilePagePprocessor::OnSelectionChanged()
 {
 	UpdateData();
 	m_nSelectedItem = m_wndList.GetSelItem();
@@ -142,51 +143,51 @@ void CProfilePagePostprocessor::OnSelectionChanged()
 	UpdateData(FALSE);
 }
 
-void CProfilePagePostprocessor::OnRenameItem(int nIndex)
+void CProfilePagePprocessor::OnRenameItem(int nIndex)
 {
 	if (!m_pProfile)
 		return;
 
-	m_pProfile->GetPostProcessorArray()[nIndex].SetTitle(m_wndList.GetItemText(nIndex));
+	(m_pProfile->*m_pGetPProcessorArray)()[nIndex].SetTitle(m_wndList.GetItemText(nIndex));
 }
 
-void CProfilePagePostprocessor::OnMoveItemUp(int nIndex)
+void CProfilePagePprocessor::OnMoveItemUp(int nIndex)
 {
 	if (!m_pProfile)
 		return;
 
-	CPostProcessor pp0 = m_pProfile->GetPostProcessorArray()[nIndex];
-	CPostProcessor pp1 = m_pProfile->GetPostProcessorArray()[nIndex + 1];
-	m_pProfile->GetPostProcessorArray().SetAt(nIndex, pp1);
-	m_pProfile->GetPostProcessorArray().SetAt(nIndex + 1, pp0);
+	CPProcessor pp0 = (m_pProfile->*m_pGetPProcessorArray)()[nIndex];
+	CPProcessor pp1 = (m_pProfile->*m_pGetPProcessorArray)()[nIndex + 1];
+	(m_pProfile->*m_pGetPProcessorArray)().SetAt(nIndex, pp1);
+	(m_pProfile->*m_pGetPProcessorArray)().SetAt(nIndex + 1, pp0);
 
 	m_nSelectedItem = nIndex;
 	UpdateData(FALSE);
 }
 
-void CProfilePagePostprocessor::OnMoveItemDown(int nIndex)
+void CProfilePagePprocessor::OnMoveItemDown(int nIndex)
 {
 	if (!m_pProfile)
 		return;
 
-	CPostProcessor pp0 = m_pProfile->GetPostProcessorArray()[nIndex - 1];
-	CPostProcessor pp1 = m_pProfile->GetPostProcessorArray()[nIndex];
-	m_pProfile->GetPostProcessorArray().SetAt(nIndex - 1, pp1);
-	m_pProfile->GetPostProcessorArray().SetAt(nIndex, pp0);
+	CPProcessor pp0 = (m_pProfile->*m_pGetPProcessorArray)()[nIndex - 1];
+	CPProcessor pp1 = (m_pProfile->*m_pGetPProcessorArray)()[nIndex];
+	(m_pProfile->*m_pGetPProcessorArray)().SetAt(nIndex - 1, pp1);
+	(m_pProfile->*m_pGetPProcessorArray)().SetAt(nIndex, pp0);
 
 	m_nSelectedItem = nIndex;
 	UpdateData(FALSE);
 }
 
-void CProfilePagePostprocessor::DoDataExchange(CDataExchange* pDX)
+void CProfilePagePprocessor::DoDataExchange(CDataExchange* pDX)
 {
 	CString strExecutable, strArguments, strInput, strOutput;
-	int nPostProcessor = m_nSelectedItem;
+	int nPProcessor = m_nSelectedItem;
 
-	if (m_pProfile && nPostProcessor > -1 && nPostProcessor < m_pProfile->GetPostProcessorArray().GetSize() && !pDX->m_bSaveAndValidate)
+	if (m_pProfile && nPProcessor > -1 && nPProcessor < (m_pProfile->*m_pGetPProcessorArray)().GetSize() && !pDX->m_bSaveAndValidate)
 	{
 		// prepare data for controls
-		CPostProcessor &pp = m_pProfile->GetPostProcessorArray()[nPostProcessor];
+		CPProcessor &pp = (m_pProfile->*m_pGetPProcessorArray)()[nPProcessor];
 
 		strExecutable = pp.GetPath();
 		strArguments = pp.GetArguments();
@@ -195,30 +196,30 @@ void CProfilePagePostprocessor::DoDataExchange(CDataExchange* pDX)
 	}
 
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CProfilePagePostprocessor)
+	//{{AFX_DATA_MAP(CProfilePagePprocessor)
 	DDX_Control(pDX, IDC_EDIT_PPEXE, m_wndExe);
 	DDX_Control(pDX, IDC_TITLE_ARGUMENTS, m_wndTitleArguments);
 	DDX_Control(pDX, IDC_TITLE_OUTPUT, m_wndTitleOutput);
 	DDX_Control(pDX, IDC_TITLE_INPUT, m_wndTitleInput);
 	DDX_Control(pDX, IDC_TITLE_EXE, m_wndTitleExe);
-	DDX_Control(pDX, IDC_POSTPROCESSORLIST, m_wndList);
+	DDX_Control(pDX, IDC_PPROCESSORLIST, m_wndList);
 	DDX_Control(pDX, IDC_INSERTPH_PPOUTPUT, m_wndOutputPh);
 	DDX_Control(pDX, IDC_INSERTPH_PPINPUT, m_wndInputPh);
 	DDX_Control(pDX, IDC_INSERTPH_PPARGUMENTS, m_wndArgumentsPh);
 	DDX_Control(pDX, IDC_EDIT_PPOUTPUT, m_wndOutput);
 	DDX_Control(pDX, IDC_EDIT_PPINPUT, m_wndInput);
 	DDX_Control(pDX, IDC_EDIT_PPARGUMENTS, m_wndArguments);
-	DDX_Control(pDX, IDC_BROWSE_POSTPROCESSOR, m_wndBrowsePostprocessor);
+	DDX_Control(pDX, IDC_BROWSE_PPROCESSOR, m_wndBrowsePprocessor);
 	DDX_Text(pDX, IDC_EDIT_PPEXE, strExecutable);
 	DDX_Text(pDX, IDC_EDIT_PPARGUMENTS, strArguments);
 	DDX_Text(pDX, IDC_EDIT_PPINPUT, strInput);
 	DDX_Text(pDX, IDC_EDIT_PPOUTPUT, strOutput);
 	//}}AFX_DATA_MAP
 
-	if (m_pProfile && nPostProcessor > -1 && nPostProcessor < m_pProfile->GetPostProcessorArray().GetSize() && pDX->m_bSaveAndValidate)
+	if (m_pProfile && nPProcessor > -1 && nPProcessor < (m_pProfile->*m_pGetPProcessorArray)().GetSize() && pDX->m_bSaveAndValidate)
 	{
 		// prepare data for controls
-		CPostProcessor &pp = m_pProfile->GetPostProcessorArray()[nPostProcessor];
+		CPProcessor &pp = (m_pProfile->*m_pGetPProcessorArray)()[nPProcessor];
 
 		pp.SetPath(strExecutable);
 		pp.SetArguments(strArguments);
@@ -227,7 +228,7 @@ void CProfilePagePostprocessor::DoDataExchange(CDataExchange* pDX)
 	}
 }
 
-BOOL CProfilePagePostprocessor::OnInitDialog()
+BOOL CProfilePagePprocessor::OnInitDialog()
 {
 	CProfilePage::OnInitDialog();
 
@@ -247,7 +248,7 @@ BOOL CProfilePagePostprocessor::OnInitDialog()
 	// EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben
 }
 
-void CProfilePagePostprocessor::OnItemAction(NMHDR *pNMHDR, LRESULT *pResult)
+void CProfilePagePprocessor::OnItemAction(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMBCGCEDITLISTBOX pHdr = (LPNMBCGCEDITLISTBOX)pNMHDR;
 

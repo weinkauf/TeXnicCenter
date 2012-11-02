@@ -795,24 +795,39 @@ void CTeXnicCenterApp::OnAppAbout()
 	aboutDlg.DoModal();
 }
 
-LaTeXView* CTeXnicCenterApp::GetActiveEditView()
+LaTeXView* CTeXnicCenterApp::GetActiveLaTeXView()
 {
-	// get active frame
-	if (!m_pMainWnd)
-		return NULL;
+	//Get active frame
+	if (!m_pMainWnd) return NULL;
+	CFrameWnd* pFrame = ((CMDIFrameWnd*)m_pMainWnd)->GetActiveFrame();
+	if (!pFrame || !pFrame->IsKindOf(RUNTIME_CLASS(CChildFrame))) return NULL;
 
-	CFrameWnd *pFrame = ((CMDIFrameWnd*)m_pMainWnd)->GetActiveFrame();
-
-	if (!pFrame || !pFrame->IsKindOf(RUNTIME_CLASS(CChildFrame)))
-		return NULL;
-
-	// get active view
-	CView *pView = pFrame->GetActiveView();
-
-	if (!pView || !pView->IsKindOf(RUNTIME_CLASS(LaTeXView)))
-		return NULL;
+	//Get active view and find out about its type
+	CView* pView = pFrame->GetActiveView();
+	if (!pView || !pView->IsKindOf(RUNTIME_CLASS(LaTeXView))) return NULL;
 
 	return (LaTeXView*)pView;
+}
+
+CodeView* CTeXnicCenterApp::GetActiveCodeView()
+{
+	//Get active frame
+	if (!m_pMainWnd) return NULL;
+	CFrameWnd* pFrame = ((CMDIFrameWnd*)m_pMainWnd)->GetActiveFrame();
+	if (!pFrame || !pFrame->IsKindOf(RUNTIME_CLASS(CChildFrame))) return NULL;
+
+	//Get active view and find out about its type
+	CView* pView = pFrame->GetActiveView();
+	if (!pView || !pView->IsKindOf(RUNTIME_CLASS(CodeView))) return NULL;
+
+	return (CodeView*)pView;
+}
+
+CString CTeXnicCenterApp::GetCurrentWordOrSelection(const bool bDefaultWordChars, const bool bIncludingEscapeChar, const bool bStripEol)
+{
+	CodeView* pCView = GetActiveCodeView();
+	if (pCView) return pCView->GetCurrentWordOrSelection(bDefaultWordChars, bIncludingEscapeChar, bStripEol);
+	return CString();
 }
 
 CDocument *CTeXnicCenterApp::GetOpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/)
@@ -912,12 +927,17 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName,BOOL bReadOnl
 
 CDocument* CTeXnicCenterApp::OpenDocumentFile(LPCTSTR lpszFileName)
 {
-	return OpenLatexDocument(lpszFileName, FALSE, -1, FALSE, true);
+	return OpenLatexDocument(lpszFileName, FALSE, -1, FALSE, true, TRUE);
+}
+
+CDocument* CTeXnicCenterApp::OpenDocumentFile(LPCTSTR lpszFileName, BOOL bAddToMRU)
+{
+	return OpenLatexDocument(lpszFileName, FALSE, -1, FALSE, true, bAddToMRU);
 }
 
 CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/,
         int nLineNumber /*= -1*/, BOOL bError /*= FALSE*/,
-        bool bAskForProjectLoad /*= true*/)
+        bool bAskForProjectLoad /*= true*/, BOOL bAddToMRU /*= FALSE*/)
 {
 	TRACE1("Opening LaTeX Doc: %s\n", lpszFileName);
 
@@ -925,16 +945,22 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 	TCHAR lpszFilePath[MAX_PATH];
 
 	GetFullPathName(lpszFileName, MAX_PATH, lpszFilePath,0);
-	CString strDocPath = lpszFilePath;
-
-	CDocTemplate *pDocTemplate = m_pLatexDocTemplate;
+	const CString strDocPath = lpszFilePath;
 
 	// try to find a document that represents the requested file
 	CDocument *pDoc = NULL;
+	CDocTemplate* pDocTemplate = m_pLatexDocTemplate;
+	POSITION pos = pDocTemplate->GetFirstDocPosition();
 	BOOL bFound = FALSE;
-
-	if ((pDoc = CWinAppEx::OpenDocumentFile(lpszFileName)) != 0)
-		bFound = TRUE;
+	while (pos)
+	{
+		pDoc = pDocTemplate->GetNextDoc(pos);
+		if (pDoc && pDoc->GetPathName().CompareNoCase(strDocPath)==0 /*&& pDoc->IsKindOf(RUNTIME_CLASS(CLatexDoc))*/)
+		{
+			bFound = TRUE;
+			break;
+		}
+	}
 
 	//Open new document, if we could not find one
 	// If we found one above, we just activate its view
@@ -968,8 +994,6 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 				// save modified documents
 				if (theApp.SaveAllModified())
 				{
-					theApp.CloseAllDocuments(m_bEndSession);
-
 					if (OpenProject(strProjectPath))
 					{
 						//... and the specified file (in most cases the main file), if not already there
@@ -988,7 +1012,10 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 
 		//Just load the file, if a project was not loaded
 		if (!bLoaded)
-			pDoc = pDocTemplate->OpenDocumentFile(strDocPath);
+		{
+			//pDoc = pDocTemplate->OpenDocumentFile(strDocPath); ==> This opens it always as a tex-file
+			pDoc = CWinAppEx::OpenDocumentFile(strDocPath, bAddToMRU); //This may open as tex or bib-file, etc.
+		}
 	}
 
 	if (!pDoc)
@@ -1267,7 +1294,7 @@ void CTeXnicCenterApp::OnFileOpen()
 		const CString path = dlg.GetNextPathName(file);
 		// open file
 		//NOTE: dlg.GetReadOnlyPref() always return false on my WinXP SP2, Tino, Jan 2007
-		OpenLatexDocument(path, dlg.GetReadOnlyPref(), -1, false, true);
+		OpenLatexDocument(path, dlg.GetReadOnlyPref(), -1, false, true, TRUE);
 	}
 
 	AfxSetLastDirectory(CPathTool::GetDirectory(dlg.GetPathName()));	
@@ -1950,7 +1977,7 @@ void CTeXnicCenterApp::OnUpdateProject()
 
 void CTeXnicCenterApp::OnProjectNewFromFile()
 {
-	LaTeXView* pEdit = GetActiveEditView();
+	LaTeXView* pEdit = GetActiveLaTeXView();
 	if (!pEdit) return;
 
 	LaTeXDocument* pDoc = pEdit->GetDocument();
@@ -1996,7 +2023,7 @@ void CTeXnicCenterApp::OnUpdateProjectNewFromFile(CCmdUI* pCmdUI)
 {
 	bool bEnable = false;
 
-	LaTeXView* pEdit = GetActiveEditView();
+	LaTeXView* pEdit = GetActiveLaTeXView();
 	if (pEdit)
 	{
 		LaTeXDocument* pDoc = pEdit->GetDocument();

@@ -80,9 +80,8 @@ protected:
 private:
 	friend class CAutoCompleteListBox;
 
-	void ApplySelection();
+	void ApplySelection(const TCHAR AdditionalInsertChar = _T(''));
 	void CancelSelection();
-	BOOL IsCancelChar(WORD theChar);
 	void Help();
 	void DrawListItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 	void MeasureListItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
@@ -119,7 +118,7 @@ public:
 	        @param Pointer to an instance of the corresponding command (maybe a command
 	        or an environment).
 	 */
-	virtual void OnACCommandSelect(const CLaTeXCommand *cmd) = 0;
+	virtual void OnACCommandSelect(const CLaTeXCommand* cmd, const TCHAR AdditionalInsertChar = _T('')) = 0;
 	/**
 	        Called, if user had cancelled auto completion
 	 */

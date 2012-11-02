@@ -65,13 +65,8 @@ void CXMLDOMDocumentEx::Create(LPCTSTR lpszDocumentNamespaces /* = NULL */, LPCT
 	// create XML document
 	HRESULT	hr;
 
-	const CLSID clsid = 
-#ifdef _WIN64
-		CLSID_DOMDocument60
-#else
-		CLSID_DOMDocument40
-#endif
-		;
+	//We use MSXML 6
+	const CLSID clsid = CLSID_DOMDocument60;
 
 	hr = CoCreateInstance(clsid);
 	
@@ -115,7 +110,7 @@ void CXMLDOMDocumentEx::AddSchema(LPCTSTR lpszSchema, LPCTSTR lpszSchemaNamespac
 	}
 	if (!xmlSchemaCache)
 	{
-		HRESULT	hr = xmlSchemaCache.CoCreateInstance(MsXml::CXMLSchemaCache40Class::s_ClsId);
+		HRESULT	hr = xmlSchemaCache.CoCreateInstance(MsXml::CXMLSchemaCache60Class::s_ClsId);
 		if (FAILED(hr) || !xmlSchemaCache)
 			AfxThrowComException(hr);
 		SetRefSchemas(xmlSchemaCache.P());

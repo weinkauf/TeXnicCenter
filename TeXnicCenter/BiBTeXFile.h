@@ -118,7 +118,7 @@ public:
 	<code>@Comment{@Book{steward03, [...]}}</code>
 	Example II<br>
 	<code>{ @Book{steward03, [...]}}</code>
-	issues a warning, since on opening brace percedes the book entry. BibTex would NOT consider
+	issues a warning, since on opening brace precedes the book entry. BibTex would NOT consider
 	the book entry in this case, since the brace is outside an entry and is treated as comment.
 	 */
 	BOOL IsWarnWrongLevelAT() const;

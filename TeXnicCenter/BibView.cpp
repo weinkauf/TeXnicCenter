@@ -687,7 +687,8 @@ void BibView::OnLvnItemChanged(NMHDR* nm, LRESULT*)
 	LPNMLISTVIEW p = reinterpret_cast<LPNMLISTVIEW>(nm);
 
 	if (p->uChanged & LVIF_STATE && p->iItem != -1 && p->uNewState & LVIS_SELECTED)
-		GetProject()->SetCurrentStructureItem(bib_items_[list_view_.GetItemData(p->iItem)].structure_item_index);
+		GetProject()->SetCurrentStructureItem(static_cast<int>
+			(bib_items_[list_view_.GetItemData(p->iItem)].structure_item_index));
 }
 
 BOOL BibView::PreTranslateMessage(MSG* pMsg)
@@ -734,20 +735,23 @@ void BibView::DoPopulate( const PredicateFunctionType& predicate )
 			lvi.lParam = lvi.iItem;
 
 			const int index = list_view_.InsertItem(&lvi);
-			ASSERT(index != -1);
 
-			list_view_.SetItemText(index,1,it->bib.GetAuthor());
-			list_view_.SetItemText(index,2,it->bib.GetTitle());
+			if (index == -1)
+				::InterlockedExchange(&stop_search_, 1);
+			else {
+				list_view_.SetItemText(index,1,it->bib.GetAuthor());
+				list_view_.SetItemText(index,2,it->bib.GetTitle());
 
-			if (it->bib.HasYear()) {
-				CString& year = temp_;
-				year.Format(_T("%i"),it->bib.GetYear().GetValue());
+				if (it->bib.HasYear()) {
+					CString& year = temp_;
+					year.Format(_T("%i"),it->bib.GetYear().GetValue());
 
-				list_view_.SetItemText(index,3,year);
+					list_view_.SetItemText(index,3,year);
+				}
+
+				list_view_.SetItemText(index,4,it->bib.GetTypeString());
+				list_view_.SetItemText(index,5,it->bib.GetPublisher());
 			}
-
-			list_view_.SetItemText(index,4,it->bib.GetTypeString());
-			list_view_.SetItemText(index,5,it->bib.GetPublisher());
 		}
 	}
 
@@ -794,8 +798,18 @@ void BibView::OnPopulateThread( const PredicateFunctionType& predicate )
 
 void BibView::OnDestroy()
 {
-	::InterlockedExchange(&stop_search_,1);
-	::WaitForSingleObject(search_semaphore_,INFINITE);
+	::InterlockedExchange(&stop_search_, 1);
+
+	MSG msg;
+
+	while (::WaitForSingleObject(search_semaphore_, 0) == WAIT_TIMEOUT) {
+		// Let the main window process remaining messages sent from
+		// OnPopulateThread, otherwise a dead lock may occur.
+		while (::PeekMessage(&msg, list_view_.m_hWnd, 0, 0, PM_REMOVE | PM_QS_SENDMESSAGE) > 0) {
+			::TranslateMessage(&msg);
+			::DispatchMessage(&msg);
+		}
+	}
 
 	WorkspacePaneBase::OnDestroy();
 }

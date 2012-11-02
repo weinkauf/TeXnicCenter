@@ -321,7 +321,7 @@ void NavigatorTreeCtrl::OnSelChanged(NMHDR* pNMHDR,LRESULT* pResult)
 		HTREEITEM hItem = reinterpret_cast<NM_TREEVIEW*>(pNMHDR)->itemNew.hItem;
 
 		if (!IsFolder(hItem))
-			p->SetCurrentStructureItem(GetItemIndex(hItem));
+			p->SetCurrentStructureItem((int)GetItemIndex(hItem));
 	}
 
 	*pResult = 0;

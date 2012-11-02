@@ -44,6 +44,7 @@
 #include "StyleFileContainer.h"
 
 class CLaTeXProject;
+class CodeView;
 class LaTeXView;
 class Speller;
 class SpellerSource;
@@ -145,11 +146,15 @@ public:
 	 */
 	CMultiDocTemplate *GetLatexDocTemplate();
 
-	/**
-	Returns a pointer to the active LaTeXView-object or NULL, if there is
-	none.
-	 */
-	LaTeXView* GetActiveEditView();
+	///Returns a pointer to the active CodeView-object or NULL, if there is none.
+	CodeView* GetActiveCodeView();
+
+	///Returns a pointer to the active LaTeXView-object or NULL, if there is none.
+	LaTeXView* GetActiveLaTeXView();
+
+	///Returns the word under the cursor, or the current selection in the active code view.
+	/// @see CodeView::GetCurrentWordOrSelection()
+	CString GetCurrentWordOrSelection(const bool bDefaultWordChars, const bool bIncludingEscapeChar, const bool bStripEol);
 
 	/** Returns a pointer to the LaTeX-document with the specified path and read-only
 	attribute. If the document is not open, it is NOT opened and NULL is returned.
@@ -194,7 +199,7 @@ public:
 	@return A pointer to the document.
 	 */
 	virtual CDocument* OpenDocumentFile(LPCTSTR lpszFileName);
-
+	virtual CDocument* OpenDocumentFile(LPCTSTR lpszFileName, BOOL bAddToMRU);
 	/**
 	Opens the specified File at the specified line. If the file is already
 	open, its main view is activated and the cursor is set to the specified
@@ -213,10 +218,12 @@ public:
 	        to load this project.
 
 	@return A pointer to the document.
+
+	@todo Should be renamed to OpenCodeDocument, since it actually opens all kinds of documents.
 	 */
 	CDocument* OpenLatexDocument(LPCTSTR lpszFileName,BOOL bReadOnly = FALSE,
 	                             int nLineNumber = -1,BOOL bError = FALSE,
-	                             bool bAskForProjectLoad = true);
+	                             bool bAskForProjectLoad = true, BOOL bAddToMRU = FALSE);
 
 	/**
 	Returns a string associated with the project document template.
