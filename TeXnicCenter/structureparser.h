@@ -478,6 +478,12 @@ private:
 	/** Actual depth */
 	SSIZE_T m_nDepth;
 
+	///Stack of files while parsing. Needed to prevent infinite loops when the user includes tex-files recursively.
+	std::vector<CString> m_ParsingFilesStack;
+
+	///Base path during parsing
+	CString m_BasePath;
+
 	/** line counter */
 	int m_nLineCount;
 
