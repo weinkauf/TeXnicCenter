@@ -795,24 +795,39 @@ void CTeXnicCenterApp::OnAppAbout()
 	aboutDlg.DoModal();
 }
 
-LaTeXView* CTeXnicCenterApp::GetActiveEditView()
+LaTeXView* CTeXnicCenterApp::GetActiveLaTeXView()
 {
-	// get active frame
-	if (!m_pMainWnd)
-		return NULL;
+	//Get active frame
+	if (!m_pMainWnd) return NULL;
+	CFrameWnd* pFrame = ((CMDIFrameWnd*)m_pMainWnd)->GetActiveFrame();
+	if (!pFrame || !pFrame->IsKindOf(RUNTIME_CLASS(CChildFrame))) return NULL;
 
-	CFrameWnd *pFrame = ((CMDIFrameWnd*)m_pMainWnd)->GetActiveFrame();
-
-	if (!pFrame || !pFrame->IsKindOf(RUNTIME_CLASS(CChildFrame)))
-		return NULL;
-
-	// get active view
-	CView *pView = pFrame->GetActiveView();
-
-	if (!pView || !pView->IsKindOf(RUNTIME_CLASS(LaTeXView)))
-		return NULL;
+	//Get active view and find out about its type
+	CView* pView = pFrame->GetActiveView();
+	if (!pView || !pView->IsKindOf(RUNTIME_CLASS(LaTeXView))) return NULL;
 
 	return (LaTeXView*)pView;
+}
+
+CodeView* CTeXnicCenterApp::GetActiveCodeView()
+{
+	//Get active frame
+	if (!m_pMainWnd) return NULL;
+	CFrameWnd* pFrame = ((CMDIFrameWnd*)m_pMainWnd)->GetActiveFrame();
+	if (!pFrame || !pFrame->IsKindOf(RUNTIME_CLASS(CChildFrame))) return NULL;
+
+	//Get active view and find out about its type
+	CView* pView = pFrame->GetActiveView();
+	if (!pView || !pView->IsKindOf(RUNTIME_CLASS(CodeView))) return NULL;
+
+	return (CodeView*)pView;
+}
+
+CString CTeXnicCenterApp::GetCurrentWordOrSelection(const bool bDefaultWordChars, const bool bIncludingEscapeChar, const bool bStripEol)
+{
+	CodeView* pCView = GetActiveCodeView();
+	if (pCView) return pCView->GetCurrentWordOrSelection(bDefaultWordChars, bIncludingEscapeChar, bStripEol);
+	return CString();
 }
 
 CDocument *CTeXnicCenterApp::GetOpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadOnly /*= FALSE*/)
@@ -1962,7 +1977,7 @@ void CTeXnicCenterApp::OnUpdateProject()
 
 void CTeXnicCenterApp::OnProjectNewFromFile()
 {
-	LaTeXView* pEdit = GetActiveEditView();
+	LaTeXView* pEdit = GetActiveLaTeXView();
 	if (!pEdit) return;
 
 	LaTeXDocument* pDoc = pEdit->GetDocument();
@@ -2008,7 +2023,7 @@ void CTeXnicCenterApp::OnUpdateProjectNewFromFile(CCmdUI* pCmdUI)
 {
 	bool bEnable = false;
 
-	LaTeXView* pEdit = GetActiveEditView();
+	LaTeXView* pEdit = GetActiveLaTeXView();
 	if (pEdit)
 	{
 		LaTeXDocument* pDoc = pEdit->GetDocument();

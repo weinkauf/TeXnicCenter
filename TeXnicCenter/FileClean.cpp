@@ -441,7 +441,7 @@ bool CFileClean::Initialize(CFileCleanItemArray& ItemArray)
 	if (!pProject) return false; //No Project = nothing to clean
 
 	CString strCurrentPath;
-	LaTeXView* pEdit = theApp.GetActiveEditView();
+	CodeView* pEdit = theApp.GetActiveCodeView();
 	if (pEdit)
 	{
 		strCurrentPath = pEdit->GetDocument()->GetPathName();
