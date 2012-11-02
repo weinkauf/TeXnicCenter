@@ -1074,6 +1074,8 @@ CString CodeView::GetWordAroundRange(const long startPos, const long endPos, con
 
 CString CodeView::GetText(const long startPos, const long endPos, bool bStripEol, const bool bConvertEncoding)
 {
+	if (startPos == endPos) return CString();
+
 	//Prepare Range data structure for scinitlla
 	Sci_TextRange TRange;
 	TRange.chrg.cpMin = startPos;
