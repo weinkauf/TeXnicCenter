@@ -115,12 +115,8 @@ public:
 	}
 };
 
-//template<class Ch, class Tr = CharTraits<Ch> >
 class Win32Locale
 {
-	//typedef typename Tr::CharType CharType;
-	//typedef Tr TraitsType;
-
 	LCID lcid_;
 
 	void SetLCID(LCID lcid)
@@ -209,7 +205,7 @@ public:
 	typedef CharTraits<Ch> Traits;
 	Win32Locale locale_;
 
-	explicit Win32LocaleCharTraits(const Win32Locale& locale) 
+	explicit Win32LocaleCharTraits(const Win32Locale& locale)
 	{
 		locale_ = locale;
 	}

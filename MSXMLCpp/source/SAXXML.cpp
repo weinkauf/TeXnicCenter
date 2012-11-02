@@ -19,7 +19,7 @@ namespace MsXml
 
 static GUID LIBID = {0xf5078f18, 0xc551, 0x11d3, {0x89, 0xb9, 0x00, 0x00, 0xf8, 0x1f, 0xe2, 0x21}};
 
-#define LIBVER_MAJOR 4
+#define LIBVER_MAJOR 6
 #define LIBVER_MINOR 0
 
 //--------------------------------------------------------------------
@@ -1060,6 +1060,36 @@ ISAXXMLReader* CSAXXMLReader40Class::GetSAXXMLReader()
 }
 
 
+//--------------------------------------------------------------------
+// class CSAXXMLReader60Class
+//--------------------------------------------------------------------
+
+const CLSID CSAXXMLReader60Class::s_ClsId = CLSID_SAXXMLReader60;
+
+
+CSAXXMLReader60Class::CSAXXMLReader60Class()
+:	CCoClassWrapper<IVBSAXXMLReader>(s_ClsId)
+{}
+
+
+CVBSAXXMLReader CSAXXMLReader60Class::GetVBSAXXMLReader()
+{
+	IVBSAXXMLReader *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+ISAXXMLReader* CSAXXMLReader60Class::GetSAXXMLReader()
+{
+	ISAXXMLReader *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
 
 
 //--------------------------------------------------------------------
@@ -1391,6 +1421,118 @@ IVBSAXErrorHandler* CMXXMLWriter40Class::GetVBSAXErrorHandler()
 
 
 IVBSAXLexicalHandler* CMXXMLWriter40Class::GetVBSAXLexicalHandler()
+{
+	IVBSAXLexicalHandler *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+
+//--------------------------------------------------------------------
+// class CMXXMLWriter60Class
+//--------------------------------------------------------------------
+
+const CLSID CMXXMLWriter60Class::s_ClsId = CLSID_MXXMLWriter60;
+
+
+CMXXMLWriter60Class::CMXXMLWriter60Class()
+:	CCoClassWrapper<IMXWriter>(s_ClsId)
+{}
+
+
+CMXWriter CMXXMLWriter60Class::GetMXWriter()
+{
+	IMXWriter *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+ISAXContentHandler* CMXXMLWriter60Class::GetSAXContentHandler()
+{
+	ISAXContentHandler *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+ISAXDeclHandler* CMXXMLWriter60Class::GetSAXDeclHandler()
+{
+	ISAXDeclHandler *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+ISAXDTDHandler* CMXXMLWriter60Class::GetSAXDTDHandler()
+{
+	ISAXDTDHandler *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+ISAXErrorHandler* CMXXMLWriter60Class::GetSAXErrorHandler()
+{
+	ISAXErrorHandler *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+ISAXLexicalHandler* CMXXMLWriter60Class::GetSAXLexicalHandler()
+{
+	ISAXLexicalHandler *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+IVBSAXContentHandler* CMXXMLWriter60Class::GetVBSAXContentHandler()
+{
+	IVBSAXContentHandler *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+IVBSAXDeclHandler* CMXXMLWriter60Class::GetVBSAXDeclHandler()
+{
+	IVBSAXDeclHandler *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+IVBSAXDTDHandler* CMXXMLWriter60Class::GetVBSAXDTDHandler()
+{
+	IVBSAXDTDHandler *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+IVBSAXErrorHandler* CMXXMLWriter60Class::GetVBSAXErrorHandler()
+{
+	IVBSAXErrorHandler *p = NULL;
+	HRESULT	hr = m_p.QueryInterface(&p);
+	if (hr != S_OK) AfxThrowComException(hr);
+	return p;
+}
+
+
+IVBSAXLexicalHandler* CMXXMLWriter60Class::GetVBSAXLexicalHandler()
 {
 	IVBSAXLexicalHandler *p = NULL;
 	HRESULT	hr = m_p.QueryInterface(&p);

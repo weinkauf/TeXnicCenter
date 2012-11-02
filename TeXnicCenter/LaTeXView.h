@@ -48,7 +48,8 @@ private:
 	void OnACBackspace();
 	void OnACChar(UINT nKey,UINT nRepCount,UINT nFlags);
 	void OnACCommandCancelled();
-	void OnACCommandSelect(const CLaTeXCommand* cmd);
+	///@todo Do not try to guess the cursor pos, but define it in the latex command (in xml). Default: after the inserted text
+	void OnACCommandSelect(const CLaTeXCommand* cmd, const TCHAR AdditionalInsertChar = _T(''));
 
 	void Reindent( int initial_line_count, int start_line );
 	void OnACHelp(const CString &cmd);	
@@ -63,9 +64,8 @@ private:
 	bool autocompletion_active_;
 
 protected:
-	void GetWordBeforeCursor(CString& strKeyword, long& start,bool bSelect = true);
-	static bool IsAutoCompletionCharacter(TCHAR tc);
-	
+	virtual void AddExtendedWordChars(CString& WordChars);
+	virtual void AddEscapeChars(CString& EscapeChars);
 	
 	afx_msg void OnEditOutsource();
 	afx_msg void OnQueryCompletion();
@@ -77,10 +77,6 @@ protected:
 	afx_msg void OnFormatTextBackColor();
 	afx_msg void OnUpdateFormatTextForeColor(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateFormatTextBackColor(CCmdUI* pCmdUI);
-
-private:
-	void RestoreFocus();
-	BOOL InvokeContextHelp(const CString& keyword);
 
 public:	
 	LaTeXDocument* GetDocument() const;

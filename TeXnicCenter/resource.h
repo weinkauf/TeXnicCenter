@@ -41,6 +41,8 @@
 #define ID_METAPOST_NEW                 192
 #define ID_BIBTEX_NEW                   193
 #define IDR_LATEX                       194
+#define IDS_POSTPROCESSOR               194
+#define IDS_PREPROCESSOR                195
 #define IDR_FIND                        199
 #define IDR_IMAGES                      201
 #define IDR_HIDDEN_CMDS                 206
@@ -727,6 +729,8 @@
 #define IDC_INSERTPH_PRPARGUMENTS       8674
 #define IDC_INSERTPH_PRPINPUT           8675
 #define IDC_INSERTPH_PRPOUTPUT          8676
+#define IDC_BROWSE_PPROCESSOR           8677
+#define IDC_PPROCESSORLIST              8678
 #define ID_TEXTMODULES_FIRST            17000
 #define ID_TEXTMODULES_LAST             18000
 #define ID_VIEW_BAR1                    32760
@@ -1469,16 +1473,16 @@
 #define IDR_ERROR_VIEW                  57673
 #define IDR_MAINFRAMEOLD                57675
 #define IDR_LATEXDOCTYPEOLD             57676
-#define IDD_PROFILE_PREPROCESSOR        57678
+#define IDD_PROFILE_PPROCESSOR          57679
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        57679
+#define _APS_NEXT_RESOURCE_VALUE        57680
 #define _APS_NEXT_COMMAND_VALUE         40689
-#define _APS_NEXT_CONTROL_VALUE         8677
+#define _APS_NEXT_CONTROL_VALUE         8679
 #define _APS_NEXT_SYMED_VALUE           57773
 #endif
 #endif

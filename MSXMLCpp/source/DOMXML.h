@@ -11,7 +11,7 @@
 #define __DOMXML_H__
 
 #include "../../InterfaceWrapper/Include/InterfaceWrapper.h"
-#include <msxml2.h>
+#include <msxml6.h>
 
 namespace MsXml
 {
@@ -2944,6 +2944,23 @@ class CXMLSchemaCache40Class : public CCoClassWrapper<IXMLDOMSchemaCollection2>
 // construction/destruction
 public:
 	CXMLSchemaCache40Class();
+
+// operations
+public:
+	CXMLDOMSchemaCollection2 GetXMLDOMSchemaCollection2();
+
+// Attributes
+public:
+	static const CLSID s_ClsId;
+};
+
+
+///Manually added
+class CXMLSchemaCache60Class : public CCoClassWrapper<IXMLDOMSchemaCollection2>
+{
+// construction/destruction
+public:
+	CXMLSchemaCache60Class();
 
 // operations
 public:

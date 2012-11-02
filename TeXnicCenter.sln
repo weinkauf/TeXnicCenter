@@ -10,6 +10,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Documentation", "TCHelp\SourceCodeDoc\TXCDocumentation.vcxproj", "{6A2C0D58-A215-42E0-B4B6-2151467D772A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TeXnicCenter", "TeXnicCenter\TeXnicCenter.vcxproj", "{7795423E-417E-4C41-A629-11EFD0EBF8AD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{12243F23-547E-4676-A36D-7DE0EE131354} = {12243F23-547E-4676-A36D-7DE0EE131354}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TeXnicCenterObjects", "TeXnicCenterObjects\Source\TeXnicCenterObjects.vcxproj", "{7D010430-948A-4400-85C4-7D18CB92068F}"
 EndProject

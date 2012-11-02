@@ -163,6 +163,8 @@ BOOL CStructureParser::StartParsing(LPCTSTR lpszMainPath, LPCTSTR lpszWorkingDir
 	m_nLinesParsed = 0;
 	m_nFilesParsed = 0;
 	m_nCharsParsed = 0;
+	m_ParsingFilesStack.clear();
+	m_BasePath.ReleaseBuffer(::GetCurrentDirectory(MAX_PATH, m_BasePath.GetBuffer(MAX_PATH)));
 
 	// Signal that parsing has started.
 	m_evtParsingDone.ResetEvent();
@@ -198,6 +200,7 @@ UINT StructureParserThread(LPVOID pStructureParser)
 	StructureItemContainer paSI;
 	bParsingResult = pParser->Parse(pParser->m_strMainPath, cookies, 0, paSI);
 
+	ASSERT(pParser->m_ParsingFilesStack.empty());
 	pParser->EmptyCookieStack(cookies, paSI);
 	
     {
@@ -371,22 +374,42 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 
 		if (::PathFileExists(strPath))
 		{
-			CString path;
+			//Make sure it's not a recursive inclusion
+			// - otherwise, it will result in a stack overflow
 
-			if (CPathTool::IsRelativePath(strPath))
+			//Get absolute path of the just specified file
+			const CString AbsPathToBeIncluded = CPathTool::IsRelativePath(strPath) ? CPathTool::Cat(m_BasePath, strPath) : strPath;
+
+			//Search for this file in the stack of files that are current open for parsing
+			// - We explicitly do not care about files, that have finished parsing already.
+			// - Because: Including several times is ok.
+			bool bFoundRecursion(false);
+			for(auto it=m_ParsingFilesStack.begin();it!=m_ParsingFilesStack.end();it++)
 			{
-				CString dir;
-				dir.ReleaseBuffer(::GetCurrentDirectory(MAX_PATH,dir.GetBuffer(MAX_PATH)));
-				
-				path = CPathTool::Cat(dir,strPath);
+				//Get the absolute path of this one
+				const CString AbsPathParsing = CPathTool::IsRelativePath(*it) ? CPathTool::Cat(m_BasePath, *it) : *it;
+
+				//Are they the same?
+				if (AbsPathToBeIncluded.CompareNoCase(AbsPathParsing) == 0)
+				{
+					//Yes, they are the same
+					bFoundRecursion = true;
+					break;
+				}
 			}
 
-			const CString relative_path = CPathTool::GetRelativePath(path,strActualFile,FALSE,FALSE);
-
-			// Make sure it's not a recursive inclusion
-			// otherwise it will result in a stack overflow
-			if (relative_path.CompareNoCase(strPath) != 0)
+			if (bFoundRecursion)
 			{
+				//Notify the user about the error
+				if (m_pParseOutputHandler && !m_bCancel)
+				{
+					info.SetErrorMessage(CString(MAKEINTRESOURCE(IDS_RECURSIVE_INCLUSION)));
+					m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::error);
+				}
+			}
+			else
+			{
+				//Continue parsing this new file
 				if (m_pParseOutputHandler && !m_bCancel)
 				{
 					CString message;
@@ -397,19 +420,13 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 					m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::information);
 				}
 
+				//Here we go!
 				Parse(strPath, cookies, nFileDepth + 1, aSI);
-			}
-			else // otherwise notify the user about the error
-			{
-				if (m_pParseOutputHandler && !m_bCancel)
-				{
-					info.SetErrorMessage(CString(MAKEINTRESOURCE(IDS_RECURSIVE_INCLUSION)));
-					m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::error);
-				}
 			}
 		}
 		else if (m_pParseOutputHandler && !m_bCancel)
 		{
+			//File does not exist (or we could just not find it)
 			AddFileItem(strPath, StructureItem::missingTexFile, strActualFile, nActualLine, aSI);
 
 			CString message;
@@ -1351,6 +1368,7 @@ BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
 		return FALSE;
 	}
 
+	m_ParsingFilesStack.push_back(lpszPath);
 	m_nFilesParsed++;
 
 	CString strActualFile(lpszPath);
@@ -1461,6 +1479,7 @@ BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
 
 	// delete text source object
 	pTs.release()->Delete();
+	m_ParsingFilesStack.pop_back();
 
 	return !m_bCancel;
 }

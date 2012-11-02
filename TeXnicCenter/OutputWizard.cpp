@@ -521,7 +521,7 @@ void COutputWizard::LookForPdf()
 	//  Path: HKEY_LOCAL_MACHINE\SOFTWARE\AFPL Ghostscript\<version>
 	//  Path: HKEY_LOCAL_MACHINE\SOFTWARE\GPL Ghostscript\<version>
 	//  Entry: GS_DLL=f:\prog\gstools\gs\gs8.12\bin\gsdll32.dll
-	// We need the directory of GS_DLL. There we find gswin32c.exe.
+	// We need the directory of GS_DLL. There we find gswin32c.exe or gswin64c.exe.
 	m_bGhostscriptInstalled = false;
 	RegistryStack gsReg(true,true); //HKEY_LOCAL_MACHINE, ReadOnly
 
@@ -561,12 +561,20 @@ void COutputWizard::LookForPdf()
 		{
 			if (gsReg.Read(_T("GS_DLL"),m_strGhostscriptPath))
 			{
-				m_strGhostscriptPath = CPathTool::Cat(CPathTool::GetDirectory(m_strGhostscriptPath),_T("gswin32c.exe"));
-
+				m_strGhostscriptPath = CPathTool::Cat(CPathTool::GetDirectory(m_strGhostscriptPath),_T("gswin64c.exe"));
 				if (ff.FindFile(m_strGhostscriptPath))
 				{
 					m_bGhostscriptInstalled = true;
 					m_bGhostscriptViaPS2PDF = false;
+				}
+				else
+				{
+					m_strGhostscriptPath = CPathTool::Cat(CPathTool::GetDirectory(m_strGhostscriptPath),_T("gswin32c.exe"));
+					if (ff.FindFile(m_strGhostscriptPath))
+					{
+						m_bGhostscriptInstalled = true;
+						m_bGhostscriptViaPS2PDF = false;
+					}
 				}
 
 				ff.Close();
@@ -578,13 +586,13 @@ void COutputWizard::LookForPdf()
 
 	// Detect SumatraPDF
 	ATL::CRegKey reg;
-	
-	if (reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS
-		|| reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\Wow6432Node\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS)
+
+	if (reg.Open(HKEY_LOCAL_MACHINE,_T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS
+		|| reg.Open(HKEY_LOCAL_MACHINE,_T("SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS)
 	{
 		ULONG length = MAX_PATH;		
 
-		if (reg.QueryStringValue(_T("Install_Dir"),sumatra_path_.GetBuffer(length),&length) == ERROR_SUCCESS)
+		if (reg.QueryStringValue(_T("InstallLocation"),sumatra_path_.GetBuffer(length),&length) == ERROR_SUCCESS)
 		{
 			sumatra_path_.ReleaseBuffer(length);
 			sumatra_path_ = CPathTool::Cat(sumatra_path_,_T("SumatraPDF.exe"));
@@ -596,6 +604,28 @@ void COutputWizard::LookForPdf()
 			sumatra_path_.ReleaseBuffer(0);
 
 		reg.Close();
+	}
+	else
+	{
+		//Older versions of Sumatra wrote their installation directory here:	
+		if (reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS
+			|| reg.Open(HKEY_LOCAL_MACHINE,_T("Software\\Wow6432Node\\SumatraPDF"), KEY_READ) == ERROR_SUCCESS)
+		{
+			ULONG length = MAX_PATH;		
+
+			if (reg.QueryStringValue(_T("Install_Dir"),sumatra_path_.GetBuffer(length),&length) == ERROR_SUCCESS)
+			{
+				sumatra_path_.ReleaseBuffer(length);
+				sumatra_path_ = CPathTool::Cat(sumatra_path_,_T("SumatraPDF.exe"));
+
+				if (CPathTool::Exists(sumatra_path_))
+					sumatra_installed_ = true;
+			}
+			else
+				sumatra_path_.ReleaseBuffer(0);
+
+			reg.Close();
+		}
 	}
 
 	// No GhostScript found?
@@ -683,8 +713,6 @@ void COutputWizard::ShowInformation()
 
 	if (m_bPdfLatexInstalled)
 		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFTYPE) + newline;
-
-	// LaTeX => PDF (SumatraPDF)?
 
 	if (m_bGhostscriptInstalled)
 		m_wndPageFinish.m_strList += prefix + GetProfileName(STE_OUTPUTWIZARD_PDFVIAPSTYPE) + newline;
@@ -778,7 +806,7 @@ void COutputWizard::GenerateOutputProfiles()
 				if (bExists)
 					m_profiles.Remove(strProfile);
 
-				CPostProcessor dvipdfm(_T("dvipdfm"), dvipdfm_path_,
+				CPProcessor dvipdfm(_T("dvipdfm"), dvipdfm_path_,
 					_T("\"%bm.dvi\""));
 				p.GetPostProcessorArray().Add(dvipdfm);
 				p.SetLaTeXArguments(strPDFLatexOptions); // Use PDF arguments
@@ -812,7 +840,7 @@ void COutputWizard::GenerateOutputProfiles()
 			SetupMakeIndex(p);
 
 			// add post processor dvips
-			CPostProcessor pp(
+			CPProcessor pp(
 				_T("DviPs"),GetDistributionFilePath(_T("dvips.exe")),
 				_T("\"%Bm.dvi\""));
 			p.GetPostProcessorArray().Add(pp);
@@ -872,7 +900,7 @@ void COutputWizard::GenerateOutputProfiles()
 			SetupMakeIndex(p);
 
 			// add post processor dvips
-			CPostProcessor ppDVIPS(
+			CPProcessor ppDVIPS(
 				_T("DviPs (PDF)"),GetDistributionFilePath(_T("dvips.exe")),
 				_T("-P pdf \"%Bm.dvi\""));
 			p.GetPostProcessorArray().Add(ppDVIPS);
@@ -881,7 +909,7 @@ void COutputWizard::GenerateOutputProfiles()
 			if (m_bGhostscriptViaPS2PDF)
 			{
 				//ps2pdf
-				CPostProcessor ppPS2PDF(
+				CPProcessor ppPS2PDF(
 					_T("ps2pdf"), m_strGhostscriptPath,
 					_T("\"%bm.ps\""));
 				p.GetPostProcessorArray().Add(ppPS2PDF);
@@ -889,7 +917,7 @@ void COutputWizard::GenerateOutputProfiles()
 			else
 			{
 				//Ghostscript directly
-				CPostProcessor ppGS(
+				CPProcessor ppGS(
 					_T("Ghostscript (ps2pdf)"),m_strGhostscriptPath,
 					_T("-sPAPERSIZE=a4 -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"%bm.pdf\" -c save pop -f \"%bm.ps\""));
 				p.GetPostProcessorArray().Add(ppGS);
@@ -955,10 +983,6 @@ void COutputWizard::AssignPDFViewer(CProfile& p)
 
 void COutputWizard::SetupSumatraDDE( CProfile &p )
 {
-	CDdeCommand cmd;
-	CProfile::CCommand profileCmd;
-	profileCmd.SetActiveCommand(CProfile::CCommand::typeDde);
-
 	CString app;
 	app.ReleaseBuffer(::GetModuleFileName(0,app.GetBuffer(MAX_PATH),MAX_PATH));
 
@@ -967,16 +991,26 @@ void COutputWizard::SetupSumatraDDE( CProfile &p )
 
 	p.SetViewerPath(exec);
 
-	cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
-	cmd.SetCommand(_T("[ForwardSearch(\"%bm.pdf\",\"%Wc\",%l,0,0,1)]"));
+	CProfile::CCommand ViewOutputCmd;
+	ViewOutputCmd.SetActiveCommand(CProfile::CCommand::typeProcess);
+	CProcessCommand SumatraProcessCmd;
+	SumatraProcessCmd.Set(m_wndPagePdfViewer.m_strPath, _T("\"%bm.pdf\""));
+	ViewOutputCmd.SetProcessCommand(SumatraProcessCmd);
+	p.SetViewProjectCmd(ViewOutputCmd);
 
-	cmd.SetServer(_T("sumatra"),_T("control"));
-	profileCmd.SetDdeCommand(cmd);
+	CDdeCommand SumatraDDECmd;
+	CProfile::CCommand ForwardSearchCmd;
+	ForwardSearchCmd.SetActiveCommand(CProfile::CCommand::typeDde);
 
-	p.SetViewProjectCmd(profileCmd);
-	p.SetViewCurrentCmd(profileCmd);
+	SumatraDDECmd.SetExecutable(m_wndPagePdfViewer.m_strPath);
+	SumatraDDECmd.SetCommand(_T("[ForwardSearch(\"%bm.pdf\",\"%Wc\",%l,0,0,1)]"));
 
-	p.SetViewCloseCmd(profileCmd);
+	SumatraDDECmd.SetServer(_T("sumatra"),_T("control"));
+	ForwardSearchCmd.SetDdeCommand(SumatraDDECmd);
+
+	p.SetViewCurrentCmd(ForwardSearchCmd);
+
+	p.SetViewCloseCmd(CProfile::CCommand());
 	p.SetCloseView(false);
 }
 
@@ -989,6 +1023,7 @@ void COutputWizard::SetupAcrobatDDE( CProfile &p )
 
 	//Get the version of the targeted Adobe Reader/Acrobat
 	// in order to properly setup the DDE server name
+	// (only for versions >= 10; older versions just use "acroview")
 	CString DDEServerName(_T("acroview"));
 	const tregex regexReaderVersion(_T(".*\\\\Reader ([\\d]+)\\..*"));
 	const tregex regexAcrobatVersion(_T(".*\\\\Acrobat ([\\d]+)\\..*"));
@@ -997,11 +1032,19 @@ void COutputWizard::SetupAcrobatDDE( CProfile &p )
 	LPCTSTR lpEnd = lpStart + m_wndPagePdfViewer.m_strPath.GetLength();
 	if (regex_search(lpStart, lpEnd, what, regexReaderVersion))
 	{
-		DDEServerName = CString(_T("acroview")) + _T("R") + CString(what[1].first, what[1].second - what[1].first);
+		CString VersionNumberString(what[1].first, what[1].second - what[1].first);
+		if (_wtoi(VersionNumberString) >= 10)
+		{
+			DDEServerName = CString(_T("acroview")) + _T("R") + VersionNumberString;
+		}
 	}
 	else if (regex_search(lpStart, lpEnd, what, regexAcrobatVersion))
 	{
-		DDEServerName = CString(_T("acroview")) + _T("A") + CString(what[1].first, what[1].second - what[1].first);
+		CString VersionNumberString(what[1].first, what[1].second - what[1].first);
+		if (_wtoi(VersionNumberString) >= 10)
+		{
+			DDEServerName = CString(_T("acroview")) + _T("A") + VersionNumberString;
+		}
 	}
 
 	cmd.SetExecutable(m_wndPagePdfViewer.m_strPath);

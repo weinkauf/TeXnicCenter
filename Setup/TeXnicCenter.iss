@@ -5,10 +5,10 @@
 ;-------------------------------------------
 
 ;Uncomment this for x64
-#define TARGET_x64
+;#define TARGET_x64
 
 ;Uncomment this for an Alpha Build
-#define ALPHA_BUILD
+;#define ALPHA_BUILD
 
 ;For debugging the Inno preprocessor
 ;#define Debug
@@ -20,9 +20,7 @@
 ;~ Setup for current user  versus  Setup for all users:
 ;~ We need elevated priveleges to write to HKLM and such.
 ;~ For the "all users" case: more or less like now. Except for HKCR -> needs to be some other like HKLM/Classes
-;~ For "current user" case: copy msxml to local dir (maybe do this always?). HKCR -> HKCU/Classes. Not in "Program Files".
-
-;~ msxml is weird. Maybe deliver an appropriate installer? Would that require admin privileges?
+;~ For "current user" case: HKCR -> HKCU/Classes. Not in "Program Files".
 
 ;~ The defaults for the doc and project templates should really be handled from within TXC.
 ;~ If the key or dir doesn't exist, then use the defaults.
@@ -56,11 +54,14 @@
   #define APP_ID            APP_NAME
 #endif
 
+;~ We need that for the file name of the setup itself
+#define APP_VERSION_NOSPACE StringChange(APP_VERSION, " ", "")
+
 
 [Setup]
 ;Output
 OutputDir=..\Output\Setup
-OutputBaseFilename=TXCSetup_{#APP_PLATFORM}
+OutputBaseFilename=TXCSetup_{#APP_VERSION_NOSPACE}_{#APP_PLATFORM}
 ;About TeXnicCenter
 AppName={#APP_NAME}
 AppVersion={#APP_VERSION}
@@ -138,19 +139,6 @@ Source: ..\Output\Product\{#APP_PLATFORM}\Release\Packages\*.bmp; DestDir: {app}
 ;Help
 Source: ..\Output\Product\{#APP_PLATFORM}\Release\Help\*.chm; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
 Source: ..\Output\Product\{#APP_PLATFORM}\Release\Help\*.chw; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
-
-;XML System files - do we really need this? For an admin account on XP, we don't need these files at all.
-;For a regular user, we need these files in the systems dir. A simple copy to the app dir doesn't work. What am I missing?
-;Source: msxml4.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-;Source: msxml4r.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-;Source: msxml4a.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-;And installing them on x64 fails anyway. We need to switch to msxml6. That one is available on all systems (needs to be checked).
-#ifndef TARGET_x64
-    Source: msxml4.dll; DestDir: {sys}; Flags: regserver sharedfile
-    Source: msxml4r.dll; DestDir: {sys}; Flags: sharedfile
-    Source: msxml4a.dll; DestDir: {sys}; Flags: sharedfile
-#endif
-
 
 ;MFC files. Copied as private assemblies. Windows will use globally installed versions, if they are installed.
 Source: {#APP_PLATFORM}\msvcr100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
