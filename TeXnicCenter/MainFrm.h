@@ -244,7 +244,6 @@ public:
 	virtual BOOL DestroyWindow();
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
-//virtual void WinHelp(DWORD dwData, UINT nCmd = HELP_CONTEXT);
 protected:
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 	//}}AFX_VIRTUAL
@@ -290,6 +289,7 @@ protected:
 	afx_msg void OnUpdateWindowCloseSelectedTab(CCmdUI* pCmdUI);
 	afx_msg void OnWindowCloseAllButActive();
 	afx_msg void OnUpdateWindowCloseAllButActive(CCmdUI* pCmdUI);
+	afx_msg LRESULT OnCommandHelp(WPARAM wParam, LPARAM lParam);
 	//}}AFX_MSG
 	afx_msg BOOL OnToggleCtrlBar(UINT nIDEvent);
 	afx_msg BOOL OnToggleDockingBar(UINT nIDEvent);
