@@ -363,6 +363,24 @@
     <ClCompile Include="..\lexers\LexCoffeeScript.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\lexers\LexAVS.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lexers\LexECL.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lexers\LexOScript.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lexers\LexPO.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lexers\LexTCMD.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lexers\LexVisualProlog.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\win32\ScintRes.rc">

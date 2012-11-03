@@ -267,8 +267,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lexers\LexA68k.cxx" />
+    <ClCompile Include="..\lexers\LexAVS.cxx" />
     <ClCompile Include="..\lexers\LexCoffeeScript.cxx" />
+    <ClCompile Include="..\lexers\LexECL.cxx" />
     <ClCompile Include="..\lexers\LexModula.cxx" />
+    <ClCompile Include="..\lexers\LexOScript.cxx" />
+    <ClCompile Include="..\lexers\LexPO.cxx" />
+    <ClCompile Include="..\lexers\LexTCMD.cxx" />
+    <ClCompile Include="..\lexers\LexVisualProlog.cxx" />
     <ClCompile Include="..\lexlib\Accessor.cxx">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
