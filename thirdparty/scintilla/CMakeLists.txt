@@ -19,15 +19,6 @@ file (GLOB PROJECT_PUBLIC_H
 )
 
 file (GLOB PROJECT_CXX
-  lexlib/Accessor.cxx
-  lexlib/CharacterSet.cxx
-  lexlib/LexerBase.cxx
-  lexlib/LexerModule.cxx
-  lexlib/LexerNoExceptions.cxx
-  lexlib/LexerSimple.cxx
-  lexlib/PropSetSimple.cxx
-  lexlib/StyleContext.cxx
-  lexlib/WordList.cxx
   lexers/LexA68k.cxx
   lexers/LexAbaqus.cxx
   lexers/LexAda.cxx
@@ -37,6 +28,7 @@ file (GLOB PROJECT_CXX
   lexers/LexASY.cxx
   lexers/LexAU3.cxx
   lexers/LexAVE.cxx
+  lexers/LexAVS.cxx
   lexers/LexBaan.cxx
   lexers/LexBash.cxx
   lexers/LexBasic.cxx
@@ -53,6 +45,7 @@ file (GLOB PROJECT_CXX
   lexers/LexCsound.cxx
   lexers/LexCSS.cxx
   lexers/LexD.cxx
+  lexers/LexECL.cxx
   lexers/LexEiffel.cxx
   lexers/LexErlang.cxx
   lexers/LexEScript.cxx
@@ -80,11 +73,13 @@ file (GLOB PROJECT_CXX
   lexers/LexNimrod.cxx
   lexers/LexNsis.cxx
   lexers/LexOpal.cxx
+  lexers/LexOScript.cxx
   lexers/LexOthers.cxx
   lexers/LexPascal.cxx
   lexers/LexPB.cxx
   lexers/LexPerl.cxx
   lexers/LexPLM.cxx
+  lexers/LexPO.cxx
   lexers/LexPOV.cxx
   lexers/LexPowerPro.cxx
   lexers/LexPowerShell.cxx
@@ -105,12 +100,23 @@ file (GLOB PROJECT_CXX
   lexers/LexTADS3.cxx
   lexers/LexTAL.cxx
   lexers/LexTCL.cxx
+  lexers/LexTCMD.cxx
   lexers/LexTeX.cxx
   lexers/LexTxt2tags.cxx
   lexers/LexVB.cxx
   lexers/LexVerilog.cxx
   lexers/LexVHDL.cxx
+  lexers/LexVisualProlog.cxx
   lexers/LexYAML.cxx
+  lexlib/Accessor.cxx
+  lexlib/CharacterSet.cxx
+  lexlib/LexerBase.cxx
+  lexlib/LexerModule.cxx
+  lexlib/LexerNoExceptions.cxx
+  lexlib/LexerSimple.cxx
+  lexlib/PropSetSimple.cxx
+  lexlib/StyleContext.cxx
+  lexlib/WordList.cxx
   src/AutoComplete.cxx
   src/CallTip.cxx
   src/Catalogue.cxx

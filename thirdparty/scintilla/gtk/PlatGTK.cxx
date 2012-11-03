@@ -25,6 +25,11 @@
 #include "UniConversion.h"
 #include "XPM.h"
 
+#if defined(__clang__)
+// Clang 3.0 incorrectly displays  sentinel warnings. Fixed by clang 3.1.
+#pragma GCC diagnostic ignored "-Wsentinel"
+#endif
+
 /* GLIB must be compiled with thread support, otherwise we
    will bail on trying to use locks, and that could lead to
    problems for someone.  `glib-config --libs gthread` needs
@@ -141,7 +146,7 @@ static void FontMutexUnlock() {
 // On GTK+ 1.x holds a GdkFont* but on GTK+ 2.x can hold a GdkFont* or a
 // PangoFontDescription*.
 class FontHandle {
-	int width[128];
+	XYPOSITION width[128];
 	encodingType et;
 public:
 	int ascent;
@@ -168,8 +173,8 @@ public:
 			width[i] = 0;
 		}
 	}
-	int CharWidth(unsigned char ch, encodingType et_) {
-		int w = 0;
+	XYPOSITION CharWidth(unsigned char ch, encodingType et_) {
+		XYPOSITION w = 0;
 		FontMutexLock();
 		if ((ch <= 127) && (et == et_)) {
 			w = width[ch];
@@ -177,7 +182,7 @@ public:
 		FontMutexUnlock();
 		return w;
 	}
-	void SetCharWidth(unsigned char ch, int w, encodingType et_) {
+	void SetCharWidth(unsigned char ch, XYPOSITION w, encodingType et_) {
 		if (ch <= 127) {
 			FontMutexLock();
 			if (et != et_) {
@@ -346,7 +351,7 @@ void Font::Release() {
 namespace Scintilla {
 #endif
 
-// On GTK+ 2.x, SurfaceID is a GdkDrawable* and on GTK+ 3.x, it is a cairo_t*
+// SurfaceID is a cairo_t*
 class SurfaceImpl : public Surface {
 	encodingType et;
 	cairo_t *context;
@@ -534,11 +539,7 @@ void SurfaceImpl::Init(SurfaceID sid, WindowID wid) {
 	PLATFORM_ASSERT(sid);
 	Release();
 	PLATFORM_ASSERT(wid);
-#if GTK_CHECK_VERSION(3,0,0)
 	context = cairo_reference(reinterpret_cast<cairo_t *>(sid));
-#else
-	context = gdk_cairo_create(reinterpret_cast<GdkDrawable *>(sid));
-#endif
 	pcontext = gtk_widget_create_pango_context(PWidget(wid));
 	layout = pango_layout_new(pcontext);
 	cairo_set_line_width(context, 1);
@@ -1359,7 +1360,7 @@ struct ListImage {
 };
 
 static void list_image_free(gpointer, gpointer value, gpointer) {
-	ListImage *list_image = (ListImage *) value;
+	ListImage *list_image = static_cast<ListImage *>(value);
 	if (list_image->pixbuf)
 		g_object_unref(list_image->pixbuf);
 	g_free(list_image);
@@ -1581,6 +1582,11 @@ PRectangle ListBoxX::GetDesiredRect() {
 			rows = desiredVisibleRows;
 
 		GtkRequisition req;
+#if GTK_CHECK_VERSION(3,0,0)
+		// This, apparently unnecessary call, ensures gtk_tree_view_column_cell_get_size
+		// returns reasonable values. 
+		gtk_widget_get_preferred_size(GTK_WIDGET(scroller), NULL, &req);
+#endif
 		int height;
 
 		// First calculate height of the clist for our desired visible
@@ -1614,7 +1620,7 @@ PRectangle ListBoxX::GetDesiredRect() {
 		gtk_widget_size_request(GTK_WIDGET(scroller), &req);
 #endif
 		rc.right = req.width;
-		rc.bottom = req.height;
+		rc.bottom = Platform::Maximum(height, req.height);
 
 		gtk_widget_set_size_request(GTK_WIDGET(list), -1, -1);
 		int width = maxItemCharacters;
@@ -1663,8 +1669,8 @@ static void init_pixmap(ListImage *list_image) {
 void ListBoxX::Append(char *s, int type) {
 	ListImage *list_image = NULL;
 	if ((type >= 0) && pixhash) {
-		list_image = (ListImage *) g_hash_table_lookup((GHashTable *) pixhash
-		             , (gconstpointer) GINT_TO_POINTER(type));
+		list_image = static_cast<ListImage *>(g_hash_table_lookup((GHashTable *) pixhash
+		             , (gconstpointer) GINT_TO_POINTER(type)));
 	}
 	GtkTreeIter iter;
 	GtkListStore *store =
@@ -1829,8 +1835,8 @@ void ListBoxX::RegisterRGBA(int type, RGBAImage *image) {
 	if (!pixhash) {
 		pixhash = g_hash_table_new(g_direct_hash, g_direct_equal);
 	}
-	ListImage *list_image = (ListImage *) g_hash_table_lookup((GHashTable *) pixhash,
-		(gconstpointer) GINT_TO_POINTER(type));
+	ListImage *list_image = static_cast<ListImage *>(g_hash_table_lookup((GHashTable *) pixhash,
+		(gconstpointer) GINT_TO_POINTER(type)));
 	if (list_image) {
 		// Drop icon already registered
 		if (list_image->pixbuf)
@@ -1852,7 +1858,7 @@ void ListBoxX::RegisterImage(int type, const char *xpm_data) {
 }
 
 void ListBoxX::RegisterRGBAImage(int type, int width, int height, const unsigned char *pixelsImage) {
-	RegisterRGBA(type, new RGBAImage(width, height, pixelsImage));
+	RegisterRGBA(type, new RGBAImage(width, height, 1.0, pixelsImage));
 }
 
 void ListBoxX::ClearRegisteredImages() {
