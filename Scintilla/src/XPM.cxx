@@ -47,14 +47,6 @@ ColourDesired XPM::ColourDesiredFromCode(int ch) const {
 
 ColourDesired XPM::ColourFromCode(int ch) const {
 	return *colourCodeTable[ch];
-#ifdef SLOW
-	for (int i=0; i<nColours; i++) {
-		if (codes[i] == ch) {
-			return colours[i].allocated;
-		}
-	}
-	return colours[0].allocated;
-#endif
 }
 
 void XPM::FillRun(Surface *surface, int code, int startX, int y, int x) {
@@ -327,8 +319,8 @@ int XPMSet::GetWidth() {
 	return (width > 0) ? width : 0;
 }
 
-RGBAImage::RGBAImage(int width_, int height_, const unsigned char *pixels_) :
-	height(height_), width(width_) {
+RGBAImage::RGBAImage(int width_, int height_, float scale_, const unsigned char *pixels_) :
+	height(height_), width(width_), scale(scale_) {
 	if (pixels_) {
 		pixelBytes.assign(pixels_, pixels_ + CountBytes());
 	} else {
@@ -339,6 +331,7 @@ RGBAImage::RGBAImage(int width_, int height_, const unsigned char *pixels_) :
 RGBAImage::RGBAImage(const XPM &xpm) {
 	height = xpm.GetHeight();
 	width = xpm.GetWidth();
+	scale = 1;
 	pixelBytes.resize(CountBytes());
 	for (int y=0; y<height; y++) {
 		for (int x=0; x<width; x++) {
@@ -364,10 +357,10 @@ const unsigned char *RGBAImage::Pixels() const {
 void RGBAImage::SetPixel(int x, int y, ColourDesired colour, int alpha) {
 	unsigned char *pixel = &pixelBytes[0] + (y*width+x) * 4;
 	// RGBA
-	pixel[0] = colour.GetRed();
-	pixel[1] = colour.GetGreen();
-	pixel[2] = colour.GetBlue();
-	pixel[3] = alpha;
+	pixel[0] = static_cast<unsigned char>(colour.GetRed());
+	pixel[1] = static_cast<unsigned char>(colour.GetGreen());
+	pixel[2] = static_cast<unsigned char>(colour.GetBlue());
+	pixel[3] = static_cast<unsigned char>(alpha);
 }
 
 RGBAImageSet::RGBAImageSet() : height(-1), width(-1){
