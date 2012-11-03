@@ -30,7 +30,7 @@ rm Output/Intermediate/*
 
 11. Rebuild All
 
-12. Create setup. Can be found in Output/Setup/TXCSetup.exe. Rename it appropriately (e.g. TXCSetup_2Alpha4.exe).
+12. Create setup. Can be found in Output/Setup/* with proper name.
 
 13. Test setup on a fresh Windows (or in a virtual machine).
 
@@ -40,7 +40,7 @@ rm Output/Intermediate/*
     hg log -f --no-merges -r "tagged(Release2Alpha3)":: --template "{desc}\n\n" > TXCReleaseNotes_2Alpha4.txt
 
 16. Upload the release notes and the setup file to sf.net. Just click on "Files". It requires Firefox or something similar.
-    Create a subfolder for the release. Place the release notes as readme.txt in this folder. It will always be displayed when people go into that folder (reST could be used, too). If the installer is going to be the new default, set it in its properties.
+    Create a subfolder for the release. Place the release notes as readme.txt in this folder (can be renamed on the server). It will always be displayed when people go into that folder (reST could be used, too). If the installer is going to be the new default, set it in its properties.
 
 17. Change the download links at texniccenter.org.
 
