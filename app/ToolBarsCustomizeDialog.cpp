@@ -401,7 +401,11 @@ BOOL ToolBarsCustomizeDialog::Create(CWnd* pParentWnd, DWORD dwStyle, DWORD dwEx
 
 	// hook the window creation process
 	AfxHookWindowCreate(this);
+#if _MSC_VER >= 1700
+	HWND hWnd = (HWND)PropertySheet(&m_psh);
+#else
 	HWND hWnd = (HWND)AfxPropertySheet(&m_psh);
+#endif
 #ifdef _DEBUG
 	DWORD dwError = ::GetLastError();
 #endif

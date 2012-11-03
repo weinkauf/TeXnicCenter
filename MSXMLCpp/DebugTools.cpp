@@ -29,7 +29,7 @@
 
 #ifdef _DEBUG
 
-	void AfxDumpXmlNode(IXMLDOMNode *pNode, DWORD dwCategory, UINT unLevel)
+	void AFX_EXPORT AfxDumpXmlNode(IXMLDOMNode *pNode, DWORD dwCategory, UINT unLevel)
 	{
 		if (pNode==NULL)
 			ATLTRACE2(dwCategory, unLevel, _T("NULL\n"));

@@ -38,4 +38,4 @@ if (MSVC)
   set_source_files_properties (StdAfx.cpp PROPERTIES COMPILE_FLAGS -Yc)
 endif (MSVC)
 
-target_link_libraries (${PROJECT_NAME} msxml2)
+target_link_libraries (${PROJECT_NAME} msxml6 msxml2)

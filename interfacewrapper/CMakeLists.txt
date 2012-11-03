@@ -1,4 +1,4 @@
-project (ifacewrapper)
+project (interfacewrapper)
 
 include (UseMFC)
 
