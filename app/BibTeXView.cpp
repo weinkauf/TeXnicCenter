@@ -137,3 +137,9 @@ int BibTeXView::GetLexer() const
 {
 	return SCLEX_BIBTEX;
 }
+
+
+void BibTeXView::AddEscapeChars(CString& EscapeChars)
+{
+	EscapeChars.Append(_T("@"));
+}

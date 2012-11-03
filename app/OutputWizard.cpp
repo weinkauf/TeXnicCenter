@@ -521,7 +521,7 @@ void COutputWizard::LookForPdf()
 	//  Path: HKEY_LOCAL_MACHINE\SOFTWARE\AFPL Ghostscript\<version>
 	//  Path: HKEY_LOCAL_MACHINE\SOFTWARE\GPL Ghostscript\<version>
 	//  Entry: GS_DLL=f:\prog\gstools\gs\gs8.12\bin\gsdll32.dll
-	// We need the directory of GS_DLL. There we find gswin32c.exe.
+	// We need the directory of GS_DLL. There we find gswin32c.exe or gswin64c.exe.
 	m_bGhostscriptInstalled = false;
 	RegistryStack gsReg(true,true); //HKEY_LOCAL_MACHINE, ReadOnly
 
@@ -561,12 +561,20 @@ void COutputWizard::LookForPdf()
 		{
 			if (gsReg.Read(_T("GS_DLL"),m_strGhostscriptPath))
 			{
-				m_strGhostscriptPath = CPathTool::Cat(CPathTool::GetDirectory(m_strGhostscriptPath),_T("gswin32c.exe"));
-
+				m_strGhostscriptPath = CPathTool::Cat(CPathTool::GetDirectory(m_strGhostscriptPath),_T("gswin64c.exe"));
 				if (ff.FindFile(m_strGhostscriptPath))
 				{
 					m_bGhostscriptInstalled = true;
 					m_bGhostscriptViaPS2PDF = false;
+				}
+				else
+				{
+					m_strGhostscriptPath = CPathTool::Cat(CPathTool::GetDirectory(m_strGhostscriptPath),_T("gswin32c.exe"));
+					if (ff.FindFile(m_strGhostscriptPath))
+					{
+						m_bGhostscriptInstalled = true;
+						m_bGhostscriptViaPS2PDF = false;
+					}
 				}
 
 				ff.Close();
@@ -798,7 +806,7 @@ void COutputWizard::GenerateOutputProfiles()
 				if (bExists)
 					m_profiles.Remove(strProfile);
 
-				CPostProcessor dvipdfm(_T("dvipdfm"), dvipdfm_path_,
+				CPProcessor dvipdfm(_T("dvipdfm"), dvipdfm_path_,
 					_T("\"%bm.dvi\""));
 				p.GetPostProcessorArray().Add(dvipdfm);
 				p.SetLaTeXArguments(strPDFLatexOptions); // Use PDF arguments
@@ -832,7 +840,7 @@ void COutputWizard::GenerateOutputProfiles()
 			SetupMakeIndex(p);
 
 			// add post processor dvips
-			CPostProcessor pp(
+			CPProcessor pp(
 				_T("DviPs"),GetDistributionFilePath(_T("dvips.exe")),
 				_T("\"%Bm.dvi\""));
 			p.GetPostProcessorArray().Add(pp);
@@ -892,7 +900,7 @@ void COutputWizard::GenerateOutputProfiles()
 			SetupMakeIndex(p);
 
 			// add post processor dvips
-			CPostProcessor ppDVIPS(
+			CPProcessor ppDVIPS(
 				_T("DviPs (PDF)"),GetDistributionFilePath(_T("dvips.exe")),
 				_T("-P pdf \"%Bm.dvi\""));
 			p.GetPostProcessorArray().Add(ppDVIPS);
@@ -901,7 +909,7 @@ void COutputWizard::GenerateOutputProfiles()
 			if (m_bGhostscriptViaPS2PDF)
 			{
 				//ps2pdf
-				CPostProcessor ppPS2PDF(
+				CPProcessor ppPS2PDF(
 					_T("ps2pdf"), m_strGhostscriptPath,
 					_T("\"%bm.ps\""));
 				p.GetPostProcessorArray().Add(ppPS2PDF);
@@ -909,7 +917,7 @@ void COutputWizard::GenerateOutputProfiles()
 			else
 			{
 				//Ghostscript directly
-				CPostProcessor ppGS(
+				CPProcessor ppGS(
 					_T("Ghostscript (ps2pdf)"),m_strGhostscriptPath,
 					_T("-sPAPERSIZE=a4 -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"%bm.pdf\" -c save pop -f \"%bm.ps\""));
 				p.GetPostProcessorArray().Add(ppGS);

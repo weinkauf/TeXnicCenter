@@ -361,13 +361,16 @@ BOOL CProfileMap::LoadXml(LPCTSTR lpszPath)
 
 		RemoveAll();
 
+		//Get the version
+		const int Version = xmlDoc.SelectSingleNode(_T("txcop:outputProfiles")).GetAttributes().GetNamedItem(_T("version")).GetNodeTypedValue();
+
 		MsXml::CXMLDOMNodeList xmlProfiles(xmlDoc.SelectNodes(_T("txcop:outputProfiles/outputProfileList/outputProfile")));
 		const long lProfiles = xmlProfiles.GetLength();
 		for (long lProfile = 0; lProfile < lProfiles; ++lProfile)
 		{
 			MsXml::CXMLDOMElement xmlProfile(xmlProfiles.GetItem(lProfile).QueryInterface(IID_IXMLDOMElement));
 			CProfile *pProfile = new CProfile();
-			pProfile->LoadXml(xmlProfile);
+			pProfile->LoadXml(xmlProfile, Version);
 			SetAt((_bstr_t)xmlProfile.GetAttribute(_T("name")), pProfile);
 		}
 
@@ -434,7 +437,7 @@ BOOL CProfileMap::SaveXml(LPCTSTR lpszPath) const
 
 		MsXml::CXMLDOMElement xmlRoot(xmlDoc.CreateElement(_T("txcop:outputProfiles")));
 		xmlRoot.SetAttribute(_T("xmlns:txcop"), _T("http://schemas.ToolsCenter.org/TeXnicCenter/OutputProfiles.xsd"));
-		xmlRoot.SetAttribute(_T("version"), 1.0);
+		xmlRoot.SetAttribute(_T("version"), 2.0);
 		xmlDoc.AppendChild(xmlRoot);
 
 		MsXml::CXMLDOMElement xmlProfileCollection(xmlDoc.CreateElement(_T("outputProfileList")));
@@ -622,11 +625,11 @@ BOOL CProfile::SerializeToRegistry(RegistryStack &reg) const
 
 	reg.PushKey();
 	reg.CreateKey(_T("PreProcessors"));
-	m_aPreProcessors.SerializeToRegistry(reg);
+	m_aPreProcessors.SerializeToRegistry(reg, _T("PreProcessor"));
 
 	reg.TopKey();
 	reg.CreateKey(_T("PostProcessors"));
-	m_aPostProcessors.SerializeToRegistry(reg);
+	m_aPostProcessors.SerializeToRegistry(reg, _T("PostProcessor"));
 
 	reg.TopKey();
 	reg.CreateKey(_T("ViewProjectCmd"));
@@ -665,11 +668,11 @@ BOOL CProfile::SerializeFromRegistry(RegistryStack &reg)
 
 	reg.PushKey();
 	reg.Open(_T("PreProcessors"));
-	m_aPreProcessors.SerializeFromRegistry(reg);
+	m_aPreProcessors.SerializeFromRegistry(reg, _T("PreProcessor"));
 
 	reg.TopKey();
 	reg.Open(_T("PostProcessors"));
-	m_aPostProcessors.SerializeFromRegistry(reg);
+	m_aPostProcessors.SerializeFromRegistry(reg, _T("PostProcessor"));
 
 	reg.TopKey();
 	reg.Open(_T("ViewProjectCmd"));
@@ -751,7 +754,7 @@ void CProfile::SaveXml(MsXml::CXMLDOMElement &xmlProfile) const
 	xmlProfile.AppendChild(xmlViewerDefinition);
 }
 
-void CProfile::LoadXml(MsXml::CXMLDOMElement &xmlProfile)
+void CProfile::LoadXml(MsXml::CXMLDOMElement &xmlProfile, const int Version)
 {
 	// serialize general settings
 	m_bStopOnLatexError = (bool)xmlProfile.GetAttribute(_T("stopOnLatexError"));
@@ -775,8 +778,11 @@ void CProfile::LoadXml(MsXml::CXMLDOMElement &xmlProfile)
 	m_strMakeIndexArguments = (LPCTSTR)(_bstr_t)xmlMakeIndexCommand.GetAttribute(_T("arguments"));
 
 	// serialize preprocessors
-	MsXml::CXMLDOMElement xmlPreProcessors(xmlProfile.SelectSingleNode(_T("preProcessors")).QueryInterface(IID_IXMLDOMElement));
-	m_aPreProcessors.LoadXml(xmlPreProcessors);
+	if (Version >= 2)
+	{
+		MsXml::CXMLDOMElement xmlPreProcessors(xmlProfile.SelectSingleNode(_T("preProcessors")).QueryInterface(IID_IXMLDOMElement));
+		m_aPreProcessors.LoadXml(xmlPreProcessors);
+	}
 
 	// serialize postprocessors
 	MsXml::CXMLDOMElement xmlPostProcessors(xmlProfile.SelectSingleNode(_T("postProcessors")).QueryInterface(IID_IXMLDOMElement));

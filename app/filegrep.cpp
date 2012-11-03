@@ -124,8 +124,8 @@ BOOL CFileGrep::Grep(
 	}
 	if (m_bWholeWords)
 	{
-		strSearch = _T("\\<") + strSearch; // start of a word
-		strSearch += _T("\\>"); // end of a word
+		strSearch = _T("\\b") + strSearch; // start of a word
+		strSearch += _T("\\b"); // end of a word
 	}
 
 	try

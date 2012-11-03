@@ -51,8 +51,8 @@ BEGIN_MESSAGE_MAP(CProfilePage, CPropertyDialogPage)
 END_MESSAGE_MAP()
 
 
-CProfilePage::CProfilePage(UINT unIDTemplate)
-		: CPropertyDialogPage(unIDTemplate)
+CProfilePage::CProfilePage(UINT unIDTemplate, UINT unIDCaption/* = 0*/)
+		: CPropertyDialogPage(unIDTemplate, unIDCaption)
 {
 }
 

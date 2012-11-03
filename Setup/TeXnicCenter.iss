@@ -5,10 +5,10 @@
 ;-------------------------------------------
 
 ;Uncomment this for x64
-#define TARGET_x64
+;#define TARGET_x64
 
 ;Uncomment this for an Alpha Build
-#define ALPHA_BUILD
+;#define ALPHA_BUILD
 
 ;For debugging the Inno preprocessor
 ;#define Debug

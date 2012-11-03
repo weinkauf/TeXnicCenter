@@ -3,7 +3,7 @@
 	<xs:annotation>
 		<xs:documentation>
 			Schema for TeXnicCenter output profiles.
-			Copyright (c) 2003-2004 ToolsCenter.org. All rights reserved.
+			Copyright (c) 2003-2012 ToolsCenter.org. All rights reserved.
 			www.ToolsCenter.org
 		</xs:documentation>
 	</xs:annotation>
@@ -25,7 +25,7 @@
 					</xs:unique>
 				</xs:element>
 			</xs:sequence>
-			<xs:attribute name="version" type="xs:decimal" use="required" fixed="1.0" />
+			<xs:attribute name="version" type="xs:decimal" use="required" />
 		</xs:complexType>
 	</xs:element>
 	
