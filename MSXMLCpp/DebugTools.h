@@ -30,7 +30,7 @@
 #include "MsXmlCpp.h"
 
 #ifdef _DEBUG
-	void AFX_EXT_CLASS AfxDumpXmlNode(IXMLDOMNode *pNode, DWORD dwCategory = traceAppMsg, UINT unLevel = 0);
+	void AFX_EXPORT AfxDumpXmlNode(IXMLDOMNode *pNode, DWORD dwCategory = traceAppMsg, UINT unLevel = 0);
 #endif
 
 #ifdef _DEBUG

@@ -15,7 +15,7 @@ set (OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIR})
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_DIR})
 
-add_subdirectory (ifacewrapper)
+add_subdirectory (interfacewrapper)
 add_subdirectory (mfcext)
 add_subdirectory (msxmlcpp)
 add_subdirectory (objects)
