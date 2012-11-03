@@ -141,18 +141,12 @@ BOOL UserTool::Invoke()
 		strMainPath = pProject->GetMainPath();
 
 	// current document specific information
-	LaTeXView* pEdit = theApp.GetActiveEditView();
+	strCurrentSelection = theApp.GetCurrentWordOrSelection(false, true, true);
+	CodeView* pEdit = theApp.GetActiveCodeView();
 
 	if (pEdit)
 	{
 		strCurrentPath = pEdit->GetDocument()->GetPathName();
-		long s = pEdit->GetCtrl().GetSelectionStart();
-		long e = pEdit->GetCtrl().GetSelectionEnd();
-
-		if (s != e) {
-			strCurrentSelection = pEdit->GetCtrl().GetSelText();
-		}
-
 		lCurrentLine = pEdit->GetCurrentLine() + 1;
 	}
 

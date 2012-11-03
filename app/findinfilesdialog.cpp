@@ -125,16 +125,20 @@ BOOL CFindInFilesDialog::OnInitDialog()
 	menu_btn_.m_bRightArrow = TRUE;
 	menu_btn_.m_bStayPressed = TRUE;
 
-	// fill controls
+	/* Fill controls */
+
+	//Search Term
 	m_wndSearchForCombo.RefreshCtrl();
+	// - select the last search term, if we do not have something given by the caller.
+	if (m_strSearchFor.IsEmpty()) m_wndSearchForCombo.SetCurSel(0);
+
+	//Search folder
 	m_wndSearchInCombo.RefreshCtrl();
-
-	if (CLaTeXProject* p = theApp.GetProject())
-		m_wndSearchInCombo.InsertString(0,p->GetDirectory());
-
-	// set standard strings
+	// - select the project directory
+	if (CLaTeXProject* p = theApp.GetProject()) m_wndSearchInCombo.InsertString(0,p->GetDirectory());
 	m_wndSearchInCombo.SetCurSel(0);
 
+	//File Types
 	if (m_strSearchThrough.IsEmpty())
 		m_wndSearchThroug.SetCurSel(0);
 

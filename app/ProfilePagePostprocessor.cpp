@@ -120,7 +120,7 @@ void CProfilePagePostprocessor::OnAddItem(int nIndex)
 	if (!m_pProfile)
 		return;
 
-	CPostProcessor pp(m_wndList.GetItemText(nIndex));
+	CPProcessor pp(m_wndList.GetItemText(nIndex));
 	m_pProfile->GetPostProcessorArray().InsertAt(nIndex,pp);
 }
 
@@ -155,8 +155,8 @@ void CProfilePagePostprocessor::OnMoveItemUp(int nIndex)
 	if (!m_pProfile)
 		return;
 
-	CPostProcessor pp0 = m_pProfile->GetPostProcessorArray()[nIndex];
-	CPostProcessor pp1 = m_pProfile->GetPostProcessorArray()[nIndex + 1];
+	CPProcessor pp0 = m_pProfile->GetPostProcessorArray()[nIndex];
+	CPProcessor pp1 = m_pProfile->GetPostProcessorArray()[nIndex + 1];
 	m_pProfile->GetPostProcessorArray().SetAt(nIndex, pp1);
 	m_pProfile->GetPostProcessorArray().SetAt(nIndex + 1, pp0);
 
@@ -169,8 +169,8 @@ void CProfilePagePostprocessor::OnMoveItemDown(int nIndex)
 	if (!m_pProfile)
 		return;
 
-	CPostProcessor pp0 = m_pProfile->GetPostProcessorArray()[nIndex - 1];
-	CPostProcessor pp1 = m_pProfile->GetPostProcessorArray()[nIndex];
+	CPProcessor pp0 = m_pProfile->GetPostProcessorArray()[nIndex - 1];
+	CPProcessor pp1 = m_pProfile->GetPostProcessorArray()[nIndex];
 	m_pProfile->GetPostProcessorArray().SetAt(nIndex - 1, pp1);
 	m_pProfile->GetPostProcessorArray().SetAt(nIndex, pp0);
 
@@ -186,7 +186,7 @@ void CProfilePagePostprocessor::DoDataExchange(CDataExchange* pDX)
 	if (m_pProfile && nPostProcessor > -1 && nPostProcessor < m_pProfile->GetPostProcessorArray().GetSize() && !pDX->m_bSaveAndValidate)
 	{
 		// prepare data for controls
-		CPostProcessor &pp = m_pProfile->GetPostProcessorArray()[nPostProcessor];
+		CPProcessor &pp = m_pProfile->GetPostProcessorArray()[nPostProcessor];
 
 		strExecutable = pp.GetPath();
 		strArguments = pp.GetArguments();
@@ -218,7 +218,7 @@ void CProfilePagePostprocessor::DoDataExchange(CDataExchange* pDX)
 	if (m_pProfile && nPostProcessor > -1 && nPostProcessor < m_pProfile->GetPostProcessorArray().GetSize() && pDX->m_bSaveAndValidate)
 	{
 		// prepare data for controls
-		CPostProcessor &pp = m_pProfile->GetPostProcessorArray()[nPostProcessor];
+		CPProcessor &pp = m_pProfile->GetPostProcessorArray()[nPostProcessor];
 
 		pp.SetPath(strExecutable);
 		pp.SetArguments(strArguments);

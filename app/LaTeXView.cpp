@@ -355,8 +355,7 @@ void LaTeXView::InstantAdvice()
 	CString keyw,key;
 	long ptStart = GetCtrl().GetCurrentPos();
 	CPoint ptClient;
-
-	GetWordBeforeCursor(keyw,ptStart,false);
+	keyw = GetWordAroundRange(ptStart, ptStart, true, false, false, true, false, false, false);
 
 	if (keyw.GetLength() > MINIMUM_KEYWORD_LENGTH)
 	{
@@ -627,99 +626,47 @@ int LaTeXView::GetNumberOfMatches( const CString& keyword )
 	return map.GetCount();
 }
 
-void LaTeXView::GetWordBeforeCursor(CString& strKeyword, long& a, bool bSelect /*=true*/)
+void LaTeXView::AddExtendedWordChars(CString& WordChars)
 {
-	long pos = a;
-	int line = GetCtrl().LineFromPosition(pos);
-	int length = GetLineLength(line);
-	
-	if (length > 0) {
-		// Get the line, the cursor is placed on
-		long start = GetCtrl().PositionFromLine(line);
+	WordChars.Append(_T("&-+:"));
 
-		// Get the position from where we start the backward search
-		long l = pos - start;
+	/* NOTE:
 
-		if (l > 0) {
-			std::vector<char> data(l + 1);
+		All the following chars are allowed in labels.
+		But we do not allow all, since some of them are rather strange.
 
-			Sci_TextRange range;
-			range.chrg.cpMin = start;
-			range.chrg.cpMax = pos;
-			range.lpstrText = &data[0];
+		Allowed:
+			'&'
+			'_'
+			'-'
+			'+'
+			':'
+		Not allowed by us:
+			'='
+			'^'
+			'.'
+			';'
+			',' //A comma can be used in \cite{weinkauf04a,weinkauf05b} and we want to see this as two bibkeys
+			'!'
+			'`'
+			'´'
+			'(' //Especially braces should not be part of a label; this would kill most editor stuff
+			')'
+			'['
+			']'
+			'<'
+			'>'
 
-			GetCtrl().GetTextRange(&range);
-
-			long EndX = l - 1;
-			long CurrentX = EndX;
-
-			//Backward search: go to first character of the current word
-			for (; CurrentX >= 0; CurrentX--) {
-				if (!IsAutoCompletionCharacter(data[CurrentX])) {
-					++CurrentX; //This is the last valid TCHAR
-					break;
-				}
-			}
-
-			if (CurrentX < 0)
-				CurrentX = 0;
-
-			if (CurrentX <= EndX) {
-				ASSERT(CurrentX >= 0);
-				ASSERT(EndX - CurrentX >= 0);
-
-				std::vector<wchar_t> conv;
-				UTF8toUTF16(range.lpstrText + CurrentX, EndX - CurrentX + 1, conv);
-
-				if (!conv.empty())
-					strKeyword.SetString(&conv[0], static_cast<int>(conv.size()));
-					
-				if (bSelect)
-					GetCtrl().SetSel(start + CurrentX,pos);
-
-				a = start + CurrentX;
-			}
-			else
-				strKeyword.Empty();
-		}
-	}
+		The following chars are allowed in keywords: '\\' '@'
+		Furthermore and by default, labels can consist of numbers and letters; keywords only of letters
+	*/
 }
 
-bool LaTeXView::IsAutoCompletionCharacter(TCHAR tc)
+void LaTeXView::AddEscapeChars(CString& EscapeChars)
 {
-	switch (tc) {
-		//All the following chars are allowed in labels.
-		// - but we do not allow all since some of them are rather strange
-		case _T('&') :
-		case _T('_') :
-		case _T('-') :
-		case _T('+') :
-		case _T(':') :
-		//case _T('='):
-		//case _T('^'):
-		//case _T('.'):
-		//case _T(';'):
-		//case _T(','): //A comma can be used in \cite{weinkauf04a,weinkauf05b} and we want to see this as two bibkeys
-		//case _T('!'):
-		//case _T('`'):
-		//case _T('´'):
-		//case _T('('): //Especially braces should not be part of a label; this would kill most editor stuff
-		//case _T(')'):
-		//case _T('['):
-		//case _T(']'):
-		//case _T('<'):
-		//case _T('>'):
-
-		//All the following chars are allowed in keywords.
-		case _T('\\') :
-		case _T('@') :
-			return TRUE;
-
-		//By default, labels can consist of numbers and letters; keywords only of letters
-		default:
-			return CharTraitsT::IsAlnum(tc);
-	}
+	EscapeChars.Append(_T("\\"));
 }
+
 
 #pragma endregion
 
@@ -812,9 +759,8 @@ void LaTeXView::OnQueryCompletion()
 	old_pos_end_ = GetCtrl().GetSelectionEnd();
 
 	CString keyword;
-	long topLeft = GetCtrl().GetCurrentPos();
-
-	GetWordBeforeCursor(keyword,topLeft); /* retrieve word to be completed */
+	const long topLeft = GetCtrl().GetCurrentPos();
+	keyword = GetWordAroundRange(topLeft, topLeft, true, false, false, true, false, false, true);
 
 	if (!keyword.IsEmpty())
 		autocompletion_list_.reset(CreateListBox(keyword, topLeft)); /* setup (and show) list box */
@@ -822,27 +768,6 @@ void LaTeXView::OnQueryCompletion()
 		GetCtrl().SetSel(old_pos_start_,old_pos_end_); /* restore old position */
 }
 
-/* Invokes context help for a given keyword */
-BOOL LaTeXView::InvokeContextHelp( const CString& keyword )
-{
-	if (keyword.IsEmpty())
-		::HtmlHelp(NULL,AfxGetApp()->m_pszHelpFilePath,HH_DISPLAY_TOC,0L);
-	else {
-		::HtmlHelp(NULL,theApp.m_pszHelpFilePath,HH_DISPLAY_TOC,0L);
-
-		HH_AKLINK link;
-		link.cbStruct = sizeof(link);
-		link.fReserved = FALSE;
-		link.pszKeywords = (LPCTSTR)keyword;
-		link.pszUrl = NULL;
-		link.pszMsgText = NULL;
-		link.pszWindow = _T(">$global_TxcHelpWindow");
-		link.fIndexOnFail = TRUE;
-		::HtmlHelp(NULL,theApp.m_pszHelpFilePath,HH_KEYWORD_LOOKUP,(DWORD) & link);
-	}
-
-	return TRUE;
-}
 
 BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 {
