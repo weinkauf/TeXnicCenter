@@ -108,9 +108,7 @@ set (PROJECT_CPP
   PlaceHolder.cpp
   PlaceholderSetsOptDlg.cpp
   PlaceholderSingleOptDlg.cpp
-  PostProcessor.cpp
   PProcessor.cpp
-  PreProcessor.cpp
   process.cpp
   ProcessCommand.cpp
   Profile.cpp
@@ -119,8 +117,6 @@ set (PROJECT_CPP
   ProfileNameDialog.cpp
   ProfilePage.cpp
   ProfilePageLatex.cpp
-  ProfilePagePostprocessor.cpp
-  ProfilePagePreprocessor.cpp
   ProfilePagePprocessor.cpp
   ProfilePageViewer.cpp
   Project.cpp
@@ -278,8 +274,6 @@ set (PROJECT_H
   PlaceHolder.h
   PlaceholderSetsOptDlg.h
   PlaceholderSingleOptDlg.h
-  PostProcessor.h
-  PreProcessor.h
   PProcessor.h
   PrivateToolBar.h
   process.h
@@ -290,8 +284,6 @@ set (PROJECT_H
   ProfileNameDialog.h
   ProfilePage.h
   ProfilePageLatex.h
-  ProfilePagePostprocessor.h
-  ProfilePagePreprocessor.h
   ProfilePagePprocessor.h
   ProfilePageViewer.h
   Project.hpp
