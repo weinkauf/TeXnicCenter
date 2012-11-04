@@ -23,38 +23,37 @@
 #include "stdafx.h"
 #include "DebugTools.h"
 
-//-------------------------------------------------------------------
-// globals
-//-------------------------------------------------------------------
-
+void AfxDumpXmlNode(IXMLDOMNode *pNode, DWORD dwCategory, UINT unLevel)
+{
 #ifdef _DEBUG
-
-	void AFX_EXPORT AfxDumpXmlNode(IXMLDOMNode *pNode, DWORD dwCategory, UINT unLevel)
+	if (pNode==NULL)
+		ATLTRACE2(dwCategory, unLevel, _T("NULL\n"));
+	else
 	{
-		if (pNode==NULL)
-			ATLTRACE2(dwCategory, unLevel, _T("NULL\n"));
-		else
+		try
 		{
-			try
-			{
-				MsXml::CXMLDOMNode	Node(pNode, TRUE);
-				ATLTRACE2(dwCategory, unLevel, _T("%s\n"), Node.GetXml());
-			}
-			catch (CComException *pE)
-			{
-				ATLTRACE2(dwCategory, unLevel, _T("AfxDumpXmlNode caused COM-error %08x\n"), pE->GetResult());
-				pE->Delete();
-			}
-			catch (CException *pE)
-			{
-				ATLTRACE2(dwCategory, unLevel, _T("AfxDumpXmlNode caused MFC-exception\n"));
-				pE->Delete();
-			}
-			catch (...)
-			{
-				ATLTRACE2(dwCategory, unLevel, _T("AfxDumpXmlNode caused general exception\n"));
-			}
+			MsXml::CXMLDOMNode	Node(pNode, TRUE);
+			ATLTRACE2(dwCategory, unLevel, _T("%s\n"), Node.GetXml());
+		}
+		catch (CComException *pE)
+		{
+			ATLTRACE2(dwCategory, unLevel, _T("AfxDumpXmlNode caused COM-error %08x\n"), pE->GetResult());
+			pE->Delete();
+		}
+		catch (CException *pE)
+		{
+			ATLTRACE2(dwCategory, unLevel, _T("AfxDumpXmlNode caused MFC-exception\n"));
+			pE->Delete();
+		}
+		catch (...)
+		{
+			ATLTRACE2(dwCategory, unLevel, _T("AfxDumpXmlNode caused general exception\n"));
 		}
 	}
+#else // !defined(_DEBUG)
+	UNREFERENCED_PARAMETER(pNode);
+	UNREFERENCED_PARAMETER(dwCategory);
+	UNREFERENCED_PARAMETER(unLevel);
+#endif // _DEBUG
+}
 
-#endif

@@ -29,15 +29,12 @@
 
 #include "MsXmlCpp.h"
 
-#ifdef _DEBUG
-	void AFX_EXPORT AfxDumpXmlNode(IXMLDOMNode *pNode, DWORD dwCategory = traceAppMsg, UINT unLevel = 0);
-#endif
+void AFX_EXPORT AfxDumpXmlNode(IXMLDOMNode *pNode, DWORD dwCategory = traceAppMsg, UINT unLevel = 0);
 
 #ifdef _DEBUG
 	#define TRACE_XML(pNode) AfxDumpXmlNode(pNode)
 	#define ATLTRACE_XML(category, level, pNode) AfxDumpXmlNode(pNode, category, level)
 #else
-	#define AfxDumpXmlNode(pNode, dwCategory, unLevel)
 	#define TRACE_XML(pNode)
 	#define ATLTRACE_XML(category, level, pNode)
 #endif
