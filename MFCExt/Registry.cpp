@@ -200,10 +200,10 @@ BOOL CRegistry::Write (LPCTSTR pszKey, LPCTSTR pszData)
 	ASSERT(AfxIsValidAddress(pszData, _tcslen(pszData), FALSE));
 
 	LONG ReturnValue = RegSetValueEx (m_hKey, pszKey, 0L, REG_SZ,
-		(CONST BYTE*) pszData, _tcslen(pszData) + 1);
+		(CONST BYTE*) pszData, static_cast<DWORD>(_tcslen(pszData) + 1));
 
 	m_Info.lMessage = ReturnValue;
-	m_Info.dwSize = _tcslen(pszData) + 1;
+	m_Info.dwSize = static_cast<DWORD>(_tcslen(pszData) + 1);
 	m_Info.dwType = REG_SZ;
 
 	if(ReturnValue == ERROR_SUCCESS)
@@ -231,7 +231,7 @@ BOOL CRegistry::Write (LPCTSTR pszKey, CStringList& scStringList)
 	ASSERT(scStringList.IsSerializable());
 	scStringList.Serialize(ar);
 	ar.Close();
-	const DWORD dwLen = file.GetLength();
+	const DWORD dwLen = static_cast<DWORD>(file.GetLength());
 	ASSERT(dwLen < iMaxChars);
 	LONG lReturn = RegSetValueEx(m_hKey, pszKey, 0, REG_BINARY,
 		file.Detach(), dwLen);
@@ -272,7 +272,7 @@ BOOL CRegistry::Write (LPCTSTR pszKey, CObList& list)
 			ar.Flush ();
 		}
 
-		DWORD dwDataSize = file.GetLength ();
+		DWORD dwDataSize = static_cast<DWORD>(file.GetLength ());
 		LPBYTE lpbData = file.Detach ();
 
 		if (lpbData == NULL)
@@ -313,7 +313,7 @@ BOOL CRegistry::Write (LPCTSTR pszKey, CObject& obj)
 			ar.Flush ();
 		}
 
-		DWORD dwDataSize = file.GetLength ();
+		DWORD dwDataSize = static_cast<DWORD>(file.GetLength ());
 		LPBYTE lpbData = file.Detach ();
 
 		if (lpbData == NULL)
@@ -353,7 +353,7 @@ BOOL CRegistry::Write (LPCTSTR pszKey, CByteArray& bcArray)
 	ASSERT(bcArray.IsSerializable());
 	bcArray.Serialize(ar);
 	ar.Close();
-	const DWORD dwLen = file.GetLength();
+	const DWORD dwLen = static_cast<DWORD>(file.GetLength());
 	ASSERT(dwLen < iMaxChars);
 	LONG lReturn = RegSetValueEx(m_hKey, pszKey, 0, REG_BINARY,
 		file.Detach(), dwLen);
@@ -396,7 +396,7 @@ BOOL CRegistry::Write (LPCTSTR pszKey, CDWordArray& dwcArray)
 			ar.Flush ();
 		}
 
-		DWORD dwDataSize = file.GetLength ();
+		DWORD dwDataSize = static_cast<DWORD>(file.GetLength ());
 		LPBYTE lpbData = file.Detach ();
 
 		if (lpbData == NULL)
@@ -464,7 +464,7 @@ BOOL CRegistry::Write (LPCTSTR pszKey, CWordArray& wcArray)
 			ar.Flush ();
 		}
 
-		DWORD dwDataSize = file.GetLength ();
+		DWORD dwDataSize = static_cast<DWORD>(file.GetLength ());
 		LPBYTE lpbData = file.Detach ();
 
 		if (lpbData == NULL)
@@ -504,7 +504,7 @@ BOOL CRegistry::Write (LPCTSTR pszKey, CStringArray& scArray)
 	ASSERT(scArray.IsSerializable());
 	scArray.Serialize(ar);
 	ar.Close();
-	const DWORD dwLen = file.GetLength();
+	const DWORD dwLen = static_cast<DWORD>(file.GetLength());
 	ASSERT(dwLen < iMaxChars);
 	LONG lReturn = RegSetValueEx(m_hKey, pszKey, 0, REG_BINARY,
 		file.Detach(), dwLen);
@@ -545,7 +545,7 @@ BOOL CRegistry::Write(LPCTSTR pszKey, const CRect& rect)
 			ar.Flush ();
 		}
 
-		DWORD dwDataSize = file.GetLength ();
+		DWORD dwDataSize = static_cast<DWORD>(file.GetLength ());
 		LPBYTE lpbData = file.Detach ();
 
 		if (lpbData == NULL)
@@ -590,7 +590,7 @@ BOOL CRegistry::Write(LPCTSTR pszKey, LPPOINT& lpPoint)
 	ASSERT(dwcArray.IsSerializable());
 	dwcArray.Serialize(ar);
 	ar.Close();
-	const DWORD dwLen = file.GetLength();
+	const DWORD dwLen = static_cast<DWORD>(file.GetLength());
 	ASSERT(dwLen < iMaxChars);
 	LONG lReturn = RegSetValueEx(m_hKey, pszKey, 0, REG_BINARY,
 		file.Detach(), dwLen);
@@ -757,7 +757,7 @@ BOOL CRegistry::Read (LPCTSTR pszKey, CByteArray& bcArray)
 	ASSERT(m_hKey);
 	ASSERT(pszKey);
 	const int iMaxChars = 4096;
-	int OldSize = bcArray.GetSize();
+	INT_PTR OldSize = bcArray.GetSize();
 	DWORD dwType;
 	DWORD dwData = iMaxChars;
 	BYTE* byData = (BYTE*)::calloc(iMaxChars, sizeof(TCHAR));
@@ -897,7 +897,7 @@ BOOL CRegistry::Read (LPCTSTR pszKey, CStringArray& scArray)
 	ASSERT(m_hKey);
 	ASSERT(pszKey);
 	const int iMaxChars = 4096;
-	int OldSize = scArray.GetSize();
+	INT_PTR OldSize = scArray.GetSize();
 	DWORD dwType;
 	DWORD dwData = iMaxChars;
 	BYTE* byData = (BYTE*)::calloc(iMaxChars, sizeof(TCHAR));
