@@ -6,7 +6,7 @@
 // documentation (don't take credit for my work), mark your changes (don't
 // get me blamed for your possible bugs), don't alter or remove this
 // notice.
-// No warrantee of any kind, express or implied, is included with this
+// No warranty of any kind, express or implied, is included with this
 // software; use at your own risk, responsibility for damages (if any) to
 // anyone resulting from the use of this software rests entirely with the
 // user.

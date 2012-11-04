@@ -34,4 +34,9 @@ set (PROJECT_H
   w_char.hxx
 )
 
+if (MSVC)
+  # silence type conversion warnings
+  add_definitions (-wd4267)
+endif (MSVC)
+
 add_library (${PROJECT_NAME} ${PROJECT_CPP} ${PROJECT_H})
