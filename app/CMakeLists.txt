@@ -348,7 +348,7 @@ set (PROJECT_H
 )
 
 set (PROJECT_RES
-  TeXnicCenter.rc
+  app.rc
   "res/additional.bmp"
   "res/bibtextype.ico"
   "res/bibtoolbar.bmp"
