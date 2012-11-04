@@ -352,10 +352,9 @@ void LaTeXView::OnModified(SCNotification* n)
 
 void LaTeXView::InstantAdvice()
 {
-	CString keyw,key;
 	long ptStart = GetCtrl().GetCurrentPos();
 	CPoint ptClient;
-	keyw = GetWordAroundRange(ptStart, ptStart, true, false, false, true, false, false, false);
+	CString keyw = GetWordAroundRange(ptStart, ptStart, true, false, false, true, false, false, false);
 
 	if (keyw.GetLength() > MINIMUM_KEYWORD_LENGTH)
 	{
@@ -363,37 +362,43 @@ void LaTeXView::InstantAdvice()
 
 		theApp.m_AvailableCommands.GetAllPossibleItems(keyw,_T(""),map);
 
-		if (map.GetCount() == 1)   //keyword is unique -> OK
+		if (map.GetCount() == 1) //keyword is unique -> show the advice
 		{
-			std::tr1::shared_ptr<CObject> c;
-			POSITION pos = map.GetStartPosition();
-			map.GetNextAssoc(pos,key,c);
-
+			std::tr1::shared_ptr<CObject> c = map.PGetFirstAssoc()->value;
 			SharedLaTeXCommandPtr lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
 
 			if (lc != NULL)
 			{
-				if (instant_advice_tip_ == NULL)
+				CString AdviceText = lc->GetExpandBefore() + lc->ToLaTeX() + lc->GetExpandAfter();
+				if (AdviceText.GetLength() > keyw.GetLength())
 				{
-					instant_advice_tip_ = new CAdvice();
-					instant_advice_tip_->Create(lc->ToLaTeX(),WS_POPUP | WS_BORDER/*SS_SUNKEN*/,CRect(),CWnd::FromHandle(GetCtrl()));
+					if (instant_advice_tip_ == NULL)
+					{
+						instant_advice_tip_ = new CAdvice();
+						instant_advice_tip_->Create(lc->ToLaTeX(),WS_POPUP | WS_BORDER/*SS_SUNKEN*/,CRect(),CWnd::FromHandle(GetCtrl()));
+					}
+
+					if (!instant_advice_tip_->IsWindowVisible())
+					{
+						// Compute window size
+						CPoint ptClient(GetCtrl().PointXFromPosition(ptStart),GetCtrl().PointYFromPosition(ptStart));
+						::ClientToScreen(GetSafeHwnd(),&ptClient);
+						// Determine if there is space enough to show the window below the text
+						ptClient.y += GetCtrl().TextHeight(GetCtrl().LineFromPosition(ptStart));
+						// Place and show the window
+						instant_advice_tip_->SetWindowPos(NULL,ptClient.x,ptClient.y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+						instant_advice_tip_->SetWindowText(AdviceText);
+						instant_advice_tip_->ShowWindow(SW_SHOW);
+						SetFocus();
+
+						const UINT advice_tip_timeout = 3000;
+						instant_advice_tip_->SetTimer(1,advice_tip_timeout,0);
+					}
 				}
-
-				if (!instant_advice_tip_->IsWindowVisible())
+				else
 				{
-					// Compute window size
-					CPoint ptClient(GetCtrl().PointXFromPosition(ptStart),GetCtrl().PointYFromPosition(ptStart));
-					::ClientToScreen(GetSafeHwnd(),&ptClient);
-					// Determine if there is space enough to show the window below the text
-					ptClient.y += GetCtrl().TextHeight(GetCtrl().LineFromPosition(ptStart));
-					// Place and show the window
-					instant_advice_tip_->SetWindowPos(NULL,ptClient.x,ptClient.y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-					instant_advice_tip_->SetWindowText(lc->GetExpandBefore() + lc->ToLaTeX() + lc->GetExpandAfter());
-					instant_advice_tip_->ShowWindow(SW_SHOW);
-					SetFocus();
-
-					const UINT advice_tip_timeout = 3000;
-					instant_advice_tip_->SetTimer(1,advice_tip_timeout,0);
+					//Advice has same length or even smaller than the triggering keyword.
+					HideAdvice();
 				}
 			}
 			else

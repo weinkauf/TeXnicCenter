@@ -1,0 +1,26 @@
+We have released the first stable version of the new TeXnicCenter 2.0 development branch. You may download a 32-bit version or 64-bit version. This is a BETA version of the software. It is somewhat stable and unlikely to crash. It is certainly stable enough to replace TeXnicCenter Version 1.
+
+We have fixed some issues since TXC 2.0 Alpha 4. Most noteworthy:
+
+Highlights:
+[*]Use MSXML 6.0, which is available on all Windows version starting with WinXP SP3 and works for 32 and 64 bit.
+[*]Fixed several issues with 'Find in Files' such as 'whole word' and initial suggestion.
+[*]Better support for SumatraPDF, Ghostscript, and mikTeX on 64-bit Windows.
+[*]Fixed support for Adobe Reader/Acrobat for versions < 10.
+[*]Don't add files to MRU list if opened when opening a project.
+[*]Fixed 3488622: BibTeX entry @mastersthesis with wrong syntax highlighting.
+[*]Fixed 3491824: Allow usage of parentheses in BibTeX keys.
+[*]Fixed 3579466: Prevent crash when parsing recursively included files.
+[*]Restored functionality: Ask for project load.
+[*]Context-sensitive help works again.
+[*]File cleaning: defaults to non-recursive cleaning.
+[*]Status bar: Show number of selections (if larger than one).
+
+
+We need your help for the further development of TeXnicCenter. In particular, we are looking for new team members, who take care of the user manual and who would create short videos that explain how to use the software.
+If you are interested in helping us, contact the maintainer Tino Weinkauf.
+
+
+Happy TeXing!
+
+The TeXnicCenter Team

@@ -325,7 +325,7 @@
 			desc="Inserts large greek theta symbol"
 			parameters="0"
 	/>
-	<lxCommand name="\Lamdba" 
+	<lxCommand name="\Lambda" 
 			icon="symbols2.bmp"
 			index="10"
 			desc="Inserts large greek lambda symbol"
