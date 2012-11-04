@@ -40,3 +40,5 @@ if (MSVC)
 endif (MSVC)
 
 add_library (${PROJECT_NAME} ${PROJECT_CPP} ${PROJECT_H})
+
+set_source_files_properties (utf_info.cxx PROPERTIES HEADER_FILE_ONLY TRUE)
