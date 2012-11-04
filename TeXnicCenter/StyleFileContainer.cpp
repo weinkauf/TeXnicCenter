@@ -472,7 +472,7 @@ BOOL CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
 
 		MsXml::CXMLDOMElement xmlPackages(xmlDoc.GetDocumentElement());
 
-		MsXml::CXMLDOMNodeList nodes = xmlPackages.GetChildNodes();
+		MsXml::CXMLDOMNodeList nodes = xmlPackages.SelectNodes(_T("*"));
 		const long lPackages = nodes.GetLength();
 		//TRACE("Found %d package nodes in %s\n", lPackages, file);
 
@@ -483,7 +483,8 @@ BOOL CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
 
 		for (long i = 0; i < lPackages; ++i)   /* walk through child nodes */
 		{
-			ProcessPackageNode(nodes.GetItem(i));
+			MsXml::CXMLDOMNode node = nodes.GetItem(i);
+			ProcessPackageNode(node);
 		}
 		return TRUE;
 	}
@@ -538,7 +539,7 @@ BOOL CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
 	}
 }
 
-void CStyleFileContainer::ProcessPackageNode( const MsXml::CXMLDOMNode &element )
+void CStyleFileContainer::ProcessPackageNode(MsXml::CXMLDOMNode& element)
 {
 	/* fetch attributes */
 	MsXml::CXMLDOMNamedNodeMap attr = element.GetAttributes();
@@ -575,7 +576,7 @@ void CStyleFileContainer::ProcessPackageNode( const MsXml::CXMLDOMNode &element 
 	}
 
 	/* Process children */
-	MsXml::CXMLDOMNodeList nodes = element.GetChildNodes();
+	MsXml::CXMLDOMNodeList nodes = element.SelectNodes(_T("*"));
 	long n = nodes.GetLength();
 
 	for (long i = 0; i < n; ++i)   /* walk through child nodes */
