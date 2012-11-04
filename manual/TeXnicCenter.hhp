@@ -1,19 +1,18 @@
 [OPTIONS]
 Compatibility=1.1 or later
-Compiled file=..\Output\Intermediate\TXCUserHelp\TeXnicCenter.chm
+Compiled file=TeXnicCenter.chm
 Contents file=TeXnicCenter.hhc
 Default Window=$global_TxcHelpWindow
 Default topic=root.html
 Display compile progress=No
 Enhanced decompilation=Yes
-Error log file=..\Output\Intermediate\TXCUserHelp\logfile.log
 Full-text search=Yes
 Index file=TeXnicCenter.hhk
-Language=0x409 Englisch (USA)
-Title=TeXnicCenter Online Help
+Language=0x409 English (United States)
+Title=TeXnicCenter Manual
 
 [WINDOWS]
-$global_TxcHelpWindow="TeXnicCenter Online Help","TeXnicCenter.hhc","TeXnicCenter.hhk","root.html","root.html","TeXnicCenter.html","TeXnicCenter","LatexHelpBook.chm::\Welcome_to_Latex_Help_e-Book.htm","LaTeX Help Book",0x63420,,0xc384e,[322,56,979,660],0x80000,,,,,,0
+$global_TxcHelpWindow="TeXnicCenter Manual","TeXnicCenter.hhc","TeXnicCenter.hhk","root.html","root.html","TeXnicCenter.html","TeXnicCenter","LatexHelpBook.chm::\Welcome_to_Latex_Help_e-Book.htm","LaTeX Help Book",0x63420,,0xc384e,[322,56,979,660],0x80000,,,,,,0
 
 
 [FILES]
