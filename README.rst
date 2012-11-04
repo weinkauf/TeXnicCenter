@@ -1,34 +1,40 @@
-Building TeXnicCenter
-=====================
+TeXnicCenter
+============
 
-Requirements
+TeXnicCenter is an integrated development environment (IDE) for typesetting
+LaTeX documents. The applications runs on Windows and requires a TeX
+distribution such as `MiKTeX <http://miktex.org/>`_ or `TeX Live
+<http://www.tug.org/texlive/>`_ to be installed.
+
+Prerequisites for compiling TeXnicCenter
+----------------------------------------
+
+To compile TeXnicCenter from source, the following tools and libraries are
+required:
+
+  * `CMake 2.8.9 <http://www.cmake.org/>`_ or higher
+  * Visual C++ 2010 with MFC libraries
+  * Microsoft HTML Help Workshop
+
+To checkout the repository, you will also need to install `Mercurial
+<http://mercurial.selenic.com/>`_. To generate the setup, `Inno Setup
+<http://www.jrsoftware.org/isinfo.php>`_ is required.
+
+Compiling TeXnicCenter
+----------------------
+
+1. Create a directory called ``build`` (or alike), ideally somewhere outside the
+   TeXnicCenter source directory.
+2. Open the command prompt in the previously created directory, and execute ::
+
+     cmake <source-dir>
+
+3. Finally, open the newly generated TeXnicCenter solution and start building.
+
+For further information, visit `TeXnicCenter website <http://www.texniccenter.org/>`_. Don't hesitate to ask us, if a problem occurs.
+
+Contributing
 ------------
 
-The following tools and libraries are required to successfully build
-TeXnicCenter and all of its components:
-
-* Visual C++ 2010 with MFC libraries
-* Microsoft HTML Help Workshop
-* Mercurial, freely available at http://mercurial.selenic.com/
-
-To generate the setup you will need:
-
-* Inno Setup available at http://www.jrsoftware.org/isinfo.php
-
-Build Process
--------------
-
-1. Open the TeXnicCenter solution TeXnicCenter.sln in Visual C++.
-2. Choose either 'Debug' or the 'Release' solution configuration.
-3. Build the complete solution. The result can be found in the newly created
-   'Output' folder.
-
-
-Visit the TeXnicCenter-Homepage
-
-     http://www.texniccenter.org/
-
-for further information. Don't hesitate to ask us, if a problem occurs.
-
-  Tino Weinkauf (tino@TeXnicCenter.org)
-  TeXnicCenter Maintainer
+If you want to contribute to the TeXnicCenter project, feel free to contact
+`Tino Weinkauf <tino@TeXnicCenter.org>`_, the TeXnicCenter maintainer.
