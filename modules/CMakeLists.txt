@@ -1,0 +1,5 @@
+add_subdirectory (mfcext)
+add_subdirectory (msxmlcpp)
+add_subdirectory (objects)
+add_subdirectory (shared)
+add_subdirectory (interfacewrapper)
