@@ -97,7 +97,7 @@ public:
 private:
 	void SetupCR(CString &s);
 	void ProcessEntityNodes(const MsXml::CXMLDOMNode &element, SharedStyleFilePtr& parent);
-	void ProcessPackageNode(const MsXml::CXMLDOMNode &element);
+	void ProcessPackageNode(MsXml::CXMLDOMNode& element);
 
 
 	bool FindStyleFilesRecursive(CString dir);
