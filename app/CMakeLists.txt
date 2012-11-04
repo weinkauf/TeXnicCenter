@@ -400,10 +400,10 @@ set (PROJECT_RES
   "res/structuretoolbar.bmp"
 )
 
-include_directories (${CMAKE_SOURCE_DIR}/interfacewrapper)
-include_directories (${CMAKE_SOURCE_DIR}/mfcext)
-include_directories (${CMAKE_SOURCE_DIR}/msxmlcpp)
-include_directories (${CMAKE_SOURCE_DIR}/objects)
+include_directories (${CMAKE_SOURCE_DIR}/modules/interfacewrapper)
+include_directories (${CMAKE_SOURCE_DIR}/modules/mfcext)
+include_directories (${CMAKE_SOURCE_DIR}/modules/msxmlcpp)
+include_directories (${CMAKE_SOURCE_DIR}/modules/objects)
 include_directories (${CMAKE_SOURCE_DIR}/thirdparty/hunspell/src/hunspell)
 include_directories (${CMAKE_SOURCE_DIR}/thirdparty/libiconv/include)
 include_directories (${scintilla_INCLUDE_DIRS})
