@@ -125,8 +125,17 @@ History: PJN / 19-03-2004 1. Initial implementation synchronized to the v1.59 re
                           SCI_GETIDENTIFIER, SCI_RGBAIMAGESETWIDTH, SCI_RGBAIMAGESETHEIGHT, SCI_MARKERDEFINERGBAIMAGE, SCI_REGISTERRGBAIMAGE, 
                           SCI_SCROLLTOSTART, SCI_SCROLLTOEND, SCI_SETTECHNOLOGY, SCI_GETTECHNOLOGY & SCI_CREATELOADER
                           Messages dropped include: SCI_SETUSEPALETTE & SCI_GETUSEPALETTE
+         PJN / 15-08-2012 1. Updated copyright details
+                          2. Updated class to work with Scintilla v3.2.1 New Messaged wrapped include: SCI_DELETERANGE, SCI_GETWORDCHARS,
+                          SCI_GETWHITESPACECHARS, SCI_SETPUNCTUATIONCHARS, SCI_GETPUNCTUATIONCHARS, SCI_AUTOCSETCASEINSENSITIVEBEHAVIOUR,
+                          SCI_AUTOCGETCASEINSENSITIVEBEHAVIOUR, SCI_GETRANGEPOINTER, SCI_GETGAPPOSITION, SCI_FINDINDICATORSHOW, 
+                          SCI_FINDINDICATORFLASH & SCI_FINDINDICATORHIDE.
+                          3. SetDocPointer method now uses a void* parameter instead of an int. This prevents a pointer truncation issue
+                          on 64bit platforms. Thanks to Kenny Liu for reporting this issue.
+                          4. GetDocPointer method now also returns a void* instead of an int return value
+                          5. Updated the code to clean compile on VC 2012
 
-Copyright (c) 2004 - 2011 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
+Copyright (c) 2004 - 2012 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
 
 All rights reserved.
 
@@ -741,6 +750,45 @@ CStringW CScintillaCtrl::GetTag(int tagNumber, BOOL bDirect)
   return UTF82W(sUTF8, -1);
 }
 
+CStringW CScintillaCtrl::GetWordChars(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nValueLength = GetWordChars(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sUTF8;
+  GetWordChars(sUTF8.GetBufferSetLength(nValueLength), bDirect);
+  sUTF8.ReleaseBuffer();
+
+  return UTF82W(sUTF8, -1);
+}
+
+CStringW CScintillaCtrl::GetWhitespaceChars(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nValueLength = GetWhitespaceChars(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sUTF8;
+  GetWhitespaceChars(sUTF8.GetBufferSetLength(nValueLength), bDirect);
+  sUTF8.ReleaseBuffer();
+
+  return UTF82W(sUTF8, -1);
+}
+
+CStringW CScintillaCtrl::GetPunctuationChars(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nValueLength = GetPunctuationChars(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sUTF8;
+  GetPunctuationChars(sUTF8.GetBufferSetLength(nValueLength), bDirect);
+  sUTF8.ReleaseBuffer();
+
+  return UTF82W(sUTF8, -1);
+}
+
 #else
 
 CStringA CScintillaCtrl::GetSelText(BOOL bDirect)
@@ -914,6 +962,45 @@ CStringA CScintillaCtrl::GetTag(int tagNumber, BOOL bDirect)
   return sTag;
 }
 
+CStringA CScintillaCtrl::GetWordChars(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nValueLength = GetWordChars(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sWordChars;
+  GetWordChars(sWordChars.GetBufferSetLength(nValueLength), bDirect);
+  sWordChars.ReleaseBuffer();
+
+  return sWordChars;
+}
+
+CStringA CScintillaCtrl::GetWhitespaceChars(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nValueLength = GetWhitespaceChars(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sWhitespaceChars;
+  GetWhitespaceChars(sWhitespaceChars.GetBufferSetLength(nValueLength), bDirect);
+  sWhitespaceChars.ReleaseBuffer();
+
+  return sWhitespaceChars;
+}
+
+CStringA CScintillaCtrl::GetPunctuationChars(BOOL bDirect)
+{
+  //Work out the length of string to allocate
+  int nValueLength = GetPunctuationChars(NULL, bDirect);
+
+  //Call the function which does the work
+  CStringA sPunctuationChars;
+  GetPunctuationChars(sPunctuationChars.GetBufferSetLength(nValueLength), bDirect);
+  sPunctuationChars.ReleaseBuffer();
+
+  return sPunctuationChars;
+}
+
 #endif //#ifdef _UNICODE
 
 
@@ -937,6 +1024,11 @@ void CScintillaCtrl::InsertText(long pos, const char* text, BOOL bDirect)
 void CScintillaCtrl::ClearAll(BOOL bDirect)
 {
   Call(SCI_CLEARALL, 0, 0, bDirect);
+}
+
+void CScintillaCtrl::DeleteRange(long pos, int deleteLength, BOOL bDirect)
+{
+  Call(SCI_DELETERANGE, static_cast<WPARAM>(pos), static_cast<LPARAM>(deleteLength), bDirect);
 }
 
 void CScintillaCtrl::ClearDocumentStyle(BOOL bDirect)
@@ -1454,6 +1546,11 @@ void CScintillaCtrl::SetWordChars(const char* characters, BOOL bDirect)
   Call(SCI_SETWORDCHARS, 0, reinterpret_cast<LPARAM>(characters), bDirect);
 }
 
+int CScintillaCtrl::GetWordChars(char* characters, BOOL bDirect)
+{
+  return Call(SCI_GETWORDCHARS, 0, reinterpret_cast<LPARAM>(characters), bDirect);
+}
+
 void CScintillaCtrl::BeginUndoAction(BOOL bDirect)
 {
   Call(SCI_BEGINUNDOACTION, 0, 0, bDirect);
@@ -1784,7 +1881,7 @@ int CScintillaCtrl::GetHighlightGuide(BOOL bDirect)
   return Call(SCI_GETHIGHLIGHTGUIDE, 0, 0, bDirect);
 }
 
-int CScintillaCtrl::GetLineEndPosition(int line, BOOL bDirect)
+long CScintillaCtrl::GetLineEndPosition(int line, BOOL bDirect)
 {
   return Call(SCI_GETLINEENDPOSITION, static_cast<WPARAM>(line), 0, bDirect);
 }
@@ -2779,14 +2876,14 @@ void CScintillaCtrl::SetViewEOL(BOOL visible, BOOL bDirect)
   Call(SCI_SETVIEWEOL, static_cast<WPARAM>(visible), 0, bDirect);
 }
 
-int CScintillaCtrl::GetDocPointer(BOOL bDirect)
+void* CScintillaCtrl::GetDocPointer(BOOL bDirect)
 {
-  return Call(SCI_GETDOCPOINTER, 0, 0, bDirect);
+  return reinterpret_cast<void*>(Call(SCI_GETDOCPOINTER, 0, 0, bDirect));
 }
 
-void CScintillaCtrl::SetDocPointer(int pointer, BOOL bDirect)
+void CScintillaCtrl::SetDocPointer(void* pointer, BOOL bDirect)
 {
-  Call(SCI_SETDOCPOINTER, 0, static_cast<LPARAM>(pointer), bDirect);
+  Call(SCI_SETDOCPOINTER, 0, reinterpret_cast<LPARAM>(pointer), bDirect);
 }
 
 void CScintillaCtrl::SetModEventMask(int mask, BOOL bDirect)
@@ -3199,6 +3296,21 @@ void CScintillaCtrl::SetWhitespaceChars(const char* characters, BOOL bDirect)
   Call(SCI_SETWHITESPACECHARS, 0, reinterpret_cast<LPARAM>(characters), bDirect);
 }
 
+int CScintillaCtrl::GetWhitespaceChars(char* characters, BOOL bDirect)
+{
+  return Call(SCI_GETWHITESPACECHARS, 0, reinterpret_cast<LPARAM>(characters), bDirect);
+}
+
+void CScintillaCtrl::SetPunctuationChars(const char* characters, BOOL bDirect)
+{
+  Call(SCI_SETPUNCTUATIONCHARS, 0, reinterpret_cast<LPARAM>(characters), bDirect);
+}
+
+int CScintillaCtrl::GetPunctuationChars(char* characters, BOOL bDirect)
+{
+  return Call(SCI_GETPUNCTUATIONCHARS, 0, reinterpret_cast<LPARAM>(characters), bDirect);
+}
+
 void CScintillaCtrl::SetCharsDefault(BOOL bDirect)
 {
   Call(SCI_SETCHARSDEFAULT, 0, 0, bDirect);
@@ -3212,6 +3324,16 @@ int CScintillaCtrl::AutoCGetCurrent(BOOL bDirect)
 int CScintillaCtrl::AutoCGetCurrentText(char* s, BOOL bDirect)
 {
   return Call(SCI_AUTOCGETCURRENTTEXT, 0, reinterpret_cast<LPARAM>(s), bDirect);
+}
+
+void CScintillaCtrl::AutoCSetCaseInsensitiveBehaviour(int behaviour, BOOL bDirect)
+{
+  Call(SCI_AUTOCSETCASEINSENSITIVEBEHAVIOUR, static_cast<WPARAM>(behaviour), 0, bDirect);
+}
+
+int CScintillaCtrl::AutoCGetCaseInsensitiveBehaviour(BOOL bDirect)
+{
+  return Call(SCI_AUTOCGETCASEINSENSITIVEBEHAVIOUR, 0, 0, bDirect);
 }
 
 void CScintillaCtrl::Allocate(int bytes, BOOL bDirect)
@@ -3357,6 +3479,16 @@ void CScintillaCtrl::CopyAllowLine(BOOL bDirect)
 const char* CScintillaCtrl::GetCharacterPointer(BOOL bDirect)
 {
   return reinterpret_cast<const char*>(Call(SCI_GETCHARACTERPOINTER, 0, 0, bDirect));
+}
+
+void* CScintillaCtrl::GetRangePointer(int position, int rangeLength, BOOL bDirect)
+{
+  return reinterpret_cast<void*>(Call(SCI_GETRANGEPOINTER, static_cast<WPARAM>(position), static_cast<LPARAM>(rangeLength), bDirect));
+}
+
+long CScintillaCtrl::GetGapPosition(BOOL bDirect)
+{
+  return Call(SCI_GETGAPPOSITION, 0, 0, bDirect);
 }
 
 void CScintillaCtrl::SetKeysUnicode(BOOL keysUnicode, BOOL bDirect)
@@ -3852,6 +3984,21 @@ int CScintillaCtrl::GetTechnology(BOOL bDirect)
 int CScintillaCtrl::CreateLoader(int bytes, BOOL bDirect)
 {
   return Call(SCI_CREATELOADER, static_cast<WPARAM>(bytes), 0, bDirect);
+}
+
+void CScintillaCtrl::FindIndicatorShow(long start, long end, BOOL bDirect)
+{
+  Call(SCI_FINDINDICATORSHOW, static_cast<WPARAM>(start), static_cast<LPARAM>(end), bDirect);
+}
+
+void CScintillaCtrl::FindIndicatorFlash(long start, long end, BOOL bDirect)
+{
+  Call(SCI_FINDINDICATORFLASH, static_cast<WPARAM>(start), static_cast<LPARAM>(end), bDirect);
+}
+
+void CScintillaCtrl::FindIndicatorHide(BOOL bDirect)
+{
+  Call(SCI_FINDINDICATORHIDE, 0, 0, bDirect);
 }
 
 void CScintillaCtrl::StartRecord(BOOL bDirect)
