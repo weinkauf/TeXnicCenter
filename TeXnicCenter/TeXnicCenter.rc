@@ -6342,7 +6342,7 @@ BEGIN
         POPUP "T&ool Windows"
         BEGIN
             MENUITEM "Outline",                     ID_VIEW_STRUCT_PANE
-            MENUITEM "Literature",                  ID_VIEW_BIB_ENTRIES_PANE
+            MENUITEM "Bibliography",                ID_VIEW_BIB_ENTRIES_PANE
             MENUITEM "Environments",                ID_VIEW_ENV_PANE
             MENUITEM "Files",                       ID_VIEW_FILES_PANE
             MENUITEM "Bookmarks",                   ID_VIEW_BOOKMARKS_PANE
@@ -8806,7 +8806,8 @@ BEGIN
     ID_VIEW_STRUCT_PANE     "Shows or hides the Outline view\nOutline"
     ID_VIEW_ENV_PANE        "Shows or hides the Environments view\nEnvironments"
     ID_VIEW_FILES_PANE      "Shows or hides the Files view\nFiles"
-    ID_VIEW_BIB_ENTRIES_PANE "Shows or hides the Literature view\nLiterature"
+    ID_VIEW_BIB_ENTRIES_PANE 
+                            "Shows or hides the Bibliography view\nBibliography"
     ID_VIEW_ERROR_LIST_PANE "Shows or hides the overview of the compilation results\nCompilation Results"
 END
 
