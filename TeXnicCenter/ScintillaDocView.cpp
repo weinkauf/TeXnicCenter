@@ -89,7 +89,7 @@ History: PJN / 12-08-2004 1. Made all the remaining non virtual functions relate
          PJN / 01-04-2011 1. Updated CScintillaFindReplaceDlg::Create to use AfxFindResourceHandle instead of 
                           AfxGetResourceHandle. Thanks to Nißl Markus for reporting this nice addition.
 
-Copyright (c) 2004 - 2011 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
+Copyright (c) 2004 - 2012 by PJ Naughter (Web: www.naughter.com, Email: pjna@naughter.com)
 
 All rights reserved.
 
@@ -478,7 +478,7 @@ void CScintillaView::PrintFooter(CDC* pDC, CPrintInfo* pInfo, RangeToFormat& frP
   //By Default we print "Page X" as well as a line separator above the text
   //Derived classes are of course free to implement their own version of PrintFooter
   CString sPage;
-  sPage.Format(_T("%d"), pInfo->m_nCurPage);
+  sPage.Format(_T("%u"), pInfo->m_nCurPage);
   CString sFooter;
   AfxFormatString1(sFooter, IDS_SCINTILLA_DEFAULT_PRINT_FOOTER, sPage);
 

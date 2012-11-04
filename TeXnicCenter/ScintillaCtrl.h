@@ -3,7 +3,7 @@ Module : ScintillaCtrl.h
 Purpose: Defines the interface for an MFC wrapper class for the Scintilla edit control (www.scintilla.org)
 Created: PJN / 19-03-2004
 
-Copyright (c) 2004 - 2011 by PJ Naughter.  (Web: www.naughter.com, Email: pjna@naughter.com)
+Copyright (c) 2004 - 2012 by PJ Naughter.  (Web: www.naughter.com, Email: pjna@naughter.com)
 
 All rights reserved.
 
@@ -103,6 +103,9 @@ public:
   CStringW DescribeProperty(const wchar_t* name, BOOL bDirect = TRUE);
   CStringW DescribeKeyWordSets(BOOL bDirect = TRUE);
   CStringW GetTag(int tagNumber, BOOL bDirect = TRUE);
+  CStringW GetWordChars(BOOL bDirect = TRUE);
+  CStringW GetWhitespaceChars(BOOL bDirect = TRUE);
+  CStringW GetPunctuationChars(BOOL bDirect = TRUE);
 
   static CStringW UTF82W(const char* pszText, int nLength);
   static CStringA W2UTF8(const wchar_t* pszText, int nLength);
@@ -120,6 +123,9 @@ public:
   CStringA DescribeProperty(const char* name, BOOL bDirect = TRUE);
   CStringA DescribeKeyWordSets(BOOL bDirect = TRUE);
   CStringA GetTag(int tagNumber, BOOL bDirect = TRUE);
+  CStringA GetWordChars(BOOL bDirect = TRUE);
+  CStringA GetWhitespaceChars(BOOL bDirect = TRUE);
+  CStringA GetPunctuationChars(BOOL bDirect = TRUE);
 #endif
 
 //Auto generated using the "ConvertScintillaiface.js" script
@@ -127,6 +133,7 @@ public:
   void AddStyledText(int length, char* c, BOOL bDirect = TRUE);
   void InsertText(long pos, const char* text, BOOL bDirect = TRUE);
   void ClearAll(BOOL bDirect = TRUE);
+  void DeleteRange(long pos, int deleteLength, BOOL bDirect = TRUE);
   void ClearDocumentStyle(BOOL bDirect = TRUE);
   int GetLength(BOOL bDirect = TRUE);
   int GetCharAt(long pos, BOOL bDirect = TRUE);
@@ -230,6 +237,7 @@ public:
   int GetCaretPeriod(BOOL bDirect = TRUE);
   void SetCaretPeriod(int periodMilliseconds, BOOL bDirect = TRUE);
   void SetWordChars(const char* characters, BOOL bDirect = TRUE);
+  int GetWordChars(char* characters, BOOL bDirect = TRUE);
   void BeginUndoAction(BOOL bDirect = TRUE);
   void EndUndoAction(BOOL bDirect = TRUE);
   void IndicSetStyle(int indic, int style, BOOL bDirect = TRUE);
@@ -296,7 +304,7 @@ public:
   int GetIndentationGuides(BOOL bDirect = TRUE);
   void SetHighlightGuide(int column, BOOL bDirect = TRUE);
   int GetHighlightGuide(BOOL bDirect = TRUE);
-  int GetLineEndPosition(int line, BOOL bDirect = TRUE);
+  long GetLineEndPosition(int line, BOOL bDirect = TRUE);
   int GetCodePage(BOOL bDirect = TRUE);
   COLORREF GetCaretFore(BOOL bDirect = TRUE);
   BOOL GetReadOnly(BOOL bDirect = TRUE);
@@ -495,8 +503,8 @@ public:
   long BraceMatch(long pos, BOOL bDirect = TRUE);
   BOOL GetViewEOL(BOOL bDirect = TRUE);
   void SetViewEOL(BOOL visible, BOOL bDirect = TRUE);
-  int GetDocPointer(BOOL bDirect = TRUE);
-  void SetDocPointer(int pointer, BOOL bDirect = TRUE);
+  void* GetDocPointer(BOOL bDirect = TRUE);
+  void SetDocPointer(void* pointer, BOOL bDirect = TRUE);
   void SetModEventMask(int mask, BOOL bDirect = TRUE);
   int GetEdgeColumn(BOOL bDirect = TRUE);
   void SetEdgeColumn(int column, BOOL bDirect = TRUE);
@@ -579,9 +587,14 @@ public:
   void WordRightEnd(BOOL bDirect = TRUE);
   void WordRightEndExtend(BOOL bDirect = TRUE);
   void SetWhitespaceChars(const char* characters, BOOL bDirect = TRUE);
+  int GetWhitespaceChars(char* characters, BOOL bDirect = TRUE);
+  void SetPunctuationChars(const char* characters, BOOL bDirect = TRUE);
+  int GetPunctuationChars(char* characters, BOOL bDirect = TRUE);
   void SetCharsDefault(BOOL bDirect = TRUE);
   int AutoCGetCurrent(BOOL bDirect = TRUE);
   int AutoCGetCurrentText(char* s, BOOL bDirect = TRUE);
+  void AutoCSetCaseInsensitiveBehaviour(int behaviour, BOOL bDirect = TRUE);
+  int AutoCGetCaseInsensitiveBehaviour(BOOL bDirect = TRUE);
   void Allocate(int bytes, BOOL bDirect = TRUE);
   int TargetAsUTF8(char* s, BOOL bDirect = TRUE);
   void SetLengthForEncode(int bytes, BOOL bDirect = TRUE);
@@ -611,6 +624,8 @@ public:
   int GetPositionCache(BOOL bDirect = TRUE);
   void CopyAllowLine(BOOL bDirect = TRUE);
   const char* GetCharacterPointer(BOOL bDirect = TRUE);
+  void* GetRangePointer(int position, int rangeLength, BOOL bDirect = TRUE);
+  long GetGapPosition(BOOL bDirect = TRUE);
   void SetKeysUnicode(BOOL keysUnicode, BOOL bDirect = TRUE);
   BOOL GetKeysUnicode(BOOL bDirect = TRUE);
   void IndicSetAlpha(int indicator, int alpha, BOOL bDirect = TRUE);
@@ -710,6 +725,9 @@ public:
   void SetTechnology(int technology, BOOL bDirect = TRUE);
   int GetTechnology(BOOL bDirect = TRUE);
   int CreateLoader(int bytes, BOOL bDirect = TRUE);
+  void FindIndicatorShow(long start, long end, BOOL bDirect = TRUE);
+  void FindIndicatorFlash(long start, long end, BOOL bDirect = TRUE);
+  void FindIndicatorHide(BOOL bDirect = TRUE);
   void StartRecord(BOOL bDirect = TRUE);
   void StopRecord(BOOL bDirect = TRUE);
   void SetLexer(int lexer, BOOL bDirect = TRUE);
