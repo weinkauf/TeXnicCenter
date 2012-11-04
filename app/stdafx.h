@@ -33,8 +33,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "targetver.h"
-
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS
 #define VC_EXTRALEAN		// Selten verwendete Teile der Windows-Header nicht einbinden
 

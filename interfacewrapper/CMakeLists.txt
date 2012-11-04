@@ -3,7 +3,8 @@ project (interfacewrapper)
 include (UseMFC)
 
 set (PROJECT_CPP InterfaceWrapper.cpp stdafx.cpp)
-set (PROJECT_H InterfaceWrapper.h InterfaceWrapperTools.h InterfaceWrapper.inl)
+set (PROJECT_H stdafx.h InterfaceWrapper.h InterfaceWrapperTools.h
+  InterfaceWrapper.inl)
 
 add_library (${PROJECT_NAME} ${PROJECT_CPP} ${PROJECT_H})
 

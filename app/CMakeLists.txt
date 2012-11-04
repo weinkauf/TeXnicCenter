@@ -326,7 +326,6 @@ set (PROJECT_H
   StyleFile.h
   StyleFileContainer.h
   TabPersistPosEdit.h
-  targetver.h
   TemplateDialog.h
   TeXnicCenter.h
   textfilesavedialog.h
