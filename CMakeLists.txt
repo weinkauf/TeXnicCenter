@@ -10,6 +10,10 @@ add_definitions (-D_CRT_SECURE_NO_WARNINGS)
 add_definitions (-D_SCL_SECURE_NO_WARNINGS)
 add_definitions (-D_UNICODE)
 
+add_definitions (-D_WIN32_WINNT=0x0600)
+add_definitions (-D_WIN32_WINDOWS=0x0410)
+add_definitions (-D_WIN32_IE=0x0700)
+
 set (OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIR})
