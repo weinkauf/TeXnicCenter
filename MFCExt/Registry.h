@@ -21,7 +21,7 @@
 #define REG_POINT	0x0002
 
 //BEGIN SW
-class AFX_EXT_CLASS CRegistry : public CObject
+class AFX_CLASS_EXPORT CRegistry : public CObject
 /*ORIGINAL
 class CRegistry : public CObject
 *///END SW
