@@ -70,6 +70,10 @@
 #include "tipdlg.h"
 #include "TeXnicCenter.h"
 
+#ifdef HAVE_VLD
+#include <vld.h>
+#endif // HAVE_VLD
+
 namespace {
 	/**
 	 * Loads the MFC resource module with the specified @a lcid, sets it as the

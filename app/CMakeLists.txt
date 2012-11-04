@@ -4,6 +4,7 @@ include (UseMFC)
 
 find_package (HtmlHelp REQUIRED)
 find_package (scintilla REQUIRED NO_MODULE)
+find_package (VLD)
 
 set (PROJECT_CPP
   aboutbox.cpp
@@ -409,6 +410,13 @@ include_directories (${CMAKE_SOURCE_DIR}/thirdparty/libiconv/include)
 include_directories (${scintilla_INCLUDE_DIRS})
 include_directories (${objects_BINARY_DIR}/objects.dir/${CMAKE_CFG_INTDIR})
 include_directories (${HTML_HELP_INCLUDE_DIRS})
+
+if (VLD_FOUND)
+  include_directories (${VLD_INCLUDE_DIRS})
+  link_directories (${VLD_LIBRARY_DIRS})
+
+  add_definitions (-DHAVE_VLD)
+endif (VLD_FOUND)
 
 add_definitions (-DHUNSPELL_STATIC)
 
