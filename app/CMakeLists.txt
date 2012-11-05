@@ -1,6 +1,42 @@
 project (app)
 
+include (CheckCXXSourceCompiles)
 include (UseMFC)
+
+check_cxx_source_compiles ("
+int main()
+{
+  ([](){})();
+}
+" HAVE_LAMBDA)
+
+if (NOT HAVE_LAMBDA)
+  message (FATAL_ERROR "Missing C++11 lambda support")
+endif (NOT HAVE_LAMBDA)
+
+check_cxx_source_compiles ("
+#include <memory>
+
+int main()
+{
+  std::unique_ptr<int>();
+}
+" HAVE_UNIQUE_PTR)
+
+if (NOT HAVE_UNIQUE_PTR)
+  message (FATAL_ERROR "Missing C++11 std::unique_ptr<>")
+endif (NOT HAVE_UNIQUE_PTR)
+
+check_cxx_source_compiles ("
+int main()
+{
+  auto tmp = 1;
+}
+" HAVE_TYPE_INFERENCE)
+
+if (NOT HAVE_UNIQUE_PTR)
+  message (FATAL_ERROR "Missing C++11 auto keyword")
+endif (NOT HAVE_UNIQUE_PTR)
 
 find_package (HtmlHelp REQUIRED)
 find_package (scintilla REQUIRED NO_MODULE)
