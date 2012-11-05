@@ -1,4 +1,4 @@
-;TeXnicCenter Inno Setup Script
+ï»¿;TeXnicCenter Inno Setup Script
 
 ;-------------------------------------------
 ; Some defines
@@ -40,10 +40,10 @@
   #define APP_PLATFORM      "Win32"
 #endif
 
-#define APP_NAME          GetStringFileInfo("..\Output\Product\" + APP_PLATFORM + "\Release\TeXnicCenter.exe", PRODUCT_NAME)
-#define APP_VERSION       GetStringFileInfo("..\Output\Product\" + APP_PLATFORM + "\Release\TeXnicCenter.exe", PRODUCT_VERSION)
-#define APP_PUBLISHER     GetStringFileInfo("..\Output\Product\" + APP_PLATFORM + "\Release\TeXnicCenter.exe", COMPANY_NAME)
-#define APP_COPYRIGHT     GetStringFileInfo("..\Output\Product\" + APP_PLATFORM + "\Release\TeXnicCenter.exe", LEGAL_COPYRIGHT)
+#define APP_NAME          GetStringFileInfo(SOURCE_DIR + "\\TeXnicCenter.exe", PRODUCT_NAME)
+#define APP_VERSION       GetStringFileInfo(SOURCE_DIR + "\\TeXnicCenter.exe", PRODUCT_VERSION)
+#define APP_PUBLISHER     GetStringFileInfo(SOURCE_DIR + "\\TeXnicCenter.exe", COMPANY_NAME)
+#define APP_COPYRIGHT     GetStringFileInfo(SOURCE_DIR + "\\TeXnicCenter.exe", LEGAL_COPYRIGHT)
 #define REGNAME           "TeXnicCenterNT"
 
 ;Alpha Builds can be used side-by-side with stable builds.
@@ -60,7 +60,7 @@
 
 [Setup]
 ;Output
-OutputDir=..\Output\Setup
+OutputDir={#OUTPUT_DIR}
 OutputBaseFilename=TXCSetup_{#APP_VERSION_NOSPACE}_{#APP_PLATFORM}
 ;About TeXnicCenter
 AppName={#APP_NAME}
@@ -79,7 +79,7 @@ DefaultGroupName={#APP_ID}
 UsePreviousAppDir=true
 ;Requirements
 ;PrivilegesRequired=none
-MinVersion=4.0.950,5.0.2195
+MinVersion=0,5.0.2195
 ;Setup
 AllowNoIcons=true
 AlwaysShowDirOnReadyPage=true
@@ -112,56 +112,50 @@ Name: Dictionaries; Description: Dictionaries; Types: custom typical
 Name: Dictionaries\EnglishGB; Description: English (GB); Types: custom
 Name: Dictionaries\EnglishUS; Description: English (US); Types: custom typical
 Name: Dictionaries\Deutsch; Description: Deutsch; Types: custom typical
-Name: Dictionaries\Francais; Description: Français; Types: custom
-Name: Dictionaries\Francais1990; Description: Français (appelé Réforme 1990); Types: custom
+Name: Dictionaries\Francais; Description: FranÃ§ais; Types: custom
+Name: Dictionaries\Francais1990; Description: FranÃ§ais (appelÃ© RÃ©forme 1990); Types: custom
 
 [Files]
 ;Application Files
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\TeXnicCenter.exe; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\Shared.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\Language\*.dll; DestDir: {app}\Language; Components: Application_Files; Flags: ignoreversion
+Source: {#SOURCE_DIR}\TeXnicCenter.exe; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#SOURCE_DIR}\shared.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#SOURCE_DIR}\Language\*.dll; DestDir: {app}\Language; Components: Application_Files; Flags: ignoreversion
 
 ;The type lib for creating wizards. We do not issue an error, if registering doesn't work.
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\TeXnicCenterObjects.tlb; DestDir: {app}; Components: Application_Files; Flags: regtypelib promptifolder comparetimestamp noregerror
+;Source: {#SOURCE_DIR}\TeXnicCenterObjects.tlb; DestDir: {app}; Components: Application_Files; Flags: regtypelib promptifolder comparetimestamp noregerror
 
 ;Some other files
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\GPL_english.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\GPL_german.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\Tips_english.txt; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\Tips_german.txt; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\UserImages.bmp; DestDir: {app}; Components: Application_Files; Flags: promptifolder comparetimestamp
+Source: {#ROOT_DIR}\data\GPL_english.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#ROOT_DIR}\data\GPL_german.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#ROOT_DIR}\data\app\Tips_english.txt; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#ROOT_DIR}\data\app\Tips_german.txt; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#ROOT_DIR}\data\app\UserImages.bmp; DestDir: {app}; Components: Application_Files; Flags: promptifolder comparetimestamp
 
 ;Packages and other XML files
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\*.xsd; DestDir: {app}; Components: Application_Files; Flags: promptifolder comparetimestamp
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\Packages\*.xml; DestDir: {app}\Packages; Components: Application_Files; Flags: promptifolder comparetimestamp
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\Packages\*.bmp; DestDir: {app}\Packages; Components: Application_Files; Flags: promptifolder comparetimestamp
+Source: {#ROOT_DIR}\data\xmlschema\*.xsd; DestDir: {app}; Components: Application_Files; Flags: promptifolder comparetimestamp
+Source: {#ROOT_DIR}\data\packages\*.xml; DestDir: {app}\Packages; Components: Application_Files; Flags: promptifolder comparetimestamp
+Source: {#ROOT_DIR}\data\packages\*.bmp; DestDir: {app}\Packages; Components: Application_Files; Flags: promptifolder comparetimestamp
 
 ;Help
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\Help\*.chm; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
-Source: ..\Output\Product\{#APP_PLATFORM}\Release\Help\*.chw; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
-
-;MFC files. Copied as private assemblies. Windows will use globally installed versions, if they are installed.
-Source: {#APP_PLATFORM}\msvcr100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#APP_PLATFORM}\msvcp100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#APP_PLATFORM}\mfc100u.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#SOURCE_DIR}\Help\*.chm; DestDir: {app}\Help; Components: Help_Files; Flags: ignoreversion
 
 ;Templates
-DestDir: {app}\Templates\Documents\English; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Templates\Documents\English\*.tex; Components: Templates\English; Flags: comparetimestamp
-DestDir: {app}\Templates\Documents\English advanced; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Templates\Documents\English advanced\*.tex; Components: Templates\English; Flags: comparetimestamp
-DestDir: {app}\Templates\Projects\English advanced; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Templates\Projects\English advanced\*.tex; Components: Templates\English; Flags: comparetimestamp
-DestDir: {app}\Templates\Projects\English; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Templates\Projects\English\*.tex; Components: Templates\English; Flags: comparetimestamp
+DestDir: {app}\Templates\Documents\English; Source: {#ROOT_DIR}\data\Templates\Documents\English\*.tex; Components: Templates\English; Flags: comparetimestamp
+DestDir: {app}\Templates\Documents\English advanced; Source: {#ROOT_DIR}\data\Templates\Documents\English advanced\*.tex; Components: Templates\English; Flags: comparetimestamp
+DestDir: {app}\Templates\Projects\English advanced; Source: {#ROOT_DIR}\data\Templates\Projects\English advanced\*.tex; Components: Templates\English; Flags: comparetimestamp
+DestDir: {app}\Templates\Projects\English; Source: {#ROOT_DIR}\data\Templates\Projects\English\*.tex; Components: Templates\English; Flags: comparetimestamp
 
-DestDir: {app}\Templates\Documents\Deutsch; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Templates\Documents\Deutsch\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
-DestDir: {app}\Templates\Documents\Deutsch erweitert; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Templates\Documents\Deutsch erweitert\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
-DestDir: {app}\Templates\Projects\Deutsch erweitert; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Templates\Projects\Deutsch erweitert\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
-DestDir: {app}\Templates\Projects\Deutsch; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Templates\Projects\Deutsch\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
+DestDir: {app}\Templates\Documents\Deutsch; Source: {#ROOT_DIR}\data\Templates\Documents\Deutsch\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
+DestDir: {app}\Templates\Documents\Deutsch erweitert; Source: {#ROOT_DIR}\data\Templates\Documents\Deutsch erweitert\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
+DestDir: {app}\Templates\Projects\Deutsch erweitert; Source: {#ROOT_DIR}\data\Templates\Projects\Deutsch erweitert\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
+DestDir: {app}\Templates\Projects\Deutsch; Source: {#ROOT_DIR}\data\Templates\Projects\Deutsch\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
 
 ;Dictionaries
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\de_DE.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Deutsch
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\en_GB.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishGB
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\en_US.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishUS
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\fr_FR.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Francais
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\fr_FR-1990.*; Flags: comparetimestamp promptifolder; Components: " Dictionaries\Francais1990"
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\de_DE.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Deutsch
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\en_GB.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishGB
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\en_US.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishUS
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\fr_FR.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Francais
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\fr_FR-1990.*; Flags: comparetimestamp promptifolder; Components: " Dictionaries\Francais1990"
 
 [Icons]
 Name: {group}\{#APP_ID}; Filename: {app}\TeXnicCenter.exe; WorkingDir: {userdocs}; IconIndex: 0
@@ -188,15 +182,15 @@ Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\DocumentTem
 Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Workspace; Flags: deletekey; Tasks: ResetWorkspace;
 
 ;Register file type: tex ; if the user wants it
-Root: HKCR; SubKey: .tex; ValueType: string; ValueData: TeXnicCenter.tex; Flags: UninsDeleteValue; Tasks: FileAssociations; 
-Root: HKCR; SubKey: TeXnicCenter.tex; ValueType: string; ValueData: "LaTeX Document"; Flags: UninsDeleteKey; Tasks: FileAssociations; 
+Root: HKCR; SubKey: .tex; ValueType: string; ValueData: TeXnicCenter.tex; Flags: UninsDeleteValue; Tasks: FileAssociations;
+Root: HKCR; SubKey: TeXnicCenter.tex; ValueType: string; ValueData: "LaTeX Document"; Flags: UninsDeleteKey; Tasks: FileAssociations;
 Root: HKCR; SubKey: TeXnicCenter.tex\DefaultIcon; ValueType: string; ValueData: {app}\TeXnicCenter.exe,1; Tasks: FileAssociations;
 Root: HKCR; SubKey: TeXnicCenter.tex\shell\open\command; ValueType: string; ValueData: """{app}\TeXnicCenter.exe"" ""%1"""; Tasks: FileAssociations;
 
-;Register file type: tcp ; always (for now) 
-Root: HKCR; SubKey: .tcp; ValueType: string; ValueData: TeXnicCenter.tcp; Flags: UninsDeleteValue; 
-Root: HKCR; SubKey: TeXnicCenter.tcp; ValueType: string; ValueData: "TeXnicCenter Project"; Flags: UninsDeleteKey; 
-Root: HKCR; SubKey: TeXnicCenter.tcp\DefaultIcon; ValueType: string; ValueData: {app}\TeXnicCenter.exe,3; 
+;Register file type: tcp ; always (for now)
+Root: HKCR; SubKey: .tcp; ValueType: string; ValueData: TeXnicCenter.tcp; Flags: UninsDeleteValue;
+Root: HKCR; SubKey: TeXnicCenter.tcp; ValueType: string; ValueData: "TeXnicCenter Project"; Flags: UninsDeleteKey;
+Root: HKCR; SubKey: TeXnicCenter.tcp\DefaultIcon; ValueType: string; ValueData: {app}\TeXnicCenter.exe,3;
 Root: HKCR; SubKey: TeXnicCenter.tcp\shell\open\command; ValueType: string; ValueData: """{app}\TeXnicCenter.exe"" ""%1""";
 
 ;Register with default programs
@@ -250,8 +244,8 @@ Root: HKLM; SubKey: SOFTWARE\RegisteredApplications; ValueType: string; ValueNam
 [Tasks]
 Name: DesktopLink; Description: Create a desktop icon; GroupDescription: Links and Associations
 Name: SendToLink; Description: Add TeXnicCenter to the 'Send To' menu; GroupDescription: Links and Associations; Flags: unchecked
-Name: FileAssociations; Description: "Make TeXnicCenter the default LaTeX Editor"; GroupDescription: Links and Associations; 
-Name: ResetWorkspace; Description: "Reset customizations (menus, toolbars, shortcuts) [recommended]"; GroupDescription: "Customizations of previously installed versions of TeXnicCenter 2"; 
+Name: FileAssociations; Description: "Make TeXnicCenter the default LaTeX Editor"; GroupDescription: Links and Associations;
+Name: ResetWorkspace; Description: "Reset customizations (menus, toolbars, shortcuts) [recommended]"; GroupDescription: "Customizations of previously installed versions of TeXnicCenter 2";
 
 [Dirs]
 Name: {app}\Templates\Documents; Flags: uninsalwaysuninstall
