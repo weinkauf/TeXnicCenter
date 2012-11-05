@@ -12,9 +12,9 @@ Prerequisites for compiling TeXnicCenter
 To compile TeXnicCenter from source, the following tools and libraries are
 required:
 
-  * `CMake 2.8.9 <http://www.cmake.org/>`_ or higher
-  * Visual C++ 2010 with MFC libraries
-  * Microsoft HTML Help Workshop
+* `CMake 2.8.9 <http://www.cmake.org/>`_ (or higher)
+* Visual C++ 2010 (or higher) with MFC libraries
+* Microsoft HTML Help Workshop
 
 To checkout the repository, you will also need to install `Mercurial
 <http://mercurial.selenic.com/>`_. To generate the setup, `Inno Setup
