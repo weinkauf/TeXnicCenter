@@ -13,13 +13,13 @@ set (PROJECT_IDL
 )
 
 set (PROJECT_IDL_GENERATED
-  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)/DocumentWizard_i.c"
-  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)/DocumentWizard_p.c"
-  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)/Project_i.c"
-  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)/Project_p.c"
-  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)/ProjectWizard_i.c"
-  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)/ProjectWizard_p.c"
-  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)/TeXnicCenterObjects_i.c"
+  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)DocumentWizard_i.c"
+  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)DocumentWizard_p.c"
+  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)Project_i.c"
+  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)Project_p.c"
+  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)ProjectWizard_i.c"
+  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)ProjectWizard_p.c"
+  "${CMAKE_CURRENT_BINARY_DIR}/\$(IntDir)TeXnicCenterObjects_i.c"
 )
 
 set (PROJECT_CPP

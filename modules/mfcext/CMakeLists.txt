@@ -3,6 +3,7 @@ project (mfcext)
 include (UseMFC)
 
 set (PROJECT_CPP
+  StdAfx.cpp
   CollectionException.cpp
   ComboColorPicker.cpp
   ExtAfx.cpp
@@ -18,7 +19,6 @@ set (PROJECT_CPP
   PerformanceTimer.cpp
   Registry.cpp
   SingleInstanceWinApp.cpp
-  StdAfx.cpp
   SystemInfo.cpp
   UniqueStringList.cpp
   WildCard.cpp
@@ -64,6 +64,10 @@ set (PROJECT_H
 
 set (PROJECT_RES MFCExt.rc res/MFCExt.rc2)
 
+if (CMAKE_MFC_FLAG EQUAL 2)
+  add_definitions (-D_AFXDLL)
+endif (CMAKE_MFC_FLAG EQUAL 2)
+
 source_group ("Resource Files" FILES ${PROJECT_RES})
 
 add_library (${PROJECT_NAME} ${PROJECT_CPP} ${PROJECT_H} ${PROJECT_RES})
@@ -71,7 +75,7 @@ add_library (${PROJECT_NAME} ${PROJECT_CPP} ${PROJECT_H} ${PROJECT_RES})
 # Setup precompiled headers
 if (MSVC)
   set_target_properties (${PROJECT_NAME} PROPERTIES COMPILE_FLAGS -YuStdAfx.h)
-  set_source_files_properties (StdAfx.cpp PROPERTIES COMPILE_FLAGS -Yc)
+  set_source_files_properties (StdAfx.cpp PROPERTIES COMPILE_FLAGS -YcStdAfx.h)
 endif (MSVC)
 
 target_link_libraries (${PROJECT_NAME} version)
