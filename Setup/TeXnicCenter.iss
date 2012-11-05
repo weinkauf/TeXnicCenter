@@ -87,8 +87,8 @@ AlwaysShowGroupOnReadyPage=true
 AlwaysShowComponentsList=true
 ShowLanguageDialog=yes
 UninstallDisplayIcon={app}\TeXnicCenter.exe
-WizardImageFile=compiler:wizmodernimage-IS.bmp
-WizardSmallImageFile=compiler:wizmodernsmallimage-IS.bmp
+WizardImageFile=bitmaps\Dialog.bmp
+WizardSmallImageFile=bitmaps\TopBanner.bmp
 ChangesAssociations=true
 ;Compression
 SolidCompression=true
