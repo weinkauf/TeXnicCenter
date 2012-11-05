@@ -22,6 +22,7 @@ add_custom_target (setup
   /DOUTPUT_DIR=${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}
   /DTARGET_${_TARGET}
   SOURCES TeXnicCenter.iss
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   COMMENT "Generating setup"
 )
 
