@@ -618,7 +618,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 	strHelpFilePath.Replace(_T(".HLP"), _T(".chm"));
 
 	CString strHelpFile = CPathTool::GetFile(strHelpFilePath);
-	CString strHelpDir = CPathTool::GetDirectory(strHelpFilePath);
+	CString strHelpDir = CPathTool::Cat(CPathTool::GetDirectory(strHelpFilePath), _T("Help"));
 	strHelpFilePath = CPathTool::Cat(strHelpDir, strHelpFile);
 
 	free((void*)m_pszHelpFilePath);
