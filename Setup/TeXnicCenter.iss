@@ -122,7 +122,7 @@ Source: {#SOURCE_DIR}\shared.dll; DestDir: {app}; Components: Application_Files;
 Source: {#SOURCE_DIR}\Language\*.dll; DestDir: {app}\Language; Components: Application_Files; Flags: ignoreversion
 
 ;The type lib for creating wizards. We do not issue an error, if registering doesn't work.
-;Source: {#SOURCE_DIR}\TeXnicCenterObjects.tlb; DestDir: {app}; Components: Application_Files; Flags: regtypelib promptifolder comparetimestamp noregerror
+Source: {#SOURCE_DIR}\TeXnicCenterObjects.tlb; DestDir: {app}; Components: Application_Files; Flags: regtypelib promptifolder comparetimestamp noregerror
 
 ;Some other files
 Source: {#ROOT_DIR}\data\GPL_english.htm; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
