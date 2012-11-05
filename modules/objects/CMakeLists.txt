@@ -32,3 +32,10 @@ add_library (${PROJECT_NAME} ${PROJECT_CPP} ${PROJECT_IDL} ${PROJECT_H}
   ${PROJECT_IDL_GENERATED})
 
 set_source_files_properties (${PROJECT_IDL_GENERATED} PROPERTIES GENERATED TRUE)
+
+add_custom_command (TARGET ${PROJECT_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.dir/${CMAKE_CFG_INTDIR}/TeXnicCenterObjects.tlb
+	${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/TeXnicCenterObjects.tlb
+	COMMENT "Copying TeXnicCenter type libarary"
+)
