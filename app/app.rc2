@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Fügen Sie hier manuell bearbeitete Ressourcen hinzu...
 
-#include "../Version.h"
+#include "Version.h"
 
 VS_VERSION_INFO VERSIONINFO
 	FILEVERSION			TXC_VERSION_SEQUENCE

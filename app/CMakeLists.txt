@@ -376,6 +376,7 @@ set (PROJECT_H
 
 set (PROJECT_RES
   app.rc
+  app.rc2
   "res/additional.bmp"
   "res/bibtextype.ico"
   "res/bibtoolbar.bmp"
@@ -462,10 +463,11 @@ endif (MSVC)
 target_link_libraries (${PROJECT_NAME} uxtheme objects hunspell libiconv mfcext
   msxmlcpp ${scintilla_LIBRARIES} htmlhelp interfacewrapper)
 
-set_target_properties (${PROJECT_NAME} PROPERTIES OUTPUT_NAME TeXnicCenter)
+set_target_properties (${PROJECT_NAME} PROPERTIES OUTPUT_NAME TeXnicCenter
+  COMPILE_DEFINITIONS "AFX_RESOURCE_DLL;AFX_TARG_NEU;AFX_TARG_ENU")
 
-add_library (lang_en_US SHARED app.rc res/TeXnicCenter.rc2)
-add_library (lang_de_DE SHARED app.rc res/TeXnicCenter.rc2)
+add_library (lang_en_US SHARED ${PROJECT_RES})
+add_library (lang_de_DE SHARED ${PROJECT_RES})
 
 set (LANG_DIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/Language)
 
@@ -477,6 +479,7 @@ set_target_properties (lang_en_US PROPERTIES COMPILE_DEFINITIONS
   RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${LANG_DIR}
   RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${LANG_DIR}
 )
+
 set_target_properties (lang_de_DE PROPERTIES COMPILE_DEFINITIONS
   "AFX_RESOURCE_DLL;AFX_TARG_NEU;AFX_TARG_DEU" OUTPUT_NAME TxcResDeutsch
   LINK_FLAGS /NOENTRY
