@@ -2,9 +2,11 @@ syntax: glob
 
 *.aps
 *.bsc
+*.chw
 *.ipch
 *.opensdf
 *.orig
+*.pyc
 *.rej
 *.sdf
 *.suo
@@ -13,5 +15,4 @@ syntax: glob
 *.user
 *~
 build*
-*.pyc
 manual/TeXnicCenter.chm
