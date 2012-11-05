@@ -17,4 +17,4 @@ add_custom_target (setup
   COMMENT "Generating setup"
 )
 
-add_dependencies (setup app manual lang_en_US lang_de_DE)
+add_dependencies (setup app manual lang_en_US lang_de_DE shared)
