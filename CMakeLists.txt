@@ -19,6 +19,10 @@ set (OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIR})
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_DIR})
 
+if (MSVC)
+  string (REPLACE "/Zm1000" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+endif (MSVC)
+
 add_subdirectory (manual)
 add_subdirectory (modules)
 add_subdirectory (thirdparty)
