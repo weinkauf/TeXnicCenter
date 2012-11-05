@@ -399,7 +399,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 		EnumResourceLanguages(m_hTxcResources, RT_VERSION, MAKEINTRESOURCE(1), (ENUMRESLANGPROC)TxcEnumResourceLanguages, (LONG) & wIdLang);
 
 		// check compatibility
-		CFileVersionInfo fviResources(m_hTxcResources, MAKELONG(wIdLang, 0x04b0/*UNICODE*/));
+		CFileVersionInfo fviResources(m_hTxcResources);
 		CFileVersionInfo fviTxc((HMODULE)NULL);
 
 		if (fviResources.GetFileVersion() == fviTxc.GetFileVersion())
