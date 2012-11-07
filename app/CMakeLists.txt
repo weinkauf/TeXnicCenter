@@ -4,6 +4,20 @@ include (CheckCXXSourceCompiles)
 include (UseMFC)
 
 check_cxx_source_compiles ("
+#define _AFXDLL
+#include <afxwin.h>
+#include <afxcontrolbars.h>
+
+int main()
+{
+}
+" HAVE_FEATURE_PACK)
+
+if (NOT HAVE_FEATURE_PACK)
+  message (FATAL_ERROR "Missing MFC feature pack")
+endif (NOT HAVE_FEATURE_PACK)
+
+check_cxx_source_compiles ("
 int main()
 {
   ([](){})();
