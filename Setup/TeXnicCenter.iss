@@ -139,37 +139,29 @@ Source: {#SOURCE_DIR}\Help\*.chm; DestDir: {app}\Help; Components: Help_Files; F
 ;MFC files. Copied as private assemblies. Windows will use globally installed versions, if they are installed.
 
 #ifdef TARGET_Win32
-#ifdef MSVC11
-#define VSCOMNTOOLS GetEnv("VS110COMNTOOLS")
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x86\Microsoft.VC110.MFC\mfc110.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x86\Microsoft.VC110.MFCLOC\mfc110deu.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x86\Microsoft.VC110.MFCLOC\mfc110enu.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x86\Microsoft.VC110.CRT\msvcp110.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x86\Microsoft.VC110.CRT\msvcr110.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-#elif defined(MSVC10)
-#define VSCOMNTOOLS GetEnv("VS100COMNTOOLS")
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x86\Microsoft.VC100.MFC\mfc100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x86\Microsoft.VC100.MFCLOC\mfc100deu.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x86\Microsoft.VC100.MFCLOC\mfc100enu.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x86\Microsoft.VC100.CRT\msvcp100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x86\Microsoft.VC100.CRT\msvcr100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-#endif
+#define REDIST_PLATFORM "x86"
 #else
-#ifdef MSVC11
-#define VSCOMNTOOLS GetEnv("VS110COMNTOOLS")
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x64\Microsoft.VC110.MFC\mfc110.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x64\Microsoft.VC110.MFCLOC\mfc110deu.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x64\Microsoft.VC110.MFCLOC\mfc110enu.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x64\Microsoft.VC110.CRT\msvcp110.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x64\Microsoft.VC110.CRT\msvcr110.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-#elif defined(MSVC10)
-#define VSCOMNTOOLS GetEnv("VS100COMNTOOLS")
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x64\Microsoft.VC100.MFC\mfc100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x64\Microsoft.VC100.MFCLOC\mfc100deu.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x64\Microsoft.VC100.MFCLOC\mfc100enu.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x64\Microsoft.VC100.CRT\msvcp100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
-Source: {#VSCOMNTOOLS}\..\..\VC\redist\x64\Microsoft.VC100.CRT\msvcr100.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+#if MSVCVER == "90"
+#define REDIST_PLATFORM "amd64"
+#else
+#define REDIST_PLATFORM "x64"
 #endif
+#endif
+
+#ifdef MSVCVER
+#define VSCOMNTOOLS GetEnv("VS" + MSVCVER + "COMNTOOLS")
+Source: {#VSCOMNTOOLS}\..\..\VC\redist\{#REDIST_PLATFORM}\Microsoft.VC{#MSVCVER}.MFC\mfc{#MSVCVER}.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#VSCOMNTOOLS}\..\..\VC\redist\{#REDIST_PLATFORM}\Microsoft.VC{#MSVCVER}.MFCLOC\mfc{#MSVCVER}deu.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#VSCOMNTOOLS}\..\..\VC\redist\{#REDIST_PLATFORM}\Microsoft.VC{#MSVCVER}.MFCLOC\mfc{#MSVCVER}enu.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#VSCOMNTOOLS}\..\..\VC\redist\{#REDIST_PLATFORM}\Microsoft.VC{#MSVCVER}.CRT\msvcp{#MSVCVER}.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#VSCOMNTOOLS}\..\..\VC\redist\{#REDIST_PLATFORM}\Microsoft.VC{#MSVCVER}.CRT\msvcr{#MSVCVER}.dll; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+
+#if MSVCVER == "90"
+Source: {#VSCOMNTOOLS}\..\..\VC\redist\{#REDIST_PLATFORM}\Microsoft.VC{#MSVCVER}.MFC\*.manifest; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#VSCOMNTOOLS}\..\..\VC\redist\{#REDIST_PLATFORM}\Microsoft.VC{#MSVCVER}.MFCLOC\*.manifest; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+Source: {#VSCOMNTOOLS}\..\..\VC\redist\{#REDIST_PLATFORM}\Microsoft.VC{#MSVCVER}.CRT\*.manifest; DestDir: {app}; Components: Application_Files; Flags: ignoreversion
+#endif
+
 #endif
 
 ;Templates
