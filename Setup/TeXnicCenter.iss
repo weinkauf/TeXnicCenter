@@ -4,9 +4,6 @@
 ; Some defines
 ;-------------------------------------------
 
-;Uncomment this for x64
-;#define TARGET_x64
-
 ;Uncomment this for an Alpha Build
 ;#define ALPHA_BUILD
 
