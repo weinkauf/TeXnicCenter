@@ -7,7 +7,7 @@ set (VERSION_PATCH 0)
 # uncomment the next line if not applicable
 set (VERSION_EXTRA "Beta 1")
 
-set (_COPYRIGHT "${YEAR} The TeXnicCenter Team. All rights reserved.")
+set (_COPYRIGHT "${YEAR} The TeXnicCenter Team")
 # place a copyright sign infront of the banner
 set (COPYRIGHT "\\xA9 ${_COPYRIGHT}")
 set (LEGAL_COPYRIGHT "Copyright ${COPYRIGHT}")
