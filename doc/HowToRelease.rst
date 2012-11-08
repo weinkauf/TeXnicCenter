@@ -34,7 +34,7 @@ Releasing TeXnicCenter
 13. Write Release Notes. Use this as a startinig point (where
     ``Release2Alpha3`` stands for the tag of the last release)::
 
-    hg log -f --no-merges -r "tagged(Release2Alpha3)":: --template "{desc}\n\n" > TXCReleaseNotes_2Alpha4.txt
+     hg log -f --no-merges -r "tagged(Release2Alpha3)":: --template "{desc}\n\n" > TXCReleaseNotes_2Alpha4.txt
 
 14. Upload the release notes and the setup file to sf.net. Just click on
     "Files". It requires Firefox or something similar. Create a subfolder for
