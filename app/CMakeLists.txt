@@ -1,6 +1,7 @@
 project (app)
 
 include (CheckCXXSourceCompiles)
+include (SetupBundle)
 include (UseMFC)
 
 check_cxx_source_compiles ("
@@ -216,6 +217,7 @@ set (PROJECT_CPP
 )
 
 set (PROJECT_H
+  ${PROJECT_BINARY_DIR}/Version.h
   aboutbox.h
   AbstractLaTeXCommand.h
   ActiveProfileDialog.h
@@ -452,6 +454,9 @@ include_directories (${CMAKE_SOURCE_DIR}/thirdparty/libiconv/include)
 include_directories (${scintilla_INCLUDE_DIRS})
 include_directories (${objects_BINARY_DIR}/objects.dir/${CMAKE_CFG_INTDIR})
 include_directories (${HTML_HELP_INCLUDE_DIRS})
+include_directories (${PROJECT_BINARY_DIR})
+
+configure_file (Version.h.in Version.h @ONLY)
 
 if (VLD_FOUND)
   include_directories (${VLD_INCLUDE_DIRS})

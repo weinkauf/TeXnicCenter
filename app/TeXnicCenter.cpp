@@ -99,7 +99,10 @@ namespace {
 		const int minExtensionLength = 3;
 
 		ASSERT(strPath.GetLength() >= minExtensionLength);
-		strPath.GetBufferSetLength(strPath.GetLength() - minExtensionLength);
+
+		if (strPath.GetLength() >= minExtensionLength)
+			strPath.GetBufferSetLength(strPath.GetLength() - minExtensionLength);
+
 		strPath += strLanguage;
 		strPath += _T(".DLL");
 
