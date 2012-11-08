@@ -35,6 +35,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "AboutBox.h"
+#include "Version.h"
 #include "FontOccManager.h"
 
 
@@ -66,6 +67,8 @@ const int TOP_LEVEL_GROUP_HEIGHT =  19;
 const int GROUP_TITLE_HEIGHT =    	17;
 const int NORMAL_TEXT_HEIGHT = 15;
 
+#define TXC_STRINGIFY(x)	 #x
+#define TXC_TO_STRING(x)	 TXC_STRINGIFY(x)
 
 
 // these define the escape sequences to suffix each array line with. They
@@ -83,7 +86,7 @@ const TCHAR DISPLAY_BITMAP      = _T('\b');
 // (see #defines above)
 LPCTSTR const pArrCredit[] =
 {
-	_T("Copyright © 1999-2012\t"),
+	TXC_COPYRIGHT_ONLY _T("\t"),
 	_T("www.TeXnicCenter.org\t"),
 	_T(""),
 	_T("Portions Copyright © 1998-2002 by Cristi Posea\f"),

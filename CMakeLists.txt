@@ -4,6 +4,22 @@ project (TeXnicCenter)
 list (APPEND CMAKE_FIND_ROOT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+set (CPACK_COMPONENTS_ALL Runtime)
+set (CPACK_COMPONENT_APPLICATIONS_GROUP "Runtime")
+set (CPACK_COMPONENT_LIBRARIES_GROUP "Development")
+set (CPACK_COMPONENT_HEADERS_GROUP "Development")
+
+if (APPLE)
+  set (CPACK_GENERATOR DragNDrop)
+elseif (UNIX)
+  set (CPACK_GENERATOR DEB)
+else (APPLE)
+  set (CPACK_GENERATOR ZIP)
+endif (APPLE)
+
+include (TeXnicCenter)
+include (CPack)
+
 add_definitions (-D_BIND_TO_CURRENT_CRT_VERSION)
 add_definitions (-D_BIND_TO_CURRENT_MFC_VERSION)
 add_definitions (-D_CRT_SECURE_NO_WARNINGS)
