@@ -271,6 +271,10 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	rCtrl.SetPasteConvertEndings(TRUE); // Convert line endings
 
+	rCtrl.SetEdgeColumn(CConfiguration::GetInstance()->m_nVerticalEdgeColumn);
+	rCtrl.SetEdgeMode(CConfiguration::GetInstance()->m_nVerticalEdgeMode);
+	rCtrl.SetEdgeColour(CConfiguration::GetInstance()->m_aVariableEdgeColor);
+
 #pragma endregion
 
 #pragma region Scintilla Keyboard Assignments
@@ -681,6 +685,9 @@ void CodeView::OnSettingsChanged()
 	GetCtrl().SetUseTabs(!CConfiguration::GetInstance()->GetUseSpaces());
 	GetCtrl().SetTabWidth(CConfiguration::GetInstance()->m_nTabWidth);
 	GetCtrl().SetIndent(GetCtrl().GetTabWidth());
+	GetCtrl().SetEdgeColumn(CConfiguration::GetInstance()->m_nVerticalEdgeColumn);
+	GetCtrl().SetEdgeMode(CConfiguration::GetInstance()->m_nVerticalEdgeMode);
+	GetCtrl().SetEdgeColour(CConfiguration::GetInstance()->m_aVariableEdgeColor);
 }
 
 void CodeView::OnSysColorChange()

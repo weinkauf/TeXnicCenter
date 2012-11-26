@@ -12,7 +12,8 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
+#include "afxres.h"
+
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -1497,7 +1498,7 @@ BEGIN
     GROUPBOX        "Tabulator",IDC_STATIC,8,72,284,30
     LTEXT           "&Tabulatorbreite:",IDC_STATIC,18,84,54,12,SS_CENTERIMAGE
     EDITTEXT        IDC_EDITOR_TABWIDTH,78,84,25,12,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
-    GROUPBOX        "Verschiedenes",IDC_STATIC,8,108,284,48
+    GROUPBOX        "Verschiedenes",IDC_STATIC,8,108,284,74
     LTEXT           "Absatz aufteilen an Spalte:",IDC_STATIC,18,120,96,12,SS_CENTERIMAGE
     EDITTEXT        IDC_OPTIONS_EDITOR_WORDWRAP_FIXEDCOLUMN,114,120,24,12,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
     CONTROL         "Leerzeichen einfügen",IDC_USE_SPACES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,156,84,126,12
@@ -1505,6 +1506,11 @@ BEGIN
     CONTROL         "Untere Hilfsfenster schließen, wenn Escape-Taste gedrückt wird",IDC_EDITOR_CLOSETOOLWINDOWS_ESC,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,138,264,10
     CONTROL         "(Im Menü ""Bearbeiten | Erweitert"")",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | SS_CENTERIMAGE | WS_GROUP,150,120,132,12
+    LTEXT           "Randbegrenzung anzeigen:",IDC_STATIC,19,151,96,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_OPTIONS_VERTICALEDGE,111,152,98,53,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_OPTIONS_EDITOR_VERTICALEDGE_COLUMN,185,167,24,12,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
+    RTEXT           "an Spalte:",IDC_STATIC,111,166,70,12,SS_CENTERIMAGE
+    PUSHBUTTON      "Color Picker",IDC_EDITOR_VERTICALEDGE_COLOR,214,150,75,14
 END
 
 IDD_OUTSOURCE DIALOGEX 0, 0, 209, 191
@@ -3376,6 +3382,18 @@ BEGIN
     IDC_PLACEHOLDER_SET_PHTYPE, 0x403, 26, 0
 0x6c41, 0x656c, 0x4420, 0x7461, 0x6965, 0x656d, 0x676e, 0x6e65, 0x7a20, 
 0x7375, 0x6d61, 0x656d, 0x006e, 
+    0
+END
+
+IDD_OPTIONS_EDITOR DLGINIT
+BEGIN
+    IDC_OPTIONS_VERTICALEDGE, 0x403, 4, 0
+0x7561, 0x0073, 
+    IDC_OPTIONS_VERTICALEDGE, 0x403, 16, 0
+0x6576, 0x7472, 0x6b69, 0x6c61, 0x2065, 0x694c, 0x696e, 0x0065, 
+    IDC_OPTIONS_VERTICALEDGE, 0x403, 21, 0
+0x6166, 0x6272, 0x6769, 0x7265, 0x4820, 0x6e69, 0x6574, 0x6772, 0x7572, 
+0x646e, "\000" 
     0
 END
 
@@ -5625,13 +5643,18 @@ BEGIN
     LTEXT           "&Tab size:",IDC_STATIC,18,84,54,12,SS_CENTERIMAGE
     EDITTEXT        IDC_EDITOR_TABWIDTH,78,84,24,12,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
     CONTROL         "Insert spaces",IDC_USE_SPACES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,156,84,126,10
-    GROUPBOX        "Miscellaneous",IDC_STATIC,8,108,284,48
+    GROUPBOX        "Miscellaneous",IDC_STATIC,8,108,284,74
     LTEXT           "Split paragraph at column:",IDC_STATIC,18,120,96,12,SS_CENTERIMAGE
     EDITTEXT        IDC_OPTIONS_EDITOR_WORDWRAP_FIXEDCOLUMN,114,120,24,12,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
     CONTROL         "Compact",IDC_FOLD_COMPACT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,48,44,10
     LTEXT           "(In the menu ""Edit | Advanced"")",IDC_STATIC,150,120,132,12,SS_CENTERIMAGE
     CONTROL         "Close bottom tool windows when 'Escape' key is pressed",IDC_EDITOR_CLOSETOOLWINDOWS_ESC,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,138,264,10
+    LTEXT           "Show vertical edge:",IDC_STATIC,19,151,96,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_OPTIONS_VERTICALEDGE,111,152,98,53,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_OPTIONS_EDITOR_VERTICALEDGE_COLUMN,185,167,24,12,ES_RIGHT | ES_AUTOHSCROLL | ES_NUMBER
+    RTEXT           "at column:",IDC_STATIC,111,166,70,12,SS_CENTERIMAGE
+    PUSHBUTTON      "Color Picker",IDC_EDITOR_VERTICALEDGE_COLOR,214,150,75,14
 END
 
 IDD_OUTSOURCE DIALOGEX 0, 0, 209, 191
@@ -7413,6 +7436,18 @@ BEGIN
     0
 END
 
+IDD_OPTIONS_EDITOR DLGINIT
+BEGIN
+    IDC_OPTIONS_VERTICALEDGE, 0x403, 5, 0
+0x6f6e, 0x656e, "\000" 
+    IDC_OPTIONS_VERTICALEDGE, 0x403, 14, 0
+0x6576, 0x7472, 0x6369, 0x6c61, 0x6c20, 0x6e69, 0x0065, 
+    IDC_OPTIONS_VERTICALEDGE, 0x403, 19, 0
+0x6f63, 0x6f6c, 0x6572, 0x2064, 0x6162, 0x6b63, 0x7267, 0x756f, 0x646e, 
+"\000" 
+    0
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -8964,7 +8999,8 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 #include "res\\TeXnicCenter.rc2"  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen
 #include "l.deu\\afxres.rc"          // Standardkomponenten
 #include "l.deu\\afxprint.rc"        // Ressourcen für Drucken/Seitenansicht
-#endif
+#endif
+
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 
