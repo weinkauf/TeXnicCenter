@@ -679,6 +679,7 @@
 #define IDC_NEXTTIP                     2249
 #define IDC_STARTUP                     2250
 #define IDC_TIPSTRING                   2251
+#define IDC_OPTIONS_EDITOR_VERTICALEDGE_COLUMN 2252
 #define IDS_MENU_UNDO_FORMAT            8615
 #define IDS_MENU_REDO_FORMAT            8616
 #define IDS_MENU_UNDO_DEFAULT           8617
@@ -731,6 +732,8 @@
 #define IDC_INSERTPH_PRPOUTPUT          8676
 #define IDC_BROWSE_PPROCESSOR           8677
 #define IDC_PPROCESSORLIST              8678
+#define IDC_OPTIONS_VERTICALEDGE        8679
+#define IDC_EDITOR_VERTICALEDGE_COLOR   8680
 #define ID_TEXTMODULES_FIRST            17000
 #define ID_TEXTMODULES_LAST             18000
 #define ID_VIEW_BAR1                    32760
@@ -1483,7 +1486,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57680
 #define _APS_NEXT_COMMAND_VALUE         40689
-#define _APS_NEXT_CONTROL_VALUE         8679
+#define _APS_NEXT_CONTROL_VALUE         8681
 #define _APS_NEXT_SYMED_VALUE           57773
 #endif
 #endif

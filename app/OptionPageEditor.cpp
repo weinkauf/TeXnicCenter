@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "resource.h"
+#include "MainFrm.h"
 #include "OptionPageEditor.h"
 #include "configuration.h"
 
@@ -18,6 +19,9 @@ COptionPageEditor::COptionPageEditor()
 {
 	m_nTabWidth = CConfiguration::GetInstance()->m_nTabWidth;
 	m_nFixedColumn = CConfiguration::GetInstance()->m_nFixedColumnWrap;
+	m_nVerticalEdgeMode = CConfiguration::GetInstance()->m_nVerticalEdgeMode;
+	m_nVerticalEdgeColumn = CConfiguration::GetInstance()->m_nVerticalEdgeColumn;
+	m_aVariableEdgeColor = CConfiguration::GetInstance()->m_aVariableEdgeColor;
 }
 
 COptionPageEditor::~COptionPageEditor()
@@ -39,6 +43,10 @@ void COptionPageEditor::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX,IDC_USE_SPACES,use_spaces_);
 	DDX_Check(pDX,IDC_FOLD_COMPACT,fold_compact_);
 	DDX_Check(pDX, IDC_EDITOR_CLOSETOOLWINDOWS_ESC, close_toolwindows_on_escape_);
+	DDX_CBIndex(pDX,IDC_OPTIONS_VERTICALEDGE,m_nVerticalEdgeMode);
+	DDX_Text(pDX,IDC_OPTIONS_EDITOR_VERTICALEDGE_COLUMN,m_nVerticalEdgeColumn);
+	DDV_MinMaxUInt(pDX,m_nVerticalEdgeColumn,1,1000);
+	DDX_Control(pDX, IDC_EDITOR_VERTICALEDGE_COLOR, m_wndVariableEdgeColorPicker);
 }
 
 
@@ -51,6 +59,9 @@ void COptionPageEditor::OnOK()
 	// Store settings to configuration
 	CConfiguration::GetInstance()->m_nTabWidth = m_nTabWidth;
 	CConfiguration::GetInstance()->m_nFixedColumnWrap = m_nFixedColumn;
+	CConfiguration::GetInstance()->m_nVerticalEdgeMode = m_nVerticalEdgeMode;
+	CConfiguration::GetInstance()->m_nVerticalEdgeColumn = m_nVerticalEdgeColumn;
+	CConfiguration::GetInstance()->m_aVariableEdgeColor = m_aVariableEdgeColor;
 
 	CConfiguration::GetInstance()->SetShowLineBelowFold(show_line_below_fold_ != 0);
 	CConfiguration::GetInstance()->SetShowLineBelowNoFold(show_line_below_no_fold_ != 0);
@@ -70,3 +81,35 @@ void COptionPageEditor::OnOK()
 	CMFCPropertyPage::OnOK();
 }
 
+BEGIN_MESSAGE_MAP(COptionPageEditor, CMFCPropertyPage)
+	ON_BN_CLICKED(IDC_EDITOR_VERTICALEDGE_COLOR, &COptionPageEditor::OnEditorVerticalEdgeColor)
+END_MESSAGE_MAP()
+
+
+void COptionPageEditor::OnEditorVerticalEdgeColor()
+{
+	UpdateData();
+	m_aVariableEdgeColor = m_wndVariableEdgeColorPicker.GetColor();
+}
+
+
+BOOL COptionPageEditor::OnInitDialog()
+{
+	CMFCPropertyPage::OnInitDialog();
+
+	// select color
+	m_wndVariableEdgeColorPicker.m_bEnabledInCustomizeMode = TRUE;
+
+	CPalette palette;
+	int colors, columns;
+
+	CreateColorButtonPalette(palette,colors,columns);
+
+	m_wndVariableEdgeColorPicker.SetPalette(&palette);
+	m_wndVariableEdgeColorPicker.SetColumnsNumber(columns);
+
+	m_wndVariableEdgeColorPicker.EnableOtherButton(CString((LPCTSTR)STE_COLOR_OTHERS));
+	m_wndVariableEdgeColorPicker.SetColor(m_aVariableEdgeColor);
+
+	return TRUE;
+}
