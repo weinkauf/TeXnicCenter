@@ -384,6 +384,15 @@ public:
 	/** Column for hard wrap via Edit | Advanced | Split Paragraphs */
 	int m_nFixedColumnWrap;
 
+	/** Mode for vertical edge */
+	int m_nVerticalEdgeMode;
+
+	/** Column for vertical edge */
+	int m_nVerticalEdgeColumn;
+
+	/** Color for vertical edge */
+	COLORREF m_aVariableEdgeColor;
+
 	/** Close ToolWindows on pressing ESC when the editor has the focus. */
 	bool m_bCloseToolWindowsOnEscape;
 

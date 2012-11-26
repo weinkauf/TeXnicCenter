@@ -144,7 +144,7 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 		for (int i = 0; i < sizeof(fontNames) / sizeof(*fontNames) &&
 			!font.CreatePointFont(100, fontNames[i]); )
 			 ++i; // Increment here to prevent compiler warning
-		
+
 		font.GetLogFont(&logFont);
 
 		SerializeProfileData(strSection,_T("EditorFont"),&m_fontEditor,direction,sizeof(logFont),&logFont);
@@ -172,6 +172,9 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	SerializeProfileInt(strSection,_T("EditorWordWrapIndicators"),&word_wrap_indicators_,direction,0);
 	SerializeProfileBool(strSection,_T("EditorShowIndentationGuides"),show_indentation_guides_,direction, show_indentation_guides_);
 	SerializeProfileInt(strSection,_T("FixedColumnWrap"),&m_nFixedColumnWrap,direction,80);
+	SerializeProfileInt(strSection,_T("VerticalEdgeMode"),&m_nVerticalEdgeMode,direction,0);
+	SerializeProfileInt(strSection,_T("VerticalEdgeColumn"),&m_nVerticalEdgeColumn,direction,80);
+	SerializeProfileInt(strSection,_T("VerticalEdgeColor"),(int*) &m_aVariableEdgeColor,direction,RGB(192,192,192));
 
 	SerializeProfileBool(strSection,_T("EditorFold"),fold_,direction,0);
 	SerializeProfileBool(strSection,_T("EditorShowLineBelowFold"),show_line_below_fold_,direction,0);
@@ -505,7 +508,7 @@ BOOL CConfiguration::RegDeleteSection(LPCTSTR lpszSection,BOOL bAdmin /*= false*
 	return false;
 }
 
-void CConfiguration::SerializeProfileBool( LPCTSTR szSection, LPCTSTR szEntry, bool& value, 
+void CConfiguration::SerializeProfileBool( LPCTSTR szSection, LPCTSTR szEntry, bool& value,
 									  SERDIRECTION direction, bool defaultvalue /*= false*/ )
 {
 	int temp = value != 0;
