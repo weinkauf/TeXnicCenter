@@ -43,6 +43,18 @@ public:
 		COLORINDEX_COUNT
 	};
 
+	enum
+	{
+		// Custom colors
+		COLORSCHEME_CUSTOM,
+
+		// Default color schemes
+		COLORSCHEME_DEFAULT,
+		COLORSCHEME_INVERSE,
+
+		COLORSCHEME_COUNT
+	};
+
 protected:
 	LaTeXViewBase();           // protected constructor used by dynamic creation
 	virtual ~LaTeXViewBase();
@@ -62,7 +74,7 @@ protected:
 	void OnUpdateUI(SCNotification* pSCNotification);
 
 public:
-	static COLORREF GetAutomaticColor(int nColorIndex);
+	static COLORREF GetAutomaticColor(int nColorIndex, const int idScheme = COLORSCHEME_DEFAULT);
 	static COLORREF GetColor(int nColorIndex);
 
 	LaTeXDocumentBase* GetDocument() const;

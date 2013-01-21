@@ -51,6 +51,8 @@ static char THIS_FILE[] = __FILE__;
 BEGIN_MESSAGE_MAP(COptionPageTextFormat,CMFCPropertyPage)
 	//{{AFX_MSG_MAP(COptionPageTextFormat)
 	ON_CBN_SELCHANGE(IDC_EDITOR_ELEMENT,OnSelchangeEditorElement)
+	ON_CBN_SELCHANGE(IDC_EDITOR_SCHEME,OnCbnSelchangeEditorSchemeElement)
+	ON_BN_CLICKED(IDC_EDITOR_EDITSCHEMECOLOR,OnBnClickedEditorEditSchemeColor)
 	ON_BN_CLICKED(IDC_EDITOR_SELECTFONT,OnEditorSelectfont)
 	ON_BN_CLICKED(IDC_EDITOR_ELEMENTCOLOR,OnElementColor)
 	ON_WM_DESTROY()
@@ -71,6 +73,7 @@ COptionPageTextFormat::COptionPageTextFormat()
 		m_aColors[i] = CConfiguration::GetInstance()->m_aEditorColors[i];
 
 	m_nEditorElement = 0;
+	m_nEditorColorScheme = CConfiguration::GetInstance()->m_nEditorColorScheme;
 
 	// initialize
 	m_font.CreateFontIndirect(&CConfiguration::GetInstance()->m_fontEditor);
@@ -171,7 +174,10 @@ void COptionPageTextFormat::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX,IDC_EDITOR_FONT,m_wndFontExample);
 	DDX_Control(pDX,IDC_EDITOR_ELEMENT,m_wndEditorElement);
 	DDX_Control(pDX,IDC_EDITOR_ELEMENTCOLOR,m_wndElementColorPicker);
+	DDX_Control(pDX, IDC_EDITOR_SCHEME, m_wndEditorSchemeElement);
+	DDX_Control(pDX, IDC_EDITOR_EDITSCHEMECOLOR, m_wndEditorSchemeColorEdit);
 	DDX_CBIndex(pDX,IDC_EDITOR_ELEMENT,m_nEditorElement);
+	DDX_CBIndex(pDX,IDC_EDITOR_SCHEME,m_nEditorColorScheme);
 	DDX_CBIndex(pDX,IDC_WINDOW,m_nWindowElement);
 	DDX_CBIndex(pDX,IDC_INSERCURSOR_STYLE,m_nInsertCursorForm);
 	DDX_CBIndex(pDX,IDC_INSERTCURSOR_BLINK,m_nInsertCursorMode);
@@ -231,6 +237,11 @@ BOOL COptionPageTextFormat::OnInitDialog()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// use data
 	UpdateData(FALSE);
+
+	m_wndEditorElement.EnableWindow(CConfiguration::GetInstance()->m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
+	m_wndElementColorPicker.EnableWindow(CConfiguration::GetInstance()->m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
+
+	m_wndEditorSchemeColorEdit.EnableWindow(CConfiguration::GetInstance()->m_nEditorColorScheme != LaTeXViewBase::COLORSCHEME_CUSTOM);
 
 	return TRUE; // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben
@@ -312,3 +323,37 @@ void COptionPageTextFormat::OnSelchangeWindow()
 	UpdateControlStates();
 }
 
+void COptionPageTextFormat::OnCbnSelchangeEditorSchemeElement()
+{
+	UpdateData();
+
+	CConfiguration::GetInstance()->m_nEditorColorScheme = m_nEditorColorScheme;
+
+	m_wndEditorElement.EnableWindow(m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
+	m_wndElementColorPicker.EnableWindow(m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
+
+	m_wndEditorSchemeColorEdit.EnableWindow(m_nEditorColorScheme != LaTeXViewBase::COLORSCHEME_CUSTOM);
+}
+
+void COptionPageTextFormat::OnBnClickedEditorEditSchemeColor()
+{
+	if (AfxMessageBox(IDS_CUSTOMIZE_COLORSCHEME, MB_YESNO | MB_ICONQUESTION, 0) == IDNO)
+	{
+		return;
+	}
+
+	UpdateData();
+
+	for (int i = 0; i < LaTeXView::COLORINDEX_COUNT; i++)
+		m_aColors[i] = LaTeXViewBase::GetAutomaticColor(i, m_nEditorColorScheme);
+
+	m_nEditorColorScheme = LaTeXViewBase::COLORSCHEME_CUSTOM;
+	CConfiguration::GetInstance()->m_nEditorColorScheme = LaTeXViewBase::COLORSCHEME_CUSTOM;
+
+	m_wndEditorSchemeElement.SetCurSel(LaTeXViewBase::COLORSCHEME_CUSTOM);
+
+	m_wndEditorElement.EnableWindow(TRUE);
+	m_wndElementColorPicker.EnableWindow(TRUE);
+
+	m_wndElementColorPicker.SetColor(m_aColors[m_wndEditorElement.GetItemData(m_nEditorElement)]);
+}
