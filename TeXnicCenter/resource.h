@@ -505,6 +505,9 @@
 #define IDC_EDITOR_FONT                 1545
 #define IDC_EDITOR_SELECTFONT           1546
 #define IDC_EDITOR_TABWIDTH             1547
+#define IDC_EDITOR_SCHEME               1548
+#define IDC_EDITOR_SELECTFONT2          1549
+#define IDC_EDITOR_EDITSCHEMECOLOR      1550
 #define IDC_OPTIONS_FILECLEAN_DELETE    2048
 #define IDC_SEARCH_BROWSE_SEARCHIN      2049
 #define IDC_OPTIONS_DEFAULT_PATH_EDIT   2051
@@ -734,6 +737,7 @@
 #define IDC_PPROCESSORLIST              8678
 #define IDC_OPTIONS_VERTICALEDGE        8679
 #define IDC_EDITOR_VERTICALEDGE_COLOR   8680
+#define IDS_CUSTOMIZE_COLORSCHEME       8681
 #define ID_TEXTMODULES_FIRST            17000
 #define ID_TEXTMODULES_LAST             18000
 #define ID_VIEW_BAR1                    32760
@@ -1485,7 +1489,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        57680
 #define _APS_NEXT_COMMAND_VALUE         40689
-#define _APS_NEXT_CONTROL_VALUE         8681
+#define _APS_NEXT_CONTROL_VALUE         8682
 #define _APS_NEXT_SYMED_VALUE           57773
 #endif
 #endif

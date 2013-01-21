@@ -195,6 +195,8 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 		SerializeProfileInt(strSection,strFormat,(int*) &m_aEditorColors[i],direction,(int) 0xFFFFFFFF);
 	}
 
+	SerializeProfileInt(strSection,_T("EditorColorScheme"),&m_nEditorColorScheme,direction,0);
+
 #pragma region Cursor settings
 
 	bool& nInsertCaretForm = insert_caret_line_;

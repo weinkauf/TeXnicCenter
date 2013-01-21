@@ -118,6 +118,7 @@ void BibTeXView::UpdateSettings()
 
 	rCtrl.SetCaretStyle(CConfiguration::GetInstance()->IsInsertCaretLine() ? CARETSTYLE_LINE : CARETSTYLE_BLOCK);
 	rCtrl.SetCaretPeriod(CConfiguration::GetInstance()->IsBlinkInsertCaret() ? 500 : 0);
+	rCtrl.SetCaretFore(GetColor(COLORINDEX_NORMALTEXT),TRUE);
 
 #pragma endregion
 }

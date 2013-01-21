@@ -372,6 +372,9 @@ public:
 	/** Colors for editor components */
 	COLORREF m_aEditorColors[LaTeXView::COLORINDEX_COUNT];
 
+	/** Color scheme for editor components */
+	int m_nEditorColorScheme;
+
 	/** Width of a tab in characters */
 	int m_nTabWidth;
 

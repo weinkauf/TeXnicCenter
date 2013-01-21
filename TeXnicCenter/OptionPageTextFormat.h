@@ -104,6 +104,8 @@ protected:
 	afx_msg void OnElementColor();
 	afx_msg void OnDestroy();
 	afx_msg void OnSelchangeWindow();
+	afx_msg void OnCbnSelchangeEditorSchemeElement();
+	afx_msg void OnBnClickedEditorEditSchemeColor();
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()
@@ -121,7 +123,9 @@ protected:
 	CComboBox m_wndOverwriteCursorForm;
 	CStatic m_wndFontExample;
 	CComboBox m_wndEditorElement;
+	CComboBox m_wndEditorSchemeElement;
 	CMFCColorButton m_wndElementColorPicker;
+	CButton m_wndEditorSchemeColorEdit;
 	int m_nEditorElement;
 	int m_nWindowElement;
 	int m_nInsertCursorForm;
@@ -134,6 +138,9 @@ protected:
 protected:
 	/** array for storing color assignment */
 	COLORREF m_aColors[LaTeXView::COLORINDEX_COUNT];
+
+	/** color scheme for editor components */
+	int m_nEditorColorScheme;
 
 	/** font definitions for editor */
 	LOGFONT m_logfont;
