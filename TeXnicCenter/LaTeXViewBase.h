@@ -82,4 +82,6 @@ public:
 protected:
 	afx_msg void OnSpellFile();
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
+public:
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 };

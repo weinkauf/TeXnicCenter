@@ -46,10 +46,6 @@ std::auto_ptr<CConfiguration> CConfiguration::impl_;
 
 CConfiguration::CConfiguration()
 : m_nStandardFileFormat(DOSStyleEOLMode)
-, blink_insert_caret_(false)
-, blink_overwrite_caret_(true)
-, insert_caret_line_(false)
-, overwrite_caret_line_(false)
 , show_line_endings_(false)
 , word_wrap_(true)
 , word_wrap_indent_(false)
@@ -195,20 +191,13 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 		SerializeProfileInt(strSection,strFormat,(int*) &m_aEditorColors[i],direction,(int) 0xFFFFFFFF);
 	}
 
-	SerializeProfileInt(strSection,_T("EditorColorScheme"),&m_nEditorColorScheme,direction,0);
+	SerializeProfileInt(strSection,_T("EditorColorScheme"), &m_nEditorColorScheme, direction, 0);
 
 #pragma region Cursor settings
 
-	bool& nInsertCaretForm = insert_caret_line_;
-	bool& nInsertCaretMode = blink_insert_caret_;
-	bool& nOverwriteCaretForm = overwrite_caret_line_;
-	bool& nOverwriteCaretMode = blink_overwrite_caret_;
-
-	SerializeProfileBool(strSection,_T("InsertCaretForm"),nInsertCaretForm,direction,nInsertCaretForm);
-	SerializeProfileBool(strSection,_T("InsertCaretMode"),nInsertCaretMode,direction,nInsertCaretMode);
-	SerializeProfileBool(strSection,_T("OverwriteCaretForm"),nOverwriteCaretForm,direction,nOverwriteCaretForm);
-	SerializeProfileBool(strSection,_T("OverwriteCaretMode"),nOverwriteCaretMode,direction,nOverwriteCaretMode);
-	SerializeProfileBool(strSection,_T("HighlightCaretLine"),highlight_caret_line_,direction,0);
+	SerializeProfileInt(strSection,_T("InsertCaretStyle"), &m_nInsertCaretStyle, direction, 1);
+	SerializeProfileInt(strSection,_T("InsertCaretBlinkPeriod"), &m_nInsertCaretBlinkPeriod, direction, 500);
+	SerializeProfileBool(strSection,_T("HighlightCaretLine"), m_bHighlightCaretLine, direction, 0);
 
 #pragma endregion
 
@@ -527,56 +516,6 @@ CConfiguration* CConfiguration::GetInstance()
 		impl_.reset(new CConfiguration);
 
 	return impl_.get();
-}
-
-bool CConfiguration::IsBlinkInsertCaret() const
-{
-	return blink_insert_caret_ == 0;
-}
-
-void CConfiguration::SetBlinkInsertCaret( bool val /*= true*/ )
-{
-	blink_insert_caret_ = !val;
-}
-
-bool CConfiguration::IsBlinkOverwriteCaret() const
-{
-	return blink_overwrite_caret_ != 0;
-}
-
-void CConfiguration::SetBlinkOverwriteCaret( bool val /*= true*/ )
-{
-	blink_overwrite_caret_ = val;
-}
-
-bool CConfiguration::IsInsertCaretLine() const
-{
-	return insert_caret_line_ == 0;
-}
-
-void CConfiguration::SetInsertCaretLine( bool val /*= true*/ )
-{
-	insert_caret_line_ = !val;
-}
-
-bool CConfiguration::IsOverwriteCaretLine() const
-{
-	return overwrite_caret_line_ != 0;
-}
-
-void CConfiguration::SetOverwriteCaretLine( bool val /*= true*/ )
-{
-	overwrite_caret_line_ = val;
-}
-
-bool CConfiguration::IsHighlightCaretLine() const
-{
-	return highlight_caret_line_;
-}
-
-void CConfiguration::SetHighlightCaretLine( bool val /*= true*/ )
-{
-	highlight_caret_line_ = val;
 }
 
 bool CConfiguration::GetShowLineEnding() const

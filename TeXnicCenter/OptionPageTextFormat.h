@@ -106,6 +106,7 @@ protected:
 	afx_msg void OnSelchangeWindow();
 	afx_msg void OnCbnSelchangeEditorSchemeElement();
 	afx_msg void OnBnClickedEditorEditSchemeColor();
+	afx_msg void UpdateDataAndControlStates();
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()
@@ -117,10 +118,6 @@ protected:
 	{
 		IDD = IDD_OPTIONS_TEXTFORMAT
 	};
-	CComboBox m_wndInsertCursorMode;
-	CComboBox m_wndInsertCursorForm;
-	CComboBox m_wndOverwriteCursorMode;
-	CComboBox m_wndOverwriteCursorForm;
 	CStatic m_wndFontExample;
 	CComboBox m_wndEditorElement;
 	CComboBox m_wndEditorSchemeElement;
@@ -128,10 +125,13 @@ protected:
 	CButton m_wndEditorSchemeColorEdit;
 	int m_nEditorElement;
 	int m_nWindowElement;
-	int m_nInsertCursorForm;
-	int m_nInsertCursorMode;
-	int m_nOverwriteCursorForm;
-	int m_nOverwriteCursorMode;
+	int m_nInsertCaretStyle;
+	BOOL m_bInsertCaretBlink;
+	int m_nInsertCaretBlinkPeriod;
+	CButton m_wndInsertCaretStyleLine;
+	CButton m_wndInsertCaretStyleBlock;
+	CButton m_btnInsertCaretBlink;
+	CEdit m_wndInsertCaretBlinkPeriod;
 	//}}AFX_DATA
 
 // Attributes

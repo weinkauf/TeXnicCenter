@@ -58,6 +58,7 @@ BEGIN_MESSAGE_MAP(COptionPageTextFormat,CMFCPropertyPage)
 	ON_WM_DESTROY()
 	ON_CBN_SELCHANGE(IDC_WINDOW,OnSelchangeWindow)
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_INSERTCURSOR_BLINK, &COptionPageTextFormat::UpdateDataAndControlStates)
 END_MESSAGE_MAP()
 
 
@@ -86,11 +87,15 @@ COptionPageTextFormat::COptionPageTextFormat()
 	// preselect a window type
 	m_nWindowElement = wndEditor;
 
-	// TODO: get current caret settings
-	//m_nInsertCursorForm = LaTeXView::GetCaretInsertForm();
-	//m_nInsertCursorMode = LaTeXView::GetCaretInsertMode();
-	//m_nOverwriteCursorForm = LaTeXView::GetCaretOverwriteForm();
-	//m_nOverwriteCursorMode = LaTeXView::GetCaretOverwriteMode();
+	//Get current caret settings
+	m_nInsertCaretStyle = CConfiguration::GetInstance()->m_nInsertCaretStyle - 1;
+	m_nInsertCaretBlinkPeriod = CConfiguration::GetInstance()->m_nInsertCaretBlinkPeriod;
+	m_bInsertCaretBlink = (m_nInsertCaretBlinkPeriod > 0);
+	// some nice UI stuff
+	if (!m_bInsertCaretBlink)
+	{
+		m_nInsertCaretBlinkPeriod = 500;
+	}
 }
 
 COptionPageTextFormat::~COptionPageTextFormat()
@@ -136,9 +141,6 @@ void COptionPageTextFormat::StoreWindowTypeSettings()
 	{
 		case wndEditor:
 			memcpy(&CConfiguration::GetInstance()->m_fontEditor,&m_logfont,sizeof(m_logfont));
-			// TODO: Cursor mode
-			//LaTeXView::SetCaretInsertStyle(m_nInsertCursorForm,m_nInsertCursorMode);
-			//LaTeXView::SetCaretOverwriteStyle(m_nOverwriteCursorForm,m_nOverwriteCursorMode);
 			break;
 
 		case wndOutput:
@@ -161,20 +163,23 @@ void COptionPageTextFormat::UpdateControlStates()
 	m_wndEditorElement.EnableWindow(m_nWindowElement == wndEditor && m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
 	m_wndElementColorPicker.EnableWindow(m_nWindowElement == wndEditor && m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
 
-	m_wndInsertCursorForm.EnableWindow(m_nWindowElement == wndEditor);
-	m_wndInsertCursorMode.EnableWindow(m_nWindowElement == wndEditor);
-	m_wndOverwriteCursorForm.EnableWindow(m_nWindowElement == wndEditor);
-	m_wndOverwriteCursorMode.EnableWindow(m_nWindowElement == wndEditor);
+	m_wndInsertCaretStyleLine.EnableWindow(m_nWindowElement == wndEditor);
+	m_wndInsertCaretStyleBlock.EnableWindow(m_nWindowElement == wndEditor);
+	m_btnInsertCaretBlink.EnableWindow(m_nWindowElement == wndEditor);
+	m_wndInsertCaretBlinkPeriod.EnableWindow(m_nWindowElement == wndEditor && m_bInsertCaretBlink);
 }
+
+
+void COptionPageTextFormat::UpdateDataAndControlStates()
+{
+	UpdateData();
+	UpdateControlStates();
+}
+
 
 void COptionPageTextFormat::DoDataExchange(CDataExchange* pDX)
 {
 	CMFCPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COptionPageTextFormat)
-	DDX_Control(pDX,IDC_INSERTCURSOR_BLINK,m_wndInsertCursorMode);
-	DDX_Control(pDX,IDC_INSERCURSOR_STYLE,m_wndInsertCursorForm);
-	DDX_Control(pDX,IDC_OVERWRITECURSOR_BLINK,m_wndOverwriteCursorMode);
-	DDX_Control(pDX,IDC_OVERWRITECURSOR_STYLE,m_wndOverwriteCursorForm);
 	DDX_Control(pDX,IDC_EDITOR_FONT,m_wndFontExample);
 	DDX_Control(pDX,IDC_EDITOR_ELEMENT,m_wndEditorElement);
 	DDX_Control(pDX,IDC_EDITOR_ELEMENTCOLOR,m_wndElementColorPicker);
@@ -183,11 +188,14 @@ void COptionPageTextFormat::DoDataExchange(CDataExchange* pDX)
 	DDX_CBIndex(pDX,IDC_EDITOR_ELEMENT,m_nEditorElement);
 	DDX_CBIndex(pDX,IDC_EDITOR_SCHEME,m_nEditorColorScheme);
 	DDX_CBIndex(pDX,IDC_WINDOW,m_nWindowElement);
-	DDX_CBIndex(pDX,IDC_INSERCURSOR_STYLE,m_nInsertCursorForm);
-	DDX_CBIndex(pDX,IDC_INSERTCURSOR_BLINK,m_nInsertCursorMode);
-	DDX_CBIndex(pDX,IDC_OVERWRITECURSOR_STYLE,m_nOverwriteCursorForm);
-	DDX_CBIndex(pDX,IDC_OVERWRITECURSOR_BLINK,m_nOverwriteCursorMode);
-	//}}AFX_DATA_MAP
+	DDX_Text(pDX, IDC_INSERTCURSOR_BLINK_SPEED, m_nInsertCaretBlinkPeriod);
+	DDV_MinMaxInt(pDX, m_nInsertCaretBlinkPeriod, 10, 2000);
+	DDX_Check(pDX, IDC_INSERTCURSOR_BLINK, m_bInsertCaretBlink);
+	DDX_Radio(pDX, IDC_INSERTCURSOR_STYLE_LINE, m_nInsertCaretStyle);
+	DDX_Control(pDX, IDC_INSERTCURSOR_BLINK, m_btnInsertCaretBlink);
+	DDX_Control(pDX, IDC_INSERTCURSOR_BLINK_SPEED, m_wndInsertCaretBlinkPeriod);
+	DDX_Control(pDX, IDC_INSERTCURSOR_STYLE_LINE, m_wndInsertCaretStyleLine);
+	DDX_Control(pDX, IDC_INSERTCURSOR_STYLE_BLOCK, m_wndInsertCaretStyleBlock);
 }
 
 BOOL COptionPageTextFormat::OnInitDialog()
@@ -271,6 +279,10 @@ void COptionPageTextFormat::OnOK()
 
 	//Copy Color scheme
 	CConfiguration::GetInstance()->m_nEditorColorScheme = m_nEditorColorScheme;
+
+	//Copy caret settings
+	CConfiguration::GetInstance()->m_nInsertCaretStyle = m_nInsertCaretStyle + 1;
+	CConfiguration::GetInstance()->m_nInsertCaretBlinkPeriod = (m_bInsertCaretBlink ? m_nInsertCaretBlinkPeriod : 0);
 
 	// OnOK should update all windows
 	m_bApplyChanges = TRUE;
@@ -357,3 +369,4 @@ void COptionPageTextFormat::OnBnClickedEditorEditSchemeColor()
 	m_wndEditorSchemeElement.SetCurSel(LaTeXViewBase::COLORSCHEME_CUSTOM);
 	OnCbnSelchangeEditorSchemeElement();
 }
+
