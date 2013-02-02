@@ -38,6 +38,8 @@
 
 #include <locale.h>
 #include <direct.h>
+#include <Propkey.h>
+#include <Propvarutil.h>
 
 #include "resource.h"
 #include "MainFrm.h"
@@ -696,7 +698,10 @@ void CTeXnicCenterApp::LoadCustomState()
 
 	// Recent projects
 	if (CanUseRecentFiles()) // Respect the group policy
+	{
 		m_recentProjectList.ReadList();
+		UpdateJumpList();
+	}
 
 	//Output Profiles
 	CProfileMap::GetInstance()->SerializeFromRegistry();
@@ -1021,6 +1026,9 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 	if (!pDoc)
 		return NULL;
 
+	if (bAddToMRU)
+		theApp.UpdateJumpList();
+
 	// set write protection
 	if (pDoc && bReadOnly)
 	{
@@ -1177,6 +1185,7 @@ BOOL CTeXnicCenterApp::OpenProject(LPCTSTR lpszPath, bool addToRecentList)
 		{
 			// Add to recent project list
 			m_recentProjectList.Add(lpszPath);
+			UpdateJumpList();
 		}
 	}
 
@@ -1571,6 +1580,100 @@ BOOL CTeXnicCenterApp::PreTranslateMessage(MSG* pMsg)
 	return CProjectSupportingWinApp::PreTranslateMessage(pMsg);
 }
 
+BOOL AddDestination(CJumpList& jumpList, CString strCategory, CString strFileName, bool openInSameWindow)
+{
+	TCHAR szAppPath[MAX_PATH];
+	::GetModuleFileName( NULL, szAppPath, MAX_PATH );
+
+	int backslashIndex = strFileName.ReverseFind('\\');
+	CString strTitle = backslashIndex >= 0 ? strFileName.Right(strFileName.GetLength() - backslashIndex - 1) : strFileName;
+	CString strCommandLineArgs;
+
+	if (openInSameWindow)
+	{
+		strCommandLineArgs = _T("/ddecmd \"[goto('") + strFileName + _T("', '0')]\"");
+	}
+	else
+	{
+		strCommandLineArgs = '"' + strFileName + '"';
+	}
+
+	CComPtr<IShellLink> shellLinkPtr;
+	if (FAILED(shellLinkPtr.CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER)))
+	{
+		return FALSE;
+	}
+	
+	shellLinkPtr->SetPath(CString('"') + szAppPath + '"');
+	shellLinkPtr->SetDescription(strFileName);
+	shellLinkPtr->SetArguments(strCommandLineArgs);
+
+	int iIcon = -1;
+	CString strFileExt = strTitle.Right(4);
+	if (strFileExt == ".tex")
+		iIcon = 1;
+	else if (strFileExt == ".bib" || strFileExt == ".bbl")
+		iIcon = 2;
+	else if (strFileExt == ".tcp")
+		iIcon = 3;
+
+	if (iIcon < 0)
+		shellLinkPtr->SetIconLocation(_T("%SystemRoot%\\system32\\SHELL32.dll"), 0);
+	else
+		shellLinkPtr->SetIconLocation(szAppPath, iIcon);
+
+	CComQIPtr<IPropertyStore> propPtr = shellLinkPtr;
+
+	if (propPtr != NULL)
+	{
+		PROPVARIANT var;
+		if (FAILED(InitPropVariantFromString(strTitle, &var)))
+		{
+			return FALSE;
+		}
+		if (FAILED(propPtr->SetValue(PKEY_Title, var)))
+		{
+			PropVariantClear(&var);
+			return FALSE;
+		}
+
+		HRESULT hr = propPtr->Commit();
+		PropVariantClear(&var);
+		if (FAILED(hr))
+		{
+			return FALSE;
+		}
+	}
+
+	return jumpList.AddDestination(strCategory, shellLinkPtr.Detach());
+}
+
+void CTeXnicCenterApp::UpdateJumpList()
+{
+	CJumpList jumpList;
+	jumpList.InitializeList();
+
+	CString strCategory;
+	strCategory.LoadString( IDS_MRU_PROJECTS );
+
+	int nProjects = m_recentProjectList.GetSize();
+	for (int i = 0; i < nProjects; ++i)
+	{
+ 		if (!m_recentProjectList.m_arrNames[i].IsEmpty())
+			AddDestination(jumpList, strCategory, m_recentProjectList.m_arrNames[i], false);
+	}
+
+	strCategory.LoadString( IDS_MRU_FILES );
+
+	int nFiles = min(m_pRecentFileList->GetSize(), (int)jumpList.GetMaxSlots()/2);
+	for (int i = 0; i < nFiles; ++i)
+	{
+		if (!m_pRecentFileList->m_arrNames[i].IsEmpty())
+			AddDestination(jumpList, strCategory, m_pRecentFileList->m_arrNames[i], true);
+	}
+
+	jumpList.CommitList();
+}
 
 void CTeXnicCenterApp::UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &recentFileList, UINT unFirstCommandId, UINT unNoFileStringId)
 {
@@ -1724,6 +1827,8 @@ void CTeXnicCenterApp::OnFileMRUProject(UINT unID)
 		m_recentProjectList.Add(filename); // Place on top
 	else
 		m_recentProjectList.Remove(nIndex);
+
+	UpdateJumpList();
 }
 
 //void CTeXnicCenterApp::OnFileMRUFile(UINT unID)

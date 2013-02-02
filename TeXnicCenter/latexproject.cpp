@@ -111,6 +111,7 @@ BOOL CLaTeXProject::OnNewProject()
 	//Save and add to LRU
 	DoFileSave();
 	theApp.m_recentProjectList.Add(GetPathName());
+	theApp.UpdateJumpList();
 
 	//Trigger analysis - parse project
 	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_PROJECT_PARSE);
@@ -166,6 +167,7 @@ BOOL CLaTeXProject::OnNewProjectFromDoc(LPCTSTR lpszDocPathName)
 	//DoFileSave(); ==> This brings up the Save-Dialog, if tcp is not there - not wanted
 	OnSaveProject(GetPathName());
 	theApp.m_recentProjectList.Add(GetPathName());
+	theApp.UpdateJumpList();
 
 	//Add views to the docking bars in the frame wnd
 	m_nInitialNavigatorTab = 0;

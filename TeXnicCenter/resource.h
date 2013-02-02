@@ -723,6 +723,8 @@
 #define IDS_SPELL_DONE                  8661
 #define IDS_SPELL_NO_SUGGESTIONS        8662
 #define IDS_MISSING_SECTION             8663
+#define IDS_MRU_PROJECTS                8664
+#define IDS_MRU_FILES                   8665
 #define IDC_EDITOR_CLOSETOOLWINDOWS_ESC 8667
 #define IDC_PREPROCESSORLIST            8668
 #define IDC_EDIT_PRPEXE                 8669
@@ -1490,7 +1492,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        57680
+#define _APS_NEXT_RESOURCE_VALUE        57684
 #define _APS_NEXT_COMMAND_VALUE         40689
 #define _APS_NEXT_CONTROL_VALUE         8688
 #define _APS_NEXT_SYMED_VALUE           57773
