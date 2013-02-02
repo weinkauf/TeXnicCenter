@@ -70,7 +70,9 @@ COptionPageTextFormat::COptionPageTextFormat()
 {
 	// copy color array
 	for (int i = 0; i < LaTeXView::COLORINDEX_COUNT; i++)
+	{
 		m_aColors[i] = CConfiguration::GetInstance()->m_aEditorColors[i];
+	}
 
 	m_nEditorElement = 0;
 	m_nEditorColorScheme = CConfiguration::GetInstance()->m_nEditorColorScheme;
@@ -154,8 +156,10 @@ void COptionPageTextFormat::StoreWindowTypeSettings()
 
 void COptionPageTextFormat::UpdateControlStates()
 {
-	m_wndEditorElement.EnableWindow(m_nWindowElement == wndEditor);
-	m_wndElementColorPicker.EnableWindow(m_nWindowElement == wndEditor);
+	m_wndEditorSchemeElement.EnableWindow(m_nWindowElement == wndEditor);
+	m_wndEditorSchemeColorEdit.EnableWindow(m_nWindowElement == wndEditor && m_nEditorColorScheme != LaTeXViewBase::COLORSCHEME_CUSTOM);
+	m_wndEditorElement.EnableWindow(m_nWindowElement == wndEditor && m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
+	m_wndElementColorPicker.EnableWindow(m_nWindowElement == wndEditor && m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
 
 	m_wndInsertCursorForm.EnableWindow(m_nWindowElement == wndEditor);
 	m_wndInsertCursorMode.EnableWindow(m_nWindowElement == wndEditor);
@@ -238,10 +242,10 @@ BOOL COptionPageTextFormat::OnInitDialog()
 	// use data
 	UpdateData(FALSE);
 
-	m_wndEditorElement.EnableWindow(CConfiguration::GetInstance()->m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
-	m_wndElementColorPicker.EnableWindow(CConfiguration::GetInstance()->m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
+	m_wndEditorElement.EnableWindow(m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
+	m_wndElementColorPicker.EnableWindow(m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
 
-	m_wndEditorSchemeColorEdit.EnableWindow(CConfiguration::GetInstance()->m_nEditorColorScheme != LaTeXViewBase::COLORSCHEME_CUSTOM);
+	m_wndEditorSchemeColorEdit.EnableWindow(m_nEditorColorScheme != LaTeXViewBase::COLORSCHEME_CUSTOM);
 
 	return TRUE; // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben
@@ -261,7 +265,12 @@ void COptionPageTextFormat::OnOK()
 
 	// copy color array
 	for (int i = 0; i < LaTeXView::COLORINDEX_COUNT; i++)
+	{
 		CConfiguration::GetInstance()->m_aEditorColors[i] = m_aColors[i];
+	}
+
+	//Copy Color scheme
+	CConfiguration::GetInstance()->m_nEditorColorScheme = m_nEditorColorScheme;
 
 	// OnOK should update all windows
 	m_bApplyChanges = TRUE;
@@ -296,7 +305,6 @@ void COptionPageTextFormat::OnElementColor()
 {
 	UpdateData();
 	m_aColors[m_wndEditorElement.GetItemData(m_nEditorElement)] = m_wndElementColorPicker.GetColor();
-
 }
 
 void COptionPageTextFormat::OnEditorSelectfont()
@@ -326,13 +334,9 @@ void COptionPageTextFormat::OnSelchangeWindow()
 void COptionPageTextFormat::OnCbnSelchangeEditorSchemeElement()
 {
 	UpdateData();
-
-	CConfiguration::GetInstance()->m_nEditorColorScheme = m_nEditorColorScheme;
-
-	m_wndEditorElement.EnableWindow(m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
-	m_wndElementColorPicker.EnableWindow(m_nEditorColorScheme == LaTeXViewBase::COLORSCHEME_CUSTOM);
-
-	m_wndEditorSchemeColorEdit.EnableWindow(m_nEditorColorScheme != LaTeXViewBase::COLORSCHEME_CUSTOM);
+	UpdateControlStates();
+	//Set the right color in the color picker
+	OnSelchangeEditorElement();
 }
 
 void COptionPageTextFormat::OnBnClickedEditorEditSchemeColor()
@@ -342,18 +346,14 @@ void COptionPageTextFormat::OnBnClickedEditorEditSchemeColor()
 		return;
 	}
 
+	//Copy current scheme to the custom scheme, then switch to custom mode
 	UpdateData();
 
 	for (int i = 0; i < LaTeXView::COLORINDEX_COUNT; i++)
+	{
 		m_aColors[i] = LaTeXViewBase::GetAutomaticColor(i, m_nEditorColorScheme);
-
-	m_nEditorColorScheme = LaTeXViewBase::COLORSCHEME_CUSTOM;
-	CConfiguration::GetInstance()->m_nEditorColorScheme = LaTeXViewBase::COLORSCHEME_CUSTOM;
+	}
 
 	m_wndEditorSchemeElement.SetCurSel(LaTeXViewBase::COLORSCHEME_CUSTOM);
-
-	m_wndEditorElement.EnableWindow(TRUE);
-	m_wndElementColorPicker.EnableWindow(TRUE);
-
-	m_wndElementColorPicker.SetColor(m_aColors[m_wndEditorElement.GetItemData(m_nEditorElement)]);
+	OnCbnSelchangeEditorSchemeElement();
 }
