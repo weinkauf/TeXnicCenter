@@ -122,7 +122,7 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 , m_regexUnknownEnvEnd(_T("\\\\end\\s*\\{([^\\}]*)\\}"))
 , m_regexCaption(_T("\\\\caption\\s*([\\[\\{].*\\})"))
 , m_regexLabel(_T("\\\\label\\s*\\{([^\\}]*)\\}"))
-, m_regexInput(_T("\\\\(input|include)\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"))
+, m_regexInput(_T("\\\\(input|include)\\*?\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"))
 , m_regexBib(_T("\\\\(no)?bibliography(?!style)([[:alpha:]]+)?\\s*\\{\\s*([^\\}]*)\\s*\\}"))
 , m_regexAppendix(_T("\\\\appendix([^[:graph:]]|$)"))
 , m_regexGraphic(_T("\\\\includegraphics\\s*\\*?(\\s*\\[[^\\]]*\\]){0,2}\\s*\\{\\s*\"?([^\\}]*)\"?\\s*\\}"))
