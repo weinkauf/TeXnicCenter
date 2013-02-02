@@ -174,6 +174,7 @@ LaTeXViewBase::~LaTeXViewBase()
 
 BEGIN_MESSAGE_MAP(LaTeXViewBase, CodeView)
 	ON_WM_CONTEXTMENU()
+	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
 
@@ -386,4 +387,22 @@ void LaTeXViewBase::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 LaTeXDocumentBase* LaTeXViewBase::GetDocument() const
 {
 	return dynamic_cast<LaTeXDocumentBase*>(CodeView::GetDocument());
+}
+
+
+int LaTeXViewBase::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CodeView::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	//Get a shorthand
+	CScintillaCtrl& rCtrl = GetCtrl();
+
+#pragma region Caret
+
+	rCtrl.SetCaretFore(GetColor(COLORINDEX_NORMALTEXT), TRUE);
+
+#pragma endregion
+
+	return 0;
 }
