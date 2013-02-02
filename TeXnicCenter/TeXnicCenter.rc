@@ -730,7 +730,7 @@ END
 
 
 /////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
+// Deutsch (Deutschland) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
 LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
@@ -3671,6 +3671,8 @@ BEGIN
     IDS_SPELL_DONE          "Die Rechtschreibprüfung wurde abgeschlossen."
     IDS_SPELL_NO_SUGGESTIONS "Keine Vorschläge"
     IDS_MISSING_SECTION     "Fehlender Abschnitt"
+    IDS_MRU_PROJECTS        "Zuletzt geöffnete Projekte"
+    IDS_MRU_FILES           "Zuletzt geöffnete Dateien"
 END
 
 STRINGTABLE
@@ -4898,12 +4900,12 @@ BEGIN
                             "(Selektiertes) Wort unter dem Cursor in Rückwärtsrichtung suchen.\nVorherigen Treffer finden (selektiert)"
 END
 
-#endif    // German (Germany) resources
+#endif    // Deutsch (Deutschland) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (United States) resources
+// Englisch (USA) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -8052,6 +8054,8 @@ BEGIN
     IDS_SPELL_DONE          "Spell check complete"
     IDS_SPELL_NO_SUGGESTIONS "No Suggestions"
     IDS_MISSING_SECTION     "Missing section"
+    IDS_MRU_PROJECTS        "Recently used projects"
+    IDS_MRU_FILES           "Recently used files"
 END
 
 STRINGTABLE
@@ -8971,7 +8975,7 @@ BEGIN
                             "Find previous word under cursor or in selection.\nFind previous selected."
 END
 
-#endif    // English (United States) resources
+#endif    // Englisch (USA) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

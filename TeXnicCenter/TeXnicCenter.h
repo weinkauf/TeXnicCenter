@@ -327,6 +327,8 @@ public:
 	virtual Speller* GetSpeller();
 
 // implementation helpers
+	void UpdateJumpList();
+
 protected:
 	/**
 	Fills the menu of the most recent used files specified by the
