@@ -1015,10 +1015,14 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 			}
 		}
 
+		//If no project is set, create a new spell checker with default configuration.
+		if (!GetProject())
+			theApp.NewSpeller(CConfiguration::GetInstance()->m_strLanguageDefault,
+							  CConfiguration::GetInstance()->m_strLanguageDialectDefault);
+
 		//Just load the file, if a project was not loaded
 		if (!bLoaded)
 		{
-			//pDoc = pDocTemplate->OpenDocumentFile(strDocPath); ==> This opens it always as a tex-file
 			pDoc = CWinAppEx::OpenDocumentFile(strDocPath, bAddToMRU); //This may open as tex or bib-file, etc.
 		}
 	}
@@ -1973,55 +1977,79 @@ void CTeXnicCenterApp::OnHelp()
 
 Speller* CTeXnicCenterApp::GetSpeller()
 {
-	CSingleLock lock(&m_csLazy);
-
 	if (!m_pSpell)
+		throw std::logic_error("GetSpeller called although no speller exists.");
+
+	return m_pSpell.get();
+}
+
+void CTeXnicCenterApp::ReleaseSpeller()
+{
+	if (!m_pSpell)
+		throw std::logic_error("ReleaseSpeller called although no speller exists.");
+
+	if (CConfiguration::GetInstance()->m_bSpellEnable && m_pBackgroundThread)
 	{
-		CWaitCursor wait;
-		CString dicName, affName;
-		// Create dictionary name and path
-		dicName.Format(_T("%s\\%s_%s.dic"),
-		               CConfiguration::GetInstance()->m_strSpellDictionaryPath,
-		               CConfiguration::GetInstance()->m_strLanguageDefault,
-		               CConfiguration::GetInstance()->m_strLanguageDialectDefault);
-		// Create affix name and path
-		affName.Format(_T("%s\\%s_%s.aff"),
-		               CConfiguration::GetInstance()->m_strSpellDictionaryPath,
-		               CConfiguration::GetInstance()->m_strLanguageDefault,
-		               CConfiguration::GetInstance()->m_strLanguageDialectDefault);
-		try
-		{
-			if (!::PathFileExists(affName))
-				throw AfxFormatString1(STE_DICTIONARY_OPEN_FAIL, affName);
-
-			if (!::PathFileExists(dicName))
-				throw AfxFormatString1(STE_DICTIONARY_OPEN_FAIL, dicName);
-
-			m_pSpell.reset(new Speller(affName, dicName));
-
-			// Create the personal dictionary if we have a name
-			if (!CConfiguration::GetInstance()->m_strSpellPersonalDictionary.IsEmpty())
-				m_pSpell->LoadPersonalDictionary(CConfiguration::GetInstance()->m_strSpellPersonalDictionary);
-		}
-		catch (const CString& str)
-		{
-			// One of the dictionary files does not exist.
-			CConfiguration::GetInstance()->m_bSpellEnable = FALSE;
-			AfxMessageBox(str, MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL);
-		}
-		catch (...)
-		{
-			// There was an error while creating the dictionary. This may be due
-			// to a corrupted file system or insufficient operating system privileges.
-			// Whatever the cause, it deserves a little stronger warning message.
-			CConfiguration::GetInstance()->m_bSpellEnable = FALSE;
-			AfxMessageBox(AfxFormatString1(STE_DICTIONARY_CREATE_FAIL, _T("")),
-			              MB_OK | MB_ICONERROR | MB_TASKMODAL);
-		}
+		m_pBackgroundThread->EnableSpeller(FALSE);
 	}
 
-	//if (m_pSpell)
-	//    m_pSpell->suggest_main(CConfiguration::GetInstance()->m_bSpellMainDictOnly);
+	m_pSpell.reset(NULL);
+}
+
+Speller* CTeXnicCenterApp::NewSpeller(CString strLanguage, CString strLanguageDialect)
+{
+	CSingleLock lock(&m_csLazy);
+
+	if (m_pSpell)
+		throw std::logic_error("NewSpeller called although speller exists.");
+
+	CWaitCursor wait;
+	CString dicName, affName;
+	// Create dictionary name and path
+	dicName.Format(_T("%s\\%s_%s.dic"),
+	               CConfiguration::GetInstance()->m_strSpellDictionaryPath,
+	               strLanguage,
+	               strLanguageDialect);
+	// Create affix name and path
+	affName.Format(_T("%s\\%s_%s.aff"),
+	               CConfiguration::GetInstance()->m_strSpellDictionaryPath,
+	               strLanguage,
+	               strLanguageDialect);
+	try
+	{
+		if (!::PathFileExists(affName))
+			throw AfxFormatString1(STE_DICTIONARY_OPEN_FAIL, affName);
+
+		if (!::PathFileExists(dicName))
+			throw AfxFormatString1(STE_DICTIONARY_OPEN_FAIL, dicName);
+
+		m_pSpell.reset(new Speller(affName, dicName));
+
+		// Create the personal dictionary if we have a name
+		if (!CConfiguration::GetInstance()->m_strSpellPersonalDictionary.IsEmpty())
+			m_pSpell->LoadPersonalDictionary(CConfiguration::GetInstance()->m_strSpellPersonalDictionary);
+	}
+	catch (const CString& str)
+	{
+		// One of the dictionary files does not exist.
+		CConfiguration::GetInstance()->m_bSpellEnable = FALSE;
+		AfxMessageBox(str, MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL);
+	}
+	catch (...)
+	{
+		// There was an error while creating the dictionary. This may be due
+		// to a corrupted file system or insufficient operating system privileges.
+		// Whatever the cause, it deserves a little stronger warning message.
+		CConfiguration::GetInstance()->m_bSpellEnable = FALSE;
+		AfxMessageBox(AfxFormatString1(STE_DICTIONARY_CREATE_FAIL, _T("")),
+		              MB_OK | MB_ICONERROR | MB_TASKMODAL);
+	}
+
+	if (CConfiguration::GetInstance()->m_bSpellEnable && m_pBackgroundThread)
+	{
+		ResetSpeller();
+		m_pBackgroundThread->EnableSpeller(TRUE);
+	}
 
 	return m_pSpell.get();
 }

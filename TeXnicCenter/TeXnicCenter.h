@@ -326,6 +326,19 @@ public:
 	// CSpellerSource
 	virtual Speller* GetSpeller();
 
+	/**
+	Initialiazes a new spell checker.
+
+	@param strLanguage
+	        Language of the spell checker.
+	@param strLanguageDialect
+	        Dialect of the spell checker.
+	 */
+	virtual Speller* NewSpeller(CString strLanguage, CString strLanguageDialect);
+
+	// Release the current spell checker.
+	virtual void ReleaseSpeller();
+
 // implementation helpers
 	void UpdateJumpList();
 
