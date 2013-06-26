@@ -72,6 +72,9 @@ CLaTeXProject::CLaTeXProject()
 		, tabbed_pane_(0)
 {
 	// initialization
+	m_strProjectLanguage = CConfiguration::GetInstance()->m_strLanguageDefault;
+	m_strProjectDialect = CConfiguration::GetInstance()->m_strLanguageDialectDefault;
+
 	// Initialize the control bars and main frame pointer members
 	m_pwndMainFrame = static_cast<CMainFrame*>(AfxGetMainWnd());
 	ASSERT(m_pwndMainFrame);
@@ -237,6 +240,16 @@ BOOL CLaTeXProject::OnOpenProject(LPCTSTR lpszPathName)
 	//Load the Project Information
 	Serialize(file,FALSE);
 
+	
+	//Initialize new speller and open ignored words
+	if (Speller* s = theApp.NewSpeller(m_strProjectLanguage, m_strProjectDialect))
+	{
+		const CString sIgnoredPath = GetIgnoredWordsFileName();
+
+		if (CPathTool::Exists(sIgnoredPath))
+			s->LoadIgnoredWords(sIgnoredPath);
+	}
+
 	SetModifiedFlag(FALSE);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -298,6 +311,9 @@ void CLaTeXProject::OnClosing()
 			s->SaveIgnoredWords(sIgnoredPath);
 		}
 	}
+
+	// Release speller.
+	theApp.ReleaseSpeller();
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// store project session
@@ -456,8 +472,11 @@ BOOL CLaTeXProject::Serialize(CIniFile &ini, BOOL bWrite)
 		m_bUseMakeIndex = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_USEMAKEINDEX,FALSE);
 
 		m_strProjectLanguage = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PLANGUAGE,CConfiguration::GetInstance()->m_strLanguageDefault);
+		if (m_strProjectLanguage.IsEmpty())
+			m_strProjectLanguage = CConfiguration::GetInstance()->m_strLanguageDefault;
 		m_strProjectDialect = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PDIALECT,CConfiguration::GetInstance()->m_strLanguageDialectDefault);
-
+		if (m_strProjectDialect.IsEmpty())
+			m_strProjectDialect = CConfiguration::GetInstance()->m_strLanguageDialectDefault;
 
 		if (nVersion > 2)
 		{
@@ -738,16 +757,6 @@ void CLaTeXProject::SetPathName(LPCTSTR lpszPathName)
 {
 	CProject::SetPathName(lpszPathName);
 	SetProjectDirectory(CPathTool::GetDirectory(lpszPathName));
-
-	// Open ignored words
-
-	if (Speller* s = theApp.GetSpeller())
-	{
-		const CString sIgnoredPath = GetIgnoredWordsFileName();
-
-		if (CPathTool::Exists(sIgnoredPath))
-			s->LoadIgnoredWords(sIgnoredPath);
-	}
 }
 
 void CLaTeXProject::DoProjectSave()

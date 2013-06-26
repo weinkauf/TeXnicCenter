@@ -95,10 +95,6 @@ END_MESSAGE_MAP()
 
 void COptionPageLanguage::OnOK()
 {
-	bool bShowNextStartInfo = (CConfiguration::GetInstance()->m_strLanguageDefault != m_strLanguageDefault);
-	bShowNextStartInfo |= (CConfiguration::GetInstance()->m_strLanguageDialectDefault != m_strDialectDefault);
-	if (bShowNextStartInfo) AfxMessageBox(STE_OPTIONS_REQUIRES_RESTART,MB_ICONINFORMATION | MB_OK);
-
 	CConfiguration::GetInstance()->m_strLanguageDefault = m_strLanguageDefault;
 	CConfiguration::GetInstance()->m_strLanguageDialectDefault = m_strDialectDefault;
 	CConfiguration::GetInstance()->m_strSpellPersonalDictionary = m_strPDictionary;
