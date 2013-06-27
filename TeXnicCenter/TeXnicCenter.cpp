@@ -1015,15 +1015,18 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 			}
 		}
 
-		//If no project is set, create a new spell checker with default configuration.
-		if (!GetProject())
-			theApp.NewSpeller(CConfiguration::GetInstance()->m_strLanguageDefault,
-							  CConfiguration::GetInstance()->m_strLanguageDialectDefault);
-
 		//Just load the file, if a project was not loaded
 		if (!bLoaded)
 		{
 			pDoc = CWinAppEx::OpenDocumentFile(strDocPath, bAddToMRU); //This may open as tex or bib-file, etc.
+		}
+
+		//If no project is loaded, create a new spell checker with default configuration.
+		// If the same language has already been loaded, then this call will do nothing.
+		if (pDoc && !GetProject())
+		{
+			NewSpeller(CConfiguration::GetInstance()->m_strLanguageDefault,
+						CConfiguration::GetInstance()->m_strLanguageDialectDefault);
 		}
 	}
 
@@ -1402,6 +1405,14 @@ void CTeXnicCenterApp::OnLatexNew()
 
 	if (pDoc && CConfiguration::GetInstance()->m_bSaveNewDocuments)
 		pDoc->DoFileSave();
+
+	//If no project is loaded, create a new spell checker with default configuration.
+	// If the same language has already been loaded, then this call will do nothing.
+	if (pDoc && !GetProject())
+	{
+		NewSpeller(CConfiguration::GetInstance()->m_strLanguageDefault,
+					CConfiguration::GetInstance()->m_strLanguageDialectDefault);
+	}
 }
 
 void CTeXnicCenterApp::OnExtrasOptions()
@@ -1977,14 +1988,14 @@ void CTeXnicCenterApp::OnHelp()
 
 Speller* CTeXnicCenterApp::GetSpeller()
 {
-	assert(m_pSpell && "GetSpeller called although no speller exists.");
+	ASSERT(m_pSpell && "GetSpeller called although no speller exists.");
 
 	return m_pSpell.get();
 }
 
 void CTeXnicCenterApp::ReleaseSpeller()
 {
-	assert(m_pSpell && "ReleaseSpeller called although no speller exists.");
+	ASSERT(m_pSpell && "ReleaseSpeller called although no speller exists.");
 
 	if (CConfiguration::GetInstance()->m_bSpellEnable && m_pBackgroundThread)
 	{
@@ -1994,24 +2005,37 @@ void CTeXnicCenterApp::ReleaseSpeller()
 	m_pSpell.reset(NULL);
 }
 
-Speller* CTeXnicCenterApp::NewSpeller(CString strLanguage, CString strLanguageDialect)
+bool CTeXnicCenterApp::NewSpeller(const CString& strLanguage, const CString& strLanguageDialect)
 {
 	CSingleLock lock(&m_csLazy);
 
-	assert(!m_pSpell && "NewSpeller called although speller exists.");
-
-	CWaitCursor wait;
-	CString dicName, affName;
 	// Create dictionary name and path
+	CString dicName;
 	dicName.Format(_T("%s\\%s_%s.dic"),
 	               CConfiguration::GetInstance()->m_strSpellDictionaryPath,
 	               strLanguage,
 	               strLanguageDialect);
 	// Create affix name and path
+	CString affName;
 	affName.Format(_T("%s\\%s_%s.aff"),
 	               CConfiguration::GetInstance()->m_strSpellDictionaryPath,
 	               strLanguage,
 	               strLanguageDialect);
+
+	//Compare desired language/dialect to the currently active one
+	if (m_pSpell && m_pSpell->SameLanguage(affName, dicName))
+	{
+		//Same language is already loaded. Everything is fine, no further need for action.
+		// NOTE: We explicitly ignore the case that the dictionary file may have changed on disk.
+		//       You just have to restart TXC, or switch the language twice.
+		return true;
+	}
+
+	//Release the old one, if it exists.
+	if (m_pSpell) ReleaseSpeller();
+
+	//Actually load a new dictionary into a new speller
+	CWaitCursor wait;
 	try
 	{
 		if (!::PathFileExists(affName))
@@ -2031,6 +2055,7 @@ Speller* CTeXnicCenterApp::NewSpeller(CString strLanguage, CString strLanguageDi
 		// One of the dictionary files does not exist.
 		CConfiguration::GetInstance()->m_bSpellEnable = FALSE;
 		AfxMessageBox(str, MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL);
+		return false;
 	}
 	catch (...)
 	{
@@ -2040,15 +2065,17 @@ Speller* CTeXnicCenterApp::NewSpeller(CString strLanguage, CString strLanguageDi
 		CConfiguration::GetInstance()->m_bSpellEnable = FALSE;
 		AfxMessageBox(AfxFormatString1(STE_DICTIONARY_CREATE_FAIL, _T("")),
 		              MB_OK | MB_ICONERROR | MB_TASKMODAL);
+		return false;
 	}
 
 	if (CConfiguration::GetInstance()->m_bSpellEnable && m_pBackgroundThread)
 	{
 		ResetSpeller();
 		m_pBackgroundThread->EnableSpeller(TRUE);
+		AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_BG_UPDATE_PROJECT); // clear or set the line attributes
 	}
 
-	return m_pSpell.get();
+	return true;
 }
 
 SpellerBackgroundThread* CTeXnicCenterApp::GetSpellerThread()
