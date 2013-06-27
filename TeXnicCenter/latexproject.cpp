@@ -115,6 +115,7 @@ BOOL CLaTeXProject::OnNewProject()
 	DoFileSave();
 	theApp.m_recentProjectList.Add(GetPathName());
 	theApp.UpdateJumpList();
+	if (m_pwndMainFrame) m_pwndMainFrame->UpdateFrameTitle();
 
 	//Trigger analysis - parse project
 	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_PROJECT_PARSE);
