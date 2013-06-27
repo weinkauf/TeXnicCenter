@@ -323,7 +323,7 @@ public:
 
 // overrides
 public:
-	// SpellerSource
+	///Returns pointer to the spell checker. May be NULL.
 	virtual Speller* GetSpeller();
 
 	/**	Initialiazes a new spell checker.
@@ -341,11 +341,11 @@ public:
 	bool NewSpeller(const CString& strLanguage, const CString& strLanguageDialect);
 
 protected:
-	// Releases the current spell checker.
+	///Releases the current spell checker.
 	void ReleaseSpeller();
 
 public:
-	//Updates the Windows 7 (and up) jump lists (in the Windows taskbar)
+	///Updates the Windows 7 (and up) jump lists (in the Windows taskbar)
 	void UpdateJumpList();
 
 protected:

@@ -1988,8 +1988,6 @@ void CTeXnicCenterApp::OnHelp()
 
 Speller* CTeXnicCenterApp::GetSpeller()
 {
-	ASSERT(m_pSpell && "GetSpeller called although no speller exists.");
-
 	return m_pSpell.get();
 }
 
