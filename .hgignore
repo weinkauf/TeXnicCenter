@@ -13,6 +13,7 @@ syntax: glob
 *.tps
 *~
 Anmerkungen/*
+_OtherRepos/*
 Output
 TCHelp/SourceCodeDoc/html/*
 TCHelp/SourceCodeDoc/TXCSourceCodeDoc.chm
