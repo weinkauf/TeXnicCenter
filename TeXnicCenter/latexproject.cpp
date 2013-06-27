@@ -240,14 +240,16 @@ BOOL CLaTeXProject::OnOpenProject(LPCTSTR lpszPathName)
 	//Load the Project Information
 	Serialize(file,FALSE);
 
-	
 	//Initialize new speller and open ignored words
-	if (Speller* s = theApp.NewSpeller(m_strProjectLanguage, m_strProjectDialect))
+	if (theApp.NewSpeller(m_strProjectLanguage, m_strProjectDialect))
 	{
 		const CString sIgnoredPath = GetIgnoredWordsFileName();
 
 		if (CPathTool::Exists(sIgnoredPath))
-			s->LoadIgnoredWords(sIgnoredPath);
+		{
+			Speller* s = theApp.GetSpeller();
+			if (s) s->LoadIgnoredWords(sIgnoredPath);
+		}
 	}
 
 	SetModifiedFlag(FALSE);
@@ -302,7 +304,6 @@ BOOL CLaTeXProject::SaveModified()
 void CLaTeXProject::OnClosing()
 {
 	// Save ignored words
-
 	if (Speller* s = theApp.GetSpeller())
 	{
 		if (s->IsIgnoredModified())
@@ -310,10 +311,8 @@ void CLaTeXProject::OnClosing()
 			const CString sIgnoredPath = GetIgnoredWordsFileName();
 			s->SaveIgnoredWords(sIgnoredPath);
 		}
+		//Reset ignores?
 	}
-
-	// Release speller.
-	theApp.ReleaseSpeller();
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// store project session
@@ -854,24 +853,21 @@ void CLaTeXProject::OnProjectProperties()
 
 	if (m_strMainPath != dlg.m_strMainFile ||
 	        m_bUseBibTex != dlg.m_bUseBibTex ||
-	        m_bUseMakeIndex != dlg.m_bUseMakeIndex)
-	{
-		SetModifiedFlag();
-	}
-
-	if (m_strProjectLanguage != dlg.m_strLanguageCurrent ||
+	        m_bUseMakeIndex != dlg.m_bUseMakeIndex ||
+			m_strProjectLanguage != dlg.m_strLanguageCurrent ||
 	        m_strProjectDialect != dlg.m_strDialectCurrent)
 	{
 		SetModifiedFlag();
-		// TO DO: restart the speller on the new language
 	}
-
 
 	m_strMainPath = dlg.m_strMainFile;
 	m_bUseBibTex = dlg.m_bUseBibTex;
 	m_bUseMakeIndex = dlg.m_bUseMakeIndex;
 	m_strProjectLanguage = dlg.m_strLanguageCurrent;
 	m_strProjectDialect = dlg.m_strDialectCurrent;
+
+	//Restart the speller on the new language - that call is cheap (speller only reloaded on new language)
+	theApp.NewSpeller(m_strProjectLanguage, m_strProjectDialect);
 }
 
 void CLaTeXProject::OnProjectOpenMainfile()
@@ -900,8 +896,8 @@ void CLaTeXProject::OnProjectParse()
 	if (!m_bCanParse || IsClosing())
 		return;
 
-	// Update the background thread
-	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_BG_UPDATE_PROJECT);
+	//// Update the background speller thread
+	//AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_BG_UPDATE_PROJECT);
 
 	// change to working dir
 	SetCurrentDirectory(CPathTool::GetDirectory(m_strMainPath));
