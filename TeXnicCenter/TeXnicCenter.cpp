@@ -1977,16 +1977,14 @@ void CTeXnicCenterApp::OnHelp()
 
 Speller* CTeXnicCenterApp::GetSpeller()
 {
-	if (!m_pSpell)
-		throw std::logic_error("GetSpeller called although no speller exists.");
+	assert(m_pSpell && "GetSpeller called although no speller exists.");
 
 	return m_pSpell.get();
 }
 
 void CTeXnicCenterApp::ReleaseSpeller()
 {
-	if (!m_pSpell)
-		throw std::logic_error("ReleaseSpeller called although no speller exists.");
+	assert(m_pSpell && "ReleaseSpeller called although no speller exists.");
 
 	if (CConfiguration::GetInstance()->m_bSpellEnable && m_pBackgroundThread)
 	{
@@ -2000,8 +1998,7 @@ Speller* CTeXnicCenterApp::NewSpeller(CString strLanguage, CString strLanguageDi
 {
 	CSingleLock lock(&m_csLazy);
 
-	if (m_pSpell)
-		throw std::logic_error("NewSpeller called although speller exists.");
+	assert(!m_pSpell && "NewSpeller called although speller exists.");
 
 	CWaitCursor wait;
 	CString dicName, affName;
