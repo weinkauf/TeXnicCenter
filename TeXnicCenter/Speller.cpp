@@ -15,6 +15,8 @@
 Speller::Speller( LPCTSTR affpath, LPCTSTR dpath, LPCTSTR key /*= 0*/ ) 
 : added_modified_(false)
 , ignored_modified_(false)
+, LoadedAffPath(affpath)
+, LoadedDictPath(dpath)
 {
 	std::ifstream in(affpath);
 	std::string line;
@@ -72,6 +74,11 @@ Speller::Speller( LPCTSTR affpath, LPCTSTR dpath, LPCTSTR key /*= 0*/ )
 
 	USES_CONVERSION;
 	spell_.reset(new Hunspell(T2CA(affpath),T2CA(dpath),T2CA(key)));
+}
+
+bool Speller::SameLanguage(const CString& affpath, const CString& dpath) const
+{
+	return (affpath == LoadedAffPath && dpath == LoadedDictPath);
 }
 
 bool Speller::IsAddedModified() const

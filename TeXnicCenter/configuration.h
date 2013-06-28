@@ -52,12 +52,6 @@ class CConfiguration
 
 	CConfiguration();
 
-	bool blink_insert_caret_, blink_overwrite_caret_;
-	bool insert_caret_line_, overwrite_caret_line_;	
-
-	/** TRUE, if caret line is highlighted, FALSE otherwise */
-	bool highlight_caret_line_;
-
 	/** TRUE, if line endings shout be displayed as special chars, FALSE otherwise */
 	bool show_line_endings_;
 
@@ -85,21 +79,6 @@ class CConfiguration
 	bool fold_compact_;
 
 public:
-	bool IsBlinkInsertCaret() const;
-	void SetBlinkInsertCaret(bool val = true);
-
-	bool IsBlinkOverwriteCaret() const;
-	void SetBlinkOverwriteCaret(bool val = true);
-
-	bool IsInsertCaretLine() const;
-	void SetInsertCaretLine(bool val = true);
-
-	bool IsOverwriteCaretLine() const;
-	void SetOverwriteCaretLine(bool val = true);
-
-	bool IsHighlightCaretLine() const;
-	void SetHighlightCaretLine(bool val = true);
-
 	bool GetShowLineEnding() const;
 	void SetShowLineEnding(bool val = true);
 
@@ -372,6 +351,9 @@ public:
 	/** Colors for editor components */
 	COLORREF m_aEditorColors[LaTeXView::COLORINDEX_COUNT];
 
+	/** Color scheme for editor components */
+	int m_nEditorColorScheme;
+
 	/** Width of a tab in characters */
 	int m_nTabWidth;
 
@@ -384,8 +366,26 @@ public:
 	/** Column for hard wrap via Edit | Advanced | Split Paragraphs */
 	int m_nFixedColumnWrap;
 
+	/** Mode for vertical edge */
+	int m_nVerticalEdgeMode;
+
+	/** Column for vertical edge */
+	int m_nVerticalEdgeColumn;
+
+	/** Color for vertical edge */
+	COLORREF m_aVariableEdgeColor;
+
 	/** Close ToolWindows on pressing ESC when the editor has the focus. */
 	bool m_bCloseToolWindowsOnEscape;
+
+	/** Type of the caret. 0 invisible, 1 line, 2 block. See also Scintilla documentation. */
+	int m_nInsertCaretStyle;
+
+	/** Rate of caret blinking in milliseconds. 0 disables blinking. See also Scintilla documentation. */
+	int m_nInsertCaretBlinkPeriod;
+
+	/** TRUE, if caret line is highlighted, FALSE otherwise. */
+	bool m_bHighlightCaretLine;
 
 	///////////////////////////////////////////////////////////////////
 	// Other window settings

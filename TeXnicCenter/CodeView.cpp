@@ -213,7 +213,7 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//together with all other colors.
 	rCtrl.SetCaretLineBack(RGB(220, 220, 255));
 	//Not so nice: rCtrl.SetCaretLineBackAlpha(90);
-	HighlightActiveLine(CConfiguration::GetInstance()->IsHighlightCaretLine());
+	HighlightActiveLine(CConfiguration::GetInstance()->m_bHighlightCaretLine);
 
 #pragma endregion
 
@@ -270,6 +270,10 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// Users are used to this from other editors.
 
 	rCtrl.SetPasteConvertEndings(TRUE); // Convert line endings
+
+	rCtrl.SetEdgeColumn(CConfiguration::GetInstance()->m_nVerticalEdgeColumn);
+	rCtrl.SetEdgeMode(CConfiguration::GetInstance()->m_nVerticalEdgeMode);
+	rCtrl.SetEdgeColour(CConfiguration::GetInstance()->m_aVariableEdgeColor);
 
 #pragma endregion
 
@@ -681,6 +685,12 @@ void CodeView::OnSettingsChanged()
 	GetCtrl().SetUseTabs(!CConfiguration::GetInstance()->GetUseSpaces());
 	GetCtrl().SetTabWidth(CConfiguration::GetInstance()->m_nTabWidth);
 	GetCtrl().SetIndent(GetCtrl().GetTabWidth());
+	GetCtrl().SetEdgeColumn(CConfiguration::GetInstance()->m_nVerticalEdgeColumn);
+	GetCtrl().SetEdgeMode(CConfiguration::GetInstance()->m_nVerticalEdgeMode);
+	GetCtrl().SetEdgeColour(CConfiguration::GetInstance()->m_aVariableEdgeColor);
+
+	GetCtrl().SetCaretStyle(CConfiguration::GetInstance()->m_nInsertCaretStyle);
+	GetCtrl().SetCaretPeriod(CConfiguration::GetInstance()->m_nInsertCaretBlinkPeriod);
 }
 
 void CodeView::OnSysColorChange()
@@ -1201,7 +1211,7 @@ bool CodeView::IsFoldingEnabled()
 
 void CodeView::HighlightActiveLine(bool show)
 {
-	CConfiguration::GetInstance()->SetHighlightCaretLine(show);
+	CConfiguration::GetInstance()->m_bHighlightCaretLine = show;
 
 	//Chained update
 	using namespace std::placeholders;
@@ -1217,8 +1227,7 @@ void CodeView::OnViewHighlightActiveLine()
 
 void CodeView::OnUpdateViewHighlightActiveLine(CCmdUI *pCmdUI)
 {
-	bool check = CConfiguration::GetInstance()->IsHighlightCaretLine();
-	pCmdUI->SetCheck(check);
+	pCmdUI->SetCheck(CConfiguration::GetInstance()->m_bHighlightCaretLine);
 }
 
 void CodeView::ShowIndentationGuides( bool show )

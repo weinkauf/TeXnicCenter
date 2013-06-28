@@ -38,6 +38,8 @@
 
 #include <locale.h>
 #include <direct.h>
+#include <Propkey.h>
+#include <Propvarutil.h>
 
 #include "resource.h"
 #include "MainFrm.h"
@@ -696,7 +698,10 @@ void CTeXnicCenterApp::LoadCustomState()
 
 	// Recent projects
 	if (CanUseRecentFiles()) // Respect the group policy
+	{
 		m_recentProjectList.ReadList();
+		UpdateJumpList();
+	}
 
 	//Output Profiles
 	CProfileMap::GetInstance()->SerializeFromRegistry();
@@ -1013,13 +1018,23 @@ CDocument* CTeXnicCenterApp::OpenLatexDocument(LPCTSTR lpszFileName, BOOL bReadO
 		//Just load the file, if a project was not loaded
 		if (!bLoaded)
 		{
-			//pDoc = pDocTemplate->OpenDocumentFile(strDocPath); ==> This opens it always as a tex-file
 			pDoc = CWinAppEx::OpenDocumentFile(strDocPath, bAddToMRU); //This may open as tex or bib-file, etc.
+		}
+
+		//If no project is loaded, create a new spell checker with default configuration.
+		// If the same language has already been loaded, then this call will do nothing.
+		if (pDoc && !GetProject())
+		{
+			NewSpeller(CConfiguration::GetInstance()->m_strLanguageDefault,
+						CConfiguration::GetInstance()->m_strLanguageDialectDefault);
 		}
 	}
 
 	if (!pDoc)
 		return NULL;
+
+	if (bAddToMRU)
+		theApp.UpdateJumpList();
 
 	// set write protection
 	if (pDoc && bReadOnly)
@@ -1177,6 +1192,7 @@ BOOL CTeXnicCenterApp::OpenProject(LPCTSTR lpszPath, bool addToRecentList)
 		{
 			// Add to recent project list
 			m_recentProjectList.Add(lpszPath);
+			UpdateJumpList();
 		}
 	}
 
@@ -1389,6 +1405,14 @@ void CTeXnicCenterApp::OnLatexNew()
 
 	if (pDoc && CConfiguration::GetInstance()->m_bSaveNewDocuments)
 		pDoc->DoFileSave();
+
+	//If no project is loaded, create a new spell checker with default configuration.
+	// If the same language has already been loaded, then this call will do nothing.
+	if (pDoc && !GetProject())
+	{
+		NewSpeller(CConfiguration::GetInstance()->m_strLanguageDefault,
+					CConfiguration::GetInstance()->m_strLanguageDialectDefault);
+	}
 }
 
 void CTeXnicCenterApp::OnExtrasOptions()
@@ -1571,6 +1595,100 @@ BOOL CTeXnicCenterApp::PreTranslateMessage(MSG* pMsg)
 	return CProjectSupportingWinApp::PreTranslateMessage(pMsg);
 }
 
+BOOL AddDestination(CJumpList& jumpList, CString strCategory, CString strFileName, bool openInSameWindow)
+{
+	TCHAR szAppPath[MAX_PATH];
+	::GetModuleFileName( NULL, szAppPath, MAX_PATH );
+
+	int backslashIndex = strFileName.ReverseFind('\\');
+	CString strTitle = backslashIndex >= 0 ? strFileName.Right(strFileName.GetLength() - backslashIndex - 1) : strFileName;
+	CString strCommandLineArgs;
+
+	if (openInSameWindow)
+	{
+		strCommandLineArgs = _T("/ddecmd \"[goto('") + strFileName + _T("', '0')]\"");
+	}
+	else
+	{
+		strCommandLineArgs = '"' + strFileName + '"';
+	}
+
+	CComPtr<IShellLink> shellLinkPtr;
+	if (FAILED(shellLinkPtr.CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER)))
+	{
+		return FALSE;
+	}
+	
+	shellLinkPtr->SetPath(CString('"') + szAppPath + '"');
+	shellLinkPtr->SetDescription(strFileName);
+	shellLinkPtr->SetArguments(strCommandLineArgs);
+
+	int iIcon = -1;
+	CString strFileExt = strTitle.Right(4);
+	if (strFileExt == ".tex")
+		iIcon = 1;
+	else if (strFileExt == ".bib" || strFileExt == ".bbl")
+		iIcon = 2;
+	else if (strFileExt == ".tcp")
+		iIcon = 3;
+
+	if (iIcon < 0)
+		shellLinkPtr->SetIconLocation(_T("%SystemRoot%\\system32\\SHELL32.dll"), 0);
+	else
+		shellLinkPtr->SetIconLocation(szAppPath, iIcon);
+
+	CComQIPtr<IPropertyStore> propPtr = shellLinkPtr;
+
+	if (propPtr != NULL)
+	{
+		PROPVARIANT var;
+		if (FAILED(InitPropVariantFromString(strTitle, &var)))
+		{
+			return FALSE;
+		}
+		if (FAILED(propPtr->SetValue(PKEY_Title, var)))
+		{
+			PropVariantClear(&var);
+			return FALSE;
+		}
+
+		HRESULT hr = propPtr->Commit();
+		PropVariantClear(&var);
+		if (FAILED(hr))
+		{
+			return FALSE;
+		}
+	}
+
+	return jumpList.AddDestination(strCategory, shellLinkPtr.Detach());
+}
+
+void CTeXnicCenterApp::UpdateJumpList()
+{
+	CJumpList jumpList;
+	jumpList.InitializeList();
+
+	CString strCategory;
+	strCategory.LoadString( IDS_MRU_PROJECTS );
+
+	int nProjects = m_recentProjectList.GetSize();
+	for (int i = 0; i < nProjects; ++i)
+	{
+ 		if (!m_recentProjectList.m_arrNames[i].IsEmpty())
+			AddDestination(jumpList, strCategory, m_recentProjectList.m_arrNames[i], false);
+	}
+
+	strCategory.LoadString( IDS_MRU_FILES );
+
+	int nFiles = min(m_pRecentFileList->GetSize(), (int)jumpList.GetMaxSlots()/2);
+	for (int i = 0; i < nFiles; ++i)
+	{
+		if (!m_pRecentFileList->m_arrNames[i].IsEmpty())
+			AddDestination(jumpList, strCategory, m_pRecentFileList->m_arrNames[i], true);
+	}
+
+	jumpList.CommitList();
+}
 
 void CTeXnicCenterApp::UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &recentFileList, UINT unFirstCommandId, UINT unNoFileStringId)
 {
@@ -1724,6 +1842,8 @@ void CTeXnicCenterApp::OnFileMRUProject(UINT unID)
 		m_recentProjectList.Add(filename); // Place on top
 	else
 		m_recentProjectList.Remove(nIndex);
+
+	UpdateJumpList();
 }
 
 //void CTeXnicCenterApp::OnFileMRUFile(UINT unID)
@@ -1868,57 +1988,92 @@ void CTeXnicCenterApp::OnHelp()
 
 Speller* CTeXnicCenterApp::GetSpeller()
 {
-	CSingleLock lock(&m_csLazy);
+	return m_pSpell.get();
+}
 
-	if (!m_pSpell)
+void CTeXnicCenterApp::ReleaseSpeller()
+{
+	ASSERT(m_pSpell && "ReleaseSpeller called although no speller exists.");
+
+	if (CConfiguration::GetInstance()->m_bSpellEnable && m_pBackgroundThread)
 	{
-		CWaitCursor wait;
-		CString dicName, affName;
-		// Create dictionary name and path
-		dicName.Format(_T("%s\\%s_%s.dic"),
-		               CConfiguration::GetInstance()->m_strSpellDictionaryPath,
-		               CConfiguration::GetInstance()->m_strLanguageDefault,
-		               CConfiguration::GetInstance()->m_strLanguageDialectDefault);
-		// Create affix name and path
-		affName.Format(_T("%s\\%s_%s.aff"),
-		               CConfiguration::GetInstance()->m_strSpellDictionaryPath,
-		               CConfiguration::GetInstance()->m_strLanguageDefault,
-		               CConfiguration::GetInstance()->m_strLanguageDialectDefault);
-		try
-		{
-			if (!::PathFileExists(affName))
-				throw AfxFormatString1(STE_DICTIONARY_OPEN_FAIL, affName);
-
-			if (!::PathFileExists(dicName))
-				throw AfxFormatString1(STE_DICTIONARY_OPEN_FAIL, dicName);
-
-			m_pSpell.reset(new Speller(affName, dicName));
-
-			// Create the personal dictionary if we have a name
-			if (!CConfiguration::GetInstance()->m_strSpellPersonalDictionary.IsEmpty())
-				m_pSpell->LoadPersonalDictionary(CConfiguration::GetInstance()->m_strSpellPersonalDictionary);
-		}
-		catch (const CString& str)
-		{
-			// One of the dictionary files does not exist.
-			CConfiguration::GetInstance()->m_bSpellEnable = FALSE;
-			AfxMessageBox(str, MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL);
-		}
-		catch (...)
-		{
-			// There was an error while creating the dictionary. This may be due
-			// to a corrupted file system or insufficient operating system privileges.
-			// Whatever the cause, it deserves a little stronger warning message.
-			CConfiguration::GetInstance()->m_bSpellEnable = FALSE;
-			AfxMessageBox(AfxFormatString1(STE_DICTIONARY_CREATE_FAIL, _T("")),
-			              MB_OK | MB_ICONERROR | MB_TASKMODAL);
-		}
+		m_pBackgroundThread->EnableSpeller(FALSE);
 	}
 
-	//if (m_pSpell)
-	//    m_pSpell->suggest_main(CConfiguration::GetInstance()->m_bSpellMainDictOnly);
+	m_pSpell.reset(NULL);
+}
 
-	return m_pSpell.get();
+bool CTeXnicCenterApp::NewSpeller(const CString& strLanguage, const CString& strLanguageDialect)
+{
+	CSingleLock lock(&m_csLazy);
+
+	// Create dictionary name and path
+	CString dicName;
+	dicName.Format(_T("%s\\%s_%s.dic"),
+	               CConfiguration::GetInstance()->m_strSpellDictionaryPath,
+	               strLanguage,
+	               strLanguageDialect);
+	// Create affix name and path
+	CString affName;
+	affName.Format(_T("%s\\%s_%s.aff"),
+	               CConfiguration::GetInstance()->m_strSpellDictionaryPath,
+	               strLanguage,
+	               strLanguageDialect);
+
+	//Compare desired language/dialect to the currently active one
+	if (m_pSpell && m_pSpell->SameLanguage(affName, dicName))
+	{
+		//Same language is already loaded. Everything is fine, no further need for action.
+		// NOTE: We explicitly ignore the case that the dictionary file may have changed on disk.
+		//       You just have to restart TXC, or switch the language twice.
+		return true;
+	}
+
+	//Release the old one, if it exists.
+	if (m_pSpell) ReleaseSpeller();
+
+	//Actually load a new dictionary into a new speller
+	CWaitCursor wait;
+	try
+	{
+		if (!::PathFileExists(affName))
+			throw AfxFormatString1(STE_DICTIONARY_OPEN_FAIL, affName);
+
+		if (!::PathFileExists(dicName))
+			throw AfxFormatString1(STE_DICTIONARY_OPEN_FAIL, dicName);
+
+		m_pSpell.reset(new Speller(affName, dicName));
+
+		// Create the personal dictionary if we have a name
+		if (!CConfiguration::GetInstance()->m_strSpellPersonalDictionary.IsEmpty())
+			m_pSpell->LoadPersonalDictionary(CConfiguration::GetInstance()->m_strSpellPersonalDictionary);
+	}
+	catch (const CString& str)
+	{
+		// One of the dictionary files does not exist.
+		CConfiguration::GetInstance()->m_bSpellEnable = FALSE;
+		AfxMessageBox(str, MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL);
+		return false;
+	}
+	catch (...)
+	{
+		// There was an error while creating the dictionary. This may be due
+		// to a corrupted file system or insufficient operating system privileges.
+		// Whatever the cause, it deserves a little stronger warning message.
+		CConfiguration::GetInstance()->m_bSpellEnable = FALSE;
+		AfxMessageBox(AfxFormatString1(STE_DICTIONARY_CREATE_FAIL, _T("")),
+		              MB_OK | MB_ICONERROR | MB_TASKMODAL);
+		return false;
+	}
+
+	if (CConfiguration::GetInstance()->m_bSpellEnable && m_pBackgroundThread)
+	{
+		ResetSpeller();
+		m_pBackgroundThread->EnableSpeller(TRUE);
+		AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_BG_UPDATE_PROJECT); // clear or set the line attributes
+	}
+
+	return true;
 }
 
 SpellerBackgroundThread* CTeXnicCenterApp::GetSpellerThread()

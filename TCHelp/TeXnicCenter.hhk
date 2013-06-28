@@ -1,489 +1,929 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
-<HTML>
-<HEAD>
-<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
-<!-- Sitemap 1.0 -->
-</HEAD><BODY>
 <UL>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%%">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%bc">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%bm">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%dc">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%dm">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%ec">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%em">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%l">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%nc">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%nm">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%pc">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%pm">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%s">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%sbc">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%sbm">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%sdc">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%sdm">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%sec">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%sem">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%snc">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%snm">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%spc">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%spm">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%stc">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%stm">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%tc">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="%tm">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="\include">
-		<param name="Local" value="creating_projects.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="\input">
-		<param name="Local" value="projects.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="\input">
-		<param name="Local" value="creating_projects.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Accelerators">
-		<param name="Local" value="custom_keyboard.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="AcrobatReader">
-		<param name="Local" value="output_config_manually_page_viewer.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="BibTeX">
-		<param name="Local" value="output_config_manually_page_latex.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Command Line Arguments">
-		<param name="Local" value="cmdlineargs.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Commands">
-		<param name="Local" value="custom_commands.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="compiler">
-		<param name="Local" value="output_config_manually_page_latex.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Configuration">
-		<param name="Local" value="configuration.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Context Menus">
-		<param name="Local" value="custom_menu.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Copyright">
-		<param name="Local" value="copyright.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Credits">
-		<param name="Local" value="credits.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Customization">
-		<param name="Local" value="customization.html">
-		</OBJECT>
-	<UL>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Commands">
-			<param name="Local" value="custom_commands.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Keyboard Shortcuts">
-			<param name="Local" value="custom_keyboard.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Look &amp; Feel">
-			<param name="Local" value="custom_options.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Menus">
-			<param name="Local" value="custom_menu.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Text Formats">
-			<param name="Local" value="custom_format.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Toolbars">
-			<param name="Local" value="custom_toolbars.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Tools Menu">
-			<param name="Local" value="custom_tools.html">
-			</OBJECT>
-	</UL>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="DDE Commands">
-		<param name="Local" value="output_config_manually_page_viewer.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="DDE Commands">
-		<param name="Local" value="ddecmds.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Distribution">
-		<param name="Local" value="requirements.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Document Templates">
-		<param name="Local" value="document_templates.html">
-		</OBJECT>
-	<UL>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Document Wizards">
-			<param name="Local" value="templates_wizards.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="File based Document Templates">
-			<param name="Local" value="templates_files.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Options Page 'Paths'">
-			<param name="Local" value="options_page_paths.html">
-			</OBJECT>
-	</UL>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="DVI">
-		<param name="Local" value="output.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="DVIPS">
-		<param name="Local" value="output_config_manually_page_postprocessing.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="DVI-Viewer">
-		<param name="Local" value="output_config_manually_page_viewer.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="FAQ">
-		<param name="Local" value="getting_help.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Features">
-		<param name="Local" value="whatis.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="File Format">
-		<param name="Local" value="options_page_file.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Font">
-		<param name="Local" value="custom_format.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Forward Search">
-		<param name="Local" value="output_config_manually_page_viewer.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Frequently Asked Questions">
-		<param name="Local" value="getting_help.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Ghostview">
-		<param name="Local" value="output_config_manually_page_viewer.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="GNU GPL">
-		<param name="Local" value="license.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="GPL">
-		<param name="Local" value="license.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Help">
-		<param name="Local" value="getting_help.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="How To">
-		<param name="Local" value="getting_help.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Introduction">
-		<param name="Local" value="introduction.html">
-		</OBJECT>
-<!--		
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Introduction">
-		<param name="Local" value="introduction.html">
-		</OBJECT>
-		-->
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Inverse Search">
-		<param name="Local" value="cmdlineargs.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Keyboard Shortcuts">
-		<param name="Local" value="custom_keyboard.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Keyword Help">
-		<param name="Local" value="getting_help.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="LaTeX">
-		<param name="Local" value="output_config_manually_page_latex.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="LaTeX distribution">
-		<param name="Local" value="requirements.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="License">
-		<param name="Local" value="license.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Look &amp; Feel">
-		<param name="Local" value="custom_options.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="MakeIndex">
-		<param name="Local" value="output_config_manually_page_latex.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Menus">
-		<param name="Local" value="custom_menu.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="MikTeX">
-		<param name="Local" value="requirements.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Options">
-		<param name="Local" value="options.html">
-		</OBJECT>
-	<UL>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="File">
-			<param name="Local" value="options_page_file.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="General">
-			<param name="Local" value="options_page_general.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Paths">
-			<param name="Local" value="options_page_paths.html">
-			</OBJECT>
-	</UL>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Output Profiles">
-		<param name="Local" value="output.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="PDF">
-		<param name="Local" value="output.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="PDF-Viewer">
-		<param name="Local" value="output_config_manually_page_viewer.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Placeholders">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Postprocessing">
-		<param name="Local" value="output_config_manually_page_postprocessing.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Profiles">
-		<param name="Local" value="output.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Project">
-		<param name="Local" value="project.html">
-		</OBJECT>
-	<UL>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Creation">
-			<param name="Local" value="project_create.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Default Directory">
-			<param name="Local" value="options_page_paths.html">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Modifying Settings">
-			<param name="Local" value="project_modify.html">
-			</OBJECT>
-	</UL>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="PS">
-		<param name="Local" value="output.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="PS-Viewer">
-		<param name="Local" value="output_config_manually_page_viewer.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Quotation Marks">
-		<param name="Local" value="options_page_general.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Saving">
-		<param name="Local" value="options_page_file.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Shortcuts">
-		<param name="Local" value="custom_keyboard.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Single Instance">
-		<param name="Local" value="cmdlineargs.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Skins">
-		<param name="Local" value="custom_options.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Spelling">
-		<param name="Name" value="Options Page 'Spelling'">
-		<param name="Local" value="options_page_spelling.html">
-		<param name="URL" value="spell_check.html">
-		<param name="Name" value="Spell checking">
-		<param name="Local" value="spell_check.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Language">
-		<param name="Name" value="Options Page 'Spelling'">
-		<param name="Local" value="options_page_spelling.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Support">
-		<param name="Local" value="getting_help.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Template Directories">
-		<param name="Local" value="options_page_paths.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="TeX">
-		<param name="Local" value="output_config_manually_page_latex.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="TeX distribution">
-		<param name="Local" value="requirements.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Text Formats">
-		<param name="Local" value="custom_format.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Toolbars">
-		<param name="Local" value="custom_toolbars.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Tools-Menu">
-		<param name="Local" value="custom_tools.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="TTH">
-		<param name="Local" value="output_config_manually_page_postprocessing.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Variables">
-		<param name="Local" value="placeholders.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Viewer">
-		<param name="Local" value="output_config_manually_page_viewer.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Visualizations">
-		<param name="Local" value="custom_options.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="YAP">
-		<param name="Local" value="output_config_manually_page_viewer.html">
-		</OBJECT>
-</UL>
-</BODY>
-</HTML>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="$$">
+    <param name="See Also" value="$$">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-$$">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%%">
+    <param name="See Also" value="%%">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%%">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%bc">
+    <param name="See Also" value="%bc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%bc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%Bc">
+    <param name="See Also" value="%Bc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%Bc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%bm">
+    <param name="See Also" value="%bm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%bm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%Bm">
+    <param name="See Also" value="%Bm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%Bm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%Dc">
+    <param name="See Also" value="%Dc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%Dc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%dc">
+    <param name="See Also" value="%dc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%dc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%Dm">
+    <param name="See Also" value="%Dm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%Dm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%dm">
+    <param name="See Also" value="%dm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%dm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%ec">
+    <param name="See Also" value="%ec">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%ec">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%em">
+    <param name="See Also" value="%em">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%em">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%l">
+    <param name="See Also" value="%l">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%l">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%nc">
+    <param name="See Also" value="%nc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%nc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%nm">
+    <param name="See Also" value="%nm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%nm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%pc">
+    <param name="See Also" value="%pc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%pc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%Pc">
+    <param name="See Also" value="%Pc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%Pc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%pm">
+    <param name="See Also" value="%pm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%pm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%Pm">
+    <param name="See Also" value="%Pm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%Pm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%s">
+    <param name="See Also" value="%s">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%s">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sbc">
+    <param name="See Also" value="%sbc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%sbc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sBc">
+    <param name="See Also" value="%sBc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%sBc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sbm">
+    <param name="See Also" value="%sbm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%sbm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sBm">
+    <param name="See Also" value="%sBm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%sBm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sDc">
+    <param name="See Also" value="%sDc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%sDc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sdc">
+    <param name="See Also" value="%sdc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%sdc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sDm">
+    <param name="See Also" value="%sDm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%sDm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sdm">
+    <param name="See Also" value="%sdm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%sdm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sec">
+    <param name="See Also" value="%sec">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%sec">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sem">
+    <param name="See Also" value="%sem">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%sem">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%snc">
+    <param name="See Also" value="%snc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%snc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%snm">
+    <param name="See Also" value="%snm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%snm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%spc">
+    <param name="See Also" value="%spc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%spc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sPc">
+    <param name="See Also" value="%sPc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%sPc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%spm">
+    <param name="See Also" value="%spm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%spm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sPm">
+    <param name="See Also" value="%sPm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%sPm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%stc">
+    <param name="See Also" value="%stc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%stc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%stm">
+    <param name="See Also" value="%stm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%stm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%tc">
+    <param name="See Also" value="%tc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%tc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%tm">
+    <param name="See Also" value="%tm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%tm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%wc">
+    <param name="See Also" value="%wc">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%wc">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%wm">
+    <param name="See Also" value="%wm">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-%wm">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="/dde">
+    <param name="See Also" value="/dde">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="command-line argument">
+    <param name="Local" value="commandline.html#cmd-/dde">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="/ddecmd">
+    <param name="See Also" value="/ddecmd">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="command-line argument">
+    <param name="Local" value="commandline.html#cmd-/ddecmd">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="/l">
+    <param name="See Also" value="/l">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="command-line argument">
+    <param name="Local" value="commandline.html#cmd-/l">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="/nosplash">
+    <param name="See Also" value="/nosplash">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="command-line argument">
+    <param name="Local" value="commandline.html#cmd-/nosplash">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="/p">
+    <param name="See Also" value="/p">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="command-line argument">
+    <param name="Local" value="commandline.html#cmd-/p">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="/pt">
+    <param name="See Also" value="/pt">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="command-line argument">
+    <param name="Local" value="commandline.html#cmd-/pt">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="AFS">
+    <param name="See Also" value="AFS">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-AFS">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="APF">
+    <param name="See Also" value="APF">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-APF">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="b">
+    <param name="See Also" value="b">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-b">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="BibTeX">
+    <param name="Local" value="introduction.html#index-0">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="BPF">
+    <param name="See Also" value="BPF">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-BPF">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="c">
+    <param name="See Also" value="c">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-c">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="COF">
+    <param name="See Also" value="COF">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-COF">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="command-line argument">
+    <param name="See Also" value="command-line argument">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="/dde">
+    <param name="Local" value="commandline.html#cmd-/dde">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="/ddecmd">
+    <param name="Local" value="commandline.html#cmd-/ddecmd">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="/l">
+    <param name="Local" value="commandline.html#cmd-/l">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="/nosplash">
+    <param name="Local" value="commandline.html#cmd-/nosplash">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="/p">
+    <param name="Local" value="commandline.html#cmd-/p">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="/pt">
+    <param name="Local" value="commandline.html#cmd-/pt">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="filename">
+    <param name="Local" value="commandline.html#cmd-filename">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="d">
+    <param name="See Also" value="d">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-d">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="distribution">
+    <param name="Local" value="introduction.html#index-1">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="DLL">
+    <param name="Local" value="doctemplates.html#term-dll">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="DVI">
+    <param name="Local" value="configuration.html#index-0">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="e">
+    <param name="See Also" value="e">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-e">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="editor">
+    <param name="Local" value="editor.html#index-0">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="editor keyboard shortcuts">
+    <param name="Local" value="editor.html#index-1">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="editor mouse shortcuts">
+    <param name="Local" value="editor.html#index-2">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="filename">
+    <param name="See Also" value="filename">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="command-line argument">
+    <param name="Local" value="commandline.html#cmd-filename">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="forward search">
+    <param name="Local" value="introduction.html#index-0">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="GPF">
+    <param name="See Also" value="GPF">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-GPF">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="IDE">
+    <param name="Local" value="introduction.html#index-0">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="inverse search">
+    <param name="Local" value="introduction.html#index-0">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="LaTeX">
+    <param name="Local" value="introduction.html#index-0">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="m">
+    <param name="See Also" value="m">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-m">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="MakeIndex">
+    <param name="Local" value="introduction.html#index-0">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="MiKTeX">
+    <param name="Local" value="introduction.html#index-1">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="n">
+    <param name="See Also" value="n">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-n">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="options">
+    <param name="Local" value="options.html#index-0">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="clean">
+    <param name="Local" value="options.html#index-5">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="directories">
+    <param name="Local" value="options.html#index-3">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="files">
+    <param name="Local" value="options.html#index-2">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="general">
+    <param name="Local" value="options.html#index-1">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="spelling">
+    <param name="Local" value="options.html#index-4">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="text format">
+    <param name="Local" value="options.html#index-6">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="p">
+    <param name="See Also" value="p">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-p">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="PDF">
+    <param name="Local" value="configuration.html#index-0">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#index-0">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="$$">
+    <param name="Local" value="placeholders.html#placeholder-$$">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%%">
+    <param name="Local" value="placeholders.html#placeholder-%%">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%Bc">
+    <param name="Local" value="placeholders.html#placeholder-%Bc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%Bm">
+    <param name="Local" value="placeholders.html#placeholder-%Bm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%Dc">
+    <param name="Local" value="placeholders.html#placeholder-%Dc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%Dm">
+    <param name="Local" value="placeholders.html#placeholder-%Dm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%Pc">
+    <param name="Local" value="placeholders.html#placeholder-%Pc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%Pm">
+    <param name="Local" value="placeholders.html#placeholder-%Pm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%bc">
+    <param name="Local" value="placeholders.html#placeholder-%bc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%bm">
+    <param name="Local" value="placeholders.html#placeholder-%bm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%dc">
+    <param name="Local" value="placeholders.html#placeholder-%dc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%dm">
+    <param name="Local" value="placeholders.html#placeholder-%dm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%ec">
+    <param name="Local" value="placeholders.html#placeholder-%ec">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%em">
+    <param name="Local" value="placeholders.html#placeholder-%em">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%l">
+    <param name="Local" value="placeholders.html#placeholder-%l">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%nc">
+    <param name="Local" value="placeholders.html#placeholder-%nc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%nm">
+    <param name="Local" value="placeholders.html#placeholder-%nm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%pc">
+    <param name="Local" value="placeholders.html#placeholder-%pc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%pm">
+    <param name="Local" value="placeholders.html#placeholder-%pm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%s">
+    <param name="Local" value="placeholders.html#placeholder-%s">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sBc">
+    <param name="Local" value="placeholders.html#placeholder-%sBc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sBm">
+    <param name="Local" value="placeholders.html#placeholder-%sBm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sDc">
+    <param name="Local" value="placeholders.html#placeholder-%sDc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sDm">
+    <param name="Local" value="placeholders.html#placeholder-%sDm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sPc">
+    <param name="Local" value="placeholders.html#placeholder-%sPc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sPm">
+    <param name="Local" value="placeholders.html#placeholder-%sPm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sbc">
+    <param name="Local" value="placeholders.html#placeholder-%sbc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sbm">
+    <param name="Local" value="placeholders.html#placeholder-%sbm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sdc">
+    <param name="Local" value="placeholders.html#placeholder-%sdc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sdm">
+    <param name="Local" value="placeholders.html#placeholder-%sdm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sec">
+    <param name="Local" value="placeholders.html#placeholder-%sec">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%sem">
+    <param name="Local" value="placeholders.html#placeholder-%sem">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%snc">
+    <param name="Local" value="placeholders.html#placeholder-%snc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%snm">
+    <param name="Local" value="placeholders.html#placeholder-%snm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%spc">
+    <param name="Local" value="placeholders.html#placeholder-%spc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%spm">
+    <param name="Local" value="placeholders.html#placeholder-%spm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%stc">
+    <param name="Local" value="placeholders.html#placeholder-%stc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%stm">
+    <param name="Local" value="placeholders.html#placeholder-%stm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%tc">
+    <param name="Local" value="placeholders.html#placeholder-%tc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%tm">
+    <param name="Local" value="placeholders.html#placeholder-%tm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%wc">
+    <param name="Local" value="placeholders.html#placeholder-%wc">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="%wm">
+    <param name="Local" value="placeholders.html#placeholder-%wm">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="AFS">
+    <param name="Local" value="placeholders.html#placeholder-AFS">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="APF">
+    <param name="Local" value="placeholders.html#placeholder-APF">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="BPF">
+    <param name="Local" value="placeholders.html#placeholder-BPF">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="COF">
+    <param name="Local" value="placeholders.html#placeholder-COF">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="GPF">
+    <param name="Local" value="placeholders.html#placeholder-GPF">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="TPF">
+    <param name="Local" value="placeholders.html#placeholder-TPF">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="TXC">
+    <param name="Local" value="placeholders.html#placeholder-TXC">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="b">
+    <param name="Local" value="placeholders.html#placeholder-b">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="c">
+    <param name="Local" value="placeholders.html#placeholder-c">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="d">
+    <param name="Local" value="placeholders.html#placeholder-d">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="e">
+    <param name="Local" value="placeholders.html#placeholder-e">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="m">
+    <param name="Local" value="placeholders.html#placeholder-m">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="n">
+    <param name="Local" value="placeholders.html#placeholder-n">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="p">
+    <param name="Local" value="placeholders.html#placeholder-p">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="r">
+    <param name="Local" value="placeholders.html#placeholder-r">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="t">
+    <param name="Local" value="placeholders.html#placeholder-t">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="w">
+    <param name="Local" value="placeholders.html#placeholder-w">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="project">
+    <param name="Local" value="projects.html#index-0">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="PS">
+    <param name="Local" value="configuration.html#index-0">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="r">
+    <param name="See Also" value="r">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-r">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="shortcuts">
+    <param name="Name" value="[0] editor.html#index-1">
+    <param name="Local" value="editor.html#index-1">
+    <param name="Name" value="[1] editor.html#index-2">
+    <param name="Local" value="editor.html#index-2">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="Sumatra PDF">
+    <param name="Local" value="introduction.html#index-1">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="t">
+    <param name="See Also" value="t">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-t">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="templates">
+    <param name="Local" value="doctemplates.html#index-0">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="document wizard">
+    <param name="Local" value="doctemplates.html#index-2">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="file based">
+    <param name="Local" value="doctemplates.html#index-1">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="TeX Live">
+    <param name="Local" value="introduction.html#index-1">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="TPF">
+    <param name="See Also" value="TPF">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-TPF">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="TXC">
+    <param name="See Also" value="TXC">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-TXC">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="viewer">
+    <param name="Local" value="introduction.html#index-1">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="PDF">
+    <param name="Local" value="introduction.html#index-1">
+</OBJECT>
+</UL><LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="w">
+    <param name="See Also" value="w">
+</OBJECT>
+<UL> <LI> <OBJECT type="text/sitemap">
+    <param name="Keyword" value="placeholder">
+    <param name="Local" value="placeholders.html#placeholder-w">
+</OBJECT>
+</UL></UL>

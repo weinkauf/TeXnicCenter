@@ -95,10 +95,6 @@ END_MESSAGE_MAP()
 
 void COptionPageLanguage::OnOK()
 {
-	bool bShowNextStartInfo = (CConfiguration::GetInstance()->m_strLanguageDefault != m_strLanguageDefault);
-	bShowNextStartInfo |= (CConfiguration::GetInstance()->m_strLanguageDialectDefault != m_strDialectDefault);
-	if (bShowNextStartInfo) AfxMessageBox(STE_OPTIONS_REQUIRES_RESTART,MB_ICONINFORMATION | MB_OK);
-
 	CConfiguration::GetInstance()->m_strLanguageDefault = m_strLanguageDefault;
 	CConfiguration::GetInstance()->m_strLanguageDialectDefault = m_strDialectDefault;
 	CConfiguration::GetInstance()->m_strSpellPersonalDictionary = m_strPDictionary;
@@ -116,14 +112,18 @@ void COptionPageLanguage::OnOK()
 		AfxMessageBox(errMsg,MB_OK,MB_ICONINFORMATION);
 	}
 
-	// Inform the background thread of the new speller state.
-	theApp.GetSpellerThread()->EnableSpeller(m_bEnableSpell);
+	//Change speller if no project is loaded
+	if (!theApp.GetProject())
+	{
+		theApp.NewSpeller(CConfiguration::GetInstance()->m_strLanguageDefault, CConfiguration::GetInstance()->m_strLanguageDialectDefault);
+	}
 
+	//In general, inform the background thread of the new speller options.
+	theApp.GetSpellerThread()->EnableSpeller(m_bEnableSpell);
 	if (m_bEnableSpell) 
 	{
 		theApp.ResetSpeller();
 	}
-
 	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_BG_UPDATE_PROJECT); // clear or set the line attributes
 
 	CMFCPropertyPage::OnOK();

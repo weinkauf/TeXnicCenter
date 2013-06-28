@@ -5,207 +5,404 @@
 <!-- Sitemap 1.0 -->
 </HEAD><BODY>
 <OBJECT type="text/site properties">
-	<param name="Window Styles" value="0x800027">
+        <param name="Window Styles" value="0x801227">
+        <param name="ImageType" value="Folder">
 </OBJECT>
 <UL>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="TeXnicCenter">
-		<param name="Local" value="TeXnicCenter.html">
-		</OBJECT>
-	<UL>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Introduction">
-			<param name="Local" value="introduction.html">
-			</OBJECT>
-		<UL>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="What is TeXnicCenter?">
-				<param name="Local" value="whatis.html">
-				</OBJECT>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Requirements">
-				<param name="Local" value="requirements.html">
-				</OBJECT>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Copyright">
-				<param name="Local" value="copyright.html">
-				</OBJECT>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Credits">
-				<param name="Local" value="credits.html">
-				</OBJECT>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="License">
-				<param name="Local" value="license.html">
-				</OBJECT>
-		</UL>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Configuration">
-			<param name="Local" value="configuration.html">
-			</OBJECT>
-		<UL>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Output Profiles">
-				<param name="Local" value="output.html">
-				</OBJECT>
-			<UL>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Output Wizard">
-					<param name="Local" value="output_config_wizard.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Manual Configuration">
-					<param name="Local" value="output_config_manually.html">
-					</OBJECT>
-				<UL>
-					<LI> <OBJECT type="text/sitemap">
-						<param name="Name" value="The '(La)TeX' Page">
-						<param name="Local" value="output_config_manually_page_latex.html">
-						</OBJECT>
-					<LI> <OBJECT type="text/sitemap">
-						<param name="Name" value="The 'Postprocessor' Page">
-						<param name="Local" value="output_config_manually_page_postprocessing.html">
-						</OBJECT>
-					<LI> <OBJECT type="text/sitemap">
-						<param name="Name" value="The 'Viewer' Page">
-						<param name="Local" value="output_config_manually_page_viewer.html">
-						</OBJECT>
-				</UL>
-			</UL>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Options">
-				<param name="Local" value="options.html">
-				</OBJECT>
-			<UL>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Tab 'General'">
-					<param name="Local" value="options_page_general.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Tab 'File'">
-					<param name="Local" value="options_page_file.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Tab 'Directories'">
-					<param name="Local" value="options_page_paths.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Tab 'Spelling'">
-					<param name="Local" value="options_page_spelling.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Tab 'Clean'">
-					<param name="Local" value="options_page_clean.html">
-					</OBJECT>
-			</UL>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Customization">
-				<param name="Local" value="customization.html">
-				</OBJECT>
-			<UL>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Commands">
-					<param name="Local" value="custom_commands.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Toolbars">
-					<param name="Local" value="custom_toolbars.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="'Tools' Menu">
-					<param name="Local" value="custom_tools.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Keyboard Shortcuts">
-					<param name="Local" value="custom_keyboard.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Menus">
-					<param name="Local" value="custom_menu.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Text Formats">
-					<param name="Local" value="custom_format.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Look &amp; Feel">
-					<param name="Local" value="custom_options.html">
-					</OBJECT>
-			</UL>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Advanced Configuration">
-				<param name="Local" value="advanced_configuration.html">
-				</OBJECT>
-		</UL>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Using TeXnicCenter">
-			<param name="Local" value="using.html">
-			</OBJECT>
-		<UL>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Project Management">
-				<param name="Local" value="project.html">
-				</OBJECT>
-			<UL>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Creating a new Project">
-					<param name="Local" value="project_create.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Modifying the Project Settings">
-					<param name="Local" value="project_modify.html">
-					</OBJECT>
-			</UL>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Document Templates">
-				<param name="Local" value="document_templates.html">
-				</OBJECT>
-			<UL>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="File based Document Templates">
-					<param name="Local" value="templates_files.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Document Wizards">
-					<param name="Local" value="templates_wizards.html">
-					</OBJECT>
-			</UL>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Getting Help">
-				<param name="Local" value="getting_help.html">
-				</OBJECT>
-		</UL>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Reference">
-			<param name="Local" value="reference.html">
-			</OBJECT>
-		<UL>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Placeholders">
-				<param name="Local" value="placeholders.html">
-				</OBJECT>
-			<UL>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Placeholders for single files">
-					<param name="Local" value="placeholdersingle.html">
-					</OBJECT>
-				<LI> <OBJECT type="text/sitemap">
-					<param name="Name" value="Placeholders for sets of files">
-					<param name="Local" value="placeholdersets.html">
-					</OBJECT>
-			</UL>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Command Line Arguments">
-				<param name="Local" value="cmdlineargs.html">
-				</OBJECT>
-			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="DDE Commands">
-				<param name="Local" value="ddecmds.html">
-				</OBJECT>
-		</UL>
-	</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="TeXnicCenter 2.0 documentation">
+    <param name="Local" value="index.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Introduction">
+    <param name="Local" value="introduction.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="What is TeXnicCenter?">
+    <param name="Local" value="introduction.html#what-is-texniccenter">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Requirements">
+    <param name="Local" value="introduction.html#requirements">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Conventions used in this manual">
+    <param name="Local" value="introduction.html#conventions-used-in-this-manual">
+</OBJECT>
 </UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Configuration">
+    <param name="Local" value="configuration.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Output profiles">
+    <param name="Local" value="configuration.html#output-profiles">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Output wizard">
+    <param name="Local" value="configuration.html#output-wizard">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Invoking the output wizard">
+    <param name="Local" value="configuration.html#invoking-the-output-wizard">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Using the output wizard">
+    <param name="Local" value="configuration.html#using-the-output-wizard">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Manual configuration">
+    <param name="Local" value="configuration.html#manual-configuration">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="(La)TeX tab">
+    <param name="Local" value="configuration.html#la-tex-tab">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Postprocessor tab">
+    <param name="Local" value="configuration.html#postprocessor-tab">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Viewer tab">
+    <param name="Local" value="configuration.html#viewer-tab">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Editor">
+    <param name="Local" value="editor.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Editor keyboard shortcuts">
+    <param name="Local" value="editor.html#editor-keyboard-shortcuts">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Editor mouse shortcuts">
+    <param name="Local" value="editor.html#editor-mouse-shortcuts">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Project management">
+    <param name="Local" value="projects.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Creating a new project">
+    <param name="Local" value="projects.html#creating-a-new-project">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Modifying project settings">
+    <param name="Local" value="projects.html#modifying-project-settings">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Document templates">
+    <param name="Local" value="doctemplates.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Example">
+    <param name="Local" value="doctemplates.html#example">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="File based document templates">
+    <param name="Local" value="doctemplates.html#file-based-document-templates">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Example">
+    <param name="Local" value="doctemplates.html#index-1">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Document wizards">
+    <param name="Local" value="doctemplates.html#document-wizards">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Customization">
+    <param name="Local" value="customization.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Customizing commands">
+    <param name="Local" value="customization.html#customizing-commands">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Customizing toolbars">
+    <param name="Local" value="customization.html#customizing-toolbars">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Customizing the tools menu">
+    <param name="Local" value="customization.html#customizing-the-tools-menu">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Customizing keyboard shortcuts">
+    <param name="Local" value="customization.html#customizing-keyboard-shortcuts">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Customizing menus">
+    <param name="Local" value="customization.html#customizing-menus">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Application Frame Menus">
+    <param name="Local" value="customization.html#application-frame-menus">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Context Menus">
+    <param name="Local" value="customization.html#context-menus">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Customizing the look and feel">
+    <param name="Local" value="customization.html#customizing-the-look-and-feel">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Options">
+    <param name="Local" value="options.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="General options">
+    <param name="Local" value="options.html#general-options">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Files options">
+    <param name="Local" value="options.html#files-options">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Directories options">
+    <param name="Local" value="options.html#directories-options">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Spelling options">
+    <param name="Local" value="options.html#spelling-options">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Clean options">
+    <param name="Local" value="options.html#clean-options">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Text format options">
+    <param name="Local" value="options.html#text-format-options">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Spelling dictionaries">
+    <param name="Local" value="dictionaries.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Additional dictionaries">
+    <param name="Local" value="dictionaries.html#additional-dictionaries">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Installing dictionaries">
+    <param name="Local" value="dictionaries.html#installing-dictionaries">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Personal dictionaries format">
+    <param name="Local" value="dictionaries.html#personal-dictionaries-format">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Using a word list from another application as personal dictionary">
+    <param name="Local" value="dictionaries.html#using-a-word-list-from-another-application-as-personal-dictionary">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Correcting spelling errors in the dictionary">
+    <param name="Local" value="dictionaries.html#correcting-spelling-errors-in-the-dictionary">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Placeholders">
+    <param name="Local" value="placeholders.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Placeholders for single files">
+    <param name="Local" value="placeholders.html#placeholders-for-single-files">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Placeholders referring to project's main file">
+    <param name="Local" value="placeholders.html#placeholders-referring-to-project-s-main-file">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Placeholders with slashes instead of backslashes">
+    <param name="Local" value="placeholders.html#placeholders-with-slashes-instead-of-backslashes">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Placeholders for 8.3 path notation">
+    <param name="Local" value="placeholders.html#placeholders-for-8-3-path-notation">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Placeholders for 8.3 path notation with slashes instead of backslashes">
+    <param name="Local" value="placeholders.html#placeholders-for-8-3-path-notation-with-slashes-instead-of-backslashes">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Placeholders referring to current file">
+    <param name="Local" value="placeholders.html#placeholders-referring-to-current-file">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Placeholders with slashes instead of backslashes">
+    <param name="Local" value="placeholders.html#id1">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Placeholders for 8.3 path notation">
+    <param name="Local" value="placeholders.html#id2">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Placeholders for 8.3 path notation with slashes instead of backslashes">
+    <param name="Local" value="placeholders.html#id3">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Placeholders referrening to a selection in the current file">
+    <param name="Local" value="placeholders.html#placeholders-referrening-to-a-selection-in-the-current-file">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Other placeholders">
+    <param name="Local" value="placeholders.html#other-placeholders">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Placeholders for sets of files">
+    <param name="Local" value="placeholders.html#placeholders-for-sets-of-files">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Examples">
+    <param name="Local" value="placeholders.html#examples">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Application example">
+    <param name="Local" value="placeholders.html#application-example">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Command-line arguments">
+    <param name="Local" value="commandline.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Open a file in TeXnicCenter using another application or the command line">
+    <param name="Local" value="commandline.html#open-a-file-in-texniccenter-using-another-application-or-the-command-line">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Multiple instance support">
+    <param name="Local" value="commandline.html#multiple-instance-support">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Single instance support">
+    <param name="Local" value="commandline.html#single-instance-support">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="DDE commands">
+    <param name="Local" value="commandline.html#dde-commands">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Copyright &amp; Credits">
+    <param name="Local" value="copyright.html">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Copyright">
+    <param name="Local" value="copyright.html#copyright">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Credits">
+    <param name="Local" value="copyright.html#credits">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Idea">
+    <param name="Local" value="copyright.html#idea">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Maintainer">
+    <param name="Local" value="copyright.html#maintainer">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Development">
+    <param name="Local" value="copyright.html#development">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Main Code">
+    <param name="Local" value="copyright.html#main-code">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Scintilla Source Code Editing Component">
+    <param name="Local" value="copyright.html#scintilla-source-code-editing-component">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Hunspell Spell Checker">
+    <param name="Local" value="copyright.html#hunspell-spell-checker">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Additional Codes">
+    <param name="Local" value="copyright.html#additional-codes">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Online-Help &amp; Tips">
+    <param name="Local" value="copyright.html#online-help-tips">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="TeXnicCenter Templates">
+    <param name="Local" value="copyright.html#texniccenter-templates">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Graphics">
+    <param name="Local" value="copyright.html#graphics">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Additional Graphics">
+    <param name="Local" value="copyright.html#additional-graphics">
+</OBJECT>
+</UL>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="GNU General Public License">
+    <param name="Local" value="copyright.html#gnu-general-public-license">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="Preamble">
+    <param name="Local" value="copyright.html#preamble">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION">
+    <param name="Local" value="copyright.html#terms-and-conditions-for-copying-distribution-and-modification">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+    <param name="Name" value="NO WARRANTY">
+    <param name="Local" value="copyright.html#no-warranty">
+</OBJECT>
+</UL>
+</UL>
+</UL>
+</UL>
+
 <OBJECT type="text/sitemap">
 	<param name="Merge" value="..\Help\LatexHelpBook.chm::\LatexHelpBook.hhc">
 </OBJECT>
+
 </BODY></HTML>
