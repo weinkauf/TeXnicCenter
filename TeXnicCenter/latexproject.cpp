@@ -1088,9 +1088,6 @@ void CLaTeXProject::OnSpellProject()
 	if (pSpell == NULL)
 		return;
 
-	// Setup path for ignored words
-	const CString sIgnoredPath = GetIgnoredWordsFileName();
-
 	SpellCheckDlg dlg(NULL,NULL);
 	dlg.SetShowDoneMessage(false);
 	dlg.SetCheckSelectionOnly(false);
@@ -1137,13 +1134,6 @@ void CLaTeXProject::OnSpellProject()
 			long ptEnd = pView->GetCtrl().GetSelectionEnd();
 
 			int result = dlg.DoModal();
-
-			// begin ow
-			if (theApp.GetSpeller()->IsAddedModified()) {
-			    //TRACE("SC was modified, saving words to %s...\n", sPath);
-			    theApp.GetSpeller()->SaveIgnoredWords(sIgnoredPath);
-			}
-			// end ow
 
 			// Restore selection
 			pView->GetCtrl().SetSel(ptStart,ptEnd);
@@ -1255,11 +1245,7 @@ const StructureItemContainer& CLaTeXProject::GetStructureItems() const
 
 const CString CLaTeXProject::GetIgnoredWordsFileName() const
 {
-	return
-	    GetDirectory() +
-	    _T("\\ignored") +
-	    GetTitle() +
-	    CConfiguration::GetInstance()->m_strGuiLanguage + _T(".sc");
+	return GetDirectory() + _T("\\") + GetTitle() + _T(".tiw");
 }
 
 namespace {

@@ -527,6 +527,12 @@ CUniqueStringList* CPlaceholderSets::GetFileSets(const unsigned int Sets,
 		//The Caller must be aware, that the following might throw a CMemoryException
 		ConvertAndAdd(strToAdd,pStrList,bShortPaths,bForwardSlash,
 		              bRelativePaths,true);
+
+		//Get the path of the tiw-file
+		strToAdd = m_pProject->GetIgnoredWordsFileName();
+		//The Caller must be aware, that the following might throw a CMemoryException
+		ConvertAndAdd(strToAdd,pStrList,bShortPaths,bForwardSlash,
+		              bRelativePaths,true);
 	}
 
 	////////////////////////////////////
