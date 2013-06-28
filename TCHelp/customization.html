@@ -1,38 +1,323 @@
-<html>
-<head>
-<title>Customization</title>
-<link rel="stylesheet" href="STYLE.CSS" type="text/css">
-</head>
-<body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<p>
-<table border="0" width="100%">
-<tr>
-<td class="h2">Customization</td>
-</tr>
-</table>
-</p>
 
-<p>TeXnicCenter allows you, to customize nearly every aspect of the graphical
-user interface (GUI).</p>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    
+    <title>Customization</title>
+    
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/keypress.css" type="text/css" />
+    <link rel="copyright" title="Copyright" href="copyright.html" />
+    <link rel="top" title="TeXnicCenter 2.0 documentation" href="index.html" />
+    <link rel="next" title="Options" href="options.html" />
+    <link rel="prev" title="Document templates" href="doctemplates.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="index.html">
+            <img class="logo" src="_static/TeXnicCenter.png" alt="Logo"/>
+          </a></p>
+        <div class="headertitle"><a
+          href="index.html">TeXnicCenter 2.0 documentation</a></div>
+        <div class="rel">
+          <a href="doctemplates.html" title="Document templates"
+             accesskey="P">previous</a> |
+          <a href="options.html" title="Options"
+             accesskey="N">next</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-<p>To customize the user interface of TeXnicCenter, select in the menu
-'<var>Tools</var>' the menu item '<var>Customize...</var>'. This will open
-the dialog '<var>Customization</var>'.</p>
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+          <div class="body">
+            
+  <div class="section" id="customization">
+<h1>Customization</h1>
+<p>TeXnicCenter allows you to customize nearly every aspect of the graphical user
+interface (GUI). To customize the user interface of TeXnicCenter select in the
+<em class="menuselection">Tools &#8227; Customize...</em> This will open the
+<em class="xref std std-dialog">Customization</em> dialog.</p>
+<div class="section" id="customizing-commands">
+<span id="customization-commands"></span><h2>Customizing commands</h2>
+<p>To customize commands which are available on several toolbars and menus open the
+<em class="xref std std-dialog">Customization</em> dialog and select the <em class="xref std std-tab">Commands</em> tab.</p>
+<div class="figure">
+<img alt="_images/customizecommands.png" src="_images/customizecommands.png" />
+<p class="caption"><em class="xref std std-dialog">Command customization</em> dialog</p>
+</div>
+<p>When this page is active you can simply drag &amp; drop commands from one menu to
+another, from one toolbar to another, from a toolbar to a menu and vice versa.
+Further on, you can drag &amp; drop commands, not already available on the toolbars
+or the menus from the <em>Commands</em> list on the dialog page.</p>
+<p>You can also change the text and/or the image of menu items and toolbar buttons.
+Simply select a menu item or a button, right click on it and choose button
+<em>Appearance...</em></p>
+<p>The controls of the page are having the following meaning:</p>
+<dl class="docutils">
+<dt><strong>Categories</strong></dt>
+<dd>Choose the category of commands to display in the list <em>Commands</em>.</dd>
+<dt><strong>Commands</strong></dt>
+<dd>Commands available for the selected categorie. You can drag &amp; drop the
+commands listed here to the toolbars and menus.</dd>
+<dt><strong>Description</strong></dt>
+<dd>A short description of the currently selected command in the list <em>Commands</em>.</dd>
+</dl>
+</div>
+<div class="section" id="customizing-toolbars">
+<span id="customization-toolbars"></span><h2>Customizing toolbars</h2>
+<p>To customize the toolbars, open the dialog Customization and select the tab
+<em class="xref std std-tab">Toolbars</em>.</p>
+<div class="figure">
+<img alt="_images/customizetoolbars.png" src="_images/customizetoolbars.png" />
+<p class="caption"><em class="xref std std-dialog">Toolbar customization</em> dialog</p>
+</div>
+<p>The meanings of the controls are:</p>
+<dl class="docutils">
+<dt><strong>Toolbars</strong></dt>
+<dd>A list of all toolbars available at the moment. The toolbars which are
+checked, are visible at the moment.</dd>
+<dt><strong>Reset</strong></dt>
+<dd>Resets the toolbar currently selected in the list <em>Toolbars</em> to the
+default configuration. All the changes you have made to the toolbar since the
+installation of TeXnicCenter will be lost.</dd>
+<dt><strong>Reset All</strong></dt>
+<dd>Resets all toolbars to the default configuration. All the changes you have
+made to the toolbars since the installation of TeXnicCenter will be lost.</dd>
+<dt><strong>New...</strong></dt>
+<dd>Creates a new toolbar. You can place commands on the toolbar using the page
+<em>Commands</em>.</dd>
+<dt><strong>Rename...</strong></dt>
+<dd>If you have selected a toolbar in the list <em>Toolbars</em>, that has been
+created by you using the <em>New...</em> command, this button allows you to
+rename the toolbar.</dd>
+<dt><strong>Delete...</strong></dt>
+<dd>If you have selected a toolbar in the list <em>Toolbars</em>, that has been
+created by you using the <em>New...</em> command, this button allows you to
+delete the toolbar.  <em>Show text labels</em> If this option is enabled,
+the buttons on the bar, selected in the list <em>Toolbars</em>, will be
+displayed with labels below the icons.</dd>
+</dl>
+</div>
+<div class="section" id="customizing-the-tools-menu">
+<span id="customization-tools"></span><h2>Customizing the tools menu</h2>
+<p>You can add several commands to the menu <em>Tools</em>, that allow you to
+invoke external tools. This is a very powerful feature. Using placeholders for
+the <em>Arguments</em>, this feature allows you to integrate external tools
+like spell checkers and other tools which should work with the current document
+or currently selected word or elements like that.</p>
+<p>To customize the menu <em>Tools</em>, open the <em class="xref std std-dialog">Customization</em> dialog
+and select the tab <em>Tools</em>.</p>
+<div class="figure">
+<img alt="_images/customizetools.png" src="_images/customizetools.png" />
+<p class="caption"><em class="xref std std-dialog">Tools menu customization</em> dialog</p>
+</div>
+<p>The meanings of the controls are:</p>
+<dl class="docutils">
+<dt><strong>Menu contents</strong></dt>
+<dd>A list of the menu items to display in the menu <em class="menuselection">Tools</em>.  You
+can create a new entry by choosing the new button (rectangle), remove the
+selected entry by choosing the delete button (cross) and move the selected
+entry up or down in the menu by choosing the up or down button.  To change the
+entry name, simply select an item and press <tt class="kbd docutils literal"><span class="pre">F2</span></tt>.</dd>
+<dt><strong>Command</strong></dt>
+<dd>Specify the full path of the application to start, when the selected entry
+will be choosen.</dd>
+<dt><strong>Arguments</strong></dt>
+<dd>Specify which arguments to pass on the command line to the application. You
+can use place holders for dynamic arguments.</dd>
+<dt><strong>Initial directory</strong></dt>
+<dd>Specify the working directory for the application to start. You can use
+placeholders for dynamic directories.</dd>
+</dl>
+</div>
+<div class="section" id="customizing-keyboard-shortcuts">
+<span id="customization-shortcuts"></span><h2>Customizing keyboard shortcuts</h2>
+<p>TeXnicCenter allows you to customize the key combinations (shortcuts), necessary
+to invoke a command without using the mouse.</p>
+<p>To customize the shortcuts, open the dialog Customization and select the tab
+<em>Keyboard</em>.</p>
+<div class="figure">
+<img alt="_images/customizekeyboard.png" src="_images/customizekeyboard.png" />
+<p class="caption"><em class="xref std std-dialog">Keyboard shortcuts customization</em> dialog</p>
+</div>
+<p>The meanings of the controls are:</p>
+<dl class="docutils">
+<dt><strong>Category</strong></dt>
+<dd>The category of the commands to display in the list <em>Commands</em>.</dd>
+<dt><strong>Commands</strong></dt>
+<dd>Commands available for the currently selected category. Select a command here
+to specify a shortcut for it.</dd>
+<dt><strong>Description</strong></dt>
+<dd>A short description of the selected command.</dd>
+<dt><strong>Set Accelerator for</strong></dt>
+<dd>Specifies the menu, for which to change the shortcuts. Has to be
+<em>Default</em>.</dd>
+<dt><strong>Current Keys</strong></dt>
+<dd>List of shortcuts currently assigned to the command selected in the list
+<em>Commands</em>.</dd>
+<dt><strong>Press new Shortcut Key</strong></dt>
+<dd>Press the key combination here, you would like to assign to the selected
+command.</dd>
+<dt><strong>Assign</strong></dt>
+<dd>Add the shortcut shown in the field <em>Press new Shortcut Key</em> to the
+list of shortcuts for the selected command.</dd>
+<dt><strong>Remove</strong></dt>
+<dd>Remove the shortcut selected in the list <em>Current Keys</em> from the list
+of shortcuts for the selected command.</dd>
+<dt><strong>Reset All</strong></dt>
+<dd>Reset all shortcuts to the default. All the changes that have been made to the
+shortcuts since the installation of TeXnicCenter will be lost.</dd>
+</dl>
+</div>
+<div class="section" id="customizing-menus">
+<span id="customization-menu"></span><h2>Customizing menus</h2>
+<p>TeXnicCenter allows you to customize the main and the context menus.  To
+customize the menus, open the dialog Customization and select the tab
+<em class="xref std std-tab">Menu</em>.</p>
+<div class="figure">
+<img alt="_images/customizemenu.png" src="_images/customizemenu.png" />
+<p class="caption"><em class="xref std std-dialog">Menu customization</em> dialog</p>
+</div>
+<p>The meanings of the controls are:</p>
+<div class="section" id="application-frame-menus">
+<h3>Application Frame Menus</h3>
+<dl class="docutils">
+<dt><strong>Show Menus for</strong></dt>
+<dd>List of available main window menus. Select the menu you would like to
+customize.  For TeXnicCenter only the <em class="xref std std-dialog">Default Menu</em> is available.</dd>
+<dt><strong>Reset</strong></dt>
+<dd>Resets the selected main window menu. All the changes that have been made to
+the menu since the installation of TeXnicCenter will be lost.</dd>
+<dt><strong>Menu animations</strong></dt>
+<dd>Specifies, which animation to use when opening a menu.</dd>
+<dt><strong>Menu shadows</strong></dt>
+<dd>If this option is enabled, menus in TeXnicCenter will have a fading shadow,
+otherwise the menus are displayed normally.</dd>
+</dl>
+</div>
+<div class="section" id="context-menus">
+<h3>Context Menus</h3>
+<dl class="docutils">
+<dt><strong>Select context menu</strong></dt>
+<dd><p class="first">List of available context menus. Select the menu you would like to customize.
+Context menus pop up, when you click the right mouse button.  TeXnicCenter
+uses the following context menus.</p>
+<dl class="last docutils">
+<dt><strong>Editor</strong></dt>
+<dd>Shown when you right click into an editor window.</dd>
+<dt><strong>Main Window Area</strong></dt>
+<dd>Shown when you right click into the main window&#8217;s background or on the
+editor&#8217;s scrollbars.</dd>
+<dt><strong>Navigator View</strong></dt>
+<dd>Shown when you right click onto an item in the navigator bar.</dd>
+</dl>
+</dd>
+<dt><strong>Reset</strong></dt>
+<dd>Resets the selected context menu. All the changes that have been made to that
+context menu since the installation of TeXnicCenter will be lost.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="customizing-the-look-and-feel">
+<span id="customization-look"></span><h2>Customizing the look and feel</h2>
+<p>TeXnicCenter allows you to widely customize the look and feel of the graphical
+user interface including downloadable skins.</p>
+<p>To customize the look &amp; feel open the <em class="xref std std-dialog">Customization</em> dialog and select
+the <em class="xref std std-tab">Options</em> tab.</p>
+<div class="figure">
+<img alt="_images/customizeoptions.png" src="_images/customizeoptions.png" />
+<p class="caption"><em class="xref std std-dialog">Options customization</em> dialog</p>
+</div>
+<p>The controls of the page are having the following meanings:</p>
+<dl class="docutils">
+<dt><strong>Show ScreenTips on toolbars</strong></dt>
+<dd>If this option is enabled, a small yellow window (ScreenTips) with a short
+description will appear when you move the mouse cursor above a toolbar icon
+and wait for a moment.</dd>
+<dt><strong>Show shortcut keys in ScreenTips</strong></dt>
+<dd>If this option is enabled, the ScreenTips will contain the shortcut for the
+specific command besides the short description of the command.</dd>
+<dt><strong>Large Icons</strong></dt>
+<dd>If this option is enabled all toolbar icons will be displayed in double size.</dd>
+</dl>
+</div>
+</div>
 
-<p>
-<ul>
-   <li>Specify, which commands should be available via the
-   <a href="custom_commands.html">Menus and Toolbars</a>;</li>
-   <li>customize the <a href="custom_toolbars.html">Toolbars</a>;</li>
-   <li>customize the menu <a href="custom_tools.html">Tools</a>;</li>
-   <li>customize the <a href="custom_keyboard.html">Keyboard Sshortcuts</a> used
-   to access commands using the keyboard;</li>
-   <li>customize the <a href="custom_menu.html">Menus</a>;</li>
-   <li>customize the <a href="custom_format.html">Text Format</a> of the
-   editor, the navigator and the output bar;</li>
-   <li>customize the general <a href="custom_options.html">Look & Feel</a>.</li>
+
+          </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="editor.html">Editor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Project management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doctemplates.html">Document templates</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Customization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#customizing-commands">Customizing commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customizing-toolbars">Customizing toolbars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customizing-the-tools-menu">Customizing the tools menu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customizing-keyboard-shortcuts">Customizing keyboard shortcuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customizing-menus">Customizing menus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customizing-the-look-and-feel">Customizing the look and feel</a></li>
 </ul>
-</p>
-</body>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dictionaries.html">Spelling dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="placeholders.html">Placeholders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commandline.html">Command-line arguments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copyright.html">Copyright &amp; Credits</a></li>
+</ul>
+
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <a href="doctemplates.html" title="Document templates"
+             >previous</a> |
+          <a href="options.html" title="Options"
+             >next</a> |
+          <a href="genindex.html" title="General Index"
+             >index</a>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer">
+        &copy; <a href="copyright.html">Copyright</a> 2013, The TeXnicCenter Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
 </html>
