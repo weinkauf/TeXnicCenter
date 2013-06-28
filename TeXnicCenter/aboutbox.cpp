@@ -83,10 +83,8 @@ const TCHAR DISPLAY_BITMAP      = _T('\b');
 // (see #defines above)
 LPCTSTR const pArrCredit[] =
 {
-	_T("Copyright © 1999-2012\t"),
+	_T("Copyright © 1999-2013 The TeXnicCenter Team\t"),
 	_T("www.TeXnicCenter.org\t"),
-	_T(""),
-	_T("Portions Copyright © 1998-2002 by Cristi Posea\f"),
 	_T(""),
 	_T(""),
 	_T("IDB_SEPARATOR\b"),
@@ -95,21 +93,19 @@ LPCTSTR const pArrCredit[] =
 	_T(""),
 	_T("Sven Wiegand\f"),
 	_T(""),
+	_T("Maintainer\r"),
+	_T(""),
+	_T("Tino Weinkauf\f"),
+	_T(""),
 	_T(""),
 	_T("IDB_SEPARATOR\b"),
 	_T(""),
 	_T("Development\r"),
 	_T(""),
-	_T("Maintainer\t"),
-	_T(""),
-	_T("Tino Weinkauf\f"),
-	_T(""),
-	_T(""),
 	_T("Main Code\t"),
 	_T(""),
 	_T("Sergiu Dotenco\f"),
 	_T("Alexander Müller\f"),
-	_T("Chris Norris\f"),
 	_T("Tino Weinkauf\f"),
 	_T("Sven Wiegand\f"),
 	_T("Oliver Wieland\f"),
@@ -128,18 +124,16 @@ LPCTSTR const pArrCredit[] =
 	_T("Additional Codes\t"),
 	_T(""),
 	_T("Loïc d'Anterroches, Stefan Ascher, Adam Clauss, Michael Dunn\f"),
-	_T("Raffi Enficiaud, Mark Findlay, Stephan Schrader, Paul Selormey\f"),
-	_T("Martin Stanek, Pavel Vacha, Christian Welzel\f"),
+	_T("Raffi Enficiaud, Mark Findlay, Chris Norris, Stephan Schrader, Paul Selormey\f"),
+	_T("Martin Stanek, Alexander Täschner, Pavel Vacha, Christian Welzel\f"),
 	_T(""),
 	_T(""),
 	_T("IDB_SEPARATOR\b"),
 	_T(""),
 	_T("Online-Help & Tips\r"),
 	_T(""),
-	_T("Gerald Binder\f"),
-	_T("Marckus Kraft\f"),
-	_T("Rüdiger Stuible\f"),
-	_T("Sven Wiegand\f"),
+	_T("Gerald Binder, Sergiu Dotenco, Marckus Kraft\f"),
+	_T("Rüdiger Stuible, Tino Weinkauf, Sven Wiegand\f"),
 	_T(""),
 	_T(""),
 	_T("IDB_SEPARATOR\b"),
@@ -212,7 +206,7 @@ CAboutDlg::CAboutDlg()
 	else
 	{
 		m_strVersion = _T("Unknown");
-		CopyrightText = _T("(c) 1999-2012 The TeXnicCenter Team");
+		CopyrightText = _T("(c) 1999-2013 The TeXnicCenter Team");
 	}
 
 	//Add 32-bit or 64-bit to the version info. That is good for error reports.
@@ -220,6 +214,10 @@ CAboutDlg::CAboutDlg()
 		m_strVersion += _T(" (64 bit)");
 	#else
 		m_strVersion += _T(" (32 bit)");
+	#endif
+
+	#ifdef _DEBUG
+		TraceCreditsAsreStructuredText();
 	#endif
 }
 
@@ -543,4 +541,40 @@ LRESULT CAboutDlg::OnCreditsPaint( UINT, LPARAM, WPARAM, BOOL& )
 LRESULT CAboutDlg::OnCreditsEraseBkgnd( UINT, LPARAM, WPARAM, BOOL& )
 {
 	return 1;
+}
+
+void CAboutDlg::TraceCreditsAsreStructuredText() const
+{
+	//Run over all lines of the credit array
+	for(int i=0;i<ARRAYCOUNT;i++)
+	{
+		CString ThisLine = pArrCredit[i];
+		
+		const TCHAR Type = ThisLine.IsEmpty() ? NORMAL_TEXT : ThisLine[ThisLine.GetLength() - 1];
+
+		if (!ThisLine.IsEmpty())
+		{
+			ThisLine.Truncate(ThisLine.GetLength() - 1);
+		}
+
+		switch (Type)
+		{
+			case NORMAL_TEXT:
+			default:
+				TRACE(ThisLine + _T("\n"));
+				break;
+
+			case TOP_LEVEL_GROUP:
+				TRACE(ThisLine + _T("\n--------------------------------------------------------------------------\n"));
+				break;
+
+			case GROUP_TITLE:
+				TRACE(ThisLine + _T("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"));
+				break;
+
+			case TOP_LEVEL_TITLE:
+			case DISPLAY_BITMAP:
+				break;
+		}
+	}
 }

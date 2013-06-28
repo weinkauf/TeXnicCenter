@@ -505,6 +505,9 @@
 #define IDC_EDITOR_FONT                 1545
 #define IDC_EDITOR_SELECTFONT           1546
 #define IDC_EDITOR_TABWIDTH             1547
+#define IDC_EDITOR_SCHEME               1548
+#define IDC_EDITOR_SELECTFONT2          1549
+#define IDC_EDITOR_EDITSCHEMECOLOR      1550
 #define IDC_OPTIONS_FILECLEAN_DELETE    2048
 #define IDC_SEARCH_BROWSE_SEARCHIN      2049
 #define IDC_OPTIONS_DEFAULT_PATH_EDIT   2051
@@ -636,7 +639,7 @@
 #define IDC_ADVTOOLS_PROMPTARG          2205
 #define IDC_ADVTOOLS_CLOSEWIN           2206
 #define IDC_OPTIONS_LANGUAGE_DOWNLOAD   2207
-#define IDC_INSERCURSOR_STYLE           2208
+#define IDC_INSERTCURSOR_STYLE          2208
 #define IDC_INSERTCURSOR_BLINK          2209
 #define IDC_OVERWRITECURSOR_BLINK       2210
 #define IDC_TEXTMODULES_NEWMODULE       2211
@@ -679,6 +682,7 @@
 #define IDC_NEXTTIP                     2249
 #define IDC_STARTUP                     2250
 #define IDC_TIPSTRING                   2251
+#define IDC_OPTIONS_EDITOR_VERTICALEDGE_COLUMN 2252
 #define IDS_MENU_UNDO_FORMAT            8615
 #define IDS_MENU_REDO_FORMAT            8616
 #define IDS_MENU_UNDO_DEFAULT           8617
@@ -719,6 +723,8 @@
 #define IDS_SPELL_DONE                  8661
 #define IDS_SPELL_NO_SUGGESTIONS        8662
 #define IDS_MISSING_SECTION             8663
+#define IDS_MRU_PROJECTS                8664
+#define IDS_MRU_FILES                   8665
 #define IDC_EDITOR_CLOSETOOLWINDOWS_ESC 8667
 #define IDC_PREPROCESSORLIST            8668
 #define IDC_EDIT_PRPEXE                 8669
@@ -731,6 +737,12 @@
 #define IDC_INSERTPH_PRPOUTPUT          8676
 #define IDC_BROWSE_PPROCESSOR           8677
 #define IDC_PPROCESSORLIST              8678
+#define IDC_OPTIONS_VERTICALEDGE        8679
+#define IDC_EDITOR_VERTICALEDGE_COLOR   8680
+#define IDS_CUSTOMIZE_COLORSCHEME       8681
+#define IDC_INSERTCURSOR_STYLE_BLOCK    8683
+#define IDC_INSERTCURSOR_STYLE_LINE     8684
+#define IDC_INSERTCURSOR_BLINK_SPEED    8686
 #define ID_TEXTMODULES_FIRST            17000
 #define ID_TEXTMODULES_LAST             18000
 #define ID_VIEW_BAR1                    32760
@@ -1480,9 +1492,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        57680
+#define _APS_NEXT_RESOURCE_VALUE        57684
 #define _APS_NEXT_COMMAND_VALUE         40689
-#define _APS_NEXT_CONTROL_VALUE         8679
+#define _APS_NEXT_CONTROL_VALUE         8688
 #define _APS_NEXT_SYMED_VALUE           57773
 #endif
 #endif

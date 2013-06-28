@@ -10,13 +10,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="advanced_configuration.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="AutoComplete.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="cmdlineargs.html">
+    <None Include="TeXnicCenter.hhc" />
+    <None Include="TeXnicCenter.hhk" />
+    <None Include="commandline.html">
       <Filter>Help Files</Filter>
     </None>
     <None Include="configuration.html">
@@ -25,165 +21,39 @@
     <None Include="copyright.html">
       <Filter>Help Files</Filter>
     </None>
-    <None Include="creating_projects.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="credits.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="custom_commands.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="custom_format.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="custom_keyboard.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="custom_menu.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="custom_options.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="custom_toolbars.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="custom_tools.html">
-      <Filter>Help Files</Filter>
-    </None>
     <None Include="customization.html">
       <Filter>Help Files</Filter>
     </None>
-    <None Include="ddecmds.html">
+    <None Include="dictionaries.html">
       <Filter>Help Files</Filter>
     </None>
-    <None Include="document_templates.html">
+    <None Include="doctemplates.html">
       <Filter>Help Files</Filter>
     </None>
-    <None Include="generating_output.html">
+    <None Include="editor.html">
       <Filter>Help Files</Filter>
     </None>
-    <None Include="getting_help.html">
+    <None Include="genindex.html">
+      <Filter>Help Files</Filter>
+    </None>
+    <None Include="index.html">
       <Filter>Help Files</Filter>
     </None>
     <None Include="introduction.html">
       <Filter>Help Files</Filter>
     </None>
-    <None Include="license.html">
-      <Filter>Help Files</Filter>
-    </None>
     <None Include="options.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="options_page_clean.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="options_page_file.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="options_page_general.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="options_page_paths.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="options_page_spelling.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="output.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="output_concept.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="output_config.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="output_config_manually.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="output_config_manually_page_latex.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="output_config_manually_page_postprocessing.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="output_config_manually_page_viewer.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="output_config_wizard.html">
       <Filter>Help Files</Filter>
     </None>
     <None Include="placeholders.html">
       <Filter>Help Files</Filter>
     </None>
-    <None Include="placeholdersets.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="placeholdersingle.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="project.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="project_create.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="project_modify.html">
-      <Filter>Help Files</Filter>
-    </None>
     <None Include="projects.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="quick_start.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="reference.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="requirements.html">
       <Filter>Help Files</Filter>
     </None>
     <None Include="root.html">
       <Filter>Help Files</Filter>
     </None>
-    <None Include="spell_check.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="STYLE.CSS">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="TEMPLATE.HTM">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="template.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="template_header.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="templates_files.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="templates_wizards.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="TeXnicCenter.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="using.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="welcome.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="whatis.html">
-      <Filter>Help Files</Filter>
-    </None>
-    <None Include="Change.log" />
-    <None Include="TeXnicCenter.hhc" />
-    <None Include="TeXnicCenter.hhk" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="LaTeXHelp\Amslatex.chm">

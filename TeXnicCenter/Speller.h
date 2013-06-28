@@ -27,8 +27,13 @@ class Speller
 
 	std::string to_code_;
 
+	CString LoadedAffPath;
+	CString LoadedDictPath;
+
 public:
 	Speller(LPCTSTR affpath, LPCTSTR dpath, LPCTSTR key = 0);
+
+	bool SameLanguage(const CString& affpath, const CString& dpath) const;
 
 	bool IsAddedModified() const;
 	bool IsIgnoredModified() const;

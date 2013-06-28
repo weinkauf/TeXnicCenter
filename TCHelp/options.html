@@ -1,36 +1,457 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-  <title>Options</title>
-  <link rel="stylesheet" href="STYLE.CSS" type="text/css">
-</head>
-<body>
-<p>
-<table border="0" width="100%">
-  <tbody>
-    <tr>
-      <td class="h2">Options</td>
-    </tr>
-  </tbody>
-</table>
-</p>
-<p>TeXnicCenter provides many options to configure the application,
-making
-usage easier. To change these options, open the dialog '<var>Options</var>'
-by choosing&nbsp; the menu item '<var>Tools|Options...</var>'.</p>
-<p>The dialog shows six tabs:</p>
-<p>
-</p>
-<ol>
-  <li> <a href="options_page_general.html">'<var>General</var>'</a></li>
-  <li> <a href="options_page_file.html">'<var>File</var>'</a></li>
-  <li> <a href="options_page_paths.html">'<var>Directories</var>'</a></li>
-  <li> <a href="options_page_spelling.html">'<var>Spelling</var>'</a></li>
-  <li> <a href="options_page_clean.html">'<var>Clean</var>'</a></li>
-  <li><a href="options_page_text_format.html"><span
- style="font-style: italic;">'Text Format'</span></a><br>
-  </li>
-</ol>
-<p></p>
-</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    
+    <title>Options</title>
+    
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/keypress.css" type="text/css" />
+    <link rel="copyright" title="Copyright" href="copyright.html" />
+    <link rel="top" title="TeXnicCenter 2.0 documentation" href="index.html" />
+    <link rel="next" title="Spelling dictionaries" href="dictionaries.html" />
+    <link rel="prev" title="Customization" href="customization.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="index.html">
+            <img class="logo" src="_static/TeXnicCenter.png" alt="Logo"/>
+          </a></p>
+        <div class="headertitle"><a
+          href="index.html">TeXnicCenter 2.0 documentation</a></div>
+        <div class="rel">
+          <a href="customization.html" title="Customization"
+             accesskey="P">previous</a> |
+          <a href="dictionaries.html" title="Spelling dictionaries"
+             accesskey="N">next</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+          <div class="body">
+            
+  <div class="section" id="options">
+<h1>Options</h1>
+<p>TeXnicCenter provides many options to configure the application, making usage
+easier. To change these options, open the dialog <em class="xref std std-dialog">Options</em> by choosing
+the menu item <em class="menuselection">Tools &#8227; Options...</em>.</p>
+<div class="section" id="general-options">
+<span id="index-0"></span><h2>General options</h2>
+<p id="index-1">The <em class="xref std std-tab">General</em> options page in the <em class="xref std std-dialog">Options</em> dialog allows to modify
+general options for TeXnicCenter.</p>
+<div class="figure">
+<img alt="_images/optionsgeneral.png" src="_images/optionsgeneral.png" />
+<p class="caption"><em class="xref std std-tab">General</em> option page</p>
+</div>
+<p>The meaning of the controls is:</p>
+<dl class="docutils">
+<dt><strong>Restore last session on start up</strong></dt>
+<dd>If enabled TeXnicCenter will reload the project and all files that were open
+before TeXnicCenter was closed the last time.</dd>
+<dt><strong>Replace quotation marks</strong></dt>
+<dd><p class="first">If this option is enabled, TeXnicCenter will do two related things:</p>
+<ul class="simple">
+<li>Replace opening quotation marks with the string specified by <em>Opening
+quotation mark</em></li>
+<li>Replace closing quotation marks with the string specified by <em>Closing
+quotation mark</em></li>
+</ul>
+<p class="last">when the user types the quotation mark <tt class="docutils literal"><span class="pre">&quot;</span></tt> character.</p>
+</dd>
+<dt><strong>Language</strong></dt>
+<dd>The choices are English and Deutsch (German).</dd>
+<dt><strong>Optimize user interface for visually handicapped users</strong></dt>
+<dd>Improves the visibility of some of the features of TeXnicCenter.</dd>
+</dl>
+</div>
+<div class="section" id="files-options">
+<span id="file-options"></span><h2>Files options</h2>
+<p id="index-2">The <em class="xref std std-tab">Files</em> options page in the dialog <em class="xref std std-dialog">Options</em> allows to modify
+the file handling of TeXnicCenter.</p>
+<div class="figure">
+<img alt="_images/optionsfiles.png" src="_images/optionsfiles.png" />
+<p class="caption"><em class="xref std std-tab">Files</em> option page</p>
+</div>
+<p>The meaning of the controls is:</p>
+<dl class="docutils">
+<dt><strong>Save new document immediately</strong></dt>
+<dd>If this option is enabled, then as soon as a new document has been created it
+will be saved without delay.</dd>
+<dt><strong>Save all before compilation</strong></dt>
+<dd>If this option is enabled, TeXnicCenter will save all modified files before
+the build process is started.</dd>
+<dt><strong>Save automatic every x minutes</strong></dt>
+<dd>If enabled, TeXnicCenter will save all modified files at the specified
+interval.</dd>
+<dt><strong>Default</strong></dt>
+<dd><p class="first">Allows to specify the default end-of-line format:</p>
+<ul class="simple">
+<li>Windows (<tt class="docutils literal"><span class="pre">\r\n</span></tt>)</li>
+<li>Unix (<tt class="docutils literal"><span class="pre">\n</span></tt>)</li>
+<li>Macintosh (<tt class="docutils literal"><span class="pre">\r</span></tt>)</li>
+</ul>
+<p class="last">The format for each file can be changed in the dialog <em class="menuselection">File &#8227;
+Save As...</em> individually.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="directories-options">
+<span id="directory-options"></span><h2>Directories options</h2>
+<p id="index-3">The <em class="xref std std-tab">Directories</em> options page in the <em class="xref std std-dialog">Options</em> dialog allows to
+modify the directory paths used by TeXnicCenter.</p>
+<div class="figure">
+<img alt="_images/optionsdirectories.png" src="_images/optionsdirectories.png" />
+<p class="caption"><em class="xref std std-tab">Directories</em> option page</p>
+</div>
+<p>The meaning of the controls is:</p>
+<dl class="docutils">
+<dt><strong>Project template directories</strong></dt>
+<dd>The directory where project templates are stored.  Typically these directories
+contain further subdirectories with collections of related templates.  When
+you create a new project, you can select a template from any of these
+collections.</dd>
+<dt><strong>Document template directories</strong></dt>
+<dd>The files in the directories listed here will be provided as document
+templates when a new document is created.</dd>
+<dt><strong>Default working directory</strong></dt>
+<dd>The directory specified here will be used as the default directory for new
+projects and new files. If this path is left empty, the default directory for
+the Windows user is used. If a project is still open, the project&#8217;s  directory
+is used.</dd>
+</dl>
+</div>
+<div class="section" id="spelling-options">
+<h2>Spelling options</h2>
+<p id="index-4">The <em class="xref std std-tab">Spelling</em> options page in the <em class="xref std std-dialog">Options</em> dialog allows users to
+set spelling and language options for TeXnicCenter.
+You can also install new <a class="reference internal" href="dictionaries.html#spelling-dictionaries"><em>dictionaries</em></a>.</p>
+<div class="figure">
+<img alt="_images/optionsspelling.png" src="_images/optionsspelling.png" />
+<p class="caption"><em class="xref std std-tab">Spelling</em> option page</p>
+</div>
+<p>The meaning of the controls is:</p>
+<dl class="docutils">
+<dt><strong>Language</strong></dt>
+<dd>This drop down list shows all languages of the installed dictionaries. The
+language setting only affects the spell checking functionality of
+TeXnicCenter. It does not affect the language of the TeXnicCenter user
+interface. Changing the language does require a restart of TeXnicCenter to
+became effective.  The choices are English (en) and German (de).</dd>
+<dt><strong>Dialect</strong></dt>
+<dd>This drop down list shows all dialects available for the selected language.
+The dialect setting only affects the spell checking functionality of
+TeXnicCenter. It does not affect the language of the TeXnicCenter user
+interface. Changing the dialect does require a restart of TeXnicCenter to
+become effective.</dd>
+<dt><strong>Check spelling while typing</strong></dt>
+<dd>When selected, TeXnicCenter performs spell checking during data input. Words
+not found in the spell checker dictionary are highlighted.</dd>
+<dt><strong>Suggest from main dictionary only</strong></dt>
+<dd>When selected, TeXnicCenter suggests only words from the main dictionary.
+Words from the personal dictionary will not be included in the suggestion
+list.</dd>
+<dt><strong>Ignore comments</strong></dt>
+<dd>When selected, TeXnicCenter does not check the spelling of comments.</dd>
+<dt><strong>Ignore LaTeX tags</strong></dt>
+<dd><p class="first">When selected, TeXnicCenter does not check the spelling of LaTeX tags. This
+setting does not affect spell checking LaTeX command arguments. For example,
+the argument of the LaTeX command</p>
+<div class="highlight-latex"><div class="highlight"><pre><span class="k">\caption</span><span class="nb">{</span>This is a caption<span class="nb">}</span>
+</pre></div>
+</div>
+<p class="last"><tt class="docutils literal"><span class="pre">This</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">caption</span></tt> is always spell-checked. This option only determines
+whether <tt class="docutils literal"><span class="pre">\caption</span></tt> is spell-checked.</p>
+</dd>
+<dt><strong>Ignore words with numbers</strong></dt>
+<dd>When selected, TeXnicCenter does not check the spelling of words containing
+numbers.</dd>
+<dt><strong>Ignore UPPERCASE words</strong></dt>
+<dd>When selected, TeXnicCenter does not check the spelling of words in uppercase
+letters.</dd>
+<dt><strong>Personal Dictionary</strong></dt>
+<dd>Contains the path to and the name of the file containing the personal
+dictionary. The personal dictionary contains words not found in the main
+dictionary. It is loaded once during application startup and written once
+during application shutdown. Clearing the personal dictionary text field
+disables the personal dictionary. Changes to the personal dictionary control
+do not cause the personal dictionary to be reloaded until TeXnicCenter is
+started next time.</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<dl class="last docutils">
+<dt>TeXnicCenter creates two types of personal word files:</dt>
+<dd><ul class="first last simple">
+<li>the personal dictionary as described above is a system-wide file and used for all projects.</li>
+<li>a project-specific file containing the words that are to be <em>ignored</em> during spell checking. This file is saved alongside the project file and has the file ending <tt class="file docutils literal"><span class="pre">.tiw</span></tt>.</li>
+</ul>
+</dd>
+</dl>
+</div>
+<p>TeXnicCenter saves the personal word files when a project or the program is closed,
+and loads them later when the program is started or a project is loaded.</p>
+<p>If you want to reset or change these dictionaries, just delete or edit them.
+Each line contains exactly one word. For example, a file with 3 words has the
+following content:</p>
+<div class="highlight-latex"><div class="highlight"><pre>first
+second
+third
+</pre></div>
+</div>
+</div>
+<div class="section" id="clean-options">
+<h2>Clean options</h2>
+<p id="index-5">The <em class="xref std std-tab">Clean</em> options page in the <em class="xref std std-dialog">Options</em> dialog allows to modify
+file protection and file deletion options when <em class="menuselection">Build &#8227; Clean
+Project</em> is invoked.</p>
+<div class="figure">
+<img alt="_images/optionsclean.png" src="_images/optionsclean.png" />
+<p class="caption"><em class="xref std std-tab">Clean</em> option page</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please be carefull when configuring this command. Deleting the wrong files may
+cause loss of important data. While TeXnicCenter tries its best to prevent
+deletion of essential files, you are responsible for this, too.</p>
+</div>
+<p>The meaning of the controls is:</p>
+<dl class="docutils">
+<dt><strong>File groups</strong></dt>
+<dd><p class="first">The entries in the list box below define the files to be deleted or protected.
+Scroll through this list and select an entry to edit or remove it.</p>
+<p class="last">There are two entries at the end of the list, which can not be edited or
+removed. These two entries are used to protect all files of the project and
+all files that are currently opened within the editor. Files recognized by
+TeXnicCenter as a part of the project are shown on the tab Files in the
+Navigation window. The listed set may not include all files of the current
+project.  You may add any not already recognized by TeXnicCenter.</p>
+</dd>
+<dt><strong>New</strong></dt>
+<dd>Pressing this button adds a new entry to the list.</dd>
+<dt><strong>Remove</strong></dt>
+<dd>Pressing this button removes the selected entry from the list.</dd>
+<dt><strong>Sort</strong></dt>
+<dd>Pressing this button sorts the list of entries for a better overview.</dd>
+<dt><strong>Description</strong></dt>
+<dd>This edit box is used to change the description text of the selected entry.
+This text does not mean anything to TeXnicCenter &#8211; type here whatever would
+be helpful in understanding the selected entry.</dd>
+<dt><strong>Pattern</strong></dt>
+<dd><p class="first">The text in this control defines a file or a set of files to act on for the
+selected entry.</p>
+<p>It is permissible to use the same wildcards (<tt class="docutils literal"><span class="pre">*</span></tt> and <tt class="docutils literal"><span class="pre">?</span></tt>) permitted in a
+Windows command line. Additionally, you may use placeholders for single files
+and placeholders for sets of files here. The combination of wildcards with
+placeholders for single files is supported, but no other combination is
+permitted.</p>
+<p class="last">Use the button on the right of the edit box to select a placeholder from a
+list.  Alternatively, you may type it in manually.</p>
+</dd>
+<dt><strong>Action</strong></dt>
+<dd><p class="first">This control selects the action to be performed on the file(s) defined by
+<strong>Pattern</strong> for the selected entry. The following actions are available:</p>
+<dl class="last docutils">
+<dt><strong>none</strong></dt>
+<dd>The selected entry will not be used to build up the lists for deletion or
+protection. Use this action to deactivate an entry without removing it
+altogether.</dd>
+<dt><strong>delete</strong></dt>
+<dd>The files defined by <strong>Pattern</strong> will be deleted unless they are protected
+by another entry in the list.</dd>
+<dt><strong>protect</strong></dt>
+<dd>The files defined by <strong>Pattern</strong> will be protected from deletion. If an
+entry defines a file to be protected and another entry defines the same file
+to be deleted, the file will be protected, i.e., the deletion entry will be
+ignored.</dd>
+</dl>
+</dd>
+<dt><strong>Include subdirectories</strong></dt>
+<dd>If selected, TeXnicCenter searches the subdirectories of the active project
+for matching files defined by <strong>Pattern</strong>, too. The choice can differ for
+different file groups.</dd>
+<dt><strong>Confirm before delete</strong></dt>
+<dd><p class="first">If selected, TeXnicCenter will show a dialog before deleting files. This
+dialog lists all the files to be deleted and protected.</p>
+<p class="last">This entry refers to all entries in the table, not just the one currently
+selected.</p>
+</dd>
+</dl>
+<p>Clicking on the <em>Cancel</em> button will dismiss any changes without
+applying them.</p>
+</div>
+<div class="section" id="text-format-options">
+<h2>Text format options</h2>
+<p id="index-6">TeXnicCenter allows to customize the font family, style and size for the
+navigator bar, the output bar and the editor window. Additionally, editor colors
+used for syntax highlighting can be modified as well.</p>
+<p>To customize the text format open the <em class="xref std std-dialog">Customization</em> dialog and select
+the <em class="xref std std-tab">Text Format</em> option page.</p>
+<div class="figure">
+<img alt="_images/optionstextformat.png" src="_images/optionstextformat.png" />
+<p class="caption"><em class="xref std std-tab">Text Format</em> option page</p>
+</div>
+<p>The meanings of the controls are:</p>
+<dl class="docutils">
+<dt><strong>Window</strong></dt>
+<dd><p class="first">Select the window for which you would like to change the text format.
+Available window types are:</p>
+<dl class="last docutils">
+<dt><strong>Editor</strong></dt>
+<dd>The editor window used to edit the (La)TeX documents.</dd>
+<dt><strong>Navigator</strong></dt>
+<dd>The window normally docked at the left side of the main window, which
+displays the document structure.</dd>
+<dt><strong>Output</strong></dt>
+<dd>The window normally docked at the bottom of the main window, which displays
+the output generated by the (La)TeX compiler.</dd>
+</dl>
+</dd>
+<dt><strong>Font</strong></dt>
+<dd>Displays an example of the currently selected font for the selected window
+type.</dd>
+<dt><strong>Change...</strong></dt>
+<dd>Allows you to select the font family, style and size to use for the selected
+window type. If the current window type is &#8216;Editor&#8217;, only fonts with a fixed
+width per character are available.</dd>
+<dt><strong>Item</strong> (only available for window type <cite>Editor</cite>)</dt>
+<dd><p class="first">Allows to specify the editor item whose appearance should be modified.</p>
+<dl class="last docutils">
+<dt><strong>Selection Margin</strong></dt>
+<dd>The margin displayed at the left side of an editor window.</dd>
+<dt><strong>Whitespaces</strong></dt>
+<dd>Invisible characters like space and tabulator.</dd>
+<dt><strong>Background</strong></dt>
+<dd><p class="first">Background of the text.</p>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This option will not change the background of the editor window but only
+the areas where text is placed.</p>
+</div>
+</dd>
+<dt><strong>Normal Text</strong></dt>
+<dd>Normal text.</dd>
+<dt><strong>Background (selected)</strong></dt>
+<dd>Same as <cite>Background</cite>, but for selected text.</dd>
+<dt><strong>Normal Text (selected)</strong></dt>
+<dd>Selected text.</dd>
+<dt><strong>Keyword</strong></dt>
+<dd>A (La)TeX keyword.</dd>
+<dt><strong>Comment</strong></dt>
+<dd>A (La)TeX comment.</dd>
+<dt><strong>Operator</strong></dt>
+<dd>A (La)TeX operator.</dd>
+<dt><strong>Text in verbatim</strong></dt>
+<dd>Text inside a verbatim environment.</dd>
+<dt><strong>Normal text in equation ($$)</strong></dt>
+<dd>Text inside inline math mode.</dd>
+<dt><strong>Keyword in equation ($$)</strong></dt>
+<dd>A (La)TeX keyword inside inline math mode.</dd>
+<dt><strong>Matched brace background</strong></dt>
+<dd>The background of matched brace.</dd>
+<dt><strong>Matched brace text</strong></dt>
+<dd>The text of matched brace.</dd>
+<dt><strong>Matched brace background (at cursor)</strong></dt>
+<dd>The background of brace at cursor.</dd>
+<dt><strong>Matched brace text (at cursor)</strong></dt>
+<dd>The text of brace at cursor.</dd>
+<dt><strong>Block background between braces</strong></dt>
+<dd>The background of text between brace at cursor and matched brace.</dd>
+<dt><strong>Unmatched brace background</strong></dt>
+<dd>The background of brace that have no pair.</dd>
+<dt><strong>Unmatched brace text</strong></dt>
+<dd>The text of brace that have no pair.</dd>
+<dt><strong>Digits</strong></dt>
+<dd>The appearance of single digits.</dd>
+<dt><strong>Units</strong></dt>
+<dd>The appearance of unit specifiers <tt class="docutils literal"><span class="pre">em</span></tt>, <tt class="docutils literal"><span class="pre">ex</span></tt>, <tt class="docutils literal"><span class="pre">pt</span></tt>, <tt class="docutils literal"><span class="pre">pc</span></tt>, <tt class="docutils literal"><span class="pre">in</span></tt>,
+<tt class="docutils literal"><span class="pre">bp</span></tt>, <tt class="docutils literal"><span class="pre">cm</span></tt>, <tt class="docutils literal"><span class="pre">mm</span></tt>, <tt class="docutils literal"><span class="pre">dd</span></tt>, <tt class="docutils literal"><span class="pre">cc</span></tt>, <tt class="docutils literal"><span class="pre">sp</span></tt>.</dd>
+</dl>
+</dd>
+<dt><strong>Color Picker</strong> (only available for window type <cite>Editor</cite>)</dt>
+<dd>Choose the color for the selected element here. The color <tt class="docutils literal"><span class="pre">Automatic</span></tt> is the
+default value for the selected element.</dd>
+<dt><strong>Tabulator width</strong> (only available for window type <cite>Editor</cite>)</dt>
+<dd>Specifies the width of a tabulator in characters.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="editor.html">Editor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Project management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doctemplates.html">Document templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customization.html">Customization</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Options</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-options">General options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#files-options">Files options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#directories-options">Directories options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spelling-options">Spelling options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clean-options">Clean options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#text-format-options">Text format options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dictionaries.html">Spelling dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="placeholders.html">Placeholders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commandline.html">Command-line arguments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copyright.html">Copyright &amp; Credits</a></li>
+</ul>
+
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <a href="customization.html" title="Customization"
+             >previous</a> |
+          <a href="dictionaries.html" title="Spelling dictionaries"
+             >next</a> |
+          <a href="genindex.html" title="General Index"
+             >index</a>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer">
+        &copy; <a href="copyright.html">Copyright</a> 2013, The TeXnicCenter Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
 </html>

@@ -1,73 +1,63 @@
 [OPTIONS]
+Binary TOC=No
+Binary Index=No
 Compatibility=1.1 or later
 Compiled file=..\Output\Intermediate\TXCUserHelp\TeXnicCenter.chm
 Contents file=TeXnicCenter.hhc
 Default Window=$global_TxcHelpWindow
-Default topic=root.html
+Default topic=index.html
 Display compile progress=No
+Full text search stop list file=TeXnicCenter.stp
 Enhanced decompilation=Yes
 Error log file=..\Output\Intermediate\TXCUserHelp\logfile.log
 Full-text search=Yes
 Index file=TeXnicCenter.hhk
-Language=0x409 Englisch (USA)
+Language=0x409
 Title=TeXnicCenter Online Help
 
 [WINDOWS]
-$global_TxcHelpWindow="TeXnicCenter Online Help","TeXnicCenter.hhc","TeXnicCenter.hhk","root.html","root.html","TeXnicCenter.html","TeXnicCenter","LatexHelpBook.chm::\Welcome_to_Latex_Help_e-Book.htm","LaTeX Help Book",0x63420,,0xc384e,[322,56,979,660],0x80000,,,,,,0
+$global_TxcHelpWindow="TeXnicCenter Online Help","TeXnicCenter.hhc","TeXnicCenter.hhk","root.html","root.html","index.html","TeXnicCenter","LatexHelpBook.chm::\Welcome_to_Latex_Help_e-Book.htm","LaTeX Help Book",0x63420,,0xc384e,[322,56,979,660],0x80000,,,,,,0
 
 
 [FILES]
-advanced_configuration.html
-cmdlineargs.html
+commandline.html
+configuration.html
 copyright.html
-credits.html
-creating_projects.html
-custom_commands.html
-custom_format.html
-custom_keyboard.html
-custom_menu.html
-custom_options.html
-custom_toolbars.html
-custom_tools.html
 customization.html
-ddecmds.html
-document_templates.html
-generating_output.html
-getting_help.html
+dictionaries.html
+doctemplates.html
+editor.html
+genindex.html
+index.html
 introduction.html
-license.html
 options.html
-options_page_clean.html
-options_page_file.html
-options_page_general.html
-options_page_paths.html
-options_page_spelling.html
-output.html
-output_concept.html
-output_config.html
-output_config_manually.html
-output_config_manually_page_latex.html
-output_config_manually_page_postprocessing.html
-output_config_manually_page_viewer.html
-output_config_wizard.html
 placeholders.html
-placeholdersets.html
-placeholdersingle.html
-project.html
 projects.html
-project_create.html
-project_modify.html
-quick_start.html
-reference.html
-requirements.html
-root.html
-template.html
-templates_files.html
-templates_wizards.html
-texniccenter.html
-using.html
-welcome.html
-whatis.html
+_static\agogo.css
+_static\ajax-loader.gif
+_static\basic.css
+_static\bgfooter.png
+_static\bgtop.png
+_static\comment-bright.png
+_static\comment-close.png
+_static\comment.png
+_static\doctools.js
+_static\down-pressed.png
+_static\down.png
+_static\file.png
+_static\jquery.js
+_static\keypress.css
+_static\minus.png
+_static\plus.png
+_static\pygments.css
+_static\searchtools.js
+_static\TeXnicCenter.ico
+_static\TeXnicCenter.png
+_static\underscore.js
+_static\up-pressed.png
+_static\up.png
+_static\websupport.js
+
 
 [MERGE FILES]
 Amslatex.chm
