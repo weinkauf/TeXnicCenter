@@ -129,7 +129,7 @@ LPCTSTR const pArrCredit[] =
 	_T(""),
 	_T("Loïc d'Anterroches, Stefan Ascher, Adam Clauss, Michael Dunn\f"),
 	_T("Raffi Enficiaud, Mark Findlay, Stephan Schrader, Paul Selormey\f"),
-	_T("Martin Stanek, Pavel Vacha, Christian Welzel\f"),
+	_T("Martin Stanek, Alexander Täschner, Pavel Vacha, Christian Welzel\f"),
 	_T(""),
 	_T(""),
 	_T("IDB_SEPARATOR\b"),
