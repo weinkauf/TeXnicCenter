@@ -78,6 +78,10 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
+private:
+	///Creates a version of the credits in reStructuredText for the manual.
+	void TraceCreditsAsreStructuredText() const;
+
 // attributes
 public:
 	//{{AFX_DATA(CAboutDlg)
