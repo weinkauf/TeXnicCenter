@@ -1,46 +1,185 @@
-<html>
-<head>
-<title> Quick Start </title>
-<link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-<a name="projects"></a>
-<p>
-<table border="0" width="100%">
-<tr>
-<td class="h2">Projects</td>
-</tr>
-</table>
-</p>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<p>TeXnicCenter manages your documents always as projects. Even if there is
-only one file (i.e. a letter), you have to create a project for this document.
-It is wise to create a directory for each project. Please refer to the
-section <a href="creating_projects.html">Creating Project</a> for more
-information.</p>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=cp1252" />
+    
+    <title>Project management</title>
+    
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/keypress.css" type="text/css" />
+    <link rel="copyright" title="Copyright" href="copyright.html" />
+    <link rel="top" title="TeXnicCenter 2.0 documentation" href="index.html" />
+    <link rel="next" title="Document templates" href="doctemplates.html" />
+    <link rel="prev" title="Editor" href="editor.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="index.html">
+            <img class="logo" src="_static/TeXnicCenter.png" alt="Logo"/>
+          </a></p>
+        <div class="headertitle"><a
+          href="index.html">TeXnicCenter 2.0 documentation</a></div>
+        <div class="rel">
+          <a href="editor.html" title="Editor"
+             accesskey="P">previous</a> |
+          <a href="doctemplates.html" title="Document templates"
+             accesskey="N">next</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-<p>A project contains the following informations:</p>
-
-<p>
-<ul>
-  <li>Path of the project directory</li>
-  <li>Path of the project's main file</li>
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+          <div class="body">
+            
+  <div class="section" id="project-management">
+<h1>Project management</h1>
+<p>TeXnicCenter provides a project management tool that helps to keep the files of
+one document together and to generate output for a document.  It is especially
+useful when working on large documents.</p>
+<p>A project file will be generated for each project containing the project&#8217;s
+properties. The stored information is:</p>
+<ul class="simple">
+<li>The path to the main file of the project relative to the directory the
+project file is placed in.  This file will be passed to the LaTeX compiler.</li>
+<li>A flag that specifies whether the current project uses BibTeX.</li>
+<li>A flag that specifies whether the current project uses MakeIndex.</li>
 </ul>
-</p>
+<p>Some features are only available if a project is opened.  Examples of these are
+Structure View (the navigator bar on the left side of the main window) and the
+automatic invocation of BibTeX and MakeIndex</p>
+<p>Using projects is very simple. Just create a new project before starting to work
+on a new document. If the requirements for the project have changed, it is easy
+to simply modify project&#8217;s properties.</p>
+<div class="section" id="creating-a-new-project">
+<span id="create-new-project"></span><span id="index-0"></span><h2>Creating a new project</h2>
+<p>To create a new project, simply choose the menu item <em class="menuselection">File &#8227; New &#8227; Project...</em></p>
+<div class="figure">
+<img alt="_images/newproject.png" src="_images/newproject.png" />
+<p class="caption"><em class="xref std std-dialog">New Project</em> dialog</p>
+</div>
+<p>Choose one of the document templates from the list on the left side. The tabs
+are representing the available categories of the available templates.</p>
+<p>The other controls have the following meanings:</p>
+<dl class="docutils">
+<dt><strong>Project Name</strong></dt>
+<dd>Name of the new project. This will also be the title of the project file and
+of the project&#8217;s main file.</dd>
+<dt><strong>Project path</strong></dt>
+<dd>The directory, where the new project is located. If the directory does not
+exist, it will be created automatically.</dd>
+<dt><strong>File format</strong></dt>
+<dd>Choose which line delimiter should be used for the newly generated files.
+Refer to the section <a class="reference internal" href="options.html#file-options"><em>Files options</em></a> for detailed information.</dd>
+<dt><strong>Uses BibTeX</strong></dt>
+<dd>Enable this option, if TeXnicCenter should run BibTeX, when generating output
+for this project.</dd>
+<dt><strong>Uses MakeIndex</strong></dt>
+<dd>Enable this option, if TeXnicCenter should run MakeIndex, when generating
+output for this project.</dd>
+<dt><strong>Template</strong></dt>
+<dd>The text displayed here is a description for the currently selected document
+template.</dd>
+</dl>
+<p>Press the <em>OK</em> button to generate the new project. TeXnicCenter will
+create the project file and the project&#8217;s main file, based on the chosen
+template.  Afterwards the newly created project will be opened in TeXnicCenter.</p>
+</div>
+<div class="section" id="modifying-project-settings">
+<h2>Modifying project settings</h2>
+<p>All project settings can be changed afterwards, by choosing the menu item
+<em class="menuselection">Project &#8227; Properties...</em> Refer to the section
+<a class="reference internal" href="#create-new-project"><em>Creating a new project</em></a> for more information.</p>
+<div class="figure">
+<img alt="_images/projectproperties.png" src="_images/projectproperties.png" />
+<p class="caption"><em class="xref std std-dialog">Project properties</em> dialog</p>
+</div>
+<p>The controls have the following meanings:</p>
+<dl class="docutils">
+<dt><strong>Main file</strong></dt>
+<dd>This is the path of the project&#8217;s main file, that will be passed to the
+(La)TeX compiler, when generating output.  The path has to be specified
+relatively to the directory, the project file is placed in.</dd>
+<dt><strong>Uses BibTeX</strong></dt>
+<dd>Enable this option, if TeXnicCenter should run BibTeX, when generating output
+for this project.</dd>
+<dt><strong>Uses MakeIndex</strong></dt>
+<dd>Enable this option, if TeXnicCenter should run MakeIndex, when generating
+output for this project.</dd>
+</dl>
+</div>
+</div>
 
 
-<p>Always put the files of one project in the project's directory. One of
-these files has to be the project's main file. The main file is the file, that
-is passed to the LaTeX compiler. If a document is split into several
-LaTeX files, they should be included into the project's main file with the
-commands <code>\input</code> or <code>\include</code>.</p>
+          </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="editor.html">Editor</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Project management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-new-project">Creating a new project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modifying-project-settings">Modifying project settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doctemplates.html">Document templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customization.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="options.html">Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dictionaries.html">Spelling dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="placeholders.html">Placeholders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commandline.html">Command-line arguments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copyright.html">Copyright &amp; Credits</a></li>
+</ul>
 
-<p>TeXnicCenter needs to know the main file of a project. Specify the main
-file, when creating the project, or change it later, by choosing the menu item
-'<var>Properties...</var>' from the menu'<var>Project</var>' and
-changing the path '<var>Main file</var>'.</p>
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
 
-</body>
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <a href="editor.html" title="Editor"
+             >previous</a> |
+          <a href="doctemplates.html" title="Document templates"
+             >next</a> |
+          <a href="genindex.html" title="General Index"
+             >index</a>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer">
+        &copy; <a href="copyright.html">Copyright</a> 2013, The TeXnicCenter Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
 </html>
-

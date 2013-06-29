@@ -4,12 +4,13 @@ Releasing TeXnicCenter
 1. ``hg up``
 2. Edit ``cmake\TeXnicCenter.cmake`` appropriately.
 3. Configure and generate the solution using CMake.
+   If the credits have changed, run the Debug version and get the reST text from the Visual Studio output window. Use it for copyright.rst in the manual. Make sure to use the latest version of the manual. Note that the 'htmlhelp' output is manually merged with the 'TCHelp' folder in the TXC repo.
 4. Build, test.
 5. Make sure, the rest of the setup script looks still good. Test building the
    setup.
 6. Merge default into stable::
 
-    hg up stable && hg merge default && hg ci --m "merge with default"
+
 
 7. Create a tag for the release.
 

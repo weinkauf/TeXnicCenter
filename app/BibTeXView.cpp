@@ -113,13 +113,6 @@ void BibTeXView::UpdateSettings()
 	rCtrl.StyleSetBack(STYLE_BRACEBAD,GetColor(COLORINDEX_BADPAIRSTRINGBKGND));
 
 #pragma endregion
-
-#pragma region Caret
-
-	rCtrl.SetCaretStyle(CConfiguration::GetInstance()->IsInsertCaretLine() ? CARETSTYLE_LINE : CARETSTYLE_BLOCK);
-	rCtrl.SetCaretPeriod(CConfiguration::GetInstance()->IsBlinkInsertCaret() ? 500 : 0);
-
-#pragma endregion
 }
 
 void BibTeXView::OnSettingsChanged()

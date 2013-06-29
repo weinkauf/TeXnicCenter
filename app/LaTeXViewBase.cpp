@@ -174,6 +174,7 @@ LaTeXViewBase::~LaTeXViewBase()
 
 BEGIN_MESSAGE_MAP(LaTeXViewBase, CodeView)
 	ON_WM_CONTEXTMENU()
+	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
 
@@ -196,54 +197,62 @@ void LaTeXViewBase::Dump(CDumpContext& dc) const
 
 // LaTeXViewBase message handlers
 
-COLORREF LaTeXViewBase::GetAutomaticColor(int nColorIndex)
+COLORREF LaTeXViewBase::GetAutomaticColor(int nColorIndex, const int idScheme)
 {
-	switch (nColorIndex) {
-		case COLORINDEX_WHITESPACE:
-		case COLORINDEX_BKGND:
-			return ::GetSysColor(COLOR_WINDOW);
-		case COLORINDEX_NORMALTEXT:
-			return ::GetSysColor(COLOR_WINDOWTEXT);
-		case COLORINDEX_SELMARGIN:
-			return ::GetSysColor(COLOR_BTNFACE/*COLOR_SCROLLBAR*/);
-		case COLORINDEX_INLINE_MATH_COMMAND:
-			return RGB(0x00,0x00,0x80);
-		case COLORINDEX_COMMENT:
-			return RGB(0x80,0x80,0x80);
-		case COLORINDEX_OPERATOR:
-			return RGB(0xFF,0x00,0x00);
-		case COLORINDEX_VERBATIM_TEXT:
-			return RGB(0xFF,0x00,0xFF);
-		case COLORINDEX_INLINE_MATH_TEXT:
-			return RGB(0x00,0x80,0x00);
-		case COLORINDEX_KEYWORD:
-			return RGB(0x00,0x00,0xFF);
-		case COLORINDEX_SELBKGND:
-			return ::GetSysColor(COLOR_HIGHLIGHT);
-		case COLORINDEX_SELTEXT:
-			return ::GetSysColor(COLOR_HIGHLIGHTTEXT);
-		case COLORINDEX_PAIRSTRINGBKGND:
-			return RGB(0xC0,0xFF,0xC0);
-		case COLORINDEX_PAIRSTRINGTEXT:
-			return RGB(0x00,0x00,0x00);
-		case COLORINDEX_BADPAIRSTRINGBKGND:
-			return RGB(0xFF,0xC0,0xC0);
-		case COLORINDEX_BADPAIRSTRINGTEXT:
-			return RGB(0x00,0x00,0x00);
-		case COLORINDEX_CURPAIRSTRINGBKGND:
-			return RGB(0xC0,0xFF,0xC0);
-		case COLORINDEX_CURPAIRSTRINGTEXT:
-			return RGB(0x00,0x00,0x00);
-		case COLORINDEX_PAIRBLOCKBKGND:
-			return RGB(0xFF,0xFF,0xC0);
-		case COLORINDEX_GROUP_NAME:
-			return RGB(0,110,150);
-		case COLORINDEX_DIGIT:
-			return RGB(75,30,200);
-		case COLORINDEX_UNIT:
-			return RGB(100,125,0);
-		default:
-			ASSERT(false); //ColorIndex not found? Shouldn't happen. Please update.
+	switch (idScheme) {
+		case COLORSCHEME_CUSTOM:
+		case COLORSCHEME_DEFAULT:
+			switch (nColorIndex) {
+				case COLORINDEX_WHITESPACE:
+				case COLORINDEX_BKGND:
+					return ::GetSysColor(COLOR_WINDOW);
+				case COLORINDEX_NORMALTEXT:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+				case COLORINDEX_SELMARGIN:
+					return ::GetSysColor(COLOR_BTNFACE/*COLOR_SCROLLBAR*/);
+				case COLORINDEX_INLINE_MATH_COMMAND:
+					return RGB(0x00,0x00,0x80);
+				case COLORINDEX_COMMENT:
+					return RGB(0x80,0x80,0x80);
+				case COLORINDEX_OPERATOR:
+					return RGB(0xFF,0x00,0x00);
+				case COLORINDEX_VERBATIM_TEXT:
+					return RGB(0xFF,0x00,0xFF);
+				case COLORINDEX_INLINE_MATH_TEXT:
+					return RGB(0x00,0x80,0x00);
+				case COLORINDEX_KEYWORD:
+					return RGB(0x00,0x00,0xFF);
+				case COLORINDEX_SELBKGND:
+					return ::GetSysColor(COLOR_HIGHLIGHT);
+				case COLORINDEX_SELTEXT:
+					return ::GetSysColor(COLOR_HIGHLIGHTTEXT);
+				case COLORINDEX_PAIRSTRINGBKGND:
+					return RGB(0xC0,0xFF,0xC0);
+				case COLORINDEX_PAIRSTRINGTEXT:
+					return RGB(0x00,0x00,0x00);
+				case COLORINDEX_BADPAIRSTRINGBKGND:
+					return RGB(0xFF,0xC0,0xC0);
+				case COLORINDEX_BADPAIRSTRINGTEXT:
+					return RGB(0x00,0x00,0x00);
+				case COLORINDEX_CURPAIRSTRINGBKGND:
+					return RGB(0xC0,0xFF,0xC0);
+				case COLORINDEX_CURPAIRSTRINGTEXT:
+					return RGB(0x00,0x00,0x00);
+				case COLORINDEX_PAIRBLOCKBKGND:
+					return RGB(0xFF,0xFF,0xC0);
+				case COLORINDEX_GROUP_NAME:
+					return RGB(0,110,150);
+				case COLORINDEX_DIGIT:
+					return RGB(75,30,200);
+				case COLORINDEX_UNIT:
+					return RGB(100,125,0);
+				default:
+					ASSERT(false); //ColorIndex not found? Shouldn't happen. Please update.
+			}
+			case COLORSCHEME_INVERSE:
+				return RGB(255,255,255) - GetAutomaticColor(nColorIndex, COLORSCHEME_DEFAULT);
+			default:
+					ASSERT(false); //idScheme not found? Shouldn't happen. Please update.
 	}
 
 	return RGB(0xFF,0x00,0x00);
@@ -266,11 +275,13 @@ void LaTeXViewBase::SetAStyle(int style, COLORREF fore, COLORREF back, int size,
 
 COLORREF LaTeXViewBase::GetColor(int nColorIndex)
 {
-	if (nColorIndex >= 0 && nColorIndex < COLORINDEX_COUNT && CConfiguration::GetInstance()->m_aEditorColors[nColorIndex] != 0xFFFFFFFF)
+	if (CConfiguration::GetInstance()->m_nEditorColorScheme == COLORSCHEME_CUSTOM &&
+		nColorIndex >= 0 && nColorIndex < COLORINDEX_COUNT &&
+		CConfiguration::GetInstance()->m_aEditorColors[nColorIndex] != 0xFFFFFFFF)
 		return CConfiguration::GetInstance()->m_aEditorColors[nColorIndex];
 
 	// user set automatic color
-	return GetAutomaticColor(nColorIndex);
+	return GetAutomaticColor(nColorIndex, CConfiguration::GetInstance()->m_nEditorColorScheme);
 }
 
 void LaTeXViewBase::OnUpdateUI(SCNotification* n)
@@ -376,4 +387,22 @@ void LaTeXViewBase::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 LaTeXDocumentBase* LaTeXViewBase::GetDocument() const
 {
 	return dynamic_cast<LaTeXDocumentBase*>(CodeView::GetDocument());
+}
+
+
+int LaTeXViewBase::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CodeView::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	//Get a shorthand
+	CScintillaCtrl& rCtrl = GetCtrl();
+
+#pragma region Caret
+
+	rCtrl.SetCaretFore(GetColor(COLORINDEX_NORMALTEXT), TRUE);
+
+#pragma endregion
+
+	return 0;
 }
