@@ -122,14 +122,23 @@ namespace {
 		return ch == '%';
 	}
 
-	bool IsUsePackage(const char* key)
+	bool IsFileInclusion(const char* key)
 	{
-		return std::strcmp(key, "usepackage") == 0;
+		return (std::strcmp(key, "usepackage") == 0
+			||  std::strcmp(key, "input") == 0
+			||  std::strcmp(key, "input*") == 0
+			||  std::strcmp(key, "include") == 0
+			||  std::strcmp(key, "include*") == 0
+			||  std::strcmp(key, "bibliography") == 0
+			||  std::strcmp(key, "includegraphics") == 0
+			);
 	}
 
-	bool IsDocumentClass(const char* key)
+	bool IsStyleInclusion(const char* key)
 	{
-		return std::strcmp(key, "documentclass") == 0;
+		return (std::strcmp(key, "documentclass") == 0
+			||  std::strcmp(key, "bibliographystyle") == 0
+			);
 	}
 
 	bool isTeXone(int ch)
@@ -402,14 +411,14 @@ namespace {
 								std::memmove(key, key + 1, k); // shift left over escape token
 								key[k--] = '\0';
 
-								if (IsUsePackage(key)) {
-									// \usepackage
-									sc.ChangeState(SCE_TEX_USE_PACKAGE);
+								if (IsFileInclusion(key)) {
+									// \usepackage, \include, \input, and so on
+									sc.ChangeState(SCE_TEX_FILE_INCLUSION);
 									newifDone = false;
 								}
-								else if (IsDocumentClass(key)) {
-									// \documentclass
-									sc.ChangeState(SCE_TEX_DOCUMENTCLASS);
+								else if (IsStyleInclusion(key)) {
+									// \documentclass \bibliographystyle
+									sc.ChangeState(SCE_TEX_STYLE_INCLUSION);
 									newifDone = false;
 								}
 								else if (!keywords || !useKeywords) {

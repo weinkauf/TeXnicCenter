@@ -202,30 +202,50 @@ COLORREF LaTeXViewBase::GetAutomaticColor(int nColorIndex, const int idScheme)
 	switch (idScheme) {
 		case COLORSCHEME_CUSTOM:
 		case COLORSCHEME_DEFAULT:
-			switch (nColorIndex) {
-				case COLORINDEX_WHITESPACE:
+			switch (nColorIndex)
+			{
 				case COLORINDEX_BKGND:
 					return ::GetSysColor(COLOR_WINDOW);
 				case COLORINDEX_NORMALTEXT:
 					return ::GetSysColor(COLOR_WINDOWTEXT);
-				case COLORINDEX_SELMARGIN:
-					return ::GetSysColor(COLOR_BTNFACE/*COLOR_SCROLLBAR*/);
-				case COLORINDEX_INLINE_MATH_COMMAND:
-					return RGB(0x00,0x00,0x80);
-				case COLORINDEX_COMMENT:
-					return RGB(0x80,0x80,0x80);
-				case COLORINDEX_OPERATOR:
-					return RGB(0xFF,0x00,0x00);
-				case COLORINDEX_VERBATIM_TEXT:
-					return RGB(0xFF,0x00,0xFF);
-				case COLORINDEX_INLINE_MATH_TEXT:
-					return RGB(0x00,0x80,0x00);
-				case COLORINDEX_KEYWORD:
-					return RGB(0x00,0x00,0xFF);
+				case COLORINDEX_CARET:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+				case COLORINDEX_CARETLINE:
+					return RGB(220, 220, 255);
 				case COLORINDEX_SELBKGND:
 					return ::GetSysColor(COLOR_HIGHLIGHT);
 				case COLORINDEX_SELTEXT:
 					return ::GetSysColor(COLOR_HIGHLIGHTTEXT);
+
+				case COLORINDEX_KEYWORD:
+					return RGB(0x00,0x00,0xFF);
+				case COLORINDEX_COMMENT:
+					return RGB(0x80,0x80,0x80);
+				case COLORINDEX_SPECIAL:
+					return RGB(158,11,15);
+				case COLORINDEX_SYMBOLS:
+					return RGB(145,0,145);
+
+				case COLORINDEX_GROUP:
+					return RGB(125,167,217);
+				case COLORINDEX_GROUP_NAME:
+					return RGB(0,110,150);
+
+				case COLORINDEX_STYLE_INCLUSION:
+					return RGB(0x8b, 0, 0);
+				case COLORINDEX_FILE_INCLUSION:
+					return RGB(0, 0x80, 0x80);
+
+				case COLORINDEX_INLINE_MATH_TEXT:
+					return RGB(0x00,0x80,0x00);
+				case COLORINDEX_INLINE_MATH_COMMAND:
+					return RGB(0x00,0x00,0x80);
+
+				case COLORINDEX_DIGIT:
+					return RGB(75,30,200);
+				case COLORINDEX_UNIT:
+					return RGB(100,125,0);
+
 				case COLORINDEX_PAIRSTRINGBKGND:
 					return RGB(0xC0,0xFF,0xC0);
 				case COLORINDEX_PAIRSTRINGTEXT:
@@ -233,19 +253,35 @@ COLORREF LaTeXViewBase::GetAutomaticColor(int nColorIndex, const int idScheme)
 				case COLORINDEX_BADPAIRSTRINGBKGND:
 					return RGB(0xFF,0xC0,0xC0);
 				case COLORINDEX_BADPAIRSTRINGTEXT:
-					return RGB(0x00,0x00,0x00);
-				case COLORINDEX_CURPAIRSTRINGBKGND:
-					return RGB(0xC0,0xFF,0xC0);
-				case COLORINDEX_CURPAIRSTRINGTEXT:
-					return RGB(0x00,0x00,0x00);
-				case COLORINDEX_PAIRBLOCKBKGND:
-					return RGB(0xFF,0xFF,0xC0);
-				case COLORINDEX_GROUP_NAME:
-					return RGB(0,110,150);
-				case COLORINDEX_DIGIT:
-					return RGB(75,30,200);
-				case COLORINDEX_UNIT:
-					return RGB(100,125,0);
+					return RGB(0xFF,0x00,0x00);
+
+				//case COLORINDEX_VERBATIM_TEXT:
+				//	return RGB(0xFF,0x00,0xFF);
+
+				case COLORINDEX_FOLDMARGIN:
+					return ::GetSysColor(COLOR_WINDOW);
+				case COLORINDEX_FOLDMARGIN_HIGHLIGHT:
+					return ::GetSysColor(COLOR_WINDOW);
+				case COLORINDEX_FOLDMARK_FORE:
+					return RGB(255,255,255);
+				case COLORINDEX_FOLDMARK_BACK:
+					return ::GetSysColor(COLOR_3DSHADOW);
+				case COLORINDEX_ERRORMARK_FORE:
+					return RGB(158,0,57);
+				case COLORINDEX_ERRORMARK_BACK:
+					return RGB(237,28,36);
+				case COLORINDEX_BOOKMARK_FORE:
+					return RGB(70,105,175);
+				case COLORINDEX_BOOKMARK_BACK:
+					return RGB(232,241,255);
+				case COLORINDEX_LINENUMBERS_FORE:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+				case COLORINDEX_LINENUMBERS_BACK:
+					return ::GetSysColor(COLOR_BTNFACE);
+
+				case COLORINDEX_INDICATOR_SPELLING:
+					return RGB(255,0,0);
+
 				default:
 					ASSERT(false); //ColorIndex not found? Shouldn't happen. Please update.
 			}
@@ -258,7 +294,7 @@ COLORREF LaTeXViewBase::GetAutomaticColor(int nColorIndex, const int idScheme)
 	return RGB(0xFF,0x00,0x00);
 }
 
-void LaTeXViewBase::SetAStyle(int style, COLORREF fore, COLORREF back, int size, LPCTSTR face) 
+void LaTeXViewBase::SetAStyle(int style, COLORREF fore, COLORREF back, int size, LPCTSTR face, BOOL bold, BOOL italic) 
 {
 	CScintillaCtrl& rCtrl = GetCtrl();
 
@@ -270,6 +306,9 @@ void LaTeXViewBase::SetAStyle(int style, COLORREF fore, COLORREF back, int size,
 
 	if (face) 
 		rCtrl.StyleSetFont(style, face);
+
+	rCtrl.StyleSetBold(style, bold);
+	rCtrl.StyleSetItalic(style, italic);
 }
 
 
@@ -282,6 +321,57 @@ COLORREF LaTeXViewBase::GetColor(int nColorIndex)
 
 	// user set automatic color
 	return GetAutomaticColor(nColorIndex, CConfiguration::GetInstance()->m_nEditorColorScheme);
+}
+
+void LaTeXViewBase::OnSettingsChanged()
+{
+	// User changed application's settings: react here
+	CScintillaCtrl& rCtrl = GetCtrl();
+
+	const LOGFONT& editor_font = CConfiguration::GetInstance()->m_fontEditor;
+	const int point_size = GetLogFontPointSize(editor_font);
+
+	//Foreground, Background, Selection.
+	SetAStyle(STYLE_DEFAULT, GetColor(COLORINDEX_NORMALTEXT), GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, false, false);
+	rCtrl.StyleSetItalic(STYLE_DEFAULT, editor_font.lfItalic);
+	rCtrl.StyleSetBold(STYLE_DEFAULT, editor_font.lfWeight >= FW_BOLD);
+	rCtrl.SetSelFore(TRUE, GetColor(COLORINDEX_SELTEXT));
+	rCtrl.SetSelBack(TRUE, GetColor(COLORINDEX_SELBKGND));
+
+	//Brace highlighting
+	SetAStyle(STYLE_BRACELIGHT, GetColor(COLORINDEX_PAIRSTRINGTEXT), GetColor(COLORINDEX_PAIRSTRINGBKGND),
+				point_size, editor_font.lfFaceName, true, false);
+	SetAStyle(STYLE_BRACEBAD, GetColor(COLORINDEX_BADPAIRSTRINGTEXT), GetColor(COLORINDEX_BADPAIRSTRINGBKGND),
+				point_size, editor_font.lfFaceName, true, false);
+
+	rCtrl.SetFoldMarginColour(TRUE, GetColor(COLORINDEX_FOLDMARGIN));
+	rCtrl.SetFoldMarginHiColour(TRUE, GetColor(COLORINDEX_FOLDMARGIN_HIGHLIGHT));
+	// Setup markers for VS style folding
+	COLORREF fore = GetColor(COLORINDEX_FOLDMARK_FORE);
+	COLORREF back = GetColor(COLORINDEX_FOLDMARK_BACK);
+	DefineMarker(SC_MARKNUM_FOLDEROPEN, SC_MARK_BOXMINUS, fore, back);
+	DefineMarker(SC_MARKNUM_FOLDER, SC_MARK_BOXPLUS, fore, back);
+	DefineMarker(SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE, fore, back);
+	DefineMarker(SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNER, fore, back);
+	DefineMarker(SC_MARKNUM_FOLDEREND, SC_MARK_BOXPLUSCONNECTED, fore, back);
+	DefineMarker(SC_MARKNUM_FOLDEROPENMID, SC_MARK_BOXMINUSCONNECTED, fore, back);
+	DefineMarker(SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNER, fore, back);
+
+	rCtrl.MarkerSetFore(CodeDocument::Errormark, GetColor(COLORINDEX_ERRORMARK_FORE));
+	rCtrl.MarkerSetBack(CodeDocument::Errormark, GetColor(COLORINDEX_ERRORMARK_BACK));
+
+	rCtrl.MarkerSetFore(CodeDocument::Bookmark, GetColor(COLORINDEX_BOOKMARK_FORE));
+	rCtrl.MarkerSetBack(CodeDocument::Bookmark, GetColor(COLORINDEX_BOOKMARK_BACK));
+
+	SetAStyle(STYLE_LINENUMBER, GetColor(COLORINDEX_LINENUMBERS_FORE), GetColor(COLORINDEX_LINENUMBERS_BACK));
+
+	rCtrl.IndicSetFore(0, GetColor(COLORINDEX_INDICATOR_SPELLING));
+
+	rCtrl.SetCaretFore(GetColor(COLORINDEX_CARET));
+	rCtrl.SetCaretLineBack(GetColor(COLORINDEX_CARETLINE));
+	//Not so nice: rCtrl.SetCaretLineBackAlpha(90);
+
+	CodeView::OnSettingsChanged();
 }
 
 void LaTeXViewBase::OnUpdateUI(SCNotification* n)
@@ -390,19 +480,10 @@ LaTeXDocumentBase* LaTeXViewBase::GetDocument() const
 }
 
 
-int LaTeXViewBase::OnCreate(LPCREATESTRUCT lpCreateStruct)
-{
-	if (CodeView::OnCreate(lpCreateStruct) == -1)
-		return -1;
-
-	//Get a shorthand
-	CScintillaCtrl& rCtrl = GetCtrl();
-
-#pragma region Caret
-
-	rCtrl.SetCaretFore(GetColor(COLORINDEX_NORMALTEXT), TRUE);
-
-#pragma endregion
-
-	return 0;
-}
+//int LaTeXViewBase::OnCreate(LPCREATESTRUCT lpCreateStruct)
+//{
+//	if (CodeView::OnCreate(lpCreateStruct) == -1)
+//		return -1;
+//
+//	return 0;
+//}
