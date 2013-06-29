@@ -1374,6 +1374,9 @@ void CodeDocument::UpdateTextBufferOnExternalChange()
 				AfxFormatSystemString(dwResult));
 			AfxMessageBox(strMsg,MB_ICONINFORMATION | MB_OK);
 			GetView()->GetCtrl().SetReadOnly(TRUE);
+		} else {
+			//Trigger analysis - parse project
+			AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_PROJECT_PARSE);
 		}
 	}
 }
