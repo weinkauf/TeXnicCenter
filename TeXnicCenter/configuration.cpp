@@ -257,12 +257,9 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	if (m_strSpellPersonalDictionary.IsEmpty())
 		m_strSpellPersonalDictionary = DefaultUserDic;
 
-	SerializeProfileString(strSection,_T("DictionaryPath"),
-	                       &m_strSpellDictionaryPath,direction,_T(""));
-
-	if (!CPathTool::Exists(m_strSpellDictionaryPath))
-		m_strSpellDictionaryPath = CPathTool::Cat(CPathTool::GetDirectory(theApp.GetModuleFileName()),
-		                           _T("Dictionaries"));
+	//Always take the dictionaries from the subfolder Dictionaries.
+	// - If we want more, than we need to add a proper user interface.
+	m_strSpellDictionaryPath = CPathTool::Cat(CPathTool::GetDirectory(theApp.GetModuleFileName()), _T("Dictionaries"));
 
 	SerializeProfileBool(strSection,_T("SkipComments"),m_bSpellSkipComments,direction,true);
 	SerializeProfileBool(strSection,_T("SkipNumbers"),m_bSpellSkipNumbers,direction,true);
