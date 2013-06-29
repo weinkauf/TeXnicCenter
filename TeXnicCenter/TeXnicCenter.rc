@@ -2878,6 +2878,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "&Hauptdatei öffnen",          ID_PROJECT_OPEN_MAINFILE
         MENUITEM "&Rechtschreibung...",         ID_SPELL_PROJECT
+        MENUITEM "&Struktur analysieren",       ID_PROJECT_PARSE
         MENUITEM SEPARATOR
         MENUITEM "Erzeugen mit &aktueller Datei als Hauptdatei", ID_PROJECT_NEW_FROM_FILE
     END
@@ -4487,7 +4488,7 @@ END
 STRINGTABLE
 BEGIN
     ID_PROJECT_PARSED       "DNT:Is send, when the project has been parsed and the views should be updated"
-    ID_PROJECT_PARSE        "DNT:Send by CMainFrame to parse project."
+    ID_PROJECT_PARSE        "Projektdateien analysieren und Strukturansichten aktualisieren."
     ID_DOCUMENT_SAVED       "DNT:Send by a CLatexDoc-object, after it has been saved."
 END
 
@@ -7009,6 +7010,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "&Open Main File",             ID_PROJECT_OPEN_MAINFILE
         MENUITEM "&Spelling...",                ID_SPELL_PROJECT
+        MENUITEM "P&arse Structure",            ID_PROJECT_PARSE
         MENUITEM SEPARATOR
         MENUITEM "&Create with active file as main file", ID_PROJECT_NEW_FROM_FILE
     END
@@ -8643,7 +8645,7 @@ END
 STRINGTABLE
 BEGIN
     ID_PROJECT_PARSED       "Is send, when the project has been parsed and the views should be updated"
-    ID_PROJECT_PARSE        "Send by CMainFrame to parse project."
+    ID_PROJECT_PARSE        "Parse project files and update structure views."
     ID_DOCUMENT_SAVED       "Send by a CLatexDoc-object, after it has been saved."
 END
 
