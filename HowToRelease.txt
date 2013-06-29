@@ -48,4 +48,4 @@ rm Output/Intermediate/*
 
 18. Publish news at texniccenter.org and latex-community.org. texniccenter.org requires FireFox to edit an article properly.
 
-19. Add a new artifact group at sf.net for the User Reports. To do so, (try to) add a new report, click on the admin link next to the group drop-down box.
+19. Add a new milestone at sf.net for the User Reports. To do so, go to the user reports and click edit milestones. At the bottom, one can add a new one.
