@@ -72,6 +72,9 @@ CLaTeXProject::CLaTeXProject()
 		, tabbed_pane_(0)
 {
 	// initialization
+	m_strProjectLanguage = CConfiguration::GetInstance()->m_strLanguageDefault;
+	m_strProjectDialect = CConfiguration::GetInstance()->m_strLanguageDialectDefault;
+
 	// Initialize the control bars and main frame pointer members
 	m_pwndMainFrame = static_cast<CMainFrame*>(AfxGetMainWnd());
 	ASSERT(m_pwndMainFrame);
@@ -111,6 +114,8 @@ BOOL CLaTeXProject::OnNewProject()
 	//Save and add to LRU
 	DoFileSave();
 	theApp.m_recentProjectList.Add(GetPathName());
+	theApp.UpdateJumpList();
+	if (m_pwndMainFrame) m_pwndMainFrame->UpdateFrameTitle();
 
 	//Trigger analysis - parse project
 	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_PROJECT_PARSE);
@@ -166,6 +171,7 @@ BOOL CLaTeXProject::OnNewProjectFromDoc(LPCTSTR lpszDocPathName)
 	//DoFileSave(); ==> This brings up the Save-Dialog, if tcp is not there - not wanted
 	OnSaveProject(GetPathName());
 	theApp.m_recentProjectList.Add(GetPathName());
+	theApp.UpdateJumpList();
 
 	//Add views to the docking bars in the frame wnd
 	m_nInitialNavigatorTab = 0;
@@ -235,6 +241,18 @@ BOOL CLaTeXProject::OnOpenProject(LPCTSTR lpszPathName)
 	//Load the Project Information
 	Serialize(file,FALSE);
 
+	//Initialize new speller and open ignored words
+	if (theApp.NewSpeller(m_strProjectLanguage, m_strProjectDialect))
+	{
+		const CString sIgnoredPath = GetIgnoredWordsFileName();
+
+		if (CPathTool::Exists(sIgnoredPath))
+		{
+			Speller* s = theApp.GetSpeller();
+			if (s) s->LoadIgnoredWords(sIgnoredPath);
+		}
+	}
+
 	SetModifiedFlag(FALSE);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -287,7 +305,6 @@ BOOL CLaTeXProject::SaveModified()
 void CLaTeXProject::OnClosing()
 {
 	// Save ignored words
-
 	if (Speller* s = theApp.GetSpeller())
 	{
 		if (s->IsIgnoredModified())
@@ -295,6 +312,7 @@ void CLaTeXProject::OnClosing()
 			const CString sIgnoredPath = GetIgnoredWordsFileName();
 			s->SaveIgnoredWords(sIgnoredPath);
 		}
+		//Reset ignores?
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -454,8 +472,11 @@ BOOL CLaTeXProject::Serialize(CIniFile &ini, BOOL bWrite)
 		m_bUseMakeIndex = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_USEMAKEINDEX,FALSE);
 
 		m_strProjectLanguage = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PLANGUAGE,CConfiguration::GetInstance()->m_strLanguageDefault);
+		if (m_strProjectLanguage.IsEmpty())
+			m_strProjectLanguage = CConfiguration::GetInstance()->m_strLanguageDefault;
 		m_strProjectDialect = ini.GetValue(KEY_PROJECTINFO,VAL_PROJECTINFO_PDIALECT,CConfiguration::GetInstance()->m_strLanguageDialectDefault);
-
+		if (m_strProjectDialect.IsEmpty())
+			m_strProjectDialect = CConfiguration::GetInstance()->m_strLanguageDialectDefault;
 
 		if (nVersion > 2)
 		{
@@ -736,16 +757,6 @@ void CLaTeXProject::SetPathName(LPCTSTR lpszPathName)
 {
 	CProject::SetPathName(lpszPathName);
 	SetProjectDirectory(CPathTool::GetDirectory(lpszPathName));
-
-	// Open ignored words
-
-	if (Speller* s = theApp.GetSpeller())
-	{
-		const CString sIgnoredPath = GetIgnoredWordsFileName();
-
-		if (CPathTool::Exists(sIgnoredPath))
-			s->LoadIgnoredWords(sIgnoredPath);
-	}
 }
 
 void CLaTeXProject::DoProjectSave()
@@ -843,24 +854,21 @@ void CLaTeXProject::OnProjectProperties()
 
 	if (m_strMainPath != dlg.m_strMainFile ||
 	        m_bUseBibTex != dlg.m_bUseBibTex ||
-	        m_bUseMakeIndex != dlg.m_bUseMakeIndex)
-	{
-		SetModifiedFlag();
-	}
-
-	if (m_strProjectLanguage != dlg.m_strLanguageCurrent ||
+	        m_bUseMakeIndex != dlg.m_bUseMakeIndex ||
+			m_strProjectLanguage != dlg.m_strLanguageCurrent ||
 	        m_strProjectDialect != dlg.m_strDialectCurrent)
 	{
 		SetModifiedFlag();
-		// TO DO: restart the speller on the new language
 	}
-
 
 	m_strMainPath = dlg.m_strMainFile;
 	m_bUseBibTex = dlg.m_bUseBibTex;
 	m_bUseMakeIndex = dlg.m_bUseMakeIndex;
 	m_strProjectLanguage = dlg.m_strLanguageCurrent;
 	m_strProjectDialect = dlg.m_strDialectCurrent;
+
+	//Restart the speller on the new language - that call is cheap (speller only reloaded on new language)
+	theApp.NewSpeller(m_strProjectLanguage, m_strProjectDialect);
 }
 
 void CLaTeXProject::OnProjectOpenMainfile()
@@ -889,8 +897,8 @@ void CLaTeXProject::OnProjectParse()
 	if (!m_bCanParse || IsClosing())
 		return;
 
-	// Update the background thread
-	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_BG_UPDATE_PROJECT);
+	//// Update the background speller thread
+	//AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_BG_UPDATE_PROJECT);
 
 	// change to working dir
 	SetCurrentDirectory(CPathTool::GetDirectory(m_strMainPath));
@@ -1080,9 +1088,6 @@ void CLaTeXProject::OnSpellProject()
 	if (pSpell == NULL)
 		return;
 
-	// Setup path for ignored words
-	const CString sIgnoredPath = GetIgnoredWordsFileName();
-
 	SpellCheckDlg dlg(NULL,NULL);
 	dlg.SetShowDoneMessage(false);
 	dlg.SetCheckSelectionOnly(false);
@@ -1129,13 +1134,6 @@ void CLaTeXProject::OnSpellProject()
 			long ptEnd = pView->GetCtrl().GetSelectionEnd();
 
 			int result = dlg.DoModal();
-
-			// begin ow
-			if (theApp.GetSpeller()->IsAddedModified()) {
-			    //TRACE("SC was modified, saving words to %s...\n", sPath);
-			    theApp.GetSpeller()->SaveIgnoredWords(sIgnoredPath);
-			}
-			// end ow
 
 			// Restore selection
 			pView->GetCtrl().SetSel(ptStart,ptEnd);
@@ -1247,11 +1245,7 @@ const StructureItemContainer& CLaTeXProject::GetStructureItems() const
 
 const CString CLaTeXProject::GetIgnoredWordsFileName() const
 {
-	return
-	    GetDirectory() +
-	    _T("\\ignored") +
-	    GetTitle() +
-	    CConfiguration::GetInstance()->m_strGuiLanguage + _T(".sc");
+	return GetDirectory() + _T("\\") + GetTitle() + _T(".tiw");
 }
 
 namespace {

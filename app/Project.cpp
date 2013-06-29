@@ -136,7 +136,7 @@ void CProject::SetPathName(LPCTSTR lpszPathName)
 	// set the document title based on path name
 	TCHAR szTitle[_MAX_FNAME];
 	if (GetFileTitle(szFullPath, szTitle, _MAX_FNAME) == 0)
-		SetTitle(szTitle);
+		SetTitle(CPathTool::GetFileTitle(szTitle));
 
 	ASSERT_VALID(this);
 }

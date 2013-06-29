@@ -194,7 +194,7 @@ void CodeView::ShadowWindow::HandleChar( TCHAR ch, bool one_level_recursion )
 		else // Backwards
 			search = &CScintillaCtrl::SearchPrev;
 
-		found = (view->GetCtrl().*search)(SCFIND_MATCHCASE,search_text,FALSE) >= 0;
+		found = (view->GetCtrl().*search)(0, search_text, FALSE) >= 0;
 		bool recursion = false;
 
 		// End of document reached

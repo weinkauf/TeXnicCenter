@@ -151,6 +151,11 @@ public:
 	const CString GetSessionPathName(LPCTSTR lpszPath = NULL) const;
 
 	/**
+	Returns the full path to the project-specific spell checker file for ignoring words.
+	 */
+	const CString GetIgnoredWordsFileName() const;
+
+	/**
 	Sets the actual selected structure item.
 
 	@param nIndex
@@ -233,8 +238,6 @@ protected:
 	CMainFrame* m_pwndMainFrame;
 	//CWorkspaceBar* m_pwndWorkspaceBar;
 	//COutputBar* m_pwndOutputBar;
-
-	const CString GetIgnoredWordsFileName() const;
 
 	//{{AFX_MSG(CLaTeXProject)
 	afx_msg void OnProjectProperties();

@@ -323,10 +323,31 @@ public:
 
 // overrides
 public:
-	// CSpellerSource
+	///Returns pointer to the spell checker. May be NULL.
 	virtual Speller* GetSpeller();
 
-// implementation helpers
+	/**	Initialiazes a new spell checker.
+
+	It is cheap to call this function,
+	since actual work is only done if the language has to be changed.
+
+		@param strLanguage
+				Language of the spell checker.
+		@param strLanguageDialect
+				Dialect of the spell checker.
+
+		@returns True, if successful. Get a pointer to the speller via GetSpeller().
+	 */
+	bool NewSpeller(const CString& strLanguage, const CString& strLanguageDialect);
+
+protected:
+	///Releases the current spell checker.
+	void ReleaseSpeller();
+
+public:
+	///Updates the Windows 7 (and up) jump lists (in the Windows taskbar)
+	void UpdateJumpList();
+
 protected:
 	/**
 	Fills the menu of the most recent used files specified by the

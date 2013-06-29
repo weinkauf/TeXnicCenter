@@ -26,7 +26,7 @@ add_definitions (-D_CRT_SECURE_NO_WARNINGS)
 add_definitions (-D_SCL_SECURE_NO_WARNINGS)
 add_definitions (-D_UNICODE)
 
-add_definitions (-D_WIN32_WINNT=0x0600)
+add_definitions (-D_WIN32_WINNT=0x0601)
 add_definitions (-D_WIN32_WINDOWS=0x0410)
 add_definitions (-D_WIN32_IE=0x0700)
 
