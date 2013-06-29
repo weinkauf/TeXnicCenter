@@ -434,14 +434,24 @@ void LaTeXView::OnACCommandSelect(const CLaTeXCommand* cmd, const TCHAR Addition
 
 	ASSERT(cmd != NULL);
 
-	//Generate string to be inserted
-	CString InsertString = cmd->GetExpandBefore(); // collect completion...
-	InsertString += cmd->ToLaTeX();
-	InsertString += cmd->GetExpandAfter();
+	//Get the place where the triggering text starts
+	long origs = GetCtrl().GetSelectionStart();
 
-	//Get the place where we started with the completion
-	const long origs = GetCtrl().GetSelectionStart();
+	//Generate string to be inserted before the triggering text
+	CString BeforeString = cmd->GetExpandBefore();
+	// - and find the actual start for the insertion
+	// - Example: "\begin{figu" becomes "\begin{figure}..." and not "\begin{\begin{figure}...".
+	for (int i=BeforeString.GetLength()-1;i>=0&&origs>=0;i--)
+	{
+		if (BeforeString[i] == GetCtrl().GetCharAt(origs - 1)) origs--;
+	}
+	// - start the selection there
+	GetCtrl().SetSelectionStart(origs);
 	const int start_line = GetCtrl().LineFromPosition(origs);
+
+	//Generate string to be inserted from the possibly new selection start
+	CString InsertString = BeforeString + cmd->ToLaTeX();
+	InsertString += cmd->GetExpandAfter();
 
 	//Do the actual insertion
 	GetCtrl().ReplaceSel(InsertString);
