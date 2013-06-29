@@ -234,79 +234,30 @@ void LaTeXView::OnCharAdded(SCNotification* n)
 
 void LaTeXView::UpdateSettings()
 {
-	CScintillaCtrl& rCtrl = GetCtrl();
-
 	const LOGFONT& editor_font = CConfiguration::GetInstance()->m_fontEditor;
 	const int point_size = GetLogFontPointSize(editor_font);
 
-	SetAStyle(STYLE_DEFAULT, GetColor(COLORINDEX_NORMALTEXT),GetColor(COLORINDEX_BKGND),
-		point_size,CConfiguration::GetInstance()->m_fontEditor.lfFaceName);
-	
-	SetAStyle(SCE_TEX_COMMENT, GetColor(COLORINDEX_COMMENT),GetColor(COLORINDEX_BKGND)); // Includes comments' color
-	SetAStyle(SCE_TEX_GROUP,RGB(125,167,217),GetColor(COLORINDEX_BKGND));
+	//Default text.
+	SetAStyle(SCE_TEX_TEXT, GetColor(COLORINDEX_NORMALTEXT), GetColor(COLORINDEX_BKGND));
 
-	SetAStyle(SCE_TEX_INLINE_MATH,GetColor(COLORINDEX_INLINE_MATH_TEXT),GetColor(COLORINDEX_BKGND));
-	SetAStyle(SCE_TEX_INLINE_MATH_COMMAND,GetColor(COLORINDEX_INLINE_MATH_COMMAND),GetColor(COLORINDEX_BKGND));
-	SetAStyle(SCE_TEX_GROUP_NAME,GetColor(COLORINDEX_GROUP_NAME),GetColor(COLORINDEX_BKGND));
-	
-	SetAStyle(SCE_TEX_TEXT,GetColor(COLORINDEX_NORMALTEXT),GetColor(COLORINDEX_BKGND));
-	SetAStyle(SCE_TEX_SPECIAL, RGB(158,11,15),GetColor(COLORINDEX_BKGND));
-	SetAStyle(SCE_TEX_SYMBOL, RGB(145,0,145),GetColor(COLORINDEX_BKGND));
-	SetAStyle(SCE_TEX_DIGIT, GetColor(COLORINDEX_DIGIT),GetColor(COLORINDEX_BKGND));
-
-	SetAStyle(SCE_TEX_DOCUMENTCLASS, RGB(0x8b, 0, 0), GetColor(COLORINDEX_BKGND));
-	SetAStyle(SCE_TEX_USE_PACKAGE, RGB(0, 0x80, 0x80), GetColor(COLORINDEX_BKGND));
-
-#pragma region Comments
-
-	// Comments displayed in italics
-	rCtrl.StyleSetFont(SCE_TEX_COMMENT,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(SCE_TEX_COMMENT,point_size);
-	rCtrl.StyleSetItalic(SCE_TEX_COMMENT,TRUE);
-
-#pragma endregion
-
-	rCtrl.StyleSetFont(SCE_TEX_UNIT,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(SCE_TEX_UNIT,point_size);
-	rCtrl.StyleSetBold(SCE_TEX_UNIT,TRUE);
-	rCtrl.StyleSetFore(SCE_TEX_UNIT,GetColor(COLORINDEX_UNIT));
-
-	rCtrl.UsePopUp(FALSE);
-
+	//Syntax
 	SetAStyle(SCE_TEX_COMMAND, GetColor(COLORINDEX_KEYWORD),GetColor(COLORINDEX_BKGND));
-	rCtrl.SetSelFore(TRUE,GetColor(COLORINDEX_SELTEXT));
-	rCtrl.SetSelBack(TRUE,GetColor(COLORINDEX_SELBKGND));
+	// - comments displayed in italics
+	SetAStyle(SCE_TEX_COMMENT, GetColor(COLORINDEX_COMMENT), GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, false, true);
+	SetAStyle(SCE_TEX_SPECIAL, GetColor(COLORINDEX_SPECIAL), GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_TEX_SYMBOL, GetColor(COLORINDEX_SYMBOLS), GetColor(COLORINDEX_BKGND));
 
-	rCtrl.StyleSetItalic(STYLE_DEFAULT,editor_font.lfItalic);
-	rCtrl.StyleSetItalic(STYLE_DEFAULT,editor_font.lfWeight >= FW_BOLD);
+	SetAStyle(SCE_TEX_GROUP, GetColor(COLORINDEX_GROUP), GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_TEX_GROUP_NAME, GetColor(COLORINDEX_GROUP_NAME),GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, true, false);
 
-#pragma region Brace highlighting
+	SetAStyle(SCE_TEX_STYLE_INCLUSION, GetColor(COLORINDEX_STYLE_INCLUSION), GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, true, false);
+	SetAStyle(SCE_TEX_FILE_INCLUSION, GetColor(COLORINDEX_FILE_INCLUSION), GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, false, true);
 
-	rCtrl.StyleSetFont(STYLE_BRACELIGHT,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(STYLE_BRACELIGHT,point_size);
-	rCtrl.StyleSetBold(STYLE_BRACELIGHT,TRUE);
-	rCtrl.StyleSetFore(STYLE_BRACELIGHT,RGB(0,0,0));
-	rCtrl.StyleSetBack(STYLE_BRACELIGHT,GetColor(COLORINDEX_PAIRSTRINGBKGND));
-
-	rCtrl.StyleSetFont(STYLE_BRACEBAD,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(STYLE_BRACEBAD,point_size);
-	rCtrl.StyleSetBold(STYLE_BRACEBAD,TRUE);
-	rCtrl.StyleSetFore(STYLE_BRACEBAD,RGB(255,0,0));
-	rCtrl.StyleSetBack(STYLE_BRACEBAD,GetColor(COLORINDEX_BADPAIRSTRINGBKGND));
-
-#pragma endregion
-
-	rCtrl.StyleSetFont(SCE_TEX_GROUP_NAME,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(SCE_TEX_GROUP_NAME,point_size);
-	rCtrl.StyleSetBold(SCE_TEX_GROUP_NAME,TRUE);
-
-	rCtrl.StyleSetFont(SCE_TEX_DOCUMENTCLASS,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(SCE_TEX_DOCUMENTCLASS,point_size);
-	rCtrl.StyleSetBold(SCE_TEX_DOCUMENTCLASS,TRUE);
-
-	rCtrl.StyleSetFont(SCE_TEX_USE_PACKAGE,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(SCE_TEX_USE_PACKAGE,point_size);
-	rCtrl.StyleSetItalic(SCE_TEX_USE_PACKAGE,TRUE);
+	SetAStyle(SCE_TEX_INLINE_MATH, GetColor(COLORINDEX_INLINE_MATH_TEXT), GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_TEX_INLINE_MATH_COMMAND, GetColor(COLORINDEX_INLINE_MATH_COMMAND), GetColor(COLORINDEX_BKGND));
+	
+	SetAStyle(SCE_TEX_DIGIT, GetColor(COLORINDEX_DIGIT), GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_TEX_UNIT, GetColor(COLORINDEX_UNIT), GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, true, false);
 }
 
 #pragma region Scintilla notifications

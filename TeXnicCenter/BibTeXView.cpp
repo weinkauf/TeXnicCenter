@@ -55,64 +55,21 @@ int BibTeXView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void BibTeXView::UpdateSettings()
 {
-	CScintillaCtrl& rCtrl = GetCtrl();
-
 	const LOGFONT& editor_font = CConfiguration::GetInstance()->m_fontEditor;
 	const int point_size = GetLogFontPointSize(editor_font);
 
-	SetAStyle(STYLE_DEFAULT, GetColor(COLORINDEX_NORMALTEXT),GetColor(COLORINDEX_BKGND),
-		point_size,CConfiguration::GetInstance()->m_fontEditor.lfFaceName);
+	//Default text.
+	SetAStyle(SCE_BIBTEX_DEFAULT, GetColor(COLORINDEX_NORMALTEXT), GetColor(COLORINDEX_BKGND));
 
-	SetAStyle(SCE_BIBTEX_COMMENT, GetColor(COLORINDEX_COMMENT),GetColor(COLORINDEX_BKGND)); // Includes comments' color
-	SetAStyle(SCE_BIBTEX_ENTRY,RGB(125,167,217),GetColor(COLORINDEX_BKGND));
+	//Syntax
+	// - comments displayed in italics
+	SetAStyle(SCE_BIBTEX_COMMENT, GetColor(COLORINDEX_COMMENT), GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, false, true);
+	SetAStyle(SCE_BIBTEX_ENTRY, GetColor(COLORINDEX_FILE_INCLUSION),GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, true, false);
+	SetAStyle(SCE_BIBTEX_KEY, GetColor(COLORINDEX_SPECIAL), GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_BIBTEX_VALUE, GetColor(COLORINDEX_KEYWORD), GetColor(COLORINDEX_BKGND));
+	SetAStyle(SCE_BIBTEX_PARAMETER, GetColor(COLORINDEX_SYMBOLS), GetColor(COLORINDEX_BKGND));
 
-	SetAStyle(SCE_BIBTEX_DEFAULT,GetColor(COLORINDEX_NORMALTEXT),GetColor(COLORINDEX_BKGND));
-	SetAStyle(SCE_BIBTEX_KEY, RGB(158,11,15),GetColor(COLORINDEX_BKGND));
-	SetAStyle(SCE_BIBTEX_PARAMETER, RGB(145,0,145),GetColor(COLORINDEX_BKGND));
-
-	SetAStyle(SCE_BIBTEX_UNKNOWN_ENTRY, RGB(255,0,0),GetColor(COLORINDEX_BKGND));
-
-	rCtrl.StyleSetFont(SCE_BIBTEX_ENTRY,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(SCE_BIBTEX_ENTRY,point_size);
-	rCtrl.StyleSetBold(SCE_BIBTEX_ENTRY,TRUE);
-
-	rCtrl.StyleSetFont(SCE_BIBTEX_UNKNOWN_ENTRY,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(SCE_BIBTEX_UNKNOWN_ENTRY,point_size);
-	rCtrl.StyleSetBold(SCE_BIBTEX_UNKNOWN_ENTRY,TRUE);
-
-#pragma region Comments 
-
-	// Comments displayed in italics
-	rCtrl.StyleSetFont(SCE_BIBTEX_COMMENT,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(SCE_BIBTEX_COMMENT,point_size);
-	rCtrl.StyleSetItalic(SCE_BIBTEX_COMMENT,TRUE);
-
-#pragma endregion
-
-	rCtrl.UsePopUp(FALSE);
-
-	SetAStyle(SCE_BIBTEX_VALUE, GetColor(COLORINDEX_KEYWORD),GetColor(COLORINDEX_BKGND));
-	rCtrl.SetSelFore(TRUE,GetColor(COLORINDEX_SELTEXT));
-	rCtrl.SetSelBack(TRUE,GetColor(COLORINDEX_SELBKGND));
-
-	rCtrl.StyleSetItalic(STYLE_DEFAULT,editor_font.lfItalic);
-	rCtrl.StyleSetItalic(STYLE_DEFAULT,editor_font.lfWeight >= FW_BOLD);
-
-#pragma region Brace highlighting
-
-	rCtrl.StyleSetFont(STYLE_BRACELIGHT,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(STYLE_BRACELIGHT,point_size);
-	rCtrl.StyleSetBold(STYLE_BRACELIGHT,TRUE);
-	rCtrl.StyleSetFore(STYLE_BRACELIGHT,RGB(0,0,0));
-	rCtrl.StyleSetBack(STYLE_BRACELIGHT,GetColor(COLORINDEX_PAIRSTRINGBKGND));
-
-	rCtrl.StyleSetFont(STYLE_BRACEBAD,editor_font.lfFaceName);
-	rCtrl.StyleSetSize(STYLE_BRACEBAD,point_size);
-	rCtrl.StyleSetBold(STYLE_BRACEBAD,TRUE);
-	rCtrl.StyleSetFore(STYLE_BRACEBAD,RGB(255,0,0));
-	rCtrl.StyleSetBack(STYLE_BRACEBAD,GetColor(COLORINDEX_BADPAIRSTRINGBKGND));
-
-#pragma endregion
+	SetAStyle(SCE_BIBTEX_UNKNOWN_ENTRY, GetColor(COLORINDEX_INDICATOR_SPELLING),GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, true, false);
 }
 
 void BibTeXView::OnSettingsChanged()
