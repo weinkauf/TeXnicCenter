@@ -68,8 +68,8 @@ CLaTeXProject::CLaTeXProject()
 		m_nCurrentStructureItem(-1),
 		m_bUseBibTex(FALSE),
 		m_bUseMakeIndex(FALSE),
-		m_nInitialNavigatorTab(0)
-		, tabbed_pane_(0)
+		m_nInitialNavigatorTab(0),
+		tabbed_pane_(0)
 {
 	// initialization
 	m_strProjectLanguage = CConfiguration::GetInstance()->m_strLanguageDefault;
@@ -118,7 +118,7 @@ BOOL CLaTeXProject::OnNewProject()
 	if (m_pwndMainFrame) m_pwndMainFrame->UpdateFrameTitle();
 
 	//Trigger analysis - parse project
-	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_PROJECT_PARSE);
+	m_pwndMainFrame->PostMessage(WM_COMMAND,ID_PROJECT_PARSE);
 
 	return TRUE;
 }
@@ -181,7 +181,7 @@ BOOL CLaTeXProject::OnNewProjectFromDoc(LPCTSTR lpszDocPathName)
 	OnProjectOpenMainfile();
 
 	//Trigger analysis - parse project
-	AfxGetMainWnd()->PostMessage(WM_COMMAND,ID_PROJECT_PARSE);
+	m_pwndMainFrame->PostMessage(WM_COMMAND,ID_PROJECT_PARSE);
 
 	return true;
 }
