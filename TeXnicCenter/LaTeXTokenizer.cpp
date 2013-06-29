@@ -87,7 +87,7 @@ bool LaTeXTokenizer::NextWord(LPCTSTR szLine, int length, int &nStartPos, int &n
 				badWord = true;
 
 			// words end on terminating character
-			if (!CharTraitsT::IsAlnum(ch))
+			if (!CharTraitsT::IsAlnum(ch) && ch != _T('\'')) //support don't as well as quell'altro sull'esperimento
 				break;
 
 			++nEndPos;
