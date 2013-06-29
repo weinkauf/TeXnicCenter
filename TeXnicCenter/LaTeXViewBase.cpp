@@ -199,7 +199,9 @@ void LaTeXViewBase::Dump(CDumpContext& dc) const
 
 COLORREF LaTeXViewBase::GetAutomaticColor(int nColorIndex, const int idScheme)
 {
-	switch (idScheme) {
+	switch (idScheme)
+	{
+		//Default color scheme
 		case COLORSCHEME_CUSTOM:
 		case COLORSCHEME_DEFAULT:
 			switch (nColorIndex)
@@ -211,7 +213,7 @@ COLORREF LaTeXViewBase::GetAutomaticColor(int nColorIndex, const int idScheme)
 				case COLORINDEX_CARET:
 					return ::GetSysColor(COLOR_WINDOWTEXT);
 				case COLORINDEX_CARETLINE:
-					return RGB(220, 220, 255);
+					return RGB(240, 240, 240);
 				case COLORINDEX_SELBKGND:
 					return ::GetSysColor(COLOR_HIGHLIGHT);
 				case COLORINDEX_SELTEXT:
@@ -285,10 +287,272 @@ COLORREF LaTeXViewBase::GetAutomaticColor(int nColorIndex, const int idScheme)
 				default:
 					ASSERT(false); //ColorIndex not found? Shouldn't happen. Please update.
 			}
-			case COLORSCHEME_INVERSE:
-				return RGB(255,255,255) - GetAutomaticColor(nColorIndex, COLORSCHEME_DEFAULT);
+
+
+		//Dark color scheme
+		case COLORSCHEME_DARK:
+			switch (nColorIndex)
+			{
+				case COLORINDEX_BKGND:
+					return RGB(0, 0, 0);
+				case COLORINDEX_NORMALTEXT:
+					return RGB(220, 220, 220);
+				case COLORINDEX_CARET:
+					return RGB(255, 255, 255);
+				case COLORINDEX_CARETLINE:
+					return RGB(41, 36, 17);
+				case COLORINDEX_SELBKGND:
+					return RGB(130, 102, 5);
+				case COLORINDEX_SELTEXT:
+					return RGB(0, 0, 0);
+
+				case COLORINDEX_KEYWORD:
+					return RGB(255, 162, 37);
+				case COLORINDEX_COMMENT:
+					return RGB(110, 110, 110);
+				case COLORINDEX_SPECIAL:
+					return RGB(99, 170, 178);
+				case COLORINDEX_SYMBOLS:
+					return RGB(11, 255, 213);
+
+				case COLORINDEX_GROUP:
+					return RGB(219, 139, 31);
+				case COLORINDEX_GROUP_NAME:
+					return RGB(99, 170, 178);
+
+				case COLORINDEX_STYLE_INCLUSION:
+					return RGB(37, 162, 255);
+				case COLORINDEX_FILE_INCLUSION:
+					return RGB(255, 81, 18);
+
+				case COLORINDEX_INLINE_MATH_TEXT:
+					return RGB(11, 255, 213);
+				case COLORINDEX_INLINE_MATH_COMMAND:
+					return RGB(219, 139, 31);
+
+				case COLORINDEX_DIGIT:
+					return RGB(11, 255, 213);
+				case COLORINDEX_UNIT:
+					return RGB(99, 170, 178);
+
+				case COLORINDEX_PAIRSTRINGBKGND:
+					return RGB(32, 92, 32);
+				case COLORINDEX_PAIRSTRINGTEXT:
+					return RGB(255, 255, 255);
+				case COLORINDEX_BADPAIRSTRINGBKGND:
+					return RGB(168, 32, 32);
+				case COLORINDEX_BADPAIRSTRINGTEXT:
+					return RGB(255, 220, 220);
+
+				//case COLORINDEX_VERBATIM_TEXT:
+				//	return RGB(0xFF,0x00,0xFF);
+
+				case COLORINDEX_FOLDMARGIN:
+					return RGB(48, 48, 48);
+				case COLORINDEX_FOLDMARGIN_HIGHLIGHT:
+					return RGB(48, 48, 48);
+				case COLORINDEX_FOLDMARK_FORE:
+					return RGB(48, 48, 48);
+				case COLORINDEX_FOLDMARK_BACK:
+					return RGB(128, 128, 128);
+				case COLORINDEX_ERRORMARK_FORE:
+					return RGB(255, 64, 64);
+				case COLORINDEX_ERRORMARK_BACK:
+					return RGB(255, 64, 64);
+				case COLORINDEX_BOOKMARK_FORE:
+					return RGB(220, 220, 220);
+				case COLORINDEX_BOOKMARK_BACK:
+					return RGB(110, 110, 110);
+				case COLORINDEX_LINENUMBERS_FORE:
+					return RGB(110, 110, 110);
+				case COLORINDEX_LINENUMBERS_BACK:
+					return RGB(0, 0, 0);
+
+				case COLORINDEX_INDICATOR_SPELLING:
+					return RGB(255, 192, 192);
+
+				default:
+					ASSERT(false); //ColorIndex not found? Shouldn't happen. Please update.
+			}
+
+
+		//Dark color scheme Kayleigh
+		case COLORSCHEME_DARK_HC:
+			switch (nColorIndex)
+			{
+				case COLORINDEX_BKGND:
+					return RGB(0, 0, 0);
+				case COLORINDEX_NORMALTEXT:
+					return RGB(255, 255, 255);
+				case COLORINDEX_CARET:
+					return RGB(255, 255, 255);
+				case COLORINDEX_CARETLINE:
+					return RGB(32, 32, 32);
+				case COLORINDEX_SELBKGND:
+					return RGB(128, 0, 0);
+				case COLORINDEX_SELTEXT:
+					return RGB(0, 0, 0);
+
+				case COLORINDEX_KEYWORD:
+					return RGB(128, 128, 255);
+				case COLORINDEX_COMMENT:
+					return RGB(128, 128, 128);
+				case COLORINDEX_SPECIAL:
+					return RGB(128, 255, 128);
+				case COLORINDEX_SYMBOLS:
+					return RGB(128, 255, 128);
+
+				case COLORINDEX_GROUP:
+					return RGB(128, 128, 255);
+				case COLORINDEX_GROUP_NAME:
+					return RGB(128, 128, 255);
+
+				case COLORINDEX_STYLE_INCLUSION:
+					return RGB(128, 128, 255);
+				case COLORINDEX_FILE_INCLUSION:
+					return RGB(128, 128, 255);
+
+				case COLORINDEX_INLINE_MATH_TEXT:
+					return RGB(128, 255, 128);
+				case COLORINDEX_INLINE_MATH_COMMAND:
+					return RGB(128, 128, 255);
+
+				case COLORINDEX_DIGIT:
+					return RGB(128, 255, 128);
+				case COLORINDEX_UNIT:
+					return RGB(128, 128, 255);
+
+				case COLORINDEX_PAIRSTRINGBKGND:
+					return RGB(0, 0, 0);
+				case COLORINDEX_PAIRSTRINGTEXT:
+					return RGB(0, 255, 0);
+				case COLORINDEX_BADPAIRSTRINGBKGND:
+					return RGB(0, 0, 0);
+				case COLORINDEX_BADPAIRSTRINGTEXT:
+					return RGB(255, 0, 0);
+
+				//case COLORINDEX_VERBATIM_TEXT:
+				//	return RGB(0xFF,0x00,0xFF);
+
+				case COLORINDEX_FOLDMARGIN:
+					return RGB(48, 48, 48);
+				case COLORINDEX_FOLDMARGIN_HIGHLIGHT:
+					return RGB(48, 48, 48);
+				case COLORINDEX_FOLDMARK_FORE:
+					return RGB(48, 48, 48);
+				case COLORINDEX_FOLDMARK_BACK:
+					return RGB(128, 128, 128);
+				case COLORINDEX_ERRORMARK_FORE:
+					return RGB(255, 64, 64);
+				case COLORINDEX_ERRORMARK_BACK:
+					return RGB(255, 64, 64);
+				case COLORINDEX_BOOKMARK_FORE:
+					return RGB(220, 220, 220);
+				case COLORINDEX_BOOKMARK_BACK:
+					return RGB(110, 110, 110);
+				case COLORINDEX_LINENUMBERS_FORE:
+					return RGB(110, 110, 110);
+				case COLORINDEX_LINENUMBERS_BACK:
+					return RGB(0, 0, 0);
+
+				case COLORINDEX_INDICATOR_SPELLING:
+					return RGB(255, 0, 0);
+
+				default:
+					ASSERT(false); //ColorIndex not found? Shouldn't happen. Please update.
+			}
+
+
+		case COLORSCHEME_SYSTEM:
+			switch (nColorIndex)
+			{
+				case COLORINDEX_BKGND:
+					return ::GetSysColor(COLOR_WINDOW);
+				case COLORINDEX_NORMALTEXT:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+				case COLORINDEX_CARET:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+				case COLORINDEX_CARETLINE:
+					return ::GetSysColor(COLOR_INFOBK);
+				case COLORINDEX_SELBKGND:
+					return ::GetSysColor(COLOR_HIGHLIGHT);
+				case COLORINDEX_SELTEXT:
+					return ::GetSysColor(COLOR_HIGHLIGHTTEXT);
+
+				case COLORINDEX_KEYWORD:
+					return ::GetSysColor(COLOR_HOTLIGHT);
+				case COLORINDEX_COMMENT:
+					return ::GetSysColor(COLOR_GRAYTEXT);
+				case COLORINDEX_SPECIAL:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+				case COLORINDEX_SYMBOLS:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+
+				case COLORINDEX_GROUP:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+				case COLORINDEX_GROUP_NAME:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+
+				case COLORINDEX_STYLE_INCLUSION:
+					return ::GetSysColor(COLOR_HOTLIGHT);
+				case COLORINDEX_FILE_INCLUSION:
+					return ::GetSysColor(COLOR_HOTLIGHT);
+
+				case COLORINDEX_INLINE_MATH_TEXT:
+					return ::GetSysColor(COLOR_MENUHILIGHT);
+				case COLORINDEX_INLINE_MATH_COMMAND:
+					return ::GetSysColor(COLOR_HOTLIGHT);
+
+				case COLORINDEX_DIGIT:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+				case COLORINDEX_UNIT:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+
+				case COLORINDEX_PAIRSTRINGBKGND:
+					return ::GetSysColor(COLOR_BTNFACE);
+				case COLORINDEX_PAIRSTRINGTEXT:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+				case COLORINDEX_BADPAIRSTRINGBKGND:
+					return ::GetSysColor(COLOR_3DSHADOW);
+				case COLORINDEX_BADPAIRSTRINGTEXT:
+					return ::GetSysColor(COLOR_3DHILIGHT);
+
+				//case COLORINDEX_VERBATIM_TEXT:
+				//	return ::GetSysColor()
+
+				case COLORINDEX_FOLDMARGIN:
+					return ::GetSysColor(COLOR_WINDOW);
+				case COLORINDEX_FOLDMARGIN_HIGHLIGHT:
+					return ::GetSysColor(COLOR_WINDOW);
+				case COLORINDEX_FOLDMARK_FORE:
+					return ::GetSysColor(COLOR_WINDOW);
+				case COLORINDEX_FOLDMARK_BACK:
+					return ::GetSysColor(COLOR_3DSHADOW);
+				case COLORINDEX_ERRORMARK_FORE:
+					return ::GetSysColor(COLOR_HOTLIGHT);
+				case COLORINDEX_ERRORMARK_BACK:
+					return ::GetSysColor(COLOR_3DSHADOW);
+				case COLORINDEX_BOOKMARK_FORE:
+					return ::GetSysColor(COLOR_3DHIGHLIGHT);
+				case COLORINDEX_BOOKMARK_BACK:
+					return ::GetSysColor(COLOR_3DSHADOW);
+				case COLORINDEX_LINENUMBERS_FORE:
+					return ::GetSysColor(COLOR_WINDOWTEXT);
+				case COLORINDEX_LINENUMBERS_BACK:
+					return ::GetSysColor(COLOR_BTNFACE);
+
+				case COLORINDEX_INDICATOR_SPELLING:
+					return ::GetSysColor(COLOR_HIGHLIGHT);
+
+				default:
+					ASSERT(false); //ColorIndex not found? Shouldn't happen. Please update.
+			}
+
+		case COLORSCHEME_SYSTEM_INVERSE:
+			return RGB(255, 255, 255) - GetAutomaticColor(nColorIndex, COLORSCHEME_SYSTEM);
+
 			default:
-					ASSERT(false); //idScheme not found? Shouldn't happen. Please update.
+				ASSERT(false); //idScheme not found? Shouldn't happen. Please update.
 	}
 
 	return RGB(0xFF,0x00,0x00);

@@ -251,7 +251,7 @@ void LaTeXView::UpdateSettings()
 	SetAStyle(SCE_TEX_GROUP_NAME, GetColor(COLORINDEX_GROUP_NAME),GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, true, false);
 
 	SetAStyle(SCE_TEX_STYLE_INCLUSION, GetColor(COLORINDEX_STYLE_INCLUSION), GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, true, false);
-	SetAStyle(SCE_TEX_FILE_INCLUSION, GetColor(COLORINDEX_FILE_INCLUSION), GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, false, true);
+	SetAStyle(SCE_TEX_FILE_INCLUSION, GetColor(COLORINDEX_FILE_INCLUSION), GetColor(COLORINDEX_BKGND), point_size, editor_font.lfFaceName, true, false);
 
 	SetAStyle(SCE_TEX_INLINE_MATH, GetColor(COLORINDEX_INLINE_MATH_TEXT), GetColor(COLORINDEX_BKGND));
 	SetAStyle(SCE_TEX_INLINE_MATH_COMMAND, GetColor(COLORINDEX_INLINE_MATH_COMMAND), GetColor(COLORINDEX_BKGND));
