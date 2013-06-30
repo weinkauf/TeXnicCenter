@@ -633,7 +633,6 @@ void LaTeXView::OnEditOutsource()
 {
 	//Get the file name of ourselves
 	LaTeXDocument* pDoc = GetDocument();
-
 	if (!pDoc) return;
 
 	//Create the dialog
@@ -645,54 +644,36 @@ void LaTeXView::OnEditOutsource()
 
 	//Show the dialog
 	if (OutsourceDlg.DoModal() == IDOK) {
-		//Get the new file name and write the selected lines to it
-		CAtlFile NewFile;
 
-		if (SUCCEEDED(NewFile.Create(OutsourceDlg.NewPath.GetPath(),GENERIC_WRITE,FILE_SHARE_READ,CREATE_ALWAYS))) {
-			//Get selected text - may be empty
-			long s = GetCtrl().GetSelectionStart();
-			long e = GetCtrl().GetSelectionEnd();
+		//Write the selected lines to the new file - same encoding as the original file
+		TextDocument td(GetDocument());
+		td.Write(OutsourceDlg.NewPath.GetPath(), GetCtrl().GetSelText());
 
-			std::vector<char> buffer;
-		
-			buffer.resize((e - s) + 1);
-			GetCtrl().GetSelText(&buffer[0]);
+		//Get relative path - omit tex-extension
+		CString RelativeFilePath = CPathTool::GetRelativePath(OldPath.GetDirectory(),
+			(OutsourceDlg.NewPath.GetFileExtension() == _T("tex"))
+			? CPathTool(OutsourceDlg.NewPath.GetBase())
+			: OutsourceDlg.NewPath);
 
-			char* text = &buffer[0];
-			std::size_t n = buffer.size() - 1;
+		// GetRelativePath uses the backslash as a separator
+		// which denotes a TeX command start; replace it by /
+		RelativeFilePath.Replace(_T('\\'),_T('/'));
 
-			// Write it to the file
-			TextDocument td(GetDocument());
-			td.WriteUTF8(NewFile,text,n);
+		//Insert the text into this document
+		GetCtrl().ReplaceSel(OutsourceDlg.CmdLeft + RelativeFilePath + OutsourceDlg.CmdRight);
 
-			NewFile.Close();
+		//Open the new file
+		if (OutsourceDlg.m_bOpenNewFile) {
+			//Open it
+			theApp.OpenLatexDocument(OutsourceDlg.NewPath,FALSE,-1,FALSE,false);
 
-			//Get relative path - omit tex-extension
-			CString RelativeFilePath = CPathTool::GetRelativePath(OldPath.GetDirectory(),
-				(OutsourceDlg.NewPath.GetFileExtension() == _T("tex"))
-				? CPathTool(OutsourceDlg.NewPath.GetBase())
-				: OutsourceDlg.NewPath);
+			//In background? Foreground is automatically done by the line above.
+			if (OutsourceDlg.m_nOpenNewFileType == 0 /*background*/) {
+				//Re-activate this view (I tried to open the new doc in background, but it did not work out)
+				CFrameWnd* pFrame = GetParentFrame();
 
-			// GetRelativePath uses the backslash as a separator
-			// which denotes a TeX command start; replace it by /
-			RelativeFilePath.Replace(_T('\\'),_T('/'));
-
-			//Insert the text into this document
-			GetCtrl().ReplaceSel(OutsourceDlg.CmdLeft + RelativeFilePath + OutsourceDlg.CmdRight);
-
-			//Open the new file
-			if (OutsourceDlg.m_bOpenNewFile) {
-				//Open it
-				theApp.OpenLatexDocument(OutsourceDlg.NewPath,FALSE,-1,FALSE,false);
-
-				//In background? Foreground is automatically done by the line above.
-				if (OutsourceDlg.m_nOpenNewFileType == 0 /*background*/) {
-					//Re-activate this view (I tried to open the new doc in background, but it did not work out)
-					CFrameWnd* pFrame = GetParentFrame();
-
-					if (pFrame)
-						pFrame->ActivateFrame();
-				}
+				if (pFrame)
+					pFrame->ActivateFrame();
 			}
 		}
 	}
