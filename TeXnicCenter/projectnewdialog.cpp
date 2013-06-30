@@ -40,6 +40,7 @@
 #include "configuration.h"
 #include "CodeDocument.h"
 #include "TeXnicCenter.h"
+#include "textsourcefile.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -138,17 +139,14 @@ BOOL CFileBasedProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &Image
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//extract description, if available
-	CFile file;
-	if (!file.Open(m_strPath, CFile::modeRead))
-		return FALSE;
-
-	try
+	CTextSourceFile TextFile;
+	if (TextFile.Create(lpszPath))
 	{
-		CArchive ar(&file, CArchive::load);
-		CString strLine;
-
-		if (ar.ReadString(strLine))
+		LPCTSTR lpLine;
+		int nLength;
+		if (TextFile.GetNextLine(lpLine, nLength))
 		{
+			CString strLine(lpLine, nLength);
 			CString strKey(_T("%DESCRIPTION: "));
 			CString strStartOfLine = strLine.Left(strKey.GetLength());
 			strStartOfLine.MakeUpper();
@@ -156,14 +154,6 @@ BOOL CFileBasedProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &Image
 			if (strStartOfLine == strKey)
 				m_strDescription = strLine.Right(strLine.GetLength() - strKey.GetLength());
 		}
-
-		ar.Close();
-		file.Close();
-	}
-	catch (CException *pE)
-	{
-		file.Abort();
-		pE->Delete();
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
