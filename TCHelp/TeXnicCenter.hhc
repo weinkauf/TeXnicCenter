@@ -111,7 +111,7 @@
     <param name="Local" value="doctemplates.html#example">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
-    <param name="Name" value="File based document templates">
+    <param name="Name" value="File-based document templates">
     <param name="Local" value="doctemplates.html#file-based-document-templates">
 </OBJECT>
 <UL>
