@@ -5,7 +5,7 @@
 ;-------------------------------------------
 
 ;Uncomment this for x64
-;#define TARGET_x64
+#define TARGET_x64
 
 ;Uncomment this for an Alpha Build
 ;#define ALPHA_BUILD
@@ -109,11 +109,9 @@ Name: Templates; Description: LaTeX Templates (Templates for creating new projec
 Name: Templates\English; Description: English LaTeX Templates; Types: custom typical
 Name: Templates\Deutsch; Description: Deutsche LaTeX Vorlagen; Types: custom typical
 Name: Dictionaries; Description: Dictionaries; Types: custom typical
-Name: Dictionaries\EnglishGB; Description: English (GB); Types: custom
-Name: Dictionaries\EnglishUS; Description: English (US); Types: custom typical
+Name: Dictionaries\English; Description: English (US & GB); Types: custom typical
 Name: Dictionaries\Deutsch; Description: Deutsch; Types: custom typical
-Name: Dictionaries\Francais; Description: Français; Types: custom
-Name: Dictionaries\Francais1990; Description: Français (appelé Réforme 1990); Types: custom
+Name: Dictionaries\Francais; Description: Français (Moderne, Classique, Réforme 1990, Toutes variantes); Types: custom
 
 [Files]
 ;Application Files
@@ -157,11 +155,9 @@ DestDir: {app}\Templates\Projects\Deutsch erweitert; Source: ..\Output\Product\{
 DestDir: {app}\Templates\Projects\Deutsch; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Templates\Projects\Deutsch\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
 
 ;Dictionaries
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\de_DE.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Deutsch
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\en_GB.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishGB
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\en_US.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishUS
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\fr_FR.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Francais
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\fr_FR-1990.*; Flags: comparetimestamp promptifolder; Components: " Dictionaries\Francais1990"
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\de*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Deutsch
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\en*; Flags: comparetimestamp promptifolder; Components: Dictionaries\English
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\fr*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Francais
 
 [Icons]
 Name: {group}\{#APP_ID}; Filename: {app}\TeXnicCenter.exe; WorkingDir: {userdocs}; IconIndex: 0
