@@ -64,11 +64,12 @@ private:
 	typedef std::vector<Item> BibItemContainerType;
 
 	enum {
-		Author		= 1,
-		Title		= 1 << 1,
-		Year		= 1 << 2,
-		Type		= 1 << 3,
-		Publisher	= 1 << 4
+		Label		= 1,
+		Author		= 1 << 1,
+		Title		= 1 << 2,
+		Year		= 1 << 3,
+		Type		= 1 << 4,
+		Publisher	= 1 << 5
 	};
 
 	static bool EveryItem(const BibItem& /*item*/);

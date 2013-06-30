@@ -112,7 +112,9 @@ BEGIN_MESSAGE_MAP(BibView, WorkspacePaneBase)
 	ON_COMMAND(ID_START_SEARCH, &BibView::OnStartSearch)
 	ON_NOTIFY(LVN_BEGINDRAG, ListID, &BibView::OnLvnBeginDrag)
 	ON_COMMAND_RANGE(ID_AUTHOR,ID_PUBLISHER, &BibView::OnSearchOptions)
+	ON_COMMAND_RANGE(ID_BIBTEX_KEY, ID_BIBTEX_KEY, &BibView::OnSearchOptions)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_AUTHOR,ID_PUBLISHER, &BibView::OnUpdateSearchOptions)
+	ON_UPDATE_COMMAND_UI(ID_BIBTEX_KEY, &BibView::OnUpdateSearchOptions)
 	ON_NOTIFY(NM_DBLCLK, ListID, &BibView::OnNMDblClk)
 	ON_NOTIFY(LVN_ITEMCHANGED, ListID, &BibView::OnLvnItemChanged)
 	ON_COMMAND(IDOK, &BibView::OnEnter)
@@ -127,7 +129,7 @@ int BibView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	// Default search options
-	search_flags_ = Author|Title|Year;
+	search_flags_ = Label|Author|Title|Year;
 
 	toolbar_.Create(this,AFX_DEFAULT_TOOLBAR_STYLE|WS_TABSTOP,IDR_BIB_SEARCH);
 	toolbar_.ModifyStyleEx(0,WS_EX_CONTROLPARENT);
@@ -449,6 +451,9 @@ bool BibView::ItemContains( const BibItem& item, const std::vector<CString>& sea
 	if (search_flags_ & Title)
 		ContainsAny(item.GetTitle(),tokens);
 
+	if (!tokens.empty() && search_flags_ & Label)
+		ContainsAny(item.GetLabel(),tokens);
+
 	if (!tokens.empty() && search_flags_ & Author)
 		ContainsAny(item.GetAuthor(),tokens);
 
@@ -513,6 +518,9 @@ bool BibView::IsSearchOptionSet(unsigned opt) const
 void BibView::OnSearchOptions(UINT id)
 {
 	switch (id) {
+		case ID_BIBTEX_KEY:
+			ToggleSearchOption(Label);
+			break;
 		case ID_AUTHOR:
 			ToggleSearchOption(Author);
 			break;
@@ -536,6 +544,9 @@ void BibView::OnUpdateSearchOptions(CCmdUI* pCmdUI)
 	unsigned opt;
 
 	switch (pCmdUI->m_nID) {
+		case ID_BIBTEX_KEY:
+			opt = Label;
+			break;
 		case ID_AUTHOR:
 			opt = Author;
 			break;
