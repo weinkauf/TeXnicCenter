@@ -119,53 +119,20 @@ void CTemplateDialog::CollectTemplates()
 	for (int i = 0; i < m_astrSearchPaths.GetSize(); i++)
 	{
 		CFileFind dirs;
-		if (!dirs.FindFile(m_astrSearchPaths[i] + _T("\\*.*"), 0))
-			continue;
+		if (!dirs.FindFile(m_astrSearchPaths[i] + _T("\\*.*"), 0)) continue;
 
-		// parse all subdirs in this directory
+		//Parse the files in this parent directory - they will appear on a tab with the name of this parent dir
+		CollectTemplateFilesInDirectory(m_astrSearchPaths[i], CPathTool::GetFile(m_astrSearchPaths[i]));
+
+		//Parse all subdirs in this directory
 		BOOL bDirsContinue = TRUE;
-
 		while (bDirsContinue)
 		{
 			bDirsContinue = dirs.FindNextFile();
+			if (!dirs.IsDirectory() || dirs.IsDots()) continue; // only directories
 
-			if (!dirs.IsDirectory() || dirs.IsDots())
-				continue; // only directories
-
-			CString strSubdir = dirs.GetFilePath();
-			CString strSubdirName = dirs.GetFileName();
-
-			// check, if name of this subdir is already existing
-			StringTemplateItemArrayMap::iterator it = 
-				m_mapSubdirToTemplates.find(strSubdirName);
-
-			if (it == m_mapSubdirToTemplates.end())
-				it = m_mapSubdirToTemplates.insert(it, std::make_pair(strSubdirName, CTemplateItemArray()));
-
-			// parse all files of interest in the directory
-			for (int nFilter = 0; nFilter < m_astrFilters.GetSize(); nFilter++)
-			{
-				CFileFind templates;
-				if (!templates.FindFile(strSubdir + "\\" + m_astrFilters[nFilter], 0))
-					continue;
-
-				// add all files
-				BOOL bTemplatesContinue = TRUE;
-
-				while (bTemplatesContinue)
-				{
-					bTemplatesContinue = templates.FindNextFile();
-					if (!templates.IsDirectory())
-					{
-						std::unique_ptr<CTemplateItem> pItem
-							(dynamic_cast<CTemplateItem*>(m_apTemplateItemClass[nFilter]->CreateObject()));
-
-						if (pItem->InitItem(templates.GetFilePath(), m_ImageList16, m_ImageList32))
-							it->second.push_back(std::move(pItem));
-					}
-				}
-				templates.Close();
-			}
+			//Parse all files of interest in this subdirectory
+			CollectTemplateFilesInDirectory(dirs.GetFilePath(), dirs.GetFileName());
 		}
 		dirs.Close();
 	}// end of "parse all the search paths"
@@ -217,6 +184,44 @@ void CTemplateDialog::CollectTemplates()
 	m_wndTemplateList.SetImageList(&m_ImageList32, LVSIL_NORMAL);
 	m_wndTemplateList.SetImageList(&m_ImageList16, LVSIL_SMALL);
 }
+
+
+void CTemplateDialog::CollectTemplateFilesInDirectory(const CString& strDirectory, const CString& strCategory)
+{
+	//Check, if the name of this subdir exists
+	StringTemplateItemArrayMap::iterator it = m_mapSubdirToTemplates.find(strCategory);
+	if (it == m_mapSubdirToTemplates.end())
+	{
+		//Create new entry in map
+		it = m_mapSubdirToTemplates.insert(it, std::make_pair(strCategory, CTemplateItemArray()));
+	}
+
+	//Parse all files of interest in the directory
+	for (int nFilter = 0; nFilter < m_astrFilters.GetSize(); nFilter++)
+	{
+		CFileFind templates;
+		if (!templates.FindFile(strDirectory + "\\" + m_astrFilters[nFilter], 0))
+			continue;
+
+		// add all files
+		BOOL bTemplatesContinue = TRUE;
+
+		while (bTemplatesContinue)
+		{
+			bTemplatesContinue = templates.FindNextFile();
+			if (!templates.IsDirectory())
+			{
+				std::unique_ptr<CTemplateItem> pItem
+					(dynamic_cast<CTemplateItem*>(m_apTemplateItemClass[nFilter]->CreateObject()));
+
+				if (pItem->InitItem(templates.GetFilePath(), m_ImageList16, m_ImageList32))
+					it->second.push_back(std::move(pItem));
+			}
+		}
+		templates.Close();
+	}
+}
+
 
 void CTemplateDialog::FillTemplateList()
 {
