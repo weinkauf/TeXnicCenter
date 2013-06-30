@@ -343,8 +343,12 @@ bool TextDocument::Read(LPCTSTR pszFileName, CStringW& string)
 			if (!use_bom_ && pos != 0)
 				use_bom_ = true;
 		}
-		else
-			result = ::GetLastError();
+		else {
+			//The file cannot be memory-mapped, but it exists on disk.
+			//An example is an empty file.
+			// => We will not report an error for this.
+			//result = ::GetLastError();
+		}
 	}
 	else
 		result = ::GetLastError();
