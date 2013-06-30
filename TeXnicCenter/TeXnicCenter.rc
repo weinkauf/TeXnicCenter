@@ -3107,6 +3107,7 @@ IDR_BIB_SEARCH_OPTIONS MENU
 BEGIN
     POPUP "Menu"
     BEGIN
+        MENUITEM "&Label",                      ID_BIBTEX_KEY
         MENUITEM "&Autor",                      ID_AUTHOR
         MENUITEM "&Titel",                      ID_TITLE
         MENUITEM "&Erscheinungsjahr",           ID_YEAR
@@ -4938,6 +4939,11 @@ BEGIN
                             "(Selektiertes) Wort unter dem Cursor in Vorwärtsrichtung suchen.\nNächsten Treffer finden (selektiert)"
     ID_SEARCH_FINDPREVIOUSSELECTED 
                             "(Selektiertes) Wort unter dem Cursor in Rückwärtsrichtung suchen.\nVorherigen Treffer finden (selektiert)"
+END
+
+STRINGTABLE
+BEGIN
+    ID_BIBTEX_KEY           "Nach BibTeX Key / Label suchen."
 END
 
 #endif    // German (Germany) resources
@@ -7239,6 +7245,7 @@ IDR_BIB_SEARCH_OPTIONS MENU
 BEGIN
     POPUP "Menu"
     BEGIN
+        MENUITEM "&Label",                      ID_BIBTEX_KEY
         MENUITEM "&Author",                     ID_AUTHOR
         MENUITEM "&Title",                      ID_TITLE
         MENUITEM "&Year",                       ID_YEAR
@@ -9051,6 +9058,11 @@ BEGIN
                             "Find next word under cursor or in selection.\nFind next selected."
     ID_SEARCH_FINDPREVIOUSSELECTED 
                             "Find previous word under cursor or in selection.\nFind previous selected."
+END
+
+STRINGTABLE
+BEGIN
+    ID_BIBTEX_KEY           "Search for bibTeX key / label."
 END
 
 #endif    // English (United States) resources
