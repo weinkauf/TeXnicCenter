@@ -1,4 +1,4 @@
-;TeXnicCenter Inno Setup Script
+﻿;TeXnicCenter Inno Setup Script
 
 ;-------------------------------------------
 ; Some defines
@@ -79,7 +79,7 @@ DefaultGroupName={#APP_ID}
 UsePreviousAppDir=true
 ;Requirements
 ;PrivilegesRequired=none
-MinVersion=4.0.950,5.0.2195
+MinVersion=5.0.2195
 ;Setup
 AllowNoIcons=true
 AlwaysShowDirOnReadyPage=true
@@ -111,7 +111,13 @@ Name: Templates\Deutsch; Description: Deutsche LaTeX Vorlagen; Types: custom typ
 Name: Dictionaries; Description: Dictionaries; Types: custom typical
 Name: Dictionaries\English; Description: English (US & GB); Types: custom typical
 Name: Dictionaries\Deutsch; Description: Deutsch; Types: custom typical
-Name: Dictionaries\Francais; Description: Fran�ais (Moderne, Classique, R�forme 1990, Toutes variantes); Types: custom
+Name: Dictionaries\Francais; Description: Français (Moderne, Classique, Réforme 1990, Toutes variantes); Types: custom
+Name: Dictionaries\Espanol; Description: Español; Types: custom
+Name: Dictionaries\Italiano; Description: Italiano; Types: custom
+Name: Dictionaries\Nederlands; Description: Nederlands; Types: custom
+Name: Dictionaries\Polski; Description: Polski; Types: custom
+Name: Dictionaries\Portugues; Description: Português (PT & BR); Types: custom
+Name: Dictionaries\Russkij; Description: Русский; Types: custom
 
 [Files]
 ;Application Files
@@ -158,6 +164,13 @@ DestDir: {app}\Templates\Projects\Deutsch; Source: ..\Output\Product\{#APP_PLATF
 DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\de*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Deutsch
 DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\en*; Flags: comparetimestamp promptifolder; Components: Dictionaries\English
 DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\fr*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Francais
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\es*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Espanol
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\it*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Italiano
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\nl*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Nederlands
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\pl*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Polski
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\pt*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Portugues
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\ru*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Russkij
+
 
 [Icons]
 Name: {group}\{#APP_ID}; Filename: {app}\TeXnicCenter.exe; WorkingDir: {userdocs}; IconIndex: 0
@@ -262,11 +275,10 @@ Name: custom; Description: Custom (Lets you choose, which components to install)
 [Run]
 Filename: {app}\TeXnicCenter.exe; Description: "Launch TeXnicCenter"; Flags: postinstall nowait skipifsilent
 
-[InnoIDE_Settings]
-LogFileOverwrite=false
 
 
 
 #ifdef Debug
   #expr SaveToFile(AddBackslash(SourcePath) + "Preprocessed.iss")
 #endif
+
