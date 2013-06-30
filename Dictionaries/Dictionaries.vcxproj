@@ -164,6 +164,98 @@
       <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
       <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
     </CustomBuild>
+    
+    <CustomBuild Include="pt_PT.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="pt_PT.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="pt_BR.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="pt_BR.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="it_IT.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="it_IT.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="es_ANY.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="es_ANY.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="nl_NL.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="nl_NL.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="pl_PL.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="pl_PL.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="ru_RU.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="ru_RU.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
