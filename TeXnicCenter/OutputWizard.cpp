@@ -432,6 +432,15 @@ void COutputWizard::LookForDviViewer()
 			Might be that it would be nicer to add an entry to editors.ini.
 
 			==> Tested with miktex up to version 2.6
+
+			Update June 2013:
+			The registry entry is not read anymore by miktex 2.9.
+			One would need to add something to
+				D:\Users\weinkauf\AppData\Roaming\MiKTeX\2.9\miktex\config\yap.ini
+			or
+				D:\Users\weinkauf\AppData\Roaming\MiKTeX\2.9\miktex\config\editors.ini
+
+			Obviously, this is a bad idea and we won't do it just like that. Anyway, miktex may adapt to us as I sent a patch.
 	 */
 	CSettingsStore reg(false,false);
 
@@ -446,14 +455,15 @@ void COutputWizard::LookForDviViewer()
 		reg.Read(_T("Editor"),strEditor);
 		strEditor.MakeUpper();
 
-		const CString& module = theApp.GetModuleFileName();
+		const CString Module = theApp.GetModuleFileName();
+		CString ModuleUpper(Module);
+		ModuleUpper.MakeUpper();
 
 		if (strEditor.IsEmpty() || // No editor defined
-				((CPathTool::GetFileTitle(strEditor).
-				  CompareNoCase(CPathTool::GetFileTitle(module))) && // if Editor is not TXC and...
-				 (AfxMessageBox(STE_OUTPUTWIZARD_YAPCONFIG,MB_ICONQUESTION | MB_YESNO) == IDYES)))   // ...the user wants us to overwrite
+			(strEditor.Find(ModuleUpper) < 0 && // if Editor is not this TXC and...
+			(AfxMessageBox(STE_OUTPUTWIZARD_YAPCONFIG,MB_ICONQUESTION | MB_YESNO) == IDYES))) // ...the user wants us to overwrite
 		{
-			strEditor = module;
+			strEditor = Module;
 			strEditor += _T(" /ddecmd \"[goto('%f', '%l')]\"");
 			reg.Write(_T("Editor"),strEditor);
 		}
