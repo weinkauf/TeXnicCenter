@@ -247,58 +247,6 @@ BOOL CFileBasedProjectTemplateItem::CreateMainFile(LPCTSTR lpszTargetPath, LPCTS
 		result = doc.Write(lpszTargetPath,text);
 	}
 
-	//CFile sourceFile;
-	//if (!sourceFile.Open(m_strPath, CFile::modeRead))
-	//	return FALSE;
-
-	////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//// copy source file to destination file
-	//CFile destFile;
-	//if (!destFile.Open(lpszTargetPath, CFile::modeCreate | CFile::modeWrite))
-	//{
-	//	sourceFile.Close();
-	//	return FALSE;
-	//}
-
-	//try
-	//{
-	//	CArchive source(&sourceFile, CArchive::load);
-	//	CArchive dest(&destFile, CArchive::store);
-	//	CString strLine;
-
-	//	if (source.Read(strLine))
-	//	{
-	//		// skip leading descriptions
-	//		CString strKey(_T("%DESCRIPTION: "));
-	//		CString strStartOfLine = strLine.Left(strKey.GetLength());
-	//		strStartOfLine.MakeUpper();
-
-	//		if (strStartOfLine == strKey)
-	//		{
-	//			// skip leading empty lines
-	//			while (source.Read(strLine) && strLine.IsEmpty());
-	//		}
-	//	}
-
-	//	if (!strLine.IsEmpty())
-	//		dest.WriteString(strLine + lpszCrLf);
-
-	//	// copy other lines
-	//	while (source.Read(strLine))
-	//		dest.WriteString(strLine + lpszCrLf);
-
-	//	source.Close();
-	//	dest.Close();
-	//	sourceFile.Close();
-	//	destFile.Close();
-	//}
-	//catch (CException *pE)
-	//{
-	//	sourceFile.Abort();
-	//	destFile.Abort();
-	//	pE->Delete();
-	//}
-
 	return result;
 }
 
