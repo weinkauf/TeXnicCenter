@@ -18,15 +18,12 @@
 ;-------------------------------------------
 
 ;~ Setup for current user  versus  Setup for all users:
-;~ We need elevated priveleges to write to HKLM and such.
+;~ We need elevated privileges to write to HKLM and such.
 ;~ For the "all users" case: more or less like now. Except for HKCR -> needs to be some other like HKLM/Classes
 ;~ For "current user" case: HKCR -> HKCU/Classes. Not in "Program Files".
 
 ;~ The defaults for the doc and project templates should really be handled from within TXC.
 ;~ If the key or dir doesn't exist, then use the defaults.
-
-;~ Artwork: Setup Icon, Setup wizard image
-
 
 
 
@@ -57,7 +54,6 @@
 ;~ We need that for the file name of the setup itself
 #define APP_VERSION_NOSPACE StringChange(APP_VERSION, " ", "")
 
-
 [Setup]
 ;Output
 OutputDir=..\Output\Setup
@@ -87,8 +83,9 @@ AlwaysShowGroupOnReadyPage=true
 AlwaysShowComponentsList=true
 ShowLanguageDialog=yes
 UninstallDisplayIcon={app}\TeXnicCenter.exe
-WizardImageFile=compiler:wizmodernimage-IS.bmp
-WizardSmallImageFile=compiler:wizmodernsmallimage-IS.bmp
+SetupIconFile=..\TeXnicCenter\res\TeXnicCenter.ico
+WizardImageFile=TXCWizardImage.bmp
+WizardSmallImageFile=TXCWizardSmallImage.bmp
 ChangesAssociations=true
 ;Compression
 SolidCompression=true
@@ -100,7 +97,6 @@ Compression=lzma2/Ultra64
   ArchitecturesAllowed=x64
   ArchitecturesInstallIn64BitMode=x64
 #endif
-
 
 [Components]
 Name: Application_Files; Description: Application Files (TeXnicCenter core components); Flags: fixed; Types: compact typical custom
