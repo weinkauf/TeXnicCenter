@@ -138,7 +138,7 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 		};
 
 		for (int i = 0; i < sizeof(fontNames) / sizeof(*fontNames) &&
-			!font.CreatePointFont(100, fontNames[i]); )
+			!font.CreatePointFont(120, fontNames[i]); )
 			 ++i; // Increment here to prevent compiler warning
 
 		font.GetLogFont(&logFont);
