@@ -395,7 +395,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// create all math bars
 	for (int i = 0; i < MATHBAR_COUNT; i++)
 	{
-		if (!CreateToolBar(&m_awndMathBar[i], IDR_MATHBAR1 + i, IDR_MATH + i)) return -1;
+		if (!CreateToolBar(&m_awndMathBar[i], IDR_MATHBAR1 + i, IDR_MATH + i, false)) return -1;
 	}
 
 	// load user defined toolbars
@@ -439,6 +439,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockPaneLeftOf(&m_wndFormatRUBar, &m_wndMathBar);
 	DockPaneLeftOf(&m_wndInsertBar, &m_wndFormatRUBar);
 
+	//NOTE: All bars need to be docked. Even if they shall be invisible at first start!
+	DockPane(&m_wndFindBar);
+	DockPane(&m_wndFormatBar);
 	for (int i = 0; i < MATHBAR_COUNT; ++i)
 	{
 		DockPane(m_awndMathBar + i);
@@ -1224,12 +1227,6 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 	if (!CMDIFrameWndEx::LoadFrame(nIDResource, dwDefaultStyle, pParentWnd, pContext))
 	{
 		return FALSE;
-	}
-
-	for (int i = 0; i < MATHBAR_COUNT; ++i)
-	{
-		if (!m_awndMathBar[i].IsRestoredFromRegistry())
-			ShowPane(m_awndMathBar + i, FALSE, TRUE, FALSE);
 	}
 
 	RecalcLayout();
