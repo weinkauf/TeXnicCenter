@@ -271,6 +271,10 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_COMMAND_EX(ID_VIEW_GREP_2_PANE, &CMainFrame::OnToggleDockingBar)
 	ON_COMMAND_EX(ID_VIEW_PARSE_PANE, &CMainFrame::OnToggleDockingBar)
 	ON_MESSAGE(WM_COMMANDHELP, &CMainFrame::OnCommandHelp)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_CASCADE, &CMainFrame::OnUpdateWindowMDICommands)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_TILE_HORZ, &CMainFrame::OnUpdateWindowMDICommands)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_TILE_VERT, &CMainFrame::OnUpdateWindowMDICommands)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_ARRANGE, &CMainFrame::OnUpdateWindowMDICommands)
 END_MESSAGE_MAP()
 
 const UINT BuildAnimationPane = 1;
@@ -2395,6 +2399,11 @@ void CMainFrame::OnWindowPrevious()
 {
 	ActivateMDIChildByMRUList(true);
 	//::SendMessage(m_hWndMDIClient, WM_MDINEXT, 0, TRUE);
+}
+
+void CMainFrame::OnUpdateWindowMDICommands(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(!IsMDITabbedGroup());
 }
 
 #pragma endregion 

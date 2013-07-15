@@ -2316,7 +2316,7 @@ BEGIN
         BEGIN
             MENUITEM "&Oben",                       ID_VIEW_DOCTAB_TOP
             MENUITEM "&Unten",                      ID_VIEW_DOCTAB_BOTTOM
-            MENUITEM "&Aus",                        ID_VIEW_DOCTAB_OFF
+            MENUITEM "&Keine Reiter, klassisches MDI", ID_VIEW_DOCTAB_OFF
             MENUITEM SEPARATOR
             MENUITEM "&Dokumentsymbole anzeigen",   ID_VIEW_DOCTAB_ICONS
             MENUITEM "Aktenordner&stil",            ID_VIEW_DOCTAB_NOTE
@@ -6454,7 +6454,7 @@ BEGIN
         BEGIN
             MENUITEM "&Top",                        ID_VIEW_DOCTAB_TOP
             MENUITEM "&Bottom",                     ID_VIEW_DOCTAB_BOTTOM
-            MENUITEM "&Off",                        ID_VIEW_DOCTAB_OFF
+            MENUITEM "N&o Tabs, Classic MDI",       ID_VIEW_DOCTAB_OFF
             MENUITEM SEPARATOR
             MENUITEM "Show &Icons",                 ID_VIEW_DOCTAB_ICONS
             MENUITEM "&Note Style",                 ID_VIEW_DOCTAB_NOTE
