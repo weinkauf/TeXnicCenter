@@ -693,9 +693,8 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 		if (theApp.GetShowMDITabs())
 			hwndlock = ::GetWindow(static_cast<CMDIFrameWnd*>(AfxGetMainWnd())->m_hWndMDIClient,GW_CHILD);
 
-        // To restore previous frame appearance order the frames are created in
-        // reversed order
-		for (int nFrame = nFrameCount - 1; nFrame >= 0; --nFrame)
+		//Restore the frames
+		for (int nFrame=0;nFrame<nFrameCount;nFrame++)
 		{
 			strKey.Format(KEY_FRAMEINFO,nFrame);
 			key.Format(KEY_VIEWINFO,strKey,0,0);			
