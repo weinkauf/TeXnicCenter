@@ -533,6 +533,9 @@ void CMainFrame::OnClose()
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
+	//Do not add the title of the MDI child to the frame window title. We do this ourselves.
+	cs.style &= ~FWS_ADDTOTITLE;
+
 	if (!CMDIFrameWndEx::PreCreateWindow(cs))
 		return FALSE;
 	return TRUE;
@@ -1309,8 +1312,6 @@ void CMainFrame::DisplayDocumentTabs()
 	//	,TRUE // Specifies whether custom tooltips are enabled.
 	//	,TRUE // set to FALSE to place close button at right of tab area
 	//	);
-
-	UpdateFrameTitle();
 }
 
 void CMainFrame::OnViewDocTabsBottom()
@@ -2122,25 +2123,47 @@ void CMainFrame::OnViewTransparency()
 
 void CMainFrame::OnUpdateFrameTitle(BOOL bAddToTitle)
 {
-	if (!theApp.GetShowMDITabs())
-		CMDIFrameWndEx::OnUpdateFrameTitle(bAddToTitle);
+	UNUSED(bAddToTitle);
+
+	//We use our own version to get consistent results regarding projects and single files.
+	UpdateFrameTitle();
+	//CMDIFrameWndEx::OnUpdateFrameTitle(bAddToTitle);
 }
 
 void CMainFrame::UpdateFrameTitle()
 {
+	CString title(MAKEINTRESOURCE(IDR_MAINFRAME));
+
 	CLaTeXProject* project = theApp.GetProject();
-
-	CString title(MAKEINTRESOURCE( IDR_MAINFRAME));
-
 	if (project)
 	{
+		//Add the project title: "Project - TeXnicCenter"
 		const CString& tmp = project->GetTitle();
-
-		if (!tmp.IsEmpty())
-			title = tmp + _T(" - ") + title;
+		if (!tmp.IsEmpty()) title = tmp + _T(" - ") + title;
+	}
+	else
+	{
+		//Add the file name: "File - TeXnicCenter"
+		CFrameWnd *pFrame = GetActiveFrame();
+		if (pFrame)
+		{
+			//Get active document
+			CDocument* pDoc = pFrame->GetActiveDocument();
+			if (pDoc)
+			{
+				const CString& tmp = CPathTool::GetFile(pDoc->GetPathName());
+				if (!tmp.IsEmpty()) title = tmp + _T(" - ") + title;
+			}
+		}
 	}
 
-	SetWindowText(title);
+	//Same as before? If not, set it.
+	CString OldTitle;
+	GetWindowText(OldTitle);
+	if (title != OldTitle)
+	{
+		SetWindowText(title);
+	}
 }
 
 void CMainFrame::OnDestroy()
