@@ -2923,7 +2923,6 @@ BEGIN
     POPUP "&Fenster"
     BEGIN
         MENUITEM "N&eues Fenster",              ID_WINDOW_NEW
-        MENUITEM "&Teilen",                     ID_WINDOW_SPLIT
         MENUITEM "S&chlieﬂen",                  ID_FILE_CLOSE
         MENUITEM "&Alle schlieﬂen",             ID_WINDOW_CLOSE_ALL
         MENUITEM "Alle &inaktiven Fenster schlieﬂen", ID_WINDOW_CLOSE_ALL_BUTACTIVE
@@ -7061,7 +7060,6 @@ BEGIN
     POPUP "&Window"
     BEGIN
         MENUITEM "&New Window",                 ID_WINDOW_NEW
-        MENUITEM "&Split",                      ID_WINDOW_SPLIT
         MENUITEM "&Close",                      ID_FILE_CLOSE
         MENUITEM "C&lose All",                  ID_WINDOW_CLOSE_ALL
         MENUITEM "Close All but &Active",       ID_WINDOW_CLOSE_ALL_BUTACTIVE
