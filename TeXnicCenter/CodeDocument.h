@@ -212,7 +212,8 @@ public:
 	 * @brief Returns a tuple containing the first and last pos of the 
 	 *        paragraph starting from the current position.
 	 */
-	const std::pair<long,long> GetParagraphRangePos(const int StartPos, const bool bRespectComments = true) const;
+	const std::pair<long,long> GetParagraphRangePos(const int StartPos, const bool bRespectComments = true,
+												const bool bNoLastNewLine = true) const;
 
 	/**
 	 * @brief Returns true if a line contains only white space.
