@@ -343,8 +343,12 @@ bool TextDocument::Read(LPCTSTR pszFileName, CStringW& string)
 			if (!use_bom_ && pos != 0)
 				use_bom_ = true;
 		}
-		else
-			result = ::GetLastError();
+		else {
+			//The file cannot be memory-mapped, but it exists on disk.
+			//An example is an empty file.
+			// => We will not report an error for this.
+			//result = ::GetLastError();
+		}
 	}
 	else
 		result = ::GetLastError();
@@ -1374,6 +1378,9 @@ void CodeDocument::UpdateTextBufferOnExternalChange()
 				AfxFormatSystemString(dwResult));
 			AfxMessageBox(strMsg,MB_ICONINFORMATION | MB_OK);
 			GetView()->GetCtrl().SetReadOnly(TRUE);
+		} else {
+			//Trigger analysis - parse project
+			AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_PROJECT_PARSE);
 		}
 	}
 }

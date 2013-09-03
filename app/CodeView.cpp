@@ -191,27 +191,14 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 #pragma region Markers
 
-	rCtrl.SetMarginSensitiveN(1,TRUE); // React on clicks
-
-	rCtrl.MarkerDefine(CodeDocument::Errormark,SC_MARK_ARROW);
-
-	rCtrl.MarkerSetFore(CodeDocument::Errormark,RGB(158,0,57));
-	rCtrl.MarkerSetBack(CodeDocument::Errormark,RGB(237,28,36));
-
-
-	rCtrl.MarkerDefine(CodeDocument::Bookmark,SC_MARK_SMALLRECT);
-
-	rCtrl.MarkerSetFore(CodeDocument::Bookmark,RGB(70,105,175));
-	rCtrl.MarkerSetBack(CodeDocument::Bookmark,RGB(232,241,255));
+	rCtrl.SetMarginSensitiveN(1, TRUE); // React on clicks
+	rCtrl.MarkerDefine(CodeDocument::Errormark, SC_MARK_ARROW);
+	rCtrl.MarkerDefine(CodeDocument::Bookmark, SC_MARK_SMALLRECT);
 
 #pragma endregion
 
 #pragma region Caret
 
-	//In the options dialog it should be possible to define these colors
-	//together with all other colors.
-	rCtrl.SetCaretLineBack(RGB(220, 220, 255));
-	//Not so nice: rCtrl.SetCaretLineBackAlpha(90);
 	HighlightActiveLine(CConfiguration::GetInstance()->m_bHighlightCaretLine);
 
 #pragma endregion
@@ -235,24 +222,12 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	rCtrl.SetMarginTypeN(folding_margin_num,SC_MARGIN_SYMBOL);
 	rCtrl.SetMarginMaskN(folding_margin_num,SC_MASK_FOLDERS);
 
-	// Setup markers for VS style folding
-	COLORREF clr = ::GetSysColor(COLOR_3DSHADOW);
-
-	DefineMarker(SC_MARKNUM_FOLDEROPEN, SC_MARK_BOXMINUS, RGB(0xff, 0xff, 0xff), clr);
-	DefineMarker(SC_MARKNUM_FOLDER, SC_MARK_BOXPLUS, RGB(0xff, 0xff, 0xff), clr);
-	DefineMarker(SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE, RGB(0xff, 0xff, 0xff), clr);
-	DefineMarker(SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNER, RGB(0xff, 0xff, 0xff), clr);
-	DefineMarker(SC_MARKNUM_FOLDEREND, SC_MARK_BOXPLUSCONNECTED, RGB(0xff, 0xff, 0xff), clr);
-	DefineMarker(SC_MARKNUM_FOLDEROPENMID, SC_MARK_BOXMINUSCONNECTED, RGB(0xff, 0xff, 0xff),clr);
-	DefineMarker(SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNER, RGB(0xff, 0xff, 0xff), clr);
-
 #pragma endregion
 
 #pragma region Misc Scintilla Options
 
 	// Indicator for spell checker errors
 	rCtrl.SetIndicatorCurrent(0); // Default is a squiggly line, which we want to use
-	rCtrl.IndicSetFore(0,RGB(255,0,0)); // Red color instead of dark green
 
 	rCtrl.SetIndent(0); //Indent same as tab size
 	ShowIndentationGuides(CConfiguration::GetInstance()->GetShowIndentationGuides());
@@ -273,6 +248,9 @@ int CodeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	rCtrl.SetEdgeColumn(CConfiguration::GetInstance()->m_nVerticalEdgeColumn);
 	rCtrl.SetEdgeMode(CConfiguration::GetInstance()->m_nVerticalEdgeMode);
 	rCtrl.SetEdgeColour(CConfiguration::GetInstance()->m_aVariableEdgeColor);
+
+	//We handle the context menu ourselves
+	rCtrl.UsePopUp(FALSE);
 
 #pragma endregion
 
@@ -677,8 +655,6 @@ void CodeView::OnSettingsChanged()
 	// User changed application's settings: react here
 
 	UpdateFoldMargin();
-
-	UpdateFoldMarginColor();
 	UpdateFoldSettings();
 
 	GetCtrl().SetUseTabs(!CConfiguration::GetInstance()->GetUseSpaces());
@@ -1469,11 +1445,6 @@ void CodeView::EnableFoldMargin(bool value)
 		TextWidth(STYLE_DEFAULT, "9") + 2 * 2 : 0;
 
 	GetCtrl().SetMarginWidthN(GetFoldingMargin(), width);
-}
-
-void CodeView::UpdateFoldMarginColor()
-{
-	GetCtrl().SetFoldMarginColour(TRUE,GetCtrl().StyleGetBack(STYLE_DEFAULT));
 }
 
 void CodeView::UpdateFoldSettings()

@@ -15,14 +15,12 @@
 ;-------------------------------------------
 
 ;~ Setup for current user  versus  Setup for all users:
-;~ We need elevated priveleges to write to HKLM and such.
+;~ We need elevated privileges to write to HKLM and such.
 ;~ For the "all users" case: more or less like now. Except for HKCR -> needs to be some other like HKLM/Classes
 ;~ For "current user" case: HKCR -> HKCU/Classes. Not in "Program Files".
 
 ;~ The defaults for the doc and project templates should really be handled from within TXC.
 ;~ If the key or dir doesn't exist, then use the defaults.
-
-;~ Artwork: Setup Icon, Setup wizard image
 
 ;-------------------------------------------
 ; Start of the actual script
@@ -50,7 +48,6 @@
 
 ;~ We need that for the file name of the setup itself
 #define APP_VERSION_NOSPACE StringChange(APP_VERSION, " ", "")
-
 
 [Setup]
 ;Output
@@ -95,7 +92,6 @@ Compression=lzma2/Ultra64
   ArchitecturesInstallIn64BitMode=x64
 #endif
 
-
 [Components]
 Name: Application_Files; Description: Application Files (TeXnicCenter core components); Flags: fixed; Types: compact typical custom
 Name: Help_Files; Description: Help Files (Help for TeXnicCenter and LaTeX reference); Types: typical custom
@@ -103,11 +99,15 @@ Name: Templates; Description: LaTeX Templates (Templates for creating new projec
 Name: Templates\English; Description: English LaTeX Templates; Types: custom typical
 Name: Templates\Deutsch; Description: Deutsche LaTeX Vorlagen; Types: custom typical
 Name: Dictionaries; Description: Dictionaries; Types: custom typical
-Name: Dictionaries\EnglishGB; Description: English (GB); Types: custom
-Name: Dictionaries\EnglishUS; Description: English (US); Types: custom typical
+Name: Dictionaries\English; Description: English (US & GB); Types: custom typical
 Name: Dictionaries\Deutsch; Description: Deutsch; Types: custom typical
-Name: Dictionaries\Francais; Description: Français; Types: custom
-Name: Dictionaries\Francais1990; Description: Français (appelé Réforme 1990); Types: custom
+Name: Dictionaries\Francais; Description: Français (Moderne, Classique, Réforme 1990, Toutes variantes); Types: custom
+Name: Dictionaries\Espanol; Description: Español; Types: custom
+Name: Dictionaries\Italiano; Description: Italiano; Types: custom
+Name: Dictionaries\Nederlands; Description: Nederlands; Types: custom
+Name: Dictionaries\Polski; Description: Polski; Types: custom
+Name: Dictionaries\Portugues; Description: Português (PT & BR); Types: custom
+Name: Dictionaries\Russkij; Description: Русский; Types: custom
 
 [Files]
 ;Application Files
@@ -173,11 +173,15 @@ DestDir: {app}\Templates\Projects\Deutsch erweitert; Source: {#ROOT_DIR}\data\Te
 DestDir: {app}\Templates\Projects\Deutsch; Source: {#ROOT_DIR}\data\Templates\Projects\Deutsch\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
 
 ;Dictionaries
-DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\de_DE.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Deutsch
-DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\en_GB.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishGB
-DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\en_US.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishUS
-DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\fr_FR.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Francais
-DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\fr_FR-1990.*; Flags: comparetimestamp promptifolder; Components: " Dictionaries\Francais1990"
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\de*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Deutsch
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\en*; Flags: comparetimestamp promptifolder; Components: Dictionaries\English
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\fr*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Francais
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\es*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Espanol
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\it*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Italiano
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\nl*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Nederlands
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\pl*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Polski
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\pt*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Portugues
+DestDir: {app}\Dictionaries; Source: {#ROOT_DIR}\data\Dictionaries\ru*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Russkij
 
 [Icons]
 Name: {group}\{#APP_ID}; Filename: {app}\TeXnicCenter.exe; WorkingDir: {userdocs}; IconIndex: 0
@@ -282,11 +286,10 @@ Name: custom; Description: Custom (Lets you choose, which components to install)
 [Run]
 Filename: {app}\TeXnicCenter.exe; Description: "Launch TeXnicCenter"; Flags: postinstall nowait skipifsilent
 
-[InnoIDE_Settings]
-LogFileOverwrite=false
 
 
 
 #ifdef Debug
   #expr SaveToFile(AddBackslash(SourcePath) + "Preprocessed.iss")
 #endif
+
