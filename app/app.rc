@@ -140,6 +140,7 @@ BEGIN
     VK_F9,          ID_PREV_ERROR,          VIRTKEY, SHIFT, NOINVERT
     VK_F10,         ID_PREV_WARNING,        VIRTKEY, SHIFT, NOINVERT
     "O",            ID_PROJECT_OPEN,        VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_F12,         ID_PROJECT_OPEN_MAINFILE, VIRTKEY, NOINVERT
     VK_SPACE,       ID_QUERY_COMPLETION,    VIRTKEY, CONTROL, NOINVERT
     VK_F3,          ID_SEARCH_FINDNEXTSELECTED, VIRTKEY, CONTROL, NOINVERT
     VK_F3,          ID_SEARCH_FINDPREVIOUSSELECTED, VIRTKEY, SHIFT, CONTROL, NOINVERT
@@ -158,7 +159,7 @@ BEGIN
     "8",            ID_VIEW_WHITE_SPACE,    VIRTKEY, SHIFT, CONTROL, NOINVERT
     VK_TAB,         ID_WINDOW_NEXT,         VIRTKEY, SHIFT, CONTROL, NOINVERT
     VK_TAB,         ID_WINDOW_PREVIOUS,     VIRTKEY, CONTROL, NOINVERT
-    VK_F12,         ID_PROJECT_OPEN_MAINFILE, VIRTKEY, NOINVERT
+    "G",            ID_EDIT_GOTO,           VIRTKEY, CONTROL, NOINVERT
 END
 
 
@@ -1242,8 +1243,8 @@ BEGIN
     CONTROL         "Tab1",IDC_TAB_CATEGORIES,"SysTabControl32",TCS_MULTILINE | WS_GROUP | WS_TABSTOP,7,7,218,198
     CONTROL         "List1",IDC_LIST_TEMPLATES,"SysListView32",LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | LVS_NOLABELWRAP | LVS_AUTOARRANGE | WS_BORDER | WS_TABSTOP,9,21,206,182
     GROUPBOX        "Datei",IDC_STATIC,229,7,135,35
-    LTEXT           "&Dateiformat:",IDC_STATIC,235,22,39,8
-    COMBOBOX        IDC_FILE_FORMAT,275,20,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "&Dateiformat:",IDC_STATIC,235,22,53,8
+    COMBOBOX        IDC_FILE_FORMAT,287,20,67,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     GROUPBOX        "Vorlage",IDC_STATIC,229,140,135,63
     LTEXT           "",IDC_STATIC_DESCRIPTION,234,155,125,41
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,210,357,1
@@ -2316,7 +2317,7 @@ BEGIN
         BEGIN
             MENUITEM "&Oben",                       ID_VIEW_DOCTAB_TOP
             MENUITEM "&Unten",                      ID_VIEW_DOCTAB_BOTTOM
-            MENUITEM "&Aus",                        ID_VIEW_DOCTAB_OFF
+            MENUITEM "&Keine Reiter, klassisches MDI", ID_VIEW_DOCTAB_OFF
             MENUITEM SEPARATOR
             MENUITEM "&Dokumentsymbole anzeigen",   ID_VIEW_DOCTAB_ICONS
             MENUITEM "Aktenordner&stil",            ID_VIEW_DOCTAB_NOTE
@@ -2878,6 +2879,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "&Hauptdatei öffnen",          ID_PROJECT_OPEN_MAINFILE
         MENUITEM "&Rechtschreibung...",         ID_SPELL_PROJECT
+        MENUITEM "&Struktur analysieren",       ID_PROJECT_PARSE
         MENUITEM SEPARATOR
         MENUITEM "Erzeugen mit &aktueller Datei als Hauptdatei", ID_PROJECT_NEW_FROM_FILE
     END
@@ -2922,7 +2924,6 @@ BEGIN
     POPUP "&Fenster"
     BEGIN
         MENUITEM "N&eues Fenster",              ID_WINDOW_NEW
-        MENUITEM "&Teilen",                     ID_WINDOW_SPLIT
         MENUITEM "S&chließen",                  ID_FILE_CLOSE
         MENUITEM "&Alle schließen",             ID_WINDOW_CLOSE_ALL
         MENUITEM "Alle &inaktiven Fenster schließen", ID_WINDOW_CLOSE_ALL_BUTACTIVE
@@ -3106,6 +3107,7 @@ IDR_BIB_SEARCH_OPTIONS MENU
 BEGIN
     POPUP "Menu"
     BEGIN
+        MENUITEM "&Label",                      ID_BIBTEX_KEY
         MENUITEM "&Autor",                      ID_AUTHOR
         MENUITEM "&Titel",                      ID_TITLE
         MENUITEM "&Erscheinungsjahr",           ID_YEAR
@@ -3253,63 +3255,102 @@ BEGIN
 
     IDC_EDITOR_SCHEME, 0x403, 9, 0
 0x7453, 0x6e61, 0x6164, 0x6472, "\000" 
-    IDC_EDITOR_SCHEME, 0x403, 11, 0
-0x6e49, 0x6576, 0x7472, 0x6569, 0x7472, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 14, 0
-0x7541, 0x7773, 0x6861, 0x736c, 0x6170, 0x746c, 0x0065, 
-    IDC_EDITOR_ELEMENT, 0x403, 12, 0
-0x654c, 0x7265, 0x657a, 0x6369, 0x6568, 0x006e, 
+    IDC_EDITOR_SCHEME, 0x403, 7, 0
+0x7544, 0x6b6e, 0x6c65, "\000" 
+    IDC_EDITOR_SCHEME, 0x403, 26, 0
+0x7544, 0x6b6e, 0x6c65, 0x6d20, 0x7469, 0x6820, 0x686f, 0x6d65, 0x4b20, 
+0x6e6f, 0x7274, 0x7361, 0x0074, 
+    IDC_EDITOR_SCHEME, 0x403, 7, 0
+0x7953, 0x7473, 0x6d65, "\000" 
+    IDC_EDITOR_SCHEME, 0x403, 18, 0
+0x7953, 0x7473, 0x6d65, 0x6920, 0x766e, 0x7265, 0x6974, 0x7265, 0x0074, 
+
     IDC_EDITOR_ELEMENT, 0x403, 16, 0
 0x6554, 0x7478, 0x6968, 0x746e, 0x7265, 0x7267, 0x6e75, 0x0064, 
     IDC_EDITOR_ELEMENT, 0x403, 14, 0
 0x6f4e, 0x6d72, 0x6c61, 0x7265, 0x5420, 0x7865, 0x0074, 
-    IDC_EDITOR_ELEMENT, 0x403, 26, 0
-0x6554, 0x7478, 0x6968, 0x746e, 0x7265, 0x7267, 0x6e75, 0x2064, 0x4128, 
-0x7375, 0x6177, 0x6c68, 0x0029, 
-    IDC_EDITOR_ELEMENT, 0x403, 24, 0
-0x6f4e, 0x6d72, 0x6c61, 0x7265, 0x5420, 0x7865, 0x2074, 0x4128, 0x7375, 
-0x6177, 0x6c68, 0x0029, 
+    IDC_EDITOR_ELEMENT, 0x403, 7, 0
+0x7543, 0x7372, 0x726f, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 27, 0
+0x6b41, 0x6974, 0x6576, 0x5a20, 0x6965, 0x656c, 0x2820, 0x6948, 0x746e, 
+0x7265, 0x7267, 0x6e75, 0x2964, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 19, 0
+0x7541, 0x7773, 0x6861, 0x686c, 0x6e69, 0x6574, 0x6772, 0x7572, 0x646e, 
+"\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 12, 0
+0x7541, 0x7773, 0x6861, 0x746c, 0x7865, 0x0074, 
     IDC_EDITOR_ELEMENT, 0x403, 14, 0
 0x6353, 0x6c68, 0x73fc, 0x6573, 0x776c, 0x726f, 0x0074, 
     IDC_EDITOR_ELEMENT, 0x403, 10, 0
 0x6f4b, 0x6d6d, 0x6e65, 0x6174, 0x0072, 
-    IDC_EDITOR_ELEMENT, 0x403, 9, 0
-0x704f, 0x7265, 0x7461, 0x726f, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 18, 0
-0x6554, 0x7478, 0x6920, 0x206e, 0x765c, 0x7265, 0x6162, 0x6974, 0x006d, 
+    IDC_EDITOR_ELEMENT, 0x403, 19, 0
+0x7053, 0x7a65, 0x6569, 0x6c6c, 0x7365, 0x5a20, 0x6965, 0x6863, 0x6e65, 
+"\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 20, 0
+0x7953, 0x626d, 0x6c6f, 0x7520, 0x646e, 0x4f20, 0x6570, 0x6172, 0x6f74, 
+0x0072, 
+    IDC_EDITOR_ELEMENT, 0x403, 19, 0
+0x6d55, 0x6567, 0x7562, 0x676e, 0x6273, 0x6765, 0x6572, 0x7a6e, 0x7265, 
+"\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 36, 0
+0x6d55, 0x6567, 0x7562, 0x676e, 0x6e73, 0x6d61, 0x2065, 0x625c, 0x6765, 
+0x6e69, 0x2e7b, 0x2e2e, 0x207d, 0x655c, 0x646e, 0x2e7b, 0x2e2e, 0x007d, 
 
+    IDC_EDITOR_ELEMENT, 0x403, 31, 0
+0x6542, 0x6566, 0x6c68, 0x7a20, 0x6d75, 0x4520, 0x6e69, 0xfc66, 0x6567, 
+0x206e, 0x6f76, 0x206e, 0x7453, 0x6c79, 0x7365, "\000" 
     IDC_EDITOR_ELEMENT, 0x403, 32, 0
-0x6f4e, 0x6d72, 0x6c61, 0x7265, 0x5420, 0x7865, 0x2074, 0x6e69, 0x4720, 
-0x656c, 0x6369, 0x7568, 0x676e, 0x2820, 0x2424, 0x0029, 
-    IDC_EDITOR_ELEMENT, 0x403, 32, 0
+0x6542, 0x6566, 0x6c68, 0x7a20, 0x6d75, 0x4520, 0x6e69, 0xfc66, 0x6567, 
+0x206e, 0x6f76, 0x206e, 0x6144, 0x6574, 0x6569, 0x006e, 
+    IDC_EDITOR_ELEMENT, 0x403, 22, 0
+0x6554, 0x7478, 0x6920, 0x206e, 0x6c47, 0x6965, 0x6863, 0x6e75, 0x2067, 
+0x2428, 0x0029, 
+    IDC_EDITOR_ELEMENT, 0x403, 31, 0
 0x6353, 0x6c68, 0x73fc, 0x6573, 0x776c, 0x726f, 0x2074, 0x6e69, 0x4720, 
-0x656c, 0x6369, 0x7568, 0x676e, 0x2820, 0x2424, 0x0029, 
+0x656c, 0x6369, 0x7568, 0x676e, 0x2820, 0x2924, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 7, 0
+0x695a, 0x6666, 0x7265, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 8, 0
+0x6945, 0x686e, 0x6965, 0x0074, 
     IDC_EDITOR_ELEMENT, 0x403, 31, 0
 0x6c4b, 0x6d61, 0x656d, 0x6872, 0x6e69, 0x6574, 0x6772, 0x7572, 0x646e, 
 0x2820, 0x757a, 0x6567, 0xf668, 0x6972, 0x2967, "\000" 
     IDC_EDITOR_ELEMENT, 0x403, 20, 0
 0x6c4b, 0x6d61, 0x656d, 0x2072, 0x7a28, 0x6775, 0x6865, 0x72f6, 0x6769, 
 0x0029, 
-    IDC_EDITOR_ELEMENT, 0x403, 31, 0
-0x6c4b, 0x6d61, 0x656d, 0x6872, 0x6e69, 0x6574, 0x6772, 0x7572, 0x646e, 
-0x2820, 0x6d61, 0x4320, 0x7275, 0x6f73, 0x2972, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 20, 0
-0x6c4b, 0x6d61, 0x656d, 0x2072, 0x6128, 0x206d, 0x7543, 0x7372, 0x726f, 
-0x0029, 
-    IDC_EDITOR_ELEMENT, 0x403, 35, 0
-0x6c42, 0x636f, 0x686b, 0x6e69, 0x6574, 0x6772, 0x7572, 0x646e, 0x7a20, 
-0x6977, 0x6373, 0x6568, 0x206e, 0x6c4b, 0x6d61, 0x656d, 0x6e72, "\000" 
     IDC_EDITOR_ELEMENT, 0x403, 27, 0
 0x6c4b, 0x6d61, 0x656d, 0x6872, 0x6e69, 0x6574, 0x6772, 0x7572, 0x646e, 
 0x2820, 0x666f, 0x6566, 0x296e, "\000" 
     IDC_EDITOR_ELEMENT, 0x403, 16, 0
 0x6c4b, 0x6d61, 0x656d, 0x2072, 0x6f28, 0x6666, 0x6e65, 0x0029, 
+    IDC_EDITOR_ELEMENT, 0x403, 13, 0
+0x6146, 0x746c, 0x6e75, 0x7367, 0x6172, 0x646e, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 26, 0
+0x6146, 0x746c, 0x6e75, 0x7367, 0x6172, 0x646e, 0x4820, 0x7265, 0x6f76, 
+0x6872, 0x6265, 0x6e75, 0x0067, 
+    IDC_EDITOR_ELEMENT, 0x403, 15, 0
+0x6146, 0x746c, 0x6e75, 0x7367, 0x7973, 0x626d, 0x6c6f, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 27, 0
+0x6146, 0x746c, 0x6e75, 0x7367, 0x7973, 0x626d, 0x6c6f, 0x4820, 0x6e69, 
+0x6574, 0x6772, 0x7572, 0x646e, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 13, 0
+0x6546, 0x6c68, 0x7265, 0x7973, 0x626d, 0x6c6f, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 25, 0
+0x6546, 0x6c68, 0x7265, 0x7973, 0x626d, 0x6c6f, 0x4820, 0x6e69, 0x6574, 
+0x6772, 0x7572, 0x646e, "\000" 
     IDC_EDITOR_ELEMENT, 0x403, 12, 0
-0x7247, 0x7075, 0x6570, 0x6e6e, 0x6d61, 0x0065, 
-    IDC_EDITOR_ELEMENT, 0x403, 8, 0
-0x695a, 0x6666, 0x7265, 0x006e, 
-    IDC_EDITOR_ELEMENT, 0x403, 10, 0
-0x6945, 0x686e, 0x6965, 0x6574, 0x006e, 
+0x654c, 0x6573, 0x657a, 0x6369, 0x6568, 0x006e, 
+    IDC_EDITOR_ELEMENT, 0x403, 24, 0
+0x654c, 0x6573, 0x657a, 0x6369, 0x6568, 0x206e, 0x6948, 0x746e, 0x7265, 
+0x7267, 0x6e75, 0x0064, 
+    IDC_EDITOR_ELEMENT, 0x403, 13, 0
+0x655a, 0x6c69, 0x6e65, 0x756e, 0x6d6d, 0x7265, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 25, 0
+0x655a, 0x6c69, 0x6e65, 0x756e, 0x6d6d, 0x7265, 0x4820, 0x6e69, 0x6574, 
+0x6772, 0x7572, 0x646e, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 32, 0
+0x6552, 0x6863, 0x7374, 0x6863, 0x6572, 0x6269, 0x6566, 0x6c68, 0x7265, 
+0x4820, 0x6e69, 0x6577, 0x7369, 0x696c, 0x696e, 0x0065, 
     0
 END
 
@@ -3439,7 +3480,7 @@ BEGIN
     STE_TAB_GREP_2          "Suchen 2"
     STE_TAB_PARSE           "Analyse"
     STE_TAB_STRUCTURE       "Gliederung"
-    STE_TB_FIND             "Suchen & Lesezeichen"
+    STE_TB_FIND             "Suchen und Lesezeichen"
     STE_TB_FORMAT           "Textformate"
     STE_TB_FORMAT_RECENTLY_USED "Häufig verwendete Textformate"
     STE_TB_INSERT           "Einfügen"
@@ -4448,7 +4489,7 @@ END
 STRINGTABLE
 BEGIN
     ID_PROJECT_PARSED       "DNT:Is send, when the project has been parsed and the views should be updated"
-    ID_PROJECT_PARSE        "DNT:Send by CMainFrame to parse project."
+    ID_PROJECT_PARSE        "Projektdateien analysieren und Strukturansichten aktualisieren."
     ID_DOCUMENT_SAVED       "DNT:Send by a CLatexDoc-object, after it has been saved."
 END
 
@@ -4685,7 +4726,7 @@ BEGIN
     ID_URL_AUTHOR           "sven@texniccenter.org\nNachricht an den Autor\nmailto:sven@texniccenter.org"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Entwicklerforum\nhttp://www.sourceforge.net/projects/texniccenter"
-    ID_URL_TCDICTDOWNLOAD   "http://extensions.services.openoffice.org/dictionaries\nWörterbücher herunterladen\nhttp://extensions.services.openoffice.org/dictionaries"
+    ID_URL_TCDICTDOWNLOAD   "http://extensions.services.openoffice.org/de/\nWörterbücher herunterladen\nhttp://extensions.services.openoffice.org/de/"
     ID_URL_TCERROR          "http://sourceforge.net/tracker/?group_id=36323&atid=479426\nFehlerbenachrichtigung\nhttp://sourceforge.net/tracker/?group_id=36323&atid=479426"
     ID_URL_TCHOME           "http://www.TeXnicCenter.org/\nTeXnicCenter Homepage\nhttp://www.TeXnicCenter.org/"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
@@ -4898,6 +4939,11 @@ BEGIN
                             "(Selektiertes) Wort unter dem Cursor in Vorwärtsrichtung suchen.\nNächsten Treffer finden (selektiert)"
     ID_SEARCH_FINDPREVIOUSSELECTED 
                             "(Selektiertes) Wort unter dem Cursor in Rückwärtsrichtung suchen.\nVorherigen Treffer finden (selektiert)"
+END
+
+STRINGTABLE
+BEGIN
+    ID_BIBTEX_KEY           "Nach BibTeX Key / Label suchen."
 END
 
 #endif    // German (Germany) resources
@@ -5572,15 +5618,15 @@ BEGIN
 END
 
 IDD_DOCUMENT_NEW DIALOGEX 0, 0, 371, 238
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "New Document"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     CONTROL         "Tab1",IDC_TAB_CATEGORIES,"SysTabControl32",TCS_MULTILINE | WS_GROUP | WS_TABSTOP,7,7,218,198
     CONTROL         "List1",IDC_LIST_TEMPLATES,"SysListView32",LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | LVS_NOLABELWRAP | LVS_AUTOARRANGE | WS_BORDER | WS_TABSTOP,9,21,206,182
     GROUPBOX        "File",IDC_STATIC,229,7,135,35
-    LTEXT           "&File &format:",IDC_STATIC,235,22,35,8
-    COMBOBOX        IDC_FILE_FORMAT,275,20,53,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "&File Format:",IDC_STATIC,235,22,50,8
+    COMBOBOX        IDC_FILE_FORMAT,288,20,66,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     GROUPBOX        "Template",IDC_STATIC,229,140,135,63
     LTEXT           "",IDC_STATIC_DESCRIPTION,234,155,125,41
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,210,357,1
@@ -6408,7 +6454,7 @@ BEGIN
         BEGIN
             MENUITEM "&Top",                        ID_VIEW_DOCTAB_TOP
             MENUITEM "&Bottom",                     ID_VIEW_DOCTAB_BOTTOM
-            MENUITEM "&Off",                        ID_VIEW_DOCTAB_OFF
+            MENUITEM "N&o Tabs, Classic MDI",       ID_VIEW_DOCTAB_OFF
             MENUITEM SEPARATOR
             MENUITEM "Show &Icons",                 ID_VIEW_DOCTAB_ICONS
             MENUITEM "&Note Style",                 ID_VIEW_DOCTAB_NOTE
@@ -6970,6 +7016,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "&Open Main File",             ID_PROJECT_OPEN_MAINFILE
         MENUITEM "&Spelling...",                ID_SPELL_PROJECT
+        MENUITEM "P&arse Structure",            ID_PROJECT_PARSE
         MENUITEM SEPARATOR
         MENUITEM "&Create with active file as main file", ID_PROJECT_NEW_FROM_FILE
     END
@@ -7014,7 +7061,6 @@ BEGIN
     POPUP "&Window"
     BEGIN
         MENUITEM "&New Window",                 ID_WINDOW_NEW
-        MENUITEM "&Split",                      ID_WINDOW_SPLIT
         MENUITEM "&Close",                      ID_FILE_CLOSE
         MENUITEM "C&lose All",                  ID_WINDOW_CLOSE_ALL
         MENUITEM "Close All but &Active",       ID_WINDOW_CLOSE_ALL_BUTACTIVE
@@ -7198,6 +7244,7 @@ IDR_BIB_SEARCH_OPTIONS MENU
 BEGIN
     POPUP "Menu"
     BEGIN
+        MENUITEM "&Label",                      ID_BIBTEX_KEY
         MENUITEM "&Author",                     ID_AUTHOR
         MENUITEM "&Title",                      ID_TITLE
         MENUITEM "&Year",                       ID_YEAR
@@ -7348,65 +7395,102 @@ BEGIN
 0x7543, 0x7473, 0x6d6f, "\000" 
     IDC_EDITOR_SCHEME, 0x403, 9, 0
 0x7453, 0x6e61, 0x6164, 0x6472, "\000" 
-    IDC_EDITOR_SCHEME, 0x403, 9, 0
-0x6e49, 0x6576, 0x7472, 0x6465, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 17, 0
-0x6553, 0x656c, 0x7463, 0x6f69, 0x206e, 0x616d, 0x6772, 0x6e69, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 13, 0
-0x6857, 0x7469, 0x2065, 0x7073, 0x6361, 0x7365, "\000" 
+    IDC_EDITOR_SCHEME, 0x403, 5, 0
+0x6144, 0x6b72, "\000" 
+    IDC_EDITOR_SCHEME, 0x403, 19, 0
+0x6144, 0x6b72, 0x4820, 0x6769, 0x2068, 0x6f43, 0x746e, 0x6172, 0x7473, 
+"\000" 
+    IDC_EDITOR_SCHEME, 0x403, 7, 0
+0x7953, 0x7473, 0x6d65, "\000" 
+    IDC_EDITOR_SCHEME, 0x403, 16, 0
+0x7953, 0x7473, 0x6d65, 0x4920, 0x766e, 0x7265, 0x6574, 0x0064, 
     IDC_EDITOR_ELEMENT, 0x403, 16, 0
 0x6554, 0x7478, 0x6220, 0x6361, 0x676b, 0x6f72, 0x6e75, 0x0064, 
     IDC_EDITOR_ELEMENT, 0x403, 12, 0
 0x6f4e, 0x6d72, 0x6c61, 0x7420, 0x7865, 0x0074, 
-    IDC_EDITOR_ELEMENT, 0x403, 28, 0
-0x6554, 0x7478, 0x6220, 0x6361, 0x676b, 0x6f72, 0x6e75, 0x2064, 0x5328, 
-0x6c65, 0x6365, 0x6974, 0x6e6f, 0x0029, 
-    IDC_EDITOR_ELEMENT, 0x403, 24, 0
-0x6f4e, 0x6d72, 0x6c61, 0x7420, 0x7865, 0x2074, 0x5328, 0x6c65, 0x6365, 
-0x6974, 0x6e6f, 0x0029, 
+    IDC_EDITOR_ELEMENT, 0x403, 6, 0
+0x6143, 0x6572, 0x0074, 
+    IDC_EDITOR_ELEMENT, 0x403, 23, 0
+0x6341, 0x6974, 0x6576, 0x6c20, 0x6e69, 0x2065, 0x6162, 0x6b63, 0x7267, 
+0x756f, 0x646e, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 21, 0
+0x6553, 0x656c, 0x7463, 0x6f69, 0x206e, 0x6162, 0x6b63, 0x7267, 0x756f, 
+0x646e, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 15, 0
+0x6553, 0x656c, 0x7463, 0x6f69, 0x206e, 0x6574, 0x7478, "\000" 
     IDC_EDITOR_ELEMENT, 0x403, 8, 0
 0x654b, 0x7779, 0x726f, 0x0064, 
     IDC_EDITOR_ELEMENT, 0x403, 8, 0
 0x6f43, 0x6d6d, 0x6e65, 0x0074, 
-    IDC_EDITOR_ELEMENT, 0x403, 9, 0
-0x704f, 0x7265, 0x7461, 0x726f, "\000" 
     IDC_EDITOR_ELEMENT, 0x403, 18, 0
-0x6554, 0x7478, 0x6920, 0x206e, 0x765c, 0x7265, 0x6162, 0x6974, 0x006d, 
+0x7053, 0x6365, 0x6169, 0x206c, 0x6863, 0x7261, 0x6361, 0x6574, 0x0072, 
 
-    IDC_EDITOR_ELEMENT, 0x403, 29, 0
-0x6f4e, 0x6d72, 0x6c61, 0x7420, 0x7865, 0x2074, 0x6e69, 0x6520, 0x7571, 
-0x7461, 0x6f69, 0x206e, 0x2428, 0x2924, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 25, 0
-0x654b, 0x7779, 0x726f, 0x2064, 0x6e69, 0x6520, 0x7571, 0x7461, 0x6f69, 
-0x206e, 0x2428, 0x2924, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 20, 0
+0x7953, 0x626d, 0x6c6f, 0x6120, 0x646e, 0x6f20, 0x6570, 0x6172, 0x6f74, 
+0x0072, 
+    IDC_EDITOR_ELEMENT, 0x403, 22, 0
+0x6e45, 0x6976, 0x6f72, 0x6d6e, 0x6e65, 0x2074, 0x6564, 0x696c, 0x696d, 
+0x6574, 0x0072, 
+    IDC_EDITOR_ELEMENT, 0x403, 39, 0
+0x6e45, 0x6976, 0x6f72, 0x6d6e, 0x6e65, 0x2074, 0x616e, 0x656d, 0x5c20, 
+0x6562, 0x6967, 0x7b6e, 0x2e2e, 0x7d2e, 0x5c20, 0x6e65, 0x7b64, 0x2e2e, 
+0x7d2e, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 24, 0
+0x7453, 0x6c79, 0x2065, 0x6e69, 0x6c63, 0x7375, 0x6f69, 0x206e, 0x6f63, 
+0x6d6d, 0x6e61, 0x0064, 
+    IDC_EDITOR_ELEMENT, 0x403, 23, 0
+0x6946, 0x656c, 0x6920, 0x636e, 0x756c, 0x6973, 0x6e6f, 0x6320, 0x6d6f, 
+0x616d, 0x646e, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 17, 0
+0x6e49, 0x696c, 0x656e, 0x6d20, 0x7461, 0x2068, 0x6574, 0x7478, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 20, 0
+0x6e49, 0x696c, 0x656e, 0x6d20, 0x7461, 0x2068, 0x6f63, 0x6d6d, 0x6e61, 
+0x0064, 
+    IDC_EDITOR_ELEMENT, 0x403, 6, 0
+0x6944, 0x6967, 0x0074, 
+    IDC_EDITOR_ELEMENT, 0x403, 5, 0
+0x6e55, 0x7469, "\000" 
     IDC_EDITOR_ELEMENT, 0x403, 25, 0
 0x614d, 0x6374, 0x6568, 0x2064, 0x7262, 0x6361, 0x2065, 0x6162, 0x6b63, 
 0x7267, 0x756f, 0x646e, "\000" 
     IDC_EDITOR_ELEMENT, 0x403, 19, 0
 0x614d, 0x6374, 0x6568, 0x2064, 0x7262, 0x6361, 0x2065, 0x6574, 0x7478, 
 "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 37, 0
-0x614d, 0x6374, 0x6568, 0x2064, 0x7262, 0x6361, 0x2065, 0x6162, 0x6b63, 
-0x7267, 0x756f, 0x646e, 0x2820, 0x7461, 0x6320, 0x7275, 0x6f73, 0x2972, 
-"\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 31, 0
-0x614d, 0x6374, 0x6568, 0x2064, 0x7262, 0x6361, 0x2065, 0x6574, 0x7478, 
-0x2820, 0x7461, 0x6320, 0x7275, 0x6f73, 0x2972, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 32, 0
-0x6c42, 0x636f, 0x206b, 0x6162, 0x6b63, 0x7267, 0x756f, 0x646e, 0x6220, 
-0x7465, 0x6577, 0x6e65, 0x6220, 0x6172, 0x6563, 0x0073, 
     IDC_EDITOR_ELEMENT, 0x403, 27, 0
 0x6e55, 0x616d, 0x6374, 0x6568, 0x2064, 0x7262, 0x6361, 0x2065, 0x6162, 
 0x6b63, 0x7267, 0x756f, 0x646e, "\000" 
     IDC_EDITOR_ELEMENT, 0x403, 21, 0
 0x6e55, 0x616d, 0x6374, 0x6568, 0x2064, 0x7262, 0x6361, 0x2065, 0x6574, 
 0x7478, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 11, 0
-0x7247, 0x756f, 0x2070, 0x616e, 0x656d, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 7, 0
-0x6944, 0x6967, 0x7374, "\000" 
-    IDC_EDITOR_ELEMENT, 0x403, 6, 0
-0x6e55, 0x7469, 0x0073, 
+    IDC_EDITOR_ELEMENT, 0x403, 12, 0
+0x6f46, 0x646c, 0x6d20, 0x7261, 0x6967, 0x006e, 
+    IDC_EDITOR_ELEMENT, 0x403, 22, 0
+0x6f46, 0x646c, 0x6d20, 0x7261, 0x6967, 0x206e, 0x6968, 0x6867, 0x696c, 
+0x6867, 0x0074, 
+    IDC_EDITOR_ELEMENT, 0x403, 19, 0
+0x6f46, 0x646c, 0x6d20, 0x7261, 0x6967, 0x206e, 0x616d, 0x6b72, 0x7265, 
+"\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 30, 0
+0x6f46, 0x646c, 0x6d20, 0x7261, 0x6967, 0x206e, 0x616d, 0x6b72, 0x7265, 
+0x6220, 0x6361, 0x676b, 0x6f72, 0x6e75, 0x0064, 
+    IDC_EDITOR_ELEMENT, 0x403, 13, 0
+0x7245, 0x6f72, 0x2072, 0x616d, 0x6b72, 0x7265, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 24, 0
+0x7245, 0x6f72, 0x2072, 0x616d, 0x6b72, 0x7265, 0x6220, 0x6361, 0x676b, 
+0x6f72, 0x6e75, 0x0064, 
+    IDC_EDITOR_ELEMENT, 0x403, 9, 0
+0x6f42, 0x6b6f, 0x616d, 0x6b72, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 20, 0
+0x6f42, 0x6b6f, 0x616d, 0x6b72, 0x6220, 0x6361, 0x676b, 0x6f72, 0x6e75, 
+0x0064, 
+    IDC_EDITOR_ELEMENT, 0x403, 12, 0
+0x694c, 0x656e, 0x6e20, 0x6d75, 0x6562, 0x0072, 
+    IDC_EDITOR_ELEMENT, 0x403, 23, 0
+0x694c, 0x656e, 0x6e20, 0x6d75, 0x6562, 0x2072, 0x6162, 0x6b63, 0x7267, 
+0x756f, 0x646e, "\000" 
+    IDC_EDITOR_ELEMENT, 0x403, 24, 0
+0x7053, 0x6c65, 0x696c, 0x676e, 0x6920, 0x646e, 0x6369, 0x7461, 0x726f, 
+0x6c20, 0x6e69, 0x0065, 
     0
 END
 
@@ -7481,7 +7565,7 @@ BEGIN
     STE_TAB_GREP_2          "Find 2"
     STE_TAB_PARSE           "Parse"
     STE_TAB_STRUCTURE       "Structure"
-    STE_TB_FIND             "Find & Bookmarks"
+    STE_TB_FIND             "Find and Bookmarks"
     STE_TB_FORMAT           "Formats"
     STE_TB_FORMAT_RECENTLY_USED "Frequently used Formats"
     STE_TB_INSERT           "Insert"
@@ -8063,7 +8147,7 @@ BEGIN
     ID_URL_AUTHOR           "sven@texniccenter.org\nE-Mail to the Author\nmailto:sven@texniccenter.org"
     ID_URL_TCDEVELOPERSGROUP 
                             "http://www.sourceforge.net/projects/texniccenter\nTeXnicCenter Developer Forum\nhttp://www.sourceforge.net/projects/texniccenter"
-    ID_URL_TCDICTDOWNLOAD   "http://extensions.services.openoffice.org/dictionaries\nDownload Dictionaries\nhttp://extensions.services.openoffice.org/dictionaries"
+    ID_URL_TCDICTDOWNLOAD   "http://extensions.services.openoffice.org/\nDownload Dictionaries\nhttp://extensions.services.openoffice.org/"
     ID_URL_TCERROR          "http://sourceforge.net/tracker/?group_id=36323&atid=479426\nReport an Error\nhttp://sourceforge.net/tracker/?group_id=36323&atid=479426"
     ID_URL_TCHOME           "http://www.TeXnicCenter.org/\nTeXnicCenter Homepage\nhttp://www.TeXnicCenter.org/"
     ID_URL_TCNEWSLETTER     "http://groups.yahoo.com/group/TeXnicCenter-News/\nTeXnicCenter Newsletter\nhttp://groups.yahoo.com/group/TeXnicCenter-News/"
@@ -8567,7 +8651,7 @@ END
 STRINGTABLE
 BEGIN
     ID_PROJECT_PARSED       "Is send, when the project has been parsed and the views should be updated"
-    ID_PROJECT_PARSE        "Send by CMainFrame to parse project."
+    ID_PROJECT_PARSE        "Parse project files and update structure views."
     ID_DOCUMENT_SAVED       "Send by a CLatexDoc-object, after it has been saved."
 END
 
@@ -8973,6 +9057,11 @@ BEGIN
                             "Find next word under cursor or in selection.\nFind next selected."
     ID_SEARCH_FINDPREVIOUSSELECTED 
                             "Find previous word under cursor or in selection.\nFind previous selected."
+END
+
+STRINGTABLE
+BEGIN
+    ID_BIBTEX_KEY           "Search for bibTeX key / label."
 END
 
 #endif    // English (United States) resources

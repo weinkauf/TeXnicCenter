@@ -271,6 +271,10 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_COMMAND_EX(ID_VIEW_GREP_2_PANE, &CMainFrame::OnToggleDockingBar)
 	ON_COMMAND_EX(ID_VIEW_PARSE_PANE, &CMainFrame::OnToggleDockingBar)
 	ON_MESSAGE(WM_COMMANDHELP, &CMainFrame::OnCommandHelp)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_CASCADE, &CMainFrame::OnUpdateWindowMDICommands)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_TILE_HORZ, &CMainFrame::OnUpdateWindowMDICommands)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_TILE_VERT, &CMainFrame::OnUpdateWindowMDICommands)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_ARRANGE, &CMainFrame::OnUpdateWindowMDICommands)
 END_MESSAGE_MAP()
 
 const UINT BuildAnimationPane = 1;
@@ -321,7 +325,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CMDIFrameWndEx::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	EnableMDITabsLastActiveActivation(true);
+	EnableMDITabsLastActiveActivation(true); //Does not work as expected, see http://blogs.msdn.com/b/dsvc/archive/2012/10/09/cmdiframewndex-enablemditabslastactiveactivation-does-not-work-as-expected-in-mdi-tabbed-style-application.aspx
 	OnApplicationLook(theApp.GetApplicationLook());
 
 	// load user images
@@ -395,7 +399,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// create all math bars
 	for (int i = 0; i < MATHBAR_COUNT; i++)
 	{
-		if (!CreateToolBar(&m_awndMathBar[i], IDR_MATHBAR1 + i, IDR_MATH + i)) return -1;
+		if (!CreateToolBar(&m_awndMathBar[i], IDR_MATHBAR1 + i, IDR_MATH + i, false)) return -1;
 	}
 
 	// load user defined toolbars
@@ -439,6 +443,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockPaneLeftOf(&m_wndFormatRUBar, &m_wndMathBar);
 	DockPaneLeftOf(&m_wndInsertBar, &m_wndFormatRUBar);
 
+	//NOTE: All bars need to be docked. Even if they shall be invisible at first start!
+	DockPane(&m_wndFindBar);
+	DockPane(&m_wndFormatBar);
 	for (int i = 0; i < MATHBAR_COUNT; ++i)
 	{
 		DockPane(m_awndMathBar + i);
@@ -526,6 +533,9 @@ void CMainFrame::OnClose()
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
+	//Do not add the title of the MDI child to the frame window title. We do this ourselves.
+	cs.style &= ~FWS_ADDTOTITLE;
+
 	if (!CMDIFrameWndEx::PreCreateWindow(cs))
 		return FALSE;
 	return TRUE;
@@ -1226,12 +1236,6 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 		return FALSE;
 	}
 
-	for (int i = 0; i < MATHBAR_COUNT; ++i)
-	{
-		if (!m_awndMathBar[i].IsRestoredFromRegistry())
-			ShowPane(m_awndMathBar + i, FALSE, TRUE, FALSE);
-	}
-
 	RecalcLayout();
 
 	DisplayDocumentTabs();
@@ -1275,6 +1279,16 @@ LRESULT CMainFrame::OnCommandHelp(WPARAM /*wParam*/, LPARAM /*lParam*/)
 
 void CMainFrame::DisplayDocumentTabs()
 {
+	/* NOTE: The code below enables several tabbed groups.
+		Now, in general that is a nice feature, but it kills all classic MDI functionality.
+		Editor-Windows cannot be cascaded anymore, and so on.
+		Furthermore, the current TXC code cannot re-create those tabbed groups.
+		Nevertheless, we leave it. Tabbed groups are a nice thing to have.
+		MDI functionality is still available, if tabs are not used: theApp.GetShowMDITabs().
+		See also:
+		http://blogs.msdn.com/b/dsvc/archive/2012/10/09/cmdiframewndex-enablemditabslastactiveactivation-does-not-work-as-expected-in-mdi-tabbed-style-application.aspx
+	*/
+
 	CMDITabInfo mdiTabParams;
 	mdiTabParams.m_style = (CMFCTabCtrl::Style)theApp.m_nMDITabStyle;
 	mdiTabParams.m_bActiveTabCloseButton = TRUE; // set to FALSE to place close button at right of tab area
@@ -1284,9 +1298,20 @@ void CMainFrame::DisplayDocumentTabs()
 	mdiTabParams.m_tabLocation = static_cast<CMFCTabCtrl::Location>(theApp.m_nMDITabLocation);
 	mdiTabParams.m_nTabBorderSize = 3;
 	mdiTabParams.m_bTabCustomTooltips = TRUE; // We will display the path name
+	mdiTabParams.m_bEnableTabSwap = true; //We can change the order of the tabs
 
 	EnableMDITabbedGroups(theApp.GetShowMDITabs(), mdiTabParams);
-	UpdateFrameTitle();
+
+
+	//Simple MDI tabs: one group. With this, all classic MDI functionality is still available.
+	//EnableMDITabs(theApp.GetShowMDITabs()
+	//	,theApp.m_bMDITabIcons
+	//	,static_cast<CMFCTabCtrl::Location>(theApp.m_nMDITabLocation)
+	//	,TRUE // Specifies whether to display tab close buttons
+	//	,(CMFCTabCtrl::Style)theApp.m_nMDITabStyle
+	//	,TRUE // Specifies whether custom tooltips are enabled.
+	//	,TRUE // set to FALSE to place close button at right of tab area
+	//	);
 }
 
 void CMainFrame::OnViewDocTabsBottom()
@@ -1439,28 +1464,82 @@ void CMainFrame::RebuildToolsMenu()
 
 int CMainFrame::GetMDIChilds(CArray<CChildFrame*, CChildFrame*>& MDIChildArray, bool bSortByTabs /*= true*/)
 {
-	int index = 0, ActiveChild = -1;
+	int ActiveChild = -1;
 
 	//Clean up
 	MDIChildArray.RemoveAll();
 
 	if (bSortByTabs)
 	{
-		HWND hwndMDIChild = ::GetWindow(m_hWndMDIClient, GW_CHILD);
+		/* We run over all tabs and collect the child frames.
+			If we enabled MDI Tabbed Groups in DisplayDocumentTabs(),
+			then we need to visit all their MDI Tab Windows and collect their tabs.
+			In this case, there are no tabs in the tab window returned by GetMDITabs().
 
-		for (; hwndMDIChild; ++index)
+			If we enabled simple MDI Tabs in DisplayDocumentTabs(),
+			then we look for tabs in the tab window returned by GetMDITabs().
+			However, that code path is off in DisplayDocumentTabs().
+
+			If tabs are completely off, we find our children the classic way. Not sure, if that is properly sorted, though.
+
+			Sorting works well for everything with tabs.
+		*/
+		if (AreMDITabs()) //True, if any tabs are enabled (MDI tabs, or MDI tabbed groups)
 		{
-			CChildFrame* pMDIChildFrame = DYNAMIC_DOWNCAST(CChildFrame, CWnd::FromHandle(hwndMDIChild));
-
-			if (pMDIChildFrame)
+			if (IsMDITabbedGroup())
 			{
-				MDIChildArray.Add(pMDIChildFrame);
-
-				if (GetActiveFrame() == pMDIChildFrame)
-					ActiveChild = index;
+				//MDI Tabbed Groups
+				for(POSITION pos = m_wndClientArea.GetMDITabGroups().GetHeadPosition();pos != NULL;)
+				{
+					CMFCTabCtrl* pTabWnd = DYNAMIC_DOWNCAST(CMFCTabCtrl, m_wndClientArea.GetMDITabGroups().GetNext(pos));
+					if (pTabWnd)
+					{
+						for(int i=0;i<pTabWnd->GetTabsNum();i++)
+						{
+							CChildFrame* pMDIChildFrame = dynamic_cast< CChildFrame* >(pTabWnd->GetTabWnd(i));
+							if (pMDIChildFrame)
+							{
+								MDIChildArray.Add(pMDIChildFrame);
+								if (GetActiveFrame() == pMDIChildFrame) ActiveChild = i;
+							}
+						}
+					}
+				}
 			}
+			else
+			{
+				//MDI Tabs ==> that code path is off in DisplayDocumentTabs().
+				CMFCTabCtrl* pTabWnd = &GetMDITabs();
+				if (pTabWnd)
+				{
+					for(int i=0;i<pTabWnd->GetTabsNum();i++)
+					{
+						CChildFrame* pMDIChildFrame = dynamic_cast< CChildFrame* >(pTabWnd->GetTabWnd(i));
+						if (pMDIChildFrame)
+						{
+							MDIChildArray.Add(pMDIChildFrame);
+							if (GetActiveFrame() == pMDIChildFrame) ActiveChild = i;
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			//No tabs, classic code. Probably the order in which we opened them, or the MRU order. Who knows.
+			HWND hwndMDIChild = ::GetWindow(m_hWndMDIClient, GW_CHILD);
 
-			hwndMDIChild = ::GetWindow(hwndMDIChild, GW_HWNDNEXT);
+			for(int i(0);hwndMDIChild;i++)
+			{
+				CChildFrame* pMDIChildFrame = DYNAMIC_DOWNCAST(CChildFrame, CWnd::FromHandle(hwndMDIChild));
+				if (pMDIChildFrame)
+				{
+					MDIChildArray.Add(pMDIChildFrame);
+					if (GetActiveFrame() == pMDIChildFrame) ActiveChild = i;
+				}
+
+				hwndMDIChild = ::GetWindow(hwndMDIChild, GW_HWNDNEXT);
+			}
 		}
 	}
 	else
@@ -1470,6 +1549,8 @@ int CMainFrame::GetMDIChilds(CArray<CChildFrame*, CChildFrame*>& MDIChildArray, 
 			CChildFrame* pMDIChildFrame = dynamic_cast< CChildFrame* >(*it);
 			MDIChildArray.Add(pMDIChildFrame);
 		}
+
+		if (!MDIChildArray.IsEmpty()) ActiveChild = 0;
 	}
 
 	return ActiveChild;
@@ -1527,7 +1608,7 @@ void CMainFrame::OnContextMenu(CWnd* pWnd, CPoint point)
 
 		if (client.PtInRect(point))
 		{
-			//Show popup for the tool bars
+			//Show popup for the tool bars: This is never shown, the system has its own one (Tino, 7/8/2013).
 			theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_TOOLBAR, point.x, point.y, this);
 		}
 		else
@@ -2042,25 +2123,47 @@ void CMainFrame::OnViewTransparency()
 
 void CMainFrame::OnUpdateFrameTitle(BOOL bAddToTitle)
 {
-	if (!theApp.GetShowMDITabs())
-		CMDIFrameWndEx::OnUpdateFrameTitle(bAddToTitle);
+	UNUSED(bAddToTitle);
+
+	//We use our own version to get consistent results regarding projects and single files.
+	UpdateFrameTitle();
+	//CMDIFrameWndEx::OnUpdateFrameTitle(bAddToTitle);
 }
 
 void CMainFrame::UpdateFrameTitle()
 {
+	CString title(MAKEINTRESOURCE(IDR_MAINFRAME));
+
 	CLaTeXProject* project = theApp.GetProject();
-
-	CString title(MAKEINTRESOURCE( IDR_MAINFRAME));
-
 	if (project)
 	{
+		//Add the project title: "Project - TeXnicCenter"
 		const CString& tmp = project->GetTitle();
-
-		if (!tmp.IsEmpty())
-			title = tmp + _T(" - ") + title;
+		if (!tmp.IsEmpty()) title = tmp + _T(" - ") + title;
+	}
+	else
+	{
+		//Add the file name: "File - TeXnicCenter"
+		CFrameWnd *pFrame = GetActiveFrame();
+		if (pFrame)
+		{
+			//Get active document
+			CDocument* pDoc = pFrame->GetActiveDocument();
+			if (pDoc)
+			{
+				const CString& tmp = CPathTool::GetFile(pDoc->GetPathName());
+				if (!tmp.IsEmpty()) title = tmp + _T(" - ") + title;
+			}
+		}
 	}
 
-	SetWindowText(title);
+	//Same as before? If not, set it.
+	CString OldTitle;
+	GetWindowText(OldTitle);
+	if (title != OldTitle)
+	{
+		SetWindowText(title);
+	}
 }
 
 void CMainFrame::OnDestroy()
@@ -2319,6 +2422,11 @@ void CMainFrame::OnWindowPrevious()
 {
 	ActivateMDIChildByMRUList(true);
 	//::SendMessage(m_hWndMDIClient, WM_MDINEXT, 0, TRUE);
+}
+
+void CMainFrame::OnUpdateWindowMDICommands(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(!IsMDITabbedGroup());
 }
 
 #pragma endregion 

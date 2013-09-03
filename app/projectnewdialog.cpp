@@ -40,6 +40,7 @@
 #include "configuration.h"
 #include "CodeDocument.h"
 #include "TeXnicCenter.h"
+#include "textsourcefile.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -138,17 +139,14 @@ BOOL CFileBasedProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &Image
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//extract description, if available
-	CFile file;
-	if (!file.Open(m_strPath, CFile::modeRead))
-		return FALSE;
-
-	try
+	CTextSourceFile TextFile;
+	if (TextFile.Create(lpszPath))
 	{
-		CArchive ar(&file, CArchive::load);
-		CString strLine;
-
-		if (ar.ReadString(strLine))
+		LPCTSTR lpLine;
+		int nLength;
+		if (TextFile.GetNextLine(lpLine, nLength))
 		{
+			CString strLine(lpLine, nLength);
 			CString strKey(_T("%DESCRIPTION: "));
 			CString strStartOfLine = strLine.Left(strKey.GetLength());
 			strStartOfLine.MakeUpper();
@@ -156,14 +154,6 @@ BOOL CFileBasedProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &Image
 			if (strStartOfLine == strKey)
 				m_strDescription = strLine.Right(strLine.GetLength() - strKey.GetLength());
 		}
-
-		ar.Close();
-		file.Close();
-	}
-	catch (CException *pE)
-	{
-		file.Abort();
-		pE->Delete();
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -256,58 +246,6 @@ BOOL CFileBasedProjectTemplateItem::CreateMainFile(LPCTSTR lpszTargetPath, LPCTS
 
 		result = doc.Write(lpszTargetPath,text);
 	}
-
-	//CFile sourceFile;
-	//if (!sourceFile.Open(m_strPath, CFile::modeRead))
-	//	return FALSE;
-
-	////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//// copy source file to destination file
-	//CFile destFile;
-	//if (!destFile.Open(lpszTargetPath, CFile::modeCreate | CFile::modeWrite))
-	//{
-	//	sourceFile.Close();
-	//	return FALSE;
-	//}
-
-	//try
-	//{
-	//	CArchive source(&sourceFile, CArchive::load);
-	//	CArchive dest(&destFile, CArchive::store);
-	//	CString strLine;
-
-	//	if (source.Read(strLine))
-	//	{
-	//		// skip leading descriptions
-	//		CString strKey(_T("%DESCRIPTION: "));
-	//		CString strStartOfLine = strLine.Left(strKey.GetLength());
-	//		strStartOfLine.MakeUpper();
-
-	//		if (strStartOfLine == strKey)
-	//		{
-	//			// skip leading empty lines
-	//			while (source.Read(strLine) && strLine.IsEmpty());
-	//		}
-	//	}
-
-	//	if (!strLine.IsEmpty())
-	//		dest.WriteString(strLine + lpszCrLf);
-
-	//	// copy other lines
-	//	while (source.Read(strLine))
-	//		dest.WriteString(strLine + lpszCrLf);
-
-	//	source.Close();
-	//	dest.Close();
-	//	sourceFile.Close();
-	//	destFile.Close();
-	//}
-	//catch (CException *pE)
-	//{
-	//	sourceFile.Abort();
-	//	destFile.Abort();
-	//	pE->Delete();
-	//}
 
 	return result;
 }

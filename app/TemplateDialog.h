@@ -106,6 +106,10 @@ public:
 	CTemplateDialog(UINT unIDTemplate,CWnd* pParent = NULL);
 	virtual ~CTemplateDialog(){}
 
+private:
+	///Type for storing all files by their subdirectories, the key is the subdirectory.
+	typedef std::map<CString, CTemplateItemArray> StringTemplateItemArrayMap;
+
 // operations
 public:
 	/**
@@ -135,9 +139,14 @@ public:
 // implementation helpers
 protected:
 	/**
-	Collects the available templates and stores them for later use.
+	Collects the available templates from all sources and stores them for later use.
 	 */
 	virtual void CollectTemplates();
+
+	/**
+	Collects the available template files in the given directory.
+	 */
+	virtual void CollectTemplateFilesInDirectory(const CString& strSubdir, const CString& strCategory);
 
 	/**
 	Fills the template list with the files of the selected directory tab.
@@ -237,8 +246,6 @@ private:
 	CStringArray m_astrSearchPaths;
 
 	/** Stores all files by their subdirectories, the key is the subdirectory. */
-	typedef std::map<CString, CTemplateItemArray> StringTemplateItemArrayMap; 
-	
 	StringTemplateItemArrayMap m_mapSubdirToTemplates;
 
 	/** Image list for the template list (large icons) */
