@@ -234,15 +234,10 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 		SerializeProfileString(strSection,_T("GuiLanguageOnLastSession"),
 		                       &m_strGuiLanguage,direction);
 
-	SerializeProfileString(strSection,_T("Language"),
-	                       &m_strLanguageDefault,direction,AfxLoadString(IDS_LANGUAGE));
-	SerializeProfileString(strSection,_T("Dialect"),
-	                       &m_strLanguageDialectDefault,direction,AfxLoadString(IDS_DIALECT));
-
 #pragma endregion
 
-#pragma region Language-Spelling
-	strSection = _T("Settings\\Language-Spelling");
+#pragma region Spelling
+	strSection = _T("Settings\\Spelling");
 
 	// Create a default name for the user dictionary (otherwise the user will always loose the added words, if a path is not specified in the options)
 	TCHAR PersonalFolderPath[MAX_PATH];
@@ -261,12 +256,16 @@ void CConfiguration::Serialize(SERDIRECTION direction)
 	// - If we want more, than we need to add a proper user interface.
 	m_strSpellDictionaryPath = CPathTool::Cat(CPathTool::GetDirectory(theApp.GetModuleFileName()), _T("Dictionaries"));
 
+	SerializeProfileString(strSection,_T("Language"),
+	                       &m_strLanguageDefault,direction,AfxLoadString(IDS_LANGUAGE));
+	SerializeProfileString(strSection,_T("Dialect"),
+	                       &m_strLanguageDialectDefault,direction,AfxLoadString(IDS_DIALECT));
 	SerializeProfileBool(strSection,_T("SkipComments"),m_bSpellSkipComments,direction,true);
 	SerializeProfileBool(strSection,_T("SkipNumbers"),m_bSpellSkipNumbers,direction,true);
 	SerializeProfileBool(strSection,_T("SkipTags"),m_bSpellSkipTags,direction,true);
 	SerializeProfileBool(strSection,_T("SkipUppercase"),m_bSpellSkipCaps,direction,true);
 	SerializeProfileBool(strSection,_T("MainDictionaryOnly"),m_bSpellMainDictOnly,direction,true);
-	SerializeProfileBool(strSection,_T("Enable"),m_bSpellEnable,direction,false);
+	SerializeProfileBool(strSection,_T("Enable"),m_bSpellEnable,direction,true);
 
 #pragma endregion
 
