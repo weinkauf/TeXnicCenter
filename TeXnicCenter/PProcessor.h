@@ -254,7 +254,7 @@ public:
 	Packs the information of this command into one string and returns
 	this string.
 	 */
-	CString SerializeToString() const;
+	CString SerializeToStringDeprecated() const;
 
 	/**
 	Sets the attributes with the information received from the given
@@ -264,7 +264,13 @@ public:
 	        TRUE on success, FALSE if the given string does not have the
 	        right format.
 	 */
-	BOOL SerializeFromString(LPCTSTR lpszPackedInformation);
+	BOOL SerializeFromStringDeprecated(LPCTSTR lpszPackedInformation);
+
+	///Writes the command to the registry
+	bool SerializeToRegistry(const CString& ValueBaseName, RegistryStack& reg) const;
+
+	///Reads the command from the registry
+	bool SerializeFromRegistry(const CString& ValueBaseName, RegistryStack& reg);
 
 	/**
 	Serializes the processor to the specified XML element.
