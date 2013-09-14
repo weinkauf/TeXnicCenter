@@ -1,13 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Dictionaries">
-      <UniqueIdentifier>{d4db9d07-009c-4eba-ad88-c22cc68498fb}</UniqueIdentifier>
-      <ParseFiles>false</ParseFiles>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
     <CustomBuild Include="de_DE.aff">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ru_RU.dic">
       <Filter>Dictionaries</Filter>
     </CustomBuild>
     <CustomBuild Include="de_DE.dic">
@@ -25,17 +22,73 @@
     <CustomBuild Include="en_US.dic">
       <Filter>Dictionaries</Filter>
     </CustomBuild>
-    <CustomBuild Include="fr_FR-1990.aff">
+    <CustomBuild Include="es_ANY.aff">
       <Filter>Dictionaries</Filter>
     </CustomBuild>
-    <CustomBuild Include="fr_FR-1990.dic">
+    <CustomBuild Include="es_ANY.dic">
       <Filter>Dictionaries</Filter>
     </CustomBuild>
-    <CustomBuild Include="fr_FR.aff">
+    <CustomBuild Include="fr_classique.aff">
       <Filter>Dictionaries</Filter>
     </CustomBuild>
-    <CustomBuild Include="fr_FR.dic">
+    <CustomBuild Include="fr_classique.dic">
       <Filter>Dictionaries</Filter>
     </CustomBuild>
+    <CustomBuild Include="fr_moderne.aff">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="fr_moderne.dic">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="fr_reforme1990.aff">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="fr_reforme1990.dic">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="fr_toutesvariantes.aff">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="fr_toutesvariantes.dic">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="it_IT.aff">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="it_IT.dic">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="nl_NL.aff">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="nl_NL.dic">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="pl_PL.aff">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="pl_PL.dic">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="pt_BR.aff">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="pt_BR.dic">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="pt_PT.aff">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="pt_PT.dic">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ru_RU.aff">
+      <Filter>Dictionaries</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Dictionaries">
+      <UniqueIdentifier>{5f4cbb65-6dd0-4f21-9762-1e878545195a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

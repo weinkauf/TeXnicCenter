@@ -43,7 +43,7 @@
           <div class="body">
             
   <div class="section" id="document-templates">
-<h1>Document templates</h1>
+<span id="id1"></span><h1>Document templates</h1>
 <p>TeXnicCenter provides support for custom document templates.</p>
 <p>A document template is a simple file or a wizard that generates a frame for a
 new document. When using document frames over and over again (i.e. a letter),
@@ -54,12 +54,17 @@ then using document templates will be a big help.</p>
 <li>Document wizards</li>
 </ul>
 <p>Several directories that contain document templates can be specified in the path
-options. The specified directories should contain sub-directories which
+options. The specified directories can contain sub-directories which
 represent the categories of the templates.</p>
-<p>When a new project is created TeXnicCenter provides the document templates found
+<p>When a new project is created, TeXnicCenter provides the templates found
 on the left side of the dialog <em class="xref std std-dialog">New Project</em>.</p>
-<p>The tabs represent the sub-directories of the directories specified in the path
-options. If one or more directories contain the same sub-directory TeXnicCenter
+<div class="figure">
+<img alt="_images/newproject.png" src="_images/newproject.png" />
+<p class="caption">The <em class="xref std std-dialog">New Project</em> dialog. See also the section on <a class="reference internal" href="projects.html#project-management"><em>project management</em></a>.</p>
+</div>
+<p>The tabs represent the sub-directories of the directories specified
+in the <a class="reference internal" href="options.html#directory-options"><em>directory options</em></a>.
+If one or more directories contain the same sub-directory, TeXnicCenter
 will display the files found in those sub-directories together in one merged
 list.</p>
 <div class="section" id="example">
@@ -112,13 +117,10 @@ company&#8217;s directory merged with templates from the local drive:</p>
 </ul>
 </div>
 <div class="section" id="file-based-document-templates">
-<h2>File based document templates</h2>
-<p>File based document templates are document templates created most easily.
-Templates of this type will be marked with this icon in the dialog
-<em class="xref std std-dialog">Project New</em>:</p>
-<p>A file based document template is a simple text file with the <tt class="file docutils literal"><span class="pre">.tex</span></tt> file
-extension placed in one of the template directories specified in the tab Path
-options.</p>
+<h2>File-based document templates</h2>
+<p>A file-based document template is created most easily.
+It is a simple text file with the <tt class="file docutils literal"><span class="pre">.tex</span></tt> file
+extension placed in one of the <a class="reference internal" href="options.html#directory-options"><em>template directories</em></a>.</p>
 <p>Such a file can contain an optional description that will be displayed in the
 field template description of the dialog <em class="xref std std-dialog">Project New</em>, when the
 template has been selected by the user. To create such a description simply
@@ -129,7 +131,7 @@ will copy the selected template file to the project&#8217;s directory, rename it
 the project&#8217;s name, remove the description line (if there is any) and replace
 the line delimiters with the ones, specified in the dialog &#8216;Project New&#8217;.</p>
 <div class="section" id="index-1">
-<span id="id1"></span><h3>Example</h3>
+<span id="id2"></span><h3>Example</h3>
 <p>This is a very simple example for a document template:</p>
 <div class="highlight-tex"><div class="highlight"><pre><span class="c">%description: An Article with a Title Page</span>
 
@@ -160,10 +162,8 @@ the line delimiters with the ones, specified in the dialog &#8216;Project New&#8
 </div>
 <div class="section" id="document-wizards">
 <h2>Document wizards</h2>
-<p>Document wizards are a special form of the document templates. Document
-templates of this type will be marked with this icon in the dialog
-<em class="xref std std-dialog">Project New</em>:</p>
-<p>A document wizard helps to create a new document by guiding step by step through
+<p>Document wizards are a special form of the document templates.
+It helps to create a new document by guiding step by step through
 the creation process. Document wizards are provided as <a class="reference internal" href="#term-dll"><em class="xref std std-term">DLL</em></a> located in
 the template directories, specified on the <em class="xref std std-tab">Path</em> options tab.</p>
 <p>Such wizards are provided on the TeXnicCenter homepage.</p>
@@ -200,7 +200,7 @@ use the <tt class="file docutils literal"><span class="pre">.dll</span></tt> fil
 <li class="toctree-l1"><a class="reference internal" href="projects.html">Project management</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Document templates</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#file-based-document-templates">File based document templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-based-document-templates">File-based document templates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#document-wizards">Document wizards</a></li>
 </ul>
 </li>

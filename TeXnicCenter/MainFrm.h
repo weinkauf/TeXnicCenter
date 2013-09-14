@@ -290,6 +290,7 @@ protected:
 	afx_msg void OnWindowCloseAllButActive();
 	afx_msg void OnUpdateWindowCloseAllButActive(CCmdUI* pCmdUI);
 	afx_msg LRESULT OnCommandHelp(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnUpdateWindowMDICommands(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	afx_msg BOOL OnToggleCtrlBar(UINT nIDEvent);
 	afx_msg BOOL OnToggleDockingBar(UINT nIDEvent);

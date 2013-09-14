@@ -1,16 +1,16 @@
-;TeXnicCenter Inno Setup Script
+﻿;TeXnicCenter Inno Setup Script
 
 ;-------------------------------------------
 ; Some defines
 ;-------------------------------------------
 
 ;Uncomment this for x64
-;#define TARGET_x64
+#define TARGET_x64
 
 ;Uncomment this for an Alpha Build
 ;#define ALPHA_BUILD
 
-;For debugging the Inno preprocessor
+;For debugging the Inno preprocessor and logging
 ;#define Debug
 
 ;-------------------------------------------
@@ -18,15 +18,12 @@
 ;-------------------------------------------
 
 ;~ Setup for current user  versus  Setup for all users:
-;~ We need elevated priveleges to write to HKLM and such.
+;~ We need elevated privileges to write to HKLM and such.
 ;~ For the "all users" case: more or less like now. Except for HKCR -> needs to be some other like HKLM/Classes
 ;~ For "current user" case: HKCR -> HKCU/Classes. Not in "Program Files".
 
 ;~ The defaults for the doc and project templates should really be handled from within TXC.
 ;~ If the key or dir doesn't exist, then use the defaults.
-
-;~ Artwork: Setup Icon, Setup wizard image
-
 
 
 
@@ -57,7 +54,6 @@
 ;~ We need that for the file name of the setup itself
 #define APP_VERSION_NOSPACE StringChange(APP_VERSION, " ", "")
 
-
 [Setup]
 ;Output
 OutputDir=..\Output\Setup
@@ -79,7 +75,7 @@ DefaultGroupName={#APP_ID}
 UsePreviousAppDir=true
 ;Requirements
 ;PrivilegesRequired=none
-MinVersion=4.0.950,5.0.2195
+MinVersion=5.0.2195
 ;Setup
 AllowNoIcons=true
 AlwaysShowDirOnReadyPage=true
@@ -87,8 +83,9 @@ AlwaysShowGroupOnReadyPage=true
 AlwaysShowComponentsList=true
 ShowLanguageDialog=yes
 UninstallDisplayIcon={app}\TeXnicCenter.exe
-WizardImageFile=compiler:wizmodernimage-IS.bmp
-WizardSmallImageFile=compiler:wizmodernsmallimage-IS.bmp
+SetupIconFile=..\TeXnicCenter\res\TeXnicCenter.ico
+WizardImageFile=TXCWizardImage.bmp
+WizardSmallImageFile=TXCWizardSmallImage.bmp
 ChangesAssociations=true
 ;Compression
 SolidCompression=true
@@ -100,7 +97,9 @@ Compression=lzma2/Ultra64
   ArchitecturesAllowed=x64
   ArchitecturesInstallIn64BitMode=x64
 #endif
-
+#ifdef Debug
+  SetupLogging=yes
+#endif
 
 [Components]
 Name: Application_Files; Description: Application Files (TeXnicCenter core components); Flags: fixed; Types: compact typical custom
@@ -109,11 +108,15 @@ Name: Templates; Description: LaTeX Templates (Templates for creating new projec
 Name: Templates\English; Description: English LaTeX Templates; Types: custom typical
 Name: Templates\Deutsch; Description: Deutsche LaTeX Vorlagen; Types: custom typical
 Name: Dictionaries; Description: Dictionaries; Types: custom typical
-Name: Dictionaries\EnglishGB; Description: English (GB); Types: custom
-Name: Dictionaries\EnglishUS; Description: English (US); Types: custom typical
+Name: Dictionaries\English; Description: English (US & GB); Types: custom typical
 Name: Dictionaries\Deutsch; Description: Deutsch; Types: custom typical
-Name: Dictionaries\Francais; Description: Fran�ais; Types: custom
-Name: Dictionaries\Francais1990; Description: Fran�ais (appel� R�forme 1990); Types: custom
+Name: Dictionaries\Francais; Description: Français (Moderne, Classique, Réforme 1990, Toutes variantes); Types: custom
+Name: Dictionaries\Espanol; Description: Español; Types: custom
+Name: Dictionaries\Italiano; Description: Italiano; Types: custom
+Name: Dictionaries\Nederlands; Description: Nederlands; Types: custom
+Name: Dictionaries\Polski; Description: Polski; Types: custom
+Name: Dictionaries\Portugues; Description: Português (PT & BR); Types: custom
+Name: Dictionaries\Russkij; Description: Русский; Types: custom
 
 [Files]
 ;Application Files
@@ -157,11 +160,16 @@ DestDir: {app}\Templates\Projects\Deutsch erweitert; Source: ..\Output\Product\{
 DestDir: {app}\Templates\Projects\Deutsch; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Templates\Projects\Deutsch\*.tex; Components: Templates\Deutsch; Flags: comparetimestamp
 
 ;Dictionaries
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\de_DE.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Deutsch
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\en_GB.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishGB
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\en_US.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\EnglishUS
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\fr_FR.*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Francais
-DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\fr_FR-1990.*; Flags: comparetimestamp promptifolder; Components: " Dictionaries\Francais1990"
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\de*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Deutsch
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\en*; Flags: comparetimestamp promptifolder; Components: Dictionaries\English
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\fr*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Francais
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\es*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Espanol
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\it*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Italiano
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\nl*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Nederlands
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\pl*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Polski
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\pt*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Portugues
+DestDir: {app}\Dictionaries; Source: ..\Output\Product\{#APP_PLATFORM}\Release\Dictionaries\ru*; Flags: comparetimestamp promptifolder; Components: Dictionaries\Russkij
+
 
 [Icons]
 Name: {group}\{#APP_ID}; Filename: {app}\TeXnicCenter.exe; WorkingDir: {userdocs}; IconIndex: 0
@@ -183,6 +191,10 @@ Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\ProjectTemp
 Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\ProjectTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Projects; Flags: createvalueifdoesntexist uninsdeletekey
 Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\DocumentTemplatePaths; ValueType: dword; ValueName: Size; ValueData: 1; Flags: createvalueifdoesntexist uninsdeletekey
 Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\DocumentTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Documents; Flags: createvalueifdoesntexist uninsdeletekey
+
+;Add the default spelling language for the current user
+Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Language; ValueType: string; ValueName: Language; ValueData: {code:DefaultSpellingLanguage}; Flags: createvalueifdoesntexist uninsdeletekey
+Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Language; ValueType: string; ValueName: Dialect; ValueData: {code:DefaultSpellingDialect}; Flags: createvalueifdoesntexist uninsdeletekey
 
 ;Reset the GUI workspace, i.e., the toolbars and menus and short cuts etc., if desired by the user
 Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Workspace; Flags: deletekey; Tasks: ResetWorkspace;
@@ -266,11 +278,63 @@ Name: custom; Description: Custom (Lets you choose, which components to install)
 [Run]
 Filename: {app}\TeXnicCenter.exe; Description: "Launch TeXnicCenter"; Flags: postinstall nowait skipifsilent
 
-[InnoIDE_Settings]
-LogFileOverwrite=false
 
 
 
 #ifdef Debug
   #expr SaveToFile(AddBackslash(SourcePath) + "Preprocessed.iss")
 #endif
+
+[Code]
+function DefaultSpellingLanguage(Param: String): String;
+begin
+  if IsComponentSelected('Dictionaries\English') then
+    Result := 'en'
+  else if IsComponentSelected('Dictionaries\Deutsch') then
+    Result := 'de'
+  else if IsComponentSelected('Dictionaries\Francais') then
+    Result := 'fr'
+  else if IsComponentSelected('Dictionaries\Espanol') then
+    Result := 'es'
+  else if IsComponentSelected('Dictionaries\Italiano') then
+    Result := 'it'
+  else if IsComponentSelected('Dictionaries\Nederlands') then
+    Result := 'nl'
+  else if IsComponentSelected('Dictionaries\Polski') then
+    Result := 'pl'
+  else if IsComponentSelected('Dictionaries\Portugues') then
+    Result := 'pt'
+  else if IsComponentSelected('Dictionaries\Russkij') then
+    Result := 'ru'
+  else
+    Result := '';
+
+  Log('Setting default spelling language to ' + Result);
+end;
+
+
+function DefaultSpellingDialect(Param: String): String;
+begin
+  if IsComponentSelected('Dictionaries\English') then
+    Result := 'US'
+  else if IsComponentSelected('Dictionaries\Deutsch') then
+    Result := 'DE'
+  else if IsComponentSelected('Dictionaries\Francais') then
+    Result := 'toutesvariantes'
+  else if IsComponentSelected('Dictionaries\Espanol') then
+    Result := 'ANY'
+  else if IsComponentSelected('Dictionaries\Italiano') then
+    Result := 'IT'
+  else if IsComponentSelected('Dictionaries\Nederlands') then
+    Result := 'NL'
+  else if IsComponentSelected('Dictionaries\Polski') then
+    Result := 'PL'
+  else if IsComponentSelected('Dictionaries\Portugues') then
+    Result := 'BR'
+  else if IsComponentSelected('Dictionaries\Russkij') then
+    Result := 'RU'
+  else
+    Result := '';
+
+  Log('Setting default spelling dialect to ' + Result);
+end;

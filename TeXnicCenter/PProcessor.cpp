@@ -67,7 +67,7 @@ BOOL CPProcessorArray::SerializeToRegistry(RegistryStack &reg, LPCTSTR lpszTypeN
 	for (int i = 0; i < GetSize(); i++)
 	{
 		strValue.Format(_T("%s%d"),lpszTypeName,i);
-		reg.Write(strValue,GetAt(i).SerializeToString());
+		GetAt(i).SerializeToRegistry(strValue, reg);
 	}
 
 	return TRUE;
@@ -87,10 +87,14 @@ BOOL CPProcessorArray::SerializeFromRegistry(RegistryStack &reg, LPCTSTR lpszTyp
 
 		strValue.Format(_T("%s%d"),lpszTypeName,i++);
 
-		if (!reg.Read(strValue,strPackedInformation))
-			break;
+		if (!pp.SerializeFromRegistry(strValue, reg))
+		{
+			//Try old-school using a serialized string
+			if (!reg.Read(strValue,strPackedInformation)) break;
 
-		pp.SerializeFromString(strPackedInformation);
+			pp.SerializeFromStringDeprecated(strPackedInformation);
+		}
+
 		Add(pp);
 	}
 
@@ -276,7 +280,7 @@ CString CPProcessor::GetExpandedOutputFile(LPCTSTR lpszPath) const
 	return AfxExpandPlaceholders(m_strOutputFile,lpszPath);
 }
 
-CString CPProcessor::SerializeToString() const
+CString CPProcessor::SerializeToStringDeprecated() const
 {
 	return
 	    m_strTitle + _T('\n') +
@@ -286,7 +290,7 @@ CString CPProcessor::SerializeToString() const
 	    m_strOutputFile;
 }
 
-BOOL CPProcessor::SerializeFromString(LPCTSTR lpszPackedInformation)
+BOOL CPProcessor::SerializeFromStringDeprecated(LPCTSTR lpszPackedInformation)
 {
 	CString strTitle,strPath,strArguments,strInputFile,strOutputFile;
 
@@ -308,6 +312,28 @@ BOOL CPProcessor::SerializeFromString(LPCTSTR lpszPackedInformation)
 	SetOutputFile(strOutputFile);
 
 	return TRUE;
+}
+
+bool CPProcessor::SerializeToRegistry(const CString& ValueBaseName, RegistryStack& reg) const
+{
+	bool success(true);
+	success &= (bool)reg.Write(ValueBaseName + _T("Title"), m_strTitle);
+	success &= (bool)reg.Write(ValueBaseName + _T("Path"), m_strPath);
+	success &= (bool)reg.Write(ValueBaseName + _T("Arguments"), m_strArguments);
+	success &= (bool)reg.Write(ValueBaseName + _T("InputFile"), m_strInputFile);
+	success &= (bool)reg.Write(ValueBaseName + _T("OutputFile"), m_strOutputFile);
+	return success;
+}
+
+bool CPProcessor::SerializeFromRegistry(const CString& ValueBaseName, RegistryStack& reg)
+{
+	bool success(true);
+	success &= (bool)reg.Read(ValueBaseName + _T("Title"), m_strTitle);
+	success &= (bool)reg.Read(ValueBaseName + _T("Path"), m_strPath);
+	success &= (bool)reg.Read(ValueBaseName + _T("Arguments"), m_strArguments);
+	success &= (bool)reg.Read(ValueBaseName + _T("InputFile"), m_strInputFile);
+	success &= (bool)reg.Read(ValueBaseName + _T("OutputFile"), m_strOutputFile);
+	return success;
 }
 
 void CPProcessor::SaveXml(MsXml::CXMLDOMElement xmlPProcessor) const

@@ -82,12 +82,13 @@ bool LaTeXTokenizer::NextWord(LPCTSTR szLine, int length, int &nStartPos, int &n
 		while (nEndPos < nLength)
 		{
 			ch = szLine[nEndPos];
+			const TBYTE chNext = (nEndPos + 1 < nLength) ? szLine[nEndPos + 1] : _T(' '); //Look ahead
 
 			if (!badWord && CConfiguration::GetInstance()->m_bSpellSkipNumbers && CharTraitsT::IsDigit(ch))
 				badWord = true;
 
-			// words end on terminating character
-			if (!CharTraitsT::IsAlnum(ch))
+			// words end on terminating character. support don't as well as quell'altro sull'esperimento and `quotes'.
+			if ( !CharTraitsT::IsAlnum(ch) && !(ch == _T('\'') && CharTraitsT::IsAlnum(chNext)) )
 				break;
 
 			++nEndPos;

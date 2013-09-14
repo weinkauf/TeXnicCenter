@@ -1,5 +1,7 @@
 1. hg up
 
+1a. Get the latest redistributable from Microsoft: http://support.microsoft.com/kb/2019667
+
 2. Edit "TeXnicCenter\Version.h" appropriately.
 
 3. Edit "TeXnicCenter\aboutbox.cpp" to reflect the current year and to make sure that all involved people are mentioned. (TODO: Need to change the manual update of the year.)
@@ -48,4 +50,4 @@ rm Output/Intermediate/*
 
 18. Publish news at texniccenter.org and latex-community.org. texniccenter.org requires FireFox to edit an article properly.
 
-19. Add a new artifact group at sf.net for the User Reports. To do so, (try to) add a new report, click on the admin link next to the group drop-down box.
+19. Add a new milestone at sf.net for the User Reports. To do so, go to the user reports and click edit milestones. At the bottom, one can add a new one.

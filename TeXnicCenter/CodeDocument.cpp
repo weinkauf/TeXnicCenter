@@ -343,8 +343,12 @@ bool TextDocument::Read(LPCTSTR pszFileName, CStringW& string)
 			if (!use_bom_ && pos != 0)
 				use_bom_ = true;
 		}
-		else
-			result = ::GetLastError();
+		else {
+			//The file cannot be memory-mapped, but it exists on disk.
+			//An example is an empty file.
+			// => We will not report an error for this.
+			//result = ::GetLastError();
+		}
 	}
 	else
 		result = ::GetLastError();
@@ -1107,7 +1111,8 @@ long CodeDocument::LineFindCommentStartPos(const int Line) const
 	return -1;
 }
 
-const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos, const bool bRespectComments /*= true*/) const
+const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos, const bool bRespectComments /*= true*/,
+																const bool bNoLastNewLine /*= true*/) const
 {
 	CScintillaCtrl& Ctrl = GetView()->GetCtrl();
 	const int NumLines = Ctrl.GetLineCount();
@@ -1165,6 +1170,12 @@ const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos
 		{
 			DownPos = CommentStartInLastLine;
 		}
+	}
+
+	//If the given pos is the first char in a line, we go back to the last char of the previous line.
+	if (bNoLastNewLine && UpPos != DownPos && DownPos == Ctrl.PositionFromLine(Ctrl.LineFromPosition(DownPos)))
+	{
+		DownPos = Ctrl.GetLineEndPosition(Ctrl.LineFromPosition(DownPos) - 1);
 	}
 
 	return std::make_pair(UpPos, DownPos);
@@ -1374,6 +1385,9 @@ void CodeDocument::UpdateTextBufferOnExternalChange()
 				AfxFormatSystemString(dwResult));
 			AfxMessageBox(strMsg,MB_ICONINFORMATION | MB_OK);
 			GetView()->GetCtrl().SetReadOnly(TRUE);
+		} else {
+			//Trigger analysis - parse project
+			AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_PROJECT_PARSE);
 		}
 	}
 }

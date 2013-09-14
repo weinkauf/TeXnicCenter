@@ -422,6 +422,7 @@ BOOL BibTeXFile::ParseField(const TCHAR *field,CString &name,CString &val)
 	/// remove whitespace
 	name.Trim();
 	val.Trim();
+	val.Replace(_T("\n"), _T(" "));
 
 	return TRUE;
 }

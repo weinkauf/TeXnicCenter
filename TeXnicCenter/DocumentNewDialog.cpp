@@ -41,6 +41,7 @@
 #include "LaTeXView.h"
 #include "Configuration.h"
 #include "TeXnicCenter.h"
+#include "textsourcefile.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -123,17 +124,14 @@ BOOL CFileBasedDocumentTemplateItem::InitItem(LPCTSTR lpszPath,CImageList &Image
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//extract description, if available
-	CFile file;
-	if (!file.Open(m_strPath,CFile::modeRead))
-		return FALSE;
-
-	try
+	CTextSourceFile TextFile;
+	if (TextFile.Create(lpszPath))
 	{
-		CArchive ar(&file,CArchive::load);
-		CString strLine;
-
-		if (ar.ReadString(strLine))
+		LPCTSTR lpLine;
+		int nLength;
+		if (TextFile.GetNextLine(lpLine, nLength))
 		{
+			CString strLine(lpLine, nLength);
 			CString strKey(_T("%DESCRIPTION: "));
 			CString strStartOfLine = strLine.Left(strKey.GetLength());
 			strStartOfLine.MakeUpper();
@@ -141,14 +139,6 @@ BOOL CFileBasedDocumentTemplateItem::InitItem(LPCTSTR lpszPath,CImageList &Image
 			if (strStartOfLine == strKey)
 				m_strDescription = strLine.Right(strLine.GetLength() - strKey.GetLength());
 		}
-
-		ar.Close();
-		file.Close();
-	}
-	catch (CException *pE)
-	{
-		file.Abort();
-		pE->Delete();
 	}
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -194,59 +184,42 @@ BOOL CFileBasedDocumentTemplateItem::InitDocument(LPCTSTR lpszPath,LPCTSTR lpszC
 
 BOOL CFileBasedDocumentTemplateItem::CreateFile(LPCTSTR lpszTargetPath,LPCTSTR lpszCrLf)
 {
-	CFile sourceFile;
-	if (!sourceFile.Open(m_strPath,CFile::modeRead))
-		return FALSE;
+	CStringW text;
+	TextDocument doc;
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// copy source file to destination file
-	CFile destFile;
-	if (!destFile.Open(lpszTargetPath,CFile::modeCreate | CFile::modeWrite))
+	bool result = doc.Read(m_strPath,text);
+
+	if (result)
 	{
-		sourceFile.Close();
-		return FALSE;
-	}
+		const CStringW lineendings(L"\r\n");
+		int index = text.FindOneOf(lineendings);
 
-	try
-	{
-		CArchive source(&sourceFile,CArchive::load);
-		CArchive dest(&destFile,CArchive::store);
-		CString strLine;
-
-		if (source.ReadString(strLine))
+		if (index != -1)
 		{
-			// skip leading descriptions
-			CString strKey(_T("%DESCRIPTION: "));
-			CString strStartOfLine = strLine.Left(strKey.GetLength());
+			CStringW line = text.Left(index);
+			const CStringW strKey(L"%DESCRIPTION: ");
+			CStringW strStartOfLine = line.Left(strKey.GetLength());
+
 			strStartOfLine.MakeUpper();
 
-			if (strStartOfLine == strKey)
+			if (strKey == strStartOfLine) 
 			{
-				// skip leading empty lines
-				while (source.ReadString(strLine) && strLine.IsEmpty());
+				text.Delete(0,index);
+				text.TrimLeft(lineendings + L' ');
 			}
 		}
 
-		if (!strLine.IsEmpty())
-			dest.WriteString(strLine + lpszCrLf);
+		LPCWSTR le = GetLineEnding(static_cast<LPCWSTR>(text),text.GetLength());
 
-		// copy other lines
-		while (source.ReadString(strLine))
-			dest.WriteString(strLine + lpszCrLf);
+		USES_CONVERSION;
 
-		source.Close();
-		dest.Close();
-		sourceFile.Close();
-		destFile.Close();
-	}
-	catch (CException *pE)
-	{
-		sourceFile.Abort();
-		destFile.Abort();
-		pE->Delete();
+		if (std::wcscmp(le,T2CW(lpszCrLf)) != 0) // Line endings not equal
+			text.Replace(le,lpszCrLf);
+
+		result = doc.Write(lpszTargetPath,text);
 	}
 
-	return TRUE;
+	return result;
 }
 
 
@@ -393,7 +366,7 @@ void CDocumentNewDialog::Create()
 			strCrlf = _T("\r\n");
 			break;
 		case UnixStyleEOLMode:
-			strCrlf = _T("\n\r");
+			strCrlf = _T("\r");
 			break;
 		case MacStyleEOLMode:
 			strCrlf = _T("\n");
