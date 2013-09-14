@@ -850,8 +850,8 @@ void CProfile::CCommand::RemoveDirectorySpecifications()
 BOOL CProfile::CCommand::SerializeToRegistry(RegistryStack &reg) const
 {
 	reg.Write(_T("ActiveType"), m_nActiveCommand);
-	reg.Write(_T("ProcessCmd"), m_cmdProcess.SerializeToString());
-	reg.Write(_T("DDECmd"), m_cmdDde.SerializeToString());
+	m_cmdProcess.SerializeToRegistry(_T("ProcessCmd"), reg);
+	m_cmdDde.SerializeToRegistry(_T("DDECmd"), reg);
 
 	return TRUE;
 }
@@ -860,10 +860,20 @@ BOOL CProfile::CCommand::SerializeFromRegistry(RegistryStack &reg)
 {
 	CString strPackedInformation;
 	reg.Read(_T("ActiveType"), m_nActiveCommand);
-	reg.Read(_T("ProcessCmd"), strPackedInformation);
-	m_cmdProcess.SerializeFromString(strPackedInformation);
-	reg.Read(_T("DDECmd"), strPackedInformation);
-	m_cmdDde.SerializeFromString(strPackedInformation);
+
+	if (!m_cmdProcess.SerializeFromRegistry(_T("ProcessCmd"), reg))
+	{
+		//Try old-school using a serialized string
+		if (reg.Read(_T("ProcessCmd"), strPackedInformation))
+			m_cmdProcess.SerializeFromStringDeprecated(strPackedInformation);
+	}
+
+	if (!m_cmdDde.SerializeFromRegistry(_T("DDECmd"), reg))
+	{
+		//Try old-school using a serialized string
+		if (reg.Read(_T("DDECmd"), strPackedInformation))
+			m_cmdDde.SerializeFromStringDeprecated(strPackedInformation);
+	}
 
 	return TRUE;
 }
