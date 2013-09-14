@@ -1,5 +1,7 @@
 1. hg up
 
+1a. Get the latest redistributable from Microsoft: http://support.microsoft.com/kb/2019667
+
 2. Edit "TeXnicCenter\Version.h" appropriately.
 
 3. Edit "TeXnicCenter\aboutbox.cpp" to reflect the current year and to make sure that all involved people are mentioned. (TODO: Need to change the manual update of the year.)
