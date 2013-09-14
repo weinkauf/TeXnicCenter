@@ -43,11 +43,11 @@ rm Output/Intermediate/*
 15. Write Release Notes. Use this as a startinig point (where Release2Alpha3 stands for the tag of the last release):
     hg log -f --no-merges -r "tagged(Release2Alpha3)":: --template "{desc}\n\n" > TXCReleaseNotes_2Alpha4.txt
 
-16. Upload the release notes and the setup file to sf.net. Just click on "Files". It requires Firefox or something similar.
-    Create a subfolder for the release. Place the release notes as readme.txt in this folder (can be renamed on the server). It will always be displayed when people go into that folder (reST could be used, too). If the installer is going to be the new default, set it in its properties.
+16. Upload the release notes and the setup file to sf.net. Just click on "Files".
+    Create a subfolder for the release. Place the release notes as readme.txt in this folder (can be renamed on the server). It will always be displayed when people go into that folder (reST could be used, too). If the installer is going to be the new default, set it in its properties. 32-bit installers are the default.
 
 17. Change the download links at texniccenter.org.
 
-18. Publish news at texniccenter.org and latex-community.org. texniccenter.org requires FireFox to edit an article properly.
+18. Publish news at texniccenter.org and latex-community.org. At texniccenter.org, use the text-editor only. The visual editor does not work.
 
 19. Add a new milestone at sf.net for the User Reports. To do so, go to the user reports and click edit milestones. At the bottom, one can add a new one.
