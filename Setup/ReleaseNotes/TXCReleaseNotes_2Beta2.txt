@@ -1,0 +1,25 @@
+This is TeXnicCenter 2.0 Beta 2 (2013/06/29)
+
+This is a BETA version of the software. It is somewhat stable and unlikely to crash. It is certainly stable enough to replace TeXnicCenter Version 1.
+
+We have fixed some issues since TXC 2.0 Beta 1. Most noteworthy:
+
+Highlights:
+* Spell checking: The spelling is now done based on the project language (see project settings). If no project is loaded, the default language from the options dialog is used.
+* Spell checking: Changing the spelling language does NOT require a restart anymore.
+* Editor: Added color schemes. It is now possible to choose between different factory settings and a customized scheme.
+* Editor: Show instant advice only, if the keyword has not been typed yet.
+* Editor: Incremental search is now insensitive to the case.
+* Editor: Options to modify vertical edge mode.
+* Structure Parser: recognizes \include* now
+* Integration: "Recently used projects" and "Recently used files" subgroups are now available from the jump lists in the Windows taskbar.
+* Integration: The title of the TXC window shows the title of the current project without ".tcp".
+
+
+We need your help for the further development of TeXnicCenter. In particular, we are looking for new team members, who take care of the user manual and who would create short videos that explain how to use the software.
+If you are interested in helping us, contact the maintainer: http://www.texniccenter.org/contact/tino
+
+
+Happy TeXing!
+
+The TeXnicCenter Team

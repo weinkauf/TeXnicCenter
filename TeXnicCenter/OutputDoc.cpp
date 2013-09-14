@@ -514,24 +514,20 @@ bool COutputDoc::AssureExistingMainFile()
 	{
 		//Everything is fine
 		if (CPathTool::Exists(strPath)) return true;
+	}
 
-		//Filename is there, but file is not on disk
-		CString strMsg;
-		strMsg.Format(STE_FILE_EXIST,strPath);
-		AfxMessageBox(strMsg);
+	//Either: proper filename is there, but file is not on disk
+	//Or: Empty file name - File not saved before
+
+	//For projects, we just report a missing main file.
+	if (!m_bActiveFileOperation)
+	{
+		AfxMessageBox(STE_PROJECT_MAINFILENOTFOUND,MB_ICONSTOP | MB_OK);
 		return false;
 	}
 	else
 	{
-		//Empty file name - File not saved before
-
-		//This should not happen for projects
-		if (!m_bActiveFileOperation)
-		{
-			AfxMessageBox(STE_PROJECT_MAINFILENOTFOUND,MB_ICONSTOP | MB_OK);
-			return false;
-		}
-
+		//For single files, we remind to save. It is likely that a new file was just not saved yet.
 		//Get the doc
 		CDocument* pDoc = GetActiveDocument();
 		if (!pDoc) return false;

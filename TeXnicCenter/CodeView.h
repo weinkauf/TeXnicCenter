@@ -164,7 +164,6 @@ private:
 	void EnableViewFolding(bool enable = true);
 	void UpdateFoldMargin();
 	void UpdateFoldSettings();
-	void UpdateFoldMarginColor();
 
 	class ShadowWindow :
 		public CWindowImpl<ShadowWindow>

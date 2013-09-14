@@ -58,16 +58,16 @@
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\Output\Product\$(Platform)\$(Configuration)\Dictionaries\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\Output\Intermediate\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">*.dic%3b*.aff%3b$(TargetPath)</ExtensionsToDeleteOnClean>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">*.dic;*.aff</ExtensionsToDeleteOnClean>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\Output\Product\$(Platform)\$(Configuration)\Dictionaries\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\Output\Intermediate\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">*.dic%3b*.aff%3b$(TargetPath)</ExtensionsToDeleteOnClean>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">*.dic;*.aff</ExtensionsToDeleteOnClean>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\Output\Product\$(Platform)\$(Configuration)\Dictionaries\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\Output\Intermediate\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">*.dic%3b*.aff%3b$(TargetPath)</ExtensionsToDeleteOnClean>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">*.dic;*.aff</ExtensionsToDeleteOnClean>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\Output\Product\$(Platform)\$(Configuration)\Dictionaries\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\Output\Intermediate\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|x64'">*.dic%3b*.aff%3b$(TargetPath)</ExtensionsToDeleteOnClean>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|x64'">*.dic;*.aff</ExtensionsToDeleteOnClean>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
@@ -82,194 +82,180 @@
   <ItemGroup>
     <CustomBuild Include="de_DE.aff">
       <FileType>Document</FileType>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
     </CustomBuild>
     <CustomBuild Include="de_DE.dic">
       <FileType>Document</FileType>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
     </CustomBuild>
     <CustomBuild Include="en_GB.aff">
       <FileType>Document</FileType>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
     </CustomBuild>
     <CustomBuild Include="en_GB.dic">
       <FileType>Document</FileType>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
     </CustomBuild>
     <CustomBuild Include="en_US.aff">
       <FileType>Document</FileType>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
     </CustomBuild>
     <CustomBuild Include="en_US.dic">
       <FileType>Document</FileType>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="fr_FR-1990.aff">
+    <CustomBuild Include="fr_classique.aff">
       <FileType>Document</FileType>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="fr_FR-1990.dic">
+    <CustomBuild Include="fr_classique.dic">
       <FileType>Document</FileType>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="fr_FR.aff">
+    <CustomBuild Include="fr_moderne.aff">
       <FileType>Document</FileType>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="fr_FR.dic">
+    <CustomBuild Include="fr_moderne.dic">
       <FileType>Document</FileType>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying File...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
     </CustomBuild>
+    <CustomBuild Include="fr_reforme1990.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="fr_reforme1990.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="fr_toutesvariantes.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="fr_toutesvariantes.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="pt_PT.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="pt_PT.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="pt_BR.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="pt_BR.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="it_IT.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="it_IT.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="es_ANY.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="es_ANY.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="nl_NL.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="nl_NL.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="pl_PL.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="pl_PL.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
+    <CustomBuild Include="ru_RU.aff">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="ru_RU.dic">
+      <FileType>Document</FileType>
+      <Message>Copying File...</Message>
+      <Command>copy /y "%(FullPath)" "$(OutDir)%(Filename)%(Extension)"</Command>
+      <Outputs>$(OutDir)%(Filename)%(Extension)</Outputs>
+    </CustomBuild>
+    
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
