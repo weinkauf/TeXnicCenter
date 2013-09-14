@@ -1,0 +1,50 @@
+This is TeXnicCenter 2.0 Stable (2013/09/14)
+
+We have fixed a large number of issues since TXC 2.0 Beta 2. Most noteworthy:
+
+
+Editor
+* Autocompletion: Fixed bug with inserting environments. Example: "\begin{figu" becomes "\begin{figure}..." and not "\begin{\begin{figure}..."
+* Reworked coloring. Now all colors in the editor can be customized.
+* Added 4 new color schemes for the editor.
+* Fixed bug regarding the file encoding of outsourced files. Now they have the same encoding as the original file.
+* Default font size is 12.
+* Fixed small bug where joining a paragraph had some unintented consequences on following lines.
+
+User Interface
+* Fixed Bug #325: Tabs are mixed up whenever project is opened
+* Fixed Bug #339: Literature and navigator not updated if bib file changes.
+* Fixed Bug #345: Missing space in title in literature windows.
+* Bibliography: Allow to search for the bibtex key (label).
+* Fixed Bug #1293: Empty files are not listed in file view
+* Fixed Bug #348: Wrong message on building an unsaved file
+* Fixed Bug: Formats and Find/Bookmarks toolbars were not properly visible.
+* Fixed Bug #319: Titlebar does not update on project creation. Consistent frame title regarding files and projects.
+* Shortcuts: Ctrl-G for Goto Line
+
+Spell Checking
+* Added dictionaries for Spanish, Italian, Dutch, Portugese, Polish, and Russian
+* Updated German and French dictionaries to the latest versions.
+* Fixed Bug #324: Apostrophed words marked as spelling error. Spell checker supports now words like "don't" as well as "quell'altro sull'esperimento".
+* Fixed Bug #253: Error if en_US.aff is not installed
+* Fixed link to download dictionaries
+
+Templates
+* Fixed long-standing issue that templates have to be inside a subfolder.
+* Fixed Bug #1171: Template directory problem
+* Fixed bug where the description of a template was not displayed anymore.
+* Fixed Bug #347: Template (Encoding) Problem
+* Small fixes to the UI of the template dialogs
+
+Other
+* Help update
+* Explicit reparse of the project now possible from the Project menu.
+* Fixed Bug #350: registry import export (multi-line). Profiles are now written without line breaks to the registry.
+
+We need your help for the further development of TeXnicCenter. In particular, we are looking for new team members, who take care of the user manual and who would create short videos that explain how to use the software.
+If you are interested in helping us, contact the maintainer: http://www.texniccenter.org/contact/
+
+
+Happy TeXing!
+
+The TeXnicCenter Team
