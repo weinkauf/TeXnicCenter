@@ -1,0 +1,71 @@
+We have released the latest and greatest version of TeXnicCenter. Finally, we left the beta stage of the current development branch and are bringing you the first fully stable version of TeXnicCenter in a long time.
+
+If you are with us for a longer time, then you know that we have high standards when it comes to calling our software "stable." TeXnicCenter users are used to installing software that works stable, but is called "beta." Well, the software reached a maturity level that we developers feel it is time to also call it what it is: "stable."
+
+As the maintainer, I want to express my gratitude to Sergiu Dotenco, who single-handedly transformed the old TXC 1.0 from the early 2000's into a modern application with a powerful editor, beautiful user interface and many other new features. This transformation was not simple and we worked for a long time on making it as mature as it is now.
+
+So, there you are. Mid-September 2013. [url=http://www.texniccenter.org/download/]Download, download, download![/url]
+
+It may seem to some of you that there is a large team behind TeXnicCenter. I can assure you, this is not the case. To sustain the development or better even speed it up, YOU need to help us. Documentation, Tutorials, Project Templates, Autocompletion-Templates, actual C++ programming, ... all input is welcome. [url=http://www.texniccenter.org/contact?si_contact_CID=1]Contact us![/url]
+
+
+Happy TeXing!
+
+The TeXnicCenter Team
+
+
+PS: And here are the release notes
+
+
+This is TeXnicCenter 2.0 Stable (2013/09/14)
+
+We have fixed a large number of issues since TXC 2.0 Beta 2. Most noteworthy:
+
+
+Editor
+[list]
+[*] Autocompletion: Fixed bug with inserting environments. Example: "\begin{figu" becomes "\begin{figure}..." and not "\begin{\begin{figure}..."
+[*] Reworked coloring. Now all colors in the editor can be customized.
+[*] Added 4 new color schemes for the editor.
+[*] Fixed bug regarding the file encoding of outsourced files. Now they have the same encoding as the original file.
+[*] Default font size is 12.
+[*] Fixed small bug where joining a paragraph had some unintented consequences on following lines.
+[/list]
+
+User Interface
+[list]
+[*] Fixed Bug #325: Tabs are mixed up whenever project is opened
+[*] Fixed Bug #339: Literature and navigator not updated if bib file changes.
+[*] Fixed Bug #345: Missing space in title in literature windows.
+[*] Bibliography: Allow to search for the bibtex key (label).
+[*] Fixed Bug #1293: Empty files are not listed in file view
+[*] Fixed Bug #348: Wrong message on building an unsaved file
+[*] Fixed Bug: Formats and Find/Bookmarks toolbars were not properly visible.
+[*] Fixed Bug #319: Titlebar does not update on project creation. Consistent frame title regarding files and projects.
+[*] Shortcuts: Ctrl-G for Goto Line
+[/list]
+
+Spell Checking
+[list]
+[*] Added dictionaries for Spanish, Italian, Dutch, Portugese, Polish, and Russian
+[*] Updated German and French dictionaries to the latest versions.
+[*] Fixed Bug #324: Apostrophed words marked as spelling error. Spell checker supports now words like "don't" as well as "quell'altro sull'esperimento".
+[*] Fixed Bug #253: Error if en_US.aff is not installed
+[*] Fixed link to download dictionaries
+[/list]
+
+Templates
+[list]
+[*] Fixed long-standing issue that templates have to be inside a subfolder.
+[*] Fixed Bug #1171: Template directory problem
+[*] Fixed bug where the description of a template was not displayed anymore.
+[*] Fixed Bug #347: Template (Encoding) Problem
+[*] Small fixes to the UI of the template dialogs
+[/list]
+
+Other
+[list]
+[*] Help update
+[*] Explicit reparse of the project now possible from the Project menu.
+[*] Fixed Bug #350: registry import export (multi-line). Profiles are now written without line breaks to the registry.
+[/list]
