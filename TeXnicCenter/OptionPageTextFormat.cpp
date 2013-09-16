@@ -205,39 +205,39 @@ BOOL COptionPageTextFormat::OnInitDialog()
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// set item data for element combo
 	// - Use this to sort the entries of the combobox. The rest of the code takes care.
-	m_wndEditorElement.SetItemData( 1, LaTeXViewBase::COLORINDEX_BKGND);
-	m_wndEditorElement.SetItemData( 2, LaTeXViewBase::COLORINDEX_NORMALTEXT);
-	m_wndEditorElement.SetItemData( 3, LaTeXViewBase::COLORINDEX_CARET);
-	m_wndEditorElement.SetItemData( 4, LaTeXViewBase::COLORINDEX_CARETLINE);
-	m_wndEditorElement.SetItemData( 5, LaTeXViewBase::COLORINDEX_SELBKGND);
-	m_wndEditorElement.SetItemData( 6, LaTeXViewBase::COLORINDEX_SELTEXT);
-	m_wndEditorElement.SetItemData( 7, LaTeXViewBase::COLORINDEX_KEYWORD);
-	m_wndEditorElement.SetItemData( 8, LaTeXViewBase::COLORINDEX_COMMENT);
-	m_wndEditorElement.SetItemData( 9, LaTeXViewBase::COLORINDEX_SPECIAL);
-	m_wndEditorElement.SetItemData(10, LaTeXViewBase::COLORINDEX_SYMBOLS);
-	m_wndEditorElement.SetItemData(11, LaTeXViewBase::COLORINDEX_GROUP);
-	m_wndEditorElement.SetItemData(12, LaTeXViewBase::COLORINDEX_GROUP_NAME);
-	m_wndEditorElement.SetItemData(13, LaTeXViewBase::COLORINDEX_STYLE_INCLUSION);
-	m_wndEditorElement.SetItemData(14, LaTeXViewBase::COLORINDEX_FILE_INCLUSION);
-	m_wndEditorElement.SetItemData(15, LaTeXViewBase::COLORINDEX_INLINE_MATH_TEXT);
-	m_wndEditorElement.SetItemData(16, LaTeXViewBase::COLORINDEX_INLINE_MATH_COMMAND);
-	m_wndEditorElement.SetItemData(17, LaTeXViewBase::COLORINDEX_DIGIT);
-	m_wndEditorElement.SetItemData(18, LaTeXViewBase::COLORINDEX_UNIT);
-	m_wndEditorElement.SetItemData(19, LaTeXViewBase::COLORINDEX_PAIRSTRINGBKGND);
-	m_wndEditorElement.SetItemData(20, LaTeXViewBase::COLORINDEX_PAIRSTRINGTEXT);
-	m_wndEditorElement.SetItemData(21, LaTeXViewBase::COLORINDEX_BADPAIRSTRINGBKGND);
-	m_wndEditorElement.SetItemData(22, LaTeXViewBase::COLORINDEX_BADPAIRSTRINGTEXT);
-	m_wndEditorElement.SetItemData(23, LaTeXViewBase::COLORINDEX_FOLDMARGIN);
-	m_wndEditorElement.SetItemData(24, LaTeXViewBase::COLORINDEX_FOLDMARGIN_HIGHLIGHT);
-	m_wndEditorElement.SetItemData(25, LaTeXViewBase::COLORINDEX_FOLDMARK_FORE);
-	m_wndEditorElement.SetItemData(26, LaTeXViewBase::COLORINDEX_FOLDMARK_BACK);
-	m_wndEditorElement.SetItemData(27, LaTeXViewBase::COLORINDEX_ERRORMARK_FORE);
-	m_wndEditorElement.SetItemData(28, LaTeXViewBase::COLORINDEX_ERRORMARK_BACK);
-	m_wndEditorElement.SetItemData(29, LaTeXViewBase::COLORINDEX_BOOKMARK_FORE);
-	m_wndEditorElement.SetItemData(30, LaTeXViewBase::COLORINDEX_BOOKMARK_BACK);
-	m_wndEditorElement.SetItemData(31, LaTeXViewBase::COLORINDEX_LINENUMBERS_FORE);
-	m_wndEditorElement.SetItemData(32, LaTeXViewBase::COLORINDEX_LINENUMBERS_BACK);
-	m_wndEditorElement.SetItemData(33, LaTeXViewBase::COLORINDEX_INDICATOR_SPELLING);
+	m_wndEditorElement.SetItemData( 0, LaTeXViewBase::COLORINDEX_BKGND);
+	m_wndEditorElement.SetItemData( 1, LaTeXViewBase::COLORINDEX_NORMALTEXT);
+	m_wndEditorElement.SetItemData( 2, LaTeXViewBase::COLORINDEX_CARET);
+	m_wndEditorElement.SetItemData( 3, LaTeXViewBase::COLORINDEX_CARETLINE);
+	m_wndEditorElement.SetItemData( 4, LaTeXViewBase::COLORINDEX_SELBKGND);
+	m_wndEditorElement.SetItemData( 5, LaTeXViewBase::COLORINDEX_SELTEXT);
+	m_wndEditorElement.SetItemData( 6, LaTeXViewBase::COLORINDEX_KEYWORD);
+	m_wndEditorElement.SetItemData( 7, LaTeXViewBase::COLORINDEX_COMMENT);
+	m_wndEditorElement.SetItemData( 8, LaTeXViewBase::COLORINDEX_SPECIAL);
+	m_wndEditorElement.SetItemData( 9, LaTeXViewBase::COLORINDEX_SYMBOLS);
+	m_wndEditorElement.SetItemData(10, LaTeXViewBase::COLORINDEX_GROUP);
+	m_wndEditorElement.SetItemData(11, LaTeXViewBase::COLORINDEX_GROUP_NAME);
+	m_wndEditorElement.SetItemData(12, LaTeXViewBase::COLORINDEX_STYLE_INCLUSION);
+	m_wndEditorElement.SetItemData(13, LaTeXViewBase::COLORINDEX_FILE_INCLUSION);
+	m_wndEditorElement.SetItemData(14, LaTeXViewBase::COLORINDEX_INLINE_MATH_TEXT);
+	m_wndEditorElement.SetItemData(15, LaTeXViewBase::COLORINDEX_INLINE_MATH_COMMAND);
+	m_wndEditorElement.SetItemData(16, LaTeXViewBase::COLORINDEX_DIGIT);
+	m_wndEditorElement.SetItemData(17, LaTeXViewBase::COLORINDEX_UNIT);
+	m_wndEditorElement.SetItemData(18, LaTeXViewBase::COLORINDEX_PAIRSTRINGBKGND);
+	m_wndEditorElement.SetItemData(19, LaTeXViewBase::COLORINDEX_PAIRSTRINGTEXT);
+	m_wndEditorElement.SetItemData(20, LaTeXViewBase::COLORINDEX_BADPAIRSTRINGBKGND);
+	m_wndEditorElement.SetItemData(21, LaTeXViewBase::COLORINDEX_BADPAIRSTRINGTEXT);
+	m_wndEditorElement.SetItemData(22, LaTeXViewBase::COLORINDEX_FOLDMARGIN);
+	m_wndEditorElement.SetItemData(23, LaTeXViewBase::COLORINDEX_FOLDMARGIN_HIGHLIGHT);
+	m_wndEditorElement.SetItemData(24, LaTeXViewBase::COLORINDEX_FOLDMARK_FORE);
+	m_wndEditorElement.SetItemData(25, LaTeXViewBase::COLORINDEX_FOLDMARK_BACK);
+	m_wndEditorElement.SetItemData(26, LaTeXViewBase::COLORINDEX_ERRORMARK_FORE);
+	m_wndEditorElement.SetItemData(27, LaTeXViewBase::COLORINDEX_ERRORMARK_BACK);
+	m_wndEditorElement.SetItemData(28, LaTeXViewBase::COLORINDEX_BOOKMARK_FORE);
+	m_wndEditorElement.SetItemData(29, LaTeXViewBase::COLORINDEX_BOOKMARK_BACK);
+	m_wndEditorElement.SetItemData(30, LaTeXViewBase::COLORINDEX_LINENUMBERS_FORE);
+	m_wndEditorElement.SetItemData(31, LaTeXViewBase::COLORINDEX_LINENUMBERS_BACK);
+	m_wndEditorElement.SetItemData(32, LaTeXViewBase::COLORINDEX_INDICATOR_SPELLING);
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// select color
