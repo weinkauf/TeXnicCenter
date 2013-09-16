@@ -312,7 +312,7 @@ void CInsertFloatObjectDialog::OnChangeFloatCaption()
 		else
 		{
 			strC[0] = m_strCaption[i];
-			m_strLabel += (bWhiteSpace ? _tcsupr(strC) : strC);
+			m_strLabel += (bWhiteSpace ? _tcsupr(strC) : strC); //bWhiteSpace + _tcsupr ==> CamelCase
 			bWhiteSpace = FALSE;
 		}
 	}
