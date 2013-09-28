@@ -4,7 +4,7 @@
 #define TXC_TO_STRING(x)	 TXC_STRINGIFY(x)
 
 #define TXC_MAJOR_VERSION    2
-#define TXC_MINOR_VERSION    01
+#define TXC_MINOR_VERSION    02
 #define TXC_REVISION         0
 #define TXC_BUILD_NUMBER     0
 
