@@ -218,12 +218,12 @@ BOOL CDdeCommand::SendCommandHelper(LPCTSTR lpszServer,LPCTSTR lpszCommand,LPCTS
 	return TRUE;
 }
 
-CString CDdeCommand::SerializeToString() const
+CString CDdeCommand::SerializeToStringDeprecated() const
 {
 	return m_strServerName + _T('\n') + m_strTopic + _T('\n') + m_strCmd + _T('\n') + m_strExecutable;
 }
 
-BOOL CDdeCommand::SerializeFromString(LPCTSTR lpszPackedInformation)
+BOOL CDdeCommand::SerializeFromStringDeprecated(LPCTSTR lpszPackedInformation)
 {
 	CString strServerName,strTopic,strCmd,strExecutable;
 	if (!AfxExtractSubString(strServerName,lpszPackedInformation,0,_T('\n')))
@@ -238,6 +238,26 @@ BOOL CDdeCommand::SerializeFromString(LPCTSTR lpszPackedInformation)
 	SetServer(strServerName,strTopic);
 	SetCommand(strCmd);
 	return TRUE;
+}
+
+bool CDdeCommand::SerializeToRegistry(const CString& ValueBaseName, RegistryStack& reg) const
+{
+	bool success(true);
+	success &= (bool)reg.Write(ValueBaseName + _T("ServerName"), m_strServerName);
+	success &= (bool)reg.Write(ValueBaseName + _T("Topic"), m_strTopic);
+	success &= (bool)reg.Write(ValueBaseName + _T("Command"), m_strCmd);
+	success &= (bool)reg.Write(ValueBaseName + _T("Executable"), m_strExecutable);
+	return success;
+}
+
+bool CDdeCommand::SerializeFromRegistry(const CString& ValueBaseName, RegistryStack& reg)
+{
+	bool success(true);
+	success &= (bool)reg.Read(ValueBaseName + _T("ServerName"), m_strServerName);
+	success &= (bool)reg.Read(ValueBaseName + _T("Topic"), m_strTopic);
+	success &= (bool)reg.Read(ValueBaseName + _T("Command"), m_strCmd);
+	success &= (bool)reg.Read(ValueBaseName + _T("Executable"), m_strExecutable);
+	return success;
 }
 
 void CDdeCommand::SaveXml(MsXml::CXMLDOMElement xmlCommand) const

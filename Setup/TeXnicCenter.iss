@@ -7,7 +7,7 @@
 ;Uncomment this for an Alpha Build
 ;#define ALPHA_BUILD
 
-;For debugging the Inno preprocessor
+;For debugging the Inno preprocessor and logging
 ;#define Debug
 
 ;-------------------------------------------
@@ -90,6 +90,9 @@ Compression=lzma2/Ultra64
 #ifdef TARGET_x64
   ArchitecturesAllowed=x64
   ArchitecturesInstallIn64BitMode=x64
+#endif
+#ifdef Debug
+  SetupLogging=yes
 #endif
 
 [Components]
@@ -204,6 +207,10 @@ Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\ProjectTemp
 Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\DocumentTemplatePaths; ValueType: dword; ValueName: Size; ValueData: 1; Flags: createvalueifdoesntexist uninsdeletekey
 Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Options\DocumentTemplatePaths; ValueType: string; ValueName: String0; ValueData: {app}\Templates\Documents; Flags: createvalueifdoesntexist uninsdeletekey
 
+;Add the default spelling language for the current user
+Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Language; ValueType: string; ValueName: Language; ValueData: {code:DefaultSpellingLanguage}; Flags: createvalueifdoesntexist uninsdeletekey
+Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Settings\Language; ValueType: string; ValueName: Dialect; ValueData: {code:DefaultSpellingDialect}; Flags: createvalueifdoesntexist uninsdeletekey
+
 ;Reset the GUI workspace, i.e., the toolbars and menus and short cuts etc., if desired by the user
 Root: HKCU; Subkey: Software\ToolsCenter\{#REGNAME}\Workspace; Flags: deletekey; Tasks: ResetWorkspace;
 
@@ -293,3 +300,56 @@ Filename: {app}\TeXnicCenter.exe; Description: "Launch TeXnicCenter"; Flags: pos
   #expr SaveToFile(AddBackslash(SourcePath) + "Preprocessed.iss")
 #endif
 
+[Code]
+function DefaultSpellingLanguage(Param: String): String;
+begin
+  if IsComponentSelected('Dictionaries\English') then
+    Result := 'en'
+  else if IsComponentSelected('Dictionaries\Deutsch') then
+    Result := 'de'
+  else if IsComponentSelected('Dictionaries\Francais') then
+    Result := 'fr'
+  else if IsComponentSelected('Dictionaries\Espanol') then
+    Result := 'es'
+  else if IsComponentSelected('Dictionaries\Italiano') then
+    Result := 'it'
+  else if IsComponentSelected('Dictionaries\Nederlands') then
+    Result := 'nl'
+  else if IsComponentSelected('Dictionaries\Polski') then
+    Result := 'pl'
+  else if IsComponentSelected('Dictionaries\Portugues') then
+    Result := 'pt'
+  else if IsComponentSelected('Dictionaries\Russkij') then
+    Result := 'ru'
+  else
+    Result := '';
+
+  Log('Setting default spelling language to ' + Result);
+end;
+
+
+function DefaultSpellingDialect(Param: String): String;
+begin
+  if IsComponentSelected('Dictionaries\English') then
+    Result := 'US'
+  else if IsComponentSelected('Dictionaries\Deutsch') then
+    Result := 'DE'
+  else if IsComponentSelected('Dictionaries\Francais') then
+    Result := 'toutesvariantes'
+  else if IsComponentSelected('Dictionaries\Espanol') then
+    Result := 'ANY'
+  else if IsComponentSelected('Dictionaries\Italiano') then
+    Result := 'IT'
+  else if IsComponentSelected('Dictionaries\Nederlands') then
+    Result := 'NL'
+  else if IsComponentSelected('Dictionaries\Polski') then
+    Result := 'PL'
+  else if IsComponentSelected('Dictionaries\Portugues') then
+    Result := 'BR'
+  else if IsComponentSelected('Dictionaries\Russkij') then
+    Result := 'RU'
+  else
+    Result := '';
+
+  Log('Setting default spelling dialect to ' + Result);
+end;

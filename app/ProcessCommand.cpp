@@ -36,6 +36,7 @@
 #include "process.h"
 #include "ProcessCommand.h"
 #include "PlaceHolder.h"
+#include "RegistryStack.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -117,12 +118,12 @@ void CProcessCommand::RemoveDirectorySpecifications()
 	m_strExecutable = CPathTool::GetFile(m_strExecutable);
 }
 
-CString CProcessCommand::SerializeToString() const
+CString CProcessCommand::SerializeToStringDeprecated() const
 {
 	return m_strExecutable + _T('\n') + m_strArguments;
 }
 
-BOOL CProcessCommand::SerializeFromString(LPCTSTR lpszPackedInformation)
+BOOL CProcessCommand::SerializeFromStringDeprecated(LPCTSTR lpszPackedInformation)
 {
 	CString strExecutable;
 	CString strArguments;
@@ -133,6 +134,22 @@ BOOL CProcessCommand::SerializeFromString(LPCTSTR lpszPackedInformation)
 
 	Set(strExecutable,strArguments);
 	return TRUE;
+}
+
+bool CProcessCommand::SerializeToRegistry(const CString& ValueBaseName, RegistryStack& reg) const
+{
+	bool success(true);
+	success &= (bool)reg.Write(ValueBaseName + _T("Executable"), m_strExecutable);
+	success &= (bool)reg.Write(ValueBaseName + _T("Arguments"), m_strArguments);
+	return success;
+}
+
+bool CProcessCommand::SerializeFromRegistry(const CString& ValueBaseName, RegistryStack& reg)
+{
+	bool success(true);
+	success &= (bool)reg.Read(ValueBaseName + _T("Executable"), m_strExecutable);
+	success &= (bool)reg.Read(ValueBaseName + _T("Arguments"), m_strArguments);
+	return success;
 }
 
 void CProcessCommand::SaveXml(MsXml::CXMLDOMElement xmlCommand) const

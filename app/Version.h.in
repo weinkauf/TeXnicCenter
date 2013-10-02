@@ -9,7 +9,7 @@
 
 #define TXC_LEGAL_COPYRIGHTA  "@LEGAL_COPYRIGHT@"
 #define TXC_LEGAL_COPYRIGHTW  L"@LEGAL_COPYRIGHT@"
-
+                             " Stable"
 #define TXC_COPYRIGHT_ONLYA  "@COPYRIGHT_ONLY@"
 #define TXC_COPYRIGHT_ONLYW  L"@COPYRIGHT_ONLY@"
 

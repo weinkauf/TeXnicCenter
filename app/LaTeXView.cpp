@@ -823,14 +823,27 @@ BOOL LaTeXView::OnInsertLaTeXConstruct( UINT nID )
 	else
 		strBeforeCursor = strInsert;
 
-	GetCtrl().BeginUndoAction();
 
-	// get selection
+	//Get info about selection and number of lines
 	ptSelStart = GetCtrl().GetSelectionStart();
 	ptSelEnd = GetCtrl().GetSelectionEnd();
-
-	int start_line = GetCtrl().LineFromPosition(ptSelStart);
+	const int start_line = GetCtrl().LineFromPosition(ptSelStart);
+	const bool bSelectionStartsAtBeginningOfLine = (GetCtrl().PositionFromLine(start_line) == ptSelStart);
+	const int end_line = GetCtrl().LineFromPosition(ptSelEnd);
+	const bool bSelectionEndsAtEndOfLine = (GetCtrl().GetLineEndPosition(end_line) == ptSelEnd);
 	const int initial_line_count = GetCtrl().GetLineCount();
+
+	//When inserting before the beginning of a line, then do not add an extra newline
+	if (bSelectionStartsAtBeginningOfLine && !strBeforeCursor.IsEmpty() && strBeforeCursor[0] == _T('\r')) {
+		strBeforeCursor = strBeforeCursor.Right(strBeforeCursor.GetLength() - 2);
+	}
+	//When inserting behind the end of a line, then do not add an extra newline
+	if (bSelectionEndsAtEndOfLine && !strBehindCursor.IsEmpty() && strBehindCursor[strBehindCursor.GetLength() - 1] == _T('\n')) {
+		strBehindCursor = strBehindCursor.Left(strBehindCursor.GetLength() - 2);
+	}
+
+	//Group the following actions into one single undo command
+	GetCtrl().BeginUndoAction();
 
 #pragma region Insertion
 	// test, if selection anchor is at the beginning or at the end of
