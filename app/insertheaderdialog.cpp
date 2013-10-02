@@ -190,7 +190,7 @@ void CInsertHeaderDialog::OnChangeTitle()
 		else
 		{
 			strC[0] = m_strTitle[i];
-			m_strLabel += (bWhiteSpace ? _tcsupr(strC) : strC);
+			m_strLabel += (bWhiteSpace ? _tcsupr(strC) : strC); //bWhiteSpace + _tcsupr ==> CamelCase
 			bWhiteSpace = FALSE;
 		}
 	}

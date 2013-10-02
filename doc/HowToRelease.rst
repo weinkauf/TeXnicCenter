@@ -1,5 +1,7 @@
 Releasing TeXnicCenter
 ======================
+1a. Get the latest redistributable from Microsoft: http://support.microsoft.com/kb/2019667
+
 
 1. ``hg up``
 2. Edit ``cmake\TeXnicCenter.cmake`` appropriately.

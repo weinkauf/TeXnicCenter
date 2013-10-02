@@ -1111,7 +1111,8 @@ long CodeDocument::LineFindCommentStartPos(const int Line) const
 	return -1;
 }
 
-const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos, const bool bRespectComments /*= true*/) const
+const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos, const bool bRespectComments /*= true*/,
+																const bool bNoLastNewLine /*= true*/) const
 {
 	CScintillaCtrl& Ctrl = GetView()->GetCtrl();
 	const int NumLines = Ctrl.GetLineCount();
@@ -1169,6 +1170,12 @@ const std::pair<long,long> CodeDocument::GetParagraphRangePos(const int StartPos
 		{
 			DownPos = CommentStartInLastLine;
 		}
+	}
+
+	//If the given pos is the first char in a line, we go back to the last char of the previous line.
+	if (bNoLastNewLine && UpPos != DownPos && DownPos == Ctrl.PositionFromLine(Ctrl.LineFromPosition(DownPos)))
+	{
+		DownPos = Ctrl.GetLineEndPosition(Ctrl.LineFromPosition(DownPos) - 1);
 	}
 
 	return std::make_pair(UpPos, DownPos);
