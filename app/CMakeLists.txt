@@ -6,6 +6,7 @@ include (UseMFC)
 
 check_cxx_source_compiles ("
 #define _AFXDLL
+#define _UNICODE
 #include <afxwin.h>
 #include <afxcontrolbars.h>
 
@@ -15,7 +16,7 @@ int main()
 " HAVE_FEATURE_PACK)
 
 if (NOT HAVE_FEATURE_PACK)
-  message (FATAL_ERROR "Missing MFC feature pack")
+  message (FATAL_ERROR "Missing MFC feature pack. The MFC feature pack is required for building TeXnicCenter.")
 endif (NOT HAVE_FEATURE_PACK)
 
 check_cxx_source_compiles ("

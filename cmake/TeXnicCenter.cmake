@@ -1,11 +1,11 @@
 set (APPLICATION_NAME TeXnicCenter)
-set (YEAR "1999-2013")
+set (YEAR "1999-2014")
 
 set (MAJOR_VERSION 2)
 set (MINOR_VERSION 0)
-set (VERSION_PATCH 0)
+set (VERSION_PATCH 2)
 # uncomment the next line if not applicable
-set (VERSION_EXTRA "Beta 2")
+set (VERSION_EXTRA "")
 
 set (_COPYRIGHT "${YEAR} The TeXnicCenter Team")
 # place a copyright sign infront of the banner

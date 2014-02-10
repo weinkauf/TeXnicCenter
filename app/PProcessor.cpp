@@ -317,22 +317,22 @@ BOOL CPProcessor::SerializeFromStringDeprecated(LPCTSTR lpszPackedInformation)
 bool CPProcessor::SerializeToRegistry(const CString& ValueBaseName, RegistryStack& reg) const
 {
 	bool success(true);
-	success &= (bool)reg.Write(ValueBaseName + _T("Title"), m_strTitle);
-	success &= (bool)reg.Write(ValueBaseName + _T("Path"), m_strPath);
-	success &= (bool)reg.Write(ValueBaseName + _T("Arguments"), m_strArguments);
-	success &= (bool)reg.Write(ValueBaseName + _T("InputFile"), m_strInputFile);
-	success &= (bool)reg.Write(ValueBaseName + _T("OutputFile"), m_strOutputFile);
+	success &= !!reg.Write(ValueBaseName + _T("Title"), m_strTitle);
+	success &= !!reg.Write(ValueBaseName + _T("Path"), m_strPath);
+	success &= !!reg.Write(ValueBaseName + _T("Arguments"), m_strArguments);
+	success &= !!reg.Write(ValueBaseName + _T("InputFile"), m_strInputFile);
+	success &= !!reg.Write(ValueBaseName + _T("OutputFile"), m_strOutputFile);
 	return success;
 }
 
 bool CPProcessor::SerializeFromRegistry(const CString& ValueBaseName, RegistryStack& reg)
 {
 	bool success(true);
-	success &= (bool)reg.Read(ValueBaseName + _T("Title"), m_strTitle);
-	success &= (bool)reg.Read(ValueBaseName + _T("Path"), m_strPath);
-	success &= (bool)reg.Read(ValueBaseName + _T("Arguments"), m_strArguments);
-	success &= (bool)reg.Read(ValueBaseName + _T("InputFile"), m_strInputFile);
-	success &= (bool)reg.Read(ValueBaseName + _T("OutputFile"), m_strOutputFile);
+	success &= !!reg.Read(ValueBaseName + _T("Title"), m_strTitle);
+	success &= !!reg.Read(ValueBaseName + _T("Path"), m_strPath);
+	success &= !!reg.Read(ValueBaseName + _T("Arguments"), m_strArguments);
+	success &= !!reg.Read(ValueBaseName + _T("InputFile"), m_strInputFile);
+	success &= !!reg.Read(ValueBaseName + _T("OutputFile"), m_strOutputFile);
 	return success;
 }
 
