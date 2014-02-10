@@ -56,7 +56,7 @@ void CTextSourceFile::Delete()
 BOOL CTextSourceFile::GetNextLine(LPCTSTR &lpLine, int &nLength)
 {
 	std::wstring line;
-	bool result = std::getline(is_,line) != 0;
+	bool result = !!std::getline(is_,line);
 
 	if (result) {
 		lpLine = m_strCurrentLine = line.c_str();
