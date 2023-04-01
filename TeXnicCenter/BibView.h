@@ -115,7 +115,6 @@ private:
 	static int ComparePublisher( const BibItem& a, const BibItem& b );
 
 	unsigned search_flags_;
-	const bool can_group_;
 	// Synchronization
 	volatile LONG stop_search_;
 	CSemaphore search_semaphore_;

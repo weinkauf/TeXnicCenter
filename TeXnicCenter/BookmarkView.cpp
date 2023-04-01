@@ -7,7 +7,6 @@
 
 #include "resource.h"
 #include "BookmarkView.h"
-#include "RunTimeHelper.h"
 #include "LatexProject.h"
 #include "TeXnicCenter.h"
 
@@ -79,8 +78,7 @@ int BookmarkView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	toolbar_.Create(this);
 	toolbar_.LoadToolBar(IDR_BOOKMARK_VIEW);
 
-	if (RunTimeHelper::IsVista())
-		::SetWindowTheme(list_view_,L"explorer",0);
+	::SetWindowTheme(list_view_,L"explorer",0);
 
 	return 0;
 }

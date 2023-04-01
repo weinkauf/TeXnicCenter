@@ -63,7 +63,7 @@ public:
 	}
 
 	/* Command was selected */
-	virtual void OnACCommandSelect(const CLaTeXCommand* cmd, const TCHAR AdditionalInsertChar = _T(''))
+	virtual void OnACCommandSelect(const CLaTeXCommand* cmd, const TCHAR AdditionalInsertChar = 0)
 	{
 		p->OnACCommandSelect(cmd, AdditionalInsertChar);
 	}
@@ -412,7 +412,7 @@ void LaTeXView::OnACCommandSelect(const CLaTeXCommand* cmd, const TCHAR Addition
 	bool bTryCursorPositioning = true;
 
 	//Add additional char
-	if (AdditionalInsertChar != _T('')) {
+	if (AdditionalInsertChar != 0) {
 		const TCHAR text[] = {static_cast<TCHAR>(AdditionalInsertChar), 0};
 		GetCtrl().InsertText(-1, text);
 		GetCtrl().SetSel(-1, GetCtrl().GetCurrentPos() + 1);

@@ -349,14 +349,6 @@ DWORD CLaTeXOutputFilter::ParseLine(const CString& strLine, DWORD dwCookie)
 		CString package = strLine.Mid(results.position(1), results.length(1));
 
 		m_currentItem.SetPackageName(package);
-
-		FileNameContainer::const_iterator it = std::find_if(fileNames_.begin(), fileNames_.end(),
-			FileTitleMatch(package));
-
-		if (it != fileNames_.end())
-			package = *it;
-
-		m_currentItem.SetPackage(package);
 	}
 	else if (regex_search(text,results,warning2))
 	{
@@ -496,9 +488,6 @@ void CLaTeXOutputFilter::UpdateCurrentItem( const CString& strLine, tagCookies t
 void CLaTeXOutputFilter::PushFile( const CString& fileName )
 {
 	m_stackFile.push(fileName);
-
-	if (CPathTool::IsFile(fileName))
-		fileNames_.insert(fileName);
 }
 
 const CString& CLaTeXOutputFilter::GetTranscriptFileName() const

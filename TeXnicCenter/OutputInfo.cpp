@@ -103,16 +103,6 @@ const CString& COutputInfo::GetSourceFile() const
 	return !m_nSrcLine.HasValue() && !package_.IsEmpty() ? package_ : m_strSrcFile;
 }
 
-const CString& COutputInfo::GetPackage() const
-{
-	return package_;
-}
-
-void COutputInfo::SetPackage( const CString& val )
-{
-	package_ = val;
-}
-
 const CString& COutputInfo::GetPackageName() const
 {
 	return packageName_;

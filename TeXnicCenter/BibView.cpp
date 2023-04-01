@@ -2,7 +2,6 @@
 #include "resource.h"
 #include "BibItem.h"
 #include "BibView.h"
-#include "RunTimeHelper.h"
 #include "navigatorview.h"
 #include "LatexProject.h"
 #include "OleDrop.h"
@@ -88,7 +87,6 @@ BibView::BibView()
 : search_timer_enabled_(false)
 , dragged_item_(-1)
 , search_flags_(0)
-, can_group_(RunTimeHelper::IsCommCtrl6())
 , stop_search_(0)
 , search_semaphore_(1,1)
 , populate_was_search_(false)
@@ -151,14 +149,12 @@ int BibView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CMFCToolBarMenuButton m(~0U,menu.GetSubMenu(0)->GetSafeHmenu(),0);
 	toolbar_.ReplaceButton(ID_SEARCH_OPTIONS,m);
 
-	if (RunTimeHelper::IsCommCtrl6())
-		search_button_->GetEditBox()->SetCueBanner(CString(MAKEINTRESOURCE(IDS_SEARCH)));
+	search_button_->GetEditBox()->SetCueBanner(CString(MAKEINTRESOURCE(IDS_SEARCH)));
 
 	list_view_.CreateEx(WS_EX_CLIENTEDGE,WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|WS_TABSTOP|LVS_REPORT|LVS_SHOWSELALWAYS,
 		CRect(0,0,0,0),this,ListID);
 
-	if (RunTimeHelper::IsVista())
-		::SetWindowTheme(list_view_,L"explorer",0);
+	::SetWindowTheme(list_view_,L"explorer",0);
 
 	list_view_.SetExtendedStyle(LVS_EX_DOUBLEBUFFER|LVS_EX_FULLROWSELECT|
 		LVS_EX_HEADERDRAGDROP|LVS_EX_LABELTIP);
@@ -272,11 +268,10 @@ void BibView::OnParsingFinished()
 	list_view_.SetRedraw(FALSE);
 	list_view_.RemoveAllGroups();
 
-	if (can_group_) {
-		// Windows XP specific: after we removed all the groups we need
-		// to reenable the group view
-		list_view_.EnableGroupView(TRUE);
-	}
+	//Tino: Check this.
+	// Windows XP specific: after we removed all the groups we need
+	// to reenable the group view
+	list_view_.EnableGroupView(TRUE);
 
 	list_view_.SetRedraw();
 
@@ -285,13 +280,9 @@ void BibView::OnParsingFinished()
 	LVGROUP lvg = {};
 	lvg.mask = LVGF_HEADER|LVGF_GROUPID;
 
-	if (RunTimeHelper::IsVista()) {
-		lvg.cbSize = sizeof(LVGROUP);
-		lvg.mask |= LVGF_STATE;
-		lvg.state = LVGS_COLLAPSIBLE;
-	}
-	else // Windows XP compatibility
-		lvg.cbSize = LVGROUP_V5_SIZE;
+	lvg.cbSize = sizeof(LVGROUP);
+	lvg.mask |= LVGF_STATE;
+	lvg.state = LVGS_COLLAPSIBLE;
 
 	for (StructureItemContainer::const_iterator it = a.begin(); it != a.end(); ++it) {
 		const StructureItem &si = *it;
@@ -301,16 +292,14 @@ void BibView::OnParsingFinished()
 			case StructureItem::missingBibFile :
 				{
 					// Windows XP or higher required for grouping
-					if (can_group_) {						
-						const CString& title = si.GetTitle();
-						lvg.iGroupId = static_cast<int>(hasher(std::basic_string<TCHAR>(title)));
+					const CString& title = si.GetTitle();
+					lvg.iGroupId = static_cast<int>(hasher(std::basic_string<TCHAR>(title)));
 
-						if (!list_view_.HasGroup(lvg.iGroupId)) {
-							const_cast<LPCTSTR&>(lvg.pszHeader) = title;
-							lvg.cchHeader = title.GetLength();
+					if (!list_view_.HasGroup(lvg.iGroupId)) {
+						const_cast<LPCTSTR&>(lvg.pszHeader) = title;
+						lvg.cchHeader = title.GetLength();
 
-							VERIFY(list_view_.InsertGroup(list_view_.GetGroupCount(),&lvg) != -1);
-						}
+						VERIFY(list_view_.InsertGroup(list_view_.GetGroupCount(),&lvg) != -1);
 					}
 				}
 				break;
@@ -730,8 +719,7 @@ void BibView::DoPopulate( const PredicateFunctionType& predicate )
 
 	LVITEM lvi = {LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM};
 
-	if (can_group_)
-		lvi.mask |= LVIF_GROUPID;
+	lvi.mask |= LVIF_GROUPID;
 
 	typedef BibItemContainerType::iterator I;
 

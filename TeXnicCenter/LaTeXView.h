@@ -49,7 +49,7 @@ private:
 	void OnACChar(UINT nKey,UINT nRepCount,UINT nFlags);
 	void OnACCommandCancelled();
 	///@todo Do not try to guess the cursor pos, but define it in the latex command (in xml). Default: after the inserted text
-	void OnACCommandSelect(const CLaTeXCommand* cmd, const TCHAR AdditionalInsertChar = _T(''));
+	void OnACCommandSelect(const CLaTeXCommand* cmd, const TCHAR AdditionalInsertChar = 0);
 
 	void Reindent( int initial_line_count, int start_line );
 	void OnACHelp(const CString &cmd);	

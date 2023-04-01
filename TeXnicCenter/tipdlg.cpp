@@ -36,7 +36,6 @@
 #include "resource.h"
 #include "TeXnicCenter.h"
 #include "tipdlg.h"
-#include "RunTimeHelper.h"
 
 #include <sys\stat.h>
 #include <sys\types.h>
@@ -224,31 +223,23 @@ BOOL CTipDlg::OnInitDialog()
 	CWindowDC dc(this);
 	LOGFONT lf;
 
-	if (!RunTimeHelper::IsVista())
-	{
-		GetFont()->GetLogFont(&lf);
-		title_color_ = RGB(0,51,153);
-	}
-	else
-	{
-		HTHEME theme = ::OpenThemeData(m_hWnd,VSCLASS_TEXTSTYLE);
-		ASSERT(theme);
+	HTHEME theme = ::OpenThemeData(m_hWnd,VSCLASS_TEXTSTYLE);
+	ASSERT(theme);
 
 #ifdef UNICODE
-		::GetThemeFont(theme,dc,TEXT_MAININSTRUCTION,0,TMT_FONT,&lf);
+	::GetThemeFont(theme,dc,TEXT_MAININSTRUCTION,0,TMT_FONT,&lf);
 #else
-		LOGFONTW lfw;
-		::GetThemeSysFont(theme,TMT_CAPTIONFONT,&lfw);
+	LOGFONTW lfw;
+	::GetThemeSysFont(theme,TMT_CAPTIONFONT,&lfw);
 
-		CFont tf;
-		tf.Attach(::CreateFontIndirectW(&lfw));
-		tf.GetLogFont(&lf);
+	CFont tf;
+	tf.Attach(::CreateFontIndirectW(&lfw));
+	tf.GetLogFont(&lf);
 #endif
-		if (FAILED(::GetThemeColor(theme,TEXT_MAININSTRUCTION,0,TMT_TEXTCOLOR,&title_color_)))
-			title_color_ = 0;
+	if (FAILED(::GetThemeColor(theme,TEXT_MAININSTRUCTION,0,TMT_TEXTCOLOR,&title_color_)))
+		title_color_ = 0;
 
-		::CloseThemeData(theme);
-	}
+	::CloseThemeData(theme);
 
 	lf.lfHeight = 135; // 13.5pt
 	title_font_.CreatePointFontIndirect(&lf,&dc);

@@ -30,7 +30,6 @@
 #include "resource.h"
 #include "OutputWizard.h"
 #include "OutputWizardFinish.h"
-#include "RunTimeHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -69,17 +68,12 @@ void COutputWizardFinish::DoDataExchange(CDataExchange* pDX)
 
 BOOL COutputWizardFinish::OnSetActive()
 {
-	if (RunTimeHelper::IsVista())
-	{
-		PropSheet_EnableWizButtons(m_hWnd,
-		                           PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH,
-		                           PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH);
-		PropSheet_ShowWizButtons(m_hWnd,
-		                         PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL | PSWIZB_FINISH,
-		                         PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH | PSWIZB_FINISH);
-	}
-	else
-		GetWizard()->SetWizardButtons(PSWIZB_BACK|PSWIZB_FINISH);
+	PropSheet_EnableWizButtons(m_hWnd,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH);
+	PropSheet_ShowWizButtons(m_hWnd,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL | PSWIZB_FINISH,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH | PSWIZB_FINISH);
 
 	return OutputWizardPage::OnSetActive();
 }

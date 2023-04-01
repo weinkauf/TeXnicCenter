@@ -8,7 +8,6 @@
 #include "SpellerBackgroundThread.h"
 #include "CodeBookmark.h"
 #include "EncodingConverter.h"
-#include "RunTimeHelper.h"
 #include "configuration.h"
 #include "EndOfLineMode.h"
 #include "textfilesavedialog.h"
@@ -919,14 +918,7 @@ void CodeDocument::SetUseBOM( bool use /*= true*/ )
 
 BOOL CodeDocument::SaveModified()
 {
-	BOOL result;
-
-	if (!RunTimeHelper::IsVista())
-		result = CScintillaDoc::SaveModified();
-	else
-		result = DoSaveModified();
-
-	return result;
+	return DoSaveModified();
 }
 
 BOOL CodeDocument::DoSave(LPCTSTR lpszPathName, BOOL bReplace /*= TRUE*/)
@@ -1034,15 +1026,7 @@ BOOL CodeDocument::DoSaveModified()
 		CString prompt;
 		AfxFormatString1(prompt,AFX_IDP_ASK_TO_SAVE,name);
 
-		int button;
-		if (!RunTimeHelper::IsVista())
-		{
-			button = AfxMessageBox(prompt, MB_YESNOCANCEL, AFX_IDP_ASK_TO_SAVE);
-		}
-		else
-		{
-			button = ShowSaveTaskDialog(prompt);
-		}
+		int button = ShowSaveTaskDialog(prompt);
 
 		switch (button) {
 			case IDCANCEL:

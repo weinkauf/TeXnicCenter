@@ -34,6 +34,8 @@
 
 #define VC_EXTRALEAN		// Selten verwendete Teile der Windows-Header nicht einbinden
 
+#include <sdkddkver.h>
+
 #include <afxwin.h>         // MFC-Kern- und -Standardkomponenten
 #include <afxext.h>         // MFC-Erweiterungen
 

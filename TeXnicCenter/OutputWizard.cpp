@@ -39,7 +39,6 @@
 #include "resource.h"
 #include "OutputWizard.h"
 #include "FontOccManager.h"
-#include "RunTimeHelper.h"
 #include "RegistryStack.h"
 #include "TeXnicCenter.h"
 
@@ -87,10 +86,8 @@ namespace
 #ifdef UNICODE
 #pragma warning(push)
 #pragma warning(disable: 4428) // universal-character-name encountered in source
-		if (RunTimeHelper::IsVista()) {
-			const wchar_t* ch = L"\u21E8"; // Some nice arrow, only for Vista or higher
-			text.Replace(_T("=>"),ch);
-		}
+		const wchar_t* ch = L"\u21E8"; // Some nice arrow, only for Vista or higher
+		text.Replace(_T("=>"),ch);
 #pragma warning(pop)
 #endif // UNICODE
 		return text;
@@ -152,17 +149,8 @@ COutputWizard::COutputWizard(CProfileMap &profiles,CWnd* pParentWnd)
 
 	m_psh.dwFlags &= ~PSH_HASHELP;
 
-	if (RunTimeHelper::IsVista())
-	{
-		m_psh.dwFlags &= ~PSH_WIZARD97;
-		m_psh.dwFlags |= PSH_AEROWIZARD | PSH_WIZARD;
-	}
-	else
-	{
-		m_psh.dwFlags |= PSH_WIZARD97|PSH_HEADER|PSH_WATERMARK;
-		m_psh.pszbmWatermark = MAKEINTRESOURCE(IDB_WIZARD);
-		m_psh.hInstance = AfxGetResourceHandle();
-	}
+	m_psh.dwFlags &= ~PSH_WIZARD97;
+	m_psh.dwFlags |= PSH_AEROWIZARD | PSH_WIZARD;
 }
 
 COutputWizard::~COutputWizard()

@@ -61,7 +61,6 @@
 #include "LaTeXDocument.h"
 #include "LaTeXView.h"
 #include "Speller.h"
-#include "RunTimeHelper.h"
 #include "BibTeXView.h"
 #include "BibTeXDocument.h"
 #include "MetaPostView.h"
@@ -2320,70 +2319,65 @@ int CTeXnicCenterApp::DoMessageBox(LPCTSTR prompt, UINT nType, UINT nIDPrompt)
 {
 	int result;
 
-	if (!RunTimeHelper::IsVista())
-		result = CWinAppEx::DoMessageBox(prompt,nType,nIDPrompt);
-	else
+	// disable windows for modal dialog
+	DoEnableModeless(FALSE);
+
+	HWND hWndTop;
+	HWND hWnd = CWnd::GetSafeOwner_(NULL, &hWndTop);
+
+	// re-enable the parent window, so that focus is restored
+	// correctly when the dialog is dismissed.
+	if (hWnd != hWndTop)
+		EnableWindow(hWnd, TRUE);
+
+	// set help context if possible
+	DWORD* pdwContext = NULL;
+
+	DWORD dwWndPid=0;
+	GetWindowThreadProcessId(hWnd,&dwWndPid);
+
+	if (hWnd != NULL && dwWndPid==GetCurrentProcessId() )
 	{
-		// disable windows for modal dialog
-		DoEnableModeless(FALSE);
+		// use app-level context or frame level context
+		LRESULT lResult = ::SendMessage(hWnd, WM_HELPPROMPTADDR, 0, 0);
+		if (lResult != 0)
+			pdwContext = (DWORD*)lResult;
+	}
 
-		HWND hWndTop;
-		HWND hWnd = CWnd::GetSafeOwner_(NULL, &hWndTop);
+	// for backward compatibility use app context if possible
+	if (pdwContext == NULL)
+		pdwContext = &m_dwPromptContext;
 
-		// re-enable the parent window, so that focus is restored
-		// correctly when the dialog is dismissed.
-		if (hWnd != hWndTop)
-			EnableWindow(hWnd, TRUE);
+	DWORD dwOldPromptContext = 0;
 
-		// set help context if possible
-		DWORD* pdwContext = NULL;
+	if (pdwContext != NULL)
+	{
+		// save old prompt context for restoration later
+		dwOldPromptContext = *pdwContext;
+		if (nIDPrompt != 0)
+			*pdwContext = HID_BASE_PROMPT+nIDPrompt;
+	}
 
-		DWORD dwWndPid=0;
-		GetWindowThreadProcessId(hWnd,&dwWndPid);
-
-		if (hWnd != NULL && dwWndPid==GetCurrentProcessId() )
+	// determine icon based on type specified
+	if ((nType & MB_ICONMASK) == 0)
+	{
+		switch (nType & MB_TYPEMASK)
 		{
-			// use app-level context or frame level context
-			LRESULT lResult = ::SendMessage(hWnd, WM_HELPPROMPTADDR, 0, 0);
-			if (lResult != 0)
-				pdwContext = (DWORD*)lResult;
-		}
+		case MB_OK:
+		case MB_OKCANCEL:
+			nType |= MB_ICONEXCLAMATION;
+			break;
 
-		// for backward compatibility use app context if possible
-		if (pdwContext == NULL)
-			pdwContext = &m_dwPromptContext;
+		case MB_YESNO:
+		case MB_YESNOCANCEL:
+			nType |= MB_ICONQUESTION;
+			break;
 
-		DWORD dwOldPromptContext = 0;
-
-		if (pdwContext != NULL)
-		{
-			// save old prompt context for restoration later
-			dwOldPromptContext = *pdwContext;
-			if (nIDPrompt != 0)
-				*pdwContext = HID_BASE_PROMPT+nIDPrompt;
-		}
-
-		// determine icon based on type specified
-		if ((nType & MB_ICONMASK) == 0)
-		{
-			switch (nType & MB_TYPEMASK)
-			{
-			case MB_OK:
-			case MB_OKCANCEL:
-				nType |= MB_ICONEXCLAMATION;
-				break;
-
-			case MB_YESNO:
-			case MB_YESNOCANCEL:
-				nType |= MB_ICONQUESTION;
-				break;
-
-			case MB_ABORTRETRYIGNORE:
-			case MB_RETRYCANCEL:
-				// No default icon for these types, since they are rarely used.
-				// The caller should specify the icon.
-				break;
-			}
+		case MB_ABORTRETRYIGNORE:
+		case MB_RETRYCANCEL:
+			// No default icon for these types, since they are rarely used.
+			// The caller should specify the icon.
+			break;
 		}
 
 #ifdef _DEBUG

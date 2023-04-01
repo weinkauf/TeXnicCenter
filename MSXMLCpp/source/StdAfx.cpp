@@ -27,7 +27,7 @@
 
 #include "stdafx.h"
 
-
+#import <msxml6.dll> named_guids
 
 AFX_MODULE_STATE* GetModuleState()
 {

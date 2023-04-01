@@ -38,7 +38,6 @@
 
 #include "resource.h"
 #include "Global.h"
-#include "RunTimeHelper.h"
 #include "TemplateDialog.h"
 #include "TeXnicCenter.h"
 
@@ -341,10 +340,8 @@ BOOL CTemplateDialog::OnInitDialog()
 	FillTemplateList();
 	UpdateControlStates();
 
-	if (RunTimeHelper::IsVista()) {
-		::SetWindowTheme(m_wndTemplateList, L"explorer", 0);
-		m_wndTemplateList.SetExtendedStyle(LVS_EX_DOUBLEBUFFER);
-	}
+	::SetWindowTheme(m_wndTemplateList, L"explorer", 0);
+	m_wndTemplateList.SetExtendedStyle(LVS_EX_DOUBLEBUFFER);
 
 	return TRUE; // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX-Eigenschaftenseiten sollten FALSE zurückgeben

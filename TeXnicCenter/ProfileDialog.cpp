@@ -37,7 +37,6 @@
 #include "ProfileDialog.h"
 #include "ProfileNameDialog.h"
 #include "OutputWizard.h"
-#include "RunTimeHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -272,8 +271,7 @@ BOOL CProfileDialog::OnInitDialog()
 {
 	CPropertyDialog::OnInitDialog();
 
-	if (RunTimeHelper::IsVista())
-		::SetWindowTheme(m_wndProfileList,L"explorer",0);
+	::SetWindowTheme(m_wndProfileList,L"explorer",0);
 
 	// fill list with profiles
 	RefillList();

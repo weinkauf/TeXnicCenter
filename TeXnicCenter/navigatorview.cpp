@@ -37,7 +37,6 @@
 #include "LatexProject.h"
 #include "configuration.h"
 #include "NavigatorView.h"
-#include "RunTimeHelper.h"
 #include "OleDrop.h"
 #include "TeXnicCenter.h"
 
@@ -85,17 +84,13 @@ BOOL NavigatorTreeCtrl::Create(CWnd *pwndParent)
 
 	DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | TVS_LINESATROOT | TVS_DISABLEDRAGDROP |
 		TVS_HASBUTTONS | TVS_SHOWSELALWAYS;
-	bool vista = RunTimeHelper::IsVista();
 
-	if (!vista)
-		style |= TVS_HASLINES;
-	else
-		style |= TVS_TRACKSELECT;
+	style |= TVS_TRACKSELECT;
 
 	// Override, Windows XP or higher theme thin edge
 	BOOL result = CWnd::CreateEx(WS_EX_CLIENTEDGE,WC_TREEVIEW,0,style,rect,pwndParent,0);
 
-	if (result && vista)
+	if (result)
 	{
 		::SetWindowTheme(m_hWnd,L"explorer",0);
 

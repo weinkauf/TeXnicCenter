@@ -66,7 +66,6 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // Behandlungsroutinen für Nachrichten COutputWizardWelcome
 
-#include "RunTimeHelper.h"
 
 BOOL COutputWizardWelcome::OnInitDialog()
 {
@@ -78,17 +77,12 @@ BOOL COutputWizardWelcome::OnInitDialog()
 
 BOOL COutputWizardWelcome::OnSetActive()
 {
-	if (RunTimeHelper::IsVista())
-	{
-		PropSheet_EnableWizButtons(m_hWnd,
-		                           PSWIZB_NEXT | PSWIZB_CANCEL,
-		                           PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL);
-		PropSheet_ShowWizButtons(m_hWnd,
-		                         PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL,
-		                         PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH | PSWIZB_CANCEL);
-	}
-	else
-		GetWizard()->SetWizardButtons(PSWIZB_NEXT);
+	PropSheet_EnableWizButtons(m_hWnd,
+		                        PSWIZB_NEXT | PSWIZB_CANCEL,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL);
+	PropSheet_ShowWizButtons(m_hWnd,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH | PSWIZB_CANCEL);
 
 	return OutputWizardPage::OnSetActive();
 }

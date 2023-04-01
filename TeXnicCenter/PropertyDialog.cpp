@@ -34,7 +34,6 @@
 
 #include "stdafx.h"
 #include "PropertyDialog.h"
-#include "RunTimeHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -101,7 +100,7 @@ BOOL CPropertyDialogPage::Create(CTabCtrl *pParentWnd, CPropertyDialog *pPropert
 
 BOOL CPropertyDialogPage::OnInitDialog()
 {
-	if (RunTimeHelper::IsCommCtrl6() && ::IsAppThemed())
+	if (::IsAppThemed())
 		::EnableThemeDialogTexture(m_hWnd, ETDT_ENABLETAB);
 
 	CDialog::OnInitDialog();

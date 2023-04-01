@@ -5,7 +5,6 @@
 class ThemedCtrl :
 			public ATL::CWindowImpl<ThemedCtrl>
 {
-	bool theming_supported_;
 	HTHEME m_hTheme;
 
 	BEGIN_MSG_MAP(ThemedCtrl)

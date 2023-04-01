@@ -30,7 +30,6 @@
 #include "resource.h"
 #include "OutputWizard.h"
 #include "OutputWizardMikTex.h"
-#include "RunTimeHelper.h"
 #include "TeXnicCenter.h"
 
 #ifdef _DEBUG
@@ -85,17 +84,12 @@ BOOL COutputWizardMiKTeX::OnSetActive()
 
 	SetDlgItemText(IDC_OW_MIKTEXYES,fmt);
 
-	if (RunTimeHelper::IsVista())
-	{
-		PropSheet_EnableWizButtons(m_hWnd,
-		                           PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL,
-		                           PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL);
-		PropSheet_ShowWizButtons(m_hWnd,
-		                         PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL,
-		                         PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH | PSWIZB_CANCEL);
-	}
-	else
-		GetWizard()->SetWizardButtons(PSWIZB_NEXT | PSWIZB_BACK);
+	PropSheet_EnableWizButtons(m_hWnd,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL);
+	PropSheet_ShowWizButtons(m_hWnd,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH | PSWIZB_CANCEL);
 
 	return OutputWizardPage::OnSetActive();
 }

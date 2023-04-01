@@ -30,7 +30,6 @@
 #include "resource.h"
 #include "OutputWizard.h"
 #include "OutputWizardDistributionPath.h"
-#include "RunTimeHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -84,17 +83,12 @@ BOOL COutputWizardDistributionPath::OnInitDialog()
 
 BOOL COutputWizardDistributionPath::OnSetActive()
 {
-	if (RunTimeHelper::IsVista())
-	{
-		PropSheet_EnableWizButtons(m_hWnd,
-		                           PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL,
-		                           PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL);
-		PropSheet_ShowWizButtons(m_hWnd,
-		                         PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL,
-		                         PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH | PSWIZB_CANCEL);
-	}
-	else
-		GetWizard()->SetWizardButtons(PSWIZB_NEXT | PSWIZB_BACK);
+	PropSheet_EnableWizButtons(m_hWnd,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL);
+	PropSheet_ShowWizButtons(m_hWnd,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_CANCEL,
+		                        PSWIZB_BACK | PSWIZB_NEXT | PSWIZB_FINISH | PSWIZB_CANCEL);
 
 	return OutputWizardPage::OnSetActive();
 }

@@ -41,7 +41,6 @@
 #include "LatexProject.h"
 #include "OleDrop.h"
 #include "OutputDoc.h"
-#include "RunTimeHelper.h"
 
 CString FormatInput(const StructureItem& item)
 {
@@ -286,10 +285,8 @@ int FileTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	MapKeyStateToFormat(MK_CONTROL, FormatInclude);
 	MapKeyStateToFormat(MK_SHIFT, bind(ExtractFileTitle, bind(&StructureItem::GetTitle, _1)));
 
-	if (RunTimeHelper::IsVista()) {
-		const DWORD style = TVS_EX_AUTOHSCROLL;
-		SetExtendedStyle(style, style);
-	}
+	const DWORD style = TVS_EX_AUTOHSCROLL;
+	SetExtendedStyle(style, style);
 
 	return 0;
 }
@@ -528,16 +525,8 @@ void FileTreeCtrl::Initialize()
 
 	if (SUCCEEDED(code)) {
 		CComPtr<IShellFolder> shellFolder;
-		if (RunTimeHelper::IsVista())
-		{
-			code = SHBindToObject(shellFolder_, pidl, NULL, IID_IShellFolder,
-				reinterpret_cast<void**>(&shellFolder));
-		}
-		else
-		{
-			code = ShellUtilXP_BindToObject(shellFolder_, pidl, IID_IShellFolder,
-				reinterpret_cast<void**>(&shellFolder));
-		}
+		code = SHBindToObject(shellFolder_, pidl, NULL, IID_IShellFolder,
+			reinterpret_cast<void**>(&shellFolder));
 
 		if (SUCCEEDED(code)) {
 			projectShellFolder_ = shellFolder;

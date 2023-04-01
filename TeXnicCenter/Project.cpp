@@ -40,7 +40,6 @@
 #include "ProjectView.h"
 #include "ProjectTemplate.h"
 #include "ProjectSupportingWinApp.h"
-#include "RunTimeHelper.h"
 #include "CodeDocument.h"
 
 #ifdef _DEBUG
@@ -460,16 +459,7 @@ BOOL CProject::SaveModified()
 	CString prompt;
 	AfxFormatString1(prompt, AFX_IDP_ASK_TO_SAVE, name);
 
-	int button;
-
-	if (!RunTimeHelper::IsVista())
-	{
-		button = AfxMessageBox(prompt, MB_YESNOCANCEL, AFX_IDP_ASK_TO_SAVE);
-	}
-	else
-	{
-		button = ShowSaveTaskDialog(prompt);
-	}
+	int button = ShowSaveTaskDialog(prompt);
 
 	switch (button)
 	{
