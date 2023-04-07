@@ -6,7 +6,7 @@ Version=4
 MainFile=SpecialPackages.tex
 UseBibTeX=0
 UseMakeIndex=0
-ActiveProfile=LaTeX => DVI
+ActiveProfile=LaTeX ⇨ PDF
 ProjectLanguage=en
 ProjectDialect=US
 
