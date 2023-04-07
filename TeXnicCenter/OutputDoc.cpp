@@ -641,7 +641,7 @@ void COutputDoc::OnLatexView()
 		else
 		{
 			CString strFormat;
-			strFormat.Format(STE_LATEX_START_FAILED,pCmd->GetProcessCommand().GetExecutable());
+			strFormat.Format(STE_LATEX_START_FAILED, (LPCTSTR)pCmd->GetProcessCommand().GetExecutable());
 			AfxMessageBox(strFormat,MB_ICONSTOP | MB_OK);
 		}
 	}
@@ -650,7 +650,7 @@ void COutputDoc::OnLatexView()
 		if (!pCmd->GetDdeCommand().SendCommand(GetMainPath(),strCurrentPath,lCurrentLine))
 		{
 			CString strFormat;
-			strFormat.Format(STE_LATEX_START_FAILED,pCmd->GetDdeCommand().GetCommand());
+			strFormat.Format(STE_LATEX_START_FAILED, (LPCTSTR)pCmd->GetDdeCommand().GetCommand());
 			AfxMessageBox(strFormat,MB_ICONSTOP | MB_OK);
 		}
 	}
@@ -727,7 +727,7 @@ void COutputDoc::OnEditFindInFiles()
 	if (pwndMainFrame)
 		pwndMainFrame->ActivateOutputTab(CMainFrame::outputTabGrep1 + m_nWorkingFileGrep,true);
 
-	strStart.Format(STE_GREP_START,dlg.m_strSearchFor);
+	strStart.Format(STE_GREP_START, (LPCTSTR)dlg.m_strSearchFor);
 	ASSERT(m_nWorkingFileGrep == 0 || m_nWorkingFileGrep == 1);
 	ASSERT(m_apGrepView[m_nWorkingFileGrep]);
 	m_apGrepView[m_nWorkingFileGrep]->SendMessage(OPW_RESET);

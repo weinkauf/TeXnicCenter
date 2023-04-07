@@ -75,12 +75,12 @@ void COutputWizardMiKTeX::DoDataExchange(CDataExchange* pDX)
 BOOL COutputWizardMiKTeX::OnSetActive()
 {
 	CString fmt;
-	fmt.Format(IDS_WIZARD_MIKTEX_DETECTED,GetWizard()->GetDistributionName());
+	fmt.Format(IDS_WIZARD_MIKTEX_DETECTED, (LPCTSTR)GetWizard()->GetDistributionName());
 
 	PropSheet_SetHeaderTitle(GetWizard()->GetSafeHwnd(),
 		PropSheet_HwndToIndex(GetWizard()->GetSafeHwnd(),m_hWnd),static_cast<LPCTSTR>(fmt));
 
-	fmt.Format(IDS_CONFIGURE_FOUND_DISTRIBUTION,GetWizard()->GetDistributionName());
+	fmt.Format(IDS_CONFIGURE_FOUND_DISTRIBUTION, (LPCTSTR)GetWizard()->GetDistributionName());
 
 	SetDlgItemText(IDC_OW_MIKTEXYES,fmt);
 

@@ -89,7 +89,7 @@ public:
 	CString GetResultString() const;
 
 private:
-	std::tr1::match_results<LPCTSTR> results;
+	std::match_results<LPCTSTR> results;
 
 protected:
 	virtual BOOL OnPreCreate();

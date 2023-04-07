@@ -457,9 +457,11 @@ private:
 	/** Regular expression describing the newenvironment command. */
 	const tregex m_regexUserEnv;
 
-	const tregex index_;
+	/** Regular expression for an index. */
+	const tregex m_regexIndex;
 
-	const tregex nomencl_;
+	/** Regular expression for a glossary. */
+	const tregex m_regexGlossary;
 
 	/** Array containing the different headers. */
 	static const int HeaderVariationsCount = 2;
@@ -502,9 +504,9 @@ private:
 	template<class It>
 	static It FindItemByPath(It first, It last, LPCTSTR path)
 	{
-		using namespace std::tr1::placeholders;
+		using namespace std::placeholders;
 
-		return std::find_if(first, last, std::tr1::bind(std::equal_to<CString>(), 
-			std::tr1::bind(&StructureItem::GetPath,_1), path));
+		return std::find_if(first, last, std::bind(std::equal_to<CString>(), 
+			std::bind(&StructureItem::GetPath,_1), path));
 	}	
 };

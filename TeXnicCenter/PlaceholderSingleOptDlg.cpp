@@ -146,7 +146,7 @@ void CPlaceholderSingleOptDlg::ConstructPlaceholder()
 	strPlaceholder.Format(_T("%%%s%c%s"),
 	                      (m_bShortFormat && bShort) ? _T("s") : _T(""),
 	                      strPHTypes[nPHType],
-	                      m_strPlaceholderBase);
+	                      (LPCTSTR)m_strPlaceholderBase);
 }
 
 BOOL CPlaceholderSingleOptDlg::OnInitDialog()

@@ -12,7 +12,7 @@ class LabelDragSource :
 	public DragSourceBase
 {
 public:
-	typedef std::tr1::function<const CString (const StructureItem&)> FormatFunctionType;
+	typedef std::function<const CString (const StructureItem&)> FormatFunctionType;
 
 private:
 	// Maps a key combination such as 0, MK_SHIFT, MK_SHIFT|MK_CONTROL

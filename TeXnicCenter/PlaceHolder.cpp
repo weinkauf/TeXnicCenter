@@ -320,9 +320,9 @@ CString CPlaceholderSets::ExpandAllSets(LPCTSTR lpszStringWithPlaceholderSets,
 	SearchString.Replace(_T("$$"),_T("\a"));
 
 	//Flags for the regex_search
-	std::tr1::regex_constants::match_flag_type nFlags = std::tr1::regex_constants::match_default;
+	std::regex_constants::match_flag_type nFlags = std::regex_constants::match_default;
 	//Match Report
-	std::tr1::match_results<LPCTSTR> what;
+	std::match_results<LPCTSTR> what;
 
 	//Init the Search
 	LPCTSTR lpStart = (LPCTSTR)SearchString;

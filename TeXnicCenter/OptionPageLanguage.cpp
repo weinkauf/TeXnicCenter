@@ -108,7 +108,7 @@ void COptionPageLanguage::OnOK()
 	if (m_bEnableSpell && !m_strPDictionary.IsEmpty() && !::PathFileExists(m_strPDictionary))
 	{
 		CString errMsg;
-		errMsg.Format(STE_PDICT_OPEN_ERROR,m_strPDictionary);
+		errMsg.Format(STE_PDICT_OPEN_ERROR, (LPCTSTR)m_strPDictionary);
 		AfxMessageBox(errMsg,MB_OK,MB_ICONINFORMATION);
 	}
 

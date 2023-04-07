@@ -195,24 +195,24 @@ int BookmarkView::FindBookmark(const CodeBookmark b, CodeBookmark** p)
 
 void BookmarkView::OnOpeningProject()
 {
-	using namespace std::tr1::placeholders;
+	using namespace std::placeholders;
 
 	CLaTeXProject* p = static_cast<CLaTeXProject*>(GetProject());
 
-	p->AddBookmarkAddedHandler(std::tr1::bind(&BookmarkView::OnBookmarkAdded,this,_1,_2));
-	p->AddBookmarkRemovedHandler(std::tr1::bind(&BookmarkView::OnBookmarkRemoved,this,_1,_2));
+	p->AddBookmarkAddedHandler(std::bind(&BookmarkView::OnBookmarkAdded,this,_1,_2));
+	p->AddBookmarkRemovedHandler(std::bind(&BookmarkView::OnBookmarkRemoved,this,_1,_2));
 
 	Populate();
 }
 
 void BookmarkView::OnClosingProject()
 {
-	using namespace std::tr1::placeholders;
+	using namespace std::placeholders;
 
 	//CLaTeXProject* p = static_cast<CLaTeXProject*>(GetProject());
 
-	//p->RemoveBookmarkAddedHandler(std::tr1::bind(&BookmarkView::OnBookmarkAdded,this,_1,_2));
-	//p->RemoveBookmarkRemovedHandler(std::tr1::bind(&BookmarkView::OnBookmarkRemoved,this,_1,_2));
+	//p->RemoveBookmarkAddedHandler(std::bind(&BookmarkView::OnBookmarkAdded,this,_1,_2));
+	//p->RemoveBookmarkRemovedHandler(std::bind(&BookmarkView::OnBookmarkRemoved,this,_1,_2));
 }
 
 void BookmarkView::OnNMDblClk(NMHDR* /*hdr*/, LRESULT*)

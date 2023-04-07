@@ -21,7 +21,7 @@ class BibView :
 	public LabelDragSource
 {
 public:
-	typedef std::tr1::function<bool (const BibItem&)> PredicateFunctionType;
+	typedef std::function<bool (const BibItem&)> PredicateFunctionType;
 
 	DECLARE_DYNAMIC(BibView)
 
@@ -104,7 +104,7 @@ private:
 	void OnPopulateThread(const PredicateFunctionType& predicate);
 
 	static int TranslateCompareFunction(LPARAM l1, LPARAM l2, BibView* pane, 
-		const std::tr1::function<int (const BibItem& a, const BibItem& b)>& f);
+		const std::function<int (const BibItem& a, const BibItem& b)>& f);
 
 	// Actual column compare functions
 	static int CompareLabel(const BibItem& a, const BibItem& b);

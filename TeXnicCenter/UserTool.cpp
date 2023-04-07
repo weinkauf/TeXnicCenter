@@ -192,7 +192,8 @@ BOOL UserTool::Invoke()
 			);
 
 			CString strProcessResult;
-			strProcessResult.Format(STE_LATEX_START_FAILED_EXT, pc.GetExecutable() + _T(' ') + pc.GetArguments(), systemError);
+			CString strExeArg(pc.GetExecutable() + _T(' ') + pc.GetArguments());
+			strProcessResult.Format(STE_LATEX_START_FAILED_EXT, (LPCTSTR)strExeArg, systemError);
 			AfxMessageBox(strProcessResult, MB_ICONSTOP|MB_OK);
 			throw FALSE;
 		}

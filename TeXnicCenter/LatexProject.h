@@ -50,7 +50,7 @@ class CLaTeXProject :
 			public CProject,
 			public CStructureParserHandler
 {
-	typedef std::tr1::function<void (CLaTeXProject*, const BookmarkEventArgs&)> LaTeXProjectEventFunctionType;
+	typedef std::function<void (CLaTeXProject*, const BookmarkEventArgs&)> LaTeXProjectEventFunctionType;
 	typedef std::vector<LaTeXProjectEventFunctionType> LaTeXProjectEventContainerType;
 	LaTeXProjectEventContainerType bookmark_added_, bookmark_removed_;
 

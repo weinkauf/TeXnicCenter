@@ -101,7 +101,7 @@ void LabelDragSource::UpdateMessageText( UINT keystate, CString& text, const Str
 		CString fmt;
 
 		if (index != -1)
-			fmt.Format(_T("%s: %s"),message,text);
+			fmt.Format(_T("%s: %s"), (LPCTSTR)message, (LPCTSTR)text);
 		else
 			fmt = text;
 

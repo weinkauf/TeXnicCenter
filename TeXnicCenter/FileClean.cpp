@@ -357,7 +357,7 @@ bool CFileCleanItemArray::SerializeToRegistry(LPCTSTR strStartSection)
 
 		//Create a Title
 		CString strTitle;
-		strTitle.Format(_T("%s_%d"),pTemp->GetDescription(),pTemp->GetFileHandling());
+		strTitle.Format(_T("%s_%d"),(LPCTSTR)pTemp->GetDescription(),pTemp->GetFileHandling());
 
 		//Write the item
 		reg.PushKey();

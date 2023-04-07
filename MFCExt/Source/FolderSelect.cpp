@@ -48,7 +48,7 @@ CFolderSelect::CFolderSelect( LPCTSTR lpszTitle, LPCTSTR lpszInitPath, UINT unFl
 	m_strInitFolder = lpszInitPath;
 	if (!m_strInitFolder.IsEmpty())
 	{
-		Init(lpszTitle, unFlags, pwndParent, (BFFCALLBACK) FolderSelectDlgCallback, (LONG)(LPCTSTR)m_strInitFolder);
+		Init(lpszTitle, unFlags, pwndParent, (BFFCALLBACK) FolderSelectDlgCallback, (LONG_PTR)(LPCTSTR)m_strInitFolder);
 	}
 	else
 	{

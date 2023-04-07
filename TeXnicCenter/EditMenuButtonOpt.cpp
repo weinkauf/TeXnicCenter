@@ -73,7 +73,7 @@ void CEditMenuButtonOpt::OnShowMenu()
 		return;
 
 	//Get the result as a string
-	CString strResult = CString((LPCTSTR) m_nMenuResult);
+	CString strResult = CString(MAKEINTRESOURCE(m_nMenuResult));
 
 	//Does the result from the menu start with '\n'?
 	if (strResult[0] != _T('\n'))

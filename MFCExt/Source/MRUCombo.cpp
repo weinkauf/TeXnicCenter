@@ -689,7 +689,6 @@ BOOL CMRUComboBox::AllocNewMRU()
 {
 	CString* acstrOldList = NULL;
 	INT_PTR      nItemsToCopy;
-	INT_PTR      i;
 
                                         // Make sure the MRU params are OK.
     if ( !VerifyMRUParams() )
@@ -715,7 +714,7 @@ BOOL CMRUComboBox::AllocNewMRU()
                                         // Save the contents of the old MRU list.
             acstrOldList = new CString [ nItemsToCopy ];
 
-            for ( i = 0; i < nItemsToCopy; i++ )
+            for ( INT_PTR i = 0; i < nItemsToCopy; i++ )
                 {
                 acstrOldList[i] = (*m_pMRU)[i];
                 }
@@ -741,7 +740,7 @@ BOOL CMRUComboBox::AllocNewMRU()
 
         if ( NULL != acstrOldList )
             {
-            for ( i = nItemsToCopy - 1; i >= 0; i-- )
+            for ( INT_PTR i = nItemsToCopy - 1; i >= 0; i-- )
                 {
                 m_pMRU->Add ( acstrOldList[i] );
                 }

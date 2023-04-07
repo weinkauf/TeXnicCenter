@@ -223,8 +223,8 @@ void Speller::SaveIgnoredWords( LPCTSTR path )
 void Speller::LoadPersonalDictionary( LPCTSTR path )
 {
 	if (LoadWords(path, added_words_)) {
-		using std::tr1::bind;
-		using namespace std::tr1::placeholders;
+		using std::bind;
+		using namespace std::placeholders;
 
 		std::for_each(added_words_.begin(),added_words_.end(),
 			bind(&Speller::DoLoadAdd,this,_1));

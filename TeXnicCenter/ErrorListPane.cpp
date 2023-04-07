@@ -96,7 +96,7 @@ int ErrorListPane::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	list_view_.InsertColumn(3,CString(MAKEINTRESOURCE(IDS_LINE)),LVCFMT_RIGHT,50);
 	list_view_.InsertColumn(4,CString(MAKEINTRESOURCE(IDS_FILE)),0,150);
 
-	using namespace std::tr1;
+	using namespace std;
 	using namespace placeholders;
 
 	list_view_.SetColumnCompareFunction(0,bind(&ErrorListPane::CompareType,this,_1,_2));
@@ -261,7 +261,6 @@ BOOL ErrorListPane::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT
 
 		if (lParam == 1)
 		{
-			CString fmt;
 			fmt.Format(IDS_ERROR_LIST_ERRORS, errors_);
 			toolbar_.SetButtonText(0, fmt);
 			fmt.Format(IDS_ERROR_LIST_WARNINGS, warnings_);
@@ -479,7 +478,7 @@ void ErrorListPane::OnContextMenu(CWnd* pWnd, CPoint point)
 		selectedItem_.reset(new COutputInfo(oi));
 
 		CString text;
-		text.Format(fmt, CPathTool::GetFile(path));
+		text.Format(fmt, (LPCTSTR)CPathTool::GetFile(path));
 
 		subMenu->ModifyMenu(ID_ERROR_VIEW_SOURCE, MF_BYCOMMAND | MF_STRING, ID_ERROR_VIEW_SOURCE, text);
 

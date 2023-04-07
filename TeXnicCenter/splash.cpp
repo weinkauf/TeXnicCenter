@@ -160,8 +160,8 @@ int CSplashWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CFileVersionInfo fv(::GetModuleHandle(0));
 
 	CString version;
-	version.Format(_T("Version %s. %s\n%s."),fv.GetProductVersion(),
-	               CString(MAKEINTRESOURCE(IDS_LOADING)),fv.GetLegalCopyright());
+	version.Format(_T("Version %s. %s\n%s."), (LPCTSTR)fv.GetProductVersion(),
+	               (LPCTSTR)CString(MAKEINTRESOURCE(IDS_LOADING)), (LPCTSTR)fv.GetLegalCopyright());
 
 	CWindowDC dc(this);
 	CFont* oldfont = dc.SelectObject(&font_);

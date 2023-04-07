@@ -29,10 +29,10 @@ void CodeView::ShadowWindow::UpdateStatusBarMessage()
 	CString message;
 
 	if (!found)
-		message.Format(IDS_FIND_INCREMENTAL_FAILED,search_text);
+		message.Format(IDS_FIND_INCREMENTAL_FAILED, (LPCTSTR)search_text);
 	else
 		message.Format(search_forward ? IDS_FIND_INCREMENTAL_FORWARD : 
-			IDS_FIND_INCREMENTAL_BACKWARD,search_text);
+			IDS_FIND_INCREMENTAL_BACKWARD, (LPCTSTR)search_text);
 
 	view->GetTopLevelFrame()->SetMessageText(message);
 }
@@ -255,7 +255,7 @@ void CodeView::ShadowWindow::HandleChar( TCHAR ch, bool one_level_recursion )
 
 					if (found) {
 						CString message;
-						message.Format(IDS_INCREMENTAL_SEARCH_PASSED_START_SEARCH,search_text);
+						message.Format(IDS_INCREMENTAL_SEARCH_PASSED_START_SEARCH, (LPCTSTR)search_text);
 
 						view->GetTopLevelFrame()->SetMessageText(message);
 						update_status_bar = false;

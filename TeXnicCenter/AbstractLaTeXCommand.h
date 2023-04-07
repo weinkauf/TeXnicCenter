@@ -46,12 +46,12 @@ class CStyleFile;
 /**
  * @brief @ref CStyleFile weak pointer type.
  */
-typedef std::tr1::weak_ptr<CStyleFile> WeakStyleFilePtr;
+typedef std::weak_ptr<CStyleFile> WeakStyleFilePtr;
 
 /**
  * @brief @ref CStyleFile smart pointer type.
  */
-typedef std::tr1::shared_ptr<CStyleFile> SharedStyleFilePtr;
+typedef std::shared_ptr<CStyleFile> SharedStyleFilePtr;
 
 /**
 CAbstractLaTeXCommand is the base class for all LaTeX constructs handled by

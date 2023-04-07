@@ -27,4 +27,3 @@
 
 #include "../source/FormatEdit.h"
 #include "../source/MRUCombo.h"
-#include "../source/ComboColorPicker.h"

@@ -125,21 +125,6 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Templates\Documents\Deutsch\Deckblatt.tex;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="Documents\Deutsch\OptionenAbkuerzungen.tex">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "Documents\Deutsch\OptionenAbkuerzungen.tex" "$(OutDir)Templates\Documents\Deutsch\OptionenAbkürzungen.tex"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Templates\Documents\Deutsch\OptionenAbkuerzungen.tex;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy "Documents\Deutsch\OptionenAbkuerzungen.tex" "$(OutDir)Templates\Documents\Deutsch\OptionenAbkürzungen.tex"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Templates\Documents\Deutsch\OptionenAbkuerzungen.tex;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "Documents\Deutsch\OptionenAbkuerzungen.tex" "$(OutDir)Templates\Documents\Deutsch\OptionenAbkürzungen.tex"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Templates\Documents\Deutsch\OptionenAbkuerzungen.tex;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "Documents\Deutsch\OptionenAbkuerzungen.tex" "$(OutDir)Templates\Documents\Deutsch\OptionenAbkürzungen.tex"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Templates\Documents\Deutsch\OptionenAbkuerzungen.tex;%(Outputs)</Outputs>
-    </CustomBuild>
     <CustomBuild Include="Documents\Deutsch\OptionenLayout.tex">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "Documents\Deutsch\OptionenLayout.tex" "$(OutDir)Templates\Documents\Deutsch\OptionenLayout.tex"
@@ -559,6 +544,19 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "Projects\English advanced\Technical Report.tex" "$(OutDir)Templates\Projects\English advanced\Technical Report.tex"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Templates\Projects\English advanced\Technical Report.tex;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Documents\Deutsch\OptionenAbkürzungen.tex">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy "Documents\Deutsch\OptionenAbkürzungen.tex" "$(OutDir)Templates\Documents\Deutsch\OptionenAbkürzungen.tex"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "Documents\Deutsch\OptionenAbkürzungen.tex" "$(OutDir)Templates\Documents\Deutsch\OptionenAbkürzungen.tex"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Templates\Documents\Deutsch\OptionenAbkürzungen.tex;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Templates\Documents\Deutsch\OptionenAbkürzungen.tex;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "Documents\Deutsch\OptionenAbkürzungen.tex" "$(OutDir)Templates\Documents\Deutsch\OptionenAbkürzungen.tex"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "Documents\Deutsch\OptionenAbkürzungen.tex" "$(OutDir)Templates\Documents\Deutsch\OptionenAbkürzungen.tex"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Templates\Documents\Deutsch\OptionenAbkürzungen.tex;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Templates\Documents\Deutsch\OptionenAbkürzungen.tex;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

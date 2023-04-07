@@ -165,7 +165,7 @@ void CStyleFileContainer::AddSearchPath(const CString &dir)
 	if (!IsDirInSearchPath(dir))
 	{
 		m_SearchPaths.Add(dir);
-		TRACE("Added %s to search path\n", dir);
+		TRACE("Added %s to search path\n", (LPCTSTR)dir);
 	}
 }
 
@@ -203,10 +203,10 @@ void CStyleFileContainer::GetAllPossibleCompletions(const CString& Partial, cons
 	POSITION pos = AllPossibleItems.GetStartPosition();
 	while (pos)
 	{
-		std::tr1::shared_ptr<CObject> pObj;
+		std::shared_ptr<CObject> pObj;
 		CString key;
 		AllPossibleItems.GetNextAssoc(pos, key, pObj);
-		SharedLaTeXCommandPtr pLatexCmd = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(pObj);
+		SharedLaTeXCommandPtr pLatexCmd = std::dynamic_pointer_cast<CLaTeXCommand>(pObj);
 		if (!pLatexCmd) continue;
 
 		Result.AddTail(pLatexCmd->ToLaTeX());
@@ -270,8 +270,8 @@ void CStyleFileContainer::GetAllPossibleItems(const CString& Partial, const CStr
 					{
 						CLaTeXCommand* NewCmd = new CLaTeXCommand(dummy, str, 0);
 						NewCmd->SetDescription(it->GetComment());
-						Result.SetAt(str, std::tr1::shared_ptr<CObject>(NewCmd));
-						//Result.SetAt(str, std::tr1::shared_ptr<CObject>(new CLaTeXCommand(dummy, str, 0)));
+						Result.SetAt(str, std::shared_ptr<CObject>(NewCmd));
+						//Result.SetAt(str, std::shared_ptr<CObject>(new CLaTeXCommand(dummy, str, 0)));
 					}
 				}
 			}
@@ -342,12 +342,12 @@ BOOL CStyleFileContainer::SaveAsXML(const CString &path)
 			while (posC != NULL)
 			{
 				SharedLaTeXCommandPtr lc;
-				std::tr1::shared_ptr<CObject> c;
+				std::shared_ptr<CObject> c;
 				CString keyC;
 				CString type;
 
 				cmds->GetNextAssoc(posC, keyC, c);
-				lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
+				lc = std::dynamic_pointer_cast<CLaTeXCommand>(c);
 
 				if (lc->IsKindOf(RUNTIME_CLASS(CNewCommand)))
 				{
@@ -502,9 +502,9 @@ BOOL CStyleFileContainer::LoadFromXML(const CString &file, BOOL addToExisting)
 				MsXml::CXMLDOMParseError xmlError(xmlDoc.GetParseError());
 				CString strErrorMsg;
 				strErrorMsg.Format(STE_XML_PARSE_ERROR,
-				                   xmlError.GetErrorCode(), xmlError.GetReason(),
-				                   xmlError.GetUrl(), xmlError.GetLine(), xmlError.GetLinepos(),
-				                   xmlError.GetSrcText());
+				                   xmlError.GetErrorCode(), (LPCTSTR)xmlError.GetReason(),
+				                   (LPCTSTR)xmlError.GetUrl(), xmlError.GetLine(), xmlError.GetLinepos(),
+				                   (LPCTSTR)xmlError.GetSrcText());
 
 				AfxMessageBox(strErrorMsg, MB_ICONEXCLAMATION | MB_OK);
 				bReportedError = true;
@@ -571,7 +571,7 @@ void CStyleFileContainer::ProcessPackageNode(MsXml::CXMLDOMNode& element)
 
 	if (!AddStyleFile(sf))
 	{
-		TRACE("WARNING: Unable to add file %s, seems to be duplicate\n", sf->GetName());
+		TRACE("WARNING: Unable to add file %s, seems to be duplicate\n", (LPCTSTR)sf->GetName());
 		return;
 	}
 

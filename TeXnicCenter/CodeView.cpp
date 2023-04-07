@@ -492,7 +492,7 @@ void CodeView::OnViewWhiteSpace()
 
 	CConfiguration::GetInstance()->m_bViewWhitespaces = !visible;
 
-	using namespace std::tr1;
+	using namespace std;
 	using namespace placeholders;
 
 	// Chained update: call for every view GetCtrl().SetViewWS(!visible,TRUE)
@@ -505,7 +505,7 @@ void CodeView::OnViewLineEnding()
 	bool visible = !GetCtrl().GetViewEOL();
 	CConfiguration::GetInstance()->SetShowLineEnding(visible);
 
-	using namespace std::tr1;
+	using namespace std;
 	using namespace placeholders;
 
 	// Chained update: call for every view GetCtrl().SetViewEOL(visible,TRUE)
@@ -528,7 +528,7 @@ void CodeView::OnViewWordWrap()
 
 	int mode = wrap ? SC_WRAP_WORD : SC_WRAP_NONE;
 
-	using namespace std::tr1;
+	using namespace std;
 	using namespace placeholders;
 
 	// Chained update: call every view
@@ -543,7 +543,7 @@ void CodeView::OnViewWordWrapIndent()
 
 	int mode = indent ? SC_WRAPINDENT_SAME : SC_WRAPINDENT_FIXED;
 
-	using namespace std::tr1;
+	using namespace std;
 	using namespace placeholders;
 
 	// Chained update: call every view
@@ -559,7 +559,7 @@ void CodeView::OnViewWordWrapIndicatorsStart()
 	
 	CConfiguration::GetInstance()->SetWordWrapIndicators(NewFlags);
 
-	using namespace std::tr1;
+	using namespace std;
 	using namespace placeholders;
 
 	// Chained update: call every view
@@ -575,7 +575,7 @@ void CodeView::OnViewWordWrapIndicatorsEnd()
 	
 	CConfiguration::GetInstance()->SetWordWrapIndicators(NewFlags);
 
-	using namespace std::tr1;
+	using namespace std;
 	using namespace placeholders;
 
 	// Chained update: call every view
@@ -1514,7 +1514,7 @@ BOOL CodeView::InvokeContextHelp(const CString& keyword)
 		link.pszMsgText = NULL;
 		link.pszWindow = NULL;
 		link.fIndexOnFail = TRUE;
-		HtmlHelp((DWORD) &link, HH_KEYWORD_LOOKUP);
+		HtmlHelp((DWORD_PTR) &link, HH_KEYWORD_LOOKUP);
 	}
 
 	return TRUE;

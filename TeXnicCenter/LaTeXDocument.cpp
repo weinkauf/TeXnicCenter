@@ -105,9 +105,9 @@ void LaTeXDocument::OnUpdateTextModulesList(CCmdUI *pCmdUI)
 			if (i < 10) {
 				CString strFormat;
 				if (i == 9)
-					strFormat.Format(_T("1&0 %s"),strDisplayName);
+					strFormat.Format(_T("1&0 %s"), (LPCTSTR)strDisplayName);
 				else
-					strFormat.Format(_T("&%d %s"),i + 1,strDisplayName);
+					strFormat.Format(_T("&%d %s"),i + 1, (LPCTSTR)strDisplayName);
 
 				strDisplayName = strFormat;
 			}
@@ -152,9 +152,9 @@ void LaTeXDocument::OnUpdateTextModulesList(CCmdUI *pCmdUI)
 				CString strFormat;
 
 				if (i == 9)
-					strFormat.Format(_T("1&0 %s"),strDisplayName);
+					strFormat.Format(_T("1&0 %s"), (LPCTSTR)strDisplayName);
 				else
-					strFormat.Format(_T("&%d %s"),i + 1,strDisplayName);
+					strFormat.Format(_T("&%d %s"),i + 1, (LPCTSTR)strDisplayName);
 
 				strDisplayName = strFormat;
 			}

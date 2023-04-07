@@ -549,7 +549,7 @@ bool CMainFrame::CreateToolBar(CMFCToolBar* pToolBar, UINT unID, UINT unTitleID,
 
 	if (!pToolBar->Create(this, style, unID) || !pToolBar->LoadToolBar(unID))
 	{
-		TRACE1("!Failed to create %s tool bar\n", AfxLoadString(unTitleID));
+		TRACE1("!Failed to create %s tool bar\n", (LPCTSTR)AfxLoadString(unTitleID));
 		return false; // creation failed
 	}
 
@@ -1010,51 +1010,51 @@ BOOL CMainFrame::ReplaceToolbarButton(UINT unCmdID, const CMFCToolBarButton &but
 	return FALSE;
 }
 
-CMFCToolBarButton *CMainFrame::GetToolBarButton(UINT unCmdID, POSITION &pos) const
+CMFCToolBarButton *CMainFrame::GetToolBarButton(UINT unCmdID, int& pos) const
 {
 	// find and return specified occurence of the button
 	int nIndex;
-	int nStartBar = (int)pos;
+	int nStartBar = pos;
 
 	if (nStartBar < 1 && (nIndex = m_wndFindBar.CommandToIndex(unCmdID)) > -1)
 	{
-		pos = (POSITION)1;
+		pos = 1;
 		return m_wndFindBar.GetButton(nIndex);
 	}
 
 	if (nStartBar < 2 && (nIndex = m_wndFormatBar.CommandToIndex(unCmdID)) > -1)
 	{
-		pos = (POSITION)2;
+		pos = 2;
 		return m_wndFormatBar.GetButton(nIndex);
 	}
 
 	if (nStartBar < 3 && (nIndex = m_wndFormatRUBar.CommandToIndex(unCmdID)) > -1)
 	{
-		pos = (POSITION)3;
+		pos = 3;
 		return m_wndFormatRUBar.GetButton(nIndex);
 	}
 
 	if (nStartBar < 4 && (nIndex = m_wndInsertBar.CommandToIndex(unCmdID)) > -1)
 	{
-		pos = (POSITION)4;
+		pos = 4;
 		return m_wndInsertBar.GetButton(nIndex);
 	}
 
 	if (nStartBar < 5 && (nIndex = m_wndLatexBar.CommandToIndex(unCmdID)) > -1)
 	{
-		pos = (POSITION)5;
+		pos = 5;
 		return m_wndLatexBar.GetButton(nIndex);
 	}
 
 	if (nStartBar < 6 && (nIndex = m_wndMathBar.CommandToIndex(unCmdID)) > -1)
 	{
-		pos = (POSITION)6;
+		pos = 6;
 		return m_wndMathBar.GetButton(nIndex);
 	}
 
 	if (nStartBar < 7 && (nIndex = m_wndToolBar.CommandToIndex(unCmdID)) > -1)
 	{
-		pos = (POSITION)7;
+		pos = 7;
 		return m_wndToolBar.GetButton(nIndex);
 	}
 
@@ -1065,7 +1065,7 @@ CMFCToolBarButton *CMainFrame::GetToolBarButton(UINT unCmdID, POSITION &pos) con
 		{
 			if (nStartBar < (i + 8) && (nIndex = m_awndMathBar[i].CommandToIndex(unCmdID)) > -1)
 			{
-				pos = (POSITION)(i + 8);
+				pos = (i + 8);
 				return m_awndMathBar[i].GetButton(nIndex);
 			}
 		}
@@ -1076,13 +1076,12 @@ CMFCToolBarButton *CMainFrame::GetToolBarButton(UINT unCmdID, POSITION &pos) con
 	{
 		CMFCToolBar *pToolBar = GetUserToolBarByIndex(i);
 
-		if (!pToolBar)
-			continue;
+		if (!pToolBar) continue;
 
-		if (nStartBar < (i + 8 + MATHBAR_COUNT) && (nIndex = pToolBar->CommandToIndex(unCmdID))
-				> -1)
+		if (nStartBar < (i + 8 + MATHBAR_COUNT)
+		&& (nIndex = pToolBar->CommandToIndex(unCmdID)) > -1)
 		{
-			pos = (POSITION)(i + 8 + MATHBAR_COUNT);
+			pos = i + 8 + MATHBAR_COUNT;
 			return pToolBar->GetButton(nIndex);
 		}
 	}
@@ -1142,14 +1141,14 @@ LRESULT CMainFrame::OnResetToolbar(WPARAM wParam, LPARAM /*lParam*/)
 			CString text;
 			t->GetDocString(text, CDocTemplate::regFileTypeName);
 
-			UINT id = ID_LATEX_NEW;
+			UINT AppendID = ID_LATEX_NEW;
 
 			if (t == theApp.GetBibTeXDocTemplate())
-				id = ID_BIBTEX_NEW;
+				AppendID = ID_BIBTEX_NEW;
 			else if (t == theApp.GetMetaPostDocTemplate())
-				id = ID_METAPOST_NEW;
+				AppendID = ID_METAPOST_NEW;
 
-			menu.AppendMenu(MF_STRING, id, text);
+			menu.AppendMenu(MF_STRING, AppendID, text);
 		}
 
 		CMFCToolBarButton* pb = m_wndToolBar.GetButton(m_wndToolBar.CommandToIndex(ID_LATEX_NEW));
@@ -1261,7 +1260,7 @@ void CMainFrame::OnHelpContents()
 void CMainFrame::OnHelpSearch()
 {
 	HH_FTS_QUERY query = { sizeof(HH_FTS_QUERY) };
-	HtmlHelp(reinterpret_cast<DWORD> (&query), HH_DISPLAY_SEARCH);
+	HtmlHelp(reinterpret_cast<DWORD_PTR> (&query), HH_DISPLAY_SEARCH);
 }
 
 void CMainFrame::OnHelpIndex()
@@ -1951,8 +1950,8 @@ void CMainFrame::OnOpenProject(CLaTeXProject* p)
 {
 	const std::vector<CProjectView*>& views = GetViews();
 
-	using namespace std::tr1::placeholders;
-	std::for_each(views.begin(), views.end(), std::tr1::bind(&CLaTeXProject::AddView, p, _1));
+	using namespace std::placeholders;
+	std::for_each(views.begin(), views.end(), std::bind(&CLaTeXProject::AddView, p, _1));
 }
 
 void CMainFrame::OnCloseProject(CLaTeXProject* p)
@@ -1961,8 +1960,8 @@ void CMainFrame::OnCloseProject(CLaTeXProject* p)
 
 	const std::vector<CProjectView*>& views = GetViews();
 
-	using namespace std::tr1::placeholders;
-	std::for_each(views.begin(), views.end(), std::tr1::bind(&CLaTeXProject::RemoveView, p, _1));
+	using namespace std::placeholders;
+	std::for_each(views.begin(), views.end(), std::bind(&CLaTeXProject::RemoveView, p, _1));
 
 	output_doc_->ClearMessages(); // Clear all the warnings, errors etc.
 }
@@ -2120,10 +2119,8 @@ void CMainFrame::OnViewTransparency()
 	dlg.DoModal();
 }
 
-void CMainFrame::OnUpdateFrameTitle(BOOL bAddToTitle)
+void CMainFrame::OnUpdateFrameTitle(BOOL /*bAddToTitle*/)
 {
-	UNUSED(bAddToTitle);
-
 	//We use our own version to get consistent results regarding projects and single files.
 	UpdateFrameTitle();
 	//CMDIFrameWndEx::OnUpdateFrameTitle(bAddToTitle);

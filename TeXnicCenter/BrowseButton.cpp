@@ -136,7 +136,7 @@ void CBrowseButton::Browse()
 			{
 				//Now we establish the callback
 				m_dataFolderDialog.lpfn = (BFFCALLBACK) BrowseDlgCallback;
-				m_dataFolderDialog.lParam = (LONG)(LPCTSTR) m_strInitFolder;
+				m_dataFolderDialog.lParam = (LONG_PTR)(LPCTSTR) m_strInitFolder;
 				bUsedCallback = true;
 			}
 		}

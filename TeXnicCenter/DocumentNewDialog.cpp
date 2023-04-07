@@ -242,7 +242,7 @@ BOOL CWizardBasedDocumentTemplateItem::InitItem(LPCTSTR lpszPath,CImageList &Ima
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// retrieve the wizard interface
 	CString strProgId;
-	strProgId.Format(_T("%s.DocumentWizard"),CPathTool::GetFileTitle(m_strPath));
+	strProgId.Format(_T("%s.DocumentWizard"), (LPCTSTR)CPathTool::GetFileTitle(m_strPath));
 
 	BSTR bstrProgId = strProgId.AllocSysString();
 	HRESULT result = m_wizard.CoCreateInstance(bstrProgId,NULL,CLSCTX_INPROC_SERVER);

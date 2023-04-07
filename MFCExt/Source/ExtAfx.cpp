@@ -38,7 +38,7 @@
 
 CString AfxLoadStringEx( UINT unID )
 {
-	CString	str( (LPCTSTR)unID );
+	CString	str(MAKEINTRESOURCE(unID));
 	return str;
 }
 

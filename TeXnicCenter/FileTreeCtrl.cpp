@@ -45,7 +45,7 @@
 CString FormatInput(const StructureItem& item)
 {
 	CString text;
-	text.Format(_T("\\input{%s}"), CPathTool::GetFileTitle(item.GetTitle()));
+	text.Format(_T("\\input{%s}"), (LPCTSTR)CPathTool::GetFileTitle(item.GetTitle()));
 
 	return text;
 }
@@ -53,7 +53,7 @@ CString FormatInput(const StructureItem& item)
 CString FormatInclude(const StructureItem& item)
 {
 	CString text;
-	text.Format(_T("\\include{%s}"), CPathTool::GetFileTitle(item.GetTitle()));
+	text.Format(_T("\\include{%s}"), (LPCTSTR)CPathTool::GetFileTitle(item.GetTitle()));
 
 	return text;
 }
@@ -278,7 +278,7 @@ int FileTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	ClearKeyStateToFormat();
 	ClearKeyStateToMessage();
 
-	using namespace std::tr1;
+	using namespace std;
 	using namespace placeholders;
 
 	MapKeyStateToFormat(0, FormatInput);
@@ -386,35 +386,35 @@ void FileTreeCtrl::Populate()
 		{
 			if (reldir != _T("."))
 			{
-				ParentDirectoryMap::iterator it = parents.find(reldir);
+				ParentDirectoryMap::iterator pit = parents.find(reldir);
 
-				if (it != parents.end())
-					parent = it->second;
+				if (pit != parents.end())
+					parent = pit->second;
 				else
 				{
 					CString component, path;
-					int index;
+					int idx;
 
 					LPCTSTR const sep = _T("\\/");
 					bool stop = false;
 
 					while (!stop)
 					{
-						index = reldir.FindOneOf(sep);
+						idx = reldir.FindOneOf(sep);
 
-						if (index == -1)
+						if (idx == -1)
 						{
-							index = reldir.GetLength();
+							idx = reldir.GetLength();
 							stop = true;
 						}
 
-						component = reldir.Left(index);
+						component = reldir.Left(idx);
 						path += component;
 
-						it = parents.find(path);
+						pit = parents.find(path);
 
-						if (it != parents.end())
-							parent = it->second;
+						if (pit != parents.end())
+							parent = pit->second;
 						else
 						{
 							const CString& absolutePath =
@@ -430,8 +430,8 @@ void FileTreeCtrl::Populate()
 
 						if (!stop)
 						{
-							path += reldir[index]; // add the \ or /
-							reldir.Delete(0, index + 1);
+							path += reldir[idx]; // add the \ or /
+							reldir.Delete(0, idx + 1);
 						}
 					}
 				}

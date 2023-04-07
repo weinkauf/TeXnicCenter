@@ -58,6 +58,9 @@ public:
 	CPropertyDialogPage(UINT unIDTemplate, UINT unIDCaption = 0);
 	CPropertyDialogPage(LPCTSTR lpszTemplateName, UINT unIDCaption = 0);
 
+	//TODO: This code seems unused, but it does do something with the helpID.
+	// We need help IDs for the property pages so that users understand the
+	// options for defining profiles.
 	void Construct(UINT unIDTemplate, UINT unIDCaption = 0);
 	void Construct(LPCTSTR lpszTemplateName, UINT unIDCaption = 0);
 

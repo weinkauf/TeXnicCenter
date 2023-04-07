@@ -18,7 +18,7 @@ class Speller
 	Speller& operator=(const Speller&);
 
 	typedef std::basic_string<TCHAR> StringType;
-	typedef std::tr1::unordered_set<StringType> WordContainer;
+	typedef std::unordered_set<StringType> WordContainer;
 	WordContainer ignored_words_;
 	bool added_modified_, ignored_modified_;
 	bool utf8_;

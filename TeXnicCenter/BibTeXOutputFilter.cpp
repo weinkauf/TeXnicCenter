@@ -18,7 +18,7 @@ BibTeXOutputFilter::~BibTeXOutputFilter()
 DWORD BibTeXOutputFilter::ParseLine(const CString& line, DWORD cookie)
 {
 	const CString warning(_T("Warning--"));
-	std::tr1::match_results<LPCTSTR> matches;
+	std::match_results<LPCTSTR> matches;
 
 	if (line.GetLength() >= warning.GetLength() && line.Left(warning.GetLength()) == warning) {
 		COutputInfo oi;

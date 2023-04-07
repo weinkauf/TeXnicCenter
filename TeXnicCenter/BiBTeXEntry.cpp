@@ -148,10 +148,10 @@ const BibItem BibTeXEntry::ToBibItem() const
 	LPCTSTR pos = std::find_if(first,last,_istdigit);
 
 	if (pos != last) {
-		int year = _ttoi(pos);
+		int iyear = _ttoi(pos);
 
-		if (year != 0) {
-			result.year_ = year;
+		if (iyear != 0) {
+			result.year_ = iyear;
 		}
 	}
 

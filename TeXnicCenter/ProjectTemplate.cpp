@@ -603,9 +603,9 @@ void CProjectManager::AddProjectTemplate(CProjectTemplate* pTemplate)
 
 			while (pos != NULL)
 			{
-				CProjectTemplate* pTemplate =
+				CProjectTemplate* pNewTemplate =
 				    (CProjectTemplate*)pStaticList->GetNext(pos);
-				AddProjectTemplate(pTemplate);
+				AddProjectTemplate(pNewTemplate);
 			}
 
 			delete pStaticList;
@@ -1017,8 +1017,8 @@ BOOL CProjectManager::DoPromptFileName(CString& fileName, UINT nIDSTitle,
 
 		while (pos != NULL)
 		{
-			CProjectTemplate* pTemplate = (CProjectTemplate*)m_templateList.GetNext(pos);
-			_AfxAppendFilterSuffix(strFilter, dlgFile.m_ofn, pTemplate,
+			CProjectTemplate* pAddTemplate = (CProjectTemplate*)m_templateList.GetNext(pos);
+			_AfxAppendFilterSuffix(strFilter, dlgFile.m_ofn, pAddTemplate,
 			                       bFirst ? &strDefault : NULL);
 			bFirst = FALSE;
 		}
@@ -1087,7 +1087,14 @@ BOOL CProjectManager::OnDDECommand(LPTSTR lpszCommand)
 	// If we were started up for DDE retrieve the Show state
 	if (AfxGetApp()->m_pCmdInfo != NULL)
 	{
+		//It seems as if MFC misuses m_pCmdInfo in ProcessShellCommand() as a convenient storeage for the nCmdShow param
+		//So we cannot change this and the code is correct.
+		//This code exists since 2002 in TXC.
+		#pragma warning(push)
+		#pragma warning(disable : 4311) //'type cast': pointer truncation from 'CCommandLineInfo *' to 'int'
+		#pragma warning(disable : 4302) //'type cast': truncation from 'CCommandLineInfo *' to 'int'
 		AfxGetApp()->m_nCmdShow = (int)AfxGetApp()->m_pCmdInfo;
+		#pragma warning(pop)
 		AfxGetApp()->m_pCmdInfo = &cmdInfo;
 	}
 	else

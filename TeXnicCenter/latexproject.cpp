@@ -223,9 +223,9 @@ BOOL CLaTeXProject::OnOpenProject(LPCTSTR lpszPathName)
 		//tcp-file not valid: inform the user about this error.
 		CString strMsg;
 		strMsg.Format(STE_FILE_INUSE,
-		              AfxLoadString(IDS_OPEN),
+		              (LPCTSTR)AfxLoadString(IDS_OPEN),
 		              lpszPathName,
-		              AfxLoadString(STE_TCP_INVALID));
+		              (LPCTSTR)AfxLoadString(STE_TCP_INVALID));
 
 		AfxMessageBox(strMsg,MB_ICONEXCLAMATION | MB_OK);
 
@@ -605,8 +605,7 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 #pragma region Bookmarks
 
 		// Restore the bookmarks before the views are created
-		// otherwise the bookmarks will no be visible
-
+		// otherwise the bookmarks will not be visible
 		typedef std::multimap<CString,CString> ValueContainerType;
 		ValueContainerType values;
 
@@ -635,38 +634,34 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 #pragma endregion
 
 #pragma region Folding points
+		// Restore the folding points before the views are created
+		// otherwise the folding will no be set
+		ValueContainerType FoldingValues;
+
+		folding_points_.clear();
+
+		FoldingPointContainerType points;
+
+		if (ini.GetValues(FoldingKey, FoldingValues))
 		{
-			// Restore the folding points before the views are created
-			// otherwise the folding will no be set
+			std::basic_istringstream<TCHAR> iss;
+			typedef std::istream_iterator<FoldingPoint,TCHAR> iterator_type;
+			typedef ValueContainerType::iterator I;
 
-			typedef std::multimap<CString,CString> ValueContainerType;
-			ValueContainerType values;
-
-			folding_points_.clear();
-
-			FoldingPointContainerType points;
-
-			if (ini.GetValues(FoldingKey,values))
+			for (I it = FoldingValues.begin(); it != FoldingValues.end(); ++it)
 			{
-				std::basic_istringstream<TCHAR> iss;
-				typedef std::istream_iterator<FoldingPoint,TCHAR> iterator_type;
-				typedef ValueContainerType::iterator I;
+				iss.clear();
+				iss.str(static_cast<LPCTSTR>(it->second)); // Value
 
-				for (I it = values.begin(); it != values.end(); ++it)
+				points.clear();
+
+				std::copy(iterator_type(iss),iterator_type(),std::back_inserter(points));
+				for (size_t ui = 0; ui < points.size(); ui++)
 				{
-					iss.clear();
-					iss.str(static_cast<LPCTSTR>(it->second)); // Value
-
-					points.clear();
-
-					std::copy(iterator_type(iss),iterator_type(),std::back_inserter(points));
-					for (size_t ui = 0; ui < points.size(); ui++)
-						points[ui].SetContracted(true);
-
-					folding_points_.insert(std::make_pair(it->first,points));
-
-					
+					points[ui].SetContracted(true);
 				}
+
+				folding_points_.insert(std::make_pair(it->first,points));
 			}
 		}
 
@@ -697,7 +692,7 @@ void CLaTeXProject::SerializeSession(CIniFile &ini, BOOL bWrite)
 		for (int nFrame=0;nFrame<nFrameCount;nFrame++)
 		{
 			strKey.Format(KEY_FRAMEINFO,nFrame);
-			key.Format(KEY_VIEWINFO,strKey,0,0);			
+			key.Format(KEY_VIEWINFO, (LPCTSTR)strKey,0,0);			
 
 			CString strDocPath = ini.GetValue(strKey,VAL_FRAMEINFO_DOCPATH,_T(""));
 
@@ -1248,7 +1243,7 @@ const CString CLaTeXProject::GetIgnoredWordsFileName() const
 }
 
 namespace {
-	void CallEventFunction(const std::tr1::function<void (CLaTeXProject*, const BookmarkEventArgs&)>& f, 
+	void CallEventFunction(const std::function<void (CLaTeXProject*, const BookmarkEventArgs&)>& f, 
 		CLaTeXProject* s, const BookmarkEventArgs& a)
 	{
 		f(s,a);
@@ -1270,10 +1265,10 @@ void CLaTeXProject::AddBookmark( const CString& filename, const CodeBookmark& b 
 	if (!bookmark_added_.empty()) {
 		const BookmarkEventArgs args(name,b);
 
-		using namespace std::tr1::placeholders;
+		using namespace std::placeholders;
 
 		std::for_each(bookmark_added_.begin(),bookmark_added_.end(),
-			std::tr1::bind(CallEventFunction,_1,this,args));
+			std::bind(CallEventFunction,_1,this,args));
 	}
 }
 
@@ -1295,10 +1290,10 @@ void CLaTeXProject::RemoveBookmark( const CString& filename, const CodeBookmark&
 		if (!bookmark_added_.empty()) {
 			const BookmarkEventArgs args(name, b);
 
-			using namespace std::tr1::placeholders;
+			using namespace std::placeholders;
 
 			std::for_each(bookmark_removed_.begin(),bookmark_removed_.end(),
-				std::tr1::bind(CallEventFunction,_1,this,args));
+				std::bind(CallEventFunction,_1,this,args));
 		}
 	}
 }
@@ -1315,10 +1310,10 @@ CodeBookmark* CLaTeXProject::GetBookmark(const CString& filename, int lineNumber
 
 	if (it != bookmarks_.end())
 	{
-		using namespace std::tr1::placeholders;
+		using namespace std::placeholders;
 
 		BookmarkContainerType::iterator it1 = std::find_if(it->second.begin(),it->second.end(),
-			std::tr1::bind(std::equal_to<int>(),std::tr1::bind(&CodeBookmark::GetLine,_1),lineNumber));
+			std::bind(std::equal_to<int>(),std::bind(&CodeBookmark::GetLine,_1),lineNumber));
 
 		if (it1 != it->second.end())
 			result = &*it1;

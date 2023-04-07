@@ -620,7 +620,7 @@ void COptionPageFileClean::OnLeavePattern()
 	{
 		//Not valid: Show Message to the user
 		CString strMsg;
-		strMsg.Format(STE_FILECLEAN_INVALIDPATTERN,TestItem.GetPattern());
+		strMsg.Format(STE_FILECLEAN_INVALIDPATTERN, (LPCTSTR)TestItem.GetPattern());
 		AfxMessageBox(strMsg,MB_OK | MB_ICONSTOP,0);
 
 		//Get focus back

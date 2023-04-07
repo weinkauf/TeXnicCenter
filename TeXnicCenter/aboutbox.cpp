@@ -83,7 +83,7 @@ const TCHAR DISPLAY_BITMAP      = _T('\b');
 // (see #defines above)
 LPCTSTR const pArrCredit[] =
 {
-	_T("Copyright © 1999-2013 The TeXnicCenter Team\t"),
+	_T("Copyright © 1999-2023 The TeXnicCenter Team\t"),
 	_T("www.TeXnicCenter.org\t"),
 	_T(""),
 	_T(""),
@@ -206,7 +206,7 @@ CAboutDlg::CAboutDlg()
 	else
 	{
 		m_strVersion = _T("Unknown");
-		CopyrightText = _T("(c) 1999-2013 The TeXnicCenter Team");
+		CopyrightText = _T("(c) 1999-2023 The TeXnicCenter Team");
 	}
 
 	//Add 32-bit or 64-bit to the version info. That is good for error reports.
@@ -453,7 +453,7 @@ LRESULT CAboutDlg::OnCreditsPaint( UINT, LPARAM, WPARAM, BOOL& )
 				{
 					CString str;
 					str.Format(_T("Could not find bitmap resource \"%s\". ")
-						_T("Be sure to assign the bitmap a QUOTED resource name"),szBitmap);
+						_T("Be sure to assign the bitmap a QUOTED resource name"), (LPCTSTR)szBitmap);
 					KillTimer(DISPLAY_TIMER_ID);
 					AfxMessageBox(str);
 					return 0;

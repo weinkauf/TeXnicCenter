@@ -118,7 +118,7 @@ void StructureTreeCtrl::OnParsingFinished()
 					if (!si.GetPrefix().IsEmpty())
 						path = si.GetPrefix() + _T(", ") + path;
 
-					title.Format(IDS_BIBLIOGRAPHY, path);
+					title.Format(IDS_BIBLIOGRAPHY, (LPCTSTR)path);
 					parent = -1; // Bibliography items are always root nodes
 				}
 

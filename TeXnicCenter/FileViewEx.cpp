@@ -656,7 +656,7 @@ HTREEITEM CCFileViewEx::AddItem(WORD nFolderType,WORD nItemType,LPCTSTR lpszName
 	pItemData->nFolderType = nFolderType;
 	pItemData->strDispName = strFileName;
 	pItemData->nFileType = nItemType;
-	hItemNew.SetData(reinterpret_cast<DWORD>(pItemData));
+	hItemNew.SetData(reinterpret_cast<DWORD_PTR>(pItemData));
 
 	// Avoid duplication, if there an item with the same display name,
 	// remove it first and delete the associated memory

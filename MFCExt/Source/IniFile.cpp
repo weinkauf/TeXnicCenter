@@ -87,12 +87,12 @@ bool CIniFile::ReadFile()
 		return true;
 
 	std::vector<char> data(s);
-	file.Read(&data[0],s);
+	file.Read(&data[0], (DWORD)s);
 
-	int cch = ::MultiByteToWideChar(CP_UTF8,0,&data[0],s,0,0);
+	int cch = ::MultiByteToWideChar(CP_UTF8, 0, &data[0], (DWORD)s, 0, 0);
 
 	std::vector<wchar_t> buffer(cch + 1);
-	::MultiByteToWideChar(CP_UTF8,0,&data[0],s,&buffer[0],cch + 1);
+	::MultiByteToWideChar(CP_UTF8, 0, &data[0], (DWORD)s, &buffer[0], cch + 1);
 
 	std::basic_istringstream<TCHAR> inifile(&buffer[0]);
 

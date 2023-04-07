@@ -285,7 +285,7 @@ int CTextModulesDlg::InsertNewModule(CTextModule& tm, const CString& NewName)
 	while ((NewIdx == -1) && (i < 1000))
 	{
 		++i;
-		tm.Name.Format(_T("%s (%d)"), NewName, i);
+		tm.Name.Format(_T("%s (%d)"), (LPCTSTR)NewName, i);
 		NewIdx = m_tmGroup.InsertSorted(tm);
 	}
 

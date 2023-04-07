@@ -1351,11 +1351,11 @@ void CodeDocument::UpdateTextBufferOnExternalChange()
 	int nResult;
 
 	if (IsModified()) {
-		strMsg.Format(STE_FILE_EXTERNALCHANGEEX,GetPathName());
+		strMsg.Format(STE_FILE_EXTERNALCHANGEEX, (LPCTSTR)GetPathName());
 		nResult = AfxMessageBox(strMsg,MB_ICONEXCLAMATION | MB_YESNO);
 	}
 	else {
-		strMsg.Format(STE_FILE_EXTERNALCHANGE,GetPathName());
+		strMsg.Format(STE_FILE_EXTERNALCHANGE, (LPCTSTR)GetPathName());
 		nResult = AfxMessageBox(strMsg,MB_ICONINFORMATION | MB_YESNO);
 	}
 
@@ -1364,9 +1364,9 @@ void CodeDocument::UpdateTextBufferOnExternalChange()
 
 		if (dwResult != ERROR_SUCCESS) {
 			strMsg.Format(STE_FILE_INUSE,
-				AfxLoadString(IDS_OPEN),
-				GetPathName(),
-				AfxFormatSystemString(dwResult));
+				(LPCTSTR)AfxLoadString(IDS_OPEN),
+				(LPCTSTR)GetPathName(),
+				(LPCTSTR)AfxFormatSystemString(dwResult));
 			AfxMessageBox(strMsg,MB_ICONINFORMATION | MB_OK);
 			GetView()->GetCtrl().SetReadOnly(TRUE);
 		} else {
@@ -1432,9 +1432,9 @@ BOOL CodeDocument::OnSaveDocument(LPCTSTR lpszPathName)
 	if (result != ERROR_SUCCESS) {
 		CString strMsg;
 		strMsg.Format(STE_FILE_INUSE,
-			AfxLoadString(IDS_SAVE),
+			(LPCTSTR)AfxLoadString(IDS_SAVE),
 			lpszPathName,
-			AfxFormatSystemString(result));
+			(LPCTSTR)AfxFormatSystemString(result));
 		AfxMessageBox(strMsg,MB_ICONEXCLAMATION | MB_OK);
 
 		save_copy_ = false;

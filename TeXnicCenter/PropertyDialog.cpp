@@ -89,7 +89,7 @@ void CPropertyDialogPage::Construct(LPCTSTR lpszTemplateName, UINT unIDCaption /
 	m_pPropertyDialog = NULL;
 	m_lpszTemplateName = lpszTemplateName;
 	if (HIWORD(m_lpszTemplateName) == 0)
-		m_nIDHelp = LOWORD((DWORD)m_lpszTemplateName);
+		m_nIDHelp = LOWORD((DWORD_PTR)m_lpszTemplateName);
 }
 
 BOOL CPropertyDialogPage::Create(CTabCtrl *pParentWnd, CPropertyDialog *pPropertyDialog)

@@ -94,7 +94,7 @@ BOOL CEmptyProjectTemplateItem::InitProject(CLaTeXProject *pProject, LPCTSTR lps
 	if (CPathTool::Exists(strTargetPath))
 	{
 		CString strMessage;
-		strMessage.Format(STE_PROJECT_MAINFILEEXISTS, strTargetPath);
+		strMessage.Format(STE_PROJECT_MAINFILEEXISTS, (LPCTSTR)strTargetPath);
 		if (AfxMessageBox(strMessage, MB_ICONWARNING | MB_YESNO) == IDNO)
 		{
 			if (AfxMessageBox(STE_PROJECT_USEEXISTINGFILE, MB_ICONQUESTION | MB_YESNO) == IDNO)
@@ -191,7 +191,7 @@ BOOL CFileBasedProjectTemplateItem::InitProject(CLaTeXProject *pProject, LPCTSTR
 	if (CPathTool::Exists(strTargetPath))
 	{
 		CString strMessage;
-		strMessage.Format(STE_PROJECT_MAINFILEEXISTS, strTargetPath);
+		strMessage.Format(STE_PROJECT_MAINFILEEXISTS, (LPCTSTR)strTargetPath);
 		if (AfxMessageBox(strMessage, MB_ICONWARNING | MB_YESNO) == IDNO)
 		{
 			if (AfxMessageBox(STE_PROJECT_USEEXISTINGFILE, MB_ICONQUESTION | MB_YESNO) == IDNO)
@@ -270,7 +270,7 @@ BOOL CWizardBasedProjectTemplateItem::InitItem(LPCTSTR lpszPath, CImageList &Ima
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// retrieve the wizard interface
 	CString strProgId;
-	strProgId.Format(_T("%s.ProjectWizard"), CPathTool::GetFileTitle(m_strPath));
+	strProgId.Format(_T("%s.ProjectWizard"), (LPCTSTR)CPathTool::GetFileTitle(m_strPath));
 
 	BSTR bstrProgId = strProgId.AllocSysString();
 	HRESULT result = m_wizard.CoCreateInstance(bstrProgId, NULL, CLSCTX_INPROC_SERVER);
@@ -481,7 +481,7 @@ void CProjectNewDialog::Create()
 		);
 
 		CString errMsg;
-		errMsg.Format(STE_PROJECTDIR_CREATE_ERR, pProject->GetWorkingDirectory(), systemError);
+		errMsg.Format(STE_PROJECTDIR_CREATE_ERR, (LPCTSTR)pProject->GetWorkingDirectory(), systemError);
 		AfxMessageBox(errMsg, MB_ICONSTOP | MB_OK);
 		return;
 	}

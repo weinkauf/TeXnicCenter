@@ -29,49 +29,93 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 //
 
 IDB_DOCUMENTTYPES       BITMAP                  "res\\documenttypes.bmp"
+
 IDB_DOCUMENTTYPES_LARGE BITMAP                  "res\\documenttypeslarge.bmp"
+
 IDB_SPLASH              BITMAP                  "res\\splash.bmp"
+
 IDB_FILE_VIEW           BITMAP                  "res\\fileview.bmp"
+
 IDR_FIND                BITMAP                  "res\\find.bmp"
+
 IDR_FORMAT              BITMAP                  "res\\format.bmp"
+
 IDR_FORMAT_RECENTLY_USED BITMAP                  "res\\formatrecentlyused.bmp"
+
 IDR_IMAGES              BITMAP                  "res\\images.bmp"
+
 IDR_INSERT              BITMAP                  "res\\insert.bmp"
+
 IDR_LATEX               BITMAP                  "res\\latex.bmp"
+
 IDR_MAINFRAME           BITMAP                  "res\\mainframe.bmp"
+
 IDR_MATH                BITMAP                  "res\\math.bmp"
+
 IDR_MATHBAR1            BITMAP                  "res\\mathbar1.bmp"
+
 IDR_MATHBAR10           BITMAP                  "res\\mathbar10.bmp"
+
 IDR_MATHBAR11           BITMAP                  "res\\mathbar11.bmp"
+
 IDR_MATHBAR12           BITMAP                  "res\\mathbar12.bmp"
+
 IDR_MATHBAR13           BITMAP                  "res\\mathbar13.bmp"
+
 IDR_MATHBAR14           BITMAP                  "res\\mathbar14.bmp"
+
 IDR_MATHBAR15           BITMAP                  "res\\mathbar16.bmp"
+
 IDR_MATHBAR16           BITMAP                  "res\\mathbar17.bmp"
+
 IDR_MATHBAR2            BITMAP                  "res\\mathbar2.bmp"
+
 IDR_MATHBAR3            BITMAP                  "res\\mathbar3.bmp"
+
 IDR_MATHBAR4            BITMAP                  "res\\mathbar4.bmp"
+
 IDR_MATHBAR5            BITMAP                  "res\\mathbar5.bmp"
+
 IDR_MATHBAR6            BITMAP                  "res\\mathbar6.bmp"
+
 IDR_MATHBAR7            BITMAP                  "res\\mathbar7.bmp"
+
 IDR_MATHBAR8            BITMAP                  "res\\mathbar8.bmp"
+
 IDR_MATHBAR9            BITMAP                  "res\\mathbar9.bmp"
+
 IDB_TEXNICCENTER        BITMAP                  "res\\logo.bmp"
+
 IDB_SEPARATOR           BITMAP                  "res\\separator.bmp"
+
 IDB_PARSE_VIEW          BITMAP                  "res\\successindicators.bmp"
+
 IDB_ITEM_TYPES          BITMAP                  "res\\itemtypes.bmp"
+
 IDR_ADDITIONAL_COMMANDS BITMAP                  "res\\additional.bmp"
+
 IDB_OUTPUT_BAR          BITMAP                  "res\\outputbar.bmp"
+
 IDR_NAVIGATION_BAR      BITMAP                  "res\\navigationbar.bmp"
+
 IDR_ERROR_LIST          BITMAP                  "res\\errorlist.bmp"
+
 IDB_NAVIGATION_BAR      BITMAP                  "res\\navigationbar.bmp"
+
 IDR_OUTPUT_BAR          BITMAP                  "res\\outputbar.bmp"
+
 IDB_BUILD_ANIMATION     BITMAP                  "res\\buildanimation.bmp"
+
 IDR_STRUCTURE           BITMAP                  "res\\structuretoolbar.bmp"
+
 IDR_BIB_SEARCH          BITMAP                  "res\\bibtoolbar.bmp"
+
 IDB_WIZARD              BITMAP                  "res\\wizard.bmp"
+
 IDR_BOOKMARK_VIEW       BITMAP                  "res\\bookmark view toolbar.bmp"
+
 IDB_LIGHTBULB           BITMAP                  "res\\Lightbulb.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -171,12 +215,19 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\TeXnicCenter.ico"
+
 IDR_LATEXWIZARD         ICON                    "res\\Wizard.ico"
+
 IDR_BIBTEXDOCTYPE       ICON                    "res\\bibtextype.ico"
+
 IDR_LATEXDOCTYPE        ICON                    "res\\LatexDoc.ico"
+
 IDR_LATEXPROJECTDOCTYPE ICON                    "res\\idr_late.ico"
+
 IDR_MAINFRAMEOLD        ICON                    "res\\TeXnicCenterOld.ico"
+
 IDR_LATEXDOCTYPEOLD     ICON                    "res\\LatexDocOld.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -184,9 +235,13 @@ IDR_LATEXDOCTYPEOLD     ICON                    "res\\LatexDocOld.ico"
 //
 
 IDC_SDRAGCOPY           CURSOR                  "res\\sdragcopy.cur"
+
 IDC_SINGLEDRAG          CURSOR                  "res\\singledrag.cur"
+
 IDC_INCREMENTAL_SEARCH  CURSOR                  "res\\Incremental search.cur"
+
 IDC_REVERSE_INCREMENTAL_SEARCH CURSOR                  "res\\Reverse incremental search.cur"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -890,7 +945,7 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "&Schlieﬂen",IDOK,227,182,50,14
     CONTROL         "",IDC_STATIC1,"Static",SS_WHITERECT,-1,-1,286,175
-    CONTROL         102,IDB_LIGHTBULB,"Static",SS_BITMAP,9,16,32,30
+    CONTROL         IDB_LIGHTBULB,IDB_LIGHTBULB,"Static",SS_BITMAP,9,16,32,30
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,-1,174,287,1
     CONTROL         "&Tipps beim Starten anzeigen",IDC_STARTUP,"Button",BS_AUTOCHECKBOX | BS_TOP | WS_TABSTOP,7,185,106,10
     PUSHBUTTON      "&N‰chster Tipp",IDC_NEXTTIP,164,182,60,14
@@ -1466,7 +1521,7 @@ BEGIN
     PUSHBUTTON      "&OK",IDCANCEL,207,220,50,14
     LTEXT           "DNT:LegalCopyright",IDC_COPYRIGHT,7,219,197,8,SS_CENTERIMAGE
     PUSHBUTTON      "TeXnicCenter.org",IDC_URL,7,229,87,8,BS_RIGHT
-    CONTROL         236,IDC_LOGO,"Static",SS_BITMAP,64,4,134,24
+    CONTROL         IDB_TEXNICCENTER,IDC_LOGO,"Static",SS_BITMAP,64,4,134,24
     CTEXT           "DNT:Version number will be inserted here",IDC_VERSION,7,28,250,8,0,WS_EX_TRANSPARENT
     CTEXT           "DNT:Scrolling Credits",IDC_CREDITS,7,42,250,164,SS_CENTERIMAGE
 END
@@ -5803,7 +5858,7 @@ BEGIN
     PUSHBUTTON      "&Next tip",IDC_NEXTTIP,164,182,60,14
     EDITTEXT        IDC_TIPSTRING,51,40,209,129,ES_MULTILINE | ES_READONLY | NOT WS_BORDER,WS_EX_TRANSPARENT
     LTEXT           "Static",IDC_TITLE,51,16,209,20,SS_CENTERIMAGE,WS_EX_TRANSPARENT
-    CONTROL         102,IDB_LIGHTBULB,"Static",SS_BITMAP,9,16,32,30
+    CONTROL         IDB_LIGHTBULB,IDB_LIGHTBULB,"Static",SS_BITMAP,9,16,32,30
 END
 
 IDD_TRANSPARENCY DIALOGEX 0, 0, 200, 49
@@ -5850,7 +5905,7 @@ BEGIN
     PUSHBUTTON      "&OK",IDCANCEL,207,220,50,14
     LTEXT           "DNT:LegalCopyright",IDC_COPYRIGHT,7,219,197,8,SS_CENTERIMAGE
     PUSHBUTTON      "TeXnicCenter.org",IDC_URL,7,229,87,8,BS_RIGHT
-    CONTROL         236,IDC_LOGO,"Static",SS_BITMAP,30,10,203,34
+    CONTROL         IDB_TEXNICCENTER,IDC_LOGO,"Static",SS_BITMAP,30,10,203,34
     CTEXT           "DNT:Version number will be inserted here",IDC_VERSION,7,44,250,8,0,WS_EX_TRANSPARENT
     CTEXT           "DNT:Scrolling Credits",IDC_CREDITS,0,59,264,147,SS_CENTERIMAGE,WS_EX_TRANSPARENT
 END
@@ -7525,6 +7580,17 @@ BEGIN
     IDC_OPTIONS_VERTICALEDGE, 0x403, 19, 0
 0x6f63, 0x6f6c, 0x6572, 0x2064, 0x6162, 0x6b63, 0x7267, 0x756f, 0x646e, 
 "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_ABOUTBOX AFX_DIALOG_LAYOUT
+BEGIN
     0
 END
 

@@ -57,7 +57,7 @@ CTextFileSaveDialog::CTextFileSaveDialog(
     CWnd* pParent /*= NULL*/)
 
 : CFileDialogEx(FALSE, lpszDefExt, lpszFileName, dwFlags, lpszFilter, pParent)
-, m_strTitle((LPCTSTR)unTitle)
+, m_strTitle(MAKEINTRESOURCE(unTitle))
 , encoding_index_(0)
 , use_bom_(false)
 {

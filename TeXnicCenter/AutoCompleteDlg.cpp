@@ -85,7 +85,7 @@ BOOL CAutoCompleteDlg::InitWithKeyword(const CString &keyword)
 
 	map.RemoveAll();
 
-	std::tr1::shared_ptr<CObject> c;
+	std::shared_ptr<CObject> c;
 	CString key;
 	int idx;
 	
@@ -108,7 +108,7 @@ BOOL CAutoCompleteDlg::InitWithKeyword(const CString &keyword)
 		POSITION pos = map.GetStartPosition();
 		map.GetNextAssoc(pos,key, c);
 
-		lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
+		lc = std::dynamic_pointer_cast<CLaTeXCommand>(c);
 
 		if (lc && m_Listener != NULL) m_Listener->OnACCommandSelect(lc.get());
 
@@ -134,7 +134,7 @@ BOOL CAutoCompleteDlg::InitWithKeyword(const CString &keyword)
 	{
 		map.GetNextAssoc(pos,key, c);
 
-		lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
+		lc = std::dynamic_pointer_cast<CLaTeXCommand>(c);
 		idx = m_Box->AddString(lc->ToLaTeX());
 
 		int ret = m_Box->SetItemDataPtr(idx,lc.get()); // sync pointer with string

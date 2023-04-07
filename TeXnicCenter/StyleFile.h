@@ -46,7 +46,7 @@
 /**
  * @brief @c CObject smart pointer type.
  */
-typedef std::tr1::shared_ptr<CObject> SharedCObjectPtr;
+typedef std::shared_ptr<CObject> SharedCObjectPtr;
 
 /**
  * @brief @c CString to @ref SharedCObjectPtr map type.
@@ -56,7 +56,7 @@ typedef CMap<CString, LPCTSTR, SharedCObjectPtr, SharedCObjectPtr> SharedObjectM
 /**
  * @brief @ref CLaTeXCommand smart pointer type.
  */
-typedef std::tr1::shared_ptr<CLaTeXCommand> SharedLaTeXCommandPtr;
+typedef std::shared_ptr<CLaTeXCommand> SharedLaTeXCommandPtr;
 
 class CNewCommand;
 class CNewEnvironment;
@@ -94,7 +94,7 @@ public:
 };
 
 /* Represents a LaTeX-Style file or class */
-class CStyleFile : public CObject, public std::tr1::enable_shared_from_this<CStyleFile>
+class CStyleFile : public CObject, public std::enable_shared_from_this<CStyleFile>
 {
 public:
 	const CString ToString() const;
@@ -129,11 +129,11 @@ public:
 	void GetPossibleItems(const CString& Partial, SharedObjectMap& Result);
 
 
-	std::tr1::shared_ptr<CNewCommand> AddCommand(const CString &name,int noOfParams = 0, const CString &desc = CString());
+	std::shared_ptr<CNewCommand> AddCommand(const CString &name,int noOfParams = 0, const CString &desc = CString());
 	/** Works for both, \newcommand and \newenvironment */
 	bool AddCommand(SharedLaTeXCommandPtr& cmd);
-	std::tr1::shared_ptr<CNewEnvironment> AddEnvironment(const CString &name,int noOfParams = 0, const CString &desc = CString());
-	bool AddOption(std::tr1::shared_ptr<CDeclareOption>& cmd);
+	std::shared_ptr<CNewEnvironment> AddEnvironment(const CString &name,int noOfParams = 0, const CString &desc = CString());
+	bool AddOption(std::shared_ptr<CDeclareOption>& cmd);
 	bool AddOption(const CString &name, const CString &desc = CString());
 
 	CStyleFile & operator =(const CStyleFile&);

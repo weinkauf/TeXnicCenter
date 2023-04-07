@@ -17,7 +17,7 @@ class StructureItem
 	//Construction/Destruction
 	mutable int main_project_file_;
 	/// Detail item information, e.g. BibItem for BibTeX entries
-	std::tr1::shared_ptr<StructureItemInfo> item_info_;
+	std::shared_ptr<StructureItemInfo> item_info_;
 	bool missing_;
 	CString prefix_;
 	

@@ -19,6 +19,9 @@
 *
 ********************************************************************/
 
+#pragma warning(push)
+#pragma warning(disable : 4100) //Unreferenced Formal Parameter
+
 
 //-------------------------------------------------------------------
 // class CInterfaceImplementationWrapper
@@ -532,3 +535,5 @@ T* CCoClassWrapper<T>::DefaultInterface()
 {
 	return m_p;
 }
+
+#pragma warning(pop)

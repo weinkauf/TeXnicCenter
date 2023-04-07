@@ -71,44 +71,6 @@
 #include "tipdlg.h"
 #include "TeXnicCenter.h"
 
-namespace {
-	/**
-	 * Loads the MFC resource module with the specified @a lcid, sets it as the
-	 * current instance and releases the previous one.
-	 *
-	 * @param lcid Resource locale of the module to be loaded.
-	 */
-	void LoadModuleResources(LCID lcid)
-	{
-		CString strLanguage;
-
-		::GetLocaleInfo(lcid, LOCALE_SABBREVLANGNAME, strLanguage.GetBuffer(MAX_PATH), MAX_PATH);
-		strLanguage.ReleaseBuffer();
-
-		CString strPath;
-		AFX_MODULE_STATE* pModuleState = AfxGetModuleState();
-		LPTSTR pszPath = strPath.GetBuffer(MAX_PATH);
-
-		::GetModuleFileName(pModuleState->m_appLangDLL, pszPath, MAX_PATH);
-		::PathRemoveExtension(pszPath);
-		strPath.ReleaseBuffer();
-		
-		const int minExtensionLength = 3;
-
-		ASSERT(strPath.GetLength() >= minExtensionLength);
-		strPath.GetBufferSetLength(strPath.GetLength() - minExtensionLength);
-		strPath += strLanguage;
-		strPath += _T(".DLL");
-
-		HINSTANCE hInstance = AfxLoadLibrary(strPath);
-
-		if (hInstance)
-		{
-			AfxFreeLibrary(pModuleState->m_appLangDLL);
-			pModuleState->m_appLangDLL = hInstance;
-		}	
-	}
-}
 
 class TeXnicCenterAppSpellerSource
 	: public SpellerSource
@@ -304,7 +266,7 @@ bool CTeXnicCenterApp::CanUseRecentFiles()
 	return !bNoRecentDocs;
 }
 
-BOOL CALLBACK TxcEnumResourceLanguages(HANDLE /*hModule*/, LPCTSTR lpszType, LPCTSTR /*lpszName*/, WORD wIdLang, LONG lParam)
+BOOL CALLBACK TxcEnumResourceLanguages(HANDLE /*hModule*/, LPCTSTR lpszType, LPCTSTR /*lpszName*/, WORD wIdLang, LONG_PTR lParam)
 {
 	ASSERT(lpszType == RT_VERSION);
 	UNUSED_ALWAYS(lpszType);
@@ -352,22 +314,6 @@ BOOL CTeXnicCenterApp::InitInstance()
 			return TRUE;
 	}
 
-	// InitCommonControlsEx() is required on Windows XP if an application
-	// manifest specifies use of ComCtl32.dll version 6 or later to enable
-	// visual styles.  Otherwise, any window creation will fail.
-	INITCOMMONCONTROLSEX InitCtrls;
-	InitCtrls.dwSize = sizeof(InitCtrls);
-	// Set this to include all the common control classes you want to use
-	// in your application.
-	InitCtrls.dwICC = ICC_WIN95_CLASSES;
-	InitCommonControlsEx(&InitCtrls);
-
-	InitContextMenuManager();
-	InitKeyboardManager();
-	InitShellManager();
-
-	AfxEnableControlContainer(new FontOccManager);
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// load configuration from registry
 
@@ -386,14 +332,15 @@ BOOL CTeXnicCenterApp::InitInstance()
 	CConfiguration::GetInstance()->Serialize(CConfiguration::Load);
 
 	// loading localized resource DLL for TeXnicCenter itself
-	m_hTxcResources = LoadLibrary(_T("language\\TxcRes") + CConfiguration::GetInstance()->m_strGuiLanguage + _T(".dll"));
+	CString strResPath(_T("language\\TxcRes") + CConfiguration::GetInstance()->m_strGuiLanguage + _T(".dll"));
+	m_hTxcResources = LoadLibrary((LPCTSTR)strResPath);
 
 	BOOL bResourcesIncompatible = FALSE;
 
 	if (m_hTxcResources)
 	{
 		WORD wIdLang = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
-		EnumResourceLanguages(m_hTxcResources, RT_VERSION, MAKEINTRESOURCE(1), (ENUMRESLANGPROC)TxcEnumResourceLanguages, (LONG) & wIdLang);
+		EnumResourceLanguages(m_hTxcResources, RT_VERSION, MAKEINTRESOURCE(1), (ENUMRESLANGPROC)TxcEnumResourceLanguages, (LONG_PTR) &wIdLang);
 
 		// check compatibility
 		CFileVersionInfo fviResources(m_hTxcResources, MAKELONG(wIdLang, 0x04b0/*UNICODE*/));
@@ -402,17 +349,6 @@ BOOL CTeXnicCenterApp::InitInstance()
 		if (fviResources.GetFileVersion() == fviTxc.GetFileVersion())
 		{
 			AfxSetResourceHandle(m_hTxcResources);
-
-			if (fviResources.GetLanguageId() != MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL))
-			{
-				LANGID id = fviResources.GetLanguageId();
-				LCID lcid = MAKELCID(id, SORT_DEFAULT);
-
-				::SetThreadLocale(lcid);
-				::SetThreadUILanguage(id);
-
-				LoadModuleResources(lcid);
-			}
 		}
 		else
 		{
@@ -420,14 +356,19 @@ BOOL CTeXnicCenterApp::InitInstance()
 		}
 	}
 
-#if 1
+
+	InitContextMenuManager();
+	InitKeyboardManager();
+	InitShellManager();
+
+	AfxEnableControlContainer(new FontOccManager);
+
 	// show splash screen
 	if (cmdInfo.m_bShowSplash)
 	{
 		CSplashWnd::EnableSplashScreen(cmdInfo.m_bShowSplash);
 		CSplashWnd::ShowSplashScreen(NULL);
 	}
-#endif
 
 	// Standardinitialisierung
 	if (!AfxOleInit())
@@ -446,15 +387,7 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	if (application_look == look_not_set)
 	{
-		OSVERSIONINFO vi = {sizeof(OSVERSIONINFO)};
-		::GetVersionEx(&vi);
-
-		if (vi.dwMajorVersion < 5 || vi.dwMajorVersion == 5 && vi.dwMinorVersion == 0) // Windows 2000 and previous versions
-			application_look = ID_VIEW_APP_LOOK_OFFICE_XP;
-		else if (vi.dwMajorVersion == 5) // Windows XP
-			application_look = ID_VIEW_APP_LOOK_VS_2005;
-		else // Windows Vista or higher
-			application_look = ID_VIEW_APP_LOOK_OFFICE_2007_BLUE;
+		application_look = ID_VIEW_APP_LOOK_OFFICE_2007_BLUE;
 	}
 
 	SetApplicationLook(application_look);
@@ -630,8 +563,8 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 		CString strMessage;
 		strMessage.Format(
-		    STE_RESOURCE_CONFLICT, CConfiguration::GetInstance()->m_strGuiLanguage,
-		    fviTxc.GetFileVersion(), fviResources.GetFileVersion());
+		    STE_RESOURCE_CONFLICT, (LPCTSTR)CConfiguration::GetInstance()->m_strGuiLanguage,
+		    (LPCTSTR)fviTxc.GetFileVersion(), (LPCTSTR)fviResources.GetFileVersion());
 		AfxMessageBox(strMessage);
 	}
 
@@ -657,8 +590,6 @@ BOOL CTeXnicCenterApp::InitInstance()
 
 	// Show Tip
 	ShowTipAtStartup();
-
-	TRACE1("Detected OS: %s\n", m_SystemInfo.ToString());
 
 	// fontDefaultGUIUnderline doesn't contain the font
 	// that is consistent with all the menus and dialogs: replace it
@@ -883,7 +814,7 @@ CDocument* CTeXnicCenterApp::GetLatexDocument(LPCTSTR lpszFileName,BOOL bReadOnl
 	CDocTemplate *pDocTemplate = m_pLatexDocTemplate;
 
 	// try to find a document that represents the requested file
-	CDocument *pDoc;
+	CDocument* pDoc = NULL;
 	POSITION pos = pDocTemplate->GetFirstDocPosition();
 	BOOL bFound = FALSE;
 
@@ -1383,7 +1314,7 @@ void CTeXnicCenterApp::OnProjectClose()
 void CTeXnicCenterApp::OnUpdateProjectClose(CCmdUI* pCmdUI)
 {
 	// enabled, if there is an open document
-	pCmdUI->Enable((BOOL)m_pProjectDocTemplate->GetFirstProjectPosition());
+	pCmdUI->Enable(m_pProjectDocTemplate->GetFirstProjectPosition() != NULL);
 }
 
 void CTeXnicCenterApp::OnProjectSave()
@@ -1455,7 +1386,7 @@ void CTeXnicCenterApp::OnLatexProfileSel()
 	if (!m_pMainWnd || !IsWindow(m_pMainWnd->m_hWnd)) return;
 
 	//Get combo box for selection the profile
-	POSITION pos = NULL;
+	int pos = 0;
 	CMFCToolBarComboBoxButton* pButton = (CMFCToolBarComboBoxButton*)(pMainFrame->GetToolBarButton(ID_LATEX_PROFILE_SEL, pos));
 	if (!pButton) return;
 	CComboBox* pBox = pButton->GetComboBox();
@@ -1487,7 +1418,7 @@ void CTeXnicCenterApp::UpdateLaTeXProfileSel()
 	CProfileMap::GetInstance()->GetKeyList(astrProfiles);
 
 	// update all instances of this button
-	POSITION pos = NULL;
+	int pos = 0;
 	CMFCToolBarComboBoxButton *pButton = NULL;
 
 	while ((pButton =
@@ -1737,13 +1668,13 @@ void CTeXnicCenterApp::UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &rec
 			{
 				CString strFormat;
 				if (i == 9)
-					strFormat.Format(_T("1&0 %s"), strDisplayName);
+					strFormat.Format(_T("1&0 %s"), (LPCTSTR)strDisplayName);
 				else
-					strFormat.Format(_T("&%d %s"), i + 1, strDisplayName);
+					strFormat.Format(_T("&%d %s"), i + 1, (LPCTSTR)strDisplayName);
 				strDisplayName = strFormat;
 			}
 
-			pMenu->AppendMenu(MF_STRING, unFirstCommandId + i, strDisplayName);
+			pMenu->AppendMenu(MF_STRING, unFirstCommandId + i, (LPCTSTR)strDisplayName);
 		}
 	}
 	else
@@ -1782,9 +1713,9 @@ void CTeXnicCenterApp::UpdateRecentFileList(CCmdUI *pCmdUI, CRecentFileList &rec
 				CString strFormat;
 
 				if (i == 9)
-					strFormat.Format(_T("1&0 %s"), strDisplayName);
+					strFormat.Format(_T("1&0 %s"), (LPCTSTR)strDisplayName);
 				else
-					strFormat.Format(_T("&%d %s"), i + 1, strDisplayName);
+					strFormat.Format(_T("&%d %s"), i + 1, (LPCTSTR)strDisplayName);
 
 				strDisplayName = strFormat;
 			}
@@ -1950,7 +1881,8 @@ void CTeXnicCenterApp::OnURL(UINT unID)
 {
 	// text behind the second '\n'-character in the description of the command
 	// is the full URL
-	CString strURL((LPCTSTR)unID);
+	CString strURL;
+	strURL.LoadString(unID);
 	int nIndex = strURL.Find(_T('\n'));
 
 	if (nIndex < 0)
@@ -2009,15 +1941,15 @@ bool CTeXnicCenterApp::NewSpeller(const CString& strLanguage, const CString& str
 	// Create dictionary name and path
 	CString dicName;
 	dicName.Format(_T("%s\\%s_%s.dic"),
-	               CConfiguration::GetInstance()->m_strSpellDictionaryPath,
-	               strLanguage,
-	               strLanguageDialect);
+	               (LPCTSTR)CConfiguration::GetInstance()->m_strSpellDictionaryPath,
+	               (LPCTSTR)strLanguage,
+	               (LPCTSTR)strLanguageDialect);
 	// Create affix name and path
 	CString affName;
 	affName.Format(_T("%s\\%s_%s.aff"),
-	               CConfiguration::GetInstance()->m_strSpellDictionaryPath,
-	               strLanguage,
-	               strLanguageDialect);
+	               (LPCTSTR)CConfiguration::GetInstance()->m_strSpellDictionaryPath,
+	               (LPCTSTR)strLanguage,
+	               (LPCTSTR)strLanguageDialect);
 
 	//Compare desired language/dialect to the currently active one
 	if (m_pSpell && m_pSpell->SameLanguage(affName, dicName))
@@ -2117,10 +2049,10 @@ void CTeXnicCenterApp::OnUpdateProject()
 		if (pDoc)
 		{
 			// Get the first document view
-			POSITION pos = pDoc->GetFirstViewPosition();
-			if (pos)
+			POSITION ViewPos = pDoc->GetFirstViewPosition();
+			if (ViewPos)
 			{
-				LaTeXView *pView = (LaTeXView *)pDoc->GetNextView(pos);
+				LaTeXView *pView = (LaTeXView *)pDoc->GetNextView(ViewPos);
 
 				if (pView && pView->IsKindOf(RUNTIME_CLASS(LaTeXView)))
 					pBackgroundThread->RecheckSpelling(pView);
@@ -2225,7 +2157,7 @@ void CTeXnicCenterApp::FindPackageFilesRecursive(CString dir)
 
 			if (!ext.CompareNoCase(_T("xml")))
 			{
-				TRACE1("Adding package file: %s...\n", CPathTool::GetFileTitle(p));
+				TRACE1("Adding package file: %s...\n", (LPCTSTR)CPathTool::GetFileTitle(p));
 				m_AvailableCommands.LoadFromXML(p, true);
 			}
 		}
@@ -2317,7 +2249,7 @@ const CString& CTeXnicCenterApp::GetModuleFileName() const
 
 int CTeXnicCenterApp::DoMessageBox(LPCTSTR prompt, UINT nType, UINT nIDPrompt)
 {
-	int result;
+	int result(0);
 
 	// disable windows for modal dialog
 	DoEnableModeless(FALSE);

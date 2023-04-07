@@ -174,7 +174,7 @@ int BibView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	list_view_.SetImageList(&il,LVSIL_SMALL);
 	il.Detach(); // Will be destroyed by the list view
 
-	using namespace std::tr1;
+	using namespace std;
 	using namespace placeholders;
 
 	MapKeyStateToFormat(0,CLaTeXProject::FormatRef); // No addition key pressed while dragging, output \cite{key}
@@ -275,7 +275,7 @@ void BibView::OnParsingFinished()
 
 	list_view_.SetRedraw();
 
-	std::tr1::hash<std::basic_string<TCHAR> > hasher;
+	std::hash<std::basic_string<TCHAR> > hasher;
 
 	LVGROUP lvg = {};
 	lvg.mask = LVGF_HEADER|LVGF_GROUPID;
@@ -425,9 +425,11 @@ bool BibView::ContainsAny( const CString& text, std::vector<CString>& tokens )
 	bool found = !pos_buffer_.empty();
 
 	// and remove these
-	for (std::vector<std::vector<CString>::iterator>::reverse_iterator it = pos_buffer_.rbegin();
-		it != pos_buffer_.rend() && !stop_search_; ++it)
-		tokens.erase(*it);
+	for (std::vector<std::vector<CString>::iterator>::reverse_iterator rit = pos_buffer_.rbegin();
+		rit != pos_buffer_.rend() && !stop_search_; ++rit)
+	{
+		tokens.erase(*rit);
+	}
 
 	return found && !stop_search_;
 }
@@ -560,7 +562,7 @@ void BibView::OnUpdateSearchOptions(CCmdUI* pCmdUI)
 }
 
 int BibView::TranslateCompareFunction(LPARAM l1, LPARAM l2, BibView* pane, 
-									  const std::tr1::function<int (const BibItem& a, const BibItem& b)>& f )
+									  const std::function<int (const BibItem& a, const BibItem& b)>& f )
 {
 	BibItemContainerType::size_type pos1 = static_cast<BibItemContainerType::size_type>(l1);
 	BibItemContainerType::size_type pos2 = static_cast<BibItemContainerType::size_type>(l2);
@@ -636,7 +638,7 @@ void BibView::StartSearch()
 			populate_was_search_ = true;
 
 			text.MakeLower();
-			using namespace std::tr1;
+			using namespace std;
 			using namespace placeholders;
 
 			std::vector<CString> words;

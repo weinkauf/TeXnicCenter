@@ -7,7 +7,7 @@
 /// \ingroup utilities
 template<class T>
 class Nullable {
-	std::tr1::shared_ptr<T> value_;
+	std::shared_ptr<T> value_;
 
 public:
 	/// Initializes an empty container.

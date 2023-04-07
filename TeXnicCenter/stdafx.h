@@ -84,7 +84,7 @@ namespace Interfaces
 
 #include <regex>
 
-typedef std::tr1::basic_regex<TCHAR> tregex;
+typedef std::basic_regex<TCHAR> tregex;
 
 #define _ATL_NO_AUTOMATIC_NAMESPACE
 

@@ -74,5 +74,5 @@ void CEditMenuButton::OnShowMenu()
 	if (!m_pEdit || !IsWindow(m_pEdit->m_hWnd))
 		return;
 
-	m_pEdit->InsertText(CString((LPCTSTR) m_nMenuResult));
+	m_pEdit->InsertText(CString(MAKEINTRESOURCE(m_nMenuResult)));
 }

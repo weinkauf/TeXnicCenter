@@ -297,7 +297,6 @@ void LaTeXView::OnModified(SCNotification* n)
 void LaTeXView::InstantAdvice()
 {
 	long ptStart = GetCtrl().GetCurrentPos();
-	CPoint ptClient;
 	CString keyw = GetWordAroundRange(ptStart, ptStart, true, false, false, true, false, false, false);
 
 	if (keyw.GetLength() > MINIMUM_KEYWORD_LENGTH)
@@ -308,8 +307,8 @@ void LaTeXView::InstantAdvice()
 
 		if (map.GetCount() == 1) //keyword is unique -> show the advice
 		{
-			std::tr1::shared_ptr<CObject> c = map.PGetFirstAssoc()->value;
-			SharedLaTeXCommandPtr lc = std::tr1::dynamic_pointer_cast<CLaTeXCommand>(c);
+			std::shared_ptr<CObject> c = map.PGetFirstAssoc()->value;
+			SharedLaTeXCommandPtr lc = std::dynamic_pointer_cast<CLaTeXCommand>(c);
 
 			if (lc != NULL)
 			{
@@ -1066,7 +1065,7 @@ void LaTeXView::OnFormatTextForeColor()
 				if (s == e) {
 					// No text selected, use \color{}
 					CStringA text;
-					text.Format("\\color%s",spec);
+					text.Format("\\color%s", (LPCSTR)spec);
 
 					c.InsertText(s,text);
 					e = s + text.GetLength();
@@ -1083,10 +1082,10 @@ void LaTeXView::OnFormatTextForeColor()
 
 					// Generate the \textcolor string
 					CStringA fmt1;
-					fmt1.Format("\\textcolor%s{",spec);
+					fmt1.Format("\\textcolor%s{", (LPCSTR)spec);
 
 					CStringA fmt2;
-					fmt2.Format("%s}",text);
+					fmt2.Format("%s}", (LPCSTR)text);
 
 					// Replace the selection
 					c.ReplaceSel(fmt1 + fmt2);
@@ -1141,10 +1140,10 @@ void LaTeXView::OnFormatTextBackColor()
 
 	// Generate the \textcolor string
 	CStringA fmt1;
-	fmt1.Format("\\colorbox%s{",spec);
+	fmt1.Format("\\colorbox%s{", (LPCSTR)spec);
 
 	CStringA fmt2;
-	fmt2.Format("%s}",text);
+	fmt2.Format("%s}", (LPCSTR)text);
 
 	// Replace the selection
 	c.ReplaceSel(fmt1 + fmt2);	

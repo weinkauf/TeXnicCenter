@@ -94,13 +94,13 @@ BOOL NavigatorTreeCtrl::Create(CWnd *pwndParent)
 	{
 		::SetWindowTheme(m_hWnd,L"explorer",0);
 
-		const DWORD style =
+		const DWORD exstyle =
 							  TVS_EX_DOUBLEBUFFER
 							//| TVS_EX_FADEINOUTEXPANDOS
 							//| TVS_EX_AUTOHSCROLL
 							| TVS_EX_RICHTOOLTIP;
 
-		SendMessage(TVM_SETEXTENDEDSTYLE,style,style);
+		SendMessage(TVM_SETEXTENDEDSTYLE, exstyle, exstyle);
 	}
 
 	return result;
@@ -255,25 +255,32 @@ HTREEITEM NavigatorTreeCtrl::GetNextExpandedItem(HTREEITEM hItem,BOOL bInclude /
 		if (!bInclude)
 		{
 			if (ItemHasChildren(hFound))
+			{
+				//Go to child
 				hFound = GetChildItem(hFound);
+			}
 			else
 			{
-				HTREEITEM hItem = hFound;
-				hFound = GetNextSiblingItem(hItem);
+				//Go to sibling
+				HTREEITEM hCurItem = hFound;
+				hFound = GetNextSiblingItem(hCurItem);
+
+				//Go to parent, and then their sibling
 				if (!hFound)
 				{
 					do
 					{
-						hFound = hItem = GetParentItem(hItem);
-						if (!hFound)
-							break;
+						hFound = hCurItem = GetParentItem(hCurItem);
+						if (!hFound) break; //We are back to the root
 					}
 					while ((hFound = GetNextSiblingItem(hFound)) == NULL);
 				}
 			}
 		}
 		else
+		{
 			bInclude = FALSE;
+		}
 	}
 	while (hFound && !(GetItemState(hFound,TVIS_EXPANDED) & TVIS_EXPANDED));
 
@@ -293,7 +300,7 @@ int NavigatorTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_bFirstTime = FALSE;
 
-	using namespace std::tr1;
+	using namespace std;
 	using namespace placeholders;
 
 	MapKeyStateToFormat(0,CLaTeXProject::FormatRef);

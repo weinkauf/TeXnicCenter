@@ -174,7 +174,8 @@ CDoubleBuffer<TYPE, BUFFERSIZE> &CDoubleBuffer<TYPE, BUFFERSIZE>::operator=( CDo
 	CSingleLock	readAccess( &buffer.m_readAccess, TRUE );
 	CSingleLock	writeAccess( &m_writeAccess, TRUE );
 
-	for( int i = 0; i < buffer.m_anValidElements[buffer.m_nReadBufferIndex]; i++ )
+	int i = 0;
+	for(; i < buffer.m_anValidElements[buffer.m_nReadBufferIndex]; i++ )
 		m_aaElements[m_nWriteBufferIndex][i] = buffer.m_aaElements[buffer.m_nReadBufferIndex][i];
 
 	m_anValidElements[m_nWriteBufferIndex] = i;

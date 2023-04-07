@@ -133,7 +133,7 @@ BOOL CFileGrep::Grep(
 		if (m_bCaseSensitive)
 			m_regEx.assign(strSearch);
 		else
-			m_regEx.assign(strSearch,std::tr1::regex_constants::icase);
+			m_regEx.assign(strSearch,std::regex_constants::icase);
 	}
 	catch (...)
 	{

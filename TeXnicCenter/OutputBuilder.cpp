@@ -90,7 +90,7 @@ BOOL COutputBuilder::Create(int nMode,
 	if (m_pView)
 	{
 		CString strMsg;
-		strMsg.Format(STE_LATEX_START,CProfileMap::GetInstance()->GetActiveProfileKey());
+		strMsg.Format(STE_LATEX_START, (LPCTSTR)CProfileMap::GetInstance()->GetActiveProfileKey());
 		m_pView->AddLine(strMsg);
 	}
 
@@ -245,7 +245,7 @@ BOOL COutputBuilder::RunLatex()
 		    NULL
 		);
 
-		m_strLatexResult.Format(STE_LATEX_START_FAILED_EXT,pc.GetExecutable(),systemError);
+		m_strLatexResult.Format(STE_LATEX_START_FAILED_EXT, (LPCTSTR)pc.GetExecutable(), systemError);
 		return FALSE;
 	}
 
@@ -309,7 +309,7 @@ BOOL COutputBuilder::RunBibTex()
 		    NULL
 		);
 
-		m_strLatexResult.Format(STE_LATEX_START_FAILED_EXT,pc.GetExecutable(),systemError);
+		m_strLatexResult.Format(STE_LATEX_START_FAILED_EXT, (LPCTSTR)pc.GetExecutable(), systemError);
 		return FALSE;
 	}
 
@@ -363,7 +363,7 @@ BOOL COutputBuilder::RunMakeIndex()
 		    NULL
 		);
 
-		m_strLatexResult.Format(STE_LATEX_START_FAILED_EXT,pc.GetExecutable(),systemError);
+		m_strLatexResult.Format(STE_LATEX_START_FAILED_EXT, (LPCTSTR)pc.GetExecutable(), systemError);
 		return FALSE;
 	}
 

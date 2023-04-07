@@ -30,7 +30,7 @@ private:
 	void RemoveColumnSort(int column);
 
 public:
-	typedef std::tr1::function<int (LPARAM, LPARAM)> CompareFunctionType;
+	typedef std::function<int (LPARAM, LPARAM)> CompareFunctionType;
 	typedef std::map<int,CompareFunctionType> CompareFunctionContainerType;
 
 private:

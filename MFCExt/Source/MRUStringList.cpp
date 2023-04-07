@@ -65,7 +65,8 @@ BOOL CMRUStringList::ReadList()
 		return FALSE;
 
 	// read all elements
-	for( int i = 0; i < GetSize(); i++ )
+	int i = 0;
+	for( ; i < GetSize(); i++ )
 	{
 		strValueName.Format( m_strNameFormat, i + 1 );
 		SetAt( i, pApp->GetProfileString( m_strSection, strValueName, _T("") ) );
@@ -73,6 +74,7 @@ BOOL CMRUStringList::ReadList()
 
 	// get number of elements
 	for( i = 0; i < GetSize() && !GetAt( i ).IsEmpty(); i++ );
+
 	m_nElementCount = i;
 
 	return TRUE;

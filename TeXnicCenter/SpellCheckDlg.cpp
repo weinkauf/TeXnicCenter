@@ -409,7 +409,7 @@ void SpellCheckDlg::OnSpellReplaceAll()
 
 #if 0
 	if (SpellerBackgroundThread* s = view_->GetDocument()->GetSpellerThread()) {
-		using namespace std::tr1;
+		using namespace std;
 		using namespace placeholders;
 
 		// Recheck the spelling on lines that have been modified

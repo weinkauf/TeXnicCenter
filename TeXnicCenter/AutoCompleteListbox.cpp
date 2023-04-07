@@ -309,7 +309,7 @@ CImageList* CAutoCompleteListBox::LoadBitmapFromFile(const CString& filename)
 		}
 		else
 		{
-			TRACE1("Could not load bitmap from file %s\n", filename);
+			TRACE1("Could not load bitmap from file %s\n", (LPCTSTR)filename);
 		}
 	}
 	else

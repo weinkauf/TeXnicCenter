@@ -114,7 +114,7 @@
     <CustomBuild Include="Projects\English advanced\Technical Report.tex">
       <Filter>Projects English advanced</Filter>
     </CustomBuild>
-    <CustomBuild Include="Documents\Deutsch\OptionenAbkuerzungen.tex">
+    <CustomBuild Include="Documents\Deutsch\OptionenAbkürzungen.tex">
       <Filter>Documents Deutsch</Filter>
     </CustomBuild>
   </ItemGroup>

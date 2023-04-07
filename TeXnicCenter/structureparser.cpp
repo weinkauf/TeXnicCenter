@@ -130,8 +130,8 @@ CStructureParser::CStructureParser(CStructureParserHandler *pStructureParserHand
 , m_regexUserCmd(_T("\\\\(re)?newcommand\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}"))
 , m_regexUserEnv(_T("\\\\(re)?newenvironment\\s*\\{([^\\}]*)\\}(\\s*\\[[^\\]]*\\])\\s*\\{([^\\}]*)\\}\\s*\\{([^\\}]*)\\}"))
 , m_regexInlineVerb(_T("\\\\verb\\*(.)[^$1]*\\1|\\\\verb([^\\*])[^$2]*\\2"))
-, index_(_T("\\\\printindex"))
-, nomencl_(_T("\\\\print(nomenclature|glossary)"))
+, m_regexIndex(_T("\\\\printindex"))
+, m_regexGlossary(_T("\\\\print(nomenclature|glossary|glossaries)"))
 {
 	// initialize attributes
 	ASSERT(pStructureParserHandler);
@@ -284,8 +284,8 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 {
 	LPCTSTR lpTextEnd = lpText;
 	StructureItem si;
-	std::tr1::match_results<LPCTSTR> what;
-	std::tr1::regex_constants::match_flag_type nFlags = std::tr1::regex_constants::match_default;
+	std::match_results<LPCTSTR> what;
+	std::regex_constants::match_flag_type nFlags = std::regex_constants::match_default;
 	int nTypeStart, nTypeCount, nTitleStart, nTitleCount;
 	CString strHeaderType;
 	COOKIE cookie;
@@ -413,7 +413,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 				if (m_pParseOutputHandler && !m_bCancel)
 				{
 					CString message;
-					message.Format(STE_PARSE_PARSING, strPath);
+					message.Format(STE_PARSE_PARSING, (LPCTSTR)strPath);
 					
 					info.SetErrorMessage(message);
 
@@ -430,7 +430,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			AddFileItem(strPath, StructureItem::missingTexFile, strActualFile, nActualLine, aSI);
 
 			CString message;
-			message.Format(STE_FILE_EXIST, strPath);
+			message.Format(STE_FILE_EXIST, (LPCTSTR)strPath);
 
 			info.SetErrorMessage(message);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
@@ -457,7 +457,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		tregex regexSplitPaths(_T("\\{([^}]*)\\}"));
 		LPCTSTR lpPathsStart = strPaths;
 		LPCTSTR lpPathsEnd = lpPathsStart + strPaths.GetLength();
-		std::tr1::match_results<LPCTSTR> MatchResult;
+		std::match_results<LPCTSTR> MatchResult;
 		while (regex_search(lpPathsStart, lpPathsEnd, MatchResult, regexSplitPaths, nFlags))
 		{
 			GraphicPaths.push_back(CString(MatchResult[1].first, MatchResult[1].second - MatchResult[1].first));
@@ -532,7 +532,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			if (GraphicFileFound)
 			{
 				CString message;
-				message.Format(STE_PARSE_FOUND, strCompletePath);
+				message.Format(STE_PARSE_FOUND, (LPCTSTR)strCompletePath);
 				
 				info.SetErrorMessage(message);
 				m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::information);
@@ -557,7 +557,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 				strCompletePath = strPath + _T(" [") + concat + _T("]");
 				
 				CString message;
-				message.Format(STE_FILE_EXIST, strCompletePath);
+				message.Format(STE_FILE_EXIST, (LPCTSTR)strCompletePath);
 				
 				info.SetErrorMessage(message);
 				m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
@@ -710,11 +710,11 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			StructureItemContainer::difference_type parent = m_anItem[m_nDepth - 1];
 
 			if (parent == -1 && !aSI.empty()) {
-				using namespace std::tr1::placeholders;
+				using namespace std::placeholders;
 				// Current header doesn't have a parent: Find previously inserted header item
 				// and check whether is its depth
 				StructureItemContainer::reverse_iterator it = std::find_if(aSI.rbegin(), aSI.rend(),
-					std::tr1::bind(std::tr1::bind(std::equal_to<int>(),std::tr1::bind(&StructureItem::GetType,_1),
+					std::bind(std::bind(std::equal_to<int>(),std::bind(&StructureItem::GetType,_1),
 						static_cast<int>(StructureItem::header)), _1));
 
 				if (it != aSI.rend()) 
@@ -814,13 +814,12 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 	}
 
 	// Find \printindex
-	if (regex_search(lpText, lpTextEnd, what, index_, nFlags) && IsCmdAt(lpText, what[0].first - lpText))
+	if (regex_search(lpText, lpTextEnd, what, m_regexIndex, nFlags) && IsCmdAt(lpText, what[0].first - lpText))
 	{
 		// parse string before occurrence
 		ParseString(lpText, what[0].first - lpText, cookies,
 			strActualFile, nActualLine, nFileDepth, aSI);
 
-		StructureItem si;
 		INITIALIZE_SI(si);
 
 		si.SetParent(-1);
@@ -837,13 +836,12 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 	}
 
 	// Find print nomencl
-	if (regex_search(lpText, lpTextEnd, what, nomencl_, nFlags) && IsCmdAt(lpText, what[0].first - lpText))
+	if (regex_search(lpText, lpTextEnd, what, m_regexGlossary, nFlags) && IsCmdAt(lpText, what[0].first - lpText))
 	{
 		// parse string before occurrence
 		ParseString(lpText, what[0].first - lpText, cookies,
 			strActualFile, nActualLine, nFileDepth, aSI);
 
-		StructureItem si;
 		INITIALIZE_SI(si);
 
 		si.SetParent(-1);
@@ -892,9 +890,9 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		// pop StructureItem::figure from stack
 		if (!cookies.empty() && cookies.top().nCookieType == StructureItem::figure)
 		{
-			StructureItem &si = aSI[cookies.top().nItemIndex];
+			StructureItem &fsi = aSI[cookies.top().nItemIndex];
 			cookies.pop();
-			CreateDefaultTitle(si);
+			CreateDefaultTitle(fsi);
 		}
 		else if (m_pParseOutputHandler && !m_bCancel)
 		{
@@ -902,7 +900,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			INITIALIZE_OI(info);
 
 			CString message;
-			message.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[StructureItem::figure]);
+			message.Format(STE_PARSE_FOUND_UNMATCHED, (LPCTSTR)m_sItemNames[StructureItem::figure]);
 
 			info.SetErrorMessage(message);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
@@ -924,9 +922,9 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		// pop StructureItem::figure from stack
 		if (!cookies.empty() && cookies.top().nCookieType == StructureItem::table)
 		{
-			StructureItem &si = aSI[cookies.top().nItemIndex];
+			StructureItem &tsi = aSI[cookies.top().nItemIndex];
 			cookies.pop();
-			CreateDefaultTitle(si);
+			CreateDefaultTitle(tsi);
 		}
 		else if (m_pParseOutputHandler && !m_bCancel)
 		{
@@ -934,7 +932,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			INITIALIZE_OI(info);
 
 			CString message;
-			message.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[StructureItem::table]);
+			message.Format(STE_PARSE_FOUND_UNMATCHED, (LPCTSTR)m_sItemNames[StructureItem::table]);
 
 			info.SetErrorMessage(message);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
@@ -956,9 +954,9 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 		// pop equation from stack
 		if (!cookies.empty() && cookies.top().nCookieType == StructureItem::equation)
 		{
-			StructureItem &si = aSI[cookies.top().nItemIndex];
+			StructureItem &esi = aSI[cookies.top().nItemIndex];
 			cookies.pop();
-			CreateDefaultTitle(si);
+			CreateDefaultTitle(esi);
 		}
 		else if (m_pParseOutputHandler && !m_bCancel)
 		{
@@ -966,7 +964,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			INITIALIZE_OI(info);
 
 			CString message;
-			message.Format(STE_PARSE_FOUND_UNMATCHED, m_sItemNames[StructureItem::equation]);
+			message.Format(STE_PARSE_FOUND_UNMATCHED, (LPCTSTR)m_sItemNames[StructureItem::equation]);
 
 			info.SetErrorMessage(message);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
@@ -1008,20 +1006,20 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			&& (cookies.top().nCookieType == StructureItem::unknownEnv)
 		        && (aSI[cookies.top().nItemIndex].m_strTitle == strEnvName))
 		{
-			StructureItem &si = aSI[cookies.top().nItemIndex];
+			StructureItem &usi = aSI[cookies.top().nItemIndex];
 			cookies.pop();
 
-			if (si.m_strCaption.IsEmpty() && !si.HasLabels())
+			if (usi.m_strCaption.IsEmpty() && !usi.HasLabels())
 			{
-				si.m_strTitle.Format(_T("%s: %s (%d)"), strEnvName,
-				                     ResolveFileName(si.m_strPath), si.m_nLine);
+				usi.m_strTitle.Format(_T("%s: %s (%d)"), (LPCTSTR)strEnvName,
+				                     (LPCTSTR)ResolveFileName(usi.m_strPath), usi.m_nLine);
 			}
 			else
 			{
-				if (si.m_strCaption.IsEmpty())
-					si.SetTitle(strEnvName + _T(": ") + si.GetLabel());
+				if (usi.m_strCaption.IsEmpty())
+					usi.SetTitle(strEnvName + _T(": ") + usi.GetLabel());
 				else
-					si.SetTitle(strEnvName + _T(": ") + si.GetLabel());
+					usi.SetTitle(strEnvName + _T(": ") + usi.GetLabel());
 			}
 		}
 		else if (m_pParseOutputHandler && !m_bCancel)
@@ -1030,7 +1028,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 			INITIALIZE_OI(info);
 
 			CString message;
-			message.Format(STE_PARSE_FOUND_UNMATCHED, strEnvName);
+			message.Format(STE_PARSE_FOUND_UNMATCHED, (LPCTSTR)strEnvName);
 
 			info.SetErrorMessage(message);
 			m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth, CParseOutputHandler::warning);
@@ -1134,7 +1132,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 					if (m_pParseOutputHandler && !m_bCancel)
 					{
 						CString message;
-						message.Format(STE_PARSE_PARSING, strPath);
+						message.Format(STE_PARSE_PARSING, (LPCTSTR)strPath);
 
 						info.SetErrorMessage(message);
 						m_pParseOutputHandler->OnParseLineInfo(info, nFileDepth,
@@ -1212,7 +1210,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 						}
 						else
 						{
-							TRACE("NP detected in CBiBTeXFile %s", strPath);
+							TRACE("NP detected in CBiBTeXFile %s", (LPCTSTR)strPath);
 						}
 					}
 				}
@@ -1225,7 +1223,7 @@ void CStructureParser::ParseString(LPCTSTR lpText, int nLength, CCookieStack &co
 						prefix.IsEmpty() ? NULL : prefix);
 
 					CString message;
-					message.Format(STE_FILE_EXIST, strPath);
+					message.Format(STE_FILE_EXIST, (LPCTSTR)strPath);
 
 					info.SetErrorMessage(message);
 
@@ -1317,7 +1315,7 @@ void CStructureParser::EmptyCookieStack(CCookieStack &cookies, StructureItemCont
 				info.SetSourceFile(si.m_strPath);
 
 				CString message;
-				message.Format(STE_PARSE_FOUND_UNMATCHED, aSI[item.nItemIndex].GetTitle());
+				message.Format(STE_PARSE_FOUND_UNMATCHED, (LPCTSTR)aSI[item.nItemIndex].GetTitle());
 
 				info.SetErrorMessage(message);
 
@@ -1377,8 +1375,8 @@ BOOL CStructureParser::Parse(LPCTSTR lpszPath, CCookieStack &cookies,
 	// parse text source
 	LPCTSTR lpLine, lpLineEnd, lpOffset;
 	int nLength;
-	std::tr1::regex_constants::match_flag_type nFlags = std::tr1::regex_constants::match_default;
-	std::tr1::match_results<LPCTSTR> what;
+	std::regex_constants::match_flag_type nFlags = std::regex_constants::match_default;
+	std::match_results<LPCTSTR> what;
 	BOOL bVerbatim = FALSE;
 	int nActualLine = 0;
 	const tregex* current_verb_end = 0;
@@ -1520,7 +1518,7 @@ void CStructureParser::CreateDefaultTitle( StructureItem& si,bool bForce /*= fal
 		if (si.m_strCaption.IsEmpty() && !si.HasLabels())
 		{
 			//Label and Caption empty ==> Generate a title from the filename
-			si.m_strTitle.Format(_T("%s (%d)"),ResolveFileName(si.m_strPath),si.m_nLine);
+			si.m_strTitle.Format(_T("%s (%d)"), (LPCTSTR)ResolveFileName(si.m_strPath), si.m_nLine);
 		}
 		else
 		{

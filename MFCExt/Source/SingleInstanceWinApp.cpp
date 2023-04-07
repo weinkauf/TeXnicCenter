@@ -299,7 +299,9 @@ BOOL CSingleInstanceWinApp::SendDdeCommand( LPCTSTR lpszDdeCommand )
 		return FALSE;
 
 	for( int i = 0; i < nLen; i++ )
+	{
 		szCmd[i] = (TCHAR)strCmd[i];
+	}
 	szCmd[nLen] = '\0';
 
 	// send command

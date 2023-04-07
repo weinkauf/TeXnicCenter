@@ -202,7 +202,7 @@ DWORD CProcess::GetExitCode() const
 	if (!GetExitCodeProcess(m_processInfo.hProcess,&dwExitCode))
 	{
 		AfxThrowProcessException(CProcessException::generic);
-		return ~0U;
+		//return ~0U;
 	}
 
 	return dwExitCode;
@@ -216,14 +216,14 @@ DWORD CProcess::WaitForProcess(DWORD dwTimeOut /*= INFINITE*/) const
 	{
 		case WAIT_FAILED:
 			AfxThrowProcessException(CProcessException::generic);
-			return WAIT_FAILED;
+			//return WAIT_FAILED;
 		case WAIT_TIMEOUT:
 			AfxThrowProcessException(CProcessException::generic);
-			return WAIT_TIMEOUT;
+			//return WAIT_TIMEOUT;
 		case WAIT_OBJECT_0:
 			return GetExitCode();
 		default:
 			AfxThrowProcessException(CProcessException::generic);
-			return ~0U;
+			//return ~0U;
 	}
 }

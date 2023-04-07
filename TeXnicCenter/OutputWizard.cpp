@@ -759,7 +759,7 @@ void COutputWizard::GenerateOutputProfiles()
 	{
 		CString strProfile(GetProfileName(STE_OUTPUTWIZARD_DVITYPE));
 
-		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
+		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS, (LPCTSTR)strProfile);
 		BOOL bExists = m_profiles.Exists(strProfile);
 
 		// create profile
@@ -795,7 +795,7 @@ void COutputWizard::GenerateOutputProfiles()
 		{
 			strProfile = GetProfileName(STE_OUTPUTWIZARD_DVIPDFMTYPE);
 
-			strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
+			strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS, (LPCTSTR)strProfile);
 			bExists = m_profiles.Exists(strProfile);
 		
 			if (!bExists || AfxMessageBox(strError,MB_ICONQUESTION | MB_YESNO) == IDYES)
@@ -821,7 +821,7 @@ void COutputWizard::GenerateOutputProfiles()
 	{
 		CString strProfile(GetProfileName(STE_OUTPUTWIZARD_PSTYPE));
 
-		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
+		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS, (LPCTSTR)strProfile);
 		BOOL bExists = m_profiles.Exists(strProfile);
 
 		if (!bExists || AfxMessageBox(strError,MB_ICONQUESTION | MB_YESNO) == IDYES)
@@ -881,7 +881,7 @@ void COutputWizard::GenerateOutputProfiles()
 	{
 		CString strProfile(GetProfileName(STE_OUTPUTWIZARD_PDFVIAPSTYPE));
 
-		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,strProfile);
+		strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS, (LPCTSTR)strProfile);
 		BOOL bExists = m_profiles.Exists(strProfile);
 
 		if (!bExists || AfxMessageBox(strError,MB_ICONQUESTION | MB_YESNO) == IDYES)
@@ -1025,7 +1025,7 @@ void COutputWizard::SetupAcrobatDDE( CProfile &p )
 	CString DDEServerName(_T("acroview"));
 	const tregex regexReaderVersion(_T(".*\\\\Reader ([\\d]+)\\..*"));
 	const tregex regexAcrobatVersion(_T(".*\\\\Acrobat ([\\d]+)\\..*"));
-	std::tr1::match_results<LPCTSTR> what;
+	std::match_results<LPCTSTR> what;
 	LPCTSTR lpStart = m_wndPagePdfViewer.m_strPath;
 	LPCTSTR lpEnd = lpStart + m_wndPagePdfViewer.m_strPath.GetLength();
 	if (regex_search(lpStart, lpEnd, what, regexReaderVersion))
@@ -1105,7 +1105,7 @@ void COutputWizard::SetupGenericPDF( CProfile &p )
 void COutputWizard::GeneratePDFProfile( const CString& name, const CString& strPDFLatexOptions, const CString& viewer_path, const CString& latexFileName )
 {
 	CString strError;
-	strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS,name);
+	strError.Format(STE_OUTPUTWIZARD_OUTPUTTYPEEXISTS, (LPCTSTR)name);
 	BOOL bExists = m_profiles.Exists(name);
 
 	if (!bExists || AfxMessageBox(strError,MB_ICONQUESTION | MB_YESNO) == IDYES)

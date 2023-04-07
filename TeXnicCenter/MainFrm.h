@@ -144,7 +144,7 @@ public:
 	        Pointer to the toolbar button with the specified command ID or
 	        NULL if there is no such button.
 	 */
-	CMFCToolBarButton* GetToolBarButton(UINT unCmdID, POSITION &pos) const;
+	CMFCToolBarButton* GetToolBarButton(UINT unCmdID, int& pos) const;
 
 	/**
 	Activates the specified tab on the output bar.

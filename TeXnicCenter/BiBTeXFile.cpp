@@ -223,7 +223,7 @@ BOOL BibTeXFile::ParseFile(const TCHAR *buf)
 		HandleParseError(STE_BIBTEX_ERR_INVALID_EOF,line,col);
 	}
 
-	TRACE2("\n%s: Found %d entries\n",m_Filename,m_Entries.GetCount());
+	TRACE2("\n%s: Found %d entries\n", (LPCTSTR)m_Filename, m_Entries.GetCount());
 	return TRUE;
 }
 
@@ -270,7 +270,7 @@ void BibTeXFile::ProcessArgument(const TCHAR *buf,int len, BibTeXEntryType type,
 
 	if (type == BIBTEX_ENTRY_TYPE_UNKNOWN)
 	{
-		TRACE2("** Ignore unknown entry at line %d: %s\n",line,m_Buffer);
+		TRACE2("** Ignore unknown entry at line %d: %s\n", line, (LPCTSTR)m_Buffer);
 		return;
 	}
 
@@ -312,8 +312,7 @@ void BibTeXFile::ProcessArgument(const TCHAR *buf,int len, BibTeXEntryType type,
 		else
 		{
 			HandleParseError(STE_BIBTEX_ERR_DUP_KEY,line,1,key);
-			TRACE2("WARNING: Invalid or duplicate key <%s> (%s)\n",key,
-				::GetString(type));
+			TRACE2("WARNING: Invalid or duplicate key <%s> (%s)\n", (LPCTSTR)key, (LPCTSTR)::GetString(type));
 		}
 	}
 	else   // extract name-value pair and add it to the entry
@@ -364,14 +363,14 @@ void BibTeXFile::HandleParseError(UINT msgID,int line,int col,const TCHAR *addDe
 		case STE_BIBTEX_ERR_QOUTEWITHINQUOTE:
 		case STE_BIBTEX_ERR_WRONGLEVELAT:
 		case STE_BIBTEX_ERR_SUSPICOUS_LINE:
-			s.Format(errMsgFmt,m_Filename,line,col);
+			s.Format((LPCTSTR)errMsgFmt, (LPCTSTR)m_Filename, line, col);
 			break;
 		case STE_BIBTEX_ERR_INVALID_TYPE:
 		case STE_BIBTEX_ERR_DUP_KEY:
-			s.Format(errMsgFmt,m_Filename,line,col,addDesc);
+			s.Format((LPCTSTR)errMsgFmt, (LPCTSTR)m_Filename, line, col, addDesc);
 			break;
 		default:
-			TRACE1("BibTeX: Warning: No handler for msgID %d\n",msgID);
+			TRACE1("BibTeX: Warning: No handler for msgID %d\n", msgID);
 	}
 
 	//TRACE(s + "\n");
@@ -445,7 +444,7 @@ void BibTeXFile::DropAllEntries()
 		}
 		else
 		{
-			TRACE("NP detected in CBiBTeXFile %s",m_Filename);
+			TRACE("NP detected in CBiBTeXFile %s", (LPCTSTR)m_Filename);
 		}
 		m_Entries.RemoveKey(key);
 	}

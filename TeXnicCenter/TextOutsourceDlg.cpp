@@ -138,7 +138,7 @@ void CTextOutsourceDlg::OnOK()
 	if (NewPath.Exists())
 	{
 		CString MsgText;
-		MsgText.Format(STE_DOCUMENT_ALREADYEXISTS, NewPath.GetPath());
+		MsgText.Format(STE_DOCUMENT_ALREADYEXISTS, (LPCTSTR)NewPath.GetPath());
 		if (AfxMessageBox(MsgText, MB_ICONWARNING | MB_YESNO) == IDNO) return;
 	}
 
