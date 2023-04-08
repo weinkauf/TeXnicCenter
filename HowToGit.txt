@@ -1,0 +1,16 @@
+TeXnicCenter consists of several git repositories.
+The main development repository can be accessed using
+
+  https://github.com/weinkauf/TeXnicCenter
+
+To actually do some coding, you want to fork it, work on it, and then submit your changes via a pull request.
+
+The tutorials repository can be found here:
+
+  https://github.com/weinkauf/TeXnicCenter-Tutorials
+
+The user manual lives here:
+
+  https://github.com/weinkauf/TeXnicCenter-Manual
+
+If you want to add new features or fix bugs, discuss the matter with the maintainer. The best way is to create a pull request on github.

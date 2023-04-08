@@ -4,7 +4,7 @@
 #include <sstream>
 #include <cstdlib>
 
-#include "../libiconv/include/iconv.h"
+#include <iconv.h>
 
 bool GetUTF8CharBytes(unsigned char byte, std::size_t& n)
 {

@@ -4,9 +4,9 @@ Building TeXnicCenter
 
 The following tools and libraries are required to successfully build
 TeXnicCenter and all of its components:
-  * Visual C++ 2010 with MFC libraries
+  * Visual C++ 2022 with MFC libraries
   * Microsoft HTML Help Workshop
-  * Mercurial, freely available at http://mercurial.selenic.com/
+  * Git
 
 To generate the setup you will need:
   * Inno Setup available at 

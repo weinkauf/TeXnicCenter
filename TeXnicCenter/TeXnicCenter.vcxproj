@@ -113,7 +113,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Full</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)/Hunspell/src/hunspell;$(SolutionDir)/Scintilla/include;$(SolutionDir)/MFCExt/Include;$(SolutionDir)/TeXnicCenterObjects/Include;$(SolutionDir)/MsXmlCpp/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/3rdParty/libiconv_config;$(SolutionDir)/Hunspell/src/hunspell;$(SolutionDir)/Scintilla/include;$(SolutionDir)/MFCExt/Include;$(SolutionDir)/TeXnicCenterObjects/Include;$(SolutionDir)/MsXmlCpp/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;STRICT;WIN32;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC;_BIND_TO_CURRENT_VCLIBS_VERSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -164,7 +164,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Full</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)/Hunspell/src/hunspell;$(SolutionDir)/Scintilla/include;$(SolutionDir)/MFCExt/Include;$(SolutionDir)/TeXnicCenterObjects/Include;$(SolutionDir)/MsXmlCpp/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/3rdParty/libiconv_config;$(SolutionDir)/Hunspell/src/hunspell;$(SolutionDir)/Scintilla/include;$(SolutionDir)/MFCExt/Include;$(SolutionDir)/TeXnicCenterObjects/Include;$(SolutionDir)/MsXmlCpp/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;STRICT;WIN64;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC;_BIND_TO_CURRENT_VCLIBS_VERSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -213,7 +213,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)/Hunspell/src/hunspell;$(SolutionDir)/Scintilla/include;$(SolutionDir)/MFCExt/Include;$(SolutionDir)/TeXnicCenterObjects/Include;$(SolutionDir)/MsXmlCpp/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/3rdParty/libiconv_config;$(SolutionDir)/Hunspell/src/hunspell;$(SolutionDir)/Scintilla/include;$(SolutionDir)/MFCExt/Include;$(SolutionDir)/TeXnicCenterObjects/Include;$(SolutionDir)/MsXmlCpp/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;STRICT;WIN32;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC;_BIND_TO_CURRENT_VCLIBS_VERSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -261,7 +261,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)/Hunspell/src/hunspell;$(SolutionDir)/Scintilla/include;$(SolutionDir)/MFCExt/Include;$(SolutionDir)/TeXnicCenterObjects/Include;$(SolutionDir)/MsXmlCpp/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/3rdParty/libiconv_config;$(SolutionDir)/Hunspell/src/hunspell;$(SolutionDir)/Scintilla/include;$(SolutionDir)/MFCExt/Include;$(SolutionDir)/TeXnicCenterObjects/Include;$(SolutionDir)/MsXmlCpp/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;STRICT;WIN64;_WINDOWS;CE_FROM_DLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HUNSPELL_STATIC;_BIND_TO_CURRENT_VCLIBS_VERSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -1109,6 +1109,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\3rdParty\libiconv.vcxproj">
+      <Project>{d316722d-ffed-44c6-a643-830bc2f521b4}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Dictionaries\Dictionaries.vcxproj">
       <Project>{8bcf7b96-863c-43be-9b8a-84b8aab304c7}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
@@ -1118,9 +1121,6 @@
     </ProjectReference>
     <ProjectReference Include="..\InterfaceWrapper\source\InterfaceWrapper.vcxproj">
       <Project>{884a5c93-0be0-42e0-a688-ddc80c53df48}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\libiconv\libiconv.vcxproj">
-      <Project>{d316722d-ffed-44c6-a643-830bc2f521b4}</Project>
     </ProjectReference>
     <ProjectReference Include="..\MFCExt\Source\MFCExt.vcxproj">
       <Project>{049ffaef-6751-42f1-b069-db51bd24911b}</Project>

@@ -1,0 +1,3 @@
+[submodule "3rdParty/libiconv"]
+	path = 3rdParty/libiconv
+	url = https://github.com/weinkauf/libiconv.git

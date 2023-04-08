@@ -1,4 +1,4 @@
-1. hg up
+1. git pull
 
 1a. Get the latest redistributable from Microsoft: http://support.microsoft.com/kb/2019667
 
@@ -27,12 +27,12 @@ Release2Beta2
 Release2.0
 Release2.01
 
-9. hg push.
+9. git push.
 
 10. rm Output/Product/*
 rm Output/Intermediate/*
 
-11. Rebuild All
+11. Rebuild All. 64-bit only
 
 12. Create setup. Can be found in Output/Setup/* with proper name.
 
@@ -41,10 +41,10 @@ rm Output/Intermediate/*
 14. AntiVirus check of the freshly installed TXC.
 
 15. Write Release Notes. Use this as a startinig point (where Release2Alpha3 stands for the tag of the last release):
-    hg log -f --no-merges -r "tagged(Release2Alpha3)":: --template "{desc}\n\n" > TXCReleaseNotes_2Alpha4.txt
+    git log Release2Alpha3..HEAD --pretty=format:"%B%n" > TXCReleaseNotes_2Alpha4.txt
 
 16. Upload the release notes and the setup file to sf.net. Just click on "Files".
-    Create a subfolder for the release. Place the release notes as readme.txt in this folder (can be renamed on the server). It will always be displayed when people go into that folder (reST could be used, too). If the installer is going to be the new default, set it in its properties. 32-bit installers are the default.
+    Create a subfolder for the release. Place the release notes as readme.txt in this folder (can be renamed on the server). It will always be displayed when people go into that folder (reST could be used, too). If the installer is going to be the new default, set it in its properties. We only do 64-bit installers.
 
 17. Change the download links at texniccenter.org.
 

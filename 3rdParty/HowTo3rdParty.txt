@@ -1,0 +1,41 @@
+How to include 3rd Party code
+===================
+
+We fork/mirror the repository to one of our own sites. This is to avoid missing repos in the far future. It happens that other repos move. By keeping a mirror ourselves, we avoid these issues.
+
+We use git submodules.
+
+
+
+
+
+How libiconv is mirrored
+===================
+
+We use the following mirror:
+git@github.com:weinkauf/libiconv.git
+
+cd libiconv.git
+git fetch -p origin
+git push --mirror
+pause
+
+
+Mirroring a repository in another location
+If you want to mirror a repository in another location, including getting updates from the original, you can clone a mirror and periodically push the changes.
+
+Open Git Bash.
+
+Create a bare mirrored clone of the repository.
+$ git clone --mirror https://github.com/EXAMPLE-USER/REPOSITORY-TO-MIRROR.git
+
+Set the push location to your mirror.
+$ cd REPOSITORY-TO-MIRROR
+  $ git remote set-url --push origin https://github.com/EXAMPLE-USER/MIRRORED
+
+As with a bare clone, a mirrored clone includes all remote branches and tags, but all local references will be overwritten each time you fetch, so it will always be the same as the original repository. Setting the URL for pushes simplifies pushing to your mirror.
+
+To update your mirror, fetch updates and push.
+
+$ git fetch -p origin
+$ git push --mirror
