@@ -531,7 +531,7 @@ void LaTeXView::OnACHelp( const CString &cmd )
 
 #pragma region Auto completion listbox handling
 
-CAutoCompleteDlg* LaTeXView::CreateListBox( CString &keyword, long pos )
+void LaTeXView::CreateListBox( CString &keyword, long pos )
 {
 	//TRACE("==> CreateListBox\n");
 
@@ -548,7 +548,8 @@ CAutoCompleteDlg* LaTeXView::CreateListBox( CString &keyword, long pos )
 	{
 		//Create window, if needed
 		if (!autocompletion_list_) {
-			autocompletion_list_.reset(new CAutoCompleteDlg(&theApp.m_AvailableCommands, this));
+			autocompletion_list_ = std::make_unique<CAutoCompleteDlg>(&theApp.m_AvailableCommands, this);
+			if (!autocompletion_list_) return;
 			autocompletion_list_->SetListener(listener_.get());
 		}
 
@@ -572,7 +573,6 @@ CAutoCompleteDlg* LaTeXView::CreateListBox( CString &keyword, long pos )
 	}
 
 	//TRACE("<== CreateListBox\n");
-	return autocompletion_list_.get();
 }
 
 int LaTeXView::GetNumberOfMatches( const CString& keyword )
@@ -702,7 +702,7 @@ void LaTeXView::OnQueryCompletion()
 	keyword = GetWordAroundRange(topLeft, topLeft, true, false, false, true, false, false, true);
 
 	if (!keyword.IsEmpty())
-		autocompletion_list_.reset(CreateListBox(keyword, topLeft)); /* setup (and show) list box */
+		CreateListBox(keyword, topLeft); /* setup (and show) list box */
 	else
 		GetCtrl().SetSel(old_pos_start_,old_pos_end_); /* restore old position */
 }

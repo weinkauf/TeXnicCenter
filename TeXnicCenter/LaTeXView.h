@@ -55,7 +55,7 @@ private:
 	void OnACHelp(const CString &cmd);	
 
 private:
-	CAutoCompleteDlg* CreateListBox(CString &keyword, long pos);
+	void CreateListBox(CString &keyword, long pos);
 	void InstantAdvice();
 
 	CAdvice* instant_advice_tip_;
